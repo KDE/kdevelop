@@ -50,7 +50,7 @@ CKDevelop::CKDevelop(){
    else{
    slotHelpContent();
    }
-  config->setGroup("View Configuration");
+  config->setGroup("General Options");
   int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
   slotSTabSelected(lastActiveTab);
 
@@ -102,9 +102,10 @@ void CKDevelop::init(){
   // call bar functions to create bars
 
   // create the main view
+
   view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Absolute,
   			config->readNumEntry("view_panner_pos", 337));
-  
+
   output_widget = new COutputWidget(kapp,view);
 //  output_widget->setFillColumnMode(80,true);
 //  output_widget->setWordWrap(true);
@@ -115,6 +116,7 @@ void CKDevelop::init(){
 
   
   //  s_tab_current = 0;
+
   top_panner = new KNewPanner(view,"top_panner",KNewPanner::Vertical,KNewPanner::Absolute,
   			      config->readNumEntry("top_panner_pos", 213));
 
@@ -216,6 +218,8 @@ void CKDevelop::init(){
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   view->activate(top_panner,output_widget); 
   
+  output_view_pos=view->separatorPos();
+  tree_view_pos=top_panner->separatorPos();
 
   // set the mainwidget
   setView(view);
@@ -239,16 +243,13 @@ void CKDevelop::initMenu(){
   // a menubar consists of popup menus
   file_menu = new QPopupMenu;
  
-  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New File..."), this, SLOT(slotFileNewFile()),
+  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"), this, SLOT(slotFileNewFile()),
 			CTRL+Key_N,ID_FILE_NEW_FILE);
 
-  file_menu->insertItem(i18n("N&ew Project..."), this, SLOT(slotFileNewAppl()),0,ID_FILE_NEW_PROJECT);
 
-  file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  file_menu->insertItem(pix,i18n("&Open File..."), this, SLOT(slotFileOpenFile()),
+  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),
 			CTRL+Key_O,ID_FILE_OPEN_FILE);
-  file_menu->insertItem(i18n("Open &Project..."), this, SLOT(slotFileOpenPrj()),0,ID_FILE_OPEN_PROJECT);
 
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
@@ -257,7 +258,6 @@ void CKDevelop::initMenu(){
   file_menu->insertItem(i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), CTRL+Key_W,ID_FILE_CLOSE);
-  //  file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()),0,ID_FILE_CLOSE_ALL);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Print..."), this, SLOT(slotFilePrint()),0,ID_FILE_PRINT);
   file_menu->insertSeparator();
@@ -302,7 +302,7 @@ void CKDevelop::initMenu(){
   view_menu = new QPopupMenu;
   view_menu->insertItem(i18n("&Goto Line..."), this, SLOT(slotEditGotoLine()),0,ID_VIEW_GOTO_LINE);
   view_menu->insertSeparator();
-  config->setGroup("View Configuration");
+  config->setGroup("General Options");
   bViewStatusbar = config->readBoolEntry("show_statusbar",true);
 
   view_menu->insertItem(i18n("&Tree-View"),this, SLOT(slotOptionsTTreeView()),
@@ -332,6 +332,18 @@ void CKDevelop::initMenu(){
   menuBar()->insertItem(i18n("&View"), view_menu);
   menuBar()->insertSeparator();
   
+
+
+
+  // the bookmarks menu
+  // p = new QPopupMenu;
+//   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
+//   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
+//   p->insertSeparator();
+//   menuBar()->insertItem(i18n("&Bookmarks"),p);
+
+
+
   // project Menu
   // first the submenu for adding projectfiles
   QPopupMenu* p2 = new QPopupMenu;
@@ -341,6 +353,13 @@ void CKDevelop::initMenu(){
 
 
   project_menu = new QPopupMenu;
+  project_menu->insertItem(i18n("KAppWizard..."), this, SLOT(slotFileNewAppl()),0,ID_FILE_NEW_PROJECT);
+  project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNew()),0, ID_PROJECT_NEW);
+  project_menu->insertItem(i18n("Open &Project..."), this, SLOT(slotFileOpenPrj()),0,ID_FILE_OPEN_PROJECT);
+  project_menu->insertSeparator();		
+  project_menu->insertItem(i18n("Compile File "),this, SLOT(slotProjectCompileFile()),CTRL+Key_F8,ID_PROJECT_COMPILE_FILE);
+  
+  project_menu->insertSeparator();		
   project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem("&Add File(s) to Project",p2,ID_PROJECT_ADD_FILE);
@@ -355,6 +374,8 @@ void CKDevelop::initMenu(){
 
   menuBar()->insertItem(i18n("&Project"), project_menu);
   disableCommand(ID_PROJECT_ADD_FILE_NEW);
+  disableCommand(ID_PROJECT_NEW);
+  disableCommand(ID_PROJECT_COMPILE_FILE);
   disableCommand(ID_PROJECT_ADD_FILE_EXIST);
   disableCommand(ID_PROJECT_ADD_FILE);
   //  disableCommand(ID_PROJECT_REMOVE_FILE);
@@ -362,27 +383,25 @@ void CKDevelop::initMenu(){
   disableCommand(ID_PROJECT_FILE_PROPERTIES);
   disableCommand(ID_PROJECT_OPTIONS);
 
-  // the bookmarks menu
-  // p = new QPopupMenu;
-//   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
-//   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
-//   p->insertSeparator();
-//   menuBar()->insertItem(i18n("&Bookmarks"),p);
-
-
   // build menu
   
   build_menu = new QPopupMenu;
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Run"), this, 
 			 SLOT(slotBuildRun()),CTRL+Key_F9,ID_BUILD_RUN);
+  build_menu->insertItem(i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"), this, 
 			 SLOT(slotBuildMake()),Key_F9,ID_BUILD_MAKE);
+  build_menu->insertSeparator();
+
   build_menu->insertItem(i18n("&Rebuild all"), this, 
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
   build_menu->insertItem(i18n("&Clean/Rebuild all"), this, 
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
-  build_menu->insertItem(i18n("Autocon&f"), this, SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
+  build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
+  build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
+  build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
+  build_menu->insertSeparator();
   build_menu->insertItem(Icon("stop.xpm"),i18n("&Stop"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("Make &API-Doc"), this, 
@@ -392,10 +411,13 @@ void CKDevelop::initMenu(){
   
   menuBar()->insertItem(i18n("&Build"), build_menu);
   disableCommand(ID_BUILD_RUN);
+  disableCommand(ID_BUILD_DEBUG);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
   disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+  disableCommand(ID_BUILD_DISTCLEAN);
   disableCommand(ID_BUILD_AUTOCONF);
+  disableCommand(ID_BUILD_CONFIGURE);
   disableCommand(ID_BUILD_STOP);
   disableCommand(ID_BUILD_MAKE_PROJECT_API);
   disableCommand(ID_BUILD_MAKE_USER_MANUAL);
@@ -418,14 +440,14 @@ void CKDevelop::initMenu(){
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING); 
   options_menu->insertSeparator();
-  options_menu->insertItem(i18n("&KDevelop..."),this,
+  options_menu->insertItem(i18n("&Documentation Path..."),this,
 		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);    
-  options_menu->insertItem(i18n("Documentation-Browser..."),this,
+  options_menu->insertItem(i18n("Documentation-&Browser..."),this,
 		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
   options_menu->insertSeparator();
-  options_menu->insertItem(i18n("Update KDE-Documentation..."),this,
+  options_menu->insertItem(i18n("Update &KDE-Documentation..."),this,
 				 SLOT(slotDocUpdateKDEDocumentation()),0,ID_OPTIONS_UPDATE_KDE_DOCUMENTATION);
-  options_menu->insertItem(i18n("Create Searchdatabase..."),this,
+  options_menu->insertItem(i18n("Create &Searchdatabase..."),this,
 				 SLOT(slotCreateSearchDatabase()),0,ID_OPTIONS_CREATE_SEARCHDATABASE);
 
 
@@ -530,7 +552,7 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
-  config->setGroup("View Configuration");
+  config->setGroup("General Options");
   if(config->readBoolEntry("show_std_toolbar", true)){
     enableToolBar(KToolBar::Show,0);
   }
@@ -594,3 +616,17 @@ void CKDevelop::initProject(){
   }
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

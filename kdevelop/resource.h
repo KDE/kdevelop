@@ -103,25 +103,29 @@
 // build-menu entries 
 
 #define ID_BUILD_RUN                13010
-#define ID_BUILD_MAKE               13020
-#define ID_BUILD_REBUILD_ALL        13030
-#define ID_BUILD_CLEAN_REBUILD_ALL  13040
-#define ID_BUILD_AUTOCONF           13045
-#define ID_BUILD_STOP               13050
+#define ID_BUILD_DEBUG              13020
+#define ID_BUILD_MAKE               13030
+#define ID_BUILD_REBUILD_ALL        13040
+#define ID_BUILD_CLEAN_REBUILD_ALL  13050
+#define ID_BUILD_DISTCLEAN          13060
+#define ID_BUILD_AUTOCONF           13070
+#define ID_BUILD_CONFIGURE          13080
+#define ID_BUILD_STOP               13090
 
-#define ID_BUILD_MAKE_PROJECT_API   13060
-#define ID_BUILD_MAKE_USER_MANUAL   13070
+#define ID_BUILD_MAKE_PROJECT_API   13100
+#define ID_BUILD_MAKE_USER_MANUAL   13110
 
 
 ///////////////////////////////////////////////////////////////////
 // project-menu entries 
 
+#define ID_PROJECT_NEW              14003
 #define ID_PROJECT_NEW_CLASS        14005
 #define ID_PROJECT_ADD_FILE         14010
 #define ID_PROJECT_ADD_FILE_NEW     14020
 #define ID_PROJECT_ADD_FILE_EXIST   14030
 #define ID_PROJECT_REMOVE_FILE      14040
-
+#define ID_PROJECT_COMPILE_FILE     14050
 
 
 #define ID_PROJECT_FILE_PROPERTIES  14055
@@ -219,4 +223,9 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
+
+
+
 

@@ -273,17 +273,10 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->setGroup("General Options");
   config->writeEntry("width",width());
   config->writeEntry("height",height());
+
   config->writeEntry("view_panner_pos",view->absSeparatorPos());
   config->writeEntry("top_panner_pos",top_panner->absSeparatorPos());
-  config->setGroup("Files");
-  if(project){
-    config->writeEntry("project_file",prj.getProjectFile());
-  }
-  config->writeEntry("cpp_file",cpp_widget->getName());
-  config->writeEntry("header_file",header_widget->getName());
-  config->writeEntry("browser_file",history_list.current());
-  cerr << "QUIT4";
-  config->setGroup("View Configuration");
+
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
@@ -292,6 +285,16 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+
+  config->setGroup("Files");
+  if(project){
+    config->writeEntry("project_file",prj.getProjectFile());
+  }
+  config->writeEntry("cpp_file",cpp_widget->getName());
+  config->writeEntry("header_file",header_widget->getName());
+  config->writeEntry("browser_file",history_list.current());
+  cerr << "QUIT4";
+
   cerr << "QUIT3";
   //config->writeEntry("x",x());
   //config->writeEntry("y",y());
@@ -398,33 +401,35 @@ void CKDevelop::slotOptionsTTreeView(){
 
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-    config->setGroup("View Configuration");
-    config->writeEntry("tree_view_pos",top_panner->separatorPos());
+    tree_view_pos=top_panner->separatorPos();
     top_panner->setSeparatorPos(0);
   }
   else{
-    config->setGroup("View Configuration");
-    top_panner->setSeparatorPos(config->readNumEntry("tree_view_pos",213));
+    top_panner->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
-  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  resize (width()+1,height());
+//  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//  resize (width()+1,height());
+  QRect rMainGeom= top_panner->geometry();
+  top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
+  top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
 
 }
 void CKDevelop::slotOptionsTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    config->setGroup("View Configuration");
-    config->writeEntry("output_view_pos",view->separatorPos());
+    output_view_pos=view->separatorPos();
     view->setSeparatorPos(view->height());
   }
   else{
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos",337));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
-  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  resize (width()+1,height());
+//  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//  resize (width()+1,height());
+  QRect rMainGeom= view->geometry();
+  view->resize(rMainGeom.width()-1,rMainGeom.height());
+  view->resize(rMainGeom.width()+1,rMainGeom.height());
 }
 
 void CKDevelop::slotOptionsRefresh(){
@@ -692,16 +697,40 @@ void CKDevelop::slotBuildRun(){
   slotBuildMake();
   next_job = "run";
 }
+void CKDevelop::slotBuildDebug(){
+  if(!prj.getBinPROGRAM()){
+  slotBuildMake();}
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    output_view_pos=view->separatorPos();
+    view->setSeparatorPos(view->height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
+  s_tab_view->setCurrentTab(TOOLS);
+  swallow_widget->sWClose(false);
+  swallow_widget->setExeString("kdbg "+prj.getBinPROGRAM());
+  swallow_widget->sWExecute();
+  swallow_widget->init();
+  
+}
+
 void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram("make")){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   setToolMenuProcess(false);
@@ -725,11 +754,13 @@ void CKDevelop::slotBuildRebuildAll(){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   setToolMenuProcess(false);
@@ -749,11 +780,13 @@ void CKDevelop::slotBuildCleanRebuildAll(){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   setToolMenuProcess(false);
@@ -767,23 +800,33 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+void CKDevelop::slotBuildDistClean(){
+  slotStatusMsg(i18n("Running make distclean..."));
+}
 void CKDevelop::slotBuildAutoconf(){
-  if(!CToolClass::searchProgram("autoconf")){
-    return;
-  }
+  slotStatusMsg(i18n("Running autoconf & friends..."));
+
+}
+
+
+void CKDevelop::slotBuildConfigure(){
+  slotStatusMsg(i18n("Running ./configure..."));
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
   setToolMenuProcess(false);
-  slotFileSave();
+  slotFileSaveAll();
   output_widget->clear();
   QDir::setCurrent(prj.getProjectDir()); 
   process.clearArguments();
-  process << "autoconf";
+  process << "./configure";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildStop(){
@@ -798,11 +841,13 @@ void CKDevelop::slotBuildAPI(){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -825,11 +870,13 @@ void CKDevelop::slotBuildManual(){
     return;
   }
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    config->setGroup("View Configuration");
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   setToolMenuProcess(false);
@@ -853,11 +900,14 @@ void CKDevelop::slotBookmarksEdit(){
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    config->setGroup("View Configuration");
-    config->writeEntry("output_view_pos",view->separatorPos());
+    output_view_pos=view->separatorPos();
     view->setSeparatorPos(view->height());
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+
   }
 
   s_tab_view->setCurrentTab(BROWSER);
@@ -1099,13 +1149,14 @@ void CKDevelop::slotDocTreeSelected(int index){
 void CKDevelop::slotToolsKIconEdit(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    config->writeEntry("output_view_pos",view->separatorPos());
+    output_view_pos=view->separatorPos();
     view->setSeparatorPos(view->height());
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-
-
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kiconedit");
@@ -1117,10 +1168,13 @@ void CKDevelop::slotToolsKDbg(){
 
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    config->writeEntry("output_view_pos",view->separatorPos());
+    output_view_pos=view->separatorPos();
     view->setSeparatorPos(view->height());
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   s_tab_view->setCurrentTab(TOOLS);
@@ -1134,10 +1188,13 @@ void CKDevelop::slotToolsKDbg(){
 void CKDevelop::slotToolsKTranslator(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    config->writeEntry("output_view_pos",view->separatorPos());
+    output_view_pos=view->separatorPos();
     view->setSeparatorPos(view->height());
-    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-    resize (width()+1,height());
+//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+//    resize (width()+1,height());
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   s_tab_view->setCurrentTab(TOOLS);
@@ -1374,4 +1431,13 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
 

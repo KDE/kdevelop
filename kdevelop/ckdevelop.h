@@ -97,14 +97,10 @@ public:
 
 
  public slots:
- /** generate a new project*/
- void slotFileNewAppl();
   /** generate a new file*/
   void slotFileNewFile();
   /**open a file*/
   void slotFileOpenFile();
-  /** open a projectfile and close the old one*/
-  void slotFileOpenPrj();
   /** save the current file,if Untitled a dialog ask for a valid name*/
   void slotFileSave();
   /** save all files*/
@@ -130,15 +126,52 @@ public:
   void slotEditSearch();
   void slotEditRepeatSearch();
   void slotEditReplace();
+  void slotBookmarksAdd();
+  void slotBookmarksEdit();
+
+
   void slotEditGotoLine();
+
+  void slotOptionsTTreeView();
+  void slotOptionsTOutputView();
 
   void slotOptionsTStdToolbar();
   void slotOptionsTBrowserToolbar();
   void slotOptionsTStatusbar();
-  void slotOptionsTTreeView();
-  void slotOptionsTOutputView();
   /** refresh all trees and other widgets*/
   void slotOptionsRefresh();
+
+ /** generate a new project with KAppWizard*/
+  void slotFileNewAppl();
+  /** generat a new project file */
+  void slotProjectNew();
+  /** open a projectfile and close the old one*/
+  void slotFileOpenPrj();
+  /** compile the actual sourcefile using setted options */
+  void slotProjectCompileFile();
+  void slotProjectAddNewFile();
+  void slotProjectAddExistingFiles();
+  void slotProjectRemoveFile();
+  void slotProjectNewClass();
+  void slotProjectFileProperties();
+  void slotProjectOptions();
+
+  void slotBuildRun();
+  void slotBuildDebug();
+  void slotBuildMake();
+  void slotBuildRebuildAll();
+  void slotBuildCleanRebuildAll();
+  void slotBuildDistClean();
+  void slotBuildAutoconf();
+  void slotBuildConfigure();
+  void slotBuildStop();
+  void slotBuildAPI();
+  void slotBuildManual();
+
+  void slotToolsKIconEdit();
+  void slotToolsKDbg();
+  void slotToolsKTranslator();
+
   void slotOptionsEditor();
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlighting();
@@ -146,10 +179,6 @@ public:
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
 
-
-  void slotToolsKIconEdit();
-  void slotToolsKDbg();
-  void slotToolsKTranslator();
 
   void slotDocBack();
   void slotDocForward();
@@ -165,23 +194,6 @@ public:
   void slotDocUpdateKDEDocumentation();
 
 
-  void slotBuildRun();
-  void slotBuildMake();
-  void slotBuildRebuildAll();
-  void slotBuildCleanRebuildAll();
-  void slotBuildAutoconf();
-  void slotBuildStop();
-  void slotBuildAPI();
-  void slotBuildManual();
-
-  void slotProjectAddNewFile();
-  void slotProjectAddExistingFiles();
-  void slotProjectRemoveFile();
-  void slotProjectNewClass();
-  void slotProjectFileProperties();
-  void slotProjectOptions();
-  void slotBookmarksAdd();
-  void slotBookmarksEdit();
 
   void slotHelpContent();
   void slotHelpHomepage();
@@ -286,6 +298,8 @@ private:
   CRealFileView* real_file_tree; // the real filetree
   CDocTree* doc_tree; // the documentation tre
 
+  int tree_view_pos;
+  int output_view_pos;
 
 
   QString version;
@@ -309,5 +323,9 @@ private:
 };
 
 #endif
+
+
+
+
 
 

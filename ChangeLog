@@ -1,9 +1,12 @@
+
 1999-01-31  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
        * added popups to the class-viewer, some Members for Class and Method Menu already created empty.
        * fixed some geometry- not yet completed.
        * re-inserted Tools-menu. Will add menus to LFV and RFV for KIconedit and KTranslator to open files in the 
          Tools-Tab. 
        * Toggle Outputview for Doc-browser(off), Make-commands(on), Tools(off)
+       * changed Project-menu for open, new, kappwizard
+       * added Build-slots for ./configure, make distclean and Autoconf
 
 1999-01-30  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 

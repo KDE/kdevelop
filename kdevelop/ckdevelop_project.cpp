@@ -24,6 +24,21 @@
 #include "caddexistingfiledlg.h"
 #include <htmltoken.h>
 
+
+void CKDevelop::slotProjectNew(){
+/* TODO: add a dialog to create empty project file, just set
+  the project name, directory and project Type (application (KDE; QT; X11; Terminal; Library)).
+  Then create directory and project file
+  - then call slotProjectAddExistingFiles to add all files needed by the new app.
+  Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
+  Ralf */
+
+}
+
+void CKDevelop::slotProjectCompileFile(){
+
+}
+
 void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
   
@@ -170,7 +185,8 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_NEW_CLASS);
   enableCommand(ID_PROJECT_FILE_PROPERTIES);
   enableCommand(ID_PROJECT_OPTIONS);
-  
+
+  enableCommand(ID_BUILD_AUTOCONF);
   project=true;
   slotOptionsRefresh();
   return true;
@@ -211,4 +227,6 @@ void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",&prj);
   dlg.show();
 }
+
+
 

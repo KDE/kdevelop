@@ -139,10 +139,13 @@ void CKDevelop::setToolMenuProcess(bool enable){
   if (enable){
     
     enableCommand(ID_BUILD_RUN);
+    enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
     enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+    enableCommand(ID_BUILD_DISTCLEAN);
     enableCommand(ID_BUILD_AUTOCONF);
+    enableCommand(ID_BUILD_CONFIGURE);
     disableCommand(ID_BUILD_STOP);
     enableCommand(ID_BUILD_MAKE_PROJECT_API);
     enableCommand(ID_BUILD_MAKE_USER_MANUAL);
@@ -151,13 +154,18 @@ void CKDevelop::setToolMenuProcess(bool enable){
     
     // set the popupmenus enable or disable
     disableCommand(ID_BUILD_RUN);
+    disableCommand(ID_BUILD_DEBUG);
     disableCommand(ID_BUILD_MAKE);
     disableCommand(ID_BUILD_REBUILD_ALL);
     disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+    disableCommand(ID_BUILD_DISTCLEAN);
     disableCommand(ID_BUILD_AUTOCONF);
+    disableCommand(ID_BUILD_CONFIGURE);
     enableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_MAKE_PROJECT_API);
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   }
 }
+
+
 
