@@ -19,7 +19,9 @@
 #include <qfileinfo.h>
 
 StoreWalker::StoreWalker( const QString& fileName, ClassStore* store )
-    : m_fileName( fileName ), m_store( store ), m_currentContainer( 0 ), m_currentClass( 0 ), m_anon( 0 )
+    : m_fileName( fileName ), m_store( store ),
+      m_currentContainer( 0 ), m_currentClass( 0 ),
+      m_currentScopeContainer( 0 ), m_anon( 0 )
 {
 }
 
@@ -36,9 +38,13 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
     m_inSlots = false;
     m_inSignals = false;
     m_anon = 0;
+    m_imports.clear();
 
     m_store->removeWithReferences( m_fileName );
+    m_imports << QStringList();
+    m_currentScopeContainer = m_store->globalScope();
     TreeParser::parseTranslationUnit( ast );
+    m_imports.pop_back();
 }
 
 void StoreWalker::parseDeclaration( DeclarationAST* ast )
@@ -79,18 +85,21 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ns->setDeclaredInFile( m_fileName );
     ns->setDeclarationEndsOnLine( endLine );
 
-    ns->setDefinedOnLine( startLine );
-    ns->setDefinitionEndsOnLine( endLine );
-    ns->setDefinedInFile( m_fileName );
+    //ns->setDefinedOnLine( startLine );
+    //ns->setDefinitionEndsOnLine( endLine );
+    //ns->setDefinedInFile( m_fileName );
 
-    ParsedClassContainer* old_scope = m_currentContainer;
+    ParsedClassContainer* old_container = m_currentContainer;
+    ParsedScopeContainer* old_scope = m_currentScopeContainer;
     m_currentContainer = ns;
+    m_currentScopeContainer = ns;
     m_currentScope.push_back( nsName );
 
     TreeParser::parseNamespace( ast );
 
     m_currentScope.pop_back();
-    m_currentContainer = old_scope;
+    m_currentScopeContainer = old_scope;
+    m_currentContainer = old_container;
 }
 
 void StoreWalker::parseNamespaceAlias( NamespaceAliasAST* ast )
@@ -105,6 +114,8 @@ void StoreWalker::parseUsing( UsingAST* ast )
 
 void StoreWalker::parseUsingDirective( UsingDirectiveAST* ast )
 {
+    QString name = ast->name()->unqualifiedName()->text();
+    m_imports.back().push_back( name );
     TreeParser::parseUsingDirective( ast );
 }
 
@@ -190,21 +201,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     QString id = d->declaratorId()->unqualifiedName()->text().stripWhiteSpace();
 
-    QStringList scope = m_currentScope;
-    if( d->declaratorId()->classOrNamespaceNameList().count() ){
-        if( d->declaratorId()->isGlobal() )
-	    scope.clear();
-	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
-	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
-	while( it.current() ){
-	    if( it.current()->name() ){
-	       scope << it.current()->name()->text();
-	    }
-	    ++it;
-	}
-    }
-
-    QString scopeStr = scope.join( "." );
+    QString scopeStr = scopeOfDeclarator( d );
     ParsedClassContainer* cl = findContainer( m_store, scopeStr );
     if( !cl )
        cl = m_currentContainer;
@@ -317,11 +314,11 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
 
-    bool innerClass = !m_currentScope.isEmpty();
+    bool innerClass = m_currentClass != 0;
 
     if ( kind == "class" ) {
         if (innerClass)
-	  m_currentContainer->addClass( klass );
+	  m_currentClass->addClass( klass );
 	else{
  	  m_store->addClass( klass );
           currentScope()->addClass( klass );
@@ -329,7 +326,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     }
     else {
         if (innerClass)
-          m_currentContainer->addStruct( klass );
+          m_currentClass->addStruct( klass );
 	else{
 	  m_store->addStruct( klass );
           currentScope()->addStruct( klass );
@@ -347,7 +344,11 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 
     m_currentContainer = klass;
     m_currentClass = klass;
+    m_imports.push_back( QStringList() );
+
     TreeParser::parseClassSpecifier( ast );
+
+    m_imports.pop_back();
     m_currentContainer = oldContainer;
     m_currentClass = oldClass;
 
@@ -413,20 +414,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     if( t && t->declaratorId() && t->declaratorId()->unqualifiedName() )
 	id = t->declaratorId()->unqualifiedName()->text();
 
-    QStringList scope = m_currentScope;
-    if( d->declaratorId() && d->declaratorId()->classOrNamespaceNameList().count() ){
-        if( d->declaratorId()->isGlobal() )
-	    scope.clear();
-	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
-	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
-	while( it.current() ){
-	    if( it.current()->name() )
-	       scope << it.current()->name()->text();
-	    ++it;
-	}
-    }
-
-    QString scopeStr = scope.join( "." );
+    QString scopeStr = scopeOfDeclarator( d );
     ParsedClassContainer* cl = findContainer( m_store, scopeStr );
     if( cl == 0 )
         cl = m_currentContainer;
@@ -704,26 +692,8 @@ void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * kla
     }
 }
 
-ParsedClass * StoreWalker::getClassByName( ParsedClassContainer * container, const QString & name )
-{
-    ParsedClass* c = container->getClassByName( name );
-    if( !c )
-	c = container->getStructByName( name );
-    return c;
-}
-
-ParsedClass * StoreWalker::getClassByName( ClassStore * container, const QString & name )
-{
-    ParsedClass* c = container->getClassByName( name );
-    if( !c )
-	c = container->getStructByName( name );
-    return c;
-}
-
 ParsedClassContainer* StoreWalker::findContainer( ClassStore* store, const QString& name )
 {
-    kdDebug(9007) << "StoreWalker::findContainer() -- " << name << endl;
-
     ParsedScopeContainer* container = store->globalScope();
 
     QStringList path = QStringList::split( ".", name );
@@ -744,20 +714,36 @@ ParsedClassContainer* StoreWalker::findContainer( ClassStore* store, const QStri
         return container;
 
     QString className = path.join( "." );
-    kdDebug(9007) << "---------> class name is " << className << endl;
     ParsedClass* klass = container->getClassByName( className );
     if( !klass )
         klass = container->getStructByName( className );
 
-    kdDebug(9007) << "----------> container is " << klass << endl;
     return klass;
 }
 
 ParsedScopeContainer* StoreWalker::currentScope()
 {
-    ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( m_currentContainer );
+    ParsedScopeContainer* scope = m_currentScopeContainer;
     if( !scope )
         scope = m_store->globalScope();
     return scope;
 }
 
+QString StoreWalker::scopeOfDeclarator( DeclaratorAST* d )
+{
+    QStringList scope = m_currentScope;
+    if( d->declaratorId()->classOrNamespaceNameList().count() ){
+        if( d->declaratorId()->isGlobal() )
+	    scope.clear();
+	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+	while( it.current() ){
+	    if( it.current()->name() ){
+	       scope << it.current()->name()->text();
+	    }
+	    ++it;
+	}
+    }
+
+    return scope.join( "." );
+}

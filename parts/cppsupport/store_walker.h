@@ -62,18 +62,21 @@ public:
 private:
     ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );
     ParsedAttribute* findOrInsertAttribute( ParsedClassContainer* scope, const QString& name );
-    QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
-    ParsedClass* getClassByName( ParsedClassContainer* container, const QString& name );
-    ParsedClass* getClassByName( ClassStore* container, const QString& name );
+
     ParsedClassContainer* findContainer( ClassStore* store, const QString& name );
     ParsedScopeContainer* currentScope();
+
+    QString scopeOfDeclarator( DeclaratorAST* d );
+    QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
 
 private:
     QString m_fileName;
     QStringList m_currentScope;
     ClassStore* m_store;
+    QValueList<QStringList> m_imports;
     ParsedClassContainer* m_currentContainer;
     ParsedClass* m_currentClass;
+    ParsedScopeContainer* m_currentScopeContainer;
     PIAccess m_currentAccess;
     bool m_inSlots;
     bool m_inSignals;
