@@ -19,6 +19,9 @@
 
 /* Yet to come file abstraction layer */
 
+#ifndef KDEVFILE_H
+#define KDEVFILE_H
+
 #include <kmimetype.h>
 
 class KDevFile
@@ -49,3 +52,5 @@ public:
 	 */
 	static CommentingStyle commentingStyleFromMimeType( KMimeType::Ptr mimeType );
 };
+
+#endif
