@@ -17,7 +17,7 @@
  </general>
  <kdevscriptproject>
   <general>
-   <activedir>src</activedir>
+   <activedir></activedir>
    <includepatterns>*.php,*.phps,*.php3,*.inc</includepatterns>
   </general>
  </kdevscriptproject>
