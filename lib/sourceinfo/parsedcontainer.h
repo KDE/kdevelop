@@ -102,11 +102,11 @@ public:
 
 protected:
     
-    /** List of attributes. */
-    QDict<ParsedAttribute> attributes;
-    
     /** List of methods. */
     QPtrList<ParsedMethod> methods;
+    
+    /** List of attributes. */
+    QDict<ParsedAttribute> attributes;
     
     /** All methods ordered by name and argument. */
     QDict<ParsedMethod> methodsByNameAndArg;
@@ -177,8 +177,14 @@ public:
      */
     ParsedAttribute *getAttributeByName(const QString &aName);
     
-    /** Get all methods in sorted order. */
+    /** Returns a list of all methods, sorted by signature. */
     QValueList<ParsedMethod*> getSortedMethodList();
+
+    /**
+     * Returns a list of the signatures of all methods,
+     * in sorted order.
+     */
+    QStringList getSortedMethodSignatureList(const QString &name);
 
     /**
      * Gets all attributes in their string reprentation in sorted order. 

@@ -92,6 +92,7 @@ MethodListAction::MethodListAction(KDevPlugin *part, const QString &text, int ac
 
 void MethodListAction::refresh(const QString &className)
 {
+    kdDebug(9003) << "MethodListAction::refresh " << className << endl;
     ParsedClass *pc;
     QStringList list;
 

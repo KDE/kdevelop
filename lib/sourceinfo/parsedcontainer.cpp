@@ -38,7 +38,10 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedContainer::ParsedContainer()
-    : methodIterator( methods ),
+    : methods(),
+      attributes(),
+      structs(),
+      methodIterator( methods ),
       attributeIterator( attributes ),
       structIterator( structs )
 {
@@ -217,15 +220,7 @@ ParsedMethod *ParsedContainer::getMethodByNameAndArg( const QString &aName )
     return methodsByNameAndArg.find( aName );
 }
 
-/*--------------------------- ParsedContainer::getSortedMethodList()
- * getSortedMethodList()
- *   Get all methods in sorted order.
- *
- * Parameters:
- *   -
- * Returns:
- *   QPtrList<ParsedMethod> *  The sorted list.
- *-----------------------------------------------------------------*/
+
 QValueList<ParsedMethod*> ParsedContainer::getSortedMethodList()
 {
     QValueList<ParsedMethod*> retVal;
@@ -240,13 +235,27 @@ QValueList<ParsedMethod*> ParsedContainer::getSortedMethodList()
         srted << aMethod->asString();
 
     srted.sort();
-
+    
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
         retVal.append( getMethodByNameAndArg(*it) );
 
     return retVal;
 }
+
+
+QStringList ParsedContainer::getSortedMethodSignatureList(const QString &name)
+{
+    QStringList retVal;
+    
+    for (methodIterator.toFirst(); methodIterator.current(); ++methodIterator)
+        if (methodIterator.current()->name() == name)
+            retVal << methodIterator.current()->asString();
+
+    retVal.sort();
+    return retVal;
+}
+
 
 /*--------------------------- ParsedContainer::getAttributeByName()
  * getAttributeByName()

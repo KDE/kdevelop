@@ -58,12 +58,12 @@
 #include "config.h"
 #include "domutil.h"
 
-#if 1
+#if __GLIBC__
 #include <malloc.h>
 void showMemUsage()
 {
     struct mallinfo mi = mallinfo();
-    kdDebug() << "Mem usage: " << mi.uordblks;
+    kdDebug() << "Mem usage: " << mi.uordblks << endl;
 }
 #else
 void showMemUsage()
@@ -365,8 +365,25 @@ void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClas
 }
 
 
-void
-CppSupportPart::initialParse( )
+// Makes sure that header files come first
+static QStringList reorder(const QStringList &list)
+{
+    QStringList headers, others;
+    
+    QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp");
+
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        if (headerExtensions.contains(QFileInfo(*it).extension()))
+            headers << (*it);
+        else
+            others << (*it);
+    
+    return headers + others;
+}
+
+
+void CppSupportPart::initialParse()
 {
     // For debugging
     showMemUsage();
@@ -426,7 +443,7 @@ CppSupportPart::initialParse( )
         kdDebug(9007) << "no persistant classstore - starting to parse" << endl;
 	kapp->setOverrideCursor(waitCursor);
 
-        QStringList files = project( )->allFiles( );
+        QStringList files = reorder( project()->allFiles() );
 
         QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
 	bar->setMinimumWidth( 120 );
@@ -639,7 +656,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 QStringList CppSupportPart::fileFilters()
 {
     if (withcpp)
-        return QStringList::split(",", "*.c,*.cpp,*.cxx,*.cc,*.C,*.m,*.mm,*.M,*.h,*.hxx,*.hpp");
+        return QStringList::split(",", "*.c,*.C,*.cc,*.cpp,*.cxx,*.m,*.mm,*.M,*.h,*.H,*.hh,*.hxx,*.hpp");
     else
         return QStringList::split(",", "*.c,*.h");
 }
@@ -664,7 +681,7 @@ QString CppSupportPart::unformatClassName(const QString &name)
 QStringList CppSupportPart::fileExtensions()
 {
     if (withcpp)
-        return QStringList::split(",", "c,cpp,cxx,cc,C,m,mm,M,h,hxx,hpp");
+        return QStringList::split(",", "c,C,cc,cpp,cxx,m,mm,M,h,H,hh,hxx,hpp");
     else
         return QStringList::split(",", "c,h");
 }

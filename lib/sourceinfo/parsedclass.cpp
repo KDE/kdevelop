@@ -383,15 +383,6 @@ bool ParsedClass::hasVirtual()
 }
 
 
-/*------------------------------- ParsedClass::getSortedSignalList()
- * getSortedSignalList()
- *   Get all signals in sorted order.
- *
- * Parameters:
- *   -
- * Returns:
- *   QPtrList<ParsedMethod> *  The sorted list.
- *-----------------------------------------------------------------*/
 QValueList<ParsedMethod*> ParsedClass::getSortedSignalList()
 {
     QValueList<ParsedMethod*> retVal;
@@ -416,15 +407,19 @@ QValueList<ParsedMethod*> ParsedClass::getSortedSignalList()
 }
 
 
-/*------------------------------- ParsedClass::getSortedSlotList()
- * getSortedSlotList()
- *   Get all slots in sorted order.
- *
- * Parameters:
- *   -
- * Returns:
- *   QPtrList<ParsedMethod> *  The sorted list.
- *-----------------------------------------------------------------*/
+QStringList ParsedClass::getSortedSignalSignatureList(const QString &name)
+{
+    QStringList retVal;
+    
+    for (signalIterator.toFirst(); signalIterator.current(); ++signalIterator)
+        if (signalIterator.current()->name() == name)
+            retVal << signalIterator.current()->asString();
+
+    retVal.sort();
+    return retVal;
+}
+
+
 QValueList<ParsedMethod*> ParsedClass::getSortedSlotList()
 {
     QValueList<ParsedMethod*> retVal;
@@ -445,6 +440,19 @@ QValueList<ParsedMethod*> ParsedClass::getSortedSlotList()
     for (it = srted.begin(); it != srted.end(); ++it)
         retVal.append( getSlotByNameAndArg(*it) );
 
+    return retVal;
+}
+
+
+QStringList ParsedClass::getSortedSlotSignatureList(const QString &name)
+{
+    QStringList retVal;
+    
+    for (slotIterator.toFirst(); slotIterator.current(); ++slotIterator)
+        if (slotIterator.current()->name() == name)
+            retVal << slotIterator.current()->asString();
+
+    retVal.sort();
     return retVal;
 }
 

@@ -1186,7 +1186,7 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
       }
       else
       {
-        kdDebug(9007) << "No method by the name " << name
+        kdDebug(9007) << "parseMethodImpl: No method by the name " << name
                       << "found in class " << className << endl;
         aMethod.out();
       }
@@ -1198,7 +1198,7 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
   	  if (!scope->path().isEmpty())        // Don't produce bad class names
   	    path = scope->path() + "." + path;
   	
-      kdDebug(9007) << "scope path is " << path << endl;
+      kdDebug(9007) << "parseMethodImpl: scope path is " << path << endl;
       aClass = store->getClassByName( path );
       if( aClass != NULL)
       {
@@ -1213,13 +1213,13 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
         }
         else
         {
-            kdDebug(9007) << "No method by the name " << name
+            kdDebug(9007) << "parseMethodImpl: No method by the name " << name
                            << "found in class " << path << endl;
           aMethod.out();
         }
       }
       else
-        kdDebug(9007) << "No class by the name " << path << " found" << endl;
+        kdDebug(9007) << "parseMethodImpl: No class by the name " << path << " found" << endl;
     }
   }
 }
@@ -2294,7 +2294,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 
         aClass->setDeclaredInScope( classPath );
 
-        kdDebug(9007) << "Storing class with path: " << aClass->path() << endl;
+        kdDebug(9007) << "parseTopLevelLexem: Storing class with path: " << aClass->path() << endl;
         
         // Check if class is in the global store, add it if missing
         bool inStore = store->hasClass( aClass->path() );

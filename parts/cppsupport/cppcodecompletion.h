@@ -83,11 +83,16 @@ protected:
     QValueList<KTextEditor::CompletionEntry> getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace );
 
     /* methods which are called recursively by getEntryListForClass(...) */
-    void getParentMethodListForClass( ParsedClass* pClass, QValueList<ParsedMethod*> *pList );
-    void getParentAttributeListForClass( ParsedClass* pClass, QValueList<ParsedAttribute*> *pList );
+    /* These are utility functions which add a layer above the ClassStore API */
+    QString getTypeOfMethod( ParsedClass*, const QString& );
+    QString getTypeOfAttribute( ParsedClass*, const QString& );
 
-    QStringList getMethodListForClass( QString strClass, QString strMethod );
-    void getParentMethodListForClass( ParsedClass* pClass, QString strMethod, QStringList *methodList );
+    QValueList<ParsedMethod*> getMethodListForClassAndAncestors( ParsedClass* pClass );
+    QValueList<ParsedAttribute*> getAttributeListForClassAndAncestors( ParsedClass* pClass );
+
+    QStringList getGlobalSignatureList(const QString &functionName);
+    QStringList getSignatureListForClass( QString strClass, QString strMethod );
+    QStringList getParentSignatureListForClass( ParsedClass* pClass, QString strMethod );
 
 private:
     CppSupportPart* m_pSupport;
@@ -107,8 +112,6 @@ private:
 
     QStringList m_CHCommentList;
 
-    QString getTypeOfMethod( ParsedClass*, const QString& );
-    QString getTypeOfAttribute( ParsedClass*, const QString& );
 };
 
 #endif

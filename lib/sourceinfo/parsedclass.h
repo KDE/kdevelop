@@ -137,12 +137,24 @@ public:
      */
     ParsedMethod *getSlotByNameAndArg(const QString &aName);
     
-    /** Gets all signals in sorted order. */
+    /** Returns a list of all signals, sorte by signature. */
     QValueList<ParsedMethod*> getSortedSignalList();
+
+    /**
+     * Returns a list of the signatures
+     * of all signals in sorted order.
+     */
+    QStringList getSortedSignalSignatureList(const QString &name);
     
-    /** Gets all slots in sorted order. */
+    /** Returns a list of all slots, sorted by signature. */
     QValueList<ParsedMethod*> getSortedSlotList();
     
+    /**
+     * Returns a list of the signatures
+     * of all slots in sorted order.
+     */
+    QStringList getSortedSlotSignatureList(const QString &name);
+
     /** Gets all virtual methods. */
     QValueList<ParsedMethod*> getVirtualMethodList();
     

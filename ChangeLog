@@ -1,3 +1,10 @@
+2002-05-20  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Make sure headers are parsed before sources
+	* Big cleanup in cppcodecompletion. Generalized
+	  some of the code and put it into classstore API.
+	  More to come...
+
 2002-05-18  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Ported "Expand text" into abbrev part

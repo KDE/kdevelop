@@ -373,6 +373,9 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     tag_label->setBuddy(tag_edit);
     tag_edit->setMinimumWidth(fm.width('X')*30);
     
+    regexp_box = new QCheckBox(i18n("&Regular expression match"), this);
+    regexp_box->setChecked(true);
+    
     QLabel *kinds_label = new QLabel(i18n("&Kinds:"), this);
 
     kinds_listview = new QListView(this);
@@ -382,9 +385,6 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     kinds_listview->header()->hide();
     kinds_listview->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 
-    regexp_box = new QCheckBox(i18n("&Regular expression match"), this);
-    regexp_box->setChecked(true);
-    
     KButtonBox *actionbox = new KButtonBox(this, Qt::Vertical);
     actionbox->addStretch();
     QPushButton *regenerate_button = actionbox->addButton(i18n("&Regenerate"));
@@ -401,8 +401,8 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     layout->addRowSpacing(3, 10);
     layout->addWidget(tag_label, 0, 0);
     layout->addWidget(tag_edit, 0, 1);
-    layout->addWidget(kinds_label, 2, 0);
     layout->addWidget(regexp_box, 1, 1);
+    layout->addWidget(kinds_label, 2, 0);
     layout->addWidget(kinds_listview, 2, 1);
     layout->addMultiCellWidget(actionbox, 0, 2, 2, 2);
     layout->addMultiCellWidget(results_listbox, 4, 4, 0, 2);

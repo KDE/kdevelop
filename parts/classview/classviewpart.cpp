@@ -318,6 +318,9 @@ void ClassViewPart::gotoDeclaration(const QString &className, const QString &met
     int toLine = -1;
     
     if (className.isEmpty()) {
+        if (methodName.isEmpty())
+            return;
+
         // Global function
         ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
         if (!pm)
@@ -359,12 +362,15 @@ void ClassViewPart::gotoDeclaration(const QString &className, const QString &met
 
 void ClassViewPart::gotoImplementation(const QString &className, const QString &methodName)
 {
-    kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << methodName << endl;
+    kdDebug(9003) << "ClassViewPart::gotoImplementation " << className << "::" << methodName << endl;
 
     QString toFile;
     int toLine = -1;
     
     if (className.isEmpty()) {
+        if (methodName.isEmpty())
+            return;
+        
         // Global function
         ParsedMethod *pm = classStore()->globalScope()->getMethodByNameAndArg(methodName);
         if (!pm)
@@ -381,8 +387,8 @@ void ClassViewPart::gotoImplementation(const QString &className, const QString &
         if (methodName.isEmpty()) {
             // Class itself
             // => does not have an implementation, so go to declaration
-            toFile = pc->declaredInFile();
-            toLine = pc->declaredOnLine();
+            toFile = pc->definedInFile();
+            toLine = pc->definedOnLine();
         } else {
             // Method of the class
             ParsedMethod *pm = pc->getMethodByNameAndArg(methodName);
