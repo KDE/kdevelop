@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 
-#ifndef  __ast_h
+#ifndef __ast_h
 #define __ast_h
 
 #include <memory>
@@ -20,6 +20,7 @@
 template <class T> typename T::Node CreateNode()
 {
     typename T::Node node( new T );
+    node->setNodeType( T::Type );
     return node;
 }
 
@@ -29,14 +30,52 @@ template <class T> typename T::Node NullNode()
     return node;
 }
 
+enum NodeType
+{
+    NodeType_Generic = 0,
+
+    NodeType_TemplateArgumentList = 1000,
+    NodeType_ClassOrNamespaceName,
+    NodeType_NestedNameSpecifier,
+    NodeType_Name,
+    NodeType_Declaration,
+    NodeType_TypeSpecifier,
+    NodeType_BaseSpecifier,
+    NodeType_BaseClause,
+    NodeType_ClassSpecifier,
+    NodeType_Enumerator,
+    NodeType_EnumSpecifier,
+    NodeType_ElaboratedTypeSpecifier,
+    NodeType_LinkageBody,
+    NodeType_LinkageSpecification,
+    NodeType_Namespace,
+    NodeType_NamespaceAlias,
+    NodeType_Using,
+    NodeType_UsingDirective,
+    NodeType_InitDeclaratorList,
+    NodeType_Typedef,
+    NodeType_Declarator,
+    NodeType_InitDeclarator,
+    NodeType_TemplateDeclaration,
+    NodeType_SimpleDeclaration,
+    NodeType_Statement,
+    NodeType_TranslationUnit,
+
+    NodeType_Custom = 2000
+};
+
 class AST
 {
 public:
     typedef std::auto_ptr<AST> Node;
+    enum { Type=NodeType_Generic };
 
 public:
     AST();
     virtual ~AST();
+
+    virtual int nodeType() const { return m_nodeType; }
+    virtual void setNodeType( int nodeType ) { m_nodeType = nodeType; }
 
     virtual AST* parent() { return m_parent; }
     virtual void setParent( AST* parent );
@@ -46,15 +85,16 @@ public:
 
     virtual void setEndPosition( int line, int col );
     virtual void getEndPosition( int* line, int* col ) const;
-    
+
     virtual QString text() const { return m_text; }
     virtual void setText( const QString& text ) { m_text = text; }
-    
+
     virtual QPtrList<AST> children() { return m_children; }
     virtual void appendChild( AST* child );
     virtual void removeChild( AST* child );
 
 private:
+    int m_nodeType;
     AST* m_parent;
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
@@ -70,17 +110,18 @@ class TemplateArgumentListAST: public AST
 {
 public:
     typedef std::auto_ptr<TemplateArgumentListAST> Node;
+    enum { Type = NodeType_TemplateArgumentList };
 
 public:
     TemplateArgumentListAST();
     virtual ~TemplateArgumentListAST();
-    
+
     void addArgument( AST::Node& arg );
     QPtrList<AST> arguments() { return m_arguments; }
-    
+
 private:
     QPtrList<AST> m_arguments;
-    
+
 private:
     TemplateArgumentListAST( const TemplateArgumentListAST& source );
     void operator = ( const TemplateArgumentListAST& source );
@@ -90,7 +131,8 @@ class ClassOrNamespaceNameAST: public AST
 {
 public:
     typedef std::auto_ptr<ClassOrNamespaceNameAST> Node;
-    
+    enum { Type = NodeType_ClassOrNamespaceName };
+
 public:
     ClassOrNamespaceNameAST();
     virtual ~ClassOrNamespaceNameAST();
@@ -114,7 +156,8 @@ class NestedNameSpecifierAST: public AST
 {
 public:
     typedef std::auto_ptr<NestedNameSpecifierAST> Node;
-    
+    enum { Type = NodeType_NestedNameSpecifier };
+
 public:
     NestedNameSpecifierAST();
     virtual ~NestedNameSpecifierAST();
@@ -134,7 +177,8 @@ class NameAST: public AST
 {
 public:
     typedef std::auto_ptr<NameAST> Node;
-    
+    enum { Type = NodeType_Name };
+
 public:
     NameAST();
     virtual ~NameAST();
@@ -162,7 +206,8 @@ class DeclarationAST: public AST
 {
 public:
     typedef std::auto_ptr<DeclarationAST> Node;
-    
+    enum { Type = NodeType_Declaration };
+
 public:
     DeclarationAST();
     virtual ~DeclarationAST();
@@ -176,7 +221,8 @@ class TypeSpecifierAST: public AST
 {
 public:
     typedef std::auto_ptr<TypeSpecifierAST> Node;
-    
+    enum { Type = NodeType_TypeSpecifier };
+
 public:
     TypeSpecifierAST();
     virtual ~TypeSpecifierAST();
@@ -224,7 +270,8 @@ class ClassSpecifierAST: public TypeSpecifierAST
 {
 public:
     typedef std::auto_ptr<ClassSpecifierAST> Node;
-    
+    enum { Type = NodeType_ClassOrNamespaceName };
+
 public:
     ClassSpecifierAST();
     virtual ~ClassSpecifierAST();    
@@ -252,7 +299,8 @@ class EnumeratorAST: public AST
 {
 public:
     typedef std::auto_ptr<EnumeratorAST> Node;
-    
+    enum { Type = NodeType_Enumerator };
+
 public:
     EnumeratorAST();
     virtual ~EnumeratorAST();
@@ -276,7 +324,8 @@ class EnumSpecifierAST: public TypeSpecifierAST
 {
 public:
     typedef std::auto_ptr<EnumSpecifierAST> Node;
-    
+    enum { Type = NodeType_EnumSpecifier };
+
 public:
     EnumSpecifierAST();
     virtual ~EnumSpecifierAST();
@@ -300,7 +349,8 @@ class ElaboratedTypeSpecifierAST: public TypeSpecifierAST
 {
 public:
     typedef std::auto_ptr<ElaboratedTypeSpecifierAST> Node;
-    
+    enum { Type = NodeType_ElaboratedTypeSpecifier };
+
 public:
     ElaboratedTypeSpecifierAST();
     virtual ~ElaboratedTypeSpecifierAST();
@@ -325,17 +375,18 @@ class LinkageBodyAST: public AST
 {
 public:
     typedef std::auto_ptr<LinkageBodyAST> Node;
-    
+    enum { Type = NodeType_LinkageBody };
+
 public:
     LinkageBodyAST();
     virtual ~LinkageBodyAST();
-    
+
     void addDeclaration( DeclarationAST::Node& ast );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
-    
+
 private:
     QPtrList<DeclarationAST> m_declarations;
-    
+
 private:
     LinkageBodyAST( const LinkageBodyAST& source );
     void operator = ( const LinkageBodyAST& source );
@@ -345,7 +396,8 @@ class LinkageSpecificationAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<LinkageSpecificationAST> Node;
-    
+    enum { Type = NodeType_LinkageSpecification };
+
 public:
     LinkageSpecificationAST();
     virtual ~LinkageSpecificationAST();
@@ -373,7 +425,8 @@ class NamespaceAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<NamespaceAST> Node;
-    
+    enum { Type = NodeType_Namespace };
+
 public:
     NamespaceAST();
     virtual ~NamespaceAST();
@@ -397,7 +450,8 @@ class NamespaceAliasAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<NamespaceAliasAST> Node;
-    
+    enum { Type = NodeType_NamespaceAlias };
+
 public:
     NamespaceAliasAST();
     virtual ~NamespaceAliasAST();
@@ -421,7 +475,8 @@ class UsingAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<UsingAST> Node;
-    
+    enum { Type = NodeType_Using };
+
 public:
     UsingAST();
     virtual ~UsingAST();
@@ -445,7 +500,8 @@ class UsingDirectiveAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<UsingDirectiveAST> Node;
-    
+    enum { Type = NodeType_UsingDirective };
+
 public:
     UsingDirectiveAST();
     virtual ~UsingDirectiveAST();
@@ -465,7 +521,8 @@ class InitDeclaratorListAST: public AST
 {
 public:
     typedef std::auto_ptr<InitDeclaratorListAST> Node;
-    
+    enum { Type = NodeType_InitDeclaratorList };
+
 public:
     InitDeclaratorListAST();
     virtual ~InitDeclaratorListAST();
@@ -479,7 +536,8 @@ class TypedefAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<TypedefAST> Node;
-    
+    enum { Type = NodeType_Typedef };
+
 public:
     TypedefAST();
     virtual ~TypedefAST();
@@ -503,7 +561,8 @@ class DeclaratorAST: public AST
 {
 public:
     typedef std::auto_ptr<DeclaratorAST> Node;
-    
+    enum { Type = NodeType_Declarator };
+
 public:
     DeclaratorAST();
     virtual ~DeclaratorAST();
@@ -547,7 +606,8 @@ class InitDeclaratorAST: public AST
 {
 public:
     typedef std::auto_ptr<InitDeclaratorAST> Node;
-    
+    enum { Type = NodeType_InitDeclarator };
+
 public:
     InitDeclaratorAST();
     virtual ~InitDeclaratorAST();
@@ -567,7 +627,8 @@ class TemplateDeclarationAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<TemplateDeclarationAST> Node;
-    
+    enum { Type = NodeType_TemplateDeclaration };
+
 public:
     TemplateDeclarationAST();
     virtual ~TemplateDeclarationAST();
@@ -595,7 +656,8 @@ class SimpleDeclarationAST: public DeclarationAST
 {
 public:
     typedef std::auto_ptr<SimpleDeclarationAST> Node;
-    
+    enum { Type = NodeType_SimpleDeclaration };
+
 public:
     SimpleDeclarationAST();
     virtual ~SimpleDeclarationAST();
@@ -619,7 +681,8 @@ class StatementAST: public AST
 {
 public:
     typedef std::auto_ptr<StatementAST> Node;
-    
+    enum { Type = NodeType_Statement };
+
 public:
     StatementAST();
     virtual ~StatementAST();
@@ -633,7 +696,8 @@ class TranslationUnitAST: public AST
 {
 public:
     typedef std::auto_ptr<TranslationUnitAST> Node;
-    
+    enum { Type = NodeType_TranslationUnit };
+
 public:
     TranslationUnitAST();
     virtual ~TranslationUnitAST();

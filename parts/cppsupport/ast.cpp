@@ -13,7 +13,7 @@
 #include <kdebug.h>
 // ------------------------------------------------------------------------
 AST::AST()
-    : m_parent( 0 ),
+    : m_nodeType( NodeType_Generic ), m_parent( 0 ),
       m_startLine( 0 ), m_startColumn( 0 ),
       m_endLine( 0 ), m_endColumn( 0 )
 {

@@ -145,11 +145,11 @@ void ProblemReporter::removeAllErrors( const QString& filename )
     while( current ){
 	QListViewItem* i = current;
 	current = current->nextSibling();
-	
-	if( i->text(1) == m_filename )
+
+	if( i->text(1) == filename )
 	    delete( i );
     }
-    
+
     if( m_markIface ){
 	QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
 	QPtrListIterator<KTextEditor::Mark> it( marks );
