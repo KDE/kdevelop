@@ -25,18 +25,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install
@@ -151,4 +144,8 @@ Dest=%{dest}/src/%{APPNAMELC}_part.rc
 Type=install
 Source=%{src}/app_shell.rc
 Dest=%{dest}/src/%{APPNAMELC}_shell.rc
+
+[MSG]
+Type=message
+Comment=A complex KDE Application using KParts was created in %{dest}
 
