@@ -103,7 +103,7 @@ public:
      * of find strings. @p strings might get truncated if it is
      * too long.
      *
-     * @param history The find history.
+     * @param strings The find history.
      * @see #findHistory
      */
     void setFindHistory( const QStringList &strings );
@@ -197,6 +197,8 @@ private:
      * Construct a find dialog with a parent object and a name. This version of the
      * constructor is for use by friends only!
      *
+     * @param parent The parent object of this widget.
+     * @param name The name of this widget.
      * @param forReplace Is this a replace dialog?
      */
     KoFindDialog( QWidget *parent, const char *name, bool forReplace );
@@ -289,7 +291,8 @@ public:
      * @param text The string to search.
      * @param pattern The pattern to look for.
      * @param index The starting index into the string.
-     * @param options. The options to use.
+     * @param options The options to use.
+     * @param matchedlength The length that matched.
      * @return The index at which a match was found, or -1 if no match was found.
      */
     static int find( const QString &text, const QString &pattern, int index, long options, int *matchedlength );

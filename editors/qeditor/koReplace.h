@@ -77,6 +77,8 @@ public:
      * @param parent The parent object of this widget
      * @param name The name of this widget
      * @param options A bitfield of the @ref Options to be enabled.
+     * @param findStrings A list of strings to find.
+     * @param replaceStrings A list of strings to replace.
      * @param hasSelection Whether a selection exists
      */
     KoReplaceDialog( QWidget *parent = 0, const char *name = 0, long options = 0,
@@ -219,8 +221,10 @@ public:
      *
      * @param text The string to search.
      * @param pattern The pattern to look for.
+     * @param replacement The replacement string.
      * @param index The starting index into the string.
-     * @param options. The options to use.
+     * @param options The options to use.
+     * @param replacedLength The replaced length.
      * @return The index at which a match was found, or -1 if no match was found.
      */
     static int replace( QString &text, const QString &pattern, const QString &replacement, int index, long options, int *replacedLength );
