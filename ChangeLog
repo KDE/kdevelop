@@ -1,6 +1,7 @@
 2001-04-17  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* Moved the splitter widget to lib/util, so it can be shared with parts
+        * Moved the editor part to lib/kwrite, to allow parts to access it.
 
 2001-04-13  Richard Dale <duke@tipitina.demon.co.uk
 
