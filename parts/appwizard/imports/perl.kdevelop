@@ -12,7 +12,7 @@
  </general>
  <kdevscriptproject>
   <run>
-   <mainprogram>$APPNAMELC$.pl</mainprogram>
+   <mainprogram>./$APPNAMELC$.pl</mainprogram>
   </run>
  </kdevscriptproject>
   <kdevfilecreate>

@@ -14,7 +14,7 @@
  </general>
  <kdevscriptproject>
   <run>
-   <mainprogram>$APPNAMELC$.py</mainprogram>
+   <mainprogram>./$APPNAMELC$.py</mainprogram>
   </run>
  </kdevscriptproject>
  <kdevdoctreeview>

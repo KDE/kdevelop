@@ -17,7 +17,7 @@
       <activedir/>
     </general>
     <run>
-      <mainprogram>$APPNAMELC$.py</mainprogram>
+      <mainprogram>./$APPNAMELC$.py</mainprogram>
     </run>
   </kdevautoproject>
   <kdevdoctreeview>

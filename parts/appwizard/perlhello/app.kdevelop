@@ -11,7 +11,7 @@
  </general>
  <kdevscriptproject>
   <run>
-   <mainprogram>$APPNAMELC$.pl</mainprogram>
+   <mainprogram>./$APPNAMELC$.pl</mainprogram>
   </run>
   <general>
     <includepatterns>*.pl,*.pm</includepatterns>
