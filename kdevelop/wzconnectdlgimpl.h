@@ -29,6 +29,12 @@ class CParsedMethod;
 
 /** For what action the dialog was called and current action : */
 enum CTPACTION {CTPVIEW=0, CTPADDATTR, CTPADDMETH, CTPADDSIGNAL, CTPADDSLOT, CTPCONNECTSIG };
+struct ClsHeader {
+   char * ClsName;
+   char * Filename;
+};
+
+extern ClsHeader QtKde[];
 
 // Index of tabs
 #define CTPCLASSVIEW    (int)0
@@ -80,12 +86,10 @@ public:
   void viewChildren();
   /**  */
   void setClassToolDlg( CClassToolDlg* ct);
-  /** No descriptions */
-  CParsedClass* getParsedParentClass( CParsedClass* aClass );
-  /** This function will try to fill up the combo with 
+  /** This function will try to fill up the combo with
 avaible Signals/Slots methods from the class itself and, if possible, 
 from its parent classes. */
-  bool fillCombo(CParsedClass* aClass,  CTPACTION action, QComboBox* cb);
+  bool fillSignalCombo(CParsedClass* aClass, bool bClear = true);
 public slots:
     void slotClone();
     void slotBtnApply();
@@ -172,6 +176,15 @@ signals: // Signals
 public: // Public attributes
   /**  */
   CClassView* class_tree;
+protected: // Protected attributes
+  /**  */
+  QString strSlotMethod;
+  /**  */
+  QString strSignalMethod;
+  /**  */
+  QStrList argList;
+  /**  */
+  QList <CParsedClass> sigClassList;
 };
 
 #endif // CCLASSPROPERTIESDLGIMPL_H

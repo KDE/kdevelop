@@ -167,6 +167,8 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
     connect(  this,   SIGNAL(showStepInSource(const QString&, int, const QString&)),
                       SLOT(slotStepInSource(const QString&,int)));
 #endif
+
+  cmdList_.setAutoDelete(true);
 }
 
 // **************************************************************************
@@ -224,6 +226,8 @@ GDBController::~GDBController()
   }
 
   delete tty_; tty_ = 0;
+  delete[] gdbOutput_;
+
   emit dbgStatus (i18n("Debugger stopped"), state_);
 }
 
