@@ -1321,7 +1321,12 @@ void CKDevelop::slotDebugAttach()
                             pid, dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        if(prj->isKDE2Project()){
+        if(prj->isCustomProject()){
+          dbgController->slotStart(underDir+binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+          dbgController->slotAttachTo(pid);
+        }
+        else{
           // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
           // the current dir is resetted to the project dir at the end of this function after the kprocess call.
           QDir::setCurrent(underDir);
@@ -1329,11 +1334,6 @@ void CKDevelop::slotDebugAttach()
                (isAScript(binProgram)) ? libtool : QString());
           dbgController->slotAttachTo(pid);
           QDir::setCurrent(prj->getProjectDir());
-        }
-        else{
-          dbgController->slotStart(underDir+binProgram, QString(),
-               (isAScript(binProgram)) ? libtool : QString());
-          dbgController->slotAttachTo(pid);
         }
       }
     }
@@ -1370,13 +1370,13 @@ void CKDevelop::slotDebugExamineCore()
                                 coreFile.data(), dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        if(prj->isKDE2Project()){
-        QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString(),
+        if(prj->isCustomProject()){
+        dbgController->slotStart(underDir+binProgram, QString(),
              (isAScript(binProgram)) ? libtool : QString());
         }
         else{
-        dbgController->slotStart(underDir+binProgram, QString(),
+        QDir::setCurrent(underDir);
+        dbgController->slotStart(binProgram, QString(),
              (isAScript(binProgram)) ? libtool : QString());
         }
         dbgController->slotCoreFile(coreFile);
