@@ -8,7 +8,7 @@ bin_PROGRAMS = gideon
 
 gideon_SOURCES = main.cpp core.cpp toplevel.cpp partloader.cpp documentationpart.cpp \
 		 importdlg.cpp partselectwidget.cpp filenameedit.cpp bufferaction.cpp \
-		 statusbar.cpp 
+		 statusbar.cpp settingswidget.ui
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 gideon_LDADD = $(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
@@ -24,4 +24,8 @@ gideon_LDADD = $(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
 
 rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc
+
+# default KDevelop	 configuration
+datadir =$(kde_confdir)
+data_DATA =gideonrc
 

@@ -1,3 +1,7 @@
+2001-05-24 Sandy Meier   <smeier@kdevelop.org>
+	* added option (load last project on startup)
+	* saved mainview configuration on exit
+
 2001-05-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added templates for GNOME app and simple automake-

@@ -216,7 +216,7 @@ void PHPSupportPart::parse(const QString &fileName)
 	  }
         }
 	else if (varre.match(line)) {
-	  kdDebug(9018) << "###########regex match line ( var ): " << varre.group(1) << endl;
+	  //	  kdDebug(9018) << "###########regex match line ( var ): " << varre.group(1) << endl;
 	  if (lastClass && inClass) {
 	    ParsedAttribute* anAttr = new ParsedAttribute();
 	    anAttr->setName(varre.group(1));

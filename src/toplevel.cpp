@@ -17,6 +17,8 @@
 #include <kedittoolbar.h>
 #include <klocale.h>
 #include <kstdaction.h>
+#include <kconfig.h>
+#include <kapp.h>
 
 #include "splitter.h"
 #include "statusbar.h"
@@ -29,6 +31,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
     setXMLFile("gideonui.rc");
 
     KToggleAction *action;
+    KConfig* config = kapp->config();
 
     action = new KToggleAction( i18n("&Selection views"), 0,
                                 this, SLOT(slotToggleSelectViews()),
@@ -58,7 +61,10 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
 
     (void) new StatusBar(this);
     
-    resize(700, 480);
+    config->setGroup("General Options");
+    setGeometry(config->readRectEntry("Geomentry"));
+    vertSplitter->setSizes(config->readIntListEntry("Vertical Splitter"));
+    horzSplitter->setSizes(config->readIntListEntry("Horizontal Splitter"));
     closing = false;
 }
 
@@ -106,8 +112,14 @@ void TopLevel::splitterCollapsed(Splitter *splitter)
 
 void TopLevel::closeReal()
 {
-    closing = true;
-    close();
+  // store the widget configuration
+  KConfig* config = kapp->config();
+  config->setGroup("General Options");
+  config->writeEntry("Geomentry",geometry());
+  config->writeEntry("Vertical Splitter",vertSplitter->sizes());
+  config->writeEntry("Horizontal Splitter",horzSplitter->sizes());
+  closing = true;
+  close();
 }
 
 

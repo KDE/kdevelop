@@ -1,0 +1,10 @@
+[General Options]
+Geomentry=4,24,1016,670
+Horizontal Splitter=212,615
+Vertical Splitter=416,168
+[KFileDialog Settings]
+Recent Files=/home/smeier/back/phporacleadmin
+[Plugins]
+KDevKonsoleView=false
+[Tools]
+Tools=

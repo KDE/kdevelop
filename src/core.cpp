@@ -16,6 +16,7 @@
 #include <qtabdialog.h>
 #include <qtextstream.h>
 #include <qvbox.h>
+#include <qcheckbox.h>
 #include <dcopclient.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -28,6 +29,7 @@
 #include <kstdaction.h>
 #include <kstddirs.h>
 #include <ktrader.h>
+#include <kconfig.h>
 
 #include "texteditor.h"
 #include "classstore.h"
@@ -54,6 +56,7 @@
 #include "filenameedit.h"
 #include "importdlg.h"
 #include "partselectwidget.h"
+#include "settingswidget.h"
 #include "toplevel.h"
 #include "partloader.h"
 #include "core.h"
@@ -103,6 +106,16 @@ Core::Core()
     win->show();
 
     emit coreInitialized();
+    
+    // load the project if needed
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    QString project = config->readEntry("Last Project","");
+    bool readProject = config->readBoolEntry("Read Last Project On Startup",true);
+    if(project !="" && readProject){
+      projectFile = project;
+      openProject();
+    }
 }
 
 
@@ -135,11 +148,11 @@ void Core::initActions()
                           this, SLOT(slotSaveFile()),
                           actionCollection(), "file_save" );
 
-    action = new KAction( i18n("Split window &vertically"), 0,
+    action = new KAction( i18n("Split window &vertically"), CTRL+Key_2,
                           this, SLOT(slotSplitVertically()),
                           actionCollection(), "file_splitvertically" );
 
-    action = new KAction( i18n("Split window &horizontally"), 0,
+    action = new KAction( i18n("Split window &horizontally"), CTRL+Key_3,
                           this, SLOT(slotSplitHorizontally()),
                           actionCollection(), "file_splithorizontally" );
 #endif
@@ -1147,6 +1160,10 @@ void Core::slotQuit()
     disconnect( manager, SIGNAL(activePartChanged(KParts::Part*)),
                 this, SLOT(activePartChanged(KParts::Part*)) );
 
+    // save the the project to open it automaticly on startup if needed
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    config->writeEntry("Last Project",projectFile);
     closeProject();
     removeGlobalParts();
 
@@ -1249,12 +1266,22 @@ void Core::slotSettingsCustomize()
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "customization dialog");
 
-    QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+    QVBox *vbox = dlg.addVBoxPage(i18n("General"));
+    SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+    
+    
+    vbox = dlg.addVBoxPage(i18n("Plugins"));
     PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
     connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 
     emit configWidget(&dlg);
     dlg.exec();
+    
+    config->setGroup("General Options");
+    config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 }
 
 
