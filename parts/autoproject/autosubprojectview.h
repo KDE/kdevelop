@@ -35,12 +35,12 @@ class AutoSubprojectView : public KListView
 	public:
 		AutoSubprojectView(AutoProjectWidget* widget, AutoProjectPart* part, QWidget *parent, const char *name);
 		virtual ~AutoSubprojectView();
-		
+
 	public:
 		void loadMakefileams ( const QString& dir );
-		
+
 		void parse(SubprojectItem *item);
-		
+
 	protected:
 		void initActions ();
 
@@ -58,7 +58,8 @@ class AutoSubprojectView : public KListView
 	private:
 		AutoProjectWidget* m_widget;
 		AutoProjectPart* m_part;
-		
+		QStringList headers;
+
 		bool m_kdeMode;
 
 		KAction* addApplicationAction;
@@ -69,11 +70,11 @@ class AutoSubprojectView : public KListView
 		KAction* addServiceAction;
 		KAction* buildSubprojectAction;
 		KAction* removeSubprojectAction;
-		
+
 	private slots:
 		void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 // 		void slotSubprojectExecuted(QListViewItem* item);
-		
+
 		void slotAddApplication();
 		void slotSubprojectOptions();
 		void slotAddSubproject();

@@ -126,19 +126,17 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 		{
 			QString lhs = re.cap( 1 );
 			QString rhs = re.cap( 2 );
-			QMap<QString, QString>::Iterator it;
+			QMap<QString, QString>::Iterator it = variables.find( lhs );
 			
-			for ( it = variables.begin(); it != variables.end(); ++it )
-			{
-				if ( lhs == it.key() )
-					break;
-			}
 			if ( it != variables.end() )
 			{
 				// Skip continuation lines
 				while ( !s.isEmpty() && s[ s.length() - 1 ] == '\\' && !ins.atEnd() )
 					s = ins.readLine();
-				s = it.key() + " = " + it.data();
+				if( !it.data().stripWhiteSpace().isEmpty() )
+				    s = it.key() + " = " + it.data();
+				else
+				    s = QString::null;
 				variables.remove( it );
 			}
 			else
@@ -156,8 +154,10 @@ void AutoProjectTool::modifyMakefileam( const QString &fileName, QMap<QString, Q
 
 	// Write new variables out
 	QMap<QString, QString>::Iterator it2;
-	for ( it2 = variables.begin(); it2 != variables.end(); ++it2 )
+	for ( it2 = variables.begin(); it2 != variables.end(); ++it2 ){
+	    if( !it2.data().stripWhiteSpace().isEmpty() )
 		outs << it2.key() + " = " + it2.data() << endl;
+	}
 
 	fin.close();
 	fout.close();

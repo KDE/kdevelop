@@ -15,6 +15,8 @@
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlineedit.h>
+#include <qvalidator.h>
+
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
@@ -142,11 +144,30 @@ void AddTargetDialog::accept()
 		return;
 	}
 
+#if 0
+	if (primary == "LIBRARIES" && !name.startsWith("lib")) {
+		KMessageBox::sorry(this, i18n("Libraries must have a lib prefix!"));
+		return;
+	}
+	
+	if (primary == "LTLIBRARIES" && !name.startsWith("lib")) {
+		KMessageBox::sorry(this, i18n("Libtool libraries must have a lib prefix!"));
+		return;
+	}
+	
 	if (primary == "LTLIBRARIES" && name.right(3) != ".la") {
 		KMessageBox::sorry(this, i18n("Libtool libraries must have a .la suffix!"));
 		return;
 	}
-
+	
+#endif
+	
+	if( primary.endsWith("LIBRARIES") && !name.startsWith("lib") )
+	    name.prepend( QString::fromLatin1("lib") );
+	
+	if( primary == "LTLIBRARIES" && !name.endsWith(".la") )
+	    name.append( QString::fromLatin1(".la") );
+	
 	QPtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
@@ -166,7 +187,7 @@ void AddTargetDialog::accept()
 			flagslist.append("-no-undefined");
 	}
 	flagslist.append(ldflagsother_edit->text());
-	QString ldflags = flagslist.join(" ");
+	QString ldflags = flagslist.join( " " );
 
 	TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, false);
 	// m_detailsView->insertItem ( titem );

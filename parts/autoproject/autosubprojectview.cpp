@@ -16,15 +16,18 @@
 
 /** Qt */
 #include <qregexp.h>
- 
+
 /** KDE Libs */
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kmessagebox.h>
+#include <kapplication.h>
 
 /** Gideon */
-#include "kdevmainwindow.h"
+#include <kdevmainwindow.h>
+#include <kdevmakefrontend.h>
 
 /** AutoProject */
 #include "subprojectoptionsdlg.h"
@@ -42,6 +45,14 @@
 #include "autosubprojectview.h"
 
 
+namespace AutoProjectPrivate
+{
+
+static bool isHeader( const QString& fileName )
+{
+    return QStringList::split( ";", "h;H;hh;hxx;hpp;tcc" ).contains( QFileInfo(fileName).extension() );
+}
+
 static QString cleanWhitespace( const QString &str )
 {
 	QString res;
@@ -55,6 +66,34 @@ static QString cleanWhitespace( const QString &str )
 	}
 
 	return res.left( res.length() - 1 );
+}
+
+static void removeDir( const QString& dirName )
+{
+    QDir d( dirName );
+    const QFileInfoList* fileList = d.entryInfoList();
+    if( !fileList )
+	return;
+    
+    QFileInfoListIterator it( *fileList );
+    while( it.current() ){
+	const QFileInfo* fileInfo = it.current();
+	++it;
+	
+	if( fileInfo->fileName() == "." || fileInfo->fileName() == ".." )
+	    continue;
+	
+	if( fileInfo->isDir() )
+	    removeDir( fileInfo->absFilePath() );
+	
+	kdDebug(9020) << "remove " << fileInfo->absFilePath() << endl;
+	d.remove( fileInfo->fileName(), false );
+    }
+    
+    kdDebug(9020) << "remove dir " << dirName << endl;
+    d.rmdir( d.absPath(), true );
+}
+
 }
 
 
@@ -80,7 +119,7 @@ void AutoSubprojectView::loadMakefileams ( const QString& dir )
 	item->path = dir;
 	parse( item );
 	item->setOpen( true );
-	
+
 	setSelected( item, true );
 }
 
@@ -93,6 +132,8 @@ void AutoSubprojectView::initActions()
 	                                       this, SLOT( slotSubprojectOptions() ), actions, "subproject options" );
 	addSubprojectAction = new KAction( i18n( "Add Subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
+	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "folder_remove", 0,
+	                                   this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
 	addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
 	                                           this, SLOT( slotAddExistingSubproject() ), actions, "add existing subproject" );
 	addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
@@ -128,8 +169,8 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 	popup.insertSeparator();
 	addExistingSubprojectAction->plug( &popup );
 	popup.insertSeparator();
-//	removeSubprojectAction->plug( &popup );
-//	popup.insertSeparator();
+	removeSubprojectAction->plug( &popup );
+	popup.insertSeparator();
 	buildSubprojectAction->plug( &popup );
 
 	popup.exec( p );
@@ -143,7 +184,7 @@ void AutoSubprojectView::slotSubprojectExecuted ( QListViewItem* item )
 void AutoSubprojectView::slotSubprojectOptions()
 {
 	kdDebug( 9020 ) << "AutoSubprojectView::slotSubprojectOptions()" << endl;
-	
+
 	SubprojectItem* spitem = static_cast <SubprojectItem*> ( selectedItem() );
 	if ( !spitem )	return;
 
@@ -156,7 +197,7 @@ void AutoSubprojectView::slotAddSubproject()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	AddSubprojectDialog dlg( m_part, this, spitem, this, "add subproject dialog" );
 
 	dlg.setCaption ( i18n ( "Add New Subproject to '%1'" ).arg ( spitem->subdir ) );
@@ -168,11 +209,11 @@ void AutoSubprojectView::slotAddExistingSubproject()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	AddExistingDirectoriesDialog dlg ( m_part, m_widget, spitem, this, "add existing subprojects" );
-	
+
 	dlg.setCaption ( i18n ( "Add Existing Subproject to '%1'" ).arg ( spitem->subdir ) );
-	
+
 	if ( dlg.exec() )
 		emit selectionChanged ( spitem );
 }
@@ -182,7 +223,7 @@ void AutoSubprojectView::slotAddTarget()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	AddTargetDialog dlg( m_widget, spitem, this, "add target dialog" );
 
 	dlg.setCaption ( i18n ( "Add New Target to '%1'" ).arg ( spitem->subdir ) );
@@ -197,7 +238,7 @@ void AutoSubprojectView::slotAddService()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	AddServiceDialog dlg( m_widget, spitem, this, "add service dialog" );
 
 	dlg.setCaption ( i18n ( "Add New Service to '%1'" ).arg ( spitem->subdir ) );
@@ -212,7 +253,7 @@ void AutoSubprojectView::slotAddApplication()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	AddApplicationDialog dlg( m_widget, spitem, this, "add application dialog" );
 
 	dlg.setCaption ( i18n ( "Add New Application to '%1'" ).arg ( spitem->subdir ) );
@@ -227,7 +268,7 @@ void AutoSubprojectView::slotBuildSubproject()
 {
 	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
 	if ( !spitem )	return;
-		
+
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, QString::fromLatin1( "" ) );
@@ -237,7 +278,69 @@ void AutoSubprojectView::slotBuildSubproject()
 
 void AutoSubprojectView::slotRemoveSubproject()
 {
+    kdDebug(9020) << "AutoSubprojectView::slotRemoveSubproject()" << endl;
 
+    SubprojectItem* spitem = static_cast<SubprojectItem*>( selectedItem() );
+    if( !spitem )
+	return;
+
+    SubprojectItem* parent = static_cast<SubprojectItem*>( spitem->parent() );
+    if( !parent || !parent->listView() || spitem->childCount() != 0 ){
+	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake manager") );
+	return;
+    }
+
+    // check for config.status
+    if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
+	KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
+	return;
+    }
+        
+    QStringList list = QStringList::split( QRegExp("[ \t]"), parent->variables["SUBDIRS"] );
+    QStringList::Iterator it = list.find( spitem->subdir );
+    if( it == list.end() ){
+        KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
+        return;
+    }
+    list.remove( it );
+    parent->variables[ "SUBDIRS" ] = list.join( "." );
+    
+    parent->listView()->setSelected( parent, true );
+    kapp->processEvents( 500 );
+    
+    
+    bool removeSources = KMessageBox::warningYesNo( 0, i18n("Do you want to remove the contents of the directory %1?").arg(spitem->path), i18n("Automake manager") ) == KMessageBox::Yes;
+    
+    if( removeSources ){
+	kdDebug(9020) << "remove dir " << spitem->path << endl;
+	AutoProjectPrivate::removeDir( spitem->path );
+    }
+    
+    if( m_widget->activeSubproject() == spitem ){
+	m_widget->setActiveSubproject( 0 );
+    }
+    // remove all targets
+    spitem->targets.setAutoDelete( true );
+    spitem->targets.clear();
+    delete( spitem );
+    spitem = 0;
+
+    // Adjust SUBDIRS variable in containing Makefile.am
+    QMap<QString,QString> replaceMap;
+    replaceMap.insert( "SUBDIRS", parent->variables["SUBDIRS"] );
+    AutoProjectTool::modifyMakefileam( parent->path + "/Makefile.am", replaceMap );
+    
+    QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
+    kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
+
+    QString cmdline = "cd ";
+    cmdline += m_part->projectDirectory();
+    cmdline += " && automake ";
+    cmdline += relmakefile;
+    cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
+    cmdline += relmakefile;
+    cmdline += " ./config.status";
+    m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
 }
 
 
@@ -250,6 +353,7 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 	QString prefix = lhs.left( pos );
 	QString primary = lhs.right( lhs.length() - pos - 1 );
 	//    kdDebug(9020) << "Prefix:" << prefix << ",Primary:" << primary << endl;
+
 
 #if 0
 
@@ -282,33 +386,30 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 			item->targets.append( titem );
 
 			QString canonname = AutoProjectTool::canonicalize( *it1 );
-			titem->ldflags = cleanWhitespace( item->variables[ canonname + "_LDFLAGS" ] );
-			titem->ldadd = cleanWhitespace( item->variables[ canonname + "_LDADD" ] );
-			titem->libadd = cleanWhitespace( item->variables[ canonname + "_LIBADD" ] );
-			titem->dependencies = cleanWhitespace( item->variables[ canonname + "_DEPENDENCIES" ] );
+			titem->ldflags = AutoProjectPrivate::cleanWhitespace( item->variables[ canonname + "_LDFLAGS" ] );
+			titem->ldadd = AutoProjectPrivate::cleanWhitespace( item->variables[ canonname + "_LDADD" ] );
+			titem->libadd = AutoProjectPrivate::cleanWhitespace( item->variables[ canonname + "_LIBADD" ] );
+			titem->dependencies = AutoProjectPrivate::cleanWhitespace( item->variables[ canonname + "_DEPENDENCIES" ] );
 
 			QString sources = item->variables[ canonname + "_SOURCES" ];
 			QStringList sourceList = QStringList::split( QRegExp( "[ \t\n]" ), sources );
-			
-			// TODO: only if in a c++ project
-			kdDebug(9020) << "-------------> path = " << (item->path) << endl;
-			QDir dir( item->path );
-			sourceList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
-			
 			QMap<QString, bool> dict;
 			QStringList::Iterator it = sourceList.begin();
 			while( it != sourceList.end() ){
-			    kdDebug(9020) << "------------> include " << (*it) << endl;
 			    dict.insert( *it, true );
 			    ++it;
 			}
-			
+
 			QMap<QString, bool>::Iterator dictIt = dict.begin();
 			while( dictIt != dict.end() ){
-				FileItem *fitem = m_widget->createFileItem( dictIt.key(), item );
+				QString fname = dictIt.key();
 				++dictIt;
-				
-				titem->sources.append( fitem );								
+
+				FileItem *fitem = m_widget->createFileItem( fname, item );
+				titem->sources.append( fitem );
+
+				if( AutoProjectPrivate::isHeader(fname) )
+					headers += fname;
 			}
 		    }
 	}
@@ -332,8 +433,13 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 		QStringList::Iterator it3;
 		for ( it3 = l.begin(); it3 != l.end(); ++it3 )
 		{
-			FileItem *fitem = m_widget->createFileItem( *it3, item );
+			QString fname = *it3;
+			FileItem *fitem = m_widget->createFileItem( fname, item );
 			titem->sources.append( fitem );
+
+			if( AutoProjectPrivate::isHeader(fname) )
+				headers += fname;
+
 		}
 	}
 	else if ( primary == "JAVA" )
@@ -374,7 +480,8 @@ void AutoSubprojectView::parseKDEDOCS( SubprojectItem *item,
 	{
 		if ( !re.exactMatch( *it ) )
 		{
-			FileItem * fitem = m_widget->createFileItem( *it, item );
+			QString fname = *it;
+			FileItem * fitem = m_widget->createFileItem( fname, item );
 			titem->sources.append( fitem );
 		}
 	}
@@ -536,9 +643,9 @@ void AutoSubprojectView::parseSUBDIRS( SubprojectItem *item,
 	}
 }
 
-
 void AutoSubprojectView::parse( SubprojectItem *item )
 {
+	headers.clear();
 	AutoProjectTool::parseMakefileam( item->path + "/Makefile.am", &item->variables );
 
 	QMap<QString, QString>::ConstIterator it;
@@ -556,6 +663,42 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 			parsePrefix( item, lhs, rhs );
 		else if ( lhs == "SUBDIRS" )
 			parseSUBDIRS( item, lhs, rhs );
+	}
+
+	// TODO: only if in a c++ project
+	TargetItem* noinst_HEADERS_item = 0;
+	QPtrListIterator<TargetItem> itemIt( item->targets );
+	while( itemIt.current() ){
+	    TargetItem* titem = itemIt.current();
+	    ++itemIt;
+
+	    if( titem->prefix == "noinst" && titem->primary == "HEADERS" ){
+	        noinst_HEADERS_item = titem;
+		break;
+	    }
+	}
+
+	if( !noinst_HEADERS_item ){
+	    noinst_HEADERS_item = m_widget->createTargetItem( "", "noinst", "HEADERS" );
+	    item->targets.append( noinst_HEADERS_item );
+	}
+
+	QDir dir( item->path );
+	QStringList headersList = QStringList::split( "[ \t]", item->variables[ "noinst_HEADERS" ] );
+	headersList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
+	headersList.sort();
+
+	item->variables[ "noinst_HEADERS" ] = headersList.join( " " );
+
+	QStringList::Iterator fileIt = headersList.begin();
+	while( fileIt != headersList.end() ){
+	    QString fname = *fileIt;
+	    ++fileIt;
+
+	    if( AutoProjectPrivate::isHeader(fname) && !headers.contains(fname) ){
+	        FileItem *fitem = m_widget->createFileItem( fname, item );
+	        noinst_HEADERS_item->sources.append( fitem );
+	    }
 	}
 }
 

@@ -818,5 +818,10 @@ void AutoProjectWidget::saveSession ( QDomElement* el )
 	}
 }
 
+void AutoProjectWidget::setActiveSubproject( SubprojectItem * spitem )
+{
+    m_activeSubproject = spitem;
+}
+
 
 #include "autoprojectwidget.moc"

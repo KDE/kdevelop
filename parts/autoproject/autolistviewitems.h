@@ -56,7 +56,7 @@ class SubprojectItem : public ProjectItem
 public:
 	SubprojectItem(QListView *parent, const QString &text);
 	SubprojectItem(SubprojectItem *parent, const QString &text);
-
+	
 	/* name of the directory */
 	QString subdir;
 	/* absolute path */

@@ -68,13 +68,15 @@ void AddSubprojectDialog::accept()
     }
 
 
+#if 0
     // check for config.status
     if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
         KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
         QDialog::accept();
 	return;
     }
-
+#endif
+    
     QDir      dir( m_subProject->path );
     QFileInfo file( dir, name );
 
@@ -136,7 +138,8 @@ void AddSubprojectDialog::accept()
         stream << "INCLUDES = " << newitem->variables["INCLUDES"] << endl;
         f.close();
     }
-    
+     
+#if 0
     QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_part->projectDirectory().length()+1);
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
     
@@ -147,7 +150,12 @@ void AddSubprojectDialog::accept()
     cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
     cmdline += relmakefile;
     cmdline += " ./config.status";
-    m_part->makeFrontend()->queueCommand(m_part->projectDirectory(), cmdline);
+    
+    m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
+    m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), m_part->configureCommand() );
+#endif
+    
+    m_part->needMakefileCvs();
     
     QDialog::accept();
 }

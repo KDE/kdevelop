@@ -68,6 +68,7 @@ public:
     void startMakeCommand(const QString &dir, const QString &target);
     void buildTarget(QString relpath, TargetItem* titem);
 
+    void needMakefileCvs();
     bool isDirty();
 
 protected:
@@ -108,9 +109,11 @@ private:
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
     QString m_buildCommand;
+    bool m_needMakefileCvs;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
+    friend class AddSubprojectDialog;
 
     // For make commands queueing
     QString constructMakeCommandLine(const QString &dir, const QString &target);

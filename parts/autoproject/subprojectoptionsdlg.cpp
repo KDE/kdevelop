@@ -80,7 +80,13 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     QCheckListItem *lastItem = 0;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
-        QCheckListItem *clitem = new QCheckListItem(insideinc_listview, *it, QCheckListItem::CheckBox);
+	kdDebug(9013) << "----------> subproject = " << (*it) << endl;
+	QString subProjectName = *it;
+	
+	if( subProjectName.isEmpty() ){
+	    subProjectName = QString::fromLatin1( "." );
+	}
+        QCheckListItem *clitem = new QCheckListItem(insideinc_listview, subProjectName, QCheckListItem::CheckBox);
         if (lastItem)
             clitem->moveItem(lastItem);
         lastItem = clitem;
@@ -102,7 +108,7 @@ void SubprojectOptionsDialog::readConfig()
     cflags_edit->setText(subProject->variables["AM_CFLAGS"]);
     cxxflags_edit->setText(subProject->variables["AM_CXXFLAGS"]);
     fflags_edit->setText(subProject->variables["AM_FFLAGS"]);
-
+    
     QString includes = subProject->variables["INCLUDES"];
     QStringList includeslist = QStringList::split(QRegExp("[ \t]"), QString(includes));
 
@@ -113,7 +119,7 @@ void SubprojectOptionsDialog::readConfig()
         while (clitem) {
             if (*it == ("-I$(top_srcdir)/" + clitem->text())) {
                 clitem->setOn(true);
-                break;
+                break;	
             }
             clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
         }

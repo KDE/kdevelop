@@ -138,6 +138,7 @@ public:
 	 * to which e.g. all files are added to.
 	 */
 	SubprojectItem* activeSubproject ();
+	void setActiveSubproject( SubprojectItem* spitem );
 
 	/**
 	 * Returns the Active Target. The Active Target is a special target

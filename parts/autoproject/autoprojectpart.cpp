@@ -59,7 +59,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     m_executeAfterBuild = false;
     bool kde = (args[0] == "kde");
-
+    m_needMakefileCvs = false; 
+	
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Automake Manager"));
@@ -520,6 +521,12 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 
 void AutoProjectPart::slotBuild()
 {
+    if( m_needMakefileCvs ){
+	slotMakefilecvs();
+	slotConfigure();
+	m_needMakefileCvs = false;
+    }
+    
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
@@ -864,6 +871,11 @@ bool AutoProjectPart::isDirty()
     }
 
     return false;
+}
+
+void AutoProjectPart::needMakefileCvs( )
+{
+    m_needMakefileCvs = true;
 }
 
 
