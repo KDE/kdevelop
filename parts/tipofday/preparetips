@@ -1,0 +1,43 @@
+# little script to extract the text from the tips file
+# and output it, so xgettext can add the tips to the po file
+#
+# 2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+
+open(FILE,"<tips") || die "unable to open tips file";
+
+$inTip=0;
+
+while(<FILE>)
+{
+	chomp;
+
+	# tip starts with <html>
+	if(/^\s*<html>/i)
+	{
+		$inTip=1;
+		print "\ni18n(\n";
+		next;
+	}	
+
+	if($inTip!=0)
+	{
+		# tip ends with </html>
+		if(/^\s*<\/html>/i)
+		{
+			print ");\n";
+			$inTip=0;
+		}
+		else
+		{
+			# replace \ with \\
+			s/\\/\\\\/g;
+
+			# replace " with \"
+			s/"/\\"/g;
+			
+			print "\"$_\\n\"\n";
+		}
+	}   
+}
+
+close(FILE);

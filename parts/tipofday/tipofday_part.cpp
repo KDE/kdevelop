@@ -84,7 +84,7 @@ void TipOfDayPart::toggleOnStart(bool on)
 {
   KConfig *config = kapp->config();
   config->setGroup("TipOfDay");
-  config->writeEntry("RunOnStart", _tipWidget->RunOnStart->isChecked());
+  config->writeEntry("RunOnStart", on);
   config->sync();
 }
 
