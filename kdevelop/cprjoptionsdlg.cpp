@@ -1293,15 +1293,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   binary_edit->setMinimumSize(0,0);
   binary_edit->setMaxLength( 32767 );
 
-  QString binaryFileName;
-  if (prj->pathToBinPROGRAM())
-    binaryFileName = prj->pathToBinPROGRAM() + "/" + prj->getBinPROGRAM();
-  else
-    binaryFileName = prj->getBinPROGRAM();
+  QString underDir=prj->pathToBinPROGRAM();
+  if (underDir.isEmpty())
+    underDir = prj->getProjectDir() + prj->getSubDir();
+  if (!underDir.isEmpty() && underDir.right(1)!='/')
+    underDir+='/';
 
-  if (!binaryFileName.isEmpty()){
-    binary_edit->setText(binaryFileName);
-  }
+  binary_edit->setText(underDir+prj->getBinPROGRAM());
 
   QPushButton* binary_button= new QPushButton(w6,"binary_button");
   binary_button->setGeometry(510,70,30,30);
