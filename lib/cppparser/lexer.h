@@ -566,9 +566,26 @@ inline void Lexer::readLineComment()
 		nextChar();
 	    }
 	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
-	} else 
-	    nextChar();
-    }    
+	} else
+        if( m_reportMessages && m_source.mid(currentPosition(), 5).lower() == "fixme" ){
+            nextChar( 5 );
+            QString msg;
+            int line = m_currentLine;
+            int col = m_currentColumn;
+
+            while( currentChar() ){
+            if( currentChar() == '*' && peekChar() == '/' )
+                break;
+            else if( currentChar() == '\n' )
+                break;
+
+            msg += currentChar();
+            nextChar();
+            }
+            m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Fixme) );
+        } else
+            nextChar();
+    }
 }
 
 inline void Lexer::readMultiLineComment()
@@ -592,8 +609,25 @@ inline void Lexer::readMultiLineComment()
 		nextChar();
 	    }
 	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
-	} else 
-	    nextChar();
+	} else
+        if( m_reportMessages && m_source.mid(currentPosition(), 5).lower() == "fixme" ){
+            nextChar( 5 );
+            QString msg;
+            int line = m_currentLine;
+            int col = m_currentColumn;
+
+            while( currentChar() ){
+            if( currentChar() == '*' && peekChar() == '/' )
+                break;
+            else if( currentChar() == '\n' )
+                break;
+
+            msg += currentChar();
+            nextChar();
+            }
+            m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Fixme) );
+        } else
+            nextChar();
     }
 }
 
