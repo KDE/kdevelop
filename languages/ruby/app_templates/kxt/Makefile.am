@@ -1,4 +1,4 @@
-dataFiles = app.rb main.rb prefs.rb app.cpp appview_base.ui prefs-base.ui \
+dataFiles = app.rb main.rb prefs.rb app.cpp appview.rb appview_base.ui prefs-base.ui \
 			appui.rc app.desktop previewruby.png app.kdevelop app-Makefile.am app-configure.in.in \
 			app.kcfg settings.kcfgc src-Makefile.am subdirs README
 
