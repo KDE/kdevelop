@@ -42,7 +42,7 @@
 /**
   * @short Base class for all your special view windows.
   *
-  * Base class for all MDI view widgets. QextMDI stores additional information in this class
+  * Base class for all MDI view widgets. KMdi stores additional information in this class
   * to handle the attach/detach mechanism and such things.
   *
   * All such windows 'lives' attached to a KMdiChildFrm widget
@@ -63,9 +63,9 @@
   * or you wrap them by a KMdiChildView somehow like this:
   *
   * <PRE>
-  * void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
+  * void DocViewMan::addKMdiFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
   * {
-  *   // cover it by a QextMDI childview and add that MDI system
+  *   // cover it by a KMdi childview and add that MDI system
   *   KMdiChildView* pMDICover = new KMdiChildView( pNewView->caption());
   *   pMDICover->setIcon(icon);
   *   m_MDICoverList.append( pMDICover);
@@ -95,7 +95,7 @@
   *   connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
   *
   *   m_pParent->addWindow( pMDICover, flags);
-  *   // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
+  *   // correct the default settings of KMdi ('cause we haven't a tab order for subwidget focuses)
   *   pMDICover->setFirstFocusableChildWidget(0L);
   *   pMDICover->setLastFocusableChildWidget(0L);
   * }

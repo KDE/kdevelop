@@ -29,6 +29,7 @@
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qtoolbutton.h>
+#include <qpopupmenu.h>
 
 #include "kmdidefines.h"
 #include "kmdichildfrmcaption.h"

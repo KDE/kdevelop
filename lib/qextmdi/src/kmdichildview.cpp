@@ -157,8 +157,8 @@ void KMdiChildView::setInternalGeometry(const QRect& newGeometry)
       // create the new geometry that is accepted by the QWidget::setGeometry() method
       QRect    newGeoQt;
 #if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
-      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-KMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
-      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-KMDI_MDI_CHILDFRM_DOUBLE_BORDER+1);
+      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft+frameGeo.width()-geo.width()-KMDI_CHILDFRM_DOUBLE_BORDER+1);
+      newGeoQt.setY(newGeometry.y()-nFrameSizeTop+frameGeo.height()-geo.height()-KMDI_CHILDFRM_DOUBLE_BORDER+1);
 #else
       newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
       newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
