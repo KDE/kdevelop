@@ -86,12 +86,12 @@ int main(int argc, char *argv[])
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
-  
+
   splash->showMessage( i18n( "Loading Project" ) );
   ProjectManager::getInstance()->loadDefaultProject();
 
   delete splash;
-   
+
   kapp->dcopClient()->registerAs("gideon");
 
   return app.exec();
