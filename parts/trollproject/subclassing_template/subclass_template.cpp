@@ -9,30 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NEWWIDGETDLG_H
-#define NEWWIDGETDLG_H
+#include "$NEWFILENAMELC$.h"
 
-#include "newwidgetdlgbase.h"
-#include "trollprojectwidget.h"
-
-class QStringList;
-class QDomDocument;
-
-class NewWidgetDlg : public NewWidgetDlgBase
+$NEWCLASS$::$NEWCLASS$(const QString &formFile,QStringList &newFileNames,
+QWidget* parent, const char* name,bool modal, WFlags fl)
+: $BASECLASS$(parent,name,modal,fl)
 {
-public:
-                        NewWidgetDlg(QStringList &newFileNames,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-                        ~NewWidgetDlg();
+}
 
-
-public slots:
-  virtual void          subclassingPressed();
-  virtual void          templateSelChanged();
-  virtual void          accept();
-
-protected:
-  QStringList           &m_newFileNames;
-};
-
-#endif
-
+$NEWCLASS$::~$NEWCLASS$()
+{
+}

@@ -1093,7 +1093,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
-        int idNewWidget = popup.insertItem(SmallIconSet("widget"),i18n("Insert New Widget..."));
+        int idSubclassWidget = popup.insertItem(SmallIconSet("widget"),i18n("Subclass widget..."));
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1148,10 +1148,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
-        if (r == idNewWidget)
+        if (r == idSubclassWidget)
         {
           QStringList newFileNames;
-          NewWidgetDlg *dlg = new NewWidgetDlg(newFileNames);
+          SubclassingDlg *dlg = new SubclassingDlg("/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui",newFileNames);
           dlg->exec();
           for (int i=0;i<newFileNames.count();i++)
             QMessageBox::information(0,"File",newFileNames[i]);

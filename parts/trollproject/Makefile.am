@@ -1,5 +1,7 @@
 # Here resides the troll project part for tmake or qmake
 
+#SUBDIRS = subclassing_template
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/project -I$(top_builddir)/lib/project \
 	   -I$(top_srcdir)/lib/util \
@@ -15,6 +17,8 @@ libkdevtrollproject_la_SOURCES = caret.cpp\
 				 projectconfigurationdlgbase.ui \
 				 filepropertybase.ui \
 				 newwidgetdlgbase.ui \
+				 subclassingdlgbase.ui \
+				 subclassingdlg.cpp \
 				 newwidgetdlg.cpp \
 				 filepropertydlg.cpp \
 				 projectconfigurationdlg.cpp \

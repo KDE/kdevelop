@@ -27,6 +27,7 @@
 #include "projectconfigurationdlg.h"
 #include "filepropertydlg.h"
 #include "newwidgetdlg.h"
+#include "subclassingdlg.h"
 
 class TrollProjectPart;
 class KListView;
