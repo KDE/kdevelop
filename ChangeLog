@@ -1,3 +1,8 @@
+2003-04-10  luc willems  <Willems.luc@pandora.be>
+	* add support for perl filecreate templates
+	* make sure declaredinfile is set correctly after adding an item to classstore so removeWithReferences() will work correctly
+	* add parsing of "use" file after saveFile()
+
 2003-04-09 Harald Fernengel <harry@kdevelop.org>
     * Applied ClearCase part from Ajay Guleria
     * Goto error now works again
