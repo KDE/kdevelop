@@ -80,6 +80,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( data ) );
 //         mainWindow()->removeView( m_widget );
 //     }
     delete m_widget;
+    delete m_configProxy;
 }
 
 void %{APPNAME}Part::init()
