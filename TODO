@@ -76,11 +76,8 @@ automakemanager:
 
 * If you click an error in the output view, "Next Error"/"Previous Error"
   should then start from that point.
-* Next/Previous error should ignore lines that aren't actual errors, like
-  "(Each undeclared identifier is reported only once for each function it appears in.)"
 * Messages in status bar would look nicer if they appeared with the same
   border as other items.
-* Sometimes breakpoints don't get set properly until you pause the debugged app.
 * Debug menu items not properly enabled/disabled.
 * Browser tool bar should truncate long menu entries so it doesn't take so
   much space.
