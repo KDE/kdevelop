@@ -71,7 +71,7 @@
                             <cstring>kdocCheck</cstring>
                         </property>
                         <property name="text">
-                            <string>Enable KDoc kdelibs documantation</string>
+                            <string>Enable KDoc kdelibs documentation</string>
                         </property>
                     </widget>
                     <spacer row="5" column="0">
