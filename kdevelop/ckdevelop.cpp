@@ -2654,9 +2654,15 @@ void CKDevelop::slotHelpManpage(QString text)
 
 void CKDevelop::slotHelpSearchText(QString text){
   int pos;
+  QString htsearch_path = "";
 
   useGlimpse = CToolClass::searchInstProgram("glimpse");
   useHtDig = CToolClass::searchInstProgram("htsearch");
+  if(!useHtDig) {
+    useHtDig = CToolClass::searchInstProgram("/usr/lib/cgi-bin/htsearch");
+    if(useHtDig)
+      htsearch_path = "/usr/lib/cgi-bin/";
+  }
 
   if (!useGlimpse && !useHtDig)
   {
@@ -2721,7 +2727,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   }
   if (useHtDig && engine=="htdig" )
   {
-    search_process << "htsearch -c " +
+    search_process << htsearch_path + "htsearch -c " +
                         locate("appdata", "tools/htdig.conf") +
                         " \"format=&matchesperpage=30&words=" +
                         encodeURL(text) +"\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
