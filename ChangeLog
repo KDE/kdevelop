@@ -1,3 +1,9 @@
+2000-01-24 Ralf Funken <funken.ruk@netcologne.de>
+	* Removed all wrong references from german manual
+	* Translated chapter CVS Integration
+	* Updated de.po
+	* commited an updated kdevelop.pot
+
 2000-01-24 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* Now REALLY fixed the kde2 app generation bugs...;-)
 
