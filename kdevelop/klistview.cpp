@@ -43,6 +43,16 @@ void KListView::clear()
     last = 0;
     QListView::clear();
 }
+void KListView::contentsMousePressEvent(QMouseEvent * event)
+{
+    QListViewItem* item;
+    item = itemAt(event->pos());
+    if (isSelected(item) && event->button() != RightButton){
+	emit selectionChanged (item);
+    }
+    
+    QListView::contentsMousePressEvent( event );
+}
 
 
 KListViewItem::KListViewItem(KListView *parent, const char *text, const char *id)

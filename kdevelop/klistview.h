@@ -41,6 +41,9 @@ public:
     virtual void clear();
     QListViewItem *lastChild() const
 	{ return last; }
+
+ protected:
+    virtual void contentsMousePressEvent(QMouseEvent * event);
     
 private:
     QListViewItem *last;
