@@ -130,6 +130,12 @@ public:
     virtual void message(const QString &str) = 0;
     
 signals:
+
+    /**
+     * Emitted after the core has done all initializations and
+     * the main window has been shown.
+     */
+    void coreInitialized();
     /**
      * A project has been opened
      */
