@@ -14,10 +14,17 @@
 
 #include <qwidget.h>
 
-#include <kmultitabbar.h>
+
+class KConfig;
+
+
+#include "ktabzoomposition.h"
+
+
+#include "ktabzoombar.h"
+
 
 class KTabZoomWidgetPrivate;
-class KConfig;
 
 class KTabZoomWidget : public QWidget
 {
@@ -25,12 +32,11 @@ class KTabZoomWidget : public QWidget
 
 public:
 
-  KTabZoomWidget(QWidget *parent=0, KMultiTabBar::KMultiTabBarPosition pos=KMultiTabBar::Left, const char *name=0);
+  KTabZoomWidget(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
   ~KTabZoomWidget();
 
-  void setStyle( KMultiTabBar::KMultiTabBarStyle style );
-
-  void addTab( const QPixmap& pixmap, QWidget *widget, const QString &tab, const QString &toolTip = QString::null);
+  void addTab(QWidget *widget, const QString &tab, const QString &toolTip = QString::null);
+  void addTab(const QPixmap& /*pix*/, QWidget *widget, const QString& tab, const QString& toolTip) { addTab(widget, tab, toolTip); }
   void removeTab(QWidget *widget);
 
   void addContent(QWidget *widget);
@@ -71,7 +77,6 @@ private slots:
   void widgetDeleted();
 
   void adjustStrut();
-  void unsetButtons();
 
 
 protected:

@@ -9,60 +9,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __K_TABZOOMFRAME_H__
-#define __K_TABZOOMFRAME_H__
+#ifndef __K_TABZOOMBAR_H__
+#define __K_TABZOOMBAR_H__
 
-#include <qframe.h>
+#include <qtabbar.h>
 
 #include "ktabzoomposition.h"
 
-
-class KTabZoomFramePrivate;
-
-class KTabZoomFrame : public QWidget
+class KTabZoomBarPrivate;
+class KTabZoomBar : public QWidget
 {
   Q_OBJECT
 
 public:
+  KTabZoomBar(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
+  ~KTabZoomBar();
 
-  KTabZoomFrame(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
-  ~KTabZoomFrame();
-
-  int addTab(QWidget *widget, const QString &title);
+  int addTab(const QTab &tab, const QString& toolTip = QString::null);
   void removeTab(int index);
+
+  void setActiveIndex(int index);
+  void unsetButtons();
 
   void setDockMode(bool docked);
 
-
-public slots:
-
-  void selected(int index);
-
+private slots:
+  void clicked(int index);
 
 signals:
-
-  void closeClicked();
-  void dockToggled(bool docked);
-  void sizeChanged();
-
-  
-protected:
-
-  void mousePressEvent(QMouseEvent *ev);
-  void mouseReleaseEvent(QMouseEvent *ev);
-  void mouseMoveEvent(QMouseEvent *ev);
-
-
-private slots:
-
-  void slotDockButtonToggled(bool toggle);
-
+  void selected(int index);
+  void unselected();
+  void docked();
 
 private:
-
-  KTabZoomFramePrivate *d;
+  KTabZoomBarPrivate *d;
 
 };
-
 
 #endif

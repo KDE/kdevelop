@@ -45,7 +45,7 @@ class KTabZoomFramePrivate
 {
 public:
 
-  KMultiTabBar::KMultiTabBarPosition m_position;
+  KTabZoomPosition::Position m_position;
   QLabel                     *m_title;
   QWidgetStack               *m_stack;
   int                        m_count;
@@ -59,7 +59,7 @@ public:
 };
 
 
-KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, const char *name)
+KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, const char *name)
   : QWidget(parent, name)
 {
   d = new KTabZoomFramePrivate;
@@ -79,7 +79,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
   vbox->addWidget(f);
 
   QHBoxLayout *hbox = new QHBoxLayout(f);
-  if (pos == KMultiTabBar::Right)
+  if (pos == KTabZoomPosition::Right)
     hbox->setDirection(QBoxLayout::RightToLeft);
 
   d->m_title = new QLabel(f);
@@ -91,13 +91,13 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
   QToolButton::ArrowType arrow = QToolButton::LeftArrow;
   switch (pos)
   {
-  case KMultiTabBar::Right:
+  case KTabZoomPosition::Right:
     arrow = QToolButton::RightArrow;
     break;
-  case KMultiTabBar::Bottom:
+  case KTabZoomPosition::Bottom:
     arrow = QToolButton::DownArrow;
     break;
-  case KMultiTabBar::Top:
+  case KTabZoomPosition::Top:
     arrow = QToolButton::UpArrow;
     break;
   default:
@@ -140,7 +140,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
 
   switch (pos)
   {
-  case KMultiTabBar::Left:
+  case KTabZoomPosition::Left:
     box = new QHBoxLayout(this);
     box->addWidget(frame,1);
     box->addWidget(d->m_slider);
@@ -148,7 +148,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
     d->m_slider->setCursor(Qt::sizeHorCursor);
     break;
 
-  case KMultiTabBar::Right:
+  case KTabZoomPosition::Right:
     box = new QHBoxLayout(this);
     box->addWidget(d->m_slider);
     box->addWidget(frame,1);
@@ -156,7 +156,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
     d->m_slider->setCursor(Qt::sizeHorCursor);
     break;
 
-  case KMultiTabBar::Bottom:
+  case KTabZoomPosition::Bottom:
     box = new QVBoxLayout(this);
     box->addWidget(d->m_slider);
     box->addWidget(frame,1);
@@ -164,7 +164,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KMultiTabBar::KMultiTabBarPosition
     d->m_slider->setCursor(Qt::sizeVerCursor);
     break;
 
-  case KMultiTabBar::Top:
+  case KTabZoomPosition::Top:
     box = new QVBoxLayout(this);
     box->addWidget(frame,1);
     box->addWidget(d->m_slider);
@@ -213,7 +213,7 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
   info->m_title = title;
 
   d->m_info.append(info);
-
+  
   return index;
 }
 
@@ -255,20 +255,20 @@ void KTabZoomFrame::mousePressEvent(QMouseEvent *ev)
 
   switch (d->m_position)
   {
-  case KMultiTabBar::Left:
+  case KTabZoomPosition::Left:
     d->m_initialSize = width();
     break;
 
-  case KMultiTabBar::Right:
+  case KTabZoomPosition::Right:
     d->m_initialSize = width();
     d->m_initialPos = x() + width();
     break;
 
-  case KMultiTabBar::Top:
+  case KTabZoomPosition::Top:
     d->m_initialSize = height();
     break;
 
-  case KMultiTabBar::Bottom:
+  case KTabZoomPosition::Bottom:
     d->m_initialSize = height();
     d->m_initialPos = y()+height();
     break;
@@ -292,30 +292,30 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
   int extend;
   switch (d->m_position)
   {
-  case KMultiTabBar::Left:
+  case KTabZoomPosition::Left:
     extend = ev->globalPos().x() - d->m_slideStart.x() + d->m_initialSize;
-    if (extend < minimumWidth()) extend = minimumWidth();
+    if (extend < minimumWidth()) extend = minimumWidth();  
     else if(extend > (int)(kapp->mainWidget()->width() / 2)) extend = (int)(kapp->mainWidget()->width() / 2);
     resize(extend, height());
     break;
 
-  case KMultiTabBar::Right:
+  case KTabZoomPosition::Right:
     extend = d->m_slideStart.x() - ev->globalPos().x() + d->m_initialSize;
-    if (extend < minimumWidth()) extend = minimumWidth();
+    if (extend < minimumWidth()) extend = minimumWidth(); 
     else if(extend > (int)(kapp->mainWidget()->width() / 2)) extend = (int)(kapp->mainWidget()->width() / 2);
     setGeometry(d->m_initialPos - extend, y(), extend, height());
     break;
 
-  case KMultiTabBar::Top:
+  case KTabZoomPosition::Top:
     extend = ev->globalPos().y() - d->m_slideStart.y() + d->m_initialSize;
-    if (extend < minimumHeight()) extend = minimumHeight();
+    if (extend < minimumHeight()) extend = minimumHeight();  
     else if(extend > (int)(kapp->mainWidget()->height() / 2)) extend = (int)(kapp->mainWidget()->height() / 2);
     resize(width(), extend);
     break;
 
-  case KMultiTabBar::Bottom:
+  case KTabZoomPosition::Bottom:
     extend = d->m_slideStart.y() - ev->globalPos().y() + d->m_initialSize;
-    if (extend < minimumHeight()) extend = minimumHeight();
+    if (extend < minimumHeight()) extend = minimumHeight();  
     else if(extend > (int)(kapp->mainWidget()->height() / 2)) extend = (int)(kapp->mainWidget()->height() / 2);
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
     break;

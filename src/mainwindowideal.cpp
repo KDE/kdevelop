@@ -216,13 +216,13 @@ void MainWindowIDEAl::createStatusBar() {
 
 
 void MainWindowIDEAl::createFramework() {
-    m_leftBar = new KTabZoomWidget(this, KMultiTabBar::Left);
+    m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
     setCentralWidget(m_leftBar);
 
-    m_bottomBar = new KTabZoomWidget(m_leftBar, KMultiTabBar::Bottom);
+    m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
     m_leftBar->addContent(m_bottomBar);
 
-    m_rightBar = new KTabZoomWidget ( m_bottomBar, KMultiTabBar::Right );
+    m_rightBar = new KTabZoomWidget (m_bottomBar, KTabZoomPosition::Right);
     m_bottomBar->addContent ( m_rightBar );
 
     m_tabWidget = new KTabWidget(m_rightBar);
