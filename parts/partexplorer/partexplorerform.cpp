@@ -28,6 +28,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // class PropertyItem
 ///////////////////////////////////////////////////////////////////////////////
+namespace PartExplorer{
 
 class PropertyItem : public KListViewItem
 {
@@ -48,6 +49,7 @@ public:
     }
 };
 
+}
 ///////////////////////////////////////////////////////////////////////////////
 // class ResultsList
 ///////////////////////////////////////////////////////////////////////////////
@@ -89,7 +91,7 @@ ResultsToolTip::ResultsToolTip( ResultsList* parent )
 
 void ResultsToolTip::maybeTip( const QPoint& p )
 {
-    PropertyItem *item = dynamic_cast<PropertyItem*>( m_resultsList->itemAt( p ) );
+    PartExplorer::PropertyItem *item = dynamic_cast<PartExplorer::PropertyItem*>( m_resultsList->itemAt( p ) );
     if ( item )
     {
         QRect r = m_resultsList->itemRect( item );
@@ -238,7 +240,7 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
             dProperty = dProperty.arg( propertyName ).arg( propertyType ).arg( propertyValue );
             kdDebug( 9000 ) << dProperty << endl;
 
-            new PropertyItem( serviceItem, propertyName, propertyType, propertyValue );
+            new PartExplorer::PropertyItem( serviceItem, propertyName, propertyType, propertyValue );
         }
     }
 }
