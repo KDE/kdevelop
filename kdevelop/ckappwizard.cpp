@@ -1847,7 +1847,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a Qt-2.1 Application with a main window containing "
+    apphelp->setText (i18n("Create a Qt-2.2 Application with a main window containing "
     											"a menubar, toolbar and statusbar, including support for "
     											"a multiple document interface (MDI) model."));
   }
