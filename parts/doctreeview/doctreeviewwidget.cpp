@@ -1106,7 +1106,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
 DocTreeViewWidget::~DocTreeViewWidget()
 {}
-
+/*
 void DocTreeViewWidget::searchForItem ( const QString& currentText )
 {
 	completionCombo->addToHistory( currentText );
@@ -1123,6 +1123,26 @@ void DocTreeViewWidget::searchForItem ( const QString& currentText )
 			++docViewIterator;
 		}
 	}
+}
+*/
+
+void DocTreeViewWidget::searchForItem ( const QString& currentText )
+{
+    completionCombo->addToHistory( currentText );
+
+    QListViewItemIterator  docViewIterator( docView );
+    while( docViewIterator.current() )
+    {
+        // Load this category
+        docViewIterator.current()->setOpen(true);
+        docViewIterator.current()->setOpen(false);
+
+        if( docViewIterator.current()->text(0).find( currentText, false ) >= 0 )
+        {
+            searchResultList.append( docViewIterator.current() );
+        }
+        ++docViewIterator;
+    }
 }
 
 void DocTreeViewWidget::slotJumpToNextMatch()
