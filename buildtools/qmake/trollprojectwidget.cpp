@@ -115,8 +115,10 @@ QString SubprojectItem::getRelativPath()
 }
 QString SubprojectItem::getDownDirs()
 {
-  if(this->parent()==NULL) return("./");
-  else return(((SubprojectItem*)this->parent())->getDownDirs()+"../");
+    SubprojectItem* pItem=this;
+	while (pItem->parent())
+	    pItem=(SubprojectItem*)pItem->parent();
+    return getRelativePath(QDir::cleanDirPath(this->path),QDir::cleanDirPath(pItem->path));
 }
 QString SubprojectItem::getSharedLibAddObject(QString downDirs)
 {
@@ -141,7 +143,7 @@ QString SubprojectItem::getSharedLibAddObject(QString downDirs)
       libString = tmpPath+"/lib"+this->configuration.m_target+".so";
 
     }else{
-      libString = tmpPath+"/lib"+this->configuration.m_subdirName+".so";
+      libString = tmpPath+"/lib"+this->configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty)+".so";
 
     }
     return(libString);
@@ -164,7 +166,7 @@ QString SubprojectItem::getApplicationObject( QString downDirs )
   tmpPath=QDir::cleanDirPath(tmpPath);
 
   if (configuration.m_target.isEmpty())
-    return tmpPath + "/" + configuration.m_subdirName;
+    return tmpPath + "/" + configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty);
   else
     return tmpPath + "/" + configuration.m_target;
 }
@@ -199,7 +201,7 @@ QString SubprojectItem::getLibAddObject(QString downDirs)
       libString = tmpPath+"/lib"+this->configuration.m_target+".a";
 
     }else{
-      libString = tmpPath+"/lib"+this->configuration.m_subdirName+".a";
+      libString = tmpPath+"/lib"+this->configuration.m_subdirName.section('/',-1,-1,QString::SectionSkipEmpty)+".a";
 
     }
     return(libString);
