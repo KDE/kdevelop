@@ -19,6 +19,7 @@
 #ifndef CEDITWIDGET_H
 #define CEDITWIDGET_H
 
+#include <qdatetime.h>
 #include <kapp.h>
 #include <kspell.h>
 #include "./kwrite/kwview.h"
@@ -32,7 +33,7 @@ class CEditWidget : public KWrite {
 
 public: // Constructor and destructor
 
-  CEditWidget(KApplication* a=0,QWidget* parent=0,const char* name=0);
+  CEditWidget(QWidget* parent=0,const char* name=0);
   ~CEditWidget();
 
 public: // Public methods to set attribute values
@@ -63,13 +64,16 @@ public: // File related method
   int loadFile(QString filename, int mode);
 
   /** Save the editbuffer to the current file. */
-  void doSave()                    { KWrite::save(); }
+  void doSave();
 
   /** Save the editbuffer to a file with the supplied filename.
    * @param filename Name of the file to save the buffer to.
    */
-  void doSave(QString filename)   { KWrite::writeFile(filename); }
+    // Requires a little thought about last_modified
+    //  void doSave(QString filename)   { KWrite::writeFile(filename); }
 
+  bool modifiedOnDisk();
+    
 public: // Cursor placement methods
 
   /** Goto the start of the line that contains the specified position.
@@ -186,6 +190,7 @@ private:
  KSpell *kspell;
  KSpellConfig *ksc;
  int spell_offset;
+ QDateTime  last_modified;
 };
 
 #endif

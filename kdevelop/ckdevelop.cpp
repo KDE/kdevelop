@@ -322,17 +322,13 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
     
     QString filename=editor_view->editor->getName();
 	
-    QFileInfo file_info(filename);
-    
-    if(file_info.lastModified() != editor_view->last_modified){
+    if (editor_view->editor->modifiedOnDisk()) {
 	if (KMessageBox::questionYesNo(this, 
 				       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
 	    == QMessageBox::No)
 	    return false;
     }
     editor_view->editor->doSave();
-    QFileInfo file_info2(filename);
-    editor_view->last_modified = file_info2.lastModified();
     return true;
 }
 
@@ -2371,7 +2367,7 @@ void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
 void CKDevelop::slotEditorViewClosing(EditorView* editorview){
-    editors->remove(editorview);
+-    editors->remove(editorview);
 }
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     editor_view = getCurrentEditorView();

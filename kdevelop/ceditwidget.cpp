@@ -20,6 +20,7 @@
 #include <iostream.h>
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
+#include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qclipboard.h>
 #include <qregexp.h>
@@ -48,7 +49,7 @@ HlManager hlManager; //highlight manager
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(KApplication*,QWidget* parent,const char* name)
+CEditWidget::CEditWidget(QWidget* parent,const char* name)
   : KWrite(new KWriteDoc(&hlManager),parent,name)
 {  
   setFocusProxy (kWriteView); 
@@ -67,8 +68,6 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,const char* name)
   pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
-
-
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -119,7 +118,19 @@ QString CEditWidget::getName(){
  *-----------------------------------------------------------------*/
 int CEditWidget::loadFile(QString filename, int mode) {
   KWrite::loadFile(filename);
+  last_modified = QFileInfo(filename).lastModified();
   return 0;
+}
+
+void CEditWidget::doSave() {
+  KWrite::save();
+  QFileInfo fi(getName());
+  last_modified = fi.lastModified();
+}
+
+bool  CEditWidget::modifiedOnDisk() {
+  QFileInfo fi(getName());
+  return fi.lastModified() != last_modified;
 }
 
 /*------------------------------------------- CEditWidget::setFocus()

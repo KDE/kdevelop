@@ -33,9 +33,8 @@ class EditorView : public QextMdiChildView, public Component {
 
 public: // Constructor and destructor
 
-  EditorView (KApplication* a=0,QWidget* parent=0,const char* name=0);
+  EditorView (QWidget* parent=0,const char* name=0);
   CEditWidget* editor;
-  QDateTime  last_modified;
  protected:
   virtual void resizeEvent (QResizeEvent *e); 
   virtual void closeEvent(QCloseEvent* e);

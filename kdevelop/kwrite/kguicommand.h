@@ -13,11 +13,11 @@
 #include <qpushbutton.h>
 #include <qpopupmenu.h>
 
+#include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kapp.h>
-#include <kwmmapp.h>
 
+#include <kwmmapp.h>
 #include <X11/Xlib.h> //used to have the XEvent type
 
 //key functions
@@ -374,19 +374,24 @@ class KGuiCmdPopup : public QPopupMenu {
 
 class KGuiCmdApp : public KApplication {
   public:
-    KGuiCmdApp(int &argc, char *argv[]) : KApplication(argc, argv, "KDevelop") {}
+    KGuiCmdApp(int &argc, char *argv[]) : KApplication(argc, argv, "kwrite") {}
+    KGuiCmdApp(int &argc, char *argv[], const QCString &rAppname) 
+      : KApplication(argc, argv, rAppname) {}
     virtual bool x11EventFilter(XEvent *e);
 //    int getModifiers() {return modifiers;}
 //  protected:
 //    int modifiers;
 };
 
+#if 0
 class KGuiCmdKWMModuleApp : public KWMModuleApplication {
   public:
-    KGuiCmdKWMModuleApp(int &argc, char **argv, const QCString &rAppname)
+    KGuiCmdKWMModuleApp(int &argc, char *argv[])
+      : KWMModuleApplication(argc, argv, "kwrite" ) {}
+    KGuiCmdKWMModuleApp(int &argc, char *argv[], const QCString &rAppname)
       : KWMModuleApplication(argc, argv, rAppname) {}
     virtual bool x11EventFilter(XEvent *e);
 };
-
+#endif
 
 #endif

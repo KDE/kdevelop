@@ -16,12 +16,13 @@
   *                                                                         *
   ***************************************************************************/
 
+#include <qfileinfo.h>
 #include <kmessagebox.h>
 #include "ceditwidget.h"
 #include "editorview.h"
 
-EditorView::EditorView(KApplication* a,QWidget* parent,const char* name) : QextMdiChildView(name,parent){
-    editor = new  CEditWidget(a,this,name);
+EditorView::EditorView(QWidget* parent,const char* name) : QextMdiChildView(name,parent){
+    editor = new  CEditWidget(this,name);
 }
 
 void EditorView::resizeEvent (QResizeEvent *e){

@@ -35,8 +35,8 @@ KGuiCmdManager cmdMngr; //manager for user -> gui commands
 int main(int argc, char* argv[]) {
   
   KStartupLogo* start_logo=0L;
-  KGuiCmdKWMModuleApp a(argc,argv,"kdevelop");//KWMModuleApplication a(argc,argv,"kdevelop");
-	a.connectToKWM();
+  KGuiCmdApp a(argc,argv,"kdevelop");
+  //	a.connectToKWM();
 
   // commands
   KWrite::addCursorCommands(cmdMngr);

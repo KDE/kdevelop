@@ -1,3 +1,7 @@
+1999-11-06  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Don't use KGuiCmdKWMModuleApp (wow, what a class name :-)
+	* moved last_modified from EditorView to CEditWidget
+
 1999-11-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Adjust loadApplicationMiniIcon() calls
 	* Corrected signatures for browser signals/slots and

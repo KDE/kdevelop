@@ -1307,8 +1307,3 @@ bool KGuiCmdApp::x11EventFilter(XEvent *e) {
   setGlobalModifiers(e);
   return KApplication::x11EventFilter(e);
 }
-
-bool KGuiCmdKWMModuleApp::x11EventFilter(XEvent *e) {
-  setGlobalModifiers(e);
-  return KWMModuleApplication::x11EventFilter(e);
-}

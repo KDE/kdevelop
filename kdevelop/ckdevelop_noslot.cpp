@@ -660,7 +660,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
       maximize = act_win->isMaximized();
   }
   QFileInfo fileinfo(filename);
-  EditorView* new_editorview = new EditorView(kapp,mdi_main_frame,QFileInfo(filename).fileName());
+  EditorView* new_editorview = new EditorView(mdi_main_frame,QFileInfo(filename).fileName());
   QFont font("Fixed",10);
   new_editorview->editor->setFont(font);
   config->setGroup("KWrite Options");
@@ -668,7 +668,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   new_editorview->editor->doc()->readConfig(config);
   new_editorview->editor->loadFile(filename,1);
   new_editorview->editor->setName(filename);
-  new_editorview->last_modified = fileinfo.lastModified();
 
   //connections
   connect(new_editorview, SIGNAL(closing(EditorView*)), this, SLOT(slotEditorViewClosing(EditorView*)));
