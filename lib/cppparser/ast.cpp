@@ -198,7 +198,7 @@ void NameAST::setGlobal( bool b )
     m_global = b;
 }
 
-void NameAST::setUnqualifedName( ClassOrNamespaceNameAST::Node& unqualifiedName )
+void NameAST::setUnqualifiedName( ClassOrNamespaceNameAST::Node& unqualifiedName )
 {
     m_unqualifiedName = unqualifiedName;
     if( m_unqualifiedName.get() ) m_unqualifiedName->setParent( this );
@@ -939,10 +939,6 @@ void ParameterDeclarationAST::setExpression( AST::Node& expression )
 
 QString ParameterDeclarationAST::text() const
 {
-    TypeSpecifierAST::Node m_typeSpec;
-    DeclaratorAST::Node m_declarator;
-    AST::Node m_expression;
-
     QString str;
     if( m_typeSpec.get() )
         str += m_typeSpec->text() + " ";

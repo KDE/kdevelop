@@ -300,7 +300,7 @@ public:
     QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
 
     ClassOrNamespaceNameAST* unqualifiedName() { return m_unqualifiedName.get(); }
-    void setUnqualifedName( ClassOrNamespaceNameAST::Node& unqualifiedName );
+    void setUnqualifiedName( ClassOrNamespaceNameAST::Node& unqualifiedName );
 
     virtual QString text() const;
 

@@ -402,7 +402,7 @@ bool Parser::parseName( NameAST::Node& node )
 	    if( lex->lookAhead(0) == Token_template )
 	        lex->nextToken(); /// skip optional template     #### @todo CHECK
 	} else {
-	    ast->setUnqualifedName( n );
+	    ast->setUnqualifiedName( n );
 	    break;
 	}
     }
@@ -1030,7 +1030,7 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 	UPDATE_POS( cl, start, lex->index() );
 
         NameAST::Node name = CreateNode<NameAST>();
-	name->setUnqualifedName( cl );
+	name->setUnqualifiedName( cl );
 	UPDATE_POS( name, start, lex->index() );
 	ast->setName( name );
 
@@ -3478,7 +3478,7 @@ bool Parser::parseMultiplicativeExpression( AST::Node& /*node*/ )
     if( !parsePmExpression(expr) )
         return false;
 
-    while( lex->lookAhead(0) == '*' || lex->lookAhead(0) == '/' || lex->lookAhead(0) == '/' ){
+    while( lex->lookAhead(0) == '*' || lex->lookAhead(0) == '/' || lex->lookAhead(0) == '%' ){
         lex->nextToken();
 
         if( !parsePmExpression(expr) )

@@ -40,11 +40,11 @@ public:
 	Level_Todo,
 	Level_Fixme
     };
-    
+
 public:
     Problem() {}
     Problem( const Problem& source )
-	: m_text( source.m_text ), m_line( source.m_line ), 
+	: m_text( source.m_text ), m_line( source.m_line ),
 	  m_column( source.m_column ), m_level( source.m_level ) {}
     Problem( const QString& text, int line, int column, int level=Level_Error )
 	: m_text( text ), m_line( line ), m_column( column ), m_level(level) {}
@@ -109,7 +109,7 @@ public:
 	return *this;
     }
 
-    bool operator == ( const Macro& source )
+    bool operator == ( const Macro& source ) const
     {
 	return
 	    m_name == source.m_name &&
