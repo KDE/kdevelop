@@ -1,3 +1,6 @@
+2000-01-25 jbb <jbb@ihug.co.nz>
+	* Add accel keys for debugger
+
 2000-01-24 Ralf Funken <funken.ruk@netcologne.de>
 	* Removed all wrong references from german manual
 	* Translated chapter CVS Integration
