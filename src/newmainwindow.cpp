@@ -172,7 +172,7 @@ void NewMainWindow::init() {
     }
 	
 	connect( Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()) );
-	
+	connect( Core::getInstance(), SIGNAL(projectOpened()), this, SLOT( projectOpened()) );
 	connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )),
 		this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )) );
 	
@@ -723,7 +723,10 @@ void NewMainWindow::setCaption( const QString & caption )
 			projectname.truncate( projectname.length() - suffix.length() );
 		}
 
-		KMdiMainFrm::setCaption( projectname + " - " + caption );
+		if ( !caption.isEmpty() )
+			KMdiMainFrm::setCaption( projectname + " - " + caption );
+		else
+			KMdiMainFrm::setCaption( projectname );
 	}
 	else
 	{
@@ -731,11 +734,11 @@ void NewMainWindow::setCaption( const QString & caption )
 	}
 }
 
-//@fixme - not currently connected - should it be?
 void NewMainWindow::projectOpened() 
 {
+	setCaption(QString::null);
 	// why would we reload mainwindow settings on project load?
-	loadSettings();
+	//loadSettings();
 }
 
 
