@@ -1,0 +1,13 @@
+[!Global!]
+IconName=kdevelop
+Comment=KDevelop
+
+[ProcessSuccess]
+Name=Process successful
+Comment=process finished successfully
+default_presentation=0
+
+[ProcessError]
+Name=Process error
+Comment=process finished with errors
+default_presentation=0

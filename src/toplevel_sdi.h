@@ -60,6 +60,7 @@ private slots:
   void slotQuit();
   void slotKeyBindings();
   void slotConfigureToolbars();
+  void slotConfigureNotifications();
   void slotSettings();
   void slotActiveProcessCountChanged( uint active );
   void slotNewToolbarConfig();

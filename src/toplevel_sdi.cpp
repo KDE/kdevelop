@@ -14,6 +14,7 @@
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 #include <kkeydialog.h>
+#include <knotifydialog.h>
 #include <kedittoolbar.h>
 
 
@@ -158,7 +159,12 @@ void TopLevelSDI::createActions()
       this, SLOT(slotConfigureToolbars()),
       actionCollection(), "settings_configure_toolbars" );
   action->setStatusText(i18n("Lets you configure toolbars"));
-  
+
+  action = KStdAction::configureNotifications(
+      this, SLOT(slotConfigureNotifications()),
+      actionCollection(), "settings_configure_notifications" );
+  action->setStatusText(i18n("Lets you configure system notifications"));
+    
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText( i18n("Lets you customize KDevelop") );
@@ -315,6 +321,11 @@ void TopLevelSDI::slotShowMenuBar()
     menuBar()->show();
   }
   saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
+}
+
+void TopLevelSDI::slotConfigureNotifications()
+{
+  KNotifyDialog::configure(this, "Notification Configuration Dialog");
 }
 
 void TopLevelSDI::slotSettings()

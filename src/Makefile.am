@@ -24,7 +24,7 @@ gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 		$(top_builddir)/lib/libkdevelop.la
 
 rcdir = $(kde_datadir)/gideon
-rc_DATA = gideonui.rc
+rc_DATA = gideonui.rc eventsrc
 
 # default KDevelop	 configuration
 datadir =$(kde_confdir)
