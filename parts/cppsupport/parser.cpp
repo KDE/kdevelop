@@ -131,20 +131,20 @@ bool Parser::skipUntil( int token )
     while( !lex->lookAhead(0).isNull() ){
 	if( lex->lookAhead(0) == token )
 	    return true;
-	
+
 	lex->nextToken();
     }
-    
+
     return false;
 }
 
 bool Parser::skipUntilDeclaration()
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilDeclaration()" << endl;
-    
+
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "-->token = " << lex->lookAhead(0).toString() << endl;
 
-    // lex->nextToken();
+    lex->nextToken();
     while( !lex->lookAhead(0).isNull() ){
 	switch( lex->lookAhead(0) ){
 	case ';':
