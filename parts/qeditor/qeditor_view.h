@@ -83,6 +83,7 @@ public slots:
     void doFind();
     void doReplace();
     void indent();
+    void ensureTextIsVisible( QTextParagraph* );
     void expandBlock( QTextParagraph* );
     void collapseBlock( QTextParagraph* );
     void expandAllBlocks();
@@ -98,6 +99,7 @@ protected:
                     QTextParagraph* lastParag, int lastIndex );
     bool process( const QString& );
     void doRepaint();
+    void internalEnsureVisibleBlock( QTextParagraph* );
     void internalExpandBlock( QTextParagraph* );
     void internalCollapseBlock( QTextParagraph* );
     

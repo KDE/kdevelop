@@ -118,6 +118,7 @@ public:
     
 signals:
     void parsed();
+    void ensureTextIsVisible( QTextParagraph* );
 
 public slots:
     void doGotoLine( int line );

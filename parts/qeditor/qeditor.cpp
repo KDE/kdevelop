@@ -253,6 +253,7 @@ void QEditor::doGotoLine( int line )
     if ( !p )
 	return;
     QTextCursor c( document() );
+    emit ensureTextIsVisible( p );
     c.setParagraph( p );
     c.setIndex( 0 );
     document()->removeSelection( 1000 );

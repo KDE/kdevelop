@@ -98,6 +98,9 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
              doc(), SIGNAL(textChanged()) );
     connect( m_editor, SIGNAL(selectionChanged()),
              doc(), SIGNAL(selectionChanged()) );
+
+    connect( m_editor, SIGNAL(ensureTextIsVisible(QTextParagraph*)),
+             this, SLOT(ensureTextIsVisible(QTextParagraph*)) );
     
     m_pCodeCompletion = new QEditorCodeCompletion( this );
     connect(m_pCodeCompletion,SIGNAL(completionAborted()),
@@ -220,6 +223,9 @@ bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 #warning "TODO: implement QEditorView::setCursorPosition"
     kdDebug(9032) << "TODO: implement QEditorView::setCursorPosition" << endl;
 
+    QTextParagraph* p = m_editor->document()->paragAt( line );
+    ensureTextIsVisible( p );
+
     m_editor->setCursorPosition( line, col );
     m_editor->ensureCursorVisible();
 
@@ -228,6 +234,10 @@ bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 
 bool QEditorView::setCursorPositionReal(unsigned int line, unsigned int col)
 {
+    QTextParagraph* p = m_editor->document()->paragAt( line );
+    if( p )
+        ensureTextIsVisible( p );
+
     m_editor->setCursorPosition( line, col );
     m_editor->ensureCursorVisible();
     return true;
@@ -473,6 +483,41 @@ void QEditorView::replace( const QString&, int matchingIndex,
     m_editor->insertAt( m_replaceDialog->replacement(),
                         m_currentParag->paragId(),
                         matchingIndex );
+}
+
+void QEditorView::ensureTextIsVisible( QTextParagraph* p)
+{
+    internalEnsureVisibleBlock( p );
+
+    m_editor->refresh();
+    doRepaint();
+}
+
+void QEditorView::internalEnsureVisibleBlock( QTextParagraph* p )
+{
+    ParagData* data = (ParagData*) p->extraData();
+
+    if( !data ){
+        return;
+    }
+    int lev = data->level(), parentLevel;
+
+    while( lev > 0 ){
+        QTextParagraph* parent = p->prev();
+
+        parentLevel = ((ParagData*) parent->extraData())->level();
+
+        while( parentLevel > lev ){
+            parent = parent->prev();
+            parentLevel = ((ParagData*) parent->extraData())->level();
+        }
+        if( parentLevel < lev ){
+            internalExpandBlock(p);
+            lev = parentLevel;
+        }
+
+        p = parent;
+    }
 }
 
 void QEditorView::internalExpandBlock( QTextParagraph* p )
