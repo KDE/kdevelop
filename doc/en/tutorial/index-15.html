@@ -89,18 +89,18 @@ int main(int argc, char *argv[])
   {
     KScribbleApp *kscribble = new KScribbleApp();
     kscribble->show();
-
+    
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
                 
-                if (args->count())
-                        for(int i=0;i&lt;args->count();i++)
+    if (args->count())
+      for(int i=0;i&lt;args->count();i++)
         kscribble->openDocumentFile(args->arg(i));
-                else
-                  kscribble->openDocumentFile();
+    else
+      kscribble->openDocumentFile();
                 
-                args->clear();
+    args->clear();
   }
-
+    
   return app.exec();
 }
 </PRE>
@@ -237,8 +237,8 @@ class KScribbleApp : public KTMainWindow
     virtual void dropEvent( QDropEvent* );
 
   private slots:
-        /** sets the main application window title each time the active MDI child window changes. */
-                void setWndTitle(QWidget*);
+    /** sets the main application window title each time the active MDI child window changes. */
+    void setWndTitle(QWidget*);
     /** switch argument for slot selection by menu or toolbar ID */
     void commandCallback(int id_);
     /** switch argument for Statusbar help entries on slot selection. Add your ID's help
@@ -260,9 +260,9 @@ class KScribbleApp : public KTMainWindow
     void slotFileClose();
     /** print the actual file */
     void slotFilePrint();
-                /** closes all documents and quits the application.*/
+    /** closes all documents and quits the application.*/
     void slotFileQuit();
-                /** reverts the last user action for the active window */
+    /** reverts the last user action for the active window */
     void slotEditUndo();
     /** put the marked text/object into the clipboard and remove
      *  it from the document
@@ -286,10 +286,10 @@ class KScribbleApp : public KTMainWindow
     /** toggles the statusbar
      */
     void slotViewStatusBar();
-                /** creates a new view for the document in the active child window and adds the new view to the
-                 * list of views the document maintains.
-                 */
-                void slotWindowNewWindow();
+    /** creates a new view for the document in the active child window and adds the new view to the
+      * list of views the document maintains.
+      */
+    void slotWindowNewWindow();
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
@@ -328,8 +328,8 @@ class KScribbleApp : public KTMainWindow
     void initStatusBar();
 
     /** Creates the main view of the KTMainWindow instance and initializes the MDI view area including any needed
-        * connections.
-     */
+      * connections.
+      */
     void initView();
 
     /** contains the recently used filenames */
@@ -341,27 +341,27 @@ class KScribbleApp : public KTMainWindow
     KAccel *keyAccel;
     /** the recent file menu containing the last five opened files */
     QPopupMenu *pRecentFileMenu;
-                /** the file menu */
-                QPopupMenu* pFileMenu;
-                /** the edit menu */
-                QPopupMenu* pEditMenu;
-                /** the pen menu */
+    /** the file menu */
+    QPopupMenu* pFileMenu;
+    /** the edit menu */
+    QPopupMenu* pEditMenu;
+    /** the pen menu */
     QPopupMenu* pPenMenu;               
-                /** the view menu */
-                QPopupMenu* pViewMenu;
+    /** the view menu */
+    QPopupMenu* pViewMenu;
     /** the window menu */
     QPopupMenu *pWindowMenu;
-                /** pWorkspace is the MDI frame widget that handles MDI child widgets. Inititalized in
-                 * initView()
-                 */
+    /** pWorkspace is the MDI frame widget that handles MDI child widgets. Inititalized in
+      * initView()
+      */
     QWorkspace *pWorkspace;
-                /** the printer instance */
+    /** the printer instance */
     QPrinter *printer;
-                /** a counter that gets increased each time the user creates a new document with "File"->"New" */
+    /** a counter that gets increased each time the user creates a new document with "File"->"New" */
     int untitledCount;
     /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
-     * removes this document from the list. The document list is checked for modified documents when the user
-     * is about to close the application. */
+      * removes this document from the list. The document list is checked for modified documents when the user
+      * is about to close the application. */
     QList&lt;KScribbleDoc> *pDocList;   
 
 };
@@ -625,12 +625,12 @@ void KScribbleApp::initView()
   QVBox* view_back = new QVBox( this );
   view_back->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   pWorkspace = new QWorkspace( view_back );
-        connect(pWorkspace, SIGNAL(clientActivated(QWidget*)), this, SLOT(setWndTitle(QWidget*)));
+  connect(pWorkspace, SIGNAL(windowActivated(QWidget*)), this, SLOT(setWndTitle(QWidget*)));
   setView(view_back);
 }
 
 void KScribbleApp::setWndTitle(QWidget*){
-        setCaption(pWorkspace->activeClient()->caption());
+  setCaption(pWorkspace->activeWindow()->caption());
 }
 
 void KScribbleApp::enableCommand(int id_)
@@ -675,7 +675,7 @@ void KScribbleApp::createClient(KScribbleDoc* doc)
         w->installEventFilter(this);
   doc->addView(w);
         w->setIcon(kapp->miniIcon());
-  if ( pWorkspace->clientList().isEmpty() ) // show the very first window in maximized mode
+  if ( pWorkspace->windowList().isEmpty() ) // show the very first window in maximized mode
           w->showMaximized();
   else
         w->show();
@@ -688,12 +688,12 @@ void KScribbleApp::openDocumentFile(const char* file)
         // check, if document already open. If yes, set the focus to the first view
   for(doc=pDocList->first(); doc > 0; doc=pDocList->next())
   {
-        if(doc->pathName()==file)
-        {
-                KScribbleView* view=doc->firstView();   
-                view->setFocus();
-                        return;
-                }
+    if(doc->pathName()==file)
+    {
+      KScribbleView* view=doc->firstView();     
+      view->setFocus();
+      return;
+    }
   }
   doc = new KScribbleDoc();
   pDocList->append(doc);
@@ -842,10 +842,10 @@ bool KScribbleApp::eventFilter(QObject* object, QEvent* event){
                         
                         e->accept();
                 //////////////  
-                if(pWorkspace->clientList().count()==1)
+                if(pWorkspace->windowList().count()==1)
                         setPlainCaption(kapp->caption());
                 else
-                        setCaption(pWorkspace->activeClient()->caption());                      
+                        setCaption(pWorkspace->activeWindow()->caption());                      
                 //////////////
                 }
                 else
@@ -894,7 +894,7 @@ void KScribbleApp::slotFileOpenRecent(int id_)
 void KScribbleApp::slotFileSave()
 {
   slotStatusMsg(i18n("Saving file..."));
-        KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
         if( m )
         {
           KScribbleDoc* doc =   m->getDocument();
@@ -917,7 +917,7 @@ void KScribbleApp::slotFileSaveAs()
                                KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
   if(!newName.isEmpty())
   {
-    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
       KScribbleDoc* doc =       m->getDocument();
@@ -941,7 +941,7 @@ void KScribbleApp::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
         
-        KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
         if( m )
         {
                 KScribbleDoc* doc=m->getDocument();
@@ -956,7 +956,7 @@ void KScribbleApp::slotFilePrint()
 {
   slotStatusMsg(i18n("Printing..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m )
                 m->print( printer );
 
@@ -988,7 +988,7 @@ void KScribbleApp::slotEditUndo()
 {
   slotStatusMsg(i18n("Reverting last action..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m )
 //              m->undo();
 
@@ -999,7 +999,7 @@ void KScribbleApp::slotEditCut()
 {
   slotStatusMsg(i18n("Cutting selection..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m )
                 m->cutSelection();      
 
@@ -1010,7 +1010,7 @@ void KScribbleApp::slotEditCopy()
 {
   slotStatusMsg(i18n("Copying selection to clipboard..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m )
                 m->copySelection();
                 
@@ -1021,7 +1021,7 @@ void KScribbleApp::slotEditPaste()
 {
   slotStatusMsg(i18n("Inserting clipboard contents..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m )
                 m->pasteSelection();
                 
@@ -1032,7 +1032,7 @@ void KScribbleApp::slotEditClearAll()
 {
   slotStatusMsg(i18n("Clearing the document contents..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m ){
                 KScribbleDoc* pDoc = m->getDocument();
                 pDoc->editClearAll();
@@ -1045,7 +1045,7 @@ void KScribbleApp::slotPenBrush()
   slotStatusMsg(i18n("Setting brush width..."));
 
   // get one window with document for a current pen width
-  QWidgetList windows = pWorkspace->clientList();
+  QWidgetList windows = pWorkspace->windowList();
   KScribbleView* m = (KScribbleView*)windows.at(0);
         KScribbleDoc* pDoc = m->getDocument();
   int curr_width=pDoc->penWidth();
@@ -1075,7 +1075,7 @@ void KScribbleApp::slotPenColor()
   int result = KColorDialog::getColor( myColor, this );
   if ( result == KColorDialog::Accepted )
   {
-        QWidgetList windows = pWorkspace->clientList();
+        QWidgetList windows = pWorkspace->windowList();
         KScribbleDoc* pDoc;
         KScribbleView* m;
         for ( int i = 0; i &lt; int(windows.count()); ++i )
@@ -1134,7 +1134,7 @@ void KScribbleApp::slotWindowNewWindow()
 {
   slotStatusMsg(i18n("Opening a new application window..."));
         
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
         if ( m ){
                 KScribbleDoc* doc = m->getDocument();
         createClient(doc);
@@ -1169,7 +1169,7 @@ void KScribbleApp::windowMenuAboutToShow()
   pWindowMenu->insertItem(i18n("&amp;Tile"),
                           pWorkspace, SLOT(tile() ),0 , ID_WINDOW_TILE );
         
-        if ( pWorkspace->clientList().isEmpty() ) {
+        if ( pWorkspace->windowList().isEmpty() ) {
                 disableCommand(ID_WINDOW_NEW_WINDOW);
                 disableCommand(ID_WINDOW_CASCADE);
                 disableCommand(ID_WINDOW_TILE);
@@ -1177,18 +1177,18 @@ void KScribbleApp::windowMenuAboutToShow()
         
         pWindowMenu->insertSeparator();
         
-        QWidgetList windows = pWorkspace->clientList();
+        QWidgetList windows = pWorkspace->windowList();
         for ( int i = 0; i &lt; int(windows.count()); ++i ) {
                 int id = pWindowMenu->insertItem(QString("&amp;%1 ").arg(i+1)+windows.at(i)->caption(),
                                                  this, SLOT( windowMenuActivated( int ) ) );
                 pWindowMenu->setItemParameter( id, i );
-          pWindowMenu->setItemChecked( id, pWorkspace->activeClient() == windows.at(i) );
+          pWindowMenu->setItemChecked( id, pWorkspace->activeWindow() == windows.at(i) );
         }
 }
 
 void KScribbleApp::windowMenuActivated( int id )
 {
-  QWidget* w = pWorkspace->clientList().at( id );
+  QWidget* w = pWorkspace->windowList().at( id );
   if ( w )
                 w->setFocus();
 }

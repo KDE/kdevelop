@@ -138,7 +138,7 @@ void KScribbleApp::slotFileSaveAs()
 ->                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
   if(!newName.isEmpty())
   {
-    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
       KScribbleDoc* doc =       m->getDocument();

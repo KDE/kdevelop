@@ -1,7 +1,7 @@
 <!doctype linuxdoc system>
 <book>
 <title>The KDE 2 Developer's Guide
-<subtitle>The KDE 2 information guide to development, I/O slaves and KOM/OpenParts
+<subtitle>The information guide to KDE 2 development, I/O slaves and KOM/OpenParts
 <author>Ralf Nolden, Kurt Granroth, Simon Hausmann, David Sweet, Preston Brown, Torben Weis and  Bern Wuebben
 <date>Version 0.2, Jan, 19  2000
 <abstract>
@@ -38,6 +38,12 @@ local desktop applications using DCOP.
 I want to thank all authors that were willing to contribute their current documentation to this handbook and hope this collection will
 be of good use to those who want to stay on the bleeding edge of KDE development.
 
+<bf>NOTE:</bf> Various parts of this document are recently out of date, as natuarally in an environment currently under construction. 
+For more up-to-date information, you should take a look at <htmlurl url="http://developer.kde.org" name="<http://developer.kde.org>">
+as well as the KDevelop site at <htmlurl url="http://www.kdevelop.org" name="<http://www.kdevelop.org>">. Especially the CORBA parts of
+the current KDE 2 development have been replaced by the DCOP protocol, which is explained in the last chapter. Also the KIOSlaves have
+undergone much improvements. In any case, please refer to the API documentation that you can generate with KDevelop from a recent snapshot
+of the KDE libraries.
 
 
 Ralf Nolden
@@ -3325,7 +3331,8 @@ Hausmann <htmlurl url="mailto:hausmann@kde.org" name="<hausmann@kde.org>">
 name="<pbrown@kde.org>">
 
 
-<appendix>Glossary
+<appendix>
+<chapt>Glossary
 <p>
 
 <descrip>

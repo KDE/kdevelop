@@ -292,7 +292,7 @@ void KScribbleApp::slotPenBrush()
   slotStatusMsg(i18n("Setting brush width..."));
 
   // get one window with document for a current pen width
-  QWidgetList windows = pWorkspace->clientList();
+  QWidgetList windows = pWorkspace->windowList();
   KScribbleView* m = (KScribbleView*)windows.at(0);
         KScribbleDoc* pDoc = m->getDocument();
   int curr_width=pDoc->penWidth();
@@ -371,7 +371,7 @@ void KScribbleApp::slotPenColor()
   int result = KColorDialog::getColor( myColor, this );
   if ( result == KColorDialog::Accepted )
   {
-    QWidgetList windows = pWorkspace->clientList();
+    QWidgetList windows = pWorkspace->windowList();
     KScribbleDoc* pDoc;
     KScribbleView* m;
     for ( int i = 0; i &lt; int(windows.count()); ++i )
