@@ -28,9 +28,11 @@ public:
 protected:
     virtual KPopupMenu *createPopup();
 
+public slots:
+    void refresh();
+
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void refresh();
     void slotTreeModeChanged();
     void slotScopeModeChanged();
 

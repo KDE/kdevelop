@@ -169,6 +169,9 @@ void ClassViewPart::updatedSourceInfo()
 {
     classes_action->refresh();
     methods_action->refresh(classes_action->currentClassName());
+    ClassViewWidget* w = dynamic_cast<ClassViewWidget*>((QWidget*)m_classtree);
+    if ( w )
+        w->refresh();
 }
 
 
