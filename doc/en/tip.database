@@ -27,4 +27,7 @@ If you compile your project and get an error, you can click on the error message
 ...that you should keep your library documentations up to date after installing new libraries ?
 ...that you can configure the syntax-highlighting of the editor ?
 ...that you can undo and redo your actions and set the amount of steps in the editor dialog ?
-...that you can access more internal debug functions by holding down the debug toolbar button?
+...that you can access more internal debug functions by holding down the debug toolbar button ?
+...that you can move the cursor by words with Ctrl and left or right arrow ?
+...that you can bookmarks helpbrowser pages in the "Bookmarks" menu ?
+...that you can start grep search from inside editor and browser with context menu ?
