@@ -19,13 +19,14 @@
 #include <qvbox.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include "filebuffer.h"
 
 class TrollProjectPart;
 class KListView;
 class SubprojectItem;
 class GroupItem;
 class FileItem;
-
+class FileBuffer;
 
 /**
  * Base class for all items appearing in ProjectOverview and ProjectDetails.
@@ -34,13 +35,13 @@ class ProjectItem : public QListViewItem
 {
 public:
     enum Type { Subproject, Group, File };
-    
+
     ProjectItem(Type type, QListView *parent, const QString &text);
     ProjectItem(Type type, ProjectItem *parent, const QString &text);
 
     Type type()
         { return typ; }
-    
+
 private:
     Type typ;
     void init();
@@ -64,6 +65,8 @@ public:
     QStringList headers;
     QStringList interfaces;
 
+    FileBuffer m_FileBuffer;
+
 private:
     void init();
 };
@@ -73,7 +76,7 @@ class GroupItem : public ProjectItem
 {
 public:
     enum GroupType { Sources, Headers, Interfaces };
-    
+
     GroupItem(QListView *lv, GroupType type, const QString &text);
 
     QList<FileItem> files;
@@ -94,8 +97,8 @@ public:
 class TrollProjectWidget : public QVBox
 {
     Q_OBJECT
-    
-public: 
+
+public:
     TrollProjectWidget(TrollProjectPart *part);
     ~TrollProjectWidget();
 
@@ -128,7 +131,7 @@ public:
 
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
-    
+
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);

@@ -28,13 +28,13 @@
 #include <kpopupmenu.h>
 #include <kregexp.h>
 #include <kurl.h>
+#include <qmessagebox.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevtoplevel.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
-
 
 /**
  * Class ProjectViewItem
@@ -386,89 +386,29 @@ void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 }
 
 
-// from Designer
-static QString parse_part( const QString &part )
-{
-    QString res;
-    bool inName = FALSE;
-    QString currName;
-    for ( int i = 0; i < (int)part.length(); ++i ) {
-	QChar c = part[ i ];
-	if ( !inName ) {
-	    if ( c != ' ' && c != '+' && c != '\t' && c != '\n' && c != '=' && c != '\\' )
-		inName = TRUE;
-	    else
-		continue;
-	}
-	if ( inName ) {
-	    if ( c == '\n' )
-		break;
-	    if ( c == '\\' ) {
-		inName = FALSE;
-		res += ' ';
-		continue;
-	    }
-	    res += c;
-	}
-    }
-    return res;
-}
-
-
 void TrollProjectWidget::parse(SubprojectItem *item)
 {
     QFileInfo fi(item->path);
     QString proname = item->path + "/" + fi.baseName() + ".pro";
     kdDebug(9024) << "Parsing " << proname << endl;
 
-    QFile f(proname);
-    if (!f.open(IO_ReadOnly))
-        return;
+    item->m_FileBuffer.bufferFile(proname);
 
-    QTextStream ts(&f);
-    QString contents = ts.read();
-    f.close();
+    QString values;
+    values = item->m_FileBuffer.getValues("INTERFACES");
+    if (values != "")
+      item->interfaces = QStringList::split(' ',values);
 
-    // from Designer
-    int i = contents.find( "INTERFACES" );
-    if ( i != -1 ) {
-	QString part = contents.mid( i + QString( "INTERFACES" ).length() );
-	QStringList lst;
-	bool inName = FALSE;
-	QString currName;
-	for ( i = 0; i < (int)part.length(); ++i ) {
-	    QChar c = part[ i ];
-	    if ( ( c.isLetter() || c.isDigit() || c == '.' || c == '/' || c == '_' ) &&
-		 c != ' ' && c != '\t' && c != '\n' && c != '=' && c != '\\' ) {
-		if ( !inName )
-		    currName = QString::null;
-		currName += c;
-		inName = TRUE;
-	    } else {
-		if ( inName ) {
-		    inName = FALSE;
-		    if ( currName.right( 3 ).lower() == ".ui" )
-			lst.append( currName );
-		}
-	    }
-	}
 
-	item->interfaces = lst;
-    }
+    values = item->m_FileBuffer.getValues("SOURCES");
+    if (values != "")
+      item->sources = QStringList::split(' ',values);
 
-    i = contents.find( "SOURCES" );
-    if ( i != -1 ) {
-	QString part = contents.mid( i + QString( "SOURCES" ).length() );
-	QString s = parse_part( part );
-	item->sources = QStringList::split( ' ', s );
-    }
 
-    i = contents.find( "HEADERS" );
-    if ( i != -1 ) {
-	QString part = contents.mid( i + QString( "HEADERS" ).length() );
-	QString s = parse_part( part );
-	item->headers = QStringList::split( ' ', s );
-    }
+    values = item->m_FileBuffer.getValues("HEADERS");
+    if (values != "")
+      item->headers = QStringList::split(' ',values);
+
 
     // Create list view items
     if (!item->interfaces.isEmpty()) {
@@ -502,11 +442,12 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         }
     }
 
-    i = contents.find( "SUBDIRS" );
-    if ( i != -1 ) {
-	QString part = contents.mid( i + QString( "SUBDIRS" ).length() );
-	QString s = parse_part( part );
-	QStringList lst = QStringList::split( ' ', s );
+
+    values = item->m_FileBuffer.getValues("SUBDIRS");
+
+    if (values != "")
+    {
+        QStringList lst = QStringList::split( ' ', values );
         QStringList::Iterator it;
         for (it = lst.begin(); it != lst.end(); ++it) {
             SubprojectItem *newitem = new SubprojectItem(item, (*it));
