@@ -263,19 +263,6 @@ void CKDevelop::slotFilePrint(){
   delete (printerdlg);
 }
 
-// void CKDevelop::mousePressEvent(QMouseEvent* event){
-//   if(event->button() == RightButton){
-//     cout << "hallo" << endl;
-//   }
-//   else {
-//     CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
-//     printerdlg->resize(600,480);
-//     printerdlg->exec(); 
-//     delete (printerdlg);
-//   }
-//   QToolBar::mousePressEvent(event);
-// }
-
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);
 }
@@ -537,17 +524,23 @@ void CKDevelop::slotOptionsKeys(){
 }
 
 void CKDevelop::slotOptionsConfigureEnscript(){
-  printconf = new CConfigPrintDlg(this, "confdialog",2);
-  printconf->resize(610,510);
-  printconf->exec();  
-  delete (printconf);
+  if (!CToolClass::searchProgram("a2ps")) {
+    return;
+  }
+  enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+  enscriptconf->resize(610,510);
+  enscriptconf->exec();  
+  delete (enscriptconf);
 }
 
 void CKDevelop::slotOptionsConfigureA2ps(){
-  printconf = new CConfigPrintDlg(this, "confdialog",1);
-  printconf->resize(610,510);
-  printconf->exec(); 
-  delete (printconf);
+  if (!CToolClass::searchProgram("a2ps")) {
+    return;
+  }
+  a2psconf = new CConfigA2psDlg(this, "confdialog");
+  a2psconf->resize(600,430);
+  a2psconf->exec(); 
+  delete (a2psconf);
 }
 
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){

@@ -61,6 +61,8 @@ class KSwallowWidget;
 #include "resource.h"
 #include "cprintdlg.h"
 
+
+
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
@@ -354,7 +356,8 @@ private:
   QString next_job;
   QString make_cmd;
 
-  CConfigPrintDlg* printconf;
+  CConfigEnscriptDlg* enscriptconf;
+  CConfigA2psDlg* a2psconf;
 
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
 };

@@ -515,8 +515,8 @@ void CKDevelop::initMenu(){
 
   // submenu for setting printprograms
   QPopupMenu* p3 = new QPopupMenu;
-  p3->insertItem(i18n("&A2PS..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_A2PS);
-  p3->insertItem(i18n("&ENSCRIPT..."), this,
+  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_A2PS);
+  p3->insertItem(i18n("&Enscript..."), this,
 		 SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_ENSCRIPT);
   options_menu = new QPopupMenu;
   options_menu->insertItem(i18n("&Editor..."),this,
@@ -532,7 +532,9 @@ void CKDevelop::initMenu(){
   
   options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
-  options_menu->insertItem(i18n("Configure &Print"),p3,ID_OPTIONS_PRINT);
+  options_menu->insertSeparator();
+
+  options_menu->insertItem(i18n("&Print options"),p3,ID_OPTIONS_PRINT);
   options_menu->insertSeparator();
   
   options_menu->insertItem(i18n("Documentation &Browser..."),this,

@@ -25,6 +25,7 @@
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
+#include "ctoolclass.h"
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -615,14 +616,23 @@ void CPrintDlg::slotFilesConfClicked() {
 void CPrintDlg::slotPrintingConfClicked() {
   int prog=programCombBox->currentItem();
   if (prog==0) {
-    printconf = new CConfigPrintDlg(this, "confdialog",1);
+    if (!CToolClass::searchProgram("a2ps")) {
+      return;
+    }
+    a2psconf = new CConfigA2psDlg(this, "confdialog");
+    a2psconf->resize(600,430);
+    a2psconf->exec(); 
   }
   else
     if (prog==1) {
-      printconf = new CConfigPrintDlg(this, "confdialog",2);
+    if (!CToolClass::searchProgram("enscript")) {
+      return;
     }
-  printconf->resize(610,510);
-  printconf->exec(); 
+      enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+      enscriptconf->resize(610,510);
+      enscriptconf->exec(); 
+    }
+
 }
 
 void CPrintDlg::slotPrintToFileDlgClicked() {

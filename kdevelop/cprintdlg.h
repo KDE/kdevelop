@@ -19,7 +19,8 @@
 #ifndef CPRINTDLG_H
 #define CPRINTDLG_H
 
-#include "cconfigprintdlg.h"
+#include "cconfigenscriptdlg.h"
+#include "cconfiga2psdlg.h"
 #include <qdialog.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -58,6 +59,7 @@ protected:
    *pageSide,*sidePerPage,*pagePerSide,*prettyCombBox,*mediaCombBox;
  QSpinBox *copySpinBox;
  QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
- CConfigPrintDlg *printconf;  
+ CConfigEnscriptDlg *enscriptconf;  
+ CConfigA2psDlg *a2psconf;
 };
 #endif

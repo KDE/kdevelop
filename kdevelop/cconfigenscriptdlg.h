@@ -1,7 +1,7 @@
 /***************************************************************************
-                          cconfigprintdlg.h  -  description                       
+                          cconfigenscriptdlg.h  -  description                       
                              -------------------                                   
-    begin                : Thu Feb 12 1999                                        
+    begin                : Thu Feb 22 1999                                        
     copyright            : (C) 1999 by Stefan Heidrich                         
     email                : sheidric@rz.uni-potsdam.de                             
  ***************************************************************************/
@@ -15,10 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CCONFIGPRINTDLG
-#define CCONFIGPRINTDLG
+#ifndef CCONFIGENSCRIPTDLG
+#define CCONFIGENSCRIPTDLG
 
-/** the KDevelop-PrintConfigdialog
+/** the KDevelop-EnscriptConfigdialog
   *@author Stefan Heidrich
   */
 
@@ -27,51 +27,37 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qdialog.h>
-#include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qdialog.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
-#include <kfontdialog.h>
 #include <qfont.h>
 #include <qfontinfo.h>
+#include <qlabel.h>
+#include <qbuttongroup.h>
+
+#include <kfontdialog.h>
 #include <kprocess.h>
 
-class CConfigPrintDlg : public QTabDialog {
+class CConfigEnscriptDlg : public QTabDialog {
   Q_OBJECT
 public:
-  CConfigPrintDlg(QWidget* parent=0,const char* name=0,int prog=1);
-  ~CConfigPrintDlg();
-  void init(int);
-  void initTab1(QWidget*parent,int);
-  void initTab2(QWidget*parent,int);
-  void initTab3(QWidget*parent,int);
-  void initTab4(QWidget*parent,int);
-  void selectedProgram(int);
-  int prog;
+  CConfigEnscriptDlg(QWidget* parent=0,const char* name=0);
+  ~CConfigEnscriptDlg();
+  void init();
+  void initTab1(QWidget*parent);
+  void initTab2(QWidget*parent);
+  void initTab3(QWidget*parent);
+  void initTab4(QWidget*parent);
+  void selectedProgram();
 
 public slots:
-    void slotHeader1Clicked();
- void slotHeader2Clicked();
+ void slotHeaderClicked();
  void slotNoHeader();
- void slotHeadertext1Clicked();
- void slotHeadertext2Clicked();
+ void slotHeadertextClicked();
  void slotLoginClicked();
  void slotFilenameClicked();
  void slotHostnameClicked();
- void slotCurrentDate1Clicked();
- void slotCurrentTime1Clicked();
- void slotCurrentDate2Clicked();
- void slotCurrentTime2Clicked();
+ void slotCurrentDateClicked();
+ void slotCurrentTimeClicked();
  void slotModiDateClicked();
  void slotModiTimeClicked();
  void slotCutLinesClicked();
@@ -84,11 +70,8 @@ public slots:
  void slotUnderlayPositionDefaultClicked();
  void slotUnderlayAngleDefaultClicked();
  void slotDefaultClicked();
- void slotDefault1Clicked();
- void slotDefault2Clicked();
  void slotOkClicked();
- void slotNumberingPages2Clicked();
- void slotNumberingPages1Clicked();
+ void slotNumberingPagesClicked();
  void slotCurrentAmpmClicked(int);
  void slotModificationAmpmClicked(int);
  void slotPreviewClicked();
@@ -117,11 +100,13 @@ protected:
     QLabel* qtarch_Label_23; 
     QLabel* qtarch_Label_22;
     QLabel* qtarch_Label_20;
+    QLabel* qtarch_label;
+    QButtonGroup* qtarch_ButtonGroup_21;
     QButtonGroup* qtarch_ButtonGroup_59;
     QButtonGroup* qtarch_ButtonGroup_61;
     QButtonGroup* qtarch_ButtonGroup_60;
     QButtonGroup* qtarch_ButtonGroup_65;
-
+    QButtonGroup* qtarch_ButtonGroup_20;
     QCheckBox* bordersButton;
     QCheckBox* tocButton;
     QCheckBox* markedWrappedLinesButton;
@@ -133,13 +118,9 @@ protected:
     QSpinBox* cycleOfChange;
     QComboBox* numberingPagesList;
     QCheckBox* highlightBarsButton;
-    QCheckBox* interpretButton;
     QCheckBox* cutLinesButton;
     QCheckBox* replaceButton;
-    QCheckBox* printAsISOLatin;
-    QCheckBox* boltFontButton;
     QSpinBox* setTabSize;
-    QSpinBox* a2psFontSize;
     QPushButton* fontForBodyButton;
     QPushButton* fontForHeaderButton;
     QLabel* qtarch_Label_8;
@@ -158,7 +139,6 @@ protected:
     QComboBox* modificationTimeFormat;
     QComboBox* modificationDatePosition;
     QComboBox* currentDateFormat;
-    QLabel *qtarch_Label_3;
     QButtonGroup* qtarch_ButtonGroup_51;
     QButtonGroup* qtarch_ButtonGroup_52;
     QLabel* qtarch_Label_14;
@@ -197,6 +177,7 @@ protected:
     QLabel* qtarch_Label_73;
     QLabel* qtarch_Label_72;
     QLabel* qtarch_Label_71;
+    QLabel* qtarch_Label_2;
     QButtonGroup* qtarch_ButtonGroup_133;
     QLabel* qtarch_Label_70;
     QButtonGroup* qtarch_ButtonGroup_132;
@@ -205,11 +186,11 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_135;
     QButtonGroup* qtarch_ButtonGroup_136;
     QButtonGroup* qtarch_ButtonGroup_137;
-
+    QButtonGroup* qtarch_ButtonGroup_33;
     KFontDialog* fontDialog;
     QString parameters,globalpara,leftstr,middlestr,rightstr,headerstr;
     QPushButton* previewButton;
-    KProcess *process,*process2,*process3;
+    KShellProcess *process,*process2,*process3;
 };
 
-#endif // CCONFIGPRINTDLG
+#endif // CCONFIGENSCRIPTDLG

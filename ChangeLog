@@ -1,3 +1,7 @@
+1999-02-23  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* split enscript and a2ps in seperate dialogs
+	* fixed some little bugs
+
 1999-02-22 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added implementation of slotProjectNew() and CNewProjectDlg class
     with dialog for creating an empty project
