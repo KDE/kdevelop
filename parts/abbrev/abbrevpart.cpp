@@ -16,6 +16,7 @@
 #include "abbrevpart.h"
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qregexp.h>
 #include <qvbox.h>
 #include <kdebug.h>
@@ -151,14 +152,14 @@ void AbbrevPart::load()
     KStandardDirs *dirs = AbbrevFactory::instance()->dirs();
     QString localTemplatesFile = locateLocal("codetemplates", "templates", AbbrevFactory::instance());
     QStringList files;
-    if (KIO::NetAccess::exists(localTemplatesFile))
+    if (QFileInfo(localTemplatesFile).exists())
         files << localTemplatesFile;
     else
         files = dirs->findAllResources("codetemplates", QString::null, false, true);
 
     QString localSourcesFile = locateLocal("sources", "sources", AbbrevFactory::instance());
     QStringList sourceFiles;
-    if (KIO::NetAccess::exists(localSourcesFile))
+    if (QFileInfo(localSourcesFile).exists())
         sourceFiles << localSourcesFile;
     else
         sourceFiles = dirs->findAllResources("sources", QString::null, false, true);
