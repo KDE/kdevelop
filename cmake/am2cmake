@@ -158,14 +158,51 @@ class CMakeFile
    end
       
    def createListsFile
-      printf("subdirs: %s\n", @subDirs);
-      @targets.each do |buildTarget|
-         printf("-------------------------------\n")
-         printf("%s, %d\n", buildTarget.name, buildTarget.type)
-         buildTarget.sources.each{ |currentFile| printf("src: %s\n", currentFile)}
-         buildTarget.uis.each{ |currentFile| printf("ui: %s\n", currentFile)}
+      file=File.new(@listsFile, "w+");
+      if not @subDirs.empty?
+         file.printf("SUBDIRS( %s )\n\n", @subDirs)
       end
-      @lines.each{ |line| printf("# %s", line)}
+      @targets.each do |buildTarget|
+         if buildTarget.type==SharedLib 
+            srcsName=buildTarget.name+"_LIB_SRCS"
+         elsif buildTarget.type==StaticLib 
+            srcsName=buildTarget.name+"_STAT_SRCS"
+         elsif buildTarget.type==Part 
+            srcsName=buildTarget.name+"_PART_SRCS"
+         else
+            srcsName=buildTarget.name+"_SRCS"
+         end
+         uisName=buildTarget.name+"_UI"
+         
+         if not buildTarget.sources.empty?   
+            file.printf("SET(%s\n", srcsName)
+            buildTarget.sources.each{ |currentFile| file.printf("%s\n", currentFile)}
+            file.printf(")\n\n")
+            if @automoc
+               file.printf("KDE_AUTOMOC(${%s})\n\n", srcsName)
+            end
+         end
+         
+         if not buildTarget.uis.empty?
+            file.printf("SET(\n")
+            buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
+            file.printf(")\n\n")
+            
+            file.printf("KDE_ADD_UI_FILES(%s ${%s}\n\n", srcsName, uisName)
+         end
+         
+         if buildTarget.type==SharedLib 
+            file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
+         elsif buildTarget.type==StaticLib 
+            file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
+         elsif buildTarget.type==Part 
+            file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
+         else
+            file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
+         end
+      end
+      file.printf("\n\n#original Makefile.am contents follow:\n\n")
+      @lines.each{ |line| file.printf("# %s", line)}
    end
 end
 
