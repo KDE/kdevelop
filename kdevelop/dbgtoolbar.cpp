@@ -291,7 +291,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   DbgMoveHandle*  moveHandle= new DbgMoveHandle(this);
 
   QPushButton*  bRun        = new DbgButton(BarIcon("dbgrun"),      i18n("Run"),        this);
-  QPushButton*  bInterrupt  = new DbgButton(BarIcon("dbgbreak"),    i18n("Interrupt"),  this);
+  QPushButton*  bInterrupt  = new DbgButton(BarIcon("player_pause"),    i18n("Interrupt"),  this);
   QPushButton*  bNext       = new DbgButton(BarIcon("dbgnext"),     QString::null,      this);
   QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"), QString::null,      this);
   QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),     QString::null,      this);

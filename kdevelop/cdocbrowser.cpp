@@ -78,7 +78,7 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
   doc_pop->insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
-  doc_pop->insertItem(SmallIconSet("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
+  doc_pop->insertItem(SmallIconSet("help"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
   
 //  view()->setFocusPolicy( QWidget::StrongFocus );
   connect(this, SIGNAL( popupMenu( const QString&, const QPoint & ) ),

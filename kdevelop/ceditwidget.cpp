@@ -66,7 +66,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name) :
   pop->setItemEnabled(ID_EDIT_PASTE,false);
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-  pop->insertItem(SmallIconSet("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+  pop->insertItem(SmallIconSet("help"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
 //  bookmarks.setAutoDelete(true);
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);

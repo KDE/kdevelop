@@ -196,10 +196,10 @@ void CKDevelop::initView()
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
-  t_tab_view->addTab(class_tree,i18n("CV"));
+  t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("CV"));
   t_tab_view->addTab(log_file_tree,i18n("LFV"));
-  t_tab_view->addTab(real_file_tree,i18n("RFV"));
-  t_tab_view->addTab(doc_tree,i18n("DOC"));
+  t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("RFV"));
+  t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("DOC"));
 
   ////////////////////////
   // Right main window
@@ -246,9 +246,9 @@ void CKDevelop::initView()
   //init
   browser_widget->setDocBrowserOptions();
 
-  s_tab_view->addTab(header_widget,i18n("Header/Reso&urce Files"));
-  s_tab_view->addTab(cpp_widget,i18n("&C/C++ Files"));
-  s_tab_view->addTab(browser_widget->view(),i18n("&Documentation-Browser"));
+  s_tab_view->addTab(header_widget,SmallIcon("source_h"),i18n("Header/Reso&urce Files"));
+  s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
+  s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
 
 #warning FIXME QSplitter activate
 //  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
@@ -684,7 +684,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(SmallIconSet("window_new"),i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
   project_menu->insertItem(SmallIconSet("wizard"),i18n("Generate Project File..."), this, SLOT(slotProjectGenerate()),0,ID_PROJECT_GENERATE);
 
-  project_menu->insertItem(SmallIconSet("folder_new"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
+  project_menu->insertItem(SmallIconSet("project_open"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
 
   recent_projects_menu = new QPopupMenu();
   connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
@@ -800,7 +800,7 @@ void CKDevelop::initMenuBar(){
   debug_menu->insertItem(SmallIconSet("dbgmemview"),  i18n("Viewers"),          this, SLOT(slotDebugMemoryView()), 0, ID_DEBUG_MEMVIEW);
   debug_menu->insertSeparator();
 
-  debug_menu->insertItem(SmallIconSet("dbgbreak"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
+  debug_menu->insertItem(SmallIconSet("player_pause"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
   debug_menu->insertItem(SmallIconSet("stop"),   i18n("Stop"),             ID_DEBUG_STOP);
 
   kdev_menubar->insertItem(i18n("Debu&g"), debug_menu);
@@ -883,9 +883,9 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(SmallIconSet("back"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
   help_menu->insertItem(SmallIconSet("forward"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(SmallIconSet("lookup"),i18n("&Search Marked Text"),this,
+  help_menu->insertItem(SmallIconSet("help"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
-  help_menu->insertItem(SmallIconSet("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  help_menu->insertItem(SmallIconSet("filefind"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
   help_menu->insertItem(SmallIconSet("mini-book1"),manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
   help_menu->insertItem(SmallIconSet("mini-book1"),programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
@@ -961,7 +961,7 @@ void CKDevelop::initToolBar(){
 
 //  toolBar()->insertButton(BarIcon("filenew"),ID_FILE_NEW, false,i18n("New"));
 
-  toolBar()->insertButton(BarIcon("folder_new"),ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar()->insertButton(BarIcon("project_open"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("fileopen"),ID_FILE_OPEN, true,i18n("Open File"));
   file_open_popup= new QPopupMenu();
@@ -1082,13 +1082,13 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("stop"),ID_HELP_BROWSER_STOP, false,i18n("Stop"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("reload_page"),ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
-	toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("mini-book1"), ID_HELP_CONTENTS, true, i18n("User Manual"));
+	toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("contents"), ID_HELP_CONTENTS, true, i18n("User Manual"));
 	
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("lookup"), ID_HELP_SEARCH_TEXT,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("help"), ID_HELP_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("contents"),ID_HELP_SEARCH,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("filefind"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
   QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
@@ -1492,7 +1492,7 @@ void CKDevelop::initDebugger()
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));
     o_tab_view->addTab(frameStack,i18n("frame stack"));
     o_tab_view->addTab(disassemble,i18n("disassemble"));
-    t_tab_view->addTab(var_viewer,i18n("VAR"));
+    t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("VAR"));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(o_tab_view, "debuggerTab");
