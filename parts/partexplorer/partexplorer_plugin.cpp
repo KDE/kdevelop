@@ -14,7 +14,7 @@
 #include "partexplorerform.h"
 
 typedef KGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( "partexplorer" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( "kdevpartexplorer" ) );
 
 PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & )
 	: KDevPlugin( "PartExplorer", "partexplorer", parent, name ? name : "PartExplorerPlugin" )
