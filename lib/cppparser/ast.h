@@ -157,6 +157,9 @@ enum NodeType
     NodeType_DoStatement,
     NodeType_ForStatement,
     NodeType_SwitchStatement,
+	NodeType_CatchStatement,
+    NodeType_CatchStatementList,
+	NodeType_TryBlockStatement,
     NodeType_DeclarationStatement,
     NodeType_TranslationUnit,
     NodeType_FunctionDefinition,
@@ -1350,6 +1353,80 @@ private:
 private:
     StatementListAST( const StatementListAST& source );
     void operator = ( const StatementListAST& source );
+};
+
+class CatchStatementAST: public StatementAST
+{
+public:
+    typedef AUTO_PTR<CatchStatementAST> Node;
+    enum { Type = NodeType_CatchStatement };
+
+    DECLARE_ALLOC( CatchStatementAST )
+    
+public:
+    CatchStatementAST();
+
+    ConditionAST* condition() const { return m_condition.get(); }
+    void setCondition( ConditionAST::Node& condition );
+
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+
+private:
+    ConditionAST::Node m_condition;
+    StatementAST::Node m_statement;
+
+private:
+    CatchStatementAST( const CatchStatementAST& source );
+    void operator = ( const CatchStatementAST& source );
+};
+
+class CatchStatementListAST: public StatementAST
+{
+public:
+    typedef AUTO_PTR<CatchStatementListAST> Node;
+    enum { Type = NodeType_CatchStatementList };
+
+    DECLARE_ALLOC( CatchStatementListAST )
+    
+public:
+    CatchStatementListAST();
+
+    QPtrList<CatchStatementAST> statementList() { return m_statementList; }
+    void addStatement( CatchStatementAST::Node& statement );
+
+private:
+    QPtrList<CatchStatementAST> m_statementList;
+
+private:
+    CatchStatementListAST( const CatchStatementListAST& source );
+    void operator = ( const CatchStatementListAST& source );
+};
+
+class TryBlockStatementAST: public StatementAST
+{
+public:
+    typedef AUTO_PTR<TryBlockStatementAST> Node;
+    enum { Type = NodeType_TryBlockStatement };
+
+    DECLARE_ALLOC( TryBlockStatementAST )
+    
+public:
+    TryBlockStatementAST();
+
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+
+    CatchStatementListAST* catchStatementList() { return m_catchStatementList.get(); }
+    void setCatchStatementList( CatchStatementListAST::Node& statementList );
+
+private:
+    StatementAST::Node m_statement;
+    CatchStatementListAST::Node m_catchStatementList;
+
+private:
+    TryBlockStatementAST( const TryBlockStatementAST& source );
+    void operator = ( const TryBlockStatementAST& source );
 };
 
 class DeclarationStatementAST: public StatementAST

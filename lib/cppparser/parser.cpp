@@ -3128,6 +3128,7 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).text() << " -- "  << "Parser::parseTryBlockStatement()" << endl;
 
+    int start = lex->index();
     if( lex->lookAhead(0) != Token_try ){
 	return false;
     }
@@ -3136,15 +3137,16 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& node )
     StatementAST::Node stmt;
     if( !parseCompoundStatement(stmt) ){
 	syntaxError();
-	return false;
     }
 
     if( lex->lookAhead(0) != Token_catch ){
 	reportError( i18n("catch expected") );
-	return false;
     }
 
+    CatchStatementListAST::Node list = CreateNode<CatchStatementListAST>();
+
     while( lex->lookAhead(0) == Token_catch ){
+
 	lex->nextToken();
 	ADVANCE( '(', "(" );
 	ConditionAST::Node cond;
@@ -3157,11 +3159,20 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& node )
 	StatementAST::Node body;
 	if( !parseCompoundStatement(body) ){
 	    syntaxError();
-	    return false;
 	}
+
+	CatchStatementAST::Node cstmt = CreateNode<CatchStatementAST>();
+	cstmt->setCondition( cond );
+	cstmt->setStatement( body );
+	list->addStatement( cstmt );
     }
 
-    node = stmt;
+    TryBlockStatementAST::Node ast = CreateNode<TryBlockStatementAST>();
+    ast->setStatement( stmt );
+    ast->setCatchStatementList( list );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
     return true;
 }
 

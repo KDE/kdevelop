@@ -85,6 +85,12 @@ QString nodeTypeToString( int type )
 	return "ForStatement";
     case NodeType_SwitchStatement:
 	return "SwitchStatement";
+    case NodeType_CatchStatement:
+	return "CatchStatement";
+    case NodeType_CatchStatementList:
+	return "CatchStatementList";
+    case NodeType_TryBlockStatement:
+	return "TryBlockStatement";
     case NodeType_DeclarationStatement:
 	return "DeclarationStatement";
     case NodeType_StatementList:
@@ -912,6 +918,55 @@ void SwitchStatementAST::setStatement( StatementAST::Node& statement )
 {
     m_statement = statement;
     if( m_statement.get() ) m_statement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+CatchStatementListAST::CatchStatementListAST()
+{
+    m_statementList.setAutoDelete( true );
+}
+
+void CatchStatementListAST::addStatement( CatchStatementAST::Node& statement )
+{
+    if( !statement.get() )
+	return;
+
+    statement->setParent( this );
+    m_statementList.append( statement.release() );
+}
+
+// --------------------------------------------------------------------------
+CatchStatementAST::CatchStatementAST()
+{
+}
+
+void CatchStatementAST::setCondition( ConditionAST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void CatchStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+TryBlockStatementAST::TryBlockStatementAST()
+{
+}
+
+void TryBlockStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+void TryBlockStatementAST::setCatchStatementList( CatchStatementListAST::Node& statementList )
+{
+    m_catchStatementList = statementList;
+    if( m_catchStatementList.get() ) m_catchStatementList->setParent( this );
 }
 
 // --------------------------------------------------------------------------
