@@ -34,6 +34,8 @@
 #include <kkeydialog.h>
 #include <kmessagebox.h>
 #include <kdevproject.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -241,7 +243,7 @@ void MainWindowIDEAl::createFramework() {
     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
 //    connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
 //    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
-    connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
+//    connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags())); // do we need this? I think not.
 //     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
 //     connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
 //     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
@@ -548,7 +550,25 @@ void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
     if ( !part || !part->inherits("KTextEditor::Document") )
         return;
 
-    connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+//    connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+
+    // Connect to the document's views newStatus() signal in order to keep track of the
+    // modified-status of the document.
+
+    // What's potentially problematic is that this signal isn't officially part of the
+    // KTextEditor::View interface. It is nevertheless there, and used in kate and kwrite.
+    // There doesn't seem to be any othere way of making this work with katepart, and since
+    // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
+    // all we get is a runtime warning. At this point in time we are only really supported
+    // by katepart anyway so IMHO this hack is justified. //teatime
+    KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( part );
+    QPtrList<KTextEditor::View> list = doc->views();
+    QPtrListIterator<KTextEditor::View> it( list );
+    while ( it.current() )
+    {
+        connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
+        ++it;
+    }
 }
 
 void MainWindowIDEAl::raiseTabbar( KTabZoomWidget* tabBar ) {
@@ -580,6 +600,35 @@ void MainWindowIDEAl::raiseEditor() {
     if(m_tabWidget->currentPage()) m_tabWidget->currentPage()->setFocus();
 }
 
+// Yes, this looks like a bit of voodoo, but should be fairly safe/correct.
+// It's also cleaner and more efficient than the last solution, not to
+// mention that it actually seems to work. ;)
+// As an added benefit, this should also work if the changed editor is not
+// the active part/current page. //teatime
+void MainWindowIDEAl::slotNewStatus()
+{
+    kdDebug(0) << "MainWindowIDEAl::slotNewStatus()" << endl;
+
+    QObject * senderobj = const_cast<QObject*>( sender() );
+    KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
+
+    if ( ! view ) return;
+
+    KParts::ReadWritePart * rw_part = view->document();
+    if ( rw_part && rw_part->widget() )
+    {
+        if ( rw_part->isModified() )
+        {
+            m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() + "*" );
+        }
+        else
+        {
+            m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() );
+        }
+    }
+}
+
+/* // Disabled until I know it doesn't break anything to remove it
 void MainWindowIDEAl::slotTextChanged() {
     QWidget* w = m_tabWidget->currentPage();
     if ( !w )
@@ -609,6 +658,7 @@ void MainWindowIDEAl::slotUpdateModifiedFlags()
         }
     }
 }
+*/
 
 void MainWindowIDEAl::slotBottomTabsChanged() {
     if ( !m_bottomBar )
