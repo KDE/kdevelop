@@ -330,7 +330,7 @@ void DocTreeGlobalConfigWidget::updateIndexClicked()
 
 void DocTreeGlobalConfigWidget::addBookmarkClicked()
 {
-    AddDocItemDialog dlg;
+    AddDocItemDialog dlg(KFile::File, "all/allfiles");
     if (!dlg.exec())
         return;
 
