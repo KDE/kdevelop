@@ -17,6 +17,7 @@
                 <Action name="subversion_untag" />
                 <Action name="subversion_update" />
                 <Action name="subversion_removesticky" />
+                <Action name="subversion_revert" />
                 <Separator />
                 <Action name="subversion_ignore" />
                 <Action name="subversion_donot_ignore" />

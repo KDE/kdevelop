@@ -55,10 +55,12 @@ signals:
 private slots:
 		void contextMenu( QPopupMenu *popup, const Context *context );
 		void slotActionUpdate();
+		void slotActionRevert();
 		void slotActionCommit();
 		void slotActionAdd();
 		void slotActionDel();
 		void slotUpdate();
+		void slotRevert();
 		void slotCommit();
 		void slotAdd();
 		void slotDel();
@@ -76,7 +78,8 @@ private:
 		*actionRemove,
 		*actionUpdate,
 		*actionAddToIgnoreList,
-		*actionRemoveFromIgnoreList;
+		*actionRemoveFromIgnoreList,
+		*actionRevert;
 
 		QGuardedPtr<subversionProjectWidget> m_projWidget;
 		KURL base;

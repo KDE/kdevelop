@@ -119,10 +119,13 @@ void subversionPart::setupActions() {
 	actionRemove->setToolTip( i18n("Remove from repository") );
 	actionRemove->setWhatsThis( i18n("<b>Remove from repository</b><p>Removes file(s) from repository.") );
 
-	actionUpdate = new KAction( i18n("&Update"), 0, this,
-			SLOT(slotActionUpdate()), actionCollection(), "subversion_update" );
+	actionUpdate = new KAction( i18n("&Update"), 0, this, SLOT(slotActionUpdate()), actionCollection(), "subversion_update" );
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("<b>Update</b><p>Updates file(s) from repository.") );
+
+	actionRevert = new KAction( i18n("&Revert"), 0, this, SLOT(slotActionRevert()), actionCollection(), "subversion_revert" );
+	actionRevert->setToolTip( i18n("Revert") );
+	actionRevert->setWhatsThis( i18n("<b>Revert</b><p>Undo local changes.") );
 
 	actionAddToIgnoreList = new KAction( i18n("&Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "subversion_ignore" );
@@ -220,6 +223,8 @@ if(!project() || !isValidDirectory(project()->projectDirectory()))
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Updates file(s) from repository."));
+		id = subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
+		subMenu->setWhatsThis(id, i18n("<b>Revert</b><p>Undo local changes.") );
 
 		subMenu->insertSeparator();
 		id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
@@ -279,6 +284,14 @@ void subversionPart::slotActionDel() {
 	}
 }
 
+void subversionPart::slotActionRevert() {
+	kdDebug() << "subversion: slotActionRevert()" << endl;
+	KURL doc;
+	if (urlFocusedDocument( doc )) {
+		m_impl->revert( doc );
+	}
+}
+
 void subversionPart::slotCommit() {
 	m_impl->commit (m_urls);
 }
@@ -289,6 +302,10 @@ void subversionPart::slotAdd() {
 
 void subversionPart::slotDel() {
 	m_impl->del (m_urls);
+}
+
+void subversionPart::slotRevert() {
+	m_impl->revert (m_urls);
 }
 
 void subversionPart::slotProjectOpened() {
