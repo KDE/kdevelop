@@ -1,8 +1,12 @@
 /* $Id$
  */
-#include <string>
+#ifndef ADA_UTILS_H
+#define ADA_UTILS_H
+
+#include <qstring.h>
 #include "AdaAST.hpp"
 
-std::string text (const RefAdaAST& n);
-int txteq (RefAdaAST n1, RefAdaAST n2);
+QString qtext (const RefAdaAST& n);
+
+#endif
 

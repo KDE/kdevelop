@@ -207,7 +207,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			_t = _retTree;
 #line 80 "expandedada.store.g"
 			
-					       QString scopeName ( QString::fromLatin1(text (gpi).c_str() ) );
+					       QString scopeName (qtext (gpi));
 					       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 					       /*
 					       psc->setDeclaredOnLine (startLine);
@@ -233,7 +233,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			_t = _retTree;
 #line 92 "expandedada.store.g"
 			
-					       QString scopeName ( QString::fromLatin1(text (ps).c_str() ) );
+					       QString scopeName (qtext (ps));
 					       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 					       /*
 					       psc->setDeclaredOnLine (startLine);
@@ -260,7 +260,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			_t = _retTree;
 #line 105 "expandedada.store.g"
 			
-					       QString scopeName ( QString::fromLatin1(text (prd).c_str() ) );
+					       QString scopeName (qtext (prd));
 					       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 					       /*
 					       psc->setDeclaredOnLine (startLine);
@@ -526,7 +526,7 @@ void AdaStoreWalker::use_clause(RefAdaAST _t) {
 					compound_name(_t);
 					_t = _retTree;
 #line 71 "expandedada.store.g"
-					m_imports.back ().push_back ( QString::fromLatin1(text (c).c_str() ) );
+					m_imports.back ().push_back (qtext (c));
 #line 531 "AdaStoreWalker.cpp"
 				}
 				else {
@@ -8514,7 +8514,7 @@ void AdaStoreWalker::package_body(RefAdaAST _t) {
 		def_id(_t);
 		_t = _retTree;
 #line 846 "expandedada.store.g"
-		m_currentScope.push_back ( QString::fromLatin1(text (id).c_str() ) );
+		m_currentScope.push_back (qtext (id));
 #line 8519 "AdaStoreWalker.cpp"
 		pkg_body_part(_t);
 		_t = _retTree;

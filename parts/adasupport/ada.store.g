@@ -98,7 +98,7 @@ compound_name
 use_clause
 	: #(USE_TYPE_CLAUSE ( subtype_mark )+ )
 	| #(USE_CLAUSE ( c:compound_name
-			{ m_imports.back ().push_back (text (#c)); }
+			{ m_imports.back ().push_back (qtext (#c)); }
 		       )+ )
 	;
 
@@ -116,7 +116,7 @@ library_item :
 		| #(PACKAGE_BODY pb:def_id pkg_body_part)
 		| #(GENERIC_PACKAGE_INSTANTIATION gpi:def_id
 		     {
-		       QString scopeName (text (gpi));
+		       QString scopeName (qtext (gpi));
 		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 		       /*
 		       psc->setDeclaredOnLine (startLine);
@@ -128,7 +128,7 @@ library_item :
 		   )
 		| #(PACKAGE_SPECIFICATION ps:def_id
 		     {
-		       QString scopeName (text (ps));
+		       QString scopeName (qtext (ps));
 		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 		       /*
 		       psc->setDeclaredOnLine (startLine);
@@ -141,7 +141,7 @@ library_item :
 		   )
 		| #(PACKAGE_RENAMING_DECLARATION prd:def_id
 		     {
-		       QString scopeName (text (prd));
+		       QString scopeName (qtext (prd));
 		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
 		       /*
 		       psc->setDeclaredOnLine (startLine);
@@ -1013,7 +1013,7 @@ subprogram_body
 
 package_body
 	: #(PACKAGE_BODY id:def_id
-		{ m_currentScope.push_back (text (id)); }
+		{ m_currentScope.push_back (qtext (id)); }
 	    pkg_body_part)
 	;
 
