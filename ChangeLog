@@ -3,6 +3,7 @@
 	* commited a patch by Bernd for reenabling the floating 
 	  debug toolbar
 	* reenabled context menu entries comming from parts
+	* added tiny part to select the UI mode
 
 2002-04-04  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* reenabled the RMB menu
