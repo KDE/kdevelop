@@ -96,15 +96,15 @@ void HighlightingConfigPage::slotAdjustAllElements()
 	  QString id = listElements->text(c);
 	  QFont font = m_map[ id ].first;
 	  QColor color = m_map[ id ].second;
-	  if (diffFlags && KFontChooser::FontDiffFamily)
+	  if (diffFlags & KFontChooser::FontDiffFamily)
 	      font.setFamily( changes.family() );
-	  if (diffFlags && KFontChooser::FontDiffStyle) {
+	  if (diffFlags & KFontChooser::FontDiffStyle) {
  	      font.setWeight( changes.weight() );
 	      font.setItalic( changes.italic() );
 	      font.setStrikeOut( changes.strikeOut() );
 	      font.setUnderline( changes.underline() );
 	  }
-	  if (diffFlags && KFontChooser::FontDiffSize)
+	  if (diffFlags & KFontChooser::FontDiffSize)
 	      font.setPointSize( changes.pointSize() );
 	  m_map[ id ] = qMakePair(font, color);
       }
