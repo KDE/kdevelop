@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 
-/** Gideon */
+/** KDevelop */
 #include <kdevmainwindow.h>
 #include <kdevmakefrontend.h>
 

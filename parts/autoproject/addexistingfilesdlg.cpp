@@ -14,7 +14,7 @@
  *                                                                         *
  ***************************************************************************/
 
-/** Here resides the Import-existing-files-dialog of the Automake Manager (a Gideon build tool part) **/
+/** Here resides the Import-existing-files-dialog of the Automake Manager (a KDevelop build tool part) **/
 
 #include <qapplication.h>
 #include <qgroupbox.h>

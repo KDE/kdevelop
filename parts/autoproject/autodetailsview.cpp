@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 
-/** Gideon */
+/** KDevelop */
 #include "autodetailsview.h"
 
 #include "kdevcore.h"

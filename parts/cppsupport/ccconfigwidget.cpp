@@ -33,7 +33,7 @@
 #include <knuminput.h>
 #include <kmainwindow.h>
 
-// gideon includes
+// kdevelop includes
 #include <domutil.h>
 #include <kdevcoderepository.h>
 #include <kdevmainwindow.h>

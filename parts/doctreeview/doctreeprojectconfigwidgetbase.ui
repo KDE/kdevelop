@@ -75,7 +75,7 @@
                 <enum>WheelFocus</enum>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>This view shows all the globaly installed documentation. Use checkboxes to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure Gideon...-&gt;Documentation Tree</string>
+                <string>This view shows all the globaly installed documentation. Use checkboxes to control the use of each documentation item in the current project. To add or remove documentation to this list, use Settings-&gt;Configure KDevelop...-&gt;Documentation Tree</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">

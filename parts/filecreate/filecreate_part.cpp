@@ -551,7 +551,7 @@ void FileCreatePart::slotInitialize( )
     readTypes(globalDom, m_filetypes, false);
 
     // use side tab or not?
-    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
+    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's kdeveloprc config file
     QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
     if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
         m_useSideTab = false;

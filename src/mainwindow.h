@@ -149,7 +149,7 @@ private:
 
 /**\brief Creates a wrapper of type KMdiChildView for the given view.
 
-After a call to wrapper(), the given view is included in the frame of gideon in the following way:\n
+After a call to wrapper(), the given view is included in the frame of kdevelop in the following way:\n
 - The view gets a new parent of type KMdiChildView.
 - A horizontal layout manager (QHBoxLayout) is generated which has a the new KMdiChildView as parent and the
   given view as Widget to layout.
@@ -157,7 +157,7 @@ After a call to wrapper(), the given view is included in the frame of gideon in 
   \ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap"
 - The new KMdiChildView gets the given name as caption (full path name) and just the extracted file name as TabCaption.
 .
-The newly created KMdiChildView is not yet connected to any other widget of Gideon, althoug it is appended to
+The newly created KMdiChildView is not yet connected to any other widget of KDevelop, althoug it is appended to
 \ref MainWindow::m_childViewMap "m_childViewMap" and \ref MainWindow::m_widgetMap "m_widgetMap".
 */
 
@@ -187,7 +187,7 @@ The newly created KMdiChildView is not yet connected to any other widget of Gide
   QPtrList<KMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
 
   // Members for dealing with the tool views
-  bool             m_myWindowsReady;               //!< true: gideon s windows are ready
+  bool             m_myWindowsReady;               //!< true: kdevelop s windows are ready
   ViewMenuAction * m_pShowOutputViews;             //!< Shows or hides all output views
   ViewMenuAction * m_pShowTreeViews;               //!< Shows or hides all tree views
   KActionMenu *    m_pTreeToolViewsMenu;           //!< Menu for changing the show-hide state of the tree tool views

@@ -15,7 +15,7 @@
  ***************************************************************************/
 
 /** Here resides the Import-existing-files-dialog of the Automake Manager **/
-/** (a Gideon build tool part) **/
+/** (a KDevelop build tool part) **/
 
 #ifndef ADDEXISTINGFILESDLG_H
 #define ADDEXISTINGFILESDLG_H
