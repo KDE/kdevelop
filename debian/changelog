@@ -1,3 +1,23 @@
+kdevelop3 (4:3.0.1-1) unstable; urgency=low
+
+  * New upstream release
+  * Updated the configure options
+  # The cron job no longer uses debconf
+
+ -- Norman Jordan <njordan@debian.org>  Fri, 20 Feb 2004 21:48:35 -0800
+
+kdevelop3 (4:3.0.0-1) unstable; urgency=low
+
+  * Updated to the 3.0.0 release
+  * Update debian/update_doc_index.sh
+    - Updated to work with the htdig 3.2.x packages
+  * Fixed the documentation search dialog
+  * Updated the htdig suggestion to htdig 3.2
+  * Added a debconf question to see if the global documentation index should
+    be created
+
+ -- Norman Jordan <njordan@debian.org>  Sun,  15 Feb 2004 19:26:18 -0800
+
 kdevelop3 (4:3.0-00cvs-20031106) unstable; urgency=low
 
   * Updated CVS sources

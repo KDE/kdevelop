@@ -43,7 +43,7 @@ update_files_list() {
   local pkgdir=${2}
 
   find "$pkgdir" -name "*.html" | \
-    awk 'OFS=""; {print "file://localhost", $0}' > "$GLOBAL_HTDIG_DIR/$pkgname""_files"
+    awk 'OFS=""; {print "file://", $0, " \\"}' > "$GLOBAL_HTDIG_DIR/$pkgname""_files"
 }
 
 doc_dirs="$QTDOC_DIR $KDELIBSDOC_DIR $KDEVELOPDOC_DIR"
@@ -113,15 +113,18 @@ fi
 
 # Create the htdig config file if necessary
 if [ ! -e "$GLOBAL_HTDIG_DIR/htdig.conf" ]; then
-  echo "database_dir:		$GLOBAL_HTDIG_DIR" >"$GLOBAL_HTDIG_DIR/htdig.conf"
-  echo "local_urls:		file://localhost=" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "# For htdig 3.2.x" >"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "database_dir:		$GLOBAL_HTDIG_DIR" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "include:		$GLOBAL_HTDIG_DIR/files" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "limit_urls_to:		file:///" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "local_urls:		file:///=/" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "local_urls_only:	true" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "maximum_pages:		1" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "image_url_prefix:	$HTDIG_DATA_DIR/pics/" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "star_image:		$HTDIG_DATA_DIR/pics/star.png" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "star_blank:		$HTDIG_DATA_DIR/pics/star_blank.png" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "compression_level:	6" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
-  echo "max_hop_count:		0" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
+  echo "max_hop_count:		1" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "search_results_wrapper:	$HTDIG_DATA_DIR/en/wrapper.html" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "nothing_found_file:	$HTDIG_DATA_DIR/en/nomatch.html" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
   echo "syntax_error_file:	$HTDIG_DATA_DIR/en/syntax.html" >>"$GLOBAL_HTDIG_DIR/htdig.conf"
@@ -130,8 +133,9 @@ fi
 
 # Create the list of files to index
 rm -f "$GLOBAL_HTDIG_DIR/files" 2> /dev/null
+echo "start_url: \\" > "$GLOBAL_HTDIG_DIR/files"
 if [ -e "$GLOBAL_HTDIG_DIR/qtdoc_files" ]; then
-  cat "$GLOBAL_HTDIG_DIR/qtdoc_files" > "$GLOBAL_HTDIG_DIR/files"
+  cat "$GLOBAL_HTDIG_DIR/qtdoc_files" >> "$GLOBAL_HTDIG_DIR/files"
 fi
 if [ -e "$GLOBAL_HTDIG_DIR/kdelibsdoc_files" ]; then
   cat "$GLOBAL_HTDIG_DIR/kdelibsdoc_files" >> "$GLOBAL_HTDIG_DIR/files"
@@ -139,9 +143,12 @@ fi
 if [ -e "$GLOBAL_HTDIG_DIR/kdevelopdoc_files" ]; then
   cat "$GLOBAL_HTDIG_DIR/kdevelopdoc_files" >> "$GLOBAL_HTDIG_DIR/files"
 fi
+# Strip the backslash from the last line
+cat "$GLOBAL_HTDIG_DIR/files" | sed '$s/ \\$//' > "$GLOBAL_HTDIG_DIR/files.new"
+mv "$GLOBAL_HTDIG_DIR/files.new" "$GLOBAL_HTDIG_DIR/files"
 
 # Index the files
-/usr/bin/htdig $initial -s -c "$GLOBAL_HTDIG_DIR/htdig.conf" "$GLOBAL_HTDIG_DIR/files" > /dev/null 2>&1
+/usr/bin/htdig $initial -s -c "$GLOBAL_HTDIG_DIR/htdig.conf" > /dev/null 2>&1
 /usr/bin/htmerge -s -c "$GLOBAL_HTDIG_DIR/htdig.conf" > /dev/null 2>&1
 
 # Mark the current package versions as indexed

@@ -28,6 +28,14 @@ ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	DEBUG_FLAGS=--enable-debug=full
 endif
 
+ifeq (,$(wildcard /usr/bin/po2debconf))
+PO@DEBCONF := no
+MINDEBCONFVER := 0.5
+else
+PO2DEBCONF := yes
+MINDEBCONFVER := 1.2.0
+endif
+
 -include debian/debiandirs
 
 debian/debiandirs: admin/debianrules
@@ -55,27 +63,16 @@ configure-stamp:
 	# make build directory
 
 	./configure --prefix=$(kde_prefix) \
-				--sysconfdir=$(kde_confdir) \
+				--sysconfdir=/etc/kde3 \
 				--with-kdelibsdoxy-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs \
 				--with-pythondir=/usr \
 				--enable-scripting \
-				--enable-ada \
-				--enable-python \
-				--enable-cpp \
-				--enable-perl \
-				--enable-php \
-				--enable-fortran \
-				--enable-sql \
-				--enable-bash \
-				--enable-ruby \
-				--enable-pascal \
 				--enable-autoproject \
 				--enable-scriptproject \
 				--enable-trollproject \
 				--enable-customproject \
 				--enable-cvs \
 				--enable-vba \
-				$(configkdevelop) \
 				--disable-final \
 				$(JAVA_FLAGS) \
 				$(DEBUG_FLAGS)
@@ -125,6 +122,11 @@ clean:
 #	fi
 
 	dh_clean
+	-rm -f parts/appwizard/common/admin.tar.gz
+	-rm -f parts/appwizard/common/gnu.tar.gz
+	-rm -f parts/appwizard/common/incadmin.tar.gz
+	-rm -f parts/appwizard/common/gnome.tar.gz
+	-rm -f parts/appwizard/common/wxwindows.tar.gz
 
 install: DH_OPTIONS=
 install-stamp: install
@@ -146,13 +148,16 @@ install: build
 	rm -f debian/tmp/usr/lib/libkdevelop.so
 	rm -f debian/tmp/usr/lib/libkdevelopqextmdi.so
 	rm -f debian/tmp/usr/lib/libpropertyeditor.so
-	mv debian/tmp/etc/kde3/kdeveloprc debian/tmp/etc/kde3/kdevelop3rc
+	mv debian/tmp/usr/share/config/kdeveloprc debian/tmp/usr/share/config/kdevelop3rc
 	mv debian/tmp/usr/bin/kdevelop debian/tmp/usr/bin/kdevelop3
 	mv debian/tmp/usr/share/applnk/Development/kdevelop.desktop debian/tmp/usr/share/applnk/Development/kdevelop3.desktop
 	mv debian/tmp/usr/share/apps/kdevelop debian/tmp/usr/share/apps/kdevelop3
 	mv debian/tmp/usr/share/doc/kde/HTML/en/kdevelop debian/tmp/usr/share/doc/kde/HTML/en/kdevelop3
+	mv debian/tmp/usr/share/icons/hicolor/16x16/apps/kdevelop.png debian/tmp/usr/share/icons/hicolor/16x16/apps/kdevelop3.png
+	mv debian/tmp/usr/share/icons/hicolor/48x48/apps/kdevelop.png debian/tmp/usr/share/icons/hicolor/48x48/apps/kdevelop3.png
+	mv debian/tmp/usr/share/icons/hicolor/32x32/apps/kdevelop.png debian/tmp/usr/share/icons/hicolor/32x32/apps/kdevelop3.png
 
-	dh_install --list-missing
+	dh_install
 
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will
@@ -165,7 +170,10 @@ binary-common:
 	dh_installdocs
 #	dh_installexamples
 	dh_installmenu
-#	dh_installdebconf
+ifeq ($(PO2DEBCONF),yes)
+	po2debconf -e utf8 debian/templates.master > debian/templates
+endif
+	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam
@@ -183,7 +191,7 @@ binary-common:
 	dh_installdeb
 	dh_perl
 	dh_shlibdeps
-	dh_gencontrol
+	dh_gencontrol -- -V'debconf-depends=debconf (>= $(MINDEBCONFVER))'
 	dh_md5sums
 	dh_builddeb
 

@@ -9,7 +9,7 @@ Package: kdevelop3
 Architecture: any
 Depends: ${shlibs:Depends}, autoconf, automake | automake1.6 | automake1.7, kdebase-bin, kdevelop3-data (>> 3.0), kdevelop3-plugins
 Recommends: make, kdevelop3-doc
-Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs4-dev, kdelibs4-doc, htdig, sgmltools-lite, gettext, a2ps, enscript, gv, qt3-dev-tools, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual, wxwin2.4-headers, wxwin2.4-i18n, wxwin2.4-examples, libwxbase2.4 | libwxgtk2.4 | libwxgtk2.4-contrib
+Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs4-dev, kdelibs4-doc, htdig (>> 3.2.0), sgmltools-lite, gettext, a2ps, enscript, gv, qt3-dev-tools, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual, wxwin2.4-headers, wxwin2.4-i18n, wxwin2.4-examples, libwxbase2.4 | libwxgtk2.4 | libwxgtk2.4-contrib
 Conflicts: gideon
 Description: An IDE for Unix/X11 - development version
  KDevelop is an easy to use Integrated Development Environment
