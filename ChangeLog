@@ -1,3 +1,8 @@
+1999-06-24 Jonas Nordin <jonas.nordin@cenacle.se>
+	* removed annoying refresh when you add files in the RFV. The RFV
+	  now keeps the focus where you are. If you add a source file only 
+	  THAT file gets parsed.
+
 1999-06-23 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed parsing of throw() statements.
 
