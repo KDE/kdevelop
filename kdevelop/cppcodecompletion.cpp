@@ -901,7 +901,7 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 {
     kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
 
-    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+?)[ \t]*(::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^;)]*)\\)[ \t]*[:{]" );
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+?)[ \t]*(::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*(:[^{]*)?\\{" );
 
     QRegExp qt_rx( "Q_[A-Z]+" );
     QRegExp strconst_rx( "\"[^\"]*\"" );
