@@ -29,7 +29,7 @@
 static const char description[] =
     I18N_NOOP("KDE GUI Designer");
 
-static const char version[] = "0.1";
+static const char version[] = "0.2";
 
 static KCmdLineOptions options[] =
 {
