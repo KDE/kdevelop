@@ -1,7 +1,7 @@
 
-tools_DATA =  processesend.pl processes.pl.in processes.pl
+tools_DATA =  processesend.pl processes.pl
 
-EXTRA_DIST = $(tools_DATA)
+EXTRA_DIST = processes.pl.in processesend.pl
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
 
