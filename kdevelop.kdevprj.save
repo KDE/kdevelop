@@ -41,7 +41,7 @@ author=kdevelop-team
 configure_args=--enable-debug
 email=kdevelop-team@kdevelop.org
 kdevprj_version=1.3
-lfv_open_groups=Headers
+lfv_open_groups=Others
 make_options=
 makefiles=Makefile.am,po/Makefile.am,kdevelop/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/pics/toolbar/Makefile.am,kdevelop/pics/misc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/kwrite/pix/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/examples/Makefile.am,kdevelop/dbg/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/kpp/Makefile.am,kdevelop/classparser/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,doc/en/about/Makefile.am,doc/en/tutorial/Makefile.am,doc/en/programming/Makefile.am,doc/en/manual/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/cref/Makefile.am,kdevelop/widgets/Makefile.am,kdevelop/widgets/qextmdi/Makefile.am,kdevelop/widgets/qextmdi/src/Makefile.am,kdevelop/widgets/qextmdi/res/Makefile.am,kdevelop/widgets/qextmdi/include/Makefile.am,kdevelop/ctags/Makefile.am,kdevelop/setup/Makefile.am
 modifyMakefiles=true
@@ -159,7 +159,7 @@ sub_dirs=en,
 type=normal
 
 [doc/en/Makefile.am]
-files=doc/en/tip.database,
+files=
 sub_dirs=cref,kde_libref,manual,programming,tutorial,about,
 type=normal
 
@@ -621,12 +621,6 @@ install_location=
 type=DATA
 
 [doc/en/programming/logotp3.png]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[doc/en/tip.database]
 dist=true
 install=false
 install_location=
