@@ -1155,12 +1155,16 @@ void CKDevelop::slotProjectMakeDistRPM(){
  connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
  connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
+	QStrList shortInfo = prj->getShortInfo();
+	QString qsShortInfo = "";
+	for ( int idx= 0; idx < shortInfo.count();  idx++ )
+		qsShortInfo += shortInfo.at(idx);
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
-                                QString::null,
+                                qsShortInfo,
 																prj->getKPPRPMVersion(),
 																prj->getKPPLicenceType(),
 																prj->getKPPURL(),
@@ -1168,8 +1172,6 @@ void CKDevelop::slotProjectMakeDistRPM(){
 																prj->getKPPBuildRoot(),
 																prj->getKPPSummary(),
 																prj->getKPPIcon());
-//(prj->getShortInfo()).join(',')
-// rpmbuilder->show();
 	rpmbuilder->startBuild();
 }
 
@@ -1184,12 +1186,16 @@ void CKDevelop::slotConfigMakeDistRPM()
  connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
  connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
+	QStrList shortInfo = prj->getShortInfo();
+	QString qsShortInfo = "";
+	for ( int idx= 0; idx < shortInfo.count();  idx++ )
+		qsShortInfo += shortInfo.at(idx);
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
-                                QString::null,
+                                qsShortInfo,
 																prj->getKPPRPMVersion(),
 																prj->getKPPLicenceType(),
 																prj->getKPPURL(),
@@ -1198,7 +1204,6 @@ void CKDevelop::slotConfigMakeDistRPM()
 																prj->getKPPSummary(),
 																prj->getKPPIcon());
 																	
- //(prj->getShortInfo()).join(',')
  rpmbuilder->show();
 }
 
