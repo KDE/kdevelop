@@ -6,4 +6,4 @@ noinst_HEADERS = tokenizer.h ClassParser.h ClassStore.h ParsedClass.h ParsedMeth
 libclassparser_a_SOURCES = tokenizer.cc ClassParser.cc ClassStore.cc ParsedClass.cc ParsedMethod.cc ParsedAttribute.cc ParsedArgument.cc ParsedParent.cc ParsedSignalSlot.cc PersistantClassStore.cc ParsedStruct.cc ClassTreeNode.cc ParsedContainer.cc ParsedClassContainer.cc ParsedItem.cc ParsedScopeContainer.cc
 
 tokenizer.cc: tokenizer.l
-	$(LEX) -+ -o$(srcdir)/tokenizer.cc $(srcdir)/tokenizer.l
+	$(LEX) -+ -otokenizer.cc $(srcdir)/tokenizer.l

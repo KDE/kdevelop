@@ -1403,6 +1403,16 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
       buf[1] = textLine->getChar(++z);
       x += a->fm.width(buf);
     } else {
+    if (ch==127)
+    {
+     ch='?';
+    }
+    else
+     if (ch !='\t' && (ch & 0x7f)< 0x20)
+     {
+       ch|=0x40;
+     }
+    a = &attribs[textLine->getAttr(z)];
       x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     }
     z++;
@@ -1460,6 +1470,16 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos) {
       buf[1] = textLine->getChar(++z);
       x += a->fm.width(buf);
     } else {
+     if (ch==127)
+     {
+      ch='?';
+     }
+     else
+      if (ch !='\t' && (ch & 0x7f)< 0x20)
+      {
+         ch|=0x40;
+      }
+      a = &attribs[textLine->getAttr(z)];
       x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     }
     z++;
@@ -2141,7 +2161,6 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
   do {
       xc = x;
       ch = textLine->getChar(z);
-#ifndef QT_I18N
       if (ch==127)
       {
        ch='?';
@@ -2151,7 +2170,6 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
        {
          ch|=0x40;
        }
-#endif
 
       if (ch == '\t') {
           x += tabWidth - (x % tabWidth);
@@ -2182,17 +2200,14 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
 
   xs = xStart;
   attr = textLine->getRawAttr(zc);
-#ifndef QT_I18N
   ch = textLine->getChar(zc);
   if (ch==127 || (ch !='\t' && ((ch & 0x7f)< 0x20)))
   {
         attr|=taSelected;
   }
-#endif
 
   while (x < xEnd) {
       nextAttr = textLine->getRawAttr(z);
-#ifndef QT_I18N
       ch = textLine->getChar(z);
       /* non printable char handling */
       if (ch==127)
@@ -2206,7 +2221,6 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
           ch|=0x40;
           nextAttr|=taSelected;
         }
-#endif
 
       if ((nextAttr ^ attr) & (taSelectMask | 256)) {
           paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
@@ -2257,7 +2271,6 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
       else {
           nextAttr = textLine->getRawAttr(zc);
           /* non printable char handling */
-#ifndef QT_I18N
           if (ch==127)
           {
             ch='?';
@@ -2269,7 +2282,6 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
               ch|=0x40;
               nextAttr|=taSelected;
             }
-#endif
           if (nextAttr != attr) {
               
               if(aCnt!=0) {
