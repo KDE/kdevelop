@@ -34,6 +34,7 @@
 #define ID_FILE_SAVE_ALL            10050
 
 #define ID_FILE_CLOSE               10060
+#define ID_FILE_CLOSE_ALL           10065
 
 #define ID_FILE_PRINT               10070
 
