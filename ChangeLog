@@ -1,3 +1,14 @@
+2001-05-14  rokrau@yahoo.com
+    * Check whether the CTags program is installed. 
+    * Check whether the user even wants to use the CTags search database.
+      This can now be set in the Options->KDevelop Setup dialog.  
+    * Removed Make Tags option, this is now automatic, if the file 
+      isnt there, it is created upon loading the tags file. 
+    * Made the creation and loading of the CTags database a "blocking" 
+      process. 
+    * Finally, if the user want to use CTags the database is 
+      now loaded when the Project is opened. 
+
 2001-05-14  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix in QextMDI: consider a messagebox with parent==this isn't a real child widget :-/
       Don't insert it in the emulated internal MDI-view focus-loop.
