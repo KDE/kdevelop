@@ -13,7 +13,129 @@ of Contents</a>
 <h2>
 <a NAME="s6"></a>6. Questions and Answers</h2>
 
-<p><br>
+<blockquote>&nbsp;
+<br><b>Q :</b> I have a question which is not adressed in the FAQ file,
+nor in the manuals of KDevelop. Where should I turn to ?
+<br><b>A:</b>&nbsp; In any case send all requests that are regarding KDevelop
+to the KDevelop mailinglist which adress can be found on the KDevelop homepage.&nbsp;
+All questions should go there and will be adressed there as well.&nbsp;
+If you stick to that, you will get the most help by the developers and
+all users having the same problems, as well as helping to keep the FAQ
+up to date.
+<br><b></b>&nbsp;<b></b>
+<p><b>Q:</b> Wrong JPEG library version: library is 61, caller expects
+62
+<br><b>A:&nbsp;</b> There are 2 ways.
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. : When the kdelibs are
+installed it installs header files for the
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jpeg libraries, these are
+version 61,&nbsp; however most distributions
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Redhat) use version 62
+libraries. To fix&nbsp; this just remove jpeglib.h
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; from /opt/kde/include. The
+pukka include&nbsp; file for version 62 should
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then be picked up. However
+looking at the&nbsp; error message above it may
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; be the other way round,
+in any case ensure&nbsp; you only have on version
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of the header file, the
+library and that&nbsp; they are consistent.
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is useful to use the locate
+command to verify that I have
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; the correct version of a
+library and header files e.g.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; updatedb
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; locate libjpeg
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; locate jpeglib
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2: You must recompiled kdesupport
+without jpeg
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; library (configure --with-libjpeg
+--with-libgif).
+<p>&nbsp;
+<p><b>Q:</b>&nbsp; make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+<br>&nbsp;&nbsp;&nbsp; cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
+<br>&nbsp;&nbsp;&nbsp; aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete;
+use `AC_PROG_INSTALL'
+<br>&nbsp;&nbsp;&nbsp; make[2]: *** [Makefile.in] Error 1
+<br><b>A:</b>&nbsp; Workaround for automake-1.4/automake-2.13 users: Just
+run
+<br>&nbsp;&nbsp;&nbsp; "aclocal" manually, then it will compile.
+<br>&nbsp;
+<p><b>Q:</b>&nbsp; What must i do, if configure said ,that i need giflib23.
+<br><b>A:</b>&nbsp; Try a newer snap of kdesupport, or maybe you have another
+giflib installed?
+<br>&nbsp;
+<p><b>Q:</b> How can I convert a KDevelop 0.2 project to a 0.3 one?
+<br><b>A:</b> Please change the AC_OUTPUT in the configure.in to a oneline
+version
+<p>&nbsp;&nbsp; for example:
+<br>&nbsp;&nbsp; old version AC_OUTPUT(Makefile \
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+kdevelop/kwrite/Makefile \
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+kdevelop/templates/Makefile
+<br>&nbsp;&nbsp; )
+<br>&nbsp;&nbsp; new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile
+kdevelop/templates/Makefile)
+<br>&nbsp;
+<br><b></b>&nbsp;<b></b>
+<p><b>Q:</b>&nbsp; I&nbsp; get the following linker errors, what do I have
+to do to get KDevelop linked ?
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/lib/libqt.so:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; warning: multiple common
+of `QArrayT&lt;char> type_info node'
+<br>ckdevelop.o: warning: previous common is here
+<br>ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
+<br>ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
+<br>unsigned short, char const *,...)'
+<br>ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
+<br>unsigned short, char const *,...)'
+<br>ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
+<br>unsigned short, char const *,...)'
+<br>ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
+<br>ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
+<br>unsigned short, char const *,...)'
+<br>ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
+<br>ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned
+short,
+<br>unsigned short, char const *,...)'
+<br>ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
+<br>short, unsigned short, char const&nbsp;&nbsp;&nbsp;&nbsp; *,...)' follow&nbsp;
+collect2: ld returned 1
+<br>exit status&nbsp; make[2]: ***
+<br>[kdevelop] Error 1&nbsp; make[2]: Leaving directory
+<br>'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
+<br>make[1]: *** [all-recursive] Error 1&nbsp; make[1]: Leaving directory
+<br>`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
+<br>make: *** [all-recursive-am] Error 2
+<p><b>A:</b> If you have the SuSE rpm&acute;s of KDE-1.1, you must recompile
+the kdelibs without the patch commited by SuSE and reinstall them.&nbsp;
+.:-(
+<br>&nbsp;&nbsp; It's a bug in the SuSE rpm's.
+<br>&nbsp;<b></b>
+<p><b>Q:</b> I see the KDevelop does not allow for usage of the delete
+key (or backspace deleting when text is marked).
+<br><b>A:</b>&nbsp; go to "Options"->"Editor" and make sure that "Delete
+on Input" is enabled, then backspace and delete works.
+<br>&nbsp;
+<p><b>Q:</b> If I add files to my project, will they be automatically included
+and compiled ?
+<br><b>A: </b>Yes, they are included in the Makefile.am's then and if you
+make a "Rebuild All" (./configure updates the Makefiles), your new added
+files will be included as well.
+<br>&nbsp;
+<p><b>Q:</b> If I removed a file, I get some weird linker messages. What
+is wrong with my project ?
+<br><b>A:</b> If the removed file is a header file, that is automatically
+processed by automoc&nbsp;(running the Qt-Meta-Object-Compiler automatically
+on all headers),
+<br>your removed header is still present as a moc-generated *.moc.cpp file
+and compiled.&nbsp; Remove the according *.moc.cpp file and rebuild the
+project.
+<br>&nbsp;
+<br>&nbsp;</blockquote>
+
+<p>
 <hr><a href="index-5.html">Previous</a> Next
 <a href="index.html#toc6">Table
 of Contents</a>
