@@ -48,7 +48,7 @@ CVSFileInfoProvider::~CVSFileInfoProvider()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-const VCSFileInfoMap *CVSFileInfoProvider::status( const QString &dirPath ) const
+const VCSFileInfoMap *CVSFileInfoProvider::status( const QString &dirPath )
 {
     // Same dir: we can do with cache ...
     if (dirPath != m_previousDirPath)

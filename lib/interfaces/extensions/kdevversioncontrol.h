@@ -193,7 +193,7 @@ public:
     This is a <b>synchronous operation</b> (blocking).
     @param dirPath The relative (to project dir) directory path to stat.
     @return Status for all <b>registered</b> files.*/
-    virtual const VCSFileInfoMap *status(const QString &dirPath) const = 0;
+    virtual const VCSFileInfoMap *status(const QString &dirPath) = 0;
 
     /**Starts a request for directory status to the remote repository.
     Requests and answers are asynchronous.

@@ -36,7 +36,7 @@ public:
     virtual ~CVSFileInfoProvider();
 
 // -- Sync interface
-    virtual const VCSFileInfoMap *status( const QString &dirPath ) const;
+    virtual const VCSFileInfoMap *status( const QString &dirPath ) ;
 
 // -- Async interface for requesting data
     virtual bool requestStatus( const QString &dirPath, void *callerData );

@@ -25,27 +25,26 @@
 #include <kdevproject.h>
 #include <unistd.h>
 #include <kapplication.h>
+#include <kdevmainwindow.h>
+#include <kmainwindow.h>
+#include <qregexp.h>
 
 SVNFileInfoProvider::SVNFileInfoProvider(subversionPart *parent, const char *name)
     : KDevVCSFileInfoProvider( parent, "svnfileinfoprovider" ),
 	m_cachedDirEntries( 0 ) {
-	if ( !connectDCOPSignal("kded","ksvnd","subversionStatus(QString,int,int,int,int,long int)", "slotStatus(QString,int,int,int,int,long int)", false) )
-		kdWarning() << "Could not connect to KDED DCOP signal, subversion file status monitoring will not work ! " << endl;
 	m_part = parent;
 }
 
 SVNFileInfoProvider::~SVNFileInfoProvider() {
-/*	if ( job )
-		job->kill();*/
 	delete m_cachedDirEntries;
 }
 
 //synchronous
-const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) const {
+const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 	if ( !m_cachedDirEntries )
 		m_cachedDirEntries = new VCSFileInfoMap;
-	return m_cachedDirEntries;
-	/*
+//	return m_cachedDirEntries;
+
 	kdDebug() << "##################################################################################### svn provider : status " << dirPath << endl;
 
 	if ( dirPath != m_previousDirPath ) {
@@ -59,13 +58,48 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) cons
 		kdDebug() << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
 		s << cmd << QFileInfo( rPath ).absFilePath();
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
-		//	job->setWindow( m_part->mainWindow()->main() );
-		//	connect( job2, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+		job2->setWindow( m_part->mainWindow()->main() );
 
-		KIO::NetAccess::synchronousRun(job2, 0);
+
+		QMap<QString,QString> ma;
+		KIO::NetAccess::synchronousRun(job2, m_part->mainWindow()->main(), 0, 0, &ma );
+
+		QValueList<QString> keys = ma.keys();
+		qHeapSort( keys );
+		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+
+		QString path;
+		int text_status, prop_status, repos_text_status, repos_prop_status;
+		long int rev;
+		int curIdx, lastIdx;
+
+		QRegExp rx( "([0-9]*)(.*)" );
+		for ( it = begin; it != end; ) {
+			kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+			if ( rx.search( *it ) == -1 ) return m_cachedDirEntries; // something is wrong ! :)
+			curIdx = lastIdx = rx.cap( 1 ).toInt(); 
+			while ( curIdx == lastIdx ) {
+				if ( rx.cap( 2 ) == "path" )
+					path = ma[ *it ];
+				else if ( rx.cap( 2	 ) == "text" )
+					text_status = ma[ *it ].toInt();
+				else if ( rx.cap( 2	 ) == "prop" )
+					prop_status = ma[ *it ].toInt();
+				else if ( rx.cap( 2	 ) == "reptxt" )
+					repos_text_status = ma[ *it ].toInt();
+				else if ( rx.cap( 2	 ) == "repprop" )
+					repos_prop_status = ma[ *it ].toInt();
+				else if ( rx.cap( 2	 ) == "rev" )
+					rev = ma[ *it ].toLong();
+				++it;
+				if ( rx.search( *it ) == -1 ) break; // something is wrong ! :)
+				curIdx = rx.cap( 1 ).toInt(); 
+			}
+			slotStatus(path, text_status, prop_status, repos_text_status, repos_prop_status, rev);
+		}
 	}
 
-    return m_cachedDirEntries;*/
+    return m_cachedDirEntries;
 }
 
 bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerData ) {
@@ -88,7 +122,7 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	s << cmd << KURL( QFileInfo( rPath ).absFilePath() );
 	KURL servURL = "svn+http://fakeserver_this_is_normal_behavior/";
 	job = KIO::special(servURL, parms, false);
-//	job->setWindow( m_part->mainWindow()->main() );
+	job->setWindow( m_part->mainWindow()->main() );
 	connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 
     return true;
@@ -96,7 +130,42 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 
 void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 	if ( j->error() )
-		j->showErrorDialog( /*m_part->mainWindow()->main()*/ );
+		j->showErrorDialog( m_part->mainWindow()->main() );
+
+	KIO::MetaData ma = j->metaData();
+	QValueList<QString> keys = ma.keys();
+	qHeapSort( keys );
+	QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+
+	QString path;
+	int text_status, prop_status, repos_text_status, repos_prop_status;
+	long int rev;
+	int curIdx, lastIdx;
+
+	QRegExp rx( "([0-9]*)(.*)" );
+	for ( it = begin; it != end; ) {
+		kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+		if ( rx.search( *it ) == -1 ) return; // something is wrong ! :)
+		curIdx = lastIdx = rx.cap( 1 ).toInt(); 
+		while ( curIdx == lastIdx ) {
+			if ( rx.cap( 2 ) == "path" )
+				path = ma[ *it ];
+			else if ( rx.cap( 2	 ) == "text" )
+				text_status = ma[ *it ].toInt();
+			else if ( rx.cap( 2	 ) == "prop" )
+				prop_status = ma[ *it ].toInt();
+			else if ( rx.cap( 2	 ) == "reptxt" )
+				repos_text_status = ma[ *it ].toInt();
+			else if ( rx.cap( 2	 ) == "repprop" )
+				repos_prop_status = ma[ *it ].toInt();
+			else if ( rx.cap( 2	 ) == "rev" )
+				rev = ma[ *it ].toLong();
+			++it;
+			if ( rx.search( *it ) == -1 ) break; // something is wrong ! :)
+			curIdx = rx.cap( 1 ).toInt(); 
+		}
+		slotStatus(path, text_status, prop_status, repos_text_status, repos_prop_status, rev);
+	}
 
 	if ( m_cachedDirEntries )
 		emit statusReady(*m_cachedDirEntries, m_savedCallerData);

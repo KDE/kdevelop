@@ -44,7 +44,7 @@ public:
     virtual ~SVNFileInfoProvider();
 
 // -- Sync interface
-    virtual const VCSFileInfoMap *status( const QString &dirPath ) const;
+    virtual const VCSFileInfoMap *status( const QString &dirPath ) ;
 
 // -- Async interface for requesting data
     virtual bool requestStatus( const QString &dirPath, void *callerData );
@@ -52,7 +52,7 @@ public:
 	QString projectDirectory() const;
 
 k_dcop:
-	void slotStatus( const QString& , int, int, int, int, long int );
+	void slotStatus( const QString& , int, int, int, int, long int ) ;
 
 public slots:
 	void slotResult( KIO::Job * );

@@ -1,4 +1,5 @@
-/* Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
+/** 
+	 Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
 	 modify it under the terms of the GNU General Public
@@ -38,8 +39,8 @@ subversionCore::subversionCore(subversionPart *part)
 	: QObject(this, "subversion core"), DCOPObject("subversion") {
 		m_part = part;
 		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
-		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
-			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
+//		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
+//			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
 
         m_fileInfoProvider = new SVNFileInfoProvider( part );
 }
@@ -55,6 +56,7 @@ KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
     return m_fileInfoProvider;
 }
 
+//not used anymore
 void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
 	kdDebug() << "Subversion Notification : " 
 		<< "path : " << path
@@ -202,6 +204,18 @@ void subversionCore::slotEndCheckout( KIO::Job * job ) {
 void subversionCore::slotResult( KIO::Job * job ) {
 		if ( job->error() )
 			job->showErrorDialog( m_part->mainWindow()->main() );
+		KIO::MetaData ma = job->metaData();
+		QValueList<QString> keys = ma.keys();
+		qHeapSort( keys );
+		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
+
+		for ( it = begin; it != end; ++it ) {
+			kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+			if ( ( *it ).endsWith( "string" ) ) {
+				m_part->mainWindow()->raiseView(m_widget);
+				m_widget->append( ma[ *it ] );
+			}
+		}
 }
 
 void subversionCore::createNewProject( const QString& // dirName
