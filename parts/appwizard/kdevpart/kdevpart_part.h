@@ -8,19 +8,19 @@
 
 
 #include <qguardedptr.h>
-#include <kdevpart.h>
+#include <kdevplugin.h>
 
 
 class $APPNAME$Widget;
 
 
-class $APPNAME$Part : public KDevPart
+class $APPNAME$Part : public KDevPlugin
 {
   Q_OBJECT
 
 public:
    
-  $APPNAME$Part(KDevApi *api, QObject *parent=0, const char *name=0);
+  $APPNAME$Part(QObject *parent, const char *name, const QStringList &);
   ~$APPNAME$Part();
 
   

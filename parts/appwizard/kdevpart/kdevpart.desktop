@@ -5,5 +5,5 @@ Exec=blubb
 Comment=$APPNAME$
 Name=KDev$APPNAME$
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdev$APPNAMELC$

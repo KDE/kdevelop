@@ -8,7 +8,6 @@
 
 class KDevProject;
 class $APPNAME$Part;
-class KParts::ReadOnlyPart;
 
 
 class $APPNAME$Widget : public QWidget

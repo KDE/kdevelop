@@ -14,8 +14,6 @@ install( "${src}/template-kdevpart/kdevpart_part.cpp",  "${dest}/${APPNAMELC}_pa
 install( "${src}/template-kdevpart/kdevpart_part.h",    "${dest}/${APPNAMELC}_part.h" );
 install( "${src}/template-kdevpart/kdevpart_widget.cpp",  "${dest}/${APPNAMELC}_widget.cpp" );
 install( "${src}/template-kdevpart/kdevpart_widget.h",    "${dest}/${APPNAMELC}_widget.h" );
-install( "${src}/template-kdevpart/kdevpart_factory.cpp",  "${dest}/${APPNAMELC}_factory.cpp" );
-install( "${src}/template-kdevpart/kdevpart_factory.h",    "${dest}/${APPNAMELC}_factory.h" );
 install( "${src}/template-kdevpart/kdevpart_part.rc",   "${dest}/kdevpart_${APPNAMELC}.rc" );
 install( "${src}/template-kdevpart/kdevpart.desktop",   "${dest}/kdevpart_${APPNAMELC}.desktop" );
 

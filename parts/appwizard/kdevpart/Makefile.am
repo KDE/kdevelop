@@ -4,7 +4,7 @@ kdevpartdir = ${appwizarddatadir}/template-kdevpart
 templatedir = ${appwizarddatadir}/templates
 
 kdevpart_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
-		kdevpart_factory.h kdevpart_factory.cpp kdevpart_widget.h kdevpart_widget.cpp \
+		kdevpart_widget.h kdevpart_widget.cpp \
 		kdevpart_part.rc kdevpart.desktop app.kdevelop
 template_DATA = kdevpart
 
