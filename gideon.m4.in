@@ -154,3 +154,127 @@ AC_MSG_RESULT($kdev_cv_phpdocdir)
 PHPDOCDIR=$kdev_cv_phpdocdir
 AC_SUBST(PHPDOCDIR)
 ])
+
+
+dnl Need a configure option for setting the java dir.
+dnl There could be several versions of java installed.
+dnl We need jni.h, javac, jar, libjvm.so and libhpi.so
+
+AC_DEFUN(KDEV_CHECK_JAVA,
+[
+AC_MSG_CHECKING([for Java directory])
+
+AC_ARG_WITH(java,
+[  --with-java=javadir   use java installed in javadir, --without-java disables ],
+[  ac_java_dir=$withval
+], ac_java_dir=""
+)
+
+dnl at this point ac_java_dir is either a dir, 'no' to disable, or '' to say look in $PATH
+if test "x$ac_java_dir" = xno; then
+   kde_cv_java_bindir=no
+   kde_cv_java_includedir=no
+   kde_cv_java_libjvmdir=no
+   kde_cv_java_libhpidir=no
+else
+  if test "x$ac_java_dir" = x; then
+    dnl No option set -> look in $PATH
+    AC_CACHE_VAL(kde_cv_java_bindir,
+    [
+      dnl First look for javac in $PATH. If not found we'll look at the option.
+      KDE_FIND_PATH(javac, JAVAC, [], [])
+      if test -n "$JAVAC"; then
+          kde_cv_java_bindir=`echo $JAVAC | sed -e 's,/javac$,/,'`
+          dnl this substitution might not work - well, we test for jni.h below
+          kde_cv_java_includedir=`echo $kde_cv_java_bindir | sed -e 's,bin/$,include/,'`
+          dnl Look for libjvm.so
+          kde_cv_java_libjvmdir=`find $kde_cv_java_bindir/.. -name libjvm.so | sed 's,libjvm.so,,'`
+          dnl Look for libhpi.so and avoid green threads
+          kde_cv_java_libhpidir=`find $kde_cv_java_bindir/.. -name libhpi.so | grep -v green | sed 's,libhpi.so,,'`
+      else
+          kde_cv_java_bindir=no
+      fi
+    ])
+  else
+    dnl config option set
+    kde_cv_java_bindir=$ac_java_dir/bin
+    kde_cv_java_includedir=$ac_java_dir/include
+  fi
+fi
+
+dnl At this point kde_cv_java_bindir and kde_cv_java_includedir are either set or "no"
+if test ! "x$kde_cv_java_bindir" = xno; then
+
+  dnl Now check everything's fine under there
+
+  if test ! -x "$kde_cv_java_bindir/javac"; then
+    AC_MSG_ERROR([javac not found under $kde_cv_java_bindir - it seems you passed a wrong --with-java.])
+  fi
+  if test ! -x "$kde_cv_java_bindir/jar"; then
+    AC_MSG_ERROR([jar not found under $kde_cv_java_bindir. javac was found though! Use --with-java or --without-java.])
+  fi
+  if test ! -r "$kde_cv_java_includedir/jni.h"; then
+    AC_MSG_ERROR([jni.h not found under $kde_cv_java_includedir. Use --with-java or --without-java.])
+  fi
+  if test ! -r "$kde_cv_java_libjvmdir/libjvm.so"; then
+    AC_MSG_ERROR([libjvm.so not found under $kde_cv_java_libjvmdir. Use --without-java.])
+  fi
+  if test ! -r "$kde_cv_java_libhpidir/libhpi.so"; then
+    AC_MSG_ERROR([libhpi.so not found under $kde_cv_java_libhpidir. Use --without-java.])
+  fi
+
+  jni_includes="-I$kde_cv_java_includedir"
+  dnl Strange thing, jni.h requires jni_md.h which is under genunix here..
+  dnl and under linux here..
+  test -d "$kde_cv_java_includedir/linux" && jni_includes="$jni_includes -I$kde_cv_java_includedir/linux"
+  test -d "$kde_cv_java_includedir/genunix" && jni_includes="$jni_includes -I$kde_cv_java_includedir/genunix"
+
+  dnl Check for JNI version
+  AC_LANG_SAVE
+  AC_LANG_CPLUSPLUS
+  ac_cxxflags_safe="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS $all_includes $jni_includes"
+
+  AC_TRY_COMPILE([
+#include <jni.h>
+	    ],
+	    [
+#ifndef JNI_VERSION_1_2
+Syntax Error
+#endif
+	    ],[
+	    ],[ AC_MSG_ERROR([Incorrect version of $kde_cv_java_includedir/jni.h.
+	          You need to have Java Development Kit (JDK) version 1.2.
+
+	          Use --with-java to specify another location.
+	          Use --without-java to configure without java support.
+        	  Or download a newer JDK and try again.
+	          See e.g. http://java.sun.com/products/jdk/1.2 ])
+	    ])
+
+  CXXFLAGS="$ac_cxxflags_safe"
+  AC_LANG_RESTORE
+
+  dnl All tests ok, inform and subst the variables
+  AC_MSG_RESULT([javac/jar in $kde_cv_java_bindir, jni.h in $kde_cv_java_includedir])
+  AC_MSG_RESULT([libjvm.so in $kde_cv_java_libjvmdir, libhpi.so in $kde_cv_java_libhpidir])
+
+  JAVAC=$kde_cv_java_bindir/javac
+  AC_SUBST(JAVAC)
+  JAR=$kde_cv_java_bindir/jar
+  AC_SUBST(JAR)
+  AC_SUBST(jni_includes)
+  JAVA_SUBDIRS="javasupport"
+  AC_SUBST(JAVA_SUBDIRS)
+  JVMLIBS="-L$kde_cv_java_libjvmdir -ljvm -L$kde_cv_java_libhpidir -lhpi"
+  AC_SUBST(JVMLIBS)
+
+else
+
+  AC_MSG_RESULT([not found -- parts/javasupport will NOT be built])
+  JAVA_SUBDIRS=""
+  AC_SUBST(JAVA_SUBDIRS)
+
+fi
+])
+
