@@ -1,5 +1,6 @@
 #include <qwhatsthis.h>
 #include <qregexp.h>
+#include <qfile.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -7,6 +8,7 @@
 #include <kaction.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 #include <kdebug.h>
 
 #include "kdevcore.h"
@@ -52,6 +54,28 @@ ValgrindPart::~ValgrindPart()
 {
   delete m_widget;
   delete proc;
+}
+
+void ValgrindPart::loadOutput()
+{
+  QString fName = KFileDialog::getOpenFileName(QString::null, "*", 0, i18n("Open Valgrind Output"));
+  if ( fName.isEmpty() )
+    return;
+
+  QFile f( fName );
+  if ( !f.open( IO_ReadOnly ) ) {
+    KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1").arg(fName) );
+    return;
+  }
+  
+  clear();
+  getActiveFiles();
+
+  QTextStream stream( &f );
+  while ( !stream.atEnd() ) {
+    receivedString( stream.readLine() + "\n" );
+  }
+  f.close();
 }
 
 void ValgrindPart::getActiveFiles()
@@ -124,6 +148,14 @@ void ValgrindPart::slotStopButtonClicked( KDevPlugin* which )
   slotKillValgrind();
 }
 
+void ValgrindPart::clear()
+{
+  m_widget->clear();
+  currentMessage = QString::null;
+  currentPid = -1;
+  lastPiece = QString::null;
+}
+
 void ValgrindPart::runValgrind( const QString& exec, const QString& params, const QString& valExec, const QString& valParams )
 {
   if ( proc->isRunning() ) {
@@ -132,9 +164,6 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
     // todo - ask for forced kill
   }
   
-  m_widget->clear();
-  currentMessage = QString::null;
-  currentPid = -1;
   getActiveFiles();
   
   proc->clearArguments();  
@@ -156,8 +185,12 @@ void ValgrindPart::receivedStdout( KProcess*, char* /* msg */, int /* len */ )
 
 void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
 {
-  QRegExp valRe( "==(\\d+)== (.*)" );
-  QString rmsg = lastPiece + QString::fromLocal8Bit( msg, len );
+  receivedString( QString::fromLocal8Bit( msg, len ) );
+}
+
+void ValgrindPart::receivedString( const QString& str )
+{
+  QString rmsg = lastPiece + str;
   QStringList lines = QStringList::split( "\n", rmsg );
 
 //  kdDebug() << "got: " << QString::fromLocal8Bit( msg, len ) << endl;
@@ -170,13 +203,19 @@ void ValgrindPart::receivedStderr( KProcess*, char* msg, int len )
   } else {
     lastPiece = QString::null;
   }
-  
+  appendMessages( lines );
+}
+
+void ValgrindPart::appendMessages( const QStringList& lines )
+{
+  QRegExp valRe( "==(\\d+)== (.*)" );
+
   for ( QStringList::ConstIterator it = lines.begin(); it != lines.end(); ++it ) {
     if ( valRe.search( *it ) < 0 )
       continue;
-    
+
     int cPid = valRe.cap( 1 ).toInt();
-      
+
     if ( valRe.cap( 2 ).isEmpty() ) {
       appendMessage( currentMessage );
       currentMessage = QString::null;

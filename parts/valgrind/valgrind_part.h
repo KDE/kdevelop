@@ -33,10 +33,14 @@ private slots:
   void receivedStdout( KProcess*, char*, int );
   void receivedStderr( KProcess*, char*, int );
   void processExited( KProcess* );
+  void loadOutput();
   
 private:
   void getActiveFiles();
   void appendMessage( const QString& message );
+  void appendMessages( const QStringList& lines );
+  void receivedString( const QString& str );
+  void clear();
   QString _lastExec, _lastParams, _lastValExec, _lastValParams;
   KProcess* proc;
   QString currentMessage;
