@@ -304,6 +304,7 @@ void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remov
     if( path.isEmpty() ){
 	NamespaceList namespaceList = file->namespaceList();
 	ClassList classList = file->classList();
+	TypeAliasList typeAliasList = file->typeAliasList();
 	FunctionList functionList = file->functionList();
 	VariableList variableList = file->variableList();
 
@@ -311,6 +312,8 @@ void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remov
 	    processNamespace( *it, remove );
 	for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	    processClass( *it, remove );
+	for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	    processTypeAlias( *it, remove );
 	for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	    processFunction( *it, remove );
 	for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -360,6 +363,7 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 
     NamespaceList namespaceList = ns->namespaceList();
     ClassList classList = ns->classList();
+    TypeAliasList typeAliasList = ns->typeAliasList();
     FunctionList functionList = ns->functionList();
     VariableList variableList = ns->variableList();
 
@@ -367,6 +371,8 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	item->processNamespace( *it, remove );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	item->processClass( *it, remove );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	item->processTypeAlias( *it, remove );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	item->processFunction( *it, remove );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -397,11 +403,14 @@ void FolderBrowserItem::processClass( ClassDom klass, bool remove )
     }
 
     ClassList classList = klass->classList();
+    TypeAliasList typeAliasList = klass->typeAliasList();
     FunctionList functionList = klass->functionList();
     VariableList variableList = klass->variableList();
 
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	item->processClass( *it, remove );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	item->processTypeAlias( *it, remove );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	item->processFunction( *it, remove );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -411,6 +420,29 @@ void FolderBrowserItem::processClass( ClassDom klass, bool remove )
 	m_classes.remove( klass );
 	if( item->isOpen() ){
 	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void FolderBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool remove )
+{
+    TypeAliasDomBrowserItem* item = m_typeAliases.contains( typeAlias ) ? m_typeAliases[ typeAlias ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new TypeAliasDomBrowserItem( this, typeAlias );
+	if( listView()->removedText.contains(typeAlias->name()) )
+	    item->setOpen( true );
+	m_typeAliases.insert( typeAlias, item );
+    }
+
+    if( remove && item->childCount() == 0 ){
+	m_typeAliases.remove( typeAlias );
+	if( item->isOpen() ){
+	    listView()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -469,6 +501,7 @@ void NamespaceDomBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 
     NamespaceList namespaceList = ns->namespaceList();
     ClassList classList = ns->classList();
+    TypeAliasList typeAliasList = ns->typeAliasList();
     FunctionList functionList = ns->functionList();
     VariableList variableList = ns->variableList();
 
@@ -476,6 +509,8 @@ void NamespaceDomBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	item->processNamespace( *it, remove );
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	item->processClass( *it, remove );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	item->processTypeAlias( *it, remove );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	item->processFunction( *it, remove );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -505,11 +540,14 @@ void NamespaceDomBrowserItem::processClass( ClassDom klass, bool remove )
     }
 
     ClassList classList = klass->classList();
+    TypeAliasList typeAliasList = klass->typeAliasList();
     FunctionList functionList = klass->functionList();
     VariableList variableList = klass->variableList();
 
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	item->processClass( *it, remove );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	item->processTypeAlias( *it, remove );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	item->processFunction( *it, remove );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -519,6 +557,29 @@ void NamespaceDomBrowserItem::processClass( ClassDom klass, bool remove )
 	m_classes.remove( klass );
 	if( item->isOpen() ){
 	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void NamespaceDomBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool remove )
+{
+    TypeAliasDomBrowserItem* item = m_typeAliases.contains( typeAlias ) ? m_typeAliases[ typeAlias ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new TypeAliasDomBrowserItem( this, typeAlias );
+	if( listView()->removedText.contains(typeAlias->name()) )
+	    item->setOpen( true );
+	m_typeAliases.insert( typeAlias, item );
+    }
+
+    if( remove && item->childCount() == 0 ){
+	m_typeAliases.remove( typeAlias );
+	if( item->isOpen() ){
+	    listView()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -576,11 +637,14 @@ void ClassDomBrowserItem::processClass( ClassDom klass, bool remove )
     }
 
     ClassList classList = klass->classList();
+    TypeAliasList typeAliasList = klass->typeAliasList();
     FunctionList functionList = klass->functionList();
     VariableList variableList = klass->variableList();
 
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
 	item->processClass( *it, remove );
+    for( TypeAliasList::Iterator it=typeAliasList.begin(); it!=typeAliasList.end(); ++it )
+	item->processTypeAlias( *it, remove );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	item->processFunction( *it, remove );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
@@ -590,6 +654,29 @@ void ClassDomBrowserItem::processClass( ClassDom klass, bool remove )
 	m_classes.remove( klass );
 	if( item->isOpen() ){
 	    listView()->removedText << klass->name();
+	}
+	delete( item );
+	item = 0;
+    }
+}
+
+void ClassDomBrowserItem::processTypeAlias( TypeAliasDom typeAlias, bool remove )
+{
+    TypeAliasDomBrowserItem* item = m_typeAliases.contains( typeAlias ) ? m_typeAliases[ typeAlias ] : 0;
+    if( !item ){
+	if( remove )
+	    return;
+
+	item = new TypeAliasDomBrowserItem( this, typeAlias );
+	if( listView()->removedText.contains(typeAlias->name()) )
+	    item->setOpen( true );
+	m_typeAliases.insert( typeAlias, item );
+    }
+
+    if( remove && item->childCount() == 0 ){
+	m_typeAliases.remove( typeAlias );
+	if( item->isOpen() ){
+	    listView()->removedText << typeAlias->name();
 	}
 	delete( item );
 	item = 0;
@@ -654,6 +741,16 @@ void ClassDomBrowserItem::setup( )
     ClassViewItem::setup();
     setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, listView()->m_part->instance()) );
     setExpandable( true );
+
+    QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
+    setText( 0, txt );
+}
+
+void TypeAliasDomBrowserItem::setup( )
+{
+    ClassViewItem::setup();
+    setPixmap( 0, UserIcon("CVtypedef", KIcon::DefaultState, listView()->m_part->instance()) );
+    setExpandable( false );
 
     QString txt = listView()->m_part->languageSupport()->formatModelItem(m_dom.data(), true);
     setText( 0, txt );
@@ -774,14 +871,19 @@ QString ClassDomBrowserItem::key( int , bool ) const
     return "2 " + text( 0 );
 }
 
-QString FunctionDomBrowserItem::key( int , bool ) const
+QString TypeAliasDomBrowserItem::key( int , bool ) const
 {
     return "3 " + text( 0 );
 }
 
-QString VariableDomBrowserItem::key( int , bool ) const
+QString FunctionDomBrowserItem::key( int , bool ) const
 {
     return "4 " + text( 0 );
+}
+
+QString VariableDomBrowserItem::key( int , bool ) const
+{
+    return "5 " + text( 0 );
 }
 
 void ClassViewWidget::slotNewClass( )
@@ -813,6 +915,13 @@ void ClassViewWidget::slotOpenImplementation( )
 }
 
 void ClassDomBrowserItem::openDeclaration( )
+{
+    int startLine, startColumn;
+    m_dom->getStartPosition( &startLine, &startColumn );
+    listView()->m_part->partController()->editDocument( KURL(m_dom->fileName()), startLine );
+}
+
+void TypeAliasDomBrowserItem::openDeclaration( )
 {
     int startLine, startColumn;
     m_dom->getStartPosition( &startLine, &startColumn );

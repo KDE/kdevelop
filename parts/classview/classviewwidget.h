@@ -35,6 +35,7 @@ class ClassViewItem;
 class FolderBrowserItem;
 class NamespaceDomBrowserItem;
 class ClassDomBrowserItem;
+class TypeAliasDomBrowserItem;
 class FunctionDomBrowserItem;
 class VariableDomBrowserItem;
 class KSelectAction;
@@ -98,6 +99,7 @@ private:
     friend class FolderBrowserItem;
     friend class NamespaceDomBrowserItem;
     friend class ClassDomBrowserItem;
+    friend class TypeAliasDomBrowserItem;
     friend class FunctionDomBrowserItem;
     friend class VariableDomBrowserItem;
 };
@@ -145,6 +147,7 @@ public:
     void processFile( FileDom file, QStringList& path, bool remove=false );
     void processNamespace( NamespaceDom ns, bool remove=false );
     void processClass( ClassDom klass, bool remove=false );
+    void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
 
@@ -152,6 +155,7 @@ private:
     QMap<QString, FolderBrowserItem*> m_folders;
     QMap<QString, NamespaceDomBrowserItem*> m_namespaces;
     QMap<ClassDom, ClassDomBrowserItem*> m_classes;
+    QMap<TypeAliasDom, TypeAliasDomBrowserItem*> m_typeAliases;
     QMap<FunctionDom, FunctionDomBrowserItem*> m_functions;
     QMap<VariableDom, VariableDomBrowserItem*> m_variables;
 
@@ -175,6 +179,7 @@ public:
 
     void processNamespace( NamespaceDom ns, bool remove=false );
     void processClass( ClassDom klass, bool remove=false );
+    void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
 
@@ -184,6 +189,7 @@ private:
     NamespaceDom m_dom;
     QMap<QString, NamespaceDomBrowserItem*> m_namespaces;
     QMap<ClassDom, ClassDomBrowserItem*> m_classes;
+    QMap<TypeAliasDom, TypeAliasDomBrowserItem*> m_typeAliases;
     QMap<FunctionDom, FunctionDomBrowserItem*> m_functions;
     QMap<VariableDom, VariableDomBrowserItem*> m_variables;
 };
@@ -206,6 +212,7 @@ public:
     QString key( int, bool ) const;
 
     void processClass( ClassDom klass, bool remove=false );
+    void processTypeAlias( TypeAliasDom typeAlias, bool remove=false );
     void processFunction( FunctionDom fun, bool remove=false );
     void processVariable( VariableDom var, bool remove=false );
 
@@ -214,8 +221,31 @@ public:
 private:
     ClassDom m_dom;
     QMap<ClassDom, ClassDomBrowserItem*> m_classes;
+    QMap<TypeAliasDom, TypeAliasDomBrowserItem*> m_typeAliases;
     QMap<FunctionDom, FunctionDomBrowserItem*> m_functions;
     QMap<VariableDom, VariableDomBrowserItem*> m_variables;
+};
+
+class TypeAliasDomBrowserItem: public ClassViewItem
+{
+public:
+    TypeAliasDomBrowserItem( QListView* parent, TypeAliasDom dom )
+    	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
+    TypeAliasDomBrowserItem( QListViewItem* parent, TypeAliasDom dom )
+    	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
+
+    const CodeModelItem* model() const { return m_dom; }
+
+    virtual bool hasDeclaration() const { return true; }
+    virtual void openDeclaration();
+
+    void setup();
+    QString key( int, bool ) const;
+
+    TypeAliasDom dom() { return m_dom; }
+
+private:
+    TypeAliasDom m_dom;
 };
 
 class FunctionDomBrowserItem: public ClassViewItem
