@@ -17,7 +17,7 @@ parts to distinguish, mainly:
 
   - src            = The core part of KDevelop
   - lib/interfaces = Plugin handler interface classes
-  - parts          = The various parts using the KParts framework
+  - parts          = The various parts using the KParts framework ( KDevPlugin childs )
   - languages      = \ref language-parts
   - buildtools     = \ref buildtool-parts
   - vcs            = \ref vcs-parts
@@ -55,10 +55,12 @@ TopLevel class).
 
 \subsection parts-overview KDevelop Parts Overview
 
-All parts reside in dedicated subdirectories of the /parts directory. They can
+All parts reside in dedicated subdirectories acording to their function. They can
 be viewed according to their functionalities as follows.
 
 \subsubsection language-parts Programming Language Support Parts
+
+These parts implement a KDevLanguageSupport Class interface.
 
 To add support for a new language check this page \ref howToAddProgrammingLanguages
 
@@ -113,6 +115,8 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
 \subsubsection buildtool-parts Build tools Parts
 
+These parts implement a KDevProject Class interface.
+
   - buildtools/ada = Ada build tool
     - (see AdaProjectPart)
     .
@@ -142,6 +146,8 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
 \subsubsection vcs-parts VCS (Version Control System) Parts
 
+These parts implement a KDevVersionControl Class interface.
+
   - vcs/cervisia = Cervisia Support
     - (see CervisiaPart)
     .
@@ -165,7 +171,7 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
 \subsubsection editor-parts editor support Specific Parts
 
-These parts implement a KTextEditor interface.
+These parts implement a KTextEditor Class interface.
 
   - editors/editor-chooser = Chooses an internal text editor
     - (see EditorChooserPart)
@@ -183,6 +189,8 @@ These parts implement a KTextEditor interface.
 
 Some of the parts are considered global - that is, they effect the entire
 operation of KDevelop.
+
+These parts implement a KDevPlugin Class interface.
 
   - parts/appwizard = New Project Wizard
     - (see AppWizardPart)
@@ -233,6 +241,8 @@ operation of KDevelop.
 
 
 \subsubsection project-specific-parts Project Specific Parts
+
+These parts implement a KDevPlugin Class interface.
 
   - parts/astyle = Source code formatter
     - (see AStylePart)
