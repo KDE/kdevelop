@@ -698,9 +698,13 @@ void GDBController::parseLine(char* buf)
 
     if (strncmp(buf, "No symbol", 9) == 0 ||                    // watch point failed
             strncmp(buf, "Single", 6) == 0 ||                   // Single stepping
-            strncmp(buf, "No source file named", 20) == 0  ||   // breakpoint not set
-            strncmp(buf, "[Switching to Thread", 20) == 0 ||    //
-            strncmp(buf, "Current language:", 17) == 0)         //
+            strncmp(buf, "No source file named", 20) == 0      ||   // breakpoint not set
+            strncmp(buf, "[Switching to Thread", 20) == 0      ||    //
+            strncmp(buf, "[Thread debugging using", 23) == 0   ||
+            strncmp(buf, "Current language:", 17) == 0         ||
+            strncmp(buf, "Error while mapping shared library sections:", 44) == 0  ||
+            strncmp(buf, "Error while reading shared library symbols:", 43) == 0 ||
+            *buf == ':' )
     {
         // We don't change state, because this falls out when a run command
         // starts rather than when a run command stops.
@@ -724,6 +728,7 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
+    
     /// @todo - Only do this at start up
     if (
         strstr(buf, "not in executable format:")                ||
@@ -1477,38 +1482,38 @@ void GDBController::slotRun()
 
     if (stateIsOn(s_appNotStarted)) {
 
-	if (!config_runShellScript_.isEmpty()) {
-	    // Special for remote debug...
-	    QCString tty(tty_->getSlave().latin1());
-	    QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
+        if (!config_runShellScript_.isEmpty()) {
+            // Special for remote debug...
+            QCString tty(tty_->getSlave().latin1());
+            QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
 
-	    KProcess *proc = new KProcess;
+            KProcess *proc = new KProcess;
 
-	    *proc << "sh" << "-c";
-	    *proc << config_runShellScript_ +
-		" " + application_.latin1() + options;
-	    proc->start(KProcess::DontCare);
-	}
+            *proc << "sh" << "-c";
+            *proc << config_runShellScript_ +
+                " " + application_.latin1() + options;
+            proc->start(KProcess::DontCare);
+        }
 
-	if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
+        if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
 
-	    // Race notice: wait for the remote gdbserver/executable
-	    // - but that might be an issue for this script to handle...
+            // Race notice: wait for the remote gdbserver/executable
+            // - but that might be an issue for this script to handle...
 
-	    // Future: the shell script should be able to pass info (like pid)
-	    // to the gdb script...
+            // Future: the shell script should be able to pass info (like pid)
+            // to the gdb script...
 
-	    queueCmd(new GDBCommand("source " + config_runGdbScript_,
-				    RUNCMD, NOTINFOCMD, 0));
+            queueCmd(new GDBCommand("source " + config_runGdbScript_,
+                                    RUNCMD, NOTINFOCMD, 0));
 
-	    // Note: script could contain "run" or "continue"
-	}
-	else {
-	    queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
-	}
+            // Note: script could contain "run" or "continue"
+        }
+        else {
+            queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
+        }
     }
     else {
-	queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+        queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
     }
 }
 
