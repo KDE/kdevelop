@@ -1163,12 +1163,12 @@ void GDBController::slotStart(const QString& shell, const QString &application)
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-        environstr += (*it).second;
+        environstr += KProcess::quote((*it).second); // It seams that the value can contain spaces acording to Oswald Buddenhagen <ossi@kde.org>
         environstr += " ";
     }
-    //TODO: use environst to set envoronment variables of the executable file.
+    //TODO: use environst to set environment variables of the executable file.
     
-    //    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"]\n");
+    DBG_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"] environment:["+environstr+"]\n");
     dbgProcess_ = new KProcess;
 
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
