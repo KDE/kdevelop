@@ -1,14 +1,14 @@
 # these are the headers for your project
-noinst_HEADERS = $APPNAMELC$.h
+noinst_HEADERS = %{APPNAMELC}.h
 
 #########################################################################
 # APPLICATION SECTION
 #########################################################################
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
-bin_PROGRAMS = $APPNAMELC$
+bin_PROGRAMS = %{APPNAMELC}
 
 # the application source, library search path, and link libraries
-$APPNAMELC$_SOURCES = $APPNAMELC$.cpp
-$APPNAMELC$_LDFLAGS = $(WX_LIBS) 
+%{APPNAMELC}_SOURCES = %{APPNAMELC}.cpp
+%{APPNAMELC}_LDFLAGS = $(WX_LIBS) 
 

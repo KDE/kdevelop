@@ -1,25 +1,25 @@
 
-#ifndef _$APPNAMEUC$_H_
-#define _$APPNAMEUC$_H_
+#ifndef _%{APPNAMEUC}_H_
+#define _%{APPNAMEUC}_H_
 
 /**
  * @short Application Main Window
- * @author $AUTHOR$ <$EMAIL$>
- * @version $VERSION$
+ * @author %{AUTHOR} <%{EMAIL}>
+ * @version %{VERSION}
  */
 
 class 
-$APPNAME$app : public wxApp
+%{APPNAME}app : public wxApp
 {
 	public:
 		virtual bool OnInit();
 };
 
 class 
-$APPNAME$Frame : public wxFrame
+%{APPNAME}Frame : public wxFrame
 {
 	public:
-		$APPNAME$Frame( const wxString& title, const wxPoint& pos, const wxSize& pos );
+		%{APPNAME}Frame( const wxString& title, const wxPoint& pos, const wxSize& pos );
 		void OnQuit( wxCommandEvent& event );
 		void OnAbout( wxCommandEvent& event );
 
@@ -33,4 +33,4 @@ enum
 	Menu_File_About
 };
 
-#endif // _$APPNAMEUC$_H_
+#endif // _%{APPNAMEUC}_H_

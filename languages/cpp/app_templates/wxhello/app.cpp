@@ -1,25 +1,25 @@
 #include <wx/wx.h>
-#include "$APPNAMELC$.h"
+#include "%{APPNAMELC}.h"
 
-BEGIN_EVENT_TABLE( $APPNAME$Frame, wxFrame )
-	EVT_MENU( Menu_File_Quit, $APPNAME$Frame::OnQuit )
-	EVT_MENU( Menu_File_About, $APPNAME$Frame::OnAbout )
+BEGIN_EVENT_TABLE( %{APPNAME}Frame, wxFrame )
+	EVT_MENU( Menu_File_Quit, %{APPNAME}Frame::OnQuit )
+	EVT_MENU( Menu_File_About, %{APPNAME}Frame::OnAbout )
 END_EVENT_TABLE()
 
-IMPLEMENT_APP($APPNAME$app)
+IMPLEMENT_APP(%{APPNAME}app)
 	
 
 bool 
-$APPNAME$app::OnInit()
+%{APPNAME}app::OnInit()
 {
-	$APPNAME$Frame *frame = new $APPNAME$Frame( wxT( "Hello World" ), wxPoint(50,50), wxSize(450,340) );
+	%{APPNAME}Frame *frame = new %{APPNAME}Frame( wxT( "Hello World" ), wxPoint(50,50), wxSize(450,340) );
 
 	frame->Show(TRUE);
 	SetTopWindow(frame);
 	return TRUE;
 } 
 
-$APPNAME$Frame::$APPNAME$Frame( const wxString& title, const wxPoint& pos, const wxSize& size )
+%{APPNAME}Frame::%{APPNAME}Frame( const wxString& title, const wxPoint& pos, const wxSize& size )
 	: wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
 	wxMenu *menuFile = new wxMenu;
@@ -38,13 +38,13 @@ $APPNAME$Frame::$APPNAME$Frame( const wxString& title, const wxPoint& pos, const
 }
 
 void 
-$APPNAME$Frame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
+%{APPNAME}Frame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
 {
 	Close(TRUE);
 }
 
 void 
-$APPNAME$Frame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
+%{APPNAME}Frame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 {
 	wxMessageBox( wxT( "This is a wxWidgets Hello world sample" ),
 			wxT( "About Hello World" ), wxOK | wxICON_INFORMATION, this );
