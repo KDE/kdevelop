@@ -14,7 +14,7 @@
 #include <qpushbutton.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
-
+#include <klocale.h>
 #include "addprefixdlg.h"
 
 
