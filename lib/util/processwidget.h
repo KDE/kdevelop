@@ -92,6 +92,9 @@ protected slots:
     void slotProcessExited(KProcess*);
 
 private:
+    void maybeScrollToBottom();
+
+private:
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
 };

@@ -18,6 +18,7 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <qpainter.h>
+#include <qapplication.h>
 
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
@@ -106,6 +107,7 @@ bool ProcessWidget::isRunning()
 void ProcessWidget::slotProcessExited(KProcess *)
 {
     childFinished(childproc->normalExit(), childproc->exitStatus());
+    maybeScrollToBottom();
     emit processExited(childproc);
 }
 
@@ -113,14 +115,16 @@ void ProcessWidget::slotProcessExited(KProcess *)
 void ProcessWidget::insertStdoutLine(const QString &line)
 {
     insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
-        ProcessListBoxItem::Normal));
+                                      ProcessListBoxItem::Normal));
+    maybeScrollToBottom();
 }
 
 
 void ProcessWidget::insertStderrLine(const QString &line)
 {
     insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
-        ProcessListBoxItem::Error));
+                                      ProcessListBoxItem::Error));
+    maybeScrollToBottom();
 }
 
 
@@ -153,6 +157,18 @@ QSize ProcessWidget::minimumSizeHint() const
 
     return QSize( QListBox::sizeHint().width(),
                   (fontMetrics().lineSpacing()+2)*4 );
+}
+
+/** Should be called right after an insertItem(),
+   will automatic scroll the listbox if it is already at the bottom
+   to prevent automatic scrolling when the user has scrolled up
+*/
+void ProcessWidget::maybeScrollToBottom()
+{
+    if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) {
+        qApp->processEvents();
+        verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
+    }
 }
 
 #include "processwidget.moc"
