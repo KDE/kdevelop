@@ -216,6 +216,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
   }
 
   if (mimeType.startsWith("text/")
+      || mimeType == "application/x-zerosize"
       || mimeType == "application/x-desktop"
       || mimeType == "application/x-kdevelop" || mimeType == "application/x-kdevelop-project"
       || mimeType == "image/x-xpm"
