@@ -49,7 +49,7 @@ public:
     
 signals:
     void builded(ProjectItemDom dom);
-    void failed(ProjectItemDom dom);
+    void failed();
 };
 
 #endif

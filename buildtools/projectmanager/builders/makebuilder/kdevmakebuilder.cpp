@@ -138,12 +138,12 @@ void KDevMakeBuilder::commandFinished(const QString &command)
 
 void KDevMakeBuilder::commandFailed(const QString &command)
 {
+    Q_UNUSED(command);
+    
     if (!m_commands.isEmpty()) {
-        QPair<QString, ProjectItemDom> item = m_commands.first();
-        if (item.first == command) {
-            m_commands.clear();
-            emit failed(item.second);
-        }
+        m_commands.clear();
+        
+        emit failed();
     }
 }
 
