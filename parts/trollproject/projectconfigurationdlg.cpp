@@ -35,6 +35,7 @@
 #include <qregexp.h>
 #include <qvalidator.h>
 #include <qtabwidget.h>
+#include <pathutil.h>
 
 ProjectConfigurationDlg::ProjectConfigurationDlg(SubprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
@@ -74,8 +75,7 @@ void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
 void ProjectConfigurationDlg::browseTargetPath()
 //==============================================
 {
-  m_targetPath->setText(KFileDialog::getExistingDirectory());
-
+  m_targetPath->setText(getRelativePath(myProjectItem->path,KFileDialog::getExistingDirectory()));
 }
 
 
