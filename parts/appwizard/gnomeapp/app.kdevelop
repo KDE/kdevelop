@@ -6,7 +6,6 @@
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
   <keywords>
-  <keywords>
    <keyword>C</keyword>
    <keyword>Code</keyword>
    <keyword>GNOME</keyword>
@@ -14,7 +13,7 @@
  </general>
  <kdevautoproject>
   <general>
-   <mainprogram>src/$APPNAMELC</mainprogram>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
   </general>
  </kdevautoproject>
  <kdevfileview>

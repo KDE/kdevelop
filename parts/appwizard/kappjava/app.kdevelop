@@ -14,7 +14,7 @@
  </general>
  <kdevautoproject>
   <run>
-   <mainprogram>src/$APPNAMELC</mainprogram>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>
  </kdevautoproject>
  <kdevfileview>
