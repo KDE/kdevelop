@@ -52,6 +52,9 @@ public:
     
     inline bool isDirty() const
     { return m_dirty; }
+
+    KDevProjectImporter *defaultImporter() const;
+    KDevProjectBuilder *defaultBuilder() const;
     
 //
 // KDevProject interface
@@ -90,8 +93,6 @@ protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
     QStringList fileList(ProjectItemDom item);
     QStringList allFiles();
-    KDevProjectImporter *defaultImporter() const;
-    KDevProjectBuilder *defaultBuilder() const;
     
 private:
     ProjectModel *m_projectModel;

@@ -19,6 +19,8 @@
 #include "kdevprojectmanager_part.h"
 #include "kdevprojectmanager_widget.h"
 
+#include <kdevprojectimporter.h>
+
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
 
@@ -26,6 +28,7 @@
 #include <kaction.h>
 #include <kdialogbase.h>
 #include <ktoolbar.h>
+#include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -344,6 +347,9 @@ ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *par
         this, SLOT(insertItem(ProjectItemDom)));
     connect(part(), SIGNAL(aboutToRemoveProjectItem(ProjectItemDom)),
         this, SLOT(removeItem(ProjectItemDom)));        
+        
+    connect(listView(), SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+        this, SLOT(contextMenu(KListView *, QListViewItem *, const QPoint &)));
 }
 
 ProjectOverview::~ProjectOverview()
@@ -405,6 +411,9 @@ ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parent
         tb->insertButton(SmallIcon("configure"), -1, true);
     }
 #endif
+
+    connect(listView(), SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+        this, SLOT(contextMenu(KListView *, QListViewItem *, const QPoint &)));
 }
 
 ProjectDetails::~ProjectDetails()
@@ -490,5 +499,44 @@ ProjectViewItem *ProjectViewItem::findProjectItem(const QString &path) const
     
     return 0;
 }
+
+void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt)
+{
+    Q_UNUSED(listView);
+    
+    Q_ASSERT(part()->defaultImporter());
+
+    ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
+    
+    if (ProjectFolderDom folder = projectItem->dom()->toFolder()) { 
+        QString makefile = part()->defaultImporter()->findMakefile(folder);
+        if (!makefile.isEmpty()) {
+            KPopupMenu menu(i18n("Folder: %1").arg(folder->shortDescription()), this);
+            menu.insertItem(i18n("Open Makefile"), 1000);
+            if (menu.exec(pt) == 1000)
+                part()->partController()->editDocument(KURL(makefile));
+        }
+    } 
+}
+
+void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt)
+{
+    Q_UNUSED(listView);
+    
+    if (!item)
+        return;
+        
+    ProjectViewItem *projectItem = static_cast<ProjectViewItem*>(item);
+        
+    if (ProjectFileDom file = projectItem->dom()->toFile()) {
+        KPopupMenu menu(i18n("File: %1").arg(file->shortDescription()), this);
+        
+        FileContext context(file->name(), false);
+        part()->core()->fillContextMenu(&menu, &context);
+        
+        menu.exec(pt);
+    }
+}
+
 
 #include "kdevprojectmanager_widget.moc"

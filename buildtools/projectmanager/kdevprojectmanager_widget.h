@@ -157,6 +157,9 @@ public:
 public slots:    
     virtual void refresh();
     virtual void reload();
+    
+private slots:
+    void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
 };
 
 class ProjectDetails: public ProjectView
@@ -168,6 +171,9 @@ public:
     
 public slots:
     void setCurrentItem(ProjectItemDom dom);
+    
+private slots:
+    void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
 };
 
 #endif
