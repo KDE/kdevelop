@@ -1,0 +1,10 @@
+todo list
+---------
+
+- A config switch to enable debug output of structure code
+- Common data structures
+  - Tree
+  - Graph
+  / Trie
+- Methods to traverse structures
+- Sample code

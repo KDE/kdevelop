@@ -1,3 +1,9 @@
+2003-01-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* revived lib/structure:
+	  - has a working Trie class now (tested with g++-3.2)
+	  - add an adaptor called KDict which is supposed to be
+	    a drop-in replacement for QDict
+
 2003-01-08  Julian Rockey <linux@jrockey.com>
 	* parts:
 	  - added new part to assist with creation of new files
