@@ -46,8 +46,10 @@ public:
     void refresh(CProject *prj);
     QString selectedText();
     void changePathes();
-
+    
 protected slots:
+    void slotUpdateAPI() { emit signalUpdateAPI();};
+    void slotUpdateUserManual(){ emit signalUpdateUserManual();};
     void slotAddDocumentation();
     void slotRemoveDocumentation();
     void slotDocumentationProp();
@@ -57,7 +59,8 @@ protected slots:
 	
 signals:
     void fileSelected(QString url_file);
-
+    void signalUpdateAPI();
+    void signalUpdateUserManual();
 private: 
 //    CProject* project;
     DocTreeKDevelopFolder *folder_kdevelop;

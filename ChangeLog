@@ -1,3 +1,9 @@
+2000-03-04  Ralf Nolden <rnolden@kdevelop.de>
+
+	* added kdoc2 support for initializing the doctree according to 
+          the kdoc-reference .kdoc files - this uses all created libs ;-)
+        * added support to update project API/Manual by rmb menu
+
 2000-03-04  Ralf Funken <rfunken@kdevelop.de>
 	* Updated de.po again :-)
         * Commited kdevelop.pot

@@ -22,6 +22,8 @@
 #include <qheader.h>
 #include <qdir.h>
 #include <qlist.h>
+#include <qregexp.h> 
+
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -452,7 +454,35 @@ void DocTreeKDELibsFolder::refresh()
 {
     ListViewFolderItem::refresh();
     list.clear();
-    list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"),         0));
+    list.append(new DocTreeKDELibsBook(this, i18n("Qt Library"), 0));
+
+#ifdef WITH_KDOC2
+    // if we have kdoc2 index files, get the reference directory 
+    QString docu_dir, index_path, libname;
+    KConfig* config=kapp->getConfig();
+    config->setGroup("Doc_Location");
+    docu_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    if (!docu_dir.isEmpty())
+    {
+      index_path= docu_dir + "/kdoc-reference";
+      QDir d;
+      d.setPath(index_path);
+      if(!d.exists())
+        return;
+      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+      QFileInfoListIterator it( *fileList ); // iterator
+      QFileInfo *fi; // the current file info
+      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
+        libname=fi->fileName();  // get the filename
+        if(!libname.contains("qt.kdoc") && fi->isFile()) // exclude qt.kdoc || qt.kdoc.gz and everything except files
+        {
+          libname=fi->baseName();  // get only the base of the filename as library name
+          list.append(new DocTreeKDELibsBook(this, libname+ i18n(" Library"), libname)); // append to the doctree
+        }
+        ++it; // increase the iterator
+      }
+    }
+#else  // if we don´t have kdoc2, do it the old way
     list.append(new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile"));
@@ -460,6 +490,7 @@ void DocTreeKDELibsFolder::refresh()
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell"));
 //    setOpen(false);
+#endif
 }
 
 
@@ -626,6 +657,8 @@ public:
     DocTreeProjectFolder(DocTreeView *parent)
         : ListViewFolderItem(parent, i18n("Current Project")), project(0)
         {}
+    void handleRightButtonPressed(QListViewItem *item,
+                                  const QPoint &p);
     virtual void refresh();
     void setProject(CProject *prj)
         {
@@ -634,6 +667,7 @@ public:
     
 private:
     CProject *project;
+    ListViewBookItem *api_item;
 };
 
 
@@ -645,13 +679,35 @@ void DocTreeProjectFolder::refresh()
     if (project && project->valid)
         {
             setExpandable(true);
-
-            (void) new ListViewBookItem(this, i18n("API documentation"),
+            api_item = new ListViewBookItem(this, i18n("API documentation"),
                                         /* strange!? */ "API-Documentation");
             (void) new ListViewBookItem(this, i18n("User manual"),
                                         /* strange!? */ "User-Manual");
 //                setOpen(false);
         }
+}
+void DocTreeProjectFolder::handleRightButtonPressed(QListViewItem *item,
+                                                   const QPoint &p)
+{
+    if (project && project->valid){
+      if ( item == this)
+      {
+          KPopupMenu pop(i18n("Project"));
+          pop.insertItem(i18n("Update API"), listView(), SLOT(slotUpdateAPI()));
+          pop.insertItem(i18n("Generate User Manual"), listView(), SLOT(slotUpdateUserManual()));
+          pop.exec(p);
+      }
+      else if (item->parent() == this)
+      {
+          KPopupMenu pop(i18n("Project"));
+          if(item==api_item)
+            pop.insertItem(i18n("Update API"), listView(), SLOT(slotUpdateAPI()));
+          else
+            pop.insertItem(i18n("Generate User Manual"), listView(), SLOT(slotUpdateUserManual()));
+          
+          pop.exec(p);
+      }
+    }
 }
 
 
@@ -743,6 +799,8 @@ void DocTreeView::slotRightButtonPressed(QListViewItem *item,
     // Not very oo style, but works for the first
     // (as long as other folders don't use right-clicks)
     folder_others->handleRightButtonPressed(item, p);
+    folder_project->handleRightButtonPressed(item, p);
+
 }
 
 
@@ -827,7 +885,7 @@ void DocTreeView::slotSelectionChanged(QListViewItem *item)
       // strip file: if present....
       //  e.g. qt2kdoc inserts it
       if (item.left(5)=="file:")
-	item=item.mid(5, item.length());
+	      item=item.mid(5, item.length());
       emit fileSelected(item);
     }
 }

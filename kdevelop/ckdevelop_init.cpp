@@ -1153,7 +1153,10 @@ void CKDevelop::initConnections(){
 
 
   connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
-
+  connect(doc_tree, SIGNAL(signalUpdateAPI()), SLOT(slotProjectAPI()));
+  connect(doc_tree, SIGNAL(signalUpdateUserManual()), SLOT(slotProjectManual()));
+  
+  
   //connect the editor lookup function with slotHelpSText
   connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));

@@ -2414,14 +2414,14 @@ void CKDevelop::slotHelpAPI(){
   if(project){
     QString api_file=prj->getProjectDir() + prj->getSubDir() +  "api/index.html";
     if(!QFileInfo(api_file).exists()){
-    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
-    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
-    	if(result==1){
-    		slotProjectAPI();
-			}
-			else{
-				return;
-			}
+//    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
+//    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
+//    	if(result==1){
+//    		slotProjectAPI();
+//			}
+//			else{
+				return;  // replaced by right mouse button handling to generate the API in the DocTreeView
+//			}
 		}
 		else{
 	    slotStatusMsg(i18n("Switching to project API Documentation..."));
@@ -2438,15 +2438,15 @@ void CKDevelop::slotHelpManual(){
  
     QString doc_file = finfo.dirPath() + "/" + finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
-    	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
-    				i18n("The Project manual documentation is not present.\n" 
-    							"Would you like to generate the handbook  now ?"), KMsgBox::QUESTION);
-    	if(result==1){
-    		slotProjectManual();
-			}
-			else{
-				return;
-			}
+//    	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
+//    				i18n("The Project manual documentation is not present.\n" 
+//    							"Would you like to generate the handbook  now ?"), KMsgBox::QUESTION);
+//    	if(result==1){
+//    		slotProjectManual();
+//			}
+//			else{
+				return;   // replaced by right mouse button handling to generate the help manual in DocTreeView 
+//			}
 		}
 		else{
 	    slotStatusMsg(i18n("Switching to project Manual..."));
