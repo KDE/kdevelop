@@ -37,7 +37,8 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
                   parent, name, false)
 {
     proc = 0;
-    indexdir = kapp->dirs()->saveLocation("data", "kdevelop/helpindex");
+    
+    indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
     QDir d; d.mkdir(indexdir);
     
     QGridLayout *grid = new QGridLayout(plainPage(), 5,3, spacingHint());
@@ -308,13 +309,15 @@ bool ProgressDialog::createConfig()
     if (wrapper.isEmpty())
         wrapper = locate("data", QString("khelpcenter/en/wrapper.html"));
     if (wrapper.isEmpty())
+        wrapper = locate("data", QString("/usr/share/htdig/wrapper.html"));
+    if (wrapper.isEmpty())
         return false;
     wrapper = wrapper.left(wrapper.length()-12);
     
     // locate the image dir
     QString images = locate("data", "khelpcenter/pics/star.png");
     if (images.isEmpty())
-        return false;
+        //return false;
     images = images.left(images.length()-8);
 
     QFile f(indexdir + "/htdig.conf");
@@ -508,9 +511,10 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     //    KCmdLineArgs::addCmdLineOptions(options);
     
+    KApplication app;
+
     KGlobal::dirs()->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
     KGlobal::locale()->setMainCatalogue("htmlsearch");
-    KApplication app;
 
     ProgressDialog *search = new ProgressDialog(0, "progress dialog");
     search->show();

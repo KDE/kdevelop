@@ -942,12 +942,15 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     KPopupMenu popup(i18n("Documentation Tree"), this);
     popup.insertItem(i18n("Properties..."), this, SLOT(slotConfigure()));
     
+
+    DocTreeItem *dItem = dynamic_cast<DocTreeItem*>( item );
+
     QListViewItem* i = contextItem;
     while(i->parent()) // go to folder
     {
         i = i->parent();
     }
-    if ( i == folder_kdelibs && contextItem->parent() && contextItem->parent()->parent() )
+    if ( i != folder_bookmarks && dItem && !dItem->fileName().isEmpty() )
     {
         popup.insertItem(i18n("Add to Bookmarks"), this, SLOT(slotAddBookmark()));
     }
