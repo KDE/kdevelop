@@ -1,11 +1,8 @@
-<!DOCTYPE kdevelop>
+<!DOCTYPE kdevelop >
 <kdevelop>
  <general>
   <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
-  <ignoreparts>
-   <part>KDevJavaDebugger</part>
-  </ignoreparts>
  </general>
  <kdevfileview>
   <groups>

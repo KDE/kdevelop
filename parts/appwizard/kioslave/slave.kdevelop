@@ -1,17 +1,17 @@
-<!DOCTYPE kdevelop>
+<!DOCTYPE kdevelop >
 <kdevelop>
  <general>
   <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
-  <ignoreparts>
-   <part>KDevJavaDebugger</part>
-  </ignoreparts>
  </general>
+ <kdevautoproject>
+  <general>
+   <mainprogram>src/$APPNAMELC</mainprogram>
+  </general>
+ </kdevautoproject>
  <kdevfileview>
   <groups>
    <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-   <group pattern="*.ui" name="User Interface" />
-   <group pattern="*.png" name="Icons" />
    <group pattern="*.po;*.ts" name="Translations" />
    <group pattern="*" name="Others" />
   </groups>

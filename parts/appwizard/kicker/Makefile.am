@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kickerdir = ${appwizarddatadir}/template-kicker
 templatedir = ${appwizarddatadir}/templates
 
-kicker_DATA = applet.cpp applet.h applet.desktop src-Makefile.am \
+kicker_DATA = applet.cpp applet.h applet.desktop applet.kdevelop src-Makefile.am \
 	      kicker.png subdirs
 template_DATA = kicker
 
