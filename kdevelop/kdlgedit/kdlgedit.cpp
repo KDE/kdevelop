@@ -1432,3 +1432,5 @@ void KDlgEdit::slotDeleteDialog(QString file){
   *proc << command;
   proc->start();
 }
+
+
