@@ -17,23 +17,25 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef __CNEWCLASSDLG_H_
 #define __CNEWCLASSDLG_H_
-
-
+#include <qlineedit.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qlistbox.h>
 #include <qtabdialog.h>
+#include <qmultilinedit.h>
+#include <kapp.h>
+#include <qcombobox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <kmsgbox.h>
+#include <kfiledialog.h>
+#include <qcheckbox.h>
+#include "cgeneratenewfile.h"
 
-class QButtonGroup;
-class QLineEdit;
-class QMultiLineEdit;
-class QPushButton;
-class QRadioButton;
-class QLabel;
-class QCheckBox;
-class KConfig;
+//#include "cproject.h"
 class CProject;
-
 
 /** generates new class-skeletons (a header and a implementation file)
   *@author Sandy Meier
@@ -42,11 +44,11 @@ class CNewClassDlg : public QDialog
 {
     Q_OBJECT
 public:
-    CNewClassDlg( QWidget *parent=0, const char *name=0,CProject* prj=0 );
+    CNewClassDlg( QWidget *parent=0, const char *name=0,CProject* prj=0 , const char *folderName=0);
   QString getHeaderFile();
   QString getImplFile();
 private:
-    //  KConfig* config;
+  KConfig* config;
   QButtonGroup* add_group;
   QButtonGroup* doc_group;
   QButtonGroup* inher_group;
@@ -72,6 +74,8 @@ private:
   QString m_header_file;
   QString m_impl_file;
   CProject* prj_info;
+  /** stores the subdir where the new class will be put */
+  const char * subdirName;
  private slots:
  void        ok();
   void  slotClassEditChanged(const char*);
