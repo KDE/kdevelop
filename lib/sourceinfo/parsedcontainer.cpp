@@ -85,10 +85,12 @@ void ParsedContainer::addStruct( ParsedClass *aStruct )
     REQUIRE( "Valid structname", !aStruct->name().isEmpty() );
     //    REQUIRE( "Unique struct", !hasStruct( _useFullPath ? aStruct->path() : aStruct->name() ) );
 
-    if ( !path().isEmpty() )
-        aStruct->setDeclaredInScope( path() );
-
-    structs.insert( aStruct->name(), aStruct );
+    if( aStruct != NULL && !aStruct->name().isEmpty() ){
+	if ( !path().isEmpty() )
+	    aStruct->setDeclaredInScope( path() );
+	
+	structs.insert( aStruct->name(), aStruct );
+    }
 }
 
 /*-------------------------------------- ParsedContainer::addAttribute()
@@ -107,10 +109,12 @@ void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
     REQUIRE( "Valid attributename", !anAttribute->name().isEmpty() );
     //    REQUIRE( "Unique attribute", !hasAttribute( _useFullPath ? anAttribute->path() : anAttribute->name() ) );
 
-    if ( !path().isEmpty() )
-        anAttribute->setDeclaredInScope( path() );
-
-    attributes.insert( anAttribute->name(),  anAttribute );
+    if( anAttribute && !anAttribute->name().isEmpty() ){
+	if ( !path().isEmpty() )
+	    anAttribute->setDeclaredInScope( path() );
+	
+	attributes.insert( anAttribute->name(),  anAttribute );
+    }
 }
 
 /*------------------------------------------ ParsedContainer::addMethod()
@@ -127,15 +131,17 @@ void ParsedContainer::addMethod( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid method", aMethod != NULL );
     REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
-
-    QString str;
-
-    if ( !path().isEmpty() )
-        aMethod->setDeclaredInScope( path() );
-
-    methods.append( aMethod );
-
-    methodsByNameAndArg.insert( aMethod->asString(), aMethod );
+    
+    if( aMethod && !aMethod->name().isEmpty() ){
+	QString str;
+	
+	if ( !path().isEmpty() )
+	    aMethod->setDeclaredInScope( path() );
+	
+	methods.append( aMethod );
+	
+	methodsByNameAndArg.insert( aMethod->asString(), aMethod );
+    }
 }
 
 /*********************************************************************

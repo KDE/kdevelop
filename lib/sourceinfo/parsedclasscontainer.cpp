@@ -96,14 +96,16 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
     REQUIRE( "Valid classname", !aClass->name().isEmpty() );
     REQUIRE( "Unique class", !hasClass( aClass->name() ) );
 
-    if ( !path().isEmpty() )
-        aClass->setDeclaredInScope( path() );
-    
-    // If this is a class, and we're adding another class that class
-    // is a subclass.
-    aClass->setIsSubClass( itemType() == PIT_CLASS );
-
-    classes.insert( aClass->name(), aClass );
+    if( aClass != NULL && !aClass->name().isEmpty() && !hasClass( aClass->name() ) ){
+	if ( !path().isEmpty() )
+	    aClass->setDeclaredInScope( path() );
+	
+	// If this is a class, and we're adding another class that class
+	// is a subclass.
+	aClass->setIsSubClass( itemType() == PIT_CLASS );
+	
+	classes.insert( aClass->name(), aClass );
+    }
 }
 
 /*------------------------------ ParsedClassContainer::removeClass()

@@ -126,10 +126,12 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
     REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
     REQUIRE( "Unique scope", !hasScope( aScope->name() ) );
     
-    if ( !path().isEmpty() )
-        aScope->setDeclaredInScope( path() );
-    
-    scopes.insert( aScope->name(), aScope );
+    if( aScope != NULL && !aScope->name().isEmpty() && !hasScope( aScope->name() ) ){
+	if ( !path().isEmpty() )
+	    aScope->setDeclaredInScope( path() );
+	
+	scopes.insert( aScope->name(), aScope );
+    }
 }
 
 /*------------------------------ ParsedScopeContainer::removeScope()

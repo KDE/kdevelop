@@ -229,8 +229,9 @@ void ClassStore::addClass(ParsedClass *klass)
     REQUIRE( "Valid class", klass != NULL );
     REQUIRE( "Valid classname", !klass->name().isEmpty() );
     REQUIRE( "Unique classpath", !hasClass( klass->path() ) );
-
-    m_allClasses.insert(klass->path(), klass);
+    
+    if( klass && !klass->name().isEmpty() && !hasClass( klass->path() ) )
+	m_allClasses.insert(klass->path(), klass);
 }
 
 
@@ -240,7 +241,8 @@ void ClassStore::addStruct(ParsedClass *strukt)
     REQUIRE( "Valid structname", !strukt->name().isEmpty() );
     REQUIRE( "Unique structpath", !hasStruct( strukt->path() ) );
 
-    m_allStructs.insert(strukt->path(), strukt);
+    if( strukt != NULL && !strukt->name().isEmpty() && !hasStruct( strukt->path() ) )
+	m_allStructs.insert(strukt->path(), strukt);
 }
 
 void ClassStore::addScript(ParsedScript *script)
@@ -249,7 +251,8 @@ void ClassStore::addScript(ParsedScript *script)
     REQUIRE( "Valid scriptname", !script->name().isEmpty() );
     REQUIRE( "Unique scriptpath", !hasScript( script->path() ) );
 
-    m_allScripts.insert(script->path(), script);
+    if( script != NULL && !script->name().isEmpty() && !hasScript( script->path() ) )
+	m_allScripts.insert(script->path(), script);
 }
 
 
@@ -259,7 +262,8 @@ void ClassStore::addScope(ParsedScopeContainer *scope)
     REQUIRE( "Valid scope name", !scope->name().isEmpty() );
     REQUIRE( "Unique scope path", !hasScope( scope->path() ) );
 
-    m_allScopes.insert(scope->path(), scope);
+    if( scope != NULL && !scope->name().isEmpty() && !hasScope( scope->path() ) )
+	m_allScopes.insert(scope->path(), scope);
 }
 
 
