@@ -153,7 +153,6 @@ private:
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;
 
-    QStringList m_projectFileList;
     QMap<QString, QDateTime> m_timestamp;
     bool m_valid;
 
