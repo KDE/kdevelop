@@ -1,3 +1,7 @@
+2K-01-15 Falk Brettschneider  <gigafalk@yahoo.com>
+	* first experimental!!! floatable version (for Toplevel-SDI mode),
+	  based on DockWidget of KDEStudio (Judin Max)
+
 2K-01-14 Falk Brettschneider  <gigafalk@yahoo.com>
         * KDevelop fitted to new KMenuBar 
 	  (now you will need at least KDE2-snapshot from 14/01/2K) 
