@@ -201,6 +201,7 @@ EOF
 for $group (split /,/, $lfvgroups) { 
         next if ($group eq "");
         $pattern = $lfvgrouppattern{$group};
+        $pattern =~ s/,/;/g;
         print FILE <<EOF;
    <group pattern="$pattern" name="$group" />
 EOF
