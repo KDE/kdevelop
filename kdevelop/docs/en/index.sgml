@@ -13,6 +13,7 @@ id="Copyright" name="Copyright"> for more information.
 
 <sect>Introduction
 <p>
+
 As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for
 commercial purpose. The most popular free software project is Linux. It is now generally agreed that Linux, (as well as other projects
 such as the Apache web server, the Perl language and GNU suite of tools), proves that free software can be of as high a quality as
@@ -43,6 +44,7 @@ autoconf,
 <item> Editing of project-specific pixmaps with KIconedit,
 <item> The inclusion of any other program you need for development by adding it to the "Tools"-menu according to your individual needs.
 </itemize>
+
 
 KDevelop makes it a joy to work with all programs in one place and saves time by automating standard development processes
 as well as giving you direct and transparent access to all information you need. The integrated browsing mechanisms are designed
@@ -229,6 +231,7 @@ KDevelop includes an automatic installation program module which is invoked when
 kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
 set up your KDevelop environment.
 
+
 The Installation dialog's buttons execute the following actions:
 <p>
 <bf>Help:</bf>  Will open  the KDEHelp program.
@@ -309,6 +312,10 @@ after pressing OK. Mind that you can set up additional options like auto saving 
 <bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
 to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
 to set all options yourself with the configuration dialogs provided in the options-menu.
+<figure>
+<eps FILE="firststart.eps">
+<img SRC="firststart.gif">
+</figure>
 
 <sect>Programs<label id="Programs">
 <p>
@@ -3051,6 +3058,7 @@ medium.  The higher the index size, the more the index files will grow. On the o
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
+
 <sect>Questions and Answers<label id="Questions and Answers">
 <p>
 This section adresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
@@ -3331,6 +3339,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
+
 
 </article>
 

@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE Library Reference Guide: Class Categories</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-3.html">Next</A>
+ <A HREF="kde_libref-1.html">Previous</A>
+ <A HREF="kde_libref.html#toc2">Table of Contents</A>
+</P>
+<H3><A NAME="s2">2. Class Categories</A></H3>
+
+<P>The KDE/Qt C++ class libraries offer easy solutions to extend applications dramatically with a minimum amount of coding on the side of
+the application programmer. This chapter therefore sorts the classes provided towards their usage by certain categories:
+<P>
+<UL>
+<LI>Baseclass</LI>
+<LI>Application architecture classes    
+<UL>
+<LI>Application objects of KDE</LI>
+<LI>Application configuration</LI>
+<LI>Main Windows</LI>
+</UL>
+</LI>
+<LI>User Interface Objects
+<UL>
+<LI>Views</LI>
+<LI>Dialogs</LI>
+<LI>Control Elements</LI>
+<LI>Menus</LI>
+</UL>
+</LI>
+<LI>General purpose classes
+<UL>
+<LI>Files</LI>
+<LI>Data objects</LI>
+<LI>Graphics</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<H3><A NAME="ss2.1">2.1 Baseclass</A>
+</H3>
+
+<P>
+<P>Most of the KDE/Qt classes have <CODE>QObject</CODE> as their baseclass in their inheritance hierarchy. <CODE>QObject</CODE> can be described as a
+baseclass because it offers the usage of Qt's signal/slot mechanism which allows object interaction within the application by avoiding
+virtual methods and should be used as the baseclass for any self-created classes that are supposed to emit signals or can connect to
+signals by slots.
+<P>
+<H3><A NAME="ss2.2">2.2 Application Architecture Classes</A>
+</H3>
+
+<P>KDE applications usually consist of a set of objects that interact with each other. The programmer has to use the provided classes to
+create a KDE application either by creating a class instance or by inheritance. A typical application contains:
+<P>
+<UL>
+<LI>One application object of <CODE>KApplication</CODE></LI>
+<LI>One mainview class derived from <CODE>KTMainWindow</CODE></LI>
+<LI>A class derived from <CODE>QWidget</CODE> to create the view area</LI>
+</UL>
+<P>
+<P>
+<H4>Application objects of KDE</H4>
+
+<P>The K Desktop Environment provides a set of functionality that an application can use to integrate into the KDE. The class
+<CODE>KApplication</CODE> therefore is the baseclass for any application that targets KDE. A KDE application only contains one object of the
+class <CODE>KApplcation</CODE> that is created in the application's <CODE>main()</CODE> function. The <CODE>KApplication</CODE> object is responsible for
+providing the basic interfaces and objects towards the desktop and interprets the commandline arguments of an application. As the
+instance is a non-visible, but the top-parent object, the following rules have to be watched:
+<P>
+<UL>
+<LI>the application is terminated by <CODE>kapp->quit()</CODE>.</LI>
+<LI>the object that is representing the graphical interface has to be set the main widget with <CODE>setTopWidget()</CODE> (for wigets not
+inherited by <CODE>KTMainWindow</CODE>)</LI>
+</UL>
+<P>The <CODE>KApplication</CODE> object provides:
+<UL>
+<LI>access to the KDE File System</LI>
+<LI>a session configuration object</LI>
+<LI>a configuration object</LI>
+<LI>internationalization by the locale object</LI>
+<LI>changing of the visible application objects by signals</LI>
+</UL>
+<P><B>Dependencies:</B> -lkdecore -lqt
+<P><B>Includes:</B> <CODE>#include &lt;kapp.h&gt;</CODE>
+<P>The <CODE>kdeui</CODE> library additionally offers two classes that inherit <CODE>KApplication</CODE> for specialized purposes:
+<P>
+<H4>KWMModuleApplication</H4>
+
+<P><B>Includes:</B> <CODE>#include &lt;kwmmapp.h&gt;</CODE>
+<P><B>Dependencies:</B> -lkdeui -lkdecore -lqt
+<P>The class KWMModuleApplication is the base class for KDE windowmanager modules. It mainly informs a module about all currently managed
+windows and changes to them (via Qt signals). There are no methods to manipulate windows. These are defined in the class KWM (see
+kwm.h). An example for using KWMModuleApplication is kcontrol.
+<P>
+<H4>KControlApplication</H4>
+
+<P>
+<P><B>Includes:</B> <CODE>#include &lt;kcontrol.h&gt;</CODE>
+<P><B>Dependencies:</B> -lkdeui -lkdecore -lqt
+<P>KControlApplication is the common base for setup applications. It provides a tab dialog and functionality common to most setup
+programs. The configuration dialogs for the KDE are examples of KControlApplications.
+<P>
+<H4>KWM</H4>
+
+<P><B>Includes:</B> <CODE>#include &lt;kwm.h&gt;</CODE>
+<P><B>Dependencies:</B> -lkdeui -lkdecore -lqt
+<P>The KWM class provides a set of static methods to interact with the window and sessionmanager. Therefore, call any member with
+<P>KWM::&lt;method()&gt;
+<P>depending on the purpose of the desired functionality.
+<P>
+<P>
+<H4>Application Configuration</H4>
+
+<P>The class <CODE>KConfig</CODE> provides the usage of a configuration object which can write its entries into configuration files. Dependent of
+the values to read and write you have to call the methods of the class <CODE>KConfigBase</CODE>.
+<P>The <CODE>KApplication</CODE> object provides an application configuration object with a resource file by default which is stored in the user's
+kde-directory as well as the session management file to store information between sessions.
+<P>For internationalization, the <CODE>KApplication</CODE> object uses the class <CODE>KLocale</CODE> to translate localized entries dependend on the
+selected language. Instead of using the <CODE>klocale->translate()</CODE> method, KDE applications should use the <CODE>i18n()</CODE> macro that
+contains the string to be translated as the message extraction depends on this macro.
+<P>
+<H4>Main Windows</H4>
+
+<P>As the application's <CODE>KApplication</CODE> instance is non-visible, it only provides the basic means to create a KDE application.
+Therefore a KDE application needs to have a main window representing the application towards the user graphically. The main window
+usually constists of a widget which can be as simple as a pure button up to the complex <CODE>KTMainWindow</CODE> widget, offering the means to
+create a full-featured main window with geometry management, session management support, menubar, toolbars and statusbar.
+<P>Generally, every main window has to be set main widget with <CODE>KApplication</CODE>'s <CODE>setTopWidget()</CODE> method. An exception is a main
+window that inherits <CODE>KTMainWindow</CODE>.
+<P>The main window usually takes the responsibility to terminate the application by providing a user interface that is connected to
+<CODE>KApplication::quit()</CODE>, easiely used by <CODE>kapp->quit()</CODE>.
+<P>Most KDE applications will use <CODE>KTMainWindow</CODE> to represent the application graphically.
+<P>
+<P>
+<H3><A NAME="ss2.3">2.3 User Interface Objects</A>
+</H3>
+
+<P>This section covers the user interface object the KDE libraries provide. By category, these can be devided by their purpose. A user
+element can be:
+<P>
+<UL>
+<LI>a view, representing the data an application is intended to produce and allowing the methods to manipulate the contents.</LI>
+<LI>dialogs, allowing the user to configure application settings, informs about the application status and changes values.</LI>
+<LI>control elements which are a part of a wider graphical interface and are ready to use</LI>
+<LI>menus which allow calling of methods directly.</LI>
+</UL>
+<P>
+<H4>Views</H4>
+
+<P>View are generally the content area of an application. Therefore it can be the main widget or a part of a main widget that additionally
+offers a set of functionality such as <CODE>KTMainWindow</CODE>
+<P>The KDE libraries offer a set of ready-to use views which can be inherited to advance the desired functionality:
+<UL>
+<LI>KTabListBox: offers a multi-column listbox where the user can change the rows with drag'n drop.</LI>
+<LI>KTreeList: inherited from QTableView, offering a collapsable tree. This could be used instead of QListView.</LI>
+<LI>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.</LI>
+<LI>KPanner and KNewPanner: manage two child widgets like QSplitter.</LI>
+<LI>KHTMLView: a HTML-interpreting widget (khtmlw)</LI>
+</UL>
+<P>For use with <CODE>KTMainWindow</CODE>, create your view instance and call <CODE>setView(QWidget*)</CODE> to enable the management by the
+<CODE>KTMainWindow</CODE> instance.
+<P>Individual views are usually created by inheritance of <CODE>QWidget</CODE>.
+<P>
+<H4>Dialogs</H4>
+
+<P>Dialogs are a main part of the user interaction whereever the application requires parameters that have to be set by the user.
+Fortunately, the KDE library already offers a set of dialogs that are ready to use for standard parameters such as fonts and colors. In
+any case wehre these types of information is requested by the user, the application should make use of these standard dialogs.
+<P>In cases where the given dialogs don't fit the requirements, you have to inherit from <CODE>QWidget</CODE> or <CODE>QDialog</CODE> and create your own
+dialog either directly coded with geometry management or by creating it visually with KDevelop's dialogeditor.
+<P>The KDE libraries offer the following dialogs:
+<UL>
+<LI>KColorDialog: selects a color value</LI>
+<LI>KWizard: base dialog class to create wizards</LI>
+<LI>KEdGotoLine: Go-to-Line dialog for editors</LI>
+<LI>KEdReplace: Search and replace dialog for editors</LI>
+<LI>KEdSrch: search dialog for editors</LI>
+<LI>KFontDialog: font selection dialog</LI>
+<LI>KIconLoaderDialog: Icon selection dialog</LI>
+<LI>KKeyDialog: keyboard accelerator configuration dialog</LI>
+<LI>KMsgBox: message box dialog with up to four configurable buttons</LI>
+<LI>KFileDialog: (kfile) file dialog to open and save files</LI>
+<LI>KSpellDlg: (kspell) spellchecking dialog for use with ISpell</LI>
+<LI>DatePickerDialog: (kab) date selection dialog</LI>
+</UL>
+<P>Additionally, the Qt library offers:
+<UL>
+<LI>QFileDialog</LI>
+<LI>QMessageBox</LI>
+<LI>QPrintDialog</LI>
+<LI>QProgressDialog</LI>
+</UL>
+<P>
+<H3><A NAME="ss2.4">2.4 Control Elements</A>
+</H3>
+
+<P>Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
+control elements that the Qt library provides, KDE offers:
+<P>
+<UL>
+<LI>KButton: active raise-lower button</LI>
+<LI>KButtonBox: manages buttons</LI>
+<LI>KColorButton: button displaying a color setting</LI>
+<LI>KCombo: similar to QComboBox</LI>
+<LI>KDatePicker: Date selection widget</LI>
+<LI>KIntegerLine: lineedit that only accepts integer values</LI>
+<LI>KLedLamp: LED lamp</LI>
+<LI>KLined: line edit</LI>
+<LI>KPanner: panner devider</LI>
+<LI>KNewPanner: panner devider managing two widgets</LI>
+<LI>KPopupMenu: popup menu with title</LI>
+<LI>KRestrictedLine: lineedit that only accepts certain input</LI>
+<LI>KSelector: value selector</LI>
+<LI>KSeparator: standard separator</LI>
+<LI>KSlider: slider widget</LI>
+<LI>KSpinBox: like QSpinBox</LI>
+<LI>KTabCtl: tabulator widget</LI>
+<LI>KTreeList: tree list widget</LI>
+</UL>
+<P>
+<H3><A NAME="ss2.5">2.5 General Purpose Classes</A>
+</H3>
+
+<P>
+<H4>Files</H4>
+
+<P>For loading and saving files, use the class <CODE>QFile</CODE> which operates with streams.
+<H4>Data Objects</H4>
+
+<P>The Qt library supports data objects by classes that offer handling of lists, arrays, streams, strings and the like. See the Qt
+documentation for mor information.
+<P>
+<H4>Graphics</H4>
+
+<P>Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
+<CODE>QPainter</CODE>.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-3.html">Next</A>
+ <A HREF="kde_libref-1.html">Previous</A>
+ <A HREF="kde_libref.html#toc2">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

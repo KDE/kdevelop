@@ -90,6 +90,7 @@ void CDocTree::refresh(CProject* prj)
   QListViewItem* lib_item;
   QListViewItem* kdevelop_item;
 	QListViewItem* pages_item;
+	
   QStrList others_list;
   char *others_str;
   QString kde_path;
@@ -110,9 +111,11 @@ void CDocTree::refresh(CProject* prj)
 //  treeH->addItem( i18n("User Manual"), THBOOK, kdevelop_item );
   pages_item = treeH->addItem( i18n("User Manual"), THBOOK, kdevelop_item );
   treeH->addItem( i18n("Programming Handbook"), THBOOK, kdevelop_item );
-  treeH->addItem( i18n("C/C++ Reference"), THBOOK, kdevelop_item );
+  treeH->addItem( i18n("Tutorials"), THBOOK, kdevelop_item );
+  treeH->addItem( i18n("KDE Library Reference"), THBOOK, kdevelop_item );
+	treeH->addItem( i18n("C/C++ Reference"), THBOOK, kdevelop_item );
   treeH->setLastItem( kdevelop_item );
-
+	
   treeH->addItem( i18n("Introduction"), THDOC, pages_item );
   treeH->addItem( i18n("Installation"), THDOC, pages_item );
   treeH->addItem( i18n("Programs"), THDOC, pages_item );
@@ -130,6 +133,7 @@ void CDocTree::refresh(CProject* prj)
 	treeH->addItem( i18n("Thanks"), THDOC, pages_item );
 	treeH->addItem( i18n("Copyright"), THDOC, pages_item );
   treeH->setLastItem( pages_item );
+	
 
   //Qt/KDE Libraries
   lib_item = treeH->addRoot( i18n("Qt/KDE Libraries"), THFOLDER );
@@ -283,12 +287,34 @@ void CDocTree::slotSelectionChanged(QListViewItem* item){
 
   config_kdevelop->setGroup("Doc_Location");
     
-	if(text == i18n("Programming Handbook") ){
+	if(text == i18n("Tutorials") ){
 		// first try the locale setting
 		file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
 		if( !QFileInfo( file ).exists() ){
 	    // not found: use the default
 	    file = strpath + "default/" + "kdevelop/tutorial.html";
+		}
+	
+		emit fileSelected(file);
+		return;
+  }
+	if(text == i18n("Programming Handbook") ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/programming.html";
+		if( !QFileInfo( file ).exists() ){
+	    // not found: use the default
+	    file = strpath + "default/" + "kdevelop/programming.html";
+		}
+	
+		emit fileSelected(file);
+		return;
+  }
+	if(text == i18n("KDE Library Reference") ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/kde_libref.html";
+		if( !QFileInfo( file ).exists() ){
+	    // not found: use the default
+	    file = strpath + "default/" + "kdevelop/kde_libref.html";
 		}
 	
 		emit fileSelected(file);
@@ -425,6 +451,7 @@ void CDocTree::slotSelectionChanged(QListViewItem* item){
 		emit fileSelected(config_kdevelop->readEntry(text));
   }
 }
+
 
 
 

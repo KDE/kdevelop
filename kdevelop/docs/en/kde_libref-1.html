@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE Library Reference Guide: Introduction</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-2.html">Next</A>
+ Previous <A HREF="kde_libref.html#toc1">Table of Contents</A>
+</P>
+<H3><A NAME="s1">1. Introduction</A></H3>
+
+<P>As the K Desktop Environment offers an easy way for application designers to offer their products with an intuitive way of user
+interaction, it provides all means to solve common tasks by a set of library classes that extend the facilities of the Qt toolkit.
+This also allows a unique look to applications as well as interaction with other programs and the window manager. This handbook
+therefore intends to provide an introduction into the usage of the KDE libraries that ship with the KDE to enable developers to find
+easy solutions for common programming issues and explains why certain techinques and classes should be used when creating applications
+that are targeting the K Desktop Environment.
+<P>Basically, KDE offers a set of standards that allow a unique look and usage of applications that should be watched when designing
+programs. A lot of tasks are done automatically, such as:
+<P>
+<UL>
+<LI>Session Management</LI>
+<LI>Standard keyboard accelerator configuration</LI>
+<LI>Font, Color and Style changing</LI>
+<LI>Theme support (KDE 1.1.2 and higher)</LI>
+<LI>Internationalization</LI>
+</UL>
+<P>Therefore, theses issues only have to be mentioned in their functionality for complete information. Application developers only have to
+care about what their program is intended to do and where KDE can help. There, KDE offers user interfaces that extend the Qt tookit
+where necessary. If both libraries offer similar solutions, KDE developers should (in most cases) use the methods provided by the KDE
+libraries.
+<P>Here, KDE offers a set of widgets that can be used for creating application specific dialogs and views. Examples are
+<UL>
+<LI>KSeparator, offering a common separator line</LI>
+<LI>KColorButton, offering a push button displaying a color</LI>
+</UL>
+<P>Normally, applications ask the user to select various values. Here, the libraries provide easy means to get these values by complex
+widgets that are ready to use and are already known to the user by the KDE desktop, such as:
+<P>
+<UL>
+<LI>File dialogs,</LI>
+<LI>Color dialogs,</LI>
+<LI>Font dialogs,</LI>
+<LI>Keyboard configuration dialogs</LI>
+</UL>
+<P>These should be used whereever a user setting is required as it simplifies the programmer's work, extends the application's facility
+dramatically and provide a common look.
+<P>The Qt library is adressed in this handbook as far as it offers solutions not provided by KDE.
+<P>
+<H3><A NAME="ss1.1">1.1 About this Handbook</A>
+</H3>
+
+<P>The descriptions for various classes are taken from the KDE library documentation.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-2.html">Next</A>
+ Previous <A HREF="kde_libref.html#toc1">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -1,0 +1,335 @@
+
+<!doctype linuxdoc system>
+<article>
+<title>The KDE Library Reference Guide
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
+<date>Version 0.1 , Mon Jun 21 1999
+<abstract>
+The Reference Guide to C++ Application Design for the K Desktop Environment (KDE). This handbook itself is part of the
+KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
+id="Copyright" name="Copyright"> for more information.
+</abstract>
+
+<toc>
+
+<sect>Introduction
+<p>
+As the K Desktop Environment offers an easy way for application designers to offer their products with an intuitive way of user
+interaction, it provides all means to solve common tasks by a set of library classes that extend the facilities of the Qt toolkit.
+This also allows a unique look to applications as well as interaction with other programs and the window manager. This handbook
+therefore intends to provide an introduction into the usage of the KDE libraries that ship with the KDE to enable developers to find
+easy solutions for common programming issues and explains why certain techinques and classes should be used when creating applications
+that are targeting the K Desktop Environment.
+
+Basically, KDE offers a set of standards that allow a unique look and usage of applications that should be watched when designing
+programs. A lot of tasks are done automatically, such as:
+
+<itemize>
+<item>Session Management
+<item>Standard keyboard accelerator configuration
+<item>Font, Color and Style changing
+<item>Theme support (KDE 1.1.2 and higher)
+<item>Internationalization
+</itemize>
+
+Therefore, theses issues only have to be mentioned in their functionality for complete information. Application developers only have to
+care about what their program is intended to do and where KDE can help. There, KDE offers user interfaces that extend the Qt tookit
+where necessary. If both libraries offer similar solutions, KDE developers should (in most cases) use the methods provided by the KDE
+libraries.
+
+Here, KDE offers a set of widgets that can be used for creating application specific dialogs and views. Examples are
+<itemize>
+<item>KSeparator, offering a common separator line
+<item>KColorButton, offering a push button displaying a color
+</itemize>
+
+Normally, applications ask the user to select various values. Here, the libraries provide easy means to get these values by complex
+widgets that are ready to use and are already known to the user by the KDE desktop, such as:
+
+<itemize>
+<item>File dialogs,
+<item>Color dialogs,
+<item>Font dialogs,
+<item>Keyboard configuration dialogs
+</itemize>
+
+These should be used whereever a user setting is required as it simplifies the programmer's work, extends the application's facility
+dramatically and provide a common look.
+
+The Qt library is adressed in this handbook as far as it offers solutions not provided by KDE.
+
+<sect1>About this Handbook
+<p>
+The descriptions for various classes are taken from the KDE library documentation.
+
+<sect>Class Categories
+<p>
+The KDE/Qt C++ class libraries offer easy solutions to extend applications dramatically with a minimum amount of coding on the side of
+the application programmer. This chapter therefore sorts the classes provided towards their usage by certain categories:
+
+<itemize>
+<item>Baseclass
+<item>Application architecture classes	
+	<itemize>
+	<item>Application objects of KDE
+	<item>Application configuration
+	<item>Main Windows
+	</itemize>
+<item>User Interface Objects
+	<itemize>
+	<item>Views
+	<item>Dialogs
+	<item>Control Elements
+	<item>Menus
+	</itemize>
+<item>General purpose classes
+	<itemize>
+	<item>Files
+	<item>Data objects
+	<item>Graphics
+	</itemize>
+</itemize>
+
+<sect1>Baseclass
+<p>
+
+Most of the KDE/Qt classes have <tt/QObject/ as their baseclass in their inheritance hierarchy. <tt/QObject/ can be described as a
+baseclass because it offers the usage of Qt's signal/slot mechanism which allows object interaction within the application by avoiding
+virtual methods and should be used as the baseclass for any self-created classes that are supposed to emit signals or can connect to
+signals by slots.
+
+<sect1>Application Architecture Classes
+<p>
+KDE applications usually consist of a set of objects that interact with each other. The programmer has to use the provided classes to
+create a KDE application either by creating a class instance or by inheritance. A typical application contains:
+
+<itemize>
+<item>One application object of <tt/KApplication/
+<item>One mainview class derived from <tt/KTMainWindow/
+<item>A class derived from <tt/QWidget/ to create the view area
+</itemize>
+
+
+<sect2>Application objects of KDE
+<p>
+The K Desktop Environment provides a set of functionality that an application can use to integrate into the KDE. The class
+<tt/KApplication/ therefore is the baseclass for any application that targets KDE. A KDE application only contains one object of the
+class <tt/KApplcation/ that is created in the application's <tt/main()/ function. The <tt/KApplication/ object is responsible for
+providing the basic interfaces and objects towards the desktop and interprets the commandline arguments of an application. As the
+instance is a non-visible, but the top-parent object, the following rules have to be watched:
+
+<itemize>
+<item>the application is terminated by <tt/kapp->quit()/.
+<item>the object that is representing the graphical interface has to be set the main widget with <tt/setTopWidget()/ (for wigets not
+inherited by <tt/KTMainWindow/)
+</itemize>
+
+The <tt/KApplication/ object provides:
+<itemize>
+<item>access to the KDE File System
+<item>a session configuration object
+<item>a configuration object
+<item>internationalization by the locale object
+<item>changing of the visible application objects by signals
+</itemize>
+
+<bf/Dependencies:/ -lkdecore -lqt
+
+<bf/Includes:/ <tt/#include &lt;kapp.h&gt;/
+
+The <tt/kdeui/ library additionally offers two classes that inherit <tt/KApplication/ for specialized purposes:
+
+<sect2>KWMModuleApplication
+<p>
+<bf/Includes:/ <tt/#include &lt;kwmmapp.h&gt;/
+
+<bf/Dependencies:/ -lkdeui -lkdecore -lqt
+
+The class KWMModuleApplication is the base class for KDE windowmanager modules. It mainly informs a module about all currently managed
+windows and changes to them (via Qt signals). There are no methods to manipulate windows. These are defined in the class KWM (see
+kwm.h). An example for using KWMModuleApplication is kcontrol.
+
+<sect2>KControlApplication
+<p>
+
+<bf/Includes:/ <tt/#include &lt;kcontrol.h&gt;/
+
+<bf/Dependencies:/ -lkdeui -lkdecore -lqt
+
+KControlApplication is the common base for setup applications. It provides a tab dialog and functionality common to most setup
+programs. The configuration dialogs for the KDE are examples of KControlApplications.
+
+<sect2>KWM
+<p>
+<bf/Includes:/ <tt/#include &lt;kwm.h&gt;/
+
+<bf/Dependencies:/ -lkdeui -lkdecore -lqt
+
+The KWM class provides a set of static methods to interact with the window and sessionmanager. Therefore, call any member with
+
+KWM::&lt;method()&gt;
+
+depending on the purpose of the desired functionality.
+
+
+<sect2>Application Configuration
+<p>
+The class <tt/KConfig/ provides the usage of a configuration object which can write its entries into configuration files. Dependent of
+the values to read and write you have to call the methods of the class <tt/KConfigBase/.
+
+The <tt/KApplication/ object provides an application configuration object with a resource file by default which is stored in the user's
+kde-directory as well as the session management file to store information between sessions.
+
+For internationalization, the <tt/KApplication/ object uses the class <tt/KLocale/ to translate localized entries dependend on the
+selected language. Instead of using the <tt/klocale->translate()/ method, KDE applications should use the <tt/i18n()/ macro that
+contains the string to be translated as the message extraction depends on this macro.
+
+<sect2>Main Windows
+<p>
+As the application's <tt/KApplication/ instance is non-visible, it only provides the basic means to create a KDE application.
+Therefore a KDE application needs to have a main window representing the application towards the user graphically. The main window
+usually constists of a widget which can be as simple as a pure button up to the complex <tt/KTMainWindow/ widget, offering the means to
+create a full-featured main window with geometry management, session management support, menubar, toolbars and statusbar.
+
+Generally, every main window has to be set main widget with <tt/KApplication/'s <tt/setTopWidget()/ method. An exception is a main
+window that inherits <tt/KTMainWindow/.
+
+The main window usually takes the responsibility to terminate the application by providing a user interface that is connected to
+<tt/KApplication::quit()/, easiely used by <tt/kapp->quit()/.
+
+Most KDE applications will use <tt/KTMainWindow/ to represent the application graphically.
+
+
+<sect1>User Interface Objects
+<p>
+This section covers the user interface object the KDE libraries provide. By category, these can be devided by their purpose. A user
+element can be:
+
+<itemize>
+<item>a view, representing the data an application is intended to produce and allowing the methods to manipulate the contents.
+<item>dialogs, allowing the user to configure application settings, informs about the application status and changes values.
+<item>control elements which are a part of a wider graphical interface and are ready to use
+<item>menus which allow calling of methods directly.
+</itemize>
+
+<sect2>Views
+<p>
+View are generally the content area of an application. Therefore it can be the main widget or a part of a main widget that additionally
+offers a set of functionality such as <tt/KTMainWindow/
+
+The KDE libraries offer a set of ready-to use views which can be inherited to advance the desired functionality:
+<itemize>
+<item>KTabListBox: offers a multi-column listbox where the user can change the rows with drag'n drop.
+<item>KTreeList: inherited from QTableView, offering a collapsable tree. This could be used instead of QListView.
+<item>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.
+<item>KPanner and KNewPanner: manage two child widgets like QSplitter.
+<item>KHTMLView: a HTML-interpreting widget (khtmlw)
+</itemize>
+
+For use with <tt/KTMainWindow/, create your view instance and call <tt/setView(QWidget*)/ to enable the management by the
+<tt/KTMainWindow/ instance.
+
+Individual views are usually created by inheritance of <tt/QWidget/.
+
+<sect2>Dialogs
+<p>
+Dialogs are a main part of the user interaction whereever the application requires parameters that have to be set by the user.
+Fortunately, the KDE library already offers a set of dialogs that are ready to use for standard parameters such as fonts and colors. In
+any case wehre these types of information is requested by the user, the application should make use of these standard dialogs.
+
+In cases where the given dialogs don't fit the requirements, you have to inherit from <tt/QWidget/ or <tt/QDialog/ and create your own
+dialog either directly coded with geometry management or by creating it visually with KDevelop's dialogeditor.
+
+The KDE libraries offer the following dialogs:
+<itemize>
+<item>KColorDialog: selects a color value
+<item>KWizard: base dialog class to create wizards
+<item>KEdGotoLine: Go-to-Line dialog for editors
+<item>KEdReplace: Search and replace dialog for editors
+<item>KEdSrch: search dialog for editors
+<item>KFontDialog: font selection dialog
+<item>KIconLoaderDialog: Icon selection dialog
+<item>KKeyDialog: keyboard accelerator configuration dialog
+<item>KMsgBox: message box dialog with up to four configurable buttons
+<item>KFileDialog: (kfile) file dialog to open and save files
+<item>KSpellDlg: (kspell) spellchecking dialog for use with ISpell
+<item>DatePickerDialog: (kab) date selection dialog
+</itemize>
+
+Additionally, the Qt library offers:
+<itemize>
+<item>QFileDialog
+<item>QMessageBox
+<item>QPrintDialog
+<item>QProgressDialog
+</itemize>
+
+<sect1>Control Elements
+<p>
+Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
+control elements that the Qt library provides, KDE offers:
+
+<itemize>
+<item>KButton: active raise-lower button
+<item>KButtonBox: manages buttons
+<item>KColorButton: button displaying a color setting
+<item>KCombo: similar to QComboBox
+<item>KDatePicker: Date selection widget
+<item>KIntegerLine: lineedit that only accepts integer values
+<item>KLedLamp: LED lamp
+<item>KLined: line edit
+<item>KPanner: panner devider
+<item>KNewPanner: panner devider managing two widgets
+<item>KPopupMenu: popup menu with title
+<item>KRestrictedLine: lineedit that only accepts certain input
+<item>KSelector: value selector
+<item>KSeparator: standard separator
+<item>KSlider: slider widget
+<item>KSpinBox: like QSpinBox
+<item>KTabCtl: tabulator widget
+<item>KTreeList: tree list widget
+</itemize>
+
+<sect1>General Purpose Classes
+<p>
+<sect2>Files
+<p>
+For loading and saving files, use the class <tt/QFile/ which operates with streams.
+<sect2>Data Objects
+<p>
+The Qt library supports data objects by classes that offer handling of lists, arrays, streams, strings and the like. See the Qt
+documentation for mor information.
+
+<sect2>Graphics
+<p>
+Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
+<tt/QPainter/.
+
+<sect>Copyright<label id="Copyright">
+<p>
+<tscreen><verb>
+
+KDevelop Copyright 1998,1999 The KDevelop Team.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+</verb></tscreen>
+
+</article>
+
+
+
+
+
+

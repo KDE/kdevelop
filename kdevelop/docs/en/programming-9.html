@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDevelop Programming Handbook: Extending the Documentation with SGML</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="programming-10.html">Next</A>
+ <A HREF="programming-8.html">Previous</A>
+ <A HREF="programming.html#toc9">Table of Contents</A>
+</P>
+<H3><A NAME="s9">9. Extending the Documentation with SGML</A></H3>
+
+<P>Due to the fact that projects often lack a complete set of user documentation, all KDevelop projects contain a pre-build handbook that
+can be easily adapted; therefore fulfilling another goal of KDE: providing enough online-help to support users that are not familiar
+with an application. This chapter therefore introduces you on how to extend the provided documentation template and what you have to do
+to make it available to the user.
+<P>
+<H3><A NAME="ss9.1">9.1 Why SGML ?</A>
+</H3>
+
+<P>SGML is a text formatting system that allows to create output in various formats; therefore technical documentation has to be written
+only once and then transfered to the desired output. The most used output is probably HTML to provide online help through web-browsers
+in a time where internet standards are available even on single-desktop systems. KDE makes use of HTML documentation by it's KDEHelp
+application where all KDE applications are listed and give access to their user manuals. To provide a unique look to KDE documentation,
+the KDE-Software Development Kit (SDK) contains a tool called <CODE>ksgml2html</CODE> which itself uses the sgmltools' sgml2html program to
+extend the HTML output with the KDE logo.
+<P>But besides this, sgmltools allow output in plain text, GNU info, LyX, DVI, Postscript and RTF; therefore the SGML documentation can be
+easily used to provide a printed version of the online handbook.
+<P>
+<H3><A NAME="ss9.2">9.2 What the Documentation already contains</A>
+</H3>
+
+<P>When creating a KDevelop project, the subdirectory docs/en already contains the index.sgml documentation file and the already produced
+output HTML files. Those are already included into the project as well as their installation destination is preset to the KDE HTML
+directory. The documentation is already adapted to your project name, version number and the programmer's information. Further, the
+output covers the index.html file containing the table of contents (which is opened by KDE Help when the user requests help); an
+installation introduction and a copyright information.
+<P>Therefore, when extending the documentation, you only have to concentrate on the information you want to add. Mind that for KDE
+projects you have to run "Make Doc-Handbook" from the "Project" menu again after the project is created. The index.sgml file is again
+processed by <CODE>ksgml2html</CODE> and the logo is added. Then open the RFV and add the <CODE>logo.gif</CODE> file to the project and set the file
+properties correctly to install the logo file into the same location the HTML files will go.
+<P>
+<H3><A NAME="ss9.3">9.3 Adding new Pages</A>
+</H3>
+
+<P>Adding another page to the documentation is very easy by adding another &lt;sect&gt;, followed by the name of the chapter to the
+index.sgml file at the location where your chapter will appear. For that, search the &lt;sect&gt; that is the chapter before and add
+your section after that into the sgml file. Whenever you want to rebuild your documentation output to control for errors, select "Make
+Doc-Handbook" from the "Project" menu which will invoke either sgml2html or ksgml2html depending on the project type. If errors occur,
+you are able to locate the error by clicking on the error message or selecting "next error" from the "View" menu.
+<P>For each &lt;sect&gt; you added, another HTML output file will be generated; therefore all chapters after the inserted will change
+their chapters. This is important if you call your HTML documentation pages from within your application- mind that you have to whatch
+the page you call for help.
+<P>
+<H3><A NAME="ss9.4">9.4 How to call Help in Dialogs</A>
+</H3>
+
+<P>Calling help in dialogs is often done by adding a Help-button; then you add a slot that is called when the button gets pressed. Within
+the slot implementation, call
+<P>
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+kapp->invokeHTMLHelp( QString aFilename, QString aTopic );
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>where <CODE>aFilename</CODE> is the the filename to be called within your HTML documentation directory of the application; e.g index-3.html.
+<CODE>aTopic</CODE> then is the topic that is to be called. The hash prefix is automatically added; just enter the chapter you want to have on
+this page, actually this would be a subsection's name.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="programming-10.html">Next</A>
+ <A HREF="programming-8.html">Previous</A>
+ <A HREF="programming.html#toc9">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
