@@ -201,3 +201,5 @@ namespace FileCreate {
   }
 
 }
+
+#include "filecreate_widget2.moc"

@@ -104,3 +104,5 @@ namespace FileCreate {
 
 }
 
+
+#include "filecreate_widget.moc"

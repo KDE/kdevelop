@@ -64,3 +64,5 @@ namespace FileCreate {
   
   
 }
+
+#include "filecreate_filedialog.moc"
