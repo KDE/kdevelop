@@ -146,10 +146,12 @@ void KDlgWidgets::clicked_QListView()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QListView");
 }
+#if 0
 void KDlgWidgets::clicked_KCombo()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("KCombo");
 }
+#endif
 void KDlgWidgets::clicked_KDatePicker()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("KDatePicker");
@@ -259,7 +261,9 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QListView.xpm",     "QListView",      clicked_QListView     ,i18n("A list view lets your application display a multi-column list or tree."));
   kdebtn = true;
   macroAddButton("kdlg_KSeparator.xpm",       "KSeparator",    clicked_KSeparator     ,i18n("'KSeparator' is a small class to provide a identically look of horizontal or vertical lines in all KDE applications."));
+#if 0
   macroAddButton("kdlg_KCombo.xpm",     "KCombo",      clicked_KCombo     ,i18n("Just like QComboBox."));
+#endif
   macroAddButton("kdlg_KColorButton.xpm",     "KColorButton",  clicked_KColorButton   ,i18n("This is a button displaying the selected color."));
   macroAddButton("kdlg_KKeyButton.xpm",       "KKeyButton",    clicked_KKeyButton     ,i18n("A push button that looks like a keyboard key."));
   macroAddButton("kdlg_KRestrictedLine.xpm",  "KRestrictedLine",clicked_KRestrictedLine,i18n("Restricted Editline: Only selected Characters are valid input."));

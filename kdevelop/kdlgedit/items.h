@@ -46,7 +46,7 @@
   #define INC_GROUPBOX
   #define INC_LISTVIEW
   #define INC_KCOLORBUTTON
-  #define INC_KCOMBO
+//  #define INC_KCOMBO
   #define INC_KDATEPICKER
   #define INC_KDATETABLE
 
@@ -317,7 +317,7 @@ class KDlgItem_KColorButton : public KDlgItem_Base
 #include <kcombo.h>
 class KDlgItem_KCombo : public KDlgItem_Base
 {
-  Q_OBJECT
+//  Q_OBJECT
 
   #define classname KDlgItem_KCombo
   #define widgettype KCombo

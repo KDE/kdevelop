@@ -790,7 +790,9 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("QScrollBar", KDlgItem_ScrollBar )
     macro_CreateIfRightOne("QGroupBox", KDlgItem_GroupBox )
     macro_CreateIfRightOne("QListView", KDlgItem_ListView )
+#if 0
     macro_CreateIfRightOne("KCombo", KDlgItem_KCombo )
+#endif
     macro_CreateIfRightOne("KDatePicker", KDlgItem_KDatePicker )
     macro_CreateIfRightOne("KDateTable", KDlgItem_KDateTable )
     macro_CreateIfRightOne("KColorButton", KDlgItem_KColorButton )

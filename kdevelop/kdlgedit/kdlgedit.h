@@ -102,7 +102,9 @@ void slotFileNew();
   void generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+#if 0
   void generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+#endif
   void generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateKDateTable(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateKKeyButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);

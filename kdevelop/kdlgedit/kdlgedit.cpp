@@ -602,7 +602,9 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("QSpinBox","qspinbox.h",generateQSpinBox);
   generateIfWidget("KColorButton","kcolorbtn.h",generateKColorButton);
   generateIfWidget("QListView","qlistview.h",generateQListView);
+#if 0
   generateIfWidget("KCombo","kcombo.h",generateKCombo);
+#endif
   generateIfWidget("KDatePicker","kdatepik.h",generateKDatePicker);
   generateIfWidget("KDateTable","kdatetbl.h",generateKDateTable);
   generateIfWidget("KKeyButton","kkeydialog.h",generateKKeyButton);
@@ -1067,7 +1069,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
     *stream << "\n";
 }
 
-
+#if 0
 void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
@@ -1082,7 +1084,7 @@ void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString 
 
     *stream << "\n";
 }
-
+#endif
 
 void KDlgEdit::generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {

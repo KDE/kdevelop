@@ -81,7 +81,9 @@ class KDlgWidgets : public QWidget  {
   void clicked_QScrollBar();
   void clicked_QGroupBox();
   void clicked_QListView();
-  void clicked_KCombo();
+#if 0	
+//  void clicked_KCombo();
+#endif
   void clicked_KDatePicker();
   void clicked_KDateTable();
   void clicked_KColorButton();
