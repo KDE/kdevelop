@@ -48,11 +48,7 @@ public:
 	{ return dir_combo->currentText(); }
     bool recursiveFlag() const
 	{ return recursive_box->isChecked(); }
-    void show()
-    {
-        pattern_combo->setFocus();
-        QDialog::show();
-    }
+    void show();
 
 #ifdef IGNORE_SCM_DIRS
     bool ignoreSCMDirsFlag() const

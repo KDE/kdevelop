@@ -275,4 +275,14 @@ void GrepDialog::slotSearchClicked()
     hide();
 }
 
+void GrepDialog::show()
+{
+    // not beautiful, but works with all window
+    // managers and Qt versions
+    if (isVisible())
+	QDialog::hide();
+    QDialog::show();
+    pattern_combo->setFocus();
+}
+
 #include "grepdlg.moc"
