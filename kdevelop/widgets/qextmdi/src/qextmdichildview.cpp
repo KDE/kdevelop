@@ -10,8 +10,9 @@
 //                                         classes and a Qt-based library
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
+//                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2001 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
 //                                         Falk Brettschneider
 //    email                :  gigafalk@yahoo.com (Falk Brettschneider)
@@ -45,12 +46,27 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_bToolView(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
-   if( caption) 
+   if( caption)
       m_szCaption = caption;
    else
       m_szCaption = QString(tr("Unnamed"));
+   m_sTabCaption = m_szCaption;
 
-   // mmorin
+   setFocusPolicy(ClickFocus);
+}
+
+//============ QextMdiChildView ============//
+
+QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
+: QWidget(parentWidget, name, f)
+  ,m_focusedChildWidget(0L)
+  ,m_firstFocusableChildWidget(0L)
+  ,m_lastFocusableChildWidget(0L)
+  ,m_stateChanged(TRUE)
+  ,m_bToolView(FALSE)
+{
+   setGeometry( 0, 0, 0, 0);  // reset
+   m_szCaption = QString(tr("Unnamed"));
    m_sTabCaption = m_szCaption;
 
    setFocusPolicy(ClickFocus);
@@ -415,6 +431,39 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          if (list->find(obj) != -1) {
             m_focusedChildWidget = (QWidget*)obj;
          }
+      }
+   }
+   else if ( (e->type() == QEvent::ChildInserted) && isAttached() ) {
+      // if we got a new child and we are attached to the MDI system we 
+      // install ourself as event filter for the new child and its children
+      // (as we did when we were added to the MDI system). 
+      QObject* pNewChild = ((QChildEvent*)e)->child();
+      if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) ) {
+         QWidget* pNewWidget = (QWidget*)pNewChild;
+         QObjectList *list = pNewWidget->queryList( "QWidget" );
+         list->insert(0, pNewChild);         // add the new child to the list too, just to save code
+         QObjectListIt it( *list );          // iterate over all new child widgets
+         QObject * obj;
+         while ( (obj=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)obj;
+            ++it;
+            widg->installEventFilter(this);
+            if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
+               if( m_firstFocusableChildWidget == 0)
+                  m_firstFocusableChildWidget = widg;  // first widget
+               m_lastFocusableChildWidget = widg; // last widget
+               //qDebug("*** %s (%s)",widg->name(),widg->className());
+            }
+            else {
+               if( widg->focusPolicy() == QWidget::WheelFocus) {
+                  if( m_firstFocusableChildWidget == 0)
+                     m_firstFocusableChildWidget = widg;  // first widget
+                  m_lastFocusableChildWidget = widg; // last widget
+                  //qDebug("*** %s (%s)",widg->name(),widg->className());
+               }
+            }
+         }
+         delete list;                        // delete the list, not the objects
       }
    }
    return FALSE;                           // standard event processing
