@@ -278,7 +278,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         subMenu->insertItem( actionAddBinary->text(), this, SLOT(slotAddBinary()) );
         subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
 
-        popup->insertSeparator();
+        subMenu->insertSeparator();
         subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
         subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
