@@ -4,5 +4,5 @@ Name=KDevMakeBuilder
 Comment=KDevelop Automake Importer
 Icon=gear
 ServiceTypes=KDevelop/ProjectBuilder
-X-KDE-Library=libkdevautomakeimporter
-X-KDevelop-ProjectImporter=
+X-KDE-Library=libkdevmakebuilder
+X-KDevelop-ProjectBuilder=

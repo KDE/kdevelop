@@ -21,6 +21,8 @@
 
 #include <kdevprojectbuilder.h>
 
+class KDialogBase;
+
 /**
 @author Roberto Raggi
 */
@@ -28,7 +30,7 @@ class KDevMakeBuilder: public KDevProjectBuilder
 {
     Q_OBJECT
 public:
-    KDevMakeBuilder(QObject *parent = 0, const char *name = 0);
+    KDevMakeBuilder(QObject *parent = 0, const char *name = 0, const QStringList &args = QStringList());
     virtual ~KDevMakeBuilder();
     
     virtual KDevProject *project() const;
@@ -41,6 +43,9 @@ public:
     virtual bool build(ProjectItemDom dom = ProjectItemDom());
     virtual bool clean(ProjectItemDom dom = ProjectItemDom());
     virtual bool execute(ProjectItemDom dom = ProjectItemDom());
+    
+private slots:
+    void projectConfigWidget(KDialogBase *dialog);
     
 private:
     KDevProject *m_project;
