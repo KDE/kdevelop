@@ -1,6 +1,16 @@
+2004-10-27  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Implemented ruby class '@@' and '@' instance variables in the class browser. 
+
+ * Ruby doesn't have declarations for class or instance variables, and so a variable is 'declared'
+   when it is first  assigned to. So the first assignment encountered in the ruby source is used, 
+   unless the variable is set in the iniitaiize() method when that is considered as the 'first'.
+
+ * The type of the variable is inferred from the type of the thing on the rhs of the assignment to it.
+
 2004-10-27  Amilcar Lucas <amilcar@kdevelop.org>
-	Exclude non API classes from the doxygen API documentation. 
-	Please use the "doxygen doxyfile" command to test it. 
+ Exclude non API classes from the doxygen API documentation. 
+ Please use the "doxygen doxyfile" command to test it. 
 
 2004-10-27 Alexander Dymo <adymo@kdevelop.org>
     The first step in creating RubyQt/Korundum RAD environment -

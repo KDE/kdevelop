@@ -159,7 +159,7 @@ void RubySupportPart::savedFile(const KURL &fileName)
 
 KDevLanguageSupport::Features RubySupportPart::features()
 {
-  return Features(Classes | Functions | Declarations | Signals | Slots);
+  return Features(Classes | Functions | Variables | Declarations | Signals | Slots);
 }
 
 void RubySupportPart::parse(const QString &fileName)
@@ -179,11 +179,13 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp memberre("'([A-Za-z0-9_ &*]+\\s)?([A-Za-z0-9_]+)\\([^)]*\\)',?");
   QRegExp begin_commentre("^*=begin");
   QRegExp end_commentre("^*=end");
+  QRegExp variablere("(@@?[A-Za-z0-9_]+)\\s*=\\s*((?:([A-Za-z0-9_:.]+)\\.new)|[\\[\\\"'%:/\\?]|%r|<<|true|false|^\\?|0[0-7]+|[-+]?0b[01]+|[-+]?0x[1-9a-fA-F]+|[-+]?[0-9_\\.e]+|nil)?");
  
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
 
   ClassDom lastClass;
+  FunctionDom lastMethod;
   int lastAccess = CodeModelItem::Public;
   QString rawline;
   QCString line;
@@ -245,7 +247,9 @@ void RubySupportPart::parse(const QString &fileName)
 	    // A ruby class/singleton method of the form <classname>.<methodname>
 	  	methodDecl->setStatic( true );
 	  }
-
+      
+	  lastMethod = method;
+	  
       if (lastClass != 0 && rawline.left(3) != "def") {
 		QStringList scope( lastClass->name() );
 		method->setScope( scope );
@@ -385,6 +389,52 @@ void RubySupportPart::parse(const QString &fileName)
 		  }
         }
 	  }	  
+   } else if (variablere.search(line) != -1 && lastClass != 0) {
+     VariableDom attr;
+     if ( lastClass->hasVariable( variablere.cap(1) ) ) {
+	   attr = lastClass->variableByName( variablere.cap(1) );
+	 } else {
+       attr = codeModel()->create<VariableModel>();
+       attr->setName( variablere.cap(1) );
+       attr->setFileName( fileName );
+       attr->setStartPosition( lineNo, 0 );
+ 	   attr->setAccess( CodeModelItem::Private );
+	   if (QRegExp("^@@").search(attr->name()) != -1) {
+	     attr->setStatic( true );
+	   }
+       lastClass->addVariable( attr );
+	 }
+	 
+	 // Give priority to any variable initialized in the constructor
+	 // Otherwise, take the first one found in the source file
+	 if (lastMethod != 0 && lastMethod->name() == "initialize") {
+       attr->setFileName( fileName );
+       attr->setStartPosition( lineNo, 0 );
+	 }
+	 
+	 if (QRegExp("^(/|%r)").search(variablere.cap(2)) != -1) {
+       attr->setType( "Regexp" );
+	 } else if (QRegExp("^[\\\"'%<]").search(variablere.cap(2)) != -1) {
+       attr->setType( "String" );
+	 } else if (QRegExp("^\\[").search(variablere.cap(2)) != -1) {
+       attr->setType( "Array" );
+	 } else if (QRegExp("^\\{").search(variablere.cap(2)) != -1) {
+       attr->setType( "Hash" );
+	 } else if (QRegExp("^:").search(variablere.cap(2)) != -1) {
+       attr->setType( "Symbol" );
+	 } else if (QRegExp("\\.\\.").search(variablere.cap(2)) != -1) {
+       attr->setType( "Range" );
+	 } else if (variablere.cap(2) == "true" || variablere.cap(2) == "false") {
+       attr->setType( variablere.cap(2) );
+	 } else if (  QRegExp("[0-9_]+").exactMatch(variablere.cap(2))
+	              || QRegExp("^[-+]?(0x|0|0b|\\?)").search(variablere.cap(2)) != -1 ) 
+	 {
+       attr->setType( "Integer" );
+	 } else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(variablere.cap(2))) {
+       attr->setType( "Float" );
+	 } else if (variablere.cap(2) != "nil") {
+       attr->setType( variablere.cap(3) );
+	 }
    } else if (begin_commentre.search(line) != -1) {
      while (!stream.atEnd() && end_commentre.search(line) == -1) {
        rawline = stream.readLine();
