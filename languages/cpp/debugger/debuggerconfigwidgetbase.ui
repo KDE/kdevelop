@@ -226,9 +226,9 @@ Otherwise leave it unchecked.</string>
             <property name="whatsThis" stdset="0">
                 <string>The goal of "Run shell script" is to start gdbserver (or an application with
 embedded gdbstub on the target). Key command here is:
-        ssh ${ruser} gdbserver jeloin:2345 "${remote##/*/}" 
-where jeloin:2345 is the host and a port. 
-"${remote##/*/}" is magic for remote filename without (the host local) path.
+        ssh ${ruser} gdbserver jeloin:2345 "${remote##/*/}"
+where jeloin:2345 is the host and a port.
+"${remote##/*/}" is magic for remote file name without (the host local) path.
 
 The goal of "Run gdb script" (gdb commands) is to connect with that target.
 Key command in this file is: target remote dox:2345

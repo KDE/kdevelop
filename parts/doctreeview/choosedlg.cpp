@@ -47,7 +47,7 @@ ChooseDlg::ChooseDlg(QWidget *parent, const char *name, DocTreeViewPart *part)
     lv->setMinimumWidth(600);
 	lv->setAllColumnsShowFocus( true );
     lv->addColumn(i18n("Topic"));
-    lv->addColumn(i18n("Filename"));
+    lv->addColumn(i18n("File Name"));
     layout->addWidget(lv);
         
     connect( lv, SIGNAL ( executed(QListViewItem *) ), this, SLOT ( slotItemExecuted(QListViewItem *) ) );

@@ -66,7 +66,7 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>&amp;Username:</string>
+                <string>&amp;User name:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>editUsername</cstring>
@@ -107,7 +107,7 @@
                 <cstring>TextLabel5</cstring>
             </property>
             <property name="text">
-                <string>&amp;Hostname:</string>
+                <string>&amp;Host name:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>editHostname</cstring>
