@@ -1,3 +1,8 @@
+2002-06-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+        * add default support to DomUtil
+        * doctreeview: add configuration for KDElibs
+        * cppsupport: add configuration for file templates
+        
 2002-05-31  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* kdevprj2kdevelop for converting project files
