@@ -94,6 +94,7 @@ void Core::running(KDevPart *which, bool runs)
 
 void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 {
+  emit contextMenu(popup, context);
 }
 
 
