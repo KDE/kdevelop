@@ -29,6 +29,8 @@
 #include <ktexteditor/cursorinterface.h>
 #include <ktexteditor/selectioninterface.h>
 #include <ktexteditor/highlightinginterface.h>
+#include <ktexteditor/searchinterface.h>
+#include <ktexteditor/markinterface.h>
 #include <qptrlist.h>
 
 class QWidget;
@@ -51,7 +53,9 @@ class QEditorPart : public KTextEditor::Document,
 					public KTextEditor::UndoInterface,
 					public KTextEditor::CursorInterface,
 					public KTextEditor::SelectionInterface,
-					public KTextEditor::HighlightingInterface
+					public KTextEditor::HighlightingInterface,
+					public KTextEditor::SearchInterface,
+					public KTextEditor::MarkInterface
 {
 	Q_OBJECT
 public:
@@ -84,6 +88,32 @@ public:
 signals:
 	void fileNameChanged();
 
+// -- MarkInterface ------------------------------------------------------------------------
+public:
+	virtual uint mark (uint line);
+
+	virtual void setMark (uint line, uint markType);
+	virtual void clearMark (uint line);
+
+	virtual void addMark (uint line, uint markType);
+	virtual void removeMark (uint line, uint markType);
+
+	virtual QPtrList<KTextEditor::Mark> marks ();
+	virtual void clearMarks ();
+	
+signals:
+	void marksChanged();
+	
+// -- SearchInterface ----------------------------------------------------------------------
+public:
+	virtual bool searchText (unsigned int startLine, unsigned int startCol, 
+			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol, 
+			unsigned int *matchLen, bool casesensitive = true, bool backwards = false);
+			
+	virtual bool searchText (unsigned int startLine, unsigned int startCol, 
+			const QRegExp &regexp, unsigned int *foundAtLine, 
+			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards = false);
+	
 // -- Document ------------------------------------------------------------------------------
 public:
 	/**

@@ -32,6 +32,8 @@ class QPopupMenu;
 
 class QEditor;
 class CodeCompletion_Impl;
+class LineNumberWidget;
+class MarkerWidget;
 
 class QEditorView: public KTextEditor::View,
 				   public KTextEditor::ClipboardInterface,
@@ -208,6 +210,8 @@ private:
 	KTextEditor::Document* m_document;
 	QEditor* m_editor;
 	CodeCompletion_Impl* m_pCodeCompletion;
+    LineNumberWidget* m_lineNumberWidget;
+    MarkerWidget* m_markerWidget;
 };
 
 #endif

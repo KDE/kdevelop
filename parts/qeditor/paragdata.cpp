@@ -27,8 +27,9 @@
 
 ParagData::ParagData()
 {
-    lastLengthForCompletion = 0;
-    m_level = 0;
+	lastLengthForCompletion = 0;
+	m_level = 0;
+	m_mark = 0;
 }
 
 ParagData::~ParagData()
@@ -38,25 +39,36 @@ ParagData::~ParagData()
 
 void ParagData::join( QTextParagData* )
 {
-    // not implemented yet!!
+	// not implemented yet!!
 }
 
 void ParagData::clear()
 {
-    m_symbolList.clear();
+	m_symbolList.clear();
 }
 
 void ParagData::add( int tp, const QChar& ch, int pos )
 {
-    m_symbolList << Symbol( tp, ch, pos );
+	m_symbolList << Symbol( tp, ch, pos );
 }
 
 int ParagData::level() const
 {
-    return m_level;
+	return m_level;
 }
 
 void ParagData::setLevel( int level )
 {
-    m_level = level;
+	m_level = level;
 }
+
+uint ParagData::mark() const
+{
+	return m_mark;
+}
+
+void ParagData::setMark( uint mark )
+{
+	m_mark = mark;
+}
+

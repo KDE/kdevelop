@@ -23,6 +23,7 @@
 #include "qeditor.h"
 #include "qeditorcodecompletion_iface_impl.h"
 #include "linenumberwidget.h"
+#include "markerwidget.h"
 
 #include <qlayout.h>
 #include <qpopupmenu.h>
@@ -39,9 +40,11 @@ QEditorView::QEditorView( KTextEditor::Document* document, QWidget* parent, cons
 
 
 	m_editor = new QEditor( this );
-	LineNumberWidget* lineNumWidget = new LineNumberWidget( m_editor, this );
+	m_lineNumberWidget = new LineNumberWidget( m_editor, this );
+        m_markerWidget = new MarkerWidget( m_editor, this );
 
-	lay->addWidget( lineNumWidget );
+	lay->addWidget( m_lineNumberWidget );
+        lay->addWidget( m_markerWidget );
 	lay->addWidget( m_editor );
 
 	setFocusProxy( m_editor );

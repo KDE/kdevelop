@@ -19,9 +19,10 @@
  *
  */
 
- #include "qeditor_part.h"
+#include "qeditor_part.h"
 #include "qeditor_view.h"
 #include "qeditor.h"
+#include "paragdata.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -526,4 +527,110 @@ int QEditorPart::findMode( const QString& filename )
 		}
 	}
 	return -1;
+}
+
+bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol, 
+			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol, 
+			unsigned int *matchLen, bool casesensitive, bool backwards )
+{
+#warning "TODO: implement QEditorPart::searchText()"
+	return false;
+}
+			
+bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol, 
+			const QRegExp &regexp, unsigned int *foundAtLine, 
+			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
+{
+#warning "TODO: implement QEditorPart::searchText()"
+	return false;
+}
+
+uint QEditorPart::mark (uint line)
+{
+#warning "TODO: implement uint QEditorPart::mark (uint line)"
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* parag = textDoc->paragAt( line );
+	if( parag ){
+		ParagData* data = (ParagData*) parag->extraData();
+		if( data ){
+			return data->mark();
+		}
+	}
+	return 0;
+}
+
+void QEditorPart::setMark (uint line, uint markType)
+{
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* parag = textDoc->paragAt( line );
+	if( parag ){
+		ParagData* data = (ParagData*) parag->extraData();
+		if( data ){
+			data->setMark( markType );
+			emit marksChanged();
+		}
+	}
+}
+
+void QEditorPart::clearMark (uint line)
+{
+	setMark( line, 0 );
+}
+
+void QEditorPart::addMark (uint line, uint markType)
+{
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* parag = textDoc->paragAt( line );
+	if( parag ){
+		ParagData* data = (ParagData*) parag->extraData();
+		if( data ){
+			data->setMark( data->mark() | markType );
+			emit marksChanged();
+		}
+	}
+}
+
+void QEditorPart::removeMark (uint line, uint markType)
+{
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* parag = textDoc->paragAt( line );
+	if( parag ){
+		ParagData* data = (ParagData*) parag->extraData();
+		if( data ){
+			data->setMark( data->mark() & ~markType );
+			emit marksChanged();
+		}
+	}
+}
+
+QPtrList<KTextEditor::Mark> QEditorPart::marks ()
+{
+	QPtrList<KTextEditor::Mark> marks;
+	marks.setAutoDelete( TRUE );
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* p = textDoc->firstParag();
+	while( p ){
+		ParagData* data = (ParagData*) p->extraData();
+		if( data && data->mark() ){		
+			KTextEditor::Mark* mark = new KTextEditor::Mark;
+			mark->type = data->mark();
+			mark->line = p->paragId();
+			marks.append( mark );
+		}
+		p = p->next();
+	}
+	return marks;
+}
+
+void QEditorPart::clearMarks ()
+{
+	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextParag* p = textDoc->firstParag();
+	while( p ){
+		ParagData* data = (ParagData*) p->extraData();
+		if( data ){		
+			data->setMark( 0 );
+		}
+		p = p->next();
+	}
 }

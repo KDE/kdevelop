@@ -30,58 +30,62 @@
 
 class Symbol{
 public:
-    enum { Left, Right };
-    Symbol() {}
+	enum { Left, Right };
+	Symbol() {}
 
-    Symbol( int tp, const QChar& ch, int pos ):
-        m_tp( tp ),
-        m_ch( ch ),
-        m_pos( pos ){}
+	Symbol( int tp, const QChar& ch, int pos ):
+		m_tp( tp ),
+		m_ch( ch ),
+		m_pos( pos ){}
 
-    Symbol( const Symbol& source )
-        : m_tp( source.m_tp ),
-          m_ch( source.m_ch ),
-          m_pos( source.m_pos ){}
+	Symbol( const Symbol& source )
+		: m_tp( source.m_tp ),
+		  m_ch( source.m_ch ),
+		  m_pos( source.m_pos ){}
 
-    Symbol& operator = ( const Symbol& source ){
-        m_tp = source.m_tp;
-        m_ch = source.m_ch;
-        m_pos = source.m_pos;
-        return *this;
-    }
+	Symbol& operator = ( const Symbol& source ){
+		m_tp = source.m_tp;
+		m_ch = source.m_ch;
+		m_pos = source.m_pos;
+		return *this;
+	}
 
-    bool operator == ( const Symbol& p ) const {
-        return m_ch == p.m_ch && m_pos == p.m_pos;
-    }
+	bool operator == ( const Symbol& p ) const {
+		return m_ch == p.m_ch && m_pos == p.m_pos;
+	}
 
-    int type() const { return m_tp; }
-    QChar ch() const { return m_ch; }
-    int pos() const { return m_pos; }
+	int type() const { return m_tp; }
+	QChar ch() const { return m_ch; }
+	int pos() const { return m_pos; }
 
 private:
-    int m_tp;
-    QChar m_ch;
-    int m_pos;
+	int m_tp;
+	QChar m_ch;
+	int m_pos;
 };
 
 class ParagData: public QTextParagData{
 public:
-    ParagData();
-    virtual ~ParagData();
+	ParagData();
+	virtual ~ParagData();
 
-    virtual void clear();
-    QValueList<Symbol> symbolList() const { return m_symbolList; }
-    virtual void add( int, const QChar&, int );
-    virtual void join( QTextParagData* );
+	virtual void clear();
+	QValueList<Symbol> symbolList() const { return m_symbolList; }
+	virtual void add( int, const QChar&, int );
+	virtual void join( QTextParagData* );
 
-    virtual int level() const;
-    virtual void setLevel( int );
+	virtual int level() const;
+	virtual void setLevel( int );
+	
+	virtual uint mark() const;
+	virtual void setMark( uint );
 
-    int lastLengthForCompletion;
+	int lastLengthForCompletion;
 
 private:
-    QValueList<Symbol> m_symbolList;
-    int m_level;
+	QValueList<Symbol> m_symbolList;
+	int m_level;
+	int m_mark;
 };
 
 #endif
