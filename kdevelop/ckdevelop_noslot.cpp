@@ -695,6 +695,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
     enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+    enableCommand(ID_PROJECT_MAKE_TAGS);
+    enableCommand(ID_PROJECT_LOAD_TAGS);
   }
   else
 //  if (!enable)
@@ -719,6 +721,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_PROJECT_MAKE_PROJECT_API);
     disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+    disableCommand(ID_PROJECT_MAKE_TAGS);
+    disableCommand(ID_PROJECT_LOAD_TAGS);
 
     disableCommand(ID_PROJECT_CLOSE);
     disableCommand(ID_PROJECT_NEW_CLASS);
