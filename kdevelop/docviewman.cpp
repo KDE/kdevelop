@@ -301,12 +301,14 @@ QWidget* DocViewMan::createView(int docId)
       KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
       // create the view and add to MDI
       pNewView = new CEditWidget(0L, "autocreatedview", pDoc);
+      pNewView->setCaption( pDoc->fileName());
     }
     break;
   case DocViewMan::HTML:
     {
       CDocBrowser* pDoc = (CDocBrowser*) pDocViewNode->pDoc;
       pNewView = pDoc->view();
+      pNewView->setCaption( pDoc->currentURL());
     }
     break;
   }
@@ -323,6 +325,12 @@ QWidget* DocViewMan::createView(int docId)
   pLayout->addWidget( pNewView);
   pMDICover->setName( pNewView->name());
   m_parent->addWindow( pMDICover, QextMdi::StandardAdd);
+  // captions
+  QString shortName = pNewView->caption();
+  int length = shortName.length();
+  shortName = shortName.right(length - (shortName.findRev('/') +1));
+  pMDICover->setTabCaption( shortName);
+  // show
   pMDICover->show();
 
   // connect signals
