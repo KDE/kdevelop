@@ -1,3 +1,7 @@
+1999-10-20 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* committed patch by G. Jungman (beginning of
+	  namespace support) - Thanks
+ 
 1999-10-20  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Rewritten the bloated widget wrapper business in
 	  the dialog editor with an event filter solution 
