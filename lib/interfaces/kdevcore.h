@@ -106,14 +106,19 @@ public:
         : Context("file"),
           m_fileName(fileName),
           m_isDirectory(isDirectory) {}
-    ~FileContext() {}
+    FileContext( const KURL::List &someURLs );
+	~FileContext() {}
 
     QString fileName() const
     { return m_fileName; }
     bool isDirectory() const
     { return m_isDirectory; }
+	// Returns a reference to the bunch of URLs
+    const KURL::List &urls() const
+    { return m_urls; }
 
 private:
+	KURL::List m_urls;
     QString m_fileName;
     bool m_isDirectory;
 };
