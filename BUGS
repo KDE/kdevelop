@@ -1,45 +1,22 @@
 
-classparser bugs:
+Classparser bugs:
 
-A couple of problems with structs
-
-struct test
-{
-  int i;
-  int a;
-  test() : i(100), a(200) {};
-  void test1()
-  { 
-      int ab = a;
-      a = 1;
+(1) 
+class x {
+	 x::y( );
 };
+The classparser stops at "::" and recognizes this as an implementation.
+That can't easily be avoided with the current cp (see ClassParser::checkClassDecl( ) )
 
-the constructor, test(), doesn't appear (that I can find), and test1() appears
-as a "Function" not under the "Structures"/"test"
-
-
-A class problem:
-
-class test
-{
-  int i;
-  int a;
-
-  test3()  {  a = i;  }          // private member
-
-public:
-  test() : i(0), a(1) {};
-  void test1()
-  {
-      int swap=i;
-      i=a;
-      a=swap;
-  }
-};
-
-the class test appears in the class list but has no children and test(),
-test1() appear as "Functions". test3() does not appear. Add "private:" before
-test3() and it'll work properly,
+(2)
+struct x {
+  struct y {
+    float f;
+  };
+} s1, s2;
+Clicking at the treeview for jumping to f won't work because y was stored
+in scope x. Scope x doesn't exist anymore because now it's called s1 and s2.
+           
 
 
 These are not considered as bugs but a lack of implementation and described for those who will complain:
@@ -47,5 +24,4 @@ These are not considered as bugs but a lack of implementation and described for 
 - The classparser does no macro expansion
 - The widget editor does not generate geometry management implementations
 - TMake is not yet supported
-- KDE 2 is not supported, neither Qt 2.0. KDE 2 is in development and KDevelop will be ported after the next KDE 1.1.x release.
 - If the generation of the KDE libs documentation fails, go to http://developer.kde.org or www.kdevelop.org and get the tar'ed documentation.

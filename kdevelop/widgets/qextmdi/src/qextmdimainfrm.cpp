@@ -922,6 +922,7 @@ void QextMdiMainFrm::switchToTabPageMode()
       pRemActiveWindow->setFocus();
    }
 
+   m_pTaskBar->hide();
    qDebug("TabPageMode on");
 }
 
@@ -946,6 +947,7 @@ void QextMdiMainFrm::finishTabPageMode()
          pParent->close();
          delete pParent;
       }
+      m_pTaskBar->show();
    }
 }
 

@@ -183,7 +183,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
       }
     }
     if( bUnion == true ){ // were just skipping the union stuff
-      while( lexem != ';' && lexem != 0 ){
+      while( lexem != ';' && lexem != 0 ){ // todo: do that in parseUnion( )
 	getNextLexem( );
       }
       if( lexem == ';' )
@@ -220,7 +220,6 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   REQUIRE( "Valid container", aContainer != NULL );
   REQUIRE( "Valid lexem", lexem == '{' );
 
-  cout << endl << "/// fillInParsedStruct" << endl;
   CParsedStruct *aStruct = new CParsedStruct();
 
   // Set some info about the struct.
@@ -256,7 +255,7 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
     getNextLexem( );
   }
 
-  if( ps.isEmpty( ) )
+  if( ps.isEmpty( ) ) // struct x {...}; ? -> use default name
     ps.append( aStruct->name );
 
   aStruct->setName( ps.first( ) );
@@ -444,6 +443,8 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 void CClassParser::parseUnion()
 {
   // Get the name
+  // ToDo: parse a complete! union
+  // e.g.: union {...} u = 97;
   getNextLexem();
 
   if( lexem == ID )
@@ -971,8 +972,8 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  *
  * Parameters:
  *   aMethod        The method to initialize.
- *   isOperator			this is not used all the operator related processing
- *  								has already been done
+ *   isOperator     this is not used all the operator related processing
+ *  		    has already been done
  *
  * Returns:
  *   -
@@ -1008,7 +1009,7 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
 
   // Set the operator name
   aMethod->setName( name );
-  
+
   // Set the type of the method.
   fillInParsedType( type );
   if( !type.isEmpty() )
@@ -1038,14 +1039,23 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
     getNextLexem();
   }
 
+  // Skip throw statements
+  if( lexem == CPTHROW ){
+    skipThrowStatement( );
+    getNextLexem( );
+  }
+
   // Other initializers
   if( lexem == ':' )
     while( lexem != 0 && lexem != '{' )
       getNextLexem();
 
-  // Skip throw statements
-  if( lexem == CPTHROW )
-    skipThrowStatement();
+  // commented out by Daniel
+  // because past the initializers the implementation starts
+  // and is expected (see 5 lines above)
+  //  Skip throw statements
+  //  if( lexem == CPTHROW )
+  //  skipThrowStatement();
 
   // Skip implementation.
   if( lexem == '{' )
@@ -1191,6 +1201,7 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
       }
       else
       {
+	// see below
         kdWarning() << "No method by the name " << name << " found in class " << className << endl;
         aMethod.out();
       }
@@ -1217,6 +1228,8 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
         }
         else
         {
+	  // again, if class x{ x::y( ) }; is found the classparser thinks it's an implementation
+	  // and we get a warning right here -> bug 2374
           kdWarning() << "No method by the name " << name << " found in class " << path << endl;
           aMethod.out();
         }
@@ -1288,6 +1301,10 @@ int CClassParser::checkClassDecl()
         PUSH_LEXEM();
         break;
       case CLCL:
+	// if in a class definition something like that is found:
+	// class x{ x::y( ); };
+	// the classparser thinks at x:: it's an implementation
+	// fact is that we don't know it exactly -> bug 2374
         isImpl = true;
         PUSH_LEXEM();
         break;
@@ -1592,20 +1609,21 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
           if( aMethod && methodType == QTSLOT)
           {
 //          (void) printf("slot: %s\n", aMethod->name.data());
-
-			CParsedMethod *	pm = aClass->getMethod(*aMethod);
-			if (pm != NULL) {
-               aMethod->setDefinedInFile( pm->definedInFile );
-               aMethod->setDefinedOnLine( pm->definedOnLine );
-               aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
-               aClass->removeMethod(pm);
-		    }
+	    
+	    CParsedMethod *	pm = aClass->getMethod(*aMethod);
+	    if (pm != NULL) {
+	      aMethod->setDefinedInFile( pm->definedInFile );
+	      aMethod->setDefinedOnLine( pm->definedOnLine );
+	      aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
+	      aClass->removeMethod(pm);
+	    }
             aMethod->setIsSlot( true );
             aClass->addSlot( aMethod );
           }
         }
-        else
+        else {
           parseMethodAttributes( aClass );
+	}
       }
       isStatic=false;
       break;

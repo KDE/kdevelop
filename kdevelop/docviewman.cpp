@@ -1180,82 +1180,74 @@ void DocViewMan::doFileCloseAll()
 {
   debug("DocViewMan::doFileCloseAll !\n");
 
-  // Get the project name
-  QString prjName = m_pParent->getProjectName();
-  if (prjName != QString(""))
-    prjName = "\n" + prjName + "\n\n";
-
   QStrList handledNames;
   bool cont=true;
 
-  // synchronizeDocAndInfo();
-
   QListIterator<QObject> itDoc(m_documentList);
-  for ( itDoc.toLast(); cont && itDoc.current() != 0L; --itDoc) {
+  itDoc.toFirst();
+  while(cont && itDoc.current())
+  {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
     if (pDoc
         && pDoc->isModified()
-        && handledNames.contains(pDoc->fileName())<1) {
-
-#warning FIXME MessageBox needed with an extra button.
-//      KMessageBox *files_close=
-//        new KMessageBox(this,
-//                        i18n("The project\n")+prjName
-//                          +i18n("contains changed files. Save modified file\n\n")
-//                          +actual_info->filename+" ?\n\n",
-//                          i18n("Save changed files ?"),
-//                          i18n("Yes"), i18n("No"), /*i18n("Save all"), */i18n("Cancel"));
-//
-//      // show the messagea and store result in result:
-//
-//      files_close->show();
-//
-//      int result=files_close->result();
-      int result = KMessageBox::warningYesNoCancel( m_pParent,
-                                                    i18n("The project %1\n"
-                                                    "contains changed files. Save modified file\n\n%2 ?\n\n")
-                                                    .arg(prjName)
-                                                    .arg(pDoc->fileName()),
-                                                    i18n("Save changed files ?"));
-
-      // create the save project messagebox
-
-      // what to do
-      if(result==KMessageBox::Yes) { // Yes- only save the current file
-        // save file as if Untitled and close file
-        if(m_pParent->isUntitled(pDoc->fileName())) {
-          m_pParent->switchToFile(pDoc->fileName());
-          handledNames.append(pDoc->fileName());
-          cont = m_pParent->fileSaveAs();
-          itDoc.toLast(); // start again... 'cause we deleted an entry
+        && handledNames.contains(pDoc->fileName())<1)
+    {
+      SaveAllDialog::SaveAllResult result = m_pParent->doProjectSaveAllDialog(pDoc->fileName());
+      switch (result)
+      {
+        case SaveAllDialog::Yes:
+        { // Yes- only save the current file
+          // save file as if Untitled and close file
+          if(m_pParent->isUntitled(pDoc->fileName()))
+          {
+            m_pParent->switchToFile(pDoc->fileName());
+            handledNames.append(pDoc->fileName());
+            cont = m_pParent->fileSaveAs();
+          }
+          else
+          { // Save file and close it
+            m_pParent->switchToFile(pDoc->fileName());
+            handledNames.append(pDoc->fileName());
+            m_pParent->slotFileSave();
+            cont = !currentEditView()->isModified(); //something went wrong
+          }
+          break;
         }
-        else { // Save file and close it
-          m_pParent->switchToFile(pDoc->fileName());
+
+        case SaveAllDialog::No:
+        {
+          // No - no save but close
           handledNames.append(pDoc->fileName());
-          m_pParent->slotFileSave();
-          cont = !currentEditView()->isModified(); //something went wrong
+          pDoc->setModified(false);
+          break;
+        }
+
+        case SaveAllDialog::SaveAll:
+        {
+          // Save all
+          m_pParent->slotFileSaveAll();
+          break;
+        }
+
+        case SaveAllDialog::Cancel:
+        {
+          cont=false;     // We are not going to continue
+          break;
         }
       }
-      else if(result==KMessageBox::No) { // No - no save but close
-        handledNames.append(pDoc->fileName());
-        pDoc->setModified(false);
-        itDoc.toLast(); // start again... 'cause we deleted an entry
-      }
+    }  // end file close/save
 
-//      if(result==3) { // Save all
-//        slotFileSaveAll();
-//        break;
-//      }
-      else if(result==KMessageBox::Cancel) { // Cancel
-        cont=false;
-        break;
-      }
-    }  // end actual file close
-
-    if (cont) { // close the document and its views
+    if (cont)
+      // We want to close the document and views
       closeKWriteDoc(pDoc);
-    }
-  } // end for-loop
+    else
+      break;    // user decided not to continue because of unsaved files
+
+    // If the doc has been deleted then the iterator will be moved to the next
+    // doc already - so we only have to move on if a doc wasn't deleted.
+    if (pDoc == itDoc.current())
+      ++itDoc;
+  } // end while-loop
 }
 
 bool DocViewMan::doProjectClose()
