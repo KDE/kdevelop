@@ -1630,8 +1630,7 @@ bool Parser::parseTypeId( AST::Node& /*node*/ )
     if( !parseTypeSpecifier(spec) ){
 	return false;
     }
-
-    QString s = lex->lookAhead(0).toString().latin1();
+    
     DeclaratorAST::Node decl;
     parseAbstractDeclarator( decl );
 
@@ -2185,6 +2184,7 @@ bool Parser::parseTypeIdList( AST::Node& /*node*/ )
     }
 
     while( lex->lookAhead(0) == ',' ){
+	lex->nextToken();
 	if( parseTypeId(typeId) ){
 	    // ...
 	} else {

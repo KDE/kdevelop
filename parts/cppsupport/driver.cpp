@@ -214,6 +214,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__stdcall" );
     lexer->addSkipWord( "__cdecl" );
     lexer->addSkipWord( "_cdecl" );
+    lexer->addSkipWord( "CALLBACK" );
 }
 
 void Driver::setupParser( Parser * parser )
