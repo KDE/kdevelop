@@ -274,11 +274,24 @@ void NewMainWindow::fillWindowMenu()
 
 	m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
  
-    QStringList string_list = PartController::getInstance()->openURLs().toStringList();
-	string_list.sort();
-    KURL::List list(string_list);
-	KURL::List::Iterator itt = list.begin();
+    QMap<QString, KURL> map;    
+    QStringList string_list;
+    KURL::List list = PartController::getInstance()->openURLs();	
+    KURL::List::Iterator itt = list.begin();
 	while ( itt != list.end() )
+    {
+        map[(*itt).fileName()] = *itt;
+        string_list.append((*itt).fileName());
+        ++itt;
+    }
+    string_list.sort();
+    
+    list.clear();
+    for(uint i = 0; i != string_list.size(); ++i)
+        list.append(map[string_list[i]]);
+	
+    itt = list.begin();
+    while ( itt != list.end() )
 	{
 		temp = m_pWindowMenu->insertItem( (*itt).fileName() );
 		m_windowList << qMakePair( temp, *itt );
