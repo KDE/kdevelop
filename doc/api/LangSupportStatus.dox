@@ -159,7 +159,7 @@
       <td bgcolor="green">Y</td>
       <td bgcolor="green">Y</td>
       <td bgcolor="green">Y</td>
-      <td bgcolor="red">N</td>
+      <td bgcolor="yellow">Y</td>
     </tr>
     <tr>
       <td>Application wizard import templates</td>
