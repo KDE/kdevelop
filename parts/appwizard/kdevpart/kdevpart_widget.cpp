@@ -23,5 +23,3 @@ $APPNAME$Widget::~$APPNAME$Widget()
 
 
 #include "$APPNAMELC$_widget.moc"
-
-#include "kdevpart_widget.moc"

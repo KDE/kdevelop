@@ -210,5 +210,3 @@ void $APPNAME$::fileOpen()
 }
 
 #include "$APPNAMELC$.moc"
-
-#include "app.moc"

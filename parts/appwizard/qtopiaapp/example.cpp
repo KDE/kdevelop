@@ -1,9 +1,9 @@
 #include "$APPNAMELC$.h"
 #include <qpushbutton.h>
 
-/* 
- *  Constructs a $APPNAME$ which is a child of 'parent', with the 
- *  name 'name' and widget flags set to 'f' 
+/*
+ *  Constructs a $APPNAME$ which is a child of 'parent', with the
+ *  name 'name' and widget flags set to 'f'
  */
 $APPNAME$::$APPNAME$( QWidget* parent,  const char* name, WFlags fl )
     : $APPNAME$Base( parent, name, fl )
@@ -11,7 +11,7 @@ $APPNAME$::$APPNAME$( QWidget* parent,  const char* name, WFlags fl )
     connect(quit, SIGNAL(clicked()), this, SLOT(goodBye()));
 }
 
-/*  
+/*
  *  Destroys the object and frees any allocated resources
  */
 $APPNAME$::~$APPNAME$()
@@ -26,5 +26,3 @@ void $APPNAME$::goodBye()
 {
     close();
 }
-
-#include "example.moc"

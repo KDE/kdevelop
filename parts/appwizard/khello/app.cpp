@@ -23,5 +23,3 @@ $APPNAME$::~$APPNAME$()
 }
 
 #include "$APPNAMELC$.moc"
-
-#include "app.moc"

@@ -18,10 +18,10 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
   : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "$APPNAME$Part" )
 {
   setInstance($APPNAME$Factory::instance());
-  setXMLFile("kdevpart_$APPNAMELC$.rc"); 
+  setXMLFile("kdevpart_$APPNAMELC$.rc");
 
   m_widget = new $APPNAME$Widget(this);
-  
+
   QWhatsThis::add(m_widget, i18n("WHAT DOES THIS PART DO?"));
 
   // now you decide what should happen to the widget. Take a look at kdevcore.h
@@ -30,8 +30,8 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
   // if you want to embed your widget as an outputview, simply uncomment
   // the following line.
 
-  // mainWindow()->embedOutputView( m_widget, "name that should appear", "enter a tooltip" ); 
-  
+  // mainWindow()->embedOutputView( m_widget, "name that should appear", "enter a tooltip" );
+
 }
 
 
@@ -42,5 +42,3 @@ $APPNAME$Part::~$APPNAME$Part()
 
 
 #include "$APPNAMELC$_part.moc"
-
-#include "kdevpart_part.moc"

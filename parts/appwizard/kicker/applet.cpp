@@ -8,7 +8,7 @@
 #include "$APPNAMELC$.h"
 
 
-$APPNAME$::$APPNAME$(const QString& configFile, Type type, int actions, QWidget *parent, const char *name) 
+$APPNAME$::$APPNAME$(const QString& configFile, Type type, int actions, QWidget *parent, const char *name)
     : KPanelApplet(configFile, type, actions, parent, name)
 {
     // Get the current application configuration handle
@@ -40,7 +40,7 @@ void $APPNAME$::help()
 
 void $APPNAME$::preferences()
 {
-    KMessageBox::information(0, i18n("This is a preferences box"));  
+    KMessageBox::information(0, i18n("This is a preferences box"));
 }
 
 int $APPNAME$::widthForHeight(int height) const
@@ -68,5 +68,3 @@ extern "C"
                              parent, "$APPNAMELC$");
     }
 }
-
-#include "applet.moc"
