@@ -26,6 +26,9 @@ public:
     OutputView(QWidget *parent, const char *name=0);
     ~OutputView();
 
+protected:
+    virtual void childFinished(bool normal, int status);
+
     // Component notifications:
     virtual void compilationAborted();
 };

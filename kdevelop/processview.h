@@ -1,5 +1,5 @@
 /***************************************************************************
-                     processview.h - log window for compiler output
+                             processview.h - base class for output views
                              -------------------                                         
     copyright            : (C) 1999 by The KDevelop Team
  ***************************************************************************/
@@ -25,14 +25,15 @@ class KProcess;
 class ProcessListBoxItem : public QListBoxText
 {
 public:
-    //    enum Type { Normal, Warning, Error };
+    enum Type { Diagnostic, Normal, Error };
     
-    ProcessListBoxItem(const QString &s/*, Type t*/);
+    ProcessListBoxItem(const QString &s, Type type);
 
-    virtual bool isErrorItem();
+    virtual bool isCustomItem();
     
 private:
     virtual void paint(QPainter *p);
+    Type t;
 };
 
 
@@ -56,6 +57,13 @@ public:
      * is used.
      */
     virtual void insertStderrLine(const QString &line);
+    /**
+     * This is called when the child process exits.
+     * The flag 'normal' is true if the process exited
+     * normally (i.e. not by a signal or similar), otherwise
+     * the exit status can be taken from 'status'.
+     */
+    virtual void childFinished(bool normal, int status);
     /**
      * Clears the child process's arguments and changes
      * into the directory dir.
@@ -82,14 +90,21 @@ signals:
     void processExited(KProcess *); 
     void rowSelected(int row);
 
+protected:
+    // Component notifications:
+    virtual void compilationAborted();
+    
 protected slots:
     void slotReceivedOutput(KProcess*, char*, int);
     void slotReceivedError(KProcess*, char*, int);
     void slotProcessExited(KProcess*);
 
 private:
+    void flushStdoutBuf();
+    void flushStderrBuf();
     KProcess *childproc;
-    QString buf;
+    QString stdoutbuf;
+    QString stderrbuf;
 };
 
 

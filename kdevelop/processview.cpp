@@ -1,5 +1,5 @@
 /***************************************************************************
-                             processview.h
+                             processview.cpp - base class for output views
                              -------------------
 
     copyright            : (C) 1999 by The KDevelop Team
@@ -19,20 +19,21 @@
 #include "processview.h"
 
 
-ProcessListBoxItem::ProcessListBoxItem(const QString &s)
-    : QListBoxText(s)
+ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
+    : QListBoxText(s), t(type)
 {}
 
 
-bool ProcessListBoxItem::isErrorItem()
+bool ProcessListBoxItem::isCustomItem()
 {
-    return true;
+    return false;
 }
 
 
 void ProcessListBoxItem::paint(QPainter *p)
 {
-    p->setPen(Qt::darkRed);
+    p->setPen((t==Error)? Qt::darkRed :
+              (t==Diagnostic)? Qt::black : Qt::darkBlue);
     QListBoxText::paint(p);
 }
 
@@ -41,6 +42,12 @@ ProcessView::ProcessView(QWidget *parent, const char *name)
     : QListBox(parent, name)
 {
     setFocusPolicy(QWidget::NoFocus);
+    QPalette pal = palette();
+    pal.setColor(QColorGroup::HighlightedText,
+                 pal.color(QPalette::Normal, QColorGroup::Text));
+    pal.setColor(QColorGroup::Highlight,
+                 pal.color(QPalette::Normal, QColorGroup::Mid));
+    setPalette(pal);
 
     childproc = new KShellProcess("/bin/sh");
 
@@ -71,6 +78,8 @@ void ProcessView::prepareJob(const QString &dir)
 void ProcessView::startJob()
 {
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    // TODO: emit a signal which is connected with a slot in CKDevelop
+    // which calls o_tab_view->setCurrentTab(MESSAGES) or so...
 }
 
 
@@ -94,41 +103,73 @@ bool ProcessView::isRunning()
 
 void ProcessView::slotReceivedOutput(KProcess *, char *buffer, int buflen)
 {
-    buf += QString::fromLatin1(buffer, buflen);
-    
-    int pos;
-    while ( (pos = buf.find('\n')) != -1)
+    // Flush stderr buffer
+    if (!stderrbuf.isEmpty())
         {
-            QString item = buf.left(pos);
-            if (!item.isEmpty())
-                insertStdoutLine(item);
-            buf = buf.right(buf.length()-pos-1);
+            insertStderrLine(stderrbuf);
+            stderrbuf = "";
         }
-    // TODO: emit a signal which is connected with a slot in CKDevelop
-    // which calls o_tab_view->setCurrentTab(MESSAGES);
+    
+    stdoutbuf += QString::fromLatin1(buffer, buflen);
+    int pos;
+    while ( (pos = stdoutbuf.find('\n')) != -1)
+        {
+            QString line = stdoutbuf.left(pos);
+            //            if (!item.isEmpty())
+            insertStdoutLine(line);
+            stdoutbuf.remove(0, pos+1);
+        }
 }
 
 
 void ProcessView::slotReceivedError(KProcess *, char *buffer, int buflen)
 {
-    QString item = QString::fromLatin1(buffer, buflen);
-    insertStderrLine(item);
+    // Flush stdout buffer
+    if (!stdoutbuf.isEmpty())
+        {
+            insertStdoutLine(stdoutbuf);
+            stdoutbuf = "";
+        }
+    
+    stderrbuf += QString::fromLatin1(buffer, buflen);
+    int pos;
+    while ( (pos = stderrbuf.find('\n')) != -1)
+        {
+            QString line = stderrbuf.left(pos);
+            //            if (!item.isEmpty())
+            insertStderrLine(line);
+            stderrbuf.remove(0, pos+1);
+        }
+    //    QString item = QString::fromLatin1(buffer, buflen);
+    //    insertStderrLine(item);
 }
 
 
 void ProcessView::slotProcessExited(KProcess *)
 {
     emit processExited(childproc);
+    childFinished(childproc->normalExit(), childproc->exitStatus());
 }
 
 
 void ProcessView::insertStdoutLine(const QString &line)
 {
-    insertItem(line);
+    insertItem(new ProcessListBoxItem(line, ProcessListBoxItem::Normal));
 }
 
 
 void ProcessView::insertStderrLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line));
+    insertItem(new ProcessListBoxItem(line, ProcessListBoxItem::Error));
+}
+
+
+void ProcessView::childFinished(bool /*normal*/, int /*status*/)
+{
+}
+
+
+void ProcessView::compilationAborted()
+{
+    killJob();
 }

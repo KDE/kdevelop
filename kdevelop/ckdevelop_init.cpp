@@ -58,8 +58,7 @@
 extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop(bool witharg)
-    : appl_process("/bin/sh"),
-      search_process("/bin/sh")
+    : search_process("/bin/sh")
 {
   version = VERSION;
   project=false;// no project
@@ -116,18 +115,9 @@ void CKDevelop::initView(){
   outputview = new OutputView(o_tab_view, "outputview");
   components.append(outputview);
 
-  stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
-  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
-  
-  stderr_widget = new COutputWidget(kapp,o_tab_view);
-  stderr_widget->setReadOnly(TRUE);
-  stderr_widget->setFocusPolicy(QWidget::NoFocus);
-
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(grepview, i18n("search"));
   o_tab_view->addTab(outputview, i18n("output"));
-  o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
-  o_tab_view->addTab(stderr_widget,i18n("stderr"));
 
 
   top_panner = new QSplitter(Qt::Horizontal, view, "top_panner");
@@ -238,11 +228,6 @@ void CKDevelop::initView(){
   edit2->modified=false;
   edit_infos.append(edit1);
   edit_infos.append(edit2);
-  
-  // init some dialogs
-#if 0
-  grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
-#endif
   
 }
 
@@ -721,8 +706,8 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(BarIcon("contents"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   
   help_menu->insertSeparator();
-  help_menu->insertItem(BarIcon("mini-book1.png"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  help_menu->insertItem(BarIcon("mini-book1.png"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
 	help_menu->insertItem(BarIcon("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertItem(BarIcon("filemail"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
@@ -1044,14 +1029,16 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(browser_widget, SIGNAL(textSelected(KHTMLView *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
-  connect(messages_widget, SIGNAL(highlighted(int)),this,SLOT(slotClickedOnMessagesWidget(int)));
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
-  connect(grepview,SIGNAL(itemSelected(const QString&,int)),SLOT(slotGrepDialogItemSelected(const QString&,int)));
   connect(messages_widget, SIGNAL(processExited(KProcess*)),
           this, SLOT(slotProcessExited(KProcess*)));
+  connect(messages_widget, SIGNAL(itemSelected(const QString&,int)),
+          SLOT(slotSwitchFileRequest(const QString&,int)));
+  connect(grepview, SIGNAL(itemSelected(const QString&,int)),
+          SLOT(slotSwitchFileRequest(const QString&,int)));
 
   // connections for the proc -processes
   connect(&search_process, SIGNAL(receivedStdout(KProcess*,char*,int)),
@@ -1065,16 +1052,6 @@ void CKDevelop::initConnections(){
 
   connect(&search_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
-
-  //application process
-  connect(&appl_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) ));
-
-  connect(&appl_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	  this,SLOT(slotApplReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&appl_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
 
 }
 

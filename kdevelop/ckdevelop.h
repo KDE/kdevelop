@@ -38,7 +38,6 @@ class CKDevelop;
 #include <keditcl.h>
 #include <kapp.h>
 #include <ktmainwindow.h>
-//#include <ktreelist.h>
 #include <kprocess.h>
 #include <khtmlview.h>
 #include <kiconloader.h>
@@ -64,7 +63,6 @@ class QListViewItem;
 class CErrorMessageParser;
 class CEditWidget;
 #include "component.h"
-#include "coutputwidget.h"
 #include "ctabctl.h"
 #include "ckdevaccel.h"
 #include "ctreehandler.h"
@@ -453,7 +451,7 @@ public:
 
   void slotHelpDlgNotes();
 
-  void slotGrepDialogItemSelected(const QString &filename,int linenumber);
+  void slotSwitchFileRequest(const QString &filename,int linenumber);
   
   ////////////////////////
   // KDlgEdit-View-Menu entries -- managed by kdevelop
@@ -542,15 +540,10 @@ public:
   void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
-  void slotClickedOnMessagesWidget(int row);
-  
 
   void slotURLSelected(KHTMLView* widget,QString url,int, QString);
   void slotDocumentDone( KHTMLView * );
   void slotURLonURL(KHTMLView*,QString);
-
-  void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
 
   void switchToKDevelop();
   void switchToKDlgEdit();
@@ -743,10 +736,7 @@ private:
   
   
   KIconLoader icon_loader;
-  /** for tools,compiler,make,kodc */
-    //  KShellProcess process;
-  /** only for selfmade appl */
-  KShellProcess appl_process;
+
   /** search with glimpse */
   KShellProcess search_process;
   /** at the moment only one project at the same time */
@@ -811,10 +801,6 @@ private:
   GrepView *grepview;
   /** Output from the application */
   OutputView *outputview;
-  /** stdin and stdout output. */
-  COutputWidget* stdin_stdout_widget;
-  /** stderr output. */
-  COutputWidget* stderr_widget;
 
   QValueList<int> kdlg_sizes;
   int workspace;

@@ -308,9 +308,9 @@ void CKDevelop::initWhatsThis(){
 		"The Standard Input/Standard Output window is a replacement "
 		"for terminal-based application communication. Running "
 		"terminal applications are using this instead of a terminal window."));
-	*/
 
 	QWhatsThis::add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
+	*/
                                   																												
 }
 

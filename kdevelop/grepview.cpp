@@ -30,7 +30,7 @@ public:
         { return str1; }
     int linenumber()
         { return str2.right(str2.length()-1).toInt()-1; }
-    virtual bool isErrorItem();
+    virtual bool isCustomItem();
 
 private:
     virtual void paint(QPainter *p);
@@ -41,7 +41,7 @@ private:
 GrepListBoxItem::GrepListBoxItem(const QString &s1,
                                  const QString &s2,
                                  const QString &s3)
-    : ProcessListBoxItem(s1+s2+s3)
+    : ProcessListBoxItem(s1+s2+s3, Normal)
 {
     str1 = s1;
     str2 = s2;
@@ -49,9 +49,9 @@ GrepListBoxItem::GrepListBoxItem(const QString &s1,
 }
 
 
-bool GrepListBoxItem::isErrorItem()
+bool GrepListBoxItem::isCustomItem()
 {
-    return false;
+    return true;
 }
 
 
@@ -154,15 +154,13 @@ void GrepView::searchActivated()
 }
 
 
-#include <iostream.h>
 void GrepView::lineHighlighted(int line)
 {
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
-    if (!i->isErrorItem())
+    if (i->isCustomItem())
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
             emit itemSelected(gi->filename(), gi->linenumber());
-            cout << "sel: " << gi->filename() << "," << gi->linenumber() << endl;
         }
 }
 
@@ -191,10 +189,4 @@ void GrepView::insertStdoutLine(const QString &line)
 void GrepView::projectOpened(CProject *prj)
 {
     grepdlg->setDirectory(prj->getProjectDir());
-}
-
-
-void GrepView::compilationAborted()
-{
-    killJob();
 }

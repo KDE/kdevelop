@@ -193,7 +193,7 @@ public: // Implementation of virtual methods
    * @param str String to initialize from.
    * @param startPos Position(0-based) at which to start.
    */
-  virtual int fromPersistantString( const char *str, int startPos ) { return startPos; }
+  virtual int fromPersistantString( const char * /*str*/, int startPos ) { return startPos; }
 
 };
 

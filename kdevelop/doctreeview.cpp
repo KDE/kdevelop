@@ -112,7 +112,7 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    QString fn(o? "folder_open" : "folder");
+    QString fn(o? "folder_open.png" : "folder.png");
     setPixmap(0, KGlobal::iconLoader()->loadApplicationMiniIcon(fn));
     KListViewItem::setOpen(o);
 }

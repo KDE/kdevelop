@@ -1,3 +1,11 @@
+1999-10-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* New asynchronous error message parser, replaces
+	  the complete class CErrorMessageParser
+	* Removed obsolete stdout and stderr widgets
+	* Give absolute path to db2html
+	* Do not link with libdb - it's not used currently
+	* Avoid some compiler warnings
+
 1999-10-13 Stefan Bartel <bartel@rz.uni-potsdam.de>
 	* commited patches for bugs 2118 and 2113
 

@@ -44,7 +44,7 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
 
   KIconLoader *icon_loader = KGlobal::iconLoader();
 
-  folder_pix = icon_loader->loadIcon("folder.png");
+  folder_pix = icon_loader->loadApplicationMiniIcon("folder.png");
   entry_pix = icon_loader->loadIcon("mini-default.png");
 
 }

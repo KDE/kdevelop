@@ -33,7 +33,6 @@ public:
     void showDialogWithPattern(QString pattern);
 
     // Component notifications:
-    virtual void compilationAborted();
     virtual void projectOpened(CProject *prj);
 
 signals:

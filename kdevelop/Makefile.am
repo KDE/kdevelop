@@ -25,7 +25,7 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
+kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
@@ -50,10 +50,13 @@ kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a  $(LIB_KHTML) -lkfile -lkio -lkspell -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldb -ldl $(LIBSOCKET) 
+kdevelop_LDADD   = ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
+	./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a \
+	./classparser/libclassparser.a ./classwizard/libclasswizard.a \
+	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
+noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
 	cclassview.h kswallow.h cgeneratenewfile.h \

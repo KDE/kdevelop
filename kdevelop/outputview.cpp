@@ -29,6 +29,33 @@ OutputView::~OutputView()
 {}
 
 
+void OutputView::childFinished(bool normal, int status)
+{
+    QString s;
+    ProcessListBoxItem::Type t;
+    
+    if (normal)
+        {
+            if (status)
+                {
+                    s = i18n("*** Exited with status: %1 ***").arg(status);
+                    t = ProcessListBoxItem::Error;
+                }
+            else
+                {
+                    s = i18n("*** Exited normally ***");
+                    t = ProcessListBoxItem::Diagnostic;
+                }
+        }
+    else
+        {
+            s = i18n("*** Process aborted ***");
+            t = ProcessListBoxItem::Error;
+        }
+    insertItem(new ProcessListBoxItem(s, t));
+}
+
+
 void OutputView::compilationAborted()
 {
     if (isRunning())

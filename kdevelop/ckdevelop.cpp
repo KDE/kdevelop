@@ -58,6 +58,7 @@
 #include "doctreeview.h"
 #include "makeview.h"
 #include "grepview.h"
+#include "outputview.h"
 #include "ceditwidget.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
@@ -856,6 +857,10 @@ void CKDevelop::slotBuildCompileFile(){
 	messages_widget->startJob();
 }
 
+/**
+ * a) make
+ * b) run
+ */
 void CKDevelop::slotBuildRun(){
   slotBuildMake();
   slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
@@ -863,6 +868,10 @@ void CKDevelop::slotBuildRun(){
   next_job = "run";
 }
 
+/**
+ * a) make
+ * b) run_with_args
+ */
 void CKDevelop::slotBuildRunWithArgs(){
     QString args=prj->getExecuteArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
@@ -875,6 +884,11 @@ void CKDevelop::slotBuildRunWithArgs(){
 	next_job = "run_with_args";
     }
 }
+
+/**
+ * a) make
+ * b) run kdbg
+ */
 void CKDevelop::slotBuildDebug(){
 
   if(!CToolClass::searchProgram("kdbg")){
@@ -900,6 +914,9 @@ void CKDevelop::slotBuildDebug(){
   
 }
 
+/**
+ * a) make
+ */
 void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
@@ -935,7 +952,10 @@ void CKDevelop::slotBuildMake(){
   messages_widget->startJob();
 }
 
-
+/**
+ * a) make clean
+ * b) make
+ */
 void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
@@ -954,7 +974,12 @@ void CKDevelop::slotBuildRebuildAll(){
   messages_widget->startJob();
 }
 
-
+/**
+ * a) make
+ * b) make distclean
+ * c) make -f Makefile.dist
+ * d) configure 
+ */
  void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
@@ -986,6 +1011,9 @@ void CKDevelop::slotBuildRebuildAll(){
   messages_widget->startJob();
 }
 
+/**
+ * a) make distclean
+ */
 void CKDevelop::slotBuildDistClean(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
@@ -1002,8 +1030,10 @@ void CKDevelop::slotBuildDistClean(){
   messages_widget->startJob();
 }
 
-
- void CKDevelop::slotBuildAutoconf(){
+/**
+ * a) make -f Makefile.dist
+ */
+void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
@@ -1026,7 +1056,9 @@ void CKDevelop::slotBuildDistClean(){
   beep = true;
 }
 
-
+/**
+ * a) configure
+ */
 void CKDevelop::slotBuildConfigure(){
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
@@ -1065,8 +1097,9 @@ void CKDevelop::slotBuildConfigure(){
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
   setToolMenuProcess(true);
-  messages_widget->killJob();
-  appl_process.kill();
+  QListIterator<Component> it(components);
+  for ( ; it.current(); ++it)
+      (*it)->compilationAborted();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2188,6 +2221,7 @@ void CKDevelop::slotDocumentDone( KHTMLView * ){
 }
 
 
+#if 0
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   stdin_stdout_widget->insert(QString::fromLatin1(buffer, buflen));
   showOutputView(true);
@@ -2198,7 +2232,7 @@ void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
   stderr_widget->insert(QString::fromLatin1(buffer, buflen));
   showOutputView(true);
 }
-
+#endif
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
   search_output += QString::fromLatin1(buffer, buflen);
@@ -2290,37 +2324,11 @@ int CKDevelop::searchToolGetNumber(QString str){
 }
 
 
-void CKDevelop::slotClickedOnMessagesWidget(int row){
-  TErrorMessageInfo info;
-  info = error_parser->getInfo(row+1);
-  if(info.filename != ""){
-    if(!bKDevelop)
-      switchToKDevelop();
-#warning FIXME
-#if 0
-    messages_widget->setCursorPosition(info.makeoutputline,0);
-    switchToFile(info.filename,info.errorline-1);
-#endif
-  }
-  else{
-     XBell(kapp->getDisplay(),100); // not a next found, beep
-  }
-}
-
-
 void CKDevelop::slotProcessExited(KProcess *proc){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
   bool ready = true;
-  QString result="";
   if (proc->normalExit()) {
-    
-    result= ((proc->exitStatus()) ? i18n("*** failed ***\n") : 
-          i18n("*** success ***\n"));
-    if ( proc== &appl_process)
-      result.sprintf(i18n("*** exit-code: %i ***\n"), 
-		     proc->exitStatus());
-    
     if (next_job == make_cmd){ // rest from the rebuild all
       messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
       (*messages_widget) << make_cmd;
@@ -2333,15 +2341,10 @@ void CKDevelop::slotProcessExited(KProcess *proc){
     }
     if ((next_job == "run"  || next_job == "run_with_args") && proc->exitStatus() == 0){ 
       // rest from the buildRun
-      appl_process.clearArguments();
-      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-      stdin_stdout_widget->clear();
-      stderr_widget->clear();
-      QString args = prj->getExecuteArgs();
       QString program = prj->getBinPROGRAM().lower();
-      
-      
+     
       if(next_job == "run_with_args"){
+        QString args = prj->getExecuteArgs();
 	if(!args.isEmpty()){
 	  program = prj->getBinPROGRAM().lower() + " "+args;
 	}
@@ -2361,24 +2364,16 @@ void CKDevelop::slotProcessExited(KProcess *proc){
 	o_tab_view->setCurrentTab(STDERR);
 	exec_str = "./" + program;
       }
-      appl_process << exec_str;
       cerr << endl << "EXEC:" << exec_str;
       setToolMenuProcess(false);
-      appl_process.start(KProcess::NotifyOnExit,KProcess::All);
+      outputview->prepareJob(prj->getProjectDir() + prj->getSubDir());
+      (*outputview) << exec_str;
+      outputview->startJob();
       next_job = "";
       ready = false;
     }
       
     next_job = "";
-  }
-  else {
-    result= i18n("*** process exited with error(s) ***\n");
-    next_job = "";
-    
-  }
-  if (!result.isEmpty())
-  {
-     messages_widget->insertStdoutLine(result);
   }
   if (ready){ // start the error-message parser
 #warning FIXME
@@ -2655,7 +2650,7 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
   menu_buffers->popup( point );
 }
 
-void CKDevelop::slotGrepDialogItemSelected(const QString &filename,int linenumber){
+void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
 

@@ -155,8 +155,6 @@ bool CKDevelop::slotProjectClose(){
 
     header_widget->clear();
     cpp_widget->clear();
-    stdin_stdout_widget->clear();
-    stderr_widget->clear();
     kdlg_dialogs_view->clear();
 
     kdlgedit->slotFileSave();
@@ -743,7 +741,7 @@ void CKDevelop::slotProjectManual(){
 			
 			messages_widget->prepareJob(info.dirPath());
 			(*messages_widget) << "db2html -d /usr/lib/sgml/stylesheets/kde.dsl ";
-			(*messages_widget) << info.fileName();
+			(*messages_widget) << info.absFilePath();
 			messages_widget->startJob();
 
 		}

@@ -41,13 +41,13 @@ public: // Implementation of virtual methods
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asPersistantString( QString &str ) { return NULL;}
+  virtual const char *asPersistantString( QString & /*str*/ ) { return NULL;}
 
   /** Initialize the object from a persistant string. 
    * @param str String to initialize from.
    * @param startPos Position(0-based) at which to start.
    */
-  virtual int fromPersistantString( const char *str, int startPos ) {return 0;}
+  virtual int fromPersistantString( const char * /*str*/, int /*startPos*/ ) {return 0;}
 
   /** Output this object to stdout. */
   virtual void out();
