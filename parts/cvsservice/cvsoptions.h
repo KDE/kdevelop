@@ -9,6 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef CVSOPTIONS_H
+#define CVSOPTIONS_H
+
 #include <qstring.h>
 #include <qdom.h>
 
@@ -94,3 +97,6 @@ private:
     static CvsOptions *m_instance;
     CvsOptions();
 };
+
+#endif  // CVSOPTIONS_H
+
