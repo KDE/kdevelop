@@ -168,7 +168,9 @@ offers a set of functionality such as <CODE>KTMainWindow</CODE>
 <UL>
 <LI>KTabListBox: offers a multi-column list box where the user can change the rows with drag'n drop.</LI>
 <LI>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.</LI>
-<LI>KNewPanner: manages two child widgets like QSplitter.</LI>
+<LI>KNewPanner: manages two child widgets like QSplitter.
+<BLOCKQUOTE>Removed in KDE 2. Use QSplitter instead.</BLOCKQUOTE>
+</LI>
 <LI>KHTMLView: a HTML-interpreting widget (khtmlw)</LI>
 </UL>
 <P>For use with <CODE>KTMainWindow</CODE>, create your view instance and call <CODE>setView(QWidget*)</CODE> to enable the management by the
@@ -217,12 +219,15 @@ control elements that the Qt library provides, KDE offers:
 <UL>
 <LI>KButton: active raise-lower button</LI>
 <LI>KButtonBox: manages buttons</LI>
-<LI>KColorButton: button displaying a color setting</LI>
+<LI>KColorButton: button displaying a color setting, calls <CODE>KColorDialog</CODE></LI>
+<LI>KIconLoaderButton: button displaying a selected Icon, calls <CODE>KIconLoaderDialog</CODE></LI>
 <LI>KDatePicker: Date selection widget</LI>
 <LI>KIntegerLine: line edit that only accepts integer values</LI>
 <LI>KLedLamp: LED lamp</LI>
 <LI>KLined: line edit</LI>
-<LI>KNewPanner: panner devider managing two widgets</LI>
+<LI>KNewPanner: panner devider managing two widgets
+<BLOCKQUOTE>Use <CODE>QSplitter</CODE> instead, this is already removed in KDE 2.</BLOCKQUOTE>
+</LI>
 <LI>KPopupMenu: popup menu with title</LI>
 <LI>KRestrictedLine: line edit that only accepts certain input</LI>
 <LI>KSelector: value selector</LI>

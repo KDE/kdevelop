@@ -1,8 +1,10 @@
-<!doctype linuxdoc system>
+<!DOCTYPE LINUXDOC PUBLIC "-//GMD//DTD linuxdoc//EN">
+<linuxdoc>
 <book>
 <titlepag>
 <title>The KDevelop Programming Handbook
-<subtitle>The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0
+<subtitle>The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version
+1.0</subtitle></title>
 <author>
 <name>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
@@ -11,11 +13,11 @@
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
+
 <toc>
 
 <chapt>Introduction
 <p>
-
 As Unix Systems are becoming more and more popular to even beginners working with computer machines due to its advantages in regards of
 stability and functionality, most are somehow disappointed, because those applications don't have a consistent look and each one
 behaves different from another. With KDE, developers have an almost perfect way to create first-class applications for Unix desktop
@@ -32,6 +34,7 @@ this handbook tries to cover the application design for KDE programs, which also
 as the <idx/KDE libraries/ and the design of User Interfaces. Also, you should have made yourself comfortable with KDevelop by reading
 <htmlurl url="index.html" name="The User Manual to KDevelop">, which contains a descriptive review of the functionality provided by the
 IDE.
+
 <sect>About this Handbook
 <p>
 This handbook has been written to give developers an introduction into KDE application development by using the KDevelop
@@ -73,7 +76,7 @@ Additional information about <idx/Qt//KDE programming is available by various so
 almost all aspects of the <idx/Qt/ GUI toolkit and contains examples as well.
 <item><htmlurl url="index.html" name="The User Manual to KDevelop">, provided with the KDevelop IDE,
 <item><em/Online-Reference/ to the <idx/Qt/-library, provided with your copy of the <idx/Qt/ toolkit in
-HTML and available as Postscript on <url url="http://www.troll.no">
+HTML and available as PostScript on <url url="http://www.troll.no">
 <item>On the Internet, see
   <itemize>
   <item>the Troll Tech web site at <url url="http://www.troll.no">,
@@ -898,28 +901,30 @@ which can be used to produce nice habits for displaying progress-bars like KDeve
 <sect2>Keyboard Accelerators
 <p>
 With reaching the method <tt/initKeyAccel()/, we already constructed the standard items of an application main window- the menubar,
-<idx/toolbar/ and statusbar. Indeed, we didn't set any keyboard accelerator<nidx/accelerator/s by which advanced users that only want to work with the keyboard
-have a quick access to certain commands that are used most often during work with our program. To do this, we could have inserted the
-accelerator<nidx/accelerator/ keys by the insertion of the menu-items for example, but KDE offers a good solution to construct and maintain keyboard
-accelerator<nidx/accelerator/s. A lot of users want to have them configurable on one hand and on the other standard accelerator<nidx/accelerator/s should be the same over
-all applications. Therefore, the KDE control center offers configuring standard keyboard accelerator<nidx/accelerator/s globally by using the
-<tt/<cdx/KAccel// class. Additionally, the <idx/KDE libraries/ contain a widget that lets users configure application specific keyboard shortcut<nidx/shortcuts/s
-easily. As the application framework only uses menu-items that have standard actions such as "New" or "Exit", these are set by the
-method <tt/initKeyAccel()/. Standard actions just have to be connected, for your application specific keyboard values, you have to
-insert them first by specifying the keyboard accelerator<nidx/accelerator/ name and then connect them. As our accelerator<nidx/accelerator/s are all present in the
-menubar, we have to change the accelerator<nidx/accelerator/s for the popup entries. Finally we call <tt/readSettings()/, which reads the current
-settings from the root window of KDE containing the configuration of standard accelerator<nidx/accelerator/s, then the settings for accelerator<nidx/accelerator/s
-specified in the application's config file. When we're going further into our example project, we will also talk about how to configure
-our application specific accelerator<nidx/accelerator/s by a configuration dialog, see <ref id="Configuring Menubars and Toolbars" name="Configuring
-Menubars and Toolbars"> for that part of the development process.
+<idx/toolbar/ and statusbar. Indeed, we didn't set any keyboard accelerator<nidx/accelerator/s by which advanced users that only want
+to work with the keyboard have a quick access to certain commands that are used most often during work with our program. To do this, we
+could have inserted the accelerator<nidx/accelerator/ keys by the insertion of the menu-items for example, but KDE offers a good
+solution to construct and maintain keyboard accelerator<nidx/accelerator/s. A lot of users want to have them configurable on one hand
+and on the other standard accelerator<nidx/accelerator/s should be the same over all applications. Therefore, the KDE control center
+offers configuring standard keyboard accelerator<nidx/accelerator/s globally by using the <tt/<cdx/KAccel// class. Additionally, the
+<idx/KDE libraries/ contain a widget that lets users configure application specific keyboard shortcut<nidx/shortcuts/s easily. As the
+application framework only uses menu-items that have standard actions such as "New" or "Exit", these are set by the method
+<tt/initKeyAccel()/. Standard actions just have to be connected, for your application specific keyboard values, you have to insert them
+first by specifying the keyboard accelerator<nidx/accelerator/ name and then connect them. As our accelerator<nidx/accelerator/s are
+all present in the menubar, we have to change the accelerator<nidx/accelerator/s for the popup entries. Finally we call
+<tt/readSettings()/, which reads the current settings from the root window of KDE containing the configuration of standard
+accelerator<nidx/accelerator/s, then the settings for accelerator<nidx/accelerator/s specified in the application's config file. When
+we're going further into our example project, we will also talk about how to configure our application specific
+accelerator<nidx/accelerator/s by a configuration dialog, see <ref id="Configuring Menubars and Toolbars" name="Configuring Menubars
+and Toolbars"> for that part of the development process.
 
 <sect2>The Document-View Model
 <p>
-The next two member function calls, <tt/initDocument()/ and <tt/initView()/, are finally building the part that the application
-windows are supposed to provide to the user: an interface to work with data that the application is supposed to manipulate; and that is
-also the reason why the application framework contains three classes, an <tt/*App/, <tt/*View/ and <tt/*Doc/ class. To understand, why
-this structure is helpful, we'll look a bit aside the actual code and introduce some theory, then we'll switch to the program again to
-see how the KDevelop frameworks support such a model.
+The next two member function calls, <tt/initDocument()/ and <tt/initView()/, are finally building the part that the application windows
+are supposed to provide to the user: an interface to work with data that the application is supposed to manipulate; and that is also
+the reason why the application framework contains three classes, an <tt/*App/, <tt/*View/ and <tt/*Doc/ class. To understand, why this
+structure is helpful, we'll look a bit aside the actual code and introduce some theory, then we'll switch to the program again to see
+how the KDevelop frameworks support such a model.
 
 Basically, all what has been explained about the framework is that we need an application instance that contains a main window. This
 window is responsible to provide the basic interface for the user- it contains the menubar, <idx/toolbar/s and statusbar and the event
@@ -948,13 +953,13 @@ in general, e.g. the same document object could be displayed by two views at the
 tiling the current one that then contains two view object that build the actual window view region.
 
 Now, if you're coming from MS-Windows systems you may have some experience with that- the MFC already provide a document model that is
-ready to use. For KDE and <idx/Qt/ applications, things are a bit different. <idx/Qt/ is a powerful toolkit as it provides the most needed classes,
-widgets etc. But there wasn't any intention to take care of the document-view model, and as KDE is inheriting <idx/Qt/, there weren't any
-tendencies to introduce such a model either. This somehow has its reason in the fact that usually X-applications don't work with an MDI
-(Multiple Document Interface).  Each main window is responsible for its data and that reduces the need of a document model to the fact
-that methods to work on documents are always implied into widgets. The only exception from this currently is the <em/KOffice/ project
-that is intended to provide a complete office suite of applications like a word processor, a spreadsheet etc. Technically, this is
-realized by two changes two the normal usage of <idx/Qt/ and KDE:
+ready to use. For KDE and <idx/Qt/ applications, things are a bit different. <idx/Qt/ is a powerful toolkit as it provides the most
+needed classes, widgets etc. But there wasn't any intention to take care of the document-view model, and as KDE is inheriting <idx/Qt/,
+there weren't any tendencies to introduce such a model either. This somehow has its reason in the fact that usually X-applications
+don't work with an MDI (Multiple Document Interface).  Each main window is responsible for its data and that reduces the need of a
+document model to the fact that methods to work on documents are always implied into widgets. The only exception from this currently is
+the <em/KOffice/ project that is intended to provide a complete office suite of applications like a word processor, a spreadsheet etc.
+Technically, this is realized by two changes two the normal usage of <idx/Qt/ and KDE:
 
 <itemize>
 <item>KOffice uses KOM and the free MICO implementation of CORBA for object communication,
@@ -998,14 +1003,14 @@ memory.
 Now, after we created all instances of the <tt/<cdx/KTMainWindow// instance of our application to create the first window, we have to
 initialize certain values that influence the look of the program. For this, we call <tt/readOptions()/, which gets all values and calls
 the methods needed to set the according attributes. The KDE-Core library contains the class <tt/<cdx/KConfig// that provides a good
-possibility to store values in configuration files as well as to read them in again. Also, as each <tt/<cdx/KApplication// instance creates
-it's resource file already, we only have to access this file and create our values. As <tt/<cdx/KConfig// provides us the file object, we
-have to use the class <tt/<cdx/KConfigBase// to read and write all entries. As writing is very easy to do with <tt/writeEntry()/ methods,
-reading depends on the attribute type which we want to initialize. Generally, an entry in the configuration file contains a value name
-and a value. Values that belong together in some context can be collected in groups, therefore we have to set the group name before we
-access the value afterwards; the group has to be set only once for reading a set of attributes that are in the same group.
+possibility to store values in configuration files as well as to read them in again. Also, as each <tt/<cdx/KApplication// instance
+creates it's resource file already, we only have to access this file and create our values. As <tt/<cdx/KConfig// provides us the file
+object, we have to use the class <tt/<cdx/KConfigBase// to read and write all entries. As writing is very easy to do with
+<tt/writeEntry()/ methods, reading depends on the attribute type which we want to initialize. Generally, an entry in the configuration
+file contains a value name and a value. Values that belong together in some context can be collected in groups, therefore we have to
+set the group name before we access the value afterwards; the group has to be set only once for reading a set of attributes that are in
+the same group. Let's have a look at what we want to read in:
 
-Let's have a look at what we want to read in:
 <tscreen><code>
 1   void KScribbleApp::readOptions()
 2   {
@@ -1060,43 +1065,47 @@ the configuration file. Indeed, the file is, according to the KDE File System St
 locations for project files. As the config file is placed in the user's home directory, each user has it's own appearance of his
 application except for values that are located in a system wide configuration file that can optionally be created and installed by the
 programmer in the KDE directory. But, although this could help in some cases, we should avoid any dependency of our application towards
-the existing of file entries. Therefore, all read methods provided by <tt/<cdx/KConfigBase// allow to add a default value to be used when the
-entry doesn't exist. Another thing important to a programmer is that the configuration file is stored in plain text, and this is for
-some reasons as well as you have to watch some criteria:
+the existing of file entries. Therefore, all read methods provided by <tt/<cdx/KConfigBase// allow to add a default value to be used
+when the entry doesn't exist. Another thing important to a programmer is that the configuration file is stored in plain text, and this
+is for some reasons as well as you have to watch some criteria:
+
 <itemize>
 <item>the user is able change the configuration file by a plain text editor
 <item>if the user wants to change values by hand, the entries should be very transparent to determine their purpose
 <item>for entries that have to be saved, but are critical in terms of security like passwords, you have to look for a proper solution
 to ensure the security.
 </itemize>
-Now that we know the basics, we're going to analyze the code. As said, we only have to use our config pointer
-to access the values. First, in line 4, we set the current group to "General Options". This indicates that the values used are somewhat
-general attributes for the application. Then we read the values for the <idx/toolbar/ and statusbar- these have to be saved when the
-application closes to restore their status again when the user restarts the program. As the bars can only be on or off, we use a
-boolean value, therefore, our method is <tt/readBoolEntry()/. The process is identical for both bars, so we only have a look at the
-lines 7-10 to watch what's happening for the <idx/toolbar/. First, we read the value into the temporary variable <tt/bViewToolbar/ at line 7.
-The value name in the file is "Show Toolbar" and, if the value is not present (which would be the case the first time the application
-starts), the default value is set to <tt/true/. Next, we set the checkmark for the menuentry for en-/disabling the <idx/toolbar/ by this
-value: we call <tt/setItemChecked()/ on the view menu, entry <tt/ID_VIEW_TOOLBAR/ with our attribute. Finally, we set the <idx/toolbar/ to use
+
+Now that we know the basics, we're going to analyze the code. As said, we only have to use our config pointer to access the values.
+First, in line 4, we set the current group to "General Options". This indicates that the values used are somewhat general attributes
+for the application. Then we read the values for the <idx/toolbar/ and statusbar- these have to be saved when the application closes to
+restore their status again when the user restarts the program. As the bars can only be on or off, we use a boolean value, therefore,
+our method is <tt/readBoolEntry()/. The process is identical for both bars, so we only have a look at the lines 7-10 to watch what's
+happening for the <idx/toolbar/. First, we read the value into the temporary variable <tt/bViewToolbar/ at line 7. The value name in
+the file is "Show Toolbar" and, if the value is not present (which would be the case the first time the application starts), the
+default value is set to <tt/true/. Next, we set the checkmark for the menuentry for en-/disabling the <idx/toolbar/ by this value: we
+call <tt/setItemChecked()/ on the view menu, entry <tt/ID_VIEW_TOOLBAR/ with our attribute. Finally, we set the <idx/toolbar/ to use
 the value. By default, the <idx/toolbar/ is visible, therefore, we only have to do something if <tt/bViewToolbar/ is <tt/false/. With
 <tt/enableToolBar()/ (line 10) we're setting the bar to hide itself if it is disabled.
 
-Next, we have to read the bar positions. As the user might have changed the bar position by dragging a bar with the mouse to
-another view area, these have to be saved as well and their status restored. Looking at the classes <tt/<cdx/KToolBar// and <tt/<cdx/KMenuBar//,
-we see that the bar positions can be:
+Next, we have to read the bar positions. As the user might have changed the bar position by dragging a bar with the mouse to another
+view area, these have to be saved as well and their status restored. Looking at the classes <tt/<cdx/KToolBar// and
+<tt/<cdx/KMenuBar//, we see that the bar positions can be:
+
 <tscreen><verb>
 enum BarPosition {Top, Left, Bottom, Right, Floating, Flat}
 </verb></tscreen>
+
 As this value has been written in a numeric value, we have to read it with <tt/readNumEntry()/ and convert it to a position value. With
 <tt/setMenuBarPos()/ and <tt/setBarPos()/ we tell the bars where to show up.
 
 Now you probably have noticed that our "File" menu contains a menu for recently used files. The filenames are stored in a list of
-strings, which has to be saved on application closing and now has to be read in to restore the menu. First, we initialize the list
-with the entries stored by using the <tt/readListEntry()/. Then, in a <tt/for-/loop, we create a menu entry for each list item.
+strings, which has to be saved on application closing and now has to be read in to restore the menu. First, we initialize the list with
+the entries stored by using the <tt/readListEntry()/. Then, in a <tt/for-/loop, we create a menu entry for each list item.
 
 Finally, we only have to take care for the geometry of our window. We read in the appearance by a <tt/QSize/ variable containing an x
-and y value for width and height of the window. As the window is initialized by <tt/<cdx/KTMainWindow//, we don't have to take care for a
-default value and only will use <tt/resize()/ if the entry is not empty.
+and y value for width and height of the window. As the window is initialized by <tt/<cdx/KTMainWindow//, we don't have to take care for
+a default value and only will use <tt/resize()/ if the entry is not empty.
 
 What is left to explain on application construction is that we initially have to disable available user commands that shouldn't be
 available if some instances don't match the needed criteria. These are file saving and operations that are using the clipboard. During
@@ -2220,20 +2229,22 @@ by retrieving the values from the dialog (which would make your dialog a lot mor
 <tt/delete/ if you called the dialog instance with <tt/new/ to avoid memory leaks.
 
 Finally, you have to connect a menuentry (with according statusbar help) to the new slot invoking the dialog; optionally a keyboard
-accelerator<nidx/accelerator/ and a <idx/toolbar/ icon. For this, add a resource ID to the file <tt/resource.h/ with a define. Then add an according menuentry
-to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The menuentry consists of:
+accelerator<nidx/accelerator/ and a <idx/toolbar/ icon. For this, add a resource ID to the file <tt/resource.h/ with a define. Then add
+an according menuentry to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The
+menuentry consists of:
 
 <itemize>
 <item>an optional icon pixmap. Call this with the <tt/Icon("iconname.xpm")/ macro of <tt/<cdx/KApplication// to use the provided
 <tt/KIconLoader/ instance.
-<item>the menuentry name. Add this with the <tt/i18n("&amp;entryname")/ macro of <tt/<cdx/KApplication// to allow internationalization. The
-ampersand should be in front of the letter that will be displayed underlined to access the entry directly by keyboard acceleration.
+<item>the menuentry name. Add this with the <tt/i18n("&amp;entryname")/ macro of <tt/<cdx/KApplication// to allow
+internationalization. The ampersand should be in front of the letter that will be displayed underlined to access the entry directly by
+keyboard acceleration.
 <item>the member instance to call. Normally this would be the <tt/this/ pointer.
 <item>the member slot to call. Use <tt/SLOT(yourmethod()/ to call the slot on the signal <tt/activated()/.
-<item>the accelerator<nidx/accelerator/ key. This should be set to zero as this is done by an entry in <tt/initKeyAccel()/ where you have to introduce an
-accelerator<nidx/accelerator/ key together with the slot to call. Then call <tt/changeMenuAccel()/ to change the menu item's accelerator<nidx/accelerator/. This will make
-it configurable by a key-chooser dialog later. For standard actions, use the enumerable values given by <tt/<cdx/KAccel//.
-<item>the menu ID as set in <tt/resource.h/
+<item>the accelerator<nidx/accelerator/ key. This should be set to zero as this is done by an entry in <tt/initKeyAccel()/ where you
+have to introduce an accelerator<nidx/accelerator/ key together with the slot to call. Then call <tt/changeMenuAccel()/ to change the
+menu item's accelerator<nidx/accelerator/. This will make it configurable by a key-chooser dialog later. For standard actions, use the
+enumerable values given by <tt/<cdx/KAccel//. <item>the menu ID as set in <tt/resource.h/
 </itemize>
 
 
@@ -2338,8 +2349,9 @@ As the frame applications provided by KDevelop contain a statusbar as well, it a
 menu and <idx/toolbar/ items. A statusbar help message is a short message that extends the meaning of a tool-tip or can be seen as a
 replacement for a tool-tip over menubar items and is (as the name suggests) displayed in the statusbar when the user enters a menu and
 highlights the menu entry; therefore all menu items connect their signal <tt/highlighted(int)/ to the method <tt/statusCallback(int)/
-which selects the according message in a switch statement. Whenever you add a menuitem to already existing menus or a <idx/toolbar/ item, add
-an according entry in this method with a short description of the action the user will cause when activating the button or menuentry.
+which selects the according message in a switch statement. Whenever you add a menuitem to already existing menus or a <idx/toolbar/
+item, add an according entry in this method with a short description of the action the user will cause when activating the button or
+menuentry.
 
 Example:
 
@@ -2411,7 +2423,7 @@ well as by a helpmenu where the user can access the online-help directly from wi
 Now, KDE (and therefore KDevelop) use the SGML-Tools 1.x package (see <url url="http://www.sgmltools.org">), which was formerly known
 as the LinuxDoc package. It contains a DTD called <tt/LinuxDoc/, and a set of mapping files for various output transformations and the
 necessary tools that actually do the replacement of <tt/LinuxDoc/ tags. The LinuxDoc DTD is based on the Qwertz DTD which itself was
-written to provide a good mapping (replacement of tags) especially for the LaTeX text system, therefore is very usable to produce a
+written to provide a good mapping (replacement of tags) especially for the &latex; text system, therefore is very usable to produce a
 good printed output. The package then got it's name from the usage for writing documentation for the LDP (Linux Documentation Project)
 and has only changed it's name due to the fact that it is an sgml-system that does not necessarily have a direct connection with the
 Linux project but can be used on any Unix-System; you can as well write your own DTD and mappings if you ever like to.
@@ -2431,7 +2443,7 @@ SGML-Tools' 1.x <tt/sgml2html/ converter to produce HTML output.
 
 I personally have encountered that while writing the KDevelop handbooks using the LinuxDoc DTD is very easy and lasts for the
 requirements I need for writing the documentation. The learning curve is very high, so you will be a sgml-tools/LinuxDoc DTD guru
-within days and that will save you a lot of time to work yourself into any formatting system such as TeX for printed output for your
+within days and that will save you a lot of time to work yourself into any formatting system such as &tex; for printed output for your
 documentation or a markup language for HTML output.
 
 One major reason for still using the sgml-tools 1.x is that most distributions ship with the package and all additional tools you need
@@ -2443,7 +2455,7 @@ see. The output formats you can achieve witht the sgml-tools are:
 <item>plain text
 <item>GNU info,
 <item>Lyx format
-<item>TeX, DVI, Postscript and PDF format
+<item>&tex;, DVI, PostScript and PDF format
 <item>Rich Text Format (RTF)
 </itemize>
 
@@ -2477,9 +2489,7 @@ built the SGML formatting.
 The following sections will therefore introduce you to the most important parts of an LinuxDoc sgml file and how to extend your
 documentation.
 
-<sect1>The Document Structure and Document Types
-<p>
-<sect2>The DTD Declaration
+<sect1>The DTD Declaration
 <p>
 An SGML file, whatever DTD it may use, always has to start with the DTD declaration. This tells the SGML parser about which DTD to use.
 Therefore, the first tag (a bracketed expression like &lt;yourtag&gt; your contents &lt;/yourtag&gt;) is always the DOCTYPE:
@@ -2501,7 +2511,7 @@ that you can select from, dependent on the purpose of your document or it's legt
 applications.
 <item><tt/&lt;report&gt;/ for articles that are longer than an &lt;article&gt; type
 <item><tt/&lt;book&gt;/ for writing large books - the KDevelop handbooks have been written using this document type
-<item><tt/&lt;slides&gt;/ for slideshows. This is useful for presentations. You will use latex as output format in most cases, of
+<item><tt/&lt;slides&gt;/ for slideshows. This is useful for presentations. You will use &latex; as output format in most cases, of
 course.
 <item><tt/&lt;letter&gt;/ for normal letters
 <item><tt/&lt;telefax&gt;/ for a telefax
@@ -2510,14 +2520,13 @@ course.
 
 Mind that these are only describing how the document structure will look like in general - not the actual output. As mentionend, the
 KDevelop default generated template is using the &lt;article&gt; structure. This is used by most applications except KDevelop itself
-which uses the &lt;book&gt; format. In the HTML output this doesn't really matter much - but for LaTeX e.g. this makes much difference.
+which uses the &lt;book&gt; format. In the HTML output this doesn't really matter much - but for &latex; e.g. this makes much difference.
 The handbooks are really "books" with separate pages for each chapter as the main difference.
 
 What follows is that the end of the sgml file must have an end-tag for the document structure type - for &lt;article&gt; this would be
-&lt;/article&gt;.
+&etago;article&gt;.
 
-
-<sect2>Titlepages
+<sect1>Titlepages
 <p>
 Now, after the document structure follows a section that describes all entries usually found on a titlepage. The predefined template
 doesn't use this explicitely but only sets the information for <tt/&lt;title&gt;/, <tt/&lt;author&gt;/ and <tt/&lt;date&gt;/ as this
@@ -2525,28 +2534,30 @@ lasts for most purposes. Especially when using a <tt/&lt;book&gt;/ structure, yo
 following lists the according tags for this, taken from the sgml source of this handbook:
 
 <code>
-<!doctype linuxdoc system>
-<book>
-<titlepag>
-<title>The KDevelop Programming Handbook
-<subtitle>The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0
-<author>
-<name>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
-<inst>The KDevelop Team
-<date>Version 2.1 , July 7, 1999
-<abstract>
-This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
-Public License; see <ref id="Copyright" name="Copyright"> for more information.
-</abstract>
+&lt;!doctype linuxdoc system&gt;
+&lt;book&gt;
+&lt;titlepag&gt;
+&lt;title&gt;The KDevelop Programming Handbook
+&lt;subtitle&gt;The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0
+&lt;author&gt;
+&lt;name&gt;Ralf Nolden &lt;htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de"
+                                   name = "&lt;Ralf.Nolden@post.rwth-aachen.de&gt;"&gt;
+&lt;inst&gt;The KDevelop Team
+&lt;date&gt;Version 2.1 , July 7, 1999
+&lt;abstract&gt;
+This handbook itself is part of the KDevelop Integrated Development Environment
+and is therefore also licensed under the GNU General Public License;
+see &lt;ref id="Copyright" name="Copyright"&gt; for more information.
+&etago;abstract&gt;
 </code>
 
 This covers all a normal titlepage usually contains. The <tt/&lt;author&gt;/ tag can also include a <tt/&lt;thanks&gt;/ tag to insert
 some thanks to co-authors, lecturers etc. <tt/&lt;inst&gt;/ represents the institute or company for which the author wrote the
-documentation; you could also use your team-name here like I did. <tt/&lt;abstract&gt; now covers an short description that is placed
+documentation; you could also use your team-name here like I did. <tt/&lt;abstract&gt;/ now covers an short description that is placed
 on the titlepage as well. This is somewhat annoying on a printed version where this section would be printed on the back of the title
-page where the copyright notice etc. are collected; this can be changed for LaTeX output when editing the tex file.
+page where the copyright notice etc. are collected; this can be changed for &latex; output when editing the &tex; file.
 
-<sect2>Indices
+<sect1>Indices
 <p>
 The LinuxDoc DTD defines a set of tags for various indices as they occur in usual documents. Those are:
 
@@ -2570,22 +2581,26 @@ two which leave the indexed phrase within the page and two for index entries tha
 </list>
 
 These tags are ignored by all backends (the tool that does the mapping of the sgml-tags to their document format) except
-<tt/sgml2latex/, which generates an index file <tt/index.idx/ that can be turned to a TeX-index with <tt/makeindex index.idx/. The
-index itself can be inserted into the tex output file afterwards with <tt/\printindex/. I patched my mapping for the LaTeX output to do
+<tt/sgml2latex/, which generates an index file <tt/index.idx/ that can be turned to a &tex;-index with <tt/makeindex index.idx/. The
+index itself can be inserted into the &tex; output file afterwards with <tt/\printindex/. I patched my mapping for the &latex; output to do
 this automatically (but still don't know how to include the index into the table of contents...).
 
-<sect2>The Document Contents
+<sect1>The Document Contents
 <p>
 Now, after explaining most details of the general structure, we're coming to the actual document contents. Dependent on the document
 structure type, has to start with a <tt/&lt;sect&gt;/ tag, when using <tt/&lt;book&gt;/ you have to start with <tt/&lt;chapt&gt;/
 for the chapters.
 
 After the start tag, you can structurize each chapter with <tt/&lt;sect1&gt;/, <tt/&lt;sect2&gt;/ etc. up to the allowed level of
-sub-sections (up to 4).
+sub-sections (4).
 
 The chapter start tag is followed by the chapter's title. There, you have the additional choice to use <tt/&lt;title&gt;/ and
-<tt>&lt;/title&gt;</> for the chapter's title.
-
+&etago;title&gt; for the chapter's title (optional). Now, afte the title of the chapter, you have to add a &lt;p&gt; tag to actually
+start with the subsection's contents. Within that, you have almost all means to format your document with list, enumerations,
+itemizations and description lists. Further, quotations, code snippets and the like can be inserted by tags; see you <tt/sgmltools/
+documentation guide for a complete list. What you should look for is the "special characters" section. This contains all valid
+replacements for characters that are different from the usual alphabet like brackets, slashes and symbols like trademark etc. With the
+given tags you can structurize your text contents as you application documentation requires.
 
 <sect>How to call Help in Dialogs
 <p><nidx/help functions/
@@ -2600,6 +2615,7 @@ kapp->invokeHTMLHelp( QString aFilename, QString aTopic );
 where <tt/aFilename/ is the the filename to be called within your HTML documentation directory of the application; e.g index-3.html.
 <tt/aTopic/ then is the topic that is to be called. The hash prefix is automatically added; just enter the chapter you want to have on
 this page, actually this would be a subsection's name.
+
 
 <chapt>Class Documentation with <idx/KDoc/
 <p>
@@ -3689,7 +3705,6 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 <appendix>Additional Information
 <p>
-
 <sect>Example Makefile.am for a Shared Library
 <p>
 <tscreen><verb>

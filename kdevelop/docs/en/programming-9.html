@@ -65,7 +65,7 @@ see. The output formats you can achieve witht the sgml-tools are:
 <LI>plain text</LI>
 <LI>GNU info,</LI>
 <LI>Lyx format</LI>
-<LI>TeX, DVI, Postscript and PDF format</LI>
+<LI>TeX, DVI, PostScript and PDF format</LI>
 <LI>Rich Text Format (RTF)</LI>
 </UL>
 <P>
@@ -99,9 +99,6 @@ built the SGML formatting.
 <P>The following sections will therefore introduce you to the most important parts of an LinuxDoc sgml file and how to extend your
 documentation.
 <P>
-<H4>The Document Structure and Document Types</H4>
-
-<P>
 <H4>The DTD Declaration</H4>
 
 <P>An SGML file, whatever DTD it may use, always has to start with the DTD declaration. This tells the SGML parser about which DTD to use.
@@ -123,7 +120,7 @@ that you can select from, dependent on the purpose of your document or it's legt
 applications.</LI>
 <LI><CODE>&lt;report&gt;</CODE> for articles that are longer than an &lt;article&gt; type</LI>
 <LI><CODE>&lt;book&gt;</CODE> for writing large books - the KDevelop handbooks have been written using this document type</LI>
-<LI><CODE>&lt;slides&gt;</CODE> for slideshows. This is useful for presentations. You will use latex as output format in most cases, of
+<LI><CODE>&lt;slides&gt;</CODE> for slideshows. This is useful for presentations. You will use LaTeX as output format in most cases, of
 course.</LI>
 <LI><CODE>&lt;letter&gt;</CODE> for normal letters</LI>
 <LI><CODE>&lt;telefax&gt;</CODE> for a telefax</LI>
@@ -136,7 +133,6 @@ The handbooks are really "books" with separate pages for each chapter as the mai
 <P>What follows is that the end of the sgml file must have an end-tag for the document structure type - for &lt;article&gt; this would be
 &lt;/article&gt;.
 <P>
-<P>
 <H4>Titlepages</H4>
 
 <P>Now, after the document structure follows a section that describes all entries usually found on a titlepage. The predefined template
@@ -146,25 +142,29 @@ following lists the according tags for this, taken from the sgml source of this 
 <P>
 <HR>
 <PRE>
-&lt;!doctype linuxdoc system>
-&lt;book>
-&lt;titlepag>
-&lt;title>The KDevelop Programming Handbook
-&lt;subtitle>The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0
-&lt;author>
-&lt;name>Ralf Nolden &lt;htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "&lt;Ralf.Nolden@post.rwth-aachen.de>">
-&lt;inst>The KDevelop Team
-&lt;date>Version 2.1 , July 7, 1999
-&lt;abstract>
-This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
-Public License; see &lt;ref id="Copyright" name="Copyright"> for more information.
+&lt;!doctype linuxdoc system&gt;
+&lt;book&gt;
+&lt;titlepag&gt;
+&lt;title&gt;The KDevelop Programming Handbook
+&lt;subtitle&gt;The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.0
+&lt;author&gt;
+&lt;name&gt;Ralf Nolden &lt;htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de"
+                                   name = "&lt;Ralf.Nolden@post.rwth-aachen.de&gt;"&gt;
+&lt;inst&gt;The KDevelop Team
+&lt;date&gt;Version 2.1 , July 7, 1999
+&lt;abstract&gt;
+This handbook itself is part of the KDevelop Integrated Development Environment
+and is therefore also licensed under the GNU General Public License;
+see &lt;ref id="Copyright" name="Copyright"&gt; for more information.
+&lt;/abstract&gt;
 </PRE>
 <HR>
 <P>This covers all a normal titlepage usually contains. The <CODE>&lt;author&gt;</CODE> tag can also include a <CODE>&lt;thanks&gt;</CODE> tag to insert
 some thanks to co-authors, lecturers etc. <CODE>&lt;inst&gt;</CODE> represents the institute or company for which the author wrote the
-documentation; you could also use your team-name here like I did. <CODE>&lt;abstract&gt; now covers an short description that is placed
+documentation; you could also use your team-name here like I did. <CODE>&lt;abstract&gt;</CODE> now covers an short description that is placed
 on the titlepage as well. This is somewhat annoying on a printed version where this section would be printed on the back of the title
-page where the copyright notice etc. are collected; this can be changed for LaTeX output when editing the tex file.
+page where the copyright notice etc. are collected; this can be changed for LaTeX output when editing the TeX file.
+<P>
 <H4>Indices</H4>
 
 <P>The LinuxDoc DTD defines a set of tags for various indices as they occur in usual documents. Those are:
@@ -185,7 +185,7 @@ two which leave the indexed phrase within the page and two for index entries tha
 <LI>&lt;ncdx&gt; as before for a tt-index entry</LI>
 <P>These tags are ignored by all backends (the tool that does the mapping of the sgml-tags to their document format) except
 <CODE>sgml2latex</CODE>, which generates an index file <CODE>index.idx</CODE> that can be turned to a TeX-index with <CODE>makeindex index.idx</CODE>. The
-index itself can be inserted into the tex output file afterwards with <CODE>\printindex</CODE>. I patched my mapping for the LaTeX output to do
+index itself can be inserted into the TeX output file afterwards with <CODE>\printindex</CODE>. I patched my mapping for the LaTeX output to do
 this automatically (but still don't know how to include the index into the table of contents...).
 <P>
 <H4>The Document Contents</H4>
@@ -194,11 +194,15 @@ this automatically (but still don't know how to include the index into the table
 structure type, has to start with a <CODE>&lt;sect&gt;</CODE> tag, when using <CODE>&lt;book&gt;</CODE> you have to start with <CODE>&lt;chapt&gt;</CODE>
 for the chapters.
 <P>After the start tag, you can structurize each chapter with <CODE>&lt;sect1&gt;</CODE>, <CODE>&lt;sect2&gt;</CODE> etc. up to the allowed level of
-sub-sections (up to 4).
+sub-sections (4).
 <P>The chapter start tag is followed by the chapter's title. There, you have the additional choice to use <CODE>&lt;title&gt;</CODE> and
-<CODE>&lt;</CODE>
-</CODE>title&gt;
-for the chapter's title.
+&lt;/title&gt; for the chapter's title (optional). Now, afte the title of the chapter, you have to add a &lt;p&gt; tag to actually
+start with the subsection's contents. Within that, you have almost all means to format your document with list, enumerations,
+itemizations and description lists. Further, quotations, code snippets and the like can be inserted by tags; see you <CODE>sgmltools</CODE>
+documentation guide for a complete list. What you should look for is the "special characters" section. This contains all valid
+replacements for characters that are different from the usual alphabet like brackets, slashes and symbols like trademark etc. With the
+given tags you can structurize your text contents as you application documentation requires.
+<P>
 <H3><A NAME="ss9.4">9.4 How to call Help in Dialogs</A>
 </H3>
 
@@ -219,6 +223,7 @@ kapp->invokeHTMLHelp( QString aFilename, QString aTopic );
 <P>where <CODE>aFilename</CODE> is the the filename to be called within your HTML documentation directory of the application; e.g index-3.html.
 <CODE>aTopic</CODE> then is the topic that is to be called. The hash prefix is automatically added; just enter the chapter you want to have on
 this page, actually this would be a subsection's name.
+<P>
 <P>
 <P ALIGN="RIGHT">
 

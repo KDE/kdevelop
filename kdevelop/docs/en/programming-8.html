@@ -109,8 +109,9 @@ font types and sizes. See the
 menu and toolbar items. A statusbar help message is a short message that extends the meaning of a tool-tip or can be seen as a
 replacement for a tool-tip over menubar items and is (as the name suggests) displayed in the statusbar when the user enters a menu and
 highlights the menu entry; therefore all menu items connect their signal <CODE>highlighted(int)</CODE> to the method <CODE>statusCallback(int)</CODE>
-which selects the according message in a switch statement. Whenever you add a menuitem to already existing menus or a toolbar item, add
-an according entry in this method with a short description of the action the user will cause when activating the button or menuentry.
+which selects the according message in a switch statement. Whenever you add a menuitem to already existing menus or a toolbar
+item, add an according entry in this method with a short description of the action the user will cause when activating the button or
+menuentry.
 <P>Example:
 <P>
 <BLOCKQUOTE><CODE>

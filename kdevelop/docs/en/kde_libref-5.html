@@ -106,19 +106,28 @@ following toolbars are then appended to the end of the last toolbar. Also you ca
 is often used by applications that offer painting facilities. The following example shows you how to use a toolbar with
 <CODE>KTMainWindow</CODE>:
 <P>
-<P>1   // first call of toolBar() - creates the toolbar 0.
+<HR>
+<PRE>
+1   // first call of toolBar() - creates the toolbar 0.
 2   toolBar()->insertButton(Icon("new.xpm"), ID_FILE_NEW, true, i18n("New File"));
-<P>3   QPopupMenu* select_menu = new QPopupMenu();
+
+3   QPopupMenu* select_menu = new QPopupMenu();
 4   toolBar()->insertButton(Icon("select.xpm"), ID_OPTIONS_SELECT, select_menu, true, i18n("Select Option"));
-<P>5   connect(toolBar(), SIGNAL(clicked( int )), SLOT( slotSelected( int )) );
-<P>
-<P>6   Foo::slotSelected( int id ){
-<P>7     switch (id ){
-<P>8       case ID_FILE_NEW:
+
+5   connect(toolBar(), SIGNAL(clicked( int )), SLOT( slotSelected( int )) );
+
+
+6   Foo::slotSelected( int id ){
+
+7     switch (id ){
+
+8       case ID_FILE_NEW:
 9         slotFileNew();
 10        break;
 11    }
 12  }
+</PRE>
+<HR>
 
 The above explains some specialities for toolbars - we will discuss these now in detail. First of all, you see that we used the
 <CODE>toolBar()</CODE> method. This returns a pointer to the according toolbar and creates one if the toolbar doesn't exist. We use the
@@ -151,7 +160,7 @@ file_menu->insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),0,ID_FILE_NEW);
 
 connect(file_menu, SIGNAL(activated(int)), SLOT(slotSelected(int)));
 
-menuBar()->insertItem(file_menu, i18n(""));
+menuBar()->insertItem(file_menu, i18n("&amp;File"));
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>By this, the <CODE>file_menu</CODE> is already connected to the <CODE>slotSelected()</CODE> method and the corresponding entry "New File" executes the
@@ -174,9 +183,51 @@ about the current state of the application and gives hints about the usage of co
 <H3><A NAME="Keyboard Accelerators"></A> <A NAME="ss5.4">5.4 Keyboard Accelerators</A>
 </H3>
 
+<P>Keyboard accelerators are a good enhancement for any kind of application. GUI application designers often think that the user can
+access all methods with the provided graphical interface, but advanced users usually want to work as fast as possible and using the
+mouse to call actions doesn't make an application very attractive. The more a user will make use of your application, the more he will
+miss keyboard accelerators. Fortunately, the Qt and KDE libraries provide a whole set of functions and classes to support keyboard
+accelerators in conjunction with GUI elements. This section therefore collects all these classes and shows the possible implememtation
+for various situations.
+<P>
+<H4>Menu Accelerators</H4>
+
+<P>The first thing where keyboard accelerators are used without much effort from the programmer's side is over menuentries. The menubar,
+as mentioned above, consists of a set of <CODE>QPopupMenu</CODE>s, which are inserted in the order they will appear later from left to right.
+The popup menu itself can be called by the user by a keyboard shortcut if he presses the ALT-key together with the underlined character
+of the desired menu of the menubar. The menuentry itself has to define the underlined character at the time you insert the popup into
+the menubar.
+<P>Example:
+<P>
+<PRE>
+menuBar()->insertItem(i18n("&amp;File"), file_menu);
+</PRE>
+<P>Mind the ampersand in front of "File". This makes the "F" the key with which the user can pop up the popup menu <CODE>file_menu</CODE> when
+pressed together with the ALT-key. The same goes with entries within the popups, where the user, after a popup is active, only has to
+press the key to invoke the desired action. Selfexplaining, you should watch the usage of underlined characters very closely, because a
+key that is used twice either in the menubar or within the same popup makes the last inserted item the one that is activated and this
+makes the previously defined shortcuts useless.
+<P>Using the menu-accelerators is therefore very easy for the programmer - just select the key you want to be used and set an ampersand
+in front of it while inserting the entry. As the KDE applications get internationalized, translators take over the responsibility to
+place the keys in their translated version later. They should watch the same principles for placing the keys and shouldn't only
+translate one-to-one but test the application later if everything is accessible again by their keyboard shortcuts.
+<P>
+<H4>Tabulator and Button Accelerators</H4>
+
+<P>
+<P>The keyboard accelerators with the ALT-key don't only work with the menus - they do the same over dialogs, tab-pages and on buttons.
+Therefore it should be used whereever possible, the principle is the same: on a dialog, you have to watch the used keys, on e.g. a
+<CODE>QTabDialog</CODE> you have to watch the keys for each page <B>plus</B> the used keys to activate the pages in the <CODE>addTab()</CODE> methods.
+<P>Within the user interface, buttons have an additional option - as mentionend, the keyboard input focus is forwarded in user interfaces
+with the TAB and SHIFT-TAB keys. When a button receives the focus, it gets a slight frame like other active elements, the user has to
+press the SPACE-key to execute the action connected to the button. Now, this can be changed by using <CODE>setDefault(true)</CODE> on one
+button or by setting <CODE>setAutoDefault(true)</CODE> on several buttons on the dialog. The difference is that if the User presses the
+ENTER-key, the default button will be pressed. If several buttons shall provide this behavoir, <CODE>setAutoDefault()</CODE> has to be used on
+those. If one of them receives the keyboard input focus, it will automatically become the default button.
+<P>
 <P>KKeyDialog: keyboard accelerator configuration dialog
-<P>KKeyChooser
-<P>KAccel
+KKeyChooser
+KAccel
 <P>
 <H3><A NAME="ss5.5">5.5 Other Widgets</A>
 </H3>
@@ -186,6 +237,7 @@ control elements that the Qt library provides, KDE offers:
 <P>KButton: active raise-lower button
 KButtonBox: manages buttons
 KColorButton: button displaying a color setting
+KIconLoaderButton: button displaying a selected Icon
 KCombo: similar to QComboBox
 KDatePicker: Date selection widget
 KIntegerLine: lineedit that only accepts integer values

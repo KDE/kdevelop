@@ -839,31 +839,34 @@ accelerator
 <!--
 accelerator
 -->
- and a toolbar icon. For this, add a resource ID to the file <CODE>resource.h</CODE> with a define. Then add an according menuentry
-to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The menuentry consists of:
+ and a toolbar icon. For this, add a resource ID to the file <CODE>resource.h</CODE> with a define. Then add
+an according menuentry to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The
+menuentry consists of:
 <P>
 <UL>
 <LI>an optional icon pixmap. Call this with the <CODE>Icon("iconname.xpm")</CODE> macro of <CODE>KApplication</CODE> to use the provided
 <CODE>KIconLoader</CODE> instance.</LI>
-<LI>the menuentry name. Add this with the <CODE>i18n("&amp;entryname")</CODE> macro of <CODE>KApplication</CODE> to allow internationalization. The
-ampersand should be in front of the letter that will be displayed underlined to access the entry directly by keyboard acceleration.</LI>
+<LI>the menuentry name. Add this with the <CODE>i18n("&amp;entryname")</CODE> macro of <CODE>KApplication</CODE> to allow
+internationalization. The ampersand should be in front of the letter that will be displayed underlined to access the entry directly by
+keyboard acceleration.</LI>
 <LI>the member instance to call. Normally this would be the <CODE>this</CODE> pointer.</LI>
 <LI>the member slot to call. Use <CODE>SLOT(yourmethod()</CODE> to call the slot on the signal <CODE>activated()</CODE>.</LI>
 <LI>the accelerator
 <!--
 accelerator
 -->
- key. This should be set to zero as this is done by an entry in <CODE>initKeyAccel()</CODE> where you have to introduce an
-accelerator
+ key. This should be set to zero as this is done by an entry in <CODE>initKeyAccel()</CODE> where you
+have to introduce an accelerator
 <!--
 accelerator
 -->
- key together with the slot to call. Then call <CODE>changeMenuAccel()</CODE> to change the menu item's accelerator
+ key together with the slot to call. Then call <CODE>changeMenuAccel()</CODE> to change the
+menu item's accelerator
 <!--
 accelerator
 -->
-. This will make
-it configurable by a key-chooser dialog later. For standard actions, use the enumerable values given by <CODE>KAccel</CODE>.</LI>
+. This will make it configurable by a key-chooser dialog later. For standard actions, use the
+enumerable values given by <CODE>KAccel</CODE>. </LI>
 <LI>the menu ID as set in <CODE>resource.h</CODE></LI>
 </UL>
 <P>

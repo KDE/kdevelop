@@ -255,7 +255,7 @@ The KDE libraries offer a set of ready to use views which can be inherited to ad
 <itemize>
 <item>KTabListBox: offers a multi-column list box where the user can change the rows with drag'n drop.
 <item>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.
-<item>KNewPanner: manages two child widgets like QSplitter.
+<item>KNewPanner: manages two child widgets like QSplitter.<footnote>Removed in KDE 2. Use QSplitter instead.</footnote>
 <item>KHTMLView: a HTML-interpreting widget (khtmlw)
 </itemize>
 
@@ -308,12 +308,13 @@ control elements that the Qt library provides, KDE offers:
 <itemize>
 <item>KButton: active raise-lower button
 <item>KButtonBox: manages buttons
-<item>KColorButton: button displaying a color setting
+<item>KColorButton: button displaying a color setting, calls <tt/KColorDialog/
+<item>KIconLoaderButton: button displaying a selected Icon, calls <tt/KIconLoaderDialog/
 <item>KDatePicker: Date selection widget
 <item>KIntegerLine: line edit that only accepts integer values
 <item>KLedLamp: LED lamp
 <item>KLined: line edit
-<item>KNewPanner: panner devider managing two widgets
+<item>KNewPanner: panner devider managing two widgets<footnote>Use <tt/QSplitter/ instead, this is already removed in KDE 2.</footnote>
 <item>KPopupMenu: popup menu with title
 <item>KRestrictedLine: line edit that only accepts certain input
 <item>KSelector: value selector
@@ -1734,8 +1735,7 @@ following toolbars are then appended to the end of the last toolbar. Also you ca
 is often used by applications that offer painting facilities. The following example shows you how to use a toolbar with
 <tt/KTMainWindow/:
 
-</code>
-
+<code>
 1   // first call of toolBar() - creates the toolbar 0.
 2   toolBar()->insertButton(Icon("new.xpm"), ID_FILE_NEW, true, i18n("New File"));
 
@@ -1786,7 +1786,7 @@ file_menu->insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),0,ID_FILE_NEW);
 
 connect(file_menu, SIGNAL(activated(int)), SLOT(slotSelected(int)));
 
-menuBar()->insertItem(file_menu, i18n("&File"));
+menuBar()->insertItem(file_menu, i18n("&amp;File"));
 </verb></tscreen>
 
 By this, the <tt/file_menu/ is already connected to the <tt/slotSelected()/ method and the corresponding entry "New File" executes the
@@ -1809,10 +1809,55 @@ about the current state of the application and gives hints about the usage of co
 
 <sect>Keyboard Accelerators<label id="Keyboard Accelerators">
 <p>
+Keyboard accelerators are a good enhancement for any kind of application. GUI application designers often think that the user can
+access all methods with the provided graphical interface, but advanced users usually want to work as fast as possible and using the
+mouse to call actions doesn't make an application very attractive. The more a user will make use of your application, the more he will
+miss keyboard accelerators. Fortunately, the Qt and KDE libraries provide a whole set of functions and classes to support keyboard
+accelerators in conjunction with GUI elements. This section therefore collects all these classes and shows the possible implememtation
+for various situations.
+
+<sect1>Menu Accelerators
+<p>
+The first thing where keyboard accelerators are used without much effort from the programmer's side is over menuentries. The menubar,
+as mentioned above, consists of a set of <tt/QPopupMenu/s, which are inserted in the order they will appear later from left to right.
+The popup menu itself can be called by the user by a keyboard shortcut if he presses the ALT-key together with the underlined character
+of the desired menu of the menubar. The menuentry itself has to define the underlined character at the time you insert the popup into
+the menubar.
+
+Example:
+
+<verb>
+menuBar()->insertItem(i18n("&amp;File"), file_menu);
+</verb>
+
+Mind the ampersand in front of "File". This makes the "F" the key with which the user can pop up the popup menu <tt/file_menu/ when
+pressed together with the ALT-key. The same goes with entries within the popups, where the user, after a popup is active, only has to
+press the key to invoke the desired action. Selfexplaining, you should watch the usage of underlined characters very closely, because a
+key that is used twice either in the menubar or within the same popup makes the last inserted item the one that is activated and this
+makes the previously defined shortcuts useless.
+
+Using the menu-accelerators is therefore very easy for the programmer - just select the key you want to be used and set an ampersand
+in front of it while inserting the entry. As the KDE applications get internationalized, translators take over the responsibility to
+place the keys in their translated version later. They should watch the same principles for placing the keys and shouldn't only
+translate one-to-one but test the application later if everything is accessible again by their keyboard shortcuts.
+
+<sect1>Tabulator and Button Accelerators
+<p>
+
+The keyboard accelerators with the ALT-key don't only work with the menus - they do the same over dialogs, tab-pages and on buttons.
+Therefore it should be used whereever possible, the principle is the same: on a dialog, you have to watch the used keys, on e.g. a
+<tt/QTabDialog/ you have to watch the keys for each page <bf/plus/ the used keys to activate the pages in the <tt/addTab()/ methods.
+
+Within the user interface, buttons have an additional option - as mentionend, the keyboard input focus is forwarded in user interfaces
+with the TAB and SHIFT-TAB keys. When a button receives the focus, it gets a slight frame like other active elements, the user has to
+press the SPACE-key to execute the action connected to the button. Now, this can be changed by using <tt/setDefault(true)/ on one
+button or by setting <tt/setAutoDefault(true)/ on several buttons on the dialog. The difference is that if the User presses the
+ENTER-key, the default button will be pressed. If several buttons shall provide this behavoir, <tt/setAutoDefault()/ has to be used on
+those. If one of them receives the keyboard input focus, it will automatically become the default button.
+
+
 KKeyDialog: keyboard accelerator configuration dialog
-
 KKeyChooser
-
 KAccel
 
 <sect>Other Widgets
@@ -1823,6 +1868,7 @@ control elements that the Qt library provides, KDE offers:
 KButton: active raise-lower button
 KButtonBox: manages buttons
 KColorButton: button displaying a color setting
+KIconLoaderButton: button displaying a selected Icon
 KCombo: similar to QComboBox
 KDatePicker: Date selection widget
 KIntegerLine: lineedit that only accepts integer values
@@ -2030,10 +2076,10 @@ dialogs.
 <p>
 The class <tt/KFileBaseDialog/ provides the basic interfaces for building filedialogs; therefore filedialogs can be customized in wide
 ranges towards your needs and is the most flexible way to construct filedialogs. Besides that, the class provides additional
-functionality for other standard cases like retrieving a directory name as well as multiple-file selection.
+functionality for other standard cases like retrieving a directory name. Further functionality can be achieved by inheritance.
 
-<sect2>Retrieving a directory name
-<p>
+<bf/Retrieving a directory name/
+
 The class provides retrieving a directory name by the static method <tt/getDirectory()/. The following example shows the usage:
 
 <tscreen><verb>
@@ -2049,27 +2095,6 @@ if(!the_directory.isEmpty())
 <footnote>Of course, you can also use <tt/KFileDialog/ instead of <tt/KFileBaseDialog/ if you like your API to be more
 consistent.</footnote>
 
-<sect2>Multiple Selections
-<p>
-Like the <tt/KFileDialog/ provides static members to retrieve single filenames for saving and opening, the <tt/KFileBaseDialog/
-provides the corresponding methods for multiple file selection (I don't know why they are <em/not/ static methods...).
-
-As these are non-static, you have to create an instance of the <tt/KFileBaseDialog/ class first and then retrieve the string list. The
-following example shows this. Mind that only the URL methods are provided!
-
-<tscreen><verb>
-QStrList file_list;
-KFileBaseDialog* mydialog= new KFileBaseDialog();
-
-file_list=mydialog->getOpenFileURLList();
-
-if(!file_list.isEmpty())
-{
-  // do something
-}
-</verb></tscreen>
-
-The same applies to <tt/getSaveFileURLList()/.
 
 <sect1>KFilePreviewDialog
 <p>
@@ -2108,8 +2133,19 @@ been exited via the OK or Cancel button.
 <sect>KFontDialog
 <p>
 The <tt/KFontDialog/ will retrieve you a value for a font currently avaliable on the system. Therefore using the fontdialog will mostly
-only make sense where you will need a font; the most recent usage is made by text editors but could be used to draw text inside a
-widget as well as into a picture.
+only make sense where you will need a font; the most recent usage is made by text editors but could also be used to get a
+formatting for a text to draw inside a widget as well as into a picture.
+
+To retrieve the font value, you probably will use the static methods of <tt/KFontDialog/. The example shows the usage:
+
+<code>
+  QFont myFont;
+  int res = KFontDialog::getFont( myFont );
+</code>
+
+This is it already - you only have to create a <tt/QFont/ instance to contain the font value. Then call the font dialog with the font
+and after the dialog was executed, your font will have the selected value. Then you have the methods of <tt/QFont/ to determine which
+type of font the user selected etc. to use the font within the application.
 
 
 <sect>KIconLoaderDialog
@@ -2118,7 +2154,15 @@ For applications requiring an icon selection, KDE provides the <tt/KIconLoaderDi
 system to draw it on a button for example. Usage is made by the KDE window manager to select the icons for mounted/unmounted states of
 device links. Then the values for the link are displayed on the according button to display the current selection; the filenames get
 stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
-device.
+device. There, an additional widget of the <tt/kdeui/ libary is used, the <tt/KIconLoaderButton/. Like the <tt/KColorButton/, this
+class will call the icon loader dialog when the user presses the button and will display the selected icon on the button.
+
+As the <tt/KIconLoaderDialog/ class does not provide any static methods, you have to create an instance first and then call
+<tt/QDialog/'s <tt/exec()/ method to display the dialog. Another possibility would be to call <tt/selectIcon()/ to execute the dialog
+but retrieve a <tt/QPixmap/ value instead. The selected Icon will be in your <tt/KIconLoader/ instance (depending on the used
+constructor which one - the standard constructor uses the application's <tt/KIconLoader/), therefore the value can be processed with
+the according methods of <tt/KIconLoader/.
+
 
 <sect>KWizard
 <p>

@@ -475,35 +475,36 @@ toolbar and statusbar. Indeed, we didn't set any keyboard accelerator
 <!--
 accelerator
 -->
-s by which advanced users that only want to work with the keyboard
-have a quick access to certain commands that are used most often during work with our program. To do this, we could have inserted the
-accelerator
+s by which advanced users that only want
+to work with the keyboard have a quick access to certain commands that are used most often during work with our program. To do this, we
+could have inserted the accelerator
 <!--
 accelerator
 -->
- keys by the insertion of the menu-items for example, but KDE offers a good solution to construct and maintain keyboard
-accelerator
+ keys by the insertion of the menu-items for example, but KDE offers a good
+solution to construct and maintain keyboard accelerator
 <!--
 accelerator
 -->
-s. A lot of users want to have them configurable on one hand and on the other standard accelerator
+s. A lot of users want to have them configurable on one hand
+and on the other standard accelerator
 <!--
 accelerator
 -->
-s should be the same over
-all applications. Therefore, the KDE control center offers configuring standard keyboard accelerator
+s should be the same over all applications. Therefore, the KDE control center
+offers configuring standard keyboard accelerator
 <!--
 accelerator
 -->
-s globally by using the
-<CODE>KAccel</CODE> class. Additionally, the KDE libraries contain a widget that lets users configure application specific keyboard shortcut
+s globally by using the <CODE>KAccel</CODE> class. Additionally, the
+KDE libraries contain a widget that lets users configure application specific keyboard shortcut
 <!--
 shortcuts
 -->
-s
-easily. As the application framework only uses menu-items that have standard actions such as "New" or "Exit", these are set by the
-method <CODE>initKeyAccel()</CODE>. Standard actions just have to be connected, for your application specific keyboard values, you have to
-insert them first by specifying the keyboard accelerator
+s easily. As the
+application framework only uses menu-items that have standard actions such as "New" or "Exit", these are set by the method
+<CODE>initKeyAccel()</CODE>. Standard actions just have to be connected, for your application specific keyboard values, you have to insert them
+first by specifying the keyboard accelerator
 <!--
 accelerator
 -->
@@ -511,13 +512,14 @@ accelerator
 <!--
 accelerator
 -->
-s are all present in the
-menubar, we have to change the accelerator
+s are
+all present in the menubar, we have to change the accelerator
 <!--
 accelerator
 -->
-s for the popup entries. Finally we call <CODE>readSettings()</CODE>, which reads the current
-settings from the root window of KDE containing the configuration of standard accelerator
+s for the popup entries. Finally we call
+<CODE>readSettings()</CODE>, which reads the current settings from the root window of KDE containing the configuration of standard
+accelerator
 <!--
 accelerator
 -->
@@ -525,9 +527,9 @@ s, then the settings for accelerator
 <!--
 accelerator
 -->
-s
-specified in the application's config file. When we're going further into our example project, we will also talk about how to configure
-our application specific accelerator
+s specified in the application's config file. When
+we're going further into our example project, we will also talk about how to configure our application specific
+accelerator
 <!--
 accelerator
 -->
@@ -536,11 +538,11 @@ s by a configuration dialog, see
 <P>
 <H4>The Document-View Model</H4>
 
-<P>The next two member function calls, <CODE>initDocument()</CODE> and <CODE>initView()</CODE>, are finally building the part that the application
-windows are supposed to provide to the user: an interface to work with data that the application is supposed to manipulate; and that is
-also the reason why the application framework contains three classes, an <CODE>*App</CODE>, <CODE>*View</CODE> and <CODE>*Doc</CODE> class. To understand, why
-this structure is helpful, we'll look a bit aside the actual code and introduce some theory, then we'll switch to the program again to
-see how the KDevelop frameworks support such a model.
+<P>The next two member function calls, <CODE>initDocument()</CODE> and <CODE>initView()</CODE>, are finally building the part that the application windows
+are supposed to provide to the user: an interface to work with data that the application is supposed to manipulate; and that is also
+the reason why the application framework contains three classes, an <CODE>*App</CODE>, <CODE>*View</CODE> and <CODE>*Doc</CODE> class. To understand, why this
+structure is helpful, we'll look a bit aside the actual code and introduce some theory, then we'll switch to the program again to see
+how the KDevelop frameworks support such a model.
 <P>Basically, all what has been explained about the framework is that we need an application instance that contains a main window. This
 window is responsible to provide the basic interface for the user- it contains the menubar, toolbars and statusbar and the event
 controlling for user interaction. Also, it contains an area, that is described as a "view". Now, the purpose of a view is generally, to
@@ -568,13 +570,13 @@ s or the mouse on menubars and toolbars.
 in general, e.g. the same document object could be displayed by two views at the same time; either by a new view in a new window or by
 tiling the current one that then contains two view object that build the actual window view region.
 <P>Now, if you're coming from MS-Windows systems you may have some experience with that- the MFC already provide a document model that is
-ready to use. For KDE and Qt applications, things are a bit different. Qt is a powerful toolkit as it provides the most needed classes,
-widgets etc. But there wasn't any intention to take care of the document-view model, and as KDE is inheriting Qt, there weren't any
-tendencies to introduce such a model either. This somehow has its reason in the fact that usually X-applications don't work with an MDI
-(Multiple Document Interface).  Each main window is responsible for its data and that reduces the need of a document model to the fact
-that methods to work on documents are always implied into widgets. The only exception from this currently is the <EM>KOffice</EM> project
-that is intended to provide a complete office suite of applications like a word processor, a spreadsheet etc. Technically, this is
-realized by two changes two the normal usage of Qt and KDE:
+ready to use. For KDE and Qt applications, things are a bit different. Qt is a powerful toolkit as it provides the most
+needed classes, widgets etc. But there wasn't any intention to take care of the document-view model, and as KDE is inheriting Qt,
+there weren't any tendencies to introduce such a model either. This somehow has its reason in the fact that usually X-applications
+don't work with an MDI (Multiple Document Interface).  Each main window is responsible for its data and that reduces the need of a
+document model to the fact that methods to work on documents are always implied into widgets. The only exception from this currently is
+the <EM>KOffice</EM> project that is intended to provide a complete office suite of applications like a word processor, a spreadsheet etc.
+Technically, this is realized by two changes two the normal usage of Qt and KDE:
 <P>
 <UL>
 <LI>KOffice uses KOM and the free MICO implementation of CORBA for object communication,</LI>
@@ -618,13 +620,14 @@ accelerator
 <P>Now, after we created all instances of the <CODE>KTMainWindow</CODE> instance of our application to create the first window, we have to
 initialize certain values that influence the look of the program. For this, we call <CODE>readOptions()</CODE>, which gets all values and calls
 the methods needed to set the according attributes. The KDE-Core library contains the class <CODE>KConfig</CODE> that provides a good
-possibility to store values in configuration files as well as to read them in again. Also, as each <CODE>KApplication</CODE> instance creates
-it's resource file already, we only have to access this file and create our values. As <CODE>KConfig</CODE> provides us the file object, we
-have to use the class <CODE>KConfigBase</CODE> to read and write all entries. As writing is very easy to do with <CODE>writeEntry()</CODE> methods,
-reading depends on the attribute type which we want to initialize. Generally, an entry in the configuration file contains a value name
-and a value. Values that belong together in some context can be collected in groups, therefore we have to set the group name before we
-access the value afterwards; the group has to be set only once for reading a set of attributes that are in the same group.
-<P>Let's have a look at what we want to read in:
+possibility to store values in configuration files as well as to read them in again. Also, as each <CODE>KApplication</CODE> instance
+creates it's resource file already, we only have to access this file and create our values. As <CODE>KConfig</CODE> provides us the file
+object, we have to use the class <CODE>KConfigBase</CODE> to read and write all entries. As writing is very easy to do with
+<CODE>writeEntry()</CODE> methods, reading depends on the attribute type which we want to initialize. Generally, an entry in the configuration
+file contains a value name and a value. Values that belong together in some context can be collected in groups, therefore we have to
+set the group name before we access the value afterwards; the group has to be set only once for reading a set of attributes that are in
+the same group. Let's have a look at what we want to read in:
+<P>
 <BLOCKQUOTE><CODE>
 <HR>
 <PRE>
@@ -683,44 +686,44 @@ the configuration file. Indeed, the file is, according to the KDE File System St
 locations for project files. As the config file is placed in the user's home directory, each user has it's own appearance of his
 application except for values that are located in a system wide configuration file that can optionally be created and installed by the
 programmer in the KDE directory. But, although this could help in some cases, we should avoid any dependency of our application towards
-the existing of file entries. Therefore, all read methods provided by <CODE>KConfigBase</CODE> allow to add a default value to be used when the
-entry doesn't exist. Another thing important to a programmer is that the configuration file is stored in plain text, and this is for
-some reasons as well as you have to watch some criteria:
+the existing of file entries. Therefore, all read methods provided by <CODE>KConfigBase</CODE> allow to add a default value to be used
+when the entry doesn't exist. Another thing important to a programmer is that the configuration file is stored in plain text, and this
+is for some reasons as well as you have to watch some criteria:
+<P>
 <UL>
 <LI>the user is able change the configuration file by a plain text editor</LI>
 <LI>if the user wants to change values by hand, the entries should be very transparent to determine their purpose</LI>
 <LI>for entries that have to be saved, but are critical in terms of security like passwords, you have to look for a proper solution
 to ensure the security.</LI>
 </UL>
-
-Now that we know the basics, we're going to analyze the code. As said, we only have to use our config pointer
-to access the values. First, in line 4, we set the current group to "General Options". This indicates that the values used are somewhat
-general attributes for the application. Then we read the values for the toolbar and statusbar- these have to be saved when the
-application closes to restore their status again when the user restarts the program. As the bars can only be on or off, we use a
-boolean value, therefore, our method is <CODE>readBoolEntry()</CODE>. The process is identical for both bars, so we only have a look at the
-lines 7-10 to watch what's happening for the toolbar. First, we read the value into the temporary variable <CODE>bViewToolbar</CODE> at line 7.
-The value name in the file is "Show Toolbar" and, if the value is not present (which would be the case the first time the application
-starts), the default value is set to <CODE>true</CODE>. Next, we set the checkmark for the menuentry for en-/disabling the toolbar by this
-value: we call <CODE>setItemChecked()</CODE> on the view menu, entry <CODE>ID_VIEW_TOOLBAR</CODE> with our attribute. Finally, we set the toolbar to use
+<P>Now that we know the basics, we're going to analyze the code. As said, we only have to use our config pointer to access the values.
+First, in line 4, we set the current group to "General Options". This indicates that the values used are somewhat general attributes
+for the application. Then we read the values for the toolbar and statusbar- these have to be saved when the application closes to
+restore their status again when the user restarts the program. As the bars can only be on or off, we use a boolean value, therefore,
+our method is <CODE>readBoolEntry()</CODE>. The process is identical for both bars, so we only have a look at the lines 7-10 to watch what's
+happening for the toolbar. First, we read the value into the temporary variable <CODE>bViewToolbar</CODE> at line 7. The value name in
+the file is "Show Toolbar" and, if the value is not present (which would be the case the first time the application starts), the
+default value is set to <CODE>true</CODE>. Next, we set the checkmark for the menuentry for en-/disabling the toolbar by this value: we
+call <CODE>setItemChecked()</CODE> on the view menu, entry <CODE>ID_VIEW_TOOLBAR</CODE> with our attribute. Finally, we set the toolbar to use
 the value. By default, the toolbar is visible, therefore, we only have to do something if <CODE>bViewToolbar</CODE> is <CODE>false</CODE>. With
 <CODE>enableToolBar()</CODE> (line 10) we're setting the bar to hide itself if it is disabled.
-<P>Next, we have to read the bar positions. As the user might have changed the bar position by dragging a bar with the mouse to
-another view area, these have to be saved as well and their status restored. Looking at the classes <CODE>KToolBar</CODE> and <CODE>KMenuBar</CODE>,
-we see that the bar positions can be:
+<P>Next, we have to read the bar positions. As the user might have changed the bar position by dragging a bar with the mouse to another
+view area, these have to be saved as well and their status restored. Looking at the classes <CODE>KToolBar</CODE> and
+<CODE>KMenuBar</CODE>, we see that the bar positions can be:
+<P>
 <BLOCKQUOTE><CODE>
 <PRE>
 enum BarPosition {Top, Left, Bottom, Right, Floating, Flat}
 </PRE>
 </CODE></BLOCKQUOTE>
-
-As this value has been written in a numeric value, we have to read it with <CODE>readNumEntry()</CODE> and convert it to a position value. With
+<P>As this value has been written in a numeric value, we have to read it with <CODE>readNumEntry()</CODE> and convert it to a position value. With
 <CODE>setMenuBarPos()</CODE> and <CODE>setBarPos()</CODE> we tell the bars where to show up.
 <P>Now you probably have noticed that our "File" menu contains a menu for recently used files. The filenames are stored in a list of
-strings, which has to be saved on application closing and now has to be read in to restore the menu. First, we initialize the list
-with the entries stored by using the <CODE>readListEntry()</CODE>. Then, in a <CODE>for-</CODE>loop, we create a menu entry for each list item.
+strings, which has to be saved on application closing and now has to be read in to restore the menu. First, we initialize the list with
+the entries stored by using the <CODE>readListEntry()</CODE>. Then, in a <CODE>for-</CODE>loop, we create a menu entry for each list item.
 <P>Finally, we only have to take care for the geometry of our window. We read in the appearance by a <CODE>QSize</CODE> variable containing an x
-and y value for width and height of the window. As the window is initialized by <CODE>KTMainWindow</CODE>, we don't have to take care for a
-default value and only will use <CODE>resize()</CODE> if the entry is not empty.
+and y value for width and height of the window. As the window is initialized by <CODE>KTMainWindow</CODE>, we don't have to take care for
+a default value and only will use <CODE>resize()</CODE> if the entry is not empty.
 <P>What is left to explain on application construction is that we initially have to disable available user commands that shouldn't be
 available if some instances don't match the needed criteria. These are file saving and operations that are using the clipboard. During
 the application's lifetime, we have to take care of these several times, but which is quite easy. The framework only gives us two

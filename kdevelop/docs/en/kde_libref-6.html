@@ -221,10 +221,8 @@ dialogs.
 
 <P>The class <CODE>KFileBaseDialog</CODE> provides the basic interfaces for building filedialogs; therefore filedialogs can be customized in wide
 ranges towards your needs and is the most flexible way to construct filedialogs. Besides that, the class provides additional
-functionality for other standard cases like retrieving a directory name as well as multiple-file selection.
-<P>
-<H4>Retrieving a directory name</H4>
-
+functionality for other standard cases like retrieving a directory name. Further functionality can be achieved by inheritance.
+<P><B>Retrieving a directory name</B>
 <P>The class provides retrieving a directory name by the static method <CODE>getDirectory()</CODE>. The following example shows the usage:
 <P>
 <BLOCKQUOTE><CODE>
@@ -242,27 +240,6 @@ if(!the_directory.isEmpty())
 <BLOCKQUOTE>Of course, you can also use <CODE>KFileDialog</CODE> instead of <CODE>KFileBaseDialog</CODE> if you like your API to be more
 consistent.</BLOCKQUOTE>
 <P>
-<H4>Multiple Selections</H4>
-
-<P>Like the <CODE>KFileDialog</CODE> provides static members to retrieve single filenames for saving and opening, the <CODE>KFileBaseDialog</CODE>
-provides the corresponding methods for multiple file selection (I don't know why they are <EM>not</EM> static methods...).
-<P>As these are non-static, you have to create an instance of the <CODE>KFileBaseDialog</CODE> class first and then retrieve the string list. The
-following example shows this. Mind that only the URL methods are provided!
-<P>
-<BLOCKQUOTE><CODE>
-<PRE>
-QStrList file_list;
-KFileBaseDialog* mydialog= new KFileBaseDialog();
-
-file_list=mydialog->getOpenFileURLList();
-
-if(!file_list.isEmpty())
-{
-  // do something
-}
-</PRE>
-</CODE></BLOCKQUOTE>
-<P>The same applies to <CODE>getSaveFileURLList()</CODE>.
 <P>
 <H4>KFilePreviewDialog</H4>
 
@@ -301,8 +278,19 @@ been exited via the OK or Cancel button.
 </H3>
 
 <P>The <CODE>KFontDialog</CODE> will retrieve you a value for a font currently avaliable on the system. Therefore using the fontdialog will mostly
-only make sense where you will need a font; the most recent usage is made by text editors but could be used to draw text inside a
-widget as well as into a picture.
+only make sense where you will need a font; the most recent usage is made by text editors but could also be used to get a
+formatting for a text to draw inside a widget as well as into a picture.
+<P>To retrieve the font value, you probably will use the static methods of <CODE>KFontDialog</CODE>. The example shows the usage:
+<P>
+<HR>
+<PRE>
+  QFont myFont;
+  int res = KFontDialog::getFont( myFont );
+</PRE>
+<HR>
+<P>This is it already - you only have to create a <CODE>QFont</CODE> instance to contain the font value. Then call the font dialog with the font
+and after the dialog was executed, your font will have the selected value. Then you have the methods of <CODE>QFont</CODE> to determine which
+type of font the user selected etc. to use the font within the application.
 <P>
 <P>
 <H3><A NAME="ss6.6">6.6 KIconLoaderDialog</A>
@@ -312,7 +300,14 @@ widget as well as into a picture.
 system to draw it on a button for example. Usage is made by the KDE window manager to select the icons for mounted/unmounted states of
 device links. Then the values for the link are displayed on the according button to display the current selection; the filenames get
 stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
-device.
+device. There, an additional widget of the <CODE>kdeui</CODE> libary is used, the <CODE>KIconLoaderButton</CODE>. Like the <CODE>KColorButton</CODE>, this
+class will call the icon loader dialog when the user presses the button and will display the selected icon on the button.
+<P>As the <CODE>KIconLoaderDialog</CODE> class does not provide any static methods, you have to create an instance first and then call
+<CODE>QDialog</CODE>'s <CODE>exec()</CODE> method to display the dialog. Another possibility would be to call <CODE>selectIcon()</CODE> to execute the dialog
+but retrieve a <CODE>QPixmap</CODE> value instead. The selected Icon will be in your <CODE>KIconLoader</CODE> instance (depending on the used
+constructor which one - the standard constructor uses the application's <CODE>KIconLoader</CODE>), therefore the value can be processed with
+the according methods of <CODE>KIconLoader</CODE>.
+<P>
 <P>
 <H3><A NAME="ss6.7">6.7 KWizard</A>
 </H3>
