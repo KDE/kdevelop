@@ -3,6 +3,8 @@
 	* Compiling of single files in auto and custom project parts
 	* Set waitCursor while ctags is running
 	* cvs log message quoting fix
+	* Bullets in make output view. 
+	  Based on a patch by Marcus Gruendler <lists@tamalin.de>
 
 2002-06-11  John Firebaugh  <jfirebaugh@kde.org>
         Debugger bugfixes:
