@@ -3,8 +3,10 @@
 <titlepag>
 <title>Benutzerhandbuch zu KDevelop
 <subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.2
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
-<inst>The KDevelop Team
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" >, 
+Ralf Funken <htmlurl url="mailto:RFunken@kdevelop.de" name = "<RFunken@kdevelop.de>">. Übersetzung : Ralf Funken <htmlurl 
+url="mailto:rfunken@kdevelop.de" name = "<rfunken@kdevelop.de>">, Ralf Nolden <htmlurl 
+url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>" > <inst>Das KDevelop Team
 <date>Version 3.0 , Mär 21,2000
 <abstract>
 Dieses Handbuch ist Teil der KDevelop Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License

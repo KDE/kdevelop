@@ -1,3 +1,8 @@
+2000-04-11  Ralf Funken <rfunken@kdevelop.de>
+	* Updated de.po
+	* According to the discussion on the i18n list
+          Updated en manual, de manual and de tutorial
+
 2000-04-11 Walter Tasin  <tasin@kdevelop.de>
 	* first created Makefile.am for shared libs
 	  uses the project settings for the _la_LIBADD flag

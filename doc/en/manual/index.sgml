@@ -3,7 +3,8 @@
 <titlepag>
 <title>The User Manual to KDevelop
 <subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.2
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, 
+Ralf Funken <htmlurl url="mailto:RFunken@kdevelop.de" name = "<RFunken@kdevelop.de>"> 
 <inst>The KDevelop Team
 <date>Version 1.2 , March 21, 2000
 <abstract>
