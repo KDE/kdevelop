@@ -349,10 +349,8 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
 
   ///////////////////////////headerfile////////////////////////
   
-  if(((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetAdded() 
-     || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetRemoved()
-		 || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasVarnameChanged()){
-    QString var;
+	if(1==1){    // generate always the header
+QString var;	
     bool was_in_buffer = false;
     if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.header_file)){
       ((CKDevelop*)parent())->switchToFile(prj->getProjectDir() + info.header_file);

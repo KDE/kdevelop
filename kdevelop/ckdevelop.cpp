@@ -1286,6 +1286,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
     return;
   }
 
+prj->updateMakefilesAm();
   slotDebugStop();
   //  QString shell = getenv("SHELL");
   QString flaglabel;
