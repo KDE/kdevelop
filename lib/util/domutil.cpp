@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   default support: Eray Ozkural (exa)                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,23 +30,45 @@ static QDomElement elementByPath(const QDomDocument &doc, const QString &path)
 }
 
 
-QString DomUtil::readEntry(const QDomDocument &doc, const QString &path)
+QString DomUtil::readEntry(const QDomDocument &doc, const QString &path, const QString &defaultEntry)
 {
     QDomElement el = elementByPath(doc, path);
-    return el.firstChild().toText().data();
+    if (el.isNull())
+        return defaultEntry;
+    else
+        return el.firstChild().toText().data();
+}
+
+// TODO: consider whether it's okay to accept empty string == default value
+// if not use the below type
+//typedef pair<bool,QString> EltInfo;
+
+QString DomUtil::readEntryAux(const QDomDocument &doc, const QString &path)
+{
+    QDomElement el = elementByPath(doc, path);
+    if (el.isNull())
+        return QString::null;
+    else
+        return el.firstChild().toText().data();
+}
+
+int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path, int defaultEntry)
+{
+    QString entry = readEntryAux(doc, path);
+    if (entry==QString::null)
+      return defaultEntry;
+    else
+      return entry.toInt();
 }
 
 
-int DomUtil::readIntEntry(const QDomDocument &doc, const QString &path)
+bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path, bool defaultEntry)
 {
-    return readEntry(doc, path).toInt();
-}
-
-
-bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path)
-{
-    QString s = readEntry(doc, path);
-    return s == "TRUE" || s == "true";
+    QString entry = readEntryAux(doc, path);
+    if (entry==QString::null)
+      return defaultEntry;
+    else
+      return entry == "TRUE" || entry == "true";
 }
 
 

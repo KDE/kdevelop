@@ -33,6 +33,11 @@ public slots:
     void slotRemovePPPath( );    
     void slotEnableCH ( bool );
     void slotSetCHWindow( );
+    void slotEnableChooseFiles(bool);
+    
+    void slotSelectTemplateGroup(const QString &);
+    void interfaceFile();
+    void implementationFile();
 
     void accept( );
     
@@ -47,8 +52,10 @@ signals:
 private:
     void initCCTab( );
     void initCSTab( );
+    void initFTTab( );
     void saveCCTab( );
     void saveCSTab( );
+    void saveFTTab( );
     
     CppSupportPart* m_pPart;
     

@@ -30,16 +30,16 @@ public:
     /**
      * Reads a string entry.
      */
-    static QString readEntry(const QDomDocument &doc, const QString &path);
+    static QString readEntry(const QDomDocument &doc, const QString &path, const QString &defaultEntry = QString::null);
     /**
      * Reads a number entry.
      */
-    static int readIntEntry(const QDomDocument &doc, const QString &path);
+    static int readIntEntry(const QDomDocument &doc, const QString &path, int defaultEntry = 0);
     /**
      * Reads a boolean entry. The strings "true" and "TRUE" are interpreted
      * as true, all other as false.
      */
-    static bool readBoolEntry(const QDomDocument &doc, const QString &path);
+    static bool readBoolEntry(const QDomDocument &doc, const QString &path, bool defaultEntry = false);
     /**
      * Reads a list entry. See writeListEntry().
      */
@@ -101,6 +101,8 @@ public:
     static void writePairListEntry(QDomDocument &doc, const QString &path, const QString &tag,
                                    const QString &firstAttr, const QString &secondAttr,
                                    const PairList &value);
+private:
+    static QString readEntryAux(const QDomDocument &doc, const QString &path);
 };
 
 #endif
