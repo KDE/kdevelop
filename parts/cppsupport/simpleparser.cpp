@@ -31,7 +31,7 @@
 #include <kregexp.h>
 #include <kdebug.h>
 
-static QString remove( QString text, const QChar& l, const QChar& r )
+static QString s_remove( QString text, const QChar& l, const QChar& r )
 {
     QString s;
 
@@ -50,6 +50,8 @@ static QString remove( QString text, const QChar& l, const QChar& r )
     return s;
 }
 
+#if 0
+// not used anywhere
 static QString remove_comment( QString text ){
     QString s;
     unsigned int index = 0;
@@ -70,6 +72,7 @@ static QString remove_comment( QString text ){
     }
     return s;
 }
+#endif
 
 SimpleContext* SimpleParser::localVariables( QString contents ){
 
@@ -84,7 +87,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
 //    QStringList keywords = QStringList::split( "|", "case|new|delete|const|static|struct|if|else|return|while|for|do" );
 
 //    contents = remove_comment( contents );
-//    contents = remove( contents, '[', ']' );
+//    contents = s_remove( contents, '[', ']' );
 
     contents
         .replace( ws, " " )
@@ -109,7 +112,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
         QString line = *it++;
         line = line.simplifyWhiteSpace();
 
-        QString simplifyLine = remove( line, '(', ')' );
+        QString simplifyLine = s_remove( line, '(', ')' );
         simplifyLine.replace( assign, "" );
 
         //kdDebug() << "line = |" << line << "|" << endl;
