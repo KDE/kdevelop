@@ -194,13 +194,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   optimize->setText(i18n("optimize"));
   optimize->setChecked(!cxxflags.contains("-O0"));
 
-  optimize_level=new KNumericSpinBox(w2,"optimize_level");
+  optimize_level=new QSpinBox(w2,"optimize_level");
   optimize_level->setGeometry(40,120,40,20);
   optimize_level->setRange(1,3);
   if (cxxflags.contains("-O1")) optimize_level->setValue(1);
   if (cxxflags.contains("-O2")) optimize_level->setValue(2);
   if (cxxflags.contains("-O3")) optimize_level->setValue(3);
-
+  connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
+  
   QLabel* optimize_level_label;
   optimize_level_label=new QLabel(w2,"optimize_level_label");
   optimize_level_label->setGeometry(100,120,140,20);
@@ -230,12 +231,13 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(debug, i18n("Checking this turns on the -g flag\n"
 														"to generate debugging information."));
 
-  debug_level=new KNumericSpinBox(w2,"debug_level");
+  debug_level=new QSpinBox(w2,"debug_level");
   debug_level->setGeometry(290,60,40,20);
   debug_level->setRange(1,3);
   if (cxxflags.contains("-g1")) debug_level->setValue(1);
   if (cxxflags.contains("-g2")) debug_level->setValue(2);
   if (cxxflags.contains("-g3")) debug_level->setValue(3);
+  connect( debug_level, SIGNAL(valueChanged(int)),this , SLOT(slotDebug_level_changed(int)) );
 
   QLabel* debug_level_label;
   debug_level_label=new QLabel(w2,"debug_level_label");
@@ -356,7 +358,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w_shadow, i18n("Warn whenever a local variable\n"
 				"shadows another local variable."));
 
-  w_id_clash_len=new QCheckBox(w3,"w_id_clash_len");
+  /*  w_id_clash_len=new QCheckBox(w3,"w_id_clash_len");
   w_id_clash_len->setGeometry(10,110,230,20);
   w_id_clash_len->setText("-Wid_clash-LEN");
   if (cxxflags.contains("-Wid-clash-LEN")) {
@@ -382,10 +384,10 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w_larger_than_len, i18n("Warn whenever an object\n"
 					"of larger than LEN bytes \n"
 					"is defined."));
-
+  */
 
   w_pointer_arith=new QCheckBox(w3,"w_pointer_arith");
-  w_pointer_arith->setGeometry(10,150,230,20);
+  w_pointer_arith->setGeometry(10,110,230,20);
   w_pointer_arith->setText("-Wpointer-arith");
   if (cxxflags.contains("-Wpointer-arith")) {
     w_pointer_arith->setChecked(true);
@@ -402,7 +404,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   w_bad_function_cast=new QCheckBox(w3,"w_bad_function_cast");
-  w_bad_function_cast->setGeometry(10,170,230,20);
+  w_bad_function_cast->setGeometry(10,130,230,20);
   w_bad_function_cast->setText("-Wbad-function-cast");
   if (cxxflags.contains("-Wbad-function-cast")) {
     w_bad_function_cast->setChecked(true);
@@ -416,7 +418,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   w_cast_qual=new QCheckBox(w3,"w_cast_qual");
-  w_cast_qual->setGeometry(10,190,230,20);
+  w_cast_qual->setGeometry(10,150,230,20);
   w_cast_qual->setText("-Wcast-qual");
   if (cxxflags.contains("-Wcast-qual")) {
     w_cast_qual->setChecked(true);
@@ -431,7 +433,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   w_cast_align=new QCheckBox(w3,"w_cast_align");
-  w_cast_align->setGeometry(10,210,230,20);
+  w_cast_align->setGeometry(10,170,230,20);
   w_cast_align->setText("-Wcast-align");
   if (cxxflags.contains("-Wcast-align")) {
     w_cast_align->setChecked(true);
@@ -447,7 +449,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   w_write_strings=new QCheckBox(w3,"w_write_strings");
-  w_write_strings->setGeometry(10,230,230,20);
+  w_write_strings->setGeometry(10,190,230,20);
   w_write_strings->setText("-Wwrite-strings");
   if (cxxflags.contains("-Wwrite-strings")) {
     w_write_strings->setChecked(true);
@@ -467,7 +469,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   w_conversion=new QCheckBox(w3,"w_conversion");
-  w_conversion->setGeometry(10,250,230,20);
+  w_conversion->setGeometry(10,210,230,20);
   w_conversion->setText("-Wconversion");
   if (cxxflags.contains("-Wconversion")) {
     w_conversion->setChecked(true);
@@ -797,12 +799,14 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   if (ldadd.contains("-lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript")) {
     l_khtmlw->setChecked(true);
     pos=ldadd.find(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript");
-    ldadd.remove(pos,29);
+    ldadd.remove(pos,52);
     //    cerr << "-htmlw OK" << endl;
   } else {
     l_khtmlw->setChecked(false);
   }
-  KQuickHelp::add(l_khtmlw, i18n("KDE HTML widget"));
+  KQuickHelp::add(l_khtmlw, i18n("KDE HTML widget :\n"
+				 "this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+				 "-ltiff, -lpng, -lm, -ljscript."));
  
   l_kfm=new QCheckBox(w4,"l_kfm");
   l_kfm->setGeometry(140,180,110,20);
@@ -1209,12 +1213,48 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
  
 }
 
+void CPrjOptionsDlg::slotOptimize_level_changed(int v) {
 
+    if (v>3) {
+	optimize_level->setValue(3);
+    }
+    if (v<1) {
+	optimize_level->setValue(1);
+    }
+
+}
+
+void CPrjOptionsDlg::slotDebug_level_changed(int v) {
+
+    if (v>3) {
+	debug_level->setValue(3);
+    }
+    if (v<1) {
+	debug_level->setValue(1);
+    }
+
+}
 
 void CPrjOptionsDlg::ok(){
+
   QString text,text2;
   QStrList short_info;
   int i,n;
+
+
+  if (optimize_level->value()>3) {
+      optimize_level->setValue(3);
+  }
+  if (optimize_level->value()<1) {
+      optimize_level->setValue(1);
+  }
+  if (debug_level->value()>3) {
+      debug_level->setValue(3);
+  } 
+  if (debug_level->value()<1) {
+      debug_level->setValue(1);
+  }
+  
 
   //*********general******************
   text = prjname_edit->text();
@@ -1245,13 +1285,13 @@ void CPrjOptionsDlg::ok(){
     text+=" -fsyntax-only";
   }
   if (optimize->isChecked()) {
-    text2.setNum(optimize_level->getValue());
+    text2.setNum(optimize_level->value());
     text+=" -O"+text2;
   } else {
     text+=" -O0";
   }
   if (debug->isChecked()) {
-    text2.setNum(debug_level->getValue());
+    text2.setNum(debug_level->value());
     text+=" -g"+text2;
   }
   if (gprof_info->isChecked()) {
@@ -1280,12 +1320,12 @@ void CPrjOptionsDlg::ok(){
   if (w_shadow->isChecked()) {
     text+=" -Wshadow";
   }
-  if (w_id_clash_len->isChecked()) {
-    text+=" -Wid-clash-LEN";
-  }
-  if (w_larger_than_len->isChecked()) {
-    text+=" -Wlarger-than-LEN";
-  }
+  //  if (w_id_clash_len->isChecked()) {
+  //    text+=" -Wid-clash-LEN";
+  //  }
+  //  if (w_larger_than_len->isChecked()) {
+  //    text+=" -Wlarger-than-LEN";
+  //  }
   if (w_pointer_arith->isChecked()) {
     text+=" -Wpointer-arith";
   }

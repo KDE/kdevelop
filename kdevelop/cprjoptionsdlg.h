@@ -66,9 +66,9 @@ protected:
   QComboBox* target;
   QCheckBox* syntax_check;
   QCheckBox* optimize;
-  KNumericSpinBox* optimize_level;
+  QSpinBox*  optimize_level;
   QCheckBox* debug;
-  KNumericSpinBox* debug_level;
+  QSpinBox*  debug_level;
   QCheckBox* gprof_info;
   QCheckBox* save_temps;
   QLineEdit* addit_gcc_options;
@@ -78,8 +78,8 @@ protected:
   QCheckBox* w_traditional;
   QCheckBox* w_undef;
   QCheckBox* w_shadow;
-  QCheckBox* w_id_clash_len;
-  QCheckBox* w_larger_than_len;
+  //  QSpinBox*  w_id_clash_len;
+  //  QSpinBox*  w_larger_than_len;
   QCheckBox* w_pointer_arith;
   QCheckBox* w_bad_function_cast;
   QCheckBox* w_cast_qual;
@@ -146,7 +146,8 @@ protected slots:
    /** is called, if the ok-button were clicked*/
   void  ok();
   void slotFileDialogClicked();
-
+  void slotOptimize_level_changed(int v);
+  void slotDebug_level_changed(int v);
 };
 
 #endif
