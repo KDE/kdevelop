@@ -638,9 +638,9 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     cmdline += target;
     cmdline.prepend(makeEnvironment());
 
-    QString dircmd = "cd ";
+    QString dircmd = "cd \"";
     dircmd += dir;
-    dircmd += " && ";
+    dircmd += "\" && ";
 
     return preCommand + dircmd + cmdline;
 }
@@ -823,8 +823,8 @@ QString AutoProjectPart::configureCommand() const
     QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
 
-    QString cmdline = topsourceDirectory();
-    cmdline += "/configure";
+    QString cmdline = "\"" + topsourceDirectory();
+    cmdline += "/configure\"";
     QString cc = DomUtil::readEntry(dom, prefix + "ccompilerbinary");
     if (!cc.isEmpty())
         cmdline.prepend(QString("CC=%1 ").arg(cc));
@@ -861,15 +861,15 @@ QString AutoProjectPart::configureCommand() const
 
     // if the build directory doesn't exist, add it's creation to the configureCommand
     if ( !QFile::exists(builddir)) {
-        dircmd = "mkdir ";
+        dircmd = "mkdir \"";
         dircmd += builddir;
-        dircmd += " && ";
+        dircmd += "\" && ";
     }
 
     // add "cd into the build directory" to the configureCommand
-    dircmd += "cd ";
+    dircmd += "cd \"";
     dircmd += builddir;
-    dircmd += " && ";
+    dircmd += "\" && ";
 
     return dircmd + cmdline;
 }
@@ -903,9 +903,9 @@ QString AutoProjectPart::makefileCvsCommand() const
 
     cmdline.prepend(makeEnvironment());
 
-    QString dircmd = "cd ";
+    QString dircmd = "cd \"";
     dircmd += topsourceDirectory();
-    dircmd += " && ";
+    dircmd += "\" && ";
 
     return dircmd + cmdline;
 }
