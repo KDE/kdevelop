@@ -138,5 +138,5 @@ if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2m
 
 printflush (STDOUT,"READY\n");
 
-system("rm -f ". $homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename);
+system("rm -f ". $homedirectory . "/share/apps/kdevelop/" . $entriesfilename);
 exit;

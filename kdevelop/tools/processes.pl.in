@@ -31,6 +31,7 @@ while (defined($name = <PROCESSLIST>)) {
   $processes{$name} = $process;
 }
 close (PROCESSLIST);
+printflush (STDOUT,"App \[$processes{NAME}\] Type \[$processes{APPLICATION}\]\n");
 
 $nameLittle = $processes{NAME};
 $nameLittle =~ tr/A-Z/a-z/;
@@ -56,7 +57,7 @@ else{
   
   
 # change to work/project directory 
-printflush (STDOUT, "changing directory...\n");
+#printflush (STDOUT, "changing directory...\n");
 chdir ($overDirectory) || die "Couldn't change to directory $overDirectory: $!";
 
 $date = `date`;
@@ -66,7 +67,7 @@ $year = 1900 + $time[5];
 
 setupDefaultChangings();
 
-printflush (STDOUT,"changing directory...\n");
+#printflush (STDOUT,"changing directory...\n");
 chdir ($overDirectory);
 
 if ($processes{APPLICATION} =~/customproj/){
@@ -175,7 +176,7 @@ sub replaceValuesInFile {
   my $wordlength = 0;
   my $word = "";
   my $replace = "";
- 
+
   open (INPUT,"<$oldfile") || die "cannot open file: $oldfile";
   # setup filename replacement...
   $hashref->{"|FILENAME|"}=$oldfile;
@@ -207,12 +208,12 @@ sub replaceValuesInFile {
     $lines[$i++]=$line;
   }
   close (INPUT);
+
   open (OUTPUT,">$oldfile") || die "cannot open file: $oldfile";
   foreach $line (@lines) {
       print OUTPUT $line;
   } 
   close (OUTPUT);
- 
 }
 
 
@@ -222,9 +223,9 @@ sub unpackFiles {
 
 #    chdir ($overDirectory);
     $dir = cwd();
-    printflush (STDOUT, "unzip file <$tarfile.gz> in <$dir>...\n");
+    printflush (STDOUT, "unpacking <$tarfile.gz> in <$dir>...\n");
     system ("gunzip $tarfile.gz");
-    printflush (STDOUT, "untar file <$tarfile.gz> in <$dir>...\n");
+#    printflush (STDOUT, "untar file <$tarfile.gz> in <$dir>...\n");
     system ("tar -xf $tarfile");
     unlink $tarfile;
 }
@@ -308,15 +309,25 @@ sub condCopyUserDocFiles {
   #if USER-Docs was not chosen in kAppWizard
   if ($processes{USER} eq "no") {
     my %emptyIT = (
-    "$nameLittle/docs/Makefile" => "",
-    "$nameLittle/docs/en/Makefile" => "",
+      "$nameLittle/docs/Makefile" => "",
+      "$nameLittle/docs/en/Makefile" => "" );
+
     # "SUBDIRS = docs" => ""    do you really need this???
-                        );
+    #                    );
     #  chdir ($underDirectory);
     #  replaceValuesInFile(\%emptyIT, "Makefile.am");
-     chdir ($overDirectory);
-     replaceValuesInFile(\%emptyIT, "configure.in");
+    chdir ($overDirectory);
 
+    # The "in.in" will generate the "in" file, so make sure we
+    # look for that first
+    if ( -f "configure.in.in")
+    {
+      replaceValuesInFile(\%emptyIT, "configure.in.in");
+    }
+    elsif ( -f "configure.in")
+    {
+      replaceValuesInFile(\%emptyIT, "configure.in");
+    }
   }
 }
 
@@ -454,7 +465,8 @@ sub changeNormalApp {
 #    unpackFiles("normal.tar");
 #    
   #renamed the directory
-  printflush (STDOUT, "changing files...\n");
+  printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
+
   chdir ($overDirectory);
   rename ("skel", $nameLittle);
 
@@ -496,6 +508,7 @@ sub changeNormalApp {
   {
     rename ("kbaseui.rc",  $nameLittle."ui.rc");
   }
+
   replaceValuesInFile(\%changings, "Makefile.am");
   replaceValuesInFile(\%changings, "main.cpp");
   replaceValuesInFile(\%changings, $nameLittle.".cpp");
@@ -519,13 +532,14 @@ sub changeNormalApp {
   condCopyGNUFiles();
   condCopyLsmFile();
   condCopyUserDocFiles();
-    
+
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.cpp");
     processCppTemplate("$nameLittle.cpp");
     processCppTemplate("${nameLittle}view.cpp");
     processCppTemplate("${nameLittle}doc.cpp");
   }
+
   if ($processes{HEADER} eq "yes") {
     processHeaderTemplate("$nameLittle.h");
     processHeaderTemplate("${nameLittle}view.h");
@@ -547,7 +561,7 @@ sub changeMiniApp {
 #   unpackFiles("mini.tar");
 #    
   #renamed the directory
-  printflush (STDOUT, "changing files...\n");
+  printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
   rename ("skel", $nameLittle);
 
@@ -615,7 +629,7 @@ sub changeTerminalCPPApp {
 #    unpackFiles("cpp.tar");
 #    
     #renamed the directory
-    printflush (STDOUT, "changing files...\n");
+    printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
     
@@ -654,7 +668,7 @@ sub changeTerminalCApp {
 #    unpackFiles("c.tar");
 #
     #renamed the directory
-    printflush (STDOUT, "changing files...\n");
+    printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
 
@@ -692,7 +706,7 @@ sub changeQtApp {
 #    unpackFiles("qt.tar");
 #    
   #renamed the directory
-  printflush (STDOUT, "changing files...\n");
+  printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
   rename ("skel", $nameLittle);
 
@@ -790,7 +804,7 @@ sub changeGnomeApp {
 #    unpackFiles("c.tar");
 #
   #renamed the directory
-  printflush (STDOUT, "changing files...\n");
+  printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
   rename ("src", $nameLittle);
   rename ("gnome-hello.desktop",$nameLittle . ".desktop");
