@@ -345,6 +345,8 @@ bool ProjectManager::closeProject()
   m_closeProjectAction->setEnabled(false);
   m_projectOptionsAction->setEnabled(false);
 
+  PartController::getInstance()->slotCloseAllWindows();
+
   return true;
 }
 

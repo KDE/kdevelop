@@ -61,6 +61,7 @@ public slots:
   void slotClosePartForWidget(const QWidget *widget);
   void slotCloseAllButPartForWidget(QWidget *widget);
   void slotActivePartChanged( KParts::Part* part );
+  void slotCloseAllWindows();
 
 protected:
 
@@ -76,7 +77,6 @@ private slots:
   void slotOpenRecent(const KURL&);
 
   void slotCloseWindow();
-  void slotCloseAllWindows();
   void slotCloseOtherWindows();
 
   void slotBack();
