@@ -1,3 +1,9 @@
+1999-12-30 jbb <jbb@ihug.co.nz>
+	* Allow user to dock the debug toolbar.
+      Allow keyboard focus on var-viewer so user can scroll
+      using keyboard
+      Update handling of mismatched core files.
+
 1999-12-28 jbb <jbb@ihug.co.nz>
 	* Add debug core file, attach to process, set debug args, debug
       other executables.

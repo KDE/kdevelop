@@ -1314,7 +1314,7 @@ void CKDevelop::initDebugger()
     brkptManager = new BreakpointManager(o_tab_view, "BPManager");
     brkptManager->setFocusPolicy(QWidget::NoFocus);
     var_viewer = new VarViewer(t_tab_view,"VAR");
-    var_viewer->setFocusPolicy(QWidget::NoFocus);
+//    var_viewer->setFocusPolicy(QWidget::NoFocus);
 
     o_tab_view->addTab(frameStack,i18n("frame stack"));
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));

@@ -925,7 +925,7 @@ void CKDevelop::slotDebugExamineCore()
 
     if (project)
     {
-      if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this))
+      if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"core",this))
       {
         slotStatusMsg(QString().sprintf(i18n("Examine core file %s in %s"),
                                 coreFile.data(), dbgExternalCmd.data()));
