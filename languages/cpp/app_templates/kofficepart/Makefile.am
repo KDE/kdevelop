@@ -4,16 +4,18 @@ dataFiles = kopart.kdevelop kopart_aboutdata.h kopart_part.cpp kopart_view.h \
 	kopart_view.cpp x-kopart.desktop kde-configure.in.in \
 	main.cpp
 
-template_DATA = kopart
-#### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+templateName = kopart
+
+### no need to change below:
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
-${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+${templateName}.tar.gz:
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

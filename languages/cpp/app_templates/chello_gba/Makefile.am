@@ -1,16 +1,18 @@
 dataFiles = main.c font.raw.c master.pal.c src-Makefile.am c-Makefile.am \
 	c-Makefile.cvs configure.in chellogba.png app.kdevelop \
 	main.h gba.h font.bmp README.devel
-template_DATA = chellogba
+templateName = chellogba
+
 ### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
-${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+${templateName}.tar.gz:
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

@@ -1,15 +1,16 @@
 dataFiles = main.cpp src-Makefile.am cpp-Makefile.am cpp-Makefile.cvs 		configure.in cppsdlhello.png app.kdevelop acinclude.m4
-template_DATA = cppsdlhello
+templateName = cppsdlhello
 
 ### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
-${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+${templateName}.tar.gz:
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

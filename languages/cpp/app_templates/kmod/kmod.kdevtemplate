@@ -1,0 +1,31 @@
+# KDE Config File
+[General]
+Name=Linux Kernel module
+Name[fr]=Module du noyau Linux
+Icon=
+Category=C
+Comment=Generates a template for a Linux kernel module.
+Comment[fr]=Génère un modèle de module pour le noyau Linux.
+FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=APPNAMELC-driver.c
+Archive=kmod.tar.gz
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+Source=%{src}/kmod.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/src-Makefile
+Dest=%{dest}/Makefile
+
+[FILE3]
+Type=install
+Source=%{src}/kmod-driver.c
+Dest=%{dest}/%{APPNAMELC}-driver.c
+

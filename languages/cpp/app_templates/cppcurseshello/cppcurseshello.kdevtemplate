@@ -1,0 +1,54 @@
+# KDE Config File
+[General]
+Name=Simple ncurses Hello world program
+Name[de]=Einfaches ncurses Hallo-Welt Programm
+Icon=
+Category=C++
+Comment=Generates a simple ncurses based Hello world program in C++
+Comment[de]=Erstellt ein einfaches Hallo Welt programm für C++ basierend auf der ncurses Bibliothek
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=cppcurseshello.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/cpp-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/cpp-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/app-configure.in
+Dest=%{dest}/configure.in
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE5]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+

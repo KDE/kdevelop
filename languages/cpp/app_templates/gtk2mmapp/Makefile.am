@@ -4,17 +4,18 @@ dataFiles = acconfig.h autogen.sh gtk2mm.glade main_window.cc \
 	app.kdevelop gtk2mm.cc gtk2mmapp main_window_glade.cc\
 	src-Makefile.am config.h gtk2mm.png
 
-template_DATA = gtk2mmapp
+templateName = gtk2mmapp
 
 ### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
-${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+${templateName}.tar.gz:
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

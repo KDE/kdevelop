@@ -1,16 +1,17 @@
 dataFiles = src-Makefile.am app.cpp app.h app_part.cpp\
 	app_part.h main.cpp app_part.rc app_shell.rc \
 	kpartapp.png app.kdevelop subdirs
-template_DATA = kpartapp
+templateName = kpartapp
 ### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
+appwizarddatadir = ${kde_datadir}/kdevappwizard
 ${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

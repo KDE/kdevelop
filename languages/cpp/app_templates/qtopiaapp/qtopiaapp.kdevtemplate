@@ -1,0 +1,63 @@
+# TMake application
+[General]
+Name=Qtopia Application
+Name[fr]=Une Application Qtopia
+Icon=qmakeapp.png
+Category=C++/Embedded
+Category[fr]=C++/Environnement embarqué
+Comment=Generate a TMake/Qt based application for Qtopia 1.x
+Comment[fr]=Génère une application basée sur Qt / TMake pour l'environnement Qtopia 1.x.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=APPNAMELC.cpp
+Archive=qtopiaapp.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/Example.png
+Dest=%{dest}/%{APPNAME}.png
+
+[FILE3]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[FILE4]
+Type=install
+Source=%{src}/example.cpp
+Dest=%{dest}/%{APPNAMELC}.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/example.h
+Dest=%{dest}/%{APPNAMELC}.h
+
+[FILE6]
+Type=install
+Source=%{src}/examplebase.ui
+Dest=%{dest}/%{APPNAMELC}base.ui
+
+[FILE7]
+Type=install
+Source=%{src}/example.control
+Dest=%{dest}/%{APPNAMELC}.control
+
+[FILE8]
+Type=install
+Source=%{src}/example.desktop
+Dest=%{dest}/%{APPNAMELC}.desktop
+
+[FILE9]
+Type=install
+Source=%{src}/example.html
+Dest=%{dest}/%{APPNAMELC}.html
+
+[FILE10]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/main.cpp
+

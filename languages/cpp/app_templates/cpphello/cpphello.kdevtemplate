@@ -1,0 +1,54 @@
+# KDE Config File
+[General]
+Name=Simple Hello world program
+Name[fr]=Un simple programme de test « Hello world »
+Icon=cpphello.png
+Category=C++
+Comment=Generates a simple Hello world program in C++
+Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C++.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=cpphello.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/cpp-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/cpp-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/configure.in
+Dest=%{dest}/configure.in
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE5]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+

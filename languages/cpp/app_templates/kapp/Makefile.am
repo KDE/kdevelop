@@ -2,17 +2,18 @@ dataFiles = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
 	appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
 	kapp.png app.kdevelop subdirs README
 
-template_DATA = kapp
+templateName = kapp
 
 ### no need to change below:
-appwizarddatadir = ${kde_datadir}/kdevappwizard
+template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
-${template_DATA}.tar.gz:
-	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
-	gzip ${template_DATA}.tar
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+${templateName}.tar.gz:
+	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
+	$(GZIP) -9 ${templateName}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = ${template_DATA}.tar.gz
+archive_DATA = ${templateName}.tar.gz ${templateName}.png
 
 CLEANFILES = *.tar.gz

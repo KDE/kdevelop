@@ -1,0 +1,25 @@
+# KDE Config File
+[General]
+Name=Simple PHP script
+Name[fr]=Un simple script de test « Hello world »
+Category=PHP
+Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php.net)
+Comment[fr]=Génère un simple script de test du type « Hello world » dans le language PHP (http://www.php.net).
+DefaultDestinatonDir=HOMEDIR/public_html
+FileTemplates=php,CPPStyle
+ShowFilesAfterGeneration=%{APPNAMELC}.php
+Archive=phphello.tar.gz
+
+[PROJECT]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[APP.PHP]
+Type=install
+Source=%{src}/app.php
+Dest=%{dest}/%{APPNAMELC}.php
+
+[MGS]
+Type=message
+Comment=A simple PHP project was created in %{dest}.

@@ -1,0 +1,62 @@
+# QMake application
+[General]
+Name=Application
+Name[fr]=Une Application Qt / QMake
+Icon=qmakeapp.png
+Category=C++/QMake project
+Category[fr]=C++/QMake
+Comment=Generate a QMake/Qt based application (crossplatform compatible)
+Comment[fr]=Génère une application basée sur Qt / QMake. Ce programme est multi platte-forme.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=qmakeapp.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/qmakeapp.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/qmakeapp.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/main.cpp
+
+[FILE5]
+Type=install
+Source=%{src}/qmakeapp.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/qmakeapp.h
+Dest=%{dest}/src/%{APPNAMELC}.h
+
+[FILE7]
+Type=install
+Source=%{src}/fileopen.xpm
+Dest=%{dest}/src/fileopen.xpm
+
+[FILE8]
+Type=install
+Source=%{src}/filesave.xpm
+Dest=%{dest}/src/filesave.xpm
+
+[FILE9]
+Type=install
+Source=%{src}/fileprint.xpm
+Dest=%{dest}/src/fileprint.xpm
+

@@ -1,0 +1,37 @@
+# KDE Config File
+[General]
+Name=Hello world program
+Name[fr]=Un simple programme de test « Hello world »
+Icon=qmakesimple.png
+Category=C++/QMake project
+Category[fr]=C++/QMake
+Comment=Generates a simple Hello world program in C++ using QMake based project manager
+Comment[fr]=Génère un simple programme de test du type « Hello world » en utilisant QMake.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=qmakesimple.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.pro
+Dest=%{dest}/%{APPNAMELC}.pro
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE3]
+Type=install
+Source=%{src}/src.pro
+Dest=%{dest}/src/src.pro
+
+[FILE4]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+

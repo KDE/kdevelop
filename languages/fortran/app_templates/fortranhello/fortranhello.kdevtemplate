@@ -1,0 +1,54 @@
+# KDE Config File
+[General]
+Name=Simple Hello world program
+Name[fr]=Un simple programme de test « Hello world »
+Icon=fortranhello.png
+Category=Fortran
+Comment=Generates a simple Hello world program in Fortran
+Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language FORTRAN.
+FileTemplates=f,None
+ShowFilesAfterGeneration=src/APPNAMELC.f
+Archive=fortranhello.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/fortran-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/fortran-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/configure.in
+Dest=%{dest}/configure.in
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE5]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{src}/main.f
+Dest=%{dest}/src/%{APPNAMELC}.f
+

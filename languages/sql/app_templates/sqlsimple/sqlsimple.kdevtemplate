@@ -1,0 +1,19 @@
+# KDE Config File
+[General]
+Name=Simple SQL Project
+Category=Database
+Comment=Generates a simple SQL project.
+FileTemplates=sql,AdaStyle
+ShowFilesAfterGeneration=APPNAMELC.sql
+Archive=sqlsimple.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/app.sql
+Dest=%{dest}/%{APPNAMELC}.sql
+

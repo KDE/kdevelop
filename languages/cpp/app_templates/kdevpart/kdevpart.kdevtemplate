@@ -1,0 +1,56 @@
+# KDE Config File
+[General]
+Name=KDevelop Part (KDevelop source tree build)
+Name[fr]=Un composant logiciel pour KDevelop (dépendant de KDevelop)
+Category=C++/KDevelop/
+Comment=This generates a KPart for KDevelop, for building within the KDevelop source tree
+Comment[fr]=Génère un composant logiciel du type « KPart » pour KDevelop, qui devra être compilé dans l'arborescence des sources de KDevelop.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=APPNAMELC_part.cpp
+Archive=kdevpart.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/template-kpartapp/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/kdevpart_part.cpp
+Dest=%{dest}/%{APPNAMELC}_part.cpp
+
+[FILE4]
+Type=install
+Source=%{src}/kdevpart_part.h
+Dest=%{dest}/%{APPNAMELC}_part.h
+
+[FILE5]
+Type=install
+Source=%{src}/kdevpart_widget.cpp
+Dest=%{dest}/%{APPNAMELC}_widget.cpp
+
+[FILE6]
+Type=install
+Source=%{src}/kdevpart_widget.h
+Dest=%{dest}/%{APPNAMELC}_widget.h
+
+[FILE7]
+Type=install
+Source=%{src}/kdevpart_part.rc
+Dest=%{dest}/kdevpart_%{APPNAMELC}.rc
+
+[FILE8]
+Type=install
+Source=%{src}/kdevpart.desktop
+Dest=%{dest}/kdevpart_%{APPNAMELC}.desktop
+
+[FILE9]
+Type=install
+Source=%{src}/README.dox
+Dest=%{dest}/README.dox
+

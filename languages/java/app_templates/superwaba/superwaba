@@ -8,6 +8,7 @@ Comment=A simple template for building SuperWaba Java based apps on WinCE and Pa
 Comment[fr]=Génère un simple modéle d'application JAVA en utilisant SuperWaba pour les environnements WinCE et PalmOS. Plus d'informations peuvent être trouvé à l'URL suivante : http://www.superwaba.org.
 FileTemplates=java
 ShowFilesAfterGeneration=APPNAME.java
+Archive=superwaba.tar.gz
 
 [JAVA]
 Type=value
@@ -17,7 +18,7 @@ Default=/usr/lib/java
 ValueType=QString
 
 [WABA]
-Type=Value
+Type=value
 Value=WABA
 Comment=Path to your SuperWaba root
 Default=/usr/lib
@@ -30,23 +31,23 @@ Dest=%{dest}
 
 [PROJECT]
 Type=install
-Source=%{src}/template-superwaba/sw.kdevelop
-Dest=%{dest}/${APPNAMELC}.kdevelop
+Source=%{src}/sw.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [FILELIST]
 Type=install
-Source=%{src}/template-superwaba/sw.filelist
-Dest=%{dest}/${APPNAMELC}.filelist
+Source=%{src}/sw.filelist
+Dest=%{dest}/%{APPNAMELC}.filelist
 
 [MAKEFILE]
 Type=install
-Source=%{src}/template-superwaba/src-Makefile
+Source=%{src}/src-Makefile
 Dest=%{dest}/Makefile
 
 [SOURCE]
 Type=install
-Source=%{src}/template-superwaba/sw.java
-Dest=%{dest}/${APPNAME}.java
+Source=%{src}/sw.java
+Dest=%{dest}/%{APPNAME}.java
 
 [MESSAGE]
 Type=Message

@@ -1,0 +1,59 @@
+# KDE Config File
+[General]
+Name=Simple SDL program
+Name[fr]=Un simple programme avec SDL
+Icon=cppsdl.png
+Category=C++
+Comment=Generates a simple SDL program in C++
+Comment[fr]=Génère un simple programme de test avec la bibliothéque SDL dans le language C++.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=cppsdlhello.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/cpp-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/cpp-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/configure.in
+Dest=%{dest}/configure.in
+
+[FILE5]
+Type=install
+Source=%{src}/acinclude.m4
+Dest=%{dest}/acinclude.m4
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE6]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE7]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+

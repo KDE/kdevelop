@@ -1,0 +1,33 @@
+# Java application
+[General]
+Name=Application
+Name[fr]=Une application JAVA / Ant
+Icon=qmakeapp.png
+Category=Java/Ant project
+Category[fr]=Java/Ant
+Comment=Generate a Java application
+Comment[fr]=Génère une application dans le language JAVA en utilisant Ant
+FileTemplates=java,JavaStyle
+ShowFilesAfterGeneration=Main.java
+Archive=javahello.tar.gz
+
+[FILE1]
+Type=install
+Source=%{src}/javahello.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/javahello.filelist
+Dest=%{dest}/%{APPNAMELC}.filelist
+
+[FILE3]
+Type=install
+Source=%{src}/Main.java
+Dest=%{dest}/Main.java
+
+[FILE4]
+Type=install
+Source=%{src}/build.xml
+Dest=%{dest}/build.xml
+
