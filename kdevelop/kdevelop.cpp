@@ -682,14 +682,19 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
     nextWidget->show();
   }
   else if (role == KDevComponent::DocumentView) {
-    bool bUseQextMDI = true;  // TODO: make this configurable!
-    if( bUseQextMDI)
+    // TODO: check the configuration!
+    if( getMainDockWidget()->caption() != QString("default")) {
+      // call the view handler service
       emit addView( w);
-    else
+    }
+    else {
+      // default: stack dockwidgets
+      m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner | KDockWidget::DockCenter);
       nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
+    }
   }
   else if (role == KDevComponent::AreaOfDocumentViews) {
-    // the first document view is also the main dockwidget (is the MDI mainframe when using QextMDI or QWorkspace)
+    // is the MDI mainframe when using QextMDI or QWorkspace
     nextWidget->setEnableDocking(KDockWidget::DockNone);
     nextWidget->setDockSite(KDockWidget::DockCorner);
     setView(nextWidget);

@@ -133,43 +133,57 @@ void KDevelopCore::initActions()
 void KDevelopCore::loadInitialComponents()
 {
   KTrader::OfferList::ConstIterator it;
+  KTrader::OfferList viewHandlerOffers;
+  bool bUseViewHandler = true;  // TODO: make this configurable!
 
+  //
   // first, load a view handling component (MDI main frame or KDockWidget-based view docking site or ...)
   // (the precondition for other components which want to embed views!)
-  KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component/ViewHandler");
-  if (offers.isEmpty()) {
+  //
+  if( bUseViewHandler)
+    viewHandlerOffers = KTrader::self()->query("KDevelop/Component/ViewHandler");
+
+  if (!viewHandlerOffers.isEmpty()) {
+    // check the list of hits and take the right one (TODO: chosen in kdevelop options)
+    bool bFound = false;
+    for (it = viewHandlerOffers.begin(); (it != viewHandlerOffers.end()) || !bFound; ++it) {
+      // at the moment it's a trivial rule: take the first one it finds
+      bFound = true;
+      break;
+    }
+
+    kdDebug(9000) << "Found view-handler component " << (*it)->name() << endl;
+    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+
+    QStringList args;
+    QVariant prop = (*it)->property("X-KDevelop-Args");
+    if (prop.isValid())
+      args = QStringList::split(" ", prop.toString());
+
+    QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(), "KDevComponent", args);
+    if (!obj->inherits("KDevComponent")) {
+      kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
+      return;
+    }
+    KDevViewHandler *vh = (KDevViewHandler*) obj;
+    QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), vh, SLOT(addView(QWidget*)) );
+
+    // initialize the view handler component and it's GUI (the mainframe widget)
+    initComponent( vh);
+    m_kdevelopgui->guiFactory()->addClient( vh);
+  }
+
+  if (viewHandlerOffers.isEmpty() || !bUseViewHandler) {
     kdDebug(9000) << "No KDevelop view-handler components. Setting to default (stacked KDockWidgets)..." << endl;
     // create a default dockwidget (required as main widget)
     QWidget* qw = new QWidget( m_kdevelopgui, "default");
     m_kdevelopgui->embedWidget( qw, KDevComponent::AreaOfDocumentViews, "default view", 0L );
     QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), m_kdevelopgui, SLOT(stackView(QWidget*)) );
   }
-  else {
-    // check the list of hits and take the right one (TODO: chosen in kdevelop options)
-    // at the moment it's a trivial rule: take the first one it finds
-    for (it = offers.begin(); it != offers.end(); ++it) {
-      kdDebug(9000) << "Found view-handler component " << (*it)->name() << endl;
-      KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
 
-      QStringList args;
-      QVariant prop = (*it)->property("X-KDevelop-Args");
-      if (prop.isValid())
-        args = QStringList::split(" ", prop.toString());
-
-      QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(), "KDevComponent", args);
-      if (!obj->inherits("KDevComponent")) {
-        kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
-        return;
-      }
-      KDevViewHandler *vh = (KDevViewHandler*) obj;
-      QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), vh, SLOT(addView(QWidget*)) );
-
-      initComponent( vh);
-      m_kdevelopgui->guiFactory()->addClient( vh);
-    }
-  }
-
-  // second, build the frame for view handling (MDI main frame or KDockWidget-based view docking site or ...)
+  //
+  // second, load all other components (and let them create their GUI)
+  //
   KTrader::OfferList restOfOffers = KTrader::self()->query("KDevelop/Component");
   if (restOfOffers.isEmpty())
     kdDebug(9000) << "No other KDevelop components" << endl;
