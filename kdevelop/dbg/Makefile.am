@@ -1,18 +1,18 @@
+INCLUDES = -I$(top_srcdir)/kdevelop/lib $(all_includes)
 
-INCLUDES= $(all_includes) -I..
+lib_LTLIBRARIES = libkdevelopdbg.la
+libkdevelopdbg_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+libkdevelopdbg_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KDEUI)
 
-noinst_LIBRARIES = libdbg.a
+libkdevelopdbg_la_SOURCES = dbgmanager.cpp dbgfactory.cpp memview.cpp \
+                            breakpointdialog.cpp  stty.cpp gdbparser.cpp \
+                            breakpoint.cpp brkptmanager.cpp dbgcommand.cpp \
+                            dbgcontroller.cpp framestack.cpp gdbcommand.cpp \
+                            gdbcontroller.cpp vartree.cpp disassemble.cpp \
+                            dbgpsdlg.cpp dbgtoolbar.cpp
 
-libdbg_a_METASOURCES = USE_AUTOMOC
-
-libdbg_a_SOURCES = memview.cpp breakpointdialog.cpp stty.cpp gdbparser.cpp \
-                   breakpoint.cpp \
-                   brkptmanager.cpp dbgcommand.cpp dbgcontroller.cpp \
-                   framestack.cpp gdbcommand.cpp gdbcontroller.cpp vartree.cpp \
-                   disassemble.cpp dbgpsdlg.cpp dbgtoolbar.cpp
-
-noinst_HEADERS = memview.h breakpointdialog.h stty.h gdbparser.h breakpoint.h \
-                 brkptmanager.h \
+noinst_HEADERS = dbgmanager.h dbgfactory.h memview.h breakpointdialog.h \
+                 stty.h gdbparser.h breakpoint.h brkptmanager.h \
                  dbgcommand.h dbgcontroller.h framestack.h gdbcommand.h \
                  gdbcontroller.h vartree.h disassemble.h \
                  dbgpsdlg.cpp dbgtoolbar.cpp
@@ -24,3 +24,12 @@ toolbar_DATA = dbgbreak.xpm dbgnext.xpm dbgrun.xpm dbgstop.xpm  \
 toolbardir = $(kde_datadir)/kdevelop/toolbar
 
 EXTRA_DIST = $(toolbar_DATA)
+
+METASOURCES = AUTO
+
+servicedir = $(kde_servicesdir)
+service_DATA = kdevelopdbg.desktop
+
+rcdir = $(kde_datadir)/kdevelopdbg
+rc_DATA = kdevelopdbg.rc
+
