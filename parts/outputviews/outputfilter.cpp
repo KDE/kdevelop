@@ -10,8 +10,6 @@
  ***************************************************************************/
 
 #include "outputfilter.h"
-#include <qdatetime.h>
-#include <kdebug.h>
 
 OutputFilter::OutputFilter( OutputFilter& next )
 	: m_next( next )

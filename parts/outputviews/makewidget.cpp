@@ -492,7 +492,7 @@ void MakeWidget::insertItem( MakeItem* item )
 	if ( !item->visible( m_compilerOutputLevel ) )
 		return;
 
-	//SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
+	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
 
 	m_paragraphToItem.insert( m_paragraphs++, item );
 	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
