@@ -1,6 +1,7 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="documentation" library="libdocumentationplugin" version="1">
+<kpartplugin name="documentation" library="libdocumentationplugin" version="2">
 <MenuBar>
+<!--  <Action name="doc_bookmarks"/> -->
 <!-- <Menu name="tools"><Text>&amp;Tools</Text>
   <Action name="plugin_action"/>
  </Menu> -->

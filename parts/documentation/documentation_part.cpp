@@ -30,6 +30,10 @@
 #include <kparts/componentfactory.h>
 #include <kservice.h>
 #include <kdialogbase.h>
+#include <kaction.h>
+#include <kactionclasses.h>
+#include <kbookmark.h>
+#include <kbookmarkmenu.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -72,6 +76,8 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
 
     mainWindow()->embedSelectViewRight(m_widget, i18n("Documentation"),
         i18n("Documentation browser"));
+    
+    setupActions();
     
     loadDocumentationPlugins();
 }
@@ -154,6 +160,13 @@ bool DocumentationPart::configure()
     l->addWidget(w1);
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
     return (dlg.exec() == QDialog::Accepted);
+}
+
+void DocumentationPart::setupActions()
+{
+/*    KActionMenu *menu = new KActionMenu(i18n("&Bookmarks"), actionCollection(), "doc_bookmarks");
+    KBookmarkMenu *bm = new KBookmarkMenu(new DocBookmarkManager(this),
+        new DocBookmarkOwner(this), menu->popupMenu(), actionCollection(), true);*/
 }
 
 #include "documentation_part.moc"

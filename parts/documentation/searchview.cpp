@@ -84,7 +84,7 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     l4->addWidget(vLabel);
     l4->addWidget(m_view);
     
-    QHBoxLayout *l5 = new QHBoxLayout(l, 0);
+    QHBoxLayout *l5 = new QHBoxLayout(l, KDialog::spacingHint());
     m_configButton = new KPushButton(i18n("Update Config"), this);
     m_indexButton = new KPushButton(i18n("Update Index"), this);
     l5->addWidget(m_configButton);

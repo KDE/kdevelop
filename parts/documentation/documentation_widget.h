@@ -30,11 +30,12 @@ class DocumentationCatalogItem;
 class QToolBox;
 class KListBox;
 class SearchView;
+class BookmarkView;
 
 class DocumentationWidget : public QWidget
 {
     Q_OBJECT
-public:  
+public:
     DocumentationWidget(DocumentationPart *part);
     ~DocumentationWidget();
 
@@ -51,6 +52,7 @@ private:
     ContentsView *m_contents;
     IndexView *m_index;
     SearchView *m_search;
+    BookmarkView *m_bookmarks;
     QToolBox *m_tab;
 };
 

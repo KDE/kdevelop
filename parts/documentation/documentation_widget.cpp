@@ -35,6 +35,7 @@
 #include "contentsview.h"
 #include "indexview.h"
 #include "searchview.h"
+#include "bookmarkview.h"
 
 DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     :QWidget(0, "documentation widget"), m_part(part)
@@ -52,6 +53,9 @@ DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     
     m_search = new SearchView(m_part, this);
     m_tab->addItem(m_search, i18n("Search"));
+    
+    m_bookmarks = new BookmarkView(this);
+    m_tab->addItem(m_bookmarks, i18n("Bookmarks"));
     
     connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 }

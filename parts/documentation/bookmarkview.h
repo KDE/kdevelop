@@ -17,52 +17,61 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef __KDEVPART_DOCUMENTATION_H__
-#define __KDEVPART_DOCUMENTATION_H__
+#ifndef BOOKMARKVIEW_H
+#define BOOKMARKVIEW_H
 
-#include <qguardedptr.h>
-#include <kdevplugin.h>
+#include <qwidget.h>
 
+#include <kbookmarkmanager.h>
+
+class KListView;
+class KPushButton;
+class DocumentationPart;
 class DocumentationWidget;
-class KListBox;
-class KConfig;
-class KDialogBase;
-class ConfigWidgetProxy;
-class DocumentationPlugin;
+class QListViewItem;
 
-/*
- Please read the README.dox file for more info about this part
- */
-class DocumentationPart : public KDevPlugin
+class DocBookmarkManager: public KBookmarkManager {
+public:
+    DocBookmarkManager(DocumentationPart *part);
+};
+
+class DocBookmarkOwner: public KBookmarkOwner {
+public:
+    DocBookmarkOwner(DocumentationPart *part);
+
+    virtual void openBookmarkURL(const QString &_url);
+    virtual QString currentTitle() const;
+    virtual QString currentURL() const;
+
+private:
+    DocumentationPart *m_part;
+};
+
+class BookmarkView : public QWidget
 {
     Q_OBJECT
 public:
+    BookmarkView(DocumentationWidget *parent = 0, const char *name = 0);
+    ~BookmarkView();
 
-    DocumentationPart(QObject *parent, const char *name, const QStringList &);
-    ~DocumentationPart();
-    
-    void emitIndexSelected(KListBox *indexBox);
-    bool configure();
-
-signals:
-    void indexSelected(KListBox *indexBox);
-    
 protected:
-    void loadDocumentationPlugins();
-    KConfig *config();
-    void setupActions();
-    
+    void showBookmarks();
+
 protected slots:
-    void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
-    
+    void itemExecuted(QListViewItem *item, const QPoint &p, int col);
+    void addBookmark();
+    void editBookmark();
+    void removeBookmark();
+
 private:
-    QGuardedPtr<DocumentationWidget> m_widget;
-    ConfigWidgetProxy *m_configProxy;
+    DocumentationWidget *m_widget;
+    KListView *m_view;
+    KPushButton *m_addButton;
+    KPushButton *m_editButton;    
+    KPushButton *m_removeButton;
     
-    QValueList<DocumentationPlugin*> m_plugins;
-    
-friend class DocGlobalConfigWidget;
-friend class SearchView;
+    DocBookmarkManager *m_bmManager;
+    DocBookmarkOwner *m_bmOwner;
 };
 
 #endif
