@@ -8,6 +8,7 @@
 #include <qaccel.h>
 #include <kconfig.h>
 #include <kapplication.h>
+#include <klocale.h>
 
 void ConfigureProblemReporter::init()
 {
@@ -16,6 +17,7 @@ void ConfigureProblemReporter::init()
     bgParserCheckbox->setChecked( config->readBoolEntry("EnableCppBgParser", true) );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
     delaySlider->setValue( config->readNumEntry("CppBgParserDelay", 250) );
+    setDelayLabel( delaySlider->value() );
     loadSpecialWords();
     addSpecialWord();
     
@@ -67,4 +69,14 @@ void ConfigureProblemReporter::accept()
 void ConfigureProblemReporter::bgParserCheckbox_toggled( bool b )
 {
     delaySlider->setEnabled( b );
+    if ( b == TRUE )
+	delayLabel->show();
+    else
+	delayLabel->hide();
+}
+
+
+void ConfigureProblemReporter::setDelayLabel( int delay )
+{
+    delayLabel->setText( i18n( "delay: %1 msec" ).arg( delay ) );
 }

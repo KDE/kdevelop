@@ -36,13 +36,42 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QCheckBox">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>bgParserCheckbox</cstring>
+                        <cstring>layout2</cstring>
                     </property>
-                    <property name="text">
-                        <string>Enable background parsing</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>bgParserCheckbox</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Enable background parsing</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>delayLabel</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>msec</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignLeft</set>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
                 <widget class="QSlider">
                     <property name="name">
@@ -128,24 +157,15 @@
                         <property name="text">
                             <string>Word</string>
                         </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
                     </column>
                     <column>
                         <property name="text">
                             <string>Skip Arguments</string>
                         </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
                     </column>
                     <column>
                         <property name="text">
                             <string>Replace Word With</string>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
                         </property>
                     </column>
                     <property name="name">
@@ -167,12 +187,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>bgParserCheckbox</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>ConfigureProblemReporter</receiver>
-        <slot>bgParserCheckbox_toggled(bool)</slot>
-    </connection>
-    <connection>
         <sender>pushButton1</sender>
         <signal>clicked()</signal>
         <receiver>ConfigureProblemReporter</receiver>
@@ -183,6 +197,18 @@
         <signal>clicked()</signal>
         <receiver>ConfigureProblemReporter</receiver>
         <slot>removeCurrentSpecialWord()</slot>
+    </connection>
+    <connection>
+        <sender>delaySlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>setDelayLabel(int)</slot>
+    </connection>
+    <connection>
+        <sender>bgParserCheckbox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ConfigureProblemReporter</receiver>
+        <slot>bgParserCheckbox_toggled(bool)</slot>
     </connection>
 </connections>
 <includes>
@@ -197,6 +223,7 @@
     <slot>removeCurrentSpecialWord()</slot>
     <slot>accept()</slot>
     <slot>bgParserCheckbox_toggled( bool b )</slot>
+    <slot access="protected">setDelayLabel( int delay )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
