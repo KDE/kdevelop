@@ -37,6 +37,7 @@ public:
   PartController(QWidget *toplevel);
   ~PartController();
 
+  void setServiceType(const QString &serviceType);
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, const QString& context);
@@ -87,6 +88,10 @@ private:
   void editText(const KURL &url, int num);
 
   static PartController *s_instance;
+  
+  // Not used at present because the editor is hard wired in KDevelop
+  QString m_presetEncoding;
+
   KParts::PartManager *m_partManager;
   QPtrList<PartListEntry> m_partList;
 };

@@ -96,6 +96,10 @@ void PartController::editDocument(const KURL &url, int lineNum)
     CKDevelop::getInstance()->switchToFile( url.path(), lineNum );
 }
 
+void PartController::setServiceType(const QString &serviceType)
+{
+  m_presetEncoding = serviceType;
+}
 
 void PartController::showDocument(const KURL &url, int lineNum)
 {
