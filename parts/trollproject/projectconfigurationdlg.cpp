@@ -73,7 +73,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     m_projectConfiguration->m_warnings = QWARN_ON;
 
   m_projectConfiguration->m_target = "";
-  if ((m_targetPath->text().simplifyWhiteSpace()!="" ||
+/*  if ((m_targetPath->text().simplifyWhiteSpace()!="" ||
       m_targetOutputFile->text().simplifyWhiteSpace()!="") &&
       !radioSubdirs->isChecked())
   {
@@ -81,7 +81,9 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     if (outputFile.simplifyWhiteSpace() == "")
       outputFile = m_projectConfiguration->m_subdirName;
     m_projectConfiguration->m_target = m_targetPath->text() + "/" + outputFile;
-  }
+  }*/
+  m_projectConfiguration->m_target = m_targetOutputFile->text();
+  m_projectConfiguration->m_destdir = m_targetPath->text();
   m_projectConfiguration->m_includepath = m_includePath->text();
   m_projectConfiguration->m_defines = QStringList::split(" ",m_defines->text());
   m_projectConfiguration->m_cxxflags_debug = QStringList::split(" ",m_debugFlags->text());
@@ -142,7 +144,7 @@ void ProjectConfigurationDlg::UpdateControls()
   }
   
   // Target
-  QString targetString = m_projectConfiguration->m_target;
+/*  QString targetString = m_projectConfiguration->m_target;
   int slashPos = targetString.findRev('/');
 
   if (slashPos>=0)
@@ -152,6 +154,9 @@ void ProjectConfigurationDlg::UpdateControls()
   }
   else
     m_targetOutputFile->setText(targetString);
+*/
+  m_targetOutputFile->setText(m_projectConfiguration->m_target);
+  m_targetPath->setText(m_projectConfiguration->m_destdir);
   clickSubdirsTemplate();
 
   // Includepath

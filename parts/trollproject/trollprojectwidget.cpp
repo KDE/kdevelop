@@ -727,6 +727,9 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   
   // Config strings
+  Buffer->removeValues("DESTDIR");
+  if (item->configuration.m_destdir.simplifyWhiteSpace()!="")
+    Buffer->setValues("DESTDIR",QString(item->configuration.m_destdir),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("TARGET");
   if (item->configuration.m_target.simplifyWhiteSpace()!="")
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
@@ -1306,6 +1309,9 @@ void TrollProjectWidget::parse(SubprojectItem *item)
       if (lst.find("opengl")!=lst.end())
         item->configuration.m_requirements += QD_OPENGL;
     }
+    item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_target = lst[0];
     item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_target = lst[0];

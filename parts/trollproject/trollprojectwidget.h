@@ -44,6 +44,7 @@ struct ProjectConfiguration
   QMakeBuildMode  m_buildMode;
   QMakeWarnings   m_warnings;
   int             m_requirements;
+  QString         m_destdir;
   QString         m_target;
   QString         m_subdirName;
   QString         m_includepath;
