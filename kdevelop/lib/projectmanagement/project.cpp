@@ -20,8 +20,11 @@
 #include "registeredfile.h"
 #include <kdebug.h>
 
-Project::Project(QObject * parent, const char* name) :  QObjectPlugin(parent,name){
-  m_files = new QValueList<RegisteredFile>();
+Project::Project(QObject * parent, const char* name,QString filename) :  QObjectPlugin(parent,name){
+  m_files = new QList<RegisteredFile>();
+  if(filename != ""){
+    readConfig(filename);
+  }
 }
 Project::~Project(){
 }
@@ -69,17 +72,18 @@ void Project::setAbsolutePath(QString path){
 /** generate/modifiy the Makefile*/
 void Project::updateMakefile(){
 }
-void Project::registerFile(RegisteredFile file){
-  m_files->append(RegisteredFile(file));
+void Project::addFile(RegisteredFile* file){
+  m_files->append(file);
 }
-void Project::unRegisterFile(RegisteredFile file){
+void Project::removeFile(RegisteredFile* file){
   //	  m_files->remove(file);
 }
 void Project::showAllFiles(){
-  QValueList<RegisteredFile>::Iterator it;
+  RegisteredFile* file;
   cerr << "show all registered Files for" << m_name << "\n";
-  for(it = m_files->begin(); it != m_files->end(); ++it )
-    cerr << "\nFilename:" << (*it).getFilename() << "\n";
+  for(file = m_files->first(); file != 0; m_files->next() ){
+    cerr << "\nFilename:" << file->getRelativeFile() << "\n";
+  }
 }
 bool Project::readConfig(QString filename){
   m_project_file = filename;
@@ -116,10 +120,11 @@ bool Project::writeGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
   config->writeEntry("name",m_name);
   config->writeEntry("plugin_name", m_plugin_name); // the projectspacetype name
+  config->writeEntry("projecttype_name",m_projecttype_name);
   QStringList file_list;
-  QValueList<RegisteredFile>::Iterator it;
-  for(it = m_files->begin(); it != m_files->end(); ++it ){
-    file_list.append((*it).getFilename());
+  RegisteredFile* file;
+  for(file = m_files->first(); file != 0; file= m_files->next() ){
+    file_list.append(file->getRelativeFile());
   }
   config->writeEntry("files",file_list);
   return true;

@@ -21,7 +21,7 @@
 #include "qobjectplugin.h"
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <qlist.h>
 #include "registeredfile.h"
 #include <ksimpleconfig.h>
 
@@ -38,7 +38,7 @@ class Project : public QObjectPlugin  {
   Q_OBJECT
     
     public: 
-  Project(QObject* parent=0,const char* name=0);
+  Project(QObject* parent=0,const char* name=0,QString filename="");
   virtual ~Project();
   /*____some get methods_____ */
   
@@ -62,9 +62,8 @@ class Project : public QObjectPlugin  {
   /** generate/modifiy the Makefile*/
   virtual void updateMakefile();
 
-  virtual void registerFile(RegisteredFile file);
-  virtual void unRegisterFile(RegisteredFile file);
-
+  virtual void addFile(RegisteredFile* file);
+  virtual void removeFile(RegisteredFile* file);
 
   virtual bool readConfig(QString filename);
   virtual bool readGeneralConfig(KSimpleConfig* config);
@@ -77,12 +76,13 @@ class Project : public QObjectPlugin  {
   /* */
   virtual void showAllFiles();
   protected:
-  QValueList<RegisteredFile>* m_files;
+  QList<RegisteredFile>* m_files;
   QString m_name;
   QString m_version;
   QString m_abs_path;
   QString m_user_project_file;
   QString m_project_file;
+  QString m_projecttype_name;
 };
 
 #endif

@@ -2,7 +2,7 @@
                           projectspace.h  -  description
                              -------------------
     begin                : Sat May 13 2000
-    copyright            : (C) 2000 by Sandy Meier
+    copyright            : (C) 2000 by Sandy Meier (KDevelop Team)
     email                : smeier@kdevelop.org
  ***************************************************************************/
 
@@ -33,9 +33,12 @@
 class ProjectSpace : public KDevComponent, public Plugin  {
   Q_OBJECT
     public: 
-  ProjectSpace(QObject* parent=0,const char* name=0);
+  ProjectSpace(QObject* parent=0,const char* name=0,QString file="");
   ~ProjectSpace();
-  
+
+  /** create a project object based on the projecfile */
+  void addProject(QString file);
+
   void addProject(Project* prj);
   void removeProject(QString name);
   
@@ -86,7 +89,17 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   virtual bool writeGeneralConfig(KSimpleConfig* config);
   virtual bool writeUserConfig(KSimpleConfig* config);
 
-	
+  /** returns the relative path, to get from source_path to destpath (both are absolute)
+      for examples: 
+      source_path: /home/smeier/testprj/
+      dest_path:   /usr/lib/
+      relative_path = ../../../user/lib/
+   */
+      
+  static QString getRelativePath(QString source_dir,QString dest_dir);
+  static QString getAbsolutePath(QString source_dir, QString rel_path);
+
+
 protected:
   /** ProjectSpace name*/
   QString m_name;
