@@ -1,3 +1,7 @@
+2001-06-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+	* let the user choose which editor part to load
+
 2001-06-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Separated project options widget in 4 separate widgets 
