@@ -12,6 +12,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+#include "tools_part.h"
 #include "treeview.h"
 
 
@@ -85,7 +86,7 @@ void ToolsConfig::fill()
 {
   _entries.clear();
 
-  KConfig *config = kapp->config();
+  KConfig *config = ToolsFactory::instance()->config();
   config->setGroup("Tools");
 
   QStringList list = config->readListEntry("Tools");
@@ -134,7 +135,7 @@ void ToolsConfig::toTree()
 
 void ToolsConfig::accept()
 {
-  KConfig *config = kapp->config();
+  KConfig *config = ToolsFactory::instance()->config();
   config->setGroup("Tools");
 
   QStringList l;

@@ -9,9 +9,12 @@
 
 #include <qguardedptr.h>
 #include <kdevplugin.h>
+#include <kgenericfactory.h>
 
 
+class QPopupMenu;
 class KDialogBase;
+class Context;
 
 
 class ToolsWidget;
@@ -35,7 +38,19 @@ private slots:
 
 	void slotToolActivated();
 
+    void contextMenu(QPopupMenu *popup, const Context *context);
+    void updateToolsMenu();
+    void toolsMenuActivated();
+    void fileContextActivated(int id);
+    void dirContextActivated(int id);
+      
+private:
+    void startCommand(QString cmdline, bool captured, QString fileName);
+
+    QPopupMenu *m_contextPopup;
+    QString m_contextFileName;
   };
 
+typedef KGenericFactory<ToolsPart> ToolsFactory;
 
 #endif

@@ -1,6 +1,9 @@
 #include "tools_part.h"
 
 #include <qfile.h>
+#include <qpopupmenu.h>
+#include <qregexp.h>
+#include <qtimer.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 
@@ -10,16 +13,23 @@
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kparts/part.h>
+#include <kprocess.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/selectioninterface.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
+#include "kdevpartcontroller.h"
+#include "kdevappfrontend.h"
 
 #include "toolsconfig.h"
+#include "toolsconfigwidget.h"
 
 
-typedef KGenericFactory<ToolsPart> ToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
@@ -32,6 +42,13 @@ ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(updateMenu()));
+
+  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+           this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+
+  // Apparently action lists can only be plugged after the
+  // xmlgui client has been registered
+  QTimer::singleShot(0, this, SLOT(updateToolsMenu()));
 }
 
 
@@ -46,6 +63,11 @@ void ToolsPart::configWidget(KDialogBase *dlg)
   ToolsConfig *w = new ToolsConfig(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
+
+  vbox = dlg->addVBoxPage(i18n("External Tools"));
+  ToolsConfigWidget *w2 = new ToolsConfigWidget(vbox, "tools config widget");
+  connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+  connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));
 }
 
 
@@ -56,7 +78,7 @@ void ToolsPart::updateMenu()
 
   unplugActionList("tools_list");
 
-  KConfig *config = kapp->config();
+  KConfig *config = ToolsFactory::instance()->config();
   config->setGroup("Tools");
 
   QStringList list = config->readListEntry("Tools");
@@ -83,5 +105,165 @@ void ToolsPart::slotToolActivated()
   kapp->startServiceByDesktopPath(df);
 }
 
+
+// Duplicated from abbrev part. This really should be in
+// the editor interface!
+static QString currentWord(KTextEditor::EditInterface *editiface,
+                           KTextEditor::ViewCursorInterface *cursoriface)
+{
+    uint line, col;
+    cursoriface->cursorPositionReal(&line, &col);
+    QString str = editiface->textLine(line);
+    int i;
+    for (i = col-1; i >= 0; --i)
+        if (!str[i].isLetter())
+            break;
+
+    return str.mid(i+1, col-i-1);
+}
+
+
+void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
+{
+    KParts::Part *part = partController()->activePart();
+    KParts::ReadWritePart *rwpart
+        = dynamic_cast<KParts::ReadWritePart*>(part);
+    KTextEditor::SelectionInterface *selectionIface
+        = dynamic_cast<KTextEditor::SelectionInterface*>(part);
+    KTextEditor::EditInterface *editIface
+        = dynamic_cast<KTextEditor::EditInterface*>(part);
+    KTextEditor::ViewCursorInterface *cursorIface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part);
+
+    if (fileName.isNull() && rwpart)
+        fileName = rwpart->url().path();
+    
+    QString projectDirectory;
+    if (project())
+        projectDirectory = project()->projectDirectory();
+    
+    QString selection;
+    if (selectionIface)
+        selection = KShellProcess::quote(selectionIface->selection());
+
+    QString word;
+    if (editIface && cursorIface)
+        word = KShellProcess::quote(currentWord(editIface, cursorIface));
+    
+    // This should really be checked before inserting into the popup
+    if (cmdline.contains("%D") && projectDirectory.isNull())
+        return;
+    cmdline.replace(QRegExp("%D"), projectDirectory);
+    
+    if (cmdline.contains("%S") && fileName.isNull())
+        return;
+    cmdline.replace(QRegExp("%S"), fileName);
+
+    if (cmdline.contains("%T") && selection.isNull())
+        return;
+    cmdline.replace(QRegExp("%S"), selection);
+
+    if (cmdline.contains("%W") && word.isNull())
+        return;
+    cmdline.replace(QRegExp("%W"), word);
+
+    if (captured)
+        appFrontend()->startAppCommand(cmdline, false);
+    else {
+        KShellProcess proc;
+        proc << cmdline;
+        proc.start(KProcess::DontCare, KProcess::NoCommunication);
+    }
+}
+
+
+void ToolsPart::updateToolsMenu()
+{
+    KConfig *config = ToolsFactory::instance()->config();
+    config->setGroup("External Tools");
+    QStringList l = config->readListEntry("Tool Menu");
+
+    QList<KAction> actions;
+    QStringList::ConstIterator it;
+    for (it = l.begin(); it != l.end(); ++it) {
+        KAction *action = new KAction(*it, 0,
+                                      this, SLOT(toolsMenuActivated()),
+                                      (QObject*) 0, (*it).utf8());
+        actions.append(action);
+    }
+
+    unplugActionList("tools2_list");
+    plugActionList("tools2_list", actions);
+}
+
+
+void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+    if (!context->hasType("file"))
+        return;
+
+    const FileContext *fcontext = static_cast<const FileContext*>(context);
+    m_contextPopup = popup;
+    m_contextFileName = fcontext->fileName();
+    
+    KConfig *config = ToolsFactory::instance()->config();
+    config->setGroup("External Tools");
+    QStringList filecontextList = config->readListEntry("File Context");
+
+    if (fcontext->isDirectory()) {
+        QStringList l = config->readListEntry("Dir Context");
+        QStringList::ConstIterator it;
+        for (it = l.begin(); it != l.end(); ++it)
+            popup->insertItem( (*it), this, SLOT(dirContextActivated(int)) );
+    } else {
+        QStringList l = config->readListEntry("File Context");
+        QStringList::ConstIterator it;
+        for (it = l.begin(); it != l.end(); ++it)
+            popup->insertItem( (*it), this, SLOT(fileContextActivated(int))  );
+    }
+}
+
+
+void ToolsPart::toolsMenuActivated()
+{
+    QString menutext = QString::fromUtf8(sender()->name());
+    KConfig *config = ToolsFactory::instance()->config();
+    config->setGroup("Tool Menu " + menutext);
+    QString cmdline = config->readEntry("CommandLine");
+    bool captured = config->readBoolEntry("Captured");
+    kdDebug() << "activating " << menutext
+              << "with cmdline " << cmdline << endl;
+    startCommand(cmdline, captured, QString::null);
+}
+
+
+void ToolsPart::fileContextActivated(int id)
+{
+    QString menutext = m_contextPopup->text(id);
+    
+    KConfig *config = ToolsFactory::instance()->config();
+    config->setGroup("File Context " + menutext);
+    QString cmdline = config->readEntry("CommandLine");
+    bool captured = config->readBoolEntry("Captured");
+    kdDebug() << "activating " << menutext
+              << "with cmdline " << cmdline
+              << " on file " << m_contextFileName << endl;
+    startCommand(cmdline, captured, m_contextFileName);
+}
+
+
+void ToolsPart::dirContextActivated(int id)
+{
+    QString menutext = m_contextPopup->text(id);
+
+    KConfig *config = ToolsFactory::instance()->config();
+    config->setGroup("Dir Context " + menutext);
+    QString cmdline = config->readEntry("CommandLine");
+    bool captured = config->readBoolEntry("Captured");
+    kdDebug() << "activating " << menutext
+              << "with cmdline " << cmdline
+              << " on directory " << m_contextFileName << endl;
+    startCommand(cmdline, captured, m_contextFileName);
+}
 
 #include "tools_part.moc"
