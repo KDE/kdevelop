@@ -44,6 +44,7 @@ ScriptProjectPart::ScriptProjectPart(KDevApi *api, QObject *parent, const char *
 
 ScriptProjectPart::~ScriptProjectPart()
 {
+    topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

@@ -65,6 +65,10 @@ ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
 
 ClassViewPart::~ClassViewPart()
 {
+    for (QWidget *w=m_widgets.first(); w != 0; w = m_widgets.next())
+      topLevel()->removeView(w);
+    topLevel()->removeView(m_classtree);
+
     // In contrast to other widgets, we can have any number of class tool
     // dialogs. That's why we don't use QGuardedPtr here, but instead let
     // the dialogs register() and unregister() themselves.

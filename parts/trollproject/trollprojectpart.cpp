@@ -72,6 +72,7 @@ TrollProjectPart::TrollProjectPart(KDevApi *api, QObject *parent, const char *na
 
 TrollProjectPart::~TrollProjectPart()
 {
+    topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

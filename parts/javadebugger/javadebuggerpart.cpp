@@ -212,6 +212,11 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
 
 JavaDebuggerPart::~JavaDebuggerPart()
 {
+    topLevel()->removeView(variableWidget);
+    topLevel()->removeView(breakpointWidget);
+    topLevel()->removeView(framestackWidget);
+    topLevel()->removeView(disassembleWidget);
+  
     delete variableWidget;
     delete breakpointWidget;
     delete framestackWidget;

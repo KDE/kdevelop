@@ -50,6 +50,7 @@ FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
 
 FileViewPart::~FileViewPart()
 {
+    topLevel()->removeView(m_filetree);
     delete m_filetree;
 }
 

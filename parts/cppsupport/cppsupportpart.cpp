@@ -175,6 +175,8 @@ CppSupportPart::slotEnableCodeCompletion( bool setEnable )
 
 CppSupportPart::~CppSupportPart()
 {
+    topLevel()->removeView(m_pCHWidget);
+
     delete m_pParser;
     delete m_pCompletion;
 

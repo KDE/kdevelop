@@ -109,6 +109,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
 
 AutoProjectPart::~AutoProjectPart()
 {
+    topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

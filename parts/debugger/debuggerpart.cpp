@@ -248,6 +248,11 @@ DebuggerPart::DebuggerPart(KDevApi *api, QObject *parent, const char *name)
 
 DebuggerPart::~DebuggerPart()
 {
+    topLevel()->removeView(variableWidget);
+    topLevel()->removeView(breakpointWidget);
+    topLevel()->removeView(framestackWidget);
+    topLevel()->removeView(disassembleWidget);
+    
     delete variableWidget;
     delete breakpointWidget;
     delete framestackWidget;

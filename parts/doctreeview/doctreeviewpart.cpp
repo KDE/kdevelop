@@ -96,6 +96,7 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
 
 DocTreeViewPart::~DocTreeViewPart()
 {
+    topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

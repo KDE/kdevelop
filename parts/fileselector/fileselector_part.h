@@ -18,7 +18,7 @@ class FileSelectorPart : public KDevPart
 public:
 
   FileSelectorPart(KDevApi *api, QObject *parent=0, const char *name=0);
-
+  ~FileSelectorPart();
 
 public slots:
 

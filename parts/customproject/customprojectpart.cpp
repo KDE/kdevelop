@@ -69,6 +69,7 @@ CustomProjectPart::CustomProjectPart(KDevApi *api, QObject *parent, const char *
 
 CustomProjectPart::~CustomProjectPart()
 {
+    topLevel()->removeView(m_widget);
     delete m_widget;
 }
 
