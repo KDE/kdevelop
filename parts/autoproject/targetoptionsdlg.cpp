@@ -98,14 +98,22 @@ void TargetOptionsDialog::readConfig()
 
     QListViewItem *lastItem = 0;
     QStringList::Iterator l2it;
+    QCheckListItem *flitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
     for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
         QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
-        while (clitem) {
-            if (*l2it == ("$(top_builddir)/" + clitem->text())) {
-                clitem->setOn(true);
-                break;
+        if (flitem) {
+            while (clitem) {
+                if (*l2it == ("$(top_builddir)/" + clitem->text())) {
+                    clitem->setOn(true);
+                    // move this item to the "top of the list"
+                    if (flitem != clitem)
+                      clitem->moveItem(flitem);
+                    // move the "top of the list" one item down
+                    flitem = static_cast<QCheckListItem*>(flitem->nextSibling());
+                    break;
+                }
+                clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
             }
-            clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
         }
         if (!clitem) {
             QListViewItem *item = new QListViewItem(outsidelib_listview, *l2it);
