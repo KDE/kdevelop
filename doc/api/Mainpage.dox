@@ -34,6 +34,7 @@ First of all read the \ref KDev3Arch (doc/api/Architecture.dox file) then you ca
   - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
   - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
   - \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
+  - \ref howToAddGenericBuildTools (doc/api/HowToAddGenericBuildTools.dox file)
 
 Additionally you may also want to find out \ref howToDocument (doc/api/HowToDocument.dox file).
 

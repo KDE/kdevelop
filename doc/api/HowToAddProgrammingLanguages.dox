@@ -7,24 +7,39 @@
 \section LSupport List of things to have "complete" support of a given language in KDevelop
 
   - Implement interface KDevLanguageSupport
+  - \ref sectionClassWizard
+  - \ref sectionAttributeMethodWizard
   - \ref sectionQtUiSubclassing - (if the language has Qt bindings)
   - \ref sectionLanguageParser
+  - \ref sectionClassStore
+    - \ref sectionMemoryClassStore
+    - \ref sectionPersistantClassStore
+    .
   - \ref sectionCodeCompletion
   - \ref sectionProblemReporter - (parses source on the fly and reports syntax errors)
-  - Syntax highlighter - (add to QEditor if not available elsewhere)
-  - \ref sectionApplicationTemplates
-  - \ref sectionSourceFileTemplates
-  - \ref sectionAbbreviationTemplates - (ife expands to an if else statement, etc)
+  - \ref sectionTemplates
+    - \ref sectionApplicationTemplates
+    - \ref sectionSourceFileTemplates
+    - \ref sectionAbbreviationTemplates - (ife expands to an if else statement, etc)
+    .
   - \ref sectionSourceCodeFormater (prettyprint functionality)
+  - \ref sectionDocumentationTopics
   - \ref sectionDebugger
     - (gdb/jdb/??? integration)
   - \ref sectionCompilerPlugins
-  - Build tool (make/ant/etc)
+  .
+
+List of optional things to support a given language in KDevelop:
+  - \ref sectionEditor - Syntax highlighter - (add to QEditor if not available elsewhere)
+  - \section sectionBuildTool (make/ant/etc)
   .
 
 Take a look at \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) to see the current status/features of the programming languages currently supported by KDevelop.
 
-\section Expl Explanations, hints, tips, and all around Good Things To Know, regarding that list
+
+
+
+\section sectionLanguageSupport Language Support
 
 Any language support should be written as a kdevelop part and implement
 KDevLanguageSupport interface (<code>lib/interfaces/kdevlanguagesupport.h</code>).
@@ -40,15 +55,6 @@ KDevelop ships with KDevLang project template. It is a simple language support p
 To use it, start a New Project and select: <code>C++->KDevelop->KDevelop Language Support Plugin</code> in the application wizard.
 The template is located in <code>languages/cpp/app_templates/kdevlang</code>, you can change it there if you need.
 
-
-
-
-
-\section LSupp Language Support
-
-<B>Language support</B> can be written either as a source tree build or as a
-standalone part (check out KDevelop part (Standalone build) application
-template in KDevelop).
 
 You should look at <code>languages/ruby</code> for a simple language support
 implementation. For a compilable language support, consult <code>languages/ada</code> or <code>languages/pascal</code> (they are not so complex as <code>languages/cpp</code>).
@@ -92,7 +98,7 @@ Other (not so complex as c++) languages can be parsed by ANTLR based parsers (li
 Consult www.antlr.org for a ANTLR documentation and look at <code>languages/java</code>, <code>languages/ada</code> and <code>languages/pascal</code> for an example of using such parsers.
 The latest version of ANTLR (2.7.2) has support for Java, C, Pascal, Ada, C++, CIM, HTML, IDL, Verilog, VRML, OCL, ASN.1, and SQL. You can write an ANTLR parser for your own language, of course.
 
-\subsection ClStore Class store
+\subsection sectionClassStore Class store
 
 If you write (or have) a language parser, your language support can have
 "class store" (a database containing the information about scopes, classes
@@ -120,7 +126,7 @@ functionality for your language. The problem reporter catches errors
 reported by a parser and displays it in a problem reporter view.
 <code>languages/java</code>, <code>languages/ada</code>, <code>languages/pascal</code> and <code>languages/cpp</code> have problem reporters.
 
-\subsection Templ Templates
+\subsection sectionTemplates Templates
 
 \subsubsection sectionApplicationTemplates Application templates
 
@@ -178,7 +184,7 @@ See also \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file) for an informat
 
 
 
-\section Editor Language Editor
+\section sectionEditor Language Editor
 
 To edit source files KDevelop uses any editor that supports the KTextEditor
 interface. The current supported editors and their features are listed
@@ -194,7 +200,7 @@ By creating QEditorIndenter and QSourceColorizer descendants you can provide the
 
 
 
-\section PrManag Build Tools
+\section sectionBuildTool Build Tool
 
 The language support is important, but it is unusable without a <B>build tool</B>
 that can manage projects written on this language. KDevelop
@@ -219,6 +225,7 @@ currently provides several build tools. They are:
   - QMake build tool
     - see TrollProjectPart at <code>buildtools/qmake</code>
     .
+  .
 
 Also available:
   - Script build tool
@@ -233,7 +240,7 @@ Also available:
 (They are deprecated build tools that will be replaced with the generic build tool).
 
 Choose your build tool and if the existing build tools doesn't fit
-in, extend generic build tool via build system plugin.
+in, extend generic build tool via build system plugin. \ref howToAddGenericBuildTools page (doc/api/HowToAddGenericBuildTools.dox file) helps you to do it.
 
 
 */

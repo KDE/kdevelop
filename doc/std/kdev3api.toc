@@ -12,6 +12,7 @@
 	<tocsect2 name="Add a programming language" url="howToAddProgrammingLanguages.html"/>
 	<tocsect2 name="Add application templates" url="howToAddApplicationTemplates.html"/>
 	<tocsect2 name="Add file templates" url="howToAddFileTemplates.html"/>
+	<tocsect2 name="Add generic build tools" url="howToAddGenericBuildTools.html"/>
 	<tocsect2 name="Document KDevelop parts" url="howToDocument.html"/>
 </tocsect1>
 <tocsect1 name="Planned tasks" url="index.html#PlannedTasks">
