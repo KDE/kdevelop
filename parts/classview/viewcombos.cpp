@@ -19,6 +19,7 @@
  */
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kcomboview.h"
 
@@ -221,5 +222,33 @@ void processFunction( ClassViewPart* /*part*/, KComboView* /*view*/, FunctionIte
     }*/
 }
 
+}
+
+void ViewCombosOp::removeNamespacesItems(ClassViewPart *part, QListView *view, const FileDom &dom)
+{
+    NamespaceList nl = dom->namespaceList();
+
+    QListViewItemIterator it( view );
+    while ( it.current() )
+    {
+        NamespaceItem *item = dynamic_cast<NamespaceItem*>(it.current());
+        kdDebug() << "ViewCombosOp::removeNamespacesItems - fileName in namespace " << item->dom()->name() << " is " << dom->name();
+        if ( (item->dom() != part->codeModel()->globalNamespace()) && nl.contains(item->dom()))
+        {
+            kdDebug() << "deleting..." << endl;
+            delete item;
+        }
+    }
+//     QPtrList<QListViewItem> lst;
+//     QListViewItemIterator it( view );
+//     while ( it.current() ) {
+//         NamespaceItem *item = dynamic_cast<NamespaceItem*>(it.current());
+//         kdDebug() << "ViewCombosOp::removeNamespacesItems - fileName in namespace " << item->dom()->name() << " is " << item->dom()->file()->name();
+//         if (item && (item->dom()->fileName() == fileName))
+//             lst.append( it.current() );
+//         ++it;
+//     }
+//
+//     lst.setAutoDelete(true);
 }
 

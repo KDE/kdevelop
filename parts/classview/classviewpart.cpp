@@ -84,7 +84,7 @@ ClassViewPart::~ClassViewPart()
     m_namespaces->view()->clear();
     m_classes->view()->clear();
     m_functions->view()->clear();
-    
+
     mainWindow()->removeView( m_widget );
     delete (ClassViewWidget*) m_widget;
 }
@@ -92,6 +92,8 @@ ClassViewPart::~ClassViewPart()
 void ClassViewPart::slotProjectOpened( )
 {
     connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
+    connect( languageSupport(), SIGNAL(aboutToRemoveSourceInfo(const QString& )), this, SLOT(refresh()));
+    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(refresh()));
 }
 
 void ClassViewPart::slotProjectClosed( )
@@ -685,6 +687,43 @@ void ClassViewPart::focusNamespaces( )
 void ClassViewPart::unfocusNamespaces( )
 {
 //    m_namespaces->view()->lineEdit()->deselect();
+}
+
+//TODO: implement
+void ClassViewPart::removeFile( const QString & fileName )
+{
+/*    bool removeCurrentNs = false;
+    NamespaceItem *ni = dynamic_cast<NamespaceItem*>(m_namespaces->view()->currentItem());
+    if (ni && (ni->dom()->fileName() == fileName))
+        removeCurrentNs = true;
+
+    FileDom dom = m_part->codeModel()->fileByName( fn );
+    if( !dom )
+        return;
+    ViewCombosOp::removeNamespacesItems(m_namespaces->view()->listView(), dom);
+
+    if (removeCurrentNs)
+    {
+        ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
+        return;
+    }
+*/
+/*    ClassItem *ci = dynamic_cast<ClassItem*>(m_classes->view()->currentItem());
+    if (ci)
+    {
+        if (ci->dom()->fileName() == fileName)
+        {
+            ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
+            delete ni;
+            return;
+        }
+    }*/
+
+}
+
+//TODO: implement
+void ClassViewPart::addFile( const QString & fileName )
+{
 }
 
 #include "classviewpart.moc"

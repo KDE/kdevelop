@@ -61,6 +61,8 @@ private slots:
     void slotProjectOpened();
     void slotProjectClosed();
     void refresh();
+    void removeFile(const QString& fileName);
+    void addFile(const QString& fileName);
     void switchedViewPopup();
     void graphicalClassView();
 

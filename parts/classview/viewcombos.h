@@ -79,6 +79,8 @@ void processNamespace( ClassViewPart *part, KComboView *view, NamespaceItem * it
 void processClass( ClassViewPart *part, KComboView *view, ClassItem * item );
 void processFunction( ClassViewPart *part, KComboView *view, FunctionItem * item );
 
+void removeNamespacesItems(ClassViewPart *part, QListView *view, const FileDom &dom);
+
 }
 
 #endif
