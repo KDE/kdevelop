@@ -72,9 +72,9 @@ apidox-am-yes:
 			echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
 			echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
 		fi ;\
-		## example path for HowToAddTemplates.dox
+		## example path for HowToAddTemplates.dox \
 		echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
-		## example path for HowToDocument.dox
+		## example path for HowToDocument.dox \
 		echo "EXAMPLE_PATH          += parts/appwizard/kdevpart" >> Doxyfile; \
 		echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
 		##--------------------------------------------------------------------------- \
@@ -92,7 +92,7 @@ apidox-am-yes:
 		echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
 		echo "HTML_OUTPUT            = html" >> Doxyfile; \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
-## (It only finds it if we install the documentation)
+## (It only finds it if we install the documentation) \
 			echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
 			echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
 			echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
@@ -135,7 +135,7 @@ apidox-am-yes:
 				else \
 					tagpath=`ls -1 $(kde_htmldir)/en/*-apidocs/$$tag/$$tag.tag 2> /dev/null` ;\
 					if test -n "$$tagpath"; then \
-## The path to the tags is relative (It only finds them if we install the documentation)
+## The path to the tags is relative (It only finds them if we install the documentation) \
 						path=`echo $$tagpath | sed -e "s,.*/\([^/]*-apidocs\)/$$tag/$$tag.tag,../../\1/$$tag,"` ;\
 					fi ;\
 				fi ;\
@@ -167,7 +167,7 @@ apidox-am-yes:
 			fi ;\
 			$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
 		fi ;\
-		## Make a nice looking Doxyfile out of the mess that we just did
+		## Make a nice looking Doxyfile out of the mess that we just did \
 		$(DOXYGEN) -s -u Doxyfile; \
 		##--------------------------------------------------------------------------- \
 		## Run doxygen                                                                \
