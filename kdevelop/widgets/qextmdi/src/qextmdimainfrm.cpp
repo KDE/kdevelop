@@ -1005,10 +1005,12 @@ void QextMdiMainFrm::switchToToplevelMode()
    // 4.) recreate the MDI childframe area and hide it
    if (oldMdiMode == QextMdi::TabPageMode) {
       QApplication::sendPostedEvents();
-      m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
-      m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
-      m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
-      m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+      if (!m_pDockbaseAreaOfDocumentViews) {
+         m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+         m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+         m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+      }
       // set this dock to main view
       setView(m_pDockbaseAreaOfDocumentViews);
       setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -1636,14 +1638,17 @@ void QextMdiMainFrm::fillWindowMenu()
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
-         m_pPlacingMenu->clear();
-         m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
-         m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-         m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
-         m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
-         m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
-         m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
-         m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      m_pPlacingMenu->clear();
+      m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      if (m_mdiMode == QextMdi::ToplevelMode) {
+         m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
+      }
       m_pWindowMenu->insertSeparator();
       int dockUndockId = m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
          m_pDockMenu->clear();
