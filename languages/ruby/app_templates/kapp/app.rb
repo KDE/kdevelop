@@ -14,7 +14,6 @@ class %{APPNAMESC} < KDE::MainWindow
           'fileSave()',
           'fileSaveAs()',
           'filePrint()',
-          'optionsShowToolbar()',
           'optionsShowStatusbar()',
           'optionsConfigureKeys()',
           'optionsConfigureToolbars()',
@@ -85,6 +84,7 @@ class %{APPNAMESC} < KDE::MainWindow
         KDE::StdAction.print(self, SLOT('filePrint()'), actionCollection())
         KDE::StdAction.quit($kapp, SLOT('quit()'), actionCollection())
     
+		setStandardToolBarMenuEnabled(true)
         @statusbarAction = KDE::StdAction.showStatusbar(self, SLOT('optionsShowStatusbar()'), actionCollection())
     
         KDE::StdAction.keyBindings(self, SLOT('optionsConfigureKeys()'), actionCollection())
@@ -201,16 +201,6 @@ class %{APPNAMESC} < KDE::MainWindow
     
             # and send the result to the printer
             p.end()
-        end
-    end
-    
-    def optionsShowToolbar()
-        # This is all very cut and paste code for showing/hiding the
-        # toolbar
-        if @toolbarAction.isChecked()
-            toolBar().show()
-        else
-            toolBar().hide()
         end
     end
     

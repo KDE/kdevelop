@@ -1,14 +1,36 @@
+## Makefile.am for %{APPNAMELC}
+
+# this is the program that gets installed.  it's name is used for all
+# of the other Makefile.am variables
+bin_PROGRAMS = %{APPNAMELC}
+
+# set the include path for X, qt and KDE
 INCLUDES = $(all_includes) -I$(RUBY_ARCHDIR)
 
-bin_PROGRAMS = %{APPNAMELC}
+# the library search path. 
 %{APPNAMELC}_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L$(RUBY_LIBDIR)
-%{APPNAMELC}_LDADD = $(LIB_KIO) $(RUBY_LIBRUBYARG)
+
+# the libraries to link against.
+%{APPNAMELC}_LDADD = $(LIB_KFILE) $(LIB_KDEPRINT) $(RUBY_LIBRUBYARG)
+
+# which sources should be compiled for %{APPNAMELC}
 %{APPNAMELC}_SOURCES = %{APPNAMELC}.cpp
 
+# let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
+KDE_ICON = AUTO
+
+# this is where the kdelnk file will go 
+kdelnkdir   = $(kde_appsdir)/Utilities
+kdelnk_DATA = %{APPNAMELC}.desktop
+
+# this is where the XML-GUI resource file goes
+rcdir = $(kde_datadir)/%{APPNAMELC}
+rc_DATA = %{APPNAMELC}ui.rc
+
 rubysrc_DATA = main.rb %{APPNAMELC}.rb %{APPNAMELC}_client.rb  %{APPNAMELC}iface.rb  \
-		%{APPNAMELC}view.rb  pref.rb %{APPNAMELC}ui.rc
+		%{APPNAMELC}view.rb  pref.rb
 
 rubysrcdir = $(kde_datadir)/%{APPNAMELC}
 
@@ -18,10 +40,4 @@ rubyuidir = $(kde_datadir)/%{APPNAMELC}
 
 %.rb: %.ui
 	$(RBUIC) -kde $< -o $@
-
-picsdirdir = $(kde_datadir)/%{APPNAMELC}/pics
-picsdir_DATA = hi16-app-%{APPNAMELC}.png hi32-app-%{APPNAMELC}.png
-
-service_DATA = %{APPNAMELC}.desktop
-servicedir = $(kde_servicesdir)
 
