@@ -41,6 +41,21 @@ Comment[zh_CN]=%{APPNAME} - 一个 KDE 控制中心模块
 Keywords=%{APPNAME},%{APPNAMELC}
 Keywords[xx]=xx%{APPNAME},%{APPNAMELC}xx
 Name=The %{APPNAME} Applet
+Name[br]=An arloadig %{APPNAME}
+Name[da]=%{APPNAME}-appletten
+Name[de]=Das Miniprogramm %{APPNAME}
+Name[es]=Applet %{APPNAME}
+Name[et]=%{APPNAME} aplett
+Name[fr]=L'applet %{APPNAME}
+Name[ga]=An Feidhmchláirín %{APPNAME}
+Name[hu]=%{APPNAME} kisalkalmazás
+Name[it]=L'applet %{APPNAME}
+Name[nl]=De %{APPNAME}-applet
+Name[pl]=Aplet %{APPNAME}
+Name[pt]='Applet' %{APPNAME}
+Name[pt_BR]=O Mini-Aplicativo %{APPNAME}
+Name[ru]=Апплет %{APPNAME}
+Name[sv]=Miniprogram %{APPNAME}
 
 
 Categories=Qt;KDE;X-KDE-settings-components;
