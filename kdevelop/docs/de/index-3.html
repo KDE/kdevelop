@@ -63,7 +63,7 @@ und beendet sich.
 
 <P>Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
 ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
-wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und Zeitraubender, weil Sie alle Kommandos
+wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
 und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
 nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <CODE>make</CODE> oder <CODE>gmake</CODE> installiert haben,
 oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
@@ -96,7 +96,7 @@ Kommandozeilenoptionen zu übergeben.</LI>
 </UL>
 <P>Aber dies ist nicht das einzige, wo KDevelop mit make zusammenarbeitet- bei KDE Applikationen sind einige Dinge speziell auf die
 Unterstützung des Entwicklers abgestimmt wie die Erzeugung der Messages-Datei für die Internationalisierung Ihres Projekts. Diese
-Funktionen sind ebenfalls sorgfältig integriert, sodaß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
+Funktionen sind ebenfalls sorgfältig integriert, so daß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
 <P>Bis jetzt wissen Sie schon einiges über Quelldateien, den Compiler und warum make benötigt wird. Im nächsten Abschnitt werden wir
 besprechen, warum Projekte, die mit KDevelop erstellt wurden, automatisch durch Verwendung eines <CODE>configure</CODE>-Scripts auf den meisten
 Unix-Plattformen übersetzt werden können.
@@ -106,11 +106,11 @@ Unix-Plattformen übersetzt werden können.
 
 <P>Der Titel dieses Abschnitts- Configure, bedeutend soviel wie Konfiguriere - läßt Sie wahrscheinlich fragen: Konfiguriere ? Was muß
 konfiguriert werden ? Oder wer ?
-<P>Nun, gehen wir davon aus, das Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
+<P>Nun, gehen wir davon aus, daß Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
 compilierte Binärdatei läuft nur auf Ihrem System und auf solchen, die mit Ihrem kompatibel sind. Um andere Plattformen zu unterstützen
 wie die verschiedenen Unix-Systeme oder Maschinen wie Alpha's oder RISC's müssen Sie ihr Programm neu übersetzen. Der einfachste Weg
 wäre, das Quellpaket auf die Zielmaschine zu kopieren und <CODE>make</CODE> nochmals laufen zu lassen. Aber was wäre, wenn die Zielmaschine
-einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein erstellen des Programms verhindert ? Nicht zu
+einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein Erstellen des Programms verhindert ? Nicht zu
 erwähnen die schwierigeren Dinge wie der Installationspfad für Ihr Programm und Dokumentation- z.B. kann KDE auf einer Maschine
 unter <CODE></CODE>opt/kde/ installiert sein, auf einer anderen aber unter <CODE>usr</CODE>local/kde/. In diesem Fall müßten Sie das Makefile immer
 bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
@@ -121,15 +121,15 @@ was auch genau den Punkt trifft.
 Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
 Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
 Makefile.
-<P>Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschieden Makrodateien für das
+<P>Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschiedene Makrodateien für das
 Projekt. Diese sind die Makefile.in's, die automake erzeugt hat und eine Datei namesn <CODE>configure.in</CODE>, die auch aus Makros besteht.
-Hierbein beinhalten die Makefile.am und .in's die Makros die dafür verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
+Hierbei beinhalten die Makefile.am und .in's die Makros die dafür verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
 Quellen, die übersetzt werden müssen, welche Dateien zum Paket gehören und welchen Namen die letzliche Binärdatei oder Bibliothek nach
-einem Erstellungsvorgang hat. Configure.in andererseits beinhaltet die Makros, nach denen das letztliche configure-Skript das System
+einem Erstellungsvorgang hat. <CODE>configure.in</CODE> andererseits beinhaltet die Makros, nach denen das letztliche configure-Skript das System
 prüft, auf denen configure ausgeführt wird. Dies können z.B. das Compiler-Kommando, benötigte Bibliotheken zu denen die letzliche
 Binärdatei gelinkt wird und include-Dateien, die das Projekt benötigt, sein.
-<P>Wenn Sie z.B. eine KDE Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zu verfügung stellen möchten, muß
-jeder Benutzer die Binärdatei selbst compilieren. Dann würden Sie eine configure.in Datei, die die Makros für eine KDE-kompatible
+<P>Wenn Sie z.B. eine KDE Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zur Verfügung stellen möchten, muß
+jeder Benutzer die Binärdatei selbst compilieren. Dann würden Sie eine <CODE>configure.in</CODE> Datei, die die Makros für eine KDE-kompatible
 Applikation enthält. Diese Makros werden dann expandiert zu einer Systemprüfung, ob die Qt-Bibliothek installiert ist, dem Pfad der
 Qt-Headerdateien, den KDE Bibliotheken und Headern etc.
 <P>
@@ -143,15 +143,15 @@ als Ihre eigene portabel sein soll, müssen Sie folgendes ausführen:
 <LI> automake aufrufen</LI>
 <LI> autoconf aufrufen</LI>
 </OL>
-<P>Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die configure.in und Makefile.in's und erzeugt
-das ausführbare Shellscript <CODE>configure</CODE>. Alles, was Sie dann zu tun haben, ist die Ausführung mit <CODE>./configure</CODE> und das
-Script wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
+<P>Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <CODE>configure.in</CODE> und <CODE>Makefile.in</CODE>'s und erzeugt
+das ausführbare Shellscript <CODE>configure</CODE>. Alles, was Sie dann zu tun haben, ist die Ausführung mit <CODE>./configure</CODE>, und das
+Skript wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
 das Projekt zu erstellen.
-<P>Dies alles scheint ein bischen viel zu sein, nur um eine kleine Applikation zu schreiben und auch viel zu lernen, speziell die
-korrekten Makros. Aber allein der Umstand, das Sie damit einen Kompiliervorgang auf fast allen Unix-Systemen erreichen, macht die
-Arbeit früher oder später wett. Schließlich müssen Sie diese Arbeit auch nur einmal für das Projekt machen und im Fall, das Ihre
+<P>Dies alles scheint ein bißchen viel zu sein, nur um eine kleine Applikation zu schreiben und auch viel zu lernen, speziell die
+korrekten Makros. Aber allein der Umstand, daß Sie damit einen Kompiliervorgang auf fast allen Unix-Systemen erreichen, macht die
+Arbeit früher oder später wett. Schließlich müssen Sie diese Arbeit auch nur einmal für das Projekt machen und im Fall, daß Ihre
 Projektdateien anwachsen, brauchen Sie ja nur die Dateinamen den Makros hinzufügen.
-<P>Nun, inwiefern unterstützt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es für den Programmierer ?
+<P>Nun, inwiefern unterstützt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es für den Programmierer?
 Die gute Nachricht für Sie ist: Sie brauchen noch nicht eimal etwas über Makros und Skripte zu wissen. Alle Details sind hinter einer
 einfach zu bedienenden graphischen Benutzeroberfläche versteckt, die die Arbeit für Sie übernimmt. Eine Applikation wird mit den
 GNU-Tools deshalb auf sehr benutzerfreundliche Art erstellt:
@@ -159,7 +159,7 @@ GNU-Tools deshalb auf sehr benutzerfreundliche Art erstellt:
 Terminalprogramm sein oder eine Art GUI Programm, das die Qt oder die Qt/KDE Bibliothek benutzt. Die ganze Arbeit wird
 für Sie erledigt und Ihr Projekt enthält schon die Makefiles, die durch eine automatische Ausführung der GNU-Tools und des
 configure-Skripts erstellt wurden.
-<P>Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch hinzufügen von Klassen, Dialogen,
+<P>Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch Hinzufügen von Klassen, Dialogen,
 Übersetzungen oder Dokumentation, was auch vollständig automatisiert abläuft. Konzentrieren Sie sich einfach auf die wirkliche Arbeit
 eines Entwicklers, nämlich Ihrer Applikation Funktionalität zu verleihen. In den meisten Fällen werden Sie wahrscheinlich nie mit
 Makefiles in Berührung kommen, wenn Sie KDevelop benutzen.
@@ -167,13 +167,13 @@ Makefiles in Berührung kommen, wenn Sie KDevelop benutzen.
 <H3><A NAME="Debuggen"></A> <A NAME="ss3.4">3.4 Debuggen</A>
 </H3>
 
-<P>Der folgende Abschnitt betrachtet einen Terminus, der unter Entwicklern weit verbreitet ist: Debuggen. Das bedeutet, das, obwohl Ihr
+<P>Der folgende Abschnitt betrachtet einen Terminus, der unter Entwicklern weit verbreitet ist: Debuggen. Das bedeutet, daß, obwohl Ihr
 Compiler die letzliche Applikation erzeugt, das Programm aber nicht läuft oder während der Ausführung abstürzt wegen eines sogenannten
 "Bugs" (Käfer) im Code. Ein Programmfehler, der mit dem Namen dieser Insekten beschrieben wird, stammt aus der Geschichte des
 Computers; einer der ersten Fehler, die eine Maschine zum Absturz brachte, war keine offensichtliche Fehlfunktion- Käfer waren in den
 Computer eingedrungen und waren dafür verantwortlich. Daher beschreibt man einen Fehler, der auf den ersten Blick nicht offensichtlich
-ist, asl einen "Bug", daher bedeutet "Debuggen", die Käfer zu entfernen, wo sie nicht hingehören. Nun, Sie brauchen sie nicht wirklich
-zu jagen; vorausgesetzt das die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie müssen innerhalb des
+ist, als einen "Bug", daher bedeutet "Debuggen", die Käfer zu entfernen, wo sie nicht hingehören. Nun, Sie brauchen sie nicht wirklich
+zu jagen; vorausgesetzt daß die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie müssen innerhalb des
 Codes gefunden werden, wenn sie die Ausführung eines Programms mit der Nachricht "Segmentation fault" (Speicherverletzung) beenden.
 GNU bietet dazu ein weiteres Werkzeug, <CODE>gdb</CODE>, den GNU Debugger. Dieses Terminalprogramm erlaubt es, die internen Werte einer
 Applikation und die Ausführung durch setzen von Haltepunkten im Code zu beobachten. Gdb stoppt die Ausführung jedes mal, wenn das
@@ -184,9 +184,9 @@ zusätzliche Daten in der Binärdatei, um die Werte und Zeilen im Code zu lokalisi
 KDbg, den KDebugger. Um Ihr Programm zu debuggen, müssen Sie nur "Debuggen" im "Erstellen" Menü auswählen oder den entsprechenden
 Werkzeugleistenknopf betätigen, der durch ein Rad mit Brille dargestellt wird und signalisiert, das Sie die Ausführung beobachten
 wollen.
-<P>KDevelop öffnet dann das Werkzeuge-Fenster und statet Ihr Programm mit KDbg. Die KDbg Oberfläche erscheint dann innerhalb des
+<P>KDevelop öffnet dann das Werkzeuge-Fenster und startet Ihr Programm mit KDbg. Die KDbg Oberfläche erscheint dann innerhalb des
 Werkzeuge-Fensters und erlaubt die Benutzung genauso als ob Sie den Debugger außerhalb von KDevelop gestartet hätten.
-<P>Ganz Allgemein zeigen die obigen Schritte, das ein Entwickler zum Schreiben seines eigenen Programms verschiedene Stufen durchlaufen
+<P>Ganz allgemein zeigen die obigen Schritte, das ein Entwickler zum Schreiben seines eigenen Programms verschiedene Stufen durchlaufen
 muß, um ein Projekt zu beginnen. Auch erklärt dies, welchen Teil KDevelop dabei übernimmt und wie die Entwicklungsumgebung die Idee eines einfachen Wegs
 zur Unix-Programmierung unterstützt. Um weitere Informationen über die GNU Tools zu erhalten, sollten Sie die zugehörige Dokumentation
 lesen, die Sie allgemein über das <CODE>man</CODE> Kommando oder über "System GNU Info contents" in der KDE Hilfe nachschlagen können.

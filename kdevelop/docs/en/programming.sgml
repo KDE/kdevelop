@@ -238,7 +238,7 @@ graphical representation of programs to the user and allow interaction. The wind
 that all graphical elements are based on the class <tt/<cdx/QWidget// and can be any type of widget that fits the needs of the application to
 communicate with the user. Therefore, all user elements somehow have to inherit <tt/<cdx/QWidget// to be visible.
 
-<sect1>User Interaction
+<sect1>User Interaction<label id="User Interaction">
 <p>
 After reading the last sections, you should already know:
 <itemize>
@@ -3347,13 +3347,170 @@ Comment=A simple drawing program
 
 Each comment line afterwards will contain the same description translated in the language the brackets symbolize. Ask translators to
 insert a good translation in their native language or include the kdelnk file when asking for translating the application's po file;
-the same applies to the name of the application set in the Name lines.
+the same applies to the name of the application set in the Name lines.<footnote>for more information about the purpose of the <idx/.kdelnk/ file, especially its use for commandline processing, see
+<htmlurl url="kde_libref.html" name="The KDE Library Reference Guide"></footnote>
 
-<bf/Note:/ for more information about the purpose of the <idx/.kdelnk/ file, especially its use for commandline processing, see
-<htmlurl url=kde_libref.html" name="The KDE Library Reference Guide">
-
-<chapt>Programming Issues
+<chapt>Programming Guidelines
 <p>
+
+Close to the end of this handbook, I want to summarize several issues that programmers should watch out while coding. These are mostly
+C++ programming tips that relate to KDE and Qt programming especially and are taken from the KDE Developer's Center which can be found
+on the Internet at <url url="http://www.kde.org">.
+
+<descrip>
+<tag/Operating Systems and Compilers/
+Sometimes you may need to know about the operating system and the compiler to ensure your application can be compiled on these
+platforms as well. This is needed especially if commercial developers are writing applications with the Qt library and want to run the
+applications on Microsoft&reg; operating systems. The Qt library already provides a set of <tt/#define/s for all supported platforms in
+<tt/qglobal.h/. Therefore, when portability problems should be solved, you should include this file and use the defines that meet your
+requirements.
+
+<tag/Filenames/ First of all, when creating sourcefiles, you should always use lowercase filenames. KDevelop supports
+this guideline already if you stick to its filename aut-suggestion. This makes it easier for other developers to remember what source
+files to look for when they have to debug your application.
+
+<tag/Classnames/
+The classnaming for KDE projects is recommended to be:
+<itemize>
+<item>class names should begin with a prefixed <bf/K/ followed by the name of the class by purpose (your choice). This would be e.g.
+<tt/KMyWidget/ for an application specific widget.
+<item>the class members should always begin with lowercase letters, followed by uppercase beginnings for the next word, e.g.
+<tt/myWidgetPointer()/
+<item>methods that return a private members value shouldn't use the <tt/get/-prefix. You should prefer using a descriptive name for
+those types of classmembers. Example: <tt/b_myboolean/ is a private member. The method returning the current value would be e.g.
+<tt/myBoolean()/.
+</itemize>
+
+<tag/File access within code/
+Hardcoding any path should be avoided by using the KDE File System Standard. You only have to watch the installation path for your
+files by the according macros of the <tt/Makefile.am/ as described in this handbook. Within the code, you should use the methods of
+<tt/KApplication/ to retrieve the actual path.
+
+<tag/Class documentation/
+Another thing already mentionend is class documentation. You should stick to use <tt/KDoc/ formatting rules as they are used by all KDE
+developers to document their classes. You should at least add a single line to all of your classmembers for yourself to remember the
+prurpose and for others to reuse code. The code-reuse by the GPL makes much more sense if you know where to find an already existing
+solution if classes are documented. The Qt library referece is a good example of well-documented interfaces, though it doesn't use
+<tt/KDoc/.
+
+<tag/Use <tt/new/ to create widgets/
+Within your implementation, you should always prefer to create widgets on the heap with <tt/new/. The Qt library has a nice habbit to
+automatically delete all child widgets you created with <tt/new/, so you don't ever have to use <tt/delete/ again in those cases. This
+is one of the most important practical features of the Qt library and you should make wide use of this.
+
+<tag/Debugging/
+When it comes to debugging, you should make use of the macros <tt/KDebug/ provides. Those are similar to the Qt macros, but can be
+retrieved by the keycode STRG+ALT+F12. See the <htmlurl url="kde_libref-4.html#ss4.4" name="KDE Library Reference Guide"> for more
+information about the event filtering of these Macros. You could as well use <tt/assert()/, but should try to be consistent with your
+debugging code.
+
+<tag/<tt/const/-declarations/
+Further, you should use <tt/const/ declarations for member functions that should or do not change any private member. This would be the
+case for all methods that only return the current value of a private member. This avoids changing the value accidently and will catch
+those logical errors at compile time. Now, towards initializing const members you should stick to do that together with using
+<tt/static/ in the declaration and initialize the value outside the constructor like this:
+<tscreen><verb>
+class foo {
+	static const int value;
+};
+
+const foo::value = 10;
+</verb></tscreen>
+ANSI C++ allows to initialize the member inside the constructor but you should avoid this as a few compilers are not capable of this
+feature.
+
+<tag/Virtual methods/
+As explained in section <ref id="User Interaction" name="User Interaction">, you should stick to the access rights and the declaration
+by <tt/virtual/ when overwriting virtual methods. At least you shouldn't reduce the access of a virtual method from protected to
+private.
+
+<tag/Forward declarations/
+Class-headers should be included where you dereference any object or instance of a class in your sourcecode. That means if your class
+uses a member of another class, replace the #include directive with a forward declaration of the class, e.g  instead of:
+
+<tscreen><verb>
+#include <qpushbutton.h>
+
+class KMyWidget:public QWidget
+{
+
+private:
+  QPushButton* ok_button;
+};
+</verb></tscreen>
+
+you should prefer to only declaring the class <tt/QPushButton/ in the header file:
+
+<tscreen><verb>
+class QPushButton;
+
+class KMyWidget:public QWidget
+{
+
+private:
+  QPushButton* ok_button;
+};
+</verb></tscreen>
+
+and place the include directive into the according sourcefile where e.g. the instance <tt/ok_button/ is dereferenced with any method of
+the class <tt/QPushButton/. This saves compile time at any rate, especially if you're using instances of classes that your're working
+on. The compiler will recompile all souces that include the header file if you made any changes on the interface of the class,
+therefore a simple addition of a method that only returns an internal value will lead to a recompilation of all sources tha include
+the header file of the class.
+
+<tag/Unused Parmeter Warnings and default arguments/
+Also you should leave out formal parameters of methods that don't necessarily require the actual parameter to work. This avoids the
+<tt/unused parameter/ warnings of your compiler when he sees a method that retrieves a formal parameter but doesn't use it in its
+implementation. Usually, you will set some default arguments for several methods. Those should always be placed in the declaration of
+the class member instead of setting them in the member implementation.
+
+<tag/Using <tt/config.h//
+KDevelop projects as well as any other project that is using <tt/autoconf/ to create a <tt/configure/-script produce a file
+<tt/config.h/ after executing the <tt/configure/-script on the target machine. The values found by <tt/configure/ are listed there and
+can be used within the sourcecode. The directive to include the <tt/config.h/ file is:
+
+<tscreen><verb>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+</verb></tscreen>
+
+One of the most recently used entries of <tt/config.h/ is probably the type-definition of <tt/bool/ for compilers that don't comply
+with the newest ANSI C++ draft.
+
+<tag/Use <tt/0/ instead of <tt/NULL//
+You should stickt to using <tt/0/ directly instead of <tt/NULL/ for preset values like the Qt and KDE libraries already do. This
+increases portablility of your applications towards different compilers that have problems with <tt/NULL/.
+
+<tag/Temporaries/
+You should declare temporary instances always before using them. This is generally considered better than direct use. Example:
+<tscreen><verb>
+// Don't:
+for( int i=0; i<n; i++){
+  //do something
+  };
+
+// Do:
+int i;
+
+for(i=0; i<n; i++){
+  //do something
+  };
+</verb></tscreen>
+
+This also counts on using temporaries in function calls:
+<tscreen><verb>
+// Don't:
+setColor( &amp;(QColor(black)) );
+
+// Do:
+QColor color(black);
+setColor( &amp;color );
+</verb></tscreen>
+
+
+</descrip>
+
 
 <chapt>References
 <p>
@@ -3362,6 +3519,8 @@ The KDevelop Programming Handbook contains information that are taken from vario
 mailing lists, as:
 
 <bf/<idx/KDoc/ documentation:/ Sirtaj S. Kang <htmlurl url="mailto:taj@.kde.org" name="taj@.kde.org">
+
+<bf/KDE Developer's Center/ maintained by Sirtaj S. Kang <htmlurl url="mailto:taj@.kde.org" name="taj@.kde.org">
 
 <bf/KDE Internationalization:/ Matthias Elter <htmlurl url="mailto:me@kde.org" name="me@kde.org">
 
@@ -3394,7 +3553,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
-</chapt>
 
 <appendix>Additional Information
 <p>
@@ -3436,6 +3594,11 @@ libexample_la_METASOURCES = USE_AUTOMOC
 
 
 </book>
+
+
+
+
+
 
 
 

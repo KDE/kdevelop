@@ -6,7 +6,7 @@ EXTRA_DIST =cref.html logotp3.gif tipdatabase \
 						tutorial.html tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html \
 						programming.html programming-1.html programming-2.html programming-3.html programming-4.html programming-5.html programming-6.html \
 						programming-7.html programming-8.html programming-9.html programming-10.html programming-11.html programming-12.html \
-						programming-13.html programming-14.html programming-15.html programming-16.html programming-17.html\
+						programming-13.html programming-14.html programming-15.html programming-16.html programming-17.html programming-18.html \
 						kde_libref.html kde_libref-1.html kde_libref-2.html kde_libref-3.html kde_libref-4.html kde_libref-5.html kde_libref-6.html \
 						kde_libref-7.html kde_libref-8.html kde_libref-9.html
 
@@ -98,7 +98,10 @@ install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) programming-17.html $(kde_htmldir)/en/kdevelop/programming-17.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) programming-18.html $(kde_htmldir)/en/kdevelop/programming-18.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) kde_libref.html $(kde_htmldir)/en/kdevelop/kde_libref.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) kde_libref-1.html $(kde_htmldir)/en/kdevelop/kde_libref-1.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) kde_libref-2.html $(kde_htmldir)/en/kdevelop/kde_libref-2.html
@@ -161,6 +164,7 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/programming-15.html
 	-rm -f $(kde_htmldir)/en/kdevelop/programming-16.html
 	-rm -f $(kde_htmldir)/en/kdevelop/programming-17.html
+	-rm -f $(kde_htmldir)/en/kdevelop/programming-18.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-1.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-2.html

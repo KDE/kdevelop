@@ -15,19 +15,19 @@ lizensiert; siehe <ref id="Copyright" name="Copyright">.
 <chapt>Einführung
 <p>
 Da alles auf Erden seine Mode hat, scheint die heutige Computerwelt immer mehr zur Benutzung freier Software auch für kommerzielle
-Zwecke zu tendieren. Man ist sich mittlerweile einig, das Linux (genauso wie andere Projekte wie der Apache Webserver, die Perl
-Skriptsprache und die GNU Tools), beweist, das freie Software qualitativ genauso gut sein kann wie kommerzielle Software. Doch trotz
+Zwecke zu tendieren. Man ist sich mittlerweile einig, daß Linux (genauso wie andere Projekte wie der Webserver, die Scriptsprache 
+Perl und die GNU Tools), beweist, das freie Software qualitativ genauso gut sein kann wie kommerzielle Software. Doch trotz
 der Qualität hat der Endbenuzter immer noch unter den kryptischen Kommandos vieler Unix-Systeme zu leiden. Damit Linux weiter blühen
 kann, braucht es Applikationen, sowohl freie als auch kommerzielle, die einfach zu benutzen sind.
 
-Das <idx/KDE/ Projekt versucht dieses Loch zu schließen, indem ein einfache Desktop und die zugehörigen Bibliotheken bereitgestellt
-wird um die Verfügbarkeit von GNU-basierter Software zu erweitern. Aber da speziell freie Software meist in der Freizeit der Autoren
-erstellt wird, ist die Frage für viele Programmierer wie sehr Sie ihre gegenwärtige Entwicklungsumgebung mögen. KDevelop will einen
+Das <idx/KDE/ Projekt versucht dieses Loch zu schließen, indem ein einfacher Desktop und die zugehörigen Bibliotheken bereitgestellt
+wird, um die Verfügbarkeit von GNU-basierter Software zu erweitern. Aber da speziell freie Software meist in der Freizeit der Autoren
+erstellt wird, ist die Frage für viele Programmierer, wie sehr Sie ihre gegenwärtige Entwicklungsumgebung mögen. KDevelop will einen
 weiteren großen Schritt machen: das Programmierleben einfacher und effizienter gestalten. Produkte, die mit KDevelop erstellt wurden,
 können eine höhere Stufe der Zuverlässigkeit und Funktionalität in der gleichen Entwicklungszeit erreichen.
 
 Um dieses Ziel zu erreichen, stellt die KDevelop Integrierte Entwicklungsumgebung viele Features bereit, die Entwickler brauchen
-genauso, wie es die Funktionalität von anderer Projekte wie <tt/make/ und dem GNU C++ compiler verpackt und sie zu einem unsichtbaren,
+genauso, wie es die Funktionalität anderer Programme wie <tt/make/ und dem GNU C++ compiler verpackt und sie zu einem unsichtbaren,
 integrierten Teil des Entwicklungsprozesses macht. KDevelop beherrscht:
 
 <itemize>
@@ -38,22 +38,22 @@ integrierten Teil des Entwicklungsprozesses macht. KDevelop beherrscht:
 <item> Die Erzeugung von Benutzerhandbüchern in SGML und die automatische Generierung in HTML-Ausgabe mit dem KDE look and feel,
 <item> Automatische HTML-basierte API-Dokumentation für die Klassen ihres Projekts mit Querreferenzierung zu den benutzten
 Bibliotheken,
-<item> Unterstüzung von Internationalisierung ihrer Applikation, die es Übersetzern erlaubt, ihre Zielsprache zu einem Projekt
+<item> Unterstützung von Internationalisierung Ihrer Applikation, die es Übersetzern erlaubt, ihre Zielsprache zu einem Projekt
 hinzuzufügen,
 <item> WYSIWYG (What you see is what you get, Was Sie sehen, ist was Sie bekommen)- Erzeugung von Benutzeroberflächen mit dem
 integrierten Dialogeditor,
-<item> Debuggen ihrer Applikation durch integrieren von KDbg,
+<item> Debuggen ihrer Applikation durch Integrieren von KDbg,
 <item> Bearbeiten von Projekt-spezifischen Pixmaps mit KIconEdit,
-<item> Die Einbeziehugn jedes anderen Programms, das Sie zur Entwicklung benötigen durch hinzufügen zum "Werkzeuge"-Menü nach ihren
-Individuellen Bedürfnissen.
+<item> Die Einbeziehung jedes anderen Programms, das Sie zur Entwicklung benötigen durch Hinzufügen zum "Werkzeuge"-Menü nach ihren
+individuellen Bedürfnissen.
 </itemize>
 
 KDevelop macht es zu einer Freude, mit allen Programmen unter einer Oberfläche zu arbeiten und spart Zeit durch Automatisierung von
 Standard-Entwicklungsprozessen, genauso wie es Ihnen direkten und transparenten Zugriff auf alle Informationen bietet, die Sie
-brauchen. Die integrierten Browser Mechanismen wurden entworfen um Dokumentationsanfragen zu unterstützen, die Entwickler in Beziehung
+brauchen. Die integrierten Browser-Mechanismen wurden entworfen um Dokumentationsanfragen zu unterstützen, die Entwickler in Beziehung
 zu Ihrem Projekt haben.
 
-Der Klassenbrowser und der Fehler-Sucher bringen Sie an jede Stelle ihres Projektcodes mit einem Mausklick ohne das Sie nach Dateien
+Der Klassenbrowser und der Fehler-Sucher bringen Sie mit einem Mausclick an jede Stelle Ihres Projektcodes, ohne daß Sie nach Dateien
 suchen müssen; Dateibäume geben direkten Zugang zu Projektdateien und das integrierte Hilfesystem bietet eine praktischen Zugriff auf
 die Online-Dokumentation überall innerhalb der Entwicklungsumgebung.
 
@@ -172,7 +172,7 @@ KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM un
 200 MMX, 128 MB Ram
 
 Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive a2ps und enscript als Pakete order
-RPM's, sodaß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
+RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
 
 <bf>Dokumentation:</bf>	
 
@@ -230,7 +230,7 @@ Unter anderen Winow-Managern öffnen Sie eine Konsole und geben ein:
 &percnt kdevelop
 </verb></tscreen>
 
-Um KDevelop mit einem besteheneden Projekt zu starten, wechseln Sie in das Projekt-Verzeichnis und geben ein:
+Um KDevelop mit einem bestehenden Projekt zu starten, wechseln Sie in das Projekt-Verzeichnis und geben ein:
 
 <tscreen><verb> 	
 &percnt kdevelop  &lt;yourProject&gt;.kdevprj
@@ -238,7 +238,7 @@ Um KDevelop mit einem besteheneden Projekt zu starten, wechseln Sie in das Proje
 
 Unter jedem Benutzerzugang wird KDevelop einen <ref id="Das Installationsprogramm" name="automatischen Installationsvorgang">
 beim ersten Start aufrufen, der eine Schnellkonfiguration für die benötigten Einstellungen vornimmt. Wenn Ihre Installation verloren
-gehen sollte, können Sie KDevelop jederzeit Re-konfigurieren, indem Sie
+gehen sollte, können Sie KDevelop jederzeit rekonfigurieren, indem Sie
 
 <tscreen><verb> 	
 &percnt kdevelop  --setup
@@ -273,7 +273,7 @@ installiert sein, um korrektes Drucken zu ermöglichen. Wenn keines installiert i
 zu ermöglichen, ohne das Setup erneut durchzuführen.
 
 <item> Prüfen nach KDbg, KIconedit und KTranslator. Wir ermutigen Sie, diese Programme zu installieren, da sie gute Helfer bei der
-Erstellung von vollständigen <idx/KDE/-Applikationen sind. Beachten Sie, das KDbg direkt zum debuggen ihres aktuellen Projekts
+Erstellung von vollständigen <idx/KDE/-Applikationen sind. Beachten Sie, das KDbg direkt zum Debuggen Ihres aktuellen Projekts
 innerhalb von KDevelop verwendet wird; KIconedit wird benötigt, um Pixmaps, die in den Dateibäumen ausgewählt werden zu betrachten und
 zu bearbeiten. Die Programme KDbg, KIconedit und KTranslator werden gleichzeitig im "Werkzeuge"-Menü der Menüleiste von KDevelop
 eingerichtet. Andere Werkzeuge können später hinzugefügt werden, indem Sie "Werkzeuge..." im Einstellungen-Menü aufrufen.
@@ -311,8 +311,8 @@ Nachdem Sie "OK" gewählt haben, wird Ihnen im Installationsfenster angezeigt, da
 Warten Sie dann bis zur nächsten Meldung.
 <p>
 
-<bf>Anmerkung:</bf> Auf Multi-User Systemen oder Systemen mit Disk-Quotas für Benutzeraccounts würde die Installation eiener kompletten
-HTML Dokumentation separat für jeden Benutzer unnötig Plattenplatz verbrauchen. Fragen Sie in diesem Fall Ihren Systemadministrator,
+<bf>Anmerkung:</bf> Auf Multi-User Systemen oder Systemen mit Disk-Quotas für Benutzeraccounts würde die Installation einer kompletten
+HTML-Dokumentation separat für jeden Benutzer unnötig Plattenplatz verbrauchen. Fragen Sie in diesem Fall Ihren Systemadministrator,
 KDevelop unter dem root-Account laufen zu lassen, um Schreibzugriff auf das Wurzelverzeichnis des Systems zu erhalten. Dann
 installieren Sie die Dokumentation im <idx/KDE/-Verzeichnis unter $KDEDIR/share/apps/kdevelop/KDE-Documentation. Der korrekte Pfad für
 Einzelbenutzer kann dann später im KDevelop Setup Dialog über das "Einstellungen" Menü gesetzt werden.
@@ -322,7 +322,7 @@ Suchdatenbank kann mit der Option erstellt werden, die KDE- und Qt-Dokumentation
 die KDevelop Dokumentation inbegriffen und wird indiziert. Wenn Sie weitere Dokumentationen besitzen, die Sie ebenfalls indizieren
 möchten, können Sie die Verzeichnisse auswählen und der Indexerstellung hinzufügen.
 
-<item> Während der Erstellung des Suchindexes zeigt das Installationsfenster Ihnen eine Nachricht, das dies ausgeführt wird. Warten Sie
+<item> Während der Erstellung des Suchindexes zeigt das Installationsfenster Ihnen eine Nachricht, daß dies ausgeführt wird. Warten Sie
 danach bis zur Aufforderung zum nächsten Schritt.
 
 <item> Wenn alle Installationsschritte erfolgreich durchgeführt wurden, zeigt Ihnen eine abschließende Dialogbox an, das KDevelop
@@ -330,7 +330,7 @@ gestartet wird, nachdem Sie "OK" wählen. Beachten Sie, das Sie zusätzliche Optio
 id="Konfiguration" name="KDevelop Setup"> Dialog, der über das "Einstellungen" Menü aufgerufen wird, einstellen können.
 </enum>
 
-<bf>Abbrechen:</bf> Zeigt eine Warnhinweis an, das der Installationsprozess abgebrochen wird. Diese Warnung erlaubt es Ihnen, nochmals
+<bf>Abbrechen:</bf> Zeigt einen Warnhinweis an, das der Installationsprozess abgebrochen wird. Diese Warnung erlaubt es Ihnen, nochmals
 zur Installation zurückzukehren ("Zurück") oder KDevelop mit den Standardeinstellungen zu starten ("Fortfahren"). Bedenken Sie, das Sie
 in diesem Fall alle Optionen mit Hilfe der Konfigurationsdialoge des "Einstellungen" Menüs selbst vornehmen müssen.
 
@@ -377,7 +377,7 @@ und beendet sich.
 <p>
 Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
 ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
-wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und Zeitraubender, weil Sie alle Kommandos
+wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und zeitraubender, weil Sie alle Kommandos
 und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
 nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <tt/make/ oder <tt/gmake/ installiert haben,
 oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
@@ -415,7 +415,7 @@ Kommandozeilenoptionen zu übergeben.
 
 Aber dies ist nicht das einzige, wo KDevelop mit make zusammenarbeitet- bei <idx/KDE/ Applikationen sind einige Dinge speziell auf die
 Unterstützung des Entwicklers abgestimmt wie die Erzeugung der Messages-Datei für die Internationalisierung Ihres Projekts. Diese
-Funktionen sind ebenfalls sorgfältig integriert, sodaß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
+Funktionen sind ebenfalls sorgfältig integriert, so daß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
 
 Bis jetzt wissen Sie schon einiges über Quelldateien, den Compiler und warum make benötigt wird. Im nächsten Abschnitt werden wir
 besprechen, warum Projekte, die mit KDevelop erstellt wurden, automatisch durch Verwendung eines <tt/configure/-Scripts auf den meisten
@@ -426,11 +426,11 @@ Unix-Plattformen übersetzt werden können.
 Der Titel dieses Abschnitts- Configure, bedeutend soviel wie Konfiguriere - läßt Sie wahrscheinlich fragen: Konfiguriere ? Was muß
 konfiguriert werden ? Oder wer ?
 
-Nun, gehen wir davon aus, das Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
+Nun, gehen wir davon aus, daß Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
 compilierte Binärdatei läuft nur auf Ihrem System und auf solchen, die mit Ihrem kompatibel sind. Um andere Plattformen zu unterstützen
 wie die verschiedenen Unix-Systeme oder Maschinen wie Alpha's oder RISC's müssen Sie ihr Programm neu übersetzen. Der einfachste Weg
 wäre, das Quellpaket auf die Zielmaschine zu kopieren und <tt/make/ nochmals laufen zu lassen. Aber was wäre, wenn die Zielmaschine
-einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein erstellen des Programms verhindert ? Nicht zu
+einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein Erstellen des Programms verhindert ? Nicht zu
 erwähnen die schwierigeren Dinge wie der Installationspfad für Ihr Programm und Dokumentation- z.B. kann <idx/KDE/ auf einer Maschine
 unter <tt//opt/kde/ installiert sein, auf einer anderen aber unter <tt/usr/local/kde/. In diesem Fall müßten Sie das Makefile immer
 bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
@@ -444,16 +444,16 @@ Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.
 Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
 Makefile.
 
-Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschieden Makrodateien für das
+Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschiedene Makrodateien für das
 Projekt. Diese sind die Makefile.in's, die automake erzeugt hat und eine Datei namesn <tt/configure.in/, die auch aus Makros besteht.
-Hierbein beinhalten die Makefile.am und .in's die Makros die dafür verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
+Hierbei beinhalten die Makefile.am und .in's die Makros die dafür verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
 Quellen, die übersetzt werden müssen, welche Dateien zum Paket gehören und welchen Namen die letzliche Binärdatei oder Bibliothek nach
-einem Erstellungsvorgang hat. Configure.in andererseits beinhaltet die Makros, nach denen das letztliche configure-Skript das System
+einem Erstellungsvorgang hat. <tt/configure.in/ andererseits beinhaltet die Makros, nach denen das letztliche configure-Skript das System
 prüft, auf denen configure ausgeführt wird. Dies können z.B. das Compiler-Kommando, benötigte Bibliotheken zu denen die letzliche
 Binärdatei gelinkt wird und include-Dateien, die das Projekt benötigt, sein.
 
-Wenn Sie z.B. eine <idx/KDE/ Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zu verfügung stellen möchten, muß
-jeder Benutzer die Binärdatei selbst compilieren. Dann würden Sie eine configure.in Datei, die die Makros für eine KDE-kompatible
+Wenn Sie z.B. eine <idx/KDE/ Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zur Verfügung stellen möchten, muß
+jeder Benutzer die Binärdatei selbst compilieren. Dann würden Sie eine <tt/configure.in/ Datei, die die Makros für eine KDE-kompatible
 Applikation enthält. Diese Makros werden dann expandiert zu einer Systemprüfung, ob die Qt-Bibliothek installiert ist, dem Pfad der
 Qt-Headerdateien, den KDE Bibliotheken und Headern etc.
 
@@ -469,17 +469,17 @@ als Ihre eigene portabel sein soll, müssen Sie folgendes ausführen:
 <item> autoconf aufrufen
 </enum>
 
-Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die configure.in und Makefile.in's und erzeugt
-das ausführbare Shellscript <tt/configure/. Alles, was Sie dann zu tun haben, ist die Ausführung mit <tt>./configure</tt> und das
-Script wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
+Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die <tt/configure.in/ und <tt/Makefile.in/'s und erzeugt
+das ausführbare Shellscript <tt/configure/. Alles, was Sie dann zu tun haben, ist die Ausführung mit <tt>./configure</tt>, und das
+Skript wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
 das Projekt zu erstellen.
 
-Dies alles scheint ein bischen viel zu sein, nur um eine kleine Applikation zu schreiben und auch viel zu lernen, speziell die
-korrekten Makros. Aber allein der Umstand, das Sie damit einen Kompiliervorgang auf fast allen Unix-Systemen erreichen, macht die
-Arbeit früher oder später wett. Schließlich müssen Sie diese Arbeit auch nur einmal für das Projekt machen und im Fall, das Ihre
+Dies alles scheint ein bißchen viel zu sein, nur um eine kleine Applikation zu schreiben und auch viel zu lernen, speziell die
+korrekten Makros. Aber allein der Umstand, daß Sie damit einen Kompiliervorgang auf fast allen Unix-Systemen erreichen, macht die
+Arbeit früher oder später wett. Schließlich müssen Sie diese Arbeit auch nur einmal für das Projekt machen und im Fall, daß Ihre
 Projektdateien anwachsen, brauchen Sie ja nur die Dateinamen den Makros hinzufügen.
 
-Nun, inwiefern unterstützt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es für den Programmierer ?
+Nun, inwiefern unterstützt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es für den Programmierer?
 Die gute Nachricht für Sie ist: Sie brauchen noch nicht eimal etwas über Makros und Skripte zu wissen. Alle Details sind hinter einer
 einfach zu bedienenden graphischen Benutzeroberfläche versteckt, die die Arbeit für Sie übernimmt. Eine Applikation wird mit den
 GNU-Tools deshalb auf sehr benutzerfreundliche Art erstellt:
@@ -489,20 +489,20 @@ Terminalprogramm sein oder eine Art GUI Programm, das die <idx/Qt/ oder die Qt/<
 für Sie erledigt und Ihr Projekt enthält schon die Makefiles, die durch eine automatische Ausführung der GNU-Tools und des
 configure-Skripts erstellt wurden.
 
-Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch hinzufügen von Klassen, Dialogen,
+Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch Hinzufügen von Klassen, Dialogen,
 Übersetzungen oder Dokumentation, was auch vollständig automatisiert abläuft. Konzentrieren Sie sich einfach auf die wirkliche Arbeit
 eines Entwicklers, nämlich Ihrer Applikation Funktionalität zu verleihen. In den meisten Fällen werden Sie wahrscheinlich nie mit
 Makefiles in Berührung kommen, wenn Sie KDevelop benutzen.
 
 <sect>Debuggen<label id="Debuggen">
 <p>
-Der folgende Abschnitt betrachtet einen Terminus, der unter Entwicklern weit verbreitet ist: Debuggen. Das bedeutet, das, obwohl Ihr
+Der folgende Abschnitt betrachtet einen Terminus, der unter Entwicklern weit verbreitet ist: Debuggen. Das bedeutet, daß, obwohl Ihr
 Compiler die letzliche Applikation erzeugt, das Programm aber nicht läuft oder während der Ausführung abstürzt wegen eines sogenannten
 "Bugs" (Käfer) im Code. Ein Programmfehler, der mit dem Namen dieser Insekten beschrieben wird, stammt aus der Geschichte des
 Computers; einer der ersten Fehler, die eine Maschine zum Absturz brachte, war keine offensichtliche Fehlfunktion- Käfer waren in den
 Computer eingedrungen und waren dafür verantwortlich. Daher beschreibt man einen Fehler, der auf den ersten Blick nicht offensichtlich
-ist, asl einen "Bug", daher bedeutet "Debuggen", die Käfer zu entfernen, wo sie nicht hingehören. Nun, Sie brauchen sie nicht wirklich
-zu jagen; vorausgesetzt das die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie müssen innerhalb des
+ist, als einen "Bug", daher bedeutet "Debuggen", die Käfer zu entfernen, wo sie nicht hingehören. Nun, Sie brauchen sie nicht wirklich
+zu jagen; vorausgesetzt daß die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie müssen innerhalb des
 Codes gefunden werden, wenn sie die Ausführung eines Programms mit der Nachricht "Segmentation fault" (Speicherverletzung) beenden.
 GNU bietet dazu ein weiteres Werkzeug, <tt/gdb/, den GNU Debugger. Dieses Terminalprogramm erlaubt es, die internen Werte einer
 Applikation und die Ausführung durch setzen von Haltepunkten im Code zu beobachten. Gdb stoppt die Ausführung jedes mal, wenn das
@@ -515,10 +515,10 @@ KDbg, den KDebugger. Um Ihr Programm zu debuggen, müssen Sie nur "Debuggen" im "
 Werkzeugleistenknopf betätigen, der durch ein Rad mit Brille dargestellt wird und signalisiert, das Sie die Ausführung beobachten
 wollen.
 
-KDevelop öffnet dann das Werkzeuge-Fenster und statet Ihr Programm mit KDbg. Die KDbg Oberfläche erscheint dann innerhalb des
+KDevelop öffnet dann das Werkzeuge-Fenster und startet Ihr Programm mit KDbg. Die KDbg Oberfläche erscheint dann innerhalb des
 Werkzeuge-Fensters und erlaubt die Benutzung genauso als ob Sie den Debugger außerhalb von KDevelop gestartet hätten.
 
-Ganz Allgemein zeigen die obigen Schritte, das ein Entwickler zum Schreiben seines eigenen Programms verschiedene Stufen durchlaufen
+Ganz allgemein zeigen die obigen Schritte, das ein Entwickler zum Schreiben seines eigenen Programms verschiedene Stufen durchlaufen
 muß, um ein Projekt zu beginnen. Auch erklärt dies, welchen Teil KDevelop dabei übernimmt und wie die Entwicklungsumgebung die Idee eines einfachen Wegs
 zur Unix-Programmierung unterstützt. Um weitere Informationen über die GNU Tools zu erhalten, sollten Sie die zugehörige Dokumentation
 lesen, die Sie allgemein über das <tt/man/ Kommando oder über "System GNU Info contents" in der KDE Hilfe nachschlagen können.
@@ -544,9 +544,9 @@ nicht nur einen besseren Weg der Makefilegenerierung sondern auch einen sicheren
 durch autoconf-generierte <tt/configure/ Skripte.
 
 Die Distribution Ihrer Applikationen verlangt vom Endbenutzer nicht mehr als ein installierter C++ Compiler und die
-Entwicklungs-bibliotheken, was meist der Fall ist; aber Sie können genausogut Binär-Pakete Ihrer Applikation vertreiben. In jedem Fall
+Entwicklungs-Bibliotheken, was meist der Fall ist; aber Sie können genausogut Binär-Pakete Ihrer Applikation vertreiben. In jedem Fall
 braucht der Endbenutzer KDevelop nicht installiert zu haben. Wenn Sie die Quellen jedoch weitergeben, raten wir dazu, die
-KDevelop-Projektdatei mitzuliefern. Bei Projekten, and denen mehrere Entwickler, vielleicht an den verschiedensten Orten, arbeiten,
+KDevelop-Projektdatei mitzuliefern. Bei Projekten, an denen mehrere Entwickler, vielleicht an den verschiedensten Orten, arbeiten,
 sollte dies generell beachtet werden, um die Konsistenz der Makefiles zu sichern. Speziell bei mehrsprachigen Applikationen werden die
 Übersetzer nicht mit dem Quellcode arbeiten außer in Fällen, die eine Korrektur benötigen, um die Internationalisierung zu
 gewährleisten. In jedem Fall wird man dankbar darüber sein, da KDevelop deren Arbeit auf ein Minimum reduziert, indem einfach die
@@ -561,7 +561,7 @@ Statuszeile, Menüleiste oder Werkzeugleiste. Da die Ressourcen in einer Resource
 hinzufügen von Werten zu den Existierenden gestalten; die Vorgaben können gleichzeitig als eine Richtlinie zur Erzeugung Ihrer
 spezifischen genommen werden. Nach der Implementierung der Funktionalität in entsprechenden Methoden die entweder durch den
 Dialogeditor erzeugt wurden oder schon Code für Standard-Aktionen enthalten, sollten Sie das Benutzerhandbuch erweitern, indem Sie die
-zur Verfügung gestellte SGML index-Datei auf die Beschreibung Ihrer Applikation anpassen. Der letzte Schritt wäre die Erzeugung der
+zur Verfügung gestellte SGML Index-Datei auf die Beschreibung Ihrer Applikation anpassen. Der letzte Schritt wäre die Erzeugung der
 Übersetzungs-Dateien und die Distribution Ihres Projekts an Übersetzer, die den letzten Schritt zur Internationalisierung übernehmen.
 
 Aber auch für nicht-GUI Programmierer bietet die IDe einen einfachen Weg, neue Projekte zu erzeugen; der Editor und Klassenbrowser in
