@@ -30,7 +30,7 @@ extern int comment_start;
 extern int comment_end;
 
 /** Last parsed comment. */
-extern char comment[2048];
+extern QString comment;
 
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
 
