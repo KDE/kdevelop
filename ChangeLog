@@ -1,3 +1,8 @@
+2003-08-29 Alexander Dymo <cloudtemple@mksat.net>
+    * Added the initial version of generic project manager.
+      It is the replacement of script/custom/pascal/ada/haskell/etc. project managers.
+      Extensible with plugins. Currently available project manager based on shell scripts. 
+
 2003-08-28 Harald Fernengel <harry@kdevelop.org>
     * SQL support now displays tables and fields in the classbrowser
 
