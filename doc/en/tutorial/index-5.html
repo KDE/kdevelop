@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Defining the Documents</TITLE>
+<TITLE>KDE Application Tutorials: Installing KDE 2</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,137 +18,99 @@
 <A HREF="index-4.html">Previous</A>
 <A HREF="index.html#toc5">Table of Contents</A>
 </P>
-<H3><A NAME="s5">5. Defining the Documents</A></H3>
+<H3><A NAME="s5">5. Installing KDE 2</A></H3>
 
+<P>In this chapter we will first go through a couple of steps that will help you set up KDevelop for creating KDE 2 / Qt 2.x
+applications. The requirements are:
+<UL>
+<LI>a current Qt-2.1 snapshot available at 
+<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
+<LI>a current KDE 2 snapshot of the packages <CODE>kdesupport</CODE> and <CODE>kdelibs</CODE></LI>
+</UL>
+<P>Both the Qt-2.1 and KDE 2 libraries are currently under development but are to be expected as final and changes to be expected for the
+final versions are marginal and may not even affect your application. This means you're getting to know the newest libraries coming up-
+and you're in charge of a valuable time-saving to create your application even before the libraries are completed.
+<P>The following sections describe what to do in detail within three steps:
+<UL>
+<LI>installing the Qt library</LI>
+<LI>installing the KDE libraries</LI>
+<LI>setting up KDevelop</LI>
+</UL>
+<P>Then you're ready to go and we'll proceed with creating the first step of the example program <EM>KScribble</EM> in the next chapter.
 <P>
-<P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
-to and from files and offer methods to manipulate the data. As <EM>KScribble</EM> will be a simple drawing application that operates on
-graphical data, we will use the Qt class <CODE>QPixmap</CODE> for storing our paintings while it is edited. <CODE>QPixmap</CODE> also offers
-simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
-reading and one for writing. Further, we need to define a pen that draws into a document, set it's width and color and make it
-available for the view class to retrieve the pen - actually you want the view offering the drawing methods, but the document as the
-central element for all views has to hold the pen originally, because two views of the same document would otherwise use different
-pens!
-<P>Therefore to define how our document class should work, we will add one instance of <CODE>QPixmap</CODE>, one of <CODE>QPen</CODE> and edit the
-methods <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>.
 <P>
-<H3><A NAME="ss5.1">5.1 Adding the Instances</A>
+<H3><A NAME="ss5.1">5.1 Setting up Qt-2.1</A>
+</H3>
+
+<P>This first step will lead you to the minimum requirement to follow our example- which implies that there is a possibility to avoid
+installing KDE 2 if you're only interested in creating Qt-only programs. As Qt-2.1 contains all needed classes and KDevelop providing a
+project template for multiple document interface applications for Qt-2.1 as well based on the same framecode that is used in the KDE 2
+template, you should have no problem at all following the example with a Qt-only application.
+<P>Now, to get the newest Qt library, get a recent version from the Troll Tech website at 
+<A HREF="http://www.troll.no">http://www.troll.no</A>, section download. Then change to root and copy the tarball to the directory where your currently used Qt
+version is placed as well - on a SuSE Linux system this would be <CODE>/usr/lib</CODE>, where you should have a directory for either
+qt-1.44 or qt-2.0.2, depending on the distribution version. Untar the library sources with
+<P><CODE>tar zxvf qtxxx.tar.gz</CODE>
+<P>depending on the name of the tarball. Then set the environment variable <CODE>QTDIR</CODE> to point to the directory where your new Qt-2.1
+library is placed with e.g. <CODE>setenv QTDIR=/usr/lib/qt-2.1</CODE>. Another solution would be to move the qt-1.44 directory, usually
+just named qt, to qt-1.44 and create a symlink that for now has to point to qt-2.1, after the library is build, change it back to
+point to the qt-1.44 directory.
+<P>Change to the Qt-2.1 directory and type:
+<BLOCKQUOTE><CODE>
+<PRE>
+./configure
+make
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>You can change back your QTDIR variable to point to your qt-1.44 installation after successfully
+compiling the Qt-2.1 library.
+<P>Now switch to the directory <CODE>/usr/lib/qt-2.1/lib</CODE> and copy the created libraries to <CODE>/usr/lib</CODE> <B>exept</B> the
+symbolic link <CODE>libqt.so</CODE>.
+<P>Then you're done with Qt and you can proceed to the next step, setting up KDE 2 libraries. If you want to develop for Qt only, proceed
+to section Setting up KDevelop.
+<P>
+<H3><A NAME="ss5.2">5.2 Setting up KDE 2 Libraries</A>
 </H3>
 
 <P>
-<P>Open the file <CODE>kscribbledoc.h</CODE> by selecting it in one of the fileviewers or by a click on the classviewer over the class
-<CODE>KScribbleDoc</CODE>. Then add the lines marked with -> from the following code snippet:
+<P>The second step leads you to install the needed KDE libraries. Download a recent snapshot of the library packages <CODE>kdesupport</CODE>
+and <CODE>kdelibs</CODE> from 
+<A HREF="http://www.kde.org">http://www.kde.org</A>. Then things will go a bit easier than for the
+Qt library. Just untar the sources to your directory and change to the kdesupport directory first. There, type:
 <P>
-<P>
-<HR>
+<BLOCKQUOTE><CODE>
 <PRE>
-->  #include &lt;qpixmap.h>
-->  #include &lt;qpen.h>
+./configure --with-qt-dir=/usr/lib/qt-2.1 --prefix=/opt/kde2
+make
 
-    class KScribbleDoc
-    {
+and as root:
 
-->      protected:
-
-->        QPen currentPen(){ return pen;};      
-                
-->              int penWidth()
-->                      { return pen.width(); }
-
-      public slots:
-        void updateAllViews(KScribbleView *sender);
-        
-        protected:
-        
-->              QPixmap buffer;
-        
-      private:
-->              QPen pen;
-        /** the modified flag of the current document */
-        bool modified;
+make install
 </PRE>
-<HR>
-<P>As you see, we added pen and buffer as well as currentPen() and penWidth(). As pen is declared private, we offer a possibility to
-retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to add them to
-the implementation file, where we're turning to now.
+</CODE></BLOCKQUOTE>
+<P>This will install the kdesupport package to the directory given in the --prefix option and compile using the new build Qt-2.1 library,
+to which you give the path to configure by the option --with-qt-dir.
+<P>The same applies to the kdelibs package, just change to the kdelibs directory and type the same as above for the kdesupport package.
+<P>Then you're done with setting up the requirements for the needed libraries to build a KDE 2 application.
+<P>As a note aside, the KDE library package contains support for automatic HTML documentation generation, which you can easily get by
+installing KDoc, version 2.x. Then type <CODE>makekdedoc</CODE> in your kdelibs directory and KDoc will create the HTML documentation in a
+subdirectory <CODE>srcdoc</CODE>. In KDevelop you can access the KDE library documentation online with setting the KDE library
+documentation path in the KDevelop Setup dialog to point to <CODE>kdelibs/srcdoc</CODE>. On the same way set your Qt-Online documentation
+path in KDevelop to point to <CODE>/usr/lib/qt-2.1/html</CODE>, so you can access the documentation right away from within KDevelop.
+<P>If you successfully installed the Qt-2.1 and KDE 2 libraries, you're just one step away from creating your first KDE 2 application, you
+just need to give KDevelop the needed information where you installed the libraries - which we'll do in the next section.
 <P>
-<H3><A NAME="ss5.2">5.2 Initialization of the Document</A>
+<H3><A NAME="ss5.3">5.3 Setting up KDevelop</A>
 </H3>
 
+<P>This part is somewhat the easiest in the whole configuration process for KDE 2 development: Setting up KDevelop. Just open KDevelop,
+then select "Options"->"KDevelop Setup" to access the KDevelop configuration. There, change to the last page, titled "Path". This page
+contains two entry fields, one for the Qt library and one for the KDE 2 libraries. As you have successfully installed everything,
+select <CODE>/usr/lib/qt-2.1</CODE> for the Qt-2.x library path and <CODE>/opt/kde2</CODE> for the KDE 2 library path. Press the "OK" button
+and you're done.
+<P>Users that only want to develop for Qt-2.x (including the current Qt-2.0.2 version) just have to set the Qt-2.x library path.
+<P>Now we can proceed to the next chapter where we will create the first step of the <EM>KScribble</EM> example.
 <P>
-<P>Select the method newDocument() in the KScribbleDoc class to jump to the method declaration. Here, we're only adding one line, marked
-with the arrow:
-<HR>
-<PRE>
-  kscribbledoc.cpp
-
-  bool KScribbleDoc::newDocument()
-  {
-    /////////////////////////////////////////////////
-    // TODO: Add your document initialization code here
-->  pen=QPen( Qt::black, 3 );
-    /////////////////////////////////////////////////
-    modified=false;
-    return true;
-  }
-</PRE>
-<HR>
-<P>This initializes the pen with the color black and width of 3 pixels; the QPen class has some more constructors, but this one lasts our
-needs here.
-<P>
-<H3><A NAME="ss5.3">5.3 Implementing the Serialization</A>
-</H3>
-
-<P>
-<P>What is left to do is to define how to open and save our pictures. This is done in the according methods:
-<P>
-<HR>
-<PRE>
-    bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
-    {
-
-        QFile f( filename );
-->     //if ( !f.open( IO_ReadOnly ) )
-->     //       return false;
-     /////////////////////////////////////////////////
-     // TODO: Add your document opening code here
-->     if(!buffer.load( filename, "PNG" ))
-->      return false;
-     /////////////////////////////////////////////////
-->     //f.close();
-
-
-    bool KScribbleDoc::saveDocument(const QString &amp;filename, const char *format /*=0*/)
-    {
-      QFile f( filename );
-->     // if ( !f.open( IO_WriteOnly ) )
-->     //       return false;
-
-      /////////////////////////////////////////////////
-      // TODO: Add your document saving code here
-->      if(!buffer.save( filename, "PNG" ))
-->              return false;
-      /////////////////////////////////////////////////
-
-->      //f.close();
-</PRE>
-<HR>
-<P>Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
-<CODE>filename</CODE> is opened, because that is done automatically by the load and save methods of QPixmap, which we add instead. Other
-documents may open a file and read in its contents such as text lines or whatever, so the QFile methods are already present in the
-codeframe. As save() and load() return a boolean value if the operation was successful, we're returning false if not, so the rest of
-the framework gets a return value and can give out warnings if the operation was not successful.
-The load() and save() methods now are already provided in QPixmap. They require the filename and the format as argument; the source
-framework on the other hand <B>does not</B> call the document methods with the format yet. If only one format is used, it lasts to
-set the format here. other methods could detect the format for example- but we will turn to this later. For now, we're using "PNG" as
-format; see QImageIO for more details about the image formats that can be opened.
-<P>Now we're already finished defining our document structure. The QPixmap buffer serves us as a buffer storing the original picture
-contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
-pen is done in newDocument(). This method is always called after the constructor within the framework internally, so you should add
-document instances initializations there as we did with the pen.
-<P>In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
-document- and then we'll be ready to paint !
 <P>
 <P ALIGN="RIGHT">
 

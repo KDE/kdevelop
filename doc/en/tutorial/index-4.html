@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: The MDI Framework</TITLE>
+<TITLE>KDE Application Tutorials: Creating KDE Applications</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,48 +18,35 @@
 <A HREF="index-3.html">Previous</A>
 <A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="s4">4. The MDI Framework</A></H3>
+<H3><A NAME="s4">4. Creating KDE Applications</A></H3>
 
-<P>If you're already familiar with previous versions of KDevelop, you will know that your IDE uses so-called "frameworks" as a starting
-point of application development. These frameworks by default contain a support for a generic document-view model, but were limited to
-SDI (Single Document Interface, one window with one view area) model structures. From KDevelop 1.1 on, the application wizard is
-capable of a lot more than the previous versions: it offers some new project types especially for those developers that want to stay
-up-to-date with the upcoming KDE 2 as well as for Qt 2.1. One major extension are MDI application frameworks for both, KDE 2 and Qt
-2.1. These frameworks differ only in the use of some library functions such as file dialogs or message boxes as well as the used
-toolbar and statusbar classes - the KDE version uses KDE 2 methods, the Qt version the according Qt functions.
-<P>To create the fist step of this tutorial application <EM>KScribble</EM>, be sure that you have followed the instructions in chapter 2
-of this tutorial handbook: setting up KDE 2. If that went all right, nothing can go wrong. If you couldn't set up the KDE 2 libraries,
-be sure that you have Qt-2.1 installed and set up KDevelop for that at least. You can follow this tutorial by choosing the according Qt
-framework as well (which has the differences as mentioned above: other method calls for dialogs and GUI components).
-<P>
-<H3><A NAME="ss4.1">4.1 Creating an MDI Framework</A>
-</H3>
-
-<P>Now we will start jumping into development by creating the frame application for <EM>KScribble</EM>. Start KDevelop and choose
-"Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
-contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
-from the Qt section. Then select "Next", enter "KScribble" as project name and "1.0" as version number. Add your name
-and email address into the according fields and you're done. Click on the "Create" button and KDevelop will generate our first version
-of <EM>KScribble</EM> while you can watch the output in the last page of the wizard. Finally, press "Exit" to return to KDevelop. In
-the output window you will see an additional message showing that the messages file has been set up for your project, which will be
-important to translate KScribble into other languages.
-<P>
-<H3><A NAME="ss4.2">4.2 Overview</A>
-</H3>
-
-<P>Now it is important to have an understanding where to find what in the generated sources and where your place as a programmer can be
-found to make <EM>KScribble</EM> a unique KDE application.
-<P>First of all, in the Classviewer you will see three already created classes, <CODE>KScribbleApp</CODE>, <CODE>KScribbleDoc</CODE> and
-<CODE>KScribbleView</CODE>. As explained above, each of them has a certain part within the application; the App class builds the main
-window and coordinates user interaction, the Doc class maintains the documents that an application can manipulate; finally the View
-class is responsible for user interaction with the child windows and communicates with the document connected to it. This has several
-consequences: to make a good use of the provided functionality, the programmer is bound to use the given View class. By default, the
-View inherits <CODE>QWidget</CODE> as a minimum requirement, but you're by far not limited to that. But inheriting from another class is
-not too much work and finally there is also the possibility to use a <CODE>QMainWindow</CODE> or <CODE>KTMainWindow</CODE> for example as the
-class to inherit and use another class that manages the view.
-<P>In the next chapter we'll continue with extending <EM>KScribble</EM> to manage it's documents. After that we'll implement the user
-interaction and you will see the first functionality that is unique to our application: we can draw pictures, load and save them.
-<P>
+<P>This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
+to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
+model and the multiple document interface (MDI) model.
+<P>By this, you will also get a good idea of concepts that are coming up ahead: KDE 2 and the Qt 2.1 library, bringing new enhancements
+and technology to the programmer's hands that will improve application design and widen the possibilities that are open to use.
+Keywords such as widget themes, Inter-Process Communication and embedded applications are popularly talked about and will allow even
+more than one can think about right now.
+<P>Therefore, KDevelop 1.1, still based on KDE 1.1.x, provides developers some of the most requested possibilities: developing
+applications for KDE 2, while still running a stable desktop environment. This also implies that this tutorial will be based on a KDE 2
+application that already makes use of Qt-2.1, offering a solution for the mentioned MDI model - which we provide as a ready-to-go frame
+application. During this tutorial you will get a clear insight on how it works and this will also make it much easier to understand the
+document-view model as well - which is hard to understand even for advanced programmers. That will help you create other type of
+applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
+let's just go inside it - you will see what's coming up on you and how easy it actually is.
+<P>The further chapters of the tutorial cover the following several steps:
+<UL>
+<LI>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.</LI>
+<LI>understanding the basic concepts of MDI and document-view model.</LI>
+<LI>creating the generic framework for <EM>KScribble</EM> and explaining the concept of the framework.</LI>
+<LI>implementing the document class, who will provide the interface to read and write the document data as well as maintaining the
+document.</LI>
+<LI>implementing the view class to visualize the data. This class also takes over the interaction with the user.</LI>
+<LI>adding dialogs to set the pen width and color of the pen to draw with, including their integration into the toolbar and menubar</LI>
+<LI>changing the view from the default <CODE>QWidget</CODE> inheritance to a scrollable view.</LI>
+</UL>
+<P>The tutorial example itself is based on the code found in the scribble example application that comes with the Qt library. The source
+of the original example can also be found within the Qt documentation, section examples.
 <P>
 <P ALIGN="RIGHT">
 
