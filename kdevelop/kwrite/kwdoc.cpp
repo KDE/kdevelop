@@ -582,7 +582,8 @@ void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
   pos = 0;
   if (!(c.flags & cfVerticalSelect)) {
     while (*s != 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
+      if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+//      if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
       } else if (*s == '\n') {
@@ -608,7 +609,8 @@ void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
 
     xPos = textWidth(c.cursor);
     while (*s != 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
+       if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+ //      if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
       } else if (*s == '\n') {
@@ -644,7 +646,8 @@ void KWriteDoc::insertFile(KWriteView *view, VConfig &c, QIODevice &dev) {
     len = dev.readBlock(buf,256);
     s = buf;
     while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
+      if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+//      if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
       } else if (*s == '\n' || *s == '\r') {
@@ -736,7 +739,8 @@ void KWriteDoc::loadFile(QIODevice &dev) {
     len = dev.readBlock(buf,512);
     s = buf;
     while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
+      if ( (*s !='\r' && *s != '\n')  || *s == '\t') {
+//      if ((unsigned char) *s >= 32 || *s == '\t') {
         textLine->append(*s);
       } else if (*s == '\n' || *s == '\r') {
         textLine = new TextLine();
@@ -1407,6 +1411,15 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
   while (x < xPos && (!wrapCursor || z < len)) {
     oldX = x;
     ch = textLine->getChar(z);
+    if (ch==127)
+    {
+     ch='?';
+    }
+    else
+     if (ch !='\t' && (ch & 0x7f)< 0x20)
+     {
+       ch|=0x40;
+     }
     a = &attribs[textLine->getAttr(z)];
     x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     z++;
@@ -1461,6 +1474,15 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos) {
   while (x < xPos) { // && z < len) {
     oldX = x;
     ch = textLine->getChar(z);
+    if (ch==127)
+    {
+     ch='?';
+    }
+    else
+     if (ch !='\t' && (ch & 0x7f)< 0x20)
+     {
+       ch|=0x40;
+     }
     a = &attribs[textLine->getAttr(z)];
     x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     z++;
@@ -2119,6 +2141,18 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
   do {
       xc = x;
       ch = textLine->getChar(z);
+#ifndef QT_I18N
+      if (ch==127)
+      {
+       ch='?';
+      }
+      else
+       if (ch !='\t' && (ch & 0x7f)< 0x20)
+       {
+         ch|=0x40;
+       }
+#endif
+
       if (ch == '\t') {
           x += tabWidth - (x % tabWidth);
       } else {
@@ -2148,8 +2182,32 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
 
   xs = xStart;
   attr = textLine->getRawAttr(zc);
+#ifndef QT_I18N
+  ch = textLine->getChar(zc);
+  if (ch==127 || (ch !='\t' && ((ch & 0x7f)< 0x20)))
+  {
+        attr|=taSelected;
+  }
+#endif
+
   while (x < xEnd) {
       nextAttr = textLine->getRawAttr(z);
+#ifndef QT_I18N
+      ch = textLine->getChar(z);
+      /* non printable char handling */
+      if (ch==127)
+      {
+        ch='?';
+        nextAttr|=taSelected;
+      }
+      else
+        if (ch !='\t' && ((ch & 0x7f)< 0x20))
+        {
+          ch|=0x40;
+          nextAttr|=taSelected;
+        }
+#endif
+
       if ((nextAttr ^ attr) & (taSelectMask | 256)) {
           paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
           xs = x;
@@ -2198,6 +2256,20 @@ KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
 
       else {
           nextAttr = textLine->getRawAttr(zc);
+          /* non printable char handling */
+#ifndef QT_I18N
+          if (ch==127)
+          {
+            ch='?';
+            nextAttr|=taSelected;
+          }
+          else
+            if ((ch & 0x7f)< 0x20)
+            {
+              ch|=0x40;
+              nextAttr|=taSelected;
+            }
+#endif
           if (nextAttr != attr) {
               
               if(aCnt!=0) {
