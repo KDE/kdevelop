@@ -465,7 +465,6 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_activeVariable = 0;
 
     if( context->hasType(Context::EditorContext) ){
-        popup->insertSeparator();
         int id = popup->insertItem( i18n( "Switch Header/Implementation"),
                 this, SLOT( slotSwitchHeader() ) );
         popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
