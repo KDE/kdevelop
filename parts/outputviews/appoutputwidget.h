@@ -14,17 +14,23 @@
 
 #include "processwidget.h"
 
+class AppOutputViewPart;
 
 class AppOutputWidget : public ProcessWidget
 {
     Q_OBJECT
     
 public:
-    AppOutputWidget();
+    AppOutputWidget(AppOutputViewPart* part);
     ~AppOutputWidget();
 
+public slots:
+	void slotRowSelected(QListBoxItem* row);
+	
 private:
     virtual void childFinished(bool normal, int status);
+	
+	AppOutputViewPart* m_part;
 };
 
 #endif

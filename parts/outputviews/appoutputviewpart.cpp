@@ -31,7 +31,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
     m_dcop = new KDevAppFrontendIface(this);
 
-    m_widget = new AppOutputWidget();
+    m_widget = new AppOutputWidget(this);
     m_widget->setCaption(i18n("Application Output"));
     QWhatsThis::add(m_widget, i18n("Application output\n\n"
                                    "The stdout/stderr output window is a replacement for "
