@@ -97,7 +97,7 @@ QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
     
     // first try project-specific
     QString fileName = (part->project()->projectDirectory() + "/templates/" + name);
-    if (!QFile::exists(fileName)) return fileName;
+    if (QFile::exists(fileName)) return fileName;
     
     // next try global
     QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
