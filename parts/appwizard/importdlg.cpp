@@ -359,7 +359,7 @@ void ImportDialog::slotFetchModulesFromRepository()
     connect( vcs, SIGNAL(finishedFetching(QString)),
         this, SLOT(slotFinishedCheckout(QString)) );
 
-    vcs->fetchFromRepository( this );
+    vcs->fetchFromRepository();
 }
 
 
