@@ -1,3 +1,8 @@
+2001-05-19  Harald Fernengel <harry@bnro.de>
+    * Added support for events. Define them in "eventsrc" and fire them via 
+      KNotifyClient::event(). Currently we have two events: "BuildSuccess" and
+      "BuildError".
+
 2001-05-19  F@lk Brettschneider <falk@kdevelop.org>
     * fixed focus problems introduced with the bugfixes on 2001-05-18
 
