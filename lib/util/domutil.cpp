@@ -15,6 +15,7 @@
 
 #include <kdebug.h>
 #include <qstringlist.h>
+#include <qfile.h>
 
 
 void DomUtil::makeEmpty( QDomElement& e )
@@ -82,7 +83,7 @@ bool DomUtil::readBoolEntry(const QDomDocument &doc, const QString &path, bool d
 QStringList DomUtil::readListEntry(const QDomDocument &doc, const QString &path, const QString &tag)
 {
     QStringList list;
-    
+
     QDomElement el = elementByPath(doc, path);
     QDomElement subEl = el.firstChild().toElement();
     while (!subEl.isNull()) {
@@ -263,7 +264,7 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
       else
         wrongchild=true;
       if (rightchild)
-      {	
+      {
         if (dompathelement.matchNumber == matchCount++)
         {
           nextElem = child;
@@ -279,4 +280,61 @@ QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstri
     }
   }
   return nextElem;
+}
+
+
+bool DomUtil::openDOMFile(QDomDocument &doc, QString filename)
+{
+  QFile file( filename );
+  if ( !file.open( IO_ReadOnly ) )
+    return false;
+  if ( !doc.setContent( &file ) ) {
+    file.close();
+    return false;
+  }
+  file.close();
+  return true;
+}
+
+bool DomUtil::saveDOMFile(QDomDocument &doc, QString filename)
+{
+  QFile file( filename );
+  if ( !file.open( IO_ReadWrite | IO_Truncate ) )
+    return false;
+  QTextStream t( &file );
+  t << doc.toString();
+  file.close();
+  return true;
+}
+
+bool DomUtil::removeTextNodes(QDomDocument doc,QString pathExt)
+{
+  QDomElement elem = elementByPathExt(doc,pathExt);
+  if (elem.isNull())
+    return false;
+  QDomNodeList children = elem.childNodes();
+  for (unsigned int i=0;i<children.count();i++)
+    if (children.item(i).isText())
+      elem.removeChild(children.item(i));
+  return true;
+}
+
+
+bool DomUtil::appendText(QDomDocument doc, QString pathExt, QString text)
+{
+  QDomElement elem = elementByPathExt(doc,pathExt);
+  if (elem.isNull())
+    return false;
+  elem.appendChild(doc.createTextNode(text));
+  return true;
+}
+
+
+bool DomUtil::replaceText(QDomDocument doc, QString pathExt, QString text)
+{
+  if (removeTextNodes(doc,pathExt) &&
+      appendText(doc,pathExt,text))
+    return true;
+  else
+    return false;
 }

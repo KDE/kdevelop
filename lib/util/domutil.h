@@ -171,7 +171,31 @@ public:
      */    
     static QDomElement elementByPathExt(QDomDocument &doc, const QString &pathstring);
 
-    
+    /**
+    * Open file - filename - and set setContents of doc
+    */
+    static bool openDOMFile(QDomDocument &doc, QString filename);
+
+    /**
+    * Store contents of doc in file - filename. Existing file will be truncated!
+    */
+    static bool saveDOMFile(QDomDocument &doc, QString filename);
+
+    /**
+    * Remove all child text nodes of parent described in pathExt
+    */
+    static bool removeTextNodes(QDomDocument doc,QString pathExt);
+
+    /**
+    * Add child text node to parent described in pathExt
+    */
+    static bool appendText(QDomDocument doc, QString pathExt, QString text);
+
+    /**
+    * Replace all chilt text nodes of parent described in pathExt with one new.
+    */
+    static bool replaceText(QDomDocument doc, QString pathExt, QString text);
+
 private:
     static QString readEntryAux(const QDomDocument &doc, const QString &path);
 };
