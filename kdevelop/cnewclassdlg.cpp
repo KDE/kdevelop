@@ -114,7 +114,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   public_button->setChecked(true);
   
   protected_button = new QRadioButton( this, "protected_button" );
-  protected_button->setGeometry( 275, 130, 70, 30 );
+  protected_button->setGeometry( 275, 130, 90, 30 );
   protected_button->setText( i18n("protected") );
   
   private_button = new QRadioButton( this, "private_button" );

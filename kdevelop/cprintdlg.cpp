@@ -922,7 +922,7 @@ void CPrintDlg::slotCreateParameters() {
 
 void CPrintDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
     return;
   }
   files = createFileString();

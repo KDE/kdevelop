@@ -1,11 +1,21 @@
-1999-03-08  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * fixed the refresh of trees with setUpdatesEnabled(false,true) and repaint to avoid flickering
-    did that for slotFileSaveAll as well
 
+1999-03-09 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	
+	* fixed the bin_PROGRAM "bug" in newProject()
+	* KDevelop is now asking, if you want to overwrite a file (addExistingFile and NewFile )
+	* added some patches by Martin and some translations (da,de,sk)
+	
+1999-03-08  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed the refresh of trees with setUpdatesEnabled(false,true) and repaint to avoid flickering
+          did that for slotFileSaveAll as well
+	  
+1999-03-08 The KDevelop Team
+	*  KDevelop 0.3 released
+	
 1999-03-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed the Installation bug with the qt-path
   * added additional proof for the qt-path into the update dialog
-
+  
 1999-03-07 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* added quickhelp in all printdialogs
 	* added lpr as printprogram

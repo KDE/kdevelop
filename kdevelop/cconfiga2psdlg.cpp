@@ -43,7 +43,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_33->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_33->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_33->setFrameStyle( 49 );
-	qtarch_ButtonGroup_33->setTitle( "Numbering" );
+	qtarch_ButtonGroup_33->setTitle(i18n("Numbering"));
 	qtarch_ButtonGroup_33->setAlignment( 1 );
 
 	qtarch_ButtonGroup_182 = new QButtonGroup( this, "ButtonGroup_182" );
@@ -55,7 +55,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_182->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_182->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_182->setFrameStyle( 49 );
-	qtarch_ButtonGroup_182->setTitle( "Lines per page" );
+	qtarch_ButtonGroup_182->setTitle(i18n("Lines per page"));
 	qtarch_ButtonGroup_182->setAlignment( 1 );
 
 	qtarch_ButtonGroup_177 = new QButtonGroup( this, "ButtonGroup_177" );
@@ -67,7 +67,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_177->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_177->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_177->setFrameStyle( 49 );
-	qtarch_ButtonGroup_177->setTitle( "Printing" );
+	qtarch_ButtonGroup_177->setTitle(i18n("Printing"));
 	qtarch_ButtonGroup_177->setAlignment( 1 );
 
 	qtarch_ButtonGroup_21 = new QButtonGroup( this, "ButtonGroup_21" );
@@ -79,7 +79,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_21->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_21->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_21->setFrameStyle( 49 );
-	qtarch_ButtonGroup_21->setTitle( "Textprinting" );
+	qtarch_ButtonGroup_21->setTitle(i18n("Textprinting"));
 	qtarch_ButtonGroup_21->setAlignment( 1 );
 
 	boltFontButton = new QCheckBox( this, "boltFontButton" );
@@ -90,7 +90,7 @@ void CConfigA2psDlg::init() {
 	boltFontButton->setBackgroundMode( QWidget::PaletteBackground );
 	boltFontButton->setFontPropagation( QWidget::NoChildren );
 	boltFontButton->setPalettePropagation( QWidget::NoChildren );
-	boltFontButton->setText( "bold font" );
+	boltFontButton->setText(i18n("bold font"));
 	boltFontButton->setAutoRepeat( FALSE );
 	boltFontButton->setAutoResize( FALSE );
 
@@ -103,7 +103,7 @@ void CConfigA2psDlg::init() {
 	alignFilesButton->setBackgroundMode( QWidget::PaletteBackground );
 	alignFilesButton->setFontPropagation( QWidget::NoChildren );
 	alignFilesButton->setPalettePropagation( QWidget::NoChildren );
-	alignFilesButton->setText( "align files" );
+	alignFilesButton->setText(i18n("align files"));
 	alignFilesButton->setAutoRepeat( FALSE );
 	alignFilesButton->setAutoResize( FALSE );
 
@@ -115,19 +115,19 @@ void CConfigA2psDlg::init() {
 	printAsISOLatin->setBackgroundMode( QWidget::PaletteBackground );
 	printAsISOLatin->setFontPropagation( QWidget::NoChildren );
 	printAsISOLatin->setPalettePropagation( QWidget::NoChildren );
-	printAsISOLatin->setText( "print non ascii character as ISO Latin 1" );
+	printAsISOLatin->setText(i18n("print non ascii character as ISO Latin 1"));
 	printAsISOLatin->setAutoRepeat( FALSE );
 	printAsISOLatin->setAutoResize( FALSE );
 
 	interpretButton = new QCheckBox( this, "interpretButton" );
-	interpretButton->setGeometry( 310, 60, 170, 30 );
+	interpretButton->setGeometry( 310, 60, 200, 30 );
 	interpretButton->setMinimumSize( 0, 0 );
 	interpretButton->setMaximumSize( 32767, 32767 );
 	interpretButton->setFocusPolicy( QWidget::TabFocus );
 	interpretButton->setBackgroundMode( QWidget::PaletteBackground );
 	interpretButton->setFontPropagation( QWidget::NoChildren );
 	interpretButton->setPalettePropagation( QWidget::NoChildren );
-	interpretButton->setText( "interpret TAB, BS and FF" );
+	interpretButton->setText(i18n("interpret TAB, BS and FF"));
 	interpretButton->setAutoRepeat( FALSE );
 	interpretButton->setAutoResize( FALSE );
 
@@ -139,7 +139,7 @@ void CConfigA2psDlg::init() {
 	currentDateButton->setBackgroundMode( QWidget::PaletteBackground );
 	currentDateButton->setFontPropagation( QWidget::NoChildren );
 	currentDateButton->setPalettePropagation( QWidget::NoChildren );
-	currentDateButton->setText( "date &  time" );
+	currentDateButton->setText(i18n("Date & Time"));
 	currentDateButton->setAutoRepeat( FALSE );
 	currentDateButton->setAutoResize( FALSE );
 
@@ -152,7 +152,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_60->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_60->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_60->setFrameStyle( 49 );
-	qtarch_ButtonGroup_60->setTitle( "Headertext" );
+	qtarch_ButtonGroup_60->setTitle(i18n("Headertext"));
 	qtarch_ButtonGroup_60->setAlignment( 1 );
 
 	headertextButton = new QCheckBox( this, "headertextButton" );
@@ -163,7 +163,7 @@ void CConfigA2psDlg::init() {
 	headertextButton->setBackgroundMode( QWidget::PaletteBackground );
 	headertextButton->setFontPropagation( QWidget::NoChildren );
 	headertextButton->setPalettePropagation( QWidget::NoChildren );
-	headertextButton->setText( "headertext" );
+	headertextButton->setText(i18n("headertext"));
 	headertextButton->setAutoRepeat( FALSE );
 	headertextButton->setAutoResize( FALSE );
 
@@ -175,7 +175,7 @@ void CConfigA2psDlg::init() {
 	qtarch_Label_20->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_20->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_20->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_20->setText( "text" );
+	qtarch_Label_20->setText(i18n("text"));
 	qtarch_Label_20->setAlignment( 289 );
 	qtarch_Label_20->setMargin( -1 );
 
@@ -200,7 +200,7 @@ void CConfigA2psDlg::init() {
 	loginButton->setBackgroundMode( QWidget::PaletteBackground );
 	loginButton->setFontPropagation( QWidget::NoChildren );
 	loginButton->setPalettePropagation( QWidget::NoChildren );
-	loginButton->setText( "login" );
+	loginButton->setText(i18n("login"));
 	loginButton->setAutoRepeat( FALSE );
 	loginButton->setAutoResize( FALSE );
 
@@ -212,7 +212,7 @@ void CConfigA2psDlg::init() {
 	filenameLine->setBackgroundMode( QWidget::PaletteBackground );
 	filenameLine->setFontPropagation( QWidget::NoChildren );
 	filenameLine->setPalettePropagation( QWidget::NoChildren );
-	filenameLine->setText( "filename" );
+	filenameLine->setText(i18n("filename"));
 	filenameLine->setAutoRepeat( FALSE );
 	filenameLine->setAutoResize( FALSE );
 
@@ -224,7 +224,7 @@ void CConfigA2psDlg::init() {
 	headerButton->setBackgroundMode( QWidget::PaletteBackground );
 	headerButton->setFontPropagation( QWidget::NoChildren );
 	headerButton->setPalettePropagation( QWidget::NoChildren );
-	headerButton->setText( "header" );
+	headerButton->setText(i18n("header"));
 	headerButton->setAutoRepeat( FALSE );
 	headerButton->setAutoResize( FALSE );
 
@@ -236,19 +236,19 @@ void CConfigA2psDlg::init() {
 	replaceButton->setBackgroundMode( QWidget::PaletteBackground );
 	replaceButton->setFontPropagation( QWidget::NoChildren );
 	replaceButton->setPalettePropagation( QWidget::NoChildren );
-	replaceButton->setText( "replace non-printing character by space" );
+	replaceButton->setText(i18n("replace non-printing character by space"));
 	replaceButton->setAutoRepeat( FALSE );
 	replaceButton->setAutoResize( FALSE );
 
 	cutLinesButton = new QCheckBox( this, "cutLinesButton" );
-	cutLinesButton->setGeometry( 310, 30, 100, 30 );
+	cutLinesButton->setGeometry( 310, 30, 200, 30 );
 	cutLinesButton->setMinimumSize( 0, 0 );
 	cutLinesButton->setMaximumSize( 32767, 32767 );
 	cutLinesButton->setFocusPolicy( QWidget::TabFocus );
 	cutLinesButton->setBackgroundMode( QWidget::PaletteBackground );
 	cutLinesButton->setFontPropagation( QWidget::NoChildren );
 	cutLinesButton->setPalettePropagation( QWidget::NoChildren );
-	cutLinesButton->setText( "cut lines" );
+	cutLinesButton->setText(i18n("cut lines"));
 	cutLinesButton->setAutoRepeat( FALSE );
 	cutLinesButton->setAutoResize( FALSE );
 
@@ -261,7 +261,7 @@ void CConfigA2psDlg::init() {
 	qtarch_ButtonGroup_20->setFontPropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_20->setPalettePropagation( QWidget::NoChildren );
 	qtarch_ButtonGroup_20->setFrameStyle( 49 );
-	qtarch_ButtonGroup_20->setTitle( "Font" );
+	qtarch_ButtonGroup_20->setTitle(i18n("Font"));
 	qtarch_ButtonGroup_20->setAlignment( 1 );
 
 	qtarch_Label_2 = new QLabel( this, "Label_2" );
@@ -272,7 +272,7 @@ void CConfigA2psDlg::init() {
 	qtarch_Label_2->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_2->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_2->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_2->setText( "set TAB size" );
+	qtarch_Label_2->setText(i18n("set TAB size"));
 	qtarch_Label_2->setAlignment( 289 );
 	qtarch_Label_2->setMargin( -1 );
 
@@ -318,19 +318,19 @@ void CConfigA2psDlg::init() {
 	qtarch_Label_3->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_3->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_3->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_3->setText( "fontsize" );
+	qtarch_Label_3->setText(i18n("fontsize"));
 	qtarch_Label_3->setAlignment( 289 );
 	qtarch_Label_3->setMargin( -1 );
 
 	numberingLineButton = new QCheckBox( this, "numberingLineButton" );
-	numberingLineButton->setGeometry( 310, 210, 110, 30 );
+	numberingLineButton->setGeometry( 310, 210, 150, 30 );
 	numberingLineButton->setMinimumSize( 0, 0 );
 	numberingLineButton->setMaximumSize( 32767, 32767 );
 	numberingLineButton->setFocusPolicy( QWidget::TabFocus );
 	numberingLineButton->setBackgroundMode( QWidget::PaletteBackground );
 	numberingLineButton->setFontPropagation( QWidget::NoChildren );
 	numberingLineButton->setPalettePropagation( QWidget::NoChildren );
-	numberingLineButton->setText( "numbering lines" );
+	numberingLineButton->setText(i18n("numbering lines"));
 	numberingLineButton->setAutoRepeat( FALSE );
 	numberingLineButton->setAutoResize( FALSE );
 
@@ -342,7 +342,7 @@ void CConfigA2psDlg::init() {
 	bordersButton->setBackgroundMode( QWidget::PaletteBackground );
 	bordersButton->setFontPropagation( QWidget::NoChildren );
 	bordersButton->setPalettePropagation( QWidget::NoChildren );
-	bordersButton->setText( "borders" );
+	bordersButton->setText(i18n("borders"));
 	bordersButton->setAutoRepeat( FALSE );
 	bordersButton->setAutoResize( FALSE );
 
@@ -356,8 +356,8 @@ void CConfigA2psDlg::init() {
 	numberingPagesList->setPalettePropagation( QWidget::NoChildren );
 	numberingPagesList->setSizeLimit( 10 );
 	numberingPagesList->setAutoResize( FALSE );
-	numberingPagesList->insertItem( "file single" );
-	numberingPagesList->insertItem( "file together" );
+	numberingPagesList->insertItem(i18n("file single"));
+	numberingPagesList->insertItem(i18n("file together"));
 
 	linesPerPage = new QSpinBox( this, "linesPerPage" );
 	linesPerPage->setGeometry( 450, 330, 110, 30 );
@@ -384,19 +384,19 @@ void CConfigA2psDlg::init() {
 	qtarch_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_label->setText( "lines per page" );
+	qtarch_label->setText(i18n("lines per page"));
 	qtarch_label->setAlignment( 289 );
 	qtarch_label->setMargin( -1 );
 
 	qtarch_Label_113 = new QLabel( this, "Label_113" );
-	qtarch_Label_113->setGeometry( 310, 240, 110, 30 );
+	qtarch_Label_113->setGeometry( 310, 240, 120, 30 );
 	qtarch_Label_113->setMinimumSize( 0, 0 );
 	qtarch_Label_113->setMaximumSize( 32767, 32767 );
 	qtarch_Label_113->setFocusPolicy( QWidget::NoFocus );
 	qtarch_Label_113->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_113->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_113->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_113->setText( "numbering pages" );
+	qtarch_Label_113->setText(i18n("numbering pages"));
 	qtarch_Label_113->setAlignment( 289 );
 	qtarch_Label_113->setMargin( -1 );
 
@@ -408,7 +408,7 @@ void CConfigA2psDlg::init() {
 	previewButton->setBackgroundMode( QWidget::PaletteBackground );
 	previewButton->setFontPropagation( QWidget::NoChildren );
 	previewButton->setPalettePropagation( QWidget::NoChildren );
-	previewButton->setText( "Preview" );
+	previewButton->setText(i18n("Preview"));
 	previewButton->setAutoRepeat( FALSE );
 	previewButton->setAutoResize( FALSE );
 
@@ -420,7 +420,7 @@ void CConfigA2psDlg::init() {
 	okButton->setBackgroundMode( QWidget::PaletteBackground );
 	okButton->setFontPropagation( QWidget::NoChildren );
 	okButton->setPalettePropagation( QWidget::NoChildren );
-	okButton->setText( "Ok" );
+	okButton->setText(i18n("Ok"));
 	okButton->setAutoRepeat( FALSE );
 	okButton->setAutoResize( FALSE );
 
@@ -432,7 +432,7 @@ void CConfigA2psDlg::init() {
 	defaultButton->setBackgroundMode( QWidget::PaletteBackground );
 	defaultButton->setFontPropagation( QWidget::NoChildren );
 	defaultButton->setPalettePropagation( QWidget::NoChildren );
-	defaultButton->setText( "Defaults" );
+	defaultButton->setText(i18n("Defaults"));
 	defaultButton->setAutoRepeat( FALSE );
 	defaultButton->setAutoResize( FALSE );
 
@@ -444,7 +444,7 @@ void CConfigA2psDlg::init() {
 	cancelButton->setBackgroundMode( QWidget::PaletteBackground );
 	cancelButton->setFontPropagation( QWidget::NoChildren );
 	cancelButton->setPalettePropagation( QWidget::NoChildren );
-	cancelButton->setText( "Cancel" );
+	cancelButton->setText(i18n("Cancel"));
 	cancelButton->setAutoRepeat( FALSE );
 	cancelButton->setAutoResize( FALSE );
 
@@ -456,19 +456,19 @@ void CConfigA2psDlg::init() {
 	fontsizeButton->setBackgroundMode( QWidget::PaletteBackground );
 	fontsizeButton->setFontPropagation( QWidget::NoChildren );
 	fontsizeButton->setPalettePropagation( QWidget::NoChildren );
-	fontsizeButton->setText( "use fontsize" );
+	fontsizeButton->setText(i18n("use fontsize"));
 	fontsizeButton->setAutoRepeat( FALSE );
 	fontsizeButton->setAutoResize( FALSE );
 
 	linesButton = new QCheckBox( this, "linesButton" );
-	linesButton->setGeometry( 320, 300, 140, 30 );
+	linesButton->setGeometry( 320, 300, 170, 30 );
 	linesButton->setMinimumSize( 0, 0 );
 	linesButton->setMaximumSize( 32767, 32767 );
 	linesButton->setFocusPolicy( QWidget::TabFocus );
 	linesButton->setBackgroundMode( QWidget::PaletteBackground );
 	linesButton->setFontPropagation( QWidget::NoChildren );
 	linesButton->setPalettePropagation( QWidget::NoChildren );
-	linesButton->setText( "uses lines per page" );
+	linesButton->setText(i18n("uses lines per page"));
 	linesButton->setAutoRepeat( FALSE );
 	linesButton->setAutoResize( FALSE );
 
@@ -775,7 +775,7 @@ QString CConfigA2psDlg::slotCreateParameters() {
 
 void CConfigA2psDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
     return;
   }
   QString dir,data1,data2,text;

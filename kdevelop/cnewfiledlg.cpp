@@ -252,35 +252,42 @@ void CNewFileDlg::slotOKClicked(){
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
-   
-
-   /*************----------generate the new File----------****************/
-   QString filename = fileName();
-   QString section;
-   QString type;
-   QString filetype = fileType();
-   QString complete_filename;
-   CGenerateNewFile generator;
+  QString filename = fileName();
+  QString complete_filename;
+  // contruct the complete_filename
+  complete_filename = location() + filename;
   
-
-   // contruct the complete_filename
-   complete_filename = location() + filename;
+  if(QFile::exists(complete_filename)){
+    if(KMsgBox::yesNo(0,i18n("Files exists!"),
+		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?")) == 2){
+      return;
+    }
+  }
+  
+  /*************----------generate the new File----------****************/
+  
+  QString section;
+  QString type;
+  QString filetype = fileType(); 
+  CGenerateNewFile generator;
+ 
+   
    
    // check if generate a empty file or generate one
-   if (useTemplate() && (filetype != "TEXTFILE") && filetype != "ICON"){ // generate one,textfile always empty
+  if (useTemplate() && (filetype != "TEXTFILE") && filetype != "ICON"){ // generate one,textfile always empty
     
-     if (filetype == "HEADER"){
+    if (filetype == "HEADER"){
       generator.genHeaderFile(complete_filename,prj);
       type = "HEADER";
-     }
-     if (filetype == "CPP"){
-       generator.genCPPFile(complete_filename,prj);
-       type = "SOURCE";
     }
-     if (filetype == "LSM"){
-       generator.genLSMFile(complete_filename,prj);
-       type = "DATA";
-     }
+    if (filetype == "CPP"){
+      generator.genCPPFile(complete_filename,prj);
+      type = "SOURCE";
+    }
+    if (filetype == "LSM"){
+      generator.genLSMFile(complete_filename,prj);
+      type = "DATA";
+    }
      if (filetype == "KDELNK"){
        generator.genKDELnkFile(complete_filename,prj);
        type = "DATA";
@@ -290,17 +297,19 @@ void CNewFileDlg::slotOKClicked(){
        type = "DATA";
      }
    }
-   else { // no template, -> empty file or icon
-     if(filetype == "ICON"){
-       generator.genIcon(complete_filename);
-     }
-     else{
-       QFile file(complete_filename);
-       file.open(IO_ReadWrite);
-       file.close();
-     }
-   }
-   accept();
+  else { // no template, -> empty file or icon
+    if(filetype == "ICON"){
+      generator.genIcon(complete_filename);
+    }
+    else{
+      
+      QFile file(complete_filename);
+      file.remove();
+      file.open(IO_ReadWrite);
+      file.close();
+    }
+  }
+  accept();
 }
 
 QString CNewFileDlg::fileName(){

@@ -929,7 +929,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_20->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_20->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_20->setFrameStyle( 49 );
-  qtarch_ButtonGroup_20->setTitle( "Font and TAB" );
+  qtarch_ButtonGroup_20->setTitle(i18n("Font and TAB"));
   qtarch_ButtonGroup_20->setAlignment( 1 );
   
   qtarch_ButtonGroup_51 = new QButtonGroup( parent, "ButtonGroup_51" );
@@ -941,7 +941,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_51->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_51->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_51->setFrameStyle( 49 );
-  qtarch_ButtonGroup_51->setTitle( "Other options" );
+  qtarch_ButtonGroup_51->setTitle(i18n("Other options"));
   qtarch_ButtonGroup_51->setAlignment( 1 );
   
   qtarch_ButtonGroup_52 = new QButtonGroup( parent, "ButtonGroup_52" );
@@ -953,7 +953,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_52->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_52->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_52->setFrameStyle( 49 );
-  qtarch_ButtonGroup_52->setTitle( "Highlight bars" );
+  qtarch_ButtonGroup_52->setTitle(i18n("Highlight bars"));
   qtarch_ButtonGroup_52->setAlignment( 1 );
   
   qtarch_Label_14 = new QLabel( parent, "Label_14" );
@@ -964,7 +964,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_14->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_14->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_14->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_14->setText( "cycle of change" );
+  qtarch_Label_14->setText(i18n("cycle of change"));
   qtarch_Label_14->setAlignment( 289 );
   qtarch_Label_14->setMargin( -1 );
 
@@ -977,7 +977,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_53->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_53->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_53->setFrameStyle( 49 );
-  qtarch_ButtonGroup_53->setTitle( "Wrapped line" );
+  qtarch_ButtonGroup_53->setTitle(i18n("Wrapped line"));
   qtarch_ButtonGroup_53->setAlignment( 1 );
   
   qtarch_ButtonGroup_33 = new QButtonGroup( parent, "ButtonGroup_33" );
@@ -989,7 +989,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_33->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_33->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_33->setFrameStyle( 49 );
-  qtarch_ButtonGroup_33->setTitle( "Numbering & border" );
+  qtarch_ButtonGroup_33->setTitle(i18n("Numbering & border"));
   qtarch_ButtonGroup_33->setAlignment( 1 );
   
   bordersButton = new QCheckBox( parent, "bordersButton" );
@@ -1000,7 +1000,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   bordersButton->setBackgroundMode( QWidget::PaletteBackground );
   bordersButton->setFontPropagation( QWidget::NoChildren );
   bordersButton->setPalettePropagation( QWidget::NoChildren );
-  bordersButton->setText( "borders" );
+  bordersButton->setText(i18n("borders"));
   bordersButton->setAutoRepeat( FALSE );
   bordersButton->setAutoResize( FALSE );
   
@@ -1012,7 +1012,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   tocButton->setBackgroundMode( QWidget::PaletteBackground );
   tocButton->setFontPropagation( QWidget::NoChildren );
   tocButton->setPalettePropagation( QWidget::NoChildren );
-  tocButton->setText( "table of contents" );
+  tocButton->setText(i18n("table of contents"));
   tocButton->setAutoRepeat( FALSE );
   tocButton->setAutoResize( FALSE );
   
@@ -1024,7 +1024,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   markedWrappedLinesButton->setBackgroundMode( QWidget::PaletteBackground );
   markedWrappedLinesButton->setFontPropagation( QWidget::NoChildren );
   markedWrappedLinesButton->setPalettePropagation( QWidget::NoChildren );
-  markedWrappedLinesButton->setText( "marked wrapped lines" );
+  markedWrappedLinesButton->setText(i18n("marked wrapped lines"));
   markedWrappedLinesButton->setAutoRepeat( FALSE );
   markedWrappedLinesButton->setAutoResize( FALSE );
   
@@ -1036,7 +1036,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_label->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_label->setFontPropagation( QWidget::NoChildren );
   qtarch_label->setPalettePropagation( QWidget::NoChildren );
-  qtarch_label->setText( "lines per page" );
+  qtarch_label->setText(i18n("lines per page"));
   qtarch_label->setAlignment( 289 );
   qtarch_label->setMargin( -1 );
   
@@ -1048,7 +1048,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingPagesButton->setBackgroundMode( QWidget::PaletteBackground );
   numberingPagesButton->setFontPropagation( QWidget::NoChildren );
   numberingPagesButton->setPalettePropagation( QWidget::NoChildren );
-  numberingPagesButton->setText( "numbering pages" );
+  numberingPagesButton->setText(i18n("numbering pages"));
   numberingPagesButton->setAutoRepeat( FALSE );
   numberingPagesButton->setAutoResize( FALSE );
   
@@ -1060,7 +1060,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_8->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_8->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_8->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_8->setText( "align files" );
+  qtarch_Label_8->setText(i18n("align files"));
   qtarch_Label_8->setAlignment( 289 );
   qtarch_Label_8->setMargin( -1 );
   
@@ -1072,7 +1072,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingLineButton->setBackgroundMode( QWidget::PaletteBackground );
   numberingLineButton->setFontPropagation( QWidget::NoChildren );
   numberingLineButton->setPalettePropagation( QWidget::NoChildren );
-  numberingLineButton->setText( "numbering lines" );
+  numberingLineButton->setText(i18n("numbering lines"));
   numberingLineButton->setAutoRepeat( FALSE );
   numberingLineButton->setAutoResize( FALSE );
   
@@ -1133,7 +1133,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_13->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_13->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_13->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_13->setText( "value for wrapped line" );
+  qtarch_Label_13->setText(i18n("value for wrapped line"));
   qtarch_Label_13->setAlignment( 289 );
   qtarch_Label_13->setMargin( -1 );
   
@@ -1147,9 +1147,9 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   numberingPagesList->setPalettePropagation( QWidget::NoChildren );
   numberingPagesList->setSizeLimit( 10 );
   numberingPagesList->setAutoResize( FALSE );
-  numberingPagesList->insertItem( "left" );
-  numberingPagesList->insertItem( "center" );
-  numberingPagesList->insertItem( "right" );
+  numberingPagesList->insertItem(i18n("left"));
+  numberingPagesList->insertItem(i18n("center"));
+  numberingPagesList->insertItem(i18n("right"));
   
   highlightBarsButton = new QCheckBox( parent, "highlightBarsButton" );
   highlightBarsButton->setGeometry( 330, 210, 100, 30 );
@@ -1159,7 +1159,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   highlightBarsButton->setBackgroundMode( QWidget::PaletteBackground );
   highlightBarsButton->setFontPropagation( QWidget::NoChildren );
   highlightBarsButton->setPalettePropagation( QWidget::NoChildren );
-  highlightBarsButton->setText( "highlight bars" );
+  highlightBarsButton->setText(i18n("highlight bars"));
   highlightBarsButton->setAutoRepeat( FALSE );
   highlightBarsButton->setAutoResize( FALSE );
   
@@ -1171,7 +1171,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_2->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_2->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_2->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_2->setText( "set TAB size" );
+  qtarch_Label_2->setText(i18n("set TAB size"));
   qtarch_Label_2->setAlignment( 289 );
   qtarch_Label_2->setMargin( -1 );
   
@@ -1183,7 +1183,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_4->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_4->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_4->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_4->setText( "font for header" );
+  qtarch_Label_4->setText(i18n("font for header"));
   qtarch_Label_4->setAlignment( 289 );
   qtarch_Label_4->setMargin( -1 );
   
@@ -1195,7 +1195,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_5->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_5->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_5->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_5->setText( "font for body" );
+  qtarch_Label_5->setText(i18n("font for body"));
   qtarch_Label_5->setAlignment( 289 );
   qtarch_Label_5->setMargin( -1 );
   
@@ -1250,8 +1250,8 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   alignFileList->setPalettePropagation( QWidget::AllChildren );
   alignFileList->setSizeLimit( 10 );
   alignFileList->setAutoResize( FALSE );
-  alignFileList->insertItem( "yes" );
-  alignFileList->insertItem( "no" );
+  alignFileList->insertItem(i18n("yes"));
+  alignFileList->insertItem(i18n("no"));
   
   qtarch_ButtonGroup_21 = new QButtonGroup( parent, "ButtonGroup_174" );
   qtarch_ButtonGroup_21->setGeometry( 310, 10, 270, 100 );
@@ -1262,7 +1262,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_ButtonGroup_21->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_21->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_21->setFrameStyle( 49 );
-  qtarch_ButtonGroup_21->setTitle( "Textprinting" );
+  qtarch_ButtonGroup_21->setTitle(i18n("Textprinting"));
   qtarch_ButtonGroup_21->setAlignment( 1 );
   
   cutLinesButton = new QCheckBox( parent, "cutLinesButton" );
@@ -1273,7 +1273,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   cutLinesButton->setBackgroundMode( QWidget::PaletteBackground );
   cutLinesButton->setFontPropagation( QWidget::NoChildren );
   cutLinesButton->setPalettePropagation( QWidget::NoChildren );
-  cutLinesButton->setText( "cut lines" );
+  cutLinesButton->setText(i18n("cut lines"));
   cutLinesButton->setAutoRepeat( FALSE );
   cutLinesButton->setAutoResize( FALSE );
   
@@ -1285,7 +1285,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   replaceButton->setBackgroundMode( QWidget::PaletteBackground );
   replaceButton->setFontPropagation( QWidget::NoChildren );
   replaceButton->setPalettePropagation( QWidget::NoChildren );
-  replaceButton->setText( "replace non-printing character by space" );
+  replaceButton->setText(i18n("replace non-printing character by space"));
   replaceButton->setAutoRepeat( FALSE );
   replaceButton->setAutoResize( FALSE );
   
@@ -1585,7 +1585,7 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   qtarch_Label_74->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_74->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_74->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_74->setText( "underlaygray (x(1/10))" );
+  qtarch_Label_74->setText(i18n("underlaygray (x(1/10))"));
   qtarch_Label_74->setAlignment( 289 );
   qtarch_Label_74->setMargin( -1 );
   
@@ -1629,8 +1629,8 @@ void CConfigEnscriptDlg::initTab4(QWidget*parent) {
   underlayStyle->setPalettePropagation( QWidget::AllChildren );
   underlayStyle->setSizeLimit( 10 );
   underlayStyle->setAutoResize( FALSE );
-  underlayStyle->insertItem( "outline" );
-  underlayStyle->insertItem( "filled" );
+  underlayStyle->insertItem(i18n("outline"));
+  underlayStyle->insertItem(i18n("filled"));
   
   underlayPositionDefaultButton = new QCheckBox( parent, "underlayPositionDefaultButton" );
   underlayPositionDefaultButton->setGeometry( 30, 170, 100, 30 );
@@ -2626,7 +2626,7 @@ void CConfigEnscriptDlg::slotModificationAmpmClicked(int prog) {
 
 void CConfigEnscriptDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
    return;
   }
   QString dir,data1,data2,param,text;

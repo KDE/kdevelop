@@ -303,6 +303,7 @@ void CKDevelop::slotProjectAddNewFile(){
 }
 
 void CKDevelop::slotAddExistingFiles(){
+  bool copy = false;
   QString type;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
@@ -334,6 +335,7 @@ void CKDevelop::slotAddExistingFiles(){
 
     for(file = files.first(); file !=0;file = files.next()){
       i++;
+      copy = false;
       progress.setProgress( i );
       file_info.setFile(file);
       source_name = file_info.fileName();
@@ -346,16 +348,25 @@ void CKDevelop::slotAddExistingFiles(){
       if (getTabLocation(dest_name) == CPP){
 	type = "SOURCE";
       }
-         
-      // if not copy the file to the correct location 
-      process.clearArguments();
-      process << "cp"; // copy is your friend :-)
-      process << file;
-      process << dest;
-      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
       
+      if(QFile::exists(dest)){
+	if(KMsgBox::yesNo(0,i18n("Files exists!"),
+			  i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?"))){
+	  copy = true;
+	}
+      }
+      else {
+	copy = true;
+      }
+      
+      if(copy){
+	process.clearArguments();
+	process << "cp"; // copy is your friend :-)
+	process << file;
+	process << dest;
+	process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
+      }
       new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
-      
     }
     progress.setProgress( files.count() );
     switchToFile(dest_name);

@@ -325,6 +325,7 @@ bool CNewProjectDlg::createdProject(){
   newPrj->setAuthor(tmpAuthor);
   newPrj->setEmail(tmpEmail);
   newPrj->setVersion(tmpPrjVersion);
+  newPrj->setBinPROGRAM(tmpPrjName.lower());
 
 
   // copy GNU file templates

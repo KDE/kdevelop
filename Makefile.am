@@ -5,11 +5,4 @@ SUBDIRS = kdevelop  po
 # have all needed files, that a GNU package needs
 AUTOMAKE_OPTIONS = foreign 
 
-
-
-
-
-
-
-
-
+EXTRA_DIST = todo.html BUGS FAQ
