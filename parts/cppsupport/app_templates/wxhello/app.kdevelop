@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <version>$VERSION$</version>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+  <keywords>
+   <keyword>C++</keyword>
+   <keyword>Code</keyword>
+   <keyword>wxWindows</keyword>
+  </keywords>
+ </general>
+ <kdevautoproject>
+  <general>
+   <activetarget>src/$APPNAMELC$</activetarget>
+   <useconfiguration>debug</useconfiguration>
+  </general>
+  <run>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
+  </run>
+    <configurations>
+      <optimized>
+        <builddir>optimized</builddir>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <cxxflags>-O2 -g0</cxxflags>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir>debug</builddir>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <cxxflags>-O0 -g3</cxxflags>
+      </debug>
+    </configurations>
+ </kdevautoproject>
+ <kdevfileview>
+  <groups>
+   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+   <group pattern="*.rc" name="Resource file" />
+   <group pattern="*.png" name="Icons" />
+   <group pattern="*" name="Others" />
+  </groups>
+ </kdevfileview>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
+ <kdevdebugger>
+  <general>
+   <dbgshell>libtool</dbgshell>
+  </general>
+ </kdevdebugger>
+  <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes>
+      <type ext="rc" />
+      <type ext="cpp" />
+      <type ext="h" />
+    </useglobaltypes>
+  </kdevfilecreate>
+</kdevelop>

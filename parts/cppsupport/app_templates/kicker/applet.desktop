@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=A panel applet called $NAME$
+Comment[da]=En panel-applet der hedder $NAME$
+Comment[es]=Un applet del panel llamado $NAME$
+Comment[hu]=$NAME$ nevű panel-kisalkalmazás
+Comment[pt]=Um 'applet' para o painel chamado $NAME$
+Comment[pt_BR]=Uma applet de painel chamada $NAME$
+Comment[sr]=Панел аплет под називом $NAME$
+Comment[sv]=Ett panelminiprogram som kallas $NAME$
+Comment[xx]=xxA panel applet called $NAME$xx
+Name=$APPNAMELC$
+Name[xx]=xx$APPNAMELC$xx
+X-KDE-Library=lib$APPNAMELC$

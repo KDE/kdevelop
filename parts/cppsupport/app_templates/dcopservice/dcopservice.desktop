@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$
+X-DCOP-ServiceType=Unique
+X-KDE-StartupNotify=false
+Comment=Template for dcop services
+Comment[da]=Skabelon for dcop-tjenester
+Comment[es]=Plantilla para servicios DCOP
+Comment[hu]=Sablon DCOP-szolgáltatásokhoz
+Comment[it]=Modello per servizi dcop
+Comment[pt]=Modelo para serviços dcop
+Comment[pt_BR]=Modelo para serviços dcop
+Comment[sr]=Шаблон за dcop сервисе
+Comment[sv]=Mall för DCOP-tjänster
+Comment[xx]=xxTemplate for dcop servicesxx
+

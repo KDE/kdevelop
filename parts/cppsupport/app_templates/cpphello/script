@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+use gideon;
+
+initGideon();
+installFileTemplate();
+installLicense();
+installIncAdmin();
+installGNU();
+
+print "Installing project file\n";
+installHTML( "${src}/template-cpphello/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
+
+print "Installing application framework\n";
+mkdir( "${dest}/src", 0777 );
+install( "${src}/template-cpphello/cpp-Makefile.am",  "${dest}/Makefile.am" );
+install( "${src}/template-cpphello/cpp-Makefile.cvs", "${dest}/Makefile.cvs" );
+install( "${src}/template-cpphello/configure.in",     "${dest}/configure.in" );
+
+
+print "Installing application sources\n";
+install( "${src}/template-cpphello/src-Makefile.am",  "${dest}/src/Makefile.am" );
+install( "${src}/template-cpphello/main.cpp",         "${dest}/src/${APPNAMELC}.cpp" );
+
+print "Finished\n";

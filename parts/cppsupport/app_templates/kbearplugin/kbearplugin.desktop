@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Icon=kbear
+ServiceTypes=KBear/Plugin
+X-KDE-Library=libkbear$APPNAMELC$
+Name=KBear$APPNAME$
+Comment=$APPNAME$
+Comment[xx]=xx$APPNAME$xx

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$
+Icon=$APPNAMELC$
+Type=Application
+Comment=A simple wxWindows Application
+Comment[da]=Et simpelt wxWindows program
+Comment[es]=Una aplicación wxWindows sencilla
+Comment[hu]=Egyszerű wxWindows-alkalmazás
+Comment[pt]=Uma aplicação wxWindows
+Comment[pt_BR]=Um simples Aplicativo wxWindows
+Comment[sr]=Проста wxWindows апликација
+Comment[sv]=Ett enkelt wxWindows-program
+Comment[xx]=xxA simple wxWindows Applicationxx

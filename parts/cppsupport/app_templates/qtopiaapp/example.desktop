@@ -1,0 +1,15 @@
+[Desktop Entry]
+Comment=An $APPNAME$ Program
+Comment[da]=Et $APPNAME$ program
+Comment[es]=Un programa $APPNAME$
+Comment[hu]=$APPNAME$ program
+Comment[pt]=O programa $APPNAME$
+Comment[pt_BR]=Um Programa $APPNAME$
+Comment[sr]=$APPNAME$ програм
+Comment[sv]=Ett $APPNAME$-program
+Comment[xx]=xxAn $APPNAME$ Programxx
+Exec=$APPNAMELC$
+Icon=$APPNAME$
+Type=Application
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx

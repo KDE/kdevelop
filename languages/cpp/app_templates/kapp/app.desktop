@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$ %i %m -caption "%c"
+Icon=$APPNAMELC$
+Type=Application
+DocPath=$APPNAMELC$/$APPNAMELC$.html
+Comment=A KDE KPart Application
+Comment[da]=Et KDE KPart program
+Comment[es]=Una aplicación KPart de KDE
+Comment[hu]=KPart-alapú KDE-alkalmazás
+Comment[it]=Applicazione KPart di KDE
+Comment[pt]=Uma aplicação KPart do KDE
+Comment[pt_BR]=Um Aplicativo KPart do KDE
+Comment[sr]=KDE KPart апликација
+Comment[sv]=Ett KDE Kpart-program
+Comment[xx]=xxA KDE KPart Applicationxx
+Terminal=0

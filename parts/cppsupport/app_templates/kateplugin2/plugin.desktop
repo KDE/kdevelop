@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Kate/Plugin
+X-KDE-Library=lib$APPNAMELC$plugin
+Name=My first Kate Plugin
+Name[da]=Min første Kate plugin
+Name[es]=Mi primer plugin de Kate
+Name[hu]=Mintapélda Kate-bővítőmodulra
+Name[it]=Il mio primo plugin di Kate
+Name[pt]=O meu primeiro 'plugin' para o Kate
+Name[pt_BR]=Meu primeiro Plugin do Kate
+Name[sr]=Мој први кate прикључак
+Name[sv]=Mitt första insticksprogram för Kate
+Name[xx]=xxMy first Kate Pluginxx
+Comment=Your short description about the plugin goes here
+Comment[da]=Din korte beskrivelse af plugin skal være her
+Comment[es]=Aquí va la descripción corta sobre los plugins
+Comment[hu]=Itt lehet egy rövid leírást adni a bővítőmodulról
+Comment[pt]=A sua descrição do 'plugin' aqui
+Comment[pt_BR]=Sua descrição sumária sobre o plugin vai aqui
+Comment[sr]=Овде иде Ваш кратак опис прикључка
+Comment[sv]=En kort beskrivningen av vad insticksprogrammet gör
+Comment[xx]=xxYour short description about the plugin goes herexx
+author=$AUTHOR$, $EMAIL$

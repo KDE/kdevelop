@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$ %i %m -caption "%c"
+Icon=$APPNAMELC$
+Type=Application
+DocPath=$APPNAMELC$/$APPNAMELC$.html
+Comment=A KDE Screen Saver
+Comment[da]=En KDE pauseskærm
+Comment[es]=Un salvapantallas de KDE
+Comment[hu]=KDE képernyővédő
+Comment[pt]=Um protector de ecrã do KDE
+Comment[pt_BR]=Um Protetor de Tela do KDE
+Comment[sr]=KDE-ов чувар екрана
+Comment[sv]=En skärmsläckare för KDE
+Comment[xx]=xxA KDE Screen Saverxx
+Terminal=0
