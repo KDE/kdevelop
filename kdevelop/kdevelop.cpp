@@ -127,8 +127,17 @@ bool KDevelop::queryClose(){
 bool KDevelop::queryExit(){
     kdDebug(9000) << "KDevelop::queryExit" << endl;
     saveCurrentDockAndMdiSzenario();
-
     // we must delete all embedded views, otherwise we get double deletion
+
+    // do we? doesn't kparts take care of deleting views?
+    // as of 2/20/2001 the following snipped of code crashes when there
+    // is an open document view in the mdi window
+    // More specifically the pEmbeddedView pointer points to a QTimer and 
+    // crashes when trying to delete it.
+    // Why there is a QTimer in the list, I have no fscking idea.
+#warning FIXME To see a crash just #define CRASH 
+#ifdef CRASH
+    
     QListIterator<QextMdiChildView> it(m_MDICoverList);
     for ( ; it.current(); ++it ) {
         QextMdiChildView* pMdiCover = it.current();
@@ -136,7 +145,7 @@ bool KDevelop::queryExit(){
         if (pEmbeddedView)
             delete pEmbeddedView;
     }
-
+#endif
     return true;
 }
 
