@@ -1,3 +1,6 @@
+2000-12-20  Ivan Hawkes <linuxgroupie@ivanhawkes.com>
+    * Added bug tracking feature (not yet complete)
+
 2000-12-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Added KDevelopIface
 	* Reanimated cvs interface using KDevNodeActions
@@ -10,7 +13,6 @@
 	* Initialize class combo in class tool
 	* Fixed MethodListAction::refresh() to always
 	  set the current item
-	  
 
 2000-12-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Further KDevComponent minimization. All components
