@@ -11,6 +11,7 @@
  
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qdir.h>
 #include "pathutil.h"
 //#include <iostream>
 
@@ -41,7 +42,7 @@ QString getRelativePath(const QString& basepath, const QString& destpath)
     destdirs.pop_front();
   if (destdirs.count())
     relpath += "/"+destdirs.join("/");
-  return relpath;
+  return QDir::cleanDirPath(relpath);
 }
 
 /*
