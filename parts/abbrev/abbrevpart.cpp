@@ -162,7 +162,7 @@ void AbbrevPart::load()
         sourceFiles << localSourcesFile;
     else
         sourceFiles = dirs->findAllResources("sources", QString::null, false, true);
-    kdDebug(9028) << "=========> sourceFiles: " << sourceFiles << endl;
+    kdDebug(9028) << "=========> sourceFiles: " << sourceFiles.join(" ") << endl;
 
     this->m_completionFile = QString::null;
     for( QStringList::Iterator it=sourceFiles.begin(); it!=sourceFiles.end(); ++it ) {
