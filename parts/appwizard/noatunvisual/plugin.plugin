@@ -3,6 +3,6 @@ Author=$AUTHOR$
 Site=http://noatun.kde.org/
 Email=$EMAIL$
 Type=visualization
-License=GPL
+License=$LICENSE$
 Name=$APPNAME$
 Comment=My scope visualization plugin
