@@ -45,6 +45,7 @@
 #include "ckdevsetupdlg.h"
 #include "cupdatekdedocdlg.h"
 #include "ccreatedocdatabasedlg.h"
+#include "cclassview.h"
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
@@ -307,6 +308,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   actual_info->last_modified = file_info2.lastModified();
   return true;
 }
+
 void CKDevelop::slotFileSave(){
 
   QString filename=edit_widget->getName();
@@ -321,9 +323,14 @@ void CKDevelop::slotFileSave(){
   else{
       saveFileFromTheCurrentEditWidget(); // save the current file
       setInfoModified(filename, edit_widget->isModified());
-     	QStrList lSavedFile;
-			lSavedFile.append(filename);
-			refreshTrees(&lSavedFile);
+      QStrList lSavedFile;
+      lSavedFile.append(filename);
+#ifdef WITH_CPP_REPARSE
+      if (project)
+#else
+      if (project && edit_widget==header_widget)
+#endif
+        refreshClassViewByFileList(&lSavedFile);
   }
   slotStatusMsg(i18n("Ready."));
   QString sHelpMsg=i18n("File ");
@@ -345,8 +352,16 @@ void CKDevelop::slotFileSaveAs(){
     slotStatusMsg(i18n("Ready."));
 }
 
+#include <iostream.h>
 void CKDevelop::slotFileSaveAll(){
     QStrList handledNames;
+    TEditInfo* actual_info, *cpp_info, *header_info;
+    CEditWidget blind_widget;
+    QStrList iFileList(false);
+    bool mod=false;
+
+    int visibleTab=s_tab_view->getCurrentTab();
+
     // ok,its a dirty implementation  :-)
     if(!bAutosave || !saveTimer->isActive()){
 	slotStatusMsg(i18n("Saving all changed files..."));
@@ -354,73 +369,98 @@ void CKDevelop::slotFileSaveAll(){
     else{
 	slotStatusMsg(i18n("Autosaving..."));
     }
-    TEditInfo* actual_info;
-    bool mod = false;
-    // save current filename to switch back after saving
-    QString visibleFile = edit_widget->getName();
-    // ooops...autosave switches tabs...
-    int visibleTab=s_tab_view->getCurrentTab();
-    // first the 2 current edits
+
+
     view->setUpdatesEnabled(false);
-    
+
     setInfoModified(header_widget->getName(), header_widget->isModified());
     setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
-    
+
+    header_info=getInfoFromFilename(header_widget->getName());
+    if (header_info)
+	header_info->text=header_widget->text();
+    cpp_info=getInfoFromFilename(cpp_widget->getName());
+    if (cpp_info)
+	cpp_info->text=cpp_widget->text();
+
     statProg->setTotalSteps(edit_infos.count());
     statProg->show();
     statProg->setProgress(0);
     int i=0;
-    for(actual_info=edit_infos.first();actual_info != 0;){
-	//KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+
+    for(actual_info=edit_infos.first();actual_info != 0;)
+    {
 	TEditInfo *next_info=edit_infos.next();
-	// get now the next info... fileSaveAs can delete the actual_info
 	i++;
 	statProg->setProgress(i);
-	if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
-	    if(isUntitled(actual_info->filename)){
-		switchToFile(actual_info->filename);
-		handledNames.append(actual_info->filename);
-		if (fileSaveAs())
-		    {
-			// maybe saved with another name... so we have to start again
-			next_info=edit_infos.first();
-			i=0;
-		    }
-		//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-		//  mod = true;  this is now handled by slotFileSaveAs()
-	    }
-	    else{
-		switchToFile(actual_info->filename,false,false);
-		handledNames.append(actual_info->filename);
-		saveFileFromTheCurrentEditWidget();
-		actual_info->modified=edit_widget->isModified();
-		// 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
-		if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
-		    mod = true;
-	    }
-	}
+//
+	cerr << "checking: " << actual_info->filename << "\n";
+	cerr << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+//
+	if(!isUntitled(actual_info->filename) && actual_info->modified &&
+		handledNames.contains(actual_info->filename)<1)
+        {
+          int qYesNo=QMessageBox::Yes;
+          handledNames.append(actual_info->filename);
+          QFileInfo file_info(actual_info->filename);
+          if (file_info.lastModified() != actual_info->last_modified)
+          {
+              qYesNo=QMessageBox::warning(this,i18n("File modified"),
+                    i18n(QString().sprintf("The file %s was modified outside\nthis editor. Save anyway?",actual_info->filename.data())),
+                     QMessageBox::Yes, QMessageBox::No);
+          }
+
+          if (qYesNo==QMessageBox::Yes)
+          {
+            QFileInfo file_info(actual_info->filename);
+            bool isModified;
+            blind_widget.setName(actual_info->filename);
+            blind_widget.setText(actual_info->text);
+            blind_widget.toggleModified(true);
+            blind_widget.doSave();
+            isModified=blind_widget.isModified();
+//
+            cerr << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+//
+
+            if (actual_info==cpp_info)
+               cpp_widget->setModified(isModified);
+            if (actual_info==header_info)
+               header_widget->setModified(isModified);
+
+            actual_info->modified = isModified;
+            if (!isModified)
+            {
+#ifdef WITH_CPP_REPARSE
+	       mod=true;
+#else
+	       mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(2)==".hxx");
+#endif
+              iFileList.append(actual_info->filename);
+              actual_info->last_modified = file_info.lastModified();
+	
+            }
+          }
+        }
+
 	actual_info=next_info;
     }
     statProg->hide();
     statProg->reset();
-    if(mod){
-	slotViewRefresh();
-    }
-    // switch back to visible file
+
+    if (project && !iFileList.isEmpty() && mod)
+      refreshClassViewByFileList(&iFileList);
+
+    setMainCaption(visibleTab);
     if (visibleTab == CPP || visibleTab == HEADER)
-	{
-	    // Does the visible file still exist??
-	    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
-		actual_info=edit_infos.next());
-	    
-	    if (actual_info)
-		switchToFile(visibleFile,false,false); // no force reload and no box if modified outside
-	    
-	    view->repaint();
-	}
+    {
+      edit_widget->setFocus();
+    }
     view->setUpdatesEnabled(true);
     // switch back to visible tab
-    s_tab_view->setCurrentTab(visibleTab);
+
+    // s_tab_view->setCurrentTab(visibleTab);
+
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -961,7 +1001,7 @@ void CKDevelop::slotDebugStop()
 }
 
 void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber,
-                                          const QString& address)
+                                          const QString& /*address*/)
 {
   if (filename.isEmpty())
   {
@@ -1929,8 +1969,8 @@ void CKDevelop::slotBookmarksClear(){
 
 void CKDevelop::openBrowserBookmark(char* file)
 {
-	slotStatusMsg(i18n("Opening bookmark..."));
-	slotURLSelected(browser_widget, QString(file),1,"test");	
+  slotStatusMsg(i18n("Opening bookmark..."));
+  slotURLSelected(browser_widget, QString(file),1,"test");	
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2054,7 +2094,7 @@ void CKDevelop::slotHelpBrowserReload(){
 QString encodeURL(const QString &str)
 {
     QString	temp;
-    static char	*digits = "0123456789ABCDEF";
+    static const char	*digits = "0123456789ABCDEF";
     const char	*p;
 
     for (p = str; p && *p; p++)
@@ -2168,14 +2208,14 @@ void CKDevelop::slotHelpReference(){
     // not found: use the default
     file = strpath + "default/" + "kdevelop/cref.html";
   }
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected(browser_widget, file,1,"test");
 }
 
 
 void CKDevelop::slotHelpQtLib(){
   config->setGroup("Doc_Location");
   QString doc_qt = config->readEntry("doc_qt", QT_DOCDIR);
-  slotURLSelected(browser_widget,"file:" + doc_qt + "/index.html",1,"test");
+  slotURLSelected(browser_widget, doc_qt + "/index.html",1,"test");
 }
 
 
@@ -2183,7 +2223,7 @@ void CKDevelop::showLibsDoc(const char *libname)
 {
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString url = "file:" + doc_kde + libname + "/index.html";
+  QString url = doc_kde + libname + "/index.html";
   slotURLSelected(browser_widget, url,1,"test");
 }
     
@@ -2210,7 +2250,7 @@ void CKDevelop::slotHelpKDEHTMLLib(){
     // not found: use khtml
     file = doc_kde + "khtml/index.html";
   }
-  slotURLSelected(browser_widget,"file:" +file  ,1,"test");
+  slotURLSelected(browser_widget, file, 1, "test");
 }
 
 
@@ -2240,7 +2280,7 @@ void CKDevelop::slotHelpManual(){
     QString name = prj->getSGMLFile().copy();
     QFileInfo finfo(name);
  
-    QString doc_file = finfo.dirPath() +"/"+finfo.baseName()+ ".html";
+    QString doc_file = finfo.dirPath() + "/" + finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
     	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
     				i18n("The Project manual documentation is not present.\n" 
@@ -2271,7 +2311,7 @@ void CKDevelop::slotHelpContents(){
     // not found: use the default
     file = strpath + "default/" + "kdevelop/index.html";
   }
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected(browser_widget, file, 1, "test");
 }
 
 void CKDevelop::slotHelpTutorial(){
@@ -2285,7 +2325,7 @@ void CKDevelop::slotHelpTutorial(){
     // not found: use the default
     file = strpath + "default/" + "kdevelop/programming/index.html";
   }
-  slotURLSelected(browser_widget,"file:" + file,1,"test");
+  slotURLSelected(browser_widget, file, 1, "test");
 	
 }
 void CKDevelop::slotHelpTipOfDay(){
@@ -2651,11 +2691,16 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
+
+  // add file: directive only if it is an absolute path
+  if (url_str.left(1)=="/")
+     url_str=QString("file:") + url;
+
   if(url_str.contains("kdevelop/search_result.html") != 0){
-    browser_widget->showURL(url,true); // with reload if equal
+    browser_widget->showURL(url_str,true); // with reload if equal
   }
   else{
-    browser_widget->showURL(url); // without reload if equal
+    browser_widget->showURL(url_str); // without reload if equal
   }
 
 /*  if (!history_list.isEmpty()){
@@ -2686,17 +2731,27 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
 
 void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 {
-	if ( url )
-	{
-		statusBar()->changeItem(url,ID_STATUS_MSG);
-	}
-	else
-	{
-		statusBar()->changeItem(i18n("Ready."), ID_STATUS_MSG);
-	}
+        // in some cases KHTMLView return "file:/file:/...."
+        //  this will be here workarounded... and also on
+        //  showURL in cdocbrowser.cpp
+  QString corr=url, url_str=url;
+
+  if (corr.left(6)=="file:/")
+    corr=corr.mid(6, corr.length());
+  if (corr.left(5)=="file:")
+    url_str=corr;
+
+  if ( url_str )
+  {
+    statusBar()->changeItem(url_str,ID_STATUS_MSG);
+  }
+  else
+  {
+    statusBar()->changeItem(i18n("Ready."), ID_STATUS_MSG);
+  }
 }
 
-void CKDevelop::slotDocumentDone( KHTMLView *_view ){
+void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index
@@ -2901,9 +2956,9 @@ void CKDevelop::slotApplReceivedStderr(const char* buffer)
     slotApplReceivedStderr(0, (char*)buffer, strlen(buffer));
 }
 
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
 void CKDevelop::slotDebugReceivedStdout(const char* buffer)
 {
-#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
   dbg_widget->insertAtEnd(QString(buffer,strlen(buffer)+1));
 //  char* buf = (char*)buffer;
 //  int buflen = strlen(buf);
@@ -2913,10 +2968,13 @@ void CKDevelop::slotDebugReceivedStdout(const char* buffer)
 //  QString str(buf,buflen+1);
 //  dbg_widget->insertLine(str);
 //  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
-#endif
 }
+#else
+void CKDevelop::slotDebugReceivedStdout(const char* )
+{ }
+#endif
 
-void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen){
+void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   search_output = search_output + str;
 }
@@ -2935,7 +2993,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
   if (useHtDig)
   {
-    slotURLSelected(browser_widget,"file:" + filename,1,"test");
+    slotURLSelected(browser_widget, filename,1,"test");
     return;
   }
 
@@ -2985,7 +3043,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
    stream << "\n</TABLE></BODY></HTML>";
 
    file.close();
-   slotURLSelected(browser_widget,"file:" + filename,1,"test");
+   slotURLSelected(browser_widget, filename,1,"test");
 
 }
 QString CKDevelop::searchToolGetTitle(QString str){
@@ -3441,7 +3499,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
       return;
     }
   }
-  slotURLSelected(browser_widget,"file:"+ url_file,1,"test");
+  slotURLSelected(browser_widget, url_file, 1, "test");
   
 }
 

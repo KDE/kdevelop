@@ -148,3 +148,22 @@ if test "$enable_kdoc2" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_KDOC2)
 fi
 ])
+
+dnl
+dnl Check whether we use parsing on cpp save
+dnl
+AC_DEFUN(KDEV_CHECK_CPP_REPARSE,
+[
+AC_MSG_CHECKING(for cpp-save reparsing)
+AC_ARG_ENABLE(cpp-reparse,
+[  --enable-cpp-reparse          enable reparsing on cpp saving],
+[if test "$enableval" = yes; then
+  enable_cpp_reparse=yes
+fi],
+enable_cpp_reparse=no)
+AC_MSG_RESULT($enable_cpp_reparse)
+
+if test "$enable_cpp_reparse" = "yes"; then
+  AC_DEFINE_UNQUOTED(WITH_CPP_REPARSE)
+fi
+])

@@ -54,6 +54,22 @@ void CKDevelop::addRecentProject(const char* file)
 	}
 }
 
+/* get the info structure from the filename */
+TEditInfo *CKDevelop::getInfoFromFilename(const QString &filename)
+{
+  TEditInfo *pRetVal=0l;
+  bool bSearch=true;
+  // search the current file which would be changed
+  for(pRetVal=edit_infos.first(); bSearch && pRetVal != 0l;)
+  {
+    if (pRetVal->filename == filename )
+      bSearch=false;
+    else
+      pRetVal=edit_infos.next();
+  }
+  return pRetVal;
+}
+
 void CKDevelop::removeFileFromEditlist(const char *filename){
   TEditInfo* actual_info;
 
@@ -184,8 +200,8 @@ void CKDevelop::setMainCaption(int tab_item)
 	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 	      kdev_caption+= version +
 //             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
-// reinserted again... to show which file (including the path - maybe it differs only in the path)
-// is in the editor! (W. Tasin)
+// reinserted again... to show which file is in the editor (including the path - maybe it differs only in the path)
+// (W. Tasin)
              	" - ["+ edit_widget->getName()+"] ";
 	      if (edit_widget->isModified())
                   {
@@ -385,6 +401,31 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   return sRegExpString;
 }
 
+void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
+{
+  	//first we'll separate the headers and the source files
+  	QStrList lHeaderList(FALSE);	//no deep copies
+  	QStrList lSourceList(FALSE);
+  	ProjectFileType lCurFileType;
+  	for (const char* lCurFile = iFileList->first(); lCurFile; lCurFile = iFileList->next())
+  	{
+  		lCurFileType = prj->getType(lCurFile);
+  		switch(lCurFileType)
+  		{
+  			case CPP_HEADER:
+  				lHeaderList.append(lCurFile);
+	  			break;
+  			case CPP_SOURCE:
+  				lSourceList.append(lCurFile);
+  				break;
+  			//skip all the other files
+  			default:
+  				break;
+  		}
+		}
+  	class_tree->refresh(&lHeaderList, &lSourceList);
+}
+
 /*------------------------------------------ CKDevelop::refreshTrees()
  * refreshTrees()
  *   Refresh the all trees. Includes re-parsing all files.
@@ -408,27 +449,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   statProg->show();
   if (iFileList)
   {
-  	//first we'll separate the headers and the source files
-  	QStrList lHeaderList(FALSE);	//no deep copies
-  	QStrList lSourceList(FALSE);
-  	ProjectFileType lCurFileType;
-  	for (const char* lCurFile = iFileList->first(); lCurFile; lCurFile = iFileList->next())
-  	{
-  		lCurFileType = prj->getType(lCurFile);
-  		switch(lCurFileType)
-  		{
-  			case CPP_HEADER:
-  				lHeaderList.append(lCurFile);
-	  			break;
-  			case CPP_SOURCE:
-  				lSourceList.append(lCurFile);
-  				break;
-  			//skip all the other files
-  			default:
-  				break;
-  		}
-		}
-  	class_tree->refresh(&lHeaderList, &lSourceList);
+        refreshClassViewByFileList(iFileList);
 	}
 	else
 	{
@@ -1164,7 +1185,7 @@ void CKDevelop::readOptions(){
       // not found: use the default
       file = strpath + "default/" + "kdevelop/welcome/index.html";
     }
-    slotURLSelected(browser_widget,"file:" + file,1,"test");
+    slotURLSelected(browser_widget, file,1,"test");
   }
 
   bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
