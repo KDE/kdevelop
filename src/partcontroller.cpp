@@ -647,6 +647,8 @@ void PartController::slotOpenFile()
 void PartController::slotOpenRecent( const KURL& url )
 {
   editDocument( url );
+  // stupid bugfix - don't allow an active item in the list
+  m_openRecentAction->setCurrentItem( -1 );
 }
 
 bool PartController::closeDocuments(const QStringList &documents)
