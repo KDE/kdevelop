@@ -205,72 +205,6 @@ void CClassStore::removeClass( const char *aName )
     globalStore.removeClass( aName );
 }
 
-/*------------------------------------------------- CClassStore::out()
- * out()
- *   Output this object to stdout.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::out()
-{
-  globalContainer.out();
-//   QList<CParsedMethod> *globalMethods;
-//   QList<CParsedAttribute> *globalAttributes;
-//   QList<CParsedStruct> *globalStructs;
-//   QList<CParsedClass> *classes;
-//   CParsedClass *aClass;
-//   CParsedMethod *aMethod;
-//   CParsedAttribute *aAttr;
-//   CParsedStruct *aStruct;
-
-//   // Output all classes.
-//   classes = globalContainer.getSortedClassList();
-//   for( aClass = classes->first();
-//        aClass != NULL;
-//        aClass = classes->next() )
-//   {
-//     aClass->out();
-//   }
-//   delete classes;
-
-//   // Global methods
-//   cout << "Global functions\n";
-
-//   globalMethods = globalContainer.getSortedMethodList();
-//   for( aMethod = globalMethods->first();
-//        aMethod != NULL;
-//        aMethod = globalMethods->next() )
-//   {
-//     aMethod->out();
-//   }
-//   delete globalMethods;
-
-//   // Global structures
-//   cout << "Global variables\n";
-//   globalAttributes = globalContainer.getSortedAttributeList();
-//   for( aAttr = globalAttributes->first();
-//        aAttr != NULL;
-//        aAttr = globalAttributes->next() )
-//   {
-//     aAttr->out();
-//   }
-//   delete globalAttributes;  
-
-//   // Global structures
-//   cout << "Global structs\n";
-//   globalStructs = globalContainer.getSortedStructList();
-//   for( aStruct = globalStructs->first();
-//        aStruct != NULL;
-//        aStruct = globalStructs->next() )
-//   {
-//     aStruct->out();
-//   }
-//   delete globalStructs;  
-}
-
 /*********************************************************************
  *                                                                   *
  *                          PUBLIC QUERIES                           *
@@ -663,19 +597,14 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
   }
 }
 
-  /**
-   * Get all global structures not declared in a scope.
-   * 
-   * @return A sorted list of global structures.
-   */
 /*---------------------------- CClassStore::getSortedClassNameList()
  * getSortedClassNameList()
- *   Get all classnames in sorted order.
+ *   Get all global structures not declared in a scope.
  *
  * Parameters:
  *   -
  * Returns:
- *   QStrList * The classnames.
+ *   A sorted list of global structures.
  *-----------------------------------------------------------------*/
 QList<CParsedStruct> *CClassStore::getSortedStructList() 
 { 
@@ -692,4 +621,81 @@ QList<CParsedStruct> *CClassStore::getSortedStructList()
   }
 
   return retVal; 
+}
+
+/*------------------------------------------------- CClassStore::out()
+ * out()
+ *   Output this object to stdout.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::out()
+{
+  QList<CParsedScopeContainer> *globalScopes;
+  QList<CParsedMethod> *globalMethods;
+  QList<CParsedAttribute> *globalAttributes;
+  QList<CParsedStruct> *globalStructs;
+  QList<CParsedClass> *classes;
+  CParsedScopeContainer *aScope;
+  CParsedClass *aClass;
+  CParsedMethod *aMethod;
+  CParsedAttribute *aAttr;
+  CParsedStruct *aStruct;
+
+  // Output all namespaces
+  cout << "Global namespaces" << endl;
+  globalScopes = globalContainer.getSortedScopeList();
+  for( aScope = globalScopes->first();
+       aScope != NULL;
+       aScope = globalScopes->next() )
+    aScope->out();
+
+
+  // Output all classes.
+  cout << "Global classes\n";
+  classes = getSortedClassList();
+  for( aClass = classes->first();
+       aClass != NULL;
+       aClass = classes->next() )
+  {
+    aClass->out();
+  }
+  delete classes;
+
+  // Global methods
+  cout << "Global functions\n";
+
+  globalMethods = globalContainer.getSortedMethodList();
+  for( aMethod = globalMethods->first();
+       aMethod != NULL;
+       aMethod = globalMethods->next() )
+  {
+    aMethod->out();
+  }
+  delete globalMethods;
+
+  // Global structures
+  cout << "Global variables\n";
+  globalAttributes = globalContainer.getSortedAttributeList();
+  for( aAttr = globalAttributes->first();
+       aAttr != NULL;
+       aAttr = globalAttributes->next() )
+  {
+    aAttr->out();
+  }
+  delete globalAttributes;  
+
+  // Global structures
+  cout << "Global structs\n";
+  globalStructs = getSortedStructList();
+  for( aStruct = globalStructs->first();
+       aStruct != NULL;
+       aStruct = globalStructs->next() )
+  {
+    aStruct->out();
+  }
+  delete globalStructs;  
 }
