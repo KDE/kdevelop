@@ -26,20 +26,19 @@ CompileErrorFilter::CompileErrorFilter( OutputFilter& next )
 {
 }
 
-const QValueList<CompileErrorFilter::ErrorFormat>& CompileErrorFilter::errorFormats()
+CompileErrorFilter::ErrorFormat* CompileErrorFilter::errorFormats()
 {
-
-	static QValueList<ErrorFormat> formats
-		= QValueList<ErrorFormat>()
-
 	// TODO: could get these from emacs compile.el
+	static ErrorFormat formats[] = {
+		// GCC
+		ErrorFormat( "([^: \t]+):([0-9]+):(.*)", 1, 2, 3 ),
+		// Fortran
+		ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
+		// Jade
+		ErrorFormat( "[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 ),
 
-	// GCC
-	<< ErrorFormat( "([^: \t]+):([0-9]+):(.*)", 1, 2, 3 )
-	// Fortran
-	<< ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
-	// Jade
-	<< ErrorFormat( "[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 );
+		ErrorFormat( 0, 0, 0, 0 ) // this one last
+	};
 
 	return formats;
 }
@@ -50,20 +49,22 @@ void CompileErrorFilter::processLine( const QString& line )
 	QString file;
 	int lineNum = 0;
 	QString text;
-	QValueList<ErrorFormat>::const_iterator it = errorFormats().begin();
-	for( ; it != errorFormats().end(); ++it )
+	int i = 0;
+	ErrorFormat* errFormats = errorFormats();
+	ErrorFormat* format = &errFormats[i];
+	while( !format->expression.isEmpty() )
 	{
-		QRegExp regExp = (*it).expression;
+		QRegExp regExp = format->expression;
 
-		if ( regExp.search( line ) == -1 )
-			continue;
+		if ( regExp.search( line ) != -1 ) {
+	                hasmatch = true;
+        	        file    = regExp.cap( format->fileGroup );
+	                lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
+	                text    = regExp.cap( format->textGroup );
+			break;
+		}
 
-		hasmatch = true;
-		file    = regExp.cap( (*it).fileGroup );
-		lineNum = regExp.cap( (*it).lineGroup ).toInt() - 1;
-		text    = regExp.cap( (*it).textGroup );
-
-		break;
+		format = &errFormats[++i];
 	}
 
 	if( hasmatch )

@@ -35,7 +35,7 @@ public:
 		int lineGroup;
 		int textGroup;
 	};
-	static const QValueList<ErrorFormat>& errorFormats();
+	static ErrorFormat* errorFormats();
 
 	void processLine( const QString& line );
 

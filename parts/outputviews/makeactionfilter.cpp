@@ -37,23 +37,24 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 #endif
 }
 
-QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
+// returns an array of ActionFormat
+MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
-	static QValueList<ActionFormat> formats
-		= QValueList<ActionFormat>()
+	static ActionFormat formats[] = {
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 ),
+		ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 ),
+		ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 ),
+		ActionFormat( i18n("linking"), "g++", "g\\+\\+ (?:\\S* )*-o ([^\\s;]+)", 1 ),
+		ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
+		ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
 
-	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
-	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
-	<< ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
-	<< ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
-	<< ActionFormat( i18n("generating"), "moc", "/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("generating"), "uic", "/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
- 	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("linking"), "g++", "g\\+\\+ (?:\\S* )*-o ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("installing"), "", "^/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
-	<< ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
-	;
+		ActionFormat( QString::null, QString::null, 0, 0 )
+	};
 
 	return formats;
 }
@@ -73,21 +74,28 @@ void MakeActionFilter::processLine( const QString& line )
 
 ActionItem* MakeActionFilter::matchLine( const QString& line )
 {
+#ifdef DEBUG
 	QTime t;
 	t.start();
+#endif
 	//FIXME: This is very slow, possibly due to the regexr matching. It can take
 	//900-1000ms to execute on an Athlon XP 2000+, while the UI is completely blocked.
-	QValueList<ActionFormat>::iterator it = actionFormats().begin();
-	for( ; it != actionFormats().end(); ++it )
+	int i = 0;
+	ActionFormat* aFormats = actionFormats();
+	ActionFormat* format = &aFormats[i];
+
+	while ( !format->action.isNull() )
 	{
-		QRegExp& regExp = (*it).expression;
-		if ( regExp.search( line ) == -1 )
-			continue;
+		QRegExp& regExp = format->expression;
+		if ( regExp.search( line ) != -1 )
+			return new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
+#ifdef DEBUG
 		if ( t.elapsed() > 100 )
 			kdDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
-		return new ActionItem( (*it).action, regExp.cap( (*it).fileGroup ), (*it).tool, line );
+#endif
+		format = &aFormats[++i];
 	}
-	return NULL;
+	return 0;
 }
 
 struct TestItem

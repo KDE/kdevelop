@@ -40,7 +40,7 @@ public:
 		QRegExp expression;
 		int fileGroup;
 	};
-	static QValueList<ActionFormat>& actionFormats();
+	static ActionFormat* actionFormats();
 
 	void processLine( const QString& line );
 
