@@ -5,6 +5,7 @@ use IO::Handle;
 sub customize
 {
         my ( $filename ) = @_;
+	my $year = ( localtime )[5] + 1900;
 
         open(IN, "<$filename") || die "Could not open for reading: $filename\n";
         open(OUT, ">$filename.tmp") || die "Could not open for writing: $filename.tmp\n";
@@ -17,6 +18,7 @@ sub customize
               s/\$APPNAME\$/$APPNAME/g;
               s/\$LICENSE\$/$LICENSE/g;
               s/\$LICENSEFILE\$/$LICENSEFILE/g;
+              s/\$YEAR\$/$year/g;
               print OUT $_;
          }
          close IN;
@@ -35,6 +37,7 @@ sub customizeHTML
 	my $H_APPNAME = $APPNAME;
 	my $H_LICENSE = $LICENSE;
 	my $H_LICENSEFILE = $LICENSEFILE;
+        my $year = ( localtime )[5] + 1900;
 	$H_AUTHOR =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
 	$H_EMAIL =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
 	$H_VERSION =~ s/([^\w\s])/'&#'.ord($1).';'/ge;
@@ -57,6 +60,7 @@ sub customizeHTML
               s/\$APPNAME\$/$H_APPNAME/g;
               s/\$LICENSE\$/$H_LICENSE/g;
               s/\$LICENSEFILE\$/$H_LICENSEFILE/g;
+              s/\$YEAR\$/$year/g;
               print OUT $_;
          }
          close IN;

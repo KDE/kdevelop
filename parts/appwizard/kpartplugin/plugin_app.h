@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 $AUTHOR$ <$EMAIL$>
+ * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
  */
 
 #ifndef _PLUGIN_$APPNAMEUC$_H_
