@@ -212,10 +212,6 @@ void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
 	added = true;
     }
 
-    kdDebug(9007) << "=======================================================" << endl;
-    kdDebug(9007) << "= the current file list contains: " << m_fileList->count()  << " files" << endl;
-    kdDebug(9007) << "=======================================================" << endl;
-
     if( added )
         m_canParse.wakeAll();
 }
