@@ -15,7 +15,7 @@
 #include <kparts/partmanager.h>
 #include <kfiledialog.h>
 
-#include <ktexteditor/cursorinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 
 #include "keditor/editor.h"
@@ -213,14 +213,12 @@ void PartController::setLineNumber(int lineNum)
 {
   KParts::Part *part = m_partManager ->activePart();
 
-  KTextEditor::CursorInterface *iface = dynamic_cast<KTextEditor::CursorInterface*>(part);
+  if (!part->inherits("KTextEditor::Document") || !part->widget())
+    return;
+
+  KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
   if (iface)
-  {
-    kdDebug() << "Set cursor to line " << lineNum << endl;
-    KTextEditor::Cursor *cursor = iface->createCursor();
-    cursor->setPosition(lineNum, 0);
-    delete cursor;
-  }
+    iface->setCursorPosition(lineNum, 0);
 }
 
 
