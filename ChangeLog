@@ -1,6 +1,11 @@
+2001-11-21  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of August Hörandl <august.hoerandl@gmx.at>
+       it adds completion to the typename in the classproperties dialog (attributes and members)
+
 2001-11-20  F@lk Brettschneider <falk@kdevelop.org>
     * bufix: showing global functions in classparser works again (fix of 2001-11-07-fix)
     * cvs version number is 2.0.3pre (we are after KDE-2.2.2 release)
+    * avoids automatic resizing of VAR tree column 0. (has driven me insane)
 
 2001-11-19  F@lk Brettschneider <falk@kdevelop.org>
     * alphabetic sorting of folders in classview
