@@ -63,8 +63,6 @@ ReplaceDlgImpl::~ReplaceDlgImpl()
 
 void ReplaceDlgImpl::show( QString const & path )
 {
-    strings_all_radio->setChecked( true );
-    find_combo->setFocus();
     path_urlreq->lineEdit()->setText( path );
 
     find_combo->setCurrentText( "" );
@@ -72,6 +70,9 @@ void ReplaceDlgImpl::show( QString const & path )
     regexp_combo->setCurrentText( "" );
 
     QDialog::show();
+    
+    strings_all_radio->setChecked( true );
+    find_combo->setFocus();
 }
 
 
