@@ -30,7 +30,7 @@ const char *cTypes[] = {
 //  ISO/IEC 14882:1998 . Sec. 2.11.1 (aka ANSI C++)
 // keyword "const" (apart from a type spec.) is also a keyword, so it is named inside this array
 const char *cppKeywords[] = {
-  "asm", "catch", "class", "const", "const_cast", "delete", "dynamic_cast",
+  "asm", "catch", "class", "const_cast", "const", "delete", "dynamic_cast",
   "explicit", "export", "false", "friend", "inline", "namespace", "new", "operator",
   "private", "protected", "public", "reinterpret_cast", "static_cast", "template",
   "this", "throw", "true", "try", "typeid", "typename", "using", "virtual",
