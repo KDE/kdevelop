@@ -132,7 +132,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 
 	connect( dir, SIGNAL(finishedLoading()), this, SLOT(dirFinishedLoading()) );
 
-    dirUrlEntered( dir->url() );
+//    dirUrlEntered( dir->url() );
 
     QStringList list;
 
@@ -153,7 +153,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 
     filter->setHistoryItems ( list );
 
-    dir->rereadDir();
+//    dir->rereadDir();
 }
 
 
