@@ -288,14 +288,14 @@ Do not forget to restart &kdevelop; in order to let any of these selections take
 When you selected either the <guilabel>IDEAl window mode</guilabel> or the <guilabel>Tabbed pages mode</guilabel> two more configuration sections will become available: <link linkend="setup-ui-tabs">Use Tabs</link> and <link linkend="setup-ui-hover">Use Close On Hover</link>. These allow to configure under which circumstances tabs will be shown on top of the document windows and whether you may close the document by a click on the tab icon.
 </para>
 <para>
-In <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between diferent sizes of the toolview tabs which surround the main working area in this mode.
+In <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between different sizes of the toolview tabs which surround the main working area in this mode.
 </para>
 
 <formalpara id="setup-ui-tabs">
 <title>Configuring the Documents Tab Bar Display</title>
 
 <para>
-In the IDEAl and tabbed pages modes there will be named tabs on the top of the document windows by default, so you can easily select different documents with a &LMB; click. If you prefer to provide more space for the document windows in the &kdevelop; main work area, you may change to another behaviour in the <guilabel>Use Tabs</guilabel> configuration section.
+In the IDEAl and tabbed pages modes there will be named tabs on top of the document windows by default, so you can easily select different documents with a &LMB; click. If you prefer to provide more space for the document windows in the &kdevelop; main work area, you may change to another behaviour in the <guilabel>Use Tabs</guilabel> configuration section.
 </para>
 </formalpara>
 
@@ -323,7 +323,7 @@ In the IDEAl and tabbed pages modes there will be named tabs on the top of the d
 <formalpara id="setup-ui-hover">
 <title>Setting Up to Close a Document by a Click On Its Tab</title>
 <para>
-When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
+When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
 </para>
 </formalpara>
 <variablelist>
@@ -359,7 +359,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
   <term><guilabel>Icons</guilabel></term>
   <listitem>
   <para>
-  Each tab will show an icon only. If the according toolview is displayed, the tab will open and a descriptive text for this toolview be shown. You may want to use this mode if you work on a monitor with limited resolution.
+  Each tab will show an icon only. If the associated toolview is displayed, the tab will open and a descriptive text for this toolview be shown. You may want to use this mode if you work on a monitor with limited resolution.
   </para>
   <para>
   The icons are not very descriptive, however. If you want to find out which toolview is assigned to a given tab, point at it with the mouse and wait a second. A short tooltip will then pop up with the toolview name.
@@ -375,7 +375,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
 <varlistentry>
   <term><guilabel>Text and Icons</guilabel></term>
   <listitem><para>
-  If the standard text toolview display looks too flat to you and you are working on a high-resolution monitor you may want to select this radio button. It will cause the name of the assosiated toolview be displayed on each tab plus an icon to the left of it, making the tabs easier to distinguish. See the <link linkend="folded-toolview-tabs">Folded Toolview Tabs</link> illustration below for an example.
+  If the standard text toolview display looks too flat to you and you are working on a high-resolution monitor you may want to select this radio button. It will cause the name of the associated toolview be displayed on each tab plus an icon to the left of it, making the tabs easier to distinguish. See the <link linkend="folded-toolview-tabs">Folded Toolview Tabs</link> illustration below for an example.
   </para></listitem>
 </varlistentry>
 </variablelist>
@@ -383,7 +383,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
 <formalpara>
 <title>Folded Toolview Tabs</title>
 <para>
-If you selected the IDEAl mode toolview tabs to display texts (with or without accompagnying icons) you need not worry about them being hidden behind some toolview. If one of the bottom toolviews occupies more space than is available to display all (vertical) tabs, they will fold around as this illustration shows:
+If you selected the IDEAl mode toolview tabs to display texts (with or without accompanying icons) you need not worry about them being hidden behind some toolview window. If one of the bottom toolview windows occupies more space than is available to display all (vertical) tabs, they will fold around as this illustration shows:
 </para>
 </formalpara>
 <screenshot>
@@ -392,13 +392,13 @@ If you selected the IDEAl mode toolview tabs to display texts (with or without a
       <imagedata fileref="folded-tabs.png" format="PNG"/>
     </imageobject>
     <caption><para>
-    Toolview tabs fold to not be hidden behind another view
+    Toolview tabs fold to not be hidden behind another view window
     </para></caption>
   </mediaobject>
 </screenshot>
 
 <note><para>
-The active toolview window must be in <emphasis>overlap mode</emphasis> to force such tab folding. Press the small square in the window border to accomplish this as shown in the example.
+The active toolview window must be shown fixed (non-overlap mode), sharing the work area with the other windows, to force such tab folding. Press the small square in the window border to accomplish this as shown in the example.
 </para></note>
 
 </sect2> <!-- setup-ui -->
