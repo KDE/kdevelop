@@ -85,7 +85,7 @@ void AStylePart::documentActivated(KEditor::Document *doc)
   
   if (doc)
   {
-	QString extension = doc->url().path();
+    QString extension = doc->url().path();
 	int pos = extension.findRev('.');
 	if (pos >= 0)
 	  extension = extension.mid(pos);
@@ -93,7 +93,6 @@ void AStylePart::documentActivated(KEditor::Document *doc)
 		|| extension == ".cpp" || extension == ".cc" || extension == ".C"
 		|| extension == ".cxx" || extension == ".hxx")
 	  enabled = true;
-
 	if (!KEditor::EditDocumentIface::interface(doc))
 	  enabled = false;
   }
