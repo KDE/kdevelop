@@ -200,7 +200,12 @@ void JavaSupportPart::parse(const QString &fileName)
     parser.setProblemReporter( d->problemReporter );
 
     try{
-        parser.setASTNodeFactory( JavaAST::factory );
+        // make an ast factory
+        antlr::ASTFactory ast_factory;
+        // initialize and put it in the parser...
+        parser.initializeASTFactory (ast_factory);
+        parser.setASTFactory (&ast_factory);
+        /* parser.setASTNodeFactory( JavaAST::factory );  (old)  */
         lexer.resetErrors();
         parser.resetErrors();
 
@@ -218,7 +223,7 @@ void JavaSupportPart::parse(const QString &fileName)
 
     } catch( antlr::ANTLRException& ex ){
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        d->problemReporter->reportError( ex.what(),
+        d->problemReporter->reportError( ex.getMessage(),
                                          fileName,
                                          lexer.getLine(),
                                          lexer.getColumn() );
@@ -253,7 +258,7 @@ void JavaSupportPart::parseContents( const QString& contents, const QString& fil
 
     } catch( antlr::ANTLRException& ex ){
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        d->problemReporter->reportError( ex.what(),
+        d->problemReporter->reportError( ex.getMessage(),
                                          fileName,
                                          lexer.getLine(),
                                          lexer.getColumn() );

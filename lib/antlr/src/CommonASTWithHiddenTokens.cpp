@@ -1,8 +1,32 @@
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 #include "antlr/config.hpp"
+#include "antlr/AST.hpp"
+#include "antlr/BaseAST.hpp"
+#include "antlr/CommonAST.hpp"
 #include "antlr/CommonASTWithHiddenTokens.hpp"
 #include "antlr/CommonHiddenStreamToken.hpp"
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
+
+// RK: Do not put constructor and destructor into the header file here..
+// this triggers something very obscure in gcc 2.95.3 (and 3.0)
+// missing vtables and stuff.
+// Although this may be a problem with with binutils.
+CommonASTWithHiddenTokens::CommonASTWithHiddenTokens()
+: CommonAST()
+{
+}
+
+CommonASTWithHiddenTokens::~CommonASTWithHiddenTokens()
+{
+}
 
 void CommonASTWithHiddenTokens::initialize(int t,const ANTLR_USE_NAMESPACE(std)string& txt)
 {
@@ -26,4 +50,12 @@ RefAST CommonASTWithHiddenTokens::factory()
 	return RefAST(new CommonASTWithHiddenTokens);
 }
 
-ANTLR_END_NAMESPACE
+RefAST CommonASTWithHiddenTokens::clone( void ) const
+{
+	CommonASTWithHiddenTokens *ast = new CommonASTWithHiddenTokens( *this );
+	return RefAST(ast);
+}
+
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif

@@ -2,6 +2,7 @@ includedir = $(prefix)/include/antlr
 
 include_HEADERS = \
 	ANTLRException.hpp \
+	ANTLRUtil.hpp \
 	AST.hpp \
 	ASTArray.hpp \
 	ASTFactory.hpp \
@@ -11,6 +12,7 @@ include_HEADERS = \
 	BaseAST.hpp \
 	BitSet.hpp \
 	CharBuffer.hpp \
+	CharInputBuffer.hpp \
 	CharScanner.hpp \
 	CharStreamException.hpp \
 	CharStreamIOException.hpp \
@@ -20,6 +22,7 @@ include_HEADERS = \
 	CommonHiddenStreamToken.hpp \
 	CommonToken.hpp \
 	InputBuffer.hpp \
+	IOException.hpp \
 	LLkParser.hpp \
 	LexerSharedInputState.hpp \
 	MismatchedCharException.hpp \

@@ -1,10 +1,19 @@
 #ifndef INC_TreeParserSharedInputState_hpp__
 #define INC_TreeParserSharedInputState_hpp__
 
-#include "antlr/config.hpp"
-#include "antlr/RefCount.hpp"
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#include <antlr/config.hpp>
+#include <antlr/RefCount.hpp>
+
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 /** This object contains the data associated with an
  *  input AST.  Multiple parsers
@@ -12,10 +21,10 @@ ANTLR_BEGIN_NAMESPACE(antlr)
  *  the same tree or to have the parser walk multiple
  *  trees.
  */
-class TreeParserInputState {
+class ANTLR_API TreeParserInputState {
 public:
-	TreeParserInputState();
-	~TreeParserInputState();
+	TreeParserInputState() : guessing(0) {}
+	virtual ~TreeParserInputState() {}
 
 public:
 	/** Are we guessing (guessing>0)? */
@@ -29,6 +38,8 @@ private:
 
 typedef RefCount<TreeParserInputState> TreeParserSharedInputState;
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_TreeParserSharedInputState_hpp__

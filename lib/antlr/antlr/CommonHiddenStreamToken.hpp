@@ -1,12 +1,21 @@
 #ifndef INC_CommonHiddenStreamToken_hpp__
 #define INC_CommonHiddenStreamToken_hpp__
 
-#include "antlr/config.hpp"
-#include "antlr/CommonToken.hpp"
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#include <antlr/config.hpp>
+#include <antlr/CommonToken.hpp>
 
-class CommonHiddenStreamToken : public CommonToken {
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
+
+class ANTLR_API CommonHiddenStreamToken : public CommonToken {
 protected:
 	RefToken hiddenBefore;
 	RefToken hiddenAfter;
@@ -25,6 +34,8 @@ public:
 	void setHiddenBefore(RefToken t);
 };
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_CommonHiddenStreamToken_hpp__

@@ -1,7 +1,7 @@
 #ifndef INC_JavaStoreWalkerTokenTypes_hpp_
 #define INC_JavaStoreWalkerTokenTypes_hpp_
 
-/* $ANTLR 2.7.1: "java.store.g" -> "JavaStoreWalkerTokenTypes.hpp"$ */
+/* $ANTLR 2.7.2: "java.store.g" -> "JavaStoreWalkerTokenTypes.hpp"$ */
 struct JavaStoreWalkerTokenTypes {
 	enum {
 		EOF_ = 1,

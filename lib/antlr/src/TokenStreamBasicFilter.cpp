@@ -1,6 +1,14 @@
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 #include "antlr/TokenStreamBasicFilter.hpp"
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 /** This object is a TokenStream that passes through all
  *  tokens except for those that you tell it to discard.
@@ -30,5 +38,7 @@ RefToken TokenStreamBasicFilter::nextToken()
 	return tok;
 }
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 

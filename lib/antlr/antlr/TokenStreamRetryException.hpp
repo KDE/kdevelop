@@ -1,10 +1,19 @@
 #ifndef INC_TokenStreamRetryException_hpp__
 #define INC_TokenStreamRetryException_hpp__
 
-#include "antlr/config.hpp"
-#include "antlr/TokenStreamException.hpp"
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#include <antlr/config.hpp>
+#include <antlr/TokenStreamException.hpp>
+
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 class TokenStreamRetryException : public TokenStreamException {
 public:
@@ -12,6 +21,8 @@ public:
 	~TokenStreamRetryException() throw() {}
 };
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_TokenStreamRetryException_hpp__

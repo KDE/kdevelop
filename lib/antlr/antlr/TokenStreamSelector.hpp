@@ -1,12 +1,21 @@
 #ifndef INC_TokenStreamSelector_hpp__
 #define INC_TokenStreamSelector_hpp__
 
-#include "antlr/config.hpp"
-#include "antlr/TokenStream.hpp"
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
+
+#include <antlr/config.hpp>
+#include <antlr/TokenStream.hpp>
 #include <map>
 #include <stack>
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 /** A token stream MUX (multiplexor) knows about n token streams
  *  and can multiplex them onto the same channel for use by token
@@ -15,7 +24,7 @@ ANTLR_BEGIN_NAMESPACE(antlr)
  * Or, you can have multiple instances of the same lexer handle
  *  multiple input streams; this works great for includes.
  */
-class TokenStreamSelector : public TokenStream {
+class ANTLR_API TokenStreamSelector : public TokenStream {
 protected:
 	/** The set of inputs to the MUX */
 #ifdef OS_NO_ALLOCATOR
@@ -43,9 +52,7 @@ public:
 
 	void addInputStream(TokenStream* stream, const ANTLR_USE_NAMESPACE(std)string& key);
 
-	/** Return the stream from which tokens are being pulled at
-	 *  the moment.
-	 */
+	/// Return the stream from which tokens are being pulled at the moment.
 	TokenStream* getCurrentStream() const;
 
 	TokenStream* getStream(const ANTLR_USE_NAMESPACE(std)string& sname) const;
@@ -67,12 +74,14 @@ public:
 	 */
 	void retry();
 
-/** Set the stream without pushing old stream */
+	/** Set the stream without pushing old stream */
 	void select(TokenStream* stream);
 
 	void select(const ANTLR_USE_NAMESPACE(std)string& sname);
 };
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_TokenStreamSelector_hpp__

@@ -1,11 +1,25 @@
 #ifndef INC_BitSet_hpp__
 #define INC_BitSet_hpp__
 
-#include "antlr/config.hpp"
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
+
+#include <antlr/config.hpp>
 #include <vector>
 #include <stdexcept>
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
+
+#if defined(_MSC_VER) && !defined(__ICL) // Microsoft Visual C++
+extern template class ANTLR_API ANTLR_USE_NAMESPACE(std)vector<unsigned int>;
+extern template class ANTLR_API ANTLR_USE_NAMESPACE(std)vector<bool>;
+#endif
 
 /**A BitSet to replace java.util.BitSet.
  * Primary differences are that most set operators return new sets
@@ -19,7 +33,6 @@ ANTLR_BEGIN_NAMESPACE(antlr)
  * Also seems like or() from util is wrong when size of incoming set is bigger
  * than this.length.
  *
- *
  * This is a C++ version of the Java class described above, with only
  * a handful of the methods implemented, because we don't need the
  * others at runtime. It's really just a wrapper around vector<bool>,
@@ -29,22 +42,24 @@ ANTLR_BEGIN_NAMESPACE(antlr)
  * @author Terence Parr, MageLang Institute
  * @author <br><a href="mailto:pete@yamuna.demon.co.uk">Pete Wells</a>
  */
-class BitSet {
+class ANTLR_API BitSet {
 private:
 	ANTLR_USE_NAMESPACE(std)vector<bool> storage;
 
 public:
-	BitSet(int nbits=64);
-	BitSet(const unsigned long* bits_,int nlongs);
+	BitSet( unsigned int nbits=64 );
+	BitSet( const unsigned long* bits_, unsigned int nlongs);
 	~BitSet();
 
-	void add(int el);
+	void add( unsigned int el );
 
-	bool member(int el) const;
+	bool member( unsigned int el ) const;
 
-	ANTLR_USE_NAMESPACE(std)vector<int> toArray() const;
+	ANTLR_USE_NAMESPACE(std)vector<unsigned int> toArray() const;
 };
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_BitSet_hpp__

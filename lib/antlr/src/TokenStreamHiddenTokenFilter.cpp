@@ -1,7 +1,15 @@
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 #include "antlr/TokenStreamHiddenTokenFilter.hpp"
 #include "antlr/CommonHiddenStreamToken.hpp"
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 /**This object filters a token stream coming from a lexer
  * or another TokenStream so that only certain token channels
@@ -142,5 +150,7 @@ RefToken TokenStreamHiddenTokenFilter::nextToken()
 	return monitored;
 }
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 

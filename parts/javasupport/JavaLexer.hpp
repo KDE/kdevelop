@@ -16,16 +16,16 @@
 	}
 
 #line 19 "JavaLexer.hpp"
-#include "antlr/config.hpp"
-/* $ANTLR 2.7.1: "java.g" -> "JavaLexer.hpp"$ */
-#include "antlr/CommonToken.hpp"
-#include "antlr/InputBuffer.hpp"
-#include "antlr/BitSet.hpp"
+#include <antlr/config.hpp>
+/* $ANTLR 2.7.2: "java.g" -> "JavaLexer.hpp"$ */
+#include <antlr/CommonToken.hpp>
+#include <antlr/InputBuffer.hpp>
+#include <antlr/BitSet.hpp>
 #include "JavaTokenTypes.hpp"
-#include "antlr/CharScanner.hpp"
-class JavaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public JavaTokenTypes
- {
-#line 991 "java.g"
+#include <antlr/CharScanner.hpp>
+class JavaLexer : public antlr::CharScanner, public JavaTokenTypes
+{
+#line 1071 "java.g"
 
 private:
 	ProblemReporter* m_problemReporter;
@@ -37,7 +37,7 @@ public:
 	void setProblemReporter( ProblemReporter* r )	{ m_problemReporter = r; }
 
         virtual void reportError( const ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex ){
-		m_problemReporter->reportError( ex.getErrorMessage().c_str(),
+		m_problemReporter->reportError( ex.toString().c_str(),
 						ex.getFilename().c_str(),
 						ex.getLine(),
 						ex.getColumn() );
@@ -60,12 +60,15 @@ public:
 private:
 	void initLiterals();
 public:
-	bool getCaseSensitiveLiterals() const;
+	bool getCaseSensitiveLiterals() const
+	{
+		return true;
+	}
 public:
-	JavaLexer(ANTLR_USE_NAMESPACE(std)istream& in);
-	JavaLexer(ANTLR_USE_NAMESPACE(antlr)InputBuffer& ib);
-	JavaLexer(const ANTLR_USE_NAMESPACE(antlr)LexerSharedInputState& state);
-	ANTLR_USE_NAMESPACE(antlr)RefToken nextToken();
+	JavaLexer(std::istream& in);
+	JavaLexer(antlr::InputBuffer& ib);
+	JavaLexer(const antlr::LexerSharedInputState& state);
+	antlr::RefToken nextToken();
 	public: void mQUESTION(bool _createToken);
 	public: void mLPAREN(bool _createToken);
 	public: void mRPAREN(bool _createToken);
@@ -111,7 +114,7 @@ public:
 	public: void mBAND_ASSIGN(bool _createToken);
 	public: void mLAND(bool _createToken);
 	public: void mSEMI(bool _createToken);
-	public: void mWS_(bool _createToken);
+	public: void mWS(bool _createToken);
 	public: void mSL_COMMENT(bool _createToken);
 	public: void mML_COMMENT(bool _createToken);
 	public: void mCHAR_LITERAL(bool _createToken);
@@ -126,19 +129,15 @@ public:
 private:
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
+	static const antlr::BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
+	static const antlr::BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
+	static const antlr::BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
+	static const antlr::BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
-	static const unsigned long _tokenSet_5_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_5;
-	static const unsigned long _tokenSet_6_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_6;
+	static const antlr::BitSet _tokenSet_4;
 };
 
 #endif /*INC_JavaLexer_hpp_*/

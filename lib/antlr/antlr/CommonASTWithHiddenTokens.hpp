@@ -1,41 +1,59 @@
 #ifndef INC_CommonASTWithHiddenTokens_hpp__
 #define INC_CommonASTWithHiddenTokens_hpp__
 
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
+
+#include <antlr/config.hpp>
+#include <antlr/CommonAST.hpp>
+
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
+
 /** A CommonAST whose initialization copies hidden token
  *  information from the Token used to create a node.
  */
-
-#include "antlr/config.hpp"
-#include "antlr/CommonAST.hpp"
-
-ANTLR_BEGIN_NAMESPACE(antlr)
-
-class CommonASTWithHiddenTokens : public CommonAST {
+class ANTLR_API CommonASTWithHiddenTokens : public CommonAST {
 public:
-	CommonASTWithHiddenTokens() : CommonAST() 
+	CommonASTWithHiddenTokens();
+	virtual ~CommonASTWithHiddenTokens();
+	virtual const char* typeName( void ) const
 	{
+		return "CommonASTWithHiddenTokens";
 	}
-	virtual ~CommonASTWithHiddenTokens()
-	{
-	}
-protected:
-	RefToken hiddenBefore,hiddenAfter; // references to hidden tokens
-public:
-	virtual RefToken getHiddenAfter() const
-		{ return hiddenAfter; }
-	virtual RefToken getHiddenBefore() const
-		{ return hiddenBefore; }
+	/// Clone this AST node.
+	virtual RefAST clone( void ) const;
 
 	// Borland C++ builder seems to need the decl's of the first two...
 	virtual void initialize(int t,const ANTLR_USE_NAMESPACE(std)string& txt);
 	virtual void initialize(RefAST t);
 	virtual void initialize(RefToken t);
 
+	virtual RefToken getHiddenAfter() const
+	{
+		return hiddenAfter;
+	}
+
+	virtual RefToken getHiddenBefore() const
+	{
+		return hiddenBefore;
+	}
+
 	static RefAST factory();
+
+protected:
+	RefToken hiddenBefore,hiddenAfter; // references to hidden tokens
 };
 
 typedef ASTRefCount<CommonASTWithHiddenTokens> RefCommonASTWithHiddenTokens;
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 
 #endif //INC_CommonASTWithHiddenTokens_hpp__

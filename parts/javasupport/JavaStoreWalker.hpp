@@ -11,10 +11,10 @@
         #include <qfileinfo.h>
 
 #line 14 "JavaStoreWalker.hpp"
-#include "antlr/config.hpp"
+#include <antlr/config.hpp>
 #include "JavaStoreWalkerTokenTypes.hpp"
-/* $ANTLR 2.7.1: "java.store.g" -> "JavaStoreWalker.hpp"$ */
-#include "antlr/TreeParser.hpp"
+/* $ANTLR 2.7.2: "java.store.g" -> "JavaStoreWalker.hpp"$ */
+#include <antlr/TreeParser.hpp>
 
 #line 12 "java.store.g"
 
@@ -39,8 +39,8 @@
  *
  * BUGS
  */
-class JavaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public JavaStoreWalkerTokenTypes
- {
+class JavaStoreWalker : public antlr::TreeParser, public JavaStoreWalkerTokenTypes
+{
 #line 45 "java.store.g"
 
 private:
@@ -75,6 +75,16 @@ public:
 #line 46 "JavaStoreWalker.hpp"
 public:
 	JavaStoreWalker();
+	void initializeASTFactory( antlr::ASTFactory& factory );
+	int getNumTokens() const
+	{
+		return JavaStoreWalker::NUM_TOKENS;
+	}
+	const char* getTokenName( int type ) const
+	{
+		if( type > getNumTokens() ) return 0;
+		return JavaStoreWalker::tokenNames[type];
+	}
 	public: void compilationUnit(RefJavaAST _t);
 	public:  QString  packageDefinition(RefJavaAST _t);
 	public:  QString  importDefinition(RefJavaAST _t);
@@ -131,12 +141,19 @@ protected:
 	RefJavaAST returnAST;
 	RefJavaAST _retTree;
 private:
-	static const char* _tokenNames[];
+	static const char* tokenNames[];
+#ifndef NO_STATIC_CONSTS
+	static const int NUM_TOKENS = 148;
+#else
+	enum {
+		NUM_TOKENS = 148
+	};
+#endif
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
+	static const antlr::BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
+	static const antlr::BitSet _tokenSet_1;
 };
 
 #endif /*INC_JavaStoreWalker_hpp_*/

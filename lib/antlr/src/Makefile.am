@@ -8,8 +8,9 @@ noinst_LTLIBRARIES = libantlr.la
 libantlr_la_LDFLAGS = -no-undefined
 
 libantlr_la_SOURCES = \
-	ANTLRException.cpp \
+	ANTLRUtil.cpp \
 	ASTFactory.cpp \
+	ASTNULLType.cpp \
 	ASTRefCount.cpp \
 	BaseAST.cpp \
 	BitSet.cpp \
@@ -21,13 +22,11 @@ libantlr_la_SOURCES = \
 	CommonToken.cpp \
 	InputBuffer.cpp \
 	LLkParser.cpp \
-	LexerSharedInputState.cpp \
 	MismatchedCharException.cpp \
 	MismatchedTokenException.cpp \
 	NoViableAltException.cpp \
 	NoViableAltForCharException.cpp \
 	Parser.cpp \
-	ParserSharedInputState.cpp \
 	RecognitionException.cpp \
 	String.cpp \
 	Token.cpp \
@@ -35,5 +34,4 @@ libantlr_la_SOURCES = \
 	TokenStreamBasicFilter.cpp \
 	TokenStreamHiddenTokenFilter.cpp \
 	TokenStreamSelector.cpp \
-	TreeParser.cpp \
-	TreeParserSharedInputState.cpp
+	TreeParser.cpp

@@ -1,7 +1,15 @@
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/RIGHTS.html
+ *
+ * $Id$
+ */
 #include "antlr/TokenStreamSelector.hpp"
 #include "antlr/TokenStreamRetryException.hpp"
 
-ANTLR_BEGIN_NAMESPACE(antlr)
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
 
 /** A token stream MUX (multiplexor) knows about n token streams
  *  and can multiplex them onto the same channel for use by token
@@ -93,5 +101,7 @@ void TokenStreamSelector::select(const ANTLR_USE_NAMESPACE(std)string& sname)
 	input = (*i).second;
 }
 
-ANTLR_END_NAMESPACE
+#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+}
+#endif
 

@@ -2,23 +2,21 @@ options {
 	language="Cpp";
 }
 
-/** Java 1.2 AST Recognizer Grammar
+/** Java 1.3 AST Recognizer Grammar
  *
- * Author:
- *	Terence Parr	parrt@magelang.com
+ * Author: (see java.g preamble)
  *
  * Version tracking now done with following ID:
  *
  * $Id$
  *
  * This grammar is in the PUBLIC DOMAIN
- *
- * BUGS
  */
+
 class JavaTreeParser extends TreeParser;
 
 options {
-	importVocab=Java;
+	importVocab = Java;
 }
 
 compilationUnit
@@ -82,6 +80,7 @@ modifier
     |   "synchronized"
     |   "const"
     |   "volatile"
+	|	"strictfp"
     ;
 
 extendsClause
@@ -91,7 +90,6 @@ extendsClause
 implementsClause
 	:	#(IMPLEMENTS_CLAUSE (identifier)* )
 	;
-
 
 interfaceBlock
 	:	#(	OBJBLOCK
@@ -114,7 +112,7 @@ objBlock
 	;
 
 ctorDef
-	:	#(CTOR_DEF modifiers methodHead slist)
+	:	#(CTOR_DEF modifiers methodHead (slist)?)
 	;
 
 methodDecl
@@ -199,6 +197,8 @@ stat:	typeDefinition
 	|	#("synchronized" expression stat)
 	|	tryBlock
 	|	slist // nested SLIST
+    // uncomment to make assert JDK 1.4 stuff work
+    // |   #("assert" expression (expression)?)
 	|	EMPTY_STAT
 	;
 
@@ -275,13 +275,15 @@ primaryExpression
 				|	"this"
 				|	"class"
 				|	#( "new" IDENT elist )
+				|   "super"
 				)
-			|	#(ARRAY_DECLARATOR type)
+			|	#(ARRAY_DECLARATOR typeSpecArray)
 			|	builtInType ("class")?
 			)
 		)
 	|	arrayIndex
 	|	#(METHOD_CALL primaryExpression elist)
+	|	ctorCall
 	|	#(TYPECAST typeSpec expr)
 	|   newExpression
 	|   constant
@@ -293,8 +295,17 @@ primaryExpression
 	|	typeSpec // type name used with instanceof
 	;
 
+ctorCall
+	:	#( CTOR_CALL elist )
+	|	#( SUPER_CTOR_CALL
+			(	elist
+			|	primaryExpression elist
+			)
+		 )
+	;
+
 arrayIndex
-	:	#(INDEX_OP primaryExpression expression)
+	:	#(INDEX_OP expr expression)
 	;
 
 constant
@@ -302,15 +313,17 @@ constant
     |   CHAR_LITERAL
     |   STRING_LITERAL
     |   NUM_FLOAT
+    |   NUM_DOUBLE
+    |   NUM_LONG
     ;
 
 newExpression
 	:	#(	"new" type
 			(	newArrayDeclarator (arrayInitializer)?
-			|	elist
+			|	elist (objBlock)?
 			)
 		)
-			
+
 	;
 
 newArrayDeclarator
