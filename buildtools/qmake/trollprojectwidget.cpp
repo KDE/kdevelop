@@ -1245,7 +1245,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("INCLUDEPATH");
   if (item->configuration.m_includepath.count())
-      Buffer->setValues("INCLUDEPATH",item->configuration.m_includepath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+      Buffer->setValues("INCLUDEPATH",item->configuration.m_includepath,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   Buffer->removeValues("DEFINES");
   if (item->configuration.m_defines.count())
     Buffer->setValues("DEFINES",item->configuration.m_defines,FileBuffer::VSM_RESET,VALUES_PER_ROW);
@@ -1281,7 +1281,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
 
   Buffer->removeValues("INCLUDEPATH");
   if (item->configuration.m_incadd.count()>0)
-    Buffer->setValues("INCLUDEPATH",item->configuration.m_incadd,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+    Buffer->setValues("INCLUDEPATH",item->configuration.m_incadd,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
   Buffer->removeValues("LIBS");
   if (item->configuration.m_libadd.count()>0)
