@@ -66,6 +66,7 @@ CommitDialog::CommitDialog( QWidget *parent, const char *name )
 
     setDetailsWidget( w );
     autoGuess();
+    edit->setFocus();
 }
 
 CommitDialog::~CommitDialog()
