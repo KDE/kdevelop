@@ -645,6 +645,7 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
 {
   CParsedContainer *aContainer = NULL;
   CParsedAttribute *aAttr = NULL;
+  CParsedStruct *aStruct = NULL;
   QString toFile;
   int toLine = -1;
 
@@ -695,6 +696,8 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
       aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
       if(!aAttr)
         aAttr = class_tree->store->globalContainer.getAttributeByName( itemName );
+      if(!aAttr)
+        aStruct = class_tree->store->globalContainer.getStructByName( itemName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDeclaration.", itemType );
@@ -706,6 +709,11 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
   {
     toFile = aAttr->declaredInFile;
     toLine = aAttr->declaredOnLine;
+  }
+  else if( aStruct != NULL )
+  {
+    toFile = aStruct->declaredInFile;
+    toLine = aStruct->declaredOnLine;
   }
 
   if( toLine != -1 )
@@ -816,6 +824,15 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
       {
         str=globalattr->current()->name;
         methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
+        method_comp->addItem(str);
+      }
+    QList<CParsedStruct> *globalstruct=class_tree->store->globalContainer.getSortedStructList( );
+    for( globalstruct->first();
+       globalstruct->current();
+       globalstruct->next() )
+      {
+        str=globalstruct->current()->name;
+        methodCombo->insertItem(SmallIcon("CVstruct"), str );
         method_comp->addItem(str);
       }
     lb->sort();
