@@ -284,7 +284,7 @@ BreakpointTableRow* GDBBreakpointWidget::find(Breakpoint *breakpoint)
 {
     // NOTE:- The match doesn't have to be equal. Each type of bp
     // must decide on the match criteria.
-    ASSERT (breakpoint);
+    Q_ASSERT (breakpoint);
 
     for ( int row = 0; row < m_table->numRows(); row++ )
     {

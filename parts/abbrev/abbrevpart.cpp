@@ -398,10 +398,10 @@ void AbbrevPart::addTemplate( const QString& templ,
                               const QString& suffixes,
                               const QString& code)
 {
-    CodeTemplate* t = m_templates.find( templ );
+    CodeTemplate* t = m_templates.find( templ.latin1() );
     if( !t ){
         t = new CodeTemplate();
-        m_templates.insert( templ, t );
+        m_templates.insert( templ.latin1(), t );
     }
     t->description = descr;
     t->suffixes = suffixes;
@@ -411,7 +411,7 @@ void AbbrevPart::addTemplate( const QString& templ,
 
 void AbbrevPart::removeTemplate( const QString& templ )
 {
-    m_templates.remove( templ );
+    m_templates.remove( templ.latin1() );
 }
 
 
@@ -510,13 +510,13 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
 	return;
 
     QString expand( " <abbrev>" );
-    if( entry->userdata && entry->text.endsWith(expand) ){
+    if( !entry->userdata.isNull() && entry->text.endsWith(expand) ){
 	QString macro = entry->text.left( entry->text.length() - expand.length() );
 	*text = "";
         uint line, col;
         viewCursorIface->cursorPositionReal( &line, &col );
         editIface->removeText( line, col-currentWord().length(), line, col );
-	insertChars( m_templates[entry->userdata]->code );
+	insertChars( m_templates[entry->userdata.latin1()]->code );
     }
 }
 

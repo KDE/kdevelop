@@ -300,7 +300,7 @@ void GDBController::executeCmd()
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
     prettyCmd = "(gdb) " + prettyCmd;
-    emit gdbStdout( prettyCmd );
+    emit gdbStdout( prettyCmd.latin1() );
 
     if (!stateIsOn(s_silent))
         emit dbgStatus ("", state_);
@@ -1184,15 +1184,15 @@ void GDBController::slotStart(const QString& shell, const QString &application)
     {
         *dbgProcess_ << "/bin/sh" << "-c" << shell + " " +config_gdbPath_
                       + "gdb " + application + " -fullname -nx -quiet";
-        emit gdbStdout("/bin/sh -c " + shell + " " +config_gdbPath_
-                      + "gdb " + application + " -fullname -nx -quiet");
+        emit gdbStdout(QString( "/bin/sh -c " + shell + " " +config_gdbPath_
+                      + "gdb " + application + " -fullname -nx -quiet" ).latin1());
     }
     else
     {
         *dbgProcess_ << config_gdbPath_ + "gdb" << application
                         << "-fullname" << "-nx" << "-quiet";
-        emit gdbStdout(config_gdbPath_ + " gdb " + application +
-                        " -fullname -nx -quiet");
+        emit gdbStdout(QString( config_gdbPath_ + " gdb " + application +
+                        " -fullname -nx -quiet" ).latin1());
     }
 
     dbgProcess_->start( KProcess::NotifyOnExit,
@@ -1247,8 +1247,11 @@ void GDBController::slotStart(const QString& shell, const QString &application)
 
     // Change the "Working directory" to the correct one
     QFileInfo app(application);
-    if (config_runAppInAppDirectory_)
-        queueCmd(new GDBCommand(QCString("cd " + app.dirPath()), NOTRUNCMD, NOTINFOCMD));
+    if (config_runAppInAppDirectory_) {
+        QCString tmp( "cd " );
+        tmp += QFile::encodeName( app.dirPath() );
+        queueCmd(new GDBCommand(tmp, NOTRUNCMD, NOTINFOCMD));
+    }
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -1857,7 +1860,7 @@ void GDBController::slotDbgProcessExited(KProcess*)
     state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
 
-    emit gdbStdout(QString("(gdb) Process exited\n"));
+    emit gdbStdout("(gdb) Process exited\n");
 }
 
 // **************************************************************************
@@ -1876,7 +1879,7 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
     kdDebug(9012) << "Requested user cmd: " << cmd;
     if (cmd.startsWith("step") || cmd.startsWith("c"))
     {
-        queueCmd(new GDBCommand(QCString(cmd), RUNCMD, NOTINFOCMD, 0));
+        queueCmd(new GDBCommand(cmd.latin1(), RUNCMD, NOTINFOCMD, 0));
         return;
     }
 
@@ -1930,7 +1933,7 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
     }
 
     kdDebug(9012) << "Using default: " << cmd;
-    queueCmd(new GDBCommand(QCString(cmd), NOTRUNCMD, INFOCMD, USERCMD));
+    queueCmd(new GDBCommand(cmd.latin1(), NOTRUNCMD, INFOCMD, USERCMD));
 }
 
 }
