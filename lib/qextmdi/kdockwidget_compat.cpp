@@ -2362,6 +2362,8 @@ void KDockManager::writeConfig(QDomElement &base)
         } else {
             //// Save an ordinary dock widget
             groupEl = doc.createElement("dock");
+            groupEl.appendChild(createStringEntry(doc, "tabCaption", obj->tabPageLabel()));
+            groupEl.appendChild(createStringEntry(doc, "tabToolTip", obj->toolTipString()));
         }
 
         groupEl.appendChild(createStringEntry(doc, "name", QString::fromLatin1(obj->name())));
@@ -2426,6 +2428,36 @@ void KDockManager::readConfig(QDomElement &base)
     while (!childEl.isNull() ) {
         KDockWidget *obj = 0;
 
+        if (childEl.tagName() != "dock") {
+            childEl = childEl.nextSibling().toElement();
+            continue;            
+        }
+        // Read an ordinary dock widget
+        obj = getDockWidgetFromName(stringEntry(childEl, "name"));
+        obj->setTabPageLabel(stringEntry(childEl, "tabCaption"));
+        obj->setToolTipString(stringEntry(childEl, "tabToolTip"));
+
+        if (!boolEntry(childEl, "hasParent")) {
+            QRect r = rectEntry(childEl, "geometry");
+            obj = getDockWidgetFromName(stringEntry(childEl, "name"));
+            obj->applyToWidget(0);
+            obj->setGeometry(r);
+            if (boolEntry(childEl, "visible"))
+                obj->QWidget::show();
+        }
+
+        if (obj && obj->header && obj->header->inherits("KDockWidget_Compat::KDockWidgetHeader")) {
+            KDockWidgetHeader *h = static_cast<KDockWidgetHeader*>(obj->header);
+            h->setDragEnabled(boolEntry(childEl, "dragEnabled"));
+        }
+
+        childEl = childEl.nextSibling().toElement();
+    }
+
+    childEl = base.firstChild().toElement();
+    while (!childEl.isNull() ) {
+        KDockWidget *obj = 0;
+    
         if (childEl.tagName() == "splitGroup") {
             // Read a group
             QString name = stringEntry(childEl, "name");
@@ -2466,9 +2498,9 @@ void KDockManager::readConfig(QDomElement &base)
                     tab->showPage(tab->page(numberEntry(childEl, "currentTab")));
                 }
             }
-        } else if (childEl.tagName() == "dock") {
-            // Read an ordinary dock widget
-            obj = getDockWidgetFromName(stringEntry(childEl, "name"));
+        } else {
+            childEl = childEl.nextSibling().toElement();  
+            continue;
         }
 
         if (!boolEntry(childEl, "hasParent")) {
@@ -2485,9 +2517,9 @@ void KDockManager::readConfig(QDomElement &base)
             h->setDragEnabled(boolEntry(childEl, "dragEnabled"));
         }
 
-        childEl = childEl.nextSibling().toElement();
+        childEl = childEl.nextSibling().toElement();  
     }
-
+    
     if (main->inherits("KDockWidget_Compat::KDockMainWindow") || main->inherits("KDockMainWindow")) {
         KDockMainWindow *dmain = (KDockMainWindow*)main;
 
@@ -2510,11 +2542,13 @@ void KDockManager::readConfig(QDomElement &base)
             mvd->applyToWidget(main);
             mvd->show();
         }
-    }
 
-    QRect mr = rectEntry(base, "geometry");
-    main->move(mr.topLeft());
-    main->resize(mr.size());
+        // only resize + move non-mainwindows
+        QRect mr = rectEntry(base, "geometry");
+        main->move(mr.topLeft());
+        main->resize(mr.size());
+    }
+    
     if (isMainVisible)
         main->show();
 
@@ -2647,6 +2681,8 @@ void KDockManager::writeConfig( KConfig* c, QString group )
         nListIt=nList.begin();
       } else {
 /*************************************************************************************************/
+        c->writeEntry( cname+":tabCaption", obj->tabPageLabel());
+        c->writeEntry( cname+":tabToolTip", obj->toolTipString());
         if ( !obj->parent() ){
           c->writeEntry( cname+":type", "NULL_DOCK");
           c->writeEntry( cname+":geometry", QRect(obj->frameGeometry().topLeft(), obj->size()) );
@@ -2712,6 +2748,43 @@ void KDockManager::readConfig( KConfig* c, QString group )
     }
   }
 
+  // firstly, only the common dockwidgets,
+  // they must be restored before e.g. tabgroups are restored
+  nameList.first();
+  while ( nameList.current() ){
+    QString oname = nameList.current();
+    c->setGroup( group );
+    QString type = c->readEntry( oname + ":type" );
+    obj = 0L;
+    
+    if ( type == "NULL_DOCK" || c->readEntry( oname + ":parent") == "___null___" ){
+      QRect r = c->readRectEntry( oname + ":geometry" );
+      obj = getDockWidgetFromName( oname );
+      obj->applyToWidget( 0L );
+      obj->setGeometry(r);
+
+      c->setGroup( group );
+      obj->setTabPageLabel(c->readEntry( oname + ":tabCaption" ));
+      obj->setToolTipString(c->readEntry( oname + ":tabToolTip" ));
+      if ( c->readBoolEntry( oname + ":visible" ) ){
+        obj->QWidget::show();
+      }
+    }
+
+    if ( type == "DOCK"  ){
+      obj = getDockWidgetFromName( oname );
+      obj->setTabPageLabel(c->readEntry( oname + ":tabCaption" ));
+      obj->setToolTipString(c->readEntry( oname + ":tabToolTip" ));
+    }
+
+    if (obj && obj->d->isContainer)  dynamic_cast<KDockContainer*>(obj->widget)->load(c,group);
+    if ( obj && obj->header){
+      obj->header->loadConfig( c );
+    }
+    nameList.next();
+  }
+  
+  // secondly, after the common dockwidgets, restore the groups and tabgroups
   nameList.first();
   while ( nameList.current() ){
     QString oname = nameList.current();
@@ -2756,22 +2829,6 @@ void KDockManager::readConfig( KConfig* c, QString group )
         }
       }
       obj = tabDockGroup;
-    }
-
-    if ( type == "NULL_DOCK" || c->readEntry( oname + ":parent") == "___null___" ){
-      QRect r = c->readRectEntry( oname + ":geometry" );
-      obj = getDockWidgetFromName( oname );
-      obj->applyToWidget( 0L );
-      obj->setGeometry(r);
-
-      c->setGroup( group );
-      if ( c->readBoolEntry( oname + ":visible" ) ){
-        obj->QWidget::show();
-      }
-    }
-
-    if ( type == "DOCK"  ){
-      obj = getDockWidgetFromName( oname );
     }
 
     if (obj && obj->d->isContainer)  dynamic_cast<KDockContainer*>(obj->widget)->load(c,group);

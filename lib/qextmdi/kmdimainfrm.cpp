@@ -516,6 +516,11 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
        mtva->d->widget = pDW->getWidget();
        mtva->d->widgetContainer = pDW;
        pDW->setWidget(pWnd);
+       if (pWnd->icon()) {
+           pDW->setPixmap(*pWnd->icon());
+       }
+       pDW->setTabPageLabel(tabCaption);
+       pDW->setToolTipString(tabToolTip);
        pWnd->show();
        dockManager->removeFromAutoCreateList(pDW);
        return mtva;
