@@ -406,7 +406,7 @@ void CKDevelop::slotFileSaveAll(){
 	if(!isUntitled(actual_info->filename) && actual_info->modified &&
 		handledNames.contains(actual_info->filename)<1)
         {
-          int qYesNo=QMessageBox::Yes;
+          int qYesNo=0;
           handledNames.append(actual_info->filename);
           QFileInfo file_info(actual_info->filename);
           if (file_info.lastModified() != actual_info->last_modified)
