@@ -1,6 +1,6 @@
 # Here resides the PHP support part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets -I$(top_srcdir)/lib/sourceinfo $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 SUBDIRS = data app_templates file_templates doc
 
 

@@ -1,6 +1,6 @@
 # Here resides the custom project part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/project -I$(top_builddir)/lib/project 	   -I$(top_srcdir)/lib/util 	   $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces	   -I$(top_srcdir)/lib/project -I$(top_builddir)/lib/project 	   -I$(top_srcdir)/lib/util 	   $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcustomproject.la
 libkdevcustomproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

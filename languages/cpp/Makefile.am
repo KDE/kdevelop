@@ -1,6 +1,6 @@
 # Here resides the C/C++ support part.
 
-SUBDIRS = templates subclassing_template newclass_templates file_templates app_templates compiler pcsimporter debugger doc
+#SUBDIRS = templates subclassing_template newclass_templates file_templates app_templates compiler pcsimporter debugger doc
 
 INCLUDES = -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
 
@@ -8,7 +8,15 @@ kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -L$(top_srcdir)/bdb/dist
 libkdevcppsupport_la_LIBADD = $(top_builddir)/bdb/build_unix/libdb.a $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 
-libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp ast_utils.cpp store_walker.cpp KDevCppSupportIface.cpp KDevCppSupportIface.skel cppsupportfactory.cpp tag_creator.cpp codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp cppnewclassdlgbase.ui cppnewclassdlg.cpp classgeneratorconfig.cpp classgeneratorconfigbase.ui subclassingdlg.cpp subclassingdlgbase.ui addattributedialogbase.ui addmethoddialogbase.ui addattributedialog.cpp addmethoddialog.cpp cppsupport_utils.cpp createpcsdialogbase.ui createpcsdialog.cpp qtdesignerintegration.cpp implementationwidgetbase.ui implementationwidget.cpp
+libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
+	ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \
+	configproblemreporter.ui backgroundparser.cpp ast_utils.cpp store_walker.cpp \
+	KDevCppSupportIface.cpp KDevCppSupportIface.skel cppsupportfactory.cpp tag_creator.cpp \
+	codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp cppnewclassdlgbase.ui \
+	cppnewclassdlg.cpp classgeneratorconfig.cpp classgeneratorconfigbase.ui subclassingdlg.cpp \
+	subclassingdlgbase.ui addattributedialogbase.ui addmethoddialogbase.ui addattributedialog.cpp \
+	addmethoddialog.cpp cppsupport_utils.cpp createpcsdialogbase.ui createpcsdialog.cpp \
+	qtdesignerintegration.cpp implementationwidgetbase.ui implementationwidget.cpp
 
 METASOURCES = AUTO
 

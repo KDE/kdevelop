@@ -1,6 +1,6 @@
 # Here resides the Fortran support part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util $(all_includes)
 SUBDIRS = file_templates app_templates compiler doc
 
 kde_module_LTLIBRARIES = libkdevfortransupport.la

@@ -5,7 +5,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 # SUBDIRS = templates subclassing_template newclass_templates file_templates
 SUBDIRS = file_templates app_templates debugger doc
 
-INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevjavasupport.la
 libkdevjavasupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

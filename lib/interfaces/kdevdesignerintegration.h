@@ -19,7 +19,7 @@
 #ifndef KDEVDESIGNERINTEGRATION_H
 #define KDEVDESIGNERINTEGRATION_H
 
-#include "designer.h"
+#include <designer.h>
 #include <qobject.h>
 #include <qdom.h>
 

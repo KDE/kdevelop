@@ -5,7 +5,7 @@
 # its own part (or the respective features should be added to the
 # language support part)
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevscriptproject.la
 libkdevscriptproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

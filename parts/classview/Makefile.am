@@ -1,6 +1,6 @@
 # Here resides the class view part.
 
-INCLUDES = -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

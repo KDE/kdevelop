@@ -34,7 +34,7 @@
 #include <kmimetype.h>
 #include "kdevplugin.h"
 #include "codemodel.h"
-#include "../external_interfaces/designer.h"
+#include <designer.h>
 
 class Tag;
 class KDevDesignerIntegration;

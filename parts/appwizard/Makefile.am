@@ -2,7 +2,7 @@
 # Here resides the app wizard part.
 
 SUBDIRS = . imports common licenses 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/lib/widgets -I$(top_srcdir)/lib/sourceinfo $(all_includes) 
 
 kde_module_LTLIBRARIES = libkdevappwizard.la
