@@ -405,7 +405,7 @@ void CKDevelop::initMenu(){
   edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
   accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
 
-  edit_menu->insertItem(i18n("&Repeat Search..."), this,
+  edit_menu->insertItem(i18n("&Repeat Search"), this,
 			SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
   

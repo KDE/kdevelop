@@ -384,7 +384,12 @@ void CKDevelop::slotEditSearch(){
 }
 void CKDevelop::slotEditRepeatSearch(){
   slotStatusMsg(i18n("Repeating last search..."));
-  edit_widget->searchAgain();
+  if(s_tab_view->getCurrentTab()==BROWSER){
+    browser_widget->findTextNext(QRegExp(doc_search_text));
+  }
+  else{
+    edit_widget->searchAgain();
+  }
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotEditReplace(){

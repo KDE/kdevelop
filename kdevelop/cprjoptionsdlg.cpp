@@ -26,6 +26,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     : QTabDialog( parent, name,TRUE )
 {
   prj_info = prj;
+  old_version = prj->getVersion();
+  need_configure_in_update = false;
   QString cxxflags=prj->getCXXFLAGS();
   QString ldflags=prj->getLDFLAGS();
   QString ldadd=prj->getLDADD();
@@ -1033,7 +1035,14 @@ void CPrjOptionsDlg::ok(){
   // write it to the disk
   prj_info->writeProject();
   prj_info->updateMakefilesAm();
+
+  if (version_edit->text() != old_version){
+    need_configure_in_update = true;
+  }
 }
 
 
 
+bool CPrjOptionsDlg::needConfigureInUpdate(){
+  return  need_configure_in_update;
+}

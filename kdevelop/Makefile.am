@@ -22,8 +22,8 @@ SUBDIRS = tools docs templates toolbar pics kwrite
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
-CXXFLAGS = -g -Wall
-LDFLAGS = -g 
+CXXFLAGS =  -Wall
+LDFLAGS =  
 # Which sources should be compiled for kdevelop.
 kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \

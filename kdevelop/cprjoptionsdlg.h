@@ -48,6 +48,7 @@ class CPrjOptionsDlg : public QTabDialog
 public:
     /**constructor*/
     CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj );
+  bool needConfigureInUpdate();
 protected:
   /** local projectinfo object*/
   CProject* prj_info; 
@@ -110,6 +111,9 @@ protected:
   QCheckBox* l_kab;
   QLineEdit* addit_ldadd;
 
+private:
+  QString old_version;
+  bool need_configure_in_update;
 protected slots:
    /** is called, if the ok-button were clicked*/
   void  ok();

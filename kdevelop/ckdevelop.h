@@ -50,6 +50,7 @@ class CKDevelop;
 class CDocBrowser;
 class CClassView;
 class KSwallowWidget;
+class CAddExistingFileDlg;
 #include "ceditwidget.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
@@ -160,6 +161,8 @@ public:
   void  slotProjectWorkspaces(int);
   void slotProjectAddNewFile();
   
+  /** helper methods for slotProjectAddExistingFiles() */
+  void slotAddExistingFiles();
   void slotProjectAddExistingFiles();
   void slotProjectRemoveFile();
   void slotProjectNewClass();
@@ -367,6 +370,8 @@ private:
 
   CConfigEnscriptDlg* enscriptconf;
   CConfigA2psDlg* a2psconf;
+
+  CAddExistingFileDlg* add_dlg;
 
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
 };

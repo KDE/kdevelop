@@ -15,6 +15,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#include <qprogressdialog.h>
 #include "ckdevelop.h"
 #include "ctoolclass.h"
 #include "ckappwizard.h"
@@ -300,17 +301,12 @@ void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
 }
 
-void CKDevelop::slotProjectAddExistingFiles(){
+void CKDevelop::slotAddExistingFiles(){
   QString type;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
-  CAddExistingFileDlg dlg(this,"test",prj);
-
-  
-  dlg.destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
-  if(dlg.exec()){
-    QString token;
+  QString token;
     QStrList files;
-    QString str_files = dlg.source_edit->text(); 
+    QString str_files = add_dlg->source_edit->text(); 
     StringTokenizer str_token;
     
     str_token.tokenize(str_files,",");
@@ -318,7 +314,7 @@ void CKDevelop::slotProjectAddExistingFiles(){
       token = str_token.nextToken();
       files.append(token);
     }
-    QString dest = dlg.destination_edit->text();
+    QString dest = add_dlg->destination_edit->text();
     if(dest.right(1) != "/"){ // I hope it works now -Sandy
       dest = dest + "/";
     }
@@ -326,7 +322,18 @@ void CKDevelop::slotProjectAddExistingFiles(){
     QString dest_name ;
     QString file;
     QFileInfo file_info;
+    int i=files.count();
+    
+    QProgressDialog progress( i18n("Copying files..."),0, i, this,"",true );
+    progress.setCaption(i18n("please wait..."));
+    progress.show();
+    
+    i=0;
+    progress.setProgress( i);
+
     for(file = files.first(); file !=0;file = files.next()){
+      i++;
+      progress.setProgress( i );
       file_info.setFile(file);
       source_name = file_info.fileName();
       dest_name = dest + source_name;
@@ -349,18 +356,30 @@ void CKDevelop::slotProjectAddExistingFiles(){
       new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
       
     }
+    progress.setProgress( files.count() );
     switchToFile(dest_name);
     refreshTrees();
-  }
-  if(new_subdir){
-    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
-    setToolMenuProcess(false);
-    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-    messages_widget->clear();
-    QDir::setCurrent(prj->getProjectDir());
-    shell_process.clearArguments();
-    shell_process << make_cmd << " -f Makefile.dist && ./configure";
+    
+    if(new_subdir){
+      KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+      setToolMenuProcess(false);
+      slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+      messages_widget->clear();
+      QDir::setCurrent(prj->getProjectDir());
+      shell_process.clearArguments();
+      shell_process << make_cmd << " -f Makefile.dist && ./configure";
     shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    }
+
+    delete add_dlg;
+    
+}
+
+void CKDevelop::slotProjectAddExistingFiles(){
+  add_dlg = new CAddExistingFileDlg(this,"test",prj);
+  add_dlg->destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
+  if(add_dlg->exec()){
+    QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));
   }
 }
 
@@ -372,6 +391,18 @@ void CKDevelop::slotProjectRemoveFile(){
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
   prjdlg.show();
+  if (prjdlg.needConfigureInUpdate()){
+    prj->updateConfigureIn();
+    KMsgBox::message(0,i18n("Information"),i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+    setToolMenuProcess(false);
+    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+    messages_widget->clear();
+    showOutputView(true);
+    QDir::setCurrent(prj->getProjectDir());
+    shell_process.clearArguments();
+    shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
 }
 
 void CKDevelop::newFile(bool add_to_project){
@@ -408,6 +439,7 @@ void CKDevelop::newFile(bool add_to_project){
     setToolMenuProcess(false);
     slotStatusMsg(i18n("Running automake/autoconf and configure..."));
     messages_widget->clear();
+    showOutputView(true);
     QDir::setCurrent(prj->getProjectDir());
     shell_process.clearArguments();
     shell_process << make_cmd << " -f Makefile.dist  && ./configure";
