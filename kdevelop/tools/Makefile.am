@@ -1,5 +1,5 @@
 
-tools_DATA =  processesend.pl processes.pl kimport
+tools_DATA =  processesend.pl processes.pl
 
 EXTRA_DIST = processes.pl.in processesend.pl kimport
 
@@ -13,4 +13,6 @@ processes.pl: processes.pl.in
 	perl -npi -e 's%^\$$kde_icondir = _;$$%\$$kde_icondir = \"'${kde_icondir}'\";%g;' \
 	    processes.pl
 
-
+install-exec-local:
+	$(mkinstalldirs) $(KDEDIR)/bin
+	$(INSTALL_SCRIPT) kimport $(KDEDIR)/bin
