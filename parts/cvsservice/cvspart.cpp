@@ -178,7 +178,7 @@ void CvsPart::setupActions()
         this, SLOT(slotActionTag()), actionCollection(),
         "cvsservice_tag" );
 
-    actionTag = new KAction( i18n("&Remove tag from file(s)"), 0,
+    actionTag = new KAction( i18n("Re&move tag from file(s)"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(),
         "cvsservice_untag" );
 
@@ -195,7 +195,7 @@ void CvsPart::setupActions()
     actionLogin = new KAction( i18n("&Login into server"), 0, this,
         SLOT(slotActionLogin()), actionCollection(), "cvsservice_login" );
 
-    actionLogout = new KAction( i18n("&Logout from server"), 0, this,
+    actionLogout = new KAction( i18n("L&ogout from server"), 0, this,
         SLOT(slotActionLogout()), actionCollection(), "cvsservice_logout" );
 }
 
@@ -272,7 +272,7 @@ QWidget* CvsPart::newProjectWidget( QWidget *parent )
 
 void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 {
-    if (context->hasType( "file" ))
+    if (context->hasType( Context::FileContext ))
     {
         kdDebug(9000) << "contextMenu()" << endl;
 
@@ -292,7 +292,6 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         // CvsService let to do log and diff operations only on one file (or directory) at time
         if (m_urls.count() == 1)
         {
-            subMenu->insertSeparator();
             subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
             subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
         }
@@ -301,7 +300,6 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
 
         popup->insertSeparator();
-
         subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
         subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
         subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
@@ -311,7 +309,6 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
 
         // Now insert in parent menu
-        popup->insertSeparator();
         popup->insertItem( i18n("CvsService"), subMenu );
     }
 }

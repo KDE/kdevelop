@@ -99,7 +99,7 @@ void GrepViewPart::projectClosed()
 void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     kdDebug(9001) << "context in grepview" << endl;
-    if (!context->hasType("editor"))
+    if (!context->hasType( Context::EditorContext ))
         return;
     
     const EditorContext *econtext = static_cast<const EditorContext*>(context);

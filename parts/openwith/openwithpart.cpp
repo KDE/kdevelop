@@ -29,7 +29,7 @@ OpenWithPart::~OpenWithPart()
 
 void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 {
-  if (!context->hasType("file"))
+  if (!context->hasType( Context::FileContext ))
     return;
 
   popup->insertSeparator();

@@ -124,7 +124,7 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 
 void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType("file"))
+    if (!context->hasType( Context::FileContext ))
         return;
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);

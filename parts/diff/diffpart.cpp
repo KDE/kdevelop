@@ -88,7 +88,7 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
 
 void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 {
-  if (!context->hasType("editor"))
+  if (!context->hasType( Context::EditorContext ))
     return;
 
   const EditorContext *eContext = static_cast<const EditorContext*>(context);

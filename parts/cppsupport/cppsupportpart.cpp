@@ -416,7 +416,7 @@ static QString findHeader(const QStringList &list, const QString &header)
 
 void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType("editor"))
+    if (!context->hasType( Context::EditorContext ))
         return;
 
     popup->insertSeparator();

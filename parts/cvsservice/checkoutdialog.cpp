@@ -94,7 +94,7 @@ CheckoutDialog::~CheckoutDialog()
 
 QString CheckoutDialog::cvsRsh() const
 {
-    return m_base->cvsRshComboBox->currentText();
+    return m_base->cvsRshEdit->text();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,15 +143,6 @@ QString CheckoutDialog::tag() const
 
 QString CheckoutDialog::module() const
 {
-/*
-    ModuleListViewItem *item = static_cast<ModuleListViewItem*>(
-        m_base->modulesListView->selectedItem()
-    );
-    if (!item)
-        return QString::null;
-
-    return item->name();
-*/
     return m_base->moduleEdit->text();
 }
 

@@ -40,29 +40,34 @@ class Context
 {
 public:
     /**
-    * Builds a context of the specified @p type.
+    * Pre-defined context. More may be added so it is possible to add custom
+    * contexts.
+    * <strong>We reserve enum values until 1000 (yeah, it is one thousand )
+    * for kdevelop official context types.</strong>
     */
-    Context( const QString &type );
-    /**
-    * Copy constructor
-    */
-    Context( const Context &);
-    Context &operator=( const Context &);
+    enum { EditorContext, DocumentationContext, ClassContext, FileContext };
 
     /**
-    * Destructor
+    * Implements this in the context so we can provide rtti
     */
-    virtual ~Context();
+    virtual int type() const = 0;
 
     /**
     * Returns the type of this Context, so clients can discriminate
     * between different file contexts.
     */
-    bool hasType( const QString &type ) const;
+    bool hasType( int type ) const;
 
-private:
-    class Private;
-    Private *d;
+protected:
+    /**
+    * Constructor
+    */
+    Context();
+
+    /**
+    * Destructor
+    */
+    virtual ~Context();
 };
 
 /**
@@ -85,6 +90,8 @@ public:
     * Destructor
     */
     virtual ~EditorContext();
+
+    virtual int type() const;
 
     /**
     * Returns the url for the file which this context was invoked for.
@@ -145,6 +152,8 @@ public:
     */
     virtual ~DocumentationContext();
 
+    virtual int type() const;
+
     /**
     * Returns the url of the document this context was invoked for.
     */
@@ -187,7 +196,9 @@ public:
     /**
     * Destructor
     */
-    ~FileContext();
+    virtual ~FileContext();
+
+    virtual int type() const;
 
     /**
     * <b>Compatibility mode</b>
@@ -233,6 +244,8 @@ public:
     * Destructor.
     */
     virtual ~ClassContext();
+
+    virtual int type() const;
 
     /**
     * Returs the classname for the selected item. including its scope

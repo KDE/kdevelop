@@ -117,7 +117,7 @@ void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
     QVBox *vbox;
 
     vbox = dlg->addVBoxPage(i18n("Project Documentation"));
-    DocTreeProjectConfigWidget *w1 = 
+    DocTreeProjectConfigWidget *w1 =
         new DocTreeProjectConfigWidget(m_widget, vbox, project(), "doc tree project config");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
@@ -128,7 +128,7 @@ void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
 void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     kdDebug(9002) << "context in doctree" << endl;
-    if (context->hasType("editor")) {
+    if (context->hasType( Context::EditorContext )) {
         const EditorContext *econtext = static_cast<const EditorContext*>(context);
         QString ident = econtext->currentWord();
         if (!ident.isEmpty()) {
@@ -140,7 +140,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             popup->insertItem( i18n("Goto Manpage: %1").arg(ident),
                                this, SLOT(slotContextGotoManpage()) );
         }
-    } else if (context->hasType("documentation")) {
+    } else if (context->hasType( Context::DocumentationContext )) {
         const DocumentationContext *dcontext = static_cast<const DocumentationContext*>(context);
         kdDebug(9002) << "documentation context in doctree" << endl;
         QString selection = dcontext->selection();

@@ -19,38 +19,10 @@
 // class Context
 ///////////////////////////////////////////////////////////////////////////////
 
-class Context::Private
-{
-public:
-    Private( const QString &type ) : m_type(type) {}
-
-    QString m_type;
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 
-Context::Context( const QString &type )
-    : d( new Private(type) )
+Context::Context()
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-Context::Context( const Context &aContext )
-    : d( 0 )
-{
-    *this = aContext;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-Context &Context::operator=( const Context &aContext)
-{
-    if (d) {
-        delete d; d = 0;
-    }
-    d = new Private( *aContext.d );
-    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,17 +30,15 @@ Context &Context::operator=( const Context &aContext)
 Context::~Context()
 {
     kdDebug() << "Context::~Context()" << endl;
-    delete d;
-    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool Context::hasType( const QString &type ) const
+bool Context::hasType( int aType ) const
 {
-    kdDebug() << "Context::hasType(" << type << "). m_type == " << d->m_type << endl;
+    kdDebug() << "Context::hasType(" << aType << "). this->type() == " << this->type() << endl;
 
-    return type == d->m_type;
+    return aType == this->type();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,7 +64,7 @@ public:
 
 EditorContext::EditorContext( const KURL &url, int line, int col,
     const QString &linestr, const QString &wordstr )
-    : Context("editor"), d( new Private(url, line, col, linestr, wordstr) )
+    : Context(), d( new Private(url, line, col, linestr, wordstr) )
 {
 }
 
@@ -105,6 +75,13 @@ EditorContext::~EditorContext()
     kdDebug() << "EditorContext::~EditorContext()" << endl;
     delete d;
     d = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int EditorContext::type() const
+{
+    return Context::EditorContext;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -177,14 +154,14 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 FileContext::FileContext( const KURL::List &someURLs )
-    : Context("file"), d( new Private(someURLs) )
+    : Context(), d( new Private(someURLs) )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 FileContext::FileContext( const QString &fileName, bool isDirectory )
-    : Context("file"), d( new Private(fileName, isDirectory))
+    : Context(), d( new Private(fileName, isDirectory))
 {
 }
 
@@ -195,6 +172,13 @@ FileContext::~FileContext()
     kdDebug() << "FileContext::~FileContext()" << endl;
     delete d;
     d = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int FileContext::type() const
+{
+    return Context::FileContext;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -237,14 +221,14 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 DocumentationContext::DocumentationContext( const QString &url, const QString &selection )
-    : Context("documentation"), d( new Private(url, selection) )
+    : Context(), d( new Private(url, selection) )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 DocumentationContext::DocumentationContext( const DocumentationContext &aContext )
-    : Context( aContext ), d( 0 )
+    : Context(), d( 0 )
 {
     *this = aContext;
 }
@@ -267,6 +251,13 @@ DocumentationContext::~DocumentationContext()
     kdDebug() << "DocumentationContext::~DocumentationContext()" << endl;
     delete d;
     d = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int DocumentationContext::type() const
+{
+    return Context::DocumentationContext;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -298,7 +289,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 ClassContext::ClassContext( const QString &classname )
-    : Context("class"), d( new Private( classname ))
+    : Context(), d( new Private( classname ))
 {
 }
 
@@ -309,6 +300,13 @@ ClassContext::~ClassContext()
     kdDebug() << "ClassContext::~ClassContext()" << endl;
     delete d;
     d = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+int ClassContext::type() const
+{
+    return Context::ClassContext;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

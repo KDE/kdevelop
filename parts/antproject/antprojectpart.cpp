@@ -522,7 +522,7 @@ void AntProjectPart::optionsAccepted()
 
 void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-  if (!context->hasType("file"))
+  if (!context->hasType( Context::EditorContext ))
     return;
 
   const FileContext *fcontext = static_cast<const FileContext*>(context);

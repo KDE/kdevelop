@@ -405,7 +405,7 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
 
 void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType("editor"))
+    if (!context->hasType( Context::EditorContext ))
         return;
 
     const EditorContext *econtext = static_cast<const EditorContext*>(context);

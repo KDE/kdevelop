@@ -96,76 +96,17 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout6</cstring>
+                <cstring>layout4</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
+                <widget class="QLineEdit" row="1" column="0">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Server path (i.e. :pserver:marios@cvs.kde.org:/home/kde)</string>
+                        <cstring>cvsRshEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="1" column="0">
-                    <item>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>ssh</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>cvsRshComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>CVS_RSH</string>
-                    </property>
-                </widget>
-                <spacer row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>spacer7</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>300</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QPushButton" row="2" column="2">
                     <property name="name">
                         <cstring>fetchModulesButton</cstring>
@@ -186,6 +127,55 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Click to fetch modules list from server you specified</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Server path (i.e. :pserver:marios@cvs.kde.org:/home/kde)</string>
+                    </property>
+                </widget>
+                <spacer row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>spacer7</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>300</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>CVS_RSH</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
@@ -255,7 +245,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Tag</string>
+                        <string>Tag / Branch</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="2">

@@ -308,7 +308,7 @@ void CvsPart::createNewProject( const QString& dirName )
 
 void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 {
-    if (context->hasType( "file" ))
+    if (context->hasType( Context::FileContext ))
     {
         kdDebug(9000) << "CvsPart::contextMenu()" << endl;
 

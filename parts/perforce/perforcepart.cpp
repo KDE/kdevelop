@@ -72,7 +72,7 @@ void PerforcePart::setupActions()
 
 void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (context->hasType("file")) {
+    if (context->hasType( Context::FileContext )) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
         popupfile = fcontext->fileName();
         QFileInfo fi( popupfile );

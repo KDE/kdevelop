@@ -207,7 +207,7 @@ void ToolsPart::updateToolsMenu()
 
 void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType("file"))
+    if (!context->hasType( Context::FileContext ))
         return;
 
     const FileContext *fcontext = static_cast<const FileContext*>(context);

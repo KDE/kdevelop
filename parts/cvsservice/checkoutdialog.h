@@ -36,7 +36,7 @@ public:
     virtual ~CheckoutDialog();
 
     /**
-    * @return "ssh" or empty string
+    * @return the value which will be used for setting $CVS_RSH env variable
     */
     QString cvsRsh() const;
     /**
