@@ -33,6 +33,7 @@
 #include <kmenubar.h>
 #if (QT_VERSION >= 300)
 #include <kapplication.h>
+#include <qtabwidget.h>
 #endif
 #endif
 #include <qtoolbutton.h>
@@ -62,6 +63,11 @@
 #include "kde2laptop_restorebutton.xpm"
 #include "kde2laptop_closebutton.xpm"
 #include "kde2laptop_closebutton_menu.xpm"
+
+#ifndef NO_KDE2
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#endif
 
 using namespace KParts;
 
@@ -459,6 +465,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->show();
    }
 
+#undef FocusIn
    QFocusEvent fe(QEvent::FocusIn);
    QApplication::sendEvent( pWnd, &fe);
 
@@ -497,8 +504,19 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
             pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
          }
       }
+#ifndef NO_KDE2
+      if (mdiMode() == QextMdi::ToplevelMode) {
+         XSetTransientForHint(qt_xdisplay(),pWnd->winId(),topLevelWidget()->winId());
+      }
+#endif
+
       return;
    }
+#ifndef NO_KDE2
+   if (mdiMode() == QextMdi::ToplevelMode) {
+      XSetTransientForHint(qt_xdisplay(),pWnd->winId(),topLevelWidget()->winId());
+   }
+#endif
 
    // this will show it...
    if (bShow) {
@@ -945,6 +963,9 @@ void QextMdiMainFrm::switchToToplevelMode()
 #endif
    for( it.toFirst(); it.current(); ++it) {
       QextMdiChildView* pView = it.current();
+#ifndef NO_KDE2
+      XSetTransientForHint(qt_xdisplay(),pView->winId(),winId());
+#endif
       if( !pView->isToolView())
          pView->show();
    }
@@ -1123,6 +1144,7 @@ void QextMdiMainFrm::finishChildframeMode()
          if( pView->isMaximized())
             pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
          detachWindow( pView, FALSE);
+	 
       }
    }
 }

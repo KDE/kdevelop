@@ -49,7 +49,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_bFocusInEventIsPending(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
-   if(caption) {
+   if(caption != 0L) {
       m_szCaption = caption;
    }
    else {
@@ -537,7 +537,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    else if (e->type() == QEvent::ChildRemoved) {
-      // if we lost a child we uninstall ourself as event filter for the lost 
+      // if we lost a child we uninstall ourself as event filter for the lost
       // child and its children
       QObject* pLostChild = ((QChildEvent*)e)->child();
       if (pLostChild != 0L) {
@@ -549,7 +549,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
             QWidget* widg = (QWidget*)obj;
             ++it;
             widg->removeEventFilter(this);
-            if((widg->focusPolicy() == QWidget::StrongFocus) || 
+            if((widg->focusPolicy() == QWidget::StrongFocus) ||
                (widg->focusPolicy() == QWidget::TabFocus   ) ||
                (widg->focusPolicy() == QWidget::WheelFocus ))
             {

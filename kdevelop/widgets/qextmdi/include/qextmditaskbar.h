@@ -32,7 +32,11 @@
 #else
 #include <ktoolbar.h>
 #endif
-#include <qlist.h>
+#if QT_VERSION < 300
+# include <qlist.h>
+#else
+# include <qptrlist.h>
+#endif
 #include <qpixmap.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -193,7 +197,7 @@ protected:
    QPtrList<QextMdiTaskBarButton>*  m_pButtonList;
 #endif
    /**
-   * The belonging MDI mainframe (parent widget of this) 
+   * The belonging MDI mainframe (parent widget of this)
    */
    QextMdiMainFrm*               m_pFrm;
    /** 
