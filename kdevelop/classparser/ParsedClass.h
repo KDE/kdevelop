@@ -94,6 +94,9 @@ public: // Public attributes
   /** List with names of frientclasses(if any). */
   QStrList friends;
 
+  /** List with names of classes declared in this class(if any). */
+  QStrList childClasses;
+
   /** Iterator for the methods. */
   QListIterator<CParsedMethod> methodIterator;
 
@@ -131,6 +134,9 @@ public: // Metods to set attribute values
 
   /** Add a friend. */
   void addFriend( const char *aName ) { friends.append( aName ); }
+
+  /** Add a childclass. */
+  void addChildClass( const char *aName ) { childClasses.append( aName ); }
 
   /** Add an attribute. */
   void addAttribute( CParsedAttribute *anAttribute );
