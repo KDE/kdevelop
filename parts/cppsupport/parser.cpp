@@ -731,18 +731,18 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 
     int start = lex->index();
 
-    AST::Node _export;
+    AST::Node exp;
 
     int startExport = lex->index();
     if( lex->lookAhead(0) == Token_export ){
 	lex->nextToken();
 	AST::Node n = CreateNode<AST>();
 	UPDATE_POS( n, startExport, lex->index() );
-	_export = n;
+	exp = n;
     }
 
     if( lex->lookAhead(0) != Token_template ){
-	if( _export.get() ){
+	if( exp.get() ){
 	    ADVANCE( Token_template, "template" );
 	} else
 	    return false;
@@ -764,7 +764,7 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
     }
 
     TemplateDeclarationAST::Node ast = CreateNode<TemplateDeclarationAST>();
-    ast->setExported( _export );
+    ast->setExported( exp );
     ast->setTemplateParameterList( params );
     ast->setDeclaration( def );
     UPDATE_POS( ast, start, lex->index() );

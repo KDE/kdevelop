@@ -534,49 +534,52 @@ static QStringList reorder(const QStringList &list)
 
 void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-	QStringList::ConstIterator it;
-
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-	    kdDebug(9007) << "addedFilesToProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
-
-		// changed - daniel
-		QString path = project()->projectDirectory() + "/" + ( *it );
-		maybeParse( path, classStore( ) );
-
-		partController()->editDocument ( KURL ( path ) );
-	}
-
+    QStringList::ConstIterator it;
+    QDir d( project()->projectDirectory() );
+    
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+	QFileInfo fileInfo( d, *it );
+	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath() << endl;
+	
+	// changed - daniel
+	QString path = fileInfo.absFilePath();
+	maybeParse( path, classStore( ) );
+	
+	partController()->editDocument ( KURL ( path ) );
+    }
+    
     emit updatedSourceInfo();
 }
 
 
 void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-
-	QStringList::ConstIterator it;
-
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-		kdDebug(9007) << "removedFilesFromProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
-
-		QString path = project()->projectDirectory() + "/" + ( *it );
-		classStore()->removeWithReferences(path);
-	        m_backgroundParser->removeFile( path );
-	}
-
-	emit updatedSourceInfo();
+    QStringList::ConstIterator it;
+    QDir d( project()->projectDirectory() );
+    
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+	QFileInfo fileInfo( d, *it );
+	kdDebug(9007) << "removedFilesFromProject(): " << fileInfo.absFilePath() << endl;
+	
+	QString path = fileInfo.absFilePath();
+	classStore()->removeWithReferences(path);
+	m_backgroundParser->removeFile( path );
+    }
+    
+    emit updatedSourceInfo();
 }
 
 
 void CppSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
-
+    
     if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-        // changed - daniel
-        maybeParse( fileName, classStore( ) );
-        emit updatedSourceInfo();
+	// changed - daniel
+	maybeParse( fileName, classStore( ) );
+	emit updatedSourceInfo();
     }
 }
 
@@ -1101,13 +1104,15 @@ CppSupportPart::parseProject( )
     bar->show( );
 
     int n = 0;
-    QString filePath;
+    QDir d( project()->projectDirectory() );
+
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
-	filePath = project()->projectDirectory() + "/" + ( *it );
+	QFileInfo fileInfo( d, *it );
+
 	label->setText( i18n( "Currently parsing: '%1'" )
-			.arg( filePath ) );
-        maybeParse( filePath, classStore() );
+			.arg( fileInfo.absFilePath() ) );
+        maybeParse( fileInfo.absFilePath(), classStore() );
 
         kapp->processEvents( );
 

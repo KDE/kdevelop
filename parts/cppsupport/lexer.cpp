@@ -467,7 +467,9 @@ const QChar* Lexer::readStringLiteral( const QChar* ptr )
 
 const QChar* Lexer::readNumberLiteral( const QChar* ptr )
 {
+#if defined (Q_CC_GNU)
 #warning "TODO: Lexer::readNumberLiteral()"
+#endif
     while( isValid(ptr) && (ptr->isLetterOrNumber() || *ptr == '.') )
         NEXT_CHAR( ptr );
 
@@ -561,7 +563,7 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 
 	    ptr = readWhiteSpaces( ptr, false );
 	    QString body;
-	    while( isValid(ptr) && *ptr != "\n" ){
+	    while( isValid(ptr) && *ptr != '\n' ){
 		if( *ptr == '\\' ){
 		    const QChar* p = readWhiteSpaces( ptr + 1, false );
 		    if( isValid(p) && *p == '\n' ){
