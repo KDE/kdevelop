@@ -964,8 +964,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
             if ( !(((obj == m_pWinIcon) || (obj == m_pUnixIcon)) && bIsSecondClick) ) {
                // in case we didn't click on the icon button
                QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
-               QApplication::postEvent(qApp->mainWidget(), pFE);
-               QApplication::sendPostedEvents();
+               QApplication::sendEvent(qApp->mainWidget(), pFE);
                if (m_pClient && !((QWidget*)obj)->hasFocus())
                   m_pClient->activate();
                QWidget* w = (QWidget*) obj;
