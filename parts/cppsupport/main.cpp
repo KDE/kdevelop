@@ -2,6 +2,7 @@
 
 #include "driver.h"
 #include "ast.h"
+#include "lexer.h"
 
 #ifdef __WALKER__
 #include "my_walker.h"
@@ -22,6 +23,11 @@ class MyDriver: public Driver
 public:
     MyDriver() { setup(); }
 
+    void setupLexer( Lexer* lex )
+    {
+        lex->disableSkipWords();
+        Driver::setupLexer( lex );
+    }
 
     // setup the preprocessor
     // code provided by Reginald Stadlbauer <reggie@trolltech.com>

@@ -448,9 +448,13 @@ void Lexer::handleDirective( const QString& directive )
     } else if( directive == "ifndef" ){
         processIfndef();
     } else if( directive == "include" ){
-        processInclude();
+	if( !m_skipping[ m_ifLevel ] ){
+            processInclude();
+        }
     } else if( directive == "undef" ){
-        processUndef();
+	if( !m_skipping[ m_ifLevel ] ){
+            processUndef();
+        }
     }
 
     // skip line
