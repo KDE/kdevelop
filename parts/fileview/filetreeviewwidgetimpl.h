@@ -13,6 +13,7 @@
 #define FILETREEVIEWWIDGETIMPL_H
 
 #include <qobject.h>
+#include <qvaluelist.h>
 #include <kfiletreeview.h>
 #include <qdom.h>
 
@@ -59,15 +60,10 @@ public:
     */
     filetreeview::BranchItemFactory *branchItemFactory() const { return m_branchItemFactory; }
     /**
-    * Warn clients that reloading is starting ...
-    * @param reloading
-    */
-    void setReloadingTree( bool reloading = true ) { m_isReloadingTree = reloading; }
-    /**
     * Costraints that must be satisfied to start a reload of the the tree.
     * @return
     */
-    virtual bool canReloadTree() const { return !m_isReloadingTree; }
+    virtual bool canReloadTree() const = 0;
     /**
     * Here the popup menu is filled: by standard only the "reload tree" (only if the above function
     * returns true) and "show project files" options are added
@@ -88,7 +84,6 @@ signals:
     void implementationInvalidated();
 
 private slots:
-    void slotSelectionChanged();
     void slotReloadTree();
     void slotToggleShowNonProjectFiles();
 
@@ -97,11 +92,11 @@ protected:
     QString projectDirectory() const;
 
 private:
+	QValueList<QListViewItem*> allSelectedItems( QListViewItem * item ) const;
     filetreeview::BranchItemFactory *m_branchItemFactory;
 
     FileViewPart *m_part;
 
-    QPtrList<KFileTreeViewItem> m_selectedItems;
     bool m_isReloadingTree;
 
     KToggleAction *m_actionToggleShowNonProjectFiles;

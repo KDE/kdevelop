@@ -232,7 +232,7 @@ VCSFileTreeWidgetImpl::~VCSFileTreeWidgetImpl()
 
 bool VCSFileTreeWidgetImpl::canReloadTree() const
 {
-    return !m_isSyncingWithRepository && FileTreeViewWidgetImpl::canReloadTree();
+    return !m_isSyncingWithRepository;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

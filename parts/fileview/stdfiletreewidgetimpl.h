@@ -26,6 +26,11 @@ class StdFileTreeWidgetImpl : public FileTreeViewWidgetImpl
 public:
     StdFileTreeWidgetImpl( FileTreeWidget *parent );
     virtual ~StdFileTreeWidgetImpl();
+
+    /*
+    * We have no reason not to allow it here
+    */
+    virtual bool canReloadTree() const { return true; }
 };
 
 #endif

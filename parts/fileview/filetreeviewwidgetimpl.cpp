@@ -34,7 +34,6 @@ FileTreeViewWidgetImpl::FileTreeViewWidgetImpl( FileTreeWidget *parent, const ch
 {
     kdDebug(9017) << "FileTreeViewWidgetImpl::FileTreeViewWidgetImpl()" << endl;
 
-    connect( parent, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()) );
     // Actions
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
@@ -107,67 +106,50 @@ KURL::List FileTreeViewWidgetImpl::selectedPathUrls()
 {
     kdDebug(9017) << "FileTreeViewWidgetImpl::selectedPathUrls()" << endl;
 
-    if (m_isReloadingTree)
-        return KURL::List();
+	KURL::List urlList;
 
-    QStringList pathUrls;
-
-    // They should be all selected but I want to be sure about this.
-    FileTreeViewItem *item = static_cast<FileTreeViewItem *>( m_selectedItems.first() );
-    while (item)
-    {
-        if (item->isSelected())
-            pathUrls << item->path();
-        item = static_cast<FileTreeViewItem *>( m_selectedItems.next() );
-    }
-
-    return KURL::List( pathUrls );
+	QValueList<QListViewItem*> list = allSelectedItems( fileTree()->firstChild() );
+	QValueList<QListViewItem*>::Iterator it = list.begin();
+	while( it != list.end() )
+	{
+		KURL url;
+		url.setPath( static_cast<FileTreeViewItem*>( *it )->path() );
+		urlList << url;
+		++it;
+	}
+	
+	return urlList;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeViewWidgetImpl::slotSelectionChanged()
+QValueList<QListViewItem*> FileTreeViewWidgetImpl::allSelectedItems( QListViewItem * item ) const
 {
-    kdDebug(9017) << "FileTreeViewWidgetImpl::slotSelectionChanged()" << endl;
-
-    if (m_isReloadingTree)
-        return;
-
-    // Check for this item
-    FileTreeViewItem *item = currentItem();
-    if (!item)
-        return;
-    if (item->isSelected())
-    {
-        if (m_selectedItems.find( item ) != -1)
-            return;
-        m_selectedItems.append( item );
-    }
-    else // It has	 been removed
-        m_selectedItems.remove( item );
-
-    // Now we clean-up the selection of old elements which are no more selected.
-    KFileTreeViewItem *it = m_selectedItems.first();
-    while (it != 0)
-    {
-        if (!it->isSelected()) {
-            KFileTreeViewItem *toDelete = it;
-            it = m_selectedItems.next();
-            m_selectedItems.remove( toDelete );
-        }
-        else
-            it = m_selectedItems.next();
-    }
+	QValueList<QListViewItem*> list;
+	
+	if ( item )
+	{
+		if ( item->isSelected() )
+		{
+			list << item;
+		}
+		
+		QListViewItem * it = item->firstChild();
+		while( it  )
+		{
+			list += allSelectedItems( it );
+			it = it->nextSibling();
+		}
+	}
+	
+	return list;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void FileTreeViewWidgetImpl::slotReloadTree()
 {
-    setReloadingTree();
-    m_selectedItems.clear();
     fileTree()->openDirectory( projectDirectory() );
-    setReloadingTree( false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
