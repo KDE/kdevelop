@@ -8,6 +8,8 @@
 	* Set /general/author and /general/email variables in
 	  project file when creating new projects
 	* More keywords in app wizard
+	* Load Java debugger only for JVM programs
+	  (keyword to be set by app wizard)
 
 2002-04-10  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* implemented setting the execution point
