@@ -16,7 +16,7 @@
 #include "ktabzoomwidget.h"
 
 
-class KWidgetInfo
+class KTZWidgetInfo
 {
 public:
 
@@ -35,7 +35,7 @@ public:
   KTabZoomBar                *m_tabBar;
   QBoxLayout                 *m_layout;
   KTabZoomFrame              *m_popup;
-  QPtrList<KWidgetInfo>      m_info;
+  QPtrList<KTZWidgetInfo>    m_info;
 
 };
 
@@ -44,6 +44,7 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
   : QWidget(parent, name)
 {
   d = new KTabZoomWidgetPrivate;
+  d->m_info.setAutoDelete(true);
 
   d->m_tabPosition = pos;
   d->m_content = 0;
@@ -80,7 +81,7 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title)
 {
   kdDebug(9000) << "AddTab: " << widget << endl;
 
-  KWidgetInfo *info = new KWidgetInfo;
+  KTZWidgetInfo *info = new KTZWidgetInfo;
   info->m_widget = widget;
 
   info->m_barIndex = d->m_tabBar->addTab(new QTab(title));
@@ -98,7 +99,7 @@ void KTabZoomWidget::widgetDeleted()
 
   kdDebug(9000) << "Widget deleted: " << w << endl;
 
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == w)
     {
       d->m_tabBar->removeTab(i->m_barIndex);
@@ -140,7 +141,7 @@ void KTabZoomWidget::selected(int index)
 {
   calculateGeometry();
 
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_barIndex == index)
     {
       d->m_popup->selected(i->m_index);
@@ -151,7 +152,7 @@ void KTabZoomWidget::selected(int index)
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == widget)
     {
       d->m_tabBar->setPressed(i->m_barIndex);
@@ -162,7 +163,7 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
 
 void KTabZoomWidget::lowerAllWidgets()
 {
-    for ( KWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
+    for ( KTZWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
     {
         d->m_popup->hide();
         d->m_tabBar->unsetButtons();
@@ -204,7 +205,7 @@ void KTabZoomWidget::unselected()
 
 void KTabZoomWidget::lowerWidget(QWidget *w)
 {
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == w)
     {
       d->m_popup->hide();

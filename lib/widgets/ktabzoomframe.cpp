@@ -14,7 +14,7 @@
 #include "ktabzoomframe.h"
 
 
-class KWidgetInfo
+class KTZFWidgetInfo
 {
 public:
 
@@ -33,7 +33,7 @@ public:
   QLabel                     *m_title;
   QWidgetStack               *m_stack;
   int                        m_count;
-  QPtrList<KWidgetInfo>      m_info;
+  QPtrList<KTZFWidgetInfo>   m_info;
   QFrame                     *m_slider;
   bool                       m_sliding;
   QPoint                     m_slideStart;
@@ -46,6 +46,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   : QWidget(parent, name)
 {
   d = new KTabZoomFramePrivate;
+  d->m_info.setAutoDelete(true);
 
   d->m_position = pos;
 
@@ -163,7 +164,7 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
 {
   int index = d->m_count++;
 
-  KWidgetInfo *info = new KWidgetInfo;
+  KTZFWidgetInfo *info = new KTZFWidgetInfo;
 
   info->m_index = d->m_stack->addWidget(widget, index);
   info->m_widget = widget;
@@ -177,7 +178,7 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
 
 void KTabZoomFrame::removeTab(int index)
 {
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZFWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_index == index)
     {
       d->m_info.remove(i);
@@ -188,7 +189,7 @@ void KTabZoomFrame::removeTab(int index)
 
 void KTabZoomFrame::selected(int index)
 {
-  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+  for (KTZFWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_index == index)
     {
       d->m_stack->raiseWidget(i->m_widget);
