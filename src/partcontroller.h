@@ -26,10 +26,13 @@ namespace KEditor
   class Editor;
 };
 
+
+#include "kdevpartcontroller.h"
+
+
 class PartListEntry;
 
-
-class PartController : public QWidget
+class PartController : public KDevPartController
 {
   Q_OBJECT
 
@@ -49,7 +52,9 @@ public:
 
   void saveAllFiles();
   void revertAllFiles();
-  
+
+  KParts::Part *getActivePart();
+
 
 protected:
 
@@ -78,7 +83,7 @@ private slots:
 
 private:
 
-  void editTextDocument(const KURL &url, int lineNum);
+  void setLineNumber(int lineNum);
 
   void setupActions();
 

@@ -1,11 +1,18 @@
 #include "core.h"
 #include "classstore.h"
+#include "partcontroller.h"
 
 
 #include "api.h"
 
 
 API *API::s_instance = 0;
+
+
+KDevPartController *API::getPartController()
+{
+  return PartController::getInstance();
+}
 
 
 void API::createInstance()

@@ -15,6 +15,8 @@
 #include <kparts/partmanager.h>
 #include <kfiledialog.h>
 
+#include <ktexteditor/cursorinterface.h>
+
 
 #include "keditor/editor.h"
 #include "keditor/cursor_iface.h"
@@ -62,7 +64,7 @@ PartController *PartController::s_instance = 0;
 
 
 PartController::PartController(QWidget *parent, QWidget *mainwindow, const char *name)
-  : QWidget(parent, name)
+  : KDevPartController(parent, name)
 {
   QVBoxLayout *vbox = new QVBoxLayout(this);
 
@@ -102,6 +104,12 @@ PartController *PartController::getInstance()
 }
 
 
+KParts::Part *PartController::getActivePart()
+{
+  return m_partManager->activePart();
+}
+
+
 void PartController::setupActions()
 {
   (void) KStdAction::open(this, SLOT(slotOpenFile()), 
@@ -136,35 +144,33 @@ void PartController::setupActions()
 
 void PartController::editDocument(const KURL &url, int lineNum)
 {
-  // TODO: Make use of the lineNum!
-
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
     activatePart(existingPart);
+    setLineNumber(lineNum);
     return;
   }
 
   QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
 
-  kdDebug() << "MIMETYPE: " << mimeType << endl;
-
   KParts::Factory *factory = 0;
-/*  if (mimeType.startsWith("text/"))
+  if (mimeType.startsWith("text/"))
   {
-    // TODO: get rid of the old editor stuff!
-    editTextDocument(url, lineNum);
-    return;
+    // TODO: once there is another editor, make the one used
+    // configurable
+    factory = findPartFactory(mimeType, "KTextEditor/Document");
   }
-*/
 
-  factory = findPartFactory(mimeType, "KParts/ReadWritePart");
+  if (!factory)
+    factory = findPartFactory(mimeType, "KParts/ReadWritePart");
 
   if (factory)
   {
     KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(m_tabWidget, "KParts/ReadWritePart"));
-    integratePart(part, url);
     part->openURL(url);
+    integratePart(part, url);
+    setLineNumber(lineNum);
   }
   else
   {
@@ -176,12 +182,11 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
 void PartController::showDocument(const KURL &url, int lineNum)
 {
-  // TODO: use lineNum!
-
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
     activatePart(existingPart);
+    setLineNumber(lineNum);
     return;
   }
 
@@ -192,13 +197,29 @@ void PartController::showDocument(const KURL &url, int lineNum)
   if (factory)
   {
     KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(m_tabWidget, "KParts/ReadOnlyPart"));
-    integratePart(part, url);
     part->openURL(url);
+    integratePart(part, url);
+    setLineNumber(lineNum);
   }
   else
   {
     // try to start a new handling process
     new KRun(url);
+  }
+}
+
+
+void PartController::setLineNumber(int lineNum)
+{
+  KParts::Part *part = m_partManager ->activePart();
+
+  KTextEditor::CursorInterface *iface = dynamic_cast<KTextEditor::CursorInterface*>(part);
+  if (iface)
+  {
+    kdDebug() << "Set cursor to line " << lineNum << endl;
+    KTextEditor::Cursor *cursor = iface->createCursor();
+    cursor->setPosition(lineNum, 0);
+    delete cursor;
   }
 }
 
@@ -254,6 +275,8 @@ void PartController::slotActivePartChanged(KParts::Part *part)
   kdDebug() << "ACTIVE PART: " << part << endl;
 
   TopLevel::getInstance()->createGUI(part);
+
+  emit activePartChanged(part);
 }
 
 
@@ -261,6 +284,7 @@ void PartController::activatePart(KParts::Part *part)
 {
   m_partManager->setActivePart(part);
   m_tabWidget->showPage(part->widget());
+  part->widget()->setFocus();
 }
 
 
@@ -340,15 +364,19 @@ void PartController::slotPartRemoved(KParts::Part *part)
 
   updateBufferMenu();
   updateMenuItems();
+
+  emit partRemoved(part);
 }
 
 
-void PartController::slotPartAdded(KParts::Part *)
+void PartController::slotPartAdded(KParts::Part *part)
 {
   kdDebug() << "PART ADDED!!!!" << endl;
 
   updateBufferMenu();
   updateMenuItems();
+
+  emit partAdded(part);
 }
 
 
@@ -370,23 +398,6 @@ void PartController::updateMenuItems()
   m_closeWindowAction->setEnabled(hasReadOnlyParts);
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
-}
-
-
-void PartController::editTextDocument(const KURL &url, int lineNum)
-{
-  // activate the requested file
-  KEditor::Document *doc = editor()->document(url);
-  if (doc)
-    return;
-
-  doc = editor()->createDocument(TopLevel::getInstance(), url);;
-  integratePart(doc, url);
-
-  // goto the requested line
-  KEditor::CursorDocumentIface *iface = KEditor::CursorDocumentIface::interface(doc);
-  if (iface)
-    iface->setCursorPosition(lineNum, 0);
 }
 
 

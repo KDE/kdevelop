@@ -9,6 +9,8 @@ class API : public KDevApi
 {
 public:
 
+  virtual KDevPartController *getPartController();
+  
   static void createInstance();
   static API *getInstance();
 
