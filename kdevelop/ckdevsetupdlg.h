@@ -52,6 +52,7 @@ private:
   QWidget *w1;
   QWidget *w2;
   QWidget *w3;
+  QWidget *w4;
   KKeyChooser* w21;
 
   QString kde_doc_path, qt_doc_path;
@@ -72,6 +73,7 @@ private:
 
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;
+  QLineEdit* qt2_edit;
 
   // Dbg external options
   QButtonGroup* dbgExternalGroup;
@@ -93,6 +95,8 @@ private:
   void slotKDEClicked();
   void slotKDEUpdateReq();
   void slotSetDebug();
+  void slotQt2Clicked();
+
 };
 
 #endif

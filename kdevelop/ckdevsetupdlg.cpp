@@ -495,11 +495,41 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
 
+//************************** QT-2 directory select *************************//
+  w4 = new QWidget( this, "pat" );
+  config->setGroup("QT2");
+
+  QLabel* qt2= new QLabel(w4,"NoName");
+  qt2->setGeometry(10,10,100,30);
+  qt2->setMinimumSize(0,0);
+  qt2->setText(i18n("Qt 2.x directory:"));
+
+  qt2_edit= new QLineEdit(w4,"NoName");
+  qt2_edit->setGeometry(10,50,290,30);
+  qt2_edit->setMinimumSize(0,0);
+  qt2_edit->setMaxLength( 32767 );
+
+  QString qt2_path= config->readEntry("qt2dir");
+  qt2_edit->setText(qt2_path);
+
+  QPushButton* qt2_button= new QPushButton(w4,"NoName");
+  qt2_button->setGeometry(310,50,30,30);
+  qt2_button->setMinimumSize(0,0);
+  qt2_button->setPixmap(pix);
+
+  KQuickHelp::add(qt2_edit,
+  KQuickHelp::add(qt2_button,
+  KQuickHelp::add(qt2,i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0"))));
+
+  connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
+
+
   // *********** tabs ****************
   addTab(w1, i18n("General"));
   addTab(w2, i18n("Keys"));
   addTab( w, i18n("Documentation" ));
   addTab(w3, i18n("Debugger" ));
+  addTab(w4, i18n("Path"));
 
   // **************set the button*********************
   setDefaultButton(i18n("Default"));
@@ -616,6 +646,9 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("Break on loading libs", dbgLibCheck->isChecked());
   config->writeEntry("Enable floating toolbar", dbgFloatCheck->isChecked());
 
+  config->setGroup("QT2");
+  config->writeEntry("qt2dir", qt2_edit->text());
+
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
   config->sync();
@@ -639,6 +672,8 @@ void CKDevSetupDlg::slotQtClicked(){
                                                               "correct path."),KMsgBox::EXCLAMATION);
   }
 }
+
+
 void CKDevSetupDlg::slotKDEClicked(){
   QString dir;
   config->setGroup("Doc_Location");
@@ -684,4 +719,20 @@ void CKDevSetupDlg::slotSetDebug()
   dbgAsmCheck->setEnabled(!externalDbg);
   dbgLibCheck->setEnabled(!externalDbg);
   dbgFloatCheck->setEnabled(!externalDbg);
+}
+
+void CKDevSetupDlg::slotQt2Clicked(){
+  QString dir;
+  config->setGroup("QT2");
+  dir = KFileDialog::getDirectory(config->readEntry("qt2dir"));
+  if (!dir.isEmpty()){
+    qt2_edit->setText(dir);
+
+  }
+  QString qt_testfile=dir+"include/qapp.h"; // test if the path really is the qt-doc path
+  if(!QFileInfo(qt_testfile).exists())
+  	KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+                                                              "Qt-2.x root directory. Please choose the\n"
+                                                              "correct path."),KMsgBox::EXCLAMATION);
+
 }
