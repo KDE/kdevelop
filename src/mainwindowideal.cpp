@@ -262,6 +262,7 @@ void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
 
 void MainWindowIDEAl::raiseView(QWidget *view) {
     m_leftBar->raiseWidget(view);
+    m_rightBar->raiseWidget(view);
     m_bottomBar->raiseWidget(view);
     m_tabWidget->showPage(view);
 }
@@ -269,12 +270,14 @@ void MainWindowIDEAl::raiseView(QWidget *view) {
 
 void MainWindowIDEAl::lowerView(QWidget *view) {
     m_leftBar->lowerWidget(view);
+    m_rightBar->lowerWidget(view);
     m_bottomBar->lowerWidget(view);
 }
 
 
 void MainWindowIDEAl::lowerAllViews() {
     m_leftBar->lowerAllWidgets();
+    m_rightBar->lowerAllWidgets();
     m_bottomBar->lowerAllWidgets();
 }
 
@@ -283,25 +286,25 @@ void MainWindowIDEAl::moveRelativeTab(int n) {
     if (m_leftBar->hasFocus()) bar = m_leftBar;
     if (m_rightBar->hasFocus()) bar = m_rightBar;
     if (m_bottomBar->hasFocus()) bar = m_bottomBar;
-
+    
     if (bar) {
-    if(bar->count()) {
-            int index = bar->indexOf(bar->current());
-
-            QWidget * view = (bar->at((bar->count()+index+n)%bar->count()));
-            bar->raiseWidget(view);
-        }
-        return;
+	if(bar->count()) {
+	    int index = bar->indexOf(bar->current());
+	    
+	    QWidget * view = (bar->at((bar->count()+index+n)%bar->count()));
+	    bar->raiseWidget(view);
+	}
+	return;
     }
-
+    
     //Default : editor
     if(m_tabWidget->count()) {
-            int index = m_tabWidget->currentPageIndex();
-
-            QWidget * view = (m_tabWidget->page((m_tabWidget->count()+index+n)%m_tabWidget->count()));
-            m_tabWidget->showPage(view);
-            m_tabWidget->currentPage()->setFocus();
-        }
+	int index = m_tabWidget->currentPageIndex();
+	
+	QWidget * view = (m_tabWidget->page((m_tabWidget->count()+index+n)%m_tabWidget->count()));
+	m_tabWidget->showPage(view);
+	m_tabWidget->currentPage()->setFocus();
+    }
 }
 
 void MainWindowIDEAl::gotoNextWindow() {
