@@ -3,7 +3,7 @@
                              -------------------
     begin                : Tue Mar 30 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,13 +22,12 @@
 #include <qstring.h>
 #include "ParsedAttribute.h"
 #include "ParsedItem.h"
-#include "ParsedClassItem.h"
 #include "ParsedContainer.h"
 
 /** The parsed representation of a structure.
  * @author Jonas Nordin
  */
-class CParsedStruct : public CParsedContainer, public CParsedClassItem
+class CParsedStruct : public CParsedContainer
 {
 public: // Constructor & Destructor
 

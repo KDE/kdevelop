@@ -1,12 +1,31 @@
+/***************************************************************************
+                          ParsedAttribute.h  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _CPARSEDATTRIBUTE_H_INCLUDED
 #define _CPARSEDATTRIBUTE_H_INCLUDED
 
 #include "ParsedItem.h"
-#include "ParsedClassItem.h"
 #include "tokenizer.h"
 
-/** Represents an attribute and all data for the attribute. */
-class CParsedAttribute : public CParsedItem, public CParsedClassItem
+/** Represents an attribute and all data for the attribute. 
+ * 
+ * @author Jonas Nordin
+ */
+class CParsedAttribute : public CParsedItem
 {
 public: // Constructor && Destructor
 

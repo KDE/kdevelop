@@ -1,9 +1,9 @@
 /***************************************************************************
-                          ClassParser.cpp  -  description
+                          ClassParser.cc  -  description
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
    
  ***************************************************************************/
 
@@ -20,9 +20,9 @@
 #include <iostream.h>
 #include <qstring.h>
 #include <qregexp.h> 
-#include <assert.h>
 #include <kapp.h>
 #include "ClassParser.h"
+#include "ProgrammingByContract.h"
 
 /** Line where a comment starts. */
 extern int comment_start;
@@ -110,11 +110,7 @@ void CClassParser::emptyStack()
  *-----------------------------------------------------------------*/
 bool CClassParser::commentInRange( CParsedItem *aItem )
 {
-  //assert( aItem != NULL );
-  if(aItem == 0){
-    cerr << "ERROR!!! in parser CClassParser::commentInRange: \n";
-    return false;
-  }
+  REQUIRE1( "Valid item", aItem != NULL, false );
 
   int range;
 
@@ -150,6 +146,8 @@ void CClassParser::skipThrowStatement()
  *-----------------------------------------------------------------*/
 void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
 {
+  REQUIRE( "Valid struct", aStruct != NULL );
+
   while( lexem != '}' && lexem != 0 )
   {
     if( lexem != '}' )
@@ -202,13 +200,8 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
 {
-  //  assert( aContainer != NULL );
-  //  assert( lexem == '{' );
-  if(aContainer == 0 ){
-    cerr << "ERROR!!! in parser CClassParser::fillInParsedStruct: \n";
-    return;
-  }
-
+  REQUIRE( "Valid container", aContainer != NULL );
+  REQUIRE( "Valid lexem", lexem == '{' );
 
   CParsedStruct *aStruct = new CParsedStruct();
 
@@ -258,6 +251,8 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
  *-----------------------------------------------------------------*/
 void CClassParser::parseStruct( CParsedContainer *aContainer )
 {
+  REQUIRE( "Valid container", aContainer != NULL );
+
   while( lexem != 0 && lexem != '{' && lexem !=';' )
   {
     PUSH_LEXEM();
@@ -286,15 +281,28 @@ void CClassParser::parseEnum()
     getNextLexem();
 }
 
-
-void CClassParser::parseNamespace()
+/*----------------------------------- CClassParser::parseNamespace()
+ * parseNamespace()
+ *   Parse a namespace.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 {
+  REQUIRE( "Valid scope", scope != NULL );
+
+  CParsedScopeContainer *ns = new CParsedScopeContainer();
+
   getNextLexem();
 
   // cerr << "parsing namespace" << endl;
   // cerr << "lexem = " << lexem << ":" << static_cast<char>(lexem) << endl;
 
-  if( lexem == '{' ) {
+  if( lexem == '{' ) 
+  {
     // anonymous namespace
     // assume 1-1 correspondence between file name and translation unit
     QString short_file_name(currentFile);
@@ -302,16 +310,16 @@ void CClassParser::parseNamespace()
     QString trans_unit_ident("(");
     trans_unit_ident += short_file_name;
     trans_unit_ident += ")";
-    namespace_stack.push_back(trans_unit_ident);
+
+    ns->setName( trans_unit_ident );
   }
-  else {
-    // extract name of namespace
-    CParsedLexem alex( lexem, getText() );
-    namespace_stack.push_back(alex.text);
+  else 
+  {
+    ns->setName( getText() );
 
     // check that it is well-formed, moving to beginning of block
     getNextLexem();
-    while(lexem != '{') {
+    while(lexem != 0 && lexem != '{') {
       debug("Bad namespace identifier.");
       getNextLexem();
     }
@@ -321,12 +329,14 @@ void CClassParser::parseNamespace()
   getNextLexem();
 
   while(lexem != 0 && lexem != '}') {
-    parseTopLevelLexem();
+    parseTopLevelLexem( ns );
     if (lexem == ';')
       getNextLexem();
   }
 
-  namespace_stack.pop_back();
+  // If the parsing went ok, we add the scope.
+  if( lexem != 0 )
+    scope->addScope( ns );
 }
 
 
@@ -476,6 +486,8 @@ bool CClassParser::isEndOfVarDecl()
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
 {
+  REQUIRE( "Valid attribute", anAttr != NULL );
+
   bool exit=false;
   CParsedLexem *aLexem;
   QString addDecl;
@@ -611,6 +623,8 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
 {
+  REQUIRE( "Valid attribute", anAttr != NULL );
+
   QString type;
 
   // Get the everything exept the type
@@ -653,6 +667,8 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
  *-----------------------------------------------------------------*/
 void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
 {
+  REQUIRE( "Valid container", aContainer != NULL );
+
   bool exit = false;
   CParsedAttribute *anAttr;
   CParsedLexem *aLexem;
@@ -821,6 +837,8 @@ CParsedAttribute *CClassParser::parseVariable()
  *-----------------------------------------------------------------*/
 void CClassParser::parseFunctionArgs( CParsedMethod *method )
 {
+  REQUIRE( "Valid method", method != NULL );
+
   CParsedAttribute *anAttr;
   CParsedArgument *anArg;
   bool exit = false;
@@ -866,6 +884,8 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
 {
+  REQUIRE( "Valid method", aMethod != NULL );
+
   QString name;
   CParsedLexem *aLexem;
   QString type;
@@ -917,7 +937,7 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   getNextLexem();
 
   // Const method
-  if( lexem == CONST )
+  if( lexem == CPCONST )
   {
     aMethod->setIsConst( true );
     getNextLexem();
@@ -1182,6 +1202,8 @@ int CClassParser::checkClassDecl()
  *-----------------------------------------------------------------*/
 void CClassParser::parseClassInheritance( CParsedClass *aClass )
 {
+  REQUIRE( "Valid class", aClass != NULL );
+
   CParsedParent *aParent; // A parent of this class.
   QString cname;          // Name of inherited class.
   int exportit=-1;          // Parent import status(private/public/protected).
@@ -1194,8 +1216,8 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     
     // For classes with no scope identifier at inheritance.
     if( lexem == ID )
-      exportit = PRIVATE;
-    else if( lexem == PUBLIC || lexem == PROTECTED || lexem == PRIVATE )
+      exportit = CPPRIVATE;
+    else if( lexem == CPPUBLIC || lexem == CPPROTECTED || lexem == CPPRIVATE )
     {
       exportit = lexem;
       getNextLexem();
@@ -1234,7 +1256,7 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
 CParsedClass *CClassParser::parseClassHeader()
 {
   CParsedClass *aClass;
-  QString parentTree;
+  QString scopeStr;
   CParsedLexem *aLexem;
   bool foundCLCL = false;
 
@@ -1259,16 +1281,6 @@ CParsedClass *CClassParser::parseClassHeader()
     getNextLexem();
   }
 
-  QString fully_qualified_name;
-
-  for( list<QString>::const_iterator i = namespace_stack.begin();
-       i != namespace_stack.end();
-       ++i
-      ) {
-    fully_qualified_name += *i;
-    fully_qualified_name += QString("::");
-  }
-
   // The classname is at the top of the stack.
   aLexem = lexemStack.pop();
   
@@ -1276,8 +1288,8 @@ CParsedClass *CClassParser::parseClassHeader()
     cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
     return 0;
   }
-  fully_qualified_name += aLexem->text;
-  aClass->setName( fully_qualified_name /* aLexem->text */);
+
+  aClass->setName( aLexem->text );
   delete aLexem;
 
   // Check if this a implementation of a nested class.
@@ -1288,18 +1300,19 @@ CParsedClass *CClassParser::parseClassHeader()
       // Skip ::
       delete lexemStack.pop();
 
-      // Append parent.
+      // Fetch the name of the parent.
       aLexem = lexemStack.pop();
       
       // Only add . if the string contains something.
-      if( !parentTree.isEmpty() )
-        parentTree = "." + parentTree;
+      if( !scopeStr.isEmpty() )
+        scopeStr = "." + scopeStr;
 
-      parentTree = aLexem->text + parentTree;
+      scopeStr = aLexem->text + scopeStr;
       delete aLexem;
     }
-    
-    aClass->setDeclaredInClass( parentTree );
+
+    // Set the scope of the class.
+    aClass->setDeclaredInScope( scopeStr );
   }
 
   // Check for inheritance
@@ -1326,6 +1339,8 @@ CParsedClass *CClassParser::parseClassHeader()
  *-----------------------------------------------------------------*/
 bool CClassParser::parseClassLexem( CParsedClass *aClass )
 {
+  REQUIRE1( "Valid class", aClass != NULL, false );
+
   CParsedClass *childClass;
   CParsedMethod *aMethod;
   QString childMap;
@@ -1333,15 +1348,15 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
 
   switch( lexem )
   {
-    case PUBLIC:
+    case CPPUBLIC:
       declaredScope = PIE_PUBLIC;
       methodType = 0;
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       declaredScope = PIE_PROTECTED;
       methodType = 0;
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       declaredScope = PIE_PRIVATE;
       methodType = 0;
       break;
@@ -1353,10 +1368,11 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       childClass = parseClass();
       if( childClass != NULL )
       {
-        childClass->setDeclaredInClass( aClass->name );
+        // When the childclass gets added to its parent class
+        // the declaredInScope attribute gets set which gives it the
+        // correct path.
         aClass->addClass( childClass );
-        childMap = aClass->name + "." + childClass->name;
-        store.globalContainer.addSubClass( childMap, childClass );
+        store.globalContainer.addClass( childClass );
       }
       break;
     case CPVIRTUAL:
@@ -1373,7 +1389,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       }
       break;        
     case CPSTRUCT:
-    case CONST:
+    case CPCONST:
     case ID:
       // Ignore everything that hasn't got any scope declarator.
       if( declaredScope != PIE_GLOBAL )
@@ -1471,7 +1487,7 @@ CParsedClass *CClassParser::parseClass()
  *-----------------------------------------------------------------*/
 bool CClassParser::isGenericLexem()
 {
-  return ( lexem == CPENUM || lexem == CPUNION || lexem == STATIC ||
+  return ( lexem == CPENUM || lexem == CPUNION || lexem == CPSTATIC ||
            lexem == CPTYPEDEF || lexem == CPTEMPLATE || lexem == CPTHROW );
 }
 
@@ -1487,6 +1503,8 @@ bool CClassParser::isGenericLexem()
  *-----------------------------------------------------------------*/
 void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
 {
+  REQUIRE( "Valid container", aContainer != NULL );
+
   QList<CParsedAttribute> list;
   CParsedAttribute *anAttr;
   CParsedMethod *aMethod;
@@ -1565,11 +1583,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
  *-----------------------------------------------------------------*/
 void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
 {
-  //  assert( aContainer != NULL );
-  if(aContainer == 0 ){
-    cerr << "ERROR!!! in parser CClassParser:::parseGenericLexem(  CParsedContainer *aContainer ) \n";
-    return;
-  }
+  REQUIRE( "Valid container", aContainer != NULL );
  
   switch( lexem )
   {
@@ -1579,7 +1593,7 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
     case CPUNION:
       parseUnion();
       break;
-    case STATIC:
+    case CPSTATIC:
       isStatic = true;
       break;
     case CPTYPEDEF:
@@ -1617,54 +1631,70 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
  *   Take care of lexem in a top-level context.
  *
  * Parameters:
- *   -
+ *   scope      The current scope.
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseTopLevelLexem()
+void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
 {
+  REQUIRE( "Valid scope", scope != NULL );
+
   CParsedClass *aClass;
   CParsedClass *parentClass;
+  CParsedScopeContainer *parentScope;
   QString key;
 
   switch( lexem )
   {
-    case NAMESPACE:
-      parseNamespace();
+    case CPNAMESPACE:
+      parseNamespace( scope );
       break;
     case CPCLASS:
       aClass = parseClass();
       
       if( aClass != NULL )
       {
-        if( aClass->isSubClass() )
+        QString scopePath = scope->path();
+
+        // We must always append the current scope to all declarations.
+        if( !scopePath.isEmpty() )
+        {
+          if( aClass->declaredInScope.isEmpty() )
+            aClass->setDeclaredInScope( scopePath );
+          else
+            aClass->setDeclaredInScope( scopePath + QString( "." ) + aClass->declaredInScope );
+        }
+
+        // Check if the class is declared in an scope.
+        if( !aClass->declaredInScope.isEmpty() )
         {
           // Get the parent class;
-          parentClass = store.getClassByName( aClass->declaredInClass );
+          parentClass = store.getClassByName( aClass->declaredInScope );
 
-          if( parentClass != NULL )
-            parentClass->addClass( aClass );
+          // If we didn't find a parent class, try to find a namespace.
+          if( parentClass == NULL )
+          {
+            parentScope = store.getScopeByName( aClass->declaredInScope );
+
+            if( parentScope != NULL )
+              parentScope->addClass( aClass );
+          }
           else
-            debug( "Didn't find parentclass: '%s'", aClass->declaredInClass.data() );
-
-          // Create the subclass hierarchy.
-          key = aClass->declaredInClass;
-          key += ".";
-          key += aClass->name;
-          
-          store.globalContainer.addSubClass( key, aClass );
+            parentClass->addClass( aClass );
         }
-        else if( !store.hasClass( aClass->name ) )
-          store.addClass( aClass );
+        
+        // Always add the class to the global store.
+        if( !store.hasClass( aClass->path() ) )
+          scope->addClass( aClass );
         else
-          debug( "Found new definition of class %s", aClass->name.data() );
+          debug( "Found new definition of class %s", aClass->path().data() );
       }
       break;
     case '{': // Skip implementation blocks
       skipBlock();
       break;
     case CPSTRUCT:
-    case CONST:
+    case CPCONST:
     case ID:
       parseMethodAttributes( &store.globalContainer );
       break;
@@ -1698,7 +1728,7 @@ void CClassParser::parseToplevel()
     if( isGenericLexem() )
       parseGenericLexem( &store.globalContainer );
     else
-      parseTopLevelLexem();
+      parseTopLevelLexem( &store.globalContainer );
 
     //    kapp->processEvents();
     getNextLexem();
@@ -1761,11 +1791,8 @@ void CClassParser::parseFile( ifstream &file )
  *-----------------------------------------------------------------*/
 bool CClassParser::parse( const char *file )
 {
-  //  assert( file != NULL );
-  if(file == 0 ){
-    cerr << "ERROR!!! in parser  CClassParser::parse( const char *file ): \n";
-    return true;
-  }
+  REQUIRE1( "Valid filename", file != NULL, false );
+  REQUIRE1( "Valid filename length", strlen( file ) > 0, false );
 
   ifstream f( file );
   currentFile = file;
@@ -1794,4 +1821,3 @@ void CClassParser::wipeout()
 
   reset();
 }
-

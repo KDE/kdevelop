@@ -1,38 +1,26 @@
-/********************************************************************
-* Name    : Definition of the persistant classtore.                 *
-* ------------------------------------------------------------------*
-* File    : PersistantClassStore.h                                  *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Mon Mar 29 16:55:31 CEST 1999                           *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                       PersistantClassStore.cc
+                         -------------------
+    begin                : Mon Mar 29 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include "PersistantClassStore.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream.h>
+#include "ProgrammingByContract.h"
 
 #define CLASSPREFIX "[CLASS]"
 
@@ -69,6 +57,9 @@ CPersistantClassStore::CPersistantClassStore( )
  *-----------------------------------------------------------------*/
 CPersistantClassStore::CPersistantClassStore( const char *aFilename )
 {
+  REQUIRE( "Valid filename", aFilename != NULL );
+  REQUIRE( "Valid filename length", strlen( aFilename ) > 0 );  
+
   filename = aFilename;
   isOpen = false;
 }
@@ -95,7 +86,7 @@ CPersistantClassStore::~CPersistantClassStore()
 
 void CPersistantClassStore::setPath( const char *aPath )
 {
-  //  assert( !isOpen );
+  //  REQUIRE( "Database open", !isOpen );
 
   path = aPath;
 }
@@ -104,7 +95,7 @@ void CPersistantClassStore::setPath( const char *aPath )
 /** Set the name of the file to read/write. */
 void CPersistantClassStore::setFilename( const char *aFilename )
 {
-  //  assert( !isOpen );
+  // REQUIRE( "Database open", !isOpen );
 
   filename = aFilename;
 }
@@ -190,12 +181,6 @@ void CPersistantClassStore::storeClass( CParsedClass *aClass )
 /** Has the store been created? */
 bool CPersistantClassStore::exists()
 {
-  //  assert( !filename.isEmpty() );
-  if(filename.isEmpty() ){
-    cerr << "ERROR!!! in parser CPersistantClassStore::exists( : \n";
-    return false;
-  }
-
   FILE *aFile;
   bool retVal;
   
@@ -219,7 +204,7 @@ bool CPersistantClassStore::exists()
 /** Check if a class exists in the store. */
 bool CPersistantClassStore::hasClass( const char *aName )
 {
-  //  assert( isOpen );
+  //  REQUIRE( "Store is open", isOpen );
 
 //   QString keyStr;
 //   Dbt data;

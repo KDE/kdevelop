@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
    
  ***************************************************************************/
 
@@ -18,8 +18,8 @@
 
 #include "ClassStore.h"
 #include <iostream.h>
-#include <assert.h>
 #include <qregexp.h>
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -44,6 +44,9 @@ CClassStore::CClassStore()
 
   // Open the store if it exists, else create it.
   globalStore.open();
+
+  // Always use full path for the global container.
+  globalContainer.setUseFullpath( true );
 }
 
 /*---------------------------------------- CClassStore::~CClassStore()
@@ -141,26 +144,38 @@ void CClassStore::storeAll()
   }
 }
 
+/*------------------------------------------- CClassStore::addScope()
+ * addScope()
+ *   Add a scope to the store.
+ *
+ * Parameters:
+ *   aScope        The scope to add.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::addScope( CParsedScopeContainer *aScope )
+{
+  REQUIRE( "Valid scope", aScope != NULL );
+  REQUIRE( "Valid scope name", !aScope->name.isEmpty() );
+  REQUIRE( "Unique scope path", !hasScope( aScope->path() ) );
+
+  globalContainer.addScope( aScope );
+}
+
 /*------------------------------------------- CClassStore::addClass()
  * addClass()
  *   Add a class to the store.
  *
  * Parameters:
  *   aClass        The class to add.
- *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CClassStore::addClass( CParsedClass *aClass )
 {
-  //  assert( aClass != NULL );
-  //  assert( !aClass->name.isEmpty() );
-  //  assert( !hasClass( aClass->name ) );
-  if(aClass == 0 ){
-    cerr << "ERROR!!! in parser  CClassStore::addClass(: \n";
-    return;
-  }
-
+  REQUIRE( "Valid class", aClass != NULL );
+  REQUIRE( "Valid classname", !aClass->name.isEmpty() );
+  REQUIRE( "Unique classpath", !hasClass( aClass->path() ) );
 
   globalContainer.addClass( aClass );
 
@@ -180,13 +195,9 @@ void CClassStore::addClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassStore::removeClass( const char *aName )
 {
-  //  assert( aName != NULL );
-  //  assert( strlen( aName ) > 0 );
-  //  assert( hasClass( aName ) );
-  if(aName == 0 ){
-    cerr << "ERROR!!! in parser  CClassStore::removeClass(: \n";
-    return;
-  }
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
 
   globalContainer.removeClass( aName );
 
@@ -342,18 +353,55 @@ QList<CClassTreeNode> *CClassStore::asForest()
   return retVal;
 }
 
+/*-------------------------------------------- CClassStore::hasScope()
+ * hasScope()
+ *   Tells if a scope exist in the store.
+ *
+ * Parameters:
+ *   aName          Name of the scope to check for.
+ * Returns:
+ *   bool           Result of the lookup.
+ *-----------------------------------------------------------------*/
+bool CClassStore::hasScope( const char *aName )
+{
+  REQUIRE1( "Valid scope name", aName != NULL, false );
+  REQUIRE1( "Valid scope name length", strlen( aName ) > 0, false );
+
+  return globalContainer.hasScope( aName );
+}
+
+/*-------------------------------------- CClassStore::getScopeByName()
+ * getScopeByName()
+ *   Get a scope from the store by using its' name.
+ *
+ * Parameters:
+ *   aName          Name of the scope to fetch.
+ * Returns:
+ *   Pointer to the scope or NULL if not found.
+ *-----------------------------------------------------------------*/
+CParsedScopeContainer *CClassStore::getScopeByName( const char *aName )
+{
+  REQUIRE1( "Valid scope name", aName != NULL, NULL );
+  REQUIRE1( "Valid scope name length", strlen( aName ) > 0, NULL );
+
+  return globalContainer.getScopeByName( aName );
+}
+
+
 /*-------------------------------------------- CClassStore::hasClass()
  * hasClass()
  *   Tells if a class exist in the store.
  *
  * Parameters:
  *   aName          Name of the class to check.
- *
  * Returns:
  *   bool           Result of the lookup.
  *-----------------------------------------------------------------*/
 bool CClassStore::hasClass( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, false );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, false );
+
   return globalContainer.hasClass( aName ) || 
     ( globalStore.isOpen && globalStore.hasClass( aName ) );
   //return classes.find( aName ) != NULL;
@@ -372,11 +420,8 @@ bool CClassStore::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CClassStore::getClassByName( const char *aName )
 {
-  //  assert( aName != NULL );
-  if( aName == 0) {
-    cerr << "ERROR!!! in parser: CClassStore::getClassByName\n";
-    return 0;
-  }
+  REQUIRE1( "Valid classname", aName != NULL, NULL );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
   
   CParsedClass *aClass;
 
@@ -400,6 +445,9 @@ CParsedClass *CClassStore::getClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
+
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
   CParsedClass *aClass;
 
@@ -428,11 +476,8 @@ QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
 {
-  //  assert( aName != NULL );
-  if(aName == 0 ){
-    cerr << "ERROR!!! in parser  CClassStore::getClassClients(: \n";
-    return 0;
-  }
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
 
   bool exit;
   CParsedClass *aClass;
@@ -476,12 +521,9 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
 {
-  //  assert( aName != NULL );
-  //  assert( hasClass( aName ) );
-   if(aName == 0 ){
-    cerr << "ERROR!!! in parser  QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName ): \n";
-    return 0;
-  }
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
+  REQUIRE1( "Class exists", hasClass( aName ), new QList<CParsedClass>() );
 
   CParsedClass *aClass;
   CParsedClass *toAdd;
@@ -566,6 +608,10 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
                                              QList<CParsedMethod> *implList,
                                              QList<CParsedMethod> *availList )
 {
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
+
   CParsedClass *aClass;
   CParsedParent *aParent;
   CParsedClass *parentClass;
