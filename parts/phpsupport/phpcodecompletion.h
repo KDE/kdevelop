@@ -22,6 +22,7 @@
 #include <kregexp.h>
 #include "keditor/editor.h"
 #include "keditor/edit_iface.h"
+#include "keditor/cursor_iface.h"
 #include "keditor/codecompletion_iface.h"
 
 class KDevCore;
@@ -29,6 +30,11 @@ class ClassStore;
 /**
  *@author Sandy Meier
  */
+
+class FunctionCompletionEntry : public KEditor::CompletionEntry {
+ public:
+  QString prototype;
+};
 
 class PHPCodeCompletion : public QObject {
   Q_OBJECT
@@ -41,16 +47,23 @@ protected slots:
   void cursorPositionChanged(KEditor::Document *doc, int line, int col);
 
  protected:
+  bool checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
-  bool checkForClassMember(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line);
   QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
-  
+  QString getClassName(QString varName,QString maybeInstanceOf);
+  QString searchCurrentClassName();
+  QString searchClassNameForVariable(QString varName);
  private:
+  int m_currentLine;
   KEditor::Editor* m_editor;
-  QValueList<KEditor::CompletionEntry> m_globalFunctions;
+  QValueList<FunctionCompletionEntry> m_globalFunctions;
   KDevCore* m_core;
   ClassStore* m_classStore;
+  KEditor::CursorDocumentIface* m_cursorInterface;
+  KEditor::EditDocumentIface* m_editInterface;
+  KEditor::CodeCompletionDocumentIface* m_codeInterface;
 };
 
 #endif

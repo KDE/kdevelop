@@ -15,6 +15,7 @@
 #include <kdialogbase.h>
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
+#include "keditor/cursor_iface.h"
 
 
 class PHPHTMLView;
@@ -23,6 +24,7 @@ class KProcess;
 class PHPErrorView;
 class PHPConfigData;
 class PHPCodeCompletion;
+class PHPParser;
 
 class PHPSupportPart : public KDevLanguageSupport
 {
@@ -53,10 +55,11 @@ private slots:
 
     // Internal
     void initialParse();
+    void documentActivated(KEditor::Document* doc);
+    void cursorPositionChanged(KEditor::Document *doc, int line, int col);
 
 private:
     void maybeParse(const QString fileName);
-    void parse(const QString &fileName);
     void executeOnWebserver();
     void executeInTerminal();
     bool validateConfig();
@@ -66,6 +69,8 @@ private:
     QString m_phpExeOutput;
     PHPConfigData* configData;
     PHPCodeCompletion* m_codeCompletion;
+    PHPParser* m_parser;
+    KEditor::CursorDocumentIface* m_cursorInterface;
 };
 
 #endif

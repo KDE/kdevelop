@@ -36,6 +36,7 @@
 #include "phpconfigwidget.h"
 #include "phpbookconfig.h"
 #include "phpcodecompletion.h"
+#include "phpparser.h"
 
 
 #include "phphtmlview.h"
@@ -89,13 +90,43 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
-  configData = new PHPConfigData(projectDom());
+  configData = new PHPConfigData(projectDom());  
+  m_parser = new  PHPParser(core(),classStore());
   m_codeCompletion = new  PHPCodeCompletion(core(),classStore());
+
+  connect(core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
+	  this, SLOT(documentActivated(KEditor::Document*)));
+
 }
 
 
 PHPSupportPart::~PHPSupportPart()
 {}
+
+void PHPSupportPart::documentActivated(KEditor::Document* doc){
+  return;
+  m_cursorInterface = KEditor::CursorDocumentIface::interface(doc);
+  if (!m_cursorInterface) { // no CursorDocument available
+    cerr << endl << "editor doesn't support the CursorDocumentIface";
+    return;
+  } 
+  disconnect(m_cursorInterface, 0, this, 0 ); // to make sure that it is't connected twice
+  connect(m_cursorInterface,SIGNAL(cursorPositionChanged(KEditor::Document*, int, int)),
+	  this,SLOT(cursorPositionChanged(KEditor::Document*, int, int))); 
+}
+
+void PHPSupportPart::cursorPositionChanged(KEditor::Document *doc, int line, int col){
+  cerr << endl << "PHPSupportPart::cursor";
+  QString fileName = core()->editor()->currentDocument()->url().url();
+  QStringList list;
+  KEditor::EditDocumentIface* m_editInterface = KEditor::EditDocumentIface::interface(doc);
+  for(int i=line;i>=0;i--){
+    list.append( m_editInterface->line(i));  
+  }
+  classStore()->removeWithReferences(fileName);
+  m_parser->parseLines(&list,fileName);
+  emit updatedSourceInfo();
+}
 
 void PHPSupportPart::slotPhpBook(KDialogBase *dlg){
         cerr << "slotPhPBook" << endl;
@@ -265,7 +296,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
         classStore()->removeWithReferences(fileName);
-        parse(fileName);
+        m_parser->parseFile(fileName);
     }
 }
 
@@ -323,103 +354,5 @@ KDevLanguageSupport::Features PHPSupportPart::features()
 }
 
 
-void PHPSupportPart::parse(const QString &fileName)
-{
-    QFile f(QFile::encodeName(fileName));
-    if (!f.open(IO_ReadOnly))
-        return;
-    QTextStream stream(&f);
-
-    KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
-    KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
-    KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
-
-    ParsedClass *lastClass = 0;
-    QString rawline;
-    QCString line;
-    int lineNo = 0;
-    int bracketOpen = 0;
-    int bracketClose = 0;
-    bool inClass = false;
-
-    while (!stream.eof()) {
-        rawline = stream.readLine();
-        line = rawline.stripWhiteSpace().latin1();
-	bracketOpen += line.contains("{");
-	bracketClose += line.contains("}");
-
-	//cerr << "kdevelop (phpsupport): try match line: " << line << endl;
-        if (classre.match(line)) {
-	  //  cerr << "kdevelop (phpsupport): regex match line: " << line << endl;
-	  inClass= true;
-	  bracketOpen = line.contains("{");
-	  bracketClose = line.contains("}");
-	  lastClass = new ParsedClass;
-	  lastClass->setName(classre.group(1));
-	  lastClass->setDefinedInFile(fileName);
-	  lastClass->setDefinedOnLine(lineNo);
-
-	  QString parentStr = classre.group(3);
-	  if(parentStr !=""){
-	    ParsedParent *parent = new ParsedParent;
-	    parent->setName(parentStr);
-	    parent->setAccess(PIE_PUBLIC);
-	    lastClass->addParent(parent);
-	  }
-
-	  if (classStore()->hasClass(lastClass->name())) {
-	    ParsedClass *old = classStore()->getClassByName(lastClass->name());
-	    old->setDeclaredOnLine(lastClass->declaredOnLine());
-	    old->setDeclaredInFile(lastClass->declaredInFile());
-	    delete lastClass;
-	    lastClass=0;
-	  } else {
-	    classStore()->addClass(lastClass);
-	  }
-
-	  if(bracketOpen == bracketClose && bracketOpen !=0 && bracketClose !=0){
-	    inClass = false; // ok we are out ouf class
-	  }
-
-
-        } else if (methodre.match(line)) {
-	  //	  cerr << "kdevelop (phpsupport): regex match line ( method ): " << line << endl;
-	  ParsedMethod *method = new ParsedMethod;
-	  method->setName(methodre.group(1));
-	  ParsedArgument* anArg = new ParsedArgument();
-	  QString arguments = methodre.group(2);
-	  anArg->setType(arguments.stripWhiteSpace().latin1());
-	  method->addArgument( anArg );
-
-	  method->setDefinedInFile(fileName);
-	  method->setDefinedOnLine(lineNo);
-
-	  if (lastClass && inClass) {
-	    //	    kdDebug(9018) << "in Class: " << line << endl;
-	    ParsedMethod *old = lastClass->getMethod(method);
-	    if (!old)
-	      lastClass->addMethod(method);
-	  } else {
-	    ParsedMethod *old = classStore()->globalContainer.getMethod(method);
-	    if (!old)
-	      classStore()->globalContainer.addMethod(method);
-	  }
-        }
-	else if (varre.match(line)) {
-	  //	  kdDebug(9018) << "###########regex match line ( var ): " << varre.group(1) << endl;
-	  if (lastClass && inClass) {
-	    ParsedAttribute* anAttr = new ParsedAttribute();
-	    anAttr->setName(varre.group(1));
-	    anAttr->setDefinedInFile(fileName);
-	    anAttr->setDefinedOnLine(lineNo);
-	    lastClass->addAttribute( anAttr );
-	    
-	  }
-	  
-	}
-        ++lineNo;
-    }
-    f.close();
-}
 
 #include "phpsupportpart.moc"
