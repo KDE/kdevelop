@@ -1060,7 +1060,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         if (r == idInsExistingFile)
         {
           KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
-                                                "("+ext+")|" + title,
+                                                ext + "|" + title + " (" + ext + ")",
                                                 this,
                                                 "Insert existing "+ title,
                                                 TRUE);
