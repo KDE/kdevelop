@@ -420,12 +420,17 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
         cl = m_currentContainer;
 
     ParsedAttribute* attr = findOrInsertAttribute( cl, id );
+    
+    QString text = typeOfDeclaration( typeSpec, d );
+    if( !text.isEmpty() )
+	attr->setType( text );
+    
 
     bool isFriend = false;
-    bool isVirtual = false;
+    //bool isVirtual = false;
     bool isStatic = false;
-    bool isInline = false;
-    bool isInitialized = decl->initializer() != 0;
+    //bool isInline = false;
+    //bool isInitialized = decl->initializer() != 0;
 
     if( storageSpec ){
 	QPtrList<AST> l = storageSpec->nodeList();
@@ -673,6 +678,7 @@ void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * kla
 	if( baseSpecifier->access() )
 	    access = baseSpecifier->access()->text();
 	bool isVirtual = baseSpecifier->isVirtual() != 0;
+	Q_UNUSED( isVirtual );
 
 	QString baseName;
 	if( baseSpecifier->name() )
