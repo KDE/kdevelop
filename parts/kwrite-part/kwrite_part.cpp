@@ -30,7 +30,7 @@ KEditor::Document *KWritePart::document(const KURL &url)
   for ( ; it.current(); ++it)
 	if (it.current()->url() == url)
 	  return it.current();
-  
+
   return 0;
 }
 

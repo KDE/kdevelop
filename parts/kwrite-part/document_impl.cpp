@@ -46,16 +46,7 @@ kdDebug() << "DocumentImpl " << this << " desctructed!!!" << endl;
 
 bool DocumentImpl::openFile()
 {
-  QFile f(m_file);
-  if (!f.open(IO_ReadOnly))
-	return false;
-
-  QTextStream ts(&f);
-  m_document->setText(ts.read());
-
-  f.close();
-
-  return true;
+  return m_document->openURL(KURL(m_file));
 }
 
 
