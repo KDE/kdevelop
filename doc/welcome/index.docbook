@@ -1,5 +1,10 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN">
 <book lang="en">
+<bookinfo>
+<date></date>
+<releaseinfo></releaseinfo>
+<abstract><para></para></abstract>
+</bookinfo>
 
 <chapter id="Welcome">
 <title>Welcome To KDevelop !</title>
