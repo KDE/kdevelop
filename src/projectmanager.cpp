@@ -21,6 +21,8 @@ class QDomDocument;
 #include <kprocess.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <ktempfile.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -45,21 +47,27 @@ class QDomDocument;
 class ProjectInfo
 {
 public:
-  QString      m_fileName;
+  KURL         m_projectURL;
   QDomDocument m_document;
   QString      m_projectPlugin, m_language;
   QStringList  m_ignoreParts, m_loadParts, m_keywords;
   QDict<KDevPlugin> m_localParts;
+
+  QString sessionFile() const;
 };
 
+QString ProjectInfo::sessionFile() const
+{
+    QString sf = m_projectURL.path(-1);
+    sf.truncate(sf.length() - 8); // without ".kdevelop"
+    sf += "kdevses"; // suffix for a KDevelop session file
+    return sf;
+}
 
 QString ProjectManager::projectDirectory( const QString& path, bool absolute ) {
     if(absolute)
         return path;
-    QFileInfo projectFile(ProjectManager::getInstance()->projectFile());
-    KURL url;
-    url.setPath(projectFile.dirPath());
-    url.addPath(path);
+    KURL url(ProjectManager::getInstance()->projectFile(), path);
     url.cleanPath();
     return url.path(-1);
 }
@@ -125,8 +133,7 @@ void ProjectManager::slotOpenProject()
   if( url.isEmpty() )
       return;
 
-  QFileInfo fileInfo( url.path() );
-  if( fileInfo.extension() == "kdevprj" )
+  if (url.path().endsWith("kdevprj"))
       loadKDevelop2Project( url );
   else
       loadProject( url );
@@ -174,9 +181,9 @@ void ProjectManager::saveSettings()
 # endif
 #endif
 #if defined(_KDE_3_1_3_)
-    config->writePathEntry("Last Project", ProjectManager::getInstance()->projectFile());
+    config->writePathEntry("Last Project", ProjectManager::getInstance()->projectFile().url());
 #else
-    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile());
+    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile().url());
 #endif
   }
 
@@ -205,7 +212,7 @@ bool ProjectManager::loadProject(const KURL &url)
     return false;
 
   m_info = new ProjectInfo;
-  m_info->m_fileName = url.path();
+  m_info->m_projectURL = url;
 
   if( !loadProjectFile() )
   {
@@ -236,11 +243,12 @@ bool ProjectManager::loadProject(const KURL &url)
 
 //  Core::getInstance()->doEmitProjectOpened();
 
-  // first restore the project session stored in a .kdevses file
-  QString projSessionFileName = m_info->m_fileName.left(m_info->m_fileName.length()-8); // without ".kdevelop"
-  projSessionFileName += "kdevses"; // suffix for a KDevelop session file
-  if (!m_pProjectSession->restoreFromFile(projSessionFileName, m_info->m_localParts)) {
-    debug("error during restoring of the KDevelop session !\n");
+  // shall we try to load a session file from network?? Probably not.
+  if (m_info->m_projectURL.isLocalFile()) {
+    // first restore the project session stored in a .kdevses file
+    if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), m_info->m_localParts)) {
+      debug("error during restoring of the KDevelop session !\n");
+    }
   }
 
   m_openRecentProjectAction->addURL(KURL(projectFile()));
@@ -259,11 +267,9 @@ bool ProjectManager::closeProject()
 
   Q_ASSERT( API::getInstance()->project() );
 
-  // save the session
-  QString sessionFileName = m_info->m_fileName;
-  sessionFileName = sessionFileName.left( sessionFileName.length() - 8); // without "kdevelop"
-  sessionFileName += "kdevses";
-  m_pProjectSession->saveToFile(sessionFileName, m_info->m_localParts);
+  // save the session if it is a local file
+  if (m_info->m_projectURL.isLocalFile())
+    m_pProjectSession->saveToFile(m_info->sessionFile(), m_info->m_localParts);
 
   if( !closeProjectSources() )
     return false;
@@ -294,11 +300,18 @@ bool ProjectManager::closeProject()
 
 bool ProjectManager::loadProjectFile()
 {
-  QFile fin(m_info->m_fileName);
+  QString path;
+  if (!KIO::NetAccess::download(m_info->m_projectURL, path)) {
+    KMessageBox::sorry(TopLevel::getInstance()->main(),
+        i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
+    return false;
+  }
+
+  QFile fin(path);
   if (!fin.open(IO_ReadOnly))
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not read project file: %1").arg(m_info->m_fileName));
+        i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
     return false;
   }
 
@@ -311,6 +324,7 @@ bool ProjectManager::loadProjectFile()
              "XML error in line %1, column %2:\n%3")
              .arg(errorLine).arg(errorCol).arg(errorMsg));
     fin.close();
+    KIO::NetAccess::removeTempFile(path);
     return false;
   }
   if (m_info->m_document.documentElement().nodeName() != "kdevelop")
@@ -318,10 +332,12 @@ bool ProjectManager::loadProjectFile()
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("This is not a valid project file."));
     fin.close();
+    KIO::NetAccess::removeTempFile(path);
     return false;
   }
 
   fin.close();
+  KIO::NetAccess::removeTempFile(path);
 
   API::getInstance()->setProjectDom(&m_info->m_document);
 
@@ -332,15 +348,27 @@ bool ProjectManager::saveProjectFile()
 {
   Q_ASSERT( API::getInstance()->projectDom() );
 
-  QFile fout(m_info->m_fileName);
-  if( !fout.open(IO_WriteOnly) ) {
-    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
-    return false;
-  }
+  if (m_info->m_projectURL.isLocalFile()) {
+    QFile fout(m_info->m_projectURL.path());
+    if( !fout.open(IO_WriteOnly) ) {
+      KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
+      return false;
+    }
 
-  QTextStream stream(&fout);
-  API::getInstance()->projectDom()->save(stream, 2);
-  fout.close();
+    QTextStream stream(&fout);
+    API::getInstance()->projectDom()->save(stream, 2);
+    fout.close();
+  } else {
+    KTempFile fout(QString::fromLatin1("kdevelop3"));
+    fout.setAutoDelete(true);
+    if (fout.status() != 0) {
+      KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
+      return false;
+    }
+    API::getInstance()->projectDom()->save(*(fout.textStream()), 2);
+    fout.close();
+    KIO::NetAccess::upload(fout.name(), m_info->m_projectURL);
+  }
 
   return true;
 }
@@ -399,15 +427,13 @@ bool ProjectManager::loadProjectPart()
 
   API::getInstance()->setProject( projectPart );
 
-  QFileInfo fi(m_info->m_fileName);
   QDomDocument& dom = *API::getInstance()->projectDom();
   QString path = DomUtil::readEntry(dom,"/general/projectdirectory", ".");
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
-  QString projectName = fi.baseName();
-  kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
+  kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << m_info->m_projectURL.fileName() << endl;
 
-  projectPart->openProject(projectDir, projectName);
+  projectPart->openProject(projectDir, m_info->m_projectURL.fileName());
 
   PluginController::getInstance()->integratePart( projectPart );
 
@@ -597,11 +623,11 @@ bool ProjectManager::closeProjectSources()
 	return PartController::getInstance()->closeDocuments(sources);
 }
 
-QString ProjectManager::projectFile() const
+KURL ProjectManager::projectFile() const
 {
   if (!m_info)
     return QString::null;
-  return m_info->m_fileName;
+  return m_info->m_projectURL;
 }
 
 bool ProjectManager::projectLoaded() const

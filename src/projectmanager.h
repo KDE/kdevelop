@@ -32,7 +32,7 @@ public:
 
   bool projectLoaded() const;
 
-  QString projectFile() const;
+  KURL projectFile() const;
 
   void createActions( KActionCollection* ac );
 

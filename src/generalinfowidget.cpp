@@ -113,8 +113,7 @@ void GeneralInfoWidget::slotProjectDirectoryComboChanged() {
         project_directory_edit->setText(ProjectManager::projectDirectory(text,false));
     else if(!isProjectDirectoryAbsolute() && text[0] == '/')
     {
-        QFileInfo projectFile(ProjectManager::getInstance()->projectFile());
-        project_directory_edit->setText(makeRelativePath(projectFile.dirPath(),text));
+        project_directory_edit->setText(KURL(ProjectManager::getInstance()->projectFile(), text).url());
     }
 }
 

@@ -58,9 +58,9 @@ bool Core::queryClose()
 # endif
 #endif
 #if defined(_KDE_3_1_3_)
-  config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile());
+  config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
 #else
-  config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile());
+  config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile().url());
 #endif
 
   if ( ProjectManager::getInstance()->projectLoaded()
