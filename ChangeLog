@@ -1,3 +1,8 @@
+1999-05-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added some new items to the dialogeditor: QSlider,QScrollBar,QGroupBox,QSpinBox 
+	inclusive the sourcecode-generation
+	* added new property typ "Orientation" to the dialogeditor
+
 1999-05-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added some new items to the dialogeditor: QComboBox,QListBox,QMultiLineEdit,QProgressBar 
 	inclusive the sourcecode-generation

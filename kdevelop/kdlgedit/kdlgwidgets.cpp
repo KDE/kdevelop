@@ -125,6 +125,22 @@ void KDlgWidgets::clicked_QMultiLineEdit()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QMultiLineEdit");
 }
+void KDlgWidgets::clicked_QSpinBox()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QSpinBox");
+}
+void KDlgWidgets::clicked_QScrollBar()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QScrollBar");
+}
+void KDlgWidgets::clicked_QSlider()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QSlider");
+}
+void KDlgWidgets::clicked_QGroupBox()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QGroupBox");
+}
 KDlgWidgets::myScrollView::~myScrollView()
 {
   int i;
@@ -177,7 +193,10 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n(""));
   macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n(""));
   macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n(""));
-
+  macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n(""));
+  macroAddButton("kdlg_QSlider.xpm",      "QSlider",       clicked_QSlider      ,i18n(""));
+  macroAddButton("kdlg_QScrollBar.xpm",      "QScrollBar",       clicked_QScrollBar      ,i18n(""));
+  macroAddButton("kdlg_QGroupBox.xpm",      "QGroupBox",       clicked_QGroupBox      ,i18n(""));
   #undef macroAddButton
 
   QFont f;

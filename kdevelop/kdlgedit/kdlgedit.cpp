@@ -452,7 +452,11 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("QListBox","qlistbox.h",generateQListBox);
   generateIfWidget("QProgressBar","qprogressbar.h",generateQProgressBar);
   generateIfWidget("QMultiLineEdit","qmultilinedit.h",generateQMultiLineEdit);
-  
+  generateIfWidget("QGroupBox","qgroupbox.h",generateQGroupBox);
+  generateIfWidget("QSlider","qslider.h",generateQSlider);
+  generateIfWidget("QScrollBar","qscrollbar.h",generateQScrollBar);
+  generateIfWidget("QSpinBox","qspinbox.h",generateQSpinBox);
+
 #undef generateIfWidget
 
 
@@ -567,6 +571,77 @@ void KDlgEdit::generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QS
     *stream << varname_p + "setTotalSteps("+ props->getPropValue("TotalSteps") +");\n";
   }
   
+  *stream << "\n";
+}
+void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  cerr << "SLIDER";
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QSlider(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
+  //setValue
+  if(props->getPropValue("Value") != ""){
+    *stream << varname_p + "setValue("+ props->getPropValue("Value") +");\n";
+  }
+  //setRange
+  *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
+  //setTracking
+  if(props->getPropValue("isTracking") == "FALSE"){
+    *stream << varname_p + "setTracking(false);\n";
+  }
+  // setOrientation
+  if(props->getPropValue("Orientation") == "Horizontal"){
+    *stream << varname_p + "setOrientation(QSlider::Horizontal);\n";
+  }
+  *stream << "\n";
+}
+void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QSpinBox(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
+  //setValue
+  if(props->getPropValue("Value") != ""){
+    *stream << varname_p + "setValue("+ props->getPropValue("Value") +");\n";
+  }
+  //setRange
+  *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
+  //setTracking
+  if(props->getPropValue("isWrapping") == "TRUE"){
+    *stream << varname_p + "seWrapping(true);\n";
+  }
+  *stream << "\n";
+}
+void KDlgEdit::generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  cerr << "SCROLLBAR";
+  KDlgPropertyBase* props = wid->getProps();
+
+  *stream << "\t" + props->getPropValue("VarName") +" = new QScrollBar(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  
+  //setValue
+  if(props->getPropValue("Value") != ""){
+    *stream << varname_p + "setValue("+ props->getPropValue("Value") +");\n";
+  }
+  //setRange
+  *stream << varname_p + "setRange("+ props->getPropValue("MinValue") +","+props->getPropValue("MaxValue")+");\n";
+  //setTracking
+  if(props->getPropValue("isTracking") == "FALSE"){
+    *stream << varname_p + "setTracking(false);\n";
+  }
+  // setOrientation
+  if(props->getPropValue("Orientation") == "Horizontal"){
+    *stream << varname_p + "setOrientation(QScrollBar::Horizontal);\n";
+  }
   *stream << "\n";
 }
 void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
@@ -757,6 +832,19 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
   }
   *stream << "\n";
   
+}
+void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QGroupBox(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  //setText
+  if(props->getPropValue("Title") != "")
+    *stream << varname_p + "setTitle(\""+ props->getPropValue("Title") +"\");\n";
+
+  *stream << "\n";
 }
 void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
   KDlgPropertyBase* props = wid->getProps();

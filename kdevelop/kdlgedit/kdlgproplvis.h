@@ -130,6 +130,23 @@ class AdvLvi_Bool : public AdvLvi_Base
   public slots:
     void activated( const char* );
 };
+class AdvLvi_Orientation : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_Orientation(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    QComboBox *cbOrientation;
+
+  public slots:
+    void activated( const char* );
+};
 
 class AdvLvi_Filename : public AdvLvi_ExtEdit
 {

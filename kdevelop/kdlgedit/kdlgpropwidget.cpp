@@ -692,6 +692,9 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           case ALLOWED_BOOL:
             lvi->setColumnWidget(1, new AdvLvi_Bool( lv, pCKDevel, prop ));
             break;
+	case ALLOWED_ORIENTATION:
+	  lvi->setColumnWidget(1, new AdvLvi_Orientation( lv, pCKDevel, prop ));
+	  break;
           case ALLOWED_INT:
             lvi->setColumnWidget(1, new AdvLvi_Int( lv, pCKDevel, prop ));
             break;
@@ -973,6 +976,43 @@ QString AdvLvi_Bool::getText()
 void AdvLvi_Bool::activated( const char* s )
 {
   propEntry->value = cbBool->currentItem() ? "FALSE" : "TRUE";
+  refreshItem();
+}
+AdvLvi_Orientation::AdvLvi_Orientation(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  cbOrientation = new QComboBox( FALSE, this );
+  cbOrientation->insertItem("Horizontal");
+  cbOrientation->insertItem("Vertical");
+  if(dpe->value == "Horizontal"){
+    cbOrientation->setCurrentItem(0);
+  }
+  else{
+    cbOrientation->setCurrentItem(1);
+  }
+  connect(cbOrientation, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+}
+
+void AdvLvi_Orientation::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (cbOrientation)
+    cbOrientation->setGeometry(0,0,width(),height()+1);
+}
+
+QString AdvLvi_Orientation::getText()
+{
+  if (cbOrientation)
+    return cbOrientation->currentText();
+  else
+    return QString();
+}
+
+void AdvLvi_Orientation::activated( const char* s )
+{
+  propEntry->value = getText();
   refreshItem();
 }
 

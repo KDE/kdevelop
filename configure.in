@@ -65,6 +65,7 @@ AC_OUTPUT(Makefile
 	kdevelop/classparser/Makefile \
 	kdevelop/kdlgedit/Makefile \
 	kdevelop/print/Makefile \
+	kdevelop/vc/Makefile \
 	kdevelop/templates/Makefile \
 	kdevelop/tools/Makefile \
 	kdevelop/docs/Makefile \

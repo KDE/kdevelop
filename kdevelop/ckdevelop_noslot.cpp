@@ -15,7 +15,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-
+#include "./kdlgedit/kdlgedit.h"
 #include <iostream.h>
 #include <kmsgbox.h>
 #include "ckdevelop.h"
@@ -24,7 +24,7 @@
 #include "kswallow.h"
 #include "ctoolclass.h"
 #include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgedit.h"
+
 
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);

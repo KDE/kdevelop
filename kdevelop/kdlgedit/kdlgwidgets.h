@@ -76,6 +76,10 @@ class KDlgWidgets : public QWidget  {
   void clicked_QListBox();
   void clicked_QMultiLineEdit();
   void clicked_QProgressBar();
+  void clicked_QSpinBox();
+  void clicked_QSlider();
+  void clicked_QScrollBar();
+  void clicked_QGroupBox();
 };
 
 #endif

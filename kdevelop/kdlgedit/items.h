@@ -36,6 +36,10 @@
 #include <qlistbox.h>
 #include <qprogressbar.h>
 #include <qmultilinedit.h>
+#include <qspinbox.h>
+#include <qscrollbar.h>
+#include <qgroupbox.h>
+#include <qslider.h>
 
 class KDlgEditWidget;
 
@@ -268,6 +272,46 @@ class KDlgItem_ProgressBar : public KDlgItem_Base
   #define classname KDlgItem_ProgressBar
   #define widgettype QProgressBar
   #define classdesc "QProgressBar"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_SpinBox : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_SpinBox
+  #define widgettype QSpinBox
+  #define classdesc "QSpinBox"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_Slider : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_Slider
+  #define widgettype QSlider
+  #define classdesc "QSlider"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_ScrollBar : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_ScrollBar
+  #define widgettype QScrollBar
+  #define classdesc "QScrollBar"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+class KDlgItem_GroupBox : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_GroupBox
+  #define widgettype QGroupBox
+  #define classdesc "QGroupBox"
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };

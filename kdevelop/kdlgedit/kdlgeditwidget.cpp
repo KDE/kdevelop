@@ -768,6 +768,10 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("QListBox", KDlgItem_ListBox )
     macro_CreateIfRightOne("QProgressBar", KDlgItem_ProgressBar )
     macro_CreateIfRightOne("QMultiLineEdit", KDlgItem_MultiLineEdit )
+    macro_CreateIfRightOne("QSpinBox", KDlgItem_SpinBox )
+    macro_CreateIfRightOne("QSlider", KDlgItem_Slider )
+    macro_CreateIfRightOne("QScrollBar", KDlgItem_ScrollBar )
+    macro_CreateIfRightOne("QGroupBox", KDlgItem_GroupBox )
     
 #undef macro_CreateIfRightOne
 
