@@ -895,7 +895,8 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
       QApplication::postEvent(qApp->mainWidget(), pFE);
       QApplication::sendPostedEvents();
-      m_pClient->setFocus();
+      if (m_pClient)
+         m_pClient->setFocus();
       raiseAndActivate();
       QWidget* w = (QWidget*) obj;
       if( (w->parent() != m_pCaption) && (w != m_pCaption))
