@@ -926,7 +926,7 @@ void CppNewClassDialog::selectall_button_clicked()
 
 void CppNewClassDialog::to_constructors_list_clicked()
 {
-    QString templateAdd = templateStrFormatted().isEmpty() ? "" : templateStrFormatted() + "\n";
+    QString templateAdd = templateStrFormatted().isEmpty() ? QString::null : templateStrFormatted() + "\n";
     QString constructor_h = classNameFormatted();
     QString constructor_cpp = templateAdd + classNameFormatted() + templateParamsFormatted() + "::" + classNameFormatted();
     constructor_h += "(";
