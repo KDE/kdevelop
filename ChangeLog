@@ -1,3 +1,8 @@
+2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: debugging with Toplevel MDI mode works properly now
+      (focus problem in QextMDI and DocViewMan::doSwitchToFile fixed)
+    * some debug messages removed
+
 2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: save MDI mode to config only when leaving the program
       (fixes problems with several opened KDevelops opened/closed in parallel)
