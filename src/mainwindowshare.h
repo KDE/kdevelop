@@ -45,7 +45,6 @@ signals:
   void gotoLastWindow();
 
 private slots:
-  void slotReportBug();
   void slotKeyBindings();
   void slotConfigureToolbars();
   void slotConfigureNotifications();

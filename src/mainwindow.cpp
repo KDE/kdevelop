@@ -275,11 +275,7 @@ void MainWindow::init()
   createGUI(0);
 
   m_pMainWindowShare->init();
-
-  KAction *a = actionCollection()->action("help_report_bug");
-  disconnect(a, SIGNAL(activated()), 0, 0);
-  connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
-
+  
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
           this, SLOT(createGUI(KParts::Part*)));
   connect(Core::getInstance(), SIGNAL(projectOpened()),
