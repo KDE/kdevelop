@@ -75,9 +75,10 @@ public:
 
     bool eventFilter( QObject * obj, QEvent *e )
     {
-	if( e->type() == QEvent::FocusIn )
+	if( e->type() == QEvent::FocusIn && mw->m_tabWidget->currentPage() )
 	{
-	    if( mw->m_tabWidget->currentPage()->children()->contains(obj) ){
+	    const QObjectList* l = mw->m_tabWidget->currentPage()->children();
+	    if( l && l->contains(obj) ){
 	      if( mw->m_leftBar->current() )
 		  mw->m_leftBar->lowerWidget( mw->m_leftBar->current() );
 	      if( mw->m_rightBar->current() )
