@@ -27,7 +27,8 @@ public:
   void addContent(QWidget *widget);
 
   void raiseWidget(QWidget *widget);
-  
+  void lowerWidget(QWidget *widget);
+
 
 private slots:
 

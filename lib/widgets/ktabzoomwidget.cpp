@@ -189,6 +189,18 @@ void KTabZoomWidget::unselected()
 }
 
 
+void KTabZoomWidget::lowerWidget(QWidget *w)
+{
+  for (KWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
+    if (i->m_widget == w)
+    {
+      d->m_popup->hide();
+      d->m_tabBar->unsetButtons();
+      return;
+    }
+}
+
+
 void KTabZoomWidget::resizeEvent(QResizeEvent *ev)
 {
   QWidget::resizeEvent(ev);

@@ -23,6 +23,8 @@ public:
   void removeTab(int index);
 
   void setPressed(int index, bool pressed=true);
+  
+  void unsetButtons();
 
 
 signals:

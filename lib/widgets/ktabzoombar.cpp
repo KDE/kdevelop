@@ -169,4 +169,15 @@ void KTabZoomBar::setPressed(int index, bool pressed)
 }
 
 
+void KTabZoomBar::unsetButtons()
+{
+  QIntDictIterator<KTabZoomButton> it(d->m_buttons);
+  while (it.current())
+  {
+    it.current()->setOn(false);
+    ++it;
+  }
+}
+		
+
 #include "ktabzoombar.moc"
