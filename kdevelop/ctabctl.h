@@ -30,26 +30,24 @@ class CTabCtl : public QTabWidget {
   Q_OBJECT
 
 public:
+
   /**constructor
    type = normal,output_widget
   */
-  
   CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
-  /**destructor*/
   ~CTabCtl(){};
 
-  /** set the top tab*/
   void setCurrentTab(int id);
   int getCurrentTab();
 
-//  void addTab(QWidget* widget, const QString& label);
   void setTabEnabled(const char* name, bool enabled);
 
 public slots:
   void slotCurrentChanged(QWidget *widget);
 
 signals:
-  void selected(int id);
+  void tabSelected(int id);
+
 };
 
 #endif

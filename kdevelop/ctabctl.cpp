@@ -22,6 +22,8 @@
 #include <qobjectlist.h>
 #include <qtabbar.h>
 
+// **************************************************************************
+
 CTabCtl::CTabCtl( QWidget* parent, const char* name, const QString& type) :
   QTabWidget(parent,name)
 {
@@ -39,15 +41,21 @@ CTabCtl::CTabCtl( QWidget* parent, const char* name, const QString& type) :
   connect(this, SIGNAL(currentChanged(QWidget *)), SLOT(slotCurrentChanged(QWidget *)));
 }
 
+// **************************************************************************
+
 void CTabCtl::setCurrentTab(int id)
 {
   tabBar()->setCurrentTab(id);
 }
 
+// **************************************************************************
+
 int CTabCtl::getCurrentTab()
 {
   return tabBar()->currentTab();
 }
+
+// **************************************************************************
 
 void CTabCtl::setTabEnabled(const char* name, bool enabled)
 {
@@ -57,20 +65,19 @@ void CTabCtl::setTabEnabled(const char* name, bool enabled)
   QObjectList * l
       = this->queryList( "QWidget", name, FALSE, TRUE );
 
-  if ( l && l->first() )
-  {
-    QObjectListIt it(*l);
-    QObject *o;
-    while( (o = it.current()) )
-    {
-      ++it;
-      if( o->isWidgetType() )
-        QTabWidget::setTabEnabled( (QWidget*)o, enabled );
-    }
-  }
+  // There should only be one here
+  ASSERT(l && (l->count() == 1));
+  QObject *o = l->first();
+  ASSERT( o->isWidgetType() );
+  QTabWidget::setTabEnabled( (QWidget*)o, enabled );
+  delete l;
 }
+
+// **************************************************************************
 
 void CTabCtl::slotCurrentChanged(QWidget *)
 {
-  emit selected(currentPageIndex());
+  emit tabSelected(currentPageIndex());
 }
+
+// **************************************************************************
