@@ -11,5 +11,10 @@
   <Action name="project_newclass"/>
  </Menu>
 </MenuBar>
+<ToolBar name="browserToolBar" position="Top" iconText="IconOnly" >
+  <text>Build Toolbar</text>
+  <Action name="project_newclass"/>
+  <Separator />
+</ToolBar>
 </kpartgui>
 
