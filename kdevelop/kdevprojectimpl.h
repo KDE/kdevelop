@@ -8,7 +8,7 @@ class KDevProjectImpl : public KDevProject
     Q_OBJECT
 
 public:
-    KDevProjectImpl( KDevApi *api, QObject *parent=0, const char *name=0 );
+    KDevProjectImpl( QObject *parent, const char *name = 0 );
     ~KDevProjectImpl();
 
     virtual void openProject(const QString &dirName);

@@ -195,7 +195,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
           this, SLOT(createGUI(KParts::Part*)));
 
-  KDevProjectImpl* prj = new KDevProjectImpl( API::getInstance(), this );
+  KDevProjectImpl* prj = new KDevProjectImpl( API::getInstance() );
   //API::getInstance()->setProject( prj ); // DISABLED robe 7/4/2002
   API::getInstance()->setProject( 0 );
   (void) ProjectManager::getInstance();

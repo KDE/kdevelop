@@ -58,7 +58,7 @@ private:
 
   void checkNewService(KService *service);
 
-  void integratePart(KDevPart *part);
+  void integratePart(KXMLGUIClient *part);
   void removePart(KDevPart *part);
 
   ProjectInfo *m_info;

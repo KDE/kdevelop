@@ -14,7 +14,7 @@ class QDomDocument;
 #include <ktrader.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
-
+#include <kparts/componentfactory.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -167,12 +167,14 @@ void ProjectManager::loadProjectPart()
   KService::Ptr projectService = KService::serviceByName(m_info->m_projectPlugin);
   if (projectService)
   {
-    KDevPart *part = PluginController::getInstance()->loadPlugin(projectService, "KDevProject", Core::getInstance());
-    if (!part)
+    KDevProject *projectPart = KParts::ComponentFactory
+      ::createInstanceFromService< KDevProject >( projectService, API::getInstance(), 0,
+                                                  PluginController::argumentsFromService( projectService ) );
+    if (!projectPart)
       return;
 
-    API::getInstance()->setProject(static_cast<KDevProject*>(part));
-    integratePart(part);
+    API::getInstance()->setProject(projectPart);
+    integratePart(projectPart);
   }
   else
     KMessageBox::sorry(CKDevelop::getInstance()->main(), i18n("No project management plugin %1 found.").arg(m_info->m_projectPlugin));
@@ -283,7 +285,7 @@ void ProjectManager::initializeProjectSupport()
 }
 
 
-void ProjectManager::integratePart(KDevPart *part)
+void ProjectManager::integratePart(KXMLGUIClient *part)
 {
   CKDevelop::getInstance()->main()->guiFactory()->addClient(part);
 }

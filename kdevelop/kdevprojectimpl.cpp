@@ -6,8 +6,8 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-KDevProjectImpl::KDevProjectImpl( KDevApi *api, QObject *parent, const char *name )
-    : KDevProject( api, parent, name )
+KDevProjectImpl::KDevProjectImpl( QObject *parent, const char *name )
+    : KDevProject( parent, name )
 {
 }
 
