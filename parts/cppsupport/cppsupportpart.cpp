@@ -52,10 +52,8 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/selectioninterface.h>
 
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
+#if defined(KDE_MAKE_VERSION) && KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
 #  include <ktexteditor/texthintinterface.h>
-# endif
 #else
 #  include <kde30x_texthintinterface.h>
 #endif
