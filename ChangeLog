@@ -1,3 +1,8 @@
+1999-06-01 Jonas Nordin <jonas.nordin@cenacle.se>
+	* added parsing of struct declarations.
+	* fixed behaviour of left/middle button clicks in the classview.
+	* fixed bug in classtool doesn't crash on unparsed items anymore.
+
 1999-05-31 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* some bugfixes in loading and generating dialogs, using the new methods newDlg() and wasVarnameChanged()
 	* added quickhelp to the new widgets and properties, based on Ralf's documentation 
