@@ -131,14 +131,14 @@ class KDlgLoader {
     /** construtor */
     KDlgLoader(QWidget *parent)
     {
+      ldr=0l;
       libLoaded = false;
       if (!loadKDlgLdrLibrary())
         return;
 
+      ldr = KDlgLdr_Init(parent);
       if (ldr)
-        ldr = KDlgLdr_Init(parent);
-
-      libLoaded = true;
+        libLoaded = true;
     }
 
     /** destructor */
