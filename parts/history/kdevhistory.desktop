@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=History
+Name=KDevOpenWith
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevhistory
+X-KDevelop-Scope=Global

@@ -1,3 +1,8 @@
+2002-04-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
+	
+	* Added a part providing a history, allowing you to go
+	  back and forward 
+
 2002-04-28  Harald Fernengel <harry@kdevelop.org>
         * SourceNavPart now uses KToolBarPopupAction to display nifty
           Konqueror-like drop down menus for source code navigation
