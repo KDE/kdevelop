@@ -54,6 +54,8 @@ private:
     enum Type { Normal, Error, Diagnostic };
     void insertLine1(const QString &line, Type type);
     void insertLine2(const QString &line, Type type);
+    bool matchEnterDir( const QString& line, QString& dir );
+    bool matchLeaveDir( const QString& line, QString& dir );
 
     QStringList commandList;
     QStringList dirList;
