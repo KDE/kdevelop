@@ -3,6 +3,7 @@
 #include <qregexp.h>
 #include <qwidgetstack.h>
 
+#include <kprocess.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
@@ -91,7 +92,9 @@ static const QString childrenParam( "--trace-children=yes" );
 
 QString ValgrindDialog::valParams() const
 {
-  QString params = QString::fromLatin1( "--tool=memcheck" );
+  QString params;
+  if (isNewValgrindVersion())
+    params = QString::fromLatin1( "--tool=memcheck " );
   params += w->valParamEdit->text();
   if ( w->memleakBox->isChecked() )
     params += " " + leakCheckParam;
@@ -183,4 +186,17 @@ void ValgrindDialog::setKcExecutable( const QString& ke )
     w->kcExecutableEdit->setURL( vUrl );
   }
 }
+
+bool ValgrindDialog::isNewValgrindVersion( ) const
+{
+  KProcess *proc = new KProcess;
+  proc->setUseShell(true);
+  *proc << "test \"valgrind-20\" == `valgrind --version | awk -F \\. '{print $1$2}'`";
+  proc->start(KProcess::Block);
+  if (proc->normalExit())
+    return proc->exitStatus();
+  return true;
+}
+
+// kate: space-indent on; indent-width 2; tab-width 2; show-tabs on;
 

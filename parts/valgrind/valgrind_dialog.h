@@ -48,6 +48,9 @@ public:
   QString kcExecutable() const;
   void setKcExecutable( const QString& ke );
         
+protected:
+  bool isNewValgrindVersion() const;
+  
 private:
   DialogWidget *w;
   Type m_type;
