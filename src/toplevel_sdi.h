@@ -60,6 +60,9 @@ public slots:
   void gotoNextWindow();
   void gotoPreviousWindow();
 
+  void raiseLeftTabbar();
+  void raiseRightTabbar();
+  void raiseBottomTabbar();
 
 private slots:
 

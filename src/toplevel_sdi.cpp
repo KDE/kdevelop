@@ -49,17 +49,29 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
   m_pWindowMenu(0L),
   m_closing(false)
 {
-  KAction * action;
+   KAction * action;
 
-  action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, 
-                        this, SLOT(gotoNextWindow()),
-                        actionCollection(), "view_next_window");
-  action->setStatusText( i18n("Switches to the next window") );
+   action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, 
+                         this, SLOT(gotoNextWindow()),
+                         actionCollection(), "view_next_window");
+   action->setStatusText( i18n("Switches to the next window") );
 
-  action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
-                        this, SLOT(gotoPreviousWindow()),
-                        actionCollection(), "view_previous_window");
-  action->setStatusText( i18n("Switches to the previous window") );
+   action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
+                         this, SLOT(gotoPreviousWindow()),
+                         actionCollection(), "view_previous_window");
+   action->setStatusText( i18n("Switches to the previous window") );
+
+   action = new KAction( i18n("Raise &Left Tabbar"), ALT+Key_L,
+			 this, SLOT(raiseLeftTabbar()),
+			 actionCollection(), "raise_left_tabbar");
+
+   action = new KAction( i18n("Raise &Right Tabbar"), ALT+Key_R,
+                         this, SLOT(raiseRightTabbar()),
+                         actionCollection(), "raise_right_tabbar");
+
+   action = new KAction( i18n("Raise &Bottom Tabbar"), ALT+Key_U,
+                         this, SLOT(raiseBottomTabbar()),
+                         actionCollection(), "raise_bottom_tabbar");
 
    // Add window menu to the menu bar
    m_pWindowMenu = new QPopupMenu( main(), "window_menu");
@@ -467,6 +479,30 @@ void TopLevelSDI::slotPartAdded(KParts::Part* part)
     return;
 
   connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+}
+
+void TopLevelSDI::raiseLeftTabbar()
+{
+  if ( !m_leftBar )
+    return;
+  
+  m_leftBar->raiseWidget( 0 );
+}
+
+void TopLevelSDI::raiseRightTabbar()
+{
+  if ( !m_rightBar )
+    return;
+
+  m_rightBar->raiseWidget( 0 );
+}
+
+void TopLevelSDI::raiseBottomTabbar()
+{
+  if ( !m_bottomBar )
+    return;
+
+  m_bottomBar->raiseWidget( 0 );
 }
 
 void TopLevelSDI::slotTextChanged()
