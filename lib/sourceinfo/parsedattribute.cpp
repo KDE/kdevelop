@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 #include <iostream.h>
-#include <qdatastream.h>
+//#include <qdatastream.h>
 #include <qstring.h>
 #include "parsedattribute.h"
 #include "programmingbycontract.h"
@@ -193,8 +193,8 @@ QString ParsedAttribute::asString()
     else
         str += " ";
     
-    if (!_name.isEmpty())
-        str += _name;
+    if (!name().isEmpty())
+        str += name();
 
     if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
         str += _type.mid(_namePos, _type.length()- _namePos);
@@ -217,12 +217,12 @@ void ParsedAttribute::out()
     QString buf;
     QString attrString;
     
-    if ( !_comment.isEmpty() )
-        cout << "    " << _comment << "\n";
+    if ( !comment().isEmpty() )
+        cout << "    " << comment().latin1() << "\n";
     
     cout << "    ";
     
-    switch (_access)
+    switch ( access() )
         {
         case PIE_PUBLIC:
             cout << "public ";
@@ -242,11 +242,8 @@ void ParsedAttribute::out()
         }
     
     // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-    cout << asString();
-    buf.sprintf("%d", _declaredOnLine );
-    cout << " @ line " << buf << " - ";
-    buf.sprintf("%d", _declarationEndsOnLine );
-    cout << buf << "\n";
+    cout << asString().latin1() << " @ line " << declaredOnLine()
+         << " - " << declarationEndsOnLine() << endl;
 }
 
 
@@ -269,15 +266,15 @@ void ParsedAttribute::out()
  *-----------------------------------------------------------------*/
 bool ParsedAttribute::isEqual( ParsedAttribute *attr )
 {
-    return (_name == attr->name() && _type == attr->type() );
+    return (name() == attr->name() && type() == attr->type() );
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
 {
-    s << arg.name() << arg.declaredInScope() << (int)arg.access()
-      << arg.definedInFile() << arg.definedOnLine() << arg.comment()
-      << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
+    operator<<(s, (const ParsedItem&)arg);
+
+    s << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
 
     return s;
 }
@@ -285,20 +282,12 @@ QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg)
 
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg)
 {
-    QString name, declaredInScope, definedInFile, comment, type;
-    int access;
-    int definedOnLine, posName;
-    int isInHFile, isStatic, isConst;
+    operator>>(s, (ParsedItem&)arg);
+
+    QString type; int isInHFile, isStatic, isConst, posName;
     
-    s >> name >> declaredInScope >> access >> definedInFile >> definedOnLine >> comment
-      >> type >> isInHFile >> isStatic >> isConst >> posName;
-    
-    arg.setName(name);
-    arg.setDeclaredInScope(declaredInScope);
-    arg.setAccess((PIAccess)access);
-    arg.setDefinedInFile(definedInFile);
-    arg.setDefinedOnLine(definedOnLine);
-    arg.setComment(comment);
+    s  >> type >> isInHFile >> isStatic >> isConst >> posName;
+
     arg.setType(type);
     arg.setIsInHFile(isInHFile);
     arg.setIsStatic(isStatic);

@@ -18,8 +18,9 @@
 #ifndef _CLASSTORE_H_
 #define _CLASSTORE_H_
 
+class QFile;
+
 #include "parsedscopecontainer.h"
-#include "persistantclassstore.h"
 #include "classtreenode.h"
 
 class ClassStoreIface;
@@ -39,7 +40,7 @@ public:
 private:
 
     /** Store for global pre-parsed classes(like Qt and KDE). */
-    PersistantClassStore globalStore;
+//    PersistantClassStore globalStore;
     ClassStoreIface *dcopIface;
 
 public:
@@ -73,7 +74,7 @@ public:
     { return globalContainer.hasStruct(aName); }
     
     /**
-     * Fetches a scope from the store using its' name.
+     * Fetches a scope from the store using its name.
      * 
      * @param aName Name of the scope to fetch.
      *
@@ -123,7 +124,7 @@ public:
      * Get all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStrList *getSortedClassNameList();
+    QStringList *getSortedClassNameList();
     
     /**
      * Fetches all virtual methods, both implemented and not.
@@ -188,13 +189,89 @@ public:
      * @param aName Name of the class to remove
      */
     void removeClass( const QString &aName );
-    
-    /** Stores all parsed classes as a database. */
-    void storeAll();
-    
+
     /** Outputs this object as text on stdout */
     void out();
-    
+
+/* here begins the persistant class store stuff */
+
+private: // Public attributes
+
+  /** Path where the persistant store file will be put. */
+  QString m_strPath;
+
+  /** The filename. */
+  QString m_strFileName;
+
+  /** Is the file opened? */
+  bool m_bIsOpen;
+
+  /** With which mode was the file opened */
+  int m_nMode;
+
+  /** Version of the persistant class store file */
+  QString m_strFormatVersion;
+
+public: // Public methods
+
+  /** Set the path where the persistant store file should be stored.
+   * @param aPath Path to the persistant store file.
+   */
+  void setPath( const QString &aPath );
+
+  /** Set the name of the file to read/write.
+   * @param aFileName Name of the persistant store file.
+   */
+  void setFileName( const QString &aFileName );
+
+  /** Open the file. */
+  bool open ( const QString &aFileName, int nMode );
+
+  /** Close the file. */
+  void close();
+
+  /** Has the store been created? */
+  bool exists();
+
+  /** Stores all data in a binary file */
+  void storeAll();
+
+  /** Restores all data from a binary file */
+  void restoreAll();
+
+protected: // Protected methods
+
+  /** Store a class in the persistant store.
+   * @param aClass The class to store in the persistant store.
+   */
+  void storeClass ( ParsedClass *pClass );
+
+  /** Store a scope in the persistant store.
+   * @param aScope The class to store in the persistant store.
+   */
+  void storeScope ( ParsedScopeContainer* pScope );
+
+  /** Store a Method in the persistant store.
+   * @param aMethod The class to store in the persistant store.
+   */
+  void storeMethod ( ParsedMethod* pMethod );
+
+  /** Store a attribute in the persistant store.
+   * @param aAttribute The class to store in the persistant store.
+   */
+  void storeAttribute ( ParsedAttribute* pAttribute );
+
+  /** Store a struct in the persistant store.
+   * @param aStruct The class to store in the persistant store.
+   */
+  void storeStruct ( ParsedStruct* pStruct );
+
+
+private: // Private attributes
+
+	QFile* m_pFile;
+	
+	QDataStream* m_pStream;
 };
 
 #endif

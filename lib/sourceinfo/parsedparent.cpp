@@ -17,10 +17,9 @@
  ***************************************************************************/
 
 #include <iostream.h>
-#include <qdatastream.h>
+//#include <qdatastream.h>
 #include "parsedparent.h"
 #include "programmingbycontract.h"
-
 
 /*********************************************************************
  *                                                                   *
@@ -100,9 +99,9 @@ void ParsedParent::setAccess( PIAccess aAccess )
  *-----------------------------------------------------------------*/
 void ParsedParent::out()
 {
-    cout << "    " << _name << "(";
+    cout << "    " << name().latin1() << "(";
 
-    switch (_access)
+    switch (access())
         {
         case PIE_PUBLIC:
             cout << "public";
@@ -124,9 +123,9 @@ void ParsedParent::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedParent &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedParent &arg)
 {
-    return s << arg.name() << (int)arg.access();
+    return s << arg.name() << ( int ) arg.access();
 }
 
 

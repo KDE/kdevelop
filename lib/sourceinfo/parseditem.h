@@ -18,9 +18,10 @@
 #ifndef _PARSEDITEM_H_
 #define _PARSEDITEM_H_
 
+#include <qdatastream.h>
 #include <qstring.h>
-#include <assert.h>
-
+#include <qtextstream.h>
+#include <iostream.h>
 
 /** The type of a ParsedItem. */
 enum PIType { 
@@ -50,12 +51,199 @@ public:
     ParsedItem();
     virtual ~ParsedItem();
 
-public:
+    /**
+     * Is this a public item? 
+     * @return If this a public item or not.
+     */
+    inline bool isPublic() const
+    { return ( _access == PIE_PUBLIC ); }
+    
+    /**
+     * Is this a protected item? 
+     * @return If this a protected item or not.
+     */
+    inline bool isProtected() const
+    { return ( _access == PIE_PROTECTED ); }
+
+    /**
+     * Is this a private item?
+     * @return If this a private item or not.
+     */
+    inline bool isPrivate() const
+    { return ( _access == PIE_PRIVATE ); }
+
+    /**
+     * Is this a package item?
+     * @return If this a package item or not.
+     */
+    inline bool isPackage() const
+    { return ( _access == PIE_PACKAGE ); }
+
+    /**
+     * Is this a global variable?
+     * @return If this a global item or not.
+     */
+    inline bool isGlobal() const
+    { return ( _access == PIE_GLOBAL ); }
+    
+    /**
+     * The path is the scope + "." + the name of the item.
+     *
+     * @return The path of this item.
+     */
+    QString path();
+    
+    /**
+     * Sets the item type. 
+     * @param aType The new type.
+     */
+    inline void setItemType(PIType aType)
+        { _itemType = aType; }
+    PIType itemType() const
+        { return _itemType; }
+    
+    /**
+     * Sets the name. 
+     * @param aName The new name.
+     */
+    inline void setName(const QString &aName)
+    {
+	if( !aName || aName == "" ){
+	    cerr << "EE: ParsedItem::setName - not a valid name" << endl;
+	    name_ = "setName standard name";
+	  }
+	else {
+	    if( name_.length( ) > 100 ){
+		cerr << "EE: ParsedItem::setName - length > 100" << endl;
+		cerr << "  : original length : '" << name_.length( ) << "'" << endl;
+		name_ = "setName standard name";
+	    }
+	    else {
+		name_ = aName;
+	    }
+	}
+    }
+    QString name() const
+        { return name_; }
+    /**
+     * Sets the acess (public/protected/private)
+     * @param aExport The new access
+     */
+    inline void setAccess(PIAccess aAccess)
+        { _access = aAccess; }
+    PIAccess access() const
+        { return _access; }
+    /**
+     * Sets the scope this item is declared in.
+     *
+     * @param aScope The scope-
+     */
+    inline void setDeclaredInScope(const QString &aScope)
+        { _declaredInScope = aScope; }
+    QString declaredInScope() const
+        { return _declaredInScope; }
+
+    /**
+     * Sets the line where the item was defined. 
+     * @param aLine 0-based line on which the item is defined.
+     */
+    inline void setDefinedOnLine(uint aLine)
+        { _definedOnLine = aLine; }
+    uint definedOnLine() const
+        { return _definedOnLine; }
+    /**
+     * Sets the line where the declaration ends.
+     * @param aLine 0-based line on which the item definition ends.
+     */
+    inline void setDefinitionEndsOnLine(uint aLine)
+        { _definitionEndsOnLine = aLine; }
+    uint definitionEndsOnLine() const
+        { return _definitionEndsOnLine; }
+
+    /**
+     * Sets the line where the item was declared. 
+     * @param aLine 0-based line on which the item is declared.
+     */
+    inline void setDeclaredOnLine(uint aLine)
+        { _declaredOnLine = aLine; }
+    uint declaredOnLine() const
+        { return _declaredOnLine; }
+
+    /**
+     * Sets the line where the declaration ends.
+     * @param aLine 0-based line on which the declaration ends. 
+     */
+    inline void setDeclarationEndsOnLine(uint aLine)
+        { _declarationEndsOnLine = aLine; }
+    uint declarationEndsOnLine() const
+        { return _declarationEndsOnLine; }
+
+    /**
+     * Sets the line where the item was defined. 
+     * @param aFile Absoulute filename of the file the item is defined in.
+     */
+    void setDefinedInFile(const QString &aFile)
+        { _definedInFile = aFile; }
+    QString definedInFile() const
+        { return _definedInFile; }
+    /**
+     * Sets the file where the item was declared. 
+     * @param aFile Absolute filename of the file the item is defined in.
+     */
+    void setDeclaredInFile(const QString &aFile)
+        { _declaredInFile = aFile; }
+    QString declaredInFile() const
+        { return _declaredInFile; }
+
+    /**
+     * Sets the comment of this item.
+     * @param aComment Comment that belongs to this item.
+     */
+    void setComment(const QString &aComment)
+        { _comment = aComment; }
+    QString comment() const
+        { return _comment; }
+    
+    /** Clears all item declaration fields */
+    void clearDeclaration()
+    {
+	_declaredInFile = QString::null;
+        _declaredOnLine = -1;
+        _declarationEndsOnLine = -1;
+    }
+    
+    /** Clears all item definition fields */
+    void clearDefinition()
+    {
+	_definedInFile = _declaredInFile;
+        _definedOnLine = _declaredOnLine;
+        _definitionEndsOnLine = _declarationEndsOnLine;
+    }
+    
+    /** 
+     * Makes this object a copy of the supplied object. 
+     *
+     * @param anItem Item to copy.
+     */
+    void copy(ParsedItem *anItem);
+    
+    /**
+     * Returns the object as a string(for tooltips etc) 
+     * @param str String to store the result in.
+     * @return Pointer to str.
+     */
+    virtual QString asString()
+    { return name_; }
+    
+    /** Outputs this object to stdout */
+    virtual void out() = 0;
+
+private:
     /** The item type. */
     PIType _itemType;
     
     /** Name of this item */
-    QString _name;
+    QString name_;
     
     /** Current scope of this item. If it's empty it's a global item. */
     QString _declaredInScope;
@@ -83,166 +271,13 @@ public:
     
     /** Comment in the vicinity(above/after) of this item. */
     QString _comment;
-    
+
 public:
-    
-    /**
-     * Is this a public item? 
-     * @return If this a public item or not.
-     */
-    inline bool isPublic()
-    { return ( _access == PIE_PUBLIC ); }
-    
-    /**
-     * Is this a protected item? 
-     * @return If this a protected item or not.
-     */
-    inline bool isProtected()
-    { return ( _access == PIE_PROTECTED ); }
-
-    /**
-     * Is this a private item?
-     * @return If this a private item or not.
-     */
-    inline bool isPrivate()
-    { return ( _access == PIE_PRIVATE ); }
-
-    /**
-     * Is this a package item?
-     * @return If this a package item or not.
-     */
-    inline bool isPackage()
-    { return ( _access == PIE_PACKAGE ); }
-
-    /**
-     * Is this a global variable?
-     * @return If this a global item or not.
-     */
-    inline bool isGlobal()
-    { return ( _access == PIE_GLOBAL ); }
-    
-    /**
-     * The path is the scope + "." + the name of the item.
-     *
-     * @return The path of this item.
-     */
-    QString path();
-    
-    /**
-     * Sets the item type. 
-     * @param aType The new type.
-     */
-    inline void setItemType(PIType aType)
-    { _itemType = aType; }
-    PIType itemType() { return _itemType; }
-    /**
-     * Sets the name. 
-     * @param aName The new name.
-     */
-    inline void setName(const QString &aName)
-    { _name = aName; }
-    QString & name() { return _name; }
-    /**
-     * Sets the acess (public/protected/private)
-     * @param aExport The new access
-     */
-    inline void setAccess(PIAccess aAccess)
-    { _access = aAccess; }
-    PIAccess access() { return _access; }
-    /**
-     * Sets the scope this item is declared in.
-     *
-     * @param aScope The scope-
-     */
-    inline void setDeclaredInScope(const QString &aScope)
-    { _declaredInScope = aScope; }
-	QString & declaredInScope() { return _declaredInScope; }
-
-    /**
-     * Sets the line where the item was defined. 
-     * @param aLine 0-based line on which the item is defined.
-     */
-    inline void setDefinedOnLine(uint aLine)
-    { _definedOnLine = aLine; }
-    uint definedOnLine() { return _definedOnLine; }
-    /**
-     * Sets the line where the declaration ends.
-     * @param aLine 0-based line on which the item definition ends.
-     */
-    inline void setDefinitionEndsOnLine(uint aLine)
-    { _definitionEndsOnLine = aLine; }
-	uint definitionEndsOnLine() { return _definitionEndsOnLine; }
-    /**
-     * Sets the line where the item was declared. 
-     * @param aLine 0-based line on which the item is declared.
-     */
-    inline void setDeclaredOnLine(uint aLine)
-    { _declaredOnLine = aLine; }
-    uint declaredOnLine() { return _declaredOnLine; }
-
-    /**
-     * Sets the line where the declaration ends.
-     * @param aLine 0-based line on which the declaration ends. 
-     */
-    inline void setDeclarationEndsOnLine(uint aLine)
-    { _declarationEndsOnLine = aLine; }
-	uint declarationEndsOnLine() { return _declarationEndsOnLine; }
-    /**
-     * Sets the line where the item was defined. 
-     * @param aFile Absoulute filename of the file the item is defined in.
-     */
-    void setDefinedInFile(const QString &aFile)
-    { _definedInFile = aFile; }
-    const QString & definedInFile() { return _definedInFile; }
-    /**
-     * Sets the file where the item was declared. 
-     * @param aFile Absolute filename of the file the item is defined in.
-     */
-    void setDeclaredInFile(const QString &aFile)
-    { _declaredInFile = aFile; }
-    const QString & declaredInFile() { return _declaredInFile; }
-
-    /**
-     * Sets the comment of this item.
-     * @param aComment Comment that belongs to this item.
-     */
-    void setComment(const QString &aComment)
-    { _comment = aComment; }
-	const QString & comment() { return _comment; }
-    
-    /** Clears all item declaration fields */
-    void clearDeclaration()
-    {
-	_declaredInFile = QString::null;
-        _declaredOnLine = -1;
-        _declarationEndsOnLine = -1;
-    }
-    
-    /** Clears all item definition fields */
-    void clearDefinition ()
-    {
-	_definedInFile = _declaredInFile;
-        _definedOnLine = _declaredOnLine;
-        _definitionEndsOnLine = _declarationEndsOnLine;
-    }
-    
-    /** 
-     * Makes this object a copy of the supplied object. 
-     *
-     * @param anItem Item to copy.
-     */
-    void copy(ParsedItem *anItem);
-    
-    /**
-     * Returns the object as a string(for tooltips etc) 
-     * @param str String to store the result in.
-     * @return Pointer to str.
-     */
-    virtual QString asString()
-    { return _name; }
-    
-    /** Outputs this object to stdout */
-    virtual void out() = 0;
+    //friend QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedItem &arg);
+QDataStream &operator>>(QDataStream &s, ParsedItem &arg);
 
 #endif 

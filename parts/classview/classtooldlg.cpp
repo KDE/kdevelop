@@ -262,8 +262,8 @@ void ClassToolDialog::refresh()
     QString oldName = class_combo->currentText();
 
     class_combo->clear();
-    QStrList *list = m_part->classStore()->getSortedClassNameList();
-    class_combo->insertStrList(list);
+    QStringList *list = m_part->classStore()->getSortedClassNameList();
+    class_combo->insertStringList(*list);
     delete list;
     setClassName(oldName);
 
@@ -298,11 +298,11 @@ void ClassToolDialog::updateCaptionAndButtons()
             break;
         case ViewMethods:
             button = methods_button;
-            caption = i18n("%1 methods").arg(access_combo->currentText());
+            caption = i18n("%1 Methods").arg(access_combo->currentText());
             break;
         case ViewAttributes:
             button = attributes_button;
-            caption = i18n("%1 attributes").arg(access_combo->currentText());
+            caption = i18n("%1 Attributes").arg(access_combo->currentText());
             break;
         default:
             button = 0;
@@ -319,7 +319,7 @@ void ClassToolDialog::updateCaptionAndButtons()
     
     if (button) {
         button->setOn(true);
-        setCaption(i18n("%1 of class %2").arg(caption).arg(currentClass->name()));
+        setCaption(i18n("%1 of Class %2").arg(caption).arg(currentClass->name()));
     } else
         setCaption(caption);
 }

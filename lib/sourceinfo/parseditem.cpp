@@ -81,10 +81,50 @@ void ParsedItem::copy( ParsedItem *anItem )
  * Returns:
  *   The path to this item.
  *-----------------------------------------------------------------*/
-QString ParsedItem::path()
+QString ParsedItem::path( )
 {
-  if ( _declaredInScope.isEmpty() )
-    return _name;
-  else
-    return _declaredInScope + "." + _name;
+    if ( _declaredInScope.isEmpty() )
+	return name_;
+    else
+	return _declaredInScope + "." + name_;
+}
+
+
+QDataStream& operator << ( QDataStream& s, const ParsedItem& arg )
+{
+    s << ( int ) arg.itemType( )              << arg.name( )           << arg.declaredInScope( )
+      << ( int ) arg.access( )                << arg.definedInFile( )  << ( int ) arg.definedOnLine( )
+      << ( int ) arg.definitionEndsOnLine( )  << arg.declaredInFile( ) << ( int ) arg.declaredOnLine( )
+      << ( int ) arg.declarationEndsOnLine( ) << arg.comment( );
+
+	return s;
+}
+
+
+QDataStream& operator >> ( QDataStream& s, ParsedItem& arg )
+{
+    int itemType; QString name, declaredInScope; int access;
+    QString definedInFile;  int definedOnLine,  definitionEndsOnLine;
+    QString declaredInFile; int declaredOnLine, declarationEndsOnLine;
+    QString comment;
+
+    s >> itemType              >> name           >> declaredInScope
+      >> access                >> definedInFile  >> definedOnLine
+      >> definitionEndsOnLine  >> declaredInFile >> declaredOnLine
+      >> declarationEndsOnLine >> comment;
+
+    arg.setItemType((PIType)itemType);
+
+	arg.setName(name);
+    arg.setDeclaredInScope(declaredInScope);
+    arg.setAccess((PIAccess)access);
+    arg.setDefinedInFile(definedInFile);
+    arg.setDefinedOnLine(definedOnLine);
+    arg.setDefinitionEndsOnLine(definitionEndsOnLine);
+    arg.setDeclaredInFile(declaredInFile);
+    arg.setDeclaredOnLine(declaredOnLine);
+    arg.setDeclarationEndsOnLine(declarationEndsOnLine);
+    arg.setComment(comment);
+
+    return s;
 }

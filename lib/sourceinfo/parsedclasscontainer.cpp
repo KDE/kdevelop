@@ -22,7 +22,6 @@
 #include "parsedclasscontainer.h"
 #include "programmingbycontract.h"
 
-
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -102,16 +101,16 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
 {
     REQUIRE( "Valid class", aClass != NULL );
     REQUIRE( "Valid classname", !aClass->name().isEmpty() );
-    REQUIRE( "Unique class", !hasClass( _useFullPath ? aClass->path() : aClass->name() ) );
-    
+    REQUIRE( "Unique class", !hasClass( useFullPath()? aClass->path() : aClass->name() ) );
+
     if ( !path().isEmpty() )
         aClass->setDeclaredInScope( path() );
     
     // If this is a class, and we're adding another class that class
     // is a subclass.
-    aClass->setIsSubClass( _itemType == PIT_CLASS );
+    aClass->setIsSubClass( itemType() == PIT_CLASS );
 
-    classes.insert( _useFullPath ? aClass->path() : aClass->name(), aClass );
+    classes.insert( useFullPath()? aClass->path() : aClass->name(), aClass );
 }
 
 /*------------------------------ ParsedClassContainer::removeClass()
@@ -126,7 +125,6 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void ParsedClassContainer::removeClass( const QString &aName )
 {
-    REQUIRE( "Valid classname", aName != NULL );
     REQUIRE( "Valid classname", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     
@@ -145,7 +143,6 @@ void ParsedClassContainer::removeClass( const QString &aName )
  *-----------------------------------------------------------------*/
 void ParsedClassContainer::removeWithReferences( const QString &aFile )
 {
-    REQUIRE( "Valid filename", aFile != NULL );
     REQUIRE( "Valid filename length", aFile.length() > 0 );
     
     ParsedContainer::removeWithReferences( aFile );
@@ -170,7 +167,6 @@ void ParsedClassContainer::removeWithReferences( const QString &aFile )
  *-----------------------------------------------------------------*/
 bool ParsedClassContainer::hasClass( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, false );
     REQUIRE1( "Valid classname length", aName.length() > 0, false );
     
     return classes.find( aName ) != NULL;
@@ -190,7 +186,6 @@ bool ParsedClassContainer::hasClass( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, NULL );
     REQUIRE1( "Valid classname length", aName.length() > 0, NULL );
     
     return classes.find( aName );
@@ -208,7 +203,7 @@ ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
 {
-    return getSortedDictList<ParsedClass>( classes, _useFullPath );
+    return getSortedDictList<ParsedClass>( classes, useFullPath() );
 }
 
 
@@ -221,25 +216,9 @@ QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-/*
-    obsolete    W. Tasin
-QStrList *ParsedClassContainer::getSortedClassNameList()
+QStringList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
 {
-  return getSortedIteratorNameList( classIterator );
-}
-*/
-/*-------------------- ParsedClassContainer::getSortedClassNameList()
- * getSortedClassNameList()
- *   Get all classnames in sorted order.
- *
- * Parameters:
- *   -
- * Returns:
- *   QStrList * The classnames.
- *-----------------------------------------------------------------*/
-QStrList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
-{
-    QStrList *ret_val = new QStrList();
+    QStringList *ret_val = new QStringList();
     ParsedClass *act;
     
     for (classIterator.toFirst();
@@ -256,4 +235,36 @@ QStrList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
     };
 
     return ret_val;
+}
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg)
+{
+    operator<<(s, (const ParsedContainer&)arg);
+
+    // Add clases
+    s << ( int ) arg.classes.count( );
+    QDictIterator<ParsedClass> classIt(arg.classes);
+    for (; classIt.current(); ++classIt)
+        s << *classIt.current();
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg)
+{
+    operator>>(s, (ParsedContainer&)arg);
+
+    int n;
+    
+    // Fetch classes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedClass *klass = new ParsedClass;
+        s >> (*klass);
+        arg.addClass(klass);
+    }
+
+    return s;
 }

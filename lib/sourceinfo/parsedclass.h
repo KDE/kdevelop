@@ -18,15 +18,14 @@
 #ifndef _PARSEDCLASS_H_
 #define _PARSEDCLASS_H_
 
-#include <qlist.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
+#include <qptrlist.h>
 #include "parseditem.h"
 #include "parsedparent.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
-#include "parsedsignalslot.h"
 #include "parsedclasscontainer.h"
 
 
@@ -44,37 +43,28 @@ public:
 private:
     
     /** List of all slots. */
-    QList<ParsedMethod> slotList;
+    QPtrList<ParsedMethod> slotList;
     
     /** All slots ordered by name and argument. */
     QDict<ParsedMethod> slotsByNameAndArg;
     
     /** List of all signals. */
-    QList<ParsedMethod> signalList;
+    QPtrList<ParsedMethod> signalList;
     
     /** All signals ordered by name and argument. */
     QDict<ParsedMethod> signalsByNameAndArg;
     
 public:
     
-    /** List with names of parentclasses(if any). */
-    QList<ParsedParent> parents;
-    
-    /** List with names of frientclasses(if any). */
-    QStrList friends;
+    /** List with names of parent classes(if any). */
+    QPtrList<ParsedParent> parents;
     
     /** List of slots. */
-    QListIterator<ParsedMethod> slotIterator;
+    QPtrListIterator<ParsedMethod> slotIterator;
     
     /** List of signals. */
-    QListIterator<ParsedMethod> signalIterator;
-    
-    /** List of signal<->slot mappings. */
-    //QList<ParsedSignalSlot> signalMaps;
-    
-    /** Tells if this class is declared inside another class. */
-    bool _isSubClass;
-    
+    QPtrListIterator<ParsedMethod> signalIterator;
+
 public:
     
     /**
@@ -103,8 +93,8 @@ public:
      * Adds a friend. 
      * @param aName A friendclass of this class.
      */
-    void addFriend(const char *aName)
-    { friends.append(aName); }
+    void addFriend(const QString &aName)
+        { _friends.append(aName); }
     
     /**
      * Adds a signal. 
@@ -118,16 +108,18 @@ public:
      */
     void addSlot(ParsedMethod *aMethod);
     
-    /** Add a signal->slot mapping. */
-    void addSignalSlotMap(ParsedSignalSlot *aSS);
-    
+    /** List with names of friend classes(if any). */
+    QStringList friends() const
+        { return _friends; }
+
     /** 
      * Sets the state if this is a subclass. 
      * @param aState The new state.
      */
     inline void setIsSubClass(bool aState)
-    { _isSubClass = aState; }
-    bool isSubClass() { return _isSubClass; }
+        { _isSubClass = aState; }
+    bool isSubClass() const
+        { return _isSubClass; }
 
 public:
     
@@ -150,13 +142,13 @@ public:
     ParsedMethod *getSlotByNameAndArg(const QString &aName);
     
     /** Gets all signals in sorted order. */
-    QList<ParsedMethod> *getSortedSignalList();
+    QPtrList<ParsedMethod> *getSortedSignalList();
     
     /** Gets all slots in sorted order. */
-    QList<ParsedMethod> *getSortedSlotList();
+    QPtrList<ParsedMethod> *getSortedSlotList();
     
     /** Gets all virtual methods. */
-    QList<ParsedMethod> *getVirtualMethodList();
+    QPtrList<ParsedMethod> *getVirtualMethodList();
     
     /**
      * Checks if this class has the named parent. 
@@ -172,11 +164,17 @@ public:
     /** Outputs the class as text on stdout. */
     void out();
 
-    friend QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+
+private:
+    /** List with names of friend classes(if any). */
+    QStringList _friends;
+    /** Tells if this class is declared inside another class. */
+    bool _isSubClass;
 };
 
 
-QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
+QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 QDataStream &operator>>(QDataStream &s, ParsedClass &arg);
 
 #endif

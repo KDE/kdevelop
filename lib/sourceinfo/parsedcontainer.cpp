@@ -11,12 +11,13 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
-#include "parsedcontainer.h"
 #include <iostream.h>
+#include <qstrlist.h>
+#include "parsedcontainer.h"
 #include "programmingbycontract.h"
 
 /*********************************************************************
@@ -74,7 +75,7 @@ ParsedContainer::~ParsedContainer()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedContainer::addStruct( ParsedStruct *aStruct ) 
+void ParsedContainer::addStruct( ParsedStruct *aStruct )
 {
     REQUIRE( "Valid struct", aStruct != NULL );
     REQUIRE( "Valid structname", !aStruct->name().isEmpty() );
@@ -82,7 +83,7 @@ void ParsedContainer::addStruct( ParsedStruct *aStruct )
 
     if ( !path().isEmpty() )
         aStruct->setDeclaredInScope( path() );
-    
+
     structs.insert( ( _useFullPath ? aStruct->path() : aStruct->name() ), aStruct );
 }
 
@@ -101,10 +102,10 @@ void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
     REQUIRE( "Valid attribute", anAttribute != NULL );
     REQUIRE( "Valid attributename", !anAttribute->name().isEmpty() );
     REQUIRE( "Unique attribute", !hasAttribute( _useFullPath ? anAttribute->path() : anAttribute->name() ) );
-    
+
     if ( !path().isEmpty() )
         anAttribute->setDeclaredInScope( path() );
-    
+
     attributes.insert( anAttribute->name(),  anAttribute );
 }
 
@@ -122,14 +123,14 @@ void ParsedContainer::addMethod( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid method", aMethod != NULL );
     REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
-    
+
     QString str;
-    
+
     if ( !path().isEmpty() )
         aMethod->setDeclaredInScope( path() );
-    
+
     methods.append( aMethod );
-    
+
     methodsByNameAndArg.insert( aMethod->asString(), aMethod );
 }
 
@@ -153,47 +154,47 @@ void ParsedContainer::addMethod( ParsedMethod *aMethod )
 ParsedMethod *ParsedContainer::getMethod( ParsedMethod *aMethod )
 {
     REQUIRE1( "Valid methodname", !aMethod->name().isEmpty(), NULL );
-    
+
     ParsedMethod *retVal = NULL;
-    
-    for ( retVal = methods.first(); 
+
+    for ( retVal = methods.first();
           retVal != NULL && !retVal->isEqual( aMethod );
           retVal = methods.next() )
         ;
-    
+
     return retVal;
 }
 
 /*------------------------------ ParsedContainer::getMethodByName()
  * getMethodByName()
- *   Get all methods matching the supplied name. 
+ *   Get all methods matching the supplied name.
  *
  * Parameters:
  *   aName                   Name of the method to fetch.
  *
  * Returns:
- *   QList<ParsedMethod> *  The methods.
+ *   QPtrList<ParsedMethod> *  The methods.
  *   NULL                    If not found.
  *-----------------------------------------------------------------*/
-QList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
+QPtrList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
 {
-    REQUIRE1( "Valid methodname", aName != NULL, new QList<ParsedMethod>() );
-    REQUIRE1( "Valid methodname length", aName.length() > 0, new QList<ParsedMethod>() );
-    
-    QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
+    REQUIRE1( "Valid methodname", aName != NULL, new QPtrList<ParsedMethod>() );
+    REQUIRE1( "Valid methodname length", aName.length() > 0, new QPtrList<ParsedMethod>() );
+
+    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
     ParsedMethod *aMethod;
-    
+
     retVal->setAutoDelete( false );
-    
-    for ( aMethod = methods.first(); 
+
+    for ( aMethod = methods.first();
           aMethod != NULL;
           aMethod = methods.next() ) {
-        // If the name matches the supplied one we append the method to the 
+        // If the name matches the supplied one we append the method to the
         // returnvalue.
         if ( aMethod->name() == aName )
             retVal->append( aMethod );
     }
-    
+
     return retVal;
 }
 
@@ -213,40 +214,39 @@ ParsedMethod *ParsedContainer::getMethodByNameAndArg( const QString &aName )
 {
     REQUIRE1( "Valid methodname", aName != NULL, NULL );
     REQUIRE1( "Valid methodname length", aName.length() > 0,  NULL );
-    
+
     return methodsByNameAndArg.find( aName );
 }
 
 /*--------------------------- ParsedContainer::getSortedMethodList()
  * getSortedMethodList()
- *   Get all methods in sorted order. 
+ *   Get all methods in sorted order.
  *
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The sorted list.
+ *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QList<ParsedMethod> *ParsedContainer::getSortedMethodList()
+QPtrList<ParsedMethod> *ParsedContainer::getSortedMethodList()
 {
-    QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
-    ParsedMethod *aMethod;
-    char *str;
-    QStrList srted;
-    QString m;
-    
+    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
     retVal->setAutoDelete( false );
-    
+
+    QStringList srted;
+
     // Ok... This sucks. But I'm lazy.
+    ParsedMethod *aMethod;
     for ( aMethod = methods.first();
           aMethod != NULL;
           aMethod = methods.next() )
-        srted.inSort( aMethod->asString() );
-    
-    for ( str = srted.first();
-          str != NULL;
-          str = srted.next() )
-        retVal->append( getMethodByNameAndArg( str ) );
-    
+        srted << aMethod->asString();
+
+    srted.sort();
+
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
+        retVal->append( getMethodByNameAndArg(*it) );
+
     return retVal;
 }
 
@@ -262,10 +262,10 @@ QList<ParsedMethod> *ParsedContainer::getSortedMethodList()
  *   NULL               If not found.
  *-----------------------------------------------------------------*/
 ParsedAttribute *ParsedContainer::getAttributeByName( const QString &aName )
-{    
+{
     REQUIRE1( "Valid attributename", aName != NULL, NULL );
     REQUIRE1( "Valid attributename length", aName.length() > 0, NULL );
-    
+
     return attributes.find( aName );
 }
 
@@ -278,21 +278,21 @@ ParsedAttribute *ParsedContainer::getAttributeByName( const QString &aName )
  * Returns:
  *   QStrList *         List of attributes in sorted order.
  *-----------------------------------------------------------------*/
-QStrList *ParsedContainer::getSortedAttributeAsStringList()
+QStringList *ParsedContainer::getSortedAttributeAsStringList()
 {
     return getSortedIteratorNameList<ParsedAttribute>( attributeIterator );
 }
 
 /*------------------------ ParsedContainer::getSortedAttributeList()
  * getSortedAttributeList()
- *   Get all attributes in sorted order. 
+ *   Get all attributes in sorted order.
  *
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The sorted list.
+ *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QList<ParsedAttribute> *ParsedContainer::getSortedAttributeList()
+QPtrList<ParsedAttribute> *ParsedContainer::getSortedAttributeList()
 {
     return getSortedDictList<ParsedAttribute>( attributes, false );
 }
@@ -309,10 +309,10 @@ QList<ParsedAttribute> *ParsedContainer::getSortedAttributeList()
  *   NULL             If not found.
  *-----------------------------------------------------------------*/
 ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
-{    
+{
     REQUIRE1( "Valid structname", aName != NULL, NULL );
     REQUIRE1( "Valid structname length", aName.length() > 0, NULL );
-    
+
     return structs.find( aName );
 }
 
@@ -325,21 +325,21 @@ ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
  * Returns:
  *   QStrList *       List of all structs in alpabetical order.
  *-----------------------------------------------------------------*/
-QStrList *ParsedContainer::getSortedStructNameList()
+QStringList *ParsedContainer::getSortedStructNameList()
 {
     return getSortedIteratorNameList<ParsedStruct>( structIterator );
 }
 
 /*---------------------------- ParsedContainer::getSortedStructList()
  * getSortedStructList()
- *   Get all structs in sorted order. 
+ *   Get all structs in sorted order.
  *
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The sorted list.
+ *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QList<ParsedStruct> *ParsedContainer::getSortedStructList()
+QPtrList<ParsedStruct> *ParsedContainer::getSortedStructList()
 {
     return getSortedDictList<ParsedStruct>( structs, _useFullPath );
 }
@@ -362,7 +362,7 @@ void ParsedContainer::removeWithReferences( const QString &aFile )
 
 /*----------------------------------- ParsedContainer::removeMethod()
  * removeMethod()
- *   Remove a method matching the specification. 
+ *   Remove a method matching the specification.
  *
  * Parameters:
  *   aMethod        Specification of the method.
@@ -376,16 +376,16 @@ void ParsedContainer::removeMethod( ParsedMethod *aMethod )
     REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
 
     QString str = aMethod->asString();
-    
+
     ParsedMethod *m = getMethodByNameAndArg( str );
-    
+
     methodsByNameAndArg.remove( str );
     methods.removeRef( m );
 }
 
 /*-------------------------------- ParsedContainer::removeAttribute()
  * removeAttribute()
- *   Remove an attribute with a specified name. 
+ *   Remove an attribute with a specified name.
  *
  * Parameters:
  *   aName          Name of the attribute to remove.
@@ -393,17 +393,17 @@ void ParsedContainer::removeMethod( ParsedMethod *aMethod )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ParsedContainer::removeAttribute( const QString &aName ) 
+void ParsedContainer::removeAttribute( const QString &aName )
 {
     REQUIRE( "Valid attribute name", aName != NULL );
     REQUIRE( "Valid attribute name length", aName.length() > 0 );
-    
+
     attributes.remove( aName );
 }
 
 /*----------------------------------- ParsedContainer::removeStruct()
  * removeStruct()
- *   Remove a struct with a specified name. 
+ *   Remove a struct with a specified name.
  *
  * Parameters:
  *   aName          Name of the struct to remove.
@@ -415,7 +415,7 @@ void ParsedContainer::removeStruct( const QString &aName )
 {
     REQUIRE( "Valid struct name", aName != NULL );
     REQUIRE( "Valid struct name length", aName.length() > 0 );
-    
+
     structs.remove( aName );
 }
 
@@ -434,4 +434,50 @@ void ParsedContainer::clear()
     methods.clear();
     methodsByNameAndArg.clear();
     structs.clear();
+}
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg)
+{
+    operator<<(s, (const ParsedItem&)arg);
+
+    // Add methods.
+    s << arg.methods.count();
+    QPtrListIterator<ParsedMethod> methodIt(arg.methods);
+    for (; methodIt.current(); ++methodIt)
+        s << *methodIt.current();
+
+    // Add attributes.
+    s << arg.attributes.count();
+    QDictIterator<ParsedAttribute> attrIt(arg.attributes);
+    for (; attrIt.current(); ++attrIt)
+        s << *attrIt.current();
+
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedContainer &arg)
+{
+    operator>>(s, (ParsedItem&)arg);
+
+    int n;
+
+    // Fetch methods
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedMethod *method = new ParsedMethod;
+        s >> (*method);
+        arg.addMethod(method);
+    }
+
+    // Fetch attributes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedAttribute *attr = new ParsedAttribute;
+        s >> (*attr);
+        arg.addAttribute(attr);
+    }
+
+    return s;
 }

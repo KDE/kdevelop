@@ -17,11 +17,10 @@
  ***************************************************************************/
 
 #include <iostream.h>
-#include <qdatastream.h>
+//#include <qdatastream.h>
 #include <qstring.h>
 #include "parsedargument.h"
 #include "programmingbycontract.h"
-
 
 /*********************************************************************
  *                                                                   *
@@ -173,13 +172,13 @@ QString ParsedArgument::toString()
  *-----------------------------------------------------------------*/
 void ParsedArgument::out()
 {
-    cout << toString();
+    cout << toString().latin1();
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedArgument &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
 {
-    s << arg.type() << arg.name() << arg.namePos();
+    s << arg.type() << arg.name() << (int) arg.namePos();
     return s;
 }
 
@@ -187,12 +186,13 @@ QDataStream &operator<<(QDataStream &s, ParsedArgument &arg)
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg)
 {
     QString type, name;
-    int posName;
+    int namePos;
 
-    s >> type >> name >> posName;
-    arg.setType(type);
-    arg.setName(name);
-    arg.setNamePos(posName);
+    s >> type >> name >> namePos;
+    arg.setType( type );
+
+	arg.setName( name );
+    arg.setNamePos( namePos );
 
     return s;
 }

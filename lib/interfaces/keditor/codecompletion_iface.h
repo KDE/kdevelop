@@ -40,7 +40,7 @@ namespace KEditor {
     signals:
       void completionAborted();
       void completionDone();
-      
+      void argHintHided(); 
       
     };
   

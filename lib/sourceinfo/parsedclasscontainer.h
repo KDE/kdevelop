@@ -23,7 +23,6 @@
 
 class ParsedClass;
 
-
 /**
  * This class is a container that also can hold classes.
  * It has a range of functions to work with the classes it holds.
@@ -71,7 +70,7 @@ public:
      * Gets all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStrList *getSortedClassNameList(bool useFullPath=false);
+    QStringList *getSortedClassNameList(bool useFullPath=false);
     
 public:
     
@@ -95,6 +94,13 @@ public:
 
     /** Clears the internal state. */
     void clear(bool bAutodel=true);
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
+    friend QTextStream& operator << ( QTextStream& s, const ParsedClassContainer& arg );
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedClassContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedClassContainer &arg);
 
 #endif

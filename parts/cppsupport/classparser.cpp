@@ -16,11 +16,12 @@
  *                                                                         *
  ***************************************************************************/
 // 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
+// 2002-02-08 added simple enum parsing - daniel
 
 #include <qstring.h>
 #include <qregexp.h>
 #include <qfile.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include "classparser.h"
 #include "programmingbycontract.h"
@@ -285,6 +286,38 @@ void CClassParser::parseEnum()
 {
   while( lexem != 0 && lexem != ';' )
     getNextLexem();
+}
+
+/*--- CClassParser::parseEnum( )
+ * parseEnum( ParsedContainer* aContainer )
+ * tries to parse an enum right
+ *
+ * Parameters: a valid container
+ *
+ * Returns   : -
+ *
+ */
+void
+CClassParser::parseEnum( ParsedContainer* aContainer )
+{
+    ParsedAttribute* attr = new ParsedAttribute( );
+
+    // skip {
+    getNextLexem( );
+    // name
+    getNextLexem( );
+    while( lexem != '}' && lexem != 0 ){
+	if( lexem == '=' )
+	    getNextLexem( );
+	else if( lexem == ',' ){
+		aContainer->addAttribute( attr );
+		attr = new ParsedAttribute( );
+	     }
+	     else
+		attr->setName( getText( ) );
+	getNextLexem( );
+    }
+    aContainer->addAttribute( attr );
 }
 
 /*----------------------------------- CClassParser::parseNamespace()
@@ -1154,8 +1187,8 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
       }
       else
       {
-        warning( "No method by the name %s found in class %s", 
-                 name.data(), className.data() );
+        qWarning( "No method by the name %s found in class %s", 
+                  name.data(), className.data() );
         aMethod.out();
       }
     }
@@ -1163,7 +1196,7 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
 // EO
   	{
   	  QString path = className;
-  	  if (scope->path())        // Don't produce bad class names
+  	  if (!scope->path().isEmpty())        // Don't produce bad class names
   	    path = scope->path() + "." + path;
   	
       kdDebug(9007) << "scope path is " << path << endl;
@@ -1181,13 +1214,13 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
         }
         else
         {
-          warning( "No method by the name %s found in class %s",
-                 name.data(), path.data() );
+          qWarning( "No method by the name %s found in class %s",
+                    name.data(), path.data() );
           aMethod.out();
         }
       }
       else
-        warning( "No class by the name %s found", path.data() );
+        qWarning( "No class by the name %s found", path.data() );
     }
   }
 }
@@ -1615,7 +1648,7 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          kdDebug(9007) << "slot: %s\n" << aMethod->name().data() << endl;
+          kdDebug(9007) << "slot: " << aMethod->name().data() << endl;
 
           ParsedMethod *pm = aClass->getMethod(aMethod);
           if (pm != NULL) {
@@ -2156,14 +2189,15 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseGenericLexem(  ParsedContainer *aContainer )
+void CClassParser::parseGenericLexem( ParsedContainer *aContainer )
 {
   REQUIRE( "Valid container", aContainer != NULL );
  
   switch( lexem )
   {
     case CPENUM:
-      parseEnum();
+      // daniel -- test for parsing enums right
+      parseEnum( aContainer );
       break;
     case CPUNION:
       parseUnion();
@@ -2318,8 +2352,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcImplementation();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-            cout << "Storing objective implementation with path: " << aClass->path() << endl;
-			store->addClass(aClass);
+                    cout << "Storing objective implementation with path: " << aClass->path().latin1() << endl;
+                    store->addClass(aClass);
 		}
 		break;
 	case CPOBJCINTERFACE:
@@ -2327,8 +2361,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcClass();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-            cout << "Storing objective interface with path: " << aClass->path() << endl;
-			store->addClass(aClass);
+                    cout << "Storing objective interface with path: " << aClass->path().latin1() << endl;
+                    store->addClass(aClass);
 		}
     		break;
     case CPOBJCCLASS:
@@ -2458,4 +2492,8 @@ void CClassParser::wipeout()
   store->wipeout();
 
   reset();
+}
+/** get a list of all classes */
+ClassStore * CClassParser::getClassStore(){
+  return  store;
 }

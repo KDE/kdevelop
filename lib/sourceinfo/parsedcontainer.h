@@ -19,8 +19,8 @@
 #define _PARSEDCONTAINER_H_
 
 #include <qdatastream.h>
-#include <qlist.h>
-#include <qstrlist.h>
+#include <qptrlist.h>
+#include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
 #include "parseditem.h"
@@ -40,19 +40,19 @@ class ParsedClass;
  * @return List of sorted element names.
  */
 template<class T>
-QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
+QStringList *getSortedIteratorNameList( QDictIterator<T> &itr )
 {
-    QStrList *retVal = new QStrList();
-    
+    QStringList *retVal = new QStringList();
+
     // Iterate over all structures.
-    for( itr.toFirst();
-         itr.current();
-       ++itr )
+    for ( itr.toFirst(); itr.current(); ++itr )
         {
             ParsedItem *item = (ParsedItem *)itr.current();
-            retVal->inSort( item->name() );
+            (*retVal) << item->name();
         }
-    
+
+    retVal->sort();
+
     return retVal;
 }
 
@@ -66,33 +66,23 @@ QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
  * @return List of sorted elements.
  */
 template<class T>
-QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
+QPtrList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
 {
-    QList<T> *retVal = new QList<T>();
-    char *str;
-    QStrList srted;
-    //  QString m;
-    QDictIterator<T> itr( dict );
-    
+    QPtrList<T> *retVal = new QPtrList<T>();
     retVal->setAutoDelete( false );
+
+    QStringList srted;
     
     // Ok... This sucks. But I'm lazy.
-    for( itr.toFirst();
-         itr.current();
-         ++itr )
-        {
-            //    itr.current()->asString( m );
-            //    srted.inSort( m );
-            
-            srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name() ) );
-        }
-    
-    for( str = srted.first();
-         str != NULL;
-         str = srted.next() )
-        {
-            retVal->append( dict.find( str ) );
-        }
+    QDictIterator<T> itr( dict );
+    for( itr.toFirst(); itr.current(); ++itr )
+        srted << ( usePath ? itr.current()->path() : itr.current()->name() );
+
+    srted.sort();
+
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
+        retVal->append( dict.find(*it) );
     
     return retVal;
 }
@@ -118,7 +108,7 @@ protected:
     QDict<ParsedAttribute> attributes;
     
     /** List of methods. */
-    QList<ParsedMethod> methods;
+    QPtrList<ParsedMethod> methods;
     
     /** All methods ordered by name and argument. */
     QDict<ParsedMethod> methodsByNameAndArg;
@@ -126,16 +116,10 @@ protected:
     /** All structures declared in this class. */
     QDict<ParsedStruct> structs;
     
-    /**
-     * Tells if objects stored in the container should use the 
-     * full path as the key(default is no).
-     */
-    bool _useFullPath;
-    
 public:
     
     /** Iterator for the methods. */
-    QListIterator<ParsedMethod> methodIterator;
+    QPtrListIterator<ParsedMethod> methodIterator;
     
     /** Iterator for the attributes. */
     QDictIterator<ParsedAttribute> attributeIterator;
@@ -167,9 +151,10 @@ public:
      * @param state If to use full path or not.
      */
     inline void setUseFullpath(bool state)
-    { _useFullPath = state; }
+        { _useFullPath = state; }
+    bool useFullPath() const
+        { return _useFullPath; }
 
-    bool useFullPath() { return _useFullPath; }
     /**
      * Gets a method by comparing with another method. 
      * @param aMethod Method to compare with.
@@ -181,7 +166,7 @@ public:
      * @param aName Name of the method.
      * @return List of methods matching the name.
      */
-    QList<ParsedMethod> *getMethodByName(const QString &aName);
+    QPtrList<ParsedMethod> *getMethodByName(const QString &aName);
     
     /**
      * Gets a method by using its name and arguments. 
@@ -205,25 +190,25 @@ public:
     ParsedAttribute *getAttributeByName(const QString &aName);
     
     /** Get all methods in sorted order. */
-    QList<ParsedMethod> *getSortedMethodList();
+    QPtrList<ParsedMethod> *getSortedMethodList();
 
     /**
      * Gets all attributes in their string reprentation in sorted order. 
      * @return List of attributes in sorted order.
      */
-    QStrList *getSortedAttributeAsStringList();
+    QStringList *getSortedAttributeAsStringList();
     
     /** Gets all attributes in sorted order. */
-    QList<ParsedAttribute> *getSortedAttributeList();
+    QPtrList<ParsedAttribute> *getSortedAttributeList();
     
     /**
      * Gets the names of all structures in a sorted list.
      * @return List of all structs in alpabetical order.
      */
-    QStrList *getSortedStructNameList();
+    QStringList *getSortedStructNameList();
     
     /** Gets all structs in sorted order. */
-    QList<ParsedStruct> *getSortedStructList();
+    QPtrList<ParsedStruct> *getSortedStructList();
 
     /**
      * Does a attribute exist in the store? 
@@ -270,8 +255,19 @@ public:
     /** Outputs this object to stdout */
     virtual void out() {}
 
-    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+    friend QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
+
+private:
+    /**
+     * Tells if objects stored in the container should use the 
+     * full path as the key(default is no).
+     */
+    bool _useFullPath;
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedContainer &arg);
 
 #include "parsedstruct.h"
 

@@ -110,8 +110,7 @@ bool ParsedScopeContainer::hasScope( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedScopeContainer *ParsedScopeContainer::getScopeByName( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, NULL );
-    REQUIRE1( "Valid scope name length", strlen( aName ) > 0, NULL );
+    REQUIRE1( "Valid scope name length", aName.length() > 0, NULL );
     
     return scopes.find( aName );
 }
@@ -129,12 +128,12 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
 {
     REQUIRE( "Valid scope", aScope != NULL );
     REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
-    REQUIRE( "Unique scope", !hasScope( _useFullPath ? aScope->path() : aScope->name() ) );
+    REQUIRE( "Unique scope", !hasScope( useFullPath()? aScope->path() : aScope->name() ) );
     
     if ( !path().isEmpty() )
         aScope->setDeclaredInScope( path() );
     
-    scopes.insert( ( _useFullPath ? aScope->path() : aScope->name() ), aScope );
+    scopes.insert( ( useFullPath()? aScope->path() : aScope->name() ), aScope );
 }
 
 /*------------------------------ ParsedScopeContainer::removeScope()
@@ -148,8 +147,7 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
  *-----------------------------------------------------------------*/
 void ParsedScopeContainer::removeScope( const QString &aName )
 {
-    REQUIRE( "Valid scope name", aName != NULL );
-    REQUIRE( "Valid scope name length", strlen( aName ) > 0 );
+    REQUIRE( "Valid scope name length", aName.length() > 0 );
     
     scopes.remove( aName );
 }
@@ -166,7 +164,7 @@ void ParsedScopeContainer::removeScope( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
 {
-    return getSortedDictList<ParsedScopeContainer>( scopes, _useFullPath );
+    return getSortedDictList<ParsedScopeContainer>( scopes, useFullPath() );
 }
 
 
@@ -180,7 +178,7 @@ QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
  * Returns:
  *   A list of scopenames.
  *-----------------------------------------------------------------*/
-QStrList *ParsedScopeContainer::getSortedScopeNameList()
+QStringList *ParsedScopeContainer::getSortedScopeNameList()
 {
     return getSortedIteratorNameList<ParsedScopeContainer>( scopeIterator );
 }
@@ -197,15 +195,15 @@ QStrList *ParsedScopeContainer::getSortedScopeNameList()
  *-----------------------------------------------------------------*/
 void ParsedScopeContainer::out()
 {
-    if ( !_comment.isEmpty() )
-        cout << _comment << endl;
+    if ( !comment().isEmpty() )
+        cout << comment().latin1() << endl;
     
     if ( !path().isEmpty() ) {
-        cout << "Namespace " << _name << " @ line " << _declaredOnLine;
-        cout << " - " << _declarationEndsOnLine << endl;
+        cout << "Namespace " << name().latin1() << " @ line " << declaredOnLine();
+        cout << " - " << declarationEndsOnLine() << endl;
         cout << "  Defined in files:" << endl;
-        cout << "    " << _declaredInFile << endl;
-        cout << "    " << _definedInFile << endl;
+        cout << "    " << declaredInFile().latin1() << endl;
+        cout << "    " << definedInFile().latin1() << endl;
     }
     
     if ( path().isEmpty() )
@@ -245,3 +243,36 @@ void ParsedScopeContainer::out()
           ++attributeIterator )
         attributeIterator.current()->out();
 }
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg)
+{
+    operator<<(s, (const ParsedClassContainer&)arg);
+
+    // Add scopes
+    s << ( int ) arg.scopes.count();
+    QDictIterator<ParsedScopeContainer> scopeIt(arg.scopes);
+    for (; scopeIt.current(); ++scopeIt)
+        s << *scopeIt.current();
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg)
+{
+    operator>>(s, (ParsedClassContainer&)arg);
+
+    int n;
+    
+    // Fetch scopes
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedScopeContainer *scope = new ParsedScopeContainer;
+        s >> (*scope);
+        arg.addScope(scope);
+    }
+
+    return s;
+}
+

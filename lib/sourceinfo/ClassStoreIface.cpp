@@ -17,11 +17,8 @@ QStringList ClassStoreIface::getSortedClassNameList()
 {
     QStringList res;
     
-    QStrList *list = m_classStore->getSortedClassNameList();
-    QStrListIterator it(*list);
-    for (; it.current(); ++it)
-        res += it.current();
-
+    QStringList *list = m_classStore->getSortedClassNameList();
+    res = *list;
     delete list;
     
     return res;

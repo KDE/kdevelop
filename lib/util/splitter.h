@@ -12,8 +12,9 @@
 #ifndef _SPLITTER_H_
 #define _SPLITTER_H_
 
-#include <qlist.h>
+#include <qvaluelist.h>
 #include <qframe.h>
+#include <qptrlist.h>
 
 class SplitterHandle;
 
@@ -86,8 +87,8 @@ private:
     void doLayout();
     int handleWidth() const;
     
-    QList<QWidget> childlist;
-    QList<SplitterHandle> handlelist;
+    QPtrList<QWidget> childlist;
+    QPtrList<SplitterHandle> handlelist;
     QValueList<int> sizes; // should really be a QVector
     Orientation _or;
 };

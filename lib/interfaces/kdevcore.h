@@ -150,6 +150,12 @@ public:
      * a command is started.
      */
     virtual void raiseWidget(QWidget *) = 0;
+    
+    /**
+     * Remove the given widget from the user interface
+     */
+    virtual void removeWidget( QWidget*, Role ) = 0;
+    
     /**
      * This method should be called by a part that wants to show a
      * context menu. The parameter context should be filled with
@@ -159,6 +165,11 @@ public:
      * which other parts can use to hook in.
      */
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
+
+    /**
+       close the current project and opens the new one
+     */
+    virtual void openProject(const QString& projectFileName)=0;
     /**
      * "Goes" to a file. This is a generic method that is used
      * e.g. by file trees. For non-text files (i.e. files which

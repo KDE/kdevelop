@@ -32,7 +32,7 @@ public:
 
   virtual bool removeLine(uint line) = 0;
 
-  virtual QString line(uint line) const = 0;
+  virtual QString line(uint line,bool replaceTabsWithSpaces=false) const = 0;
   virtual bool setLine(const QString &text, uint line) = 0;
 
   virtual bool hasSelectedText();
@@ -40,8 +40,10 @@ public:
   virtual DCOPRef dcopInterface() const;
 
   static EditDocumentIface *interface(Document *doc);
-
-
+ signals:
+  void textChanged(KEditor::Document *doc, int line, int col);
+  void textChanged();
+  
 private:
 
   EditDocumentDCOPIface *m_dcopIface;

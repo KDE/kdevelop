@@ -18,80 +18,95 @@
 #ifndef _PERSISTANTCLASSTORE_H_
 #define _PERSISTANTCLASSTORE_H_
 
-#include <qstring.h>
-#include "parsedclass.h"
+#define VERSION_FILE_FORMAT "0.1"
 
+#include "classstore.h"
+
+class QFile;
 
 /** This class handles all persistant storage of classes,
  * global functions and variables.
  * @author Jonas Nordin
  */
-class PersistantClassStore
+class PersistantClassStore : public ClassStore
 {
 
 public: // Constructor & Destructor
 
-  PersistantClassStore();
-  PersistantClassStore( const QString &aFilename );
+   PersistantClassStore();
   ~PersistantClassStore();
 
 public: // Public attributes
 
-  /** Path where the database files will be put. */
-  QString path;
+  /** Path where the persistant store file will be put. */
+  QString m_strPath;
 
   /** The filename. */
-  QString filename;
+  QString m_strFileName;
 
   /** Is the file opened? */
-  bool isOpen;
+  bool m_bIsOpen;
 
 public: // Public methods
 
-  /** Set the path where the database files should be stored.
-   * @param aPath Path to the database files.
+  /** Set the path where the persistant store file should be stored.
+   * @param aPath Path to the persistant store file.
    */
   void setPath( const QString &aPath );
 
   /** Set the name of the file to read/write. 
-   * @param aFilename Name of the database file.
+   * @param aFileName Name of the persistant store file.
    */
-  void setFilename( const QString &aFilename );
+  void setFileName( const QString &aFileName );
 
   /** Open the file. */
-  bool open();
+  bool open ( const QString &aFileName, int nMode );
 
   /** Close the file. */
   void close();
 
-  /** Store a class in the database. 
-   * @param aClass The class to store in the database.
-   */
-  void storeClass( ParsedClass *aClass );
-
-  /** Remove a class from the database. 
-   * @param aName Name of the class to remove.
-   */
-  void removeClass( const QString & /*aName*/ ) {};
-
-public: // Public queries
-
   /** Has the store been created? */
   bool exists();
 
-  /** Check if a class exists in the store. */
-  bool hasClass( const QString &aName );
+  /** Stores all data in a binary file */
+  void storeAll();
 
-  /** Fetch a class from the database using its' name. */
-  ParsedClass *getClassByName( const QString &aName );
+  /** Restores all data from a binary file */
+  void restoreAll();
+
+protected: // Protected methods
+
+  /** Store a class in the persistant store.
+   * @param aClass The class to store in the persistant store.
+   */
+  void storeClass ( ParsedClass *pClass );
+
+  /** Store a scope in the persistant store.
+   * @param aScope The class to store in the persistant store.
+   */
+  void storeScope ( ParsedScopeContainer* pScope );
+
+  /** Store a Method in the persistant store.
+   * @param aMethod The class to store in the persistant store.
+   */
+  void storeMethod ( ParsedMethod* pMethod );
+
+  /** Store a attribute in the persistant store.
+   * @param aAttribute The class to store in the persistant store.
+   */
+  void storeAttribute ( ParsedAttribute* pAttribute );
+
+  /** Store a struct in the persistant store.
+   * @param aStruct The class to store in the persistant store.
+   */
+  void storeStruct ( ParsedStruct* pStruct );
+
 
 private: // Private attributes
 
-  /** The database environment. */
-  //  DbEnv env;
+	QFile* m_pFile;
+	QDataStream* m_pStream;
 
-  /** The database object. */
-  //  Db *db;
 };
 
 #endif 

@@ -74,7 +74,7 @@ public:
      *
      * @return A list of all scopenames in alphabetical order.
      */
-    QStrList *getSortedScopeNameList();
+    QStringList *getSortedScopeNameList();
     
     /**
      * Adds a scope to this scope. 
@@ -95,6 +95,13 @@ public:
     
     /** Outputs this object to stdout. */
     void out();
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
+    friend QTextStream& operator << ( QTextStream& s, const ParsedScopeContainer& arg );
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedScopeContainer &arg);
+QDataStream &operator>>(QDataStream &s, ParsedScopeContainer &arg);
 
 #endif

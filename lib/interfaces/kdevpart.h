@@ -16,7 +16,9 @@
 #include <kparts/part.h>
 #include <qdom.h>
 #include <kaction.h>
-#include <qlist.h>
+#if (QT_VERSION >= 300)
+#include <qptrlist.h>
+#endif
 
 class KDevCore;
 class KDevProject;
@@ -28,13 +30,12 @@ class KDevAppFrontend;
 class ClassStore;
 class KDevApi;
 
-
+// 2002-02-08 added ccClassStore( ) - daniel
 
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
  * and so on.
  */
-
 class KDevPart : public KParts::Part
 {
     Q_OBJECT
@@ -78,6 +79,13 @@ public:
      * Gives a reference to the class store
      */
     ClassStore *classStore();
+    
+    /**
+     * Gives a reference to the codecompletion classstore
+     * added by daniel
+     */
+    ClassStore* ccClassStore( ); 
+    
     /**
      * Gives a reference to the DOM tree that represents
      * the project file.

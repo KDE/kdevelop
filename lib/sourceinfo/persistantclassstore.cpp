@@ -16,52 +16,31 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qfile.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream.h>
 #include "persistantclassstore.h"
+#include "classstore.h"
 #include "programmingbycontract.h"
 
 #define CLASSPREFIX "[CLASS]"
 
-/*********************************************************************
- *                                                                   *
- *                     CREATION RELATED METHODS                      *
- *                                                                   *
- ********************************************************************/
 
-/*-------------------- PersistantClassStore::PersistantClassStore()
+/*------------------- PersistantClassStore::PersistantClassStore()
  * PersistantClassStore()
  *   Constructor.
  *
  * Parameters:
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-PersistantClassStore::PersistantClassStore( )
+PersistantClassStore::PersistantClassStore()
 {
-    isOpen = false;
-    //   db = NULL;
-}
-
-/*-------------------- PersistantClassStore::PersistantClassStore()
- * PersistantClassStore()
- *   Constructor.
- *
- * Parameters:
- *   filename       Name of the file to store/read from.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-PersistantClassStore::PersistantClassStore( const QString &aFilename )
-{
-    REQUIRE( "Valid filename", aFilename != NULL );
-    REQUIRE( "Valid filename length", aFilename.length() > 0 );  
-    
-    filename = aFilename;
-    isOpen = false;
+	m_pFile = 0;
+	m_bIsOpen = false;
 }
 
 
@@ -76,8 +55,7 @@ PersistantClassStore::PersistantClassStore( const QString &aFilename )
  *-----------------------------------------------------------------*/
 PersistantClassStore::~PersistantClassStore()
 {
-    //   if( isOpen )
-    //     db->close(0);
+	if ( m_pFile ) delete m_pFile;
 }
 
 
@@ -89,18 +67,18 @@ PersistantClassStore::~PersistantClassStore()
 
 void PersistantClassStore::setPath( const QString &aPath )
 {
-    //  REQUIRE( "Database open", !isOpen );
+    //  REQUIRE( "Database open", !m_bIsOpen );
     
-    path = aPath;
+    m_strPath = aPath;
 }
 
 
 /** Set the name of the file to read/write. */
-void PersistantClassStore::setFilename( const QString &aFilename )
+void PersistantClassStore::setFileName( const QString &aFileName )
 {
-    // REQUIRE( "Database open", !isOpen );
+    // REQUIRE( "Database open", !m_bIsOpen );
     
-    filename = aFilename;
+    m_strFileName = aFileName;
 }
 
 
@@ -111,148 +89,177 @@ void PersistantClassStore::setFilename( const QString &aFilename )
  ********************************************************************/
 
 /** Open the file. */
-bool PersistantClassStore::open()
+bool PersistantClassStore::open ( const QString &aFileName, int nMode )
 {
-    //  assert( !isOpen );
-    
-    //   DbInfo info;
-    
-    //   try
-    //   {
-    //     env.appinit( path, NULL, DB_INIT_CDB );
-    //   }
-    //   catch( DbException e )
-    //   {
-    //     debug( "%s", e.what() );
-    //   }
-    
-    //   isOpen = true;
-    
-    //   try
-    //   {
-    //     Db::open( filename, DB_HASH, DB_CREATE, 0660, &env, &info, &db );
-    //   }
-    //   catch(DbException e)
-    //   {
-    //     debug( "%s", e.what() );
-    //     isOpen = false;
-    //   }
-    
-    //   debug( "The store is %s", ( isOpen ? "Open" : "Closed" ) );
-    
-    isOpen = false;
-    return isOpen;
+	if ( !m_bIsOpen && !m_pFile )
+	{
+		m_pFile = new QFile ( aFileName );
+
+		if ( m_pFile->open ( nMode ) );
+		{
+			m_pStream = new QDataStream ( m_pFile );
+			m_strFileName = aFileName;
+			m_bIsOpen = true;
+			return m_bIsOpen;
+		}
+	}
+
+    m_bIsOpen = false;
+    return m_bIsOpen;
 }
 
 
 /** Close the file. */
 void PersistantClassStore::close()
 {
-    //  assert( isOpen );
-    
-    //   db->close( 0 );
-    isOpen = false;
+	m_pFile->close();
+	m_bIsOpen = false;
 }
 
-/** Store a class in the database. */
-void PersistantClassStore::storeClass( ParsedClass * /*aClass*/ )
+/** */
+void PersistantClassStore::storeAll()
 {
-    //  assert( isOpen );
-    //  assert( aClass != NULL );
-    //  assert( !aClass->name.isEmpty() );
-    
-    //   QString keyStr;
-    //   QString dataStr;
-    //   int retVal;
-    
-    //   // Initialize the key
-    //   keyStr = CLASSPREFIX + aClass->name;
-    //   Dbt key( keyStr.data(), keyStr.length() + 1 );
-    
-    //   // Initilize the data.
-    //   aClass->asPersistantString( dataStr );
-    //   Dbt data(dataStr.data(), dataStr.length() + 1 );
-    
-    //   // Store the class in the database.
-    //   retVal = db->put( NULL, &key, &data, 0 );
-    
-    //   if( retVal != 0 )
-    //   {
-    //     perror( "ParsedClass::storeClass" );
-    //     debug( "Couldn't store class %s", aClass->name.data() );
-    //   }
+	//m_pStream << VERSION_FILE_FORMAT;
+
+	ParsedScopeContainer* pScope;
+	ParsedClass* pClass;
+	ParsedMethod* pMethod;
+	ParsedAttribute* pAttribute;
+	ParsedStruct* pStruct;
+
+	//stream << globalContainer.getSortedScopeList()->count();
+
+	/* serialize the scopes and their classes, methods, structs, attributes */
+	for ( globalContainer.scopeIterator.toFirst();
+			globalContainer.scopeIterator.current();
+			++globalContainer.scopeIterator )
+	{
+		pScope = globalContainer.scopeIterator.current();
+
+		storeScope ( pScope );
+	}
+
+	/* serialize global classes */
+	for ( globalContainer.classIterator.toFirst();
+			globalContainer.classIterator.current();
+			++globalContainer.classIterator )
+	{
+		pClass = globalContainer.classIterator.current();
+		storeClass ( pClass );
+	}
+
+	/* serialize global methods */
+	for ( globalContainer.methodIterator.toFirst();
+			globalContainer.methodIterator.current();
+			++globalContainer.methodIterator )
+	{
+		pMethod = globalContainer.methodIterator.current();
+		storeMethod ( pMethod );
+	}
+
+	/* serialize global structs */
+	for ( globalContainer.structIterator.toFirst();
+			globalContainer.structIterator.current();
+			++globalContainer.structIterator )
+	{
+		pStruct = globalContainer.structIterator.current();
+		// storeStruct ( pStruct );  // this doesn't work yet
+	}
+
+	/* serialize global attributes */
+	for ( globalContainer.attributeIterator.toFirst();
+			globalContainer.attributeIterator.current();
+			++globalContainer.attributeIterator )
+	{
+		pAttribute = globalContainer.attributeIterator.current();
+		storeAttribute ( pAttribute );
+	}
 }
 
+/** */
+void PersistantClassStore::restoreAll()
+{
+
+}
 
 /** Has the store been created? */
 bool PersistantClassStore::exists()
 {
-    FILE *aFile;
-    bool retVal;
-    
-    // Try to open the file.
-    aFile = fopen( filename, "r" );
-    retVal = ( aFile != NULL );
-    
-    // If the file exists, make sure we close it again.
-    if( retVal )
-        fclose( aFile );
-    
-    return retVal;
+	return QFile::exists ( m_strFileName );
 }
 
-/*********************************************************************
- *                                                                   *
- *                          PUBLIC QUERIES                           *
- *                                                                   *
- ********************************************************************/
-
-/** Check if a class exists in the store. */
-bool PersistantClassStore::hasClass( const QString & /*aName*/ )
+/** Store a class in the persistant store. */
+void PersistantClassStore::storeScope ( ParsedScopeContainer * pScope )
 {
-    //  REQUIRE( "Store is open", isOpen );
-    
-    //   QString keyStr;
-    //   Dbt data;
-    bool retVal = false;
-    
-    //   if( aName != NULL && strlen( aName ) > 0 )
-    //   {
-    //     keyStr = CLASSPREFIX;
-    //     keyStr += aName;
-    //     Dbt key(keyStr.data(), keyStr.length() + 1);
-    
-    //     retVal = ( db->get( NULL, &key, &data, 0 ) == 0 );
-    //   }
-    
-    return retVal;
+	/* serialize the scopes and their classes, methods, structs, attributes */
+	for ( pScope->scopeIterator.toFirst();
+			pScope->scopeIterator.current();
+			++pScope->scopeIterator )
+	{
+		ParsedClass* pClass;
+		ParsedMethod* pMethod;
+		ParsedAttribute* pAttribute;
+		ParsedStruct* pStruct;
+
+		pScope = pScope->scopeIterator.current();
+
+		/* serialize the classes of current scope */
+		for ( pScope->classIterator.toFirst();
+				pScope->classIterator.current();
+				++pScope->classIterator )
+		{
+			pClass = pScope->classIterator.current();
+			storeClass ( pClass );
+		}
+
+		/* serialize the methods of current scope */
+		for ( pScope->methodIterator.toFirst();
+				pScope->methodIterator.current();
+				++pScope->methodIterator )
+		{
+			pMethod = pScope->methodIterator.current();
+			storeMethod ( pMethod );
+		}
+
+		/* serialize the structs of current scope */
+		for ( pScope->structIterator.toFirst();
+				pScope->structIterator.current();
+				++pScope->structIterator )
+		{
+			pStruct = pScope->structIterator.current();
+			// storeStruct ( pStruct );  // this doesn't work yet
+		}
+
+		/* serialize the attributes of current scope */
+		for ( pScope->attributeIterator.toFirst();
+				pScope->attributeIterator.current();
+				++pScope->attributeIterator )
+		{
+			pAttribute = pScope->attributeIterator.current();
+			storeAttribute ( pAttribute );
+		}
+
+		/* Serialize the scopes within a scope */
+		storeScope ( pScope );
+	}
 }
 
-/** Fetch a class from the database using its' name. */
-ParsedClass *PersistantClassStore::getClassByName( const QString &aName )
+void PersistantClassStore::storeClass ( ParsedClass* pClass )
 {
-    //  assert( isOpen );
-    //  assert( aName != NULL && strlen( aName ) > 0 );
-    if (aName == 0 ){
-        cerr << "ERROR!!! in parser ParsedClass *PersistantClassStore::getClassByName( : \n";
-        return 0;
-    }
-    
-    //   QString keyStr;
-    //   Dbt data;
-    ParsedClass *aClass = NULL;
-    //  bool retVal = false;
-    
-    //   keyStr = CLASSPREFIX;
-    //   keyStr += aName;
-    //   Dbt key(keyStr.data(), keyStr.length() + 1);
-    
-    //   retVal = ( db->get( NULL, &key, &data, 0 ) == 0 );
-    //   if( retVal == 0 )
-    //   {
-    //     aClass = new ParsedClass();
-    //     aClass->fromPersistantString( (char *)data.get_data(), 0 );
-    //   }
-    
-    return aClass;
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pClass );
+}
+
+void PersistantClassStore::storeMethod ( ParsedMethod* pMethod )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pMethod );
+}
+
+void PersistantClassStore::storeStruct ( ParsedStruct* pStruct )
+{
+	//if ( m_bIsOpen ) ( *m_pStream ) << ( *pStruct );
+}
+
+void PersistantClassStore::storeAttribute( ParsedAttribute* pAttribute )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pAttribute );
 }

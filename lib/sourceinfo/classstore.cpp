@@ -22,6 +22,9 @@
 #include <qregexp.h>
 #include "programmingbycontract.h"
 
+#include <qfile.h>
+
+
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -41,15 +44,22 @@ ClassStore::ClassStore()
 {
     // Initialize the persistant class store.
     //  globalStore.setPath( "/tmp"  );
-    globalStore.setFilename( "classes.db" );
-    
+    //globalStore.setFilename( "/home/victor/Development/C++/Projects/gideon.cvs/classes.db" );
+
     // Open the store if it exists, else create it.
-    globalStore.open();
+    //globalStore.open ( "/home/victor/Development/C++/Projects/gideon.cvs/classes.udb" );
+	//globalStore.storeClass(NULL);
     
     // Always use full path for the global container.
-    globalContainer.setUseFullpath( true );
+	globalContainer.setUseFullpath( true );
 
-    dcopIface = new ClassStoreIface(this);
+	dcopIface = new ClassStoreIface(this);
+
+	m_strFormatVersion = "0.1";
+
+	m_pFile = 0;
+	m_pStream = 0;
+	m_bIsOpen = false;
 }
 
 
@@ -64,6 +74,7 @@ ClassStore::ClassStore()
  *-----------------------------------------------------------------*/
 ClassStore::~ClassStore()
 {
+	if ( m_pFile ) delete m_pFile;
 }
 
 /*********************************************************************
@@ -83,8 +94,10 @@ ClassStore::~ClassStore()
  *-----------------------------------------------------------------*/
 void ClassStore::wipeout()
 {
-    ScopeLevel=0;
-    globalContainer.clear();
+    cerr << "ClassStore::wipeout start" << endl;
+    ScopeLevel = 0;
+    globalContainer.clear( );
+    cerr << "ClassStore::wipeout end" << endl;
 }
 
 
@@ -173,28 +186,79 @@ void ClassStore::removeWithReferences( const QString &aFile )
 //  }
 //}
 
-/*------------------------------------------- ClassStore::storeAll()
- * storeAll()
- *   Store all parsed classes as a database.
+
+/*------------------------------------------------- ClassStore::out()
+ * out()
+ *   Output this object to stdout.
  *
  * Parameters:
- *   aClass        The class to add.
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void ClassStore::storeAll()
+void ClassStore::out()
 {
-    QString str;
+    QList<ParsedScopeContainer> *globalScopes;
+    QList<ParsedMethod> *globalMethods;
+    QList<ParsedAttribute> *globalAttributes;
+    QList<ParsedStruct> *globalStructs;
+    QList<ParsedClass> *classes;
+    ParsedScopeContainer *aScope;
     ParsedClass *aClass;
-    
-    for ( globalContainer.classIterator.toFirst();
-          globalContainer.classIterator.current();
-          ++globalContainer.classIterator )
+    ParsedMethod *aMethod;
+    ParsedAttribute *aAttr;
+    ParsedStruct *aStruct;
+
+    // Output all namespaces
+    cout << "Global namespaces" << endl;
+    globalScopes = globalContainer.getSortedScopeList();
+    for ( aScope = globalScopes->first();
+          aScope != NULL;
+          aScope = globalScopes->next() )
+        aScope->out();
+
+
+    // Output all classes.
+    cout << "Global classes\n";
+    classes = getSortedClassList();
+    for ( aClass = classes->first();
+          aClass != NULL;
+          aClass = classes->next() )
         {
-            aClass = globalContainer.classIterator.current();
-            globalStore.storeClass( aClass );
+            aClass->out();
         }
+    delete classes;
+
+    // Global methods
+    cout << "Global functions\n";
+
+    globalMethods = globalContainer.getSortedMethodList();
+    for ( aMethod = globalMethods->first();
+          aMethod != NULL;
+          aMethod = globalMethods->next() ) {
+        aMethod->out();
+    }
+    delete globalMethods;
+
+    // Global structures
+/*    cout << "Global variables\n";
+    globalAttributes = globalContainer.getSortedAttributeList();
+    for ( aAttr = globalAttributes->first();
+          aAttr != NULL;
+          aAttr = globalAttributes->next() ) {
+        aAttr->out();
+    }
+    delete globalAttributes;
+*/
+    // Global structures
+/*    cout << "Global structs\n";
+    globalStructs = getSortedStructList();
+    for ( aStruct = globalStructs->first();
+          aStruct != NULL;
+          aStruct = globalStructs->next() ) {
+        aStruct->out();
+    }
+    delete globalStructs;*/
 }
 
 /*------------------------------------------- ClassStore::addScope()
@@ -211,7 +275,7 @@ void ClassStore::addScope( ParsedScopeContainer *aScope )
     REQUIRE( "Valid scope", aScope != NULL );
     REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
     REQUIRE( "Unique scope path", !hasScope( aScope->path() ) );
-    
+
     globalContainer.addScope( aScope );
 }
 
@@ -232,9 +296,9 @@ void ClassStore::addClass( ParsedClass *aClass )
     REQUIRE( "Unique classpath", !hasClass( aClass->path() ) );
     
     globalContainer.addClass( aClass );
-    
-    if ( globalStore.isOpen )
-        globalStore.storeClass( aClass );
+
+/*    if ( globalStore.isOpen )
+        globalStore.storeClass( aClass );*/
 }
 
 /*---------------------------------------- ClassStore::removeClass()
@@ -249,14 +313,13 @@ void ClassStore::addClass( ParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void ClassStore::removeClass( const QString &aName )
 {
-    REQUIRE( "Valid classname", aName != NULL );
-    REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+    REQUIRE( "Valid classname length", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     
     globalContainer.removeClass( aName );
     
-    if ( globalStore.isOpen )
-        globalStore.removeClass( aName );
+/*    if ( globalStore.isOpen )
+        globalStore.removeClass( aName );*/
 }
 
 /*********************************************************************
@@ -347,8 +410,7 @@ QList<ClassTreeNode> *ClassStore::asForest()
  *-----------------------------------------------------------------*/
 bool ClassStore::hasScope( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, false );
-    REQUIRE1( "Valid scope name length", strlen( aName ) > 0, false );
+    REQUIRE1( "Valid scope name length", aName.length() > 0, false );
     
     return globalContainer.hasScope( aName );
 }
@@ -365,7 +427,6 @@ bool ClassStore::hasScope( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedScopeContainer *ClassStore::getScopeByName( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, NULL );
     REQUIRE1( "Valid scope name length", aName.length() > 0, NULL );
     
     return globalContainer.getScopeByName( aName );
@@ -383,18 +444,17 @@ ParsedScopeContainer *ClassStore::getScopeByName( const QString &aName )
  *-----------------------------------------------------------------*/
 bool ClassStore::hasClass( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, false );
     REQUIRE1( "Valid classname length", aName.length() > 0, false );
     
-    return globalContainer.hasClass( aName ) || 
-        ( globalStore.isOpen && globalStore.hasClass( aName ) );
+    return globalContainer.hasClass( aName );/* ||
+        ( globalStore.isOpen && globalStore.hasClass( aName ) );*/
     //return classes.find( aName ) != NULL;
 }
 
 
 /*-------------------------------------- ClassStore::getClassByName()
  * getClassByName()
- *   Get a class from the list by using its' name.
+ *   Get a class from the list by using its name.
  *
  * Parameters:
  *   aName          Name of the class to fetch.
@@ -405,14 +465,13 @@ bool ClassStore::hasClass( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedClass *ClassStore::getClassByName( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, NULL );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
+    REQUIRE1( "Valid classname length", aName.length() > 0, NULL );
     
     ParsedClass *aClass;
     
-    if ( globalStore.isOpen && globalStore.hasClass( aName ) )
+/*    if ( globalStore.isOpen && globalStore.hasClass( aName ) )
         aClass = globalStore.getClassByName( aName );
-    else
+    else*/
         aClass = globalContainer.getClassByName( aName );
     
     return aClass;
@@ -431,8 +490,7 @@ ParsedClass *ClassStore::getClassByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassesByParent( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<ParsedClass>() );
+    REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     
     QList<ParsedClass> *retVal = new QList<ParsedClass>();
     ParsedClass *aClass;
@@ -463,8 +521,7 @@ QList<ParsedClass> *ClassStore::getClassesByParent( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassClients( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<ParsedClass>() );
+    REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     
     bool exit;
     ParsedClass *aClass;
@@ -506,7 +563,6 @@ QList<ParsedClass> *ClassStore::getClassClients( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassSuppliers( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
     REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     REQUIRE1( "Class exists", hasClass( aName ), new QList<ParsedClass>() );
     
@@ -535,7 +591,7 @@ QList<ParsedClass> *ClassStore::getClassSuppliers( const QString &aName )
         
         // If this isn't the class and the string contains data, we check for it.
         if ( str != aName && !str.isEmpty() ) {
-            debug( "Checking if '%s' is a class", str.data() );
+            qDebug( "Checking if '%s' is a class", str.data() );
             toAdd = getClassByName( str );
             if ( toAdd )
                 retVal->append( toAdd );
@@ -583,7 +639,7 @@ QList<ParsedClass> *ClassStore::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-QStrList *ClassStore::getSortedClassNameList()
+QStringList *ClassStore::getSortedClassNameList()
 {
     return globalContainer.getSortedClassNameList(true);
 }
@@ -607,7 +663,6 @@ void ClassStore::getVirtualMethodsForClass( const QString &aName,
                                             QList<ParsedMethod> *implList,
                                             QList<ParsedMethod> *availList )
 {
-    REQUIRE( "Valid classname", aName != NULL );
     REQUIRE( "Valid classname length", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     
@@ -679,80 +734,272 @@ QList<ParsedStruct> *ClassStore::getSortedStructList()
             retVal->append( globalContainer.structIterator.current() );
     }
     
-    return retVal; 
+    return retVal;
 }
 
 
-/*------------------------------------------------- ClassStore::out()
- * out()
- *   Output this object to stdout.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void ClassStore::out()
+
+
+
+/*********************************************************************
+ *                                                                   *
+ *                    METHODS TO SET ATTRIBUTE VALUES                *
+ *                                                                   *
+ ********************************************************************/
+
+void ClassStore::setPath( const QString &aPath )
 {
-    QList<ParsedScopeContainer> *globalScopes;
-    QList<ParsedMethod> *globalMethods;
-    QList<ParsedAttribute> *globalAttributes;
-    QList<ParsedStruct> *globalStructs;
-    QList<ParsedClass> *classes;
-    ParsedScopeContainer *aScope;
-    ParsedClass *aClass;
-    ParsedMethod *aMethod;
-    ParsedAttribute *aAttr;
-    ParsedStruct *aStruct;
-    
-    // Output all namespaces
-    cout << "Global namespaces" << endl;
-    globalScopes = globalContainer.getSortedScopeList();
-    for ( aScope = globalScopes->first();
-          aScope != NULL;
-          aScope = globalScopes->next() )
-        aScope->out();
-    
-    
-    // Output all classes.
-    cout << "Global classes\n";
-    classes = getSortedClassList();
-    for ( aClass = classes->first();
-          aClass != NULL;
-          aClass = classes->next() )
-        {
-            aClass->out();
-        }
-    delete classes;
-    
-    // Global methods
-    cout << "Global functions\n";
-    
-    globalMethods = globalContainer.getSortedMethodList();
-    for ( aMethod = globalMethods->first();
-          aMethod != NULL;
-          aMethod = globalMethods->next() ) {
-        aMethod->out();
-    }
-    delete globalMethods;
-    
-    // Global structures
-    cout << "Global variables\n";
-    globalAttributes = globalContainer.getSortedAttributeList();
-    for ( aAttr = globalAttributes->first();
-          aAttr != NULL;
-          aAttr = globalAttributes->next() ) {
-        aAttr->out();
-    }
-    delete globalAttributes;  
-    
-    // Global structures
-    cout << "Global structs\n";
-    globalStructs = getSortedStructList();
-    for ( aStruct = globalStructs->first();
-          aStruct != NULL;
-          aStruct = globalStructs->next() ) {
-        aStruct->out();
-    }
-    delete globalStructs;
+    //  REQUIRE( "Database open", !m_bIsOpen );
+
+    m_strPath = aPath;
+}
+
+
+/** Set the name of the file to read/write. */
+void ClassStore::setFileName( const QString &aFileName )
+{
+    // REQUIRE( "Database open", !m_bIsOpen );
+
+    m_strFileName = aFileName;
+}
+
+
+/*********************************************************************
+ *                                                                   *
+ *                           PUBLIC METHODS                          *
+ *                                                                   *
+ ********************************************************************/
+
+/** Open the file. */
+bool ClassStore::open ( const QString &aFileName, int nMode )
+{
+	if ( !m_bIsOpen && !m_pFile )
+	{
+		m_pFile = new QFile ( aFileName );
+
+		if ( m_pFile->open ( nMode ) );
+		{
+			m_pStream = new QDataStream ( m_pFile );
+			m_strFileName = aFileName;
+			m_nMode = nMode;
+			m_bIsOpen = true;
+			return m_bIsOpen;
+		}
+	}
+
+    m_bIsOpen = false;
+    return m_bIsOpen;
+}
+
+
+/** Close the file. */
+void ClassStore::close()
+{
+	if ( m_pFile && m_bIsOpen )
+	{
+		m_pFile->close();
+		m_pFile = 0;
+		m_bIsOpen = false;
+		delete m_pStream;
+	}
+}
+
+/** */
+void ClassStore::storeAll()
+{
+	if ( !m_bIsOpen ) m_pFile->open ( m_nMode );
+
+	( *m_pStream ) << m_strFormatVersion;
+
+	ParsedScopeContainer* pScope;
+	ParsedClass* pClass;
+	ParsedMethod* pMethod;
+	ParsedAttribute* pAttribute;
+	ParsedStruct* pStruct;
+
+	/* serialize the global scopes, their scopes and their classes, methods, structs, attributes */
+	cerr << "Number of globals to store : " << globalContainer.getSortedScopeList()->count() << endl;
+
+	/* serialize global classes */
+	( *m_pStream ) << globalContainer.getSortedClassList()->count();
+	for ( globalContainer.classIterator.toFirst();
+			globalContainer.classIterator.current();
+			++globalContainer.classIterator )
+	{
+		pClass = globalContainer.classIterator.current();
+		storeClass ( pClass );
+	}
+
+	/* serialize global methods */
+	( *m_pStream ) << globalContainer.getSortedMethodList()->count();
+	for ( globalContainer.methodIterator.toFirst();
+			globalContainer.methodIterator.current();
+			++globalContainer.methodIterator )
+	{
+		pMethod = globalContainer.methodIterator.current();
+		storeMethod ( pMethod );
+	}
+
+	/* serialize global structs */
+	( *m_pStream ) << globalContainer.getSortedStructList()->count();
+	for ( globalContainer.structIterator.toFirst();
+			globalContainer.structIterator.current();
+			++globalContainer.structIterator )
+	{
+		pStruct = globalContainer.structIterator.current();
+		storeStruct ( pStruct );  // this doesn't work yet
+	}
+
+	/* serialize global attributes */
+	( *m_pStream ) << globalContainer.getSortedAttributeList()->count();
+	for ( globalContainer.attributeIterator.toFirst();
+			globalContainer.attributeIterator.current();
+			++globalContainer.attributeIterator )
+	{
+		pAttribute = globalContainer.attributeIterator.current();
+		storeAttribute ( pAttribute );
+	}
+}
+
+/** */
+void ClassStore::restoreAll()
+{
+	QString strFileVersion;
+
+	( *m_pStream ) >> strFileVersion;
+
+	if ( strFileVersion == m_strFormatVersion )
+	{
+		wipeout( );
+
+		int nCount;
+		( *m_pStream ) >> nCount;
+
+		ParsedClass* pc = 0;
+		for ( int i = 0; i < nCount; i++ )
+		{
+			pc = new ParsedClass();
+			( *m_pStream ) >> ( *pc );
+			globalContainer.addClass ( pc );
+			pc = 0;
+		}
+
+		( *m_pStream ) >> nCount;
+		ParsedMethod* pm = 0;
+		for ( int i = 0; i < nCount; i++ )
+		{
+			pm = new ParsedMethod();
+			( *m_pStream ) >> ( *pm );
+			globalContainer.addMethod ( pm );
+		}
+
+		( *m_pStream ) >> nCount;
+		ParsedStruct* ps = 0;
+		for ( int i = 0; i < nCount; i++ )
+		{
+			ps = new ParsedStruct();
+			( *m_pStream ) >> ( *ps );
+			globalContainer.addStruct ( ps );
+		}
+
+		( *m_pStream ) >> nCount;
+		ParsedAttribute* pa = 0;
+		for ( int i = 0; i < nCount; i++ )
+		{
+			pa = new ParsedAttribute();
+			( *m_pStream ) >> ( *pa );
+			globalContainer.addAttribute ( pa );
+		}
+	}
+
+}
+
+/** Has the store been created? */
+bool ClassStore::exists()
+{
+	return QFile::exists ( m_strFileName );
+}
+
+/** Store a class in the persistant store. */
+void ClassStore::storeScope ( ParsedScopeContainer * pScope )
+{
+	/* serialize the scopes and their classes, methods, structs, attributes */
+	( *m_pStream ) << pScope->getSortedScopeList()->count();
+	for ( pScope->scopeIterator.toFirst(); pScope->scopeIterator.current(); ++pScope->scopeIterator )
+	{
+		ParsedClass* pClass;
+		ParsedMethod* pMethod;
+		ParsedAttribute* pAttribute;
+		ParsedStruct* pStruct;
+
+		pScope = pScope->scopeIterator.current();
+
+		/* serialize the classes of current scope */
+		cerr << "Storing scope classes" << endl;
+		( *m_pStream ) << pScope->getSortedClassList()->count();
+		for ( pScope->classIterator.toFirst();
+				pScope->classIterator.current();
+				++pScope->classIterator )
+		{
+			pClass = pScope->classIterator.current();
+			storeClass ( pClass );
+		}
+
+		/* serialize the methods of current scope */
+		cerr << "Storing scope methods" << endl;
+		( *m_pStream ) << pScope->getSortedMethodList()->count();
+		for ( pScope->methodIterator.toFirst();
+				pScope->methodIterator.current();
+				++pScope->methodIterator )
+		{
+			pMethod = pScope->methodIterator.current();
+			storeMethod ( pMethod );
+		}
+
+		/* serialize the structs of current scope */
+		cerr << "Storing scope structs" << endl;
+		( *m_pStream ) << pScope->getSortedStructList()->count();
+		for ( pScope->structIterator.toFirst();
+				pScope->structIterator.current();
+				++pScope->structIterator )
+		{
+			pStruct = pScope->structIterator.current();
+			storeStruct ( pStruct );  // this doesn't work yet
+		}
+
+		/* serialize the attributes of current scope */
+		cerr << "Storing scope attributes" << endl;
+		( *m_pStream ) << pScope->getSortedAttributeList()->count();
+		for ( pScope->attributeIterator.toFirst();
+				pScope->attributeIterator.current();
+				++pScope->attributeIterator )
+		{
+			pAttribute = pScope->attributeIterator.current();
+			storeAttribute ( pAttribute );
+		}
+
+		/* Serialize the scopes within a scope */
+		cerr << "Storing scope scope" << endl;
+		storeScope ( pScope );
+	}
+}
+
+void ClassStore::storeClass ( ParsedClass* pClass )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pClass );
+}
+
+void ClassStore::storeMethod ( ParsedMethod* pMethod )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pMethod );
+}
+
+void ClassStore::storeStruct ( ParsedStruct* pStruct )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pStruct );
+}
+
+void ClassStore::storeAttribute( ParsedAttribute* pAttribute )
+{
+	if ( m_bIsOpen ) ( *m_pStream ) << ( *pAttribute );
 }

@@ -12,6 +12,7 @@
 #include <qframe.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <qstyle.h>
 #include <kdebug.h>
 
 #include "splitter.h"
@@ -46,7 +47,7 @@ void Splitter::setOrientation(Orientation orient)
                 handlelist.remove((uint)0);
             }
         }
-        
+
         _or = orient;
         doLayout();
     }
@@ -73,7 +74,7 @@ QWidget *Splitter::firstChild()
 
 int Splitter::handleWidth() const
 {
-    return (orientation() == Horizontal)? style().splitterWidth() : 0;
+    return (orientation() == Horizontal)? style().pixelMetric(QStyle::PM_SplitterWidth, this) : 0;
 }
 
 
@@ -101,7 +102,7 @@ void Splitter::splitChild(QWidget *old, QWidget *w)
 {
 #if 0
     kdDebug(9000) << "splitChild - Old list of splitter children:" << endl;
-    QListIterator<QWidget> it1(childlist);
+    QPtrListIterator<QWidget> it1(childlist);
     for (; it1.current(); ++it1)
         kdDebug(9000) << it1.current()->name() << endl;
 #endif
@@ -182,18 +183,18 @@ void Splitter::doLayout()
             sizes[i] = QMAX(sizes[i], childlist.at(i)->minimumSizeHint().width());
             childlist.at(i)->setGeometry(offset, 0, sizes[i], height());
             offset += childlist.at(i)->width();
-            handlelist.at(i)->setGeometry(offset, 0, style().splitterWidth(), height());
+            handlelist.at(i)->setGeometry(offset, 0, style().pixelMetric(QStyle::PM_SplitterWidth, this), height());
             handlelist.at(i)->show();
             offset += handlelist.at(i)->width();
         }
-        
+
         if (childlist.count()) {
             childlist.at(i)->setGeometry(offset, 0, width()-offset, height());
             handlelist.at(i)->hide();
         }
-        
+
     } else {
-        
+
         int offset = 0;
         uint i;
         for (i=0; i+1 < childlist.count(); ++i) {
@@ -201,10 +202,10 @@ void Splitter::doLayout()
             childlist.at(i)->setGeometry(0, offset, width(), sizes[i]);
             offset += childlist.at(i)->height();
         }
-        
+
         if (childlist.count())
             childlist.at(i)->setGeometry(0, offset, width(), height()-offset);
-        
+
     }
 
     setUpdatesEnabled(true);
@@ -358,7 +359,7 @@ void SplitterHandle::mousePressEvent(QMouseEvent *e)
 void SplitterHandle::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    style().drawSplitter(&p, 0, 0, width(), height(), colorGroup(), Horizontal);
+    style().drawPrimitive(QStyle::PE_Splitter, &p, QRect(0, 0, width(), height()), colorGroup(), QStyle::Style_Horizontal);
 }
 
 #include "splitter.moc"

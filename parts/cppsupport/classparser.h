@@ -24,7 +24,7 @@
 #include <FlexLexer.h>
 #include <fstream.h>
 #include "tokenizer.h"
-#include "classstore.h"
+#include "persistantclassstore.h"
 
 /** This class handles the parsing and generation of all C++ and C
  * constructions. The classparser has a store in which all elements that
@@ -49,7 +49,7 @@ private: // Private classes
   {
   public: // Constructor & destructor
     
-    CParsedLexem( int aType, const char *aText) { type = aType; text = aText; }
+    CParsedLexem( int aType, const QString &aText) { type = aType; text = aText; }
     ~CParsedLexem() {}
     
   public: // Public attributes
@@ -77,6 +77,8 @@ public: // Public Methods
 
   /** Output this object as text on stdout */
   void out()     { store->out(); }
+  /** get a list of all classes */
+  ClassStore * getClassStore();
 
 //  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
 //    { store.getDependentFiles( fileList, dependentList); }
@@ -150,6 +152,9 @@ private: // Private methods
 
   /** Parse an enumeration. */
   void parseEnum();
+  
+  /** try to parse an enum right */
+  void parseEnum( ParsedContainer* aContainer );
 
   /** Parse an union. */
   void parseUnion();

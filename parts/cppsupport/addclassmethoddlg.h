@@ -1,12 +1,10 @@
 /***************************************************************************
-               cclassaddmethoddlg.h  -  description
+                          addclassmethoddialog.h  -  description
                              -------------------
-
-    begin                : Fri Mar 19 1999
-
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@cenacle.se
-
+    copyright            : (C) 2001 by August Hörandl
+    email                : august.hoerandl@gmx.at
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,104 +16,25 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef ADDCLASSMETHODDIALOG_H
+#define ADDCLASSMETHODDIALOG_H
 
-#ifndef _ADDCLASSMETHODDLG_H_
-#define _ADDCLASSMETHODDLG_H_
+#include "addclassmethodui.h"
 
-#include <qdialog.h>
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qmultilinedit.h>
-#include <qlayout.h> 
-#include "parsedmethod.h"
-
-/**
- * Dialog to create a new method for a class. 
- * @author Jonas Nordin
+class ParsedMethod;
+class ClassStore;
+/**add a new method to a class
  */
-class AddClassMethodDialog : public QDialog
-{
-    Q_OBJECT
-public: // Constructor & Destructor
     
-    AddClassMethodDialog( QWidget *parent=0, const char *name=0 );
-
-public: // Public queries
+class AddClassMethodDialog : public AddClassMethodUI  {
+  Q_OBJECT
+public:
+	AddClassMethodDialog(ClassStore *store, const QString &className, QWidget *parent, const char *name);
+	virtual ~AddClassMethodDialog();
 
     ParsedMethod *asSystemObj();
 
-protected: // Private widgets
-
-    ///////////////////////////////
-    // Layouts
-    ///////////////////////////////
-    
-    /** Main layout for the dialog. */
-    QVBoxLayout topLayout;
-    
-    /** Layout for function definition. */
-    QGridLayout functionLayout;
-    
-    /** Layout for choosing access. */
-    QGridLayout accessLayout;
-    
-    /** Layout for choosing type. */
-    QGridLayout typeLayout;
-    
-    /** Layout for choosing modifier. */
-    QGridLayout modifierLayout;
-    
-    /** Layout for the ok/cancel buttons. */
-    QHBoxLayout buttonLayout;
-    
-    ///////////////////////////////
-    // Button groups
-    //////////////////////////////
-    
-    QButtonGroup modifierGrp;
-    QButtonGroup typeGrp;
-    QButtonGroup functionGrp;
-    QButtonGroup accessGrp;
-    
-    QLabel typeLbl;
-    QLineEdit typeEdit;
-    QLabel declLbl;
-    QLineEdit declEdit;
-    QLabel docLbl;
-    QMultiLineEdit docEdit;
-    
-    /** Public method. */
-    QRadioButton publicRb;
-    /** Protected method rb. */
-    QRadioButton protectedRb;
-    /** Private method rb. */
-    QRadioButton privateRb;
-    
-    /** This is a method rb. */
-    QRadioButton methodRb;
-    /** This is a signal rb. */
-    QRadioButton signalRb;
-    /** This is a slot rb. */
-    QRadioButton slotRb;
-    
-    /** This method is virtual. */
-    QCheckBox virtualCb;
-    /** This method is pure-virtual. */
-    QCheckBox pureCb;
-    /** This method is static. */
-    QCheckBox staticCb;
-    /** This method is const. */
-    QCheckBox constCb;
-    
-    QPushButton okBtn;
-    QPushButton cancelBtn;
-    
-protected slots:
-
+public slots:
     /**
      * This slot is executed when the user clicks on the type rb.
      * It toggles the modifiers on/off.
@@ -128,12 +47,41 @@ protected slots:
      */ 
     void slotVirtualClicked(); 
     
+    void accept();
+protected slots: // Protected slots
+  /** add new Paramter */
+  void slotNewPara();
+  /** delete Paramter */
+  void slotDelPara();
+  /** move Paramter up*/
+  void slotUpPara();
+  /** move Paramter down */
+  void slotDownPara();
 private: // Private methods
-    
-    void setWidgetValues();
-    void setCallbacks();
-
-    virtual void accept();
+  /** return documentation string */
+  QString getDocu();
+  /** return name + parameters */
+  QString getDecl();
+private slots: // Private slots
+  /** Debug only - show Message boxes
+with values */
+  void slotDebug();
+  /** clone a function */
+  void slotClone();
+  /** select a different Parameter */
+  void slotParaHighLight( QListBoxItem * );
+  /** update current parameter in listbox */
+  void slotUpdateParameter(const QString&);
+private: // Private attributes
+  /** pointer to list: all classes */
+  ClassStore * store;
+  /** name of currently selected class */
+  const QString& currentClass;
+  /** - prevent loops via signal/slot calls
+    * - if a widget is changed and emits a signal the signal handler shouldn't change
+    * the widget (learned that the hard way ;-)
+    */
+  bool editactive;
 };
 
 #endif

@@ -32,9 +32,15 @@ public:
      */
     virtual QStringList allSourceFiles() = 0;
 
+	void setProjectName ( const QString& name ) { m_projectName = name; };
+	QString projectName() { return m_projectName; };
+
 signals:
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
+
+private:
+	QString m_projectName;
 };
 
 #endif

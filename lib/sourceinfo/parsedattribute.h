@@ -32,42 +32,30 @@ public:
     ParsedAttribute();
     ~ParsedAttribute();
     
-public:
-    /** The attribute's type. */
-    QString _type;
-    
-    /** Is this attribute defined in the .h file? */
-    bool _isInHFile;
-    
-    /** Is this a static attribute */
-    bool _isStatic;
-    
-    /** Is this a const attribute */
-    bool _isConst;
-    
-    /** where I have to place the name between type */
-    int _namePos;
-    
-public:
     /** Sets the type. */
     void setType(const QString &aType);
-    QString & type() { return _type; }
+    QString type() const
+        { return _type; }
 
     /** Sets the pos of the name between type */
     void setNamePos(int pos);
-	int namePos() { return _namePos; }
+    int namePos() const
+        { return _namePos; }
 
     /** Sets if it is defined in the .h file. */
     void setIsInHFile(bool aState = true);
-	bool isInHFile() { return _isInHFile; }
+    bool isInHFile() const
+        { return _isInHFile; }
     
     /** Sets the attribute's static status */
     void setIsStatic(bool aState = true);
-	bool isStatic() { return _isStatic; }
+    bool isStatic() const
+        { return _isStatic; }
     
     /** Sets the attribute's const status */
     void setIsConst(bool aState = true);
-	bool isConst() { return _isConst; }
+    bool isConst() const
+        { return _isConst; }
     
     /**
      * Makes this object a copy of the supplied object.
@@ -83,10 +71,26 @@ public:
     
     /** Outputs this object to stdout */
     virtual void out();
+
+private:
+    /** The attribute's type. */
+    QString _type;
+    
+    /** Is this attribute defined in the .h file? */
+    bool _isInHFile;
+    
+    /** Is this a static attribute */
+    bool _isStatic;
+    
+    /** Is this a const attribute */
+    bool _isConst;
+    
+    /** where I have to place the name between type */
+    int _namePos;
 };
 
 
-QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg);
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg);
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg);
 
 #endif

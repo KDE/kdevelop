@@ -48,14 +48,6 @@ public:
      * Starts the child process.
      */
     void startJob(const QString &dir, const QString &command);
-
-public slots:
-    /**
-     * Kills the child processss.
-     */
-    void killJob();
-
-protected:
     /**
      * Inserts one line from stdin into the listbox. This can
      * be overridden by subclasses to implement
@@ -69,6 +61,14 @@ protected:
      * is used.
      */
     virtual void insertStderrLine(const QString &line);
+
+public slots:
+    /**
+     * Kills the child processss.
+     */
+    void killJob();
+
+protected:
     /**
      * This is called when the child process exits.
      * The flag 'normal' is true if the process exited

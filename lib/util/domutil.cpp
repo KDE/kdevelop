@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <kdebug.h>
+#include <qstringlist.h>
 
 #include "domutil.h"
 

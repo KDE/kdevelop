@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <qwhatsthis.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -50,7 +50,7 @@ AddClassAttributeDialog::AddClassAttributeDialog(QWidget *parent, const char *na
       okBtn( this, "okBtn" ),
       cancelBtn( this, "cancelBtn" )
 {
-    setCaption( i18n("Add member variable") );
+    setCaption( i18n("Add Member Variable") );
 
     setWidgetValues();
     setCallbacks();

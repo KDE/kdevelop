@@ -99,6 +99,9 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
+    /*========== for ignoring qt-specific macros daniel 18012002 ===*/
+<INITIAL>"Q_PROPERTY("    {}
+<INITIAL>"Q_ENUMS("       {}
 
     /*==============> Objective-C keyword <==============*/
 <INITIAL>"@class"        {return CPOBJCCLASS;}

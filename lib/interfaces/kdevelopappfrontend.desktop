@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/AppFrontend
 Name=App frontend interface
