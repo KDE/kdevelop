@@ -2998,7 +2998,11 @@ void CKDevelop::slotSTabSelected(int item){
 
 void CKDevelop::slotOTabSelected(int item)
 {
-  disassemble->slotActivate(item == DISASSEMBLE);
+  if (disassemble)
+    disassemble->slotActivate(item == DISASSEMBLE);
+  else
+    if (item == DISASSEMBLE)
+      o_tab_view->setCurrentTab(MESSAGES);
 }
 
 void CKDevelop::slotMenuBuffersSelected(int id){
