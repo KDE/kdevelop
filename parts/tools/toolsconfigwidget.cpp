@@ -35,6 +35,9 @@ struct ToolsConfigEntry
     QString cmdline;
     bool isdesktopfile;
     bool captured;
+    bool isEmpty() const {
+        return ( menutext.isEmpty() && cmdline.isEmpty() );
+    }
 };
 
 
@@ -49,7 +52,7 @@ ToolsConfigWidget::ToolsConfigWidget(QWidget *parent, const char *name)
     toolsmenuBox->installEventFilter(this);
     toolsmenuBox->viewport()->setAcceptDrops(true);
     toolsmenuBox->viewport()->installEventFilter(this);
-    
+
     readConfig();
 }
 
@@ -85,7 +88,7 @@ void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfig
     KConfig *config = ToolsFactory::instance()->config();
 
     QStringList list;
-    
+
     QDictIterator<ToolsConfigEntry> it(entryDict);
     for (; it.current(); ++it) {
         ToolsConfigEntry *entry = it.current();
@@ -116,7 +119,7 @@ void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfig
 void ToolsConfigWidget::fillListBox(QListBox *lb, const QDict<ToolsConfigEntry> &entryDict)
 {
     lb->clear();
-    
+
     QDictIterator<ToolsConfigEntry> it(entryDict);
     for (; it.current(); ++it) {
         ToolsConfigEntry *entry = it.current();
@@ -180,10 +183,12 @@ void ToolsConfigWidget::toolsmenuaddClicked()
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp();
+        entry->cmdline = dlg.getApp().stripWhiteSpace();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        if (addEntry(entry, &m_toolsmenuEntries))
+        if ( entry->isEmpty() )
+            delete entry;
+        else if (addEntry(entry, &m_toolsmenuEntries))
             return;
     }
 }
@@ -205,10 +210,13 @@ void ToolsConfigWidget::filecontextaddClicked()
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp();
+        entry->cmdline = dlg.getApp().stripWhiteSpace();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        if (addEntry(entry, &m_filecontextEntries))
+        if ( entry->isEmpty() )
+            delete entry;
+
+        else if (addEntry(entry, &m_filecontextEntries))
             return;
     }
 }
@@ -230,10 +238,12 @@ void ToolsConfigWidget::dircontextaddClicked()
     if (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
-        entry->cmdline = dlg.getApp();
+        entry->cmdline = dlg.getApp().stripWhiteSpace();
         entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        if (addEntry(entry, &m_dircontextEntries))
+        if ( entry->isEmpty() )
+            delete entry;
+        else if (addEntry(entry, &m_dircontextEntries))
             return;
     }
 }
