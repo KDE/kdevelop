@@ -3218,8 +3218,8 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
   }
 }
 
-void KWriteDoc::clearBookmarks() {
-
+void KWriteDoc::clearBookmarks()
+{
   for(int line = 0; line < getTextLineCount(); line++)
     {
       TextLine* textline = textLine(line);
@@ -3236,7 +3236,6 @@ void KWriteDoc::clearBookmarks() {
 
 void KWriteDoc::updateBMPopup(QPopupMenu* popup)
 {
-
   for(int line = 0; line < getTextLineCount(); line++)
     {
       TextLine* curTextline = textLine(line);
@@ -3273,14 +3272,12 @@ void KWriteDoc::gotoBookmark(QString &text) {
 
   QString strLine = text.mid(start, len);
 
-  debug("KWrite::gotoBookmark line : '%s' !\n", strLine.data());
-
   int line = strLine.stripWhiteSpace().toInt() - 1;
 
   debug("KWrite::gotoBookmark line : '%d' !\n", line);
 
   if(line >= 0) {
-    KWriteView * view = views.first();
+    KWriteView* view = views.first();
     if(view) {
       view->kWrite->gotoPos(0, line);
       view->kWrite->setFocus();
@@ -3291,12 +3288,12 @@ void KWriteDoc::gotoBookmark(QString &text) {
 
 KWrite* KWriteDoc::getKWrite()
 {
-    KWriteView * view = views.first();
-    if(view) {
-      return view->kWrite;
-    } else {
-      return 0L;
-    }
+  KWriteView * view = views.first();
+  if(view) {
+    return view->kWrite;
+  } else {
+    return 0L;
+  }
 }
 
 #include "kwdoc.moc"

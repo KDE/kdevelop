@@ -26,16 +26,16 @@
 /** (struct) contains the internal representation of a textfile
   *@author Sandy Meier
   */
-struct TEditInfo {
-  /**  the id in the menu-buffer*/
-  int id; 
-  QString filename;
-  QCString text; // should be removed
-  bool modified; // modified ?
-  int cursor_line;
-  int cursor_col;
-  QDateTime last_modified;
-};
+//struct TEditInfo {
+//  /**  the id in the menu-buffer*/
+//  int id;
+//  QString filename;
+//  QCString text; // should be removed
+//  bool modified; // modified ?
+//  int cursor_line;
+//  int cursor_col;
+//  QDateTime last_modified;
+//};
 
 struct TBugReportInfo {
     QString email;
