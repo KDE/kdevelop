@@ -240,8 +240,12 @@ private: // Private methods
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
 
-  /** Return this view as a treestring. */
-  const char *asTreeStr();
+  /** 
+   * Return this view as a treestring. 
+   * 
+   * @param str String to return the tree in.
+   */
+  void asTreeStr( QString str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
 };

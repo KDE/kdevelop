@@ -741,9 +741,9 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
  * Returns:
  *   QString        The tree as a string.
  *-----------------------------------------------------------------*/
-const char *CClassView::asTreeStr()
+void CClassView::asTreeStr(QString &str)
 {
-  QString str="";
+  str="";
 
   buildTreeStr( classesItem, str );
 
@@ -828,9 +828,9 @@ void CClassView::buildInitalClassTree()
   // Add all classes without a folder.
   ((CClassTreeHandler *)treeH)->addClasses( &rootList, classesItem );
 
-  // Save the tree. FOR SOME REASON ONLY 1974 CHARACTERS ARE SAVED. :-(
-  //  str = asTreeStr();
-  //  project->setClassViewTree( str );
+  // Save the tree.
+  asTreeStr( Str );
+  project->setClassViewTree( str );
 }
 
 /*-------------------------------- CClassView::createCTDlg()
