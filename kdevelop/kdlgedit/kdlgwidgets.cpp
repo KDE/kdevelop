@@ -189,14 +189,14 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Lets user can (de-)select some settings."));
   macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber     ,i18n("Displays a number in the style of LC-displays\noften used in clocks."));
   macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton   ,i18n("Lets the user choose between several options."));
-  macroAddButton("kdlg_QComboBox.xpm",      "QComboBox",       clicked_QComboBox      ,i18n(""));
-  macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n(""));
-  macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n(""));
-  macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n(""));
-  macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n(""));
-  macroAddButton("kdlg_QSlider.xpm",      "QSlider",       clicked_QSlider      ,i18n(""));
-  macroAddButton("kdlg_QScrollBar.xpm",      "QScrollBar",       clicked_QScrollBar      ,i18n(""));
-  macroAddButton("kdlg_QGroupBox.xpm",      "QGroupBox",       clicked_QGroupBox      ,i18n(""));
+  macroAddButton("kdlg_QComboBox.xpm",      "QComboBox",       clicked_QComboBox      ,i18n("A combo box lets the user set a value by selecting\nit from a drop-down menu or by inserting the value,\nif the box is write enabled"));
+  macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n("Provides a single-column list of items that can be scrolled."));
+  macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n("Offers a multi-line editor."));
+  macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n("Displays the progress of an action that takes a longer time to be finished."));
+  macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n("Allows choosing numeric values by up-\nand down buttons or insertion if write enabled."));
+  macroAddButton("kdlg_QSlider.xpm",      "QSlider",       clicked_QSlider      ,i18n("Sets a value in a program-defined range by a slider."));
+  macroAddButton("kdlg_QScrollBar.xpm",      "QScrollBar",       clicked_QScrollBar      ,i18n("Indicates the range of a value and sets the current value\nby a slider as well as up- and down buttons; often used\nfor widgets whose contents is larger than the acutally visible\nview area. By using the scrollbar, the visible area\ncan be changed to another part of the widgets' contents."));
+  macroAddButton("kdlg_QGroupBox.xpm",      "QGroupBox",       clicked_QGroupBox      ,i18n("Provides a groupbox frame with title to indicate that\nchild widgets within the box belong together."));
   #undef macroAddButton
 
   QFont f;

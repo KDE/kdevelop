@@ -1,3 +1,9 @@
+1999-05-31 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* some bugfixes in loading and generating dialogs, using the new methods newDlg() and wasVarnameChanged()
+	* added quickhelp to the new widgets and properties, based on Ralf's documentation 
+	* added "find" to "make messages", so messages in the dialogeditor/print/vc/classparser
+	are now avaible in the kdevelop.pot
+
 1999-05-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed project loading for commandline
 	* changed KDevelop to use KApplication

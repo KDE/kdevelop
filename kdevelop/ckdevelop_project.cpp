@@ -893,7 +893,6 @@ bool CKDevelop::readProjectFile(QString file){
   // file menu
   
   enableCommand(ID_FILE_NEW);
-  enableCommand(ID_KDLG_FILE_NEW);
   enableCommand(ID_FILE_PRINT);
   // doc menu
   enableCommand(ID_HELP_PROJECT_API);
@@ -926,6 +925,7 @@ bool CKDevelop::readProjectFile(QString file){
   }
   
   if(prj->isKDEProject() || prj->isQtProject()){
+    enableCommand(ID_KDLG_FILE_NEW);
     kdlg_tabctl->setTabEnabled("dialogs_view",true);
     kdlg_tabctl->setCurrentTab(1); // dialogs
   

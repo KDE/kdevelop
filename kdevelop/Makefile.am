@@ -86,7 +86,7 @@ DISTCLEANFILES = $(kdevelop_METASOURCES)
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
 messages:
-	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot $(kdevelop_SOURCES) && mv messages.po ../po/kdevelop.pot
+	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc`  && mv messages.po ../po/kdevelop.pot 
 
 # just install datas here. Use install-exec-local for scripts and etc.
 # the binary itself is already installed from automake

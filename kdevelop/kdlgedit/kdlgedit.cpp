@@ -49,44 +49,53 @@ KDlgEdit::~KDlgEdit()
 void KDlgEdit::slotFileNew(){
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   TDialogFileInfo info;
+  QString temp_dialog_file = dialog_file;
   if(prj != 0){
-    KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
-    if( dlg.exec()){
-      // get the location
-      QString location = dlg.getLocation();
-      if(location.right(1) != "/"){
-	location = location + "/";
+    if(slotFileClose()){
+      KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
+      if( dlg.exec()){
+	// get the location
+	QString location = dlg.getLocation();
+	if(location.right(1) != "/"){
+	  location = location + "/";
+	}
+	info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
+	info.dist = true;
+	info.install = false;
+	info.classname = dlg.getClassname();
+	info.baseclass = dlg.getBaseClass();
+	info.header_file = getRelativeName(location + dlg.getHeaderName());
+	info.source_file = getRelativeName(location + dlg.getSourceName());
+	info.data_file = getRelativeName(location + dlg.getDataName());
+	info.is_toplevel_dialog = true;
+	
+	QString l_dialog_file = prj->getProjectDir() + info.rel_name;
+	
+	if(prj->addDialogFileToProject(info.rel_name,info)){
+	  ((CKDevelop*)parent())->newSubDir();
+	}
+	((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
+	((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
+	
+	// registrate the source files
+	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
+	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getSourceName());
+	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getDataName());
+	
+	// generate the new files;
+	// header
+	generateInitialHeaderFile(info,dlg.getBaseClassHeader());
+	generateInitialSourceFile(info);
+	slotOpenDialog(l_dialog_file);
+	slotBuildGenerate();
+	((CKDevelop*)parent())->refreshTrees();
       }
-      info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
-      info.dist = true;
-      info.install = false;
-      info.classname = dlg.getClassname();
-      info.baseclass = dlg.getBaseClass();
-      info.header_file = getRelativeName(location + dlg.getHeaderName());
-      info.source_file = getRelativeName(location + dlg.getSourceName());
-      info.data_file = getRelativeName(location + dlg.getDataName());
-      info.is_toplevel_dialog = true;
-
-      QString l_dialog_file = prj->getProjectDir() + info.rel_name;
-
-      if(prj->addDialogFileToProject(info.rel_name,info)){
-	((CKDevelop*)parent())->newSubDir();
+      else{
+	if(temp_dialog_file != ""){
+	  slotOpenDialog(temp_dialog_file);
+	}
       }
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
-      
-      // registrate the source files
-      ((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
-      ((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getSourceName());
-      ((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getDataName());
-
-      // generate the new files;
-      // header
-      generateInitialHeaderFile(info,dlg.getBaseClassHeader());
-      generateInitialSourceFile(info);
-      slotOpenDialog(l_dialog_file);
-      slotBuildGenerate();
-      ((CKDevelop*)parent())->refreshTrees();
-    }
+    } // end if(slotFileClose()
   }
 }
 
@@ -194,7 +203,8 @@ void KDlgEdit::slotBuildGenerate(){
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
 
-  ///////////////////////////// datafile/////////////////////////
+  ///////////////////////////// datafile ///////////////////////////////////////////
+	////////first generate the datafile and then the header for the datafile//////////
 
   if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.data_file)){
       ((CKDevelop*)parent())->switchToFile(prj->getProjectDir() + info.data_file);
@@ -256,7 +266,8 @@ void KDlgEdit::slotBuildGenerate(){
   ///////////////////////////headerfile////////////////////////
   
   if(((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetAdded() 
-     || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetRemoved()){
+     || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetRemoved()
+		 || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasVarnameChanged()){
     QString var;
     bool was_in_buffer = false;
     if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.header_file)){
@@ -339,6 +350,8 @@ void KDlgEdit::slotBuildGenerate(){
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->setModified(false);
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetAdded(false);
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetRemoved(false);
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->setVarnameChanged(false);
+
   slotFileSave();
 }
 
@@ -1000,3 +1013,6 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
     *stream << varname_p + "setMask(QBitmap(\""+props->getPropValue("MaskBitmap")+"\"));\n";
   }
 }
+
+
+

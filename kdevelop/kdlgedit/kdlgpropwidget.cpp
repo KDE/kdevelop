@@ -104,8 +104,39 @@ void fillHelps()
   setPropHelp(nr++, "QLineEdit",       "MaxLength",       i18n("<i>Class : QLineEdit</i>\n\nSets the maximum length of the text in the editor.") );
   setPropHelp(nr++, "QLineEdit",       "CursorPositon",   i18n("<i>Class : QLineEdit</i>\n\nSet the cursor position for this line edit.") );
   setPropHelp(nr++, "QLineEdit",       "isTextSelected",  i18n("<i>Class : QLineEdit</i>\n\nWhen enabled the text is initially selected.") );
+  setPropHelp(nr++, "QGroupBox",       "Title",  i18n("<i>Class : QGroupBox</i>\n\nSets the groupbox title that is displayed in the box frame
+.") );
+  setPropHelp(nr++, "QProgressBar",       "TotalSteps",  i18n("<i>Class : QProgressBar</i>\n\nSets the total steps of the progressbar. During the iteration of your action to display the progress, you have to call setProgress(int) to advance the progress step displayed to (int)
+") );
+  setPropHelp(nr++, "",       "setFixedVisibleLines",  i18n("<i>Class QMultiLineEdit,QListBox: </i>\n\nSets a fixed height for the widget so that the given number of textlines are displayed using the current font.") );
+  setPropHelp(nr++, "QMultiLineEdit",       "Text",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets the text of the widget.") );
+  setPropHelp(nr++, "",       "isAutoUpdate",  i18n("<i>Class QMultiLineEdit, QListBox</i>\n\nUsed to avoid flicker during large changes; the view is not updated if disabled.") );
+  setPropHelp(nr++, "QMultiLineEdit",       "isReadOnly",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets the widget text to read only; disables text input.") );
+  setPropHelp(nr++, "QMultiLineEdit",       "isOverWriteMode",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets overwrite enabled or disabled.") );
+  setPropHelp(nr++, "QMultiLineEdit",       "isTextSelected",  i18n("<i>Class QMultiLineEdit: </i>\n\nMarks the whole text selected
+.") );
+   setPropHelp(nr++, "QScrollBar",       "MaxValue",  i18n("<i>Class QScrollBar: </i>\n\nSets the maximum slider value; used in constructor") );
+   setPropHelp(nr++, "QScrollBar",       "MinValue",  i18n("<i>Class QScrollBar: </i>\n\nSets the minimum slider value; used in constructor") );
+   setPropHelp(nr++, "QScrollBar",       "Orientation",  i18n("<i>Class QScrollBar: </i>\n\nSets the orientation of the scrollbar to horizontal or vertical") );
+   setPropHelp(nr++, "QScrollBar",       "Value",  i18n("<i>Class QScrollBar: </i>\n\nSets the initial value of the scrollbar in the constructor") );
+   setPropHelp(nr++, "QScrollBar",       "isTracking",  i18n("<i>Class QScrollBar: </i>\n\nIf enabled, the scrollbar emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
 
+    setPropHelp(nr++, "QSlider",       "MaxValue",  i18n("<i>Class QSlider: </i>\n\nsets the maximum slider value; used in constructor") );
+   setPropHelp(nr++, "QSlider",       "MinValue",  i18n("<i>Class QSlider: </i>\n\nsets the minimum slider value; used in constructor") );
+   setPropHelp(nr++, "QSlider",       "Orientation",  i18n("<i>Class QSlider: </i>\n\nsets the orientation of the slider to horizontal or vertical") );
+   setPropHelp(nr++, "QSlider",       "Value",  i18n("<i>Class QSlider: </i>\n\nuses QRangeControl::setValue() to set the value") );
+   setPropHelp(nr++, "QSlider",       "isTracking",  i18n("<i>Class QSlider: </i>\n\nif enabled, the slider emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
+   setPropHelp(nr++, "QListBox",       "isAutoScroll",  i18n("<i>Class QListBox: </i>\n\nIf auto-scrolling is enabled, the list box will scroll its contents when the user drags the mouse outside (below or above) the list box.") );
+   setPropHelp(nr++, "QListBox",       "isAutoBottomScrollBar",  i18n("<i>Class QListBox: </i>\n\nIf it is enabled, then the list box will get\na bottom scroll bar if the maximum list box item\nwidth exceeds the list box width.") );
+   setPropHelp(nr++, "QListBox",       "isAutoScrollBar",  i18n("<i>Class QListBox: </i>\n\nEnables an automatic (vertical) scroll bar.") );
+   setPropHelp(nr++, "QListBox",       "isBottomScrollBar",  i18n("<i>Class QListBox: </i>\n\nEnables a bottom scroll bar.") );
+   setPropHelp(nr++, "QListBox",       "isDragSelect",  i18n("<i>Class QListBox: </i>\n\nIf drag-selection is enabled, the list box will highlight\nnew items when the user drags the mouse inside the list box. ") );
+   setPropHelp(nr++, "QListBox",       "isSmoothScrolling",  i18n("<i>Class QListBox: </i>\n\nEnables smooth list box scrolling.") );
+   
+    
+   
   setPropHelp(nr, QString(),QString(),QString());
+  
 }
 
 
