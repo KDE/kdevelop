@@ -46,7 +46,7 @@ install: build
 	dh_installdirs
 	install -d debian/tmp/etc/kde2
 	$(MAKE) prefix=/usr DESTDIR=$(debdir)/tmp install
-	sudo rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
+	rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
 
 deb-common:
 	dh_movefiles
@@ -78,7 +78,7 @@ binary:	install binary-common binary-arch binary-indep
 
 install-local:
 	$(MAKE) prefix=/usr
-	sudo $(MAKE) prefix=/usr install
+	$(MAKE) prefix=/usr install
 
 .PHONY: binary binary-arch binary-indep clean install install-local
 
