@@ -6,6 +6,7 @@
 
 2000-01-09 Christian Couder <chcouder@club-internet.fr>
 	* Added Benoit Cerrina's FileOpenPatch.
+	* Bookmarks are now saved in a config file.
 
 2000-01-08 Christian Couder <chcouder@club-internet.fr>
 	* Added "Toggle Bookmark" features and removed 

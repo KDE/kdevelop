@@ -1899,9 +1899,10 @@ void KWrite::saveAs() {
   writeURL(url);
 }
 
-
-
 void KWrite::clear() {
+	// Write bookmarks, breakpoints, ...
+	kWriteDoc->writeFileConfig();
+
   kWriteDoc->clear();
   kWriteDoc->clearFileName();
   kWriteDoc->updateViews();
@@ -2435,9 +2436,6 @@ void KWrite::gotoBookmark(int n) {
 			{
 				if(textline->isBookmarked())
 				{
-					debug("KWrite::gotoBookmark: line: %d, currentBookmark: %d, n: %d",
-						line, currentBookmark, n);
-
 					if(n == currentBookmark)
 					{
             gotoPos(0, line);

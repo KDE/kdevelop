@@ -399,6 +399,8 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
   contents.setAutoDelete(true);
 
+	fileConfig = new KConfig(NULL, "kdevelop_srcfiles.cfg");
+
   colors[0] = white;
   colors[1] = darkBlue;
   colors[2] = black;
@@ -417,6 +419,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   undoSteps = 50;
 
   pseudoModal = 0L;
+
   clear();
   clearFileName();
 
@@ -426,6 +429,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
 KWriteDoc::~KWriteDoc() {
   highlight->release();
+	delete fileConfig;
 }
 
 int KWriteDoc::lastLine() const {
@@ -458,6 +462,56 @@ void KWriteDoc::tagAll() {
   }
 }
 
+void KWriteDoc::readFileConfig()
+{
+	readBookmarkConfig(fileConfig);
+}
+
+void KWriteDoc::writeFileConfig()
+{
+	writeBookmarkConfig(fileConfig);
+}
+
+void KWriteDoc::readBookmarkConfig(KConfig *config)
+{
+	// Read the bookmarks line number string list
+ 	QStrList listLines;
+	QString entryName = QString("Bookmarks_for_") + fName;
+	config->readListEntry(entryName, listLines);
+
+	// Set the lines found in the list as bookmarked
+ 	for(uint i = 0; i < listLines.count(); i++)
+ 	{
+		QString item = listLines.at(i);
+
+		TextLine* textline = contents.at(item.toInt());
+		if(textline != NULL) textline->toggleBookmark();
+ 	}
+}
+
+void KWriteDoc::writeBookmarkConfig(KConfig *config)
+{
+	// Get a string list with all the bookmarked line numbers
+ 	QStrList listLines;
+ 	for(uint line = 0; line < contents.count(); line++)
+ 	{
+		TextLine* textline = contents.at(line);
+		if(textline != NULL)
+		{
+			if(textline->isBookmarked())
+			{
+      	QString item;
+    		item.sprintf("%d", line);
+    		listLines.append(item);
+			}
+		}
+ 	}
+
+	// Save the list
+	QString entryName = QString("Bookmarks_for_") + fName;
+	config->writeEntry(entryName, listLines);
+}
+
 void KWriteDoc::readConfig(KConfig *config) {
   int z;
   char s[16];
@@ -483,14 +537,12 @@ void KWriteDoc::writeConfig(KConfig *config) {
 }
 
 void KWriteDoc::readSessionConfig(KConfig *config) {
-
   readConfig(config);
   fName = config->readEntry("URL");
   setHighlight(hlManager->nameFind(config->readEntry("Highlight")));
 }
 
 void KWriteDoc::writeSessionConfig(KConfig *config) {
-
   writeConfig(config);
   config->writeEntry("URL",fName);
   config->writeEntry("Highlight",highlight->name());
@@ -660,6 +712,9 @@ void KWriteDoc::writeFile(QIODevice &dev) {
     if(eolMode != eolUnix) dev.putch('\r');
     if(eolMode != eolMacintosh) dev.putch('\n');
   } while (true);
+
+	// Write bookmarks, breakpoints, ...
+	writeFileConfig();
 }
 
 void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
@@ -1962,6 +2017,7 @@ void KWriteDoc::setFileName(const char *s) {
   KWriteView *view;
 
   fName = s;
+
   for (view = views.first(); view != 0L; view = views.next()) {
     emit view->kWrite->newCaption();
   }
@@ -1987,12 +2043,15 @@ void KWriteDoc::setFileName(const char *s) {
     hl = hlManager->mimeFind(buf, bufpos, &s[pos]);
   }
   setHighlight(hl);
+
+	// Read bookmarks, breakpoints, ...
+	readFileConfig();
+
   updateViews();
 }
 
 void KWriteDoc::clearFileName() {
   KWriteView *view;
-
   fName.truncate(fName.findRev('/') +1);
   for (view = views.first(); view != 0L; view = views.next()) {
     emit view->kWrite->newCaption();
