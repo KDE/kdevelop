@@ -591,8 +591,8 @@ QString TrollProjectWidget::getCurrentTarget()
 {
   if (!m_shownSubproject)
     return "";
-  if (m_shownSubproject->configuration.m_destdir.right(1)=='/'||
-      m_shownSubproject->configuration.m_destdir.isEmpty())
+  if (m_shownSubproject->configuration.m_destdir.isEmpty() ||
+      m_shownSubproject->configuration.m_destdir[ m_shownSubproject->configuration.m_destdir.length()-1 ] == '/' )
     return m_shownSubproject->configuration.m_destdir+m_shownSubproject->configuration.m_target;
   else
     return m_shownSubproject->configuration.m_destdir+'/'+m_shownSubproject->configuration.m_target;
@@ -1314,7 +1314,7 @@ QString TrollProjectWidget::getHeader()
   }
   if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
     templateString = i18n("a subdirs project");
-  header.sprintf(m_part->getQMakeHeader(),
+  header.sprintf(m_part->getQMakeHeader().latin1(),
                  relpath.ascii(),
                  templateString.ascii(),
                  targetString.ascii());
@@ -1465,8 +1465,8 @@ void TrollProjectWidget::slotAddFiles()
   KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
                                         filter,
                                         this,
-                                        i18n("Insert existing files"),
-                                        TRUE);
+                                        "Insert existing files",
+                                        true);
   dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
   dialog->exec();
   QStringList files = dialog->selectedFiles();
@@ -1787,8 +1787,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           KFileDialog *dialog = new KFileDialog(projectDirectory()+relpath,
                                                 ext + "|" + title + " (" + ext + ")",
                                                 this,
-                                                i18n("Insert existing %1").arg(title),
-                                                TRUE);
+                                                "Insert existing",
+                                                true);
           dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
           if ( dialog->exec() == QDialog::Rejected )
 	    return;

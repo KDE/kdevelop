@@ -21,6 +21,8 @@
 #include <klineedit.h>
 #include <klineeditdlg.h>
 #include <kurlrequester.h>
+#include <kdebug.h>
+
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlistview.h>
@@ -226,7 +228,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   QListViewItem *lvItem=outsidelibdir_listview->firstChild();
   while(lvItem)
   {
-    std::cerr<<lvItem->text(0)<<std::endl;
     myProjectItem->configuration.m_librarypath.append(lvItem->text(0));
     lvItem=lvItem->itemBelow();
   }
@@ -236,7 +237,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->subdirs.clear();
   while(lvItem)
   {
-    std::cerr<<lvItem->text(0)<<std::endl;
     myProjectItem->subdirs.append(lvItem->text(0));
     lvItem=lvItem->itemBelow();
   }
@@ -505,7 +505,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
         }
     }
 
-  std::cerr<< "itemlist count =" << itemList.count()<<std::endl;
+  kdDebug()<< "itemlist count =" << itemList.count()<<endl;
     
   //add all other prj in itemList unchecked
   ProjectItem *item=itemList.first();
@@ -620,7 +620,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
           {
 
             if((*it).find(tmpLibDir)>=0 && tmpLibDir!="" && !tmpLibDir.isEmpty()){
-              std::cerr<<"remove from LIBDIR   "<<(*it).ascii()<<"   tmpLib="<<tmpLibDir.ascii()<<""<<std::endl;
+              kdDebug()<<"remove from LIBDIR   "<<(*it).ascii()<<"   tmpLib="<<tmpLibDir.ascii()<<""<<endl;
               libDirList.remove(it);
               it=libDirList.begin();
             }
@@ -635,7 +635,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   QStringList::Iterator it1=libDirList.begin();
   for(;it1!=libDirList.end();++it1)
   {
-      std::cerr<<"create LIBDIR item  "<<(*it1).ascii()<<std::endl;
+      kdDebug()<<"create LIBDIR item  "<<(*it1).ascii()<<endl;
       new QListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
   }
   
