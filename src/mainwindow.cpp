@@ -35,6 +35,7 @@
 #include <kedittoolbar.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
 
 
 #include "projectmanager.h"
@@ -400,8 +401,10 @@ QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
   pMDICover->setTabCaption(shortName);
   pMDICover->setCaption(name);
 
-  const QPixmap& wndIcon = view->icon() ? *(view->icon()) : QPixmap();
-  pMDICover->setIcon(wndIcon);
+  const QPixmap* wndIcon = view->icon();
+  if (wndIcon) {
+      pMDICover->setIcon(*wndIcon);
+  }
 
   m_widgetMap.insert(view, pMDICover);
   m_childViewMap.insert(pMDICover, view);
@@ -409,12 +412,17 @@ QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
   return pMDICover;
 }
 
-
 void MainWindow::embedPartView(QWidget *view, const QString &name, const QString& fullName)
 {
   QextMdiChildView *child = wrapper(view, name);
   m_captionDict.insert(fullName, child);
 
+  const QPixmap* wndIcon = view->icon();
+  if (!wndIcon || (wndIcon && (wndIcon->size().height() > 16))) {
+    child->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
+  }
+
+  
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::UseQextMDISizeHint;
   addWindow(child, mdiFlags);
 
