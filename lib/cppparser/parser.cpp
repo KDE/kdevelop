@@ -2003,7 +2003,18 @@ bool Parser::parseExceptionSpecification( GroupAST::Node& node )
     lex->nextToken();
 
     ADVANCE( '(', "(" );
-    parseTypeIdList( node );
+    if( lex->lookAhead(0) == Token_ellipsis ){
+        // extension found in MSVC++ 7.x headers
+        int start = lex->index();
+        GroupAST::Node ast = CreateNode<GroupAST>();
+        AST_FROM_TOKEN( ellipsis, lex->index() );
+        ast->addNode( ellipsis );
+        lex->nextToken();
+        UPDATE_POS( ast, start, lex->index() );
+        node = ast;
+    } else {
+        parseTypeIdList( node );
+    }
     ADVANCE( ')', ")" );
 
     return true;

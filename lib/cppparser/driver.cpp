@@ -285,17 +285,13 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "ANTLR_API" );
 
     // gnu
-    lexer->addSkipWord( "__extension__" );
+    lexer->addSkipWord( "__extension__", SkipWordAndArguments );
     lexer->addSkipWord( "__attribute__", SkipWordAndArguments );
     lexer->addSkipWord( "__BEGIN_DECLS" );
     lexer->addSkipWord( "__END_DECLS" );
     lexer->addSkipWord( "__THROW" );
-    lexer->addSkipWord( "__const" );
-    lexer->addSkipWord( "__const__" );
     lexer->addSkipWord( "__restrict" );
     lexer->addSkipWord( "__restrict__" );
-    lexer->addSkipWord( "__inline" );
-    lexer->addSkipWord( "__inline__" );
     lexer->addSkipWord( "__attribute_pure__" );
     lexer->addSkipWord( "__attribute_malloc__" );
     lexer->addSkipWord( "__attribute_format_strfmon__" );
@@ -374,6 +370,12 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "_cdecl" );
     lexer->addSkipWord( "CALLBACK" );
 
+   // gcc extensions
+    addMacro( Macro("__asm__", "asm") );
+    addMacro( Macro("__inline", "inline") );
+    addMacro( Macro("__inline__", "inline") );
+    addMacro( Macro("__const", "const") );
+    addMacro( Macro("__const__", "const") );
     addMacro( Macro("__volatile__", "volatile") );
     addMacro( Macro("__complex__", "") );
 }
