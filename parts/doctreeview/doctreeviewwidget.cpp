@@ -1072,7 +1072,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
 
     // avoid empty pages when clicking on .toc files, choose its first child instead
     if (ident.right(4) == ".toc") {
-        dtitem = dtitem->firstChild();
+        dtitem = static_cast<DocTreeItem*>(dtitem->firstChild());
         if (!dtitem) return;
         ident = dtitem->fileName();
         if (ident.isEmpty()) return;
