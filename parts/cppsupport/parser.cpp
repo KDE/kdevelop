@@ -566,9 +566,11 @@ bool Parser::parseUsingDirective( DeclarationAST::Ptr& node )
 }
 
 
-bool Parser::parseOperatorFunctionId( AST::Ptr& /*node*/ )
+bool Parser::parseOperatorFunctionId( AST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperatorFunctionId()" << endl;
+    
+    int start = lex->index();
 
     if( lex->lookAhead(0) != Token_operator ){
 	return false;
@@ -576,9 +578,12 @@ bool Parser::parseOperatorFunctionId( AST::Ptr& /*node*/ )
     lex->nextToken();    
 
     AST::Ptr op;    
-    if( parseOperator(op) )
+    if( parseOperator(op) ){
+        node = AST::Ptr( new AST() );
+	node->setStart( start );
+	node->setEnd( lex->index() );
 	return true;
-    else {
+    } else {
 	// parse cast operator
 	AST::Ptr cv;
         parseCvQualify(cv);       
@@ -593,19 +598,27 @@ bool Parser::parseOperatorFunctionId( AST::Ptr& /*node*/ )
 	
 	AST::Ptr ptrOp;
 	while( parsePtrOperator(ptrOp) )
-  	    ;
+  	    ;	    
 	
+        node = AST::Ptr( new AST() );
+	node->setStart( start );
+	node->setEnd( lex->index() );
 	return true;
     }
 }
 
-bool Parser::parseTemplateArgumentList( AST::Ptr& /*node*/ )
+bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgumentList()" << endl;
+    
+    int start = lex->index();
+    
+    node = TemplateArgumentListAST::Ptr( new TemplateArgumentListAST() );
     
     AST::Ptr templArg;
     if( !parseTemplateArgument(templArg) )
 	return false;
+    node->addArgument( templArg );
     
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
@@ -614,7 +627,11 @@ bool Parser::parseTemplateArgumentList( AST::Ptr& /*node*/ )
 	    parseError();
 	    break;
 	}
+	node->addArgument( templArg );
     }
+    
+    node->setStart( start );
+    node->setEnd( lex->index() );
     
     return true;
 }
@@ -672,9 +689,11 @@ bool Parser::parseAsmDefinition( DeclarationAST::Ptr& /*node*/ )
     return true;
 }
 
-bool Parser::parseTemplateDeclaration( DeclarationAST::Ptr& /*node*/ )
+bool Parser::parseTemplateDeclaration( DeclarationAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
+    
+    int start = lex->index();
     
     bool _export = false;
     if( lex->lookAhead(0) == Token_export ){
@@ -691,11 +710,10 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Ptr& /*node*/ )
     
     ADVANCE( Token_template, "template" );
 
+    AST::Ptr params;
     if( lex->lookAhead(0) == '<' ){
-	lex->nextToken()
-	;
-	AST::Ptr params;
-	parseTemplateParameterList(params);
+	lex->nextToken();
+	parseTemplateParameterList( params );
 	
 	ADVANCE( '>', ">" );
     }
@@ -704,6 +722,14 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Ptr& /*node*/ )
     if( !parseDefinition(def) ){
 	reportError( i18n("expected a declaration") );
     }
+    
+    TemplateDeclarationAST::Ptr ast( new TemplateDeclarationAST() );
+    ast->setExport( _export );
+    ast->setTemplateParameterList( params );
+    ast->setDeclaration( def );
+    ast->setStart( start );
+    ast->setEnd( lex->index() );
+    node = ast;
         
     return true;
 }
@@ -768,10 +794,12 @@ bool Parser::parseOperator( AST::Ptr& /*node*/ )
     return false;
 }
 
-bool Parser::parseCvQualify( AST::Ptr& /*node*/ )
+bool Parser::parseCvQualify( AST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCvQualify()" << endl;
     
+    int start = lex->index();
+        
     int n = 0;
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
@@ -781,6 +809,11 @@ bool Parser::parseCvQualify( AST::Ptr& /*node*/ )
 	} else
 	    break;
     }
+    
+    node = AST::Ptr( new AST() );
+    node->setStart( start );
+    node->setEnd( lex->index() );
+    
     return n != 0;
 }
 
@@ -835,7 +868,7 @@ bool Parser::parsePtrOperator( AST::Ptr& /*node*/ )
 }
 
 
-bool Parser::parseTemplateArgument( AST::Ptr& /*node*/ )
+bool Parser::parseTemplateArgument( AST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgument()" << endl;
     
@@ -845,26 +878,36 @@ bool Parser::parseTemplateArgument( AST::Ptr& /*node*/ )
 	return true;
     }
 #endif
+    int start = lex->index();
+        
+    if( !skipAssignmentExpression() ){
+        return false;
+    }
     
-    return skipAssignmentExpression();
+    node = AST::Ptr( new AST() );
+    node->setStart( start );
+    node->setEnd( lex->index() );
+    
+    return true;
 }
 
 bool Parser::parseTypeSpecifier( AST::Ptr& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeSpecifier()" << endl;
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "----> token = " << lex->lookAhead(0).toString() << endl;
 
+    int start = lex->index();
+    
     AST::Ptr cv;    
-    parseCvQualify(cv);
+    parseCvQualify( cv );
     
     AST::Ptr spec;
     if( parseElaboratedTypeSpecifier(spec) || parseSimpleTypeSpecifier(spec) ){
         AST::Ptr cv2;
-	parseCvQualify(cv2);
-    } else
-	return false;
+	parseCvQualify( cv2 );
+	return true;
+    } 
     
-    return true;
+    return false;
 }
 
 bool Parser::parseDeclarator( AST::Ptr& /*node*/ )
@@ -1804,7 +1847,7 @@ bool Parser::parseNestedNameSpecifier( AST::Ptr& /*node*/ )
 	    lex->nextToken(); // skip template name
 	    lex->nextToken(); // skip <
 	    
-	    AST::Ptr args;
+	    TemplateArgumentListAST::Ptr args;
 	    if( !parseTemplateArgumentList(args) ){
 		lex->setIndex( index );
 		return false;
@@ -1888,7 +1931,7 @@ bool Parser::parseUnqualifiedName( AST::Ptr& node )
 	    lex->nextToken();
 	    
 	    // optional template arguments
-	    AST::Ptr args;
+	    TemplateArgumentListAST::Ptr args;
 	    parseTemplateArgumentList( args );
 	    
 	    if( lex->lookAhead(0) != '>' ){
@@ -2268,10 +2311,7 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Ptr& node )
     AST::Ptr storageSpec;
     while( parseStorageClassSpecifier(storageSpec) )
 	;
-    
-    AST::Ptr cv;
-    parseCvQualify( cv );
-    
+        
     AST::Ptr spec;
     if ( !parseTypeSpecifierOrClassSpec(spec) ) { // replace with simpleTypeSpecifier?!?!
 	lex->setIndex( index );
@@ -2327,9 +2367,6 @@ bool Parser::parseDeclarationStatement( AST::Ptr& /*node*/ )
 bool Parser::parseDeclaration( DeclarationAST::Ptr& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaration()" << endl;
-
-#warning "TODO: Parser::parseDeclaration() -- fill abstract syntax tree"
-
 
     AST::Ptr funSpec;
     while( parseFunctionSpecifier(funSpec) )

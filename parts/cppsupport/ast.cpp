@@ -281,3 +281,61 @@ void TypedefAST::setInitDeclaratorList( AST::Ptr& initDeclaratorList )
     m_initDeclaratorList = initDeclaratorList;
 }
 
+// ------------------------------------------------------------------------
+TemplateArgumentListAST::TemplateArgumentListAST()
+{
+}
+
+TemplateArgumentListAST::~TemplateArgumentListAST()
+{
+}
+
+void TemplateArgumentListAST::addArgument( AST::Ptr& arg )
+{
+    if( !arg.get() )
+        return;
+	
+    m_arguments.append( arg.release() );
+}
+
+
+// ------------------------------------------------------------------------
+TemplateDeclarationAST::TemplateDeclarationAST()
+    : m_export( false )
+{
+}
+
+TemplateDeclarationAST::~TemplateDeclarationAST()
+{
+}
+
+bool TemplateDeclarationAST::isExport() const
+{
+    return m_export;
+}
+
+void TemplateDeclarationAST::setExport( bool b )
+{
+    m_export = b;
+}
+
+AST* TemplateDeclarationAST::templateParameterList()
+{
+    return m_templateParameterList.get();
+}
+
+void TemplateDeclarationAST::setTemplateParameterList( AST::Ptr& templateParameterList )
+{
+    m_templateParameterList = templateParameterList;
+}
+
+DeclarationAST* TemplateDeclarationAST::declaration()
+{
+    return m_declaration.get();
+}
+
+void TemplateDeclarationAST::setDeclaration( DeclarationAST::Ptr& declaration )
+{
+    m_declaration = declaration;
+}
+

@@ -247,6 +247,54 @@ private:
     void operator = ( const TypedefAST& source );
 };
 
+class TemplateArgumentListAST: public AST
+{
+public:
+    typedef std::auto_ptr<TemplateArgumentListAST> Ptr;
+    
+public:
+    TemplateArgumentListAST();
+    virtual ~TemplateArgumentListAST();
+    
+    void addArgument( AST::Ptr& arg );
+    QPtrList<AST> arguments() { return m_arguments; }
+    
+private:
+    QPtrList<AST> m_arguments;
+    
+private:
+    TemplateArgumentListAST( const TemplateArgumentListAST& source );
+    void operator = ( const TemplateArgumentListAST& source );
+};
+
+class TemplateDeclarationAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<TemplateDeclarationAST> Ptr;
+    
+public:
+    TemplateDeclarationAST();
+    virtual ~TemplateDeclarationAST();
+    
+    bool isExport() const;
+    void setExport( bool b );
+    
+    AST* templateParameterList();
+    void setTemplateParameterList( AST::Ptr& templateParameterList );
+    
+    DeclarationAST* declaration();
+    void setDeclaration( DeclarationAST::Ptr& declaration );
+    
+private:
+    bool m_export;
+    AST::Ptr m_templateParameterList;
+    DeclarationAST::Ptr m_declaration;
+    
+private:
+    TemplateDeclarationAST( const TemplateDeclarationAST& source );
+    void operator = ( const TemplateDeclarationAST& source );
+};
+
 class TranslationUnitAST: public AST
 {
 public:

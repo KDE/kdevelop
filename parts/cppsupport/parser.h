@@ -65,7 +65,7 @@ public /*rules*/ :
     bool parseStringLiteral( AST::Ptr& node );
     bool parseName( NameAST::Ptr& node );
     bool parseOperatorFunctionId( AST::Ptr& node );
-    bool parseTemplateArgumentList( AST::Ptr& node );
+    bool parseTemplateArgumentList( TemplateArgumentListAST::Ptr& node );
     bool parseOperator( AST::Ptr& node );
     bool parseCvQualify( AST::Ptr& node );
     bool parseSimpleTypeSpecifier( AST::Ptr& node );
