@@ -75,7 +75,7 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
              this, SLOT( slotDropped(QDropEvent *, QListViewItem *) ) );
 
     _cfg = NULL;
-    
+
     QTimer::singleShot(0, this, SLOT(initConfig()));
 }
 
@@ -376,7 +376,7 @@ QString SnippetWidget::parseText(QString text, QString del)
 
       if ( strName != del+del  &&  mapVar[strName].length() <= 0 ) {  //if not doubel-delimiter and not already in map
         if (iInMeth == 0) {  //check config, if input-method "single" is selected
-          strMsg=QString(i18n("Please enter the value for <b>%1</b>:")).arg(strName);
+          strMsg=i18n("Please enter the value for <b>%1</b>:").arg(strName);
           strNew = showSingleVarDialog( strName, &_mapSaved, rSingle );
 	  if (strNew=="")
 	    return ""; //user clicked Cancle
