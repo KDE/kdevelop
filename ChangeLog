@@ -1,4 +1,7 @@
 2001-11-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: attributes with namespace prefix in variable type are displayed in class parser now
+
+2001-11-05  F@lk Brettschneider <falk@kdevelop.org>
     * ALT+0 till ALT+9 for all MDI modes now
 
 2001-11-03  jbb <jbb@kdevelop.org>
