@@ -77,8 +77,8 @@ public slots:
 private slots:
 	void slotPartAdded( KParts::Part *part );
 	void slotActivePartChanged( KParts::Part *part );
-	void slotArgHintHided();
-	void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
+	void slotArgHintHidden();
+	void slotCompletionBoxHidden();
 	void slotTextChanged();
 	void slotFileParsed( const QString& fileName );
 	void slotTimeout();

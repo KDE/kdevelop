@@ -345,15 +345,15 @@ void CppCodeCompletion::slotTimeout()
 	completeText();
 }
 
-void CppCodeCompletion::slotArgHintHided( )
+void CppCodeCompletion::slotArgHintHidden()
 {
-	//kdDebug(9007) << "CppCodeCompletion::slotArgHintHided()" << endl;
+	//kdDebug(9007) << "CppCodeCompletion::slotArgHintHidden()" << endl;
 	m_bArgHintShow = false;
 }
 
-void CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
+void CppCodeCompletion::slotCompletionBoxHidden()
 {
-	Q_UNUSED( entry );
+	//kdDebug( 9007 ) << "CppCodeCompletion::slotCompletionBoxHidden()" << endl;
 	m_bCompletionBoxShow = false;
 }
 
@@ -371,10 +371,12 @@ void CppCodeCompletion::integratePart( KParts::Part* part )
 		{
 			kdDebug( 9007 ) << k_funcinfo << "enabling code completion" << endl;
 			connect( part, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
-			connect( part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
-			         SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
+			connect( part->widget(), SIGNAL( completionDone() ), this,
+			         SLOT( slotCompletionBoxHidden() ) );
+			connect( part->widget(), SIGNAL( completionAborted() ), this,
+			         SLOT( slotCompletionBoxHidden() ) );
 			connect( part->widget(), SIGNAL( argHintHidden() ), this,
-			         SLOT( slotArgHintHided() ) );
+			         SLOT( slotArgHintHidden() ) );
 		}
 
 	}
@@ -438,6 +440,17 @@ void CppCodeCompletion::slotTextChanged()
 	QString strCurLine = m_activeEditor->textLine( nLine );
 	QString ch = strCurLine.mid( nCol - 1, 1 );
 	QString ch2 = strCurLine.mid( nCol - 2, 2 );
+	
+	// Tell the completion box to _go_away_ when the completion char
+	// becomes empty or whitespace and the box is already showing.
+	// !!WARNING!! This is very hackish, but KTE doesn't offer a way
+	// to tell the completion box to _go_away_
+	if ( ch.simplifyWhiteSpace().isEmpty() && m_bCompletionBoxShow )
+	{
+		QValueList<KTextEditor::CompletionEntry> entryList;
+		m_bCompletionBoxShow = true;
+		m_activeCompletion->showCompletionBox( entryList, 0 );
+	}
 	
 	m_ccLine = 0;
 	m_ccColumn = 0;
@@ -820,6 +833,7 @@ void CppCodeCompletion::completeText( )
 	{
 		if ( !m_fileEntryList.isEmpty() )
 		{
+			m_bCompletionBoxShow = true;
 			m_activeCompletion->showCompletionBox( m_fileEntryList, column - m_includeRx.matchedLength() );
 		}
 		return ;
@@ -1174,7 +1188,8 @@ void CppCodeCompletion::completeText( )
 		{
 			entryList = unique( entryList );
 			qHeapSort( entryList );
-
+			
+			m_bCompletionBoxShow = true;
 			m_activeCompletion->showCompletionBox( entryList, word.length() );
 		}
 	}
@@ -1206,6 +1221,7 @@ void CppCodeCompletion::completeText( )
 		{
 			signatureList = unique( signatureList );
 			qHeapSort( signatureList );
+			m_bArgHintShow = true;
 			m_activeCompletion->showArgHint( signatureList, "()", "," );
 		}
 	}
