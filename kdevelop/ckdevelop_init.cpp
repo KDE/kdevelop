@@ -233,11 +233,11 @@ void CKDevelop::initView(){
 void CKDevelop::initKeyAccel(){
   accel = new CKDevAccel( this );
   //file menu
-  accel->connectItem( KAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW);
-  accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
-  accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
+  accel->connectItem( KStdAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW);
+  accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
+  accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
   
-  accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
+  accel->connectItem( KStdAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
   
   accel->insertItem(i18n("Save As"), "SaveAs", 0);
   accel->connectItem( "SaveAs", this, SLOT(slotFileSaveAs()), true, ID_FILE_SAVE_AS);
@@ -245,8 +245,8 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem(i18n("Save All"), "SaveAll", 0);
   accel->connectItem( "SaveAll", this, SLOT(slotFileSaveAll()), true, ID_FILE_SAVE_ALL);
   
-  accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()), true, ID_FILE_PRINT);
-  accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()), true, ID_FILE_QUIT);
+  accel->connectItem( KStdAccel::Print , this, SLOT(slotFilePrint()), true, ID_FILE_PRINT);
+  accel->connectItem( KStdAccel::Quit, this, SLOT(slotFileQuit()), true, ID_FILE_QUIT);
 
   //edit menu  
 
@@ -380,7 +380,7 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "Clear_Bookmarks", this, SLOT(slotBookmarksClear()), true, ID_BOOKMARKS_CLEAR);
 
   //Help menu
-  accel->connectItem( KAccel::Help , this, SLOT(slotHelpContents()), true, ID_HELP_CONTENTS);
+  accel->connectItem( KStdAccel::Help , this, SLOT(slotHelpContents()), true, ID_HELP_CONTENTS);
   
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText()), true, ID_HELP_SEARCH_TEXT);
@@ -1150,17 +1150,17 @@ void CKDevelop::initProject()
 
 void CKDevelop::setKeyAccel(){    
     
-    accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
-    accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
-    accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
+    accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
+    accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
+    accel->connectItem( KStdAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
     
     
-    accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
-    accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
-    accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
-    accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KAccel::Save );
-    accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
-    accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
+    accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
+    accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
+    accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
+    accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
+    accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
+    accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
 
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
 
@@ -1183,7 +1183,7 @@ void CKDevelop::setKeyAccel(){
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
     
     accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-    accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
+    accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
     
 }
 
@@ -1205,3 +1205,4 @@ void CKDevelop::setToolmenuEntries(){
        
 
 }
+
