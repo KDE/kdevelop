@@ -388,7 +388,7 @@ if (!newtext || !newattribs) {
 }
 
 
-Attribute::Attribute() : font(), fm(font), printFont(), printFM(printFont) {
+Attribute::Attribute() : font(), printFont(), fm(font), printFM(printFont) {
 }
 
 void Attribute::setFont(const QFont &f) {
