@@ -1,2 +1,2 @@
-SUBDIRS = kdevelop 
+SUBDIRS = kdevelop std  
 
