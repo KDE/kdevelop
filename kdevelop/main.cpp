@@ -61,12 +61,6 @@ int main(int argc, char* argv[])
 //  cmdMngr.makeDefault();
 //  cmdMngr.readConfig(a.config());
 
-  // Resource types
-  KGlobal::dirs()->addResourceType("kdev_template", KStandardDirs::kde_default("data")
-                                   + kapp->name() + "/templates/");
-  KGlobal::dirs()->addResourceType("kdev_pic", KStandardDirs::kde_default("data")
-                                   + kapp->name() + "/pics/");
-
 //  a.config()->setGroup("General Options");
 //  bool bStartLogo= a.config()->readBoolEntry("Logo",true);
 //  bool bInstall=a.config()->readBoolEntry("Install",true);

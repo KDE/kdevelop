@@ -1,5 +1,5 @@
 /***************************************************************************
-                             doctreeview.cpp
+                             doctreewidget.cpp
                              -------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
@@ -26,12 +26,12 @@
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
-#include "../config.h"
+#include "config.h"
 
 #include "ctoolclass.h"
 #include "cproject.h"
-#include "customizedlg.h"
-#include "doctreeviewconfigwidget.h"
+//#include "customizedlg.h"
+//#include "doctreeviewconfigwidget.h"
 #include "doctreeview.h"
 
 
@@ -184,7 +184,7 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
 class DocTreeKDevelopFolder : public KDevListViewItem
 {
 public:
-    DocTreeKDevelopFolder(DocTreeView *parent)
+    DocTreeKDevelopFolder(DocTreeWidget *parent)
         : KDevListViewItem(parent, Folder, i18n("KDevelop"), "")
         { setExpandable(true); }
     void refresh();
@@ -312,7 +312,7 @@ void DocTreeKDELibsBook::setOpen(bool o)
 class DocTreeKDELibsFolder : public KDevListViewItem
 {
 public:
-    DocTreeKDELibsFolder(DocTreeView *parent)
+    DocTreeKDELibsFolder(DocTreeWidget *parent)
         : KDevListViewItem(parent, Folder, i18n("Qt/KDE Libraries"), "")
         { setExpandable(true); }
     void refresh();
@@ -362,7 +362,7 @@ void DocTreeKDELibsFolder::refresh()
 class DocTreeDocbaseFolder : public KDevListViewItem
 {
 public:
-    DocTreeDocbaseFolder(DocTreeView *parent);
+    DocTreeDocbaseFolder(DocTreeWidget *parent);
     ~DocTreeDocbaseFolder();
     virtual void setOpen(bool o);
 private:
@@ -370,7 +370,7 @@ private:
 };
 
 
-DocTreeDocbaseFolder::DocTreeDocbaseFolder(DocTreeView *parent)
+DocTreeDocbaseFolder::DocTreeDocbaseFolder(DocTreeWidget *parent)
     : KDevListViewItem(parent, Folder, i18n("Documentation Base"), "")
 {
     setExpandable(true);
@@ -442,12 +442,12 @@ void DocTreeDocbaseFolder::setOpen(bool o)
 class DocTreeOthersFolder : public KDevListViewItem
 {
 public:
-    DocTreeOthersFolder(DocTreeView *parent);
+    DocTreeOthersFolder(DocTreeWidget *parent);
     void refresh();
 };
 
 
-DocTreeOthersFolder::DocTreeOthersFolder(DocTreeView *parent)
+DocTreeOthersFolder::DocTreeOthersFolder(DocTreeWidget *parent)
     : KDevListViewItem(parent, Folder, i18n("Others"), "")
 {}
 
@@ -474,7 +474,7 @@ void DocTreeOthersFolder::refresh()
 class DocTreeProjectFolder : public KDevListViewItem
 {
 public:
-    DocTreeProjectFolder(DocTreeView *parent);
+    DocTreeProjectFolder(DocTreeWidget *parent);
     void setProject(CProject *prj)
         { project = prj; }
     void refresh();
@@ -484,7 +484,7 @@ private:
 };
 
 
-DocTreeProjectFolder::DocTreeProjectFolder(DocTreeView *parent)
+DocTreeProjectFolder::DocTreeProjectFolder(DocTreeWidget *parent)
     : KDevListViewItem(parent, Folder, i18n("Current Project"), "")
 {}
 
@@ -505,12 +505,12 @@ void DocTreeProjectFolder::refresh()
 
 
 /**************************************/
-/* The DocTreeView itself              */
+/* The DocTreeWidget itself           */
 /**************************************/
 
 
-DocTreeView::DocTreeView(QWidget *parent, const char *name)
-    : KListView(parent, name)
+DocTreeWidget::DocTreeWidget(DocTreeView *view, QWidget *parentWidget)
+    : KListView(parentWidget, "doc tree widget")
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -531,14 +531,16 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
+
+    this->view = view;
 }
 
 
-DocTreeView::~DocTreeView()
+DocTreeWidget::~DocTreeWidget()
 {}
 
 
-void DocTreeView::slotItemExecuted(QListViewItem *item)
+void DocTreeWidget::slotItemExecuted(QListViewItem *item)
 {
     // We assume here that ALL (!) items in the list view
     // are ListViewItem's
@@ -548,15 +550,15 @@ void DocTreeView::slotItemExecuted(QListViewItem *item)
 
     QString ident = kitem->ident();
     if (ident == "internal:projectAPI")
-        emit projectAPISelected();
+        emit view->projectAPISelected();
     else if (ident == "internal:projectManual")
-        emit projectManualSelected();
+        emit view->projectManualSelected();
     else if (!ident.isEmpty())
-        emit fileSelected(kitem->ident());
+        emit view->fileSelected(kitem->ident());
 }
 
 
-void DocTreeView::slotRightButtonPressed(QListViewItem *item, const QPoint &p, int)
+void DocTreeWidget::slotRightButtonPressed(QListViewItem *item, const QPoint &p, int)
 {
     contextItem = item;
     KPopupMenu pop(i18n("Documentation Tree"));
@@ -565,29 +567,31 @@ void DocTreeView::slotRightButtonPressed(QListViewItem *item, const QPoint &p, i
 }
 
 
-void DocTreeView::slotConfigure()
+void DocTreeWidget::slotConfigure()
 {
-    DocTreeViewConfigWidget::Page page;
+#if 0
+    DocTreeConfigWidget::Page page;
     if (contextItem == folder_kdevelop || contextItem->parent() == folder_kdevelop)
-        page = DocTreeViewConfigWidget::KDevelop;
+        page = DocTreeWidgetConfigWidget::KDevelop;
     else if (contextItem == folder_kdelibs || contextItem->parent() == folder_kdelibs)
-        page = DocTreeViewConfigWidget::Libraries;
+        page = DocTreeWidgetConfigWidget::Libraries;
     else
-        page = DocTreeViewConfigWidget::Others;
+        page = DocTreeWidgetConfigWidget::Others;
 
     CustomizeDialog *dlg = new CustomizeDialog(this, "customize doctreeview");
     QFrame *frame = dlg->addPage(i18n("Documentation Tree"));
     QBoxLayout *vbox = new QVBoxLayout(frame);
-    DocTreeViewConfigWidget *w =
-        new DocTreeViewConfigWidget(this, frame, "doctreeview config widget");
+    DocTreeWidgetConfigWidget *w =
+        new DocTreeConfigWidget(this, frame, "doctreeview config widget");
     w->showPage(page);
     vbox->addWidget(w);
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     dlg->exec();
+#endif
 }
 
 
-void DocTreeView::configurationChanged()
+void DocTreeWidget::configurationChanged()
 {
     folder_kdevelop->refresh();
     folder_kdelibs->refresh();
@@ -595,24 +599,26 @@ void DocTreeView::configurationChanged()
 }
 
 
-void DocTreeView::docPathChanged()
+void DocTreeWidget::docPathChanged()
 {
     folder_kdelibs->refresh();
 }
 
 
-void DocTreeView::createConfigWidget(CustomizeDialog *parent)
+void DocTreeWidget::createConfigWidget(CustomizeDialog *parent)
 {
+#if 0
     QFrame *frame = parent->addPage(i18n("Documentation Tree"));
     QBoxLayout *vbox = new QVBoxLayout(frame);
-    DocTreeViewConfigWidget *w =
-        new DocTreeViewConfigWidget(this, frame, "doctreeview config widget");
+    DocTreeWidgetConfigWidget *w =
+        new DocTreeWidgetConfigWidget(this, frame, "doctreeview config widget");
     vbox->addWidget(w);
     connect(parent, SIGNAL(okClicked()), w, SLOT(accept()));
+#endif
 }
 
 
-void DocTreeView::projectOpened(CProject *prj)
+void DocTreeWidget::projectOpened(CProject *prj)
 {
     folder_project->setProject(prj);
     folder_kdevelop->refresh();
@@ -622,7 +628,7 @@ void DocTreeView::projectOpened(CProject *prj)
 }
 
 
-void DocTreeView::projectClosed()
+void DocTreeWidget::projectClosed()
 {
     folder_project->setProject(0);
 }

@@ -1,3 +1,10 @@
+2000-06-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Turned Component into KDevComponent which inherits KParts::Plugin
+	  Instead of multiple inheritance, the component and its visual
+	  representation (aka widget ;-) are now separated.
+	* Turned doc tree view into a plugin. This doesn't really
+	  work yet, but serves as a nice proof of concept :-)
+
 2000-06-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Made a new shared library libkdevelop with (currently)
 	  CToolClass and CProject

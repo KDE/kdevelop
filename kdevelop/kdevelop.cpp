@@ -24,7 +24,9 @@
 #include <kiconloader.h>
 #include <kstddirs.h>
 #include <klibloader.h>
+#include <ktrader.h>
 
+#include "lib/kdevcomponent.h"
 #include "kdevelop.h"
 #include "kdevelopfactory.h"
 
@@ -33,6 +35,13 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
+
+  m_mainwidget = createDockWidget(QString("main"), BarIcon("filenew"));
+  m_mainwidget->setWidget(new QWidget(this, "mainwidget"));
+  setView(m_mainwidget);
+  setMainDockWidget(m_mainwidget);
+  
+  initComponents();
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
@@ -739,6 +748,36 @@ void KDevelop::initHelp(){
   m_paHelpAboutKDE->setShortText( i18n("Information about the KDE Project") );
 //  m_paHelpAboutKDE->setWhatsThis(  );
 
+}
+
+
+void KDevelop::initComponents()
+{
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
+    KTrader::OfferList::Iterator it;
+    if (offers.isEmpty())
+        qDebug("No KDevelop components");
+    for (it = offers.begin(); it != offers.end(); ++it) {
+        QVariant prop = (*it)->property("X-KDevelop-ComponentType");
+
+        if (prop.isValid() && prop.toString() == "SelectView") {
+            qDebug("Found SelectView %s", (*it)->name().latin1());
+            KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+            QObject *obj = factory->create(0, (*it)->name().latin1(), "KParts::Plugin");
+
+            if (!obj->inherits("KDevComponent")) {
+                qDebug("Component does not inherit KDevComponent");
+                continue;
+            }
+            KDevComponent *comp = (KDevComponent*) obj;
+            
+            KDockWidget *wid = createDockWidget((*it)->name(), BarIcon((*it)->icon())
+                                                , 0, (*it)->comment(), "");
+            wid->setWidget(comp->widget());
+            wid->setToolTipString((*it)->comment());
+            wid->manualDock(m_mainwidget, KDockWidget::DockLeft);
+        }
+    }       
 }
 
 

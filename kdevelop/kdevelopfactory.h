@@ -26,8 +26,9 @@
 
 class KDevelopFactory {
 public: 
-	KDevelopFactory();
-	virtual ~KDevelopFactory();
+  KDevelopFactory();
+  virtual ~KDevelopFactory();
+    
   /** provides the about data for KDevelop */
   static const KAboutData* aboutData();
 

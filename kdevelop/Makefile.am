@@ -1,17 +1,3 @@
-
-# this 10 paths are KDE specific. Use them:
-# kde_htmldir       Where your docs should go to. (contains lang subdirs)
-# kde_appsdir       Where your application file (.desktop) should go to. 
-# kde_icondir       Where your icon should go to.
-# kde_minidir       Where your mini icon should go to.
-# kde_datadir       Where you install application data. (Use a subdir)
-# kde_locale        Where translation files should go to.(contains lang subdirs)
-# kde_cgidir        Where cgi-bin executables should go to.
-# kde_confdir       Where config files should go to.
-# kde_mimedir       Where mimetypes should go to.
-# kde_toolbardir    Where general toolbar icons should go to.
-# kde_wallpaperdir  Where general wallpapers should go to.
-
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
@@ -53,6 +39,9 @@ rc_DATA = kdevelopui.rc
 
 mimedir   = $(kde_mimedir)/application
 mime_DATA = x-kdevelop-project.desktop
+
+servicetypedir = $(kde_servicetypesdir)
+servicetype_DATA = kdevelopcomponent.desktop
 
 messages:
 	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot

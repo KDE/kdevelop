@@ -6,11 +6,11 @@ INCLUDES = $(all_includes)
 
 lib_LTLIBRARIES = libkdevelop.la
 libkdevelop_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0 
-libkdevelop_la_LIBADD = $(LIB_KDEUI)
+libkdevelop_la_LIBADD = $(LIB_KPARTS)
 
-libkdevelop_la_SOURCES = ctoolclass.cpp cproject.cpp
+libkdevelop_la_SOURCES = ctoolclass.cpp cproject.cpp kdevcomponent.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
-kdevelopinclude_HEADERS = ctoolclass.h cproject.h 
+kdevelopinclude_HEADERS = ctoolclass.h cproject.h kdevcomponent.h
 
 METASOURCES = AUTO

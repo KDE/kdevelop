@@ -43,6 +43,8 @@ class KDevelop : public KParts::DockMainWindow
   /** initializes the help messages (whats this and
 statusbar help) on the KActions */
   void initHelp();
+  /** loads the components */
+  void initComponents();
   // File Actions
   KAction* m_paFileNew;
   KAction* m_paFileOpen;
@@ -149,6 +151,7 @@ statusbar help) on the KActions */
   KAction* m_paHelpReportBug;
   KAction* m_paHelpAboutApp;
   KAction* m_paHelpAboutKDE;
+  KDockWidget *m_mainwidget;
 
 private slots:
   void slotFilePrint();
