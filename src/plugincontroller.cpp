@@ -12,6 +12,7 @@
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
 
+#include "kdevpart.h"
 #include "kdevapi.h"
 #include "kdevfactory.h"
 #include "kdevplugin.h"
@@ -26,6 +27,28 @@
 
 #include "plugincontroller.h"
 
+// a separate method in this anonymous namespace to avoid having it all
+// inline in plugincontroller.h
+namespace
+{
+  template <class ComponentType>
+  ComponentType *loadDefaultPart( const QString &serviceType )
+  {
+    KTrader::OfferList offers = KTrader::self()->query( serviceType, QString::null );
+    KTrader::OfferList::ConstIterator serviceIt = offers.begin();
+    for ( ; serviceIt != offers.end(); ++serviceIt ) {
+      KService::Ptr service = *serviceIt;
+
+      ComponentType *part = KParts::ComponentFactory
+        ::createInstanceFromService< ComponentType >( service, API::getInstance(), 0,
+                                                      PluginController::argumentsFromService( service ) );
+      
+      if ( part )
+        return part;
+    }
+    return 0;
+  }
+};
 
 PluginController *PluginController::s_instance = 0;
 
@@ -54,31 +77,18 @@ PluginController::~PluginController()
 
 void PluginController::loadDefaultParts()
 {
-  KService *service;
-  KDevPart *part;
-
   // Make frontend
-  KTrader::OfferList makeFrontendOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/MakeFrontend"), QString::null);
-  if (makeFrontendOffers.isEmpty())
-    return;
-  service = *makeFrontendOffers.begin();
-  part = loadPlugin(service, "KDevMakeFrontend", Core::getInstance());
-  if (part)
-  {
-    API::getInstance()->setMakeFrontend(static_cast<KDevMakeFrontend*>(part));
-    integratePart(part);
+  KDevMakeFrontend *makeFrontend = loadDefaultPart< KDevMakeFrontend >( "KDevelop/MakeFrontend" );
+  if ( makeFrontend ) {
+    API::getInstance()->setMakeFrontend( makeFrontend );
+    integratePart( makeFrontend );
   }
 
   // App frontend
-  KTrader::OfferList appFrontendOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/AppFrontend"), QString::null);
-  if (appFrontendOffers.isEmpty())
-    return;
-  service = *appFrontendOffers.begin();
-  part = loadPlugin(service, "KDevAppFrontend", Core::getInstance());
-  if (part)
-  {
-    API::getInstance()->setAppFrontend(static_cast<KDevAppFrontend*>(part));
-    integratePart(part);
+  KDevAppFrontend *appFrontend = loadDefaultPart< KDevAppFrontend >( "KDevelop/AppFrontend" );
+  if ( appFrontend ) {
+    API::getInstance()->setAppFrontend( appFrontend );
+    integratePart( appFrontend );
   }
 }
 

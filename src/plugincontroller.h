@@ -25,6 +25,8 @@ public:
 
   static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
+  static QStringList argumentsFromService( const KService::Ptr &service );
+
 protected:
 
   PluginController();
@@ -36,8 +38,6 @@ private:
   void loadDefaultParts();
 
   void integratePart(KXMLGUIClient *part);
-
-  static QStringList argumentsFromService( const KService::Ptr &service );
 
   static PluginController *s_instance;
 
