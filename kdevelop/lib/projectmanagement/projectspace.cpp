@@ -563,8 +563,8 @@ QStringList ProjectSpace::allProjectNames(){
 }
 
 void ProjectSpace::dump(){
-  cerr << endl << "ProjectSpace Name: " << m_name;
-  cerr << endl << "absolute Path: " << m_path;
+  kdDebug(9030) << "ProjectSpace Name: " << m_name << endl;
+  kdDebug(9030) << "absolute Path: " << m_path << endl;
   Project* pProject=0;
   for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
     pProject->dump();
@@ -577,7 +577,7 @@ void ProjectSpace::fillActiveProjectPopupMenu(){
   if(pAction == 0){ // no action available
     return;
   }
-  //  cerr << endl << "fillActiveProjectPopupMenu()";
+  //  kdDebug(9030) << "fillActiveProjectPopupMenu()" << endl;
   QPopupMenu* pMenu = pAction->popupMenu();
   pMenu->clear();
   Project* pProject=0;
@@ -611,7 +611,7 @@ QDomDocument* ProjectSpace::writeGlobalDocument()
     pluginName = pData->appName();
   }
   else {
-    kdDebug(9030) << "ProjectSpace::writeXMLConfig() no aboutPlugin() found :-(";
+    kdDebug(9030) << "ProjectSpace::writeXMLConfig() no aboutPlugin() found :-(" << endl;
     return 0L;
   }
   ps.setAttribute("pluginName", pluginName); // the projectspacetype name
@@ -732,7 +732,7 @@ QList<KAction> ProjectSpace::kdevNodeActions(KDevNode* pNode){
 }
 
 void ProjectSpace::slotRenameFile(KDevNode* pNode){
-  kdDebug(9030) << "renameFile called: ";
+  kdDebug(9030) << "renameFile called: " << endl;
   pNode->show();
   if (!pNode->inherits("KDevFileNode")){
     kdDebug(9030) << "ProjectSpace::slotRenameFile() pNode doesn't inherit KDevFileNode" << endl;
@@ -779,7 +779,7 @@ void ProjectSpace::slotRenameFile(KDevNode* pNode){
   }
 }
 void ProjectSpace::slotDeleteFile(KDevNode* pNode){
-  kdDebug(9030) << "deleteFile called: ";
+  kdDebug(9030) << "deleteFile called: " << endl;
   pNode->show();
   if (!pNode->inherits("KDevFileNode")){
     kdDebug(9030) << "ProjectSpace::slotDeleteFile() pNode doesn't inherit KDevFileNode" << endl;
@@ -807,7 +807,7 @@ void ProjectSpace::slotDeleteFile(KDevNode* pNode){
   
 }
 void ProjectSpace::slotRemoveFileFromProject(KDevNode* pNode){
-  kdDebug(9030) << "removeFileFromProject called:";
+  kdDebug(9030) << "removeFileFromProject called:" << endl;
   pNode->show();
   if (!pNode->inherits("KDevFileNode")){
     kdDebug(9030) << "ProjectSpace::slotRemoveFileFromProject() pNode doesn't inherit KDevFileNode" << endl;
@@ -833,7 +833,7 @@ void ProjectSpace::slotRemoveFileFromProject(KDevNode* pNode){
   
 }
 void ProjectSpace::slotMoveFileTo(KDevNode* pNode){
-  kdDebug(9030) << "slotMoveFileTo called:";
+  kdDebug(9030) << "slotMoveFileTo called:" << endl;
   pNode->show();
   if (!pNode->inherits("KDevNode")){
     kdDebug(9030) << "ProjectSpace::slotMoveFileTo() pNode doesn't inherit KDevFileNode" << endl;
@@ -871,7 +871,7 @@ void ProjectSpace::slotMoveFileTo(KDevNode* pNode){
   emit sigAddedFileToProject(pNewFileNode); // inform the other components
 }
 void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
-  kdDebug(9030) << "slotCopyFileTo called:";
+  kdDebug(9030) << "slotCopyFileTo called:" << endl;
   pNode->show();
   if (!pNode->inherits("KDevFileNode")){
     kdDebug(9030) << "ProjectSpace::slotCopyFileTo() pNode doesn't inherit KDevFileNode" << endl;
@@ -898,7 +898,7 @@ void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
     pNewFile->setRelativeFile(relFile);
     pProject->addFile(pNewFile);
     pNewFileNode = new KDevFileNode(dir + "/" + info.fileName(),m_name,pProject->name());
-    kdDebug(9030) << "emit sigAddedFileToProject";
+    kdDebug(9030) << "emit sigAddedFileToProject" << endl;
   }
   
   KURL srcURL(absFileName);
