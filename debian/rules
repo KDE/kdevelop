@@ -14,7 +14,7 @@ build:
 
 clean:
 	dh_testdir
-	rm -f build-stamp install-stamp
+	rm -f build build-stamp install-stamp
 	dh_clean 
 	-make distclean
 	-rm -f `find . -name "*~"`
