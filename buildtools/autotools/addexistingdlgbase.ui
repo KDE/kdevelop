@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>743</width>
-            <height>716</height>
+            <width>592</width>
+            <height>445</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -259,9 +259,6 @@
                                 <property name="text">
                                     <string>A&amp;dd All</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Import by creating symbolic links (recommended)</string>
                                 </property>
@@ -272,9 +269,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Add Selected</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Import by copying (not recommended)</string>
@@ -369,9 +363,6 @@
                                 <property name="text">
                                     <string>R&amp;emove All</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes all added files.</string>
                                 </property>
@@ -382,9 +373,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove Selected</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes the selected files.</string>
