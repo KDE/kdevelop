@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Benutzerhandbuch zu KDevelop: General Configuration</TITLE>
+<TITLE>Benutzerhandbuch zu KDevelop: Grundsätzliche Konfiguration</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,129 +18,134 @@
  <A HREF="index-13.html">Zurück</A>
  <A HREF="index.html#toc14">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="General Configuration"></A> <A NAME="s14">14. General Configuration</A></H3>
+<H3><A NAME="Grundsätzliche Konfiguration"></A> <A NAME="s14">14. Grundsätzliche Konfiguration</A></H3>
 
-<P>This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
-found by the according entry in the Options-menu.
+<P>Diese Kapitel beschreibt, wie Sie Ihre individuelle Voreinstellungen für die Arbeitsweise von KDevelop einstellen können. Alle unten 
+beschriebenen Einstellungen finden Sie unter den entsprechenden Einträgen im Einstellungen Menü.
 <P>
-<H3><A NAME="Configuring the &quot;Tools&quot; Menu"></A> <A NAME="ss14.1">14.1 Configuring the "Tools" Menu</A>
+<H3><A NAME="Konfiguration des &quot;Werkzeuge&quot; Menüs"></A> <A NAME="ss14.1">14.1 Konfiguration des "Werkzeuge" Menüs</A>
 </H3>
 
-<P>As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
-your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
-"Tools"-menu. To change the tools-menu, select "Tools" from the "Options" menu. This dialog allows to specify the entry name,
-program and additional command line options you want to pass to the execution. To remove a program from the menu, select the entry
-name and choose "Delete". To add a program, specify the menuentry, where a &amp; is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
+<P>Da KDevelop in seinem Benutzer-Interface auch die Verwendung von Drittanbieterprogrammen unterstützt, haben Sie die Möglichkeit 
+jedes Programm Ihrer Wahl für die Programmentwicklung mit KDevelop zu konfigurieren. Dies wird erreicht, indem Sie ihr Programm 
+den bereits vordefinierten Programmen im "Werkzeuge" Menü hinzufügen. Zum Ändern des "Werkzeuge" Menüs, wählen Sie 
+"Werkzeuge..." aus dem Einstellungen Menü. Dieser Dialog ermöglicht Ihnen die Eingabe eines Titels, des Programmnamens und 
+zusätzlicher Parameter, die Sie dem Programm übergeben wollen. Wenn Sie ein Programm aus dem Menü entfernen wollen, selektieren 
+Sie den Titel und wählen dann "Löschen". Zum Hinzufügen eines Programms, geben Sie einen Titel ein, wobei der einem &amp; folgende 
+Buchstabe als Tastaturkürzel dient; Sie können die bereits definierten Einträge zum Vergleich heranziehen. Wählen Sie die ausführbare 
+Datei und evtl. Parameter. Dann drücken Sie "Hinzufügen" und der Eintrag wird dem Menü hinzugefügt. Nachdem Sie den 
+Konfigurationsdialog verlassen haben, aktualisiert sich das Werkzeuge Menü selbst, so daß die neue Konfiguration sofort und ohne 
+Neustart von KDevelop zur Verfügung steht.
 <P>
-<H3><A NAME="ss14.2">14.2 File Viewer Options</A>
+<H3><A NAME="ss14.2">14.2 Optionen der Dateiansicht</A>
 </H3>
 
-<P>The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
-better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
-context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
+<P>Die logische Dateiansicht (LFV) kann komplett über Kontextmenüs konfiguriert werden. Da die Intention die ist, Dateien logisch zu 
+trennen um eine bessere Übersicht über komplexe Projekte zu erhalten, ist eine der meistgenutzten Konfigurationmöglichkeiten das 
+Erzeugen von Dateigruppen. Diese Gruppen können gebildet werden, indem Sie das Kontextmenü, durch einen Klick mit der rechten 
+Maustaste über dem Projekt-Icon am Beginn des Baumes, öffnen. Das Menü bietet folgende Punkte an:
 <UL>
-<LI>New File: Opens the New File dialog. Equals to the menubar command "File"-"New"</LI>
-<LI>New Class: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"New Class"</LI>
-<LI>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for the project files that will be
-displayed in this group.</LI>
-<LI>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
-the filename is shown.</LI>
+<LI>Neue Datei: Öffnet den Neue Datei Dialog. Entspricht  dem Kommando "Datei"-"Neu"</LI>
+<LI>Neue Klasse: Öffnet den Klassengenerator um eine neue Klasse zu erzeugen. Entspricht dem Kommando 
+"Projekt"-"Neue Klasse"</LI>
+<LI>Neue Gruppe: Öffnet einen Dialog zu Erstellung einer neuen Gruppe. Dort können einen Gruppenname und einen Filter für die 
+Dateien, die in dieser Gruppe dargestellt werden, eingeben.</LI>
+<LI>Relativen Pfad anzeigen: Wenn ausgewählt, werden Dateien mit Ihrem Pfad, ausgehend vom Haupt-Projektverzeichnis, 
+angezeigt; sonst wird nur der Dateiname ausgegeben.</LI>
 </UL>
-<P>Over a group folder, the according context menu offers:
-<P>
+<P>Über einem Gruppenordner zeigt das entsprechende Kontextmenü:
 <UL>
-<LI>New Group: Opens the New Group dialog as in the context menu described above.</LI>
-<LI>Remove group: removes the group from the LFV.</LI>
-<LI>Properties: Opens the properties of the group. There, you can edit the file filters by a list of wildcards separated by commas.</LI>
+<LI>Neue Gruppe: Öffnet den neue Gruppe Dialog wie oben beschrieben.</LI>
+<LI>Gruppe entfernen: Entfernt die Gruppe aus dem LFV.</LI>
+<LI>Eigenschaften: Öffnet die Eigenschaften der Gruppe. Dort können Sie den Dateifilter editieren, indem Sie eine, durch Kommata 
+getrennte Liste von Wildcards eingeben.</LI>
 </UL>
-<P>
 <P>
 <H3><A NAME="KDevelop Setup"></A> <A NAME="ss14.3">14.3 KDevelop Setup</A>
 </H3>
 
-<P><B>Make-command:</B>
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
-<P><B>Autosave:</B>
-<P>If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
+<P><B>Make-Kommando:</B>
+<P>Der Allgemeine Optionen Dialog erlaubt es, die generellen Einstellungen für KDevelop vorzunehmen. Als erstes sollten Sie das auf 
+Ihrem System installierte Make-Kommando angeben. Wenn das angegebene Programm nicht existiert, erhalten Sie eine Warnung von 
+KDevelop, wenn Sie das nächste Mal Make ausführen wollen.
+<P><B>Automatisch speichern:</B>
+<P>Wenn Automatisch speichern angekreuzt ist, wird KDevelop in periodischen Zeitintervallen alle geänderten Dateien speichern. Das 
+Intervall kann auf 3, 5, 15 oder 30 Minuten eingestellt werden.
+<P><B>Automatisch wechseln:</B>
+<P>Wenn eingeschaltet, werden sich die KDevelop Fenster entsprechend der momentane Nutzung ein- und ausschalten, wenn Sie z.B. zu 
+einer Dokumentation im Hilfemenü wechseln, wird sich der Dokumentationsbrowser zusammen mit dem Dokumentationsbaum öffnen, 
+während sich das Ausgabefenster schließt.
+<P><B>Start:</B>
+<P>Sie können wählen, ob das Start-Logo von KDevelop während des Ladens angezeigt werden soll. Weiterhin können Sie das Öffnen 
+des letzten Projektes unterdrücken, sowie einstellen, ob Sie den Tip des Tage angezeigt bekommen.
 <P>
-<P><B>Autoswitch:</B>
-<P>If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
-window turned off.
-Startup:
-<P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<H3><A NAME="Changing Keyboard Shortcuts"></A> <A NAME="ss14.4">14.4 Changing Keyboard Shortcuts</A>
+<H3><A NAME="Ändern der Tastatur Kürzel"></A> <A NAME="ss14.4">14.4 Ändern der Tastatur Kürzel</A>
 </H3>
 
-<P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / STRG key etc.
+<P>Der Dialog "Tasten" läßt Sie die Tastenzuordnung in KDevelop einstellen. Beachten Sie, daß globale Tastenkürzel wie Datei öffnen oder 
+Drucken, im KDE Kontrollcenter eingestellt werden können. Eine Tastenfunktion kann eingestellt werden, indem Sie einen Menüeintrag 
+auswählen und dann den zuzuordnenden Wert wie ALT/STRG u.s.w. eingeben.
 <P>
-<H3><A NAME="Documentation"></A> <A NAME="ss14.5">14.5 Documentation</A>
+<H3><A NAME="ss14.5">14.5 Dokumentation</A>
 </H3>
 
 <P>
-<H4>Directories</H4>
+<H4>Verzeichnisse</H4>
 
-<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
-<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
-documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
-according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
-first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
-also setting the KDE Library Doc path automatically.
+<P>Damit der Dokumentationsbrowser korrekt arbeiten kann, braucht KDevelop einige Informationen bezüglich des Pfades, in dem die 
+HTML-Dokumentation auf Ihrem System installiert ist. Daher ist es notwendig sowohl den Pfad zu Ihre Qt Onlinedokumentation, als auch 
+den zu Ihrer KDE Bibliothekendokumentation anzugeben.
+<P>Normalerweise wird die Qt-Dokumentation im gleichen Verzeichnis wie Qt selber abgelegt; wenn sich z.B. Qt in /usr/local/qt befindet, 
+ist der einzugebende Pfad /usr/local/qt/html. Für die KDE-Dokumentation müssen Sie das Wurzelverzeichnis aller Dokumentationen 
+angeben, wobei angenommen wird, daß sich die KDE-Bibliothekendokumentation im selben Verzeichnis befindet. Beide Pfade können 
+durch Betätigen der entsprechenden Knöpfe selektiert werden, die eine Pfadauswahl anzeigen. Wenn sich keine Dokumentation der 
+KDE Bibliotheken auf Ihrem System befindet, sollten Sie zuerst im nächsten Dialog "KDE Dokumentation aktualisieren" wählen. Dadurch 
+wird die Dokumentation in einem Pfad Ihrer Wahl erzeugt und es wird automatisch der richtige Pfad in KDevelop gesetzt.
 <P>
-<H4>Options</H4>
+<H4>Optionen</H4>
 
 <P>
-<H4>Update KDE-Documentation</H4>
+<H4>KDE-Dokumentation aktualisieren</H4>
 
-<P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
-installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
-up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
-/home/rnolden/kdelibs-1.1/.
-<P>Then, you can choose three different installation modes, as:
+<P>Für Benutzer die keine aktuelle Dokumentation der KDE Bibliotheken haben, insbesondere die Dokumentation der auf Ihrem System 
+installierten Dateien, erzeugt dieser Dialog eine neue oder aktualisiert eine bestehende Dokumentation. Diese Funktion erfordert, daß 
+kdoc und qt2kdoc auf Ihrem System instaliert sind, welche Teil des kdesdk Paketes sind. Zuerst müssen Sie den Pfad zu den aktuellen 
+Quellen der KDE Bibliotheken setzen. Dies ist <EM>nicht</EM> der include Pfad von KDE ! Geben Sie nur den Pfad zu den Qelldateien ein, 
+wie /home/rnolden/kdelibs-1.1/.
+<P>Sie können dann zwischen drei verschieden Installationsmodi wählen:
 <P>
 <UL>
-<LI> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
-installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
-newly generated documentation into the recent path.</LI>
-<LI> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
-well as above, but gives you the choice to set up a new documentation place.</LI>
-<LI> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
-the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
-kdelibs version.</LI>
+<LI> Alte Dokumentation löschen und in aktuellem Doku-Verzeichnis installieren: Es wird davon ausgegangen, daß Sie bereits eine 
+Dokumentation installiert haben. Wenn Sie dies ankreuzen, wird die aktuelle Dokumentation gelöscht und mit der neu erzeugten 
+überschrieben.</LI>
+<LI> Alte Dokumentation löschen und in neues Doku-Verzeichnis installieren:  Wenn Sie dies ankreuzen, wird die aktuelle 
+Dokumentation wie oben gelöscht. Sie können jedoch im Eingabefeld einen Pfad wählen, in dem die neu erzeugte Dokumentation 
+installiert wird.</LI>
+<LI> Alte Dokumentation nicht ändern und in neues Doku-Verzeichnis installieren:  Hiermit wird Ihre aktuelle Dokumentation nicht 
+gelöscht und Sie können einen neuen Pfad für die Kdelibs-Dokumentation eingeben. Achtung: Bitte geben Sie nicht den Pfad an, wo 
+Ihre jetzige Dokumentation installiert ist - dadurch könnten alte und neue Dateien vermischt werden!</LI>
 </UL>
-<P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
-users who generate a new documentation from scratch.
-<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
-documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
-give browsing the most functionality.
+<P>Der "neue" Pfad zu den KDE Bibliotheksdokumentationen muß für die Optionen 2 und 3 angegeben werden. Es ist außerdem empfohlen 
+für Benutzer, die eine komplett neue Dokumentation generieren wollen.
+<P>Nachdem Sie OK gedrückt haben, wird KDevelop ein Unterverzeichnis "kdoc-reference" im Dokumentationspfad erzeugen, das die 
+kdoc Referenzdateien enthält. Als erstes wird die Qt Klassendokumentation indiziert, so daß eine Verbindung zur Dokumentation der 
+KDE Bibliotheken erstellt werden kann. Daher ist es wichtig, das Sie vorher den Pfad zur Qt Dokumentation eingegeben haben, damit 
+qt2kdoc die Dateien finden kann. Schließlich werden die KDE Bibliotheken indiziert und die Dokumentation wird mit den Querverweisen 
+erstellt, um so ein Höchstmaß an Funktionalität beim Browsen zur Verfügung zu stellen.
 <P>
-<H4>Create Search Database</H4>
+<H4>Suchdatenbank erstellen</H4>
 
-<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
-Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
-documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
-directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
-in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
-will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-<A HREF="index-6.html#Benutzung des Dokumentationsbrowsers">Benutzung des Dokumentationsbrowsers</A>.
-<P>
+<P>Der Dialog "Suchdatenbank erstellen", der über den "Erzeugen" Knopf erreicht werden kann, erlaubt es dem Programmierer eine 
+Suchdatenbank zu erstellen, in der interaktiv nach Schlüsselworten gesucht werden kann. Zum Erzeugen der Datenbank und zur 
+Benutzung der Suchfunktionalität muß entweder glimpse oder ht://Dig installiert sein. Voreingestellt ist sowohl die Indizierung der KDE 
+Bibliotheksdokumentation, als auch die der Qt Dokumentation, wobei davon ausgegangen wird, daß die Pfade korrekt eingestellt 
+wurden. Es können auch noch zusätzlich zu indizierende Verzeichnisse angegeben werden. Nach Eingabe eines zusätzlichen Pfades 
+muß die Hinzufügen Taste betätigt werden. Ein so gesetzter Pfad kann durch Auswählen des Eintrages und Betätigen der Entfernen 
+Taste wieder aus der Liste entfernt werden. Außerdem werden dem Benutzer drei verschiedene Indexgrößen zur Auswahl angeboten: 
+winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer werden auch die Indexdateien. Auf der anderen Seite wird 
+die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist höher, so daß wir eine mittlere Größe empfehlen. Zur 
+Verwendung der Suchfunktion, sehen Sie unter 
+<A HREF="index-6.html#Benutzung des Dokumentationsbrowsers">Benutzung des Dokumentationsbrowsers</A> nach.
 <P>
 <P ALIGN="RIGHT">
 
