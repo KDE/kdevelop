@@ -117,7 +117,10 @@ bool DocSearchDialog::performSearch()
     QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
     QDir d;
     if(indexdir.isEmpty() || !QFile::exists(indexdir + "/htdig.conf")) {
-        if(QFile::exists("/var/lib/kdevelop/helpindex/htdig.conf")) {
+        if(QFile::exists("/var/lib/kdevelop3/helpindex/htdig.conf")) {
+            indexdir = "/var/lib/kdevelop3/helpindex";
+        }
+        else if(QFile::exists("/var/lib/kdevelop/helpindex/htdig.conf")) {
             indexdir = "/var/lib/kdevelop/helpindex";
         } else {
             kdDebug() << "Can not find the htdig configuration file" << endl;
