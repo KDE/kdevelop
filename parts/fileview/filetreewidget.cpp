@@ -11,20 +11,13 @@
 
 #include "filetreewidget.h"
 
-#include <qapplication.h>
-#include <qdir.h>
-#include <qfileinfo.h>
 #include <qheader.h>
 #include <qpainter.h>
 #include <qregexp.h>
-#include <qvaluestack.h>
 #include <kdebug.h>
-#include <kdirwatch.h>
-#include <kiconloader.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kpopupmenu.h>
-#include <kmimetype.h>
+#include <kfileitem.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -33,127 +26,45 @@
 #include "domutil.h"
 #include "fileviewpart.h"
 
-
-class FileTreeItem : public QListViewItem
+class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
-    enum Type { File, Dir };
-    
-    FileTreeItem(FileTreeWidget *parent, Type type, const QString &nam);
-    FileTreeItem(FileTreeItem *parent, Type type, const QString &nam);
-    ~FileTreeItem();
-    
-    QString path();
-    Type type() const
-    { return typ; }
-    void setIsProjectFile(bool b)
-    { m_isProjectFile = b; }
-    bool isProjectFile() const
-    { return m_isProjectFile; }
+    MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
+       : KFileTreeViewItem( parent, item, branch )
+    {
+        hideOrShow();
+    }
+    MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
+       : KFileTreeViewItem( parent, item, branch )
+    {
+        hideOrShow();
+    }
 
-    virtual void setOpen(bool o);
     virtual void paintCell(QPainter *p, const QColorGroup &cg,
                            int column, int width, int alignment);
-                           
     void hideOrShow();
 
 private:
     FileTreeWidget* listView()
     { return static_cast<FileTreeWidget*>(QListViewItem::listView()); }
-
-    void init();
-    Type typ;
-    bool m_isProjectFile;
 };
 
-
-FileTreeItem::FileTreeItem(FileTreeWidget *parent, Type type, const QString &name)
-    : QListViewItem(parent, name), typ(type)
+void MyFileTreeViewItem::hideOrShow()
 {
-    init();
-}
-
-
-FileTreeItem::FileTreeItem(FileTreeItem *parent, Type type, const QString &name)
-    : QListViewItem(parent, name), typ(type)
-{
-    init();
-}
-
-
-void FileTreeItem::init()
-{
-   setPixmap(0, KMimeType::pixmapForURL( KURL(path()), 0, KIcon::Small ) );
-   if (typ == Dir) {
-        setExpandable(true);
-        kdDebug(9017) << "Watch dir " << path() << endl;
-        listView()->watchDir(path());
-    }
-}
-
-
-FileTreeItem::~FileTreeItem()
-{}
-
-
-QString FileTreeItem::path()
-{
-    QString name = text(0);
-    if (parent()) {
-        name.prepend("/");
-        name.prepend(static_cast<FileTreeItem*>(parent())->path());
-    }
-
-    return name;
-}
-
-
-void FileTreeItem::setOpen(bool o)
-{
-    if (o && !childCount()) {
-        QDir dir(path());
-        
-        const QFileInfoList *fileList = dir.entryInfoList();
-        if (fileList) {
-            QFileInfoListIterator it(*fileList);
-            
-            // TODO: Update when files added or removed.
-            QStringList projectFiles = listView()->m_part->project()->allFiles();
-            for (; it.current(); ++it) {
-                QFileInfo *fi = it.current();
-                FileTreeItem* item;
-                if (fi->fileName() == "." || fi->fileName() == ".." )
-                    continue;
-                if (fi->isDir())
-                    item = new FileTreeItem(this, Dir, fi->fileName());
-                else
-                    item = new FileTreeItem(this, File, fi->fileName());
-                item->setIsProjectFile( projectFiles.contains( item->path() ) );
-                item->hideOrShow();
-            }
-        }
-    }
-    QListViewItem::setOpen(o);
-}
-
-void FileTreeItem::hideOrShow()
-{
-    bool projectFile = listView()->m_showNonProjectFiles || isProjectFile();
-    bool matchesHidePattern = listView()->matchesHidePattern( text(0) );
+    setVisible( listView()->shouldBeShown( this ) );
     
-    setVisible( (type() == Dir || projectFile) && !matchesHidePattern );
-    
-    FileTreeItem* item = static_cast<FileTreeItem*>(firstChild());
+    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     while( item ) {
         item->hideOrShow();
-        item = static_cast<FileTreeItem*>(item->nextSibling());
+        item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
     }
 }
 
-void FileTreeItem::paintCell(QPainter *p, const QColorGroup &cg,
+void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
                              int column, int width, int alignment)
 {
-    if ( isProjectFile() && listView()->m_showNonProjectFiles ) {
+    if ( listView()->m_showNonProjectFiles &&
+         listView()->m_projectFiles.contains( path() ) ) {
         QFont font(p->font());
         font.setBold(true);
         p->setFont(font);
@@ -161,21 +72,36 @@ void FileTreeItem::paintCell(QPainter *p, const QColorGroup &cg,
     QListViewItem::paintCell(p, cg, column, width, alignment);
 }
 
+class MyFileTreeBranch : public KFileTreeBranch
+{
+public:
+   MyFileTreeBranch( KFileTreeView* view, const KURL& url, const QString& name, const QPixmap& pix )
+       : KFileTreeBranch( view, url, name, pix, false,
+           new MyFileTreeViewItem(
+               view, new KFileItem( url, "inode/directory", S_IFDIR  ), this ) )
+   {
+   }
+   
+   virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
+   {
+       if( !parent || !fileItem )
+           return 0;
+       return new MyFileTreeViewItem( parent, fileItem, this );
+   }
+};
 
 FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
-    : KListView(parent, name)
+    : KFileTreeView(parent, name)
 {
     setResizeMode(QListView::LastColumn);
     setSorting(0);
     header()->hide();
     addColumn(QString::null);
-
+    
+    setDragEnabled( true );
+    
     m_part = part;
     
-    m_dirWatch = new KDirWatch(this);
-    connect( m_dirWatch, SIGNAL(dirty(const QString&)),
-             this, SLOT(slotDirectoryDirty(const QString &)) );
-
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
@@ -193,7 +119,6 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     m_hidePatterns = QStringList::split(",", patterns);
 }
 
-
 FileTreeWidget::~FileTreeWidget()
 {
     QDomDocument &dom = *m_part->projectDom();
@@ -201,12 +126,21 @@ FileTreeWidget::~FileTreeWidget()
     DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", m_hidePatterns.join(",") );
 }
 
-
-void FileTreeWidget::watchDir(const QString &dirName)
+void FileTreeWidget::openDirectory( const QString& dirName )
 {
-    m_dirWatch->addDir(dirName);
+    m_projectFiles = m_part->project()->allFiles();
+    
+    KURL url;
+    url.setPath( dirName );
+    const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
+    addBranch( new MyFileTreeBranch( this, url, url.prettyURL(), pix ) )->root()->setOpen( true );
 }
 
+bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
+{
+    return( (m_showNonProjectFiles || item->isDir() || m_projectFiles.contains( item->path() ))
+             && !matchesHidePattern( item->text(0) ) );
+}
 
 bool FileTreeWidget::matchesHidePattern(const QString &fileName)
 {
@@ -222,60 +156,33 @@ bool FileTreeWidget::matchesHidePattern(const QString &fileName)
 
 void FileTreeWidget::hideOrShow()
 {
-    FileTreeItem* item = static_cast<FileTreeItem*>(firstChild());
+    MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     if( !item )
       return;
     
     // Need to skip the root item.
-    item = static_cast<FileTreeItem*>(item->firstChild());
+    item = static_cast<MyFileTreeViewItem*>(item->firstChild());
     while( item ) {
         item->hideOrShow();
-        item = static_cast<FileTreeItem*>(item->nextSibling());
+        item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
     }
 }
 
-void FileTreeWidget::openDirectory(const QString &dirName)
-{
-    ( new FileTreeItem(this, FileTreeItem::Dir, dirName) )->setOpen(true);
-    hideOrShow();
-}
-
-
-void FileTreeWidget::slotDirectoryDirty(const QString &dirName)
-{
-    kdDebug(9017) << "Directory dirty " << dirName << endl;
-
-    QListViewItemIterator it(this);
-    for (; it.current(); ++it) {
-        FileTreeItem *ftitem = static_cast<FileTreeItem*>(it.current());
-        if (ftitem->path() == dirName) {
-            bool wasOpen = ftitem->isOpen();
-            while (ftitem->firstChild())
-                delete ftitem->firstChild();
-            ftitem->setOpen( wasOpen );
-        }
-    }
-
-    hideOrShow();
-}
-
-
-void FileTreeWidget::slotItemExecuted(QListViewItem *item)
+void FileTreeWidget::slotItemExecuted( QListViewItem* item )
 {
     if (!item)
         return;
-    FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
+    
+    KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
 
-    // Is it a group item?
-    if (ftitem->type() != FileTreeItem::File)
+    if( ftitem->isDir() )
         return;
 
-    m_part->partController()->editDocument(QString("file://") + ftitem->path());
-    m_part->topLevel()->lowerView(this);
+    m_part->partController()->editDocument( ftitem->url() );
+    m_part->topLevel()->lowerView( this );
 }
 
-
-void FileTreeWidget::slotContextMenu(KListView*, QListViewItem* item, const QPoint &p)
+void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPoint &p )
 {
     KPopupMenu popup(i18n("File Tree"), this);
     
@@ -284,14 +191,13 @@ void FileTreeWidget::slotContextMenu(KListView*, QListViewItem* item, const QPoi
     popup.setItemChecked(id, m_showNonProjectFiles);
     
     if( item != 0 ) {
-      FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
-      FileContext context(ftitem->path(), ftitem->type() == FileTreeItem::Dir);
+      KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
+      FileContext context( ftitem->path(), ftitem->isDir() );
       m_part->core()->fillContextMenu(&popup, &context);
     }
     
     popup.exec(p);
 }
-
 
 void FileTreeWidget::slotToggleShowNonProjectFiles()
 {

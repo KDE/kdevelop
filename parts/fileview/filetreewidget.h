@@ -13,30 +13,26 @@
 #define _FILETREEWIDGET_H_
 
 #include <qstringlist.h>
-#include <klistview.h>
+#include <kfiletreeview.h>
 
 class FileViewPart;
-class KDirWatch;
 
-
-class FileTreeWidget : public KListView
+class FileTreeWidget : public KFileTreeView
 {
     Q_OBJECT
 
-    friend class FileTreeItem;
+    friend class MyFileTreeViewItem;
     
 public:
     FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
     ~FileTreeWidget();
-
     void openDirectory(const QString &dirName);
-    void watchDir(const QString &dirName);
-
+    bool shouldBeShown( KFileTreeViewItem* item );
+    
 public slots:
     void hideOrShow();
     
 private slots:
-    void slotDirectoryDirty(const QString &dirName);
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotToggleShowNonProjectFiles();
@@ -45,8 +41,8 @@ private:
     bool matchesHidePattern(const QString &fileName);
     
     FileViewPart *m_part;
-    KDirWatch *m_dirWatch;
     QStringList m_hidePatterns;
+    QStringList m_projectFiles;
     bool m_showNonProjectFiles;
 };
 
