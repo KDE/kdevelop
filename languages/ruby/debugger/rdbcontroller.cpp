@@ -401,7 +401,7 @@ void RDBController::parseProgramLocation(char *buf)
 	int sourceLine = 0;
 	
     //  "1: a = 1"
-    QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
+    QRegExp display_re("^(\\d+):\\s(.*)$");
 	
     //  "/opt/qt/src/widgets/qlistview.rb:1558:puts 'hello world'"
     QRegExp sourcepos_re("^([^:]+):(\\d+):(.*)$");
