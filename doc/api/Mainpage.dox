@@ -59,6 +59,9 @@ There is also \ref FutureTasks (doc/api/FutureTasks.dox file). Put all ideas for
   - \ref FAQ
   - \ref deprecated
 
+\section misc_libs Miscellaneous libraries included in KDevelop
+  - \ref PropEditor
+
 \section howTobuildAPIlocalcopy How to build a local copy of this documentation
 
 This documentation is very large and changes with every cvs commit, therefore is not available for download.
