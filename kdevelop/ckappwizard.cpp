@@ -916,7 +916,7 @@ void CKAppWizard::slotProcessExited() {
   }
   TFileInfo fileInfo;
   fileInfo.rel_name = "AUTHORS";
-  fileInfo.type = "DATA";
+  fileInfo.type = DATA;
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
@@ -924,35 +924,35 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject ("AUTHORS",fileInfo);
     
     fileInfo.rel_name = "COPYING";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("COPYING",fileInfo);
     
     fileInfo.rel_name = "ChangeLog";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("ChangeLog",fileInfo);
     
     fileInfo.rel_name = "INSTALL";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("INSTALL",fileInfo);
     
     fileInfo.rel_name = "README";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject ("README",fileInfo);
     
     fileInfo.rel_name = "TODO";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
@@ -962,14 +962,14 @@ void CKAppWizard::slotProcessExited() {
 
   if (lsmfile->isChecked()) {
     fileInfo.rel_name = namelow + ".lsm";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + ".lsm",fileInfo);
   }
   fileInfo.rel_name = namelow + "/main.cpp";
-  fileInfo.type = "SOURCE";
+  fileInfo.type = CPP_SOURCE;
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
@@ -978,14 +978,14 @@ void CKAppWizard::slotProcessExited() {
   if (!(ta->isChecked())) {
     
     fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
-    fileInfo.type = "SOURCE";
+    fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/" + namelow + ".cpp",fileInfo);
     
     fileInfo.rel_name = namelow + "/" + namelow + ".h";
-    fileInfo.type = "HEADER";
+    fileInfo.type = CPP_HEADER;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
@@ -994,35 +994,35 @@ void CKAppWizard::slotProcessExited() {
   
   if (kna->isChecked() || qta->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
-    fileInfo.type = "SOURCE";
+    fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/" + namelow + "doc.cpp",fileInfo);
     
     fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
-    fileInfo.type = "HEADER";
+    fileInfo.type = CPP_HEADER;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/" + namelow + "doc.h",fileInfo);
    
     fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
-    fileInfo.type = "SOURCE";
+    fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/" + namelow + "view.cpp",fileInfo);
     
     fileInfo.rel_name = namelow + "/" + namelow + "view.h";
-    fileInfo.type = "HEADER";
+    fileInfo.type = CPP_HEADER;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
     project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
    
     fileInfo.rel_name = namelow + "/resource.h";
-    fileInfo.type = "HEADER";
+    fileInfo.type = CPP_HEADER;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
@@ -1032,7 +1032,7 @@ void CKAppWizard::slotProcessExited() {
   
   if (datalink->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
@@ -1041,7 +1041,7 @@ void CKAppWizard::slotProcessExited() {
   
   if (progicon->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
@@ -1050,7 +1050,7 @@ void CKAppWizard::slotProcessExited() {
 
   if (miniicon->isChecked()) {
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
     QString icon = namelow + ".xpm";
@@ -1060,7 +1060,7 @@ void CKAppWizard::slotProcessExited() {
   
   if (userdoc->isChecked()) {
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;
@@ -1073,7 +1073,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);
 
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;
@@ -1086,7 +1086,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-2.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;
@@ -1099,7 +1099,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-3.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;
@@ -1112,7 +1112,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-4.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) { 
       fileInfo.install = true;
@@ -1125,7 +1125,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-5.html",fileInfo);
   
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;
@@ -1138,7 +1138,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/docs/en/index-6.html",fileInfo);
     
     fileInfo.rel_name = namelow + "/docs/en/index.html";
-    fileInfo.type = "DATA";
+    fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(ta->isChecked())) {
       fileInfo.install = true;

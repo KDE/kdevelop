@@ -112,7 +112,7 @@ void CKDevelop::slotFileClose(){
   }
   // add the next edit to the location
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    if ( getTabLocation(actual_info->filename) == getTabLocation(edit_widget->getName())){ // found
+    if ( CProject::getType( actual_info->filename ) == CProject::getType(edit_widget->getName())){ // found
       edit_widget->setText(actual_info->text);
       edit_widget->toggleModified(actual_info->modified);
       edit_widget->setName(actual_info->filename);
@@ -125,7 +125,7 @@ void CKDevelop::slotFileClose(){
   // if not found a successor create an new file
   actual_info = new TEditInfo;
   actual_info->modified=false;
-  if (getTabLocation(edit_widget->getName()) == 0) {// header
+  if (CProject::getType(edit_widget->getName()) == CPP_HEADER) {// header
     actual_info->id = menu_buffers->insertItem("Untitled.h",-2,0);
     actual_info->filename = "Untitled.h";
   }
@@ -158,7 +158,7 @@ void CKDevelop::slotFileSave(){
   else{
     edit_widget->doSave();
     // only refresh if header file changed
-    if(getTabLocation(filename)==HEADER){
+    if(CProject::getType(filename)==CPP_HEADER){
     slotViewRefresh();
     }
   }

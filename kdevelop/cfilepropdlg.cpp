@@ -297,7 +297,7 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   
   // save the old-one
   if(saved_info !=0 ){ //ok,there is a old one,it !=0
-    saved_info->type = type_combo->currentText();
+    saved_info->type = prj->getTypeFromString( type_combo->currentText() ); 
     saved_info->dist = incdist_check->isChecked();
     saved_info->install = install_check->isChecked();
     saved_info->install_location = install_loc_edit->text();
@@ -322,25 +322,25 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   text.setNum(file_info.size());
   size_e_label->setText(text);
 
-  if(info->type != "PO"){
+  if(info->type != PO){
     incdist_check->setEnabled(true);
     install_loc_edit->setEnabled(true);
     install_check->setEnabled(true);
     install_loc_label->setEnabled(true);
   }
-  if (info->type == "HEADER"){
+  if (info->type == CPP_HEADER){
     type_combo->setCurrentItem(0);
   }
-  if (info->type == "SOURCE"){
+  if (info->type == CPP_SOURCE){
     type_combo->setCurrentItem(1);
   }
-  if (info->type == "SCRIPT"){
+  if (info->type == SCRIPT){
     type_combo->setCurrentItem(2);
   }
-  if (info->type == "DATA"){
+  if (info->type == DATA){
     type_combo->setCurrentItem(3);
   }
-  if (info->type == "PO"){
+  if (info->type == PO){
     type_combo->setCurrentItem(4);
   }
 
@@ -382,7 +382,7 @@ void CFilePropDlg::slotInstallCheckToogled(bool on){
 }
 void CFilePropDlg::slotOk(){
     if(saved_info !=0 ){ //ok,there is a old one,it !=0
-	saved_info->type = type_combo->currentText();
+	saved_info->type = prj->getTypeFromString( type_combo->currentText() );
 	saved_info->dist = incdist_check->isChecked();
 	saved_info->install = install_check->isChecked();
 	saved_info->install_location = install_loc_edit->text();
