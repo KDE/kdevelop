@@ -294,11 +294,11 @@ void CKAppWizard::initPages(){
                                  "for window-manager popup menus.");
   QWhatsThis::add(miniicon, text);
                 
-  text = i18n("Add a KDE link file which is installed in\n"
+  text = i18n("Add a KDE desktop file which is installed in\n"
               "the KDE panel of the end user. By default, your application's\n"
-              "link file will be installed in the Applications menu. You can\n"
+              "dsktop file will be installed in the Applications menu. You can\n"
               "change this destination by editing the installation properties\n"
-              "for the link file later.");
+              "for the desktop file later.");
   QWhatsThis::add(datalink, text);
 
   text = i18n("Lets you select another icon for your program\n"

@@ -2,6 +2,8 @@
 	* app generation now generates .desktop files instead of
 	  .kdelnk files -> they do not seem to be installed with new
 	  app?  
+	* for app wizard dialog 2, moved up icon section - was displayed
+	  out of the dialog's bounds
 
 2K-01-18 Falk Brettschneider  <gigafalk@yahoo.com>
 	* bugfix in CKDevelop (concerning to floatable stuff)
@@ -2037,6 +2039,7 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
 
 
 
