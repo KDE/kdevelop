@@ -91,23 +91,43 @@ TEditInfo *CKDevelop::getInfoFromFilename(const QString &filename)
  *-----------------------------------------------------------------*/
 bool CKDevelop::isProjectDirty()
 {
-  TEditInfo *actual_info;
   bool isClean=true;
 
-  QFileInfo file_info(prj->getProjectDir() + prj->getSubDir() + prj->getBinPROGRAM());
+  QString prjDir=prj->getProjectDir();
+  QFileInfo bin_info(prjDir + prj->getSubDir() + prj->getBinPROGRAM());
+  QStrList listAllPrjFiles;
+  const char *filename;
 
-  if (!file_info.exists())
+  prj->getAllFiles(listAllPrjFiles);
+  if (!bin_info.exists())
     isClean=false;
 
   setInfoModified(header_widget->getName(), header_widget->isModified());
   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-  for(actual_info=edit_infos.first(); isClean && actual_info != 0;)
+
+  for(filename=listAllPrjFiles.first(); isClean && filename != 0; filename=listAllPrjFiles.next())
   {
-    TEditInfo *next_info=edit_infos.next();
-    if (actual_info->modified || file_info.lastModified()<actual_info->last_modified)
-      isClean=false;
-    actual_info=next_info;
+    // only check valid names and don't check files like *kdevprj or AUTHORS etc.
+    if (*filename!='\0' && CProject::getType(filename)!=DATA)
+    {
+      TEditInfo *actual_info=getInfoFromFilename(prjDir+filename);
+
+      if (actual_info)
+      {
+        // here we are... having the file already opened
+        if (actual_info->modified || bin_info.lastModified()<actual_info->last_modified)
+          isClean=false;
+      }
+      else
+      {
+        // here only the check if the file would be younger than the target file
+        //  i. e. the project binary
+        QFileInfo src_info(prjDir + filename);
+        if (bin_info.lastModified()<src_info.lastModified())
+          isClean=false;
+      }
+    }
   }
 
   return !isClean;
