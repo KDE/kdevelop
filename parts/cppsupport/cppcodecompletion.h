@@ -59,7 +59,7 @@ protected slots:
     void slotActivePartChanged(KParts::Part *part);
     void slotArgHintHided();
     void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
-    void slotTextChanged( int nLine, int nCol );
+    void slotTextChanged();
     void slotCursorPositionChanged( int iLine, int ncol );
     void slotFileParsed( const QString& fileName );
 

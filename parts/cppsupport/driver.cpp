@@ -46,6 +46,12 @@ void Driver::clear( const QString & fileName )
 {
     m_dependences.remove( fileName );
     m_problems.remove( fileName );
+    QMap<QString, Macro>::Iterator it = m_macros.begin();
+    while( it != m_macros.end() ){
+        Macro m = *it++;
+        if( m.fileName() == fileName )
+            m_macros.remove( m.name() );
+    }
 }
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep )
@@ -148,10 +154,10 @@ TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QS
 
     TranslationUnitAST :: Node translationUnit;
     parser.parseTranslationUnit( translationUnit );
-    
+
     m_currentFileName = QString::null;
     lexer = 0;
-    
+
     return translationUnit;
 }
 
@@ -172,7 +178,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
     lexer->addSkipWord( "__STL_DEFAULT_ALLOCATOR",  SkipWordAndArguments, "T" );
     lexer->addSkipWord( "__STL_MUTEX_INITIALIZER" );
-    
+
 	// antlr
     lexer->addSkipWord( "ANTLR_BEGIN_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );

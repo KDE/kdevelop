@@ -188,7 +188,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
              SLOT( projectConfigWidget( KDialogBase* ) ) );
 
-    m_bEnableCC = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/codecompletion/enablecc" );
+    m_bEnableCC = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/codecompletion/enablecc", true );
+
 
     QDomElement element = projectDom( )->documentElement( )
                           .namedItem( "cppsupportpart" ).toElement( )
@@ -315,10 +316,10 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
     if( !textHintIface )
 	return;
-        
+
     connect( view, SIGNAL(needTextHint(int,int,QString&)),
 	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
-    
+
     textHintIface->enableTextHints( 1000 );
 }
 
@@ -333,11 +334,11 @@ CppSupportPart::projectOpened( )
     connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
     connect( project(), SIGNAL(projectCompiled()),
-	     this, SLOT(slotProjectCompiled()) );	     
+	     this, SLOT(slotProjectCompiled()) );
 
     // code completion working class
     m_projectFileList = project()->allFiles();
-    
+
     m_timestamp.clear();
     m_pCompletion = new CppCodeCompletion( this, classStore() );
     m_projectClosed = false;
@@ -422,21 +423,21 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
     QStringList::ConstIterator it;
     QDir d( project()->projectDirectory() );
-    
+
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
 	QFileInfo fileInfo( d, *it );
 	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath() << endl;
-	
+
 	// changed - daniel
 	QString path = fileInfo.absFilePath();
 	maybeParse( path, classStore( ) );
-	
+
 	partController()->editDocument ( KURL ( path ) );
     }
-    
+
     m_projectFileList = project()->allFiles();
-    
+
     emit updatedSourceInfo();
 }
 
@@ -445,19 +446,19 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     QStringList::ConstIterator it;
     QDir d( project()->projectDirectory() );
-    
+
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
 	QFileInfo fileInfo( d, *it );
 	kdDebug(9007) << "removedFilesFromProject(): " << fileInfo.absFilePath() << endl;
-	
+
 	QString path = fileInfo.absFilePath();
 	classStore()->removeWithReferences(path);
 	m_backgroundParser->removeFile( path );
     }
-    
+
     m_projectFileList = project()->allFiles();
-    
+
     emit updatedSourceInfo();
 }
 
@@ -465,7 +466,7 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 void CppSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
-    
+
     if (m_projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
 	// changed - daniel
 	maybeParse( fileName, classStore( ) );
@@ -763,11 +764,11 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 
     // set the default indent : space
     QString indent = " ";
-   
+
     if (style == "UserDefined")
-    { 
-      bool ok = true; 
-      // set indention according to the configuration 
+    {
+      bool ok = true;
+      // set indention according to the configuration
       indent = ((fill == "Tabs") ? QString ("\t") : indent.fill (' ', fillSpaces.toInt (&ok)));
       // if the fillSpaces property is not a number -> reset indention to 2 spaces
       indent = (ok ? indent : QString ("  "));
@@ -775,14 +776,14 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
     else
     {
       indent = "\t";
-    } 
- 
+    }
+
     if( !pm->comment().isEmpty() ) {
         str += indent + "/**\n" + indent;
         str += pm->comment().replace( QRegExp("\n"), "\n" + indent );
         str += "\n" + indent + "*/\n";
     }
- 
+
     str += indent;
 
     if (pm->isVirtual())
@@ -925,7 +926,7 @@ CppSupportPart::parseProject( )
     //label->show( );
 
     mainWindow()->statusBar()->message( i18n("Updating...") );
-    
+
     kapp->processEvents( );
     kapp->setOverrideCursor( waitCursor );
 
@@ -974,24 +975,24 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 {
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
-    
+
     QFileInfo fileInfo( fileName );
     QDateTime t = fileInfo.lastModified();
-    
+
     if( !fileInfo.exists() ){
 	store->removeWithReferences( fileName );
 	return;
     }
-	
+
     QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
     if( it != m_timestamp.end() && *it == t ){
 	return;
     }
-    
+
     m_timestamp[ fileName ] = t;
 
     partController()->blockSignals( true );
-    
+
     m_backgroundParser->addFile( fileName );
     while( m_backgroundParser->filesInQueue() > 0 )
        m_backgroundParser->isEmpty().wait();
@@ -1004,7 +1005,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     }
     m_backgroundParser->unlock();
     m_backgroundParser->removeFile( fileName );
-    
+
     partController()->blockSignals( false );
 }
 
@@ -1120,7 +1121,7 @@ void CppSupportPart::slotMakeMember()
          m_backgroundParser->isEmpty().wait();
 
     QString text;
-	    
+
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
     if( translationUnit ){
@@ -1156,19 +1157,19 @@ void CppSupportPart::slotMakeMember()
 
 	    text += declaratorToString( declarator, scopeStr ).simplifyWhiteSpace() + "\n{\n}\n\n";
 	}
-	
+
 	m_backgroundParser->unlock();
 
 	QString implFile = findSourceFile();
-	
+
 	if( !text.isEmpty() && !implFile.isEmpty() ){
 	    partController()->editDocument( implFile );
-	    
+
 	    KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
 	    KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
-	    	    
+
 	    int line = editiface->numLines() - 1;
-	    	    
+
 	    if( editiface )
 		editiface->insertText( line, 0, text );
 	    if( cursoriface )
@@ -1220,26 +1221,26 @@ void CppSupportPart::slotProjectCompiled()
 QStringList CppSupportPart::modifiedFileList()
 {
     QStringList lst;
-    
+
     QStringList fileList = m_projectFileList;
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
 	QString fileName = *it;
 	++it;
-		
+
 	QFileInfo fileInfo( project()->projectDirectory(), fileName );
-	
+
 	if( !fileExtensions().contains(fileInfo.extension()) )
 	    continue;
-	
+
 	QDateTime t = fileInfo.lastModified();
 	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( fileInfo.absFilePath() );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;
-	
+
 	lst << fileName;
     }
-    
+
     return lst;
 }
 

@@ -38,7 +38,7 @@ public:
 	: m_text( source.m_text ), m_line( source.m_line ), m_column( source.m_column ) {}
     Problem( const QString& text, int line, int column )
 	: m_text( text ), m_line( line ), m_column( column ) {}
-    
+
     Problem& operator = ( const Problem& source )
     {
 	m_text = source.m_text;
@@ -46,7 +46,7 @@ public:
 	m_column = source.m_column;
 	return( *this );
     }
-    
+
     bool operator == ( const Problem& p ) const
     {
 	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column;
@@ -55,7 +55,7 @@ public:
     QString text() const { return m_text; }
     int line() const { return m_line; }
     int column() const { return m_column; }
-    
+
 private:
     QString m_text;
     int m_line;
@@ -74,65 +74,72 @@ class Macro
 {
 public:
     typedef QPair<QString,int> Argument;
-    
+
 public:
     Macro( bool hasArguments = false ): m_hasArguments( hasArguments ) {}
     Macro( const QString &n, const QString &b ) : m_name( n ), m_body( b ), m_hasArguments( false ) {}
-    
+
     Macro( const Macro& source )
 	: m_name( source.m_name),
+          m_fileName( source.m_fileName ),
 	  m_body( source.m_body ),
 	  m_hasArguments( source.m_hasArguments ),
 	  m_argumentList( source.m_argumentList ) {}
-    
+
     Macro& operator = ( const Macro& source )
     {
 	m_name = source.m_name;
 	m_body = source.m_body;
+        m_fileName = source.m_fileName;
 	m_hasArguments = source.m_hasArguments;
 	m_argumentList = source.m_argumentList;
 	return *this;
     }
-    
+
     bool operator == ( const Macro& source )
     {
 	return
 	    m_name == source.m_name &&
+            m_fileName == source.m_fileName &&
 	    m_body == source.m_body &&
 	    m_hasArguments == source.m_hasArguments &&
 	    m_argumentList == source.m_argumentList;
     }
-    
+
     QString name() const { return m_name; }
     void setName( const QString& name ) { m_name = name; }
-    
+
+    QString fileName() const { return m_fileName; }
+    void setFileName( const QString& fileName ) { m_fileName = fileName; }
+
     QString body() const { return m_body; }
     void setBody( const QString& body ) { m_body = body; }
-    
+
     bool hasArguments() const { return m_hasArguments; }
     void setHasArguments( bool hasArguments ) { m_hasArguments = hasArguments; }
     QValueList<Argument> argumentList() const { return m_argumentList; }
-    
+
     void clearArgumentList() { m_argumentList.clear(); m_hasArguments = false; }
     void addArgument( const Argument& argument ) { m_argumentList << argument; }
     void addArgumentList( const QValueList<Argument>& arguments ) { m_argumentList += arguments; }
-    
+
 private:
     QString m_name;
+    QString m_fileName;
     QString m_body;
     bool m_hasArguments;
     QValueList<Argument> m_argumentList;
 };
-    
+
 class Driver
 {
 public:
     Driver();
     virtual ~Driver();
-    
+
     virtual void reset();
     virtual void clear( const QString& fileName );
-    
+
     virtual void addDependence( const QString& fileName, const Dependence& dep );
     virtual void addMacro( const Macro& macro );
     virtual void addProblem( const QString& fileName, const Problem& problem );

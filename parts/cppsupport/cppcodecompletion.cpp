@@ -160,10 +160,10 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore )
 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
-    
+
     connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
-    
+
     connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
 }
 
@@ -199,13 +199,13 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
       return;
 
     m_currentFileName = QString::null;
-    
+
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
     if( !doc )
 	return;
-    
+
     m_currentFileName = doc->url().path();
-    
+
     // if the interface stuff fails we should disable codecompletion automatically
     m_pEditIface = dynamic_cast<KTextEditor::EditInterface*>(part);
     if( !m_pEditIface ){
@@ -224,7 +224,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
         kdDebug( 9007 ) << "Editor doesn't support the CompletionIface" << endl;
         return;
     }
-    
+
     // here we have to investigate :)
     if( m_pSupport && m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
@@ -232,8 +232,8 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged(int,int) ), this,
                  SLOT( slotCursorPositionChanged(int,int) ) );
 */
-	QObject::connect(part, SIGNAL(textChanged(int,int)),
-		this, SLOT(slotTextChanged(int, int)) );
+	QObject::connect(part, SIGNAL(textChanged()),
+		this, SLOT(slotTextChanged()) );
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
@@ -242,7 +242,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
                  SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
     }
-    
+
     kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
 }
 
@@ -250,7 +250,7 @@ void
 CppCodeCompletion::slotCursorPositionChanged( int nLine, int nCol )
 {
     kdDebug(9007) << "Cursor position changed" << endl;
-#if 0    
+#if 0
     if( !m_pSupport )
 	return;
 
@@ -300,14 +300,20 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 
 
 void
-CppCodeCompletion::slotTextChanged( int nLine, int nCol )
+CppCodeCompletion::slotTextChanged()
 {
     m_ccTimer->stop();
-    
+
+    if( !m_pCursorIface )
+        return;
+
+    unsigned int nLine, nCol;
+    m_pCursorIface->cursorPositionReal( &nLine, &nCol );
+
     QString strCurLine = m_pEditIface->textLine( nLine );
-    QString ch = strCurLine.mid( nCol, 1 );
-    QString ch2 = strCurLine.mid( nCol-1, 2 );
-    
+    QString ch = strCurLine.mid( nCol-1, 1 );
+    QString ch2 = strCurLine.mid( nCol-2, 2 );
+
     kdDebug(9007) << "ch = " << ch << " -- ch2 = " << ch2 << endl;
 
     if ( ch == "." || ch2 == "->" ){
@@ -1208,7 +1214,7 @@ QStringList CppCodeCompletion::getParentSignatureListForClass( ParsedClass* pCla
           // TODO: look in ClassStore for Namespace classes
           } */
     }
-    
+
     return retVal;
 }
 
@@ -1216,23 +1222,23 @@ QString CppCodeCompletion::getText( unsigned int startLine, unsigned int startCo
 				    unsigned int endLine, unsigned int endColumn )
 {
     QString text;
-    
+
     if( !m_pCursorIface )
 	return text;
-    
+
     for( unsigned int i=startLine; i<=endLine; ++i ){
 	QString textLine = m_pEditIface->textLine( i );
 	if( i == startLine )
 	    textLine = textLine.mid( startColumn );
 	else if( i == endLine )
 	    textLine = textLine.left( endColumn );
-	
+
 	text += textLine;
-	
+
 	if( i != endLine )
 	    text += "\n";
     }
- 
+
     return text;
 }
 
@@ -1240,10 +1246,10 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 {
     if( fileName != m_currentFileName || !m_pSupport )
 	return;
-    
+
     unsigned int line, column;
-    m_pCursorIface->cursorPositionReal( &line, &column );    
-    
+    m_pCursorIface->cursorPositionReal( &line, &column );
+
     kdDebug(9007) << "CppCodeCompletion::slotFileParsed()" << endl;
 
 #if 0

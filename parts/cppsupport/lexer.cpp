@@ -415,6 +415,7 @@ void Lexer::processDefine( Macro& m )
 	}
     }
 
+    m.setFileName( m_driver->currentFileName() );
     m.setBody( body );
     m_driver->addMacro( m );
 
