@@ -109,9 +109,19 @@ bool ProjectManager::loadProjectFile(const QString &fileName)
     return false;
   }
 
-  if (!m_info->m_document.setContent(&fin) || m_info->m_document.doctype().name() != "kdevelop")
+  int errorLine, errorCol;
+  QString errorMsg;
+  if (!m_info->m_document.setContent(&fin, &errorMsg, &errorLine, &errorCol))
   {
-    KMessageBox::sorry(TopLevel::getInstance()->main(), "This is not a valid project file.");
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("This is not a valid project file.\n"
+                                                             "XML error in line %1, column %2:\n%3")
+                       .arg(errorLine).arg(errorCol).arg(errorMsg));
+    fin.close();
+    return false;
+  }
+  if (m_info->m_document.doctype().name() != "kdevelop")
+  {
+    KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("This is not a valid project file."));
     fin.close();
     return false;
   }
