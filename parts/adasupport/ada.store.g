@@ -1,8 +1,6 @@
 /* $Id$
  * ANTLR Ada tree walker for building the Kdevelop class store
  * Copyright (C) 2003 Oliver Kellogg  <okellogg@users.sourceforge.net>
- *
- * Temporary Note:   THIS IS A PLACEHOLDER -- under construction.
  */
 
 header "pre_include_hpp" {
@@ -37,7 +35,7 @@ options {
 {
 private:
     QString m_fileName;
-    QStringList m_currentScope;
+    QPtrList<ParsedScopeContainer> m_scopeStack;
     ClassStore* m_store;
     QValueList<QStringList> m_imports;
     ParsedScopeContainer* m_currentContainer;
@@ -52,9 +50,10 @@ public:
     void setFileName (const QString& fileName) { m_fileName = fileName; }
 
     void init () {
-        m_currentScope.clear ();
+        m_scopeStack.clear ();
 	m_imports.clear ();
         m_currentContainer = m_store->globalScope ();
+	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
         m_store->removeWithReferences (m_fileName);
     }
@@ -62,8 +61,20 @@ public:
     void wipeout ()            { m_store->wipeout (); }
     void out ()                { m_store->out (); }
     void removeWithReferences (const QString& fileName) {
-        m_store->removeWithReferences (fileName);
+	m_store->removeWithReferences (fileName);
     }
+    ParsedScopeContainer * insertScopeContainer
+			  (ParsedScopeContainer* scope, const QString & name ) {
+	ParsedScopeContainer* ns = scope->getScopeByName( name );
+	if (!ns) {
+	    ns = new ParsedScopeContainer();
+	    ns->setName( name );
+	    scope->addScope( ns );
+	    m_store->addScope( ns );
+	}
+	return ns;
+    }
+
 }
 
 /*
@@ -117,27 +128,30 @@ library_item :
 		| #(GENERIC_PACKAGE_INSTANTIATION gpi:def_id
 		     {
 		       QString scopeName (qtext (gpi));
-		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
-		       /*
-		       psc->setDeclaredOnLine (startLine);
-		       psc->setDeclaredInFile (m_fileName);
-		       psc->setDeclarationEndsOnLine (endLine);
-		        */
+		       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+		       psc->setDeclaredOnLine( #gpi->getLine() );
+		       psc->setDeclaredInFile( m_fileName );
+		       // psc->setDeclarationEndsOnLine (endLine);
 		     }
 		     generic_inst
 		   )
 		| #(PACKAGE_SPECIFICATION ps:def_id
 		     {
 		       QString scopeName (qtext (ps));
-		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
-		       /*
-		       psc->setDeclaredOnLine (startLine);
-		       psc->setDeclaredInFile (m_fileName);
-		       psc->setDeclarationEndsOnLine (endLine);
-		        TBD: push new scope onto stack.
-		        */
+		       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+		       psc->setDeclaredOnLine( #ps->getLine() );
+		       psc->setDeclaredInFile( m_fileName );
+		       m_currentContainer = psc;
+		       m_scopeStack.append( psc );
 		     }
-		     pkg_spec_part
+		    pkg_spec_part
+		     {
+		       m_scopeStack.removeLast();
+		       if (m_scopeStack.count() == 0)
+		         m_scopeStack.append( m_store->globalScope() );
+		       m_currentContainer = m_scopeStack.last();
+		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+		     }
 		   )
 		| #(PACKAGE_RENAMING_DECLARATION prd:def_id
 		     {
@@ -176,19 +190,38 @@ modifiers : #(MODIFIERS
  */
 
 subprog_decl
-	: #(GENERIC_PROCEDURE_INSTANTIATION def_id generic_inst)
-	| #(PROCEDURE_RENAMING_DECLARATION  def_id formal_part_opt renames)
-	| #(PROCEDURE_DECLARATION           def_id formal_part_opt)
-	| #(PROCEDURE_BODY_STUB             def_id formal_part_opt)
-	| #(ABSTRACT_PROCEDURE_DECLARATION  def_id formal_part_opt)
+	: #(GENERIC_PROCEDURE_INSTANTIATION def_id[true] generic_inst)
+	| #(PROCEDURE_RENAMING_DECLARATION  def_id[true] formal_part_opt renames)
+	| #(PROCEDURE_DECLARATION           def_id[true] formal_part_opt)
+	| #(PROCEDURE_BODY_STUB             def_id[true] formal_part_opt)
+	| #(ABSTRACT_PROCEDURE_DECLARATION  def_id[true] formal_part_opt)
 	| #(GENERIC_FUNCTION_INSTANTIATION  def_designator generic_inst)
 	| #(FUNCTION_RENAMING_DECLARATION   def_designator function_tail renames)
 	| #(FUNCTION_DECLARATION            def_designator function_tail)
 	| #(FUNCTION_BODY_STUB              def_designator function_tail)
-	| #(ABSTRACT_FUNCTION_DECLARATION   def_id function_tail)
+	| #(ABSTRACT_FUNCTION_DECLARATION   def_id[true] function_tail)
 	;
 
-def_id : compound_name  // Can afford looseness because parser is tight.
+def_id [bool is_subprogram=false]
+	: cn:compound_name
+	  {
+	    if (is_subprogram) {
+	      ParsedMethod *method = new ParsedMethod;
+	      method->setName (qtext (cn));
+	      method->setDeclaredInFile ( m_fileName );
+	      method->setDeclaredOnLine ( #cn->getLine() );
+
+	      ParsedMethod *old = m_currentContainer->getMethod (method);
+	      if (old) {
+	          delete (method);
+	          method = old;
+	      } else {
+	          m_currentContainer->addMethod (method);
+	      }
+	    } else {
+	      // TBC: what about other declarations?
+	    }
+	  }
 	;
 
 generic_inst : compound_name ( value_s )?
@@ -268,7 +301,21 @@ extension_opt :  #(EXTENSION_OPT ( NuLL | value_s )? )
 	;
 
 def_designator
-	: compound_name
+	: cn:compound_name
+	  {
+	    ParsedMethod *method = new ParsedMethod;
+	    method->setName (qtext (cn));
+	    method->setDeclaredInFile ( m_fileName );
+	    method->setDeclaredOnLine ( #cn->getLine() );
+
+	    ParsedMethod *old = m_currentContainer->getMethod (method);
+	    if (old) {
+	        delete method;
+	        method = old;
+	    } else {
+	        m_currentContainer->addMethod (method);
+	    }
+	  }
 	| definable_operator_symbol
 	;
 
@@ -570,8 +617,24 @@ enumeration_aggregate : ( value )*
 
 generic_decl
 	: #(GENERIC_PACKAGE_RENAMING generic_formal_part_opt def_id renames)
-	| #(GENERIC_PACKAGE_DECLARATION generic_formal_part_opt def_id
-		pkg_spec_part)
+	| #(GENERIC_PACKAGE_DECLARATION generic_formal_part_opt gpd:def_id
+		     {
+		       QString scopeName (qtext (gpd));
+		       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+		       psc->setDeclaredOnLine( #gpd->getLine() );
+		       psc->setDeclaredInFile( m_fileName );
+		       m_currentContainer = psc;
+		       m_scopeStack.append( psc );
+		     }
+		pkg_spec_part
+		     {
+		       m_scopeStack.removeLast();
+		       if (m_scopeStack.count() == 0)
+		         m_scopeStack.append( m_store->globalScope() );
+		       m_currentContainer = m_scopeStack.last();
+		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+		     }
+		)
 	| #(GENERIC_PROCEDURE_RENAMING generic_formal_part_opt def_id
 		formal_part_opt renames)
 	| #(GENERIC_PROCEDURE_DECLARATION generic_formal_part_opt def_id
@@ -1013,7 +1076,10 @@ subprogram_body
 
 package_body
 	: #(PACKAGE_BODY id:def_id
-		{ m_currentScope.push_back (qtext (id)); }
+		/* TBD
+		{ QString name (qtext (id));
+		}
+		 */
 	    pkg_body_part)
 	;
 

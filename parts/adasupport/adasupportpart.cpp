@@ -27,7 +27,7 @@
 
 #include "AdaLexer.hpp"
 #include "AdaParser.hpp"
-// #include "AdaStoreWalker.hpp"
+#include "AdaStoreWalker.hpp"
 #include "AdaAST.hpp"
 
 
@@ -84,7 +84,8 @@ AdaSupportPart::~AdaSupportPart ()
 KDevLanguageSupport::Features AdaSupportPart::features ()
 {
     return KDevLanguageSupport::Features
-        (Classes | Structs | Functions | Variables | Namespaces | Declarations);
+        (  // TBD: Classes |
+	 Functions | Namespaces);
 }
 
 void AdaSupportPart::projectOpened ()
@@ -208,12 +209,10 @@ void AdaSupportPart::parse (const QString &fileName)
 
         if (errors == 0 && ast != antlr::nullAST) {
             kdDebug () << "-------------------> start StoreWalker" << endl;
-/* TBD
             AdaStoreWalker walker;
             walker.setFileName (fileName);
             walker.setClassStore (classStore ());
             walker.compilation_unit (ast);
- */
         }
     } catch (antlr::ANTLRException& ex) {
         kdDebug () << "*exception*: " << ex.toString ().c_str () << endl;

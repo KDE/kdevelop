@@ -33,7 +33,7 @@ class AdaStoreWalker : public antlr::TreeParser, public AdaStoreWalkerTokenTypes
 
 private:
     QString m_fileName;
-    QStringList m_currentScope;
+    QPtrList<ParsedScopeContainer> m_scopeStack;
     ClassStore* m_store;
     QValueList<QStringList> m_imports;
     ParsedScopeContainer* m_currentContainer;
@@ -48,9 +48,10 @@ public:
     void setFileName (const QString& fileName) { m_fileName = fileName; }
 
     void init () {
-        m_currentScope.clear ();
+        m_scopeStack.clear ();
 	m_imports.clear ();
         m_currentContainer = m_store->globalScope ();
+	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
         m_store->removeWithReferences (m_fileName);
     }
@@ -58,8 +59,20 @@ public:
     void wipeout ()            { m_store->wipeout (); }
     void out ()                { m_store->out (); }
     void removeWithReferences (const QString& fileName) {
-        m_store->removeWithReferences (fileName);
+	m_store->removeWithReferences (fileName);
     }
+    ParsedScopeContainer * insertScopeContainer
+			  (ParsedScopeContainer* scope, const QString & name ) {
+	ParsedScopeContainer* ns = scope->getScopeByName( name );
+	if (!ns) {
+	    ns = new ParsedScopeContainer();
+	    ns->setName( name );
+	    scope->addScope( ns );
+	    m_store->addScope( ns );
+	}
+	return ns;
+    }
+
 #line 34 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
@@ -83,7 +96,9 @@ public:
 	public: void use_clause(RefAdaAST _t);
 	public: void subtype_mark(RefAdaAST _t);
 	public: void subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t);
-	public: void def_id(RefAdaAST _t);
+	public: void def_id(RefAdaAST _t,
+		bool is_subprogram=false
+	);
 	public: void pkg_body_part(RefAdaAST _t);
 	public: void generic_inst(RefAdaAST _t);
 	public: void pkg_spec_part(RefAdaAST _t);
