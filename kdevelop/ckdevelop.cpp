@@ -803,6 +803,7 @@ void CKDevelop::slotBuildCompileFile(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -811,27 +812,52 @@ void CKDevelop::slotBuildCompileFile(){
   slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
   messages_widget->clear();
   process.clearArguments();
-  QFileInfo fileinfo(cpp_widget->getName());
-  QDir::setCurrent(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
-	QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-	process << flaglabel;
-	if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty()) {
-		if (!prj->getCXXFLAGS().isEmpty()) {
-			process << prj->getCXXFLAGS() << " ";
-		}
-		if (!prj->getAdditCXXFLAGS().isEmpty()) {
-			process << prj->getAdditCXXFLAGS();
-		}
-	}
-	process  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty()) {
-		process << prj->getLDFLAGS();
-	}
-  process  << "\" ";
-  process << make_cmd << fileinfo.baseName()+".o";
+  QFileInfo fileinfo(cpp_widget->getName());
+  QString actualDir=fileinfo.dirPath();
+  QDir::setCurrent(actualDir);
+
+  if (prj->getProjectType()!="normal_empty")
+  {
+   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+   process << flaglabel;
+   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+   {
+     if (!prj->getCXXFLAGS().isEmpty())
+     {
+       process << prj->getCXXFLAGS() << " ";
+     }
+     if (!prj->getAdditCXXFLAGS().isEmpty())
+     {
+       process << prj->getAdditCXXFLAGS();
+     }
+   }
+   process  << "\" " << "LDFLAGS=\" " ;
+   if (!prj->getLDFLAGS().isEmpty())
+   {
+     process << prj->getLDFLAGS();
+   }
+   process  << "\" ";
+   process << make_cmd << fileinfo.baseName()+".o";
+  }
+  else
+  {
+    QString makefile=actualDir+"/Makefile";
+    process << make_cmd;
+    if (!QFileInfo(makefile).exists())
+    {
+      makefile=prj->getProjectDir()+prj->getSubDir()+"Makefile";
+      if (!QFileInfo(makefile).exists())
+        makefile=prj->getProjectDir()+"Makefile";
+      if (QFileInfo(makefile).exists())
+        process << "-f" << makefile;
+    }
+    process << fileinfo.baseName()+".o";
+  }
+
+
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -1578,6 +1604,7 @@ void CKDevelop::slotBuildMake(){
     return;
   }
 
+  QString makefileDir=prj->getProjectDir() + prj->getSubDir();
   // Kill the debugger if it's running
   if (dbgController)
     slotDebugStop();
@@ -1591,21 +1618,31 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  process.clearArguments();
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  process << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  QDir::setCurrent(makefileDir);
+  if (prj->getProjectType()=="normal_empty" &&
+       !QFileInfo(makefileDir+"Makefile").exists())
   {
+     if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
+       QDir::setCurrent(prj->getProjectDir());
+  }
+
+  process.clearArguments();
+  if (prj->getProjectType()!="normal_empty")
+  {
+   QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+   process << flaglabel;
+   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+   {
             if (!prj->getCXXFLAGS().isEmpty())
                   process << prj->getCXXFLAGS() << " ";
             if (!prj->getAdditCXXFLAGS().isEmpty())
                   process << prj->getAdditCXXFLAGS();
-  }
-  process  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
+   }
+   process  << "\" " << "LDFLAGS=\" " ;
+   if (!prj->getLDFLAGS().isEmpty())
                 process << prj->getLDFLAGS();
-  process  << "\" ";
+   process  << "\" ";
+  }
 
   if(!prj->getMakeOptions().isEmpty()){
     process << make_cmd << prj->getMakeOptions();
