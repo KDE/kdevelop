@@ -1,4 +1,4 @@
 EXTRA_DIST = index-texi index-python index.xsl \
-	     toc-gsdoc toc-php toc-python
+	     toc-gsdoc toc-docbook toc-python
 
 
