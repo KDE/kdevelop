@@ -34,6 +34,7 @@
 #include "classparser.h"
 #include "addclassmethoddlg.h"
 #include "addclassattributedlg.h"
+#include "cppcodecompletion.h"
 
 
 CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const char *name)
@@ -51,6 +52,8 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
              this, SLOT(documentActivated(KEditor::Document*)) );
+
+    m_pCompletion = new CppCodeCompletion ( core()->editor() );
     
     KAction *action;
 
@@ -73,6 +76,7 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 CppSupportPart::~CppSupportPart()
 {
     delete m_parser;
+    delete m_pCompletion;
 }
 
 

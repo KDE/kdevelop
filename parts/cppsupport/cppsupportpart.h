@@ -22,6 +22,8 @@ class ParsedAttribute;
 class ClassStore;
 class Context;
 class CClassParser;
+class CppCodeCompletion;
+
 namespace KEditor { class Document; }
 
 class CppSupportPart : public KDevLanguageSupport
@@ -59,6 +61,7 @@ private:
     QString asHeaderCode(ParsedAttribute *pa);
 
     CClassParser *m_parser;
+    CppCodeCompletion* m_pCompletion;
     bool withcpp;
     QString popupstr;
 };

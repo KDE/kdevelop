@@ -4,6 +4,8 @@
 #include <qsizegrip.h>
 #include <qapp.h>
 
+#include "codecompletion_arghint.h"
+
 #include "codecompletion_iface_impl.h"
 #include <iostream.h>
 
@@ -40,6 +42,10 @@ CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document
 
   QFont font = m_edit->doc()->getTextFont(0,0);
   m_completionListBox->setFont(QFont(font.family(),font.pointSize()));
+
+  m_pArgHint = new KDevArgHint ( m_edit );
+
+  connect(edit, SIGNAL ( newCurPos() ), this, SLOT ( slotCursorPosChanged () ) );
 }
 
 void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset){
@@ -167,5 +173,32 @@ void CodeCompletionIfaceImpl::updateBox(bool newCoordinate){
   m_completionPopup->show();
 }
 
+void CodeCompletionIfaceImpl::showArgHint ( QValueList <QString> functionList, QString strWrapping, QString strDelimiter )
+{
+	m_pArgHint->removeFunctions();
+
+	m_pArgHint->setArgMarkInfos ( strWrapping, strDelimiter );
+
+	QValueList <QString>::Iterator it;
+
+	int nNum = 0;
+
+	for( it = functionList.begin(); it != functionList.end(); it++ )
+	{
+		cerr << "insert function text" << endl;
+
+		m_pArgHint->setFunctionText ( nNum, ( *it ) );
+
+		nNum++;
+	}
+
+	m_pArgHint->show();
+
+}
+
+void CodeCompletionIfaceImpl::slotCursorPosChanged()
+{
+	m_pArgHint->cursorPositionChanged ( document(), m_edit->currentLine(), m_edit->currentColumn() );
+}
 
 
