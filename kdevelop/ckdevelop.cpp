@@ -609,6 +609,17 @@ void CKDevelop::slotViewTStatusbar(){
   }
 }
 
+void CKDevelop::slotViewMdiViewTaskbar(){
+  if(view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR)){
+    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,false);
+    m_pTaskBar->hide();
+  }
+  else{
+    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,true);
+    m_pTaskBar->show();
+  }
+}
+
 void CKDevelop::slotViewRefresh(){
   refreshTrees();
 }
@@ -3695,6 +3706,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_VIEW_TOOLBAR,                          i18n("Enables/Disables the standard toolbar"))
     ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,                  i18n("Enables/Disables the browser toolbar"))
     ON_STATUS_MSG(ID_VIEW_STATUSBAR,                        i18n("Enables/Disables the statusbar"))
+    ON_STATUS_MSG(ID_VIEW_MDIVIEWTASKBAR,                   i18n("Enables/Disables the MDI-view taskbar"))
 
     ON_STATUS_MSG(ID_VIEW_REFRESH,                          i18n("Refreshes current view"))
     ON_STATUS_MSG(ID_VIEW_IN_KFM,                           i18n("Opens the current document in the KFM browser"))

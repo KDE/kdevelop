@@ -831,6 +831,8 @@ void CKDevelop::readOptions()
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
 	if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
+	if (config->readBoolEntry("show_mdi_view_taskbar",true))
+    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
 
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop
@@ -907,6 +909,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
+  config->writeEntry("show_mdi_view_taskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   // set the mode of the tab headers

@@ -86,7 +86,8 @@
 
 #define ID_VIEW_TOOLBAR             12040
 #define ID_VIEW_BROWSER_TOOLBAR     12050
-#define ID_VIEW_STATUSBAR           12060
+#define ID_VIEW_STATUSBAR           12055
+#define ID_VIEW_MDIVIEWTASKBAR      12057
 
 #define ID_VIEW_TAB_TEXT            12061
 #define ID_VIEW_TAB_ICONS           12062

@@ -1,3 +1,6 @@
+2001-04-08  F@lk Brettschneider <falk@kdevelop.org>
+    * added MDI-view taskbar entry to "View" menu, actually it should work but it doesn't yet. :-( That taskbar problem will tear me down 6 foot deep...
+
 2001-04-07  Christian Couder <christian@kdevelop.org>
     * Fix a bug due to the last modified attribute of the kwritedoc not
     initialised. When we create a kwritedoc, now we check if the file exists

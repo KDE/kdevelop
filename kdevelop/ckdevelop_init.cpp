@@ -277,14 +277,6 @@ void CKDevelop::initView()
   initMenuBar();
   initToolBar();
 
-  // the rest of the init for the kedits
-//FB//  edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-//FB//  edit1->modified=false;
-//FB//  edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-//FB//  edit2->modified=false;
-//FB//  edit_infos.append(edit1);
-//FB//  edit_infos.append(edit2);
-
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
 }
@@ -394,6 +386,9 @@ void CKDevelop::initKeyAccel()
 	
   accel->insertItem( i18n("Statusbar"), "Statusbar", (unsigned int) 0);
   accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR );
+
+  accel->insertItem( i18n("MDI-View-Taskbar"), "MDI-View-Taskbar", (unsigned int) 0);
+  accel->connectItem( "MDI-View-Taskbar", this, SLOT(slotViewMdiViewTaskbar()), true, ID_VIEW_MDIVIEWTASKBAR );
 
 
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
@@ -684,6 +679,8 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
   view_menu->insertItem(i18n("&Statusbar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
+  view_menu->insertItem(i18n("&MDI-View-Taskbar"),this,
+			   SLOT(slotViewMdiViewTaskbar()),0,ID_VIEW_MDIVIEWTASKBAR);
   view_menu->insertItem(i18n("Tab-Te&xt"), view_tab_menu,ID_VIEW_TABS);
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
@@ -1148,6 +1145,20 @@ void CKDevelop::initToolBar(){
 
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
+
+  // set the right default position for the MDI view taskbar
+  config->setGroup("CKDevelop Toolbar QextMdiTaskBar");
+  QString dockEdgeStr = config->readEntry("Position","Bottom");
+  QMainWindow::ToolBarDock taskBarEdge;
+  if (dockEdgeStr == "Bottom")
+    taskBarEdge = Bottom;
+  else if (dockEdgeStr == "Top")
+    taskBarEdge = Top;
+  else if (dockEdgeStr == "Left")
+    taskBarEdge = Left;
+  else if (dockEdgeStr == "Right")
+    taskBarEdge = Right;
+  moveToolBar( m_pTaskBar, taskBarEdge);
 }
 
 /*------------------------------------------ CKDevelop::initStatusBar()

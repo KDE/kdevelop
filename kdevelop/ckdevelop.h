@@ -337,6 +337,8 @@ public:
   void slotViewTBrowserToolbar();
   /** en-/disable the statusbar */
   void slotViewTStatusbar();
+  /** en-/disable the MDI-view taskbar */
+  void slotViewMdiViewTaskbar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
 
