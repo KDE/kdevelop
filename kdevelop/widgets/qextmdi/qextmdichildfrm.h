@@ -181,6 +181,14 @@ public:
    */
    inline MdiWindowState state(){ return m_state; };
    /**
+   * Returns the geometry that will be restored by calling restore().
+   */
+   QRect restoreGeometry() const;
+   /**
+   * Sets the geometry that will be restored by calling restore().
+   */
+   void  setRestoreGeometry(const QRect& newRestGeo);
+   /**
    * Forces updating the rects of the caption and so...
    * It may be useful when setting the mdiCaptionFont of the MdiManager
    */

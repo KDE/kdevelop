@@ -531,6 +531,20 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    }
 }
 
+//============== restoreGeometry ================//
+
+QRect QextMdiChildFrm::restoreGeometry() const
+{
+   return m_restoredRect;
+}
+
+//============== setRestoreGeometry ================//
+
+void QextMdiChildFrm::setRestoreGeometry(const QRect& newRestGeo)
+{
+   m_restoredRect = newRestGeo;
+}
+
 //============ setCaption ===============//
 
 void QextMdiChildFrm::setCaption(const QString& text)
@@ -649,7 +663,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 
    QSize mins = m_pClient->minimumSize();
    QSize maxs = m_pClient->maximumSize();
-   m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,TRUE);
+   m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,isVisible());
    m_pClient->setMinimumSize(mins.width(),mins.height());
    m_pClient->setMaximumSize(maxs.width(),maxs.height());
 
@@ -904,11 +918,6 @@ void QextMdiChildFrm::showSystemMenu()
 
 void QextMdiChildFrm::switchToMinimizeLayout()
 {
-   int clientMinWidth = m_pClient->minimumWidth();
-   if( clientMinWidth == 0)
-      clientMinWidth = 300;
-   m_pClient->hide();
-
    setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
    setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+QEXTMDI_MDI_CHILDFRM_SEPARATOR);
 
@@ -920,7 +929,7 @@ void QextMdiChildFrm::switchToMinimizeLayout()
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
 
    // resizing
-   resize( clientMinWidth+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER, minimumHeight());
+   resize( 300, minimumHeight());
 
    // positioning
    m_pManager->layoutMinimizedChildren();
