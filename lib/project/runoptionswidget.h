@@ -23,7 +23,7 @@ class RunOptionsWidget : public RunOptionsWidgetBase
     
 public:
     RunOptionsWidget( QDomDocument &dom, const QString &configGroup,
-                      QWidget *parent=0, const char *name=0 );
+                      const QString &projectDirectory, QWidget *parent=0, const char *name=0 );
     ~RunOptionsWidget();
 
 public slots:
@@ -32,9 +32,11 @@ public slots:
 private:
     virtual void addVarClicked();
     virtual void removeVarClicked();
+    virtual void browseMainProgram();
     
     QDomDocument &m_dom;
     QString m_configGroup;
+    QString m_projectDirectory;
 };
 
 #endif

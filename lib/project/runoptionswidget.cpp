@@ -23,10 +23,11 @@
 
 
 RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup,
-                                   QWidget *parent, const char *name)
+                                    const QString &projectDirectory,QWidget *parent, const char *name)
     : RunOptionsWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
+    m_projectDirectory = projectDirectory;
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
 
@@ -80,5 +81,14 @@ void RunOptionsWidget::removeVarClicked()
     delete listview->currentItem();
 }
 
+
+void RunOptionsWidget::browseMainProgram()
+{
+  mainprogram_edit->setText(QFileDialog::getOpenFileName(m_projectDirectory,
+                                                         i18n("All files (*)"),
+                                                         0,
+                                                         i18n("Browse main program"),
+                                                         i18n("Select main program executable.")));
+}
 
 #include "runoptionswidget.moc"

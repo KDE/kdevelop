@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>424</width>
-            <height>337</height>
+            <width>430</width>
+            <height>334</height>
         </rect>
     </property>
     <property name="caption">
@@ -38,7 +38,7 @@
             <property name="title">
                 <string>Run</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -48,20 +48,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>mainprogram_label_3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Main program (relative to project directory):</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>mainprogram_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>progargs_label_3</cstring>
                     </property>
@@ -69,12 +56,33 @@
                         <string>Program arguments:</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>progargs_edit</cstring>
                     </property>
                 </widget>
-            </vbox>
+                <widget class="QLineEdit" row="1" column="0">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>browseMainButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse...</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>mainprogram_label_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Main program (relative to project directory):</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
@@ -235,6 +243,7 @@
 </tabstops>
 <slots>
     <slot access="protected">addVarClicked()</slot>
+    <slot>browseMainProgram()</slot>
     <slot access="protected">removeVarClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
