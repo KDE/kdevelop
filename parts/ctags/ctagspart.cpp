@@ -11,6 +11,7 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "ctagsdlg.h"
