@@ -998,15 +998,6 @@ AC_DEFUN(AC_PATH_KDE,
   ], [ac_use_path_checking=""]
   )
 
-  AC_ARG_WITH(install-root, [  --with-install-root=DIR the root, where to install to [default=/]],
-  [
-  if test "$withval" = "no";
-    then kde_install_root="";
-    else kde_install_root=$withval;
-  fi
-  ], [kde_install_root=""]
-  )
-  
   if test -n "$kde_install_root"; then
      install_root="$kde_install_root"
   else

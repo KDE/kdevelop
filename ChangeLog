@@ -1,3 +1,7 @@
+1999-09-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed documentation bug #1917
+	* Removed --with-install-root option
+
 1999-09-14 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: empty ClassView caused segfault on
 	  on asking for ToolTip 
