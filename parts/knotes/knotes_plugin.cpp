@@ -57,8 +57,10 @@ KNotesPlugin::~KNotesPlugin()
 
 KParts::Part* KNotesPlugin::part()
 {
-    if (!m_part)
+    if (!m_part){
 	m_part = new KNotesPart(this, "notes");
+	(void) dcopClient();
+    }
 
     return m_part;
 }
