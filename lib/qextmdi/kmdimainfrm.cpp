@@ -123,6 +123,7 @@ public:
 	~KMdiMainFrmPrivate(){}
 	KMdiDockContainer* activeDockPriority[4];
 	KMdiFocusList *focusList;
+    int m_styleIDEAlMode;
 };
 
 //============ constructor ============//
@@ -519,7 +520,7 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
        if (pWnd->icon()) {
            pDW->setPixmap(*pWnd->icon());
        }
-       pDW->setTabPageLabel(tabCaption);
+       pDW->setTabPageLabel((tabCaption==0)?pWnd->caption():tabCaption);
        pDW->setToolTipString(tabToolTip);
        pWnd->show();
        dockManager->removeFromAutoCreateList(pDW);
@@ -1604,6 +1605,11 @@ void KMdiMainFrm::setupTabbedDocumentViewSpace() {
 
 }
 
+void KMdiMainFrm::setIDEAlModeStyle(int flags)
+{
+    d->m_styleIDEAlMode = flags; // see KMultiTabBar for the first 3 bits
+}
+
 /**
  * Docks all view windows (Windows-like)
  */
@@ -1724,7 +1730,7 @@ void KMdiMainFrm::setupToolViewsForIDEALMode()
 
 
     KMdiDockContainer *tmpDC;
-    m_leftContainer->setWidget(tmpDC=new KMdiDockContainer(m_leftContainer, this, KDockWidget::DockLeft));
+    m_leftContainer->setWidget(tmpDC=new KMdiDockContainer(m_leftContainer, this, KDockWidget::DockLeft, d->m_styleIDEAlMode));
     m_leftContainer->setEnableDocking(KDockWidget::DockLeft);
     m_leftContainer->manualDock(mainDock, KDockWidget::DockLeft,20);
     tmpDC->init();
@@ -1735,9 +1741,9 @@ void KMdiMainFrm::setupToolViewsForIDEALMode()
     connect(tmpDC,SIGNAL(activated(KMdiDockContainer*)),this,SLOT(setActiveToolDock(KMdiDockContainer*)));
     connect(tmpDC,SIGNAL(deactivated(KMdiDockContainer*)),this,SLOT(removeFromActiveDockList(KMdiDockContainer*)));
 
-    m_rightContainer->setWidget(tmpDC=new KMdiDockContainer(m_rightContainer, this, KDockWidget::DockRight));
+    m_rightContainer->setWidget(tmpDC=new KMdiDockContainer(m_rightContainer, this, KDockWidget::DockRight, d->m_styleIDEAlMode));
     m_rightContainer->setEnableDocking(KDockWidget::DockRight);
-    m_rightContainer->manualDock(mainDock, KDockWidget::DockRight,20);
+    m_rightContainer->manualDock(mainDock, KDockWidget::DockRight,80);
     tmpDC->init();
 #if 0    
     if (m_mdiGUIClient) connect (this,SIGNAL(toggleRight()),tmpDC,SLOT(toggle()));
@@ -1746,7 +1752,7 @@ void KMdiMainFrm::setupToolViewsForIDEALMode()
     connect(tmpDC,SIGNAL(activated(KMdiDockContainer*)),this,SLOT(setActiveToolDock(KMdiDockContainer*)));
     connect(tmpDC,SIGNAL(deactivated(KMdiDockContainer*)),this,SLOT(removeFromActiveDockList(KMdiDockContainer*)));
 
-    m_topContainer->setWidget(tmpDC=new KMdiDockContainer(m_topContainer, this, KDockWidget::DockTop));
+    m_topContainer->setWidget(tmpDC=new KMdiDockContainer(m_topContainer, this, KDockWidget::DockTop, d->m_styleIDEAlMode));
     m_topContainer->setEnableDocking(KDockWidget::DockTop);
     m_topContainer->manualDock(mainDock, KDockWidget::DockTop,20);
     tmpDC->init();
@@ -1757,9 +1763,9 @@ void KMdiMainFrm::setupToolViewsForIDEALMode()
     connect(tmpDC,SIGNAL(activated(KMdiDockContainer*)),this,SLOT(setActiveToolDock(KMdiDockContainer*)));
     connect(tmpDC,SIGNAL(deactivated(KMdiDockContainer*)),this,SLOT(removeFromActiveDockList(KMdiDockContainer*)));
 
-    m_bottomContainer->setWidget(tmpDC=new KMdiDockContainer(m_bottomContainer, this, KDockWidget::DockBottom));
+    m_bottomContainer->setWidget(tmpDC=new KMdiDockContainer(m_bottomContainer, this, KDockWidget::DockBottom, d->m_styleIDEAlMode));
     m_bottomContainer->setEnableDocking(KDockWidget::DockBottom);
-    m_bottomContainer->manualDock(mainDock, KDockWidget::DockBottom,20);
+    m_bottomContainer->manualDock(mainDock, KDockWidget::DockBottom,80);
     tmpDC->init();
 #if 0    
     if (m_mdiGUIClient) connect (this,SIGNAL(toggleBottom()),tmpDC,SLOT(toggle()));

@@ -63,7 +63,8 @@ private:
   bool moveMouse;
 };
 
-KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position):QWidget(parent),KMdiDockContainerBase()
+KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position, int flags)
+: QWidget(parent),KMdiDockContainerBase()
 {
   m_block=false;
   m_inserted=-1;
@@ -86,6 +87,7 @@ KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position
   m_tb=new KMultiTabBar(((position==KDockWidget::DockTop) || (position==KDockWidget::DockBottom))?
     KMultiTabBar::Horizontal:KMultiTabBar::Vertical,this);
 
+  m_tb->setStyle(KMultiTabBar::KMultiTabBarStyle(flags));
   m_tb->showActiveTabTexts(true);
 
   m_tb->setPosition((position==KDockWidget::DockLeft)?KMultiTabBar::Left:
@@ -191,23 +193,23 @@ void KMdiDockContainer::insertWidget (KDockWidget *dwdg, QPixmap pixmap, const Q
 
     kdDebug()<<"NAMENAMENAMENAME:===========================:"<<w->tabPageLabel()<<endl;
 
-    m_tb->setTab(tab,true);
+//FB    m_tb->setTab(tab,true);
 
     connect(m_tb->tab(tab),SIGNAL(clicked(int)),this,SLOT(tabClicked(int)));
 
     kdDebug()<<"KMdiDockContainer::insertWidget()"<<endl;
 
-    m_tb->setTab(oldtab,false);
+//FB    m_tb->setTab(oldtab,false);
 
     mTabCnt++;
     m_inserted=tab;
     int dummy=0;
-    tabClicked(tab);
+//FB    tabClicked(tab);
     KDockContainer::insertWidget(w,pixmap,text,dummy);
     itemNames.append(w->name());
   }
 
-  m_ws->raiseWidget(tab);
+//FB  m_ws->raiseWidget(tab);
 }
 
 void KMdiDockContainer::showWidget(KDockWidget *w) {

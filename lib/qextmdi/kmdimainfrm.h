@@ -532,8 +532,12 @@ public slots:
    /**
     * Docks all view windows. Toolviews use dockcontainers
     */
-    virtual void switchToIDEAlMode();
-    virtual void finishIDEAlMode(bool full=true);
+   virtual void switchToIDEAlMode();
+   virtual void finishIDEAlMode(bool full=true);
+   /**
+    * Sets the appearance of the IDEAl mode. See KMultiTabBar styles for the first 3 bits.
+    */
+   void setIDEAlModeStyle(int flags);
    /*
    * @return if the view taskbar should be shown if there are MDI views
    */

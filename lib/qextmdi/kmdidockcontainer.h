@@ -36,7 +36,7 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
   Q_OBJECT
 
   public:
-    KMdiDockContainer(QWidget *parent, QWidget *win, int position);
+    KMdiDockContainer(QWidget *parent, QWidget *win, int position, int flags);
     virtual ~KMdiDockContainer();
     KDockWidget *parentDockWidget();
 

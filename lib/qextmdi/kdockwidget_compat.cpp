@@ -2359,6 +2359,10 @@ void KDockManager::writeConfig(QDomElement &base)
                 list.append( ((KDockTabGroup*)obj->widget)->page( i )->name() );
             groupEl.appendChild(createListEntry(doc, "tabs", "tab", list));
             groupEl.appendChild(createNumberEntry(doc, "currentTab", ((KDockTabGroup*)obj->widget)->currentPageIndex()));
+            if (!obj->parent()) {
+                groupEl.appendChild(createStringEntry(doc, "dockBackTo", obj->formerBrotherDockWidget ? obj->formerBrotherDockWidget->name() : ""));
+                groupEl.appendChild(createNumberEntry(doc, "dockBackToPos", obj->formerDockPos));
+            }
         } else {
             //// Save an ordinary dock widget
             groupEl = doc.createElement("dock");
@@ -2532,7 +2536,7 @@ void KDockManager::readConfig(QDomElement &base)
     while (!childEl.isNull() ) {
         KDockWidget *obj = 0;
 
-        if (childEl.tagName() != "dock") {
+        if (childEl.tagName() != "dock" && childEl.tagName() != "tabGroup") {
             childEl = childEl.nextSibling().toElement();
             continue;            
         }
@@ -2545,6 +2549,7 @@ void KDockManager::readConfig(QDomElement &base)
                 obj->formerBrotherDockWidget = getDockWidgetFromName(name);
             }
             obj->formerDockPos = KDockWidget::DockPosition(numberEntry(childEl, "dockBackToPos"));
+            obj->updateHeader();
         }
         childEl = childEl.nextSibling().toElement();  
     }
@@ -2694,6 +2699,8 @@ void KDockManager::writeConfig( KConfig* c, QString group )
           c->writeEntry( cname+":parent", "___null___");
           c->writeEntry( cname+":geometry", QRect(obj->frameGeometry().topLeft(), obj->size()) );
           c->writeEntry( cname+":visible", obj->isVisible());
+          c->writeEntry( cname+":dockBackTo", obj->formerBrotherDockWidget ? obj->formerBrotherDockWidget->name() : "");
+          c->writeEntry( cname+":dockBackToPos", obj->formerDockPos);
         } else {
           c->writeEntry( cname+":parent", "yes");
         }
