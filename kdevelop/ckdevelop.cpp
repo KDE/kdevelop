@@ -431,12 +431,12 @@ void CKDevelop::slotViewGotoLine(){
 void CKDevelop::slotViewNextError(){
   TErrorMessageInfo info = error_parser->getNext();
   if(info.filename != ""){
-    messages_widget->setCursorPosition(info.makeoutputline,0);
+    messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
-    slotStatusMsg(messages_widget->textLine(info.makeoutputline));
+    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
   }
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -461,12 +461,12 @@ void CKDevelop::slotViewNextError(){
 void CKDevelop::slotViewPreviousError(){
   TErrorMessageInfo info = error_parser->getPrev();
   if(info.filename != ""){
-    messages_widget->setCursorPosition(info.makeoutputline,0);
+    messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
-    slotStatusMsg(messages_widget->textLine(info.makeoutputline));
+    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep

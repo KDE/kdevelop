@@ -447,7 +447,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   KQuickHelp::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
 
 	description_mledit = new QMultiLineEdit( w3, "description_mledit" );
-	description_mledit->setGeometry( 20, 40, 360, 130 );
+	description_mledit->setGeometry( 20, 30, 360, 130 );
 	description_mledit->setMinimumSize( 0, 0 );
 	description_mledit->setMaximumSize( 32767, 32767 );
 	description_mledit->setFocusPolicy( QWidget::StrongFocus );
@@ -460,7 +460,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 
 	QLabel* qtarch_description_label;
 	qtarch_description_label = new QLabel( w3, "description_label" );
-	qtarch_description_label->setGeometry( 20, 10, 360, 30 );
+	qtarch_description_label->setGeometry( 20, 00, 360, 30 );
 	qtarch_description_label->setMinimumSize( 0, 0 );
 	qtarch_description_label->setMaximumSize( 32767, 32767 );
 	qtarch_description_label->setFocusPolicy( QWidget::NoFocus );
