@@ -6,10 +6,11 @@
 -Jonas Nordin <jonas.nordin@syncom.se>
 -Pascal Krahmer <pascal@beast.de>
 -Bernd Gehrmann <bernd@kdevelop.org>
--Jörgen Olsson <jorgen@cenacle.net> 
+-Jörgen Olsson <jorgen@cenacle.net>
 -Stefan Bartel <bartel@rz.uni-potsdam.de>
 -Walter Tasin <tasin@kdevelop.org>
 -John Birch <jbb@kdevelop.org>
+-Falk Brettschneider <falk.brettschneider@gmx.de>
 
 ***Translations coordination***
 
@@ -37,7 +38,7 @@
 -Kaðan Kongar <kongar@doruk.net.tr>           - Turkish
 -Sunchange Lee <leesongchen@263.net>          - Simpl. Chinese (GB2312)
 
-***startlogo*** 
+***startlogo***
 KDevelop 1.0: Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>
 KDevelop 1.1: RKocher@t-online.de (Ralph Kocher)
 KDevelop 1.2: RKocher@t-online.de (Ralph Kocher)
@@ -56,7 +57,7 @@ KDevelop 1.2: RKocher@t-online.de (Ralph Kocher)
 -Stefan Mars <mars@lysator.liu.se>
 -Nikolay Liber <nikolay_liber@mail.ru>
 -Gordon Tyler <gtyler@iafrica.com>
--Huy Cuong Nguyen <huyc@iquebec.com> 
+-Huy Cuong Nguyen <huyc@iquebec.com>
 -John R. Zedlewski <zedlwski@princeton.edu>
 -Stephan Uhlmann <suhlmann@gmx.de>
 -Charles Egan cega@oklahoma.net
@@ -73,7 +74,6 @@ KDevelop 1.2: RKocher@t-online.de (Ralph Kocher)
 -Ulltveit-Moe <Nils.Ulltveit-Moe@hia.no>
 -Nich Hudson <nick@nthcliff.demon.co.uk>
 -R. Imura <imura@cs.titech.ac.jp>
--Falk Brettschneider <gigafalk@yahoo.com>
 -Ralf Funken <rfunken@kdevelop.de>
 -Jens Zurheide <zuzu@surf-callino.de>
 -Micha Bieber <micha@ani.de>
@@ -82,6 +82,7 @@ KDevelop 1.2: RKocher@t-online.de (Ralph Kocher)
 -Roland Krause <rokrau@yahoo.com>
 -Daniel Engelschalt<s2697@htw-dresden.de>
 -Harald Fernengel <harry@bnro.de>
+-Ravikiran Rajagopal <ravi@ee.eng.ohio-state.edu>
 
 ****Gnome Template Application****
 
