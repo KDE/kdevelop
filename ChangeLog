@@ -1,3 +1,7 @@
+2003-11-16 Mario Scalas <marioscalas@agilemovement.it>
+    * Version control color feedback for the file view (currently implemented 
+      by vcs/cvsservice plugin only).
+
 2003-11-13 Amilcar Lucas <a.lucas@tu-bs.de>
     * Readded a even cleaner kdevelop.kdevelop file.
     PLEASE do _not_ commit changes to this file.
