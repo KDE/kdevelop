@@ -219,37 +219,7 @@ void CKDevelop::init(){
   edit_infos.append(edit1);
   edit_infos.append(edit2);
 
-  /*
-  top_panner->deactivate();
-  view->deactivate();
-  s_tab_view->recreate(view,0,QPoint(0,0),true);
-  view->activate(s_tab_view,output_widget);
   
-  
-  view->deactivate();
-  s_tab_view->recreate(top_panner,0,QPoint(0,0),true);
-  header_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  cpp_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  browser_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  swallow_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  view->activate(top_panner,output_widget); 
-  
-  top_panner->deactivate();
-  view->deactivate();
-  s_tab_view->recreate(view,0,QPoint(0,0),true);
-  view->activate(s_tab_view,output_widget);
-
-  view->deactivate();
-  s_tab_view->recreate(top_panner,0,QPoint(0,0),true);
-  header_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  cpp_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  browser_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  swallow_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  view->activate(top_panner,output_widget); 
-  
-  */
 }
 void CKDevelop::initMenu(){
   // build a menubar
@@ -437,11 +407,13 @@ void CKDevelop::initMenu(){
   options_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this, 
 			   SLOT(slotOptionsRefresh()),0,ID_OPTIONS_REFRESH);
   options_menu->insertSeparator();
-  //  options_menu->insertItem(i18n("Toogle &Tree-View"),this, SLOT(slotOptionsTTreeView()),
-  //			   0,ID_OPTIONS_TREEVIEW);
-  //options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,config->readBoolEntry("show_tree_view"));
-  //options_menu->insertItem(i18n("Toogle &Output-View"),this, SLOT(slotOptionsTOutputView()));
-  //options_menu->insertSeparator();
+  options_menu->insertItem(i18n("Toogle &Tree-View"),this, SLOT(slotOptionsTTreeView()),
+ 			   CTRL+Key_T,ID_OPTIONS_TREEVIEW);
+  options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,config->readBoolEntry("show_tree_view"));
+
+  //  options_menu->insertItem(i18n("Toogle &Output-View"),this, SLOT(slotOptionsTOutputView()),CTRL+Key_O,ID_OPTIONS_OUTPUTVIEW);
+  //  options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,config->readBoolEntry("show_output_view"));
+  options_menu->insertSeparator();
   
   options_menu->insertItem(i18n("Toogle &Std-Toolbar"),this, 
 			   SLOT(slotOptionsTStdToolbar()),0,ID_OPTIONS_STD_TOOLBAR);

@@ -36,7 +36,7 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name) : KTreeList(parent,n
   file_pop->insertItem(i18n("New LFV-Group..."),this,SLOT(slotNewGroup()));
   file_pop->insertSeparator();
   file_pop->insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
-  file_pop->insertItem(i18n("Delete File"),this,SLOT(slotFileDelete()));
+  file_pop->insertItem(i18n("Delete File..."),this,SLOT(slotFileDelete()));
   file_pop->insertSeparator();
   file_pop->insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
   group_pop = new KPopupMenu();
@@ -232,12 +232,16 @@ void CLogFileView::slotFileRemove(){
   emit selectedFileRemove();
 }
 void CLogFileView::slotFileDelete(){
+
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+    return;
+  }
   QString name = getCurrentItem()->getText();
   name = project->getProjectDir() + name;
   KShellProcess* proc = new KShellProcess;
   QFileInfo info(name);
-  QString command = "mv " + name + " ~/Desktop/Trash/" + info.fileName();
-  cerr << "\n\n" << command << "\n\n";
+  QString command = "rm -f " + name;
+  //  cerr << "\n\n" << command << "\n\n";
   *proc << command;
   proc->start();
   

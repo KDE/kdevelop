@@ -2,7 +2,6 @@
                           ccreatedocdatabasedlg.cpp  -  description                              
                              -------------------                                         
 
-    version              :                                   
     begin                : Sat Jan 9 1999                                           
     copyright            : (C) 1999 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de
@@ -274,8 +273,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     return;
   }
   
-  QDir dir(QDir::home());
-  dir.mkdir(".kdevelop");
+  QDir dir(KApplication::localkdedir()+"/share/apps/");
+  dir.mkdir("kdevelop");
  
   QString kde_doc_dir = conf->readEntry("doc_kde");
   QString qt_doc_dir = conf->readEntry("doc_qt");
@@ -303,7 +302,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   }
   
   proc->clearArguments();
-  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ QDir::homeDirPath() + "/.kdevelop";
+  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop";
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   accept();
 

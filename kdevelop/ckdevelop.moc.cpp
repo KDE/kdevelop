@@ -1,7 +1,7 @@
 /****************************************************************************
 ** CKDevelop meta object code from reading C++ file 'ckdevelop.h'
 **
-** Created: Tue Jan 19 16:25:57 1999
+** Created: Sun Jan 24 13:09:26 1999
 **      by: The Qt Meta Object Compiler ($Revision$)
 **
 ** WARNING! All changes made in this file will be lost!

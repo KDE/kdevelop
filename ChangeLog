@@ -1,10 +1,17 @@
 
+1999-01-24  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* added save/restore cursorposition in the edit_widgets when switching a file
+	* added a warning info, when deleting a file from LFV
+	* implemented menu->options->ToogleTreeView, it flickers a little bit, but it works
+	* moved the working directory from $HOME/.kdevelop/ to $HOME/.kde./share/apps/kdevelop/ 
+	        TODO: fixes KAppwizard to work with the new dir
 
 1999-01-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-	* kdevelop/cclassview.cpp: removed memory leaks,and commit many bugfixes
+	* kdevelop/cclassview.cpp: removed memory leaks,and some other bugs
 	* little modification of the file-prop-dlg for more space in the treeview
-	* new new-file dlg,I think it is now a little bit better
+	* new new-file dlg,I think it is now a little bit better :-)
 
 1999-01-22  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
@@ -12,7 +19,7 @@
 
 1999-01-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-	* kdevelop/ckdevelop.cpp: added messageboxes if a program cound't found
+	* kdevelop/ckdevelop.cpp: added messageboxes, if a program cound't found
 	* kdevelop/cclassview.cpp : commit patches by Jost Schenck,many bug fixes
 
 1999-01-19  Sandy Meier  <smeier@rz.uni-potsdam.de>

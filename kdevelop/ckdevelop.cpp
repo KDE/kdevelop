@@ -285,8 +285,12 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("browser_file",history_list.current());
   cerr << "QUIT4";
   config->setGroup("View Configuration");
-  // config->writeEntry("show_tree_view",options_menu->isItemChecked(ID_OPTIONS_TREEVIEW));
-  // config->writeEntry("show_output_view",options_menu->isItemChecked(ID_OPTIONS_OUTPUTVIEW));
+
+  config->writeEntry("show_tree_view",options_menu->isItemChecked(ID_OPTIONS_TREEVIEW));
+  config->writeEntry("show_output_view",options_menu->isItemChecked(ID_OPTIONS_OUTPUTVIEW));
+  config->writeEntry("tree_view_pos",top_panner->separatorPos());
+  config->writeEntry("output_view_pos",view->separatorPos());
+
   config->writeEntry("show_std_toolbar",options_menu->isItemChecked(ID_OPTIONS_STD_TOOLBAR));
   config->writeEntry("show_browser_toolbar",options_menu->isItemChecked(ID_OPTIONS_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",options_menu->isItemChecked(ID_OPTIONS_STATUSBAR));
@@ -393,48 +397,30 @@ void CKDevelop::slotOptionsTStatusbar(){
   
 }
 void CKDevelop::slotOptionsTTreeView(){
-  /*
+
   if(options_menu->isItemChecked(ID_OPTIONS_TREEVIEW)){
     options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,false);
-    top_panner->deactivate();
-
-    view->recreate(this,0,QPoint(0,0),true);
-    
-    s_tab_view->recreate(view,0,QPoint(0,0),true);
-    top_panner->removeChild(s_tab_view);
-    top_panner->removeChild(t_tab_view);
-    view->removeChild(top_panner);
-
-    header_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    cpp_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    browser_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    swallow_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-
-    //output_widget->recreate(view,0,QPoint(0,0),true);
-    view->deactivate();
-    view->activate(s_tab_view,output_widget);
-    //view->setSeperatorPos(100);
-    cerr << "IF";
-    show();
-     view->show();
-    // s_tab_view->show();
-    // output_widget->show();
+    top_panner->setSeparatorPos(0);
   }
   else{
+    top_panner->setSeparatorPos(200);
     options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,true);
-    view->deactivate();
-    s_tab_view->recreate(top_panner,0,QPoint(0,0),true);
-    header_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    cpp_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    browser_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    swallow_widget->recreate(s_tab_view,0,QPoint(0,0),true);
-    top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-    view->activate(top_panner,output_widget); 
-    cerr << "ELSE";
   }
-  */
+  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  resize (width()+1,height());
+ 
 }
 void CKDevelop::slotOptionsTOutputView(){
+  if(options_menu->isItemChecked(ID_OPTIONS_OUTPUTVIEW)){
+    options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,false);
+    view->setSeparatorPos(view->height());
+  }
+  else{
+    view->setSeparatorPos(400);
+    options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,true);
+  }
+  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  resize (width()+1,height());
 }
 
 void CKDevelop::slotOptionsRefresh(){
@@ -542,7 +528,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
     
   }
 
-   QString filename = QDir::homeDirPath() + "/.kdevelop/search_result.html";
+   QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
    QFile file(filename);
    QTextStream stream(&file);
    file.open(IO_WriteOnly);
@@ -606,7 +592,7 @@ void CKDevelop::slotDocSText(QString text){
 
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
-  search_process << "glimpse  -H "+ QDir::homeDirPath() + "/.kdevelop -U -c -y '"+ text +"'";
+  search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput); 
 
   slotStatusMsg(IDS_DEFAULT); 

@@ -53,7 +53,7 @@ void CKDevelop::switchToFile(QString filename){
 
   // check if the file exists
   if(!QFile::exists(filename) && filename != "Untitled.h" && filename != "Untitled.cpp"){
-    KMsgBox::message(this,"Attention",filename +"\n\nFile does not exist!");
+    KMsgBox::message(this,i18n("Attention"),filename +"\n\nFile does not exist!");
     return;
   }
   
@@ -62,12 +62,12 @@ void CKDevelop::switchToFile(QString filename){
   if (getTabLocation(filename) == HEADER){
     edit_widget = header_widget;
     s_tab_view->setCurrentTab(HEADER);
-    //output_widget->append("Aktuelles edit_widget = header_widget");
+    //output_widget->append("current edit_widget = header_widget");
   }
   else{
     edit_widget = cpp_widget;
     s_tab_view->setCurrentTab(CPP);
-    //output_widget->append("Aktuelles edit_widget = cpp_widget");
+    //output_widget->append("current edit_widget = cpp_widget");
   }
   edit_widget->setFocus();
   if (filename == edit_widget->getName()){
@@ -76,7 +76,7 @@ void CKDevelop::switchToFile(QString filename){
     return;
   }
   
-  // search the current file which would be ausgewechselt
+  // search the current file which would be changed
   
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName() ){
@@ -90,6 +90,8 @@ void CKDevelop::switchToFile(QString filename){
     // rescue the old file
   actual_info->text = edit_widget->text();
   actual_info->modified = edit_widget->isModified();
+  actual_info->cursor_line = edit_widget->currentLine();
+  actual_info->cursor_col = edit_widget->currentColumn();
   // output_widget->append("auszuwechseldes file:" + actual_info->filename);
 
   // already in the list ?
@@ -100,14 +102,13 @@ void CKDevelop::switchToFile(QString filename){
       edit_widget->setText(info->text);
       edit_widget->setName(filename);
       edit_widget->toggleModified(info->modified);
+      edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
       
-      //      output_widget->append ("File: war schon vorhanden");
+      //      output_widget->append ("File: was was already there");
       setCaption("KDevelop V" + version + ": " + filename);
       return;
     }
   }
- 
-  
   // not found -> generate a new edit_info,loading
   
   // build a new info
@@ -115,8 +116,10 @@ void CKDevelop::switchToFile(QString filename){
   info = new TEditInfo;
   
   info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-(
+  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( (Sandy Meier)
   info->modified = false;
+  info->cursor_line = 0;
+  info->cursor_col = 0;
 
   // update the widget
   cerr << filename;

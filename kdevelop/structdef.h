@@ -74,6 +74,8 @@ struct TEditInfo {
   QString filename;
   QString text; // 
   bool modified; // modified ?
+  int cursor_line;
+  int cursor_col;
 };
 
 #endif

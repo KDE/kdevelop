@@ -227,6 +227,7 @@ public:
   void refreshClassCombos();
 protected:
   virtual void closeEvent(QCloseEvent* e);
+ 
 private:
   //the menus
   QPopupMenu* file_menu;

@@ -30,8 +30,8 @@
 # on host anakonda:
 #
 # CC="g++" CFLAGS="-O2 -Wall" CPPFLAGS="" \
-# LD="/usr/bin/ld" NM="/usr/bin/nm -B" RANLIB="ranlib" LN_S="ln -s" \
-#   ./ltconfig --disable-shared --disable-static --with-gcc --with-gnu-ld --no-verify ./ltmain.sh i586-pc-linux-gnulibc1
+# LD="/usr/i486-linux/bin/ld" NM="/usr/bin/nm -B" RANLIB="ranlib" LN_S="ln -s" \
+#   ./ltconfig --disable-shared --disable-static --with-gcc --with-gnu-ld --no-verify ./ltmain.sh i586-pc-linux-gnu
 #
 # Compiler and other test output produced by ltconfig, useful for
 # debugging ltconfig, is in ./config.log if it exists.
@@ -59,8 +59,8 @@ build_libtool_libs=no
 build_old_libs=yes
 
 # The host system.
-host_alias="i586-pc-linux-gnulibc1"
-host="i586-pc-linux-gnulibc1"
+host_alias="i586-pc-linux-gnu"
+host="i586-pc-linux-gnu"
 
 # The archiver.
 AR="ar"
@@ -69,7 +69,7 @@ AR="ar"
 CC="g++"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld"
+LD="/usr/i486-linux/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"

@@ -117,6 +117,9 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       str = word(event->x(),event->y());
     }
     searchtext = str;
+    if(str.length() > 20 ){
+      str = str.left(20) + "...";
+    }
     pop->changeItem(i18n("look up: ") + str,0); // the lookup entry
     pop->popup(this->mapToGlobal(event->pos()));
   }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** CTabCtl meta object code from reading C++ file 'ctabctl.h'
 **
-** Created: Mon Jan 4 22:57:00 1999
+** Created: Sat Jan 23 20:34:14 1999
 **      by: The Qt Meta Object Compiler ($Revision$)
 **
 ** WARNING! All changes made in this file will be lost!
