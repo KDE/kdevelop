@@ -530,17 +530,61 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
     } else if( directive == "define" ){
 	ptr = readWhiteSpaces( ptr, false );
 	if( isValid(ptr) ) {
+	    Macro m;
+	    
 	    const QChar* startMacroName = ptr;
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
+	    m.setName( macroName );
+	    
 	    ptr = readWhiteSpaces( ptr, false );
 	    if( isValid(ptr) && *ptr == '(' ){
-		ptr = skip( ptr, '(', ')' );
-		if( isValid(ptr) )
-		    ++ptr;
+		m.setHasArguments( true );
+		++ptr;
+		
+		while( isValid(ptr) && *ptr != ')' ){
+		    ptr = readWhiteSpaces( ptr, false );
+		    const QChar* startArg = ptr;
+		    ptr = readIdentifier( ptr );
+		    QString arg( startArg, int(ptr-startArg) );
+		    
+		    m.addArgument( arg );
+		    
+		    ptr = readWhiteSpaces( ptr, false );
+		    if( !isValid(ptr) || *ptr != ',' )
+			break;
+		    
+		    ++ptr; // skip ','
+		}
+		
+		if( isValid(ptr) && *ptr == ')' )
+		    ++ptr; // skip ')'		
 	    }
+	    
+	    ptr = readWhiteSpaces( ptr, false );
+	    QString body;
+	    while( isValid(ptr) && *ptr != "\n" ){
+		if( *ptr == '\\' ){
+		    const QChar* p = readWhiteSpaces( ptr + 1, false );
+		    if( isValid(p) && *p == '\n' ){
+			newline( p );
+			ptr = readWhiteSpaces( p + 1, false );
+			continue;
+		    }
+		}
+		body += *ptr;
+		++ptr;
+	    }
+	    m.setBody( body );
+	    qDebug( "body of %s is %s", m.name().latin1(), m.body().latin1() );
 	}
     } else if( directive == "undef" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( isValid(ptr) ) {
+	    const QChar* startMacroName = ptr;
+	    ptr = readIdentifier( ptr );
+	    QString macroName( startMacroName, int(ptr-startMacroName) );
+	}
     } else if( directive == "line" ){
     } else if( directive == "error" ){
     } else if( directive == "pragma" ){
@@ -551,10 +595,31 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	else
 	    m_directiveStack.push( PreProc_in_group );
     } else if( directive == "ifdef" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( isValid(ptr) ) {
+	    const QChar* startMacroName = ptr;
+	    ptr = readIdentifier( ptr );
+	    QString macroName( startMacroName, int(ptr-startMacroName) );
+	}
+	
 	m_directiveStack.push( PreProc_in_group );
     } else if( directive == "ifndef" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( isValid(ptr) ) {
+	    const QChar* startMacroName = ptr;
+	    ptr = readIdentifier( ptr );
+	    QString macroName( startMacroName, int(ptr-startMacroName) );
+	}
+	
 	m_directiveStack.push( PreProc_in_group );
     } else if( directive == "elif" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( isValid(ptr) ) {
+	    const QChar* startMacroName = ptr;
+	    ptr = readIdentifier( ptr );
+	    QString macroName( startMacroName, int(ptr-startMacroName) );
+	}
+	
 	// ignore elif
 	(void) m_directiveStack.pop();
 	m_directiveStack.push( PreProc_skip );	

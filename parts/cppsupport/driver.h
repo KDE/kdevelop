@@ -65,7 +65,7 @@ typedef QPair<QString, int> Dependence;
 class Macro
 {
 public:
-    typedef QPair<QString, QString> Argument;
+    typedef QString Argument;
     
 public:
     Macro(): m_hasArguments( false ) {}
@@ -101,15 +101,12 @@ public:
     void setBody( const QString& body ) { m_body = body; }
     
     bool hasArguments() const { return m_hasArguments; }
+    void setHasArguments( bool hasArguments ) { m_hasArguments = hasArguments; }
     QValueList<Argument> argumentList() const { return m_argumentList; }
     
     void clearArgumentList() { m_argumentList.clear(); m_hasArguments = false; }
-    void addArgument( const Argument& argument ) { m_hasArguments = true; m_argumentList << argument; }
-    void addArgumentList( const QValueList<Argument>& arguments ) 
-    { 
-	m_hasArguments = true; 
-	m_argumentList += arguments; 
-    }
+    void addArgument( const Argument& argument ) { m_argumentList << argument; }
+    void addArgumentList( const QValueList<Argument>& arguments ) { m_argumentList += arguments; }
     
 private:
     QString m_name;
