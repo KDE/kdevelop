@@ -1,3 +1,7 @@
+2002-12-03 F@lk Brettschneider <falk@kdevelop.org>
+    * now session saves/loads cursor position;
+      and view geometries in Childframe UI mode
+
 2002-12-02 Caleb Tennis <caleb@aei-tech.com>
     * Added configuration option to set environment variables before
       running "Automake & Friends".  Patch provided by Hannes Mehnert

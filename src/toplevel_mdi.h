@@ -4,6 +4,7 @@
 
 #include <qmap.h>
 #include <qptrlist.h>
+#include <qdict.h>
 
 
 #include <qextmdimainfrm.h>
@@ -12,6 +13,7 @@
 
 #include "kdevtoplevel.h"
 
+class QDomElement;
 class ViewMenuAction;
 class ViewMenuActionPrivateData;
 
@@ -60,7 +62,6 @@ KParts::ReadOnlyPart * getPartFromWidget(const QWidget * pWidget) const;
 signals:
 
   void wantsToQuit();
-
 
 public slots:
 
@@ -112,6 +113,9 @@ private slots:
   void slotNewToolbarConfig();
   void slotConfigureToolbars();
   void slotReactToProjectOpened();
+  void slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl);
+  void slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl);
+
   
 private:
   
@@ -153,6 +157,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
                                                    //!< Contains the same pairs as \ref TopLevelMDI::m_childViewMap "m_childViewMap"
   QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
                                                    //!< Contains the same pairs as \ref TopLevelMDI::m_widgetMap "m_widgetMap"
+  QDict<QextMdiChildView>          m_captionDict;  //!< Key: caption string --> Data:QextMdiChildView*
 
   QPtrList<QextMdiChildView> m_outputViews;        //!< Lists all output views
   QPtrList<QextMdiChildView> m_selectViews;        //!< Lists all select views

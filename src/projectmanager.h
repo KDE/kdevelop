@@ -34,6 +34,8 @@ public:
 
   void createActions( KActionCollection* ac );
 
+  ProjectSession* projectSession() const;
+  
 public slots:
   bool loadProject( const KURL& url);
   bool closeProject();
@@ -69,7 +71,7 @@ private:
 
   static ProjectManager *s_instance;
 
-  ProjectSession* m_pKDevSession;
+  ProjectSession* m_pProjectSession;
 };
 
 

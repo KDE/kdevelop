@@ -15,8 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "projectsession.h"
-
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qfile.h>
@@ -25,11 +23,16 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include "ktexteditor/viewcursorinterface.h"
+#include "ktexteditor/document.h"
 
 #include "api.h"
 #include "partcontroller.h"
 #include "domutil.h"
 #include "documentationpart.h"
+#include "toplevel.h"
+
+#include "projectsession.h"
 
 //---------------------------------------------------------------------------
 ProjectSession::ProjectSession()
@@ -102,7 +105,7 @@ bool ProjectSession::restoreFromFile(const QString& sessionFileName)
 void ProjectSession::recreateDocs(QDomElement& el)
 {
 ////  QDomElement mainframeEl = el.namedItem("Mainframe").toElement();
-////  bool bMaxMode = (bool) mainframeEl.attribute("MaximizeMode", "0").toInt();
+////  bool bMaxMode =initXMLTree() (bool) mainframeEl.attribute("MaximizeMode", "0").toInt();
 ////  QextMdiMainFrm* pMainWidget = (QextMdiMainFrm*) qApp->mainWidget();
 ////  pMainWidget->setEnableMaximizedChildFrmMode(bMaxMode);
 ////  bool bTaskBarWasOn = pMainWidget->isViewTaskBarOn();
@@ -163,8 +166,8 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
   // loop over all views of this document
   int nView = 0;
+
   QDomElement viewEl;
-  const bool HIDE = false;
   QString viewType;
   QString context;
   if (docEl.hasAttribute("context")) {
@@ -178,18 +181,20 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 ////      // yes, memorize for later use
 ////      pFocusedView = pView;
 ////    }
-    // read geometry of current view
-    loadViewGeometry(viewEl);
-
-////    // read the cursor position of current view
-////    int line = docEl.attribute( "CursorPosLine", "-1").toInt();
-////    int col  = docEl.attribute( "CursorPosCol", "0").toInt();
 
     if (context.isEmpty()) {
-      PartController::getInstance()->editDocument(url);
+      int line;
+      if (viewEl.hasAttribute("line")) {
+        line = viewEl.attribute("line", "0").toInt();
+      }
+      PartController::getInstance()->editDocument(url, line);
     }
     else {
       PartController::getInstance()->showDocument(url, context);
+    }
+    QDomElement viewPropertiesEl = viewEl.namedItem("AdditionalSettings").toElement();
+    if (!viewPropertiesEl.isNull()) {
+      emit sig_restoreAdditionalViewProperties(url.url(), &viewPropertiesEl);
     }
 
   }
@@ -201,43 +206,6 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 ////    pFocusedView->setFocus();
 ////  }
 
-}
-
-//---------------------------------------------------------------------------
-void ProjectSession::loadViewGeometry(QDomElement viewEl)
-{
-  // read the view position and size
-  int nMinMaxMode = viewEl.attribute( "MinMaxMode", "0").toInt();
-  int   nLeft     = viewEl.attribute( "Left", "-10000").toInt(); // XXX hack: value -10000 wouldn't be restored correctly
-  int   nTop      = viewEl.attribute( "Top", "-10000").toInt();
-  int   nWidth    = viewEl.attribute( "Width", "-1").toInt();
-  int   nHeight   = viewEl.attribute( "Height", "-1").toInt();
-
-  // MDI stuff
-  bool bAttached = (bool) viewEl.attribute( "Attach", "1").toInt();
-
-////  // restore appearence
-////  QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
-////  if ((mdiMode != QextMdi::TabPageMode) && (mdiMode != QextMdi::ToplevelMode)) {
-////    if ((!pMDICover->isAttached()) && (bAttached) ) {
-////      pMDICover->attach();
-////    }
-////    if ( (pMDICover->isAttached()) && (!bAttached) ) {
-////      pMDICover->detach();
-////    }
-////  }
-////  if (nMinMaxMode == 0) {
-////    pMDICover->setInternalGeometry(QRect(nLeft, nTop, nWidth, nHeight));
-////  }
-////  else {
-////    if (nMinMaxMode == 1) {
-////      pMDICover->minimize();
-////    }
-////    if (nMinMaxMode == 2) {
-////      // maximize: nothing to do, this is already under control of the mainframe
-////    }
-////    pMDICover->setRestoreGeometry(QRect(nLeft, nTop, nWidth, nHeight));
-////  }
 }
 
 //---------------------------------------------------------------------------
@@ -279,9 +247,12 @@ bool ProjectSession::saveToFile(const QString& sessionFileName)
 
   QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
+////    QString partName = it.current()->name();
+////    QMessageBox::information(0L,"",partName);
+
     KParts::ReadOnlyPart* pReadOnlyPart = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
     if (!pReadOnlyPart)
-      continue;
+      continue; // note: read-write parts are also a read-only part, they inherit from it
 
     DocumentationPart* pDocuPart = dynamic_cast<DocumentationPart*>(pReadOnlyPart);
 
@@ -295,14 +266,13 @@ bool ProjectSession::saveToFile(const QString& sessionFileName)
     nDocs++;
 ////    docEl.setAttribute( "Type", "???");
 ////    // get the view list
-////    QList<KWriteView> viewList = pDoc->viewList();
+////    QList<KWpEditorPartriteView> viewList = pDoc->viewList();
 ////    // write the number of views
 ////    docEl.setAttribute( "NumberOfViews", viewList.count());
     docEl.setAttribute( "NumberOfViews", 1);
     // loop over all views of this document
     int nView = 0;
 ////    KWriteView* pView = 0L;
-    QWidget* pView = 0L;
     QString viewIdStr;
 ////    for (viewList.first(), nView = 0; viewList.current() != 0; viewList.next(), nView++) {
 ////      pView = viewList.current();
@@ -313,16 +283,20 @@ bool ProjectSession::saveToFile(const QString& sessionFileName)
         // focus?
 ////        viewEl.setAttribute("Focus", (((CEditWidget*)pView->parentWidget()) == m_pDocViewMan->currentEditView()));
         viewEl.setAttribute("Type", "???");
-        // save geometry of current view
-        saveViewGeometry( pView, viewEl);
-////      }
-////    }
-////    // save cursor position of current view
-////    if (pView) {
-////      QPoint cursorPos(pView->cursorPosition());
-////      docEl.setAttribute("CursorPosCol", cursorPos.x());
-////      docEl.setAttribute("CursorPosLine", cursorPos.y());
-////    }
+
+    QDomElement viewPropertiesEl = domdoc.createElement("AdditionalSettings");
+    viewEl.appendChild(viewPropertiesEl);
+    emit sig_saveAdditionalViewProperties(url, &viewPropertiesEl);
+
+    if (pReadOnlyPart->inherits("KTextEditor::Document")) {
+      KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(pReadOnlyPart->widget());
+      if (iface) {
+        unsigned int line, col;
+        iface->cursorPosition(&line, &col);
+        viewEl.setAttribute( "line", line );
+      }
+    }
+
     if (pDocuPart) {
       docEl.setAttribute( "context", pDocuPart->context() );
     }
@@ -340,39 +314,4 @@ bool ProjectSession::saveToFile(const QString& sessionFileName)
   initXMLTree();  // clear and initialize the tree again
 
   return true;
-}
-
-//---------------------------------------------------------------------------
-void ProjectSession::saveViewGeometry( QWidget* pView, QDomElement viewEl)
-{
-  if (!pView) return;
-  if (!pView->parentWidget()) return;
-////  QextMdiChildView* pMDICover = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
-/*!*/  QWidget* pMDICover = dynamic_cast<QWidget*>(pView->parentWidget());
-  if (!pMDICover) return;
-
-  // write the view position and size
-  QRect geom;
-  int nMinMaxMode = 0;
-  if (pMDICover->isMinimized()) {
-    nMinMaxMode = 1;
-  }
-  if (pMDICover->isMaximized()) {
-    nMinMaxMode = 2;
-  }
-  if (nMinMaxMode == 0) {
-////    geom = pMDICover->internalGeometry();
-  }
-  else {
-////    geom = pMDICover->restoreGeometry();
-  }
-  viewEl.setAttribute( "MinMaxMode", nMinMaxMode);
-  viewEl.setAttribute( "Left", geom.left());
-  viewEl.setAttribute( "Top", geom.top());
-  viewEl.setAttribute( "Width", geom.width());
-  viewEl.setAttribute( "Height", geom.height());
-
-////  // MDI stuff
-////  QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
-////  viewEl.setAttribute( "Attach", pMDICover->isAttached() || (mdiMode == QextMdi::TabPageMode));
 }

@@ -52,13 +52,13 @@ ProjectManager *ProjectManager::s_instance = 0;
 
 ProjectManager::ProjectManager()
 : m_info(0L)
- ,m_pKDevSession(new ProjectSession)
+ ,m_pProjectSession(new ProjectSession)
 {
 }
 
 ProjectManager::~ProjectManager()
 {
-  delete m_pKDevSession;
+  delete m_pProjectSession;
   delete m_info;
 }
 
@@ -199,7 +199,7 @@ bool ProjectManager::loadProject(const KURL &url)
   // first restore the project session stored in a .kdevses file
   QString projSessionFileName = m_info->m_fileName.left(m_info->m_fileName.length()-8); // without ".kdevelop"
   projSessionFileName += "kdevses"; // suffix for a KDevelop session file
-  if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
+  if (!m_pProjectSession->restoreFromFile(projSessionFileName)) {
     debug("error during restoring of the KDevelop session !\n");
   }
 
@@ -221,7 +221,7 @@ bool ProjectManager::closeProject()
   QString sessionFileName = m_info->m_fileName;
   sessionFileName = sessionFileName.left( sessionFileName.length() - 8); // without "kdevelop"
   sessionFileName += "kdevses";
-  m_pKDevSession->saveToFile(sessionFileName);
+  m_pProjectSession->saveToFile(sessionFileName);
 
   if( !closeProjectSources() )
     return false;
@@ -512,6 +512,11 @@ QString ProjectManager::projectFile() const
 bool ProjectManager::projectLoaded() const
 {
   return m_info != 0;
+}
+
+ProjectSession* ProjectManager::projectSession() const
+{
+  return m_pProjectSession;
 }
 
 #include "projectmanager.moc"

@@ -26,6 +26,7 @@
 #include "core.h"
 #include "settingswidget.h"
 #include "statusbar.h"
+#include "projectsession.h"
 
 #include "toplevel.h"
 #include "toplevel_mdi.h"
@@ -288,9 +289,16 @@ void TopLevelMDI::createFramework()
   PartController::createInstance(this);
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-	  this, SLOT(createGUI(KParts::Part*)));
-  connect( Core::getInstance(), SIGNAL(projectOpened()),
-           this, SLOT(slotReactToProjectOpened()) );
+          this, SLOT(createGUI(KParts::Part*)));
+  connect(Core::getInstance(), SIGNAL(projectOpened()),
+          this, SLOT(slotReactToProjectOpened()) );
+  connect(ProjectManager::getInstance()->projectSession(),
+          SIGNAL(sig_restoreAdditionalViewProperties(const QString&, const QDomElement*)),
+          this, SLOT(slotRestoreAdditionalViewProperties(const QString&, const QDomElement*)));
+  connect(ProjectManager::getInstance()->projectSession(),
+          SIGNAL(sig_saveAdditionalViewProperties(const QString&, QDomElement*)),
+          this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
+
 
   setMenuForSDIModeSysButtons(menuBar());
 }
@@ -408,9 +416,10 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 }
 
 
-void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QString &/*toolTip*/)
+void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QString& fullName)
 {
   QextMdiChildView *child = wrapper(view, name);
+  m_captionDict.insert(fullName, child);
 
   unsigned int mdiFlags = QextMdi::StandardAdd;
 
@@ -544,7 +553,7 @@ void TopLevelMDI::removeView(QWidget *view)
 
     m_widgetMap.remove(view);
     m_childViewMap.remove(wrapper);
-
+    m_captionDict.remove(wrapper->caption());
     // Note: this reparenting is necessary. Otherwise, the view gets
     // deleted twice: once when the wrapper is deleted, and the second
     // time when the part is deleted.
@@ -1152,6 +1161,74 @@ void TopLevelMDI::slotReactToProjectOpened()
       pWrappingDockWidget->hide();
     }
   }
+}
+
+void TopLevelMDI::slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl)
+{
+  QextMdiChildView* pMDICover = m_captionDict[viewName];
+  if (!pMDICover) { return; }
+
+  // read the view position and size
+  int nMinMaxMode = viewEl->attribute( "MinMaxMode", "0").toInt();
+  int   nLeft     = viewEl->attribute( "Left", "-10000").toInt(); // XXX hack: value -10000 wouldn't be restored correctly
+  int   nTop      = viewEl->attribute( "Top", "-10000").toInt();
+  int   nWidth    = viewEl->attribute( "Width", "-1").toInt();
+  int   nHeight   = viewEl->attribute( "Height", "-1").toInt();
+
+  // MDI stuff
+  bool bAttached = (bool) viewEl->attribute( "Attach", "1").toInt();
+
+  // restore appearence
+  if ((mdiMode() != QextMdi::TabPageMode) && (mdiMode() != QextMdi::ToplevelMode)) {
+    if ((!pMDICover->isAttached()) && (bAttached) ) {
+      pMDICover->attach();
+    }
+    if ( (pMDICover->isAttached()) && (!bAttached) ) {
+      pMDICover->detach();
+    }
+  }
+  if (nMinMaxMode == 0) {
+    pMDICover->setInternalGeometry(QRect(nLeft, nTop, nWidth, nHeight));
+  }
+  else {
+    if (nMinMaxMode == 1) {
+      pMDICover->minimize();
+    }
+    if (nMinMaxMode == 2) {
+      // maximize: nothing to do, this is already under control of the mainframe
+    }
+    pMDICover->setRestoreGeometry(QRect(nLeft, nTop, nWidth, nHeight));
+  }
+}
+
+void TopLevelMDI::slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl)
+{
+  QextMdiChildView* pMDICover = m_captionDict[viewName];
+  if (!pMDICover) { return; }
+
+  // write the view position and size
+  QRect geom;
+  int nMinMaxMode = 0;
+  if (pMDICover->isMinimized()) {
+    nMinMaxMode = 1;
+  }
+  if (pMDICover->isMaximized()) {
+    nMinMaxMode = 2;
+  }
+  if (nMinMaxMode == 0) {
+    geom = pMDICover->internalGeometry();
+  }
+  else {
+    geom = pMDICover->restoreGeometry();
+  }
+  viewEl->setAttribute( "MinMaxMode", nMinMaxMode);
+  viewEl->setAttribute( "Left", geom.left());
+  viewEl->setAttribute( "Top", geom.top());
+  viewEl->setAttribute( "Width", geom.width());
+  viewEl->setAttribute( "Height", geom.height());
+
+  // MDI stuff
+  viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == QextMdi::TabPageMode));
 }
 
 #include "toplevel_mdi.moc"

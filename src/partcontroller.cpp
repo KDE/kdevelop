@@ -196,7 +196,10 @@ kdDebug(9000) << "SHOW: " << url.url() << " context=" << context << endl;
   else
     activatePart(part);
 
-  part->openURL(url);
+  bool bSuccess = part->openURL(url);
+  if (!bSuccess) {
+    // part->showError(...);
+  }
 }
 
 
