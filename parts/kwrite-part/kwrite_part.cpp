@@ -54,11 +54,4 @@ void KWritePart::documentDestroyed()
 }
 
 
-KEditor::Document *KWritePart::currentDocument()
-{
-  // TODO: use part manager to look up
-  return 0;
-}
-
-
 #include "kwrite_part.moc"

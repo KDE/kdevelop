@@ -26,7 +26,6 @@ public:
 
   virtual KEditor::Document *document(const KURL &url);
   virtual KEditor::Document *createDocument(QWidget *parentWidget=0, const KURL &url="");
-  virtual KEditor::Document *currentDocument();
 
 
 private slots:

@@ -48,12 +48,5 @@ void EditorTestPart::documentDestroyed()
   _documents.remove(static_cast<const DocumentImpl*>(sender()));
 }
  
- 
-KEditor::Document *EditorTestPart::currentDocument()
-{
-  // TODO: use part manager to look up
-  return 0;
-}
-
 
 #include "editortest_part.moc"
