@@ -24,7 +24,6 @@ class KPopupMenu;
 class QHBoxLayout;
 class KArchiveDirectory;
 class KArchiveFile;
-
 #include <qptrlist.h>
 #include <qdict.h>
 #include <qlineedit.h>
@@ -151,6 +150,9 @@ private: //methods
 	bool copyFile( const QString &source, const QString &dest, bool isXML, bool process );
 	QString kdevRoot(const QString &templateName ) const;
 	void openAfterGeneration();
+	
+	void setPermissions(const KArchiveFile *source, QString dest);
+	void setPermissions(const installFile &file);
 	
 private: //data
 

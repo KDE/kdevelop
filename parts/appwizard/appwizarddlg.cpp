@@ -59,6 +59,8 @@
 #include <karchive.h>
 #include <ktar.h>
 #include <ktempdir.h>
+#include <kfileitem.h>
+#include <kio/chmodjob.h>
 
 #include <qlayout.h>
 
@@ -415,7 +417,8 @@ void AppWizardDialog::accept()
 	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
 	if( templateArchive.open( IO_ReadOnly ) )
 	{
-		templateArchive.directory()->copyTo(archDir.name(), true);
+		//templateArchive.directory()->copyTo(archDir.name(), true);
+		unpackArchive(templateArchive.directory(), archDir.name(), false);
 	}
 	else
 	{
@@ -579,6 +582,7 @@ void AppWizardDialog::accept()
 				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( (*fileIt).dest) );
 				return;
 			}
+			setPermissions(*fileIt);
 		}
 	}
     // if dir still does not exist
@@ -643,8 +647,6 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 			outputFile.close();
 			return false;
 		}
-		inputFile.close();
-		outputFile.close();
 	}
 	else
 	{
@@ -676,12 +678,14 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 			if( !process )
 			{
 				file->copyTo( dest );
+				setPermissions(file, dest + "/" + file->name());
 			}
 			else
 			{
 				KTempFile temp;
 				temp.close();	// cannot write to a still opened file
-				file->copyTo( temp.name() );	// This is plain wrong, KArchiveFile::copyTo takes a directory
+				QString tempName = temp.name();
+				file->copyTo( tempName );	// This is plain wrong, KArchiveFile::copyTo takes a directory
 				// assume that an archive does not contain XML files
 				// ( where should we currently get that info from? )
 				if ( !copyFile( temp.name(), dest + "/" + file->name(), false, process ) )
@@ -690,6 +694,7 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 					temp.unlink();
 					return;
 				}
+				setPermissions(file, dest + "/" + file->name());
 				temp.unlink();
 			}
 		}
@@ -1024,6 +1029,53 @@ void AppWizardDialog::favouritesContextMenu(QIconViewItem* item, const QPoint& p
 {
 	if(item)
 		m_favouritesMenu->popup(point);
+}
+
+void AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)
+{
+	kdDebug() << "AppWizardDialog::setPermissions(const KArchiveFile *source, QString dest)" << endl;
+	kdDebug() << "	dest: " << dest << endl;
+	
+	if (source->permissions() & 00100)
+	{
+		kdDebug() << "source is executable" << endl;
+		KIO::UDSEntry entry;
+		KURL kurl = KURL::fromPathOrURL(dest);
+		if (KIO::NetAccess::stat(kurl, entry, 0))
+		{
+			KFileItem it(entry, kurl);
+			int mode = it.permissions();
+			kdDebug() << "stat shows permissions: " << mode << endl;
+			KIO::chmod(KURL::fromPathOrURL(dest), mode | 00100 );
+		}
+	}
+}
+
+void AppWizardDialog::setPermissions(const installFile &file)
+{
+	kdDebug() << "AppWizardDialog::setPermissions(const installFile &file)" << endl;
+	kdDebug() << "	dest: " << file.dest << endl;
+	
+	KIO::UDSEntry sourceentry;
+	KURL sourceurl = KURL::fromPathOrURL(file.source);
+	if (KIO::NetAccess::stat(sourceurl, sourceentry, 0))
+	{
+		KFileItem sourceit(sourceentry, sourceurl);
+		int sourcemode = sourceit.permissions();
+		if (sourcemode & 00100)
+		{
+			kdDebug() << "source is executable" << endl;
+			KIO::UDSEntry entry;
+			KURL kurl = KURL::fromPathOrURL(file.dest);
+			if (KIO::NetAccess::stat(kurl, entry, 0))
+			{
+				KFileItem it(entry, kurl);
+				int mode = it.permissions();
+				kdDebug() << "stat shows permissions: " << mode << endl;
+				KIO::chmod(KURL::fromPathOrURL(file.dest), mode | 00100 );
+			}
+		}
+	}
 }
 
 #include "appwizarddlg.moc"
