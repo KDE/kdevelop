@@ -43,8 +43,7 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
   kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
 
-  kdlg_top_panner = new KNewPanner(top_panner,"kdlg_top_panner",KNewPanner::Vertical,KNewPanner::Percent,
-  			      config->readNumEntry("kdlg_top_panner_pos", 80));
+  kdlg_top_panner = new KNewPanner(top_panner,"kdlg_top_panner",KNewPanner::Vertical);
 
   kdlg_prop_widget = new KDlgPropWidget(this,kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
   kdlg_edit_widget = new KDlgEditWidget(this,kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
@@ -115,29 +114,14 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_view_menu->insertItem(i18n("&Sourcecode Editor"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Widgets-View"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
-  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-
   kdlg_view_menu->insertItem(i18n("&Output-View"),this, SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-
-  config->setGroup("General Options");
   kdlg_view_menu->insertItem(i18n("&Properties-View"), this, SLOT(slotKDlgViewPropView()), 0, ID_KDLG_VIEW_PROPVIEW);
-  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,config->readBoolEntry("show_properties_view",true));
-
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Toolbar"), this, SLOT(slotKDlgViewToolbar()),0,ID_KDLG_VIEW_TOOLBAR);
-  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,config->readBoolEntry("show_kdlg_toolbar", true));
-
   kdlg_view_menu->insertItem(i18n("Status&bar"),this, SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
-  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),kdlgedit,
 			   SLOT(slotViewRefresh()),0,ID_KDLG_VIEW_REFRESH);
-
   kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
 			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
@@ -146,10 +130,6 @@ void CKDevelop::initKDlgMenuBar(){
 
   ///////////////////////////////////////////////////////////////////
   // Project-menu entries
-
- 
-
-  // project-menu
   kdlg_project_menu = new QPopupMenu;
   kdlg_project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
   kdlg_project_menu->insertItem(i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
@@ -164,8 +144,6 @@ void CKDevelop::initKDlgMenuBar(){
 
   kdlg_project_menu->insertItem(i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-
-  	
   kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
   kdlg_project_menu->insertSeparator();	
@@ -423,15 +401,6 @@ void CKDevelop::initKDlgToolBar(){
 
   connect(toolBar(ID_KDLG_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_KDLG_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
-  config->setGroup("General Options");
-  if(config->readBoolEntry("show_kdlg_toolbar", true)){
-    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
-  }
-  else{
-    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
-  }
-
-
 }
 
 void CKDevelop::initKDlgStatusBar(){
@@ -481,6 +450,13 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,9 @@
+1999-06-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed hiding of the progressbar in the statusbar
+	* added sessionmanagement
+	* rearranged initialization code for the config file
+	* updated documentation index-2.html by changes from Michael Farr <michael@middlesoft.com>
+	
 1999-06-01 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added parsing of struct declarations.
 	* fixed behaviour of left/middle button clicks in the classview.
@@ -1071,4 +1077,5 @@
 
 
 >>>>>>> 1.190
+
 

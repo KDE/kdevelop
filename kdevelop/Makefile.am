@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
 kdevelop_SOURCES = cctviewdeclarationcmd.cpp cclasstooltreeview.cpp klangcombo.cpp grepdialog.cpp ctreeview.cpp ctreehandler.cpp cerrormessageparser.cpp ccvaddfolderdlg.cpp cclasstreehandler.cpp cbugreportdlg.cpp caddnewtranslationdlg.cpp ctoolsconfigdlg.cpp cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdoctree.cpp cdocbrowser.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
-kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./vc/libvc.a ./print/libprint.a  -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs classparser kdlgedit kwrite pics vc print templates toolbar tools 
 

@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = processes.pl.in processesend.pl 
+EXTRA_DIST = processes.pl processes.pl.in processesend.pl 
 
 ####### kdevelop will overwrite this part!!! (end)############
 tools_DATA =  processes.pl processesend.pl 

@@ -323,6 +323,7 @@ void CKDevelop::slotFilePrint(){
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
+  saveOptions();
   close();
 }
 
@@ -528,12 +529,15 @@ void CKDevelop::slotViewTBrowserToolbar(){
 }
 
 void CKDevelop::slotViewTStatusbar(){
-  
-  bViewStatusbar=!bViewStatusbar;
-  view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
-  kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
+  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
+    view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
+	  kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
+  }
+  else{
+    view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
+  	kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
+  }
   enableStatusBar();
-  
 }
 
 void CKDevelop::slotViewRefresh(){
@@ -1381,6 +1385,8 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
   ///////////////////////////////////////////////////////////////////
   // change status message of whole statusbar temporary (text, msec)
   statusBar()->message(text, 2000);
+	QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
+
 }
 
 void CKDevelop::enableCommand(int id_)
@@ -2197,6 +2203,13 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
+
+
+
 
 
 

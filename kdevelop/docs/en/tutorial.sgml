@@ -997,43 +997,43 @@ Let's have a look at what we want to read in:
 <tscreen><code>
 1   void KScribbleApp::readOptions()
 2   {
-3	
-4   	config->setGroup("General Options");
+3
+4      config->setGroup("General Options");
 5
-6   	// bar status settings
-7   	bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
-8	    view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
-9	    if(!bViewToolbar)
-10      enableToolBar(KToolBar::Hide);
-11	
-12    bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
-13	  view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
-14	  if(!bViewStatusbar)
-15      enableStatusBar(KStatusBar::Hide);
-16	
-17	  // bar position settings
-18	  KMenuBar::menuPosition menu_bar_pos;
-19	  menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
+6      // bar status settings
+7      bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+8      view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+9      if(!bViewToolbar)
+10       enableToolBar(KToolBar::Hide);
+11
+12     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+13     view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+14     if(!bViewStatusbar)
+15       enableStatusBar(KStatusBar::Hide);
+16
+17     // bar position settings
+18     KMenuBar::menuPosition menu_bar_pos;
+19     menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
 20
-21    KToolBar::BarPosition tool_bar_pos;
-22    tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+21     KToolBar::BarPosition tool_bar_pos;
+22     tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
 23
-24	  menuBar()->setMenuBarPos(menu_bar_pos);
-25    toolBar()->setBarPos(tool_bar_pos);
-26	
-27    // initialize the recent file list
-28	  recent_files.setAutoDelete(TRUE);
-29	  config->readListEntry("Recent Files",recent_files);
-30	
-31	  uint i;
-32    for ( i =0 ; i < recent_files.count(); i++){
-33      recent_files_menu->insertItem(recent_files.at(i));
-34    }
+24     menuBar()->setMenuBarPos(menu_bar_pos);
+25     toolBar()->setBarPos(tool_bar_pos);
+26
+27     // initialize the recent file list
+28     recent_files.setAutoDelete(TRUE);
+29     config->readListEntry("Recent Files",recent_files);
+30
+31     uint i;
+32     for ( i =0 ; i < recent_files.count(); i++){
+33       recent_files_menu->insertItem(recent_files.at(i));
+34     }
 35
-36    QSize size=config->readSizeEntry("Geometry");
-37	  if(!size.isEmpty())
-38      resize(size);
-}
+36     QSize size=config->readSizeEntry("Geometry");
+37     if(!size.isEmpty())
+38       resize(size);
+39   }
 </code></tscreen>
 
 As we have seen in one of the above code parts, the first action our constructor does was:
@@ -1133,7 +1133,7 @@ if (app.isRestored()){
   int n = 1;
   while (KTMainWindow::canBeRestored(n)){
     (new KScribbleApp)->restore(n);
-     n++;
+    n++;
   }
 }
 </verb></tscreen>
@@ -1153,24 +1153,24 @@ session beginning, this information now is used to restore the document contents
 <tscreen><verb>
 void KScribbleApp::readProperties(KConfig*)
 {
-	QString filename = config->readEntry("filename","");
-	bool modified = config->readBoolEntry("modified",false);
+  QString filename = config->readEntry("filename","");
+  bool modified = config->readBoolEntry("modified",false);
   if( modified ){
-  	bool b_canRecover;
-		QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
-  	
-  	if(b_canRecover){
-   			doc->openDocument(tempname);
-   			doc->setModified();
-   			QFileInfo info(filename);
-   			doc->pathName(info.absFilePath());
-   			doc->title(info.fileName());
-   			QFile::remove(tempname);
-		}
-	}
- 	else if(!filename.isEmpty()){
-		doc->openDocument(filename);
-	}
+    bool b_canRecover;
+    QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
+
+    if(b_canRecover){
+      doc->openDocument(tempname);
+      doc->setModified();
+      QFileInfo info(filename);
+      doc->pathName(info.absFilePath());
+      doc->title(info.fileName());
+      QFile::remove(tempname);
+    }
+  }
+  else if(!filename.isEmpty()){
+  doc->openDocument(filename);
+  }
   setCaption(kapp->appName()+": "+doc->getTitle());
 }		
 </verb></tscreen>
@@ -1216,7 +1216,7 @@ HTML output, therefore all documentation is placed in the headers.
 
 <sect>Creating Views
 <p>
-<sect1>Using Library Views and Dialogs
+<sect1>Using Library Views
 <p>
 <sect1>Qt Views
 <p>
@@ -1309,6 +1309,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
 
 
 

@@ -120,24 +120,26 @@ contents of KDevelop's internal Messages-window.
 
 <sect1>Requirements
 <p>
-In order to successfully compile and use KDevelop, you need the following programs and libraries.
+In order to successfully compile and use KDevelop, you need the following programs and libraries which are available on most platforms
+as distribution packages and thereby can be installed easily.
 <p>
 <bf>Required:</bf>
 <itemize>
-<item>gcc/g++ 2.7.2.1 (or compatible)
-<item>perl 5.004
-<item>autoconf 2.12
-<item>automake 1.2
-<item>Qt 1.42
-<item><idx/KDE/ 1.1
+<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>GNU make (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>perl 5.004, available at <htmlurl url="http://www.perl.com" name="http://www.perl.com">
+<item>autoconf 2.12, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>automake 1.2, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>Qt 1.42, avaliable at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item><idx/KDE/ 1.1.x, available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">
 </itemize>
 <p>
 <bf>Optional:</bf>
 <itemize>
 <item>a2ps or enscript for printing support
 <item>ghostview or kghostview for printing preview
-<item>glimpse 4.0 for the search index
-<item>sgmltools 1.0
+<item>glimpse 4.0 for the search index, available at <htmlurl url="http://glimpse.cs.arizona.edu" name="http://glimpse.cs.arizona.edu">
+<item>sgmltools 1.0, available at <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with KDoc, KSgml2Html, KTranslator (available at <htmlurl
 url="http://developer.kde.org" name="http://developer.kde.org">)
 <item>KDbg, KIconEdit (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
@@ -145,6 +147,9 @@ url="http://developer.kde.org" name="http://developer.kde.org">)
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
 200 MMX, 128MB RAM.
+
+As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including a2ps and enscript as packages or
+rpm's, so you should have no problem installing the required third-party software.
 
 <bf>Documentation:</bf>	
 
@@ -188,105 +193,117 @@ If your system's make-command is <tt/gmake/, type <tt/gmake/ instead of <tt/make
 
 <sect1>Starting KDevelop
 <p>
-If you use <idx/KDE/ as your window manager, KDevelop can be started either with choosing "K"&rarr"Applications"&rarr"KDevelop". As
-KDevelop supports <idx/KDE/-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the
-KDevelop project icon) in the <idx/KDE/ File Manager which will start KDevelop and load the project.
-
+If you use <idx/KDE/ as your window manager, KDevelop can be started either with choosing
+"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4". As KDevelop supports <idx/KDE/-Mime-types, you can also start by selecting a
+KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the <idx/KDE/ File Manager which will start KDevelop
+and load the project.
 Under other window managers, open a console and type:
 <tscreen><verb>
 &percnt kdevelop
 </verb></tscreen>
 
-Starting KDevelop with a certain project would be to change into the project-directory and to type:
+To start Kdevelop with an existing project, change into the project-directory and type:
+
 <tscreen><verb> 	
 &percnt kdevelop  &lt;yourProject&gt;.kdevprj
 </verb></tscreen>
 
 Under each user account KDevelop will invoke the <ref id="The Installation Program" name="automatic installation"> process on the
-first start, allowing a quick configuration of the most needed options. If your installation is messed up, please delete your
-kdeveloprc file and restart KDevelop, the automatic installation will be called again to set up KDevelop according to your system.
+first start, allowing a quick configuration of the most needed options. If your installation is messed up, you can reconfigure KDevelop
+any time either by entering
+
+<tscreen><verb> 	
+&percnt kdevelop  --setup
+</verb></tscreen>
+
+or, when using KDE, by choosing "K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup".
 
 <sect1>The Installation Program<label id="The Installation Program">
 <p>
-KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current
-user account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
-"Proceed" to automatically check your system and to set up your KDevelop environment.
+KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
+kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
+set up your KDevelop environment.
 
 The Installation dialog's buttons execute the following actions:
 <p>
-<bf>Help:</bf>  Will open  the KDEHelp program and open this page.
+<bf>Help:</bf>  Will open  the KDEHelp program.
 <p>
-<bf>Proceed:</bf>  This will actually start the installation process and execute actions in the following order:
+<bf>Proceed:</bf> This starts the installation process and executes the following actions:
 
 <enum>
 <item> Checking for make/gmake, autoconf, autoheader, automake and perl for the creation and compilation of new applications
 generated by KDevelop. If gmake is installed, the make-command will be set automatically to use gmake.  Other comandline options
-to your make program can be set in the setup dialog accessed by the options menu later.
+to your make program can be set in the setup dialog accessed by the options menu later, an introduction into development under Unix is
+explained in section <ref id="Programs" name="Programs">.
 
 <item> Checking for KDoc and Glimpse.  Those will allow to create a new <idx/KDE-library/ documentation and a search index
 automatically in a later setup step if found.
 
 <item> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
-allow correct printing.
+allow correct printing. If neither program is installed, you can do this at any time lateron at your option without having to run the
+setup again.
 
-<item> Checking for KDbg,KIconedit and KTranslator.  We advise to install those programs as they are good
-helpers to create complete <idx/KDE/-applications. Note that KDbg is used directly for debugging your current project within KDevelop;
-KIconedit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are
-then configured to be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the
+<item> Checking for KDbg, KIconedit and KTranslator.  We encourage you to install those programs as they are good
+helpers for creating complete <idx/KDE/-applications. Note that KDbg is used directly for debugging your current project within
+KDevelop; KIconedit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator
+are then configured to be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the
 Tools-menu by selecting "Tools..." in the Options menu later.
 
-<item> Showing the summary dialog.  All tested programs are listed with found or not found, additional hints are given, if a
+<item> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
 
-<item> Then follows the detection of your Qt-online documentation path.  This checks for several standard path in your system for
-the documentation and sets the path automatically.  If your Qt-Documentation could not be found, a message will appear that asks
-you to set the correct path or to continue.  Choosing to set the path will return to the main installation window and shows an
-editing field with a button on the right of it.  Choosing this button will open a directory selection dialog, where you can
-switch to the directory the documentation is located. Usually this is in the qt/html directory. After doing so, the installation
-can continue with the selection of "Proceed" again.
+<item>Detection of your Qt-online documentation path: this checks for several standard paths in your system for the documentation and
+sets the path automatically. If your Qt-Documentation could not be found either because it is not installed or your system keeps it at
+a different location, a message will appear that asks you to set the correct path manually or to continue. Choosing the button to set
+the path will return to the main installation window and shows an editing field with a button on the right of it to choose the path.
+Usually this is in the qt/html directory. After doing so, the installation can continue with the selection of "Proceed" again.
 
 <item> If KDoc was detected, you are asked to create/update your <idx/KDE/-library documentation.  For that, you need to have the
-kde-libraries in source form. For Linux-Users who have installed <idx/KDE/ from a distribution, we advise to copy and extract the
-source of the kdelibs-package to your system; Free BSD users who installed the kdelibs as a package should look for their according
-distfile package of the ports-collection.   If none of these cases can be fulfilled, you should download the sources from
-<htmlurl url="http://www.kde.org" name="http://www.kde.org"> and untar the sources on your system to create a documentation.  If
-you wish to use the documentation package provided by <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">,
-you can cancel the creation and continue with creating the search index. Mind that the path to your kde-library documentation has
-to be set manually in the setup dialog accessed by the options menu then.
+kde-libraries in source form. For Linux-Users who have installed <idx/KDE/ from a distribution, we suggest to copying and extracting
+the source of the kdelibs-package to your system; Free BSD users who installed the kdelibs as a package should look for their according
+distfile package of the ports-collection.   If none of these cases match your situation, you should download the sources from <htmlurl
+url="http://www.kde.org" name="http://www.kde.org"> and untar the sources on your system. If you wish to use the documentation package
+provided by <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">, cancel the creation and continue with creating
+the search index. After the installer finished and KDevelop has been started, set the path to the extracted documentation package in
+the KDevelop Setup dialog and run the search index setup again, which can be found at the same setup page of the dialog.
 
-<item> The "Update <idx/KDE/-Library documentation" dialog is set up to use a default path for the location of the documentation
-to create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your
-library sources with the selection button on top of the dialog and press OK. If the path was set correctly, you are asked if your
-documentation should be created using the khtml  or the khtmlw library.  We advise to use khtml as khtmlw is older and exists for
-compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion while programming, we decided to
-only include one of those for documentation.  If you are working on applications that use khtmlw, you should create a different
-documentation with the <ref id="General Configuration" name="KDevelop Setup"> in the options menu and use khtmlw then.    During
-the creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the
-next message.
+The "Update <idx/KDE/-Library documentation" dialog is set up to use a default path for the location of the documentation in
+$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library sources you
+extracted on the sytem with the selection button on top of the dialog and press OK. As an example, if you got the kdelibs.tar.gz
+package from <htmlurl url="http://www.kde.org" name="http://www.kde.org"> and downloaded it to your home directory, you should open a
+console or terminal and enter "tar zxvf kdelibs.tar.gz". This will untar the sources into a directory $HOME/kdelibs, which then
+contains the sources for each library in a subdirectory, e.g. for kdecore, this would be in /home/rnolden/kdelibs/kdecore. Now, the
+path you have to enter in the KDE-Library documentation dialog would be the path to all libraries, in the example
+/home/rnolden/kdelibs.
+
+If the path was set correctly, you are asked if your documentation should be created using the khtml or the khtmlw library. Both are
+providing a HTML-widget which are used to create windows that can display HTML files and is used by KDEHelp and KFM. As the classes are
+the same in both libraries, we decided to include only one library for documentation to avoid confusion due to the fact that the header
+files containing the classes differ in their filename. After pressing the OK button, a message in the installation window shows that it
+is in progress and you should wait for the next message.
 <p>
-<bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the creation of a complete HTML documentation
-for each user would be a mere waste of disk space. In this case, ask you system administrator to run KDevelop under the
-root account to allow write access to the system's root directory. Then create the documentation within the
-<idx/KDE/-directory, under $KDEDIR/share/apps/kdevelop/KDE-Documentation. The correct path can then be set up later in the KDevelop
-setup dialog, available in the "Options"-menu.
+
+<bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the installation of a complete HTML documentation
+for each user would be a waste of disk space. In this case, ask your system administrator to run KDevelop under the root account to
+allow write access to the system's root directory. Then install the documentation within the <idx/KDE/-directory, under
+$KDEDIR/share/apps/kdevelop/KDE-Documentation. The correct path can then be set up later in the KDevelop setup dialog, available in the
+"Options"-menu.
 
 <item> If the system check found the Glimpse program on your system, you are offered to create a search database. The
 search database can be created with the options of including the KDE-documentation and the Qt-documentation (default). Additionally
-the online documentation of KDevelop is included and will be indexed.  If you have other documentation that should be indexed you
-can select the directories and add them to the indexing process as well. If you wish to have direct access to these
-documentations, you have to add them to the documentation tree later in KDevelop by a right-button click on the "Others" folder,
-offering the addition of other documentations.
+the KDevelop documentation is included and will be indexed.  If you have other documentation that you want indexed you
+can select the directories and add them to the indexing process as well.
 
 <item> During the creation of the search index, the installation window will show a message that this is in progress.
 
-<item> If all installation steps were done correctly,  a final message shows that KDevelop will be started
-after pressing OK and you are ready to start. Mind that you can set up additional options like auto saving in the
-<ref id="General Configuration" name="KDevelop Setup"> dialog that can be accessed by the options menu.
+<item> If all installation steps were done correctly,  a final message states that KDevelop will be started
+after pressing OK. Mind that you can set up additional options like auto saving in the
+<ref id="General Configuration" name="KDevelop Setup"> dialog that can be accessed through the options menu.
 </enum>
 
-<bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows to
-return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you have to
-set all options yourself with the configuration dialogs provided in the options-menu.
+<bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
+to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
+to set all options yourself with the configuration dialogs provided in the options-menu.
 
 <sect>Programs<label id="Programs">
 <p>

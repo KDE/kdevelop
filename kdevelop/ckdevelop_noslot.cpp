@@ -18,12 +18,14 @@
 #include "./kdlgedit/kdlgedit.h"
 #include <iostream.h>
 #include <kmsgbox.h>
+#include <qprogressdialog.h>
 #include "ckdevelop.h"
 #include "debug.h"
 #include "cclassview.h"
 #include "kswallow.h"
 #include "ctoolclass.h"
 #include "./kdlgedit/kdlgdialogs.h"
+#include "cdocbrowser.h"
 
 
 void CKDevelop::refreshTrees(){
@@ -163,6 +165,18 @@ void CKDevelop::switchToFile(QString filename){
     s_tab_view->setCurrentTab(TOOLS);
     swallow_widget->sWClose(false);
     swallow_widget->setExeString("kpaint "+ filename);
+    swallow_widget->sWExecute();
+    swallow_widget->init();
+    return;
+  }
+  if((filename).right(3) == ".ps"){
+    if(!CToolClass::searchInstProgram("kghostview")){
+			return;
+		}
+    showOutputView(false);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    swallow_widget->setExeString("kghostview "+ filename);
     swallow_widget->sWExecute();
     swallow_widget->init();
     return;
@@ -519,11 +533,160 @@ void CKDevelop::showOutputView(bool show){
     view->resize(rMainGeom.width(),rMainGeom.height());
   }
 }
-
-void CKDevelop::closeEvent(QCloseEvent* e){
+void CKDevelop::readOptions(){
   config->setGroup("General Options");
-  config->writeEntry("width",width());
-  config->writeEntry("height",height());
+
+	/////////////////////////////////////////
+	// GEOMETRY
+  QSize size=config->readSizeEntry("Geometry");
+	if(!size.isEmpty())
+		resize(size);
+	else
+		setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+
+	/////////////////////////////////////////
+	// BAR STATUS
+	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
+	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
+	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
+	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
+
+
+  KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+  toolBar()->setBarPos(tool_bar_pos);
+	bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
+	if(std_toolbar){
+	  view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
+    enableToolBar(KToolBar::Show,0);
+  }
+  else{
+    enableToolBar(KToolBar::Hide,0);
+  }
+	// Browser Toolbar
+  KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
+  toolBar(ID_BROWSER_TOOLBAR)->setBarPos(browser_tool_bar_pos);
+	bool browser_toolbar=config->readBoolEntry("show_browser_toolbar",true);
+	if(browser_toolbar){
+	  view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
+    enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
+  }
+  else{
+    enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
+  }
+	
+	// Dialogedit Toolbar	
+  KToolBar::BarPosition kdlg_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("KDlgEdit ToolBar Position", KToolBar::Top);
+  toolBar(ID_KDLG_TOOLBAR)->setBarPos(kdlg_tool_bar_pos);
+	bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
+  if(kdlg_toolbar){
+		kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
+    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
+  }
+  else{
+    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
+  }
+	// Statusbar
+	bool statusbar=config->readBoolEntry("show_statusbar",true);
+	if(statusbar){
+	  view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
+	}
+	else{
+		enableStatusBar();
+	}
+	
+	/////////////////////////////////////////
+	// Outputwindow, TreeView, KDevelop/KDlgEdit
+	view->setSeparatorPos(config->readNumEntry("view_panner_pos",80));
+	bool outputview= config->readBoolEntry("show_output_view", true);
+	if(outputview){
+	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    output_view_pos=view->separatorPos();
+	}
+	else{
+    output_view_pos=config->readNumEntry("output_view_pos", 80);
+	}
+	
+  top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 213));
+	bool treeview=config->readBoolEntry("show_tree_view", true);
+	if(treeview){
+	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+    tree_view_pos=top_panner->separatorPos();
+	}
+  else{
+    tree_view_pos=config->readNumEntry("tree_view_pos", 213);
+  }
+	
+
+  kdlg_top_panner->setSeparatorPos(config->readNumEntry("kdlg_top_panner_pos", 80));
+	if(config->readBoolEntry("show_properties_view",true)){
+	  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
+    properties_view_pos=kdlg_top_panner->separatorPos();
+	}	
+  else{
+    properties_view_pos=config->readNumEntry("properties_view_pos", 80);
+  }
+
+
+	/////////////////////////////////////////
+	// RUNTIME VALUES AND FILES
+  bAutosave=config->readBoolEntry("Autosave",true);
+  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+  saveTimer=new QTimer(this);
+  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+  if(bAutosave){
+    saveTimer->start(saveTimeout);
+  }
+  else{
+    saveTimer->stop();
+  }
+  bAutoswitch=config->readBoolEntry("Autoswitch",true);
+  bDefaultCV=config->readBoolEntry("DefaultClassView",true);
+  make_cmd=config->readEntry("Make","make");
+  //  make_with_cmd=config->readEntry("MakeWith","");
+
+  config->setGroup("Files");
+	doc_bookmarks_list.setAutoDelete(TRUE);
+	doc_bookmarks_title_list.setAutoDelete(TRUE);
+	
+	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
+	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+		
+	uint i;
+	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
+    doc_bookmarks->insertItem(doc_bookmarks_title_list.at(i));
+  }
+	
+  QString filename;
+  filename = config->readEntry("browser_file","");
+  if(!filename.isEmpty()){
+    slotURLSelected(browser_widget,filename,1,"test");
+  }
+  else{
+		slotHelpContents();
+  }
+
+  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
+  if(switchKDevelop){
+    switchToKDevelop();
+  }
+  else{
+    switchToKDlgEdit();
+  }
+}
+
+void CKDevelop::saveOptions(){
+	
+	config->setGroup("General Options");
+	config->writeEntry("Geometry", size() );
+
+  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
+  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
+  config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
+	config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
+	config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
   config->writeEntry("view_panner_pos",view->separatorPos());
   config->writeEntry("top_panner_pos",top_panner->separatorPos());
@@ -555,32 +718,95 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("Make",make_cmd);
 
   config->setGroup("Files");
-  config->writeEntry("cpp_file",cpp_widget->getName());
-  config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
 	config->writeEntry("doc_bookmarks", doc_bookmarks_list);
 	config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
-  //save the dialog;
-  //  kdlgedit->slotFileSave();
-  
-  config->setGroup("Files");
-  config->writeEntry("project_file","");
+
+	config->sync();
+}
+
+bool CKDevelop::queryExit(){
+	saveOptions();
+	return true;
+}
+
+bool CKDevelop::queryClose(){
+  swallow_widget->sWClose(false);
   if(project){
+	  config->setGroup("Files");
     config->writeEntry("project_file",prj->getProjectFile());
+		config->writeEntry("cpp_file",cpp_widget->getName());
+  	config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
     if(!slotProjectClose()){ // if not ok,pressed cancel
-      e->ignore();
-      return; //not close!
+      return false; //not close!
     }
   }
-  e->accept();
-  swallow_widget->sWClose(false);
+	return true;
+}
 
-  config->sync();
-  KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
-  KTMainWindow::closeEvent(e);
+void CKDevelop::readProperties(KConfig* sess_config){
+  QString filename;
+  filename = sess_config->readEntry("project_file","");
+
+  QFile file(filename);
+  if (file.exists()){
+    if(!(readProjectFile(filename))){
+      KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+      refreshTrees();
+    }
+		else{
+   	  QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
+		  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
+  		connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
+			progressDlg->setCaption(i18n("Starting..."));
+   		progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
+   	  progressDlg->setProgress(0);
+   	  progressDlg->show();
+      refreshTrees();
+			delete progressDlg;
+		}
+    filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
+    QFile _file(filename);
+
+    if (QFile::exists(filename)){
+      switchToFile(filename);
+
+    }
+
+    filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
+    if (QFile::exists(filename)){
+      switchToFile(filename);
+    }
+  }
+  else{
+    refreshTrees(); // this refresh only the documentation tab,tree
+  }
+}
+
+void CKDevelop::saveProperties(KConfig* sess_config){
+	
+  if(project){
+		sess_config->writeEntry("project_file",prj->getProjectFile());
+		sess_config->writeEntry("cpp_file",cpp_widget->getName());
+  	sess_config->writeEntry("header_file",header_widget->getName());
+    prj->setCurrentWorkspaceNumber(workspace);
+    saveCurrentWorkspaceIntoProject();
+    prj->writeProject();
+	}	
+	if(bAutosave)
+		slotFileSaveAll();
+	else{
+	  TEditInfo* info;
+	  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+			if(info->modified){
+				setUnsavedData ( true );
+				break;
+			}
+		}
+	}
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
@@ -592,48 +818,6 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -86,11 +86,11 @@ public:
   CKDevelop();
   /**destructor*/
   ~CKDevelop(){};
-  void init();
+  void initView();
   void initConnections();
   void initKeyAccel();
-  void initMenu();
-  void initToolbar();
+  void initMenuBar();
+  void initToolBar();
   void initStatusBar();
   void initWhatsThis();
   void initProject();
@@ -151,12 +151,12 @@ public:
 
  public slots:
 
- ////////////////////////
- // FILE-Menu entries
- ///////////////////////
+  ////////////////////////
+  // FILE-Menu entries
+  ///////////////////////
  
- /** generate a new file*/
- void slotFileNew();
+ 	/** generate a new file*/
+	 void slotFileNew();
   /**open a file*/
   void slotFileOpen();
   /** opens a file from the file_open_popup that is a delayed popup menu installed in the open file button of the toolbar */
@@ -177,7 +177,7 @@ public:
   
   ////////////////////////
   // EDIT-Menu entries
-///////////////////////
+	///////////////////////
   /** Undo last editing step */
   void slotEditUndo();
   /** Redo last editing step */
@@ -498,9 +498,19 @@ public:
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 protected:
-  virtual void closeEvent(QCloseEvent* e);
-  //  void mousePressEvent(QMouseEvent* event);
-
+	/** reads all options and initializes values*/
+	void readOptions();
+	/** saves all options on queryExit() */
+	void saveOptions();
+	/* save the project of the current window and close the swallow widget. If project closing is cancelled, returns false */
+	virtual bool queryClose();
+	/* saves all options by calling saveOptions() */
+	virtual bool queryExit();
+	/* saves the currently opened project by the session manager and write the project file to the session config*/
+	virtual void saveProperties(KConfig* );
+	/** initializes the session windows and opens the projects of the last session*/
+	virtual void readProperties(KConfig* );
+	
 private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
@@ -613,7 +623,6 @@ private:
   QString kdev_caption;
   QString kdlg_caption;
   bool project;
-  bool bViewStatusbar;
 
   bool  prev_was_search_result;
 
@@ -653,6 +662,8 @@ private:
 };
 
 #endif
+
+
 
 
 

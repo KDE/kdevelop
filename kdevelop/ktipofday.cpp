@@ -168,13 +168,13 @@ void KTipofDay::slotNext()
 
 	QFile f(file);
 	QString	tip_text;
-	int text_line=1;
+	int text_line=2;
 	int next;
 	bool found = false;
 
 	KConfig *config = kapp->getConfig();
 	config->setGroup("TipOfTheDay");
-	next = config->readNumEntry("NextTip", 1);
+	next = config->readNumEntry("NextTip", 2);
 	
 	if (f.open(IO_ReadOnly))
 	{
@@ -183,10 +183,10 @@ void KTipofDay::slotNext()
 		{
   			tip_text = t.readLine();
 				tip_label->setText(tip_text);
-				if (next < 30)
+				if (next < 31)
   				config->writeEntry("NextTip",next+1);
   		  else
-  		    config->writeEntry("NextTip",1);
+  		    config->writeEntry("NextTip",2);
 				found = true;
 		    if(text_line==next)
   				break;
@@ -195,6 +195,8 @@ void KTipofDay::slotNext()
 		f.close();
 	}
 }
+
+
 
 
 
