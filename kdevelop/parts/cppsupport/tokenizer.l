@@ -100,6 +100,16 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
 
+    /*==============> Objective-C keyword <==============*/
+<INITIAL>"@class"        {return CPOBJCCLASS;}
+<INITIAL>"@interface"    {return CPOBJCINTERFACE;}
+<INITIAL>"@protocol"     {return CPOBJCPROTOCOL;}
+<INITIAL>"@private"      {return CPOBJCPRIVATE;}
+<INITIAL>"@protected"    {return CPOBJCPROTECTED;}
+<INITIAL>"@public"       {return CPOBJCPUBLIC;}
+<INITIAL>"@implementation"  {return CPOBJCIMPLEMENTATION;}
+<INITIAL>"@end"          {return CPOBJCEND;}
+
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
 <INITIAL>"L"?[']{CCHAR}+[']    {return STRING;}

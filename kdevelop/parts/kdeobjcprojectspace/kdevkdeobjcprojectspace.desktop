@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=KDE Objective-C ProjectSpace (handles KDE Objective-C Projects,po files...)
+Name=KDE Objective-C
+Icon=find
+ServiceTypes=KDevelop/ProjectSpace
+X-KDE-Library=libkdevkdeobjcprojectspace
+X-KDevelop-Language=Objective-C

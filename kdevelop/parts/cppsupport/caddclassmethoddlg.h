@@ -19,7 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef CADDCLASSMETHODDLG_H
 #define CADDCLASSMETHODDLG_H
 

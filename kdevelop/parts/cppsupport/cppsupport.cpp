@@ -284,7 +284,8 @@ QString CppSupport::asCppCode(ParsedMethod *pm)
 
     // Take the path and replace all . with ::
     QString path = pm->path();
-    path.replace( QRegExp( "\\." ), "::" );
+    path.replace( QRegExp( "\\." ), "XX" );
+//    path.replace( QRegExp( "\\." ), "::" );
 
     str += pm->type;
     str += " ";
