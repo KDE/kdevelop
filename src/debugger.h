@@ -15,6 +15,7 @@
 # include "kde30x_markinterfaceextension.h"
 #endif
 
+#if (KDE_VERSION > 305)
 /**
 * Describes a single breakpoint in the system
 *
@@ -50,6 +51,7 @@ private:
     uint m_lineNum;
 };
 
+#endif
 
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
@@ -108,6 +110,7 @@ private slots:
     */
     void partAdded( KParts::Part* part );
 
+
     /**
     * Called by the TextEditor interface when the marks have changed position
     * because the user has added or removed source.
@@ -115,6 +118,12 @@ private slots:
     * these source changes.
     */
     void marksChanged();
+
+    /**
+    * This is not required by kde version > 3.0.5 but must exist to satisfy
+    * the moc pre-compile
+    */
+    void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
 
 private:
     enum MarkType {

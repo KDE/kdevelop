@@ -33,6 +33,8 @@ Debugger *Debugger::getInstance()
 }
 
 
+#if (KDE_VERSION > 305)
+
 void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
     KParts::Part *part = PartController::getInstance()->partForURL(KURL(fileName));
@@ -43,9 +45,8 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     if (!iface)
         return;
 
-    // Temporarily disconnect so we don't get confused by receiving extra markChanged signals
-    // This wouldn't be a problem if the debugging interfaces had explicit add/remove methods
-    // rather than just toggle
+    // Temporarily disconnect so we don't get confused by receiving extra
+    // marksChanged signals
     disconnect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
     iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
 
@@ -74,6 +75,38 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     connect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
 }
 
+#else
+
+void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
+{
+    kdDebug() << "setBreakpoint:" << fileName << endl;
+    KParts::Part *part = PartController::getInstance()->partForURL(KURL(fileName));
+    if( !part )
+        return;
+    MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
+    if (!iface)
+        return;
+
+    // Temporarily disconnect so we don't get confused by receiving extra markChanged signals
+    // This wouldn't be a problem if the debugging interfaces had explicit add/remove methods
+    // rather than just toggle
+    disconnect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
+                this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+    iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
+    if( id != -1 )
+    {
+        uint markType = Breakpoint;
+        if( !pending )
+            markType |= ActiveBreakpoint;
+        if( !enabled )
+            markType |= DisabledBreakpoint;
+        iface->addMark( lineNum, markType );
+    }
+    connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
+             this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+}
+
+#endif
 
 void Debugger::clearExecutionPoint()
 {
@@ -112,6 +145,7 @@ void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
     iface->addMark( lineNum, ExecutionPoint );
 }
 
+#if (KDE_VERSION > 305)
 
 void Debugger::marksChanged()
 {
@@ -174,6 +208,38 @@ void Debugger::marksChanged()
     }
 }
 
+void Debugger::markChanged( Mark, MarkInterfaceExtension::MarkChangeAction)
+{}
+
+#else
+
+void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction action )
+{
+    if( !sender()->inherits("KTextEditor::Document") )
+        return;
+    KTextEditor::Document* doc = (KTextEditor::Document*) sender();
+    MarkInterfaceExtension* iface = KTextEditor::markInterfaceExtension( doc );
+    if( !iface )
+        return;
+    if( mark.type & Breakpoint )
+    {
+        if( !PartController::getInstance()->partForURL( doc->url() ) )
+            return; // Probably means the document is being closed.
+        switch( action )
+        {
+            // Would be better to call distinct methods here rather than toggle...
+        case MarkInterfaceExtension::MarkAdded:
+        case MarkInterfaceExtension::MarkRemoved:
+            emit toggledBreakpoint( doc->url().path(), mark.line );
+            break;
+        }
+    }
+}
+
+void Debugger::marksChanged()
+{}
+
+#endif
 
 void Debugger::partAdded( KParts::Part* part )
 {
@@ -189,7 +255,17 @@ void Debugger::partAdded( KParts::Part* part )
     iface->setPixmap((MarkInterface::MarkTypes)ExecutionPoint, *executionPointPixmap());
     iface->setMarksUserChangable( Bookmark | Breakpoint );
 
+#if (KDE_VERSION > 305)
+
     connect( part, SIGNAL(marksChanged()), this, SLOT(marksChanged()) );
+
+#else
+
+    connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
+             this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+
+#endif
+
 }
 
 #include "debugger.moc"
