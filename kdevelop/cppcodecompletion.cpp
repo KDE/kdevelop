@@ -395,7 +395,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
 
     if( e1.isEmpty() ){
         type = v_this.type;
-    } else if( check_end(e1, "::") ){
+    } else if( checkEnd(e1, "::") ){
         type = e1.left( e1.length() - 2 ).stripWhiteSpace();
     } else {
         int first_paren_index = 0;
@@ -846,10 +846,10 @@ void CppCodeCompletion::completeText()
 
 }
 
-bool CppCodeCompletion::check_end(const QString &str, const QString &suffix)
+bool CppCodeCompletion::checkEnd(const QString &str, const QString &suffix)
 {
 #if QT_VERSION >=300
-   return str.ends_with(suffix);
+   return str.endsWith(suffix);
 #else
    return (str.right(suffix.length()) == suffix);
 #endif
