@@ -357,6 +357,10 @@ public:
   void slotBuildAutoconf();
   void slotBuildConfigure();
 
+  /** connects the menu AND toolbar up to the debug functions
+      Most functions are in dbgController which is constructed when
+      the user wants the debugger */
+  void slotDebugActivator(int id);
   /** Starts up the debugger, and gets it running. This may
       instantiate a debugger if it doesn't exist */
   void slotDebugRun();
@@ -757,6 +761,7 @@ private:
   QPopupMenu* project_menu;
 //  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
+  QPopupMenu* debug_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
   QPopupMenu* menu_buffers;

@@ -131,7 +131,7 @@
   
 #define ID_BUILD_RUN                14070
 #define ID_BUILD_RUN_WITH_ARGS			14075
-#define ID_BUILD_DEBUG              14080
+//#define ID_BUILD_DEBUG              14080
 
 #define ID_BUILD_AUTOCONF           14090
 #define ID_BUILD_CONFIGURE          14100
@@ -139,6 +139,7 @@
 
 // The debugger entries
 #define ID_DEBUG_RUN                14320
+#define ID_DEBUG_RUN_CURSOR         14325
 #define ID_DEBUG_STOP               14330
 #define ID_DEBUG_STEP               14340
 #define ID_DEBUG_STEP_INST          14341
@@ -148,7 +149,9 @@
 #define ID_DEBUG_MEMVIEW            14370
 #define ID_DEBUG_BREAK_INTO         14380
 
-// The debugger startups (Also ID_BUILD_DEBUG starts the debugger as well)
+// The debugger startups
+#define ID_DEBUG_START              14382
+#define ID_DEBUG_START_OTHER        14384
 #define ID_DEBUG_SET_ARGS           14390
 #define ID_DEBUG_CORE               14392
 #define ID_DEBUG_NAMED_FILE         14394

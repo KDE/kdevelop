@@ -800,8 +800,57 @@ void CKDevelop::slotBuildRunWithArgs(){
     }
 }
 
+void CKDevelop::slotDebugActivator(int id)
+{
+  switch (id)
+  {
+    case ID_DEBUG_START:
+      slotBuildDebug();
+      break;
+    case ID_DEBUG_RUN:
+      ASSERT(dbgInternal);
+      slotDebugRun();
+      break;
+    case ID_DEBUG_STEP:
+      ASSERT(dbgInternal && dbgController);
+      dbgController->slotStepInto();
+      break;
+    case ID_DEBUG_STEP_INST:
+      ASSERT(dbgInternal && dbgController);
+      dbgController->slotStepIntoIns();
+      break;
+    case ID_DEBUG_NEXT:
+      ASSERT(dbgInternal && dbgController);
+      dbgController->slotStepOver();
+      break;
+    case ID_DEBUG_NEXT_INST:
+      ASSERT(dbgInternal && dbgController);
+      dbgController->slotStepOverIns();
+      break;
+    case ID_DEBUG_STOP:
+      ASSERT(dbgInternal);
+      slotDebugStop();
+      break;
+    case ID_DEBUG_BREAK_INTO:
+      ASSERT(dbgInternal && dbgController);
+      dbgController->slotBreakInto();
+      break;
+    case ID_DEBUG_MEMVIEW:
+      ASSERT(dbgInternal);
+      slotDebugMemoryView();
+      break;
+    case ID_DEBUG_FINISH:
+      ASSERT(dbgInternal);
+      dbgController->slotStepOutOff();
+      break;
+  }
+}
+
 void CKDevelop::slotDebugRun()
 {
+  if (!dbgController)
+    return;
+
   // and start the debugger going
   dbgController->slotRun();
 }
@@ -888,6 +937,9 @@ void CKDevelop::slotDebugBPState(Breakpoint* BP)
 
 void CKDevelop::slotDebugMemoryView()
 {
+  if (!dbgController)
+    return;
+
   MemoryView* memoryView = new MemoryView(this, "Memory view");
   connect(  memoryView,     SIGNAL(disassemble(const QString&, const QString&)),
             dbgController,  SLOT(slotDisassemble(const QString&, const QString&)));
@@ -940,6 +992,9 @@ void CKDevelop::slotDebugAttach()
 {
   if (dbgInternal)
   {
+    if (dbgController)
+      slotDebugStop();
+
     slotStatusMsg(i18n("Debug running process..."));
     // TODO - do this properly, list of processes needed
     Dbg_PS_Dialog psDlg(this, "process");
@@ -980,6 +1035,9 @@ void CKDevelop::slotDebugExamineCore()
 {
   if (dbgInternal)
   {
+    if (dbgController)
+      slotDebugStop();
+
     slotStatusMsg(i18n("Enter core file to examine..."));
 
     if (project)
@@ -1004,6 +1062,9 @@ void CKDevelop::slotDebugNamedFile()
 {
   if (dbgInternal)
   {
+    if (dbgController)
+      slotDebugStop();
+
     slotStatusMsg(i18n("Enter executable to debug..."));
     if (project)
     {
@@ -1038,6 +1099,9 @@ void CKDevelop::slotBuildDebug()
 
   if (dbgInternal)
   {
+    if (dbgController)
+      slotDebugStop();
+
     setupInternalDebugger();
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
     dbgController->slotStart(prj->getBinPROGRAM(), prj->getDebugArgs());
@@ -1080,30 +1144,50 @@ void CKDevelop::slotBuildDebug()
 
 void CKDevelop::setDebugMenuProcess(bool enable)
 {
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,        enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_MEMVIEW,    enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,       enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP_INST,  enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,       enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT_INST,  enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_FINISH,     enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_BREAK_INTO, enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STOP,       enable);
+  // When starting we turn off the original toolbar start button
+  toolBar()->setItemEnabled(ID_DEBUG_START,           !enable && project);
+  toolBar()->setItemEnabled(ID_BUILD_RUN,             !enable && project);
+  toolBar()->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,   !enable && project);
+  toolBar()->setItemEnabled(ID_BUILD_STOP,            enable);
 
-  // When starting we turn off the original toolbar start button and startup
-  // the debuggers floating toolbar.
-  toolBar()->setItemEnabled(ID_BUILD_DEBUG, !enable && project);
+  toolBar()->setItemEnabled(ID_DEBUG_RUN,             dbgInternal && enable);
+  toolBar()->setItemEnabled(ID_DEBUG_STEP,            dbgInternal && enable);
+  toolBar()->setItemEnabled(ID_DEBUG_NEXT,            dbgInternal && enable);
+  toolBar()->setItemEnabled(ID_DEBUG_FINISH,          dbgInternal && enable);
 
-  if (enable)
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_START,          !enable && project);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN,            !enable && project);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_BUILD_STOP,           enable);
+
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,    dbgInternal && enable);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,   dbgInternal && enable);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,   dbgInternal && enable);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_FINISH, dbgInternal && enable);
+
+  debug_menu->setItemEnabled(ID_DEBUG_START,          !enable && project);
+  debug_menu->setItemEnabled(ID_DEBUG_START_OTHER,    dbgInternal && !enable && project);
+  debug_menu->setItemEnabled(ID_BUILD_RUN,            !enable && project);
+  debug_menu->setItemEnabled(ID_BUILD_RUN_WITH_ARGS,  !enable && project);
+
+  debug_menu->setItemEnabled(ID_DEBUG_RUN,            dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,     dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_NEXT,           dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_NEXT_INST,      dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_STEP,           dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_STEP_INST,      dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_FINISH,         dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_MEMVIEW,        dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_BREAK_INTO,     dbgInternal && enable);
+  debug_menu->setItemEnabled(ID_DEBUG_STOP,           enable);
+
+  // now create/destroy the floating toolbar
+  if (dbgInternal && dbgController && dbgEnableFloatingToolbar && enable)
   {
-    if (dbgEnableFloatingToolbar)
-    {
-      ASSERT(dbgController);
-      dbgToolbar = new DbgToolbar(dbgController, this);
-      dbgToolbar->show();
-      connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
-                dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
-    }
+    dbgToolbar = new DbgToolbar(dbgController, this);
+    dbgToolbar->show();
+    connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
+              dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
   }
   else
   {
@@ -1194,7 +1278,8 @@ void CKDevelop::slotBuildMake(){
   }
 
   // Kill the debugger if it's running
-  slotDebugStop();
+  if (dbgController)
+    slotDebugStop();
 
   //save/generate dialog if needed
   kdlgedit->generateSourcecodeIfNeeded();
@@ -3367,9 +3452,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_REBUILD_ALL:
   	slotBuildRebuildAll();
   	break;
-  case ID_BUILD_DEBUG:
-    slotBuildDebug();
-    break;
   case ID_BUILD_RUN:
     slotBuildRun();
     break;
@@ -3420,41 +3502,19 @@ void CKDevelop::slotToolbarClicked(int item){
     }		
     break;
 
+  // Redirect to code that handles menu and toolbar selection
+  // for these functions.
+  case ID_DEBUG_START:
   case ID_DEBUG_RUN:
-    ASSERT(dbgInternal);
-    slotDebugRun();
-    break;
   case ID_DEBUG_STEP:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotStepInto();
-    break;
   case ID_DEBUG_STEP_INST:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotStepIntoIns();
-    break;
   case ID_DEBUG_NEXT:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotStepOver();
-    break;
   case ID_DEBUG_NEXT_INST:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotStepOverIns();
-    break;
   case ID_DEBUG_STOP:
-    ASSERT(dbgInternal);
-    slotDebugStop();
-    break;
   case ID_DEBUG_BREAK_INTO:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotBreakInto();
-    break;
-  case ID_DEBUG_MEMVIEW:    // change this name
-    ASSERT(dbgInternal);
-    slotDebugMemoryView();
-    break;
+  case ID_DEBUG_MEMVIEW:
   case ID_DEBUG_FINISH:
-    ASSERT(dbgInternal);
-    dbgController->slotStepOutOff();
+    slotDebugActivator(item);
     break;
   }
 }
@@ -3542,12 +3602,27 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_STOP,                    			  i18n("Stops make immediately"))
   ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
   ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
-
-  ON_STATUS_MSG(ID_BUILD_DEBUG,                  			    i18n("Invokes make and starts debugging the binary"))
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
- 
+
+  ON_STATUS_MSG(ID_DEBUG_START,                  			    i18n("Invokes the debugger on the current project executable"))
+  ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
+  ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Arguments for the debugger"))
+  ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine core file"))
+  ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Run other app than the current project executable"))
+//  ON_STATUS_MSG(ID_DEBUG_NORMAL,                          i18n(""))
+  ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
+
+  ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
+  ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
+  ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
+  ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
+  ON_STATUS_MSG(ID_DEBUG_NEXT,                            i18n("Step over"))
+  ON_STATUS_MSG(ID_DEBUG_NEXT_INST,                       i18n("Step over instr"))
+  ON_STATUS_MSG(ID_DEBUG_FINISH,                          i18n("Run to end of function"))
+  ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
+  ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
 
   ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,												i18n("Changes to the KDevelop dialogeditor"))
   ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,										i18n("Changes to KDevelop project editor"))

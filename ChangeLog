@@ -1,3 +1,6 @@
+2000-01-22 jbb <jbb@ihug.co.nz>
+	* Rearrange debug toolbar and add debug menu
+
 2000-01-21 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commited patch by R. Imura <imura@cs.titech.ac.jp>, KDevelop can handle multibyte characters now, see www.kde.gr.jp for more information
 

@@ -89,7 +89,7 @@ CKDevelop::CKDevelop(bool witharg)
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+//  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set debug arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
 //  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set remote target"),this,SLOT(slotDebugSetRemote()),0,ID_DEBUG_SET_REMOTE);
   // ************ END DEBUGGER STUFF
@@ -255,7 +255,9 @@ void CKDevelop::initView(){
   
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
-  
+
+  // Setup the debug menu correctly.
+  setDebugMenuProcess(false);
 }
 
 /*--------------------------------------- CKDevelop::initKeyAccel()
@@ -432,7 +434,7 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
   
   accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
-  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_BUILD_DEBUG );
+  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START );
 
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
@@ -655,7 +657,7 @@ void CKDevelop::initMenuBar(){
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
   build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
 //  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
-  build_menu->insertItem(Icon("debugger.xpm"), i18n("&Debug..."), debugPopup, ID_BUILD_DEBUG);
+//  build_menu->insertItem(Icon("debugger.xpm"), i18n("&Debug..."), debugPopup, ID_BUILD_DEBUG);
 
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -664,7 +666,31 @@ void CKDevelop::initMenuBar(){
 
   kdev_menubar->insertItem(i18n("&Build"), build_menu);
 
+  ///////////////////////////////////////////////////////////////////
+  // Debug-menu entries
 
+  debug_menu = new QPopupMenu;
+  debug_menu->insertItem(Icon("debugger.xpm"),    i18n("&Start"),           ID_DEBUG_START);  //this, SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+  debug_menu->insertItem(Icon("debugger.xpm"),    i18n("Start (other)..."), debugPopup, ID_DEBUG_START_OTHER);
+  debug_menu->insertSeparator();
+
+  debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run"),              ID_DEBUG_RUN);
+  debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
+  debug_menu->insertItem(Icon("dbgnext.xpm"),     i18n("Step over"),        ID_DEBUG_NEXT);
+  debug_menu->insertItem(Icon("dbgnextinst.xpm"), i18n("Step over instr."), ID_DEBUG_NEXT_INST);
+  debug_menu->insertItem(Icon("dbgstep.xpm"),     i18n("Step into"),        ID_DEBUG_STEP);
+  debug_menu->insertItem(Icon("dbgstepinst.xpm"), i18n("Step into instr."), ID_DEBUG_STEP_INST);
+  debug_menu->insertItem(Icon("dbgstepout.xpm"),  i18n("Step out"),         ID_DEBUG_FINISH);
+  debug_menu->insertSeparator();
+
+  debug_menu->insertItem(Icon("dbgmemview.xpm"),  i18n("Viewers"),          this, SLOT(slotDebugMemoryView()), 0, ID_DEBUG_MEMVIEW);
+  debug_menu->insertSeparator();
+
+  debug_menu->insertItem(Icon("dbgbreak.xpm"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
+  debug_menu->insertItem(Icon("stop_proc.xpm"),   i18n("Stop"),             ID_DEBUG_STOP);
+
+  kdev_menubar->insertItem(i18n("&Debug"), debug_menu);
+  connect(debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
@@ -800,6 +826,7 @@ void CKDevelop::initMenuBar(){
   connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(debug_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
@@ -833,9 +860,9 @@ void CKDevelop::initToolBar(){
 
   toolBar()->insertButton(Icon("print.xpm"),ID_FILE_PRINT,false,i18n("Print"));
 
-  QFrame *separatorLine= new QFrame(toolBar());
-  separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine);
+  QFrame *sepUndo= new QFrame(toolBar());
+  sepUndo->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,sepUndo);
 	
   toolBar()->insertButton(Icon("undo.xpm"),ID_EDIT_UNDO,false,i18n("Undo"));
   toolBar()->insertButton(Icon("redo.xpm"),ID_EDIT_REDO,false,i18n("Redo"));
@@ -844,25 +871,23 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("copy.xpm"),ID_EDIT_COPY, true,i18n("Copy"));
   toolBar()->insertButton(Icon("paste.xpm"),ID_EDIT_PASTE, true,i18n("Paste"));
 	
-  QFrame *separatorLine1= new QFrame(toolBar());
-  separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine1);
+  QFrame *sepCompile= new QFrame(toolBar());
+  sepCompile->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,sepCompile);
 
   toolBar()->insertButton(Icon("compfile.xpm"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   toolBar()->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
-  // ********* DEBUG stuff
-  toolBar()->setDelayedPopup(ID_BUILD_DEBUG, debugPopup);
-  // ********* DEBUG
+  toolBar()->insertButton(Icon("debugger.xpm"),ID_DEBUG_START, false, i18n("Debug"));
+  toolBar()->setDelayedPopup(ID_DEBUG_START, debugPopup);
   toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
 
-  QFrame *separatorLine2= new QFrame(toolBar());
-  separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine2);
+  QFrame *sepDlgEd= new QFrame(toolBar());
+  sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,sepDlgEd);
 
   toolBar()->insertButton(Icon("newwidget.xpm"),ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
   toolBar()->insertButton(Icon("tree_win.xpm"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
@@ -870,16 +895,20 @@ void CKDevelop::initToolBar(){
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
- QFrame *separatorLine3= new QFrame(toolBar());
- separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
- toolBar()->insertWidget(0,20,separatorLine3);
+  QFrame *sepDbgRun = new QFrame(toolBar());
+  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,sepDbgRun);
 
+  toolBar()->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
+  toolBar()->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
+  toolBar()->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+  toolBar()->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
-  whats_this = new QWhatsThis;
-  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());
-  QToolTip::add(btnwhat, i18n("What's this...?"));
-  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
-  btnwhat->setFocusPolicy(QWidget::NoFocus);
+//  toolBar()->insertButton(Icon("dbgnextinst.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
+//  toolBar()->insertButton(Icon("dbgstepinst.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
+//  toolBar()->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory, dissemble, registers, library viewer"));
+//  toolBar()->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false, i18n("Interrupt the app execution"));
+//  toolBar()->insertButton(Icon("stop_proc.xpm"),ID_DEBUG_STOP, false, i18n("Stop debugging the app"));
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
@@ -938,6 +967,16 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
+  QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
+  sepWhatsThis->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
+
+  whats_this = new QWhatsThis;
+  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar(ID_BROWSER_TOOLBAR));
+  QToolTip::add(btnwhat, i18n("What's this...?"));
+  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+  btnwhat->setFocusPolicy(QWidget::NoFocus);
+
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
 }
@@ -1410,25 +1449,6 @@ void CKDevelop::initDebugger()
 
     connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
               frameStack,             SLOT(slotSelectFrame(int)));
-
-    toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
-    QFrame *separatorLine= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-    separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-    toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine);
-
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnextinst.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstepinst.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory, dissemble, registers, library viewer"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false, i18n("Interrupt the app execution"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_DEBUG_STOP, false, i18n("Stop debugging the app"));
-
-  	QFrame *separatorLine1= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-    separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-    toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine1);
   }
 
   // Enable or disable the tabs, if they exist...

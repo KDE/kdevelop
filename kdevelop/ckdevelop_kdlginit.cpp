@@ -192,7 +192,7 @@ void CKDevelop::initKDlgMenuBar(){
 
   kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
 	kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-  kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
+  kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_DEBUG_START);
 
   kdlg_build_menu->insertSeparator();
   kdlg_build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -202,6 +202,11 @@ void CKDevelop::initKDlgMenuBar(){
 	
 
   kdlg_menubar->insertItem(i18n("&Build"), kdlg_build_menu);
+
+  ///////////////////////////////////////////////////////////////////
+  // Debug-menu entries - It's exactly the same as the other menu
+
+  kdlg_menubar->insertItem(i18n("&Debug"), debug_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
@@ -303,7 +308,7 @@ void CKDevelop::initKDlgMenuBar(){
  
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_RUN_WITH_ARGS);
-  disableCommand(ID_BUILD_DEBUG);
+//  disableCommand(ID_BUILD_DEBUG);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
   disableCommand(ID_BUILD_STOP);
@@ -355,10 +360,19 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
-	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
+	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_DEBUG_START, false, i18n("Debug"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
+
+  QFrame *sepDbgRun = new QFrame(toolBar(ID_KDLG_TOOLBAR));
+  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,sepDbgRun);
+
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
   QFrame *separatorLine2= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
