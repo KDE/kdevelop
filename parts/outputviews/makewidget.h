@@ -13,16 +13,13 @@
 #define _MAKEWIDGET_H_
 
 #include <qstack.h>
-#include "qtextedit.h"
-#include "qbrush.h"
-#include "qstylesheet.h"
-#include "private/qrichtext_p.h"
+#include <qregexp.h>
+#include <qtextedit.h>
 
 
 class MakeViewPart;
 class MakeItem;
 class KProcess;
-class KRegExp;
 class ProcessLineMaker;
 
 
@@ -92,24 +89,28 @@ private:
     bool m_bShortCompilerOutput;
     bool m_bShowDirNavMsg;
     
+    QRegExp m_pErrorGccRx;
     int m_errorGccFileGroup;
     int m_errorGccRowGroup;
     int m_errorGccTextGroup;
+
+    QRegExp m_pErrorFtnchekRx;
     int m_errorFtnchekFileGroup;
     int m_errorFtnchekRowGroup;
     int m_errorFrnchekTextGroup;
+
+    QRegExp m_pErrorJadeRx;
     int m_errorJadeFileGroup;
     int m_errorJadeRowGroup;
     int m_errorJadeTextGroup;
+
+    QRegExp m_pCompileFile1;
+    QRegExp m_pCompileFile2;
+    QRegExp m_pCompileFile3;
+    QRegExp m_pMocFile;
+    QRegExp m_pLinkFile;
+    QRegExp m_pInstallFile;
     int m_fileNameGroup;
- 
-    KRegExp* m_pErrorGccRx;
-    KRegExp* m_pErrorFtnchekRx;
-    KRegExp* m_pErrorJadeRx;
-    KRegExp* m_pCompileFile1;
-    KRegExp* m_pCompileFile2;
-    KRegExp* m_pCompileFile3;
-    KRegExp* m_pLinkFile;
 };
 
 #endif
