@@ -87,7 +87,7 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 <item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.
 <item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen C++ Code erzeugt.
 <item>Kapitel <ref id="Debuggen einer Anwendung" name="Debuggen einer Anwendung">, Features und Erläuterungen zum internen Debugger
-<item>Kapitel <ref id="General Configuration" name="General Configuration"> zeigt Ihnen, wie Sie generelle Einstellungen zur Benutzung von KDevelop vornehmen.
+<item>Kapitel <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur Benutzung von KDevelop vornehmen.
 <item>Kapitel <ref id="Questions and Answers" name="Questions and Answers">, behandelt Fragen, die bei der Benutzung von KDevelop unter verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
 </itemize>
 
@@ -384,8 +384,7 @@ oder suchen Sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents
 
 Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug benötigt, um den Übersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
 das Schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
-Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="General
-Configuration" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
+Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="KDevelop Setup" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
 Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
 Werkzeugleiste oder wählen Sie die gewünschte Funktion aus dem "Erstellen" Menü.
 
@@ -897,7 +896,7 @@ Header/Resourcen-Fenster für Header- und andere Textdateien wie die SGML-Dokumen
 Quellcodes. Auf diese folgt das Dokumentationsfenster, das eine HTML-Formate anzeigt. Ganz rechts befindet sich das Werkzeuge-Fenster
 zur Arbeit mit externen Programmen wie KIconedit oder KDbg, die in die Entwicklungsumgebung eingebettet sind. Jedes Werkzeug, das registriert ist,
 können Sie über das "Werkzeuge" Menü aufrufen; die Registrierung von weiteren Programmen können Sie über einen Konfigurationsdialog
-vornehmen (sehen Sie <ref id="General Configuration" name="General Configuration">). Eine Beschreibung der Editorfunktionen finden Sie
+vornehmen (sehen Sie <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration">). Eine Beschreibung der Editorfunktionen finden Sie
 im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zum Hilfebrowser schlagen Sie bitte 
 <ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
 
@@ -1098,7 +1097,7 @@ Das Werkzeuge-Menü enthält standardmäßig die Einträge für folgende Programme, fa
 KTranslator. Diese werden durch das KDevelop Installationsprogramm geprüft und in dieser Reihenfolge eingefügt. Der Aufruf eines
 Programms öffnet das "Werkzeuge"-Fenster und startet das Programm innerhalb dieses Fensters. Die Programme können Sie über den
 "Werkzeuge" Eintrag des Einstellungen-Menüs konfigurieren; lesen Sie dazu 
-<ref id="Configuring the &dquot;Tools&dquot; Menu" name="Configuring the &dquot;Tools&dquot; Menu">.
+<ref id="Konfiguration des &dquot;Werkzeuge&dquot; Menüs" name="Konfiguration des &dquot;Werkzeuge&dquot; Menüs">.
 
 <sect1>Anpassen von KDevelop
 <p>
@@ -1254,7 +1253,7 @@ Dokumentation zu durchsuchen.
 <sect>Tastenbefehle
 <p>
 Dieser Abschnitt behandelt die vordefinierten als auch die Standard-Konfiguration der Schnelltasten für Kommandos, die Sie in der
-KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Changing Keyboard Shortcuts" name="Changing Keyboard Shortcuts">.
+KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern der Tastatur Kürzel" name="Ändern der Tastatur Kürzel">.
 
 <sect1>Tastaturbelegung für Textbearbeitung
 <p>
@@ -1518,7 +1517,7 @@ dazu finden Sie im <htmlurl url="programming.html" name="KDevelop Programmierhan
 "Benutzerhandbuch erstellen" aus dem Projekt-Menü auf. Falls die SGML-Tools Fehler in der Formatierung entdecken, werden diese im
 Ausgabefenster angezeigt, womit Sie wie übllich sofort zur Fehlerzeile springen können. Das Programm "Glimpse" wird zur Erzeugung eines
 Persönlichen Such-Indexes zu Ihrer Dokumentation benötigt. Der Index wird gewöhnlich während des Installationsprogramms erstellt, Sie
-können dies aber jederzeit nachholen, indem Sie die entsprechende Option im <ref id="General Configuration" name="KDevelop Setup">
+können dies aber jederzeit nachholen, indem Sie die entsprechende Option im <ref id="KDevelop Setup" name="KDevelop Setup">
 Dialog auswählen. Zur Verwendung der zur Verfügung stehenden Suchfunktionen lesen Sie bitte auch <ref id="Verwendung des Suchindexes" name="Verwendung des Suchindexes">.
 
 <sect1>Zur Verfügung Stehende Dokumentation
@@ -1546,13 +1545,13 @@ den Ordner "reference" unter ($KDEDIR)/share/doc/HTML/default/kdevelop/reference
 
 Der Qt/KDE-Bibliotheks-Dokumentationsordner erlaubt Ihnen den direkten Zugriff auf die HTML-Online-Dokumentation Ihrer Kopie der
 Qt-Bibliothek. Der Pfad zur Bibliotheksdokumentation wird für gewöhnlich durch das KDevelop Installationsprogramm ermittelt, Sie können
-diesen aber auch manuell im <ref id="General Configuration" name="KDevelop Setup"> Dialog einstellen. Weiterhin wird die verfügbare
+diesen aber auch manuell im <ref id="KDevelop Setup" name="KDevelop Setup"> Dialog einstellen. Weiterhin wird die verfügbare
 Dokumentation der KDE-Bibliotheken nach dem Bibliotheksnamen aufgelistet, damit Sie bei Verwendung von Klassen einer Bibliothek sehr
 einfach den Biblitheks-typ ermitteln können, um dann die Linker-Einstellungen Ihres Projekts zu aktualisieren. Beachten Sie, das die
 ganze KDE-Bibliotheksdokumentation Ihnen nur zur Verfügung steht, wenn Sie diese Mit KDoc, dem im KDE-SDK enthaltenen Programm,
 erstellt haben. Da das Installationsprogramm von KDevelop dies automatisch erstellt, sollten Sie daher KDoc vor der Installation von
-KDevelop installieren. Sie können die Dokumentation jedoch jederzeit mit den Optionen im <ref id="General Configuration" name="KDevelop
-Setup"> Dialog erstellen.
+KDevelop installieren. Sie können die Dokumentation jedoch jederzeit mit den Optionen im 
+<ref id="KDevelop Setup" name="KDevelop Setup"> Dialog erstellen.
 
 Der Dokumentationsbaum enthält weiterhin den Ordner "Andere", der zum Hinzufügen eigener Dokumentation gedacht ist, wie unten
 beschrieben. Schließlich gibt Ihnen der Dokumentationsbaum Zugriff auf die API und das Handbuchs Ihres aktuellen
@@ -1574,8 +1573,9 @@ Sie OK, um den Eintrag dem Dokumentationsbaum hinzuzufügen.
 <p>
 KDevelop enthält eine ganze Reihe von Funktionen, die Ihnen helfen, Informationen innerhalb der HTML-Dokumentation zu suchen. Um diese
 Fähigkeiten zu nutzen, benötigen Sie das Programm "Glimpse", einem frei erhältlichen Datenbank-Generator, der den Suchindex erstellt
-und Anfragen in der Dokumentation bearbeitet. Um den Suchindex zu erstellen, lesen Sie bitte den Abschnitt <ref id="General
-Configuration" name="KDevelop Setup">. Der Index wird ebenfalls automatisch während des Installationsprogramms erstellt.
+und Anfragen in der Dokumentation bearbeitet. Um den Suchindex zu erstellen, lesen Sie bitte den Abschnitt 
+<ref id="KDevelop Setup" name="KDevelop Setup">. Der Index wird ebenfalls automatisch während des 
+Installationsprogramms erstellt.
 
 Die Suchfunktionen stehen Ihnen über verschiedene Wege zur Verfügung:
 <enum>
@@ -1652,8 +1652,7 @@ gleichzeitig zu sichern, können Sie im Menü Datei auch "Alles Speichern" auswähl
 Nun, wenn Sie an einem Projekt arbeiten, wäre es sehr unangenehm, wenn Sie durch kritische Systemzustände Ihre Änderungen verlieren
 würden weil das Abspeichern vergessen wurde. KDevelop kann dies für Sie übernehmen, indem es automatisches Abspeichern anbietet, das
 Standardmäßig eingeschaltet ist und alle Änderungen in Intervallen von 5 Minuten abspeichert. Sie können auch ein anderes Intervall
-einstellen oder das automatische Abspeichern zu verhindern, näheres dazu finden Sie im Abschnitt <ref id="KDevelop Setup"
-name="KDevelop Setup">.
+einstellen oder das automatische Abspeichern zu verhindern, näheres dazu finden Sie im Abschnitt <ref id="KDevelop Setup"name="KDevelop Setup">.
 
 Zusätzlich dazu übernimmt KDevelop die Kontrolle über Ihre Änderungen, wenn Sie zu einem anderen Projekt wechseln oder die Entwicklungsumgebung
 verlassen wollen. Sie werden dann gefragt, ob Sie die geänderten Dateien speichern wollen, wobei Sie ebenso angeben können, welche
@@ -2485,15 +2484,12 @@ Unter Compileroptionen können Sie die Compilerflags für Zielcomputer, Debuggen u
 
 <sect1>Ziel
 <p>
-Unter Ziel können Sie drei Optionen einstellen:
+Unter Ziel können Sie zwei Optionen einstellen:
 
 Zielcomputer : Sie können hier den Maschinentyp für Ihr Programm eingeben. Andere Typen als Ihre Maschine werden gewöhnlich 
 nur benötigt, um vorcompilierte Pakete zu erstellen. i386v übergibt <em/-b/ an den Compiler und ist für Cross-Compiler gedacht, 
 um ein Binary für ein Intel-System, das mit Unix System V läuft, zu erstellen. Normalerweise können Sie die Standardeinstellung 
 verwenden.
-
-Nur Syntax überprüfen: Diese Option übergibt dem Compiler den zusätzlichen Parameter <em/-fsyntax-only/ der dazu dient, 
-den Code nach Syntax-Fehlern zu untersuchen. Darüber hinaus wird aber keine Compilierung ausgeführt.
 
 Optimieren: Setzen Sie hier die <em/-O/ Option für den GCC. Abschalten der Optimierung bedeutet <em/-O0/. Je höher der 
 Level, desto länger dauert der Compiliervorgang. Allerdings ist dann die Ausführgeschwindigkeit höher. Es können 
@@ -3311,132 +3307,139 @@ Da die CVS Kommandos von KDevelop nur mit dem <tt/cvs/ System Kommando und desse
 Sie keine Probleme haben CVS zu benutzen.
 
 
-<chapt>General Configuration<label id="General Configuration">
+<chapt>Grundsätzliche Konfiguration<label id="Grundsätzliche Konfiguration">
 <p>
-This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
-found by the according entry in the Options-menu.
+Diese Kapitel beschreibt, wie Sie Ihre individuelle Voreinstellungen für die Arbeitsweise von KDevelop einstellen können. Alle unten 
+beschriebenen Einstellungen finden Sie unter den entsprechenden Einträgen im Einstellungen Menü.
 
-<sect>Configuring the "Tools" Menu<label id="Configuring the &dquot;Tools&dquot; Menu">
+<sect>Konfiguration des "Werkzeuge" Menüs<label id="Konfiguration des &dquot;Werkzeuge&dquot; Menüs">
 <p>
-As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
-your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
-"Tools"-menu. To change the tools-menu, select "Tools" from the "Options" menu. This dialog allows to specify the entry name,
-program and additional command line options you want to pass to the execution. To remove a program from the menu, select the entry
-name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
+Da KDevelop in seinem Benutzer-Interface auch die Verwendung von Drittanbieterprogrammen unterstützt, haben Sie die Möglichkeit 
+jedes Programm Ihrer Wahl für die Programmentwicklung mit KDevelop zu konfigurieren. Dies wird erreicht, indem Sie ihr Programm 
+den bereits vordefinierten Programmen im "Werkzeuge" Menü hinzufügen. Zum Ändern des "Werkzeuge" Menüs, wählen Sie 
+"Werkzeuge..." aus dem Einstellungen Menü. Dieser Dialog ermöglicht Ihnen die Eingabe eines Titels, des Programmnamens und 
+zusätzlicher Parameter, die Sie dem Programm übergeben wollen. Wenn Sie ein Programm aus dem Menü entfernen wollen, selektieren 
+Sie den Titel und wählen dann "Löschen". Zum Hinzufügen eines Programms, geben Sie einen Titel ein, wobei der einem & folgende 
+Buchstabe als Tastaturkürzel dient; Sie können die bereits definierten Einträge zum Vergleich heranziehen. Wählen Sie die ausführbare 
+Datei und evtl. Parameter. Dann drücken Sie "Hinzufügen" und der Eintrag wird dem Menü hinzugefügt. Nachdem Sie den 
+Konfigurationsdialog verlassen haben, aktualisiert sich das Werkzeuge Menü selbst, so daß die neue Konfiguration sofort und ohne 
+Neustart von KDevelop zur Verfügung steht.
 
-<sect>File Viewer Options
+<sect>Optionen der Dateiansicht
 <p>
-The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
-better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
-context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
+Die logische Dateiansicht (LFV) kann komplett über Kontextmenüs konfiguriert werden. Da die Intention die ist, Dateien logisch zu 
+trennen um eine bessere Übersicht über komplexe Projekte zu erhalten, ist eine der meistgenutzten Konfigurationmöglichkeiten das 
+Erzeugen von Dateigruppen. Diese Gruppen können gebildet werden, indem Sie das Kontextmenü, durch einen Klick mit der rechten 
+Maustaste über dem Projekt-Icon am Beginn des Baumes, öffnen. Das Menü bietet folgende Punkte an:
 <itemize>
-<item>New File: Opens the New File dialog. Equals to the menubar command "File"-"New"
-<item>New Class: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"New Class"
-<item>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for the project files that will be
-displayed in this group.
-<item>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
-the filename is shown.
+<item>Neue Datei: Öffnet den Neue Datei Dialog. Entspricht  dem Kommando "Datei"-"Neu"
+<item>Neue Klasse: Öffnet den Klassengenerator um eine neue Klasse zu erzeugen. Entspricht dem Kommando 
+"Projekt"-"Neue Klasse"
+<item>Neue Gruppe: Öffnet einen Dialog zu Erstellung einer neuen Gruppe. Dort können einen Gruppenname und einen Filter für die 
+Dateien, die in dieser Gruppe dargestellt werden, eingeben.
+<item>Relativen Pfad anzeigen: Wenn ausgewählt, werden Dateien mit Ihrem Pfad, ausgehend vom Haupt-Projektverzeichnis, 
+angezeigt; sonst wird nur der Dateiname ausgegeben.
 </itemize>
 
-Over a group folder, the according context menu offers:
-
+Über einem Gruppenordner zeigt das entsprechende Kontextmenü:
 <itemize>
-<item>New Group: Opens the New Group dialog as in the context menu described above.
-<item>Remove group: removes the group from the LFV.
-<item>Properties: Opens the properties of the group. There, you can edit the file filters by a list of wildcards separated by commas.
+<item>Neue Gruppe: Öffnet den neue Gruppe Dialog wie oben beschrieben.
+<item>Gruppe entfernen: Entfernt die Gruppe aus dem LFV.
+<item>Eigenschaften: Öffnet die Eigenschaften der Gruppe. Dort können Sie den Dateifilter editieren, indem Sie eine, durch Kommata 
+getrennte Liste von Wildcards eingeben.
 </itemize>
-
 
 <sect>KDevelop Setup<label id="KDevelop Setup">
 <p>
-<bf>Make-command:</bf>
-The General Options dialog lets you configure KDevelop's general settings.
-First, you should set the make-command available on your system. If the selected program does not exist,
-KDevelop will warn you the next time your're invoking a make command.
+<bf>Make-Kommando:</bf>
 
-<bf>Autosave:</bf>
+Der Allgemeine Optionen Dialog erlaubt es, die generellen Einstellungen für KDevelop vorzunehmen. Als erstes sollten Sie das auf 
+Ihrem System installierte Make-Kommando angeben. Wenn das angegebene Programm nicht existiert, erhalten Sie eine Warnung von 
+KDevelop, wenn Sie das nächste Mal Make ausführen wollen.
 
-If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
+<bf>Automatisch speichern:</bf>
 
+Wenn Automatisch speichern angekreuzt ist, wird KDevelop in periodischen Zeitintervallen alle geänderten Dateien speichern. Das 
+Intervall kann auf 3, 5, 15 oder 30 Minuten eingestellt werden.
 
-<bf>Autoswitch:</bf>
+<bf>Automatisch wechseln:</bf>
 
-If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
-documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the output
-window turned off.
-Startup:
+Wenn eingeschaltet, werden sich die KDevelop Fenster entsprechend der momentane Nutzung ein- und ausschalten, wenn Sie z.B. zu 
+einer Dokumentation im Hilfemenü wechseln, wird sich der Dokumentationsbrowser zusammen mit dem Dokumentationsbaum öffnen, 
+während sich das Ausgabefenster schließt.
 
-For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
-Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<sect>Changing Keyboard Shortcuts<label id="Changing Keyboard Shortcuts">
+<bf>Start:</bf>
+
+Sie können wählen, ob das Start-Logo von KDevelop während des Ladens angezeigt werden soll. Weiterhin können Sie das Öffnen 
+des letzten Projektes unterdrücken, sowie einstellen, ob Sie den Tip des Tage angezeigt bekommen.
+
+<sect>Ändern der Tastatur Kürzel<label id="Ändern der Tastatur Kürzel">
 <p>
-The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / STRG key etc.
+Der Dialog "Tasten" läßt Sie die Tastenzuordnung in KDevelop einstellen. Beachten Sie, daß globale Tastenkürzel wie Datei öffnen oder 
+Drucken, im KDE Kontrollcenter eingestellt werden können. Eine Tastenfunktion kann eingestellt werden, indem Sie einen Menüeintrag 
+auswählen und dann den zuzuordnenden Wert wie ALT/STRG u.s.w. eingeben.
 
-<sect>Documentation<label id="Documentation">
+<sect>Dokumentation
 <p>
-<sect1> Directories
+<sect1> Verzeichnisse
 <p>
-For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
-is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
+Damit der Dokumentationsbrowser korrekt arbeiten kann, braucht KDevelop einige Informationen bezüglich des Pfades, in dem die 
+HTML-Dokumentation auf Ihrem System installiert ist. Daher ist es notwendig sowohl den Pfad zu Ihre Qt Onlinedokumentation, als auch 
+den zu Ihrer KDE Bibliothekendokumentation anzugeben.
 
-Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
-you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
-documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
-according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
-first enter the next configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice,
-also setting the KDE Library Doc path automatically.
+Normalerweise wird die Qt-Dokumentation im gleichen Verzeichnis wie Qt selber abgelegt; wenn sich z.B. Qt in /usr/local/qt befindet, 
+ist der einzugebende Pfad /usr/local/qt/html. Für die KDE-Dokumentation müssen Sie das Wurzelverzeichnis aller Dokumentationen 
+angeben, wobei angenommen wird, daß sich die KDE-Bibliothekendokumentation im selben Verzeichnis befindet. Beide Pfade können 
+durch Betätigen der entsprechenden Knöpfe selektiert werden, die eine Pfadauswahl anzeigen. Wenn sich keine Dokumentation der 
+KDE Bibliotheken auf Ihrem System befindet, sollten Sie zuerst im nächsten Dialog "KDE Dokumentation aktualisieren" wählen. Dadurch 
+wird die Dokumentation in einem Pfad Ihrer Wahl erzeugt und es wird automatisch der richtige Pfad in KDevelop gesetzt.
 
-<sect1>Options
+<sect1>Optionen
 <p>
-<sect2>Update KDE-Documentation
+<sect2>KDE-Dokumentation aktualisieren
 <p>
-For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
-installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
-up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
-/home/rnolden/kdelibs-1.1/.
+Für Benutzer die keine aktuelle Dokumentation der KDE Bibliotheken haben, insbesondere die Dokumentation der auf Ihrem System 
+installierten Dateien, erzeugt dieser Dialog eine neue oder aktualisiert eine bestehende Dokumentation. Diese Funktion erfordert, daß 
+kdoc und qt2kdoc auf Ihrem System instaliert sind, welche Teil des kdesdk Paketes sind. Zuerst müssen Sie den Pfad zu den aktuellen 
+Quellen der KDE Bibliotheken setzen. Dies ist <em/nicht/ der include Pfad von KDE ! Geben Sie nur den Pfad zu den Qelldateien ein, 
+wie /home/rnolden/kdelibs-1.1/.
 
-Then, you can choose three different installation modes, as:
+Sie können dann zwischen drei verschieden Installationsmodi wählen:
 
 <itemize>
-<item> Delete old Documentation and  install to recent Documentationpath:  this assumes that youalready have a documentation
-installed and is placed in the path the Documentation Path-dialog was entered. This will delete all documentation and install the
-newly generated documentation into the recent path.
-<item> Delete old Documentation and install to new Documentationpath:   this will result in deleting the old documentation as
-well as above, but gives you the choice to set up a new documentation place.
-<item> Leave old Documentation untouched and install to new Documentation path:   This is recommended for a new generation of
-the kdelibs documentation for users who didn't have one before and for those who want to keep the last documentation for an older
-kdelibs version.
+<item> Alte Dokumentation löschen und in aktuellem Doku-Verzeichnis installieren: Es wird davon ausgegangen, daß Sie bereits eine 
+Dokumentation installiert haben. Wenn Sie dies ankreuzen, wird die aktuelle Dokumentation gelöscht und mit der neu erzeugten 
+überschrieben.
+<item> Alte Dokumentation löschen und in neues Doku-Verzeichnis installieren:  Wenn Sie dies ankreuzen, wird die aktuelle 
+Dokumentation wie oben gelöscht. Sie können jedoch im Eingabefeld einen Pfad wählen, in dem die neu erzeugte Dokumentation 
+installiert wird.
+<item> Alte Dokumentation nicht ändern und in neues Doku-Verzeichnis installieren:  Hiermit wird Ihre aktuelle Dokumentation nicht 
+gelöscht und Sie können einen neuen Pfad für die Kdelibs-Dokumentation eingeben. Achtung: Bitte geben Sie nicht den Pfad an, wo 
+Ihre jetzige Dokumentation installiert ist - dadurch könnten alte und neue Dateien vermischt werden!
 </itemize>
 
-The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
-users who generate a new documentation from scratch.
+Der "neue" Pfad zu den KDE Bibliotheksdokumentationen muß für die Optionen 2 und 3 angegeben werden. Es ist außerdem empfohlen 
+für Benutzer, die eine komplett neue Dokumentation generieren wollen.
 
-After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
-reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
-documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
-give browsing the most functionality.
+Nachdem Sie OK gedrückt haben, wird KDevelop ein Unterverzeichnis "kdoc-reference" im Dokumentationspfad erzeugen, das die 
+kdoc Referenzdateien enthält. Als erstes wird die Qt Klassendokumentation indiziert, so daß eine Verbindung zur Dokumentation der 
+KDE Bibliotheken erstellt werden kann. Daher ist es wichtig, das Sie vorher den Pfad zur Qt Dokumentation eingegeben haben, damit 
+qt2kdoc die Dateien finden kann. Schließlich werden die KDE Bibliotheken indiziert und die Dokumentation wird mit den Querverweisen 
+erstellt, um so ein Höchstmaß an Funktionalität beim Browsen zur Verfügung zu stellen.
 
-<sect2>Create Search Database
+<sect2>Suchdatenbank erstellen
 <p>
-The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
-keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
-Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
-documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
-directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
-directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path
-in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
-medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
-will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-<ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers">.
-
+Der Dialog "Suchdatenbank erstellen", der über den "Erzeugen" Knopf erreicht werden kann, erlaubt es dem Programmierer eine 
+Suchdatenbank zu erstellen, in der interaktiv nach Schlüsselworten gesucht werden kann. Zum Erzeugen der Datenbank und zur 
+Benutzung der Suchfunktionalität muß entweder glimpse oder ht://Dig installiert sein. Voreingestellt ist sowohl die Indizierung der KDE 
+Bibliotheksdokumentation, als auch die der Qt Dokumentation, wobei davon ausgegangen wird, daß die Pfade korrekt eingestellt 
+wurden. Es können auch noch zusätzlich zu indizierende Verzeichnisse angegeben werden. Nach Eingabe eines zusätzlichen Pfades 
+muß die Hinzufügen Taste betätigt werden. Ein so gesetzter Pfad kann durch Auswählen des Eintrages und Betätigen der Entfernen 
+Taste wieder aus der Liste entfernt werden. Außerdem werden dem Benutzer drei verschiedene Indexgrößen zur Auswahl angeboten: 
+winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer werden auch die Indexdateien. Auf der anderen Seite wird 
+die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist höher, so daß wir eine mittlere Größe empfehlen. Zur 
+Verwendung der Suchfunktion, sehen Sie unter 
+<ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
 
 <chapt>Questions and Answers<label id="Questions and Answers">
 <p>
