@@ -32,6 +32,8 @@ QString VCSFileInfo::state2String( FileState state )
         case Modified: return "modified";
         case Conflict: return "conflict";
         case Sticky: return "sticky";
+        case NeedsPatch: return "needs patch";
+        case NeedsCheckout: return "needs check-out";
         case Directory: return "directory";
         case Unknown:
         default:

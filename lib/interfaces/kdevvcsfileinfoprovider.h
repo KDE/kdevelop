@@ -20,7 +20,7 @@
 */
 struct VCSFileInfo
 {
-    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky, Directory };
+    enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky, NeedsPatch, NeedsCheckout, Directory };
 
     VCSFileInfo() {}
     VCSFileInfo( QString fn, QString workRev, QString repoRev, FileState aState )
