@@ -29,6 +29,11 @@
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
+<!--
+NOTE:
+Entries which require special treatment are marked with comments starting with '###'. They should be visited on a regular basis.
+-->
+
 <book lang="&language;">
 
 <bookinfo>
@@ -140,7 +145,7 @@ You will here find information on the following topics:
   <listitem><para>
   <link linkend="debugger">The debugger interface</link> - describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop; so to always maintain easy acess to the program sources in question.
   </para></listitem>
-<!-- ### Maybe interesting, of course, but too detailed for an IDE user manual
+<!-- ### Currently disabled. Probably too specialized. Check later again.
   <listitem><para>
   <link linkend="python">Python</link> - an overview on how to create Python-based applications in &kdevelop;.
   </para></listitem>
@@ -188,7 +193,7 @@ You will here find information on the following topics:
   <secondary>UNIX</secondary></indexterm>
 
 <para>
-From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
+From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a. translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
 </para>
 <para>
 The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system - and at the same time a very high level programming language. A shell script is built from a set of small utility programs like e.g. <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
@@ -2002,6 +2007,16 @@ If the page is used, &appwizard; will fill in some common header comment which f
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 </literal></computeroutput></screen>
 
@@ -2123,6 +2138,30 @@ Do not forget to initially check what the &appwizard; has provided. For example 
 <para>
 Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
 </para>
+
+<warning id="defaultbuild-warning"> <!-- ### remove this when "default" works again -->
+
+  <indexterm zone="defaultbuild-warning">
+    <primary>default build configuration</primary>
+	<secondary>warning</secondary></indexterm>
+  <indexterm zone="defaultbuild-warning">
+    <primary>build configurations</primary>
+	<secondary>default build warning</secondary></indexterm>
+  <indexterm zone="defaultbuild-warning">
+    <primary>warning</primary>
+	<secondary>default build configuration</secondary></indexterm>
+
+  <para>
+  Before you compile your new project the first time, have a look at <menuchoice><guimenu>Project</guimenu> <guimenuitem>Build Configuration</guimenuitem></menuchoice>. If there are three selections displayed: <guimenuitem>default</guimenuitem>, <guimenuitem>optimized</guimenuitem>, and <guimenuitem>debug</guimenuitem>, with <guimenuitem>debug</guimenuitem> selected, by all means stick to this, or use <guimenuitem>optimized</guimenuitem> instead.
+  </para>
+  <para>
+  Due to some limitations in the current autoconf/automake setup you should <emphasis>by no means</emphasis> build in the <guimenuitem>default</guimenuitem> configuration. This will corrupt some internal directory settings, thus making <command>configure</command> complain when you try to use it in the <guimenuitem>optimized</guimenuitem>, or <guimenuitem>debug</guimenuitem> build configuration afterwards.
+  </para>
+  <para>
+  (This applies to these multiselection capabilities only. If the application type you selected provides a <guimenuitem>default</guimenuitem> build configuration only, you should of course use this one.)
+  </para>
+</warning>
+
 </sect2> <!-- newprojects-start-build -->
 
 </sect1> <!-- newprojects -->
@@ -3693,7 +3732,7 @@ breakpoints.
 </chapter> <!-- debugger -->
 
 <!-- ====================================================================== -->
-<!-- ### Questionable, if not IDE-specific.
+<!-- ### Questionable, probably not IDE-specific enough. Check later again.
 <chapter id="python">
 <title>Python</title>
 
@@ -3703,7 +3742,7 @@ breakpoints.
 </chapter> --> <!-- python -->
 
 <!-- ====================================================================== -->
-<!-- ### Questionable, if not IDE-specific.
+<!-- ### Questionable, probably not IDE-specific enough. Check later again.
 <chapter id="php">
 <title>PHP</title>
 
