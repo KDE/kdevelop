@@ -147,7 +147,7 @@ void SnippetWidget::slotEdit()
 //  \fn SnippetWidget::slotListDblClicked()
 /*!
     On a DoubleClick the clicked snippet gets inserted at the
-    aktual cursor position of the active view
+    current cursor position of the active view
 */
 void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int)
 {
@@ -166,8 +166,8 @@ void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int
       return;
   //OK, now we've got the clicked snippet
 
-  //process variables if any and then insert into the active view
-  insertIntoActivView( parseText(pSnippet->getText()) );
+  //process variables if any, then insert into the active view
+  insertIntoActiveView( parseText(pSnippet->getText(), _SnippetConfig.getDelimiter()) );
 }
 
 
@@ -189,10 +189,10 @@ SnippetItem * SnippetWidget::pFindByName(QString name)
 
 
 /*!
-    \fn SnippetWidget::insertIntoActivView(QString text)
+    \fn SnippetWidget::insertIntoActiveView(QString text)
     Inserts the parameter text into the activ view
  */
-void SnippetWidget::insertIntoActivView(QString text)
+void SnippetWidget::insertIntoActiveView(QString text)
 {
   //get the interfaces for the KTexteditor parts
   KTextEditor::ViewCursorInterface *cursorIface
@@ -370,7 +370,7 @@ void SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
 }
 
 
-//  fn SnippetWidget::parseText(QString text)
+//  fn SnippetWidget::parseText(QString text, QString del)
 /*!
     This function is used to parse the given QString for variables. If found the user will be prompted
     for a replacement value. It returns the string text with all replacements made

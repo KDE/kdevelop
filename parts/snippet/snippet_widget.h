@@ -58,7 +58,7 @@ protected:
     void maybeTip( const QPoint & );
 
 private:
-    void insertIntoActivView(QString text);
+    void insertIntoActiveView(QString text);
     QString parseText(QString text, QString del="$");
     bool showMultiVarDialog(QMap<QString, QString> * map, QMap<QString, QString> * mapSave,
                             int & iWidth, int & iBasicHeight, int & iOneHeight);
