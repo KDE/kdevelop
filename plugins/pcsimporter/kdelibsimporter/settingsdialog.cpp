@@ -21,7 +21,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     : SettingsDialogBase(parent,name,fl)
 {
     QStringList kdedirs;
-    kdedirs.push_back( ::getenv("KDEDIR") );
+    kdedirs.push_back( ::getenv("KDEDIR") + QString("/include") );
     kdedirs.push_back( "/usr/lib/kde/include" );
     kdedirs.push_back( "/usr/local/kde/include" );
     kdedirs.push_back( "/usr/local/include" );
