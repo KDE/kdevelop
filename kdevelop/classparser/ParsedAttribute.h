@@ -43,8 +43,12 @@ public: // Public methods to set attribute values
 
 public: // Implementation of virtual methods
 
+  /** Make this object a copy of the supplied object. 
+   * @param anAttribute Attribute to copy. */
+  virtual void copy( CParsedAttribute *anAttribute );
+
   /** Return the attributes code for the headerfile. */
-  void asHeaderCode( QString &str );
+  virtual void asHeaderCode( QString &str );
 
   /** Return the object as a string(for tooltips etc) */
   virtual const char *asString( QString &str );

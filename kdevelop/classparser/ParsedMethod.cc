@@ -202,6 +202,38 @@ void CParsedMethod::out()
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------------- CParsedMethod::copy()
+ * copy()
+ *   Make this object a copy of the supplied object. 
+ *
+ * Parameters:
+ *   aMethod       Method to copy.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedMethod::copy( CParsedMethod *aMethod )
+{
+  assert( aMethod != NULL );
+
+  CParsedArgument *newArg;
+  CParsedArgument *anArg;
+
+  CParsedAttribute::copy( aMethod );
+
+  setIsVirtual( aMethod->isVirtual );
+
+  for( anArg = aMethod->arguments.first();
+       anArg != NULL;
+       anArg = aMethod->arguments.next() )
+  {
+    newArg = new CParsedArgument();
+    newArg->copy( anArg );
+
+    addArgument( newArg );
+  }
+}
+
 /*---------------------------------- CParsedAttribute::asHeaderCode()
  * asHeaderCode()
  *   Return the attributes code for the headerfile. NB. If the name

@@ -143,6 +143,25 @@ void CParsedAttribute::setIsConst( bool aState )
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------------- CParsedAttribute::copy()
+ * copy()
+ *   Make this object a copy of the supplied object. 
+ *
+ * Parameters:
+ *   anAttribute      Attribute to copy.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedAttribute::copy( CParsedAttribute *anAttribute )
+{
+  CParsedItem::copy( anAttribute );
+
+  setType( anAttribute->type );
+  setIsStatic( anAttribute->isStatic );
+  setIsConst( anAttribute->isConst );
+}
+
 /*---------------------------------- CParsedAttribute::asHeaderCode()
  * asHeaderCode()
  *   Return the attributes code for the headerfile.

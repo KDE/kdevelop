@@ -41,7 +41,9 @@
 #define _PARSEDARGUMENT_H_INCLUDED
 
 #include <qstring.h>
-/** */
+
+/** This object represents the parsed argument of a method. 
+ * @author Jonas Nordin(jonas.nordin@cenacle.se) */
 class CParsedArgument
 {
 public: // Constructor & Destructor
@@ -66,6 +68,9 @@ public: // Public methods to set attribute values
   void setType( const char *aType );
 
 public: // Public queries
+
+  /** Make this object a copy of the supplied object. */
+  void copy( CParsedArgument *anArgument );
 
   /** Return this arguments as a string. */
   void toString( QString &str );

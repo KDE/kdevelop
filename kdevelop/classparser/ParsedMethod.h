@@ -77,14 +77,18 @@ public: // Public attributes
 
 public: // Public queries
 
+  /** Make this object a copy of the supplied object. 
+   * @param aMethod Method to copy. */
+  virtual void copy( CParsedMethod *aMethod );
+
   /** Return this methods' header code. */
-  void asHeaderCode( QString &str );
+  virtual void asHeaderCode( QString &str );
 
   /** Return this method as a implementation stub. */
   void asCppCode( QString &buf );
 
   /** Return a string made for persistant storage. */
-  const char *asPersistantString( QString &dataStr );
+  virtual const char *asPersistantString( QString &dataStr );
 
   /** Is the supplied method equal to this one
     * (regarding type, name and signature)? */

@@ -2,6 +2,7 @@
 #define _CPARSERITEM_H_INCLUDED
 
 #include <qstring.h>
+#include <assert.h>
 
 /** The type of item. */
 typedef enum
@@ -93,6 +94,16 @@ public: // Public methods to set attribute values
   void setComment( const char *aComment )     { comment = aComment; }
 
 public: // Virtual methods to be defined by children.
+
+  /** Make this object a copy of the supplied object. */
+  virtual void copy( CParsedItem *anItem )
+  {
+    assert( anItem != NULL );
+    
+    setName( anItem->name );
+    setExport( anItem->export );
+    setComment( anItem->comment );
+  }
 
   /** Return the object as a string(for tooltips etc) */
   virtual const char *asString( QString &str ) { str = name; return str; }

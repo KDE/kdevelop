@@ -110,6 +110,24 @@ void CParsedArgument::setType( const char *aType )
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------------ CParsedArgument::copy()
+ * copy()
+ *   Make this object a copy of the supplied object.
+ *
+ * Parameters:
+ *   anArg            Argument to copy.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedArgument::copy( CParsedArgument *anArg )
+{
+  assert( anArg != NULL );
+
+  setName( anArg->name );
+  setType( anArg->type );
+}
+
 /*------------------------------------------ CParsedArgument::toString()
  * toString()
  *   Return the object as a string(for tooltips etc).
