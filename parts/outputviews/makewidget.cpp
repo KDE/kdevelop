@@ -230,13 +230,18 @@ void MakeWidget::startNextJob()
 	else
 	{
 		QString s = currentCommand.right(currentCommand.length() - i);
-		m_bCompiling =
-			s.contains("configure ")        ||
-			s.contains(" Makefile.cvs")     ||
-			s.contains(" clean")            ||
-			s.contains(" distclean")        ||
-			s.contains(" package-messages") ||
-			s.contains(" install");
+		if ( s.contains("configure ")        ||
+		     s.contains(" Makefile.cvs")     ||
+		     s.contains(" clean")            ||
+		     s.contains(" distclean")        ||
+		     s.contains(" package-messages") ||
+		     s.contains(" install") ) 
+		{
+		    m_bCompiling = false;
+		}
+		else {
+		    m_bCompiling = true;
+		}
 	}
 
 	it = dirList.begin();
