@@ -1,3 +1,8 @@
+2004-04-09 Alexander Dymo <cloudtemple@mksat.net>
+    * Commited new documentation part for KDevelop. It features documentation plugin system,
+      it's easy now to add support for a new documentation format by implementing DocumentationPlugin interface.
+      Index is now loading faster, index caching mechanism is used. Configuration dialog became more clean and convenient.
+
 2004-03-22 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Restructured CppSupportPart::parseProject()
 
