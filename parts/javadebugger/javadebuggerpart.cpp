@@ -55,7 +55,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     
     variableWidget = new VariableWidget();
     variableWidget->setEnabled(false);
-    variableWidget->setIcon(SmallIcon("brace"));
+    variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
     QWhatsThis::add(variableWidget, i18n("Variable tree\n\n"
                                          "The variable tree allows you to see "
