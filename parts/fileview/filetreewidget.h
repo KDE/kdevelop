@@ -42,15 +42,12 @@ public:
     FileViewPart *part() const { return m_part; }
 
     KURL::List selectedPathUrls();
-
+    KDevVCSFileInfoProvider *vcsFileInfoProvider() const;
     void applyHidePatterns( const QString &hidePatterns );
     QString hidePatterns() const;
 
 public slots:
     void hideOrShow();
-    void addProjectFiles( QStringList const & fileList, bool constructing = false );
-    void removeProjectFiles( QStringList const & fileList );
-    void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
 
 private slots:
     void slotItemExecuted(QListViewItem *item);
@@ -60,6 +57,10 @@ private slots:
     void slotReloadTree();
     void slotToggleShowNonProjectFiles();
     void slotToggleShowVCSFields( bool checked );
+
+    void addProjectFiles( QStringList const & fileList, bool constructing = false );
+    void removeProjectFiles( QStringList const & fileList );
+    void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
 
 private:
     bool matchesHidePattern(const QString &fileName);

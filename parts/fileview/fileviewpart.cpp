@@ -52,20 +52,6 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     m_widget->setIcon( SmallIcon("folder") );
     mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
 
-    // File tree
-    connect( project(), SIGNAL( addedFilesToProject( const QStringList & ) ),
-             m_widget->m_filetree, SLOT( addProjectFiles( const QStringList & ) ) );
-    connect( project(), SIGNAL( removedFilesFromProject( const QStringList & ) ),
-             m_widget->m_filetree, SLOT( removeProjectFiles( const QStringList & ) ) );
-
-    // We can do this since the version control has global scope while the file tree has project scope: hence
-    // the former is always loaded before the latter.
-    if (versionControl() && versionControl()->fileInfoProvider())
-    {
-        connect( versionControl()->fileInfoProvider(), SIGNAL(dirStatusReady(const VCSFileInfoList&, void*)),
-            m_widget->m_filetree, SLOT(vcsDirStatusReady(const VCSFileInfoList&, void*)) );
-    }
-
     m_widget->showProjectFiles();
 }
 
