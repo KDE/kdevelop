@@ -1,3 +1,14 @@
+2003-06-18 Mario Scalas <mario.scalas@libero.it>
+	* (CvsPart) New features added:
+	  - It is now possible to add to/remove files from .cvsignore file
+	  - When adding/removing files to project, part will now ask for user action
+	* (CvsPart) Code has been restructured.
+	* (lib) Modified FileContext in kdevecore.{h,cpp} so it can handle KURL::List.
+	  (This is just an addition: old code should work as before).
+	* (FileView) FileTreeWidget supports multiple files selections now. Removed
+	  drag support because it needs to be fixed by TT (seems a bug from qt-3.1.2
+	  onward).
+
 2003-06-15 Harald Fernengel <harry@kdevelop.org>
     * Added notification if a file has been modified outside the IDE
       (IDEAl mode only for now).
@@ -10,7 +21,7 @@
     * Warn if another process is running on execution and allow a restart.
     * Make automake deal with METASOURCES=AUTO
     * Remember position in document for compile warning/errors so that you can
-      edit the document and still be taken to the correct location 
+      edit the document and still be taken to the correct location
       (work in progress, commented out, requires up-to-date katepart)
     * Separate highlighting for errors and warnings (work in progress)
 
