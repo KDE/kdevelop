@@ -102,6 +102,7 @@ protected: // Protected signals and slots
     void slotFolderNew();
     void slotClassBaseClasses();
     void slotClassDerivedClasses();
+    void slotClassTool();
     void slotViewDefinition();
     void slotViewDeclaration();
 

@@ -336,8 +336,9 @@ void  CClassView::initPopups()
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
   classPopup.insertSeparator();
-  classPopup.insertItem( i18n("Base classes..."), this, SLOT(slotClassBaseClasses()));
-  classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
+  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
+  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
+  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()));
   classPopup.insertSeparator();
   id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
   classPopup.setItemEnabled(id, false );
@@ -707,6 +708,15 @@ void CClassView::slotClassDerivedClasses()
   dlg.setStore( store );
   dlg.setClass( getCurrentClass() );
   dlg.viewChildren();
+  dlg.show();
+}
+
+void CClassView::slotClassTool()
+{
+  CClassToolDlg dlg(this, "classToolDlg" );
+
+  dlg.setStore( store );
+  dlg.setClass( getCurrentClass() );
   dlg.show();
 }
 
