@@ -17,6 +17,8 @@
  *
  */
 
+#include "treeview.h"
+
 #include <qdir.h>
 #include <qheader.h>
 #include <qstringlist.h>
@@ -33,8 +35,6 @@
 #include <kiconloader.h>
 #include <kdesktopfile.h>
 #include <kaction.h>
-
-#include "treeview.h"
 
 
 TreeItem::TreeItem(QListViewItem *parent, const QString& file)

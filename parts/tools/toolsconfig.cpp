@@ -1,18 +1,17 @@
-#include <qapplication.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qlistbox.h>
-#include <qlabel.h>
-
-
-#include <klocale.h>
-#include <kdialog.h>
-#include <kdesktopfile.h>
-#include <kiconloader.h>
-#include <kapplication.h>
-
-
 #include "toolsconfig.h"
+
+#include <qapplication.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistbox.h>
+#include <qpushbutton.h>
+
+#include <kapplication.h>
+#include <kdesktopfile.h>
+#include <kdialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
+
 #include "treeview.h"
 
 

@@ -1,24 +1,22 @@
-#include <qwhatsthis.h>
-#include <qpushbutton.h>
+#include "tipofday_part.h"
+
 #include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qwhatsthis.h>
 
-
-#include <kiconloader.h>
-#include <klocale.h>
+#include <kaction.h>
 #include <kapplication.h>
-#include <kstandarddirs.h>
-#include <ktextbrowser.h>
 #include <kconfig.h>
 #include <kgenericfactory.h>
-#include <kaction.h>
-
-
-#include <kdevapi.h>
-#include <kdevcore.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <ktextbrowser.h>
 #include <ktip.h>
 
+#include "kdevapi.h"
+#include "kdevcore.h"
 
-#include "tipofday_part.h"
 
 typedef KGenericFactory<TipOfDayPart> TipOfDayFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) );

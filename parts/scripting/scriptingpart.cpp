@@ -9,16 +9,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "scriptingpart.h"
 #include <Python.h>
 #include <stdlib.h>
 #include <dcopclient.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kgenericfactory.h>
 #include <kaction.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <kstandarddirs.h>
 
 #include "kdevcore.h"
-#include "scriptingpart.h"
 
 
 static ScriptingPart *scripting_part;

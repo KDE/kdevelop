@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "javadebuggerpart.h"
+
 #include <qdir.h>
 #include <qwhatsthis.h>
 #include <kfiledialog.h>
@@ -33,7 +35,7 @@
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
 #include "memviewdlg.h"
-#include "javadebuggerpart.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
 

@@ -1,12 +1,10 @@
+#include "uichooser_widget.h"
+
 #include <qradiobutton.h>
 
-
 #include <kapplication.h>
-#include <kdebug.h>
 #include <kconfig.h>
-
-
-#include "uichooser_widget.h"
+#include <kdebug.h>
 
 
 UIChooserWidget::UIChooserWidget(QWidget *parent, const char *name)

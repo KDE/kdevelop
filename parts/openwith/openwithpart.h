@@ -1,11 +1,12 @@
 #ifndef __OPENWITHPART_H__
 #define __OPENWITHPART_H__
 
-
 #include <kurl.h>
 
-
 #include "kdevplugin.h"
+
+class QPopupMenu;
+class Context;
 
 
 class OpenWithPart : public KDevPlugin

@@ -1,23 +1,23 @@
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include "tools_part.h"
+
 #include <qfile.h>
+#include <qvbox.h>
+#include <qwhatsthis.h>
 
-
+#include <kaction.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <kconfig.h>
-#include <kapplication.h>
-#include <kdesktopfile.h>
-#include <kdebug.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
 
-#include <kdevcore.h>
+#include "kdevcore.h"
 
-
-#include "tools_part.h"
 #include "toolsconfig.h"
+
 
 typedef KGenericFactory<ToolsPart> ToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );

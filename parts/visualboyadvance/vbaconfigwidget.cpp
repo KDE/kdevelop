@@ -16,14 +16,17 @@
  ***************************************************************************/
 
 #include "vbaconfigwidget.h"
-#include "domutil.h"
-#include <qradiobutton.h>
+
 #include <qcheckbox.h>
-#include <qlineedit.h>
-#include <kfiledialog.h>
 #include <qdir.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
 #include <qtoolbutton.h>
-#include "vbaconfigwidget.moc"
+
+#include <kfiledialog.h>
+
+#include "domutil.h"
+
 
 using namespace VisualBoyAdvance;
 
@@ -137,3 +140,5 @@ void VBAConfigWidget::emuPathButtonClicked(){
     emuPathEdit->setText(emu);
   }
 }
+
+#include "vbaconfigwidget.moc"

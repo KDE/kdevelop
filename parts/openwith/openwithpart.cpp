@@ -1,3 +1,5 @@
+#include "openwithpart.h"
+
 #include <kpopupmenu.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -10,11 +12,7 @@
 #include "kdevcore.h"
 
 
-#include "openwithpart.h"
-
-
 K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KGenericFactory<OpenWithPart>("kdevopenwith"));
-
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin(parent, name)

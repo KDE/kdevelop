@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "regexptestdlg.h"
+
 #include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
@@ -19,8 +21,6 @@
 #include <qradiobutton.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-
-#include "regexptestdlg.h"
 
 
 RegexpTestDialog::RegexpTestDialog(/*KDevPart *part*/)

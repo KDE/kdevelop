@@ -20,6 +20,15 @@
 #include "domutil.h"
 
 
+bool FileTemplate::exists(KDevPlugin *part, const QString &name)
+{
+    KDevProject *project = part->project();
+    QString fileName = project->projectDirectory() + "/templates/" + name;
+
+    return QFile::exists(fileName);
+}
+
+
 QString FileTemplate::read(KDevPlugin *part, const QString &name)
 {
     KDevProject *project = part->project();

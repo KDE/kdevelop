@@ -9,13 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "regexptestpart.h"
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
 
 #include "kdevcore.h"
 #include "regexptestdlg.h"
-#include "regexptestpart.h"
+
 
 typedef KGenericFactory<RegexpTestPart> RegexpTestFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) );

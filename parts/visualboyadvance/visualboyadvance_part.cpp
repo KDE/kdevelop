@@ -1,18 +1,20 @@
+#include "visualboyadvance_part.h"
+
+#include <qvbox.h>
 #include <qwhatsthis.h>
+
+#include <kaction.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
+
+#include "kdevcore.h"
+#include "kdevproject.h"
+#include "kdevappfrontend.h"
 #include "domutil.h"
-#include <kdevproject.h>
-#include <kdevappfrontend.h>
-#include <qvbox.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
 
-
-#include <kdevcore.h>
-
-#include "visualboyadvance_part.h"
 #include "vbaconfigwidget.h"
+
 
 using namespace VisualBoyAdvance;
 

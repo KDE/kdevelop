@@ -1,17 +1,16 @@
+#include "uichooser_part.h"
+
 #include <qvbox.h>
 
-
-#include <kiconloader.h>
-#include <klocale.h>
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
+#include "kdevcore.h"
 
-#include <kdevcore.h>
-
-
-#include "uichooser_part.h"
 #include "uichooser_widget.h"
+
 
 typedef KGenericFactory<UIChooserPart> UIChooserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( "kdevuichooser" ) );

@@ -1,16 +1,14 @@
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include "windowmenupart.h"
+
 #include <kaction.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
 #include <kmainwindow.h>
 #include <kparts/part.h>
-
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevtoplevel.h"
-
-
-#include "windowmenupart.h"
 
 
 typedef KGenericFactory<WindowMenuPart> WindowMenuFactory;

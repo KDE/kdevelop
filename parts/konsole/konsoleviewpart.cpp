@@ -1,17 +1,16 @@
+#include "konsoleviewpart.h"
+
 #include <qwhatsthis.h>
 
-
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
-
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 
 #include "konsoleviewwidget.h"
-#include "konsoleviewpart.h"
 
-#include <kgenericfactory.h>
 
 K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) );
 

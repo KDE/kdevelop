@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "trollprojectpart.h"
+
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
@@ -26,7 +28,6 @@
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
 #include "trollprojectwidget.h"
-#include "trollprojectpart.h"
 #include "config.h"
 
 

@@ -13,6 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "trollprojectwidget.h"
+
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qheader.h>
@@ -31,7 +33,6 @@
 #include "kdevpartcontroller.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
-#include "trollprojectwidget.h"
 
 
 /**
