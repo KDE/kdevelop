@@ -909,7 +909,7 @@ void CKAppWizard::initPages(){
   output->setFontPropagation( QWidget::SameFont );
   output->setPalettePropagation( QWidget::SameFont );
   output->insertLine( "" );
-  output->setReadOnly( FALSE );
+  output->setReadOnly( TRUE );
   output->setOverwriteMode( FALSE );
   
   errOutput = new QMultiLineEdit( widget4, "errOutput" );
@@ -921,7 +921,7 @@ void CKAppWizard::initPages(){
   errOutput->setFontPropagation( QWidget::SameFont );
   errOutput->setPalettePropagation( QWidget::SameFont );
   errOutput->insertLine( "" );
-  errOutput->setReadOnly( FALSE );
+  errOutput->setReadOnly( TRUE );
   errOutput->setOverwriteMode( FALSE );
   QFont font("helvetica",10);
   output->setFont(font);

@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <qobjectlist.h>
 #include <qlabel.h>
 #include <qbttngrp.h>
 #include <qpushbt.h>
 #include <qobjcoll.h>
-
 #include <kapp.h>
 
 #include "kwdialog.h"
@@ -23,10 +23,11 @@ SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   QRect r, br;
   int y;
 
-//  setFocusPolicy(QWidget::StrongFocus);
+  setFocusPolicy(QWidget::StrongFocus);
 
   search = new QComboBox(true, this);
   search->insertStrList(searchFor);
+  search->setFocus();
   //workaround for missing QComboBox::selectAll()
   ((QLineEdit *) (search->children()->getFirst()))->selectAll();
 //  search->dumpObjectTree();
@@ -137,7 +138,7 @@ void SearchDialog::okSlot() {
 }
 
 ReplacePrompt::ReplacePrompt(QWidget *parent, const char *name)
-  : QDialog(0L, name, false) {
+  : QDialog(0L,name,false) {
 
   QLabel *label;
   QPushButton *button;
@@ -295,7 +296,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt8 = new QCheckBox(i18n("&Persistent Selections"),group);
   opt9 = new QCheckBox(i18n("&Multiple Selections"),group);
   opt10 = new QCheckBox(i18n("&Vertical Selections"),group);
-  opt11 = new QCheckBox(i18n("&Overwrite Selections"),group);
+  opt11 = new QCheckBox(i18n("&Delete On Input"),group);
   opt12 = new QCheckBox(i18n("&Toggle Old"),group);
 
   opt8->setChecked(flags & cfPersistent);
