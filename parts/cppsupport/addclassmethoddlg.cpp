@@ -32,6 +32,7 @@
 #include "parsedmethod.h"
 #include "cclonefunctiondlg.h"
 #include "addclassmethoddlg.h"
+#include "addclassmethoddlg.moc"
 
 //#define TEST_DEBUG_ONLY  1
 

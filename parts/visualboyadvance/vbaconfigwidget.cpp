@@ -23,6 +23,7 @@
 #include <kfiledialog.h>
 #include <qdir.h>
 #include <qtoolbutton.h>
+#include "vbaconfigwidget.moc"
 
 using namespace VisualBoyAdvance;
 

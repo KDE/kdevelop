@@ -1327,4 +1327,4 @@ void Core::recentProjectSelected(const KURL &url)
 }
 
 
-//#include "core.moc"
+#include "core.moc"
