@@ -254,20 +254,17 @@ void KDevSession::recreateDocs(QDomElement& el){
     // read the document name and type
     QString docName = docEl.attribute( "FileName", "");
     QString docType = docEl.attribute( "Type", "Unknown");
-    if (!docName.isEmpty()) {
+    if (!docName.isEmpty() && QFile::exists(docName)) {
       // create the document
       if (docType == QString("KWriteDoc")) {
 
         KWriteDoc* pDoc = m_pDocViewMan->createKWriteDoc(docName);
         if (pDoc) {
-        // this should be a call to DocViewMan::loadKWriteDoc() (rokrau 6/11/01)
           // load contents from file
-          if(QFile::exists(docName)) {
-            QFile f(docName);
-            if (f.open(IO_ReadOnly)) {
-              pDoc->loadFile(f);
-              f.close();
-            }
+          QFile f(docName);
+          if (f.open(IO_ReadOnly)) {
+            pDoc->loadFile(f);
+            f.close();
           }
           // views
           recreateViews( pDoc, docEl);

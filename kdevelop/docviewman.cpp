@@ -61,10 +61,11 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   m_docBookmarksTitleList.setAutoDelete(TRUE);
     
   connect( this, SIGNAL(sig_viewActivated(QWidget*)), 
-					 m_pParent, SLOT(slotViewSelected(QWidget*)) );
-
-	connect( this, SIGNAL(sig_newStatus(const QString&)), 
-					 m_pParent, SLOT(slotStatusMsg(const QString&)) );
+           m_pParent, SLOT(slotViewSelected(QWidget*)) );
+  connect( this, SIGNAL(sig_newStatus(const QString&)),
+           m_pParent, SLOT(slotStatusMsg(const QString&)) );
+  connect( m_pParent, SIGNAL(lastChildViewClosed()),
+           this, SLOT(slotResetMainFrmCaption()) );
 }
 
 //------------------------------------------------------------------------------
@@ -168,7 +169,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
   if (!pEditWidget) {
     return;
-	}
+  }
 
   // If the caller wanted to be positioned at a particular place in the file
   // then they have supplied the line and col. Otherwise we use the
@@ -324,7 +325,7 @@ void DocViewMan::doSearch()
   if (curDocIsBrowser()) {
     if (currentBrowserDoc()) {
       KActionCollection* pAC = currentBrowserDoc()->actionCollection();
-			if (pAC) {
+      if (pAC) {
         KAction* pFindAction = pAC->action("find");
         if (pFindAction) {
           pFindAction->activate();
@@ -678,7 +679,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
   pMDICover->setTabCaption( shortName);
-	pMDICover->setCaption(pNewView->caption());
+  pMDICover->setCaption(pNewView->caption());
   connect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
           this, SLOT(slot_viewActivated(QextMdiChildView*)));
 
@@ -889,6 +890,13 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
   m_MDICoverList.remove( pMDICover);
 
   closeCDocBrowser(pDoc);
+}
+
+void DocViewMan::slotResetMainFrmCaption()
+{
+  if (m_pParent) {
+    m_pParent->setMainCaption();
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -1137,7 +1145,7 @@ void DocViewMan::doFileCloseAll()
 bool DocViewMan::doProjectClose()
 {
   QStrList handledNames;
-  bool cont = true;
+  bool cont = true; // continue to close the project
 
   // synchronizeDocAndInfo();
 
@@ -1182,7 +1190,7 @@ bool DocViewMan::doProjectClose()
       }
 
       if (result==SaveAllDialog::Cancel) { // Cancel
-        cont=false;
+        cont=false; // not continuing to close the project
         break;
       }
     }  // end actual file close

@@ -80,15 +80,15 @@ bool CKDevelop::slotProjectClose()
 
   // save the session
   KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-	m_pKDevSession->setLastCompile(compile_combo->currentText());
+  m_pKDevSession->setLastCompile(compile_combo->currentText());
   QString sessionFileName = prj->getProjectFile();
   sessionFileName = sessionFileName.left( sessionFileName.length() - 7);
   sessionFileName += "kdevses";
   m_pKDevSession->saveToFile(sessionFileName);
 
-  bool cont = m_docViewManager->doProjectClose();
+  bool bCloseProj = m_docViewManager->doProjectClose();
 
-  if (cont)
+  if (bCloseProj)
     {
       // cancel wasn't pressed and all sources are saved - project closed
       // clear all widgets
@@ -103,7 +103,7 @@ bool CKDevelop::slotProjectClose()
       stderr_widget->clear();
       
       if (dbgController)
-    slotDebugStop();
+        slotDebugStop();
       
       //clear all edit_infos before starting a new project
       // edit_infos.clear(); now in doProjectClose (Christian)
@@ -145,7 +145,7 @@ bool CKDevelop::slotProjectClose()
       disableCommand(ID_CV_GRAPHICAL_VIEW);
       disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
       disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-		  disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
+      disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
       file_open_popup->clear();
       file_open_list.clear();
@@ -154,12 +154,11 @@ bool CKDevelop::slotProjectClose()
   slotStatusMsg(i18n("Ready."));
   refreshTrees();
   
-  if (!cont)
-    {
-      setMainCaption();
-    }
+  if (bCloseProj) {
+    setMainCaption();
+  }
   
-  return cont; // false if pressed cancel
+  return bCloseProj; // false if pressed cancel
 }
 
 

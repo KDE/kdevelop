@@ -104,16 +104,16 @@ public:
   ///////////////////////////
 
   /** */
-	void doBookmarksToggle();
+  void doBookmarksToggle();
 
   /** */
-	void doBookmarksClear();
+  void doBookmarksClear();
 
   /** */
-	void doBookmarksNext();
+  void doBookmarksNext();
 
   /** */
-	void doBookmarksPrevious();
+  void doBookmarksPrevious();
 
   /** */
   void doClearBookmarks();
@@ -122,12 +122,12 @@ public:
   void installBMPopup(QPopupMenu *p);
 
   /** */
-	void connectBMPopup();
+  void connectBMPopup();
 
   /** */
-	void readBookmarkConfig(KConfig* theConfig);
+  void readBookmarkConfig(KConfig* theConfig);
   /** */
-	void writeBookmarkConfig(KConfig* theConfig);
+  void writeBookmarkConfig(KConfig* theConfig);
 
   /** */
     QString getBrowserMenuItem(int index);
@@ -254,10 +254,11 @@ public slots:
   /** shows the desired document bookmark 
    * (eventually, switches to file and activates it) */
   void gotoDocBookmark(int n);
-
+  /** The last view has been closed, set the mainwidget caption to default */
+  void slotResetMainFrmCaption();
 
   // ***************************
-	// Edit slots
+  // Edit slots
   // ***************************
 
   /** swich construction for the toolbar icons, selecting the right slots */
@@ -313,8 +314,8 @@ signals:
       has been closed */
   void sig_lastDocClosed();
 
-	/** Is emitted when the status message should be changed */
-	void sig_newStatus(const QString& text);
+  /** Is emitted when the status message should be changed */
+  void sig_newStatus(const QString& text);
 
 // attributes
 private:
