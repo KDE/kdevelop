@@ -13,9 +13,6 @@
             <height>625</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form3</string>
-    </property>
     <property name="whatsThis" stdset="0">
         <string>This form allows you to create a CVS repository for your new project</string>
     </property>
