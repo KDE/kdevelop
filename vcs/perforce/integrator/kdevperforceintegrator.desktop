@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevPerforceIntegrator
+Comment=Perforce Project Integration Facility
+Exec=blubb
+ServiceTypes=KDevelop/VCSIntegrator
+X-KDE-Library=libperforceintegrator
+X-KDevelop-Default=false
+X-KDevelop-VCS=Perforce
+X-KDevelop-VCSPlugin=KDevPerforce
+X-KDevelop-Version=3

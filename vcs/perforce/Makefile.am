@@ -15,3 +15,5 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevperforce.desktop
 
 rcdir = $(kde_datadir)/kdevperforce
+
+SUBDIRS = integrator

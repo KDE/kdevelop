@@ -1,0 +1,20 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CCIntegratorDlgBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CCIntegratorDlgBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevSubversionIntegrator
+Comment=Subversion Project Integration Facility
+Icon=misc
+Exec=blubb
+ServiceTypes=KDevelop/VCSIntegrator
+X-KDE-Library=libsubversionintegrator
+X-KDevelop-Default=false
+X-KDevelop-VCS=Subversion
+X-KDevelop-VCSPlugin=KDevsubversion
+X-KDevelop-Version=3

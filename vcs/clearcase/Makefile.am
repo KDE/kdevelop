@@ -13,3 +13,5 @@ METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevclearcase.desktop
+
+SUBDIRS = integrator

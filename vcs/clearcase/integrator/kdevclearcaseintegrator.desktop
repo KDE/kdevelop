@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevClearcaseIntegrator
+Comment=Clearcase Project Integration Facility
+Exec=blubb
+ServiceTypes=KDevelop/VCSIntegrator
+X-KDE-Library=libclearcaseintegrator
+X-KDevelop-Default=false
+X-KDevelop-VCS=ClearCase
+X-KDevelop-VCSPlugin=KDevClearCase
+X-KDevelop-Version=3
