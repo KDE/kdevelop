@@ -1,9 +1,11 @@
+2002-03-25  Roland Krause  <roland@cougar>
+    * added parts/classwizzard and parts/cppsupport from gideon
+
 2002-03-25  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added sourceinfo/pcs
 	
 2002-03-24  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added code template
-
 2002-03-21  Robertp Raggi  <raggi@cli.di.unipi.it>
     * added code completion/expand word
 	
@@ -1043,7 +1045,6 @@
       allows users to do away with kde1 whilst kdevelop2.0 is
       being developed.
 LOP_1_4.
-
 2000-12-30  jbb <jbb@kdevelop.org>
     * Ported 1.3 to kde2 - This is an interim version that
       allows users to do away with kde1 whilst kdevelop2.0 is
