@@ -250,6 +250,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
     tagBuilder.setStatic( isStatic );
     tagBuilder.setInline( isInline );
     tagBuilder.setPure( false );
+    tagBuilder.setConst( d->constant() != 0 );
 
     m_catalog->addItem( tag );
 
@@ -421,7 +422,7 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
 
     Tag tag;
     CppVariable<Tag> tagBuilder( tag );
-    
+
     tag.setKind( Tag::Kind_Variable );
     tag.setFileName( m_fileName );
     tag.setName( id );
@@ -497,7 +498,7 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
 
     Tag tag;
     CppFunction<Tag> tagBuilder( tag );
-    
+
     tag.setKind( Tag::Kind_FunctionDeclaration );
     tag.setFileName( m_fileName );
     tag.setName( id );
@@ -516,6 +517,7 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     tagBuilder.setStatic( isStatic );
     tagBuilder.setInline( isInline );
     tagBuilder.setPure( isPure );
+    tagBuilder.setConst( d->constant() != 0 );
 
     parseFunctionArguments( tag, d );
 
@@ -554,9 +556,9 @@ void TagCreator::parseFunctionArguments( Tag& tag, DeclaratorAST* declarator )
         }
 
     }
-    
+
     CppFunction<Tag> tagBuilder( tag );
-    
+
     tagBuilder.setArguments( types );
     tagBuilder.setArgumentNames( args );
 }
@@ -607,7 +609,7 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 
 	Tag tag;
 	CppBaseClass<Tag> tagBuilder( tag );
-	
+
 	tag.setKind( Tag::Kind_Base_class );
 	tag.setFileName( m_fileName );
 	tag.setName( className );
@@ -651,24 +653,24 @@ QString TagCreator::scopeOfDeclarator( DeclaratorAST* d )
 
 int TagUtils::stringToAccess( const QString & access )
 {
-    QStringList l = QStringList() 
-		    << "public" << "protected" << "private" 
+    QStringList l = QStringList()
+		    << "public" << "protected" << "private"
 		    << "public slots" << "protected slots" << "private slots"
 		    << "signals";
- 
+
     int idx = l.findIndex( access );
     return idx == -1 ? 0 : idx+1;
 }
 
 QString TagUtils::accessToString( int id )
 {
-    QStringList l = QStringList() 
-		    << "public" << "protected" << "private" 
+    QStringList l = QStringList()
+		    << "public" << "protected" << "private"
 		    << "public slots" << "protected slots" << "private slots"
 		    << "signals";
-    
+
     if( l.at(id-1) != l.end() )
 	return l[ id-1 ];
-    
+
     return QString::null;
 }
