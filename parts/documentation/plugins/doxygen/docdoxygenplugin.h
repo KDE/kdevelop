@@ -58,6 +58,10 @@ protected:
     
     void createIndexFromTag(QDomDocument &dom, IndexBox* index, DocumentationCatalogItem* item,
         QDomElement &parentEl, const QString &prefix);
+    
+    void autoSetupDocs(const QString &defaultDir, const QString &searchDir, 
+        const QString &name);
+    
 };
 
 

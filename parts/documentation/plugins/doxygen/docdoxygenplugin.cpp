@@ -186,22 +186,39 @@ bool DocDoxygenPlugin::needRefreshIndex(DocumentationCatalogItem* item)
 
 void DocDoxygenPlugin::autoSetupPlugin()
 {
-    QString doxyDocDir(KDELIBS_DOXYDIR);
+    autoSetupDocs(KDELIBS_DOXYDIR, "en/kdelibs-apidocs", "The KDE API Reference (The KDE API Reference)");
+    autoSetupDocs("", "en/kdevelop-apidocs", "The KDevelop Platform API Documentation (KDevelop)");
+    
+}
+
+void DocDoxygenPlugin::autoSetupDocs(const QString &defaultDir, const QString &searchDir,
+    const QString &name)
+{
+    QString doxyDocDir(defaultDir);
     doxyDocDir = URLUtil::envExpand(doxyDocDir);
     if (doxyDocDir.isEmpty())
     {
-        QStringList apiDirs = DocDoxygenPluginFactory::instance()->dirs()->findDirs("html", "kdelibs-apidocs");
-        if (apiDirs.count() > 0)
-            doxyDocDir = apiDirs.first();
+        QStringList apiDirs = DocDoxygenPluginFactory::instance()->dirs()->findDirs("html", searchDir);
+        for (QStringList::const_iterator it = apiDirs.begin(); it != apiDirs.end(); ++it )
+        {
+            doxyDocDir = *it;
+            QString indexFile = doxyDocDir + "index.html";
+            if (QFile::exists(indexFile))
+            {
+                doxyDocDir = doxyDocDir + "/" + searchDir;
+                break;
+            }
+            doxyDocDir = "";
+        }
     }
     if (!doxyDocDir.isEmpty())
     {
         config->setGroup("Search Settings");
-        config->writeEntry("The KDE API Reference (The KDE API Reference)", true);
+        config->writeEntry(name, true);
         config->setGroup("Index Settings");
-        config->writeEntry("The KDE API Reference (The KDE API Reference)", true);
+        config->writeEntry(name, true);
         config->setGroup("Locations");
-        config->writePathEntry("The KDE API Reference (The KDE API Reference)", doxyDocDir + QString("/index.html"));
+        config->writePathEntry(name, doxyDocDir + QString("/index.html"));
     }
 }
 
