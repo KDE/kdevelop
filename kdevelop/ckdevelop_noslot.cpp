@@ -692,16 +692,15 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       return;
     }
 
+//		KProcess designer_process;	
+//		designer_process << "designer" << "-client" << filename;
 		KShellProcess designer_process("/bin/sh");
 		const QString oldGroup = config->group();
 		config->setGroup("QT2");
-		QString qt2dir =  QString("QTDIR=") + config->readEntry("qt2dir") + " ";
+		QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
 		config->setGroup(oldGroup);
 		designer_process << qt2dir << "designer" << "-client" << filename;
-         if(!designer_process.start(KProcess::DontCare)) {
-         debug("QtDesigner didn't start!");
-         }
-                if(!designer_process.start(KProcess::DontCare)) {
+		if(!designer_process.start(KProcess::DontCare)) {
     	debug("QtDesigner didn't start!");
 		}
     return;
