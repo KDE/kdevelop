@@ -291,18 +291,12 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
  * Get all VariableSetModes for a variable.
  * Returns: number of ValueSetModes
  */
-int FileBuffer::getVariableValueSetModes(const QString &variable,FileBuffer::ValueSetMode* &modes)
+void FileBuffer::getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes)
 //=======================================================================================================
 {
   Caret curPos(0,0);
   bool finished = false;
-  Caret findconfigvariables(0,0);
-  int numberofvariables;
-  for(numberofvariables = 0; findconfigvariables != Caret(-1,-1); ++numberofvariables)
-  {
-    findconfigvariables = findInBuffer(QString("\nCONFIG"),findconfigvariables);
-  }
-  modes = new ValueSetMode[numberofvariables];
+
   for (int i=0; !finished; ++i)
   {
     Caret variablePos(findInBuffer(variable,curPos));
@@ -311,12 +305,14 @@ int FileBuffer::getVariableValueSetModes(const QString &variable,FileBuffer::Val
       finished=true;
       continue;
     }
+
     Caret eqSign = findInBuffer("=",variablePos);
     if (eqSign.m_row != variablePos.m_row)
     {
       curPos = Caret(variablePos)+Caret(1,0);
       continue;
     }
+
     QString line=m_buffer[eqSign.m_row];
     QChar effectOperator = line[eqSign.m_idx-1];
     long lineNum=eqSign.m_row;
@@ -332,21 +328,21 @@ int FileBuffer::getVariableValueSetModes(const QString &variable,FileBuffer::Val
       }
       line = "";
     }
+
     if (QString("+-*~").find(effectOperator)==-1)
     {
-      modes[i] = VSM_RESET;
+      modes.append(new ValueSetMode(VSM_RESET));
     }
     if (effectOperator=='-')
     {
-      modes[i] = VSM_EXCLUDE;
+      modes.append(new ValueSetMode(VSM_EXCLUDE));
     }
     else
     {
-      modes[i] = VSM_APPEND;
+      modes.append(new ValueSetMode(VSM_APPEND));
     }
     curPos = Caret(lineNum+1,0);
   }
-  return numberofvariables;
 }
 
 /**
