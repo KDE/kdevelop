@@ -72,6 +72,12 @@ public:
   DCOPRef dcopInterface() const;
 
 
+signals:
+
+  void loaded(KEditor::Document *doc);
+  void saved(KEditor::Document *doc);
+
+
 protected:  
   
   Document(Editor *parent);

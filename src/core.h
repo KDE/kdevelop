@@ -85,6 +85,9 @@ private slots:
 
     void slotUpdateStatusBar();
 
+    void slotDocumentLoaded(KEditor::Document *doc);
+    void slotDocumentSaved(KEditor::Document *doc);
+
 
 private:
     KActionCollection *actionCollection();

@@ -597,10 +597,13 @@ KEditor::Document *Core::createDocument(const KURL &url)
   if (!doc)
       return 0;
 
+  connect(doc, SIGNAL(loaded(KEditor::Document*)), this, SLOT(slotDocumentLoaded(KEditor::Document*)));
+  connect(doc, SIGNAL(saved(KEditor::Document*)), this, SLOT(slotDocumentSaved(KEditor::Document*)));
+  
   KEditor::StatusDocumentIface *status = KEditor::StatusDocumentIface::interface(doc);
   if (status)
   {
-    connect(status, SIGNAL(message(KEditor::Document*,const QString &)), win->statusBar(), SLOT(message(KEditor::Document*,const QString &))),
+    connect(status, SIGNAL(message(KEditor::Document*,const QString &)), this, SLOT(message(KEditor::Document*,const QString &))),
     connect(status, SIGNAL(statusChanged(KEditor::Document*)), this, SLOT(slotUpdateStatusBar()));
   }
  
@@ -1103,6 +1106,20 @@ void Core::slotBreakPointEnabled(KEditor::Document *doc, int line)
 {
   QString fname = doc->url().path();
   emit toggledBreakpoint(fname, line);
+}
+
+
+void Core::slotDocumentLoaded(KEditor::Document *doc)
+{
+  kdDebug() << "EMIT: loaded " << doc->url().path() << endl;
+  emit loadedFile(doc->url().path());
+}
+
+
+void Core::slotDocumentSaved(KEditor::Document *doc)
+{
+  kdDebug() << "EMIT: saved " << doc->url().path() << endl;
+  emit savedFile(doc->url().path());
 }
 
 

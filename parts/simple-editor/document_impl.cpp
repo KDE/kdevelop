@@ -51,6 +51,8 @@ bool DocumentImpl::openFile()
   f.close();
 
   resetModifiedTime();
+
+  emit KEditor::Document::loaded(this);
   
   return true;
 }
@@ -71,7 +73,9 @@ bool DocumentImpl::saveFile()
   f.close();
 
   resetModifiedTime();
-  
+
+  emit KEditor::Document::saved(this);
+
   return true;
 }
 
