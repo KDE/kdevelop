@@ -57,11 +57,11 @@ Documentation viewer improvements
 Application wizard improvementes, application templates, documentation, bug fixes:
   Dominik Haumann <dhdev@gmx.de>
 
-DistPart:
+DistPart, Bash Shell Support:
   Ian Reinhart Geiser <geiseri@kde.org>
 
-Bash Shell Support:
-  Ian Reinhart Geiser <geiseri@kde.org>
+API Documentation, Run Options, code reorganization. Fixes for project templates, autotools and doxygen. 
+  Amilcar Lucas <a.lucas@tu-bs.de>
 
 Other software included in the source package:
 
