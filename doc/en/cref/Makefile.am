@@ -1,8 +1,8 @@
 EXTRA_DIST =index.html
 
 install-data-local:
-	$(mkinstalldirs) $(kde_htmldir)/nl/kdevelop/reference/C/
-	$(INSTALL_DATA) index.html $(kde_htmldir)/nl/kdevelop/reference/C/cref.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/reference/C/
+	$(INSTALL_DATA) index.html $(kde_htmldir)/en/kdevelop/reference/C/cref.html
 
 uninstall-local:
-	-rm -f $(kde_htmldir)/nl/kdevelop/reference/C/cref.html
+	-rm -f $(kde_htmldir)/en/kdevelop/reference/C/cref.html
