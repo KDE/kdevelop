@@ -115,6 +115,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)));
+    connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
+             this, SLOT(partRemoved(KParts::Part*)));
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
@@ -560,6 +562,7 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 		QString path = project()->projectDirectory() + "/" + ( *it );
 		classStore()->removeWithReferences(path);
+	        m_backgroundParser->removeFile( path );
 	}
 
 	emit updatedSourceInfo();
@@ -1429,6 +1432,18 @@ QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
     SubclassingDlg *dlg = new SubclassingDlg(this, formName, fileName, dummy);
     dlg->exec();
     return dummy;
+}
+
+void CppSupportPart::partRemoved( KParts::Part* part )
+{
+    kdDebug(9032) << "CppSupportPart::partRemoved()" << endl;
+
+    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>( part );
+    if( doc ){
+	QString fileName = doc->url().path();
+	if( !fileName.isEmpty() )
+	    m_backgroundParser->removeFile( fileName );
+    }
 }
 
 

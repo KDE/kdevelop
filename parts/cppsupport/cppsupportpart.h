@@ -99,6 +99,7 @@ protected:
 
 private slots:
     void activePartChanged(KParts::Part *part);
+    void partRemoved( KParts::Part* part );
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
