@@ -43,6 +43,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
   ,m_stateChanged(TRUE)
+  ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
@@ -63,6 +64,7 @@ QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFl
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
   ,m_stateChanged(TRUE)
+  ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
@@ -397,7 +399,7 @@ void QextMdiChildView::resizeEvent(QResizeEvent* e)
 
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
-   if( e->type() == QEvent::KeyPress) {
+   if( e->type() == QEvent::KeyPress && isAttached()) {
       QKeyEvent* ke = (QKeyEvent*) e;
       if( ke->key() == Qt::Key_Tab) {
          //qDebug("ChildView %i::eventFilter - TAB from %s (%s)", this, obj->name(), obj->className());
@@ -417,10 +419,19 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    else if( e->type() == QEvent::FocusIn) {
-      if (obj->inherits("QWidget")) {
-         QObjectList *list = queryList( "QWidget" );
-         if (list->find(obj) != -1) {
-            m_focusedChildWidget = (QWidget*)obj;
+      if (isAttached()) {
+         if (obj->inherits("QWidget")) {
+            QObjectList *list = queryList( "QWidget" );
+            if (list->find(obj) != -1) {
+               m_focusedChildWidget = (QWidget*)obj;
+            }
+         }
+      }
+      else {   // is toplevel
+         if (!m_bFocusActivationIsPending) {
+            m_bFocusActivationIsPending = true;
+            activate(); // sets the focus
+            m_bFocusActivationIsPending = false;
          }
       }
    }

@@ -274,7 +274,6 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
       } else {
          attachWindow( pWnd, !(flags & QextMdi::Hide));
       }
-      pWnd->installEventFilter(this);
 
       if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
          if (!pWnd->isMaximized())
@@ -368,6 +367,8 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
+   pWnd->installEventFilter(this);
+
    // decide whether window shall be cascaded
    bool bCascade = FALSE;
    QRect frameGeo = pWnd->frameGeometry();
@@ -417,6 +418,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 //============= detachWindow ==============//
 void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 {
+   pWnd->removeEventFilter(this);
    pWnd->youAreDetached();
    // this is only if it was attached and you want to detach it
    if(pWnd->parent() != NULL ) {
@@ -595,6 +597,9 @@ void QextMdiMainFrm::focusInEvent(QFocusEvent *)
 
 bool QextMdiMainFrm::event( QEvent* e)
 {
+   if( e->type() == QEvent::FocusIn) {
+      qDebug("FocusIn");
+   }
    if( e->type() == QEvent::User) {
       QextMdiChildView* pWnd = (QextMdiChildView*)((QextMdiViewCloseEvent*)e)->data();
       if( pWnd != 0L)
@@ -608,11 +613,14 @@ bool QextMdiMainFrm::event( QEvent* e)
 bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
 {
    if( e->type() == QEvent::FocusIn) {
-      QextMdiChildView* pWnd = (QextMdiChildView*)obj;
-      if( pWnd != 0L)
-         qDebug("xxx");
+      QFocusEvent* pFE = (QFocusEvent*) e;
+      if (pFE->reason() == QFocusEvent::ActiveWindow) {
+         if (!m_pCurrentWindow->isAttached()) {
+            return TRUE;   // eat the event
+         }
+      }
    }
-   return FALSE;
+   return DockMainWindow::eventFilter( obj, e);
 }
 
 /**

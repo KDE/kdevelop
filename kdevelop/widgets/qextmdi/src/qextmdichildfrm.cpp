@@ -824,7 +824,7 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
    m_pClose->removeEventFilter(this);
    m_pClient->removeEventFilter(this);
 
-   m_pClient->removeEventFilterForAllChildren();
+//SCHEDULED_FOR_REMOVE   m_pClient->removeEventFilterForAllChildren();
 
    return pFocPolDict;
 }
@@ -885,6 +885,10 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 {
    if ( (e->type() == QEvent::MouseButtonPress) && (((QWidget*)obj) != m_pClient) ) {
+      QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
+      QApplication::postEvent(qApp->mainWidget(), pFE);
+      QApplication::sendPostedEvents();
+      m_pClient->setFocus();
       raiseAndActivate();
       QWidget* w = (QWidget*) obj;
       if( (w->parent() != m_pCaption) && (w != m_pCaption))
@@ -917,7 +921,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          delete list;                        // delete the list, not the objects
       }
    }
-   return FALSE;                           // standard event processing
+   return QWidget::eventFilter( obj, e);  // standard event processing
 }
 
 //============= raiseAndActivate ===============//

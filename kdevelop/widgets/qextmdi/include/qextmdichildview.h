@@ -84,6 +84,16 @@ protected:
    * For example it could be that a 'maximize' is pending, if this variable is TRUE.
    */
    bool        m_stateChanged;
+   /**
+   *
+   */
+   bool        m_bFocusActivationIsPending;
+
+private:
+   /**
+   * Internally used as indicator whether this QextMdiChildView is treated as document view or as tool view.
+   */
+   bool  m_bToolView;
 
 // methods
 public:
@@ -337,12 +347,6 @@ protected:
    * Internally used for the minimize/maximize/restore mechanism when in attach mode.
    */
    virtual void resizeEvent(QResizeEvent *e);
-
-private:
-   /** 
-   * Internally used as indicator whether this QextMdiChildView is treated as document view or as tool view. 
-   */
-   bool  m_bToolView;
 
 signals:
    /** 
