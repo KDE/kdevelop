@@ -1108,9 +1108,9 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     KConfig *configdh = DocTreeViewFactory::instance()->config();
     if (configdh)
     {
-        configdh->setGroup("DevHelp");
-        QString firstScan = configdh->readEntry("FirstScan");
-        if (firstScan.isEmpty())
+        configdh->setGroup("TocDevHelp");
+        QString firstScan = configdh->readEntry("FirstScan", "yes");
+        if (firstScan != "no")
         {
             DocTreeViewTool::scanDevHelpDirs();
             configdh->writeEntry("FirstScan", "no");
