@@ -40,7 +40,7 @@ QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
 	static QValueList<ActionFormat> formats
 		= QValueList<ActionFormat>()
 
-	<< ActionFormat( i18n("compiling"), "g++", "/bin/sh\\s.*libtool.*--mode=compile.*`.*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
+	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
 	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
 	<< ActionFormat( i18n("generating"), "moc", ".*/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("generating"), "uic", ".*/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
@@ -123,6 +123,18 @@ void MakeActionFilter::test()
 		"'/home/john/src/kde/kdevelop/lib/interfaces/'`/home/john/src/kde/kdevelop/lib/interfaces/kdevcore.cpp; then mv "
 		"\".deps/kdevcore.Tpo\" \".deps/kdevcore.Plo\"; else rm -f \".deps/kdevcore.Tpo\"; exit 1; fi",
 		"compiling", "g++", "kdevcore.cpp" )
+	<< TestItem( // automake 1.7, srcdir != builddir
+		"if g++ -DHAVE_CONFIG_H -I. -I/home/john/src/kde/kdevelop/src -I.. -I/home/john/src/kde/kdevelop/lib/interfaces "
+		"-I/home/john/src/kde/kdevelop/lib/sourceinfo -I/home/john/src/kde/kdevelop/lib/util -I/home/john/src/kde/kdevelop/lib "
+		"-I/home/john/src/kde/kdevelop/lib/qextmdi/include -I/home/john/src/kde/kdevelop/lib/structure -I/usr/local/kde/include "
+		"-I/home/john/src/kde/qt-copy/include -I/usr/X11R6/include -DQT_THREAD_SUPPORT -D_REENTRANT -Wnon-virtual-dtor "
+		"-Wno-long-long -Wundef -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -ansi "
+		"-D_XOPEN_SOURCE=500 -D_BSD_SOURCE -Wcast-align -Wconversion -Wchar-subscripts -fno-builtin -g3 -Wformat-security "
+		"-Wmissing-format-attribute -fno-exceptions -fno-check-new -fno-common -MT mainwindowideal.o -MD -MP -MF "
+		"\".deps/mainwindowideal.Tpo\" -c -o mainwindowideal.o `test -f '/home/john/src/kde/kdevelop/src/mainwindowideal.cpp' "
+		"|| echo '/home/john/src/kde/kdevelop/src/'`/home/john/src/kde/kdevelop/src/mainwindowideal.cpp; then mv "
+		"\".deps/mainwindowideal.Tpo\" \".deps/mainwindowideal.Po\"; else rm -f \".deps/mainwindowideal.Tpo\"; exit 1; fi",
+		"compiling", "g++", "mainwindowideal.cpp" )
 	<< TestItem(
 		"source='makewidget.cpp' object='makewidget.lo' libtool=yes depfile='.deps/makewidget.Plo' "
 		"tmpdepfile='.deps/makewidget.TPlo' depmode=gcc3 /bin/sh ../../admin/depcomp /bin/sh ../../libtool --mode=compile "
