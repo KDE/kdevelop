@@ -1194,25 +1194,19 @@ void CppSupportPart::setupCatalog( )
 
 KMimeType::List CppSupportPart::mimeTypes( )
 {
+    QStringList mimeList = QStringList() 
+			   << "text/x-csrc"
+			   << "text/x-c++src"
+			   << "text/x-chdr"
+			   << "text/x-c++hdr";
+    
     KMimeType::List list;
-    KMimeType::Ptr mime;
-
-    mime = KMimeType::mimeType( "text/x-csrc" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-chdr" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-c++src" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-c++hdr" );
-    if( mime )
-	list << mime;
-
+    for( QStringList::Iterator it=mimeList.begin(); it!=mimeList.end(); ++it )
+    {
+	if( KMimeType::Ptr mime = KMimeType::mimeType(*it) )
+	    list << mime;
+    }
+    
     return list;
 }
 
