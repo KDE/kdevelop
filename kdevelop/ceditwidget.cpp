@@ -69,8 +69,6 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   bookmarks.setAutoDelete(true);
   pop->insertSeparator();
   pop->insertItem(Icon("dbgrunto.xpm"),"Run to cursor",this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
-  pop->insertItem(Icon("dbgstepout.xpm"),"Step out off",this,SLOT(slotStepOutOff()),0,ID_EDIT_STEP_OUT_OFF);
-  pop->insertSeparator();
   pop->insertItem(Icon("dbgwatchvar.xpm"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
 }
 
@@ -420,10 +418,6 @@ void CEditWidget::slotGrepText(){
 void CEditWidget::slotRunToCursor(){
     QFileInfo fi( getName() );
     emit runToCursor(fi.fileName(), currentLine()+1);
-}
-
-void CEditWidget::slotStepOutOff(){
-    emit stepOutOff();
 }
 
 void CEditWidget::slotAddWatchVariable(){

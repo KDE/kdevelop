@@ -66,6 +66,7 @@
 #include "./dbg/breakpoint.h"
 #include "./dbg/framestack.h"
 #include "./dbg/memview.h"
+#include "dbgtoolbar.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
@@ -766,80 +767,12 @@ void CKDevelop::slotBuildRunWithArgs(){
 
 void CKDevelop::slotDebugRun()
 {
-  if (!dbgController)
-  {
-//  	enableToolBar(KToolBar::Show,ID_DEBUG_TOOLBAR);
-    dbgController = new GDBController(var_viewer->varTree(), frameStack);
-
-    connect(  dbgController,    SIGNAL(rawGDBBreakpointList (char*)),
-              brkptManager,     SLOT(slotParseGDBBrkptList(char*)));
-    connect(  dbgController,    SIGNAL(rawGDBBreakpointSet(char*, int)),
-              brkptManager,     SLOT(slotParseGDBBreakpointSet(char*, int)));
-    connect(  dbgController,    SIGNAL(acceptPendingBPs()),
-              brkptManager,     SLOT(slotSetPendingBPs()));
-    connect(  dbgController,    SIGNAL(unableToSetBPNow(int)),
-              brkptManager,     SLOT(slotUnableToSetBPNow(int)));
-
-    connect(  dbgController,    SIGNAL(dbgStatus(const QString&,int)),
-              this,             SLOT(slotDebugStatus(const QString&,int)));
-    connect(  dbgController,    SIGNAL(showStepInSource(const QString&,int)),
-              this,             SLOT(slotDebugShowStepInSource(const QString&,int)));
-    connect(  dbgController,    SIGNAL(ttyStdout(const char*)),
-              this,             SLOT(slotApplReceivedStdout(const char*)));
-    connect(  dbgController,    SIGNAL(ttyStderr(const char*)),
-              this,             SLOT(slotApplReceivedStderr(const char*)));
-
-#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    connect(  dbgController,    SIGNAL(rawData(const char*)),
-              this,             SLOT(slotDebugReceivedStdout(const char*)));
-#endif
-
-    connect(  brkptManager,     SIGNAL(publishBPState(Breakpoint*)),
-              dbgController,    SLOT(slotBPState(Breakpoint*)));
-    connect(  brkptManager,     SIGNAL(clearAllBreakpoints()),
-              dbgController,    SLOT(slotClearAllBreakpoints()));
-
-    connect(  frameStack,       SIGNAL(selectFrame(int)),
-              dbgController,    SLOT(slotSelectFrame(int)));
-
-    connect(  var_viewer->varTree(),  SIGNAL(expandItem(VarItem*)),
-              dbgController,          SLOT(slotExpandItem(VarItem*)));
-    connect(  var_viewer->varTree(),  SIGNAL(expandUserItem(VarItem*, const QString&)),
-              dbgController,          SLOT(slotExpandUserItem(VarItem*, const QString&)));
-    connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool,int)),
-              dbgController,          SLOT(slotSetLocalViewState(bool,int)));
-
-    connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
-              dbgController,    SLOT(slotRunUntil(const QString&, int)));
-
-    connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
-              dbgController,    SLOT(slotRunUntil(const QString&, int)));
-
-    connect(  header_widget,    SIGNAL(stepOutOff()),
-              dbgController,    SLOT(slotStepOutOff()));
-
-    connect(  cpp_widget,       SIGNAL(stepOutOff()),
-              dbgController,    SLOT(slotStepOutOff()));
-
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), prj->getExecuteArgs());
-  }
-
-	// Ensure the toolbar is on
-	setDebugMenuProcess(true);
-
-  // If there's BP's waiting to be set then do this now
-  brkptManager->slotSetPendingBPs();
-	
   // and start the debugger going
   dbgController->slotRun();
 }
 
 void CKDevelop::slotDebugStop()
 {
-  setDebugMenuProcess(false);
-//  enableToolBar(KToolBar::Hide,ID_DEBUG_TOOLBAR);
-
   delete dbgController;
   dbgController = 0;
   brkptManager->reset();
@@ -850,6 +783,12 @@ void CKDevelop::slotDebugStop()
 #endif
   edit_widget->clearStepLine();
   brkptManager->refreshBP(edit_widget->getName());
+
+  toolBar()->setItemEnabled(ID_BUILD_DEBUG, project);
+  // We disabled autosaving when debugging, so if they wanted
+  // it we have to restart it
+  if (bAutosave)
+    saveTimer->start(saveTimeout);
 }
 
 void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber)
@@ -941,23 +880,6 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
     slotStatusMsg(msg);
 }
 
-void CKDevelop::setDebugMenuProcess(bool enable)
-{
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,        enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_MEMVIEW,    enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,       enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,       enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STOP,       enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RESTART,    enable);
-  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_BREAK_INTO, enable);
-
-  if (enable)
-    saveTimer->stop();  // stop the autosaving
-  else
-    if(bAutosave)
-      saveTimer->start(saveTimeout); // maybe restart autosaving
-}
-
 void CKDevelop::slotBuildDebug(){
 
   if(!bKDevelop)
@@ -972,8 +894,74 @@ void CKDevelop::slotBuildDebug(){
 
   if (dbgInternal)
   {
+    saveTimer->stop();  // stop the autosaving
+
     slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
                     (prj->getBinPROGRAM()).data()));
+
+    ASSERT(!dbgController);
+
+    dbgController = new GDBController(var_viewer->varTree(), frameStack);
+
+    connect(  dbgController,    SIGNAL(rawGDBBreakpointList (char*)),
+              brkptManager,     SLOT(slotParseGDBBrkptList(char*)));
+    connect(  dbgController,    SIGNAL(rawGDBBreakpointSet(char*, int)),
+              brkptManager,     SLOT(slotParseGDBBreakpointSet(char*, int)));
+    connect(  dbgController,    SIGNAL(acceptPendingBPs()),
+              brkptManager,     SLOT(slotSetPendingBPs()));
+    connect(  dbgController,    SIGNAL(unableToSetBPNow(int)),
+              brkptManager,     SLOT(slotUnableToSetBPNow(int)));
+
+    connect(  dbgController,    SIGNAL(dbgStatus(const QString&,int)),
+              this,             SLOT(slotDebugStatus(const QString&,int)));
+    connect(  dbgController,    SIGNAL(showStepInSource(const QString&,int)),
+              this,             SLOT(slotDebugShowStepInSource(const QString&,int)));
+    connect(  dbgController,    SIGNAL(ttyStdout(const char*)),
+              this,             SLOT(slotApplReceivedStdout(const char*)));
+    connect(  dbgController,    SIGNAL(ttyStderr(const char*)),
+              this,             SLOT(slotApplReceivedStderr(const char*)));
+
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    connect(  dbgController,    SIGNAL(rawData(const char*)),
+              this,             SLOT(slotDebugReceivedStdout(const char*)));
+#endif
+
+    connect(  brkptManager,     SIGNAL(publishBPState(Breakpoint*)),
+              dbgController,    SLOT(slotBPState(Breakpoint*)));
+    connect(  brkptManager,     SIGNAL(clearAllBreakpoints()),
+              dbgController,    SLOT(slotClearAllBreakpoints()));
+
+    connect(  frameStack,       SIGNAL(selectFrame(int)),
+              dbgController,    SLOT(slotSelectFrame(int)));
+
+    connect(  var_viewer->varTree(),  SIGNAL(expandItem(VarItem*)),
+              dbgController,          SLOT(slotExpandItem(VarItem*)));
+    connect(  var_viewer->varTree(),  SIGNAL(expandUserItem(VarItem*, const QString&)),
+              dbgController,          SLOT(slotExpandUserItem(VarItem*, const QString&)));
+    connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool,int)),
+              dbgController,          SLOT(slotSetLocalViewState(bool,int)));
+
+    connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
+              dbgController,    SLOT(slotRunUntil(const QString&, int)));
+
+    connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
+              dbgController,    SLOT(slotRunUntil(const QString&, int)));
+
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    dbgController->slotStart(prj->getBinPROGRAM(), prj->getExecuteArgs());
+
+    // We turn off the original toolbar start button and startup the debuggers
+    // floating toolbar.
+    toolBar()->setItemEnabled(ID_BUILD_DEBUG, false);
+    DbgToolbar* dbgToolbar = new DbgToolbar(dbgController, this);
+    dbgToolbar->show();
+
+    connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
+              dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
+
+    // If there's BP's waiting to be set then do this now
+    brkptManager->slotSetPendingBPs();
+	
     slotDebugRun();
     return;
   }
@@ -993,7 +981,6 @@ void CKDevelop::slotBuildDebug(){
 
   slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
                 (prj->getBinPROGRAM()).data(), dbgExternalCmd.data()));
-//  slotStatusMsg(i18n("Running  ")+prj->getBinPROGRAM()+i18n("  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -3091,7 +3078,7 @@ void CKDevelop::slotToolbarClicked(int item){
       cv_decl_or_impl=true;
     }		
     break;
-
+/*
   case ID_DEBUG_RUN:
     ASSERT(dbgInternal);
     slotDebugRun();
@@ -3116,6 +3103,7 @@ void CKDevelop::slotToolbarClicked(int item){
     ASSERT(dbgInternal && dbgController);
     slotDebugMemoryView();
     break;
+*/
   }
 }
 

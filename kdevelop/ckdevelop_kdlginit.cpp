@@ -304,7 +304,6 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_RUN_WITH_ARGS);
   disableCommand(ID_BUILD_DEBUG);
-//  disableCommand(ID_DEBUG_RUN);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
   disableCommand(ID_BUILD_STOP);

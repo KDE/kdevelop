@@ -170,17 +170,18 @@ void KIconBorder::paintBreakpoint(int line)
 		return;
 
   // A breakpoint is on this line - draw it
-	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
+  TextLine* tLine = kWriteDoc->textLine(line);
+	if (tLine && (tLine->getBPId() != 0))
 	{
 		QPixmap bpPix;
-    if (!kWriteDoc->textLine(line)->isBPEnabled())
+    if (!tLine->isBPEnabled())
     {
       #include "pix/breakpoint_gr.xpm"
       bpPix = QPixmap(breakpoint_gr_xpm);
     }
     else
     {
-		  if (kWriteDoc->textLine(line)->isBPPending())
+		  if (tLine->isBPPending())
 		  {
         #include "pix/breakpoint_bl.xpm"
 			  bpPix = QPixmap(breakpoint_bl_xpm);
@@ -209,10 +210,9 @@ void KIconBorder::paintDbgPosition(int line)
 
 void KIconBorder::paintLine(int line)
 {
-  if (line < kWriteDoc->getTextLineCount())
+  if (line >=0 && line < kWriteDoc->getTextLineCount())
   {
 		clearLine(line);
-
 		paintBookmark(line);
 		paintBreakpoint(line);
 		paintDbgPosition(line);
@@ -258,9 +258,11 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
     }
     case RightButton:
     {
-	    selectMenu.setItemEnabled (menuId_editBrkpoint,
-	                            kWriteDoc->textLine(cursorOnLine)->getBPId() != 0 );
-      selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
+      if (TextLine* tline=kWriteDoc->textLine(cursorOnLine))
+      {
+	      selectMenu.setItemEnabled (menuId_editBrkpoint, tline->getBPId() != 0 );
+        selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
+      }
       break;
     }
 

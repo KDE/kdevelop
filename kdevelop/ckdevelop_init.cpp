@@ -406,8 +406,7 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
   accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_BUILD_DEBUG );
-//  accel->connectItem("BuildDebug", this, SLOT(slotDebugRun()), true, ID_BUILD_DEBUG );
-  
+
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
   
@@ -1287,9 +1286,17 @@ void CKDevelop::setToolmenuEntries(){
 
 void CKDevelop::initDebugger()
 {
-  // Because we cannot delete tabs we must always set up them up
-  // They may be disabled later...
-  if (!var_viewer)
+  bool oldDbg = dbgInternal;
+
+  config = kapp->getConfig();
+  config->setGroup("Debug");
+  dbgInternal = !config->readBoolEntry("Use external debugger");
+  dbgExternalCmd = config->readEntry("External debugger program","kdbg");
+
+  // once we've set these tabs up we don't seem to be able to remove them
+  // without crashing. So for internal debuggers set them up and if they
+  // change their mind they may be disabled later... All rather ugly...
+  if (dbgInternal && !var_viewer)
   {
     ASSERT(!frameStack && !brkptManager && !var_viewer && !dbgController);
     frameStack = new FrameStack(o_tab_view, "FrameStack");
@@ -1347,47 +1354,32 @@ void CKDevelop::initDebugger()
               var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
     connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
               var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
-
-  	toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
-  	toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
-	  QFrame *separatorLine= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-  	separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  	toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine);
-
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory view dialog"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false,i18n("Run/continue"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Step into"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Step over"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgrestart.xpm"),ID_DEBUG_RESTART, false,i18n("Restart program"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstop.xpm"),ID_DEBUG_STOP, false,i18n("Stop debugging"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false,i18n("Break into running program"));
-
-	  QFrame *separatorLine1= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-  	separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  	toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine1);
   }
 
-  config = kapp->getConfig();
-  config->setGroup("Debug");
-  bool oldDbg = dbgInternal;
-
-  dbgInternal = !config->readBoolEntry("Use external debugger");
-  dbgExternalCmd = config->readEntry("External debugger program","kdbg");
-
-  o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal);
-  o_tab_view->setTabEnabled(i18n("BPManager"), dbgInternal);
-  t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal);
-  var_viewer->setEnabled(dbgInternal);
-  frameStack->setEnabled(dbgInternal);
-  brkptManager->setEnabled(dbgInternal);
+  // Enable or disable the tabs, if they exist...
+  if (var_viewer)
+  {
+    // Figure out whether the tabs should be enabled or not.
+    o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal);
+    o_tab_view->setTabEnabled(i18n("BPManager"), dbgInternal);
+    t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal);
+    var_viewer->setEnabled(dbgInternal);
+    frameStack->setEnabled(dbgInternal);
+    brkptManager->setEnabled(dbgInternal);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  o_tab_view->setTabEnabled(i18n("debugger"), dbgInternal);
-  dbg_widget->setEnabled(dbgInternal);
+    o_tab_view->setTabEnabled(i18n("debugger"), dbgInternal);
+    dbg_widget->setEnabled(dbgInternal);
 #endif
+  }
 
+  // If we've switch external/internal debuggers then stop any
+  // internal debugger running.
   if (oldDbg != dbgInternal)
     slotDebugStop();
-  else
-    if (dbgInternal && dbgController)
-      dbgController->reConfig();
+
+  // If we are running an internal debugger they (may have) changed
+  // the config, so poke it the current values.
+  //
+  if (dbgController)
+    dbgController->reConfig();
 }

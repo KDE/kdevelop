@@ -189,7 +189,7 @@ public:
     * @param enable if true than enable,otherwise disable
     */
   void setToolMenuProcess(bool enable);
-  void setDebugMenuProcess(bool enable);
+//  void setDebugMenuProcess(bool enable);
 
   KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
   KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
@@ -898,7 +898,7 @@ private:
   /** debugger additions */
   DbgController* dbgController;
 
-  /** The debugger's tree of local variable's */
+  /** The debugger's tree of local variables */
   VarViewer* var_viewer;
 
   /** */
