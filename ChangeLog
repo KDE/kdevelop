@@ -1,3 +1,7 @@
+2000-03-29 Falk Brettschneider <gigafalk@yahoo.com>
+        * correct error message and installation guide for the case
+	  that the C/C++ reference is not installed (en and de)
+
 2000-03-27 Ralf Nolden <rnolden@kdevelop.de>
         * fixed old urls to kdevelop.org in german manual
 
