@@ -22,9 +22,6 @@
 #include <kstandarddirs.h>
 #include <kmainwindow.h>
 #include <dcopref.h>
-#include <repository_stub.h>
-#include <cvsservice_stub.h>
-#include <cvsjob_stub.h>
 // CvsService stuff
 #include <repository_stub.h>
 #include <cvsservice_stub.h>
