@@ -19,6 +19,7 @@
 #include "bugedit.h"
 #include <qdatetime.h>
 #include <qdom.h>
+#include <qfile.h>
 #include <qmessagebox.h>
 #include <qsortedlist.h>
 #include <qxml.h>
