@@ -1,5 +1,4 @@
-# You must update the package name
-package FOO;
+package $MODULE$;
 
 use strict;
 
