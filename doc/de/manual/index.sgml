@@ -962,10 +962,9 @@ oder die entsprechenden Schaltflächen der Werkzeugleiste aufgerufen werden:
 verschiedenen Schablonen angelegt werden; weiterhin geben Sie Dateinamen und Pfad an.<p>
 <item><bf/Öffnen			STRG+O/ zeigt den "Öffne Datei..." Dialog an und läßt Sie den Dateinamen einer zu öffnenden Datei auswählen.<p>
 <item><bf/Schießen		STRG+W/ Schließt die Datei des aktuellen Bearbeitungsfensters<p>
-<item><bf/Speichern			STRG+S/	Saves the file opened in the top editing window. If the file has not been saved yet, the "Save File
-As..." dialog will be opened to let you choose a path and filename for the file to be saved.<p>
-<item><bf/Speichern unter.../ öffnet den "Speichere Datei unter..." Dialog, indem Sie der Datei unter einen neuen Namen abspeichern
-können.<p>
+<item><bf/Speichern			STRG+S/	Speichert die im obersten Editorfenster geöffnete Datei. Ist die Datei bisher noch nicht gespeichert
+worden, öffnet sich der "Speichern unter" Dialog, in dem Sie einen Pfad- und Dateinamen eingeben können.<p>
+<item><bf/Speichern unter.../ öffnet den "Speichere Datei unter..." Dialog, indem Sie der Datei unter einen neuen Namen abspeichern können.<p>
 <item><bf/Alles speichern/ Speichert alle geänderten Dateien<p>
 <item><bf/Drucken...	STRG+P/ Öffnet den "Drucke Datei" Dialog, in dem Sie die Druckereinstellung für die Verwendung von enscript
 oder lpr festlegen, um dann zu drucken.<p>
@@ -1162,27 +1161,44 @@ meistbenutzten Dokumentationen. Zusätzliche Online-Hilfe können Sie im DOC-Tabul
 <item><bf/Suche Markierten Text		F2/ Scannt den Suchindex nach dem aktuell markierten Text des Editor- oder Browserfensters. Nach der
 Suche wird Ihnen eine Resultats-Seite angezeigt, in der Sie die gewünschte Hilfeseite aufrufen können. Nach der Auswahl zeigt Ihnen der
 Browser die gefundene Textstelle markiert an. Mit F3 (Weitersuchen) können Sie das nächste Ergebnis auf derselben Seite anzeigen.<p>
-<item><bf/Search for Help on.../Öffnet den "Suche nach Hilfe zu..." Dialog, in dem Sie nach einem spezifischen Ausdruck suchen
-können.<p>
-<item><bf/Benutzerhandbuch		F1/ Öffnet die Inhalts-Seite des KDevelop Benutzerhandbuchs.<p>
-<item><bf/Programmierhandbuch / Öffnet das <htmlurl url="programming.html" name="KDevelop Programmierhandbuch"><p>
-<item><bf/Tip des Tages/ Öffnet den Tip des Tages Dialog, um Sie über weitere Features von KDevelop zu informieren.<p>
-<item><bf/KDevelop Homepage/ Bringt Sie zur Homepage von KDevelop, falls Sie über einen Internet-Zugang verfügen.<p>
-<item><bf/Bugreport.../ Öffnet den Bugreport-Dialog, in dem Sie dem KDevelop-Team eine Fehlerbeschreibung per E-Mail senden können;
-siehe auch <ref id="Melden von Fehlern" name="Melden von Fehlern"><p>
-<item><bf>C/C++ Referenz</bf> Zeigt die Index-Seite der C/C++ Referenz an. Ist diese nicht installiert, zeigt Ihnen eine
-Fehlerseite an, wie Sie die Referenz nachinstallieren.<p>
-<item><bf/Qt-Bibliothek/ Wechselt zur Index-Seite der Qt-Dokumentation, die Sie mit Ihrer Kopie der Qt-Bibliothek erhalten
-haben.<p>
-<item><bf/KDE-Core-Bibliothek/ Öffnet den Klassenindex der KDE-Core Bibliotheksdokumentation.<p>
-<item><bf/KDE-GUI-Bibliothek/  Wie vor für die GUI-Bibliothek<p>
-<item><bf/KDE-KFile-Bibliothek/ Wie vor für die KFile-Bibliothek<p>
-<item><bf/KDE-HTML-Bibliothek/ Wie vor für die HTML-Bibliothek<p>
-<item><bf/Projekt-API-Dokumentation/ Wechselt zum Klassendokumentation des Projekts<p>
-<item><bf/Projekt-Benutzerhandbuch/ Öffnet die Inhaltsseite des Benutzerhandbuchs Ihres aktuellen Projekts. Verwenden Sie diese
-Funktion zur Kontrolle der HTML-Ausgabe Ihrer Dokumentation.<p>
-<item><bf/Über KDevelop.../ Öffnet eine Dialogbox mit Informationen zu KDevelop mit Hinweisen zur Version, Autoren, Email-Adressen und
-Lizenzbestimmungen.
+<item><bf/Suche nach Hilfe zu.../Öffnet den "Suche nach Hilfe zu..." Dialog, in dem Sie nach einem spezifischen Ausdruck suchen
+können.
+<p>
+<item><bf/<idx/Das Benutzerhandbuch zu Kdevelop/ <idx/F1// Öffnet das Benutzerhandbuch zu Kdevelop (Dieses Handbuch).
+<p>
+<item><bf/<idx/Das KDevelop Programmier-Handbuch//
+Öffnet die <htmlurl url="programming/index.html" name="KDevelop Programmier-Handbuch">
+Indexseite. Dieses Handbuch enthält enthält eine vollständige Anleitung zur Programmierung der KDE.
+<p>
+<item><bf/<idx/KDE Anwendungs Tutorials//
+Wechselt zur Indexseite der <htmlurl url="tutorial/index.html" name ="KDE Anwendungs Tutorials">. Dieses Handbuch erklärt, wie man
+die Qt Tutorial Anwendungen erstellt und führt Sie durch Entwicklung einer Beispielanwendung in die KDE Programmierung ein.
+<p>
+<item><bf/<idx/Der KDE Bibliotheks-Referenzführer//
+Wechselt zur Indexseite des <htmlurl url="kde_libref/index.html" name="KDE Bibliotheks-Referenzführers">. Dieses Handbuch enthält
+detailierte Informationen über die Verwendung der KDE/Qt Bibliotheken, unterteilt in Abschnitte wie z.B. Ereignisbehandlung.
+<p>
+<item><bf/<idx/Programmieren mit KDE 2//
+Wechselt zur Indexseite des Buches <htmlurl url="addendum/index.html" name="Programmieren mit KDE 2">. Dieses Handbuch enthält
+Informationen über die neueste KDE Entwicklung und darüber, wie Sie Ihre Anwendungen KDE 2 fertig machen.
+<p>
+<item><bf>C/C++ <idx/Referenz/</bf> Zeigt die Indexseite der Sprachreferenz. Wenn die Referenz nicht installiert ist, wird auf
+einer Fehlerseite erkärt, wo Sie die Referenz bekommen, und wie Sie sie installieren.
+<p>
+<item><bf/<idx/Tip des Tages// Öffnet den Dialog "Tip des Tages", der Ihnen nützliche Tips zur Arbeit mit KDevelop liefert.
+<p>
+<item><bf/<idx/Homepage von KDevelop// Öffnet, sofern Internetzugang vorhanden ist, die KDevelop Homepage in Ihrem Browser.
+<p>
+<item><bf/<idx/Bugreport/.../ Öffnet den KDevelop Bugreportdialog, mit dessen Hilfe Sie eine Fehlermeldung direkt per EMail an das
+KDevelop Team senden können. Siehe auch <ref id="Melden von Fehlern" name="Melden von Fehlern">.
+<p>
+<item><bf/<idx/API-Dokumentation des Projekts// Wechselt zum Index der Klassendokumentation Ihres Projekts.<nidx/KDoc/<nidx/API/
+<p>
+<item><bf/<idx/Benutzerhandbuch des Projekts// Öffnet die Indexseite des Benutzerhandbuches Ihres aktuellen Projekts. Sie können
+sie verwenden, um sich die von <idx/KSgml2Html/ erzeugte <idx/HTML/-<idx/Ausgabe/ anzusehen.
+<p>
+<item><bf/Über KDevelop.../ Zeigt die Aboutbox von KDevelop, die die verwendete Version, die Namen und Email-Adressen der Autoren
+sowie die Kdevelop Lizenzbestimmungen zeigt.
 </itemize>
 
 <sect>Schaltflächen der Werkzeugleisten

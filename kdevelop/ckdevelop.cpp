@@ -3892,8 +3892,8 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BOOKMARKS_PREVIOUS,										i18n("Goes to the previous bookmark in the current window file"))
   ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmarks for the current window"))
 
-  ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switchs to last browser page"))
-  ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switchs to next browser page"))
+  ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switches to last browser page"))
+  ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switches to next browser page"))
 
   ON_STATUS_MSG(ID_HELP_BROWSER_RELOAD,                   i18n("Reloads the current browser page"))
   ON_STATUS_MSG(ID_HELP_BROWSER_STOP,                   	i18n("Cancels the document request"))
@@ -3902,27 +3902,27 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				i18n("Searchs the selected text in the documentation"))
   ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
 
-  ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switchs to KDevelop's User Manual"))
-  ON_STATUS_MSG(ID_HELP_PROGRAMMING,                			i18n("Switchs to the KDevelop Programming Handbook"))
-  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switchs to the KDE Tutorials Handbook"))
-  ON_STATUS_MSG(ID_HELP_KDELIBREF,          			        i18n("Switchs to the KDE Library Reference Guide Handbook"))
-  ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,           			    i18n("Switchs to the KDE 2 Developer´s Guide Handbook"))
-  ON_STATUS_MSG(ID_HELP_REFERENCE,                			  i18n("Switchs to the C/C++-Reference"))
+  ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switches to KDevelop's User Manual"))
+  ON_STATUS_MSG(ID_HELP_PROGRAMMING,                			i18n("Switches to the KDevelop Programming Handbook"))
+  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switches to the KDE Tutorials Handbook"))
+  ON_STATUS_MSG(ID_HELP_KDELIBREF,          			        i18n("Switches to the KDE Library Reference Guide Handbook"))
+  ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,           			    i18n("Switches to the KDE 2 Developer´s Guide Handbook"))
+  ON_STATUS_MSG(ID_HELP_REFERENCE,                			  i18n("Switches to the C/C++-Reference"))
   
   ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,												i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
   ON_STATUS_MSG(ID_HELP_BUG_REPORT,			                 	i18n("Sends a bug-report email to the KDevelop Team"))
   
-  ON_STATUS_MSG(ID_HELP_PROJECT_API,		           			  i18n("Switchs to the project's API-Documentation"))
-  ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switchs to the project's User-Manual"))
+  ON_STATUS_MSG(ID_HELP_PROJECT_API,		           			  i18n("Switches to the project's API-Documentation"))
+  ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switches to the project's User-Manual"))
 
 
   ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
-  ON_STATUS_MSG(ID_CV_WIZARD,															i18n("Switchs to declaration/implementation"))
-  ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,										i18n("Switchs to the method's declaration"))
-  ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,										i18n("Switchs to the method's definition"))
+  ON_STATUS_MSG(ID_CV_WIZARD,															i18n("Switches to declaration/implementation"))
+  ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,										i18n("Switches to the method's declaration"))
+  ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,										i18n("Switches to the method's definition"))
   ON_STATUS_MSG(ID_CV_GRAPHICAL_VIEW,											i18n("Opens the graphical inheritance tree"))
   ON_STATUS_MSG(ID_CV_CLASS_TOOL,													i18n("Opens the classtool dialog"))
   ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,									i18n("Displays the inherited classes of the current class"))

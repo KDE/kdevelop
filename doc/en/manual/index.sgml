@@ -1112,17 +1112,16 @@ Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handb
 index page. This handbook contains a complete programming guide to KDE development.
 <p>
 <item><bf/<idx/KDE Application Tutorials// 
-Changes to the index page of the KDE Application Tutorials handbook.
+Changes to the index page of the <htmlurl url="tutorial/index.html" name="KDE Application Tutorials"> handbook.
 This handbook explains how to build the Qt tutorial applications and introduces you to KDE programming by developing 
 an example application.
 <p>
 <item><bf/<idx/The KDE Library Reference Guide// 
-Changes to the index page of the KDE Library Reference Guide. This handbook contains detailed information about using the KDE/Qt libraries
-separated on topics such as event handling.
-<p>
+Changes to the index page of the <htmlurl url="kde_libref/index.html" name="KDE Library Reference Guide">. This handbook contains
+detailed information about using the KDE/Qt libraries separated on topics such as event handling. <p>
 <item><bf/<idx/The KDE 2 Developer´s Guide// 
-Changes to the index page of the KDE 2 Developer´s Guide. This Handbook contains information about the most recent KDE development
-and how to prepare your application to be KDE 2-ready.
+Changes to the index page of the <htmlurl url="addendum/index.html" name="KDE 2 Developer´s Guide">. This Handbook contains
+information about the most recent KDE development and how to prepare your application to be KDE 2-ready.
 <p>
 <item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
 reference is not installed, an error page shows you how to get the reference and how to install it correctly.
