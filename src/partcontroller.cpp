@@ -117,7 +117,7 @@ void PartController::setEncoding(const QString &encoding)
 void PartController::editDocument(const KURL &inputUrl, int lineNum)
 {
   KURL url = inputUrl;
-  bool localUrl = (url.url().left(6) == "file:/");
+  bool localUrl = url.url().startsWith("file:/");
   
   // Make sure the URL exists
   if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
@@ -136,13 +136,13 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
       }
     }
     
-    localUrl = (url.url().left(6) == "file:/");
+    localUrl = url.url().startsWith("file:/");
     if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
       // See if this url is relative to the current project's directory
       url = project->projectDirectory() + "/" + url.url();
     }
     
-    localUrl = (url.url().left(6) == "file:/");
+    localUrl = url.url().startsWith("file:/");
     if (!url.isValid() || (!localUrl && !KIO::NetAccess::exists(url))) {
       // Here perhaps we should prompt the user to find the file?
       return;
