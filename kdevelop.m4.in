@@ -136,7 +136,9 @@ AC_MSG_RESULT($enable_scripting)
 
 SCRIPTING=
 if test "$enable_scripting" = "yes"; then
-  KDE_CHECK_PYTHON
+  KDE_CHECK_PYTHON(1.5, [
+	AC_MSG_ERROR([You enabled scripting but have no python installed.])
+  ])
   SCRIPTING=scripting
 fi
   AC_SUBST(SCRIPTING)
