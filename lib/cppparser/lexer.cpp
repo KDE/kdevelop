@@ -28,6 +28,25 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
+#if defined( KDEVELOP_BGPARSER )
+#include <qthread.h>
+
+class KDevTread: public QThread
+{
+public:
+    static void yield()
+    {
+	msleep( 0 );
+    }
+};
+
+inline void qthread_yield()
+{
+    KDevTread::yield();
+}
+
+#endif
+
 #define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QString::null : m_source.mid((start), (len)) )
 #define ADD_TOKEN(tk) \
 { \
@@ -292,6 +311,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    int argsEndAtLine = currentLine();
 	    int argsEndAtColumn = currentColumn();
 
+#if defined( KDEVELOP_BGPARSER )
+	    qthread_yield();
+#endif
 	    m_source.insert( currentPosition(), m.body() );
 
             // tokenize the macro body
@@ -336,6 +358,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                 }
             }
 
+#if defined( KDEVELOP_BGPARSER )
+	    qthread_yield();
+#endif
             m_source.insert( currentPosition(), textToInsert );
 
             d->endScope();
@@ -357,6 +382,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 			skip( '(', ')' );
 		}
 		if( !(*pos).second.isEmpty() ){
+#if defined( KDEVELOP_BGPARSER )
+	    qthread_yield();
+#endif
 		    m_source.insert( currentPosition(), QString(" ") + (*pos).second + QString(" ") );
 		    m_endPtr = m_source.length();
 		}
