@@ -79,22 +79,30 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 PartExplorerForm::PartExplorerForm( QWidget *parent )
-    : PartExplorerFormBase( parent, "partexplorerform", 0 )
+    : KDialogBase( parent, "parteplorerform", false,
+        i18n("Part Explorer -- A services lister"), User1 | Close, User1, true )
 {
-    resultsList = new ResultsList( this );
-    resultsList->addColumn( tr2i18n( "Property" ) );
-    resultsList->addColumn( tr2i18n( "Type" ) );
-    resultsList->addColumn( tr2i18n( "Value" ) );
-    resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
+    m_base = new PartExplorerFormBase( this, "partexplorerformbase", 0 );
+    m_resultsList = new ResultsList( m_base );
+    m_resultsList->addColumn( tr2i18n( "Property" ) );
+    m_resultsList->addColumn( tr2i18n( "Type" ) );
+    m_resultsList->addColumn( tr2i18n( "Value" ) );
+    m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
-        resultsList->sizePolicy().hasHeightForWidth() ) );
-    PartExplorerFormBaseLayout->addWidget( resultsList );
+        m_resultsList->sizePolicy().hasHeightForWidth() ) );
+    m_base->layout()->add( m_resultsList );
+    setMainWidget( m_base );
 
+    // User1 button text
+    setButtonText( User1, i18n("&Search") );
 
-    connect( typeEdit, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
-    connect( costraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+    // Resize dialog
+    resize( 480, 512 );
 
-    connect( searchButton, SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
+    connect( m_base->typeEdit, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+    connect( m_base->costraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+
+    connect( actionButton(User1), SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,7 +115,7 @@ PartExplorerForm::~PartExplorerForm()
 
 QString PartExplorerForm::serviceType() const
 {
-    QString st = this->typeEdit->text();
+    QString st = m_base->typeEdit->text();
 
     return st.isEmpty()? QString::null : st;
 }
@@ -116,7 +124,7 @@ QString PartExplorerForm::serviceType() const
 
 QString PartExplorerForm::costraints() const
 {
-    QString c = this->costraintsText->text();
+    QString c = m_base->costraintsText->text();
     return c.isEmpty()? QString::null : c;
 }
 
@@ -156,7 +164,7 @@ void PartExplorerForm::slotDisplayError( QString errorMessage )
 
 void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
 {
-    this->resultsList->clear();
+    this->m_resultsList->clear();
 
     if ( services.isEmpty())
     {
@@ -164,7 +172,7 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
         return;
     }
 
-    this->resultsList->setRootIsDecorated( true );
+    this->m_resultsList->setRootIsDecorated( true );
 
     KListViewItem *rootItem = 0;
 
@@ -172,7 +180,7 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
     for ( ; it != services.end(); ++it )
     {
         KService::Ptr service = (*it);
-        KListViewItem *serviceItem = new KListViewItem( this->resultsList, rootItem, service->name() );
+        KListViewItem *serviceItem = new KListViewItem( this->m_resultsList, rootItem, service->name() );
 
         QStringList propertyNames = service->propertyNames();
         for ( QStringList::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )

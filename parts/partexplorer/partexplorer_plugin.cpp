@@ -15,9 +15,10 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
-
+#include <kaction.h>
 #include <kmainwindow.h>
-#include "kdevmainwindow.h"
+
+#include <kdevmainwindow.h>
 
 #include "partexplorerform.h"
 
@@ -30,9 +31,14 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
     // we need an instance
     setInstance( PartExplorerPluginFactory::instance() );
 
+    setXMLFile( "kdevpartexplorer.rc" );
+
     // this should be your custom internal widget
-    m_widget = new PartExplorerForm();
-    mainWindow()->embedSelectView( m_widget, i18n("PartExplorer"), i18n("Query system services"));
+    m_widget = new PartExplorerForm( mainWindow()->main()->centralWidget() );
+//    mainWindow()->embedSelectView( m_widget, i18n("PartExplorer"), i18n("Query system services"));
+
+    (void)new KAction( i18n("Show &Part Explorer window"), 0, this, SLOT(slotShowForm()),
+        actionCollection(), "show_partexplorerform" );
 }
 
 PartExplorerPlugin::~PartExplorerPlugin()
@@ -41,7 +47,12 @@ PartExplorerPlugin::~PartExplorerPlugin()
     {
         mainWindow()->removeView( m_widget );
     }
-    delete m_widget;
+    //delete m_widget;
+}
+
+void PartExplorerPlugin::slotShowForm()
+{
+    m_widget->show();
 }
 
 #include "partexplorer_plugin.moc"

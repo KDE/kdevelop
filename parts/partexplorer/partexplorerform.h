@@ -13,17 +13,17 @@
 #define PARTEXPLORERFORM_H
 
 #include <ktrader.h>
-
-#include "partexplorerformbase.h"
+#include <kdialogbase.h>
 
 class ResultsList;
+class PartExplorerFormBase;
 
 /**
 * The GUI for the PartExplorer.
 *
 * @author Mario Scalas
 */
-class PartExplorerForm : public PartExplorerFormBase
+class PartExplorerForm : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -45,7 +45,8 @@ protected slots:
     void slotSearchRequested();
 
 private:
-    ResultsList *resultsList;
+    ResultsList *m_resultsList;
+    PartExplorerFormBase *m_base;
 };
 
 #endif

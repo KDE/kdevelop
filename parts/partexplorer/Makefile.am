@@ -11,7 +11,5 @@ libkdevpartexplorer_la_SOURCES = partexplorerformbase.ui partexplorerform.cpp pa
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpartexplorer.desktop
-
 rcdir = $(kde_datadir)/kdevpartexplorer
-
+rc_DATA = kdevpartexplorer.desktop kdevpartexplorer.rc

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>276</width>
-            <height>369</height>
+            <width>429</width>
+            <height>246</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -100,17 +100,6 @@
                 <string>i. e. ([X-KDevelop-Scope]='Global')</string>
             </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>searchButton</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Start Search</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Perform the query</string>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1_3</cstring>
@@ -132,7 +121,6 @@
 <tabstops>
     <tabstop>typeEdit</tabstop>
     <tabstop>costraintsText</tabstop>
-    <tabstop>searchButton</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

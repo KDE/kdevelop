@@ -45,6 +45,9 @@ public:
     */
     virtual ~PartExplorerPlugin();
 
+private slots:
+    void slotShowForm();
+
 private:
     /**
     * The dialog for user interaction, so the plugin is usable too ;)
