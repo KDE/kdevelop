@@ -198,7 +198,6 @@ void CKAppWizard::initPages()
   qextmdiitem = new QListViewItem( qtentry, i18n("QextMDI"));
   qt2mdiitem = new QListViewItem( qtentry, i18n("Qt 2.2 MDI"));
   qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.2 SDI"));
-  qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
 
   gnomeentry = new QListViewItem (applications, "GNOME");
   gnomeentry->setExpandable (true);
@@ -214,9 +213,6 @@ void CKAppWizard::initPages()
   kde2mdiitem = new QListViewItem (kdeentry,i18n("KDE 2 MDI"));
   kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kde2miniitem = new QListViewItem (kdeentry,i18n("KDE 2 Mini"));
-  kdenormaloglitem = new QListViewItem(kdeentry, i18n("Normal-OpenGL"));
-  kdenormalitem = new QListViewItem (kdeentry,i18n("Normal"));
-  kdeminiitem = new QListViewItem (kdeentry,i18n("Mini"));
 
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
@@ -1121,16 +1117,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
 	  entries << KStandardDirs::kde_default("icon");
     entries << "\nAPPLICATION\n";
 
-    if (kdeminiitem->isSelected()) {
-      entries << "kdemini\n";
-    }
-    else if (kdenormalitem->isSelected()) {
-      entries << "kdenormal\n";
-    }
-    else if (kdenormaloglitem->isSelected()){
-      entries << "kdenormalogl\n";
-    }
-    else if (kde2miniitem->isSelected()) {
+    if (kde2miniitem->isSelected()) {
       entries << "kde2mini\n";
     }
     else if (kde2normalitem->isSelected()) {
@@ -1138,9 +1125,6 @@ void CKAppWizard::generateEntries(const QString &filename) {
     }
     else if (kde2mdiitem->isSelected()) {
       entries << "kde2mdi\n";
-    }
-    else if (qtnormalitem->isSelected()) {
-      entries << "qtnormal\n";
     }
     else if (qt2normalitem->isSelected()) {
        entries << "qt2normal\n";
@@ -1389,16 +1373,7 @@ void CKAppWizard::okPermited()
 
   p.clearArguments();
   bool hasTemplate = true;
-  if (kdeminiitem->isSelected()) {
-    copysrc = locate("appdata", "templates/mini.tar.gz");
-  }
-  else if (kdenormalitem->isSelected()) {
-    copysrc = locate("appdata", "templates/normal.tar.gz");
-  }
-  else if (kdenormaloglitem->isSelected()){
-    copysrc = locate("appdata", "templates/normalogl.tar.gz");
-  }
-  else if (kde2miniitem->isSelected()) {
+  if (kde2miniitem->isSelected()) {
     copysrc = locate("appdata", "templates/mini2.tar.gz");
   }
   else if (kde2normalitem->isSelected()) {
@@ -1406,9 +1381,6 @@ void CKAppWizard::okPermited()
   }
   else if (kde2mdiitem->isSelected()) {
     copysrc = locate("appdata", "templates/kdemdi.tar.gz");
-  }
-  else if (qtnormalitem->isSelected()) {
-    copysrc = locate("appdata", "templates/qt.tar.gz");
   }
   else if (qt2normalitem->isSelected()) {
     copysrc = locate("appdata", "templates/qt2.tar.gz");
@@ -1549,16 +1521,15 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/" + nametext + ".cpp");
     file.remove (dir + "/" + nametext + "/" + nametext + ".h");
   }
-  if (kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() ||
-    kde2normalitem->isSelected()|| kde2mdiitem->isSelected() ||
-      qtnormalitem->isSelected()|| qt2normalitem->isSelected()||
+  if (kde2normalitem->isSelected()|| kde2mdiitem->isSelected() ||
+      qt2normalitem->isSelected()||
       qt2mdiitem->isSelected() || qextmdiitem->isSelected())
   {
     file.remove (dir + "/" + nametext + "/" + nametext + "doc.cpp");
     file.remove (dir + "/" + nametext + "/" + nametext + "doc.h");
     file.remove (dir + "/" + nametext + "/" + nametext + "view.cpp");
     file.remove (dir + "/" + nametext + "/" + nametext + "view.h");
-    if(kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() || qtnormalitem->isSelected()|| qextmdiitem->isSelected())
+    if(qextmdiitem->isSelected())
       file.remove (dir + "/" + nametext + "/resource.h");
   }
   if( qextmdiitem->isSelected())
@@ -1598,84 +1569,7 @@ void CKAppWizard::slotApplicationClicked() {
   apidoc->setEnabled(!citem->isSelected() && !customprojitem->isSelected());
   userdoc->setEnabled(!customprojitem->isSelected());
 
-  if (kdenormalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
-  {
-    pm.load(locate("appdata", "pics/normalApp.bmp"));
-    widget1b->setBackgroundPixmap(pm);
-    apidoc->setChecked(true);
-    datalink->setEnabled(true);
-    datalink->setChecked(true);
-    progicon->setEnabled(true);
-    progicon->setChecked(true);
-    miniicon->setEnabled(true);
-    miniicon->setChecked(true);
-    miniload->setEnabled(true);
-    iconload->setEnabled(true);
-    lsmfile->setChecked(true);
-    gnufiles->setChecked(true);
-    userdoc->setChecked(true);
-    generatesource->setChecked(true);
-    generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
-       m_finishButton->setEnabled(true);
-    }
-    apphelp->setText (i18n("Create a KDE-application with session-management, "
-         "menubar, toolbar, statusbar and support for a "
-         "document-view codeframe model."));
-  }
-
-  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support
-  else if (kdenormaloglitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
-  {
-    pm.load(locate("appdata", "pics/normalOglApp.bmp"));
-    widget1b->setBackgroundPixmap(pm);
-    apidoc->setChecked(true);
-    datalink->setEnabled(true);
-    datalink->setChecked(true);
-    progicon->setEnabled(true);
-    progicon->setChecked(true);
-    miniicon->setEnabled(true);
-    miniicon->setChecked(true);
-    miniload->setEnabled(true);
-    iconload->setEnabled(true);
-    lsmfile->setChecked(true);
-    gnufiles->setChecked(true);
-    userdoc->setChecked(true);
-    generatesource->setChecked(true);
-    generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit")))
-    {
-       m_finishButton->setEnabled(true);
-    }
-    apphelp->setText (i18n("Create a KDE-application with session-management, "
-                            "menubar, toolbar, statusbar and support for a "
-                            "document-view codeframe model."
-                            " OpenGL(tm) (Mesa3D) support is added."));
-  }
-  else if (kdeminiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
-  {
-    pm.load(locate("appdata", "pics/miniApp.bmp"));
-    widget1b->setBackgroundPixmap(pm);
-    apidoc->setChecked(true);
-    datalink->setEnabled(true);
-    datalink->setChecked(true);
-    progicon->setEnabled(true);
-    progicon->setChecked(true);
-    miniicon->setEnabled(true);
-    miniicon->setChecked(true);
-    miniload->setEnabled(true);
-    iconload->setEnabled(true);
-    lsmfile->setChecked(true);
-    gnufiles->setChecked(true);
-    userdoc->setChecked(true);
-    generatesource->setChecked(true);
-    generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
-       m_finishButton->setEnabled(true);
-    }
-    apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
-  }
-  else if (kde2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  if (kde2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/normalApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
@@ -1747,31 +1641,6 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText (i18n("Create a KDE-2 MDI (Multiple Document Interface) application with "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
-  }
-  else if (qtnormalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
-  {
-    pm.load(locate("appdata", "pics/qtApp.bmp"));
-    widget1b->setBackgroundPixmap(pm);
-    apidoc->setChecked(false);
-    datalink->setEnabled(false);
-    datalink->setChecked(false);
-    progicon->setEnabled(true);
-    progicon->setChecked(true);
-    miniicon->setEnabled(true);
-    miniicon->setChecked(true);
-    miniload->setEnabled(true);
-    iconload->setEnabled(true);
-    lsmfile->setChecked(true);
-    gnufiles->setChecked(true);
-    userdoc->setChecked(true);
-    generatesource->setChecked(true);
-    generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
-       m_finishButton->setEnabled(true);
-    }
-    apphelp->setText (i18n("Create a Qt-Application with a main window containing "
-                          "a menubar, toolbar and statusbar, including support for "
-                          "a generic document-view model."));
   }
   else if (qt2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1982,7 +1851,7 @@ void CKAppWizard::slotDefaultClicked() {
   cppheader->setText( i18n("headertemplate for .cpp-files") );
 
   widget1b->setBackgroundPixmap(pm);
-  applications->setSelected(kdenormalitem,true);
+  applications->setSelected(kde2normalitem,true);
   apidoc->setEnabled(true);
   apidoc->setChecked(true);
   lsmfile->setChecked(true);
@@ -2245,16 +2114,6 @@ void CKAppWizard::slotProcessExited() {
   else if (citem->isSelected()) {
     project->setProjectType("normal_c");
   }
-  else if (kdeminiitem->isSelected()) {
-    project->setProjectType("mini_kde");
-  }
-  else if (kdenormalitem->isSelected()) {
-    project->setProjectType("normal_kde");
-  }
-  else if (kdenormaloglitem->isSelected())
-  {
-    project->setProjectType("normalogl_kde");
-  }
   else if (kde2miniitem->isSelected()) {
     project->setProjectType("mini_kde2");
   }
@@ -2263,9 +2122,6 @@ void CKAppWizard::slotProcessExited() {
   }
   else if (kde2mdiitem->isSelected()) {
     project->setProjectType("mdi_kde2");
-  }
-  else if (qtnormalitem->isSelected()) {
-    project->setProjectType("normal_qt");
   }
   else if (qt2normalitem->isSelected()) {
     project->setProjectType("normal_qt2");
@@ -2299,24 +2155,13 @@ void CKAppWizard::slotProcessExited() {
   project->setCXXFLAGS ("-O0 -g3 -Wall");
 
 
-  if (kdeminiitem->isSelected() ) {
-    project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
-  }
-  else if ( kde2miniitem->isSelected()) {
+  if ( kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
-  }
-  else if (kdenormalitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
-  }
-  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
-  else if(kdenormaloglitem->isSelected())
-  {
-     project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIB_QGL)");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
     project->setLDADD (" -lkfile -lkdeui -lkdecore $(LIB_QT)");
   }
-  else if (qtnormalitem->isSelected() || qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
+  else if (qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
   }
   else if (qextmdiitem->isSelected()) {
@@ -2350,9 +2195,8 @@ void CKAppWizard::slotProcessExited() {
  // KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
-  if (kdenormalitem->isSelected() || kdeminiitem->isSelected() ||
-    kde2normalitem->isSelected() || kde2miniitem->isSelected()  ||
-    kde2mdiitem->isSelected()|| kdenormaloglitem->isSelected())
+  if (kde2normalitem->isSelected() || kde2miniitem->isSelected()  ||
+    kde2mdiitem->isSelected())
   {
      sub_dir_list.append("po");
   }
@@ -2397,7 +2241,7 @@ void CKAppWizard::slotProcessExited() {
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
-  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
+  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
        project->isQt2Project() || qextmdiitem->isSelected()) &&
         CToolClass::searchProgram("xgettext"))
   {
@@ -2585,9 +2429,8 @@ void CKAppWizard::slotProcessExited() {
     }
   }
 
-  if (kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() ||
-    kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
-    qtnormalitem->isSelected() ||project->isQt2Project() ||
+  if (kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
+    project->isQt2Project() ||
     qextmdiitem->isSelected())
   {
      if (generatesource->isChecked()) {
@@ -2619,7 +2462,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.install_location = "";
       project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
 
-      if (kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || qtnormalitem->isSelected() ||qextmdiitem->isSelected()){
+      if (qextmdiitem->isSelected()){
         fileInfo.rel_name = namelow + "/resource.h";
         fileInfo.type = CPP_HEADER;
         fileInfo.dist = true;
@@ -2673,7 +2516,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
+    if (!(qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
       if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/medium/locolor/apps/" + namelow + ".xpm";
@@ -2691,7 +2534,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
+    if (!( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
       if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/small/locolor/apps/" + namelow + ".xpm";
@@ -2705,7 +2548,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
   }
 
-  if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
+  if ( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
     fileInfo.rel_name = namelow + "/filenew.xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2740,7 +2583,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.dist = true;
       if (!cppitem->isSelected() && !citem->isSelected()) {
         fileInfo.install = true;
-        if (qtnormalitem->isSelected() || project->isQt2Project() || qextmdiitem->isSelected())
+        if ( project->isQt2Project() || qextmdiitem->isSelected())
           fileInfo.install_location = "$(prefix)/doc/";
         else
           fileInfo.install_location = "$(kde_htmldir)/en/";
@@ -2872,17 +2715,6 @@ void CKAppWizard::slotProcessExited() {
     project->readProject();
   }
 
-  if ((kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || kdeminiitem->isSelected())
-      && CToolClass::searchInstProgram("ksgml2html"))
-  {
-    KShellProcess cp_process;
-    QString nif_template = locate("appdata", "templates/nif_template");
-    cp_process.clearArguments();
-    cp_process << "cp"; // copy is your friend :-)
-    cp_process << nif_template;
-    cp_process << directory +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
-    cp_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
-  }
 
   q->clearArguments();
   *q << "perl" << locate("appdata", "tools/processesend.pl");
@@ -2900,33 +2732,6 @@ void CKAppWizard::slotMakeEnd() {
   directorytext = directoryline->text();
   QString cvscommand;
 
-  if (userdoc->isChecked())
-  {
-    cvscommand="cd "+ directorytext + "/" + nametext + "/docs/en && cvs add index*.html && ";
-    TFileInfo fileInfo;
-    QFileInfo gif (directorytext + "/" + nametext + "/docs/en/logotp3.gif");
-    if (gif.exists())
-    {
-      fileInfo.rel_name = nametext + "/docs/en/logotp3.gif";
-      fileInfo.type = DATA;
-      fileInfo.dist = true;
-      fileInfo.install = true;
-      fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.gif";
-      project->addFileToProject (nametext + "/docs/en/logotp3.gif",fileInfo);
-      cvscommand += "cvs add logotp3.gif && ";
-    }
-    QFileInfo png (directorytext + "/" + nametext + "/docs/en/logotp3.png");
-    if (png.exists())
-    {
-      fileInfo.rel_name = nametext + "/docs/en/logotp3.png";
-      fileInfo.type = DATA;
-      fileInfo.dist = true;
-      fileInfo.install = true;
-      fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.png";
-      project->addFileToProject (nametext + "/docs/en/logotp3.png",fileInfo);
-      cvscommand += "cvs add logotp3.png && ";
-    }
-  }
   project->writeProject ();
   project->updateMakefilesAm ();
   QString message=messageline->text();

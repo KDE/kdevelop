@@ -155,9 +155,6 @@ private:
   CProject* project;
   QStrList sub_dir_list;
   QListViewItem *kdeentry;
-  QListViewItem *kdenormaloglitem; // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
-  QListViewItem *kdenormalitem;
-  QListViewItem *kdeminiitem;
   QListViewItem *kde2normalitem;
   QListViewItem *kde2miniitem;
   QListViewItem *kde2mdiitem;
@@ -169,7 +166,6 @@ private:
   QListViewItem *cppitem;
   QListViewItem *customprojitem;
   QListViewItem *gnomenormalitem;
-  QListViewItem *qtnormalitem;
   QListViewItem *qt2normalitem;
   QListViewItem *qt2mdiitem;
   QListViewItem *qextmdiitem;

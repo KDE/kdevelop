@@ -2,12 +2,12 @@
 require ("flush.pl");
 use File::Copy;
 
-$homedirectory = $ENV{HOME};
+$homedirectory = $ENV{KDEHOME};
 my $entriesfilename= shift || "entries";
 printflush (STDOUT,"Starting with configuration\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename)
+open (PROCESSLIST,$homedirectory . "/share/apps/kdevelop/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 while ( defined ($name = <PROCESSLIST> )) {
   chomp ($name);

@@ -9,16 +9,16 @@ my $entriesfilename= shift || "entries";
 
 my %changings;
 
-my $homedirectory = $ENV{HOME};
-my $local_icondir = $homedirectory . "/.kde/share/icons/";
-my $local_datadir = $homedirectory . "/.kde/share/apps/";
+my $homedirectory = $ENV{KDEHOME};
+my $local_icondir = $homedirectory . "/share/icons/";
+my $local_datadir = $homedirectory . "/share/apps/";
 my $kde_miniicondir = $kde_icondir . "/mini";
 my $local_miniicondir = $local_icondir ."/mini";
 
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename)
+open (PROCESSLIST,$homedirectory . "/share/apps/kdevelop/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 
 while (defined($name = <PROCESSLIST>)) {
@@ -47,7 +47,7 @@ if ($processes{VSSUPPORT} eq "none"){
 	$underDirectory = $overDirectory . $nameLittle;
 }
 else{
-	$overDirectory = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/";
+	$overDirectory = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/";
 	$underDirectory = $overDirectory . $nameLittle;
 }
 	
@@ -75,17 +75,14 @@ else{
     unpackFiles ("admin.tar");	
   }
 
-  if ($processes{APPLICATION} =~ /kdemini|kde2mini/) {
+  if ($processes{APPLICATION} =~ /kde2mini/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kdenormal|kde2normal|kde2mdi/)
   {
     changeNormalApp();
   }
-  elsif ($processes{APPLICATION} =~ /kdenormalogl/) {
-    changeNormalOGLApp();
-  }
-  elsif ($processes{APPLICATION} =~ /qtnormal|qt2normal|qt2mdi|qextmdi/) {
+  elsif ($processes{APPLICATION} =~ /qt2normal|qt2mdi|qextmdi/) {
     changeQtApp();
   }
   elsif ($processes{APPLICATION} eq "cpp") {
@@ -100,17 +97,17 @@ else{
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
-#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/");
+#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/");
 #  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
-#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/.cvsignore";
+#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/.cvsignore";
 #  system ("cp $copysrc $copydes");
   
-#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
-#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
+#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
+#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
 #  system ("cp $copysrc $copydes");
   
-#  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
-#  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
+#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
+#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
 #  system ("cp $copysrc $copydes");
  
   $copysrc = $templatedir . "/cvsignore_template";
@@ -132,7 +129,7 @@ if ($processes{VSSUPPORT} eq "cvs") {
     $copydes = $underDirectory . "/docs/en/.cvsignore";
     copy ("$copysrc", "$copydes");
 
-    if ($processes{APPLICATION} -= /kdemini|kdenormal|kde2mini|kde2normal|kdenormalogl|kde2mdi/)
+    if ($processes{APPLICATION} -= /kde2mini|kde2normal|kde2mdi/)
     {
 
       $copydes = $underDirectory . "/api/.cvsignore";
@@ -540,72 +537,6 @@ sub changeNormalApp {
     
 }
 
-# Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support
-sub changeNormalOGLApp {
-
-#    unpackFiles("normalogl.tar");
-# 
-   
- #renamed the directory
-  printflush (STDOUT, "changing files...\n");
-  chdir ($overDirectory);
-  rename ("skel", $nameLittle);
-
-  #create the templatedirectory
-  condCopyTemplateFiles();
-
-  #Replacements in overDirectory
-  chdir ($overDirectory);
-  replaceValuesInFile(\%changings, "Makefile.am");
-  replaceValuesInFile(\%changings, "configure.in");
-
-  #Replacements and name changing in underDirectory
-  chdir ($underDirectory);
-
-  rename ("kbase.cpp",     $nameLittle.".cpp");
-  rename ("kbase.h",       $nameLittle.".h");
-  rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
-  rename ("kbasedoc.h",    $nameLittle."doc.h");
-  rename ("kbaseview.cpp", $nameLittle."view.cpp");
-  rename ("kbaseview.h",   $nameLittle."view.h");
-
-  replaceValuesInFile(\%changings, "Makefile.am");
-  replaceValuesInFile(\%changings, "main.cpp");
-  replaceValuesInFile(\%changings, $nameLittle.".cpp");
-  replaceValuesInFile(\%changings, $nameLittle.".h");
-  replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
-  replaceValuesInFile(\%changings, $nameLittle."view.cpp");
-  replaceValuesInFile(\%changings, $nameLittle."doc.h");
-  replaceValuesInFile(\%changings, $nameLittle."view.h");
-  replaceValuesInFile(\%changings, "resource.h");
-
-  #Replacements in documentation directory
-  chdir ($underDirectory."/docs/en");
-  replaceValuesInFile(\%changings, "Makefile.am");
-
-  condCopyGNUFiles();
-  condCopyLsmFile();
-  condCopyUserDocFiles();
-    
-  if ($processes{CPP} eq "yes") {
-    processCppTemplate("main.cpp");
-  	processCppTemplate("$nameLittle.cpp");
-  	processCppTemplate("${nameLittle}view.cpp");
-  	processCppTemplate("${nameLittle}doc.cpp");
-  }
-    
-  if ($processes{HEADER} eq "yes") {
-  	processHeaderTemplate("$nameLittle.h");
-  	processHeaderTemplate("${nameLittle}view.h");
-  	processHeaderTemplate("${nameLittle}doc.h");
-  	processHeaderTemplate("resource.h");
-  }
-    
-  condCopyKdelnkFile();
-  condCopyProgIcons();
-  condCreateApiDoc();
-    
-}
 
 sub changeMiniApp {
 
@@ -622,10 +553,6 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if($processes{APPLICATION} eq "kdemini")
-  {
-    replaceValuesInFile(\%changings, "configure.in");
-  }
   if($processes{APPLICATION} eq "kde2mini")
   {
     replaceValuesInFile(\%changings, "configure.in.in");
