@@ -102,7 +102,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   connect(phpExeProc, SIGNAL(processExited(KProcess*)),
 	  this, SLOT(slotPHPExeExited(KProcess*)));
 
-  m_htmlView = new PHPHTMLView();
+  m_htmlView = new PHPHTMLView(this);
   mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"), "PHP");	// @fixme after stringfreeze - last argument should be i18n() 
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
@@ -309,7 +309,7 @@ void PHPSupportPart::executeInTerminal(){
       
   QString file;
   if(m_htmlView==0){
-    m_htmlView = new PHPHTMLView();
+    m_htmlView = new PHPHTMLView(this);
     mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
   }
   m_htmlView->show();

@@ -18,16 +18,25 @@
 #ifndef PHPHTMLVIEW_H
 #define PHPHTMLVIEW_H
 
-#include <khtml_part.h>
+#include <kdevhtmlpart.h>
 
 /**
   *@author 
   */
-
-class PHPHTMLView : public KHTMLPart  {
+class PHPSupportPart;
+  
+class PHPHTMLView : public KDevHTMLPart  {
+Q_OBJECT
 public: 
-	PHPHTMLView();
+	PHPHTMLView(PHPSupportPart *part);
 	~PHPHTMLView();
+protected slots:
+
+    virtual void slotDuplicate();
+    virtual void slotOpenInNewWindow(const KURL &url);
+    
+private:
+    PHPSupportPart *m_part;
 };
 
 #endif
