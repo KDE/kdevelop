@@ -70,12 +70,6 @@ void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 }
 
 
-void Core::message(const QString &str)
-{
-  TopLevel::getInstance()->statusBar()->message(str);
-}
-
-
 void Core::openProject(const QString& projectFileName)
 {
   ProjectManager::getInstance()->loadProject(projectFileName);

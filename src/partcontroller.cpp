@@ -15,6 +15,7 @@
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kaction.h>
+#include <kstatusbar.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
@@ -409,7 +410,7 @@ void PartController::saveAllFiles()
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
       rw_part->save();
 
-      Core::getInstance()->message(i18n("Saved %1").arg(rw_part->url().url()));
+      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().url()));
     }
 }
 
