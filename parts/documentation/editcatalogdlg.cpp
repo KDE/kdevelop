@@ -23,6 +23,7 @@
 
 #include <klineedit.h>
 #include <kurlrequester.h>
+#include <kurlcompletion.h>
 
 #include "kdevdocumentationplugin.h"
 
@@ -46,7 +47,7 @@ EditCatalogDlg::~EditCatalogDlg()
 /*$SPECIALIZATION$*/
 void EditCatalogDlg::locationURLChanged(const QString &text)
 {
-    titleEdit->setText(m_plugin->catalogTitle(text));
+    titleEdit->setText(m_plugin->catalogTitle(KURLCompletion::replacedPath(text, true, true)));
 }
 
 void EditCatalogDlg::accept()
@@ -61,6 +62,8 @@ QString EditCatalogDlg::title() const
 
 QString EditCatalogDlg::url() const
 {
+    if (locationURL->lineEdit())
+        return locationURL->lineEdit()->text();
     return locationURL->url();
 }
 
