@@ -1,3 +1,9 @@
+2001-09-26 Victor Röder <victor_roeder@gmx.de>
+	* CppCCParser rewritten by Daniel Engelschalt
+	* The affected code for CC is saved in a temporary file now
+	* fixed some bugs in CppCodeCompletion
+	* This is still very very alpha
+
 2001-08-22 Sandy Meier <smeier@kdevelop.org>
 	* all 1500 php global functions are now available for code completion (incl. prototype) 
 
@@ -615,5 +621,6 @@
 	method's arguments were not being displayed (was that a bug or a feature?). 
 	Clicking on a class's instance variables in the class browser now works and 
 	takes you to the source file.
+
 
 
