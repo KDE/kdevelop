@@ -263,7 +263,7 @@ void SQLSupportPart::savedFile( const QString &fileName )
 
 KDevLanguageSupport::Features SQLSupportPart::features()
 {
-    return Features( KDevLanguageSupport::Classes | KDevLanguageSupport::Functions );
+    return Features( Classes | Functions );
 }
 
 KMimeType::List SQLSupportPart::mimeTypes( )

@@ -35,7 +35,7 @@ public:
 	    combo->setCurrentText( text() );
 	return combo;
     }
-    
+
     virtual void setContentFromEditor( QWidget* w )
     {
 	if ( w->inherits( "QComboBox" ) )
@@ -59,7 +59,7 @@ public:
 	    sb->setValue( text().toInt() );
 	return sb;
     }
-    
+
     virtual void setContentFromEditor( QWidget* w )
     {
 	if ( w->inherits( "QSpinBox" ) )
@@ -81,7 +81,7 @@ public:
 	le->setEchoMode( QLineEdit::Password );
 	return le;
     }
-    
+
     virtual void setContentFromEditor( QWidget* w )
     {
 	if ( w->inherits( "KLineEdit" ) ) {
@@ -91,7 +91,7 @@ public:
 	    QTableItem::setContentFromEditor( w );
 	}
     }
-    
+
     QString password;
 };
 
@@ -219,17 +219,18 @@ void SqlConfigWidget::loadConfig()
     QStringList db;
     int i = 0;
     while ( true ) {
-	QStringList db = DomUtil::readListEntry( *doc, "kdevsqlsupport/servers/server" + QString::number( i ), "el" );
-	if ( db.isEmpty() )
-	    return;
-	
-	addRow( dbTable );
-	int row = dbTable->numRows() - 2;
-	for ( int ii = 0; ii < 5; ii++ )
-	    dbTable->setText( row, ii, db[ii] );
-	((PasswordTableItem*)dbTable->item( row, 5 ))->password = SQLSupportPart::cryptStr( db[5] );
-	
-	i++;
+        QStringList db = DomUtil::readListEntry( *doc, "kdevsqlsupport/servers/server" + QString::number( i ), "el" );
+        if ( db.isEmpty() )
+            return;
+
+        addRow( dbTable );
+        int row = dbTable->numRows() - 2;
+        for ( int ii = 0; ii < 5; ii++ )
+            dbTable->setText( row, ii, db[ii] );
+        dbTable->setText(row, 5, QString().fill(QChar('*'), db[5].length()));
+        ((PasswordTableItem*)dbTable->item( row, 5 ))->password = SQLSupportPart::cryptStr( db[5] );
+
+        i++;
     }
     updateButtons();
     changed = false;
