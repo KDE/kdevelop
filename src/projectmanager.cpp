@@ -248,6 +248,7 @@ bool ProjectManager::loadProject(const KURL &url)
 
   if( projectLoaded() && !closeProject() )
   {
+	m_openRecentProjectAction->setCurrentItem( -1 );
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
 	return false;  
