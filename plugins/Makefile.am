@@ -2,5 +2,5 @@
 # directory, these are 'transient' in a sense and don't
 # share the complete KDevComponent interface.
 
-SUBDIRS = gccoptions pgioptions fpcoptions dccoptions ghcoptions buildsystem compiler
+SUBDIRS = buildsystem compiler
 
