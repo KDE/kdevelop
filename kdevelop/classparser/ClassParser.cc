@@ -116,33 +116,47 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
   {
     if( lexem != '}' )
     {
-      switch( checkClassDecl() )
+      switch( lexem )
       {
-        case CP_IS_ATTRIBUTE:
-          anAttr = new CParsedAttribute();
-          fillInParsedVariable( anAttr );
-          if( !anAttr->name.isEmpty() )
-            aStruct->addMember( anAttr );
-          else
-            delete anAttr;
-          break;
-          
-        case CP_IS_MULTI_ATTRIBUTE:
-          fillInMultipleVariable( list );
-          
-          // Add the attributes to the class.
-          for( anAttr = list.first();
-               anAttr != NULL;
-               anAttr = list.next() )
+        case ID:
+          switch( checkClassDecl() )
           {
-            aStruct->addMember( anAttr );
+            case CP_IS_ATTRIBUTE:
+              anAttr = new CParsedAttribute();
+              fillInParsedVariable( anAttr );
+              if( !anAttr->name.isEmpty() )
+                aStruct->addMember( anAttr );
+              else
+                delete anAttr;
+              break;
+              
+            case CP_IS_MULTI_ATTRIBUTE:
+              fillInMultipleVariable( list );
+              
+              // Add the attributes to the class.
+              for( anAttr = list.first();
+                   anAttr != NULL;
+                   anAttr = list.next() )
+              {
+                aStruct->addMember( anAttr );
+              }
+              break;
+            default: // Ignore all other cases for now
+              emptyStack();
+              
+              // Goto the end of the declaration.
+              while( lexem != ';' && lexem != 0 && lexem != '}' )
+                getNextLexem();
           }
+        case CPENUM:
+          parseEnum();
           break;
-        default: // Ignore all other cases for now
-          emptyStack();
+        default:
+          debug( "Found unknow struct declaration." );
       }
 
-      getNextLexem();
+      if( lexem != '}' )
+        getNextLexem();
     }
   }
 }
@@ -209,7 +223,7 @@ CParsedStruct *CClassParser::parseStruct()
  *-----------------------------------------------------------------*/
 void CClassParser::parseEnum()
 {
-  while( lexem != ';' )
+  while( lexem != 0 && lexem != ';' )
     getNextLexem();
 }
 
@@ -919,7 +933,8 @@ void CClassParser::parseClassMethodVariable( CParsedClass *aClass )
            anAttr != NULL;
            anAttr = list.next() )
       {
-        aClass->addAttribute( anAttr );
+        if( !anAttr->name.isEmpty() )
+          aClass->addAttribute( anAttr );
       }
       break;
   }
@@ -1114,7 +1129,8 @@ void CClassParser::parseGlobalMethodVariable()
            anAttr != NULL;
            anAttr = list.next() )
       {
-        store.addGlobalVar( anAttr );
+        if( !anAttr->name.isEmpty() )
+          store.addGlobalVar( anAttr );
       }
       break;
   }
@@ -1150,7 +1166,7 @@ void CClassParser::parseToplevel()
         {
           case CPSTRUCT:
             aStruct = parseStruct();
-            if( aStruct != NULL )
+            if( aStruct != NULL && !aStruct->name.isEmpty() )
               store.addGlobalStruct( aStruct );
             break;
           case CPENUM:
@@ -1190,7 +1206,7 @@ void CClassParser::parseToplevel()
         break;
       case CPSTRUCT:
         aStruct = parseStruct();
-        if( aStruct )
+        if( aStruct && !aStruct->name.isEmpty() )
           store.addGlobalStruct( aStruct );
 
         break;
