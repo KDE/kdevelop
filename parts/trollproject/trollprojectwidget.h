@@ -41,7 +41,7 @@ class FileBuffer;
 
 
 /**
- * Structure that holds a projects configuration
+ * Structure that holds a subprojects configuration
  */
 struct ProjectConfiguration
 {
@@ -71,6 +71,8 @@ struct ProjectConfiguration
   QStringList     m_prjdeps;
   QStringList     m_incdeps;
   bool            m_inheritconfig;
+  bool            m_target_install;
+  QString         m_target_install_path;
 };
 
 

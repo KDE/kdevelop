@@ -168,7 +168,16 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     outsideItem=(QCheckListItem*)outsideItem->itemBelow();
   }
 
-
+  //target.install
+  if (checkInstallTarget->isChecked() == true)
+  {
+    myProjectItem->configuration.m_target_install = true;
+    myProjectItem->configuration.m_target_install_path = m_InstallTargetPath->text();
+  }
+  else
+  {
+    myProjectItem->configuration.m_target_install = false;  
+  }
   //add libs to link
   myProjectItem->configuration.m_libadd.clear();
   myProjectItem->configuration.m_librarypath.clear();
@@ -327,6 +336,22 @@ void ProjectConfigurationDlg::UpdateControls()
   else
     m_targetOutputFile->setText(targetString);
 */
+  //target.path = path
+  //INSTALLS += target
+  if (myProjectItem->configuration.m_target_install == true) 
+  {
+    checkInstallTarget->setChecked(true);
+    m_InstallTargetPath->setEnabled(true);
+  } 
+  else
+  {
+    checkInstallTarget->setChecked(false);
+    m_InstallTargetPath->setEnabled(false);
+  }
+  m_InstallTargetPath->setText(myProjectItem->configuration.m_target_install_path);
+  
+  
+  
   m_targetOutputFile->setText(myProjectItem->configuration.m_target);
   m_targetPath->setText(myProjectItem->configuration.m_destdir);
   clickSubdirsTemplate();
@@ -905,4 +930,12 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
   
+}
+
+void ProjectConfigurationDlg::slotInstallTargetClicked()
+{
+  if (checkInstallTarget->isChecked() == true)
+    m_InstallTargetPath->setEnabled(true);
+  else
+    m_InstallTargetPath->setEnabled(false);
 }

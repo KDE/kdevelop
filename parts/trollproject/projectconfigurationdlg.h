@@ -70,6 +70,7 @@ virtual void outsideLibDirRemoveClicked();
 virtual void outsideLibDirEditClicked();
 
 virtual void slotStaticLibClicked(int);
+virtual void slotInstallTargetClicked();
 
 void updateIncludeControl();
 void updateLibaddControl();

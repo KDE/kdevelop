@@ -1099,7 +1099,14 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (item->configuration.m_libadd.count()>0)
     Buffer->setValues("TARGETDEPS",item->configuration.m_prjdeps,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
-
+  if (!item->configuration.m_target_install_path.isEmpty() &&
+      item->configuration.m_target_install)
+  {
+    Buffer->removeValues("target.path");
+    Buffer->removeValues("INSTALLS");
+    Buffer->setValues("target.path",item->configuration.m_target_install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+    Buffer->setValues("INSTALLS",QString("target"),FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  }
     
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -1999,6 +2006,26 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("MOC_DIR",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_mocpath = lst[0];
+      
+    // Install path
+    item->m_FileBuffer.getValues("target.path",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_target_install_path = lst[0];
+    item->m_FileBuffer.getValues("INSTALLS",lst,minusListDummy);
+    if (lst.count())
+    {
+      QStringList::iterator it = lst.begin();
+      for (;it!=lst.end();it++)
+      {
+        if (*it == "target")
+        {
+          item->configuration.m_target_install = true;
+          break;
+        }
+      }
+    }
+    
+    
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)

@@ -1646,6 +1646,12 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>slotStaticLibClicked(int)</slot>
     </connection>
+    <connection>
+        <sender>checkInstallTarget</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>slotInstallTargetClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
@@ -1693,6 +1699,7 @@
     <slot>prjDepsMoveUpClicked()</slot>
     <slot>prjDepsMoveDownClicked()</slot>
     <slot>slotStaticLibClicked(int)</slot>
+    <slot>slotInstallTargetClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
