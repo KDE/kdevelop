@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ImplementMethodsDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -19,6 +19,12 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel1</cstring>
@@ -35,7 +41,7 @@
                 <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property name="resizable">
+                <property name="resizeable">
                     <bool>true</bool>
                 </property>
             </column>
@@ -51,6 +57,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
                 <spacer>
                     <property name="name">
                         <cstring>spacer1</cstring>
@@ -64,7 +76,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>81</width>
-                            <height>20</height>
+                            <height>0</height>
                         </size>
                     </property>
                 </spacer>
@@ -113,17 +125,15 @@
     <forward>class ParsedClass;</forward>
 </forwards>
 <variables>
-    <variable access="public">QValueList&lt;ParsedMethod*&gt; selectedMethods;</variable>
+    <variable>QValueList&lt;ParsedMethod*&gt; selectedMethods;</variable>
     <variable>QGuardedPtr&lt;CppSupportPart&gt; m_part;</variable>
 </variables>
 <slots>
+    <slot>init()</slot>
+    <slot>destroy()</slot>
+    <slot>setPart( CppSupportPart * part )</slot>
     <slot>accept()</slot>
+    <slot returnType="int">implementMethods( ParsedClass * klass )</slot>
 </slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function>setPart( CppSupportPart * part )</function>
-    <function returnType="int">implementMethods( ParsedClass * klass )</function>
-</functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
