@@ -196,8 +196,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "<bold>.</bold> - Matches any character\n"
 			 "<bold>^</bold> - Matches the beginning of a line\n"
 			 "<bold>$</bold> - Matches the end of a line\n"
-			 //			 "<bold>\\<</bold>  Matches the beginning of a word\n"
-			 //			 "<bold>\\\></bold>  Matches the end of a word\n"
+	                 "<bold>\\\\\\<</bold> - Matches the beginning of a word\n"
+                         "<bold>\\\\\\></bold> - Matches the end of a word\n"
 			 "\n"
 			 "The following repetition operators exist:\n"
 			 "<bold>?</bold> - The preceding item is matches at most once\n"
@@ -210,7 +210,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "   but at most <i>m</i> times.\n"
 			 "\n"
 			 "Furthermore, backreferences to bracketed subexpressions are\n"
-			 "available via the notation \\<i>n</i>."
+			 "available via the notation \\\\<i>n</i>."
 			 ));
     KQuickHelp::add(files_combo,
 		    i18n("Enter the file name pattern of the files to search here.\n"
