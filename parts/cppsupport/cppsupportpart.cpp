@@ -1177,7 +1177,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
     return fileExtensions().contains( fileInfo.extension() ) && !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
 }
 
-QString CppSupportPart::formatModelItem( const CodeModelItem *item )
+QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDescription )
 {
     if (item->isFunction())
     {
@@ -1192,9 +1192,12 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item )
             args.isEmpty() ? args += "" : args += ", " ;
             args += formatModelItem((*it).data());
         }
-        function += (model->isVirtual() ? QString("virtual ") : QString("") ) + model->resultType() + " " +
-	    model->name() + "(" + args + ")" + (model->isConstant() ? QString(" const") : QString("") ) +
+	if( !shortDescription )
+            function += (model->isVirtual() ? QString("virtual ") : QString("") ) + model->resultType() + " ";
+
+	function += model->name() + "(" + args + ")" + (model->isConstant() ? QString(" const") : QString("") ) +
             (model->isAbstract() ? QString(" = 0") : QString("") );
+
         return function;
     }
     else if (item->isVariable())
@@ -1202,15 +1205,23 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item )
         const VariableModel *model = dynamic_cast<const VariableModel*>(item);
         if (!model)
             return "";
+	else if( shortDescription )
+	    return model->name();
         return model->type() + " " + model->name();
     }
     else if (item->isArgument())
     {
         const ArgumentModel *model = dynamic_cast<const ArgumentModel*>(item);
-        return model->type() + " " + model->name() + ( model->name().isEmpty() || model->defaultValue().isEmpty() ? QString("") : QString(" = ") + model->defaultValue() );
+	QString arg;
+	if( !shortDescription )
+	    arg += model->type() + " ";
+	arg += model->name();
+	if( !shortDescription )
+	    arg += model->defaultValue().isEmpty() ? QString("") : QString(" = ") + model->defaultValue();
+	return arg.stripWhiteSpace();
     }
     else
-        return KDevLanguageSupport::formatModelItem(item);
+        return KDevLanguageSupport::formatModelItem(item, shortDescription);
 }
 
 void CppSupportPart::addClass( )

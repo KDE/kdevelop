@@ -73,7 +73,7 @@ public:
     static KConfig *config();
 
     virtual QString formatTag( const Tag& tag );
-    virtual QString formatModelItem( const CodeModelItem *item );
+    virtual QString formatModelItem( const CodeModelItem *item, bool shortDescription=false );
     virtual void addClass();
 
 signals:
@@ -133,9 +133,9 @@ private:
     QString findSourceFile();
     int pcsVersion();
     void setPcsVersion( int version );
-    
+
     void saveProjectSourceInfo();
-    
+
     CppCodeCompletion* m_pCompletion;
     CppCodeCompletionConfig* m_pCompletionConfig;
 
