@@ -219,29 +219,25 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     connect( this, SIGNAL(selectionChanged()),
              this, SLOT(slotSelectionChanged()) );
 
-    addColumn( QString::null ); // 0
-    header()->hide();
-/*
     addColumn( "Filename" ); // 0
     addColumn( "Revision" );  // 1
     addColumn( "Timestamp" );  // 2
-*/
 
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
-/*
+
     m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
         this, SLOT(slotToggleShowVCSFields()), this, "actiontoggleshowvcsfieldstoggleaction" );
     m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
     connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
-*/
+
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
-/*
+
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
-    slotToggleShowVCSFields( false );
-*/
+    slotToggleShowVCSFields( showVCSFields() );
+
     // Hide pattern for files
     QString defaultHidePattern = "*.o,*.lo,CVS";
     QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
@@ -550,7 +546,8 @@ void FileTreeWidget::slotToggleShowVCSFields( bool checked )
     kdDebug(9017) << "FileTreeWidget::slotToggleShowVCSFields()" << endl;
     kdDebug(9017) << "Yet to be implemented!!" << endl;
 
-    // @todo implement show VCS Fields
+    // @fixme: even if I hide the columns they are taken in account when resizing
+    // the list view :-/
     if (checked)
     {
         setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
@@ -570,33 +567,12 @@ void FileTreeWidget::slotToggleShowVCSFields( bool checked )
     triggerUpdate();
 }
 
-void FileTreeWidget::resizeContents( int w, int h )
-{
-    KFileTreeView::resizeContents( w, h );
-/*
-    if (!showVCSFields())
-        setColumnWidth( 0, contentsWidth() );
-*/
-}
-
 ///////////////////////////////////////////////////////////////////////////////
-/*
-void FileTreeWidget::vcsFileStateChanged( const VCSFileInfoList &modifiedFiles )
+
+void FileTreeWidget::vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData )
 {
-    kdDebug(9017) << "FileTreeWidget::vcsFileStateChanged(const VCSFileInfoList &)" << endl;
+    kdDebug(9017) << "FileTreeWidget::vcsFileStateReady(const VCSFileInfoList &, void*)" << endl;
 
-    for (VCSFileInfoList::const_iterator it=modifiedFiles.begin(); it != modifiedFiles.end(); ++it)
-    {
-        const VCSFileInfo &info = (*it);
-        kdDebug(9017) << "** " << info.pathName << ", " << info.revision << ", " << info.timestamp
-            << ", " << info.state << endl;
-    }
-    // @todo
-    // For each file in modifiedFiles do
-    //    - find the KFileTreeViewItem related
-    //    - update its content
 }
-
-*/
 
 #include "filetreewidget.moc"

@@ -47,11 +47,10 @@ public:
     QString hidePatterns() const;
 
 public slots:
-    virtual void resizeContents( int w, int h );
     void hideOrShow();
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
-//    void vcsFileStateChanged( const VCSFileInfoList &modifiedFiles );
+    void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
 
 private slots:
     void slotItemExecuted(QListViewItem *item);
