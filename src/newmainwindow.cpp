@@ -129,12 +129,13 @@ void NewMainWindow::init() {
 
     createGUI(0);
 
-    QString appstr = "kdev";
+    //adymo: commented by me - this is a hell, we don't want to enter it, do we?
+/*    QString appstr = "kdev";
     if (KGlobal::instance()->aboutData())
         appstr = KGlobal::instance()->aboutData()->appName();
 	QString uimode = QString( "%1uimode%2rc" ).arg(appstr).arg( m_mdiMode );
 	KConfig uiConfig( uimode, true );
-	readDockConfig( &uiConfig );
+	readDockConfig( &uiConfig );*/
 
     m_pMainWindowShare->init();
 	
@@ -479,8 +480,8 @@ void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QS
 void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) 
 {
 	embedView( KDockWidget::DockRight, view, name, toolTip );
-//	if (TopLevel::mode == TopLevel::AssistantMode)
-//		raiseView(view);
+	if (TopLevel::mode == TopLevel::AssistantMode)
+		raiseView(view);
 }
 
 void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) 
