@@ -99,6 +99,20 @@ private slots:
 
 private:
 
+	struct ToolViewData
+	{
+		ToolViewData() {}
+		ToolViewData( KDockWidget::DockPosition pos, QString n, QString t ) 
+			: position(pos), name(n), toolTip(t) {}
+
+		KDockWidget::DockPosition position;
+		QString name;
+		QString toolTip;
+	};
+
+	QMap<QWidget*,ToolViewData> m_availableToolViews;
+	QMap<QWidget*,ToolViewData> m_unAvailableToolViews;
+
   virtual bool queryClose();
   virtual bool queryExit();
 

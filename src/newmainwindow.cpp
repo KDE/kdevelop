@@ -42,6 +42,7 @@
 #include <kmultitabbar.h>
 #include <ktabwidget.h>
 #include <kparts/part.h>
+#include <kdockwidget.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -275,25 +276,25 @@ void NewMainWindow::fillWindowMenu()
 	}
 
 	m_windowList << qMakePair( m_pWindowMenu->insertSeparator(), KURL() );
- 
-    QMap<QString, KURL> map;    
-    QStringList string_list;
-    KURL::List list = PartController::getInstance()->openURLs();	
-    KURL::List::Iterator itt = list.begin();
-	while ( itt != list.end() )
-    {
-        map[(*itt).fileName()] = *itt;
-        string_list.append((*itt).fileName());
-        ++itt;
-    }
-    string_list.sort();
-    
-    list.clear();
-    for(uint i = 0; i != string_list.size(); ++i)
-        list.append(map[string_list[i]]);
 	
-    itt = list.begin();
-    while ( itt != list.end() )
+	QMap<QString, KURL> map;    
+	QStringList string_list;
+	KURL::List list = PartController::getInstance()->openURLs();	
+	KURL::List::Iterator itt = list.begin();
+	while ( itt != list.end() )
+	{
+		map[(*itt).fileName()] = *itt;
+		string_list.append((*itt).fileName());
+		++itt;
+	}
+	string_list.sort();
+	
+	list.clear();
+	for(uint i = 0; i != string_list.size(); ++i)
+		list.append(map[string_list[i]]);
+	
+	itt = list.begin();
+	while ( itt != list.end() )
 	{
 		temp = m_pWindowMenu->insertItem( (*itt).fileName() );
 		m_windowList << qMakePair( temp, *itt );
@@ -331,7 +332,7 @@ void NewMainWindow::createFramework() {
 
     connect(this, SIGNAL(viewActivated(KMdiChildView*)), this, SLOT(slotViewActivated(KMdiChildView*)) );
     connect(this, SIGNAL(currentChanged(QWidget*)), PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
-    connect(this, SIGNAL(sigCloseWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
+//    connect(this, SIGNAL(sigCloseWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(createGUI(KParts::Part*)));
 }
 
@@ -385,6 +386,8 @@ void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QS
 {
 	if( !view ) return;
 	KMdiMainFrm::addToolWindow( view, KDockWidget::DockLeft, getMainDockWidget(), 20, toolTip, name );
+
+	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockLeft, name, toolTip ) );
 }
 
 void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) 
@@ -393,12 +396,16 @@ void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, c
 	KMdiMainFrm::addToolWindow( view, KDockWidget::DockRight, getMainDockWidget(), 20, toolTip, name );
      if (TopLevel::mode == TopLevel::AssistantMode)
          raiseView(view);
+
+	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockRight, name, toolTip ) );
 }
 
 void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) 
 {
 	if( !view ) return;
 	KMdiMainFrm::addToolWindow( view, KDockWidget::DockBottom, getMainDockWidget(), 20, toolTip, name );
+
+	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockBottom, name, toolTip ) );
 }
 
 void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
@@ -428,17 +435,70 @@ void NewMainWindow::removeView( QWidget * view )
 
 	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) ) 
 	{
-		(void) view->reparent(0, QPoint(0,0), false );	// why?
+		(void) view->reparent(0, QPoint(0,0), false );
 		closeWindow( childView );
 	} 
 	else if( view->parentWidget()->qt_cast("KDockWidget") ) 
 	{
+		(void) view->reparent(0, QPoint(0,0), false );
 		deleteToolWindow( view );
 	}
 }
 
-void NewMainWindow::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
-    /// @todo implement me
+static KDockWidget::DockPosition getDockWidgetDockingBorder( QWidget * w )
+{
+	int depth = 0;
+	while( w && depth < 10 )
+	{
+		if ( KDockWidget * dockWidget = dynamic_cast<KDockWidget*>( w ) )
+		{
+			if ( dockWidget->currentDockPosition() == KDockWidget::DockLeft ||
+				dockWidget->currentDockPosition() == KDockWidget::DockRight ||
+				dockWidget->currentDockPosition() == KDockWidget::DockBottom ||
+				dockWidget->currentDockPosition() == KDockWidget::DockTop )
+			{
+				return dockWidget->currentDockPosition();
+			}
+		}
+		depth++;
+		w = w->parentWidget();
+	}
+	return KDockWidget::DockNone;
+}
+
+void NewMainWindow::setViewAvailable(QWidget * view, bool bEnabled) 
+{
+	if ( !view ) return;
+
+	if ( bEnabled )
+	{
+		if ( m_availableToolViews.contains( view ) ) return; // already visible
+
+		if ( m_unAvailableToolViews.contains( view ) )
+		{
+			ToolViewData t = m_unAvailableToolViews[ view ];
+			m_unAvailableToolViews.remove( view );
+
+			KMdiMainFrm::addToolWindow( view, t.position, getMainDockWidget(), 20, t.toolTip, t.name );
+			m_availableToolViews.insert( view, t );
+		}
+	}
+	else
+	{
+		if ( m_unAvailableToolViews.contains( view ) ) return; // already hidden
+
+		if ( m_availableToolViews.contains( view ) )
+		{
+			ToolViewData t = m_availableToolViews[ view ];
+			m_availableToolViews.remove( view );
+
+			KDockWidget::DockPosition pos = getDockWidgetDockingBorder( view );
+			t.position = ( pos != KDockWidget::DockNone ? pos : t.position );	// the view might have changed position
+
+			removeView( view );
+			m_unAvailableToolViews.insert( view, t );
+		}
+	}
 }
 
 void NewMainWindow::raiseView(QWidget *view) 
