@@ -253,16 +253,19 @@ void CKDevelop::initWhatsThis(){
 	                                  "documentation and the KDevelop manuals. Can be "
 	                                  "configured individually by right-button menu."));
 	
-	QWhatsThis::add(header_widget, i18n("Header/Resource Files\n\n"
-	                                  "This window shows header and all other project files "
-	                                  "except for source files. The statusbar shows the "
-	                                  "status of the insert/overwrite key as well as the "
-	                                  "cursor position by line and column."));
+
+
+#warning FIXME MDI stuff														
+	// QWhatsThis::add(header_widget, i18n("Header/Resource Files\n\n"
+// 	                                  "This window shows header and all other project files "
+// 	                                  "except for source files. The statusbar shows the "
+// 	                                  "status of the insert/overwrite key as well as the "
+// 	                                  "cursor position by line and column."));
 	
-	QWhatsThis::add(cpp_widget, i18n("C/C++ Files\n\n"
-	                                  "This window shows only source files. The statusbar shows "
-	                                  "the status of the insert/overwrite key as well as the "
-	                                  "cursor position by line and column."));
+// 	QWhatsThis::add(cpp_widget, i18n("C/C++ Files\n\n"
+// 	                                  "This window shows only source files. The statusbar shows "
+// 	                                  "the status of the insert/overwrite key as well as the "
+// 	                                  "cursor position by line and column."));
 	
 	QWhatsThis::add(browser_widget, i18n("Documentation Browser\n\n"
 	                                  "The documentation browser window shows the online-"

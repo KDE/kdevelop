@@ -25,6 +25,7 @@
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 #include <assert.h>
+#include "editorview.h"
 
 
 /*********************************************************************
@@ -274,9 +275,12 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   }
 
   // Add the declaration.
-  edit_widget->insertAtLine( toAdd, atLine );
-  edit_widget->setCursorPosition( atLine, 0 );
-  edit_widget->toggleModified( true );
+  //  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view != 0){
+      editor_view->editor->insertAtLine( toAdd, atLine );
+      editor_view->editor->setCursorPosition( atLine, 0 );
+      editor_view->editor->toggleModified( true );
+  }
 
   // Get the code for the .cpp file.
   aMethod->asCppCode( toAdd );
@@ -288,9 +292,12 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
 
     // Add the code to the file.
     aMethod->asCppCode( toAdd );
-    edit_widget->append( toAdd );
-    edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
-    edit_widget->toggleModified( true );
+    //    EditorView* editor_view = getCurrentEditorView();
+    if(editor_view != 0){
+	editor_view->editor->append( toAdd );
+	editor_view->editor->setCursorPosition( editor_view->editor->lines() - 1, 0 );
+	editor_view->editor->toggleModified( true );
+    }
   }
 }
 
@@ -364,8 +371,11 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   }
 
   // Add the code to the file.
-  edit_widget->insertAtLine( toAdd, atLine );
-  edit_widget->setCursorPosition( atLine, 0 );
+  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view != 0L){
+      editor_view->editor->insertAtLine( toAdd, atLine );
+      editor_view->editor->setCursorPosition( atLine, 0 );
+  }
 
   // Delete the genererated attribute
   delete aAttr;
@@ -383,54 +393,53 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodName )
-{
-  CParsedClass *aClass;
-  CParsedMethod *aMethod;
-  int line;
-
-  aClass = class_tree->store->getClassByName( aClassName );
-
-  if( aClass != NULL )
-  {
-    aMethod = aClass->getMethodByNameAndArg( aMethodName );
-
-    // If we don't find the method, we try to find a slot with the same name.
-    if( aMethod == NULL )
-      aMethod = aClass->getSlotByNameAndArg( aMethodName );
-
-    // If it isn't a method or a slot we go for a signal. 
-    if( aMethod == NULL )
-      aMethod = aClass->getSignalByNameAndArg( aMethodName );
-
-    // If everything fails notify the user.
-    if( aMethod != NULL )
-    {
-      if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to delete this method?"))
-          == KMessageBox::Yes )
-      {
-        // Start by deleting the declaration.
-        switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
-        edit_widget->deleteInterval( aMethod->declaredOnLine, 
-                                     aMethod->declarationEndsOnLine );
-
-        // Comment out the definition if it isn't a signal.
-        if( !aMethod->isSignal )
-        {
-          switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
-          for( line = aMethod->definedOnLine; 
-               line <= aMethod->definitionEndsOnLine;
-               line++ )
-            edit_widget->insertAtLine( i18n("//Del by KDevelop: "), line );
-        }
-      }
+void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodName ){
+    CParsedClass *aClass;
+    CParsedMethod *aMethod;
+    int line;
+    
+    aClass = class_tree->store->getClassByName( aClassName );
+    
+    if( aClass != NULL ){
+	aMethod = aClass->getMethodByNameAndArg( aMethodName );
+	
+	// If we don't find the method, we try to find a slot with the same name.
+	if( aMethod == NULL )
+	    aMethod = aClass->getSlotByNameAndArg( aMethodName );
+	
+	// If it isn't a method or a slot we go for a signal. 
+	    if( aMethod == NULL )
+		aMethod = aClass->getSignalByNameAndArg( aMethodName );
+	    
+	    // If everything fails notify the user.
+	    if( aMethod != NULL ){
+		if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to delete this method?"))
+		    == KMessageBox::Yes ){
+		    // Start by deleting the declaration.
+		    switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
+		    //		    EditorView* editor_view = getCurrentEditorView();
+		    if(editor_view != 0){
+			editor_view->editor->deleteInterval( aMethod->declaredOnLine, 
+						     aMethod->declarationEndsOnLine );
+			
+			// Comment out the definition if it isn't a signal.
+			if( !aMethod->isSignal ){
+			    switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+			    editor_view = getCurrentEditorView();
+			    for( line = aMethod->definedOnLine; 
+				 line <= aMethod->definitionEndsOnLine;
+				 line++ )
+				editor_view->editor->insertAtLine( i18n("//Del by KDevelop: "), line );
+			}
+		    }
+		}
+	    }
+	    else
+		KMessageBox::error( NULL, i18n("Method missing - Couldn't find the method to delete.") );
     }
     else
-      KMessageBox::error( NULL, i18n("Method missing - Couldn't find the method to delete.") );
-  }
-  else
-      KMessageBox::error( NULL, i18n( "Class missing - Couldn't find the class which has the method to delete.") );
-
+	KMessageBox::error( NULL, i18n( "Class missing - Couldn't find the class which has the method to delete.") );
+    
 }
 
 /*********************************************************************

@@ -29,6 +29,7 @@ automake 1.4
 Qt 2.0
 KDE 2
 flex
+CVS 1.10
 
 optional:
 -----------------------

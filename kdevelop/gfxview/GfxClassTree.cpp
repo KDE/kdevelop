@@ -524,14 +524,39 @@ void CGfxClassTree::drawConnection(CGfxClassBox *abox)
   if(abox->m_sibling != NULL)
     p.lineTo(abox->m_sibling->x() + CONN_CHILD_DELTA_STOPX,
 	     abox->m_sibling->y() + CONN_CHILD_DELTA_STOPY);
-
+  
+  
+  
   // Else draw up to parent 
-  else
-    p.lineTo(abox->x() + CONN_CHILD_DELTA_STOPX,
-	     abox->m_parent->y() + CLASSBOXHEIGHT);
+  else {
+    /* REMOVED ::      p.lineTo(abox->x() + CONN_CHILD_DELTA_STOPX,
+       abox->m_parent->y() + CLASSBOXHEIGHT); */
+    // ADDED BEGIN           
+    const int CONN_ARROW_H = 6;
+    const int CONN_ARROW_W = 4;
 
+    p.lineTo(abox->x() + CONN_CHILD_DELTA_STOPX, abox->m_parent->y() +
+CONN_ARROW_H + CLASSBOXHEIGHT);
+    p.drawLine(abox->x() + CONN_CHILD_DELTA_STOPX - CONN_ARROW_W,
+	       abox->m_parent->y() + CONN_ARROW_H + CLASSBOXHEIGHT,
+	       abox->x() + CONN_CHILD_DELTA_STOPX + CONN_ARROW_W,
+	       abox->m_parent->y() + CONN_ARROW_H + CLASSBOXHEIGHT);
+    p.drawLine(abox->x() + CONN_CHILD_DELTA_STOPX - CONN_ARROW_W,
+	       abox->m_parent->y() + CONN_ARROW_H + CLASSBOXHEIGHT,
+                            abox->x() + CONN_CHILD_DELTA_STOPX, abox->m_parent->y() +
+	       CLASSBOXHEIGHT);
+    p.drawLine(abox->x() + CONN_CHILD_DELTA_STOPX + CONN_ARROW_W,
+	       abox->m_parent->y() + CONN_ARROW_H + CLASSBOXHEIGHT,
+	       abox->x() + CONN_CHILD_DELTA_STOPX, abox->m_parent->y() +
+	       CLASSBOXHEIGHT);
+  }
+  // ADDED END     
+  
   p.end();
 }
+
+
+  
 
 
 

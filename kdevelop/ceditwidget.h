@@ -23,6 +23,7 @@
 #include <kspell.h>
 #include "./kwrite/kwview.h"
 
+
 /** An abstraction layer for the editwidget.
   *@author Sandy Meier
   */
@@ -31,7 +32,7 @@ class CEditWidget : public KWrite {
 
 public: // Constructor and destructor
 
-  CEditWidget(KApplication* a=0,QWidget* parent=0,char* name=0);
+  CEditWidget(KApplication* a=0,QWidget* parent=0,const char* name=0);
   ~CEditWidget();
 
 public: // Public methods to set attribute values

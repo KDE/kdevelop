@@ -18,7 +18,7 @@ APPSDIR = $(kde_appsdir)
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins
+SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins widgets 
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -43,14 +43,15 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp \
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp \
-	doctreeconfdlg.cpp grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp
+	doctreeconfdlg.cpp grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp editorview.cpp docbrowserview.cpp
 
 kdevelop_METASOURCES = AUTO
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
+
+kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a \
 	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 
@@ -70,7 +71,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \
-	makeview.h grepdlg.h outputview.h doctreeconfdlg.h ckdevaccel.h
+	makeview.h grepdlg.h outputview.h doctreeconfdlg.h ckdevaccel.h editorview.h docbrowserview.h
 
 EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \

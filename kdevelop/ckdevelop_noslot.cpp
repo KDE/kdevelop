@@ -37,6 +37,11 @@
 #include "ceditwidget.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
+#include "editorview.h"
+#include "widgets/qextmdi/qextmdimainfrm.h"
+
+#include "./kwrite/kwdoc.h"
+#include "./kwrite/kguicommand.h"
 
 void CKDevelop::addRecentProject(const char* file)
 {
@@ -56,74 +61,76 @@ void CKDevelop::addRecentProject(const char* file)
 }
 
 void CKDevelop::removeFileFromEditlist(const char *filename){
-  TEditInfo* actual_info;
+#warning FIXME MDI stuff
 
-//search the actual edit_info and remove it
-  for(actual_info=edit_infos.first();actual_info != 0;){
-    TEditInfo* next_info=edit_infos.next();
-    if (actual_info->filename == filename){ // found
+  // TEditInfo* actual_info;
 
-      menu_buffers->removeItem(actual_info->id);
-      if(edit_infos.removeRef(actual_info)){
-      }
-    }
-    actual_info=next_info;
-  }
+// //search the actual edit_info and remove it
+//   for(actual_info=edit_infos.first();actual_info != 0;){
+//     TEditInfo* next_info=edit_infos.next();
+//     if (actual_info->filename == filename){ // found
 
-  // was this file in the cpp_widget?
-  if (cpp_widget->getName() == filename)
-  {
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-      if ( CProject::getType( actual_info->filename ) == CPP_SOURCE)
-      { // found
-        cpp_widget->setText(actual_info->text);
-        cpp_widget->toggleModified(actual_info->modified);
-        cpp_widget->setName(actual_info->filename);
-  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-        return;
-      }
-    }
+//       menu_buffers->removeItem(actual_info->id);
+//       if(edit_infos.removeRef(actual_info)){
+//       }
+//     }
+//     actual_info=next_info;
+//   }
 
-    // if not found a successor create an new file
-    actual_info = new TEditInfo;
-    actual_info->modified=false;
-    QString sCFilename= (project && prj->getProjectType()=="normal_c") ? i18n("Untitled.c") : i18n("Untitled.cpp");
-    actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
-    actual_info->filename = sCFilename;
+//   // was this file in the cpp_widget?
+//   if (cpp_widget->getName() == filename)
+//   {
+//     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+//       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
+//       if ( CProject::getType( actual_info->filename ) == CPP_SOURCE)
+//       { // found
+//         cpp_widget->setText(actual_info->text);
+//         cpp_widget->toggleModified(actual_info->modified);
+//         cpp_widget->setName(actual_info->filename);
+//   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
+//         return;
+//       }
+//     }
 
-    edit_infos.append(actual_info);
+//     // if not found a successor create an new file
+//     actual_info = new TEditInfo;
+//     actual_info->modified=false;
+//     QString sCFilename= (project && prj->getProjectType()=="normal_c") ? i18n("Untitled.c") : i18n("Untitled.cpp");
+//     actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
+//     actual_info->filename = sCFilename;
 
-    cpp_widget->clear();
-    cpp_widget->setName(actual_info->filename);
-  }
+//     edit_infos.append(actual_info);
 
-  // was this file in the header_widget?
-  if (header_widget->getName() == filename)
-  {
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-      if ( CProject::getType( actual_info->filename ) != CPP_SOURCE)
-      { // found
-        header_widget->setText(actual_info->text);
-        header_widget->toggleModified(actual_info->modified);
-        header_widget->setName(actual_info->filename);
-  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-        return;
-      }
-    }
+//     cpp_widget->clear();
+//     cpp_widget->setName(actual_info->filename);
+//   }
 
-    // if not found a successor create an new file
-    actual_info = new TEditInfo;
-    actual_info->modified=false;
-    actual_info->id = menu_buffers->insertItem(i18n("Untitled.h"),-2,0);
-    actual_info->filename = i18n("Untitled.h");
+//   // was this file in the header_widget?
+//   if (header_widget->getName() == filename)
+//   {
+//     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+//       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
+//       if ( CProject::getType( actual_info->filename ) != CPP_SOURCE)
+//       { // found
+//         header_widget->setText(actual_info->text);
+//         header_widget->toggleModified(actual_info->modified);
+//         header_widget->setName(actual_info->filename);
+//   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
+//         return;
+//       }
+//     }
 
-    edit_infos.append(actual_info);
+//     // if not found a successor create an new file
+//     actual_info = new TEditInfo;
+//     actual_info->modified=false;
+//     actual_info->id = menu_buffers->insertItem(i18n("Untitled.h"),-2,0);
+//     actual_info->filename = i18n("Untitled.h");
 
-    header_widget->clear();
-    header_widget->setName(actual_info->filename);
-  }
+//     edit_infos.append(actual_info);
+
+//     header_widget->clear();
+//     header_widget->setName(actual_info->filename);
+//   }
 
 }
 
@@ -165,39 +172,39 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
  * Returns:
  *    nothing
  *-----------------------------------------------------------------*/
-void CKDevelop::setMainCaption(int tab_item)
-{
+void CKDevelop::setMainCaption(int tab_item){
+    EditorView* editor_view = getCurrentEditorView();
+    
     if (bKDevelop)
-    {
-      switch(tab_item)
-      {
-          case BROWSER:
-	     kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
-                  break;
-          case TOOLS:
-	     kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
-                  break;
-          default:
-	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-	      kdev_caption+= version +
-             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
-	      if (edit_widget->isModified())
-                  {
-                     enableCommand(ID_FILE_SAVE);
-	        kdev_caption+= " *";
-                  }
-                  else
-                  {
-                    disableCommand(ID_FILE_SAVE);
-                  }
-                  break;
-      }
-      setCaption(kdev_caption);
-    }
-    else
-    {
-        // not using KDevelop but KDlgEdit
-    }
+	{
+	    switch(tab_item)
+		{
+		case BROWSER:
+		    kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
+		    break;
+		case TOOLS:
+		    kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
+		    break;
+		default:
+		    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+		    if(editor_view != 0){
+			kdev_caption+= version +
+			    " - ["+ QFileInfo(editor_view->editor->getName()).fileName()+"] ";
+			if (editor_view->editor->isModified())
+			    {
+				enableCommand(ID_FILE_SAVE);
+				kdev_caption+= " *";
+			    }
+			else
+			    {
+				disableCommand(ID_FILE_SAVE);
+			    }
+			break;
+		    }
+		}
+	}
+    setCaption(kdev_caption);
+    
 }
 
 
@@ -233,109 +240,111 @@ bool CKDevelop::isUntitled(const char* name)
  *-----------------------------------------------------------------*/
 bool CKDevelop::fileSaveAs(){
 
-  QString name, oldName;
-  TEditInfo* actual_info=0;
-  TEditInfo* old_info=0;
-  TEditInfo* search_info;
-  int msg_result=KMessageBox::Ok; // simulate ok state... this could change by one of the following messageboxes
+#warning FIXME MDI stuff
+ //  QString name, oldName;
+//   TEditInfo* actual_info=0;
+//   TEditInfo* old_info=0;
+//   TEditInfo* search_info;
+//   int msg_result=KMessageBox::Ok; // simulate ok state... this could change by one of the following messageboxes
 
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-      return false;
+//   // if edit_widget isn't shown don't proceed
+  
+//   if (edit_widget==0l)
+//       return false;
 
-  oldName=edit_widget->getName();
-  if (bAutosave)
-    saveTimer->stop();
+//   oldName=edit_widget->getName();
+//   if (bAutosave)
+//     saveTimer->stop();
 
-  do
-  {
-    if (!isUntitled(oldName))
-      name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
-    else
-      name = KFileDialog::getSaveFileName((const char *)
-                                          ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
-                                          0,this,oldName);
+//   do
+//   {
+//     if (!isUntitled(oldName))
+//       name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
+//     else
+//       name = KFileDialog::getSaveFileName((const char *)
+//                                           ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
+//                                           0,this,oldName);
 
-    if (name.isNull()){
-    // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
-      if (bAutosave)
-       saveTimer->start(saveTimeout);
-     return false;
-    }
+//     if (name.isNull()){
+//     // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
+//       if (bAutosave)
+//        saveTimer->start(saveTimeout);
+//      return false;
+//     }
 
-    // check if the extension is changed and the widget or program to view must change
-    if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
-      msg_result = KMessageBox::warningYesNoCancel(this, 
-                                                   i18n("Do you really want to save the file\n"
-                                                        "as another type of document?"));
-    if(msg_result==KMessageBox::Yes && QFile::exists(name))
-    {
-      msg_result=KMessageBox::warningYesNoCancel(this,
-                                                 i18n("\nThe file\n\n%1\n\nalready exists.\n"
-                                                      "Do you want overwrite the old one?\n").arg(name));
-    }
+//     // check if the extension is changed and the widget or program to view must change
+//     if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
+//       msg_result = KMessageBox::warningYesNoCancel(this, 
+//                                                    i18n("Do you really want to save the file\n"
+//                                                         "as another type of document?"));
+//     if(msg_result==KMessageBox::Yes && QFile::exists(name))
+//     {
+//       msg_result=KMessageBox::warningYesNoCancel(this,
+//                                                  i18n("\nThe file\n\n%1\n\nalready exists.\n"
+//                                                       "Do you want overwrite the old one?\n").arg(name));
+//     }
     
-  } while (msg_result == KMessageBox::No); // repeat it on 'no'
+//   } while (msg_result == KMessageBox::No); // repeat it on 'no'
 
 
-  if (msg_result==KMessageBox::Cancel){
-     //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
-      if (bAutosave)
-       saveTimer->start(saveTimeout);
-     return false;
-  }
+//   if (msg_result==KMessageBox::Cancel){
+//      //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
+//       if (bAutosave)
+//        saveTimer->start(saveTimeout);
+//      return false;
+//   }
 
 
-   // search if we can find the new desired filename in edit_infos ...
-   // means already loaded
-  for(search_info=edit_infos.first(); search_info!=0 && (actual_info == 0 || old_info == 0);
-      search_info=edit_infos.next()){
-     if (search_info->filename == name)
-       actual_info=search_info;
-     if (search_info->filename == oldName)
-       old_info=search_info;
-  }
+//    // search if we can find the new desired filename in edit_infos ...
+//    // means already loaded
+//   for(search_info=edit_infos.first(); search_info!=0 && (actual_info == 0 || old_info == 0);
+//       search_info=edit_infos.next()){
+//      if (search_info->filename == name)
+//        actual_info=search_info;
+//      if (search_info->filename == oldName)
+//        old_info=search_info;
+//   }
 
-  // now that all cancel possibilities are handled simulate a changed file
-  // edit_widget->toggleModified(true);
+//   // now that all cancel possibilities are handled simulate a changed file
+//   // edit_widget->toggleModified(true);
 
-  if (!edit_widget->KWrite::writeFile(name)){
-  // if saving failed
-      if (bAutosave)
-       saveTimer->start(saveTimeout);
-     return false;
-  }
+//   if (!edit_widget->KWrite::writeFile(name)){
+//   // if saving failed
+//       if (bAutosave)
+//        saveTimer->start(saveTimeout);
+//      return false;
+//   }
 
-  if (actual_info != 0l && actual_info==old_info)
-  {
-    // here we are ... saving the file with the same name
-    //   so only the modified-flags have to be changed
-    actual_info->modified = false;
-    edit_widget->toggleModified(false);
-  }
-  else
-  {
-    // now open this file as new file in edit_infos
-    //    if an widget still contains the file then update the contents in the widget from file
-    switchToFile(name, true);
+//   if (actual_info != 0l && actual_info==old_info)
+//   {
+//     // here we are ... saving the file with the same name
+//     //   so only the modified-flags have to be changed
+//     actual_info->modified = false;
+//     edit_widget->toggleModified(false);
+//   }
+//   else
+//   {
+//     // now open this file as new file in edit_infos
+//     //    if an widget still contains the file then update the contents in the widget from file
+//     switchToFile(name, true);
 
-    if (oldName!=name)
-    {
-      // here we are... and any Untitled-file was saved with another name
-      //   and now we can remove the untitled file
-      if (isUntitled(oldName))
-      {
-          removeFileFromEditlist(oldName);
-      }
-    }
+//     if (oldName!=name)
+//     {
+//       // here we are... and any Untitled-file was saved with another name
+//       //   and now we can remove the untitled file
+//       if (isUntitled(oldName))
+//       {
+//           removeFileFromEditlist(oldName);
+//       }
+//     }
 
-    slotViewRefresh();
-  }
+//     slotViewRefresh();
+//   }
 
-  if (bAutosave)
-     saveTimer->start(saveTimeout);
+//   if (bAutosave)
+//      saveTimer->start(saveTimeout);
 
-  return true;
+//   return true;
 }
 
 
@@ -442,15 +451,14 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModifiedBox){
+    //    EditorView* editor_view = getCurrentEditorView();
+    
+    cerr << "enter switchtofile\n";
+    filename = (isUntitled(filename)) ? filename : QFileInfo(filename).absFilePath();
 
-  filename = (isUntitled(filename)) ? filename : QFileInfo(filename).absFilePath();
-
-  if (edit_widget)
-    lastfile = edit_widget->getName();
-  lasttab = s_tab_view->getCurrentTab();
-
-  TEditInfo* info;
-  TEditInfo* actual_info;
+   
+#warning FIXME MDI stuff
+ 
 
   // check if the file exists
   if(!QFile::exists(filename) && !isUntitled(filename)){
@@ -470,36 +478,36 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
       return;
     }
     showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kiconedit " + filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    //    s_tab_view->setCurrentTab(TOOLS);
+   //  swallow_widget->sWClose(false);
+//     swallow_widget->setExeString("kiconedit " + filename);
+//     swallow_widget->sWExecute();
+//     swallow_widget->init();
     return;
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(3) == ".po"){
     if(CToolClass::searchInstProgram("ktranslator")){
     showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("ktranslator "+ filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    //    s_tab_view->setCurrentTab(TOOLS);
+    // swallow_widget->sWClose(false);
+//     swallow_widget->setExeString("ktranslator "+ filename);
+//     swallow_widget->sWExecute();
+//     swallow_widget->init();
     return;
-		}
+    }
   }
   //load ktranslator if clicked/loaded an po file
   if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp" || (filename).right(4) == ".xbm"){
     if(!CToolClass::searchInstProgram("kpaint")){
 			return;
-		}
+    }
     showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kpaint "+ filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    //    s_tab_view->setCurrentTab(TOOLS);
+    // swallow_widget->sWClose(false);
+//     swallow_widget->setExeString("kpaint "+ filename);
+//     swallow_widget->sWExecute();
+//     swallow_widget->init();
     return;
   }
   if((filename).right(3) == ".ps"){
@@ -507,131 +515,189 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 			return;
 		}
     showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kghostview "+ filename);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+    //    s_tab_view->setCurrentTab(TOOLS);
+    // swallow_widget->sWClose(false);
+//     swallow_widget->setExeString("kghostview "+ filename);
+//     swallow_widget->sWExecute();
+//     swallow_widget->init();
     return;
   }
 
   
   // set the correct edit_widget
-  if (CProject::getType(filename) == CPP_SOURCE){
-    edit_widget = cpp_widget;
-//    s_tab_view->setCurrentTab(CPP);
+  // if (CProject::getType(filename) == CPP_SOURCE){
+//     //    edit_widget = cpp_widget;
+//     //    s_tab_view->setCurrentTab(CPP);
     
-    if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
-      enableCommand(ID_BUILD_COMPILE_FILE);
-  }
-  else{
-    edit_widget = header_widget;
-//    s_tab_view->setCurrentTab(HEADER);
-    disableCommand(ID_BUILD_COMPILE_FILE);
-  }
+//     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
+//       enableCommand(ID_BUILD_COMPILE_FILE);
+//   }
+//   else{
+//     //    edit_widget = header_widget;
+//     //    s_tab_view->setCurrentTab(HEADER);
+//     disableCommand(ID_BUILD_COMPILE_FILE);
+//   }
   
-  // search the current file which would be changed
+//   // search the current file which would be changed
   
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    if (actual_info->filename == edit_widget->getName() ){
-      break;
-    }
-  }
+//   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+//     if (actual_info->filename == edit_widget->getName() ){
+//       break;
+//     }
+//   }
   
-  if(actual_info == 0){
-//    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
-  }
+//   if(actual_info == 0){
+// //    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
+//   }
 
 
-  // handle file if it was modified on disk by another editor/cvs
-  QFileInfo file_info(edit_widget->fileName());
+//   // handle file if it was modified on disk by another editor/cvs
+//   QFileInfo file_info(edit_widget->fileName());
 
-  if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-      if(KMessageBox::questionYesNo(this,
-                                    i18n("The file %1 was modified outside this editor.\n"
-                                         "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
-	  bForceReload = true;
-	  actual_info->last_modified = file_info.lastModified();
-      }
-  }
-  if (!bShowModifiedBox){
-     actual_info->last_modified = file_info.lastModified(); 
-  }
+//   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
+//       if(KMessageBox::questionYesNo(this,
+//                                     i18n("The file %1 was modified outside this editor.\n"
+//                                          "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
+// 	  bForceReload = true;
+// 	  actual_info->last_modified = file_info.lastModified();
+//       }
+//   }
+//   if (!bShowModifiedBox){
+//      actual_info->last_modified = file_info.lastModified(); 
+//   }
   
-  if (!bForceReload && filename == edit_widget->getName()){
-      //    cerr << endl <<endl << "Filename:" << filename 
-      // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
-      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-      edit_widget->setFocus();
-      return;
-  }
+//   if (!bForceReload && filename == edit_widget->getName()){
+//       //    cerr << endl <<endl << "Filename:" << filename 
+//       // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
+//       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+//       edit_widget->setFocus();
+//       return;
+//   }
 
-    // rescue the old file
-  actual_info->text = edit_widget->text();
-  actual_info->modified = edit_widget->isModified();
-  actual_info->cursor_line = edit_widget->currentLine();
-  actual_info->cursor_col = edit_widget->currentColumn();
-  // output_widget->append("auszuwechseldes file:" + actual_info->filename);
+//     // rescue the old file
+//   actual_info->text = edit_widget->text();
+//   actual_info->modified = edit_widget->isModified();
+//   actual_info->cursor_line = edit_widget->currentLine();
+//   actual_info->cursor_col = edit_widget->currentColumn();
+//   // output_widget->append("auszuwechseldes file:" + actual_info->filename);
 
-  // already in the list ?
-  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-    if (info->filename == filename ) { // if found in list
+//   // already in the list ?
+//   for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+//     if (info->filename == filename ) { // if found in list
       
-      //      cerr << "******already****\n" << info->text << "**************\n";
-      if (bForceReload)
-      {
-	  QFileInfo fileinfo(filename);
-               edit_widget->clear();
-               edit_widget->loadFile(filename,1);
-               info->modified=false;
-               info->cursor_line=info->cursor_col=0;
-               info->text = edit_widget->text();
-      }
-      else
-      {
-         edit_widget->setName(filename);     // inserted to stop flickering of caption
-         edit_widget->setText(info->text);
-      }
-      edit_widget->setName(filename);
-      edit_widget->toggleModified(info->modified);
-      edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
+//       //      cerr << "******already****\n" << info->text << "**************\n";
+//       if (bForceReload)
+//       {
+// 	  QFileInfo fileinfo(filename);
+//                edit_widget->clear();
+//                edit_widget->loadFile(filename,1);
+//                info->modified=false;
+//                info->cursor_line=info->cursor_col=0;
+//                info->text = edit_widget->text();
+//       }
+//       else
+//       {
+//          edit_widget->setName(filename);     // inserted to stop flickering of caption
+//          edit_widget->setText(info->text);
+//       }
+//       edit_widget->setName(filename);
+//       edit_widget->toggleModified(info->modified);
+//       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
-      //      output_widget->append ("File: was was already there");
-      //      setMainCaption();  is handled by setCurrentTab()
-      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-      edit_widget->setFocus();
-      return;
-    }
+//       //      output_widget->append ("File: was was already there");
+//       //      setMainCaption();  is handled by setCurrentTab()
+//       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+//       edit_widget->setFocus();
+
+
+  // and now MDI
+  cerr << "filename:" << filename << endl;
+  for(editor_view=editors->first();editor_view != 0;editor_view=editors->next()){
+      cerr << editor_view->editor->getName() << "\n";
+      
+      if (editor_view->editor->getName() == filename ) { // if found in list
+	  mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
+	  //	  mdi_main_frame->taskbarButtonLeftClicked(edit_component);
+	  editor_view->setFocus();
+	  return;
+      }
+      //
   }
+  //    }
+  //  }
   // not found -> generate a new edit_info,loading
   
   // build a new info
-  QFileInfo fileinfo(filename);
-  info = new TEditInfo;
+ //  QFileInfo fileinfo(filename);
+//   info = new TEditInfo;
   
-  info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy 
-  info->modified = false;
-  info->cursor_line = 0;
-  info->cursor_col = 0;
-  info->last_modified = fileinfo.lastModified();
+//   info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
+//   info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy 
+//   info->modified = false;
+//   info->cursor_line = 0;
+//   info->cursor_col = 0;
+//   info->last_modified = fileinfo.lastModified();
 
-  // update the widget
+//   // update the widget
 
-  edit_widget->clear();
-  edit_widget->loadFile(filename,1);
-  edit_widget->setName(filename);
-  info->text = edit_widget->text();
-  edit_infos.append(info); // add to the list
+//   edit_widget->clear();
+//   edit_widget->loadFile(filename,1);
+//   edit_widget->setName(filename);
+//   info->text = edit_widget->text();
+//   edit_infos.append(info); // add to the list
  
-  s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-  edit_widget->setFocus();
+//   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+//   edit_widget->setFocus();
+
+
+  //  //MDI
+  cerr << "new mdi window";
+  
+  QextMdiChildView*act_win = mdi_main_frame->activeWindow () ;
+  bool maximize = false;
+  if(act_win != 0){
+      maximize = act_win->isMaximized();
+  }
+  QFileInfo fileinfo(filename);
+  EditorView* new_editorview = new EditorView(kapp,mdi_main_frame,QFileInfo(filename).fileName());
+  QFont font("Fixed",10);
+  new_editorview->editor->setFont(font);
+  config->setGroup("KWrite Options");
+  new_editorview->editor->readConfig(config);
+  new_editorview->editor->doc()->readConfig(config);
+  new_editorview->editor->loadFile(filename,1);
+  new_editorview->editor->setName(filename);
+  new_editorview->last_modified = fileinfo.lastModified();
+
+  //connections
+  connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
+  connect(new_editorview->editor, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+  connect(new_editorview->editor, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+  connect(new_editorview->editor, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+  connect(new_editorview->editor, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
+  connect(new_editorview->editor, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+  //   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
+  connect(new_editorview->editor, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(new_editorview->editor->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  
+  mdi_main_frame->addWindow( new_editorview, true);
+  if(maximize){
+      //  new_editorview->maximize(false);
+  }
+  new_editorview->setFocus();
+  
+  //add to the editors
+  editors->append(new_editorview);
+  
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
-  lasttab = s_tab_view->getCurrentTab();
+  //  lasttab = s_tab_view->getCurrentTab();
   switchToFile( filename, false);
-  edit_widget->setCursorPosition( lineNo, 0 );
+  //  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view !=0){
+      editor_view->editor->setCursorPosition( lineNo, 0 );
+  }
 }
 
 void CKDevelop::switchToKDevelop(){
@@ -645,7 +711,7 @@ void CKDevelop::switchToKDevelop(){
   //////// change the mainview ////////
   //  kdlg_tabctl->hide();
   kdlg_top_panner->hide();
-  s_tab_view->show();
+  mdi_main_frame->show();
   t_tab_view->show();
 
   top_panner->hide();
@@ -722,9 +788,9 @@ void CKDevelop::switchToKDlgEdit(){
   bKDevelop=false;
   this->setUpdatesEnabled(false);
   //////// change the mainview ////////
-  s_tab_view->hide();
+  mdi_main_frame->hide();
   t_tab_view->hide();
-  //  kdlg_tabctl->show();
+  kdlgedit->kdlg_get_dialogs_view()->show();
   kdlg_top_panner->show();
 
   top_panner->hide();
@@ -788,64 +854,64 @@ void CKDevelop::switchToKDlgEdit(){
 }
 
 void CKDevelop::setToolMenuProcess(bool enable){
-
-  if (enable)
-    disableCommand(ID_BUILD_STOP);
-  else
-    enableCommand(ID_BUILD_STOP);
-
-  if (enable && project){
-
-    if(s_tab_view->getCurrentTab() == CPP){
-      enableCommand(ID_BUILD_COMPILE_FILE);
-    }
-    enableCommand(ID_BUILD_RUN);
-    enableCommand(ID_BUILD_RUN_WITH_ARGS);
-    enableCommand(ID_BUILD_DEBUG);
-    enableCommand(ID_BUILD_MAKE);
-    enableCommand(ID_BUILD_REBUILD_ALL);
-    enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
-    enableCommand(ID_BUILD_DISTCLEAN);
-    enableCommand(ID_BUILD_AUTOCONF);
-    enableCommand(ID_BUILD_CONFIGURE);
-    if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
-      disableCommand(ID_PROJECT_MESSAGES);
-    }
-    else{
-      enableCommand(ID_PROJECT_MESSAGES);
-    }
-    enableCommand(ID_PROJECT_MAKE_PROJECT_API);
-    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-		enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-
-  }
-
-  if (!enable)
-  {
-    // set the popupmenus enable or disable
-    disableCommand(ID_BUILD_COMPILE_FILE);
-    disableCommand(ID_BUILD_RUN_WITH_ARGS);
-    disableCommand(ID_BUILD_RUN);
-    disableCommand(ID_BUILD_DEBUG);
-    disableCommand(ID_BUILD_MAKE);
-    disableCommand(ID_BUILD_REBUILD_ALL);
-    disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
-    disableCommand(ID_BUILD_DISTCLEAN);
-    disableCommand(ID_BUILD_AUTOCONF);
-    disableCommand(ID_BUILD_CONFIGURE);
-    disableCommand(ID_PROJECT_MESSAGES);
-    disableCommand(ID_PROJECT_MAKE_PROJECT_API);
-    disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-  }
-
-  if(bAutosave)
-  {
-    if(enable)
-      saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+    if (enable)
+	disableCommand(ID_BUILD_STOP);
     else
-      saveTimer->stop();  // stop the autosaving if make or something is running
-  }
+	enableCommand(ID_BUILD_STOP);
+    
+    if (enable && project){
+	if(editor_view !=0){
+	  if (CProject::getType(editor_view->editor->getName()) == CPP_SOURCE){
+	      enableCommand(ID_BUILD_COMPILE_FILE);
+	  }
+	}
+	enableCommand(ID_BUILD_RUN);
+	enableCommand(ID_BUILD_RUN_WITH_ARGS);
+	enableCommand(ID_BUILD_DEBUG);
+	enableCommand(ID_BUILD_MAKE);
+	enableCommand(ID_BUILD_REBUILD_ALL);
+	enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+	enableCommand(ID_BUILD_DISTCLEAN);
+	enableCommand(ID_BUILD_AUTOCONF);
+	enableCommand(ID_BUILD_CONFIGURE);
+	if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+	    disableCommand(ID_PROJECT_MESSAGES);
+	}
+	else{
+	    enableCommand(ID_PROJECT_MESSAGES);
+	}
+	enableCommand(ID_PROJECT_MAKE_PROJECT_API);
+	enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+	enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+	
+    }
+    
+    if (!enable)
+	{
+	    // set the popupmenus enable or disable
+	    disableCommand(ID_BUILD_COMPILE_FILE);
+	    disableCommand(ID_BUILD_RUN_WITH_ARGS);
+	    disableCommand(ID_BUILD_RUN);
+	    disableCommand(ID_BUILD_DEBUG);
+	    disableCommand(ID_BUILD_MAKE);
+	    disableCommand(ID_BUILD_REBUILD_ALL);
+	    disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+	    disableCommand(ID_BUILD_DISTCLEAN);
+	    disableCommand(ID_BUILD_AUTOCONF);
+	    disableCommand(ID_BUILD_CONFIGURE);
+	    disableCommand(ID_PROJECT_MESSAGES);
+	    disableCommand(ID_PROJECT_MAKE_PROJECT_API);
+	    disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+	    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+	}
+    
+    if(bAutosave)
+	{
+	    if(enable)
+		saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+	    else
+		saveTimer->stop();  // stop the autosaving if make or something is running
+	}
 }
 
 void CKDevelop::switchToWorkspace(int id){
@@ -1143,7 +1209,8 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
-  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
+#warning FIXME MDI stuff
+  //  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   config->writeEntry("show_kdevelop",bKDevelop);
@@ -1170,12 +1237,13 @@ bool CKDevelop::queryExit(){
 }
 
 bool CKDevelop::queryClose(){
-  swallow_widget->sWClose(false); // close the tools in the tools-tab
+    //  swallow_widget->sWClose(false); // close the tools in the tools-tab
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
-    config->writeEntry("cpp_file",cpp_widget->getName());
-    config->writeEntry("header_file",header_widget->getName());
+#warning FIXME MDI stuff
+    //    config->writeEntry("cpp_file",cpp_widget->getName());
+    //    config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1189,23 +1257,23 @@ bool CKDevelop::queryClose(){
     int save=true;
 
     config->writeEntry("project_file","");
+#warning FIXME MDI stuff
+    //    setInfoModified(header_widget->getName(), header_widget->isModified());
+    //    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-    setInfoModified(header_widget->getName(), header_widget->isModified());
-    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+    // for(actual_info=edit_infos.first();save && actual_info != 0;
+// 		actual_info=edit_infos.next())
+//     {
+//        if (actual_info->modified)
+//          save=false;
+//     }
 
-    for(actual_info=edit_infos.first();save && actual_info != 0;
-		actual_info=edit_infos.next())
-    {
-       if (actual_info->modified)
-         save=false;
-    }
-
-    if (!save)
-    {
-      msg_result = KMessageBox::questionYesNo(this, 
-                                              i18n("There is unsaved data.\n"
-                                                   "Do you really want to quit?"));
-    }
+//     if (!save)
+//     {
+//       msg_result = KMessageBox::questionYesNo(this, 
+//                                               i18n("There is unsaved data.\n"
+//                                                    "Do you really want to quit?"));
+//     }
     return msg_result==KMessageBox::Yes;
   }
   return true;
@@ -1254,8 +1322,9 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
     sess_config->writeEntry("project_file",prj->getProjectFile());
-    sess_config->writeEntry("cpp_file",cpp_widget->getName());
-    sess_config->writeEntry("header_file",header_widget->getName());
+#warning FIXME MDI stuff
+    //    sess_config->writeEntry("cpp_file",cpp_widget->getName());
+    //    sess_config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1263,14 +1332,15 @@ void CKDevelop::saveProperties(KConfig* sess_config){
   if(bAutosave)
     slotFileSaveAll();
   else{
-    TEditInfo* info;
-    for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-      if(info->modified){
-#warning FIXME: Port to new session management
-          //	setUnsavedData ( true );
-	break;
-      }
-    }
+#warning FIXME MDI stuff
+    // TEditInfo* info;
+//     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+//       if(info->modified){
+// #warning FIXME: Port to new session management
+//           //	setUnsavedData ( true );
+// 	break;
+//       }
+//     }
   }
 }
 
@@ -1286,3 +1356,13 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
 
 
 
+EditorView* CKDevelop::getCurrentEditorView(){
+    QextMdiChildView * win = mdi_main_frame->activeWindow();
+    EditorView* editor_view;
+    if(win !=0L){
+	for(editor_view=editors->first();editor_view != 0;editor_view=editors->next()){
+	    if (editor_view == win ) return editor_view;// if found in list
+	}
+    }
+    return 0L;
+}

@@ -143,6 +143,7 @@ void CTreeView::contentsMousePressEvent(QMouseEvent * event)
   item = itemAt(mousePos);
   if (isSelected(item) && mouseBtn != RightButton){
       emit selectionChanged ();
+	emit selectionChanged(item);
   }
 
   if(mouseBtn == MidButton){		

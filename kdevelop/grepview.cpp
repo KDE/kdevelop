@@ -14,13 +14,13 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qregexp.h>
 
 #include "cproject.h"
 #include "ctoolclass.h"
 #include "grepview.h"
 #include "grepdlg.h"
 #include "misc.h"
-#include "qregexp.h"
 
 class GrepListBoxItem : public ProcessListBoxItem
 {

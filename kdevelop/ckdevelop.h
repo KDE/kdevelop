@@ -62,6 +62,11 @@ class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
 class CEditWidget;
+class QextMdiMainFrm;
+class QextMdiChildView;
+class EditorView;
+class DocBrowserView;
+
 #include "component.h"
 #include "ctabctl.h"
 #include "ckdevaccel.h"
@@ -474,8 +479,6 @@ public:
   ///////////////////////
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
-  /** click on the main window tabs: header, source,documentation or tools*/
-  void slotSTabSelected(int item);
   /** set the window tab automatically without click */
   void slotSCurrentTab(int item);
   /** click on the treeview tabs: cv,lfv,wfv,doc*/
@@ -587,6 +590,8 @@ public:
                              const char *declName, 
                              THType type  );
 
+  void slotMDIGetFocus(QextMdiChildView* item);
+
 protected: // Protected methods
 
   /** The user selected a class in the classcombo.
@@ -640,6 +645,8 @@ public: // Public methods
   QString searchToolGetTitle(QString str);
   QString searchToolGetURL(QString str);
   void saveCurrentWorkspaceIntoProject();
+  // returns the current editor (mdi) or 0L
+  EditorView* getCurrentEditorView();
 
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
@@ -723,7 +730,7 @@ private:
    *  handles menu/toolbar etc. events specified for the dialogeditor. */
   KDlgEdit* kdlgedit;
   
-  /** If this to true, the user wants a beep after a 
+  /** If this to true, the user get a beep after a 
    *  process,slotProcessExited() */
   bool beep; 
   
@@ -753,18 +760,26 @@ private:
   ///////////////////////////////
 
   QList<Component> components;
-  /** The tabbar for the sourcescode und browser. */
-  CTabCtl* s_tab_view;
   /** The tabbar for the trees. */
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
   CTabCtl* o_tab_view;
 
-  CEditWidget* edit_widget; // a pointer to the actual editwidget
-  CEditWidget* header_widget; // the editwidget for the headers/resources
-  CEditWidget* cpp_widget;    //  the editwidget for cpp files
+
+  QextMdiMainFrm* mdi_main_frame;
+  /** all editor views */
+  QList<EditorView>* editors;
+
+  /** the current editor view or 0*/
+  EditorView* editor_view;
+  DocBrowserView* browser_view;
+
+  
+  //  CEditWidget* edit_widget; // a pointer to the actual editwidget
+  //  CEditWidget* header_widget; // the editwidget for the headers/resources
+  //CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;
-  KSwallowWidget* swallow_widget;
+  //  KSwallowWidget* swallow_widget;
  
   /** The classview. */
   CClassView* class_tree;

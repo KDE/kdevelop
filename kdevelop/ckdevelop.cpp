@@ -71,6 +71,11 @@
 #include "print/cconfigenscriptdlg.h"
 #include "print/cconfiga2psdlg.h"
 #include "plugins/pluginmanagerdlg.h"
+#include "editorview.h"
+#include "widgets/qextmdi/qextmdichildview.h"
+#include "widgets/qextmdi/qextmdimainfrm.h"
+#include "docbrowserview.h"
+
 
 
 extern KGuiCmdManager cmdMngr;
@@ -79,15 +84,26 @@ extern KGuiCmdManager cmdMngr;
 // editor commands
 ///////////////////////
 void CKDevelop::doCursorCommand(int cmdNum) {
-  if (edit_widget != 0L) edit_widget->doCursorCommand(cmdNum);
+
+    //    EditorView* editor_view = getCurrentEditorView();
+    if(editor_view != 0){
+	editor_view->editor->doCursorCommand(cmdNum);
+    }
 }
 
 void CKDevelop::doEditCommand(int cmdNum) {
-  if (edit_widget != 0L) edit_widget->doEditCommand(cmdNum);
+    //  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view != 0){
+      editor_view->editor->doEditCommand(cmdNum);
+  }
+  
 }
 
 void CKDevelop::doStateCommand(int cmdNum) {
-  if (edit_widget != 0L) edit_widget->doStateCommand(cmdNum);
+    //  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view != 0){
+      editor_view->editor->doStateCommand(cmdNum);
+  }
 }
 
 
@@ -134,225 +150,216 @@ void CKDevelop::slotFileOpen( int id_ ){
 }
 
 void CKDevelop::slotFileClose(){
+#warning FIXME MDI stuff
+   //  // if editor_view->editor isn't shown don't proceed
+//     if (editor_view->editor==0l)
+//        return;
 
-    // if edit_widget isn't shown don't proceed
-    if (edit_widget==0l)
-       return;
+//     slotStatusMsg(i18n("Closing file..."));
+//     QString filename = editor_view->editor->getName();
+//     int msg_result;
 
-    slotStatusMsg(i18n("Closing file..."));
-    QString filename = edit_widget->getName();
-    int msg_result;
+//     if(editor_view->editor->isModified()){
+	
+// 	// no autosave if the user intends to save a file
+// 	if (bAutosave)
+// 	    saveTimer->stop();
+	
+// 	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
+// 	// restart autosaving
+// 	if (bAutosave)
+// 	    saveTimer->start(saveTimeout);
+	
+// 	if (msg_result == KMessageBox::Yes){ // yes
+	
+// 	    if (isUntitled(filename))
+// 		{
+// 		    if (!fileSaveAs())
+// 			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
+// 		}
+// 	    else
+// 		{
+// 		    saveFileFromTheCurrentEditWidget();
+// 		    if (editor_view->editor->isModified())
+// 			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
+// 		}
+// 	}
+	
+// 	if (msg_result == KMessageBox::Cancel) // cancel
+// 	    {
+// 		setInfoModified(filename, editor_view->editor->isModified());
+// 		slotStatusMsg(i18n("Ready."));
+// 		return;
+// 	    }
+//     }
 
-    if(edit_widget->isModified()){
-	
-	// no autosave if the user intends to save a file
-	if (bAutosave)
-	    saveTimer->stop();
-	
-	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
-	// restart autosaving
-	if (bAutosave)
-	    saveTimer->start(saveTimeout);
-	
-	if (msg_result == KMessageBox::Yes){ // yes
-	
-	    if (isUntitled(filename))
-		{
-		    if (!fileSaveAs())
-			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
-		}
-	    else
-		{
-		    saveFileFromTheCurrentEditWidget();
-		    if (edit_widget->isModified())
-			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
-		}
-	}
-	
-	if (msg_result == KMessageBox::Cancel) // cancel
-	    {
-		setInfoModified(filename, edit_widget->isModified());
-		slotStatusMsg(i18n("Ready."));
-		return;
-	    }
-    }
-
-    removeFileFromEditlist(filename);
-    setMainCaption();
-    slotStatusMsg(i18n("Ready."));
+//     removeFileFromEditlist(filename);
+//     setMainCaption();
+//     slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileCloseAll()
 {
-  slotStatusMsg(i18n("Closing all files..."));
-  TEditInfo* actual_info;
-  QStrList handledNames;
-  bool cont=true;
+#warning FIXME MDI stuff
+  // slotStatusMsg(i18n("Closing all files..."));
+//   TEditInfo* actual_info;
+//   QStrList handledNames;
+//   bool cont=true;
 
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+//   setInfoModified(header_widget->getName(), header_widget->isModified());
+//   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-  for(actual_info=edit_infos.first();cont && actual_info != 0;)
-  {
-    TEditInfo *next_info=edit_infos.next();
-    if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
-    {
-#warning FIXME: QMessageBox has 3 buttons maximum
-#if 0
-        KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
-                                         i18n("The project\n\n%1\n\ncontains changed files."
-                                              "Save modified file\n\n%2?\n\n")
-                                         .arg(prj->getProjectName).arg(actual_info->filename),
-                                         KMsgBox::QUESTION,
-                                         i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+//   for(actual_info=edit_infos.first();cont && actual_info != 0;)
+//   {
+//     TEditInfo *next_info=edit_infos.next();
+//     if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
+//     {
+// #warning FIXME: QMessageBox has 3 buttons maximum
+// #if 0
+//         KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
+//                                          i18n("The project\n\n%1\n\ncontains changed files."
+//                                               "Save modified file\n\n%2?\n\n")
+//                                          .arg(prj->getProjectName).arg(actual_info->filename),
+//                                          KMsgBox::QUESTION,
+//                                          i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
 
-      // show the messagea and store result in result:
+//       // show the messagea and store result in result:
 
-      files_close->show();
+//       files_close->show();
 
-      int result=files_close->result();
-#else
-      int result = 0; // until problem above is resolved
-#endif
+//       int result=files_close->result();
+// #else
+//       int result = 0; // until problem above is resolved
+// #endif
 
-      // create the save project messagebox
+//       // create the save project messagebox
 
-      // what to do
-      if(result==1) // Yes- only save the actual file
-      {
-        // save file as if Untitled and close file
-        if(isUntitled(actual_info->filename))
-        {
-          switchToFile(actual_info->filename);
-          handledNames.append(actual_info->filename);
-	        cont=fileSaveAs();
-          next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-        }				
-        else // Save file and close it
-        {
-          switchToFile(actual_info->filename);
-          handledNames.append(actual_info->filename);
-          slotFileSave();
-          actual_info->modified=edit_widget->isModified();
-          cont=!actual_info->modified; //something went wrong
-        }
-      }
+//       // what to do
+//       if(result==1) // Yes- only save the actual file
+//       {
+//         // save file as if Untitled and close file
+//         if(isUntitled(actual_info->filename))
+//         {
+//           switchToFile(actual_info->filename);
+//           handledNames.append(actual_info->filename);
+// 	        cont=fileSaveAs();
+//           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+//         }				
+//         else // Save file and close it
+//         {
+//           switchToFile(actual_info->filename);
+//           handledNames.append(actual_info->filename);
+//           slotFileSave();
+//           actual_info->modified=editor_view->editor->isModified();
+//           cont=!actual_info->modified; //something went wrong
+//         }
+//       }
 
-      if(result==2) // No - no save but close
-      {
-        handledNames.append(actual_info->filename);
-        actual_info->modified=false;
-        removeFileFromEditlist(actual_info->filename); // immediate remove
-        next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-      }
+//       if(result==2) // No - no save but close
+//       {
+//         handledNames.append(actual_info->filename);
+//         actual_info->modified=false;
+//         removeFileFromEditlist(actual_info->filename); // immediate remove
+//         next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+//       }
 
-      if(result==3) // Save all
-      {
-        slotFileSaveAll();
-        break;
-      }
+//       if(result==3) // Save all
+//       {
+//         slotFileSaveAll();
+//         break;
+//       }
 
-      if(result==4) // Cancel
-      {
-        cont=false;
-	      break;
-      }	
-    }  // end actual file close
+//       if(result==4) // Cancel
+//       {
+//         cont=false;
+// 	      break;
+//       }	
+//     }  // end actual file close
 
-    actual_info=next_info;
-  } // end for-loop
+//     actual_info=next_info;
+//   } // end for-loop
 
-  // check if something went wrong with saving
-  if ( cont )
-  {
-    for( actual_info=edit_infos.first();
-         cont && actual_info != 0;
-         actual_info=edit_infos.next())
-    {
-      if ( actual_info->modified )
-        cont=false;
-    } // end for-loop
+//   // check if something went wrong with saving
+//   if ( cont )
+//   {
+//     for( actual_info=edit_infos.first();
+//          cont && actual_info != 0;
+//          actual_info=edit_infos.next())
+//     {
+//       if ( actual_info->modified )
+//         cont=false;
+//     } // end for-loop
 
-    if(cont)
-    {
-      header_widget->clear();
-      cpp_widget->clear();
-      menu_buffers->clear();
+//     if(cont)
+//     {
+//       header_widget->clear();
+//       cpp_widget->clear();
+//       menu_buffers->clear();
 
-      //clear all edit_infos before starting a new project
-      edit_infos.clear();
+//       //clear all edit_infos before starting a new project
+//       edit_infos.clear();
 
-      header_widget->setName(i18n("Untitled.h"));
-      cpp_widget->setName(i18n("Untitled.cpp"));
-      TEditInfo* edit1 = new TEditInfo;
-      TEditInfo* edit2 = new TEditInfo;
-      edit1->filename = header_widget->getName();
-      edit2->filename = cpp_widget->getName();
+//       header_widget->setName(i18n("Untitled.h"));
+//       cpp_widget->setName(i18n("Untitled.cpp"));
+//       TEditInfo* edit1 = new TEditInfo;
+//       TEditInfo* edit2 = new TEditInfo;
+//       edit1->filename = header_widget->getName();
+//       edit2->filename = cpp_widget->getName();
 
-      edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-      edit1->modified=false;
-      edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-      edit2->modified=false;
-      edit_infos.append(edit1);
-      edit_infos.append(edit2);
-    }
-  }
+//       edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
+//       edit1->modified=false;
+//       edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
+//       edit2->modified=false;
+//       edit_infos.append(edit1);
+//       edit_infos.append(edit2);
+//     }
+//   }
 
-  slotStatusMsg(i18n("Ready."));
+//   slotStatusMsg(i18n("Ready."));
 }
 
 bool CKDevelop::saveFileFromTheCurrentEditWidget(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return false;
-
-  QString filename=edit_widget->getName();
-  TEditInfo* actual_info;
-  QFileInfo file_info(filename);
-  
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      if (actual_info->filename == filename ){
-	  break;
-      }
-  }
-  if(actual_info == 0) return false; //oops :-(
-
-  if(file_info.lastModified() != actual_info->last_modified){
-    if (KMessageBox::questionYesNo(this, 
-                                   i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
-        == QMessageBox::No)
-        return false;
-  }
-  edit_widget->doSave();
-  QFileInfo file_info2(filename);
-  actual_info->last_modified = file_info2.lastModified();
-  return true;
+#warning FIXME: MDI stuff
+   // if editor_view->editor isn't shown don't proceed
+    //    EditorView* current_editor_view = getCurrentEditorView();
+    if (editor_view==0)
+	return false;
+    
+    QString filename=editor_view->editor->getName();
+	
+    QFileInfo file_info(filename);
+    
+    if(file_info.lastModified() != editor_view->last_modified){
+	if (KMessageBox::questionYesNo(this, 
+				       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
+	    == QMessageBox::No)
+	    return false;
+    }
+    editor_view->editor->doSave();
+    QFileInfo file_info2(filename);
+    editor_view->last_modified = file_info2.lastModified();
+    return true;
 }
 
 
 void CKDevelop::slotFileSave(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
+    // if editor_view->editor isn't shown don't proceed
+    if (editor_view==0)
+	return;
+    
+   QString filename=editor_view->editor->getName();
+   QString sShownFilename=QFileInfo(filename).fileName();
+   slotStatusMsg(i18n("Saving file ")+sShownFilename);
 
-  QString filename=edit_widget->getName();
-  QString sShownFilename=QFileInfo(filename).fileName();
-  slotStatusMsg(i18n("Saving file ")+sShownFilename);
-  
-  if(isUntitled(filename)){
-    slotFileSaveAs();
-  }
-  else{
-      saveFileFromTheCurrentEditWidget(); // save the current file
-      setInfoModified(filename, edit_widget->isModified());
-      // only refresh if header file changed
-      if(CProject::getType(filename)==CPP_HEADER){
-	  slotViewRefresh();
-      }
-  }
-  slotStatusMsg(i18n("Ready."));
-  QString sHelpMsg = edit_widget->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
-  slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));
+   saveFileFromTheCurrentEditWidget(); // save the current file
+   setInfoModified(filename, editor_view->editor->isModified());
+   // only refresh if header file changed
+   if(CProject::getType(filename)==CPP_HEADER){
+       slotViewRefresh();
+   }
+   slotStatusMsg(i18n("Ready."));
+   QString sHelpMsg = editor_view->editor->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
+   slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));
 }
 
 void CKDevelop::slotFileSaveAs(){
@@ -365,106 +372,99 @@ void CKDevelop::slotFileSaveAs(){
 }
 
 void CKDevelop::slotFileSaveAll(){
-    QStrList handledNames;
-    // ok,its a dirty implementation  :-)
-    if(!bAutosave || !saveTimer->isActive()){
-	slotStatusMsg(i18n("Saving all changed files..."));
-    }
-    else{
-	slotStatusMsg(i18n("Autosaving..."));
-    }
-    TEditInfo* actual_info;
-    bool mod = false;
-    // save current filename to switch back after saving
-    QString visibleFile = (edit_widget) ? edit_widget->getName() : QString("");
-    // ooops...autosave switches tabs...
-    int visibleTab=s_tab_view->getCurrentTab();
-    // first the 2 current edits
-    view->setUpdatesEnabled(false);
+  #warning FIXME MDI stuff
+    // QStrList handledNames;
+//     // ok,its a dirty implementation  :-)
+//     if(!bAutosave || !saveTimer->isActive()){
+// 	slotStatusMsg(i18n("Saving all changed files..."));
+//     }
+//     else{
+// 	slotStatusMsg(i18n("Autosaving..."));
+//     }
+//     TEditInfo* actual_info;
+//     bool mod = false;
+//     // save current filename to switch back after saving
+//     QString visibleFile = (editor_view->editor) ? editor_view->editor->getName() : QString("");
+//     // ooops...autosave switches tabs...
+//     int visibleTab=s_tab_view->getCurrentTab();
+//     // first the 2 current edits
+//     view->setUpdatesEnabled(false);
     
-    setInfoModified(header_widget->getName(), header_widget->isModified());
-    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+//     setInfoModified(header_widget->getName(), header_widget->isModified());
+//     setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
     
-    statProg->setTotalSteps(edit_infos.count());
-    statProg->show();
-    statProg->setProgress(0);
-    int i=0;
-    for(actual_info=edit_infos.first();actual_info != 0;){
+//     statProg->setTotalSteps(edit_infos.count());
+//     statProg->show();
+//     statProg->setProgress(0);
+//     int i=0;
+//     for(actual_info=edit_infos.first();actual_info != 0;){
 
-	TEditInfo *next_info=edit_infos.next();
-	// get now the next info... fileSaveAs can delete the actual_info
-	i++;
-	statProg->setProgress(i);
-	if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
-	    if(isUntitled(actual_info->filename)){
-		switchToFile(actual_info->filename);
-		handledNames.append(actual_info->filename);
-		if (fileSaveAs())
-		    {
-			// maybe saved with another name... so we have to start again
-			next_info=edit_infos.first();
-			i=0;
-		    }
+// 	TEditInfo *next_info=edit_infos.next();
+// 	// get now the next info... fileSaveAs can delete the actual_info
+// 	i++;
+// 	statProg->setProgress(i);
+// 	if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
+// 	    if(isUntitled(actual_info->filename)){
+// 		switchToFile(actual_info->filename);
+// 		handledNames.append(actual_info->filename);
+// 		if (fileSaveAs())
+// 		    {
+// 			// maybe saved with another name... so we have to start again
+// 			next_info=edit_infos.first();
+// 			i=0;
+// 		    }
 	    
 	       
-	    }
-	    else{
-		switchToFile(actual_info->filename,false,false);
-		handledNames.append(actual_info->filename);
-		saveFileFromTheCurrentEditWidget();
-		actual_info->modified=edit_widget->isModified();
-		// 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
-		if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
-		    mod = true;
-	    }
-	}
-	actual_info=next_info;
-    }
-    statProg->hide();
-    statProg->reset();
-    if(mod){
-	slotViewRefresh();
-    }
-    // switch back to visible file
-    if (visibleTab == CPP || visibleTab == HEADER)
-	{
-	    // Does the visible file still exist??
-	    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
-		actual_info=edit_infos.next());
+// 	    }
+// 	    else{
+// 		switchToFile(actual_info->filename,false,false);
+// 		handledNames.append(actual_info->filename);
+// 		saveFileFromTheCurrentEditWidget();
+// 		actual_info->modified=editor_view->editor->isModified();
+// 		// 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
+// 		if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
+// 		    mod = true;
+// 	    }
+// 	}
+// 	actual_info=next_info;
+//     }
+//     statProg->hide();
+//     statProg->reset();
+//     if(mod){
+// 	slotViewRefresh();
+//     }
+//     // switch back to visible file
+//     if (visibleTab == CPP || visibleTab == HEADER)
+// 	{
+// 	    // Does the visible file still exist??
+// 	    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
+// 		actual_info=edit_infos.next());
 	    
-	    if (actual_info)
-		switchToFile(visibleFile,false,false); // no force reload and no box if modified outside
+// 	    if (actual_info)
+// 		switchToFile(visibleFile,false,false); // no force reload and no box if modified outside
 	    
-	    view->repaint();
-	}
-    view->setUpdatesEnabled(true);
-    // switch back to visible tab
-    s_tab_view->setCurrentTab(visibleTab);
-    slotStatusMsg(i18n("Ready."));
+// 	    view->repaint();
+// 	}
+//     view->setUpdatesEnabled(true);
+//     // switch back to visible tab
+//     s_tab_view->setCurrentTab(visibleTab);
+//     slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotFilePrint(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-       return;
-
-  QString file;
-  slotFileSave();
-/*  if (s_tab_view->getCurrentTab() == BROWSER) {
-  	file = browser_widget->currentURL();
-  	CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus", TRUE);
- 	printerdlg->resize(600,480);
-	  printerdlg->exec();
-  	delete (printerdlg);
-  }
-  else { */
-	  file = edit_widget->getName();
-	  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
-	  printerdlg->resize(600,480);
-	  printerdlg->exec();
-  	delete (printerdlg);
-//	}
+    // if editor_view isn't shown don't proceed
+    if (editor_view==0)
+	return;
+    
+    QString file;
+    slotFileSave();
+    
+    file = editor_view->editor->getName();
+    CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
+    printerdlg->resize(600,480);
+    printerdlg->exec();
+    delete (printerdlg);
 }
 
 void CKDevelop::slotFileQuit(){
@@ -478,86 +478,84 @@ void CKDevelop::slotFileQuit(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotEditUndo(){
- if(edit_widget != 0L)
-   edit_widget->undo();
+    if(editor_view != 0)
+	editor_view->editor->undo();
 }
 
 
 void CKDevelop::slotEditRedo(){
- if(edit_widget != 0L)
-  edit_widget->redo();
+    if(editor_view != 0)
+	editor_view->editor->redo();
+    
 }
 void CKDevelop::slotEditUndoHistory(){
-    if(edit_widget != 0L){
-	edit_widget->undoHistory();
-    }
+    if(editor_view != 0)
+	editor_view->editor->undoHistory();
+    
 }
 
 void CKDevelop::slotEditCut(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
+    // if editor_view->editor isn't shown don't proceed
+    if(editor_view == 0)
+	return;
 
-  slotStatusMsg(i18n("Cutting..."));
-  edit_widget->cut();
-  slotStatusMsg(i18n("Ready."));
+    slotStatusMsg(i18n("Cutting..."));
+    editor_view->editor->cut();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditCopy(){
-//slotStatusMsg(i18n("Copying..."));
-  if(s_tab_view->getCurrentTab() == 2) {
-    slotStatusMsg(i18n("Copying..."));
-    browser_widget->slotCopyText();
-    slotStatusMsg(i18n("Ready."));
-  }
-//	else
-//    edit_widget->copyText();
-//slotStatusMsg(i18n("Ready."));
+    if(mdi_main_frame->activeWindow() == browser_view){
+	slotStatusMsg(i18n("Copying..."));
+	browser_widget->slotCopyText();
+	slotStatusMsg(i18n("Ready."));
+    }
 }
 
 
 void CKDevelop::slotEditPaste(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-  slotStatusMsg(i18n("Pasting selection..."));
-  edit_widget->paste();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view->editor isn't shown don't proceed
+    if(editor_view == 0)
+	return;
+    
+    slotStatusMsg(i18n("Pasting selection..."));
+    editor_view->editor->paste();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditInsertFile(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-  slotStatusMsg(i18n("Inserting file contents..."));
-  edit_widget->insertFile();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view isn't shown don't proceed
+    if(editor_view == 0)
+	return;
+    slotStatusMsg(i18n("Inserting file contents..."));
+    editor_view->editor->insertFile();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditSearch(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-  slotStatusMsg(i18n("Searching..."));
-  edit_widget->search();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view->editor isn't shown don't proceed
+    if(editor_view == 0)
+	return;
+    slotStatusMsg(i18n("Searching..."));
+    editor_view->editor->search();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditRepeatSearch(){
-  slotStatusMsg(i18n("Repeating last search..."));
-  if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->findTextNext(QRegExp(doc_search_text));
-  }
-  else{
-  // if edit_widget isn't shown don't proceed
-    if (edit_widget!=0l)
-     edit_widget->searchAgain();
-  }
-  slotStatusMsg(i18n("Ready."));
+    slotStatusMsg(i18n("Repeating last search..."));
+    if(mdi_main_frame->activeWindow() == browser_view){
+	browser_widget->findTextNext(QRegExp(doc_search_text));
+    }
+    else{
+	// if editor_view->editor isn't shown don't proceed
+	if (editor_view !=0 )
+	    editor_view->editor->searchAgain();
+    }
+    slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -575,59 +573,56 @@ void CKDevelop::slotEditSearchInFiles(QString search){
 }
 
 void CKDevelop::slotEditSearchText(){
-  QString text;
-  if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->getSelectedText(text);
-  }
-  else{
-     // if edit_widget isn't shown don't proceed
-    if (edit_widget!=0l)
-    {
-      text = edit_widget->markedText();
-      if(text == ""){
-        text = edit_widget->currentWord();
-      }
+    QString text;
+    if(mdi_main_frame->activeWindow() == browser_view){
+	browser_widget->getSelectedText(text);
     }
-  }
-
-  if (!text.isEmpty())
-    slotEditSearchInFiles(text);
-  slotStatusMsg(i18n("Ready."));
+    else{
+	// if editor_view->editor isn't shown don't proceed
+	if (editor_view !=0)
+	    {
+		text = editor_view->editor->markedText();
+		if(text == ""){
+		    text = editor_view->editor->currentWord();
+		}
+	    }
+    }
+    
+    if (!text.isEmpty())
+	slotEditSearchInFiles(text);
+    
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotEditReplace(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-
-  slotStatusMsg(i18n("Replacing..."));
-  edit_widget->replace();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view->editor isn't shown don't proceed
+    if(editor_view == 0)
+	return;
+    
+    slotStatusMsg(i18n("Replacing..."));
+    editor_view->editor->replace();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditSpellcheck(){
-  if (edit_widget!=0l)
-	edit_widget->spellcheck();
+   if(editor_view != 0)
+       editor_view->editor->spellcheck();
 }
 
 
 void CKDevelop::slotEditSelectAll(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-  slotStatusMsg(i18n("Selecting all..."));
-  edit_widget->selectAll();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view->editor isn't shown don't proceed
+    if(editor_view == 0)
+	return;
+    slotStatusMsg(i18n("Selecting all..."));
+    editor_view->editor->selectAll();
+    slotStatusMsg(i18n("Ready."));
 }
 
-
-
-
-
 void CKDevelop::slotEditDeselectAll(){
-  if (edit_widget!=0l)
-    edit_widget->deselectAll();
+    if(editor_view != 0)
+	editor_view->editor->deselectAll();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -635,12 +630,12 @@ void CKDevelop::slotEditDeselectAll(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotViewGotoLine(){
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-     return;
-  slotStatusMsg(i18n("Switching to selected line..."));
-  edit_widget->gotoLine();
-  slotStatusMsg(i18n("Ready."));
+  // if editor_view->editor isn't shown don't proceed
+    if (editor_view==0)
+	return;
+    slotStatusMsg(i18n("Switching to selected line..."));
+    editor_view->editor->gotoLine();
+    slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -787,14 +782,15 @@ void CKDevelop::slotViewRefresh(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotBuildCompileFile(){
+
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  QFileInfo fileinfo(cpp_widget->getName());
-  slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
+  QFileInfo fileinfo(editor_view->editor->getName());
+  slotStatusMsg(i18n("Compiling ")+editor_view->editor->getName());
   messages_widget->prepareJob(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
@@ -803,17 +799,18 @@ void CKDevelop::slotBuildCompileFile(){
   (*messages_widget) << flaglabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
+
             if (!prj->getCXXFLAGS().isEmpty())
-                  (*messages_widget) << prj->getCXXFLAGS() << " ";
+		(*messages_widget) << prj->getCXXFLAGS() << " ";
             if (!prj->getAdditCXXFLAGS().isEmpty())
-                  (*messages_widget) << prj->getAdditCXXFLAGS();
-  }
-  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-                (*messages_widget) << prj->getLDFLAGS();
-  (*messages_widget) << "\" ";
-  (*messages_widget) << make_cmd << fileinfo.baseName()+".o";
-	messages_widget->startJob();
+		(*messages_widget) << prj->getAdditCXXFLAGS();
+	}
+    (*messages_widget) << "\" " << "LDFLAGS=\" " ;
+    if (!prj->getLDFLAGS().isEmpty())
+	(*messages_widget) << prj->getLDFLAGS();
+    (*messages_widget) << "\" ";
+    (*messages_widget) << make_cmd << fileinfo.baseName()+".o";
+    messages_widget->startJob();
 }
 
 /**
@@ -864,12 +861,13 @@ void CKDevelop::slotBuildDebug(){
   
   slotStatusMsg(i18n("Running %1 in KDbg").arg(prj->getBinPROGRAM()));
 
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  swallow_widget->setExeString("kdbg "+ prj->getBinPROGRAM());
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+#warning FIXME MDI stuff 
+  //  s_tab_view->setCurrentTab(TOOLS);
+  //  swallow_widget->sWClose(false);
+  //   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
+  //   swallow_widget->setExeString("kdbg "+ prj->getBinPROGRAM());
+  //   swallow_widget->sWExecute();
+  //   swallow_widget->init();
   
 }
 
@@ -929,6 +927,7 @@ void CKDevelop::slotBuildRebuildAll(){
   messages_widget->startJob();
 }
 
+
 /**
  * a) make
  * b) make distclean
@@ -981,6 +980,7 @@ void CKDevelop::slotBuildDistClean(){
   messages_widget->startJob();
 }
 
+
 /**
  * a) make -f Makefile.dist
  */
@@ -1009,6 +1009,7 @@ void CKDevelop::slotBuildAutoconf(){
 /**
  * a) configure
  */
+
 void CKDevelop::slotBuildConfigure(){
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
@@ -1068,25 +1069,27 @@ void CKDevelop::slotToolsTool(int tool){
     
     showOutputView(false);
 
-    QString argument=tools_argument.at(tool);
+    
+#warning FIXME MDI stuff
+   //  QString argument=tools_argument.at(tool);
  		
-    // This allows us to replace the macro %H with the header file name, %S with the source file name
-    // and %D with the project directory name.  Any others we should have?
-    argument.replace( QRegExp("%H"), header_widget->getName() );
-    argument.replace( QRegExp("%S"), cpp_widget->getName() );
-    if(project){
-      argument.replace( QRegExp("%D"), prj->getProjectDir() );
-    }
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    if(argument.isEmpty()){
-      swallow_widget->setExeString(tools_exe.at(tool));
-    }
-    else{
-      swallow_widget->setExeString(tools_exe.at(tool)+argument);
-    }
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+//     // This allows us to replace the macro %H with the header file name, %S with the source file name
+//     // and %D with the project directory name.  Any others we should have?
+//     argument.replace( QRegExp("%H"), header_widget->getName() );
+//     argument.replace( QRegExp("%S"), cpp_widget->getName() );
+//     if(project){
+//       argument.replace( QRegExp("%D"), prj->getProjectDir() );
+//     }
+//     s_tab_view->setCurrentTab(TOOLS);
+//     swallow_widget->sWClose(false);
+//     if(argument.isEmpty()){
+//       swallow_widget->setExeString(tools_exe.at(tool));
+//     }
+//     else{
+//       swallow_widget->setExeString(tools_exe.at(tool)+argument);
+//     }
+//     swallow_widget->sWExecute();
+//     swallow_widget->init();
 }
 
 
@@ -1103,82 +1106,86 @@ void CKDevelop::slotOptionsEditor(){
     qtd->setCaption(i18n("Options Editor"));
     
     // indent options
-    IndentConfigTab *indentConfig = new IndentConfigTab(qtd, cpp_widget);
-    qtd->addTab(indentConfig, i18n("Indent"));
+#warning FIXME MDI stuff
+   //  IndentConfigTab *indentConfig = new IndentConfigTab(qtd, cpp_widget);
+//     qtd->addTab(indentConfig, i18n("Indent"));
     
-    // select options
-    SelectConfigTab *selectConfig = new SelectConfigTab(qtd, cpp_widget);
-    qtd->addTab(selectConfig, i18n("Select"));
+//     // select options
+//     SelectConfigTab *selectConfig = new SelectConfigTab(qtd, cpp_widget);
+//     qtd->addTab(selectConfig, i18n("Select"));
     
-    // edit options
-    EditConfigTab *editConfig = new EditConfigTab(qtd, cpp_widget);
-    qtd->addTab(editConfig, i18n("Edit"));
+//     // edit options
+//     EditConfigTab *editConfig = new EditConfigTab(qtd, cpp_widget);
+//     qtd->addTab(editConfig, i18n("Edit"));
     
     
-    qtd->setOkButton(i18n("OK"));
-    qtd->setCancelButton(i18n("Cancel"));
+//     qtd->setOkButton(i18n("OK"));
+//     qtd->setCancelButton(i18n("Cancel"));
     
 
-    if (qtd->exec()) {
-	// indent options
-	indentConfig->getData(cpp_widget);
-	indentConfig->getData(header_widget);
-	// select options
-	selectConfig->getData(cpp_widget);
-	selectConfig->getData(header_widget);
-	// edit options
-	editConfig->getData(cpp_widget);
-	editConfig->getData(header_widget);
+//     if (qtd->exec()) {
+// 	// indent options
+// 	indentConfig->getData(cpp_widget);
+// 	indentConfig->getData(header_widget);
+// 	// select options
+// 	selectConfig->getData(cpp_widget);
+// 	selectConfig->getData(header_widget);
+// 	// edit options
+// 	editConfig->getData(cpp_widget);
+// 	editConfig->getData(header_widget);
 	
-	config->setGroup("KWrite Options");
-	cpp_widget->writeConfig(config);
-	cpp_widget->doc()->writeConfig(config);
+// 	config->setGroup("KWrite Options");
+// 	cpp_widget->writeConfig(config);
+// 	cpp_widget->doc()->writeConfig(config);
 	
-	slotStatusMsg(i18n("Ready."));
-    }
-    delete qtd;
+// 	slotStatusMsg(i18n("Ready."));
+//     }
+//     delete qtd;
 
 }
 void CKDevelop::slotOptionsEditorColors(){
-  slotStatusMsg(i18n("Setting up the Editor's colors..."));
-  cpp_widget->colDlg();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+#warning FIXME MDI stuff
+  // slotStatusMsg(i18n("Setting up the Editor's colors..."));
+//   cpp_widget->colDlg();
+//   config->setGroup("KWrite Options");
+//   cpp_widget->writeConfig(config);
+//   cpp_widget->doc()->writeConfig(config);
+//   header_widget->copySettings(cpp_widget);
+//   config->setGroup("KWrite Options");
+//   header_widget->readConfig(config);
+//   header_widget->doc()->readConfig(config);
+//   slotStatusMsg(i18n("Ready."));
 
 }
 
 
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
-  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
-  cpp_widget->hlDef();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+#warning FIXME MDI stuff
+ //  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
+//   cpp_widget->hlDef();
+//   config->setGroup("KWrite Options");
+//   cpp_widget->writeConfig(config);
+//   cpp_widget->doc()->writeConfig(config);
+//   header_widget->copySettings(cpp_widget);
+//   config->setGroup("KWrite Options");
+//   header_widget->readConfig(config);
+//   header_widget->doc()->readConfig(config);
+//   slotStatusMsg(i18n("Ready."));
 }
 
 
  void CKDevelop::slotOptionsSyntaxHighlighting(){
-  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
-  cpp_widget->hlDlg();
-  config->setGroup("KWrite Options");
-  cpp_widget->writeConfig(config);
-  cpp_widget->doc()->writeConfig(config);
-  header_widget->copySettings(cpp_widget);
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  slotStatusMsg(i18n("Ready."));
+#warning FIXME MDI stuff
+ //  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
+//   cpp_widget->hlDlg();
+//   config->setGroup("KWrite Options");
+//   cpp_widget->writeConfig(config);
+//   cpp_widget->doc()->writeConfig(config);
+//   header_widget->copySettings(cpp_widget);
+//   config->setGroup("KWrite Options");
+//   header_widget->readConfig(config);
+//   header_widget->doc()->readConfig(config);
+//   slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -1347,44 +1354,47 @@ void CKDevelop::slotPluginPluginManager(){
 }
 
 void CKDevelop::slotBookmarksSet(){
-	if(s_tab_view->getCurrentTab()==BROWSER)
-		slotBookmarksAdd();
-	else{
-		if(edit_widget==header_widget)
-			header_widget->setBookmark();
-		if(edit_widget==cpp_widget)
-			cpp_widget->setBookmark();
-	}
+#warning FIXME MDI stuff
+// 	if(s_tab_view->getCurrentTab()==BROWSER)
+// 		slotBookmarksAdd();
+// 	else{
+// 		if(editor_view->editor==header_widget)
+// 			header_widget->setBookmark();
+// 		if(editor_view->editor==cpp_widget)
+// 			cpp_widget->setBookmark();
+// 	}
 }
 void CKDevelop::slotBookmarksAdd(){
-	if(s_tab_view->getCurrentTab()==BROWSER){
-		doc_bookmarks->clear();
-		doc_bookmarks_list.append(browser_widget->currentURL());
-		doc_bookmarks_title_list.append(browser_widget->currentTitle());
+#warning FIXME MDI stuff
+// 	if(s_tab_view->getCurrentTab()==BROWSER){
+// 		doc_bookmarks->clear();
+// 		doc_bookmarks_list.append(browser_widget->currentURL());
+// 		doc_bookmarks_title_list.append(browser_widget->currentTitle());
 		
-		uint i;
-    for ( i =0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
-    }
-	}
-	if(edit_widget==header_widget)
-		header_widget->addBookmark();
-	if(edit_widget==cpp_widget)
-		cpp_widget->addBookmark();
+// 		uint i;
+//     for ( i =0 ; i < doc_bookmarks_list.count(); i++){
+//       doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
+//     }
+// 	}
+// 	if(editor_view->editor==header_widget)
+// 		header_widget->addBookmark();
+// 	if(editor_view->editor==cpp_widget)
+// 		cpp_widget->addBookmark();
 
 }
 void CKDevelop::slotBookmarksClear(){
-	if(s_tab_view->getCurrentTab()==BROWSER){
-		doc_bookmarks_list.clear();
-		doc_bookmarks_title_list.clear();
-		doc_bookmarks->clear();
-	}		
-	else{
-		if(edit_widget==header_widget)
-			header_widget->clearBookmarks();
-		if(edit_widget==cpp_widget)
-			cpp_widget->clearBookmarks();
-	}	
+#warning FIXME MDI stuff
+	// if(s_tab_view->getCurrentTab()==BROWSER){
+// 		doc_bookmarks_list.clear();
+// 		doc_bookmarks_title_list.clear();
+// 		doc_bookmarks->clear();
+// 	}		
+// 	else{
+// 		if(editor_view->editor==header_widget)
+// 			header_widget->clearBookmarks();
+// 		if(editor_view->editor==cpp_widget)
+// 			cpp_widget->clearBookmarks();
+// 	}	
 }
 
 void CKDevelop::slotBoomarksBrowserSelected(int id_){
@@ -1404,7 +1414,7 @@ void CKDevelop::slotHelpBack(){
   if (str != 0){
     if(!bKDevelop)
       switchToKDevelop();
-    s_tab_view->setCurrentTab(BROWSER);
+    browser_view->setFocus();
     browser_widget->showURL(str);
   }
 
@@ -1417,7 +1427,7 @@ void CKDevelop::slotHelpForward(){
   if (str != 0){
     if(!bKDevelop)
       switchToKDevelop();
-    s_tab_view->setCurrentTab(BROWSER);
+    browser_view->setFocus();
     browser_widget->showURL(str);
   }
 
@@ -1431,7 +1441,7 @@ void CKDevelop::slotHelpHistoryBack( int id_){
   if (str != 0){
     if(!bKDevelop)
       switchToKDevelop();
-    s_tab_view->setCurrentTab(BROWSER);
+    browser_view->setFocus();
     browser_widget->showURL(str);
   }
 
@@ -1447,7 +1457,7 @@ void CKDevelop::slotHelpHistoryForward( int id_){
   if (str != 0){
     if(!bKDevelop)
       switchToKDevelop();
-    s_tab_view->setCurrentTab(BROWSER);
+    browser_view->setFocus();
     browser_widget->showURL(str);
   }
 
@@ -1457,11 +1467,11 @@ void CKDevelop::slotHelpHistoryForward( int id_){
 void CKDevelop::slotHelpBrowserReload(){
 	slotStatusMsg(i18n("Reloading page..."));
   if(!bKDevelop)
-    switchToKDevelop();
-  s_tab_view->setCurrentTab(BROWSER);
+      switchToKDevelop();
+  browser_view->setFocus();
   browser_widget->setFocus();
-	browser_widget->showURL(browser_widget->currentURL(), true);
-	slotStatusMsg(i18n("Ready."));
+  browser_widget->showURL(browser_widget->currentURL(), true);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotHelpSearchText(QString text){
@@ -1507,23 +1517,23 @@ void CKDevelop::slotHelpSearchText(QString text){
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 void CKDevelop::slotHelpSearchText(){
-  QString text;
-  if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->getSelectedText(text);
-  }
-  else{
-    // if edit_widget isn't shown don't proceed
-    if (edit_widget!=0l)
-    {
-      text = edit_widget->markedText();
-      if(text == ""){
-        text = edit_widget->currentWord();
-      }
+    QString text;
+    if(mdi_main_frame->activeWindow() == browser_view){
+	browser_widget->getSelectedText(text);
     }
-  }
-
-  if (!text.isEmpty())
-  slotHelpSearchText(text);
+    else{
+	// if editor_view->editor isn't shown don't proceed
+	if (editor_view !=0)
+	    {
+		text = editor_view->editor->markedText();
+		if(text == ""){
+		    text = editor_view->editor->currentWord();
+		}
+	    }
+    }
+    
+    if (!text.isEmpty())
+	slotHelpSearchText(text);
 }
 
 void CKDevelop::slotHelpSearch(){
@@ -1531,14 +1541,14 @@ void CKDevelop::slotHelpSearch(){
   CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
   connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotHelpSearchText(QString)));
   help_srch_dlg->exec();
-	delete help_srch_dlg;
+  delete help_srch_dlg;
 }
 
 
 void CKDevelop::slotHelpReference(){
   QString file = CToolClass::locatehtml("kdevelop/reference/C/cref.html");
   if (file.isNull())
-      file = CToolClass::locatehtml("kdevelop/cref.html");
+    file = CToolClass::locatehtml("kdevelop/cref.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
@@ -1895,25 +1905,29 @@ void CKDevelop::disableCommand(int id_)
 
 void CKDevelop::slotNewStatus()
 {
+    
   int config;
-  config = edit_widget->config();
-  statusBar()->changeItem(config & cfOvr ? "OVR" : "INS",ID_STATUS_INS_OVR);
-  // set new caption... maybe the file content is changed
-  setMainCaption();
+  //  EditorView* editor_view = getCurrentEditorView();
+  if(editor_view !=0){
+      config = editor_view->editor->config();
+      statusBar()->changeItem(config & cfOvr ? "OVR" : "INS",ID_STATUS_INS_OVR);
+      // set new caption... maybe the file content is changed
+      setMainCaption();
+  }
 }
 
 
 void CKDevelop::slotMarkStatus() {
-
-  if (edit_widget != 0L) {
-    if (edit_widget->hasMarkedText()) {
-      enableCommand(ID_EDIT_CUT);
-      enableCommand(ID_EDIT_COPY);
-    } else{
-      disableCommand(ID_EDIT_CUT);
-      disableCommand(ID_EDIT_COPY);
+    EditorView* editor_view = getCurrentEditorView();
+    if (editor_view != 0) {
+	if (editor_view->editor->hasMarkedText()) {
+	    enableCommand(ID_EDIT_CUT);
+	    enableCommand(ID_EDIT_COPY);
+	} else{
+	    disableCommand(ID_EDIT_CUT);
+	    disableCommand(ID_EDIT_COPY);
+	}
     }
-  }
 }
 
 
@@ -1952,70 +1966,77 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
 */
 void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
 {
-  int item=s_tab_view->getCurrentTab();
-  if (item==BROWSER)
-  {
-      if(bMarked){
-        enableCommand(ID_EDIT_COPY);
-      }
-      else{
-        disableCommand(ID_EDIT_COPY);
-      }		
-  }
+#warning FIXME MDI stuff
+  // int item=s_tab_view->getCurrentTab();
+//   if (item==BROWSER)
+//   {
+//       if(bMarked){
+//         enableCommand(ID_EDIT_COPY);
+//       }
+//       else{
+//         disableCommand(ID_EDIT_COPY);
+//       }		
+//   }
 }
 
 void CKDevelop::slotClipboardChanged()
 {
-  int item = s_tab_view->getCurrentTab();
-  QString text = QApplication::clipboard()->text();
-//  if(!bContents || item==BROWSER || item==TOOLS)
-  if(text.isEmpty() || item==BROWSER || item==TOOLS)
-    disableCommand(ID_EDIT_PASTE);
-  else
-    enableCommand(ID_EDIT_PASTE);
+#warning FIXME MDI stuff
+  // int item = s_tab_view->getCurrentTab();
+//   QString text = QApplication::clipboard()->text();
+// //  if(!bContents || item==BROWSER || item==TOOLS)
+//   if(text.isEmpty() || item==BROWSER || item==TOOLS)
+//     disableCommand(ID_EDIT_PASTE);
+//   else
+  //     enableCommand(ID_EDIT_PASTE);
 }
 
 void CKDevelop::slotNewLineColumn()
 {
-  // if edit_widget isn't shown don't proceed
-  if (edit_widget==0l)
-      return;
-  QString str = i18n("Line: %1 Col: %2")
-      .arg(edit_widget->currentLine()+1)
-      .arg(edit_widget->currentColumn()+1);
-  statusBar()->changeItem(str, ID_STATUS_LN_CLM);
+    //    EditorView* editor_view = getCurrentEditorView();
+    
+    // if editor_view->editor isn't shown don't proceed
+    if (editor_view==0)
+	return;
+    QString str = i18n("Line: %1 Col: %2")
+	.arg(editor_view->editor->currentLine()+1)
+	.arg(editor_view->editor->currentColumn()+1);
+    statusBar()->changeItem(str, ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
-  int state;
-  state = (edit_widget) ? edit_widget->undoState() : 0;
-  //undo
-  if(state & 1){
-    enableCommand(ID_EDIT_UNDO);
-  }
-  else{
-    disableCommand(ID_EDIT_UNDO);
-  }
-  //redo
-  if(state & 2){
-    enableCommand(ID_EDIT_REDO);
-  }
-  else{
-    disableCommand(ID_EDIT_REDO);
-  }
-  
+    //    EditorView* editor_view = getCurrentEditorView();
+    if(editor_view !=0){
+	int state;
+	state = (editor_view->editor) ? editor_view->editor->undoState() : 0;
+	//undo
+	if(state & 1){
+	    enableCommand(ID_EDIT_UNDO);
+	}
+	else{
+	    disableCommand(ID_EDIT_UNDO);
+	}
+	//redo
+	if(state & 2){
+	    enableCommand(ID_EDIT_REDO);
+	}
+	else{
+	    disableCommand(ID_EDIT_REDO);
+	}
+    }
 }
 
 
 void CKDevelop::slotURLSelected(KHTMLView* ,QString url,int,QString){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
-    switchToKDevelop();
+      switchToKDevelop();
   showOutputView(false);
-  s_tab_view->setCurrentTab(BROWSER);
+#warning FIXME MDI stuff
+  //  s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
-    browser_widget->showURL(url,true); // with reload if equal
+      browser_widget->showURL(url,true); // with reload if equal
   }
   else{
     browser_widget->showURL(url); // without reload if equal
@@ -2056,8 +2077,9 @@ void CKDevelop::slotDocumentDone( KHTMLView * ){
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
 
-  if (s_tab_view->getCurrentTab()==BROWSER)
-     setMainCaption(BROWSER);
+#warning FIXME MDI stuff
+ //  if (s_tab_view->getCurrentTab()==BROWSER)
+//      setMainCaption(BROWSER);
 
   if (pos!=-1)
    url_wo_ref = actualURL.left(pos);
@@ -2244,6 +2266,7 @@ int CKDevelop::searchToolGetNumber(QString str){
 }
 
 
+
 void CKDevelop::slotProcessExited(KProcess *proc){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
@@ -2330,146 +2353,7 @@ void CKDevelop::slotTTabSelected(int item){
 }
 
 
-void CKDevelop::slotSTabSelected(int item){
-  lasttab = s_tab_view->getCurrentTab();
 
-  // if no edit widget is currently visible, then edit_widget stays 0L
-  edit_widget = 0L;
-
-  if (item == HEADER || item == CPP)
-  {
-     // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
-    enableCommand(ID_FILE_SAVE_AS);
-    enableCommand(ID_FILE_CLOSE);
-
-    enableCommand(ID_FILE_PRINT);
-
-    QString text=QApplication::clipboard()->text();
-    if(text.isEmpty())
-      disableCommand(ID_EDIT_PASTE);
-    else
-      enableCommand(ID_EDIT_PASTE);
-
-    enableCommand(ID_EDIT_INSERT_FILE);
-    enableCommand(ID_EDIT_SEARCH);
-    enableCommand(ID_EDIT_REPEAT_SEARCH);
-    enableCommand(ID_EDIT_REPLACE);
-    enableCommand(ID_EDIT_SPELLCHECK);
-    enableCommand(ID_EDIT_INDENT);
-    enableCommand(ID_EDIT_UNINDENT);
-    enableCommand(ID_EDIT_SELECT_ALL);
-    enableCommand(ID_EDIT_DESELECT_ALL);
-    enableCommand(ID_EDIT_INVERT_SELECTION);
-
-  }
-
-  if (item == HEADER){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-      if ( bDefaultCV)
-				t_tab_view->setCurrentTab(CV);
-      else
-				t_tab_view->setCurrentTab(LFV);
-    }
-    disableCommand(ID_BUILD_COMPILE_FILE);
-    edit_widget = header_widget;
-    edit_widget->setFocus();
-    slotNewUndo();
-    slotNewStatus();
-//    setMainCaption();  is called by slotNewStatus()
-    slotNewLineColumn();
-  }
-  if (item == CPP){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
-      if ( bDefaultCV)
-				t_tab_view->setCurrentTab(CV);
-      else
-				t_tab_view->setCurrentTab(LFV);
-    }
-    if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
-      enableCommand(ID_BUILD_COMPILE_FILE);
-    }
-    edit_widget = cpp_widget;
-    edit_widget->setFocus();
-    slotNewUndo();
-    slotNewStatus();
-//    setMainCaption();  is called by slotNewStatus()
-    slotNewLineColumn();
-  }
-
-  if (item == HEADER || item == CPP)
-  {
-    int state;
-    state = edit_widget->undoState();
-    //undo
-    if(state & 1)
-      enableCommand(ID_EDIT_UNDO);
-    else
-      disableCommand(ID_EDIT_UNDO);
-    //redo
-    if(state & 2)
-      enableCommand(ID_EDIT_REDO);
-    else
-      disableCommand(ID_EDIT_REDO);
-
-    slotMarkStatus();
-/*
-//    QString str = edit_widget->markedText();
-    if (edit_widget->hasMarkedText()){
-      enableCommand(ID_EDIT_CUT);
-      enableCommand(ID_EDIT_COPY);
-    }
-    else{
-      disableCommand(ID_EDIT_CUT);
-      disableCommand(ID_EDIT_COPY);
-    }*/		
-  }
-
-  if(item == BROWSER || item == TOOLS)
-  {
-    disableCommand(ID_BUILD_COMPILE_FILE);
-
-    disableCommand(ID_FILE_SAVE);
-    disableCommand(ID_FILE_SAVE_AS);
-    disableCommand(ID_FILE_CLOSE);
-
-    disableCommand(ID_FILE_PRINT);
-
-    disableCommand(ID_EDIT_UNDO);
-    disableCommand(ID_EDIT_REDO);
-    disableCommand(ID_EDIT_CUT);
-    disableCommand(ID_EDIT_PASTE);
-    disableCommand(ID_EDIT_INSERT_FILE);
-    disableCommand(ID_EDIT_SEARCH);
-    disableCommand(ID_EDIT_REPEAT_SEARCH);
-    disableCommand(ID_EDIT_REPLACE);
-    disableCommand(ID_EDIT_SPELLCHECK);
-    disableCommand(ID_EDIT_INDENT);
-    disableCommand(ID_EDIT_UNINDENT);
-    disableCommand(ID_EDIT_SELECT_ALL);
-    disableCommand(ID_EDIT_DESELECT_ALL);
-    disableCommand(ID_EDIT_INVERT_SELECTION);
-  }
-
-  if(item == BROWSER){
-    if(bAutoswitch)
-      t_tab_view->setCurrentTab(DOC);
-    browser_widget->setFocus();
-
-    if (browser_widget->isTextSelected())
-      enableCommand(ID_EDIT_COPY);
-    else
-      disableCommand(ID_EDIT_COPY);
-
-    setMainCaption(BROWSER);
-  }
-
-  if(item == TOOLS){
-    disableCommand(ID_EDIT_COPY);
-    setMainCaption(TOOLS);
-  }
-  //  s_tab_current = item;
-
-}
 
 void CKDevelop::slotMenuBuffersSelected(int id){
   TEditInfo* info;
@@ -2557,14 +2441,16 @@ void CKDevelop::slotTCurrentTab(int item){
 }
 
 void CKDevelop::slotSCurrentTab(int item){
-    s_tab_view->setCurrentTab(item);
+#warning FIXME MDI stuff
+  //    s_tab_view->setCurrentTab(item);
 }
 
 void CKDevelop::slotToggleLast() {
-  if ( lasttab != s_tab_view->getCurrentTab() )
-    s_tab_view->setCurrentTab( lasttab );
-  else
-    switchToFile( lastfile );
+#warning FIXME MDI stuff
+ //  if ( lasttab != s_tab_view->getCurrentTab() )
+//     s_tab_view->setCurrentTab( lasttab );
+//   else
+//     switchToFile( lastfile );
 }
 
 void CKDevelop::slotBufferMenu( const QPoint& point ) {
@@ -2573,6 +2459,124 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
 
 void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
+}
+void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
+    editor_view = getCurrentEditorView();
+    int type = CPP_HEADER;
+    if(editor_view !=0) {
+	type = CProject::getType(editor_view->editor->getName());
+    }
+
+    if (editor_view != 0){
+	enableCommand(ID_FILE_SAVE_AS);
+	enableCommand(ID_FILE_CLOSE);
+	
+	enableCommand(ID_FILE_PRINT);
+	
+	QString text=QApplication::clipboard()->text();
+	if(text.isEmpty())
+	    disableCommand(ID_EDIT_PASTE);
+	else
+	    enableCommand(ID_EDIT_PASTE);
+	
+	enableCommand(ID_EDIT_INSERT_FILE);
+	enableCommand(ID_EDIT_SEARCH);
+	enableCommand(ID_EDIT_REPEAT_SEARCH);
+	enableCommand(ID_EDIT_REPLACE);
+	enableCommand(ID_EDIT_SPELLCHECK);
+	enableCommand(ID_EDIT_INDENT);
+	enableCommand(ID_EDIT_UNINDENT);
+	enableCommand(ID_EDIT_SELECT_ALL);
+	enableCommand(ID_EDIT_DESELECT_ALL);
+	enableCommand(ID_EDIT_INVERT_SELECTION);
+
+	slotNewUndo();
+	slotNewStatus();
+	slotNewLineColumn();
+    }
+    
+    if (type == CPP_HEADER){
+	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+	    if ( bDefaultCV)
+		t_tab_view->setCurrentTab(CV);
+	    else
+		t_tab_view->setCurrentTab(LFV);
+	}
+	disableCommand(ID_BUILD_COMPILE_FILE);
+    }
+    if (type == CPP_SOURCE){
+	if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+	    if ( bDefaultCV)
+		t_tab_view->setCurrentTab(CV);
+	    else
+		t_tab_view->setCurrentTab(LFV);
+	}
+	if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
+	    enableCommand(ID_BUILD_COMPILE_FILE);
+	}
+    }
+    
+    if (editor_view != 0){
+	int state;
+	state = editor_view->editor->undoState();
+	//undo
+	if(state & 1)
+	    enableCommand(ID_EDIT_UNDO);
+	else
+	    disableCommand(ID_EDIT_UNDO);
+	//redo
+	if(state & 2)
+	    enableCommand(ID_EDIT_REDO);
+	else
+	    disableCommand(ID_EDIT_REDO);
+	
+	slotMarkStatus();
+    }
+    
+    if(browser_view == item){ // browser selected TODO tools
+	cerr << "BROWSER";
+	disableCommand(ID_BUILD_COMPILE_FILE);
+	disableCommand(ID_FILE_SAVE);
+	disableCommand(ID_FILE_SAVE_AS);
+	disableCommand(ID_FILE_CLOSE);
+	
+	disableCommand(ID_FILE_PRINT);
+	
+	disableCommand(ID_EDIT_UNDO);
+	disableCommand(ID_EDIT_REDO);
+	disableCommand(ID_EDIT_CUT);
+	disableCommand(ID_EDIT_PASTE);
+	disableCommand(ID_EDIT_INSERT_FILE);
+	disableCommand(ID_EDIT_SEARCH);
+	disableCommand(ID_EDIT_REPEAT_SEARCH);
+	disableCommand(ID_EDIT_REPLACE);
+	disableCommand(ID_EDIT_SPELLCHECK);
+	disableCommand(ID_EDIT_INDENT);
+	disableCommand(ID_EDIT_UNINDENT);
+	disableCommand(ID_EDIT_SELECT_ALL);
+	disableCommand(ID_EDIT_DESELECT_ALL);
+	disableCommand(ID_EDIT_INVERT_SELECTION);
+	if(bAutoswitch){
+	    t_tab_view->setCurrentTab(DOC);
+	    browser_widget->setFocus();
+	
+	    if (browser_widget->isTextSelected())
+		enableCommand(ID_EDIT_COPY);
+	    else
+		disableCommand(ID_EDIT_COPY);
+    
+	    setMainCaption(BROWSER);
+	}
+	editor_view = 0;
+    }
+    
+    
+    
+    //   if(item == TOOLS){
+    //         disableCommand(ID_EDIT_COPY);
+    //         setMainCaption(TOOLS);
+    //   }
+    //   //  s_tab_current = item;
 }
 
 void CKDevelop::slotToolbarClicked(int item){
@@ -2870,7 +2874,6 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
 
 
 

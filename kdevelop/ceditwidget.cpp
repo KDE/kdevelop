@@ -48,8 +48,8 @@ HlManager hlManager; //highlight manager
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
-  : KWrite(new KWriteDoc(&hlManager),parent,name) 
+CEditWidget::CEditWidget(KApplication*,QWidget* parent,const char* name)
+  : KWrite(new KWriteDoc(&hlManager),parent,name)
 {  
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
@@ -322,7 +322,7 @@ int CEditWidget::getLinePos( const char *buf, uint aLine )
 }
 
 void CEditWidget::enterEvent ( QEvent * e){
-  setFocus();
+    //  setFocus();
 }
 
 void CEditWidget::mousePressEvent(QMouseEvent* event){

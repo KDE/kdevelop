@@ -54,173 +54,175 @@ void CKDevelop::slotProjectImport()
 
 bool CKDevelop::slotProjectClose(){
   // R.Nolden 03.02.99
-  slotStatusMsg(i18n("Closing project..."));
-  TEditInfo* actual_info;
-  QStrList handledNames;
-  bool cont=true;
 
-  log_file_tree->storeState(prj);
+#warning FIXME MDI stuff
+    //   slotStatusMsg(i18n("Closing project..."));
+   //   TEditInfo* actual_info;
+//   QStrList handledNames;
+   bool cont=true;
 
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+//   log_file_tree->storeState(prj);
 
-  for(actual_info=edit_infos.first();cont && actual_info != 0;){
-      TEditInfo *next_info=edit_infos.next();
-      if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
+//   setInfoModified(header_widget->getName(), header_widget->isModified());
+//   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-#warning FIXME: QMessageBox has 3 buttons maximum
-#if 0
-	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
-					   i18n("The project\n\n")+prj->getProjectName()
-					   +i18n("\n\ncontains changed files. Save modified file\n\n")
-					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
-					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
- 				// show the messagea and store result in result:
-	project_close->show();
-    	int result=project_close->result();
-#else
-        int result = 0; // until problem above is resolved
-#endif
+//   for(actual_info=edit_infos.first();cont && actual_info != 0;){
+//       TEditInfo *next_info=edit_infos.next();
+//       if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
+
+// #warning FIXME: QMessageBox has 3 buttons maximum
+// #if 0
+// 	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
+// 					   i18n("The project\n\n")+prj->getProjectName()
+// 					   +i18n("\n\ncontains changed files. Save modified file\n\n")
+// 					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
+// 					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+//  				// show the messagea and store result in result:
+// 	project_close->show();
+//     	int result=project_close->result();
+// #else
+//         int result = 0; // until problem above is resolved
+// #endif
 	
-	// create the save project messagebox
+// 	// create the save project messagebox
 	
-	// what to do
-	if(result==1){  // Yes- only save the actual file
-				// save file as if Untitled and close file
-	  if(isUntitled(actual_info->filename))
-            {
+// 	// what to do
+// 	if(result==1){  // Yes- only save the actual file
+// 				// save file as if Untitled and close file
+// 	  if(isUntitled(actual_info->filename))
+//             {
 
-	    switchToFile(actual_info->filename);
-            handledNames.append(actual_info->filename);
-	    cont=fileSaveAs();
-            next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-	  }
-				// Save file and close it
-	  else{
-//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
-	    switchToFile(actual_info->filename);
-            handledNames.append(actual_info->filename);
-	    slotFileSave();
-            actual_info->modified=edit_widget->isModified();
-            cont=!actual_info->modified; //something went wrong
-	  }
-	}
+// 	    switchToFile(actual_info->filename);
+//             handledNames.append(actual_info->filename);
+// 	    cont=fileSaveAs();
+//             next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+// 	  }
+// 				// Save file and close it
+// 	  else{
+// //	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
+// 	    switchToFile(actual_info->filename);
+//             handledNames.append(actual_info->filename);
+// 	    slotFileSave();
+//             actual_info->modified=edit_widget->isModified();
+//             cont=!actual_info->modified; //something went wrong
+// 	  }
+// 	}
 	
-	if(result==2){   // No - no save but close
-          handledNames.append(actual_info->filename);
-	  actual_info->modified=false;
-          removeFileFromEditlist(actual_info->filename); // immediate remove
-          next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-	}
-	if(result==3){  // Save all
-	  slotFileSaveAll();
-	  break;
-	}
-	if(result==4){ // Cancel
-	  cont=false;
-	  break;
-	}
+// 	if(result==2){   // No - no save but close
+//           handledNames.append(actual_info->filename);
+// 	  actual_info->modified=false;
+//           removeFileFromEditlist(actual_info->filename); // immediate remove
+//           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+// 	}
+// 	if(result==3){  // Save all
+// 	  slotFileSaveAll();
+// 	  break;
+// 	}
+// 	if(result==4){ // Cancel
+// 	  cont=false;
+// 	  break;
+// 	}
 	
-      }  // end actual file close
-     actual_info=next_info;
-    } // end for-loop
+//       }  // end actual file close
+//      actual_info=next_info;
+//     } // end for-loop
 
-  // check if something went wrong with saving
-  if (cont)
-  {
-    for(actual_info=edit_infos.first(); cont && actual_info != 0;
-	actual_info=edit_infos.next())
-    {
-        if (actual_info->modified)
-           cont=false;
-    } // end for-loop
-  }
+//   // check if something went wrong with saving
+//   if (cont)
+//   {
+//     for(actual_info=edit_infos.first(); cont && actual_info != 0;
+// 	actual_info=edit_infos.next())
+//     {
+//         if (actual_info->modified)
+//            cont=false;
+//     } // end for-loop
+//   }
 
-  if(cont){
-    // cancel wasn't pressed and all sources are saved - project closed
-    // clear all widgets
+//   if(cont){
+//     // cancel wasn't pressed and all sources are saved - project closed
+//     // clear all widgets
 
-    if(!bKDevelop){
-      //      switchToKDevelop();
-    }
-    //    disableCommand(ID_TOOLS_KDLGEDIT);
+//     if(!bKDevelop){
+//       //      switchToKDevelop();
+//     }
+//     //    disableCommand(ID_TOOLS_KDLGEDIT);
 
-    QListIterator<Component> it(components);
-    for ( ; it.current(); ++it)
-        (*it)->projectClosed();
-    menu_buffers->clear();
+//     QListIterator<Component> it(components);
+//     for ( ; it.current(); ++it)
+//         (*it)->projectClosed();
+//     menu_buffers->clear();
 
-    header_widget->clear();
-    cpp_widget->clear();
+//     header_widget->clear();
+//     cpp_widget->clear();
 
-    kdlgedit->slotFileSave();
+//     kdlgedit->slotFileSave();
     
-    //clear all edit_infos before starting a new project
-    edit_infos.clear();
+//     //clear all edit_infos before starting a new project
+//     edit_infos.clear();
     
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+//     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+//     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
     
-    // re-inititalize the edit widgets
-    header_widget->setName(i18n("Untitled.h"));
-    cpp_widget->setName(i18n("Untitled.cpp"));
-    TEditInfo* edit1 = new TEditInfo;
-    TEditInfo* edit2 = new TEditInfo;
-    edit1->filename = header_widget->getName();
-    edit2->filename = cpp_widget->getName();
+//     // re-inititalize the edit widgets
+//     header_widget->setName(i18n("Untitled.h"));
+//     cpp_widget->setName(i18n("Untitled.cpp"));
+//     TEditInfo* edit1 = new TEditInfo;
+//     TEditInfo* edit2 = new TEditInfo;
+//     edit1->filename = header_widget->getName();
+//     edit2->filename = cpp_widget->getName();
     
-    edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-    edit1->modified=false;
-    edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-    edit2->modified=false;
-    edit_infos.append(edit1);
-    edit_infos.append(edit2);
+//     edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
+//     edit1->modified=false;
+//     edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
+//     edit2->modified=false;
+//     edit_infos.append(edit1);
+//     edit_infos.append(edit2);
     
-    // set project to false and disable all ID_s related to project=true	
-    prj->writeProject();
-    project=false;
-    prj->valid = false;
-    delete prj;
-    prj = 0;
+//     // set project to false and disable all ID_s related to project=true	
+//     prj->writeProject();
+//     project=false;
+//     prj->valid = false;
+//     delete prj;
+//     prj = 0;
     
-    switchToFile(header_widget->getName());
+//     switchToFile(header_widget->getName());
     
-    disableCommand(ID_FILE_NEW);
-    // doc menu
-    disableCommand(ID_HELP_PROJECT_API);
-    disableCommand(ID_HELP_USER_MANUAL);
-    // build menu
-    setToolMenuProcess(false);  
-    disableCommand(ID_BUILD_STOP);
-    disableCommand(ID_BUILD_AUTOCONF);
-    disableCommand(ID_KDLG_BUILD_GENERATE);
+//     disableCommand(ID_FILE_NEW);
+//     // doc menu
+//     disableCommand(ID_HELP_PROJECT_API);
+//     disableCommand(ID_HELP_USER_MANUAL);
+//     // build menu
+//     setToolMenuProcess(false);  
+//     disableCommand(ID_BUILD_STOP);
+//     disableCommand(ID_BUILD_AUTOCONF);
+//     disableCommand(ID_KDLG_BUILD_GENERATE);
     
-    // prj menu
-    disableCommand(ID_PROJECT_CLOSE);
-    disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-    disableCommand(ID_PROJECT_REMOVE_FILE);
-    disableCommand(ID_PROJECT_NEW_CLASS);
-    disableCommand(ID_PROJECT_FILE_PROPERTIES);
-    disableCommand(ID_PROJECT_OPTIONS);
-    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+//     // prj menu
+//     disableCommand(ID_PROJECT_CLOSE);
+//     disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+//     disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+//     disableCommand(ID_PROJECT_REMOVE_FILE);
+//     disableCommand(ID_PROJECT_NEW_CLASS);
+//     disableCommand(ID_PROJECT_FILE_PROPERTIES);
+//     disableCommand(ID_PROJECT_OPTIONS);
+//     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
-    disableCommand(ID_CV_WIZARD);
-    disableCommand(ID_CV_GRAPHICAL_VIEW);
-	  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-  	disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+//     disableCommand(ID_CV_WIZARD);
+//     disableCommand(ID_CV_GRAPHICAL_VIEW);
+// 	  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+//   	disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
 
-    file_open_popup->clear();
-    file_open_list.clear();
-  }
+//     file_open_popup->clear();
+//     file_open_list.clear();
+//   }
 
-  slotStatusMsg(i18n("Ready."));
-  refreshTrees();
+//   slotStatusMsg(i18n("Ready."));
+//   refreshTrees();
 
-  if (!cont)
-  {
-   setMainCaption();
-  }
+//   if (!cont)
+//   {
+//    setMainCaption();
+//   }
 
   return cont; // false if pressed cancel
 }
@@ -883,31 +885,18 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 }
 
 bool CKDevelop::readProjectFile(QString file){
-  QString str;
-  QString extension;
-
-  prj = new CProject(file);
-  if(!(prj->readProject())){
-    return false;
-  }
-  else {
-      project=true;
-  }
-
-  // if this is a c project then change Untitled.cpp to Untitled.c
-  if (prj->getProjectType()=="normal_c")
-  {
-    TEditInfo *actual_info=0l;
-    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename!=i18n("Untitled.cpp");
-         actual_info=edit_infos.next());
-    if (actual_info)
-    {
-      actual_info->filename = i18n("Untitled.c");
-      menu_buffers->changeItem(actual_info->filename, actual_info->id);
-      if (cpp_widget->getName()==i18n("Untitled.cpp"))
-        cpp_widget->setName(actual_info->filename);
+    QString str;
+    QString extension;
+    
+    prj = new CProject(file);
+    if(!(prj->readProject())){
+	return false;
     }
-   }
+    else {
+	project=true;
+    }
+
+
 
   extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
   str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
@@ -919,7 +908,7 @@ bool CKDevelop::readProjectFile(QString file){
     switchToFile(str);
   }
 
-// TODO: Add function to read last opened files from project to restore project workspace
+  //TODO: Add function to read last opened files from project to restore project workspace
 
   switchToWorkspace(prj->getCurrentWorkspaceNumber());
   // set the menus enable
@@ -979,25 +968,26 @@ bool CKDevelop::readProjectFile(QString file){
 
 
 void  CKDevelop::saveCurrentWorkspaceIntoProject(){
-  TWorkspace current;
-  TEditInfo* actual_info;
+#warning FIXME MDI stuff
+ //  TWorkspace current;
+//   TEditInfo* actual_info;
 
-  // save the current workspace
-  current.id = workspace;
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    current.openfiles.append(actual_info->filename);
-    debug(actual_info->filename);
-  }
-  current.openfiles.removeRef(i18n("Untitled.h"));
-  current.openfiles.removeRef(i18n("Untitled.cpp"));
-  current.openfiles.removeRef(i18n("Untitled.c"));
-  current.header_file = header_widget->getName();
-  current.cpp_file = cpp_widget->getName();
-  current.browser_file =history_list.current();
-  current.show_treeview =view_menu->isItemChecked(ID_VIEW_TREEVIEW);
-  current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
+//   // save the current workspace
+//   current.id = workspace;
+//   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+//     current.openfiles.append(actual_info->filename);
+//     debug(actual_info->filename);
+//   }
+//   current.openfiles.removeRef(i18n("Untitled.h"));
+//   current.openfiles.removeRef(i18n("Untitled.cpp"));
+//   current.openfiles.removeRef(i18n("Untitled.c"));
+//   current.header_file = header_widget->getName();
+//   current.cpp_file = cpp_widget->getName();
+//   current.browser_file =history_list.current();
+//   current.show_treeview =view_menu->isItemChecked(ID_VIEW_TREEVIEW);
+//   current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
 
-  prj->writeWorkspace(current);
+//   prj->writeWorkspace(current);
 }
 
 void CKDevelop::newSubDir(){
