@@ -32,6 +32,7 @@ namespace KParts{
 
 namespace KTextEditor{
     class EditInterface;
+	class MarkInterface;
     class Document;
 }
 
@@ -66,6 +67,7 @@ private:
     CppSupportPart* m_cppSupport;
     KTextEditor::EditInterface* m_editor;
     KTextEditor::Document* m_document;
+	KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
     QString m_filename;
     int m_active;

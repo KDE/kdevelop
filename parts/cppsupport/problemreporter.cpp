@@ -26,11 +26,14 @@
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/markinterface.h>
+#include <ktexteditor/markinterfaceextension.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kurl.h>
 #include <kapplication.h>
+#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -69,13 +72,14 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
       m_cppSupport( part ),
       m_editor( 0 ),
       m_document( 0 ),
+	  m_markIface( 0 ),
       m_bgParser( 0 )
 {
     addColumn( i18n("Level") );
     addColumn( i18n("Problem") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
-    addColumn( i18n("Column") );
+    //addColumn( i18n("Column") );
     setAllColumnsShowFocus( TRUE );
 
     m_timer = new QTimer( this );
@@ -121,7 +125,9 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     if( m_editor )
         connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 
-    m_timer->changeInterval( m_delay );
+	m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
+    
+	m_timer->changeInterval( m_delay );
 }
 
 void ProblemReporter::slotTextChanged()
@@ -158,6 +164,15 @@ void ProblemReporter::reparse()
             delete( i );
     }
 
+	if( m_markIface ){
+		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
+		QPtrListIterator<KTextEditor::Mark> it( marks );
+		while( it.current() ){
+			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType10 );
+			++it;
+		}
+	}
+		
     m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
     m_bgParser->start();
 
@@ -175,6 +190,10 @@ void ProblemReporter::reportError( QString message,
                                    QString filename,
                                    int line, int column )
 {
+	if( m_markIface ){
+		m_markIface->addMark( line-1, KTextEditor::MarkInterface::markType10 );
+	}
+	
     new ProblemItem( this,
                        "error",
                        message.replace( QRegExp("\n"), "" ),
@@ -224,8 +243,14 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
 }
 
-void ProblemReporter::slotPartAdded( KParts::Part* )
+void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
+	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
+	
+	if( !iface )
+		return;
+		
+	iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
 
 }
 

@@ -44,7 +44,7 @@ tokenizer.cpp: tokenizer.l
 	mv tokenizer.cpp.tmp tokenizer.cpp
 
 tokenizer-cc.cpp: tokenizer.l
-	lfex -+ -otokenizer-cc.cpp $(srcdir)/tokenizer-cc.l && cat tokenizer-cc.cpp | \
+	flex -+ -otokenizer-cc.cpp $(srcdir)/tokenizer-cc.l && cat tokenizer-cc.cpp | \
 	sed -e "s,class istream;,#include <iostream\.h>," > tokenizer-cc.cpp.tmp && \
 	mv tokenizer-cc.cpp.tmp tokenizer-cc.cpp
 
