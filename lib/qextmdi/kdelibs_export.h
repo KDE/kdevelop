@@ -4,5 +4,6 @@
 #define KMDI_EXPORT 
 #define KDEUI_EXPORT 
 #define KUTILS_EXPORT
+#define KDEFX_EXPORT
 
 #endif
