@@ -408,7 +408,8 @@ void CppCodeCompletion::slotTextChanged()
     m_ccColumn = 0;
 
     if( (m_pSupport->codeCompletionConfig()->automaticCodeCompletion() &&
-	(ch == "." || ch2 == "->" || ch2 == "::")) ||
+        (!ch.isEmpty() && ch != "\n" && ch != " " && ch != "\t" ) /*
+	(ch == "." || ch2 == "->" || ch2 == "::") */ ) ||
 	(m_pSupport->codeCompletionConfig()->automaticArgumentsHint() && ch == "(") ||
 	(m_pSupport->codeCompletionConfig()->automaticHeaderCompletion() && (ch == "\"" || ch == "<") &&
 	 m_includeRx.search(strCurLine) != -1 ) )
