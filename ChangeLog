@@ -1,3 +1,10 @@
+2000-10-31 Ralf Nolden <nolden@kde.org>
+  * fixed one more bug, there was a ) too much left in the ldadd line in the templates generated since sunday night.
+  * get KDoc from KDE_2_0_BRANCH, this is a fixed version which works with creating the KDE 2 API and the project API
+    (thanks for the info, John)
+  * updated english handbook, translators: see chapter 1 and chapter 8 and change 1.2 into 1.3 where
+    you find it.
+
 2000-10-30 Ralf Nolden <nolden@kde.org>
   * fixed two bugs introduced yesterday: -lkfm removed from KDE2 templates and make error
 

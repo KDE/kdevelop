@@ -96,8 +96,10 @@ can control the Compiler output without having to switch back to the programming
 one may want to continue working on a Qt 1.x /KDE 1.x project before porting to the new API. Mind that the designer has to be included in
 you PATH variable to be automatically called from within KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic
 as well to generate C++ output from your .ui files created with designer. KDevelop takes care of automatically adding .ui files to Makefile.am
-under the _SOURCES line. If you run into problems with including header files of classes that get generated during <CODE>make</CODE>, make sure the ui file
-gets processed before any implementation file that includes a generated class header, i.e. set the ui files in the front of the _SOURCES line if necessary.
+under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
+<P>However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
+*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
+with the Qt desinger.
 <P>
 <P>
 <H4>KAppWizard and the Classtools</H4>

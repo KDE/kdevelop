@@ -66,7 +66,7 @@ regards to KDE 2.0 development.
 
 Improvements were made in the following sections:
 
-KDevelop 1.2:
+<bf>KDevelop 1.2:</bf>
 <itemize>
 <item>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,
 <item>CVS support for most needed functions such as adding, removing, updating and committing files and directories,
@@ -76,16 +76,39 @@ KDevelop 1.2:
 directly
 </itemize>
 
-KDevelop 1.3:
+<bf>KDevelop 1.3:</bf>
 
 <itemize>
-<item>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction class and the configure script searches
+<item>rewritten templates for Qt 2.x, now based on Qt-2.2.1 only as they make use of the QAction
+class and the configure script searches
 for the <bf>uic</bf> which processes Qt designer files
-<item>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also using the uic for desinger files
-<item>general support for the new Qt designer in the New File dialog, LFV folders and automatic opening on selection in the file trees.
-<item>several bugfixes regarding bugs in the kwrite code and KDevelop itself
-</itemize>
-
+<item>rewritten templates for KDE 2.0 which make use of the new API now fully and who are also
+using the uic for desinger files
+<item>support for the new <bf>Qt Designer</bf> in KDE 2.0/Qt-2.2.x projects.
+<item>the new <bf>Qt Linguist</bf> and its tools coming with it to create internationalization files
+for Qt applications is fully supported. The handling of internationalization is done the same way as
+for KDE project with KDevelop, just that you have to use tr() instead of i18(). Create an example Qt
+application to see the details. Also mind that all Qt utilities have to be in your $PATH variable,
+usually this is $QTDIR/bin.
+<item>all KDE 2.0 and Qt 2.2.x templates make use of KDE´s
+autoconf/automake system, this enables developers to convert their automatic configuration system to
+KDE easily if they decide to use KDE features for their application.
+<item>KDevelop ships with three additional scripts to make your life easier; these are installed in
+$prefix/bin (usually $KDEDIR/bin):
+	<itemize>
+	<item><bf>extractrc:</bf> this is a script that is originally located in the KDE CVS module kdesdk
+(KDE Software Development Kit). It is called automatically for creating the pot-file of your
+application and extracts the strings from your XML resource file that is used to build the GUI in
+KDE 2.0 applications
+	<item><bf>kimport:</bf> kimport is a perl script that enables you to create a *.kdevprj (KDevelp
+Project File) from almost any automake/autoconf compatible already existing project. Usage: go to
+your project directory and call kimport &gt; &lt;yourprojectname&gt;.kdevprj. This will redirect the
+output to a projectfile that you can load into KDevelop.
+	<item><bf>kdevdlg2ui:</bf> converts an existing *.kdevdlg file that has been created with
+KDevelop´s Dialogeditor into a *.ui file that can be edited with Qt´s designer.
+	</itemize>
+<item>several bugfixes regarding bugs in the
+kwrite code and KDevelop itself </itemize>
 
 Any comments about the IDE, its documentation or feature requests are welcome.
 
@@ -275,7 +298,7 @@ If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <t
 <sect>Starting KDevelop
 <p>
 If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Development"&rarr"KDevelop 1.2". As KDevelop supports <idx/KDE/-Mime-types, you can
+"K"&rarr"Development"&rarr"KDevelop 1.3". As KDevelop supports <idx/KDE/-Mime-types, you can
 also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the 
 <idx/KDE/ File Manager which will start KDevelop and load the project.
 Under other window managers, open a console and type:
@@ -627,8 +650,11 @@ The current release makes use of the Qt designer for all KDE 2.0/Qt 2.x project 
 one may want to continue working on a Qt 1.x /KDE 1.x project before porting to the new API. Mind that the designer has to be included in
 you PATH variable to be automatically called from within KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic
 as well to generate C++ output from your .ui files created with designer. KDevelop takes care of automatically adding .ui files to Makefile.am
-under the _SOURCES line. If you run into problems with including header files of classes that get generated during <tt/make/, make sure the ui file
-gets processed before any implementation file that includes a generated class header, i.e. set the ui files in the front of the _SOURCES line if necessary.
+under the _SOURCES line while dependencies are automatically resolved by the am_edit script.
+
+However, KDevelop comes with a converter script (kdlgdesinger) that helps you port existing
+*.kdevdlg files created with KDevelop´s internal dialogeditor to *.ui files that can be processed
+with the Qt desinger.
 
 
 <sect1><idx/KAppWizard/ and the Classtools
@@ -2178,8 +2204,8 @@ remove the "Hello World" line in main() and construct your <idx/classes/ the sam
 Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
 required libraries as well as setting the according installation path in the KDevelop Setup dialog (see <ref 
 id="General Configuration" name="General Configuration">) before generating a project to ensure everything 
-will work automatically. The KDevelop 1.2 Appwizard adds a GNOME-template so that developers wanting to use KDevelop to create
-GTK+-based applications can do so as well.
+will work automatically. The KDevelop 1.3 Appwizard adds a GNOME-template so that developers wanting
+to use KDevelop to create GTK+-based applications can do so as well.
 
 Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
@@ -2280,9 +2306,18 @@ Requires the QextMDI library, see <htmlurl url="http://www.geocities.com/gigafal
 name="http://www.geocities.com/gigafalk/qextmdi.htm"> for more information.
 </itemize>
 
-Further, the Application Wizard offers a template for creating GNOME-compliant applications with the GTK+ C-library with a ready-to-run
-mainwindow containing a menubar, toolbar and statusbar.
+Mind that the Qt 2 normal and Qt 2 MDI template make use of the KDE autoconf/automake system. This
+enables you to convert your existing Qt-only application into a KDE application easily as the
+automatic checks for needed KDE libraries and header files can be added with little change on the
+project; see section <ref id="Project Hacking" name="Project Hacking"> for more information.
 
+These two Qt templates also enable you to internationalize the GUI of your application by
+integrating Qt Linguist. The way to handle KDevelop for adding languages is identical to KDE
+projects.
+
+Further, the Application Wizard offers a template for creating GNOME-compliant
+applications with the GTK+ C-library with a ready-to-run mainwindow containing a menubar, toolbar
+and statusbar.
 The two C and C++ -Application types offer a framework for creating commandline applications.
 
 And last but not least you can create an empty projekt, e.g. to work with existing projects.
@@ -2349,12 +2384,17 @@ After the new file has been created, the project file will be updated as well as
 To add a complete class to your project, you can construct a new class with the Classgenerator which is invoked by "<idx/New Class/" from
 the Project-menu.
 
-In case you have an existing project and you want to add certain <idx/classes/ that you want to re-use in your project, select "Add
-File(s) to Project..." from the <idx/"Project"-menu/. Select "Add existing files", which will open a dialog to let you specify which
-files will be added to the project and the destination directory. Mind that the files will be copied into the specified directory and
-added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
-case you want to add e.g. <idx/pixmaps/ that have to be installed by the end-user, you should update the File Properties for the added
-file and specify the installation path (see <ref id="Setting Project File Options" name="Setting Project File Options">
+In case you have an existing project and you want to add certain <idx/classes/ that you want to
+re-use in your project, select "Add File(s) to Project..." from the <idx/"Project"-menu/. Select
+"Add existing files", which will open a dialog to let you specify which files will be added to the
+project and the destination directory. Mind that the files will be copied into the specified
+directory and added to the project. You should call "Make" after adding sources; then your added
+files will be included in the build-process. In case you want to add e.g. <idx/pixmaps/ that have to
+be installed by the end-user, you should update the File Properties for the added file and specify
+the installation path (see <ref id="Setting Project File Options" name="Setting Project File
+Options">).
+
+
 
 To add a file to the project that is already in the project directory, go to the <idx/RFV/, where all project-included files are
 displayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
@@ -2421,6 +2461,42 @@ you to support their language. You will find a list of email-addresses of the tr
 this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl url="programming/index-11.html" name="The KDevelop
 Programming Handbook"> where questions about internationalization are covered again.
 
+<sect2>Internationalization of KDE 2.0 Applications
+<p>
+KDE 2.0 projects have a slightly different handling of adding po files and keeping them up-to-date
+than KDE 1.x projects.
+
+The first thing to watch out is that when generating a new KDE 2.0 project, make package-messages is
+called from the base directory of your project in opposition to make messages in the project´s
+subdirectory in KDE 1.x applications. While merging strings is done with calling make merge in the
+po directory in KDE 1, this is called automatically <tt>within</tt> make package-messages -
+resulting in an error message even while creating your project with the application wizard.
+
+Another issue to watch out is that KDevelop installs a script called <bf>extractrc</bf> into your
+$KDEDIR/bin directory. This script is originally located in the KDE CVS module kdesdk/scripts and is
+called automatically within make package-messages, if your Makefile.am contains the line
+<tt>messages:rc.cpp</tt> instead of <tt>messages:</tt>. This is the default for the KDE 2 normal and
+KDE 2 MDI project type, the KDE 2 mini only uses <tt>messages:</tt>.
+
+What it does actually is extracting the strings out of your XML resource file to build the
+application´s GUI, which is called &lt;yourapp&gt;ui.rc, and stores these stings in a temporary
+rc.cpp file that gets processed while building the pot-file to include these strings into your
+internationalization.
+
+However, if you intend to build a KDE 2.0 application based on the KDE 2 mini template, change the
+Makefile.am in this section, there are already comments in it what to change where.
+
+<sect2>Internationalization of Qt 2.2.x applications
+<p>
+Since Qt includes the tr() method together with the QTranslator class in Qt 2.x, you can easily
+internationalize your Qt-only project as well. KDevelop 1.3 supports this by using the tools that
+come with Qt´s Linguist: lupdate and lrelease. The strings used with tr() are read into
+language-dependent *.ts files by lupdate; lrelease then converts the translated XML file to a file
+*.qm which stores the translations as binary information. You can add each language automatically
+within KDevelop, just use the same way as for KDE projects. The *.ts files are stored in the
+LFV-Folder "Translations" automatically and Linugist is called when selecting them in the LFV and
+the RFV.
+
 <sect1>Extending the Project Documentation<label id="Extending the Project Documentation">
 <p>
 All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
@@ -2450,7 +2526,7 @@ filename and enter CTRL+V to insert the clipboard contents (which was the instal
 way to specify the installation path. For more options about specifying installation destinations, see <htmlurl
 url="programming/index-14.html" name="The KDevelop Programming Handbook">.
 
-<sect1>Project Hacking<label id="Project Hacking">
+<sect>Project Hacking<label id="Project Hacking">
 <p>
 When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the <idx/Makefile/s. To change any settings for
@@ -2460,30 +2536,77 @@ the <idx/Makefile.am/ macros and add all changes in the <idx/Makefile.am/'s afte
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
 this will prevent using KDevelop for any changes related to project configuration.
 
-Another hint may be of good use when developing KDE 2.0/ Qt 2.2.x applications using the Qt designer to create user interfaces. The ui files
-get added by KDevelop to the _SOURCES line in the Makefile.am of the subdirectory containing the ui file. This may result in the scenario that
-you want to include the header file of the generated dialog which may not exist yet when your file that includes it gets compiled as the <bf>uic</bf>
-(Qt user interface compiler) generates the C++ output. Therefore, the order of source files in the _SOURCES line may be important - if you
-run into problems, remove the ui file from the project (don´t delete it!), add the sourcefile that needs to include a generated header to the project and then
-re-add the ui file to the project.
+<sect1>Project Type Definitions
+<p>
+KDevelops´ project files stores the project information in the style of readable KDE config files.
+You can find the according sections therefore easily you´re looking for. Now, to convert an existing
+project to another project typ can shorten the time to port an existing KDE 1.x project over to KDE
+2 (which counts as well for Qt). Just change the following section with the according project tpe:
+
+<tscreen><verb>
+[General]
+author=Ralf Nolden
+project_type=normal_kde2
+</verb></tscreen>
+
+Valid project tpes are:
+<itemize>
+<item><tt>normal_empty</tt>: Custom Project
+<item><tt>normal_kde</tt>: KDE 1.x Normal (SDI) Project
+<item><tt>mini_kde</tt>: KDE 1.x Mini Project
+<item><tt>normalogl_kde</tt>: KDE 1.x OpenGL Project
+<item><tt>normal_kde2</tt>: KDE 2.0 Normal (SDI) Project
+<item><tt>mini_kde2</tt>: KDE 2.0 Mini Project
+<item><tt>mdi_kde2</tt>: KDE 2.0 MDI Project
+<item><tt>normal_qt</tt>: Qt-1.44 Project (SDI)
+<item><tt>normal_qt2</tt>: Qt-2.2.x Project (SDI)
+<item><tt>mdi_qt2</tt>: Qt-2.2.x Project (MDI, uses QWorkspace)
+<item><tt>mdi_qextmdi</tt>: Qt-2.x Project (uses the QextMDI library)
+</itemize>
+
+<sect1>Qt Designer <p>
+Another hint may be of good use when developing KDE 2.0/ Qt 2.2.x applications
+using the Qt designer to create user interfaces. The ui files get added by KDevelop to the _SOURCES
+line in the Makefile.am of the subdirectory containing the ui file. This may result in the scenario
+that you want to include the header file of the generated dialog which may not exist yet when your
+file that includes it gets compiled as the <bf>uic</bf> (Qt user interface compiler) generates the
+C++ output. However, the am_edit file will resolve all dependencies for you, so you don´t have to
+worry about that.
+
+<sect1>Converting *.kdevdlg files
+<p>
+KDevelop 1.3 comes with a converter script <tt>kdevdlg2ui</tt> to turn already constructed dialogs
+with it´s internal dialogeditor into a *.ui file. However, you should be aware that you may have
+to re-inherit from your class that is generated by Qt´s uic and add your implementations from your
+former KDevelop dialog there. The converter script is mainly used to convert the dialogs´ user
+interface, not your methods, signals or slots. So, re-editing the converted *.ui file may be
+necessary as well as inheriting from it´s generated class. Existing KDE 1.x applications can´t make
+use of *.ui files, therefore generate a new framework for your KDE 2/Qt2 application and move over
+your implemtation, *.kdevprj and Makefile.am´s of your subdirectories.
+
 
 <sect>Compiler and <idx/Linker/ Flags for Projects
 <p>
-Each new project contains all needed options for the <idx/Compiler/ and <idx/Linker/ as well as general settings. By default, your project
-is set to use <idx/debugging/ by the -g flag, and <idx/warnings/ are set to the standard, -Wall. This ensures you can debug your application
-and detect constructions that may cause program <idx/errors/. For some applications, you would need additional <idx/Compiler/ or <idx/Linker/ flags,
-especially if you're using libraries that are not currently included by the <idx/Linker/. Then you need to update the project by
-configuring the correct settings with the Project Options dialog. See <ref id="Build Settings" name="Build Settings"> for more
-information how and where to set Compiler Options, Warnings and <idx/Linker/ Options.
+Each new project contains all needed options for the <idx/Compiler/ and <idx/Linker/ as well as
+general settings. By default, your project is set to use <idx/debugging/ by the -g flag, and
+<idx/warnings/ are set to the standard, -Wall. This ensures you can debug your application and
+detect constructions that may cause program <idx/errors/. For some applications, you would need
+additional <idx/Compiler/ or <idx/Linker/ flags, especially if you're using libraries that are not
+currently included by the <idx/Linker/. Then you need to update the project by configuring the
+correct settings with the Project Options dialog. See <ref id="Build Settings" name="Build
+Settings"> for more information how and where to set Compiler Options, Warnings and <idx/Linker/
+Options.
 
 <sect>External Projects
 <p>
-Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
-empty project file with your project name, version and type information as well as your name and email address.  Then copy all your
-compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
-will be copied into your project directory and the <idx/Makefile.am/'s are updated.   Please change all <idx/Makefile.am/ entries existing
-before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
-compiled and installed after the conversion to ensure the project's consistency.
+Existing automake/autoconf compatible projects (which make use of Makefile.am´s to store their
+information) can be used together with KDevelop by creating a KDevelop project file with the
+<bf>kimport</bf> script. After the project file has been build up, you should edit it with your
+favorite editor and set the project type accoding to your needs, see <ref id="Project Hacking"
+name="Project Hacking"> for more details about available project types.
+Mind that you should deselect "modify Makefiles" in the Project Options after you loaded your
+project the first time.
+
 
 <chapt>Build Settings<label id="Build Settings">
 <p>

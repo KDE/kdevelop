@@ -772,7 +772,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     if (ldadd.contains(" $(LIB_QT) ")) {
       l_qt->setChecked(true);
       pos=ldadd.find("$(LIB_QT)");
-      ldadd.remove(pos,8);
+      ldadd.remove(pos,9);
       //cerr << "-lqt OK" << endl;
     }
     else {
