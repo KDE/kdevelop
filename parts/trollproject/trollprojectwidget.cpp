@@ -823,7 +823,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (!item->configuration.m_target.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("INCLUDEPATH");
-  if (!item->configuration.m_includepath.count())
+  if (item->configuration.m_includepath.count())
       Buffer->setValues("INCLUDEPATH",item->configuration.m_includepath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("DEFINES");
   if (item->configuration.m_defines.count())
