@@ -22,6 +22,7 @@
 
 #include "caddclassattributedlg.h"
 #include <kmsgbox.h>
+#include <kapp.h>
 
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -42,7 +43,7 @@ CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name 
     okBtn( this, "okBtn" ),
     cancelBtn( this, "cancelBtn" )
 {
-  setCaption( "Add member variable" );
+  setCaption( i18n("Add member variable") );
 
   setWidgetValues();
   setCallbacks();
@@ -58,7 +59,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   modifierGrp.setFontPropagation( QWidget::NoChildren );
   modifierGrp.setPalettePropagation( QWidget::NoChildren );
   modifierGrp.setFrameStyle( 49 );
-  modifierGrp.setTitle( "Modifiers" );
+  modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
 
   varGrp.setGeometry( 10, 10, 260, 230 );
@@ -69,7 +70,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   varGrp.setFontPropagation( QWidget::NoChildren );
   varGrp.setPalettePropagation( QWidget::NoChildren );
   varGrp.setFrameStyle( 49 );
-  varGrp.setTitle( "Variable" );
+  varGrp.setTitle( i18n("Variable") );
   varGrp.setAlignment( 1 );
 
   accessGrp.setGeometry( 10, 250, 260, 50 );
@@ -80,7 +81,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   accessGrp.setFontPropagation( QWidget::NoChildren );
   accessGrp.setPalettePropagation( QWidget::NoChildren );
   accessGrp.setFrameStyle( 49 );
-  accessGrp.setTitle( "Access" );
+  accessGrp.setTitle( i18n("Access") );
   accessGrp.setAlignment( 1 );
 
   typeLbl.setGeometry( 20, 30, 40, 20 );
@@ -90,7 +91,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   typeLbl.setBackgroundMode( QWidget::PaletteBackground );
   typeLbl.setFontPropagation( QWidget::NoChildren );
   typeLbl.setPalettePropagation( QWidget::NoChildren );
-  typeLbl.setText( "Type:" );
+  typeLbl.setText( i18n("Type:") );
   typeLbl.setAlignment( 289 );
   typeLbl.setMargin( -1 );
 
@@ -113,7 +114,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   nameLbl.setBackgroundMode( QWidget::PaletteBackground );
   nameLbl.setFontPropagation( QWidget::NoChildren );
   nameLbl.setPalettePropagation( QWidget::NoChildren );
-  nameLbl.setText( "Name:" );
+  nameLbl.setText( i18n("Name:") );
   nameLbl.setAlignment( 289 );
   nameLbl.setMargin( -1 );
 
@@ -136,7 +137,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   docLbl.setBackgroundMode( QWidget::PaletteBackground );
   docLbl.setFontPropagation( QWidget::NoChildren );
   docLbl.setPalettePropagation( QWidget::NoChildren );
-  docLbl.setText( "Documentation:" );
+  docLbl.setText( i18n("Documentation:") );
   docLbl.setAlignment( 289 );
   docLbl.setMargin( -1 );
 
@@ -213,9 +214,10 @@ void CAddClassAttributeDlg::setWidgetValues()
   okBtn.setBackgroundMode( QWidget::PaletteBackground );
   okBtn.setFontPropagation( QWidget::NoChildren );
   okBtn.setPalettePropagation( QWidget::NoChildren );
-  okBtn.setText( "OK" );
+  okBtn.setText( i18n("OK") );
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
+	okBtn.setDefault( TRUE );
 
   cancelBtn.setGeometry( 170, 370, 100, 30 );
   cancelBtn.setMinimumSize( 0, 0 );
@@ -224,7 +226,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
   cancelBtn.setFontPropagation( QWidget::NoChildren );
   cancelBtn.setPalettePropagation( QWidget::NoChildren );
-  cancelBtn.setText( "Cancel" );
+  cancelBtn.setText( i18n("Cancel") );
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
 
@@ -276,11 +278,15 @@ void CAddClassAttributeDlg::OK()
 {
 
   if( strlen( typeEdit.text() ) == 0 )
-    KMsgBox::message( this, "No type",
-                      "You have to specify a variable type." );
+    KMsgBox::message( this, i18n("No type"),
+                      i18n("You have to specify a variable type.") );
   else if( strlen( nameEdit.text() ) == 0 )
-    KMsgBox::message( this, "No name",
-                      "You have to specify a variable name." );
+    KMsgBox::message( this, i18n("No name"),
+                      i18n("You have to specify a variable name.") );
   else
     accept();
 }
+
+
+
+

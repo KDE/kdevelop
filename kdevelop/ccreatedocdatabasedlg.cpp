@@ -215,7 +215,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	ok_button->setBackgroundMode( QWidget::PaletteBackground );
 	ok_button->setFontPropagation( QWidget::NoChildren );
 	ok_button->setPalettePropagation( QWidget::NoChildren );
-	ok_button->setText( "OK" );
+	ok_button->setText( i18n("OK") );
 	ok_button->setAutoRepeat( FALSE );
 	ok_button->setAutoResize( FALSE );
 	ok_button->setDefault(true);
@@ -328,11 +328,13 @@ void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
   
 }
 void CCreateDocDatabaseDlg::slotDirButtonClicked(){
-  QString name=KFileBaseDialog::getDirectory(dir_edit->text(),this,"Directory");
+  QString name=KFileBaseDialog::getDirectory(dir_edit->text(),this,i18n("Select Directory..."));
   if(!name.isEmpty()){
     dir_edit->setText(name);
   }
 }
+
+
 
 
 

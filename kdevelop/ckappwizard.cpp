@@ -106,7 +106,7 @@ void CKAppWizard::initPages(){
   applications->setAllColumnsShowFocus( FALSE );
   applications->setItemMargin( 1 );
   applications->setRootIsDecorated( TRUE );
-  applications->addColumn( "Applications", -1 );
+  applications->addColumn( i18n("Applications"), -1 );
   applications->setColumnWidthMode( 0, QListView::Maximum );
   applications->setColumnAlignment( 0, 1 );
   applications->setSorting (-1,FALSE);
@@ -134,11 +134,11 @@ void CKAppWizard::initPages(){
   apphelp->setAlignment( 289 );
   apphelp->setMargin( -1 );
   
-  othersentry = new QListViewItem (applications, "others");
+  othersentry = new QListViewItem (applications, i18n("Others"));
   othersentry->setExpandable (true);
   othersentry->setOpen (TRUE);
   othersentry->sortChildItems (0,FALSE);
-  customprojitem = new QListViewItem (othersentry,"custom project");
+  customprojitem = new QListViewItem (othersentry,i18n("custom project"));
   
   /*	gtkentry = new QListViewItem (applications, "GTK");
 	gtkentry->setExpandable (true);
@@ -147,28 +147,28 @@ void CKAppWizard::initPages(){
 	gtkminiitem = new QListViewItem (gtkentry,"Mini");
 	gtknormalitem = new QListViewItem (gtkentry,"Normal");
   */
-  ccppentry = new QListViewItem (applications, "Terminal");
+  ccppentry = new QListViewItem (applications, i18n("Terminal"));
   ccppentry->setExpandable (true);
   ccppentry->setOpen (TRUE);
   ccppentry->sortChildItems (0,FALSE);
-  cppitem = new QListViewItem (ccppentry,"C++");
+  cppitem = new QListViewItem (ccppentry,i18n("C++"));
   //citem = new QListViewItem (ccppentry,"C");
 
-  qtentry = new QListViewItem (applications, "QT");
+  qtentry = new QListViewItem (applications, i18n("Qt"));
   qtentry->setExpandable (true);
   qtentry->setOpen (TRUE);
   qtentry->sortChildItems (0,FALSE);
   //qtminiitem = new QListViewItem (qtentry,"Mini");
-  qtnormalitem = new QListViewItem (qtentry,"Normal");
+  qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
   
-  kdeentry = new QListViewItem (applications,"KDE");
+  kdeentry = new QListViewItem (applications,i18n("KDE"));
   kdeentry->setExpandable (true);
   kdeentry->setOpen (TRUE);
   kdeentry->sortChildItems (0,FALSE);
   //komitem = new QListViewItem (kdeentry,"KOM");
   //corbaitem = new QListViewItem (kdeentry,"Corba");
-  kdeminiitem = new QListViewItem (kdeentry,"Mini");
-  kdenormalitem = new QListViewItem (kdeentry,"Normal");
+  kdeminiitem = new QListViewItem (kdeentry,i18n("Mini"));
+  kdenormalitem = new QListViewItem (kdeentry,i18n("Normal"));
   
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
@@ -455,52 +455,56 @@ void CKAppWizard::initPages(){
   
   KQuickHelp::add(name,
 		  KQuickHelp::add(nameline,
-				  i18n("Enter the Project's name here. This is\n"
-				       "also the directory name under which your Project\n"
+				  i18n("Insert your project name here. This is\n"
+				       "also the name of the directory where your Project\n"
 				       "will be created.")));
   KQuickHelp::add(directory,
 		  KQuickHelp::add(directoryline,
 				  KQuickHelp::add(directoryload,
-						  i18n("Enter the toplevel-directory the project\n"
-						       "will be stored. This <b>must</b> be an\n"
-						       "<b>existing directory !!"))));
+						  i18n("Enter the toplevel-directory of your project.\n"
+						       "This <b>must</b> be an <b>existing directory !!"))));
   KQuickHelp::add(versionnumber,
 		  KQuickHelp::add(versionline,
-				  i18n("Enter the Version number here.\n"
-				       "The number will be used in the about-dialog\n"
-				       "and in the main widget's topbar.")));
+				  i18n("Set the initial version number of your project here.\n"
+				       "The number will be used in the about-dialog as well as for\n"
+				       "determining the project's package numbering for distribution.")));
   KQuickHelp::add(authorname,
 		  KQuickHelp::add(authorline,
-				  i18n("Enter your name here for the about dialog.\n"
-				       "You may also consider using the Team-name.")));
+				  i18n("Insert your name or the development team name here. This will be used\n"
+				  			"for adding your name as the author to all generated files of your project.")));
   KQuickHelp::add(email,
 		  KQuickHelp::add(emailline,
-				  i18n("Enter your email adress here, so users\n"
-				       "can send you bug reports easiely ;-))")));
+				  i18n("Enter your email adress here. This will be\n"
+				  "used for all generated files.")));
   
-  KQuickHelp::add(apidoc, i18n("Check this if you wish to have your API\n"
-			       "Documentation generated automatically"));
-  KQuickHelp::add(userdoc, i18n("Check this if you wish a general User\n"
-				"Documentation to be generated automatically."));
-  KQuickHelp::add(lsmfile, i18n("Check this to create a lsm-File"));
-  KQuickHelp::add(gnufiles, i18n("Check this if you wish to have\n"
-				"the GNU-Standard files created like\n"
-				 "INSTALL and README"));
-  KQuickHelp::add(progicon, i18n("Check this to create a sample icon for\n"
-				 "your program. We suggest to do so and just\n"
-				 "change it's view by using KIconEdit."));
-  KQuickHelp::add(miniicon, i18n("Check this to create a sample mini-icon\n"
-				 "for your program. We suggest to do so and just\n"
-				 "change it's view by using KIconEdit."));
-  KQuickHelp::add(datalink, i18n("Check this if you wish to have\n"
-				 "a .kdelnk for you application in the\n"
-				 "K-Menu.  The default is the Applications-\n"
-				 "submenu. You can change this to other menus\n"
-				 "by changing the file properties afterwards."));
-  KQuickHelp::add(iconload, i18n("Select this if you wish another\n"
-				 "already created icon to be used."));
-  KQuickHelp::add(miniload, i18n("Select this if you wish another\n"
-				 "already created mini-icon to be used."));
+  KQuickHelp::add(apidoc, i18n("This lets you generate a HTML-based documentation set\n"
+  													"for your project classes including cross-reference to\n"
+  													"the used libraries."));
+  KQuickHelp::add(userdoc, i18n("This will generate a preset documentation handbook in HTML\n"
+  																"by an SGML file included with your package."));
+  KQuickHelp::add(lsmfile, i18n("This will create a lsm-file for your project. The Linux Software Map\n"
+  														"is a file generally used for projects for distribution purpose and contains\n"
+  														"a short description of the project including the requirements on the side of\n"
+  														"the end-user."));
+  KQuickHelp::add(gnufiles, i18n("This will generate a set of GNU standard files for your project.\n"
+  																"These will give the end-user of the sourcepackage an overview about\n"
+  																"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
+  																"protocol your changes."));
+  KQuickHelp::add(progicon, i18n("This will add a program icon to your project that represents\n"
+  														"your application."));
+  KQuickHelp::add(miniicon, i18n("This will add a mini program icon to your project that is used\n"
+  															"for window-manager popup menus."));
+  KQuickHelp::add(datalink, i18n("This will add a KDE link file which is installed in\n"
+  															"the KDE panel of the end-user. By default, your application's\n"
+  															"link file will be installed in the Applications-menu. You can\n"
+  															"change this destination by editing the installation properties\n"
+  															"for the link file later."));
+  KQuickHelp::add(iconload, i18n("This lets you select another icon for your program\n"
+  														"than the sample program icon provided by the Application\n"
+  														"Wizard."));
+  KQuickHelp::add(miniload, i18n("This lets you select another mini-icon for your program\n"
+  														"than the sample program icon provided by the Application\n"
+  														"Wizard."));
   
   
   
@@ -572,11 +576,12 @@ void CKAppWizard::initPages(){
   hedit->setReadOnly( FALSE );
   hedit->setOverwriteMode( FALSE );
   
-  QToolTip::add(hload,i18n("you can load another headertemplate here"));
-  QToolTip::add(hnew,i18n("you can clear the headertemplate here"));
-  QToolTip::add(hedit,i18n("you can edit your headertemplate here"));
+  QToolTip::add(hload,i18n("Press this button to select an\n"
+  													"existing header template file"));
+  QToolTip::add(hnew,i18n("Clears the pre-set headertemplate"));
+  QToolTip::add(hedit,i18n("Edit your headertemplate here"));
   
-  KQuickHelp::add(hheader, i18n("Check this if you want a standard\n"
+  KQuickHelp::add(hheader, i18n("Use a standard\n"
 				"headertemplate for your headerfiles"));
   
   

@@ -530,12 +530,12 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_6->insert( printToFileButton );
 
   previewButton = new QPushButton( mainwidget, "previewButton" );
-  previewButton->setText(("Preview"));
+  previewButton->setText(i18n("Preview"));
   previewButton->setGeometry( 20, 440, 100, 30 );
   connect(previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
 
   okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(("OK"));
+  okButton->setText(i18n("OK"));
   okButton->setGeometry( 370, 440, 100, 30 );
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
 
@@ -1300,5 +1300,6 @@ void CPrintDlg::loadSettings() {
   formatCombBox->setCurrentItem(settings->readNumEntry("OutputFormat"));
   defaultCombBox->setCurrentItem(settings->readNumEntry("Default"));
 }
+
 
 

@@ -22,6 +22,7 @@
 
 #include "caddclassmethoddlg.h"
 #include <kmsgbox.h>
+#include <kapp.h>
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -43,7 +44,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     okBtn( this, "okBtn" ),
     cancelBtn( this, "cancelBtn" )
 {
-  setCaption( "Add member function" );
+  setCaption( i18n("Add member function") );
 
   setWidgetValues();
   setCallbacks();
@@ -59,7 +60,7 @@ void CAddClassMethodDlg::setWidgetValues()
   modifierGrp.setFontPropagation( QWidget::NoChildren );
   modifierGrp.setPalettePropagation( QWidget::NoChildren );
   modifierGrp.setFrameStyle( 49 );
-  modifierGrp.setTitle( "Modifiers" );
+  modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
 
   functionGrp.setGeometry( 10, 10, 260, 230 );
@@ -70,7 +71,7 @@ void CAddClassMethodDlg::setWidgetValues()
   functionGrp.setFontPropagation( QWidget::NoChildren );
   functionGrp.setPalettePropagation( QWidget::NoChildren );
   functionGrp.setFrameStyle( 49 );
-  functionGrp.setTitle( "Function" );
+  functionGrp.setTitle( i18n("Function") );
   functionGrp.setAlignment( 1 );
 
   accessGrp.setGeometry( 10, 250, 260, 50 );
@@ -81,7 +82,7 @@ void CAddClassMethodDlg::setWidgetValues()
   accessGrp.setFontPropagation( QWidget::NoChildren );
   accessGrp.setPalettePropagation( QWidget::NoChildren );
   accessGrp.setFrameStyle( 49 );
-  accessGrp.setTitle( "Access" );
+  accessGrp.setTitle( i18n("Access") );
   accessGrp.setAlignment( 1 );
 
   typeLbl.setGeometry( 20, 30, 40, 20 );
@@ -91,7 +92,7 @@ void CAddClassMethodDlg::setWidgetValues()
   typeLbl.setBackgroundMode( QWidget::PaletteBackground );
   typeLbl.setFontPropagation( QWidget::NoChildren );
   typeLbl.setPalettePropagation( QWidget::NoChildren );
-  typeLbl.setText( "Type:" );
+  typeLbl.setText( i18n("Type:") );
   typeLbl.setAlignment( 289 );
   typeLbl.setMargin( -1 );
 
@@ -114,7 +115,7 @@ void CAddClassMethodDlg::setWidgetValues()
   declLbl.setBackgroundMode( QWidget::PaletteBackground );
   declLbl.setFontPropagation( QWidget::NoChildren );
   declLbl.setPalettePropagation( QWidget::NoChildren );
-  declLbl.setText( "Declaration:" );
+  declLbl.setText( i18n("Declaration:") );
   declLbl.setAlignment( 289 );
   declLbl.setMargin( -1 );
 
@@ -137,7 +138,7 @@ void CAddClassMethodDlg::setWidgetValues()
   docLbl.setBackgroundMode( QWidget::PaletteBackground );
   docLbl.setFontPropagation( QWidget::NoChildren );
   docLbl.setPalettePropagation( QWidget::NoChildren );
-  docLbl.setText( "Documentation:" );
+  docLbl.setText( i18n("Documentation:") );
   docLbl.setAlignment( 289 );
   docLbl.setMargin( -1 );
 
@@ -225,9 +226,10 @@ void CAddClassMethodDlg::setWidgetValues()
   okBtn.setBackgroundMode( QWidget::PaletteBackground );
   okBtn.setFontPropagation( QWidget::NoChildren );
   okBtn.setPalettePropagation( QWidget::NoChildren );
-  okBtn.setText( "OK" );
+  okBtn.setText( i18n("OK") );
   okBtn.setAutoRepeat( FALSE );
   okBtn.setAutoResize( FALSE );
+	okBtn.setDefault( TRUE );
 
   cancelBtn.setGeometry( 170, 370, 100, 30 );
   cancelBtn.setMinimumSize( 0, 0 );
@@ -236,7 +238,7 @@ void CAddClassMethodDlg::setWidgetValues()
   cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
   cancelBtn.setFontPropagation( QWidget::NoChildren );
   cancelBtn.setPalettePropagation( QWidget::NoChildren );
-  cancelBtn.setText( "Cancel" );
+  cancelBtn.setText( i18n("Cancel") );
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
 
@@ -299,11 +301,15 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
 void CAddClassMethodDlg::OK()
 {
   if( strlen( typeEdit.text() ) == 0 )
-    KMsgBox::message( this, "No type",
-                      "You have to specify a function type." );
+    KMsgBox::message( this, i18n("No type"),
+                      i18n("You have to specify a function type.") );
   else if( strlen( declEdit.text() ) == 0 )
-    KMsgBox::message( this, "No name",
-                      "You have to specify a function name." );
+    KMsgBox::message( this, i18n("No name"),
+                      i18n("You have to specify a function name.") );
   else
     accept();
 }
+
+
+
+

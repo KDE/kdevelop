@@ -125,7 +125,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( "OK" );
+  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
 	ok_button->setDefault( TRUE );
@@ -155,7 +155,7 @@ CAddExistingFileDlg::~CAddExistingFileDlg(){
 }
 void CAddExistingFileDlg::sourceButtonClicked(){
  
-  QStrList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,"Source File(s)...") );
+  QStrList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
   files.setAutoDelete(true);
 
   QString comp_str;
@@ -169,7 +169,7 @@ void CAddExistingFileDlg::sourceButtonClicked(){
 
 }
 void CAddExistingFileDlg::destinationButtonClicked(){
- QString name=KDirDialog::getDirectory(destination_edit->text(),this,"Destination Directory");
+ QString name=KDirDialog::getDirectory(destination_edit->text(),this,i18n("Destination Directory"));
  if(!name.isEmpty()){
     destination_edit->setText(name);
   }
@@ -200,6 +200,7 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
 
 
 

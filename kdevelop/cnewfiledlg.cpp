@@ -40,7 +40,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_linux->setCurrentItem(0);
 
   list_manuals = new QListBox( tab, "list_manuals" );
-  list_manuals->insertItem("english (.sgml)");
+  list_manuals->insertItem(i18n("english (.sgml)"));
   list_manuals->setMultiSelection( FALSE );
   list_manuals->setCurrentItem(0);
 
@@ -422,5 +422,6 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
 
 

@@ -1,3 +1,6 @@
+1999-05-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed all i18n() that were missing
+	
 1999-05-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added bookmarks menu for the browser window
 	* added delayed popups for browser history on toolbar back and forward buttons

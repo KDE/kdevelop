@@ -240,13 +240,13 @@ void CClassToolDlg::readIcons()
 
 void CClassToolDlg::setTooltips()
 {
-  QToolTip::add( &parentsBtn, "View parents" );
-  QToolTip::add( &childrenBtn, "View children" );
-  QToolTip::add( &clientsBtn, "View clients" );
-  QToolTip::add( &suppliersBtn, "View suppliers" );
-  QToolTip::add( &attributesBtn, "View attributes" );
-  QToolTip::add( &methodsBtn, "View methods" );
-  QToolTip::add( &virtualsBtn, "View virtual methods" );
+  QToolTip::add( &parentsBtn, i18n("Show parents") );
+  QToolTip::add( &childrenBtn, i18n("Show children") );
+  QToolTip::add( &clientsBtn, i18n("Show clients") );
+  QToolTip::add( &suppliersBtn, i18n("Show suppliers") );
+  QToolTip::add( &attributesBtn, i18n("Show attributes") );
+  QToolTip::add( &methodsBtn, i18n("Show methods") );
+  QToolTip::add( &virtualsBtn, i18n("Show virtual methods") );
 }
 
 void CClassToolDlg::setCallbacks()
@@ -679,4 +679,5 @@ void CClassToolDlg::OK()
 {
   accept();
 }
+
 

@@ -653,8 +653,8 @@ void CClassView::slotClassNew()
 
 void CClassView::slotClassDelete()
 {
-  if( KMsgBox::yesNo( this, "Delete class", 
-                      "Are you sure you want to delete this class?",
+  if( KMsgBox::yesNo( this, i18n("Delete class"),
+                      i18n("Are you sure you want to delete this class?"),
                       KMsgBox::QUESTION ) == 1 )
   {
     KMsgBox::message( this, "Not implemented",
@@ -696,8 +696,8 @@ void CClassView::slotMethodNew()
 
 void CClassView::slotMethodDelete()
 {
-  if( KMsgBox::yesNo( this, "Delete method", 
-                      "Are you sure you want to delete this method?",
+  if( KMsgBox::yesNo( this, i18n("Delete method"),
+                      i18n("Are you sure you want to delete this method?"),
                       KMsgBox::QUESTION ) == 1 )
   {
     KMsgBox::message( this, "Not implemented",
@@ -839,3 +839,4 @@ void CClassView::slotMoveToFolder()
 //     debug( "Moving items." );
 //   }
 }
+

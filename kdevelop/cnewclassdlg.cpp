@@ -109,16 +109,16 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 
   public_button = new QRadioButton( this, "public_button" );
   public_button->setGeometry( 275, 100, 100, 30 );
-  public_button->setText( i18n("public") );
+  public_button->setText( "public" );
   public_button->setChecked(true);
   
   protected_button = new QRadioButton( this, "protected_button" );
   protected_button->setGeometry( 275, 130, 90, 30 );
-  protected_button->setText( i18n("protected") );
+  protected_button->setText("protected" );
   
   private_button = new QRadioButton( this, "private_button" );
   private_button->setGeometry( 275, 160, 100, 30 );
-  private_button->setText( i18n("private") );
+  private_button->setText( "private" );
 	
 
   add_group = new QButtonGroup( this, "add_group" );
@@ -161,7 +161,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 
   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setGeometry( 130, 340, 100, 30 );
-  ok_button->setText("OK");
+  ok_button->setText(i18n("OK"));
 	ok_button->setDefault( TRUE );
 
   cancel_button = new QPushButton( this, "cancel_button" );
@@ -357,5 +357,6 @@ void CNewClassDlg::slotImplEditChanged(const char*){
     impl_modified = true;
   }
 }
+
 
 

@@ -50,7 +50,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_severity_group->setFontPropagation( QWidget::NoChildren );
 	qtarch_severity_group->setPalettePropagation( QWidget::NoChildren );
 	qtarch_severity_group->setFrameStyle( 49 );
-	qtarch_severity_group->setTitle( "Severity" );
+	qtarch_severity_group->setTitle( i18n("Severity") );
 	qtarch_severity_group->setAlignment( 1 );
 
 	QButtonGroup* qtarch_priority_group;
@@ -63,7 +63,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_priority_group->setFontPropagation( QWidget::NoChildren );
 	qtarch_priority_group->setPalettePropagation( QWidget::NoChildren );
 	qtarch_priority_group->setFrameStyle( 49 );
-	qtarch_priority_group->setTitle( "Priority" );
+	qtarch_priority_group->setTitle( i18n("Priority") );
 	qtarch_priority_group->setAlignment( 1 );
 
 	name_edit = new QLineEdit( w, "name_edit" );
@@ -101,7 +101,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_name_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_name_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_name_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_name_label->setText( "Your Name :" );
+	qtarch_name_label->setText( i18n("Your Name :") );
 	qtarch_name_label->setAlignment( 289 );
 	qtarch_name_label->setMargin( -1 );
 
@@ -114,7 +114,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_email_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_email_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_email_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_email_label->setText( "Your E-mail Address :" );
+	qtarch_email_label->setText( i18n("Your E-mail Address :") );
 	qtarch_email_label->setAlignment( 289 );
 	qtarch_email_label->setMargin( -1 );
 
@@ -127,7 +127,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_subject_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_subject_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_subject_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_subject_label->setText( "Subject :" );
+	qtarch_subject_label->setText( i18n("Subject :") );
 	qtarch_subject_label->setAlignment( 289 );
 	qtarch_subject_label->setMargin( -1 );
 
@@ -152,7 +152,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_class_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_class_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_class_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_class_label->setText( "Error Class :" );
+	qtarch_class_label->setText( i18n("Error Class :") );
 	qtarch_class_label->setAlignment( 289 );
 	qtarch_class_label->setMargin( -1 );
 
@@ -166,10 +166,10 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	class_combo->setPalettePropagation( QWidget::AllChildren );
 	class_combo->setSizeLimit( 10 );
 	class_combo->setAutoResize( FALSE );
-	class_combo->insertItem( "software bug" );
-	class_combo->insertItem( "documentation bug" );
-	class_combo->insertItem( "change-request" );
-	class_combo->insertItem( "how do I ..." );
+	class_combo->insertItem( i18n("software bug") );
+	class_combo->insertItem( i18n("documentation bug") );
+	class_combo->insertItem( i18n("change-request") );
+	class_combo->insertItem( i18n("how do I ...") );
 
 	priority_low = new QRadioButton( w, "priority_low" );
 	priority_low->setGeometry( 30, 280, 150, 30 );
@@ -179,7 +179,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	priority_low->setBackgroundMode( QWidget::PaletteBackground );
 	priority_low->setFontPropagation( QWidget::NoChildren );
 	priority_low->setPalettePropagation( QWidget::NoChildren );
-	priority_low->setText( "low" );
+	priority_low->setText( i18n("low") );
 	priority_low->setAutoRepeat( FALSE );
 	priority_low->setAutoResize( FALSE );
 	priority_low->setChecked( TRUE );
@@ -192,7 +192,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	priority_medium->setBackgroundMode( QWidget::PaletteBackground );
 	priority_medium->setFontPropagation( QWidget::NoChildren );
 	priority_medium->setPalettePropagation( QWidget::NoChildren );
-	priority_medium->setText( "medium" );
+	priority_medium->setText( i18n("medium") );
 	priority_medium->setAutoRepeat( FALSE );
 	priority_medium->setAutoResize( FALSE );
 
@@ -204,7 +204,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	priority_high->setBackgroundMode( QWidget::PaletteBackground );
 	priority_high->setFontPropagation( QWidget::NoChildren );
 	priority_high->setPalettePropagation( QWidget::NoChildren );
-	priority_high->setText( "high" );
+	priority_high->setText( i18n("high") );
 	priority_high->setAutoRepeat( FALSE );
 	priority_high->setAutoResize( FALSE );
 
@@ -216,7 +216,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	severity_harmless->setBackgroundMode( QWidget::PaletteBackground );
 	severity_harmless->setFontPropagation( QWidget::NoChildren );
 	severity_harmless->setPalettePropagation( QWidget::NoChildren );
-	severity_harmless->setText( "harmless" );
+	severity_harmless->setText( i18n("harmless") );
 	severity_harmless->setAutoRepeat( FALSE );
 	severity_harmless->setAutoResize( FALSE );
 	severity_harmless->setChecked( TRUE );
@@ -229,7 +229,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	severity_serious->setBackgroundMode( QWidget::PaletteBackground );
 	severity_serious->setFontPropagation( QWidget::NoChildren );
 	severity_serious->setPalettePropagation( QWidget::NoChildren );
-	severity_serious->setText( "serious" );
+	severity_serious->setText( i18n("serious") );
 	severity_serious->setAutoRepeat( FALSE );
 	severity_serious->setAutoResize( FALSE );
 
@@ -241,7 +241,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	severity_critical->setBackgroundMode( QWidget::PaletteBackground );
 	severity_critical->setFontPropagation( QWidget::NoChildren );
 	severity_critical->setPalettePropagation( QWidget::NoChildren );
-	severity_critical->setText( "critical" );
+	severity_critical->setText( i18n("critical") );
 	severity_critical->setAutoRepeat( FALSE );
 	severity_critical->setAutoResize( FALSE );
 
@@ -255,19 +255,19 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	location_combo->setPalettePropagation( QWidget::AllChildren );
 	location_combo->setSizeLimit( 10 );
 	location_combo->setAutoResize( FALSE );
-	location_combo->insertItem( "I don´t know" );
-	location_combo->insertItem( "class tree" );
-	location_combo->insertItem( "logical file tree" );
-	location_combo->insertItem( "documentation tree" );
-	location_combo->insertItem( "editor" );
-	location_combo->insertItem( "dialog editor" );
-	location_combo->insertItem( "documentation browser" );
-	location_combo->insertItem( "app-wizard" );
-	location_combo->insertItem( "build process" );
-	location_combo->insertItem( "output window" );
-	location_combo->insertItem( "configuration" );
-	location_combo->insertItem( "project management" );
-	location_combo->insertItem( "installation process" );
+	location_combo->insertItem( i18n("I don´t know") );
+	location_combo->insertItem( i18n("class tree") );
+	location_combo->insertItem( i18n("logical file tree") );
+	location_combo->insertItem( i18n("documentation tree") );
+	location_combo->insertItem( i18n("editor") );
+	location_combo->insertItem( i18n("dialog editor") );
+	location_combo->insertItem( i18n("documentation browser") );
+	location_combo->insertItem( i18n("app-wizard") );
+	location_combo->insertItem( i18n("build process") );
+	location_combo->insertItem( i18n("output window") );
+	location_combo->insertItem( i18n("configuration") );
+	location_combo->insertItem( i18n("project management") );
+	location_combo->insertItem( i18n("installation process") );
 
 	QLabel* qtarch_location_label;
 	qtarch_location_label = new QLabel( w, "location_label" );
@@ -278,7 +278,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_location_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_location_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_location_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_location_label->setText( "Error Location :" );
+	qtarch_location_label->setText( i18n("Error Location :") );
 	qtarch_location_label->setAlignment( 289 );
 	qtarch_location_label->setMargin( -1 );
 
@@ -306,7 +306,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_environment_group->setFontPropagation( QWidget::NoChildren );
 	qtarch_environment_group->setPalettePropagation( QWidget::NoChildren );
 	qtarch_environment_group->setFrameStyle( 49 );
-	qtarch_environment_group->setTitle( "Environment" );
+	qtarch_environment_group->setTitle( i18n("Environment") );
 	qtarch_environment_group->setAlignment( 1 );
 
 	QLabel* qtarch_kdevelop_version_label;
@@ -318,7 +318,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_kdevelop_version_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_kdevelop_version_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_kdevelop_version_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_kdevelop_version_label->setText( "KDevelop version :" );
+	qtarch_kdevelop_version_label->setText( i18n("KDevelop version :") );
 	qtarch_kdevelop_version_label->setAlignment( 289 );
 	qtarch_kdevelop_version_label->setMargin( -1 );
 
@@ -357,7 +357,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_kde_version_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_kde_version_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_kde_version_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_kde_version_label->setText( "KDE version :" );
+	qtarch_kde_version_label->setText( i18n("KDE version :") );
 	qtarch_kde_version_label->setAlignment( 289 );
 	qtarch_kde_version_label->setMargin( -1 );
 
@@ -383,7 +383,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_qt_version_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_qt_version_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_qt_version_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_qt_version_label->setText( "QT version :" );
+	qtarch_qt_version_label->setText( i18n("QT version :") );
 	qtarch_qt_version_label->setAlignment( 289 );
 	qtarch_qt_version_label->setMargin( -1 );
 
@@ -409,7 +409,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_os_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_os_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_os_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_os_label->setText( "OS / distribution :" );
+	qtarch_os_label->setText( i18n("OS / distribution :") );
 	qtarch_os_label->setAlignment( 289 );
 	qtarch_os_label->setMargin( -1 );
 
@@ -422,7 +422,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_compiler_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_compiler_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_compiler_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_compiler_label->setText( "Compiler" );
+	qtarch_compiler_label->setText( i18n("Compiler") );
 	qtarch_compiler_label->setAlignment( 289 );
 	qtarch_compiler_label->setMargin( -1 );
 
@@ -444,7 +444,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 
   //+++++++++ TAB: Problem description+++++++++++++++++++++++++++++++++++++
   QWidget* w3=new QWidget(this,"Problem description");
-  KQuickHelp::add(w3, i18n("Fill in all information,\nwe need to help you."));
+  KQuickHelp::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
 
 	description_mledit = new QMultiLineEdit( w3, "description_mledit" );
 	description_mledit->setGeometry( 20, 40, 360, 130 );
@@ -467,7 +467,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_description_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_description_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_description_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_description_label->setText( "Bug Description :" );
+	qtarch_description_label->setText( i18n("Bug Description :") );
 	qtarch_description_label->setAlignment( 289 );
 	qtarch_description_label->setMargin( -1 );
 
@@ -480,7 +480,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_repeat_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_repeat_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_repeat_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_repeat_label->setText( "How to repeat the error :" );
+	qtarch_repeat_label->setText( i18n("How to repeat the error :") );
 	qtarch_repeat_label->setAlignment( 289 );
 	qtarch_repeat_label->setMargin( -1 );
 
@@ -505,7 +505,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_fix_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_fix_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_fix_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_fix_label->setText( "Perhaps a bugfix or workaround ?" );
+	qtarch_fix_label->setText( i18n("Perhaps a bugfix or workaround ?") );
 	qtarch_fix_label->setAlignment( 289 );
 	qtarch_fix_label->setMargin( -1 );
 
@@ -652,3 +652,4 @@ bool CBugReportDlg::sendEmail() {
 
   return true;
 }
+

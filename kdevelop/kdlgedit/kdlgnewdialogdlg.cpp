@@ -44,7 +44,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	qwidget_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	qwidget_radio_button->setFontPropagation( QWidget::NoChildren );
 	qwidget_radio_button->setPalettePropagation( QWidget::NoChildren );
-	qwidget_radio_button->setText( i18n("QWidget") );
+	qwidget_radio_button->setText( "QWidget" );
 	qwidget_radio_button->setAutoRepeat( FALSE );
 	qwidget_radio_button->setAutoResize( FALSE );
 	
@@ -56,7 +56,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	qdialog_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	qdialog_radio_button->setFontPropagation( QWidget::NoChildren );
 	qdialog_radio_button->setPalettePropagation( QWidget::NoChildren );
-	qdialog_radio_button->setText( i18n("QDialog") );
+	qdialog_radio_button->setText( "QDialog" );
 	qdialog_radio_button->setAutoRepeat( FALSE );
 	qdialog_radio_button->setAutoResize( FALSE );
 	qdialog_radio_button->setChecked( TRUE );
@@ -69,7 +69,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	qframe_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	qframe_radio_button->setFontPropagation( QWidget::NoChildren );
 	qframe_radio_button->setPalettePropagation( QWidget::NoChildren );
-	qframe_radio_button->setText( i18n("QFrame") );
+	qframe_radio_button->setText( "QFrame" );
 	qframe_radio_button->setAutoRepeat( FALSE );
 	qframe_radio_button->setAutoResize( FALSE );
 
@@ -81,7 +81,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	qtabdialog_radio_button->setBackgroundMode( QWidget::PaletteBackground );
 	qtabdialog_radio_button->setFontPropagation( QWidget::NoChildren );
 	qtabdialog_radio_button->setPalettePropagation( QWidget::NoChildren );
-	qtabdialog_radio_button->setText(i18n("QTabDialog") );
+	qtabdialog_radio_button->setText( "QTabDialog" );
 	qtabdialog_radio_button->setAutoRepeat( FALSE );
 	qtabdialog_radio_button->setAutoResize( FALSE );
 	qtabdialog_radio_button->setEnabled(false);
@@ -499,6 +499,7 @@ QString  KDlgNewDialogDlg::getBaseClassHeader(){
   if(custom_radio_button->isChecked()) return custom_header_edit->text();
   return QString("qdialog.h");
 }
+
 
 
 

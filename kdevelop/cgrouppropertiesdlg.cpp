@@ -85,7 +85,7 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
   ok_button->setPalettePropagation( QWidget::NoChildren );
-  ok_button->setText( "OK" );
+  ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   
@@ -113,3 +113,4 @@ CGroupPropertiesDlg::~CGroupPropertiesDlg(){
 void CGroupPropertiesDlg::slotOK(){
   accept();
 }
+

@@ -631,7 +631,7 @@ void CKDevInstall::slotAuto() // proceed >>
   if(kdbg){
     kdbg_str="kdbg"+found+"\n";
 		tools_exe.append("kdbg");
-		tools_entry.append(i18n("K&Debugger"));
+		tools_entry.append("K&Debugger");
 	}
   else
     kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
@@ -650,7 +650,7 @@ void CKDevInstall::slotAuto() // proceed >>
 		tools_entry.append("K&Paint");
 	}
   else
-    kpaint_str="KPaint"+not_found+"\n";
+    kpaint_str=i18n("KPaint")+not_found+"\n";
 
   QString ktranslator_str;
   if(ktranslator){
@@ -664,22 +664,22 @@ void CKDevInstall::slotAuto() // proceed >>
   if(glimpse)
     glimpse_str="Glimpse"+found+"\n";
   else
-    glimpse_str="Glimpse"+not_found+" -- search functionality will not be provide\nd";
+    glimpse_str="Glimpse"+not_found+ i18n(" -- search functionality will not be provided\n");
   QString glimpseindex_str;
   if(glimpseindex)
     glimpseindex_str="Glimpseindex"+found+"\n";
   else
-    glimpseindex_str="Glimpseindex"+not_found+" -- search functionality will not be provided\n";
+    glimpseindex_str="Glimpseindex"+not_found+ i18n(" -- search functionality will not be provided\n");
   QString perl_str;
   if(perl)
     perl_str="Perl"+found+"\n";
   else
-    perl_str="Perl"+not_found+" -- generation of new frame applications will not be possible\n";
+    perl_str="Perl"+not_found+ i18n(" -- generation of new frame applications will not be possible\n");
   QString print_str;
   if(a2ps || enscript)
-    print_str="a2ps / enscript"+found+"  -- printing available\n";
+    print_str="a2ps / enscript"+found+ i18n("  -- printing available\n");
   else
-    print_str="a2ps / enscript"+not_found+" -- printing can only use lpr\n";
+    print_str="a2ps / enscript"+not_found+ i18n(" -- printing can only use lpr\n");
 
 
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
@@ -805,6 +805,8 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
+
 
 
 

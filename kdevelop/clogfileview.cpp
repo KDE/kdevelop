@@ -65,21 +65,21 @@ CLogFileView::~CLogFileView(){
  *-----------------------------------------------------------------*/
 void CLogFileView::initPopups()
 {
-  file_pop.setTitle("File");
+  file_pop.setTitle(i18n("File"));
   file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
   file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()));
   file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disk..."),this,SLOT(slotFileDelete()));
   file_pop.insertSeparator();
   file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
   
-  group_pop.setTitle("Group");
+  group_pop.setTitle(i18n("Group"));
   group_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
   group_pop.insertSeparator();
   group_pop.insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()));
   group_pop.insertSeparator();
   group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()));
 
-  project_pop.setTitle("Project");
+  project_pop.setTitle(i18n("Project"));
   project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
   project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
   project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
@@ -399,3 +399,4 @@ void CLogFileView::storeState(CProject* prj){
   }
   prj->setLFVOpenGroups(opengroups);
 }
+

@@ -504,7 +504,7 @@ void CFilePrintDlg::init() {
   currentButton->setChecked(true);
 
   okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(("OK"));
+  okButton->setText(i18n("OK"));
   okButton->setGeometry( 370, 440, 100, 30 );
 
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
@@ -860,6 +860,7 @@ void CFilePrintDlg::loadSettings() {
   settings->readListEntry("FileList",fileList);
   selfChoosenFilesMultiLine->insertStrList(&fileList);
 }
+
 
 
 

@@ -209,7 +209,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     ok_button->setBackgroundMode( QWidget::PaletteBackground );
     ok_button->setFontPropagation( QWidget::NoChildren );
     ok_button->setPalettePropagation( QWidget::NoChildren );
-    ok_button->setText( "OK" );
+    ok_button->setText( i18n("OK") );
     ok_button->setAutoRepeat( FALSE );
     ok_button->setAutoResize( FALSE );
     ok_button->setDefault( true );
@@ -447,13 +447,13 @@ void CUpdateKDEDocDlg::slotDelRecentRadioButtonClicked(){
   doc_label->setEnabled(false);
 }
 void CUpdateKDEDocDlg::slotDocButtonClicked(){
-  QString name = KDirDialog::getDirectory(doc_edit->text(),this,"New KDE Documentation Directory...");
+  QString name = KDirDialog::getDirectory(doc_edit->text(),this,i18n("New KDE Documentation Directory..."));
   if(!name.isEmpty()){
     doc_edit->setText(name);
   }
 }
 void CUpdateKDEDocDlg::slotSourceButtonClicked(){
-  QString dir = KDirDialog::getDirectory(source_edit->text(),this,"KDE Libs Directory...");
+  QString dir = KDirDialog::getDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
   if(!dir.isEmpty()){
     QString kde_testfile=dir+"/kfile/kdir.cpp"; // test if the path really is the kdelibs path
     if(QFileInfo(kde_testfile).exists()){
@@ -467,15 +467,4 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
