@@ -144,7 +144,7 @@ bool Parser::skipUntilDeclaration()
     
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "-->token = " << lex->lookAhead(0).toString() << endl;
 
-    lex->nextToken();
+    // lex->nextToken();
     while( !lex->lookAhead(0).isNull() ){
 	switch( lex->lookAhead(0) ){
 	case ';':
@@ -2418,6 +2418,8 @@ bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBlockDeclaration()" << endl;
     switch( lex->lookAhead(0) ) {
+    case Token_typedef:
+	return parseTypedef( node );
     case Token_using:
 	return parseUsing( node );
     case Token_asm:
