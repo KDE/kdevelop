@@ -1,3 +1,6 @@
+2004-03-22 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Restructured CppSupportPart::parseProject()
+
 2004-03-17 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Extended diffpart to also handle FileContext and dirty files.
     * Updated FileList. Now supports filestate feedback and has a context menu for file operations.
