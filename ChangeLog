@@ -1,3 +1,10 @@
+2002-04-04  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* reenabled the RMB menu
+	* fixed the widget deletion when parts are closed
+	* mark the active document in the menu
+	* renamed the "Buffer" menu "Window"
+	* removed the MDI window menu
+	
 2002-04-01  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* added qextmdi to gideon
 	* made UI model configurable
