@@ -1,3 +1,11 @@
+2002-04-30  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Implemented fileFilters() for cppsupport
+	* Methods and classes can now be added 
+	  when no file is loaded
+	* Don't parse headers twice, now that they
+	  are included in AutoProjectPart::allFiles()
+
 2002-04-29  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Display header files in automake manager

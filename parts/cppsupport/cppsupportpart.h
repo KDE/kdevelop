@@ -58,16 +58,19 @@ public:
     void slotTypeOfExpression();
      * meant for the project's own classes
      */
-    QString pcsFileExt( ){ return ".pcs"; };
+    static QString pcsFileExt()
+    { return ".pcs"; };
     
     /**
      * return pre-parsing File Extension
      * meant for extern includes
      */
-    QString ppFileExt ( ){ return "-pp.pcs"; };    
+    static QString ppFileExt()
+    { return "-pp.pcs"; };    
     
 protected:
     virtual KDevLanguageSupport::Features features();
+    virtual QStringList fileFilters();
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);
 
@@ -76,6 +79,7 @@ private slots:
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
+    void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
@@ -86,15 +90,15 @@ private slots:
     void slotCompleteText();
     void slotExpandText();
     void slotTypeOfExpression();
+    void slotEnableCodeHinting(bool setEnabled, bool setOutputView);
+    void slotEnableCodeCompletion(bool setEnabled);
 
     // Internal
     void initialParse();
     
-    // daniel
-    void projectConfigWidget( KDialogBase* );
-    
 private:
-    void maybeParse(const QString fileName, ClassStore* pStore, CClassParser* pParser );
+    QStringList fileExtensions();
+    void maybeParse(const QString fileName, ClassStore *store, CClassParser *parser);
     // daniel
     /**
      * parses a directory incl. subdirectories if wanted
@@ -103,7 +107,8 @@ private:
      * param bar progressbar
      * param label for debug output on screen
      */
-    void parseDirectory( const QString directory, const bool withSubDirectories, QProgressBar* bar, QLabel* label );
+    void parseDirectory(const QString &directory, bool withSubDirectories,
+                        QProgressBar *bar, QLabel *label);
     
     QString asHeaderCode(ParsedMethod *pm);
     QString asCppCode(ParsedMethod *pm);
@@ -118,12 +123,6 @@ private:
     
     bool m_bEnableCC;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;
-   
-    KTextEditor::EditInterface *m_pEditIface;
-
-public slots:
-    void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
-    void slotEnableCodeCompletion( bool setEnabled );
 };
 
 #endif

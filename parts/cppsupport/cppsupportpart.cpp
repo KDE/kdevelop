@@ -120,7 +120,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_pParser      = 0;
     m_pCompletion  = 0;
-    m_pEditIface   = 0;
 
     withcpp = false;
     if ( args.count() == 1 && args[ 0 ] == "Cpp" )
@@ -207,6 +206,7 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 	     this, SLOT( slotEnableCodeCompletion( bool ) ) );
 }
 
+
 void CppSupportPart::activePartChanged(KParts::Part *part)
 {
     bool enabled = false;
@@ -216,8 +216,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     if (doc) {
         QFileInfo fi(doc->url().path());
         QString ext = fi.extension();
-        ;
-        if (QStringList::split(',', "c,cc,cpp,cxx,C,h,hxxi,hpp").contains(ext))
+        if (fileExtensions().contains(ext))
             enabled = true;
     }
 
@@ -225,8 +224,6 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
     actionCollection()->action("edit_expand_text")->setEnabled(enabled);
     actionCollection()->action("edit_type_of_expression")->setEnabled(enabled);
-
-    m_pEditIface = dynamic_cast<KTextEditor::EditInterface*>(doc);
 }
 
 
@@ -317,45 +314,29 @@ static QString findHeader(const QStringList &list, const QString &header)
 
 void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (context->hasType("editor")) {
-        const EditorContext *econtext = static_cast<const EditorContext*>(context);
-        QString str = econtext->linestr();
-	if (str.isEmpty())
-	  return;
-
-        QRegExp re("[ \t]*#include *[<\"](.*)[>\"][ \t]*");
-        if (re.exactMatch(str) &&
-            !findHeader(project()->allFiles(), re.cap(1)).isEmpty()) {
-            popupstr = re.cap(1);
-	    popup->insertSeparator();
-            popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
-                               this, SLOT(slotGotoIncludeFile()) );
-        }
+    if (!context->hasType("editor"))
+        return;
+    
+    const EditorContext *econtext = static_cast<const EditorContext*>(context);
+    QString str = econtext->linestr();
+    if (str.isEmpty())
+        return;
+    
+    QRegExp re("[ \t]*#include *[<\"](.*)[>\"][ \t]*");
+    if (re.exactMatch(str) &&
+        !findHeader(project()->allFiles(), re.cap(1)).isEmpty()) {
+        popupstr = re.cap(1);
+        popup->insertSeparator();
+        popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
+                           this, SLOT(slotGotoIncludeFile()) );
     }
 }
 
 
-void
-CppSupportPart::maybeParse(const QString fileName, ClassStore* pStore, CClassParser* pParser )
+void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClassParser *parser)
 {
-    QFileInfo fi( fileName );
-    QString   path = fi.filePath( );
-    QString   ext  = fi.extension( );
-
-    if( ext == "cpp" || ext == "cc" || ext == "cxx" ){
-        QString headerFileName = path.left( path.length( ) - ext.length( ) ) + "h";
-
-        pStore->removeWithReferences( headerFileName );
-        pParser->parse( headerFileName );
-
-        pStore->removeWithReferences( fileName );
-        pParser->parse( fileName );
-    }
-    else if( ext == "h" ){
-        pStore->removeWithReferences( fileName );
-        pParser->parse( fileName );
-    }
-
+    store->removeWithReferences(fileName);
+    parser->parse(fileName);
 }
 
 
@@ -517,8 +498,8 @@ CppSupportPart::initialParse( )
 }
 
 // better idea needed for not always calling with QProgressBar & QLabel
-inline void
-CppSupportPart::parseDirectory( QString startDir, bool withSubDir, QProgressBar* bar, QLabel* label )
+void CppSupportPart::parseDirectory(const QString &startDir, bool withSubDir,
+                                    QProgressBar *bar, QLabel *label )
 {
     QFileInfo* fi = 0;
     QDir       dirObject;
@@ -642,6 +623,24 @@ KDevLanguageSupport::Features CppSupportPart::features()
 }
 
 
+QStringList CppSupportPart::fileFilters()
+{
+    if (withcpp)
+        return QStringList::split(",", "*.c,*.cpp,*.cxx,*.cc,*.C,*.h,*.hxx,*.hpp");
+    else
+        return QStringList::split(",", "*.c,*.h");
+}
+
+
+QStringList CppSupportPart::fileExtensions()
+{
+    if (withcpp)
+        return QStringList::split(",", "c,cpp,cxx,cc,C,h,hxx,hpp");
+    else
+        return QStringList::split(",", "c,h");
+}
+
+
 void CppSupportPart::slotNewClass()
 {
     CppNewClassDialog dlg(this);
@@ -651,11 +650,6 @@ void CppSupportPart::slotNewClass()
 
 void CppSupportPart::addMethod(const QString &className)
 {
-   if (! m_pEditIface) {
-      KMessageBox::sorry(0, i18n("Can't get Interface: EditDocumentIface\nIs the file open ?"), "OOPS" );
-      return;
-   }
-
     CppAddMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
@@ -709,28 +703,36 @@ void CppSupportPart::addMethod(const QString &className)
         atLine++;
 
     partController()->editDocument(pc->declaredInFile(), atLine);
-    kdDebug() << "Adding to .h: " << atLine << " " << headerCode << endl;
+    kdDebug(9007) << "Adding to .h: " << atLine << " " << headerCode << endl;
 
-    if (m_pEditIface)
-      m_pEditIface->insertLine(atLine, headerCode);
+    KParts::ReadWritePart *rwpart;
+    KTextEditor::EditInterface *editiface;
+
+    rwpart = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    editiface = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    if (editiface)
+        editiface->insertLine(atLine, headerCode);
+    else
+        kdDebug(9007) << "no edit" << endl;
 
     QString cppCode = asCppCode(pm);
 
     partController()->editDocument(pc->definedInFile(), atLine);
-    kdDebug() << "Adding to .cpp: " << atLine << " " << cppCode << endl;
+    kdDebug(9007) << "Adding to .cpp: " << atLine << " " << cppCode << endl;
 
-    if (m_pEditIface)
-      m_pEditIface->insertLine(atLine, cppCode);
+    rwpart = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    editiface = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    if (editiface)
+        editiface->insertLine(atLine, cppCode);
+    else
+        kdDebug(9007) << "no edit" << endl;
+    
     delete pm;
 }
 
 
 void CppSupportPart::addAttribute(const QString &className)
 {
-   if (! m_pEditIface) {
-      KMessageBox::sorry(0, i18n("Can't get Interface: EditDocumentIface\nIs the file open ?"), "OOPS" );
-      return;
-   }
     AddClassAttributeDialog dlg(0, "attrDlg");
     if( !dlg.exec() )
       return;
@@ -766,9 +768,16 @@ void CppSupportPart::addAttribute(const QString &className)
         atLine++;
 
     partController()->editDocument(pc->declaredInFile(), atLine);
-    kdDebug() << "Adding at line " << atLine << " " << headerCode << endl;
-    if (m_pEditIface)
-      m_pEditIface->insertLine(atLine, headerCode);
+    kdDebug(9007) << "Adding at line " << atLine << " " << headerCode << endl;
+
+    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
+        (partController()->activePart());
+    KTextEditor::EditInterface *editiface
+        = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    if (editiface)
+        editiface->insertLine(atLine, headerCode);
+    else
+        kdDebug(9007) << "no edit" << endl;
 
     delete pa;
 }

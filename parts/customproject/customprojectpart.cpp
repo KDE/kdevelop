@@ -76,6 +76,8 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(targetMenuActivated(int)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 }
 
 
@@ -104,6 +106,13 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
+void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+    if (context->hasType("file")) {
+    }
+}
+
+    
 void CustomProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_projectDirectory = dirName;
@@ -211,8 +220,12 @@ QStringList CustomProjectPart::allFiles()
     QStringList res;
 
     QStringList::ConstIterator it;
-    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
-        res += (m_projectDirectory + "/" + (*it));
+    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) {
+        QString fileName = *it;
+        if (!fileName.startsWith("/"))
+            fileName.prepend("/");
+            fileName.prepend(m_projectDirectory());
+        res += fileName;
 
     return res;
 }
