@@ -1,7 +1,6 @@
 High priority tasks!
 ====================
 
-
 1. Fixing major/annoying bugs
 -----------------------------
 
@@ -12,6 +11,15 @@ High priority tasks!
   - cd's when selecting a file, but doesn't when selecting a dir
     desired: a menu option to "cd" to that directory
   - CTRL-C doesn't work, typing ../ does weird things
+
+* automake part:
+  - Add files dialog: DND doesn't work!
+  - Should be able to DND files from other targets / file list / konq
+    to add to targets.
+  - Doesn't always get lib path relative to $top_buildir correct.
+    (projectDirectory() != $(top_builddir) in general)
+  - Probably some Makefile.am entries should not be written if they are
+    empty (DEPENDENCIES, ... what else?)
 
 * UI bugs:
   - GUI redraw blocked on Gideon startup for the time of project loading 
@@ -31,12 +39,20 @@ High priority tasks!
     border as other items.
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
-      
+
 * misc:
   - Printing files not supported
   - Trying Java projects results in mysterious error messages
+  - Project name should be able to contain spaces
+  - Should be able to keep project file in a separate directory and
+    specify what the project root directory is.
+  - Also, should be able to have a separate project root and top build dir.
+    E.g. I want to have a kate project in kdebase, but I want to project file
+    to live in ~/src/projects. So I set projectDir = ~/src/kdebase/kate and
+    topBuildDir = ~/src/kdebase. Should be able to specify these paths as
+    absolute or relative to home or relative to the project file or relative
+    to each other, for portability across team projects.
 
-  
 2. KDevelop 2 compatibility
 ---------------------------
 
