@@ -39,6 +39,91 @@ public:
     /** The methods arguments(if any) */
     QList<ParsedArgument> arguments;
     
+public:
+    
+    /** Adds an argument to this method. */
+    void addArgument(ParsedArgument *anArg);
+    
+    /**
+     * Sets the status if this is a virtual method.
+     * @param aState The new state.
+     */
+    void setIsVirtual(bool aState=true)
+        { _isVirtual = aState; }
+    bool isVirtual()
+        { return _isVirtual; }
+
+    /**
+     * Sets the status if this is a pure virtual method.
+     * @param aState The new state. 
+     */
+    void setIsPure(bool aState=true)
+        { _isPure = aState; }
+    bool isPure()
+        { return _isPure; }
+    
+    /**
+     * Sets the status if this is a slot. 
+     * @param aState The new state.
+     */
+    void setIsSlot(bool aState=true)
+        { _isSlot = aState; }
+    bool isSlot()
+        { return _isSlot; }
+    
+    /**
+     * Sets the status if this is a signal. 
+     * @param aState The new state.
+     */
+    void setIsSignal(bool aState=true)
+        { _isSignal = aState; }
+    bool isSignal()
+        { return _isSignal; }
+    
+    /**
+     * Sets this method as a constructor.
+     * @param aState The new state.
+     */
+    void setIsConstructor(bool aState=true)
+        { _isConstructor = aState; }
+    bool isConstructor()
+        { return _isConstructor; }
+
+    /**
+     * Sets this method as a destructor.
+     * @param aState The new state.
+     */
+    void setIsDestructor(bool aState=true)
+        { _isDestructor = aState; }
+    bool isDestructor()
+        { return _isDestructor; }
+
+    /**
+     * Is the method an Objective-C method? 
+     */
+    void setIsObjectiveC(bool is=true)
+        { _isObjectiveC = is; }
+    bool isObjectiveC()
+        { return _isObjectiveC; }
+
+    /**
+     * Makes this object a copy of the supplied object. 
+     * @param aMethod Method to copy.
+     */
+    virtual void copy(ParsedMethod *aMethod);
+    
+    /**
+     * Is the supplied method equal to this one
+     * (regarding type, name and signature)? */
+    bool isEqual(ParsedMethod *method);
+
+    /** Returns the object as a string(for tooltips etc) */
+    QString asString();
+    
+    /** Outputs this object to stdout */
+    void out();
+
+private:
     /** Is this methods declared virtual? */
     bool _isVirtual : 1;
     
@@ -59,80 +144,6 @@ public:
 
     /** Is this a Objective-C method? */
     bool _isObjectiveC : 1;
-
-public:
-    
-    /** Adds an argument to this method. */
-    void addArgument(ParsedArgument *anArg);
-    
-    /**
-     * Sets the status if this is a virtual method.
-     * @param aState The new state.
-     */
-    void setIsVirtual(bool aState=true)
-    { _isVirtual = aState; }
-	bool isVirtual() { return _isVirtual; }
-    /**
-     * Sets the status if this is a pure virtual method.
-     * @param aState The new state. 
-     */
-    void setIsPure(bool aState=true)
-    { _isPure = aState; }
-	bool isPure() { return _isPure; }
-    
-    /**
-     * Sets the status if this is a slot. 
-     * @param aState The new state.
-     */
-    void setIsSlot(bool aState=true)
-    { _isSlot = aState; }
-	bool isSlot() { return _isSlot; }
-    
-    /**
-     * Sets the status if this is a signal. 
-     * @param aState The new state.
-     */
-    void setIsSignal(bool aState=true)
-    { _isSignal = aState; }
-	bool isSignal() { return _isSignal; }
-    
-    /**
-     * Sets this method as a constructor.
-     * @param aState The new state.
-     */
-    void setIsConstructor(bool aState=true)
-    { _isConstructor = aState; }
-	bool isConstructor() { return _isConstructor; }
-
-    /**
-     * Sets this method as a destructor.
-     * @param aState The new state.
-     */
-    void setIsDestructor(bool aState=true)
-    { _isDestructor = aState; }
-	bool isDestructor() { return _isDestructor; }
-
-    /**
-     * Is the method an Objective-C method? 
-     */
-    void setIsObjectiveC(bool is=true) { _isObjectiveC = is; }
-	bool isObjectiveC() { return _isObjectiveC; }
-    /**
-     * Makes this object a copy of the supplied object. 
-     * @param aMethod Method to copy.
-     */
-    virtual void copy(ParsedMethod *aMethod);
-    
-    /**
-     * Is the supplied method equal to this one
-     * (regarding type, name and signature)? */
-    bool isEqual(ParsedMethod *method);
-
-    /** Returns the object as a string(for tooltips etc) */
-    QString asString();
-    
-    /** Outputs this object to stdout */
-    void out();
 };
 
 

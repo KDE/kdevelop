@@ -129,12 +129,12 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
 {
     REQUIRE( "Valid scope", aScope != NULL );
     REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
-    REQUIRE( "Unique scope", !hasScope( _useFullPath ? aScope->path() : aScope->name() ) );
+    REQUIRE( "Unique scope", !hasScope( useFullPath()? aScope->path() : aScope->name() ) );
     
     if ( !path().isEmpty() )
         aScope->setDeclaredInScope( path() );
     
-    scopes.insert( ( _useFullPath ? aScope->path() : aScope->name() ), aScope );
+    scopes.insert( ( useFullPath()? aScope->path() : aScope->name() ), aScope );
 }
 
 /*------------------------------ ParsedScopeContainer::removeScope()
@@ -166,7 +166,7 @@ void ParsedScopeContainer::removeScope( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
 {
-    return getSortedDictList<ParsedScopeContainer>( scopes, _useFullPath );
+    return getSortedDictList<ParsedScopeContainer>( scopes, useFullPath() );
 }
 
 
@@ -197,15 +197,15 @@ QStrList *ParsedScopeContainer::getSortedScopeNameList()
  *-----------------------------------------------------------------*/
 void ParsedScopeContainer::out()
 {
-    if ( !_comment.isEmpty() )
-        cout << _comment << endl;
+    if ( !comment().isEmpty() )
+        cout << comment() << endl;
     
     if ( !path().isEmpty() ) {
-        cout << "Namespace " << _name << " @ line " << _declaredOnLine;
-        cout << " - " << _declarationEndsOnLine << endl;
+        cout << "Namespace " << name() << " @ line " << declaredOnLine();
+        cout << " - " << declarationEndsOnLine() << endl;
         cout << "  Defined in files:" << endl;
-        cout << "    " << _declaredInFile << endl;
-        cout << "    " << _definedInFile << endl;
+        cout << "    " << declaredInFile() << endl;
+        cout << "    " << definedInFile() << endl;
     }
     
     if ( path().isEmpty() )

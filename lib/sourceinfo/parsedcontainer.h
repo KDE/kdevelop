@@ -126,12 +126,6 @@ protected:
     /** All structures declared in this class. */
     QDict<ParsedStruct> structs;
     
-    /**
-     * Tells if objects stored in the container should use the 
-     * full path as the key(default is no).
-     */
-    bool _useFullPath;
-    
 public:
     
     /** Iterator for the methods. */
@@ -167,9 +161,10 @@ public:
      * @param state If to use full path or not.
      */
     inline void setUseFullpath(bool state)
-    { _useFullPath = state; }
+        { _useFullPath = state; }
+    bool useFullPath() const
+        { return _useFullPath; }
 
-    bool useFullPath() { return _useFullPath; }
     /**
      * Gets a method by comparing with another method. 
      * @param aMethod Method to compare with.
@@ -271,6 +266,13 @@ public:
     virtual void out() {}
 
     friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+
+private:
+    /**
+     * Tells if objects stored in the container should use the 
+     * full path as the key(default is no).
+     */
+    bool _useFullPath;
 };
 
 #include "parsedstruct.h"

@@ -30,27 +30,17 @@ public:
     ParsedParent();
     ~ParsedParent();
     
-public:
-    
-    /** Name of parent class */
-    QString _name;
-    
-    /** Export type of the inheritance */
-    PIAccess _access;
-
-public:
-    
     /** Sets parent the parent name */
     void setName(const QString &aName);
-
-    /** Sets parent the parent name */
-    QString & name() { return _name; };
+    /** Gets the parent name */
+    QString name() const
+        { return _name; };
 
     /** Sets the export status */
     void setAccess(PIAccess aAccess);
-
     /** Gets the export status */
-    PIAccess access() { return _access; };
+    PIAccess access() const
+        { return _access; };
 
     inline bool isPublic()    { return ( _access == PIE_PUBLIC ); }
     inline bool isProtected() { return ( _access == PIE_PROTECTED ); }
@@ -59,6 +49,13 @@ public:
 
     /** Outputs the class as text on stdout */
     void out();
+
+private:
+    /** Name of parent class */
+    QString _name;
+    
+    /** Access type of the inheritance */
+    PIAccess _access;
 };
 
 

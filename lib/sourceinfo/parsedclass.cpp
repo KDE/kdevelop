@@ -133,9 +133,9 @@ void ParsedClass::removeWithReferences( const QString &aFile )
         }
     }
     
-    if ( _declaredInFile == aFile ) {
+    if ( declaredInFile() == aFile ) {
   	clearDeclaration();
-    } else if ( _definedInFile == aFile ) {
+    } else if ( definedInFile() == aFile ) {
   	clearDefinition();
     }
 }
@@ -493,14 +493,14 @@ void ParsedClass::out()
     //ParsedSignalSlot *aSS;
     char *str;
     
-    if ( !_comment.isEmpty() )
-        cout << _comment << endl;
+    if ( !comment().isEmpty() )
+        cout << comment() << endl;
     
-    cout << "Class " << path() << " @ line " << _declaredOnLine;
-    cout << " - " << _declarationEndsOnLine << endl;
+    cout << "Class " << path() << " @ line " << declaredOnLine();
+    cout << " - " << declarationEndsOnLine() << endl;
     cout << "  Defined in files:" << endl;
-    cout << "    " << _declaredInFile << endl;
-    cout << "    " << _definedInFile << endl;
+    cout << "    " << declaredInFile() << endl;
+    cout << "    " << definedInFile() << endl;
     cout << "  Parents:" << endl;
     for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
         aParent->out();

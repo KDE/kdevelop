@@ -31,35 +31,23 @@ public:
     ParsedArgument();
     ~ParsedArgument();
 
-public:
-    /** The name of the argument. */
-    QString _name;
-
-    /** The type of the argument. */
-    QString _type;
-    
-    /** where I have to place the name between type */
-    int _namePos;
-    
-public:
-    
     /** Sets the argument name */
     void setName(const QString &aName);
-
     /** Sets the argument name */
-    QString & name() { return _name; }
+    QString name() const
+        { return _name; }
 
     /** Sets the type */
     void setType(const QString &aType);
-
     /** Gets the type */
-    QString &type() { return _type; }
+    QString type() const
+        { return _type; }
 
     /** Sets the pos of the name between type */
     void setNamePos(int pos);
-
     /** Gets the pos of the name between type */
-    int namePos() { return _namePos; }
+    int namePos() const
+        { return _namePos; }
 
     /** Makes this object a copy of the supplied object. */
     void copy(ParsedArgument *anArgument);
@@ -72,6 +60,16 @@ public:
     
     /** Outputs this object to stdout */
     void out();
+
+private:
+    /** The name of the argument. */
+    QString _name;
+
+    /** The type of the argument. */
+    QString _type;
+    
+    /** where I have to place the name between type */
+    int _namePos;
 };
 
 

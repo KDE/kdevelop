@@ -26,7 +26,6 @@
 #include "parsedparent.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
-#include "parsedsignalslot.h"
 #include "parsedclasscontainer.h"
 
 
@@ -68,13 +67,7 @@ public:
     
     /** List of signals. */
     QListIterator<ParsedMethod> signalIterator;
-    
-    /** List of signal<->slot mappings. */
-    //QList<ParsedSignalSlot> signalMaps;
-    
-    /** Tells if this class is declared inside another class. */
-    bool _isSubClass;
-    
+
 public:
     
     /**
@@ -118,16 +111,14 @@ public:
      */
     void addSlot(ParsedMethod *aMethod);
     
-    /** Add a signal->slot mapping. */
-    void addSignalSlotMap(ParsedSignalSlot *aSS);
-    
     /** 
      * Sets the state if this is a subclass. 
      * @param aState The new state.
      */
     inline void setIsSubClass(bool aState)
-    { _isSubClass = aState; }
-    bool isSubClass() { return _isSubClass; }
+        { _isSubClass = aState; }
+    bool isSubClass() const
+        { return _isSubClass; }
 
 public:
     
@@ -173,6 +164,10 @@ public:
     void out();
 
     friend QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
+
+private:
+    /** Tells if this class is declared inside another class. */
+    bool _isSubClass;
 };
 
 

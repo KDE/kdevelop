@@ -193,8 +193,8 @@ QString ParsedAttribute::asString()
     else
         str += " ";
     
-    if (!_name.isEmpty())
-        str += _name;
+    if (!name().isEmpty())
+        str += name();
 
     if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
         str += _type.mid(_namePos, _type.length()- _namePos);
@@ -217,12 +217,12 @@ void ParsedAttribute::out()
     QString buf;
     QString attrString;
     
-    if ( !_comment.isEmpty() )
-        cout << "    " << _comment << "\n";
+    if ( !comment().isEmpty() )
+        cout << "    " << comment() << "\n";
     
     cout << "    ";
     
-    switch (_access)
+    switch ( access() )
         {
         case PIE_PUBLIC:
             cout << "public ";
@@ -243,9 +243,9 @@ void ParsedAttribute::out()
     
     // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
     cout << asString();
-    buf.sprintf("%d", _declaredOnLine );
+    buf.sprintf("%d", declaredOnLine() );
     cout << " @ line " << buf << " - ";
-    buf.sprintf("%d", _declarationEndsOnLine );
+    buf.sprintf("%d", declarationEndsOnLine() );
     cout << buf << "\n";
 }
 
@@ -269,7 +269,7 @@ void ParsedAttribute::out()
  *-----------------------------------------------------------------*/
 bool ParsedAttribute::isEqual( ParsedAttribute *attr )
 {
-    return (_name == attr->name() && _type == attr->type() );
+    return (name() == attr->name() && type() == attr->type() );
 }
 
 

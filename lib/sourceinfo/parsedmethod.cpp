@@ -108,7 +108,7 @@ QString ParsedMethod::asString()
 {
     ParsedArgument *arg;
     
-    QString str = _name;
+    QString str = name();
 
    if ( _isObjectiveC )
      return str;
@@ -142,14 +142,14 @@ void ParsedMethod::out()
     ParsedArgument *arg;
     char buf[10];
     
-    if ( !_comment.isEmpty() )
-        cout << "    " << _comment << "\n";
+    if ( !comment().isEmpty() )
+        cout << "    " << comment() << "\n";
     
     cout << "    ";
-    switch( _access )
+    switch( access() )
         {
         case PIE_PUBLIC:
-            cout << _isObjectiveC ? "" : "public ";
+            cout << isObjectiveC()? "" : "public ";
             break;
         case PIE_PROTECTED:
             cout << "protected ";
@@ -165,19 +165,19 @@ void ParsedMethod::out()
             break;
         }
     
-    if ( _isVirtual )
+    if ( isVirtual() )
         cout << "virtual ";
     
-    if ( _isStatic )
+    if ( isStatic() )
         cout << "static ";
     
-    if ( _isSlot )
+    if ( isSlot() )
         cout << "slot ";
     
-    if ( _isSignal )
+    if ( isSignal() )
         cout << "signal ";
     
-    cout << ( _type.isEmpty() ? "" : _type.data() )  << " " << _name << "( ";
+    cout << type().latin1()  << " " << name() << "( ";
     
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
@@ -186,15 +186,15 @@ void ParsedMethod::out()
         arg->out();
     }
     
-    cout << ( _isConst ? " ) const\n" : " )\n" );
-    sprintf( buf, "%d", _declaredOnLine );
+    cout << ( isConst()? " ) const\n" : " )\n" );
+    sprintf( buf, "%d", declaredOnLine() );
     cout << "      declared @ line " << buf << " - ";
-    sprintf( buf, "%d", _declarationEndsOnLine );
+    sprintf( buf, "%d", declarationEndsOnLine() );
     cout << buf << "\n";
-    cout << "      defined(in " << ( _isInHFile ? ".h" : ( _isObjectiveC ? ".m" : ".cc" ) ) << ")";
-    sprintf( buf, "%d", _definedOnLine );
+    cout << "      defined(in " << ( isInHFile()? ".h" : ( isObjectiveC()? ".m" : ".cc" ) ) << ")";
+    sprintf( buf, "%d", definedOnLine() );
     cout << "@ line " << buf << " - ";
-    sprintf( buf, "%d", _definitionEndsOnLine );
+    sprintf( buf, "%d", definitionEndsOnLine() );
     cout << buf << "\n";
 }
 
