@@ -2241,16 +2241,16 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
+  sub_dir_list.clear();
   if(kickeritem->isSelected()){
    makeAmInfo.type = "shared_library";
   }
   else {
    makeAmInfo.type = "prog_main";
   }
-  sub_dir_list.clear();
-  if (userdoc->isChecked()) {
-    //    sub_dir_list.append("docs");
-  }
+//   if (userdoc->isChecked()) {
+//     //    sub_dir_list.append("docs");
+//   }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
