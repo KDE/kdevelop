@@ -1,8 +1,28 @@
+/***************************************************************************
+		file       : GfxClassBox.cpp
+ ---------------------------------------------------------------------------
+               begin       : Jun 7 1999
+               copyright   : (C) 1999 by Jörgen Olsson
+               email       : jorgen@cenacle.net
+ ***************************************************************************/
+
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
+
+
 #include "GfxClassBox.h"
 #include <qpainter.h>
-#include <stdio.h>
 
-
+// 7*7 Minusbutton image
 const char * btnminus_xpm[] = {
   "7 7 3 1",
   "       c #FFFFFFFFFFFF",
@@ -16,6 +36,7 @@ const char * btnminus_xpm[] = {
   " .....X",
   ".XXXXXX"};
 
+// 7*7 Plusbutton image
 const char * btnplus_xpm[] = {
   "7 7 3 1",
   "       c #FFFFFFFFFFFF",
@@ -29,22 +50,6 @@ const char * btnplus_xpm[] = {
   " ..X..X",
   ".XXXXXX"};    
 
-/*-----------------------------------------------------------------
-*
-*
-*
-* Parameters:
-*
-*
-*
-* Returns:
-*
-*
-*
-*-----------------------------------------------------------------*/
-
-
-
 
 /*------------------------------------ CGfxClassBox::CGfxClassBox()
 * CGfxClassBox()
@@ -52,6 +57,8 @@ const char * btnplus_xpm[] = {
 *
 * Parameters:
 *  aclass         The parsed class that this box represents
+*  aname          The class name
+*  aparentwidget  Pointer to parent widget
 *
 * Returns:
 *   -
@@ -325,21 +332,21 @@ int CGfxClassBox::GetXDepth()
 }
 
 
-/*-----------------------------------------------------------------
-*
+/*--------------------------------------- CGfxClassBox::paintEvent()
+* paintEvent()
+*   paintEvent implementation
 * Parameters:
-*
+*   QPaintEvent *
 *
 *
 * Returns:
-*
+*   -
 *-----------------------------------------------------------------*/
 void CGfxClassBox::paintEvent(QPaintEvent *)
 {
   QPainter p;
 
   p.begin(this);
-
 
   if(m_class != NULL)
     p.setBrush(QBrush(CLASSBOXCOL_INSYSTEM,SolidPattern));
@@ -353,10 +360,7 @@ void CGfxClassBox::paintEvent(QPaintEvent *)
   p.moveTo(0,height());
   p.lineTo(0,0);
   p.lineTo(width(),0);
-  
   p.setPen(QColor(0x00,0x00,0x00));
-  
-
   p.drawText(rect(),AlignHCenter|AlignVCenter,m_name);
   p.end();
 
@@ -385,7 +389,6 @@ void CGfxClassBox::PosRefresh(int boxid)
   {
     x = GetX();
     y = GetY();
-    //  printf("Moving me to %d,%d\n",x,y);
     move(x,y);
     show();
     emit drawConnection(this);

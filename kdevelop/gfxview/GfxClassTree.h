@@ -1,3 +1,20 @@
+/***************************************************************************
+                file       : GfxClassTree.h
+ ---------------------------------------------------------------------------
+               begin       : Jun 7 1999
+               copyright   : (C) 1999 by Jörgen Olsson
+               email       : jorgen@cenacle.net
+ ***************************************************************************/
+ 
+ 
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/    
 #ifndef GFXCLASSTREE_H_INCLUDED
 #define GFXCLASSTREE_H_INCLUDED
 
