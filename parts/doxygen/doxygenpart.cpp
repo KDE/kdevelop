@@ -43,9 +43,13 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
     KAction *action;
 
-    action = new KAction( i18n("Run Doxygen"), 0,
+    action = new KAction( i18n("Build API Documentation"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
+
+    action = new KAction( i18n("Clean API Documentation"), 0,
+                          this, SLOT(slotDoxClean()),
+                          actionCollection(), "clean_doxygen" );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -220,5 +224,29 @@ void DoxygenPart::slotDoxygen()
 
     makeFrontend()->queueCommand(dir, cmdline);
 }
+
+
+void DoxygenPart::slotDoxClean()
+{
+
+    QString outputDirectory = Config_getString("OUTPUT_DIRECTORY");
+    if ( outputDirectory.isEmpty() )
+        outputDirectory = project()->projectDirectory();
+    if ( outputDirectory.right(1) != "/" )
+        outputDirectory += "/";
+
+    QString htmlDirectory   = Config_getString("HTML_OUTPUT");
+    if ( htmlDirectory.isEmpty() )
+        htmlDirectory = "html";
+    if ( htmlDirectory.right(1) != "/" )
+        htmlDirectory += "/";
+
+    QString cmdline = "rm -f " + KShellProcess::quote( outputDirectory + htmlDirectory + "*");
+    
+    kdDebug(9026) << "Cleaning Doxygen html generated API documentation using: " << cmdline << endl;
+
+    makeFrontend()->queueCommand(KShellProcess::quote(project()->projectDirectory()), cmdline);
+}
+
 
 #include "doxygenpart.moc"

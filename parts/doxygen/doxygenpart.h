@@ -28,11 +28,24 @@ public:
     ~DoxygenPart();
 
 private slots:
-   void projectConfigWidget(KDialogBase *dlg);
+    /** Configuration dialog under "Project Options..." that alows
+      * to specify doxygen configuration options and store them to
+      * a configuration file. The file name is Doxyfile and it's stored
+      * in the project root.
+      */
+    void projectConfigWidget(KDialogBase *dlg);
+
+    /** run doxygen to generate API documentation */
     void slotDoxygen();
-    
+
+    /** clean the html API docs (delete the generated html files) */
+    void slotDoxClean();
+
 private:
 
+    /** If a Doxygen configuration file doesn't exist, create one.
+      * And copy some of the project settings to it.
+      */
     void adjustDoxyfile();
 
     DoxygenDialog *m_dialog;

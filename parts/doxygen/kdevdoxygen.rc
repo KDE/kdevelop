@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCTags" version="1">
+<kpartgui name="KDevCTags" version="2">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_doxygen"/>
+    <Action name="clean_doxygen"/>
   </Menu>
 </MenuBar>
 </kpartgui>
