@@ -68,7 +68,7 @@ void VisualBoyAdvancePart::slotExecute(){
 
 void VisualBoyAdvancePart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox;
-  vbox = dlg->addVBoxPage(i18n("Run Options"));
+  vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
   VBAConfigWidget* w = new VBAConfigWidget(this,vbox);
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
