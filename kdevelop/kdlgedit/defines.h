@@ -50,6 +50,7 @@
 #define RESIZE_MIDDLE_LEFT     7
 #define RESIZE_MIDDLE_RIGHT    8
 
+#define MAX_MAIN_ENTRYS 16
 
 #endif
 

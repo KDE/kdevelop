@@ -18,6 +18,7 @@
 
 #include "kdlgedit.h"
 #include "../ckdevelop.h"
+#include "kdlgeditwidget.h"
 
 KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name)
 {
@@ -34,6 +35,7 @@ void KDlgEdit::slotFileNew()
 
 void KDlgEdit::slotFileOpen()
 {
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile("/tmp/dialog.kdevdlg");
 }
 
 void KDlgEdit::slotFileClose()
@@ -42,7 +44,7 @@ void KDlgEdit::slotFileClose()
 
 void KDlgEdit::slotFileSave()
 {
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("");
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/dialog.kdevdlg");
 }
 	
 void KDlgEdit::slotEditUndo()

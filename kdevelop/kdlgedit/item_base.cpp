@@ -35,6 +35,25 @@ KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool i
   repaintItem();
 }
 
+void KDlgItem_Base::deleteMyself()
+{
+  if (!childs)
+    return;
+
+  KDlgItem_Base *w = childs->getFirst();
+
+  while (w)
+  {
+    w->deleteMyself();
+    if (w->getItem())
+      delete w->getItem();
+    delete w;
+    w = childs->getNext();
+  }
+
+  childs->clear();
+}
+
 void KDlgItem_Base::repaintItem(QWidget *it)
 {
   QWidget *itm = it ? it : item;

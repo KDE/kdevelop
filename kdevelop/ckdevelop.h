@@ -65,12 +65,13 @@ class CErrorMessageParser;
 #include "./print/cprintdlg.h"
 #include "./classparser/ParsedClass.h"
 
-#include "./kdlgedit/kdlgedit.h"
-#include "./kdlgedit/kdlgeditwidget.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgwidgets.h"
-#include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgitems.h"
+
+class KDlgEdit;
+class KDlgEditWidget;
+class KDlgPropWidget;
+class KDlgWidgets;
+class KDlgDialogs;
+class KDlgItems;
 
 
 /** the mainclass in kdevelop

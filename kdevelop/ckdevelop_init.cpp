@@ -982,15 +982,15 @@ void CKDevelop::initProject(){
 
 
 void CKDevelop::setKeyAccel(){
-  if(bKDevelop){
-    accel->disconnectItem(accel->stdAction( KAccel::Open ), kdlgedit, SLOT(slotFileOpen()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Close ) , kdlgedit, SLOT(slotFileClose()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Save ) , kdlgedit, SLOT(slotFileSave()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Undo ), kdlgedit, SLOT(slotEditUndo()) );
-    accel->disconnectItem( "Redo" , kdlgedit, SLOT(slotEditRedo()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Cut ), kdlgedit, SLOT(slotEditCut()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Copy ), kdlgedit, SLOT(slotEditCopy()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Paste ), kdlgedit, SLOT(slotEditPaste()) );
+if(bKDevelop){
+    accel->disconnectItem(accel->stdAction( KAccel::Open ),(QObject*)kdlgedit, SLOT(slotFileOpen()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Close ) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Undo ), (QObject*)kdlgedit, SLOT(slotEditUndo()) );
+    accel->disconnectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Cut ), (QObject*)kdlgedit, SLOT(slotEditCut()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Copy ), (QObject*)kdlgedit, SLOT(slotEditCopy()) );
+    accel->disconnectItem(accel->stdAction( KAccel::Paste ), (QObject*)kdlgedit, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
 
     accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()) );
@@ -1050,14 +1050,14 @@ void CKDevelop::setKeyAccel(){
     accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
 
-    accel->connectItem( KAccel::Open , kdlgedit, SLOT(slotFileOpen()) );
-    accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
-    accel->connectItem( KAccel::Save , kdlgedit, SLOT(slotFileSave()) );
-    accel->connectItem( KAccel::Undo , kdlgedit, SLOT(slotEditUndo()) );
-    accel->connectItem( "Redo" , kdlgedit, SLOT(slotEditRedo()) );
-    accel->connectItem( KAccel::Cut , kdlgedit, SLOT(slotEditCut()) );
-    accel->connectItem( KAccel::Copy , kdlgedit, SLOT(slotEditCopy()) );
-    accel->connectItem( KAccel::Paste , kdlgedit, SLOT(slotEditPaste()) );
+    accel->connectItem( KAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()) );
+    accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()) );
+    accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()) );
+    accel->connectItem( KAccel::Undo , (QObject*)kdlgedit, SLOT(slotEditUndo()) );
+    accel->connectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
+    accel->connectItem( KAccel::Cut , (QObject*)kdlgedit, SLOT(slotEditCut()) );
+    accel->connectItem( KAccel::Copy , (QObject*)kdlgedit, SLOT(slotEditCopy()) );
+    accel->connectItem( KAccel::Paste , (QObject*)kdlgedit, SLOT(slotEditPaste()) );
     accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
 
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );

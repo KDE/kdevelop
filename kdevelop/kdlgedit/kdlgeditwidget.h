@@ -42,7 +42,10 @@ class KDlgEditWidget : public QWidget  {
     KDlgItemDatabase *database() { return dbase; }
 
     bool addItem(QString);
+    KDlgItem_Widget *addItem(KDlgItem_Base*, QString);
+
     KDlgItem_Widget *mainWidget() { return main_widget; }
+    void setMainWidget(KDlgItem_Widget *mw) { main_widget = mw; }
     KDlgItem_Base *selectedWidget() { return selected_widget; }
 
     void selectWidget(KDlgItem_Base*);
@@ -56,8 +59,11 @@ class KDlgEditWidget : public QWidget  {
 
     bool saveToFile( QString fname );
     void saveWidget( KDlgItem_Widget *, QTextStream *, int deep = 0);
-  public slots:
+
+    bool openFromFile( QString fname );
+    void openWidget( KDlgItem_Widget *, QTextStream * );
   protected:
+
     virtual void resizeEvent ( QResizeEvent * );
 
     KDlgItemDatabase *dbase;

@@ -1,3 +1,9 @@
+1999-04-09 Pascal Krahmer <pascal@beast.de>
+        * removed includes for kdlg files from ckdevelop in order to save compiling time
+        * fixed some conversation errors for some compilers in ckdevelop_init.cpp.
+          (.., kdlgedit,... -> ,..(QObject*) kdlgedit,..) (for accelerators)
+        * added loading functionality (!!!)
+        * save and load now work with files (fixed to /tmp/dialog.kdevdlg for now)
 
 1999-04-09  Sandy Meier  <smeier@rz.uni-potsdam.de>
 

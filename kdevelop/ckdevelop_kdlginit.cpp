@@ -20,6 +20,14 @@
 #include <qtoolbutton.h>
 #include "ckdevelop.h"
 
+#include "./kdlgedit/kdlgedit.h"
+#include "./kdlgedit/kdlgeditwidget.h"
+#include "./kdlgedit/kdlgpropwidget.h"
+#include "./kdlgedit/kdlgwidgets.h"
+#include "./kdlgedit/kdlgdialogs.h"
+#include "./kdlgedit/kdlgitems.h"
+
+
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor: Widget_1.kdevdlg";
   kdlgedit=new KDlgEdit(this,"dialogeditor");

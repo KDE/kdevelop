@@ -27,7 +27,6 @@
 #include "defines.h"
 
 
-#define MAX_MAIN_ENTRYS 16
 
 class AdvLvi_Base;
 class QPushButton;
@@ -79,6 +78,7 @@ class AdvListView : public QListView
     virtual void saveOpenStats();
     virtual void restoreOpenStats();
     virtual void setGeometryEntrys(int x, int y, int w, int h);
+    virtual QString openStat(int i) { return openStats[i]; }
     void updateWidgets();
   protected:
 

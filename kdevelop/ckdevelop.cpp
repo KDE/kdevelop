@@ -35,6 +35,8 @@
 #include <kmsgbox.h>
 #include <ktabctl.h>
 
+#include "./kdlgedit/kdlgedit.h"
+
 // #include <kio_linedit_dlg.h>
 
 #include "ckdevelop.h"
@@ -974,6 +976,7 @@ void CKDevelop::slotOptionsAutosave(bool autosave){
 }
 
 void CKDevelop::slotOptionsAutosaveTime(int time){
+
   switch(time){
   case 0:
     saveTimeout=3*60*1000;

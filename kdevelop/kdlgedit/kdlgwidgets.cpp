@@ -21,6 +21,7 @@
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include "../ckdevelop.h"
+#include "kdlgeditwidget.h"
 
 #define btnsize 34
 

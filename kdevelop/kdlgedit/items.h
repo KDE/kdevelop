@@ -21,6 +21,12 @@
 
 #include <qframe.h>
 #include "itemsglobal.h"
+#include "kdlgpropwidget.h"
+#include <kcursor.h>
+#include "kdlgeditwidget.h"
+#include <kruler.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
@@ -50,6 +56,8 @@ class KDlgItem_Base : public QObject
     virtual void select() { }
     virtual void deselect() { }
 
+    void deleteMyself();
+
     bool isMainWidget;
   protected:
     KDlgItemDatabase *childs;
@@ -59,13 +67,6 @@ class KDlgItem_Base : public QObject
 };
 
 
-
-	
-#include "kdlgeditwidget.h"
-#include <kruler.h>
-#include "defines_item.h"
-
-
 class KDlgItem_Widget : public KDlgItem_Base
 {
   Q_OBJECT
@@ -73,46 +74,35 @@ class KDlgItem_Widget : public KDlgItem_Base
   public:
     KDlgItem_Widget( KDlgEditWidget* editwid , QWidget *parent, bool ismainwidget, const char* name = 0 );
 
-  MYITEMCLASS_BEGIN( QFrame )
-    public:
-      MyWidget(KDlgItem_Widget* wid, QWidget* parent = 0, bool isMainWidget = false, const char* name = 0);
-
-    MYITEMCLASS_STDSTUFF( KDlgItem_Widget )
-  MYITEMCLASS_END
-
-  ITEMWRAPPER_STDSTUFF( KDlgItem_Widget, QWidget, "QWidget" )
+  #define classname KDlgItem_Widget
+  #define widgettype QFrame
+  #define classdesc "QWidget"
+  #define MyWidgetAdd  public: MyWidget(KDlgItem_Widget* wid, QWidget* parent = 0, bool isMainWidget = false, const char* name = 0);
+  #include "item_class.cpp.inc"
 };
 
 
-
-#include <qlineedit.h>
 
 class KDlgItem_LineEdit : public KDlgItem_Base
 {
   Q_OBJECT
 
-  MYITEMCLASS_BEGIN( QLineEdit )
-    MYITEMCLASS_STDSTUFF( KDlgItem_LineEdit )
-    virtual void keyPressEvent ( QKeyEvent * ) {}
-  MYITEMCLASS_END
-
-  ITEMWRAPPER_STDSTUFF( KDlgItem_LineEdit, QLineEdit, "LineEdit" )
+  #define classname KDlgItem_LineEdit
+  #define widgettype QLineEdit
+  #define classdesc "QLineEdit"
+  #define MyWidgetAdd virtual void keyPressEvent ( QKeyEvent * ) {}
+  #include "item_class.cpp.inc"
 };
-
-
-#include <qpushbutton.h>
 
 class KDlgItem_PushButton : public KDlgItem_Base
 {
   Q_OBJECT
 
-  MYITEMCLASS_BEGIN( QPushButton )
-    MYITEMCLASS_STDSTUFF( KDlgItem_PushButton )
-  MYITEMCLASS_END
-
-  ITEMWRAPPER_STDSTUFF( KDlgItem_PushButton, QPushButton, "PushButton" )
+  #define classname KDlgItem_PushButton
+  #define widgettype QPushButton
+  #define classdesc "QPushButton"
+  #include "item_class.cpp.inc"
 };
-
 
 
 #endif

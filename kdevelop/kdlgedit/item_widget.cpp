@@ -112,7 +112,7 @@ KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , con
   repaintItem();
 }
 
-void KDlgItem_Widget::repaintItem(QWidget *it)
+void KDlgItem_Widget::repaintItem(QFrame *it)
 {
   QWidget *itm = it ? it : item;
 

@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include "../ckdevelop.h"
 #include "kdlgproplv.h"
+#include "kdlgitems.h"
 #include "items.h"
 #include "defines.h"
 
@@ -746,7 +747,6 @@ AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyE
   btnMore = new QPushButton("...",this);
   leInput = new QLineEdit( this );
   leInput->setText(dpe->value);
-
   connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 //  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );

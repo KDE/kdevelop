@@ -26,7 +26,9 @@
 #include <kruler.h>
 #include <stdio.h>
 #include "items.h"
-
+#include "kdlgproplv.h"
+#include "kdlgitems.h"
+#include "kdlgpropwidget.h"
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
@@ -71,27 +73,244 @@ KDlgEditWidget::~KDlgEditWidget()
 {
 }
 
-bool KDlgEditWidget::saveToFile( QString fname )
+int dlgfilelinecnt = 0;
+
+QString dlgReadLine( QTextStream *t )
 {
-  QFile f;
-  if ( f.open(IO_WriteOnly, stderr) )
+  QString s;
+  do {
+    s = t->readLine().stripWhiteSpace();
+    dlgfilelinecnt++;
+  } while ( (!t->eof()) && ((s.left(2) == "//") || (s.isEmpty())) );
+
+  if (s.left(2) == "//")
+    return QString();
+
+  if (s.isEmpty())
+    return QString();
+
+  return s;
+}
+
+bool readGrp_Ignore( QTextStream *t )
+{
+  QString s;
+  int cnt = 0;
+  do {
+    s = dlgReadLine(t);
+    if (s=="{") cnt++;
+    if (s=="}")
+      {
+        if (cnt <= 1)
+          return true;
+        else
+          cnt --;
+      }
+  } while (!t->eof());
+
+  return true;
+}
+
+bool readGrp_Information( QTextStream *t )
+{
+  return readGrp_Ignore( t );
+}
+
+bool readGrp_SessionManagement( QTextStream *t )
+{
+  return readGrp_Ignore( t );
+}
+
+bool readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, QTextStream *t, QString ctype )
+{
+  int svdlc = dlgfilelinecnt;
+
+  if (dlgReadLine(t) != "{")
+    return false;
+
+  KDlgItem_Widget *thatsme = 0;
+
+  if (par)
+    {
+      thatsme = edwid->addItem(par, ctype);
+    }
+  else
+    {
+      edwid->deselectWidget();
+      thatsme = edwid->mainWidget();
+      thatsme->deleteMyself();
+    }
+
+  if (thatsme)
+    {
+      int i;
+      for (int i=1; i<=thatsme->getProps()->getEntryCount(); i++)
+        thatsme->getProps()->setProp_Value(i,"");
+    }
+  else
+    {
+      int res = 0;
+      QString errmsg = QString().sprintf(i18n("Error reading dialog file (line %d) :\n   Could not insert item (%s). Seems like I don't know it :-("), svdlc, (const char*)ctype);
+      printf("kdlgedit : %s\n", (const char*)errmsg);
+      res = QMessageBox::warning( edwid, "Error", errmsg, i18n("&Ignore"), i18n("&Cancel"),0,1 );
+      if (res == 1)
+        {
+          dlgfilelinecnt = -100;
+          return false;
+        }
+    }
+
+  QString s;
+  do {
+    s = dlgReadLine(t);
+    if ((s.left(s.find(' ')).upper() == "ITEM") && (!thatsme))
+      {
+        printf("kdlgedit : ignoring item \"%s\" line %d\n", (const char*)s.right(s.length()-s.find(' ')-1).upper(), dlgfilelinecnt);
+        readGrp_Ignore( t );
+      }
+    if ((s!="}") && (thatsme))
+      {
+        if (s.left(s.find(' ')).upper() == "ITEM")
+          {
+            if (!readGrp_Item( edwid, thatsme, t, s.right(s.length()-s.find(' ')-1).upper() ))
+              return false;
+          }
+        else
+          {
+            QString name  = s.left(s.find('='));
+            QString value = s.right(s.length()-s.find('=')-2);
+            value = value.left(value.length()-1);
+            thatsme->getProps()->setProp_Value(name, value);
+          }
+      }
+  } while ((!t->eof()) && (s!="}"));
+
+  if (thatsme)
+    thatsme->repaintItem();
+
+  return true;
+}
+
+
+bool readGroup( KDlgEditWidget *edwid, QTextStream *t )
+{
+  QString s;
+  s = dlgReadLine(t);
+  if (s.isEmpty())
+    return false;
+
+  QString type = s.left(s.find(' ')).upper();
+  QString name = s.right(s.length()-s.find(' ')-1).upper();
+
+  printf("Group=%s; Name=%s\n",(const char*)type,(const char*)name);
+
+  if (type == "DATA")
+    {
+      if (name == "INFORMATION")
+        if (!readGrp_Information( t ))
+          return false;
+      else if (name == "SESSIONMANAGEMENT")
+        if (!readGrp_SessionManagement( t ))
+          return false;
+      else
+        if (!readGrp_Ignore( t ))
+          return false;
+    }
+  else if (type == "ITEM")
+    {
+      if (!readGrp_Item( edwid, 0, t, name ))
+        return false;
+    }
+
+  edwid->getCKDevel()->kdlg_get_items_view()->refreshList();
+  edwid->selectWidget(edwid->mainWidget());
+
+  return true;
+}
+
+bool KDlgEditWidget::openFromFile( QString fname )
+{
+  dlgfilelinecnt = 0;
+  QFile f(fname);
+  if ( f.open(IO_ReadOnly) )
     {
       QTextStream t( &f );
 
-      t << "//" << "KDevelop Dialog Editor File (.kdevdlg)\n";
-      t << "//" << "\n";
-      t << "//" << "Created by KDlgEdit Version " << KDLGEDIT_VERSION_STR << " (C) 1999 by Pascal Krahmer\n";
-      t << "//" << "Get KDevelop including KDlgEdit at \"www.beast.de/kdevelop\"\n";
-      t << "//" << "\n";
-      t << "//" << "This file is free software; you can redistribute it and/or modify\n";
-      t << "//" << "it under the terms of the GNU General Public License as published by\n";
-      t << "//" << "the Free Software Foundation; either version 2 of the License, or\n";
-      t << "//" << "(at your option) any later version.\n\n";
-      t << "information\n";
+      while (!t.eof())
+        {
+          if (!readGroup( this, &t ))
+            {
+              int res = 0;
+              if (dlgfilelinecnt >=0)
+                {
+                  res = QMessageBox::warning( this, fname, i18n("Error while reading the dialog file.\n\n"
+                               "Note : If you choose continue now the\ndialog may be loaded and saved incorrectly."),
+                               i18n("&Ignore"), i18n("&Cancel"),0,1 );
+                }
+              else
+                res = 1;
+              if (res == 1)
+                {
+                  printf("kdlgedit : Aborted reading dialog file \"%s\"\n", (const char*)fname);
+                  QMessageBox::information( this, fname,
+                           i18n("Reading aborted !\n\nThe dialog has not been loaded completely."
+                                "\nOpen another dialog or create a new one\nif you don't like the result."));
+                  f.close();
+                  return false;
+                }
+            }
+        }
+
+      f.close();
+    }
+  else
+    return false;
+
+  return true;
+}
+
+void KDlgEditWidget::openWidget( KDlgItem_Widget *, QTextStream * )
+{
+}
+
+bool KDlgEditWidget::saveToFile( QString fname )
+{
+  QFile f(fname);
+  if ( f.open(IO_WriteOnly) )
+    {
+      QTextStream t( &f );
+
+      t << "// " << "KDevelop Dialog Editor File (.kdevdlg)\n";
+      t << "// " << "\n";
+      t << "// " << "Created by KDlgEdit Version " << KDLGEDIT_VERSION_STR << " (C) 1999 by Pascal Krahmer\n";
+      t << "// " << "Get KDevelop including KDlgEdit at \"www.beast.de/kdevelop\"\n";
+      t << "// " << "\n";
+      t << "// " << "This file is free software; you can redistribute it and/or modify\n";
+      t << "// " << "it under the terms of the GNU General Public License as published by\n";
+      t << "// " << "the Free Software Foundation; either version 2 of the License, or\n";
+      t << "// " << "(at your option) any later version.\n\n";
+      t << "data Information\n";
       t << "{\n";
       t << "   Filename=\"" << fname << "\"\n";
-      t << "   EditorVersion=\"KDevelop: " << KDEVELOP_VERSION_STR << "; DlgEdit: " << KDLGEDIT_VERSION_STR << "\"\n";
+      t << "   KDevelopVersion=\"" << KDEVELOP_VERSION_STR << "\"\n";
+      t << "   DlgEditVersion=\"" << KDLGEDIT_VERSION_STR << "\"\n";
       t << "   LastChangedDate=\"" << QDateTime(QDate().currentDate(), QTime().currentTime()).toString() << "\"\n";
+      t << "}\n";
+
+      t << "\ndata SessionManagement\n";
+      t << "{\n";
+
+      AdvListView *lv = pCKDevel->kdlg_get_prop_widget()->getListView();
+      lv->saveOpenStats();
+      int i;
+      int n=0;
+      for (i=0; i<MAX_MAIN_ENTRYS; i++)
+        {
+          if (lv->openStat(i).length() != 0)
+            t << "   " << "OpenedRoot_" << ++n << "=\"" << lv->openStat(i) << "\"\n";
+        }
+
+      t << "   " << "OpenedRootCount=\"" << n << "\"\n";
       t << "}\n";
 
       saveWidget(mainWidget(), &t);
@@ -115,13 +334,13 @@ void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep 
     sDeep = sDeep + "   ";
 
   *t << "\n";
-  *t << sDeep << "item " << wid->itemClass() << " \"" << wid->getProps()->getProp("Name")->value << "\"\n";
+  *t << sDeep << "item " << wid->itemClass() << "\n";
   *t << sDeep << "{\n";
 
   for (i=1; i<=wid->getProps()->getEntryCount(); i++)
     {
       if (wid->getProps()->getProp(i)->value.length() > 0)
-        *t << sDeep << "  " << wid->getProps()->getProp(i)->name << "=\"" << wid->getProps()->getProp(i)->value << "\"\n";
+        *t << sDeep << "   " << wid->getProps()->getProp(i)->name << "=\"" << wid->getProps()->getProp(i)->value << "\"\n";
     }
 
   if (wid->itemClass().upper() == "QWIDGET")
@@ -181,35 +400,35 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
 bool KDlgEditWidget::addItem(QString Name)
 {
   KDlgItem_Base *par = main_widget;
-  bool setPWI = false;
 
   if (selectedWidget())
     if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
       {
-        switch( QMessageBox::information( this, i18n("Add item"),
+        int res = 0;
+        res = QMessageBox::information( this, i18n("Add item"),
                      i18n("Into which widget do you want to insert this item ?\n\n"
                      "You either may add it to the main widget or to the selected\n"
                      "widget respectively to the selected items' parent widget."),
-                     i18n("&Main"), i18n("&Selected"), i18n("&Cancel"),0,2 ) )
+                     i18n("&Main"), i18n("&Selected"), i18n("&Cancel"),0,2 );
+
+        if (res == 1)
           {
-            case 0: // "Main Widget" clicked
-            break;
-            case 1: // "Selected Widget" clicked
-              if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
-                  par = selectedWidget();
-              else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
-                  par = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
-              setPWI = true;
-            break;
-            case 2: // "Cancel clicked"
-            return true;
+            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+                par = selectedWidget();
+            else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+                par = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
           }
-
-
+        else if (res == 2)
+          return true;
       }
 
+  return addItem(par, Name) ? true : false;
+}
+
+KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
+{
   if (!par)
-    return false;
+    return 0;
 
   KDlgItem_Widget *wid = 0;
 
@@ -224,10 +443,10 @@ bool KDlgEditWidget::addItem(QString Name)
   #undef macro_CreateIfRightOne
 
   if (!wid)
-    return false;
+    return 0;
 
   par->addChild( wid );
-  if (setPWI)
+  if (par != main_widget)
     wid->parentWidgetItem = (KDlgItem_Widget*)par;
 
 //  wid->repaintItem();
@@ -235,6 +454,6 @@ bool KDlgEditWidget::addItem(QString Name)
   if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
     ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
-  return true;
+  return wid;
 }
 

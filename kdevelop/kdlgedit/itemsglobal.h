@@ -47,6 +47,7 @@ class KDlgItemDatabase
     int numItems();
     bool addItem(KDlgItem_Base *item);
     void removeItem(KDlgItem_Base *item, bool deleteIt=false);
+    void clear() { int i; for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++) items[i]=0; }
 
     KDlgItem_Base *getFirst() { recentGetNr = -1; return getNext(); }
     KDlgItem_Base *getNext();
