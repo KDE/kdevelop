@@ -1,3 +1,8 @@
+2001-02-11 Omid Givi <omid@givi.nl>
+	* Fixed bug: dealing with null pointers in NewProjectDlg::slotProjectSpaceSelected
+	  It happenned for example if you click on the area arround the
+	  items in the ListView and not exactly on the items.
+
 2001-02-09 Omid Givi <omid@givi.nl>
 	* Created KDevCompiler. This represent a compiler Entity which
 	  holds compiler dependant attributes (like name, icon, pointer to
