@@ -14,7 +14,7 @@
     <Action name="build_clean_target" />
   </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar">
+<ToolBar name="buildToolBar">
     <Action name="build_compilefile" group="build_operations" />
     <Action name="build_build_target" group="build_operations" />
     <Action name="build_rebuild_target" group="build_operations" />
