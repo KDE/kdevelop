@@ -30,7 +30,7 @@ struct TEditInfo {
   /**  the id in the menu-buffer*/
   int id; 
   QString filename;
-  QString text; // 
+  QCString text; //
   bool modified; // modified ?
   int cursor_line;
   int cursor_col;

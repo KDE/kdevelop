@@ -477,7 +477,7 @@ bool CKDevelop::fileSaveAs(){
   {
     // now open this file as new file in edit_infos
     //    if an widget still contains the file then update the contents in the widget from file
-    switchToFile(name, true);
+    switchToFile(name,-1,-1, true);
 
     if (oldName!=name)
     {
@@ -695,7 +695,8 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
-void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox)
+void CKDevelop::switchToFile( QString filename, int line, int col,
+                              bool bForceReload, bool bShowModifiedBox)
 {
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
@@ -884,87 +885,122 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   if (!bForceReload && filename == edit_widget->getName()){
-      //    cerr << endl <<endl << "Filename:" << filename 
+    if (line != -1)
+      edit_widget->setCursorPosition(line, col);
+
+      //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
       edit_widget->setFocus();
       return;
   }
 
-  // rescue the old file
+  // store the old file
   actual_info->text = edit_widget->text();
   actual_info->modified = edit_widget->isModified();
   actual_info->cursor_line = edit_widget->currentLine();
   actual_info->cursor_col = edit_widget->currentColumn();
   // output_widget->append("auszuwechseldes file:" + actual_info->filename);
 
-  // already in the list ?
+  bool found = false;
+
+  // See if we already have the file wanted in our list of saved files.
   for(info=edit_infos.first();info != 0;info=edit_infos.next())
   {
      // if found in list
     if (info->filename == filename )
     {
-      if (bForceReload)
-      {
-        QFileInfo fileinfo(filename);
-        edit_widget->clear();
-        edit_widget->loadFile(filename,1);
-        info->modified=false;
-        info->cursor_line=info->cursor_col=0;
-        info->text = edit_widget->text();
-      }
-      else
-      {
-         edit_widget->setName(filename);     // inserted to stop flickering of caption
-         edit_widget->setText(info->text);
-      }
-      edit_widget->setName(filename);
-      edit_widget->toggleModified(info->modified);
-      edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
-
-      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-      edit_widget->setFocus();
-
-      // Need to get the breakpoints displayed in this file (if any)
-			if (brkptManager)
-	      brkptManager->refreshBP(filename);
-      return;
+      found = true;
+      break;
     }
   }
-  // not found -> generate a new edit_info,loading
 
-  // build a new info
-  QFileInfo fileinfo(filename);
-  info = new TEditInfo;
-  
-  info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-//  info->id = menu_buffers->insertItem(filename,-2,0); // insert at first index
-  info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy
-  info->modified = false;
-  info->cursor_line = 0;
-  info->cursor_col = 0;
-  info->last_modified = fileinfo.lastModified();
+  // Not found or needing a reload causes the file to be read from disk and the
+  // info reset.
+  if (!found || bForceReload)
+  {
+    QFileInfo fileinfo(filename);
+    if (!found)
+    {
+      // not found -> generate a new edit_info,loading
+      info = new TEditInfo;
+      info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
+      edit_infos.append(info); // add to the list
+    }
 
-  // update the widget
-  edit_widget->clear();
-  edit_widget->loadFile(filename,1);
+    info->filename = filename;
+    info->modified = false;
+    info->cursor_line = 0;
+    info->cursor_col = 0;
+    info->last_modified = fileinfo.lastModified();
+
+    edit_widget->clear();
+    // update the widget
+    edit_widget->loadFile(filename,1);
+  }
+  else
+  {
+    // The file is in the list so use the saved text
+    edit_widget->setText(info->text);
+  }
+
+  edit_widget->toggleModified(info->modified);
+
+  // If the caller wanted to be positioned at a particular place in the file
+  // then they have supplied the line and col. Otherwise we use the
+  // current info values (0 if new) for the placement.
+  if (line == -1)
+    edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
+  else
+    edit_widget->setCursorPosition(line, col);
+
   edit_widget->setName(filename);
-
   info->text = edit_widget->text();
-  edit_infos.append(info); // add to the list
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
   edit_widget->setFocus();
 
   // Need to get the breakpoints displayed in this file (if any)
 	if (brkptManager)
 	  brkptManager->refreshBP(filename);
+
+//      if (bForceReload)
+//      {
+//        QFileInfo fileinfo(filename);
+//        edit_widget->clear();
+//        edit_widget->loadFile(filename,1);
+//        info->modified=false;
+//        info->cursor_line=info->cursor_col=0;
+//        info->text = edit_widget->text();
+//      }
+//      else
+//      {
+////         edit_widget->setName(filename);     // inserted to stop flickering of caption
+//         edit_widget->setText(info->text);
+//      }
+//
+//      if (line == -1)
+//        edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
+//      else
+//        edit_widget->setCursorPosition(line, col);
+//
+//      edit_widget->toggleModified(info->modified);
+//      edit_widget->setName(filename);
+//
+//      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+//      edit_widget->setFocus();
+//
+//      // Need to get the breakpoints displayed in this file (if any)
+//			if (brkptManager)
+//	      brkptManager->refreshBP(filename);
+//      return;
+//    }
 }
 
-void CKDevelop::switchToFile(QString filename, int lineNo){
-  lasttab = s_tab_view->getCurrentTab();
-  switchToFile( filename, false);
-  edit_widget->setCursorPosition( lineNo, 0 );
-}
+//void CKDevelop::switchToFile(QString filename, int lineNo){
+//  lasttab = s_tab_view->getCurrentTab();
+//  switchToFile( filename, false, lineNo, 0);
+//  edit_widget->setCursorPosition( lineNo, 0 );
+//}
 
 //#warning FIXME this is now redundent??
 //void CKDevelop::switchToKDevelop(){
@@ -1024,18 +1060,18 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
 
 void CKDevelop::startDesigner()
 {
-	KShellProcess designer_process("/bin/sh");
-	const QString oldGroup = config->group();
-	config->setGroup("QT2");
-	QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
-	config->setGroup(oldGroup);
-	designer_process << qt2dir << "designer";
-	if(!designer_process.start(KProcess::DontCare)) {
-  	debug("QtDesigner didn't start!");
-	}
+  KShellProcess designer_process("/bin/sh");
+  const QString oldGroup = config->group();
+  config->setGroup("QT2");
+  QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
+  config->setGroup(oldGroup);
+  designer_process << qt2dir << "designer";
+  if(!designer_process.start(KProcess::DontCare)) {
+    debug("QtDesigner didn't start!");
+  }
   return;
 }
-	
+
 
 void CKDevelop::setToolMenuProcess(bool enable){
 
@@ -1182,12 +1218,12 @@ void CKDevelop::showTreeView(bool show){
 }
 void CKDevelop::showOutputView(bool show){
   if(bAutoswitch){
-  	if(show){
-	  	if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-  	 		return; // it's already visible
+    if(show){
+      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+        return; // it's already visible
       }
       else{
-				slotViewTOutputView();
+        slotViewTOutputView();
       }
     }
     else{
@@ -1195,7 +1231,7 @@ void CKDevelop::showOutputView(bool show){
         return; //it's already unvisible
       }
       else{
-				slotViewTOutputView();
+        slotViewTOutputView();
       }
     }
   }
@@ -1204,16 +1240,16 @@ void CKDevelop::readOptions()
 {
   config->setGroup("General Options");
 
-	/////////////////////////////////////////
-	// GEOMETRY
+  /////////////////////////////////////////
+  // GEOMETRY
   QSize size=config->readSizeEntry("Geometry");
-	if(!size.isEmpty())
-		resize(size);
-	else
-		setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+  if(!size.isEmpty())
+    resize(size);
+  else
+    setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
 
-	/////////////////////////////////////////
-	// BAR STATUS
+  /////////////////////////////////////////
+  // BAR STATUS
 #warning FIXME menubars
 //	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
 //	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);

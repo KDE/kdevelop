@@ -309,21 +309,23 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
   QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
   opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
-  opt1->setFixedSize(opt1->sizeHint());
+//  opt1->setFixedSize(opt1->sizeHint());
   opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
-  opt2->setFixedSize(opt2->sizeHint());
+//  opt2->setFixedSize(opt2->sizeHint());
   opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
-  opt3->setFixedSize(opt3->sizeHint());
+//  opt3->setFixedSize(opt3->sizeHint());
   opt4 = new QCheckBox(i18n("&Replace Tabs"),g1);
-  opt4->setFixedSize(opt4->sizeHint());
+//  opt4->setFixedSize(opt4->sizeHint());
   opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
-  opt5->setFixedSize(opt5->sizeHint());
+//  opt5->setFixedSize(opt5->sizeHint());
   opt6 = new QCheckBox(i18n("Wrap &Cursor"),g1);
-  opt6->setFixedSize(opt6->sizeHint());
+//  opt6->setFixedSize(opt6->sizeHint());
   opt7 = new QCheckBox(i18n("&Auto Brackets"),g1);
-  opt7->setFixedSize(opt7->sizeHint());
+//  opt7->setFixedSize(opt7->sizeHint());
+	opt8 = new QCheckBox(i18n("&Show tabs"), g1);
+//  opt8->setFixedSize(opt7->sizeHint());
 
-  g1->setMinimumHeight(8+8+8+6*4+7*(opt1->sizeHint().height()));
+  g1->setMinimumHeight(8+8+8+6*4+8*(opt1->sizeHint().height()));
 
   opt1->setChecked(flags & cfAutoIndent);
   opt2->setChecked(flags & cfBackspaceIndent);
@@ -332,30 +334,30 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt5->setChecked(flags & cfRemoveSpaces);
   opt6->setChecked(flags & cfWrapCursor);
   opt7->setChecked(flags & cfAutoBrackets);
-
+  opt8->setChecked(flags & cfShowTabs);
 
   QGroupBox *g2 = new QGroupBox(i18n("Select Options"),this);
-  opt8 = new QCheckBox(i18n("&Persistent Selections"),g2);
-  opt8->setFixedSize( opt8->sizeHint() );
-  opt9 = new QCheckBox(i18n("&Multiple Selections"),g2);
-  opt9->setFixedSize( opt9->sizeHint() );
-  opt10 = new QCheckBox(i18n("&Vertical Selections"),g2);
-  opt10->setFixedSize( opt10->sizeHint() );
-  opt11 = new QCheckBox(i18n("&Delete On Input"),g2);
-  opt11->setFixedSize( opt11->sizeHint() );
-  opt12 = new QCheckBox(i18n("&Toggle Old"),g2);
-  opt12->setFixedSize( opt12->sizeHint() );
-  opt13 = new QCheckBox(i18n("A&uto Copy"),g2);
-  opt13->setFixedSize( opt13->sizeHint() );
+  opt9 = new QCheckBox(i18n("&Persistent Selections"),g2);
+//  opt9->setFixedSize( opt8->sizeHint() );
+  opt10 = new QCheckBox(i18n("&Multiple Selections"),g2);
+//  opt10->setFixedSize( opt9->sizeHint() );
+  opt11 = new QCheckBox(i18n("&Vertical Selections"),g2);
+//  opt11->setFixedSize( opt10->sizeHint() );
+  opt12 = new QCheckBox(i18n("&Delete On Input"),g2);
+//  opt12->setFixedSize( opt11->sizeHint() );
+  opt13 = new QCheckBox(i18n("&Toggle Old"),g2);
+//  opt13->setFixedSize( opt12->sizeHint() );
+  opt14 = new QCheckBox(i18n("A&uto Copy"),g2);
+//  opt14->setFixedSize( opt13->sizeHint() );
 
-  g2->setMinimumHeight(8+8+8+6*4+6*(opt8->sizeHint().height()));
+  g2->setMinimumHeight(8+8+8+6*4+6*(opt9->sizeHint().height()));
 
-  opt8->setChecked(flags & cfPersistent);
-  opt9->setChecked(flags & cfKeepSelection);
-  opt10->setChecked(flags & cfVerticalSelect);
-  opt11->setChecked(flags & cfDelOnInput);
-  opt12->setChecked(flags & cfXorSelect);
-  opt13->setChecked(flags & cfAutoCopy);
+  opt9->setChecked(flags & cfPersistent);
+  opt10->setChecked(flags & cfKeepSelection);
+  opt11->setChecked(flags & cfVerticalSelect);
+  opt12->setChecked(flags & cfDelOnInput);
+  opt13->setChecked(flags & cfXorSelect);
+  opt14->setChecked(flags & cfAutoCopy);
 
 
   e1 = new QLineEdit(this);
@@ -418,18 +420,19 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   vbl1->addWidget( opt5,0,AlignLeft );
   vbl1->addWidget( opt6,0,AlignLeft );
   vbl1->addWidget( opt7,0,AlignLeft );
+  vbl1->addWidget( opt8,0,AlignLeft );
 
   vbl3->addSpacing( 10 );
   vbl3->addWidget( g2 );
 
   QVBoxLayout *vbl2 = new QVBoxLayout(g2, 8, 4);
   vbl2->addSpacing(8);
-  vbl2->addWidget( opt8,0,AlignLeft );
   vbl2->addWidget( opt9,0,AlignLeft );
   vbl2->addWidget( opt10,0,AlignLeft );
   vbl2->addWidget( opt11,0,AlignLeft );
   vbl2->addWidget( opt12,0,AlignLeft );
   vbl2->addWidget( opt13,0,AlignLeft );
+  vbl2->addWidget( opt14,0,AlignLeft );
 
   vbl6->addSpacing( 10 );
 
@@ -470,13 +473,14 @@ int SettingsDialog::getFlags() {
   if (opt5->isChecked()) flags |= cfRemoveSpaces;
   if (opt6->isChecked()) flags |= cfWrapCursor;
   if (opt7->isChecked()) flags |= cfAutoBrackets;
+  if (opt8->isChecked()) flags |= cfShowTabs;
 
-  if (opt8->isChecked()) flags |= cfPersistent;
-  if (opt9->isChecked()) flags |= cfKeepSelection;
-  if (opt10->isChecked()) flags |= cfVerticalSelect;
-  if (opt11->isChecked()) flags |= cfDelOnInput;
-  if (opt12->isChecked()) flags |= cfXorSelect;
-  if (opt13->isChecked()) flags |= cfAutoCopy;
+  if (opt9->isChecked()) flags |= cfPersistent;
+  if (opt10->isChecked()) flags |= cfKeepSelection;
+  if (opt11->isChecked()) flags |= cfVerticalSelect;
+  if (opt12->isChecked()) flags |= cfDelOnInput;
+  if (opt13->isChecked()) flags |= cfXorSelect;
+  if (opt14->isChecked()) flags |= cfAutoCopy;
   return flags;
 }
 

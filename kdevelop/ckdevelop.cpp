@@ -3885,13 +3885,13 @@ void CKDevelop::slotRealFileTreeSelected(QString file){
 }
 
 void CKDevelop::slotUpdateFileFromVCS(QString file){
-    switchToFile(file,false,false); // force not reload and no messagebox if modified on disc, because slotFileSave() will do it
+    switchToFile(file,-1,-1, false,false); // force not reload and no messagebox if modified on disc, because slotFileSave() will do it
     slotFileSave();
     prj->getVersionControl()->update(file);
     switchToFile(file,true,false);
 }
 void CKDevelop::slotCommitFileToVCS(QString file){
-    switchToFile(file,false,false);
+    switchToFile(file,-1,-1,false,false);
     slotFileSave();
     prj->getVersionControl()->commit(file);
     switchToFile(file,true,false);
@@ -3906,11 +3906,11 @@ void CKDevelop::slotUpdateDirFromVCS(QString dir){
     QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
     for ( ; it.current(); ++it ) {
-  actual_info = it.current();
-  QFileInfo file_info(actual_info->filename);
-  if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-      switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-  }
+      actual_info = it.current();
+      QFileInfo file_info(actual_info->filename);
+      if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+        switchToFile(actual_info->filename,-1,-1,true,false); //force reload, no modified on disc messagebox
+      }
     }
 }
 
@@ -3923,11 +3923,11 @@ void CKDevelop::slotCommitDirToVCS(QString dir){
     QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
     for ( ; it.current(); ++it ) {
-  actual_info = it.current();
-  QFileInfo file_info(actual_info->filename);
-  if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-      switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-  }
+      actual_info = it.current();
+      QFileInfo file_info(actual_info->filename);
+      if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+        switchToFile(actual_info->filename,-1,-1,true,false); //force reload, no modified on disc messagebox
+      }
     }
     
 }

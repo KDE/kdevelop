@@ -958,7 +958,7 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
   h = kWriteDoc->fontHeight;
   for (z = 0; z < updateState; z++) {
     line = updateLines[z];
-    kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
+    kWriteDoc->paintTextLine(paint,line,xStart,xEnd, kWrite->flags() & cfShowTabs);
     bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
     leftBorder->paintLine(line);
@@ -988,7 +988,7 @@ void KWriteView::paintCursor() {
   //debug("===============================maximus BUG begin");
       paint.begin(drawBuffer);
   //debug("===============================maximus BUG end");
-      kWriteDoc->paintTextLine(paint,cursor.y,cXPos - 2, cXPos + 3);
+      kWriteDoc->paintTextLine(paint,cursor.y,cXPos - 2, cXPos + 3, kWrite->flags() & cfShowTabs);
       bitBlt(this,x - 2,y,drawBuffer,0,0,5,h);
       paint.end();
     }
@@ -1340,20 +1340,20 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   y = line*h - yPos;
   yEnd = updateR.y() + updateR.height();
 
+ int textLineCount = kWriteDoc->getTextLineCount()-1;
   while (y < yEnd)
   {
-		TextLine *textLine;
-		int ctxNum = 0;
-    if ((kWriteDoc->getTextLineCount()-1)>line)
+    if (textLineCount>line)
     {
-      textLine = kWriteDoc->textLine(line);
+      int ctxNum = 0;
+      TextLine *textLine = kWriteDoc->textLine(line);
       if (line > 0)
         ctxNum = kWriteDoc->textLine(line - 1)->getContext();
       ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
       textLine->setContext(ctxNum);
     }
 
-    kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
+    kWriteDoc->paintTextLine(paint,line,xStart,xEnd, kWrite->flags() & cfShowTabs);
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this,updateR.x(),y,drawBuffer,0,0,updateR.width(),h);
 
@@ -1524,12 +1524,16 @@ void KWrite::optDlg() {
   SettingsDialog *dlg;
 
   dlg = new SettingsDialog(configFlags,wrapAt,kWriteDoc->tabChars,kWriteDoc->undoSteps,
-    topLevelWidget());
-  if (dlg->exec() == QDialog::Accepted) {
+                            topLevelWidget());
+  if (dlg->exec() == QDialog::Accepted)
+  {
+    bool showTabsChanged = (dlg->getFlags() & cfShowTabs) != (configFlags & cfShowTabs);
     setConfig(dlg->getFlags() | (configFlags & cfOvr));
     wrapAt = dlg->getWrapAt();
     kWriteDoc->setTabWidth(dlg->getTabWidth());
     kWriteDoc->setUndoSteps(dlg->getUndoSteps());
+    if (showTabsChanged)
+      kWriteView->tagAll();
     kWriteDoc->updateViews();
   }
   delete dlg;
@@ -1556,7 +1560,7 @@ void KWrite::toggleOverwrite() {
   setConfig(configFlags ^ cfOvr);
 }
 
-QString KWrite::text() {
+QCString KWrite::text() {
   return kWriteDoc->text();
 }
 
@@ -1578,7 +1582,7 @@ QString KWrite::word(int x, int y) {
 
 void KWrite::setText(const char *s) {
   kWriteDoc->setText(s);
-  kWriteDoc->updateViews();
+//  kWriteDoc->updateViews();
 }
 
 
@@ -2686,6 +2690,7 @@ void KWrite::writeConfig(KConfig *config) {
   config->writeEntry("RemoveTrailingSpaces",(flags & cfRemoveSpaces) != 0);
   config->writeEntry("WrapCursor",(flags & cfWrapCursor) != 0);
   config->writeEntry("AutoBrackets",(flags & cfAutoBrackets) != 0);
+  config->writeEntry("ShowTabs",(flags & cfShowTabs) != 0);
   config->writeEntry("PersistentSelections",(flags & cfPersistent) != 0);
   config->writeEntry("MultipleSelections",(flags & cfKeepSelection) != 0);
   config->writeEntry("VerticalSelections",(flags & cfVerticalSelect) != 0);

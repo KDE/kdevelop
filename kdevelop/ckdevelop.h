@@ -189,13 +189,14 @@ public:
    * @param bForceReload if true then enforce updating widget text from file
    * @param bShowModifiedBox if true no messagebox is shown, if the file was modified outside the editor
    */
-  void switchToFile(QString filename, bool bForceReload=false,bool bShowModifiedBox=true); // filename = abs
+  void switchToFile(QString filename, int line = -1, int col = 0,
+                    bool bForceReload=false,bool bShowModifiedBox=true);
 
   /** Switch to a certain line in a certain file.
    *  @param filename Absolute filename of the file to switch to.
    *  @param lineNo   The line in the file to switch to.
    */
-  void switchToFile(QString filename, int lineNo);
+//  void switchToFile(QString filename, int lineNo);
 
   /** set the correct toolbar and menubar,if a process is running
     * @param enable if true than enable,otherwise disable

@@ -233,7 +233,7 @@ class KWriteDoc : QObject {
     void invertSelection();
     void selectWord(PointStruc &cursor, int flags);
 
-    QString text();
+    QCString text();
     QString getWord(PointStruc &cursor);
     void setText(const char *);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
@@ -241,7 +241,7 @@ class KWriteDoc : QObject {
     void delMarkedText(KWriteView *, VConfig &);
 
     QColor &cursorCol(int x, int y);
-    void paintTextLine(QPainter &, int line, int xStart, int xEnd);
+    void paintTextLine(QPainter &, int line, int xStart, int xEnd, bool showTabs);
     void printTextLine(QPainter &, int line, int xEnd, int y);
 
     void setModified(bool);

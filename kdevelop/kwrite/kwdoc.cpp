@@ -436,12 +436,13 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   JPcode = Nkf::EUC;
 #endif
 
-  setHighlight(0); //calls updateFontData()
+//  setHighlight(0); //calls updateFontData()
   connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
 }
 
 KWriteDoc::~KWriteDoc() {
-  highlight->release();
+  if (highlight)
+  	highlight->release();
 	delete fileConfig;
 }
 
@@ -1221,7 +1222,7 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
   int ctxNum, endCtx;
 
   lastLine = (int) contents.count() -1;
-  if (endLine >= lastLine)
+  if (endLine > lastLine)
     endLine = lastLine;
 
   line = startLine;
@@ -1241,7 +1242,8 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
 
     endCtx = textLine->getContext();
 //    ctxNum = highlight->doHighlight(ctxNum,textLine);
-    if(endLine-line<4)ctxNum = highlight->doHighlight(ctxNum,textLine);
+    if(endLine-line<4)
+			ctxNum = highlight->doHighlight(ctxNum,textLine);
     textLine->setContext(ctxNum);
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));
@@ -1774,7 +1776,7 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
   if (cursor.y > selectEnd) selectEnd = cursor.y;
 }
 
-QString KWriteDoc::text() {
+QCString KWriteDoc::text() {
   TextLine *textLine;
   int len, last, z, end;
 
@@ -2106,201 +2108,333 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
 // //printf("\n");
 // }
 ////////////////////////////////////////////////////////////////////////
-void
-KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
+void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd, bool showTabs)
 {
   int y;
-  TextLine *textLine;
+  TextLine* textLine;
+  int len;
+  const char *s;
   int z, x;
   char ch;
   Attribute *a = 0L;
   int attr, nextAttr;
   int xs;
   int xc, zc;
-  static char aLB[256];
-  int aCnt, xcp;
+
+//  struct timeval tv1, tv2, tv3; //for profiling
+//  struct timezone tz;
 
   y = 0;//line*fontHeight - yPos;
-  if (line >= (int) contents.count()) {
-      paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
-      return;
+  if (line > lastLine()) {
+    paint.fillRect(0, y, xEnd - xStart,fontHeight, colors[4]);
+    return;
   }
-//printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
-//printf("text = ");
+
   textLine = contents.at(line);
+  len = textLine->length();
+  s = textLine->getText();
 
-  z = 0;
+  // skip to first visible character
   x = 0;
+  z = 0;
   do {
-      xc = x;
-      ch = textLine->getChar(z);
-      if (ch==127)
-      {
-       ch='?';
-      }
-      else
-       if (ch !='\t' && (ch & 0x7f)< 0x20)
-       {
-         ch|=0x40;
-       }
-
-      if (ch == '\t') {
-          x += tabWidth - (x % tabWidth);
-      } else {
-          a = &attribs[textLine->getAttr(z)];
-#ifdef QT_I18N
-      if (iseucchar(ch)) {
-	char buf[3];
-	buf[0] = ch;
-	buf[1] = textLine->getChar(++z);
-	buf[2] = '\0';
-	x += a->fm.width(buf);
-      } else {
-	x += a->fm.width(&ch,1);
-      }
-#else
-          x += a->fm.width(&ch,1);
-#endif
-      }
-      z++;
+    xc = x;
+    zc = z;
+    if (z == len) break;
+    ch = s[z];//textLine->getChar(z);
+    if (ch == '\t') {
+      x += tabWidth - (x % tabWidth);
+    } else {
+      a = &attribs[textLine->getAttr(z)];
+      x += a->fm.width(ch);//a->width(ch);
+    }
+    z++;
   } while (x <= xStart);
-  zc = z - 1;
-#ifdef QT_I18N
-  if (iseucchar(textLine->getChar(zc))) {
-    zc--;
-  }
-#endif
 
+//gettimeofday(&tv1, &tz);
+
+  // draw background
   xs = xStart;
   attr = textLine->getRawAttr(zc);
-  ch = textLine->getChar(zc);
-  if (ch==127 || (ch !='\t' && ((ch & 0x7f)< 0x20)))
-  {
-        attr|=taSelected;
-  }
-
   while (x < xEnd) {
-      nextAttr = textLine->getRawAttr(z);
-      ch = textLine->getChar(z);
-      /* non printable char handling */
-      if (ch==127)
-      {
-        ch='?';
-        nextAttr|=taSelected;
+    nextAttr = textLine->getRawAttr(z);
+    if ((nextAttr ^ attr) & (taSelectMask | 256)) {
+      paint.fillRect(xs - xStart, y, x - xs, fontHeight, colors[attr >> taShift]);
+      xs = x;
+      attr = nextAttr;
+    }
+    if (z == len) break;
+    ch = s[z];//textLine->getChar(z);
+    if (ch == '\t') {
+      x += tabWidth - (x % tabWidth);
+    } else {
+      a = &attribs[attr & taAttrMask];
+      x += a->fm.width(ch);//a->width(ch);
+    }
+    z++;
+  }
+  paint.fillRect(xs - xStart, y, xEnd - xs, fontHeight, colors[attr >> taShift]);
+  len = z; //reduce length to visible length
+
+//gettimeofday(&tv2, &tz);
+
+  // draw text
+  x = xc;
+  z = zc;
+  y += fontAscent;// -1;
+  attr = -1;
+  while (z < len) {
+    ch = s[z];//textLine->getChar(z);
+    if (ch == '\t') {
+      if (z > zc) {
+        QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+        paint.drawText(x - xStart, y, str);
+        x += a->fm.width(str); //a->width(s);//&s[zc], z - zc);
       }
-      else
-        if (ch !='\t' && ((ch & 0x7f)< 0x20))
-        {
-          ch|=0x40;
-          nextAttr|=taSelected;
+      zc = z +1;
+
+      if (showTabs) {
+        nextAttr = textLine->getRawAttr(z);
+        if (nextAttr != attr) {
+          attr = nextAttr;
+          a = &attribs[attr & taAttrMask];
+
+          if (attr & taSelectMask) paint.setPen(a->selCol);
+            else paint.setPen(a->col);
+          paint.setFont(a->font);
         }
 
-      if ((nextAttr ^ attr) & (taSelectMask | 256)) {
-          paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
-          xs = x;
-          attr = nextAttr;
+//        paint.drawLine(x - xStart, y -2, x - xStart, y);
+//        paint.drawLine(x - xStart, y, x - xStart + 2, y);
+        paint.drawPoint(x - xStart, y);
+        paint.drawPoint(x - xStart +1, y);
+        paint.drawPoint(x - xStart, y -1);
       }
-      ch = textLine->getChar(z);
-      if (ch == '\t') {
-          x += tabWidth - (x % tabWidth);
-      } else {
-          a = &attribs[attr & taAttrMask];
-#ifdef QT_I18N
-      if (iseucchar(ch)) {
- 	char buf[3];
- 	buf[0] = ch;
- 	buf[1] = textLine->getChar(++z);
-	buf[2] = '\0';
-	x += a->fm.width(buf);
-      } else {
-	x += a->fm.width(&ch,1);
+      x += tabWidth - (x % tabWidth);
+    } else {
+      nextAttr = textLine->getRawAttr(z);
+      if (nextAttr != attr) {
+        if (z > zc) {
+          QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+          paint.drawText(x - xStart, y, str);
+          x += a->fm.width(str);//a->width(s);//&s[zc], z - zc);
+          zc = z;
+        }
+        attr = nextAttr;
+        a = &attribs[attr & taAttrMask];
+
+        if (attr & taSelectMask) paint.setPen(a->selCol);
+          else paint.setPen(a->col);
+        paint.setFont(a->font);
       }
-#else
-          x += a->fm.width(&ch,1);
-#endif
-      }
-      z++;
+    }
+    z++;
   }
-  
-  paint.fillRect(xs - xStart,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
-
-  y += fontAscent -1;
-  attr = -1;
-  aCnt = 0;
-  xcp  = xc;
-
-  while (xc < xEnd) {
-      ch = textLine->getChar(zc);
-
-      if (ch == '\t') {
-          xc += tabWidth - (xc % tabWidth);
-          if(aCnt!=0) {
-              paint.drawText(xcp - xStart,y,aLB,aCnt);
-              aCnt = 0;
-          }
-          xcp  = xc;
-      } 
-
-      else {
-          nextAttr = textLine->getRawAttr(zc);
-          /* non printable char handling */
-          if (ch==127)
-          {
-            ch='?';
-            nextAttr|=taSelected;
-          }
-          else
-            if ((ch & 0x7f)< 0x20)
-            {
-              ch|=0x40;
-              nextAttr|=taSelected;
-            }
-          if (nextAttr != attr) {
-              
-              if(aCnt!=0) {
-                  paint.drawText(xcp - xStart,y,aLB,aCnt);
-                  aCnt = 0;
-                  xcp  = xc;
-              }
-
-              attr = nextAttr;
-              a = &attribs[attr & taAttrMask];
-              if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
-              paint.setFont(a->font);
-          }
-#ifdef QT_I18N
-      if (iseucchar(ch)) {
-         char buf[3];
- 	buf[0] = ch;
- 	buf[1] = textLine->getChar(++zc);
- 	buf[2] = '\0';
- 	paint.drawText(xc - xStart,y+1,buf);
-	xc += a->fm.width(buf);
-      } else {
-        paint.drawText(xc - xStart,y,&ch,1);
-	xc += a->fm.width(&ch,1);
-      }
-#else
-          aLB[aCnt++] = ch;
-          xc += a->fm.width(&ch,1);
-
-          if(aCnt == 256) {
-              paint.drawText(xcp - xStart,y,aLB,aCnt);
-              aCnt = 0;
-              xcp  = xc;
-          }
-#endif
-      }
-      zc++;
+  if (z > zc) {
+    QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+    paint.drawText(x - xStart, y, str);
   }
-
-  if(aCnt!=0) {
-      paint.drawText(xcp - xStart,y,aLB,aCnt);
-      aCnt = 0;
-      xcp  = xc;
-  }
-//printf("\n");
+//gettimeofday(&tv3, &tz);
+//printf(" %d %d\n", tv2.tv_usec - tv1.tv_usec, tv3.tv_usec - tv2.tv_usec);
 }
+
+
+
+//void
+//KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
+//{
+//  int y;
+//  TextLine *textLine;
+//  int z, x;
+//  char ch;
+//  Attribute *a = 0L;
+//  int attr, nextAttr;
+//  int xs;
+//  int xc, zc;
+//  static char aLB[256];
+//  int aCnt, xcp;
+//
+//  y = 0;//line*fontHeight - yPos;
+//  if (line >= (int) contents.count()) {
+//      paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
+//      return;
+//  }
+////printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
+////printf("text = ");
+//  textLine = contents.at(line);
+//
+//  z = 0;
+//  x = 0;
+//  do {
+//      xc = x;
+//      ch = textLine->getChar(z);
+//      if (ch==127)
+//      {
+//       ch='?';
+//      }
+//      else
+//       if (ch !='\t' && (ch & 0x7f)< 0x20)
+//       {
+//         ch|=0x40;
+//       }
+//
+//      if (ch == '\t') {
+//          x += tabWidth - (x % tabWidth);
+//      } else {
+//          a = &attribs[textLine->getAttr(z)];
+//#ifdef QT_I18N
+//      if (iseucchar(ch)) {
+//	char buf[3];
+//	buf[0] = ch;
+//	buf[1] = textLine->getChar(++z);
+//	buf[2] = '\0';
+//	x += a->fm.width(buf);
+//      } else {
+//	x += a->fm.width(&ch,1);
+//      }
+//#else
+//          x += a->fm.width(&ch,1);
+//#endif
+//      }
+//      z++;
+//  } while (x <= xStart);
+//  zc = z - 1;
+//#ifdef QT_I18N
+//  if (iseucchar(textLine->getChar(zc))) {
+//    zc--;
+//  }
+//#endif
+//
+//  xs = xStart;
+//  attr = textLine->getRawAttr(zc);
+//  ch = textLine->getChar(zc);
+//  if (ch==127 || (ch !='\t' && ((ch & 0x7f)< 0x20)))
+//  {
+//        attr|=taSelected;
+//  }
+//
+//  while (x < xEnd) {
+//      nextAttr = textLine->getRawAttr(z);
+//      ch = textLine->getChar(z);
+//      /* non printable char handling */
+//      if (ch==127)
+//      {
+//        ch='?';
+//        nextAttr|=taSelected;
+//      }
+//      else
+//        if (ch !='\t' && ((ch & 0x7f)< 0x20))
+//        {
+//          ch|=0x40;
+//          nextAttr|=taSelected;
+//        }
+//
+//      if ((nextAttr ^ attr) & (taSelectMask | 256)) {
+//          paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
+//          xs = x;
+//          attr = nextAttr;
+//      }
+//      ch = textLine->getChar(z);
+//      if (ch == '\t') {
+//          x += tabWidth - (x % tabWidth);
+//      } else {
+//          a = &attribs[attr & taAttrMask];
+//#ifdef QT_I18N
+//      if (iseucchar(ch)) {
+// 	char buf[3];
+// 	buf[0] = ch;
+// 	buf[1] = textLine->getChar(++z);
+//	buf[2] = '\0';
+//	x += a->fm.width(buf);
+//      } else {
+//	x += a->fm.width(&ch,1);
+//      }
+//#else
+//          x += a->fm.width(&ch,1);
+//#endif
+//      }
+//      z++;
+//  }
+//
+//  paint.fillRect(xs - xStart,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
+//
+//  y += fontAscent -1;
+//  attr = -1;
+//  aCnt = 0;
+//  xcp  = xc;
+//
+//  while (xc < xEnd) {
+//      ch = textLine->getChar(zc);
+//
+//      if (ch == '\t') {
+//          xc += tabWidth - (xc % tabWidth);
+//          if(aCnt!=0) {
+//              paint.drawText(xcp - xStart,y,aLB,aCnt);
+//              aCnt = 0;
+//          }
+//          xcp  = xc;
+//      }
+//
+//      else {
+//          nextAttr = textLine->getRawAttr(zc);
+//          /* non printable char handling */
+//          if (ch==127)
+//          {
+//            ch='?';
+//            nextAttr|=taSelected;
+//          }
+//          else
+//            if ((ch & 0x7f)< 0x20)
+//            {
+//              ch|=0x40;
+//              nextAttr|=taSelected;
+//            }
+//          if (nextAttr != attr) {
+//
+//              if(aCnt!=0) {
+//                  paint.drawText(xcp - xStart,y,aLB,aCnt);
+//                  aCnt = 0;
+//                  xcp  = xc;
+//              }
+//
+//              attr = nextAttr;
+//              a = &attribs[attr & taAttrMask];
+//              if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
+//              paint.setFont(a->font);
+//          }
+//#ifdef QT_I18N
+//      if (iseucchar(ch)) {
+//         char buf[3];
+// 	buf[0] = ch;
+// 	buf[1] = textLine->getChar(++zc);
+// 	buf[2] = '\0';
+// 	paint.drawText(xc - xStart,y+1,buf);
+//	xc += a->fm.width(buf);
+//      } else {
+//        paint.drawText(xc - xStart,y,&ch,1);
+//	xc += a->fm.width(&ch,1);
+//      }
+//#else
+//          aLB[aCnt++] = ch;
+//          xc += a->fm.width(&ch,1);
+//
+//          if(aCnt == 256) {
+//              paint.drawText(xcp - xStart,y,aLB,aCnt);
+//              aCnt = 0;
+//              xcp  = xc;
+//          }
+//#endif
+//      }
+//      zc++;
+//  }
+//
+//  if(aCnt!=0) {
+//      paint.drawText(xcp - xStart,y,aLB,aCnt);
+//      aCnt = 0;
+//      xcp  = xc;
+//  }
+////printf("\n");
+//}
 
 //////////////////////////////////////////////////////////////////////////
 

@@ -53,6 +53,9 @@ const int cfMark            = 8192;
 
 const int cfAutoCopy        = 16384;
 
+const int cfShowTabs    		= 32768;
+
+
 //update flags
 const int ufDocGeometry     = 1;
 const int ufUpdateOnScroll  = 2;
@@ -313,6 +316,9 @@ class KWrite : public QWidget {
     */
     int undoState();
     void copySettings(KWrite *);
+
+    int flags() const		{ return configFlags; }
+
   public slots:
     /** Presents a options dialog to the user
     */
@@ -369,7 +375,7 @@ class KWrite : public QWidget {
   public:
      /** Gets the complete document content as string
      */
-     QString text();
+     QCString text();
      /** Gets the word where the cursor is on
      */
      QString currentWord();

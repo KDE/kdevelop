@@ -160,44 +160,6 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   setFocus();
 }
 
-/*
-void CEditWidget::spellcheck(){
-   kspell= new KSpell (this, "KDevelop: Spellcheck", this,
-		   SLOT (spellcheck2 (KSpell *)));	
-}
-
-void CEditWidget::spellcheck2(KSpell *){
-    if (kspell->isOk())
-      {
-
-//	setReadOnly (TRUE);
-
-	connect (kspell, SIGNAL (misspelling (char *, QStrList *, unsigned)),
-		 this, SLOT (misspelling (char *, QStrList *, unsigned)));
-	connect (kspell, SIGNAL (corrected (char *,
-						 char *, unsigned)),
-		 this, SLOT (corrected (char *,
-					char *, unsigned)));
-
-       connect (kspell, SIGNAL (progress (unsigned int)),
-                this, SIGNAL (spellcheck_progress (unsigned int)) );
-
-	connect (kspell, SIGNAL (done(char *)),
-		 this, SLOT (spellResult (char *)));
-	
-	kspell->setProgressResolution (2);
-
-	kspell->check (text().data());
-	
-      }
-    else
-      {
-	KMessageBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
-			 "Please make sure you have ISpell properly configured and in your PATH.", KMessageBox::STOP);
-      }
-}
-*/
-
 /*------------------------------------- CEditWidget::deleteInterval()
  * deleteInterval()
  *   Delete an interval of lines.
@@ -211,21 +173,14 @@ void CEditWidget::spellcheck2(KSpell *){
  *-----------------------------------------------------------------*/
 void CEditWidget::deleteInterval( uint startAt, uint endAt )
 {
-    assert( startAt <= endAt );
+  assert( startAt <= endAt );
 
-  int startPos=0;
-  int endPos=0;
-  QString txt;
-
-  // Fetch the text.
-  txt = text();
-
-  // Find start position.
-  startPos = getLinePos( txt, startAt );
+  QCString txt = text();
+  int startPos = getLinePos( txt, startAt );
 
   // We find the end of the line by increasing the linecounter and
   // subtracting by one to make pos point at the last \n character.
-  endPos = getLinePos( txt, endAt + 1 );
+  int endPos = getLinePos( txt, endAt + 1 );
   endPos--;
 
   // Remove the interval.
@@ -254,16 +209,8 @@ void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
   assert( toInsert != NULL );
 //  assert( atLine >= 0 );      uint is always >=0 ???
 
-  int pos=0;
-  QString txt;
-
-  // Fetch the text.
-  txt = text();
-
-  // Find the position to insert at.
-  pos = getLinePos( txt, atLine );
-
-  // Insert the new text.
+  QCString txt = text();
+  int pos = getLinePos( txt, atLine );
   txt.insert( pos, toInsert );
 
   // Update the editwidget with the new text.
@@ -285,9 +232,7 @@ void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
  *-----------------------------------------------------------------*/
 void CEditWidget::append( const char *toAdd )
 {
-  QString txt;
-
-  txt = text();
+  QCString txt = text();
   txt.append( toAdd );
   setText( txt );
 }

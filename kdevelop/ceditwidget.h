@@ -45,7 +45,7 @@ public: // Public methods to set attribute values
   /** Discard old text without warning and set new text
    * @param text The new text.
    */
-  void setText(const QString& text)      { KWrite::setText(text); }
+//  void setText(const QString& text)      { KWrite::setText(text); }
 
   /** Sets the modification status of the document. */
   void toggleModified(bool mod)    { KWrite::setModified(mod); }
@@ -76,7 +76,7 @@ public: // Cursor placement methods
   void gotoPos(int pos, QString text);
 
   /** Presents a "Goto Line" dialog to the user. */
-  void gotoLine()                 { KWrite::gotoLine(); }
+//  void gotoLine()                 { KWrite::gotoLine(); }
 
 public: // Selection related methods
   
@@ -84,48 +84,48 @@ public: // Selection related methods
   void copyText()                 { KWrite::copy(); }
 
   /** Inverts the current selection. */
-  void invertSelection()          { KWrite::invertSelection(); }
+//  void invertSelection()          { KWrite::invertSelection(); }
 
   /** Deselects all text. */
-  void deselectAll()              { KWrite::deselectAll(); }
+//  void deselectAll()              { KWrite::deselectAll(); }
 
 public: // Search and replace methods
 
   /** Presents a search dialog to the user. */
-  void search()                   { KWrite::search(); }
+//  void search()                   { KWrite::search(); }
 
   /** Repeats the last search or replace operation. 
    * On replace, the user is prompted even if the "Prompt On Replace" 
    * option was off.
    */
-  void searchAgain()              { KWrite::searchAgain(); }
+//  void searchAgain()              { KWrite::searchAgain(); }
 
   /** Presents a replace dialog to the user. */
-  void replace()                  { KWrite::replace(); }
+//  void replace()                  { KWrite::replace(); }
 
 public: // Indent methods
 
   /** Moves the current line or the selection one position to the 
    * right
    */
-  void indent()                   { KWrite::indent(); }
+//  void indent()                   { KWrite::indent(); }
 
   /** Moves the current line or the selection one position to the 
    * left
    */
-  void unIndent()                 { KWrite::unIndent(); }
+//  void unIndent()                 { KWrite::unIndent(); }
 
 public: // Comment methods
 
   /** Adds '//' to the beginning of the current line or of the lines in the
    * selection
    */
-  void comment()                   { KWrite::comment(); }
+//  void comment()                   { KWrite::comment(); }
 
   /** Removes '//' to the beginning of the current line or of the lines in the
    * selection
    */
-  void unComment()                 { KWrite::unComment(); }
+//  void unComment()                 { KWrite::unComment(); }
 
 public: // Queries
 
@@ -137,7 +137,7 @@ public: // Queries
   /** Gets the marked text as string. 
    * @return The marked text as a string.
    */
-  QString markedText()            { return KWrite::markedText(); }
+//  QString markedText()            { return KWrite::markedText(); }
   
   /** Get the current filename. 
    * @return The current filename.
@@ -147,7 +147,7 @@ public: // Queries
   /** Gets the complete document content as string. 
    * @return A string containing the whole document.
    */
-  QString text()                  { return KWrite::text(); }
+//  QString text()                  { return KWrite::text(); }
 
   /** Returns the number of lines in the text. 
    * @return Number of lines in the text.
