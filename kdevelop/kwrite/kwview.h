@@ -96,7 +96,6 @@ class KIconBorder : public QWidget {
     KIconBorder(KWrite *, KWriteDoc *, KWriteView *);
     ~KIconBorder();
 
-
   	/** Paints line */
 		void paintLine(int line);
 		/** Clear line*/
@@ -105,48 +104,44 @@ class KIconBorder : public QWidget {
 		void paintBookmark(int line);
 		/** Paint a breakpoint on the line if needed */
 		void paintBreakpoint(int line);
+    /** Painst an icon where the debugger has stopped */
+    void paintDbgPosition(int line);
 
   	/**  */
   	virtual void mousePressEvent(QMouseEvent* e);
   	/**  */
     virtual void paintEvent(QPaintEvent* e);
 
-		int getFontHeight();
-
   	/** Paint an icon to y */
-		void ShowIcon(QPixmap& icon, int y);
+		void showIcon(const QPixmap& icon, int y);
 
-	protected:
+  protected slots:
+    /**  */
+    void slotGetRange();
+    /**  */
+    void slotToggleBookmark();
+    /**  */
+    void slotLMBMenuToggle();
+    /**  */
+    void slotToggleBreakpoint();
+    /**  */
+    void slotEditBreakpoint();
+
+  private:
     KWrite *kWrite;
     KWriteDoc *kWriteDoc;
 		KWriteView *kWriteView;
 
 		QPopupMenu selectMenu;
-    /** Y-coord of the mouse */
-    int mouseY;
-
-	  /** Icon for the bookmarks */
-//	  QPixmap bookmarkIcon;
-
-  protected slots: // Protected slots
-    /**  */
-    void closePopup();
-    /**  */
-    void getRange();
-    /** toggles a bookmark */
-    void toggleBookmark();
-    /**  */
-    void toggleMenu();
-    /**  */
-    void slotBreakpointRMBMenu();
-
-  private: // Private attributes
-    /**  */
-    int id_toggle;
-    /**  */
-    bool selectBroBm;
+		/** action when user left clicks in border */
+  	bool LMBIsBreakpoint;
+    /** cursor is on line number */
+	  int cursorOnLine;
+	  /** the checkable menu items */
+  	int menuId_LMBBrkpoint;
+	  int menuId_LMBBookmark;
+	  int menuId_editBrkpoint;
 };
-
 
 class KWriteView : public QWidget {
     Q_OBJECT
@@ -351,8 +346,10 @@ class KWrite : public QWidget {
     void newUndo();
 
     // dbg
-    void gutterClick( const QString&, int, bool );
+    void toggleBreakpoint( const QString&, int );
+    void editBreakpoint( const QString&, int );
     void deleteLine( int );
+    void clearAllBreakpoints();
 
   protected:
     int configFlags;

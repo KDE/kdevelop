@@ -57,6 +57,11 @@ enum GDBCmd
   UNSETWATCH      = 'w',
 };
 
+#define RUNCMD      (true)
+#define NOTRUNCMD   (false)
+#define INFOCMD     (true)
+#define NOTINFOCMD  (false)
+
 /**
   *@author John Birch
   */

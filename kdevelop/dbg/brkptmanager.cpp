@@ -56,21 +56,6 @@ void BreakpointManager::reset()
 
 /***************************************************************************/
 
-void BreakpointManager::removeAll()
-{
-  for (int index=0; index<(int)count(); index++)
-  {
-    Breakpoint* BP = (Breakpoint*)item(index);
-    BP->setActionDie();
-    emit publishBPState(BP);
-    removeItem(index);
-  }
-
-  repaint();
-}
-
-/***************************************************************************/
-
 // Essentially tells the editor (display window) what lines contain a
 // breakpoint. Used when a file is loaded
 void BreakpointManager::refreshBP(const QString& filename)
@@ -211,10 +196,11 @@ void BreakpointManager::mouseDoubleClickEvent(QMouseEvent *e)
 void BreakpointManager::breakpointPopup(Breakpoint* BP)
 {
   KPopupMenu popup("Breakpoint menu");
-  popup.insertItem( i18n("Remove breakpoint"),    this, SLOT(slotRemoveBreakpoint()) );
-  popup.insertItem( i18n("Modify breakpoint"),    this, SLOT(slotModifyBreakpoint()) );
-  if (BP->hasSourcePosition())
-    popup.insertItem( i18n("Display source code"),  this, SLOT(slotGotoBreakpointSource()) );
+  popup.insertItem( i18n("Remove breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
+  popup.insertItem( i18n("Edit breakpoint"),              this, SLOT(slotEditBreakpoint()) );
+  popup.insertItem( i18n("Clear all breakpoints"),        this, SLOT(slotClearAllBreakpoints()) );
+  int id = popup.insertItem( i18n("Display source code"), this, SLOT(slotGotoBreakpointSource()) );
+  popup.setItemEnabled(id, BP->hasSourcePosition());
   popup.exec(QCursor::pos());
 }
 
@@ -228,7 +214,22 @@ void BreakpointManager::slotRemoveBreakpoint()
 
 /***************************************************************************/
 
-void BreakpointManager::slotModifyBreakpoint()
+void BreakpointManager::slotClearAllBreakpoints()
+{
+  for (int index=count()-1; index>=0; index--)
+  {
+    Breakpoint* BP = (Breakpoint*)item(index);
+    if (BP->isPending() && !BP->isDbgProcessing())
+      removeBreakpoint(index);
+  }
+
+  if (count())
+    emit clearAllBreakpoints();
+}
+
+/***************************************************************************/
+
+void BreakpointManager::slotEditBreakpoint()
 {
   if (currentItem() >= 0)
     modifyBreakpoint(currentItem());
@@ -276,8 +277,7 @@ void BreakpointManager::slotUnableToSetBPNow(int BPid)
 
 /***************************************************************************/
 
-void BreakpointManager::slotToggleStdBreakpoint
-              (const QString& fileName, int lineNo, bool RMBClicked)
+void BreakpointManager::slotToggleStdBreakpoint(const QString& fileName, int lineNo)
 {
   FilePosBreakpoint* fpBP = new FilePosBreakpoint(fileName, lineNo);
 
@@ -285,13 +285,24 @@ void BreakpointManager::slotToggleStdBreakpoint
   if (found >= 0)
   {
     delete fpBP;
-    if (RMBClicked)
-      modifyBreakpoint(found);
-    else
-      removeBreakpoint(found);
+    removeBreakpoint(found);
   }
   else
     addBreakpoint(fpBP);
+}
+
+/***************************************************************************/
+
+void BreakpointManager::slotEditBreakpoint(const QString& fileName, int lineNo)
+{
+  FilePosBreakpoint* fpBP = new FilePosBreakpoint(fileName, lineNo);
+
+  int found = findIndex(fpBP);
+  if (found >= 0)
+  {
+    delete fpBP;
+    modifyBreakpoint(found);
+  }
 }
 
 /***************************************************************************/
@@ -390,7 +401,7 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
   }
   		
   // Remove any inactive breakpoints.
-  for (int index=0; index<(int)count(); index++)
+  for (int index=count()-1; index>=0; index--)
   {
     Breakpoint* BP = (Breakpoint*)(item(index));
     if (!BP->isActive(activeFlag_))

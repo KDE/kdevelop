@@ -409,8 +409,17 @@ QString TrimmableItem::getCache()
   return QString();
 }
 
+// **************************************************************************
+
 void TrimmableItem::updateValue(const QString& value)
 {
+}
+
+// **************************************************************************
+
+const char * TrimmableItem::key ( int column, bool ascending ) const
+{
+  return "";
 }
 
 // **************************************************************************

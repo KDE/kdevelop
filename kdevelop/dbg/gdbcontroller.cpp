@@ -178,19 +178,19 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // Initialise gdb. At this stage gdb is sitting wondering what to do,
   // and to whom. Organise a few things, then set up the tty for the application,
   // and the application itself
-  queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), false, false));
-  queueCmd(new GDBCommand("set confirm off", false, false));
+  queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
   if (!config_displayStaticMembers_)
-    queueCmd(new GDBCommand("set print static-members off", false, false));
-  queueCmd(new GDBCommand(QString().sprintf("tty %s", (tty_->getMainTTY()).data()), false, false));
+    queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand(QString().sprintf("tty %s", (tty_->getMainTTY()).data()), NOTRUNCMD, NOTINFOCMD));
   if (!args.isEmpty())
-    queueCmd(new GDBCommand(QString().sprintf("set args %s", args.data()), false, false));
+    queueCmd(new GDBCommand(QString().sprintf("set args %s", args.data()), NOTRUNCMD, NOTINFOCMD));
 
-  queueCmd(new GDBCommand(QString().sprintf("file %s", application.data()), false, false));
+  queueCmd(new GDBCommand(QString().sprintf("file %s", application.data()), NOTRUNCMD, NOTINFOCMD));
 
   // This makes gdb pump a variable out on one line.
-  queueCmd(new GDBCommand("set width 0", false, false));
-  queueCmd(new GDBCommand("set height 0", false, false));
+  queueCmd(new GDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("set height 0", NOTRUNCMD, NOTINFOCMD));
 
   // Get gdb to notify us of shared library events. This allows us to
   // set breakpoints in shared libraries, that the user has set previously.
@@ -198,12 +198,12 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // satisfy gdb!
   // An alternative to this would be catch load, catch unload, but they don't work!
   if (config_breakOnLoadingLibrary_)
-    queueCmd(new GDBCommand("set stop-on 1", false, false));
+    queueCmd(new GDBCommand("set stop-on 1", NOTRUNCMD, NOTINFOCMD));
 
   // Print some nicer names in disassembly output. Although for an assembler
   // person this may actually be wrong and the mangled name could be better.
   if (config_asm_demangle_)
-    queueCmd(new GDBCommand("set print asm-demangle on", false, false));
+    queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
 
   // Organise any breakpoints.
   emit acceptPendingBPs();
@@ -331,9 +331,9 @@ void GDBController::actOnProgramPause(const QString& msg)
     varTree_->setActiveFlag();
 
     // These two need to be actioned immediately. The order _is_ important
-    queueCmd(new GDBCommand("backtrace", false, false, BACKTRACE), true);
+    queueCmd(new GDBCommand("backtrace", NOTRUNCMD, false, BACKTRACE), INFOCMD);
     if (stateIsOn(s_viewLocals))
-      queueCmd(new GDBCommand("info local", false, true, LOCALS));
+      queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 
     varTree_->findWatch()->requestWatchVars();
     varTree_->findWatch()->setActive();
@@ -440,8 +440,8 @@ void GDBController::parseLine(char* buf)
         int BPNo = atoi(buf+11);
         if (BPNo)
         {
-          queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo),false, false));
-          queueCmd(new GDBCommand("info breakpoints", false, false, BPLIST));
+          queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
+          queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
         }
         else
           ASSERT(false);
@@ -463,7 +463,7 @@ void GDBController::parseLine(char* buf)
         setStateOff(s_appBusy);
         DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
         emit acceptPendingBPs();
-        queueCmd(new GDBCommand("continue", true, false));
+        queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
         break;
       }
 
@@ -495,7 +495,7 @@ void GDBController::parseLine(char* buf)
       // Starts with "Brea" so assume "Breakpoint" and just get a full
       // breakpoint list. Note that the state is unchanged. This probably
       // isn't triggered?
-      queueCmd(new GDBCommand("info breakpoints", false, false, BPLIST));
+      queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 
       DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
       break;
@@ -516,7 +516,7 @@ void GDBController::parseLine(char* buf)
           // and the world will be a better place.
           DBG_DISPLAY("Parsed (Starts with digit - BP forced) <" + QString(buf) + ">");
           setStateOff(s_appBusy|s_BPForcedStop);
-          queueCmd(new GDBCommand("continue", true, false));
+          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
           break;
         }
 
@@ -545,7 +545,7 @@ void GDBController::parseProgramLocation(char* buf)
     // which sends the previously queued breakpoint to gdb first.
     DBG_DISPLAY("Program location (BP forced) <" + QString(buf) + ">");
     setStateOff(s_appBusy|s_BPForcedStop);
-    queueCmd(new GDBCommand("continue", true, false));
+    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
   }
   else
   {
@@ -827,11 +827,11 @@ void GDBController::setBreakpoint(const QString& BPSetCmd, int key)
 
 void GDBController::clearBreakpoint(const QString& BPClearCmd)
 {
-  queueCmd(new GDBCommand(BPClearCmd, false, false));
+  queueCmd(new GDBCommand(BPClearCmd, NOTRUNCMD, NOTINFOCMD));
   // Note: this is NOT an info command, because gdb doesn't explictly tell
   // us that the breakpoint has been deleted, so if we don't have it the
   // BP list doesn't get updated.
-  queueCmd(new GDBCommand("info breakpoints", false, false, BPLIST));
+  queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 }
 
 // **************************************************************************
@@ -843,21 +843,21 @@ void GDBController::modifyBreakpoint(Breakpoint* BP)
   {
     if (BP->changedCondition())
       queueCmd(new GDBCommand(QString().sprintf(
-                  "condition %d %s",  BP->dbgId(), BP->conditional().data()),false,false));
+                  "condition %d %s",  BP->dbgId(), BP->conditional().data()), NOTRUNCMD, NOTINFOCMD));
 
     if (BP->changedIgnoreCount())
       queueCmd(new GDBCommand(QString().sprintf(
-                  "ignore %d %d", BP->dbgId(), BP->ignoreCount()),false,false));
+                  "ignore %d %d", BP->dbgId(), BP->ignoreCount()), NOTRUNCMD, NOTINFOCMD));
 
     if (BP->changedEnable())
       queueCmd(new GDBCommand(QString().sprintf("%s %d",
-                  BP->isEnabled() ? "enable" : "disable", BP->dbgId()),false,false));
+                  BP->isEnabled() ? "enable" : "disable", BP->dbgId()), NOTRUNCMD, NOTINFOCMD));
 
     BP->setDbgProcessing(true);
     // Note: this is NOT an info command, because gdb doesn't explictly tell
     // us that the breakpoint has been deleted, so if we don't have it the
     // BP list doesn't get updated.
-    queueCmd(new GDBCommand("info breakpoints", false, false, BPLIST));
+    queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
   }
 }
 
@@ -873,7 +873,7 @@ void GDBController::slotRun()
   if (stateIsOn(s_appBusy|s_dbgNotStarted))
     return;
 
-  queueCmd(new GDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", true, false));
+  queueCmd(new GDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************
@@ -884,10 +884,10 @@ void GDBController::slotRunUntil(const QString& filename, int lineNo)
     return;
 
   if (filename == "")
-    queueCmd(new GDBCommand(QString().sprintf("until %d",lineNo), true, false));
+    queueCmd(new GDBCommand(QString().sprintf("until %d",lineNo), RUNCMD, NOTINFOCMD));
   else
     queueCmd(new GDBCommand(QString().sprintf("until %s:%d",
-                          filename.data(), lineNo), true, false));
+                          filename.data(), lineNo), RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************
@@ -897,7 +897,7 @@ void GDBController::slotStepInto()
   if (stateIsOn(s_appBusy|s_appNotStarted))
     return;
 
-  queueCmd(new GDBCommand("step", true, false));
+  queueCmd(new GDBCommand("step", RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************
@@ -907,7 +907,7 @@ void GDBController::slotStepOver()
   if (stateIsOn(s_appBusy|s_appNotStarted))
     return;
 
-  queueCmd(new GDBCommand("next", true, false));
+  queueCmd(new GDBCommand("next", RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************
@@ -917,7 +917,7 @@ void GDBController::slotStepOutOff()
   if (stateIsOn(s_appBusy|s_appNotStarted))
     return;
 
-  queueCmd(new GDBCommand("finish", true, false));
+  queueCmd(new GDBCommand("finish", RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************
@@ -948,8 +948,8 @@ void GDBController::slotBPState(Breakpoint* BP)
     if (!config_forceBPSet_)
       return;
 
-    // When forcing a breakpoint to be set, just interrupt a running
-    // app and note in he state that we're doing this.
+    // When forcing breakpoints to be set/unset, interrupt a running app
+    // and change the state.
   	ASSERT (dbgProcess_);
   	dbgProcess_->kill(SIGINT);
   	setStateOn(s_BPForcedStop);
@@ -977,13 +977,40 @@ void GDBController::slotBPState(Breakpoint* BP)
 
 // **************************************************************************
 
+void GDBController::slotClearAllBreakpoints()
+{
+  // Are we in a position to do anything to this breakpoint?
+  if (stateIsOn(s_dbgNotStarted))
+    return;
+
+  if (stateIsOn(s_appBusy))
+  {
+    if (!config_forceBPSet_)
+      return;
+
+    // When forcing breakpoints to be set/unset, interrupt a running app
+    // and change the state.
+  	ASSERT (dbgProcess_);
+  	dbgProcess_->kill(SIGINT);
+  	setStateOn(s_BPForcedStop);
+  }
+
+  queueCmd(new GDBCommand("delete", NOTRUNCMD, NOTINFOCMD));
+  // Note: this is NOT an info command, because gdb doesn't explictly tell
+  // us that the breakpoint has been deleted, so if we don't have it the
+  // BP list doesn't get updated.
+  queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+}
+
+// **************************************************************************
+
 void GDBController::slotDisassemble(const QString& start, const QString& end)
 {
   if (stateIsOn(s_appBusy|s_dbgNotStarted))
     return;
 
   QString cmd(QString().sprintf("disassemble %s %s", start.data(), end.data()));
-  queueCmd(new GDBCommand(cmd, false, true, DISASSEMBLE));
+  queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, DISASSEMBLE));
 }
 
 // **************************************************************************
@@ -994,7 +1021,7 @@ void GDBController::slotMemoryDump(const QString& address, const QString& amount
     return;
 
   QString cmd(QString().sprintf("x/%sb %s", amount.data(), address.data()));
-  queueCmd(new GDBCommand(cmd, false, true, MEMDUMP));
+  queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, MEMDUMP));
 }
 
 // **************************************************************************
@@ -1004,7 +1031,7 @@ void GDBController::slotRegisters()
   if (stateIsOn(s_appBusy|s_dbgNotStarted))
     return;
 
-  queueCmd(new GDBCommand("info all-registers", false, true, REGISTERS));
+  queueCmd(new GDBCommand("info all-registers", NOTRUNCMD, INFOCMD, REGISTERS));
 }
 
 // **************************************************************************
@@ -1014,7 +1041,7 @@ void GDBController::slotLibraries()
   if (stateIsOn(s_appBusy|s_dbgNotStarted))
     return;
 
-  queueCmd(new GDBCommand("info sharedlibrary", false, true, LIBRARIES));
+  queueCmd(new GDBCommand("info sharedlibrary", NOTRUNCMD, INFOCMD, LIBRARIES));
 }
 
 // **************************************************************************
@@ -1029,7 +1056,7 @@ void GDBController::slotSelectFrame(int frameNo)
   // to frame 0 regardless, so being removed with a run command is the best
   // thing that could happen here.
   if (frameNo != currentFrame_)
-    queueCmd(new GDBCommand(QString().sprintf("frame %d", frameNo), false, true, FRAME));
+    queueCmd(new GDBCommand(QString().sprintf("frame %d", frameNo), NOTRUNCMD, NOTINFOCMD, FRAME));
 
   // Hold on to  this frame number so that we know where to put the
   // local variables if any are generated.
@@ -1051,7 +1078,7 @@ void GDBController::slotSelectFrame(int frameNo)
   {
     // Have we already got these details?
     if (frame->needLocals())
-      queueCmd(new GDBCommand("info local", false, true, LOCALS));
+      queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
   }
 }
 
@@ -1170,9 +1197,9 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
     int BPNo = atoi(found+25);
     if (BPNo)
     {
-      queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo),false, false));
-      queueCmd(new GDBCommand("info breakpoints", false, false, BPLIST));
-      queueCmd(new GDBCommand("continue", true, false));
+      queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
+      queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
       emit unableToSetBPNow(BPNo);
     }
     return;

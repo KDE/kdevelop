@@ -130,6 +130,7 @@ public:
 
   virtual void setCache(const QString& value);
   virtual QString getCache();
+  virtual const char * key ( int column, bool ascending ) const;
 
 private:
   int activeFlag_;

@@ -39,7 +39,6 @@ public:
   virtual ~BreakpointManager();
 
   void reset();
-  void removeAll();
   void refreshBP(const QString& filename);
 
 private:
@@ -57,7 +56,8 @@ private:
   void breakpointPopup(Breakpoint *BP);
 
 public slots:
-  void slotToggleStdBreakpoint(const QString& filename, int lineNo, bool RMBClicked);
+  void slotToggleStdBreakpoint(const QString& filename, int lineNo);
+  void slotEditBreakpoint(const QString& fileName, int lineNo);
   void slotToggleWatchpoint(const QString& varName);
 
   void slotParseGDBBrkptList(char* str);
@@ -65,7 +65,8 @@ public slots:
 
   void slotSetPendingBPs();
   void slotRemoveBreakpoint();
-  void slotModifyBreakpoint();
+  void slotClearAllBreakpoints();
+  void slotEditBreakpoint();
   void slotGotoBreakpointSource();
  	void slotUnableToSetBPNow(int BPNo);
 
@@ -73,6 +74,7 @@ signals:
   void publishBPState(Breakpoint* brkpt);
   void refreshBPState(const Breakpoint* brkpt);
   void gotoSourcePosition(const QString& filename, int lineno);
+  void clearAllBreakpoints();
 
 private:
   int activeFlag_;
