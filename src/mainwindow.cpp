@@ -244,7 +244,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
 {
   KConfig *config = kapp->config();
   config->setGroup("UI");
-  mdiStyle = config->readNumEntry("MDIStyle", 0);
+  mdiStyle = config->readNumEntry("MDIStyle", 1);
 
   setIDEAlModeStyle(mdiStyle); // KDEV3 style of KMultiTabBar
   setStandardMDIMenuEnabled(false);
