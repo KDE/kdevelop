@@ -29,7 +29,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 308)
 #include <ktexteditor/markinterfaceextension.h>
 #endif
 
@@ -60,7 +60,7 @@ public:
 		: QListViewItem( parent, level, problem, file, line, column ) {}
 
 	int compare( QListViewItem* item, int column, bool ascending ) const {
-		if( column == 3 || column == 4 ){
+		if( column == 2 || column == 3 ){
 			int a = text( column ).toInt();
 			int b = item->text( column ).toInt();
 			if( a == b )
@@ -77,14 +77,14 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
       m_cppSupport( part ),
       m_editor( 0 ),
       m_document( 0 ),
-	  m_markIface( 0 ),
+      m_markIface( 0 ),
       m_bgParser( 0 )
 {
     addColumn( i18n("Level") );
-    addColumn( i18n("Problem") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
-    //addColumn( i18n("Column") );
+    addColumn( i18n("Column") );
+    addColumn( i18n("Problem") );
     setAllColumnsShowFocus( TRUE );
 
     m_timer = new QTimer( this );
@@ -168,7 +168,7 @@ void ProblemReporter::reparse()
         QListViewItem* i = current;
         current = current->nextSibling();
 
-        if( i->text(2) == m_filename )
+        if( i->text(1) == m_filename )
             delete( i );
     }
 
@@ -188,9 +188,9 @@ void ProblemReporter::reparse()
 
 void ProblemReporter::slotSelected( QListViewItem* item )
 {
-    KURL url( item->text(2) );
-    int line = item->text( 3 ).toInt();
-    // int column = item->text( 4 ).toInt();
+    KURL url( item->text(1) );
+    int line = item->text( 2 ).toInt();
+    // int column = item->text( 3 ).toInt();
     m_cppSupport->partController()->editDocument( url, line-1 );
 }
 
@@ -198,16 +198,16 @@ void ProblemReporter::reportError( QString message,
                                    QString filename,
                                    int line, int column )
 {
-	if( m_markIface ){
-		m_markIface->addMark( line-1, KTextEditor::MarkInterface::markType10 );
-	}
+    if( m_markIface ){
+	m_markIface->addMark( line, KTextEditor::MarkInterface::markType10 );
+    }	
 	
     new ProblemItem( this,
-                       "error",
-                       message.replace( QRegExp("\n"), "" ),
-                       filename,
-                       QString::number( line ),
-                       QString::number( column ) );
+		     "error",
+		     filename,
+		     QString::number( line+1 ),
+		     QString::number( column+1 ),
+		     message.replace( QRegExp("\n"), "" ) );
 }
 
 void ProblemReporter::reportWarning( QString message,
@@ -215,23 +215,23 @@ void ProblemReporter::reportWarning( QString message,
                                      int line, int column )
 {
     new ProblemItem( this,
-                       "warning",
-                       message.replace( QRegExp("\n"), "" ),
-                       filename,
-                       QString::number( line ),
-                       QString::number( column ) );
+		     "warning",
+		     filename,
+		     QString::number( line+1 ),
+		     QString::number( column+1 ),
+		     message.replace( QRegExp("\n"), "" ) );
 }
 
 void ProblemReporter::reportMessage( QString message,
                                      QString filename,
                                      int line, int column )
 {
-    new QListViewItem( this,
-                       "message",
-                       message.replace( QRegExp("\n"), "" ),
-                       filename,
-                       QString::number( line ),
-                       QString::number( column ) );
+    new ProblemItem( this,
+		     "message",
+		     filename,
+		     QString::number( line+1 ),
+		     QString::number( column+1 ),
+		     message.replace( QRegExp("\n"), "" ) );
 }
 
 void ProblemReporter::configure()
@@ -253,7 +253,7 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
-#if (KDE_VERSION > 304)
+#if (KDE_VERSION > 308)
 	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 	
 	if( !iface )

@@ -149,6 +149,11 @@ public:
     const QChar* position() const;
     void setPosition( const QChar* position );
 
+    void getStartPosition( int* line, int* column ) const;
+    void setStartPosition( int line, int column );
+    void getEndPosition( int* line, int* column ) const;
+    void setEndPosition( int line, int column );
+
     unsigned int length() const;
     void setLength( unsigned int length );
 
@@ -158,6 +163,10 @@ private:
     int m_type;
     const QChar* m_position;
     int m_length;
+    int m_startLine;
+    int m_startColumn;
+    int m_endLine;
+    int m_endColumn;
 }; // class Token
 
 class Lexer {
@@ -218,6 +227,9 @@ private:
     bool m_recordWhiteSpaces;
     bool m_startLine;
     QValueStack<int> m_directiveStack;
+    
+    int m_currentLine;
+    int m_currentColumn;
 };
 
 
@@ -238,7 +250,11 @@ inline Token::Token( int type, const QChar* position, int length )
 inline Token::Token( const Token& source )
     : m_type( source.m_type ),
       m_position( source.m_position ),
-      m_length( source.m_length )
+      m_length( source.m_length ),
+      m_startLine( source.m_startLine ),
+      m_startColumn( source.m_startColumn ),
+      m_endLine( source.m_endLine ),
+      m_endColumn( source.m_endColumn )
 {
 }
 
@@ -247,6 +263,10 @@ inline Token& Token::operator = ( const Token& source )
     m_type = source.m_type;
     m_position = source.m_position;
     m_length = source.m_length;
+    m_startLine = source.m_startLine;
+    m_startColumn = source.m_startColumn;
+    m_endLine = source.m_endLine;
+    m_endColumn = source.m_endColumn;
     return( *this );
 }
 
@@ -259,7 +279,11 @@ inline bool Token::operator == ( const Token& token ) const
 {
     return m_type == token.m_type &&
        m_position == token.m_position &&
-         m_length == token.m_length;
+         m_length == token.m_length &&
+      m_startLine == token.m_startLine &&
+    m_startColumn == token.m_startColumn &&
+        m_endLine == token.m_endLine &&
+      m_endColumn == token.m_endColumn;
 }
 
 inline QString Token::toString() const
@@ -285,6 +309,30 @@ inline void Token::setType( int type )
 inline const QChar* Token::position() const
 {
     return m_position;
+}
+
+inline void Token::setStartPosition( int line, int column )
+{
+    m_startLine = line;
+    m_startColumn = column;
+}
+
+inline void Token::setEndPosition( int line, int column )
+{
+    m_endLine = line;
+    m_endColumn = column;
+}
+
+inline void Token::getStartPosition( int* line, int* column ) const
+{
+    if( line ) *line = m_startLine;
+    if( column ) *column = m_startColumn;
+}
+
+inline void Token::getEndPosition( int* line, int* column ) const
+{
+    if( line ) *line = m_endLine;
+    if( column ) *column = m_endColumn;
 }
 
 inline void Token::setPosition( const QChar* position )
@@ -364,5 +412,7 @@ inline int Lexer::tokenPosition( const Token& token ) const
 {
     return token.position() - m_buffer;
 }
+
+
 
 #endif
