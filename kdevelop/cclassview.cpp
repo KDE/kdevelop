@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <kmsgbox.h>
 #include <qheader.h>
+#include <qprogressdialog.h> 
 
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
@@ -144,11 +145,13 @@ void CClassView::initPopups()
  *-----------------------------------------------------------------*/
 void CClassView::refresh( CProject *proj )
 {
+  QProgressDialog progressDlg(NULL, "progressDlg", true );
   QStrList list;
   QStrList src;
   QStrList header;
   char *str;
   QString projDir;
+  int i;
 
   debug( "CClassView::refresh( proj )" );
 
@@ -164,17 +167,31 @@ void CClassView::refresh( CProject *proj )
   header = proj->getHeaders();
 
   // Parse headerfiles.
+  progressDlg.setLabelText( i18n("Parsing headers...") );
+  progressDlg.setTotalSteps( header.count() );
+  progressDlg.setProgress( 0 );
+  progressDlg.show();
+  i=0;
   for( str = header.first(); str != NULL; str = header.next() )
   {
     debug( "  parsing:[%s]", str );
     cp.parse( str );
+    i++;
+    progressDlg.setProgress( i );
   }
   
   // Parse sourcefiles.
+  progressDlg.setLabelText( i18n("Parsing sources...") );
+  progressDlg.setTotalSteps( src.count() );
+  progressDlg.setProgress( 0 );
+  progressDlg.show();
+  i=0;
   for( str = src.first(); str != NULL; str = src.next() )
   {
     debug( "  parsing:[%s]", str );
     cp.parse( str );
+    i++;
+    progressDlg.setProgress( i );
   }
   
   refresh();
@@ -221,7 +238,7 @@ void CClassView::refresh()
 
   // Add all global functions and variables
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), globals );
-  //  addAttributes( store->gvIterator, globals );
+  ((CClassTreeHandler *)treeH)->addGlobalVariables( store->getSortedGlobalVarList(), globals );
 
   // Open the classes and globals folder.
   setOpen( classes, true );
