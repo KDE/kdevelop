@@ -784,6 +784,13 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   if (pDoc->viewCount() == 0) {
     closeKWriteDoc(pDoc);
   }
+  /* if there are no more views, the pointer have to be "reset" here,
+   * because slot_gotFocus() can not be called any longer
+   */
+  if (m_MDICoverList.count() == 0) {
+    m_pCurEditView = 0L;
+    m_pCurBrowserView = 0L;
+  }
 }
 
 //-----------------------------------------------------------------------------

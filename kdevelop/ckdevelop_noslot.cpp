@@ -196,7 +196,7 @@ bool CKDevelop::isProjectDirty()
  *-----------------------------------------------------------------*/
 void CKDevelop::setMainCaption(int item)
 {
-  QString capt;
+  QString capt=QString::null;
   CEditWidget* pCEW = m_docViewManager->currentEditView();
   switch(item)
   {
@@ -215,15 +215,14 @@ void CKDevelop::setMainCaption(int item)
 
   default:
     if (pCEW) {
-      // something is going seriously wrong here...
-      assert (pCEW->doc());
-      capt = QFileInfo(pCEW->getName()).fileName();
+      //capt = QFileInfo(pCEW->getName()).fileName();
+      QString name=pCEW->getName();
+      int len=name.length();
+      int ip=name.findRev("/",-1);
+      capt = name.right(len-ip-1);
     }
-    else {
-      capt = "";
-    }
-    if (project) {
-      capt = prj->getProjectName() + " - " + capt;
+    if (capt.isNull()) {
+      capt = prj->getProjectName();
     }
     if (pCEW && pCEW->isModified())
     {

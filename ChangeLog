@@ -1,3 +1,7 @@
+2001-06-15  rokrau@yahoo.com
+   * bugfix: another attempt to fix the mysterious crash 
+     CKDevelop::setMainCaption
+
 2001-06-13  rokrau@yahoo.com
    * bugfix: prevent an infinite loop in coutputwidget.cpp
 
