@@ -1,20 +1,16 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-chellodir = ${appwizarddatadir}/template-chello
-templatedir = ${appwizarddatadir}/templates
 
-chello_DATA = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs 	      configure.in chello.png app.kdevelop
+dataFiles = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs \
+	configure.in chello.png app.kdevelop
+
+templatedir = ${appwizarddatadir}/templates
 template_DATA = chello
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+chello.tar.gz:
+	$(TAR) -cf chello.tar -C $(srcdir) ${dataFiles}
+	gzip chello.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = chello.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(chellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(chellodir)/script
+CLEANFILES = *.tar.gz

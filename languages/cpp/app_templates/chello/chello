@@ -8,7 +8,7 @@ Comment=Generates a simple Hello world program in C
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=src/APPNAMELC.c
-Archive=chello.tgz
+Archive=chello.tar.gz
 
 [LIBS]
 Type = value
@@ -40,23 +40,23 @@ Default=true
 
 [LICENSE]
 Type=install
-Source=%{src}/template-common/%{LICENSEFILE}
+Source=%{kdevelop}/template-common/%{LICENSEFILE}
 Dest=%{dest}/%{LICENSEFILE}
 
 [ADMIN]
 Type=install archive
-Source=%{src}/template-common/admin.tar.gz
+Source=%{kdevelop}/template-common/admin.tar.gz
 Dest=%{dest}
 Process=false
 
 [GNU]
 Type=install archive
-Source=%{src}/template-common/gnu.tar.gz
+Source=%{kdevelop}/template-common/gnu.tar.gz
 Dest=%{dest}
 
 [PROJECT]
 Type=install
-Source=%{src}/template-chello/app.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [SRC]
@@ -75,44 +75,44 @@ Option=INSTALL_DOCS
 
 [MAKEFILE.AM]
 Type=install
-Source=%{src}/template-chello/c-Makefile.am
+Source=%{src}/c-Makefile.am
 Dest=%{dest}/Makefile.am
 
 [MAKEFILE.CVS]
 Type=install
-Source=%{src}/template-chello/c-Makefile.cvs
+Source=%{src}/c-Makefile.cvs
 Dest=%{dest}/Makefile.cvs
 
 [CONFIGURE.IN]
 Type=install
-Source=%{src}/template-chello/configure.in
+Source=%{src}/configure.in
 Dest=%{dest}/configure.in
 
 [SRC.MAKEFILE.AM]
 Type=install
-Source=%{src}/template-chello/src-Makefile.am
+Source=%{src}/src-Makefile.am
 Dest=%{dest}/src/Makefile.am
 
 [APP.C]
 Type=install
-Source=%{src}/template-chello/main.c
+Source=%{src}/main.c
 Dest=%{dest}/src/%{APPNAMELC}.c
 
 [DOCSMAKEFILE.AM1]
 Type=install
-Source=%{src}/template-common/kde-doc-Makefile.am
+Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
 Option=INSTALL_DOCS
 
 [DOCSMAKEFILE.AM2]
 Type=install
-Source=%{src}/template-common/kde-doc-en-Makefile.am
+Source=%{kdevelop}/template-common/kde-doc-en-Makefile.am
 Dest=%{dest}/doc/en/Makefile.am
 Option=INSTALL_DOCS
 
 [DOCS]
 Type=install
-Source=%{src}/template-common/kde-index.docbook
+Source=%{kdevelop}/template-common/kde-index.docbook
 Dest=%{dest}/doc/en/index.docbook
 Option=INSTALL_DOCS
 
