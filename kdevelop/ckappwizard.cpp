@@ -1046,7 +1046,7 @@ void CKAppWizard::generateEntries() {
   else if (kdeminiitem->isSelected()) {
     entries << "kdemini\n";
   }
-  if (kde2normalitem->isSelected()) {
+  else if (kde2normalitem->isSelected()) {
     entries << "kde2normal\n";
   }
   else if (kde2miniitem->isSelected()) {
@@ -1482,7 +1482,7 @@ void CKAppWizard::slotApplicationClicked() {
     }
     apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
   }
-  if (kde2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (kde2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);

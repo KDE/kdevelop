@@ -72,7 +72,16 @@ else {
   elsif ($processes{APPLICATION} eq "qtnormal") {
     changeQtApp();
   }
+  elsif ($processes{APPLICATION} eq "qt2normal") {
+    changeQtApp();
+  }
   elsif ($processes{APPLICATION} eq "kdenormal") {
+    changeNormalApp();
+  }
+  elsif ($processes{APPLICATION} eq "kde2mini") {
+    changeMiniApp();
+  }
+  elsif ($processes{APPLICATION} eq "kde2normal") {
     changeNormalApp();
   }
 }
@@ -115,7 +124,7 @@ if ($processes{VSSUPPORT} eq "cvs") {
     $copydes = $underDirectory . "/docs/en/.cvsignore";
     copy ("$copysrc", "$copydes");
 
-    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal") {	
+    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" || $processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal") {	
 #      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
 #      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
 #      system ("cp $copysrc $copydes");
