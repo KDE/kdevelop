@@ -1,24 +1,26 @@
 <?php
 
 printHeader();
-echo "<H1>Hello World</H1>";
+echo "<h1>Hello World!</h1>\n";
 printFooter();
 
 function printHeader(){
-  echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"\n" .
-    "\"http://www.w3.org/TR/REC-html40/loose.dtd\"><HTML>\n" . 
-    "<HEAD>\n" .
-    "<meta name=\"description\" content=\"\" >\n" .
-    "<meta name=\"author\" content=\"$AUTHOR$\">\n" .
-    "<meta name=\"keywords\" content=\"\" >\n" .
-    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" .
-    "<TITLE>$APPNAME$</TITLE>\n" .
-    "</HEAD>\n". 
-    "<BODY>\n";
+	echo <<<EOF
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta name="description" content="" />
+	<meta name="author" content="$AUTHOR$" />
+	<meta name="keywords" content="" />
+	<title>$APPNAME$</title>
+</head>
+<body>
+
+EOF;
 }
 
 function printFooter(){
-  echo "\n</BODY></HTML>";
+	echo "</body>\n</html>";
 }
 
 ?>
