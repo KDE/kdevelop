@@ -260,7 +260,9 @@ void CMakeOutputWidget::checkForError()
   }
 
   tmp_it = m_errorMap.begin();
-  tmp_it++;
+  // if unchecked this can cause a nasty endless loop
+  if (tmp_it != m_errorMap.end()) tmp_it++;
+
   if (line > tmp_it.key())
     it = m_errorMap.end();
   else

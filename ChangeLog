@@ -1,3 +1,6 @@
+2001-06-13  rokrau@yahoo.com
+   * bugfix: prevent an infinite loop in coutputwidget.cpp
+
 2001-06-12  rokrau@yahoo.com
    * bugfix: kdevelop didnt open a project from the command line, instead 
      dumped core
