@@ -327,16 +327,31 @@ void CustomProjectPart::populateProject()
             QPtrListIterator<QFileInfo> it(*dirEntries);
             for (; it.current(); ++it) {
                 QString fileName = it.current()->fileName();
-                if (fileName == "." || fileName == "..")
-                    continue;
-                QString path = it.current()->absFilePath();
-                if (it.current()->isDir()) {
-                    kdDebug(9025) << "Pushing: " << path << endl;
-                    s.push(path);
-                }
-                else {
-                        kdDebug(9025) << "Adding: " << path << endl;
-                    m_sourceFiles.append(path.mid(prefixlen));
+
+                if ((!fileName.endsWith("~"))
+                    && ((fileName.endsWith(".java"))
+                        || (fileName.endsWith(".h"))
+                        || (fileName.endsWith(".H"))
+                        || (fileName.endsWith(".hh"))
+                        || (fileName.endsWith(".hxx"))
+                        || (fileName.endsWith(".hpp"))
+                        || (fileName.endsWith(".c"))
+                        || (fileName.endsWith(".C"))
+                        || (fileName.endsWith(".cc"))
+                        || (fileName.endsWith(".cpp"))
+                        || (fileName.endsWith(".c++"))
+                        || (fileName.endsWith(".cxx"))
+                        || (fileName.startsWith("Makefile"))))  //Makefile, Makefile.am, Makefile.in
+                {
+                   QString path = it.current()->absFilePath();
+                   if (it.current()->isDir()) {
+                      kdDebug(9025) << "Pushing: " << path << endl;
+                      s.push(path);
+                   }
+                   else {
+                      kdDebug(9025) << "Adding: " << path << endl;
+                      m_sourceFiles.append(path.mid(prefixlen));
+                   }
                 }
             }
         }
