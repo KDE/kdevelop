@@ -368,6 +368,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
     QPtrListIterator<EnumeratorAST> it( l );
     while( it.current() ){
 	ParsedAttribute* attr = findOrInsertAttribute( m_currentContainer, it.current()->id()->text() );
+	attr->setAccess( m_currentAccess );
 	attr->setType( "int" );
 	attr->setIsStatic( true );
 
@@ -421,6 +422,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
         cl = m_currentContainer;
 
     ParsedAttribute* attr = findOrInsertAttribute( cl, id );
+    attr->setAccess( m_currentAccess );
 
     QString text = typeOfDeclaration( typeSpec, d );
     if( !text.isEmpty() )
