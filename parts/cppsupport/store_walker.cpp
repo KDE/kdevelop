@@ -751,7 +751,7 @@ ParsedScopeContainer* StoreWalker::currentScope()
 QString StoreWalker::scopeOfDeclarator( DeclaratorAST* d )
 {
     QStringList scope = m_currentScope;
-    if( d->declaratorId()->classOrNamespaceNameList().count() ){
+    if( d && d->declaratorId() && d->declaratorId()->classOrNamespaceNameList().count() ){
         if( d->declaratorId()->isGlobal() )
 	    scope.clear();
 	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
