@@ -1,3 +1,9 @@
+2002-12-29 Harald Fernengel <harry@kdevelop.org>
+	* Added valgrind part, requires installed valgrind
+	  parses and displays valgrind's output in a listview,
+	  tries to auto-guess the location of the memory leaks in
+	  the project
+
 2002-12-18 Caleb Tennis <caleb@aei-tech.com>
         * Hack to fix KTabZoomFrame from going smaller than the
           sizeHint() of the part it is loading.  This needs more work,
@@ -21,12 +27,12 @@
 2002-12-22 F@lk Brettschneider <falk@kdevelop.org>
 	* QEditor: double click selection improved
 	* renaming of main window classes, the names were confusing
-    
+
 2002-12-18 F@lk Brettschneider <falk@kdevelop.org>
 	* QEditor: can now delete words via Ctrl+Backspace and Ctrl+Del
 	* new class TopLevelShare, moved doubled stuff to it from the 2 main widget classes
 	* implemented tool-/status-/view-bar on/off actions in 'Settings' menu
-        
+
 2002-12-18  Victor Röder  <victor_roeder@gmx.de>
 	* Added "Choose Target Dialog"
 	* Added SLOTS for removing/adding many files
