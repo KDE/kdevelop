@@ -9,3 +9,4 @@ ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevxulsupport
 X-KDevelop-Language=Xul
 X-KDevelop-Args=Xul
+X-KDevelop-Version=1

@@ -133,11 +133,15 @@
   <Action name="tree_view"/>
   <Action name="output_view"/>
   <DefineGroup name="view_operations"/>
-  <Action name="stop_processes"/>
-  <DefineGroup name="build_operations"/>
-  <DefineGroup name="debug_operations"/>
   <Merge/>
   <Action name="help_whats_this"/>
+</ToolBar>
+
+<ToolBar name="buildToolBar" position="Top" noMerge="1">
+  <text>Main Toolbar</text>
+  <DefineGroup name="build_operations"/>
+  <DefineGroup name="debug_operations"/>
+  <Action name="stop_processes"/>
 </ToolBar>
 
 <ToolBar name="browserToolBar" position="Top" noMerge="1">

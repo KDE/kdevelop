@@ -7,3 +7,4 @@ Name=KDevHaskellProject
 GenericName=Haskell Project
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevhaskellproject
+X-KDevelop-Version=1
