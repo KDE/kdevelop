@@ -107,6 +107,16 @@ void VarViewer::clear()
 
 // **************************************************************************
 
+void VarViewer::setEnabled(bool bEnabled)
+{
+  QWidget::setEnabled(bEnabled);
+  if (bEnabled && parentWidget()) {
+    varTree_->setColumnWidth(0, parentWidget()->width()/2);
+  }
+}
+
+// **************************************************************************
+
 void VarViewer::slotAddWatchVariable()
 {
   QString watchVar(watchVarEntry_->text());
@@ -133,6 +143,8 @@ VarTree::VarTree( QWidget *parent, const char *name ) :
 
   connect (this,  SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )),
                   SLOT(slotRightButtonClicked ( QListViewItem *, const QPoint &, int )));
+
+  setColumnWidthMode(0, QListView::Manual);
 }
 
 // **************************************************************************

@@ -46,6 +46,9 @@ public:
   VarTree* varTree()      { return varTree_; }
   void clear();
 
+public slots:
+  virtual void setEnabled(bool bEnabled);
+
 private slots:
   void slotAddWatchVariable();
 
