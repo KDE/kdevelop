@@ -2233,19 +2233,19 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   }
   slotStatusMsg(i18n("Updating KDE-Libs documentation..."));
   config->setGroup("Doc_Location");
-  CUpdateKDEDocDlg dlg(&shell_process, config, this,"test");
-  if(dlg.exec()){
-    slotStatusMsg(i18n("Generating Documentation..."));
-    setToolMenuProcess(false);
-    if (dlg.isUpdated())
-    {
-        config->writeEntry("doc_kde",dlg.getDocPath());
-        config->sync();
-        // doc_tree->refresh(prj);
-        // doing this by next_job ... if the documentation generation has finished
-  next_job="doc_refresh";
-    }
-  }
+//TEMPORARILY_DISABLED  CUpdateKDEDocDlg dlg(&shell_process, config, this,"test");
+//TEMPORARILY_DISABLED  if(dlg.exec()){
+//TEMPORARILY_DISABLED    slotStatusMsg(i18n("Generating Documentation..."));
+//TEMPORARILY_DISABLED    setToolMenuProcess(false);
+//TEMPORARILY_DISABLED    if (dlg.isUpdated())
+//TEMPORARILY_DISABLED    {
+//TEMPORARILY_DISABLED        config->writeEntry("doc_kde",dlg.getDocPath());
+//TEMPORARILY_DISABLED        config->sync();
+//TEMPORARILY_DISABLED        // doc_tree->refresh(prj);
+//TEMPORARILY_DISABLED        // doing this by next_job ... if the documentation generation has finished
+//TEMPORARILY_DISABLED  next_job="doc_refresh";
+//TEMPORARILY_DISABLED    }
+//TEMPORARILY_DISABLED  }
 }
 void CKDevelop::slotOptionsCreateSearchDatabase(){
   bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
@@ -2256,10 +2256,10 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
                         i18n("Program not found!"));
     return;
   }
-  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
-  if(dlg.exec()){
-    slotStatusMsg(i18n("Creating Search Database..."));
-  }
+//TEMPORARILY_DISABLED  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
+//TEMPORARILY_DISABLED  if(dlg.exec()){
+//TEMPORARILY_DISABLED    slotStatusMsg(i18n("Creating Search Database..."));
+//TEMPORARILY_DISABLED  }
 
   return;
 

@@ -167,9 +167,11 @@ int main(int argc, char* argv[])
   {
     if (bInstall)
     {
-      CKDevInstall* install=new CKDevInstall(0,"install");
+      CKDevInstall* install = new CKDevInstall(0,"install");
+      a.setMainWidget(install);
       install->show();
-      delete install;
+      int retVal = a.exec();
+      return retVal;
     }
 
   config->setGroup("General Options");
