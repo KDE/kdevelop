@@ -283,9 +283,6 @@ static void main(String[] cmdLineArgs)
     KCmdLineArgs.addCmdLineOptions(options);
     KApplication app = new KApplication();
 
-    // register ourselves as a dcop client
-    app.dcopClient().registerAs(app.name(), false);
-
     // see if we are starting with session management
     if (app.isRestored())
         RESTORE("$APPNAME$");
