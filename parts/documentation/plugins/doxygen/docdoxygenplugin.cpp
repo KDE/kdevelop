@@ -31,7 +31,10 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <khtml_part.h>
+#include <khtmlview.h>
 #include <kstandarddirs.h>
+
+#include <dom/html_document.h>
 
 #include <urlutil.h>
 #include <kdevgenericfactory.h>
@@ -60,22 +63,18 @@ QPair<KFile::Mode, QString> DocDoxygenPlugin::catalogLocatorProps()
 
 QString DocDoxygenPlugin::catalogTitle(const QString& url)
 {
-        kdDebug() << "1-----------" << endl;
     QFileInfo fi(url);
     if (!fi.exists())
-    {
-        kdDebug() << "2-----------" << url << endl;
         return QString::null;
-    }
    
-    KHTMLPart part;
-    if (!part.openURL(KURL(url)))
-    {
-        kdDebug() << "-----------" << endl;
-        return QString::null;
-    }
-    
-    return part.htmlDocument().title().string();
+    DOM::HTMLDocument *doc = new DOM::HTMLDocument();
+    doc->setAsync(false);
+    doc->load(DOM::DOMString(url));
+    QString title = doc->title().string();
+    //FIXME: strange, but the next line invokes a crash
+    //for now, it's better to loose memory than crash 
+//    delete doc;
+    return title;
 }
 
 QString DocDoxygenPlugin::pluginName() const
@@ -85,7 +84,23 @@ QString DocDoxygenPlugin::pluginName() const
 
 QStringList DocDoxygenPlugin::fullTextSearchLocations()
 {
-    return QStringList();
+    QStringList locs;
+        
+    QMap<QString, QString> entryMap = config->entryMap("Locations");
+
+    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
+        it != entryMap.end(); ++it)
+    {
+        config->setGroup("Search Settings");
+        if (config->readBoolEntry(it.key(), false))
+        {
+            config->setGroup("Locations");
+            QFileInfo fi(config->readPathEntry(it.key()));
+            locs << fi.dirPath(true);
+        }
+    }
+    
+    return locs;
 }
 
 void DocDoxygenPlugin::setCatalogURL(DocumentationCatalogItem* item)
@@ -94,7 +109,7 @@ void DocDoxygenPlugin::setCatalogURL(DocumentationCatalogItem* item)
 
 bool DocDoxygenPlugin::needRefreshIndex(DocumentationCatalogItem* item)
 {
-    QFileInfo fi(item->url().url());
+    QFileInfo fi(item->url().path());
     config->setGroup("Index");
     if (fi.lastModified() > config->readDateTimeEntry(item->text(0), new QDateTime()))
     {
