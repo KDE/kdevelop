@@ -82,7 +82,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     // Setup widgets and dbgcontroller
     variableWidget = new VariableWidget( 0, "variablewidget");
-    variableWidget->setEnabled(false);
+//     /*variableWidget*/->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
     QWhatsThis::add
@@ -624,7 +624,7 @@ bool DebuggerPart::startDebugger()
     mainWindow()->setViewAvailable(disassembleWidget, true);
     mainWindow()->setViewAvailable(gdbOutputWidget, true);
 
-    variableWidget->setEnabled(true);
+//     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
 
@@ -655,7 +655,7 @@ void DebuggerPart::slotStopDebugger()
     disassembleWidget->clear();
     disassembleWidget->slotActivate(false);
 
-    variableWidget->setEnabled(false);
+//     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     gdbOutputWidget->setEnabled(false);
