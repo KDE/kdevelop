@@ -58,10 +58,10 @@ Another tasks:
 
 \section codereftodo Code refactoring/improvements
   - architecture:
-    -implement multiple-views per document
+    - implement multiple-views per document
     .
   - modularity:
-    - make sure all lib interfaces are available via DCOP</li>
+    - make sure all lib interfaces are available via DCOP
     .
   - improvement:
     - find a nicer way to remove dynamic menu entries from context menus
