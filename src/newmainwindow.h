@@ -93,6 +93,7 @@ private slots:
   void documentChangedState( const KURL &, DocumentState );
   void fillWindowMenu();
   void openURL( int );
+  void tabMoved(int from, int to);
    
 //  void loadMDISettings();
 

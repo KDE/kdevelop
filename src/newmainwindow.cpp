@@ -206,6 +206,8 @@ void NewMainWindow::init() {
                     connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
                     tabWidget()->setCornerWidget(but, TopRight);
                 }
+                tabWidget()->setTabReorderingEnabled(true);
+                connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
         }
 }
 
@@ -664,6 +666,13 @@ void NewMainWindow::documentChangedState( const KURL & url, DocumentState state 
 				break;
 		}
 	}
+}
+
+void NewMainWindow::tabMoved( int from, int to )
+{
+    KMdiChildView *view = m_pDocumentViews->at(from);
+    m_pDocumentViews->remove(from);
+    m_pDocumentViews->insert(to, view);
 }
 
 #include "newmainwindow.moc"
