@@ -29,7 +29,7 @@
 class QPopupMenu;
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
-#if (KDE_VERSION > 310)
+#if (KDE_VERSION >= KDE_MAKE_VERSION(3,1,90))
 #  include <ktexteditor/texthintinterface.h>
 #else
 # include "kde30x_texthintinterface.h"
