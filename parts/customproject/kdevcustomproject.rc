@@ -3,6 +3,7 @@
 <MenuBar>
   <Menu name="build" >
     <Action name="build_build" />
+    <Action name="build_target" />
     <Action name="build_clean" />
     <Separator/>
     <Action name="build_execute" />

@@ -149,12 +149,6 @@
     </vbox>
 </widget>
 <connections>
-    <connection>
-        <sender>make_button</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>configure_options_widget</receiver>
-        <slot>makeToggled(bool)</slot>
-    </connection>
 </connections>
 <slots>
     <slot access="protected">makeToggled(bool)</slot>

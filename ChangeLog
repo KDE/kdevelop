@@ -1,3 +1,9 @@
+2002-04-17  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Populate Build->Build Target menu in CustomProject
+	  with targets from Makefile, build.xml resp.
+	* Use kdDebug() more consequently
+
 2002-04-16  Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* added a bit more context to the EditorContext

@@ -18,6 +18,7 @@
 #include "kdevproject.h"
 
 class QListViewItem;
+class QPopupMenu;
 class KDialogBase;
 class CustomProjectWidget;
 
@@ -45,6 +46,8 @@ private slots:
     void slotBuild();
     void slotClean();
     void slotExecute();
+    void updateTargetMenu();
+    void targetMenuActivated(int id);
     
 private:
     void populateProject();
@@ -54,6 +57,8 @@ private:
     QString m_projectDirectory;
     QString m_projectName;
     QStringList m_sourceFiles;
+    QPopupMenu *m_targetMenu;
+    QStringList m_targets;
 };
 
 #endif

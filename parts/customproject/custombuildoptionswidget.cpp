@@ -23,8 +23,13 @@ CustomBuildOptionsWidget::CustomBuildOptionsWidget(QDomDocument &dom,
     : CustomBuildOptionsWidgetBase(parent, name),
       m_dom(dom)
 {
-    ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/tool") == "ant");
+    ant_button->setChecked(DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant");
     builddir_edit->setText(DomUtil::readEntry(dom, "/kdevcustomproject/build/builddir"));
+
+    // This connection must not be made before the ant->setChecked() line,
+    // because at this time makeToggled() would crash
+    connect( make_button, SIGNAL(toggled(bool)),
+             this, SLOT(makeToggled(bool)) );
 }
 
 
@@ -35,7 +40,7 @@ CustomBuildOptionsWidget::~CustomBuildOptionsWidget()
 void CustomBuildOptionsWidget::accept()
 {
     QString buildtool = ant_button->isChecked()? "ant" : "make";
-    DomUtil::writeEntry(m_dom, "/kdevcustomproject/build/tool", buildtool);
+    DomUtil::writeEntry(m_dom, "/kdevcustomproject/build/buildtool", buildtool);
     DomUtil::writeEntry(m_dom, "/kdevcustomproject/build/builddir", builddir_edit->text());
 }
 
@@ -44,6 +49,7 @@ void CustomBuildOptionsWidget::setMakeOptionsWidget(QTabWidget *tw, QWidget *mow
 {
     m_tabWidget = tw;
     m_makeOptions = mow;
+    makeToggled(make_button->isChecked());
 }
 
 

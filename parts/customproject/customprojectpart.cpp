@@ -14,18 +14,21 @@
 #include <qapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qpopupmenu.h>
+#include <qregexp.h>
 #include <qtabwidget.h>
 #include <qvaluestack.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+#include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
+#include <kpopupmenu.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -63,6 +66,14 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
 
+    KActionMenu *menu = new KActionMenu( i18n("Build &target"),
+                                         actionCollection(), "build_target" );
+    m_targetMenu = menu->popupMenu();
+
+    connect( m_targetMenu, SIGNAL(aboutToShow()),
+             this, SLOT(updateTargetMenu()) );
+    connect( m_targetMenu, SIGNAL(activated(int)),
+             this, SLOT(targetMenuActivated(int)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
@@ -98,28 +109,21 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     m_projectDirectory = dirName;
     m_projectName = projectName;
 
-    QDomElement docEl = projectDom()->documentElement();
-    QDomElement customprojectEl = docEl.namedItem("kdevcustomproject").toElement();
-    QDomElement filesEl = customprojectEl.namedItem("files").toElement();
-
-    if (filesEl.isNull()) {
+    QFile f(dirName + "/" + projectName + ".filelist");
+    if (f.open(IO_ReadOnly)) {
+        QTextStream stream(&f);
+        while (!stream.atEnd()) {
+            QString s = stream.readLine();
+            if (!s.startsWith("#"))
+                m_sourceFiles << s;
+        }
+    } else {
         int r = KMessageBox::questionYesNo(topLevel()->main(),
                                            i18n("This project does not contain any files yet.\n"
                                                 "Populate it with all C/C++/Java files below "
                                                 "the project directory?"));
         if (r == KMessageBox::Yes)
             populateProject();
-        // Try again now
-        filesEl = customprojectEl.namedItem("files").toElement();
-        if (filesEl.isNull())
-            return;
-    }
-    
-    QDomElement childEl = filesEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "file")
-            m_sourceFiles << childEl.firstChild().toText().data();
-        childEl = childEl.nextSibling().toElement();
     }
 }
 
@@ -128,14 +132,6 @@ void CustomProjectPart::populateProject()
 {
     QApplication::setOverrideCursor(Qt::waitCursor);
     
-    QDomDocument &dom = *projectDom();
-    
-    QDomElement docEl = dom.documentElement();
-    QDomElement customprojectEl = docEl.namedItem("kdevcustomproject").toElement();
-    QDomElement filesEl = dom.createElement("files");
-    customprojectEl.appendChild(filesEl);
-
-    QStringList fileList;
     QValueStack<QString> s;
     int prefixlen = m_projectDirectory.length()+1;
     s.push(m_projectDirectory);
@@ -157,25 +153,29 @@ void CustomProjectPart::populateProject()
             }
             else {
                 kdDebug(9025) << "Adding: " << path << endl;
-                fileList.append(path.mid(prefixlen));
+                m_sourceFiles.append(path.mid(prefixlen));
             }
         }
     } while (!s.isEmpty());
-
-    QStringList::ConstIterator it;
-    for (it = fileList.begin(); it != fileList.end(); ++it) {
-        kdDebug(9025) << "file: " << (*it) << endl;
-        QDomElement fileEl = dom.createElement("file");
-        fileEl.appendChild(dom.createTextNode(*it));
-        filesEl.appendChild(fileEl);
-    }
 
     QApplication::restoreOverrideCursor();
 }
 
 
 void CustomProjectPart::closeProject()
-{}
+{
+    QFile f(m_projectDirectory + "/" + m_projectName + ".filelist");
+    if (!f.open(IO_WriteOnly))
+        return;
+
+    QTextStream stream(&f);
+    stream << "# KDevelop Custom Project File List" << endl;
+
+    QStringList::ConstIterator it;
+    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
+        stream << (*it) << endl;
+    f.close();
+}
 
 
 QString CustomProjectPart::projectDirectory()
@@ -311,5 +311,67 @@ void CustomProjectPart::slotExecute()
     appFrontend()->startAppCommand(program);
 }
 
+
+void CustomProjectPart::updateTargetMenu()
+{
+    m_targets.clear();
+    m_targetMenu->clear();
+
+    QDomDocument &dom = *projectDom();
+    bool ant = DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant";
+
+    if (ant) {
+        QFile f(buildDirectory() + "/build.xml");
+        if (!f.open(IO_ReadOnly)) {
+            kdDebug(9025) << "No build file" << endl;
+            return;
+        }
+        QDomDocument dom;
+        if (!dom.setContent(&f)) {
+            kdDebug(9025) << "Build script not valid xml" << endl;
+            f.close();
+            return;
+        }
+        f.close();
+
+        QDomNode node = dom.documentElement().firstChild();
+        while (!node.isNull()) {
+            if (node.toElement().tagName() == "target")
+                m_targets.append(node.toElement().attribute("name"));
+            node = node.nextSibling();
+        }
+    } else {
+        QFile f(buildDirectory() + "/Makefile");
+        if (!f.open(IO_ReadOnly)) {
+            kdDebug(9025) << "No Makefile" << endl;
+            return;
+        }
+        QTextStream stream(&f);
+        QRegExp re(".PHONY\\s*:(.*)");
+        while (!stream.atEnd()) {
+            QString str = stream.readLine();
+            // Read all continuation lines
+            while (str.right(1) == "\\" && !stream.atEnd()) {
+                str.remove(str.length()-1, 1);
+                str += stream.readLine();
+            }
+            if (re.search(str) == 0)
+                m_targets += QStringList::split(" ", re.cap(1).simplifyWhiteSpace());
+        }
+        f.close();
+    }
+
+    int id = 0;
+    QStringList::ConstIterator it;
+    for (it = m_targets.begin(); it != m_targets.end(); ++it)
+        m_targetMenu->insertItem(*it, id++);
+}
+
+
+void CustomProjectPart::targetMenuActivated(int id)
+{
+    QString target = m_targets[id];
+    startMakeCommand(buildDirectory(), target);
+}
 
 #include "customprojectpart.moc"
