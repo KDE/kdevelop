@@ -3,6 +3,14 @@
 	* adapted the the look of all Autmake dialogs
 	* add blue bullet to the make output view
 
+2002-07-01  Jakob Simon-Gaarde <jakob@jsg.dk>
+  * trollprojectpart:
+    * trollprojectwidget:
+      * Can now insert files and subdirs (.pro files are altered dynamically)
+
+  * Simple qmake projects can now fully be created and maintained from kdevelop
+    Currently working on handling more complicated .pro files with scopes.
+
 2002-06-30 Victor Röder <victor_roeder@gmx.de>
 	* continued the import existing dialog
 		-> ONLY adding existing files works at the moment!
@@ -10,6 +18,30 @@
 		-> see kfilednd*view.* for details
 	* added new bullets to the make outputview
 	* everything needs a little bit code clean-up, so don't worry :-)
+
+2002-06-29  Jakob Simon-Gaarde <jakob@jsg.dk>
+  * trollprojectpart:
+    * FileBuffer:
+      * added FileBuffer::removeValues() removes all values for a variable
+        in the .pro buffer
+      * added FileBuffer::setValues() alter buffer set qmake variable values. 
+        This enables files and subdirs to be added and removed.
+      * added FileBuffer::saveBuffer() save buffer to file.
+
+2002-06-28  Jakob Simon-Gaarde <jakob@jsg.dk>
+  * trollprojectpart:
+    * filebufferclass added to buffer .pro files
+      (+filebuffer.cpp, +filebuffer.h)
+    * Caret pointer for FileBuffer class
+      (+caret.h, +caret.cpp)  
+    * FileBuffer:
+      * added FileBuffer::findInBuffer(), find substring return Caret-pointer
+      * added FileBuffer::getValues() gets values for a qmake variable
+        handles '=' and '+=' operators (still to add '-=', '*=' and '~=')
+        return QString of space separated values
+    * trollprojectwidget:
+      * .pro file parser rewritten ( trollprojectwidget::parse() )
+        * reads forms (.ui files)
 
 2002-06-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* save and restore the dock mode in IDEAl
