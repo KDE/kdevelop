@@ -281,13 +281,13 @@ void CTreeHandler::readIcons()
 
   il = KGlobal::iconLoader();
 
-  icons[ THFOLDER ] = new QPixmap( il->loadIcon( "folder.xpm" ) );
-  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadIcon( "folder_open.xpm" ) );
-  icons[ THCLASS ] = new QPixmap(locate("appdata", "pics/mini/CVclass"));
-  icons[ THPROJECT ] = new QPixmap( il->loadIcon( "kwm.xpm" ) );
-  icons[ THBOOK ] = new QPixmap( il->loadIcon( "mini-book1.xpm" ) );
-  icons[ THBOOK_OPEN ] = new QPixmap( il->loadIcon( "mini-book2.xpm" ) );
-  icons[ THDOC ] = new QPixmap( il->loadIcon( "mini-doc.xpm") );
+  icons[ THFOLDER ] = new QPixmap( il->loadApplicationMiniIcon( "folder.png" ) );
+  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadApplicationMiniIcon( "folder_open.png" ) );
+  icons[ THCLASS ] = new QPixmap(locate("appdata", "pics/mini/CVclass.xpm"));
+  icons[ THPROJECT ] = new QPixmap( il->loadApplicationMiniIcon( "kwm.xpm" ) );
+  icons[ THBOOK ] = new QPixmap( BarIcon( "mini-book1" ) );
+  icons[ THBOOK_OPEN ] = new QPixmap( BarIcon( "mini-book2" ) );
+  icons[ THDOC ] = new QPixmap( BarIcon( "mini-doc" ) );
   icons[ THSTRUCT ] = new QPixmap(locate("appdata","pics/mini/CVstruct.xpm"));
   icons[ THPUBLIC_ATTR ] = new QPixmap(locate("appdata","pics/mini/CVpublic_var.xpm"));
   icons[ THPROTECTED_ATTR ] = new QPixmap(locate("appdata", "pics/mini/CVprotected_var.xpm"));
@@ -301,9 +301,9 @@ void CTreeHandler::readIcons()
   icons[ THPROTECTED_METHOD ] = new QPixmap(locate("appdata", "pics/mini/CVprotected_meth.xpm"));
   icons[ THPRIVATE_METHOD ] = new QPixmap(locate("appdata", "pics/mini/CVprivate_meth.xpm"));
   icons[ THGLOBAL_FUNCTION ] = new QPixmap( locate("appdata", "pics/mini/CVglobal_meth.xpm"));
-  icons[ THC_FILE ] = new QPixmap( il->loadIcon( "c_src.xpm" ) );
+  icons[ THC_FILE ] = new QPixmap( il->loadApplicationMiniIcon( "c_src.png" ) );
   icons[ THINSTALLED_FILE ] = new QPixmap( locate("appdata", "pics/mini/inst_file.xpm"));
-  icons[ THDELETE ] = new QPixmap( il->loadIcon( "delete.xpm" ) );
+  icons[ THDELETE ] = new QPixmap( BarIcon( "delete" ) );
 
   CTreeHandler::iconsRead = true;
 }
