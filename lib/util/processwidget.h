@@ -12,7 +12,7 @@
 #ifndef _PROCESSWIDGET_H_
 #define _PROCESSWIDGET_H_
 
-#include <qlistbox.h>
+#include <klistbox.h>
 
 class KProcess;
 class ProcessLineMaker;
@@ -36,7 +36,7 @@ private:
  * This class is designed to share code between the
  * grep and application output widgets.
  */
-class ProcessWidget : public QListBox
+class ProcessWidget : public KListBox
 {
     Q_OBJECT
 

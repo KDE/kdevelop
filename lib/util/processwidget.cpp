@@ -40,7 +40,7 @@ void ProcessListBoxItem::paint(QPainter *p)
 
 
 ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
-    : QListBox(parent, name)
+    : KListBox(parent, name)
 {
     setFocusPolicy(QWidget::NoFocus);
     QPalette pal = palette();
