@@ -20,7 +20,7 @@
 
 #include <kfiledialog.h>
 #include <kmsgbox.h>
-
+#include <kquickhelp.h>
 #include "ctoolsconfigdlg.h"
 #include "ctoolclass.h"
 
@@ -40,7 +40,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	add_button->setText(i18n( "&Add" ));
 	add_button->setAutoRepeat( FALSE );
 	add_button->setAutoResize( FALSE );
-      
+        KQuickHelp::add(add_button,i18n("Click here to add a tool specified below."));
 
 	delete_button = new QPushButton( this, "delete_button" );
 	delete_button->setGeometry( 270, 60, 100, 30 );
@@ -49,6 +49,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	delete_button->setAutoRepeat( FALSE );
 	delete_button->setAutoResize( FALSE );
 	delete_button->setEnabled( FALSE );
+	KQuickHelp::add(delete_button,i18n("Click here to delete an entry from the list."));
 
 	move_up_button = new QPushButton( this, "move_up_button" );
 	move_up_button->setGeometry( 270, 110, 100, 30 );
@@ -57,6 +58,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_up_button->setAutoRepeat( FALSE );
 	move_up_button->setAutoResize( FALSE );
 	move_up_button->setEnabled( FALSE );
+	KQuickHelp::add(move_up_button,i18n("Click here to move up the selected entry."));
 
 	move_down_button = new QPushButton( this, "move_down_button" );
 	move_down_button->setGeometry( 270, 150, 100, 30 );
@@ -65,7 +67,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_down_button->setAutoRepeat( FALSE );
 	move_down_button->setAutoResize( FALSE );
 	move_down_button->setEnabled( FALSE );
-
+	KQuickHelp::add(move_down_button,i18n("Click here to move down the selected entry."));
 
 	executable_label = new QLabel( this, "command_label" );
 	executable_label->setGeometry( 30, 240, 170, 30 );
@@ -82,12 +84,14 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	
 	executable_button = new QPushButton( this, "executable_button" );
 	executable_button->setGeometry( 410, 240, 30, 30 );
+	KQuickHelp::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
 	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
 	QPixmap pix;
 	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
 	executable_button->setPixmap(pix);
 	executable_button->setAutoRepeat( FALSE );
 	executable_button->setAutoResize( FALSE );
+        KQuickHelp::add(executable_edit,KQuickHelp::add(executable_button,i18n("Enter the name of the executable file here.")));
 
 	menu_text_label = new QLabel( this, "Label_3" );
 	menu_text_label->setGeometry( 30, 280, 170, 30 );
@@ -101,6 +105,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	menu_text_edit->setMaxLength( 32767 );
 	menu_text_edit->setEchoMode( QLineEdit::Normal );
 	menu_text_edit->setFrame( TRUE );
+	KQuickHelp::add(menu_text_label,KQuickHelp::add(menu_text_edit,i18n("Enter a menu text for the executable here.")));
 
 	arguments_label = new QLabel( this, "Label_4" );
 	arguments_label->setGeometry( 30, 320, 170, 30 );
@@ -114,6 +119,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	arguments_edit->setMaxLength( 32767 );
 	arguments_edit->setEchoMode( QLineEdit::Normal );
 	arguments_edit->setFrame( TRUE );
+        KQuickHelp::add(arguments_label,KQuickHelp::add(arguments_edit,i18n("Enter arguments for the executable here.")));
 
 	ok_button = new QPushButton( this, "ok_button" );
 	ok_button->setGeometry( 390, 20, 100, 30 );

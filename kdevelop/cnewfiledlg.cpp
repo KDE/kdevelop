@@ -21,7 +21,7 @@
 #include <kmsgbox.h>
 #include <iostream.h>
 #include <kfiledialog.h>
-
+#include <kquickhelp.h>
 
 CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CProject* p_prj) 
   : QDialog(parent,name,modal,f){
@@ -53,6 +53,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
+  KQuickHelp::add(list_cpp,KQuickHelp::add(list_manuals,KQuickHelp::add(list_linux,i18n("Choose the type of the new file here."))));
 
   tab->addTab(list_cpp,i18n("General"));
   tab->addTab(list_manuals,i18n("Manuals"));
@@ -82,6 +83,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	edit->setMaxLength( 32767 );
 	edit->setEchoMode( QLineEdit::Normal );
 	edit->setFrame( TRUE );
+        KQuickHelp::add(label_filename,KQuickHelp::add(edit,i18n("Enter a name for your new file here.")));
 
 	check_use_template = new QCheckBox( this, "check_use_template" );
 	check_use_template->setGeometry( 270, 120, 180, 30 );
@@ -94,6 +96,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_use_template->setText(i18n("use Template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
+	KQuickHelp::add(check_use_template,i18n("Check this if you want to use a template."));
 	
 	button_group = new QButtonGroup( this, "button_group" );
 	button_group->setGeometry( 20, 200, 430, 140 );
@@ -118,7 +121,8 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	check_add_project->setText(i18n("add to Project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
-
+	KQuickHelp::add(check_add_project,i18n("Check this if you want to add the new file to your project."));
+	
 	location_label = new QLabel( this, "location_label" );
 	location_label->setGeometry( 30, 250, 160, 30 );
 	location_label->setMinimumSize( 0, 0 );
@@ -143,6 +147,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	prj_loc_edit->setMaxLength( 32767 );
 	prj_loc_edit->setEchoMode( QLineEdit::Normal );
 	prj_loc_edit->setFrame( TRUE );
+	KQuickHelp::add(prj_loc_edit,i18n("Enter the directory where the new file will be located."));
 
 	loc_button = new QPushButton( this, "loc_button" );
 	loc_button->setGeometry( 410, 290, 30, 30 );
@@ -157,6 +162,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
+	KQuickHelp::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
 
 	button_group->insert( check_add_project );
 	button_group->insert( loc_button );

@@ -23,6 +23,7 @@
 #include "caddclassmethoddlg.h"
 #include <kmsgbox.h>
 #include <kapp.h>
+#include <kquickhelp.h>
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -62,7 +63,8 @@ void CAddClassMethodDlg::setWidgetValues()
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
-
+  KQuickHelp::add(&modifierGrp,i18n("You can set modifiers for the member function here."));
+  
   functionGrp.setGeometry( 10, 10, 260, 230 );
   functionGrp.setMinimumSize( 0, 0 );
   functionGrp.setMaximumSize( 32767, 32767 );
@@ -84,7 +86,10 @@ void CAddClassMethodDlg::setWidgetValues()
   accessGrp.setFrameStyle( 49 );
   accessGrp.setTitle( i18n("Access") );
   accessGrp.setAlignment( 1 );
-
+  KQuickHelp::add(&accessGrp,i18n(
+  "You can choose here whether you want the member function\n"
+  "be declared as public, protected or private."));
+  
   typeLbl.setGeometry( 20, 30, 40, 20 );
   typeLbl.setMinimumSize( 0, 0 );
   typeLbl.setMaximumSize( 32767, 32767 );
@@ -107,6 +112,7 @@ void CAddClassMethodDlg::setWidgetValues()
   typeEdit.setMaxLength( 32767 );
   typeEdit.setEchoMode( QLineEdit::Normal );
   typeEdit.setFrame( TRUE );
+  KQuickHelp::add(&typeLbl,KQuickHelp::add(&typeEdit,i18n("Enter the type of the member function here.")));
 
   declLbl.setGeometry( 20, 80, 70, 20 );
   declLbl.setMinimumSize( 0, 0 );
@@ -118,7 +124,7 @@ void CAddClassMethodDlg::setWidgetValues()
   declLbl.setText( i18n("Declaration:") );
   declLbl.setAlignment( 289 );
   declLbl.setMargin( -1 );
-
+  
   declEdit.setGeometry( 20, 100, 240, 30 );
   declEdit.setMinimumSize( 0, 0 );
   declEdit.setMaximumSize( 32767, 32767 );
@@ -130,6 +136,7 @@ void CAddClassMethodDlg::setWidgetValues()
   declEdit.setMaxLength( 32767 );
   declEdit.setEchoMode( QLineEdit::Normal );
   declEdit.setFrame( TRUE );
+  KQuickHelp::add(&declLbl,KQuickHelp::add(&declEdit,i18n("Enter the declaration of the member function here.")));
 
   docLbl.setGeometry( 20, 130, 100, 20 );
   docLbl.setMinimumSize( 0, 0 );
@@ -152,6 +159,7 @@ void CAddClassMethodDlg::setWidgetValues()
   docEdit.insertLine( "" );
   docEdit.setReadOnly( FALSE );
   docEdit.setOverwriteMode( FALSE );
+  KQuickHelp::add(&docLbl,KQuickHelp::add(&docEdit,i18n("You can enter a description of the member function here.")));
 
   publicRb.setGeometry( 20, 270, 70, 20 );
   publicRb.setMinimumSize( 0, 0 );

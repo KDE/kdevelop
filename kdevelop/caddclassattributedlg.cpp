@@ -23,6 +23,7 @@
 #include "caddclassattributedlg.h"
 #include <kmsgbox.h>
 #include <kapp.h>
+#include <kquickhelp.h>
 
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -61,7 +62,8 @@ void CAddClassAttributeDlg::setWidgetValues()
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
-
+  KQuickHelp::add(&modifierGrp,i18n("You can set modifiers for the member variable here."));
+  
   varGrp.setGeometry( 10, 10, 260, 230 );
   varGrp.setMinimumSize( 0, 0 );
   varGrp.setMaximumSize( 32767, 32767 );
@@ -83,6 +85,9 @@ void CAddClassAttributeDlg::setWidgetValues()
   accessGrp.setFrameStyle( 49 );
   accessGrp.setTitle( i18n("Access") );
   accessGrp.setAlignment( 1 );
+  KQuickHelp::add(&accessGrp,i18n(
+  "You can choose here whether you want the member variable\n"
+  "be declared as public, protected or private."));
 
   typeLbl.setGeometry( 20, 30, 40, 20 );
   typeLbl.setMinimumSize( 0, 0 );
@@ -106,6 +111,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   typeEdit.setMaxLength( 32767 );
   typeEdit.setEchoMode( QLineEdit::Normal );
   typeEdit.setFrame( TRUE );
+  KQuickHelp::add(&typeLbl,KQuickHelp::add(&typeEdit,i18n("Enter the type of the member variable here.")));
 
   nameLbl.setGeometry( 20, 80, 70, 20 );
   nameLbl.setMinimumSize( 0, 0 );
@@ -129,6 +135,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   nameEdit.setMaxLength( 32767 );
   nameEdit.setEchoMode( QLineEdit::Normal );
   nameEdit.setFrame( TRUE );
+  KQuickHelp::add(&nameLbl,KQuickHelp::add(&nameEdit,i18n("Enter the name of the member variable here.")));
 
   docLbl.setGeometry( 20, 130, 100, 20 );
   docLbl.setMinimumSize( 0, 0 );
@@ -140,7 +147,8 @@ void CAddClassAttributeDlg::setWidgetValues()
   docLbl.setText( i18n("Documentation:") );
   docLbl.setAlignment( 289 );
   docLbl.setMargin( -1 );
-
+  KQuickHelp::add(&docLbl,KQuickHelp::add(&docEdit,i18n("You can enter a description of the member variable here.")));
+  
   docEdit.setGeometry( 20, 150, 240, 80 );
   docEdit.setMinimumSize( 0, 0 );
   docEdit.setMaximumSize( 32767, 32767 );
