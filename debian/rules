@@ -7,7 +7,8 @@ build:
 	( CFLAGS="-g -O2 -pipe -Wall" \
 	  CXXFLAGS="$$CFLAGS" \
 	  ./configure --enable-docbase --enable-kdoc2 --enable-debug --disable-rpath \
-	  --libdir=/usr/X11R6/lib --includedir=/usr/include/kde )
+	  --libdir=/usr/lib --includedir=/usr/include/kde \
+	  --with-qt-dir=/usr/lib/qt1g --mandir=/usr/share/man )
  
 	make 
 
@@ -19,8 +20,7 @@ clean:
 	dh_clean 
 	-make distclean
 	-rm -f `find . -name "*~"`
-	-rm -rf debian/tmp debian/files* core debian/substvars \
-		debian/menu debian/*shlibs* 
+	-rm -rf debian/menu debian/mailcap 
 	-rm -rf config.log libtool config.status config.cache
 	
 binary-indep:	build
@@ -36,7 +36,7 @@ binary-arch:	build
 	-rm -rf debian/tmp
 	make install DESTDIR=`pwd`/debian/tmp
 	chmod a+x debian/kderules
-	debian/kderules
+	perl debian/kderules
 	dh_movefiles
 	dh_undocumented 
 	dh_installdocs
@@ -44,6 +44,7 @@ binary-arch:	build
 	dh_strip
 	dh_compress
 	dh_fixperms
+	dh_perl
 	dh_suidregister
 	dh_makeshlibs
 	dh_installdeb

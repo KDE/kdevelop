@@ -64,14 +64,14 @@ if (@ARGV && $ARGV[0] eq 'update') {
 }
 
 if (@ARGV && $ARGV[0] eq 'echodirs') {
-  print STDOUT "export kde_htmldir=/usr/doc/kde/HTML\n";
+  print STDOUT "export kde_htmldir=/usr/share/doc/HTML\n";
   print STDOUT "export kde_appsdir=/usr/share/applnk\n";
   print STDOUT "export kde_icondir=/usr/share/icons\n";
   print STDOUT "export kde_sounddir=/usr/share/sounds\n";
   print STDOUT "export kde_datadir=/usr/share/apps\n";
   print STDOUT "export kde_locale=/usr/share/locale\n";
   print STDOUT "export kde_cgidir=/usr/lib/cgi-bin\n";
-  print STDOUT "export kde_confdir=/etc/kde2\n";
+  print STDOUT "export kde_confdir=/etc/kde\n";
   print STDOUT "export kde_mimedir=/usr/share/mimelnk\n";
   print STDOUT "export kde_toolbardir=/usr/share/toolbar\n";
   print STDOUT "export kde_wallpaperdir=/usr/share/wallpapers\n";
@@ -79,7 +79,7 @@ if (@ARGV && $ARGV[0] eq 'echodirs') {
   print STDOUT "export kde_partsdir=/usr/lib/parts\n";
   print STDOUT "export includedir=/usr/include/kde\n";
   print STDOUT "export libdir=/usr/lib\n";
-  print STDOUT "export QTDIR=/usr/lib/qt2beta\n";
+  print STDOUT "export QTDIR=/usr/lib/qt1g\n";
   print STDOUT "export micodir=/usr/lib\n";
   print STDOUT "export pythondir=/usr/lib\n";
   exit
@@ -125,8 +125,8 @@ if ($pwd =~ ?^(.*/)build_([^/]*)$?) {
   }
 }
 
-if (! -d "debian/tmp/usr/doc/$package") {
-	mkdir("-p", "debian/tmp/usr/doc/$package") ;
+if (! -d "debian/tmp/usr/share/doc/$package") {
+	mkdir("-p", "debian/tmp/usr/share/doc/$package") ;
 }
 
 if (! -d "debian/tmp/usr/share/pixmaps") {
@@ -136,14 +136,14 @@ if (! -d "debian/tmp/usr/share/pixmaps") {
 
 if (@docs) {
        chdir($origPwd);
-       cp( "-aP", @docs, "debian/tmp/usr/doc/$package") ;
-       if (-f "debian/tmp/usr/doc/$package/ChangeLog") {
-	  mv("debian/tmp/usr/doc/$package/ChangeLog", 
-		"debian/tmp/usr/doc/$package/changelog");
+       cp( "-aP", @docs, "debian/tmp/usr/share/doc/$package") ;
+       if (-f "debian/tmp/usr/share/doc/$package/ChangeLog") {
+	  mv("debian/tmp/usr/share/doc/$package/ChangeLog", 
+		"debian/tmp/usr/share/doc/$package/changelog");
 	}
-	if (-f "debian/tmp/usr/doc/$package/CHANGES") {
-	  mv("debian/tmp/usr/doc/$package/CHANGES",
-		"debian/tmp/usr/doc/$package/changelog");
+	if (-f "debian/tmp/usr/share/doc/$package/CHANGES") {
+	  mv("debian/tmp/usr/share/doc/$package/CHANGES",
+		"debian/tmp/usr/share/doc/$package/changelog");
 	}
 }
 

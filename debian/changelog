@@ -1,3 +1,9 @@
+kdevelop (1:1.0-19990924-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 29 Sep 1999 14:00:03 -0400
+
 kdevelop (1:0.4-19990728-1) unstable; urgency=low
 
   * Added further manuals to doc-base
