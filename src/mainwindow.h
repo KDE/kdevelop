@@ -127,7 +127,6 @@ protected:
   /** Reimplemented from QWidget just to get the info, that the window will now be shown */
   void resizeEvent(QResizeEvent *ev);
   /** Adds a tool view window to the output or tree views*/
-  void addToolViewWindow(EView eView, KMdiChildView *child, const QString &name, const QString &toolTip);
 
 
 private slots:

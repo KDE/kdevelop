@@ -50,7 +50,7 @@
 #include "toplevel.h"
 #include "mainwindowshare.h"
 #include "mainwindow.h"
-
+#include <kmditoolviewaccessor.h>
 // ====================================================== class ViewMenuAction
 ViewMenuAction::ViewMenuAction(
   ViewMenuActionPrivateData Data,
@@ -235,6 +235,8 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_pShowTreeViews(0L)
   ,m_toggleViewbar(0L)
 {
+   setManagedDockPositionModeEnabled(true);
+
   resize( 800, 600 );
   m_pMainWindowShare = new MainWindowShare(this);
 
@@ -428,66 +430,6 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
   }
 }
 
-/** Adds a tool view window to the output or tree views
- *
- *  First the dock base for the new tool window has to be determined.
- *  If the GUI has already been initialized (m_myWindowsReady == true) the list of
- *  tool views is searched for the first visible window which will the serve as dock base.
- *
- *  If the GUI is in the process of beeing build up (m_myWindowsReady == false)
- *  the state of the windows can not be determined reliably. Therefore, the first
- *  tool window of the correct type (OuputView or TreeView) will be used as dock base.
- *
- *  If there is no tool window (first == null) then either MainWindow will serve
- *  as dock base or the first part view, depending on the mdi mode.
- */
-void MainWindow::addToolViewWindow(EView eView, KMdiChildView *child, const QString& name, const QString &toolTip)
-{
-  // Count how many windows are visible
-  QWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
-  QPtrList<KMdiChildView> *pViews = (eView==OutputView)?&m_outputViews:&m_selectViews;
-  if(m_myWindowsReady)
-  {
-    ToolDockBaseState dockBaseState(pViews);
-    first = dockBaseState.pFirstToolWindow;
-  }
-  else
-  {
-    if(eView == OutputView) first = m_outputViews.first();
-    else                    first = m_selectViews.first();
-  }
-  // Check, if the tool window is visible (it may have been closed using the close button)
-
-  if (!first)  // If there is no selected view yet ...
-  {
-    if (mdiMode() == KMdi::TabPageMode)
-      first = m_partViews.first();
-
-    if (!first)
-      first = this;
-
-    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockBottom, first, 70, toolTip, name);
-    else {
-      QString tabName = name;
-      /// @todo implement_me: if (!tabHeaderShouldContainText) {
-        tabName = "";
-      /// @todo implement_me: }
-      addToolWindow(child, KDockWidget::DockLeft, first, 25, toolTip, tabName);
-    }
-  }
-  else
-  {
-    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, name);
-    else {
-      QString tabName = name;
-      /// @todo implement_me: if (!tabHeaderShouldContainText) {
-        tabName = "";
-      /// @todo implement_me: }
-      addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, tabName);
-    }
-  }
-}
-
 void MainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
     const QPixmap* wndIcon = view->icon();
@@ -497,20 +439,27 @@ void MainWindow::embedSelectView(QWidget *view, const QString &name, const QStri
     }
 
     KMdiChildView *child = wrapper(view, name);
-    addToolViewWindow(TreeView, child, name, toolTip);
+
+    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(child,KDockWidget::DockLeft,m_pMdi,25);
+
+//    addToolWindow(TreeView, child, name, toolTip);
     m_selectViews.append(child);
 }
 
 void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip)
 {
   //we do not have a right pane so we insert it in the default pos
-  embedSelectView( view, title, toolTip );
+//  embedSelectView( view, title, toolTip );
+    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(view,KDockWidget::DockRight,m_pMdi,25);
+
 }
 
 void MainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
   KMdiChildView *child = wrapper(view, name);
-  addToolViewWindow(OutputView, child, name, toolTip);
+//  addToolViewWindow(OutputView, child, name, toolTip);
+    KMdiToolViewAccessor *tmp=KMdiMainFrm::addToolWindow(child,KDockWidget::DockBottom,m_pMdi,25);
+
   m_outputViews.append(child);
 }
 
@@ -1055,6 +1004,7 @@ void MainWindow::showAllToolWin(EView eView, bool show )
 /** Changes the show-hide state of a single tree or output tool window */
 void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData)
 {
+#if 0
   // Determine the state of the windows inwolved
   const  ToolWindowState winState(ActionData.pDockWidget);
   QPtrList<KMdiChildView> *pViews        = 0L;             // The views to make a menu from
@@ -1125,6 +1075,7 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
          addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name(), ActionData.pChildView->name());
     }
   }
+#endif
 }
 
 
