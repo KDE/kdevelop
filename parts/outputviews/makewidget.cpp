@@ -322,9 +322,7 @@ void MakeWidget::nextError()
 		setSelection(parag, 0, parag+1, 0, 0);
 		setCursorPosition(parag, 0);
 		ensureCursorVisible();
-		m_part->partController()->editDocument(item->fileName, item->lineNum);
-		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
-		m_part->mainWindow()->lowerView(this);
+		searchItem( it );
 		return;
 	}
 
@@ -350,9 +348,7 @@ void MakeWidget::prevError()
 		setSelection(parag, 0, parag+1, 0, 0);
 		setCursorPosition(parag, 0);
 		ensureCursorVisible();
-		m_part->partController()->editDocument(item->fileName, item->lineNum);
-		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
-		m_part->mainWindow()->lowerView(this);
+		searchItem( it );
 		return;
 	}
 
