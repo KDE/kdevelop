@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include <qradiobutton.h>
-
+#include <kmdidefines.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -49,21 +49,23 @@ void UIChooserWidget::load()
     return;
   }
 
-  int mdi = config->readNumEntry("MDIMode", 3);
+  int mdi = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
 
   switch (mdi)
   {
-  case 1:
+  case KMdi::ChildframeMode:
     modeMDI->setChecked(true);
     break;
-  case 2:
+  case KMdi::TabPageMode:
     modeTab->setChecked(true);
     break;
-  case 0:
+  case KMdi::ToplevelMode:
     modeToplevel->setChecked(true);
     break;
-  default:
+  case KMdi::IDEAlMode:
     modeIDEAl->setChecked(true);
+    break;
+  default:
     break;
   }
 }
@@ -84,13 +86,13 @@ void UIChooserWidget::save()
     config->writeEntry("MajorUIMode", "QextMDI");
 
     if (modeTab->isChecked())
-      config->writeEntry("MDIMode", 2);
+      config->writeEntry("MDIMode", KMdi::TabPageMode);
     else if (modeToplevel->isChecked())
-      config->writeEntry("MDIMode", 0);
+      config->writeEntry("MDIMode", KMdi::ToplevelMode);
     else if (modeMDI->isChecked())
-      config->writeEntry("MDIMode", 1);
+      config->writeEntry("MDIMode", KMdi::ChildframeMode);
     else
-      config->writeEntry("MDIMode", 3); // KMdi-IDEA
+      config->writeEntry("MDIMode", KMdi::IDEAlMode); // KMdi-IDEA
   }
 
   config->sync();
