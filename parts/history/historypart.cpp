@@ -115,6 +115,8 @@ void HistoryPart::backPopupActivated(int id)
   saveState(partController()->activePart());
   for (int i=0; i < by; ++i)
     m_history.prev();
+  if(m_history.prev()==0L) m_history.first();
+  
   restoreState();
   
   updateActions();
@@ -128,6 +130,8 @@ void HistoryPart::forwardPopupActivated(int id)
   saveState(partController()->activePart());
   for (int i=0; i < by; ++i)
     m_history.next();
+  if(m_history.current()==0L) m_history.last();
+  
   restoreState();
 
   updateActions();
@@ -261,7 +265,7 @@ void HistoryPart::backActivated()
 {
   saveState(partController()->activePart());
   
-  m_history.prev();
+  if(m_history.prev()==0L) m_history.first();
 
   restoreState();
 }
@@ -271,7 +275,7 @@ void HistoryPart::forwardActivated()
 {
   saveState(partController()->activePart());
 
-  m_history.next();
+  if(m_history.next()==0L)  m_history.last();
 
   restoreState();
 }
