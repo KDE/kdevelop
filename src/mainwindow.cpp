@@ -379,6 +379,10 @@ void MainWindow::createActions()
   m_toggleViewbar->setText("&Viewbar");
   m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
   showViewTaskBar(); // because start state must be equal to the action state
+  if (m_mdiMode == QextMdi::TabPageMode) {
+    slotToggleViewbar();
+    m_toggleViewbar->setEnabled(false);
+  }
 }
 
 QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
@@ -1052,18 +1056,30 @@ KParts::ReadOnlyPart * MainWindow::getPartFromWidget(const QWidget * pWidget) co
 void MainWindow::switchToToplevelMode()
 {
   saveMDISettings();
+  m_toggleViewbar->setEnabled(true);
+  if (mdiMode() == QextMdi::TabPageMode) {
+      slotToggleViewbar();
+  }
   QextMdiMainFrm::switchToToplevelMode();
 }
 
 void MainWindow::switchToChildframeMode()
 {
   saveMDISettings();
+  m_toggleViewbar->setEnabled(true);
+  if (mdiMode() == QextMdi::TabPageMode) {
+      slotToggleViewbar();
+  }
   QextMdiMainFrm::switchToChildframeMode();
 }
 
 void MainWindow::switchToTabPageMode()
 {
   saveMDISettings();
+  if (isViewTaskBarOn()) {
+      slotToggleViewbar();
+  }
+  m_toggleViewbar->setEnabled(false);
   QextMdiMainFrm::switchToTabPageMode();
 }
 
