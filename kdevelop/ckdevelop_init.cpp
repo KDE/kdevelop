@@ -165,53 +165,36 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-//  QFont font("Fixed",10);
+  maindock = createDockWidget( "Editor",SmallIcon("kdevelop") );
+  setView(maindock);
+  setMainDockWidget( maindock );
+  maindock->setEnableDocking( KDockWidget::DockNone);   // We cannot remove this window
 
-  ////////////////////////
-  // Main splitter
-  ////////////////////////
-
-  mainSplitter = new QSplitter(Qt::Vertical, this, "mainSplitter");
-
-  ////////////////////////
-  // Top Panner
-  ////////////////////////
-
-  //  s_tab_current = 0;
-  topSplitter = new QSplitter(QSplitter::Horizontal, mainSplitter, "topSplitter"); //,QSplitter::Absolute);
-
-
-  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), this, i18n("Tree-View"));
+  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0L, i18n("Tree-View"));
+  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
+ 
+  s_tab_view = new CTabCtl(maindock);
+  maindock->setWidget( s_tab_view );
+	
   t_tab_view = new CTabCtl(treedock);
   treedock->setWidget(t_tab_view);
 
-  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), this, i18n("Output-View"));
   o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
   outputdock->setWidget(o_tab_view);
 
-  main = createDockWidget( "Editor",SmallIcon("kdevelop") , this );
-  s_tab_view = new CTabCtl(main);
-  main->setWidget( s_tab_view );
-  setView(main);
-  setMainDockWidget( main );
-	
-  treedock->manualDock(main, KDockWidget::DockLeft, 35/*size relation in %*/);
-  outputdock->manualDock(main, KDockWidget::DockBottom, 70/*size relation in %*/);
+  if (config->hasGroup("dock_setting_default"))
+  {
+		// use the last placements
+    readDockConfig(config);
+  }
+  else
+  {
+    // Set the default window placement
+    treedock->manualDock(maindock, KDockWidget::DockLeft, 35/*size relation in %*/);
+    outputdock->manualDock(maindock, KDockWidget::DockBottom, 70/*size relation in %*/);
+  }
 
-  readDockConfig(config);
-	
-	main->setEnableDocking( KDockWidget::DockNone);
-	main->setDockSite( KDockWidget::DockCorner);	
-
-	treedock->setDockSite( KDockWidget::DockCorner);	
-	treedock->setEnableDocking( KDockWidget::DockCorner);
-	outputdock->setDockSite( KDockWidget::DockCorner);	
-	outputdock->setEnableDocking( KDockWidget::DockCorner);
-
-
-//  t_tab_view = new CTabCtl(topSplitter);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
-//  t_tab_view->setMinimumSize(600,400);
 
   ////////////////////////
   // Treeviews
@@ -252,22 +235,14 @@ void CKDevelop::initView()
       break;
   }
 
-
-  ////////////////////////
-  // Right main window
-  ////////////////////////
-
-  // the tabbar + tabwidgets for edit and browser
-
-
-
-//  s_tab_view = new CTabCtl(topSplitter);
+  ////////////////////////////
+  // editor and browser window
+  ////////////////////////////
   s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   header_widget = new CEditWidget(s_tab_view,"header");
   header_widget->setFocusPolicy(QWidget::StrongFocus);
 
-//  header_widget->setFont(font);
   header_widget->setFont(KGlobalSettings::fixedFont());
   header_widget->setName(i18n("Untitled.h"));
   config->setGroup("KWrite Options");
@@ -278,15 +253,11 @@ void CKDevelop::initView()
   edit_widget=header_widget;
   cpp_widget = new CEditWidget(s_tab_view,"cpp");
   cpp_widget->setFocusPolicy(QWidget::StrongFocus);
-//  cpp_widget->setFont(font);
   cpp_widget->setFont(KGlobalSettings::fixedFont());
   cpp_widget->setName(i18n("Untitled.cpp"));
   config->setGroup("KWrite Options");
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);
-
-//  edit_widget->setFocusPolicy(QWidget::StrongFocus);
-
 
   // init the 2 first kedits
   TEditInfo* edit1 = new TEditInfo;
@@ -295,7 +266,6 @@ void CKDevelop::initView()
   edit2->filename = cpp_widget->getName();
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");
-//  browser_widget->setFocusPolicy(QWidget::StrongFocus);
 
   prev_was_search_result= false;
   //init
@@ -305,18 +275,10 @@ void CKDevelop::initView()
   s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
   s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
 
-#warning FIXME QSplitter activate
-//  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
-//  view->activate(topSplitter,o_tab_view);
-
   ////////////////////////
   // Outputwindow
   ////////////////////////
 	
-
-//  o_tab_view = new CTabCtl(mainSplitter, "output_tabview","output_widget");
-//  mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
-
   messages_widget = new COutputWidget(o_tab_view);
   messages_widget->setFocusPolicy(QWidget::ClickFocus);
   messages_widget->setReadOnly(TRUE);
@@ -335,10 +297,6 @@ void CKDevelop::initView()
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-
-  // set the mainwidget
-//  setCentralWidget(mainSplitter);
-
 
   initKeyAccel();
   initMenuBar();
@@ -442,9 +400,6 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
   accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()), true, ID_VIEW_PREVIOUS_ERROR  );
 
-//  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg",(unsigned int) 0);
-//  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()), true, ID_KDLG_TOOLS_KDEVELOP );
-
   accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", (unsigned int) 0);
   accel->connectItem("Dialog Editor", this, SLOT(startDesigner()), true, ID_TOOLS_DESIGNER );
 
@@ -531,9 +486,6 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
 
-//  accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
-//  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START );
-
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
 
@@ -545,12 +497,6 @@ void CKDevelop::initKeyAccel()
 
   accel->insertItem( i18n("Configure..."), "BuildConfigure", (unsigned int) 0);
   accel->connectItem( "BuildConfigure", this, SLOT(slotBuildConfigure()), true, ID_BUILD_CONFIGURE );
-
-
-  //   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
-  //   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ), true, ID_BUILD_MAKE_WITH );
-
-  // Tools-menu
 
   // Bookmarks-menu
   accel->insertItem( i18n("Toggle Bookmark"), "Toggle_Bookmarks", IDK_BOOKMARKS_TOGGLE);
@@ -794,17 +740,8 @@ void CKDevelop::initMenuBar(){
   project_menu->insertSeparator();
 
   project_menu->insertItem(SmallIconSet("configure"),i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
-  //  project_menu->insertSeparator();		
-
-//  workspaces_submenu = new QPopupMenu;
-  //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
-  //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
-  //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
-  //  project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
-  //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
 
   kdev_menubar->insertItem(i18n("&Project"), project_menu);
-
 
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
@@ -882,7 +819,6 @@ void CKDevelop::initMenuBar(){
   // Options-menu entries
   // submenu for setting printprograms
   QPopupMenu* p3 = new QPopupMenu;
-  //p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_PRINT_A2PS);
   p3->insertItem(i18n("&Enscript..."), this,
 		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
 
@@ -918,7 +854,6 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries
   bookmarks_menu=new QPopupMenu;
-//  bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
   bookmarks_menu->insertItem(SmallIconSet("bookmark_add"),i18n("&Toggle Bookmark"),this,SLOT(slotBookmarksToggle()),0,ID_BOOKMARKS_TOGGLE);
   bookmarks_menu->insertItem(i18n("&Next Bookmark"),this,SLOT(slotBookmarksNext()),0,ID_BOOKMARKS_NEXT);
   bookmarks_menu->insertItem(i18n("&Previous Bookmark"),this,SLOT(slotBookmarksPrevious()),0,ID_BOOKMARKS_PREVIOUS);
@@ -1051,9 +986,6 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton("editcopy",ID_EDIT_COPY, true,i18n("Copy"));
   toolBar()->insertButton("editpaste",ID_EDIT_PASTE, true,i18n("Paste"));
 	
-//  QFrame *sepCompile= new QFrame(toolBar());
-//  sepCompile->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-//  toolBar()->insertWidget(0,20,sepCompile);
   toolBar()->insertSeparator();
 
   toolBar()->insertButton("compfile",ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
@@ -1073,9 +1005,6 @@ void CKDevelop::initToolBar(){
   toolBar()->insertSeparator();
   toolBar()->insertButton("stop",ID_BUILD_STOP, false,i18n("Stop"));
 
-//  QFrame *sepDlgEd= new QFrame(toolBar());
-//  sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-//  toolBar()->insertWidget(0,20,sepDlgEd);
   toolBar()->insertSeparator();
 
   toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
@@ -1084,9 +1013,6 @@ void CKDevelop::initToolBar(){
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
-//  QFrame *sepDbgRun = new QFrame(toolBar());
-//  sepDbgRun->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-//  toolBar()->insertWidget(0,20,sepDbgRun);
   toolBar()->insertSeparator();
 
   toolBar()->insertButton("dbgrun",ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
@@ -1163,19 +1089,10 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("filefind",ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
-//  QFrame *sepWhatsThis= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
-//  sepWhatsThis->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-//  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,sepWhatsThis);
   toolBar()->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("contexthelp",ID_HELP_WHATS_THIS,
               true,i18n("What's this...?"));
-
-//  whats_this = new QWhatsThis(this);
-//  QToolButton *btnwhat = whats_this->whatsThisButton(toolBar(ID_BROWSER_TOOLBAR));
-//  QToolTip::add(btnwhat, i18n("What's this...?"));
-//  toolBar(ID_BROWSER_TOOLBAR)->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
-//  btnwhat->setFocusPolicy(QWidget::NoFocus);
 
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
@@ -1193,15 +1110,12 @@ void CKDevelop::initToolBar(){
 void CKDevelop::initStatusBar()
 {
 
-//  m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
   statProg = new QProgressBar(statusBar(),"Progressbar");
   statProg->setFixedWidth( 100 );             // arbitrary width
   statProg->setCenterIndicator(true);
-//  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
   statProg->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
   statProg->setMargin( 0 );
   statProg->setLineWidth(0);
-//  statProg->setMidLineWidth(3);
   statProg->setBackgroundMode( QWidget::PaletteBackground );
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
@@ -1216,7 +1130,6 @@ void CKDevelop::initStatusBar()
 
 
   statusBar()->addWidget( m_statusLabel, 1, false );
-//  statusBar()->insertItem("   ",                                       ID_STATUS_MSG,      1,  true);
   statusBar()->insertFixedItem("     ",                             ID_STATUS_DBG,          true);
   statusBar()->addWidget(statProg,                                                      0,  true);
   statProg->setFixedHeight( statProg->sizeHint().height() - 8 );
@@ -1317,10 +1230,6 @@ void CKDevelop::initConnections(){
   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
   connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-
-  // connect Docbrowser rb menu
-//  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
-//  								this, SLOT(slotURLSelected(KHTMLView*,const QString&,int,const char*))); 	
 
   connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));

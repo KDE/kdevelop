@@ -835,10 +835,10 @@ private:
   	
   KMenuBar* kdev_menubar;
 
-  QSplitter* mainSplitter;
-  QSplitter* topSplitter;
-  QValueList<int> mainSplitterPos;
-  QValueList<int> topSplitterPos;
+//  QSplitter* mainSplitter;
+//  QSplitter* topSplitter;
+//  QValueList<int> mainSplitterPos;
+//  QValueList<int> topSplitterPos;
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 
@@ -881,7 +881,7 @@ private:
   CTabCtl* o_tab_view;
   KDockWidget* treedock;
   KDockWidget* outputdock;
-  KDockWidget* main;
+  KDockWidget* maindock;
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources

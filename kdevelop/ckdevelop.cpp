@@ -418,7 +418,7 @@ void CKDevelop::slotFileSaveAll()
     else
       slotStatusMsg(i18n("Autosaving..."));
 
-    mainSplitter->setUpdatesEnabled(false);
+//    mainSplitter->setUpdatesEnabled(false);
 
     setInfoModified(header_widget->getName(), header_widget->isModified());
     setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
@@ -504,7 +504,7 @@ void CKDevelop::slotFileSaveAll()
   {
     browser_widget->view()->setFocus();
   }
-  mainSplitter->setUpdatesEnabled(true);
+//  mainSplitter->setUpdatesEnabled(true);
   slotStatusMsg(i18n("Ready."));
 }
 
