@@ -1,3 +1,7 @@
+1999-03-27 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* moved/ported many tree-related sourcecode from CKDevelop to the treeclasses 
+          (CLogFileView,CRealFileView and CDocTree)
+
 1999-03-26  Stefan Bartel  <bartel@rz.uni-potsdam.de>
         * ported the RFV to QListView
 	* added icon "inst_file.xpm" for RFV
