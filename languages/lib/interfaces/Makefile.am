@@ -1,6 +1,6 @@
 
 METASOURCES = AUTO
-langincludedirdir = $(includedir)/kdevelop/languages
+langincludedirdir = $(includedir)/kdevelop/languages/interfaces
 lib_LTLIBRARIES = liblang_interfaces.la
 liblang_interfaces_la_LDFLAGS = $(all_libraries)
 liblang_interfaces_la_SOURCES = kdevpcsimporter.cpp

@@ -3,7 +3,9 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	$(all_includes)
 METASOURCES = AUTO
 libdesignerintegration_la_LDFLAGS = $(all_libraries)
-noinst_LTLIBRARIES = libdesignerintegration.la
+lib_LTLIBRARIES = libdesignerintegration.la
 libdesignerintegration_la_SOURCES = implementationwidgetbase.ui \
 	implementationwidget.cpp qtdesignerintegration.cpp
-noinst_HEADERS = implementationwidget.h qtdesignerintegration.h
+
+langincludedirdir = $(includedir)/kdevelop/languages/designer_integration
+langincludedir_HEADERS = qtdesignerintegration.h implementationwidget.h implementationwidgetbase.h

@@ -20,7 +20,7 @@ rc2_DATA = kdevmakeview.rc
 noinst_HEADERS = filterdlg.h
 
 libkdevmakeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevmakeview_la_LIBADD = $(top_builddir)/lib/widgets/libwidgets.la \
+libkdevmakeview_la_LIBADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/interfaces/extensions/dcop/libkdevdcopextensions.la $(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML)
 libkdevmakeview_la_SOURCES = makeviewpart.cpp makewidget.cpp directorystatusmessagefilter.cpp \
@@ -28,7 +28,7 @@ libkdevmakeview_la_SOURCES = makeviewpart.cpp makewidget.cpp directorystatusmess
 	makeactionfilter.cpp otherfilter.cpp filterdlg.ui
 
 libkdevappview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevappview_la_LIBADD = $(top_builddir)/lib/widgets/libwidgets.la \
+libkdevappview_la_LIBADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/interfaces/extensions/dcop/libkdevdcopextensions.la $(top_builddir)/lib/libkdevelop.la \
 	$(LIB_KHTML)
 libkdevappview_la_SOURCES = appoutputviewpart.cpp appoutputwidget.cpp directorystatusmessagefilter.cpp \

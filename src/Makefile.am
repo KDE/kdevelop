@@ -13,7 +13,7 @@ kdevelop_SOURCES = core.cpp partcontroller.cpp projectmanager.cpp \
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevelop_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
+kdevelop_LDADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la $(LIB_KDEVMDI) \
 	$(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
 
@@ -32,7 +32,7 @@ kdevassistant_SOURCES = api.cpp core.cpp documentationpart.cpp editorproxy.cpp \
 	partcontroller.cpp partselectwidget.cpp plugincontroller.cpp projectmanager.cpp \
 	projectsession.cpp settingswidget.ui statusbar.cpp toplevel.cpp generalinfowidgetbase.ui \
 	main_assistant.cpp mimewarningdialog.ui splashscreen.cpp
-kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
+kdevassistant_LDADD = $(top_builddir)/lib/widgets/libkdevwidgets.la \
 	$(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la $(LIB_KDEVMDI) \
 	-lktexteditor $(LIB_KHTML) $(LIB_KPARTS) $(LIB_KDEUI)
 

@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 kde_module_LTLIBRARIES = libkdevgrepview.la
 libkdevgrepview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevgrepview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
-	$(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
+	$(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML)
 
 libkdevgrepview_la_SOURCES = grepviewpart.cpp grepviewwidget.cpp grepdlg.cpp
 

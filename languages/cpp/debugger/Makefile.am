@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/languages/lib/debugger \
 
 kde_module_LTLIBRARIES = libkdevdebugger.la
 libkdevdebugger_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevdebugger_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML) \
+libkdevdebugger_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML) \
 	$(top_builddir)/languages/lib/debugger/liblang_debugger.la
 
 libkdevdebugger_la_SOURCES = debuggerdcopinterface.skel debuggerpart.cpp dbgcontroller.cpp gdbcontroller.cpp dbgcommand.cpp gdbcommand.cpp gdbparser.cpp stty.cpp breakpoint.cpp variablewidget.cpp gdbbreakpointwidget.cpp framestackwidget.cpp disassemblewidget.cpp memviewdlg.cpp dbgpsdlg.cpp dbgtoolbar.cpp debuggerconfigwidget.cpp debuggerconfigwidgetbase.ui gdboutputwidget.cpp gdbtable.cpp

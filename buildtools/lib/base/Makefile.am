@@ -6,3 +6,4 @@ libkdevbuildbase_la_LDFLAGS = $(all_libraries)
 noinst_LTLIBRARIES = libkdevbuildbase.la
 noinst_HEADERS = kdevbuildtool.h
 libkdevbuildbase_la_SOURCES = kdevbuildtool.cpp
+kdevelopbuildtoolsincludedir = $(includedir)/kdevelop/buildtools/base

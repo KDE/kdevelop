@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 kde_module_LTLIBRARIES = libkdevcvsservice.la
 libkdevcvsservice_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcvsservice_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
-	$(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML) -lcvsservice
+	$(top_builddir)/lib/widgets/libkdevwidgets.la $(LIB_KHTML) -lcvsservice
 
 libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp \
     cvsformbase.ui cvsform.cpp \
