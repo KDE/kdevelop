@@ -45,7 +45,6 @@ private:
     void buildTreeByNamespace(bool fromScratch);
     void buildTree(bool fromScratch);
 
-    static void sortFolder(QListViewItem* item);
     static QString determineFolder(QString fileName, QString projectDir, int levels = -1);
 };
 

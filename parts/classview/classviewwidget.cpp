@@ -3,6 +3,7 @@
  *   jonas.nordin@syncom.se                                                *
  *   Copyright (C) 2000-2001 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Eray Ozkural <erayo@cs.bilkent.edu.tr>                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -156,12 +157,14 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
                                                 QStringList &dirNames,
                                                 QMap<QString, ClassTreeItem*> *folders)
 {    
+    QMap<ClassTreeItem*, ClassTreeItem*> lastItems;
+    lastItems[classes] = 0;
     QStringList::ConstIterator sit;
     for (sit = dirNames.begin(); sit != dirNames.end(); ++sit) {
         QStringList l = QStringList::split('/', *sit);
         QStringList::ConstIterator i;
         QString path;
-        for (i = l.begin(); i != l.end(); ++i) {
+        for (i = l.begin(); i != l.end(); ++i) {  // for each directory component
             const QString & dir = *i;
             ClassTreeItem *parent;
             QMap<QString, ClassTreeItem*>::iterator folder = folders->find(path);
@@ -172,15 +175,14 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
             if (!path.isEmpty())
                 path += '/';
             path += dir;
-            if (folders->find(path)==folders->end())
-                folders->insert(path, new ClassTreeOrganizerItem(parent, 0, dir));
+            if (folders->find(path)==folders->end()) { // new folder
+                ClassTreeItem* item =                 // create new item
+                    new ClassTreeOrganizerItem(parent,lastItems[parent],dir);
+              folders->insert(path, item, dir);     // insert item
+              lastItems[parent] = item;            // set last item of parent
+            }
         }
     }
-
-    // Sort folders
-    setSorting(1, true); // turn sorting on
-    sortFolder(classes);
-    //setSorting(-1);      // we don't keep the whole view sorted
 }
 
 
@@ -353,18 +355,5 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     if (!fromScratch)
         setTreeState(oldTreeState);
 }
-    
-// Sort folders recursively in a tree view
-// This forces a sorting of all items
-void ClassViewWidget::sortFolder(QListViewItem* item)
-{
-    if (item!=0) {
-        item->sort();
-        QListViewItem *child = item->firstChild();
-        for (; child!=0; child = child->nextSibling())
-            sortFolder(child);
-    }
-}
-
     
 #include "classviewwidget.moc"

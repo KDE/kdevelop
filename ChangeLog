@@ -1,12 +1,15 @@
 2002-06-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-        * classview: fix hierarchical view (It showed only a single
-          level of directories)
+        * classview:
+          - fix hierarchical view (It showed only a single
+            level of directories)
+          - make hierarchical view default (a la 2.x)
+          - don't use sort() as suggested by Bernd
+          - remove obsolete sortFolder() <-- won't work anymore
         * cppsupport: add file templates for .cpp and .h
         * hack old kwrite-part a little to bring it up to date
           (not finished)
         * Add TODO items suggested by Falk
-
-2002-06-12  Matthias Hölzer-Klüpfel <mhk@kde.org>
+        2002-06-12  Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* Improved buttons in IDEAl mode: added keyboard navigation 
 	  and styleability.
