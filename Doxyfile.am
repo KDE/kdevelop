@@ -127,7 +127,7 @@ apidox-am-yes:
 		fi ;\
 		fi ;\
 	done ;\
-	echo "GENERATE_TAGFILE       = $(top_builddir)/apidocs/$(subdir)/$(subdir).tag" >> Doxyfile ;\
+	echo "GENERATE_TAGFILE       = $(top_builddir)/apidocs/$(DOXYGEN_PROJECT_NAME).tag" >> Doxyfile ;\
 	##--------------------------------------------------------------------------- \
 	## Configuration options related to the dot tool                              \
 	##--------------------------------------------------------------------------- \
@@ -152,9 +152,9 @@ install-data-local: install-apidox
 ## install API documentation
 install-apidox:
 		$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/$(subdir)/html ; \
-		if test -f $(top_builddir)/apidocs/$(subdir)/$(subdir).tag; then \
-		echo $(INSTALL_DATA) $(top_builddir)/apidocs/$(subdir)/$(subdir).tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/$(subdir); \
-		$(INSTALL_DATA) $(top_builddir)/apidocs/$(subdir)/$(subdir).tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/$(subdir); \
+		if test -f $(top_builddir)/apidocs/$(DOXYGEN_PROJECT_NAME).tag; then \
+		echo $(INSTALL_DATA) $(top_builddir)/apidocs/$(DOXYGEN_PROJECT_NAME).tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/$(subdir); \
+		$(INSTALL_DATA) $(top_builddir)/apidocs/$(DOXYGEN_PROJECT_NAME).tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/$(subdir); \
 		fi; \
 		if test -d $(top_builddir)/apidocs/$(subdir)/html; then \
 			list=`ls $(top_builddir)/apidocs/$(subdir)/html`; \
