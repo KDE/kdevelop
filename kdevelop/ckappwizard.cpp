@@ -2299,11 +2299,11 @@ void CKAppWizard::slotProcessExited() {
   }
   if ( kpartitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11 $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
-   project->setLDFLAGS("$(all_libraries)");
+   project->setLDFLAGS("${all_libraries}");
   }
   if ( kioslaveitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore -lqt -lXext -lX11 -lkio");
-   project->setLDFLAGS("$(all_libraries) $(KDE_RPATH)");
+   project->setLDFLAGS("${all_libraries} ${KDE_RPATH}");
   }
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
