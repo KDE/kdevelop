@@ -308,6 +308,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
+    actionCollection()->action("edit_make_member")->setEnabled(enabled);
 
     if( !part )
 	return;
@@ -860,12 +861,12 @@ void CppSupportPart::slotNodeSelected( QListViewItem* item )
 
     m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
 				     item->text(3).toInt(), item->text(4).toInt() );
-    m_activeViewCursor->setCursorPosition(item->text(1).toInt(), item->text(2).toInt());
+    m_activeViewCursor->setCursorPositionReal(item->text(1).toInt(), item->text(2).toInt());
 }
 
 void CppSupportPart::slotMakeMember()
 {
-    if( !m_activeViewCursor )
+    if( !m_activeViewCursor || !m_valid )
         return;
 
     // sync
@@ -896,6 +897,7 @@ void CppSupportPart::slotMakeMember()
 
 	if( decl && declarator && declarator->parameterDeclarationClause() ){
 
+	    text += "\n\n";
 	    text += typeSpecToString( decl->typeSpec() );
 	    if( text )
 	        text += " ";
@@ -916,27 +918,29 @@ void CppSupportPart::slotMakeMember()
 
 	if( !text.isEmpty() && !implFile.isEmpty() ){
 	    partController()->editDocument( implFile );
+	    kapp->processEvents( 500 );
 
             // sync
             while( m_backgroundParser->filesInQueue() > 0 )
                 m_backgroundParser->isEmpty().wait();
 
-	    KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
-	    KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
-
-	    int line = editiface->numLines() - 1;
-
-	    if( editiface )
-		editiface->insertText( line, 0, text );
-	    if( cursoriface )
-		cursoriface->setCursorPosition( line, 0 );
-	} else {
-	    int line = m_activeEditor->numLines() - 1;
-	    if( m_activeEditor )
-		m_activeEditor->insertText( line, 0, text );
-	    if( m_activeViewCursor )
-		m_activeViewCursor->setCursorPosition( line, 0 );
 	}
+	
+	m_backgroundParser->lock();
+	translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
+	int atLine, atColumn;
+	if( translationUnit ){
+	    translationUnit->getEndPosition( &atLine, &atColumn );
+	} else {
+	    atLine = m_activeEditor->numLines() - 1;
+	    atColumn = 0;
+	}
+	m_backgroundParser->unlock();
+
+	if( m_activeEditor )
+	    m_activeEditor->insertText( atLine, atColumn, text );
+	if( m_activeViewCursor )
+	    m_activeViewCursor->setCursorPositionReal( atLine, atColumn );
     }
 }
 

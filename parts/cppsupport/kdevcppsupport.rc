@@ -1,10 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCppSupport" version="2">
+<kpartgui name="KDevCppSupport" version="3">
 <MenuBar>
  <Menu name="edit">
   <Action name="edit_complete_text"/>
  </Menu>
 
+ <Menu name="edit">
+  <Action name="edit_make_member"/>
+ </Menu>
+ 
  <Menu name="view">
   <Action name="edit_switchheader"/>
  </Menu>

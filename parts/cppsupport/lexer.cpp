@@ -867,4 +867,8 @@ int Lexer::macroExpression()
     return macroLogicalOr();
 }
 
-#include "lexer.moc"
+// *IMPORTANT*
+// please, don't include lexer.moc here, because Lexer isn't a QObject class!!
+// if you have problem while recompiling try to remove cppsupport/.deps,
+// cppsupport/Makefile.in and rerun automake/autoconf
+
