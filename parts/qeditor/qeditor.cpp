@@ -303,9 +303,9 @@ void QEditor::updateStyles()
     int tabwidth = tabStop();
     QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
     if( colorizer ){
+	setFont( colorizer->format( 0 )->font() );
 	setTabStopWidth( colorizer->format(0)->width('x') * tabwidth );
 	document()->setTabStops( colorizer->format(0)->width('x') * tabwidth );
-	setFont( colorizer->format( 0 )->font() );
     }
     KTextEdit::updateStyles();
 }
