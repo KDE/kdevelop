@@ -1,0 +1,8 @@
+# Java application
+[General]
+Name=Application
+Icon=qmakeapp.png
+Category=Java/Ant project
+Comment=Generate a Java application
+FileTemplates=java,JavaStyle
+
