@@ -1,3 +1,8 @@
+2002-07-17 Victor Röder <victor_roeder@gmx.de>
+	* added a simple search mechanism to the Documentation Browser
+		-> but not really efficient :-(
+		-> TODO: Toy with a few ideas...
+
 2002-07-15 Jakob Simon-Gaarde <jakob@jsg.dk>
   * trollproject:
     * trollprojectwidget:
@@ -11,7 +16,7 @@
 
 2002-07-07 Victor Röder <victor_roeder@gmx.de>
 	* repaired layouting of some Automake dialogs
-	* adapted the the look of all Autmake dialogs
+	* adapted the the look of all Automake dialogs
 	* add blue bullet to the make output view
 
 2002-07-01  Jakob Simon-Gaarde <jakob@jsg.dk>
