@@ -31,7 +31,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     functionLayout( 9, 3, 1, "functionLayout" ),
     accessLayout( 3, 5, 1, "accessLayout" ),
     typeLayout( 3, 5, 1, "typeLayout" ),
-    modifierLayout( 3, 5, 1, "modifierLayout" ),
+    modifierLayout( 3, 6, 1, "modifierLayout" ),
     buttonLayout( 5, "buttonLayout" ),
     modifierGrp( this, "modifierGrp" ),
     typeGrp( this, "typeGrp" ),
@@ -50,6 +50,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     signalRb( this, "signalRb" ),
     slotRb( this, "slotRb" ),
     virtualCb( this, "virtualCb" ),
+    pureCb( this, "pureCb" ),
     staticCb( this, "staticCb" ),
     constCb( this, "constCb" ),
     okBtn( this, "okBtn" ),
@@ -150,6 +151,11 @@ void CAddClassMethodDlg::setWidgetValues()
   virtualCb.setFixedHeight( 20 );
   virtualCb.setText( "Virtual" );
 
+  pureCb.setMinimumSize( 60, 20 );
+  pureCb.setFixedHeight( 20 );
+  pureCb.setText( "Pure" );
+  pureCb.setEnabled( false );
+
   staticCb.setMinimumSize( 60, 20 );
   staticCb.setFixedHeight( 20 );
   staticCb.setText( "Static" );
@@ -169,7 +175,6 @@ void CAddClassMethodDlg::setWidgetValues()
   cancelBtn.setAutoRepeat( FALSE );
   cancelBtn.setAutoResize( FALSE );
 
-
   // Access group
   accessGrp.insert( &publicRb );
   accessGrp.insert( &protectedRb );
@@ -182,6 +187,7 @@ void CAddClassMethodDlg::setWidgetValues()
 
   // Modifier group
   modifierGrp.insert( &virtualCb );
+  modifierGrp.insert( &pureCb );
   modifierGrp.insert( &staticCb );
   modifierGrp.insert( &constCb );
 
@@ -213,11 +219,12 @@ void CAddClassMethodDlg::setWidgetValues()
   typeLayout.addRowSpacing( 2, 10 );
 
   // Modifier layout
-  modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 4 );
+  modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 5 );
   modifierLayout.addRowSpacing( 0, 20 );
   modifierLayout.addWidget( &virtualCb, 1, 1 );
-  modifierLayout.addWidget( &staticCb, 1, 2 );
-  modifierLayout.addWidget( &constCb, 1, 3 );
+  modifierLayout.addWidget( &pureCb, 1, 2 );
+  modifierLayout.addWidget( &staticCb, 1, 3 );
+  modifierLayout.addWidget( &constCb, 1, 4 );
   modifierLayout.addRowSpacing( 2, 10 );
 
   // Button layout
@@ -234,6 +241,7 @@ void CAddClassMethodDlg::setCallbacks()
   connect( &methodRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
   connect( &slotRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
   connect( &signalRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+  connect( &virtualCb, SIGNAL ( clicked() ), SLOT( slotVirtualClicked() ) );
 
   // Ok and cancel buttons.
   connect( &okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
@@ -259,13 +267,13 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   else // Else just set the whole thing as the name
     aMethod->setName( decl );
 
-  // Set the type
+  // Set the type.
   if( slotRb.isChecked() )
     aMethod->setIsSlot( true );
   else if( signalRb.isChecked() )
     aMethod->setIsSignal( true );
 
-  // Set the export 
+  // Set the export.
   if( publicRb.isChecked() )
     aMethod->setExport( PIE_PUBLIC );
   else if( protectedRb.isChecked() )
@@ -273,13 +281,15 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   else if( privateRb.isChecked() )
     aMethod->setExport( PIE_PRIVATE );
   
-  // Set modifiers if this is a normal method.
-  if( !aMethod->isSignal && !aMethod->isSlot )
-  {
+  // Set the modifiers if they are enabled.
+  if( pureCb.isEnabled() )
+    aMethod->setIsPure( pureCb.isChecked() );
+  if( staticCb.isEnabled() )
     aMethod->setIsStatic( staticCb.isChecked() );
+  if( constCb.isEnabled() )
     aMethod->setIsConst( constCb.isChecked() );
+  if( virtualCb.isEnabled())
     aMethod->setIsVirtual( virtualCb.isChecked() );
-  }
 
   // Set comment
   comment = "/** " + docEdit.text() + " */";
@@ -295,13 +305,21 @@ void CAddClassMethodDlg::slotToggleModifier()
     staticCb.setEnabled( false );
     constCb.setEnabled( false );
     virtualCb.setEnabled( false );
+    pureCb.setEnabled( false );
   }
   else
   {
-    staticCb.setEnabled( true );
     constCb.setEnabled( true );
     virtualCb.setEnabled( true );
+
+    slotVirtualClicked();
   }
+}
+
+void CAddClassMethodDlg::slotVirtualClicked()
+{
+  pureCb.setEnabled( virtualCb.isChecked() );
+  staticCb.setEnabled( !virtualCb.isChecked() );
 }
 
 void CAddClassMethodDlg::OK()

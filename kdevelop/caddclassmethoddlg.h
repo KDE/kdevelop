@@ -102,8 +102,13 @@ protected: // Private widgets
   /** This is a slot rb. */
   QRadioButton slotRb;
 
+  /** This method is virtual. */
   QCheckBox virtualCb;
+  /** This method is pure-virtual. */
+  QCheckBox pureCb;
+  /** This method is static. */
   QCheckBox staticCb;
+  /** This method is const. */
   QCheckBox constCb;
 
   QPushButton okBtn;
@@ -112,7 +117,14 @@ protected: // Private widgets
 
 protected slots:
 
+  /** This slot is executed when the user clicks on the type rb.
+   * It toggles the modifiers on/off. */
   void slotToggleModifier();
+
+  /** This slot is executed when the user click the virtual button.
+   * It toggles the pure button on/off.*/ 
+  void slotVirtualClicked(); 
+ 
   void OK();
 
 private: // Private methods
