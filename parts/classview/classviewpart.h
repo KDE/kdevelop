@@ -76,6 +76,7 @@ private slots:
     void refresh();
     void removeFile(const QString& fileName);
     void addFile(const QString& fileName);
+    void removeNamespace(const QString &name);
     void switchedViewPopup();
     void graphicalClassView();
 

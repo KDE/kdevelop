@@ -77,6 +77,7 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
         this, SLOT(activePartChanged(KParts::Part*)));
+    connect( m_widget, SIGNAL(removedNamespace(const QString&)), this, SLOT(removeNamespace(const QString& )));
 
     m_classes->view()->setDefaultText(EmptyClasses);
     m_functions->view()->setDefaultText(EmptyFunctions);
@@ -834,6 +835,16 @@ void ClassViewPart::updateClassesForAdd( NamespaceDom nsdom )
             item->setOpen(true);
             ViewCombosOp::processClass(this, m_classes->view(), item);
         }
+    }
+}
+
+void ClassViewPart::removeNamespace( const QString & name )
+{
+    if (nsmap.contains(name))
+    {
+        NamespaceItem *i = nsmap[name];
+        if (i)
+            m_namespaces->view()->removeItem(i);
     }
 }
 

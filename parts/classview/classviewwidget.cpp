@@ -121,7 +121,7 @@ void ClassViewWidget::refresh()
 	return;
 
     clear();
-    m_projectItem = new FolderBrowserItem( this, m_part->project()->projectName() );
+    m_projectItem = new FolderBrowserItem( this, this, m_part->project()->projectName() );
     m_projectItem->setOpen( true );
     blockSignals( true );
 
@@ -137,7 +137,7 @@ void ClassViewWidget::refresh()
 
 void ClassViewWidget::slotProjectOpened( )
 {
-    m_projectItem = new FolderBrowserItem( this, m_part->project()->projectName() );
+    m_projectItem = new FolderBrowserItem( this, this, m_part->project()->projectName() );
     m_projectItem->setOpen( true );
 
     m_projectDirectory = URLUtil::canonicalPath( m_part->project()->projectDirectory() );
@@ -327,7 +327,7 @@ void FolderBrowserItem::processFile( FileDom file, QStringList& path, bool remov
 	if( remove )
 	    return;
 
-	item = new FolderBrowserItem( this, current );
+	item = new FolderBrowserItem( m_widget, this, current );
 	if( listView()->removedText.contains(current) )
 	    item->setOpen( true );
 	m_folders.insert( current, item );
@@ -378,6 +378,7 @@ void FolderBrowserItem::processNamespace( NamespaceDom ns, bool remove )
 	    listView()->removedText << ns->name();
 	}
 	delete( item );
+    emit m_widget->removedNamespace(ns->name());
 	item = 0;
     }
 }

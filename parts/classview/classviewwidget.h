@@ -59,6 +59,9 @@ public:
 
     void clear();
 
+signals:
+    void removedNamespace(const QString &name);
+
 private slots:
     void slotNewClass();
     void slotAddMethod();
@@ -129,10 +132,10 @@ public:
 class FolderBrowserItem: public ClassViewItem
 {
 public:
-    FolderBrowserItem( QListView* parent, const QString& name=QString::null )
-    	: ClassViewItem( parent, name ) {}
-    FolderBrowserItem( QListViewItem* parent, const QString& name=QString::null )
-    	: ClassViewItem( parent, name ) {}
+    FolderBrowserItem( ClassViewWidget* widget, QListView* parent, const QString& name=QString::null )
+    	: ClassViewItem( parent, name ), m_widget(widget) {}
+    FolderBrowserItem( ClassViewWidget* widget, QListViewItem* parent, const QString& name=QString::null )
+    	: ClassViewItem( parent, name ), m_widget(widget) {}
 
     virtual bool isFolder() const { return true; }
 
@@ -151,6 +154,8 @@ private:
     QMap<ClassDom, ClassDomBrowserItem*> m_classes;
     QMap<FunctionDom, FunctionDomBrowserItem*> m_functions;
     QMap<VariableDom, VariableDomBrowserItem*> m_variables;
+
+    ClassViewWidget* m_widget;
 };
 
 class NamespaceDomBrowserItem: public ClassViewItem
