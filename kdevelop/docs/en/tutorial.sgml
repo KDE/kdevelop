@@ -637,6 +637,8 @@ at the fuctionality that enables user interaction and how certain things work. T
 and, as it is similar to almost all KDE applications, will enable you to read source codes from other projects as well; additionally,
 you will know where to change what part of the code to make your applications behave the way they are designed for.
 
+<sect2>The <tt/main()/ Function<label id="The main() Function">
+<p>
 As the application begins its execution with entering the <tt/main()/ function, this will be the start for our code exmination. The
 <tt/main()/ function of <em/KScribble/ is implemented in the file <tt/main.cpp/ and can also be found using the Class Browser by
 selecting the "Globals" folder, subfolder "Functions":
@@ -727,7 +729,7 @@ KScribbleApp::KScribbleApp()
 }
 </code></tscreen>
 
-We see that our instance of <tt/KConfig/ now points to the applications configuration, so we can operate
+We see that our config instance of <tt/KConfig/ now points to the applications configuration, so we can operate
 with the configuration file entries later.
 
 Then, all parts of the application that are needed are created by their according member functions that are specific to our main
@@ -979,9 +981,239 @@ memory.
 During the development of our sample application <em/KScribble/, we'll go further into this development process and complete the
 application framework according to our program's special needs.
 
+<sect3>Application Configuration
+<p>
+Now, after we created all instances of the <tt/KTMainWindow/ instance of our application to create the first window, we have to
+initialize certain values that influence the look of the program. For this, we call <tt/readOptions()/, which gets all values and calls
+the methods needed to set the according attributes. The KDE-Core library contains the class <tt/KConfig/ that provides a good
+possiblity to store values in configuration files as well as to read them in again. Also, as each <tt/KApplication/ instance creates
+it's resource file already, we only have to access this file and create our values. As <tt/KConfig/ provides us the file object, we
+have to use the class <tt/KConfigBase/ to read and write all entries. As writing is very easy to do with <tt/writeEntry()/ methods,
+reading depends on the attribute type which we want to initalize. Generally, an entry in the configuration file contains a value name
+and a value. Values that belong together in some context can be collected in groups, therefore we have to set the group name before we
+access the value afterwards; the group has to be set only once for reading a set of attributes that are in the same group.
+
+Let's have a look at what we want to read in:
+<tscreen><code>
+1   void KScribbleApp::readOptions()
+2   {
+3	
+4   	config->setGroup("General Options");
+5
+6   	// bar status settings
+7   	bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+8	    view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+9	    if(!bViewToolbar)
+10      enableToolBar(KToolBar::Hide);
+11	
+12    bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+13	  view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+14	  if(!bViewStatusbar)
+15      enableStatusBar(KStatusBar::Hide);
+16	
+17	  // bar position settings
+18	  KMenuBar::menuPosition menu_bar_pos;
+19	  menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
+20
+21    KToolBar::BarPosition tool_bar_pos;
+22    tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+23
+24	  menuBar()->setMenuBarPos(menu_bar_pos);
+25    toolBar()->setBarPos(tool_bar_pos);
+26	
+27    // initialize the recent file list
+28	  recent_files.setAutoDelete(TRUE);
+29	  config->readListEntry("Recent Files",recent_files);
+30	
+31	  uint i;
+32    for ( i =0 ; i < recent_files.count(); i++){
+33      recent_files_menu->insertItem(recent_files.at(i));
+34    }
+35
+36    QSize size=config->readSizeEntry("Geometry");
+37	  if(!size.isEmpty())
+38      resize(size);
+}
+</code></tscreen>
+
+As we have seen in one of the above code parts, the first action our constructor does was:
+
+<tscreen><verb>
+config=kapp->getConfig();
+</verb></tscreen>
+
+which sets the <tt/KConfig/ pointer <tt/config/ to the application configuration. Therefore, we don't have to care for the location of
+the configuration file. Indeed, the file is, according to the KDE File System Standard (KDE FSS), located in
+<tt>&dollar;HOME/.kde/share/config/</tt>; we will have a closer look about the KDE FSS in a later step when we're setting installation
+locations for project files. As the config file is placed in the user's home directory, each user has it's own appearance of his
+application except for values that are located in a system wide configuration file that can optionally be created and installed by the
+programmer in the KDE directory. But, although this could help in some cases, we should avoid any dependecy of our application towards
+the existing of file entries. Therefore, all read methods provided by <tt/KConfigBase/ allow to add a default value to be used when the
+entry doesn't exist. Another thing important to a programmer is that the configuration file is stored in plain text, and this is for
+some reasons as well as you have to watch some criterias:
+<itemize>
+<item>the user is able change the configuration file by a plain text editor
+<item>if the user wants to chage values by hand, the entries should be very transparent to determine their purpose
+<item>for entries that have to be saved, but are critical in terms of security like passwords, you have to look for a proper solution
+to ensure the security.
+</itemize>
+Now that we know the basics, we're going to analyze the code. As said, we only have to use our config pointer
+to access the values. First, in line 4, we set the current goup to "General Options". This indicates that the values used are somewhat
+general attributes for the application. Then we read the values for the toolbar and statusbar- these have to be saved when the
+application closes to restore their status again when the user restarts the program. As the bars can only be on or off, we use a
+boolean value, therefore, our method is <tt/readBoolEntry()/. The process is identical for both bars, so we only have a look at the
+lines 7-10 to watch what's happening for the toolbar. First, we read the value into the temporary variable <tt/bViewToolbar/ at line 7.
+The value name in the file is "Show Toolbar" and, if the value is not present (which would be the case the first time the application
+starts), the default value is set to <tt/true/. Next, we set the checkmark for the menuentry for en-/disabling the toolbar by this
+value: we call <tt/setItemChecked()/ on the view menu, enty <tt/ID_VIEW_TOOLBAR/ with our attribute. Finally, we set the toolbar to use
+the value. By default, the toolbar is visible, therefore, we only have to do something if <tt/bViewToolbar/ is <tt/false/. With
+<tt/enableToolBar()/ (line 10) we're setting the bar to hide itself if it is disabled.
+
+Next, we have to read the bar positions. As the user might have changed the bar position by dragging a bar with the mouse to
+another view area, these have to be saved as well and their status restored. Looking at the classes <tt/KToolBar/ and <tt/KMenuBar/,
+we see that the bar positions can be:
+<tscreen><verb>
+enum BarPosition {Top, Left, Bottom, Right, Floating, Flat}
+</verb></tscreen>
+As this value has been written in a numeric value, we have to read it with <tt/readNumEntry()/ and convert it to a position value. With
+<tt/setMenuBarPos()/ and <tt/setBarPos()/ we tell the bars where to show up.
+
+Now you probably have noticed that our "File" menu contains an menu for recently used files. The filenames are stored in a list of
+strings, which has to be saved on application closing and now has to be read in to restore the menu. First, we initialize the list
+with the entries stored by using the <tt/readListEntry()/. Then, in a <tt/for-/loop, we create a menu entry for each list item.
+
+Finally, we only have to take care for the geometry of our window. We read in the appearance by a <tt/QSize/ variable containing an x
+and y value for width and heigth of the window. As the window is initialized by <tt/KTMainWindow/, we don't have to take care for a
+default value and only will use <tt/resize()/ if the entry is not empty.
+
+What is left to explain on application construction is that we initially have to disable available user commands that shouldn't be
+available if some instances don't match the needed criteria. These are file saving and operations that are using the clipboard. During
+the application's lifetime, we have to take care of these several times, but which is quite easy. The framework only gives us two
+methods to enable/disable menubar and toolbar items with one method call at the same time.
+
+<sect3>Executing
+<p>
+During the past section, we have only monitored what happens during the constructor call of our <tt/KScribbleApp/ instance providing us
+the main window. After returning to the <tt/main()/ function, we have to call <tt/show()/ to display the window. What is different from
+any <tt/KApplication/ or <tt/QApplication/ here is that when we're using <tt/KTMainWindow/ as the instance for our main widget, we
+don't have to set it with <tt/setMainWidget()/. This is done by <tt/KTMainWindow/ itself and we don't have to take care of that.
+
+The only thing left then is to interpret the commandline. We get the commandline option and ask, if <tt/int argc/ is > 1, which
+indicates that the user called our application with <tt/kscribble filename_to_open/. Our window is then asked to open the file by it's
+name and calls <tt/openDocumentFile()/ with the filename.
+
+The last line of the <tt/main()/ function does the known job: it executes the application instance and the program enters the event
+loop.
+
+Now, in section <ref id="The main() Function" name="The main() Function">, we started to separate the execution process by
+<tt/if( app.isRestored() )/ and described the usual invocation process. The following now gives an introduction to session
+management and how our application makes use of this.
+
+<sect2>Invocation by Session Management
+<p>
+As we said, the <tt/main()/ function tests, if the application is invoked by the session manager. The session manager is responsible to
+save the current status of all open application windows on the user's desktop and has to resore them when the user logs in the next
+time, which means that the application is not started by the user but automatically invoked. The part of the code which is executed
+was:
+<tscreen><verb>
+6    if (app.isRestored())
+7    {
+8       RESTORE(KScribbleApp);
+9    }
+</verb></tscreen>
+
+In <ref id="The main() Function" name="The main() Function">, we stated that we test the invocation by asking
+<tt/app.isRestored()/. Then line 8 gets executed. It looks like a simple statement, but in fact this will result in a complex execution
+process which we want to follow in this section.
+
+RESTORE() itself is a macro provided by <tt/KTMainWindow/. It expands to the following code:
+
+<tscreen><verb>
+if (app.isRestored()){
+  int n = 1;
+  while (KTMainWindow::canBeRestored(n)){
+    (new KScribbleApp)->restore(n);
+     n++;
+  }
+}
+</verb></tscreen>
+
+This will restore all application windows of the class <tt/KScribbleApp/ by creating the instances and calling <tt/restore()/ to the
+new window. It is important to realize that if your application uses several different widgets that inherit <tt/KTMainWindow/, you have
+to expand the macro and determine the type of the top widgets by using <tt/KTMainWindow::classNameOfToplevel(n)/ instead of the class
+<tt/KScribbleApp/.
+The <tt/restore()/ method then reads the part of the session file that contains the information about the window. As <tt/KTMainWindow/
+stores all of this for us, we don't have to care for anything else. Only information that belong to our specific instance of
+<tt/KScribbleApp/ has to be found then. Usually this would be a temporary file that we created to store the document or other
+initialization that we might need. To get to this restoration information, we only have to overwrite two virtual methods of
+<tt/KTMainWindow/, <tt/saveProperties()/ and <tt/readProperties()/. The information we have to save on session end is if the currently
+opended document is modified or not and the filename. If the file is modified, we will get a temporary filename to save it to. On
+session beginning, this information now is used to restore the document contents:
+
+<tscreen><verb>
+void KScribbleApp::readProperties(KConfig*)
+{
+	QString filename = config->readEntry("filename","");
+	bool modified = config->readBoolEntry("modified",false);
+  if( modified ){
+  	bool b_canRecover;
+		QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
+  	
+  	if(b_canRecover){
+   			doc->openDocument(tempname);
+   			doc->setModified();
+   			QFileInfo info(filename);
+   			doc->pathName(info.absFilePath());
+   			doc->title(info.fileName());
+   			QFile::remove(tempname);
+		}
+	}
+ 	else if(!filename.isEmpty()){
+		doc->openDocument(filename);
+	}
+  setCaption(kapp->appName()+": "+doc->getTitle());
+}		
+</verb></tscreen>
+Here, the line <tt/kapp->checkRecoverFile()/ seems a bit strange, as <tt/b_canRecover/ is not initialized. This is done by the method
+which sets it to <tt/true/, if there is a recover file. As we only saved a document in a recover file if it was modified, we set the
+modified bit directly to indicate that the information hasn't been saved to the belonging file. Also we have to take care that the
+recover file has another filename than the original file which was opened. Therefore, we have to reset the filename and path to the old
+filename. Finally, we have the information we wanted to recover and we can delete the temporary file by the session manager.
+
+<bf/Summary:/
+
+During this chapter, you got to know how the application starts either by normal user invocation or by the session manager. We went
+through the code to learn how the parts of the visual interface of the application are constructed as well as how to initialize
+attributes by configuration file entries. Now you can execute the framework application to test these functions and see how the
+program window reacts.
 
 <sect1>Additional Contents of KDevelop Projects
 <p>
+Besides the sourcecode provided, KDevelop projects contain a lot of other additional parts that are of interest to the developer. These
+are:
+<itemize>
+<item>a program icon
+<item>a program mini-icon
+<item>a .kdelnk file
+<item>a sample SGML-documentation file
+<item>a set of API-documentation generated from the framework source
+</itemize>
+
+Except the API-documentation, these elements of the project will be installed together with the application binary. As the project
+framework has to be as open as possible, you have to adapt these parts towards your project goals. These are first to edit the icons
+provided. This will give your application a unique identifyer by which the user can determine your application visually in window
+manager menus. The .kdelnk file then is a file that installs your application into <tt/kpanel/ in the <tt/Applications/ menu. This has
+to be edited by setting the installation path which will be discussed later in this handbook. Finally, the documentation that you will
+provide to the user is written in SGML. This makes it very easy to create several different output from the same source. By default,
+KDevelop offers to create a set of HTML files from this source, for KDE-projects this will automatically use the <tt/ksgml2html/
+program to add a consistent KDE look and feel to the documentation. In a later section, we will see how the SGML source is edited and
+what we have to watch for installation on the end-user.
+
+Finally, the API (Application Programming Interface) documentation allows you and other developers to quickly get into the code and use
+the classes without having to guess what purpose each class is for. We will learn how to extend the API documentation in a later step,
+for now it lasts to know that the documentation is generated by the <tt/KDoc/ program, which processes the header files and creates the
+HTML output, therefore all documentation is placed in the headers.
+
 <sect>Creating Views
 <p>
 <sect1>Using Library Views and Dialogs
