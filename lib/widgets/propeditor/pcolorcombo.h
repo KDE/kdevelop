@@ -24,6 +24,8 @@
 
 class KColorCombo;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with color combobox.
 */
@@ -46,5 +48,7 @@ private slots:
 private:
     KColorCombo *m_edit;
 };
+
+}
 
 #endif

@@ -53,6 +53,8 @@
 #include "ppixmapedit.h"
 #include "pcursoredit.h"
 
+namespace PropertyLib{
+
 PropertyMachineFactory *PropertyMachineFactory::m_factory = 0;
 
 PropertyMachineFactory::PropertyMachineFactory()
@@ -190,4 +192,6 @@ bool PropertyMachineFactory::hasDetailedEditors( int type )
         (type==Property::Rect) || (type==Property::SizePolicy) )
         return true;
     return 0;
+}
+
 }

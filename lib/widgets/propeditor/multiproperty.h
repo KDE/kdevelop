@@ -26,6 +26,8 @@
 #include "property.h"
 #include "childproperty.h"
 
+namespace PropertyLib{
+
 class PropertyList;
 
 /** @file multiproperty.h
@@ -47,6 +49,8 @@ only once for all properties with the same name and same type.
 class MultiProperty
 {
 public:
+    /**Constructs multiproperty with one property which is not connected to a property list.*/
+    MultiProperty(Property *prop);
     /**Constructs empty multiproperty.*/
     MultiProperty(PropertyList *propertyList);
     /**Constructs multiproperty with one Property in the list.*/
@@ -115,5 +119,7 @@ private:
 friend class PropertyList;
 friend class PropertyBuffer;
 };
+
+}
 
 #endif

@@ -22,6 +22,8 @@
 
 #include "property.h"
 
+namespace PropertyLib{
+
 class MultiProperty;
 
 /**
@@ -75,5 +77,7 @@ private:
     MultiProperty *m_parent;
     ChildPropertyType m_childType;
 };
+
+}
 
 #endif

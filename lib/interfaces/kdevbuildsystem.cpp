@@ -220,7 +220,7 @@ BuildItemConfigWidget::BuildItemConfigWidget( BuildBaseItem *it, QWidget * paren
     :QWidget(parent, name)
 {
     QVBoxLayout *l = new QVBoxLayout(this, 2, 0);
-    PropertyEditor *ed = new PropertyEditor(this, "item_propeditor");
+    PropertyLib::PropertyEditor *ed = new PropertyLib::PropertyEditor(this, "item_propeditor");
     ed->populateProperties(&(it->attributes()));
     l->addWidget(ed);
 }

@@ -26,6 +26,8 @@
 class QLineEdit;
 class QPainter;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor for QSize values.
 */
@@ -43,5 +45,7 @@ private:
     QLineEdit *m_edit;
     QVariant m_value;
 };
+
+}
 
 #endif

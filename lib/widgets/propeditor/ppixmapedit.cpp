@@ -30,6 +30,8 @@
 #include <kfiledialog.h>
 #include <kpushbutton.h>
 
+namespace PropertyLib{
+
 PPixmapEdit::PPixmapEdit(MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -120,6 +122,8 @@ bool PPixmapEdit::eventFilter(QObject *o, QEvent *ev)
         }
     }
     return PropertyWidget::eventFilter(o, ev);
+}
+
 }
 
 #include "ppixmapedit.moc"

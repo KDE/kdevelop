@@ -24,6 +24,8 @@
 
 class QLineEdit;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor for QPoint values.
 */
@@ -42,5 +44,7 @@ private:
     QVariant m_value;
 
 };
+
+}
 
 #endif

@@ -29,6 +29,8 @@
 
 #include "multiproperty.h"
 
+namespace PropertyLib{
+
 /**
 @short An abstract base class of property viewer and editor vidget.
 
@@ -80,5 +82,7 @@ signals:
 protected:
     MultiProperty *m_property;
 };
+
+}
 
 #endif

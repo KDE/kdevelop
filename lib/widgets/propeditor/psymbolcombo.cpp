@@ -33,6 +33,8 @@
 
 #include "psymbolcombo.h"
 
+namespace PropertyLib{
+
 PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -121,6 +123,8 @@ void PSymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r
     p->setPen(Qt::NoPen);
     p->drawRect(r);
     p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QChar(value.toInt()));
+}
+
 }
 
 #ifndef PURE_QT

@@ -24,13 +24,16 @@
 
 #include "propertylist.h"
 
+class QPushButton;
+class QGridLayout;
+
+namespace PropertyLib{
+
 class PropertyItem;
 class PropertyGroupItem;
 class PropertyWidget;
 class Property;
 class MultiProperty;
-class QPushButton;
-class QGridLayout;
 struct Machine;
 
 /** @file propertyeditor.h
@@ -110,5 +113,7 @@ private:
     
 friend class PropertyItem;
 };
+
+}
 
 #endif

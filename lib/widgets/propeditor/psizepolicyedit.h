@@ -26,6 +26,8 @@
 
 class QLineEdit;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor for QSizePolicy values.
 */
@@ -46,5 +48,7 @@ private:
     QVariant m_value;
     QMap<QString, QVariant> m_spValues;
 };
+
+}
 
 #endif

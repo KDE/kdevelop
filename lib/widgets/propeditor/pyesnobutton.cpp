@@ -25,6 +25,8 @@
 
 #include <klocale.h>
 
+namespace PropertyLib{
+
 PYesNoButton::PYesNoButton(MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -61,6 +63,8 @@ void PYesNoButton::updateProperty(bool toggled)
 {
     toggled ? m_edit->setText(i18n("Yes")) : m_edit->setText(i18n("No"));
     emit propertyChanged(m_property, value());
+}
+
 }
 
 #include "pyesnobutton.moc"

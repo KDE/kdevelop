@@ -24,6 +24,8 @@
 
 class KFontRequester;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with font chooser button.
 */
@@ -44,5 +46,7 @@ private:
     KFontRequester *m_edit;
 
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 #include <qlayout.h>
 #include <knuminput.h>
 
+namespace PropertyLib{
+
 PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {    
@@ -56,6 +58,8 @@ void PDoubleNumInput::setValue(const QVariant &value, bool emitChange)
 void PDoubleNumInput::updateProperty(double val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #ifndef PURE_QT

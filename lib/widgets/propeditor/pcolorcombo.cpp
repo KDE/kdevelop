@@ -24,6 +24,8 @@
 
 #include <kcolorcombo.h>
 
+namespace PropertyLib{
+
 PColorCombo::PColorCombo(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -68,6 +70,9 @@ void PColorCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
     p->drawRect(r2);
 }
 
+}
+
 #ifndef PURE_QT
 #include "pcolorcombo.moc"
 #endif
+

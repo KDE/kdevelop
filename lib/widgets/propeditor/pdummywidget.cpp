@@ -21,6 +21,8 @@
 
 #include <qpainter.h>
 
+namespace PropertyLib{
+
 PDummyWidget::PDummyWidget(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -43,6 +45,8 @@ void PDummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r
     p->setBrush(cg.background());
     p->setPen(Qt::NoPen);
     p->drawRect(r);
+}
+
 }
 
 #ifndef PURE_QT

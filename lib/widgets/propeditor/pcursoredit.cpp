@@ -21,6 +21,8 @@
 
 #include <qpainter.h>
 
+namespace PropertyLib{
+
 PCursorEdit::PCursorEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues,
     QWidget* parent, const char* name)
     :PComboBox(property, spValues, parent, name)
@@ -30,6 +32,8 @@ PCursorEdit::PCursorEdit(MultiProperty* property, const QMap<QString, QVariant> 
 void PCursorEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
     PropertyWidget::drawViewer(p, cg, r, findDescription(value));
+}
+
 }
 
 #include "pcursoredit.moc"

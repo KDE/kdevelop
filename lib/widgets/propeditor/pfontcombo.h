@@ -28,6 +28,8 @@
 
 class KFontCombo;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with font combo box.
 */
@@ -48,5 +50,7 @@ private slots:
 private:
     KFontCombo *m_edit;
 };
+
+}
 
 #endif

@@ -29,6 +29,8 @@ class QPainter;
 class QColorGroup;
 class QRect;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with empty widget.
 
@@ -52,5 +54,7 @@ public:
 private:
     QVariant m_value;
 };
+
+}
 
 #endif

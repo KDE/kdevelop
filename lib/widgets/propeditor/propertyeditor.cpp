@@ -38,6 +38,8 @@
 #include "multiproperty.h"
 #include "propertymachinefactory.h"
 
+namespace PropertyLib{
+
 class PropertyItem: public KListViewItem{
 public:
     PropertyItem(PropertyEditor *parent, MultiProperty *property)
@@ -459,6 +461,8 @@ void PropertyEditor::undo()
     m_currentEditWidget->undo();
     m_currentEditItem->setChanged(false);
     repaintItem(m_currentEditItem);
+}
+
 }
 
 #include "propertyeditor.moc"

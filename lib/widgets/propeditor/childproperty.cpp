@@ -25,6 +25,8 @@
 #include <qsizepolicy.h>
 
 #include "multiproperty.h"
+
+namespace PropertyLib{
  
 ChildProperty::ChildProperty(MultiProperty *parent, int type, ChildPropertyType childType, const QString &name,
     const QString &description, const QVariant &value, bool save, bool readOnly)
@@ -137,4 +139,6 @@ QVariant ChildProperty::value( ) const
                 return m_parent->value().toSizePolicy().verStretch();
     }
     return QVariant();
+}
+
 }

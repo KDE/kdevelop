@@ -29,6 +29,8 @@
 #include <keditlistbox.h>
 #include <kstdguiitem.h>
 
+namespace PropertyLib{
+
 PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent, const char *name)
      :PropertyWidget(property, parent, name)
 {
@@ -96,6 +98,8 @@ void PStringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect
     p->setBrush(cg.background());
     p->drawRect(r);
     p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toStringList().join(", "));
+}
+
 }
 
 #ifndef PURE_QT

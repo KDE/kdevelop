@@ -21,6 +21,8 @@
 
 #include <qpainter.h>
 
+namespace PropertyLib{
+
 PropertyWidget::PropertyWidget(MultiProperty *property, QWidget *parent, const char *name)
     :QWidget(parent, name), m_property(property)
 {
@@ -52,6 +54,8 @@ void PropertyWidget::setValueList(const QMap<QString, QVariant> &valueList)
 void PropertyWidget::undo()
 {
     m_property->undo();
+}
+
 }
 
 #ifndef PURE_QT

@@ -24,6 +24,8 @@
 
 class QCheckBox;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with checkbox.
 */
@@ -46,5 +48,7 @@ private slots:
 private:
     QCheckBox *m_edit;
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 
 #include <kcolorbutton.h>
 
+namespace PropertyLib {
+
 PColorButton::PColorButton(MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -69,6 +71,8 @@ void PColorButton::setValue(const QVariant& value, bool emitChange)
 void PColorButton::updateProperty(const QColor &color)
 {
     emit propertyChanged(m_property, value());
+}
+
 }
 
 #include "pcolorbutton.moc"

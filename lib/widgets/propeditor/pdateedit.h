@@ -24,6 +24,8 @@
 
 class QDateEdit;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor for QDate values.
 */
@@ -43,5 +45,7 @@ private slots:
 private:
     QDateEdit *m_edit;
 };
+
+}
 
 #endif

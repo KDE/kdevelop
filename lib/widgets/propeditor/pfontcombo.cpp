@@ -31,6 +31,8 @@
 #include <qfontdatabase.h>
 #endif
 
+namespace PropertyLib{
+
 PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -73,6 +75,8 @@ void PFontCombo::setValue(const QVariant &value, bool emitChange)
 void PFontCombo::updateProperty(const QString &val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #ifndef PURE_QT

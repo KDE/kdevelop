@@ -20,6 +20,8 @@
 
 #include <qstring.h>
 
+namespace PropertyLib{
+
 Property::Property(int type, const QString &name, const QString &description,
     const QVariant &value, bool save, bool readOnly):
     m_type(type), m_name(name), m_description(description), m_value(value), m_save(save),
@@ -124,3 +126,4 @@ QVariant Property::oldValue() const
         return m_oldValue;
 }
 
+}

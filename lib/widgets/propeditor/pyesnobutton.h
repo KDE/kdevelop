@@ -24,6 +24,8 @@
 
 class QPushButton;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with yes-no button to edit boolean values.
 */
@@ -43,5 +45,7 @@ protected slots:
 private:
     QPushButton *m_edit;
 };
+
+}
 
 #endif

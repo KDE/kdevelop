@@ -24,6 +24,8 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 
+namespace PropertyLib{
+
 PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -62,6 +64,8 @@ void PSpinBox::setValue(const QVariant &value, bool emitChange)
 void PSpinBox::updateProperty(int val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #ifndef PURE_QT

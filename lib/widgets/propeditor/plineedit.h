@@ -24,6 +24,8 @@
 
 class QLineEdit;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with line edit.
 */
@@ -44,5 +46,7 @@ private slots:
 private:
     QLineEdit *m_edit;
 };
+
+}
 
 #endif

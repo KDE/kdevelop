@@ -24,6 +24,8 @@
 
 class QSpinBox;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with integer num input box.
 */
@@ -45,5 +47,7 @@ private slots:
 private:
     QSpinBox *m_edit;
 };
+
+}
 
 #endif

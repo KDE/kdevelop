@@ -24,10 +24,13 @@
 
 #include "propertywidget.h"
 
+class QWidget;
+
+namespace PropertyLib{
+
 class Property;
 class MultiProperty;
 class ChildProperty;
-class QWidget;
 
 /** @file propertymachinefactory.h
 @short Contains @ref PropertyMachineFactory class and @ref Machine structure.
@@ -89,6 +92,6 @@ private:
     QMap<int, createMachine > m_registeredForType;
 };
 
-
+}
 
 #endif

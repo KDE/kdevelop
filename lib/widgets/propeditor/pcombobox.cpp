@@ -22,6 +22,8 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 
+namespace PropertyLib{
+
 PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name), m_valueList(list)
 {
@@ -100,6 +102,9 @@ void PComboBox::setValueList(const QMap<QString, QVariant> &valueList)
     fillBox();
 }
 
+}
+
 #ifndef PURE_QT
 #include "pcombobox.moc"
 #endif
+

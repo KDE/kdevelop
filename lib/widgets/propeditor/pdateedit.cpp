@@ -23,6 +23,8 @@
 #include <qpainter.h>
 #include <qlayout.h>
 
+namespace PropertyLib{
+
 PDateEdit::PDateEdit(MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -59,6 +61,8 @@ void PDateEdit::setValue(const QVariant& value, bool emitChange)
 void PDateEdit::updateProperty(const QDate &val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #include "pdateedit.moc"

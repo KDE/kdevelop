@@ -24,6 +24,8 @@
 
 class KDoubleNumInput;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with double num input box.
 */
@@ -45,5 +47,7 @@ private slots:
 private:
     KDoubleNumInput *m_edit;
 };
+
+}
 
 #endif

@@ -62,8 +62,8 @@ public:
     BuildBaseItem* parent() { return m_parent; }
     const BuildBaseItem* parent() const { return m_parent; }
 
-    PropertyList& attributes() { return m_attributes; }
-    PropertyList *pAttributes() { return &m_attributes; }
+    PropertyLib::PropertyList& attributes() { return m_attributes; }
+    PropertyLib::PropertyList *pAttributes() { return &m_attributes; }
 
 //    bool hasAttribute( const QString& name ) const { return m_attributes.contains( name ); }
     QVariant attribute( const QString& name ) { return m_attributes[name]->value(); }
@@ -77,7 +77,7 @@ protected:
 private:
     int m_type;
     BuildBaseItem* m_parent;
-    PropertyList m_attributes;
+    PropertyLib::PropertyList m_attributes;
 
 private:
     BuildBaseItem( const BuildBaseItem& source );

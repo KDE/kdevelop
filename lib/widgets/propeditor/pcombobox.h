@@ -28,6 +28,8 @@
 
 class QComboBox;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with combobox.
 */
@@ -64,5 +66,7 @@ private:
 
     QComboBox *m_edit;
 };
+
+}
 
 #endif

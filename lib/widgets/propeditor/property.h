@@ -26,6 +26,8 @@
 class QWidget;
 class QString;
 
+namespace PropertyLib{
+
 /** @file property.h
 @short Contains @ref Property class and @ref PropertyType enum.
 */
@@ -62,23 +64,43 @@ public:
         Integers that represent the type of the property. */
     enum PropertyType {
         //standard supported QVariant types
-        String = QVariant::String          /**<string*/,
-        Integer = QVariant::Int            /**<integer*/,
-        Double = QVariant::Double          /**<double*/,
-        Boolean = QVariant::Bool           /**<boolean*/,
-        Date = QVariant::Date              /**<date*/,
-        DateTime = QVariant::DateTime      /**<date and time*/,
-        StringList = QVariant::StringList  /**<string list*/,
-        Color = QVariant::Color            /**<color*/,
-        List = QVariant::List              /**<QValueList<QVariant>*/,
+        Invalid = QVariant::Invalid        /**<invalid property type*/,
         Map = QVariant::Map                /**<QMap<QString, QVariant>*/,
-        Size = QVariant::Size              /**<size (width, height)*/,
-        Pixmap = QVariant::Pixmap          /**<pixmap*/,
-        Cursor = QVariant::Cursor          /**<cursor*/,
-        Point = QVariant::Point            /**<point (x,y)*/,
-        Rect = QVariant::Rect              /**<rectangle (x,y, width, height)*/,
-        SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
+        List = QVariant::List              /**<QValueList<QVariant>*/,       
+        String = QVariant::String          /**<string*/,
+        StringList = QVariant::StringList  /**<string list*/,
         Font = QVariant::Font              /**<font*/,
+        Pixmap = QVariant::Pixmap          /**<pixmap*/,
+        //@todo implement QVariant::Brush
+        Rect = QVariant::Rect              /**<rectangle (x,y, width, height)*/,
+        Size = QVariant::Size              /**<size (width, height)*/,
+        Color = QVariant::Color            /**<color*/,
+        //@todo implement QVariant::Palette
+        //@todo implement QVariant::ColorGroup
+        //@todo implement QVariant::IconSet
+        Point = QVariant::Point            /**<point (x,y)*/,
+        //@todo implement QVariant::Image
+        Integer = QVariant::Int            /**<integer*/,
+        //@todo implement QVariant::UInt
+        Boolean = QVariant::Bool           /**<boolean*/,
+        Double = QVariant::Double          /**<double*/,
+        //@todo implement QVariant::CString
+        //@todo implement QVariant::PointArray
+        //@todo implement QVariant::Region
+        //@todo implement QVariant::Bitmap
+        Cursor = QVariant::Cursor          /**<cursor*/,
+        SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
+        Date = QVariant::Date              /**<date*/,
+        //@todo implement QVariant::Time
+        DateTime = QVariant::DateTime      /**<date and time*/,
+        //@todo implement QVariant::ByteArray
+        //@todo implement QVariant::BitArray
+        //@todo implement QVariant::KeySequence
+        //@todo implement QVariant::Pen
+        //@todo implement QVariant::Long
+        //@todo implement QVariant::LongLong
+        //@todo implement QVariant::ULongLong
+        
 
         //predefined custom types
         ValueFromList = 2000               /**<string value from a list*/,
@@ -151,5 +173,7 @@ private:
     bool m_readOnly;
     bool m_visible;
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 
 class KColorButton;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with color chooser button.
 */
@@ -43,5 +45,7 @@ protected slots:
 private:
     KColorButton *m_edit;
 };
+
+}
 
 #endif

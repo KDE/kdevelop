@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qsizepolicy.h>
 
+namespace PropertyLib{
+
 PSizePolicyEdit::PSizePolicyEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name), m_spValues(spValues)
 {
@@ -66,6 +68,8 @@ QString PSizePolicyEdit::findValueDescription(QVariant val) const
             return it.key();
     }
     return "";
+}
+
 }
 
 #include "psizepolicyedit.moc"

@@ -23,6 +23,8 @@
 #include <qlayout.h>
 #include <qpainter.h>
 
+namespace PropertyLib{
+
 PPointEdit::PPointEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
@@ -53,6 +55,8 @@ void PPointEdit::setValue(const QVariant& value, bool emitChange)
 
     if (emitChange)
         emit propertyChanged(m_property, value);
+}
+
 }
 
 #include "ppointedit.moc"

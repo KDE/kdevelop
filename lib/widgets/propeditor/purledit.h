@@ -26,6 +26,8 @@
 
 class KURLRequester;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with an url editor to choose the location of file or directory.
 */
@@ -45,5 +47,7 @@ private:
     KURLRequester *m_edit;
 
 };
+
+}
 
 #endif

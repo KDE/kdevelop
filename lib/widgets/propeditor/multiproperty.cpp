@@ -20,6 +20,14 @@
 
 #include "propertylist.h"
 
+namespace PropertyLib{
+
+MultiProperty::MultiProperty(Property *prop)
+    :m_propertyList(0)
+{
+    list.append(prop);
+}
+
 MultiProperty::MultiProperty(PropertyList *propertyList)
     :m_propertyList(propertyList)
 {
@@ -149,7 +157,8 @@ void MultiProperty::setValue(const QVariant &value)
     for (property = list.first(); property; property = list.next())
     {
         property->setValue(value);
-        emit m_propertyList->propertyValueChanged(property);
+        if (m_propertyList)
+            emit m_propertyList->propertyValueChanged(property);
     }
 }
 
@@ -159,7 +168,7 @@ void MultiProperty::setValue(const QVariant &value, bool emitChange)
     for (property = list.first(); property; property = list.next())
     {
         property->setValue(value);
-        if (emitChange)
+        if (emitChange && m_propertyList)
             emit m_propertyList->propertyValueChanged(property);
     }
 }
@@ -253,6 +262,9 @@ void MultiProperty::undo()
     for (property = list.first(); property; property = list.next())
     {
         property->setValue(property->oldValue(), false);
-        emit m_propertyList->propertyValueChanged(property);
+        if (m_propertyList)
+            emit m_propertyList->propertyValueChanged(property);
     }
+}
+
 }

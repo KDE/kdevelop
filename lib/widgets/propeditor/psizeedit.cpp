@@ -23,6 +23,8 @@
 #include <qlayout.h>
 #include <qpainter.h>
 
+namespace PropertyLib{
+
 PSizeEdit::PSizeEdit(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -54,6 +56,8 @@ void PSizeEdit::setValue(const QVariant& value, bool emitChange)
 
     if (emitChange)
         emit propertyChanged(m_property, value);
+}
+
 }
 
 #include "psizeedit.moc"

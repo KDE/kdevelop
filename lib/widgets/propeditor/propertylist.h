@@ -26,6 +26,8 @@
 #include <qvaluelist.h>
 #include <qpair.h>
 
+namespace PropertyLib{
+
 class Property;
 class MultiProperty;
 
@@ -153,5 +155,7 @@ public:
     /**Intersects with other @ref PropertyList.*/
     virtual void intersect(const PropertyList *list);
 };
+
+}
 
 #endif

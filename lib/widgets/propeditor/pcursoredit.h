@@ -22,6 +22,8 @@
 
 #include "pcombobox.h"
 
+namespace PropertyLib{
+
 /**
 @short %Property editor for QCursor values.
 */
@@ -34,5 +36,7 @@ public:
 
     virtual void drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value);   
 };
+
+}
 
 #endif

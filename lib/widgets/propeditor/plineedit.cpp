@@ -22,6 +22,8 @@
 #include <qlineedit.h>
 #include <qlayout.h>
 
+namespace PropertyLib{
+
 PLineEdit::PLineEdit(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -50,6 +52,8 @@ void PLineEdit::setValue(const QVariant &value, bool emitChange)
 void PLineEdit::updateProperty(const QString& val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #ifndef PURE_QT

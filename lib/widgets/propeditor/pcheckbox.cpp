@@ -29,6 +29,8 @@
 #include "compat_tools.h"
 #endif
 
+namespace PropertyLib{
+
 PCheckBox::PCheckBox(MultiProperty *property, QWidget *parent, const char *name)
     :PropertyWidget(property, parent, name)
 {
@@ -65,6 +67,8 @@ void PCheckBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
     p->setPen(Qt::NoPen);
     p->drawRect(r);
     p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toBool() ? i18n("true") : i18n("false"));
+}
+
 }
 
 #ifndef PURE_QT

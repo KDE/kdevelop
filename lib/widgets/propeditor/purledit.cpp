@@ -22,6 +22,8 @@
 #include <kurlrequester.h>
 #include <qlayout.h>
 
+namespace PropertyLib{
+
 PUrlEdit::PUrlEdit(KFile::Mode mode, MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -51,6 +53,8 @@ void PUrlEdit::setValue(const QVariant& value, bool emitChange)
 void PUrlEdit::updateProperty(const QString &val)
 {
     emit propertyChanged(m_property, QVariant(val));
+}
+
 }
 
 #include "purledit.moc"

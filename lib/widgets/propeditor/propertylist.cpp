@@ -22,6 +22,8 @@
 #include "property.h"
 #include "multiproperty.h"
 
+namespace PropertyLib{
+
 PropertyList::PropertyList()
     :QObject(0, 0), m_propertyOwner(true)
 {
@@ -263,6 +265,8 @@ QPtrList<Property> PropertyList::properties(const QString &name)
     if (m_list.contains(name))
         return m_list[name]->list;
     return QPtrList<Property>();
+}
+
 }
 
 #ifndef PURE_QT

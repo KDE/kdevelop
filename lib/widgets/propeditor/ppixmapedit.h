@@ -25,6 +25,8 @@
 class QLabel;
 class KPushButton;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor which shows a pixmap and allows to load it from file.
 */
@@ -49,5 +51,7 @@ private:
     QLabel *m_popup;
     KPushButton *m_button;
 };
+
+}
 
 #endif

@@ -26,6 +26,8 @@
 #include <kfontrequester.h>
 #include <klocale.h>
 
+namespace PropertyLib{
+
 PFontButton::PFontButton(MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
@@ -67,6 +69,8 @@ void PFontButton::setValue(const QVariant& value, bool emitChange)
 void PFontButton::updateProperty(const QFont &font)
 {
     emit propertyChanged(m_property, value());
+}
+
 }
 
 #include "pfontbutton.moc"

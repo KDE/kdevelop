@@ -26,6 +26,8 @@ class QLineEdit;
 class QPushButton;
 class QHBoxLayout;
 
+namespace PropertyLib{
+
 /**
 @short %Property editor with string list editor.
 */
@@ -53,5 +55,7 @@ private:
 
     QStringList m_list;
 };
+
+}
 
 #endif

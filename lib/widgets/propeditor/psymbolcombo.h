@@ -26,6 +26,9 @@ class QLineEdit;
 class QPushButton;
 class QHBoxLayout;
 
+namespace PropertyLib{
+
+
 /**
 @short %Property editor with char selector.
 */
@@ -53,5 +56,7 @@ private:
     QPushButton *m_select;
     QHBoxLayout *l;
 };
+
+}
 
 #endif
