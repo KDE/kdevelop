@@ -20,6 +20,8 @@ tokenizer.cpp: tokenizer.l
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
+#service_DATA = kdevcppsupport.desktop kdevcsupport.desktop kdevobjcsupport.desktop
+
 service_DATA = kdevcppsupport.desktop kdevcsupport.desktop
 
 rcdir = $(kde_datadir)/kdevcppsupport

@@ -50,7 +50,7 @@ QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
        ++itr )
         {
             ParsedItem *item = (ParsedItem *)itr.current();
-            retVal->inSort( item->name );
+            retVal->inSort( item->name() );
         }
     
     return retVal;
@@ -84,7 +84,7 @@ QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
             //    itr.current()->asString( m );
             //    srted.inSort( m );
             
-            srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name ) );
+            srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name() ) );
         }
     
     for( str = srted.first();
@@ -130,7 +130,7 @@ protected:
      * Tells if objects stored in the container should use the 
      * full path as the key(default is no).
      */
-    bool useFullPath;
+    bool _useFullPath;
     
 public:
     
@@ -167,8 +167,9 @@ public:
      * @param state If to use full path or not.
      */
     inline void setUseFullpath(bool state)
-    { useFullPath = state; }
-    
+    { _useFullPath = state; }
+
+    bool useFullPath() { return _useFullPath; }
     /**
      * Gets a method by comparing with another method. 
      * @param aMethod Method to compare with.

@@ -31,12 +31,12 @@
  *-----------------------------------------------------------------*/
 ParsedItem::ParsedItem()
 { 
-    itemType = PIT_UNKNOWN; 
-    access = PIE_GLOBAL; 
-    declaredOnLine = -1; 
-    declarationEndsOnLine = -1;
-    definedOnLine = -1; 
-    definitionEndsOnLine = -1;
+    _itemType = PIT_UNKNOWN;
+    _access = PIE_GLOBAL;
+    _declaredOnLine = -1;
+    _declarationEndsOnLine = -1;
+    _definedOnLine = -1;
+    _definitionEndsOnLine = -1;
 }
 
 /*--------------------------------------- ParsedItem::~ParsedItem()
@@ -66,9 +66,9 @@ void ParsedItem::copy( ParsedItem *anItem )
 {
   REQUIRE( "Valid item", anItem != NULL );
   
-  setName( anItem->name );
-  setAccess( anItem->access );
-  setComment( anItem->comment );
+  setName( anItem->name() );
+  setAccess( anItem->access() );
+  setComment( anItem->comment() );
 }
 
 /*------------------------------------------------ ParsedItem::path()
@@ -83,8 +83,8 @@ void ParsedItem::copy( ParsedItem *anItem )
  *-----------------------------------------------------------------*/
 QString ParsedItem::path()
 {
-  if ( declaredInScope.isEmpty() )
-    return name;
+  if ( _declaredInScope.isEmpty() )
+    return _name;
   else
-    return declaredInScope + "." + name;
+    return _declaredInScope + "." + _name;
 }

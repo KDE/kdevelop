@@ -169,18 +169,18 @@ void PythonSupportPart::parse(const QString &fileName)
                 ParsedParent *parent = new ParsedParent;
                 parent->setName((*it).stripWhiteSpace());
                 parent->setAccess(PIE_PUBLIC);
-                kdDebug(9014) << "Add parent" << parent->name << endl;
+                kdDebug(9014) << "Add parent" << parent->name() << endl;
                 lastClass->addParent(parent);
             }
              
-           if (classStore()->hasClass(lastClass->name)) {
-                ParsedClass *old = classStore()->getClassByName(lastClass->name);
-                old->setDeclaredOnLine(lastClass->declaredOnLine);
-                old->setDeclaredInFile(lastClass->declaredInFile);
+           if (classStore()->hasClass(lastClass->name())) {
+                ParsedClass *old = classStore()->getClassByName(lastClass->name());
+                old->setDeclaredOnLine(lastClass->declaredOnLine());
+                old->setDeclaredInFile(lastClass->declaredInFile());
                 delete lastClass;
                 lastClass = old;
             } else {
-                kdDebug(9014) << "Add class " << lastClass->name << endl;
+                kdDebug(9014) << "Add class " << lastClass->name() << endl;
                 classStore()->addClass(lastClass);
             }
            
@@ -193,12 +193,12 @@ void PythonSupportPart::parse(const QString &fileName)
             
             if (lastClass && rawline.left(3) != "def") {
                 ParsedMethod *old = lastClass->getMethod(method);
-                kdDebug(9014) << "Add class method " << method->name << endl;
+                kdDebug(9014) << "Add class method " << method->name() << endl;
                 if (!old)
                     lastClass->addMethod(method);
             } else {
                 ParsedMethod *old = classStore()->globalContainer.getMethod(method);
-                kdDebug(9014) << "Add global method " << method->name << endl;
+                kdDebug(9014) << "Add global method " << method->name() << endl;
                 if (!old)
                     classStore()->globalContainer.addMethod(method);
                 lastClass = 0;

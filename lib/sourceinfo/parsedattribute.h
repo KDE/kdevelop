@@ -34,40 +34,40 @@ public:
     
 public:
     /** The attribute's type. */
-    QString type;
+    QString _type;
     
     /** Is this attribute defined in the .h file? */
-    bool isInHFile;
+    bool _isInHFile;
     
     /** Is this a static attribute */
-    bool isStatic;
+    bool _isStatic;
     
     /** Is this a const attribute */
-    bool isConst;
+    bool _isConst;
     
     /** where I have to place the name between type */
-    int posName;
+    int _namePos;
     
 public:
     /** Sets the type. */
     void setType(const QString &aType);
-    QString attributeType() { return type; }
+    QString & type() { return _type; }
 
     /** Sets the pos of the name between type */
     void setNamePos(int pos);
-	int namePos() { return posName; }
+	int namePos() { return _namePos; }
 
     /** Sets if it is defined in the .h file. */
     void setIsInHFile(bool aState = true);
-	bool inHFile() { return isInHFile; }
+	bool isInHFile() { return _isInHFile; }
     
     /** Sets the attribute's static status */
     void setIsStatic(bool aState = true);
-	bool isStaticAttribute() { return isStatic; }
+	bool isStatic() { return _isStatic; }
     
     /** Sets the attribute's const status */
     void setIsConst(bool aState = true);
-	bool isConstAttribute() { return isConst; }
+	bool isConst() { return _isConst; }
     
     /**
      * Makes this object a copy of the supplied object.
@@ -86,7 +86,7 @@ public:
 };
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg);
+QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg);
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg);
 
 #endif

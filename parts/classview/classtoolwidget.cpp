@@ -72,7 +72,7 @@ void ClassToolWidget::insertClassAndClasses(ParsedClass *parsedClass, QList<Pars
          pParent != 0;
          pParent = parentList->next() )
         {
-            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name());
             lastItem = new ClassTreeClassItem(root, lastItem, parentClass);
             lastItem->setExpandable(false);
         }
@@ -95,7 +95,7 @@ void ClassToolWidget::addClassAndAttributes(ParsedClass *parsedClass, PIAccess f
           pAttr != 0;
           pAttr = attrList->next() )
         {
-            if (filter == (PIAccess)-1 || filter == pAttr->access) 
+            if (filter == (PIAccess)-1 || filter == pAttr->access())
                 ilastItem = new ClassTreeAttrItem(*lastItem, ilastItem, pAttr);
         }
     delete attrList;
@@ -118,7 +118,7 @@ void ClassToolWidget::addClassAndMethods(ParsedClass *parsedClass, PIAccess filt
           pMethod != 0;
           pMethod = methodList->next() )
         {
-            if (filter == (PIAccess)-1 || filter == pMethod->access) 
+            if (filter == (PIAccess)-1 || filter == pMethod->access())
                 ilastItem = new ClassTreeMethodItem(*lastItem, ilastItem, pMethod);
         }
     delete methodList;
@@ -139,7 +139,7 @@ void ClassToolWidget::insertAllClassMethods(ParsedClass *parsedClass, PIAccess f
           pParent != 0;
           pParent = parsedClass->parents.next() )
         {
-            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name());
             if (parentClass)
                 addClassAndMethods(parentClass, filter, &lastItem);
         }
@@ -158,7 +158,7 @@ void ClassToolWidget::insertAllClassAttributes(ParsedClass *parsedClass, PIAcces
           pParent != 0;
           pParent = parsedClass->parents.next() )
         {
-            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name);
+            ParsedClass *parentClass = m_part->classStore()->getClassByName(pParent->name());
             if (parentClass)
                 addClassAndAttributes(parentClass, filter, &lastItem);
         }

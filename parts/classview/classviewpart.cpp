@@ -300,7 +300,7 @@ ParsedClass *ClassViewPart::getClass(const QString &className)
 
     kdDebug(9003) << "ClassViewPart::getClass " << className << endl;
     ParsedClass *pc = classStore()->getClassByName(className);
-    if (pc && !pc->isSubClass)
+    if (pc && !pc->isSubClass())
         classes_action->setCurrentItem(className);
     
     return pc;
@@ -323,8 +323,8 @@ void ClassViewPart::gotoDeclaration(const QString &className,
     switch(type) {
     case Class:
         if (pc) {
-            toFile = pc->declaredInFile;
-            toLine = pc->declaredOnLine;
+            toFile = pc->declaredInFile();
+            toLine = pc->declaredOnLine();
         }
         break;
     case Struct:
@@ -332,8 +332,8 @@ void ClassViewPart::gotoDeclaration(const QString &className,
             ps = pc->getStructByName(memberName);
         else
             ps = classStore()->globalContainer.getStructByName(memberName);
-        toFile = ps->declaredInFile;
-        toLine = ps->declaredOnLine;
+        toFile = ps->declaredInFile();
+        toLine = ps->declaredOnLine();
         break;
     case PublicAttr:
     case ProtectedAttr:
@@ -379,8 +379,8 @@ void ClassViewPart::gotoDeclaration(const QString &className,
     
     // Fetch the line and file from the attribute if the value is set.
     if (pa) {
-        toFile = pa->declaredInFile;
-        toLine = pa->declaredOnLine;
+        toFile = pa->declaredInFile();
+        toLine = pa->declaredOnLine();
     }
     
     if (toLine != -1) {
@@ -424,7 +424,7 @@ void ClassViewPart::gotoImplementation(const QString &className,
     }
     
     if (pm)
-        core()->gotoSourceFile(pm->definedInFile, pm->definedOnLine);
+        core()->gotoSourceFile(pm->definedInFile(), pm->definedOnLine());
 }
 
 #include "classviewpart.moc"

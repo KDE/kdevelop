@@ -35,7 +35,7 @@
  *-----------------------------------------------------------------*/
 ParsedArgument::ParsedArgument()
 {
-    posName=-1;
+    _namePos=-1;
 }
 
 
@@ -69,7 +69,7 @@ void ParsedArgument::setName( const QString &aName )
     REQUIRE( "Valid name", aName != NULL );
     REQUIRE( "Valid name length", aName.length() > 0 );
     
-    name = aName.stripWhiteSpace();
+    _name = aName.stripWhiteSpace();
 }
 
 
@@ -88,7 +88,7 @@ void ParsedArgument::setType( const QString &aType )
     REQUIRE( "Valid type", aType != NULL );
     REQUIRE( "Valid type length", aType.length() > 0 );
     
-    type = aType.stripWhiteSpace();
+    _type = aType.stripWhiteSpace();
 }
 
 /*------------------------------------ ParsedArgument::setNamePos()
@@ -103,7 +103,7 @@ void ParsedArgument::setType( const QString &aType )
  *-----------------------------------------------------------------*/
 void ParsedArgument::setNamePos( int pos )
 {
-    posName = pos;
+    _namePos = pos;
 }
 
 
@@ -127,9 +127,9 @@ void ParsedArgument::copy( ParsedArgument *anArg )
 {
     REQUIRE( "Valid argument", anArg != NULL );
     
-    setNamePos( anArg->posName );
-    setName( anArg->name );
-    setType( anArg->type );
+    setNamePos( anArg->namePos() );
+    setName( anArg->name() );
+    setType( anArg->type() );
 }
 
 
@@ -145,18 +145,18 @@ void ParsedArgument::copy( ParsedArgument *anArg )
  *-----------------------------------------------------------------*/
 QString ParsedArgument::toString()
 {
-    QString str=type;
-    
-    if (posName>=0 && ((unsigned)posName)<type.length())
-        str = str.left(posName);
+    QString str=_type;
+
+    if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
+        str = str.left(_namePos);
     else
         str += " ";
 
-    if (!name.isEmpty())
-        str += name;
+    if (!_name.isEmpty())
+        str += _name;
     
-    if (posName>=0 && ((unsigned)posName)<type.length())
-        str += type.mid(posName, type.length()-posName);
+    if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
+        str += _type.mid(_namePos, _type.length()-_namePos);
 
     return str;
 }
@@ -177,9 +177,9 @@ void ParsedArgument::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
+QDataStream &operator<<(QDataStream &s, ParsedArgument &arg)
 {
-    s << arg.type << arg.name << arg.posName;
+    s << arg.type() << arg.name() << arg.namePos();
     return s;
 }
 

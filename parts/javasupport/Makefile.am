@@ -33,7 +33,7 @@ datadir = $(kde_datadir)/kdevjavasupport
 data_DATA = kdevjavasupport.jar kdevjavapluginapi.jar
 
 JAVAROOT = .
-CLASSPATH = .:${kde_libraries}/java
+CLASSPATH = .:${kde_libraries}/java/qtjava.jar:${kde_libraries}/java/koala.jar
 JAVACFLAGS = -classpath $(CLASSPATH)
 
 METASOURCES = AUTO

@@ -44,7 +44,7 @@ void ClassTreeItem::init(const QString &text)
 
 KPopupMenu *ClassTreeItem::createPopup()
 {
-    if (!m_item || m_item->itemType == PIT_SCOPE)
+    if (!m_item || m_item->itemType() == PIT_SCOPE)
         return 0;
 
     KDevLanguageSupport::Features features = classTree()->m_part->languageSupport()->features();
@@ -52,11 +52,11 @@ KPopupMenu *ClassTreeItem::createPopup()
     KPopupMenu *popup = new KPopupMenu();
     if (features & KDevLanguageSupport::Declarations)
         popup->insertItem( i18n("Go to declaration..."), classTree(), SLOT(slotGotoDeclaration()) );
-    if (m_item->itemType == PIT_METHOD)
+    if (m_item->itemType() == PIT_METHOD)
         popup->insertItem( i18n("Go to definition..."), classTree(), SLOT(slotGotoImplementation()) );
 
     QString title;
-    switch(m_item->itemType) {
+    switch(m_item->itemType()) {
     case PIT_CLASS:
         {
             title = i18n("Class");
@@ -83,9 +83,9 @@ KPopupMenu *ClassTreeItem::createPopup()
             title = i18n("Attribute");
         break;
     case PIT_METHOD:
-        if (static_cast<ParsedMethod*>(m_item)->isSlot)
+        if (static_cast<ParsedMethod*>(m_item)->isSlot())
             title = i18n("Slot");
-        else if (static_cast<ParsedMethod*>(m_item)->isSignal)
+        else if (static_cast<ParsedMethod*>(m_item)->isSignal())
             title = i18n("Signal");
         else if (m_item->isGlobal())
             title = i18n("Function");
@@ -116,8 +116,8 @@ QString ClassTreeItem::scopedText() const
 void ClassTreeItem::getDeclaration(QString *toFile, int *toLine)
 {
     if (m_item) {
-        *toFile = m_item->declaredInFile;
-        *toLine = m_item->declaredOnLine;
+        *toFile = m_item->declaredInFile();
+        *toLine = m_item->declaredOnLine();
     }
 }
 
@@ -125,8 +125,8 @@ void ClassTreeItem::getDeclaration(QString *toFile, int *toLine)
 void ClassTreeItem::getImplementation(QString *toFile, int *toLine)
 {
     if (m_item) {
-        *toFile = m_item->definedInFile;
-        *toLine = m_item->definedOnLine;
+        *toFile = m_item->definedInFile();
+        *toLine = m_item->definedOnLine();
     }
 }
 
@@ -327,9 +327,9 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
 {
     QString icon;
     
-    if (parsedMethod->isSignal)
+    if (parsedMethod->isSignal())
         icon = "CVpublic_signal";
-    else if (parsedMethod->isSlot) {
+    else if (parsedMethod->isSlot()) {
         if (parsedMethod->isPublic())
             icon = "CVpublic_slot";
         else if (parsedMethod->isProtected())

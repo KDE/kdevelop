@@ -116,7 +116,7 @@ bool CClassParser::commentInRange( ParsedItem *aItem )
 
   int range;
 
-  range = (aItem->declaredOnLine - ( comment_end - 1 ) );
+  range = (aItem->declaredOnLine() - ( comment_end - 1 ) );
 
   return ( range > 0 && range <=2 );
 }
@@ -234,7 +234,7 @@ void CClassParser::fillInParsedStruct( ParsedContainer *aContainer )
   if( commentInRange( aStruct ) )
     aStruct->setComment( comment );
 
-  if( aStruct != NULL && !aStruct->name.isEmpty() )
+  if( aStruct != NULL && !aStruct->name().isEmpty() )
   {
     aContainer->addStruct( aStruct );
 
@@ -344,7 +344,7 @@ void CClassParser::parseNamespace( ParsedScopeContainer *scope )
   // EO start
   // reference to an already declared namespace
   // retrieve it
-  ParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
+  ParsedScopeContainer *ns2 = scope->getScopeByName(ns->name());
   if (ns2)
   {
     delete ns;
@@ -658,7 +658,7 @@ void CClassParser::fillInParsedVariableHead( ParsedAttribute *anAttr )
     }
   }
 
-  anAttr->type+=addDecl;
+  anAttr->type()+=addDecl;
   anAttr->setDeclaredInFile( currentFile );
   anAttr->setDeclaredOnLine( /* declStart */ getLineno());
   anAttr->setDefinedInFile( currentFile );
@@ -690,7 +690,7 @@ void CClassParser::fillInParsedVariable( ParsedAttribute *anAttr )
 
   // Set values in the variable.
   if( !type.isEmpty() )
-    anAttr->setType( type + anAttr->type );
+    anAttr->setType( type + anAttr->type() );
 
   anAttr->setNamePos( type.length() );
 
@@ -746,7 +746,7 @@ void CClassParser::fillInMultipleVariable( ParsedContainer *aContainer )
       while(  lexemStack.top()->type != ID && lexemStack.top()->type != ',' )
       {
         aLexem = lexemStack.pop();
-        anAttr->type = aLexem->text + anAttr->type;
+        anAttr->setType(aLexem->text + anAttr->type());
         delete aLexem;
       }
 
@@ -772,9 +772,9 @@ void CClassParser::fillInMultipleVariable( ParsedContainer *aContainer )
        anAttr = list.next() )
   {
     // Only add attributes that have a name.
-    if( !anAttr->name.isEmpty() )
+    if( !anAttr->name().isEmpty() )
     {
-      anAttr->type = type + anAttr->type;
+      anAttr->setType(type + anAttr->type());
 
       aContainer->addAttribute( anAttr );
     }
@@ -906,13 +906,13 @@ void CClassParser::parseFunctionArgs( ParsedMethod *method )
     {
       // Move the values to the argument object.
       anArg = new ParsedArgument();
-      if( !anAttr->name.isEmpty() )
-        anArg->setName( anAttr->name );
+      if( !anAttr->name().isEmpty() )
+        anArg->setName( anAttr->name() );
 
-      if( !anAttr->type.isEmpty() )
-        anArg->setType( anAttr->type );
+      if( !anAttr->type().isEmpty() )
+        anArg->setType( anAttr->type() );
       
-      anArg->setNamePos( anAttr->posName );
+      anArg->setNamePos( anAttr->namePos() );
       // Add the argument to the method.
       method->addArgument( anArg );
       delete anAttr;
@@ -1553,9 +1553,9 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
 
         if( store->hasClass( childClass->path() ) ) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
-  	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine );
-  	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile );
-  	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope );
+  	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine() );
+  	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile() );
+  	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope() );
   	      delete childClass;
   	      childClass = parsedClassRef;
         } else {
@@ -1586,9 +1586,9 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
 		ParsedMethod *	pm = aClass->getMethod(aMethod);
 		
 		if (pm != NULL) {
-          aMethod->setDefinedInFile( pm->definedInFile );
-          aMethod->setDefinedOnLine( pm->definedOnLine );
-          aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
+          aMethod->setDefinedInFile( pm->definedInFile() );
+          aMethod->setDefinedOnLine( pm->definedOnLine() );
+          aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine() );
           aClass->removeMethod(pm);
 		}
         	
@@ -1613,13 +1613,13 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          kdDebug(9007) << "slot: %s\n" << aMethod->name.data() << endl;
+          kdDebug(9007) << "slot: %s\n" << aMethod->name().data() << endl;
 
           ParsedMethod *pm = aClass->getMethod(aMethod);
           if (pm != NULL) {
-               aMethod->setDefinedInFile( pm->definedInFile );
-               aMethod->setDefinedOnLine( pm->definedOnLine );
-               aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine );
+               aMethod->setDefinedInFile( pm->definedInFile() );
+               aMethod->setDefinedOnLine( pm->definedOnLine() );
+               aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine() );
                aClass->removeMethod(pm);
 		    }
             aMethod->setIsSlot( true );
@@ -2092,7 +2092,7 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
     case CP_IS_ATTRIBUTE:
       anAttr = new ParsedAttribute();
       fillInParsedVariable( anAttr );
-      if( !anAttr->name.isEmpty() )
+      if( !anAttr->name().isEmpty() )
         aContainer->addAttribute( anAttr );
       else
         delete anAttr;
@@ -2110,7 +2110,7 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
       aMethod = new ParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
 
-      if( !aMethod->name.isEmpty() )
+      if( !aMethod->name().isEmpty() )
       {
         // If this method already exists we just get the attributes
         // for the definition, and copy them into the new parsed method
@@ -2118,9 +2118,9 @@ void CClassParser::parseMethodAttributes( ParsedContainer *aContainer )
         oldMethod = aContainer->getMethod( aMethod );
         if( oldMethod != NULL )
         {
-          aMethod->setDefinedInFile( oldMethod->definedInFile );
-          aMethod->setDefinedOnLine( oldMethod->definedOnLine );
-          aMethod->setDefinitionEndsOnLine( oldMethod->definitionEndsOnLine );
+          aMethod->setDefinedInFile( oldMethod->definedInFile() );
+          aMethod->setDefinedOnLine( oldMethod->definedOnLine() );
+          aMethod->setDefinitionEndsOnLine( oldMethod->definitionEndsOnLine() );
           aContainer->removeMethod(oldMethod);
         }
         aContainer->addMethod( aMethod );
@@ -2231,8 +2231,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
       	// don't put the class into the scope hierarchy yet, in case
       	// it is already in the store (when 'aClass' will need to be
       	// deleted, and the existing parsed class used instead).
-        QString savedClassPath = QString( aClass->declaredInScope );
-        QString classPath = aClass->declaredInScope;
+        QString savedClassPath = QString( aClass->declaredInScope() );
+        QString classPath = aClass->declaredInScope();
 
         if( classPath.isEmpty() && !scope->path().isEmpty() )
           classPath = scope->path();
@@ -2260,8 +2260,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         // Check if class is in the global store, add it if missing
         if( store->hasClass( aClass->path() ) ) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
-  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine );
-  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile );
+  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine() );
+  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile() );
   	      delete aClass;
   	      aClass = parsedClassRef;
         } else {
@@ -2273,7 +2273,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         aClass->setDeclaredInScope( savedClassPath );
         QString scopePath = scope->path();
 
-        if( aClass->declaredInScope.isEmpty() && !scopePath.isEmpty() )
+        if( aClass->declaredInScope().isEmpty() && !scopePath.isEmpty() )
         {
           aClass->setDeclaredInScope(scopePath);
           scope->addClass( aClass );
@@ -2315,7 +2315,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 	case CPOBJCIMPLEMENTATION:
 		aClass = parseObjcImplementation();
 		
-		if (aClass != NULL && !store->hasClass(aClass->name)) {
+		if (aClass != NULL && !store->hasClass(aClass->name())) {
             cout << "Storing objective implementation with path: " << aClass->path() << endl;
 			store->addClass(aClass);
 		}
@@ -2324,7 +2324,7 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 	case CPOBJCPROTOCOL:
 		aClass = parseObjcClass();
 		
-		if (aClass != NULL && !store->hasClass(aClass->name)) {
+		if (aClass != NULL && !store->hasClass(aClass->name())) {
             cout << "Storing objective interface with path: " << aClass->path() << endl;
 			store->addClass(aClass);
 		}

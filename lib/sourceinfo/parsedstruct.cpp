@@ -70,8 +70,8 @@ ParsedStruct::~ParsedStruct()
  *-----------------------------------------------------------------*/
 void ParsedStruct::out()
 {
-    if ( !comment.isEmpty() )
-        cout << "   " << comment << "\n";
+    if ( !_comment.isEmpty() )
+        cout << "   " << _comment << "\n";
     
     cout << "   " << path() << "\n";
     for ( attributeIterator.toFirst();

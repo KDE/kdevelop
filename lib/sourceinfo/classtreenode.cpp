@@ -37,7 +37,7 @@
  *-----------------------------------------------------------------*/
 ClassTreeNode::ClassTreeNode()
     : theClass(0),
-      isInSystem(false)
+      _isInSystem(false)
 {
     children.setAutoDelete( false );
 }
@@ -76,7 +76,7 @@ ClassTreeNode::~ClassTreeNode()
 void ClassTreeNode::setClass( ParsedClass *aClass )
 {
     REQUIRE( "Valid parent class", aClass != NULL );
-    REQUIRE( "Valid parent class name", !aClass->name.isEmpty() );
+    REQUIRE( "Valid parent class name", !aClass->name().isEmpty() );
     
     theClass = aClass;
 }
@@ -95,7 +95,7 @@ void ClassTreeNode::setClass( ParsedClass *aClass )
 void ClassTreeNode::addChild( ClassTreeNode *aChild )
 {
     REQUIRE( "Valid child", aChild != NULL );
-    REQUIRE( "Valid child name", !aChild->name.isEmpty() );
+    REQUIRE( "Valid child name", !aChild->name().isEmpty() );
     
     children.append( aChild );
 }
@@ -122,7 +122,7 @@ void ClassTreeNode::out()
     
     cout << "(";
     
-    cout << theClass ? theClass->name.data() : "??";
+    cout << theClass ? theClass->name().data() : "??";
     
     for ( aChild = children.first();
           aChild != NULL;

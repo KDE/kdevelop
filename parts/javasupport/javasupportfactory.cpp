@@ -156,8 +156,11 @@ JavaSupportFactory::JavaSupportFactory(QObject *parent, const char *name)
 	vm_args.ignoreUnrecognized = JNI_TRUE;
 	res = JNI_CreateJavaVM(&jvm, (void **) &env, &vm_args);
 	if (res < 0) {
+		kdDebug(9013) << "Can't create JVM" << endl;
 		return;
 	}
+
+	kdDebug(9013) << "Created JVM, classpath: " << classPath << endl;
 
 	urlLoaderClass = env->FindClass("kdevjavapluginapi");
 

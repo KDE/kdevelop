@@ -363,10 +363,10 @@ void PHPSupportPart::parse(const QString &fileName)
 	    lastClass->addParent(parent);
 	  }
 
-	  if (classStore()->hasClass(lastClass->name)) {
-	    ParsedClass *old = classStore()->getClassByName(lastClass->name);
-	    old->setDeclaredOnLine(lastClass->declaredOnLine);
-	    old->setDeclaredInFile(lastClass->declaredInFile);
+	  if (classStore()->hasClass(lastClass->name())) {
+	    ParsedClass *old = classStore()->getClassByName(lastClass->name());
+	    old->setDeclaredOnLine(lastClass->declaredOnLine());
+	    old->setDeclaredInFile(lastClass->declaredInFile());
 	    delete lastClass;
 	    lastClass=0;
 	  } else {

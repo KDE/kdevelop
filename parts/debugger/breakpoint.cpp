@@ -281,7 +281,7 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
     const FilePosBreakpoint* check = dynamic_cast<const FilePosBreakpoint*>(brkpt);
     if (!check)
         return false;
-    
+
     // member case
     return  ( (fileName_ == check->fileName_) &&
               (lineNo_ == check->lineNo_));
@@ -291,7 +291,8 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 void FilePosBreakpoint::configureDisplay()
 {
-    display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
+    QFileInfo fi(fileName_);
+    display_ = i18n("breakpoint at %1:%2").arg(fi.baseName()).arg(lineNo_);
     Breakpoint::configureDisplay();
 }
 

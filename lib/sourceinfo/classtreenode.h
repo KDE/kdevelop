@@ -34,7 +34,7 @@ public:
 public:
   
     /** The name of this node. */
-    QString name;
+    QString _name;
     
     /** The actual class data. */
     ParsedClass *theClass;
@@ -43,21 +43,25 @@ public:
     QList<ClassTreeNode> children;
     
     /** Is this class present in the system? */
-    bool isInSystem;
+    bool _isInSystem;
     
 public:
 
     /** Sets the nodename. */
     void setName(const QString &aName)
-    { name = aName; }
-    
+    { _name = aName; }
+
+    /** Gets the nodename. */
+    QString & name() { return _name; }
+
     /** Sets the class data. */
     void setClass(ParsedClass *aClass);
     
     /** Tells if we found this class in the system. */
     void setIsInSystem(bool aState)
-    { isInSystem = aState; }
-    
+    { _isInSystem = aState; }
+    bool isInSystem() { return _isInSystem; }
+
     /** Adds a child to this class node. */
     void addChild(ClassTreeNode *aChild);
     

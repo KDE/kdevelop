@@ -71,10 +71,10 @@ void HierarchyDialog::refresh()
     QList<ParsedClass> *list = m_part->classStore()->getSortedClassList();
     QListIterator<ParsedClass> it(*list);
     for (; it.current(); ++it) {
-        class_combo->insertItem(it.current()->name);
+        class_combo->insertItem(it.current()->name());
         QListIterator<ParsedParent> it2(it.current()->parents);
         for (; it2.current(); ++it2)
-            digraph->addEdge(it2.current()->name, it.current()->name);
+            digraph->addEdge(it2.current()->name(), it.current()->name());
     }
     delete list;
 

@@ -33,24 +33,33 @@ public:
 
 public:
     /** The name of the argument. */
-    QString name;
+    QString _name;
 
     /** The type of the argument. */
-    QString type;
+    QString _type;
     
     /** where I have to place the name between type */
-    int posName;
+    int _namePos;
     
 public:
     
     /** Sets the argument name */
     void setName(const QString &aName);
-    
+
+    /** Sets the argument name */
+    QString & name() { return _name; }
+
     /** Sets the type */
     void setType(const QString &aType);
-    
+
+    /** Gets the type */
+    QString &type() { return _type; }
+
     /** Sets the pos of the name between type */
     void setNamePos(int pos);
+
+    /** Gets the pos of the name between type */
+    int namePos() { return _namePos; }
 
     /** Makes this object a copy of the supplied object. */
     void copy(ParsedArgument *anArgument);
@@ -66,7 +75,7 @@ public:
 };
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg);
+QDataStream &operator<<(QDataStream &s, ParsedArgument &arg);
 QDataStream &operator>>(QDataStream &s, ParsedArgument &arg);
 
 #endif

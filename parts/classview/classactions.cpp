@@ -41,7 +41,7 @@ void ClassListAction::refresh()
     QStringList list;
     QListIterator<ParsedClass> it(*classList);
     for ( ; it.current(); ++it)
-        list << it.current()->name;
+        list << it.current()->name();
 
     qHeapSort(list);
 

@@ -73,7 +73,7 @@ public:
     //QList<ParsedSignalSlot> signalMaps;
     
     /** Tells if this class is declared inside another class. */
-    bool isSubClass;
+    bool _isSubClass;
     
 public:
     
@@ -126,8 +126,9 @@ public:
      * @param aState The new state.
      */
     inline void setIsSubClass(bool aState)
-    { isSubClass = aState; }
-    
+    { _isSubClass = aState; }
+    bool isSubClass() { return _isSubClass; }
+
 public:
     
     /**
@@ -171,11 +172,11 @@ public:
     /** Outputs the class as text on stdout. */
     void out();
 
-    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+    friend QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
 };
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
 QDataStream &operator>>(QDataStream &s, ParsedClass &arg);
 
 #endif

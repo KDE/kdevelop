@@ -65,7 +65,7 @@ void ParsedParent::setName( const QString &aName )
     REQUIRE( "Valid name", aName != NULL );
     REQUIRE( "Valid name length", aName.length() > 0 );
     
-    name = aName;
+    _name = aName;
 }
 
 /*----------------------------------------- ParsedClass::setExport()
@@ -80,7 +80,7 @@ void ParsedParent::setName( const QString &aName )
  *-----------------------------------------------------------------*/
 void ParsedParent::setAccess( PIAccess aAccess )
 {
-    access = aAccess;
+    _access = aAccess;
 }
 
 /*********************************************************************
@@ -100,9 +100,9 @@ void ParsedParent::setAccess( PIAccess aAccess )
  *-----------------------------------------------------------------*/
 void ParsedParent::out()
 {
-    cout << "    " << name << "(";
-    
-    switch (access)
+    cout << "    " << _name << "(";
+
+    switch (_access)
         {
         case PIE_PUBLIC:
             cout << "public";
@@ -121,9 +121,9 @@ void ParsedParent::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedParent &arg)
+QDataStream &operator<<(QDataStream &s, ParsedParent &arg)
 {
-    return s << arg.name << (int)arg.access;
+    return s << arg.name() << (int)arg.access();
 }
 
 

@@ -40,25 +40,25 @@ public:
     QList<ParsedArgument> arguments;
     
     /** Is this methods declared virtual? */
-    bool isVirtual : 1;
+    bool _isVirtual : 1;
     
     /** Is this method declared as a pure virtual method(method()=0) */
-    bool isPure : 1;
+    bool _isPure : 1;
     
     /** Is this a slot? */
-    bool isSlot : 1;
+    bool _isSlot : 1;
     
     /** Is this a signal? */
-    bool isSignal : 1;
+    bool _isSignal : 1;
     
     /** Is this a constructor? */
-    bool isConstructor : 1;
+    bool _isConstructor : 1;
     
     /** Is this a destructor? */
-    bool isDestructor : 1;
-   
+    bool _isDestructor : 1;
+
     /** Is this a Objective-C method? */
-    bool isObjectiveC : 1;
+    bool _isObjectiveC : 1;
 
 public:
     
@@ -70,53 +70,53 @@ public:
      * @param aState The new state.
      */
     void setIsVirtual(bool aState=true)
-    { isVirtual = aState; }
-	bool isVirtualMethod() { return isVirtual; }
+    { _isVirtual = aState; }
+	bool isVirtual() { return _isVirtual; }
     /**
      * Sets the status if this is a pure virtual method.
      * @param aState The new state. 
      */
     void setIsPure(bool aState=true)
-    { isPure = aState; }
-	bool isPureMethod() { return isPure; }
+    { _isPure = aState; }
+	bool isPure() { return _isPure; }
     
     /**
      * Sets the status if this is a slot. 
      * @param aState The new state.
      */
     void setIsSlot(bool aState=true)
-    { isSlot = aState; }
-	bool isSlotMethod() { return isSlot; }
+    { _isSlot = aState; }
+	bool isSlot() { return _isSlot; }
     
     /**
      * Sets the status if this is a signal. 
      * @param aState The new state.
      */
     void setIsSignal(bool aState=true)
-    { isSignal = aState; }
-	bool isSignalMethod() { return isSignal; }
+    { _isSignal = aState; }
+	bool isSignal() { return _isSignal; }
     
     /**
      * Sets this method as a constructor.
      * @param aState The new state.
      */
     void setIsConstructor(bool aState=true)
-    { isConstructor = aState; }
-	bool isConstructorMethod() { return isConstructor; }
+    { _isConstructor = aState; }
+	bool isConstructor() { return _isConstructor; }
 
     /**
      * Sets this method as a destructor.
      * @param aState The new state.
      */
     void setIsDestructor(bool aState=true)
-    { isDestructor = aState; }
-	bool isDestructorMethod() { return isDestructor; }
+    { _isDestructor = aState; }
+	bool isDestructor() { return _isDestructor; }
 
     /**
      * Is the method an Objective-C method? 
      */
-    void setIsObjectiveC(bool is) { isObjectiveC = is; };
-	bool isObjectiveCMethod() { return isObjectiveC; }
+    void setIsObjectiveC(bool is=true) { _isObjectiveC = is; }
+	bool isObjectiveC() { return _isObjectiveC; }
     /**
      * Makes this object a copy of the supplied object. 
      * @param aMethod Method to copy.
@@ -136,7 +136,7 @@ public:
 };
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg);
+QDataStream &operator<<(QDataStream &s, ParsedMethod &arg);
 QDataStream &operator>>(QDataStream &s, ParsedMethod &arg);
 
 #endif

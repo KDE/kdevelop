@@ -37,7 +37,7 @@ extern int ScopeLevel;
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ClassStore::ClassStore() 
+ClassStore::ClassStore()
 {
     // Initialize the persistant class store.
     //  globalStore.setPath( "/tmp"  );
@@ -105,15 +105,15 @@ void ClassStore::removeWithReferences( const QString &aFile )
     // container that we can be deleting classes from.
     ParsedClass *aClass = globalContainer.classIterator.toFirst();
     while (aClass) {
-        if ( aClass->declaredInFile == aFile ) {
-            if ( aClass->definedInFile.isEmpty() ||
-                 aClass->definedInFile == aClass->declaredInFile )
+        if ( aClass->declaredInFile() == aFile ) {
+            if ( aClass->definedInFile().isEmpty() ||
+                 aClass->definedInFile() == aClass->declaredInFile() )
                 removeClass( aClass->path() );
             else
                 aClass->removeWithReferences(aFile);
         } else {
-            if ( aClass->definedInFile == aFile ) {
-                if ( aClass->declaredInFile.isEmpty() )
+            if ( aClass->definedInFile() == aFile ) {
+                if ( aClass->declaredInFile().isEmpty() )
                     removeClass( aClass->path() );
                 else
                     aClass->removeWithReferences(aFile);
@@ -209,7 +209,7 @@ void ClassStore::storeAll()
 void ClassStore::addScope( ParsedScopeContainer *aScope )
 {
     REQUIRE( "Valid scope", aScope != NULL );
-    REQUIRE( "Valid scope name", !aScope->name.isEmpty() );
+    REQUIRE( "Valid scope name", !aScope->name().isEmpty() );
     REQUIRE( "Unique scope path", !hasScope( aScope->path() ) );
     
     globalContainer.addScope( aScope );
@@ -228,7 +228,7 @@ void ClassStore::addScope( ParsedScopeContainer *aScope )
 void ClassStore::addClass( ParsedClass *aClass )
 {
     REQUIRE( "Valid class", aClass != NULL );
-    REQUIRE( "Valid classname", !aClass->name.isEmpty() );
+    REQUIRE( "Valid classname", !aClass->name().isEmpty() );
     REQUIRE( "Unique classpath", !hasClass( aClass->path() ) );
     
     globalContainer.addClass( aClass );
@@ -290,18 +290,18 @@ QList<ClassTreeNode> *ClassStore::asForest()
         aClass = globalContainer.classIterator.current();
         
         // Check if we have added the child.
-        childNode = ctDict.find( aClass->name );
+        childNode = ctDict.find( aClass->name() );
         
         // If not in the table already, we add a new node.
         if ( childNode == NULL ) {
             childNode = new ClassTreeNode();
             
-            ctDict.insert( aClass->name, childNode );
-        } else if ( !childNode->isInSystem )
+            ctDict.insert( aClass->name(), childNode );
+        } else if ( !childNode->isInSystem() )
             retVal->removeRef( childNode );
         
         // Set childnode values.
-        childNode->setName( aClass->name );
+        childNode->setName( aClass->name() );
         childNode->setClass( aClass );
         childNode->setIsInSystem( true );
         
@@ -314,17 +314,17 @@ QList<ClassTreeNode> *ClassStore::asForest()
                   aParent != NULL;
                   aParent = childNode->theClass->parents.next() ) {
                 // Check if we have added the parent already.
-                parentNode = ctDict.find( aParent->name );
-                
+                parentNode = ctDict.find( aParent->name() );
+
                 // Add a new node for the parent if not added already.
                 if ( parentNode == NULL ) {
                     // Create the parentnode.
                     parentNode = new ClassTreeNode();
-                    parentNode->setName( aParent->name );
+                    parentNode->setName( aParent->name() );
                     parentNode->setIsInSystem( false );
                     
                     retVal->append( parentNode );
-                    ctDict.insert( parentNode->name, parentNode );
+                    ctDict.insert( parentNode->name(), parentNode );
                 }
                 
                 // Add the child to the parent node.
@@ -476,13 +476,13 @@ QList<ParsedClass> *ClassStore::getClassClients( const QString &aName )
           globalContainer.classIterator.current();
           ++globalContainer.classIterator ) {
         aClass = globalContainer.classIterator.current();
-        if ( aClass->name != aName ) {
+        if ( aClass->name() != aName ) {
             exit = false;
             for ( aClass->attributeIterator.toFirst();
                   aClass->attributeIterator.current() && !exit;
                   ++(aClass->attributeIterator) ) {
                 aAttr = aClass->attributeIterator.current();
-                exit = ( aAttr->type.find( aName ) != -1 );
+                exit = ( aAttr->type().find( aName ) != -1 );
             }
             
             if ( exit )
@@ -521,8 +521,8 @@ QList<ParsedClass> *ClassStore::getClassSuppliers( const QString &aName )
     for ( aClass->attributeIterator.toFirst();
           aClass->attributeIterator.current();
           ++aClass->attributeIterator ) {
-        str = aClass->attributeIterator.current()->type;
-        
+        str = aClass->attributeIterator.current()->type();
+
         // Remove all unwanted stuff.
         str = str.replace(  QRegExp("[\\*&]"), "" );
         str = str.replace(  QRegExp("const"), "" );
@@ -563,7 +563,7 @@ QList<ParsedClass> *ClassStore::getSortedClassList()
     // Remove all non-global classes.
     aClass = list->first();
     while (aClass != NULL) {
-        if ( !aClass->declaredInScope.isEmpty() ) {
+        if ( !aClass->declaredInScope().isEmpty() ) {
             list->remove();
             aClass = list->current();
         } else
@@ -633,7 +633,7 @@ void ClassStore::getVirtualMethodsForClass( const QString &aName,
               aParent != NULL;
               aParent = aClass->parents.next() ) {
             // Try to fetch the parent.
-            parentClass = getClassByName( aParent->name );
+            parentClass = getClassByName( aParent->name() );
             if ( parentClass != NULL ) {
                 list = parentClass->getVirtualMethodList();
                 
@@ -645,7 +645,7 @@ void ClassStore::getVirtualMethodsForClass( const QString &aName,
                         implList->append( aMethod );
                         added.insert( aMethod->asString(), "" );
                     }
-                    else if ( !aMethod->isConstructor && !aMethod->isDestructor )
+                    else if ( !aMethod->isConstructor() && !aMethod->isDestructor() )
                         availList->append( aMethod );
                 }
                 
@@ -675,7 +675,7 @@ QList<ParsedStruct> *ClassStore::getSortedStructList()
           globalContainer.structIterator.current();
           ++globalContainer.structIterator ) {
         // Only append global structs.
-        if ( globalContainer.structIterator.current()->declaredInScope.isEmpty() )
+        if ( globalContainer.structIterator.current()->declaredInScope().isEmpty() )
             retVal->append( globalContainer.structIterator.current() );
     }
     

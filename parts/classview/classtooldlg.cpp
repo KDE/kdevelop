@@ -316,7 +316,7 @@ void ClassToolDialog::updateCaptionAndButtons()
     
     if (button) {
         button->setOn(true);
-        setCaption(i18n("%1 of class %2").arg(caption).arg(currentClass->name));
+        setCaption(i18n("%1 of class %2").arg(caption).arg(currentClass->name()));
     } else
         setCaption(caption);
 }
@@ -338,21 +338,21 @@ void ClassToolDialog::buildTree()
             break;
         case ViewChildren:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassesByParent(currentClass->name);
+                QList<ParsedClass> *list = m_part->classStore()->getClassesByParent(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
                 delete list;
             }
             break;
         case ViewClients:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassClients(currentClass->name);
+                QList<ParsedClass> *list = m_part->classStore()->getClassClients(currentClass->name());
                 class_tree->insertClassAndClasses(currentClass, list);
                 delete list;
             }
             break;
         case ViewSuppliers:
             {
-                QList<ParsedClass> *list = m_part->classStore()->getClassSuppliers( currentClass->name );
+                QList<ParsedClass> *list = m_part->classStore()->getClassSuppliers( currentClass->name() );
                 class_tree->insertClassAndClasses( currentClass, list );
                 delete list;
             }

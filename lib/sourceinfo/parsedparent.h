@@ -33,29 +33,35 @@ public:
 public:
     
     /** Name of parent class */
-    QString name;
+    QString _name;
     
     /** Export type of the inheritance */
-    PIAccess access;
-    
+    PIAccess _access;
+
 public:
     
     /** Sets parent the parent name */
     void setName(const QString &aName);
-    
+
+    /** Sets parent the parent name */
+    QString & name() { return _name; };
+
     /** Sets the export status */
     void setAccess(PIAccess aAccess);
-    
-    inline bool isPublic()    { return ( access == PIE_PUBLIC ); }
-    inline bool isProtected() { return ( access == PIE_PROTECTED ); }
-    inline bool isPrivate()   { return ( access == PIE_PRIVATE ); }
+
+    /** Gets the export status */
+    PIAccess access() { return _access; };
+
+    inline bool isPublic()    { return ( _access == PIE_PUBLIC ); }
+    inline bool isProtected() { return ( _access == PIE_PROTECTED ); }
+    inline bool isPrivate()   { return ( _access == PIE_PRIVATE ); }
     
     /** Outputs the class as text on stdout */
     void out();
 };
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedParent &arg);
+QDataStream &operator<<(QDataStream &s, ParsedParent &arg);
 QDataStream &operator>>(QDataStream &s, ParsedParent &arg);
 
 #endif

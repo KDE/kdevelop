@@ -49,7 +49,7 @@ ParsedClass::ParsedClass()
     //signalMaps.setAutoDelete( true );
     classes.setAutoDelete( false );
     
-    isSubClass = false;
+    _isSubClass = false;
 }
 
 
@@ -93,15 +93,15 @@ void ParsedClass::removeWithReferences( const QString &aFile )
     
     methodIterator.toFirst();
     while ( ( aMethod = methodIterator.current() ) != 0 ) {
-        if ( aMethod->declaredInFile == aFile ) {
-            if ( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+        if ( aMethod->declaredInFile() == aFile ) {
+            if ( aMethod->definedInFile().isNull() || aMethod->declaredInFile() == aMethod->definedInFile() ) {
                 ParsedContainer::removeMethod(aMethod);
             } else {
                 aMethod->clearDeclaration();
                 ++methodIterator;
             }
-        } else if ( aMethod->definedInFile == aFile ) {
-            if ( aMethod->declaredInFile.isNull() ) {
+        } else if ( aMethod->definedInFile() == aFile ) {
+            if ( aMethod->declaredInFile().isNull() ) {
                 ParsedContainer::removeMethod(aMethod);
             } else {
                 aMethod->clearDefinition();
@@ -114,15 +114,15 @@ void ParsedClass::removeWithReferences( const QString &aFile )
     
     slotIterator.toFirst();
     while ( ( aMethod = slotIterator.current() ) != 0 ) {
-        if ( aMethod->declaredInFile == aFile ) {
-            if ( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+        if ( aMethod->declaredInFile() == aFile ) {
+            if ( aMethod->definedInFile().isNull() || aMethod->declaredInFile() == aMethod->definedInFile() ) {
                 slotList.removeRef( aMethod );
             } else {
                 aMethod->clearDeclaration();
                 ++slotIterator;
             }
-        } else if ( aMethod->definedInFile == aFile ) {
-            if ( aMethod->declaredInFile.isNull() ) {
+        } else if ( aMethod->definedInFile() == aFile ) {
+            if ( aMethod->declaredInFile().isNull() ) {
                 slotList.removeRef(aMethod);
             } else {
                 aMethod->clearDefinition();
@@ -133,9 +133,9 @@ void ParsedClass::removeWithReferences( const QString &aFile )
         }
     }
     
-    if ( declaredInFile == aFile ) {
+    if ( _declaredInFile == aFile ) {
   	clearDeclaration();
-    } else if ( definedInFile == aFile ) {
+    } else if ( _definedInFile == aFile ) {
   	clearDefinition();
     }
 }
@@ -154,8 +154,8 @@ void ParsedClass::removeWithReferences( const QString &aFile )
 void ParsedClass::removeMethod( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid method", aMethod != NULL );
-    REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
-    
+    REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
+
     QString str = aMethod->asString();
     
     if ( slotList.removeRef( aMethod ) ) {
@@ -203,8 +203,8 @@ void ParsedClass::clearDeclaration()
 void ParsedClass::addParent( ParsedParent *aParent )
 {
     REQUIRE( "Valid parent", aParent != NULL );
-    REQUIRE( "Valid parent name", !aParent->name.isEmpty() );
-    
+    REQUIRE( "Valid parent name", !aParent->name().isEmpty() );
+
     parents.append( aParent );
 }
 
@@ -222,7 +222,7 @@ void ParsedClass::addParent( ParsedParent *aParent )
 void ParsedClass::addSignal( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid signal", aMethod != NULL );
-    REQUIRE( "Valid signal name", !aMethod->name.isEmpty()  );
+    REQUIRE( "Valid signal name", !aMethod->name().isEmpty()  );
     
     aMethod->setDeclaredInScope( path() );
     signalList.append( aMethod );
@@ -245,8 +245,8 @@ void ParsedClass::addSignal( ParsedMethod *aMethod )
 void ParsedClass::addSlot( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid slot", aMethod != NULL );
-    REQUIRE( "Valid slot name", !aMethod->name.isEmpty() );
-    
+    REQUIRE( "Valid slot name", !aMethod->name().isEmpty() );
+
     aMethod->setDeclaredInScope( path() );
     
     slotList.append( aMethod );
@@ -347,7 +347,7 @@ bool ParsedClass::hasParent( const QString &aName )
     ParsedParent *aParent;
     
     for ( aParent = parents.first();
-          aParent != NULL && aParent->name != aName;
+          aParent != NULL && aParent->name() != aName;
           aParent = parents.next() )
         ;
     
@@ -372,7 +372,7 @@ bool ParsedClass::hasVirtual()
           methodIterator.current() && !retVal;
           ++methodIterator )
         {
-            retVal |= methodIterator.current()->isVirtual;
+            retVal |= methodIterator.current()->isVirtual();
         }
     
     return retVal;
@@ -468,7 +468,7 @@ QList<ParsedMethod> *ParsedClass::getVirtualMethodList()
           methodIterator.current();
           ++methodIterator )
         {
-            if ( methodIterator.current()->isVirtual )
+            if ( methodIterator.current()->isVirtual() )
                 retVal->append( methodIterator.current() );
         }
     
@@ -493,14 +493,14 @@ void ParsedClass::out()
     //ParsedSignalSlot *aSS;
     char *str;
     
-    if ( !comment.isEmpty() )
-        cout << comment << endl;
+    if ( !_comment.isEmpty() )
+        cout << _comment << endl;
     
-    cout << "Class " << path() << " @ line " << declaredOnLine;
-    cout << " - " << declarationEndsOnLine << endl;
+    cout << "Class " << path() << " @ line " << _declaredOnLine;
+    cout << " - " << _declarationEndsOnLine << endl;
     cout << "  Defined in files:" << endl;
-    cout << "    " << declaredInFile << endl;
-    cout << "    " << definedInFile << endl;
+    cout << "    " << _declaredInFile << endl;
+    cout << "    " << _definedInFile << endl;
     cout << "  Parents:" << endl;
     for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
         aParent->out();
@@ -532,10 +532,10 @@ void ParsedClass::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
+QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
 {
-    s << arg.name << arg.definedOnLine;
-    
+    s << arg.name() << arg.definedOnLine();
+
     // Add parents.
     s << arg.parents.count();
     QListIterator<ParsedParent> parentIt(arg.parents);

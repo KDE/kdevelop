@@ -41,13 +41,13 @@ ParsedMethod::ParsedMethod()
 {
     setItemType( PIT_METHOD );
     arguments.setAutoDelete( true );
-    isVirtual = false;
-    isPure = false;
-    isSlot = false;
-    isSignal = false;
-    isConstructor = false;
-    isDestructor = false;
-    isObjectiveC = false;
+    _isVirtual = false;
+    _isPure = false;
+    _isSlot = false;
+    _isSignal = false;
+    _isConstructor = false;
+    _isDestructor = false;
+    _isObjectiveC = false;
 }
 
 
@@ -84,7 +84,7 @@ void ParsedMethod::addArgument( ParsedArgument *anArg )
 {
     ASSERT( anArg != NULL );
     
-    if ( anArg->type != "void" )
+    if ( anArg->type() != "void" )
         arguments.append( anArg );
 }
 
@@ -108,9 +108,9 @@ QString ParsedMethod::asString()
 {
     ParsedArgument *arg;
     
-    QString str = name;
+    QString str = _name;
 
-   if ( isObjectiveC )
+   if ( _isObjectiveC )
      return str;
 
     str += "(";
@@ -142,14 +142,14 @@ void ParsedMethod::out()
     ParsedArgument *arg;
     char buf[10];
     
-    if ( !comment.isEmpty() )
-        cout << "    " << comment << "\n";
+    if ( !_comment.isEmpty() )
+        cout << "    " << _comment << "\n";
     
     cout << "    ";
-    switch( access )
+    switch( _access )
         {
         case PIE_PUBLIC:
-            cout << isObjectiveC ? "" : "public ";
+            cout << _isObjectiveC ? "" : "public ";
             break;
         case PIE_PROTECTED:
             cout << "protected ";
@@ -162,19 +162,19 @@ void ParsedMethod::out()
             break;
         }
     
-    if ( isVirtual )
+    if ( _isVirtual )
         cout << "virtual ";
     
-    if ( isStatic )
+    if ( _isStatic )
         cout << "static ";
     
-    if ( isSlot )
+    if ( _isSlot )
         cout << "slot ";
     
-    if ( isSignal )
+    if ( _isSignal )
         cout << "signal ";
     
-    cout << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( "; 
+    cout << ( _type.isEmpty() ? "" : _type.data() )  << " " << _name << "( ";
     
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
@@ -183,15 +183,15 @@ void ParsedMethod::out()
         arg->out();
     }
     
-    cout << ( isConst ? " ) const\n" : " )\n" );
-    sprintf( buf, "%d", declaredOnLine );
+    cout << ( _isConst ? " ) const\n" : " )\n" );
+    sprintf( buf, "%d", _declaredOnLine );
     cout << "      declared @ line " << buf << " - ";
-    sprintf( buf, "%d", declarationEndsOnLine );
+    sprintf( buf, "%d", _declarationEndsOnLine );
     cout << buf << "\n";
-    cout << "      defined(in " << ( isInHFile ? ".h" : ( isObjectiveC ? ".m" : ".cc" ) ) << ")";
-    sprintf( buf, "%d", definedOnLine );
+    cout << "      defined(in " << ( _isInHFile ? ".h" : ( _isObjectiveC ? ".m" : ".cc" ) ) << ")";
+    sprintf( buf, "%d", _definedOnLine );
     cout << "@ line " << buf << " - ";
-    sprintf( buf, "%d", definitionEndsOnLine );
+    sprintf( buf, "%d", _definitionEndsOnLine );
     cout << buf << "\n";
 }
 
@@ -221,10 +221,10 @@ void ParsedMethod::copy( ParsedMethod *aMethod )
     
     ParsedAttribute::copy( aMethod );
     
-    setIsVirtual( aMethod->isVirtual );
-    setIsSlot( aMethod->isSlot );
-    setIsSignal( aMethod->isSignal );
-    setIsObjectiveC( aMethod->isObjectiveC );
+    setIsVirtual( aMethod->isVirtual() );
+    setIsSlot( aMethod->isSlot() );
+    setIsSignal( aMethod->isSignal() );
+    setIsObjectiveC( aMethod->isObjectiveC() );
 
 
     for ( anArg = aMethod->arguments.first();
@@ -264,26 +264,26 @@ bool ParsedMethod::isEqual( ParsedMethod *method )
         for ( m1 = arguments.first(), m2 = method->arguments.first();
               m1 != NULL && retVal; 
               m1 = arguments.next(), m2 = method->arguments.next() )
-            retVal = retVal && ( m1->type == m2->type );
+            retVal = retVal && ( m1->type() == m2->type() );
     
     return retVal;
 }
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
+QDataStream &operator<<(QDataStream &s, ParsedMethod &arg)
 {
-    operator<<(s, (const ParsedAttribute&)arg);
-    
+    operator<<(s, (ParsedAttribute&)arg);
+
     // Add arguments.
     s << arg.arguments.count();
     QListIterator<ParsedArgument> it(arg.arguments);
     for (; it.current(); ++it)
         s << *it.current();
 
-    s << arg.definitionEndsOnLine << arg.declaredInFile
-      << arg.declaredOnLine << arg.declarationEndsOnLine
-      << (int)arg.isVirtual << (int)arg.isPure << (int)arg.isSlot << (int)arg.isSignal
-      << (int)arg.isConstructor << (int)arg.isDestructor << (int)arg.isObjectiveC;
+    s << arg.definitionEndsOnLine() << arg.declaredInFile()
+      << arg.declaredOnLine() << arg.declarationEndsOnLine()
+      << (int)arg.isVirtual() << (int)arg.isPure() << (int)arg.isSlot() << (int)arg.isSignal()
+      << (int)arg.isConstructor() << (int)arg.isDestructor() << (int)arg.isObjectiveC();
     
     return s;
 }

@@ -101,17 +101,17 @@ void ParsedClassContainer::clear(bool bAutodel)
 void ParsedClassContainer::addClass( ParsedClass *aClass )
 {
     REQUIRE( "Valid class", aClass != NULL );
-    REQUIRE( "Valid classname", !aClass->name.isEmpty() );
-    REQUIRE( "Unique class", !hasClass( useFullPath ? aClass->path() : aClass->name ) );
+    REQUIRE( "Valid classname", !aClass->name().isEmpty() );
+    REQUIRE( "Unique class", !hasClass( _useFullPath ? aClass->path() : aClass->name() ) );
     
     if ( !path().isEmpty() )
         aClass->setDeclaredInScope( path() );
     
     // If this is a class, and we're adding another class that class
     // is a subclass.
-    aClass->setIsSubClass( itemType == PIT_CLASS );
-    
-    classes.insert( useFullPath ? aClass->path() : aClass->name, aClass );
+    aClass->setIsSubClass( _itemType == PIT_CLASS );
+
+    classes.insert( _useFullPath ? aClass->path() : aClass->name(), aClass );
 }
 
 /*------------------------------ ParsedClassContainer::removeClass()
@@ -208,7 +208,7 @@ ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
 {
-    return getSortedDictList<ParsedClass>( classes, useFullPath );
+    return getSortedDictList<ParsedClass>( classes, _useFullPath );
 }
 
 

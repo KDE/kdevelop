@@ -287,56 +287,56 @@ void CppSupportPart::addMethod(const QString &className)
     int atLine = -1;
     ParsedClass *pc = classStore()->getClassByName(className);
     
-    if (pm->isSignal) {
+    if (pm->isSignal()) {
         for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
             ParsedMethod *meth = pc->signalIterator.current();
-            if (meth->access == pm->access && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
+            if (meth->access() == pm->access() &&
+                atLine < meth->declarationEndsOnLine())
+                atLine = meth->declarationEndsOnLine();
         }
-    } else if (pm->isSlot) {
+    } else if (pm->isSlot()) {
         for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
             ParsedMethod *meth = pc->slotIterator.current();
-            if (meth->access == pm->access && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
+            if (meth->access() == pm->access() &&
+                atLine < meth->declarationEndsOnLine())
+                atLine = meth->declarationEndsOnLine();
         }
     } else {
         for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
             ParsedMethod *meth = pc->methodIterator.current();
-            if (meth->access == pm->access && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
+            if (meth->access() == pm->access() &&
+                atLine < meth->declarationEndsOnLine())
+                atLine = meth->declarationEndsOnLine();
         }
     }
 
     QString headerCode = asHeaderCode(pm);
     
     if (atLine == -1) {
-        if (pm->isSignal) 
+        if (pm->isSignal())
             headerCode.prepend(QString("signals:\n"));
-        else if (pm->access == PIE_PUBLIC)
-            headerCode.prepend(QString("public:%1\n").arg(pm->isSlot? " slots" :  ""));
-        else if (pm->access == PIE_PROTECTED)
-            headerCode.prepend(QString("protected:\n").arg(pm->isSlot? " slots" :  ""));
-        else if (pm->access == PIE_PRIVATE) 
-            headerCode.prepend(QString("private:\n").arg(pm->isSlot? " slots" :  ""));
+        else if (pm->access() == PIE_PUBLIC)
+            headerCode.prepend(QString("public:%1\n").arg(pm->isSlot()? " slots" :  ""));
+        else if (pm->access() == PIE_PROTECTED)
+            headerCode.prepend(QString("protected:\n").arg(pm->isSlot()? " slots" :  ""));
+        else if (pm->access() == PIE_PRIVATE)
+            headerCode.prepend(QString("private:\n").arg(pm->isSlot()? " slots" :  ""));
         else
             kdDebug(9007) << "selectedAddMethod: Unknown access "
-                          << (int)pm->access << endl;
+                          << (int)pm->access() << endl;
 
-        atLine = pc->declarationEndsOnLine;
+        atLine = pc->declarationEndsOnLine();
     } else 
         atLine++;
 
-    core()->gotoSourceFile(pc->declaredInFile, atLine);
+    core()->gotoSourceFile(pc->declaredInFile(), atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine << " " 
                   << headerCode << endl
                   << "####################";
 
     QString cppCode = asCppCode(pm);
     
-    core()->gotoSourceFile(pc->definedInFile, atLine);
+    core()->gotoSourceFile(pc->definedInFile(), atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine
                   << " " << cppCode
                   << "####################" << endl;
@@ -359,29 +359,29 @@ void CppSupportPart::addAttribute(const QString &className)
     
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
         ParsedAttribute *attr = pc->attributeIterator.current();
-        if (attr->access == pa->access && 
-            atLine < attr->declarationEndsOnLine)
-            atLine = attr->declarationEndsOnLine;
+        if (attr->access() == pa->access() &&
+            atLine < attr->declarationEndsOnLine())
+            atLine = attr->declarationEndsOnLine();
     }
     
     QString headerCode = asHeaderCode(pa);
     
     if (atLine == -1) {
-        if (pa->access == PIE_PUBLIC)
+        if (pa->access() == PIE_PUBLIC)
             headerCode.prepend("public: // Public attributes\n");
-        else if (pa->access == PIE_PROTECTED)
+        else if (pa->access() == PIE_PROTECTED)
             headerCode.prepend("protected: // Protected attributes\n");
-        else if (pa->access == PIE_PRIVATE) 
+        else if (pa->access() == PIE_PRIVATE)
             headerCode.prepend("private: // Private attributes\n");
         else
             kdDebug(9007) << "selectedAddAttribute: Unknown access "
-                          << (int)pa->access << endl;
+                          << (int)pa->access() << endl;
 
-        atLine = pc->declarationEndsOnLine;
+        atLine = pc->declarationEndsOnLine();
     } else 
         atLine++;
 
-    core()->gotoSourceFile(pc->declaredInFile, atLine);
+    core()->gotoSourceFile(pc->declaredInFile(), atLine);
     kdDebug(9007) << "####################" << "Adding at line " << atLine
                   << " " << headerCode
                   << "####################" << endl;
@@ -393,23 +393,23 @@ void CppSupportPart::addAttribute(const QString &className)
 QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 {
     QString str = "  ";
-    str += pm->comment;
+    str += pm->comment();
     str += "\n  ";
 
-    if (pm->isVirtual)
+    if (pm->isVirtual())
         str += "virtual ";
     
-    if (pm->isStatic)
+    if (pm->isStatic())
         str += "static ";
     
-    str += pm->type;
+    str += pm->type();
     str += " ";
-    str += pm->name;
+    str += pm->name();
     
-    if (pm->isConst)
+    if (pm->isConst())
         str += " const";
     
-    if (pm->isPure)
+    if (pm->isPure())
         str += " = 0";
     
     str += ";\n";
@@ -420,21 +420,21 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 
 QString CppSupportPart::asCppCode(ParsedMethod *pm)
 {
-    if (pm->isPure || pm->isSignal)
+    if (pm->isPure() || pm->isSignal())
         return QString();
 
-    QString str = pm->comment;
+    QString str = pm->comment();
     str += "\n";
 
     // Take the path and replace all . with ::
     QString path = pm->path();
     path.replace( QRegExp( "\\." ), "::" );
 
-    str += pm->type;
+    str += pm->type();
     str += " ";
     str += pm->path();
     
-    if (pm->isConst)
+    if (pm->isConst())
         str += " const";
     
     str += "{\n}\n";
@@ -446,13 +446,13 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
 QString CppSupportPart::asHeaderCode(ParsedAttribute *pa)
 {
     QString str = "  ";
-    str += pa->comment;
+    str += pa->comment();
     str += "\n  ";
 
-    if (pa->isConst)
+    if (pa->isConst())
         str += "const ";
 
-    if (pa->isStatic)
+    if (pa->isStatic())
         str += "static ";
 
     str += pa->asString();

@@ -42,10 +42,10 @@
 ParsedAttribute::ParsedAttribute()
 {
     setItemType( PIT_ATTRIBUTE );
-    isConst = false;
-    isStatic = false;
-    isInHFile = true;
-    posName = -1; // place it at the end
+    _isConst = false;
+    _isStatic = false;
+    _isInHFile = true;
+    _namePos = -1; // place it at the end
 }
 
 /*----------------------------- ParsedAttribute::~ParsedAttribute()
@@ -82,8 +82,8 @@ void ParsedAttribute::setType( const QString &aType )
 {
     REQUIRE( "Valid type", aType != NULL );
     
-    type = aType;
-    type = type.stripWhiteSpace();
+    _type = aType;
+    _type = _type.stripWhiteSpace();
 }
 
 /*------------------------------------ ParsedAttribute::setNamePos()
@@ -98,7 +98,7 @@ void ParsedAttribute::setType( const QString &aType )
  *-----------------------------------------------------------------*/
 void ParsedAttribute::setNamePos( int pos )
 {
-    posName = pos;
+    _namePos = pos;
 }
 
 /*---------------------------------- ParsedAttribute::setIsInHFile()
@@ -113,7 +113,7 @@ void ParsedAttribute::setNamePos( int pos )
  *-----------------------------------------------------------------*/
 void ParsedAttribute::setIsInHFile( bool aState )
 {
-    isInHFile = aState;
+    _isInHFile = aState;
 }
 
 
@@ -129,7 +129,7 @@ void ParsedAttribute::setIsInHFile( bool aState )
  *-----------------------------------------------------------------*/
 void ParsedAttribute::setIsStatic( bool aState )
 {
-    isStatic = aState;
+    _isStatic = aState;
 }
 
 /*------------------------------------- ParsedAttribute::setIsConst()
@@ -144,7 +144,7 @@ void ParsedAttribute::setIsStatic( bool aState )
  *-----------------------------------------------------------------*/
 void ParsedAttribute::setIsConst( bool aState )
 {
-    isConst = aState;
+    _isConst = aState;
 }
 
 
@@ -168,10 +168,10 @@ void ParsedAttribute::copy( ParsedAttribute *anAttribute )
 {
     ParsedItem::copy( anAttribute );
     
-    setNamePos( anAttribute->posName );
-    setType( anAttribute->type );
-    setIsStatic( anAttribute->isStatic );
-    setIsConst( anAttribute->isConst );
+    setNamePos( anAttribute->namePos() );
+    setType( anAttribute->type() );
+    setIsStatic( anAttribute->isStatic() );
+    setIsConst( anAttribute->isConst() );
 }
 
 
@@ -187,19 +187,19 @@ void ParsedAttribute::copy( ParsedAttribute *anAttribute )
  *-----------------------------------------------------------------*/
 QString ParsedAttribute::asString()
 {
-    QString str = type;
-    
-    if (posName>=0 && ((unsigned)posName)<type.length())
-        str = str.left(posName);
+    QString str = _type;
+
+    if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
+        str = str.left(_namePos);
     else
         str += " ";
     
-    if (!name.isEmpty())
-        str += name;
-    
-    if (posName>=0 && ((unsigned)posName)<type.length())
-        str += type.mid(posName, type.length()-posName);
-    
+    if (!_name.isEmpty())
+        str += _name;
+
+    if (_namePos>=0 && ((unsigned)_namePos)<_type.length())
+        str += _type.mid(_namePos, _type.length()- _namePos);
+
     return str;
 }
 
@@ -218,12 +218,12 @@ void ParsedAttribute::out()
     QString buf;
     QString attrString;
     
-    if ( !comment.isEmpty() )
-        cout << "    " << comment << "\n";
+    if ( !_comment.isEmpty() )
+        cout << "    " << _comment << "\n";
     
     cout << "    ";
     
-    switch (access)
+    switch (_access)
         {
         case PIE_PUBLIC:
             cout << "public ";
@@ -241,9 +241,9 @@ void ParsedAttribute::out()
     
     // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
     cout << asString();
-    buf.sprintf("%d", declaredOnLine );
+    buf.sprintf("%d", _declaredOnLine );
     cout << " @ line " << buf << " - ";
-    buf.sprintf("%d", declarationEndsOnLine );
+    buf.sprintf("%d", _declarationEndsOnLine );
     cout << buf << "\n";
 }
 
@@ -267,16 +267,16 @@ void ParsedAttribute::out()
  *-----------------------------------------------------------------*/
 bool ParsedAttribute::isEqual( ParsedAttribute *attr )
 {
-    return (name == attr->name && type == attr->type );
+    return (_name == attr->name() && _type == attr->type() );
 }
 
 
-QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
+QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg)
 {
-    s << arg.name << arg.declaredInScope << (int)arg.access
-      << arg.definedInFile << arg.definedOnLine << arg.comment
-      << arg.type << (int)arg.isInHFile << (int)arg.isStatic << (int)arg.isConst << (int)arg.posName;
-    
+    s << arg.name() << arg.declaredInScope() << (int)arg.access()
+      << arg.definedInFile() << arg.definedOnLine() << arg.comment()
+      << arg.type() << (int)arg.isInHFile() << (int)arg.isStatic() << (int)arg.isConst() << (int)arg.namePos();
+
     return s;
 }
 

@@ -35,7 +35,7 @@
  *   -
  *-----------------------------------------------------------------*/
 ParsedContainer::ParsedContainer()
-    : useFullPath( false ),
+    : _useFullPath( false ),
       methodIterator( methods ),
       attributeIterator( attributes ),
       structIterator( structs )
@@ -77,13 +77,13 @@ ParsedContainer::~ParsedContainer()
 void ParsedContainer::addStruct( ParsedStruct *aStruct ) 
 {
     REQUIRE( "Valid struct", aStruct != NULL );
-    REQUIRE( "Valid structname", !aStruct->name.isEmpty() );
-    REQUIRE( "Unique struct", !hasStruct( useFullPath ? aStruct->path() : aStruct->name ) );
-    
+    REQUIRE( "Valid structname", !aStruct->name().isEmpty() );
+    REQUIRE( "Unique struct", !hasStruct( _useFullPath ? aStruct->path() : aStruct->name() ) );
+
     if ( !path().isEmpty() )
         aStruct->setDeclaredInScope( path() );
     
-    structs.insert( ( useFullPath ? aStruct->path() : aStruct->name ), aStruct );  
+    structs.insert( ( _useFullPath ? aStruct->path() : aStruct->name() ), aStruct );
 }
 
 /*-------------------------------------- ParsedContainer::addAttribute()
@@ -99,13 +99,13 @@ void ParsedContainer::addStruct( ParsedStruct *aStruct )
 void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
 {
     REQUIRE( "Valid attribute", anAttribute != NULL );
-    REQUIRE( "Valid attributename", !anAttribute->name.isEmpty() );
-    REQUIRE( "Unique attribute", !hasAttribute( useFullPath ? anAttribute->path() : anAttribute->name ) );
+    REQUIRE( "Valid attributename", !anAttribute->name().isEmpty() );
+    REQUIRE( "Unique attribute", !hasAttribute( _useFullPath ? anAttribute->path() : anAttribute->name() ) );
     
     if ( !path().isEmpty() )
         anAttribute->setDeclaredInScope( path() );
     
-    attributes.insert( anAttribute->name,  anAttribute );
+    attributes.insert( anAttribute->name(),  anAttribute );
 }
 
 /*------------------------------------------ ParsedContainer::addMethod()
@@ -121,7 +121,7 @@ void ParsedContainer::addAttribute( ParsedAttribute *anAttribute )
 void ParsedContainer::addMethod( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid method", aMethod != NULL );
-    REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
+    REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
     
     QString str;
     
@@ -152,7 +152,7 @@ void ParsedContainer::addMethod( ParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 ParsedMethod *ParsedContainer::getMethod( ParsedMethod *aMethod )
 {
-    REQUIRE1( "Valid methodname", !aMethod->name.isEmpty(), NULL );
+    REQUIRE1( "Valid methodname", !aMethod->name().isEmpty(), NULL );
     
     ParsedMethod *retVal = NULL;
     
@@ -190,7 +190,7 @@ QList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
           aMethod = methods.next() ) {
         // If the name matches the supplied one we append the method to the 
         // returnvalue.
-        if ( aMethod->name == aName )
+        if ( aMethod->name() == aName )
             retVal->append( aMethod );
     }
     
@@ -341,7 +341,7 @@ QStrList *ParsedContainer::getSortedStructNameList()
  *-----------------------------------------------------------------*/
 QList<ParsedStruct> *ParsedContainer::getSortedStructList()
 {
-    return getSortedDictList<ParsedStruct>( structs, useFullPath );
+    return getSortedDictList<ParsedStruct>( structs, _useFullPath );
 }
 
 /*--------------------------- ParsedContainer::removeWithReferences()
@@ -373,8 +373,8 @@ void ParsedContainer::removeWithReferences( const QString &aFile )
 void ParsedContainer::removeMethod( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid method", aMethod != NULL );
-    REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
-    
+    REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
+
     QString str = aMethod->asString();
     
     ParsedMethod *m = getMethodByNameAndArg( str );
