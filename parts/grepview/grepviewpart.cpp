@@ -51,14 +51,14 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("find"));
     m_widget->setCaption(i18n("Grep Output"));
-    QWhatsThis::add(m_widget, i18n("<b>Grep</b><p>"
+    QWhatsThis::add(m_widget, i18n("<b>Find in files</b><p>"
                                    "This window contains the output of a grep "
                                    "command. Clicking on an item in the list "
                                    "will automatically open the corresponding "
                                    "source file and set the cursor to the line "
                                    "with the match."));
 
-    mainWindow()->embedOutputView(m_widget, i18n("Grep"), i18n("Output of the grep command"));
+    mainWindow()->embedOutputView(m_widget, i18n("Find in files"), i18n("Output of the grep command"));
 
     KAction *action;
 
@@ -67,7 +67,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "edit_grep");
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("<b>Find in files</b><p>"
-                               "Opens the 'Search in Files' dialog. There you "
+                               "Opens the 'Find in files' dialog. There you "
                                "can enter a regular expression which is then "
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
@@ -118,7 +118,7 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
         QString squeezed = KStringHandler::csqueeze(ident, 30);
         int id = popup->insertItem( i18n("Grep: %1").arg(squeezed),
                            this, SLOT(slotContextGrep()) );
-        popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the search in files dialog "
+        popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the find in files dialog "
                                "and sets the pattern to a text under the cursor."));
         popup->insertSeparator();
     }

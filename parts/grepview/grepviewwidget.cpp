@@ -306,7 +306,7 @@ void GrepViewWidget::popupMenu(QListBoxItem *, const QPoint &p)
     if(isRunning()) return;
     if(KAction *findAction = m_part->actionCollection()->action("edit_grep")) {
         KPopupMenu rmbMenu;
-        rmbMenu.insertTitle(i18n("Grep"));
+        rmbMenu.insertTitle(i18n("Find in files"));
         findAction->plug(&rmbMenu);
         rmbMenu.exec(p);
     }
