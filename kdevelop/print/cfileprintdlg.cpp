@@ -22,7 +22,7 @@
 #include <kapp.h>
 #include <kmsgbox.h>
 #include <qdatetime.h>
-#include "cproject.h"
+#include "../cproject.h"
 #include <kquickhelp.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){

@@ -20,7 +20,7 @@
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <iostream.h>
-#include "ctoolclass.h"
+#include "../ctoolclass.h"
 #include <kmsgbox.h>
 #include <kquickhelp.h>
 

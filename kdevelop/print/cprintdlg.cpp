@@ -25,9 +25,9 @@
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
-#include "ctoolclass.h"
+#include "../ctoolclass.h"
 #include <kmsgbox.h>
-#include "cproject.h"
+#include "../cproject.h"
 #include <kquickhelp.h>
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDialog(parent, name, true){

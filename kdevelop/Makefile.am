@@ -17,7 +17,7 @@ APPSDIR = $(kde_appsdir)/Applications
 INCLUDES= $(all_includes) -I./classparser
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser
+SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser print
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -32,10 +32,10 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   kswallow.cpp cgeneratenewfile.cpp \
 		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 		   cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
-		   ctoolclass.cpp cdoctreepropdlg.cpp cprintdlg.cpp cfileprintdlg.cpp \
-		   cconfigenscriptdlg.cpp cconfiga2psdlg.cpp ckdevelop_whatsthis.cpp \
+		   ctoolclass.cpp cdoctreepropdlg.cpp \
+		   ckdevelop_whatsthis.cpp \
 		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp ktipofday.cpp \
-		   ckdevinstall.cpp cdatepikerdlg.cpp ckdevelop_kdlginit.cpp \
+		   ckdevinstall.cpp ckdevelop_kdlginit.cpp \
 		   caddclassmethoddlg.cpp caddclassattributedlg.cpp \
 		   cclasstooldlg.cpp cclasstreehandler.cpp
 
@@ -44,7 +44,7 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a -lkfile -lkfm $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl
+kdevelop_LDADD   = ./print/libprint.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a -lkfile -lkfm $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
@@ -54,9 +54,9 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
-		cprintdlg.h cfileprintdlg.h cconfigenscriptdlg.h cconfiga2psdlg.h debug.h \
+		debug.h \
 		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
-		cdatepikerdlg.h caddclassmethoddlg.h caddclassattributedlg.h
+		caddclassmethoddlg.h caddclassattributedlg.h
 		cclasstooldlg.h cclasstreehandler.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm

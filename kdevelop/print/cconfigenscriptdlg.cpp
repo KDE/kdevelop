@@ -18,7 +18,7 @@
 #include "cconfigenscriptdlg.h"
 #include <kapp.h>
 #include <iostream.h>
-#include "ctoolclass.h"
+#include "../ctoolclass.h"
 #include <kmsgbox.h>
 #include <kquickhelp.h>
 
