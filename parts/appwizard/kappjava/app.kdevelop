@@ -33,4 +33,9 @@
   <general>
   </general>
  </kdevdebugger>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="java"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

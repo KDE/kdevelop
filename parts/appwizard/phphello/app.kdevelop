@@ -35,4 +35,9 @@
 	   <realtimeParsing>false</realtimeParsing>
 	  </codeHelp>
 </kdevphpsupport>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="php"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

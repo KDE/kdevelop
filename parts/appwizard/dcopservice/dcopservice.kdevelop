@@ -38,4 +38,10 @@
    <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="cpp"/>
+   <type ext="h"/>
+  </useglobaltypes>
+ </kdevfilecreate>
 </kdevelop>

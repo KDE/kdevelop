@@ -36,4 +36,9 @@
      <group pattern="*.py" name="Python files" />
    </groups>
  </kdevfileview>
+  <kdevfilecreate>
+    <useglobaltypes>
+      <type ext="py"/>
+    </useglobaltypes>
+  </kdevfilecreate>
 </kdevelop>

@@ -37,6 +37,12 @@
   </configure>
  </kdevautoproject>
  <kdevvisualadvance>
-	<binary>src/$APPNAMELC$.gba</binary>
-</kdevvisualadvance>
+   <binary>src/$APPNAMELC$.gba</binary>
+ </kdevvisualadvance>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="c"/>
+   <type ext="h"/>
+  </useglobaltypes>
+ </kdevfilecreate>
 </kdevelop>
