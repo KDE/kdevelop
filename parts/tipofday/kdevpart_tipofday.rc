@@ -5,7 +5,4 @@
   <Action name="help_tipofday"/>
  </Menu>
 </MenuBar>
-<ToolBar name="mainToolBar">
-  <Action name="help_tipofday"/>
-</ToolBar>
 </kpartplugin>
