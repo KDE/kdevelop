@@ -2030,6 +2030,7 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 	if(ask){  // 	only open dialog when asked
 	  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
   	if(argdlg.exec()){
+			args=argdlg.getArguments();
   		if(conf==i18n("(Default)")){
 	    	prj->setConfigureArgs(argdlg.getArguments());
   	  	prj->writeProject();
