@@ -31,7 +31,6 @@
   </Menu>
   <Menu name="project">
     <text>&amp;Project</text>
-    <Action name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
     <Action name="project_close"/>

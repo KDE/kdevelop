@@ -16,3 +16,9 @@
 
 * Check if a man page exists before offering the context menu
   item 'Goto manpage'
+
+* Show intro page on startup
+
+* Rerun configure if options have changed
+
+* Optional: Arrange classes by sub project

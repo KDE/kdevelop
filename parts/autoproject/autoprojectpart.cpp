@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qfileinfo.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -53,6 +54,10 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name
                           this, SLOT(slotClean()),
                           actionCollection(), "project_clean" );
     
+    action = new KAction( i18n("Run automake & friends"), 0,
+                          this, SLOT(slotMakefilecvs()),
+                          actionCollection(), "project_makefilecvs" );
+
     action = new KAction( i18n("Run configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "project_configure" );
@@ -110,14 +115,26 @@ QStringList AutoProjectPart::allSourceFiles()
 
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    // Do something smarter here...
-    if (makeFrontend()->isRunning()) {
-        KMessageBox::sorry(0, i18n("There is currently a job running."));
-        return;
-    }
-
     core()->saveAllFiles();
 
+    QFileInfo fi1(dir + "/Makefile");
+    if (!fi1.exists()) {
+        QFileInfo fi2(projectDirectory() + "/configure");
+        if (!fi2.exists()) {
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
+                                                              "and no configure script for this project.\n"
+                                                              "Run automake & friends and configure first?"));
+            if (r == KMessageBox::No)
+                return;
+            slotMakefilecvs();
+            slotConfigure();
+        } else {
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run configure first?"));
+            if (r == KMessageBox::No)
+                return;
+            slotConfigure();
+        }
+    }
     QDomDocument &doc = *document();
 
     QString cmdline = DomUtil::readEntry(doc, "/kdevautoproject/make/makebin");
@@ -136,7 +153,11 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     cmdline += " ";
     cmdline += target;
     
-    makeFrontend()->startMakeCommand(dir, cmdline);
+    QString dircmd = "cd ";
+    dircmd += dir;
+    dircmd += " && ";
+
+    makeFrontend()->queueCommand(dircmd + cmdline);
 }
 
 
@@ -152,14 +173,20 @@ void AutoProjectPart::slotClean()
 }
 
 
+void AutoProjectPart::slotMakefilecvs()
+{
+    QString cmdline = "make -f Makefile.cvs";
+
+    QString dircmd = "cd ";
+    dircmd += projectDirectory();
+    dircmd += " && ";
+
+    makeFrontend()->queueCommand(dircmd + cmdline);
+}
+
+
 void AutoProjectPart::slotConfigure()
 {
-    // Do something smarter here...
-    if (makeFrontend()->isRunning()) {
-        KMessageBox::sorry(0, i18n("There is currently a job running."));
-        return;
-    }
-
     QDomDocument &doc = *document();
     
     QString cmdline = "./configure";
@@ -188,7 +215,11 @@ void AutoProjectPart::slotConfigure()
         cmdline += configargs;
     }
 
-    makeFrontend()->startMakeCommand(projectDirectory(), cmdline);
+    QString dircmd = "cd ";
+    dircmd += projectDirectory();
+    dircmd += " && ";
+
+    makeFrontend()->queueCommand(dircmd + cmdline);
 }
 
 #include "autoprojectpart.moc"

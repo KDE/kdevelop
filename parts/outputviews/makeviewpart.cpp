@@ -63,19 +63,9 @@ MakeViewPart::~MakeViewPart()
 }
 
 
-void MakeViewPart::startMakeCommand(const QString &dir, const QString &command)
+void MakeViewPart::queueCommand(const QString &command)
 {
-#if 0
-    // We allow non-project related make commands, for example
-    // for the appwizard
-    if (!project()) {
-        kdDebug(9004) << "MakeViewPart: compilation started with project?" << endl;
-        return;
-    }
-#endif
-    //    QString dir = project()? project()->projectDirectory() : QString::null;
-
-    m_widget->startJob(dir, command);
+    m_widget->queueJob(command);
 }
 
 

@@ -79,7 +79,9 @@ void FortranSupportPart::slotFtnchek()
 
     QDomDocument &dom = *document();
     
-    QString cmdline = "ftnchek -nonovice ";
+    QString cmdline = "cd ";
+    cmdline += project()->projectDirectory();
+    cmdline += "&& ftnchek -nonovice ";
 
     if (DomUtil::readBoolEntry(dom, "/kdevfortransupport/ftnchek/division"))
         cmdline += "-division ";
@@ -137,7 +139,7 @@ void FortranSupportPart::slotFtnchek()
         }
     }
     
-    makeFrontend()->startMakeCommand(project()->projectDirectory(), cmdline);
+    makeFrontend()->queueCommand(cmdline);
 }
 
 

@@ -30,13 +30,11 @@ public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
 
-    void startJob(const QString &dir, const QString &command);
+    void queueJob(const QString &command);
     bool isRunning();
     
-signals:
-    void processExited(bool success);
-    
 public slots:
+    void startNextJob();
     void killJob();
     void nextError();
     void prevError();
@@ -55,7 +53,8 @@ private:
     void insertLine(const QString &line, Type type);
     void insertStdoutLine(const QString &line);
     void insertStderrLine(const QString &line);
-    
+
+    QStringList commandList;
     KProcess *childproc;
     QString stdoutbuf;
     QString stderrbuf;

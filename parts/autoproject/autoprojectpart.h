@@ -40,6 +40,7 @@ private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotBuild();
     void slotClean();
+    void slotMakefilecvs();
     void slotConfigure();
     
 private:

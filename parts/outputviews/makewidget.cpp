@@ -9,8 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
 #include <qapplication.h>
+#include <qdir.h>
+#include <qtimer.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -63,8 +64,23 @@ MakeWidget::~MakeWidget()
 }
 
 
-void MakeWidget::startJob(const QString &dir, const QString &command)
+void MakeWidget::queueJob(const QString &command)
 {
+    commandList.append(command);
+    if (!isRunning())
+        startNextJob();
+}
+
+
+void MakeWidget::startNextJob()
+{
+    QStringList::Iterator it = commandList.begin();
+    if (it == commandList.end())
+        return;
+
+    QString command = *it;
+    commandList.remove(it);
+    
     clear();
     items.clear();
     parags = 0;
@@ -72,11 +88,6 @@ void MakeWidget::startJob(const QString &dir, const QString &command)
     
     insertLine(command, Diagnostic);
     childproc->clearArguments();
-    if (!dir.isNull()) {
-        kdDebug(9000) << "Changing to dir " << dir << endl;
-        QDir::setCurrent(dir);
-    }
-
     *childproc << command;
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
     
@@ -239,16 +250,23 @@ void MakeWidget::slotProcessExited(KProcess *)
     
     insertLine(s, t);
 
-    emit processExited(childproc->normalExit());
     m_part->core()->running(m_part, false);
+
+    // Defensive programming: We emit this with a single shot timer so that we go once again
+    // through the event loop. After that, we can be sure that the process is really finished
+    // and the its KProcess object can be reused.
+    if (childproc->normalExit())
+        QTimer::singleShot(0, this, SLOT(startNextJob()));
+    else
+        commandList.clear();
 }
 
 
 void MakeWidget::insertStdoutLine(const QString &line)
 {
     // KRegExp has ERE syntax
-    KRegExp enterDirRx("[^\n]*: Entering directory `([^\n]*)'$");
-    KRegExp leaveDirRx("[^\n]*: Leaving directory `([^\n]*)'$");
+    KRegExp enterDirRx("^make\\[0-9+\\]: ([^`]) `([^\n]*)'$");
+    KRegExp leaveDirRx("^make\\[0-9+\\]: ([^`]) `([^\n]*)'$");
 
     if (enterDirRx.match(line)) {
         QString *dir = new QString(enterDirRx.group(1));

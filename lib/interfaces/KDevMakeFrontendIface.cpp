@@ -13,7 +13,7 @@ KDevMakeFrontendIface::~KDevMakeFrontendIface()
 {}
 
 
-void KDevMakeFrontendIface::startMakeCommand(const QString &dir, const QString &command) 
+void KDevMakeFrontendIface::queueCommand(const QString &command) 
 {
-    m_makeFrontend->startMakeCommand(dir, command);
+    m_makeFrontend->queueCommand(command);
 }

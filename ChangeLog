@@ -1,3 +1,10 @@
+2001-06-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Allow several commands for the make frontend to be queued
+	* Project management automatically runs configures if no
+	  Makefile exists and Makefile.cvs if no configure script
+	  exists
+
 2001-06-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Don't show Fortran options for gcc

@@ -20,9 +20,15 @@ public:
 
     /**
      * The component shall start to execute a make-like command.
-     * Commands are always asynchronous.
+     * Commands are always asynchronous. You can submit several jobs
+     * without caring about another job already running. There are
+     * executed in the order in which they are submitted. If one of
+     * then fails, all following jobs are dropped.
+     * You should not make any assumptions about the directory in which
+     * the command is started. If the command depends on that, put and
+     * explicit 'cd' into the command.
      */
-    virtual void startMakeCommand(const QString &dir, const QString &command) = 0;
+    virtual void queueCommand(const QString &command) = 0;
     /**
      * Returns whether the application is currently running.
      */

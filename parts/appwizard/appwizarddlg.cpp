@@ -298,12 +298,6 @@ void AppWizardDialog::accept()
             return;
         }
     
-    // Do something smarter here...
-    if (m_part->makeFrontend()->isRunning()) {
-        KMessageBox::sorry(0, i18n("There is currently a job running."));
-        return;
-    }
-    
     QString source, script;
     QFileInfo finfo(m_pCurrentAppInfo->templateName);
     QDir dir(finfo.dir());
@@ -357,7 +351,7 @@ void AppWizardDialog::accept()
     cmdline += " --filetemplate=";
     cmdline += KShellProcess::quote(tempFile->name());
 
-    m_part->makeFrontend()->startMakeCommand(QDir::homeDirPath(), cmdline);
+    m_part->makeFrontend()->queueCommand(cmdline);
 
     QWizard::accept();
 }

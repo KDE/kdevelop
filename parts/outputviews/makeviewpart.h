@@ -29,7 +29,7 @@ public:
     ~MakeViewPart();
 
 protected:
-    virtual void startMakeCommand(const QString &dir, const QString &command);
+    virtual void queueCommand(const QString &command);
     virtual bool isRunning();
 
 private:
