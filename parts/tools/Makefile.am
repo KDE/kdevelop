@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevtools.la
 libkdevtools_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevtools_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevtools_la_SOURCES = tools_factory.cpp tools_part.cpp toolsconfig.cpp treeview.cpp
+libkdevtools_la_SOURCES = tools_part.cpp toolsconfig.cpp treeview.cpp
 
 METASOURCES = AUTO
 

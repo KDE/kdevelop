@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Tools
 Name=KDevTools
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevtools
 X-KDevelop-Scope=Global 

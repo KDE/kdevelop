@@ -8,7 +8,7 @@
 
 
 #include <qguardedptr.h>
-#include <kdevpart.h>
+#include <kdevplugin.h>
 
 
 class KDialogBase;
@@ -17,13 +17,13 @@ class KDialogBase;
 class ToolsWidget;
 
 
-class ToolsPart : public KDevPart
+class ToolsPart : public KDevPlugin
   {
     Q_OBJECT
 
 public:
 
-    ToolsPart(KDevApi *api, QObject *parent = 0, const char *name = 0);
+    ToolsPart( QObject *parent, const char *name, const QStringList & );
     ~ToolsPart();
 
 

@@ -10,18 +10,20 @@
 #include <kapplication.h>
 #include <kdesktopfile.h>
 #include <kdebug.h>
-
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include <kdevcore.h>
 
 
-#include "tools_factory.h"
 #include "tools_part.h"
 #include "toolsconfig.h"
 
+typedef KGenericFactory<ToolsPart> ToolsFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );
 
-ToolsPart::ToolsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
   setInstance(ToolsFactory::instance());
 
