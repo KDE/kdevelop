@@ -66,6 +66,7 @@ QString message(const QCString &key)
     addMessage("OPTIMIZE_OUTPUT_FOR_C", i18n("Optimize output for C"));
     addMessage("OPTIMIZE_OUTPUT_JAVA", i18n("Optimize output for Java"));
     addMessage("SHOW_USED_FILES", i18n("Show used files"));
+    addMessage("SUBGROUPING", i18n("Class members type subgrouping"));
     addMessage("Messages", i18n("Messages"));
     addMessage("QUIET", i18n("Suppress output"));
     addMessage("WARNINGS", i18n("Show warnings"));
