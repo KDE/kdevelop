@@ -113,6 +113,29 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------- CParsedContainer::getMethod()
+ * getMethod()
+ *   Get a method by comparing with another method.
+ *
+ * Parameters:
+ *   aMethod            Method to compare with.
+ *
+ * Returns:
+ *   CParsedMethod *    The method.
+ *   NULL               If not found.
+ *-----------------------------------------------------------------*/
+CParsedMethod *CParsedContainer::getMethod( CParsedMethod &aMethod )
+{
+  CParsedMethod *retVal = NULL;
+
+  for( retVal = methods.first(); 
+       retVal != NULL && !retVal->isEqual( aMethod );
+       retVal = methods.next() )
+    ;
+
+  return retVal;
+}
+
 /*------------------------------ CParsedContainer::getMethodByName()
  * getMethodByName()
  *   Get all methods matching the supplied name. 

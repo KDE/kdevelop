@@ -85,6 +85,11 @@ public: // Metods to set attribute values
 
 public: // Public queries
 
+  /** Get a method by comparing with another method. 
+   * @param aMethod Method to compare with.
+   */
+  CParsedMethod *getMethod( CParsedMethod &aMethod );
+
   /** Get all methods matching the supplied name. 
    * @param aName Name of the method.
    * @return List of methods matching the name.
