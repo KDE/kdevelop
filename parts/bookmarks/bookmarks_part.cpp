@@ -28,6 +28,29 @@
 #include "bookmarks_widget.h"
 #include "bookmarks_part.h"
 
+/** \class BookmarksPart
+This plugin provides a navigation view for bookmarks and
+persistance to editor bookmarks in such a way that it is
+possible to have bookmarks in files that are not open and,
+when implemented, that these bookmarks are saved with the
+project.
+
+\feature provides a navigation view for bookmarks
+
+\authors <a href="jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
+
+\maintainer <a href="jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
+
+\bug Pre KDE-3.2 / KDE-3.1.3, using source reformatting, or
+the ReplacePart will result in katepart messing up bookmarks
+(and breakpoints). There is no current workaround.
+
+\requirement KDE >= 3.1.3
+
+\todo Grouping of bookmarks (?)
+
+\todo Possibility of adding a "comment" to a bookmark (?)
+*/
 
 typedef KGenericFactory<BookmarksPart> BookmarksFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( "kdevbookmarks" ) );

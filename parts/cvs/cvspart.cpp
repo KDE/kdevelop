@@ -56,6 +56,59 @@
 #include "cvsoptionswidget.h"
 #include "checkoutdialog.h"
 
+/** \class CvsPart
+
+ Implementation for the CvsPart command line tool wrapper: it let to do all common
+ used cvs operations (add, commit, remove, ...).
+Currently CvsPart is really primitive when compared to Cervisia.
+The better option will be integrating Cervisia within KDevelop (read FAQ).
+
+What cvspart when compared to Cervisia is really missing:
+  - the visual feedback: there is no way for people to understand what files
+    have been update, patched, modified, ...
+  - lots of useful dialogs like displaying branches ...
+  - the ability to fetch releases for files (hmmm ... would this apply to single
+    files only?)
+
+\authors <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\maintainer <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
+
+\feature Can add, commit, remove, diff, update, log
+\feature Log enables creations of diff files between releases
+\feature Can add files to (remove from) .cvsignore file so they will not be handled
+  by CVS.
+\feature It does intercept events like adding and removing project's files, asking
+  for user action.
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
+
+\requirement <a href="http://www.cvshome.org">CVS</a> >= 1.10.6
+
+
+\todo When committing files must be committed differently by their type: binary
+   files must be committed with "-kb" command line option. A list of file
+   extension is what fits better: when committing two file lists will be
+   separately committed, the one with binary files, the others with text files.
+   This will make easier switching to cvsservice when time arises :-)
+\todo Adding the import feature for checking out modules from repositories: fetch
+   a modules list and ask the user which one he wants to commit
+\todo Additional slots for more complex stuff as status, revert, patch creation, ...
+
+\faq Why not integrate Cervisia in KDevelop?<br>
+   This would be a nice but CervisiaPart component is not really designed for
+   being embedded in KDevelop. We'll need to adapt it at source level to fit
+   in gideon's architecture but this is not possible since Cervisia is QPL.
+   The only thing we could try is to use Cervisia's DCOP cvsservice but this
+   really needs experimentation since I'm not really proficient with DCOP ;-).
+   Feel free to provide and source code for this kind of integration.
+
+\faq Does cvspart support login with :pserver: or :ext: ?<br>
+   You _must_ be logged in before using cvs operations because there is no
+   support for login (this will change if requests come).
+
+*/
+
 KURL KURL_fromPathOrURL( const QString& text )
 {
 #if KDE_VERSION > 305

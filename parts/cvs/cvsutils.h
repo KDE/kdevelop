@@ -20,7 +20,6 @@ class KURL::List;
 
 /**
 * A collection of utility functions for handling cvs repositories.
-* @author KDevelop Authors
 */
 namespace CvsUtils
 {
@@ -33,7 +32,7 @@ namespace CvsUtils
     * param @urls list of KURL to check (the list can be modified during the operation)
     * parap @op type of cvs operation, as pecified in @see CvsOperation enum
     */
-    void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
+    void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsPart::CvsOperation op );
 
     /*
     * Add file(s) to their respective ignore list. This means that, for example, if you

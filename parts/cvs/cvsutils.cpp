@@ -65,13 +65,13 @@ bool CvsUtils::isRegisteredInRepository( const QString &projectDirectory, const 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsUtils::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op )
+void CvsUtils::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsPart::CvsOperation op )
 {
     kdDebug(9000) << "CvsPart::validateURLs() here!" << endl;
 
     // If files are to be added, we can avoid to check them to see if they are registered in the
     // repository ;)
-    if (op == opAdd)
+    if (op == CvsPart::opAdd)
     {
         kdDebug(9000) << "This is a Cvs Add operation and will not be checked against repository ;-)" << endl;
         return;

@@ -82,7 +82,9 @@ To update to a newer doxygen version:
 
 Everything else we can customize for our look & feel.
 
+\authors <a href="mailto:dimitri AT stack.nl">Dimitri van Heesch</a>
 
+\maintainer <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 \maintainer <a href="mailto:a.lucas at tu-bs dot de">Amilcar Lucas</a>
 
 
@@ -94,15 +96,18 @@ Everything else we can customize for our look & feel.
   and the "search engine" option in Doxygen configuration is activated.
 
 
-\requirement You need to install the Doxygen binaries in your machine. This part supports
+\requirement You need to install the <a href="http://www.doxygen.org">Doxygen</a> binaries in your machine. This part supports
 all versions up to the version stated on the version.cpp file. As usual it is
 recomended to use the latest version.
-\requirement It is recomended that you also install dot (tool to generate graphical
+\requirement It is recomended that you also install <a href="http://www.graphviz.org">dot</a> (tool to generate graphical
 dependencies).
 
 
 \bug doesn't resize the configuration GUI properly.
 
+
+\faq <b>Do I need to install Doxygen?</b><br>
+     Yes
 */
 
 typedef KGenericFactory<DoxygenPart> DoxygenFactory;
