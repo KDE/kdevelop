@@ -1,3 +1,9 @@
+2001-07-03  Richard Dale <duke@tipitina.demon.co.uk
+
+	* Added accessor methods to the Class store/parser sources, so that
+          instance variables should no longer need to be accessed directly.
+          Java plugin api sources regenerated to use the new accessor method names
+
 2001-07-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Doc index dialog remembers checked indices and
