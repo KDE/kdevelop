@@ -814,14 +814,16 @@ void CKDevelop::slotProjectManual(){
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    QValueList<int> sizes;
+/*    QValueList<int> sizes;
     sizes << output_view_pos;
     view->setSizes(sizes);
+*/
+    o_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
+/*    QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+*/  }
 
   showOutputView(true);
   error_parser->toogleOff();

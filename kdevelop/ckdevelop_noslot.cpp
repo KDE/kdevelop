@@ -953,14 +953,19 @@ void CKDevelop::showOutputView(bool show){
 
 void CKDevelop::readOptions(){
   config->setGroup("General Options");
+  QValueList<int> sizes;
 
 	/////////////////////////////////////////
 	// GEOMETRY
   QSize size=config->readSizeEntry("Geometry");
-	if(!size.isEmpty())
-		resize(size);
-	else
-		setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
+  if(!size.isEmpty())
+	resize(size);
+  else
+   {
+     size=QSize(780, 560);
+     setGeometry(QApplication::desktop()->width()/2-390, QApplication::desktop()->height()/2-280,
+		size.width(), size.height());
+   }
 
 	/////////////////////////////////////////
 	// BAR STATUS
@@ -1015,34 +1020,39 @@ void CKDevelop::readOptions(){
 	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
-  QValueList<int> sizes;   
-  sizes << config->readNumEntry("view_panner_pos", 80);
-  view->setSizes(sizes);
   bool outputview= config->readBoolEntry("show_output_view", true);
+  output_view_pos=config->readNumEntry("OutputViewHeight", size.height()*20/100);
+  int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
+
+  sizes=view->sizes();
+  sizes[0]=edit_view_pos;
+  sizes[1]=output_view_pos;
+  view->setSizes(sizes);
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
     toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
-    output_view_pos=view->sizes()[0];
   }
-  else{
-    output_view_pos=config->readNumEntry("output_view_pos", 80);
-  }
-  QValueList<int> top_panner_sizes;
-  top_panner_sizes << config->readNumEntry("top_panner_pos", 213);
-  top_panner->setSizes(top_panner_sizes);
+  else
+    o_tab_view->hide();
+
   bool treeview=config->readBoolEntry("show_tree_view", true);
+  tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
+  edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
+  sizes=top_panner->sizes();
+  sizes[0]=tree_view_pos;
+  sizes[1]=edit_view_pos;
+  top_panner->setSizes(sizes);
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     toolBar()->setButton(ID_VIEW_TREEVIEW, true);
     toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
-    tree_view_pos=top_panner->sizes()[0];
   }
-  else{
-    tree_view_pos=config->readNumEntry("tree_view_pos", 213);
-  }
+  else
+    t_tab_view->hide();
+
 	
   QValueList<int> kdlg_panner_sizes;
   kdlg_panner_sizes << config->readNumEntry("kdlg_top_panner_pos", 80);
@@ -1128,12 +1138,13 @@ void CKDevelop::saveOptions(){
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
-  config->writeEntry("view_panner_pos",view->sizes()[0]);
-  config->writeEntry("top_panner_pos",top_panner->sizes()[0]);
-  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->sizes()[0]);
 
-  config->writeEntry("tree_view_pos",tree_view_pos);
-  config->writeEntry("output_view_pos",output_view_pos);
+  config->writeEntry("EditViewHeight",view->sizes()[0]);
+  config->writeEntry("OutputViewHeight",view->sizes()[1]);
+  config->writeEntry("ClassViewWidth",top_panner->sizes()[0]);
+  config->writeEntry("EditViewWidth",top_panner->sizes()[1]);
+
+  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->sizes()[0]);
   config->writeEntry("properties_view_pos", properties_view_pos);
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
