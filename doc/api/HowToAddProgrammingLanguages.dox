@@ -18,15 +18,15 @@
     - (add to QEditor if not available elsewhere)
 	.
   - Build tool (make/ant/etc)
-  - Source file templates
-  - Application wizard
+  - \ref applicationTemplates
+  - \ref sourceFileTemplates
   - Source code abbreviations
     - (ife expands to an if else statement, etc)
 	.
   - Source formatter (prettyprint functionality)
-  - Debugger
+  - \ref debuggerSupport
     - (gdb/jdb/??? integration)
-  - Compiler plugins
+  - \ref compilerPlugins
   - KDevLang project template
   .
 
@@ -146,16 +146,18 @@ in, extend generic build tool via build system plugin.
 
 \section Templ Templates
 
-\subsection AppWiz Application Wizard Templates
+\subsection applicationTemplates Application Wizard Templates
 
 <B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddTemplates (HowToAddTemplates.dox file)
 and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
 
-\subsection FCreateTpl File Create Templates
+\subsection sourceFileTemplates Source File Templates
 
 Another thing to do is to create <B>file create templates</B>. They are prototypes for a source files of your language. These prototypes are placed in
-<code>parts/filecreate/file-templates</code> dir and have names equal to the extensions of language source files. The description of the prototypes is placed
-in <code>parts/filecreate/template-info.xml</code>. Consult <code>parts/filecreate/README</code> for further information.
+<code>parts/filecreate/file-templates</code> dir or <code>languages/YOURLANGUAGE/file_templates</code> and have names equal to the extensions of language source files.
+The description of the prototypes is placed in <code>parts/filecreate/template-info.xml</code>.
+
+Consult FileCreatePart (parts/filecreate/README.dox file) and \ref howToAddFileTemplates for further information.
 
 \subsection CdAbbr Code Abbreviation Templates
 
@@ -171,13 +173,13 @@ indentation) you can improve QEditor included in KDevelop (<code>parts/qeditor</
 To obtain source formatter functionality (that is already available to
 c-based languages) you can extend astyle library (<code>lib/astyle</code>) that is used by KDevelop to format sources.
 
-\section Debugger Debugger Support
+\section debuggerSupport Debugger Support
 
 The last thing to have a complete language support in KDevelop is to
 write a <B>debugger support</B>. KDevelop already provides GDB support
 (<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
 
-\section Compiler Compiler plugins
+\section compilerPlugins Compiler plugins
 
 There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options. Compiler plugins must implement KDevCompilerOptions interface.
 

@@ -33,6 +33,7 @@ First of all read the \ref KDev3Arch then you can find more information on how t
   - \ref howToAddPlugins
   - \ref howToAddProgrammingLanguages
   - \ref howToAddTemplates
+  - \ref howToAddFileTemplates
 
 Additionally you may also want to find out \ref howToDocument.
 

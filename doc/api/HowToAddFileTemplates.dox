@@ -1,0 +1,15 @@
+/** \file HowToAddFileTemplates.dox
+  * \brief How to add file templates to the file create part
+  */
+/** \page howToAddFileTemplates How to add file templates to the file create part
+
+File templates provide the developer with a basic file.
+They are prototypes for a source files of your language. These prototypes are placed in
+<code>parts/filecreate/file-templates</code> dir or <code>languages/YOURLANGUAGE/file_templates</code>
+and have names equal to the extensions of language source files.
+
+The description of the prototypes is placed in <code>parts/filecreate/template-info.xml</code>.
+
+That's all! :)
+
+*/
