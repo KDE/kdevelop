@@ -23,7 +23,10 @@ KMimeType::List KDevLanguageSupport::mimeTypes()
 
 QString KDevLanguageSupport::formatTag( const Tag& tag )
 {
+// class Tag is undefined therefore gcc-2.x does not want cast it - let then there be "unused" warning for gcc<3.0 !
+#if __GNUC__ >= 3
     Q_UNUSED( tag );
+#endif
     return QString::null;
 }
 
