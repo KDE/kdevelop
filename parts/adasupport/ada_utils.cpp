@@ -7,6 +7,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 
@@ -29,7 +30,7 @@ QString ada_spec_filename (const QString& comp_unit_name)
 {
    QString fn (comp_unit_name.lower ());
 
-   fn.replace ('.', '-');
+   fn.replace (QRegExp("."), "-");
    fn += ".ads";
    return fn;
 }
