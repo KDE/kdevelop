@@ -28,6 +28,13 @@
 class KDevLanguageSupport;
 class ImplementationWidget;
 
+/**
+Qt Designer integration base class.
+Contains language-independent implementation part of a @ref KDevDesignerIntegration interface.
+Ready to use in KDevelop language support plugins.
+
+Subclasses of this class should reimplement only pure virtual functions in the common case.
+*/
 class QtDesignerIntegration : public KDevDesignerIntegration
 {
 Q_OBJECT
@@ -49,7 +56,15 @@ public slots:
     bool selectImplementation(const QString &formName);
     
 protected:
+    /**Reimplement this to add a function to a class. This means you need to modify
+    the source file and add actual code of a function.*/
     virtual void addFunctionToClass(KInterfaceDesigner::Function function, ClassDom klass) = 0;
+    /**Modifies name to be a name of a implementation file for languages that have
+    separate files for interface and implementation parts of a class. For example,
+    C++ language support plugin will do:
+    @code
+    name.replace(".h", ".cpp");
+    @endcode*/
     virtual void processImplementationName(QString &name);
     
     //Form file - derived class name 

@@ -28,6 +28,15 @@
 class KListViewItem;
 class KDevLanguageSupport;
 
+/**
+Base class for implementation creation widgets.
+Contains language-independent implementation widget that can be used
+to create or select an implementation of a form in designer.
+
+Implementations could be subclasses or simple files with callbacks, etc.
+
+Subclasses of this class should reimplement only pure virtual functions in the common case.
+*/
 class ImplementationWidget : public CreateImplemenationWidgetBase
 {
 Q_OBJECT
@@ -35,9 +44,11 @@ public:
     ImplementationWidget(KDevLanguageSupport *part, QWidget* parent = 0, const char* name = 0, bool modal = false);
     ~ImplementationWidget();
     /*$PUBLIC_FUNCTIONS$*/
-    
+
+    /**@returns The %DOM of selected (or created) class.*/    
     ClassDom selectedClass();
     
+    /**Executes implementation widget for a form @p formName.*/
     int exec(const QString &formName);
 
 public slots:
@@ -45,12 +56,18 @@ public slots:
 
 protected:    
     /*$PROTECTED_FUNCTIONS$*/
+    /**Sets up the dialog. No need to reimplement unless you want to restrict
+    the number of classes being displayed as possible implementation classes.*/
     void init(const QString &formName);
     
     void processNamespaces(NamespaceDom dom, KListViewItem *parent);
     void processClasses(ClassDom dom, KListViewItem *parent);
+    
+    /**Creates a class and adds it to a project. No need to reimplement.*/
     bool createClass();
     
+    /**Reimplement to create actual files with the form implementation.
+    @return The list of absolute paths to a files created.*/
     virtual QStringList createClassFiles() = 0;
 
 protected slots:

@@ -27,7 +27,10 @@
 
 #include <kurl.h>
 
-
+/**
+* Base class to handle signals from the editor that relate to breakpoints 
+* and the execution point of the debugger.
+*/
 class KDevDebugger : public QObject
 {
   Q_OBJECT

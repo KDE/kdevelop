@@ -1,0 +1,36 @@
+/**
+@mainpage The KDevelop %Debugger Support Library
+
+This library contains classes to implement debugger support for a programming language.
+
+<b>Link with</b>: -llang_debugger
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/languages/debugger
+
+\section usingdebugger Where to use this library
+
+Each debugger support plugin must interact with an editor to set breakpoints,
+jump to execution points, etc. This kind of interaction is implemented in
+@ref Debugger class. Your debugger support plugin just need to create
+an instance of @ref Debugger class and connect its signals, for example:
+@code
+m_debugger = new Debugger( partController() );
+
+connect( m_debugger, SIGNAL(toggledBreakpoint(const QString &, int)),
+            debuggerBreakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
+connect( m_debugger, SIGNAL(editedBreakpoint(const QString &, int)),
+            debuggerBreakpointWidget, SLOT(slotEditBreakpoint(const QString &, int)) );
+connect( m_debugger, SIGNAL(toggledBreakpointEnabled(const QString &, int)),
+            debuggerBreakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
+@endcode
+Then m_debugger instance can be used for example, to jump to the execution point:
+@code
+m_debugger->gotoExecutionPoint(fileUrl, lineNumber);
+@endcode
+or to set a breakpoint:
+@code
+m_debugger->setBreakpoint(fileName, lineNumber, id, enabled, pending);
+@endcode
+
+*/
+

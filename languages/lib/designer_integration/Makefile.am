@@ -10,6 +10,6 @@ libdesignerintegration_la_SOURCES = implementationwidgetbase.ui \
 langincludedirdir = $(includedir)/kdevelop/languages/designer_integration
 langincludedir_HEADERS = qtdesignerintegration.h implementationwidget.h implementationwidgetbase.h
 
-DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevinterfaces
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevinterfaces kdevutil
 DOXYGEN_PROJECTNAME = KDevelop Designer Integration Support Library
 include ../../../Doxyfile.am
