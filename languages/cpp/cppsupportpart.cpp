@@ -209,7 +209,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                                "for external libraries.") );
     action->setEnabled(false);
 	
-	m_createGetterSetterAction = new KAction(i18n("Create get/set Methods"), 0, this, SLOT(slotCreateAccessMethods()), actionCollection(), "edit_create_getter_setter");
+	m_createGetterSetterAction = new KAction(i18n("Create Accessor Methods"), 0, this, SLOT(slotCreateAccessMethods()), actionCollection(), "edit_create_getter_setter");
 	
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
