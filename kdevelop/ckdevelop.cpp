@@ -1887,7 +1887,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   // set the make arguments
   process.clearArguments();
   process << flags;
-  process << make_cmd << "-f" << makefile;
+  process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
   process << target;
   
   // why is this beeping business necessary? shouldn't there be a switch?
@@ -3203,7 +3203,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 //   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1));
+  messages_widget->insertAtEnd(QCString(buffer,buflen+1), MakeOutputItem::Diagnostic);
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){

@@ -82,36 +82,23 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   setSelectionMode(QListBox::Extended);
 }
 
-//void CMakeOutputWidget::setCursorPosition (int, int)
-//{
-//}
-
-//QString CMakeOutputWidget::textLine (int)
-//{
-//  return QString::null;
-//}
-
-//void CMakeOutputWidget::cursorPosition (int *, int *)
-//{
-//}
-
-void CMakeOutputWidget::insertAtEnd(const QString& text)
+void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputItem::Type defaultType)
 {
   buf += text;
   int pos;
 
   while ( (pos = buf.find('\n')) != -1)
   {
-    processLine(buf.left(pos));
+    processLine(buf.left(pos), defaultType);
     buf.remove(0, pos+1);
   }
 }
 
-void CMakeOutputWidget::processLine(const QString& line)
+void CMakeOutputWidget::processLine(const QString& line, MakeOutputItem::Type type)
 {
   QString fileInErr = QString::null;
   int lineInErr = -1;
-  MakeOutputItem::Type type = MakeOutputItem::Normal;
+//  MakeOutputItem::Type type = MakeOutputItem::Normal;
 
   const int errorGccFileGroup = 1;
   const int errorJadeFileGroup = 1;
@@ -162,16 +149,6 @@ void CMakeOutputWidget::processLine(const QString& line)
   setBottomItem(numRows()-1);
 }
 
-//void CMakeOutputWidget::mouseReleaseEvent(QMouseEvent*)
-//{
-//  emit clicked();
-//}
-//
-//void CMakeOutputWidget::keyPressEvent ( QKeyEvent* event)
-//{
-//  emit keyPressed(event->ascii());
-//}
-//
 void CMakeOutputWidget::start()
 {
   clear();

@@ -76,32 +76,21 @@ public:
   CMakeOutputWidget(QWidget* parent, const char* name=0);
   ~CMakeOutputWidget() {};
 
-  void insertAtEnd(const QString& s);
+  void insertAtEnd(const QString& s,
+                MakeOutputItem::Type defaultType=MakeOutputItem::Normal);
 
-//  void setCursorPosition (int, int);
-//  QString textLine (int);
-//  void cursorPosition (int *, int *);
-//  QString text() { return QString::null; }
   void start();
   void viewNextError();
   void viewPreviousError();
 
-protected:
-//  void mouseReleaseEvent(QMouseEvent* event);
-//  void keyPressEvent ( QKeyEvent* event);
-
 signals:
-  /** emited, if the mouse was clicked over the widget*/
-//  void clicked();
-//  void keyPressed(int key);
   void switchToFile(const QString& filename, int lineNo);
 
 public slots:
   void slotClicked (QListBoxItem* item);
 
 private:
-  void processLine(const QString& line);
-
+  void processLine(const QString& line, MakeOutputItem::Type defaultType);
   QString buf;
   QStack<QString> dirStack;
   KRegExp enterDir;
