@@ -12,7 +12,7 @@
 #include <kparts/part.h>
 #include <kdialogbase.h>
 #include <kapplication.h>
-#include <kregexp.h>
+#include <qregexp.h>
 
 
 #include "kdevcore.h"
@@ -161,8 +161,8 @@ void RubySupportPart::parse(const QString &fileName)
     return;
   QTextStream stream(&f);
 
-  KRegExp classre("^\\s*class\\s+([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
-  KRegExp methodre("^\\s*def\\s+([A-Za-z0-9_]+).*$");
+  QRegExp classre("^\\s*class\\s+([A-Z][A-Za-z0-9_]+)\\s*(<\\s*([A-Z][A-Za-z0-9_:]+))?$");
+  QRegExp methodre("^\\s*def\\s+([A-Za-z0-9_]+).*$");
 
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
@@ -175,13 +175,13 @@ void RubySupportPart::parse(const QString &fileName)
   while (!stream.atEnd()) {
     rawline = stream.readLine();
     line = rawline.stripWhiteSpace().local8Bit();
-    if (classre.match(line)) {
+    if (classre.search(line) != -1) {
       lastClass = codeModel()->create<ClassModel>();
-      lastClass->setName(classre.group(1));
+      lastClass->setName(classre.cap(1));
       lastClass->setFileName( fileName );
       lastClass->setStartPosition( lineNo, 0 );
 
-      QString parent = classre.group(3);//.stripWhiteSpace()?
+      QString parent = classre.cap(3);//.stripWhiteSpace()?
       if (!parent.isEmpty())
       {
         kdDebug() << "Add parent " << parent << endl;
@@ -201,9 +201,9 @@ void RubySupportPart::parse(const QString &fileName)
           kdDebug() << "Add class " << lastClass->name() << endl;
           m_file->addClass( lastClass );
       }
-    } else if (methodre.match(line)) {
+    } else if (methodre.search(line) != -1) {
       FunctionDom method = codeModel()->create<FunctionModel>();
-      method->setName(methodre.group(1));
+      method->setName(methodre.cap(1));
       kdDebug() << "Add method: " << method->name() << endl;
       method->setFileName( fileName );
       method->setStartPosition( lineNo, 0 );
