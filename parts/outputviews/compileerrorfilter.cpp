@@ -62,7 +62,7 @@ void CompileErrorFilter::processLine( const QString& line )
         	        file    = regExp.cap( format->fileGroup );
 	                lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
 	                text    = regExp.cap( format->textGroup );
-			if (regExp.cap(3).startsWith("warning", false))
+			if (regExp.cap(3).contains("warning", false))
 				isWarning = true;
 			break;
 		}
