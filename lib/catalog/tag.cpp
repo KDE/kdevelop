@@ -21,74 +21,96 @@
 #include <qdatastream.h>
 
 Tag::Tag()
-    : m_kind( 0 ), m_flags( 0 ),
-      m_startLine( 0 ), m_startColumn( 0 ),
-      m_endLine( 0 ), m_endColumn( 0 )
 {
+    data = new TagData();
+    data->kind = 0;
+    data->flags = 0;
+    data->startLine = 0;
+    data->startColumn = 0;
+    data->endLine = 0;
+    data->endColumn = 0;
 }
 
 Tag::Tag( const Tag& source )
-    : m_kind( source.m_kind ),
-    m_flags( source.m_flags ),
-    m_name( source.m_name ),
-    m_scope( source.m_scope ),
-    m_fileName( source.m_fileName ),
-    m_startLine( source.m_startLine ), m_startColumn( source.m_startColumn ),
-    m_endLine( source.m_endLine ), m_endColumn( source.m_endColumn ),
-    m_attributes( source.m_attributes )
 {
+    data = source.data;
+    data->ref();
 }
 
 Tag::~Tag()
 {
+    if( data->deref() ){
+	delete( data );
+	data = 0;
+    }
+}
+
+void Tag::detach()
+{
+    if( data->count != 1 )
+	*this = copy();
+}
+
+Tag Tag::copy()
+{
+    Tag t;
+    
+    t.data->id = data->id;
+    t.data->kind = data->kind;
+    t.data->flags = data->flags;
+    t.data->name = data->name;
+    t.data->scope = data->scope;
+    t.data->fileName = data->fileName;
+    t.data->startLine = data->startLine;
+    t.data->startColumn = data->startColumn;
+    t.data->endLine = data->endLine;
+    t.data->endColumn = data->endColumn;
+    t.data->attributes = data->attributes;
+    
+    return t;
 }
 
 Tag& Tag::operator = ( const Tag& source )
 {
-    m_id = source.m_id;
-    m_kind = source.m_kind;
-    m_flags = source.m_flags;
-    m_name = source.m_name;
-    m_scope = source.m_scope;
-    m_fileName = source.m_fileName;
-    m_startLine = source.m_startLine;
-    m_startColumn = source.m_startColumn;
-    m_endLine = source.m_endLine;
-    m_endColumn = source.m_endColumn;
-    m_attributes = source.m_attributes;
+    source.data->ref();
+    if ( data->deref() ){
+	delete data;
+    }
+    data = source.data;
+    
     return( *this );
 }
 
 void Tag::load( QDataStream& stream )
 {
     stream
-        >> m_id
-	>> m_kind
-	>> m_flags
-	>> m_name
-	>> m_scope
-	>> m_fileName
-	>> m_startLine
-	>> m_startColumn
-	>> m_endLine
-	>> m_endColumn
-	>> m_attributes;
+        >> data->id
+	>> data->kind
+	>> data->flags
+	>> data->name
+	>> data->scope
+	>> data->fileName
+	>> data->startLine
+	>> data->startColumn
+	>> data->endLine
+	>> data->endColumn
+	>> data->attributes;
 }
 
 void Tag::store( QDataStream& stream ) const
 {
     stream
-        << m_id
-	<< m_kind
-	<< m_flags
-	<< m_name
-	<< m_scope
-	<< m_fileName
-	<< m_startLine
-	<< m_startColumn
-	<< m_endLine
-	<< m_endColumn
-	<< m_attributes;
+        << data->id
+	<< data->kind
+	<< data->flags
+	<< data->name
+	<< data->scope
+	<< data->fileName
+	<< data->startLine
+	<< data->startColumn
+	<< data->endLine
+	<< data->endColumn
+	<< data->attributes;
 }
 
 QDataStream& operator << ( QDataStream& s, const Tag& t)

@@ -478,13 +478,10 @@ inline void GCatalog<Tp>::removeItems( const QValueList< QueryArgument > & args 
 template <class Tp>
 inline QCString GCatalog<Tp>::generateId()
 {
-    QCString asStr;
-    int n = 0;
     for( ;; ){
-	++n;
-
-	unsigned long l = d->rnd.getLong( 999999 );
-	asStr.setNum( l );
+	QCString asStr;
+	QDataStream s( asStr, IO_WriteOnly );
+	s << d->rnd.getLong( 999999 );
 
 	if( !hasItem(asStr) ){
 	    return asStr;

@@ -22,6 +22,7 @@
 
 #include <qmap.h>
 #include <qvariant.h>
+#include <qshared.h>
 
 class QDataStream;
 
@@ -59,42 +60,46 @@ public:
 
     QCString id() const
     {
-        return m_id;
+        return data->id;
     }
 
     void setId( const QCString& id )
     {
-        m_id = id;
+	detach();
+        data->id = id;
     }
 
     int kind() const
     {
-        return m_kind;
+        return data->kind;
     }
 
     void setKind( int kind )
     {
-        m_kind = kind;
+	detach();
+        data->kind = kind;
     }
 
     unsigned long flags() const
     {
-        return m_flags;
+        return data->flags;
     }
 
     void setFlags( unsigned long flags )
     {
-        m_flags = flags;
+	detach();
+        data->flags = flags;
     }
 
     QString fileName() const
     {
-        return m_fileName;
+        return data->fileName;
     }
 
     void setFileName( const QString& fileName )
     {
-        m_fileName = fileName;
+	detach();
+        data->fileName = fileName;
     }
 
     QString path( const QString& sep = QString::fromLatin1("::") ) const
@@ -107,46 +112,50 @@ public:
 
     QString name() const
     {
-        return m_name;
+        return data->name;
     }
 
     void setName( const QString& name )
     {
-        m_name = name;
+	detach();
+        data->name = name;
     }
 
     QStringList scope() const
     {
-        return m_scope;
+        return data->scope;
     }
 
     void setScope( const QStringList& scope )
     {
-        m_scope = scope;
+	detach();
+        data->scope = scope;
     }
 
     void getStartPosition( int* line, int* column ) const
     {
-	if( line ) *line = m_startLine;
-	if( column ) *column = m_startColumn;
+	if( line ) *line = data->startLine;
+	if( column ) *column = data->startColumn;
     }
 
     void setStartPosition( int line, int column )
     {
-	m_startLine = line;
-	m_startColumn = column;
+	detach();
+	data->startLine = line;
+	data->startColumn = column;
     }
 
     void getEndPosition( int* line, int* column ) const
     {
-	if( line ) *line = m_endLine;
-	if( column ) *column = m_endColumn;
+	if( line ) *line = data->endLine;
+	if( column ) *column = data->endColumn;
     }
 
     void setEndPosition( int line, int column )
     {
-	m_endLine = line;
-	m_endColumn = column;
+	detach();
+	data->endLine = line;
+	data->endColumn = column;
     }
 
     bool hasAttribute( const QCString& name ) const
@@ -160,65 +169,77 @@ public:
 	    name == "endLine" ||
 	    name == "endColumn" )
 	    return true;
-        return m_attributes.contains( name );
+        return data->attributes.contains( name );
     }
 
     QVariant attribute( const QCString& name ) const
     {
-	if( name == "kind" )
-	    return m_kind;
+	if( name == "id" )
+	    return data->id;
+	else if( name == "kind" )
+	    return data->kind;
 	else if( name == "name" )
-	    return m_name;
+	    return data->name;
 	else if( name == "scope" )
-	    return m_scope;
+	    return data->scope;
 	else if( name == "fileName" )
-	    return m_fileName;
+	    return data->fileName;
 	else if( name == "startLine" )
-	    return m_startLine;
+	    return data->startLine;
 	else if( name == "startColumn" )
-	    return m_startColumn;
+	    return data->startColumn;
 	else if( name == "endLine" )
-	    return m_endLine;
+	    return data->endLine;
 	else if( name == "endColumn" )
-	    return m_endColumn;
-        return m_attributes[ name ];
+	    return data->endColumn;
+        return data->attributes[ name ];
     }
 
     void setAttribute( const QCString& name, const QVariant& value )
     {
-	if( name == "kind" )
-	    m_kind = value.toInt();
+	detach();
+	if( name == "id" )
+	    data->id = value.toCString();
+	else if( name == "kind" )
+	    data->kind = value.toInt();
 	else if( name == "name" )
-	    m_name = value.toString();
+	    data->name = value.toString();
 	else if( name == "scope" )
-	    m_scope = value.toStringList();
+	    data->scope = value.toStringList();
 	else if( name == "fileName" )
-	    m_fileName = value.toString();
+	    data->fileName = value.toString();
 	else if( name == "startLine" )
-	    m_startLine = value.toInt();
+	    data->startLine = value.toInt();
 	else if( name == "startColumn" )
-	    m_startColumn = value.toInt();
+	    data->startColumn = value.toInt();
 	else if( name == "endLine" )
-	    m_endLine = value.toInt();
+	    data->endLine = value.toInt();
 	else if( name == "endColumn" )
-	    m_endColumn = value.toInt();
+	    data->endColumn = value.toInt();
 	else
-	    m_attributes[ name ] = value;
+	    data->attributes[ name ] = value;
     }
-
+    
     void load( QDataStream& stream );
     void store( QDataStream& stream ) const;
 
 private:
-    QCString m_id;
-    int m_kind;
-    unsigned long m_flags;
-    QString m_name;
-    QStringList m_scope;
-    QString m_fileName;
-    int m_startLine, m_startColumn;
-    int m_endLine, m_endColumn;
-    QMap<QCString, QVariant> m_attributes;
+    Tag copy();
+    void detach();
+    
+private:
+    struct TagData: public QShared
+    {
+	QCString id;
+	int kind;
+	unsigned long flags;
+	QString name;
+	QStringList scope;
+	QString fileName;
+	int startLine, startColumn;
+	int endLine, endColumn;
+	QMap<QCString, QVariant> attributes;
+    } *data;
 };
 
 QDataStream& operator << ( QDataStream&, const Tag& );
