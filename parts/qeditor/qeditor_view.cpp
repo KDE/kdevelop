@@ -701,7 +701,8 @@ void QEditorView::setupActions()
 
     new KAction( i18n("&Configure Editor..."), "configure editor", 0,
 		 doc(), SLOT(configDialog()),
-                 actionCollection(), "settings_configure_editor" );
+                 actionCollection(), "set_confdlg" );
+//                 actionCollection(), "settings_configure_editor" );
 }
 
 void QEditorView::expandAllBlocks()

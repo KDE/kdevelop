@@ -28,7 +28,7 @@
   </Menu>
 
   <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
-    <Action name="settings_configure_editor" group="configure_merge"/>
+    <Action name="set_confdlg" group="configure_merge" />
   </Menu>
 </MenuBar>
 

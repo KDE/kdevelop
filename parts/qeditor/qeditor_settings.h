@@ -39,6 +39,8 @@ public:
     KConfig* config() { return m_config; }
     const KConfig* config() const { return m_config; }
 
+    void readConfig() { init(); }
+
     // groups
     QString generalGroup() const { return QString::fromLatin1("General"); }
 

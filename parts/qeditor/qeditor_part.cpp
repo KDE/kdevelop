@@ -38,6 +38,7 @@
 
 #include "qeditor_part.h"
 #include "qeditor_view.h"
+#include "qeditor_settings.h"
 #include "qeditor_browserextension.h"
 #include "qeditor.h"
 #include "paragdata.h"
@@ -731,6 +732,39 @@ void QEditorPart::setMarksUserChangable(uint markMask)
     m_currentView->markerWidget()->setMarksUserChangable(markMask);
 }
 
+// -- ConfigInterface ---------------------------------------------------------------------
+
+void QEditorPart::readConfig()
+{
+    QEditorSettings::self()->readConfig();
+    m_currentView->configChanged();
+}
+
+void QEditorPart::writeConfig()
+{
+    kdDebug(9032) << "QEditorPart::writeConfig() - not implemented yet!" << endl;
+}
+
+void QEditorPart::readConfig(KConfig *)
+{
+    kdDebug(9032) << "QEditorPart::readConfig(KConfig *) - not implemented yet!" << endl;
+}
+
+void QEditorPart::writeConfig(KConfig *)
+{
+    kdDebug(9032) << "QEditorPart::writeConfig(KConfig *) - not implemented yet!" << endl;
+}
+
+void QEditorPart::readSessionConfig(KConfig *)
+{
+    kdDebug(9032) << "QEditorPart::readSessionConfig(KConfig *) - not implemented yet!" << endl;
+}
+
+void QEditorPart::writeSessionConfig(KConfig *)
+{
+    kdDebug(9032) << "QEditorPart::writeSessionConfig(KConfig *) - not implemented yet!" << endl;
+}
+
 void QEditorPart::configDialog()
 {
     KDialogBase dlg(KDialogBase::Tabbed, i18n("QEditor Options"),
@@ -755,16 +789,23 @@ void QEditorPart::configDialog()
 
     emit configWidget( &dlg );
 
-    if( dlg.exec() ){
-	QPtrList<QEditorView> views = QEditorPartFactory::views();
-	QPtrListIterator<QEditorView> it( views );
-	while( it.current() ){
-	    kdDebug(9032) << "------------------------ update configuration -----------------" << endl;
-	    it.current()->configChanged();
-	    ++it;
-	}
+    if ( dlg.exec() )
+    {
+        QEditorSettings::self()->config()->sync();
+        m_currentView->configChanged();
+/*
+        QPtrList<QEditorView> views = QEditorPartFactory::views();
+        QPtrListIterator<QEditorView> it( views );
+        while( it.current() )
+        {
+            it.current()->configChanged();
+            ++it;
+        }
+*/        
     }
 }
+
+// ----------------------------------------------------------------------------------
 
 QSourceColorizer* QEditorPart::colorizer() const
 {

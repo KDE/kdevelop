@@ -32,6 +32,7 @@
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/searchinterface.h>
 #include <ktexteditor/markinterface.h>
+#include <ktexteditor/configinterface.h>
 #if (KDE_VERSION > 305)
 # include <ktexteditor/markinterfaceextension.h>
 #else
@@ -71,7 +72,8 @@ class QEditorPart:
 	public KTextEditor::HighlightingInterface,
 	public KTextEditor::SearchInterface,
 	public KTextEditor::MarkInterface,
-	public KTextEditor::MarkInterfaceExtension
+	public KTextEditor::MarkInterfaceExtension,
+	public KTextEditor::ConfigInterface
 {
     Q_OBJECT
 public:
@@ -101,12 +103,37 @@ public:
     QSourceColorizer* colorizer() const;
     QEditorIndenter* indenter() const;
 
-public slots:
-    void configDialog();
-
 signals:
     void fileNameChanged();
     void configWidget( KDialogBase* );
+
+// -- ConfigInterface ----------------------------------------------------------------------
+public slots:
+    /**
+      Read/Write the config to the standard place where this editor
+      part saves it config, say: read/save default values for that
+      editor part
+    */
+    virtual void readConfig ();
+    virtual void writeConfig ();
+
+    /**
+      Read/Write the config of the part to a given kconfig object
+      to store the settings in a different place than the standard
+    */
+    virtual void readConfig (KConfig *);
+    virtual void writeConfig (KConfig *);
+
+    /**
+      Read/Write session config of only this document/view/plugin
+    */
+    virtual void readSessionConfig (KConfig *);
+    virtual void writeSessionConfig (KConfig *);
+
+    /**
+      Shows a config dialog for the part
+    */
+    virtual void configDialog();
 
 // -- MarkInterface ------------------------------------------------------------------------
 public:
