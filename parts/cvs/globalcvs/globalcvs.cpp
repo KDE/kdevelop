@@ -23,7 +23,7 @@ typedef KGenericFactory<GlobalCvs> GlobalCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevglobalcvs, GlobalCvsFactory( "kdevglobalcvs" ) );
 
 GlobalCvs::GlobalCvs(QObject *parent, const char *name, const QStringList &)
-        : KDevGlobalVersionControl(parent, name,"Cvs") {
+        : KDevGlobalVersionControl("CVS",parent, name) {
 
     setInstance(GlobalCvsFactory::instance());
     setXMLFile("kdevglobalcvs.rc");
@@ -44,7 +44,7 @@ QWidget* GlobalCvs::newProjectWidget(QWidget *parent) {
     return form;
 }
 
-void GlobalCvs::createNewProject(QString dir) {
+void GlobalCvs::createNewProject(const QString& dir) {
     if (!form)
         return;
     QString init("");

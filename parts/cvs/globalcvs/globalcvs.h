@@ -25,7 +25,7 @@ public:
     ~GlobalCvs();
 
     QWidget * newProjectWidget(QWidget *parent);
-    void createNewProject(QString dir);
+    void createNewProject(const QString& dir);
 
 public slots:
     void slotImportCvs();

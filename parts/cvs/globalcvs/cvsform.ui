@@ -35,7 +35,7 @@ for your new project</string>
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Cvs Root :</string>
+                <string>CVS Root :</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1">
@@ -43,10 +43,10 @@ for your new project</string>
                 <cstring>root_edit</cstring>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Enter your Cvs Root location</string>
+                <string>Enter your CVS Root location</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Cvs Root location goes here
+                <string>CVS Root location goes here
 e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home/cvs&lt;/tt&gt;</string>
             </property>
         </widget>
@@ -77,7 +77,7 @@ e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home
                 <string>Enter the name of the repository</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Cvs Repository name goes here
+                <string>CVS Repository name goes here
 Most of the thime you'll just reuse the project name</string>
             </property>
         </widget>
@@ -116,7 +116,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Cvs Repository :</string>
+                <string>CVS Repository :</string>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0">
@@ -135,7 +135,7 @@ Most of the thime you'll just reuse the project name</string>
                 <string>Init Root</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Check if you defined a new Cvs Root</string>
+                <string>Check if you defined a new CVS Root</string>
             </property>
         </widget>
     </grid>
