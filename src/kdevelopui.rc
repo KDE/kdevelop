@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="16" name="kdevelop" >
+<kpartgui version="17" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -41,18 +41,10 @@
   <Menu name="view">
     <text>&amp;View</text>
     <DefineGroup name="history_operations"/>
+    <Action name="history_back"/>
+    <Action name="history_forward"/>
     <Separator/>
-    <Action name="view_next_window"/>
-    <Action name="view_previous_window"/>
-    <Action name="view_first_window"/>
-    <Action name="view_last_window"/>
     <Action name="file_switchto"/>
-    <Separator/>
-    <Action name="view_tree_tool_views"/>
-    <Action name="view_output_tool_views"/>
-    <Action name="raise_left_tabbar"/>
-    <Action name="raise_right_tabbar"/>
-    <Action name="raise_bottom_tabbar"/>
     <Action name="raise_editor"/>
     <Separator/>
     <DefineGroup name="error_operations"/>
@@ -128,12 +120,12 @@
   <text>Main Toolbar</text>
   <Action name="project_open" />
   <DefineGroup name="project_operations"/>
+  <Action name="history_back"/>
+  <Action name="history_forward"/>
   <DefineGroup name="file_operations"/>
   <DefineGroup name="print_merge"/>
   <DefineGroup name="edit_operations"/>
   <DefineGroup name="find_operations"/>
-  <Action name="tree_view"/>
-  <Action name="output_view"/>
   <DefineGroup name="view_operations"/>
   <DefineGroup name="zoom_operations"/>
   <Merge/>
@@ -151,8 +143,6 @@
   <text>Browser Toolbar</text>
   <DefineGroup name="class_operations" />
   <DefineGroup name="browser_operations" />
-  <Action name="browser_back" />
-  <Action name="browser_forward" />
   <Merge/>
 </ToolBar>
 
