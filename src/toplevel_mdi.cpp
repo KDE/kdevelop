@@ -197,7 +197,8 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
 
 void TopLevelMDI::embedSelectViewRight ( QWidget* view, const QString& title )
 {
-	return;
+  //we do not have a right pane so we insert it in the default pos
+  embedSelectView( view, title );
 }
 
 void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
