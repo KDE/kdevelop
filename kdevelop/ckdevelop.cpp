@@ -2343,6 +2343,41 @@ void CKDevelop::slotHelpSearch(){
 	delete help_srch_dlg;
 }
 
+
+void CKDevelop::showDocHelp(const char *bookname)
+{
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+  // first try the locale setting
+  file = strpath + klocale->language() + '/' + bookname +"/index.html";
+  
+  if( !QFileInfo( file ).exists() ){
+    // not found: use the default
+    file = strpath + "default/" + bookname +"/index.html";
+  }
+  slotURLSelected(browser_widget, file, 1, "test");  
+}
+
+void CKDevelop::slotHelpContents(){
+  showDocHelp("kdevelop");  
+}
+
+void CKDevelop::slotHelpProgramming(){
+  showDocHelp("kdevelop/programming");  
+}
+
+void CKDevelop::slotHelpTutorial(){
+  showDocHelp("kdevelop/tutorial");  
+}
+
+void CKDevelop::slotHelpKDELibRef(){
+  showDocHelp("kdevelop/kde_libref");  
+}
+
+void CKDevelop::slotHelpKDE2DevGuide(){
+  showDocHelp("kdevelop/addendum");  
+}
+
 void CKDevelop::slotHelpReference(){
 
   QString strpath = KApplication::kde_htmldir().copy() + "/";
@@ -2363,48 +2398,48 @@ void CKDevelop::slotHelpReference(){
   slotURLSelected(browser_widget, file,1,"test");
 }
 
+void CKDevelop::slotHelpTipOfDay(){
+	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
+	tipdlg->show();
 
-void CKDevelop::slotHelpQtLib(){
-  config->setGroup("Doc_Location");
-  QString doc_qt = config->readEntry("doc_qt", QT_DOCDIR);
-  slotURLSelected(browser_widget, doc_qt + "/index.html",1,"test");
+	delete tipdlg;	
 }
 
-
-void CKDevelop::showLibsDoc(const char *libname)
-{
-  config->setGroup("Doc_Location");
-  QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString url = doc_kde + libname + "/index.html";
-  slotURLSelected(browser_widget, url,1,"test");
-}
+void CKDevelop::slotHelpHomepage(){
+  if(vfork() > 0) {
+    // drop setuid, setgid
+    setgid(getgid());
+    setuid(getuid());
     
-void CKDevelop::slotHelpKDECoreLib(){
-  showLibsDoc("kdecore");
-}
-
-
-void CKDevelop::slotHelpKDEGUILib(){
-  showLibsDoc("kdeui");
-}
-
-
-void CKDevelop::slotHelpKDEKFileLib(){
-  showLibsDoc("kfile");
-}
-
-
-void CKDevelop::slotHelpKDEHTMLLib(){
-  config->setGroup("Doc_Location");
-  QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString file = doc_kde + "khtmlw/index.html";
-  if( !QFileInfo( file ).exists() ){
-    // not found: use khtml
-    file = doc_kde + "khtml/index.html";
+    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
+    _exit(0);
   }
-  slotURLSelected(browser_widget, file, 1, "test");
 }
+void CKDevelop::slotHelpBugReport(){
+    
+    config->setGroup("General Options");
+    TBugReportInfo info;
+    info.author = config->readEntry("author_name","");
+    info.email = config->readEntry("author_email","");
+    info.os = config->readEntry("os","");
+    info.kde_version = config->readEntry("kde_version","");
+    info.qt_version = config->readEntry("qt_version","");
+    info.compiler = config->readEntry("compiler","");
+    info.sendmail_command = config->readEntry("sendmail_command","/usr/sbin/sendmail");
 
+    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
+    if( dlg.exec()){
+			config->writeEntry("author_name",dlg.name);
+			config->writeEntry("author_email",dlg.email_address);
+			config->writeEntry("os",dlg.os);
+			config->writeEntry("qt_version",dlg.qt_version);
+			config->writeEntry("kde_version",dlg.kde_version);
+			config->writeEntry("compiler",dlg.compiler);
+			config->writeEntry("sendmail_command",dlg.sendmail_command);
+    }
+    
+    
+}
 
 void CKDevelop::slotHelpAPI(){
   if(project){
@@ -2452,79 +2487,6 @@ void CKDevelop::slotHelpManual(){
   }
 }
 
-void CKDevelop::slotHelpContents(){
-    
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
-  QString file;
-  // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/index.html";
-  
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = strpath + "default/" + "kdevelop/index.html";
-  }
-  slotURLSelected(browser_widget, file, 1, "test");
-}
-
-void CKDevelop::slotHelpTutorial(){
-
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
-  QString file;
-  // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/programming/index.html";
-
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = strpath + "default/" + "kdevelop/programming/index.html";
-  }
-  slotURLSelected(browser_widget, file, 1, "test");
-	
-}
-void CKDevelop::slotHelpTipOfDay(){
-	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
-	tipdlg->show();
-
-	delete tipdlg;	
-}
-
-
-
-
-void CKDevelop::slotHelpHomepage(){
-  if(vfork() > 0) {
-    // drop setuid, setgid
-    setgid(getgid());
-    setuid(getuid());
-    
-    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
-    _exit(0);
-  }
-}
-void CKDevelop::slotHelpBugReport(){
-    
-    config->setGroup("General Options");
-    TBugReportInfo info;
-    info.author = config->readEntry("author_name","");
-    info.email = config->readEntry("author_email","");
-    info.os = config->readEntry("os","");
-    info.kde_version = config->readEntry("kde_version","");
-    info.qt_version = config->readEntry("qt_version","");
-    info.compiler = config->readEntry("compiler","");
-    info.sendmail_command = config->readEntry("sendmail_command","/usr/sbin/sendmail");
-
-    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
-    if( dlg.exec()){
-			config->writeEntry("author_name",dlg.name);
-			config->writeEntry("author_email",dlg.email_address);
-			config->writeEntry("os",dlg.os);
-			config->writeEntry("qt_version",dlg.qt_version);
-			config->writeEntry("kde_version",dlg.kde_version);
-			config->writeEntry("compiler",dlg.compiler);
-			config->writeEntry("sendmail_command",dlg.sendmail_command);
-    }
-    
-    
-}
 void CKDevelop::slotHelpAbout(){
   QMessageBox aboutmsg(this, "About KDevelop");
   aboutmsg.setCaption(i18n("About KDevelop..."));
@@ -3941,20 +3903,19 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
 
   ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switchs to KDevelop's User Manual"))
-  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switchs to the KDevelop Programming Handbook"))
-  ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,												i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
-
+  ON_STATUS_MSG(ID_HELP_PROGRAMMING,                			i18n("Switchs to the KDevelop Programming Handbook"))
+  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switchs to the KDE Tutorials Handbook"))
+  ON_STATUS_MSG(ID_HELP_KDELIBREF,          			        i18n("Switchs to the KDE Library Reference Guide Handbook"))
+  ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,           			    i18n("Switchs to the KDE 2 Developer´s Guide Handbook"))
   ON_STATUS_MSG(ID_HELP_REFERENCE,                			  i18n("Switchs to the C/C++-Reference"))
-  ON_STATUS_MSG(ID_HELP_QT_LIBRARY,                			  i18n("Switchs to the QT-Documentation"))
-  ON_STATUS_MSG(ID_HELP_KDE_CORE_LIBRARY,          			  i18n("Switchs to the KDE-Core-Documentation"))
-  ON_STATUS_MSG(ID_HELP_KDE_GUI_LIBRARY,           			  i18n("Switchs to the KDE-GUI-Documentation"))
-  ON_STATUS_MSG(ID_HELP_KDE_KFILE_LIBRARY,          			i18n("Switchs to the KDE-File-Documentation"))
-  ON_STATUS_MSG(ID_HELP_KDE_HTML_LIBRARY,          			  i18n("Switchs to the KDE-Html-Documentation"))
+  
+  ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,												i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
+  ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
+  ON_STATUS_MSG(ID_HELP_BUG_REPORT,			                 	i18n("Sends a bug-report email to the KDevelop Team"))
+  
   ON_STATUS_MSG(ID_HELP_PROJECT_API,		           			  i18n("Switchs to the project's API-Documentation"))
   ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switchs to the project's User-Manual"))
 
-  ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
-  ON_STATUS_MSG(ID_HELP_BUG_REPORT,			                 	i18n("Sends a bug-report email to the KDevelop Team"))
 
   ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))

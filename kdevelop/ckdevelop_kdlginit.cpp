@@ -19,7 +19,7 @@
 // This file contains the construction of the kdialogedit views including menubar and toolbar
 #include <qtoolbutton.h>
 #include "ckdevelop.h"
-
+#include "doctreeview.h"
 #include "./kdlgedit/kdlgedit.h"
 #include "./kdlgedit/kdlgeditwidget.h"
 #include "./kdlgedit/kdlgpropwidget.h"
@@ -251,6 +251,12 @@ void CKDevelop::initKDlgMenuBar(){
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
   kdlg_menubar->insertItem(i18n("&Options"), kdlg_options_menu);
 
+  QString manual=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("index.html"));    
+  QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));    
+  QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));    
+  QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));    
+  QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));    
+  
   kdlg_help_menu=new QPopupMenu;
   kdlg_help_menu->insertItem(Icon("back.xpm"),i18n("Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
   kdlg_help_menu->insertItem(Icon("forward.xpm"),i18n("Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
@@ -259,22 +265,16 @@ void CKDevelop::initKDlgMenuBar(){
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
   kdlg_help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   kdlg_help_menu->insertSeparator();
-  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"), manual,this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"), programming,this,SLOT(slotHelpProgramming()),0 ,ID_HELP_PROGRAMMING);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"), tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"), kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"), addendum,this,SLOT(slotHelpKDE2DevGuide()),0 ,ID_HELP_KDE2_DEVGUIDE);
+  kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
+  kdlg_help_menu->insertSeparator();	
 	kdlg_help_menu->insertItem(Icon("idea.xpm"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   kdlg_help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   kdlg_help_menu->insertItem(Icon("filemail.xpm"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
-  kdlg_help_menu->insertSeparator();
-  kdlg_help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
-  kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
-  kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
-				 SLOT(slotHelpKDECoreLib()),0,ID_HELP_KDE_CORE_LIBRARY);
-  kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&GUI-Library"),this,
-				 SLOT(slotHelpKDEGUILib()),0,ID_HELP_KDE_GUI_LIBRARY);
-  kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&KFile-Library"),this,
-				 SLOT(slotHelpKDEKFileLib()),0,ID_HELP_KDE_KFILE_LIBRARY);
-  kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&HTML-Library"),this,
-				 SLOT(slotHelpKDEHTMLLib()),0,ID_HELP_KDE_HTML_LIBRARY);
   kdlg_help_menu->insertSeparator();
   kdlg_help_menu->insertItem(i18n("Project &API-Doc"),this,
 				      SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);

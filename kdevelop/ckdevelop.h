@@ -500,35 +500,32 @@ public:
   void slotHelpSearchText(QString text);
   /** shows the Search for Help on.. dialog to insert a search expression */
   void slotHelpSearch();
-  /** shows the C/C++-referenc */
-  void slotHelpReference();
-  /** shows the Qt-doc */
-  void slotHelpQtLib();
-  void showLibsDoc(const char *libname);
-  /** shows the kdecore-doc */
-  void slotHelpKDECoreLib();
-  /** shows the kdeui-doc */
-  void slotHelpKDEGUILib();
-  /** shows the kfile-doc */
-  void slotHelpKDEKFileLib();
-  /** shows the khtml / khtmlw -doc */
-  void slotHelpKDEHTMLLib();
-  /** shows the API of the current project */
-  void slotHelpAPI();
-  /** shows the manual of the current project */
-  void slotHelpManual();
   /** shows the KDevelop manual */
   void slotHelpContents();
-  /** shows the Programming handbook */
+  /** shows the KDevelop Programming handbook */
+  void slotHelpProgramming();
+  /** shows the Tutorial handbook */
   void slotHelpTutorial();
+  /** shows the KDE library reference */
+  void slotHelpKDELibRef();
+  /** shows the KDE 2 developer guide */
+  void slotHelpKDE2DevGuide();
+  /** shows the C/C++-referenc */
+  void slotHelpReference();
   /** shows the tip of the day */
   void slotHelpTipOfDay();
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
   /** shows the bug report dialog*/
   void slotHelpBugReport();
+  /** shows the API of the current project */
+  void slotHelpAPI();
+  /** shows the manual of the current project */
+  void slotHelpManual();
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
+  /** switches to the handbook selected: manual, programming, tutorial... */  
+  void showDocHelp(const char *bookname);
 
   void slotHelpDlgNotes();
 

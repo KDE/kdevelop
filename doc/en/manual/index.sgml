@@ -1105,10 +1105,28 @@ will be displayed if more than one hit was reported for the search on one page.<
 <item><bf/<idx/Search for Help on...//Opens the Search for Help on... dialog that lets you search for a specific expression you want
 help on.
 <p>
-<item><bf/<idx/User Manual/		<idx/F1// Opens the User's Manual to KDevelop index page so you have access to this manual.
+<item><bf/<idx/The User Manual to KDevelop/		<idx/F1// Opens the User's Manual to KDevelop index page (this handbook).
 <p>
-<item><bf/<idx/Programming Handbook/ / Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handbook"> index
-page to access the programming manuals
+<item><bf/<idx/The KDevelop Programming Handbook// 
+Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handbook">
+index page. This handbook contains a complete programming guide to KDE development.
+<p>
+<item><bf/<idx/KDE Application Tutorials// 
+Changes to the index page of the KDE Application Tutorials handbook.
+This handbook explains how to build the Qt tutorial applications and introduces you to KDE programming by developing 
+an example application.
+<p>
+<item><bf/<idx/The KDE Library Reference Guide// 
+Changes to the index page of the KDE Library Reference Guide. This handbook contains detailed information about using the KDE/Qt libraries
+separated on topics such as event handling.
+<p>
+<item><bf/<idx/The KDE 2 Developer´s Guide// 
+Changes to the index page of the KDE 2 Developer´s Guide. This Handbook contains information about the most recent KDE development
+and how to prepare your application to be KDE 2-ready.
+<p>
+<item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
+reference is not installed, an error page shows you how to get the reference and how to install it correctly.
+
 <p>
 <item><bf/<idx/Tip of the Day// Opens the Tip of the Day dialog to inform you about KDevelop's
 features.
@@ -1118,18 +1136,6 @@ features.
 <item><bf/<idx/Bug Report/.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by
 email. See <ref id="Bug Reporting" name="Bug Reporting">
 <p>
-<item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
-reference is not installed, an error page shows you how to get the reference and how to install it correctly.
-<p>
-<item><bf/<idx/Qt-Library// Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.
-<p>
-<item><bf/<idx/KDE-Core-Library// Opens the class-index file of the KDE-Core library documentation.<nidx/kdecore/
-<p>
-<item><bf/<idx/KDE-GUI-Library//  As above for the <idx/GUI/-library<nidx/kdeui/
-<p>
-<item><bf/<idx/KDE-KFile-Library// As above for the KFile-library
-<p>
-<item><bf/<idx/KDE-HTML-Library// As above for the <idx/HTML/-library<p>
 <item><bf/<idx/Project-API-Doc// Changes to the project's class-documentation index file.<nidx/KDoc/<nidx/API/
 <p>
 <item><bf/<idx/Project-User-Manual// Opens the User manual's index file of your current project. This can be used to review the

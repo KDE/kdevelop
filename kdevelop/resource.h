@@ -226,34 +226,33 @@
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
-#define ID_HELP_BACK                 18010
-#define ID_HELP_FORWARD              18020
+#define ID_HELP_BACK                    18010
+#define ID_HELP_FORWARD                 18020
 
-#define ID_HELP_BROWSER_RELOAD			18022
-#define ID_HELP_BROWSER_STOP				18023
+#define ID_HELP_BROWSER_RELOAD          18022
+#define ID_HELP_BROWSER_STOP            18023
 
-#define ID_HELP_SEARCH_TEXT          18030
-#define ID_HELP_SEARCH              18040
+#define ID_HELP_SEARCH_TEXT             18030
+#define ID_HELP_SEARCH                  18040
 
-#define ID_HELP_CONTENTS             18050
-#define ID_HELP_TUTORIAL						 18051
-#define ID_HELP_TIP_OF_DAY						18052
-#define ID_HELP_REFERENCE           18060
+#define ID_HELP_CONTENTS                18050
+#define ID_HELP_PROGRAMMING             18051
+#define ID_HELP_TUTORIAL                18052
+#define ID_HELP_KDELIBREF               18053
+#define ID_HELP_KDE2_DEVGUIDE           18054
+#define ID_HELP_REFERENCE               18055
 
-#define ID_HELP_QT_LIBRARY           18070
-#define ID_HELP_KDE_CORE_LIBRARY     18080
-#define ID_HELP_KDE_GUI_LIBRARY      18090
-#define ID_HELP_KDE_KFILE_LIBRARY    18100
-#define ID_HELP_KDE_HTML_LIBRARY     18110
+#define ID_HELP_TIP_OF_DAY              18060
+#define ID_HELP_HOMEPAGE                18070
+#define ID_HELP_BUG_REPORT              18080
 
-#define ID_HELP_PROJECT_API			      18120
-#define ID_HELP_USER_MANUAL          18130
-#define ID_HELP_HOMEPAGE            18140
-#define ID_HELP_BUG_REPORT          18145
-#define ID_HELP_DLGNOTES            18149
-#define ID_HELP_ABOUT               18150
+#define ID_HELP_PROJECT_API             18120
+#define ID_HELP_USER_MANUAL             18130
+#define ID_HELP_ABOUT                   18150
 
-#define ID_HELP_WHATS_THIS     			18160
+#define ID_HELP_DLGNOTES                18149
+
+#define ID_HELP_WHATS_THIS              18160
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-File-menu-entries

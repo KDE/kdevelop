@@ -31,7 +31,6 @@
 #include "cdoctreepropdlg.h"
 #include "cproject.h"
 #include "doctreeview.h"
-#include <stdio.h>
 
 // There are still problems with BEN's workaround in certain circumstances
 // so for the time being I've used my solution. jbb 07-02-2000
@@ -56,20 +55,20 @@ ListViewDocItem::ListViewDocItem(KListViewItem *parent,
 {
     setPixmap(0, Icon("mini/mini-doc.xpm"));
 }
-
-
-/**
- * A list view item that is decorated with a book icon.
- * This typically represents one manual. When the user "opens"
- * the book, the according icon is changed.
- */
-class ListViewBookItem : public KListViewItem
-{
-public:
-    ListViewBookItem( KListViewItem *parent,
-                      const char *text, const char *filename );
-    virtual void setOpen(bool o);
-};
+//
+//
+///**
+// * A list view item that is decorated with a book icon.
+// * This typically represents one manual. When the user "opens"
+// * the book, the according icon is changed.
+// */
+//class ListViewBookItem : public KListViewItem
+//{
+//public:
+//    ListViewBookItem( KListViewItem *parent,
+//                      const char *text, const char *filename );
+//    virtual void setOpen(bool o);
+//};
 
 
 ListViewBookItem::ListViewBookItem(KListViewItem *parent,
@@ -144,19 +143,7 @@ void ListViewFolderItem::refresh()
  * the setOpen() implementation is currently nothing more than
  * a dirty hack.
  */
-class DocTreeKDevelopBook : public ListViewBookItem
-{
-public:
-    DocTreeKDevelopBook( KListViewItem *parent, const char *text,
-                         const char *filename, bool expandable=false )
-        : ListViewBookItem(parent, text, locatehtml(filename))
-        { setExpandable(expandable); }
-    virtual void setOpen(bool o);
-private:
-    void readSgmlIndex(FILE *f);
-    static QString locatehtml(const char *filename);
-};
-
+// moved class declaration to doctreeview.h because I need the static members in CKDevelop -Ralf Nolden
 
 QString DocTreeKDevelopBook::locatehtml(const char *filename)
 {
@@ -229,6 +216,29 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
         }
 }
 
+QString DocTreeKDevelopBook::readIndexTitle(const char* book)
+{
+  FILE *f;
+  if ( (f = fopen(book, "r")) != 0)
+  {
+    QString title;
+    char buf[512];
+    while (fgets(buf, sizeof buf, f))
+    {
+      // search for the TITLE start and end tag, store title between the two positions minus the tag length
+      QString s = buf;
+      int pos1 = s.find("<TITLE>");
+      if (pos1 == -1)
+          continue;
+      int pos2 = s.find("</TITLE>", pos1+7);
+      if (pos2 == -1)
+          continue;
+      title = s.mid(pos1+7, pos2-(pos1+7));
+    }    
+    fclose(f);
+    return title;
+  }
+}
 
 void DocTreeKDevelopBook::setOpen(bool o)
 {
@@ -262,22 +272,42 @@ public:
 
 void DocTreeKDevelopFolder::refresh()
 {
-    ListViewFolderItem::refresh();
+  ListViewFolderItem::refresh();
 
-    (void) new DocTreeKDevelopBook(this, i18n("Welcome !"),
-                                   "welcome/index.html", false);
-    (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
-                                   "index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
-                                   "programming/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
-                                   "tutorial/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
-                                   "kde_libref/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
-                                   "addendum/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
-                                   "reference/C/cref.html");
+  QString welcome=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("welcome/index.html"));    
+  QString manual=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("index.html"));    
+  QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));    
+  QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));    
+  QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));    
+  QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));    
+    
+  (void) new DocTreeKDevelopBook(this, welcome,
+                                 "welcome/index.html", false);
+  (void) new DocTreeKDevelopBook(this, manual,
+                                 "index.html", true);
+  (void) new DocTreeKDevelopBook(this, programming,
+                                 "programming/index.html", true);
+  (void) new DocTreeKDevelopBook(this, tutorial,
+                                 "tutorial/index.html", true);
+  (void) new DocTreeKDevelopBook(this, kdelibref,
+                                 "kde_libref/index.html", true);
+  (void) new DocTreeKDevelopBook(this, addendum,
+                                 "addendum/index.html", true);
+//  (void) new DocTreeKDevelopBook(this, i18n("Welcome !"),
+//                                 "welcome/index.html", false);
+//  (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
+//                                 "index.html", true);
+//  (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
+//                                 "programming/index.html", true);
+//  (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
+//                                 "tutorial/index.html", true);
+//  (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
+//                                 "kde_libref/index.html", true);
+//  (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
+//                                 "addendum/index.html", true);
+    
+  (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
+                                 "reference/C/cref.html");
 
     //horrible hack to counter the QListView bug DO NOT CHANGE without thinking about it
     //and looking closely at the implementation of QListView, expacially how are the pointers
@@ -358,12 +388,61 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
           qt_path= qt_path+"/";
         return qt_path + "index.html";
     }
+#ifdef WITH_KDOC2
+    QString indexFile;
+    indexFile =  kde_path + "/kdoc-reference/" + libname +".kdoc";
+    if(!(QFile::exists(indexFile) || QFile::exists(indexFile+".gz"))){
+    // return the standard way to get to the index file if the kdoc file doesn´t exist    
+        if (kde_path.right(1) != "/")
+          kde_path= kde_path+"/";
+        return kde_path + libname + "/index.html";
+    }
+    FILE *f;
+    if ( (f = fopen(indexFile, "r")) != 0)
+    {
+      char buf[512];
+      int count=0;
+      QString baseurl;
+      while (fgets(buf, sizeof buf, f))
+      {
+        QString s = buf;
+        if (s.left(11) == "<BASE URL=\"")
+        {
+            int pos2 = s.find("\">", 11);
+            if (pos2 != -1)
+                baseurl = s.mid(11, pos2-11);
+        }
+      }
+      fclose(f);
+      return baseurl+"/index.html";
+    }
+    else if ( (f = popen(QString("gzip -c -d ")
+                         + indexFile + ".gz 2>/dev/null", "r")) != 0)
+    {
+      char buf[512];
+      int count=0;
+      QString baseurl;
+      while (fgets(buf, sizeof buf, f))
+      {
+        QString s = buf;
+        if (s.left(11) == "<BASE URL=\"")
+        {
+            int pos2 = s.find("\">", 11);
+            if (pos2 != -1)
+                baseurl = s.mid(11, pos2-11);
+        }
+      }
+      fclose(f);
+      return baseurl+"/index.html";
+    }
+#else    
     else
     {
         if (kde_path.right(1) != "/")
           kde_path= kde_path+"/";
         return kde_path + libname + "/index.html";
     }
+#endif
 }
 
 int DocTreeKDELibsBook::readKdoc2Index(FILE *f)

@@ -21,6 +21,7 @@
 #define _DOCTREEVIEW_H_
 #define OLD
 #include "klistview.h"
+#include <stdio.h>
 
 
 class DocTreeKDevelopFolder;
@@ -28,6 +29,7 @@ class DocTreeKDELibsFolder;
 class DocTreeOthersFolder;
 class DocTreeProjectFolder;
 class DocTreeDocbaseFolder;
+class ListViewBookItem;
 class CProject;
 
 
@@ -69,6 +71,48 @@ private:
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
 };
+
+/*************************************/
+/* Folder "KDevelop"                */
+/*************************************/
+
+
+/**
+ * A list view item that is decorated with a book icon.
+ * This typically represents one manual. When the user "opens"
+ * the book, the according icon is changed.
+ */
+class ListViewBookItem : public KListViewItem
+{
+public:
+    ListViewBookItem( KListViewItem *parent,
+                      const char *text, const char *filename );
+    virtual void setOpen(bool o);
+};
+
+
+/**
+ * Here we specialize on a KDevelop book. The constructor takes
+ * only the last part of the file name as argument and tries to
+ * locate the file according to the locale set.
+ * The constructor allows an argument expandable, but
+ * the setOpen() implementation is currently nothing more than
+ * a dirty hack.
+ */
+class DocTreeKDevelopBook : public ListViewBookItem
+{
+public:
+    DocTreeKDevelopBook( KListViewItem *parent, const char *text,
+                         const char *filename, bool expandable=false )
+        : ListViewBookItem(parent, text, locatehtml(filename))
+        { setExpandable(expandable); }
+    virtual void setOpen(bool o);
+    static QString readIndexTitle(const char* book);
+    static QString locatehtml(const char *filename);
+private:
+    void readSgmlIndex(FILE *f);
+};
+
 #endif
 
 

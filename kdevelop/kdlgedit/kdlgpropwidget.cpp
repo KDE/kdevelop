@@ -248,16 +248,16 @@ void AdvListView::linkclicked(QString str)
 {
   if (str.upper() == "KDEV")
     pCKDevel->slotHelpContents();
-  if (str.upper() == "KDECORE")
-    pCKDevel->slotHelpKDECoreLib();
-  if (str.upper() == "KDEUI")
-    pCKDevel->slotHelpKDEGUILib();
-  if (str.upper() == "KDEKFILELIB")
-    pCKDevel->slotHelpKDEKFileLib();
-  if (str.upper() == "KDEHTML")
-    pCKDevel->slotHelpKDEHTMLLib();
-  if (str.upper() == "QT")
-    pCKDevel->slotHelpQtLib();
+//  if (str.upper() == "KDECORE")
+//    pCKDevel->slotHelpKDECoreLib();
+//  if (str.upper() == "KDEUI")
+//    pCKDevel->slotHelpKDEGUILib();
+//  if (str.upper() == "KDEKFILELIB")
+//    pCKDevel->slotHelpKDEKFileLib();
+//  if (str.upper() == "KDEHTML")
+//    pCKDevel->slotHelpKDEHTMLLib();
+//  if (str.upper() == "QT")
+//    pCKDevel->slotHelpQtLib();
   if (str.upper() == "C")
     pCKDevel->slotHelpReference();
   if (str.upper() == "ABOUT")
@@ -279,7 +279,6 @@ void AdvListView::linkclicked(QString str)
 	_exit(0);
       }
     }
-
 }
 
 void AdvListView::help()
