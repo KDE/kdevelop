@@ -393,13 +393,14 @@ static PyObject *pydcopc_demarshal_double(PyObject */*self*/, PyObject *arg)
 }
 
 
-static DCOPClient *client = 0;
+DCOPClient *pydcopc_client = 0;
 
 static DCOPClient *dcopClient()
 {
     if (!DCOPClient::mainClient()) {
-        client = new DCOPClient;
-        if (!client->attach()) {
+        qDebug("Creating dcop client");
+        pydcopc_client = new DCOPClient;
+        if (!pydcopc_client->attach()) {
             PyErr_SetString(PyExc_RuntimeError, "DCOP: could not attach");
             return NULL;
         }
@@ -482,7 +483,7 @@ public:
         slot.append("()");
         receivers[slot] = func;
         Py_INCREF(func);
-        bool res = connectDCOPSignal(appname, objname, signal, slot, true);
+        bool res = connectDCOPSignal(appname, objname, signal, slot, false);
         qDebug("PyDCOP connect %s/%s/%s/%s has result %s",
                appname.data(), objname.data(),
                signal.data(), slot.data(),
@@ -507,13 +508,13 @@ private:
 };
 
 
-static PyDCOP_Dispatcher *dispatcher = 0;
+DCOPObject *pydcopc_dispatcher = 0;
 
-PyDCOP_Dispatcher *signalDispatcher()
+static PyDCOP_Dispatcher *signalDispatcher()
 {
-    if (!dispatcher)
-        dispatcher = new PyDCOP_Dispatcher();
-    return dispatcher;
+    if (!pydcopc_dispatcher)
+        pydcopc_dispatcher = new PyDCOP_Dispatcher();
+    return static_cast<PyDCOP_Dispatcher*>(pydcopc_dispatcher);
 }
 
 

@@ -13,6 +13,7 @@
 #include <Python.h>
 #include <stdlib.h>
 #include <dcopclient.h>
+#include <dcopobject.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -25,6 +26,7 @@ static ScriptingPart *scripting_part;
 extern "C" {
     void initkdevelopc();
     void initpydcopc();
+    int __kde_do_not_unload;
 }
 
 typedef KGenericFactory<ScriptingPart> ScriptingFactory;
@@ -73,8 +75,14 @@ ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringLis
 }
 
 
+extern DCOPObject *pydcopc_dispatcher;
+
+
 ScriptingPart::~ScriptingPart()
-{}
+{
+    delete pydcopc_dispatcher;
+    pydcopc_dispatcher = 0;
+}
 
 
 PyObject *ScriptingPart::addMenuItem(PyObject *args)
