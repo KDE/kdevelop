@@ -11,11 +11,6 @@
  *                                                                         *
 ***************************************************************************/
 
-
-/***** SHOULD ONLY BE HERE UNLESS KDE 3.1 IS RELEASED! *****/
-#include "kdeversion.h"
-/*************/
-
 #include "doxygenconfigwidget.h"
 
 #include <qscrollview.h>
@@ -26,11 +21,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-/***** SHOULD ONLY BE HERE UNLESS KDE 3.1 IS RELEASED! *****/
-#if KDE_VERSION >= 310
-/*************/
-#include <kaccelmanager.h>
-#endif
 
 #include "config.h"
 #include "input.h"
@@ -160,12 +150,6 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
         emit toggle(di.currentKey(), ((InputBool *)obj)->getState());
     }
    
- /***** SHOULD ONLY BE HERE UNLESS KDE 3.1 IS RELEASED! *****/
-   #if KDE_VERSION >= 310
-/*************/
-	KAcceleratorManager::manage(this);
-    #endif
-
     m_fileName = fileName;
     loadFile();
 }
