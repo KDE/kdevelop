@@ -20,7 +20,7 @@
 
 
 #include "cclassview.h"
-#include "ccreatedocdatabasedlg.h"
+#include "setup/ccreatedocdatabasedlg.h"
 #include "cdocbrowser.h"
 #include "ceditwidget.h"
 //#include "cerrormessageparser.h"
@@ -34,7 +34,7 @@
 #include "ctabctl.h"
 #include "ctoolclass.h"
 #include "ctoolsconfigdlg.h"
-#include "cupdatekdedocdlg.h"
+#include "setup/cupdatekdedocdlg.h"
 #include "ckonsolewidget.h"
 
 #include "dbgtoolbar.h"
