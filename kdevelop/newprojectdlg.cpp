@@ -35,13 +35,13 @@
 #include <qheader.h>
 #include <kmessagebox.h>
 #include "newprojectdlg.h"
-#include "partloader.h"
 #include "appwizard.h"
 #include "ctoolclass.h"
+#include "KDevComponentManager.h"
+#include "kdevelopcore.h"
 
 
-
-NewProjectDlg::NewProjectDlg(ProjectSpace* projectSpace,QWidget *parent, const char *name,bool modal )
+NewProjectDlg::NewProjectDlg(KDevelopCore* kdc, ProjectSpace* projectSpace,QWidget *parent, const char *name,bool modal )
   : NewProjectDlgBase(parent,name,modal){
   
   m_current_appwizard_plugin=0; // no current
@@ -53,9 +53,9 @@ NewProjectDlg::NewProjectDlg(ProjectSpace* projectSpace,QWidget *parent, const c
   m_pProjectSpace = projectSpace;
   m_newProjectSpace = true;
   m_pSelectedProjectSpace =0;
+  m_pKDevelopCore = kdc;
 
 
-  
   //  QStringList::Iterator it;		
   KStandardDirs* std_dirs = KGlobal::dirs();
   QStringList plugin_list;
@@ -230,10 +230,11 @@ void NewProjectDlg::slotOk(){
     m_newProjectSpace = false;
   }
   if (m_newProjectSpace) {
-    QObject *psObj = PartLoader::loadByName(this, m_current_prjspace_name, "ProjectSpace");
-    m_pSelectedProjectSpace = static_cast<ProjectSpace*>(psObj);
+		m_pKDevelopCore->closeProjectSpace();
+    (void) m_pKDevelopCore->m_pKDevComponentManager->loadByName(this, m_current_prjspace_name, "ProjectSpace");
+    m_pSelectedProjectSpace = static_cast<ProjectSpace*>(m_pKDevelopCore->m_pKDevComponentManager->component("ProjectSpace"));
     if(m_pSelectedProjectSpace == 0){
-      KMessageBox::sorry(0, i18n("Sorry can't create ProjectSpace with type %1")
+      KMessageBox::sorry(0, i18n("Sorry, can't create ProjectSpace with type %1")
 		       .arg(m_current_prjspace_name));
       return;
     }

@@ -35,6 +35,7 @@
 #include "projectspace.h"
 #include "appwizard.h"
 #include "newprojectdlgbase.h"
+#include "kdevelopcorebase.h"
 
 /** displays all available projecttypes/projectspaces in different categories,
     user can choise if KDevelop should generate a new ProjectSpace + Project
@@ -45,10 +46,12 @@
   @author Sandy Meier
   */
 
+class KDevelopCore;
+
 class NewProjectDlg : public NewProjectDlgBase  {
 Q_OBJECT
 public: 
-	NewProjectDlg(ProjectSpace* projectSpace=0,QWidget *parent=0, const char *name=0,bool modal=true);
+	NewProjectDlg(KDevelopCore* kdc, ProjectSpace* projectSpace=0,QWidget *parent=0, const char *name=0,bool modal=true);
 	virtual	~NewProjectDlg();
 	void initDialog();
 	bool newProjectSpaceCreated();
@@ -79,7 +82,7 @@ public:
 	QPixmap* m_pixmap;
 	ProjectSpace* m_pProjectSpace;
 	ProjectSpace* m_pSelectedProjectSpace;
-	
+	KDevelopCore* m_pKDevelopCore;	
 	
 	// others
 	bool m_project_name_modified;
