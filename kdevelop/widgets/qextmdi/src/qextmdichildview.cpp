@@ -87,7 +87,7 @@ QRect QextMdiChildView::internalGeometry()
    if (mdiParent()) {
       // get the client area coordinates inside the MDI child frame
       QRect    posInFrame = geometry();
-      // map these values to the parent of the MDI child frame 
+      // map these values to the parent of the MDI child frame
       // (this usually is the MDI child area) and return
       QPoint   ptTopLeft     = mdiParent()->mapToParent(posInFrame.topLeft());
       QPoint   ptBottomRight = mdiParent()->mapToParent(posInFrame.bottomRight());
@@ -292,7 +292,7 @@ void QextMdiChildView::youAreAttached(QextMdiChildFrm *lpC)
 void QextMdiChildView::youAreDetached()
 {
    setCaption(m_szCaption);
-   
+
    setTabCaption(m_sTabCaption);
    if(myIconPtr())setIcon(*(myIconPtr()));
    setFocusPolicy(QWidget::StrongFocus);
@@ -332,7 +332,7 @@ QPixmap * QextMdiChildView::myIconPtr()
 
 void QextMdiChildView::focusInEvent(QFocusEvent *e)
 {
-   // every widget get a FocusInEvent when a popup menu is opened!?! -> maybe bug of QT
+   // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
    if (e && ((e->reason())==QFocusEvent::Popup)) {
       return;
    }
@@ -436,11 +436,12 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
    }
    else if ( (e->type() == QEvent::ChildInserted) && isAttached() ) {
-      // if we got a new child and we are attached to the MDI system we 
+      // if we got a new child and we are attached to the MDI system we
       // install ourself as event filter for the new child and its children
-      // (as we did when we were added to the MDI system). 
+      // (as we did when we were added to the MDI system).
       QObject* pNewChild = ((QChildEvent*)e)->child();
-      if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) ) {
+      if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) &&
+           !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("KMessageBox")) ) {
          QWidget* pNewWidget = (QWidget*)pNewChild;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code

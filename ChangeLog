@@ -1,3 +1,7 @@
+2001-05-14  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix in QextMDI: consider a messagebox with parent==this isn't a real child widget :-/
+      Don't insert it in the emulated internal MDI-view focus-loop.
+
 2001-05-12  rokrau@yahoo.com
     * Update: The functionality of the CTags search implementation is
       being concentrated in an implementation class so it can later
