@@ -2,14 +2,24 @@ INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
-libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp 			       kdevlanguagesupport.cpp kdevversioncontrol.cpp 			       kdevmakefrontend.cpp kdevappfrontend.cpp kdevcompileroptions.cpp 			       kdevpartcontroller.cpp kdevapi.cpp kdevdifffrontend.cpp 			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp 			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp 			       KDevPartControllerIface.skel KDevPartControllerIface.cpp 			       kdevplugin.cpp kdevdebugger.cpp kdevglobalversioncontrol.cpp kdevglobalversioncontrol.h
+libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp kdevlanguagesupport.cpp \
+			       kdevversioncontrol.cpp kdevmakefrontend.cpp kdevappfrontend.cpp \
+			       kdevcompileroptions.cpp kdevpartcontroller.cpp kdevapi.cpp \
+			       kdevdifffrontend.cpp KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
+			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
+			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
+			       KDevPartControllerIface.skel KDevPartControllerIface.cpp \
+			       kdevplugin.cpp kdevdebugger.cpp kdevglobalversioncontrol.cpp \
+			       kdevglobalversioncontrol.h \
+			       kde30x_markinterfaceextension.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
 			  kdevlanguagesupport.h kdevversioncontrol.h kdevdifffrontend.h \
 			  kdevmakefrontend.h kdevappfrontend.h kdevcompileroptions.h \
 			  KDevMakeFrontendIface.h KDevAppFrontendIface.h KDevCoreIface.h \
-			  kdevplugin.h kdevdebugger.h
+			  kdevplugin.h kdevdebugger.h \
+			  kde30x_markinterfaceextension.h
 
 noinst_HEADERS = kdevapi.h
 

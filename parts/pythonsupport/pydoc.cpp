@@ -9,6 +9,7 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 #include <kprocess.h>
+#include <kdeversion.h>
 
 using namespace KIO;
 
@@ -30,11 +31,19 @@ void PydocProtocol::get(const KURL& url)
     mimeType("text/html");
     key = url.path();
 
+#if (KDE_VERSION > 305)    
     QString cmd = KProcess::quote(python);
     cmd += " ";
     cmd += KProcess::quote(script);
     cmd += " -w ";
     cmd += KProcess::quote(key);
+#else
+    QString cmd = KShellProcess::quote(python);
+    cmd += " ";
+    cmd += KShellProcess::quote(script);
+    cmd += " -w ";
+    cmd += KShellProcess::quote(key);
+#endif
     
     FILE *fd = popen(cmd.data(), "r");
     char buffer[4096];

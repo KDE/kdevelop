@@ -28,6 +28,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
+#include <kdeversion.h>
 
 #define INDEXER
 #include "misc.cpp"
@@ -238,7 +239,11 @@ void ProgressDialog::scanDirectories()
                 }
             } else {
                 QString cmd = "gzip -c -d ";
+#if (KDE_VERSION > 305)
                 cmd += KProcess::quote(*it2);
+#else
+                cmd += KShellProcess::quote(*it2);
+#endif
                 cmd += " 2>/dev/null";
                 if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
                     addKdocDir(f);

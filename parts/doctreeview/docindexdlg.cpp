@@ -30,6 +30,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
+#include <kdeversion.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -219,7 +220,11 @@ void DocIndexDialog::readKDocIndex()
                 }
             } else {
                 QString cmd = "gzip -c -d ";
+#if (KDE_VERSION > 305)
                 cmd += KProcess::quote(*it);
+#else
+                cmd += KShellProcess::quote(*it);
+#endif
                 cmd += " 2>/dev/null";
                 if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
                     readKDocEntryList(f, &index->identNames, &index->identUrls);

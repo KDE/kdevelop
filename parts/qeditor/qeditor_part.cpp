@@ -721,6 +721,21 @@ void QEditorPart::clearMarks ()
     }
 }
 
+void QEditorPart::setPixmap(MarkInterface::MarkTypes, const QPixmap &)
+{
+  // TODO
+}
+
+void QEditorPart::setDescription(MarkInterface::MarkTypes, const QString &)
+{
+  // TODO
+}
+
+void QEditorPart::setMarksUserChangable(uint markMask)
+{
+  // TODO
+}
+
 void QEditorPart::configDialog()
 {
     KDialogBase dlg(KDialogBase::Tabbed, i18n("QEditor Options"),

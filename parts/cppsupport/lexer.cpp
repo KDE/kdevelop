@@ -557,3 +557,5 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
     }
     return ptr;
 }
+
+#include "lexer.moc"

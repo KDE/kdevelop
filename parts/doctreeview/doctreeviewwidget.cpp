@@ -41,6 +41,7 @@
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
 #include <kprocess.h>
+#include <kdeversion.h>
 
 #include "kdevcore.h"
 #include "domutil.h"
@@ -180,7 +181,11 @@ void DocTreeKDELibsBook::readContents()
         }
     } else {
         QString cmd = "gzip -c -d ";
+#if (KDE_VERSION > 305)
         cmd += KProcess::quote(idx_filename);
+#else
+        cmd += KShellProcess::quote(idx_filename);
+#endif        
         cmd += " 2>/dev/null";
         if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
             readKdoc2Index(f);

@@ -22,6 +22,7 @@
 #ifndef QEDITORPART_H
 #define QEDITORPART_H
 
+#include <kdeversion.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -31,6 +32,11 @@
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/searchinterface.h>
 #include <ktexteditor/markinterface.h>
+#if (KDE_VERSION > 305)
+# include <ktexteditor/markinterfaceextension.h>
+#else
+# include "kde30x_markinterfaceextension.h"
+#endif
 #include <qptrlist.h>
 
 #include "qeditor_factory.h"
@@ -63,7 +69,8 @@ class QEditorPart:
 	public KTextEditor::SelectionInterface,
 	public KTextEditor::HighlightingInterface,
 	public KTextEditor::SearchInterface,
-	public KTextEditor::MarkInterface
+	public KTextEditor::MarkInterface,
+	public KTextEditor::MarkInterfaceExtension
 {
     Q_OBJECT
 public:
@@ -135,6 +142,16 @@ public:
 
 signals:
     void marksChanged();
+
+// -- MarkInterfaceExtension----------------------------------------------------------------
+public:
+    virtual void setPixmap(MarkInterface::MarkTypes, const QPixmap &);
+    virtual void setDescription(MarkInterface::MarkTypes, const QString &);
+    virtual void setMarksUserChangable(uint markMask);
+
+signals:
+    virtual void markChanged (KTextEditor::Mark mark,
+                              KTextEditor::MarkInterfaceExtension::MarkChangeAction action);
 
 // -- SearchInterface ----------------------------------------------------------------------
 public:

@@ -1,11 +1,11 @@
-#include "debugger.h"
-
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktexteditor/document.h>
 
 #include "editorproxy.h"
 #include "partcontroller.h"
+
+#include "debugger.h"
 
 using namespace KTextEditor;
 
@@ -101,7 +101,6 @@ void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
 
 void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction action )
 {
-#if (KDE_VERSION > 305)
   if( !sender()->inherits("KTextEditor::Document") )
     return;
   KTextEditor::Document* doc = (KTextEditor::Document*) sender();
@@ -119,13 +118,11 @@ void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction 
       break;
     }
   }
-#endif
 }
 
 
 void Debugger::partAdded( KParts::Part* part )
 {
-#if (KDE_VERSION > 305)
   MarkInterfaceExtension *iface = dynamic_cast<MarkInterfaceExtension*>(part);
   if( !iface )
     return;
@@ -140,7 +137,6 @@ void Debugger::partAdded( KParts::Part* part )
   
   connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
            this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
-#endif
 }
 
 #include "debugger.moc"

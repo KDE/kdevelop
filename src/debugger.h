@@ -9,15 +9,9 @@
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
 #if (KDE_VERSION > 305)
-#include <ktexteditor/markinterfaceextension.h>
+# include <ktexteditor/markinterfaceextension.h>
 #else
-namespace KTextEditor {
-  class Mark;
-  class MarkInterfaceExtension {
-  public:
-    typedef int MarkChangeAction;
-  };
-}
+# include "kde30x_markinterfaceextension.h"
 #endif
 
 class Debugger : public KDevDebugger

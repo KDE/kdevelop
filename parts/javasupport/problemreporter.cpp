@@ -30,7 +30,9 @@
 #include <ktexteditor/markinterface.h>
 
 #if (KDE_VERSION > 305)
-#include <ktexteditor/markinterfaceextension.h>
+# include <ktexteditor/markinterfaceextension.h>
+#else
+# include "kde30x_markinterfaceextension.h"
 #endif
 
 #include <kdebug.h>
@@ -253,14 +255,12 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
-#if (KDE_VERSION > 305)
 	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 	
 	if( !iface )
 		return;
 		
 	iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
-#endif
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )

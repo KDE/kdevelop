@@ -54,8 +54,8 @@ MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
     : QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
       m_editor( editor )
 {
-    bookmarkPixmap = SmallIcon( "bookmark" );
-    breakpointPixmap = SmallIcon( "breakpoint" );
+    bookmarkPixmap = SmallIcon( "attach" );
+    breakpointPixmap = SmallIcon( "stop" );
     execPixmap = SmallIcon( "exec" );
     problemPixmap = SmallIcon( "stop" );
     funStartPixmap = SmallIcon( "start" );
