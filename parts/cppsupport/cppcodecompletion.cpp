@@ -5,7 +5,7 @@
     copyright            : (C) 2001 by Victor Röder
     email                : victor_roeder@gmx.de
     copyright            : (C) 2002 by Roberto Raggi
-    email                : raggi@cli.di.unipi.it
+    email                : roberto@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************

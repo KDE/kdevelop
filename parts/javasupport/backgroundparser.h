@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2002 by Roberto Raggi                                   *
- *   raggi@cli.di.unipi.it                                                 *
+ *   roberto@kdevelop.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

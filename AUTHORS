@@ -25,7 +25,7 @@ editing component:
   The KWrite authors <kwrite-devel@kde.org>
 
 QEditor part, help for code-completion, abbrev part:
-  Roberto Raggi <raggi@cli.di.unipi.it>
+  Roberto Raggi <roberto@kdevelop.org>
 
 Qt 3 port, various patches:
   Harald Fernengel <harry@kdevelop.org>

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");
   aboutData.addAuthor("Dimitri van Heesch", "doxywizard", "dimitri@stack.nl");
   aboutData.addAuthor("Harald Fernengel", "Qt 3 port, patches", "harry@kdevelop.org");
-  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "raggi@cli.di.unipi.it");
+  aboutData.addAuthor("Roberto Raggi", "QEditor part, code completion, abbrev part", "roberto@kdevelop.org");
   aboutData.addAuthor("Simon Hausmann", "Help with KParts infrastructure", "hausmann@kde.org");
   aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
   aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");

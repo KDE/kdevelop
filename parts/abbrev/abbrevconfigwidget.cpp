@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2002 Roberto Raggi                                      *
- *   raggi@cli.di.unipi.it                                                 *
+ *   roberto@kdevelop.org                                                 *
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *

@@ -1,4 +1,4 @@
-// Gideon support by Roberto Raggi (raggi@cli.di.unipi.it)
+// Gideon support by Roberto Raggi (roberto@kdevelop.org)
 
 header "pre_include_hpp" {
 	#include "classstore.h"
