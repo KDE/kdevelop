@@ -268,13 +268,13 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   DbgButton*    bNext       = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  DbgButton*    bNexti      = new DbgButton(i18n("i"), pm, this);
+  DbgButton*    bNexti      = new DbgButton(i18n("Next"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
   DbgButton*    bStep       = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
-  DbgButton*    bStepi      = new DbgButton(i18n("i"), pm, this);
+  DbgButton*    bStepi      = new DbgButton(i18n("Step in"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
   DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);

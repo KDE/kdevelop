@@ -118,8 +118,8 @@ VarTree::VarTree( QWidget *parent, const char *name ) :
   setSorting(-1);
   setFrameStyle(Panel | Sunken);
   setLineWidth(2);
-  addColumn("Variable");
-  addColumn("Value");
+  addColumn(i18n("Variable"));
+  addColumn(i18n("Value"));
   setMultiSelection (false);
   setFocusPolicy(QWidget::StrongFocus);
 

@@ -214,7 +214,7 @@ GDBController::~GDBController()
   }
 
   delete tty_; tty_ = 0;
-  emit dbgStatus ("Debugger stopped", state_);
+  emit dbgStatus (i18n("Debugger stopped"), state_);
 }
 
 // **************************************************************************
