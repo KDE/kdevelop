@@ -490,6 +490,7 @@ void DocViewMan::loadKWriteDoc(KWriteDoc* pDoc,
     if (f.open(IO_ReadOnly)) {
       pDoc->loadFile(f);
       f.close();
+      pDoc->updateViews();
     }
   }
 }
