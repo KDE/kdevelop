@@ -100,6 +100,7 @@ private slots:
   void tabContextActivated(int);    
   void configureToolbars();
   void setupWindowMenu();
+  void slotNewToolbarConfig();
 
 //  void loadMDISettings();
 

@@ -199,14 +199,17 @@ void NewMainWindow::init() {
 
 void NewMainWindow::configureToolbars( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
+	saveMainWindowSettings( KGlobal::config(), "MainWindow" );
 	KEditToolbar dlg( factory() );
-	if ( dlg.exec() )
-	{
-		setupWindowMenu();
-		createGUI( PartController::getInstance()->activePart() );
-	}
+	connect( &dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()) );
+	dlg.exec();
+}
+
+void NewMainWindow::slotNewToolbarConfig( )
+{
+	setupWindowMenu();
+	m_pMainWindowShare->slotGUICreated( PartController::getInstance()->activePart() );
+	applyMainWindowSettings( KGlobal::config(), "MainWindow" );
 }
 
 void NewMainWindow::tabContext(QWidget* widget,const QPoint & pos)
