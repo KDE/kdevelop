@@ -7,7 +7,7 @@
 
 #include <dcopobject.h>
 
-class $APPNAME$Iface : public DCOPObject
+class $APPNAME$Iface : virtual public DCOPObject
 {
   K_DCOP
 public:
