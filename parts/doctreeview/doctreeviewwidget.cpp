@@ -170,7 +170,11 @@ void DocTreeDoxygenBook::readTagFile()
     QFile f(tagName);
     if(!f.exists())
     {
+#if QT_VERSION >= 0x030100
         tagName.remove("/html/");
+#else
+	tagName.replace( QRegExp( "\\/html\\/" ), QString() );
+#endif
         f.setName( tagName );
     }
     if (!f.open(IO_ReadOnly)) {
