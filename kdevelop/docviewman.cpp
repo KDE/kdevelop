@@ -323,7 +323,13 @@ void DocViewMan::doSearch()
 {
   if (curDocIsBrowser()) {
     if (currentBrowserDoc()) {
-      currentBrowserDoc()->doSearchDialog();
+      KActionCollection* pAC = currentBrowserDoc()->actionCollection();
+			if (pAC) {
+        KAction* pFindAction = pAC->action("find");
+        if (pFindAction) {
+          pFindAction->activate();
+        }
+      }
     }
   }
   else {
@@ -337,9 +343,6 @@ void DocViewMan::doSearch()
 void DocViewMan::doRepeatSearch(QString &search_text, int back)
 {
   if (currentEditView()) {
-    if (curDocIsBrowser())
-      currentBrowserDoc()->findTextNext(QRegExp(search_text),true);
-    else
       currentEditView()->searchAgain(back==1);
   }
 }
