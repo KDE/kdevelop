@@ -13,7 +13,12 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <qlabel.h>
+#include <qfontmetrics.h>
+
+
 #include <kdebug.h>
+
 
 #include "statusbar.h"
 
@@ -30,13 +35,66 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 
     timer = new QTimer(this);
     connect( timer, SIGNAL(timeout()), this, SLOT(timeout()) );
-    
+
+	// stretcher
+	addWidget(new QWidget(this), 1);
+
+	_status = new QLabel(this);
+	_status->setMinimumWidth(_status->fontMetrics().width("OVR, ro"));
+	_status->setAlignment(QWidget::AlignCenter);
+	addWidget(_status, 0, true);
+
+	_cursorPosition = new QLabel(this);
+	_cursorPosition->setMinimumWidth(_cursorPosition->fontMetrics().width("Line: xxxxx, Col: xxx"));
+	addWidget(_cursorPosition, 0, true);
+	
+    _modified = new QLabel(this);
+    _modified->setFixedWidth(_modified->fontMetrics().width("*"));
+    addWidget(_modified, 0, true);
+
     widget = 0; 
+
+	setEditorStatusVisible(false);
 }
 
 
 StatusBar::~StatusBar()
 {}
+
+
+void StatusBar::setEditorStatusVisible(bool visible)
+{
+  // Note: I tried to hide/show the widgets here, but that
+  // causes flicker, so I just set them to be empty.
+		
+  if (!visible)
+	{
+	  _status->setText("");
+	  _modified->setText("");
+	  _cursorPosition->setText("");
+	}
+}
+
+
+void StatusBar::setStatus(const QString &str)
+{
+  _status->setText(str);
+}
+
+
+void StatusBar::setCursorPosition(int line, int col)
+{
+  _cursorPosition->setText(QString("Line: %1, Col: %2").arg(line).arg(col));
+}
+
+
+void StatusBar::setModified(bool isModified)
+{
+  if (isModified)
+	_modified->setText("*");
+  else
+	_modified->setText("");
+}
 
 
 void StatusBar::message(const QString &str)
@@ -58,7 +116,11 @@ void StatusBar::timeout()
 
 bool StatusBar::event(QEvent *e)
 {
-    if ( e->type() == QEvent::ChildInserted) {
+	// Note: I commented this out, as it completely breaks the
+	// functionality of the toolbar. It seems like it isn't used
+	// anywhere anyway. (mhk)
+	
+/*    if ( e->type() == QEvent::ChildInserted) {
         QChildEvent *ce = static_cast<QChildEvent*>(e);
         if (ce->child()->isWidgetType()) {
             delete widget;
@@ -78,7 +140,7 @@ bool StatusBar::event(QEvent *e)
             return true;
         }
     }
-
+*/
     return QStatusBar::event(e);
 }
 

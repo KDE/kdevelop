@@ -41,6 +41,8 @@
 #ifdef NEW_EDITOR
 #include "keditor/editor.h"
 #include "keditor/cursor_iface.h"
+#include "keditor/status_iface.h"
+#include "keditor/cursor_iface.h"
 #else
 #include "editorpart.h"
 #endif
@@ -246,6 +248,8 @@ void Core::activePartChanged(KParts::Part *part)
 {
     win->createGUI(part);
     activePart = part;
+
+	slotUpdateStatusBar();
 
 	// TODO: enable/disable actions depending on the current part!
     	
@@ -568,6 +572,17 @@ KEditor::Document *Core::createDocument(const KURL &url)
   KEditor::Document *doc = editor()->createDocument(win, url);
   if (!doc)
       return 0;
+
+  KEditor::StatusDocumentIface *status = static_cast<KEditor::StatusDocumentIface *>(doc->queryInterface("KEditor::StatusDocumentIface"));
+  if (status)
+  {
+	connect(status, SIGNAL(message(const QString &)), win->statusBar(), SLOT(message(const QString &))),
+	connect(status, SIGNAL(statusChanged()), this, SLOT(slotUpdateStatusBar()));
+  }
+ 
+  KEditor::CursorDocumentIface *cursor = static_cast<KEditor::CursorDocumentIface *>(doc->queryInterface("KEditor::CursorDocumentIface"));
+ if (cursor)
+   connect(cursor, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(slotUpdateStatusBar()));
 
   partManager()->addPart(doc);
 
@@ -1123,5 +1138,35 @@ void Core::slotStop()
     // Hmm, not much to do ;-)
     emit stopButtonClicked();
 }
+
+
+void Core::slotUpdateStatusBar()
+{
+  if (!activePart || !activePart->inherits("KEditor::Document"))
+  {
+	win->statusBar()->setEditorStatusVisible(false);
+	return;
+  }
+
+  KEditor::Document *doc = static_cast<KEditor::Document*>(activePart);
+
+  KEditor::StatusDocumentIface *status = static_cast<KEditor::StatusDocumentIface *>(doc->queryInterface("KEditor::StatusDocumentIface"));   
+  if (status)
+  {
+    win->statusBar()->setStatus(status->status());
+    win->statusBar()->setModified(status->modified());	
+  }
+  
+  KEditor::CursorDocumentIface *cursor = static_cast<KEditor::CursorDocumentIface *>(doc->queryInterface("KEditor::CursorDocumentIface"));
+  if (cursor)
+  {
+	 int line, col;
+	 cursor->getCursorPosition(line, col);
+	 win->statusBar()->setCursorPosition(line, col);
+  }
+
+  win->statusBar()->setEditorStatusVisible(true);  
+}
+
 
 #include "core.moc"

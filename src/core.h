@@ -87,6 +87,9 @@ private slots:
     void slotSettingsCustomize();
     void slotStop();
 
+	void slotUpdateStatusBar();
+
+
 private:
     KActionCollection *actionCollection();
     void initActions();

@@ -14,6 +14,8 @@
 
 #include <qstatusbar.h>
 
+class QLabel;
+
 
 /**
  * A special status bar adjusted to our needs. Its main
@@ -40,6 +42,13 @@ public:
 public slots:
     void message(const QString &str);
 
+
+    void setEditorStatusVisible(bool visible);
+    void setStatus(const QString &str);
+	void setCursorPosition(int line, int col);
+	void setModified(bool isModified);
+
+
 protected:
     virtual void paintEvent(QPaintEvent *e);
     virtual bool event(QEvent *e);
@@ -51,6 +60,11 @@ private:
     QString msg;
     QWidget *widget;
     QTimer *timer;
+
+	QLabel *_modified;
+	QLabel *_cursorPosition;
+	QLabel *_status;
+
 };
 
 #endif
