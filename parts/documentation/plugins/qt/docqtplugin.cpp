@@ -325,9 +325,25 @@ void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item)
     }
 }
 
-KURL::List DocQtPlugin::fullTextSearchLocations()
+QStringList DocQtPlugin::fullTextSearchLocations()
 {
-    return KURL::List();
+    QStringList locs;
+        
+    QMap<QString, QString> entryMap = config->entryMap("Locations");
+
+    for (QMap<QString, QString>::const_iterator it = entryMap.begin();
+        it != entryMap.end(); ++it)
+    {
+        config->setGroup("Search Settings");
+        if (config->readBoolEntry(it.key(), false))
+        {
+            config->setGroup("Locations");
+            QFileInfo fi(config->readPathEntry(it.key()));
+            locs << fi.dirPath(true);
+        }
+    }
+    
+    return locs;
 }
 
 void DocQtPlugin::loadCatalogConfiguration(KListView *configurationView)
@@ -375,7 +391,7 @@ void DocQtPlugin::saveCatalogConfiguration(KListView *configurationView)
         if (confItem->isChanged())
             config->deleteEntry(confItem->origTitle());
         config->writeEntry(confItem->title(), confItem->fullTextSearch());
-        
+
         ++it;
     }
     config->sync();

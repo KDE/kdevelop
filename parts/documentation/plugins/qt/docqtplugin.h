@@ -46,7 +46,7 @@ public:
     virtual void loadCatalogConfiguration(KListView *configurationView);
     virtual void saveCatalogConfiguration(KListView *configurationView);
     
-    virtual KURL::List fullTextSearchLocations();
+    virtual QStringList fullTextSearchLocations();
 
     virtual QPair<KFile::Mode, QString> catalogLocatorProps();
     virtual QString catalogTitle(const QString &url);
