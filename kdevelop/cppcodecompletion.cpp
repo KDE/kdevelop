@@ -509,6 +509,8 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     QString e1 = exprs.first().stripWhiteSpace();
     popFrontStringList(exprs);
 
+    kdDebug() << "---> e1 = " << e1 << endl;
+
     if( e1.isEmpty() ){
         type = v_this.type;
     } else if( checkEnd(e1, "::") ){
@@ -517,14 +519,28 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
         int first_paren_index = 0;
         if( (first_paren_index = e1.find('(')) != -1 ){
             if( first_paren_index == 0 ){
-                // e1 is a subexpression or a cast
-                QString subexpr = e1.mid( 1, e1.length() - 2 );
-                subexpr = subexpr.stripWhiteSpace();
-                int start_expr = expressionAt( subexpr, subexpr.length()-1 );
-                if( start_expr != subexpr.length()-1 ){
-                    subexpr = subexpr.mid( start_expr );
-                    kdDebug() << "subexpr = " << subexpr << endl;
+                if( e1[e1.length()-1] == ')' ){
+                    // e1 is a subexpression
+                    QString subexpr = e1.mid( 1, e1.length() - 2 );
+                    subexpr = subexpr.stripWhiteSpace();
+                    if( subexpr[0] != '(' ){
+                        int start_expr = expressionAt( subexpr, subexpr.length()-1 );
+                        if( start_expr != subexpr.length()-1 ){
+                            subexpr = subexpr.mid( start_expr );
+                            kdDebug() << "subexpr = " << subexpr << endl;
+                        }
+                    }
                     type = evaluateExpression( subexpr, ctx, sigma );
+                } else {
+                    // e1 is cast
+                    kdDebug() << "maybe a cast = " << e1 << endl;
+                    KDevRegExp cast_rx( "^\\([ \t]*([a-zA-Z_][a-zA-Z0-9_]*)[^)]*)" );
+                    if( cast_rx.search(e1) == 0 ){
+                        type = cast_rx.cap( 1 );
+                        kdDebug() << "cast type = " << type << endl;
+                    } else {
+                        type = QString::null;
+                    }
                 }
             } else {
                 e1 = e1.left( first_paren_index ).stripWhiteSpace();
