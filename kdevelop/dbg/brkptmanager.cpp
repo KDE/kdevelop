@@ -308,11 +308,9 @@ void BreakpointManager::slotEditBreakpoint(const QString& fileName, int lineNo)
   FilePosBreakpoint* fpBP = new FilePosBreakpoint(fileName, lineNo);
 
   int found = findIndex(fpBP);
+  delete fpBP;
   if (found >= 0)
-  {
-    delete fpBP;
     modifyBreakpoint(found);
-  }
 }
 
 /***************************************************************************/
@@ -322,17 +320,19 @@ void BreakpointManager::slotToggleBPEnabled(const QString& fileName, int lineNo)
   FilePosBreakpoint* fpBP = new FilePosBreakpoint(fileName, lineNo);
 
   int found = findIndex(fpBP);
+  delete fpBP;
   if (found >= 0)
   {
-    delete fpBP;
-    Breakpoint* BP = (Breakpoint*)item(found);
-    BP->setEnabled(!BP->isEnabled());
-    BP->setPending(true);
-    BP->setActionModify(true);
-    emit publishBPState(BP);
-
-    BP->configureDisplay();
-    repaint();
+    setCurrentItem(found);
+    slotToggleBPEnabled();
+//    Breakpoint* BP = (Breakpoint*)item(found);
+//    BP->setEnabled(!BP->isEnabled());
+//    BP->setPending(true);
+//    BP->setActionModify(true);
+//    emit publishBPState(BP);
+//
+//    BP->configureDisplay();
+//    repaint();
   }
 }
 

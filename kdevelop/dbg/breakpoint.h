@@ -47,17 +47,17 @@ public:
   bool isActive(int active) const  {  return (  (active_ == active) ||
                                                 (s_pending_ && !s_actionClear_) ); }
 
-  void setEnabled(bool enabled)                 { s_enabled_ = enabled; }
+  void setEnabled(bool enabled)                 { s_changedEnable_ = (s_enabled_ != enabled);             s_enabled_ = enabled; }
   bool isEnabled() const                        { return s_enabled_; }
   void setTemporary(bool temporary)             { s_temporary_ = temporary; }
   bool isTemporary() const                      { return s_temporary_; }
   void setHardwareBP(bool hardwareBP)           { s_hardwareBP_ = hardwareBP; }
   bool isHardwareBP() const                     { return s_hardwareBP_; }
-  void setIgnoreCount(int ignoreCount)          { ignoreCount_ = ignoreCount; }
+  void setIgnoreCount(int ignoreCount)          { s_changedIgnoreCount_ = (ignoreCount_ != ignoreCount);  ignoreCount_ = ignoreCount; }
   int ignoreCount() const                       { return ignoreCount_; }
   void setAddress(const QString& address)       { address_ = address; }
   QString address() const                       { return address_; }
-  void setConditional(const QString& condition) { condition_ = condition; }
+  void setConditional(const QString& condition) { s_changedCondition_ = (condition_ != condition);        condition_ = condition; }
   QString conditional() const                   { return condition_; }
 
   bool changedCondition()                       { return s_changedCondition_; }

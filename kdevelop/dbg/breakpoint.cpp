@@ -56,7 +56,7 @@ Breakpoint::Breakpoint(bool temporary, bool enabled) :
   key_(BPKey_++),
   active_(0),
   ignoreCount_(0),
-  condition_("")
+  condition_(QString::null)
 {
 }
 
@@ -223,23 +223,9 @@ bool Breakpoint::modifyDialog()
   BPDialog* modifyBPDialog = new BPDialog(this);
   if (modifyBPDialog->exec())
   {
-    if (condition_ != modifyBPDialog->getConditional())
-    {
-      setConditional(modifyBPDialog->getConditional());
-      s_changedCondition_ = true;
-    }
-
-    if (ignoreCount_ != modifyBPDialog->getIgnoreCount())
-    {
-      setIgnoreCount(modifyBPDialog->getIgnoreCount());
-      s_changedIgnoreCount_ = true;
-    }
-
-    if (s_enabled_ != modifyBPDialog->isEnabled())
-    {
-      setEnabled(modifyBPDialog->isEnabled());
-      s_changedEnable_ = true;
-    }
+    setConditional(modifyBPDialog->getConditional());
+    setIgnoreCount(modifyBPDialog->getIgnoreCount());
+    setEnabled(modifyBPDialog->isEnabled());
   }
 
   delete modifyBPDialog;
