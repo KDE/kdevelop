@@ -112,13 +112,14 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
 	nextChar(); // skip #
 	readWhiteSpaces( false );	    // skip white spaces
+	m_startLine = false;
 
 	int start = currentPosition();
 	readIdentifier(); // read the directive
 	QString directive = m_source.mid( start, currentPosition() - start );
 
 	handleDirective( directive );
-    } else if( m_skipping[m_ifLevel] ){
+    } else if( m_startLine && m_skipping[m_ifLevel] ){
 	// skip line and continue
 	while( !currentChar().isNull() && currentChar() != '\n' )
 	    nextChar();
