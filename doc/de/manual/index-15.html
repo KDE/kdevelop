@@ -153,6 +153,28 @@ aktualisiert die Makedateien).
 <P><B>A:</B> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der 
 automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte 
 *.moc.cpp Datei vorhanden und kompiliert. Entfernen Sie die entsprechende *.moc.cpp Datei und erstellen Sie Ihr Projekt neu.
+<P><B>F:</B> Configure beschwert sich darüber, daß es eine kleine KDE Anwendung nicht ausführen kann. Eine Untersuchung der
+config.log zeigt, daß die Bibliothek libXext nicht gefunden wird.
+<B>A:</B> Installieren Sie das Paket xdevel.
+<P><B>F:</B> Ich entwickle eine Anwendung, für die ich die -D Option des Präprozessors einschalten muß. Wenn ich dies in KDevelop
+in den Projektoptionen einstelle, ist alles in Ordnung. Wenn ich aber eine Distribution meines Projektes erstelle, wird die -D
+Option nicht verwendet. Was muß ich machen, damit es funktioniert?
+<B>A:</B> Editieren Sie die Datei configure.in in Ihrem Projekthauptverzeichnis. Sie müssen hier am Anfang der Datei
+eingeben:
+<P>CXXFLAGS=$(CXXFLAGS) " -DYOURDEFINE"
+AC_SUBST(CXXFLAGS)
+<P>
+<P><B>F:</B> Bei mir läuft ein KDE 2 Schnappschuß und ich möchte KDevelop unter KDE 2 verwenden. Wie kann ich am besten vorgehen?
+<B>A:</B> Da KDevelop für KDE 2 sich zur Zeit noch in der Entwicklung befindet, sollten Sie in Betracht ziehen, die stabile 1.x
+Version von KDevelop zu verwenden. Sie können dies mit Hilfe eines Shellskripts machen:
+<P>#/bin/bash
+QTDIR=/usr/lib/qt-1.44 export QTDIR
+KDEDIR=/opt/kde export KDEDIR
+exec /opt/kde/bin/kdevelop
+<P>Speichern Sie diese Datei zum Beispiel als kdevelop1 und machen Sie sie ausführbar, indem Sie eingeben:
+<P>chmod 755 kdevelop1
+<P>Sie können nun KDevelop 1.x unter KDE 2 ausführen, indem Sie kdevelop1 aufrufen. Zum Erstellen von KDE 2 Anwendungen mit KDevelop
+1.x, müssen Sie den korrekten Pfad im KDevelop-Setup eingeben, auch wenn Sie KDevelop unter KDE 2 ausführen !
 <P>
 <P ALIGN="RIGHT">
 
