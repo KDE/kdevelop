@@ -11,3 +11,5 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 EXTRA_DIST = BUGS FAQ kdevelop.kdevprj kdevelop.lsm README.htdig
 
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/acinclude.m4.in $(top_srcdir)/libtool.m4.in $(top_srcdir)/kdevelop.m4
+	cd $(top_srcdir) && cat acinclude.m4.in libtool.m4.in kdevelop.m4 > acinclude.m4   

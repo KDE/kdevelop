@@ -1,10 +1,18 @@
+kdevelop (1:1.1beta2-20000206-1) stable; urgency=low
+
+  * Back to old configure arguments
+  * Mentioned debugger in control file, 
+    made kdebase a dependency
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  7 Feb 2000 00:10:59 +0100
+
 kdevelop (1:1.1beta2-20000131-1) stable; urgency=low
 
   * New upstream version: 1.1beta2
   * Use --prefix in configure, set kde_confdir, kde_htmldir explicitly
     because of new autoconf framework
 
- -- Bernd Gehrmann <bernd@lina>  Mon, 31 Jan 2000 21:15:04 +0100
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon, 31 Jan 2000 21:15:04 +0100
 
 kdevelop (1:1.0-19991206-1) stable; urgency=low
 

@@ -6,11 +6,9 @@ build:
 	dh_testdir
 	( CFLAGS="-O2 -pipe -Wall" \
 	  CXXFLAGS="$$CFLAGS" \
-	  kde_confdir="/etc/kde" \
-	  kde_htmldir="/usr/doc/kde/HTML" \
-	  ./configure --prefix=/usr --enable-docbase --enable-kdoc2 --disable-rpath \
+	  ./configure --enable-docbase --enable-kdoc2 --disable-rpath \
 	  --libdir=/usr/X11R6/lib --includedir=/usr/include/kde )
- 
+
 	make 
 
 	touch build
