@@ -182,11 +182,18 @@ void HistoryPart::restoreState()
 
   m_restoring = true;
 
-  partController()->setActivePart(entry->m_part);
-  if (entry->m_part->widget())
+  if ( partController()->parts()->contains( entry->m_part ) )
   {
-    mainWindow()->raiseView(entry->m_part->widget());
-    entry->m_part->widget()->setFocus();
+	partController()->setActivePart(entry->m_part);
+	if (entry->m_part->widget())
+	{
+		mainWindow()->raiseView(entry->m_part->widget());
+		entry->m_part->widget()->setFocus();
+	}
+  }
+  else
+  {
+  	kdDebug( 9031 ) << "Found invalid part in history - NOT restoring!" << endl;
   }
 
   m_restoring = false;
