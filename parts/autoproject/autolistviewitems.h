@@ -12,6 +12,8 @@
 *                                                                         *
 ***************************************************************************/
 
+#ifndef AUTOLISTVIEWITEMS_H
+#define AUTOLISTVIEWITEMS_H
 
 #include <qptrlist.h>
 
@@ -125,4 +127,6 @@ public:
 	QString name;
 	QString uiFileLink;
 };
+
+#endif
 
