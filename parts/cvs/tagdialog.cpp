@@ -59,3 +59,5 @@ bool TagDialog::isBranch() const
 {
     return tagAsBranchCheck->isChecked();
 }
+
+#include "tagdialog.moc"

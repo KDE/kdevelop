@@ -66,3 +66,5 @@ void CheckoutDialog::slotFetchModulesList()
 }
 
 //#include "serverconfigurationwidget.moc.cpp"
+
+#include "checkoutdialog.moc"

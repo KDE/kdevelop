@@ -160,3 +160,5 @@ QString ServerConfigurationWidget::compressionLevel() const
 }
 
 //#include "serverconfigurationwidget.moc.cpp"
+
+#include "serverconfigurationwidget.moc"
