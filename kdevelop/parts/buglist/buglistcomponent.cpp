@@ -95,10 +95,12 @@ void BugListComponent::projectSpaceOpened()
         kdDebug(9040) << "BugList::Project Space Read" << endl;
         m_pProjectSpace = projectSpace();
 
-/*        QDomDocument *doc = m_pProjectSpace->readUserDocument();
-        QDomNodeList grepList = doc->elementsByTagName("BugList");
-        QDomElement grepElement = grepList.item(0).toElement();
-        kdDebug(9040) << "BugList::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;*/
+        QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
+//        QDomNodeList projNodes = doc->elementsByTagName("BugList");
+//        QDomElement bugElement = projNodes.item(0).toElement();
+//        kdDebug(9040) << "BugList::file = " << bugElement.attribute("file") << endl;
+  QDomElement psElement = doc.documentElement(); // get the Projectspace
+  kdDebug(9040) << "BugList::filex = " << psElement.attribute("pluginName") << endl;
     }
     else
     {
