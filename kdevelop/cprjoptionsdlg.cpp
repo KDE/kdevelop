@@ -1052,7 +1052,7 @@ void CPrjOptionsDlg::setupTab5()
 					   "files  are being considered for remaking, which file-\n"
 					   "times are being compared and with what results, which\n"
 					   "files  actually  need  to  be  remade, which implicit\n"
-					   "rules are considered and which  are  applied---every­\n"
+					   "rules are considered and which  are  applied---every-\n"
 					   "thing  interesting about how make decides what to do."));
 
   QString text;
@@ -1085,7 +1085,7 @@ void CPrjOptionsDlg::setupTab5()
 				      "in order to fool future invocations of make."));
 
   QWhatsThis::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory\n"
-					 "before and after other processing.  This may be  use­\n"
+					 "before and after other processing.  This may be  use-\n"
 					 "ful  for  tracking down errors from complicated nests\n"
 					 "of recursive make commands."));
 

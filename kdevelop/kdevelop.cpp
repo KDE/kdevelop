@@ -709,7 +709,7 @@ void KDevelop::initHelp(){
   m_paHelpWhatsThis->setShortText( i18n("Allows you to retrieve Whats This help over the KDevelop User Interface") );
 //  m_paHelpWhatsThis->setWhatsThis(  );
 
-  m_paHelpWelcome->setShortText( i18n("Switches to the KDevelop Documentation´s Welcome page") );
+  m_paHelpWelcome->setShortText( i18n("Switches to the KDevelop Documentation's Welcome page") );
 //  m_paHelpWelcome->setWhatsThis(  );
 
   m_paHelpUserManual->setShortText( i18n("Switchs to KDevelop's User Manual") );

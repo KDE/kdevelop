@@ -306,7 +306,7 @@ void CUpdateKDEDocDlg::OK(){
        {
           KMessageBox::sorry(this,
                  i18n("The old documentation path\n%1"
-                      "\ndoesn´t exist anymore."
+                      "\ndoesn't exist anymore."
                       "\nProcess will continue without deletion...").arg(doc_path));
        }
        else
