@@ -6,6 +6,7 @@
 #include <kstatusbar.h>
 #include <kmainwindow.h>
 #include <kconfig.h>
+#include <kdeversion.h>
 
 
 #include "toplevel.h"
@@ -49,7 +50,11 @@ bool Core::queryClose()
   // save the the project to open it automaticly on startup if needed
   KConfig* config = kapp->config();
   config->setGroup("General Options");
+#if KDE_IS_VERSION(3,1,3)
+  config->writePathEntry("Last Project",ProjectManager::getInstance()->projectFile());
+#else
   config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile());
+#endif
 
   if ( ProjectManager::getInstance()->projectLoaded()
    && !ProjectManager::getInstance()->closeProject() )

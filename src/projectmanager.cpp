@@ -113,7 +113,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
 void ProjectManager::slotOpenProject()
 {
-  QString defaultProjectsDir = kapp->config()->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
+  QString defaultProjectsDir = kapp->config()->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
   KURL url = KFileDialog::getOpenURL(defaultProjectsDir, "*.kdevelop", TopLevel::getInstance()->main(), i18n("Open Project"));
   loadProject(url);
@@ -153,7 +153,11 @@ void ProjectManager::saveSettings()
   if (projectLoaded())
   {
     config->setGroup("General Options");
+#if KDE_IS_VERSION(3,1,3)
+    config->writePathEntry("Last Project", ProjectManager::getInstance()->projectFile());
+#else
     config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile());
+#endif
   }
 
   m_openRecentProjectAction->saveEntries(config, "RecentProjects");
@@ -163,7 +167,7 @@ void ProjectManager::loadDefaultProject()
 {
   KConfig *config = kapp->config();
   config->setGroup("General Options");
-  QString project = config->readEntry("Last Project", "");
+  QString project = config->readPathEntry("Last Project");
   bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
   if (!project.isEmpty() && readProject)
   {
@@ -378,7 +382,7 @@ bool ProjectManager::loadProjectPart()
 
   QFileInfo fi(m_info->m_fileName);
   QDomDocument& dom = *API::getInstance()->projectDom();
-  QString path = DomUtil::readEntry(dom,"/general/projectdirectory",".");
+  QString path = DomUtil::readPathEntry(dom,"/general/projectdirectory", ".");
   bool absolute = DomUtil::readBoolEntry(dom,"/general/absoluteprojectpath",false);
   QString projectDir = projectDirectory( path, absolute );
   QString projectName = fi.baseName();
