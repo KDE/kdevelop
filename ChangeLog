@@ -1,5 +1,7 @@
 2003-04-16 Roberto Raggi <roberto@kdevelop.org>
     * Implemented the support for class inheritance in the new pcs
+    * Moved the c++ parser into kdevelop/lib/cppparser, so other
+      projects like kate and umbrello can use it
 
 2003-04-15 Roberto Raggi <roberto@kdevelop.org>
     * Added the new persistant class store
