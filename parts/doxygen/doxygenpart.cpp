@@ -26,7 +26,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
-#include "../../lib/util/domutil.h"
+#include "domutil.h"
 
 
 #include "config.h"
