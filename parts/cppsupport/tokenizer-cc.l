@@ -20,8 +20,7 @@
 %{
   #include <stdlib.h>
   #include <qstring.h>
-  #include <iostream.h>
-  #include "tokenizer.h"
+  #include "tokenizer-cc.h"
   #include "FlexLexer.h"
 
   /** This class is a stupid trick to make it possible 
@@ -42,9 +41,9 @@
   QString comment;
 
   /* Function prototypes */
-  static bool beginComment(MyLexer *lex);
-  static void inComment(MyLexer *lex);
-  static bool endComment(MyLexer *lex);
+  bool beginComment(MyLexer *lex);
+  void inComment(MyLexer *lex);
+  bool endComment(MyLexer *lex);
 %}
 
 WS           [[:blank:]\r]+
@@ -89,6 +88,42 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"throw"         {return CPTHROW;}
 <INITIAL>"namespace"     {return CPNAMESPACE;}
 
+    /*==============> Objective-C keyword <==============*/
+<INITIAL>"@class"        {return CPOBJCCLASS;}
+<INITIAL>"@interface"    {return CPOBJCINTERFACE;}
+<INITIAL>"@protocol"     {return CPOBJCPROTOCOL;}
+<INITIAL>"@private"      {return CPOBJCPRIVATE;}
+<INITIAL>"@protected"    {return CPOBJCPROTECTED;}
+<INITIAL>"@public"       {return CPOBJCPUBLIC;}
+<INITIAL>"@implementation"  {return CPOBJCIMPLEMENTATION;}
+<INITIAL>"@end"          {return CPOBJCEND;}
+
+
+    /*==> added by DANIEL <==*/
+<INITIAL>"emit"           {return CPEMIT;}
+
+<INITIAL>"void"           {return CPVOID;}
+<INITIAL>"int"            {return CPINT;}
+<INITIAL>"bool"           {return CPBOOL;}
+<INITIAL>"float"          {return CPFLOAT;}
+<INITIAL>"char"           {return CPCHAR;}
+<INITIAL>"static_cast"    {return CPSCAST;}
+<INITIAL>"dynamic_cast"   {return CPDCAST;}
+<INITIAL>"for"            {return CPFOR;}
+<INITIAL>"while"          {return CPWHILE;}
+<INITIAL>"do"             {return CPDO;}
+<INITIAL>"if"             {return CPIF;}
+<INITIAL>"else"           {return CPELSE;}
+<INITIAL>"switch"         {return CPSWITCH;}
+<INITIAL>"case"           {return CPCASE;}
+<INITIAL>"break"          {return CPBREAK;}
+<INITIAL>"default"        {return CPDEFAULT;}
+<INITIAL>"return"         {return CPRETURN;}
+
+<INITIAL>"<<"             {return CPPIPE;}
+<INITIAL>">>"             {return CPPIPE;}
+
+
     /*==============> Ignored stuff <==============*/
     /*========== added to avoid extern "C" trouble--rnolden 03232000====*/
 <INITIAL>"Q_EXPORT"       {}
@@ -99,16 +134,6 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
-
-    /*==============> Objective-C keyword <==============*/
-<INITIAL>"@class"        {return CPOBJCCLASS;}
-<INITIAL>"@interface"    {return CPOBJCINTERFACE;}
-<INITIAL>"@protocol"     {return CPOBJCPROTOCOL;}
-<INITIAL>"@private"      {return CPOBJCPRIVATE;}
-<INITIAL>"@protected"    {return CPOBJCPROTECTED;}
-<INITIAL>"@public"       {return CPOBJCPUBLIC;}
-<INITIAL>"@implementation"  {return CPOBJCIMPLEMENTATION;}
-<INITIAL>"@end"          {return CPOBJCEND;}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
@@ -131,11 +156,16 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"^"          {return '^';}
 <INITIAL>"!"          {return '!';}
 
+<INITIAL>"?"          {return '?';}
+
     /*==============> End of Phrase <==============*/
 <INITIAL>";"          {return ';';}
 
     /*==============> Comma <==============*/
 <INITIAL>","          {return ',';}
+
+    /*==============> Dot <==============*/
+<INITIAL>"."          {return '.';}	
 
     /*==============> Paranthesis <==============*/
 <INITIAL>"("          {return '(';}
@@ -180,20 +210,20 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %%
 
-static bool beginComment(MyLexer *lex)
+bool beginComment(MyLexer *lex)
 {
  comment_start = lex->lineno();
  comment="/*";
  return true;
 }
 
-static void inComment(MyLexer *lex)
+void inComment(MyLexer *lex)
 {
   char *text=lex->gettext();
   comment+=text;
 };
 
-static bool endComment(MyLexer *lex)
+bool endComment(MyLexer *lex)
 {
  comment_end = lex->lineno();
  comment+="*/";
