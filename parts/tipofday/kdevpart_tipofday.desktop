@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=TipOfDay
+Comment=Tip of the day
 Name=KDevTipOfDay
 Icon=kdevelop
 ServiceTypes=KDevelop/Part
