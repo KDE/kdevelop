@@ -426,7 +426,7 @@ AC_DEFUN(KDEV_CHECK_BDB,
          choke me
       #else
          DB *db;
-         db->open( db, "test.db", NULL, DB_BTREE, DB_CREATE, 0644 );
+         db->open( db, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
       #endif
     ],
       ac_cv_bdb=yes,
@@ -437,7 +437,7 @@ AC_DEFUN(KDEV_CHECK_BDB,
    ])
 
   if test "$ac_cv_bdb" != "yes"; then
-    AC_MSG_ERROR(no - please install Berkeley DB = 3 (not 4))
+    AC_MSG_ERROR(no - please install Berkeley DB >= 3)
   else
     AC_MSG_RESULT(yes)
   fi
