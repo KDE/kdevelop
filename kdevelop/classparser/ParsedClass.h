@@ -76,7 +76,22 @@ public: // Public attributes
   
 public: // Metods to set attribute values
 
-  /** Add a parent. 
+  /** Remove all items in the store with references to the file.
+   * @param aFile The file to check references to.
+   */
+  void removeWithReferences( const char *aFile );
+
+  /** Remove a method matching the specification (from either 'methods'
+   * or 'slotList').
+   * @param aMethod Specification of the method.
+   */
+  void removeMethod( CParsedMethod *aMethod );
+
+  /** Clear all attribute values.
+   */
+  void clearDeclaration();
+
+  /** Add a parent.
    * @param aParent A parent of this class.
    */
   void addParent( CParsedParent *aParent );

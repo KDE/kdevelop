@@ -164,7 +164,7 @@ public: // Public Methods
    *  @param dependentList  - A list of files that depends on the given file
    *  @returns              - The dependent files added in param dependentList
    */
-  void getDependentFiles( QStrList& fileList, QStrList& dependentList);
+//  void getDependentFiles( QStrList& fileList, QStrList& dependentList);
 
   /** Remove a class from the store. 
    * @param aName Name of the class to remove

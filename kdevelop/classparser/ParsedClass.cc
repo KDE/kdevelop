@@ -71,6 +71,124 @@ CParsedClass::~CParsedClass()
  *                                                                   *
  ********************************************************************/
 
+/*---------------------- CParsedClass::removeWithReferences()
+ * removeWithReferences()
+ *   Remove references to all items in the parsed class that were
+ *   obtained from the given file
+ *
+ * Parameters:
+ *   aFile          The file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::removeWithReferences( const char *aFile )
+{
+  REQUIRE( "Valid filename", aFile != NULL );
+  REQUIRE( "Valid filename length", strlen( aFile ) > 0 );
+
+  CParsedMethod *aMethod = NULL;
+
+  methodIterator.toFirst();
+  while( ( aMethod = methodIterator.current() ) != (CParsedMethod *) NULL )
+  {
+    if( aMethod->declaredInFile == aFile ) {
+    		if( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+    			CParsedContainer::removeMethod(aMethod);
+    		} else {
+    			aMethod->clearDeclaration();
+    			++methodIterator;
+    		}
+    } else if( aMethod->definedInFile == aFile ) {
+    		if( aMethod->declaredInFile.isNull() ) {
+    			CParsedContainer::removeMethod(aMethod);
+    		} else {
+    			aMethod->clearDefinition();
+    			++methodIterator;
+    		}
+    } else {
+    		++methodIterator;
+    }
+  }
+
+  slotIterator.toFirst();
+  while( ( aMethod = slotIterator.current() ) != (CParsedMethod *) NULL )
+  {
+    if( aMethod->declaredInFile == aFile ) {
+    		if( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+			slotList.removeRef( aMethod );
+    		} else {
+    			aMethod->clearDeclaration();
+    			++slotIterator;
+    		}
+    } else if( aMethod->definedInFile == aFile ) {
+    		if( aMethod->declaredInFile.isNull() ) {
+			slotList.removeRef(aMethod);
+    		} else {
+    			aMethod->clearDefinition();
+    			++slotIterator;
+    		}
+    } else {
+    		++slotIterator;
+    }
+  }
+
+  if( declaredInFile == aFile ) {
+  	clearDeclaration();
+  } else if( definedInFile == aFile ) {
+  	clearDefinition();
+  }
+}
+
+/*----------------------------------- CParsedClass::removeMethod()
+ * removeMethod()
+ *   Remove a method matching the specification.
+ *
+ * Parameters:
+ *   aMethod        Specification of the method.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::removeMethod( CParsedMethod *aMethod )
+{
+  REQUIRE( "Valid method", aMethod != NULL );
+  REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
+
+  QString str;
+  aMethod->asString( str );
+
+  if ( slotList.removeRef( aMethod ) ) {
+    slotsByNameAndArg.remove( str );
+  } else {
+  	CParsedContainer::removeMethod( aMethod );
+  }
+}
+
+/*----------------------------------------- CParsedClass::clearDeclaration()
+ * clearDeclaration()
+ *   Clear all attributes which are only in the class declaration,
+ *	 and not in the definition part. This excludes the 'methods'
+ *   and 'slotList' lists, as these can contain parsed methods with
+ *   definition data
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::clearDeclaration()
+{
+  attributes.clear();
+  structs.clear();
+  slotsByNameAndArg.clear();
+  signalList.clear();
+  signalsByNameAndArg.clear();
+  parents.clear();
+  friends.clear();
+  signalMaps.clear();
+
+  CParsedItem::clearDeclaration();
+}
+
 /*----------------------------------------- CParsedClass::addParent()
  * addParent()
  *   Add a parent.
@@ -131,7 +249,6 @@ void CParsedClass::addSlot( CParsedMethod *aMethod )
 
   aMethod->setDeclaredInScope( path() );
   slotList.append( aMethod );
-
   aMethod->asString( str );
   slotsByNameAndArg.insert( str, aMethod );
 }

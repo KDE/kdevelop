@@ -175,10 +175,20 @@ public: // Public methods to set attribute values
    */
   void setDeclaredInFile( const char *aFile ) { declaredInFile = aFile; }
 
-  /** Set the comment of this item. 
+  /** Set the comment of this item.
    * @param aComment Comment that belongs to this item.
    */
   void setComment( const char *aComment )     { comment = aComment; }
+
+  /** Clear all item declaration fields */
+  void clearDeclaration()     {	declaredInFile = (const char *) NULL;
+  								declaredOnLine = -1;
+  								declarationEndsOnLine = -1; }
+
+  /** Clear all item definition fields */
+  void clearDefinition ()     { 	definedInFile = declaredInFile;
+  								definedOnLine = declaredOnLine;
+  								definitionEndsOnLine = declarationEndsOnLine; }
 
   /** 
    * Make this object a copy of the supplied object. 
