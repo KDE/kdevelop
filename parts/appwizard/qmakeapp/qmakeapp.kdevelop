@@ -32,7 +32,7 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell>/usr/bin/libtool</dbgshell>
+      <dbgshell/>
       <breakpoints/>
       <programargs></programargs>
       <gdbpath>/usr/bin/</gdbpath>
