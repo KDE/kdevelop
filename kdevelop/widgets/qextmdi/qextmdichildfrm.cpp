@@ -430,98 +430,97 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 	}
 	//QRect begin(x(),y(),width(),height());
 	//QRect end=begin;
-	switch(state){
-		case Normal:
-			switch(m_state){
-				case Maximized:
-          //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
-          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
-          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-          setGeometry(m_restoredRect);
-          m_state=state;
+   switch(state){
+   case Normal:
+      switch(m_state){
+      case Maximized:
+         m_state=state;
+         //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
+         m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+         m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+         m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+         setGeometry(m_restoredRect);
+         break;
+      case Minimized:
+         m_state=state;
+         //begin=QRect(x()+width()/2,y()+height()/2,1,1);
+         //if(bAnimate)m_pManager->animate(begin,end);
+         m_pClient->show();
+         m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+         m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+         // reset to normal-captionbar
+         m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+         m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+         QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+         QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+         setGeometry(m_restoredRect);
+         break;
+      case Normal:
           break;
-				case Minimized:
-          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
-          //if(bAnimate)m_pManager->animate(begin,end);
-          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
-          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-          // reset to normal-captionbar
-          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
-          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
-          QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-            					
-          setGeometry(m_restoredRect);
-          m_pClient->show();
-          m_state=state;
-          break;
-				case Normal:
-           break;
-			}
-			break;
-		case Maximized:
-			//end=QRect(0,0,m_pManager->width(),m_pManager->height());
-			switch(m_state){
-				case Minimized:
-          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
-          //if(bAnimate)m_pManager->animate(begin,end);
-          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
-          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-          setMaximumSize(32767,32767);
-          // reset to maximize-captionbar
-          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
-          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
-          QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
-          m_state=state;
-          setGeometry(-m_pClient->x(), -m_pClient->y(),
-                      m_pManager->width() + width() - m_pClient->width(),
-                      m_pManager->height() + height() - m_pClient->height());
-          m_pClient->show();
-          raise();
-          break;
-				case Normal:
-          m_state=state;
-          m_oldClientMinSize = m_pClient->minimumSize();
-          m_oldClientMaxSize = m_pClient->maximumSize();
-          setMaximumSize(32767,32767);
-          //if(bAnimate)m_pManager->animate(begin,end);
-          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-          setGeometry(-m_pClient->x(), -m_pClient->y(),
-          				    m_pManager->width() + width() - m_pClient->width(),
-                      m_pManager->height() + height() - m_pClient->height());
-          show();
-          raise();
-          break;
-				case Maximized:
-          break;
-			}
-			break;
-		case Minimized:
-			//end=QRect(x()+width()/2,y()+height()/2,1,1);
-			switch(m_state){
-				case Maximized:
-          m_state=state;
-          switchToMinimizeLayout();
-          //if(bAnimate)m_pManager->animate(begin,end);
-          m_pManager->childMinimized(this,TRUE);
-          break;
-        case Normal:
-          m_state=state;
-          m_oldClientMinSize = m_pClient->minimumSize();
-          m_oldClientMaxSize = m_pClient->maximumSize();
-          m_restoredRect = geometry();
-          switchToMinimizeLayout();
-          //if(bAnimate)m_pManager->animate(begin,end);
-          m_pManager->childMinimized(this,FALSE);
-          break;
-				case Minimized:
-          break;
-			}
-			break;
-	}
-	bAnimate = FALSE; //dummy, only to avoid "unused parameter"
+  		}
+      break;
+   case Maximized:
+      //end=QRect(0,0,m_pManager->width(),m_pManager->height());
+      switch(m_state){
+      case Minimized:
+         //begin=QRect(x()+width()/2,y()+height()/2,1,1);
+         //if(bAnimate)m_pManager->animate(begin,end);
+         m_pClient->show();
+         m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
+         m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+         setMaximumSize(32767,32767);
+         // reset to maximize-captionbar
+         m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
+         m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+         QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
+         QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+         m_state=state;
+         setGeometry(-m_pClient->x(), -m_pClient->y(),
+                     m_pManager->width() + width() - m_pClient->width(),
+                     m_pManager->height() + height() - m_pClient->height());
+         raise();
+         break;
+      case Normal:
+         m_state=state;
+         m_oldClientMinSize = m_pClient->minimumSize();
+         m_oldClientMaxSize = m_pClient->maximumSize();
+         show();
+         setMaximumSize(32767,32767);
+         //if(bAnimate)m_pManager->animate(begin,end);
+         m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
+         setGeometry(-m_pClient->x(), -m_pClient->y(),
+         				    m_pManager->width() + width() - m_pClient->width(),
+                     m_pManager->height() + height() - m_pClient->height());
+         raise();
+         break;
+      case Maximized:
+         break;
+		}
+   break;
+   case Minimized:
+      //end=QRect(x()+width()/2,y()+height()/2,1,1);
+      switch(m_state){
+      case Maximized:
+         m_state=state;
+         switchToMinimizeLayout();
+         //if(bAnimate)m_pManager->animate(begin,end);
+         m_pManager->childMinimized(this,TRUE);
+         break;
+      case Normal:
+         m_state=state;
+         m_oldClientMinSize = m_pClient->minimumSize();
+         m_oldClientMaxSize = m_pClient->maximumSize();
+         m_restoredRect = geometry();
+         switchToMinimizeLayout();
+         //if(bAnimate)m_pManager->animate(begin,end);
+         m_pManager->childMinimized(this,FALSE);
+         break;
+      case Minimized:
+         break;
+      }
+   break;
+   }
+   bAnimate = FALSE; //dummy, only to avoid "unused parameter"
 }
 
 //============ setCaption ===============//
