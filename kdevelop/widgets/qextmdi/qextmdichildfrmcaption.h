@@ -56,7 +56,8 @@ protected:
    virtual void mouseDoubleClickEvent(QMouseEvent *);
    virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void mouseMoveEvent(QMouseEvent *e);
-   
+   QString abbreviateText(QString origStr, int maxWidth);
+
 // attributes
 public:
    QString           m_szCaption;
