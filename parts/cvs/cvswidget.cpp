@@ -79,10 +79,10 @@ void CvsWidget::lineHighlighted(int line) {
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
     if (i->isCustomItem()) {
         CvsListBoxItem *ci = static_cast<CvsListBoxItem*>(i);
-	if (ci->containsFileName()) {
-	    m_part->partController()->editDocument(dir + "/" + ci->fileName());
-	    m_part->mainWindow()->lowerView(this);
-	}
+    if (ci->containsFileName()) {
+        m_part->partController()->editDocument(dir + "/" + ci->fileName());
+        m_part->mainWindow()->lowerView(this);
+    }
     }
 }
 

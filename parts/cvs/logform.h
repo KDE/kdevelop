@@ -24,25 +24,25 @@ Implementation for the form displaying 'cvs log' output.
 */
 class LogForm : public LogFormBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     LogForm( QWidget *parent=0, const char *name=0, int flags=0 );
     ~LogForm();
 
-	void start( const QString &workDir, const QStringList &pathsList );
+    void start( const QString &workDir, const QStringList &pathsList );
 
 public slots:
-	void slotProcessExited();
-	void slotReadStdout();
-	void slotReadStderr();
-	void slotLinkClicked( const QString & link );
+    void slotProcessExited();
+    void slotReadStdout();
+    void slotReadStderr();
+    void slotLinkClicked( const QString & link );
 
 private:
-	void setText( const QString& text );
+    void setText( const QString& text );
 
 private:
-	QProcess *process;
-	QString pathName;
+    QProcess *process;
+    QString pathName;
 };
 
 #endif

@@ -30,13 +30,16 @@ const QString SSS( ":" );  // Server String Separator :)
 ///////////////////////////////////////////////////////////////////////////////
 
 ServerConfigurationWidget::ServerConfigurationWidget( QWidget *parent, const char *name, WFlags f )
-	: ServerConfigurationWidgetBase( parent, name ? name : "serverconfigurationwidget", f )
+    : ServerConfigurationWidgetBase( parent, name ? name : "serverconfigurationwidget", f )
 {
-	setWFlags( WDestructiveClose | getWFlags() );  // Auto-delete this window when closed
+    setWFlags( WDestructiveClose | getWFlags() );  // Auto-delete this window when closed
 
-	connect( userNameLineEdit, SIGNAL(lostFocus()), this, SLOT(slotBuildServerString()) );
-	connect( serverPathLineEdit, SIGNAL(lostFocus()), this, SLOT(slotBuildServerString()) );
-	connect( connectionMethodComboBox, SIGNAL(activated(int)), this, SLOT(slotBuildServerString()) );
+    connect( userNameLineEdit, SIGNAL(lostFocus()), this, SLOT(slotBuildServerString()) );
+    connect( serverPathLineEdit, SIGNAL(lostFocus()), this, SLOT(slotBuildServerString()) );
+    connect( connectionMethodComboBox, SIGNAL(activated(int)), this, SLOT(slotBuildServerString()) );
+
+    // Update others widgets when connection method changes
+    connect( connectionMethodComboBox, SIGNAL(activated(QString &)), this, SLOT(slotConnectionMethodChanged(QString &)) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,87 +54,107 @@ ServerConfigurationWidget::~ServerConfigurationWidget()
 // the user fills a field
 void ServerConfigurationWidget::slotBuildServerString()
 {
-	if (serverPath().isEmpty())
-		return;
+    if (serverPath().isEmpty())
+        return;
 
-	QString serverString = QString::null;
-	if (connectionMethod() == "local" && !serverPath().isEmpty())
-	{
-		serverString = serverPath();
-	}
-	else
-	{
-		if (userName().isEmpty())
-			return;
+    QString serverString = QString::null;
+    if (connectionMethod() == "local" && !serverPath().isEmpty())
+    {
+        serverString = serverPath();
+    }
+    else
+    {
+        if (userName().isEmpty())
+            return;
 
-		QString serverString = SSS + connectionMethod() + SSS +
-			userName() + "@" + serverName() + ":" + serverPort() + serverPath();
-	}
+        QString serverString = SSS + connectionMethod() + SSS +
+            userName() + "@" + serverName() + ":" + serverPort() + serverPath();
+    }
 
-	KMessageBox::information( 0, serverString, "Server string is ..." );
+    KMessageBox::information( 0, serverString, "Server string is ..." );
 
-	emit serverStringReady( serverString );
+    emit serverStringReady( serverString );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void ServerConfigurationWidget::slotConnectionMethodChanged( QString &connMethod )
+{
+    if (connMethod == "local")
+    {
+        this->userNameLineEdit->setDisabled( true );
+        this->serverNameLineEdit->setDisabled( true );
+        this->serverPortNumInput->setDisabled( true );
+        this->serverPathLineEdit->setDisabled( true );
+    }
+    else // connMethod == "pserver" || connMethod == "ext"
+    {
+        this->userNameLineEdit->setEnabled( true );
+        this->serverNameLineEdit->setEnabled( true );
+        this->serverPortNumInput->setEnabled( true );
+        this->serverPathLineEdit->setEnabled( true );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::connectionMethod() const
 {
-	return connectionMethodComboBox->text( connectionMethodComboBox->currentItem() );
+    return connectionMethodComboBox->text( connectionMethodComboBox->currentItem() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::userName() const
 {
-	return userNameLineEdit->text();
+    return userNameLineEdit->text();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QCString ServerConfigurationWidget::password() const
 {
-//	m_password = QCString( "xxx" );
+//    m_password = QCString( "xxx" );
 
-	(int)KPasswordDialog::getPassword( m_password,
-		i18n("Please, type to your account password for accessing the repository\n"
-			"(Leave blank if no password is needed)") );
+    (int)KPasswordDialog::getPassword( m_password,
+        i18n("Please, type to your account password for accessing the repository\n"
+            "(Leave blank if no password is needed)") );
 /*
-	if (KPasswordDialog::getPassword( m_password,
-		i18n("Please, type to your account password for accessing the repository\n"
-			"(Leave blank if no password is needed)") ) == KDialog::Accepted)
-	{
-	}
+    if (KPasswordDialog::getPassword( m_password,
+        i18n("Please, type to your account password for accessing the repository\n"
+            "(Leave blank if no password is needed)") ) == KDialog::Accepted)
+    {
+    }
 */
-	return m_password;
+    return m_password;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::serverName() const
 {
-	return serverNameLineEdit->text();
+    return serverNameLineEdit->text();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::serverPort() const
 {
-	return QString::number( serverPortNumInput->value() );
+    return QString::number( serverPortNumInput->value() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::serverPath() const
 {
-	return serverPathLineEdit->text();
+    return serverPathLineEdit->text();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString ServerConfigurationWidget::compressionLevel() const
 {
-	return compressionLevelComboBox->text( compressionLevelComboBox->currentItem() );
+    return compressionLevelComboBox->text( compressionLevelComboBox->currentItem() );
 }
 
 //#include "serverconfigurationwidget.moc.cpp"

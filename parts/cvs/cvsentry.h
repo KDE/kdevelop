@@ -15,30 +15,30 @@ class QTextStream;
 
 struct CvsEntry
 {
-	enum  EntryState { invalidEntry, fileEntry, directoryEntry };
+    enum  EntryState { invalidEntry, fileEntry, directoryEntry };
 
-	CvsEntry();
-	CvsEntry( const QString &aLine );
+    CvsEntry();
+    CvsEntry( const QString &aLine );
 
-	bool read( QTextStream & );
-	void write( QTextStream & );
+    bool read( QTextStream & );
+    void write( QTextStream & );
 
-	void clean();
+    void clean();
 
-	void parse( const QString &aLine );
-	QString pack() const;
+    void parse( const QString &aLine );
+    QString pack() const;
 
-	EntryState state() const;
+    EntryState state() const;
 
-	QString type; // "D" or ""
-	QString fileName;
-	QString revision;
-	QString timeStamp;
-	QString options;
-	QString tagDate;
+    QString type; // "D" or ""
+    QString fileName;
+    QString revision;
+    QString timeStamp;
+    QString options;
+    QString tagDate;
 
-	static const QString invalidMarker;
-	static const QString directoryMarker;
-	static const QString fileMarker;
-	static const QString entrySeparator;
+    static const QString invalidMarker;
+    static const QString directoryMarker;
+    static const QString fileMarker;
+    static const QString entrySeparator;
 };

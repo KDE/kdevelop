@@ -42,8 +42,8 @@ CommitDialog::CommitDialog()
     textEdit->setMinimumSize(fm.width("0")*80, fm.lineSpacing()*3);
     layout->addWidget(textEdit, 10);
 
-	checkAddToChangelog = new QCheckBox( i18n("&Add entry to master Changelog too"), this, "checkboxaddtochangelog" );
-	layout->addWidget( checkAddToChangelog, 0 );
+    checkAddToChangelog = new QCheckBox( i18n("&Add entry to master Changelog too"), this, "checkboxaddtochangelog" );
+    layout->addWidget( checkAddToChangelog, 0 );
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
@@ -58,38 +58,38 @@ CommitDialog::CommitDialog()
     layout->activate();
     adjustSize();
 
-//	new KDictSpellingHighlighter( textEdit );
+//    new KDictSpellingHighlighter( textEdit );
 }
 
 QStringList CommitDialog::logMessage() const
 {
-	QStringList textLines;
-//	textEdit->setText( "Bla bla bla bla\n" );
-	for (int i=0; i<textEdit->paragraphs(); ++i)
-	{
-		textLines << textEdit->text( i );
-	}
-	return textLines;
+    QStringList textLines;
+//    textEdit->setText( "Bla bla bla bla\n" );
+    for (int i=0; i<textEdit->paragraphs(); ++i)
+    {
+        textLines << textEdit->text( i );
+    }
+    return textLines;
 }
 
 bool CommitDialog::mustAddToChangeLog() const
 {
-	return checkAddToChangelog->isChecked();
+    return checkAddToChangelog->isChecked();
 }
 
 void CommitDialog::accept()
 {
-	if (textEdit->text().isNull() || textEdit->text().isEmpty()) {
+    if (textEdit->text().isNull() || textEdit->text().isEmpty()) {
         int s = KMessageBox::warningContinueCancel( this,
-			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
-			i18n("CVS Commit Warning"),
-			KStdGuiItem::cont(),
-			i18n("askWhenCommittingEmptyLogs") );
+            i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
+            i18n("CVS Commit Warning"),
+            KStdGuiItem::cont(),
+            i18n("askWhenCommittingEmptyLogs") );
         if ( s != KMessageBox::Continue ) {
-			return;
-		}
-	}
-	QDialog::accept();
+            return;
+        }
+    }
+    QDialog::accept();
 }
 
 #include "commitdlg.moc"

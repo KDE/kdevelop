@@ -21,63 +21,63 @@ class CvsPart;
 class CvsOptions
 {
 public:
-	virtual ~CvsOptions();
+    virtual ~CvsOptions();
 
-	static CvsOptions *instance();
+    static CvsOptions *instance();
 
-	void save( QDomDocument &dom );
-	void load( const QDomDocument &dom );
+    void save( QDomDocument &dom );
+    void load( const QDomDocument &dom );
 
-	void setCvs( const QString &p );
-	QString cvs();
+    void setCvs( const QString &p );
+    QString cvs();
 
-	void setCommit( const QString &p );
-	QString commit();
+    void setCommit( const QString &p );
+    QString commit();
 
-	void setUpdate( const QString &p );
-	QString update();
+    void setUpdate( const QString &p );
+    QString update();
 
-	void setAdd( const QString &p );
-	QString add();
+    void setAdd( const QString &p );
+    QString add();
 
-	void setRemove( const QString &p );
-	QString remove();
+    void setRemove( const QString &p );
+    QString remove();
 
-	void setRevert( const QString &p );
-	QString revert();
+    void setRevert( const QString &p );
+    QString revert();
 
-	void setDiff( const QString &p );
-	QString diff();
+    void setDiff( const QString &p );
+    QString diff();
 
-	void setLog( const QString &p );
-	QString log();
+    void setLog( const QString &p );
+    QString log();
 
-	void setRsh( const QString &p );
-	QString rsh();
+    void setRsh( const QString &p );
+    QString rsh();
 
 private:
-	// Cache
-	QString m_cvs;
-	QString m_commit;
-	QString m_update;
-	QString m_add;
-	QString m_remove;
-	QString m_revert;
-	QString m_diff;
-	QString m_log;
-	QString m_rsh;
+    // Cache
+    QString m_cvs;
+    QString m_commit;
+    QString m_update;
+    QString m_add;
+    QString m_remove;
+    QString m_revert;
+    QString m_diff;
+    QString m_log;
+    QString m_rsh;
 
-	static CvsOptions *m_instance;
-	CvsOptions();
+    static CvsOptions *m_instance;
+    CvsOptions();
 };
 /*
-#define default_cvs 	QString::fromLatin1("-f")
-#define default_commit	QString::fromLatin1("")
-#define default_update	QString::fromLatin1("-dP")
-#define default_add		QString::fromLatin1("")
-#define default_remove	QString::fromLatin1("-f")
-#define default_replace	QString::fromLatin1("-C -d -P")
-#define default_diff	QString::fromLatin1("-u3 -p")
-#define default_log		QString::fromLatin1("")
-#define default_rsh		QString::fromLatin1("")
+#define default_cvs     QString::fromLatin1("-f")
+#define default_commit    QString::fromLatin1("")
+#define default_update    QString::fromLatin1("-dP")
+#define default_add        QString::fromLatin1("")
+#define default_remove    QString::fromLatin1("-f")
+#define default_replace    QString::fromLatin1("-C -d -P")
+#define default_diff    QString::fromLatin1("-u3 -p")
+#define default_log        QString::fromLatin1("")
+#define default_rsh        QString::fromLatin1("")
 */

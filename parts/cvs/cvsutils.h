@@ -24,19 +24,19 @@ class KURL::List;
 */
 namespace CvsUtils
 {
-	bool isRegisteredInRepository( const QString &projectDirectory, const KURL &url );
-	// Ideally this function will take a bunch of URLs and validate them (they are valid files,
-	// are files registered in CVS, ...). Currently checks only for files belonging to the
-	// repository ;)
-	void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
+    bool isRegisteredInRepository( const QString &projectDirectory, const KURL &url );
+    // Ideally this function will take a bunch of URLs and validate them (they are valid files,
+    // are files registered in CVS, ...). Currently checks only for files belonging to the
+    // repository ;)
+    void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
 
-	// Add file(s) to their respective ignore list
-	void addToIgnoreList( const QString &projectDirectory, const KURL &url );
-	void addToIgnoreList( const QString &projectDirectory, const KURL::List &urls );
+    // Add file(s) to their respective ignore list
+    void addToIgnoreList( const QString &projectDirectory, const KURL &url );
+    void addToIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 
-	// Remove file(s) from their respective .ignore files
-	void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
-	void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
+    // Remove file(s) from their respective .ignore files
+    void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
+    void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 };
 
 #endif // CVSUTILS_H

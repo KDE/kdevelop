@@ -22,27 +22,28 @@
 */
 class ServerConfigurationWidget : public ServerConfigurationWidgetBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ServerConfigurationWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
-	~ServerConfigurationWidget();
+    ServerConfigurationWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    ~ServerConfigurationWidget();
 
-	QString connectionMethod() const;
-	QString userName() const;
-	QCString password() const;
-	QString serverName() const;
-	QString serverPort() const;
-	QString serverPath() const;
-	QString compressionLevel() const;
+    QString connectionMethod() const;
+    QString userName() const;
+    QCString password() const;
+    QString serverName() const;
+    QString serverPort() const;
+    QString serverPath() const;
+    QString compressionLevel() const;
 
 signals:
-	void serverStringReady( const QString &serverString );
+    void serverStringReady( const QString &serverString );
 
 private slots:
-	void slotBuildServerString();
+    void slotBuildServerString();
+    void slotConnectionMethodChanged( QString &connMethod );
 
 private:
-	mutable QCString m_password;
+    mutable QCString m_password;
 };
 
 #endif
