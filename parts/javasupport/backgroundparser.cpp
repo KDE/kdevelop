@@ -58,7 +58,7 @@ void BackgroundParser::run()
 
     } catch( antlr::ANTLRException& ex ){
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        m_reporter->reportError( ex.getMessage(),
+        m_reporter->reportError( ex.getMessage().c_str(),
 				 m_fileName,
 				 lexer.getLine(),
 				 lexer.getColumn() );
