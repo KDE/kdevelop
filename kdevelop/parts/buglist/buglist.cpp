@@ -18,8 +18,10 @@
 #include "buglist.h"
 #include "bugedit.h"
 #include <qdatetime.h>
+#include <qdom.h>
 #include <qmessagebox.h>
 #include <qsortedlist.h>
+#include <qxml.h>
 #include <fstream.h>
 #include <klocale.h>
 
@@ -31,6 +33,7 @@
 #define LST_AGE         4
 #define LST_PACKAGE     5
 #define LST_ASSIGNEDTO  6
+
 
 BugList::BugList(QWidget *parent, const char *name, QString FileName,
                  QString Initials, QString UserName, QString UserEMail)
@@ -161,18 +164,140 @@ BugList::~BugList()
 
 void BugList::ParseFile ()
 {
-    // Create a handler.
-    StructureParser     handler (this);
+    QFile           file (m_FileName);
+    QDomDocument    xmlDocument;
+    uint            Count;
 
-    // Use the simple reader to parse our file.
-    QFile               xmlFile (m_FileName);
-    QXmlInputSource     source (xmlFile);
-    QXmlSimpleReader    reader;
+    // Try to open our bug tracking file.
+    if (!file.open (IO_ReadOnly))
+    {
+        QMessageBox (NULL, i18n("Can't read the bug tracking file %1.").arg(m_FileName));
+        return;
+    }
 
-    // Begin to parse the XML file.
-    reader.setFeature ("http://trolltech.com/xml/features/report-whitespace-only-CharData",FALSE);
-    reader.setContentHandler (&handler);
-    reader.parse (source);
+    // Try to associate the file with the XML document.
+    if (!xmlDocument.setContent(&file))
+    {
+        QMessageBox (NULL, i18n("The file %1 does not contain valid XML").arg(m_FileName));
+        return;
+    }
+
+    // Get the main space of the document.
+    kdDebug(9040) << "BugList::Parsing the bug list" << endl;
+    QDomElement elmMain = xmlDocument.documentElement();
+
+    // Get the list of developers.
+    QDomNodeList nodeDevelopers = xmlDocument.elementsByTagName("Developer");
+    for (Count = 0;Count < nodeDevelopers.count ();Count++)
+    {
+        BugCounter *    pBugCounter;
+
+        // Retrieve the developer element.
+        QDomElement elmDeveloper = nodeDevelopers.item(Count).toElement();
+
+        // Add the current developer settings into the dictionary.
+        pBugCounter = new BugCounter;
+        pBugCounter->Initials = elmDeveloper.attribute("Initials");
+        pBugCounter->LastBugNumber = elmDeveloper.attribute("Counter").toInt ();
+        Developers.insert (pBugCounter->Initials, pBugCounter);
+    }
+
+    // Get the list of bugs.
+    QDomNodeList nodeBugs = xmlDocument.elementsByTagName("Bug");
+    for (Count = 0;Count < nodeBugs.count ();Count++)
+    {
+        Bug *   pBug;
+
+        // Retrieve the developer element.
+        QDomElement elmBug = nodeBugs.item(Count).toElement();
+
+        // Grab the basic attributes.
+        pBug = new Bug;
+        pBug->BugID = elmBug.attribute("BugID");
+        pBug->Description = elmBug.attribute("Description");
+
+        // Work through all the elements.
+        QDomNode    nodeChild = elmBug.firstChild ();
+        while (!nodeChild.isNull ())
+        {
+            // Turn the node into an element.
+            QDomElement elmSubBug = nodeChild.toElement();
+
+            // Severity
+            if (elmSubBug.nodeName () == "Severity")
+                pBug->Severity = elmSubBug.text ();
+
+            // BugClass
+            if (elmSubBug.nodeName () == "BugClass")
+                pBug->BugClass = elmSubBug.text ();
+
+            // Location
+            if (elmSubBug.nodeName () == "Location")
+                pBug->Location = elmSubBug.text ();
+
+            // AssignedTo
+            if (elmSubBug.nodeName () == "AssignedTo")
+                pBug->AssignedTo = elmSubBug.text ();
+
+            // AssignedEMail
+            if (elmSubBug.nodeName () == "AssignedEMail")
+                pBug->AssignedEMail = elmSubBug.text ();
+
+            // ReportUserName
+            if (elmSubBug.nodeName () == "ReportUserName")
+                pBug->ReportUserName = elmSubBug.text ();
+
+            // ReportEMail
+            if (elmSubBug.nodeName () == "ReportEMail")
+                pBug->ReportEMail = elmSubBug.text ();
+
+            // Package
+            if (elmSubBug.nodeName () == "Package")
+                pBug->Package = elmSubBug.text ();
+
+            // VersionNo
+            if (elmSubBug.nodeName () == "VersionNo")
+                pBug->VersionNo = elmSubBug.text ();
+
+            // Notes
+            if (elmSubBug.nodeName () == "Notes")
+                pBug->Notes = elmSubBug.text ();
+
+            // Workaround
+            if (elmSubBug.nodeName () == "Workaround")
+                pBug->Workaround = elmSubBug.text ();
+
+            // SysInfo
+            if (elmSubBug.nodeName () == "SysInfo")
+                pBug->SysInfo = elmSubBug.text ();
+
+            // Priority
+            if (elmSubBug.nodeName () == "Priority")
+                pBug->Priority = elmSubBug.text ();
+
+            // Repeat
+            if (elmSubBug.nodeName () == "Repeat")
+                pBug->Repeat = elmSubBug.text ();
+
+            // AssignedDate
+            if (elmSubBug.nodeName () == "AssignedDate")
+                pBug->AssignedDate.setYMD (elmSubBug.text ().right (4).toInt (),elmSubBug.text ().mid (elmSubBug.text ().find ('/') + 1,elmSubBug.text ().findRev ('/') - elmSubBug.text ().find ('/') - 1).toInt (),elmSubBug.text ().left (elmSubBug.text ().find ('/')).toInt ());
+
+            // ReportDate
+            if (elmSubBug.nodeName () == "ReportDate")
+                pBug->ReportDate.setYMD (elmSubBug.text ().right (4).toInt (),elmSubBug.text ().mid (elmSubBug.text ().find ('/') + 1,elmSubBug.text ().findRev ('/') - elmSubBug.text ().find ('/') - 1).toInt (),elmSubBug.text ().left (elmSubBug.text ().find ('/')).toInt ());
+
+            // FixScheduled
+            if (elmSubBug.nodeName () == "FixScheduled")
+                pBug->FixScheduled.setYMD (elmSubBug.text ().right (4).toInt (),elmSubBug.text ().mid (elmSubBug.text ().find ('/') + 1,elmSubBug.text ().findRev ('/') - elmSubBug.text ().find ('/') - 1).toInt (),elmSubBug.text ().left (elmSubBug.text ().find ('/')).toInt ());
+
+     kdDebug(9040) << "BugList::Node-" << elmSubBug.nodeName () << "-" << elmSubBug.text () << endl;
+            //pBug->BugClass = elmBug.attribute("BugClass");
+            nodeChild = nodeChild.nextSibling ();
+        }
+
+        InsertBug (pBug);
+    }
 }
 
 
@@ -185,7 +310,6 @@ void BugList::ParseFile ()
 
 void BugList::WriteXMLFile ()
 {
-    ofstream        Out (m_FileName,ios::trunc | ios::out);
     QSortedList     <QString> SortedBugList;
     QSortedList     <QString> SortedDeveloperList;
     QDictIterator   <Bug> BugIterator (BugDictionary);
@@ -193,6 +317,7 @@ void BugList::WriteXMLFile ()
     QString *       pEntry;
     Bug *           pBug;
     BugCounter *    pBugCounter;
+    QString         TheDate;
 
     // We make a sorted list of the bug ID's - why don't QT provide a sort on
     // their dictionary object?
@@ -211,150 +336,169 @@ void BugList::WriteXMLFile ()
     }
     SortedDeveloperList.sort ();
 
-    // Write the header.
-    Out << "<?xml version='1.0'?>" << endl;
-    Out << "<Bugs>" << endl;
+    QDomDocument    xmlDocument ("BugTracking");
+    xmlDocument.appendChild (xmlDocument.createProcessingInstruction ("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
-    // Out with the developer list.
-    Out << "  <Developers>" << endl;
+    // The main document space.
+    QDomElement elmMain = xmlDocument.appendChild (xmlDocument.createElement("BugData")).toElement();
+
+    // Write out the developer list.
+    QDomElement elmDevelopers = elmMain.appendChild (xmlDocument.createElement("Developers")).toElement();
     for (pEntry = SortedDeveloperList.first(); pEntry != NULL; pEntry = SortedDeveloperList.next ())
     {
         // Get a pointer to our object.
         pBugCounter = Developers [*pEntry];
 
         // Pump it out.
-        Out << "    <Developer>" << endl;
-        if (pBugCounter->Initials)
-            Out << "      <Initials>" << pBugCounter->Initials << "</Initials>" << endl;
-        Out << "      <Counter>" << pBugCounter->LastBugNumber << "</Counter>" << endl;
-        Out << "    </Developer>" << endl;
+        QDomElement elmDeveloper = elmDevelopers.appendChild (xmlDocument.createElement("Developer")).toElement();
+        elmDeveloper.setAttribute ("Initials",pBugCounter->Initials);
+        elmDeveloper.setAttribute ("Counter",pBugCounter->LastBugNumber);
     }
-    Out << "  </Developers>" << endl;
 
     // Output the bug list.
+    QDomElement elmBugs = elmMain.appendChild(xmlDocument.createElement("Bugs")).toElement();
     for (pEntry = SortedBugList.first(); pEntry != NULL; pEntry = SortedBugList.next ())
     {
         // Get a pointer to our object.
         pBug = BugDictionary [*pEntry];
-
-        // Iterate the dictionary.
-        Out << "  <Bug>" << endl;
+        QDomElement elmBug = elmBugs.appendChild (xmlDocument.createElement("Bug")).toElement();
 
         // BugID
         if (pBug->BugID)
-            Out << "    <BugID>" << pBug->BugID << "</BugID>" << endl;
+            elmBug.setAttribute ("BugID",pBug->BugID);
 
         // Description
         if (pBug->Description)
-            Out << "    <Description>" << pBug->Description << "</Description>" << endl;
+            elmBug.setAttribute ("Description",pBug->Description);
 
-        // Severity
+         // Severity
         if (pBug->Severity)
-            Out << "    <Severity>" << pBug->Severity << "</Severity>" << endl;
+        {
+            QDomElement elmSeverity = elmBug.appendChild (xmlDocument.createElement("Severity")).toElement();
+            elmSeverity.appendChild (xmlDocument.createTextNode(pBug->Severity)).toElement();
+        }
 
         // Priority
         if (pBug->Priority)
-            Out << "    <Priority>" << pBug->Priority << "</Priority>" << endl;
+        {
+            QDomElement elmPriority = elmBug.appendChild (xmlDocument.createElement("Priority")).toElement();
+            elmPriority.appendChild (xmlDocument.createTextNode(pBug->Priority)).toElement();
+        }
 
         // BugClass
         if (pBug->BugClass)
-            Out << "    <Class>" << pBug->BugClass << "</Class>" << endl;
-
-        // Location
-        if (pBug->Location)
-            Out << "    <Location>" << pBug->Location << "</Location>" << endl;
+        {
+            QDomElement elmBugClass = elmBug.appendChild (xmlDocument.createElement("BugClass")).toElement();
+            elmBugClass.appendChild (xmlDocument.createTextNode(pBug->BugClass)).toElement();
+        }
 
         // AssignedTo
         if (pBug->AssignedTo)
-            Out << "    <AssignedTo>" << pBug->AssignedTo << "</AssignedTo>" << endl;
-
-        // AssignedDate
-        if (!pBug->AssignedDate.isNull ())
         {
-            Out << "    <AssignedDate>";
-            Out << pBug->AssignedDate.day () << "/";
-            Out << pBug->AssignedDate.month () << "/";
-            Out << pBug->AssignedDate.year ();
-            Out << "</AssignedDate>" << endl;
+            QDomElement elmAssignedTo = elmBug.appendChild (xmlDocument.createElement("AssignedTo")).toElement();
+            elmAssignedTo.appendChild (xmlDocument.createTextNode(pBug->AssignedTo)).toElement();
         }
 
         // AssignedEMail
         if (pBug->AssignedEMail)
-            Out << "    <AssignedEMail>" << pBug->AssignedEMail << "</AssignedEMail>" << endl;
+        {
+            QDomElement elmAssignedEMail = elmBug.appendChild (xmlDocument.createElement("AssignedEMail")).toElement();
+            elmAssignedEMail.appendChild (xmlDocument.createTextNode(pBug->AssignedEMail)).toElement();
+        }
 
         // ReportUserName
         if (pBug->ReportUserName)
-            Out << "    <ReportUserName>" << pBug->ReportUserName << "</ReportUserName>" << endl;
+        {
+            QDomElement elmReportUserName = elmBug.appendChild (xmlDocument.createElement("ReportUserName")).toElement();
+            elmReportUserName.appendChild (xmlDocument.createTextNode(pBug->ReportUserName)).toElement();
+        }
 
         // ReportEMail
         if (pBug->ReportEMail)
-            Out << "    <ReportEMail>" << pBug->ReportEMail << "</ReportEMail>" << endl;
-
-        // ReportDate
-        if (!pBug->ReportDate.isNull ())
         {
-            Out << "    <ReportDate>";
-            Out << pBug->ReportDate.day () << "/";
-            Out << pBug->ReportDate.month () << "/";
-            Out << pBug->ReportDate.year ();
-            Out << "</ReportDate>" << endl;
-        }
-
-        // Fixed
-        Out << "    <Fixed>" << pBug->Fixed << "</Fixed>" << endl;
-
-        // FixDate
-        if (!pBug->FixDate.isNull ())
-        {
-            Out << "    <FixDate>";
-            Out << pBug->FixDate.day () << "/";
-            Out << pBug->FixDate.month () << "/";
-            Out << pBug->FixDate.year ();
-            Out << "</FixDate>" << endl;
+            QDomElement elmReportEMail = elmBug.appendChild (xmlDocument.createElement("ReportEMail")).toElement();
+            elmReportEMail.appendChild (xmlDocument.createTextNode(pBug->ReportEMail)).toElement();
         }
 
         // Package
         if (pBug->Package)
-            Out << "    <Package>" << pBug->Package << "</Package>" << endl;
+        {
+            QDomElement elmPackage = elmBug.appendChild (xmlDocument.createElement("Package")).toElement();
+            elmPackage.appendChild (xmlDocument.createTextNode(pBug->Package)).toElement();
+        }
 
         // VersionNo
         if (pBug->VersionNo)
-            Out << "    <VersionNo>" << pBug->VersionNo << "</VersionNo>" << endl;
+        {
+            QDomElement elmVersionNo = elmBug.appendChild (xmlDocument.createElement("VersionNo")).toElement();
+            elmVersionNo.appendChild (xmlDocument.createTextNode(pBug->VersionNo)).toElement();
+        }
 
         // Notes
         if (pBug->Notes)
-            Out << "    <Notes>" << pBug->Notes << "</Notes>" << endl;
+        {
+            QDomElement elmNotes = elmBug.appendChild (xmlDocument.createElement("Notes")).toElement();
+            elmNotes.appendChild (xmlDocument.createTextNode(pBug->Notes)).toElement();
+        }
 
         // Workaround
         if (pBug->Workaround)
-            Out << "    <Workaround>" << pBug->Workaround << "</Workaround>" << endl;
-
-        // FixScheduled
-        if (!pBug->FixScheduled.isNull ())
         {
-            Out << "    <FixScheduled>";
-            Out << pBug->FixScheduled.day () << "/";
-            Out << pBug->FixScheduled.month () << "/";
-            Out << pBug->FixScheduled.year ();
-            Out << "</FixScheduled>" << endl;
+            QDomElement elmWorkaround = elmBug.appendChild (xmlDocument.createElement("Workaround")).toElement();
+            elmWorkaround.appendChild (xmlDocument.createTextNode(pBug->Workaround)).toElement();
         }
 
         // Repeat
         if (pBug->Repeat)
-            Out << "    <Repeat>" << pBug->Repeat << "</Repeat>" << endl;
+        {
+            QDomElement elmRepeat = elmBug.appendChild (xmlDocument.createElement("Repeat")).toElement();
+            elmRepeat.appendChild (xmlDocument.createTextNode(pBug->Repeat)).toElement();
+        }
 
         // SysInfo
         if (pBug->SysInfo)
-            Out << "    <SysInfo>" << pBug->SysInfo << "</SysInfo>" << endl;
+        {
+            QDomElement elmSysInfo = elmBug.appendChild (xmlDocument.createElement("SysInfo")).toElement();
+            elmSysInfo.appendChild (xmlDocument.createTextNode(pBug->SysInfo)).toElement();
+        }
 
-        // Next dictionary item now.
-        Out << "  </Bug>" << endl;
+        // AssignedDate
+        if (!pBug->AssignedDate.isNull ())
+        {
+            QDomElement elmAssignedDate = elmBug.appendChild (xmlDocument.createElement("AssignedDate")).toElement();
+            TheDate.sprintf ("%i/%i/%i",pBug->AssignedDate.day (), pBug->AssignedDate.month (), pBug->AssignedDate.year ());
+            elmAssignedDate.appendChild (xmlDocument.createTextNode(TheDate)).toElement();
+        }
+
+        // ReportDate
+        if (!pBug->ReportDate.isNull ())
+        {
+            QDomElement elmReportDate = elmBug.appendChild (xmlDocument.createElement("ReportDate")).toElement();
+            TheDate.sprintf ("%i/%i/%i",pBug->ReportDate.day (), pBug->ReportDate.month (), pBug->ReportDate.year ());
+            elmReportDate.appendChild (xmlDocument.createTextNode(TheDate)).toElement();
+        }
+
+        // FixScheduled
+        if (!pBug->FixScheduled.isNull ())
+        {
+            QDomElement elmFixScheduled = elmBug.appendChild (xmlDocument.createElement("FixScheduled")).toElement();
+            TheDate.sprintf ("%i/%i/%i",pBug->FixScheduled.day (), pBug->FixScheduled.month (), pBug->FixScheduled.year ());
+            elmFixScheduled.appendChild (xmlDocument.createTextNode(TheDate)).toElement();
+        }
 
         ++BugIterator;
     }
 
-    // Close off the XML.
-    Out << "</Bugs>" << endl;
+    // Save the document to a file.
+    QFile file (m_FileName);
+    if (!file.open (IO_WriteOnly))
+    {
+        QMessageBox (NULL, i18n("Can't save the bug tracking file."));
+        return;
+    }
+    QTextStream s(&file);
+    xmlDocument.save (s,4);
+    file.close();
 }
 
 

@@ -24,9 +24,6 @@ Bug::Bug ()
     Severity = "normal";
     Priority = "normal";
 
-    // Not fixed by default.
-    Fixed = FALSE;
-
     // Put a good default in place.
     ReportDate = QDateTime::currentDateTime ().date ();
 }

@@ -54,10 +54,6 @@ class Bug
         QString     SysInfo;
         QString     Priority;
         QString     Repeat;
-
-        // May not use these.
-        bool        Fixed;
-        QDate       FixDate;
 };
 
 #endif

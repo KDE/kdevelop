@@ -347,27 +347,6 @@ BugEdit::BugEdit (QWidget * parent=0, const char * name=0, Bug * pBug = 0, bool 
     new QWidget (GeneralLayout);
     new QWidget (GeneralLayout);
 
-    // SPACER!!!
-    new QWidget (GeneralLayout);
-
-/*    // CHKBOX: Fixed
-    chkboxFixed = new QCheckBox (i18n("&Bug is Fixed"), GeneralLayout);
-    chkboxFixed->setChecked (pBug->Fixed);
-    QWhatsThis::add (chkboxFixed,
-	    i18n("Check this box if the bug\n"
-			 "has been fixed."));
-
-    // LABEL: FixDate
-    QLabel *lblFixDate = new QLabel (i18n ("&Fixed On:"), GeneralLayout);
-
-    // LINEEDIT: FixDate
-    editFixDate = new QLineEdit(GeneralLayout);
-    lblFixDate->setBuddy (editFixDate);
-    if (pBug->FixDate.isValid ())
-        editFixDate->setText (DateToQString (pBug->FixDate));
-    QWhatsThis::add (editFixDate,
-	    i18n("Enter the date this bug was repaired."));*/
-
     // LINEEDIT: Notes.
     editNotes = new QMultiLineEdit (pSheetNotes,"Notes");
     editNotes->setText (pBug->Notes);
@@ -440,9 +419,6 @@ void BugEdit::updateRecord()
 
     m_pBug->AssignedDate = QStringToDate (editAssignedDate->text ());
     m_pBug->ReportDate = QStringToDate (editReportDate->text ());
-
-//    m_pBug->Fixed = chkboxFixed->isChecked ();
-//    m_pBug->FixDate = editFixDate->text ();
 }
 
 

@@ -24,8 +24,8 @@
 
 #include "bug.h"
 #include "bugcounter.h"
-#include "structureparser.h"
 #include <kapp.h>
+#include <kdebug.h>
 #include <kdevcomponent.h>
 #include <qwidget.h>
 #include <qlistview.h>
@@ -35,15 +35,9 @@
 #include <qdict.h>
 
 
-// Forward declaration to handle the dependancies.
-class StructureParser;
-
-
 class BugList : public QWidget // KDevComponent
 {
 Q_OBJECT
-
-friend StructureParser;
 
 public:
     /** construtor/destructor */

@@ -349,7 +349,7 @@ sub_dirs=doctreeview,classview,grepview,outputviews,qextmdimainfrmview,cppsuppor
 type=normal
 [kdevelop/parts/buglist/Makefile.am]
 dist=true
-files=kdevelop/parts/buglist/Makefile.am,kdevelop/parts/buglist/bug.cpp,kdevelop/parts/buglist/bugcounter.cpp,kdevelop/parts/buglist/bugcounter.h,kdevelop/parts/buglist/bugedit.cpp,kdevelop/parts/buglist/structureparser.cpp,kdevelop/parts/buglist/structureparser.h,kdevelop/parts/buglist/bugedit.h,kdevelop/parts/buglist/bug.h,kdevelop/parts/buglist/buglist.cpp,kdevelop/parts/buglist/buglist.h,kdevelop/parts/buglist/buglistcomponent.cpp,kdevelop/parts/buglist/buglistcomponent.h,kdevelop/parts/buglist/main.cpp,kdevelop/parts/buglist/main.h
+files=kdevelop/parts/buglist/Makefile.am,kdevelop/parts/buglist/bug.cpp,kdevelop/parts/buglist/bugcounter.cpp,kdevelop/parts/buglist/bugcounter.h,kdevelop/parts/buglist/bugedit.cpp,kdevelop/parts/buglist/bugedit.h,kdevelop/parts/buglist/bug.h,kdevelop/parts/buglist/buglist.cpp,kdevelop/parts/buglist/buglist.h,kdevelop/parts/buglist/buglistcomponent.cpp,kdevelop/parts/buglist/buglistcomponent.h,kdevelop/parts/buglist/main.cpp,kdevelop/parts/buglist/main.h
 install=false
 install_location=
 sub_dirs=
@@ -410,16 +410,6 @@ install=false
 install_location=
 type=SOURCE
 [kdevelop/parts/buglist/main.h]
-dist=true
-install=false
-install_location=
-type=HEADER
-[kdevelop/parts/buglist/structureparser.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-[kdevelop/parts/buglist/structureparser.h]
 dist=true
 install=false
 install_location=

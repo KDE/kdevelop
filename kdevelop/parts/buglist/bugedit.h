@@ -75,8 +75,6 @@ private:
     QLineEdit *         editReportUserName;
     QLineEdit *         editReportEMail;
     QLineEdit *         editReportDate;
-    QCheckBox *         chkboxFixed;
-    QLineEdit *         editFixDate;
     QLineEdit *         editPackage;
     QLineEdit *         editVersionNo;
     QMultiLineEdit *    editNotes;
