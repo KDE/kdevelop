@@ -1,3 +1,6 @@
+2002-06-14  Roberto Raggi  <raggi@cli.di.unipi.it>
+	* qeditor: added keyboard macro support
+	
 2002-06-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * classview:
           - fix hierarchical view (It showed only a single
