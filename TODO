@@ -45,6 +45,10 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - [Modified] missing in mainframe caption
   - captions missing for toolbar buttons
 
+* build/configuration:
+  - cross-compiling feature missing
+  - make "MIN_VERSION" configurable on new project creation
+
 * doctreeview:
   - implement "Make User Manual"
   - use kdoc to update Qt/KDE docs
