@@ -555,8 +555,6 @@ void RubyDebuggerPart::slotRun()
 {
 	if (controller->stateIsOn(s_programExited)) {
 		rdbBreakpointWidget->reset();
-		framestackWidget->clear();
-		variableWidget->clear();
 	}
     
 	if ( controller->stateIsOn( s_dbgNotStarted ) ) {

@@ -220,7 +220,9 @@ void RDBParser::setItem(TrimmableItem *parent, const QString &varName,
     case typeReference:
         item->setText(ValueCol, value);
         item->setCache(value);
-        item->setExpandable(true);
+		// If there's a comma, there must be a list of things
+		// to expand
+        item->setExpandable(value.contains(','));
         break;
 
     case typeValue:

@@ -65,6 +65,8 @@ class VariableWidget : public QWidget
 
 public:
     VariableWidget( QWidget *parent=0, const char *name=0 );
+	
+	// Clear everything but the Watch and Global frames
     void clear();
 
     VariableTree *varTree() const

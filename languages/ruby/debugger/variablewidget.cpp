@@ -84,12 +84,14 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 void VariableWidget::clear()
 {
 	QListViewItemIterator it(varTree_);
-	while (it.current()) {
-        if (	it.current()->rtti() != RTTI_WATCH_ROOT 
-				&& it.current()->rtti() != RTTI_WATCH_VAR_ITEM
-				&& it.current()->rtti() != RTTI_GLOBAL_ROOT ) 
+	while (it.current() != 0) {
+		QListViewItem * item = it.current();
+		
+        if (	item->rtti() != RTTI_WATCH_ROOT 
+				&& item->rtti() != RTTI_WATCH_VAR_ITEM
+				&& item->rtti() != RTTI_GLOBAL_ROOT ) 
 		{
-			QListViewItem * item = it.current();
+			
 			delete item;
 		}
 		++it;
@@ -97,6 +99,7 @@ void VariableWidget::clear()
 	
 	return;
 }
+
 
 // **************************************************************************
 
@@ -687,7 +690,9 @@ void VarItem::checkForRequests()
     // On the other hand, if it's empty, there is no reason to go on...
     if ( cache_.isEmpty() ) return;
 
-    if (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) {
+    if (	isExpandable() 
+			&& (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) ) 
+	{
         waitingForData();
         emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
     }
