@@ -2,7 +2,7 @@
 <class>%{APPNAME}view_base</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>%{APPNAME}view_base</cstring>
+        <cstring>%{APPNAMESC}view_base</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>%{APPNAME}_base</string>
+        <string>%{APPNAMESC}_base</string>
     </property>
     <grid>
         <property name="name">
