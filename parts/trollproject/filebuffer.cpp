@@ -235,6 +235,11 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
       continue;
     }
     Caret eqSign = findInBuffer("=",variablePos);
+    if (eqSign.m_row != variablePos.m_row)
+    {
+      curPos = Caret(variablePos)+Caret(1,0);
+      continue;
+    }
     QString line=m_buffer[eqSign.m_row];
     QChar effectOperator = line[eqSign.m_idx-1];
     long lineNum=eqSign.m_row;
@@ -478,7 +483,7 @@ QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
 }
 
 /**
- * Handling qmake scopes means handling two types og scopes 
+ * Handling qmake scopes means handling two types og scopes
  * 1. bracket scopes s1:s2:...:sn{ . . . }
  * 2. non-bracketscopes s1:s2:...:sn:v1 = ... [\ ... [\ ...]]
  */
