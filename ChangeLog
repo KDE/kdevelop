@@ -1,3 +1,7 @@
+2001-03-05 Omid Givi <omid@kdevelop.org>
+	* Implemented Project Space options dialog
+	* Enahnced Linker Options dialog
+	
 2001-03-04 Omid Givi <omid@kdevelop.org>
 	* Implemented 'Project General Information' in the
 	  Project Options Dialog. 
