@@ -621,7 +621,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 	  editor_view->setFocus();
           cerr << "Already edited with name:" << editor_view->currentEditor()->fileName() << endl;
           // This looks odd:
-	  mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
+	  //--Falk Br.-- setFocus() sets the taskbar button, too//    mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
 	  
 	  return;
       }
