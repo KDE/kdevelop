@@ -45,6 +45,7 @@
 #include "./dbg/vartree.h"
 #include "./dbg/framestack.h"
 #include "./dbg/brkptmanager.h"
+#include "./dbg/disassemble.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -59,8 +60,9 @@ CKDevelop::CKDevelop(bool witharg)
 
       dbgController(0),
       var_viewer(0),
-      frameStack(0),
       brkptManager(0),
+      frameStack(0),
+      disassemble(0),
       dbg_widget(0),
       dbgInternal(false)
 {
@@ -600,7 +602,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  project_menu->insertSeparator();		
 
-  workspaces_submenu = new QPopupMenu;
+//  workspaces_submenu = new QPopupMenu;
   //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
   //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
   //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
@@ -984,6 +986,7 @@ void CKDevelop::initConnections(){
 
   connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
   connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
+  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
 
   connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
@@ -1330,20 +1333,25 @@ void CKDevelop::initDebugger()
   if (dbgInternal && !var_viewer)
   {
     ASSERT(!frameStack && !brkptManager && !var_viewer && !dbgController);
-    frameStack = new FrameStack(o_tab_view, "FrameStack");
-    frameStack->setFocusPolicy(QWidget::NoFocus);
-    brkptManager = new BreakpointManager(o_tab_view, "BPManager");
+    brkptManager  = new BreakpointManager(o_tab_view, "BPManager");
+    frameStack    = new FrameStack(o_tab_view, "FrameStack");
+    disassemble   = new Disassemble(kapp, o_tab_view, "Disassemble");
+    var_viewer    = new VarViewer(t_tab_view,"VAR");
+
     brkptManager->setFocusPolicy(QWidget::NoFocus);
-    var_viewer = new VarViewer(t_tab_view,"VAR");
+    frameStack->setFocusPolicy(QWidget::NoFocus);
+    disassemble->setFocusPolicy(QWidget::NoFocus);
 //    var_viewer->setFocusPolicy(QWidget::NoFocus);
 
-    o_tab_view->addTab(frameStack,i18n("frame stack"));
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));
+    o_tab_view->addTab(frameStack,i18n("frame stack"));
+    o_tab_view->addTab(disassemble,i18n("disassemble"));
     t_tab_view->addTab(var_viewer,i18n("VAR"));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(kapp, o_tab_view, "debugger");
     o_tab_view->addTab(dbg_widget,i18n("debugger"));
+    dbg_widget->insertLine("Start dbg");
 #endif
 
   	// Connect the breakpoint manager to monitor the bp setting - even
@@ -1385,18 +1393,23 @@ void CKDevelop::initDebugger()
               var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
     connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
               var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
+
+    connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
+              frameStack,             SLOT(slotSelectFrame(int)));
   }
 
   // Enable or disable the tabs, if they exist...
   if (var_viewer)
   {
     // Figure out whether the tabs should be enabled or not.
-    o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal);
     o_tab_view->setTabEnabled(i18n("BPManager"), dbgInternal);
-    t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal);
-    var_viewer->setEnabled(dbgInternal);
-    frameStack->setEnabled(dbgInternal);
+    o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
+    o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
+    t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal && dbgController);
     brkptManager->setEnabled(dbgInternal);
+    frameStack->setEnabled(dbgInternal && dbgController);
+    disassemble->setEnabled(dbgInternal && dbgController);
+    var_viewer->setEnabled(dbgInternal && dbgController);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     o_tab_view->setTabEnabled(i18n("debugger"), dbgInternal);
     dbg_widget->setEnabled(dbgInternal);
@@ -1409,7 +1422,7 @@ void CKDevelop::initDebugger()
     slotDebugStop();
 
   // If we are running an internal debugger they (may have) changed
-  // the config, so poke it the current values.
+  // the config, so poke the current values into the controller
   //
   if (dbgController)
     dbgController->reConfig();

@@ -42,7 +42,8 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
 	ctoolsconfigdlg.cpp cbugreportdlg.cpp cclasstooltreeview.cpp \
-	cmakemanualdlg.cpp cmakemanualdlgdata.cpp ckdevaccel.cpp dbgtoolbar.cpp
+	cmakemanualdlg.cpp cmakemanualdlgdata.cpp ckdevaccel.cpp \
+    dbgtoolbar.cpp dbgpsdlg.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path.
@@ -66,7 +67,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
-	cmakemanualdlg.h klistview.h ckdevaccel.h dbgtoolbar.h
+	cmakemanualdlg.h klistview.h ckdevaccel.h dbgtoolbar.h dbgpsdlg.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk
 

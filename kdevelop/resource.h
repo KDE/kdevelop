@@ -301,6 +301,7 @@
 #define LFV 1
 #define RFV 2
 #define DOC 3
+#define VAR 4
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the messages_widget
@@ -308,6 +309,9 @@
 #define MESSAGES 0
 #define STDINSTDOUT 1
 #define STDERR 2
+#define BREAKPOINT 3
+#define FRAME_STACK 4
+#define DISASSEMBLE 5
 
 ///////////////////////////////////////////////////////////////////
 // Toolbar ID's

@@ -84,6 +84,7 @@ class DbgController;
 class FrameStack;
 class BreakpointManager;
 class Breakpoint;
+class Disassemble;
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -367,7 +368,8 @@ public:
       memory, libraries, disassembled code */
   void slotDebugMemoryView();
   /** follows the source position in the editor of the debugger*/
-  void slotDebugShowStepInSource(const QString& filename,int linenumber);
+  void slotDebugShowStepInSource(const QString& filename, int linenumber,
+                                  const QString& address);
   /** follows the source position in the editor of the debugger*/
   void slotDebugGoToSourcePosition(const QString& filename,int linenumber);
   /** Shows the debugger status on the status line */
@@ -519,6 +521,10 @@ public:
   void slotToolbarClicked(int);
   /** click on the main window tabs: header, source,documentation or tools*/
   void slotSTabSelected(int item);
+  /** click on the output window tabs: messages, stdout, stderr, breakpoint,
+      disassemble, frame stack*/
+  void slotOTabSelected(int item);
+
   /** set the window tab automatically without click */
   void slotSCurrentTab(int item);
   /** click on the treeview tabs: cv,lfv,wfv,doc*/
@@ -740,7 +746,7 @@ private:
   QPopupMenu* doc_bookmarks;
 
   QPopupMenu* project_menu;
-  QPopupMenu* workspaces_submenu;
+//  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
@@ -916,8 +922,9 @@ private:
   VarViewer* var_viewer;
 
   /** */
-  FrameStack* frameStack;
   BreakpointManager* brkptManager;
+  FrameStack* frameStack;
+  Disassemble* disassemble;
 
   /** debugger dialog */
   COutputWidget* dbg_widget;
@@ -927,6 +934,9 @@ private:
 
   // Initiates a variety of debugging sessions.
   QPopupMenu* debugPopup;
+
+  // Protect the gdbcontroller deletion.
+  bool dbgShuttingDown;
 };
 
 #endif

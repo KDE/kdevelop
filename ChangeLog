@@ -1,3 +1,11 @@
+2000-01-04 Christian Couder <chcouder@club-internet.fr>
+	* Disassemble window - not complete, but workable.
+      Fix attach/detach
+      Add pid selector for attach
+      Core file fixes
+      Debugger shutdown corrections
+      Other fixes
+
 2000-01-03 Christian Couder <chcouder@club-internet.fr>
 	* Added Next/Previous Bookmark features.
 
