@@ -26,6 +26,7 @@
   - Source formatter (prettyprint functionality)
   - Debugger
     - (gdb/jdb/??? integration)
+  - Compiler plugins
 	.
   .
 
@@ -80,14 +81,14 @@ See <code>cppsupport</code> and <code>javasupport</code> for examples.
 If you write (or have) a language parser, your language support can have
 "class store" (a database containing the information about scopes, classes
 and methods - their names, names of source files, location in source files,
-etc.). Class store libraries can be found at <code>lib/catalog</code> and <code>lib/sourceinfo</code>.
+etc.). Class store libraries can be found at <code>lib/catalog</code> (Catalog) and <code>lib/interfaces</code> (CodeModel).
 
 KDevelop provides class browsers that extract information from a <B>class store</B> and display it in a tree view and toolbar selectors of scopes, classes and methods.
 
-Catalog is the new persistant class store for KDevelop written by Roberto Raggi and everybody is highly encouraged to use it. Take a look at
-<code>parts/cppsupport</code> for an example of using catalog. <code>parts/pascalsupport</code> is completely based on a catalog (which is filled by a pascal parser - check <code>pascal.tree.g</code> grammar file). Catalog is stored on disk in the database file (Berkeley db) If you use catalog, your class browser will be <code>parts/classbrowser</code>.
+Catalog is the persistant class store for KDevelop. Persistant class store can be used as an information storage for code completion but it also can be used as a class store for the project. Take a look at
+<code>parts/cppsupport</code> for an example of using catalog. Catalog is stored on disk in the database file (Berkeley db) If you use catalog with the project, your class browser will be <code>parts/classbrowser</code>.
 
-Sourceinfo is the deprecated class store. Look at <code>parts/adasupport</code> (especially interesting is <code>ada.store.g grammar</code> file) to find out how it is filled by a parser with information. This class store can't be saved onto a disk. The class browser for a sourceinfo based stores is <code>parts/classview</code>.
+CodeModel is the memory class store. It is very efficient and thus it is recommended for using as a project class store. CodeModel libraries are located in <code>lib/interfaces/codemodel.h</code>. The class browser for a CodeModel based stores is <code>parts/classview</code>.
 
 Class store enables you to write a code completion for the language. At the
 moment (2003-06-25), code completion is available only to cppsupport so take a
@@ -112,29 +113,32 @@ currently provides several project managers. They are:
 
   - Automake manager
     - <code>parts/autoproject</code>
-	.
+    .
   - QMake manager
     - <code>parts/trollproject</code>
-	.
-  - Custom project manager
-    - <code>parts/customproject</code>
-	- (works with custom makefiles, also has ant support)
-	.
-  - Script project manager
-    - <code>parts/scriptproject</code>
-	- (the generic project manager for all scripting languages).
-	.
+    .
+  - Generic manager
+    - Offers project manager facilities using project files in xml format (dtd is located in <code>parts/genericproject/kdevxmlproject.dtd</code>). Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins. Build system plugin is an object that implements KDevBuildSystem interface. Build system plugins are located in <code>plugins/buildsystem</code>.
   .
 
 Also available:
+  - Custom project manager
+    - <code>parts/customproject</code>
+    - (works with custom makefiles, also has ant support)
+    .
+  - Script project manager
+    - <code>parts/scriptproject</code>
+    - (the generic project manager for all scripting languages).
+    .
   - <code>parts/pascalproject</code> and
   - <code>parts/adaproject</code>
+  - <code>parts/haskellproject</code>
   .
 
-(They are the project managers for a compiled language with main source file concept).
+(They are deprecated project managers that will be replaced with generic manager).
 
 Choose your project manager and if the existing project managers doesn't fit
-in, you can modify <code>parts/customproject</code> to use a specific build tool or help us to develop "generic project manager" suitable for every language and build tool (there are some ideas which haven't been implemented yet).
+in, extend generic project manager via build system plugin.
 
 \section Templ Templates
 
@@ -168,6 +172,10 @@ c-based languages) you can extend astyle library (<code>lib/astyle</code>) that 
 The last thing to have a complete language support in KDevelop is to
 write a <B>debugger support</B>. KDevelop already provides GDB support
 (<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
+
+\section Compiler Compiler plugins
+
+There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options. Compiler plugins must implement KDevCompilerOptions interface.
 
 \section MiscInf Other Info
 
