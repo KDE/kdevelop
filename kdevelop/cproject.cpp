@@ -787,29 +787,42 @@ void CProject::updateMakefileAm(QString makefile){
 
 	//***************************generate needed things for shared_library*********
 	config.setGroup(makefile);
-	if(config.readEntry("type") == "shared_library"){
+	if(config.readEntry("type") == "shared_library" ){
 	  getSources(makefile,source_files);
 	  for(str= source_files.first();str !=0;str = source_files.next()){
 	    sources =  str + " " + sources ;
 	  }
 	  QDir dir(getDir(makefile));
           QString type=getProjectType();
-
+      if( (type == "kio_slave") )
+	 {
+		stream << "kde_module_LTLIBRARIES = kio_" << dir.dirName() << ".la\n\n";
+	}
+	else
+	{
 	  stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
-
+     }
           if (type!="normal_cpp" && type != "normal_c")
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
-	    stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
+			          if( (type == "kio_slave") )
+						stream << "kio_" << dir.dirName() << "_la_METASOURCES=AUTO\n\n";
+					else
+	   					 stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
 	  }
           else
            if (QFileInfo(getProjectDir() + "automoc").exists())
            {
+			 if( (type == "kio_slave") )
+				stream << "kio_" << dir.dirName() <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+			else
 	    stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
            }
-
+       if( (type == "kio_slave") )
+		stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+	  else
 	  stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
     if(isQt2Project())	
 	    // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff

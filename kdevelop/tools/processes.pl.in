@@ -75,11 +75,11 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kickerapp/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kickerapp|kpart|kioslave|sharedlib/) {
     unpackFiles ("admin.tar");
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
@@ -89,7 +89,7 @@ else{
   elsif ($processes{APPLICATION} =~ /qt2normal|qt2mdi|qextmdi/) {
     changeQtApp();
   }
-  elsif ($processes{APPLICATION} eq "cpp") {
+  elsif ($processes{APPLICATION} eq "cpp|sharedlib") {
     changeTerminalCPPApp();
   }
   elsif ($processes{APPLICATION} eq "c") {
@@ -105,22 +105,22 @@ if ($processes{VSSUPPORT} eq "cvs") {
 #  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
 #  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/.cvsignore";
 #  system ("cp $copysrc $copydes");
-  
+
 #  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
 #  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
 #  system ("cp $copysrc $copydes");
-  
+
 #  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
 #  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
 #  system ("cp $copysrc $copydes");
- 
+
   $copysrc = $templatedir . "/cvsignore_template";
   $copydes = $overDirectory . "/.cvsignore";
   copy ("$copysrc", "$copydes");
-  
+
   $copydes = $underDirectory . "/templates/.cvsignore";
   copy ("$copysrc", "$copydes");
-  
+
   $copydes = $underDirectory . "/.cvsignore";
   copy ("$copysrc", "$copydes");
 
@@ -490,7 +490,7 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, "configure.in");
   }
-  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kickerapp/)
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kickerapp|kpart|kioslave/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -535,6 +535,7 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, $nameLittle."ui.rc");
   }
+
   #Replacements in documentation directory
   chdir ($underDirectory."/docs/en");
   replaceValuesInFile(\%changings, "Makefile.am");
@@ -581,7 +582,7 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp/)
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -590,19 +591,56 @@ sub changeMiniApp {
   #Replacements and name changing in underDirectory
   chdir ($underDirectory);
 
-  rename ("skel.cpp", $nameLittle.".cpp");
-  rename ("skel.h",   $nameLittle.".h");
+
   if ($processes{APPLICATION} =~ /kickerapp/)
   {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
+  if ($processes{APPLICATION} =~ /kpart|kioslave/)
+  {
+    if ($processes{APPLICATION} =~ /kpart/)
+        {
+                rename("skel.rc", $nameLittle.".rc");
+                replaceValuesInFile(\%changings, "$nameLittle.rc");
+        }
+    if ($processes{APPLICATION} =~ /kioslave/)
+        {
+                rename("skel.protocol", $nameLittle.".protocol");
+                replaceValuesInFile(\%changings, "$nameLittle.protocol");
+        }
+
+    rename ("skel.cpp",  $nameLittle.".cpp");
+    rename ("skel.h",   $nameLittle.".h");
+    replaceValuesInFile(\%changings, "$nameLittle.cpp");
+    replaceValuesInFile(\%changings, "$nameLittle.h");
+    if ($processes{CPP} eq "yes") {
+      processCppTemplate("$nameLittle.cpp");
+    }
+    
+    if ($processes{HEADER} eq "yes") {
+       processHeaderTemplate("$nameLittle.h");
+    }  
+  }
+  else
+  {
+     rename ("skel.cpp", $nameLittle.".cpp");
+     rename ("skel.h",   $nameLittle.".h");
+     replaceValuesInFile(\%changings, "$nameLittle.cpp");
+     replaceValuesInFile(\%changings, "$nameLittle.h");
+     replaceValuesInFile(\%changings, "main.cpp");
+    if ($processes{CPP} eq "yes") {
+      processCppTemplate("main.cpp");
+      processCppTemplate("$nameLittle.cpp");
+    }
+    
+    if ($processes{HEADER} eq "yes") {
+       processHeaderTemplate("$nameLittle.h");
+    }
+  }
 
   replaceValuesInFile(\%changings, "Makefile.am");
-  replaceValuesInFile(\%changings, "$nameLittle.cpp");
-  replaceValuesInFile(\%changings, "$nameLittle.h");
-  replaceValuesInFile(\%changings, "main.cpp");
-
+  
   chdir ($underDirectory."/docs/en");
   replaceValuesInFile(\%changings, "Makefile.am");
 
@@ -613,15 +651,6 @@ sub changeMiniApp {
     condCopyKdelnkFile();
   }
   condCopyProgIcons();
-
-  if ($processes{CPP} eq "yes") {
-    processCppTemplate("main.cpp");
-    processCppTemplate("$nameLittle.cpp");
-  }
-    
-  if ($processes{HEADER} eq "yes") {
-    processHeaderTemplate("$nameLittle.h");
-  }
 
   condCreateApiDoc();
 }

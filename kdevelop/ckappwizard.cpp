@@ -188,6 +188,7 @@ void CKAppWizard::initPages()
   ccppentry->sortChildItems (0,FALSE);
   cppitem = new QListViewItem (ccppentry,i18n("C++"));
   citem = new QListViewItem (ccppentry,i18n("C"));
+  //sharedlibitem = new QListViewItem(ccppentry, i18n("C++ Shared Library"));
 
   qtentry = new QListViewItem (applications, i18n("Qt"));
   qtentry->setExpandable (true);
@@ -212,6 +213,8 @@ void CKAppWizard::initPages()
   kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kde2miniitem = new QListViewItem (kdeentry,i18n("KDE 2 Mini"));
   kickeritem = new QListViewItem( kdeentry, i18n("KDE 2 Kicker Applet"));
+  kpartitem = new QListViewItem( kdeentry, i18n("Konqueror Plugin"));
+  kioslaveitem = new QListViewItem(kdeentry, i18n("KDE 2 Kio Slave"));
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
 
@@ -1149,12 +1152,20 @@ void CKAppWizard::generateEntries(const QString &filename) {
     else if (kickeritem->isSelected()) {
       entries << "kickerapp\n";
     }
-    else if (customprojitem->isSelected()) {
+		else if (kioslaveitem->isSelected()) {
+			entries << "kioslave\n";
+		}
+		else if (sharedlibitem->isSelected()) {
+			entries << "sharedlib\n";
+		}
+		else if (kpartitem->isSelected()) {
+			entries << "kpart\n";
+		}    else if (customprojitem->isSelected()) {
       entries << "customproj\n";
     }
 
-    if (kickeritem->isSelected()||qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
-    kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
+    if (kpartitem->isSelected()||kickeritem->isSelected()||qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
+    kioslaveitem->isSelected()||kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
     {
       entries << "CONFIGARG\n";
 
@@ -1399,6 +1410,15 @@ void CKAppWizard::okPermited()
   else if (kickeritem->isSelected()) {
     copysrc = locate("appdata", "templates/kicker.tar.gz");
   }
+  else if (kpartitem->isSelected()) {
+    copysrc = locate("appdata", "templates/kpart.tar.gz");
+  }
+  else if (kioslaveitem->isSelected()) {
+    copysrc = locate("appdata", "templates/kioslave.tar.gz");
+  }
+  else if (sharedlibitem->isSelected()) {
+    copysrc = locate("appdata", "templates/sharedlib.tar.gz");
+  }
   else {
     hasTemplate = false;
   }
@@ -1411,8 +1431,8 @@ void CKAppWizard::okPermited()
       p << "'" + copysrc + "'";
       p << "'" + copydes + "';";
 
-      if( ( kickeritem->isSelected()||kde2miniitem->isSelected()||
-            kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
+      if( ( kickeritem->isSelected()||kpartitem->isSelected()||kde2miniitem->isSelected()||
+            kde2normalitem->isSelected()||kde2mdiitem->isSelected()||kioslaveitem->isSelected()||
             qt2normalitem->isSelected()||qt2mdiitem->isSelected()))
       {
         if (QFileInfo(adminsrc).exists())
@@ -1558,7 +1578,7 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/app.c");
     file.remove (dir + "/" + nametext + "/app.h");
   }
-  if( kickeritem->isSelected()){
+  if( kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected()||sharedlibitem->isSelected()){
         file.remove (dir + "/" + nametext + "/main.cpp");
   }
 }
@@ -1658,6 +1678,75 @@ void CKAppWizard::slotApplicationClicked() {
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
+  else if (sharedlibitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(locate("appdata", "pics/sharelib.png"));
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(true);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+       m_finishButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a C++ based shared library."));
+  }
+  else if (kioslaveitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(locate("appdata", "pics/kioslave.png"));
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(true);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+       m_finishButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2 KIO Slave. \nKIOSlaves are the foundation for all protocols in KDE2.  If you want to create a new connector"));
+  }
+  else if (kpartitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(locate("appdata", "pics/kpart.png"));
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(true);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+       m_finishButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2 KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
+  }
   else if (kickeritem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
     pm.load(locate("appdata", "pics/kicker.png"));
@@ -1679,7 +1768,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2kicker applet."));
+    apphelp->setText (i18n("Create a KDE-2 kicker applet.  \nThese are applets for KDE2's panel."));
   }
   else if (qt2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -2177,6 +2266,15 @@ void CKAppWizard::slotProcessExited() {
   else if (kickeritem->isSelected()){
    project->setProjectType("kicker_app");
   }
+	else if (kpartitem->isSelected()){
+		project->setProjectType("kpart_plugin");
+	}
+	else if (kioslaveitem->isSelected()){
+		project->setProjectType("kio_slave");
+	}
+	else if (sharedlibitem->isSelected()){
+		project->setProjectType("shared_lib");
+	}
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
@@ -2199,6 +2297,14 @@ void CKAppWizard::slotProcessExited() {
   if ( kickeritem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11");
   }
+  if ( kpartitem->isSelected()) {
+   project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11 $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
+   project->setLDFLAGS("$(KDE_PLUGIN)");
+  }
+  if ( kioslaveitem->isSelected()) {
+   project->setLDADD( " -lkdeui -lkdecore -lqt -lXext -lX11 -lkio");
+   project->setLDFLAGS("$(all_libraries) $(KDE_RPATH)");
+  }
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
   }
@@ -2215,7 +2321,7 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
   }
 
-  if(kickeritem->isSelected()||project->isQt2Project() || project->isKDE2Project() || qextmdiitem->isSelected())
+  if(kickeritem->isSelected()||kpartitem->isSelected()||kioslaveitem->isSelected()||project->isQt2Project() || project->isKDE2Project() || qextmdiitem->isSelected())
   {
     KConfig * config = KGlobal::config();
     config->setGroup("QT2");
@@ -2240,7 +2346,7 @@ void CKAppWizard::slotProcessExited() {
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
   if (kde2normalitem->isSelected() || kde2miniitem->isSelected()  ||
-    kde2mdiitem->isSelected() || kickeritem->isSelected())
+    kde2mdiitem->isSelected() || kickeritem->isSelected()||kpartitem->isSelected()||kioslaveitem->isSelected())
   {
      sub_dir_list.append("po");
   }
@@ -2253,7 +2359,7 @@ void CKAppWizard::slotProcessExited() {
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
   sub_dir_list.clear();
-  if(kickeritem->isSelected()){
+  if(kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected() || sharedlibitem->isSelected()){
   	makeAmInfo.type = "shared_library";
   }
   else {
@@ -2397,7 +2503,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + ".lsm",fileInfo);
   }
 
-  if (generatesource->isChecked() && !kickeritem->isSelected()) {
+  if (generatesource->isChecked() && !kickeritem->isSelected()&&!kpartitem->isSelected()&&!kioslaveitem->isSelected()) {
     QString extension= (citem->isSelected() || gnomenormalitem->isSelected()) ? "c" : "cpp";
     fileInfo.rel_name = namelow + "/main."+extension;
     fileInfo.type = CPP_SOURCE;
@@ -2555,6 +2661,23 @@ void CKAppWizard::slotProcessExited() {
         project->addFileToProject (namelow +  "/myview.ui",fileInfo);
   }
 
+  if(kpartitem->isSelected()){
+        fileInfo.rel_name = namelow + "/" +  namelow + ".rc";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = true;
+        fileInfo.install_location = " $(kde_datadir)/khtml/kpartplugins";
+        project->addFileToProject (namelow + "/" +  namelow + ".rc",fileInfo);
+  }
+  if(kioslaveitem->isSelected()){
+        fileInfo.rel_name = namelow + "/" +  namelow + ".protocol";
+        fileInfo.type = DATA;
+        fileInfo.dist = true;
+        fileInfo.install = true;
+        fileInfo.install_location = " $(kde_servicesdir)";
+        project->addFileToProject (namelow + "/" +  namelow + ".protocol",fileInfo);
+  }
+
   if (datalink->isChecked()) {
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2577,7 +2700,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
     if (!(qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+      if (kpartitem->isSelected()||kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/locolor/32x32/apps/" + namelow + ".png";
       else
         fileInfo.install_location = "$(kde_icondir)/" + namelow + ".png";
@@ -2595,7 +2718,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
     if (!( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+      if (kpartitem->isSelected()||kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/locolor/16x16/apps/" + namelow + ".png";
       else
         fileInfo.install_location = "$(kde_minidir)/" + namelow + ".png";
