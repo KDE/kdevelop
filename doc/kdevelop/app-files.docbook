@@ -69,19 +69,56 @@ There are quite a lot of default configuration subdirectories in <filename class
 
   <listitem><itemizedlist>
     <title>Task Specific Parts</title>
-    <listitem><para><filename class="directory">kdevabbrev/</filename> &mdash; contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part.</para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevabbrev/</filename> &mdash; contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">sources/</filename> &mdash; contains keyword definition files used by the <guilabel>Expand Text</guilabel> command.</para></listitem>
+        <listitem><para><filename class="directory">templates/</filename> &mdash; contains template definition files used by the <guilabel>Expand Abbreviation</guilabel> command.</para></listitem>
+        <listitem><para><filename>kdevabbrev.rc</filename> &mdash; provides the <guimenuitem>Expand Text</guimenuitem> and <guimenuitem>Expand Abbreviation</guimenuitem> entries in the <guimenu>Edit</guimenu> menu.</para></listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem>
+      <para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">importfiles/</filename> &mdash; contains <filename>.kdevelop</filename> project files which control the initialization of the project.</para></listitem>
+        <listitem><para><filename class="directory">imports/</filename> &mdash; contains templates to set up project specific <filename>.desktop</filename> files.</para></listitem>
+        <listitem><para><filename class="directory">template-common/</filename> &mdash; contains various files commonly included in the project source directories.</para></listitem>
+        <listitem><para><filename class="directory">templates/</filename> &mdash; contains configuration files which describe the information to be included in a given project source directory.</para></listitem>
+        <listitem><para><filename>*.png</filename> &mdash; project preview images used by the &appwizard;.</para></listitem>
+        <listitem><para><filename>*.tar.gz</filename> &mdash; tarballs containing the source files to be included in a new generated project directory.</para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para><filename class="directory">kdevastyle/</filename> &mdash; provides the <guimenuitem>Reformat Source</guimenuitem> entry in the <guimenu>Edit</guimenu> menu.</para></listitem>
-    <listitem><para><filename class="directory">kdevclassview/</filename> &mdash; contains files used by the <guilabel>Class View</guilabel> project plugin.</para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevclassview/</filename> &mdash; contains files used by the <guilabel>Class View</guilabel> project plugin:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">pics/</filename> &mdash; contains the icons used in the <guilabel>Classes</guilabel> classview tree.</para></listitem>
+        <listitem><para><filename>kdevclassview.tc</filename> &mdash; provides the <guimenuitem>Class Inheritance Diagram</guimenuitem> entry in the <guimenu>Projects</guimenu> menu as well as the classes navigation combo box in the <guilabel>Browser Toolbar</guilabel>.</para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para><filename class="directory">kdevcloser/</filename> &mdash; provides the <guimenu>Windows</guimenu> menu close entries.</para></listitem>
     <listitem><para><filename class="directory">kdevctags/</filename> &mdash; provides the <guimenuitem>CTags</guimenuitem> entry in the <guimenu>Tools</guimenu> menu for the <guilabel>CTags Frontend</guilabel> project plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevcvsservice/</filename> &mdash; contains files used by the <guilabel>CVS Integration</guilabel> projct plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevcvsservice/</filename> &mdash; provides the icon used by the <guilabel>CvsService</guilabel> tab and a short shell script used to add a new entry to the &cvs; repository, both used by the <guilabel>CVS Integration</guilabel> projct plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevdebugger/</filename> &mdash; provides the <guimenu>Debug</guimenu> menu entries for the <guilabel>Debugger Frontend</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevdiff/</filename> &mdash; provides the <guimenuitem>Difference Viewer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu.</para></listitem>
     <listitem><para><filename class="directory">kdevdistpart/</filename> &mdash; provides the <guimenuitem>Distribution &amp; Publishing</guimenuitem> entry in the <guimenu>Project</guimenu> menu for the <guilabel>Final Packaging Support</guilabel> project plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevdocumentation/</filename> &mdash; contains files used by the <guilabel>Documentation</guilabel> plugin.</para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevdocumentation/</filename> &mdash; contains files used by the <guilabel>Documentation</guilabel> plugin:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">en/</filename> and <filename class="directory">pics/</filename> &mdash; contain files used by the <application>htdig</application> search tool.</para></listitem>
+        <listitem><para><filename class="directory">tocs/</filename> &mdash; contain the default &kdevelop; documantation content description files (see the description in <link linkend="toc-file-structure">Basic Structure of &kdevelop; TOC Files</link>).</para></listitem>
+        <listitem><para><filename>kdevpart_documentation.rc</filename> &mdash; provides the search related entries in the <guimenu>Help</guimenu> menu.</para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para><filename class="directory">kdevdoxygen/</filename> &mdash; provides the menu entries for the <guilabel>Doxygen Support</guilabel> project plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard.</guilabel></para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard:</guilabel>
+      <itemizedlist>
+        <listitem><para><filename class="directory">file-templates/</filename> &mdash; provides the initial text contents to be put into the new file of a given type.</para></listitem>
+        <listitem><para><filename>kdevpart_filecreate.rc</filename> &mdash; provides the <guimenuitem>New</guimenuitem> entry in the <guimenu>File</guimenu> menu.</para></listitem>
+        <listitem><para><filename>template-info.xml</filename> &mdash; contains descriptions of the available file types to be displayed in the <guilabel>New File</guilabel> tool view.</para></listitem>
+      </itemizedlist>
+    </para></listitem>
     <listitem><para><filename class="directory">kdevfilter/</filename> &mdash; provides the <guimenuitem>Execute Command...</guimenuitem> and <guimenuitem>Filter Selection Through Command...</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Shell Filtering and Insertion</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevfullscreen/</filename> &mdash; provides the <guimenuitem>Full Screen Mode</guimenuitem> entry in the <guimenu>View</guimenu> menu and the according tool bar icon.</para></listitem>
     <listitem><para><filename class="directory">kdevgrepview/</filename> &mdash; provides the <guimenuitem>Find in Files...</guimenuitem>entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Grep Frontend</guilabel> plugin.</para></listitem>
