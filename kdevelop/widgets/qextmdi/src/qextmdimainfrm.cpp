@@ -265,7 +265,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockCorner);
          m_pDockbaseOfTabPage = pCover;
       }
-      pCover->show();
+      if (!(flags & QextMdi::Hide)) {
+        pCover->show();
+      }
       pWnd->setFocus();
    }
    else {
