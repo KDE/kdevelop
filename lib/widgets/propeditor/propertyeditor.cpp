@@ -25,7 +25,6 @@
 #include <kiconloader.h>
 #else
 #include "compat_tools.h"
-#include <undo.xpm>
 #endif
 
 #include <qtable.h>
@@ -195,7 +194,7 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
 #ifndef PURE_QT
     m_undoButton->setPixmap(SmallIcon("undo"));
 #else
-    m_undoButton->setPixmap(QPixmap(undo_xpm));
+    m_undoButton->setPixmap( QPixmap("undo.xpm") );
 #endif
     m_undoButton->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
     m_undoButton->resize(m_undoButton->height(), m_undoButton->height());
