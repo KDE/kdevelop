@@ -7,6 +7,7 @@ noinst_LTLIBRARIES = libkdevutil.la
 libkdevutil_la_SOURCES = processwidget.cpp \
 			 domutil.cpp \
 			 splitter.cpp \
+			 execcommand.cpp \
 			 filetemplate.cpp
 
 METASOURCES = AUTO
