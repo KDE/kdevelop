@@ -181,7 +181,7 @@ void ProblemReporter::reparse()
 		QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
 		QPtrListIterator<KTextEditor::Mark> it( marks );
 		while( it.current() ){
-			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType10 );
+			m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
 			++it;
 		}
 	}
@@ -205,7 +205,7 @@ void ProblemReporter::reportError( QString message,
                                    int line, int column )
 {
 	if( m_markIface ){
-		m_markIface->addMark( line-1, KTextEditor::MarkInterface::markType10 );
+		m_markIface->addMark( line-1, KTextEditor::MarkInterface::markType07 );
 	}
 
     new ProblemItem( this,
@@ -265,7 +265,7 @@ void ProblemReporter::slotPartAdded( KParts::Part* part )
 	if( !iface )
 		return;
 		
-	iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
+	iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )

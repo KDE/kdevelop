@@ -306,7 +306,7 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 	QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
 	QPtrListIterator<KTextEditor::Mark> it( marks );
 	while( it.current() ){
-	    m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType10 );
+	    m_markIface->removeMark( it.current()->line, KTextEditor::MarkInterface::markType07 );
 	    ++it;
 	}
     }
@@ -443,7 +443,7 @@ void ProblemReporter::slotPartAdded( KParts::Part* part )
     if( !iface )
 	return;
 
-    iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
+    iface->setPixmap( KTextEditor::MarkInterface::markType07, SmallIcon("stop") );
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )
@@ -477,7 +477,7 @@ int ProblemReporter::levelToMarkType( int level ) const
     switch( level )
     {
     case Problem::Level_Error:
-	return KTextEditor::MarkInterface::markType10;
+	return KTextEditor::MarkInterface::markType07;
     case Problem::Level_Warning:
         return -1;
     case Problem::Level_Todo:
