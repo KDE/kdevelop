@@ -92,9 +92,6 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	method->setFileName( fileName );
 	method->setStartPosition( lineNo, 0 );
 
-	method->setImplementedInFile( fileName );
-	method->setImplementationStartPosition( lineNo, 0 );
-
 	if (lastClass && inClass) {
 	  //	    kdDebug(9018) << "in Class: " << line << endl;
 	  if (!lastClass->hasFunction(method->name()))

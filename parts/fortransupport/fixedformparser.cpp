@@ -51,9 +51,6 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
     method->setFileName(fileName);
     method->setStartPosition(lineNum, 0);
 
-    method->setImplementedInFile(fileName);
-    method->setImplementationStartPosition(lineNum, 0);
-
     if( !m_file->hasFunction(method->name()) )
         m_file->addFunction(method);
 }
