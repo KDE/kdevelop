@@ -417,12 +417,15 @@ void CKDevelop::slotProjectRemoveFile(){
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
   QString shell = getenv("SHELL");
-  QString flaglabel;
+  QString flagclabel;
+  QString flagcpplabel;
   if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+      flagclabel= "CFLAGS=\"";
+      flagcpplabel = "CXXFLAGS=\"";
   }
   else{
-      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+    flagclabel="env CFLAGS=\"";
+    flagcpplabel= "env CXXFLAGS=\"";
   }
   
   QString args=prj->getConfigureArgs();
@@ -438,7 +441,8 @@ void CKDevelop::slotProjectOptions(){
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
       shell_process << make_cmd << " -f Makefile.dist  && ";
-      shell_process << flaglabel;
+      // C++
+      shell_process << flagcpplabel;
       if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
       {
        if (!prj->getCXXFLAGS().isEmpty())
@@ -446,6 +450,16 @@ void CKDevelop::slotProjectOptions(){
        if (!prj->getAdditCXXFLAGS().isEmpty())
           shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
       }
+      // c
+      shell_process << "\" " << flagclabel;
+      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+      {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+      }
+
       shell_process  << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
          shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
@@ -462,7 +476,9 @@ void CKDevelop::slotProjectOptions(){
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
-      shell_process << flaglabel;
+
+      // c++
+      shell_process << flagcpplabel;
       if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
       {
        if (!prj->getCXXFLAGS().isEmpty())
@@ -470,6 +486,17 @@ void CKDevelop::slotProjectOptions(){
        if (!prj->getAdditCXXFLAGS().isEmpty())
           shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
       }
+      // c
+      shell_process  << "\" " << flagclabel;
+      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+      {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+      }
+
+
       shell_process  << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
 	shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
@@ -1165,20 +1192,44 @@ void CKDevelop::newSubDir(){
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
 //  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  shell_process << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-            if (!prj->getCXXFLAGS().isEmpty())
-                  shell_process << prj->getCXXFLAGS() << " ";
-            if (!prj->getAdditCXXFLAGS().isEmpty())
-                  shell_process << prj->getAdditCXXFLAGS();
+
+  QString shell = getenv("SHELL");
+  QString flagclabel;
+  QString flagcpplabel;
+  if(shell == "/bin/bash"){
+      flagclabel= "CFLAGS=\"";
+      flagcpplabel = "CXXFLAGS=\"";
   }
+  else{
+    flagclabel="env CFLAGS=\"";
+    flagcpplabel= "env CXXFLAGS=\"";
+  }
+
+  shell_process << make_cmd << " -f Makefile.dist  && ";
+  //C++
+  shell_process << flagcpplabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+    {
+      if (!prj->getCXXFLAGS().isEmpty())
+	shell_process << prj->getCXXFLAGS() << " ";
+      if (!prj->getAdditCXXFLAGS().isEmpty())
+	shell_process << prj->getAdditCXXFLAGS();
+    }
+
+  shell_process  << "\" " << flagclabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+    {
+      if (!prj->getCXXFLAGS().isEmpty())
+	shell_process << prj->getCXXFLAGS() << " ";
+      if (!prj->getAdditCXXFLAGS().isEmpty())
+	shell_process << prj->getAdditCXXFLAGS();
+    }
+  
   shell_process  << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
-                shell_process << prj->getLDFLAGS();
+    shell_process << prj->getLDFLAGS();
   shell_process  << "\" ";
-  shell_process << make_cmd << " -f Makefile.dist  && ./configure" << prj->getConfigureArgs();
+  shell_process <<  " ./configure" << prj->getConfigureArgs();
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 

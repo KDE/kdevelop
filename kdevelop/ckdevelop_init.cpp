@@ -1259,9 +1259,17 @@ void CKDevelop::initProject(bool witharg){
       connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
       progressDlg->setCaption(i18n("Starting..."));
       progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
-      progressDlg->setCancelButtonText(i18n("Cancel"));
+      QPushButton* btn = new QPushButton(0,"");
+      
+      
+      
+      btn->setText("ddd");
+      
+      progressDlg->setCancelButton(btn);
+      //      progressDlg->setCancelButtonText(i18n("Cancel"));
       progressDlg->setProgress(0);
       progressDlg->show();
+      btn->hide();
       setCursor(KCursor::arrowCursor());
       refreshTrees();
       delete progressDlg;

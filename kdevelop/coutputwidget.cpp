@@ -25,7 +25,9 @@ void COutputWidget::insertAtEnd(QString s)
 {
   int row = (numLines() == 0)? 0 : numLines()-1;
   int col = qstrlen(textLine(row));
-
+  if (s == "\n" && row == 0 && col == 0)
+    s = " \n";
+  
   insertAt(s, row, col);
 }
 void COutputWidget::mouseReleaseEvent(QMouseEvent*){

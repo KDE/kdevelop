@@ -180,15 +180,15 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 			       "cross-compilers to build a binary for an intel\n"
 			       "machine running Unix System V.")));
 
-  syntax_check=new QCheckBox(w2,"syntax_check");
-  syntax_check->setGeometry(20,60,220,20);
-  syntax_check->setText(i18n("only syntax check"));
-  syntax_check->setChecked(cxxflags.contains("-fsyntax-only"));
-  KQuickHelp::add(syntax_check, i18n("This option sets the compiler\n"
-			     	"to <i>-fsyntax-only</i>\n"
-				"which lets you check your code for\n"
-				"syntax-errors but doesn't do anything\n"
-				"else beyond that.")); 
+  // syntax_check=new QCheckBox(w2,"syntax_check");
+//   syntax_check->setGeometry(20,60,220,20);
+//   syntax_check->setText(i18n("only syntax check"));
+//   syntax_check->setChecked(cxxflags.contains("-fsyntax-only"));
+//   KQuickHelp::add(syntax_check, i18n("This option sets the compiler\n"
+// 			     	"to <i>-fsyntax-only</i>\n"
+// 				"which lets you check your code for\n"
+// 				"syntax-errors but doesn't do anything\n"
+// 				"else beyond that.")); 
 
   optimize=new QCheckBox(w2,"optimize");
   optimize->setGeometry(20,90,220,20);
@@ -1269,9 +1269,9 @@ void CPrjOptionsDlg::ok(){
   if (target->currentItem()) {
     text=" -b "+QString(target->currentText());
   }
-  if (syntax_check->isChecked()) {
-    text+=" -fsyntax-only";
-  }
+  // if (syntax_check->isChecked()) {
+//     text+=" -fsyntax-only";
+//   }
   if (optimize->isChecked()) {
     text2.setNum(optimize_level->value());
     text+=" -O"+text2;
