@@ -565,7 +565,7 @@ inline void Lexer::readLineComment()
 		msg += currentChar();
 		nextChar();
 	    }
-	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col) );
+	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
 	} else 
 	    nextChar();
     }    
@@ -591,7 +591,7 @@ inline void Lexer::readMultiLineComment()
 		msg += currentChar();
 		nextChar();
 	    }
-	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col) );
+	    m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col, Problem::Level_Todo) );
 	} else 
 	    nextChar();
     }

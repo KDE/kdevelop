@@ -33,33 +33,46 @@ class Parser;
 class Problem
 {
 public:
+    enum
+    {
+	Level_Error = 0,
+	Level_Warning,
+	Level_Todo,
+	Level_Fixme
+    };
+    
+public:
     Problem() {}
     Problem( const Problem& source )
-	: m_text( source.m_text ), m_line( source.m_line ), m_column( source.m_column ) {}
-    Problem( const QString& text, int line, int column )
-	: m_text( text ), m_line( line ), m_column( column ) {}
+	: m_text( source.m_text ), m_line( source.m_line ), 
+	  m_column( source.m_column ), m_level( source.m_level ) {}
+    Problem( const QString& text, int line, int column, int level=Level_Error )
+	: m_text( text ), m_line( line ), m_column( column ), m_level(level) {}
 
     Problem& operator = ( const Problem& source )
     {
 	m_text = source.m_text;
 	m_line = source.m_line;
 	m_column = source.m_column;
+	m_level = source.m_level;
 	return( *this );
     }
 
     bool operator == ( const Problem& p ) const
     {
-	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column;
+	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column && m_level == p.m_level;
     }
 
     QString text() const { return m_text; }
     int line() const { return m_line; }
     int column() const { return m_column; }
+    int level() const { return m_level; }
 
 private:
     QString m_text;
     int m_line;
     int m_column;
+    int m_level;
 };
 
 enum
