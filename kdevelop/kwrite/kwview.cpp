@@ -1973,6 +1973,11 @@ void KWrite::replace() {
 }
 
 void KWrite::searchAgain(bool back) {
+  if ( searchForList.isEmpty() ) {
+    // search again wanted without searching first...
+    search();
+    return;
+  }
   bool b= (searchFlags & sfBackward) > 0;
   initSearch(s, (searchFlags & ((b==back)?~sfBackward:~0))  // clear flag for forward searching
                 | sfFromCursor | sfPrompt | sfAgain | ((b!=back)?sfBackward:0) );
