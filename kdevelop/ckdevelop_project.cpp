@@ -16,6 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 #include <qprogressdialog.h>
+#include <kcursor.h>
+
 #include "ckdevelop.h"
 #include "ctoolclass.h"
 #include "ckappwizard.h"
@@ -343,20 +345,26 @@ void CKDevelop::slotAddExistingFiles(){
       
       type = "DATA";
       if (dest_name.right(2) == ".h"){
-      type = "HEADER";
+        type = "HEADER";
       }
       if (getTabLocation(dest_name) == CPP){
-	type = "SOURCE";
+      	type = "SOURCE";
       }
       
-      if(QFile::exists(dest)){
-	if(KMsgBox::yesNo(0,i18n("Files exists!"),
-			  i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?"))){
-	  copy = true;
-	}
+      if(QFile::exists(dest_name)){
+      	int result=KMsgBox::yesNoCancel(this,i18n("Files exists!"),
+		  	    i18n("\nThe file\n\n"+source_name+"\n\nalready exists.\nDo you want overwrite the old one?\n"));
+		    if(result==1)
+	        copy = true;
+	      if(result==2)
+	        copy = false;
+	      if(result==3){
+          setCursor( KCursor::arrowCursor() );
+	        break;;
+        }
       }
       else {
-	copy = true;
+      	copy = true;
       }
       
       if(copy){
@@ -706,6 +714,7 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
 
 
 
