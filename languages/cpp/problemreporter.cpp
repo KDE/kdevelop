@@ -248,6 +248,7 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
+    w->setPart( m_cppSupport );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
 }

@@ -152,7 +152,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
-    m_driver = new CppDriver( this );
+    m_driver = new CppDriver( this );    
     m_problemReporter = 0;
 
     m_functionHintTimer = new QTimer( this );
@@ -161,9 +161,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     setXMLFile( "kdevcppsupport.rc" );
 
     m_catalogList.setAutoDelete( true );
-
-    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
-    m_backgroundParser->start();
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
@@ -372,6 +369,14 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
+    
+    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
+    m_backgroundParser->start();
+    
+    // setup the driver
+    QString conf_file_name = specialHeaderName();
+    if( QFile::exists(conf_file_name) )
+        m_driver->parseFile( conf_file_name, true );
 
     m_projectDirectory = URLUtil::canonicalPath( project()->projectDirectory() );
     m_projectFileList = project()->allFiles();
@@ -817,7 +822,7 @@ uint toTime_t(QDateTime t)
 #endif
 
 bool
-CppSupportPart::parseProject( )
+CppSupportPart::parseProject( bool force )
 {
     //QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
     //label->setMinimumWidth( 600 );
@@ -845,7 +850,7 @@ CppSupportPart::parseProject( )
     QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
     
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
-    if( !QFile::exists( skip_file_name ) && f.open(IO_ReadOnly) ){
+    if( !force && !QFile::exists( skip_file_name ) && f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
  
         createIgnorePCSFile();
@@ -1687,6 +1692,26 @@ void CppSupportPart::createIgnorePCSFile( )
         skip_pcs_file.writeBlock( skip_me );
         skip_pcs_file.close();
     }
+}
+
+QString CppSupportPart::specialHeaderName( bool local ) const
+{
+	if( local )
+		return ::locateLocal( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
+	
+	return ::locate( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
+}
+
+void CppSupportPart::updateParserConfiguration()
+{
+	m_backgroundParser->updateParserConfiguration();
+	
+	QString conf_file_name = specialHeaderName();
+	m_driver->removeAllMacrosInFile( conf_file_name );
+	
+	m_driver->parseFile( conf_file_name, true );
+	
+	parseProject( true );
 }
 
 #include "cppsupportpart.moc"

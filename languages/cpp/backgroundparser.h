@@ -61,6 +61,7 @@ public:
 
     TranslationUnitAST* translationUnit( const QString& fileName );
     QValueList<Problem> problems( const QString& fileName );
+    void updateParserConfiguration();
 
     void close();
 

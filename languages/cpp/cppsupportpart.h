@@ -58,6 +58,9 @@ public:
     virtual ~CppSupportPart();
 
     bool isValid() const { return m_valid; }
+    
+    QString specialHeaderName( bool local=false ) const;
+    void updateParserConfiguration();
 
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
@@ -143,7 +146,7 @@ private slots:
     /**
      * only parses the current project
      */
-    bool parseProject( );
+    bool parseProject( bool force=false );
 
 private:
 

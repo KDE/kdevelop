@@ -21,6 +21,9 @@ rc_DATA = kdevcppsupport.rc
 templatedir = ${kde_datadir}/kdevabbrev/templates
 template_DATA = cpptemplates
 
+configurationdir = ${kde_datadir}/kdevcppsupport
+configuration_DATA = configuration
+
 AM_CXXFLAGS = -DAST_DEBUG
 
 bin_PROGRAMS = r++

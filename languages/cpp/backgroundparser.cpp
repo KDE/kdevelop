@@ -186,8 +186,13 @@ BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consum
     : m_consumed( consumed ), m_cppSupport( part ), m_close( false )
 {
     m_fileList = new SynchronizedFileList();
-    m_driver = new KDevDriver( m_cppSupport );
+    m_driver = new KDevDriver( m_cppSupport );    
     m_driver->setSourceProvider( new KDevSourceProvider(m_cppSupport) );
+    
+    QString conf_file_name = m_cppSupport->specialHeaderName();
+    if( QFile::exists(conf_file_name) )
+        m_driver->parseFile( conf_file_name, true );
+    
     //disabled for now m_driver->setResolveDependencesEnabled( true );
 }
 
@@ -332,6 +337,15 @@ bool BackgroundParser::filesInQueue()
     QMutexLocker locker( &m_mutex );
 
     return m_fileList->count() || !m_currentFile.isEmpty();
+}
+
+void BackgroundParser::updateParserConfiguration()
+{
+    QMutexLocker locker( &m_mutex );
+    
+    QString conf_file_name = m_cppSupport->specialHeaderName();
+    m_driver->removeAllMacrosInFile( conf_file_name );
+    m_driver->parseFile( conf_file_name, true );
 }
 
 void BackgroundParser::run()
