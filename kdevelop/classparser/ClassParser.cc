@@ -1695,7 +1695,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
           // If we didn't find a parent class, try to find a namespace.
           if( parentClass == NULL )
           {
-            parentScope = store.getScopeByName( aClass->declaredInScope );
+            parentScope = store.getScopeByName( scopePath );
 
             if( parentScope != NULL )
               parentScope->addClass( aClass );
