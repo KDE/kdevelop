@@ -252,13 +252,21 @@ void PythonSupportPart::parse(const QString &fileName)
             if (lastClass && rawline.left(3) != "def") {
                 ParsedMethod *old = lastClass->getMethod(method);
                 kdDebug(9014) << "Add class method " << method->name() << endl;
-                if (!old)
+                if( old ){
+                    delete( method );
+                    method = old;
+                } else {
                     lastClass->addMethod(method);
+                }
             } else {
                 ParsedMethod *old = classStore()->globalScope()->getMethod(method);
                 kdDebug(9014) << "Add global method " << method->name() << endl;
-                if (!old)
+                if( old ){
+                    delete( method );
+                    method = old;
+                } else {
                     classStore()->globalScope()->addMethod(method);
+                }
                 lastClass = 0;
             }
 

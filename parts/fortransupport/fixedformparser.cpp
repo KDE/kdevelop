@@ -52,8 +52,12 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
     method->setDefinedOnLine(lineNum);
 
     ParsedMethod *old = store->globalScope()->getMethod(method);
-    if (!old)
+    if( old ){
+        delete( method )
+        method = old;
+    } else {
         store->globalScope()->addMethod(method);
+    }
 }
 
 
