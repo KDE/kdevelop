@@ -21,6 +21,7 @@
 #include <qdir.h>
 #include <qtoolbutton.h>
 #include <qprogressdialog.h>
+#include <qframe.h>
 
 #include <kmsgbox.h>
 #include <kaccel.h>
@@ -832,6 +833,8 @@ void CKDevelop::initToolbar(){
   btnwhat->setFocusPolicy(QWidget::NoFocus);
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
+  connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
+	
   config->setGroup("General Options");
   if(config->readBoolEntry("show_std_toolbar", true)){
     enableToolBar(KToolBar::Show,0);
@@ -860,6 +863,7 @@ void CKDevelop::initToolbar(){
               true,i18n("Search for Help on..."));
 	
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
+  connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
 
   if(config->readBoolEntry("show_browser_toolbar", true)){
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
@@ -1136,6 +1140,7 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
 
 
 

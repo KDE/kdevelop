@@ -401,6 +401,7 @@ void CKDevelop::initKDlgToolBar(){
   btn_kdlg_what->setFocusPolicy(QWidget::NoFocus);
 
   connect(toolBar(ID_KDLG_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
+  connect(toolBar(ID_KDLG_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
   config->setGroup("General Options");
   if(config->readBoolEntry("show_kdlg_toolbar", true)){
     enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
@@ -459,6 +460,9 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
 
 
 
