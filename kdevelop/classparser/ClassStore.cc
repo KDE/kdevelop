@@ -183,9 +183,10 @@ QList<CClassTreeNode> *CClassStore::asForest()
   CParsedParent *aParent;  
   CClassTreeNode *childNode;
   CClassTreeNode *parentNode;
-  QDict<CClassTreeNode> dict;
-  QDictIterator<CClassTreeNode> di(dict);
+  QDict<CClassTreeNode> ctDict;
+  QStrList orderList;
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
+  char *aName;
 
   // Iterate over all parsed classes.
   for( classIterator.toFirst();
@@ -195,14 +196,17 @@ QList<CClassTreeNode> *CClassStore::asForest()
     aClass = classIterator.current();
 
     // Check if we have added the child.
-    childNode = dict.find( aClass->name );
+    childNode = ctDict.find( aClass->name );
     
     // If not in the table already, we add a new node.
     if( childNode == NULL )
     {
       childNode = new CClassTreeNode();
-      dict.insert( aClass->name, childNode );
+      ctDict.insert( aClass->name, childNode );
+      orderList.inSort( aClass->name );
     }
+    else if( !childNode->isInSystem )
+      orderList.remove( childNode->name );
     
     // Set childnode values.
     childNode->setName( aClass->name );
@@ -211,7 +215,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
 
     // If this class has no parent, we add it as a rootnode in the forest.
     if( aClass->parents.count() == 0 )
-      retVal->append( childNode );
+      orderList.inSort( childNode->name );
     else // Has parents
     {
       // Add this class to its' parents.
@@ -220,7 +224,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
            aParent = childNode->theClass->parents.next() )
       {
         // Check if we have added the parent already.
-        parentNode = dict.find( aParent->name );
+        parentNode = ctDict.find( aParent->name );
         
         // Add a new node for the parent if not added already.
         if( parentNode == NULL )
@@ -229,8 +233,9 @@ QList<CClassTreeNode> *CClassStore::asForest()
           parentNode = new CClassTreeNode();
           parentNode->setName( aParent->name );
           parentNode->setIsInSystem( false );
-          
-          dict.insert( parentNode->name, parentNode );
+
+          orderList.inSort( parentNode->name );
+          ctDict.insert( parentNode->name, parentNode );
         }
         
         // Add the child to the parent node.
@@ -239,13 +244,11 @@ QList<CClassTreeNode> *CClassStore::asForest()
     }
   }
 
-  for( di.toFirst();
-       di.current();
-       ++di );
+  for( aName = orderList.first();
+       aName != NULL;
+       aName = orderList.next() )
   {
-    // All classes not found in the system are rootnodes.
-    if( di.current() && !di.current()->isInSystem )
-      retVal->append( di.current() );
+    retVal->append( ctDict.find( aName ) );
   }
 
   return retVal;
