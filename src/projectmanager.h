@@ -87,9 +87,6 @@ private:
   bool loadLanguageSupport(const QString& lang);
   void unloadLanguageSupport();
 
-  void loadVCSSupport();
-  void unloadVCSSupport();
-  
   QString profileByAttributes(const QString &language, const QStringList &keywords);
   
   ProjectInfo *m_info;

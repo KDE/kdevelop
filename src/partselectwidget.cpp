@@ -79,18 +79,10 @@ private:
 
 PartSelectWidget::PartSelectWidget(QDomDocument &projectDom,
                                    QWidget *parent, const char *name)
-    : QWidget(parent, name), m_projectDom(projectDom), _scope(Project)
+    : QWidget(parent, name), m_projectDom(projectDom)
 {
     init();
 }
-
-
-PartSelectWidget::PartSelectWidget(QWidget *parent, const char *name)
-    : QWidget(parent, name), m_projectDom(QDomDocument()), _scope(Global)
-{
-    init();
-}
-
 
 void PartSelectWidget::init()
 {
@@ -113,9 +105,7 @@ void PartSelectWidget::init()
     groupBox0Layout->addWidget(label0);
     layout->addWidget(groupBox0);
 
-    QString text = (_scope==Global)?
-        i18n("Plugins to Load at Startup") :
-        i18n("Plugins to Load for This Project");
+    QString text( i18n("Plugins to Load for This Project") );
 
     QGroupBox * groupBox1 = new QGroupBox( text, this );
     groupBox1->setColumnLayout(0, Qt::Vertical );
@@ -151,67 +141,13 @@ void PartSelectWidget::init()
 
     connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
 	connect( _urlLabel, SIGNAL( leftClickedURL( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
-/*
-    if (_scope == Global)
-        readGlobalConfig();
-    else
-*/	
+
 	readProjectConfig();
 }
 
 
 PartSelectWidget::~PartSelectWidget()
 {}
-
-#if 0
-void PartSelectWidget::readGlobalConfig()
-{
-    //FIXME: fix this, use new profiles arch !!!!!
-    KTrader::OfferList globalOffers = PluginController::getInstance()->engine().offers(
-        PluginController::getInstance()->currentProfile(), ProfileEngine::Global);
-//     KConfig config( PluginController::getInstance()->currentProfilePath() );
-//     config.setGroup("Plugins");
-
-    for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
-    {
-//		parse out any existing url to make it clickable
-		QString Comment = (*it)->comment();
-		QRegExp re("\\bhttp://[\\S]*");
-		re.search( Comment );
-		Comment.replace( re, "" );
-
-		QString url;
-		if ( re.pos() > -1 )
-		{
-			url = re.cap();
-		}
-
-        PluginItem *item = new PluginItem( _pluginList, (*it)->desktopEntryName(), (*it)->genericName(), Comment, url );
-        item->setOn(/*config.readBoolEntry((*it)->name(), true)*/ true);
-    }
-
-	QListViewItem * first = _pluginList->firstChild();
-	if ( first )
-	{
-		_pluginList->setSelected( first, true );
-	}
-}
-
-void PartSelectWidget::saveGlobalConfig()
-{
-    //FIXME: fix this, use new profiles arch !!!!!!!!!!!!
-*    KConfig config( PluginController::getInstance()->currentProfilePath() );
-    config.setGroup("Plugins");
-
-    QListViewItemIterator it( _pluginList );
-    while ( it.current() )
-    {
-        PluginItem * item = static_cast<PluginItem*>( it.current() );
-        config.writeEntry( item->name(), item->isOn() );
-        ++it;
-    }
-}
-#endif
 
 void PartSelectWidget::readProjectConfig()
 {
@@ -296,11 +232,6 @@ void PartSelectWidget::saveProjectConfig()
 
 void PartSelectWidget::accept()
 {
-/*
-    if (_scope == Global)
-        saveGlobalConfig();
-    else
-*/
     saveProjectConfig();
     emit accepted();
 }

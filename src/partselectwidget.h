@@ -28,10 +28,7 @@ class PartSelectWidget : public QWidget
     Q_OBJECT
 
 public:
-    /* for selection of project parts */
     PartSelectWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
-    /* for selection of global parts */
-    PartSelectWidget( QWidget *parent=0, const char *name=0 );
     ~PartSelectWidget();
 
 public slots:
@@ -46,17 +43,12 @@ private slots:
     void selectProfile(QListViewItem* item);
 
 private:
-    enum Scope { Global, Project };
-
     void init();
-//    void readGlobalConfig();
-//    void saveGlobalConfig();
     void readProjectConfig();
     void saveProjectConfig();
     void fillProfilesList();
 
     QDomDocument m_projectDom;
-    Scope _scope;
 
     QListView * _pluginList;
     QComboView *_pluginProfile;

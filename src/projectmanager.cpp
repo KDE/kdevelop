@@ -264,8 +264,6 @@ void ProjectManager::slotLoadProject( )
     return;
   }
   
-  loadVCSSupport();
- 
   TopLevel::getInstance()->statusBar()->message( i18n("Changing plugin profile...") );
   m_oldProfileName = PluginController::getInstance()->changeProfile(m_info->m_profileName);
   
@@ -314,11 +312,7 @@ bool ProjectManager::closeProject( bool exiting )
 
   Core::getInstance()->doEmitProjectClosed();
 
-  unloadVCSSupport();
-// fixme: this should unload global plugins as well and switch to the selected "base" profile unless 
-// we are on our way to load a new project
-  PluginController::getInstance()->unloadProjectPlugins();	
-  
+  PluginController::getInstance()->unloadProjectPlugins();
   PluginController::getInstance()->changeProfile(m_oldProfileName);
   unloadLanguageSupport();
   unloadProjectPart();
@@ -609,48 +603,6 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
 
     QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
     return loadProject( KURL(projectFile) );
-}
-
-void ProjectManager::loadVCSSupport()
-{
-  m_vcsPlugin = 0;
-  if (m_info->m_vcsPlugin.isEmpty())
-    return;
-  
-  KService::Ptr vcsService = KService::serviceByDesktopName(m_info->m_vcsPlugin);
-  if (!vcsService) {
-    // this is for backwards compatibility with pre-alpha6 projects
-    vcsService = KService::serviceByDesktopName(m_info->m_vcsPlugin.lower());
-  }
-  if (!vcsService) {
-    KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("No VCS plugin %1 found.")
-            .arg(m_info->m_vcsPlugin));
-    return;
-  }
-
-  KDevVersionControl *vcsPart = KParts::ComponentFactory
-    ::createInstanceFromService< KDevVersionControl >( vcsService, API::getInstance(), 0,
-                                                  PluginController::argumentsFromService( vcsService ) );
-  if ( !vcsPart ) {
-    KMessageBox::sorry(TopLevel::getInstance()->main(),
-        i18n("Could not create VCS plugin %1.")
-            .arg(m_info->m_vcsPlugin));
-    return;
-  }
-
-  PluginController::getInstance()->integrateAndRememberPart( vcsService->desktopEntryName(), vcsPart );
-  m_vcsName = vcsService->desktopEntryName();
-  m_vcsPlugin = vcsPart;
-}
-
-void ProjectManager::unloadVCSSupport()
-{
-  if (m_vcsPlugin)
-  {
-    PluginController::getInstance()->removeAndForgetPart(m_vcsName, m_vcsPlugin);
-    delete m_vcsPlugin;
-  }
 }
 
 QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
