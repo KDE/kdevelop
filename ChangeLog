@@ -1,3 +1,10 @@
+2000-12-05  Ralf Nolden <nolden@kde.org>
+  * fixed MDI templates with the help of Pascal Francq <pfrancq@ulb.ac.be>
+    that fixes the crashes on exiting
+  * changed the way to start apps to set the current dir the "underDir" and reset this to the getProjectDir after the
+    according kprocess call, so all apps are actually started from the directory they are currently in. Needed because KDE2 apps
+    using XML rc files for GUI construction won´t find the XML file otherwise.
+
 2000-12-02  Ralf Nolden <nolden@kde.org>
   * updated kde2 and qt2 templates with correct docs destination on install
   * changed kde2 and qt2 templates to require a separate admin.tar.gz containing /admin on generating the project
