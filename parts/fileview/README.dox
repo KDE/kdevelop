@@ -1,24 +1,11 @@
 /** \class FileViewPart
-Put a brief description here, the brief description ends at the first dot.
-Put a more detailed description of your part in these lines. It can span
-over several lines. You can even use some html commands in these lines like:
-<code>This is code</code>, html links <a href="http://somelocation">link text</a>,
-and images.
+The file tree list view for displaying files within project dir.
 
-\authors <a href="mailto:$EMAIL$">$AUTHOR$</a>
-\authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
-...
-\authors <a href="mailto:nth author AT provider.com">nth author full name</a>
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 
-\maintainer <a href="mailto:$EMAIL$">$AUTHOR$</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
+\maintainer <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\feature Provides a way of navigating and interacting with the source files of the current project.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..

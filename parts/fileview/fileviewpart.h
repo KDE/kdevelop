@@ -19,9 +19,6 @@
 class PartWidget;
 class KDialogBase;
 
-/**
- * The file tree list view for displaying files within project dir.
-*/
 class FileViewPart : public KDevPlugin
 {
     Q_OBJECT
@@ -30,7 +27,7 @@ public:
     FileViewPart( QObject *parent, const char *name, const QStringList & );
     virtual ~FileViewPart();
 
-    // Colors to use for VCS visual feed-back
+    //! Colors to use for VCS visual feed-back
     static VCSColors vcsColors;
 
 private slots:
