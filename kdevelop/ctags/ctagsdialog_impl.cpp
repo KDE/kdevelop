@@ -65,7 +65,7 @@ void searchTagsDialogImpl::slotLBItemSelected(int i)
 {
   kdDebug() << "in searchTagsDialogImpl::slotLBItemSelected() \n";
   kdDebug() << "selected item: " << i << "\n";
-  emit gotoTag(&m_currentTagList[i]);
+  gotoTag(&m_currentTagList[i]);
 }
 /* 
  * public slot
@@ -132,4 +132,59 @@ void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
     }
     append = false;
   }
+}
+
+void searchTagsDialogImpl::gotoTag(const CTag* tag)
+{
+  if (!tag) {
+    kdDebug() << "searchTagsDialogImpl::slotTagGotoFile, "
+              << "Error: null tag\n" ;
+    return;
+  }
+  kdDebug() << "searchTagsDialogImpl::slotTagGotoFile, "
+            << "open file " << tag->file()
+            << " at line "  << tag->line()  << "\n";
+  int line = tag->line();
+  if (tag->isFile()&&(line<=1)) line = -1;
+  kdDebug() << "emit signal: switchToFile("
+            <<  tag->file() << "," << line << ");\n";
+  emit switchToFile(tag->file(),line);
+}
+/**
+ * Open all files that correspond to tag
+ */
+void searchTagsDialogImpl::slotGotoFile(QString text)
+{
+  kdDebug() << "searchTagsDialogImpl::slotGotoFile searching for " << text << "\n";
+  slotClear();
+  setTagType(file);
+  searchTagLineEdit->setText(text);
+  /*
+   * there is no need to set the search result if we
+   * only find one tag, so in the future slotSearchTag
+   * can be split up and we can avoid duplicate effort
+   */
+  slotSearchTag();
+  if (m_currentTagList.count()==1) {
+    gotoTag(&m_currentTagList[0]);
+  }
+  else {
+    show();
+    raise();
+  }
+//  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+//  if (tagsDB.is_initialized()) {
+//    kdDebug() << "found tags data base\n";
+//    if (const CTagList* taglist = tagsDB.ctaglist(text))
+//    {
+//      int ntags = taglist->count();
+//      kdDebug() << "found: " << ntags << " entries for: "
+//                << text << "\n";
+//      // should only be one but we can open all we find
+//      for (int it=0; it<ntags; ++it)
+//      {
+//        ctags_dlg->gotoTag(&(*taglist)[it]);
+//      }
+//    }
+//  }
 }

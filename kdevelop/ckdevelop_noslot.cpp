@@ -62,21 +62,21 @@
 
 void CKDevelop::setupRecentProjectMenu()
 {
-	QStringList list=config->readListEntry("Recent Projects");
+    QStringList list=config->readListEntry("Recent Projects");
   for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     addRecentProject((*it));
 }
 
 void CKDevelop::saveRecentProjectMenu()
 {
-	QStringList list;
+    QStringList list;
   for (uint index=0; index < recent_projects_menu->count(); index++)
   {
     int id = recent_projects_menu->idAt(index);
     QString menuFile = recent_projects_menu->text(id);
     list.append(menuFile);
   }
-	config->writeEntry("Recent Projects", list);
+    config->writeEntry("Recent Projects", list);
 }
 
 void CKDevelop::shuffleProjectToTop(int id)
@@ -169,7 +169,7 @@ bool CKDevelop::isProjectDirty()
       {
         // here we are... having the file already opened
         if (pDoc->isModified() 
-	    || bin_info.lastModified() < pDoc->getLastFileModifDate())
+        || bin_info.lastModified() < pDoc->getLastFileModifDate())
           isClean=false;
       }
       /* here only the check if the file would be younger than the target file
@@ -408,27 +408,27 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
 
 void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
 {
-  	//first we'll separate the headers and the source files
-  	QStrList lHeaderList(FALSE);	//no deep copies
-  	QStrList lSourceList(FALSE);
-  	ProjectFileType lCurFileType;
-  	for (const char* lCurFile = iFileList->first(); lCurFile; lCurFile = iFileList->next())
-  	{
-  		lCurFileType = prj->getType(lCurFile);
-  		switch(lCurFileType)
-  		{
-  			case CPP_HEADER:
-  				lHeaderList.append(lCurFile);
-	  			break;
-  			case CPP_SOURCE:
-  				lSourceList.append(lCurFile);
-  				break;
-  			//skip all the other files
-  			default:
-  				break;
-  		}
-		}
-  	class_tree->refresh(lHeaderList, lSourceList);
+      //first we'll separate the headers and the source files
+      QStrList lHeaderList(FALSE);    //no deep copies
+      QStrList lSourceList(FALSE);
+      ProjectFileType lCurFileType;
+      for (const char* lCurFile = iFileList->first(); lCurFile; lCurFile = iFileList->next())
+      {
+          lCurFileType = prj->getType(lCurFile);
+          switch(lCurFileType)
+          {
+              case CPP_HEADER:
+                  lHeaderList.append(lCurFile);
+                  break;
+              case CPP_SOURCE:
+                  lSourceList.append(lCurFile);
+                  break;
+              //skip all the other files
+              default:
+                  break;
+          }
+        }
+      class_tree->refresh(lHeaderList, lSourceList);
 }
 
 /*------------------------------------------ CKDevelop::refreshTrees()
@@ -441,8 +441,8 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(QStrList * iFileList){
-//	time_t lStart = time(NULL);
-//	clock_t lStartClock = clock();
+//    time_t lStart = time(NULL);
+//    clock_t lStartClock = clock();
   kapp->processEvents(100);
   doc_tree->refresh(prj);
   if (!project){
@@ -451,22 +451,22 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 
   // Update the classview.
   slotStatusMsg(i18n("Scanning project files..."));
-	setCursor(KCursor::waitCursor());
+    setCursor(KCursor::waitCursor());
   statProg->show();
   if (iFileList)
   {
     refreshClassViewByFileList(iFileList);
-	}
-	else
-	{
-//		time_t lStart = time(NULL);
-//		clock_t lStartClock = clock();
+    }
+    else
+    {
+//        time_t lStart = time(NULL);
+//        clock_t lStartClock = clock();
     kapp->processEvents(100);
-		class_tree->refresh(prj);
-//		kdDebug() << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
-// 	 	kdDebug() << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+        class_tree->refresh(prj);
+//        kdDebug() << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
+//          kdDebug() << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 
-	}
+    }
 
   statProg->reset();
 //  statProg->hide();
@@ -488,7 +488,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   kapp->processEvents(100);
 
   statusBar()->repaint();
-  setCursor(KCursor::arrowCursor());	
+  setCursor(KCursor::arrowCursor());    
   // update the file_open_menu
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
@@ -528,10 +528,10 @@ void CKDevelop::refreshTrees(TFileInfo *info)
     kapp->processEvents(100);
     // If this is a sourcefile we parse it and update the classview.
     if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
-		{
-			class_tree->addFile( prj->getProjectDir() + info->rel_name );
-			CVRefreshClassCombo();
-		}
+        {
+            class_tree->addFile( prj->getProjectDir() + info->rel_name );
+            CVRefreshClassCombo();
+        }
 
     // Update LFV.
     kapp->processEvents(100);
@@ -610,7 +610,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
   // Enable or disable command
   if (CProject::getType(filename) == CPP_SOURCE){
-    if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
+    if(build_menu->isItemEnabled(ID_BUILD_MAKE))            
       enableCommand(ID_BUILD_COMPILE_FILE);
   }
   else
@@ -796,7 +796,7 @@ void CKDevelop::showTreeView(bool show){
         return; // it's already unvisible){
       }
       else{
-				slotViewTTreeView();
+                slotViewTTreeView();
       }
     }
   }
@@ -837,32 +837,32 @@ void CKDevelop::readOptions()
     view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
   if(config->readBoolEntry("show_browser_toolbar",true))
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-	if (config->readBoolEntry("show_statusbar",true))
+    if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-	if (config->readBoolEntry("show_mdi_view_taskbar",true))
+    if (config->readBoolEntry("show_mdi_view_taskbar",true))
     view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
 
-	/////////////////////////////////////////
-	// Outputwindow, TreeView, KDevelop
-  /////////////////////	
+    /////////////////////////////////////////
+    // Outputwindow, TreeView, KDevelop
+  /////////////////////    
 
-	config->setGroup("dock_setting_default");
-	// settings just turned around...true is false and false is true ;-)
-	bool outputview= config->readBoolEntry("Output-View:visible", true);
-	if(outputview){
-	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-	}
-	bool treeview=config->readBoolEntry("Tree-View:visible", true);
-	if(treeview){
-	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-	}
+    config->setGroup("dock_setting_default");
+    // settings just turned around...true is false and false is true ;-)
+    bool outputview= config->readBoolEntry("Output-View:visible", true);
+    if(outputview){
+      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
+        toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
+    }
+    bool treeview=config->readBoolEntry("Tree-View:visible", true);
+    if(treeview){
+      view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+        toolBar()->setButton(ID_VIEW_TREEVIEW, true);
+    }
 /////////////////////
 
   config->setGroup("General Options");
-	/////////////////////////////////////////
-	// RUNTIME VALUES AND FILES
+    /////////////////////////////////////////
+    // RUNTIME VALUES AND FILES
   bAutosave=config->readBoolEntry("Autosave",true);
   saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
   saveTimer=new QTimer(this);
@@ -882,28 +882,28 @@ void CKDevelop::readOptions()
   setupRecentProjectMenu();
 
   //MB
-	doctool = config->readNumEntry("doc_tool_type");
+    doctool = config->readNumEntry("doc_tool_type");
   // must be done here - cause the call comes AFTER the initialization of Project menue :(
   if (doctool == DT_KDOC || doctool == 0)
   {
     doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,true);
     doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,false);
-	  doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
+      doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
   }
   if (doctool == DT_DOX)
   {
     doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,false);
     doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,true);
-	  doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
+      doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
   }
-	//MB end
-	
-	doc_bookmarks_list.setAutoDelete(TRUE);
-	doc_bookmarks_title_list.setAutoDelete(TRUE);
-	
-	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
-	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
+    //MB end
+    
+    doc_bookmarks_list.setAutoDelete(TRUE);
+    doc_bookmarks_title_list.setAutoDelete(TRUE);
+    
+    config->readListEntry("doc_bookmarks",doc_bookmarks_list);
+    config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
+    for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
   }
 
@@ -937,7 +937,7 @@ void CKDevelop::readOptions()
 }
 
 void CKDevelop::saveOptions(){
-	
+    
   saveMainWindowSettings (config);
   config->setGroup("General Options");
 
@@ -1057,7 +1057,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
 }
 
 void CKDevelop::saveProperties(KConfig* /*sess_config*/){
-	
+    
   if(project){
     kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
 //FB    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
@@ -1065,14 +1065,14 @@ void CKDevelop::saveProperties(KConfig* /*sess_config*/){
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
-  }	
+  }    
   if(bAutosave)
     slotFileSaveAll();
   else{
     // TEditInfo* info;
     // for(info=edit_infos.first();info != 0;info=edit_infos.next()){
     //   if(info->modified){
-    //     #warning FIXME missing method	setUnsavedData ( true );
+    //     #warning FIXME missing method    setUnsavedData ( true );
     //     break;
     //   }
     // }
@@ -1129,4 +1129,10 @@ void CKDevelop::create_tags()
   shell_process << files ;
   // run it
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+}
+
+/** return the instance of the CTags search dialog */
+searchTagsDialogImpl* CKDevelop::getCTagsDialog() const
+{
+  return ctags_dlg;
 }

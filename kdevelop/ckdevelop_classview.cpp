@@ -167,10 +167,15 @@ void CKDevelop::slotCVViewDefinition( const char *parentPath,
  *-----------------------------------------------------------------*/
 void CKDevelop::slotSwitchToFile(const QString & toFile, int toLine)
 {
-  if (!toFile.isEmpty() && toLine!=-1)
-  {
+  /* this can not be checked here
+   * should be done outside the slot
+   * before calling, so its gone
+   * (rokrau 05/10/01)
+   */
+  //if (!toFile.isEmpty() && toLine!=-1)
+  //{
     switchToFile( toFile, toLine );
-  }
+  //}
 }
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()

@@ -1004,7 +1004,8 @@ void CKDevelop::initConnections(){
 
   connect(grep_dlg,SIGNAL(itemSelected(QString,int)),this,SLOT(slotGrepDialogItemSelected(QString,int)));
   // connect ctag search dialog signal
-  connect(ctags_dlg,SIGNAL(gotoTag(const CTag*)),this,SLOT(slotTagGotoFile(const CTag*)));
+  // connect(ctags_dlg,SIGNAL(gotoTag(const CTag*)),this,SLOT(slotTagGotoFile(const CTag*)));
+  connect(ctags_dlg,SIGNAL(switchToFile(const QString&, int)),this,SLOT(slotSwitchToFile(const QString&, int)));
 
   // connections for the proc -processes
   connect(&search_process, SIGNAL(receivedStdout(KProcess*,char*,int)),

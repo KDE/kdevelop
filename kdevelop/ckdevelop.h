@@ -251,7 +251,6 @@ public:
 
  public slots:
 
-  void slotSwitchToFile(QString filename, int line);
   void enableCommand(int id_);
   void disableCommand(int id_);
 
@@ -750,14 +749,6 @@ public:
    */
   void slotCreateNewViewWindow();
   /**
-   * Goto the line in the file of the tag
-   */
-  void slotTagGotoFile(const CTag* tag);
-  /**
-   * Open the file that corresponds to tag
-   */
-  void slotTagOpenFile(QString tag);
-  /**
    * Switch between corresponding source and header files. Assumes that
    * the files exist and that they have the same basename.
    */
@@ -843,6 +834,9 @@ public: // Public methods
   /** create a ctags file for the current CProject */
   void create_tags();
 
+  /** return the instance of the CTags search dialog */
+  searchTagsDialogImpl* getCTagsDialog() const ;
+
   bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
@@ -869,7 +863,7 @@ protected:
   bool queryExit();
   /** saves the currently opened project by the session manager and write 
    * the project file to the session config*/
-  void saveProperties(KConfig* );
+  void saveProperties(KConfig*);
   /** initializes the session windows and opens the projects of the last
    * session */
   void readProperties(KConfig* );

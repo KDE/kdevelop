@@ -34,14 +34,14 @@ public:
     ~searchTagsDialogImpl();
     void setTagType(tagType type);
     void setSearchResult(const CTagList& taglist);
-
+    void gotoTag(const CTag* tag);
 public slots:
     void slotLBItemSelected(int i);
     void slotClear();
     void slotSearchTag();
-
+    void slotGotoFile(QString text);
 signals:
-    void gotoTag(const CTag* tag);
+    void switchToFile(const QString& filename, int line);
 
 private:
     CTagList m_currentTagList;

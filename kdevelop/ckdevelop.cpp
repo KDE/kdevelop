@@ -3860,12 +3860,6 @@ void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
   switchToFile(filename,linenumber);
 }
 
-void CKDevelop::slotSwitchToFile(QString filename, int line)
-{
-  switchToFile(filename, line);
-}
-
-
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {
   case ID_FILE_NEW:

@@ -39,6 +39,7 @@
 #include "docviewman.h"
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
+#include "./ctags/ctagsdialog_impl.h"
 #include "ckdevaccel.h"
 
 //==============================================================================
@@ -737,10 +738,13 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
   pEW->setCaption(pDoc->fileName());
 
   // connect tag related functionality
-  connect( pEW, SIGNAL(tagSwitchTo()),m_pParent, SLOT(slotTagSwitchTo()));
-  connect( pEW, SIGNAL(tagOpenFile(QString)),m_pParent, SLOT(slotTagOpenFile(QString)));
-  connect( pEW, SIGNAL(tagDefinition(QString)),m_pParent, SLOT(slotTagDefinition(QString)));
-  connect( pEW, SIGNAL(tagDeclaration(QString)),m_pParent, SLOT(slotTagDeclaration(QString)));
+  searchTagsDialogImpl* ctagsDlg = m_pParent->getCTagsDialog();
+  connect( pEW, SIGNAL(tagSwitchTo()), m_pParent, SLOT(slotTagSwitchTo()));
+
+  connect( pEW, SIGNAL(tagOpenFile(QString)), ctagsDlg, SLOT(slotGotoFile(QString)));
+
+  connect( pEW, SIGNAL(tagDefinition(QString)), m_pParent, SLOT(slotTagDefinition(QString)));
+  connect( pEW, SIGNAL(tagDeclaration(QString)), m_pParent, SLOT(slotTagDeclaration(QString)));
   //connect the editor lookup function with slotHelpSText
   connect( pEW, SIGNAL(manpage(QString)),m_pParent, SLOT(slotHelpManpage(QString)));
   connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));

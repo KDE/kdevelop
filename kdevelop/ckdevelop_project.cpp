@@ -1574,6 +1574,7 @@ void SaveAllDialog::cancel()
 /**
  * Open the file that corresponds to tag
  */
+/* ...
 void CKDevelop::slotTagGotoFile(const CTag* tag)
 {
   if (!tag) {
@@ -1584,30 +1585,34 @@ void CKDevelop::slotTagGotoFile(const CTag* tag)
   kdDebug() << "CKDevelop::slotTagGotoFile, "
             << "open file " << tag->file()
             << "at line "   << tag->line()  << "\n";
-  switchToFile(tag->file(),tag->line());
+  if (tag->isFile()&&(tag->line()<=1))
+    switchToFile(tag->file());
+  else
+    switchToFile(tag->file(),tag->line());
 }
-/**
- * Open all files that correspond to tag
- */
-void CKDevelop::slotTagOpenFile(QString text)
-{
-  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << text << "\n";
-  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-  if (tagsDB.is_initialized()) {
-    kdDebug() << "found tags data base\n";
-    if (const CTagList* taglist = tagsDB.ctaglist(text))
-    {
-      int ntags = taglist->count();
-      kdDebug() << "found: " << ntags << " entries for: "
-                << text << "\n";
-      // should only be one but we can open all we find
-      for (int it=0; it<ntags; ++it)
-      {
-        slotTagGotoFile(&(*taglist)[it]);
-      }
-    }
-  }
-}
+... */
+///**
+// * Open all files that correspond to tag
+// */
+//void CKDevelop::slotTagOpenFile(QString text)
+//{
+//  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << text << "\n";
+//  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+//  if (tagsDB.is_initialized()) {
+//    kdDebug() << "found tags data base\n";
+//    if (const CTagList* taglist = tagsDB.ctaglist(text))
+//    {
+//      int ntags = taglist->count();
+//      kdDebug() << "found: " << ntags << " entries for: "
+//                << text << "\n";
+//      // should only be one but we can open all we find
+//      for (int it=0; it<ntags; ++it)
+//      {
+//        ctags_dlg->gotoTag(&(*taglist)[it]);
+//      }
+//    }
+//  }
+//}
 /**
  * Switch between corresponding source and header files. Assumes that
  * the files exist and that they have the same basename.
@@ -1630,7 +1635,7 @@ void CKDevelop::slotTagSwitchTo()
     kdDebug() << "in CKDevelop::slotTagSwitchTo():\n";
     kdDebug() << "current filename: " << curFileName << "\n";
     kdDebug() << "switch to filename: " << switchToName << "\n";
-    slotTagOpenFile(switchToName);
+    ctags_dlg->slotGotoFile(switchToName);
   }
 }
 void CKDevelop::slotTagSearch()
@@ -1663,7 +1668,7 @@ void CKDevelop::slotTagDefinition(QString text)
         int nTags = taglist->count();
         for (int i=0;i<nTags;++i){
           if ((*taglist)[i].isDefinition())
-            slotTagGotoFile(&(*taglist)[i]);
+            ctags_dlg->gotoTag(&(*taglist)[i]);
         }
       }
       /* in the case of multiple instances we show a dialog
@@ -1699,7 +1704,7 @@ void CKDevelop::slotTagDeclaration(QString text)
         int nTags = taglist->count();
         for (int i=0;i<nTags;++i){
           if ((*taglist)[i].isDeclaration())
-            slotTagGotoFile(&(*taglist)[i]);
+            ctags_dlg->gotoTag(&(*taglist)[i]);
         }
       }
       /* in the case of multiple instances we show a dialog
