@@ -19,6 +19,8 @@
 
 #include "ckdevelop.h"
 #include "cclassview.h"
+#include "caddclassmethoddlg.h"
+#include "caddclassattributedlg.h"
 #include <assert.h>
 
 
@@ -131,19 +133,26 @@ void CKDevelop::slotCVViewDefinition(  const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
+void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
   CParsedClass *aClass;
-  QListViewItem *item;
-  CParsedMethod *meth = NULL;
   QString toAdd;
   int atLine = -1;
-
-  // Fetch the current item from the tree.
-  item = class_tree->currentItem();
+  CParsedMethod *meth = NULL;
+  CParsedMethod *aMethod;
+  CAddClassMethodDlg dlg(this, "methodDlg" );
+  
+  // Show the dialog and let the user fill it out.
+  if( dlg.exec() )
+  {
+    aMethod = dlg.asSystemObj();
+    aMethod->setDeclaredInClass( aClassName );
+  }
+  else
+    return;
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( item->text(0) );
+  aClass = class_tree->store->getClassByName( aClassName );
 
   // Search for a method with the same export as the one being added.
   for( aClass->methodIterator.toFirst();
@@ -206,19 +215,26 @@ void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
+void CKDevelop::slotCVAddAttribute( const char *aClassName )
 {
-  QListViewItem *item;
   CParsedClass *aClass;
   CParsedAttribute *attr = NULL;
   QString toAdd;
   int atLine = -1;
-  
-  // Fetch the current item.
-  item = class_tree->currentItem();
+  CAddClassAttributeDlg dlg(this, "attrDlg" );
+  CParsedAttribute *aAttr;
+
+  if( dlg.exec() )
+  {
+    aAttr = dlg.asSystemObj();
+
+    aAttr->setDeclaredInClass( aClassName );
+  }
+  else
+    return;
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( item->text(0) );
+  aClass = class_tree->store->getClassByName( aClassName );
   
   for( aClass->attributeIterator.toFirst();
        aClass->attributeIterator.current() && attr == NULL;
@@ -493,7 +509,6 @@ void CKDevelop::refreshClassCombo()
 
   // Clear the combos.
   classCombo->clear();
-  methodCombo->clear();
 
   classList = class_tree->store->getSortedClasslist();
   // Add all classes.
@@ -515,6 +530,8 @@ void CKDevelop::refreshClassCombo()
     classCombo->setCurrentItem( savedIdx );
     refreshMethodCombo( aClass );
   }
+  else
+    methodCombo->clear();
 }
 
 /*----------------------------------- CKDevelop::refreshMethodCombo()
@@ -533,6 +550,10 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
   QListBox *lb;
   KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   QString str;
+  QString savedMethod;
+
+  // Save the current value.
+  savedMethod = methodCombo->currentText();
 
   methodCombo->clear();
   lb = methodCombo->listBox();
@@ -556,5 +577,12 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
   }
 
   lb->setAutoUpdate( true );
+
+  // Try to restore the saved value.
+  for(int i=0; i<methodCombo->count(); i++ )
+  {
+    if( savedMethod == methodCombo->text( i ) )
+      methodCombo->setCurrentItem( i );
+  }
 }
 
