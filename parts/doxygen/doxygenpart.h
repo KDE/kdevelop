@@ -14,17 +14,17 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class DoxygenDialog;
 
 
-class DoxygenPart : public KDevPart
+class DoxygenPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    DoxygenPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    DoxygenPart( QObject *parent, const char *name, const QStringList & );
     ~DoxygenPart();
 
 private slots:

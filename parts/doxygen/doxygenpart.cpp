@@ -11,17 +11,20 @@
 
 #include <qvbox.h>
 #include <klocale.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
-#include "doxygenfactory.h"
 #include "doxygenpart.h"
 
+typedef KGenericFactory<DoxygenPart> DoxygenFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( "kdevdoxygen" ) );
 
-DoxygenPart::DoxygenPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");
