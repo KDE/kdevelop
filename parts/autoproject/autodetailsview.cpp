@@ -372,7 +372,8 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 				QDomDocument &dom = *(m_part->projectDom());
 				for (uint i=0; i<newFileNames.count(); i++)
 				{
-					QString srcfile_relpath = newFileNames[i].remove(0,m_part->projectDirectory().length());
+					QString srcfile_relpath = newFileNames[i];
+					srcfile_relpath.remove(0,m_part->projectDirectory().length());
 					QString uifile_relpath = QString(m_widget->selectedSubproject()->path + "/" + fitem->name).remove(0,m_part->projectDirectory().length());
 					DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
 										"subclass","sourcefile", "uifile");
