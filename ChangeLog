@@ -1,3 +1,6 @@
+2004-05-21 Sascha Cunz <scunz@ng-projekt.de>
+    * Added a ncurses template
+
 2004-05-10 Andras Mantia <amantia@kde.org>
     * Add possibility to define environment variables for the configure stage.
 
@@ -10,6 +13,13 @@
       This means that kdevassistant can browse KDE API docs and has table of contents and index!
       kdevassistant (and kdevelop itself) is now the first documentation browser where you can 
       look for Qt and KDE classes at the same time (using one index).
+
+2004-04-30 Sascha Cunz <scunz@ng-projekt.de>
+    * Added Paul Drummond's patch for having "favourites" in appwizard.
+
+2004-04-25 Sascha Cunz <scunz@ng-projekt.de>
+    * Added support for reading the licenses that appwizard uses dynamically. Install all current licenses
+      to $prefix/share/apps/kdevelop/licenses
 
 2004-04-22 Alexander Dymo <cloudtemple@mksat.net>
     * Added brand new "Look in documentation" function that puts the term under the cursor into the
