@@ -1212,6 +1212,7 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
 
     queueCmd(new GDBCommand("handle SIG32 pass nostop noprint", NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("handle SIG43 pass nostop noprint", NOTRUNCMD, NOTINFOCMD));
 
     // Print some nicer names in disassembly output. Although for an assembler
     // person this may actually be wrong and the mangled name could be better.
