@@ -172,7 +172,6 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     // Project configuration
     projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
     projectconfButton->setPixmap ( SmallIcon ( "configure.png",22 ) );
-    projectconfButton->setText("Configure");
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
     QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
@@ -259,6 +258,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( addfilesButton, SIGNAL ( clicked () ), this, SLOT ( slotAddFiles () ) );
     connect ( newfileButton, SIGNAL ( clicked () ), this, SLOT ( slotNewFile () ) );
     connect ( removefileButton, SIGNAL ( clicked () ), this, SLOT ( slotRemoveFile () ) );
+    connect ( configurefileButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureFile () ) );
 
     // Detail tree connections
     connect( details, SIGNAL(selectionChanged(QListViewItem*)),
@@ -384,7 +384,7 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
 QString TrollProjectWidget::getCurrentTarget()
 {
   if (!m_shownSubproject)
-    return;
+    return "";
   return m_shownSubproject->configuration.m_target;
 }
 
@@ -847,6 +847,32 @@ void TrollProjectWidget::slotRemoveFile()
   removeFile(m_shownSubproject, fitem);
 }
 
+void TrollProjectWidget::slotConfigureFile()
+{
+  QListViewItem *selectedItem = details->currentItem();
+  if (!selectedItem)
+    return;
+  ProjectItem *pvitem = static_cast<ProjectItem*>(selectedItem);
+  // Check that it is a file (just in case)
+  if (pvitem->type() != ProjectItem::File)
+    return;
+  FileItem *fitem = static_cast<FileItem*>(pvitem);
+
+  GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
+  if (!gitem)
+    return;
+  QStringList dirtyScopes;
+  FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
+  SubprojectItem *scope;
+  propdlg->exec();
+  for (uint i=0; i<dirtyScopes.count();i++)
+  {
+    scope = getScope(m_shownSubproject,dirtyScopes[i]);
+    if (scope)
+      updateProjectFile(scope);
+  }
+
+}
 
 void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 {
@@ -856,10 +882,12 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
     if (pvitem->type() == ProjectItem::Group)
     {
         removefileButton->setEnabled(false);
+        configurefileButton->setEnabled(false);
     }
     else if (pvitem->type() == ProjectItem::File)
     {
         removefileButton->setEnabled(true);
+        configurefileButton->setEnabled(true);
     }
 }
 
@@ -891,7 +919,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert new file..."));
-        int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
+ //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
         if (r == idInsExistingFile)
@@ -974,11 +1002,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           for (uint i=0; i<dirtyScopes.count();i++)
           {
             scope = getScope(m_shownSubproject,dirtyScopes[i]);
-            kdDebug(9024) << "Looking for scope: " << dirtyScopes[i] << " (starting in " <<  m_shownSubproject->scopeString << ")" << endl;
             if (scope)
                updateProjectFile(scope);
-             else
-               kdDebug(9024) << "Scope not found" << endl;
           }
         }
 

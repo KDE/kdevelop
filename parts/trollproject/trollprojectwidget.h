@@ -192,6 +192,7 @@ private slots:
     void slotAddFiles();
     void slotNewFile();
     void slotRemoveFile();
+    void slotConfigureFile();
 
 private:
     void cleanDetailView(SubprojectItem *item);
