@@ -1,20 +1,15 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-phphellodir = ${appwizarddatadir}/template-phphello
 templatedir = ${appwizarddatadir}/templates
 
-phphello_DATA = app.php app.kdevelop
+dataFiles = app.php app.kdevelop
 template_DATA = phphello
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+phphello.tar.gz:
+	$(TAR) -cf phphello.tar -C ${srcdir} ${dataFiles}
+	gzip phphello.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = phphello.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+CLEANFILES = *.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(phphellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(phphellodir)/script

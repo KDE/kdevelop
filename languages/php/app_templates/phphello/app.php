@@ -1,6 +1,6 @@
 <?php
 
-%{TEMPLATE_FOR_php}
+%{PHP_TEMPLATE}
 
 printHeader();
 echo "<h1>Hello World!</h1>\n";

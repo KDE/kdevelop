@@ -8,15 +8,16 @@ Comment[fr]=Génère un simple script de test du type « Hello world » dans le lang
 DefaultDestinatonDir=HOMEDIR/public_html
 FileTemplates=php,CPPStyle
 ShowFilesAfterGeneration=%{APPNAMELC}.php
+Archive=phphello.tar.gz
 
 [PROJECT]
 Type=install
-Source=%{src}/template-phphello/app.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [APP.PHP]
 Type=install
-Source=%{src}/template-phphello/app.php
+Source=%{src}/app.php
 Dest=%{dest}/%{APPNAMELC}.php
 
 [MGS]
