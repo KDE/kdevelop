@@ -8,16 +8,25 @@
 #include "keditor/edit_iface.h"
 
 
-class EditIfaceImpl : public KEditor::EditIface
+class EditIfaceImpl : public KEditor::EditDocumentIface
 {
   Q_OBJECT
 
 public:
 
-  EditIfaceImpl(QMultiLineEdit *edit, KEditor::Editor *parent);
+  EditIfaceImpl(QMultiLineEdit *edit, KEditor::Document *parent, KEditor::Editor *editor);
 
-  virtual QString getText();
+  virtual QString text() const;
   virtual void setText(const QString &text);
+
+  virtual void append(const QString &text);
+  virtual bool insertLine(const QString &text, uint line);
+  virtual bool insertAt(const QString &text, uint line, uint col);
+       
+  virtual bool removeLine(uint line);
+         
+  virtual QString line(uint line) const;
+  virtual bool setLine(const QString &text, uint line);
 
 
 private:

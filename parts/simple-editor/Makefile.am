@@ -3,7 +3,7 @@ METASOURCES = AUTO
 
 kde_module_LTLIBRARIES = libeditortestpart.la
 
-libeditortestpart_la_SOURCES = editortest_part.cpp editortest_factory.cpp document_impl.cpp clipboard_iface_impl.cpp undo_iface_impl.cpp cursor_iface_impl.cpp
+libeditortestpart_la_SOURCES = editortest_part.cpp editortest_factory.cpp document_impl.cpp clipboard_iface_impl.cpp undo_iface_impl.cpp cursor_iface_impl.cpp edit_iface_impl.cpp
 
 libeditortestpart_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 libeditortestpart_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE) $(top_builddir)/lib/interfaces/keditor/libkeditorinterface.la

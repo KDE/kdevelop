@@ -13,6 +13,7 @@
 #include "clipboard_iface_impl.h"
 #include "undo_iface_impl.h"
 #include "cursor_iface_impl.h"
+#include "edit_iface_impl.h"
 
 
 using namespace KEditor;
@@ -32,6 +33,7 @@ DocumentImpl::DocumentImpl(Editor *parent, QWidget *parentWidget)
   new ClipboardIfaceImpl(_widget, this, parent);
   new UndoIfaceImpl(_widget, this, parent);
   new CursorIfaceImpl(_widget, this, parent);
+  new EditIfaceImpl(_widget, this, parent);
 
   setXMLFile("editortest_part.rc", true);
 }
