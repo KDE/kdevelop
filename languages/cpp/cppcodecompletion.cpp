@@ -823,8 +823,8 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 		//Remove the vars that don't correspond to the member access operator
 		//that we are using.  
 		//TODO: Take into account the de-reference operator...
-		bool correctAccessOp = ( ( var.ptrList.count() && arrowOp ) ||
-		                         ( !var.ptrList.count() && dotOp ) );
+		bool correctAccessOp = ( ( var.ptrList.count() && var.ptrList[0] == "*" && arrowOp ) ||
+		                         ( ( !var.ptrList.count() || var.ptrList[0] == "&" ) && dotOp ) );
 		
 		if ( !type.isEmpty() && correctAccessOp )
 			return evaluateExpressionInternal( exprList, type );
