@@ -531,6 +531,8 @@ public:
   void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
 
+  void switchToKDevelop();
+  void switchToKDlgEdit();
 
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotProcessExited(KProcess* proc);
@@ -578,6 +580,8 @@ public:
                              const char *declName, 
                              THType type  );
 
+protected: // Protected methods
+
   /** The user selected a class in the classcombo.
    * @param aName Name of the class.
    */
@@ -588,26 +592,47 @@ public:
    */
   void CVMethodSelected( const char *aName );
 
-  // return the position of the classdeclaration begin
+  /** Goto the definition of the specified item.
+   * @param className Name of the class holding the definition. NULL for globals.
+   * @param declName Name of the definition item.
+   * @param type Type of definition item.
+   */
   void CVGotoDefinition( const char *className, 
                          const char *declName, 
                          THType type );
+
+  /** Goto the declaration of the specified item.
+   * @param className Name of the class holding the definition. NULL for globals.
+   * @param declName Name of the definition item.
+   * @param type Type of definition item.
+   */
   void CVGotoDeclaration( const char *className, 
                           const char *declName, 
                           THType type );
+  
+  /** Returns the class for the supplied classname. 
+   * @param className Name of the class to fetch.
+   * @return Pointer to the class or NULL if not found.
+   */
+  CParsedClass *CVGetClass( const char *className );
 
-  bool  isFileInBuffer(QString abs_filename);
+  /** Update the class combo with all classes in alpabetical order. */
+  void CVRefreshClassCombo();
+
+  /** Update the method combo with the methods from the selected
+   * class.
+   * @param aClass Class to update the methodcombo from.
+   */
+  void CVRefreshMethodCombo( CParsedClass *aClass );
+
+public: // Public methods
+  bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
   QString searchToolGetURL(QString str);
-  void refreshClassCombo();
-  void refreshMethodCombo( CParsedClass *aClass );
   void saveCurrentWorkspaceIntoProject();
-
-  void switchToKDevelop();
-  void switchToKDlgEdit();
 
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();

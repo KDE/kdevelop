@@ -197,12 +197,12 @@ bool CKDevelop::fileSaveAs(){
 
   do
   {
-       if (!isUntitled(oldName))
-        name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
-       else
-        name = KFileDialog::getSaveFileName((const char *)
-           ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
-		0,this,oldName);
+    if (!isUntitled(oldName))
+      name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
+    else
+      name = KFileDialog::getSaveFileName((const char *)
+                                          ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
+                                          0,this,oldName);
 
     if (name.isNull()){
     // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
@@ -257,10 +257,10 @@ bool CKDevelop::fileSaveAs(){
 
   if (actual_info != 0l && actual_info==old_info)
   {
-       // here we are ... saving the file with the same name
-       //   so only the modified-flags have to be changed
-       actual_info->modified = false;
-       edit_widget->toggleModified(false);
+    // here we are ... saving the file with the same name
+    //   so only the modified-flags have to be changed
+    actual_info->modified = false;
+    edit_widget->toggleModified(false);
   }
   else
   {
@@ -287,7 +287,7 @@ bool CKDevelop::fileSaveAs(){
   return true;
 }
 
-/*---------------------------------------- CKDevelop::realSearchText2regExp()
+/*---------------------------------- CKDevelop::realSearchText2regExp()
  * realSearchText2regExp()
  *    converts a string to a regular expression.
  *    you will need the function if you want to search even this text.
@@ -326,6 +326,15 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   return sRegExpString;
 }
 
+/*------------------------------------------ CKDevelop::refreshTrees()
+ * refreshTrees()
+ *   Refresh the all trees. Includes re-parsing all files.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
   if (!project){
@@ -341,7 +350,7 @@ void CKDevelop::refreshTrees(){
   statProg->hide();
 
   // Update the classcombo.
-  refreshClassCombo();
+  CVRefreshClassCombo();
 
   // Update LFV.
   log_file_tree->storeState(prj);
@@ -353,7 +362,7 @@ void CKDevelop::refreshTrees(){
   kdlg_dialogs_view->refresh(prj);
 
   kdev_statusbar->repaint();
-	setCursor(KCursor::arrowCursor());	
+  setCursor(KCursor::arrowCursor());	
   // update the file_open_menu
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
@@ -391,7 +400,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
       if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
 	{
 	  class_tree->addFile( prj->getProjectDir() + info->rel_name );
-	  refreshClassCombo();
+	  CVRefreshClassCombo();
 	}
       
       // Update LFV.

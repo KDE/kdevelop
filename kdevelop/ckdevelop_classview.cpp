@@ -63,7 +63,7 @@ void CKDevelop::slotClassChoiceCombo(int index)
   if ( !classname.isEmpty() )
   {
     aClass = class_tree->store->getClassByName( classname );
-    refreshMethodCombo( aClass );
+    CVRefreshMethodCombo( aClass );
   }
 }
 
@@ -430,7 +430,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
 
 /*********************************************************************
  *                                                                   *
- *                          PUBLIC METHODS                           *
+ *                          PRIVATE METHODS                          *
  *                                                                   *
  ********************************************************************/
 
@@ -510,14 +510,7 @@ void CKDevelop::CVGotoDefinition( const char *className,
   CParsedClass *aClass = NULL;
   CParsedMethod *aMethod = NULL;
 
-  // Fetch a class if one is passed.
-  if( className != NULL && strlen( className ) > 0 )
-  {
-    aClass = class_tree->store->getClassByName( className );
-
-    if( aClass != NULL )
-      CVClassSelected( className );
-  }
+  aClass = CVGetClass( className );
 
   // Get the type of declaration at the index.
   switch( type )
@@ -571,19 +564,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
   QString toFile;
   int toLine = -1;
 
-  if( className != NULL && strlen( className ) > 0 )
-  {
-    aClass = class_tree->store->getClassByName( className );
-
-    if( aClass != NULL )
-      CVClassSelected( className );
-
-    // Check if this is a subclass, if so fetch it.
-    if( type == THCLASS && 
-        declName != NULL && strlen( declName ) > 0 &&
-        strcmp( className, declName ) != 0 )
-      aClass = aClass->getClassByName( declName );
-  }
+  aClass = CVGetClass( className );
 
   switch( type )
   {
@@ -654,8 +635,8 @@ void CKDevelop::CVGotoDeclaration( const char *className,
   }
 }
 
-/*----------------------------------- CKDevelop::refreshClassCombo()
- * refreshClassCombo()
+/*----------------------------------- CKDevelop::CVRefreshClassCombo()
+ * CVRefreshClassCombo()
  *   Update the class combo with all classes.
  *
  * Parameters:
@@ -663,7 +644,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::refreshClassCombo()
+void CKDevelop::CVRefreshClassCombo()
 {
   CParsedClass *aClass;
   QList<CParsedClass> *classList;
@@ -695,14 +676,14 @@ void CKDevelop::refreshClassCombo()
   if( aClass && savedIdx != -1 )
   {
     classCombo->setCurrentItem( savedIdx );
-    refreshMethodCombo( aClass );
+    CVRefreshMethodCombo( aClass );
   }
   else
     methodCombo->clear();
 }
 
-/*----------------------------------- CKDevelop::refreshMethodCombo()
- * refreshMethodCombo()
+/*----------------------------------- CKDevelop::CVRefreshMethodCombo()
+ * CVRefreshMethodCombo()
  *   Update the method combo with the methods from the selected
  *   class.
  *
@@ -712,7 +693,7 @@ void CKDevelop::refreshClassCombo()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
+void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
 {
   QListBox *lb;
   KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
@@ -753,7 +734,30 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
   }
 }
 
+/*----------------------------------- CKDevelop::CVRefreshMethodCombo()
+ * CVRefreshMethodCombo()
+ *   Returns the class for the supplied classname. 
+ *
+ * Parameters:
+ *   className        Name of the class to fetch.
+ *
+ * Returns:
+ *   Pointer to the class or NULL if not found.
+ *-----------------------------------------------------------------*/
+CParsedClass *CKDevelop::CVGetClass( const char *className )
+{
+  QString parentClassName;
+  CParsedClass *aClass = NULL;
 
+  if( className != NULL && strlen( className ) > 0 )
+  {
+    // Try to fetch the class.
+    aClass = class_tree->store->getClassByName( className );
 
+    // If we found the class and it isn't a subclass we update the combo.
+    if( aClass != NULL && !aClass->isSubClass() )
+      CVClassSelected( className );
+  }
 
-
+  return aClass;
+}
