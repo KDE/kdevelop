@@ -984,24 +984,50 @@ void CKDevelop::slotBuildCompileFile(){
   }
   else
   {
-    QString makefile=actualDir+"/Makefile";
-    process << make_cmd;
-	  debug("run: %s ", make_cmd.data());
-    if (!QFileInfo(makefile).exists())
-    {
-      makefile=prj->getProjectDir()+prj->getSubDir()+"Makefile";
-      if (!QFileInfo(makefile).exists())
-        makefile=prj->getProjectDir()+"Makefile";
-      if (QFileInfo(makefile).exists())
-      {
-			  process << "-f" << makefile;
-	      debug("-f %s ", makefile.data());
-			}
+    // Find the pertinent makefile. Search order is:
+    // 1. Current file's path
+    // 2. Project's subdirectory (say xyz/src)
+    // 3. Project's main directory
+    QString makefile = fileinfo.dirPath(true) + "/Makefile";
+    if (! QFileInfo(makefile).exists()) {
+      makefile = prj->getProjectDir() + prj->getSubDir() + "Makefile";
     }
-	  debug("%s.o\n",fileinfo.baseName().data());
+    if (! QFileInfo(makefile).exists()) {
+      makefile = prj->getProjectDir() + "Makefile";
+    }
+    bool gotMakefile = QFileInfo(makefile).exists();
+    if (! gotMakefile) {
+      debug("note: makefile not found, gmake will probably use default rules");
+    }
+    // Working directory has to be set, and we *don't* touch kdevelop's current't
+    // directory (via QDir::setCurrent()).
+    // Working directory is tried to be set to (priority is 3, 2, 1)
+    // 1. Absolute directory of current file, then to
+    // 2. Absolute directory of the makefile, then to
+    // 3. Directory where make should be called, from project options
+    QString cwd = fileinfo.dirPath(true);
+    if (gotMakefile) {
+      cwd = QFileInfo(makefile).dirPath(true);      
+    }
+    cwd = prj->getDirWhereMakeWillBeCalled(cwd); // this is typically relative
+    if (QDir::isRelativePath(cwd)) {
+      cwd = prj->getProjectDir() + cwd;     
+    }
+    cwd = QDir(cwd).absPath();
+    // Invoke make with proper options
+    debug("run: %s in: %s", make_cmd.data(), cwd.data());
+    process.setWorkingDirectory(cwd);
+    process << make_cmd;
+    QString makeOptions = prj->getMakeOptions();
+    if (gotMakefile &&
+        (QFileInfo(makefile).dirPath(true) != cwd)) {
+      makeOptions += " -f " + makefile;
+    }
+    debug("make options: %s", makeOptions.data());
+    process << prj->getMakeOptions();
+    debug("%s.o\n",fileinfo.baseName().data());
     process << fileinfo.baseName()+".o";
   }
-
 
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
