@@ -31,9 +31,7 @@ SplashScreen::SplashScreen()
   vbox->addWidget(pixmap);
 
   m_message = new QLabel(m_splash);
-  QPalette pal(m_message->palette());
-  pal.setColor(QPalette::Active, QColorGroup::Foreground, Qt::white);
-  m_message->setPalette(pal);
+  m_message->setPaletteForegroundColor(Qt::white);
   m_message->setBackgroundColor(Qt::black);
   vbox->addWidget(m_message);
 
