@@ -1464,7 +1464,7 @@ bool CProject::isKDEProject()
 }
 bool CProject::isKDE2Project()
 {
-  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kpart_plugin");
+  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kpart_plugin")
   		return true;
   return false;
 }
