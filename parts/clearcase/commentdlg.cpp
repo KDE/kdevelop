@@ -56,3 +56,5 @@ CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
 }
 
 
+
+#include "commentdlg.moc"
