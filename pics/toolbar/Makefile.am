@@ -1,2 +1,2 @@
-kdevelopdir = $(kde_datadir)/kdevelop/pics
+kdevelopdir = $(kde_datadir)/kdevelop/icons
 kdevelop_ICON = AUTO
