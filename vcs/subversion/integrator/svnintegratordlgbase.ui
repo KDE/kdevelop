@@ -63,7 +63,7 @@
                         <cstring>createProject</cstring>
                     </property>
                     <property name="text">
-                        <string>Create a project tree and import new project into trunk/</string>
+                        <string>Create a project tree and import new project into trunk</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
