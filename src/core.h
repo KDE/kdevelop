@@ -7,8 +7,6 @@
 
 #include "kdevcore.h"
 
-class KDevCoreIface;
-
 
 class Core : public KDevCore
 {
@@ -45,8 +43,6 @@ private:
 
   static Core *s_instance;
   
-  KDevCoreIface *m_dcopIface;
-
 };
 
 

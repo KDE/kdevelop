@@ -6,6 +6,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kmainwindow.h>
+#include <dcopclient.h>
 
 
 #include "toplevel.h"
@@ -47,6 +48,8 @@ int main(int argc, char *argv[])
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
+
+  kapp->dcopClient()->registerAs("gideon");
 
   return app.exec();
 }

@@ -370,7 +370,7 @@ void PartController::closePart(KParts::Part *part)
 	          i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
 	          i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
       if (res == KMessageBox::Cancel)
-        return false;
+        return;
       if (res == KMessageBox::Ok)
         rw_part->save();
     }

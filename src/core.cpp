@@ -1,11 +1,7 @@
 #include <kapp.h>
 #include <kdebug.h>
 #include <kstatusbar.h>
-#include <dcopclient.h>
 #include <kmainwindow.h>
-
-
-#include "KDevCoreIface.h"
 
 
 #include "toplevel.h"
@@ -31,16 +27,11 @@ Core *Core::getInstance()
 Core::Core()
   : KDevCore()
 {
-  s_instance = this;
-  
-  m_dcopIface = new KDevCoreIface(this);
-  kapp->dcopClient()->registerAs("gideon");
 }
 
 
 Core::~Core()
 {
-  delete m_dcopIface;
 }
 
 

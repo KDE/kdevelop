@@ -150,7 +150,7 @@ void TopLevelSDI::embedOutputView(QWidget *view, const QString &name)
 }
 
 
-void TopLevelSDI::removeView(QWidget *view)
+void TopLevelSDI::removeView(QWidget *)
 {
 }
 
