@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "qdir.h"
 #include "kdlgedit.h"
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
@@ -23,9 +23,14 @@
 #include "kdlgpropwidget.h"
 #include "items.h"
 #include "kdlgotherdlgs.h"
+#include "kdlgnewdialogdlg.h"
+#include "kdlgdialogs.h"
 
-KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name)
+KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
+   
+   connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
+	   SLOT(slotOpenDialog(QString)));
 }
 
 KDlgEdit::~KDlgEdit()
@@ -33,13 +38,44 @@ KDlgEdit::~KDlgEdit()
 }
 
 
-void KDlgEdit::slotFileNew()
-{
+void KDlgEdit::slotFileNew(){
+  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  TDialogFileInfo info;
+  if(prj != 0){
+    KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
+    if( dlg.exec()){
+      // get the location
+      QString location = dlg.getLocation();
+      info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
+      info.dist = true;
+      info.install = false;
+      info.classname = dlg.getClassname();
+      info.baseclass = dlg.getBaseClass();
+      info.header_file = getRelativeName(location + dlg.getHeaderName());
+      info.source_file = getRelativeName(location + dlg.getSourceName());
+      info.data_file = getRelativeName(location + dlg.getDataName());
+      info.is_toplevel_dialog = true;
+
+      dialog_file = prj->getProjectDir() + info.rel_name;
+
+      if(prj->addDialogFileToProject(info.rel_name,info)){
+	((CKDevelop*)parent())->newSubDir();
+      }
+      ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+      ((CKDevelop*)parent())->refreshTrees();
+    }
+  }
 }
 
 void KDlgEdit::slotFileOpen()
 {
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile("/tmp/dialog.kdevdlg");
+}
+void KDlgEdit::slotOpenDialog(QString file){
+  slotFileSave();
+  dialog_file = file;
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile(file);
+  ((CKDevelop*)parent())->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
 }
 
 void KDlgEdit::slotFileClose()
@@ -48,7 +84,7 @@ void KDlgEdit::slotFileClose()
 
 void KDlgEdit::slotFileSave()
 {
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/dialog.kdevdlg");
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
 }
 	
 void KDlgEdit::slotEditUndo()
@@ -110,5 +146,12 @@ void KDlgEdit::slotViewGrid()
     }
 }
 
-
-
+QString KDlgEdit::getRelativeName(QString abs_filename){
+  CProject* prj = ((CKDevelop*)parent())->getProject();
+  // normalize it a little bit
+  abs_filename.replace(QRegExp("///"),"/"); // remove ///
+  abs_filename.replace(QRegExp("//"),"/"); // remove //
+  abs_filename.replace(QRegExp(prj->getProjectDir()),"");
+  return abs_filename;
+}
+  

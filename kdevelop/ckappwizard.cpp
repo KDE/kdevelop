@@ -1156,13 +1156,8 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*");
   project->addLFVGroup ("Others","");
   project->setFilters("Others",group_filters);
-
-  if (!(ta->isChecked() || qta->isChecked())) {
-    group_filters.clear();
-    group_filters.append("*.po");
-    project->addLFVGroup ("Translations","");
-    project->setFilters("Translations",group_filters);
-  }
+  
+  
   
   if (gnufiles->isChecked()) {
     group_filters.clear();
@@ -1175,6 +1170,19 @@ void CKAppWizard::slotProcessExited() {
     group_filters.append("NEWS");
     project->addLFVGroup ("GNU","");
     project->setFilters("GNU",group_filters);
+  }
+
+  if (!(ta->isChecked() || qta->isChecked())) {
+    group_filters.clear();
+    group_filters.append("*.po");
+    project->addLFVGroup ("Translations","");
+    project->setFilters("Translations",group_filters);
+  }
+  if (!ta->isChecked()) {
+    group_filters.clear();
+    group_filters.append("*.kdevdlg");
+    project->addLFVGroup ("Dialogs","");
+    project->setFilters("Dialogs",group_filters);
   }
   
   

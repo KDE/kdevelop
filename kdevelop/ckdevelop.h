@@ -132,6 +132,7 @@ public:
   KDlgDialogs* kdlg_get_dialogs_view() { return kdlg_dialogs_view; }
   KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
   KStatusBar*  kdlg_get_statusbar() { return kdlg_statusbar; }
+  CProject* getProject() {return prj;}
 
 
  public slots:
@@ -447,11 +448,12 @@ public:
   void switchToKDevelop();
   void switchToKDlgEdit();
 
+  /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
+  void newSubDir();
 protected:
   virtual void closeEvent(QCloseEvent* e);
   //  void mousePressEvent(QMouseEvent* event);
-  /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
-  void newSubDir();
+  
 
 private:
   //the menus for kdevelop main

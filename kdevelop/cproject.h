@@ -35,13 +35,43 @@ struct TMakefileAmInfo {
   QString type;
   QStrList sub_dirs;
 };
+
+/** info struct for a dialogfile (used in CProject) 
+ * maybe I will inherited this from TFileInfo in the future
+ *@author Sandy Meier
+ */
+struct TDialogFileInfo {
+  /** location + name in the projectdir*/
+  QString rel_name;
+  /** SOURCE,HEADER,SCRIPT,DATA,PO,DIALOG*/
+  QString type;
+  /** include in distribution?*/
+  bool dist;
+  /** install?*/
+  bool install;
+  /** install-location*/
+  QString install_location;
+  
+  QString classname;
+  /**QWidget,QFrame,QDialog,QTabDialog,Custom*/
+  QString baseclass;
+  /** toplevel Dialog?, is needed to support QTabDialogs*/
+  bool is_toplevel_dialog;
+  /** the children if baseclass is a QTabdialog,relative filenames of other *.kdevdlg*/
+  QStrList widget_files;
+  
+  QString header_file;
+  QString source_file;
+  QString data_file;
+  
+};
 /** info struct for a file (used in CProject)
   *@author Sandy Meier
   */
 struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** SOURCE,HEADER,SCRIPT,DATA*/
+  /** SOURCE,HEADER,SCRIPT,DATA,PO,DIALOG*/
   QString type;
   /** include in distribution?*/
   bool dist;
@@ -170,6 +200,7 @@ public: // Methods to fetch project options
   /** Fetch all groups in the logic file view. */
   void getLFVGroups(QStrList& groups);
   TFileInfo getFileInfo(QString filename);
+  TDialogFileInfo getDialogFileInfo(QString rel_filename);
   TMakefileAmInfo getMakefileAmInfo(QString rel_name);
 
 public: // Public queries
@@ -181,6 +212,7 @@ public: // Public queries
 
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
+  void getAllTopLevelDialogs(QStrList& list);
 
   /** Get all sources for this makefile */
   void getSources(QString rel_name_makefileam,QStrList& sources);
@@ -201,6 +233,7 @@ public: // Public methods
   //  void writeMakefileAmInfo(TMakefileAmInfo info);
   /** return true if a new subdir was added to the project*/
   bool addFileToProject(QString rel_name,TFileInfo info);
+  bool addDialogFileToProject(QString rel_name,TDialogFileInfo info);
   void removeFileFromProject(QString rel_name);
   void setKDevelopWriteArea(QString makefile);
   void addMakefileAmToProject(QString rel_name,TMakefileAmInfo info);

@@ -24,6 +24,8 @@
 #include "cclassview.h"
 #include "kswallow.h"
 #include "ctoolclass.h"
+#include "./kdlgedit/kdlgdialogs.h"
+#include "./kdlgedit/kdlgedit.h"
 
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
@@ -35,6 +37,7 @@ void CKDevelop::refreshTrees(){
   log_file_tree->storeState(prj);
   log_file_tree->refresh(prj);
   real_file_tree->refresh(prj);
+  kdlg_dialogs_view->refresh(prj);
  
 }
  
@@ -89,7 +92,11 @@ void CKDevelop::switchToFile(QString filename){
     }
   }
 
-
+  if(filename.right(8) == ".kdevdlg"){
+    switchToKDlgEdit();
+    kdlgedit->slotOpenDialog(filename);
+    return;
+  }
   
   // set the correct edit_widget
   if (getTabLocation(filename) == HEADER){

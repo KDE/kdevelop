@@ -30,7 +30,6 @@
 
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor: Widget_1.kdevdlg";
-  kdlgedit=new KDlgEdit(this,"dialogeditor");
 
   kdlg_tabctl= new CTabCtl(top_panner);
   kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
@@ -38,6 +37,7 @@ void CKDevelop::initKDlg(){
   kdlg_widgets_view= new KDlgWidgets(this,kdlg_tabctl,"widgets_view");
   kdlg_dialogs_view = new KDlgDialogs(kdlg_tabctl,"dialogs_view");
   kdlg_items_view = new KDlgItems(this,kdlg_tabctl,"items_view");
+  kdlgedit=new KDlgEdit(this,"dialogeditor");
 
   kdlg_tabctl->addTab(kdlg_widgets_view,i18n("Widgets"));
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
@@ -69,7 +69,7 @@ void CKDevelop::initKDlgMenuBar(){
   // File-menu entries
   kdlg_file_menu= new QPopupMenu;
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
-  kdlg_file_menu->insertItem(pix,i18n("&New"), this, SLOT(slotFileNew()), 0,ID_FILE_NEW);
+  kdlg_file_menu->insertItem(pix,i18n("&New Dialog"), kdlgedit, SLOT(slotFileNew()), 0,ID_KDLG_FILE_NEW);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   kdlg_file_menu->insertItem(pix, i18n("&Open..."), kdlgedit, SLOT(slotFileOpen()), 0, ID_KDLG_FILE_OPEN);
   kdlg_file_menu->insertItem(i18n("&Close"), kdlgedit, SLOT(slotFileClose()),0, ID_KDLG_FILE_CLOSE);

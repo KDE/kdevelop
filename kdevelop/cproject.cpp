@@ -316,7 +316,24 @@ void CProject::getFilters(QString group,QStrList& filters){
   config->setGroup("LFV Groups");
   config->readListEntry(group,filters);
 }
+bool CProject::addDialogFileToProject(QString rel_name,TDialogFileInfo info){
+  config->setGroup(info.rel_name);
+  config->writeEntry("baseclass",info.baseclass);
+  config->writeEntry("widget_files",info.widget_files);
+  config->writeEntry("is_toplevel_dialog",info.is_toplevel_dialog);
+  config->writeEntry("header_file",info.header_file);
+  config->writeEntry("cpp_file",info.header_file);
+  config->writeEntry("data_file",info.data_file);
+  config->writeEntry("classname",info.classname);
+  
+  TFileInfo file_info;
+  file_info.rel_name = info.rel_name;
+  file_info.type = "DIALOG";
+  file_info.dist = info.dist;
+  file_info.install = info.install;
 
+  return addFileToProject(file_info.rel_name,file_info);
+}
 bool CProject::addFileToProject(QString rel_name,TFileInfo info){
   
   // normalize it a little bit
@@ -679,6 +696,36 @@ QString CProject::getName(QString rel_name){
   int pos = rel_name.findRev('/');
   int len = rel_name.length() - pos - 1;
   return rel_name.right(len);
+}
+void CProject::getAllTopLevelDialogs(QStrList& list){
+  list.clear();
+  QStrList  all_files;
+  TFileInfo info;
+  getAllFiles(all_files);
+  QString file;
+  for(file = all_files.first();file != 0;file = all_files.next()){
+    info = getFileInfo(file);
+    if(info.type == "DIALOG" && file.right(8) == ".kdevdlg"){
+      list.append(info.rel_name);
+    }
+  }
+}
+TDialogFileInfo CProject::getDialogFileInfo(QString rel_filename){
+  TDialogFileInfo info;
+  config->setGroup(rel_filename);
+  info.rel_name = rel_filename;
+  info.type = config->readEntry("type");
+  info.dist = config->readBoolEntry("dist");
+  info.install = config->readBoolEntry("install");
+  info.install_location = config->readEntry("install_location");
+  info.classname = config->readEntry("classname");
+  info.baseclass = config->readEntry("baseclass");
+  info.is_toplevel_dialog = config->readBoolEntry("is_toplevel_dialog");
+  config->readListEntry("widget_files",info.widget_files);
+  info.header_file = config->readEntry("header_file");
+  info.source_file = config->readEntry("source_file");
+  info.data_file = config->readEntry("data_file");
+  return info;  
 }
 void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
   sources.clear();
