@@ -276,8 +276,8 @@ sub processMakefile ($)
     }
     appendLines($final_lines . "all-am");
 
-    my $lookup = 'DEP_FILES\s*=(.*)\n';
-    if ($MakefileData =~ /\n$lookup/) {
+    my $lookup = 'DEP_FILES\s*=([^\n]*)';
+    if ($MakefileData =~ /\n$lookup\n/) {
       $depfiles = $1;
 
 
@@ -307,7 +307,24 @@ sub processMakefile ($)
       }
     }
 
-    $MakefileData =~ s/\$\(CXXFLAGS\)/\$\(CXXFLAGS\) \$\(KDE_CXXFLAGS\)/g;
+    my $found = 1;
+
+    while ($found) {
+      if ($MakefileData =~ m/\n(.*)\$\(CXXFLAGS\)(.*)\n/) {
+	my $vor = $1;
+	my $nach = $2;
+	my $lookup = quotemeta("$1\$(CXXFLAGS)$2");
+	my $replacement = "$1\$(KCXXFLAGS)$2"; 
+	$MakefileData =~ s/$lookup/$replacement/;
+	$lookup =~ s/\\\$\\\(CXXFLAGS\\\)/\\\$\\\(KCXXFLAGS\\\)/;
+	$replacement = "$vor\$(KCXXFLAGS) \$(KDE_CXXFLAGS)$nach";
+	substituteLine($lookup, $replacement);
+      } else {
+	$found = 0;
+      }
+    }
+
+    $MakefileData =~ s/\$\(KCXXFLAGS\)/\$\(CXXFLAGS\)/g;
 
     # Always update the Makefile.in
     updateMakefile ();
@@ -742,7 +759,7 @@ sub tag_SUBDIRS ()
   opendir (THISDIR, ".");
   foreach $entry (readdir(THISDIR)) {
     next if ($entry eq "CVS" || $entry =~ /^\./);
-    if (-d $entry && -f $entry . "/Makefile.in") {
+    if (-d $entry && -f $entry . "/Makefile.am") {
       $subdirs .= " $entry";
       next;
     }
@@ -1158,7 +1175,6 @@ sub tag_CLOSURE () {
   if ($MakefileData !~ /\n$program\_LDFLAGS\s*=.*-no-undefined/) {
     return;
   }
-  print "$program\n";
   my $closure = $realname{$program} . ".closure";
   my $lines = "$closure: \$($program\_OBJECTS) \$($program\_DEPENDENCIES)\n";
   $lines .= "\t\@echo \"int main() {}\" > $program\_closure.$cxxsuffix\n";
@@ -1170,8 +1186,8 @@ sub tag_CLOSURE () {
   appendLines($lines);
   $lookup = $realname{$program} . ": (.*)";
   if ($MakefileData =~ /\n$lookup\n/) {
-    $lines  = $realname{$program} . ": $closure $1";
-#    $lines .= "\n#" . $realname{$program} . ": $1";
+    $lines  = "\@KDE_USE_CLOSURE_TRUE@". $realname{$program} . ": $closure $1";
+    $lines .= "\n\@KDE_USE_CLOSURE_FALSE@" . $realname{$program} . ": $1";
     substituteLine($lookup, $lines);
   }
 }
@@ -1231,22 +1247,24 @@ sub tag_DOCFILES ()
     if ($files =~ /(^| )index\.docbook($| )/) {
 
       my $lines = "";
-      $lines .= "docs-am: db2html-dir/index.html\n";
+      $lines .= "docs-am: HTML HTML/index.html\n";
       $lines .= "\n";
-      $lines .= "db2html-dir/index.html: index.docbook\n";
-      $lines .= "\t-rm -f db2html-dir\n";
-      $lines .= "\tdb2html -d /usr/lib/sgml/stylesheets/kde.dsl \$(srcdir)/index.docbook\n";
-      $lines .= "\t-rm -fr db2html-dir/stylesheet-images\n";
+      $lines .= "HTML:\n";
+      $lines .= "\ttest -d HTML || mkdir HTML\n";
+      $lines .= "\n";
+      $lines .= "HTML/index.html: index.docbook\n";
+      $lines .= "\t\@test -d HTML && rm -r HTML\n";
+      $lines .= "\tkdb2html \$(srcdir)/index.docbook\n";
       $lines .= "\n";
       $lines .= "install-docs:\n";
       $lines .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname\n";
-      $lines .= "\t\@if test -d db2html-dir; then \\\n";
-      $lines .= "\t(cd db2html-dir && for file in * .anchors; do if test -f \$\$file; then \\\n";
+      $lines .= "\t\@if test -d HTML; then \\\n";
+      $lines .= "\t(cd HTML && for file in * .anchors; do if test -f \$\$file; then \\\n";
       $lines .= "\techo \$(INSTALL_DATA) \$\$file \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$file ;\\\n";
       $lines .= "\t\$(INSTALL_DATA) \$\$file \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$file; \\\n";
       $lines .= "\tfi; done); fi\n";
       $lines .= "\t-rm -f \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/common\n";
-      $lines .= "\t\$(LN_S) ../../en/common \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/common\n";
+      $lines .= "\t\$(LN_S) ../../$kdelang/common \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/common\n";
       $lines .= "\n";
       $lines .= "uninstall-docs:\n";
       $lines .= "\t-rm -rf \$(kde_htmldir)/$kdelang/$appname\n";
