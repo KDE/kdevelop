@@ -227,6 +227,10 @@ void TopLevelMDI::init()
 
   createGUI(0);
 
+  if (!isFakingSDIApplication()) {
+    menuBar()->insertItem( tr("&Window"), windowMenu(), -1, menuBar()->count()-1);
+  }
+
   if ( PluginController::pluginServices().isEmpty() ) {
     KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
         "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
@@ -281,11 +285,6 @@ void TopLevelMDI::createStatusBar()
 
 void TopLevelMDI::createFramework()
 {
-  if (!isFakingSDIApplication())
-  {
-    menuBar()->insertItem( tr("&Window"), windowMenu());
-  }
-
   PartController::createInstance(this);
 
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -645,6 +644,7 @@ void TopLevelMDI::saveSettings()
 {
   ProjectManager::getInstance()->saveSettings();
   saveMainWindowSettings(kapp->config(), "Mainwindow");
+  saveMDISettings();
 }
 
 
@@ -654,6 +654,8 @@ void TopLevelMDI::saveMDISettings()
   config->setGroup("UI");
 
   config->writeEntry("MDI mode", mdiMode());
+
+  config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 }
 
 
