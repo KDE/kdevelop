@@ -1,11 +1,14 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
   <!ENTITY grep "<application>grep</application>">
   <!ENTITY egrep "<application>egrep</application>">
   <!ENTITY ctags "<application>ctags</application>">
   <!ENTITY doxygen "<application>doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
+  <!ENTITY CVS "<application>CVS</application>">
+  <!ENTITY cvs "<application>cvs</application>">
+  <!ENTITY ssh "<application>ssh</application>">
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -28,11 +31,11 @@
 </authorgroup>
 
 <copyright>
-<year>2002></year>
+<year>2002</year>
 <holder>Bernd Gehrmann</holder>
 </copyright>
 
-<legalnoctice>&FDLNotice;</legalnotice>
+<legalnotice>&FDLNotice;</legalnotice>
 
 <abstract>
 <para>This documentation describes the &kdevelop; Integrated
@@ -916,6 +919,108 @@ breakpoints.
 <title>Using CVS</title>
 
 <para>
+&CVS; is the revision control system which many open source projects -
+including KDE - are using. It stores all sources codes in a central place,
+called the <emphasis>repository</emphasis>.  From the repository, developers 
+can check out a current version of the project or snapshots of it at arbitrary
+points of time. In contrast to some other revision control systems, it is not 
+necessary to <emphasis>lock</emphasis> files one wants to work on. So 
+development can be highly parallelized.
+</para>
+
+<para>
+Whenever a developer has finished a task, he <emphasis>commits</emphasis> his
+code (accompanied by a log message). &CVS; takes the job to merge the changes
+made by several developers. It can of course happen that developers work on 
+the same piece of code, resulting in a conflicting set of changes (in practice
+this occurs seldom, and is often a sign of a lack of communication). In this
+case &CVS; rejects a commit; only after all conflicts are resolved, a file can
+be commited.
+</para>
+
+<para>
+So far, this has been a description of the basic features of &CVS; one usually
+has to cope with. But &CVS; can provide a lot more: One can  maintain several
+branches of a project (e. g. KDE 1.1.2 and KDE 2 were branches in KDE's 
+development tree), merge changes from one branch to another, ask for
+differences between revisions, the revision history of files etc.
+</para>
+
+<para>
+&CVS; is implemented as a client-server system. As a user, all communication
+with the repository goes through the command line program &cvs;. A higher
+level user interface is available through frontends like 
+<application>Cervisia</application> (<ulink url="http://cervisia.sf.net"/>)
+or <application>TkCVS</application> (<ulink url="http://tkcvs.sf.net"/>).
+In &kdevelop;, only a small part of the &cvs; functionality which is
+important for your daily work can be used directly.
+</para>
+
+<para>
+Basic knowledge of &CVS; usage is assumed. In particular, you should know 
+how to checkout a given project from the repository. We recommend the
+book "Open Source Development With CVS" by Karl Fogel which is freely
+distributed (except for the non-technical chapters). See
+<ulink url="http://cvsbook.red-bean.com/cvsbook.html"/>.
+</para>
+
+<para>
+In the file views, the following context menu items are available:
+</para>
+
+<itemizedlist>
+
+<listitem>
+<formalpara><title>Add to Repository</title>
+<para>Prepares the marked file for addition to the repository. The file
+is transferred to the repository when you commit it (or the containing
+directory) the next time.
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara><title>Remove from Repository</title>
+<para>
+Prepares a file for removal from the repository. This also deletes
+the file on the local file system, so use this feature with care!
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara><title>Update</title>
+<para>
+Runs <command>cvs update</command> to merge any changes from other
+users into your working directory. When you use this menu item over
+a directory, the update normally happens recursively, except if you
+have disable this in the configuration file <filename>.cvsrc</filename>.
+</para>
+</formalpara>
+</listitem>
+
+<listitem>
+<formalpara><title>Commit</title>
+<para>
+Runs <command>cvs commit</command> to upload any locally made changes
+to the repository. Note that you should update before doing this.
+Otherwise, when another user has committed his own changes before,
+&CVS; may give you an error message.
+</para>
+</formalpara>
+</listitem>
+
+</itemizedlist>
+
+<para>
+All these commands are invoked as subprocesses by &kdevelop; without any
+further command line options or environment variables. This may be a
+problem when the connection with the &CVS; server goes through a
+&ssh; connection and requires that you enter your password each time 
+you commit or update. This is for instance necessary when your project is
+hosted on <filename>sourceforge.net</filename>. Workarounds for this
+problem are described on the CVS/SSH FAQ which you can find in the
+SourceForge documentation.
 </para>
 
 </chapter>
@@ -1160,7 +1265,11 @@ the content of the matched subgroups will be shown in a list box.
 <para>
 </para>
 
+&underFDL;
+&underGPL;
+
 </simplesect>
+
 
 </chapter>
 
