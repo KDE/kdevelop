@@ -707,7 +707,7 @@ static int listHeight( QListView *l, int /*sl*/ )
 
 //    return prefH < l->sizeHint().height() ? prefH : l->sizeHint().height();
 
-    return prefH;
+    return prefH+2;
 }
 
 /*!
