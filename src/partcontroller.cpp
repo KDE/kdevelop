@@ -759,14 +759,14 @@ void PartController::slotCurrentChanged(QWidget *w)
     }
 }
 
-
 void PartController::slotOpenFile()
 {
-  QStringList fileNames = KFileDialog::getOpenFileNames(QString::null, QString::null, TopLevel::getInstance()->main(), QString::null);
+  KURL::List fileNames = KFileDialog::getOpenURLs(QString::null, QString::null, TopLevel::getInstance()->main(), QString::null);
 
-  for ( QStringList::Iterator it = fileNames.begin(); it != fileNames.end(); ++it ) {
-    editDocument(KURL(*it));
-    m_openRecentAction->addURL( KURL(*it) );
+  for ( KURL::List::Iterator it = fileNames.begin(); it != fileNames.end(); ++it ) 
+  {
+    editDocument( *it );
+    m_openRecentAction->addURL( *it );
   }
   m_openRecentAction->saveEntries( kapp->config(), "RecentFiles" );
 }
