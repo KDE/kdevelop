@@ -8,3 +8,8 @@ as follows: Install kdoc and the kdelibs sources. Then
 For the graphical classbrowser, you need the program 'dot'
 from the graphviz package which can be downloaded from
 www.graphviz.org. This is only a runtime dependency!
+
+If you are experiencing build problems related to .moc files, try
+  rm *.moc*
+  make force-reedit
+in the source directory where the build system complains.
