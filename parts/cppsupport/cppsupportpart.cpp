@@ -341,6 +341,8 @@ CppSupportPart::projectOpened( )
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
     connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
+    connect( project( ), SIGNAL( changedFilesInProject( const QStringList & ) ),
+             this, SLOT( changedFilesInProject( const QStringList & ) ) );
     connect( project(), SIGNAL(projectCompiled()),
 	     this, SLOT(slotProjectCompiled()) );
 
@@ -478,6 +480,19 @@ void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
     emit updatedSourceInfo();
 }
 
+void CppSupportPart::changedFilesInProject( const QStringList & fileList )
+{
+    QStringList::ConstIterator it;
+    QDir d( project()->projectDirectory() );
+
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        QFileInfo fileInfo( d, *it );
+        kdDebug(9007) << "changedFilesInProject() " << fileInfo.absFilePath() << endl;
+        maybeParse( fileInfo.absFilePath(), classStore() );
+    }
+    emit updatedSourceInfo();
+}
 
 void CppSupportPart::savedFile(const QString &fileName)
 {

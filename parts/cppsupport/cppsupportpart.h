@@ -95,6 +95,7 @@ private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
+    void changedFilesInProject( const QStringList & fileList );    
     void slotProjectCompiled();
     void setupCatalog();
 
