@@ -416,7 +416,7 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
   }
 
 
-  unsigned int mdiFlags = KMdi::StandardAdd | KMdi::UseQextMDISizeHint;
+  unsigned int mdiFlags = KMdi::StandardAdd | KMdi::UseKMdiSizeHint;
   addWindow(child, mdiFlags);
 
   m_partViews.append(child);
@@ -696,7 +696,11 @@ void MainWindow::loadMDISettings()
       switchToTabPageMode();
     }
     break;
-
+  case KMdi::IDEAlMode:
+    {
+      switchToIDEAlMode();
+    }
+    
   default:
     break;
   }
