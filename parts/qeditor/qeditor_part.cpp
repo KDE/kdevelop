@@ -108,6 +108,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     setInstance( QEditorPartFactory::instance() );
 
     m_views.setAutoDelete( FALSE );
+    m_cursors.setAutoDelete( TRUE );
 
     m_currentView = new QEditorView( this, parentWidget, widgetName );
     m_views.append( m_currentView );

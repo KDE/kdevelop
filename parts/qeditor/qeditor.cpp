@@ -138,6 +138,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
     m_applicationMenu = 0;
     m_parser = 0;
     m_recording = FALSE;
+    m_keys.setAutoDelete( TRUE );
 
     document()->addSelection( ParenMatcher::Match );
     document()->addSelection( ParenMatcher::Mismatch );
@@ -157,6 +158,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
 QEditor::~QEditor()
 {
+    m_keys.clear();
     delete( parenMatcher );
 }
 
