@@ -604,7 +604,9 @@ void CKDevelop::slotEditSearchText(){
       }
     }
   }
-  slotEditSearchInFiles(text);
+
+  if (!text.isEmpty())
+    slotEditSearchInFiles(text);
   slotStatusMsg(i18n("Ready."));
 }
 

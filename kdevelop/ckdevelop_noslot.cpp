@@ -361,21 +361,23 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   bool bFound;
   char *szChangingChars= (bForGrep) ? (char*)"[]\\^$" : (char*)"$^*[]|()\\;,#<>-.~{}" ;
 
-  while ((ch=*szOldText++)!='\0')
+  if (szOldText)
   {
-    bFound=false;
-    for (i=0; !bFound && szChangingChars[i]!='\0';)
-    {
-       if (szChangingChars[i]==ch)
-           bFound=true;
-       else
-           i++;
+    while ((ch=*szOldText++)!='\0')
+     {
+       bFound=false;
+       for (i=0; !bFound && szChangingChars[i]!='\0';)
+      {
+         if (szChangingChars[i]==ch)
+             bFound=true;
+         else
+             i++;
+      }
+      if (bFound)
+          sRegExpString+='\\';
+      sRegExpString+=ch;
     }
-    if (bFound)
-        sRegExpString+='\\';
-    sRegExpString+=ch;
   }
-
   return sRegExpString;
 }
 
