@@ -62,6 +62,7 @@ private:
   char* parseOther          (char* buf);
   char* parseCmdBlock       (char* buf);
 
+  void pauseApp();
   void executeCmd ();
   void destroyCmds();
   void removeInfoRequests();
