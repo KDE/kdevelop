@@ -106,7 +106,7 @@ EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/phphello/ \
                          parts/appwizard/perlhello/ \
                          parts/appwizard/pascalhello/ \
-                         parts/appwizard/noatunplugin/ \
+                         parts/appwizard/noatunui/ \
                          parts/appwizard/noatunvisual/ \
                          parts/appwizard/kscreensaver/ \
                          parts/appwizard/kpartplugin/ \
