@@ -109,11 +109,11 @@ void KTabZoomWidget::addTab( const QPixmap& pixmap, QWidget *widget, const QStri
 
   static int id = 0;
 
-  ++id;
-
   d->m_tabBar->appendTab( pixmap, id, title );
   info->m_barIndex = id;
   info->m_index = d->m_popup->addTab(widget, title);
+  ++id;
+
 
   connect(d->m_tabBar->tab(id), SIGNAL(clicked(int)), this, SLOT(selected(int)));
   //connect(d->m_tabBar->tab(id), SIGNAL(unselected()), this, SLOT(unselected()));
@@ -206,6 +206,7 @@ void KTabZoomWidget::addContent(QWidget *content)
 void KTabZoomWidget::selected(int index)
 {
   if( !d->m_tabBar->isTabRaised(index) ){
+     kdDebug() << "=========================> unselected!!!!!!" << endl;
      unselected();
      return;
   }
@@ -303,6 +304,7 @@ void KTabZoomWidget::unsetButtons()
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
+  kdDebug() << "========> raiseWidget(" << widget->name() << ")" << endl;
   if ( !widget )
     widget = d->m_lastActiveWidget;
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
@@ -310,6 +312,9 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
     {
       /// @todo d->m_tabBar->setActiveIndex(i->m_barIndex);
       d->m_lastActiveWidget = i->m_widget;
+      kdDebug() << "========> index = (" << i->m_index << ")" << endl;
+      d->m_tabBar->tab( i->m_index )->setState( true );
+      selected( i->m_index );
       return;
     }
 }
