@@ -36,7 +36,7 @@ public:
     enum Type { Subproject, Target, File };
     
     ProjectItem(Type type, QListView *parent, const QString &text);
-    ProjectItem(Type type, ProjectItem *parentt, const QString &text);
+    ProjectItem(Type type, ProjectItem *parent, const QString &text);
 
     Type type()
         { return typ; }
@@ -142,6 +142,7 @@ public:
     FileItem *createFileItem(const QString &name);
 
     void emitAddedFile(const QString &name);
+    void emitRemovedFile(const QString &name);
     
 private slots:
     void slotItemExecuted(QListViewItem *item);

@@ -13,6 +13,7 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <qprogressdialog.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <kapp.h>
@@ -137,9 +138,19 @@ void CppSupportPart::initialParse()
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
+        QProgressDialog progress;
+        progress.setCancelButton(0);
+        
         QStringList files = project()->allSourceFiles();
-        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
+        
+        int n = 0;
+        progress.setTotalSteps(files.count());
+        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
+            progress.setProgress(n);
+            kapp->processEvents();
             maybeParse(*it);
+            ++n;
+        }
         
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();

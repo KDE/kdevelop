@@ -14,6 +14,8 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				targetoptionsdlg.cpp \
 				addtargetdlg.cpp \
 				addfiledlg.cpp \
+				removefiledlg.cpp \
+				addprefixdlg.cpp \
 				misc.cpp
 
 METASOURCES = AUTO

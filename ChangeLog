@@ -6,7 +6,14 @@
 	* Made file view aware of files added to and
 	  removed from the project
 	* Added 'subdirs' files to KDE app templates
-	* Several bug fixes in project management
+	* Fixed project management regexps for tabs
+	* Fixed project management to properly emit addedFile signals
+	* Fixed auto project behaviour for prefixes with underscores
+	* LIBADD is for libraries, LDADD for programs
+	* Implemented 'Add prefix' dialog
+	* Show progress dialog when parsing files
+	* Implemented Remove file dialog in project management.
+	  Does not quite work yet :-(
 
 2001-05-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
@@ -144,7 +151,7 @@
 	* prepared the Tip-of-the-Day plugin to make use of the
           KTipDialog class that will soon appear in kdelibs.
 
-2001-05-01  Richard Dale <duke@tipitina.demon.co.uk
+2001-05-01  Richard Dale <duke@tipitina.demon.co.uk>
 
         * Removed hard coded java classpaths, and classnames. They are derived
 	  from the projectDirectory and mainProgram project attributes.
@@ -228,7 +235,7 @@
 	  with multiple views per document
 	* Ported the debugger frontend
 
-2001-04-06  Richard Dale <duke@tipitina.demon.co.uk
+2001-04-06  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Added Java and Objective-C class browsing, and Java KDE project template and
 	automake support (ie the _JAVA primary). Fixed bug in class browser where a 

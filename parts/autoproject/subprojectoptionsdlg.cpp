@@ -22,6 +22,7 @@
 
 #include "domutil.h"
 #include "misc.h"
+#include "addprefixdlg.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 #include "subprojectoptionsdlg.h"
@@ -163,7 +164,7 @@ void SubprojectOptionsDialog::init()
     f77flags_edit->setText(subProject->variables["AM_FFLAGS"]);
 
     QCString includes = subProject->variables["INCLUDES"];
-    QStringList l = QStringList::split(QRegExp("[ \\t]"), QString(includes));
+    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(includes));
     include_view->insertStringList(l);
     
     //    QStringList::ConstIterator it1;
@@ -246,7 +247,11 @@ void SubprojectOptionsDialog::f77flagsClicked()
 
 void SubprojectOptionsDialog::addPrefixClicked()
 {
-    new QListViewItem(prefix_view, "foo", "bar");
+    AddPrefixDialog dlg;
+    if (!dlg.exec())
+        return;
+    
+    new QListViewItem(prefix_view, dlg.name(), dlg.path());
 }
 
 

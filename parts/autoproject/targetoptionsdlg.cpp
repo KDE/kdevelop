@@ -30,8 +30,7 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     target = item;
     m_widget = widget;
 
-    QString addvarname =
-        (item->primary == "PROGRAMS") || (item->primary == "LTLIBRARIES")? "LDADD" : "LIBADD";
+    QString addvarname = (item->primary == "PROGRAMS")? "LDADD" : "LIBADD";
     QLabel *ldlibadd_label = new QLabel(i18n("Libraries to link with (%1)").arg(addvarname), this);
     ldlibadd_edit = new QLineEdit(this);
     ldlibadd_edit->setFocus();
@@ -80,7 +79,7 @@ TargetOptionsDialog::~TargetOptionsDialog()
 
 void TargetOptionsDialog::init()
 {
-    if (target->primary == "PROGRAMS" || target->primary == "LTLIBRARIES")
+    if (target->primary == "PROGRAMS")
         ldlibadd_edit->setText(target->ldadd);
     else
         ldlibadd_edit->setText(target->libadd);
@@ -93,7 +92,7 @@ void TargetOptionsDialog::accept()
 {
     QMap<QCString, QCString> replaceMap;
     
-    if (target->primary == "PROGRAMS" || target->primary == "LTLIBRARIES") {
+    if (target->primary == "PROGRAMS") {
         QCString old_ldadd = target->ldadd;
         QCString new_ldadd = ldlibadd_edit->text().latin1();
         if (new_ldadd != old_ldadd) {
@@ -102,7 +101,7 @@ void TargetOptionsDialog::accept()
         }
     }
     
-    if (target->primary == "LIBRARIES") {
+    if (target->primary == "LIBRARIES" || target->primary == "LTLIBARIES") {
         QCString old_libadd = target->libadd;
         QCString new_libadd = ldlibadd_edit->text().latin1();
         if (new_libadd != old_libadd) {

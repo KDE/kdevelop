@@ -226,8 +226,9 @@ void FileViewWidget::removeFile(const QString &fileName)
             if (fvfitem->fileName() == fileName) {
                 delete fvfitem;
                 //                fvgitem->sortChildItems(0, true);
-                break;
+                return;
             }
+            childItem = childItem->nextSibling();
         }
         item = item->nextSibling();
     }

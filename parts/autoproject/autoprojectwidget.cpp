@@ -28,6 +28,7 @@
 #include "targetoptionsdlg.h"
 #include "addtargetdlg.h"
 #include "addfiledlg.h"
+#include "removefiledlg.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
@@ -331,6 +332,17 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
                 name + ".la";
             m_part->startMakeCommand(activeSubproject->path, titem->name);
         }
+    } else if (pvitem->type() == ProjectItem::File) {
+        FileItem *fitem = static_cast<FileItem*>(pvitem);
+        TargetItem *titem = static_cast<TargetItem*>(fitem->parent());
+        KPopupMenu pop;
+        int idRemoveFile = pop.insertItem(i18n("Remove file..."));
+        int r = pop.exec(p);
+        if (r == idRemoveFile) {
+            RemoveFileDialog dlg(this, activeSubproject, titem, fitem->text(0), this, "remove file dialog");
+            if (dlg.exec())
+                slotItemExecuted(activeSubproject);
+        }
     }
 }
 
@@ -371,10 +383,16 @@ void AutoProjectWidget::emitAddedFile(const QString &name)
 }
 
 
+void AutoProjectWidget::emitRemovedFile(const QString &name)
+{
+    emit m_part->removedFileFromProject(name);
+}
+
+
 void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCString rhs)
 {
     // Parse line foo_bar = bla bla
-    int pos = lhs.find('_');
+    int pos = lhs.findRev('_');
     QCString prefix = lhs.left(pos);
     QCString primary = lhs.right(lhs.length()-pos-1);
     //    kdDebug(9020) << "Prefix:" << prefix << ",Primary:" << primary << endl;
