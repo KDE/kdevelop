@@ -19,7 +19,7 @@
 #define PHPNEWCLASSDLG_H
 
 #include <qwidget.h>
-#include <phpnewclassdlgbase.h>
+#include "phpnewclassdlgbase.h"
 
 /**
   *@author Sandy Meier

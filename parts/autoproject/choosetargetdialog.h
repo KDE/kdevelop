@@ -17,7 +17,7 @@
 #ifndef _CHOOSETARGETDIALOG_H_
 #define _CHOOSETARGETDIALOG_H_
 
-#include <choosetargetdlgbase.h>
+#include "choosetargetdlgbase.h"
 
 class AutoProjectWidget;
 class AutoProjectPart;

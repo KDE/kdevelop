@@ -17,7 +17,7 @@
 #ifndef _REMOVETARGETDLG_H_
 #define _REMOVETARGETDLG_H_
 
-#include <removetargetdlgbase.h>
+#include "removetargetdlgbase.h"
 
 #include <qptrlist.h>
 
