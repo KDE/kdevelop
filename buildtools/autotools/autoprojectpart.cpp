@@ -898,6 +898,19 @@ QString AutoProjectPart::configureCommand() const
         cmdline += configargs;
     }
 
+   DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), prefix + "envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+        environstr += EnvVarTools::quote((*it).second);
+        environstr += " ";
+    }
+    cmdline.prepend(environstr);
+
     QString builddir = buildDirectory();
     QString dircmd;
 

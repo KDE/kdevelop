@@ -15,6 +15,7 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -30,6 +31,7 @@
 
 #include "kdevcompileroptions.h"
 #include "autoprojectpart.h"
+#include "environmentvariableswidget.h"
 
 
 class ServiceComboBox
@@ -73,6 +75,9 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
     config_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
 
     m_part = part;
+    env_groupBox->setColumnLayout( 1, Qt::Vertical );
+    QDomDocument &dom = *part->projectDom();
+    m_environmentVariablesWidget = new EnvironmentVariablesWidget(dom, "/kdevautoproject/general/envvars", env_groupBox);
 
     coffers   = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C'");
     cxxoffers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C++'");
@@ -193,11 +198,14 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     cflags_edit->setText(DomUtil::readEntry(dom, prefix + "cflags"));
     cxxflags_edit->setText(DomUtil::readEntry(dom, prefix + "cxxflags"));
     f77flags_edit->setText(DomUtil::readEntry(dom, prefix + "f77flags"));
+
+    m_environmentVariablesWidget->readEnvironment(dom, prefix + "envvars");
 }
 
 
 void ConfigureOptionsWidget::saveSettings(const QString &config)
 {
+    m_environmentVariablesWidget->accept();
     QDomDocument dom = *m_part->projectDom();
     QString prefix = "/kdevautoproject/configurations/" + config + "/";
     kdDebug(9020) << "Saving config under " << prefix << endl;
@@ -230,6 +238,7 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
 
     if (KMessageBox::questionYesNo(this, i18n("Re-run configure for %1 now?").arg(config)) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
+
 }
 
 
@@ -412,6 +421,7 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
 void ConfigureOptionsWidget::accept()
 {
     DomUtil::writeEntry(*m_part->projectDom(), "/kdevautoproject/general/useconfiguration", currentConfig);
+    m_environmentVariablesWidget->accept();
     if (dirty)
     {
         saveSettings(currentConfig);

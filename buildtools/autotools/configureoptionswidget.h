@@ -20,12 +20,12 @@
 
 class KDevCompilerOptions;
 class AutoProjectPart;
-
+class EnvironmentVariablesWidget;
 
 class ConfigureOptionsWidget : public ConfigureOptionsWidgetBase
 {
     Q_OBJECT
-    
+
 public:
     ConfigureOptionsWidget( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
     ~ConfigureOptionsWidget();
@@ -51,7 +51,7 @@ private:
     void fixLayout();
     void readSettings(const QString &config);
     void saveSettings(const QString &config);
-    
+
     KDevCompilerOptions *createCompilerOptions(const QString &lang);
     KTrader::OfferList coffers, cxxoffers, f77offers;
     QStringList cservice_names, cservice_execs;
@@ -60,8 +60,9 @@ private:
     QStringList allConfigs;
     QString currentConfig;
     bool dirty;
-    
+
     AutoProjectPart *m_part;
+    EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 
 #endif
