@@ -149,6 +149,9 @@ private:
 	CompletionMode m_completionMode;
 
 	QRegExp m_includeRx;
+	QRegExp m_cppCodeCommentsRx;
+	QRegExp m_codeCompleteChRx;
+	QRegExp m_codeCompleteCh2Rx;
 	QValueList<KTextEditor::CompletionEntry> m_fileEntryList;
 };
 

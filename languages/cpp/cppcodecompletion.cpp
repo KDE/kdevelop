@@ -273,8 +273,19 @@ static QStringList unique( const QStringList& entryList )
 }
 
 CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
-		: d( new CppCodeCompletionData ), m_includeRx( "^\\s*#\\s*include\\s+[\"<]" )
+		: d( new CppCodeCompletionData ),
+		//Matches on includes
+		m_includeRx( "^\\s*#\\s*include\\s+[\"<]" ),
+		//Matches on C++ and C style comments as well as literal strings
+		m_cppCodeCommentsRx("(//([^\n]*)(\n|$)|/\\*.*\\*/|\"([^\\\\]|\\\\.)*\")"),
+		//Matches on alpha chars and '.'
+		m_codeCompleteChRx("([A-Z])|([a-z])|(\\.)"),
+		//Matches on "->" and "::"
+		m_codeCompleteCh2Rx("(->)|(\\:\\:)")
+
 {
+	m_cppCodeCommentsRx.setMinimal( true );
+		
 	m_pSupport = part;
 
 	m_activeCursor = 0;
@@ -288,8 +299,10 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	computeFileEntryList();
 
 	CppSupportPart* cppSupport = m_pSupport;
-	connect( cppSupport->project(), SIGNAL( addedFilesToProject( const QStringList& ) ), this, SLOT( computeFileEntryList() ) );
-	connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ), this, SLOT( computeFileEntryList() ) );
+	connect( cppSupport->project(), SIGNAL( addedFilesToProject( const QStringList& ) ), 
+	         this, SLOT( computeFileEntryList() ) );
+	connect( cppSupport->project(), SIGNAL( removedFilesFromProject( const QStringList& ) ), 
+	         this, SLOT( computeFileEntryList() ) );
 
 	m_bArgHintShow = false;
 	m_bCompletionBoxShow = false;
@@ -317,7 +330,8 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	         this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
-	connect( part, SIGNAL( fileParsed( const QString& ) ), this, SLOT( slotFileParsed( const QString& ) ) );
+	connect( part, SIGNAL( fileParsed( const QString& ) ), 
+	         this, SLOT( slotFileParsed( const QString& ) ) );
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -461,12 +475,13 @@ void CppCodeCompletion::slotTextChanged()
 	bool codeComplete = m_pSupport->codeCompletionConfig() ->automaticCodeCompletion();
 	bool headComplete = m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion();
 	
-	QRegExp chRx("([A-Z])|([a-z])|(\\.)");		//completes on alpha chars and '.'
-	QRegExp ch2Rx("(->)|(\\:\\:)");				//completes on "->" and "::"
+	// m_codeCompleteChRx completes on alpha chars and '.'
+	// m_codeCompleteCh2Rx completes on "->" and "::"
 
 	if ( ( argsHint && ch == "(" ) ||
 	     ( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
-	     ( codeComplete && ( chRx.search( ch ) != -1 || ch2Rx.search( ch2 ) != -1 ) ) ||
+	     ( codeComplete && ( m_codeCompleteChRx.search( ch ) != -1 || 
+	                         m_codeCompleteCh2Rx.search( ch2 ) != -1 ) ) ||
 	     ( headComplete && ( ch == "\"" || ch == "<" ) && m_includeRx.search( strCurLine ) != -1 ) )
 	{
 		int time;
@@ -491,15 +506,13 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 		of the same length for purposes of finding the expr. */
 
 	QString text = contents;
-	QRegExp rx( "(//([^\n]*)(\n|$)|/\\*.*\\*/|\"([^\\\\]|\\\\.)*\")" );
-	rx.setMinimal( TRUE );
 
 	int pos = 0;
-	while ( (pos = rx.search( text, pos )) != -1 ) 
+	while ( (pos = m_cppCodeCommentsRx.search( text, pos )) != -1 ) 
 	{
-		if ( rx.cap( 1 ).startsWith( "//" ) ) 
+		if ( m_cppCodeCommentsRx.cap( 1 ).startsWith( "//" ) ) 
 		{
-			QString before = rx.cap( 1 );
+			QString before = m_cppCodeCommentsRx.cap( 1 );
 			QString after;
 			after.fill(' ', before.length() - 5 );
 			after.prepend( "/*" );
@@ -509,7 +522,7 @@ int CppCodeCompletion::expressionAt( const QString& contents, int index )
 		}
 		else
 		{
-			pos += rx.matchedLength();
+			pos += m_cppCodeCommentsRx.matchedLength();
 		}
 	}
 
