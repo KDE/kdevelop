@@ -619,7 +619,7 @@ bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
    if( e->type() == QEvent::FocusIn) {
       QFocusEvent* pFE = (QFocusEvent*) e;
       if (pFE->reason() == QFocusEvent::ActiveWindow) {
-         if (!m_pCurrentWindow->isAttached() && (m_pMdi->topChild() != 0L)) {
+         if ( (m_pCurrentWindow != 0L) && !m_pCurrentWindow->isAttached() && (m_pMdi->topChild() != 0L)) {
             return TRUE;   // eat the event
          }
       }
