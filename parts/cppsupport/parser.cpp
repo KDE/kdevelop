@@ -3419,12 +3419,15 @@ bool Parser::parseUnaryExpression( AST::Node& node )
         case Token_sizeof:
 	{
             lex->nextToken();
+	    int index = lex->index();
             if( lex->lookAhead(0) == '(' ){
                 lex->nextToken();
 		AST::Node typeId;
-                parseTypeId( typeId );
-                CHECK( ')', ")" );
-		return true;
+		if( parseTypeId(typeId) && lex->lookAhead(0) == ')' ){
+		    lex->nextToken();
+		    return true;
+		}
+		lex->setIndex( index );
             }
 	    AST::Node expr;
 	    return parseUnaryExpression( expr );
