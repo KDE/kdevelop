@@ -66,7 +66,7 @@ void PerforcePart::setupActions()
                 actionCollection(), "perforce_diff" );
     actionAdd = new KAction( i18n("Add to Repository"), 0, this, SLOT(slotActionAdd()),
                 actionCollection(), "perforce_add" );
-    actionRemove = new KAction( i18n("Remove from Repository"), 0, this, SLOT(slotActionRemove()),
+    actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotActionRemove()),
                 actionCollection(), "perforce_remove" );
 }
 
@@ -242,7 +242,7 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     if ( diff.isEmpty() ) {
-        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Differences Found") );
+        KMessageBox::information( 0, i18n("There is no difference to the repository."), i18n("No Differences Found") );
         return;
     }
 

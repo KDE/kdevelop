@@ -168,7 +168,7 @@ void CvsPart::init()
 void CvsPart::setupActions()
 {
 
-    KAction * action = new KAction( i18n("CVS repository"), 0, this, SLOT(slotCheckOut()),
+    KAction * action = new KAction( i18n("CVS Repository"), 0, this, SLOT(slotCheckOut()),
         actionCollection(), "cvs_checkout" );
     action->setStatusText( i18n("Check-out from an existing CVS repository") );
     actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotActionCommit()),
@@ -185,12 +185,12 @@ void CvsPart::setupActions()
         actionCollection(), "cvs_update" );
     actionRevert = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotActionRevert()),
         actionCollection(), "cvs_revert" );
-    actionTag = new KAction( i18n("Tag/Branch selected file(s)"), 0, this, SLOT(slotTag()),
+    actionTag = new KAction( i18n("Tag/Branch Selected File(s)"), 0, this, SLOT(slotTag()),
         actionCollection(), "cvs_tag" );
 
-    actionAddToIgnoreList = new KAction( i18n("Ignore this file when doing cvs operation"), 0,
+    actionAddToIgnoreList = new KAction( i18n("Ignore This File When Doing CVS Operation"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvs_ignore" );
-    actionRemoveFromIgnoreList = new KAction( i18n("Do not Ignore this file when doing cvs operation"), 0,
+    actionRemoveFromIgnoreList = new KAction( i18n("Do Not Ignore This File When Doing CVS Operation"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvs_donot_ignore" );
 }
 
@@ -331,7 +331,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         URLUtil::dump( urls );
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
-//        subMenu->insertTitle( i18n("Available actions") );
+//        subMenu->insertTitle( i18n("Available Actions") );
 
         subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
         subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
@@ -592,7 +592,7 @@ void CvsPart::slotDiffFinished()
 
     if ( diff.isEmpty() )
     {
-        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Difference found") );
+        KMessageBox::information( 0, i18n("There is no difference to the repository."), i18n("No Difference Found") );
         return;
     }
 
@@ -960,7 +960,7 @@ void CvsPart::slotAddFilesToProject( const QStringList &filesToAdd )
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want to be added to CVS repository too?"),
-        i18n("CVS - New Files added to project ..."),
+        i18n("CVS - New Files Added to Project"),
         KStdGuiItem::yes(),
         KStdGuiItem::no(),
         i18n("askWhenAddingNewFiles") );
@@ -982,7 +982,7 @@ void CvsPart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
-        i18n("CVS - Files removed from project ..."),
+        i18n("CVS - Files Removed From Project"),
         KStdGuiItem::yes(),
         KStdGuiItem::no(),
         i18n("askWhenRemovingFiles") );

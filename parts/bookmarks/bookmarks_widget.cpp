@@ -227,12 +227,12 @@ void BookmarksWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 			popup.insertTitle( _selectedItem->url().fileName() + i18n(", line ")
 				+ QString::number( _selectedItem->line() +1 ) );
 
-			popup.insertItem( i18n("Remove this bookmark"), this, SLOT( doEmitRemoveBookMark() ) );
+			popup.insertItem( i18n("Remove This Bookmark"), this, SLOT( doEmitRemoveBookMark() ) );
 		}
 		else
 		{
 			popup.insertTitle( _selectedItem->url().fileName() + i18n( ", All" ) );
-			popup.insertItem( i18n("Remove these bookmarks"), this, SLOT( doEmitRemoveBookMark() ) );
+			popup.insertItem( i18n("Remove These Bookmarks"), this, SLOT( doEmitRemoveBookMark() ) );
 		}
 		popup.exec(p);
 	}

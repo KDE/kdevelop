@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>467</width>
-            <height>149</height>
+            <height>188</height>
         </rect>
     </property>
     <property name="caption">
@@ -38,7 +38,7 @@
                         <enum>Plain</enum>
                     </property>
                     <property name="text">
-                        <string>Template &amp;Name:</string>
+                        <string>Template &amp;name:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>
@@ -75,7 +75,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Set Template Content from &amp;File:</string>
+                        <string>Set template content from &amp;file:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>

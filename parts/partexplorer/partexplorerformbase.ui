@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>276</width>
-            <height>265</height>
+            <height>369</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -43,7 +43,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>KDE Service type</string>
+                <string>KDE service type:</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
@@ -78,7 +78,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Additional costraints</string>
+                <string>Additional constraints:</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
@@ -105,7 +105,7 @@
                 <cstring>searchButton</cstring>
             </property>
             <property name="text">
-                <string>&amp;Start search</string>
+                <string>&amp;Start Search</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Perform the query</string>

@@ -280,7 +280,7 @@ void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     if ( diff.isEmpty() ) {
-        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Difference found") );
+        KMessageBox::information( 0, i18n("There is no difference to the repository."), i18n("No Difference Found") );
         return;
     }
 

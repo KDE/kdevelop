@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>473</width>
-            <height>603</height>
+            <width>566</width>
+            <height>780</height>
         </rect>
     </property>
     <property name="caption">
@@ -519,7 +519,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>virtual</string>
+                                            <string>Virtual</string>
                                         </property>
                                     </widget>
                                     <widget class="QRadioButton">
@@ -530,7 +530,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>public</string>
+                                            <string>Public</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -544,7 +544,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>protected</string>
+                                            <string>Protected</string>
                                         </property>
                                     </widget>
                                     <widget class="QRadioButton">
@@ -555,7 +555,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <bool>false</bool>
                                         </property>
                                         <property name="text">
-                                            <string>private</string>
+                                            <string>Private</string>
                                         </property>
                                     </widget>
                                 </hbox>
@@ -605,7 +605,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <cstring>gtk_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Generate G&amp;TK+ Class</string>
+                                    <string>Generate G&amp;TK+ class</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">

@@ -176,7 +176,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
 
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
-        int	idCopyToClipboard = popup.insertItem( i18n("Copy to clipboard") );
+        int	idCopyToClipboard = popup.insertItem( i18n("Copy to Clipboard") );
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch)

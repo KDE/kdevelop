@@ -30,7 +30,7 @@
             </column>
             <column>
                 <property name="text">
-                    <string>Databasename</string>
+                    <string>Database Name</string>
                 </property>
                 <property name="pixmap">
                     <pixmap></pixmap>
@@ -183,9 +183,6 @@
     <slot>setProjectDom( QDomDocument * doc )</slot>
     <slot>loadConfig()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>

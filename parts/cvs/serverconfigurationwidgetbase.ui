@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>CVS Server configuration</string>
+        <string>CVS Server Configuration</string>
     </property>
     <grid>
         <property name="name">
@@ -40,40 +40,8 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Server configuration</string>
+                <string>Server Configuration</string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>73</y>
-                        <width>153</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Server (i.e. cvs.kde.org)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel5</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>375</x>
-                        <y>22</y>
-                        <width>117</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Compression level</string>
-                </property>
-            </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
@@ -108,82 +76,6 @@
                         <x>375</x>
                         <y>43</y>
                         <width>117</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>293</x>
-                        <y>73</y>
-                        <width>199</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Path on server (i.e. /home/kde)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>173</x>
-                        <y>73</y>
-                        <width>112</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Port</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>22</y>
-                        <width>127</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Connection method</string>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>local</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>pserver</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>ext</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>connectionMethodComboBox</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>43</y>
-                        <width>127</width>
                         <height>22</height>
                     </rect>
                 </property>
@@ -228,22 +120,6 @@
                 </property>
                 <property name="value">
                     <number>2401</number>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>147</x>
-                        <y>22</y>
-                        <width>138</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Username</string>
                 </property>
             </widget>
             <widget class="QLineEdit">
@@ -305,10 +181,134 @@
                             </sizepolicy>
                         </property>
                         <property name="text">
-                            <string>Login (Not logged in)</string>
+                            <string>Login</string>
                         </property>
                     </widget>
                 </hbox>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel5</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>375</x>
+                        <y>22</y>
+                        <width>117</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Compression level:</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>293</x>
+                        <y>73</y>
+                        <width>199</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Path on server (i.e. /home/kde):</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>73</y>
+                        <width>153</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Server (i.e. cvs.kde.org):</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>173</x>
+                        <y>73</y>
+                        <width>112</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Port:</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>147</x>
+                        <y>22</y>
+                        <width>138</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Username:</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>22</y>
+                        <width>127</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Connection method:</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>local</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>pserver</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>ext</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>connectionMethodComboBox</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>43</y>
+                        <width>127</width>
+                        <height>22</height>
+                    </rect>
+                </property>
             </widget>
         </widget>
     </grid>

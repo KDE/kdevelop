@@ -81,7 +81,7 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
     
   popup->insertSeparator( 1 );
 
-  popup->insertItem( i18n( "Highlight syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 2 );
+  popup->insertItem( i18n( "Highlight Syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 2 );
   popup->setItemChecked( POPUP_BASE - 1, _highlight );
   popup->insertSeparator( 3 );
 

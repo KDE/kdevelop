@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>368</width>
-            <height>109</height>
+            <width>551</width>
+            <height>133</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Insert the release you are interested in ...</string>
+        <string>Insert Interesting Release</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -27,7 +27,10 @@
                 <cstring>releaseNameLabel</cstring>
             </property>
             <property name="text">
-                <string>Release name</string>
+                <string>Release name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
         <widget class="QLineEdit">

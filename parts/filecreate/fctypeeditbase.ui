@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>476</width>
-            <height>194</height>
+            <height>253</height>
         </rect>
     </property>
     <property name="caption">
@@ -41,7 +41,7 @@
                         <enum>Plain</enum>
                     </property>
                     <property name="text">
-                        <string>Type &amp;Extension:</string>
+                        <string>Type &amp;extension:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>
@@ -73,7 +73,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Type &amp;Name:</string>
+                        <string>Type &amp;name:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>
@@ -105,7 +105,7 @@
                         <cstring>textLabel3_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Type &amp;Description:</string>
+                        <string>Type &amp;description:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>
@@ -159,7 +159,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Set Template Content from &amp;File:</string>
+                        <string>Set template content from &amp;file:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignBottom</set>
@@ -274,7 +274,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>kicondialog.h</includehint>
+    <includehint>kiconbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

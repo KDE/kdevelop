@@ -134,7 +134,7 @@ void RunOptionsWidget::browseCustomDirectory()
 {
     QString path = customRunDirectory_edit->text().stripWhiteSpace();
     KDirSelectDialog *dlg = new KDirSelectDialog(path, false, this, QString::null, true);
-    dlg->setCaption(i18n("Select a directory"));
+    dlg->setCaption(i18n("Select Directory"));
 
     if (dlg->exec()) {
     // if after the dialog execution the OK button was selected:
@@ -166,7 +166,7 @@ void RunOptionsWidget::browseMainProgram()
     << "application/x-perl"
     << "application/x-python";
     dlg->setMimeFilter(filters);
-    dlg->setCaption(i18n("Select main program executable."));
+    dlg->setCaption(i18n("Select Main Program Executable"));
     QString path = mainprogram_edit->text().stripWhiteSpace();
     if (!path.isEmpty()) {
         // strip initial "./" if necessary

@@ -1019,12 +1019,12 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     subSearchButton = new QToolButton ( hbo, "sub search check" );
     subSearchButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
     subSearchButton->setPixmap ( SmallIcon ( "pause" ) );
-    QToolTip::add ( subSearchButton, i18n ( "Search Substrings" ) );
+    QToolTip::add ( subSearchButton, i18n ( "Search substrings" ) );
 
     indexModeSwitch = new QToolButton ( hbo, "index mode switch" );
     indexModeSwitch->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
     indexModeSwitch->setPixmap ( SmallIcon ( "pause" ) );
-    QToolTip::add ( indexModeSwitch, i18n ( "Show Topics for Index Items" ) );
+    QToolTip::add ( indexModeSwitch, i18n ( "Show topics for index items" ) );
 
     indexView = new KListView ( indexWidget, "documentation index list view" );
 

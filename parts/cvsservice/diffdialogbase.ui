@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>461</width>
-            <height>125</height>
+            <height>134</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Choose the revision to diff ...</string>
+        <string>Choose Revisions to Diff</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -43,7 +43,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Revision A</string>
+                        <string>Revision A:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1">
@@ -78,7 +78,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Revision B</string>
+                        <string>Revision B:</string>
                     </property>
                 </widget>
             </grid>

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>445</width>
-            <height>377</height>
+            <width>497</width>
+            <height>441</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,7 +24,7 @@
                 <cstring>groupBox4</cstring>
             </property>
             <property name="title">
-                <string>Common settings</string>
+                <string>Common Settings</string>
             </property>
             <vbox>
                 <property name="name">
@@ -64,7 +64,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>When updating </string>
+                <string>When Updating</string>
             </property>
             <vbox>
                 <property name="name">
@@ -75,7 +75,7 @@
                         <cstring>createNewDirWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>create new directories (if any)</string>
+                        <string>Create new directories (if any)</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -83,7 +83,7 @@
                         <cstring>pruneEmptyDirWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>prune empty directories</string>
+                        <string>Prune empty directories</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -91,7 +91,7 @@
                         <cstring>recursiveWhenUpdateCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>update subdirectories too</string>
+                        <string>Update subdirectories too</string>
                     </property>
                 </widget>
             </vbox>
@@ -101,7 +101,7 @@
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>When committing / removing</string>
+                <string>When Committing/Removing</string>
             </property>
             <vbox>
                 <property name="name">
@@ -112,7 +112,7 @@
                         <cstring>recursiveWhenCommitRemoveCheck</cstring>
                     </property>
                     <property name="text">
-                        <string>be recursive</string>
+                        <string>Be recursive</string>
                     </property>
                 </widget>
             </vbox>
@@ -122,7 +122,7 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>When creating a diff</string>
+                <string>When Creating Diffs</string>
             </property>
             <grid>
                 <property name="name">
@@ -154,7 +154,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Use these extra options</string>
+                        <string>Use these extra options:</string>
                     </property>
                 </widget>
                 <widget class="KIntNumInput" row="1" column="1">
@@ -184,15 +184,13 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Context lines</string>
+                        <string>Context lines:</string>
                     </property>
                 </widget>
             </grid>
         </widget>
     </vbox>
 </widget>
-<tabstops>
-</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>

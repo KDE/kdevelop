@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>456</width>
-            <height>478</height>
+            <width>556</width>
+            <height>529</height>
         </rect>
     </property>
     <property name="caption">
@@ -202,7 +202,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>buttonSpacer</cstring>
@@ -233,7 +232,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -263,18 +262,17 @@
     <tabstop>newFilesListBox</tabstop>
     <tabstop>neverAskAgainCheckBox</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">slotActiveTargetToggled(bool)</slot>
     <slot access="protected">slotChooseTargetToggled(bool)</slot>
     <slot access="private">slotSubprojectChanged(const QString&amp;)</slot>
     <slot access="private">slotTargetChanged(const QString&amp;)</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>

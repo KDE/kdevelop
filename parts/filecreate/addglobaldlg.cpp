@@ -94,11 +94,11 @@ void AddGlobalDlg::languageChange()
     buttonOk->setAccel( QKeySequence( QString::null ) );
     buttonCancel->setText( tr2i18n( "&Cancel" ) );
     buttonCancel->setAccel( QKeySequence( QString::null ) );
-    fcglobal_view->header()->setLabel( 0, tr2i18n( "Type Extension" ) );
-    fcglobal_view->header()->setLabel( 1, tr2i18n( "Type Name" ) );
-    fcglobal_view->header()->setLabel( 2, tr2i18n( "Template Location" ) );
-    fcglobal_view->header()->setLabel( 3, tr2i18n( "Icon" ) );
-    fcglobal_view->header()->setLabel( 4, tr2i18n( "Description" ) );
+    fcglobal_view->header()->setLabel( 0, tr2i18n( "Type extension:" ) );
+    fcglobal_view->header()->setLabel( 1, tr2i18n( "Type name:" ) );
+    fcglobal_view->header()->setLabel( 2, tr2i18n( "Template location:" ) );
+    fcglobal_view->header()->setLabel( 3, tr2i18n( "Icon:" ) );
+    fcglobal_view->header()->setLabel( 4, tr2i18n( "Description:" ) );
 }
 
 #include "addglobaldlg.moc"

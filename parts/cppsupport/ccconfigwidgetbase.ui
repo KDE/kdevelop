@@ -160,7 +160,7 @@
                                     <cstring>checkAutomaticCodeCompletion</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic Code Completion</string>
+                                    <string>Automatic code completion</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -168,7 +168,7 @@
                                     <cstring>checkAutomaticArgumentsHint</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic Arguments Hint</string>
+                                    <string>Automatic arguments hint</string>
                                 </property>
                             </widget>
                             <widget class="QSlider" row="1" column="0">

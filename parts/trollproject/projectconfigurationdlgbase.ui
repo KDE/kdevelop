@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>586</width>
-            <height>529</height>
+            <width>612</width>
+            <height>634</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -221,7 +221,7 @@
                                     <cstring>checkInstallTarget</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>install</string>
+                                    <string>Install</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="1">
@@ -229,7 +229,7 @@
                                     <cstring>textLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>installpath:</string>
+                                    <string>Installation path:</string>
                                 </property>
                             </widget>
                         </grid>
@@ -287,7 +287,7 @@
                                     <cstring>staticRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Static Library</string>
+                                    <string>Static library</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
@@ -316,7 +316,7 @@
                                     <cstring>sharedRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Shared Library</string>
+                                    <string>Shared library</string>
                                 </property>
                             </widget>
                         </grid>

@@ -42,7 +42,7 @@ CommitDialog::CommitDialog()
     textEdit->setMinimumSize(fm.width("0")*80, fm.lineSpacing()*3);
     layout->addWidget(textEdit, 10);
 
-    checkAddToChangelog = new QCheckBox( i18n("&Add entry to master Changelog too"), this, "checkboxaddtochangelog" );
+    checkAddToChangelog = new QCheckBox( i18n("&Add entry to master changelog too"), this, "checkboxaddtochangelog" );
     layout->addWidget( checkAddToChangelog, 0 );
 
     KButtonBox *buttonbox = new KButtonBox(this);

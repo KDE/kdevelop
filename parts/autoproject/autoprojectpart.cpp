@@ -422,10 +422,10 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 		{
 			if ( !messageBoxShown )
 			{
-				KMessageBox::information(m_widget, i18n("The directory you selected is not the Active Directory!\n"
+				KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory!\n"
 														"You should 'activate' the target you're currently working on in Automake Manager.\n"
 														"Just right-click a target and choose 'Make Target Active'."),
-														i18n ( "No Active Target found" ), "No automake manager active target warning" );
+														i18n ( "No Active Target Found" ), "No automake manager active target warning" );
 				messageBoxShown = true;
 			}
 		}

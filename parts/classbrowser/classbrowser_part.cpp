@@ -53,7 +53,7 @@ ClassBrowserPart::ClassBrowserPart( QObject* parent, const char* name, const QSt
     setXMLFile( "kdevpart_classbrowser.rc" );
 
     m_widget = new ClassBrowserWidget( this );
-    QWhatsThis::add( m_widget, i18n("Class Browser") );
+    QWhatsThis::add( m_widget, i18n("Class browser") );
 
     setupActions();
 

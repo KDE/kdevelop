@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>463</width>
-            <height>317</height>
+            <width>512</width>
+            <height>330</height>
         </rect>
     </property>
     <property name="caption">
@@ -56,7 +56,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Fetch module</string>
+                <string>Fetch Module</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -64,7 +64,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Fetch from</string>
+                <string>Fetch from:</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">

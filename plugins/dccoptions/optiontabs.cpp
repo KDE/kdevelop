@@ -29,7 +29,7 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
 
-    QVButtonGroup *map_group = new QVButtonGroup(i18n("Map file"), this);
+    QVButtonGroup *map_group = new QVButtonGroup(i18n("Map File"), this);
     QRadioButton *m_defaultMap = new QRadioButton(i18n("Off"), map_group);
     m_defaultMap->setChecked(true);
     new FlagRadioButton(map_group, radioController,
@@ -220,7 +220,7 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
 
     QGridLayout *layout2 = new QGridLayout(layout, 2, 2, KDialog::spacingHint());
 
-    QVButtonGroup *align_group = new QVButtonGroup(i18n("Code Alignment and Stack Frames"), this);
+    QVButtonGroup *align_group = new QVButtonGroup(i18n("Code Alignment && Stack Frames"), this);
     QRadioButton *align_def = new QRadioButton(i18n("Default (-$A8)"), align_group);
     align_def->setChecked(true);
     new FlagRadioButton(align_group, radioController,

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>625</width>
+            <width>679</width>
             <height>449</height>
         </rect>
     </property>
@@ -16,6 +16,9 @@
         <string>Run Options</string>
     </property>
     <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>directoryButtonGroup</cstring>
@@ -24,12 +27,15 @@
                 <string>Directory</string>
             </property>
             <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
                 <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>executableDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>run from the directory where the executable is</string>
+                        <string>Run from the directory where the executable is</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -43,7 +49,7 @@
                         <cstring>buildDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>run from the BUILD directory:</string>
+                        <string>Run from the BUILD directory:</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>1</number>
@@ -57,12 +63,12 @@
                         <cstring>buildDirectory_radio</cstring>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="1">
+                <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
                         <cstring>customDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>custom directory:</string>
+                        <string>Custom directory:</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>2</number>
@@ -79,7 +85,7 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="2" column="3" rowspan="1" colspan="1">
+                <widget class="QPushButton" row="2" column="3">
                     <property name="name">
                         <cstring>browseCustomButton</cstring>
                     </property>
@@ -106,6 +112,9 @@
                 <string>Program</string>
             </property>
             <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
                 <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>mainprogram_label</cstring>
@@ -175,6 +184,9 @@
                 <cstring>layout1</cstring>
             </property>
             <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>startinterminal_box</cstring>
@@ -226,14 +238,14 @@
     <tabstop>progargs_edit</tabstop>
     <tabstop>startinterminal_box</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot>directoryRadioChanged()</slot>
     <slot>browseCustomDirectory()</slot>
     <slot>browseMainProgram()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Tag files on CVS repository</string>
+        <string>Tag Files on CVS Repository</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -35,7 +35,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Tag/Branch name</string>
+                        <string>Tag/Branch name:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -50,7 +50,7 @@
                 <cstring>tagAsBranchCheck</cstring>
             </property>
             <property name="text">
-                <string>tag as &amp;Branch</string>
+                <string>Tag as &amp;branch</string>
             </property>
         </widget>
         <widget class="QCheckBox">

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>447</width>
-            <height>219</height>
+            <height>284</height>
         </rect>
     </property>
     <property name="caption">
@@ -60,7 +60,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -82,7 +82,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>fileLayout</cstring>
@@ -138,7 +137,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLabel" row="1" column="1">
                     <property name="name">
                         <cstring>targetLabel</cstring>

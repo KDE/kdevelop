@@ -74,7 +74,7 @@ Most of the thime you'll just reuse the project name</string>
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Module</string>
+                <string>Module:</string>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0">
@@ -118,7 +118,7 @@ Most of the thime you'll just reuse the project name</string>
                 <enum>Plain</enum>
             </property>
             <property name="text">
-                <string>Server path</string>
+                <string>Server path:</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
@@ -144,7 +144,7 @@ e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home
                 <enum>Plain</enum>
             </property>
             <property name="text">
-                <string>CVS_RSH</string>
+                <string>CVS_RSH:</string>
             </property>
         </widget>
         <widget class="QComboBox" row="1" column="1">

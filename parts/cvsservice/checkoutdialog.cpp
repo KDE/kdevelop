@@ -65,7 +65,7 @@ public:
 
 CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
     QWidget *parent, const char *name, WFlags f )
-    : KDialogBase( parent, "checkoutdialog", true, i18n("CVS checkout ..."),
+    : KDialogBase( parent, "checkoutdialog", true, i18n("CVS Checkout"),
         Ok | Cancel, Ok, true ),
     m_service( cvsService ), m_job( 0 )
 {

@@ -237,7 +237,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "the version number at this time."));
 
     // LABEL: VersionNo
-    QLabel *lblVersionNo = new QLabel (i18n ("Version No:"), GeneralLayout);
+    QLabel *lblVersionNo = new QLabel (i18n ("Version no:"), GeneralLayout);
 
     // LINEEDIT: VersionNo
     editVersionNo = new QLineEdit(GeneralLayout);

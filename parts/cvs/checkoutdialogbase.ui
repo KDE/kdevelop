@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>382</width>
+            <width>547</width>
             <height>310</height>
         </rect>
     </property>
@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>CVS Server configuration</string>
+        <string>CVS Server Configuration</string>
     </property>
     <vbox>
         <property name="name">
@@ -90,7 +90,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Server path (you must be already logged in)</string>
+                        <string>Server path (you must be already logged in):</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -106,7 +106,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>CVS_RSH</string>
+                        <string>CVS_RSH:</string>
                     </property>
                 </widget>
                 <spacer row="2" column="0" rowspan="1" colspan="2">
@@ -141,7 +141,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Modules on server</string>
+                <string>Modules on Server</string>
             </property>
             <vbox>
                 <property name="name">
@@ -198,7 +198,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Check-out</string>
+                                <string>Check-Out</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Fetch modules list from server</string>

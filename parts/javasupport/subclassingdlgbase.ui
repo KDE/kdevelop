@@ -145,7 +145,7 @@
                         <cstring>reformat_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Reformat Source</string>
+                        <string>Reformat source</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="4" column="2">
@@ -161,7 +161,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Reformat Source by Default</string>
+                        <string>Reformat source by default</string>
                     </property>
                 </widget>
             </grid>
@@ -221,12 +221,12 @@
         <slot>onChangedClassName()</slot>
     </connection>
 </connections>
-<slots>
-    <slot>onChangedClassName()</slot>
-</slots>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot>onChangedClassName()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

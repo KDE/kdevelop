@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>510</width>
+            <width>671</width>
             <height>494</height>
         </rect>
     </property>
@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>CVS Server configuration</string>
+        <string>CVS Server Configuration</string>
     </property>
     <vbox>
         <property name="name">
@@ -89,7 +89,7 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Local destination directory</string>
+                        <string>Local destination directory:</string>
                     </property>
                 </widget>
             </grid>
@@ -120,7 +120,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Fetch modules list</string>
+                        <string>Fetch Modules List</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Fetch modules list from server</string>
@@ -142,7 +142,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Server path (i.e. :pserver:marios@cvs.kde.org:/home/kde)</string>
+                        <string>Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde)</string>
                     </property>
                 </widget>
                 <spacer row="2" column="0" rowspan="1" colspan="2">
@@ -175,7 +175,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>CVS_RSH</string>
+                        <string>CVS_RSH:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
@@ -229,7 +229,7 @@
                         <cstring>textLabel1_4</cstring>
                     </property>
                     <property name="text">
-                        <string>Module</string>
+                        <string>Module:</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="2">
@@ -245,7 +245,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Tag / Branch</string>
+                        <string>Tag/Branch:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="2">

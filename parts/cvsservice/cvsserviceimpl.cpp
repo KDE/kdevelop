@@ -472,8 +472,8 @@ void CvsServiceImpl::slotDiffFinished( bool normalExit, int exitStatus )
 
     if ( diff.isEmpty() )
     {
-        KMessageBox::information( 0, i18n("There is no difference to the repository"),
-            i18n("No Difference found") );
+        KMessageBox::information( 0, i18n("There is no difference to the repository."),
+            i18n("No Difference Found") );
         return;
     }
 
