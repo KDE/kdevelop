@@ -400,7 +400,8 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
 
   drawBuffer = getBuffer(this);
 
-  doc->registerView(this);
+  if (doc)
+    doc->registerView(this);
 }
 
 KWriteView::~KWriteView() {
