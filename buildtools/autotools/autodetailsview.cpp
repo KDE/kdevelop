@@ -355,7 +355,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
         int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
         popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));
-		int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
+		int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-Subclass..."));
         popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
                            "and prompts to implement missing in childclass slots and functions."));
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));

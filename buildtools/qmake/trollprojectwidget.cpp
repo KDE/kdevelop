@@ -2206,7 +2206,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         if (!fitem->uiFileLink.isEmpty())
         {
-          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
+          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-Subclass..."));
           popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
                            "and prompts to implement missing in childclass slots and functions."));
         }
@@ -2909,7 +2909,7 @@ void TrollProjectWidget::slotExecuteProject()
 
     if ( program.isEmpty() ) {
         KMessageBox::sorry(this, i18n("Please specify the executable name in the "
-            "project options dialog first."), i18n("No executable name given"));
+            "project options dialog first."), i18n("No Executable Name Given"));
         return;
     }
 

@@ -546,7 +546,7 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
     if (!m_cvsService->ok())
     {
         KMessageBox::sorry( 0, i18n("Sorry, cannot diff!"),
-            i18n("Sorry cannot diff 2") );
+            i18n("Error During Diff") );
         return;
     }
 

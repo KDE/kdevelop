@@ -86,7 +86,7 @@ FileViewPart::~FileViewPart()
 
 void FileViewPart::projectConfigWidget( KDialogBase *dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage( i18n("File tree") );
+    QVBox *vbox = dlg->addVBoxPage( i18n("File Tree") );
     VCSColorsConfigWidget *w = new VCSColorsConfigWidget( this, vcsColors, vbox, "vcscolorsconfigwidget" );
     connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
 }

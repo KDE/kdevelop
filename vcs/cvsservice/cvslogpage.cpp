@@ -112,7 +112,7 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
 //    m_part->core()->running( m_part, false );
     if (!normalExit)
     {
-        KMessageBox::sorry( this, i18n("Log failed with exitStatus == %1").arg( exitStatus), i18n("Log failed") );
+        KMessageBox::sorry( this, i18n("Log failed with exitStatus == %1").arg( exitStatus), i18n("Log Failed") );
         return;
     }
 

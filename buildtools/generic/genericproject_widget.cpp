@@ -515,7 +515,7 @@ void GenericProjectWidget::slotNewGroup( )
     if (!git)
         return;
     bool ok;
-    QString groupName = KLineEditDlg::getText(i18n("Group Name"), "", &ok, this );
+    QString groupName = KLineEditDlg::getText(i18n("Group Name"), i18n("Enter the group name:"), "", &ok, this );
     if (!ok)
         return;
     QDir dir;
@@ -533,7 +533,7 @@ void GenericProjectWidget::slotNewTarget( )
     if (!git)
         return;
     bool ok;
-    QString targetName = KLineEditDlg::getText(i18n("Target Name"), "", &ok, this );
+    QString targetName = KLineEditDlg::getText(i18n("Target Name"), i18n("Enter the target name:"), "", &ok, this );
     if (!ok)
         return;
     BuildTargetItem *tit = new BuildTargetItem(targetName, git->groupItem());

@@ -51,7 +51,7 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
     KEditListBox::CustomEditor editor(req, pEdit);
     pCustomEditor = editor;
 #endif
-    elb = new KEditListBox( i18n("Directories to parse"), pCustomEditor, this );
+    elb = new KEditListBox( i18n("Directories to Parse"), pCustomEditor, this );
 
     grid->addMultiCellWidget(elb, 2, 2, 0, grid->numCols());
 

@@ -752,7 +752,7 @@ void CppSupportPart::slotNewClass()
 void CppSupportPart::addMethod( ClassDom klass )
 {
     if( !klass ){
-	KMessageBox::error(0,i18n("Error"),i18n("Please select a class!"));
+	KMessageBox::error(0,i18n("Please select a class!"),i18n("Error"));
 	return;
     }
 
@@ -763,7 +763,7 @@ void CppSupportPart::addMethod( ClassDom klass )
 void CppSupportPart::addAttribute( ClassDom klass )
 {
     if( !klass ){
-	KMessageBox::error(0,i18n("Error"),i18n("Please select a class!"));
+	KMessageBox::error(0,i18n("Please select a class!"),i18n("Error"));
 	return;
     }
 

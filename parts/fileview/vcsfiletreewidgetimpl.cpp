@@ -240,7 +240,7 @@ void VCSFileTreeWidgetImpl::fillPopupMenu( QPopupMenu *popupMenu, QListViewItem 
     {
         m_vcsStatusRequestedItem = fileItem;
         popupMenu->insertSeparator();
-        int id = popupMenu->insertItem( i18n( "Sync with repository"), this, SLOT( slotSyncWithRepository() ) );
+        int id = popupMenu->insertItem( i18n( "Sync with Repository"), this, SLOT( slotSyncWithRepository() ) );
         popupMenu->setWhatsThis( id,
             i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.") );
     }

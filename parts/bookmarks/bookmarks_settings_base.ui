@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>BookmarkSettingsBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -35,7 +35,7 @@
                         <cstring>checkBox1</cstring>
                     </property>
                     <property name="text">
-                        <string>Show Code Tooltip</string>
+                        <string>Show code tooltip</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -57,7 +57,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Lines of Context:</string>
+                                <string>Lines of context:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox">
@@ -122,7 +122,7 @@
                         <cstring>radioButton2</cstring>
                     </property>
                     <property name="text">
-                        <string>Only If Comment</string>
+                        <string>Only if comment</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

@@ -65,7 +65,7 @@ void CVSDiffPage::startDiff( const QString &fileName, const QString &v1, const Q
 
     if ( v1.isEmpty() || v2.isEmpty() )
     {
-        KMessageBox::error( this, i18n("Error: passed revisions are empty!"), i18n( "Error diffing!!") );
+        KMessageBox::error( this, i18n("Error: passed revisions are empty!"), i18n( "Error During Diff") );
         return;
     }
 
@@ -98,7 +98,7 @@ void CVSDiffPage::slotJobExited( bool normalExit, int /*exitStatus*/ )
     }
     else
     {
-        KMessageBox::error( this, i18n("Error diffing"), i18n( "Error diffing!!") );
+        KMessageBox::error( this, i18n("An error occured during diffing."), i18n( "Error During Diff"));
     }
 }
 

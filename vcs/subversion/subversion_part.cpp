@@ -98,7 +98,7 @@ subversionPart::~subversionPart() {
 }
 
 void subversionPart::setupActions() {
-	actionCommit = new KAction( i18n("&Commit to repository"), 0, this,
+	actionCommit = new KAction( i18n("&Commit to Repository"), 0, this,
 			SLOT(slotActionCommit()), actionCollection(), "subversion_commit" );
 	actionCommit->setToolTip( i18n("Commit file(s)") );
 	actionCommit->setWhatsThis( i18n("Commit file(s)<p>Commit file to repository if modified") );
@@ -108,12 +108,12 @@ void subversionPart::setupActions() {
 				actionDiff->setToolTip( i18n("Build difference") );
 				actionDiff->setWhatsThis( i18n("Build difference<p>Build difference between releases") );
 				*/
-	actionAdd = new KAction( i18n("&Add to repository"), 0, this, SLOT(slotActionAdd()),
+	actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
 			actionCollection(), "subversion_add" );
 	actionAdd->setToolTip( i18n("Add file to repository") );
 	actionAdd->setWhatsThis( i18n("Add file <p>Add file to repository") );
 
-	actionRemove = new KAction( i18n("&Remove from repository"), 0, this,
+	actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
 			SLOT(slotActionRemove()), actionCollection(), "subversion_remove" );
 	actionRemove->setToolTip( i18n("Remove from repository") );
 	actionRemove->setWhatsThis( i18n("Remove from repository<p>Remove file(s) from repository") );
@@ -123,12 +123,12 @@ void subversionPart::setupActions() {
 	actionUpdate->setToolTip( i18n("Update") );
 	actionUpdate->setWhatsThis( i18n("Update<p>Update file(s) from repository") );
 
-	actionAddToIgnoreList = new KAction( i18n("&Ignore in Subversion operations"), 0,
+	actionAddToIgnoreList = new KAction( i18n("&Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "subversion_ignore" );
 	actionAddToIgnoreList->setToolTip( i18n("Ignore in Subversion operations") );
 	actionAddToIgnoreList->setWhatsThis( i18n("Ignore in Subversion operations<p>Ignore file(s)") );
 
-	actionRemoveFromIgnoreList = new KAction( i18n("Do &not ignore in Subversion operations"), 0,
+	actionRemoveFromIgnoreList = new KAction( i18n("Do &Not Ignore in Subversion Operations"), 0,
 			this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "subversion_donot_ignore" );
 	actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in Subversion operations") );
 	actionRemoveFromIgnoreList->setWhatsThis( i18n("Do not ignore in Subversion operations<p>Do not ignore file(s)") );
