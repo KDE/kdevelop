@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
-#include <ktip.h>
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>

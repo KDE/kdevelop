@@ -58,7 +58,10 @@
 #include "docviewman.h"
 #include "kdevsession.h"
 
+#ifndef USE_KDE_2_1_1
 #include <ktip.h>
+#endif
+
 #include <kaboutdialog.h>
 #include <kcombobox.h>
 #include <kcursor.h>
@@ -2455,12 +2458,13 @@ void CKDevelop::slotHelpReference() {
 }
 
 void CKDevelop::slotHelpTipOfDay(bool force){
-
+#ifndef USE_KDE_2_1_1
   QString file=locate("html", KGlobal::locale()->language()+"/kdevelop/tip.database");
   if(!QFileInfo(file).exists())
   	file=locate("html", "en/kdevelop/tip.database");
 
   KTipDialog::showTip(locate("data", file), force);
+#endif
 }
 
 void CKDevelop::slotHelpHomepage(){

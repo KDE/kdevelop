@@ -216,6 +216,8 @@ void CKDevelop::setMainCaption(int item)
 
   default:
     if (pCEW) {
+      // something is going seriously wrong here...
+      assert (pCEW->doc());
       capt = QFileInfo(pCEW->getName()).fileName();
     }
     else {
