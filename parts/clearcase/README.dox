@@ -1,6 +1,6 @@
 /** \class ClearcasePart
 Integrates Clearcase configuration management system into KDevelop.
-Based on Perforce implementation by Harald Fernengel <harry@kdevelop.org>
+Based on Perforce (PerforcePart) implementation by Harald Fernengel <harry AT kdevelop.org>
 
 To use clearcase functions, you need to:
   -# Create a view in which you will keep your project files
@@ -21,7 +21,7 @@ To use clearcase functions, you need to:
   -# To checkout a directory, select directory in file selector part and use
     popup-menu.
 
-\authors <a href="mailto:ajay_guleria at yahoo dot com">Ajay Guleria</a>
+\authors <a href="mailto:ajay_guleria AT yahoo dot com">Ajay Guleria</a>
 
 \feature Integrates Clearcase configuration management system into KDevelop.
 \feature Provided a dialog for checkout and checkin comments.

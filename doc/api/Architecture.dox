@@ -22,6 +22,8 @@ parts to distinguish, mainly:
       
 \image html Architecture.png
 
+This image is not complete there are parts that are not displayed. See below for a more detailed description.
+
 \subsection core-part The Core Part of KDevelop
 
 \subsubsection mainwindows Main Window Objects
@@ -59,11 +61,17 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
   - parts/adasupport = Support for Ada
     - (see AdaSupportPart)
     .
+  - parts/bashsupport = Support for bash
+    - (see BashSupportPart)
+    .
   - parts/cppsupport = Support for C/C++
     - (see CppSupportPart)
     .
   - parts/fortransupport = Support for Fortran
     - (see FortranSupportPart)
+    .
+  - parts/haskellsupport = Support for Haskell
+    - (see HaskellSupportPart)
     .
   - parts/javasupport = Support for Java
     - (see JavaSupportPart)
@@ -82,6 +90,12 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
     .
   - parts/rubysupport = Support for Ruby
     - (see RubySupportPart)
+    .
+  - parts/sqlsupport = Support for SQL
+    - (see SQLSupportPart)
+    .
+  - parts/xulsupport = Support for XUL
+    - (see XulSupportPart)
     .
   .
 
@@ -118,6 +132,9 @@ To add support for a new language check this page \ref howToAddProgrammingLangua
 
   - parts/cervisia = Cervisia Support
     - (see CervisiaPart)
+    .
+  - parts/clearcase = IBM Rational ClearCase Support
+    - (see ClearcasePart)
     .
   - parts/cvs = CVS Support
     - (see CvsPart)
