@@ -1,4 +1,8 @@
-2001-05-04  F@lk Brettschneider <falk@kdevelop.org>
+2001-05-06  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: annoying question 'changed outside the editor. Wanna save?'
+      although not changed is removed now.
+
+2001-05-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: avoid crash when closing the app during project loading.
 
 2001-05-01  jbb <jbb@kdevelop.org>
