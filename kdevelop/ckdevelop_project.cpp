@@ -34,6 +34,7 @@
 #include "./kdlgedit/kdlgpropwidget.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgedit.h"
+#include "cmakemanualdlg.h"
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -759,36 +760,33 @@ void CKDevelop::slotProjectAPI(){
 }
 
 void CKDevelop::slotProjectManual(){
-  bool ksgml=true;
-  if(!CToolClass::searchProgram("sgml2html")){
-    return;
-  }
-  if(!CToolClass::searchInstProgram("ksgml2html")){
-    ksgml=false;
-    KMsgBox::message(this,i18n("Warning..."),i18n("The program ksgml2html wasn't found, therefore your documentation\nwon't have the usual KDE logo and look.\n\nThe manual will be build using sgml2html."));
-  }
-	if(!prj->isKDEProject())
-		ksgml=false;
-  showOutputView(true);
-  error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
-  setToolMenuProcess(false);
-  //  slotFileSaveAll();
-  slotStatusMsg(i18n("Creating project Manual..."));
-  messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
-  if(ksgml==false){
-    process.clearArguments();
-    process << "sgml2html";
-    process << prj->getSGMLFile();
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
-  else{
-    process.clearArguments();
-    process << "ksgml2html";
-    process << prj->getSGMLFile();
-    process << "en";
-    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  }
+
+    CMakeManualDlg dlg;
+    if(dlg.exec()){
+	
+	showOutputView(true);
+	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+	setToolMenuProcess(false);
+	//  slotFileSaveAll();
+	slotStatusMsg(i18n("Creating project Manual..."));
+	messages_widget->clear();
+	QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
+	bool ksgml;
+	if(ksgml==false){
+	    process.clearArguments();
+	    process << "sgml2html";
+	    process << prj->getSGMLFile();
+	    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	}
+	else{
+	    process.clearArguments();
+	    process << "ksgml2html";
+	    process << prj->getSGMLFile();
+	    process << "en";
+	    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	}
+    }
+  
 }
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
@@ -1075,4 +1073,5 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
 

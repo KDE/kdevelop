@@ -8,14 +8,16 @@ data Information
    Filename="/home/smeier/devel/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
    KDevelopVersion="0.4"
    DlgEditVersion="0.1alpha"
-   LastChanged="Wed Jul 14 20:30:57 1999"
+   LastChanged="Thu Jul 15 22:12:20 1999"
 }
 
 data SessionManagement
 {
    OpenedRoot_1="General"
    OpenedRoot_2="C++ Code"
-   OpenedRootCount="2"
+   OpenedRoot_3="Appearance"
+   OpenedRoot_4="Geometry"
+   OpenedRootCount="4"
 }
 
 item QWidget
@@ -45,6 +47,7 @@ item QWidget
    item QPushButton
    {
       Name="NoName"
+      IsEnabled="false"
       VarName="ok_button"
       X="50"
       Y="170"
@@ -96,7 +99,7 @@ item QWidget
    item QRadioButton
    {
       Name="NoName"
-      VarName="sgtml2html_radiobutton"
+      VarName="sgml2html_radiobutton"
       X="200"
       Y="30"
       Width="100"
@@ -130,6 +133,5 @@ item QWidget
       MinWidth="0"
       MinHeight="0"
       Text="Button"
-      Pixmap="/opt/kde/share/icons/mini/mini-ofolder.xpm"
    }
 }

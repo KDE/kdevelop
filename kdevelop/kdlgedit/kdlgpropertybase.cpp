@@ -71,7 +71,7 @@ void KDlgPropertyBase::dumpConstruct(QTextStream *stream, QString classname,
 {
     QString s = "  ";
     s += getPropValue("VarName");
-    s += "= new";
+    s += "= new ";
     s += classname;
     s += "(";
     s += parentname;

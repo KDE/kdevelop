@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cfilepropdlg.cpp  -  description                              
+   cfilepropdlg.cpp  -  yet another sourcefile with many confusing hacks,:-( sorry 
                              -------------------                                         
 
     begin                : Sat Oct 17 1998                                           
@@ -133,7 +133,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   name_label->setMargin( -1 );
   
   incdist_check = new QCheckBox( this, "incdist_check" );
-  incdist_check->setGeometry( 350, 160, 150, 30 );
+  incdist_check->setGeometry( 350, 160, 250, 30 );
   incdist_check->setMinimumSize( 0, 0 );
   incdist_check->setMaximumSize( 32767, 32767 );
   incdist_check->setFocusPolicy( QWidget::TabFocus );
@@ -158,7 +158,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   
 
   install_loc_label = new QLabel( this, "install_loc_label" );
-  install_loc_label->setGeometry( 350, 280, 140, 20 );
+  install_loc_label->setGeometry( 350, 280, 190, 20 );
   install_loc_label->setMinimumSize( 0, 0 );
   install_loc_label->setMaximumSize( 32767, 32767 );
   install_loc_label->setFocusPolicy( QWidget::NoFocus );
@@ -273,6 +273,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   connect(install_check,SIGNAL(toggled(bool)),SLOT(slotInstallCheckToogled(bool)));
   connect(ok_button,SIGNAL(clicked()),SLOT(slotOk()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+  connect(type_combo,SIGNAL(activated(int)),SLOT(slotTypeComboActivated(int)));
   saved_info = 0;
 
   
@@ -289,6 +290,28 @@ CFilePropDlg::~CFilePropDlg(){
  *                              SLOTS                                *
  *                                                                   *
  ********************************************************************/ 
+void CFilePropDlg::slotTypeComboActivated(int index){
+    if(index != 4){ // PO
+	if(index == 1){ // CPP_SOURCE
+	    incdist_check->setEnabled(false);
+	}
+	else{
+	    incdist_check->setEnabled(true);
+	}
+	
+	install_loc_edit->setEnabled(true);
+	install_check->setEnabled(true);
+	install_loc_label->setEnabled(true);
+	
+    }
+    else {
+	incdist_check->setEnabled(false);
+	install_loc_edit->setEnabled(false);
+	install_check->setEnabled(false);
+	install_loc_label->setEnabled(false);
+	
+    }
+}
 void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
 
 
@@ -331,10 +354,22 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   size_e_label->setText(text);
 
   if(info->type != PO){
-    incdist_check->setEnabled(true);
+    if(info->type == CPP_SOURCE){
+      incdist_check->setEnabled(false);
+    }
+    else{
+      incdist_check->setEnabled(true);
+    }
+   
     install_loc_edit->setEnabled(true);
     install_check->setEnabled(true);
     install_loc_label->setEnabled(true);
+  }
+  else{
+    incdist_check->setEnabled(false);
+    install_loc_edit->setEnabled(false);
+    install_check->setEnabled(false);
+    install_loc_label->setEnabled(false);
   }
   if (info->type == CPP_HEADER){
     type_combo->setCurrentItem(0);
@@ -355,7 +390,7 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
     type_combo->setCurrentItem(5);
   }
 
-  if(info->dist){
+  if(info->dist || info->type == CPP_SOURCE){
     incdist_check->setChecked(true);
   }
   else{
@@ -375,12 +410,6 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   //  cerr << "SAVE=INFO";
   saved_info = info;
   
-  if (info->type == PO){
-    incdist_check->setEnabled(false);
-    install_loc_edit->setEnabled(false);
-    install_check->setEnabled(false);
-    install_loc_label->setEnabled(false);
-  }
 }
 void CFilePropDlg::slotInstallCheckToogled(bool on){
     install_loc_edit->setEnabled(on);

@@ -16,10 +16,55 @@
  ***************************************************************************/
 
 #include "cmakemanualdlg.h"
+#include "ctoolclass.h"
+#include <kmsgbox.h>
+#include <kfiledialog.h>
 
 CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name) : QDialog(parent,name,true){
 	initDialog();
+  program_group = new QButtonGroup(this,"NoName");
+  program_group->setGeometry(10,10,330,70);
+  program_group->setMinimumSize(0,0);
+	program_group->setTitle("Program");
+	program_group->insert(sgml2html_radiobutton);
+	program_group->insert(ksgml2html_radiobutton);
+	program_group->lower();
+
+	connect(ok_button,SIGNAL(clicked()),this,SLOT(slotOkClicked()));
+	connect(cancel_button,SIGNAL(clicked()),this,SLOT(reject()));		
+	connect(file_button,SIGNAL(clicked()),this,SLOT(slotFileButtonClicked()));			
+
+	ok_button->setEnabled(false);
 }
 
 CMakeManualDlg::~CMakeManualDlg(){
 }
+
+
+void CMakeManualDlg::slotOkClicked(){
+	bool ksgml=true;
+	if( !CToolClass::searchProgram("sgml2html")){
+	    return;
+	}
+	if(!CToolClass::searchInstProgram("ksgml2html")){
+	    ksgml=false;
+//	    KMsgBox::message(this,i18n("Warning..."),i18n("The program ksgml2html wasn't found, therefore your documentation\nwon't have the usual KDE logo and look.\n\nThe manual will be build using sgml2html."));
+	}
+	accept();
+}
+void CMakeManualDlg::slotFileButtonClicked(){
+	QString str =  KFileDialog::getOpenFileName(0,"*.sgml",this,"test");
+  if(!str.isEmpty()){
+    file_edit->setText(str);
+  }
+	
+}
+
+
+
+
+
+
+
+
+

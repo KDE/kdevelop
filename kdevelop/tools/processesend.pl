@@ -34,7 +34,7 @@ else {
   #start configure
   printflush (STDOUT,"make configure...\n");
   chdir ($overDirectory);
-  system ("./configure");
+  system ("CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
 }
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
@@ -49,4 +49,6 @@ chdir ($underDirectory);
 printflush (STDOUT,"READY\n");
 
 exit;
+
+
 

@@ -29,6 +29,7 @@
 //Generated area. DO NOT EDIT!!!(end)
 
 #include <qdialog.h>
+#include <qbuttongroup.h>
 
 /**
   *@author The KDevelop Team
@@ -48,12 +49,19 @@ protected:
 	QPushButton *cancel_button;
 	QLineEdit *file_edit;
 	QLabel *QLabel_1;
-	QRadioButton *sgtml2html_radiobutton;
+	QRadioButton *sgml2html_radiobutton;
 	QRadioButton *ksgml2html_radiobutton;
 	QPushButton *file_button;
 	//Generated area. DO NOT EDIT!!!(end)
 
-private: 
+	QButtonGroup* program_group;
+private:
+
+protected slots:
+	void slotOkClicked();
+	void slotFileButtonClicked();
 };
 
 #endif
+
+

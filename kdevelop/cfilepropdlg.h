@@ -45,9 +45,10 @@ public:
 	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0,QString preselecteditem="");
 	~CFilePropDlg();
  public slots:
- void slotSelectionChanged(QListViewItem* item );
-  void  slotInstallCheckToogled(bool on);
-  void slotOk();
+       void slotSelectionChanged(QListViewItem* item );
+ void  slotInstallCheckToogled(bool on);
+ void slotOk();
+void  slotTypeComboActivated(int index);
 
 protected:
   QList<TFileInfo>* file_list;

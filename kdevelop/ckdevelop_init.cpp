@@ -347,7 +347,7 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", "");
   accel->connectItem("ProjectAPI", this, SLOT(slotProjectAPI()) );
   
-  accel->insertItem(i18n("Make User-Manual"), "ProjectManual", "");
+  accel->insertItem(i18n("Make User-Manual..."), "ProjectManual", "");
   accel->connectItem("ProjectManual", this, SLOT(slotProjectManual()));
   
   accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", "");
@@ -548,7 +548,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  project_menu->insertItem(Icon("mini/mini-book1.xpm"), i18n("Make &User-Manual"), this,
+  project_menu->insertItem(Icon("mini/mini-book1.xpm"), i18n("Make &User-Manual..."), this,
 			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
   // submenu for making dists
 
