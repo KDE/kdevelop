@@ -60,7 +60,7 @@ private slots:
 
     void slotReloadTree();
     void slotToggleShowNonProjectFiles();
-    void slotToggleShowVCSFields();
+    void slotToggleShowVCSFields( bool checked );
 
 private:
     bool matchesHidePattern(const QString &fileName);

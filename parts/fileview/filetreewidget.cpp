@@ -210,10 +210,6 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
     setDragEnabled( false );
 
-    addColumn( "Filename" ); // 0
-    addColumn( "Revision" );  // 1
-    addColumn( "Timestamp" );  // 2
-
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
@@ -223,21 +219,33 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     connect( this, SIGNAL(selectionChanged()),
              this, SLOT(slotSelectionChanged()) );
 
+    addColumn( QString::null ); // 0
+    header()->hide();
+/*
+    addColumn( "Filename" ); // 0
+    addColumn( "Revision" );  // 1
+    addColumn( "Timestamp" );  // 2
+*/
+
     m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
+/*
     m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
         this, SLOT(slotToggleShowVCSFields()), this, "actiontoggleshowvcsfieldstoggleaction" );
     m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
-
+    connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
+*/
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
+/*
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
+    slotToggleShowVCSFields( false );
+*/
     // Hide pattern for files
     QString defaultHidePattern = "*.o,*.lo,CVS";
     QString hidePattern = DomUtil::readEntry( dom, "/kdevfileview/tree/hidepatterns", defaultHidePattern );
     m_hidePatterns = QStringList::split( ",", hidePattern );
-    slotToggleShowVCSFields();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -246,7 +254,7 @@ FileTreeWidget::~FileTreeWidget()
 {
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/hidenonprojectfiles", !showNonProjectFiles() );
-    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
+//    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/showvcsfields", showVCSFields() );
     DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", hidePatterns() );
 }
 
@@ -341,7 +349,7 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
     }
 
     // Submenu for visualization options
-    m_actionToggleShowVCSFields->plug( &popup );
+//    m_actionToggleShowVCSFields->plug( &popup );
     m_actionToggleShowNonProjectFiles->plug( &popup );
 
     if (item != 0)
@@ -537,13 +545,13 @@ QString FileTreeWidget::hidePatterns() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void FileTreeWidget::slotToggleShowVCSFields()
+void FileTreeWidget::slotToggleShowVCSFields( bool checked )
 {
     kdDebug(9017) << "FileTreeWidget::slotToggleShowVCSFields()" << endl;
     kdDebug(9017) << "Yet to be implemented!!" << endl;
 
     // @todo implement show VCS Fields
-    if (showVCSFields())
+    if (checked)
     {
         setColumnWidth( 0, contentsWidth() / 3 ); // "Filename"
         setColumnWidth( 1, contentsWidth() / 3 ); // "Revision"
