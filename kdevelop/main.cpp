@@ -180,7 +180,8 @@ int main(int argc, char* argv[])
   CKDevelop* kdevelop = new CKDevelop();
   a.setMainWidget(kdevelop);
 
-  start_logo->raise();
+  if (start_logo)
+      start_logo->raise();
   QApplication::flushX();
 
   kdevelop->completeStartup(args->count() == 0);
