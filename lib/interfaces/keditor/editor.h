@@ -159,7 +159,22 @@ public:
 
   virtual Document *document(const KURL &url) = 0;
   virtual Document *createDocument(QWidget *parentWidget=0, const KURL &url="") = 0;
-  virtual Document *currentDocument() = 0;
+  virtual Document *currentDocument();
+
+
+signals:
+
+  void documentActivated(KEditor::Document *document);
+  
+
+public slots:
+
+  void activePartChanged(KParts::Part *part);
+
+
+private:
+
+  Document *_currentDocument;
 
 };
 

@@ -56,7 +56,7 @@ void Document::slotSave()
 
 
 Editor::Editor(QObject *parent, const char *name)
-  : QObject(parent, name), KXMLGUIClient((KXMLGUIClient*)parent)
+  : QObject(parent, name), KXMLGUIClient((KXMLGUIClient*)parent), _currentDocument(0)
 {
 }
 
@@ -79,5 +79,22 @@ EditorInterface *Editor::queryInterface(const QString &ifname)
   return 0;  
 }
 
+
+Document *Editor::currentDocument()
+{
+  return _currentDocument;
+}
+
+
+void Editor::activePartChanged(KParts::Part *part)
+{
+  if (!part || !part->inherits("KEditor::Document"))
+	_currentDocument = 0;
+  else 
+	_currentDocument = static_cast<Document*>(part);
+  
+  emit documentActivated(_currentDocument);
+}
+  
 
 #include "editor.moc"
