@@ -91,7 +91,10 @@ void RunOptionsWidget::browseMainProgram()
                                i18n("Select main program executable."));
 
   if (path.find(m_projectDirectory)==0)
+  {
     path.remove(0,m_projectDirectory.length()+1);
+    path = "./" + path;
+  }
   mainprogram_edit->setText(path);
 }
 
