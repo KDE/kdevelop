@@ -1,3 +1,6 @@
+2002-04-25  F@lk Brettschneider <falk@kdevelop.org>
+        * applied framestack patch, reviewed by Harald
+	
 2002-04-24  F@lk Brettschneider <falk@kdevelop.org>
         * fixed an evil crash after QextMDI gets confused in the view-focus control.
 	  (reason for that bug was changed event behaviour in the latest Qt versions.

@@ -19,6 +19,7 @@
 #define FRAMESTACK_H
 
 #include <qlistview.h>
+#include <qstringlist.h>
 
 /**
   *@author John Birch
@@ -101,10 +102,17 @@ public slots:
 signals:
   void selectFrame(int frameNo, int threadNo, bool needFrames);
 
+#if QT_VERSION < 300
+private:
+  QListViewItem* findItemWhichBeginsWith(const QString& text) const;
+#endif
+
 private:
   ThreadStackItem*  viewedThread_;
   ThreadStackItem*  stoppedAtThread_;
   int               currentFrame_;
+  QString           firstLineOfLastBacktrace_;
+  QStringList       threadList_;
 };
 
 #endif
