@@ -14,10 +14,14 @@ class DocumentImpl : public KEditor::Document
 
 public:
 
-  DocumentImpl(KEditor::Editor *parent);
+  DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget=0);
 
-  virtual bool load(const QString &filename);
-  virtual bool save(const QString &filename);
+  virtual bool saveFile();
+
+
+protected:
+
+  virtual bool openFile();
 
 
 private:

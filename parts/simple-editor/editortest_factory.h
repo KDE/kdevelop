@@ -6,14 +6,15 @@
 #define _EDITORTESTFACTORY_H_
 
 
-#include <klibloader.h>
+#include <kparts/part.h>
+#include <kparts/factory.h>
 
 
 class KInstance;
 class KAboutData;
 
 
-class EditorTestPartFactory : public KLibFactory
+class EditorTestPartFactory : public KParts::Factory
 {
   Q_OBJECT
 		  

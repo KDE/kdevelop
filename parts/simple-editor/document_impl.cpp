@@ -9,6 +9,7 @@
 
 #include "document_impl.h"
 #include "editortest_part.h"
+#include "editortest_factory.h"
 #include "clipboard_iface_impl.h"
 #include "undo_iface_impl.h"
 #include "cursor_iface_impl.h"
@@ -17,15 +18,15 @@
 using namespace KEditor;
 
 
-DocumentImpl::DocumentImpl(Editor *parent)
+DocumentImpl::DocumentImpl(Editor *parent, QWidget *parentWidget)
   : Document(parent), _widget(0)
 {
-  // create the editor
-  _widget = new QMultiLineEdit;
-  setWidget(_widget);  
+  setInstance(EditorTestPartFactory::instance());
 
-  // register with the view manager
-  parent->addView(_widget);
+  // create the editor
+  _widget = new QMultiLineEdit(parentWidget);
+  _widget->setFont(QFont("courier", 12));
+  setWidget(_widget);  
 
   // create interfaces
   new ClipboardIfaceImpl(_widget, this, parent);
@@ -33,17 +34,12 @@ DocumentImpl::DocumentImpl(Editor *parent)
   new CursorIfaceImpl(_widget, this, parent);
 
   setXMLFile("editortest_part.rc", true);
-
-  // register with the part manager
-  parent->addPart(this);
-
-  _widget->setFocus();
 }
 
 
-bool DocumentImpl::load(const QString &filename)
+bool DocumentImpl::openFile()
 {
-  QFile f(filename);
+  QFile f(m_file);
   if (!f.open(IO_ReadOnly))
 	return false;
 
@@ -54,15 +50,13 @@ bool DocumentImpl::load(const QString &filename)
 
   f.close();
 
-  rename(filename);
-
   return true;
 }
 
 
-bool DocumentImpl::save(const QString &filename)
+bool DocumentImpl::saveFile()
 {
-  QFile f(filename);
+  QFile f(m_file);
   if (!f.open(IO_WriteOnly))
 	return false;
 
@@ -70,8 +64,6 @@ bool DocumentImpl::save(const QString &filename)
   ts << _widget->text();
 
   f.close();
-
-  rename(filename);
 
   return true;
 }

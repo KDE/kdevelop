@@ -3,4 +3,3 @@ Name=EditorTestPart
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
 X-KDE-Library=libeditortestpart
 Type=Service
-InitialPreference=200
