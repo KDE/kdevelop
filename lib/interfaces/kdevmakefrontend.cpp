@@ -1,8 +1,8 @@
 #include "kdevmakefrontend.h"
 
 
-KDevMakeFrontend::KDevMakeFrontend(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+KDevMakeFrontend::KDevMakeFrontend(QObject *parent, const char *name)
+    : KDevPlugin(parent, name)
 {
 }
 

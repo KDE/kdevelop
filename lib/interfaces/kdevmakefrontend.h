@@ -6,16 +6,16 @@
 #define _KDEVMAKEFRONTEND_H_
 
 #include <qstringlist.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class KDevMakeFrontend : public KDevPart
+class KDevMakeFrontend : public KDevPlugin
 {
     Q_OBJECT
     
 public:
     
-    KDevMakeFrontend( KDevApi *api, QObject *parent=0, const char *name=0 );
+    KDevMakeFrontend( QObject *parent=0, const char *name=0 );
     ~KDevMakeFrontend();
 
     /**
