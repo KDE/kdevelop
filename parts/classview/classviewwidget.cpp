@@ -152,11 +152,17 @@ QString ClassViewWidget::determineFolder(QString fileName, QString projectDir, i
  * The hierarchy is built up below the parent argument.
  * The output argument folders is filled with a mapping from
  * folder names to their list view items.
+ * @param classes organizer item for classes
+ * @param dirNames a sorted list of paths
+ * @param folders a map from paths to tree items
  */
 void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
-                                                QStringList &dirNames,
+                                                const QStringList &dirNames,
                                                 QMap<QString, ClassTreeItem*> *folders)
-{    
+{
+    // using a dictionary is the best solution to track last items
+    // for the hierarchical order that we want to preserve
+    // since dirNames comes sorted each folder will be automatically sorted
     QMap<ClassTreeItem*, ClassTreeItem*> lastItems;
     lastItems[classes] = 0;
     QStringList::ConstIterator sit;
@@ -178,7 +184,7 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
             if (folders->find(path)==folders->end()) { // new folder
                 ClassTreeItem* item =                 // create new item
                     new ClassTreeOrganizerItem(parent,lastItems[parent],dir);
-              folders->insert(path, item, dir);     // insert item
+              (*folders)[path] = item;              // insert folder
               lastItems[parent] = item;            // set last item of parent
             }
         }
@@ -190,10 +196,9 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
  * Creates a flat list of folder items.
  */
 void ClassViewWidget::buildClassFolderFlatList(ClassTreeItem *organizerItem,
-                                               QStringList &dirNames,
+                                               const QStringList &dirNames,
                                                QMap<QString, ClassTreeItem*> *folders)
 {
-    dirNames.sort();
     ClassTreeItem *lastItem = 0;
     
     QStringList::ConstIterator it;
@@ -246,6 +251,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             if (!dirName.isNull() && !dirNames.contains(dirName))
                 dirNames.append(dirName);                        
         }
+        dirNames.sort(); // we insert in sorted order
         
         // Create folders
         QMap<QString, ClassTreeItem*> folders;
