@@ -1,4 +1,8 @@
 1999-06-11 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed even more parsing bugs. The parser seems to handle all
+	  linux kernel headers now!
+
+1999-06-11 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed more parsing issues. Finished converting to new classhierarchy.
 
 1999-06-11  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
