@@ -74,7 +74,7 @@ public:
      *
      * @return A list of all scopenames in alphabetical order.
      */
-    QStrList *getSortedScopeNameList();
+    QStringList *getSortedScopeNameList();
     
     /**
      * Adds a scope to this scope. 

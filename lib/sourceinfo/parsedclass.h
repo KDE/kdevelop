@@ -19,7 +19,7 @@
 #define _PARSEDCLASS_H_
 
 #include <qlist.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
 #include "parseditem.h"
@@ -56,11 +56,8 @@ private:
     
 public:
     
-    /** List with names of parentclasses(if any). */
+    /** List with names of parent classes(if any). */
     QList<ParsedParent> parents;
-    
-    /** List with names of frientclasses(if any). */
-    QStrList friends;
     
     /** List of slots. */
     QListIterator<ParsedMethod> slotIterator;
@@ -96,8 +93,8 @@ public:
      * Adds a friend. 
      * @param aName A friendclass of this class.
      */
-    void addFriend(const char *aName)
-    { friends.append(aName); }
+    void addFriend(const QString &aName)
+        { _friends.append(aName); }
     
     /**
      * Adds a signal. 
@@ -111,6 +108,10 @@ public:
      */
     void addSlot(ParsedMethod *aMethod);
     
+    /** List with names of friend classes(if any). */
+    QStringList friends() const
+        { return _friends; }
+
     /** 
      * Sets the state if this is a subclass. 
      * @param aState The new state.
@@ -166,6 +167,8 @@ public:
     friend QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
 
 private:
+    /** List with names of friend classes(if any). */
+    QStringList _friends;
     /** Tells if this class is declared inside another class. */
     bool _isSubClass;
 };

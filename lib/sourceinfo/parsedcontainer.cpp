@@ -15,8 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "parsedcontainer.h"
 #include <iostream.h>
+#include <qstrlist.h>
+#include "parsedcontainer.h"
 #include "programmingbycontract.h"
 
 /*********************************************************************
@@ -229,23 +230,22 @@ ParsedMethod *ParsedContainer::getMethodByNameAndArg( const QString &aName )
 QList<ParsedMethod> *ParsedContainer::getSortedMethodList()
 {
     QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
-    ParsedMethod *aMethod;
-    char *str;
-    QStrList srted;
-    QString m;
-    
     retVal->setAutoDelete( false );
+
+    QStringList srted;
     
     // Ok... This sucks. But I'm lazy.
+    ParsedMethod *aMethod;
     for ( aMethod = methods.first();
           aMethod != NULL;
           aMethod = methods.next() )
-        srted.inSort( aMethod->asString() );
+        srted << aMethod->asString();
+
+    srted.sort();
     
-    for ( str = srted.first();
-          str != NULL;
-          str = srted.next() )
-        retVal->append( getMethodByNameAndArg( str ) );
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
+        retVal->append( getMethodByNameAndArg(*it) );
     
     return retVal;
 }
@@ -278,7 +278,7 @@ ParsedAttribute *ParsedContainer::getAttributeByName( const QString &aName )
  * Returns:
  *   QStrList *         List of attributes in sorted order.
  *-----------------------------------------------------------------*/
-QStrList *ParsedContainer::getSortedAttributeAsStringList()
+QStringList *ParsedContainer::getSortedAttributeAsStringList()
 {
     return getSortedIteratorNameList<ParsedAttribute>( attributeIterator );
 }
@@ -325,7 +325,7 @@ ParsedStruct *ParsedContainer::getStructByName( const QString &aName )
  * Returns:
  *   QStrList *       List of all structs in alpabetical order.
  *-----------------------------------------------------------------*/
-QStrList *ParsedContainer::getSortedStructNameList()
+QStringList *ParsedContainer::getSortedStructNameList()
 {
     return getSortedIteratorNameList<ParsedStruct>( structIterator );
 }

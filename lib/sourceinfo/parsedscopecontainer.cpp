@@ -110,8 +110,7 @@ bool ParsedScopeContainer::hasScope( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedScopeContainer *ParsedScopeContainer::getScopeByName( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, NULL );
-    REQUIRE1( "Valid scope name length", strlen( aName ) > 0, NULL );
+    REQUIRE1( "Valid scope name length", aName.length() > 0, NULL );
     
     return scopes.find( aName );
 }
@@ -148,8 +147,7 @@ void ParsedScopeContainer::addScope( ParsedScopeContainer *aScope )
  *-----------------------------------------------------------------*/
 void ParsedScopeContainer::removeScope( const QString &aName )
 {
-    REQUIRE( "Valid scope name", aName != NULL );
-    REQUIRE( "Valid scope name length", strlen( aName ) > 0 );
+    REQUIRE( "Valid scope name length", aName.length() > 0 );
     
     scopes.remove( aName );
 }
@@ -180,7 +178,7 @@ QList<ParsedScopeContainer> *ParsedScopeContainer::getSortedScopeList()
  * Returns:
  *   A list of scopenames.
  *-----------------------------------------------------------------*/
-QStrList *ParsedScopeContainer::getSortedScopeNameList()
+QStringList *ParsedScopeContainer::getSortedScopeNameList()
 {
     return getSortedIteratorNameList<ParsedScopeContainer>( scopeIterator );
 }
@@ -198,14 +196,14 @@ QStrList *ParsedScopeContainer::getSortedScopeNameList()
 void ParsedScopeContainer::out()
 {
     if ( !comment().isEmpty() )
-        cout << comment() << endl;
+        cout << comment().latin1() << endl;
     
     if ( !path().isEmpty() ) {
-        cout << "Namespace " << name() << " @ line " << declaredOnLine();
+        cout << "Namespace " << name().latin1() << " @ line " << declaredOnLine();
         cout << " - " << declarationEndsOnLine() << endl;
         cout << "  Defined in files:" << endl;
-        cout << "    " << declaredInFile() << endl;
-        cout << "    " << definedInFile() << endl;
+        cout << "    " << declaredInFile().latin1() << endl;
+        cout << "    " << definedInFile().latin1() << endl;
     }
     
     if ( path().isEmpty() )

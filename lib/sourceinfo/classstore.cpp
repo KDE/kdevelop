@@ -249,8 +249,7 @@ void ClassStore::addClass( ParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void ClassStore::removeClass( const QString &aName )
 {
-    REQUIRE( "Valid classname", aName != NULL );
-    REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+    REQUIRE( "Valid classname length", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     
     globalContainer.removeClass( aName );
@@ -347,8 +346,7 @@ QList<ClassTreeNode> *ClassStore::asForest()
  *-----------------------------------------------------------------*/
 bool ClassStore::hasScope( const QString &aName )
 {
-    REQUIRE1( "Valid scope name", aName != NULL, false );
-    REQUIRE1( "Valid scope name length", strlen( aName ) > 0, false );
+    REQUIRE1( "Valid scope name length", aName.length() > 0, false );
     
     return globalContainer.hasScope( aName );
 }
@@ -405,8 +403,7 @@ bool ClassStore::hasClass( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedClass *ClassStore::getClassByName( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, NULL );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
+    REQUIRE1( "Valid classname length", aName.length() > 0, NULL );
     
     ParsedClass *aClass;
     
@@ -431,8 +428,7 @@ ParsedClass *ClassStore::getClassByName( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassesByParent( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<ParsedClass>() );
+    REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     
     QList<ParsedClass> *retVal = new QList<ParsedClass>();
     ParsedClass *aClass;
@@ -463,8 +459,7 @@ QList<ParsedClass> *ClassStore::getClassesByParent( const QString &aName )
  *-----------------------------------------------------------------*/
 QList<ParsedClass> *ClassStore::getClassClients( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, new QList<ParsedClass>() );
-    REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<ParsedClass>() );
+    REQUIRE1( "Valid classname length", aName.length() > 0, new QList<ParsedClass>() );
     
     bool exit;
     ParsedClass *aClass;
@@ -535,7 +530,7 @@ QList<ParsedClass> *ClassStore::getClassSuppliers( const QString &aName )
         
         // If this isn't the class and the string contains data, we check for it.
         if ( str != aName && !str.isEmpty() ) {
-            debug( "Checking if '%s' is a class", str.data() );
+            qDebug( "Checking if '%s' is a class", str.data() );
             toAdd = getClassByName( str );
             if ( toAdd )
                 retVal->append( toAdd );
@@ -583,7 +578,7 @@ QList<ParsedClass> *ClassStore::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-QStrList *ClassStore::getSortedClassNameList()
+QStringList *ClassStore::getSortedClassNameList()
 {
     return globalContainer.getSortedClassNameList(true);
 }

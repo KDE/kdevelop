@@ -123,7 +123,7 @@ public:
      * Get all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStrList *getSortedClassNameList();
+    QStringList *getSortedClassNameList();
     
     /**
      * Fetches all virtual methods, both implemented and not.

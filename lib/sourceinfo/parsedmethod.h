@@ -34,8 +34,6 @@ public:
     ParsedMethod();
     ~ParsedMethod();
     
-public:
-    
     /** The methods arguments(if any) */
     QList<ParsedArgument> arguments;
     

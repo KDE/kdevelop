@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <qstrlist.h>
 #include "programmingbycontract.h"
 #include "parsedclass.h"
 
@@ -184,7 +185,7 @@ void ParsedClass::clearDeclaration()
     signalList.clear();
     signalsByNameAndArg.clear();
     parents.clear();
-    friends.clear();
+    _friends.clear();
     
     ParsedItem::clearDeclaration();
 }
@@ -391,25 +392,23 @@ bool ParsedClass::hasVirtual()
 QList<ParsedMethod> *ParsedClass::getSortedSignalList()
 {
     QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
-    char *str;
-    QStrList srted;
-    
     retVal->setAutoDelete( false );
+
+    QStringList srted;
     
     // Ok... This sucks. But I'm lazy.
     for ( signalIterator.toFirst();
           signalIterator.current();
           ++signalIterator )
         {
-            srted.inSort( signalIterator.current()->asString() );
+            srted << signalIterator.current()->asString();
         }
+
+    srted.sort();
     
-    for ( str = srted.first();
-          str != NULL;
-          str = srted.next() )
-        {
-            retVal->append( getSignalByNameAndArg( str ) );
-        }
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
+        retVal->append( getSignalByNameAndArg(*it) );
     
     return retVal;
 }
@@ -427,24 +426,24 @@ QList<ParsedMethod> *ParsedClass::getSortedSignalList()
 QList<ParsedMethod> *ParsedClass::getSortedSlotList()
 {
     QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
-    char *str;
-    QStrList srted;
-    
     retVal->setAutoDelete( false );
+    
+    QStringList srted;
     
     // Ok... This sucks. But I'm lazy.
     for ( slotIterator.toFirst();
           slotIterator.current();
           ++slotIterator )
         {
-            srted.inSort( slotIterator.current()->asString() );
+            srted << slotIterator.current()->asString();
         }
+
+    srted.sort();
     
-    for ( str = srted.first();
-          str != NULL;
-          str = srted.next() )
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
         {
-            retVal->append( getSlotByNameAndArg( str ) );
+            retVal->append( getSlotByNameAndArg(*it) );
         }
     
     return retVal;
@@ -494,19 +493,20 @@ void ParsedClass::out()
     char *str;
     
     if ( !comment().isEmpty() )
-        cout << comment() << endl;
+        cout << comment().latin1() << endl;
     
-    cout << "Class " << path() << " @ line " << declaredOnLine();
+    cout << "Class " << path().latin1() << " @ line " << declaredOnLine();
     cout << " - " << declarationEndsOnLine() << endl;
     cout << "  Defined in files:" << endl;
-    cout << "    " << declaredInFile() << endl;
-    cout << "    " << definedInFile() << endl;
+    cout << "    " << declaredInFile().latin1() << endl;
+    cout << "    " << definedInFile().latin1() << endl;
     cout << "  Parents:" << endl;
     for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
         aParent->out();
     cout << "  Friends:" << endl;
-    for ( str = friends.first(); str != NULL; str = friends.next() )
-        cout << "   " << str << endl;
+    QStringList::ConstIterator friendsIt;
+    for ( friendsIt = _friends.begin(); friendsIt != _friends.end(); ++friendsIt )
+        cout << "   " << (*friendsIt).latin1() << endl;
     cout << "  Attributes:" << endl;
     for ( ait.toFirst(); ait.current(); ++ait )
         ait.current()->out();
@@ -543,10 +543,10 @@ QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
         s << *parentIt.current();
     
     // Add friends.
-    s << arg.friends.count();
-    QStrListIterator friendIt(arg.friends);
-    for (; friendIt.current(); ++friendIt)
-        s << friendIt.current();
+    s << arg.friends().count();
+    QStringList::Iterator friendsIt;
+    for (friendsIt = arg._friends.begin(); friendsIt != arg._friends.end(); ++friendsIt)
+        s << (*friendsIt);
     
     // Add methods.
     s << arg.methods.count();

@@ -191,7 +191,7 @@ bool PersistantClassStore::exists()
     bool retVal;
     
     // Try to open the file.
-    aFile = fopen( filename, "r" );
+    aFile = fopen( filename.latin1(), "r" );
     retVal = ( aFile != NULL );
     
     // If the file exists, make sure we close it again.

@@ -71,7 +71,7 @@ public:
      * Gets all classnames in sorted order.
      * @return A list of all classnames in sorted order.
      */
-    QStrList *getSortedClassNameList(bool useFullPath=false);
+    QStringList *getSortedClassNameList(bool useFullPath=false);
     
 public:
     

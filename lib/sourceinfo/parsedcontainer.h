@@ -20,7 +20,7 @@
 
 #include <qdatastream.h>
 #include <qlist.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
 #include "parseditem.h"
@@ -40,19 +40,19 @@ class ParsedClass;
  * @return List of sorted element names.
  */
 template<class T>
-QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
+QStringList *getSortedIteratorNameList( QDictIterator<T> &itr )
 {
-    QStrList *retVal = new QStrList();
-    
+    QStringList *retVal = new QStringList();
+
     // Iterate over all structures.
-    for( itr.toFirst();
-         itr.current();
-       ++itr )
+    for ( itr.toFirst(); itr.current(); ++itr )
         {
             ParsedItem *item = (ParsedItem *)itr.current();
-            retVal->inSort( item->name() );
+            (*retVal) << item->name();
         }
-    
+
+    retVal->sort();
+
     return retVal;
 }
 
@@ -69,30 +69,20 @@ template<class T>
 QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
 {
     QList<T> *retVal = new QList<T>();
-    char *str;
-    QStrList srted;
-    //  QString m;
-    QDictIterator<T> itr( dict );
-    
     retVal->setAutoDelete( false );
+
+    QStringList srted;
     
     // Ok... This sucks. But I'm lazy.
-    for( itr.toFirst();
-         itr.current();
-         ++itr )
-        {
-            //    itr.current()->asString( m );
-            //    srted.inSort( m );
-            
-            srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name() ) );
-        }
-    
-    for( str = srted.first();
-         str != NULL;
-         str = srted.next() )
-        {
-            retVal->append( dict.find( str ) );
-        }
+    QDictIterator<T> itr( dict );
+    for( itr.toFirst(); itr.current(); ++itr )
+        srted << ( usePath ? itr.current()->path() : itr.current()->name() );
+
+    srted.sort();
+
+    QStringList::ConstIterator it;
+    for (it = srted.begin(); it != srted.end(); ++it)
+        retVal->append( dict.find(*it) );
     
     return retVal;
 }
@@ -206,7 +196,7 @@ public:
      * Gets all attributes in their string reprentation in sorted order. 
      * @return List of attributes in sorted order.
      */
-    QStrList *getSortedAttributeAsStringList();
+    QStringList *getSortedAttributeAsStringList();
     
     /** Gets all attributes in sorted order. */
     QList<ParsedAttribute> *getSortedAttributeList();
@@ -215,7 +205,7 @@ public:
      * Gets the names of all structures in a sorted list.
      * @return List of all structs in alpabetical order.
      */
-    QStrList *getSortedStructNameList();
+    QStringList *getSortedStructNameList();
     
     /** Gets all structs in sorted order. */
     QList<ParsedStruct> *getSortedStructList();

@@ -126,7 +126,6 @@ void ParsedClassContainer::addClass( ParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void ParsedClassContainer::removeClass( const QString &aName )
 {
-    REQUIRE( "Valid classname", aName != NULL );
     REQUIRE( "Valid classname", aName.length() > 0 );
     REQUIRE( "Class exists", hasClass( aName ) );
     
@@ -145,7 +144,6 @@ void ParsedClassContainer::removeClass( const QString &aName )
  *-----------------------------------------------------------------*/
 void ParsedClassContainer::removeWithReferences( const QString &aFile )
 {
-    REQUIRE( "Valid filename", aFile != NULL );
     REQUIRE( "Valid filename length", aFile.length() > 0 );
     
     ParsedContainer::removeWithReferences( aFile );
@@ -170,7 +168,6 @@ void ParsedClassContainer::removeWithReferences( const QString &aFile )
  *-----------------------------------------------------------------*/
 bool ParsedClassContainer::hasClass( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, false );
     REQUIRE1( "Valid classname length", aName.length() > 0, false );
     
     return classes.find( aName ) != NULL;
@@ -190,7 +187,6 @@ bool ParsedClassContainer::hasClass( const QString &aName )
  *-----------------------------------------------------------------*/
 ParsedClass *ParsedClassContainer::getClassByName( const QString &aName )
 {
-    REQUIRE1( "Valid classname", aName != NULL, NULL );
     REQUIRE1( "Valid classname length", aName.length() > 0, NULL );
     
     return classes.find( aName );
@@ -221,25 +217,9 @@ QList<ParsedClass> *ParsedClassContainer::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-/*
-    obsolete    W. Tasin
-QStrList *ParsedClassContainer::getSortedClassNameList()
+QStringList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
 {
-  return getSortedIteratorNameList( classIterator );
-}
-*/
-/*-------------------- ParsedClassContainer::getSortedClassNameList()
- * getSortedClassNameList()
- *   Get all classnames in sorted order.
- *
- * Parameters:
- *   -
- * Returns:
- *   QStrList * The classnames.
- *-----------------------------------------------------------------*/
-QStrList *ParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
-{
-    QStrList *ret_val = new QStrList();
+    QStringList *ret_val = new QStringList();
     ParsedClass *act;
     
     for (classIterator.toFirst();

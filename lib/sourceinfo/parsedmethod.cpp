@@ -143,7 +143,7 @@ void ParsedMethod::out()
     char buf[10];
     
     if ( !comment().isEmpty() )
-        cout << "    " << comment() << "\n";
+        cout << "    " << comment().latin1() << "\n";
     
     cout << "    ";
     switch( access() )
@@ -177,7 +177,7 @@ void ParsedMethod::out()
     if ( isSignal() )
         cout << "signal ";
     
-    cout << type().latin1()  << " " << name() << "( ";
+    cout << type().latin1()  << " " << name().latin1() << "( ";
     
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
@@ -263,7 +263,7 @@ bool ParsedMethod::isEqual( ParsedMethod *method )
         retVal = method->arguments.count() == arguments.count();
     
     // If they have the same number of arguments we bother to check them.
-    if( retVal )
+    if ( retVal )
         for ( m1 = arguments.first(), m2 = method->arguments.first();
               m1 != NULL && retVal; 
               m1 = arguments.next(), m2 = method->arguments.next() )
