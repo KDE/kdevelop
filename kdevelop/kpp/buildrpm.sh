@@ -22,10 +22,10 @@ good ()
 
 DIR=$BASE/build-$NAME
 
-
+        sleep 1
         rm -rf $DIR
         echo Starting Build Process
-        RPMERR="Setting up the build enviroment."
+        RPMERR="setting up the build enviroment."
         echo Setting up the build enviroment...
         mkdir -p $DIR/RPMROOT/BUILD/   || error
         mkdir -p $DIR/RPMROOT/RPMS/    || error
@@ -41,11 +41,13 @@ DIR=$BASE/build-$NAME
         echo Copying the spec files.
         cp -a $BASE/$NAME.spec $DIR/RPMROOT/SPECS         || error
         echo looking for  $BASE/$NAME/lo32-app-$NAME.png
-        if [ -f `$BASE/$NAME/lo32-app-$NAME.png`]; then
-                RPMERR="converting the RPM icon."
+        if [ -f  $BASE/$NAME/lo32-app-$NAME.png ]; then
+                RPMERR="converting the RPM icon. Please check to see that $BASE/$NAME/lo32-app-$NAME.png is present"
                 echo Converting the RPM icon...
                 echo convert $BASE/$NAME/lo32-app-$NAME.png $DIR/RPMROOT/SOURCES/$NAME.xpm
                 convert $BASE/$NAME/lo32-app-$NAME.png $DIR/RPMROOT/SOURCES/$NAME.xpm  || error
+        else
+                echo $BASE/$NAME/lo32-app-$NAME.png was not found, there will not be an application icon included in the R$
         fi
 cat > $DIR/rpmmacros <<EOF
 %_topdir $DIR/RPMROOT/

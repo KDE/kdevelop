@@ -2299,7 +2299,7 @@ void CKAppWizard::slotProcessExited() {
   }
   if ( kpartitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11 $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
-   project->setLDFLAGS("$(KDE_PLUGIN)");
+   project->setLDFLAGS("$(all_libraries)");
   }
   if ( kioslaveitem->isSelected()) {
    project->setLDADD( " -lkdeui -lkdecore -lqt -lXext -lX11 -lkio");
@@ -2666,7 +2666,7 @@ void CKAppWizard::slotProcessExited() {
         fileInfo.type = DATA;
         fileInfo.dist = true;
         fileInfo.install = true;
-        fileInfo.install_location = " $(kde_datadir)/khtml/kpartplugins";
+        fileInfo.install_location = " $(kde_datadir)/khtml/kpartplugins/" + namelow + ".rc";
         project->addFileToProject (namelow + "/" +  namelow + ".rc",fileInfo);
   }
   if(kioslaveitem->isSelected()){

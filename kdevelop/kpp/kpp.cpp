@@ -190,6 +190,9 @@ bool Kpp::loadPrefs(){
   kdDebug() << "I got spec template from " << tempqsSpecTemplate << endl;
   qsSpecTemplate = kcConfig->readEntry( "specTemplate", tempqsSpecTemplate);
   kdDebug() << "I got spec template from " << qsSpecTemplate << endl;
+  if (qsSpecTemplate == "")
+	   KMessageBox::sorry(0, i18n("Currently there is no default template for your SPEC file. \n You will have select one before you can create an RPM." ), i18n("Missing SPEC template"), true);
+
   //QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
   //QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));
   //QComboBox_1->setCurrentItem(kcConfig->readNumEntry("license", 0));

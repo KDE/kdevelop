@@ -803,8 +803,16 @@ void CProject::updateMakefileAm(QString makefile){
 	  stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
      }
           if (type!="normal_cpp" && type != "normal_c")
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-
+		{
+	    		stream << "\nINCLUDES = $(all_includes)\n\n";
+             stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
+			if( type == "kpart_plugin")
+			{
+				stream << "\nLDADD = " << getLDADD() << "\n\n";
+				stream << "\nlib" << dir.dirName() << "_la_LIBADD = " << getLDADD() << "\n\n";
+				stream << "\nlib" << dir.dirName() << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
+			}
+		}
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
 			          if( (type == "kio_slave") )
@@ -821,7 +829,11 @@ void CProject::updateMakefileAm(QString makefile){
 	    stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
            }
        if( (type == "kio_slave") )
-		stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+		{
+			stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+			stream << "kio_" << dir.dirName() << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
+			stream << "kio_" << dir.dirName() << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+		}
 	  else
 	  stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
     if(isQt2Project())	
