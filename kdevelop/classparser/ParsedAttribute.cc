@@ -216,6 +216,9 @@ void CParsedAttribute::out()
 {
   char buf[10];
 
+  if( !comment.isEmpty() )
+    cout << "    " << comment << "\n";
+
   cout << "    ";
 
   switch( exportScope )

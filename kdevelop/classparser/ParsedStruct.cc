@@ -92,6 +92,9 @@ CParsedStruct::~CParsedStruct()
  *-----------------------------------------------------------------*/
 void CParsedStruct::out()
 {
+  if( !comment.isEmpty() )
+    cout << "   " << comment << "\n";
+
   cout << "   " << name << "\n";
   for( attributeIterator.toFirst();
        attributeIterator.current();
