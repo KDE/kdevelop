@@ -9,6 +9,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  konsole astyle tools ctags regexptest cvs doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith windowmenu history \
-          sourcenav texttools qeditor\
+          sourcenav texttools qeditor buglist\
 	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 
 
