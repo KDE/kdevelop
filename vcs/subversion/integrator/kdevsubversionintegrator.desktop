@@ -2,7 +2,17 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevSubversionIntegrator
+Name[da]=KDevelop Subversion-integration
+Name[sv]=KDevelop Subversion-integration
 Comment=Subversion Project Integration Facility
+Comment[da]=Subversion projektintegration
+Comment[et]=Subversion projekti põimimisvahend
+Comment[fr]=Service d'intégration pour un projet utilisant Subversion
+Comment[it]=Funzione di integrazione del progetto Subversion
+Comment[pt]=Integração com Projectos Subversion
+Comment[pt_BR]=Facilidade de Integração ao Projeto de Subversão
+Comment[ru]=Интеграция Subversion
+Comment[sv]=Funktion för integrering av Subversion i projekt
 Icon=misc
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator

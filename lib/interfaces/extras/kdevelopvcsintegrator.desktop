@@ -4,6 +4,14 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/VCSIntegrator
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop VCS Integrator
+Name[da]=KDevelop VCS-importør
+Name[et]=KDevelopi VCS põimija
+Name[fr]=Intégrateur VCS de KDevelop
+Name[it]=Integratore VCS di KDevelop
+Name[pt]=Importador de VCS do KDevelop
+Name[pt_BR]=Integrador VCS para o KDevelop
+Name[ru]=Модуль работы с системами контроля версий для KDevelop
+Name[sv]=KDevelop VCS-import
 
 [PropertyDef::X-KDevelop-VCS]
 Type=QString

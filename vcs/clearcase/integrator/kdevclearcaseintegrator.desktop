@@ -2,7 +2,17 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevClearcaseIntegrator
+Name[da]=KDevelop Clearcase-integration
+Name[sv]=KDevelop Clearcase-integration
 Comment=Clearcase Project Integration Facility
+Comment[da]=Clearcase projektintegration
+Comment[et]=Clearcase projekti põimimisvahend
+Comment[fr]=Service d'intégration pour un projet utilisant Clearcase
+Comment[it]=Funzione di integrazione del progetto Clearcase
+Comment[pt]=Integração com Projectos Clearcase
+Comment[pt_BR]=Facilidade de Integração ao Projeto de Clearcase
+Comment[ru]=Интеграция Clearcase
+Comment[sv]=Funktion för integrering av Clearcase i projekt
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator
 X-KDE-Library=libclearcaseintegrator

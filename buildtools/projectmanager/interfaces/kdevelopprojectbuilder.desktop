@@ -4,6 +4,16 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/ProjectBuilder
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Project Builder
+Name[da]=KDevelop Projektbygger
+Name[et]=KDevelopi projektiehitaja
+Name[fr]=Créateur de projet pour KDevelop
+Name[it]=Compilatore di progetto di KDevelop
+Name[pt]=Construtor de Projectos do KDevelop
+Name[pt_BR]=Construtor de Projeto do KDevelop
+Name[ru]=Интерфейс сборки проектов KDevelop
+Name[sr]=KDevelop-ов градилац пројекта
+Name[sr@Latn]=KDevelop-ов градилац пројекта
+Name[sv]=KDevelop projektbyggare
 
 [PropertyDef::X-KDevelop-ProjectBuilder]
 Type=QString

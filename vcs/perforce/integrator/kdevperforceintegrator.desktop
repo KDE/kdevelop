@@ -2,7 +2,17 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevPerforceIntegrator
+Name[da]=KDevelop Perforce-integration
+Name[sv]=KDevelop Perforce-integration
 Comment=Perforce Project Integration Facility
+Comment[da]=Perforce projektintegration
+Comment[et]=Perforce projekti põimimisvahend
+Comment[fr]=Service d'intégration pour un projet utilisant Perforce
+Comment[it]=Funzione di integrazione del progetto Perforce
+Comment[pt]=Integração com Projectos Perforce
+Comment[pt_BR]=Facilidade de Integração ao Projeto de Perforce
+Comment[ru]=Интеграция Perforce
+Comment[sv]=Funktion för integrering av Perforce i projekt
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator
 X-KDE-Library=libperforceintegrator

@@ -2,7 +2,17 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevCVSIntegrator
+Name[da]=KDevelop CVS-integration
+Name[sv]=KDevelop CVS-integration
 Comment=CVS Service Project Integration Facility
+Comment[da]=CVS service projektintegration
+Comment[et]=CVS teenuse projekti põimimisvahend
+Comment[fr]=Service d'intégration pour un projet utilisant CVS
+Comment[it]=Funzione di integrazione del progetto CVS Service
+Comment[pt]=Integração com Projectos de Serviço CVS
+Comment[pt_BR]=Facilidade de Integração ao Projeto do Serviço CVS
+Comment[ru]=Интеграция CVS
+Comment[sv]=Funktion för integrering av CVS-tjänst i projekt
 Icon=cervisia
 Exec=blubb
 ServiceTypes=KDevelop/VCSIntegrator
