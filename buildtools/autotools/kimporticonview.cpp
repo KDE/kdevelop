@@ -63,7 +63,7 @@ void KImportIconView::drawContents ( QPainter *p, int cx, int cy, int cw, int ch
 
         // word-wrap the string
         KWordWrap* wordWrap1 = KWordWrap::formatText( fm, rect, AlignHCenter | WordBreak, m_strIntro );
-        KWordWrap* wordWrap2 = KWordWrap::formatText( fm, rect, AlignHCenter | WordBreak, "Or just use the buttons!" );
+        KWordWrap* wordWrap2 = KWordWrap::formatText( fm, rect, AlignHCenter | WordBreak, i18n("Or just use the buttons!") );
 
         QRect introRect1 = wordWrap1->boundingRect();
 		QRect introRect2 = wordWrap2->boundingRect();
