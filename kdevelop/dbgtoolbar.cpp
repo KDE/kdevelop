@@ -218,7 +218,6 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
       menu->setTitle("Debug toolbar");
       menu->insertItem(i18n("Undock toolbar"),                toolBar_, SLOT(slotUndock()));
       menu->insertItem(i18n("Undock and activate kDevelop"),  toolBar_, SLOT(slotActivateAndUndock()));
-      menu->insertItem(i18n("Stop debugging"),                toolBar_, SLOT(slotDbgStop()));
       menu->popup(e->globalPos());
       break;
   }
@@ -344,8 +343,9 @@ DbgToolbar::~DbgToolbar()
 
 void DbgToolbar::slotDbgStop()
 {
+  ASSERT(!docker_);
   ckDevelop_->slotDebugStop();
-  close();
+  close();    // TODO - This is not right
 }
 
 // **************************************************************************
