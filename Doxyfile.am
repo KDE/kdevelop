@@ -15,10 +15,10 @@ apidox-am-yes:
 		cp $(top_srcdir)/admin/Doxyfile.global Doxyfile; \
 		echo "PROJECT_NAME           = $(DOXYGEN_PROJECT_NAME)" >> Doxyfile; \
 		echo "PROJECT_NUMBER         = \"Version $(VERSION)\"" >> Doxyfile; \
-		echo "OUTPUT_DIRECTORY       = $(top_builddir)/apidocs" >> Doxyfile; \
+		echo "OUTPUT_DIRECTORY       = $(PWD)/apidocs" >> Doxyfile; \
 		echo "BRIEF_MEMBER_DESC      = YES" >> Doxyfile; \
 		echo "FULL_PATH_NAMES        = YES" >> Doxyfile; \
-		echo "STRIP_FROM_PATH        = $(PWD)/" >> Doxyfile; \
+		echo "STRIP_FROM_PATH        = $(top_srcdir)/" >> Doxyfile; \
 		echo "ALIASES               += \"feature=\xrefitem features \\\"Feature(s)\\\" \\\"Features\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"maintainer=\xrefitem maintainers \\\"Maintainer(s)\\\" \\\"Maintainers\\\"\" " >> Doxyfile; \
 		echo "ALIASES               += \"unmaintained=\xrefitem unmaintained \\\"Unmaintained\\\" \\\"Unmaintained\\\"\" " >> Doxyfile; \
@@ -36,7 +36,7 @@ apidox-am-yes:
 			patterns= ;\
 			dirs= ;\
 			include_items='$(DOXYGEN_INPUT) '; for item in $$include_items; do \
-				if test -d "$(PWD)/$$item"; then \
+				if test -d "$(top_srcdir)/$$item"; then \
 					dirs="$$dirs $$item" ;\
 				else \
 					patterns="$$patterns $$item" ;\
@@ -49,7 +49,7 @@ apidox-am-yes:
 			patterns= ;\
 			dirs= ;\
 			exclude_items='$(DOXYGEN_EXCLUDE) '; for item in $$exclude_items; do \
-				if test -d "$(PWD)/$$item"; then \
+				if test -d "$(top_srcdir)/$$item"; then \
 					dirs="$$dirs $$item" ;\
 				else \
 					patterns="$$patterns $$item" ;\
@@ -66,12 +66,12 @@ apidox-am-yes:
 		echo "HTML_OUTPUT            = html" >> Doxyfile; \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			if test "$(DOXYGEN_SEARCHENGINE)" == "YES"; then \
-				echo "HTML_HEADER            = apidocs/common/appheader.html" >> Doxyfile ;\
+				echo "HTML_HEADER            = $(PWD)/apidocs/common/appheader.html" >> Doxyfile ;\
 			else \
-				echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+				echo "HTML_HEADER            = $(PWD)/apidocs/common/header.html" >> Doxyfile ;\
 			fi ;\
-			echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
-			echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
+			echo "HTML_FOOTER            = $(PWD)/apidocs/common/footer.html" >> Doxyfile ;\
+			echo "HTML_STYLESHEET        = $(PWD)/apidocs/common/doxygen.css" >> Doxyfile ;\
 		else \
 			echo "HTML_HEADER            = " >> Doxyfile ;\
 			echo "HTML_FOOTER            = " >> Doxyfile ;\
@@ -119,7 +119,12 @@ apidox-am-yes:
 			fi ;\
 			$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
 		fi ;\
-		$(DOXYGEN) Doxyfile; \
+		$(DOXYGEN) -s -u Doxyfile ; \
+		cp Doxyfile Doxyfile.in ; \
+		path_to_doxyfile=$(PWD) ;\
+		cd $(top_srcdir) ;\
+		$(DOXYGEN) $$path_to_doxyfile/Doxyfile ; \
+		cd $$path_to_doxyfile ;\
 		rm -f Doxyfile; \
 	fi
 
