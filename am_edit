@@ -18,7 +18,8 @@
 # The concept (and base code) for this peogram came from automoc,
 # supplied by the following
 #
-# Kalle Dalheimer <kalle\@kde.org>      (The originator?)
+# Matthias Ettrich <ettrich\@kde.org>      (The originator)
+# Kalle Dalheimer <kalle\@kde.org>      (The original implementator)
 # Harri Porten  <porten@tu-harburg.de>
 # Alex Zepeda  <garbanzo@hooked.net>
 # David Faure <faure@kde.org>
@@ -67,6 +68,8 @@ sub tag_LOCALINSTALL();
 sub tag_IDLFILES();
 sub tag_TOPLEVEL();
 sub tag_SUBDIRS();
+sub tag_ICON();
+sub tag_CLOSURE();
 
 # Some global globals...
 $verbose    = 0;        # a debug flag
@@ -98,7 +101,8 @@ while (defined ($ARGV[0]))
                 "       by Matthias Ettrich <ettrich\@kde.org>\n\n",
                 "Making it useful by Stephan Kulow <coolo\@kde.org> and\n",
                 "Harri Porten <porten\@kde.org>\n",
-                "Updated (Feb-1999), John Birch <jb.nz\@writeme.com>\n\n";
+                "Updated (Feb-1999), John Birch <jb.nz\@writeme.com>\n",
+	        "Current Maintainer Stephan Kulow\n\n";
         exit 0;
     }
     elsif (/^--verbose$|^-v$/)
@@ -120,15 +124,16 @@ while (defined ($ARGV[0]))
                 "  -v, --verbose      verbosely list files processed\n",
                 "  -h, --help         print this help, then exit\n",
                 "  --version          print version number, then exit\n",
-                "  -p, --path=        use the path to automoc if the path\n",
+                "  -p, --path=        use the path to am_edit if the path\n",
 	        "  --no-final         don't patch for --enable-final\n",
                 "                     called from is not the one to be used\n";
 	
         exit 0;
     }
-    elsif (/^--no-final$$/)
+    elsif (/^--no-final$/)
     {
 	$use_final = 0;
+        $thisProg .= " --no-final";
     }
     else
     {
@@ -189,16 +194,19 @@ sub processMakefile ($)
     local %realObjs = ();  # lists the objects compiled into $program
     local %sources = ();   # lists the sources used for $program
     local %finalObjs = (); # lists the objects compiled when final
+    local %realname = ();  # the binary name of program variable
     local %idlfiles = ();  # lists the idl files used for $program
+    local $allidls = "";
     local $idl_output = "";# lists all idl generated files for cleantarget
 
     local %depedmocs = ();
 
     local $metasourceTags = 0;
-    local $dep_files = "";
-    local %target_adds = (); # the targets to add
-    local $kdelang    = "";
-    
+    local $dep_files      = "";
+    local $dep_finals     = "";
+    local %target_adds    = (); # the targets to add
+    local $kdelang        = "";
+
     $makefileDir = dirname($makefile);
     chdir ($makefileDir);
     $printname = $makefile;
@@ -216,6 +224,7 @@ sub processMakefile ($)
     foreach $program (@programs) {
 	tag_METASOURCES ();         # Sorts out the moc rules
 	tag_IDLFILES();             # Sorts out idl rules
+	tag_CLOSURE();
     }
 
     if ($idl_output) {
@@ -228,20 +237,21 @@ sub processMakefile ($)
     } else {
       $kdelang = '';
     }
-    
+
     tag_POFILES ();             # language rules for po directory
     tag_DOCFILES ();            # language rules for doc directories
     tag_TOPLEVEL ();            # language rules for po toplevel
     tag_LOCALINSTALL();         # add $(DESTDIR) before all kde_ dirs
+    tag_ICON();
 
     my $tmp = "force-reedit:\n";
     $tmp   .= "\t$automkCall\n\tcd \$(top_srcdir) && perl $thisProg $printname\n\n";
     appendLines($tmp);
 
     tag_FINAL() if ($use_final);
-    
+
     my $final_lines = "final:\n\t\$(MAKE) ";
-    
+
     foreach $program (@programs) {
 
       my $lookup = "$program\_OBJECTS.*=[^\n]*";
@@ -249,7 +259,7 @@ sub processMakefile ($)
       my $new = "";
 
       my @list = split(/[\034\s]+/, $realObjs{$program});
-      
+
       if ($use_final && @list > 1 && $finalObjs{$program}) {
 	
 	$new  = "\@KDE_USE_FINAL_FALSE\@$program\_OBJECTS = " . $realObjs{$program};
@@ -261,20 +271,34 @@ sub processMakefile ($)
       } else {
 	$new = "$program\_OBJECTS = " . $realObjs{$program};
       }
-      
+
       substituteLine ($lookup, $new);
     }
     appendLines($final_lines . "all-am");
 
     my $lookup = 'DEP_FILES\s*=(.*)\n';
     if ($MakefileData =~ /\n$lookup/) {
-      $lines = "DEP_FILES = $dep_files";
-      $lines .= " \034";
-      $lines .= $1;
-      $lines .= "\n";
+      $depfiles = $1;
+
+
+      if ($dep_finals) {
+	$lines  = "\@KDE_USE_FINAL_TRUE\@DEP_FILES = $dep_files $dep_finals \034\t$depfiles\n";
+	$lines .= "\@KDE_USE_FINAL_FALSE\@DEP_FILES = $dep_files $depfiles\n";
+      } else {
+	$lines = "DEP_FILES = $dep_files $depfiles\n";
+      }
 
       substituteLine($lookup, $lines);
     }
+
+    my $cvs_lines = "cvs-clean:\n";
+    $cvs_lines .= "\t\$(MAKE) -f \$(top_srcdir)/admin/Makefile.common cvs-clean\n";
+    appendLines($cvs_lines);
+
+    $cvs_lines  = "kde-rpo-clean:\n";
+    $cvs_lines .= "\t-rm -f *.rpo\n";
+    appendLines($cvs_lines);
+    $target_adds{"clean"} .= "kde-rpo-clean ";
 
     foreach $add (keys %target_adds) {
       my $lookup = "$add:\s*(.*)";
@@ -283,9 +307,7 @@ sub processMakefile ($)
       }
     }
 
-    my $cvs_lines = "cvs-clean:\n";
-    $cvs_lines .= "\t\$(MAKE) -f \$(top_srcdir)/admin/Makefile.common cvs-clean\n";
-    appendLines($cvs_lines);
+    $MakefileData =~ s/\$\(CXXFLAGS\)/\$\(CXXFLAGS\) \$\(KDE_CXXFLAGS\)/g;
 
     # Always update the Makefile.in
     updateMakefile ();
@@ -302,7 +324,7 @@ sub initialise ()
 {
     if (! -r "Makefile.am") {
 	print STDOUT "found Makefile.in without Makefile.am\n" if ($verbose);
-	return;
+	return 0;
     }
 
     # Checking for files to process...
@@ -322,7 +344,12 @@ sub initialise ()
     # If we've processed the file before...
     restoreMakefile ()      if ($MakefileData =~ /$progId/);
 
-    # Look for the tags than mean we should process this file.
+    if ($MakefileData =~ /\nKDE_OPTIONS\s*=\s*([^\n]*)\n/) {
+      my @kde_options = split(/[\s\034]/, $1);
+      return 0 if (grep(/^foreign$/, @kde_options)); # don't touch me
+    }
+
+    # Look for the tags that mean we should process this file.
     $metasourceTags = 0;
     $metasourceTags++    while ($MakefileData =~ /\n[^=#]*METASOURCES\s*=/g);
 
@@ -345,24 +372,59 @@ sub initialise ()
 		last;
 	    }
 	}
-    }
+      }
+						
+    while ($MakefileData =~ /\n(\S*)_OBJECTS\s*=\s*([^\n]*)\n/g) {
 
-    while ($MakefileData =~ /\n(\S*)_OBJECTS\s*=\s*([^(\n]*)\n/g) {
       my $program = $1;
       my $objs = $2; # safe them
+
+      my $ocv = 0;
+
+      my @objlist = split(/[\s\034]+/, $objs);
+      foreach $obj (@objlist) {
+	if ($obj =~ /\$\((\S+)\)/ ) {
+	  my $variable = $1;
+	  if ($variable !~ 'OBJEXT') {
+	    $ocv = 1;
+	  }
+	}
+      }
+
+      next if ($ocv);
+
       $program =~ s/^am_// if ($program =~ /^am_/);
-      
+
       print STDOUT "found program $program\n" if ($verbose);
       push(@programs, $program);
-      
+
       $realObjs{$program} = $objs;
-      
+
       if ($MakefileData =~ /\n$program\_SOURCES\s*=\s*(.*)\n/) {
 	$sources{$program} = $1;
       } else {
 	$sources{$program} = "";
 	print STDERR "found program with no _SOURCES: $program\n";
       }
+
+      my $realprogram = $program;
+      $realprogram =~ s/_/./g; # unmask to regexp
+      if ($MakefileData =~ /\n($realprogram)(\$\(EXEEXT\)?)?:.*\$\($program\_OBJECTS\)/) {
+	$realname{$program} = $1;
+      } else {
+	$realname{$program} = "";
+	print STDERR "$printname: found program with no dependencies: $program\n";
+      }
+    }
+						
+    my $lookup = '\nDEPDIR\s*=.*';
+    if ($MakefileData !~ /($lookup)\n/) {
+      $lookup = '\nbindir\s*=.*';
+      if ($MakefileData =~ /($lookup)\n/) {
+	substituteLine ($lookup, "DEPDIR = .deps\n$1");
+      }
+    } else {
+      print STDERR "$printname defines DEPDIR. This means you're using automake > 1.4 - this is not supported!\n";
     }
 
     my $localTag = 0;
@@ -409,7 +471,7 @@ sub tag_META_INCLUDES ()
 sub tag_FINAL()
 {
   my @final_names = ();
-  
+
   foreach $program (@programs) {
 
     if ($sources{$program} =~ /\(/) {
@@ -417,12 +479,8 @@ sub tag_FINAL()
       next;
     }
 
-    my @list = split(/[\s\034]+/, $realObjs{$program});
-    # we're not making anything faster for one object file
-    next if (@list == 1);
-
     my $mocsources = "";
-    
+
     my @progsources = split(/[\s\034]+/, $sources{$program});
     my %sourcelist = ();
 
@@ -446,11 +504,11 @@ sub tag_FINAL()
        $cxx_suffix = quotemeta($cxx_suffix);
        if ($suffix =~ $cxx_suffix) {
          $suffix_is_cxx = 1;
-         last;
+         last; # $cxx_suffix
        }
       }
 
-      my $mocfiles_in = ($suffix eq $cxxsuffix) && 
+      my $mocfiles_in = ($suffix eq $cxxsuffix) &&
 	defined($depedmocs{$program});
 
       my @sourcelist = split(/[\s\034]+/, $sourcelist{$suffix});
@@ -458,14 +516,14 @@ sub tag_FINAL()
       if ((@sourcelist == 1 && !$mocfiles_in) || $suffix_is_cxx != 1 ) {
 
 	# we support IDL on our own
-	if ($suffix =~ /^idl$/ || $suffix =~ /^h$/) {
+	if ($suffix =~ /^skel$/ || $suffix =~ /^stub/ || $suffix =~ /^h$/) {
 	  next;
 	}
-	  
+	
 	foreach $file (@sourcelist) {
 
 	  $file =~ s/\Q$suffix\E$//;
-	  
+	
 	  $finalObjs{$program} .= $file;
 	  if ($program =~ /_la$/) {
 	    $finalObjs{$program} .= "lo ";
@@ -495,7 +553,7 @@ sub tag_FINAL()
 	  }
 	}
       }
-      
+
       $handling .= "\n";
       $handling .= "\t\@echo 'creating $program.all_$suffix.$suffix ...'; \\\n";
       $handling .= "\trm -f $program.all_$suffix.files $program.all_$suffix.final; \\\n";
@@ -506,9 +564,9 @@ sub tag_FINAL()
       $handling .= "\tdone; \\\n";
       $handling .= "\tcat $program.all_$suffix.final $program.all_$suffix.files  > $program.all_$suffix.$suffix; \\\n";
       $handling .= "\trm -f $program.all_$suffix.final $program.all_$suffix.files\n";
-      
+
       appendLines($handling);
-	  
+	
       push(@final_names, "$program.all_$suffix.$suffix");
       $finalObjs{$program} .= "$program.all_$suffix.";
       if ($program =~ /_la$/) {
@@ -525,10 +583,10 @@ sub tag_FINAL()
     $lines .= "\t-rm -f " . join(' ', @final_names) . "\n" if (@final_names);
     appendLines($lines);
     $target_adds{"$cleantarget-am"} .= "$cleantarget-final ";
-    
+
     foreach $finalfile (@final_names) {
       $finalfile =~ s/\.[^.]*$/.P/;
-      $dep_files .= " .deps/$finalfile";
+      $dep_finals .= " \$(DEPDIR)/$finalfile";
     }
   }
 }
@@ -592,13 +650,13 @@ sub tag_METASOURCES ()
     }
 
     checkMocCandidates ();
-    
+
     if (@newObs) {
       my $ext =  ($program =~ /_la$/) ? ".moc.lo " : ".moc.o ";
       $realObjs{$program} .= "\034" . join ($ext, @newObs) . $ext;
       $depedmocs{$program} = join (".moc.$cxxsuffix " , @newObs) . ".moc.$cxxsuffix";
       foreach $file (@newObs) {
-	$dep_files .= " .deps/$file.moc.P";
+	$dep_files .= " \$(DEPDIR)/$file.moc.P";
       }
     }
     if (@deped) {
@@ -657,7 +715,7 @@ sub tag_TOPLEVEL()
 
   print STDOUT "pofiles found = $pofiles\n"   if ($verbose);
   handle_POFILES($pofiles, '$(TOPLEVEL_LANG)') if ($pofiles);
-  
+
   if (@restfiles) {
     $target_adds{"install-data-am"} .= "install-nls-files ";
     $lines = "install-nls-files:\n";
@@ -667,13 +725,13 @@ sub tag_TOPLEVEL()
     }
     appendLines($lines);
   }
-  
+
   return 0;
 }
 
 #-----------------------------------------------------------------------------
 
-sub tag_SUBDIRS () 
+sub tag_SUBDIRS ()
 {
   if ($MakefileData !~ /\nSUBDIRS\s*=\s*\$\(AUTODIRS\)\s*\n/) {
     return 1;
@@ -700,56 +758,203 @@ sub tag_IDLFILES ()
 {
   my @psources = split(/[\034\s]+/, $sources{$program});
   my $dep_lines = "";
+  my @cppFiles = ();
 
   foreach $source (@psources) {
-    if ($source =~ m/\.idl$/) {
+
+    my $skel = ($source =~ m/\.skel$/);
+
+    if ($source =~ m/\.stub$/ || $skel) {
+
       print STDERR "adding IDL file $source\n" if ($verbose);
 
-      $source =~ s/\.idl$//;
-      
+      $source =~ s/\.(stub|skel)$//;
+
+      my $sourcename;
+
+      if ($skel) {
+	$sourcename = "$source\_skel";
+      } else {
+	$sourcename = "$source\_stub";
+      }
+
       my $sourcedir = '';
-      if (-f "$makefileDir/$source.idl") {
+      if (-f "$makefileDir/$source.h") {
 	$sourcedir = '$(srcdir)/';
       } else {
-	if ($MakefileData =~ /\n$source\_IDLDIR\s*=\s*(\S+)\n/) {#
+	if ($MakefileData =~ /\n$source\_DIR\s*=\s*(\S+)\n/) {#
 	  $sourcedir = $1;
 	  $sourcedir .= "/" if ($sourcedir !~ /\/$/);
 	}
       }
-     
-      $dep_lines .= "$source.h: $sourcedir$source.idl \$(micodir)/include/CORBA.h\n";
-      $dep_lines .= "\t\$(IDL) \$(IDL_FLAGS) --c++-suffix $cxxsuffix $sourcedir$source.idl\n";
-      $dep_lines .= "$source.$cxxsuffix: $source.h\n";
 
-      $idlfiles{$program} .= $source . " ";
-      $realObjs{$program} .= " $source.";
-      if ($program =~ /_la$/) {
-	$realObjs{$program} .= "lo";
-      } else {
-	$realObjs{$program} .= "o";
+      if ($allidls !~ /$source\_kidl/) {
+
+	$dep_lines .= "$source.kidl: $sourcedir$source.h \$(DCOPIDL_DEPENDENCIES)\n";
+	$dep_lines .= "\t\$(DCOPIDL) $sourcedir$source.h > $source.kidl || rm -f $source.kidl\n";
+
+	$allidls .= $source . "_kidl ";
       }
-      $sources{$program} .= " $source.$cxxsuffix";
-      $idl_output .= "$source.$cxxsuffix $source.h ";
+
+      if ($allidls !~ /$sourcename/) {
+
+	
+	if ($skel) {
+	  $dep_lines .= "$sourcename.$cxxsuffix: $source.kidl\n";
+	  $dep_lines .= "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-stub $source.kidl\n";
+	} else {
+	  $dep_lines .= "$sourcename.$cxxsuffix: $sourcename.h\n";
+	  $dep_lines .= "$sourcename.h: $source.kidl\n";
+	  $dep_lines .= "\t\$(DCOPIDL2CPP) --c++-suffix $cxxsuffix --no-skel $source.kidl\n";
+	}
+	@cppFiles =
+	  `grep -l "^#include *.$sourcename\.h." $cppExt 2> /dev/null`;
+        foreach $file (@cppFiles) {
+	  chomp ($file);
+	  $dep_lines .= "\$(srcdir)/$file: $sourcename.h\n";
+	}
+	
+	# just to make sure the warning gets issused
+	@cppFiles =
+	  `grep -l "^#include *.$sourcename\.h." $hExt 2> /dev/null`;
+	
+	foreach $file (@cppFiles) {
+	  print STDERR "Warning: $sourcename.h included in $printname/$file\n";
+	}
+
+	$allidls .= $sourcename . " ";
+      }
+
+      $idlfiles{$program} .= $sourcename . " ";
+
+      if ($program =~ /_la$/) {
+	$realObjs{$program} .= " $sourcename.lo";
+      } else {
+	$realObjs{$program} .= " $sourcename.\$(OBJEXT)";
+      }
+      $sources{$program} .= " $sourcename.$cxxsuffix";
+      $idl_output .= "\\\n\t$sourcename.$cxxsuffix $sourcename.h $source.kidl ";
     }
   }
   if ($dep_lines) {
     appendLines($dep_lines);
-    my $lookup = "($program)";
-    $lookup =~ s/\_/./g;
-    $lookup .= ":(.*)\\\$\\\($program\_OBJECTS\\\)(.*)";
-    if ($MakefileData =~ /\n$lookup/) {
+  }
 
-      my $line = "$1:$2";
+  if (0) {
+    my $lookup = "($program)";
+    $lookup .= '(|\$\(EXEEXT\))';
+    $lookup =~ s/\_/./g;
+    $lookup .= ":(.*..$program\_OBJECTS..*)";
+#    $lookup = quotemeta($lookup);
+    if ($MakefileData =~ /\n$lookup\n/) {
+
+      my $line = "$1$2: ";
       foreach $file (split(' ', $idlfiles{$program})) {
-	$line .= "$file.h ";
+        $line .= "$file.$cxxsuffix ";
       }
-      $line .= "\$($program\_OBJECTS)$3\n";
+      $line .= $3;
       substituteLine($lookup, $line);
     } else {
       print STDERR "no built dependency found $lookup\n";
     }
   }
-  
+
+}
+
+sub tag_ICON()
+{
+  my $lookup = 'KDE_ICON\s*=\s*([^\n]*)';
+  return 1    if ($MakefileData !~ /\n$lookup/);
+  my @_appnames = split(" ", $1);
+  print STDOUT "KDE_ICON processing <@_appnames>\n"   if ($verbose);
+  my @appnames = ();
+  foreach $appname (@_appnames) {
+    push(@appnames, quotemeta($appname));
+  }
+
+  my @files = ();
+  opendir (THISDIR, ".");
+  foreach $entry (readdir(THISDIR)) {
+    next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^\#.*\#$/);
+    next if (! -f $entry);
+    foreach $appname (@appnames) {
+      push(@files, $entry)
+	if ($entry =~ /-$appname\.xpm/ || $entry =~ /-$appname\.png/);
+    }
+  }
+  closedir (THISDIR);
+  $target_adds{"install-data-am"} .= "install-kde-icons ";
+  $target_adds{"uninstall-am"} .= "uninstall-kde-icons ";
+
+  $install = "install-kde-icons:\n";
+  $uninstall = "uninstall-kde-icons:\n";
+
+  my %directories = ();
+
+  foreach $file (@files)
+    {
+      my $newfile = $file;
+      my $prefix = $file;
+      $prefix =~ s/\.(png|xpm)$//;
+      my $appname = $prefix;
+      $appname =~ s/^[^-]+-// if ($appname =~ /-/) ;
+      $appname =~ s/^[^-]+-// if ($appname =~ /-/) ;
+      $appname = quotemeta($appname);
+      $prefix =~ s/$appname$//;
+      $prefix =~ s/-$//;
+
+      $prefix = 'los-app' if ($prefix eq 'mini');
+      $prefix = 'lom-app' if ($prefix eq 'lo');
+      $prefix = 'hil-app' if ($prefix eq 'large');
+      $prefix .= '-app' if ($prefix =~ m/^...$/);
+
+      my $type = $prefix;
+      $type =~ s/^.*-([^-]+)$/$1/;
+      $prefix =~ s/^(.*)-[^-]+$/$1/;
+
+      my %type_hash =
+	(
+	 'app' => 'apps',
+	 'device' => 'devices',
+	 'filesys' => 'filesystems',
+	 'mime' => 'mimetypes',
+	 'toolbar' => 'toolbars'
+	);
+
+      if (! defined $type_hash{$type} ) {
+	print STDERR "unknown icon type $type in $printname ($file)\n";
+	next;
+      }
+
+      my %dir_hash =
+	(
+	 'los' => 'small/locolor',
+	 'him' => 'medium/hicolor',
+	 'lom' => 'medium/locolor',
+	 'hil' => 'large/hicolor',
+	);
+
+      $newfile =~ s@.*-($appname\.(png|xpm?))@$1@;
+
+      if (! defined $dir_hash{$prefix}) {
+	print STDERR "unknown icon prefix $prefix in $printname\n";
+	next;
+      }
+
+      my $dir = $dir_hash{$prefix} . "/" . $type_hash{$type};
+
+      if (!defined $directories{$dir}) {
+	$install .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_icondir)/$dir\n";
+	$directories{$dir} = 1;
+      }
+	
+      $install .= "\t\$(INSTALL_DATA) \$(srcdir)/$file \$(DESTDIR)\$(kde_icondir)/$dir/$newfile\n";
+      $uninstall .= "\t-rm -f \$(DESTDIR)\$(kde_icondir)/$dir/$newfile\n";
+
+    }
+
+  appendLines($install . "\n" . $uninstall);
+
 }
 
 sub handle_POFILES($$)
@@ -791,10 +996,10 @@ sub handle_POFILES($$)
 	}
     }
 
-  $target_adds{"install-data-am"} .= "install-nls-\@USE_NLS\@ ";
-  
-  $tmp = "install-nls-no:\n";
-  $tmp .= "install-nls-yes:\n";
+  $target_adds{"install-data-am"} .= "install-nls ";
+
+  $tmp = "install-nls:\n";
+  $tmp .= "install-nls:\n";
   if ($lang) {
     $tmp  .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES\n";
   }
@@ -804,7 +1009,7 @@ sub handle_POFILES($$)
       $pofile =~ /(.*)\.[^\.]*$/;          # Find name minus extension
       $tmp .= "$1 ";
     }
-  
+
   $tmp .= "; do \\\n";
   if ($lang) {
     $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base.gmo \$(DESTDIR)\$(kde_locale)/$lang/LC_MESSAGES/\$\$base.mo ;\\\n";
@@ -818,7 +1023,7 @@ sub handle_POFILES($$)
   appendLines ($tmp);
 
   $target_adds{"uninstall"} .= "uninstall-nls ";
-  
+
   $tmp = "uninstall-nls:\n";
   foreach $pofile (@pofiles)
     {
@@ -837,7 +1042,7 @@ sub handle_POFILES($$)
   $tmp .= "all-nls-yes: \$(GMOFILES)\n";
 
   appendLines($tmp);
-  
+
   $target_adds{"distdir"} .= "distdir-nls ";
 
   $tmp = "distdir-nls:\$(GMOFILES)\n";
@@ -845,7 +1050,7 @@ sub handle_POFILES($$)
   $tmp .= "\t  cp \$(srcdir)/\$\$file \$(distdir); \\\n";
   $tmp .= "\tdone\n";
   $tmp .= "\ttest -z \"\$(GMOFILES)\" || cp \$(GMOFILES) \$(distdir)\n";
-  
+
   appendLines ($tmp);
 
 }
@@ -896,7 +1101,7 @@ sub helper_LOCALINSTALL($)
 {
   my $lookup = "\n" . $_[0] . ":";
   if ($MakefileData =~ /($lookup)/) {
-    
+
     my $install = $MakefileData;
     $install =~ s/\n/\035/g;
     $install =~ s/.*\035$_[0]:[^\035]*\035//;
@@ -929,11 +1134,11 @@ sub tag_LOCALINSTALL ()
 
 sub replaceDestDir($) {
   local $line = $_[0];
-  
+
   if ($line =~ /^\s*\$\(mkinstalldirs\)/ || $line =~ /^\s*\$\(INSTALL\S*\)/
       || $line =~ /^\s*(-?rm.*) \S*$/)
   {
-    $line =~ s/^(.*) ([^\s]*)\s*$/$1 \$(DESTDIR)$2/;
+    $line =~ s/^(.*) ([^\s]*)\s*$/$1 \$(DESTDIR)$2/ if ($line !~ /\$\(DESTDIR\)/);
   }
 
   if ($line ne $_[0]) {
@@ -941,14 +1146,54 @@ sub replaceDestDir($) {
     substituteLine($_[0], $line);
   }
 }
-#-----------------------------------------------------------------------------
 
+#---------------------------------------------------------------------------
+sub tag_CLOSURE () {
+  return if ($program !~ /_la$/);
+
+  my $lookup = quotemeta($realname{$program}) . ":.*?\n\t.*?\\((.*?)\\) .*\n";
+  $MakefileData =~ m/$lookup/;
+  return if ($1 !~ /CXXLINK/);
+
+  if ($MakefileData !~ /\n$program\_LDFLAGS\s*=.*-no-undefined/) {
+    return;
+  }
+  print "$program\n";
+  my $closure = $realname{$program} . ".closure";
+  my $lines = "$closure: \$($program\_OBJECTS) \$($program\_DEPENDENCIES)\n";
+  $lines .= "\t\@echo \"int main() {}\" > $program\_closure.$cxxsuffix\n";
+  $lines .= "\t\@\$\(LTCXXCOMPILE\) -c $program\_closure.$cxxsuffix\n";
+  $lines .= "\t\@\$\(CXXLINK\) $program\_closure.lo \$($program\_LDFLAGS) \$($program\_OBJECTS) \$($program\_LIBADD) \$(LIBS)\n";
+  $lines .= "\t\@rm -f $program\_closure.* $closure\n";
+  $lines .= "\t\@echo \"timestamp\" > $closure\n";
+  $lines .= "\n";
+  appendLines($lines);
+  $lookup = $realname{$program} . ": (.*)";
+  if ($MakefileData =~ /\n$lookup\n/) {
+    $lines  = $realname{$program} . ": $closure $1";
+#    $lines .= "\n#" . $realname{$program} . ": $1";
+    substituteLine($lookup, $lines);
+  }
+}
+
+#-----------------------------------------------------------------------------
 # Returns 0 if the line was processed - 1 otherwise.
 # Errors are logged in the global $errorflags
 sub tag_DOCFILES ()
 {
+    if ($MakefileData =~ /\nSUBDIRS\s*=/) { # subdirs
+      $MakefileData =~ /\n(.*-recursive:\s*)\n/;
+      my $orig_rules = $1;
+      my $rules = $orig_rules;
+      $rules =~ s/:\s*$//;
+      substituteLine($orig_rules, "$rules docs-recursive:");
+      appendLines("docs: docs-recursive docs-am\n");
+    } else {
+      appendLines("docs: docs-am\n");
+    }
+
     my $lookup = 'KDE_DOCS\s*=\s*([^\n]*)';
-    return 1    if ($MakefileData !~ /\n$lookup/);
+    goto nodocs    if ($MakefileData !~ /\n$lookup/);
     print STDOUT "KDE_DOCS processing <$1>\n"   if ($verbose);
 
     tag_SUBDIRS();
@@ -963,12 +1208,12 @@ sub tag_DOCFILES ()
     if ($appname =~ /AUTO/) {
       $appname = basename($makefileDir);
     }
-    
+
     if ($tmp !~ / - /)
     {
         opendir (THISDIR, ".");
 	foreach $entry (readdir(THISDIR)) {
-	  next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^#.*#$/);
+	  next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^\#.*\#$/);
 	  next if (! -f $entry);
 	  $files .= "$entry ";
 	}
@@ -981,13 +1226,43 @@ sub tag_DOCFILES ()
 	$tmp =~ s/^\S*\s*-\s*//;
         $files = $tmp;
     }
-    return 1    if (!$files);        # Nothing to do
+    goto nodocs if (!$files);        # Nothing to do
 
-    $target_adds{"install-data-am"} .= "install-nls-\@USE_NLS\@ ";
+    if ($files =~ /(^| )index\.docbook($| )/) {
+
+      my $lines = "";
+      $lines .= "docs-am: db2html-dir/index.html\n";
+      $lines .= "\n";
+      $lines .= "db2html-dir/index.html: index.docbook\n";
+      $lines .= "\t-rm -f db2html-dir\n";
+      $lines .= "\tdb2html -d /usr/lib/sgml/stylesheets/kde.dsl \$(srcdir)/index.docbook\n";
+      $lines .= "\t-rm -fr db2html-dir/stylesheet-images\n";
+      $lines .= "\n";
+      $lines .= "install-docs:\n";
+      $lines .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname\n";
+      $lines .= "\t\@if test -d db2html-dir; then \\\n";
+      $lines .= "\t(cd db2html-dir && for file in * .anchors; do if test -f \$\$file; then \\\n";
+      $lines .= "\techo \$(INSTALL_DATA) \$\$file \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$file ;\\\n";
+      $lines .= "\t\$(INSTALL_DATA) \$\$file \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$file; \\\n";
+      $lines .= "\tfi; done); fi\n";
+      $lines .= "\t-rm -f \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/common\n";
+      $lines .= "\t\$(LN_S) ../../en/common \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/common\n";
+      $lines .= "\n";
+      $lines .= "uninstall-docs:\n";
+      $lines .= "\t-rm -rf \$(kde_htmldir)/$kdelang/$appname\n";
+      $lines .= "\n";
+      $target_adds{"install-data-am"} .= "install-docs ";
+      $target_adds{"uninstall"} .= "uninstall-docs ";
+      appendLines ($lines);
+      $docsadded = 1;
+    } else {
+      appendLines("docs-am:\n");
+    }
+
+    $target_adds{"install-data-am"} .= "install-nls";
     $target_adds{"uninstall"} .= "uninstall-nls ";
 
-    $tmp = "install-nls-no:\n";
-    $tmp .= "install-nls-yes:\n";
+    $tmp = "install-nls:\n";
     $tmp .= "\t\$(mkinstalldirs) \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname\n";
     $tmp .= "\t\@for base in $files; do \\\n";
     $tmp .= "\t  echo \$(INSTALL_DATA) \$\$base \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$base ;\\\n";
@@ -999,26 +1274,21 @@ sub tag_DOCFILES ()
     $tmp .= "\t  rm -f \$(DESTDIR)\$(kde_htmldir)/$kdelang/$appname/\$\$base ;\\\n";
     $tmp .= "\tdone\n\n";
     appendLines ($tmp);
-    
+
     $target_adds{"distdir"} .= "distdir-nls ";
-    
+
     $tmp = "distdir-nls:\n";
     $tmp .= "\tfor file in $files; do \\\n";
     $tmp .= "\t  cp \$(srcdir)/\$\$file \$(distdir); \\\n";
     $tmp .= "\tdone\n";
-    
+
     appendLines ($tmp);
 
     return 0;
-}
 
-sub tag_LOCALINSTALL ()
-{
-  helper_LOCALINSTALL('install-exec-local');
-  helper_LOCALINSTALL('install-data-local');
-  helper_LOCALINSTALL('uninstall-local');
-
-  return 0;
+  nodocs:
+    appendLines("docs-am:\n");
+    return 1;
 }
 
 #-----------------------------------------------------------------------------
@@ -1045,13 +1315,6 @@ sub findMocCandidates ()
             }
             $mocFiles{$1} = "$dir\035$hFile";   # Add relative dir
         }
-    }
-
-    if (!%mocFiles)
-    {
-        print STDERR "Error: No moc-able header's found but METASOURCES in $printname \n";
-        $errorflag = 1;
-        return 1;
     }
 
     return 0;
@@ -1179,7 +1442,7 @@ sub updateMakefile ()
     open (FILEOUT, "> $makefile")
                         || die "Could not create $makefile: $!\n";
 
-    print FILEOUT "# $progId - " . '$Revision$' . "\n";
+    print FILEOUT "\# $progId - " . '$Revision$ '  . "\n";
     $MakefileData =~ s/\034/\\\n/g;    # Restore continuation lines
     print FILEOUT $MakefileData;
     close FILEOUT;
@@ -1212,7 +1475,7 @@ sub substituteLine ($$)
       $new =~ s/\034/\\\n/g;
       my $newCount = 1;
       $newCount++  while ($new =~ /\n/g);
-      
+
       $MakefileData =~ s/\n$lookup/\n#>- $old\n#>\+ $newCount\n$new/;
     } else {
       print STDERR "Warning: substitution of \"$lookup\" in $printname failed\n";
