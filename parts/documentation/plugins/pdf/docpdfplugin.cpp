@@ -61,7 +61,7 @@ DocumentationCatalogItem* DocPDFPlugin::createCatalog(KListView* contents, const
 
 QPair<KFile::Mode, QString> DocPDFPlugin::catalogLocatorProps()
 {
-    return QPair<KFile::Mode, QString>(KFile::File, "all/allfiles");
+    return QPair<KFile::Mode, QString>(KFile::File, "*.pdf");
 }
 
 QString DocPDFPlugin::catalogTitle(const QString& /*url*/)
