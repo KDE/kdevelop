@@ -88,10 +88,10 @@ aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "okellogg@users.
   splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
+  PluginController::getInstance()->loadInitialPlugins();
+
   splash->showMessage( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
-
-  PluginController::getInstance()->loadInitialPlugins();
 
   Core::getInstance()->doEmitCoreInitialized();
 
