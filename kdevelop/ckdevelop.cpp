@@ -738,23 +738,28 @@ void CKDevelop::slotViewRefresh(){
 }
 
 void CKDevelop::slotViewDebuggerViewsVar(){
-  m_dockbase_var_viewer->changeHideShowState();
+  if( m_bIsDebuggingInternal)
+    m_dockbase_var_viewer->changeHideShowState();
 }
 
 void CKDevelop::slotViewDebuggerViewsBreakpoints(){
-  m_dockbase_brkptManager_view->changeHideShowState();
+  if( m_bIsDebuggingInternal)
+    m_dockbase_brkptManager_view->changeHideShowState();
 }
 
 void CKDevelop::slotViewDebuggerViewsFrameStack(){
-  m_dockbase_frameStack_view->changeHideShowState();
+  if( m_bIsDebuggingInternal)
+    m_dockbase_frameStack_view->changeHideShowState();
 }
 
 void CKDevelop::slotViewDebuggerViewsDisassemble(){
-  m_dockbase_disassemble_view->changeHideShowState();
+  if( m_bIsDebuggingInternal)
+    m_dockbase_disassemble_view->changeHideShowState();
 }
 
 void CKDevelop::slotViewDebuggerViewsDebugger(){
-  m_dockbase_dbg_widget_view->changeHideShowState();
+  if( m_bIsDebuggingInternal)
+    m_dockbase_dbg_widget_view->changeHideShowState();
 }
 
 
@@ -822,48 +827,44 @@ void CKDevelop::slotBuildDebug(){
   enableCommand(ID_BUILD_STOP);
   disableCommand(ID_BUILD_DEBUG);
 
-//if(we_will_use_the_internal_debugger) {
+  if(m_bInternalDbgChosen){
     // save the normal "edit" configuration before switching to "debug" configuration.
     writeDockConfig( m_config, "EditMode Dock-Settings");
 
-    // only if we wasn't in debug mode before, create the debugger widgets
-    // and put they on default position
-    if(m_dockbase_brkptManager_view == 0L) {  // maybe a hacky test?
-      m_dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon(""));
-      m_brkptManager  = new BreakpointManager(0L, "BPManagerTab");
-      m_dockbase_brkptManager_view->setWidget(m_brkptManager);
+    // create the debugger widgets and put them on default position
+    ASSERT(!m_bIsDebuggingInternal);  // if not already debugging
+    m_dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon(""));
+    m_brkptManager  = new BreakpointManager(0L, "BPManagerTab");
+    m_dockbase_brkptManager_view->setWidget(m_brkptManager);
       	
-      m_dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon(""));
-      m_frameStack    = new FrameStack(0L, "FStackTab");
-      m_dockbase_frameStack_view->setWidget(m_frameStack);
+    m_dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon(""));
+    m_frameStack    = new FrameStack(0L, "FStackTab");
+    m_dockbase_frameStack_view->setWidget(m_frameStack);
       	
-      m_dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon(""));
-      m_disassemble   = new Disassemble(0L, "DisassembleTab");
-      m_dockbase_disassemble_view->setWidget(m_disassemble);
+    m_dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon(""));
+    m_disassemble   = new Disassemble(0L, "DisassembleTab");
+    m_dockbase_disassemble_view->setWidget(m_disassemble);
       	
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-      m_dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon(""));
-      m_dbg_widget = new COutputWidget(kapp, 0L, "debuggerTab");
-      m_dockbase_dbg_widget_view->setWidget(m_dbg_widget);
-      m_dbg_widget->insertLine("Start dbg");
+    m_dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon(""));
+    m_dbg_widget = new COutputWidget(kapp, 0L, "debuggerTab");
+    m_dockbase_dbg_widget_view->setWidget(m_dbg_widget);
+    m_dbg_widget->insertLine("Start dbg");
 #endif
 
-      m_dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
-      m_dockbase_var_viewer->setCaption("");
-      m_var_viewer = new VarViewer(0L,"VARTab");
-      m_dockbase_var_viewer->setWidget(m_var_viewer);
-      m_dockbase_var_viewer->setToolTipString(i18n("variables tree view (for debugging)"));
+    m_dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
+    m_dockbase_var_viewer->setCaption("");
+    m_var_viewer = new VarViewer(0L,"VARTab");
+    m_dockbase_var_viewer->setWidget(m_var_viewer);
+    m_dockbase_var_viewer->setToolTipString(i18n("variables tree view (for debugging)"));
 
-      m_dockbase_brkptManager_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
-      m_dockbase_frameStack_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
-      m_dockbase_o_tab_view = m_dockbase_disassemble_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
+    m_dockbase_brkptManager_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
+    m_dockbase_frameStack_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
+    m_dockbase_disassemble_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-      m_dockbase_o_tab_view = m_dockbase_dbg_widget_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
+    m_dockbase_dbg_widget_view->manualDock(m_dockbase_messages_widget, KDockWidget::DockCenter);
 #endif
-      QString nameOfOutputSuperDock = m_dockbase_o_tab_view->name();
-
-      m_dockbase_var_viewer->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
-    }
+    m_dockbase_var_viewer->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
 
     // rearrange the debugger widgets by a probably existing "debug" configuration
     readDockConfig( m_config, "DebugMode Dock-Settings");
@@ -876,7 +877,12 @@ void CKDevelop::slotBuildDebug(){
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     enableCommand(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER);
 #endif
-//  }
+    m_bIsDebuggingInternal = true;
+  }
+  else {
+    QMessageBox::information(0L,i18n(""),i18n("Not yet supported"));
+    m_bIsDebuggingExternal = true;
+  }
 }
 
 /**
@@ -1022,24 +1028,40 @@ void CKDevelop::slotBuildStop(){
   setToolMenuProcess(true);
   ComponentManager::self()->notifyCompilationAborted();
 
-  writeDockConfig( m_config, "DebugMode Dock-Settings");
-  disableCommand(ID_VIEW_DEBUGGER_VIEWS_VAR);
-  disableCommand(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS);
-  disableCommand(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK);
-  disableCommand(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE);
+  if( m_bIsDebuggingInternal) {
+
+    delete m_dockbase_brkptManager_view;
+    delete m_dockbase_frameStack_view;
+    delete m_dockbase_disassemble_view;
+    delete m_dockbase_var_viewer;
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  disableCommand(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER);
+    delete m_dockbase_dbg_widget_view;
 #endif
 
-  m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, false);
-  m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, false);
-  m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, false);
-  m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, false);
+    writeDockConfig( m_config, "DebugMode Dock-Settings");
+    disableCommand(ID_VIEW_DEBUGGER_VIEWS_VAR);
+    disableCommand(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS);
+    disableCommand(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK);
+    disableCommand(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, false);
+    disableCommand(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER);
 #endif
 
-  readDockConfig( m_config, "EditMode Dock-Settings");
+    m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, false);
+    m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, false);
+    m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, false);
+    m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, false);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, false);
+#endif
+
+    readDockConfig( m_config, "EditMode Dock-Settings");
+    m_bIsDebuggingInternal = false;
+  }
+  else {
+    QMessageBox::information(0L,i18n(""),i18n("Not yet supported"));
+    m_bIsDebuggingExternal = false;
+  }
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -2761,7 +2783,7 @@ void CKDevelop::slotSwitchToToplevelMode() {
 }
 
 void CKDevelop::slotUpdateDebuggerViewsMenu(){
-  if(m_dockbase_brkptManager_view != 0L){ // XXX needs a better rule (when is debug on and off?)
+  if(m_bIsDebuggingInternal){
     // check/uncheck menu items
     m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, m_dockbase_var_viewer->mayBeHide());
     m_debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, m_dockbase_brkptManager_view->mayBeHide());

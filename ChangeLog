@@ -1,3 +1,6 @@
+2000-06-01 Falk Brettschneider <gigafalk@yahoo.com>
+  * case distinction m_bIsDebuggingInternal/External, m_bInternalDbgChosen
+
 2000-05-28 Falk Brettschneider <gigafalk@yahoo.com>
   * added 'm_' to all attributes of class CKDevelop
     to make clear what's local and what's not

@@ -72,6 +72,9 @@ CKDevelop::CKDevelop()
 	: KDockMainWindow("CKDevelop_mainwindow")
   ,m_search_process("/bin/sh")
   ,m_dockbase_brkptManager_view(0L)
+  ,m_bIsDebuggingInternal(false)
+  ,m_bIsDebuggingExternal(false)
+  ,m_bInternalDbgChosen(true)
 {
   m_version = VERSION;
   m_project=false;// no project
@@ -211,8 +214,8 @@ void CKDevelop::initView(){
   m_dockbase_log_file_tree->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
   m_dockbase_real_file_tree->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
   m_dockbase_doc_tree->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
-  m_dockbase_t_tab_view = m_dockbase_widprop_split_view->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
-  QString nameOfTreeSuperDock = m_dockbase_t_tab_view->name();	
+/*m_dockbase_t_tab_view = */m_dockbase_widprop_split_view->manualDock(m_dockbase_class_tree, KDockWidget::DockCenter);
+//  QString nameOfTreeSuperDock = m_dockbase_t_tab_view->name();	
 
 	// read all settings concerning to the dockwidget´s stuff
 	// Note: this has to be done _before_ we disable some dock positions

@@ -813,6 +813,10 @@ private:
   bool m_useGlimpse;
   bool m_useHtDig;
 
+  // modes of KDevelop
+  bool m_bIsDebuggingInternal;
+  bool m_bIsDebuggingExternal;
+  bool m_bInternalDbgChosen;
 };
 
 #endif
