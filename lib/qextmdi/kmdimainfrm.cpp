@@ -2362,7 +2362,7 @@ void KMdiMainFrm::fillWindowMenu()
     }
   }
   m_pWindowMenu->insertSeparator();
-  m_pWindowMenu->insertItem(i18n("&MDI Mode..."), m_pMdiModeMenu);
+  m_pWindowMenu->insertItem(i18n("&MDI Mode"), m_pMdiModeMenu);
   m_pMdiModeMenu->clear();
   m_pMdiModeMenu->insertItem(i18n("&Toplevel Mode"), this, SLOT(switchToToplevelMode()));
   m_pMdiModeMenu->insertItem(i18n("C&hildframe Mode"), this, SLOT(switchToChildframeMode()));
@@ -2386,7 +2386,7 @@ void KMdiMainFrm::fillWindowMenu()
   }
   m_pWindowMenu->insertSeparator();
   if (!bTabPageMode && !bIDEAlMode) {
-    int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
+    int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile"), m_pPlacingMenu);
     m_pPlacingMenu->clear();
     m_pPlacingMenu->insertItem(i18n("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
     m_pPlacingMenu->insertItem(i18n("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
@@ -2399,7 +2399,7 @@ void KMdiMainFrm::fillWindowMenu()
       m_pWindowMenu->setItemEnabled(placMenuId, false);
     }
     m_pWindowMenu->insertSeparator();
-    int dockUndockId = m_pWindowMenu->insertItem(i18n("&Dock/Undock..."), m_pDockMenu);
+    int dockUndockId = m_pWindowMenu->insertItem(i18n("&Dock/Undock"), m_pDockMenu);
     m_pDockMenu->clear();
     m_pWindowMenu->insertSeparator();
     if (bNoViewOpened) {
