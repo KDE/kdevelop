@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <qapplication.h>
 #include "%{APPNAMELC}.h"
