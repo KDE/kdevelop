@@ -16,7 +16,9 @@ namespace KParts
   class Factory;
   class PartManager;
   class ReadOnlyPart;
+  class ReadWritePart;
 }
+
 namespace KTextEditor 
 { 
 	class Editor; 
@@ -46,14 +48,17 @@ public:
 
   bool closeAllWindows();
   virtual bool closePartForWidget( const QWidget* widget );
+  virtual bool closePartForURL( const KURL & url );
 
   static void createInstance(QWidget *parent);
   static PartController *getInstance();
 
   void saveAllFiles();
   void revertAllFiles();
-  bool isDirty(KParts::ReadOnlyPart* part);
 
+  bool isDirty(KParts::ReadOnlyPart * part);
+  bool isModified( KParts::Part * );
+  
   bool readyToClose();
 
   KParts::Part *partForURL(const KURL &url);
@@ -62,8 +67,6 @@ public:
 
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
-  void savePartWidgetIcon(KParts::Part *part);
-  void restorePartWidgetIcon(KParts::Part *part);
 
 public slots:
 
@@ -73,7 +76,14 @@ public slots:
   void slotCloseAllWindows();
 
 signals:
+	// this is typically emitted when an editorpart does "save as"
+	// which will change the part's URL
 	void partURLChanged( KParts::ReadOnlyPart * );
+	
+	// this is emitted when the document changes, 
+	// either internally or on disc
+	void documentChangedState( const KURL &, DocumentState );
+	
 
 protected:
 
@@ -111,7 +121,6 @@ private slots:
   void dirty( const QString& fileName );
   void slotFileDirty( const KURL & url );
   void slotNewStatus();
-  void slotRestoreStatus();
 
 private:
   KURL findURLInProject(const KURL& url);
@@ -124,6 +133,8 @@ private:
   bool closePart(KParts::Part *part);
 
   QPopupMenu *contextPopupMenu();
+  
+  void doEmitState( KParts::ReadWritePart * );
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
   KTextEditor::Editor * createEditorPart();
@@ -156,7 +167,6 @@ private:
   QPtrList< HistoryEntry > m_history;
   KDirWatch* dirWatcher;
   QMap< const KParts::ReadOnlyPart*, QDateTime > accessTimeMap;
-  QMap< const KParts::Part*, QPixmap > partWidgetIcons;
   bool m_restoring;
   QGuardedPtr<KParts::Factory> _editorFactory;
 };

@@ -25,6 +25,7 @@
 #include <qmap.h>
 #include <qguardedptr.h>
 
+#include <kdevpartcontroller.h>
 #include "kdevmainwindow.h"
 
 class MainWindowShare;
@@ -62,33 +63,11 @@ public:
 
   void init();
 
-
-//  bool eventFilter( QObject *watched, QEvent *e );
-//  bool switching(void) const { return m_bSwitching; }
-//  void setSwitching( const bool switching ) { m_bSwitching = switching; }
-  
   void setUserInterfaceMode(const QString& uiMode);
-
-protected:
-   /**
-   * Pointer to the Window menu. SDI specific. MDI uses the feature of qextmdimainfrm.
-   */
-//   QGuardedPtr<QPopupMenu> m_pWindowMenu;
 
 public slots:
 
   void createGUI(KParts::Part *part);
-/*
-  void gotoNextWindow();
-  void gotoFirstWindow();
-  void gotoPreviousWindow();
-  void gotoLastWindow();
-*/  
-/*
-  void raiseLeftTabbar();
-  void raiseRightTabbar();
-  void raiseBottomTabbar();
-*/  
   void raiseEditor();
 
   /** Store the currently active view tab of the output (bottom) view */
@@ -108,27 +87,15 @@ signals:
   void sigCloseWindow( const QWidget* widget );
 
 private slots:
-//  void slotBufferSelected();      // One entry of the Windows menu has been selected
-//  void slotStatusChange(KParts::Part*);
-//  void slotTabSelected(QWidget*);
-//  void slotFillWindowMenu();
-//  void slotPartAdded(KParts::Part*);
-//  void slotDocChanged(const KURL& url);
-//  void slotNewStatus();
-//  void slotPartJobCompleted();
-//  void fileDirty(const QString& fileName);
-//  void fileDirty( const KURL & url );
   void slotViewActivated(KMdiChildView* child);
-//  void slotViewDeactivated(KMdiChildView* child);
   void slotCoreInitialized();
+  void slotPartURLChanged( KParts::ReadOnlyPart *);
+  void documentChangedState( const KURL &, DocumentState );
+
 //  void loadMDISettings();
 
 private:
 
-//  KMdiChildView* wrapper(QWidget *view, const QString& name);
-    
-//  KDockWidget *addToolViewWidget( KDockWidget::DockPosition pos, QWidget *widget, const QPixmap &icon, const QString &caption);
-    
   virtual bool queryClose();
   virtual bool queryExit();
 
@@ -139,28 +106,10 @@ private:
   void saveSettings();
 
   void moveRelativeTab(int);
-#if 0
-  void raiseTabbar( KTabZoomWidget *tabBar );
-#endif
-//  void updateTabForPart( KParts::ReadWritePart * );
-
-//  void clearWindowMenu();
-
-//  KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
+  
   KAction *m_raiseEditor;
 
-#if 0
-  KDevTabWidget *m_tabWidget;
-  KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
-#endif
-
   MainWindowShare*   m_pMainWindowShare;
-
-//  QMap<QWidget*, QDateTime> m_timeStamps;
-//  bool m_bSwitching;
-
-//  QValueList<int> m_windowMenus;
-//  QPtrList<KAction> m_windowDynamicMenus;
 };
 
 

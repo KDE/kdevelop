@@ -159,6 +159,12 @@ void NewMainWindow::init() {
 	
 	connect( Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()) );
 	
+	connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )),
+		this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )) );
+	
+	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
+		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
+	
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
 	if ( tabWidget() )
 	{
@@ -488,6 +494,44 @@ void NewMainWindow::restoreOutputViewTab( )
 void NewMainWindow::lowerAllViews( )
 {
   // seems there's nothing to do here
+}
+
+void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	if ( !ro_part || !ro_part->widget() || !ro_part->widget()->parentWidget() ) return;
+	
+	KMdiChildView * childView = dynamic_cast<KMdiChildView*>( ro_part->widget()->parentWidget() );
+	if ( childView )
+	{
+		childView->setMDICaption( ro_part->url().fileName() );
+	}
+}
+
+void NewMainWindow::documentChangedState( const KURL & url, DocumentState state )
+{
+	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( PartController::getInstance()->findOpenDocument( url ) );
+	if ( ro_part && ro_part->widget() )
+	{
+		switch( state )
+		{
+			// we should probably restore the original icon instead of just using "kdevelop",
+			// but I have never seen any other icon in use so this should do for now
+			case Clean:
+				ro_part->widget()->setIcon( SmallIcon("kdevelop"));
+				break;
+			case Modified:
+				ro_part->widget()->setIcon( SmallIcon("filesave"));
+				break;
+			case Dirty:
+				ro_part->widget()->setIcon( SmallIcon("revert"));
+				break;
+			case DirtyAndModified:
+				ro_part->widget()->setIcon( SmallIcon("stop"));
+				break;					
+		}
+	}
 }
 
 #include "newmainwindow.moc"

@@ -33,6 +33,14 @@ namespace KParts
   class ReadOnlyPart;
 }
 
+enum DocumentState
+{
+	Clean,
+	Modified,
+	Dirty,
+	DirtyAndModified
+};
+
 class KDevPartController : public KParts::PartManager
 {
   Q_OBJECT
@@ -52,6 +60,7 @@ public:
   /** true if the file has been modified outside KDevelop */
   virtual bool isDirty(KParts::ReadOnlyPart*) = 0;
   virtual bool closePartForWidget( const QWidget* widget ) = 0;
+  virtual bool closePartForURL( const KURL & url ) = 0;
 
 signals:
 

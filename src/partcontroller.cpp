@@ -481,7 +481,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   }
 
   TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
-  savePartWidgetIcon(part);
 
   addPart(part);
 
@@ -494,14 +493,13 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if (ro_part && ro_part->url().isLocalFile()) {
 //    kdDebug(9000) << "KDirWatch: adding " << url.path() << endl;
-//    dirWatcher->addFile( url.path() );
+    dirWatcher->addFile( url.path() );
     accessTimeMap[ ro_part ] = dirWatcher->ctime( url.path() );
     emit loadedFile(ro_part->url().path());
   }
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
-  connect(part, SIGNAL(completed()), this, SLOT(slotRestoreStatus()));	// do we need this one?
   
   // yes, we're cheating again. this signal exists for katepart's 
   // Document object and our DocumentationPart
@@ -577,23 +575,6 @@ QPopupMenu *PartController::contextPopupMenu()
   return popup;
 }
 
-
-/*static bool urlIsEqual(const KURL &a, const KURL &b)
-{
-  if (a.isLocalFile() && b.isLocalFile())
-  {
-    struct stat aStat, bStat;
-
-    if ((::stat(QFile::encodeName(a.fileName()), &aStat) == 0)
-        && (::stat(QFile::encodeName(b.fileName()), &bStat) == 0))
-    {
-      return (aStat.st_dev == bStat.st_dev) && (aStat.st_ino == bStat.st_ino);
-    }
-  }
-
-  return a == b;
-}*/
-
 KParts::Part *PartController::partForURL(const KURL &url)
 {
   QPtrListIterator<KParts::Part> it(*parts());
@@ -631,6 +612,8 @@ void PartController::closeActivePart()
 
 bool PartController::closePart(KParts::Part *part)
 {
+	if ( !part ) return false;
+
   if (part->inherits("KParts::ReadOnlyPart"))
   {
     KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(part);
@@ -640,7 +623,6 @@ bool PartController::closePart(KParts::Part *part)
       return false;
     }
   }
-  partWidgetIcons.remove(part);
 
   // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
   // get called from the destroyed signal of the part being deleted below.
@@ -896,6 +878,11 @@ bool PartController::closePartForWidget( const QWidget* w )
   return true;
 }
 
+bool PartController::closePartForURL( const KURL & url )
+{
+	return closePart( partForURL( url ) );
+}
+
 bool PartController::readyToClose()
 {
 	return closeAllWindows();
@@ -1073,14 +1060,14 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
 
   // embed the part
   TopLevel::getInstance()->embedPartView( part->widget(), name, shortDescription );
-  savePartWidgetIcon(part);
   addPart( part );
 }
 
 void PartController::dirty( const QString& fileName )
 {
-//  kdDebug(9000) << "DIRRRRRTY: " << fileName << " " << dirWatcher->ctime( fileName ).toString( "mm:ss:zzz" ) << endl;
-  emit fileDirty( KURL( fileName ) );
+	KURL url;
+	url.setPath( fileName );
+	emit fileDirty( url );
 }
 
 bool PartController::isDirty( KParts::ReadOnlyPart* part )
@@ -1088,7 +1075,7 @@ bool PartController::isDirty( KParts::ReadOnlyPart* part )
   if ( !part || !part->url().isLocalFile() )
     return false;
 
-//  kdDebug( 9000 ) << "isDirty?" << accessTimeMap[ part ].toString( "mm:zzz" ) << " : " << dirWatcher->ctime( part->url().path() ).toString( "mm:zzz" ) << endl;
+  kdDebug( 9000 ) << "isDirty?" << accessTimeMap[ part ].toString( "mm:zzz" ) << " : " << dirWatcher->ctime( part->url().path() ).toString( "mm:zzz" ) << endl;
 
   if ( accessTimeMap.contains( part ) )
     return ( accessTimeMap[ part ] < dirWatcher->ctime( part->url().path() ) );
@@ -1097,78 +1084,58 @@ bool PartController::isDirty( KParts::ReadOnlyPart* part )
   return false;
 }
 
-void PartController::savePartWidgetIcon( KParts::Part * part )
-{
-    if ((!part->widget()) || (!part->widget()->icon()))
-        return;
-    QPixmap m(*(part->widget()->icon()));
-    partWidgetIcons[part] = m;
-}
-
-void PartController::restorePartWidgetIcon( KParts::Part * part )
-{
-    if (!part->widget())
-        return;
-	if (partWidgetIcons.contains(part))
-	{
-		part->widget()->setIcon(partWidgetIcons[part]);
-	}
-	else
-	{
-		part->widget()->setIcon( SmallIcon("kdevelop") );
-	}
-}
-
 void PartController::slotNewStatus( )
 {
-    kdDebug(9000) << "PartController::slotNewStatus()" << endl;
+	kdDebug(9000) << k_funcinfo << endl;
 
     QObject * senderobj = const_cast<QObject*>( sender() );
     KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
-
     if ( view )
     {
-        KParts::ReadWritePart * rw_part = view->document();
-        if ( isDirty( rw_part ) ) {
-        } else if ( rw_part->isModified() ) {
-            rw_part->widget()->setIcon(SmallIcon("filesave"));
-        } else {
-            restorePartWidgetIcon(rw_part);
-        }
-    }
+		doEmitState( view->document() );
+   }
 }
 
-void PartController::slotRestoreStatus( )
-{
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(const_cast<QObject*>(sender()));
-
-  if ( !ro_part )
-    return;
-
-  if (!isDirty(ro_part))
-    restorePartWidgetIcon(ro_part);
-}
-
-void PartController::slotFileDirty( const KURL & url )
+void PartController::doEmitState( KParts::ReadWritePart * rw_part )
 {
 	kdDebug(9000) << k_funcinfo << endl;
 	
-	KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
-	if ( !rw_part || !rw_part->widget() ) return;
+	if ( !rw_part ) return;
+
+	DocumentState state = Clean;
+	if ( rw_part->isModified() )
+	{
+		state = Modified;
+	}
+	if ( isDirty( rw_part ) )
+	{
+		if ( state == Modified )
+		{
+			state = DirtyAndModified;
+		} 
+		else
+		{
+			state = Dirty;
+		}
+	}
+	emit documentChangedState( rw_part->url(), state );
+}
+ 
+void PartController::slotFileDirty( const KURL & url )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+
+	doEmitState( dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) ) );
+}
+
+bool PartController::isModified( KParts::Part * part )
+{
+	if ( !part ) return false;
 	
-	if ( isDirty( rw_part ) ) 
-	{
-		rw_part->widget()->setIcon( SmallIcon("revert") );
-	} 
-	else if ( !rw_part->isModified() )
-	{
-//		rw_part->widget()->setIcon( SmallIcon("kdevelop") );
-		restorePartWidgetIcon( rw_part );
-	}
-	else
-	{
-		rw_part->widget()->setIcon( SmallIcon("filesave") );
-	}
+	KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( part );
+	if ( !rw_part ) return false;
+	
+	return rw_part->isModified();
 }
 
 #include "partcontroller.moc"
