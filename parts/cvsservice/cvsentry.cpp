@@ -70,7 +70,7 @@ void CVSEntry::parse( const QString &aLine, CVSEntry &entry )
     else if (aLine.startsWith( directoryMarker )) // Must be a directory then
     {
         entry.m_type = directoryEntry; // Is a directory
-        entry.m_fields.pop_front(); // Remove first
+        entry.m_fields.pop_front(); // QStringList::split() fills and empty item in head
     }
     else // What the hell is this? >:-)
     {

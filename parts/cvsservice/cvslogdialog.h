@@ -33,7 +33,7 @@ public:
     void startLog( const QString &workDir, const QString &pathName );
 
 private slots:
-    void slotDiffRequested( const QString &revA, const QString &revB );
+    void slotDiffRequested( const QString &pathName, const QString &revA, const QString &revB );
     virtual void slotCancel();
 
 private:

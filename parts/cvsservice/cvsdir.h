@@ -81,11 +81,14 @@ public:
 
 private:
     void refreshEntriesCache() const;
-    inline QByteArray cacheFile( const QString &fileName ) const;
+    static QByteArray cacheFile( const QString &fileName );
 
     QString m_cvsDir;
 
     mutable QMap<QString,CVSEntry> m_cachedEntries;
+
+    explicit CVSDir( const CVSDir & ); // verboten!
+    CVSDir &operator=( const CVSDir & );
 };
 
 #endif

@@ -1,16 +1,3 @@
-//
-// C++ Implementation: cvslogdialog
-//
-// Description:
-//
-//
-// Author: KDevelop Authors <kdevelop-devel@kdevelop.org>, (C) 2003
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
-#include "cvslogdialog.h"
-
 /***************************************************************************
  *   Copyright (C) 200?-2003 by KDevelop Authors                           *
  *   www.kdevelop.org                                                      *
@@ -47,16 +34,16 @@
 
 CVSLogDialog::CVSLogDialog( CvsService_stub *cvsService, QWidget *parent, const char *name, int )
     : KDialogBase( Tabbed, i18n("CVS Log & diff dialog"), Close, Close,
-    parent, name? name : "logformdialog",false /*modal*/, true /*separator*/ ),
+    parent, name? name : "logformdialog", false /*modal*/, true /*separator*/ ),
     m_cvsLogPage( 0 ), m_cvsService( cvsService )
 {
     setWFlags( getWFlags() | WDestructiveClose );
 
-    QVBox *page = addVBoxPage( QString("Dummy") );
-    m_cvsLogPage = new CVSLogPage( m_cvsService, page );
+    QVBox *vbox = addVBoxPage( i18n("Log from CVS") );
+    m_cvsLogPage = new CVSLogPage( m_cvsService, vbox );
 
-    connect( m_cvsLogPage, SIGNAL(linkClicked(const QString&, const QString&)),
-        this, SLOT(slotDiffRequested(const QString&, const QString&)) );
+    connect( m_cvsLogPage, SIGNAL(diffRequested(const QString&, const QString&, const QString&)),
+        this, SLOT(slotDiffRequested(const QString&, const QString&, const QString&)) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,16 +61,28 @@ void CVSLogDialog::startLog( const QString &workDir, const QString &pathName )
         ", pathName = " << pathName << endl;
 
 //    displayActionFeedback( true );
+/*
+    QVBox *vbox = addVBoxPage( i18n("Log from CVS: ") + pathName );
+    m_cvsLogPage = new CVSLogPage( m_cvsService, vbox );
+    this->resize( m_cvsLogPage->size() );
 
-    m_cvsLogPage->setCaption( pathName );
+    connect( m_cvsLogPage, SIGNAL(linkClicked(const QString&, const QString&)),
+        this, SLOT(slotDiffRequested(const QString&, const QString&)) );
+*/
     m_cvsLogPage->startLog( workDir, pathName );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSLogDialog::slotDiffRequested( const QString &revA, const QString &revB )
+void CVSLogDialog::slotDiffRequested( const QString &pathName, const QString &revA, const QString &revB )
 {
+    kdDebug() << "CVSLogDialog::slotDiffRequested()" << endl;
+
     // Create a new CVSDiffPage and start diffing process
+    QString diffTitle =  i18n("Diff between %1 and %2").arg( revA ).arg( revB );
+    QVBox *vbox = addVBoxPage( diffTitle );
+    CVSDiffPage *diffPage = new CVSDiffPage( m_cvsService, vbox );
+    diffPage->startDiff( pathName, revA, revB );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

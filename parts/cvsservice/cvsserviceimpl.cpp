@@ -42,6 +42,7 @@
 #include "changelog.h"
 #include "cvsoptions.h"
 #include "cvspart.h"
+#include "jobscheduler.h"
 #include "cvsserviceimpl.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +51,8 @@
 
 
 CvsServiceImpl::CvsServiceImpl( CvsServicePart *part, const char *name )
-    : CvsServicePartImpl( part, name? name : "cvsserviceimpl" )
+    : CvsServicePartImpl( part, name? name : "cvsserviceimpl" ),
+    m_scheduler( 0 )
 {
     if (requestCvsService())
     {
@@ -62,6 +64,8 @@ CvsServiceImpl::CvsServiceImpl( CvsServicePart *part, const char *name )
             "I could not request a valid CvsService!!!! :-((( " << endl;
     }
 
+    m_scheduler = new DirectScheduler( m_widget );
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 }
 
@@ -69,6 +73,8 @@ CvsServiceImpl::CvsServiceImpl( CvsServicePart *part, const char *name )
 
 CvsServiceImpl::~CvsServiceImpl()
 {
+    delete m_scheduler;
+
     releaseCvsService();
 }
 
@@ -78,7 +84,7 @@ void CvsServiceImpl::login()
 {
     DCOPRef job = m_cvsService->login( this->projectDirectory() );
 
-    processWidget()->startJob( job );
+    m_scheduler->schedule( job );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,7 +93,7 @@ void CvsServiceImpl::logout()
 {
     DCOPRef job = m_cvsService->logout( this->projectDirectory() );
 
-    processWidget()->startJob( job );
+    m_scheduler->schedule( job );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +118,7 @@ void CvsServiceImpl::checkout()
         // will use it for return the info to the caller.
         modulePath = dlg.workDir() + QDir::separator() + dlg.module();
 
-        processWidget()->startJob( job );
+        m_scheduler->schedule( job );
         connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotCheckoutFinished(bool,int)) );
     }
 }
@@ -141,7 +147,7 @@ void CvsServiceImpl::commit( const KURL::List& urlList )
         return;
     }
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     // 2. if requested to do so, add an entry to the Changelog too
@@ -181,9 +187,9 @@ void CvsServiceImpl::update( const KURL::List& urlList )
         options->recursiveWhenUpdate(),
         options->createDirsWhenUpdate(),
         options->pruneEmptyDirsWhenUpdate(),
-        additionalOptions ); 
+        additionalOptions );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
@@ -200,7 +206,7 @@ void CvsServiceImpl::add( const KURL::List& urlList, bool binary )
 
     DCOPRef cvsJob = m_cvsService->add( m_fileList, binary );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
@@ -217,40 +223,13 @@ void CvsServiceImpl::remove( const KURL::List& urlList )
 
     DCOPRef cvsJob = m_cvsService->remove( m_fileList, true );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-void CvsServiceImpl::revert( const KURL::List& urlList )
-{
-    kdDebug(9000) << "CvsServiceImpl::revert() here" << endl;
-
-    if (!prepareOperation( urlList, opRevert ))
-        return;
-
-    CvsOptions *options = CvsOptions::instance();
-    QString revertOptions = options->revertOptions();
-
-    ReleaseInputDialog dlg( i18n("Revert to another release ..."),
-        mainWindow()->main()->centralWidget() );
-    if (dlg.exec() == QDialog::Rejected)
-        return;
-
-    revertOptions += dlg.release();
-    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, revertOptions );
-
-    processWidget()->startJob( cvsJob );
-    connect( processWidget(), SIGNAL(jobFinished(bool,int)),
-        this, SLOT(slotJobFinished(bool,int)) );
-
-    doneOperation();
-}
-*/
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsServiceImpl::removeStickyFlag( const KURL::List& urlList )
@@ -268,7 +247,7 @@ void CvsServiceImpl::removeStickyFlag( const KURL::List& urlList )
         options->pruneEmptyDirsWhenUpdate(),
         "-A" );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
@@ -315,7 +294,7 @@ void CvsServiceImpl::diff( const KURL::List& urlList )
         return;
     }
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotDiffFinished(bool,int)) );
 
@@ -339,7 +318,7 @@ void CvsServiceImpl::tag( const KURL::List& urlList )
     DCOPRef cvsJob = m_cvsService->createTag( m_fileList, dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
@@ -363,7 +342,7 @@ void CvsServiceImpl::unTag( const KURL::List& urlList )
     DCOPRef cvsJob = m_cvsService->createTag( m_fileList, dlg.tagName(),
         dlg.isBranch(), dlg.force() );
 
-    processWidget()->startJob( cvsJob );
+    m_scheduler->schedule( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
         this, SLOT(slotJobFinished(bool,int)) );
 
@@ -435,17 +414,17 @@ bool CvsServiceImpl::requestCvsService()
     if (KApplication::startServiceByDesktopName( "cvsservice",
         QStringList(), &error, &appId ))
     {
-        kdDebug() << "Starting cvsservice failes with message: " <<
-            error << endl;
+        QString msg = i18n( "Cannot start DCOP CvsService. Please check your\n"
+            "Cervisia installation and re-try. Reason was:\n" ) + error;
+        KMessageBox::error( processWidget(), msg, "DCOP Error" );
+
         return false;
     }
     else
     {
         m_cvsService = new CvsService_stub( appId, "CvsService" );
+        m_repository = new Repository_stub( appId, "CvsRepository" );
     }
-
-    // create stub for repository
-    m_repository = new Repository_stub( appId, "CvsRepository" );
 
     return true;
 }
@@ -458,6 +437,15 @@ void CvsServiceImpl::releaseCvsService()
         m_cvsService->quit();
     delete m_cvsService;
     delete m_repository;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsServiceImpl::prepareOperation( const KURL::List &someUrls, CvsOperation op )
+{
+    bool correctlySetup = (m_cvsService != 0) && (m_repository != 0);
+
+    return correctlySetup && CvsServicePartImpl::prepareOperation( someUrls, op );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qtextbrowser.h>
+#include <qlayout.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qstringlist.h>
@@ -25,20 +26,26 @@
 
 #include "cvsoptions.h"
 #include "cvslogpage.h"
+#include "cvsdiffpage.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CVSLogPage
 ///////////////////////////////////////////////////////////////////////////////
 
 CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char *name, int )
-    : QVBox( parent, name? name : "logformdialog" ),
+    : QWidget( parent, name? name : "logformpage" ),
+    DCOPObject(),
     m_cvsService( cvsService ), m_cvsLogJob( 0 )
 {
+    QLayout *thisLayout = new QVBoxLayout( this );
+
     m_textBrowser = new QTextBrowser( this, "logbrowser" );
+    thisLayout->add( m_textBrowser );
 
     // @fixme: a better way?
-    setMinimumWidth(fontMetrics().maxWidth()*40);
-    setMinimumHeight(fontMetrics().maxWidth()*43);
+    m_textBrowser->setMinimumWidth(fontMetrics().maxWidth()*40);
+    m_textBrowser->setMinimumHeight(fontMetrics().maxWidth()*43);
+//    resize();
 
     connect( m_textBrowser, SIGNAL(linkClicked( const QString& )),
         this, SLOT(slotLinkClicked( const QString& )) );
@@ -152,6 +159,8 @@ void CVSLogPage::slotLogJobExited( bool normalExit, int exitStatus )
             m_textBrowser->append( s );
         }
     }
+    m_logTextBackup = m_textBrowser->source();
+
 //    emit jobFinished( normalExit, exitStatus );
 }
 
@@ -160,6 +169,10 @@ void CVSLogPage::slotLogJobExited( bool normalExit, int exitStatus )
 void CVSLogPage::slotLinkClicked( const QString &link )
 {
     kdDebug() << "CVSLogPage::slotLinkClicked()" << endl;
+
+    // The text browser clears the page so we go back to our old one
+    // @fixme: in this way I lose the source
+    m_textBrowser->setSource( m_logTextBackup );
 
     QString ver = link.mid( link.findRev( "/" ) + 1 );
     QString v1 = ver.section( '_', 0, 0 );
@@ -170,7 +183,7 @@ void CVSLogPage::slotLinkClicked( const QString &link )
         return;
     }
 
-    emit diffRequested( v1, v2 );
+    emit diffRequested( m_pathName, v1, v2 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

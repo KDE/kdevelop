@@ -13,7 +13,7 @@
 #define CVSLOGPAGE_H
 
 #include <dcopobject.h>
-#include <qvbox.h>
+#include <qwidget.h>
 
 class CvsJob_stub;
 class CvsService_stub;
@@ -24,7 +24,7 @@ Implementation for the form displaying 'cvs log' output.
 
 @author Mario Scalas
 */
-class CVSLogPage : public QVBox, public DCOPObject
+class CVSLogPage : public QWidget, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
@@ -42,17 +42,18 @@ k_dcop:
 
 signals:
     //! Emitted when the user click upon a link
-    void diffRequested( const QString &revA, const QString &revB );
+    void diffRequested( const QString &pathName, const QString &revA, const QString &revB );
 
 private slots:
     void slotLinkClicked( const QString &link );
 
-private:
+//private:
 //    void parseLogContent( const QString& text );
 
 private:
     QString m_pathName;
     QTextBrowser *m_textBrowser;
+    QString m_logTextBackup;
 
     CvsService_stub *m_cvsService;
     CvsJob_stub *m_cvsLogJob;

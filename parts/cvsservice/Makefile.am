@@ -6,17 +6,7 @@ kde_module_LTLIBRARIES = libkdevcvsservice.la
 libkdevcvsservice_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcvsservice_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lcvsservice
 
-libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp cvsserviceimpl.cpp \
-    cvsformbase.ui cvsform.cpp \
-    commitdialogbase.ui commitdlg.cpp \
-    cvsoptionswidgetbase.ui cvsoptionswidget.cpp \
-    cvsprocesswidget.cpp cvsprocesswidget.skel \
-    cvsentry.cpp cvsdir.cpp changelog.cpp cvsoptions.cpp \
-    checkoutdialogbase.ui checkoutdialog.cpp checkoutdialog.skel \
-    tagdialog.cpp tagdialogbase.ui \
-    diffdialogbase.ui diffdialog.cpp \
-    releaseinputdialogbase.ui releaseinputdialog.cpp \
-    cvslogdialog.cpp cvslogpage.cpp cvslogpage.skel cvsdiffpage.cpp cvsdiffpage.skel
+libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp cvsserviceimpl.cpp cvsformbase.ui cvsform.cpp commitdialogbase.ui commitdlg.cpp cvsoptionswidgetbase.ui cvsoptionswidget.cpp cvsprocesswidget.cpp cvsprocesswidget.skel cvsentry.cpp cvsdir.cpp changelog.cpp cvsoptions.cpp checkoutdialogbase.ui checkoutdialog.cpp checkoutdialog.skel tagdialog.cpp tagdialogbase.ui diffdialogbase.ui diffdialog.cpp releaseinputdialogbase.ui releaseinputdialog.cpp cvslogdialog.cpp jobscheduler.cpp cvslogpage.cpp cvslogpage.skel cvsdiffpage.cpp cvsdiffpage.skel
 
 METASOURCES = AUTO
 
@@ -26,4 +16,4 @@ service_DATA = kdevcvsservice.desktop
 
 rcdir = $(kde_datadir)/kdevcvsservice
 rc_DATA = kdevcvsservicepart.rc buildcvs.sh
-noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h cvsoptionswidgetbase.h cvspart.h cvspartimpl.h cvsprocesswidget.h cvsserviceimpl.h cvsutils.h tagdialog.h tagdialogbase.h diffdialog.h cvsdir.h cvslogpage.h cvsdiffpage.h cvslogdialog.h
+noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h cvsoptionswidgetbase.h cvspart.h cvspartimpl.h cvsprocesswidget.h cvsserviceimpl.h cvsutils.h tagdialog.h tagdialogbase.h diffdialog.h cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h

@@ -72,7 +72,7 @@ QStringList prependToStringList( const QString &s, const QStringList &paths )
 // Global vars
 ///////////////////////////////////////////////////////////////////////////////
 
-//
+// See createNewProject( const QString &) and slotProjectOpened()
 bool g_projectWasJustCreated = false;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -646,7 +646,7 @@ void CvsServicePart::slotProjectClosed()
     options->save( project() );
     delete options;
 
-    // When files are added to project they may be added to/removed from repository too
+    // We don't have a project anymore ...
     disconnect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
     disconnect( project(), SIGNAL(removedFilesFromProject(const QStringList&)), this, SLOT(slotRemovedFilesFromProject(const QStringList &)) );
 }

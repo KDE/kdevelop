@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include <qtextedit.h>
-#include <qvbox.h>
+#include <qlayout.h>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qstringlist.h>
@@ -24,7 +24,6 @@
 #include <cvsservice_stub.h>
 
 #include "cvsoptions.h"
-
 #include "cvsdiffpage.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,12 @@ CVSDiffPage::CVSDiffPage( CvsService_stub *cvsService,
     : QWidget( parent, name? name : "logformdialog" ),
     m_diffText( 0 ), m_cvsService( cvsService ), m_cvsDiffJob( 0 )
 {
+    QLayout *thisLayout = new QVBoxLayout( this );
+    // This should be replaced by the diff part
     m_diffText = new QTextEdit( this, "difftextedit" );
+    m_diffText->setReadOnly( true );
+
+    thisLayout->add( m_diffText );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,9 @@ void CVSDiffPage::slotDiffJobExited( bool normalExit, int /*exitStatus*/ )
 
     if (normalExit)
     {
-        m_diffText->setText( m_cvsDiffJob->output().join( "\n" ) );
+        QString diffText = m_cvsDiffJob->output().join( "\n" );
+        kdDebug() << "*** Received: " << diffText << endl;
+        m_diffText->setText( diffText );
     }
     else
     {
@@ -128,6 +134,6 @@ void CVSDiffPage::cancel()
         m_cvsDiffJob->cancel();
 }
 
-//#include "cvsdiffpage.moc"
+#include "cvsdiffpage.moc"
 
 

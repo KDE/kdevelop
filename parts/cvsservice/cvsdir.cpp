@@ -115,7 +115,7 @@ QString CVSDir::root() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QByteArray CVSDir::cacheFile( const QString &fileName ) const
+QByteArray CVSDir::cacheFile( const QString &fileName )
 {
     QFile f( fileName );
     if (!f.open( IO_ReadOnly ))

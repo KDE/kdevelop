@@ -30,7 +30,7 @@
 #include <cvsservice_stub.h>
 
 // Undef
-#define MYDCOPDEBUG
+//#define MYDCOPDEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsProcessWidget

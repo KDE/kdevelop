@@ -17,7 +17,7 @@
 class CvsProcessWidget;
 class CvsForm;
 class CheckoutDialog;
-
+class JobScheduler;
 class CvsService_stub;
 class Repository_stub;
 
@@ -53,6 +53,10 @@ public:
         const QString &message, const QString &module, const QString &vendor,
         const QString &release, bool mustInitRoot );
 
+protected:
+    // Reimplemented so we can test for correctly setup DCOP CvsService :-)
+    virtual bool prepareOperation( const KURL::List &someUrls, CvsOperation op );
+
 private slots:
     void slotJobFinished( bool normalExit, int exitStatus );
     void slotDiffFinished( bool normalExit, int exitStatus );
@@ -66,7 +70,10 @@ private:
     CvsService_stub *m_cvsService;
     Repository_stub *m_repository;
 
+    // Used for storing module path between start and ending of check-out
     QString modulePath;
+
+    JobScheduler *m_scheduler;
 };
 
 #endif
