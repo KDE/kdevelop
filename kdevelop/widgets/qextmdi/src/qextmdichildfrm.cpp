@@ -35,6 +35,7 @@
 #include "qextmdichildfrmcaption.h"
 #include "qextmdichildarea.h"
 #include "qextmdichildfrm.h"
+#include "qextmdimainfrm.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // QextMdiChildFrm
@@ -51,20 +52,21 @@
 #define QEXTMDI_RESIZE_BOTTOMRIGHT (8|4)
 
 #include "filenew.xpm"
-#ifdef _OS_WIN32_
 #include "win_closebutton.xpm"
 #include "win_minbutton.xpm"
 #include "win_maxbutton.xpm"
 #include "win_restorebutton.xpm"
 #include "win_undockbutton.xpm"
-
-#else // in case of UNIX: KDE look
 #include "kde_closebutton.xpm"
 #include "kde_minbutton.xpm"
 #include "kde_maxbutton.xpm"
 #include "kde_restorebutton.xpm"
 #include "kde_undockbutton.xpm"
-#endif
+#include "kde2_closebutton.xpm"
+#include "kde2_minbutton.xpm"
+#include "kde2_maxbutton.xpm"
+#include "kde2_restorebutton.xpm"
+#include "kde2_undockbutton.xpm"
 
 QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
   : QLabel( parent, name)
@@ -89,57 +91,59 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pCaption  = new QextMdiChildFrmCaption(this);
    m_pManager  = parent;
 
-#ifdef _OS_WIN32_
-   m_pIcon     = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
-   m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
-   m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
-   m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
-   m_pUndock   = new QPushButton(m_pCaption, "qextmdi_pushbutton_undock");
-#else // in case of UNIX: KDE look
-   m_pIcon     = new QToolButton(m_pCaption, "qextmdi_toolbutton_icon");
+   m_pWinIcon  = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
+   m_pUnixIcon = new QToolButton(m_pCaption, "qextmdi_toolbutton_icon");
    m_pMinimize = new QToolButton(m_pCaption, "qextmdi_toolbutton_min");
    m_pMaximize = new QToolButton(m_pCaption, "qextmdi_toolbutton_max");
    m_pClose    = new QToolButton(m_pCaption, "qextmdi_toolbutton_close");
    m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
-#endif
 
 #if QT_VERSION > 209
-#ifndef _OS_WIN32_
-   m_pIcon->setAutoRaise(TRUE);
-#endif
+   m_pUnixIcon->setAutoRaise(TRUE);
 #endif
 #if QT_VERSION > 209
-#ifndef _OS_WIN32_
-   m_pMinimize->setAutoRaise(TRUE);
-   m_pMaximize->setAutoRaise(TRUE);
-   m_pClose->setAutoRaise(TRUE);
-   m_pUndock->setAutoRaise(TRUE);
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pMinimize->setAutoRaise(TRUE);
+      m_pMaximize->setAutoRaise(TRUE);
+      m_pClose->setAutoRaise(TRUE);
+      m_pUndock->setAutoRaise(TRUE);
+   }
 #endif
 
-   QObject::connect(m_pIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
+   QObject::connect(m_pWinIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
+   QObject::connect(m_pUnixIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
    QObject::connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
    QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
    QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
 
    m_pIconButtonPixmap = new QPixmap( filenew);
-#ifdef _OS_WIN32_
-   m_pMinButtonPixmap = new QPixmap( win_minbutton);
-   m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
-   m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
-   m_pCloseButtonPixmap = new QPixmap( win_closebutton);
-   m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
-#else // in case of UNIX: KDE look
-   m_pMinButtonPixmap = new QPixmap( kde_minbutton);
-   m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
-   m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
-   m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
-   m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      m_pMinButtonPixmap = new QPixmap( win_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( win_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
+   }
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pMinButtonPixmap = new QPixmap( kde_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
+   }
+   else {
+      m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( kde2_undockbutton);
+   }
 
-   m_pIcon->setPixmap( *m_pIconButtonPixmap);
-   m_pIcon->setFocusPolicy(NoFocus);
+   m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pWinIcon->setFocusPolicy(NoFocus);
+   m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pUnixIcon->setFocusPolicy(NoFocus);
    m_pClose->setPixmap( *m_pCloseButtonPixmap);
    m_pClose->setFocusPolicy(NoFocus);
    m_pMinimize->setPixmap( *m_pMinButtonPixmap);
@@ -434,7 +438,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    case Normal:
       switch(m_state){
       case Maximized:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          m_state=state;
          //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
@@ -444,7 +448,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          setGeometry(m_restoredRect);
          break;
       case Minimized:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          m_state=state;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
@@ -467,7 +471,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
       //end=QRect(0,0,m_pManager->width(),m_pManager->height());
       switch(m_state){
       case Minimized:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pClient->show();
@@ -486,7 +490,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          raise();
          break;
       case Normal:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
@@ -508,14 +512,14 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
       //end=QRect(x()+width()/2,y()+height()/2,1,1);
       switch(m_state){
       case Maximized:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          m_state=state;
          switchToMinimizeLayout();
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pManager->childMinimized(this,TRUE);
          break;
       case Normal:
-         m_pClient->m_stateChanged = true;
+         m_pClient->m_stateChanged = TRUE;
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
@@ -565,7 +569,8 @@ void QextMdiChildFrm::enableClose(bool bEnable)
 void QextMdiChildFrm::setIcon(const QPixmap& pxm)
 {
    *m_pIconButtonPixmap = pxm;
-   m_pIcon->setPixmap( pxm);
+   m_pWinIcon->setPixmap( pxm);
+   m_pUnixIcon->setPixmap( pxm);
 }
 
 //============ icon =================//
@@ -732,7 +737,8 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    delete pFocPolDict;
 
    // reset the focus policies for the rest
-   m_pIcon->setFocusPolicy(QWidget::NoFocus);
+   m_pWinIcon->setFocusPolicy(QWidget::NoFocus);
+   m_pUnixIcon->setFocusPolicy(QWidget::NoFocus);
    m_pClient->setFocusPolicy(QWidget::ClickFocus);
    m_pCaption->setFocusPolicy(QWidget::NoFocus);
    m_pUndock->setFocusPolicy(QWidget::NoFocus);
@@ -741,7 +747,8 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
    m_pClose->setFocusPolicy(QWidget::NoFocus);
 
    // install the event filter (catch mouse clicks) for the rest
-   m_pIcon->installEventFilter(this);
+   m_pWinIcon->installEventFilter(this);
+   m_pUnixIcon->installEventFilter(this);
    m_pCaption->installEventFilter(this);
    m_pUndock->installEventFilter(this);
    m_pMinimize->installEventFilter(this);
@@ -784,7 +791,8 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
    delete list;                        // delete the list, not the objects
 
    // remove the event filter (catch mouse clicks) for the rest
-   m_pIcon->removeEventFilter(this);
+   m_pWinIcon->removeEventFilter(this);
+   m_pUnixIcon->removeEventFilter(this);
    m_pCaption->removeEventFilter(this);
    m_pUndock->removeEventFilter(this);
    m_pMinimize->removeEventFilter(this);
@@ -806,19 +814,30 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
    int captionWidth=width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
    m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth, captionHeight);
    //The buttons are caption children
-#ifdef _OS_WIN32_
-   m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
-   m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
-   m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
-   m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
-   m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
-#else // in case of Unix : KDE look
-   m_pIcon->setGeometry(0,0,captionHeight,captionHeight);
-   m_pClose->setGeometry((captionWidth-captionHeight),0,captionHeight,captionHeight);
-   m_pMaximize->setGeometry((captionWidth-(captionHeight*2)),0,captionHeight,captionHeight);
-   m_pMinimize->setGeometry((captionWidth-(captionHeight*3)),0,captionHeight,captionHeight);
-   m_pUndock->setGeometry((captionWidth-(captionHeight*4)),0,captionHeight,captionHeight);
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      m_pUnixIcon->hide();
+      m_pWinIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
+      m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
+      m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
+      m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
+      m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
+   }
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pWinIcon->hide();
+      m_pUnixIcon->setGeometry    ( 0,                            0, captionHeight,captionHeight);
+      m_pClose->setGeometry   ( captionWidth-captionHeight,   0, captionHeight,captionHeight);
+      m_pMaximize->setGeometry( captionWidth-captionHeight*2, 0, captionHeight,captionHeight);
+      m_pMinimize->setGeometry( captionWidth-captionHeight*3, 0, captionHeight,captionHeight);
+      m_pUndock->setGeometry  ( captionWidth-captionHeight*4, 0, captionHeight,captionHeight);
+   }
+   else {
+      m_pWinIcon->hide();
+      m_pUnixIcon->hide();
+      m_pClose->setGeometry   ( 0,                 0, 27, captionHeight);
+      m_pMaximize->setGeometry( captionWidth-27,   0, 27, captionHeight);
+      m_pMinimize->setGeometry( captionWidth-27*2, 0, 27, captionHeight);
+      m_pUndock->setGeometry  ( captionWidth-27*3, 0, 27, captionHeight);
+   }
    //Resize the client
    if(m_pClient) {
       QSize newClientSize(captionWidth,
@@ -866,35 +885,36 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
 
    m_pSystemMenu->clear();
 
-#ifdef _OS_WIN32_
-   m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
-   m_pSystemMenu->insertItem(tr("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
-   m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
-   m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
-   m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
-   if( state() == Normal)
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),FALSE);
-   else if( state() == Maximized) {
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),FALSE);
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),FALSE);
-   }
-   else if( state() == Minimized) {
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
-      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),FALSE);
-   }
-#else
-   if( state() != Normal)
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
       m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
-   if( state() != Maximized)
-      m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
-   if( state() != Minimized)
-      m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
-   if( state() != Maximized)
-      m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
-   if( state() == Normal)
-      m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
-#endif
+      m_pSystemMenu->insertItem(tr("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
+      m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
+      m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
+      if( state() == Normal)
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),FALSE);
+      else if( state() == Maximized) {
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),FALSE);
+      }
+      else if( state() == Minimized) {
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),FALSE);
+      }
+   }
+   else  {
+      if( state() != Normal)
+         m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
+      if( state() != Maximized)
+         m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
+      if( state() != Minimized)
+         m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
+      if( state() != Maximized)
+         m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
+      if( state() == Normal)
+         m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
+   }
 
    m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
    m_pSystemMenu->insertSeparator();
@@ -906,13 +926,18 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
 /** Shows a system menu for child frame windows. */
 void QextMdiChildFrm::showSystemMenu()
 {
-#ifndef _OS_WIN32_
-   m_pIcon->setDown( FALSE);
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
+      m_pUnixIcon->setDown( FALSE);
+   }
    QPoint popupmenuPosition;
    //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
-   popupmenuPosition = QPoint( m_pIcon->pos().x(),
-                               m_pIcon->pos().y() + m_pIcon->height() + QEXTMDI_MDI_CHILDFRM_BORDER );
+   QRect iconGeom;
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look)
+      iconGeom = m_pWinIcon->geometry();
+   else
+      iconGeom = m_pUnixIcon->geometry();
+   popupmenuPosition = QPoint( iconGeom.x(),
+                               iconGeom.y() + iconGeom.height() + QEXTMDI_MDI_CHILDFRM_BORDER );
    systemMenu()->popup( mapToGlobal( popupmenuPosition));
 }
 

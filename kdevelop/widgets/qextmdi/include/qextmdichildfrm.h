@@ -85,38 +85,28 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 // attributes  
 public:
    enum MdiWindowState { Normal,Maximized,Minimized };
-   QextMdiChildView        *m_pClient;
+   QextMdiChildView*        m_pClient;
 
 protected:
-   QextMdiChildArea        *m_pManager;
-   QextMdiChildFrmCaption  *m_pCaption;
-#ifdef _OS_WIN32_
-   /**
-   * This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
-   */
-   QextMdiWin32IconButton  *m_pIcon;
-   QPushButton    *m_pMinimize;
-   QPushButton    *m_pMaximize;
-   QPushButton    *m_pClose;
-   QPushButton    *m_pUndock;
-#else // in case of UNIX: KDE look
-   QToolButton    *m_pIcon;
-   QToolButton    *m_pMinimize;
-   QToolButton    *m_pMaximize;
-   QToolButton    *m_pClose;
-   QToolButton    *m_pUndock;
-#endif
+   QextMdiChildArea*        m_pManager;
+   QextMdiChildFrmCaption*  m_pCaption;
+   QextMdiWin32IconButton*  m_pWinIcon;
+   QToolButton*   m_pUnixIcon;
+   QToolButton*   m_pMinimize;
+   QToolButton*   m_pMaximize;
+   QToolButton*   m_pClose;
+   QToolButton*   m_pUndock;
    MdiWindowState m_state;
    QRect          m_restoredRect;
    int            m_iResizeCorner;
    int            m_iLastCursorCorner;
    bool           m_resizeMode;
-   QPixmap        *m_pIconButtonPixmap;
-   QPixmap        *m_pMinButtonPixmap;
-   QPixmap        *m_pMaxButtonPixmap;
-   QPixmap        *m_pRestoreButtonPixmap;
-   QPixmap        *m_pCloseButtonPixmap;
-   QPixmap        *m_pUndockButtonPixmap;
+   QPixmap*       m_pIconButtonPixmap;
+   QPixmap*       m_pMinButtonPixmap;
+   QPixmap*       m_pMaxButtonPixmap;
+   QPixmap*       m_pRestoreButtonPixmap;
+   QPixmap*       m_pCloseButtonPixmap;
+   QPixmap*       m_pUndockButtonPixmap;
    /** 
    * Every child frame window has an temporary ID in the Window menu of the child area. 
    */
@@ -124,7 +114,7 @@ protected:
    /** 
    * Imitates a system menu for child frame windows 
    */
-   QPopupMenu     *m_pSystemMenu;
+   QPopupMenu*    m_pSystemMenu;
    QSize          m_oldClientMinSize;
    QSize          m_oldClientMaxSize;
 

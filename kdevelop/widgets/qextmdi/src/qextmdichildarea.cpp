@@ -206,9 +206,9 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
    QPoint pnt(0,0);
    if(indexOfWindow==0)return pnt;
 
-   bool bTopLevelMode = false;
+   bool bTopLevelMode = FALSE;
    if( height() == 1)	// hacky?!
-   		bTopLevelMode = true;
+   		bTopLevelMode = TRUE;
 
    QextMdiChildFrm *lpC=m_pZ->first();
    int step=(lpC ? lpC->m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_BORDER : 20);

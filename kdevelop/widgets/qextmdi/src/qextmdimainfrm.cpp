@@ -40,16 +40,27 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
 
-#ifdef _OS_WIN32_
 #include "win_undockbutton.xpm"
 #include "win_minbutton.xpm"
 #include "win_restorebutton.xpm"
 #include "win_closebutton.xpm"
-#else // in case of UNIX: KDE look
 #include "kde_undockbutton.xpm"
 #include "kde_minbutton.xpm"
 #include "kde_restorebutton.xpm"
 #include "kde_closebutton.xpm"
+#include "kde2_undockbutton.xpm"
+#include "kde2_minbutton.xpm"
+#include "kde2_restorebutton.xpm"
+#include "kde2_closebutton.xpm"
+
+#ifdef _OS_WIN32_
+QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
+#else
+#ifdef NO_KDE2
+QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE1Look;
+#else
+QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
+#endif
 #endif
 
 //============ constructor ============//
@@ -65,14 +76,20 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_pDockMenu(0L)
    ,m_pPlacingMenu(0L)
    ,m_pMainMenuBar(0L)
-   ,m_bTopLevelMode(false)
-   ,m_bMaximizedChildFrmMode(false)
+   ,m_pUndockButtonPixmap(0L)
+   ,m_pMinButtonPixmap(0L)
+   ,m_pRestoreButtonPixmap(0L)
+   ,m_pCloseButtonPixmap(0L)
+   ,m_pUndock(0L)
+   ,m_pMinimize(0L)
+   ,m_pRestore(0L)
+   ,m_pClose(0L)
+   ,m_bTopLevelMode(FALSE)
+   ,m_bMaximizedChildFrmMode(FALSE)
    ,m_oldMainFrmHeight(0)
    ,m_oldMainFrmMinHeight(0)
    ,m_oldMainFrmMaxHeight(0)
 {
-//   setRightJustification( TRUE);
-
    // Create the local list of windows
    m_pWinList = new QList<QextMdiChildView>;
    m_pWinList->setAutoDelete(FALSE);
@@ -205,9 +222,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
 
    if( (flags & QextMdi::Detach) || m_bTopLevelMode) {
-      detachWindow( pWnd, false /*bShow*/ ); // false to avoid flickering
+      detachWindow( pWnd, FALSE /*bShow*/ ); // FALSE to avoid flickering
    } else {
-      attachWindow( pWnd, false /*bShow*/);
+      attachWindow( pWnd, FALSE /*bShow*/);
    }
 
    if( flags & QextMdi::Maximize)
@@ -245,14 +262,14 @@ void QextMdiMainFrm::addToolWindow( QextMdiChildView* pWnd)
    pWnd->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pWnd->isVisible());
    QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
    m_pWinList->append(pWnd);
-   pWnd->m_bToolView = true;
+   pWnd->m_bToolView = TRUE;
 }
 
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
    // decide whether window shall be cascaded
-   bool bCascade = false;
+   bool bCascade = FALSE;
    QRect frameGeo = pWnd->frameGeometry();
    QPoint topLeftScreen = pWnd->mapToGlobal(QPoint(0,0));
    QPoint topLeftMdiChildArea = m_pMdi->mapFromGlobal(topLeftScreen);
@@ -260,7 +277,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    if ( (topLeftMdiChildArea.x() < 0) || (topLeftMdiChildArea.y() < 0) ||
         (topLeftMdiChildArea.x()+frameGeo.width() > childAreaGeo.width()) ||
         (topLeftMdiChildArea.y()+frameGeo.height() > childAreaGeo.height()) ) {
-      bCascade = true;
+      bCascade = TRUE;
    }
 
    // create frame and insert child view
@@ -279,7 +296,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
-      m_bTopLevelMode = false;
+      m_bTopLevelMode = FALSE;
       qDebug("TopLevelMode off");
       emit leavedTopLevelMode();
    }
@@ -290,7 +307,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    // position and really attach to MDI
    // this should add all the frame stuff but nothing more
    // remove the bShow from here
-   m_pMdi->manageChild(lpC,false,bCascade);
+   m_pMdi->manageChild(lpC,FALSE,bCascade);
    if (bShow) {
       lpC->show();
    }
@@ -373,7 +390,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    }
 
    if(pWnd->isToolView())
-      pWnd->m_bToolView = false;
+      pWnd->m_bToolView = FALSE;
 }
 
 //============== closeWindow ==============//
@@ -479,8 +496,8 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
 
 void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
 {
-   //taskbarButtonLeftClicked( pWnd); // set focus
    activateView( pWnd); // set focus
+   QApplication::sendPostedEvents();
    taskBarPopup( pWnd, TRUE)->popup( QCursor::pos());
 }
 
@@ -568,7 +585,7 @@ void QextMdiMainFrm::switchToToplevelMode()
          setFixedHeight( height() - m_pMdi->height() + 27);
       }
    }
-   m_bTopLevelMode = true;
+   m_bTopLevelMode = TRUE;
    qDebug("ToplevelMode on");
 }
 
@@ -589,7 +606,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       setMaximumHeight( m_oldMainFrmMaxHeight);
       resize( width(), m_oldMainFrmHeight);
       m_oldMainFrmHeight = 0;
-      m_bTopLevelMode = false;
+      m_bTopLevelMode = FALSE;
       qDebug("TopLevelMode off");
       emit leavedTopLevelMode();
    }
@@ -611,39 +628,55 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
    m_pMainMenuBar = pMenuBar;
    if( m_pMainMenuBar == 0L)
       return;  // use setMenuForSDIModeSysButtons( 0L) for unsetting the external main menu!
-#ifdef _OS_WIN32_
-   m_pUndock = new QPushButton( pMenuBar);
-   m_pRestore = new QPushButton( pMenuBar);
-   m_pMinimize = new QPushButton( pMenuBar);
-   m_pClose = new QPushButton( pMenuBar);
+
+   if (!m_pUndock)
+      m_pUndock = new QToolButton( pMenuBar);
+   if (!m_pRestore)
+      m_pRestore = new QToolButton( pMenuBar);
+   if (!m_pMinimize)
+      m_pMinimize = new QToolButton( pMenuBar);
+   if (!m_pClose)
+      m_pClose = new QToolButton( pMenuBar);
+   m_pUndock->setAutoRaise(FALSE);
+   m_pMinimize->setAutoRaise(FALSE);
+   m_pRestore->setAutoRaise(FALSE);
+   m_pClose->setAutoRaise(FALSE);
 
    setSysButtonsAtMenuPosition();
 
-   QPixmap* m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
-   QPixmap* m_pMinButtonPixmap = new QPixmap( win_minbutton);
-   QPixmap* m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
-   QPixmap* m_pCloseButtonPixmap = new QPixmap( win_closebutton);
-#else // in case of Unix : KDE look
-   m_pUndock = new QToolButton( pMenuBar);
-   m_pRestore = new QToolButton( pMenuBar);
-   m_pMinimize = new QToolButton( pMenuBar);
-   m_pClose = new QToolButton( pMenuBar);
-   setSysButtonsAtMenuPosition();
-
-   QPixmap* m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
-   QPixmap* m_pMinButtonPixmap = new QPixmap( kde_minbutton);
-   QPixmap* m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
-   QPixmap* m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
-#endif
-
+   delete m_pUndockButtonPixmap;
+   delete m_pMinButtonPixmap;
+   delete m_pRestoreButtonPixmap;
+   delete m_pCloseButtonPixmap;
+   // create the decoration pixmaps
+   if (frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
+      m_pMinButtonPixmap = new QPixmap( win_minbutton);
+      m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( win_closebutton);
+   }
+   else if (frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
+      m_pMinButtonPixmap = new QPixmap( kde_minbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
 #if QT_VERSION > 209
-#ifndef _OS_WIN32_
-   m_pUndock->setAutoRaise(TRUE);
-   m_pMinimize->setAutoRaise(TRUE);
-   m_pRestore->setAutoRaise(TRUE);
-   m_pClose->setAutoRaise(TRUE);
+      m_pUndock->setAutoRaise(TRUE);
+      m_pMinimize->setAutoRaise(TRUE);
+      m_pRestore->setAutoRaise(TRUE);
+      m_pClose->setAutoRaise(TRUE);
 #endif
-#endif
+   }
+   else {
+      m_pUndockButtonPixmap = new QPixmap( kde2_undockbutton);
+      m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
+      m_pUndock->setAutoRaise(TRUE);
+      m_pMinimize->setAutoRaise(TRUE);
+      m_pRestore->setAutoRaise(TRUE);
+      m_pClose->setAutoRaise(TRUE);
+   }
 
    m_pUndock->hide();
    m_pMinimize->hide();
@@ -664,13 +697,16 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
       return;
 
    int menuW = m_pMainMenuBar->parentWidget()->width();
-#ifdef _OS_WIN32_
-   int h = 16;
-   int y = m_pMainMenuBar->height()/2-8;
-#else  // in case of UNIX: KDE look
-   int h = 20;
-   int y = m_pMainMenuBar->height()/2-10;
-#endif
+   int h;
+   int y;
+   if (frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      h = 16;
+      y = m_pMainMenuBar->height()/2-8;
+   }
+   else {
+      h = 20;
+      y = m_pMainMenuBar->height()/2-10;
+   }
 
    m_pUndock->setGeometry( ( menuW - ( h * 4) - 5), y, h, h);
    m_pMinimize->setGeometry( ( menuW - ( h * 3) - 5), y, h, h);
@@ -685,7 +721,7 @@ void QextMdiMainFrm::setMaximizeModeOn()
    if( !pCurrentChild)
       return;
 
-   m_bMaximizedChildFrmMode = true;
+   m_bMaximizedChildFrmMode = TRUE;
    qDebug("MaximizeMode on");
 
    // if there is no menubar given, those system buttons aren't possible
@@ -710,7 +746,7 @@ void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
    if( !oldChild)
       return;
 
-   m_bMaximizedChildFrmMode = true;
+   m_bMaximizedChildFrmMode = TRUE;
    qDebug("MaximizeMode off");
 
    // if there is no menubar given, those system buttons aren't possible
@@ -875,6 +911,27 @@ void QextMdiMainFrm::dockMenuItemActivated(int id)
 void QextMdiMainFrm::popupWindowMenu(QPoint p)
 {
    m_pWindowMenu->popup( p);
+}
+
+//================ setFrameDecorOfAttachedViews ===============//
+
+void QextMdiMainFrm::setFrameDecorOfAttachedViews( int frameDecor)
+{
+   switch (frameDecor) {
+   case 0:
+      m_frameDecoration = QextMdi::Win95Look;
+      break;
+   case 1:
+      m_frameDecoration = QextMdi::KDE1Look;
+      break;
+   case 2:
+      m_frameDecoration = QextMdi::KDE2Look;
+      break;
+   default:
+      qDebug("unknown MDI decoration");
+      break;
+   }
+   setMenuForSDIModeSysButtons( m_pMainMenuBar);
 }
 
 #ifndef NO_INCLUDE_MOCFILES

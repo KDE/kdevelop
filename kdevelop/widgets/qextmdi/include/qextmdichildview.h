@@ -80,7 +80,7 @@ protected:
    int         m_windowMenuID;
    /** 
    * Holds a temporary information about if the MDI view state has changed but is not processed yet (pending state).
-   * For example it could be that a 'maximize' is pending, if this variable is true.
+   * For example it could be that a 'maximize' is pending, if this variable is TRUE.
    */
    bool        m_stateChanged;
 
@@ -108,7 +108,7 @@ public:
    QWidget* focusedChildWidget();
    /**
    * Returns TRUE if the MDI view is a child window within the MDI mainframe widget
-   * or false if the MDI view is in toplevel mode
+   * or FALSE if the MDI view is in toplevel mode
    */
    bool isAttached() { return (mdiParent() != 0L); };
    /**

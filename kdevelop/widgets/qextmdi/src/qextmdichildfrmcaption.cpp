@@ -31,6 +31,7 @@
 #include "qextmdichildfrmcaption.h"
 #include "qextmdichildfrm.h"
 #include "qextmdichildarea.h"
+#include "qextmdimainfrm.h"
 #include <iostream.h>
 //////////////////////////////////////////////////////////////////////////////
 // Class   : QextMdiChildFrmCaption
@@ -64,9 +65,8 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
       setMouseTracking(FALSE);
-#ifndef _OS_WIN32_
-      QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
-#endif
+      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+         QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
       m_bCanMove = TRUE;
       m_offset = mapToParent( e->pos());
    }
@@ -77,9 +77,8 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
-#ifndef _OS_WIN32_
-      QApplication::restoreOverrideCursor();
-#endif
+      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+         QApplication::restoreOverrideCursor();
       releaseMouse();
       m_bCanMove = FALSE;
    }
@@ -117,10 +116,13 @@ void QextMdiChildFrmCaption::setActive(bool bActive)
       return;
    
    //    Ensure the icon's pixmap has the correct bg color
-   m_pParent->m_pIcon->setBackgroundColor(bActive
+   m_pParent->m_pWinIcon->setBackgroundColor(bActive
    ? m_pParent->m_pManager->m_captionActiveBackColor
    : m_pParent->m_pManager->m_captionInactiveBackColor);
-   
+   m_pParent->m_pUnixIcon->setBackgroundColor(bActive
+   ? m_pParent->m_pManager->m_captionActiveBackColor
+   : m_pParent->m_pManager->m_captionInactiveBackColor);
+
    m_bActive = bActive;
    repaint( FALSE);
 }
@@ -138,11 +140,15 @@ void QextMdiChildFrmCaption::setCaption(const QString& text)
 int QextMdiChildFrmCaption::heightHint()
 {
    int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
-#ifdef _OS_WIN32_
-   if(hght<18)hght=18;
-#else // in case of Unix: KDE look
-   if(hght<20)hght=20;
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      if(hght<18)hght=18;
+   }
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      if(hght<20)hght=20;
+   }
+   else {
+      if(hght<14)hght=14;
+   }
    return hght;
 }
 
@@ -160,11 +166,13 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
       p.fillRect(r,m_pParent->m_pManager->m_captionInactiveBackColor);
       p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
    }
-#ifdef _OS_WIN32_
-   r.setLeft(r.left()+19); //Shift the text after the icon
-#else // in case of Unix: KDE look
-   r.setLeft(r.left()+22); //Shift the text after the icon
-#endif
+   //Shift the text after the icon
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look)
+      r.setLeft(r.left()+19);
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look)
+      r.setLeft(r.left()+22);
+   else
+      r.setLeft(r.left()+30);
 
    int captionWidthForText = width() - 5*heightHint();   // = width - width_for_buttons
    QString text = abbreviateText( m_szCaption, captionWidthForText);
@@ -219,9 +227,8 @@ void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
 {
    setMouseTracking(TRUE);
    grabMouse();
-#ifndef _OS_WIN32_
-   QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
-#endif
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+      QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
    m_bCanMove = TRUE;
    m_offset = mapFromGlobal( QCursor::pos());
 }

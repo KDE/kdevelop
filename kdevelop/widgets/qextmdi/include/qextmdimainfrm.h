@@ -85,6 +85,11 @@ typedef enum {
       ToolWindow  = 16
    } AddWindowFlags;
 
+typedef enum {
+      Win95Look = 0,
+      KDE1Look  = 1,
+      KDE2Look  = 2
+   } QextMdiFrameDecor;
 }; //namespace
 
 /**
@@ -134,23 +139,17 @@ protected:
    QPixmap                 *m_pRestoreButtonPixmap;
    QPixmap                 *m_pCloseButtonPixmap;
 
-#ifdef _OS_WIN32_
-   QPushButton             *m_pUndock;
-   QPushButton             *m_pMinimize;
-   QPushButton             *m_pRestore;
-   QPushButton             *m_pClose;
-#else
    QToolButton             *m_pUndock;
    QToolButton             *m_pMinimize;
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
-#endif
    QPoint                  m_undockPositioningOffset;
    bool                    m_bTopLevelMode;
    bool                    m_bMaximizedChildFrmMode;
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
+   static QextMdi::QextMdiFrameDecor   m_frameDecoration;
 
 // methods
 public:
@@ -278,12 +277,15 @@ public:
    * If no such menu is given, QextMDI simply overlays the buttons
    * at the upper right-hand side of the main widget.
    */
-
 #ifndef NO_KDE2
    virtual void setMenuForSDIModeSysButtons( KMenuBar* = 0);
 #else
    virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
 #endif
+   /**
+   * @return the decoration of the window frame of docked (attached) MDI views
+   */
+   static int frameDecorOfAttachedViews() { return m_frameDecoration; };
 
 public slots:
    /**
@@ -395,6 +397,10 @@ public slots:
    * Tile Vertically 
    */
    virtual void tileVertically() { m_pMdi->tileVertically(); };
+   /**
+   * Sets the decoration of the window frame of docked (attached) MDI views
+   */
+   virtual void setFrameDecorOfAttachedViews( int frameDecor);
 protected:
 //   /**
 //   * Calls the destructor by delete.

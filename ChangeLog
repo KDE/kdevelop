@@ -1,3 +1,8 @@
+2000-10-22 Falk Brettschneider <falk@kdevelop.org>
+	* now QextMDI has got an additional KDE2 decoration
+        * decoration of docked MDI-views can be switched (Win95,KDE1,KDE2)
+        * part 'qextmdimainfrmview' disabled (ready for removing)
+
 2000-10-21 Sandy Meier   <smeier@kdevelop.org>
 	* implemented recursive file adding (frontend)
 

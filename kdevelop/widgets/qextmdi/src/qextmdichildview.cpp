@@ -41,8 +41,8 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
-  ,m_stateChanged(true)
-  ,m_bToolView(false)
+  ,m_stateChanged(TRUE)
+  ,m_bToolView(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption) 
@@ -354,7 +354,7 @@ void QextMdiChildView::resizeEvent(QResizeEvent* e)
    QWidget::resizeEvent( e);
 
    if( m_stateChanged) {
-      m_stateChanged = false;
+      m_stateChanged = FALSE;
       if( isMaximized()) {
          qDebug("is maximized now");
          emit isMaximizedNow();
