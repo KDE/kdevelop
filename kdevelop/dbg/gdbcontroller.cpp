@@ -1235,7 +1235,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
 void GDBController::slotCoreFile(const QString& coreFile)
 {
   setStateOff(s_silent);
-  queueCmd(new GDBCommand("core " + coreFile, NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand("core " + coreFile, NOTRUNCMD, NOTINFOCMD, 0));
   queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
   if (stateIsOn(s_viewLocals))
     queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -1247,7 +1247,7 @@ void GDBController::slotAttachTo(int pid)
 {
   setStateOff(s_appNotStarted|s_programExited|s_silent);
   setStateOn(s_attached);
-  queueCmd(new GDBCommand(QString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand(QString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
   queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
   if (stateIsOn(s_viewLocals))
     queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
