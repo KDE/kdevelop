@@ -3,13 +3,6 @@
 set -e
 case "$1" in
     configure)
-      if [ -x /usr/sbin/install-docs ]; then
-        /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-user
-        /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-tutorial
-        /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-programming
-        /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-kdelibref
-        /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-addendum
-      fi
     ;;
  
     abort-upgrade|abort-remove|abort-deconfigure)

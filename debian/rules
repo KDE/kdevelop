@@ -41,7 +41,8 @@ binary-arch:	build
 	dh_clean -a
 	install -d debian/tmp/etc/kde2
 	$(MAKE) prefix=/usr DESTDIR=`pwd`/debian/tmp/ install
-	-rm -rf debian/tmp/home debian/tmp/blah
+	-rm -rf debian/tmp/home debian/tmp/blah \
+		debian/tmp/usr/share/applnk/Development/designer.desktop
 	cp kdevelop/kdeveloprc debian/tmp/etc/kde2/
 	perl -w debian/debianrules cleanup
 	dh_undocumented 

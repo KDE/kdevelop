@@ -4,10 +4,6 @@ set -e
  
 case "$1" in
     remove|failed-upgrade|upgrade|deconfigure)
-      if [ -x /usr/sbin/install-docs ]; then
-        /usr/sbin/install-docs -r kdevelop-tutorial
-        /usr/sbin/install-docs -r kdevelop-user
-      fi
         ;;
     *)
         echo "prerm called with unknown argument \`$1'" >&2
