@@ -56,7 +56,7 @@ goals and wide use of object-oriented design. C++ makes programming a joy if you
 information hiding and reusablitity of already existing code.
 <P>When creating a KDE or Qt project, you always have to have a view that inherits <CODE>QWidget</CODE>, either by direct inheriance or because
 the library widget you want to use inherits <CODE>QWidget</CODE>. Therefore, the Application Wizard already constructed a view that is an
-instance of a class <CODE>View</CODE>, which inherits <CODE>QWidget</CODE> already. The application creates your view in the method
+instance of a class <CODE>&lt;yourapp&gt;View</CODE>, which inherits <CODE>QWidget</CODE> already. The application creates your view in the method
 <CODE>initView()</CODE>, where an instance is created and connected to the main widget as it's view with <CODE>KTMainWidget::setView()</CODE>.
 <P>This chapter therefore describes how to use library widgets for creating views of KDE or Qt applications that are generated with
 KDevelop, then we're looking at the libraries and what kind of views are already offered. Finally, we will extend the already provided

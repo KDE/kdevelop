@@ -60,8 +60,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
   doc_pop->insertSeparator();
   doc_pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this, SLOT(slotCopyText()),0,2);
 	doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,3);
+	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,4);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,4);
+  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,5);
 
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
@@ -74,11 +75,27 @@ CDocBrowser::~CDocBrowser(){
 }
 
 
+
+void CDocBrowser::slotViewInKFM(){
+	
+  if(vfork() > 0) {
+		QString url=currentURL();
+    // drop setuid, setgid
+    setgid(getgid());
+    setuid(getuid());
+
+    execlp("kfmclient", "kfmclient", "exec", url.data(), 0);
+    _exit(0);
+  }
+
+}
+
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
 
   if(url.left(7) == "http://"){
+
     if(vfork() > 0) {
       // drop setuid, setgid
       setgid(getgid());
@@ -231,17 +248,17 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     QString text;
     getSelectedText(text);
     doc_pop->setItemEnabled(2,true);
-    doc_pop->setItemEnabled(4,true);
+    doc_pop->setItemEnabled(5,true);
 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),4);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),5);
   }
   else{
     doc_pop->setItemEnabled(2,false);
-    doc_pop->setItemEnabled(4,false);
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),4);
+    doc_pop->setItemEnabled(5,false);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),5);
   }
   doc_pop->popup(pnt);
 }

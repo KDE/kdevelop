@@ -64,7 +64,8 @@ public slots:
   void slotURLForward();
   void slotSearchText();
 	void slotSetFileTitle(const char* title);
-	
+	void slotViewInKFM();
+		
  signals:
   void signalURLBack();
   void signalURLForward();

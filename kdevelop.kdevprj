@@ -90,12 +90,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/docs/en/Makefile.am,
+openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/docs/en/tutorial.sgml,/home/rnolden/Development/kdevelop/kdevelop/docs/en/index.sgml,/home/rnolden/Development/kdevelop/ChangeLog,/home/rnolden/Development/kdevelop/kdevelop//docs/en/tutorial.sgml,
 show_outputview=false
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/kdevelop/docs/en/Makefile.am
+header_file=/home/rnolden/Development/kdevelop/kdevelop//docs/en/tutorial.sgml
 cpp_file=/home/rnolden/Development/kdevelop/kdevelop/main.cpp
-browser_file=file:/home/rnolden/Development/kdevelop/kdevelop/docs/en/index-10.html#ss10.3
+browser_file=file:/home/rnolden/Development/kdevelop/kdevelop/docs/en/tutorial-12.html
 [kdevelop/kdlgedit/item_slider.cpp]
 install_location=
 dist=true
@@ -222,8 +222,8 @@ type=SOURCE
 [Config for BinMakefileAm]
 ldflags=
 addcxxflags=
-ldadd=-lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11
-cxxflags=-O2 -Wall
+ldadd= -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11
+cxxflags= -O2 -Wall
 bin_program=kdevelop
 [kdevelop/cconfiga2psdlg.h]
 install_location=
@@ -450,6 +450,16 @@ install_location=
 dist=true
 install=false
 type=DATA
+[kdevelop/kdlgedit/kdlgreadmedlg.cpp]
+install_location=
+dist=true
+install=false
+type=SOURCE
+[kdevelop/pics/startlogo.gif]
+install_location=
+dist=true
+install=false
+type=DATA
 [kdevelop/caddclassattributedlg.cpp]
 install_location=
 dist=true
@@ -523,7 +533,7 @@ dist=true
 install=false
 type=HEADER
 [kdevelop/pics/Makefile.am]
-files=kdevelop/pics/customApp.bmp,kdevelop/pics/kAppWizard.bmp,kdevelop/pics/miniApp.bmp,kdevelop/pics/normalApp.bmp,kdevelop/pics/qtApp.bmp,kdevelop/pics/startlogo.bmp,kdevelop/pics/terminalApp.bmp,kdevelop/pics/tipday.bmp,
+files=kdevelop/pics/customApp.bmp,kdevelop/pics/kAppWizard.bmp,kdevelop/pics/miniApp.bmp,kdevelop/pics/normalApp.bmp,kdevelop/pics/qtApp.bmp,kdevelop/pics/startlogo.bmp,kdevelop/pics/terminalApp.bmp,kdevelop/pics/tipday.bmp,kdevelop/pics/dlg_firstrun.gif,kdevelop/pics/startlogo.gif,
 type=normal
 sub_dirs=mini,
 [kdevelop/pics/mini/CVstruct.xpm]
@@ -1338,7 +1348,7 @@ dist=true
 install=true
 type=DATA
 [General]
-make_options=-j1
+make_options= -j1
 makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/docs/de/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/print/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/toolbar/Makefile.am,kdevelop/tools/Makefile.am,
 author=The KDevelop Team
 project_type=normal_kde
@@ -1347,7 +1357,7 @@ lfv_open_groups=Others,
 workspace=1
 version=0.4
 project_name=KDevelop
-sgml_file=index.sgml
+sgml_file=tutorial.sgml
 short_info=KDevelop is an interactive Integrated ,Development environment for Unix Sytems ,to build C++ applications.,
 email=
 kdevprj_version=0.3
@@ -1537,7 +1547,7 @@ dist=true
 install=false
 type=SOURCE
 [kdevelop/kdlgedit/Makefile.am]
-files=kdevelop/kdlgedit/kdlgdialogs.cpp,kdevelop/kdlgedit/kdlgdialogs.h,kdevelop/kdlgedit/kdlgedit.cpp,kdevelop/kdlgedit/kdlgedit.h,kdevelop/kdlgedit/kdlgeditwidget.cpp,kdevelop/kdlgedit/kdlgeditwidget.h,kdevelop/kdlgedit/kdlgitems.cpp,kdevelop/kdlgedit/kdlgitems.h,kdevelop/kdlgedit/kdlgnewwidget.cpp,kdevelop/kdlgedit/kdlgnewwidget.h,kdevelop/kdlgedit/kdlgproplvis.h,kdevelop/kdlgedit/kdlgpropwidget.cpp,kdevelop/kdlgedit/kdlgpropwidget.h,kdevelop/kdlgedit/kdlgwidgets.cpp,kdevelop/kdlgedit/kdlgwidgets.h,kdevelop/kdlgedit/defines.h,kdevelop/kdlgedit/item_base.cpp,kdevelop/kdlgedit/item_checkbox.cpp,kdevelop/kdlgedit/item_combobox.cpp,kdevelop/kdlgedit/item_groupbox.cpp,kdevelop/kdlgedit/item_label.cpp,kdevelop/kdlgedit/item_lcdnumber.cpp,kdevelop/kdlgedit/item_lineedit.cpp,kdevelop/kdlgedit/item_listbox.cpp,kdevelop/kdlgedit/item_multilineedit.cpp,kdevelop/kdlgedit/item_progressbar.cpp,kdevelop/kdlgedit/item_pushbutton.cpp,kdevelop/kdlgedit/item_radiobutton.cpp,kdevelop/kdlgedit/item_scrollbar.cpp,kdevelop/kdlgedit/item_slider.cpp,kdevelop/kdlgedit/item_spinbox.cpp,kdevelop/kdlgedit/item_widget.cpp,kdevelop/kdlgedit/items.h,kdevelop/kdlgedit/itemsglobal.cpp,kdevelop/kdlgedit/itemsglobal.h,kdevelop/kdlgedit/kdlgnewdialogdlg.cpp,kdevelop/kdlgedit/kdlgnewdialogdlg.h,kdevelop/kdlgedit/kdlgotherdlgs.cpp,kdevelop/kdlgedit/kdlgotherdlgs.h,kdevelop/kdlgedit/kdlgproplv.h,kdevelop/kdlgedit/item_all.cpp.inc,kdevelop/kdlgedit/item_class.cpp.inc,
+files=kdevelop/kdlgedit/kdlgdialogs.cpp,kdevelop/kdlgedit/kdlgdialogs.h,kdevelop/kdlgedit/kdlgedit.cpp,kdevelop/kdlgedit/kdlgedit.h,kdevelop/kdlgedit/kdlgeditwidget.cpp,kdevelop/kdlgedit/kdlgeditwidget.h,kdevelop/kdlgedit/kdlgitems.cpp,kdevelop/kdlgedit/kdlgitems.h,kdevelop/kdlgedit/kdlgnewwidget.cpp,kdevelop/kdlgedit/kdlgnewwidget.h,kdevelop/kdlgedit/kdlgproplvis.h,kdevelop/kdlgedit/kdlgpropwidget.cpp,kdevelop/kdlgedit/kdlgpropwidget.h,kdevelop/kdlgedit/kdlgwidgets.cpp,kdevelop/kdlgedit/kdlgwidgets.h,kdevelop/kdlgedit/defines.h,kdevelop/kdlgedit/item_base.cpp,kdevelop/kdlgedit/item_checkbox.cpp,kdevelop/kdlgedit/item_combobox.cpp,kdevelop/kdlgedit/item_groupbox.cpp,kdevelop/kdlgedit/item_label.cpp,kdevelop/kdlgedit/item_lcdnumber.cpp,kdevelop/kdlgedit/item_lineedit.cpp,kdevelop/kdlgedit/item_listbox.cpp,kdevelop/kdlgedit/item_multilineedit.cpp,kdevelop/kdlgedit/item_progressbar.cpp,kdevelop/kdlgedit/item_pushbutton.cpp,kdevelop/kdlgedit/item_radiobutton.cpp,kdevelop/kdlgedit/item_scrollbar.cpp,kdevelop/kdlgedit/item_slider.cpp,kdevelop/kdlgedit/item_spinbox.cpp,kdevelop/kdlgedit/item_widget.cpp,kdevelop/kdlgedit/items.h,kdevelop/kdlgedit/itemsglobal.cpp,kdevelop/kdlgedit/itemsglobal.h,kdevelop/kdlgedit/kdlgnewdialogdlg.cpp,kdevelop/kdlgedit/kdlgnewdialogdlg.h,kdevelop/kdlgedit/kdlgotherdlgs.cpp,kdevelop/kdlgedit/kdlgotherdlgs.h,kdevelop/kdlgedit/kdlgproplv.h,kdevelop/kdlgedit/item_all.cpp.inc,kdevelop/kdlgedit/item_class.cpp.inc,kdevelop/kdlgedit/kdlgreadmedlg.cpp,kdevelop/kdlgedit/kdlgreadmedlg.h,
 type=static_library
 sub_dirs=
 [kdevelop/kwrite/kmimemagic.cpp]
@@ -1615,6 +1625,16 @@ install_location=
 dist=true
 install=false
 type=SOURCE
+[kdevelop/kdlgedit/kdlgreadmedlg.h]
+install_location=
+dist=true
+install=false
+type=HEADER
+[kdevelop/pics/dlg_firstrun.gif]
+install_location=
+dist=true
+install=false
+type=DATA
 [kdevelop/docs/en/tutorial-7.html]
 install_location=$$(kde_htmldir)/en/kdevelop/tutorial-7.html
 dist=true

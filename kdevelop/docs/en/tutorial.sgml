@@ -1256,7 +1256,7 @@ information hiding and reusablitity of already existing code.
 
 When creating a KDE or Qt project, you always have to have a view that inherits <tt/QWidget/, either by direct inheriance or because
 the library widget you want to use inherits <tt/QWidget/. Therefore, the Application Wizard already constructed a view that is an
-instance of a class <tt/<yourapp>View/, which inherits <tt/QWidget/ already. The application creates your view in the method
+instance of a class <tt/&lt;yourapp&gt;View/, which inherits <tt/QWidget/ already. The application creates your view in the method
 <tt/initView()/, where an instance is created and connected to the main widget as it's view with <tt/KTMainWidget::setView()/.
 
 This chapter therefore describes how to use library widgets for creating views of KDE or Qt applications that are generated with
@@ -1365,6 +1365,533 @@ handling; then we will connect certain functions to the toolbar and menubar and 
 <p>
 <sect1>What the Dialogeditor provides
 <p>
+<sect1>Qt and KDE Widgets
+<p>
+Currently provided widgets are:
+
+<bf/QT-Widgets:/
+<itemize>
+<item><bf/QWidget/ - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
+hirarchy within your dialog.
+<item><bf/QLabel/ - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the
+purpose of the lineedit is or which varialbe e.g. a combo box allows to set.
+<item><bf/QPushButton/ - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.
+<item><bf/QCheckBox/ - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.
+<item><bf/QLCDNumber/ - displays numbers in LCD style. Often used for clocks.
+<item><bf/QRadioButton/ - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
+of them depend on each other, e.g. you have three radiobuttons, but ony want the user to choose one of three offered options.
+<item><bf/QComboBox/ - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
+box is write enabled.
+<item><bf/QListBox/ - provides a single-column list of items that can be scrolled.
+<item><bf/QListView/ - creates a multi-column list view that can be used to display e.g. file trees etc. in tree and table view.
+<item><bf/QMultiLineEdit/ - offers a multi-line editor.
+<item><bf/QProgressBar/ - displays the progress of an action that takes a longer time to be finished.
+<item><bf/QSpinBox/ - allows choosing numeric values by up- and down buttons or insertion if write enabled.
+<item><bf/QSlider/ - sets a value in a program-defined range by a slider.
+<item><bf/QScrollBar/ - indicates the range of a value and sets the current value by a slider as well as up- and down buttons; often
+used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
+to another part of the widgets' contents.
+<item><bf/QGroupBox/ - provides a groupbox frame with title to indicate that child widgets within the box belong together.
+</itemize>
+
+<bf/KDE-Widgets:/
+<itemize>
+<item><bf/KColorButton/ - a pushbutton displaying a selected color. On a button press, the KDE Color dialog is shown where the user can
+select another color. Often used for drawing applications or in any case where color values can be set.
+<item><bf/KCombo/ - similar to <tt/QComboBox/. Lets the user choose a value by a drop-down listbox.
+<item><bf/KDatePicker/ - a complete widget to get a date value by the user.
+<item><bf/KDateTable/ - a calendar table to select a date of a month. Used by <tt/KDatePicker/ to build the datepicker dialog.
+<item><bf/KKeyButton/ - a button to select a key value. If the button is selected, it gets activated. Pressing a keyboard button will
+change the key value for the button which can be used to configure keybindings.
+<item><bf/KLed/ - and LED (Light Emitting Diode) widget to display a certain state.
+<item><bf/KLedLamp/ - and LED lamp that also supports click actions
+<item><bf/KProgress/ - similar to <tt/QProgressBar/, <tt/KProgress/ supports certain other values.
+<item><bf/KRestrictedLine/ - a <tt/QLineEdit/ that only accepts certain user input. This can be used to restrict access to certain data
+by password dialogs.
+<item><bf/KSeparator/ - a separator widget to be used in all cases where KDE applications require a separator to provide a unique look.
+Often used in dialogs to separate logical parts where <tt/QGroupBox/ doesn't fit.
+<item><bf/KTreeList/ - a collapsable list view to display trees similar to <tt/QListView/.
+</itemize>
+
+<sect1>Properties of Qt supported Widgets
+<p>
+
+The following chapter gives a complete overview over the currently supported widgets of the Qt toolkit. To achieve a better
+understanding of the properties, these are separated to their inheritance. As all of them inherit <tt/QWidget/, this class is described
+first. All QWidget properties are available for all other widgets as well, so these are not listed for them again. For widget groups
+that inherit an abstract subclass of QWidget as their baseclass, the baseclasses' properties are listed first (though this class does
+not provide a widget in the dialogeditor itself). Then the widget properities for the available widget of the group contains the
+properties that are specific to it. For a better understanding the inheritance tree of the available widgets is listed below:
+
+<itemize>
+<item><ref id="QWidget" name="QWidget">
+	<itemize>
+		<item><ref id="QButton" name="QButton"> (abstract)
+			<itemize>
+			<item><ref id="QCheckBox" name="QCheckBox">
+			<item><ref id="QPushButton" name="QPushButton">
+			<item><ref id="QRadioButton" name="QRadioButton">
+			</itemize>
+		<item><ref id="QComboBox" name="QComboBox">
+		<item><ref id="QFrame" name="QFrame"> (abstract for now)
+			<itemize>
+			<item><ref id="QGroupBox" name="QGroupBox">
+			<item><ref id="QLCDNumber" name="QLCDNumber">
+			<item><ref id="QLabel" name="QLabel">
+			<item><ref id="QProgressBar" name="QProgressBar">
+			<item><ref id="QScrollView" name="QScrollView"> (abstract for now)
+				<itemize>
+				<item><ref id="QListView" name="QListView">
+				</itemize>
+			<item><ref id="QSpinBox" name="QSpinBox">
+			<item><ref id="QTableView" name="QTableView"> (abstract)
+				<itemize>
+				<item><ref id="QListBox" name="QListBox">
+				<item><ref id="QMultiLineEdit" name="QMultiLineEdit">
+				</itemize>
+			</itemize>
+		<item><ref id="QLineEdit" name="QLineEdit">
+		<item><ref id="QScrollBar" name="QScrollBar">
+		<item><ref id="QSlider" name="QSlider">
+	</itemize>
+</itemize>
+
+<sect2>QWidget Properties <label id="QWidget">
+<p>
+QWidget is the base class for almost all widgets in Qt and KDE. Therefore widgets that inherit QWidget will allow to use the same
+settings in most cases.
+
+<itemize>
+<item><bf/Appearance:/
+  <itemize>
+  <item><bf/BgColor:/ Background color of the widget
+  <item><bf/BgMode:/ Background mode of the widget
+  <item><bf/BgPalColor:/ Color pallette for the background
+  <item><bf/BgPixmap:/ filename for a background pixmap
+  <item><bf/Cursor:/ Cusor over the widget
+  <item><bf/Font:/ Font for the widget
+  <item><bf/MaskBitmap:/ filename for a masking bitmap.
+  </itemize>
+<item><bf/C++ Code:/
+  <itemize>
+  <item><bf/AcceptsDrops:/ if set to true, the widget item will accept drops by drag'n drop mechanisms
+  <item><bf/Connections:/ connects the item's signals to slots
+  <item><bf/FocusProxy:/ the item that gives its focus to this widget.
+  <item><bf/HasFocus:/ sets if the item has the focus by default. Mind that only one item per dialog can have this value as true
+  <item><bf/ResizeToParent:/ resizes the widget to it's parent size (not visible in editing mode)
+  <item><bf/VarName:/ Variable name of the item. Chage this to names that describe the item's purpose.
+  </itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/IsEnabled:/ sets if the widget will accept user events
+  <item><bf/IsHidden:/ sets the item to be visible(false) or hidden(true)
+  <item><bf/Name:/ sets the name of the widget. Mind that the name is different from the VarName in C++ Code.
+  </itemize>
+<item><bf/Geometry:/
+  <itemize>
+  <item><bf/Height:/ height of the item
+  <item><bf/IsFixedSize:/
+  <item><bf/MaxHeight:/ maximum value for Height
+  <item><bf/MaxWidth:/ maximum value for Width
+  <item><bf/MinHeight:/ minimum value for Height
+  <item><bf/MinWidth:/ minimum value for Width
+  <item><bf/SizeIncX:/ pixel steps for resize actions for X position
+  <item><bf/SizeIncY:/ pixel steps for resize actions for Y position
+  <item><bf/Width:/ width of the item
+  <item><bf/X:/ position horizontal, counted from the left corner
+  <item><bf/Y:/ position vertical, counted up to down
+  </itemize>
+</itemize>
+
+
+<sect2>QButton inherited widgets <label id="QButton">
+<p>
+<tt/QButton/ is an abstract widget class that provides properties common to buttons.
+
+Inherits <ref id="QWidget" name="QWidget">
+
+Inherited by <ref id="QCheckBox" name="QCheckBox">, <ref id="QPushButton" name="QPushButton"> and <ref id="QRadioButton"
+name="QRadioButton"> inherit <tt/QButton/.
+
+
+<itemize>
+<item><bf/Appearance:/
+  <itemize>
+  <item><bf/setPixmap:/ sets the pixmap filename to use
+  </itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/setText:/ the text on labels, buttons and boxes, also pre-set text for lineedits.
+  <item><bf/setAutoRepeat:/ if enabled, the clicked() signal is emitted at regular intervals while the button is down. No effect on
+  toogle buttons.
+  <item><bf/setAutoResize:/ Enables auto-resizing if TRUE. When auto-resize is enabled, the button will resizes itself
+  whenever the contents changes.
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QCheckBox Properities <label id="QCheckBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/isChecked: (setChecked)/ defines is the checkbox is set checked on construction
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QPushButton Properties <label id="QPushButton">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/isAutoDefault: (setAutoDefault)/ the auto-default button becomes the default push button if it receives the keyboard input focus.
+  <item><bf/isDefault: (setDefault)/ there can be only one default button and it is only allowed to use in a dialog (see <tt/QDialog/). The
+  default button emits <tt/clicked()/ if the user presses the Enter key.
+  <item><bf/isMenuButton: (setIsMenuButton)/ tells the button to draw
+  a menu indication triangle if enabled. The menu has to be inserted separately.
+  <item><bf/isToggleButton::(setToggleButton)/ makes a push button a toggle button, so the button has a similar state as check
+  boxes.
+  <item><bf/isToggledOn: (setOn)/ (public slot) switches a toggle button on.
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QRadioButton Properties <label id="QRadioButton">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/isChecked: (setChecked)/ defines is the radiobutton is set checked on construction
+  </itemize>
+</itemize>
+<p>
+
+<sect2>QComboBox Properties <label id="QComboBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+( no additional properties for now)
+<p>
+
+
+<sect2>QFrame inherited widgets <label id="QFrame">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+For now only used as an abstract class.
+
+<itemize>
+<item><bf/Appearance:/
+  <itemize>
+  <item>Margin (setMargin): sets the margin, which is the distance from the innermost pixel of the frame and the outermost pixel of the
+  contents.
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QGroupBox Properties <label id="QGroupBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/Title: (setTitle)/ sets the groupbox title that is displayed in the box frame.
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QLCDNumber Properties  <label id="QLCDNumber">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/NumDigits:(setNumDigits)/ sets the number of digits displayed in QLCDNumber
+  <item><bf/Value: (display)/ (public slot) sets the initial value for QLCDNumber
+  </itemize>
+</itemize>
+<p>
+
+
+<sect3>QLabel Properties  <label id="QLabel">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+<item><bf/Appearance:/
+  <itemize>
+  <item>Margin (setMargin): sets the margin, which is for QLabel the distance from the frame to the first letter of the label text,
+  depending on the alignment of the label.
+  </itemize>
+<item><bf/C++ Code: /
+  <itemize>
+  <item><bf/Buddy: (setBuddy)/ sets the buddy widget of the label.
+  </itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/Text: (setText)/ sets the label text.
+  <item><bf/isAutoResize: (setAutoResize)/ if TRUE, the label will resize itself if the contents changes. The top left corner is not
+  moved.
+  </itemize>
+</itemize>
+<p>
+
+
+<sect3>QProgressBar Properties  <label id="QProgressBar">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/TotalSteps: (setTotalSteps)/ (public slot) sets the total steps of the progressbar. During the iteration of your action to
+  display the progress, you have to call setProgress(int) to advance the progress step displayed to (int).
+  </itemize>
+</itemize>
+<p>
+			
+<sect3>QScrollView <label id="QScrollView">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+Inherited by <ref id="QListBox" name="QListBox">
+(abstract for now)
+
+Provides a scrollable widget that manages the display of a childwidget by a vertical and horizontal scrollbar.
+
+<sect4>QListView<label id="QListView">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QListView" name="QListView">
+
+Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars throug <ref
+id="QScrollView" name="QScrollView">.
+
+<itemize>
+<item><bf/Appearance:/
+	<itemize>
+	<item><bf/ListViewFont:/ (setFont()) Sets the font of the ListView items
+	<item><bf/ListViewPalette:/ (setPalette()) Sets the palette of the list view items
+	<item><bf/TreeStepSize:/ (setTreeStepSize(int)) Offset of pixels of a child item to its parent item
+	<item><bf/hScrollBarMode:/ Scrollbar mode provided by <ref id="QScrollView" name="QScrollView"> for the horizontal scrollbar
+	<item><bf/isAllColumnsShowFocus:/ (setAllColumnsShowFocus(bool)) displays focus on all columns of an item.
+	<item><bf/isMultiSelection:/ enables multiselection of list items
+	<item><bf/isRootDecorated:/ enabeles the + and - decoration to open and close trees
+	<item><bf/vScrollBarMode:/Scrollbar mode provided by <ref id="QScrollView" name="QScrollView"> for the vertical scrollbar
+	</itemize>
+<item><bf/General:/
+	<itemize>
+	<item><bf/Entries:/ lets you insert a list of entries that are pre-set as QListViewItems.
+	<item><bf/isAutoUpdate:/
+	</itemize>
+</itemize>
+
+<sect3>QSpinBox Properties <label id="QSpinBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+<item><bf/General:/
+  <itemize>
+  <item><bf/MaxValue:/
+  <item><bf/MinValue:/
+  <item><bf/Prefix:/
+  <item><bf/Suffix:/
+  <item><bf/Value:/
+  <item><bf/isWrapping:/
+  </itemize>
+</itemize>
+<p>
+
+<sect3>QTableView inherited widgets <label id="QTableView">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+Inherited by <ref id="QListBox" name="QListBox"> and <ref id="QMultiLineEdit" name="QMultiLineEdit">
+<p>
+
+<sect4>QListBox Properties <label id="QListBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+<itemize>
+
+<item><bf/General:/
+  <itemize>
+  <item><bf/isAutoBottomScrollBar: (setAutoBottomScrollBar)/
+  <item><bf/isAutoScroll: (setAutoScroll)/
+  <item><bf/isAutoScrollBar: (setAutoScrollBar)/
+  <item><bf/isAutoUpdate: (setAutoUpdate)/
+  <item><bf/isBottomScrollBar: (setBottomScrollBar)/
+  <item><bf/isDragSelect: (setDragSelect)/
+  <item><bf/isSmoothScrolling: (setSmoothScrolling)/
+  </itemize>
+
+<item><bf/Geometry:/
+
+<itemize>
+<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.
+</itemize>
+
+</itemize>
+<p>
+
+<sect4>QMultiLineEdit Properties <label id="QMultiLineEdit">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/Text: (setText) / (public slot) sets the text of the widget.
+<item><bf/isAutoUpdate: (setAutoUpdate)/ used to avoid flicker during large changes; the view is not updated if disabled.
+<item><bf/isOverWriteMode: (setOverwriteMode) /(public slot) sets overwrite enabled or disabled.
+<item><bf/isReadOnly: (setReadOnly)/ (public slot) sets the widget text to read only; disables text input.
+<item><bf/isTextSelected: (selectAll)/(public slot) marks the whole text selected
+</itemize>
+
+<item><bf/Geometry:/
+
+<itemize>
+<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.
+</itemize>
+
+</itemize>
+<p>
+
+
+<sect2>QLineEdit Properties <label id="QLineEdit">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/CursorPosition: (setCursorPosition)/ sets the default cursor position.
+<item><bf/MaxLength: (setMaxLength) / sets the maximum string length
+<item><bf/Text: (setText) / (public slot) sets the contents displayed on construction
+<item><bf/hasFrame: (setFrame) / draws the lineedit witin a two-pixel frame if enabled.
+<item><bf/isTextSelected: (selectAll) / (public slot) sets the text to be selected.
+</itemize>
+
+</itemize>
+<p>
+
+<sect2>QScrollBar Properties <label id="QScrollBar">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
+<item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
+<item><bf/Orientation: (setOrientation)/ sets the orientation of the scrollbar to horizontal or vertical.
+<item><bf/Value: / sets the initial value of the scrollbar in the constructor (optional)
+<item><bf/isTracking: (setTracking)/ if enabled, the scrollbar emits <tt/valueChanged()/ whenever the bar is dragged; otherwise only on
+mouse release.
+</itemize>
+
+</itemize>
+<p>
+
+<sect2>QSlider Properties <label id="QSlider">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
+<item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
+<item><bf/Orientation: (setOrientation)/ sets the orientation of the slider to horizontal or vertical.
+<item><bf/Value: (setValue)/ (public slot) uses <tt/QRangeControl::setValue()/ to set the value.
+<item><bf/isTracking:(setTracking)/ if enabled, the slider emits <tt/valueChanged()/ whenever the slider is dragged; otherwise only on
+mouse release.
+</itemize>
+
+</itemize>
+<p>
+
+<sect1>Properties of KDE supported Widgets
+<p>
+
+<itemize>
+<item><ref id="QWidget" name="QWidget">
+	<itemize>
+	<item><ref id="QButton" name="QButton"> (abstract)
+		<itemize>
+		<item><ref id="QPushButton" name="QPushButton">
+  		<itemize>
+  		<item><ref id="KColorButton" name="KColorButton">
+  		<item><ref id="KKeyButton" name="KKeyButton">
+  		</itemize>		
+		</itemize>
+	<item><ref id="QComboBox" name="QComboBox">
+		<itemize>
+		<item><ref id="KCombo" name="KCombo">
+		</itemize>
+	<item><ref id="QFrame" name="QFrame"> (abstract for now)
+ 		<itemize>
+ 		<item><ref id="KDatePicker" name="KDatePicker">
+ 		<item><ref id="KLedLamp" name="KLedLamp">
+ 		<item><ref id="KProgress" name="KProgress">
+ 		<item><ref id="KSeparator" name="KSeparator">
+ 		<item><ref id="QTableView" name="QTableView"> (abstract)
+ 			<itemize>
+ 			<item><ref id="KDateTable" name="KDateTable">
+ 			<item><ref id="KTreeList" name="KTreeList">
+ 			</itemize>
+ 		</itemize>
+ 	<item><ref id="QLineEdit" name="QLineEdit">
+ 		<itemize>
+ 		<item><ref id="KRestrictedLine" name="KRestrictedLine">
+ 		</itemize>
+	</itemize>
+	<item><ref id="KLed" name="KLed">
+</itemize>
+
+<sect2>KColorButton<label id="KColorButton">
+<p>
+<sect2>KKeyButton<label id="KKeyButton">
+<p>
+<sect2>KCombo<label id="KCombo">
+<p>
+<sect2>KDatePicker<label id="KDatePicker">
+<p>
+<sect2>KLedLamp<label id="KLedLamp">
+<p>
+<sect2>KProgress<label id="KProgress">
+<p>
+<sect2>KSeparator<label id="KSeparator">
+<p>
+<sect2>KDateTable<label id="KDateTable">
+<p>
+<sect2>KTreeList<label id="KTreeList">
+<p>
+<sect2>KRestrictedLine<label id="KRestrictedLine">
+<p>
+<sect2>KLed<label id="KLed">
+<p>
+
 <sect1>Constructing a new Dialog
 <p>
 <sect1>Setting Widget Properties
@@ -1448,7 +1975,7 @@ according methods documented in the <tt/KApplication/ class.
 	<item>bin/  Application binaries directory
 	<item>lib/ standard kde libraries (libkdecore etc.)
 		<itemize>
-		<item>'appname'/ Application specific data that is platform dependent
+		<item>&lt;appname&gt;/ Application specific data that is platform dependent
 		</itemize>
 	<item>include/ standard kde header files
 	<item>parts/
@@ -1460,9 +1987,9 @@ according methods documented in the <tt/KApplication/ class.
 			<item>HTML/ HTML documentation directory
 				<itemize>
 				<item>default --> Link to kdedir()/share/doc/HTML/en
-				<item>'lang'/ language of the documentation set, e.g en for english, de for german
+				<item>&lt;lang&gt;/ language of the documentation set, e.g en for english, de for german
 					<itemize>
-					<item>'appname'/
+					<item>&lt;appname&gt;/
 						<itemize>
 						<item>index.html  - the start page loaded by KDEHelp, usually the table of contents page
 						<item>other application help files, e.g. index-1.html, index-2.html (generated from the index.sgml file)
@@ -1490,33 +2017,33 @@ according methods documented in the <tt/KApplication/ class.
 			</itemize>
 		<item>partlnk/
 			<itemize>	
-			<item><partname>.kdelnk
+			<item>&lt;partname&gt;.kdelnk
 			</itemize>
 		<item>icons/ Icons used in kdelnk files
 			<itemize>
-			<item><appname>.xpm
+			<item>&lt;appname&gt;.xpm
 			<item>mini/ Mini Icons for kpanel
 			</itemize>
 		<item>toolbar/ Standard toolbar pixmaps (eg. fileopen.xpm)
 		<item>wallpapers/ Wallpapers used by kdisplay
 		<item>apps/	
 			<itemize>
-			<item>'appname'/
+			<item>&lt;appname&gt;/
 				<itemize>
 				<item>toolbar/ Toolbar pixmaps
 				<item>pics/ Other application pixmaps
 				<item>application specific data (must be platform independent)
 				</itemize>
-			<item>'libname'/
+			<item>&lt;libname&gt;/
 				<itemize>
 				<item>pics/
 				<item>locale/
 					<itemize>
-					<item>'lang'/
+					<item>&lt;lang&gt;/
 						<itemize>
 						<item>LC_MESSAGES/
 							<itemize>
-							<item>'appname'.mo
+							<item>&lt;appname&gt;.mo
 							</itemize>
 						</itemize>
 					</itemize>
@@ -1551,12 +2078,13 @@ The supported macros are:
 <itemize>
 <item>&dollar;(kde_bindir)  expands to: <bf>kdedir()/bin/</bf> Application binary file (required)
 <item>&dollar;(kde_appsdir)	expands to: <bf>kdedir()/share/applnk/</bf> Application kdelnk file (required)
-<item>&dollar;(kde_icondir) expands to: <bf>kdedir()/share/icons/<appname>.xpm</bf>Application icon (required)
-<item><descrip><tag/&dollar;(kde_htmldir)/ expands to: <bf>kdedir()/share/doc/default/HTML/</bf> HTML documentation directory. You have
-to append <bf>/en/&lt;yourfile&gt;.html </descrip>
-<item>&dollar;(kde_minidir)       Where your mini icon should go to.
-<item>&dollar;(kde_datadir)       Where you install application data. (Use a subdir))
-<item>&dollar;(kde_locale        Where translation files should go to.(contains lang subdir)s)
+<item>&dollar;(kde_icondir) expands to: <bf>kdedir()/share/icons/&lt;appname&gt;.xpm</bf>Application icon (required)
+<item>&dollar;(kde_htmldir) expands to: <bf>kdedir()/share/doc/default/HTML/</bf> HTML documentation directory. You have
+to append <bf>/en/&lt;yourfile&gt;.html</bf>
+<item>&dollar;(kde_minidir) expands to: <bf>kdedir()/share/icons/mini/ </bf> Application mini icon.
+<item>&dollar;(kde_datadir) expands to: <bf>kdedir()/share/apps/</bf>     Application data. (Use a subdirectory)
+<item>&dollar;(kde_locale   expands to: <bf>kdedir()/share/locale/</bf>    Application translation files should go to.(contains lang
+subdirs for the languages)
 <item>&dollar;(kde_cgidir)        Where cgi-bin executables should go to.
 <item>&dollar;(kde_confdir)       Where config files should go to.
 <item>&dollar;(kde_mimedir)       Where mimetypes should go to.
@@ -1569,17 +2097,23 @@ to append <bf>/en/&lt;yourfile&gt;.html </descrip>
 What does this
 mean to application developers? A standard KDE application will install files into several places in the above structure. The only
 required items are the application binary, the application kdelnk file, the application icon and the application help files - all
-others are optional. The most common things that are installed are: Type of file Location Application binary (required) kdedir()/bin/
-Application help files (required)
-Application toolbar pixmaps
-kdedir()/share/apps/<appname>/toolbar/
-Application platform independent data
-kdedir()/share/apps/<appname>/
-Application platform specific data
-kdedir()/lib/<appname>/
-kdedir()/share/apps/<libname>/toolbar
-Toolbar icons for library widgets.
-kdedir()/share/apps/<libname>/pics Any other bitmaps for library widgets.
+others are optional. The most common things that are installed are:
+
+<code>
+Type of file                                    Location
+
+Application binary (required)                   kdedir()/bin/
+
+Application platform specific data              kdedir()/lib/&lt;appname&gt;/
+
+Application toolbar pixmaps                     kdedir()/share/apps/&lt;appname&gt;/toolbar/
+
+Application platform independent data           kdedir()/share/apps/&lt;appname&gt;
+
+Toolbar icons for library widgets.              kdedir()/share/apps/&lt;libname&gt;/toolbar/
+
+Any other bitmaps for library widgets.          kdedir()/share/apps/&lt;libname&gt;/pics/
+</code>
 
 <sect>Finding Errors
 <p>
@@ -1610,6 +2144,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
 
 
 

@@ -1,3 +1,8 @@
+1999-06-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* moved widget properties documentation to the tutorial
+	* added view in new window to the doc-browser context menu to open a document page in kfm
+	* updated the startlogo to the new one comitted by Jacek Wojdel <J.C.Wojdel@cs.tudelft.nl>
+	
 1999-06-07 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commit bugfix by Torsten Uhlmann <TUhlmann@debis.com> ,cprjoptions
 
@@ -7,6 +12,14 @@
         * added info dialog for the first use of the dlgedit
         * fixed some bugs
         * muuuuch more !
+
+1999-06-05  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added icons for the new items of the dialog editor
+	* added toolbar buttons to en/disable output and tree view
+	* added add bookmark to browser context menu, reloading of browser file,
+		home button and cancel request
+	* completed application wizard labels
+	* updated documentation for the new dialogeditor items and LFV configuration
 	
 1999-06-04 Pascal Krahmer
         * Added A LOT of items to the dialog editor.
