@@ -6,31 +6,36 @@
 Project templates provide the developer with a basic application framework.
 This is necessary for rapid application development (RAD) and makes it even
 for (unexperienced) 3rd party developer possible to create standard conforming
-applications like kedit as well as plugins for example for kdevelop or noatun.
+applications like kedit as well as plugins for example for kdevelop or noatun.\n\n
+\ref templates_1\n
+\ref templates_2\n
+\ref templates_3
+<hr>
 
-\section overview_intro Example: How To Create a Simple KDE Application Template "KHello"
+\section templates_1 I. Example: How To Create a Simple KDE Application Template "KHello"
 
 You can find this template in <code>$KDEDIR/share/apps/kdevappwizard/template-khello</code>.
 
-\subsection struct_step1 Step 1: Basic Skeleton
+\subsection templates_1_1 Step 1: Basic Skeleton
 
-Create a directory <code>khello</code> with the files
+Create a directory <code>template-khello</code> with the files
 <code><pre>
-    - khello/app.cpp
-    - khello/app.h
-    - khello/app.desktop
-    - khello/app.kdevelop
-    - khello/appui.rc
-    - khello/khello
-    - khello/main.cpp
-    - khello/preview.png
-    - khello/script
-    - khello/src-Makefile.am
-    - khello/subdirs
+    - template-khello/app.cpp
+    - template-khello/app.h
+    - template-khello/app.desktop
+    - template-khello/app.kdevelop
+    - template-khello/appui.rc
+    - template-khello/khello
+    - template-khello/main.cpp
+    - template-khello/preview.png
+    - template-khello/script
+    - template-khello/src-Makefile.am
+    - template-khello/subdirs
     .
 </pre></code>
+\note The directory name must begin with <code>"template-"</code>.
 
-\subsection detail_step2 Step 2: The Files in Detail
+\subsection templates_1_2 Step 2: The Files in Detail
 
 Have a look into the files! There are some variables which the applicatin
 wizard will replace:
@@ -43,15 +48,13 @@ wizard will replace:
     - $LICENSE$ ..... by the license
     .
 </pre></code>
-
-
-\subsubsection detail_source The Soure Code khello/app.cpp, khello/app.h and khello/main.cpp
+\subsubsection templates_1_2a The Soure Code template-khello/app.cpp, template-khello/app.h and template-khello/main.cpp
 
 This files contain the source code that should not be too special so that the
 user can implement his own ideas.\n
-(There may be variables included - see "Step 2: The Files in Detail").
+(There may be variables included - see \ref templates_1_2 "Step 2: The Files in Detail").
 
-\subsubsection detail_khello The File khello/khello
+\subsubsection templates_1_2b The File template-khello/khello
 
 It may look like this:
 \include khello/khello
@@ -63,41 +66,36 @@ The application wizard looks into this file to get
     - and the file templates the project uses (<code>FileTemplates=</code>).
     .
 
-\attention The file <code>khello/khello</code> must have the same name as the
-directory! If the directory is <code>my_template</code> the file must be
-<code>my_template/my_template</code>.
+\attention The file <code>template-khello/khello</code> must have the same name as
+the right half of the directory! If the directory is <code>template-foobar</code>
+the file must be <code>template-foobar/foobar</code>.
 
-\subsubsection detail_addon Some Additional Files
+\subsubsection templates_1_2c Some Additional Files
 
 The file
-    - <code>khello/appui.rc</code> contains information about the toolbar and the menu
-    - <code>khello/preview.png</code> will be shown in the aplication wizard
-    - <code>khello/app.desktop</code> describes the application.
+    - <code>template-khello/appui.rc</code> contains information about the toolbar and the menu
+    - <code>template-khello/preview.png</code> will be shown in the aplication wizard
+    - <code>template-khello/app.desktop</code> describes the application.
+    - <code>template-khello/subdirs</code> contains a list of the subdirectories (usually <code>doc, po, src</code>) and can be found in the project root directory. It is necessary for the autotools.
     .
 
-\subsubsection detail_subdirs The File khello/subdirs
+\subsubsection templates_1_2d The File template-khello/src-Makefile.am
 
-\include khello/subdirs
-This file contains the list of subdirectories and can be found in the project
-root direcotry. It is necessary for the autotools.
-
-\subsubsection detail_src_Makefile The File khello/src-Makefile.am
-
-This file will be copied to the $PROJECTDIR/src/.
+This file will be copied to the <code>$PROJECTDIR/src/</code>.
 \include khello/src-Makefile.am
 
-\subsubsection detail_script The File khello/script
+\subsubsection templates_1_2e The File template-khello/script
 
 The following script is used to install the template and replaces all
 variables by the corresponding value. The result is a hopefully working
 kdevelop project!
 \include khello/script
 \note There are several application templates which use some identical
-files - that's why some files are taken from the "template-common"-directory.
+files - that's why some files are taken from the <code>"template-common"</code>-directory.
 
-\subsection detail_step3 Step 3: Registration/Installation of the Application Template
+\section templates_2 II. Registration/Installation Of The Application Template
 
-The easies way to install your template is to provide an "install" script.\n
+The easies way to install your template is to provide an "install.sh" script.\n
 Example:
 \code
 #!/bin/sh
@@ -116,12 +114,21 @@ read newdir
 
 if [ "$newdir"a = a ]; then newdir="${kde_dir}/share/apps/kdevappwizard/"; fi
 
+# make sure the directories exist
+if [ ! -e "${newdir}" ]; then mkdir -p "$newdir" ; fi;
+if [ ! -e "${newdir}/template-khello" ]; then mkdir -p "${newdir}/template-khello" ; fi;
+if [ ! -e "${newdir}/templates" ]; then mkdir -p "${newdir}/templates" ; fi;
+
 # install now
-cp -R --target-directory "$newdir" your_template_direcotry
-# the file khello/khello must go to the templates directory.
-mv "$newdir/template-your_template" "$newdir/templates/"
+cp -R --target-directory "$newdir" template-khello
+# the file template-khello/khello must go to the "templates" directory that
+# kdevelop knows that it exists
+mv "$newdir/template-khello/khello" "$newdir/templates/"
 echo "done"
 \endcode
-\todo test the script in Step 3 :)
+
+\section templates_3 III. How To Add The Template To KDevelop CVS HEAD
+\todo TODO!
+
 
 */
