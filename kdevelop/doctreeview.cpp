@@ -201,29 +201,55 @@ QString DocTreeKDevelopBook::locatehtml(const char *filename)
 
 void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
 {
-    char buf[512];
-    while (fgets(buf, sizeof buf, f))
-        {
-            // HTML files produced by sgml2html have toc's like the following:
-            // <H2><A NAME="toc1">1.</A> <A HREF="index-1.html">Introduction</A></H2>
-            QString s = buf;
-            if (s.find("<H2>") == -1)
-                continue;
-            int pos1 = s.find("A HREF=\"");
-            if (pos1 == -1)
-                continue;
-            int pos2 = s.find('"', pos1+8);
-            if (pos2 == -1)
-                continue;
-            int pos3 = s.find('<', pos2+1);
-            if (pos3 == -1)
-                continue;
-            QString filename = s.mid(pos1+8, pos2-(pos1+8));
-            QString title = s.mid(pos2+2, pos3-(pos2+2));
-            QFileInfo fi(ident());
-            QString path = fi.dirPath() + "/" + filename;
-            new ListViewDocItem(this, title, path);
-        }
+  char buf[512];
+  ListViewDocItem* chapt;
+  while (fgets(buf, sizeof buf, f))
+  {
+    // HTML files produced by sgml2html have toc's like the following:
+    // <H2><A NAME="toc1">1.</A> <A HREF="index-1.html">Introduction</A></H2>
+    QString s = buf;
+    if (s.left(4) == "<H2>")
+    {
+      if (s.find("<H2>") == -1)
+          continue;
+      int pos1 = s.find("A HREF=\"");
+      if (pos1 == -1)
+          continue;
+      int pos2 = s.find('"', pos1+8);
+      if (pos2 == -1)
+          continue;
+      int pos3 = s.find('<', pos2+1);
+      if (pos3 == -1)
+          continue;
+      QString filename = s.mid(pos1+8, pos2-(pos1+8));
+      QString title = s.mid(pos2+2, pos3-(pos2+2));
+      QFileInfo fi(ident());
+      QString path = fi.dirPath() + "/" + filename;
+      chapt=new ListViewDocItem(this, title, path);
+    }
+    else if (s.left(4)=="<LI>")
+    {
+      int pos1 = s.find("A HREF=\"");
+      if (pos1 == -1)
+          continue;
+      int pos2 = s.find("\">", pos1+8);
+      if (pos2 == -1)
+          continue;
+      int pos3 = s.find(' ', pos2+1);             
+      if(pos3 == -1)
+          continue;
+      int pos4 = s.find('<', pos2+1);             
+      if(pos4 == -1)
+          continue;
+      
+      QString filename = s.mid(pos1+8, pos2-(pos1+8)); 
+      QString sectname = s.mid(pos3+1, pos4-(pos3+1));
+      QFileInfo fi(ident());
+      QString path = fi.dirPath() + "/" + filename;
+      if(chapt)
+        new ListViewDocItem(chapt, sectname,path);
+    }
+  }
 }
 
 QString DocTreeKDevelopBook::readIndexTitle(const char* book)
@@ -856,6 +882,37 @@ void DocTreeProjectFolder::handleRightButtonPressed(QListViewItem *item,
 /* The DocTreeView itself              */
 /**************************************/
 
+DocTreeView::DocToolTip::DocToolTip( QWidget *parent )
+  : QToolTip( parent )
+{
+}
+
+void DocTreeView::DocToolTip::maybeTip( const QPoint &p )
+{
+  DocTreeView *dt;
+  QString str;
+  QRect r;
+  
+  dt = (DocTreeView *)parentWidget();
+  
+  dt->tip( p, r, str );
+
+  if( !str.isEmpty() && r.isValid() )
+    tip( r, str );
+}
+
+void DocTreeView::tip( const QPoint &p, QRect &r, QString &str )
+{
+  QListViewItem *i;
+
+  i = itemAt( p );
+  r = itemRect( i );
+  
+  if( i != NULL && r.isValid() )
+    str = i->text( 0 );
+  else
+    str = "";
+}
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
     : KListView(parent, name)
@@ -877,6 +934,7 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
 
     folder_kdevelop->setOpen(true);
     folder_kdelibs->setOpen(true);
+    toolTip = new DocToolTip( this );
     
     connect( this,
              SIGNAL(rightButtonPressed(QListViewItem*,const QPoint&,int)),

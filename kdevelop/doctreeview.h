@@ -22,7 +22,7 @@
 #define OLD
 #include "klistview.h"
 #include <stdio.h>
-
+#include <qtooltip.h>
 
 class DocTreeKDevelopFolder;
 class DocTreeKDELibsFolder;
@@ -48,6 +48,7 @@ public:
     void refresh(CProject *prj);
     QString selectedText();
     void changePathes();
+    void tip( const QPoint &p, QRect &r, QString &str );
     
 protected slots:
     void slotUpdateAPI() { emit signalUpdateAPI();};
@@ -70,6 +71,18 @@ private:
     DocTreeOthersFolder *folder_others;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
+
+private: // Private classes
+  /** Class that handles dynamic tooltips in the doctree. */
+  class DocToolTip : public QToolTip
+  {
+  public:
+    DocToolTip(QWidget *parent);
+  protected:
+    void maybeTip( const QPoint & );
+  };
+  /** The dynamic tooltip:er. */
+  DocToolTip * toolTip;
 };
 
 /*************************************/

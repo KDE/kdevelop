@@ -2,7 +2,9 @@
         * added special kdoc2 features to the doctree ;-)
           now you can access all members in the html docu directly including the header list,
           globals, hierarchy and annotated list.
-
+        * added chapters to fold out on the kdevelop handbooks
+        * added tooltips to doctree
+          
 2000-03-09 Ralf Nolden <rnolden@kdevelop.de>
 	* fixed manual and programming handbook error in description for
             construction of new dialogs
