@@ -16,24 +16,11 @@ default: install
 debdir=$(shell pwd)/debian
 instdir=$(debdir)/tmp
 
-# configkdevelop=--enable-debug --enable-docbase --enable-kdoc2 \
-# --disable-rpath --libdir=$(kde_libdir) --includedir=$(kde_includedir)\
-#  --with-qt-includes=/usr/include/qt --mandir=$(mandir) \
-#  --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html
-
-
-
-#--prefix=/usr/local/kde \
-#--libdir=$(kde_libdir) --includedir=$(kde_includedir) --mandir=$(mandir) \
-# --enable-scripting --with-pythondocdir=/usr/share/python2.2-doc \
-# --enable-javasupport \
-
-
 run:
-	LD_LIBRARY_PATH=/usr/local/kde/lib /usr/local/kde/bin/gideon
+	LD_LIBRARY_PATH=/usr/local/kde3/lib /usr/local/kde/bin/gideon
 
 debug:
-	LD_LIBRARY_PATH=/usr/local/kde/lib kdbg /usr/local/kde/bin/gideon
+	LD_LIBRARY_PATH=/usr/local/kde3/lib kdbg /usr/local/kde/bin/gideon
 
 config2:
 	if test ! -f configure; then \
@@ -57,13 +44,13 @@ config3:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
-	./configure $(configkdevelop) \
+	./configure \
 	--prefix=/usr/local/kde3 \
 	--with-qt-dir=/usr/local/qt \
 	--with-qt-includes=/usr/local/qt \
 	--enable-debug \
 	--disable-rpath \
-	--with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
+	--with-kdelibsdoc-dir=/usr/share/doc/kdelibs4-doc/html \
 	--enable-docbase \
 	--with-phpdocdir=/usr/share/doc/php4 \
 	--with-glibdocdir=/usr/share/doc/glib-reference/html \
