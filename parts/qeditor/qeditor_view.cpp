@@ -50,6 +50,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
@@ -355,36 +356,57 @@ void QEditorView::proceed()
     // Start point
     QTextParagraph * firstParagraph = m_editor->document()->firstParagraph();
     int firstIndex = 0;
+    QTextParagraph * startParagraph = 0L;
+    int startIndex = 0;
+    QTextParagraph * lastParagraph;
+    int lastIndex;
 
     // 'From Cursor' option
     QEditor* edit = m_editor;
     if ( edit && ( m_options & KoFindDialog::FromCursor ) )
     {
-        firstParagraph = edit->textCursor()->paragraph();
-        firstIndex = edit->textCursor()->index();
+        startParagraph = edit->textCursor()->paragraph();
+        startIndex = edit->textCursor()->index();
     } // no else here !
 
+    bool forw = ! (m_options & KoFindDialog::FindBackwards);
+    
     // 'Selected Text' option
     if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
-        if ( !firstParagraph ) // not set by 'from cursor'
-        {
-            QTextCursor c1 = edit->document()->selectionStartCursor( QTextDocument::Standard );
-            firstParagraph = c1.paragraph();
-            firstIndex = c1.index();
-        }
+        QTextCursor c1 = edit->document()->selectionStartCursor( QTextDocument::Standard );
+        firstParagraph = c1.paragraph();
+        firstIndex = c1.index();
         QTextCursor c2 = edit->document()->selectionEndCursor( QTextDocument::Standard );
-        // Find in the selection
-        (void) find_real( firstParagraph, firstIndex, c2.paragraph(), c2.index() );
+	lastParagraph = c2.paragraph();
+	lastIndex = c2.index();
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
-        QTextParagraph * lastParagraph = edit->document()->lastParagraph();
-        (void) find_real( firstParagraph, firstIndex, lastParagraph, lastParagraph->length()-1 );
+        lastParagraph = edit->document()->lastParagraph();
+	lastIndex = lastParagraph->length()-1;
+    }
+    
+    bool bProceed = true;
+    if (forw) {
+	while (bProceed) { // loop until cancelled
+	    bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
+	    if (bProceed) {
+		bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
+	    }
+	}
+    }
+    else { // backwards
+	while (bProceed) { // loop until cancelled
+	    bProceed = find_real( firstParagraph, firstIndex, startParagraph, startIndex );
+	    if (bProceed) {
+		bProceed = find_real( startParagraph, startIndex, lastParagraph, lastIndex );
+	    }
+	}
     }
 }
 
-bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
+bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,			     
                              QTextParagraph* lastParagraph, int lastIndex )
 {
     m_currentParag = firstParagraph;
@@ -435,6 +457,8 @@ bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
 
 void QEditorView::doFind()
 {
+    m_findDialog->m_find->setEditURL(m_editor->selectedText());
+
     if( m_findDialog->exec() ){
         m_options = m_findDialog->options();
         m_find = new KoFind( m_findDialog->pattern(), m_findDialog->options() );
@@ -448,6 +472,8 @@ void QEditorView::doFind()
 
 void QEditorView::doReplace()
 {
+    m_replaceDialog->m_find->setEditURL(m_editor->selectedText());
+    
     if( m_replaceDialog->exec() ){
         m_options = m_replaceDialog->options();
         m_replace = new KoReplace( m_replaceDialog->pattern(), m_replaceDialog->replacement(),

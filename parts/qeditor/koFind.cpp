@@ -179,7 +179,8 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     }
     setFindHistory(findStrings);
     m_find->setFocus();
-    enableButtonOK( !pattern().isEmpty() );
+    enableButtonOK( !pattern().isEmpty() );   
+    
 }
 
 void KoFindDialog::textSearchChanged( const QString & text)

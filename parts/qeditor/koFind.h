@@ -167,11 +167,14 @@ protected slots:
     void showPatterns();
     void showPlaceholders();
     void textSearchChanged( const QString &);
-private:
+  
+public:        
+    KHistoryCombo *m_find;
+    KHistoryCombo *m_replace;
 
+private:
     QGroupBox *m_findGrp;
     QLabel *m_findLabel;
-    KHistoryCombo *m_find;
     QCheckBox *m_regExp;
     QPushButton *m_regExpItem;
     QGridLayout *m_findLayout;
@@ -202,7 +205,6 @@ private:
 
     QGroupBox *m_replaceGrp;
     QLabel *m_replaceLabel;
-    KHistoryCombo *m_replace;
     QCheckBox* m_backRef;
     QPushButton* m_backRefItem;
     QGridLayout *m_replaceLayout;
