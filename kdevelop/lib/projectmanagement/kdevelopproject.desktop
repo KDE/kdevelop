@@ -8,3 +8,6 @@ Type=QString
 
 [PropertyDef::X-KDevelop-Compilers]
 Type=QString
+
+[PropertyDef::X-KDevelop-Linker]
+Type=QString
