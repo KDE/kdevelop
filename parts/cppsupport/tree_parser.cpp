@@ -22,8 +22,8 @@ TreeParser::~TreeParser()
 
 void TreeParser::parseTranslationUnit( TranslationUnitAST* translationUnit )
 {
-    //kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;    
-    
+    //kdDebug(9007) << "TreeParser::parseTranslationUnit()" << endl;
+
     QPtrList<DeclarationAST> declarations = translationUnit->declarationList();
     QPtrListIterator<DeclarationAST> it( declarations );
     while( it.current() ){
@@ -34,8 +34,11 @@ void TreeParser::parseTranslationUnit( TranslationUnitAST* translationUnit )
 
 void TreeParser::parseDeclaration( DeclarationAST* declaration )
 {
-    //kdDebug(9007) << "TreeParser::parseDeclaration()" << endl;    
-    
+    //kdDebug(9007) << "TreeParser::parseDeclaration()" << endl;
+
+    if( !declaration )
+        return;
+	
     switch( declaration->nodeType() )
     {
     case NodeType_LinkageSpecification:
@@ -82,7 +85,7 @@ void TreeParser::parseDeclaration( DeclarationAST* declaration )
 
 void TreeParser::parseLinkageSpecification( LinkageSpecificationAST* ast )
 {
-    //kdDebug(9007) << "TreeParser::parseLinkageSpecification()" << endl;    
+    //kdDebug(9007) << "TreeParser::parseLinkageSpecification()" << endl;
     if( ast->linkageBody() )
 	parseLinkageBody( ast->linkageBody() );
     else if( ast->declaration() )
@@ -91,7 +94,7 @@ void TreeParser::parseLinkageSpecification( LinkageSpecificationAST* ast )
 
 void TreeParser::parseNamespace( NamespaceAST* decl )
 {
-    //kdDebug(9007) << "TreeParser::parseNamespace()" << endl;    
+    //kdDebug(9007) << "TreeParser::parseNamespace()" << endl;
     if( decl->linkageBody() )
 	parseLinkageBody( decl->linkageBody() );
 }

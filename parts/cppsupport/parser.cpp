@@ -2960,13 +2960,21 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    }
 		}
 		break;
+
+	    case '(':
+	    case '[':
+	        // ops!! it seems a declarator
+		goto start_decl;
+		break;
 	    }
+
 	}
 
 	syntaxError();
 	return false;
     }
 
+start_decl:
     lex->setIndex( index );
 
     if( lex->lookAhead(0) == Token_const && lex->lookAhead(1) == Token_identifier && lex->lookAhead(2) == '=' ){

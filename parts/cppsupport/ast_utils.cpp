@@ -226,9 +226,12 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
        }
        text += " ";
    }
-   
+
    text += scope;
 
+   if( declarator->subDeclarator() )
+       text += QString::fromLatin1("(") + declaratorToString(declarator->subDeclarator()) + QString::fromLatin1(")");
+       
    if( declarator->declaratorId() )
        text += declarator->declaratorId()->text();
 
