@@ -26,7 +26,7 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdatetime.h>
-#include <kdockwidget.h>
+#include <kmdidockwidget.h>
 
 class KMdiToolViewAccessor : public QObject
 {

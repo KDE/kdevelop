@@ -24,7 +24,7 @@
 #include "kmditoolviewaccessor.moc"
 #include "kmditoolviewaccessor_p.h"
 #include "kmdimainfrm.h"
-#include <kdockwidget.h>
+#include <kmdidockwidget.h>
 #include <kdebug.h>
 
 
