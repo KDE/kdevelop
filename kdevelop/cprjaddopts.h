@@ -39,7 +39,8 @@ public:
 private:
   CPrjConfChange *configureIn;
   QString old_KDE_QT_ver;
-  bool exceptionsEnabled, nooptEnabled, miscTestsEnabled;
+  bool exceptionsEnabled, nooptEnabled, miscTestsEnabled,
+       flexEnabled, yaccEnabled;
 
 };
 

@@ -69,6 +69,16 @@ void CPrjAddOpts::initGUI()
   miscTestsEnabled=configureIn->isOptionEnabled("KDE_MISC_TESTS");
   misc_tests->setChecked(miscTestsEnabled);
   
+  // check for flex-option
+  flex->setEnabled(configureIn->isOptionAvailable("KDE_NEED_FLEX"));
+  flexEnabled=configureIn->isOptionEnabled("KDE_NEED_FLEX");
+  flex->setChecked(flexEnabled);
+  
+  // check for yacc-option
+  yacc->setEnabled(configureIn->isOptionAvailable("AC_PROG_YACC"));
+  yaccEnabled=configureIn->isOptionEnabled("AC_PROG_YACC");
+  yacc->setChecked(yaccEnabled);
+  
 }
 
 bool CPrjAddOpts::changed() const
@@ -90,6 +100,14 @@ bool CPrjAddOpts::changed() const
   
   // check now for misc-tests-flag changement
   if (!resChanged && misc_tests->isChecked()!=miscTestsEnabled)
+    resChanged=true;
+  
+  // check now for flex-flag changement
+  if (!resChanged && flex->isChecked()!=flexEnabled)
+    resChanged=true;
+  
+  // check now for yacc-flag changement
+  if (!resChanged && yacc->isChecked()!=yaccEnabled)
     resChanged=true;
   
   return resChanged;
@@ -131,9 +149,21 @@ void CPrjAddOpts::modifyConfigureIn()
   
   // change misc tests string inside configure.in(.in)
   if (misc_tests->isChecked())
-    configureIn->enableOption("KDE_MISC_TESTS", "");
+    configureIn->enableOption("KDE_MISC_TESTS");
   else
-    configureIn->disableOption("KDE_MISC_TESTS", "");
+    configureIn->disableOption("KDE_MISC_TESTS");
+  
+  // change flex string inside configure.in(.in)
+  if (flex->isChecked())
+    configureIn->enableOption("KDE_NEED_FLEX");
+  else
+    configureIn->disableOption("KDE_NEED_FLEX");
+  
+  // change yacc string inside configure.in(.in)
+  if (yacc->isChecked())
+    configureIn->enableOption("AC_PROG_YACC");
+  else
+    configureIn->disableOption("AC_PROG_YACC");
   
   // write out changements
   configureIn->writeConfFile();  

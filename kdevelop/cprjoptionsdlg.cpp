@@ -191,10 +191,10 @@ void CPrjOptionsDlg::addGeneralPage()
 //
 void CPrjOptionsDlg::addAdditionalOptionsPage()
 {
-  QFrame* additionalPage = addPage(i18n("Additionals"),i18n("Additional Project Options"),
+  QFrame* additionalPage = addPage(i18n("Configure-Settings"),i18n("\"configure\" Settings"),
   KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(additionalPage);
-  QWhatsThis::add(additionalPage, i18n("Set some additional options of your project here."));
+  QWhatsThis::add(additionalPage, i18n("Set some configure options of your project here."));
   addOptsDlg = new CPrjAddOpts(&configureIn, additionalPage);
   grid->addWidget(addOptsDlg,0,0);
 }

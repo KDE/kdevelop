@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>458</width>
+            <width>442</width>
             <height>289</height>
         </rect>
     </property>
@@ -84,17 +84,6 @@
                 </widget>
             </hbox>
         </widget>
-        <widget row="3"  column="0" >
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>misc_tests</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>do some &amp;misc configure tests</string>
-            </property>
-        </widget>
         <widget row="1"  column="0" >
             <class>QCheckBox</class>
             <property stdset="1">
@@ -110,7 +99,51 @@
                 <string>Use this to activate exceptions</string>
             </property>
         </widget>
-        <spacer row="1"  column="1"  rowspan="3"  colspan="2" >
+        <widget row="3"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>misc_tests</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>do some &amp;misc configure tests</string>
+            </property>
+        </widget>
+        <widget row="5"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>yacc</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>add bison/&amp;yacc tests</string>
+            </property>
+        </widget>
+        <widget row="4"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>flex</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>add (f)&amp;lex tests</string>
+            </property>
+        </widget>
+        <widget row="2"  column="0" >
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>noopt</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>don't use predefined -O &amp;flag</string>
+            </property>
+        </widget>
+        <spacer row="1"  column="1"  rowspan="5"  colspan="2" >
             <property>
                 <name>name</name>
                 <cstring>Spacer13</cstring>
@@ -131,22 +164,14 @@
                 </size>
             </property>
         </spacer>
-        <widget row="2"  column="0" >
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>noopt</cstring>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>don't use predefined -O flag</string>
-            </property>
-        </widget>
     </grid>
 </widget>
 <tabstops>
     <tabstop>kde_qt_version</tabstop>
     <tabstop>exceptions</tabstop>
+    <tabstop>noopt</tabstop>
     <tabstop>misc_tests</tabstop>
+    <tabstop>flex</tabstop>
+    <tabstop>yacc</tabstop>
 </tabstops>
 </UI>
