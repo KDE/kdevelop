@@ -8,7 +8,7 @@ Package: kdevelop
 Architecture: any
 Depends: ${shlibs:Depends}, autoconf, automake, kdebase
 Recommends: make
-Suggests: qt-dev, qt-doc, kdelibs2g-dev, glimpse, sgmltools, a2ps, enscript, gv
+Suggests: qt-dev, qt-doc, kdelibs2g-dev, kdelibs-doc, glimpse, sgmltools, a2ps, enscript, gv
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment
  for developping C/C++ applications under X11. It features 
