@@ -7,6 +7,7 @@ Comment[xx]=xx$APPNAME$xx
 Name=KDev$APPNAME$
 Name[sv]=KDevelop $APPNAME$
 Name[xx]=xxKDev$APPNAME$xx
+GenericName=$APPNAME$
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
