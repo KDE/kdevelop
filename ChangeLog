@@ -1,6 +1,7 @@
 2002-01-22  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: TabPage mode, crash when closing a file repaired in QextMDI
       (it was bug #37374 and some others)
+    * .ts files can also be opened in kdevelop-editor now
 
 2002-01-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
     * fix: make undo work gracefully with autoindentation of '{'
