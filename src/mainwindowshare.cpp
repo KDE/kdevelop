@@ -296,15 +296,16 @@ void MainWindowShare::slotConfigureNotifications()
 
 void MainWindowShare::slotSettings()
 {
-	KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
-                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
+    KDialogBase dlg(KDialogBase::IconList, i18n("Configure KDevelop"),
+                    KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
                     "customization dialog");
 
     SettingsWidget *gsw;
     KConfig* config = kapp->config();
     if (TopLevel::mode != TopLevel::AssistantMode)
     {
-		QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
+        dlg.setHelp("setup");
+        QVBox *vbox = dlg.addVBoxPage(i18n("General"), i18n("General"), DesktopIcon("kdevelop") );
         gsw = new SettingsWidget(vbox, "general settings widget");
 
         gsw->projects_url->setMode((int)KFile::Directory);
