@@ -163,6 +163,9 @@ private: // Popupmenus
   /** Popupmenu for slots. */
   KPopupMenu slotPopup;
 
+  /** Popupmenu for signals. */
+  KPopupMenu signalPopup;
+
   /** Popupmenu for folders. */
   KPopupMenu folderPopup;
 

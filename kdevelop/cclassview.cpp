@@ -131,7 +131,7 @@ void CClassView::initPopups()
   methodPopup.setTitle( i18n( "Method" ) );
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()), 0, ID_CV_VIEW_DECLARATION);
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ),0,ID_CV_VIEW_DEFINITION);
-	methodPopup.insertSeparator();
+  methodPopup.insertSeparator();
   methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
@@ -146,8 +146,13 @@ void CClassView::initPopups()
   slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
   slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
   slotPopup.insertSeparator();
-  id = slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
-  slotPopup.setItemEnabled( id, false );
+  slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
+
+  // Signal popup
+  signalPopup.setTitle( i18n( "Signal" ) );
+  signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDefinition()),0, ID_CV_VIEW_DEFINITION );
+  signalPopup.insertSeparator();
+  signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Folder popup
   folderPopup.setTitle( i18n( "Folder" ) );
@@ -160,6 +165,7 @@ void CClassView::initPopups()
   connect(&methodPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
   connect(&projectPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
   connect(&slotPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&signalPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
 }
 
 /*********************************************************************
@@ -480,6 +486,9 @@ KPopupMenu *CClassView::getCurrentPopup()
     case THPRIVATE_SLOT:
       popup = &slotPopup;
       break;
+    case THSIGNAL:
+      popup = &signalPopup;
+      break;
     default:
       break;
   }
@@ -780,8 +789,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR || type == THPUBLIC_SIGNAL ||
-        type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL )
+        type == THPRIVATE_ATTR || type == THSIGNAL )
       slotViewDeclaration();
     else
       slotViewDefinition();
@@ -790,8 +798,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR  || type == THPUBLIC_SIGNAL ||
-        type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL)
+        type == THPRIVATE_ATTR  || type == THSIGNAL )
       slotViewDefinition();
     else
       slotViewDeclaration();
