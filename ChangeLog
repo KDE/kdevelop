@@ -1,3 +1,6 @@
+2002-05-28  Roberto Raggi <raggi@cli.di.unipi.it>
+	* qeditor: added find/replace dialogs
+
 2002-05-27  Harald Fernengel <harry@kdevelop.org>
         * added perforce VCS part
 
