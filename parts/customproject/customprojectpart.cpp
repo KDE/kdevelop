@@ -301,7 +301,8 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
     if (!ant) {
         QFileInfo fi(dir + "/Makefile");
-        if (!fi.exists()) {
+	QFileInfo fi2(dir + "/makefile");
+        if (!fi.exists() && !fi2.exists()) {
             KMessageBox::information(topLevel()->main(),
                                      i18n("There is no Makefile in this directory."));
             return;
@@ -427,8 +428,11 @@ void CustomProjectPart::updateTargetMenu()
     } else {
         QFile f(buildDirectory() + "/Makefile");
         if (!f.open(IO_ReadOnly)) {
-            kdDebug(9025) << "No Makefile" << endl;
-            return;
+	    f.setName( buildDirectory() + "/makefile" );
+	    if ( !f.open(IO_ReadOnly) ) {
+                kdDebug(9025) << "No Makefile" << endl;
+                return;
+	    }
         }
         QTextStream stream(&f);
         QRegExp re(".PHONY\\s*:(.*)");
