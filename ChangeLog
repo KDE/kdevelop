@@ -1,6 +1,11 @@
 2002-07-18  Harald Fernengel <harry@kdevelop.org>
-    * Applied debian patches by Norman Jordan <njordan@shaw.ca> 
+    * Applied debian patches by Norman Jordan <njordan@shaw.ca>
     * Applied the OpenBSD compile fix by Craig Barraclough <craigba@creative.com.au>
+2002-07-17  Kuba Ober <kuba@mareimbrium.org>
+    * using tab for comments made possible
+      - tab key inserts tabs at end of the line
+      - tab key inserts tabs if used before a comment ("//", "/*")
+      - tab key inserts tabs if used inside a comment
 2002-06-25  Walter Tasin <tasin@kdevelop.org>
     * bugfix #44111: CFLAGS and CPPFLAGS don't apply in build process
     blessed by Roland

@@ -323,6 +323,7 @@ class KWriteDoc : public QObject {
     HlManager *hlManager;
     Highlight *highlight;
     Attribute attribs[nAttribs];
+    int commentAttribute;
     
     KConfig* kWriteConfig;
 

@@ -447,6 +447,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   : QObject(0L)
   ,hlManager(hlManager)
   ,highlight(0L)
+  ,commentAttribute(-1)
   ,kWriteConfig(0L)
   ,tabChars(8)
   ,tabWidth(0)
@@ -1110,6 +1111,12 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
 // (4) is enabled by cfIndentParentheses
 
 // "tab indents" -- special behaviour of tab & shift-tab
+// 0. if cursor is:
+//    - past end of text in a non-empty line,
+//    - in a (possibly zero-length) whitespace before // or /*, but not in the
+//      whitespace at beginning of the line (so that we can normally indent
+//      multiline comments),
+//    insert regular tab and don't indent (and the algorithm is finished)
 // 1. treat the first non-empty line above the current one as baseline
 // 2. if the current line has closing brace "}" as its first character,
 //    then decrease the baseline indentation by one level
@@ -1165,7 +1172,7 @@ int KWriteDoc::seekIndentRef(QList<TextLine> & contents) {
 void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
   // NB: silent assumption is that what indentSpaces() counts
   // indeed consists of all spaces. If somebody types tab, tab,
-  // space, tab, text, and tabs are *not* indents and are *not*
+  // space, tab, text, and tabs are *not* indents that would be
   // replaced with spaces, then this will be borken as it used to
   // be in 2.1-release, but such an antisocial behaviour should be
   // damned anyway ;-)) Kuba
@@ -1283,8 +1290,8 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
       }
 
       char* buf = new char[tabs + spaces];
-      memset(buf, '\t', tabs);
-      memset(buf + tabs, ' ', spaces);
+      if (tabs > 0) memset(buf, '\t', tabs);
+      if (spaces > 0) memset(buf + tabs, ' ', spaces);
       PointStruc linebeg(0, c.cursor.y);
       recordInsert(linebeg, &buf[0], tabs + spaces);
       delete[] buf;
@@ -1295,32 +1302,73 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
   recordEnd(view,c);
 }
 
+// returns the smallest non-zero value of the pair (a, b), or zero if both are zero
+template <typename T>
+static inline T minnz(T a, T b) { return (((a != 0) && (b != 0) && (a < b)) || (b == 0)) ? a : b; }
+// returns the largest of the pair (a, b), or a if they are same
+template <typename T>
+static inline T max(T a, T b) { return (a >= b) ? a : b; }
+
 void KWriteDoc::commonTab(KWriteView * view, VConfig & c, bool add) {
+
+  // TODO: it would be cleaner to put it where it belongs, that is at all points
+  // where highlight items can get changed
+  if (commentAttribute == -1) {
+    ItemDataList idl;
+    ItemDataList & list = idl;
+    highlight->getItemDataList(list);
+    #ifdef DEBUG
+    std::cerr << "highlight->getItemDataList(list); list.count() = " << list.count() << std::endl;
+    #endif
+    for (ItemData * item = list.first(); item != 0; item = list.next()) {
+      if (item->name == "Comment") commentAttribute = list.at();
+    }
+    #ifdef DEBUG
+    std::cerr << "commentAttribute = " << commentAttribute << std::endl;
+    #endif
+  }
 
   recordStart(c.cursor);
 
-  if (!(c.flags & cfTabIndent)) {
-    // auto indentation hasn't been chosen
+  TextLine* textLine = contents.at(c.cursor.y);
+  // NB: accessing the list like that is expensive
+
+  const char * curline = textLine->getString();
+  const char * curtext;
+  const char * comment;
+  const char * dummy = "abc"; // dummy text to avoid excess test-for-NULL logic
+  curtext = (textLine->length() > c.cursor.x) ? curline + c.cursor.x : dummy + 1;
+  comment = minnz(strstr(curtext, "//"), strstr(curtext, "/*"));
+  comment = (comment != 0) ? comment : dummy;
+
+  if ((!(c.flags & cfTabIndent)) || // tab doesn't indent
+      ((textLine->lastChar() > 0) && (c.cursor.x > textLine->lastChar())) || // past end of line
+      ((strspn(curtext, " \t") == (size_t)(comment - curtext)) && // in the whitespace before comment
+       (strspn(curline, " \t") < (size_t)(comment - curline))) || // but not in leading whitespace
+      (textLine->getAttr(max(c.cursor.x - 1, 0)) == commentAttribute)) { // inside of comment
     // insert regular tab like we know it
     if (add) insertChar(view, c, '\t');
   } else {
     // indent the new line
 
     // find out baseline indentation level
-    TextLine* textLine;
+    bool preserve = true; // shall we preserve original indentation makeup?
+    int tabs = 0; // how many tabs were used in indentation found
+    int spaces = 0; // how many spaces were used in indentation found
     int cells = 0; // how many character cells were used (ie. accounting tab width)
-
+   
     if (c.cursor.y > 0) {
       textLine = contents.at(c.cursor.y - 1); // check the previous line
-      // NB: accessing the list like that is expensive
 
-      cells = seekIndentRef(contents);
+      cells = seekIndentRef(contents, tabs, spaces);
 
       textLine = contents.current();
 
       // adjust indentation levels for opening brace in this line
       if (textLine->getChar(textLine->lastChar())=='{') { // opening brace
         cells += indentLength;
+        preserve = false; // preserving spaces only make sense to align (...) stuff --
+                          // opening brace surely means the parentheses were closed
       }
     }
 
@@ -1359,8 +1407,12 @@ void KWriteDoc::commonTab(KWriteView * view, VConfig & c, bool add) {
     std::cerr << " indentPos " << indentPos << std::endl;
     #endif
 
-    int tabs = indentPos / tabChars;
-    int spaces = indentPos % tabChars;
+    // alter reference line indentation makeup only if changing indentation depth
+    preserve &= cells == indentPos;
+    if (! preserve) {
+      tabs = indentPos / tabChars;
+      spaces = indentPos % tabChars;
+    }
 
     if (c.flags & cfReplaceTabs) {
       tabs = 0;
