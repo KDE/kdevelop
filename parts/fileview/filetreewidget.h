@@ -59,6 +59,7 @@ private slots:
 
     void addProjectFiles( QStringList const & fileList, bool constructing = false );
     void removeProjectFiles( QStringList const & fileList );
+    void slotSyncWithRepository();
     void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
 
 private:
@@ -67,8 +68,12 @@ private:
     FileViewPart *m_part;
     KFileTreeBranch * m_rootBranch;
 
-    // @fixme Is this guard really useful?
+    //! @fixme Is this guard really useful?
     bool m_isReloadingTree;
+    //! We use this guard to avoid enabling the "reload tree" action when performing
+    // syncing with remote repositories.
+    bool m_isSyncingWithRepository;
+    QListViewItem *m_vcsStatusRequestedItem;
 
     QStringList m_hidePatterns;
     QStringList m_projectFiles;
