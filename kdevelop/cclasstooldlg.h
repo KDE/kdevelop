@@ -118,7 +118,23 @@ protected slots:
   void slotVirtuals();
   void slotExportComboChoice(int idx);
   void slotClassComboChoice(int idx);
+  
+  /** Slot from the classtree telling that the user wants to view a
+   * declation. */
+  void slotCTViewDecl( const char *className, const char *declName, THType type );
+
+  /** Slot from the classtree telling that the user wants to view a
+   * defintion. */
+  void slotCTViewDef( const char *className, const char *declName, THType type );
   void OK();
+
+signals: // Signals
+
+  /** This signal is emitted when a user wants to view a declaration. */
+  void signalViewDeclaration( const char *, const char *, THType );
+
+  /** This signal is emitted when a user wants to view a definition. */
+  void signalViewDefinition( const char *, const char *, THType );
 
 private: // Private attribues
 

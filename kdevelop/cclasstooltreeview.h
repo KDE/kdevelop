@@ -77,6 +77,15 @@ private: // Popupmenus
 protected slots:
   void slotViewDefinition();
   void slotViewDeclaration();
+
+signals: // Signals
+
+  /** This signal is emitted when a user wants to view a declaration. */
+  void signalViewDeclaration( const char *, const char *, THType );
+
+  /** This signal is emitted when a user wants to view a definition. */
+  void signalViewDefinition( const char *, const char *, THType );
+
 };
 
 #endif

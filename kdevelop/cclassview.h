@@ -24,8 +24,8 @@
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
-#include "cctviewdefinitioncmd.h"
-#include "cctviewdeclarationcmd.h"
+
+class CClassToolDlg;
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
@@ -79,13 +79,6 @@ public: // Public methods
   /** View graphical classtree. */
   void viewGraphicalTree();
 
-  /** Views the definition. */
-  void viewDefinition( const char *className, const char *declName, THType type );
-
-  /** Views the declaration. */
-  void viewDeclaration( const char *className, const char *declName, THType type );
-
-
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
@@ -111,6 +104,11 @@ protected: // Protected signals and slots
     void slotClassTool();
     void slotViewDefinition();
     void slotViewDeclaration();
+    /** Views the definition. */
+    void slotViewDefinition( const char *className, const char *declName, THType type );
+    
+    /** Views the declaration. */
+    void slotViewDeclaration( const char *className, const char *declName, THType type );
     void slotClassWizard();
   signals:
     void selectedFileNew();
@@ -183,13 +181,12 @@ private: // Private attributes
   /** The project. */
   CProject *project;
 
-  /** Command used by the classtool to view definitions. */
-  CCTViewDefinitionCmd definitionCmd;
-
-  /** Command used by the classtool to view declarations. */
-  CCTViewDeclarationCmd declarationCmd;
-
 private: // Private methods
+
+  /** Create a new ClassTool dialog and setup its' attributes.
+   * @return A newly allocated classtool dialog.
+   */
+  CClassToolDlg *createCTDlg();
 
   /** Fetch one node from a tree string.
    * @param str        String containing the tree.

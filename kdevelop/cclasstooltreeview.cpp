@@ -60,16 +60,16 @@ void CClassToolTreeView::initPopups()
 {
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  // Method popup
+  classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
 
+  // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration())); 
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDefinition()));
+  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
 }
 
 /*********************************************************************
@@ -161,12 +161,30 @@ KPopupMenu *CClassToolTreeView::getCurrentPopup()
 
 void CClassToolTreeView::slotViewDefinition() 
 {
-  if( definitionCmd != NULL )
-    definitionCmd->execute( this );  
+  const char *className;
+  const char *declName;
+  THType type;
+
+  ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+
+  emit signalViewDefinition( className, declName, type );
 }
 
 void CClassToolTreeView::slotViewDeclaration()
 {
-  if( declarationCmd != NULL )
-    declarationCmd->execute( this );
+  const char *className;
+  const char *declName;
+  THType type;
+
+  if( treeH->itemType() == THCLASS )
+  {
+    className = currentItem()->text(0);
+    emit signalViewDeclaration( className, className, THCLASS );
+  }
+  else
+  {
+    ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+
+    emit signalViewDeclaration( className, declName, type );
+  }
 }

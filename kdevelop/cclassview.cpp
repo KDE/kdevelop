@@ -64,9 +64,6 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   setTreeHandler( new CClassTreeHandler() );
   ((CClassTreeHandler *)treeH)->setStore( store );
 
-  definitionCmd.setClassView( this );
-  declarationCmd.setClassView( this );
-  
   connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));
 }
 
@@ -389,11 +386,12 @@ void CClassView::viewGraphicalTree()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::viewDefinition( const char *className, 
+void CClassView::slotViewDefinition( const char *className, 
                                  const char *declName, 
                                  THType type )
 {
-  if( className == NULL && declName == NULL )
+  if( ( className == NULL && declName == NULL ) || 
+      ( className != NULL && !store->hasClass( className ) ) )
     QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
   else
     emit selectedViewDefinition( className, declName, type );
@@ -408,11 +406,12 @@ void CClassView::viewDefinition( const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::viewDeclaration( const char *className, 
-                                  const char *declName, 
-                                  THType type )
+void CClassView::slotViewDeclaration( const char *className, 
+                                      const char *declName, 
+                                      THType type )
 {
-  if( className == NULL && declName == NULL )
+  if( ( className == NULL && declName == NULL )  || 
+      ( className != NULL && !store->hasClass( className ) ) )
     QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
   else
     emit selectedViewDeclaration( className, declName, type );
@@ -740,6 +739,27 @@ void CClassView::buildInitalClassTree()
   //  project->setClassViewTree( str );
 }
 
+/** Create a new ClassTool dialog and setup its' attributes.
+ * @return A newly allocated classtool dialog.
+ */
+CClassToolDlg *CClassView::createCTDlg()
+{
+  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
+
+  connect( ctDlg, 
+           SIGNAL( signalViewDeclaration(const char *, const char *, THType ) ),
+           SLOT(slotViewDeclaration(const char *, const char *, THType ) ) );
+                   
+  connect( ctDlg, 
+           SIGNAL( signalViewDefinition(const char *, const char *, THType ) ),
+           SLOT(slotViewDefinition(const char *, const char *, THType ) ) );
+
+  ctDlg->setStore( store );
+  ctDlg->setClass( getCurrentClass() );
+
+  return ctDlg;
+}
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -878,36 +898,24 @@ void CClassView::slotFolderDelete()
 
 void CClassView::slotClassBaseClasses()
 {
-  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
+  CClassToolDlg *ctDlg = createCTDlg();
 
-  ctDlg->setStore( store );
-  ctDlg->setViewDefinitionCmd( &definitionCmd );
-  ctDlg->setViewDeclarationCmd( &declarationCmd );  
-  ctDlg->setClass( getCurrentClass() );
   ctDlg->viewParents();
   ctDlg->show();
 }
 
 void CClassView::slotClassDerivedClasses() 
 {
-  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
+  CClassToolDlg *ctDlg = createCTDlg();
 
-  ctDlg->setStore( store );
-  ctDlg->setClass( getCurrentClass() );
-  ctDlg->setViewDefinitionCmd( &definitionCmd );
-  ctDlg->setViewDeclarationCmd( &declarationCmd );  
   ctDlg->viewChildren();
   ctDlg->show();
 }
 
 void CClassView::slotClassTool()
 {
-  CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
+  CClassToolDlg *ctDlg = createCTDlg();
 
-  ctDlg->setStore( store );
-  ctDlg->setClass( getCurrentClass() );
-  ctDlg->setViewDefinitionCmd( &definitionCmd );
-  ctDlg->setViewDeclarationCmd( &declarationCmd );  
   ctDlg->show();
 }
 
@@ -920,7 +928,7 @@ void CClassView::slotViewDefinition()
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
 
-  viewDefinition( className, otherName, idxType );
+  slotViewDefinition( className, otherName, idxType );
 }
 
 void CClassView::slotViewDeclaration()
@@ -932,7 +940,7 @@ void CClassView::slotViewDeclaration()
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
 
-  viewDeclaration( className, otherName, idxType );
+  slotViewDeclaration( className, otherName, idxType );
 }
 
 void CClassView::slotClassWizard()
