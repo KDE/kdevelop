@@ -7,7 +7,7 @@
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
 {
-    kdDebug(9002) << "Building DocTreeView" << endl;
+    kdDebug(9002) << "Building DocTreeWidget" << endl;
 
     setInstance(DocTreeFactory::instance());
     setWidget(new DocTreeWidget(this, parent));

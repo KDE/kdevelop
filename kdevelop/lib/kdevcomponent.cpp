@@ -30,6 +30,14 @@ void KDevComponent::projectClosed()
 {
 }
 
+void KDevComponent::classStoreOpened(CClassStore *store)
+{
+}
+
+void KDevComponent::classStoreClosed()
+{
+}
+
 void KDevComponent::addedFileToProject(const QString&)
 {
 }

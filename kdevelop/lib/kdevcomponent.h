@@ -22,6 +22,7 @@
 #include <kparts/part.h>
 
 class CProject;
+class CClassStore;
 class CustomizeDialog;
 
 /**
@@ -62,6 +63,8 @@ public:
      * The project has beeen closed.
      */
     virtual void projectClosed();
+    virtual void classStoreOpened(CClassStore *store);
+    virtual void classStoreClosed();
     /**
      * A file has been added to the project. The filename is
      * given relative to the project dir.
@@ -77,6 +80,10 @@ public:
      * given relative to the project dir.
      */
     virtual void savedFile(const QString&);
+
+signals:
+    void sourceFileSelected(const QString &filename, int lineno=-1);
+    void documentationFileSelected(const QString &filename);
 };
 
 

@@ -538,7 +538,7 @@ void DocTreeWidget::slotItemExecuted(QListViewItem *item)
     else if (ident == "internal:projectManual")
         emit m_view->projectManualSelected();
     else if (!ident.isEmpty())
-        emit m_view->fileSelected(kitem->ident());
+        emit m_view->documentationFileSelected(kitem->ident());
 }
 
 

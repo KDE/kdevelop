@@ -2,7 +2,7 @@
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = lib plugin parts tools templates
+SUBDIRS = lib plugin parts classparser tools templates
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -18,7 +18,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-kdevelop_LDADD = $(LIB_KPARTS) $(LIB_KFILE) -lfl
+kdevelop_LDADD = $(top_builddir)/kdevelop/classparser/libkdevclassparser.la $(LIB_KPARTS) $(LIB_KFILE)
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = kdevelop.h kdevelopfactory.h

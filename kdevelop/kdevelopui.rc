@@ -211,9 +211,7 @@
   <Action name="debug_stop" />
  </ToolBar>
  <ToolBar name="browserToolBar" fullWidth="false" >
-  <Action name="class_combo" />
-  <Action name="method_combo" />
-  <Action name="class_wizard" />
+  <Merge/>
   <Separator/>
   <Action name="help_back" />
   <Action name="help_forward" />

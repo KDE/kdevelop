@@ -1,38 +1,38 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include "main.h"
-#include "grepview.h"
+#include "classview.h"
 
 
 extern "C" {
 
-    void *init_libkdevgrepview()
+    void *init_libkdevclassview()
     {
-        return new GrepFactory;
+        return new ClassFactory;
     }
     
 };
 
 
-GrepFactory::GrepFactory(QObject *parent, const char *name)
+ClassFactory::ClassFactory(QObject *parent, const char *name)
     : KLibFactory(parent, name)
 {
     instance();
 }
 
 
-GrepFactory::~GrepFactory()
+ClassFactory::~ClassFactory()
 {
     delete s_instance;
     s_instance = 0;
 }
 
 
-QObject *GrepFactory::create(QObject *parent, const char *name,
+QObject *ClassFactory::create(QObject *parent, const char *name,
                              const char *classname, const QStringList &args)
 {
     if (parent && !parent->isWidgetType()) {
-        kdDebug(9001) << "Parent of grep view is not a widget" << endl;
+        kdDebug(9001) << "Parent of class view is not a widget" << endl;
         return 0;
     }
     QWidget *parentWidget = (QWidget *) parent;
@@ -40,19 +40,19 @@ QObject *GrepFactory::create(QObject *parent, const char *name,
     // Depending on classname, this should method should also
     // be able to create the config dialog
 
-    kdDebug(9001) << "Building GrepView" << endl;
+    kdDebug(9001) << "Building ClassView" << endl;
     
-    QObject *obj = new GrepView(parentWidget, name);
+    QObject *obj = new ClassView(parentWidget, name);
     emit objectCreated(obj);
     return obj;
 }
 
 
-KInstance *GrepFactory::s_instance = 0;
-KInstance *GrepFactory::instance()
+KInstance *ClassFactory::s_instance = 0;
+KInstance *ClassFactory::instance()
 {
     if (!s_instance)
-        s_instance = new KInstance("kdevgrepview");
+        s_instance = new KInstance("kdevclassview");
 
     return s_instance;
 }

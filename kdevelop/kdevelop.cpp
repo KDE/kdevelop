@@ -28,6 +28,7 @@
 #include <ktrader.h>
 
 #include "lib/kdevcomponent.h"
+#include "classparser/ClassParser.h"
 #include "kdevelop.h"
 #include "kdevelopfactory.h"
 
@@ -751,8 +752,17 @@ void KDevelop::initHelp(){
 }
 
 
+static CClassStore *classstore = 0;
 void KDevelop::initComponents()
 {
+    // Hack to test the class viewer
+    CClassParser *classparser = new CClassParser;
+    kdDebug(9000) << "Parsing kdevelop.cpp" << endl;
+    classparser->parse("kdevelop.cpp");
+    kdDebug(9000) << "Parsing doctreewidget.cpp" << endl;
+    classparser->parse("parts/doctreeview/doctreewidget.cpp");
+    classstore = &classparser->store;
+    
     loadComponents("SelectView", KDockWidget::DockLeft);
     loadComponents("OutputView", KDockWidget::DockBottom);
 }
@@ -768,7 +778,7 @@ void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos
         QVariant prop = (*it)->property("X-KDevelop-ComponentType");
 
         if (prop.isValid() && prop.toString() == type) {
-            kdDebug(9000) << "Found " << type << (*it)->name().latin1() << endl;
+            kdDebug(9000) << "Found " << type << " " << (*it)->name().latin1() << endl;
             KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
             QObject *obj = factory->create(0, (*it)->name().latin1(), "KDevComponent");
 
@@ -784,6 +794,9 @@ void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos
             wid->setWidget(comp->widget());
             wid->setToolTipString((*it)->comment());
             wid->manualDock(m_mainwidget, pos);
+
+            // Hack
+            comp->classStoreOpened(classstore);
         }
     }
 }

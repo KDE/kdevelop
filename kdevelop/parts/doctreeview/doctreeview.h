@@ -26,7 +26,6 @@ protected:
     virtual void projectOpened(CProject *prj);
     
 signals:
-    void fileSelected(const QString &url_file);
     void projectAPISelected();
     void projectManualSelected();
 

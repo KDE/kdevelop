@@ -1,3 +1,9 @@
+2000-06-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Ported the class and method selection combos in the
+	  toolbar to the KAction framework.
+	* New ClassView part, currently contains only the
+	  toolbar stuff; the rest is a bit messy to port
+
 2000-06-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Made KDevComponent inherit KParts::Part
 	* Turned grep view into a KDevComponent

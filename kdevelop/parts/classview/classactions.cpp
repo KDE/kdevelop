@@ -1,0 +1,156 @@
+#include <qpopupmenu.h>
+#include <qstringlist.h>
+#include <qtl.h>
+#include <ktoolbar.h>
+#include "ClassStore.h"
+#include "classactions.h"
+
+
+ClassListAction::ClassListAction(const QString &text, int accel,
+                                 const QObject *receiver, const char *methodname,
+                                 QObject *parent, const char *name)
+    : KSelectAction(text, accel, receiver, methodname, parent, name)
+{
+    m_store = 0;
+}
+
+
+void ClassListAction::setClassStore(CClassStore *store)
+{
+    m_store = store;
+}
+
+
+void ClassListAction::setCurrentItem(const QString &item)
+{
+    int idx = items().findIndex(currentText());
+    if (idx != -1)
+        KSelectAction::setCurrentItem(idx);
+}
+
+
+void ClassListAction::refresh()
+{
+    if (!m_store)
+        return;
+    
+    QList<CParsedClass> *classList = m_store->getSortedClassList();
+
+    QStringList list;
+    QListIterator<CParsedClass> it(*classList);
+    for ( ; it.current(); ++it)
+        list << it.current()->name;
+
+    qHeapSort(list);
+
+    int idx = list.findIndex(currentText());
+    setItems(list);
+    if (idx != -1)
+        KSelectAction::setCurrentItem(idx);
+}
+
+
+MethodListAction::MethodListAction(const QString &text, int accel,
+                                   const QObject *receiver, const char *methodname,
+                                   QObject *parent, const char *name)
+    : KSelectAction(text, accel, receiver, methodname, parent, name)
+{
+    m_store = 0;
+}
+
+
+void MethodListAction::setClassStore(CClassStore *store)
+{
+    m_store = store;
+}
+
+
+void MethodListAction::refresh(const QString &classname)
+{
+    if (!m_store)
+        return;
+
+    CParsedClass *pc = m_store->getClassByName(classname);
+
+    QStringList list;
+    for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
+        QString str;
+        pc->methodIterator.current()->asString(str);
+        list << str;
+    }
+    for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
+        QString str;
+        pc->slotIterator.current()->asString(str);
+        list << str;
+    }
+    qHeapSort(list);
+
+    int idx = list.findIndex(currentText());
+    setItems(list);
+    if (idx != -1)
+        setCurrentItem(idx);
+}
+
+
+KDevDelayedPopupAction::KDevDelayedPopupAction(const QString& text, const QString& pix, int accel,
+                                               QObject *receiver, const char *methname,
+                                               QObject* parent, const char* name )
+    : KAction(text, pix, accel, receiver, methname, parent, name)
+{
+    m_popup = 0;
+}
+
+
+KDevDelayedPopupAction::~KDevDelayedPopupAction()
+{
+    if ( m_popup )
+        delete m_popup;
+}
+
+
+int KDevDelayedPopupAction::plug(QWidget *widget, int index)
+{
+    if (widget->inherits("KToolBar")) {
+        KToolBar *bar = (KToolBar *)widget;
+        connect( bar, SIGNAL(destroyed()), this, SLOT(slotDestroyed()) );
+        
+        int id = KAction::getToolButtonID();
+        bar->insertButton(iconName(), id, SIGNAL( clicked() ), this,
+                          SLOT(slotActivated()), isEnabled(), plainText(),
+                          index);
+        addContainer(bar, id);
+        bar->setDelayedPopup(id, popupMenu(), true);
+        
+        return containerCount()-1;
+    }
+    
+    return KAction::plug(widget, index);
+}
+
+
+void KDevDelayedPopupAction::unplug(QWidget *widget)
+{
+    if (widget->inherits( "KToolBar")) {
+        KToolBar *bar = (KToolBar *)widget;
+        
+        int idx = findContainer(bar);
+        if (idx == -1)
+            return;
+        
+        bar->removeItem(menuId(idx));
+        removeContainer(idx);
+        
+        return;
+    }
+    
+    KAction::unplug(widget);
+}
+
+
+QPopupMenu *KDevDelayedPopupAction::popupMenu()
+{
+    if (!m_popup)
+        m_popup = new QPopupMenu();
+    
+    return m_popup;
+}
