@@ -32,3 +32,4 @@ rc_DATA = gideonui.rc eventsrc
 datadir =$(kde_confdir)
 data_DATA =gideonrc
 
+SUBDIRS =  profiles
