@@ -1,3 +1,6 @@
+2005-01-25 Jens Dagerbo <jens.dagerbo@swipnet.se>
+ * Reimplemented "Forward" for source navigation history
+
 2005-01-23 Amilcar Lucas <amilcar@kdevelop.org>
  * Updated support for Doxygen up to 1.4.1
 
