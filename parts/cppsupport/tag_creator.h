@@ -19,7 +19,7 @@
 class Catalog;
 class Tag;
 
-namespace TagUtils 
+namespace TagUtils
 {
     int stringToAccess( const QString& access );
     QString accessToString( int id );
@@ -53,6 +53,16 @@ public:
     virtual void parseFunctionArguments( Tag& tag, DeclaratorAST* declarator );
     virtual void parseBaseClause( const QString& className, BaseClauseAST* baseClause );
 
+	// have to find another way this is just a quick hack
+	/**call this function after the last use of a TagCreator object, to do cleanup work*/
+	static void destroyDocumentation();
+	/**
+		This sets the directories, where the doxygen documentation should be searched in.
+		@param dirs QStringList containing strings, which define the pathes, where documentation is searched in
+	*/
+	static void setDocumentationDirectories(const QStringList& dirs);
+
+
 private:
     QString scopeOfDeclarator( DeclaratorAST* d );
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
@@ -67,6 +77,8 @@ private:
     bool m_inSlots;
     bool m_inSignals;
     int m_anon;
+
+	static class DoxyDoc* m_documentation;
 
 private:
     TagCreator( const TagCreator& source );

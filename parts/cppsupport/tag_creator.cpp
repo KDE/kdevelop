@@ -13,9 +13,12 @@
 #include "catalog.h"
 #include "ast_utils.h"
 #include "cpp_tags.h"
+#include "doxydoc.h"
 
 #include <kdebug.h>
 #include <qfileinfo.h>
+
+DoxyDoc* TagCreator::m_documentation = new DoxyDoc("");
 
 TagCreator::TagCreator( const QString& fileName, Catalog* c )
     : m_catalog( c ), m_fileName( fileName ), m_anon( 0 )
@@ -24,6 +27,16 @@ TagCreator::TagCreator( const QString& fileName, Catalog* c )
 
 TagCreator::~TagCreator()
 {
+}
+
+void TagCreator::destroyDocumentation(){
+        delete m_documentation;
+}
+
+void TagCreator::setDocumentationDirectories(const QStringList& str){
+	if (m_documentation)
+		delete m_documentation;
+	m_documentation = new DoxyDoc(str);
 }
 
 void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
@@ -520,6 +533,10 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     tagBuilder.setConst( d->constant() != 0 );
 
     parseFunctionArguments( tag, d );
+
+	QString arguments = tag.attribute("a").toStringList().join(",");
+    QString scopeStr = m_currentScope.join("::");
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace('.',"::"), id, type, arguments));
 
     m_catalog->addItem( tag );
 }

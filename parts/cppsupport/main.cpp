@@ -171,7 +171,7 @@ int main( int argc, char* argv[] )
         std::cerr << "*error* " << "database " << dbFileName << " already exists!" << std::endl << std::endl;
         return -1;
     }
-
+	QStringList docdirlist;
     for( int i=2; i<argc; ++i ){
         QString s( argv[i] );
         if( s == "-r" || s == "--recursive" ){
@@ -186,7 +186,10 @@ int main( int argc, char* argv[] )
        } else if( s == "-c" || s == "--check-only" ){
            generateTags = false;
 	   continue;
-       }
+       }  else if ( s.left(2) == "-d"){
+		docdirlist << s.right(s.length()-2);
+		continue;
+	}
 
         QDir dir( s );
         if( !dir.exists() ){
@@ -210,6 +213,7 @@ int main( int argc, char* argv[] )
 
     QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
     QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
+	TagCreator::setDocumentationDirectories(docdirlist);
     while( unitIt != units.end() ){
         TagCreator w( unitIt.key(), &catalog );
         w.parseTranslationUnit( unitIt.data() );
@@ -223,6 +227,7 @@ int main( int argc, char* argv[] )
         ++unitIt;
     }
     std::cout << std::endl;
+	TagCreator::destroyDocumentation();
 
     return 0;
 }
