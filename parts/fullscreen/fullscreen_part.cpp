@@ -12,7 +12,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
-#include <kaction.h>
+#include <kstdaction.h>
 #include <kmainwindow.h>
 #include <kmenubar.h>
 
@@ -34,10 +34,7 @@ FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringL
 
   m_bFullScreen = false;
 
-  m_pFullScreen = new KAction( i18n( "&Full-Screen Mode" ), "window_fullscreen", CTRL+SHIFT+Key_F, this,
-        SLOT( slotToggleFullScreen() ), actionCollection(), "fullscreen" );
-  m_pFullScreen->setToolTip(i18n("Full-screen mode"));
-  m_pFullScreen->setWhatsThis(i18n("<b>Full-screen mode</b><p>Enters or exits full screen mode (also hides menubar when switching into full screen mode)."));
+  m_pFullScreen = KStdAction::fullScreen(this, SLOT(slotToggleFullScreen()), actionCollection(), mainWindow()->main());
 }
 
 FullScreenPart::~FullScreenPart()
@@ -46,23 +43,22 @@ FullScreenPart::~FullScreenPart()
 
 void FullScreenPart::slotToggleFullScreen( )
 {
-   KMainWindow* mw = mainWindow()->main();
    m_bFullScreen = !m_bFullScreen;
    if( m_bFullScreen ){
-      mw->menuBar()->hide();
-      mw->showFullScreen();
+      //mw->menuBar()->hide();
+      mainWindow()->main()->showFullScreen();
 
-      m_pFullScreen->setText( i18n( "Exit Full-Screen Mode" ) );
+      /*m_pFullScreen->setText( i18n( "Exit Full-Screen Mode" ) );
       m_pFullScreen->setToolTip( i18n( "Exit full-screen mode" ) );
-      m_pFullScreen->setIcon( "window_nofullscreen" );
+      m_pFullScreen->setIcon( "window_nofullscreen" );*/
    } else {
-      mw->menuBar()->show();
+      //mw->menuBar()->show();
 
-      mw->showNormal();
+      mainWindow()->main()->showNormal();
 
-      m_pFullScreen->setText( i18n( "&Full-Screen Mode" ) );
+      /*m_pFullScreen->setText( i18n( "&Full-Screen Mode" ) );
       m_pFullScreen->setToolTip(i18n("Full-screen mode"));
-      m_pFullScreen->setIcon( "window_fullscreen" );
+      m_pFullScreen->setIcon( "window_fullscreen" );*/
    }
 }
 
