@@ -1,4 +1,4 @@
-SUBDIRS = lib classparser plugin parts tools templates
+SUBDIRS = widgets lib classparser plugin parts tools templates
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib -I$(top_srcdir)/kdevelop/classparser $(all_includes)
 
