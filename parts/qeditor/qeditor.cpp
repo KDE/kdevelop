@@ -52,6 +52,7 @@
 #include "xml_colorizer.h"
 #include "qmake_colorizer.h"
 #include "cs_colorizer.h"
+#include "ocaml_colorizer.h"
 
 #if defined(HAVE_PERL_MODE)
 #  include "perl_colorizer.h"
@@ -424,6 +425,11 @@ void QEditor::setLanguage( const QString& l )
     } else if( m_language == "qmake" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new QMakeColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );
+        setBackgroundParser( 0 );
+    } else if( m_language == "ocaml" ){
+        setElectricKeys( QString::null );
+	document()->setPreProcessor( new OCamlColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
         setBackgroundParser( 0 );
     } else {

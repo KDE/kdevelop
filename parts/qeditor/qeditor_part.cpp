@@ -534,6 +534,12 @@ void QEditorPart::setupHighlighting()
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.jsp";
     m_modes.append( mode );    
+    
+    mode = new HLMode;
+    mode->name = "ocaml";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.ml" << "*.mli";
+    m_modes.append( mode );    
 }
 
 unsigned int QEditorPart::hlMode()
