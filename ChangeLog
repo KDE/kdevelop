@@ -1,3 +1,7 @@
+2001-04-17  rokrau@yahoo.com
+    * fixed one crash in docviewman.cpp
+    * some more integration work on the ctags support
+
 2001-04-18  F@lk Brettschneider <falk@kdevelop.org>
     * moved the MDI mode selection to Options->KDevelop->user_interface
     * bugfix: concerning the visibility of the MDI view taskbar
