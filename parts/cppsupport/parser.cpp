@@ -413,7 +413,7 @@ bool Parser::skipExpression( AST::Node& node )
 	    lex->nextToken();
 	    break;
 
-#if 1
+#if 0
 	case Token_identifier:
 	    lex->nextToken();
 	    if( lex->lookAhead( 0 ) == Token_identifier )

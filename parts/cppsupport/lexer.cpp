@@ -154,7 +154,37 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		if( currentChar() == '(' )
 		    skip( '(', ')' );
 	    }
-	    m_source.insert( currentPosition(), QString(" ") + m.body() + QString(" ") );
+            QString body = QString(" ") + m.body() + QString(" ");
+	    m_source.insert( currentPosition(), body );
+
+            // tokenize the macro body
+            m_endPtr = currentPosition() + body.length();
+            while( !currentChar().isNull() ){
+                Token tok;
+
+                readWhiteSpaces();
+                bool d = m_preprocessorEnabled;
+
+                if( currentChar().isLetter() || currentChar() == '_' ){
+                    QString word;
+                    int c = currentPosition();
+                    while( (c<m_endPtr) && (m_source[c].isLetterOrNumber() || m_source[c] == '_') ) {
+                        word += m_source[ c++ ];
+                    }
+                    if( word == ide )
+                        disablePreprocessor();
+
+                }
+                nextToken( tok );
+                if( tok == -1 || tok == Token_eof ){
+                    m_preprocessorEnabled = d;
+                    break;
+                }
+                addToken( tok );
+
+                m_preprocessorEnabled = d;
+            }
+
 	    m_endPtr = m_source.length();
 	} else if( m_skipWordsEnabled ){
 	    QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
