@@ -1,4 +1,4 @@
-/***************************************************************************
+/*-*************************************************************************
                           ccommand.h  -  description
                              -------------------
     begin                : Sun May 23 1999
@@ -6,17 +6,19 @@
     email                : jonas.nordin@cenacle.se
  ***************************************************************************/
  
-/***************************************************************************
+/*-*************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/  
+ ***************************************************************************/
 #ifndef _CCOMMAND_H_INCLUDED
 #define _CCOMMAND_H_INCLUDED
 
+/** Abstract class to be used to separate classes and callbacks. This is
+  * really helpful for separating implementation and GUI. */
 class CCommand
 {
 public: // The execute method
