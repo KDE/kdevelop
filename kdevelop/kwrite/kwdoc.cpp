@@ -584,7 +584,9 @@ void KWriteDoc::removeView(KWriteView *view) {
 
 
 int KWriteDoc::currentColumn(PointStruc &cursor) {
-  return contents.at(cursor.y)->cursorX(cursor.x,tabChars);
+  TextLine* pTL = contents.at(cursor.y);
+  if (pTL)
+    return pTL->cursorX(cursor.x, tabChars);
 }
 
 void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
