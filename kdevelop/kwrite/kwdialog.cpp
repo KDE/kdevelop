@@ -302,13 +302,14 @@ int GotoLineDialog::getLine() {
 }
 
 
-SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoSteps,
-  QWidget *parent, const char *name)
+SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
+                               int indentLength, int undoSteps,
+                               QWidget* parent, const char *name)
   : QDialog(parent,name,true) {
-
   QLabel *label1;
   QLabel *label2;
   QLabel *label3;
+  QLabel *indentLabel;
   QPushButton *button1, *button2;
   char buf[8];
 
@@ -375,14 +376,24 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   if (label3->sizeHint().width()>max)
     max = label3->sizeHint().width();
 
+  indentEdit = new QLineEdit(this);
+  sprintf(buf,"%d",indentLength);
+  indentEdit->setText(buf);
+  indentEdit->setValidator( new KIntValidator( indentEdit ) );
+  indentLabel = new QLabel(indentEdit,i18n("Indent Length:"),this);
+  if (indentLabel->sizeHint().width()>max)
+    max = indentLabel->sizeHint().width();
+
   label1->setFixedSize( max, label1->sizeHint().height() );
   label2->setFixedSize( max, label2->sizeHint().height() );
   label3->setFixedSize( max, label3->sizeHint().height() );
+  indentLabel->setFixedSize( max, indentLabel->sizeHint().height() );
 
   e1->setFixedSize( max, e1->sizeHint().height() );
   e2->setFixedSize( max, e2->sizeHint().height() );
   e3->setFixedSize( max, e3->sizeHint().height() );
-  
+  indentEdit->setFixedSize( max, indentEdit->sizeHint().height() );
+
   button1 = new QPushButton(i18n("&OK"),this);
   button1->setFixedSize(button1->sizeHint());
   button1->setDefault(true);
@@ -440,6 +451,10 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   vbl5->addSpacing( 20 );
   vbl5->addWidget( label3,0,AlignLeft );
   vbl5->addWidget( e3,0,AlignLeft );
+  vbl5->addWidget( indentEdit,0,AlignLeft );
+  vbl5->addSpacing( 20 );
+  vbl5->addWidget( indentLabel,0,AlignLeft );
+  vbl5->addWidget( indentEdit,0,AlignLeft );
 
   mainLayout->addSpacing( 10 );
   mainLayout->addStretch( 1 );
@@ -488,6 +503,10 @@ int SettingsDialog::getTabWidth() {
 
 int SettingsDialog::getUndoSteps() {
   return atoi(e3->text());
+}
+
+int SettingsDialog::getIndentLength() {
+  return atoi(indentEdit->text());
 }
 
 ColorDialog::ColorDialog(QColor *colors, QWidget *parent, const char *name)

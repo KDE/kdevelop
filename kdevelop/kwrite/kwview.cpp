@@ -1046,13 +1046,16 @@ X      : cut
     }
   } else
 #endif
-  if ((e->ascii() >= 32 || e->ascii() == '\t')
-    && e->key() != Key_Delete && e->key() != Key_Backspace) {
-//    printf("input %d\n",e->ascii());
+  if ((e->ascii() >= 32 )  // removed: || e->ascii() == '\t'
+       && e->key() != Key_Delete && e->key() != Key_Backspace) {
+       // process normal characters
+        //    printf("input %d\n",e->ascii());
     if (c.flags & cfDelOnInput) {
+      // delete on input
       kWriteDoc->delMarkedText(this,c);
       getVConfig(c);
     }
+    // insert the character at the current cursor.
     kWriteDoc->insertChar(this,c,e->ascii());
   } else {
     if (e->state() & ShiftButton) c.flags |= cfMark;
@@ -1175,6 +1178,11 @@ X      : cut
         case Key_Insert:
             if (e->state() & ShiftButton) kWriteDoc->paste(this,c);
               else kWrite->toggleOverwrite();
+            break;
+        case Key_Tab:
+            //if (e->state() & ShiftButton) ; // TODO: jump to enclosing brace
+              //else
+            kWriteDoc->tab(this,c);
             break;
 /*        case Key_F9:
             printf("text() %s\n", kWrite->text().data());
@@ -1481,14 +1489,17 @@ void KWrite::copySettings(KWrite *w) {
 void KWrite::optDlg() {
   SettingsDialog *dlg;
 
-  dlg = new SettingsDialog(configFlags,wrapAt,kWriteDoc->tabChars,kWriteDoc->undoSteps,
-                            topLevelWidget());
-  if (dlg->exec() == QDialog::Accepted)
-  {
-    bool showTabsChanged = (dlg->getFlags() & cfShowTabs) != (configFlags & cfShowTabs);
+  dlg = new SettingsDialog(configFlags, wrapAt, kWriteDoc->tabChars,
+                           kWriteDoc->indentLength, kWriteDoc->undoSteps,
+                           topLevelWidget());
+
+  if (dlg->exec() == QDialog::Accepted) {
+    bool showTabsChanged = (dlg->getFlags() & cfShowTabs)
+                           != (configFlags & cfShowTabs);
     setConfig(dlg->getFlags() | (configFlags & cfOvr));
     wrapAt = dlg->getWrapAt();
     kWriteDoc->setTabWidth(dlg->getTabWidth());
+    kWriteDoc->setIndentLength(dlg->getIndentLength());
     kWriteDoc->setUndoSteps(dlg->getUndoSteps());
     if (showTabsChanged)
       kWriteView->tagAll();

@@ -1,3 +1,10 @@
+2001-12-08  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+    * add new editor configuration: Indent Length
+    * Indent Length and Tab Width are different.
+    * special handling for tab key, in autoindentation
+      mode tab key behaves like emacs (indents text)
+    * improved AutoIndent mode: indent open braces.
+
 2001-12-07 Ralf Nolden <nolden@kde.org>
     * bugfix from Bernd Lachner <dev@lachner-net.de> to prevent ui files from being parsed which caused segfaults on 
 	some projects while loading

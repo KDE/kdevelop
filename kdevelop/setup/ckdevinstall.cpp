@@ -128,6 +128,7 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Color2","0,0,0");
     m_config->writeEntry("Color3","0,0,0");
     m_config->writeEntry("TabWidth","2");
+    m_config->writeEntry("IndentLength","2");
     m_config->writeEntry("Color4","255,255,255");
 
     m_config->setGroup("C Highlight");

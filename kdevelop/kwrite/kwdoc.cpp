@@ -171,8 +171,18 @@ int TextLine::firstChar() {
   int z;
 
   z = 0;
-  while (z < len && (unsigned char) text[z] <= 32) z++;
+  while (z < len && (unsigned char) text[z] <= 32)
+    z++; // skip ws
   return (z < len) ? z : -1;
+}
+
+int TextLine::lastChar() {
+  int z;
+
+  z = len-1;
+  while (z > 0 && (unsigned char) text[z] <= 32)
+    z--; // skip ws
+  return (z > 0) ? z : -1;
 }
 
 char TextLine::getChar( int pos ) const {
@@ -516,6 +526,7 @@ void KWriteDoc::readBookmarkConfig(KConfig *config)
 	// Set the lines found in the list as bookmarked
  	for(uint i = 0; i < listLines.count(); i++)
  	{
+
 		QString item = listLines.at(i);
 
 		TextLine* textline = contents.at(item.toInt());
@@ -551,6 +562,7 @@ void KWriteDoc::readConfig(KConfig *config) {
   char s[16];
 
   setTabWidth(config->readNumEntry("TabWidth",8));
+  setIndentLength(config->readNumEntry("IndentLength",2));
   setUndoSteps(config->readNumEntry("UndoSteps",5000));
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
@@ -563,6 +575,7 @@ void KWriteDoc::writeConfig(KConfig *config) {
   char s[16];
 
   config->writeEntry("TabWidth",tabChars);
+  config->writeEntry("IndentLength",indentLength);
   config->writeEntry("UndoSteps",undoSteps);
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
@@ -1045,33 +1058,105 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
   recordEnd(view,c);
 }
 
+#ifdef DEBUG
+#include <iostream>
+#endif DEBUG
+
 void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
 
   recordStart(c.cursor);
 
   if (!(c.flags & cfAutoIndent)) {
+    // regular newline action
     recordAction(KWAction::newLine,c.cursor);
     c.cursor.y++;
     c.cursor.x = 0;
   } else {
-    TextLine *textLine;
-    int pos;
+    // indent the new line
 
-    textLine = contents.at(c.cursor.y);
-    pos = textLine->firstChar();
-    if (pos > c.cursor.x) c.cursor.x = pos;
+    // find the column to indent to
+    TextLine* textLine = contents.at(c.cursor.y); // check the current line
+    // NB: accessing the list like that is expensive
 
+    // compute where to indent to
+    int pos = textLine->firstChar(); // first non-ws char
+    bool prevLine = false;
+    if (pos > c.cursor.x) {  // what the user wants is to
+      c.cursor.x = pos;     // insert a line before this one!
+      prevLine = true;
+    }
+    // seek a first char in previous lines
     do {
       pos = textLine->firstChar();
-      if (pos >= 0) break;
+      if (!prevLine && textLine->getChar(textLine->lastChar())=='{')
+        // opening brace
+        pos += indentLength;
+      if (pos >= 0) // we've got our position
+        break;     // terminate loop
       textLine = contents.prev();
     } while (textLine);
+
+    // insert the newline and indent the cursor
     recordAction(KWAction::newLine,c.cursor);
     c.cursor.y++;
     c.cursor.x = 0;
     if (pos > 0) {
-      recordReplace(c.cursor,0,textLine->getText(),pos);
+      //recordReplace(c.cursor,0,textLine->getText(),pos);
       c.cursor.x = pos;
+    }
+  }
+
+  recordEnd(view,c);
+}
+
+void KWriteDoc::tab(KWriteView *view, VConfig &c) {
+
+  recordStart(c.cursor);
+
+  if (!(c.flags & cfAutoIndent)) {
+    // auto indentation hasn't been chosen
+    // insert regular tab like we know it
+    insertChar(view, c, '\t');
+  } else {
+    // indent the new line
+
+    // find the column to indent to
+    TextLine* textLine = contents.at(c.cursor.y); // check the current line
+    // NB: accessing the list like that is expensive
+
+    // compute where to indent to
+    int indentPos = 0; // first non-ws char
+    // seek a first char in previous lines
+    textLine = contents.prev();
+    while (textLine) {
+      indentPos = textLine->firstChar();
+      if (textLine->getChar(textLine->lastChar())=='{') // opening brace
+        indentPos += indentLength;
+      #ifdef DEBUG
+      cerr << "indent pos=" << indentPos << endl;
+      #endif
+      if (indentPos >= 0) // we've got our position
+        break;     // terminate loop
+      textLine = contents.prev();
+    }
+
+    if (indentPos > 0) {
+
+      // if cursor before the indentation target then align cursor
+      if (c.cursor.x < indentPos)
+        c.cursor.x = indentPos;
+
+      // if the line does not start on indent pos align it there
+      textLine = contents.at(c.cursor.y);
+      int curPos = textLine->firstChar();
+      if (curPos < indentPos) {
+        int len = indentPos-curPos;
+        char buf[len];
+        memset(buf, ' ', len);
+        textLine->insert(0, &buf[0], len);
+      }
+      else if (curPos > indentPos)
+        textLine->del(indentPos, curPos-indentPos);
     }
   }
 
@@ -1258,6 +1343,12 @@ void KWriteDoc::setTabWidth(int chars) {
 //  tagAll();
 }
 
+/** Set indentation width */
+void KWriteDoc::setIndentLength(int length){
+  if (length < 1) length = 1;
+  if (length > 16) length = 16;
+  indentLength = length;
+}
 
 void KWriteDoc::updateLines(int startLine, int endLine, int flags)
 {
@@ -3430,7 +3521,5 @@ found:
   a = &attribs[attr];
   bm.eXPos = bm.sXPos + a->fm.width(bracket);//a->width(bracket);
 }
-
-
 
 #include "kwdoc.moc"
