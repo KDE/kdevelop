@@ -31,6 +31,9 @@
 #ifdef __osf__
 #define _XOPEN_SOURCE_EXTENDED
 #define O_NDELAY O_NONBLOCK
+#define _OSF_SOURCE
+#include <float.h>
+#undef _OSF_SOURCE
 #endif
 
 #include <stdlib.h>
