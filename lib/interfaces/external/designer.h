@@ -84,6 +84,8 @@ signals:
     
     /**Emit this signal when a designer wants to open the editor with function definition.*/
     void editFunction(DesignerType type, const QString &formName, const QString &functionName);
+    /**Emit this signal when a designer wants to open the editor for a form sources.*/
+    void editSource(DesignerType type, const QString &formName);
 };
 
 }
