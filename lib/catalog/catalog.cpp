@@ -304,7 +304,7 @@ void Catalog::open( const QString& dbName )
     }
 
     if ((ret = d->dbp->open(
-	d->dbp, d->dbName.latin1(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	qWarning( "db_open: %s", db_strerror(ret) );
 	close();
 	return;

@@ -70,7 +70,7 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
 
-	nsName.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
+	nsName.sprintf( "(%s_%d)", shortFileName.local8Bit().data(), m_anon++ );
     } else {
 	nsName = ast->namespaceName()->text();
     }
@@ -306,7 +306,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     if( !ast->name() ){
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
-	className.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
+	className.sprintf( "(%s_%d)", shortFileName.local8Bit().data(), m_anon++ );
     } else {
 	className = ast->name()->unqualifiedName()->text().stripWhiteSpace();
     }
@@ -684,7 +684,7 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
 {
     if( !container )
         container = m_store->globalScope();
-    
+
     QStringList path = QStringList::split( ".", name );
     QStringList::Iterator it = path.begin();
     while( it != path.end() ){
@@ -703,7 +703,7 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
         return container;
 
     QString className = path.join( "." );
-    
+
     ParsedClass* klass = 0;
     ParsedClassContainer* c = container;
     while( c && path.size() ){
@@ -714,10 +714,10 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
 	    klass = c->getStructByName( s );
 	if( !klass )
 	    break;
-	
+
 	c = klass;
     }
-	
+
     if( !klass && includeImports ){
 
         QStringList imports;
@@ -735,7 +735,7 @@ ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedSco
             ++impIt;
         }
     }
-            
+
     return klass;
 }
 

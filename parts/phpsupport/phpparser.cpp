@@ -172,7 +172,7 @@ void PHPParser::parseFile(const QString& fileName){
 
   while (!stream.eof()) {
     rawline = stream.readLine();
-    line = rawline.stripWhiteSpace().latin1();
+    line = rawline.stripWhiteSpace().local8Bit();
     bracketOpen += line.contains("{");
     bracketClose += line.contains("}");
     if(bracketOpen == bracketClose && bracketOpen !=0 && bracketClose !=0){

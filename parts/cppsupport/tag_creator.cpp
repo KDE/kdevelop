@@ -298,7 +298,7 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
     if( !ast->name() ){
 	//QFileInfo fileInfo( m_fileName );
 	//QString shortFileName = fileInfo.baseName();
-	//className.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
+	//className.sprintf( "(%s_%d)", shortFileName.local8Bit(), m_anon++ );
     } else {
 	className = ast->name()->text();
     }
@@ -454,7 +454,7 @@ void TagCreator::parseAccessDeclaration( AccessDeclarationAST * access )
     m_currentAccess = l.at( 0 )->text();
     if( m_currentAccess == "signals" )
 	m_currentAccess = "public"; //!?
-    
+
     m_inSlots = l.count() > 1 ? l.at( 1 )->text() == "slots" : false;
     m_inSignals = l.count() > 1 ? l.at( 0 )->text() == "signals" : false;
 }
@@ -601,10 +601,10 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 	    }
 	    ++nameIt;
 	}
-	
+
 	if( baseSpecifier->name()->unqualifiedName() && baseSpecifier->name()->unqualifiedName()->name() )
 	    baseName += baseSpecifier->name()->unqualifiedName()->name()->text();
-	
+
 	Tag tag;
 	tag.setKind( Tag::Kind_Base_class );
 	tag.setFileName( m_fileName );

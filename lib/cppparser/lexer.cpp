@@ -271,7 +271,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    addToken( tok );
 		}
             }
-	    m_driver->addMacro( m );	    
+	    m_driver->addMacro( m );
             m_preprocessorEnabled = d;
 	    m_currentLine = argsEndAtLine;
 	    m_currentColumn = argsEndAtColumn;
@@ -331,7 +331,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     } else {
-	tk = Token( ch.latin1(), currentPosition(), 1 );
+	tk = Token( ch, currentPosition(), 1 );
 	nextChar();
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
@@ -435,7 +435,7 @@ QString Lexer::readArgument()
     }
 
     //qDebug( "arg = %s", arg.latin1() );
-    
+
     m_tokens = tokens;
     m_size = size;
 
@@ -679,7 +679,7 @@ int Lexer::macroPrimary()
 {
     readWhiteSpaces( false );
     int result = 0;
-    switch( currentChar().latin1() ) {
+    switch( currentChar() ) {
     case '(':
 	nextChar();
 	result = macroExpression();
@@ -695,7 +695,7 @@ int Lexer::macroPrimary()
     case '!':
     case '~':
 	{
-	    char tk = currentChar().latin1();
+	    QChar tk = currentChar();
 	    nextChar();
 	    int result = macroPrimary();
 	    if( tk == '-' ) return -result;

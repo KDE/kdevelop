@@ -31,14 +31,14 @@ static PyObject *pydcopc_marshal_QString(PyObject */*self*/, PyObject *arg)
 static PyObject *pydcopc_marshal_QCString(PyObject */*self*/, PyObject *arg)
 {
     QCString cstr;
-    
+
     char *p;
     Py_UNICODE *ustr; int ulen;
 
     if (PyArg_ParseTuple(arg, (char*)"s", &p)) {
         cstr = QCString(p);
     } else if (PyArg_ParseTuple(arg, (char*)"u#", &ustr, &ulen)) {
-        cstr = QString((const QChar*)ustr, (uint)ulen).latin1();
+        cstr = QString((const QChar*)ustr, (uint)ulen).local8Bit();
     } else {
         PyErr_SetString(PyExc_TypeError, "Expected string or unicode string");
         return 0;
@@ -523,7 +523,7 @@ static PyObject *pydcopc_connect( PyObject */*self*/, PyObject *args )
 {
     char *appname, *objname, *signal;
     PyObject *func;
-    
+
     if (!PyArg_ParseTuple(args, (char*)"sssO", &appname, &objname, &signal, &func))
         return 0;
 

@@ -218,7 +218,7 @@ void AppWizardDialog::licenseChanged()
 
     QString author = author_edit->text();
     QString email = email_edit->text();
-    
+
     str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
 
     switch (license_combo->currentItem())
@@ -342,7 +342,7 @@ void AppWizardDialog::accept()
     script = dir.filePath("template-" + finfo.fileName() + "/script");
 
     QString license =
-        (license_combo->currentItem()<4)? license_combo->currentText() : QString("Custom");
+        (license_combo->currentItem()<4)? license_combo->currentText() : i18n("Custom");
 
     QString licensefile;
     switch (license_combo->currentItem())

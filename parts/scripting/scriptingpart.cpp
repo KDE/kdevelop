@@ -20,6 +20,7 @@
 #include <kstandarddirs.h>
 
 #include "kdevcore.h"
+#include <qfile.h>
 
 
 static ScriptingPart *scripting_part;
@@ -67,9 +68,9 @@ ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringLis
 
 #if 0
     QString initfile = locate("data", "kdevpython/init.py");
-    FILE *f1 = fopen(initfile.latin1(), "r");
+    FILE *f1 = fopen(QFile::encodeName(initfile), "r");
     kdDebug(9011) << "evaluate init.py" << endl;
-    PyRun_SimpleFile(f1, (char*)initfile.latin1());
+    PyRun_SimpleFile(f1, QFile::encodeName(initfile));
     fclose(f1);
 #endif
 }

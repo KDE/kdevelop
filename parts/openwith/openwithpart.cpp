@@ -43,7 +43,7 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
   KPopupMenu *sub = new KPopupMenu(popup);
 
   sub->insertItem(i18n("Open as UTF-8"), this, SLOT(openAsEncoding(int)));
-  
+
   QString mimeType = KMimeType::findByURL(m_url, 0, true, true)->name();
   KTrader::OfferList offers = KTrader::self()->query(mimeType, "Type == 'Application'");
 
@@ -53,12 +53,12 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     KTrader::OfferList::Iterator it;
     for (it = offers.begin(); it != offers.end(); ++it)
     {
-      KAction *action = new KAction((*it)->name(), 0, 0, (*it)->desktopEntryPath().latin1());
+      KAction *action = new KAction((*it)->name(), 0, 0, (*it)->desktopEntryPath());
       connect(action, SIGNAL(activated()), this, SLOT(openWithService()));
       action->plug(sub);
     }
     sub->insertSeparator();
-    
+
     popup->insertItem(i18n("Open With"), sub);
 
     // make sure the generic "Open with ..." entry gets appended to the submenu

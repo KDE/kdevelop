@@ -62,7 +62,7 @@ void RegexpTestDialog::somethingChanged()
 {
     success_label->clear();
     subgroups_listview->clear();
-    
+
     if ( qregexp_button->isChecked() || qregexp_min_button->isChecked() )
         checkQRegExp();
     else if ( kregexp_button->isChecked() )
@@ -122,7 +122,7 @@ void RegexpTestDialog::checkPOSIX()
     regex_t compiledPattern;
     regmatch_t matches[20];
     int cflags = extendedposix_button->isChecked()? REG_EXTENDED : 0;
-    QCString regexp = pattern_edit->text().latin1();
+    QCString regexp = pattern_edit->text().local8Bit();
     int res = regcomp(&compiledPattern, regexp, cflags);
     if (res != 0) {
         QString regcompMessage;
@@ -173,19 +173,19 @@ void RegexpTestDialog::checkPOSIX()
         success_label->setText(regcompMessage);
         return;
     }
-    
+
     for (int i = 0; i < 20; ++i) {
         matches[i].rm_so = -1;
         matches[i].rm_eo = -1;
     }
-    
-    QCString testString = teststring_edit->text().latin1();
+
+    QCString testString = teststring_edit->text().local8Bit();
     res = regexec(&compiledPattern, testString, 20, matches, 0);
     if (res != 0) {
         success_label->setText(i18n("No match"));
         return;
     }
-    
+
     success_label->setText(i18n("Successfully matched"));
     int len = testString.length();
     for (int i = 0; i < 20; ++i) {
@@ -205,7 +205,7 @@ void RegexpTestDialog::insertQuoted()
     QString rawstr = pattern_edit->text();
 
     QString str;
-    
+
     int len = rawstr.length();
     for (int i=0; i < len; ++i) {
         QChar ch = rawstr[i];
@@ -220,7 +220,7 @@ void RegexpTestDialog::insertQuoted()
     KParts::ReadWritePart *rwpart
         = dynamic_cast<KParts::ReadWritePart*>(m_part->partController()->activePart());
     QWidget *view = m_part->partController()->activeWidget();
-    
+
     KTextEditor::EditInterface *editiface
         = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
     if (!editiface) {

@@ -684,7 +684,7 @@ void GDBController::parseLine(char* buf)
     if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
         strstr(buf, "not in executable format:")                ||
         strstr(buf, "No such file or directory.")               ||  // does this fall out?
-        strstr(buf, i18n("No such file or directory.").latin1())||  // from system via gdb
+        strstr(buf, i18n("No such file or directory.").local8Bit())||  // from system via gdb
         strstr(buf, "is not a core dump:")                      ||
         strncmp(buf, "ptrace: No such process.", 24)==0         ||
         strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
