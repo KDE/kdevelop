@@ -41,7 +41,7 @@ QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
 		= QValueList<ActionFormat>()
 
 	<< ActionFormat( i18n("compiling"), "g++", "/bin/sh\\s.*libtool.*--mode=compile.*`.*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 )
-	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*([^\\s;]*)", 1 )
+	<< ActionFormat( i18n("compiling"), "g++", "g\\+\\+ (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 )
 	<< ActionFormat( i18n("generating"), "moc", ".*/moc\\b.*\\s-o\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("generating"), "uic", ".*/uic\\b.*\\s-o\\s([^\\s;]+)", 1 )
 	<< ActionFormat( i18n("linking"), "libtool", "/bin/sh\\s.*libtool.*--mode=link .* -o ([^\\s;]+)", 1 )
@@ -142,6 +142,15 @@ void MakeActionFilter::test()
 		"appoutputviewpart.lo appoutputwidget.lo directorystatusmessagefilter.lo outputfilter.lo compileerrorfilter.lo "
 		"commandcontinuationfilter.lo makeitem.lo makeactionfilter.lo otherfilter.lo ../../lib/libkdevelop.la",
 		"linking", "libtool", "libkdevoutputviews.la.closure" )
+	<< TestItem( //automake, builddir!=srcdir, libtool=no, compiling
+		" g++ -DHAVE_CONFIG_H -I. -I/home/andris/cvs-developement/head/quanta/quanta/project "
+		"-I../.. -I/home/andris/cvs-developement/head/quanta/quanta/dialogs -I/opt/kde3/include -I/usr/lib/qt3/include -I/usr/X11R6/include  "
+		"-I../../quanta/dialogs  -DQT_THREAD_SUPPORT  -D_REENTRANT -DKOMMANDER -DDESIGNER -DQT_NO_SQL -DHAVE_KDE  -Wnon-virtual-dtor "
+		"-Wno-long-long -Wundef -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -ansi -D_XOPEN_SOURCE=500 -D_BSD_SOURCE "
+		"-Wcast-align -Wconversion -Wchar-subscripts -fno-builtin -g3 -DKDE_NO_COMPAT -fno-exceptions -fno-check-new -fno-common  -c -o project.o "
+		"`test -f '/home/andris/cvs-developement/head/quanta/quanta/project/project.cpp' || "
+		"echo '/home/andris/cvs-developement/head/quanta/quanta/project/'`/home/andris/cvs-developement/head/quanta/quanta/project/project.cpp	",
+		"compiling", "g++", "project.cpp")
 	;
 
 	QValueList<TestItem>::const_iterator it = testItems.begin();
