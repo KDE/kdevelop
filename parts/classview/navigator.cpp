@@ -245,17 +245,21 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
 
     //remove items not in toLeave list
-    for (QMap<QString, QListViewItem*>::iterator it = m_functionNavDecls.begin();
-        it != m_functionNavDecls.end(); ++it)
+    QMap<QString, QListViewItem*>::iterator it = m_functionNavDecls.begin();
+    while ( it != m_functionNavDecls.end() )
     {
-        if (!toLeave.contains(it.key()))
+        QMap<QString, QListViewItem*>::iterator it2 = it;     
+        ++it;
+        if ( !toLeave.contains( it2.key() ) )
         {
-            if (it.data())
-                m_part->m_functionsnav->view()->removeItem(it.data());
-            m_functionNavDecls.remove(it);
+            if (it2.data())
+            {
+                m_part->m_functionsnav->view()->removeItem(it2.data());
+            }
+            m_functionNavDecls.remove(it2);        
         }
     }
-
+    
     toLeave.clear();
     FunctionDefinitionList list = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
     for (FunctionDefinitionList::const_iterator it = list.begin(); it != list.end(); ++it)
@@ -282,16 +286,20 @@ void Navigator::refreshNavBars(const QString &activeFileName, bool clear)
 
     kdDebug(9003) << k_funcinfo << "leave list: " << toLeave << endl;
     //remove items not in toLeave list
-    for (QMap<QString, QListViewItem*>::iterator it = m_functionNavDefs.begin();
-        it != m_functionNavDefs.end(); ++it)
+    QMap<QString, QListViewItem*>::iterator itt = m_functionNavDefs.begin();
+    while ( itt != m_functionNavDefs.end() )
     {
-        if (!toLeave.contains(it.key()))
+        QMap<QString, QListViewItem*>::iterator it2 = itt;     
+        ++itt;
+        if ( !toLeave.contains( it2.key() ) )
         {
-            if (it.data())
-                m_part->m_functionsnav->view()->removeItem(it.data());
-            m_functionNavDefs.remove(it);
+            if (it2.data())
+            {
+                m_part->m_functionsnav->view()->removeItem(it2.data());
+            }
+            m_functionNavDefs.remove(it2);        
         }
-    }
+    }    
 }
 
 void Navigator::refresh()
