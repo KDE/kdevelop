@@ -47,7 +47,7 @@ static QValueList<CompletionEntry> getAllWords( const QString& text,
     QMap<QString, bool> map;
     QValueList<CompletionEntry> entries;
 #if QT_VERSION < 300
-    QRegExp rx(QString("[\\s:;,+-*/]") + prefix + "[a-zA-Z0-9_]+[\\s:;,+-*/]");
+    QRegExp rx(QString("[^a-zA-Z0-9_]") + prefix + "[a-zA-Z0-9_]+[^a-zA-Z0-9_]");
 #else
     QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
 #endif
