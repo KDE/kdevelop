@@ -9,8 +9,8 @@
 
 #include "api.h"
 #include "partcontroller.h"
+#include "domutil.h"
 #include "documentationpart.h"
-
 
 void ProjectWorkspace::save()
 {  
@@ -18,15 +18,8 @@ void ProjectWorkspace::save()
   // No, these things are exactly what the project file is for
 
   QDomDocument* dom = API::getInstance()->projectDom();
-  QDomElement element = dom->documentElement();
-  QDomElement wsElement = element.namedItem( "workspace" ).toElement();
-  
-  if( wsElement.isNull() ) {
-    wsElement = dom->createElement( "workspace" );
-    element.appendChild( wsElement );
-  }
-  
-  saveFileList( wsElement );
+  QDomElement el = DomUtil::createElementByPath( *dom, "/workspace" );
+  saveFileList( el );
 }
 
 void ProjectWorkspace::restore()
@@ -40,16 +33,10 @@ void ProjectWorkspace::restore()
 
 void ProjectWorkspace::saveFileList( QDomElement& wsElement)
 {
-  QDomElement openfiles = wsElement
-       .namedItem( "openfiles" ).toElement();
-  if( openfiles.isNull() ) {
-      openfiles = wsElement.ownerDocument().createElement( "openfiles" );
-      wsElement.appendChild( openfiles );
-  }
-  
+  QDomElement openfiles = DomUtil::namedChildElement( wsElement, "openfiles" );
+    
   // clear old entries
-  while( !openfiles.firstChild().isNull() )
-    openfiles.removeChild( openfiles.firstChild() );
+  DomUtil::makeEmpty( openfiles );
     
   QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
