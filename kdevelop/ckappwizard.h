@@ -183,6 +183,7 @@ private:
   QListViewItem *qtnormalitem;
   QListViewItem *qt2normalitem;
   QListViewItem *qt2mdiitem;
+  QListViewItem *qextmdiitem;
   QLineEdit* messageline;
   QLabel* logMessage;
   QLineEdit* vendorline;
