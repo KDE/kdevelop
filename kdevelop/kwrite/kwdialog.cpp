@@ -128,6 +128,13 @@ SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   search->setFocus();
 }
 
+void SearchDialog::setSearchText( const QString &searchstr )
+{
+  search->insertItem( searchstr, 0 );
+  search->setCurrentItem( 0 );
+  ((QLineEdit *) (search->children()->getFirst()))->selectAll();
+}
+
 const char *SearchDialog::getSearchFor() {
   return search->currentText();
 }

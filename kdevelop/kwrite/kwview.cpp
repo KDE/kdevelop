@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include <qstring.h>
+#include <qregexp.h>
 #include <qwidget.h>
 #include <qfont.h>
 #include <qpainter.h>
@@ -2050,6 +2051,14 @@ void KWrite::search() {
 
   searchDialog = new SearchDialog(&searchForList, 0L,
     searchFlags & ~sfReplace,topLevelWidget());
+  if ( kWriteDoc->hasMarkedText() ) {
+    QString str = markedText();
+    str.replace(QRegExp("^\n"), "");
+    int pos=str.find("\n");
+    if (pos>-1)
+     str=str.left(pos);
+    searchDialog->setSearchText( str );
+  }
 
   kWriteView->focusOutEvent(0L);// QT bug ?
   if (searchDialog->exec() == QDialog::Accepted) {
@@ -2066,6 +2075,14 @@ void KWrite::replace() {
 
   searchDialog = new SearchDialog(&searchForList, &replaceWithList,
     searchFlags | sfReplace,topLevelWidget());
+  if ( kWriteDoc->hasMarkedText() ) {
+    QString str = markedText();
+    str.replace(QRegExp("^\n"), "");
+    int pos=str.find("\n");
+    if (pos>-1)
+     str=str.left(pos);
+    searchDialog->setSearchText( str );
+  }
 
   kWriteView->focusOutEvent(0L);// QT bug ?
   if (searchDialog->exec() == QDialog::Accepted) {

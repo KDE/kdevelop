@@ -1,3 +1,6 @@
+2000-11-06 Sandy Meier  <smeier@kdevelop.org>
+	* commited patch by Jens Zurheide <zuzu@surf-callino.de> (auto_marked_search in kwrite)
+
 2000-11-02  Ralf Nolden <nolden@kde.org>
   * fixed slotBuildCompileFile
   * added Generate Project file to call kimport
