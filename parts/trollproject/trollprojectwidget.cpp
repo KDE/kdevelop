@@ -1126,7 +1126,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                                                 i18n("Insert existing %1").arg(title),
                                                 TRUE);
           dialog->setMode(KFile::Files | KFile::ExistingOnly | KFile::LocalOnly);
-          dialog->exec();
+          if ( dialog->exec() == QDialog::Rejected )
+	    return;
           QStringList files = dialog->selectedFiles();
           for (unsigned int i=0;i<files.count();i++)
           {
@@ -1142,7 +1143,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             addFileToCurrentSubProject(titem,filename);
           }
           // Update project file
-          updateProjectFile(titem->owner);
+          if ( titem && titem->owner )
+            updateProjectFile(titem->owner);
           // Update subprojectview
           slotOverviewSelectionChanged(m_shownSubproject);
         }
