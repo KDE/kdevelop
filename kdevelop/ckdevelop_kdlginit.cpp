@@ -220,13 +220,11 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Tools-menu entries
   kdlg_tools_menu= new QPopupMenu;
-  kdlg_tools_menu->insertItem(i18n("&KDevelop"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
-  kdlg_tools_menu->insertItem(i18n("K&Dbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
-  kdlg_tools_menu->insertItem(i18n("K&Iconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
-  kdlg_tools_menu->insertItem(i18n("K&Translator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
   kdlg_menubar->insertItem(i18n("&Tools"), kdlg_tools_menu);
 
 
+  ///////////////////////////////////////////////////////////////////
+  // Options-menu entries
   kdlg_options_menu = new QPopupMenu;
   kdlg_options_menu->insertItem(i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
@@ -461,6 +459,10 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
+
 
 
 

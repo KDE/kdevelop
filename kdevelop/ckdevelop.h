@@ -96,7 +96,8 @@ public:
   void refreshTrees();
 
   void setKeyAccel();
-  
+	void setToolmenuEntries();
+	
   void initKDlg();
   void initKDlgMenuBar();
   void initKDlgToolBar();
@@ -275,10 +276,8 @@ public:
   ////////////////////////
   // TOOLS-Menu entries
   ///////////////////////
-  void slotToolsKDbg();
-  void slotToolsKIconEdit();
-  void slotToolsKTranslator();
-  
+  void slotToolsTool(int tool);
+
   ////////////////////////
   // OPTIONS-Menu entries
   ///////////////////////
@@ -286,8 +285,13 @@ public:
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
+  /** shows the Browser configuration dialog */
   void slotOptionsDocBrowser();
+  /** shows the Tools-menu configuration dialog */
+	void slotOptionsToolsConfigDlg();
+	/** shows the configuration dialog for enscript-printing */
   void slotOptionsConfigureEnscript();
+  /** shows the configuration dialog for a2ps printing */
   void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
@@ -486,7 +490,11 @@ private:
   QPopupMenu* kdlg_tools_menu;
   QPopupMenu* kdlg_options_menu;
   QPopupMenu* kdlg_help_menu;
-	
+
+	QStrList tools_exe;
+	QStrList tools_entry;
+	QStrList tools_argument;
+  	
   KMenuBar* kdev_menubar;
   KMenuBar* kdlg_menubar;
 
@@ -591,6 +599,8 @@ private:
 };
 
 #endif
+
+
 
 
 

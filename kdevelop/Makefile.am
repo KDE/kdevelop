@@ -1,14 +1,3 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-CXXFLAGS = -O2 -Wall 
-LDFLAGS = 
-kdevelop_SOURCES = cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp cprintdlg.cpp coutputwidget.cpp cnewprojectdlg.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp cfileprintdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdoctree.cpp cdocbrowser.cpp cdatepikerdlg.cpp ccreatedocdatabasedlg.cpp cconfigenscriptdlg.cpp cconfiga2psdlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
-kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
-
-SUBDIRS = docs classparser kdlgedit kwrite 
-
-EXTRA_DIST = caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddlg.cpp caddclassmethoddlg.h caddexistingfiledlg.cpp caddexistingfiledlg.h cclasstooldlg.cpp cclasstooldlg.h cclassview.cpp cclassview.h cconfiga2psdlg.cpp cconfiga2psdlg.h cconfigenscriptdlg.cpp cconfigenscriptdlg.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h cdatepikerdlg.cpp cdatepikerdlg.h cdocbrowser.cpp cdocbrowser.h cdoctree.cpp cdoctree.h cdoctreepropdlg.cpp cdoctreepropdlg.h ceditwidget.cpp ceditwidget.h cfileprintdlg.cpp cfileprintdlg.h cfilepropdlg.cpp cfilepropdlg.h cfinddoctextdlg.cpp cfinddoctextdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevelop.cpp ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_kdlginit.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevelop_whatsthis.cpp ckdevinstall.cpp ckdevinstall.h ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h cnewprojectdlg.cpp cnewprojectdlg.h coutputwidget.cpp coutputwidget.h cprintdlg.cpp cprintdlg.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h debug.h kdevelop-project.xpm kdevelop.kdelnk kdevelop.xpm kdeveloprc kstartuplogo.cpp kstartuplogo.h kswallow.cpp kswallow.h ktipofday.cpp ktipofday.h main.cpp mini-kdevelop.xpm resource.h structdef.h x-kdevelop-project.kdelnk cexecuteargdlg.cpp cexecuteargdlg.h 
-
-####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to. 
@@ -50,8 +39,9 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 	caddclassmethoddlg.cpp caddclassattributedlg.cpp \
 	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
-	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp
-
+	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
+	ctoolsconfigdlg.cpp
+	
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -72,8 +62,9 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
 	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
 	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
-	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h
-
+	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
+	ctoolsconfigdlg.h
+	
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 
 # if you "make distclean", this files get removed. If you want to remove
@@ -108,3 +99,4 @@ uninstall-local:
 	-rm -f $(APPSDIR)/kdevelop.kdelnk
 	-rm -f $(kde_icondir)/kdevelop.xpm
 	-rm -f $(kde_minidir)/kdevelop.xpm
+

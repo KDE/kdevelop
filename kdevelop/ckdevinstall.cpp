@@ -572,6 +572,10 @@ void CKDevInstall::slotAuto() // proceed >>
     ktranslator=true;
   }
 
+	QStrList tools_exe;
+	QStrList tools_entry;
+	QStrList tools_argument;
+
   QString found=i18n(" was found.");
   QString not_found=i18n(" was not found.");
 
@@ -617,18 +621,27 @@ void CKDevInstall::slotAuto() // proceed >>
   else
     kdoc_str="kdoc"+not_found+" -- generating API-documentations will not be possible\n";
   QString kdbg_str;
-  if(kdbg)
+  if(kdbg){
     kdbg_str="kdbg"+found+"\n";
+		tools_exe.append("kdbg");
+		tools_entry.append(i18n("K&Debugger"));
+	}
   else
     kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
   QString kiconedit_str;
-  if(kiconedit)
+  if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";
+		tools_exe.append("kiconedit");
+		tools_entry.append("K&IconEdit");
+	}
   else
     kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible\n";
   QString ktranslator_str;
-  if(ktranslator)
+  if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
+		tools_exe.append("ktranslator");
+		tools_entry.append("K&Translator");
+	}
   else
     ktranslator_str="KTranslator"+not_found+"\n";
   QString glimpse_str;
@@ -657,6 +670,11 @@ void CKDevInstall::slotAuto() // proceed >>
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
                   +print_str+kdbg_str+kiconedit_str+ktranslator_str, KMsgBox::INFORMATION);
 
+	config->setGroup("ToolsMenuEntries");
+	config->writeEntry("Tools_exe",tools_exe);
+	config->writeEntry("Tools_entry",tools_entry);
+	config->writeEntry("Tools_argument",tools_argument);
+	
   if(qt_test){ // test, if qt_test is required- qt_test is set to "true" in the constructor.
   						 // Leave out the test if the correct path has been set in the edit field (there, qt_test has been set to false)
 	

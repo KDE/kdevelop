@@ -45,6 +45,8 @@ CKDevelop::CKDevelop(){
 
 
   initProject();
+	setToolmenuEntries();
+	
   config->setGroup("Files");
   filename = config->readEntry("browser_file","");
   if(!filename.isEmpty()){
@@ -633,10 +635,7 @@ void CKDevelop::initMenu(){
 // Tools-menu entries
 
   tools_menu = new QPopupMenu;
-  tools_menu->insertItem(i18n("&KDialogEdit"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
-  tools_menu->insertItem(i18n("K&Dbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
-  tools_menu->insertItem(i18n("K&Iconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
-  tools_menu->insertItem(i18n("K&Translator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
+		
   kdev_menubar->insertItem(i18n("&Tools"), tools_menu);
 
 ///////////////////////////////////////////////////////////////////
@@ -662,6 +661,7 @@ void CKDevelop::initMenu(){
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
 
   options_menu->insertItem(i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
+	options_menu->insertItem(i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
@@ -1097,6 +1097,43 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
 }
+
+void CKDevelop::setToolmenuEntries(){
+  config = kapp->getConfig();
+  config->setGroup("ToolsMenuEntries");
+	config->readListEntry("Tools_exe",tools_exe);
+	config->readListEntry("Tools_entry",tools_entry);
+	config->readListEntry("Tools_argument",tools_argument);
+	
+	uint items;
+	for(items=0;items<tools_entry.count();items++){
+		tools_menu->insertItem(tools_entry.at(items));
+		kdlg_tools_menu->insertItem(tools_entry.at(items));
+	}
+  tools_menu->insertItem(i18n("&Dialogeditor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
+  kdlg_tools_menu->insertItem(i18n("&KDevelop"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
+	
+	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
+	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -36,6 +36,7 @@
 #include <ktabctl.h>
 
 #include "./kdlgedit/kdlgedit.h"
+#include "ctoolsconfigdlg.h"
 
 // #include <kio_linedit_dlg.h>
 
@@ -848,9 +849,16 @@ void CKDevelop::slotBuildManual(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-void CKDevelop::slotToolsKDbg(){
-
-  if(!CToolClass::searchProgram("kdbg")){
+void CKDevelop::slotToolsTool(int tool){
+	switch(tool){
+		case ID_TOOLS_KDLGEDIT:
+			return;
+			break;
+		case ID_KDLG_TOOLS_KDEVELOP:
+			return;
+			break;
+	}
+	if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
     return;
   }
   if(!bKDevelop)
@@ -858,46 +866,19 @@ void CKDevelop::slotToolsKDbg(){
 
   showOutputView(false);
 
+  QString argument=tools_argument.at(tool);
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kdbg");
-  swallow_widget->sWExecute();
-  swallow_widget->init();
+  if(argument.isEmpty()){
+  	swallow_widget->setExeString(tools_exe.at(tool));
+	}
+	else{
+  	swallow_widget->setExeString(tools_exe.at(tool)+argument);
+	}
+	swallow_widget->sWExecute();
+ 	swallow_widget->init();
 }
 
-void CKDevelop::slotToolsKIconEdit(){
-
-  if(!CToolClass::searchProgram("kiconedit")){
-    return;
-  }
-  if(!bKDevelop)
-    switchToKDevelop();
-
-  showOutputView(false);
-
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kiconedit");
-  swallow_widget->sWExecute();
-  swallow_widget->init();
-}
-
-void CKDevelop::slotToolsKTranslator(){
-  if(!CToolClass::searchProgram("ktranslator")){
-    return;
-  }
-  if(!bKDevelop)
-    switchToKDevelop();
-
-  showOutputView(false);
-
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  swallow_widget->setExeString("ktranslator");
-  swallow_widget->sWExecute();
-  swallow_widget->init();
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // OPTIONS-Menu slots
@@ -975,6 +956,16 @@ void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(IDS_DEFAULT);
 }
 
+void CKDevelop::slotOptionsToolsConfigDlg(){
+  slotStatusMsg(i18n("Configuring Tools-Menu entries..."));
+  CToolsConfigDlg* configdlg= new CToolsConfigDlg(this,"configdlg");
+  configdlg->show();
+
+  tools_menu->clear();
+  kdlg_tools_menu->clear();
+	setToolmenuEntries();
+  slotStatusMsg(IDS_DEFAULT);
+}
 void CKDevelop::slotOptionsConfigureEnscript(){
   if (!CToolClass::searchProgram("enscript")) {
     return;
@@ -2002,15 +1993,15 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        			  i18n("Creates the Project's API with KDoc"))
   ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        			  i18n("Creates the Project's User Manual with the sgml-file"))
 
-  ON_STATUS_MSG(ID_TOOLS_KDBG,                    			  i18n("Starts KDbg in the tools window"))
-  ON_STATUS_MSG(ID_TOOLS_KTRANSLATOR,             			  i18n("Starts KTranslator in the tools window"))
-  ON_STATUS_MSG(ID_TOOLS_KICONEDIT,               			  i18n("Starts KIconedit in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,												i18n("Changes to the KDevelop dialogeditor"))
+  ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,										i18n("Changes to KDevelop project editor"))
 
   ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			    i18n("Sets the Editor's behavoir"))
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			    i18n("Sets the Editor's colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS,  i18n("Sets the highlighting default colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			    i18n("Sets the highlighting colors"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				    i18n("Configures the Browser options"))
+	ON_STATUS_MSG(ID_OPTIONS_TOOLS_CONFIG_DLG,							i18n("Configures the Tools-Menu entries"))
   ON_STATUS_MSG(ID_OPTIONS_PRINT,       			            i18n("Configures printing options"))
   ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,       	        i18n("Configures the printer to use enscript"))
   ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,       			        i18n("Configures the printer to use a2ps"))
@@ -2037,6 +2028,22 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,9 @@
+1999-04-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added Toolmenu configuration dialog
+		TODO: Move up, move down button functionality.
+	* the toolmenu updates itself after configuration, that works in both modes(kdevelop & kdlgedit)
+	* the installation process adds the correct items to the toolsmenu if the programs were found
+	
 1999-04-15 Pascal Krahmer <pascal@beast.de>
         * added isModified(), wasWidgetAdded() and wasWidgetRemoved()
           methods to KDlgEditWidget (Sandy needs them)
@@ -806,6 +812,7 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
 
 
 

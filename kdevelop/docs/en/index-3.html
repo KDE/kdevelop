@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The Complete User's Guide to the KDevelop IDE: Configuration </TITLE>
+<TITLE>The User Manual to KDevelop: Configuration </TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -43,7 +43,6 @@ Vertical Selections:            when selecting multiple lines, the selection is 
 Delete On Input:                 deletes a selection when writing in the selection.
 Toggle Old:                          allows only one selection. A selection made gets deselected when another selection is made.
 <P>Wrap Words At:                      sets the maximum
-<P>
 <H3><A NAME="ss3.2">3.2 Editor Colors</A>
 </H3>
 
@@ -53,28 +52,22 @@ Toggle Old:                          allows only one selection. A selection made
 - selected:                     the color of selected text to display the selection
 - found:                          the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".
 - selected + found:        the color of text selected to search for and found
-<P>
 <H3><A NAME="ss3.3">3.3 Editor Defaults</A>
 </H3>
 
 <P>The Editor Defaults dialog lets you configure the default values for language items such as keywords etc.
 and the default font style.  When setting up the syntax highlighting (see below), those default values can be used
 to configure standard values configured here.
-<P>
-<P>
 <H3><A NAME="ss3.4">3.4 Syntax-Highlighting</A>
 </H3>
 
 <P>The Syntax-Highlighting configurations dialog allows settings for different programming languages and fonts, each independent.
 To change the preset syntax-highlighting for a language, choose the language and the idiom wich display type you want to change.
-<P>
-<P>
 <H3><A NAME="ss3.5">3.5 Documentation Browser</A>
 </H3>
 
 <P>The Documentation Browser can be configured by this menu,setting colors for HTML links, background etc.
 Also the font size can be changed as well as the fixed and standard font type according to the system's installed fonts.
-<P>
 <H3><A NAME="ss3.6">3.6 Printer Setup</A>
 </H3>
 
@@ -101,13 +94,11 @@ a documentation in the Helpmenu, the Documentation browser will be opened, toget
 <P>Startup:
 <P>For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
 Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
-<P>
 <H4>Keys</H4>
 
 <P>The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
 KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
 configuration can be changed by checking values like the Alt / Ctrl key etc.
-<P>
 <H4>Documentation</H4>
 
 <P>
@@ -123,10 +114,12 @@ assumed all KDE-Libs documentation resides in the same directory. Both path's ca
 displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should first enter the next
 configuration dialog, Update KDE-Documentation. This will create the documentation to a path of your choice, also setting the KDE Library
 Doc path automatically.
-<P>
 <H4>Options</H4>
 
-<P>Update KDE-Documentation
+<P>
+<H4>Update KDE-Documentation</H4>
+
+<P>
 <P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files installed
 on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations.
 <P>This function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package.
@@ -147,8 +140,9 @@ be generated for the kdelibs.  So it is important that you have set up the Qt do
 qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to give browsing the most functionality.
 <P>
 <P>
-<P>Create Search Database
-The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a keyword
+<H4>Create Search Database</H4>
+
+<P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a keyword
 interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.  Preset are the
 options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the documentation files were
 set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include directories the user can set up himself
@@ -157,7 +151,6 @@ the path.  A path once set can be removed from the index by selecting the path i
 user is offered three different modes for the index size: tiny, small and medium.  The higher the index size, the more the index files
 will grow. On the other hand, a search in a bigger searchdatabase will be faster and more successful, so we suggest choosing a "medium" size.
 For using the search function, see section  4.8   Using the Documentation Browser
-<P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-4.html">Next</A>

@@ -137,28 +137,24 @@
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
-#define ID_TOOLS_KDLGEDIT           15010
-#define ID_TOOLS_KICONEDIT          15020
-#define ID_TOOLS_KDBG               15030
-#define ID_TOOLS_KTRANSLATOR        15040
-                                     
+
+#define ID_TOOLS_KDLGEDIT           10
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries 
 
 #define ID_OPTIONS_EDITOR          	      	     16010
 #define ID_OPTIONS_EDITOR_COLORS           	     16020
-#define ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS	     16025
-#define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16030
+#define ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS	     16030
+#define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16040
 
 #define ID_OPTIONS_DOCBROWSER			               16050
+#define ID_OPTIONS_TOOLS_CONFIG_DLG								16060	
 
-#define ID_OPTIONS_KEYS          16035
+#define ID_OPTIONS_PRINT         16070
+#define ID_OPTIONS_PRINT_A2PS          16071
+#define ID_OPTIONS_PRINT_ENSCRIPT      16072
 
-#define ID_OPTIONS_PRINT         16036
-#define ID_OPTIONS_PRINT_A2PS          16037
-#define ID_OPTIONS_PRINT_ENSCRIPT      16038
-
-#define ID_OPTIONS_KDEVELOP            16040
+#define ID_OPTIONS_KDEVELOP            16080
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
@@ -213,7 +209,7 @@
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-Tools-menu-entries
-#define ID_KDLG_TOOLS_KDEVELOP      20310
+#define ID_KDLG_TOOLS_KDEVELOP      11
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-Build-menu-entries
@@ -378,6 +374,10 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
+
+
 
 
 
