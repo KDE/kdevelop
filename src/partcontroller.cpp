@@ -298,7 +298,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   if ( mimeType == "application/x-designer" )
   {
     KService::Ptr preferredApp = KServiceTypeProfile::preferredService( mimeType, "Application" );
-    if ( preferredApp->desktopEntryName() == "designer" )
+    if ( preferredApp && preferredApp->desktopEntryName() == "designer" )
     {
       KRun::runURL(url, mimeType);
       return;
