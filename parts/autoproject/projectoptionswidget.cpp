@@ -23,6 +23,7 @@
 #include <kdialog.h>
 #include <klibloader.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kseparator.h>
 #include <kservice.h>
 #include <ktrader.h>
@@ -354,6 +355,9 @@ void ProjectOptionsWidget::accept()
 
     DomUtil::writeEntry(doc, "/kdevautoproject/general/mainprogram", mainbin_edit->text());
     DomUtil::writeEntry(doc, "/kdevautoproject/general/programargs", progargs_edit->text());
+
+    if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
+        m_part->slotConfigure();
 }
 
 #include "projectoptionswidget.moc"

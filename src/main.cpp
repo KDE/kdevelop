@@ -35,11 +35,12 @@ int main(int argc, char *argv[])
                          VERSION, description, KAboutData::License_GPL,
                          "(c) 1999-2001 Bernd Gehrmann & others");
     aboutData.addAuthor("Bernd Gehrmann", "Everything not credited elsewhere :-)", "bernd@kdevelop.org");
-    aboutData.addAuthor("John Birch", "Debugger frontend", "jbb@kdevelop.org");
+    aboutData.addAuthor("Richard Dale", "Java & Objective C support", "Richard_Dale@tipitina.demon.co.uk");
     aboutData.addAuthor("Jonas Nordin", "C++ source parser", "jonas.nordin@syncom.se");
-    aboutData.addAuthor("Sandy Meier", "Context menu stuff", "smeier@kdevelop.org");
+    aboutData.addAuthor("John Birch", "Debugger frontend", "jbb@kdevelop.org");
+    aboutData.addAuthor("Sandy Meier", "PHP support, context menu stuff", "smeier@kdevelop.org");
     aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");
-    aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "htdig indexing", "hoelzer@kde.org");
+    aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "Several parts, htdig indexing", "hoelzer@kde.org");
     aboutData.addAuthor("The KWrite authors", "editor component", "kwrite-devel@kde.org");
     aboutData.addAuthor("Robert Moniot", "ftnchek documentation", "moniot@fordham.edu");
     aboutData.addAuthor("Ka-Ping Yee", "pydoc utility", "ping@lfw.org");

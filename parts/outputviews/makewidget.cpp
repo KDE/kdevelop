@@ -64,9 +64,10 @@ MakeWidget::~MakeWidget()
 }
 
 
-void MakeWidget::queueJob(const QString &command)
+void MakeWidget::queueJob(const QString &dir, const QString &command)
 {
     commandList.append(command);
+    dirList.append(dir);
     if (!isRunning())
         startNextJob();
 }
@@ -81,18 +82,22 @@ void MakeWidget::startNextJob()
     QString command = *it;
     commandList.remove(it);
     
+    it =  dirList.begin();
+    QString dir = *it;
+    dirList.remove(it);
+    
     clear();
     items.clear();
     parags = 0;
     moved = false;
     
-    insertLine(command, Diagnostic);
+    insertLine2(command, Diagnostic);
     childproc->clearArguments();
     *childproc << command;
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
     
     dirstack.clear();
-    dirstack.push(new QString(QDir::currentDirPath()));
+    dirstack.push(new QString(dir));
 
     m_part->core()->raiseWidget(this);
     m_part->core()->running(m_part, true);
@@ -198,7 +203,7 @@ void MakeWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
 {
     // Flush stderr buffer
     if (!stderrbuf.isEmpty()) {
-        insertStderrLine(stderrbuf);
+        insertLine1(stderrbuf, Normal);
         stderrbuf = "";
     }
     
@@ -206,7 +211,7 @@ void MakeWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
     int pos;
     while ( (pos = stdoutbuf.find('\n')) != -1) {
         QString line = stdoutbuf.left(pos);
-        insertStdoutLine(line);
+        insertLine1(line, Normal);
         stdoutbuf.remove(0, pos+1);
     }
 }
@@ -216,7 +221,7 @@ void MakeWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
 {
     // Flush stdout buffer
     if (!stdoutbuf.isEmpty()) {
-        insertStdoutLine(stdoutbuf);
+        insertLine1(stdoutbuf, Diagnostic);
         stdoutbuf = "";
     }
     
@@ -224,7 +229,7 @@ void MakeWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
     int pos;
     while ( (pos = stderrbuf.find('\n')) != -1) {
         QString line = stderrbuf.left(pos);
-        insertStderrLine(line);
+        insertLine1(line, Diagnostic);
         stderrbuf.remove(0, pos+1);
     }
 }
@@ -248,7 +253,7 @@ void MakeWidget::slotProcessExited(KProcess *)
         t = Error;
     }
     
-    insertLine(s, t);
+    insertLine2(s, t);
 
     m_part->core()->running(m_part, false);
 
@@ -257,38 +262,20 @@ void MakeWidget::slotProcessExited(KProcess *)
     // and the its KProcess object can be reused.
     if (childproc->normalExit())
         QTimer::singleShot(0, this, SLOT(startNextJob()));
-    else
+    else {
         commandList.clear();
+        dirList.clear();
+    }
 }
 
 
-void MakeWidget::insertStdoutLine(const QString &line)
+void MakeWidget::insertLine1(const QString &line, Type type)
 {
     // KRegExp has ERE syntax
     KRegExp enterDirRx("[^\n]*: Entering directory `([^\n]*)'$");
     KRegExp leaveDirRx("[^\n]*: Leaving directory `([^\n]*)'$");
-
-    if (enterDirRx.match(line)) {
-        QString *dir = new QString(enterDirRx.group(1));
-        dirstack.push(dir);
-        kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
-    }
-    else if (leaveDirRx.match(line)) {
-        kdDebug(9004) << "Leaving dir: " << leaveDirRx.group(1) << endl;
-        QString *dir = dirstack.pop();
-        kdDebug(9004) << "Now: " << (*dir) << endl;
-        delete dir;
-    }
-    
-    insertLine(line, Normal);
-}
-
-
-void MakeWidget::insertStderrLine(const QString &line)
-{
-    // KRegExp has ERE syntax
     KRegExp errorGccRx("([^: \t]+):([0-9]+):.*");
-    KRegExp errorFtnchekRx("(.*).*line.*([0-9]+):.*");
+    KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):.*");
     KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:.*");
     const int errorGccFileGroup = 1;
     const int errorGccRowGroup = 2;
@@ -297,6 +284,21 @@ void MakeWidget::insertStderrLine(const QString &line)
     const int errorJadeFileGroup = 1;
     const int errorJadeRowGroup = 2;
 
+    if (enterDirRx.match(line)) {
+        QString *dir = new QString(enterDirRx.group(1));
+        dirstack.push(dir);
+        kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
+        insertLine2(line, Diagnostic);
+        return;
+    } else if (leaveDirRx.match(line)) {
+        kdDebug(9004) << "Leaving dir: " << leaveDirRx.group(1) << endl;
+        QString *dir = dirstack.pop();
+        kdDebug(9004) << "Now: " << (*dir) << endl;
+        delete dir;
+        insertLine2(line, Diagnostic);
+        return;
+    }
+    
     QString fn;
     int row = -1;
     
@@ -322,14 +324,14 @@ void MakeWidget::insertStderrLine(const QString &line)
             fn.prepend("/").prepend(*dirstack.top());
         kdDebug(9004) << "Path: " << fn << endl;
         items.append(new MakeItem(parags, fn, row));
-        insertLine(line, Error);
+        insertLine2(line, Error);
     } else {
-        insertLine(line, Diagnostic);
+        insertLine2(line, type);
     }
 }
 
 
-void MakeWidget::insertLine(const QString &line, Type type)
+void MakeWidget::insertLine2(const QString &line, Type type)
 {
     ++parags;
 

@@ -139,7 +139,7 @@ void FortranSupportPart::slotFtnchek()
         }
     }
     
-    makeFrontend()->queueCommand(cmdline);
+    makeFrontend()->queueCommand(QString::null, cmdline);
 }
 
 

@@ -63,9 +63,9 @@ MakeViewPart::~MakeViewPart()
 }
 
 
-void MakeViewPart::queueCommand(const QString &command)
+void MakeViewPart::queueCommand(const QString &dir, const QString &command)
 {
-    m_widget->queueJob(command);
+    m_widget->queueJob(dir, command);
 }
 
 

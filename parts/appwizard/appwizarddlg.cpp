@@ -351,7 +351,7 @@ void AppWizardDialog::accept()
     cmdline += " --filetemplate=";
     cmdline += KShellProcess::quote(tempFile->name());
 
-    m_part->makeFrontend()->queueCommand(cmdline);
+    m_part->makeFrontend()->queueCommand(QString::null, cmdline);
 
     QWizard::accept();
 }

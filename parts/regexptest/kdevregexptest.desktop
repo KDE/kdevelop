@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Regular Expression tester
+Name=KDevRegexpTest
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevregexptest
+X-KDevelop-Scope=Global
+

@@ -30,7 +30,7 @@ public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
 
-    void queueJob(const QString &command);
+    void queueJob(const QString &dir, const QString &command);
     bool isRunning();
     
 public slots:
@@ -50,11 +50,11 @@ private:
     void searchItem(int parag);
     
     enum Type { Normal, Error, Diagnostic };
-    void insertLine(const QString &line, Type type);
-    void insertStdoutLine(const QString &line);
-    void insertStderrLine(const QString &line);
+    void insertLine1(const QString &line, Type type);
+    void insertLine2(const QString &line, Type type);
 
     QStringList commandList;
+    QStringList dirList;
     KProcess *childproc;
     QString stdoutbuf;
     QString stderrbuf;

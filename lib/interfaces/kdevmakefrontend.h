@@ -26,9 +26,11 @@ public:
      * then fails, all following jobs are dropped.
      * You should not make any assumptions about the directory in which
      * the command is started. If the command depends on that, put and
-     * explicit 'cd' into the command.
+     * explicit 'cd' into the command. The parameter dir is interpreted
+     * as a starting directory to find files when parsing compiler error
+     * messages.
      */
-    virtual void queueCommand(const QString &command) = 0;
+    virtual void queueCommand(const QString &dir, const QString &command) = 0;
     /**
      * Returns whether the application is currently running.
      */

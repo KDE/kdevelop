@@ -48,6 +48,7 @@ private:
     
     QGuardedPtr<AutoProjectWidget> m_widget;
     friend class AutoProjectWidget;
+    friend class ProjectOptionsWidget;
 };
 
 #endif

@@ -15,7 +15,7 @@ public:
     ~KDevMakeFrontendIface();
 
 k_dcop:
-    void queueCommand(const QString &command);
+    void queueCommand(const QString &dir, const QString &command);
 
 private:
     KDevMakeFrontend *m_makeFrontend;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,33 +9,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _MAKEVIEWPART_H_
-#define _MAKEVIEWPART_H_
+#ifndef _REGEXPTESTFACTORY_H_
+#define _REGEXPTESTFACTORY_H_
 
-#include <qguardedptr.h>
-
-#include "kdevmakefrontend.h"
-#include "KDevMakeFrontendIface.h"
+#include "kdevfactory.h"
 
 
-class MakeWidget;
-
-class MakeViewPart : public KDevMakeFrontend
+class RegexpTestFactory : public KDevFactory
 {
     Q_OBJECT
 
 public:
-    MakeViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
-    ~MakeViewPart();
+    RegexpTestFactory( QObject *parent=0, const char *name=0 );
+    ~RegexpTestFactory();
 
-protected:
-    virtual void queueCommand(const QString &dir, const QString &command);
-    virtual bool isRunning();
+    virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
+    static KInstance *instance();
 
 private:
-    QGuardedPtr<MakeWidget> m_widget;
-    KDevMakeFrontendIface *m_dcop;
-    friend class MakeWidget;
+    static KInstance *s_instance;
 };
 
 #endif

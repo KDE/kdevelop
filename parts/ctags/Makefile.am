@@ -2,11 +2,6 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 
-#bin_PROGRAMS = test
-#test_SOURCES = ctagscollection.cpp
-#test_LDFLAGS = $(all_libraries)
-#test_LDADD = $(LIB_KDEUI)
-
 kde_module_LTLIBRARIES = libkdevctags.la
 libkdevctags_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevctags_la_LIBADD = $(top_builddir)/lib/libkdevelop.la

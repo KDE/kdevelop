@@ -30,7 +30,7 @@ class CTagsDialog : public QDialog
 {
     Q_OBJECT
     
- public:
+public:
     CTagsDialog( KDevPart *part );
     ~CTagsDialog();
 

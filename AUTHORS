@@ -7,12 +7,12 @@ C++ source parser:
   Jonas Nordin <jonas.nordin@cenacle.se>
 
 Java support:
-  Richard Dale <>
+  Richard Dale <Richard_Dale@tipitina.demon.co.uk>
 
 Context menu stuff, PHP support:
   Sandy Meier <smeier@kdevelop.org>
 
-htdig searching & indexing:
+Several parts, htdig searching & indexing:
   Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
 
 KDE application templates:

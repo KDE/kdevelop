@@ -157,7 +157,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     dircmd += dir;
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(dircmd + cmdline);
+    makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
 
@@ -181,7 +181,7 @@ void AutoProjectPart::slotMakefilecvs()
     dircmd += projectDirectory();
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(dircmd + cmdline);
+    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
 }
 
 
@@ -219,7 +219,7 @@ void AutoProjectPart::slotConfigure()
     dircmd += projectDirectory();
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(dircmd + cmdline);
+    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
 }
 
 #include "autoprojectpart.moc"

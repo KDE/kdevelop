@@ -1,3 +1,14 @@
+2001-06-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* New part regexptest for testing regular expressions
+	* Fixed make frontend to recognize ftnchek messages
+	  correctly
+	* Changed make frontend api again so that the dir is
+	  given as parameter. Necessary for finding the 
+	  directory of an erroneous file when only one
+	  directory is built
+	* Rerun configure when project options have changed.
+
 2001-06-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Allow several commands for the make frontend to be queued

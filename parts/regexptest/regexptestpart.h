@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,33 +9,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _MAKEVIEWPART_H_
-#define _MAKEVIEWPART_H_
+#ifndef _REGEXPTESTPART_H_
+#define _REGEXPTESTPART_H_
 
 #include <qguardedptr.h>
+#include <kdialogbase.h>
+#include "kdevpart.h"
 
-#include "kdevmakefrontend.h"
-#include "KDevMakeFrontendIface.h"
+class RegexpTestDialog;
 
 
-class MakeWidget;
-
-class MakeViewPart : public KDevMakeFrontend
+class RegexpTestPart : public KDevPart
 {
     Q_OBJECT
 
 public:
-    MakeViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
-    ~MakeViewPart();
+    RegexpTestPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ~RegexpTestPart();
 
-protected:
-    virtual void queueCommand(const QString &dir, const QString &command);
-    virtual bool isRunning();
-
+private slots:
+    void slotRegexpTest();
+    
 private:
-    QGuardedPtr<MakeWidget> m_widget;
-    KDevMakeFrontendIface *m_dcop;
-    friend class MakeWidget;
+    RegexpTestDialog *m_dialog;
 };
 
 #endif
