@@ -151,6 +151,9 @@ void QEditorPart::setReadWrite(bool rw)
 
 void QEditorPart::setModified(bool modified)
 {
+    if ( modified == ReadWritePart::isModified() )
+        return; //nothing to do
+
     m_currentView->editor()->setModified( modified );
 
     // in any event, we want our parent to do it's thing
