@@ -42,6 +42,7 @@ typedef enum _Project_enum
   SCRIPT,
   DATA,
   PO,
+  QT_TS,
   KDEV_DIALOG,
   LEXICAL,
   PT_END_POS
@@ -92,7 +93,7 @@ struct TDialogFileInfo {
 struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG, LEXICAL*/
+  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG, LEXICAL, QT_TS, QT_IF (qt translation(ts), qt interface (ui)*/
   ProjectFileType type;
   /** include in distribution?*/
   bool dist;
@@ -388,6 +389,9 @@ public: // Public methods
   */
   QString& setInfosInString(QString& strtemplate, bool basics=true);
   void clearMakefileAmChanged();
+  /** returns the Qt translation files (*.ts) in the project
+ */
+  void getTSFiles(QString makefileam, QStrList& ts_files);
 
 
 protected:
