@@ -161,4 +161,11 @@ void Disassemble::showEvent(QShowEvent*)
 }
 
 /***************************************************************************/
+
+void Disassemble::hideEvent(QHideEvent*)
+{
+  slotActivate(false);
+}
+
+/***************************************************************************/
 #include "disassemble.moc"
