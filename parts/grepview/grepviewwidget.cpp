@@ -222,12 +222,12 @@ void GrepViewWidget::childFinished(bool normal, int status)
 void GrepViewWidget::slotExecuted(QListBoxItem* item)
 {
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item);
-    if (i->isCustomItem())
-        {
-            GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-            m_part->partController()->editDocument(gi->filename(), gi->linenumber());
-            m_part->mainWindow()->lowerView(this);
-        }
+    if (!i || !i->isCustomItem())
+        return;
+
+    GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
+    m_part->partController()->editDocument(gi->filename(), gi->linenumber());
+    m_part->mainWindow()->lowerView(this);
 }
 
 
