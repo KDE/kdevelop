@@ -179,7 +179,7 @@ void PerforcePart::slotDiff()
     }
     QStringList args;
 
-    args << "diff" << "-du"; // "du" means unified diff
+    args << "diff";
     args << name;
     ExecCommand* cmv = new ExecCommand( "p4", args, QString::null, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
