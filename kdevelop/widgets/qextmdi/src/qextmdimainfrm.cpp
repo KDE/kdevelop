@@ -576,6 +576,9 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
          int cnt = pTab->pageCount();
 #endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
+         }
       }
       delete pDockW;
    }
@@ -643,6 +646,9 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
          int cnt = pTab->pageCount();
 #endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
+         }
       }
       delete pDockW;
    }
