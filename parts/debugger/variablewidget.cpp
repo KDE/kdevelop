@@ -69,7 +69,6 @@ void VariableWidget::clear()
   QListViewItemIterator it(varTree_);
   while (it.current())
   {
-    kdDebug(24000) << "item: " << it.current()->text(0) << "\n";
     if (!dynamic_cast<WatchRoot*>(varTree_->findRoot(it.current())))
     {
       QListViewItem *item = it.current();
