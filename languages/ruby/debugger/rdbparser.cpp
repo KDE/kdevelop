@@ -95,6 +95,7 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 	int			pos;
 	QString		varName;
 	QCString	value;
+	QRegExp 	ppref_re("(#<([^:]|::)+:0x[\\da-f]+)([^\\n>]*)(>?)");
     
 	switch (parent->dataType()) {
     case REFERENCE_TYPE:
@@ -106,7 +107,6 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 		//		@sleeper=#<Thread:0x3008fd18 sleep>,
 		//		@temp={"z"=>"zed", "p"=>"pee"}>
 		//
-		QRegExp ppref_re("(#<([^:]|::)+:0x[\\da-f]+)([^\\n>]*)(>?)");
 		QRegExp ppvalue_re("\\s*([^\\n\\s=]+)=([^\\n]+)[,>]");
 	
 		pos = ppref_re.search(buf);
@@ -161,8 +161,14 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 			
 		while (pos != -1) {
 			varName = pparray_re.cap(1);
-			value = pparray_re.cap(2).latin1();
-			DataType dataType = determineType(value.data());
+			
+			if (ppref_re.search(pparray_re.cap(2)) != -1) {
+				value = (ppref_re.cap(1) + ">").latin1();
+			} else {
+				value = pparray_re.cap(2).latin1();
+			}
+				
+			DataType dataType = determineType((char *) pparray_re.cap(2).latin1());
 			setItem(parent, varName, dataType, value);
 				
 			pos += pparray_re.matchedLength();
