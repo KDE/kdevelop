@@ -1387,6 +1387,8 @@ void CKAppWizard::okPermited()
   if (!entriesfname.isEmpty())
     *q << entriesfname;
 
+  *q << locateLocal("appdata", "");
+
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
    m_finishButton->setEnabled(false);
 
@@ -2671,7 +2673,7 @@ void CKAppWizard::slotProcessExited() {
         fileInfo.type = DATA;
         fileInfo.dist = true;
         fileInfo.install = true;
-        fileInfo.install_location = " $(kde_servicesdir)";
+        fileInfo.install_location = " $(kde_servicesdir)/" + namelow + ".protocol";
         project->addFileToProject (namelow + "/" +  namelow + ".protocol",fileInfo);
   }
   if(kthemeitem->isSelected()){
@@ -2679,7 +2681,7 @@ void CKAppWizard::slotProcessExited() {
         fileInfo.type = DATA;
         fileInfo.dist = true;
         fileInfo.install = true;
-        fileInfo.install_location = " $(kde_datadir)/kstyle/themes";
+        fileInfo.install_location = " $(kde_datadir)/kstyle/themes/" +  namelow + ".themerc";
         project->addFileToProject (namelow + "/" +  namelow + ".themerc",fileInfo);
   }
 
@@ -2689,7 +2691,9 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install = true;
     if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
       fileInfo.rel_name = namelow + "/" + namelow + ".desktop";
-      fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".desktop";
+      fileInfo.install_location =
+        (kickeritem->isSelected() ? "$(kde_datadir)/kicker/applets/" :
+	 "$(kde_appsdir)/Applications/") + namelow + ".desktop";
       project->addFileToProject (namelow + "/" + namelow + ".desktop",fileInfo);
      }
      else if(kcmoduleitem->isSelected()){
@@ -2916,6 +2920,8 @@ void CKAppWizard::slotProcessExited() {
   *q << "perl" << locate("appdata", "tools/processesend.pl");
   if (!entriesfname.isEmpty())
     *q << entriesfname;
+
+  *q << locateLocal("appdata", "");
 
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
 }

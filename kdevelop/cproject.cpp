@@ -939,14 +939,14 @@ void CProject::updateMakefileAm(const QString& makefile)
           if( (type == "kio_slave") )
           {
             stream << "kio_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else if( (type == "kc_module") )
           {
             stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
             stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else
             stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";

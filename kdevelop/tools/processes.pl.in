@@ -13,15 +13,13 @@ my %changings;
 my $homedirectory = $ENV{KDEHOME};
 $homedirectory = "$ENV{HOME}/.kde2"    if (!$homedirectory);
 
-my $local_icondir     = $homedirectory  . "/share/icons/";
-my $local_datadir     = $homedirectory  . "/share/apps/";
+my $local_datadir     = shift || ($homedirectory  . "/share/apps/kdevelop");
 my $kde_miniicondir   = $kde_icondir    . "/locolor/16x16/apps/";
-my $local_miniicondir = $local_icondir  . "/mini";
 
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/share/apps/kdevelop/" . $entriesfilename)
+open (PROCESSLIST, $local_datadir . "/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 
 while (defined($name = <PROCESSLIST>)) {
@@ -51,7 +49,7 @@ if ($processes{VSSUPPORT} eq "none"){
   $underDirectory = $overDirectory . $nameLittle;
 }
 else{
-  $overDirectory = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/";
+  $overDirectory = $local_datadir . "/kdeveloptemp/";
   $underDirectory = $overDirectory . $nameLittle;
 }
 
@@ -105,18 +103,6 @@ else{
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/");
-#  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/.cvsignore";
-#  system ("cp $copysrc $copydes");
-
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
-#  system ("cp $copysrc $copydes");
-
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
-#  system ("cp $copysrc $copydes");
 
   $copysrc = $templatedir . "/cvsignore_template";
   $copydes = $overDirectory . "/.cvsignore";
@@ -254,12 +240,12 @@ sub condCopyTemplateFiles {
   if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
   else {
     if ($processes{HEADER} eq "yes") {
-        copy ("$local_datadir/kdevelop/header",
+        copy ("$local_datadir/header",
         "$underDirectory/templates/header_template");
     }
   
     if ($processes{CPP} eq "yes") {
-        copy ("$local_datadir/kdevelop/cpp",
+        copy ("$local_datadir/cpp",
         "$underDirectory/templates/cpp_template");
     }
   }
@@ -420,7 +406,7 @@ sub processCppTemplate {
 
   my ( $file ) = @_;
 
-  copy ("$local_datadir/kdevelop/cpp", $underDirectory);
+  copy ("$local_datadir/cpp", $underDirectory);
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "cpp", $file);
 
@@ -450,7 +436,7 @@ sub processHeaderTemplate {
 
   my ( $file ) = @_;
 
-  copy ("$local_datadir/kdevelop/header", $underDirectory);
+  copy ("$local_datadir/header", $underDirectory);
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "header", $file);
 
@@ -478,7 +464,7 @@ sub processHeaderTemplate {
 sub changeNormalApp {
 
 #    unpackFiles("normal.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
 
@@ -606,7 +592,7 @@ sub changeMiniApp {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
-  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme/)
+  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme|kickerapp/)
   {
     if ($processes{APPLICATION} =~ /kpart/)
         {
