@@ -24,6 +24,7 @@
 #include <qlined.h>
 #include <qlistbox.h>
 #include <qradiobt.h>
+#include <kfiledialog.h>
 
 /** the KDE-Fileprintdialog
   *@author Stefan Heidrich
@@ -39,6 +40,10 @@ public:
 public slots:
     void slotFileCancelClicked();
  void slotSelfChoosenFilesActive(int);
+ void slotSelfChoosenFileButtonClicked();
+ void slotSelfChoosenFileAddClicked();
+ void slotSelfChoosenFileCleanClicked();
+ void slotSelfChoosenFileDeleteClicked();
   
 protected:
     QListBox* selfChoosenFilesMultiLine;

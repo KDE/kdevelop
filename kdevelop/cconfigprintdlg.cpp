@@ -1375,7 +1375,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	a2psFontButton->setText( "" );
 	a2psFontButton->setAutoRepeat( FALSE );
 	a2psFontButton->setAutoResize( FALSE );
-	connect (a2psFontButton,SIGNAL(clicked()),SLOT(slotFontClicked()));
+	connect (a2psFontButton,SIGNAL(clicked()),SLOT(slotFontA2psClicked()));
 
 	fontForBodyButton = new QPushButton( parent, "fontForBodyButton" );
 	fontForBodyButton->setGeometry( 430, 380, 140, 30 );
@@ -1388,7 +1388,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	fontForBodyButton->setText( "" );
 	fontForBodyButton->setAutoRepeat( FALSE );
 	fontForBodyButton->setAutoResize( FALSE );
-	connect (fontForBodyButton,SIGNAL(clicked()),SLOT(slotFontClicked()));
+	connect (fontForBodyButton,SIGNAL(clicked()),SLOT(slotFontBodyClicked()));
 
 	fontForHeaderButton = new QPushButton( parent, "fontForHeaderButton" );
 	fontForHeaderButton->setGeometry( 430, 340, 140, 30 );
@@ -1401,7 +1401,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	fontForHeaderButton->setText( "" );
 	fontForHeaderButton->setAutoRepeat( FALSE );
 	fontForHeaderButton->setAutoResize( FALSE );
-	connect (fontForHeaderButton,SIGNAL(clicked()),SLOT(slotFontClicked()));
+	connect (fontForHeaderButton,SIGNAL(clicked()),SLOT(slotFontHeaderClicked()));
 
 	qtarch_ButtonGroup_20->insert( a2psFontButton );
 	qtarch_ButtonGroup_20->insert( fontForBodyButton );
@@ -1638,7 +1638,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	qtarch_Label_74->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_74->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_74->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_74->setText( "underlaygray (x1/10)" );
+	qtarch_Label_74->setText( "underlaygray (x(1/10))" );
 	qtarch_Label_74->setAlignment( 289 );
 	qtarch_Label_74->setMargin( -1 );
 
@@ -1734,7 +1734,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	underlayFontButton->setText( "" );
 	underlayFontButton->setAutoRepeat( FALSE );
 	underlayFontButton->setAutoResize( FALSE );
-	connect (underlayFontButton, SIGNAL(clicked()),SLOT(slotFontClicked()));
+	connect (underlayFontButton, SIGNAL(clicked()),SLOT(slotFontUnderlayClicked()));
 
 	qtarch_ButtonGroup_136->insert( underlayAngleDefault );
 	qtarch_ButtonGroup_134->insert( underlayFontButton );
@@ -2093,39 +2093,76 @@ void CConfigPrintDlg::slotUnderlayButtonClicked() {
 
 void CConfigPrintDlg::slotUnderlayPositionDefaultClicked() {
     if (underlayPositionDefaultButton->isChecked()) {
-	underlayYPosition->setEnabled(true);
-	underlayXPosition->setEnabled(true);
-	qtarch_ButtonGroup_133->setEnabled(true);
-	qtarch_ButtonGroup_132->setEnabled(true);
-	qtarch_Label_72->setEnabled(true);
-    }
-    else {
 	underlayYPosition->setEnabled(false);
 	underlayXPosition->setEnabled(false);
 	qtarch_ButtonGroup_133->setEnabled(false);
 	qtarch_ButtonGroup_132->setEnabled(false);
 	qtarch_Label_72->setEnabled(false);
     }
+    else {
+	underlayYPosition->setEnabled(true);
+	underlayXPosition->setEnabled(true);
+	qtarch_ButtonGroup_133->setEnabled(true);
+	qtarch_ButtonGroup_132->setEnabled(true);
+	qtarch_Label_72->setEnabled(true);
+    }
 }
 
 void CConfigPrintDlg::slotUnderlayAngleDefaultClicked() {
   if (underlayAngleDefault->isChecked()) {
-    underlayAngle->setEnabled(true);
-    qtarch_Label_71->setEnabled(true);
-  }
-  else {
     underlayAngle->setEnabled(false);
     qtarch_Label_71->setEnabled(false);
   }
+  else {
+    underlayAngle->setEnabled(true);
+    qtarch_Label_71->setEnabled(true);
+  }
 }
 
-void CConfigPrintDlg::slotFontClicked() {
+void CConfigPrintDlg::slotFontUnderlayClicked() {
   QFont font;
   QString string1,string2;
+  int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
   fontDialog->exec();
   font=fontDialog->font();
   string1=font.family();
-  string2= (QString) font.pointSize();
-  underlayFontButton->setText((QString) font.pointSize());
+  size=font.pointSize();
+  underlayFontButton->setText(string1+string2.setNum(size));
+}
+
+void CConfigPrintDlg::slotFontBodyClicked() {
+  QFont font;
+  QString string1,string2;
+  int size;
+  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->exec();
+  font=fontDialog->font();
+  string1=font.family();
+  size=font.pointSize();
+  fontForBodyButton->setText(string1+string2.setNum(size));
+}
+
+void CConfigPrintDlg::slotFontHeaderClicked() {
+  QFont font;
+  QString string1,string2;
+  int size;
+  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->exec();
+  font=fontDialog->font();
+  string1=font.family();
+  size=font.pointSize();
+  fontForHeaderButton->setText(string1+string2.setNum(size));
+}
+
+void CConfigPrintDlg::slotFontA2psClicked() {
+  QFont font;
+  QString string1,string2;
+  int size;
+  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
+  fontDialog->exec();
+  font=fontDialog->font();
+  string1=font.family();
+  size=font.pointSize();
+  a2psFontButton->setText(string1+string2.setNum(size));
 }

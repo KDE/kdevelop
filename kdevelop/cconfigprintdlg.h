@@ -75,7 +75,10 @@ public slots:
  void slotWrappedLinesClicked();
  void slotHighlightBarsClicked();
  void slotUnderlayButtonClicked();
- void slotFontClicked();
+ void slotFontA2psClicked();
+ void slotFontHeaderClicked();
+ void slotFontBodyClicked();
+ void slotFontUnderlayClicked();
  void slotUnderlayPositionDefaultClicked();
  void slotUnderlayAngleDefaultClicked();
 

@@ -118,6 +118,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesCleanButton->setText( "clean" );
 	selfChoosenFilesCleanButton->setAutoRepeat( FALSE );
 	selfChoosenFilesCleanButton->setAutoResize( FALSE );
+	connect (selfChoosenFilesCleanButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileCleanClicked()));
 
 	selfChoosenFilesDeleteButton = new QPushButton( this, "selfChoosenFilesDeleteButton" );
 	selfChoosenFilesDeleteButton->setGeometry( 430, 380, 70, 30 );
@@ -130,6 +131,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesDeleteButton->setText( "delete" );
 	selfChoosenFilesDeleteButton->setAutoRepeat( FALSE );
 	selfChoosenFilesDeleteButton->setAutoResize( FALSE );
+	connect (selfChoosenFilesDeleteButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileDeleteClicked()));
 
 	selfChoosenFilesAddButton = new QPushButton( this, "selfChoosenFilesAddButton" );
 	selfChoosenFilesAddButton->setGeometry( 360, 380, 70, 30 );
@@ -142,6 +144,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesAddButton->setText( "add" );
 	selfChoosenFilesAddButton->setAutoRepeat( FALSE );
 	selfChoosenFilesAddButton->setAutoResize( FALSE );
+	connect (selfChoosenFilesAddButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileAddClicked()));
 
 	qtarch_Label_77 = new QLabel( this, "Label_77" );
 	qtarch_Label_77->setGeometry( 40, 260, 70, 30 );
@@ -191,6 +194,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesPushButton->setText( "..." );
 	selfChoosenFilesPushButton->setAutoRepeat( FALSE );
 	selfChoosenFilesPushButton->setAutoResize( FALSE );
+	connect(selfChoosenFilesPushButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileButtonClicked()));
 
 	qtarch_Label_79 = new QLabel( this, "Label_79" );
 	qtarch_Label_79->setGeometry( 50, 130, 30, 30 );
@@ -560,4 +564,25 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
 	    timeAndLine->setEnabled(true);
 	    timeSinceLine->setEnabled(true);
 	  }
+}
+
+void CFilePrintDlg::slotSelfChoosenFileButtonClicked() {
+  selfChoosenFileLine->setText(KFileDialog::getOpenFileName());
+}
+
+void CFilePrintDlg::slotSelfChoosenFileAddClicked() {
+  selfChoosenFilesMultiLine->insertItem(selfChoosenFileLine->text());
+}
+
+void CFilePrintDlg::slotSelfChoosenFileCleanClicked() {
+  selfChoosenFilesMultiLine->clear();
+}
+
+void CFilePrintDlg::slotSelfChoosenFileDeleteClicked() {
+  unsigned int count = selfChoosenFilesMultiLine->count();
+  for (unsigned int i=count;i>0;i--) {
+    if (selfChoosenFilesMultiLine->isSelected(i-1)) {
+      selfChoosenFilesMultiLine->removeItem(i-1);      
+    }
+  }
 }
