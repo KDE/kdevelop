@@ -571,14 +571,18 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 #if !defined(NO_KDE2) && (QT_VERSION >= 300)
          QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
          int cnt = pTab->count();
-#else
-         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
-         int cnt = pTab->pageCount();
-#endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
          if (pDockW == m_pDockbaseOfTabPage) {
             m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
          }
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         KDockWidget* pLastPage = (KDockWidget*) pTab->getLastPage();
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->getPrevPage(pLastPage);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = pLastPage;
+         }
+#endif
       }
       delete pDockW;
    }
@@ -641,14 +645,18 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 #if !defined(NO_KDE2) && (QT_VERSION >= 300)
          QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
          int cnt = pTab->count();
-#else
-         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
-         int cnt = pTab->pageCount();
-#endif
          m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
          if (pDockW == m_pDockbaseOfTabPage) {
             m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
          }
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         KDockWidget* pLastPage = (KDockWidget*) pTab->getLastPage();
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->getPrevPage(pLastPage);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = pLastPage;
+         }
+#endif
       }
       delete pDockW;
    }

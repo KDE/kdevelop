@@ -1,6 +1,8 @@
 2002-03-03  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: 0x0 pointer access in SimpleParser
       (Ctrl+Space on class name in class declaration, happened only sometimes)
+    * bugfix: that crash on method removeWindowFromMdi(...) should also be fixed on KDE 2,
+      was in a different #ifdef branch than the KDE 3 version
 
 2002-03-02  Walter Tasin <tasin@kdevelop.org>
     * bugfix: crash on KThemes (only on KDE 3)
