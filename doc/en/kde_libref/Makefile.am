@@ -3,18 +3,18 @@ EXTRA_DIST =index.sgml logotp3.png \
             index-8.html index-9.html
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref
-	$(INSTALL_DATA) logotp3.png $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/logotp3.png
-	$(INSTALL_DATA) index.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index.html
-	$(INSTALL_DATA) index-1.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-1.html
-	$(INSTALL_DATA) index-2.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-2.html
-	$(INSTALL_DATA) index-3.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-3.html
-	$(INSTALL_DATA) index-4.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-4.html
-	$(INSTALL_DATA) index-5.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-5.html
-	$(INSTALL_DATA) index-6.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-6.html
-	$(INSTALL_DATA) index-7.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-7.html
-	$(INSTALL_DATA) index-8.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-8.html
-	$(INSTALL_DATA) index-9.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref/index-9.html
+	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/kde_libref
+	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/en/kdevelop/kde_libref/logotp3.png
+	$(INSTALL_DATA) index.html $(kde_htmldir)/en/kdevelop/kde_libref/index.html
+	$(INSTALL_DATA) index-1.html $(kde_htmldir)/en/kdevelop/kde_libref/index-1.html
+	$(INSTALL_DATA) index-2.html $(kde_htmldir)/en/kdevelop/kde_libref/index-2.html
+	$(INSTALL_DATA) index-3.html $(kde_htmldir)/en/kdevelop/kde_libref/index-3.html
+	$(INSTALL_DATA) index-4.html $(kde_htmldir)/en/kdevelop/kde_libref/index-4.html
+	$(INSTALL_DATA) index-5.html $(kde_htmldir)/en/kdevelop/kde_libref/index-5.html
+	$(INSTALL_DATA) index-6.html $(kde_htmldir)/en/kdevelop/kde_libref/index-6.html
+	$(INSTALL_DATA) index-7.html $(kde_htmldir)/en/kdevelop/kde_libref/index-7.html
+	$(INSTALL_DATA) index-8.html $(kde_htmldir)/en/kdevelop/kde_libref/index-8.html
+	$(INSTALL_DATA) index-9.html $(kde_htmldir)/en/kdevelop/kde_libref/index-9.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref/logotp3.png
