@@ -24,9 +24,6 @@
 class GDBParser
 {
 public:
-    GDBParser();
-    ~GDBParser();
-    
     void parseData(TrimmableItem *parent, char *buf,
                    bool requested, bool params);
     DataType  determineType(char *buf) const;
@@ -35,6 +32,9 @@ public:
     char *skipQuotes(char *buf, char quote) const;
     char *skipDelim(char *buf, char open, char close) const;
     
+    static GDBParser *getGDBParser();
+    static void destroy();
+
 private:
     TrimmableItem *getItem(TrimmableItem *parent, DataType itemType,
                            const QString &varName, bool requested);
@@ -49,6 +49,11 @@ private:
     QCString getValue(char **buf, bool requested);
     void setItem(TrimmableItem *parent, const QString &varName, DataType dataType,
                  const QCString &value, bool requested, bool params);
+
+protected:
+    GDBParser();
+    ~GDBParser();
+    static GDBParser *GDBParser_;
 };
 
 #endif

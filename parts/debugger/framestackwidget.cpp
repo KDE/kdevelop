@@ -18,7 +18,9 @@
 
 #include <klocale.h>
 
+#include <qheader.h>
 #include <qlistbox.h>
+#include <qregexp.h>
 #include <qstrlist.h>
 
 #include <ctype.h>
@@ -29,12 +31,20 @@
 /***************************************************************************/
 
 FramestackWidget::FramestackWidget(QWidget *parent, const char *name)
-    : QListBox(parent, name),
-      currentFrame_(0),
-      currentList_(0)
+    : QListView(parent, name),
+      viewedThread_(0),
+      stoppedAtThread_(0),
+      currentFrame_(0)
 {
-    connect( this, SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)) );
-    connect( this, SIGNAL(selected(int)), SLOT(slotHighlighted(int)) );
+    setRootIsDecorated(true);
+    setResizeMode(LastColumn);
+    setSorting(-1);
+    setSelectionMode(Single);
+    addColumn(QString::null);
+    header()->hide();
+    
+    connect( this, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotSelectionChanged(QListViewItem*)) );
 }
  
 
@@ -42,29 +52,89 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name)
 
 FramestackWidget::~FramestackWidget()
 {
-    delete currentList_;
 }
 
 /***************************************************************************/
 
-void FramestackWidget::slotHighlighted(int frame)
+QListViewItem *FramestackWidget::lastChild() const
 {
-    // always set this as the current frame and emit a signal
-    // because this will display the source file if it's not visible
-    // due to the user having opened a different file.
-    currentFrame_ = frame;
-    emit selectFrame(frame);
+    QListViewItem* child = firstChild();
+    if (child)
+        while (QListViewItem* nextChild = child->nextSibling())
+            child = nextChild;
+    
+    return child;
+}
+
+// **************************************************************************
+
+void FramestackWidget::clear()
+{
+    viewedThread_     = 0;
+    stoppedAtThread_  = 0;
+    currentFrame_     = 0;
+    
+    QListView::clear();
+}
+
+/***************************************************************************/
+
+void FramestackWidget::slotSelectionChanged(QListViewItem *thisItem)
+{
+    ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (thisItem);
+    if (thread) {
+        slotSelectFrame(0, thread->threadNo());
+    } else {
+        FrameStackItem *frame = dynamic_cast<FrameStackItem*> (thisItem);
+        if (frame)
+            slotSelectFrame(frame->frameNo(), frame->threadNo());
+    }
 }
 
 /***************************************************************************/
 
 // someone (the vartree :-)) wants us to select this frame.
-void FramestackWidget::slotSelectFrame(int frame)
+void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
 {
-  if (isSelected(frame))
-    slotHighlighted(frame);   // force this when we're already selected
-  else
-    setCurrentItem(frame);
+    FrameStackItem *frame = 0;
+    if (threadNo != -1) {
+        viewedThread_ = findThread(threadNo);
+        if (!viewedThread_) {
+            ASSERT(!viewedThread_);
+            return;                 // fatal
+        }
+        
+        frame = findFrame(frameNo, threadNo);
+        if (frame)
+            setSelected(frame, true);
+    }
+    
+    emit selectFrame(frameNo, threadNo, !(frame));
+}
+
+/***************************************************************************/
+
+void FramestackWidget::parseGDBThreadList(char *str)
+{
+    // on receipt of a thread list we must always clear the list.
+    clear();
+    
+    while (char *end = strchr(str, '\n')) {
+        *end = 0;                             // make it a string
+
+        if (*str == '*' || *str == ' ') {     // skip non-thread list strings
+            QString threadDesc = QString(str);
+            ThreadStackItem* thread = new ThreadStackItem(this, threadDesc);
+            
+            // This indicates the current thread
+            if (*str == '*') {
+                viewedThread_ = thread;
+                stoppedAtThread_ = thread;
+                thread->setOpen(true);
+            }
+        }
+        str = end+1;                          // next string
+    }
 }
 
 /***************************************************************************/
@@ -74,44 +144,45 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
     // #0  Test::Test (this=0x8073b20, parent=0x0, name=0x0) at test.cpp:224
     // #1  0x804bba9 in main (argc=1, argv=0xbffff9c4) at main.cpp:24
     
-    clear();
-    delete currentList_;
-    currentList_ = new QStrList(true);      // make deep copies of the data
-    currentList_->setAutoDelete(true);      // delete items when they are removed
+    // If we don't have a thread program then clear the list.
+    if (!viewedThread_)
+        clear();
     
-    while (char *end = strchr(str, '\n')) {
+    while (char* end = strchr(str, '\n')) {
         *end = 0;                             // make it a string
-        currentList_->append(str);            // This copies the string (deepcopies = true above)
+        QString frameDesc = QString(str);
+        if (*str == '#')                      // Don't bother with extra data
+            if (viewedThread_)
+                new FrameStackItem(viewedThread_, frameDesc);
+            else
+                new FrameStackItem(this, frameDesc);
         str = end+1;                          // next string
     }
-    
-    insertStrList(currentList_);
-    currentFrame_ = 0;
 }
 
 /***************************************************************************/
 
-QCString FramestackWidget::getFrameParams(int frame)
+QCString FramestackWidget::getFrameParams(int frameNo, int threadNo)
 {
-    if (!currentList_) {
-        if (char *frameData = currentList_->at(frame)) {
-            if (char *paramStart = strchr(frameData, '(')) {
-                GDBParser parser;
-                if (char *paramEnd = parser.skipDelim(paramStart, '(', ')')) {
-                    // allow for operator()(params)
-                    if (paramEnd == paramStart+2) {
-                        if (*(paramEnd+1) == '(') { 
-                            paramStart = paramEnd+1;
-                            paramEnd = parser.skipDelim(paramStart, '(', ')');
-                            if (!paramEnd)
-                                return QCString();
-                        }
+    if (FrameStackItem* frame = findFrame(frameNo, threadNo)) {
+        QString frameStr = frame->text(0);
+        char *frameData = (char*) frameStr.latin1();
+        if (char *paramStart = strchr(frameData, '(')) {
+            GDBParser *parser = GDBParser::getGDBParser();
+            if (char *paramEnd = parser->skipDelim(paramStart, '(', ')')) {
+                // allow for operator()(params)
+                if (paramEnd == paramStart+2) {
+                    if (*(paramEnd+1) == '(') {
+                        paramStart = paramEnd+1;
+                        paramEnd = parser->skipDelim(paramStart, '(', ')');
+                        if (!paramEnd)
+                            return QCString();
                     }
-                    
-                    // The parameters are contained _within_ the brackets.
-                    if (paramEnd-paramStart > 2)
-                        return QCString (paramStart+1, paramEnd-paramStart-1);
                 }
+                
+                // The parameters are contained _within_ the brackets.
+                if (paramEnd-paramStart > 2)
+                    return QCString(paramStart+1, paramEnd-paramStart-1);
             }
         }
     }
@@ -121,28 +192,179 @@ QCString FramestackWidget::getFrameParams(int frame)
 
 /***************************************************************************/
 
-QString FramestackWidget::getFrameName(int frame)
+QString FramestackWidget::getFrameName(int frameNo, int threadNo)
 {
-    if (currentList_) {
-        if (char *frameData = currentList_->at(frame)) {
-            if (char *paramStart = strchr(frameData, '(')) {
-                char *fnstart = paramStart-2;
-                while (fnstart > frameData) {
-                    if (isspace(*fnstart))
-                        break;
-                    fnstart--;
-                }
-                QString frameName(QString().sprintf("#%d %s(...)", frame,
-                                                    QCString(fnstart, paramStart-fnstart+1).data()));
-                return frameName;
+    if (FrameStackItem *frame = findFrame(frameNo, threadNo)) {
+        QString frameStr = frame->text(0);
+        char *frameData = (char*) frameStr.latin1();
+        if (char *paramStart = strchr(frameData, '(')) {
+            char *fnstart = paramStart-2;
+            while (fnstart > frameData) {
+                if (isspace(*fnstart))
+                    break;
+                fnstart--;
             }
+            if (threadNo != -1) {
+                QString frameName("T%1#%2 %3(...)");
+                return frameName.arg(threadNo).arg(frameNo)
+                    .arg(QCString(fnstart, paramStart-fnstart+1));
+            }
+            
+            QString frameName("#%1 %2(...)");
+            return frameName.arg(frameNo).arg(QCString(fnstart, paramStart-fnstart+1));
         }
     }
-    
     return i18n("No stack");
+}
+
+// **************************************************************************
+
+ThreadStackItem *FramestackWidget::findThread(int threadNo)
+{
+    QListViewItem *sibling = firstChild();
+    while (sibling) {
+        ThreadStackItem *thread = dynamic_cast<ThreadStackItem*> (sibling);
+        if (thread && thread->threadNo() == threadNo) {
+            return thread;
+        }
+        sibling = sibling->nextSibling();
+    }
+    
+    return 0;
+}
+
+// **************************************************************************
+
+FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
+{
+    QListViewItem* frameItem = 0;
+    
+    if (threadNo != -1) {
+        ThreadStackItem *thread = findThread(threadNo);
+        if (thread == 0)
+            return 0;     // no matching thread?
+        frameItem = thread->firstChild();
+    }
+    
+    if (frameItem == 0)
+        frameItem = firstChild();
+    
+    while (frameItem) {
+        if (((FrameStackItem*)frameItem)->frameNo() == frameNo)
+            break;
+        
+        frameItem = frameItem->nextSibling();
+    }
+    return (FrameStackItem*)frameItem;
+}
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDesc)
+    : QListViewItem(parent, parent->lastChild()),
+      frameNo_(-1),
+      threadNo_(-1)
+{
+        setText(VarNameCol, frameDesc);
+    QRegExp num("[0-9]*");
+    int start;
+    int len;
+    if ((start=num.match(frameDesc,1,&len))>=0)
+        frameNo_ = frameDesc.mid(start,len).toInt();
+}
+
+// **************************************************************************
+
+FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc)
+    : QListViewItem(parent, parent->lastChild()),
+  frameNo_(-1),
+  threadNo_(parent->threadNo())
+{
+    setText(VarNameCol, frameDesc);
+    QRegExp num("[0-9]*");
+    int start;
+    int len;
+    if ((start=num.match(frameDesc,1,&len))>=0)
+        frameNo_ = frameDesc.mid(start,len).toInt();
+}
+
+// **************************************************************************
+
+FrameStackItem::~FrameStackItem()
+{
+}
+
+// **************************************************************************
+
+QListViewItem *FrameStackItem::lastChild() const
+{
+    QListViewItem* child = firstChild();
+    if (child)
+        while (QListViewItem* nextChild = child->nextSibling())
+            child = nextChild;
+    
+    return child;
+}
+
+// **************************************************************************
+
+void FrameStackItem::setOpen(bool open)
+{
+    if (open)
+        ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
+    
+    QListViewItem::setOpen(open);
+}
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+ThreadStackItem::ThreadStackItem(FramestackWidget *parent, const QString &threadDesc)
+    : QListViewItem(parent, threadDesc),
+      threadNo_(-1)
+{
+    setText(VarNameCol, threadDesc);
+    setExpandable(true);
+    QRegExp num("[0-9]*");
+    int start;
+    int len;
+    if ((start=num.match(threadDesc,2,&len))>=0)
+        threadNo_ = threadDesc.mid(start,len).toInt();
+}
+
+// **************************************************************************
+
+ThreadStackItem::~ThreadStackItem()
+{
+}
+
+// **************************************************************************
+
+QListViewItem *ThreadStackItem::lastChild() const
+{
+    QListViewItem* child = firstChild();
+    if (child)
+        while (QListViewItem* nextChild = child->nextSibling())
+            child = nextChild;
+    
+    return child;
+}
+
+// **************************************************************************
+
+void ThreadStackItem::setOpen(bool open)
+{
+    if (open)
+        ((FramestackWidget*)listView())->slotSelectFrame(0, threadNo());
+    
+    QListViewItem::setOpen(open);
 }
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
+
 #include "framestackwidget.moc"

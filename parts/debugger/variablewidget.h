@@ -24,7 +24,7 @@ enum DataType { typeUnknown, typeValue, typePointer, typeReference,
                 typeStruct, typeArray, typeQString, typeWhitespace,
                 typeName };
 
-class FrameRoot;
+class VarFrameRoot;
 class WatchRoot;
 class VarItem;
 class VariableTree;
@@ -42,6 +42,8 @@ public:
 
     VariableTree *varTree() const
     { return varTree_; }
+
+    virtual void setEnabled(bool b);
 
 private slots:
     void slotAddWatchVariable();
@@ -70,17 +72,18 @@ public:
     void setActiveFlag()                  { activeFlag_++; }
     
     QListViewItem *findRoot(QListViewItem *item) const;
-    FrameRoot *findFrame(int frameNo) const;
+    VarFrameRoot *findFrame(int frameNo, int threadNo) const;
     WatchRoot *findWatch();
-    
+    void setCurrentThread(int currentThread)     { currentThread_ = currentThread; }
+
     // Remove items that are not active
     void trim();
     void trimExcessFrames();
-    void setLocalViewState(bool localsOn, int frameNo);
+    void setLocalViewState(bool localsOn, int frameNo, int threadNo);
 
 signals:
     void toggleWatchpoint(const QString &varName);
-    void selectFrame(int frameNo);
+    void selectFrame(int frameNo, int threadNo);
     void expandItem(VarItem *item);
     void expandUserItem(VarItem *item, const QCString &request);
     void setLocalViewState(bool localsOn);
@@ -93,7 +96,8 @@ private slots:
 
 private:
     int activeFlag_;
-    DbgController *controller;
+    int currentThread_;
+    //DbgController *controller;
 
     friend class VarItem;
     friend class WatchRoot;
@@ -172,25 +176,26 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class FrameRoot : public TrimmableItem
+class VarFrameRoot : public TrimmableItem
 {
 public:
-    FrameRoot(VariableTree *parent, int frameNo);
-    virtual ~FrameRoot();
+    VarFrameRoot(VariableTree *parent, int frameNo, int threadNo);
+    virtual ~VarFrameRoot();
     
     void setLocals(char *locals);
     void setParams(const QCString& params);
     
     void setOpen(bool open);
     
-    int  getFrameNo() const                     { return frameNo_; }
     void setFrameName(const QString &frameName) { setText(VarNameCol, frameName); setText(ValueCol, ""); }
     
     bool needLocals() const                     { return needLocals_; }
+    bool matchDetails(int frameNo, int threadNo);
     
 private:
     bool    needLocals_;
     int     frameNo_;
+    int     threadNo_;
     QCString params_;
     QCString locals_;
 };

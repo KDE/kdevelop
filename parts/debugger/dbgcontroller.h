@@ -88,7 +88,7 @@ public slots:
     virtual void slotExpandItem(VarItem *parent)                            = 0;
     virtual void slotExpandUserItem(VarItem *parent,
                                     const QCString &userRequest)            = 0;
-    virtual void slotSelectFrame(int frame)                                 = 0;
+    virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
     virtual void slotSetLocalViewState(bool onOff)                          = 0;
     
 protected slots:

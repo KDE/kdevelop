@@ -42,7 +42,9 @@
 #include "dbgpsdlg.h"
 #include "dbgtoolbar.h"
 #include "memviewdlg.h"
+#include "gdbparser.h"
 #include "debuggerconfigwidget.h"
+
 
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
@@ -267,6 +269,8 @@ DebuggerPart::~DebuggerPart()
     delete disassembleWidget;
     delete controller;
     delete floatingToolBar;
+
+    GDBParser::destroy();
 }
 
 

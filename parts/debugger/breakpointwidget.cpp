@@ -35,7 +35,7 @@ BreakpointWidget::BreakpointWidget(QWidget *parent, const char *name)
 {
     connect( this, SIGNAL(rightButtonPressed(QListBoxItem*, const QPoint&)),
              SLOT(slotContextMenu(QListBoxItem*)) );
-    connect ( this, SIGNAL(executed(QListBoxItem*)),
+    connect ( this, SIGNAL(clicked(QListBoxItem*)),
               SLOT(slotExecuted(QListBoxItem*)) );
 }
 

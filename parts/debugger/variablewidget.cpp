@@ -36,19 +36,6 @@
 #endif
 
 // **************************************************************************
-
-//TODO - change to a base class parser and setup a factory
-static GDBParser *parser = 0;
-
-static GDBParser *getParser()
-{
-  if (!parser)
-    parser = new GDBParser;
-
-  return parser;
-}
-
-// **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
@@ -83,6 +70,15 @@ void VariableWidget::clear()
 
 // **************************************************************************
 
+void VariableWidget::setEnabled(bool bEnabled)
+{
+    QWidget::setEnabled(bEnabled);
+    if (bEnabled && parentWidget()) {
+        varTree_->setColumnWidth(0, parentWidget()->width()/2);
+  }
+}
+// **************************************************************************
+
 void VariableWidget::slotAddWatchVariable()
 {
     QString watchVar(watchVarEntry_->text());
@@ -96,16 +92,18 @@ void VariableWidget::slotAddWatchVariable()
 
 VariableTree::VariableTree(VariableWidget *parent, const char *name)
     : KListView(parent, name),
-      activeFlag_(0)
+      activeFlag_(0),
+      currentThread_(-1)
 {
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
+    setColumnWidthMode(0, Manual);
     setSorting(-1);
+    QListView::setSelectionMode(QListView::Single);
     addColumn(i18n("Variable"));
     addColumn(i18n("Value"));
     // This may be a matter of taste...
     header()->hide();
-    setMultiSelection(false);
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
@@ -155,14 +153,16 @@ void VariableTree::slotAddWatchVariable(const QString &watchVar)
 
 // **************************************************************************
 
-void VariableTree::setLocalViewState(bool localsOn, int frameNo)
+void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
 {
+    // FIXME: Is the following true wrt THREADS
+
     // When they want to _close_ a frame then we need to check the state of
     // all other frames to determine whether we still need the locals.
     if (!localsOn) {
         QListViewItem *sibling = firstChild();
         while (sibling) {
-            FrameRoot *frame = dynamic_cast<FrameRoot*> (sibling);
+            VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (sibling);
             if (frame && frame->isOpen()) {
                 localsOn = true;
                 break;
@@ -173,7 +173,7 @@ void VariableTree::setLocalViewState(bool localsOn, int frameNo)
     }
     
     emit setLocalViewState(localsOn);
-    emit selectFrame(frameNo);
+    emit selectFrame(frameNo, threadNo);
 }
 
 
@@ -189,15 +189,15 @@ QListViewItem *VariableTree::findRoot(QListViewItem *item) const
 
 // **************************************************************************
 
-FrameRoot *VariableTree::findFrame(int frameNo) const
+VarFrameRoot *VariableTree::findFrame(int frameNo, int threadNo) const
 {
     QListViewItem *sibling = firstChild();
     
     // frames only exist on th top level so we only need to
     // check the siblings
     while (sibling) {
-        FrameRoot *frame = dynamic_cast<FrameRoot*> (sibling);
-        if (frame && frame->getFrameNo() == frameNo)
+        VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (sibling);
+        if (frame && frame->matchDetails(frameNo, threadNo))
             return frame;
         
         sibling = sibling->nextSibling();
@@ -252,8 +252,8 @@ void VariableTree::trimExcessFrames()
     
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
-        if (FrameRoot *frame = dynamic_cast<FrameRoot*> (child)) {
-            if (frame->getFrameNo() != 0)
+        if (VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (child)) {
+            if (frame->matchDetails(0, currentThread_))
                 delete frame;
         }
         child = nextChild;
@@ -496,7 +496,7 @@ void VarItem::updateValue(char *buf)
     }
 
     if (dataType_ == typeUnknown) {
-        dataType_ = getParser()->determineType(buf);
+        dataType_ = GDBParser::getGDBParser()->determineType(buf);
         if (dataType_ == typeArray)
             buf++;
         
@@ -507,7 +507,7 @@ void VarItem::updateValue(char *buf)
             dataType_ = typeValue;
     }
     
-    getParser()->parseData(this, buf, true, false);
+    GDBParser::getGDBParser()->parseData(this, buf, true, false);
     setActive();
 }
 
@@ -531,7 +531,7 @@ void VarItem::setOpen(bool open)
         if (cache_) {
             QCString value = cache_;
             cache_ = QCString();
-            getParser()->parseData(this, value.data(), false, false);
+            GDBParser::getGDBParser()->parseData(this, value.data(), false, false);
             trim();
         } else {
             if (dataType_ == typePointer || dataType_ == typeReference) {
@@ -627,10 +627,11 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 // **************************************************************************
 // **************************************************************************
 
-FrameRoot::FrameRoot(VariableTree *parent, int frameNo)
+VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
     : TrimmableItem (parent),
       needLocals_(true),
       frameNo_(frameNo),
+      threadNo_(threadNo),
       params_(QCString()),
       locals_(QCString())
 {
@@ -639,13 +640,13 @@ FrameRoot::FrameRoot(VariableTree *parent, int frameNo)
 
 // **************************************************************************
 
-FrameRoot::~FrameRoot()
+VarFrameRoot::~VarFrameRoot()
 {
 }
 
 // **************************************************************************
 
-void FrameRoot::setLocals(char *locals)
+void VarFrameRoot::setLocals(char *locals)
 {
     ASSERT(isActive());
     
@@ -671,7 +672,7 @@ void FrameRoot::setLocals(char *locals)
 
 // **************************************************************************
 
-void FrameRoot::setParams(const QCString &params)
+void VarFrameRoot::setParams(const QCString &params)
 {
     setActive();
     params_ = params;
@@ -682,22 +683,29 @@ void FrameRoot::setParams(const QCString &params)
 
 // Override setOpen so that we can decide what to do when we do change
 // state. This
-void FrameRoot::setOpen(bool open)
+void VarFrameRoot::setOpen(bool open)
 {
     bool localStateChange = (isOpen() != open);
     QListViewItem::setOpen(open);
     
     if (localStateChange)
-        ((VariableTree*)listView())->setLocalViewState(open, frameNo_);
+        ((VariableTree*)listView())->setLocalViewState(open, frameNo_, threadNo_);
     
     if (!open)
         return;
     
-    getParser()->parseData(this, params_.data(), false, true);
-    getParser()->parseData(this, locals_.data(), false, false);
+    GDBParser::getGDBParser()->parseData(this, params_.data(), false, true);
+    GDBParser::getGDBParser()->parseData(this, locals_.data(), false, false);
     
     locals_ = QCString();
     params_ = QCString();
+}
+
+// **************************************************************************
+
+bool VarFrameRoot::matchDetails(int frameNo, int threadNo)
+{
+    return frameNo == frameNo_ && threadNo == threadNo_;
 }
 
 // **************************************************************************
