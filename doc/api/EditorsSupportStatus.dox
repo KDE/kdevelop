@@ -12,9 +12,9 @@ qeditor and Nedit are interfaced via KDevelop's code. You can look at their code
     <tr>
       <th style="text-align: center;">features/editor</th>
       <th style="text-align: center;">kate</th>
-      <th style="text-align: center;">kvim (not available yet!)</th>
-      <th style="text-align: center;">qeditor</th>
-      <th style="text-align: center;">Nedit (Disabled)</th>
+      <th style="text-align: center;">kvim (KDE 3.2)</th>
+      <th style="text-align: center;"><a href="classQEditor.html">qeditor</a></th>
+      <th style="text-align: center;"><a href="classKNEditFactory.html">Nedit (Disabled)</a></th>
     </tr>
     <tr>
       <td style="background-color: rgb(51, 204, 0);">Advanced text editor</td>

@@ -9,18 +9,18 @@
 <table border="1">
     <tr>
       <th scope=col>Feature/Language</th>
-      <th scope=col>Ada</th>
-      <th scope="col">Bash</th>
-      <th scope=col>C/C++</th>
-      <th scope=col>Fortran</th>
-      <th scope=col>Java</th>
-      <th scope=col>Pascal</th>
-      <th scope=col>Perl (disabled)</th>
-      <th scope=col>PHP</th>
-      <th scope=col>Python</th>
-      <th scope=col>Ruby</th>
-      <th scope=col>Haskell</th>
-      <th scope=col>SQL</th>
+      <th scope=col><a href="classAdaSupportPart.html">Ada</a></th>
+      <th scope=col><a href="classBashSupportPart.html">Bash</a></th>
+      <th scope=col><a href="classCppSupportPart.html">C/C++</a></th>
+      <th scope=col><a href="classFortranSupportPart.html">Fortran</a></th>
+      <th scope=col><a href="classJavaSupportPart.html">Java</a></th>
+      <th scope=col><a href="classPascalSupportPart.html">Pascal</a></th>
+      <th scope=col><a href="classPerlSupportPart.html">Perl (disabled)</a></th>
+      <th scope=col><a href="classPHPSupportPart.html">PHP</a></th>
+      <th scope=col><a href="classPythonSupportPart.html">Python</a></th>
+      <th scope=col><a href="classRubySupportPart.html">Ruby</a></th>
+      <th scope=col><a href="classHaskellSupportPart.html">Haskell</a></th>
+      <th scope=col><a href="classSQLSupportPart.html">SQL</a></th>
     </tr>
     <tr>
       <td>\ref sectionClassWizard</td>
