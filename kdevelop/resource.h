@@ -131,6 +131,7 @@
 #define ID_OPTIONS_EDITOR_COLORS           15066
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 15067
 #define ID_OPTIONS_KDEVELOP  15070
+#define ID_OPTIONS_DOCBROWSER		15071
 
 ///////////////////////////////////////////////////////////////////
 // tools-menu entries 
