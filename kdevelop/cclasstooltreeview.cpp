@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri May 23 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
  
 /***************************************************************************
@@ -17,7 +17,6 @@
 #include "cclasstooltreeview.h"
 #include "cclasstreehandler.h"
 #include <assert.h>
-#include <klocale.h>
 
 /*********************************************************************
  *                                                                   *
@@ -127,30 +126,34 @@ KPopupMenu *CClassToolTreeView::getCurrentPopup()
 
 void CClassToolTreeView::slotViewDefinition() 
 {
-  const char *className;
-  const char *declName;
-  THType type;
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
 
-  ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+  ((CClassTreeHandler *)(treeH))->getCurrentNames( parentPath, itemName, 
+                                                   parentType, itemType );
 
-  emit signalViewDefinition( className, declName, type );
+  emit signalViewDefinition( parentPath, itemName, parentType, itemType );
 }
 
 void CClassToolTreeView::slotViewDeclaration()
 {
-  const char *className;
-  const char *declName;
-  THType type;
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
 
   if( treeH->itemType() == THCLASS )
   {
-    className = currentItem()->text(0);
-    emit signalViewDeclaration( className, className, THCLASS );
+    parentPath = currentItem()->text(0);
+    emit signalViewDeclaration( parentPath, "", THCLASS, THCLASS );
   }
   else
   {
-    ((CClassTreeHandler *)(treeH))->getCurrentNames( &className, &declName, &type );
+  ((CClassTreeHandler *)(treeH))->getCurrentNames( parentPath, itemName, 
+                                                   parentType, itemType );
 
-    emit signalViewDeclaration( className, declName, type );
+    emit signalViewDeclaration( parentPath, itemName, parentType, itemType );
   }
 }
