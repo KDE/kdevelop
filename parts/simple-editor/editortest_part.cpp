@@ -15,10 +15,9 @@
 
 
 #include "keditor/cursor_iface.h"
-//#include "undo_iface_impl.h"
-//#include "edit_iface_impl.h"
 #include "keditor/clipboard_iface.h"
 #include "keditor/undo_iface.h"
+#include "documents_iface_impl.h"
 
 
 using namespace KEditor;
@@ -36,7 +35,8 @@ EditorTestPart::EditorTestPart(QWidget *parentWidget, const char *widgetName, QO
   new CursorEditorIface(this);
   new UndoEditorIface(this);
   new ClipboardEditorIface(this);
-  //  new EditIfaceImpl(m_widget, this);
+  new DocumentsIfaceImpl(this);
+
 
   setWidget(_stack);
 
@@ -80,6 +80,7 @@ Document *EditorTestPart::getDocument(const QString &filename)
   }
 
   // if there was none, create a new one
+  bool created = false;
   if (!impl)
   {
     edit = new QMultiLineEdit(_stack);
@@ -92,11 +93,16 @@ Document *EditorTestPart::getDocument(const QString &filename)
 
     _documents.append(impl);
     _stack->addTab(edit, impl->shortName());
+
+	created = true;
   }
  
   // show the document 
   edit = impl->editor();
   _stack->showPage(edit);
+
+  if (created)
+	emit Editor::documentAdded();
 
   return impl;
 }

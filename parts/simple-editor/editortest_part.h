@@ -33,6 +33,8 @@ public:
 
   QTabWidget *tabWidget() { return _stack; };
 
+  QList <DocumentImpl> _documents;
+
 
 private slots:
 
@@ -43,7 +45,6 @@ private slots:
 private:
 
   QTabWidget *_stack;
-  QList < DocumentImpl > _documents;
 
 };
 

@@ -7,6 +7,7 @@
 	<Separator/>
     <Action name="file_save"/>
 	<Action name="file_save_as"/>
+	<Action name="file_save_all"/>
 	<Action name="file_close"/>
 	<Separator/>
     <Action name="file_quit"/>
@@ -21,6 +22,10 @@
   </Menu>
   <Menu noMerge="1" name="go_document"><text>&amp;Go</text>
     <Action name="go_goto_line"/>
+  </Menu>
+  <Menu name="buffers"> <text>&amp;Buffers</text>
+    <ActionList name="buffer_list"/>
+    <Merge/>
   </Menu>
 </MenuBar>
 </kpartgui>
