@@ -280,16 +280,14 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 }
     
 /** get the selected method */
-bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment,
+bool CCloneFunctionDlg::getMethod(QString& type, QString& name, QString& decl, QString& comment,
                                   bool& ispriv, bool& isprot, bool& ispub,
-                                  bool& isvirt, bool& isSlot, bool& isSignal) {
-
- TODO: const
+                                  bool& isvirt, bool& isSlot, bool& isSignal, bool& isconst) {
 
   QString str;
-  const QString name = allclasses->currentText();
+  const QString curr = allclasses->currentText();
   const QString selected = methods->currentText();
-  if(name == templates) {
+  if(curr == templates) {
     static ParsedMethod result;
     
     int blank    = selected.find(' ') + 1;
@@ -299,6 +297,7 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
     int argbegin = selected.findRev('(', argend);
     type = selected.left(blank);
     decl = selected.mid(blank, argend-blank+1);
+    name = selected.mid(blank, argbegin-blank+1);
     comment = selected.mid(blank, argbegin-blank);
     comment.replace( QRegExp("^set"), "set ");
     comment.replace( QRegExp("^get"), "get ");
@@ -310,17 +309,19 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
     isvirt = false;
     isSlot = false;
     isSignal = false;
+    isconst = false;
     return true;
   }
 
-  ParsedClass *theClass = classtree->getClassByName( name );
+  ParsedClass *theClass = classtree->getClassByName( curr );
   if (theClass == 0)
-    theClass = libclasstree->getClassByName( name );
+    theClass = libclasstree->getClassByName( curr );
   if (theClass == 0)
     return false;
   ParsedMethod* res = searchMethod(theClass, selected);
   if (res) {
     type = res->type();
+    name = res->name();
     decl = res->asString();
     comment = res->comment();
     ispub  = res->isPublic();
@@ -329,6 +330,7 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
     isvirt = res->isVirtual();
     isSlot = res->isSlot();
     isSignal = res->isSignal();
+    isconst = res->isConst();
     
     return true;
   } else

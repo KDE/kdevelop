@@ -45,8 +45,8 @@ public:
   CCloneFunctionDlg( ClassStore * store, ClassStore * libstore,
 		     const QString& currentClass, QWidget *parent=0, const char *name=0);
   /** get the selected method */
-  bool getMethod(QString& type, QString& decl, QString& comment,
-                  bool& ispriv, bool& isprot, bool& ispub, bool& isvirt, bool& isSlot, bool& isSignal);
+  bool getMethod(QString& type, QString& name, QString& decl, QString& comment,
+                  bool& ispriv, bool& isprot, bool& ispub, bool& isvirt, bool& isSlot, bool& isSignal, bool& isconst);
 private:
   ParsedMethod* searchMethod(ParsedClass* theClass, QString selected);
   /** fill the comboboxes with all classes */

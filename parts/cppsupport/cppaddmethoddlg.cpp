@@ -416,34 +416,22 @@ QString CppAddMethodDialog::getDocu()
 /** clone a function */
 void CppAddMethodDialog::slotClone()
 {
-#ifdef TEST_DEBUG_ONLY
-  // test only - some values to test
-  {
-    QString type("int*"), 
-	decl("operator () (float x, int& a,double* b=3)"), 
-	str("/** a comment\n2.nd line */");
-    bool isPrivat(true), isProtected(false), isPublic(false), isvirtual(false), 
-	isSlot(false), isSignal(false);
-#else
   // thats the real one
   CCloneFunctionDlg cloneDlg(store, libstore, currentClass, this, "cloneDlg");
   if (cloneDlg.exec())
   {
-    QString type, decl, str;
-    bool isPrivat, isProtected, isPublic, isvirtual, isSignal, isSlot;
+    QString type, name, decl, str;
+    bool isPrivat, isProtected, isPublic, isvirtual, isSignal, isSlot, isConst;
 
-    if (! cloneDlg.getMethod(type, decl, str, 
-			     isPrivat, isProtected, isPublic, isvirtual, isSlot, isSignal ))
+    if (! cloneDlg.getMethod(type, name, decl, str, 
+			     isPrivat, isProtected, isPublic, isvirtual, isSlot, isSignal, isConst ))
       return;
-#endif
     // copy type and declaration
     edType -> setText(type.simplifyWhiteSpace().stripWhiteSpace());
 
     // search for paramters
     int parastart = decl.findRev('(');
     int paraend = decl.find(')', parastart);
-    QString name(decl);
-    name.truncate(parastart);
     edName -> setText(name.simplifyWhiteSpace().stripWhiteSpace());
     QString para(decl.mid(parastart+1, paraend-parastart-1));
     para.replace( QRegExp("\\s*=\\s*"), EQU );
@@ -470,6 +458,8 @@ void CppAddMethodDialog::slotClone()
     // virtual
     cbVirtual -> setChecked( isvirtual );
     slotVirtualClicked();
+    // const
+    cbConst -> setChecked( isConst );
   }
 }
 
