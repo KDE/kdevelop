@@ -1,3 +1,6 @@
+2003-03-01  Roberto Raggi <roberto@kdevelop.org>
+	* added javahello template to appwizard
+
 2003-02-28  Roberto Raggi <roberto@kdevelop.org>
 	* reenabled java support
 	* removed obsolete kdevelop java plugin template
