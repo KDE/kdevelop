@@ -445,7 +445,9 @@ void CppCodeCompletion::slotTextChanged()
 	// becomes empty or whitespace and the box is already showing.
 	// !!WARNING!! This is very hackish, but KTE doesn't offer a way
 	// to tell the completion box to _go_away_
-	if ( ch.simplifyWhiteSpace().isEmpty() && m_bCompletionBoxShow )
+	if ( ch.simplifyWhiteSpace().isEmpty() && 
+	     !strCurLine.simplifyWhiteSpace().contains("virtual") &&
+	     m_bCompletionBoxShow )
 	{
 		QValueList<KTextEditor::CompletionEntry> entryList;
 		m_bCompletionBoxShow = true;
