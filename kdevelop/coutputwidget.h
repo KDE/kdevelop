@@ -93,6 +93,8 @@ private:
 #if (QT_VERSION < 300)
   void paintCell(QPainter* p, int row, int col);
   int mapToView( int xIndex, int line );
+#else
+  static bool isAboveQt303();
 #endif
 
   QString m_buf;

@@ -25,6 +25,35 @@
 #include <qfont.h>
 #include <qstylesheet.h>
 
+#if QT_VERSION >= 300
+
+#include <qregexp.h>
+
+bool CMakeOutputWidget::isAboveQt303()
+{
+  static int result = -1;
+
+  if ( result == -1 ) {
+    int qMajor = -1;
+    int qMinor = -1;
+    int qVer = -1;
+    QRegExp verRegExp("(\\d+)\\.(\\d+)\\.(\\d+)");
+    verRegExp.search( QString(qVersion()) );
+    qVer = verRegExp.cap(1).toInt();
+    qMajor = verRegExp.cap(2).toInt();
+    qMinor = verRegExp.cap(3).toInt();
+    //qDebug( "Qt version: %d.%d.%d", qVer, qMajor, qMinor );
+    if ( qVer > 3 || qMajor > 0 || qMinor > 3 ) {
+      result = 1;
+    } else {
+      result = 0;
+    }
+  }
+
+  return (result > 0);
+}
+#endif
+
 COutputWidget::COutputWidget(QWidget* parent, const char* name) :
 //  KEdit(parent,name)
   QMultiLineEdit(parent, name)
@@ -84,8 +113,10 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
 #if QT_VERSION >= 300
   setTextFormat(Qt::RichText);
 
-  // This is necessary in order to work around a bug in Qt's RichText widget. (Marcus Gruendler)
-  styleSheet()->item( "font" )->setDisplayMode( QStyleSheetItem::DisplayBlock );
+  if (!isAboveQt303()) {
+    // This is necessary in order to work around a bug in Qt's RichText widget. (Marcus Gruendler)
+    styleSheet()->item( "font" )->setDisplayMode( QStyleSheetItem::DisplayBlock );
+  }
 #endif
 }
 
@@ -123,17 +154,12 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int index;
     getCursorPosition(&currentPara, &index);
 
-    bool isQt304 = false;
-    if (QString(qVersion()) == "3.0.4") {
-      isQt304 = true;
-    }
-
     int paraCount;
-    if (!isQt304) {
-      paraCount = paragraphs()-1;
+    if (isAboveQt303()) {
+      paraCount = paragraphs();
     }
     else {
-      paraCount = paragraphs();
+      paraCount = paragraphs()-1;
     }    
 
     // escape rich edit tags like "&", "<", ">"
@@ -151,7 +177,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         break;
       default:
         // Runtime check for broken Qt version. Don't add empty new lines.
-        if (line[0]=='\n' && !isQt304) {
+        if (line[0]=='\n' && !(isAboveQt303())) {
           break;
         }
           
@@ -298,7 +324,7 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
-    if (QString(qVersion()) == "3.0.4") {
+    if (isAboveQt303()) {
       m_errorMap.insert(numLines(), errorDetails);
     }
     else {
