@@ -14,20 +14,33 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
-
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kconfig.h>
 
 void AppWizardUtil::guessAuthorAndEmail(QString *author, QString *email)
 {
     char hostname[512];
 
-    struct passwd *pw = ::getpwuid(getuid());
-    // pw==0 => the system must be really fucked up
-    if (!pw)
-        return;
+    QString cfgName(KGlobal::dirs()->findResource("config","emaildefaults"));
+    if(cfgName.isEmpty()) {
+        struct passwd *pw = ::getpwuid(getuid());
+        // pw==0 => the system must be really fucked up
+        if (!pw)
+            return;
 
-    // I guess we don't have to support users with longer host names ;-)
-    (void) ::gethostname(hostname, sizeof hostname);
+        // I guess we don't have to support users with longer host names ;-)
+        (void) ::gethostname(hostname, sizeof hostname);
 
-    *author = QString::fromLocal8Bit(pw->pw_gecos);
-    *email = QString(pw->pw_name) + "@" + hostname;
+        *author = QString::fromLocal8Bit(pw->pw_gecos);
+        *email = QString(pw->pw_name) + "@" + hostname;
+    }
+    else {
+	KConfig cfg(cfgName, true);
+	cfg.setGroup("Defaults");
+	QString profile = cfg.readEntry("Profile", "Default");    
+        cfg.setGroup("PROFILE_" + profile);
+	*author = cfg.readEntry("FullName", "Author");
+        *email = cfg.readEntry("EmailAddress", "me@me.com");	
+    }
 }
