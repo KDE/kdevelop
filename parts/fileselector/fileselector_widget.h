@@ -163,8 +163,10 @@ public:
     KFSConfigPage( QWidget* parent=0, const char *name=0, KDevFileSelector *kfs=0);
     virtual ~KFSConfigPage() {};
 
+public slots:
     virtual void apply();
     virtual void reload();
+    virtual void slotChanged();
 
 private:
     void init();

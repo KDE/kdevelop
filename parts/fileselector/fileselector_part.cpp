@@ -77,7 +77,7 @@ void FileSelectorPart::slotConfigWidget( KDialogBase * dlg )
 {
     QVBox* vbox = dlg->addVBoxPage( i18n( "File Selector" ) );
     KFSConfigPage* page = new KFSConfigPage( vbox, 0, m_filetree );
-    connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( accept( ) ) );
+    connect( dlg, SIGNAL( okClicked( ) ), page, SLOT( apply( ) ) );
     // ### implement reload
 }
 

@@ -723,6 +723,7 @@ void KFSConfigPage::reload()
     // hmm, what is this supposed to do, actually??
     init();
 }
+
 void KFSConfigPage::init()
 {
     KConfig *config = kapp->config();
@@ -767,6 +768,11 @@ void KFSConfigPage::init()
     cbSesLocation->setChecked( config->readBoolEntry( "restore location", true ) );
     cbSesFilter->setChecked( config->readBoolEntry( "restore last filter", true ) );
 }
+
+void KFSConfigPage::slotChanged()
+{
+}
+
 //END KFSConfigPage
 
 
