@@ -925,13 +925,9 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
     }
 
     if( lex->lookAhead(0) != Token_template ){
-	if( exp.get() ){
-	    ADVANCE( Token_template, "template" );
-	} else
-	    return false;
+	return false;
     }
-
-    ADVANCE( Token_template, "template" );
+    lex->nextToken();
 
     AST::Node params;
     if( lex->lookAhead(0) == '<' ){
@@ -1541,7 +1537,9 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 	    }
 	    
 	    ADVANCE( '>', ">" );
-	    ADVANCE( Token_class, "class" );
+	    
+	    if( lex->lookAhead(0) == Token_class )
+		lex->nextToken();
 	    
 	    // parse optional name
 	    QString name;
