@@ -1137,8 +1137,11 @@ void Highlight::release() {
 
 int Highlight::doHighlight(int, TextLine *textLine) {
 
-  textLine->setAttribs(0,0,textLine->length());
-  textLine->setAttr(0);
+  if (textLine)
+  {
+    textLine->setAttribs(0,0,textLine->length());
+    textLine->setAttr(0);
+  }
   return 0;
 }
 
