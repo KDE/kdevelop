@@ -1,3 +1,21 @@
+High priority tasks!
+====================
+
+1. Fixing major bugs
+--------------------
+
+2. KDevelop 2 compatibility
+---------------------------
+
+These are things that must be accomplished before we can say that
+gideon >= kdevelop 2.x UI-wise and functionality-wise!
+
+doctreeview:
+ * forward/back buttons must implement history in doctreeview!
+
+New features
+============
+  
 Short-Term:
 
 mhk: move function areas of kdevcore into separate classes
