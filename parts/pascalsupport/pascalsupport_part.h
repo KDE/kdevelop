@@ -14,6 +14,10 @@
 #include "kdevlanguagesupport.h"
 
 class PascalSupportWidget;
+class KDialogBase;
+class QPopupMenu;
+class Context;
+class PascalSupportPartData;
 
 class PascalSupportPart : public KDevLanguageSupport
 {
@@ -37,11 +41,18 @@ private slots:
     void removedFilesFromProject(const QStringList &fileList);
     void slotProjectCompiled();
 
+    void initialParse();
+
 private:
+    void maybeParse(const QString &fileName);
+    void parse(const QString &fileName);
+
     QGuardedPtr<PascalSupportWidget> m_widget;
 
     bool m_projectClosed;
     QStringList m_projectFileList;
+
+    PascalSupportPartData* d;
 
 };
 
