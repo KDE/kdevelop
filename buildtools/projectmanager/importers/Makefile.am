@@ -1,2 +1,2 @@
 METASOURCES = AUTO
-SUBDIRS = automake
+SUBDIRS = automake custom

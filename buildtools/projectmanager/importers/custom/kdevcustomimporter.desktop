@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KDevCustomImporter
+Comment=KDevelop Custom Importer
+Icon=gear
+ServiceTypes=KDevelop/ProjectImporter
+X-KDE-Library=libkdevcustomimporter
+X-KDevelop-ProjectImporter=

@@ -1,0 +1,143 @@
+/* This file is part of KDevelop
+    Copyright (C) 2004 Roberto Raggi <roberto@kdevelop.org>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+*/
+#include "kdevcustomimporter.h"
+
+#include <kdevproject.h>
+#include <domutil.h>
+
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <klocale.h>
+
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qregexp.h>
+
+const QString &KDevCustomImporter::customImporter =
+    KGlobal::staticQString("/kdevprojectmanager/importer/custom");
+
+K_EXPORT_COMPONENT_FACTORY(libkdevcustomimporter, KGenericFactory<KDevCustomImporter>("kdevcustomimporter"))
+
+KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const QStringList &)
+    : KDevProjectImporter(parent, name)
+{
+    m_project = ::qt_cast<KDevProject*>(parent);
+    Q_ASSERT(m_project);
+    
+    QDomDocument &dom = *project()->projectDom();
+    includes = DomUtil::readListEntry(dom, customImporter, "include");
+    excludes = DomUtil::readListEntry(dom, customImporter, "include");
+    
+    if (includes.isEmpty())
+        includes << "*.h" << "*.cpp" << "*.c";   // ### remove me
+        
+    excludes << "CVS" << "moc_*.cpp"; // ### remove me
+}
+
+KDevCustomImporter::~KDevCustomImporter()
+{
+}
+
+KDevProject *KDevCustomImporter::project() const
+{
+    return m_project;
+}
+
+bool KDevCustomImporter::isValid(const QFileInfo *fileInfo) const
+{
+    QString fileName = fileInfo->fileName();
+    
+    bool ok = fileInfo->isDir();
+    for (QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it) {
+        QRegExp rx(*it, true, true);
+        if (rx.exactMatch(fileName)) {
+            ok = true;
+        }
+    }
+    
+    if (!ok)
+        return false;
+        
+    for (QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it) {
+        QRegExp rx(*it, true, true);
+        if (rx.exactMatch(fileName)) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
+{
+    QDir dir(item->name());
+    
+    static const QString &dot = KGlobal::staticQString(".");
+    static const QString &dotdot = KGlobal::staticQString("..");
+    
+    ProjectTargetDom target = item->projectModel()->create<ProjectTargetModel>();
+    target->setName("files");
+    item->addTarget(target);
+    
+    ProjectFolderList folder_list;
+    if (const QFileInfoList *entries = dir.entryInfoList()) {
+        QFileInfoListIterator it(*entries);
+        while (const QFileInfo *fileInfo = it.current()) {
+            ++it;
+            
+            if (!isValid(fileInfo))
+                continue;
+            
+            if (fileInfo->isDir() && fileInfo->fileName() != dot && fileInfo->fileName() != dotdot) {
+                ProjectFolderDom folder = item->projectModel()->create<ProjectFolderModel>();
+                folder->setName(fileInfo->absFilePath());
+                item->addFolder(folder);
+                folder_list.append(folder);
+            } else if (fileInfo->isFile()) {
+                ProjectFileDom file = item->projectModel()->create<ProjectFileModel>();
+                file->setName(fileInfo->absFilePath());
+                target->addFile(file);
+            }
+        }
+    }
+    
+    return folder_list;
+}
+
+ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fileName)
+{
+    ProjectFolderDom folder = model->create<ProjectFolderModel>();
+    folder->setName(fileName);
+    return folder->toItem();
+}
+
+QString KDevCustomImporter::findMakefile(ProjectFolderDom dom) const
+{
+    Q_UNUSED(dom);
+    return QString::null;
+}
+
+QStringList KDevCustomImporter::findMakefiles(ProjectFolderDom dom) const
+{
+    Q_UNUSED(dom);
+    return QStringList();
+}
+
+#include "kdevcustomimporter.moc"
