@@ -33,8 +33,6 @@ public:
 private slots:
 
   void popupAboutToShow();
-  void popupAboutToHide();
-  void deletePopup();
 
   void activePartChanged(KParts::Part *part);
 
@@ -45,7 +43,6 @@ private:
   
   static EditorProxy *s_instance;
 
-  QPopupMenu *m_popup;
   QArray<int> m_popupIds;
 
 };

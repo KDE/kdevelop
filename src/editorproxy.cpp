@@ -104,6 +104,23 @@ void EditorProxy::popupAboutToShow()
   if (!popup)
     return;
 
+  // ugly hack: remove all but the "original" items
+  for (int index=popup->count()-1; index >= 0; --index)
+  {
+    int id = popup->idAt(index);
+    if (m_popupIds.contains(id) == 0)
+    {
+      QMenuItem *item = popup->findItem(id);
+      if (item->popup())
+	delete item->popup();
+      else
+          popup->removeItemAt(index);
+      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
+    } else {
+        kdDebug(9000) << "leaving id " << id << endl;
+    }
+  }
+
   // ugly hack: mark the "original" items 
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
@@ -135,36 +152,6 @@ void EditorProxy::popupAboutToShow()
     EditorContext context(ro_part->url(), line, editIface->textLine(line), col);
     Core::getInstance()->fillContextMenu(popup, &context);
   }
-}
-
-
-void EditorProxy::popupAboutToHide()
-{
-  m_popup = (QPopupMenu*)sender();
-
-  QTimer::singleShot(0, this, SLOT(deletePopup()));
-}
-
-
-void EditorProxy::deletePopup()
-{
-  if (!m_popup)
-    return;
-
-  // ugly hack: remove all but the "original" items
-  for (int index=m_popup->count()-1; index >= 0; --index)
-  {
-    int id = m_popup->idAt(index);
-    if (m_popupIds.contains(id) == 0)
-    {
-      QMenuItem *item = m_popup->findItem(id);
-      if (item->popup())
-	delete item->popup();
-      m_popup->removeItemAt(index);
-    }
-  }
-
-  m_popup = 0;
 }
 
 
