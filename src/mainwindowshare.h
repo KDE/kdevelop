@@ -46,6 +46,8 @@ private slots:
   void slotKeyBindings();
   void slotConfigureToolbars();
   void slotConfigureNotifications();
+  void slotConfigureEditors();
+  void slotActivePartChanged( KParts::Part * );
   void slotSettings();
   void slotActiveProcessChanged( KDevPlugin*, bool );
   void slotStopPopupActivated(int);
@@ -68,6 +70,8 @@ private:
   KToggleAction*   m_toggleViewToolbar;
   KToggleAction*   m_toggleBrowserToolbar;
   KToggleAction*   m_toggleStatusbar;
+
+  KAction * m_configureEditorAction;
 
   KToolBarPopupAction*  m_stopProcesses;                 //!< Stops all running processes
 

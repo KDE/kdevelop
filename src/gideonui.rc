@@ -103,6 +103,7 @@
     <Action name="settings_configure_shortcuts" />
     <Action name="settings_configure_toolbars" />
     <Action name="settings_configure_notifications" />
+    <Action name="settings_configure_editors" />
     <Action name="settings_configure" />
     <DefineGroup name="configure_merge" />
   </Menu>

@@ -37,6 +37,11 @@
 #include <kurlrequester.h>
 #include <kpopupmenu.h>
 
+#include <ktexteditor/configinterface.h>
+#include <kparts/partmanager.h>
+#include <kdevpartcontroller.h>
+#include <kdebug.h>
+
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
 #endif
@@ -152,6 +157,11 @@ void MainWindowShare::createActions()
   action = new KAction( i18n("&First Accessed Window"), ALT+Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
   action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
 
+  m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
+  action->setStatusText( i18n("configure editors settings") );
+
+  connect( API::getInstance()->partController(), SIGNAL( activePartChanged( KParts::Part * ) ),
+    this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
 }
 
 void MainWindowShare::slotReportBug()
@@ -308,6 +318,62 @@ void MainWindowShare::slotSettings()
     config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
     config->sync();
     API::getInstance()->makeFrontend()->updateSettingsFromConfig();
+}
+
+void MainWindowShare::slotConfigureEditors()
+{
+    kdDebug(0) << " *** MainWindowShare::slotConfigureEditors()" << endl;
+
+    KDevPartController * partController = API::getInstance()->partController();
+    KParts::Part * part = partController->activePart();
+
+    KTextEditor::ConfigInterface * conf = dynamic_cast<KTextEditor::ConfigInterface*>( part );
+    if ( ! conf )
+    {
+        kdDebug(0) << "*** No KTextEditor::ConfigInterface for part!" << endl;
+        return;
+    }
+
+    // show the modal config dialog for this part if it has a ConfigInterface
+    conf->configDialog();
+
+    // iterate over other instances of this part type and apply configuration
+    if( const QPtrList<KParts::Part> * partlist = partController->parts() )
+    {
+        QPtrListIterator<KParts::Part> it( *partlist );
+        while ( KParts::Part* p = it.current() )
+        {
+            if ( KTextEditor::ConfigInterface * ci = dynamic_cast<KTextEditor::ConfigInterface *>( p ) )
+            {
+                ci->readConfig();
+            }
+            ++it;
+        }
+    }
+}
+
+void MainWindowShare::slotActivePartChanged( KParts::Part * part )
+{
+    kdDebug(0) << "MainWindowShare::slotActivePartChanged()" << endl;
+
+    if ( ! part ) return;
+
+    // disable configuration entry if active part is not an editor
+    if ( ! dynamic_cast<KTextEditor::ConfigInterface *>( part ) )
+    {
+        m_configureEditorAction->setEnabled( false );
+        return;
+    }
+
+    m_configureEditorAction->setEnabled( true );
+
+    // remove the part's merged menu entry
+    KAction * action = part->action("set_confdlg"); // name from katepartui.rc
+    if ( action )
+    {
+        kdDebug(0) << " *** found \"set_confdlg\" action - unplugging" << endl;
+        action->unplugAll();
+    }
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
