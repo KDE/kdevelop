@@ -131,12 +131,11 @@ void SpecSupport::slotexportSPECPushButtonPressed() {
     }
 }
 
-bool SpecSupport::getInfo(QString s, QString motif, void (packageBase::*func)(QString)) {
+QString SpecSupport::getInfo(QString s, QString motif) {
     QRegExp re(motif + "[ \t]*([^ \t].*[^ \t])[ \t]*");
-    if (re.exactMatch(s)) {
-        (this->*func)(re.cap(1));
-        return true;
-    } else return false;
+    if (re.exactMatch(s))
+        return re.cap(1);
+    return QString::null;
 }
 
 //    QPushButton* importSPECPushButton;
@@ -147,14 +146,23 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
 
         while (!stream.atEnd()) {
             QString s = stream.readLine();
-            if (getInfo(s,"Name:",&SpecSupport::setAppName));
-            else if (getInfo(s,"Version:",&SpecSupport::setAppVersion));
-            else if (getInfo(s,"Release:",&SpecSupport::setAppRevision));
-            else if (getInfo(s,"Vendor:",&SpecSupport::setAppVendor));
-            else if (getInfo(s,"Copyright:",&SpecSupport::setAppLicense));
-            else if (getInfo(s,"Summary:",&SpecSupport::setAppSummary));
-            else if (getInfo(s,"Group:",&SpecSupport::setAppGroup));
-            else if (getInfo(s,"Packager:",&SpecSupport::setAppPackager));
+            QString info;
+            if (!(info = getInfo(s,"Name:")).isEmpty())
+                setAppName(info);
+            else if (!(info = !getInfo(s,"Version:")).isEmpty())
+                setAppVersion(info);
+            else if (!(info = getInfo(s,"Release:")).isEmpty())
+                setAppRevision(info);
+            else if (!(info = getInfo(s,"Vendor:")).isEmpty())
+                setAppVendor(info);
+            else if (!(info = getInfo(s,"Copyright:")).isEmpty())
+                setAppLicense(info);
+            else if (!(info = getInfo(s,"Summary:")).isEmpty())
+                setAppSummary(info);
+            else if (!(info = getInfo(s,"Group:")).isEmpty())
+                setAppGroup(info);
+            else if (!(info = getInfo(s,"Packager:")).isEmpty())
+                setAppPackager(info);
             else if (s.startsWith("%description")) {
                 QString desc;
                 while (!stream.atEnd()) {

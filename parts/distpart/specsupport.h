@@ -20,15 +20,15 @@ public:
 public slots:
     void slotbuildAllPushButtonPressed();
     void slotexportSPECPushButtonPressed();
-    void slotimportSPECPushButtonPressed();    
+    void slotimportSPECPushButtonPressed();
     void slotsrcPackagePushButtonPressed();
-    
+
 private:
     void parseDotRpmmacros();
     bool createRpmDirectoryFromMacro(const QString & name);
-    
-    bool getInfo(QString s, QString motif, void (packageBase::*func)(QString));
-    
+
+    QString getInfo(QString s, QString motif);
+
     DistpartPart * m_part;
     QMap<QString,QString> map;
     QPushButton *buildAllPushButton, *exportSPECPushButton, *importSPECPushButton, *srcPackagePushButton;
