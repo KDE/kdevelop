@@ -7,6 +7,7 @@ noinst_LTLIBRARIES = libkdevinterfaces.la
 libkdevinterfaces_la_SOURCES = kdevfactory.cpp kdevpart.cpp kdevcore.cpp kdevproject.cpp \
 			       kdevlanguagesupport.cpp kdevversioncontrol.cpp \
 			       kdevmakefrontend.cpp kdevappfrontend.cpp kdevcompileroptions.cpp \
+			       kdevpartcontroller.cpp \
 			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
 			       KDevCoreIface.skel KDevCoreIface.cpp

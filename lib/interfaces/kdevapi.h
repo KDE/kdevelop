@@ -20,11 +20,18 @@ class KDevMakeFrontend;
 class KDevAppFrontend;
 class ClassStore;
 class QDomDocument;
+class KDevPartController;
+
 
 // 2002-02-08 add ccClassStore - daniel
 class KDevApi
 {
 public:
+
+    virtual KDevPartController *getPartController() = 0;
+
+
+    // TODO: Refactor everything below!
     KDevApi()
         : classStore(0),
           projectDom(0),
