@@ -25,6 +25,7 @@ public:
 
 private slots:
   void slotExecValgrind();
+  void slotKillValgrind();
   void receivedStdout( KProcess*, char*, int );
   void receivedStderr( KProcess*, char*, int );
   void processExited( KProcess* );

@@ -34,6 +34,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
            this, SLOT(receivedStderr( KProcess*, char*, int )) );
   connect( proc, SIGNAL(processExited( KProcess* )),
            this, SLOT(processExited( KProcess* )) );
+  connect( core(), SIGNAL(stopButtonClicked()),
+           this, SLOT(slotKillValgrind()) );
   
   m_widget = new ValgrindWidget( this );
   
@@ -108,10 +110,16 @@ void ValgrindPart::slotExecValgrind()
   }
 }
 
+void ValgrindPart::slotKillValgrind()
+{
+  if ( proc )
+    proc->kill();
+}
+
 void ValgrindPart::runValgrind( const QString& exec, const QString& params, const QString& valExec, const QString& valParams )
 {
   if ( proc->isRunning() ) {
-    KMessageBox::sorry( 0, "There is already an instance of valgrind running." );
+    KMessageBox::sorry( 0, i18n( "There is already an instance of valgrind running." ) );
     return;
     // todo - ask for forced kill
   }
@@ -125,7 +133,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   *proc << valExec << valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
   topLevel()->raiseView( m_widget );
-  // todo - connect the "stop" button
+  core()->running( this, true );
 }
 
 void ValgrindPart::receivedStdout( KProcess*, char* msg, int len )
@@ -177,7 +185,7 @@ void ValgrindPart::processExited( KProcess* p )
     appendMessage( currentMessage + lastPiece );
     currentMessage = QString::null;
     lastPiece = QString::null;
-    // TODO: disconnect stop button
+    core()->running( this, false );
   }
 }
 
