@@ -197,7 +197,7 @@ void CMakeOutputWidget::viewNextError()
       ErrorDetails errorDetails = it.data();
       if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
       {
-//?        selectLine(it.key());
+        selectLine(it.key());
         emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
         return;
       }
@@ -217,7 +217,7 @@ void CMakeOutputWidget::viewPreviousError()
       ErrorDetails errorDetails = it.data();
       if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
       {
-//?        selectLine(it.key());
+        selectLine(it.key());
         emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
         return;
       }
@@ -274,7 +274,7 @@ void CMakeOutputWidget::checkForError()
     ErrorDetails errorDetails = tmp_it.data();
     if (!errorDetails.m_fileName.isEmpty() && errorDetails.m_lineNumber >= 0)
     {
-//?      selectLine(line);
+      selectLine(line);
       emit switchToFile(errorDetails.m_fileName, errorDetails.m_lineNumber);
       it = tmp_it;
       return;
