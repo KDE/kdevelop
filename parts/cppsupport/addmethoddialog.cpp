@@ -34,6 +34,7 @@
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
 
+#include <qregexp.h>
 #include <qfileinfo.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
@@ -239,7 +240,7 @@ void AddMethodDialog::accept()
 #if QT_VERSION >= 0x030100
 	    QString className = m_klass->path().replace( QString("."), QString("::") );
 #else
-	    QString className;// =????   FIXME!
+	    QString className = m_klass->path().replace( QRegExp("\\."), QString("::") );
 #endif
 	    while( item ){
 		if( item->text(2) == "Friend" || item->text(2) == "Pure Virtual" ){
