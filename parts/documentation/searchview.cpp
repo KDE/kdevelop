@@ -187,6 +187,8 @@ void SearchView::search()
     kdDebug(9002) << "starting kprocess" << endl;
     kdDebug(9002) << "htdig line:" << exe << " -c " << (indexdir + "/htdig.conf ") << query <<  endl;
     KProcess *proc = new KProcess;
+    QString picdir = kapp->dirs()->findResourceDir("data", "kdevdocumentation/pics/htdig.png");
+    proc->setEnvironment("PICDIR", picdir);
     *proc << exe << "-c" << (indexdir + "/htdig.conf") << query;
 
     connect( proc, SIGNAL(receivedStdout(KProcess *,char*,int)),
