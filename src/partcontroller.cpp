@@ -479,6 +479,7 @@ void PartController::showDocument(const KURL &url, bool newWin)
     return;
   }
   
+  addHistoryEntry();
   
   HTMLDocumentationPart *part = dynamic_cast<HTMLDocumentationPart*>(activePart());
   if (!part || newWin)
@@ -1109,7 +1110,7 @@ bool PartController::readyToClose()
 	return true;
 }
 
-void PartController::slotActivePartChanged( KParts::Part * part )
+void PartController::slotActivePartChanged( KParts::Part * )
 {
 	kdDebug(9000) << k_funcinfo << endl;
 	
@@ -1370,7 +1371,7 @@ void PartController::slotBackAboutToShow()
 	int i = 0;
 	while( i < 10 && it != m_simpleHistory.end() )
 	{
-		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line), (*it).id );
+		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line +1), (*it).id );
 		++i;
 		++it;
 	} 
