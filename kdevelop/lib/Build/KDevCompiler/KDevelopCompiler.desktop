@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/KDevCompiler
+Name=KDevCompiler
+
+[PropertyDef::X-KDevelop-Language]
+Type=QString
