@@ -167,8 +167,11 @@ void AddSubprojectDialog::accept()
         QString configurein = projroot + "configure.in";
 
         QStringList list = AutoProjectTool::configureinLoadMakefiles(configurein);
-        list.push_back( relpath + "/Makefile" );
-        AutoProjectTool::configureinSaveMakefiles(configurein, list);
+        if ( !list.isEmpty() )
+        {
+            list.push_back( relpath + "/Makefile" );
+            AutoProjectTool::configureinSaveMakefiles(configurein, list);
+        }
     }
 
 #if 0

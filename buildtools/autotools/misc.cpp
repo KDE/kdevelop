@@ -252,9 +252,11 @@ QStringList AutoProjectTool::configureinLoadMakefiles(QString configureinpath)
 {
 	QFile configurein(configureinpath);
 
-	configurein.open ( IO_ReadOnly );
-	//if ( !configurein.open( IO_ReadOnly ) )
-	//  what should I return ??
+	if ( !configurein.open( IO_ReadOnly ) )
+	{
+		kdDebug() << k_funcinfo << " - couldn't open file: " << configureinpath << endl;
+		return QStringList();
+	}
 
 	QTextStream stream( &configurein);
 	QStringList list;
