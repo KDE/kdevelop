@@ -1,3 +1,7 @@
+2002-06-10  John Firebaugh  <jfirebaugh@kde.org>
+        * New breakpoints widget. Uses KListView.
+        * Breakpoints should sync with document much better now.
+
 2002-06-10  Bernd Gehrmann  <bernd@linux.local>
 
 	* Made class display (flat list vs. directory hierarchy) configurable

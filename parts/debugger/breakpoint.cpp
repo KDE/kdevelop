@@ -36,9 +36,7 @@ static int BPKey_ = 0;
 /***************************************************************************/
 
 Breakpoint::Breakpoint(bool temporary, bool enabled)
-    : QListBoxItem (),
-      display_(QString::null),
-      s_pending_(true),
+    : s_pending_(true),
       s_actionAdd_(false),
       s_actionClear_(false),
       s_actionModify_(false),
@@ -67,77 +65,32 @@ Breakpoint::~Breakpoint()
 
 /***************************************************************************/
 
-int Breakpoint::height(const QListBox *lb) const
+QString Breakpoint::statusString() const
 {
-    return lb->fontMetrics().lineSpacing() + 1 ;
-}
-
-/***************************************************************************/
-
-int Breakpoint::width(const QListBox *lb) const
-{
-    return lb->fontMetrics().width( text() ) + 6;
-}
-
-/***************************************************************************/
-
-void Breakpoint::paint( QPainter *p )
-{
-    QFontMetrics fm = p->fontMetrics();
-    int yPos = fm.ascent() + fm.leading()/2;
-    p->drawText( 0, yPos, text() );
-}
-
-/***************************************************************************/
-
-QString Breakpoint::text () const
-{
-    return display_;
-}
-
-/***************************************************************************/
-
-void Breakpoint::configureDisplay()
-{
-    if (s_temporary_)
-        display_ += i18n("\ttemporary");
-    
-    if (!s_enabled_)
-        display_ += i18n("\tdisabled");
-    
-    if (!condition_.isEmpty())
-        display_ += i18n("\tif %1").arg(condition_);
-    
-    if (hits_)
-        display_ += i18n("\thits %1").arg(hits_);
-    
-    if (ignoreCount_)
-        display_ += i18n("\tignore count %1").arg(ignoreCount_);
-    
-    if (s_hardwareBP_)
-        display_ = i18n("hw %1").arg(display_);
-    
-    if (dbgId_>0) {
-        QString t(display_);
-        display_ = i18n("%1 %2").arg(dbgId_).arg(display_);
-    }
-    
-    if (s_pending_) {
-        QString pending(i18n("Breakpoint state. The 'Pending ' state is the first state displayed",
-                             "Pending "));
+    if( !s_enabled_ )
+        return i18n("Disabled");
+    if( s_pending_ ) {
         if (s_actionAdd_)
-            pending += i18n("Breakpoint state. The 'add ' state is appended to the other states",
-                            "add ");
+            return i18n("Pending Add");
         if (s_actionClear_)
-            pending += i18n("Breakpoint state. The 'clear ' state is appended to the other states",
-                            "clear ");
+            return i18n("Pending Clear");
         if (s_actionModify_)
-            pending += i18n("Breakpoint state. The 'modify ' state is appended to the other states",
-                            "modify ");
-        
-        display_ = i18n("%1>\t%2").arg(pending).arg(display_);
+            return i18n("Pending Modify");
     }
+    return i18n("Active");
 }
+
+// void Breakpoint::configureDisplay()
+// {
+//     if (s_temporary_)
+//         display_ += i18n("\ttemporary");
+//     
+//     if (ignoreCount_)
+//         display_ += i18n("\tignore count %1").arg(ignoreCount_);
+//     
+//     if (s_hardwareBP_)
+//         display_ = i18n("hw %1").arg(display_);
+// }
 
 /***************************************************************************/
 
@@ -186,8 +139,6 @@ void Breakpoint::reset()
     s_dbgProcessing_      = false;
     s_hardwareBP_         = false;
     hits_                 = 0;
-    
-    configureDisplay();
 }
 
 /***************************************************************************/
@@ -212,8 +163,6 @@ void Breakpoint::setActive(int active, int id)
         s_changedIgnoreCount_ = false;
         s_changedEnable_      = false;
     }
-    
-    configureDisplay();
 }
 /***************************************************************************/
 
@@ -240,7 +189,6 @@ FilePosBreakpoint::FilePosBreakpoint(const QString &fileName, int lineNum,
       fileName_(fileName),
       lineNo_(lineNum)
 {
-    configureDisplay();
 }
 
 /***************************************************************************/
@@ -287,11 +235,11 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 /***************************************************************************/
 
-void FilePosBreakpoint::configureDisplay()
-{
-    display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
-    Breakpoint::configureDisplay();
-}
+// void FilePosBreakpoint::configureDisplay()
+// {
+//     display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
+//     Breakpoint::configureDisplay();
+// }
 
 
 /***************************************************************************/
@@ -302,7 +250,6 @@ Watchpoint::Watchpoint(const QString& varName, bool temporary, bool enabled)
     : Breakpoint(temporary, enabled),
       varName_(varName)
 {
-    configureDisplay();
 }
 
 /***************************************************************************/
@@ -320,11 +267,11 @@ QString Watchpoint::dbgSetCommand() const
 
 /***************************************************************************/
 
-void Watchpoint::configureDisplay()
-{
-    display_ = i18n("watchpoint on %1").arg(varName_);
-    Breakpoint::configureDisplay();
-}
+// void Watchpoint::configureDisplay()
+// {
+//    display_ = i18n("watchpoint on %1").arg(varName_);
+//    Breakpoint::configureDisplay();
+// }
 
 /***************************************************************************/
 

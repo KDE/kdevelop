@@ -3,6 +3,7 @@
 
 
 #include <qobject.h>
+#include <qpixmap.h>
 
 
 #include <kurl.h>
@@ -36,7 +37,12 @@ public:
    */
   virtual void clearExecutionPoint() = 0;
 
-
+  static const QPixmap* inactiveBreakpointPixmap();
+  static const QPixmap* activeBreakpointPixmap();
+  static const QPixmap* reachedBreakpointPixmap();
+  static const QPixmap* disabledBreakpointPixmap();
+  static const QPixmap* executionPointPixmap();
+  
 signals:
 
   /**

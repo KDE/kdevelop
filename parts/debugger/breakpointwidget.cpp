@@ -18,6 +18,7 @@
 
 #include <qdict.h>
 #include <qheader.h>
+#include <qfileinfo.h>
 
 #include <kpopupmenu.h>
 
@@ -25,18 +26,153 @@
 #include <ctype.h>
 #include <klocale.h>
 #include <qcursor.h>
+
+#include "kdevdebugger.h"
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
+class BreakpointItem : public QListViewItem
+{
+public:
+    BreakpointItem( BreakpointWidget* parent, const FilePosBreakpoint& BP )
+        : QListViewItem( parent ),
+          m_breakpoint( BP )
+    {
+      setRenameEnabled( BreakpointWidget::Condition, true );
+      m_breakpoint.setActionAdd( true );
+      m_breakpoint.setPending( true );
+      emit listView()->publishBPState( m_breakpoint );
+    }
+    
+    BreakpointWidget* listView() { return (BreakpointWidget*)QListViewItem::listView(); }
+    
+    QString text( int column ) const
+    {
+        switch( (BreakpointWidget::Column)column ) {
+        case BreakpointWidget::Status:
+            return m_breakpoint.statusString();
+            break;
+        case BreakpointWidget::File:
+            return QFileInfo( m_breakpoint.fileName() ).fileName();
+            break;
+        case BreakpointWidget::Line:
+            return QString::number( m_breakpoint.lineNum() );
+            break;
+        case BreakpointWidget::Hits:
+            return QString::number( m_breakpoint.hits() );
+            break;
+        case BreakpointWidget::Condition:
+            return m_breakpoint.conditional();
+            break;
+        }
+        return QString::null;
+    }
+    
+    const QPixmap* pixmap( int column ) const
+    {
+        if( column != BreakpointWidget::Status )
+            return 0L;
+        if( !m_breakpoint.isEnabled() )
+            return KDevDebugger::disabledBreakpointPixmap();
+//        if( m_breakpoint.hits() > 0 )
+//            return KDevDebugger::reachedBreakpointPixmap();
+        if( !m_breakpoint.isPending() )
+            return KDevDebugger::activeBreakpointPixmap();
+        return KDevDebugger::inactiveBreakpointPixmap();
+    }
+    
+    void reset()
+    {
+        m_breakpoint.reset();
+        listView()->repaintItem( this );
+    }
+    
+    void remove()
+    {
+        // Pending but the debugger hasn't started processing this BP so
+        // we can just remove it.
+        if( m_breakpoint.isPending() && !m_breakpoint.isDbgProcessing() ) {
+            m_breakpoint.setActionDie();
+            emit listView()->publishBPState( m_breakpoint );
+            delete this;
+        } else {
+            m_breakpoint.setPending( true );
+            m_breakpoint.setActionClear( true );
+            listView()->repaintItem( this );
+            emit listView()->publishBPState( m_breakpoint );
+        }
+    }
+    
+    void modify()
+    {
+        if( !m_breakpoint.modifyDialog() )
+          return;
+          
+        m_breakpoint.setPending( true );
+        m_breakpoint.setActionModify( true );
+        
+        listView()->repaintItem( this );
+        emit listView()->publishBPState( m_breakpoint );
+    }
+    
+    void toggleEnabled()
+    {
+        m_breakpoint.setEnabled( !m_breakpoint.isEnabled() );
+        m_breakpoint.setPending( true );
+        m_breakpoint.setActionModify( true );
+        
+        listView()->repaintItem( this );
+        emit listView()->publishBPState( m_breakpoint );
+    }
+    
+    void update( int active, int id, int hits, int ignore, const QString& condition )
+    {
+        m_breakpoint.setActive(active, id);
+        m_breakpoint.setHits(hits);
+        m_breakpoint.setIgnoreCount(ignore);
+        m_breakpoint.setConditional(condition);
+        listView()->repaintItem( this );
+        emit listView()->publishBPState( m_breakpoint );
+    }
+    
+    void update( int active, int id, bool hardware )
+    {
+        m_breakpoint.setActive(active, id);
+        m_breakpoint.setHardwareBP(hardware);
+        listView()->repaintItem( this );
+        emit listView()->publishBPState( m_breakpoint );
+    }
+    
+    void publishIfPending()
+    {
+        if( m_breakpoint.isPending() && !m_breakpoint.isDbgProcessing() )
+            emit listView()->publishBPState( m_breakpoint );
+    }
+        
+    const Breakpoint& breakpoint() { return m_breakpoint; }
+    
+private:
+    FilePosBreakpoint m_breakpoint;
+};
+
 BreakpointWidget::BreakpointWidget(QWidget *parent, const char *name)
-    :  KListBox(parent, name),
+    :  KListView(parent, name),
        activeFlag_(0)
 {
-    connect( this, SIGNAL(rightButtonPressed(QListBoxItem*, const QPoint&)),
-             SLOT(slotContextMenu(QListBoxItem*)) );
-    connect ( this, SIGNAL(clicked(QListBoxItem*)),
-              SLOT(slotExecuted(QListBoxItem*)) );
+    addColumn( "Status" );
+    addColumn( "File" );
+    addColumn( "Line" );
+    addColumn( "Hits" );
+    addColumn( "Condition" );
+    setColumnAlignment( Line, AlignRight );
+    setColumnAlignment( Hits, AlignRight );
+    setAllColumnsShowFocus( true );
+    connect( this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+             SLOT(slotContextMenu(QListViewItem*)) );
+    connect( this, SIGNAL(executed(QListViewItem*)),
+             SLOT(slotExecuted(QListViewItem*)) );
 }
 
 /***************************************************************************/
@@ -49,9 +185,8 @@ BreakpointWidget::~BreakpointWidget()
 
 void BreakpointWidget::reset()
 {
-    for (int index=0; index<(int)count(); index++)
-        ((Breakpoint*)item(index))->reset();
-    repaint();
+    for( QListViewItemIterator it( this ); it.current(); ++it )
+        ((BreakpointItem*)it.current())->reset();
 }
 
 /***************************************************************************/
@@ -60,230 +195,151 @@ void BreakpointWidget::reset()
 // breakpoint. Used when a file is loaded
 void BreakpointWidget::refreshBP(const QString &filename)
 {
-    for (int index=0; index<(int)count(); index++) {
-        Breakpoint *BP = (Breakpoint*)item(index);
-        if (BP->hasSourcePosition() && (BP->fileName() == filename))
+    for( QListViewItemIterator it( this ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        const Breakpoint& BP = item->breakpoint();
+        if (BP.hasSourcePosition() && (BP.fileName() == filename))
             emit refreshBPState(BP);
     }
 }
 
 /***************************************************************************/
 
-int BreakpointWidget::findIndex(const Breakpoint *breakpoint) const
+BreakpointItem* BreakpointWidget::find( const Breakpoint& breakpoint ) const
 {
-    // NOTE:- The match doesn't have to be equal. Each type of BP
-    // must decide on the match criteria.
-    ASSERT (breakpoint);
-    
-    for (int index=0; index<(int)count(); index++) {
-        Breakpoint *BP = (Breakpoint*)(item(index));
-        if (breakpoint->match(BP))
-            return index;
+    BreakpointWidget* that = const_cast<BreakpointWidget*>(this);
+    for( QListViewItemIterator it( that ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        const Breakpoint& BP = item->breakpoint();
+        if (breakpoint.match(&BP))
+            return item;
     }
     
-    return -1;
+    return 0L;
 }
 
 /***************************************************************************/
 
 // The Id is supplied by the debugger
-Breakpoint *BreakpointWidget::findId(int dbgId) const
+BreakpointItem* BreakpointWidget::findId(int dbgId) const
 {
-    for (int index=0; index<(int)count(); index++) {
-        Breakpoint *BP = (Breakpoint*)item(index);
-        if (BP->dbgId() == dbgId)
-            return BP;
+    BreakpointWidget* that = const_cast<BreakpointWidget*>(this);
+    for( QListViewItemIterator it( that ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        const Breakpoint& BP = item->breakpoint();
+        if (BP.dbgId() == dbgId)
+            return item;
     }
     
-    return 0;
+    return 0L;
 }
 
 /***************************************************************************/
 
 // The key is a unique number supplied by us
-Breakpoint *BreakpointWidget::findKey(int BPKey) const
+BreakpointItem* BreakpointWidget::findKey(int BPKey) const
 {
-    for (int index=0; index<(int)count(); index++) {
-        Breakpoint *BP = (Breakpoint*)item(index);
-        if (BP->key() == BPKey)
-            return BP;
+    BreakpointWidget* that = const_cast<BreakpointWidget*>(this);
+    for( QListViewItemIterator it( that ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        const Breakpoint& BP = item->breakpoint();
+        if (BP.key() == BPKey)
+            return item;
     }
     
-    return 0;
-}
-
-
-/***************************************************************************/
-
-void BreakpointWidget::addBreakpoint(Breakpoint *BP)
-{
-    insertItem(BP);
-    BP->setActionAdd(true);
-    BP->setPending(true);
-    emit publishBPState(BP);
-    
-    BP->configureDisplay();
-    repaint();
-}
-
-/***************************************************************************/
-
-void BreakpointWidget::removeBreakpoint(Breakpoint *BP)
-{
-    // Pending but the debugger hasn't started processing this BP so
-    // we can just remove it.
-    if (BP->isPending() && !BP->isDbgProcessing()) {
-        BP->setActionDie();
-        emit publishBPState(BP);
-        removeItem(findIndex(BP));
-    } else {
-        BP->setPending(true);
-        BP->setActionClear(true);
-        emit publishBPState(BP);
-        
-        BP->configureDisplay();
-    }
-    
-    repaint();
-}
-
-/***************************************************************************/
-
-void BreakpointWidget::modifyBreakpoint(Breakpoint *BP)
-{
-    if (BP->modifyDialog()) {
-        BP->setPending(true);
-        BP->setActionModify(true);
-        emit publishBPState(BP);
-        
-        BP->configureDisplay();
-        repaint();
-    }
-}
-
-/***************************************************************************/
-
-void BreakpointWidget::toggleBPEnabled(Breakpoint *BP)
-{
-    BP->setEnabled(!BP->isEnabled());
-    BP->setPending(true);
-    BP->setActionModify(true);
-    emit publishBPState(BP);
-    
-    BP->configureDisplay();
-    repaint();
+    return 0L;
 }
 
 /***************************************************************************/
 
 void BreakpointWidget::removeAllBreakpoints()
 {
-    for (int index=count()-1; index>=0; index--) {
-        Breakpoint *BP = (Breakpoint*)item(index);
-        if (BP->isPending() && !BP->isDbgProcessing())
-            removeBreakpoint(BP);
+    for( QListViewItemIterator it( this ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        item->remove();
     }
     
-    if (count())
+    if( childCount() > 0 )
         emit clearAllBreakpoints();
 }
 
 /***************************************************************************/
 
-void BreakpointWidget::slotExecuted(QListBoxItem *item)
+void BreakpointWidget::slotExecuted(QListViewItem *item)
 {
-    if (item) {
-        setCurrentItem(item);
-        Breakpoint *BP = (Breakpoint*)item;
-        if (BP->hasSourcePosition())
-            emit gotoSourcePosition(BP->fileName(), BP->lineNum()-1);
-    }
+    if( !item )
+        return;
+    
+    const Breakpoint& BP = ((BreakpointItem*)item)->breakpoint();
+    if (BP.hasSourcePosition())
+        emit gotoSourcePosition(BP.fileName(), BP.lineNum()-1);
 }
 
 /***************************************************************************/
 
-void BreakpointWidget::slotContextMenu(QListBoxItem *item)
+void BreakpointWidget::slotContextMenu(QListViewItem *item)
 {
-    if (!item)
-        return;
-
-    Breakpoint *BP = (Breakpoint*)item;
     KPopupMenu popup(i18n("Breakpoints"), this);
-    int idRemoveBP        = popup.insertItem( i18n("Remove Breakpoint") );
-    int idEditBP          = popup.insertItem( i18n("Edit Breakpoint") );
-    int idToggleBPEnabled = popup.insertItem( BP->isEnabled()?
-                                              i18n("Disable Breakpoint") :
-                                              i18n("Enable Breakpoint") );
-    int idGotoSource      = popup.insertItem( i18n("Display Source Code") );
-    popup.setItemEnabled(idGotoSource, BP->hasSourcePosition());
-    popup.insertSeparator();
-    int idClearAll        = popup.insertItem( i18n("Clear All Breakpoints") );
-
-    int res = popup.exec(QCursor::pos());
-
-    if (res == idRemoveBP)
-        removeBreakpoint(BP);
-    else if (res == idEditBP)
-        modifyBreakpoint(BP);
-    else if (res == idToggleBPEnabled)
-        toggleBPEnabled(BP);
-    else if (res == idGotoSource && BP->hasSourcePosition())
-        emit gotoSourcePosition(BP->fileName(), BP->lineNum()-1);
-    else if (res == idClearAll)
-        removeAllBreakpoints();
+    if( item ) {
+      BreakpointItem* bpItem = (BreakpointItem*)item;
+      const Breakpoint& BP = bpItem->breakpoint();
+      int idRemoveBP        = popup.insertItem( i18n("Remove Breakpoint") );
+      int idEditBP          = popup.insertItem( i18n("Edit Breakpoint") );
+      int idToggleBPEnabled = popup.insertItem( BP.isEnabled()?
+                                                i18n("Disable Breakpoint") :
+                                                i18n("Enable Breakpoint") );
+      int idGotoSource      = popup.insertItem( i18n("Display Source Code") );
+      popup.setItemEnabled(idGotoSource, BP.hasSourcePosition());
+      popup.insertSeparator();
+      int idClearAll        = popup.insertItem( i18n("Clear All Breakpoints") );
+      int res = popup.exec(QCursor::pos());
+      if (res == idRemoveBP)
+          bpItem->remove();
+      else if (res == idEditBP)
+          bpItem->modify();
+      else if (res == idToggleBPEnabled)
+          bpItem->toggleEnabled();
+      else if (res == idGotoSource && BP.hasSourcePosition())
+          emit gotoSourcePosition(BP.fileName(), BP.lineNum()-1);
+      else if (res == idClearAll)
+          removeAllBreakpoints();
+   } else {
+      int idClearAll        = popup.insertItem( i18n("Clear All Breakpoints") );
+      int res = popup.exec(QCursor::pos());
+      if (res == idClearAll)
+          removeAllBreakpoints();
+   }
 }
 
 /***************************************************************************/
 
 void BreakpointWidget::slotToggleBreakpoint(const QString &fileName, int lineNum)
 {
-    FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
-    int found = findIndex(fpBP);
-    if (found >= 0) {
-        delete fpBP;
-        removeBreakpoint((Breakpoint*)item(found));
-    } else
-        addBreakpoint(fpBP);
+    FilePosBreakpoint BP( fileName, lineNum+1 );
+    BreakpointItem* item = find( BP );
+    if( item ) {
+        item->remove();
+    } else {
+        new BreakpointItem( this, BP );
+    }
 }
 
 /***************************************************************************/
 
 void BreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNum)
 {
-    FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
-    int found = findIndex(fpBP);
-    delete fpBP;
-    if (found >= 0)
-        modifyBreakpoint((Breakpoint*)item(found));
+    BreakpointItem* item = find( FilePosBreakpoint( fileName, lineNum+1 ) );
+    if( item )
+        item->modify();
 }
 
 /***************************************************************************/
 
 void BreakpointWidget::slotToggleBreakpointEnabled(const QString &fileName, int lineNum)
 {
-    FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
-    int found = findIndex(fpBP);
-    delete fpBP;
-    if (found >= 0) {
-        setCurrentItem(found);
-        toggleBPEnabled((Breakpoint*)item(found));
-    }
-}
-
-/***************************************************************************/
-
-void BreakpointWidget::slotToggleWatchpoint(const QString &varName)
-{
-    Watchpoint *watchpoint = new Watchpoint(varName, false, true);
-    int found = findIndex(watchpoint);
-    if (found >= 0) {
-        removeBreakpoint((Breakpoint*)item(found));
-        delete watchpoint;
-    } else
-        addBreakpoint(watchpoint);
+    BreakpointItem* item = find( FilePosBreakpoint( fileName, lineNum+1 ) );
+    if( item )
+        item->toggleEnabled();
 }
 
 /***************************************************************************/
@@ -291,10 +347,9 @@ void BreakpointWidget::slotToggleWatchpoint(const QString &varName)
 // The debugger allows us to set pending breakpoints => do it
 void BreakpointWidget::slotSetPendingBPs()
 {
-    for (int index=0; index<(int)count(); index++) {
-        Breakpoint *BP = (Breakpoint*)(item(index));
-        if (BP->isPending() && !BP->isDbgProcessing())
-            emit publishBPState(BP);
+    for( QListViewItemIterator it( this ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        item->publishIfPending();
     }
 }
 
@@ -307,10 +362,8 @@ void BreakpointWidget::slotUnableToSetBPNow(int BPid)
 {
     if (BPid == -1)
         reset();
-    else if (Breakpoint *BP = findId(BPid))
-        BP->reset();
-    
-    repaint();
+    else if (BreakpointItem *item = findId(BPid))
+        item->reset();
 }
 
 /***************************************************************************/
@@ -371,31 +424,19 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
                 }
             }
             
-            if (Breakpoint *BP = findId(id)) {
-                BP->setActive(activeFlag_, id);
-                BP->setHits(hits);
-                BP->setIgnoreCount(ignore);
-                BP->setConditional(condition);
-                emit publishBPState(BP);
-                
-                BP->configureDisplay();
+            if (BreakpointItem *item = findId(id)) {
+                item->update( activeFlag_, id, hits, ignore, condition );
             }
         }
     }
     
     // Remove any inactive breakpoints.
-    for (int index=count()-1; index>=0; index--) {
-        Breakpoint* BP = (Breakpoint*)(item(index));
-        if (!BP->isActive(activeFlag_)) {
-            BP->setActionDie();
-            emit publishBPState(BP);
-            
-            removeItem(index);
-        }
+    for( QListViewItemIterator it( this ); it.current(); ++it ) {
+        BreakpointItem* item = (BreakpointItem*)it.current();
+        if( item->breakpoint().isActive( activeFlag_ ) )
+            continue;
+        item->remove();
     }
-    
-    //  setAutoUpdate(true);
-    repaint();
 }
 
 /***************************************************************************/
@@ -404,11 +445,11 @@ void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
 {
     char *startNo=0;
     bool hardware = false;
-    Breakpoint *BP = findKey(BPKey);
-    if (!BP)
+    BreakpointItem* item = findKey(BPKey);
+    if (!item)
         return;   // Why ?? Possibly internal dbgController BPs that shouldn't get here!
     
-    BP->setDbgProcessing(false);
+//    item->setDbgProcessing(false);
     
     if ((strncmp(str, "Breakpoint ", 11) == 0))
         startNo = str+11;
@@ -423,12 +464,7 @@ void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
     if (startNo) {
         int id = atoi(startNo);
         if (id) {
-            BP->setActive(activeFlag_, id);
-            BP->setHardwareBP(hardware);
-            emit publishBPState(BP);
-            
-            BP->configureDisplay();
-            repaint();
+            item->update( activeFlag_, id, hardware );
         }
     }
 }

@@ -16,10 +16,11 @@
 #ifndef _BREAKPOINTWIDGET_H_
 #define _BREAKPOINTWIDGET_H_
 
-#include <klistbox.h>
+#include <klistview.h>
 
 class Breakpoint;
 class QMouseEvent;
+class BreakpointItem;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -28,7 +29,7 @@ class QMouseEvent;
 //TODO derive a GDB specific manager to handle the GDB specific
 // data in the parsers!!
 
-class BreakpointWidget : public KListBox
+class BreakpointWidget : public KListView
 {
     Q_OBJECT
     
@@ -36,17 +37,22 @@ public:
     BreakpointWidget( QWidget* parent=0, const char* name=0 );
     virtual ~BreakpointWidget();
     
+    enum Column {
+        Status     = 0,
+        File       = 1,
+        Line       = 2,
+        Hits       = 3,
+        Condition  = 4
+    }; 
+    
+public slots:
     void reset();
     void refreshBP(const QString &filename);
     
-public slots:
     // Connected to from the editor widget:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
     void slotEditBreakpoint(const QString &fileName, int lineNum);
     void slotToggleBreakpointEnabled(const QString &fileName, int lineNum);
-
-    // Conncected to from the variable widget:
-    void slotToggleWatchpoint(const QString &varName);
 
     // Connected to from the dbgcontroller:
     void slotSetPendingBPs();
@@ -55,29 +61,27 @@ public slots:
     void slotParseGDBBreakpointSet(char *str, int BPKey);
   
 private slots:
-    void slotExecuted(QListBoxItem *item);
-    void slotContextMenu(QListBoxItem *item);
+    void slotExecuted(QListViewItem *item);
+    void slotContextMenu(QListViewItem *item);
 
 signals:
-    void publishBPState(Breakpoint *brkpt);
-    void refreshBPState(Breakpoint *brkpt);
+    void publishBPState( const Breakpoint& );
+    void refreshBPState( const Breakpoint& );
     void gotoSourcePosition(const QString &fileName, int lineNum);
     void clearAllBreakpoints();
 
 private:
-    int findIndex(const Breakpoint *BP) const;
-    Breakpoint *findId(int id) const;
-    Breakpoint *findKey(int BPKey) const;
+    friend class BreakpointItem;
+    
+    BreakpointItem* find(const Breakpoint& BP) const;
+    BreakpointItem* findId(int id) const;
+    BreakpointItem* findKey(int BPKey) const;
 
     void setActive();
-    void addBreakpoint(Breakpoint *BP);
-    void removeBreakpoint(Breakpoint *BP);
-    void modifyBreakpoint(Breakpoint *BP);
-    void toggleBPEnabled(Breakpoint *BP);
     void removeAllBreakpoints();
 
 private:
-  int activeFlag_;
+    int activeFlag_;
 };
 /***************************************************************************/
 /***************************************************************************/

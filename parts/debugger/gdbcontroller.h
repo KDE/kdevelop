@@ -73,7 +73,7 @@ private:
     
     void setBreakpoint(const QCString &BPSetCmd, int key);
     void clearBreakpoint(const QCString &BPClearCmd);
-    void modifyBreakpoint(Breakpoint *BP);
+    void modifyBreakpoint(const Breakpoint&);
     
     void setStateOn(int stateOn)    { state_ |= stateOn; }
     void setStateOff(int stateOff)  { state_ &= ~stateOff; }
@@ -93,7 +93,7 @@ public slots:
     void slotStepOutOff();
     
     void slotBreakInto();
-    void slotBPState(Breakpoint *BP);
+    void slotBPState( const Breakpoint& );
     void slotClearAllBreakpoints();
     
     void slotDisassemble(const QString &start, const QString &end);

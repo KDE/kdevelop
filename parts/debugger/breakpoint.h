@@ -23,7 +23,7 @@
 /***************************************************************************/
 /***************************************************************************/
 
-class Breakpoint : public QListBoxItem
+class Breakpoint
 {
 public:
     Breakpoint(bool temporary=false, bool enabled=true);
@@ -32,14 +32,10 @@ public:
     virtual QString dbgSetCommand() const                 = 0;
     virtual QString dbgRemoveCommand() const;
     virtual bool match(const Breakpoint* brkpt) const     = 0;
-    virtual QString text () const;
-    virtual void configureDisplay();
     virtual bool modifyDialog();
     virtual void reset();
     
-    int height(const QListBox *lb) const;
-    int width(const QListBox *lb) const;
-    void paint(QPainter *p);
+    QString statusString() const;
     
     void setActive(int active, int id);
     bool isActive(int active) const  {  return (  (active_ == active) ||
@@ -58,9 +54,9 @@ public:
     void setConditional(const QString &condition) { s_changedCondition_ = (condition_ != condition);        condition_ = condition; }
     QString conditional() const                   { return condition_; }
     
-    bool changedCondition()                       { return s_changedCondition_; }
-    bool changedIgnoreCount()                     { return s_changedIgnoreCount_; }
-    bool changedEnable()                          { return s_changedEnable_; }
+    bool changedCondition() const                 { return s_changedCondition_; }
+    bool changedIgnoreCount() const               { return s_changedIgnoreCount_; }
+    bool changedEnable() const                    { return s_changedEnable_; }
     
     void setPending(bool pending)                 { s_pending_ = pending; }
     bool isPending() const                        { return s_pending_; }
@@ -84,13 +80,6 @@ public:
     virtual bool hasSourcePosition() const;
     virtual QString fileName() const;
     virtual int lineNum() const;
-    
-protected:
-    // Ugggghh - this needs to be removed - it's
-    // for the listbox display which seems to get confused
-    // if you just change the strings position
-    // (eg QString.data()). It works like this but...
-    QString display_;
     
 private:
     bool s_pending_             :1;
@@ -128,7 +117,6 @@ public:
     virtual ~FilePosBreakpoint();
     virtual QString dbgSetCommand() const;
     virtual bool match(const Breakpoint *brkpt) const;
-    virtual void configureDisplay();
     
     QString fileName() const          { return fileName_; }
     int lineNum() const               { return lineNo_; }
@@ -158,7 +146,6 @@ private:
 //  CatchBreakpoint(bool temporary=false, bool enabled=true);
 //  virtual ~CatchBreakpoint();
 //  virtual QString dbgSetCommand() const;
-//  virtual void configureDisplay();
 //  virtual CatchBreakpoint& operator=(const CatchBreakpoint& rhs);
 //};
 /***************************************************************************/
@@ -171,7 +158,6 @@ private:
 //  virtual ~ExitBreakpoint();
 //  virtual QString dbgSetCommand() const;
 //  bool match(const Breakpoint* brkpt) const;
-//  virtual void configureDisplay();
 //};
 /***************************************************************************/
 /***************************************************************************/
@@ -183,7 +169,6 @@ public:
     virtual ~Watchpoint();
     virtual QString dbgSetCommand() const;
     bool match(const Breakpoint *brkpt) const;
-    virtual void configureDisplay();
     
 private:
     QString varName_;

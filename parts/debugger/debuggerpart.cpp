@@ -94,7 +94,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
-    topLevel()->embedOutputView(breakpointWidget, i18n("&Breakpoints"));
+    topLevel()->embedOutputView(breakpointWidget, i18n("Breakpoints"));
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -107,7 +107,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"));
+    topLevel()->embedOutputView(framestackWidget, i18n("Frame Stack"));
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -128,10 +128,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              framestackWidget, SLOT(slotSelectFrame(int, int)));
     
     // breakpointWidget -> this
-    connect( breakpointWidget, SIGNAL(refreshBPState(Breakpoint*)),
-             this,             SLOT(slotRefreshBPState(Breakpoint*)));
-    connect( breakpointWidget, SIGNAL(publishBPState(Breakpoint*)),
-             this,             SLOT(slotRefreshBPState(Breakpoint*)));
+    connect( breakpointWidget, SIGNAL(refreshBPState(const Breakpoint&)),
+             this,             SLOT(slotRefreshBPState(const Breakpoint&)));
+    connect( breakpointWidget, SIGNAL(publishBPState(const Breakpoint&)),
+             this,             SLOT(slotRefreshBPState(const Breakpoint&)));
     connect( breakpointWidget, SIGNAL(gotoSourcePosition(const QString&, int)),
              this,             SLOT(slotGotoSource(const QString&, int)) );
 
@@ -251,6 +251,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+    connect( partController(), SIGNAL(loadedFile(const QString &)),
+             breakpointWidget, SLOT(refreshBP(const QString &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( debugger(), SIGNAL(editedBreakpoint(const QString &, int)),
@@ -359,8 +361,8 @@ void DebuggerPart::setupController()
              breakpointWidget, SLOT(slotParseGDBBrkptList(char*)));
     connect( controller,       SIGNAL(rawGDBBreakpointSet(char*, int)),
              breakpointWidget, SLOT(slotParseGDBBreakpointSet(char*, int)));
-    connect( breakpointWidget, SIGNAL(publishBPState(Breakpoint*)),
-             controller,       SLOT(slotBPState(Breakpoint*)));
+    connect( breakpointWidget, SIGNAL(publishBPState(const Breakpoint&)),
+             controller,       SLOT(slotBPState(const Breakpoint &)));
 
     // controller -> disassembleWidget
     connect( controller,       SIGNAL(showStepInSource(const QString&, int, const QString&)),
@@ -586,14 +588,14 @@ void DebuggerPart::slotMemoryView()
 }
 
 
-void DebuggerPart::slotRefreshBPState(Breakpoint *BP)
+void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 {
-    if (BP->isActionDie())
-        debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
+    if (BP.isActionDie())
+        debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
                               -1, true, false);
     else 
-        debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
-                              1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
+        debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
+                              1/*BP->id()*/, BP.isEnabled(), BP.isPending() );
 }
 
 

@@ -50,7 +50,8 @@ private:
     Breakpoint         = KTextEditor::MarkInterface::markType02,
     ActiveBreakpoint   = KTextEditor::MarkInterface::markType03,
     ReachedBreakpoint  = KTextEditor::MarkInterface::markType04,
-    ExecutionPoint     = KTextEditor::MarkInterface::markType05
+    DisabledBreakpoint = KTextEditor::MarkInterface::markType05,
+    ExecutionPoint     = KTextEditor::MarkInterface::markType06
   };
 
   static Debugger *s_instance;

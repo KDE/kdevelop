@@ -41,9 +41,13 @@
 #include <stdlib.h>
 using namespace std;
 
+#ifndef _NDEBUG
+#define DBG_MONITOR
+#endif
+
 #if defined(DBG_MONITOR)
   #define GDB_MONITOR
-  #define DBG_DISPLAY(X)          {emit rawData((QString("\n")+QString(X)));}
+  #define DBG_DISPLAY(X)          {kdDebug(9012) << QString(X) << endl;}
 #else
   #define DBG_DISPLAY(X)          {;}
 #endif
@@ -1077,23 +1081,23 @@ void GDBController::clearBreakpoint(const QCString &BPClearCmd)
 
 // **************************************************************************
 
-void GDBController::modifyBreakpoint(Breakpoint *BP)
+void GDBController::modifyBreakpoint( const Breakpoint& BP )
 {
-    ASSERT(BP->isActionModify());
-    if (BP->dbgId()) {
-        if (BP->changedCondition())
-            queueCmd(new GDBCommand(QCString().sprintf("condition %d %s", BP->dbgId(), BP->conditional().latin1()),
+    ASSERT(BP.isActionModify());
+    if (BP.dbgId()) {
+        if (BP.changedCondition())
+            queueCmd(new GDBCommand(QCString().sprintf("condition %d %s", BP.dbgId(), BP.conditional().latin1()),
                                     NOTRUNCMD, NOTINFOCMD));
         
-        if (BP->changedIgnoreCount())
-            queueCmd(new GDBCommand(QCString().sprintf("ignore %d %d", BP->dbgId(), BP->ignoreCount()),
+        if (BP.changedIgnoreCount())
+            queueCmd(new GDBCommand(QCString().sprintf("ignore %d %d", BP.dbgId(), BP.ignoreCount()),
                                     NOTRUNCMD, NOTINFOCMD));
         
-        if (BP->changedEnable())
+        if (BP.changedEnable())
             queueCmd(new GDBCommand(QCString().sprintf("%s %d",
-                                                       BP->isEnabled() ? "enable" : "disable", BP->dbgId()), NOTRUNCMD, NOTINFOCMD));
+                                                       BP.isEnabled() ? "enable" : "disable", BP.dbgId()), NOTRUNCMD, NOTINFOCMD));
         
-        BP->setDbgProcessing(true);
+//        BP.setDbgProcessing(true);
         // Note: this is NOT an info command, because gdb doesn't explictly tell
         // us that the breakpoint has been deleted, so if we don't have it the
         // BP list doesn't get updated.
@@ -1134,7 +1138,7 @@ void GDBController::slotStart(const QString &application)
         return;
     }
     
-    GDB_DISPLAY("\nStarting GDB - app:["+application+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
+    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+config_dbgShell_+"] path:["+config_gdbPath_+"]\n");
     dbgProcess_ = new KProcess;
     
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1323,10 +1327,10 @@ void GDBController::slotBreakInto()
 // **************************************************************************
 
 // See what, if anything needs doing to this breakpoint.
-void GDBController::slotBPState(Breakpoint *BP)
+void GDBController::slotBPState( const Breakpoint& BP )
 {
     // Are we in a position to do anything to this breakpoint?
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !BP->isPending() || BP->isActionDie())
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !BP.isPending() || BP.isActionDie())
         return;
     
     // We need this flag so that we can continue execution. I did use
@@ -1344,14 +1348,14 @@ void GDBController::slotBPState(Breakpoint *BP)
         restart = true;
     }
     
-    if (BP->isActionAdd()) {
-        setBreakpoint(BP->dbgSetCommand().latin1(), BP->key());
-        BP->setDbgProcessing(true);
+    if (BP.isActionAdd()) {
+        setBreakpoint(BP.dbgSetCommand().latin1(), BP.key());
+//        BP.setDbgProcessing(true);
     } else {
-        if (BP->isActionClear()) {
-            clearBreakpoint(BP->dbgRemoveCommand().latin1());
-            BP->setDbgProcessing(true);
-        } else if (BP->isActionModify()) {
+        if (BP.isActionClear()) {
+            clearBreakpoint(BP.dbgRemoveCommand().latin1());
+//            BP.setDbgProcessing(true);
+        } else if (BP.isActionModify()) {
             modifyBreakpoint(BP); // Note: DbgProcessing gets set in modify fn
         }
     }
@@ -1588,7 +1592,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf, buflen+1));
+    DBG_DISPLAY(QString("\nSTDERR: ")+QString::fromLatin1(buf, buflen+1));
     slotDbgStdout(proc, buf, buflen);
     
     //  QString bufData(buf, buflen+1);

@@ -28,7 +28,7 @@ class DisassembleWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
-
+namespace KParts { class Part; };
 
 class DebuggerPart : public KDevPlugin
 {
@@ -58,7 +58,7 @@ private slots:
     void slotStepOut();
     void slotMemoryView();
 
-    void slotRefreshBPState(Breakpoint *BP);
+    void slotRefreshBPState(const Breakpoint&);
     void slotStatus(const QString &msg, int state);
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);

@@ -78,7 +78,7 @@ public slots:
     virtual void slotStepOutOff()                                           = 0;
     
     virtual void slotBreakInto()                                            = 0;
-    virtual void slotBPState(Breakpoint *BP)                                = 0;
+    virtual void slotBPState(const Breakpoint&)                             = 0;
     
     virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
     virtual void slotMemoryDump(const QString &start, const QString &amount)= 0;
