@@ -281,6 +281,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              gdbOutputWidget, SLOT(insertStderrLine(const QString&)) );
     
     setupController();
+    
+    if( project() )
+        projectOpened();
 }
 
 

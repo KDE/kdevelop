@@ -34,34 +34,32 @@ public:
   void createActions( KActionCollection* ac );
 
 public slots:
-  void loadProject( const KURL& url);
-  void closeProject();
+  bool loadProject( const KURL& url);
+  bool closeProject();
 
 private slots:
   void slotOpenProject();
   void slotProjectOptions();
+  
   void loadLocalParts();
+  void unloadLocalParts();
 
 private:
   ProjectManager();
 
   void setupActions();
-
-  bool loadProjectFile(const QString &fileName);
   void getGeneralInfo();
-
-  void loadProjectPart();
-  void loadLanguageSupport();
-  void unloadLocalParts();
-  void unloadLanguageSupport();
-  void saveProjectFile();
   bool closeProjectSources();
+  bool checkNewService(const KService::Ptr &service);
 
-  void initializeProjectSupport();
-
-  void checkNewService(const KService::Ptr &service);
-
-  bool loadService( const KService::Ptr &service );
+  bool loadProjectFile();
+  bool saveProjectFile();
+  
+  bool loadProjectPart();
+  void unloadProjectPart();
+  
+  bool loadLanguageSupport();
+  void unloadLanguageSupport();
 
   ProjectInfo *m_info;
 

@@ -65,7 +65,6 @@ PluginController *PluginController::getInstance()
 PluginController::PluginController()
   : QObject()
 {
-  m_globalParts.setAutoDelete( true );
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
 }
@@ -80,6 +79,7 @@ void PluginController::loadInitialPlugins()
 
 PluginController::~PluginController()
 {
+  unloadGlobalPlugins();
 }
 
 
@@ -125,10 +125,11 @@ void PluginController::loadGlobalPlugins()
     
     // Unload it if it is marked as ignored and loaded
     if (!config->readBoolEntry( name, true)) {
-      KXMLGUIClient* part = m_globalParts[name];
+      KDevPlugin* part = m_globalParts[name];
       if( part ) {
         removePart( part );
         m_globalParts.remove( name );
+        part->deleteLater();
       }
       continue;
     }
@@ -146,6 +147,17 @@ void PluginController::loadGlobalPlugins()
        m_globalParts.insert( name, plugin );
        integratePart( plugin );
     }
+  }
+}
+
+void PluginController::unloadGlobalPlugins()
+{
+  for( QDictIterator<KDevPlugin> it( m_globalParts ); !it.isEmpty(); )
+  {
+    KDevPlugin* part = it.current();
+    removePart( part );
+    m_globalParts.remove( it.currentKey() );
+    delete part;
   }
 }
 

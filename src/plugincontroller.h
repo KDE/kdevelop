@@ -42,11 +42,12 @@ protected:
 private slots:
   void slotConfigWidget( KDialogBase* );
   void loadGlobalPlugins();
+  void unloadGlobalPlugins();
   
 private:
   void loadDefaultParts();
 
-  QDict<KXMLGUIClient> m_globalParts;
+  QDict<KDevPlugin> m_globalParts;
   
   static PluginController *s_instance;
 

@@ -70,6 +70,9 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
                                            actionCollection(), "class_wizard");
     setupPopup();
     m_decl_or_impl = false;
+    
+    if( project() )
+        projectOpened();
 }
 
 
@@ -145,6 +148,7 @@ void ClassViewPart::projectOpened()
     KDevLanguageSupport *ls = languageSupport();
     if (ls)
         connect(ls, SIGNAL(updatedSourceInfo()), this, SLOT(updatedSourceInfo()));
+    updatedSourceInfo();
     emit setLanguageSupport(ls);
     setupPopup();
 }

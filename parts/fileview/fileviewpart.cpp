@@ -58,6 +58,9 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
              this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+    
+    if( project() )
+        projectOpened();
 }
 
 
