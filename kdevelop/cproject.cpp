@@ -614,7 +614,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
         {
           // set the defaults
           makefileaminfo.type = "static_library";
-          makefileaminfo.sharedlibLDFLAGS = "-version-info 0:0:1";
+          makefileaminfo.sharedlibLDFLAGS = "-version-info 0:0:0";
           QDir dir(getDir(makefile_name));
           makefileaminfo.sharedlibRootName = dir.dirName();
 

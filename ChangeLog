@@ -1,3 +1,8 @@
+2001-12-14  Walter Tasin <tasin@kdevelop.org>
+    * Making 'make dist' working again
+    * starting up with version info 0:0:0 like mentioned in
+      the documentation of libtool
+
 2001-12-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
     * reposition cursor when indenting an existing line
     * realign cursor to indentation position when it's before first character

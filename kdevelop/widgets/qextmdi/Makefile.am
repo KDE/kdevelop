@@ -3,4 +3,4 @@
 SUBDIRS =src
 
 ####### kdevelop will overwrite this part!!! (end)############
-EXTRADIST = include res
+EXTRA_DIST = include res
