@@ -1441,14 +1441,14 @@ void CKDevelop::completeStartup( bool loadLastProject )
   moveToolBar( m_pTaskBar, taskBarEdge);
 }
 
-CProject* CKDevelop::initProject( bool loadLastProject )
+void CKDevelop::initProject( bool loadLastProject )
 {
   if( !loadLastProject || !lastShutdownOK )
-    return 0;
+    return;
 
   config->setGroup("General Options");
   if( !config->readBoolEntry("LastProject",true) )
-    return 0;
+    return;
 
   config->setGroup("Files");
   slotOpenProject( KURL( config->readEntry("project_file","") ) );
