@@ -1,6 +1,5 @@
 #include "ClassStoreIface.h"
 #include "classstore.h"
-#include <qstringlist.h>
 
 
 ClassStoreIface::ClassStoreIface(ClassStore *classStore)

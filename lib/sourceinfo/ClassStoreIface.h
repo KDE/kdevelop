@@ -2,6 +2,7 @@
 #define _KDEVCLASSSTOREIFACE_H_
 
 #include <dcopobject.h>
+#include <qstringlist.h>
 
 class ClassStore;
 
