@@ -142,7 +142,25 @@ make: *** [all-recursive-am] Error 2
 
 <B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
 them or get an updated rpm of the kdelibs from 
-<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P>
+<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P><B>Q:</B> Configure complains about the Qt version not being between 1.44 and 2.00
+<P><B>A:</B> You probably have Qt2.00 installed on your system, and this messes up ./configure. For the purpose of compiling
+KDevelop you should set QTDIR to the correct directory.
+<P><B>Q:</B> Configure complains about not being able to compile a small KDE application. Examining config.log reveals that it
+can't find the library libXext.
+<P><B>A:</B> Install the package xdevel
+<P><B>Q:</B> I´m already running a KDE 2 snapshot and I want to use KDevelop under KDE 2. What is the best way to do this ?
+<P><B>A:</B> As KDevelop for KDE 2 is currently under development, you should consider using the current stable 1.x release of
+KDevelop for production usage. Running KDevelop 1.x under KDE 2 can be done by creating a shell-script:
+<P>#/bin/bash
+QTDIR=/usr/lib/qt-1.44 export QTDIR
+KDEDIR=/opt/kde export KDEDIR
+exec /opt/kde/bin/kdevelop
+<P>Save this file as e.g. kdevelop1 and set this file to executable with
+<P>chmod 755 kdevelop1
+<P>Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
+For developing KDE 2 applications with KDevelop 1.x you have to set the correct
+path in the KDevelop Setup even if you´re running KDevelop under KDE 2 !
+<P>
 <H3><A NAME="ss15.4">15.4 Usage Questions</A>
 </H3>
 
@@ -159,18 +177,18 @@ according *.moc.cpp file and rebuild the project.
 <P><B>Q:</B> Configure complains about not being able to compile a small KDE
 application. Examining config.log reveals that it can't find the library
 libXext.
-<B>A:</B> Install the package xdevel
+<P><B>A:</B> Install the package xdevel
 <P><B>Q:</B> I´m developing an application where I need to set -D options to the preprocessor. If I add these
 in KDevelop to my project options, everything is ok, but when I distribute my package, the -D options set in
 KDevelop are not used. What do I have to do to make this work ?
-<B>A:</B> Edit the file configure.in in your toplevel source directory. Here, you have to enter somewhere at
+<P><B>A:</B> Edit the file configure.in in your toplevel source directory. Here, you have to enter somewhere at
 the beginning:
 <P>CXXFLAGS=$(CXXFLAGS) " -DYOURDEFINE"
 AC_SUBST(CXXFLAGS)
 <P>
 <P><B>Q:</B> I´m already running a KDE 2 snapshot and I want to use KDevelop under KDE 2. What is the best way
 to do this ?
-<B>A:</B> As KDevelop for KDE 2 is currently under development, you should consider using the current stable
+<P><B>A:</B> As KDevelop for KDE 2 is currently under development, you should consider using the current stable
 1.x release of KDevelop for production usage. Running KDevelop 1.x under KDE 2 can be done by creating a
 shell-script:
 <P>#/bin/bash
@@ -182,6 +200,33 @@ exec /opt/kde/bin/kdevelop
 <P>Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
 For developing KDE 2 applications with KDevelop 1.x you have to set the correct path in the KDevelop Setup
 even if you´re running KDevelop under KDE 2 !
+<P><B>Q:</B> I'm using a KDevelop 1.4 which is already KDE2 enabled. There is no dialog editor any more. How do I create my dialogs ?
+<P><B>A:</B> Since KDevelop 1.4 the QT designer is used for creating dialogs. But not only the tool has changed but also the way
+how dialogs are designed and used from within KDevelop. To create a new dialog choose new from the file dialog and create a new QT
+designer (*.ui) file. Now the designer is opened and you can develop your dialog. ATTENTION: most QT packages (*.deb,*.rpm) does
+not include support for KDE widgets. You need this to use e.g. KListView or other KDE widgets in your dialogs.  After creating
+the dialog, you inherit your dialog class from the newly created dialog.
+<P><B>Q:</B> I have downloaded the QT-2.2.x packages from ftp.kde.org and there are now KDE widgets available in the designer. How
+can I get them ? A: You have to recompile QT with ./configure -kde as additional option. Remember to set $KDEDIR and $QTDIR to the
+appropriate directories. After doing so you have an option KDE in the tools menue of the designer.
+<P><B>Q:</B> I use RedHat Linux with KDevelop and tried to recompile the QT library with -kde in order to use the designer with KDE
+widget support but  during configure it says that $KDEDIR does not contain a valid KDE installation ? A: RedHat uses a
+non-standard directory setting with KDE. The normal case would be that the libs are in $KDEDIR/lib, binaries in $KDEDIR/bin
+and includes in $KDEDIR/include. RedHat uses /usr as $KDEDIR but $KDEDIR/include/kde as directory for  header files. Therefore
+configure from QT fails to detect the correct directories. It searches dcopserver in the binaries folder and the header files in
+their folder. So if you choose $KDEDIR to be /usr, configure can't find the includes. A possible solution for this is to create a
+/usr/local/kde     directory and set symlinks to /usr/bin and /usr/include/kde in this "pseudo" kde dir. Then export
+KDEDIR=/usr/local/kde and do the ./configure -kde. After compiling QT you have the KDE entries in the tools menu of the QT
+designer.
+<P><B>Q:</B> Is there any HOWTO available on how to work with QT designer made dialogs ?
+<P><B>A:</B> Yes, there is a great tutorial on http://women.kde.org/docs/tut_kdevelop/
+<P><B>Q:</B> I have installed htdig but there is now htsearch available ?
+<P><B>A:</B> On e.g. RedHat systems the htsearch executable is placed in the /cgi-bin dir of apache. You can create symlinks in /usr/bin or simply add this path ro &nbsp;/.bashrc
+<P><B>Q:</B> I have htdig, htmerge and htsearch available but I get an error message thet the config file of htdig could not be
+found or is invalid ? A: Read README.htdig in the source directory tree and create a htdig.conf file. Then copy it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop setup menu.
+<P>
+<P>
+<P>
 <P>
 <P ALIGN="RIGHT">
 
