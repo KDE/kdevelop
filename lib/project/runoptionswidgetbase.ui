@@ -232,6 +232,12 @@
         <receiver>run_options_widget</receiver>
         <slot>removeVarClicked()</slot>
     </connection>
+    <connection>
+        <sender>browseMainButton</sender>
+        <signal>clicked()</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>browseMainProgram()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainprogram_edit</tabstop>

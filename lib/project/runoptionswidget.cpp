@@ -84,11 +84,15 @@ void RunOptionsWidget::removeVarClicked()
 
 void RunOptionsWidget::browseMainProgram()
 {
-  mainprogram_edit->setText(QFileDialog::getOpenFileName(m_projectDirectory,
-                                                         i18n("All files (*)"),
-                                                         0,
-                                                         i18n("Browse main program"),
-                                                         i18n("Select main program executable.")));
+  QString path = QFileDialog::getOpenFileName(m_projectDirectory,
+                               i18n("All files (*)"),
+                               0,
+                               i18n("Browse main program"),
+                               i18n("Select main program executable."));
+
+  if (path.find(m_projectDirectory)==0)
+    path.remove(0,m_projectDirectory.length()+1);
+  mainprogram_edit->setText(path);
 }
 
 #include "runoptionswidget.moc"
