@@ -51,3 +51,5 @@ DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kpar
 DOXYGEN_PROJECTNAME = KDevelop Generic Shell
 DOXYGEN_DOCDIRPREFIX = kdevshell
 include ../Doxyfile.am
+profilesdatadir = $(kde_datadir)/kdevelop/profiles
+profilesdata_DATA = projectprofiles

@@ -206,3 +206,39 @@ KURL::List ProfileEngine::resourcesRecursive(const QString &profileName, const Q
     resources += listingEx.resourceList;
     return resources;
 }
+
+void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1, 
+    const QString &profile2, QStringList &unload, KTrader::OfferList &load)
+{
+    KTrader::OfferList offers1 = offers(profile1, offerType);
+    KTrader::OfferList offers2 = offers(profile2, offerType);
+    
+    QStringList offers1List;
+    for (KTrader::OfferList::const_iterator it = offers1.constBegin();
+        it != offers1.constEnd(); ++it)
+        offers1List.append((*it)->name());
+    QMap<QString, KService::Ptr> offers2List;
+    for (KTrader::OfferList::const_iterator it = offers2.constBegin();
+        it != offers2.constEnd(); ++it)
+        offers2List[(*it)->name()] = *it;
+    
+//    kdDebug() << "OLD PROFILE: " << offers1List << endl;
+//    kdDebug() << "NEW PROFILE: " << offers2List << endl;
+    
+    for (QStringList::const_iterator it = offers1List.constBegin();
+        it != offers1List.constEnd(); ++it)
+    {
+//         kdDebug() << "checking: " << *it << endl;
+        if (offers2List.contains(*it))
+        {
+//             kdDebug() << "    keep" << endl;
+            offers2.remove(offers2List[*it]);
+        }
+        else
+        {
+//             kdDebug() << "    unload" << endl;
+            unload.append(*it);
+        }        
+    }
+    load = offers2;
+}

@@ -301,7 +301,10 @@ void ProjectManager::slotLoadProject( )
   }
   
   loadVCSSupport();
-
+ 
+  TopLevel::getInstance()->statusBar()->message( i18n("Changing plugin profile...") );
+  m_oldProfileName = PluginController::getInstance()->changeProfile(m_info->m_profileName);
+  
   TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
   loadLocalParts();
 
@@ -350,6 +353,7 @@ bool ProjectManager::closeProject( bool exiting )
 //  PluginController::getInstance()->unloadAllLocalParts();
   unloadVCSSupport();
   PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
+  PluginController::getInstance()->changeProfile(m_oldProfileName);
   unloadLanguageSupport();
   unloadProjectPart();
 
@@ -481,6 +485,14 @@ void ProjectManager::getGeneralInfo()
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
   getAttributeList(generalEl, "keywords", "keyword", m_info->m_keywords);
   getAttributeList(generalEl, "secondaryLanguages", "language", m_info->m_secondaryLanguages);
+
+  //FIXME: adymo: workaround for those project templates without "profile" element
+//  m_info->m_profileName = getAttribute(generalEl, "profile");
+  QDomElement el = generalEl.namedItem("profile").toElement();
+  if (el.isNull())
+      m_info->m_profileName = profileByAttributes(m_info->m_language, m_info->m_keywords);
+  else
+      m_info->m_profileName = el.firstChild().toText().data();
 }
 
 bool ProjectManager::loadProjectPart()
@@ -676,6 +688,36 @@ void ProjectManager::unloadVCSSupport()
     PluginController::getInstance()->removeAndForgetPart(m_vcsName, m_vcsPlugin);
     delete m_vcsPlugin;
   }
+}
+
+QString ProjectManager::profileByAttributes(const QString &language, const QStringList &keywords)
+{
+    KConfig config(locate("data", "kdevelop/profiles/projectprofiles"));
+    config.setGroup(language);
+    
+    QStringList profileKeywords = QStringList::split("/", "Empty");
+    if (config.hasKey("Keywords"))
+        profileKeywords = config.readListEntry("Keywords");
+    
+    int idx = 0;
+    for (QStringList::const_iterator it = profileKeywords.constBegin();
+        it != profileKeywords.constEnd(); ++it)
+    {
+        if (keywords.contains(*it))
+        {
+            idx = profileKeywords.findIndex(*it);
+            break;
+        }
+    }
+    
+    QStringList profiles;
+    if (config.hasKey("Profiles"))
+    {
+        profiles = config.readListEntry("Profiles");
+        kdDebug() << "IDX: " << idx << "    PROFILE: " << profiles[idx] << endl;
+        return profiles[idx];
+    }
+    return "KDevelop";
 }
 
 #include "projectmanager.moc"

@@ -175,6 +175,7 @@ void PartSelectWidget::saveGlobalConfig()
 
 void PartSelectWidget::readProjectConfig()
 {
+    //FIXME: include not only project plugins but also global ones here
     QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
 
     KTrader::OfferList localOffers = PluginController::getInstance()->engine().offers(

@@ -75,6 +75,16 @@ public:
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
+    
+    /**Gets the difference between @p profile1 and @p profile2.
+    Difference is calculated as two lists of plugins to be unloaded and loaded
+    in order to switch from @p profile1 to @p profile2.
+    @param unload Will be filled with a list of plugins to unload.
+    @param load Will be filled with a list of plugins to load.
+    @note Resulting lists are not cleared. Pass only clean lists in the
+    common case.*/
+    void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2, 
+        QStringList &unload, KTrader::OfferList &load);
 
     Profile *rootProfile() const { return m_rootProfile; }
     

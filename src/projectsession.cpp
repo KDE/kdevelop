@@ -230,10 +230,8 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
 //---------------------------------------------------------------------------
 bool ProjectSession::saveToFile( const QString & sessionFileName, const QValueList< KDevPlugin * > plugins )
 {
-
   QString section, keyword;
   QDomElement session = domdoc.documentElement();
-
 
   int nDocs = 0;
   QString docIdStr;

@@ -103,5 +103,5 @@ QString KDevIDEExtension::xmlFile()
 
 QString KDevIDEExtension::defaultProfile()
 {
-    return "KDevelop";
+    return "IDE";
 }

@@ -59,6 +59,9 @@ public:
   virtual KURL::List profileResources(const QString &nameFilter);
   virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
   
+  //returns the name of an old profile that was unloaded
+  QString changeProfile(const QString &newProfile);
+  
 signals:
   void loadingPlugin(const QString &plugin);
 
@@ -69,6 +72,8 @@ private slots:
   void slotConfigWidget( KDialogBase* );
   void loadGlobalPlugins();
   void loadCorePlugins();
+  void loadGlobalPlugins(KTrader::OfferList globalOffers);
+  void loadCorePlugins(KTrader::OfferList coreOffers);
 //  void unloadGlobalPlugins();
   void unloadPlugins();
   

@@ -115,30 +115,17 @@ PluginController::~PluginController()
 void PluginController::loadCorePlugins()
 {
   KTrader::OfferList coreOffers = m_engine.offers(m_profile, ProfileEngine::Core);
-  for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
-  {
-    QString name = (*it)->name();
-
-    // Check if it is already loaded
-    if( m_parts[ name ] != 0 )
-      continue;
-
-    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
-
-    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
-
-    KDevPlugin *plugin = loadPlugin( *it );
-    if ( plugin )
-    {
-        m_parts.insert( name, plugin );
-        integratePart( plugin );
-    }
-  }
+  loadCorePlugins(coreOffers);
 }
 
 void PluginController::loadGlobalPlugins()
 {
   KTrader::OfferList globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
+  loadGlobalPlugins(globalOffers);
+}
+
+void PluginController::loadGlobalPlugins(KTrader::OfferList globalOffers)
+{
 //  KConfig config( m_profilePath );
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
@@ -167,6 +154,29 @@ void PluginController::loadGlobalPlugins()
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin ) {
+        m_parts.insert( name, plugin );
+        integratePart( plugin );
+    }
+  }
+}
+
+void PluginController::loadCorePlugins(KTrader::OfferList coreOffers)
+{
+  for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
+  {
+    QString name = (*it)->name();
+
+    // Check if it is already loaded
+    if( m_parts[ name ] != 0 )
+      continue;
+
+    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
+
+    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
+
+    KDevPlugin *plugin = loadPlugin( *it );
+    if ( plugin )
+    {
         m_parts.insert( name, plugin );
         integratePart( plugin );
     }
@@ -229,7 +239,8 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 
 bool PluginController::checkNewService( ProjectInfo * projectInfo, const KService::Ptr &service )
 {
-  QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
+    //FIXME: adymo: do we need this checkNewService?
+/*  QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
   QStringList langlist = var.asStringList();
 
   // empty means it supports all languages
@@ -250,7 +261,7 @@ bool PluginController::checkNewService( ProjectInfo * projectInfo, const KServic
       return false;
     }
   }
-
+*/
   projectInfo->m_loadParts << service->name();
   return true;
 }
@@ -291,10 +302,12 @@ QStringList PluginController::argumentsFromService( const KService::Ptr &service
 
 void PluginController::slotConfigWidget( KDialogBase* dlg )
 {
-  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
+    //FIXME: adymo: i disabled this because plugin configuration should be project-wide
+    // in profile-enabled shell
+/*  QVBox *vbox = dlg->addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-  connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );
+  connect( w, SIGNAL(accepted()), this, SLOT(loadGlobalPlugins()) );*/
 }
 
 void PluginController::integratePart(KXMLGUIClient *part)
@@ -356,6 +369,25 @@ KURL::List PluginController::profileResources(const QString &nameFilter)
 KURL::List PluginController::profileResourcesRecursive(const QString &nameFilter)
 {
     return m_engine.resourcesRecursive(currentProfile(), nameFilter);
+}
+
+QString PluginController::changeProfile(const QString &newProfile)
+{
+    kdDebug() << "CHANGING PROFILE: from " << currentProfile() << " to " << newProfile << endl;
+    QStringList unload;
+    KTrader::OfferList coreLoad;
+    KTrader::OfferList globalLoad;
+    m_engine.diffProfiles(ProfileEngine::Core, currentProfile(), newProfile, unload, coreLoad);
+    m_engine.diffProfiles(ProfileEngine::Global, currentProfile(), newProfile, unload, globalLoad);
+
+    QString oldProfile = m_profile;
+    m_profile = newProfile;
+        
+    unloadPlugins(unload);
+    loadCorePlugins(coreLoad);
+    loadGlobalPlugins(globalLoad);
+        
+    return oldProfile;
 }
 
 
