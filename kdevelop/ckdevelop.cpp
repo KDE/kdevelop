@@ -742,6 +742,11 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
     m_bToggleToolViewsIsPending = false;
     toolBar()->setButton(type, false);
   }
+
+  QWidget* pCurView = activeWindow();
+  if (pCurView) {
+    pCurView->setFocus();
+  }
 }
 
 void CKDevelop::slotViewTStdToolbar(){
