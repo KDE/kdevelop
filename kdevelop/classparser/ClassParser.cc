@@ -23,6 +23,15 @@
 #include <kapp.h>
 #include "ClassParser.h"
 
+/** Line where a comment starts. */
+extern int comment_start;
+
+/** Line where a comment ends. */
+extern int comment_end;
+
+/** Last parsed comment. */
+extern char comment[2048];
+
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
 
 enum
@@ -86,6 +95,27 @@ void CClassParser::emptyStack()
 {
   while( !lexemStack.isEmpty() )
     delete lexemStack.pop();
+}
+
+/*------------------------------------ CClassParser::commentInRange()
+ * commentInRange()
+ *   Tells if the last parsed comment is in range to be a comment
+ *   for the current parsed item.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+bool CClassParser::commentInRange( CParsedItem *aItem )
+{
+  assert( aItem != NULL );
+
+  int range;
+
+  range = (aItem->declaredOnLine - ( comment_end - 1 ) );
+
+  return ( range > 0 && range <=2 );
 }
 
 /*---------------------------------- CClassParser::skipThrowStatement()
@@ -199,6 +229,9 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   if( lexem == ID )
     aStruct->setName( getText() );
   
+  if( commentInRange( aStruct ) )
+    aStruct->setComment( comment );
+
   if( aStruct != NULL && !aStruct->name.isEmpty() )
     aContainer->addStruct( aStruct );
 }
@@ -422,7 +455,7 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
   }
 
   anAttr->setDeclaredInFile( currentFile );
-  anAttr->setDeclaredOnLine( getLineno() );
+  anAttr->setDeclaredOnLine( declStart );
   anAttr->setExport( declaredScope );
 }
 
@@ -460,6 +493,10 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
     anAttr->setName( "" );
   else // Set the end of this variable declaration.
     anAttr->setDeclarationEndsOnLine( getLineno() );
+
+  // Set the comment if in range.
+  if( commentInRange( anAttr ) )
+    anAttr->setComment( comment );
 }
 
 /*----------------------------- CClassParser::fillInMultipleVariable()
@@ -699,8 +736,8 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
     parseFunctionArgs( aMethod );
 
   // Set some attributes of the parsed method.
-  aMethod->setDefinedOnLine( getLineno() );
-  aMethod->setDeclaredOnLine( getLineno() );
+  aMethod->setDefinedOnLine( declStart );
+  aMethod->setDeclaredOnLine( declStart );
   aMethod->setDefinedInFile( currentFile );
   aMethod->setDeclaredInFile( currentFile );
   aMethod->setExport( declaredScope );
@@ -731,6 +768,10 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   // Set end of declaration and definition.
   aMethod->setDefinitionEndsOnLine( getLineno() );
   aMethod->setDeclarationEndsOnLine( getLineno() );  
+
+  // Set the comment if in range.
+  if( commentInRange( aMethod ) )
+    aMethod->setComment( comment );
 }
 
 /*---------------------------- CClassParser::parseMethodDeclaration()
@@ -893,8 +934,6 @@ int CClassParser::checkClassDecl()
   int retVal = CP_IS_OTHER;
   bool exit = false;
   CParsedLexem *aLexem;
-
-  declStart = getLineno();
 
   while( !exit )
   {
@@ -1204,6 +1243,10 @@ CParsedClass *CClassParser::parseClass()
 
   if( aClass != NULL )
   {
+    // Set the comment if in range.
+    if( commentInRange( aClass ) )
+      aClass->setComment( comment );
+
     declaredScope = PIE_GLOBAL;
 
     // Iterate until we find the end of the class.
@@ -1211,11 +1254,13 @@ CParsedClass *CClassParser::parseClass()
     {
       getNextLexem();
 
+      declStart = getLineno();
+
       if( isGenericLexem() )
         parseGenericLexem( aClass );
       else
         exit = parseClassLexem( aClass );
-    }
+    }    
   }
 
   return aClass;
@@ -1395,6 +1440,7 @@ void CClassParser::parseTopLevelLexem()
   {
     case CPCLASS:
       aClass = parseClass();
+      
       if( aClass != NULL )
       {
         if( aClass->isSubClass() )
@@ -1453,6 +1499,8 @@ void CClassParser::parseToplevel()
   // Loop until we're out of lexem.
   while( lexem != 0 )
   {
+    declStart = getLineno();
+
     if( isGenericLexem() )
       parseGenericLexem( &store.globalContainer );
     else
@@ -1478,6 +1526,8 @@ void CClassParser::reset()
   declaredScope = PIE_GLOBAL;
   isStatic=false;
   declStart = -1;
+  comment_start = -1;
+  comment_end = -1;
 }
 
 /*----------------------------------------- CClassParser::parseFile()

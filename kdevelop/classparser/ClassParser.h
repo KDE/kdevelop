@@ -124,6 +124,10 @@ private: // Private methods
   /** Remove all elements from the stack. */
   void emptyStack();
 
+  /** Tells if the last parsed comment is in range to be a comment
+   * for the current parsed item. */
+  bool commentInRange( CParsedItem *aItem );
+
   /** Parse all structure declarations.
    * @param aStruct The struct that holds the declarations.
    */
