@@ -45,3 +45,4 @@ void ConfigureOptionsWidget::accept()
     QDir dir(fi.dir());
     dir.mkdir(fi.fileName());
 }
+#include "configureoptionswidget.moc"

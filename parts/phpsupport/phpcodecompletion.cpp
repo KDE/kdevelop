@@ -248,3 +248,4 @@ QValueList<KEditor::CompletionEntry> PHPCodeCompletion::getClassMethodsAndVariab
   } while (pClass != 0);
   return list;
 }
+#include "phpcodecompletion.moc"

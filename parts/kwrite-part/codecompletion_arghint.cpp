@@ -323,3 +323,4 @@ QString KDevArgHint::markCurArg()
 	return strFuncText;
 }
 
+#include "codecompletion_arghint.moc"

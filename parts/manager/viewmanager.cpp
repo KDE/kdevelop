@@ -63,3 +63,4 @@ void ViewManager::slotDocumentClose()
   closeView (view);
   dm->deleteDoc(doc);
 }
+#include "viewmanager.moc"

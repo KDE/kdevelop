@@ -88,3 +88,4 @@ void PHPErrorView::parse(QString& phpOutput){
     }
   }
 }
+#include "phperrorview.moc"

@@ -94,3 +94,4 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 	}
 }
 
+#include "cppcodecompletion.moc"

@@ -488,3 +488,4 @@ void InputStrList::browseDir()
         le->setText(dirName);
     }
 }
+#include "input.moc"

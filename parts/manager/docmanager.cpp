@@ -43,3 +43,4 @@ bool DocManager::deleteDoc (KTextEditor::Document *doc)
   docs.remove (doc);
   return true;
 }
+#include "docmanager.moc"
