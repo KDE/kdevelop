@@ -70,7 +70,6 @@ private slots:
     void slotQuit();
     void slotProjectOpen();
     void slotProjectClose();
-    void slotProjectImport();
     void slotBufferSelected();
     void slotDocumentationBufferSelected(const KURL &url);
     void slotProjectOptions();

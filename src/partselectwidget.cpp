@@ -133,6 +133,10 @@ void PartSelectWidget::saveProjectConfig()
     
     QStringList ignoreparts;
     QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
+    if (ignorepartsEl.isNull()) {
+        ignorepartsEl = m_projectDom.createElement("ignoreparts");
+        generalEl.appendChild(ignorepartsEl);
+    }
 
     // Clear old entries
     while (!ignorepartsEl.firstChild().isNull())
@@ -151,6 +155,7 @@ void PartSelectWidget::saveProjectConfig()
             kdDebug(9000) << "Appending " << (*it2) << endl;
         }
     }
+    kdDebug(9000) << "xml:" << m_projectDom.toString() << endl;
 }
 
 

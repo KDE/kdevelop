@@ -61,7 +61,15 @@ void FileViewConfigWidget::storeConfig()
     QDomDocument projectDom = *m_part->document();
     QDomElement docEl = projectDom.documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
+    if (fileviewEl.isNull()) {
+        fileviewEl = projectDom.createElement("kdevfileview");
+        docEl.appendChild(fileviewEl);
+    }
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
+    if (groupsEl.isNull()) {
+        groupsEl = projectDom.createElement("groups");
+        fileviewEl.appendChild(groupsEl);
+    }
 
     // Clear old entries
     while (!groupsEl.firstChild().isNull())

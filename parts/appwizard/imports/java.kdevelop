@@ -1,0 +1,10 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+ <general>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>Java</primarylanguage>
+  <ignoreparts>
+   <part>KDevDebugger</part>
+  </ignoreparts>
+ </general>
+</kdevelop>

@@ -56,6 +56,8 @@ KInstance *AppWizardFactory::instance()
         s_instance = new KInstance("kdevappwizard");
         KStandardDirs *dirs = s_instance->dirs();
         dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
+        dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");
+        dirs->addResourceType("appimportfiles", KStandardDirs::kde_default("data") + "kdevappwizard/importfiles/");
     }
 
     return s_instance;

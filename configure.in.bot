@@ -1,0 +1,7 @@
+if test -z "$DOT_FOUND"; then
+  echo ""
+  echo "You're missing the dot program."
+  echo "It is still possible to run and use KDevelop without it, but you will "
+  echo "not be able to use the new graphical classbrowser. In order to get "
+  echo "a dot copy, go to www.graphviz.org and download the graphviz package."
+fi

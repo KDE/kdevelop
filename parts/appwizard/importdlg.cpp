@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcombobox.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qlabel.h>
@@ -16,14 +17,14 @@
 #include <qlineedit.h>
 #include <qtextstream.h>
 #include <kbuttonbox.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kservice.h>
-#include <ktrader.h>
+#include <kstddirs.h>
 
-#include "servicecombobox.h"
+#include "appwizardfactory.h"
 #include "importdlg.h"
 
 
@@ -33,12 +34,6 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
     setCaption(i18n("Import directory"));
 
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
-
-    QLabel *info_label = new QLabel(i18n("<qt>This dialog allows you to create a project file in an "
-                                         "existing directory. Using a project file has the advantage "
-                                         "that you can use project management functionality and you "
-                                         "can configure which plugins you want to use for that project</qt>"), this);
-    layout->addWidget(info_label);
 
     QLabel *name_label = new QLabel(i18n("Project &name:"), this);
     
@@ -57,24 +52,12 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
     dir_button->setFixedSize(30, 25);
     connect( dir_button, SIGNAL(clicked()), this, SLOT(dirButtonClicked()) );
     
-    QLabel *project_label = new QLabel(i18n("&Project management:"), this);
+    QLabel *project_label = new QLabel(i18n("&Project type:"), this);
 
-    KTrader::OfferList projectOffers =
-        KTrader::self()->query("KDevelop/Project", QString::null);
-    project_combo = new ServiceComboBox(projectOffers, this);
+    project_combo = new QComboBox(this);
     project_label->setBuddy(project_combo);
 
-    QLabel *language_label = new QLabel(i18n("Primary programming &language:"), this);
-
-    language_combo = new QComboBox(this);
-    language_label->setBuddy(language_combo);
-    KTrader::OfferList languageOffers =
-        KTrader::self()->query("KDevelop/LanguageSupport", QString::null);
-    QValueList<KService::Ptr>::ConstIterator it;
-    for (it = languageOffers.begin(); it != languageOffers.end(); ++it)
-        language_combo->insertItem((*it)->property("X-KDevelop-Language").toString());
-
-    QGridLayout *grid = new QGridLayout(2, 2);
+    QGridLayout *grid = new QGridLayout(3, 2);
     layout->addLayout(grid);
 
     grid->addWidget(name_label, 0, 0);
@@ -83,9 +66,7 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
     grid->addWidget(dir_edit, 1, 1);
     grid->addWidget(dir_button, 1, 2);
     grid->addWidget(project_label, 2, 0);
-    grid->addMultiCellWidget(project_combo, 2, 2, 1, 2);
-    grid->addWidget(language_label, 3, 0);
-    grid->addMultiCellWidget(language_combo, 3, 3, 1, 2);
+    grid->addWidget(project_combo, 2, 1);
 
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
@@ -101,6 +82,15 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
 
     connect(ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
     connect(cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
+
+    KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
+    importNames = dirs->findAllResources("appimports", QString::null, false, true);
+    QStringList::ConstIterator it;
+    for (it = importNames.begin(); it != importNames.end(); ++it) {
+        KConfig config(KGlobal::dirs()->findResource("appimports", *it));
+        config.setGroup("General");
+        project_combo->insertItem(config.readEntry("Comment"));
+    }
 }
 
 
@@ -110,14 +100,6 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    QString project = project_combo->currentText();
-    if (project.isEmpty()) {
-        KMessageBox::sorry(this, i18n("You have to choose a projectmanagement component."));
-        return;
-    }
-
-    QString language = language_combo->currentText();
-    
     QDir dir(dir_edit->text());
     if (!dir.exists()) {
         KMessageBox::sorry(this, i18n("You have to choose a directory."));
@@ -135,20 +117,34 @@ void ImportDialog::accept()
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
             return;
         }
+
+    QFileInfo finfo(importNames[project_combo->currentItem()]);
+    QDir importdir(finfo.dir());
+    importdir.cdUp();
+    QFile src(importdir.filePath("importfiles/" + finfo.fileName() + ".kdevelop"));
+    kdDebug(9010) << "Import template " << src.name() << endl;
+    if (!src.open(IO_ReadOnly)) {
+        KMessageBox::sorry(this, i18n("Can not open project template."));
+        return;
+    }
     
-    QFile f(dir.filePath(projectName + ".kdevelop"));
-    if (!f.open(IO_WriteOnly)) {
+    QFile dest(dir.filePath(projectName + ".kdevelop"));
+    if (!dest.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Can not write the project file."));
         return;
     }
 
-    QTextStream stream(&f);
-    stream << "<!DOCTYPE kdevelop>\n<kdevelop>\n  <general>\n"
-           << "    <projectmanagement>" << project << "</projectmanagement>\n";
-    if (!language.isEmpty())
-        stream << "    <primarylanguage>" << language << "</primarylanguage>\n";
-    stream << "  </general>\n</kdevelop>\n";
-    f.close();
+    QTextStream srcstream(&src);
+    QTextStream deststream(&dest);
+    
+    while (!srcstream.atEnd()) {
+        QString line = srcstream.readLine();
+        line.replace(QRegExp("$APPNAMELC$"), projectName);
+        deststream << line << endl;
+    }
+
+    dest.close();
+    src.close();
     
     QDialog::accept();
 }

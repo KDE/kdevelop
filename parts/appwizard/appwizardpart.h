@@ -28,6 +28,7 @@ public:
 
 private slots:
     void slotNewProject();
+    void slotImportProject();
     
 private:
     AppWizardDialog *m_dialog;

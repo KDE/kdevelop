@@ -1,13 +1,20 @@
+2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Made some dom writing code more robust by
+	  creating non-existent nodes in the tree
+	* Rewrote the import dialog to allow the choice between
+	  a number of import templates
+
 2001-05-31 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
-    * switched to the new editor interface concept
+	* switched to the new editor interface concept
 
 2001-05-31 Sandy Meier <smeier@kdevelop.org>
 	
 	* added initial php webserver/shell preview and config dialog (phpsupport)
 	* added errormessage parser/view (phpsupport) 
 	
-2001-05-31  Richard Dale <duke@tipitina.demon.co.uk
+2001-05-31  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Added a Java JNI based plugin api, and a corresponding
 	  project template for building a plugin. Java parts are

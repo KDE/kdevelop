@@ -32,7 +32,6 @@
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
     <Action name="project_close"/>
-    <Action name="project_import"/>
     <DefineGroup name="project"/>
     <Action name="project_options"/>
     <Merge/>

@@ -1,0 +1,16 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+ <general>
+  <projectmanagement>KDevScriptProject</projectmanagement>
+  <primarylanguage>Python</primarylanguage>
+  <ignoreparts>
+   <part>KDevDebugger</part>
+   <part>KDevJavaDebugger</part>
+  </ignoreparts>
+ </general>
+ <kdevscriptproject>
+  <general>
+   <mainprogram>$APPNAMELC.py</mainprogram>
+  </general>
+ </kdevscriptproject>
+</kdevelop>

@@ -14,7 +14,6 @@
 
 #include <qdialog.h>
 
-class ServiceComboBox;
 class QComboBox;
 class QLineEdit;
 
@@ -34,11 +33,10 @@ private slots:
     void dirButtonClicked();
     
 private:
+    QStringList importNames;
     QLineEdit *name_edit;
     QLineEdit *dir_edit;
-    ServiceComboBox *project_combo;
-    QComboBox *language_combo;
-    //    ServiceComboBox *language_combo;
+    QComboBox *project_combo;
 };
 
 #endif

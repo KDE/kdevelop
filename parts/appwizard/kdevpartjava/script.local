@@ -1,4 +1,4 @@
-#!perl -I/opt/kde2/share/apps/gideon/template-common
+#!perl -I/home/bernd/kde2/share/apps/kdevappwizard/template-common
 
 use gideon;
 

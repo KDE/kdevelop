@@ -16,6 +16,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
+#include "importdlg.h"
 #include "appwizarddlg.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -27,10 +28,9 @@ AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
     setInstance(AppWizardFactory::instance());
     setXMLFile("kdevappwizard.rc");
 
-#if 0
     KAction *action;
     
-    action = new KAction( i18n("&New project..."), "wizard", 0,
+    action = new KAction( i18n("&New project..."), "window_new", 0,
                           this, SLOT(slotNewProject()),
                           actionCollection(), "project_new" );
     action->setStatusText( i18n("Generates a new project from a template") );
@@ -38,12 +38,12 @@ AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
-#else
-    (void) new KAction( i18n("&New project..."), "window_new",0,
-                        this, SLOT(slotNewProject()),
-                        actionCollection(), "project_new" );
-#endif
 
+    action = new KAction( i18n("&Import existing directory..."),"wizard", 0,
+                          this, SLOT(slotImportProject()),
+                          actionCollection(), "project_import" );
+    action->setStatusText( i18n("Creates a project file for a given directory.") );
+    
     m_dialog = 0;
 }
 
@@ -61,6 +61,13 @@ void AppWizardPart::slotNewProject()
         m_dialog = new AppWizardDialog(this, 0, "app wizard");
 
     m_dialog->show();
+}
+
+
+void AppWizardPart::slotImportProject()
+{
+    ImportDialog dlg(0, "import dialog");
+    dlg.exec();
 }
 
 #include "appwizardpart.moc"

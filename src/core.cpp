@@ -48,7 +48,6 @@
 #include "keditor/debug_iface.h"
 
 #include "filenameedit.h"
-#include "importdlg.h"
 #include "partselectwidget.h"
 #include "settingswidget.h"
 #include "toplevel.h"
@@ -156,11 +155,6 @@ void Core::initActions()
                           actionCollection(), "project_close" );
     action->setEnabled(false);
     action->setStatusText( i18n("Closes the current project") );
-
-    action = new KAction( i18n("&Import existing directory..."),"wizard", 0,
-                          this, SLOT(slotProjectImport()),
-                          actionCollection(), "project_import" );
-    action->setStatusText( i18n("Creates a project file for a given directory.") );
 
     action = new KAction( i18n("Project &Options..."), 0,
                           this, SLOT(slotProjectOptions()),
@@ -946,14 +940,6 @@ void Core::slotProjectOpen()
 void Core::slotProjectClose()
 {
     closeProject();
-}
-
-
-void Core::slotProjectImport()
-{
-    ImportDialog *dlg = new ImportDialog(win, "import dialog");
-    dlg->exec();
-    delete dlg;
 }
 
 

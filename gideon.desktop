@@ -2,7 +2,7 @@
 BinaryPattern=kdevelop;
 Type=Application
 Exec=gideon -caption "%c" %i %m %u
-MimeType=application/x-kdevelop-project;
+MimeType=application/x-kdevelop;
 Icon=kdevelop
 DocPath=kdevelop/index.html
 Terminal=0

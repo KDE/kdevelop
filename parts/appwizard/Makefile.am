@@ -1,6 +1,6 @@
 # Here resides the app wizard part.
 
-SUBDIRS = common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
+SUBDIRS = imports common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
 	  kdevpart pythonhello phphello chello cpphello gnomeapp kdevpartjava
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
@@ -12,9 +12,10 @@ libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevappwizard_la_SOURCES = appwizardfactory.cpp \
 			      appwizardpart.cpp \
 			      appwizarddlg.cpp \
-				filepropspagebase.ui \
-				filepropspage.cpp \
-				appwizarddlgbase.ui
+			      importdlg.cpp \
+			      filepropspagebase.ui \
+			      filepropspage.cpp \
+			      appwizarddlgbase.ui
 
 METASOURCES = AUTO
 
