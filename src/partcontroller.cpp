@@ -46,6 +46,13 @@
 
 #include "partcontroller.h"
 
+#ifdef KDE_MAKE_VERSION
+# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+#  define OLD__KDE
+# endif
+#else
+# define OLD__KDE
+#endif
 
 PartController *PartController::s_instance = 0;
 
@@ -196,7 +203,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
   // Make sure the URL exists
   // KDE 3.0 compatibility hack: use KIO::NetAccess for everything >= KDE 3.1
-#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+#ifdef OLD__KDE
   if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
 #else
   if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
@@ -208,7 +215,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
       url = findURLInProject(url);
 
       localUrl = url.url().startsWith("file:/");
-#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+#ifdef OLD__KDE
       if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
 #else
       if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
@@ -219,7 +226,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
     }
 
     localUrl = url.url().startsWith("file:/");
-#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+#ifdef OLD__KDE
     if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
 #else
     if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
