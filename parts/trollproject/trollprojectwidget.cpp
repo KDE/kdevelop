@@ -1055,7 +1055,7 @@ void TrollProjectWidget::slotNewFile()
     if (createFileSupport) 
     {
         KDevCreateFile::CreatedFile crFile =
-            createFileSupport->createNewFile(QString::null,  m_shownSubproject->path.mid(projectDirectory().length()));
+            createFileSupport->createNewFile(QString::null, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
     } else {
         bool ok = FALSE;
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1349,6 +1349,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 }
                 
                 DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
+                
+                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
+                    "subclass","sourcefile", "uifile");
             }
         }
     }
