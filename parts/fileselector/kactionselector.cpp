@@ -286,7 +286,7 @@ void KActionSelector::setButtonIconSize( ButtonIconSize size )
   loadIcons();
 }
 
-KActionSelector::InsertionPolicy KActionSelector::availableInsertionPolicy()
+KActionSelector::InsertionPolicy KActionSelector::availableInsertionPolicy() const
 {
   return d->availableInsertionPolicy;
 }
@@ -296,7 +296,7 @@ void KActionSelector::setAvailableInsertionPolicy( InsertionPolicy p )
   d->availableInsertionPolicy = p;
 }
 
-KActionSelector::InsertionPolicy KActionSelector::selectedInsertionPolicy()
+KActionSelector::InsertionPolicy KActionSelector::selectedInsertionPolicy() const
 {
   return d->selectedInsertionPolicy;
 }
@@ -306,7 +306,7 @@ void KActionSelector::setSelectedInsertionPolicy( InsertionPolicy p )
   d->selectedInsertionPolicy = p;
 }
 
-bool KActionSelector::showUpDownButtons()
+bool KActionSelector::showUpDownButtons() const
 {
   return d->showUpDownButtons;
 }

@@ -229,7 +229,7 @@ public:
     The default policy for the available listbox is Sorted.
     See also InsertionPolicy, setAvailableInsertionPolicy().
   */
-  InsertionPolicy availableInsertionPolicy();
+  InsertionPolicy availableInsertionPolicy() const;
   
   /**
     Sets the insertion policy for the available listbox.
@@ -242,7 +242,7 @@ public:
     The default policy for the selected listbox is BelowCurrent.
     See also InsertionPolicy, setSelectedInsertionPolicy().
   */
-  InsertionPolicy selectedInsertionPolicy();
+  InsertionPolicy selectedInsertionPolicy() const;
   
   /**
     Sets the insertion policy for the selected listbox.
@@ -253,7 +253,7 @@ public:
   /**
     @return wheather the Up and Down buttons should be displayed.
   */
-  bool showUpDownButtons();
+  bool showUpDownButtons() const;
   
   /**
     Sets wheather the Up and Down buttons should be displayed
