@@ -512,12 +512,16 @@ QList<CParsedClass> *CClassStore::getSortedClassList()
   CParsedClass *aClass;
 
   // Remove all non-global classes.
-  for( aClass = list->first();
-       aClass != NULL;
-       aClass = list->next() )
+  aClass = list->first();
+  while (aClass != NULL)
   {
     if( !aClass->declaredInScope.isEmpty() )
+    {
       list->remove();
+      aClass = list->current();
+    }
+    else
+      aClass = list->next();
   }
 
   return list;
