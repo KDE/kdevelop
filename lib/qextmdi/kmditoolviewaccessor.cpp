@@ -60,6 +60,9 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 			d->widgetContainer->setToolTipString(tabToolTip);
 		}
 	}
+	if (mdiMainFrm->m_mdiGUIClient)
+		mdiMainFrm->m_mdiGUIClient->addToolView(this);
+
 	d->widget->installEventFilter(this);
 }
 
