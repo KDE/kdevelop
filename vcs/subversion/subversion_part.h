@@ -57,9 +57,11 @@ private slots:
 		void slotActionUpdate();
 		void slotActionCommit();
 		void slotActionAdd();
+		void slotActionDel();
 		void slotUpdate();
 		void slotCommit();
 		void slotAdd();
+		void slotDel();
 		void slotProjectClosed();
 		void slotProjectOpened();
 		void projectConfigWidget( KDialogBase *dlg );

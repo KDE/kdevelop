@@ -29,7 +29,6 @@
 #include <klineedit.h>
 #include <kio/job.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <kmainwindow.h>
 
 using namespace KIO;
@@ -102,6 +101,25 @@ void subversionCore::add( const KURL::List& list ) {
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 6;
+		s << cmd << *it;
+		SimpleJob * job = KIO::special(servURL, parms, true);
+		job->setWindow( m_part->mainWindow()->main() );
+		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
+	}
+}
+
+void subversionCore::del( const KURL::List& list ) {
+	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( ! servURL.protocol().startsWith( "svn" ) ) {
+		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		kdDebug() << "deleting : " << (*it).prettyURL() << endl;
+		QByteArray parms;
+		QDataStream s( parms, IO_WriteOnly );
+		int cmd = 7;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
 		job->setWindow( m_part->mainWindow()->main() );
