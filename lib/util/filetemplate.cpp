@@ -58,16 +58,18 @@ QString FileTemplate::read(KDevPlugin *part, const QString &name)
 }
 
 
-void FileTemplate::copy(KDevPlugin *part, const QString &name,
+bool FileTemplate::copy(KDevPlugin *part, const QString &name,
                         const QString &dest)
 {
     QString text = read(part, name);
 
     QFile f(dest);
     if (!f.open(IO_WriteOnly))
-        return;
+        return false;
 
     QTextStream stream(&f);
     stream << text;
     f.close();
+
+    return true;
 }

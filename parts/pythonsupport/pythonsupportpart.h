@@ -26,8 +26,9 @@ public:
     ~PythonSupportPart();
 
 protected:
-    virtual KDevLanguageSupport::Features features();
-
+    virtual Features features();
+    virtual QStringList fileFilters();
+    
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void projectOpened();

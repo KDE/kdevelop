@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,25 +9,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "appoutputwidget.h"
+#ifndef _SCRIPTPROJECTOPTIONSWIDGET_H_
+#define _SCRIPTPROJECTOPTIONSWIDGET_H_
 
-#include <klocale.h>
+#include "scriptoptionswidgetbase.h"
 
-#include "appoutputviewpart.h"
-
-
-AppOutputWidget::AppOutputWidget()
-    : ProcessWidget(0, "app output widget")
-{}
+class KDevPlugin;
 
 
-AppOutputWidget::~AppOutputWidget()
-{}
-
-
-void AppOutputWidget::childFinished(bool normal, int status)
+class ScriptOptionsWidget : public ScriptOptionsWidgetBase
 {
-    ProcessWidget::childFinished(normal, status);
-}
+    Q_OBJECT
+    
+public:
+    ScriptOptionsWidget( KDevPlugin *part, QWidget *parent=0, const char *name=0 );
+    ~ScriptOptionsWidget();
 
-#include "appoutputwidget.moc"
+public slots:
+    void accept();
+
+private:
+    KDevPlugin *m_part;
+};
+
+#endif

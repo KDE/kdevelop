@@ -17,8 +17,9 @@
 
 #include "kdevproject.h"
 
-class ScriptProjectWidget;
 class QListViewItem;
+class KDialogBase;
+class ScriptProjectWidget;
 
 
 class ScriptProjectPart : public KDevProject
@@ -41,10 +42,16 @@ protected:
     virtual void addFile(const QString &fileName);
     virtual void removeFile(const QString &fileName);
 
+private slots:
+    void projectConfigWidget(KDialogBase *dlg);
+    void slotNewFile();
+     
 private:
     QString m_projectDirectory;
     QString m_projectName;
     QStringList m_sourceFiles;
+
+    friend class ScriptNewFileDialog;
 };
 
 #endif

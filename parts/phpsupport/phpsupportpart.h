@@ -31,11 +31,13 @@ class PHPSupportPart : public KDevLanguageSupport
 {
     Q_OBJECT
 
-public:    PHPSupportPart( QObject *parent, const char *name, const QStringList & );
+public:
+    PHPSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PHPSupportPart();
 
 protected:
-    virtual KDevLanguageSupport::Features features();
+    virtual Features features();
+    virtual QStringList fileFilters();
 
 private slots:
     void projectOpened();

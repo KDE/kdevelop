@@ -12,9 +12,13 @@
 #include "scriptprojectpart.h"
 
 #include <qdir.h>
+#include <qregexp.h>
 #include <qvaluestack.h>
+#include <qvbox.h>
 #include <qwhatsthis.h>
+#include <kaction.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -24,6 +28,9 @@
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
+#include "kdevlanguagesupport.h"
+#include "scriptoptionswidget.h"
+#include "scriptnewfiledlg.h"
 
 
 typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
@@ -34,7 +41,15 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
 {
     setInstance(ScriptProjectFactory::instance());
 
-    //    setXMLFile("kdevscriptproject.rc");
+    setXMLFile("kdevscriptproject.rc");
+
+    KAction *action;
+    action = new KAction( i18n("New file..."), 0,
+                          this, SLOT(slotNewFile()),
+                          actionCollection(), "file_newfile" );
+    
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
 
 
@@ -42,10 +57,48 @@ ScriptProjectPart::~ScriptProjectPart()
 {}
 
 
+void ScriptProjectPart::projectConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox;
+    vbox = dlg->addVBoxPage(i18n("Script project options"));
+    ScriptOptionsWidget *w = new ScriptOptionsWidget(this, vbox);
+    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+}
+
+
+/**
+ * This should really be merged with FileTreeWidget::matchesHidePattern()
+ * and put in its own class.
+ */
+static bool matchesPattern(const QString &fileName, const QStringList &patternList)
+{
+    QStringList::ConstIterator it;
+    for (it = patternList.begin(); it != patternList.end(); ++it) {
+        QRegExp re(*it, true, true);
+        if (re.search(fileName) == 0 && re.matchedLength() == fileName.length())
+            return true;
+    }
+
+    return false;
+}
+
+
 void ScriptProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_projectDirectory = dirName;
     m_projectName = projectName;
+
+    QDomDocument &dom = *projectDom();
+
+    QString includepatterns
+        = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
+    QStringList includepatternList = includepatterns.isNull()?
+        languageSupport()->fileFilters() : QStringList::split(",", includepatterns);
+    QString excludepatterns
+        = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
+    if (excludepatterns.isNull())
+        excludepatterns = "*~";
+    QStringList excludepatternList = QStringList::split(",", excludepatterns);
 
     // Put all files from all subdirectories into file list
     QValueStack<QString> s;
@@ -55,7 +108,7 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
     QDir dir;
     do {
         dir.setPath(s.pop());
-        kdDebug(9025) << "Examining: " << dir.path() << endl;
+        kdDebug(9015) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
         QListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) {
@@ -64,12 +117,17 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
                 continue;
             QString path = it.current()->absFilePath();
             if (it.current()->isDir()) {
-                kdDebug(9025) << "Pushing: " << path << endl;
+                kdDebug(9015) << "Pushing: " << path << endl;
                 s.push(path);
             }
             else {
-                kdDebug(9025) << "Adding: " << path << endl;
-                m_sourceFiles.append(path.mid(prefixlen));
+                if (matchesPattern(path, includepatternList)
+                    && !matchesPattern(path, excludepatternList)) {
+                    kdDebug(9015) << "Adding: " << path << endl;
+                    m_sourceFiles.append(path.mid(prefixlen));
+                } else {
+                    kdDebug(9015) << "Ignoring: " << path << endl;
+                }
             }
         }
     } while (!s.isEmpty());
@@ -123,6 +181,7 @@ QStringList ScriptProjectPart::allSourceFiles()
 
 void ScriptProjectPart::addFile(const QString &fileName)
 {
+    kdDebug(9015) << "AddFile2" << fileName << endl;
     m_sourceFiles.append(fileName);
     emit addedFileToProject(fileName);
 }
@@ -134,5 +193,11 @@ void ScriptProjectPart::removeFile(const QString &fileName)
     emit removedFileFromProject(fileName);
 }
 
+
+void ScriptProjectPart::slotNewFile()
+{
+    ScriptNewFileDialog dlg(this);
+    dlg.exec();
+}
 
 #include "scriptprojectpart.moc"

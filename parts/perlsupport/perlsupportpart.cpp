@@ -148,6 +148,14 @@ KDevLanguageSupport::Features PerlSupportPart::features()
 }
 
 
+QStringList PerlSupportPart::fileFilters()
+{
+    QStringList l;
+    l << "*.pl" << "*.pm";
+    return l;
+}
+
+
 void PerlSupportPart::parse(const QString &fileName)
 {
     QFile f(QFile::encodeName(fileName));

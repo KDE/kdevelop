@@ -51,7 +51,7 @@ public:
     /** 
      * returns a typical filterlist  for the support language
      * should be configurable in the languagesupport dialog
-     * example "*.cpp;*.h;*.c";
+     * example "*.cpp,*.h,*.c";
      * used in grepview, adding files
      */
     virtual QStringList fileFilters();

@@ -32,6 +32,10 @@ private:
 };
 
 
+/**
+ * This class is designed to share code between the
+ * grep and application output widgets.
+ */
 class ProcessWidget : public QListBox
 {
     Q_OBJECT

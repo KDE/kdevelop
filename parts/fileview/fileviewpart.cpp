@@ -76,10 +76,14 @@ void FileViewPart::projectOpened()
     m_filetree->openDirectory(project()->projectDirectory());
 
     // File groups
-    connect( project(), SIGNAL(addedFileToProject(const QString &)),
-             m_filegroups, SLOT(addFile(const QString &)) );
-    connect( project(), SIGNAL(removedFileFromProject(const QString &)),
-             m_filegroups, SLOT(removeFile(const QString &)) );
+    connect( project(), SIGNAL(addedFileToProject(const QString&)),
+             m_filetree, SLOT(hideOrShow()) );
+    connect( project(), SIGNAL(removedFileFromProject(const QString&)),
+             m_filetree, SLOT(hideOrShow()) );
+    connect( project(), SIGNAL(addedFileToProject(const QString&)),
+             m_filegroups, SLOT(addFile(const QString&)) );
+    connect( project(), SIGNAL(removedFileFromProject(const QString&)),
+             m_filegroups, SLOT(removeFile(const QString&)) );
     m_filegroups->refresh();
 }
 

@@ -377,5 +377,11 @@ KDevLanguageSupport::Features PHPSupportPart::features()
 }
 
 
+QStringList PHPSupportPart::fileFilters()
+{
+    QStringList l;
+    l << "*.inc" << "*.php" << "*.html" << "*.php3";
+    return l;
+}
 
 #include "phpsupportpart.moc"

@@ -25,7 +25,8 @@ public:
     ~PerlSupportPart();
 
 protected:
-    virtual KDevLanguageSupport::Features features();
+    virtual Features features();
+    virtual QStringList fileFilters();
 
 private slots:
     void projectOpened();

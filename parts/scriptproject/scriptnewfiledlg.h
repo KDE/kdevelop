@@ -9,43 +9,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILETREEWIDGET_H_
-#define _FILETREEWIDGET_H_
+#ifndef _SCRIPTNEWFILEDLG_H_
+#define _SCRIPTNEWFILEDLG_H_
 
-#include <qstringlist.h>
-#include <klistview.h>
+#include <qdialog.h>
 
-class FileViewPart;
-class KDirWatch;
+class QCheckBox;
+class QLineEdit;
+class ScriptProjectPart;
 
 
-class FileTreeWidget : public KListView
+class ScriptNewFileDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
-    ~FileTreeWidget();
-
-    void openDirectory(const QString &dirName);
-    void watchDir(const QString &dirName);
-
-public slots:
-    void hideOrShow();
+    ScriptNewFileDialog( ScriptProjectPart *part, QWidget *parent=0, const char *name=0 );
+    ~ScriptNewFileDialog();
     
-private slots:
-    void slotDirectoryDirty(const QString &dirName);
-    void slotItemExecuted(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void slotToggleShowNonProjectFiles();
+protected:
+    virtual void accept();
 
 private:
-    bool matchesHidePattern(const QString &fileName);
-    
-    FileViewPart *m_part;
-    KDirWatch *m_dirWatch;
-    QStringList m_hidePatterns;
-    bool m_showNonProjectFiles;
+    QCheckBox *usetemplate_box;
+    QLineEdit *filename_edit;
+    ScriptProjectPart *m_part;
 };
 
 #endif

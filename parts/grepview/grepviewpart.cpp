@@ -67,14 +67,6 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                                "searched through all files in the directories "
                                "you specify. Matches will be displayed, you "
                                "can switch to a match directly.") );
-
-#if 0
-    // No longer necessary since the dock widgets are gone :-)
-    action = new KAction( i18n("&Grep results"), 0,
-                          this, SLOT(slotRaiseWidget()),
-                          actionCollection(), "window_grep" );
-    action->setStatusText( i18n("Brings the grep results window to the foreground.") );
-#endif
 }
 
 

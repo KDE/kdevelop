@@ -105,9 +105,6 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
-
-    
-
 }
 
 

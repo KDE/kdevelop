@@ -155,7 +155,7 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     m_dirWatch = new KDirWatch(this);
     connect( m_dirWatch, SIGNAL(dirty(const QString&)),
              this, SLOT(slotDirectoryDirty(const QString &)) );
-    
+
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(returnPressed(QListViewItem*)),

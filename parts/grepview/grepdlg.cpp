@@ -54,7 +54,7 @@ const char *filepatterns[] = {
     "*.h,*.hxx,*.idl",
     "*.java",
     "*",
-		0
+    0
 };
 
 

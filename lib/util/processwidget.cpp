@@ -13,6 +13,7 @@
 
 #include <qdir.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kprocess.h>
 #include <qpainter.h>
 
@@ -101,11 +102,10 @@ void ProcessWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
         stderrbuf = "";
     }
     
-    stdoutbuf += QString::fromLatin1(buffer, buflen);
+    stdoutbuf += QString::fromLocal8Bit(buffer, buflen);
     int pos;
     while ( (pos = stdoutbuf.find('\n')) != -1) {
         QString line = stdoutbuf.left(pos);
-        //            if (!item.isEmpty())
         insertStdoutLine(line);
         stdoutbuf.remove(0, pos+1);
     }
@@ -120,7 +120,7 @@ void ProcessWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
         stdoutbuf = "";
     }
     
-    stderrbuf += QString::fromLatin1(buffer, buflen);
+    stderrbuf += QString::fromLocal8Bit(buffer, buflen);
     int pos;
     while ( (pos = stderrbuf.find('\n')) != -1) {
         QString line = stderrbuf.left(pos);
@@ -149,8 +149,25 @@ void ProcessWidget::insertStderrLine(const QString &line)
 }
 
 
-void ProcessWidget::childFinished(bool /*normal*/, int /*status*/)
+void ProcessWidget::childFinished(bool normal, int status)
 {
+    QString s;
+    ProcessListBoxItem::Type t;
+    
+    if (normal) {
+        if (status) {
+            s = i18n("*** Exited with status: %1 ***").arg(status);
+            t = ProcessListBoxItem::Error;
+        } else {
+            s = i18n("*** Exited normally ***");
+            t = ProcessListBoxItem::Diagnostic;
+        }
+    } else {
+        s = i18n("*** Process aborted ***");
+        t = ProcessListBoxItem::Error;
+    }
+    
+    insertItem(new ProcessListBoxItem(s, t));
 }
 
 

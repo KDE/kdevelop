@@ -178,8 +178,9 @@ void GrepViewWidget::searchActivated()
 }
 
 
-void GrepViewWidget::childFinished(bool, int)
+void GrepViewWidget::childFinished(bool normal, int status)
 {
+    ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
 }
 

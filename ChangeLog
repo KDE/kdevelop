@@ -1,3 +1,13 @@
+2002-04-19  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* In script projects, scan the source file list
+	  at loading time with configurable include
+	  and exclude pattern lists
+	* New file dialog in script project
+	* Implemented KDevLanguageSupport::fileFilters()
+	  for Python, Perl and PHP
+	* grep part shows the exit status of the sub process
+
 2002-04-19  Harald Fernengel <harry@kdevelop.org>
 
         * make outputwidget now locale aware
@@ -6,8 +16,8 @@
 
 	* filter plugin
 	* Added methods addFile() and removeFile()
-	  to KDevProject interface, not implemented
-	  currently
+	  to KDevProject interface, implemented
+	  in script and custom project parts
 	* Add File dialog in auto project uses the
 	  FileTemplate class now
 	* Fixed displayed symbol kinds in ctags

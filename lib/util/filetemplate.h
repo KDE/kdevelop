@@ -37,7 +37,7 @@ public:
      * file with the name dest and - while copying -
      * performs variable substitutions.
      */
-    static void copy(KDevPlugin *part, const QString &name,
+    static bool copy(KDevPlugin *part, const QString &name,
                      const QString &dest);
 };
 

@@ -114,7 +114,6 @@ void PythonSupportPart::projectClosed()
 void PythonSupportPart::maybeParse(const QString fileName)
 {
     QFileInfo fi(fileName);
-    QString path = fi.filePath();
     if (fi.extension() == "py") {
         classStore()->removeWithReferences(fileName);
         parse(fileName);
@@ -172,6 +171,14 @@ void PythonSupportPart::savedFile(const QString &fileName)
 KDevLanguageSupport::Features PythonSupportPart::features()
 {
     return Features(Classes | Functions);
+}
+
+
+QStringList PythonSupportPart::fileFilters()
+{
+    QStringList l;
+    l << "*.py";
+    return l;
 }
 
 
