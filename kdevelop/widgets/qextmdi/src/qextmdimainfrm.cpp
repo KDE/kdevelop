@@ -275,7 +275,8 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          attachWindow( pWnd, !(flags & QextMdi::Hide));
       }
 
-      if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
+      if ((m_bMaximizedChildFrmMode && !(m_bSDIApplication && (flags & QextMdi::Detach)))
+       || (flags & QextMdi::Maximize) ) {
          if (!pWnd->isMaximized())
             pWnd->maximize();
       }
