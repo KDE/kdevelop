@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Editor
+Name=KDevelop editor part
+Icon=find
+ServiceTypes=KDevelop/Component
+X-KDE-Library=libkdeveditorpart
