@@ -4,10 +4,14 @@ Comment=KDevelop
 
 [ProcessSuccess]
 Name=Process successful
+Name[sv]=Processen lyckades
 Comment=Process finished successfully
+Comment[sv]=Processen avslutades med lyckat resultat
 default_presentation=0
 
 [ProcessError]
 Name=Process error
+Name[sv]=Processfel
 Comment=Process finished with errors
+Comment[sv]=Processen avslutades med fel
 default_presentation=0
