@@ -13,14 +13,7 @@
 
 CvsOptionsWidget::CvsOptionsWidget( QWidget *parent, const char *name )
     : CvsOptionsWidgetBase( parent, name )
-//    : QVBox( parent, name )
 {
-/*
-    m_cfgWidget = new ServerConfigurationWidget( this, "serverconfigurationwidget" );
-    cvsOptionsWidgetLayout->addWidget( m_cfgWidget );
-
-    resize( QSize(448, 408).expandedTo(minimumSizeHint()) );
-*/
     readConfig();
 }
 

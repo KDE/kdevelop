@@ -35,8 +35,6 @@ public:
 public slots:
     void accept();
 
-    ServerConfigurationWidget *m_cfgWidget;
-
 private:
     void readConfig();
     void storeConfig();

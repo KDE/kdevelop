@@ -30,7 +30,7 @@ class KProcess;
 class CvsPart;
 
 // Available Cvs operations
-enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff };
+enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff, opTag };
 
 /**
 * Implementation for the CvsPart command line tool wrapper: it let to do all common
@@ -72,6 +72,7 @@ private slots:
     void slotActionRevert();
     void slotActionLog();
     void slotActionDiff();
+    void slotActionTag();
     void slotActionAddToIgnoreList();
     void slotActionRemoveFromIgnoreList();
 
@@ -83,6 +84,7 @@ private slots:
     void slotRevert();
     void slotLog();
     void slotDiff();
+    void slotTag();
     void slotAddToIgnoreList();
     void slotRemoveFromIgnoreList();
 
@@ -117,6 +119,7 @@ private:
     void revert( const KURL::List& urlList );
     void log( const KURL::List& urlList );
     void diff( const KURL::List& urlList );
+    void tag( const KURL::List& urlList );
     void addToIgnoreList( const KURL::List& urlList );
     void removeFromIgnoreList( const KURL::List& urlList );
 
@@ -164,6 +167,7 @@ private:
         *actionRemove,
         *actionUpdate,
         *actionRevert,
+        *actionTag,
         *actionAddToIgnoreList,
         *actionRemoveFromIgnoreList;
 };

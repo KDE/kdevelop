@@ -18,6 +18,7 @@
 #include <kmessagebox.h>
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
+#include <kmainwindow.h>
 #include <kaction.h>
 #include <kurl.h>
 
@@ -47,6 +48,7 @@
 #include "cvswidget.h"
 #include "cvsoptions.h"
 #include "commitdlg.h"
+#include "tagdialog.h"
 #include "logform.h"
 #include "cvsform.h"
 #include "cvsoptionswidget.h"
@@ -100,7 +102,7 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
     : KDevVersionControl( "KDevCvsPart", "kdevcvspart", parent, name ? name : "CVS" ),
     proc( 0 ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ), actionRemove( 0 ),
-    actionUpdate( 0 ), actionRevert( 0 ),
+    actionUpdate( 0 ), actionRevert( 0 ), actionTag( 0 ),
     actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 )
 {
     setInstance( CvsFactory::instance() );
@@ -164,6 +166,9 @@ void CvsPart::setupActions()
         actionCollection(), "cvs_update" );
     actionRevert = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotActionRevert()),
         actionCollection(), "cvs_revert" );
+    actionTag = new KAction( i18n("Tag/Branch selected file(s)"), 0, this, SLOT(slotTag()),
+        actionCollection(), "cvs_tag" );
+
     actionAddToIgnoreList = new KAction( i18n("Ignore this file when doing cvs operation"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvs_ignore" );
     actionRemoveFromIgnoreList = new KAction( i18n("Do not Ignore this file when doing cvs operation"), 0,
@@ -259,7 +264,6 @@ void CvsPart::createNewProject( const QString& dirName )
     if ( !g_tempEnvRsh.isEmpty() )
         rsh = "CVS_RSH=" + KShellProcess::quote( g_tempEnvRsh );
 
-
     if (m_cvsConfigurationForm->init_check->isChecked())
     {
         init = rsh + " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->root_edit->text()) + " init && ";
@@ -287,7 +291,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 {
     if (context->hasType( "file" ))
     {
-        kdDebug(9000) << "contextMenu()" << endl;
+        kdDebug(9000) << "CvsPart::contextMenu()" << endl;
 
         const FileContext *fcontext = static_cast<const FileContext*>( context );
         // FIXME: Here we must hope that fcontext->fileName() returns an absolute path ;(
@@ -320,6 +324,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
         subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
         subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
+        subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
 
         subMenu->insertSeparator();
 
@@ -418,6 +423,18 @@ void CvsPart::slotActionDiff()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void CvsPart::slotActionTag()
+{
+    KURL currDocument;
+    if (urlFocusedDocument( currDocument ))
+    {
+        urls << currDocument;
+        tag( urls );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void CvsPart::slotActionAddToIgnoreList()
 {
     KURL currDocument;
@@ -487,6 +504,13 @@ void CvsPart::slotLog()
 void CvsPart::slotDiff()
 {
     diff( urls );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotTag()
+{
+    tag( urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -608,6 +632,10 @@ QString CvsPart::buildCommitCmd( const QString _directoryName, const QStringList
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// Four spaces for every log line (except the first which includes the
+// developers name)
+#define CHANGELOG_PREPEND_STRING QString( "    " )
+
 void CvsPart::commit( const KURL::List& urlList )
 {
     if (!prepareOperation( opCommit ))
@@ -635,7 +663,7 @@ void CvsPart::commit( const KURL::List& urlList )
         entry.addLines( dlg.logMessage() );
         entry.addToLog( this->project()->projectDirectory() + "/ChangeLog" );
 
-        kdDebug( 9999 ) << " *** ChangeLog entry : " << entry.toString( "\t" ) << endl;
+        kdDebug( 9999 ) << " *** ChangeLog entry : " << entry.toString( CHANGELOG_PREPEND_STRING ) << endl;
 
         // 2.2 Commit modifications (needed?)
         //command = buildCommitCmd( this->project()->projectDirectory(), changeLogFileName, dlg.logMessage() );
@@ -711,6 +739,11 @@ void CvsPart::remove( const KURL::List& urlList )
 
     CvsOptions *options = CvsOptions::instance();
     QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
+
+    kdDebug(9000) << "These are the KURLs I'm going to remove:" << endl;
+    URLUtil::dump( urlList );
+
+    kdDebug(9000) << "Which translate in the following relative (to projectDir) pathnames: " << fileList.join(" ") << endl;
 
     QString command("cd ");
     command += KShellProcess::quote( project()->projectDirectory() );
@@ -841,6 +874,47 @@ void CvsPart::diff( const KURL::List& urlList )
     connect( proc, SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(receivedStderr(KProcess*,char*,int)) );
 
     core()->running( this, true );
+
+    doneOperation();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::tag( const KURL::List& urlList )
+{
+    kdDebug(9000) << "CvsPart::tag() here" << endl;
+
+    if (!prepareOperation( opTag ))
+        return;
+
+    TagDialog dlg( mainWindow()->main()->centralWidget() );
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    CvsOptions *options = CvsOptions::instance();
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
+    QString files = fileList.join( " " );
+
+    QString command("cd ");
+    command += KShellProcess::quote( project()->projectDirectory() );
+    command += " && " + cvs_rsh() + " cvs ";
+    command += options->cvs();
+    command += " tag ";
+    if (dlg.isBranch())
+    {
+        command += " -b " + dlg.branchName();
+    }
+    else
+    {
+        command += dlg.tagName();
+    }
+    command += " ";
+    command += files;
+
+    kdDebug(9000) << "Running: " << command << endl;
+
+//    makeFrontend()->queueCommand(dirName, command);
+    m_widget->startCommand( project()->projectDirectory(), command );
 
     doneOperation();
 }
