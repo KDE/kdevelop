@@ -2,7 +2,8 @@ INCLUDES = -I$(top_srcdir)/lib/compat $(all_includes)
 METASOURCES = AUTO
 
 lib_LTLIBRARIES =  libkdevpropertyeditor.la
-libkdevpropertyeditor_la_LDFLAGS = $(all_libraries)
+libkdevpropertyeditor_la_LIBADD = $(LIB_KIO)
+libkdevpropertyeditor_la_LDFLAGS = -no-undefined $(all_libraries)
 libkdevpropertyeditor_la_SOURCES = childproperty.cpp  pcombobox.cpp        pdummywidget.cpp  ppointedit.cpp      propertymachinefactory.cpp  pstringlistedit.cpp\
 multiproperty.cpp  pcursoredit.cpp      pfontbutton.cpp   prectedit.cpp       propertywidget.cpp          psymbolcombo.cpp\
 pcheckbox.cpp      pdateedit.cpp        pfontcombo.cpp    property.cpp        psizeedit.cpp               purledit.cpp\
