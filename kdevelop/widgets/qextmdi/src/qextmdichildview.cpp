@@ -583,7 +583,7 @@ void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 void QextMdiChildView::show()
 {
    QWidget* pParent = mdiParent();
-   if( pParent != 0L && pParent->isVisible())
+   if (pParent != 0L)
       pParent->show();
    QWidget::show();
 }
