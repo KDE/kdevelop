@@ -21,21 +21,18 @@
   <run>
    <disable_default>true</disable_default>
   </run>
-  <compiler>
-   <ccompiler>GccOptions</ccompiler>
-   <cxxcompiler>GppOptions</cxxcompiler>
-   <f77compiler>Pgf77Options</f77compiler>
-   <ccompilerbinary>arm-agb-elf-gcc</ccompilerbinary>
-   <cxxcompilerbinary>arm-agb-elf-g++</cxxcompilerbinary>
-   <f77compilerbinary></f77compilerbinary>
-   <cflags></cflags>
-   <cxxflags></cxxflags>
-   <f77flags></f77flags>
-  </compiler>
-  <configure>
-   <configargs>--host=arm-gcc-elf --build=i386</configargs>
-   <builddir></builddir>
-  </configure>
+  <configurations>
+   <default>
+    <configargs>--host=arm-gcc-elf --build=i386</configargs>
+    <ldflags>-T lnkscript crt0.o</ldflags>
+    <ccompiler>GccOptions</ccompiler>
+    <cxxcompiler>GppOptions</cxxcompiler>
+    <f77compiler>G77Options</f77compiler>
+    <ccompilerbinary>arm-agb-elf-gcc</ccompilerbinary>
+    <cxxcompilerbinary>arm-agb-elf-g++</cxxcompilerbinary>
+    <cflags>-nostartfiles</cflags>
+   </default>
+  </configurations>
  </kdevautoproject>
  <kdevvisualadvance>
    <binary>src/$APPNAMELC$.gba</binary>
