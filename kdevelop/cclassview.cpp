@@ -60,6 +60,11 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
 
   setTreeHandler( new CClassTreeHandler() );
   ((CClassTreeHandler *)treeH)->setStore( store );
+
+  definitionCmd.setClassView( this );
+  declarationCmd.setClassView( this );
+  
+  connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));
 }
 
 /*------------------------------------------ CClassView::~CClassView()
@@ -307,6 +312,38 @@ void CClassView::refreshClassByName( const char *aName )
   }
 }
 
+/*------------------------------------- CClassView::viewDefinition()
+ * viewDefinition()
+ *   Views a definition of an item.
+ *
+ * Parameters:
+ *   
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::viewDefinition( const char *className, 
+                                 const char *declName, 
+                                 THType type )
+{
+  emit selectedViewDefinition( className, declName, type );
+}
+
+/*------------------------------------- CClassView::viewDefinition()
+ * viewDefinition()
+ *   Views a declaration of an item.
+ *
+ * Parameters:
+ *   
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::viewDeclaration( const char *className, 
+                                  const char *declName, 
+                                  THType type )
+{
+  emit selectedViewDeclaration( className, declName, type );
+}
+
 /*********************************************************************
  *                                                                   *
  *                          PRIVATE METHODS                          *
@@ -456,6 +493,17 @@ void CClassView::buildTree( const char *str )
   }
 }
 
+/*----------------------------------------- CClassView::buildTreeStr()
+ * buildTreeStr()
+ *   Make a tree(as a string).
+ *
+ * Parameters:
+ *   item           The root item.
+ *   str            The string to store the result in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassView::buildTreeStr( QListViewItem *item, QString &str )
 {
   THType type;
@@ -615,6 +663,22 @@ void CClassView::slotClassDelete()
                       
 }
 
+void CClassView::slotClassViewSelected()
+{
+  // Only react on clicks on the left mousebutton.
+  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER )
+  {
+    slotViewDefinition();
+  }
+  else if( mouseBtn == MidButton && treeH->itemType() != THFOLDER )
+  {
+    slotViewDeclaration();
+  }
+
+  // Set it back, so next time only if user clicks again we react.
+  mouseBtn = RightButton; 
+}
+
 void CClassView::slotMethodNew()
 {
   CParsedMethod *aMethod;
@@ -698,41 +762,61 @@ void CClassView::slotFolderDelete()
 
 void CClassView::slotClassBaseClasses()
 {
-  CClassToolDlg dlg(this, "classToolDlg" );
+  CClassToolDlg ctDlg( this, "classToolDlg" );
 
-  dlg.setStore( store );
-  dlg.setClass( getCurrentClass() );
-  dlg.viewParents();
-  dlg.show();
+  ctDlg.setStore( store );
+  ctDlg.setViewDefinitionCmd( &definitionCmd );
+  ctDlg.setViewDeclarationCmd( &declarationCmd );  
+  ctDlg.setClass( getCurrentClass() );
+  ctDlg.viewParents();
+  ctDlg.show();
 }
 
 void CClassView::slotClassDerivedClasses() 
 {
-  CClassToolDlg dlg(this, "classToolDlg" );
+  CClassToolDlg ctDlg( this, "classToolDlg" );
 
-  dlg.setStore( store );
-  dlg.setClass( getCurrentClass() );
-  dlg.viewChildren();
-  dlg.show();
+  ctDlg.setStore( store );
+  ctDlg.setClass( getCurrentClass() );
+  ctDlg.setViewDefinitionCmd( &definitionCmd );
+  ctDlg.setViewDeclarationCmd( &declarationCmd );  
+  ctDlg.viewChildren();
+  ctDlg.show();
 }
 
 void CClassView::slotClassTool()
 {
-  CClassToolDlg dlg(this, "classToolDlg" );
+  CClassToolDlg ctDlg( this, "classToolDlg" );
 
-  dlg.setStore( store );
-  dlg.setClass( getCurrentClass() );
-  dlg.show();
+  ctDlg.setStore( store );
+  ctDlg.setClass( getCurrentClass() );
+  ctDlg.setViewDefinitionCmd( &definitionCmd );
+  ctDlg.setViewDeclarationCmd( &declarationCmd );  
+  ctDlg.show();
 }
 
 void CClassView::slotViewDefinition() 
 {
-  emit selectedViewDefinition();
+  const char *className;
+  const char *otherName;
+  THType idxType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+
+  viewDefinition( className, otherName, idxType );
 }
 
 void CClassView::slotViewDeclaration()
 {
-  emit selectedViewDeclaration();
+  const char *className;
+  const char *otherName;
+  THType idxType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+
+  viewDeclaration( className, otherName, idxType );
 }
 
 void CClassView::slotMoveToFolder()
@@ -755,22 +839,3 @@ void CClassView::slotMoveToFolder()
 //     debug( "Moving items." );
 //   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -25,11 +25,12 @@
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
+#include "cctviewdefinitioncmd.h"
+#include "cctviewdeclarationcmd.h"
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
   */
-
 class CClassView : public CTreeView
 {
   Q_OBJECT
@@ -66,6 +67,15 @@ public: // Public refreshmethods
   /** Refresh a class by using its' name. */
   void refreshClassByName( const char *aName );
 
+public: // Public methods
+
+  /** Views the definition. */
+  void viewDefinition( const char *className, const char *declName, THType type );
+
+  /** Views the declaration. */
+  void viewDeclaration( const char *className, const char *declName, THType type );
+
+
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
@@ -76,6 +86,7 @@ protected: // Protected signals and slots
     void slotFileNew();
     void slotClassNew();
     void slotClassDelete();
+    void slotClassViewSelected();
     void slotMethodNew();
     void slotMethodDelete();
     void slotAttributeNew();
@@ -93,8 +104,8 @@ protected: // Protected signals and slots
     void selectedFileNew();
     void selectedClassNew();
     void selectedProjectOptions();
-    void selectedViewDeclaration();
-    void selectedViewDefinition();
+    void selectedViewDeclaration(const char *, const char *,THType);
+    void selectedViewDefinition(const char *, const char *,THType);
     void signalAddMethod( CParsedMethod * );
     void signalAddAttribute( CParsedAttribute * );
 
@@ -139,6 +150,12 @@ private: // Private attributes
 
   /** The project. */
   CProject *project;
+
+  /** Command used by the classtool to view definitions. */
+  CCTViewDefinitionCmd definitionCmd;
+
+  /** Command used by the classtool to view declarations. */
+  CCTViewDeclarationCmd declarationCmd;
 
 private: // Private methods
 
