@@ -15,6 +15,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith history filecreate \
           texttools javasupport javadebugger replace rubysupport closer bashsupport pascalsupport pascalproject \
-          partexplorer bookmarks fullscreen \
+          partexplorer bookmarks fullscreen nedit \
           $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
 
