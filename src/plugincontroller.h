@@ -1,7 +1,6 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
-#include <qobject.h>
 #include <qdict.h>
 #include <qvaluelist.h>
 
@@ -21,7 +20,7 @@ class ProjectInfo;
 Plugin controller implementation.
 Loads and unloads plugins.
 */
-class PluginController : public QObject, public KDevPluginController
+class PluginController : public KDevPluginController
 {
   Q_OBJECT
 
@@ -57,6 +56,9 @@ public:
   
   ProfileEngine &engine() { return m_engine; }
 
+  virtual KURL::List profileResources(const QString &nameFilter);
+  virtual KURL::List profileResourcesRecursive(const QString &nameFilter);
+  
 signals:
   void loadingPlugin(const QString &plugin);
 

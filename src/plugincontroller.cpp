@@ -76,7 +76,7 @@ PluginController *PluginController::getInstance()
 
 
 PluginController::PluginController()
-  : QObject(), KDevPluginController()
+  : KDevPluginController()
 {
   connect( Core::getInstance(), SIGNAL(configWidget(KDialogBase*)),
            this, SLOT(slotConfigWidget(KDialogBase*)) );
@@ -157,22 +157,16 @@ void PluginController::loadGlobalPlugins()
       continue;
     }*/
     
-    kdDebug() << "TRY: " << name << endl;
-
     // Check if it is already loaded
     if( m_parts[ name ] != 0 )
       continue;
-    kdDebug() << "GOOD 1: " << name << endl;
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
-    kdDebug() << "GOOD 2: " << name << endl;
 
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
-    kdDebug() << "GOOD 3: " << name << endl;
     if ( plugin ) {
-        kdDebug() << "LOADED: " << name << endl;
         m_parts.insert( name, plugin );
         integratePart( plugin );
     }
@@ -279,7 +273,7 @@ KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
     KDevPlugin * pl = KParts::ComponentFactory
         ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
                                                  argumentsFromService( service ), &err );
-    kdDebug() << "ERR: " << err << endl;
+//    kdDebug() << "ERR: " << err << endl;
     return pl;
 }
 
@@ -352,6 +346,16 @@ KDevPlugin * PluginController::extension( const QString & serviceType, const QSt
         if (ext) return ext;
     }
     return 0;
+}
+
+KURL::List PluginController::profileResources(const QString &nameFilter)
+{
+    return m_engine.resources(currentProfile(), nameFilter);
+}
+
+KURL::List PluginController::profileResourcesRecursive(const QString &nameFilter)
+{
+    return m_engine.resourcesRecursive(currentProfile(), nameFilter);
 }
 
 
