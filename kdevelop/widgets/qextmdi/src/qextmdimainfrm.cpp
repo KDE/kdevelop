@@ -1441,13 +1441,6 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
    if( m_pMainMenuBar == 0L)
       return;
       
-   if (oldChild) {
-      QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
-      QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
-      QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
-      QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
-      m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
-   }
    if (newChild) {
       if (frameDecorOfAttachedViews() == QextMdi::KDE2LaptopLook) {
          m_pMainMenuBar->insertItem( QPixmap(kde2laptop_closebutton_menu), newChild, SLOT(closePressed()), 0, -1, 0);
@@ -1455,6 +1448,17 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
       else {
          m_pMainMenuBar->insertItem( *newChild->icon(), newChild->systemMenu(), -1, 0);
       }
+   }
+   if (oldChild) {
+      m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(1));
+   }
+   if (oldChild) {
+      QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
+      QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
+      QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
+      QObject::disconnect( m_pClose, SIGNAL(clicked()), oldChild, SLOT(closePressed()) );
+   }
+   if (newChild) {
       QObject::connect( m_pUndock, SIGNAL(clicked()), newChild, SLOT(undockPressed()) );
       QObject::connect( m_pMinimize, SIGNAL(clicked()), newChild, SLOT(minimizePressed()) );
       QObject::connect( m_pRestore, SIGNAL(clicked()), newChild, SLOT(maximizePressed()) );
