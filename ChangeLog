@@ -1,3 +1,6 @@
+2005-01-08 Jens Dagerbo <jens.dagerbo@swipnet.se>
+ * Made it possible to finally remove Code Completion databases via the GUI
+
 2005-01-03 Robert Gruber <rgruber@users.sourceforge.net>
  * Added support for CVS commands edit, unedit and editors
 
