@@ -43,8 +43,13 @@ kdelibs_docdirs=""
 ],
 )
 
-kdelibs_docdirs="/usr/doc/kdelibs-doc/html /opt/kde/share/doc/HTML/default/kdelibs"
-kdelibs_docdirs="$ac_kdelibs_docdirs $kdelibs_docdirs"
+kdelibs_docdirs="/usr/doc/kdelibs-doc/html"
+if test "${prefix}" = NONE; then
+  ac_kde_htmldir="$ac_default_prefix"/share/doc/HTML
+else
+  ac_kde_htmldir="$prefix"/share/doc/HTML
+fi
+kdelibs_docdirs="$ac_kdelibs_docdirs $ac_kde_htmldir/default/kdelibs $kdelibs_docdirs"
 AC_FIND_FILE(kdecore/index.html, $kdelibs_docdirs, kdelibs_docdir)
 AC_MSG_RESULT($kdelibs_docdir)
 if test "$kdelibs_docdir" = NO; then
