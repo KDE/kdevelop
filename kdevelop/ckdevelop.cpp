@@ -2488,8 +2488,8 @@ void CKDevelop::slotToolbarClicked(int item){
 
 void CKDevelop::slotSwitchToChildframeMode() {
   showMaximized();
-  dockIn( dockbase_o_tab_view, DockBottom);
-  dockIn( dockbase_t_tab_view, DockLeft);
+  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
+  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
 }
 
 void CKDevelop::slotSwitchToToplevelMode() {

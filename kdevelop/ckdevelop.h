@@ -703,6 +703,7 @@ private:
   DockWidget* dockbase_o_tab_view;
   CTabCtl* o_tab_view;
 
+  DockWidget* dockbase_mdi_main_frame;
   MdiFrame* mdi_main_frame;
 
   /** the current editor view or 0*/

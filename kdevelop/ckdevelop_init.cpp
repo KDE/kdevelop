@@ -168,7 +168,11 @@ void CKDevelop::initView(){
   // Right main window
   ////////////////////////
   
-  mdi_main_frame = new MdiFrame( this, "mdi_frame");
+  dockbase_mdi_main_frame = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
+  mdi_main_frame = new MdiFrame( dockbase_mdi_main_frame, "mdi_frame");
+  setView(dockbase_mdi_main_frame);
+  setMainDockWidget( dockbase_mdi_main_frame );
+
   // maybe we should make this configurable :-)
 //  mdi_main_frame->m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
   
@@ -195,10 +199,10 @@ void CKDevelop::initView(){
   // dock the 2 base widgets
   //
   
-  dockIn(dockbase_t_tab_view,DockLeft);
-  dockIn(dockbase_o_tab_view,DockBottom);
+  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
+  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
   // set the mainwidget
-  setView(mdi_main_frame);
+
   initKeyAccel();
 
   initMenuBar();
@@ -212,11 +216,7 @@ void CKDevelop::initView(){
 	//   (just open it when the menubar is up)
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   browser_widget = browser_view->browser;
-  mdi_main_frame->addWindow(browser_view, // the view pointer
-                            false,        // show it
-			    true);        // attach it
-  browser_view->maximize();
-  browser_view->show();
+  mdi_main_frame->addWindow(browser_view, QextMdi::Maximize); // attached, shown and focused by default
 
   prev_was_search_result= false;
   //init

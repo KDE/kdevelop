@@ -368,17 +368,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
       new_dialogview->resize(int(double(mdi_main_frame->width()*3)/4.0),
 			     int(double(mdi_main_frame->height()*3)/4.0) );  
   
-#warning FIXME size handling when adding MDI views
-      mdi_main_frame->addWindow( new_dialogview,  // the view pointer
-				 false,            // show it
-				 true);           // attach it
-      new_dialogview->maximize();
-      new_dialogview->show();
-      				 
-      if(maximize){
-	  new_dialogview->maximize(true);
-      }
-      new_dialogview->setFocus();
+      if( maximize)
+        mdi_main_frame->addWindow( new_dialogview, QextMdi::Maximize); // attached, shown and focused by default
+      else
+        mdi_main_frame->addWindow( new_dialogview); // attached, shown and focused by default
+
       return;
   }
   
@@ -450,18 +444,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   new_editorview->resize(int(double(mdi_main_frame->width()*3)/4.0),
                          int(double(mdi_main_frame->height()*3)/4.0) );  
   
-#warning FIXME size handling when adding MDI views
-  mdi_main_frame->addWindow( new_editorview,  // the view pointer
-                             false,           // show it
-			     true);           // attach it
-  new_editorview->maximize();
-  new_editorview->show();
-  
-  if(maximize){
-    new_editorview->maximize(true);
-  }
-  new_editorview->setFocus();
-  
+  if( maximize)
+    mdi_main_frame->addWindow( new_editorview, QextMdi::Maximize); // attached, shown and focused by default
+  else  
+    mdi_main_frame->addWindow( new_editorview); // attached, shown and focused by default
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
