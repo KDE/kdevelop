@@ -30,7 +30,6 @@
 #include <ktexteditor/codecompletioninterface.h>
 
 #include "cppsupportpart.h"
-#include "simpleparser.h"
 #include "ast.h"
 
 class ParsedClass;
@@ -38,6 +37,7 @@ class ParsedClassContainer;
 class ParsedScopeContainer;
 class CodeInformationRepository;
 class CppCodeCompletionData;
+class SimpleContext;
 
 class CppCodeCompletion : public QObject
 {

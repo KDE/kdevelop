@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include "cppcodecompletion.h"
-#include "kdevregexp.h"
 #include "backgroundparser.h"
 #include "ast.h"
 #include "ast_utils.h"
@@ -32,7 +31,6 @@
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
-#include <kregexp.h>
 #include <kstatusbar.h>
 #include <ktexteditor/document.h>
 
@@ -51,6 +49,76 @@
 #include <classstore.h>
 #include <parsedclass.h>
 #include <parsedscopecontainer.h>
+
+
+class SimpleVariable{
+public:
+    SimpleVariable()
+        : name( QString::null ), type( QString::null ){}
+    SimpleVariable( const SimpleVariable& source )
+        : name( source.name ), type( source.type ) {}
+    ~SimpleVariable(){}
+
+    SimpleVariable& operator = ( const SimpleVariable& source ){
+        name = source.name;
+        type = source.type;
+        return *this;
+    }
+
+    QString name;
+    QString type;
+};
+
+class SimpleContext{
+public:
+    SimpleContext( SimpleContext* prev=0 )
+        : m_prev( prev ) {}
+
+    virtual ~SimpleContext()
+        {
+            if( m_prev ){
+                delete( m_prev );
+                m_prev = 0;
+            }
+        }
+
+    SimpleContext* prev() const
+        { return m_prev; }
+
+    void attach( SimpleContext* ctx )
+        { m_prev = ctx; }
+
+    void detach()
+        { m_prev = 0; }
+
+    const QValueList<SimpleVariable>& vars() const
+        { return m_vars; }
+
+    void add( const SimpleVariable& v )
+        { m_vars.append( v ); }
+
+    void add( const QValueList<SimpleVariable>& vars )
+        { m_vars += vars; }
+
+    SimpleVariable findVariable( const QString& varname )
+        {
+            SimpleContext* ctx = this;
+            while( ctx ){
+                const QValueList<SimpleVariable>& vars = ctx->vars();
+                for( int i=vars.count() - 1; i>=0; --i ){
+                    SimpleVariable v = vars[ i ];
+                    if( v.name == varname )
+                        return v;
+                }
+                ctx = ctx->prev();
+            }
+            return SimpleVariable();
+        }
+
+private:
+    QValueList<SimpleVariable> m_vars;
+    SimpleContext* m_prev;
+};
 
 struct RecoveryPoint
 {
