@@ -974,9 +974,9 @@ As..." dialog will be opened to let you choose a path and filename for the file 
 <item><bf/Speichern unter.../ öffnet den "Speichere Datei unter..." Dialog, indem Sie der Datei unter einen neuen Namen abspeichern
 können.<p>
 <item><bf/Alles speichern/ Speichert alle geänderten Dateien<p>
-<item><bf/Print...	Ctrl+P/ Öffnet den "Drucke Datei" Dialog, in dem Sie die Druckereinstellung für die Verwendung von a2ps, enscript
+<item><bf/Drucken...	Ctrl+P/ Öffnet den "Drucke Datei" Dialog, in dem Sie die Druckereinstellung für die Verwendung von a2ps, enscript
 oder lpr festlegen, um dann zu drucken.<p>
-<item><bf/Quit			Ctrl+Q/ Beendet KDevelop. Wenn Dateien geändert wurden, werden Sie aufgefordert, diese zu speichern.<p>
+<item><bf/Verlassen  Ctrl+Q/ Beendet KDevelop. Wenn Dateien geändert wurden, werden Sie aufgefordert, diese zu speichern.<p>
 </itemize>
 <p>
 
@@ -1003,10 +1003,10 @@ werden, wenn mehr als ein Treffer in der gleichen Seite gefunden wurde.<p>
 <item><bf/Suchen in Dateien...		Ctrl+Alt+F/ Zeigt den "Suchen in Dateien" Dialog an, der über <tt/grep/ ganze Verzeichnisse mit
 zusätzlichen Wildcards durchsucht. Die Suchergebnisse werden in einer Liste angezeigt, die Dateinamen, Zeile und Ausdruck enthält. Die
 Auswahl eines Ausdrucks öffnet die gewählte Datei und setzt den Cursor an die Position des Ergebnisses.<p>
-<item><bf/Select All  Ctrl+A/ Markiert den gesamten Text der Datei, die momentatn geöffnet ist.<p>
-<item><bf/Deselect All/ Entfernt alle Markierungen in der aktuellen Datei. Dies wird meist nur in Verbindung mit Multi-Auswahl
+<item><bf/Alles auswählen  Ctrl+A/ Markiert den gesamten Text der Datei, die momentatn geöffnet ist.<p>
+<item><bf/Alles abwählen/ Entfernt alle Markierungen in der aktuellen Datei. Dies wird meist nur in Verbindung mit Multi-Auswahl
 benötigt, sodaß Sie nicht jede Auswahl separat entfernen müssen.<p>
-<item><bf/Invert Selection/ Invertiert die Auswahl, heißt: die aktuelle Auswahl wird entfernt und unmarkierter Text wird ausgewählt.<p>
+<item><bf/Auswahl umkehren/ Invertiert die Auswahl, heißt: die aktuelle Auswahl wird entfernt und unmarkierter Text wird ausgewählt.<p>
 </itemize>
 <p>
 
@@ -1521,122 +1521,128 @@ erstellen". Dabei werden alle Header-Dateien Ihres Projekts nach Klassen dokumen
 mit der Qt und KDE-Dokumentation verbunden wird, um Ihnen schnellen Zugriff auf vererbte Klassen zu gewährleisten.
 
 Zur Erzeugung des Projekthandbuchs sollten Sie ksgml2html (enthalten im KDE-SDK) und als Minimum die SGML-Tools auf Ihrem System
-installiert haben.
-
-To extend and change your project's online-documentation, you have to edit the
-documentation file for your project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu.
-In case sgmltools detect formatting errors, those will be displayed in the output window allow you to find the error line directly. The
-program "glimpse" is used to create a personal search-index for your documentation automatically. The index is generally build during
-the installation process, but can also be build with the <ref id="General Configuration" name="KDevelop Setup"> dialog. For a
-description of the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">.
+installiert haben. Um die Dokumentation Ihres Projekts zu ändern und zu erweitern, müssen Sie die index.sgml Datei editieren. Hinweise
+dazu finden Sie im <htmlurl url="programming.html" name="KDevelop Programmierhandbuch">. Nach dem Speichern Ihrer Änderungen rufen Sie
+"Benutzerhandbuch erstellen" aus dem Projekt-Menü auf. Falls die SGML-Tools Fehler in der Formatierung entdecken, werden diese im
+Ausgabefenster angezeigt, womit Sie wie übllich sofort zur Fehlerzeile springen können. Das Programm "Glimpse" wird zur Erzeugung eines
+Persönlichen Such-Indexes zu Ihrer Dokumentation benötigt. Der Index wird gewöhnlich während des Installationsprogramms erstellt, Sie
+können dies aber jederzeit nachholen, indem Sie die entsprechende Option im <ref id="General Configuration" name="KDevelop Setup">
+Dialog auswählen. Zur Verwendung der zur Verfügung stehenden Suchfunktionen lesen Sie bitte auch <ref id="Benutzen des Suchindexes"
+name="Benutzen des Suchindexes">.
 
 <sect2>Zur Verfügung Stehende Dokumentation
 <p>
-The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
-the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
-installation, configuration, available functionality and introduction to application development. The second book is <htmlurl
-url="programming.html" name="The KDevelop Programming Handbook"> in it's first edition. The programming handbook covers most questions
-related to the creation and extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich
-facilities that applications created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring
-<idx/KDE/-compliance, which covers the same instructions given on the internet site of <htmlurl url="http://developer.kde.org"
-name="http://developer.kde.org"> However, the programming handbook cannot replace any additonal documentation available in printed or
-electronic form about the C++ programming language as well as about the usage of the Qt-library in certain terms.
+Die KDevelop IDE bringt selbst zwei Sätze an Online-Dokumentation mit, die Sie entweder über das Hilfe-Menü oder durch Auswahl im
+Dokumentations-Baum im Ordner KDevelop erreichen. Das erste Buch ist dieses Handbuch in der Online-Version, die Ihnen alle benötigten
+Informationen in Bezug auf Installation, Konfiguration, verfügbarer Funktionalität und eine Einführung in die Entwicklung von
+Applikationen zur Verfügung stellt.
 
-The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">.
-It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to
-untar it as root with <tt/tar zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation
-directory of KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
-($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+Das zweite Buch ist das <htmlurl url="programming.html" name="KDevelop Programmierhandbuch"> in seiner ersten Ausgabe. Das
+Programmierhandbuch behandelt die meisten Fragen in Bezug auf die Erzeugung und Erweiterung von Projekten, die mit KDevelop bearbeitet
+werden können. Durch eine detaillierte Beschreibung der Rahmenapplikation erhalten Sie einen Überblick, was Ihnen Applikationen, die
+mit der Qt- und den KDE-Bibliotheken erstellt werden, leisten können; ebenfalls enthält dieses Handbuch Richtlinien zur Erstellung von
+KDE-Kompatiblen Programmen, die Generell die gleichen Instruktionen enthalten, wie Sie auf der Internet-Seite von <htmlurl
+url="http://developer.kde.org" name="http://developer.kde.org"> finden. Jedoch kann dieses Programmierhandbuch keine zusätzliche
+Dokumentation ersetzen, die Sie entweder gedruckt oder in elektronischer Form zur C++ Programmiersprache erhalten können, wie auch die
+Verwendung der Qt-Bibliothek.
 
-The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
-The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
-manually in the <ref id="General Configuration" name="KDevelop Setup"> dialog. Also, all available documentation for the KDE-libraries
-are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
-to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
-by KDoc- so this program, included in the <idx/KDE-SDK/, has to be installed before the documentation can be generated. As the
-installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
-this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the <ref
-id="General Configuration" name="KDevelop Setup"> dialog.
+Die C/C++-Referenz, die KDevelop zur Zeit verwendet ist nur auf der KDevelop Homepage unter <htmlurl
+url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">
+erhältlich; bei Distributionen wird diese evtl. mitgeliefert. Sie können diese einfach installieren, indem Sie das Quellpaket beziehen
+und in das Haupt-KDE Verzeichnis kopieren ($KDEDIR). Dort entpacken Sie das Paket als Administrator (root) mit <tt/tar zxvf
+c_c++_reference.tar.gz/, die Referenz wird dann in das Dokumentations-Verzeichnis kopiert. Zur Deinstallation der Referenz löschen Sie
+den Ordner "reference" unter ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 
-The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
-documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
-project.
+Der Qt/KDE-Bibliotheks-Dokumentationsordner erlaubt Ihnen den direkten Zugriff auf die HTML-Online-Dokumentation Ihrer Kopie der
+Qt-Bibliothek. Der Pfad zur Bibliotheksdokumentation wird für gewöhnlich durch das KDevelop Installationsprogramm ermittelt, Sie können
+diesen aber auch manuell im <ref id="General Configuration" name="KDevelop Setup"> Dialog einstellen. Weiterhin wird die verfügbare
+Dokumentation der KDE-Bibliotheken nach dem Bibliotheksnamen aufgelistet, damit Sie bei Verwendung von Klassen einer Bibliothek sehr
+einfach den Biblitheks-typ ermitteln können, um dann die Linker-Einstellungen Ihres Projekts zu aktualisieren. Beachten Sie, das die
+ganze KDE-Bibliotheksdokumentation Ihnen nur zur Verfügung steht, wenn Sie diese Mit KDoc, dem im KDE-SDK enthaltenen Programm,
+erstellt haben. Da das Installationsprogramm von KDevelop dies automatisch erstellt, sollten Sie daher KDoc vor der Installation von
+KDevelop installieren. Sie können die Dokumentation jedoch jederzeit mit den Optionen im <ref id="General Configuration" name="KDevelop
+Setup"> Dialog erstellen.
+
+Der Dokumentationsbaum enthält weiterhin den Ordner "Andere", der zum Hinzufügen eigener Dokumentation gedacht ist, wie unten
+beschrieben. Schließlich gibt Ihnen der Dokumentationsbaum Zugriff auf die API und das Handbuchs Ihres aktuellen
+Projekts.
 
 <sect2>Hinzufügen eigener Dokumentation zum Hilfebrowser
 <p>
-To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree called
-Documentation, containing four folders. The "Others" folder is, by default, empty. On a right mousebutton click over this folder,
-a context menu opens that has an entry "Add Entry". Select this to open the Add Entry dialog where you have to enter two values:
-the upper one for the name that will be displayed for the documentation within the Doc-tree, and, below that, a file-entry line.
-Here, you have to enter the path and filename to the startpage that will be opened by the selection of the entry later. You can
-enter the path and filename directly or by selection of the pushbutton on the right to open a file-chooser dialog. This allows a
-quick browsing on your system to the path for your startpage. Mind that only HTML-documentation can be selected, so only HTML
-files are allowed to choose. Selecting OK will add the entry to the Doc-tree and is available directly.
+Um Ihren Hilfe-Browser anzupassen, öffnen Sie die Baumansicht und wählen Sie den "DOC" Tabulator.Sie sehen dann einen geöffneten Baum,
+der vier enthält. Der Ordner "Andere" ist Standardmäßig leer. Durch einen rechten Mausklick über diesem Ordner rufen Sie das
+Kontextmenü auf, das einen Befehl "Eintrag hinzufügen" enthält. Wählen Sie diesen aus, um das Dialogfeld "Eintrag hinzufügen"
+aufzurufen, in dem Sie zwei Werte angeben müssen: der Obere für den Namen, der die Dokumentation im Baum repräsentiert, und darunter
+eine Datei-Eingabezeile. Hier geben Sie den Pfad und Dateinamen zur Startseite der Dokumentation an, die bei einer späteren Auswahl
+aufgerufen wird. Sie können den Pfad und Dateinamen direkt angeben oder durch einen Dateiauswahl-Dialog setzen, den Sie durch Betätigen
+der Schlatfläche mit dem geöffneten Ordner aufrufen. Dies erlaubt Ihnen das Schnelle durchsuchen Ihres Systems nach dem Pfad zur
+Startseite. Bedenken Sie, das Sie nur auf HTML-Dokumentation zugreifen können, also nur HTML-Dateien sind zur Auswahl erlaubt. Wählen
+Sie OK, um den Eintrag dem Dokumentationsbaum hinzuzufügen.
 
 <sect2>Benutzen des Suchindexes<label id="Benutzen des Suchindexes">
 <p>
-KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
-needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
-within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">. The index is also
-automatically generated during the installation program.
+KDevelop enthält eine ganze Reihe von Funktionen, die Ihnen helfen, Informationen innerhalb der HTML-Dokumentation zu suchen. Um diese
+Fähigkeiten zu nutzen, benötigen Sie das Programm "Glimpse", einem frei erhältlichen Datenbank-Generator, der den Suchindex erstellt
+und Anfragen in der Dokumentation bearbeitet. Um den Suchindex zu erstellen, lesen Sie bitte den Abschnitt <ref id="General
+Configuration" name="KDevelop Setup">. Der Index wird ebenfalls automatisch während des Installationsprogramms erstellt.
 
-The search functions are available through several ways which you can choose from:
+Die Suchfunktionen stehen Ihnen über verschiedene Wege zur Verfügung:
 <enum>
-<item>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for. Then
-press the right mouse button and select look up: "expression" This can also be done by selecting "Search Marked Text" from the
-help menu, the shorcut key F2 or by selecting the Search icon from the toolbar.
-<item>in the Documentation browser select the text you want to look up and press the right mouse button, select look
-up:"expression" or select "Search Marked Text" or the search icon as above.
-<item>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
-on..." icon from the toolbar, opening a search dialog where you can enter the expression you want to get information for.
+<item>Im Editor: wählen Sie den Text aus, zu dem Sie Hilfe benötigen oder plazieren Sie den Cursor im Wort, das Sie suchen. Dann wählen
+Sie im Kontextmenü den Eintrag "Suche: &lt;Ausdruck&gt;". Sie können dies auch über den Eintrag "Suche Markierten Text" aus dem
+Hilfe-Menü, die Schnelltaste F2 oder die entsprechende Schlaltfläche der Werkzeugleiste aufrufen.
+<item>Im Dokumentationsbrowser: wählen Sie den Text aus, den Sie suchen und wählen Sie wie vor im Kontextmenü den Eintrag "Suche:
+&lt;Ausdruck&gt;", optional den Befehl "Suche Markierten Text" oder die Schaltfläche der Werkzeugleiste wie oben.
+<item>Wenn sie nach einem speziellen Ausdruck suchen, wählen Sie "Suche nach Hilfe zu..." im Hilfe-Menü oder wählen Sie die
+entsprechende Schaltfläche aus der Werkzeugleiste, die einen Suchdialog öffnet, in dem Sie den gesuchten Ausdruck eingeben können.
 </enum>
-Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
-entries.
+Direkten Zugriff auf spezielle Dokumentation erhalten Sie über die entsprechenden Symbole im Dokumentationsbaum oder den Einträgen des
+Hilfe-Menüs.
 
-The Helpbrowser also offers support for grep to search for a selection within your current project, e.g you've opened the documentation
-page for the <tt/KTMainWindow/ class (KDEUI library) and you want to know where in your code <tt/KTMainWindow/ appears. Mark
-<tt/KTMainWindow/ and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
-your grep search directly. Then you can choose an result line to jump to the according sourcecode.
+Der Hilfebrowser bietet weiterhin Unterstützung für Grep, um eine Auswahl innerhalb ihres Projektes zu suchen, z.B. wenn Sie die
+Dokumentationsseite zur <tt/KTMainWindow/ Klasse (KDEUI Bibliothek) geöffnet haben und Sie wissen möchten, wo Sie innerhalb ihres Codes
+der Ausdruck <tt/KTMainWindow/ erscheint. Markieren Sie <tt/KTMainWindow/ und wählen Sie dann entweder "Grep: KTMainWindow" oder die
+Schnelltaste UMSCHALT+F2. Der "Suchen in Dateien" Dialog erscheint dann sofort mit den Ergebnissen Ihrer Grep-Suche. Sie können die
+entsprechenden Ergebnisse auswählen, um zum Quellcode zu wechseln.
 
 <sect>Arbeiten mit dem Editor<label id="Arbeiten mit dem Editor">
 <p>
-An important part of the integrated development environment is the editor. You're using it for:
+Ein wichtiger Teil der Integrierten Entwicklungsumgebung ist der Editor. Sie benutzen ihm, um:
 <itemize>
-<item>creating, opening and saving source and project files
-<item>editing source and project files
-<item>writing your sgml documentation
-<item>printing your project files
+<item>Quellcode- und Projektdateien zu erzeugen, öffnen und speichern
+<item>Quellcode- und Projektdateien zu bearbeiten
+<item>Ihre SGML-Dokumentation zu schreiben
+<item>Ihre Projektdateien zu drucken
 </itemize>
-Generally, the editor itself doesn't do much difference in comparison to other editors; especially as it is a build-in version of
-the popular KWrite, also known as the "Extended Editor". If you're familar with that, you won't have any problems using it for
-managing your projects. In addition to normal editors, KDevelop contains a new printing system, that is far more extended for use
-with sourcecodes- and you can choose between the printing program you want to use.
+Im allgemeinen unterscheidet sich der Editor nicht so sehr von anderen; speziell da es eine angepasste Version des bekannten KWrite,
+auch als "Erweiterter Editor" bekannt, ist. Wenn Sie damit vertraut sind, werden Sie keine Probleme bei der Verwendung zur Verwaltung
+Ihrer Projekte haben. Zusätzlich zu normalen Editoren enthält KDevelop ein neues Drucksystem, das speziell auf die Verwendung mit
+Quellcode zugeschnitten ist- und Sie können das zu verwendende Druckprogramm auswählen.
 
-This section gives you more information about how to handle your project files and to make you more familiar with the editor's
-functionality. A lot of Unix-hardliners would prefer using Emacs or XEmacs- they're fine with that. But it isn't neccessary for
-easy programming, and especially for beginners, to work themselves into powerful editors which shall, in the result, only allow
-you to enter your code.
+Dieser Abschnitt gibt Ihnen weitere Informationen darüber, wie Sie Ihre Projektdateien verwalten und macht Sie mit den Funktionen des
+Editors bekannt. Eine Menge Unix-Hardliner würden sicher Emacs oder XEmacs bevorzugen- Sie sind damit zufrieden. Aber letztlich ist es
+zur einfachen Programmierung, speziell für Anfänger, nicht nötig, sich in solch starke Editoren einzuarbeiten, die letzendlich doch nur
+zur Eingabe des Codes verwendet werden.
 
 <sect1>Organisation von Projektdateien
 <p>
-The following sections describe how to create, save, open and close your project files you need to edit- mind that this doesn't
-include translation files or pixmaps. Those are recognized automatically and the according editing program like KTranslator opens
-those files for you.
+Der folgende Abschnitt beschreibt, wie Sie Projektdateien anlegen, speichern, öffnen und schließen- beachten Sie, das dies noch nicht
+die Übersetzungsdateien und Grafiken beinhaltet. Diese werden automatisch erkannt und mit den entsprechenden Bearbeitungsprogrammen wie
+KTranslator geöffnet.
 
-To give you an easy access to your files, KDevelop contains two easy-to-handle treeviews, similar to a filemanager, that recognize
-if you selected a file, and opens it in the according editor window. The main view contains two windows that are used
-independently, but connected via the Project Editor, so you can do all menubar actions the same way. The intention behind this is
-that it allows you to handle two windows at the same time, although only one is visible. The C/C++ window thereby takes another
-task, which allows you to easily compile your sources one by one, so you can check the impelmentations without having to run a
-complete build-process over your project.
+Um Ihnen einen einfachen Zugriff auf Ihre Dateien zu geben, enthält KDevelop zwei einfach zu bedienende Baumansichten, ähnlich eines
+Dateimanagers, der die Auswahl einer Datei registriert und sie im entsprechenden Fenster öffnet. Die Haupansicht enthält zwei
+Editierfenster, die unabhängig voneinander arbeiten aber über den Projekt-Editor verbunden sind, sodaß Sie die gleichen Menübefehle
+verwenden können. Das C/C++ Fenster übernimmt dabei gleichzeitig die Aufgabe, Ihnen das einzelne Übersetzen von Quellcode-Dateien zu
+ermöglichen, damit Sie die Implementierung prüfen können, ohne einen vollständigen Erstellungsvorgang aufrufen zu müssen.
 
-This can be done when having the C/C++ window on top. Select "Compile File" from the Build-menu or press the according button in
-the toolbar. Your file gets saved and compiled, and you can control any errors by the compiler output in the output window.
+Dies können Sie, wenn das C/C++ Fenster sichtbar ist, durch Auswahl von "Datei compilieren" aus dem "Bauen" Menü oder das
+entsprechende Symbol der Werkzeugleiste aufrufen. Ihre Datei wird dann gespeichert und übersetzt, wie üblich stehen Ihnen dann die
+Compilermeldungen im Ausgabe-Fenster zur Verfügung.
 
-Within the IDE you can open as many textfiles as you like. All opened files are listed in the Window-menu, so you can switch
-between them by selecting the according filename from the menu. Further, the actual opened file is displayed with its name in the
-window frame of KDevelop.
+Innerhalb der IDE können Sie soviele Dateien öffnen, wie Sie möchten. Alle geöffneten Dateien werden im Fenster-Menü aufgelistet, damit
+Sie zwischen den Dateien durch Auswahl des Dateinamens wechseln können. Weiterhin wird der Dateiname der aktuell geöffneten Datei in
+der Titelleiste von KDevelop angezeigt.
 
 <sect2>Erzeugen und Speichern von Dateien
 <p>
@@ -3432,4 +3438,10 @@ Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </article>
+
+
+
+
+
+
 

@@ -1427,11 +1427,11 @@ documentation.
 To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
 classdocumentation for the <idx/KDE-libraries/ during the setup process, but can also invoked by option in the <ref id="General
 Configuration" name="KDevelop Setup">. For the generation of an API (Application Programming Interface) Documentation for your
-project's classes, KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of
-the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the Helpbrowser. For the
-generation of the project handbooks, you should have ksgml2html (provided with the <idx/KDE-SDK/) and, as a minimum, SGML-tools
+project's classes, KDoc is also used and called by the Project-menu, entry "Make API-Doc". This will process all current header files
+of the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the Helpbrowser. For
+the generation of the project handbooks, you should have ksgml2html (provided with the <idx/KDE-SDK/) and, as a minimum, SGML-tools
 installed on your system. To extend and change your project's online-documentation, you have to edit the documentation file for your
-project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
+project by selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Project-menu. In case sgmltools detect
 formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
 is used to create a personal search-index for your documentation automatically. The index is generally build during the
 installation process, but can also be build with the <ref id="General Configuration" name="KDevelop Setup"> dialog. For a description of
@@ -1450,11 +1450,11 @@ name="http://developer.kde.org"> However, the programming handbook cannot replac
 electronic form about the C++ programming language as well as about the usage of the Qt-library in certain terms.
 
 The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">.
-It can be installed easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to
-untar it as root with <tt/tar zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation
-directory of KDevelop. For uninstalling the reference documentation you just have to delete the "reference" folder under
-($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">. On
+distributions the reference may be included, see your distribution installation program index for more information. It can be installed
+easily by downloading and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you have to untar it as root with <tt/tar
+zxvf c_c++_reference.tar.gz/, the reference will then be copied the documentation directory of KDevelop. For uninstalling the reference
+documentation you just have to delete the "reference" folder under ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 
 The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
 The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
@@ -1462,24 +1462,24 @@ manually in the <ref id="General Configuration" name="KDevelop Setup"> dialog. A
 are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
 to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
 by KDoc- so this program, included in the <idx/KDE-SDK/, has to be installed before the documentation can be generated. As the
-installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
+installation program of KDevelop does this automatically, it should be installed before running the KDevelop Setup. If
 this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the <ref
 id="General Configuration" name="KDevelop Setup"> dialog.
 
-The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
-documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
+The documentation tree also contains the "Others" folder which is inteded to contain all personally customized
+documentation as described below. Finally, the Doc-Tree allows access to the API and the Manual for your current
 project.
 
 <sect2>Adding Documentation to the Helpbrowser
 <p>
-To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree called
-Documentation, containing four folders. The "Others" folder is, by default, empty. On a right mousebutton click over this folder,
-a context menu opens that has an entry "Add Entry". Select this to open the Add Entry dialog where you have to enter two values:
-the upper one for the name that will be displayed for the documentation within the Doc-tree, and, below that, a file-entry line.
-Here, you have to enter the path and filename to the startpage that will be opened by the selection of the entry later. You can
-enter the path and filename directly or by selection of the pushbutton on the right to open a file-chooser dialog. This allows a
-quick browsing on your system to the path for your startpage. Mind that only HTML-documentation can be selected, so only HTML
-files are allowed to choose. Selecting OK will add the entry to the Doc-tree and is available directly.
+To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree containing four folders.
+The "Others" folder is, by default, empty. On a right mousebutton click over this folder, a context menu opens that has an entry "Add
+Entry". Select this to open the Add Entry dialog where you have to enter two values: the upper one for the name that will be displayed
+for the documentation within the Doc-tree, and, below that, a file-entry line. Here, you have to enter the path and filename to the
+startpage that will be opened by the selection of the entry later. You can enter the path and filename directly or by selection of the
+pushbutton on the right to open a file-chooser dialog. This allows a quick browsing on your system to the path for your startpage. Mind
+that only HTML-documentation can be selected, so only HTML files are allowed to choose. Selecting OK will add the entry to the Doc-tree
+and is available directly.
 
 <sect2>Using the Search Index<label id="Using the Search Index">
 <p>
@@ -3337,6 +3337,12 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </article>
+
+
+
+
+
+
 
 
 
