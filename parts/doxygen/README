@@ -45,29 +45,41 @@ To update to a newer doxygen version:
 -------------------------------------
 
 1. Merge over the config.h and config.cpp files from the addon/doxywizard/
-   directory in the doxygen sources. You'll have to issue:
+   directory in the doxygen sources.
+   You'll need:
+     GNU bison v1.34 or better
+     GNU flex v2.5.4 or better
+     Kompare from KDEsdk
+
+   You'll have to issue:
        $ ./configure --with-doxywizard && make
    to get the config.h and config.cpp files on this directory.
    You should also copy config.l if you'd like to do some debugging.
-   To do the merge you should use:
+
+   To do the merge on config.cpp you should use:
        $ kompare doxygen-location/addon/doxywizard/config.cpp  kdevelop-location/parts/doxygen/config.cpp
-       $ kompare doxygen-location/addon/doxywizard/config.h    kdevelop-location/parts/doxygen/config.h
-   Be careful because doxygen uses the deprecated QList class while KDevelop
+   -Be careful because doxygen uses the deprecated QList class while KDevelop
    uses the new QPtrList so you should not merge certain lines of code!!!
-   Be careful because doxygen uses the deprecated QRegExp::match() method while
+   -Be careful because doxygen uses the deprecated QRegExp::match() method while
    KDevelop uses the new QRegExp::search() and QRegExp::matchedLength() mehtods
    instead so you should not merge certain lines of code!!!
 
-2. Replace _ALL_ references to the deprecated QList class with the new QPtrList
-   class in config.h and config.cpp
+   To do the merge on config.h you should use:
+          $ kompare doxygen-location/addon/doxywizard/config.h    kdevelop-location/parts/doxygen/config.h
+   -Again, be careful because doxygen uses the deprecated QList class while KDevelop
+   uses the new QPtrList so you should not merge certain lines of code!!!
 
-3. Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
 
-4. Add the new i18n strings to messages.cpp
+2. Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
 
-5. Update version.cpp
+3. Add the new i18n strings to messages.cpp.
+   To do so, run KDevelop and go to Project-> Project Options -> Doxygen.
+   Take a look at KDevelop' console output, it will warn you about the missing
+   messages. Add them to messages.cpp file.
 
-6. Add anything else you needed to do, to get it to compile, to this README file.
+4. Update version.cpp
+
+5. Add anything else you needed to do, to get it to compile, to this README file.
 
 
 Everything else we can customize for our look & feel.
