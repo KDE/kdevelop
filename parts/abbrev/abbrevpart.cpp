@@ -394,6 +394,9 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
     KConfig* config = AbbrevFactory::instance()->config();
     config->setGroup( "General" );
     
+    disconnect( view, 0, this, 0 );
+    disconnect( doc, 0, this, 0 );
+
     if( config->readBoolEntry("AutoExpand", true) ){
 	connect( view, SIGNAL(completionAborted()),
 		 this, SLOT(slotCompletionAborted()) );
