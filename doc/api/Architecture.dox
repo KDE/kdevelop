@@ -7,6 +7,29 @@
 KDevelop uses a plugin based architecture. This will be explained in more
 detail in the next sections. To add a new plugin check the \ref howToAddPlugins page.
 
+\section devteammodel Development Team cooperation model
+
+KDevelop is the result of the work of many people. To help syncronize the effords and to automate
+some tasks, the team uses many tools:
+
+  - CVS servers
+  - KDE Bugzilla
+  - Web servers
+  - Mailing Lists
+  - IRC
+  - Doxygen
+  - docbook
+  - LXR
+  - E-mail :)
+  - Cron Jobs
+  - and of course KDevelop :)
+  .
+
+They get interconnected like this:
+
+\image html Development.png
+
+
 \section overview Source Overview
 
 \subsection source-division Main Source Divisions
