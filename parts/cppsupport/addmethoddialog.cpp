@@ -276,6 +276,7 @@ void AddMethodDialog::accept()
 		QTextStream stream( &str, IO_WriteOnly );
 		stream << "\n\n"
                     << "/*!\n"
+		    << "    \\fn " << className << "::" << item->text( 4 ) << "\n"
                     << " */\n";
 
                 if( item->text(0) == "True" )
