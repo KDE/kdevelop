@@ -1,3 +1,8 @@
+2001-02-23  jbb <jbb@kdevelop.org>
+    * Fixed Multiple tools beng started after adding a tool
+      grep support for Solaris - find params needed adjusting
+      Update of QExtMDI template.
+
 2000-12-30  jbb <jbb@kdevelop.org>
     * Ported 1.3 to kde2 - This is an interim version that
       allows users to do away with kde1 whilst kdevelop2.0 is

@@ -38,16 +38,9 @@ else {
   
   #start configure
   printflush (STDOUT,"make configure...\n");
-  if ($processes{APPLICATION} eq "qextmdi") {
-    printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall -DNO_KDE2\"\n>./configure $confargs\n");
-    chdir ($overDirectory);
-    system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall -DNO_KDE2\" ./configure " . $confargs);
-  }
-  else {
-    printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
-    chdir ($overDirectory);
-    system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);
-  }	
+  printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
+  chdir ($overDirectory);
+  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);	
 }
 
 #if API-Files was chosen in kAppWizard

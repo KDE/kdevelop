@@ -2161,15 +2161,15 @@ void CKDevelop::slotToolsTool(int tool){
   if(project){
     argument.replace( QRegExp("%D"), prj->getProjectDir() );
   }
+
   QString process_call;
-  if(argument.isEmpty()){
-      process_call=tools_exe.at(tool);
-   } else {
-      process_call=tools_exe.at(tool)+argument;
-   }
-  KShellProcess process("/bin/sh");
-  process << process_call;
-  process.start(KProcess::DontCare);
+  if(argument.isEmpty())
+    process_call=tools_exe.at(tool);
+  else
+    process_call=tools_exe.at(tool)+argument;
+
+  kdDebug() << "Tool wanted <" << process_call << ">" << endl;
+  (void) KRun::runCommand (process_call);
 }
 
 

@@ -320,11 +320,12 @@ void GrepDialog::slotSearch()
     filepattern += "'";
     if (!recursive_box->isChecked())
         filepattern += " -maxdepth 1";
-    filepattern += " -name ";
+    filepattern += " \\( -name ";
     filepattern += files;
+    filepattern += " \\) -print";
     filepattern += "`";
 
-    childproc = new KShellProcess("/bin/sh");
+    childproc = new KShellProcess();
     *childproc << "grep";
     *childproc << "-n";
     *childproc << (QString("-e '") + pattern + "'");
@@ -335,7 +336,8 @@ void GrepDialog::slotSearch()
          SLOT(childExited()) );
     connect( childproc, SIGNAL(receivedStdout(KProcess *, char *, int)),
          SLOT(receivedOutput(KProcess *, char *, int)) );
-    childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
+    // actually it should be checked whether the process was started succesfully
+    bool success=childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 void GrepDialog::slotSearchFor(QString pattern){

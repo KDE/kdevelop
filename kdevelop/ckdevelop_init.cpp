@@ -853,6 +853,7 @@ void CKDevelop::initMenuBar(){
   // Tools-menu entries
   tools_menu = new QPopupMenu;
   menuBar()->insertItem(i18n("&Tools"), tools_menu);
+  connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
   ///////////////////////////////////////////////////////////////////
   // Options-menu entries
@@ -997,7 +998,7 @@ void CKDevelop::initMenuBar(){
   connect(p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(debug_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   //connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
@@ -1531,7 +1532,7 @@ void CKDevelop::setToolmenuEntries(){
 	for(items=0;items<tools_entry.count();items++)
 		tools_menu->insertItem(tools_entry.at(items),items);
 	
-	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
+//	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }
 
 void CKDevelop::initDebugger()

@@ -2320,7 +2320,6 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" -lqt -lXext -lX11");
   }
   else if (qextmdiitem->isSelected()) {
-    project->setAdditCXXFLAGS (" -DNO_KDE2");   
     project->setLDADD (" -lqt -lXext -lX11 -lqextmdi");
   }
   else if (gnomenormalitem->isSelected()) {
@@ -2334,8 +2333,10 @@ void CKAppWizard::slotProcessExited() {
     QString qtpath=config->readEntry("qt2dir");
     if(qtpath.right(1) == "/")
       qtpath=qtpath.remove(qtpath.length()-1,1);
-    if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+    if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() )
       project->setConfigureArgs("--with-qt-dir="+qtpath);
+    else if( qextmdiitem->isSelected())
+      project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");   
     else{
       QString kde2path=config->readEntry("kde2dir");
       if(kde2path.right(1) == "/")
