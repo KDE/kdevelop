@@ -7,6 +7,7 @@
   </Menu>
   <Menu name="build" >
     <Action name="build_build" />
+    <Action name="build_compilefile" />
     <Action name="build_configure" />
     <Action name="build_makefilecvs" />
     <Action name="build_install" />

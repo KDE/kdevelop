@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kparts/part.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -75,6 +76,10 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
+
+    action = new KAction( i18n("Compile &File"), "make_kdevelop",
+                          this, SLOT(slotCompileFile()),
+                          actionCollection(), "build_compilefile" );
     
     action = new KAction( i18n("Run Configure"), 0,
                           this, SLOT(slotConfigure()),
@@ -152,27 +157,6 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 }
-
-
-#if 0
-// find the canonical absolute path of a given path
-// get rid of (absolute at least!) symlinks
-// getting rid of relative symlinks is a little trickier
-QString realPath(QString path)
-{
-    QFileInfo file(path);
-    if (file.exists() && file.isSymLink())
-        path = file.readLink();
-    int pos = path.findRev('/');
-    if (pos == -1)
-         return path;
-    else {
-        QString rem = path.left(pos);
-        QString last = path.right(path.length()-pos);
-        return realPath(rem) + last;
-    }
-}
-#endif
 
 
 void AutoProjectPart::openProject(const QString &dirName, const QString &projectName)
@@ -355,6 +339,34 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 void AutoProjectPart::slotBuild()
 {
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
+}
+
+
+void AutoProjectPart::slotCompileFile()
+{
+    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    if (!part || !part->url().isLocalFile())
+        return;
+
+    QString fileName = part->url().path();
+    QFileInfo fi(fileName);
+    QString sourceDir = fi.dirPath();
+    QString baseName = fi.baseName();
+    kdDebug(9020) << "Compiling " << fileName
+                  << "in dir " << sourceDir
+                  << " with baseName " << baseName << endl;
+
+    QString projectDir = projectDirectory();
+    if (!sourceDir.startsWith(projectDir)) {
+        KMessageBox::sorry(m_widget, i18n("Can only compile files in directories which belong to the project."));
+        return;
+    }
+
+    QString buildDir = buildDirectory() + sourceDir.mid(projectDir.length());
+    QString target = baseName + ".lo";
+    kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
+    
+    startMakeCommand(buildDir, target);
 }
 
 

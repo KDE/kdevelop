@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
+#include <kparts/part.h>
 #include <kpopupmenu.h>
 
 #include "domutil.h"
@@ -58,6 +59,10 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
+    
+    action = new KAction( i18n("Compile &File"), "make_kdevelop",
+                          this, SLOT(slotCompileFile()),
+                          actionCollection(), "build_compilefile" );
     
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
@@ -335,6 +340,31 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 void CustomProjectPart::slotBuild()
 {
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
+}
+
+
+void CustomProjectPart::slotCompileFile()
+{
+    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    if (!part || !part->url().isLocalFile())
+        return;
+
+    QString fileName = part->url().path();
+    QFileInfo fi(fileName);
+    QString sourceDir = fi.dirPath();
+    QString baseName = fi.baseName();
+    kdDebug(9020) << "Compiling " << fileName
+                  << "in dir " << sourceDir
+                  << " with baseName " << baseName << endl;
+    
+    // What would be nice: In case of non-recursive build system, climb up from
+    // the source dir until a Makefile is found
+
+    QString buildDir = sourceDir;
+    QString target = baseName + ".o";
+    kdDebug(9020) << "builddir " << buildDir << ", target " << target << endl;
+    
+    startMakeCommand(buildDir, target);
 }
 
 

@@ -275,7 +275,7 @@ void FileTreeWidget::slotItemExecuted(QListViewItem *item)
 }
 
 
-void FileTreeWidget::slotContextMenu(KListView* listView, QListViewItem* item, const QPoint &p)
+void FileTreeWidget::slotContextMenu(KListView*, QListViewItem* item, const QPoint &p)
 {
     KPopupMenu popup(i18n("File Tree"), this);
     

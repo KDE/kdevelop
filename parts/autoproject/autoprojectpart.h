@@ -62,6 +62,7 @@ private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void slotAddTranslation();
     void slotBuild();
+    void slotCompileFile();
     void slotClean();
     void slotDistClean();
     void slotInstall();

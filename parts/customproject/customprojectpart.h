@@ -50,6 +50,7 @@ private slots:
     void slotAddToProject();
     void slotRemoveFromProject();
     void slotBuild();
+    void slotCompileFile();
     void slotClean();
     void slotExecute();
     void updateTargetMenu();

@@ -1,3 +1,7 @@
+2002-06-12  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Compiling of single files in auto and custom project parts
+
 2002-06-11  John Firebaugh  <jfirebaugh@kde.org>
         Debugger bugfixes:
         * Use core stop button and signal
