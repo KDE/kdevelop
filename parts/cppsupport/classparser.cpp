@@ -2411,7 +2411,7 @@ void CClassParser::parseToplevel()
       parseTopLevelLexem( store->globalScope() );
 
 
-// ### THIS CRASHES when redrawing the listview   kapp->processEvents(500);
+    kapp->processEvents(500);
     getNextLexem();
   }
 }
