@@ -61,6 +61,7 @@ public:
     DocumentationPlugin* plugin() const { return m_plugin; }
     
     virtual void setOpen(bool o);
+    void load();
     
 protected:
     virtual void activate();

@@ -104,12 +104,20 @@ DocumentationCatalogItem::~ DocumentationCatalogItem( )
 
 void DocumentationCatalogItem::setOpen(bool o)
 {
-    if (o && !isLoaded)
+    if (o)
     {
-        plugin()->createTOC(this);
-        isLoaded = true;
+        load();
     }
     DocumentationItem::setOpen(o);
+}
+
+void DocumentationCatalogItem::load()
+{
+if(isLoaded)
+return;
+
+        plugin()->createTOC(this);
+        isLoaded = true;
 }
 
 void DocumentationCatalogItem::activate()
