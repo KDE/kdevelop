@@ -3002,7 +3002,7 @@ bool KWrite::askReplaceEnd() {
   kWriteDoc->updateViews();
   if (s.flags & KWrite::sfFinished) {
     // replace finished
-    str = i18n("%1 replace(s) made").arg(replaces);
+    str = i18n("%n replace made","%n replaces made",replaces);
     KMessageBox::information(this, str, i18n("Replace"));
     return true;
   }
@@ -3010,16 +3010,22 @@ bool KWrite::askReplaceEnd() {
   // ask for continue
   if (!(s.flags & KWrite::sfBackward)) {
     // forward search
-    str = i18n("%1 replace(s) made.\n"
+    str = i18n("%n replace made.\n"
                "End of document reached.\n"
-               "Continue from the beginning?").arg(replaces);
+               "Continue from the beginning?",
+	       "%n replaces made.\n"
+               "End of document reached.\n"
+               "Continue from the beginning?",replaces);
     query = KMessageBox::questionYesNo(this, str, i18n("Replace"),
 		i18n("Continue"), i18n("Stop"));
   } else {
     // backward search
-    str = i18n("%1 replace(s) made.\n"
+    str = i18n("%n replace made.\n"
                 "Beginning of document reached.\n"
-                "Continue from the end?").arg(replaces);
+                "Continue from the end?",
+		"%n replaces made.\n"
+                "Beginning of document reached.\n"
+                "Continue from the end?",replaces);
     query = KMessageBox::questionYesNo(this, str, i18n("Replace"),
                 i18n("Continue"), i18n("Stop"));
   }
