@@ -21,6 +21,13 @@
 </othercredit>
 </authorgroup>
 
+<copyright>
+<year>1998</year>
+<year>1999</year>
+<year>2000</year>
+<holder>Ralf Nolden</holder>
+</copyright>
+
 <date>21/03/2000</date>
 <releaseinfo>1.02.00</releaseinfo>
 
@@ -28,13 +35,6 @@
 <keyword>KDE</keyword>
 <keyword>Kdevelop</keyword>
 </keywordset>
-
-<copyright>
-<year>1998</year>
-<year>1999</year>
-<year>2000</year>
-<holder>Ralf Nolden</holder>
-</copyright>
 
 <abstract>
 <para>This handbook is part of the <application>KDevelop</application> Integrated Development Environment, for KDE 1.x and KDE 2.0 </para>
