@@ -108,7 +108,7 @@ public slots:
 
 protected slots:
   void slotDbgStdout(KProcess* proc, char* buf, int buflen);
-/*  void slotDbgStderr(KProcess* proc, char* buf, int buflen); */
+  void slotDbgStderr(KProcess* proc, char* buf, int buflen);
   void slotDbgWroteStdin(KProcess *proc);
   void slotDbgProcessExited(KProcess* proc);
   void slotStepInSource(const QString& filename, int lineNo);

@@ -213,7 +213,7 @@ GDBController::~GDBController()
       dbgProcess_->kill(SIGKILL);
   }
 
-  delete tty_;
+  delete tty_; tty_ = 0;
   emit dbgStatus ("Debugger stopped", state_);
 }
 
@@ -707,7 +707,8 @@ void GDBController::parseLine(char* buf)
       // TODO - Only do this at start up
       if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
           strstr(buf, "not in executable format:")                ||
-          strstr(buf, "No such file or directory.")               ||
+          strstr(buf, "No such file or directory.")               ||  // does this fall out?
+          strstr(buf, i18n("No such file or directory."))         ||  // from system via gdb
           strstr(buf, "is not a core dump:")                      ||
           strncmp(buf, "ptrace: No such process.", 24)==0         ||
           strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
@@ -1131,14 +1132,25 @@ void GDBController::slotStart(const QString& application, const QString& args)
   connect( tty_, SIGNAL(OutOutput( const char* )), SIGNAL(ttyStdout( const char* )) );
   connect( tty_, SIGNAL(ErrOutput( const char* )), SIGNAL(ttyStderr( const char* )) );
 
-  DBG_DISPLAY("Starting GDB");
+  QString tty(tty_->getMainTTY());
+  if (tty.isEmpty())
+  {
+    KMsgBox::message(0, i18n("Error"), i18n("tty not set, so gdb cannot start\n\ncheck the settings on /dev/tty*\nand /dev/pty*"),
+                          KMsgBox::EXCLAMATION);
+
+    delete tty_;
+    tty_ = 0;
+    return;
+  }
+
+  GDB_DISPLAY("\nStarting GDB\n");
   dbgProcess_ = new KProcess;
 
   connect(  dbgProcess_,  SIGNAL(receivedStdout(KProcess *, char *, int)),
             this,         SLOT(slotDbgStdout(KProcess *, char *, int)));
 
   connect(  dbgProcess_,  SIGNAL(receivedStderr(KProcess *, char *, int)),
-            this,         SLOT(slotDbgStdout(KProcess *, char *, int)));
+            this,         SLOT(slotDbgStderr(KProcess *, char *, int)));
 
   connect(  dbgProcess_,  SIGNAL(wroteStdin(KProcess *)),
             this,         SLOT(slotDbgWroteStdin(KProcess *)));
@@ -1166,7 +1178,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
   else
     queueCmd(new GDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
 
-  queueCmd(new GDBCommand(QString().sprintf("tty %s", (tty_->getMainTTY()).data()), NOTRUNCMD, NOTINFOCMD));
+  queueCmd(new GDBCommand(QString("tty ")+tty, NOTRUNCMD, NOTINFOCMD));
 
   if (!args.isEmpty())
     queueCmd(new GDBCommand(QString().sprintf("set args %s", args.data()), NOTRUNCMD, NOTINFOCMD));
@@ -1571,11 +1583,14 @@ void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
 
 // **************************************************************************
 
-/*void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
+void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
-  QString bufData(buf, buflen+1);
-  DBG_DISPLAY(QString("[gdb] STDERR: ")+bufData);
-  char* found;
+  // At the moment, just drop a message out and redirect
+  DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf, buflen+1));
+  slotDbgStdout(proc, buf, buflen);
+
+//  QString bufData(buf, buflen+1);
+//  char* found;
 //  if ((found = strstr(buf, "No symbol table is loaded")))
 //    emit dbgStatus (QString("No symbol table is loaded"), state_);
 
@@ -1586,23 +1601,24 @@ void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
   // when the library gets loaded again.
   // TODO  programHasExited_ isn't always set correctly,
   // but it (almost) doesn't matter.
-  if (programHasExited_ && (found = strstr(bufData.data(), "Cannot insert breakpoint")))
-  {
-    setStateOff(s_appBusy);
-    int BPNo = atoi(found+25);
-    if (BPNo)
-    {
-      queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
-      queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
-      emit unableToSetBPNow(BPNo);
-    }
-    return;
-  }
+//  if (programHasExited_ && (found = strstr(bufData.data(), "Cannot insert breakpoint")))
+//  {
+//    setStateOff(s_appBusy);
+//    int BPNo = atoi(found+25);
+//    if (BPNo)
 
-  parse(bufData.data());
+//    {
+//      queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
+//      queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+//      queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+//      emit unableToSetBPNow(BPNo);
+//    }
+//    return;
+//  }
+//
+//  parse(bufData.data());
 }
-*/
+
 // **************************************************************************
 
 void GDBController::slotDbgWroteStdin(KProcess *proc)
