@@ -1,3 +1,7 @@
+2000-04-14 Walter Tasin  <tasin@kdevelop.de>
+	* correcting workaround for SEGFAULT in QMultiLineEdit
+          (thx to Simon Derr <sderr@ensisun.imag.fr> for the hint)
+
 2000-04-11  Ralf Funken <rfunken@kdevelop.de>
 	* Updated de.po
 	* According to the discussion on the i18n list
