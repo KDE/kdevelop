@@ -1,6 +1,7 @@
 #ifndef __DEBUGGER_H__
 #define __DEBUGGER_H__
 
+#include <qvaluelist.h>
 
 #include "kdevdebugger.h"
 
@@ -21,7 +22,7 @@ class Debugger : public KDevDebugger
 public:
 
   static Debugger *getInstance();
-  
+
   void setBreakpoint(const QString &fileName, int lineNum,
                      int id, bool enabled, bool pending);
 
@@ -32,11 +33,13 @@ protected:
 
   Debugger();
   ~Debugger();
-  
+
 private slots:
 
   void partAdded( KParts::Part* part );
-  void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
+//TODO: Remove if there is no problem with breakpoint marks
+//  void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
+  void marksChanged();
 
 private:
   enum MarkType {
@@ -49,7 +52,8 @@ private:
   };
 
   static Debugger *s_instance;
-  
+  QValueList<int> BPList;
+
 };
 
 

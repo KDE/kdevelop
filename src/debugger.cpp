@@ -35,20 +35,30 @@ Debugger *Debugger::getInstance()
 
 void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
-  kdDebug() << "setBreakpoint:" << fileName << endl;
   KParts::Part *part = PartController::getInstance()->partForURL(KURL(fileName));
   if( !part )
     return;
   MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
   if (!iface)
     return;
-  
   // Temporarily disconnect so we don't get confused by receiving extra markChanged signals
   // This wouldn't be a problem if the debugging interfaces had explicit add/remove methods
   // rather than just toggle
+//TODO: Remove if there is no problem with breakpoint marks
+/*
   disconnect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
               this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+*/
+  disconnect( part, SIGNAL(marksChanged()),
+              this, SLOT(marksChanged()) );
   iface->removeMark( lineNum, Breakpoint | ActiveBreakpoint | ReachedBreakpoint | DisabledBreakpoint );
+  if (BPList.contains(lineNum))
+  {
+    QValueList<int>::Iterator it;
+    it = BPList.find(lineNum);
+    BPList.remove(it);
+  }
+
   if( id != -1 ) {
     uint markType = Breakpoint;
     if( !pending )
@@ -56,9 +66,15 @@ void Debugger::setBreakpoint(const QString &fileName, int lineNum, int id, bool 
     if( !enabled )
       markType |= DisabledBreakpoint;
     iface->addMark( lineNum, markType );
+    BPList.append(lineNum);
   }
+//TODO: Remove if there is no problem with breakpoint marks
+/*
   connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
            this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+*/
+  connect( part, SIGNAL(marksChanged()),
+           this, SLOT(marksChanged()) );
 }
 
 
@@ -85,20 +101,22 @@ void Debugger::clearExecutionPoint()
 void Debugger::gotoExecutionPoint(const KURL &url, int lineNum)
 {
   clearExecutionPoint();
-  
+
   PartController::getInstance()->editDocument(url, lineNum);
-  
+
   KParts::Part *part = PartController::getInstance()->partForURL(url);
   if( !part )
     return;
   MarkInterface *iface = dynamic_cast<MarkInterface*>(part);
   if( !iface )
     return;
-  
+
   iface->addMark( lineNum, ExecutionPoint );
 }
 
 
+//TODO: This method should not be needed anymore, as the marksChanged() does the job. (Andras Mantia)
+/*
 void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction action )
 {
   if( !sender()->inherits("KTextEditor::Document") )
@@ -119,6 +137,38 @@ void Debugger::markChanged( Mark mark, MarkInterfaceExtension::MarkChangeAction 
     }
   }
 }
+*/
+
+void Debugger::marksChanged()
+{
+ if(sender()->inherits("KTextEditor::Document") )
+ {
+    KTextEditor::Document* doc = (KTextEditor::Document*) sender();
+    MarkInterface* iface = KTextEditor::markInterface( doc );
+    if (iface)
+    {
+      if( !PartController::getInstance()->partForURL( doc->url() ) )
+         return; // Probably means the document is being closed.
+      KTextEditor::Mark *m;
+      KTextEditor::Mark mark;
+      QValueList<int> oldBPList = BPList;
+      for (uint i = 0; i < oldBPList.count(); i++)
+      {
+        emit toggledBreakpoint( doc->url().path(), oldBPList[i] );
+      }
+      BPList.clear();
+      QPtrList<KTextEditor::Mark> newMarks = iface->marks();
+      for (uint i = 0; i < newMarks.count(); i++)
+      {
+        m = newMarks.at(i);
+        if (m->type & Breakpoint)
+        {
+          emit toggledBreakpoint( doc->url().path(), m->line );
+        }
+       }
+   }
+ }
+}
 
 
 void Debugger::partAdded( KParts::Part* part )
@@ -126,7 +176,7 @@ void Debugger::partAdded( KParts::Part* part )
   MarkInterfaceExtension *iface = dynamic_cast<MarkInterfaceExtension*>(part);
   if( !iface )
     return;
-  
+
   iface->setDescription((MarkInterface::MarkTypes)Breakpoint, i18n("Breakpoint"));
   iface->setPixmap((MarkInterface::MarkTypes)Breakpoint, *inactiveBreakpointPixmap());
   iface->setPixmap((MarkInterface::MarkTypes)ActiveBreakpoint, *activeBreakpointPixmap());
@@ -134,9 +184,13 @@ void Debugger::partAdded( KParts::Part* part )
   iface->setPixmap((MarkInterface::MarkTypes)DisabledBreakpoint, *disabledBreakpointPixmap());
   iface->setPixmap((MarkInterface::MarkTypes)ExecutionPoint, *executionPointPixmap());
   iface->setMarksUserChangable( Bookmark | Breakpoint );
-  
+//TODO: Remove if there is no problem with breakpoint marks
+/*
   connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
            this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+*/
+  connect( part, SIGNAL(marksChanged()),
+           this, SLOT(marksChanged()) );
 }
 
 #include "debugger.moc"
