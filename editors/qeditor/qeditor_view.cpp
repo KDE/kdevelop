@@ -157,6 +157,7 @@ void QEditorView::setMarkerWidgetVisible( bool b )
 {
     if( b ){
 	m_markerWidget->show();
+	m_markerWidget->doRepaint();
     } else {
 	m_markerWidget->hide();
     }
@@ -171,6 +172,7 @@ void QEditorView::setLineNumberWidgetVisible( bool b )
 {
     if( b ){
 	m_lineNumberWidget->show();
+	m_lineNumberWidget->doRepaint();
     } else {
 	m_lineNumberWidget->hide();
     }
@@ -185,6 +187,7 @@ void QEditorView::setLevelWidgetVisible( bool b )
 {
     if( b ){
 	m_levelWidget->show();
+	m_levelWidget->doRepaint();
     } else {
 	m_levelWidget->hide();
     }
