@@ -321,6 +321,12 @@ not comfortable with certain options for e.g. the Linker or need additional proj
 the Makefile.am macros and add all changes in the Makefile.am's after the section separated with the entry "KDevelop write area".
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
 this will prevent using KDevelop for any changes related to project configuration.
+<P>Another hint may be of good use when developing KDE 2.0/ Qt 2.2.x applications using the Qt designer to create user interfaces. The ui files
+get added by KDevelop to the _SOURCES line in the Makefile.am of the subdirectory containing the ui file. This may result in the scenario that
+you want to include the header file of the generated dialog which may not exist yet when your file that includes it gets compiled as the <B>uic</B>
+(Qt user interface compiler) generates the C++ output. Therefore, the order of source files in the _SOURCES line may be important - if you
+run into problems, remove the ui file from the project (don´t delete it!), add the sourcefile that needs to include a generated header to the project and then
+re-add the ui file to the project.
 <P>
 <H3><A NAME="ss8.5">8.5 Compiler and Linker Flags for Projects</A>
 </H3>
