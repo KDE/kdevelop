@@ -1,4 +1,3 @@
-...that KDevelop offers Quickhelp by a right button click on items ?
 ...that can select your autosaving time in the setup dialog ?
 If you want to specify additional command-line options to your make program, you can set them in the setup dialog.
 If you use functions of other libraries than the application is currently linked with, you can specify them in the project options dialog.
