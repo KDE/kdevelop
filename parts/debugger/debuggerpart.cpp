@@ -14,6 +14,8 @@
 #include <qdir.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+#include <qpopupmenu.h>
+
 #include <kaction.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -46,7 +48,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( parent, name ),
-      controller(0)
+      controller(0), m_editorContext(KURL(), 0, "", 0)
 {
     setInstance(DebuggerFactory::instance());
     
@@ -245,6 +247,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              breakpointWidget, SLOT(slotEditBreakpoint(const QString &, int)) );
     connect( core(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
+
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+	     this, SLOT(fillContextMenu(QPopupMenu *, const Context *)));
 }
 
 
@@ -261,6 +266,24 @@ DebuggerPart::~DebuggerPart()
     delete disassembleWidget;
     delete controller;
     delete floatingToolBar;
+}
+
+
+void DebuggerPart::fillContextMenu(QPopupMenu *popup, const Context *context)
+{
+  if (!context->hasType("editor"))
+    return;
+
+  m_editorContext = *((EditorContext*)(context));
+
+  popup->insertSeparator();
+  popup->insertItem(i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()));
+}
+
+
+void DebuggerPart::toggleBreakpoint()
+{
+  breakpointWidget->slotToggleBreakpoint(m_editorContext.url().path(), m_editorContext.line());
 }
 
 

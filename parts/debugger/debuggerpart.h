@@ -16,6 +16,7 @@
 
 #include <qguardedptr.h>
 #include "kdevplugin.h"
+#include "kdevcore.h"
 
 class KDialogBase;
 class VariableWidget;
@@ -25,6 +26,7 @@ class DisassembleWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
+class QPopupMenu;
 
 
 class DebuggerPart : public KDevPlugin
@@ -36,6 +38,11 @@ public:
     ~DebuggerPart();
 
 private slots:
+   
+    void fillContextMenu(QPopupMenu *popup, const Context *context);
+    void toggleBreakpoint();
+    
+	
     void projectConfigWidget(KDialogBase *dlg);
     void slotRun();
     void slotExamineCore();
@@ -68,6 +75,8 @@ private:
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     DbgController *controller;
     QGuardedPtr<DbgToolBar> floatingToolBar;
+
+    EditorContext m_editorContext;
 };
 
 #endif
