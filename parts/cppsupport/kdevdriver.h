@@ -23,6 +23,13 @@ public:
     // code provided by Reginald Stadlbauer <reggie@trolltech.com>
     void setup();
 
+    virtual void addMacro( const Macro& m )
+    {
+        if( m.name() == "signals" || m.name() == "slots" )
+            return;
+        Driver::addMacro( m );
+    }
+
 protected:
     void setupLexer( Lexer* lexer );
 
