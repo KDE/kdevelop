@@ -95,7 +95,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                               "leave the tree items closed and add the "
                               "variable(s) to the watch section.\n"
                               "To change a variable value in your "
-                              "running app use a watch variable (eg a=5)."));
+                              "running app use a watch variable (&eg; a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 

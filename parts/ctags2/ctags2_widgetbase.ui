@@ -90,7 +90,7 @@
                         <cstring>input_edit</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Type the identifier you want to lookup. &lt;p&gt; The will populate view a reducing list as you type.</string>
+                        <string>Type the identifier you want to lookup. &lt;p&gt; The identifier will populate and display a reducing list as you type.</string>
                     </property>
                 </widget>
                 <widget class="QLabel">

@@ -69,7 +69,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "leave the tree items closed and add the "
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
-                                         "running app use a watch variable (eg a=5)."));
+                                         "running app use a watch variable (&eg; a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 
@@ -79,7 +79,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "Displays a list of breakpoints with "
                                            "their current status. Clicking on a "
                                            "breakpoint item with the right mouse button displays "
-                                           "a popupmenu so you may manipulate the "
+                                           "a popup menu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
     mainWindow()->embedOutputView(breakpointWidget, i18n("&Breakpoints"), i18n("debugger breakpoints"));

@@ -180,7 +180,7 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
 
     m_actionToggleDisplayLocation = new KToggleAction( i18n("Display Location Column"), KShortcut(),
         this, SLOT(slotToggleDisplayLocation()), this, "actiontoggleshowlocation" );
-    m_actionToggleDisplayLocation->setWhatsThis(i18n("<b>Display the Location Column</b><p>Displays a columne with the location of the files."));
+    m_actionToggleDisplayLocation->setWhatsThis(i18n("<b>Display the Location Column</b><p>Displays a column with the location of the files."));
 
     m_part = part;
     (void) translations; // supress compiler warning

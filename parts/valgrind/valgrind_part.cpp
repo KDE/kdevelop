@@ -47,7 +47,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   m_widget->setCaption(i18n("Valgrind Output"));
   
   QWhatsThis::add( m_widget, i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br>"
-    "use of uninitialised memory<br>"
+    "use of uninitialized memory<br>"
     "reading/writing memory after it has been free'd<br>"
     "reading/writing off the end of malloc'd blocks<br>"
     "reading/writing inappropriate areas on the stack<br>"

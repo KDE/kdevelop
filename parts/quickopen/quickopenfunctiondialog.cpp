@@ -131,7 +131,7 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
 		}
 	}
 	else{
-		KMessageBox::error( this, i18n("Error! Can't find matching name function!") );
+		KMessageBox::error( this, i18n("Error: cannot find matching name function.") );
 	}
 
 	accept();

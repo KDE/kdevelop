@@ -46,7 +46,7 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
                           this, SLOT(slotShellFilter()),
                           actionCollection(), "tools_filtershell" );
     action->setToolTip(i18n("Filter selection through a shell command"));
-    action->setWhatsThis(i18n("<b>Filter selection through shell command</b><p>Filters selection through a shell command and outputs it's result into the current document."));
+    action->setWhatsThis(i18n("<b>Filter selection through shell command</b><p>Filters selection through a shell command and outputs its result into the current document."));
 
     m_insertDialog = 0;
     m_filterDialog = 0;
