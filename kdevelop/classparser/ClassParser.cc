@@ -1565,7 +1565,7 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
 {
   //  assert( aContainer != NULL );
   if(aContainer == 0 ){
-    cerr << "ERROR!!! in parser CClassParser::fillInParsedStruct: \n";
+    cerr << "ERROR!!! in parser CClassParser:::parseGenericLexem(  CParsedContainer *aContainer ) \n";
     return;
   }
  
