@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include "SDL/SDL.h"
+#include "SDL.h"
 
 using namespace std;
 
