@@ -46,7 +46,7 @@ class CVSFileInfoProvider;
 class CvsServicePartImpl : public QObject
 {
     friend class CvsServicePart;
-    
+
     Q_OBJECT
 public:
     //! Available Cvs operations
@@ -144,7 +144,7 @@ public:
     * @param dirName path to project directory on local system
     * @param cvsRsh value for the CVS_RSH env var (for accessing :ext:
     *        repositories)
-    * @param location [marios] you should fix this :)
+    * @param location cvs server path (i.e. :pserver:marios@cvs.kde.org:/home/kde)
     * @param message an initial creation message for the project
     * @param module the module into repository where to put this source tree
     * @param vendor vendor string
@@ -164,6 +164,7 @@ public:
     * @return a reference to the custom FileInforProvider object (FORWARDER)
     */
     KDevVCSFileInfoProvider *fileInfoProvider() const;
+
 
 // Helpers
 public:
@@ -246,6 +247,17 @@ private:
     */
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
+    /*
+    * Implementation for requesting user input when files are added to / removed from project
+    */
+    void addFilesToProject( const QStringList &filesToAdd );
+    void removedFilesFromProject(const QStringList &filesToRemove);
+    /*
+    * Check each file in the list against CVS and returns a new list with the files
+    * currently registered in the repository: if none is registered the returned list
+    * is (quite rightly) empty.
+    */
+    QStringList checkFileListAgainstCVS( const QStringList &filesToCheck ) const;
 
     //! Changelog filename (currently "CHANGELOG" )
     static const QString changeLogFileName;

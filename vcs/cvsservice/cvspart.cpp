@@ -59,16 +59,6 @@
 
 #include "cvspart.h"
 
-QStringList prependToStringList( const QString &s, const QStringList &paths )
-{
-    QStringList l = paths;
-    for (size_t i=0; i<l.count(); ++i)
-    {
-        l[i] = s + QDir::separator() + l[i];
-    }
-    return l;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Global vars
 ///////////////////////////////////////////////////////////////////////////////
@@ -619,44 +609,14 @@ void CvsServicePart::slotStopButtonClicked( KDevPlugin* which )
 
 void CvsServicePart::slotAddFilesToProject( const QStringList &filesToAdd )
 {
-    kdDebug( 9006 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
-
-    int s = KMessageBox::questionYesNo( 0,
-        i18n("Do you want to be added to CVS repository too?"),
-        i18n("CVS - New Files Added to Project"),
-        KStdGuiItem::yes(),
-        KStdGuiItem::no(),
-        i18n("askWhenAddingNewFiles") );
-    if (s == KMessageBox::Yes)
-    {
-        kdDebug( 9006 ) << "Adding these files: " << filesToAdd.join( ", " ) << endl;
-
-        m_urls = KURL::List( prependToStringList( project()->projectDirectory(), filesToAdd ) );
-        URLUtil::dump( m_urls );
-        m_impl->add( m_urls );
-    }
+    m_impl->addFilesToProject( filesToAdd );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsServicePart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
 {
-    kdDebug( 9006 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
-
-    int s = KMessageBox::questionYesNo( 0,
-        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
-        i18n("CVS - Files Removed From Project"),
-        KStdGuiItem::yes(),
-        KStdGuiItem::no(),
-        i18n("askWhenRemovingFiles") );
-    if (s == KMessageBox::Yes)
-    {
-        kdDebug( 9006 ) << "Removing these files: " << fileToRemove.join( ", " ) << endl;
-
-        m_urls = KURL::List( prependToStringList( project()->projectDirectory(), fileToRemove ) );
-        URLUtil::dump( m_urls );
-        m_impl->remove( m_urls );
-    }
+    m_impl->removedFilesFromProject( fileToRemove );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -55,7 +55,6 @@
 #include "cvspart.h"
 #include "cvspartimpl.h"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // class Constants
 ///////////////////////////////////////////////////////////////////////////////
@@ -675,7 +674,7 @@ bool CvsServicePartImpl::requestCvsService()
         QStringList(), &error, &appId ))
     {
         QString msg = i18n( "Unable to find the Cervisia KPart. \n"
-	"Cervisia Integration will not be available. Please check your\n"
+            "Cervisia Integration will not be available. Please check your\n"
             "Cervisia installation and re-try. Reason was:\n" ) + error;
         KMessageBox::error( processWidget(), msg, "DCOP Error" );
 
@@ -709,6 +708,72 @@ void CvsServicePartImpl::flushJobs()
     processWidget()->cancelJob();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::addFilesToProject( const QStringList &filesToAdd )
+{
+    kdDebug( 9006 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
+
+    QStringList filesInCVS = checkFileListAgainstCVS( filesToAdd );
+    if (filesInCVS.isEmpty())
+        return;
+
+    int s = KMessageBox::questionYesNo( 0,
+        i18n("Do you want to be added to CVS repository too?"),
+        i18n("CVS - New Files Added to Project"),
+        KStdGuiItem::yes(),
+        KStdGuiItem::no(),
+        i18n("askWhenAddingNewFiles") );
+    if (s == KMessageBox::Yes)
+    {
+        kdDebug( 9006 ) << "Adding these files: " << filesInCVS.join( ", " ) << endl;
+
+        const KURL::List urls = KURL::List( filesInCVS );
+        URLUtil::dump( urls );
+        add( urls );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServicePartImpl::removedFilesFromProject(const QStringList &filesToRemove)
+{
+    kdDebug( 9006 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
+
+    QStringList filesInCVS = checkFileListAgainstCVS( filesToRemove );
+    if (filesInCVS.isEmpty())
+        return;
+
+    int s = KMessageBox::questionYesNo( 0,
+        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
+        i18n("CVS - Files Removed From Project"),
+        KStdGuiItem::yes(),
+        KStdGuiItem::no(),
+        i18n("askWhenRemovingFiles") );
+    if (s == KMessageBox::Yes)
+    {
+        kdDebug( 9006 ) << "Removing these files: " << filesInCVS.join( ", " ) << endl;
+        const KURL::List urls = KURL::List( filesInCVS );
+        URLUtil::dump( urls );
+        remove( urls );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QStringList CvsServicePartImpl::checkFileListAgainstCVS( const QStringList &filesToCheck ) const
+{
+    QStringList filesInCVS;
+    for (QStringList::const_iterator it = filesToCheck.begin(); it != filesToCheck.end(); ++it )
+    {
+        const QString &fn = (*it);
+        QFileInfo fi( fn );
+        if (isValidDirectory( fi.dirPath( true ) ))
+            filesInCVS += ( m_part->project()->projectDirectory() + QDir::separator() + fn );
+    }
+
+    return filesInCVS;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -801,15 +866,14 @@ void CvsServicePartImpl::slotJobFinished( bool exitStatus, int exitCode )
     // Return a null string if the operation was not succesfull
     kdDebug() << "CvsServicePartImpl::slotJobFinished(): job ended with code == "
         << exitCode << endl;
-
+/*
     // Operation has been successfull
     if (!exitStatus)
         return;
 
     // 1. Assemble the CVSFileInfoList
     // 2. notify all clients
-
-
+*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
