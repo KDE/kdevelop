@@ -48,6 +48,7 @@ private slots:
 
 private:
     QString popupfile;
+    QString viewname;
 };
 
 #endif

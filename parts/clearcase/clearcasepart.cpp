@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include "clearcasepart.h"
+#include "commentdlg.h"
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -35,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( "kdevclearcase" 
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
         : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),
-        default_checkin("-nc"),default_checkout("-unres -nc"),default_uncheckout("-rm"),
+        default_checkin(""),default_checkout(""),default_uncheckout("-rm"),
         default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
 {
     setInstance(ClearcaseFactory::instance());
@@ -53,6 +54,17 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
     if (context->hasType("file")) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
         popupfile = fcontext->fileName();
+
+        // check if this file belongs to a clearcase directory
+        // i.e. is the file /view/<view_name/vobs/... format?
+       QString s1 = popupfile.section('/', 1, 1);
+       QString s2 = popupfile.section('/', 2, 2);
+       QString s3 = popupfile.section('/', 3, 3);
+       if(s1 == "view" && s3 == "vobs" || s1 == "vobs")
+         viewname = s2;
+       else
+         return;
+        
         QFileInfo fi(popupfile);
         popup->insertSeparator();
 
@@ -90,9 +102,16 @@ void ClearcasePart::slotCheckin()
         name = fi.fileName();
     }
 
-    QDomDocument &dom = *this->projectDom();
+    CcaseCommentDlg dlg(FALSE);
+    if (dlg.exec() == QDialog::Rejected)
+        return;
 
+    QDomDocument &dom = *this->projectDom();
     QString message = DomUtil::readEntry(dom,"/kdevclearcase/checkin_options",default_checkin);
+    if(dlg.logMessage().isEmpty())
+      message += "-nc ";
+    else
+      message += "-c \"" + dlg.logMessage() + "\"";
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
@@ -118,12 +137,23 @@ void ClearcasePart::slotCheckout()
         name = fi.fileName();
     }
 
+    CcaseCommentDlg dlg(TRUE);
+    if (dlg.exec() == QDialog::Rejected)
+        return;
+
     QDomDocument &dom = *this->projectDom();
+    QString message = DomUtil::readEntry(dom,"/kdevclearcase/checkout_options",default_checkout);
+    if(!dlg.isReserved())
+      message += "-unres ";
+    if(dlg.logMessage().isEmpty())
+      message += "-nc ";
+    else
+      message += "-c \"" + dlg.logMessage() + "\"";
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
     command += " && cleartool checkout ";
-    command += DomUtil::readEntry(dom,"/kdevclearcase/checkout_options",default_checkout);
+    command += message;
     command += " ";
     command += KShellProcess::quote(name);
 
