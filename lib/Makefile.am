@@ -11,9 +11,10 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 			$(top_builddir)/lib/sourceinfo/libkdevsourceinfo.la \
 			$(top_builddir)/lib/util/libkdevutil.la \
 			$(top_builddir)/lib/project/libkdevproject.la \
+			$(top_builddir)/lib/compat/libkdevcompat.la \
 			-lktexteditor $(LIB_KPARTS) $(LIB_KIO)
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces sourceinfo util project widgets qextmdi antlr structure catalog cppparser
+SUBDIRS = interfaces sourceinfo util project widgets qextmdi antlr structure catalog cppparser compat
 
