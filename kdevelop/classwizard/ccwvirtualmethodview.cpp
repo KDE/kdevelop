@@ -195,14 +195,13 @@ void CCWVirtualMethodView::setCallbacks()
 void CCWVirtualMethodView::setStore( ClassStore *aStore )
 {
   assert( aStore != NULL );
-  QStringList* list;
+  QStringList list;
 
   store = aStore;
 
   // Fetch the list and update the combobox.
   list = store->getSortedClassNameList();
-  classCombo.insertStringList( *list );
-  delete( list );       // ROBE
+  classCombo.insertStringList( list );
 }
 
 /*********************************************************************
@@ -213,8 +212,10 @@ void CCWVirtualMethodView::setStore( ClassStore *aStore )
 
 void CCWVirtualMethodView::slotClassComboChoice(int idx)
 {
-  QPtrList<ParsedMethod> availList;
-  QPtrList<ParsedMethod> usedList;
+  QValueList<ParsedMethod*> availList;
+  QValueList<ParsedMethod*> usedList;
+  QValueList<ParsedMethod*>::ConstIterator availListIt;
+  QValueList<ParsedMethod*>::ConstIterator usedListIt;
   ParsedMethod *aMethod;
   QString str;
 
@@ -227,18 +228,19 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
   store->getVirtualMethodsForClass( classCombo.text( idx ),
                                     &usedList, &availList );
 
-
-  for( aMethod = usedList.first();
-       aMethod != NULL;
-       aMethod = usedList.next() )
+  for( usedListIt = usedList.begin();
+       usedListIt != usedList.end();
+       ++usedListIt )
   {
+    aMethod = *usedListIt;
     implLb.inSort( aMethod->asString() );
   }
 
-  for( aMethod = availList.first();
-       aMethod != NULL;
-       aMethod = availList.next() )
+  for( availListIt = availList.begin();
+       availListIt != availList.end();
+       ++availListIt )
   {
+    aMethod = *availListIt;
     // Create the string like <classname>::<methodname>
     str = aMethod->asString();
     str = aMethod->declaredInScope() + "::" + str;

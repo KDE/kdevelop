@@ -66,8 +66,8 @@ protected:
     QStringList splitExpression( const QString& text );
 
     /* methods which are called recursively by getEntryListForClass(...) */
-    QList<ParsedMethod>* getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList );
-    QList<ParsedAttribute>* getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList );
+    QValueList<ParsedMethod*> getParentMethodListForClass ( ParsedClass* pClass, QValueList<ParsedMethod*>* pList );
+    QValueList<ParsedAttribute*> getParentAttributeListForClass ( ParsedClass* pClass, QValueList<ParsedAttribute*>* pList );
 
     QString getTypeOfMethod( ParsedContainer*, const QString& );
     QString getTypeOfAttribute( ParsedContainer*, const QString& );

@@ -437,10 +437,10 @@ void CClassView::refresh()
   QString str;
   QListViewItem *item;
   QString treeStr;
-  QList<ParsedScopeContainer> *scopeList;
-  QList<ParsedMethod> *methodList;
-  QList<ParsedAttribute> *attributeList;
-  QList<ParsedStruct> *structList;
+  QValueList<ParsedScopeContainer*> scopeList;
+  QValueList<ParsedMethod*> methodList;
+  QValueList<ParsedAttribute*> attributeList;
+  QValueList<ParsedStruct*> structList;
 
   kdDebug() << "CClassView::refresh()" << endl;
 
@@ -466,23 +466,20 @@ void CClassView::refresh()
   scopeList = store->globalContainer.getSortedScopeList();
   ((CClassTreeHandler *)treeH)->addScopes( scopeList, item );
   item->sortChildItems(0,true);
-  delete scopeList;
 
   // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
   structList = store->getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
   item->sortChildItems(0,true);
-  delete structList;
 
   // Add global functions
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
   methodList = store->globalContainer.getSortedMethodList();
-  kdDebug() << "Got " << methodList->count() << " methods" << endl;
+  kdDebug() << "Got " << methodList.count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
   item->sortChildItems(0,true);
-  delete methodList;
 
   // Add global variables
   treeH->setLastItem( item );
@@ -490,7 +487,6 @@ void CClassView::refresh()
   attributeList = store->globalContainer.getSortedAttributeList();
   ((CClassTreeHandler *)treeH)->addGlobalVariables( attributeList, item );
   item->sortChildItems(0,true);
-  delete attributeList;
 
   treeH->setLastItem( item );
 
@@ -969,11 +965,11 @@ void CClassView::buildInitalClassTree()
 //	clock_t startClock = clock();
   QString str;
   ParsedClass *aPC;
-  QList<ParsedClass> *list;
+  QValueList<ParsedClass*> list;
   QString projDir;
   QSortedList<CClassView::SubfolderClassList> listOfClassLists;
   CClassView::SubfolderClassList* pCurClassList;
-  QList<ParsedClass> rootList;
+  QValueList<ParsedClass*> rootList;
 
   kdDebug() << "buildInitalClassTree" << endl;
 
@@ -987,10 +983,10 @@ void CClassView::buildInitalClassTree()
   projDir = project->getProjectDir();
 
   // Add all parsed classes to the correct list;
-  for( aPC = list->first();
-       aPC !=NULL;
-       aPC = list->next())
+  QValueList<ParsedClass*>::ConstIterator listit;
+  for (listit = list.begin(); listit != list.end(); ++listit)
   {
+    aPC = *listit;
     // Try to determine if this is a subdirectory.
     str = aPC->definedInFile();
     str = str.remove( 0, projDir.length() );
@@ -1017,7 +1013,7 @@ void CClassView::buildInitalClassTree()
       }
 
       // search if a class list called contents of str already exists
-      QList<ParsedClass>* iterlist = 0L;
+      QValueList<ParsedClass*> iterlist;
       bool bFound = false;
       for (pCurClassList = listOfClassLists.first(); !bFound && pCurClassList != 0; pCurClassList = listOfClassLists.next()) {
         if (pCurClassList->subfolderName == str) {
@@ -1025,19 +1021,16 @@ void CClassView::buildInitalClassTree()
           iterlist = pCurClassList->pClassList;
         }
       }
-      if (!iterlist) {
+      if (iterlist.isEmpty()) {
         // must create a new class list
-        iterlist = new QList<ParsedClass>(); // will be deleted in destructor of pSCL
+        iterlist = QValueList<ParsedClass*>(); // will be deleted in destructor of pSCL
         pCurClassList = new CClassView::SubfolderClassList( str, iterlist);
         listOfClassLists.append(pCurClassList);
       }
 
-      iterlist->append(aPC);
+      iterlist.append(aPC);
     }
   }
-
-  delete list;
-
 
   // Add all classes with a folder.
   // (it's tricky: loop from end to start to ensure the folder items are above the class items)
@@ -1060,7 +1053,7 @@ void CClassView::buildInitalClassTree()
   }
 
   // Add all classes without a folder.
-  ((CClassTreeHandler *)treeH)->addClasses( &rootList, classesItem );
+  ((CClassTreeHandler *)treeH)->addClasses( rootList, classesItem );
 
   // Save the tree.
 //  asTreeStr( str );

@@ -537,12 +537,14 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, ParsedAttribute* aAt
      - I choose to find the position at the first method...
   */
   ParsedMethod *aMethod;
-  QList <ParsedMethod>  *lMethod = aClass -> getSortedMethodList();
-  aMethod = lMethod -> first();
+  QValueList <ParsedMethod*>  lMethod = aClass -> getSortedMethodList();
   QString File="";
   int n, Line = 32767;
-  do
+
+  QValueList<ParsedMethod*>::ConstIterator lMethodIt;
+  for (lMethodIt = lMethod.begin(); lMethodIt != lMethod.end(); ++lMethodIt)
   {
+    aMethod = *lMethodIt;
     kdDebug() << "in file " << aMethod -> definedInFile().data() << endl;
     if( ( aMethod -> definedInFile().find(".h")) == -1)
     {
@@ -550,8 +552,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, ParsedAttribute* aAt
       if ( ((n=aMethod -> definedOnLine()) < Line) && ( n > 0) )
       Line = n;
     }
-    aMethod = lMethod -> next();
-  }while ( aMethod);
+  }
   if( Line != 32767 )
   {
     kdDebug() << "found a place " << File.data() << " at line# " << Line << endl;
@@ -917,7 +918,7 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
 void CKDevelop::CVRefreshClassCombo()
 {
   ParsedClass *aClass;
-  QList<ParsedClass> *classList;
+  QValueList<ParsedClass*> classList;
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString savedClass;
@@ -934,17 +935,16 @@ void CKDevelop::CVRefreshClassCombo()
   class_comp->addItem(i18n("(Globals)"));
 
   classList = API::getInstance()->classStore()->getSortedClassList();
-  for( aClass = classList->first(),i=0;
-       aClass != NULL;
-       aClass = classList->next(), i++ )
+  QValueList<ParsedClass*>::ConstIterator classListIt;
+  for (classListIt = classList.begin(), i=0; classListIt != classList.end(); ++classListIt, i++)
   {
+    aClass = *classListIt;
     classCombo->insertItem(SmallIcon("CVclass"), aClass->name() );
     class_comp->addItem(aClass->name());
     if( aClass->name() == savedClass )
       savedIdx = i;
 
   }
-  delete classList;
 
   if (!savedClass.isEmpty())
   {
@@ -990,30 +990,27 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
   lb->setAutoUpdate( false );
 
   if((classCombo->currentText()==i18n("(Globals)"))){
-    QList<ParsedMethod> *globalmeth=API::getInstance()->classStore()->globalContainer.getSortedMethodList( );
-    for( globalmeth->first();
-       globalmeth->current();
-       globalmeth->next() )
+    QValueList<ParsedMethod*> globalmeth=API::getInstance()->classStore()->globalContainer.getSortedMethodList( );
+    QValueList<ParsedMethod*>::ConstIterator globalmethit;
+    for (globalmethit = globalmeth.begin(); globalmethit != globalmeth.end(); ++globalmethit)
       {
-        str = globalmeth->current()->asString();
+        str = (*globalmethit)->asString();
         methodCombo->insertItem(SmallIcon("CVglobal_meth"), str );
         method_comp->addItem(str);
       }
-    QList<ParsedAttribute> *globalattr=API::getInstance()->classStore()->globalContainer.getSortedAttributeList( );
-    for( globalattr->first();
-       globalattr->current();
-       globalattr->next() )
+    QValueList<ParsedAttribute*> globalattr=API::getInstance()->classStore()->globalContainer.getSortedAttributeList( );
+    QValueList<ParsedAttribute*>::ConstIterator  globalattrit;
+    for (globalattrit = globalattr.begin(); globalattrit != globalattr.end(); ++globalattrit)
       {
-        str=globalattr->current()->name();
+        str=(*globalattrit)->name();
         methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
         method_comp->addItem(str);
       }
-    QList<ParsedStruct> *globalstruct=API::getInstance()->classStore()->globalContainer.getSortedStructList( );
-    for( globalstruct->first();
-       globalstruct->current();
-       globalstruct->next() )
+    QValueList<ParsedStruct*> globalstruct=API::getInstance()->classStore()->globalContainer.getSortedStructList( );
+    QValueList<ParsedStruct*>::ConstIterator globalstructit;
+    for (globalstructit = globalstruct.begin(); globalstructit != globalstruct.end(); ++globalstructit)
       {
-        str=globalstruct->current()->name();
+        str=(*globalstructit)->name();
         methodCombo->insertItem(SmallIcon("CVstruct"), str );
         method_comp->addItem(str);
       }
@@ -1062,19 +1059,18 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
   }
 
   // ADD ATTRIBUTES
-  QList<ParsedAttribute> *list;
+  QValueList<ParsedAttribute*> list;
   list = aClass->getSortedAttributeList();
-  for( list->first();
-       list->current();
-       list->next() )
+  QValueList<ParsedAttribute*>::ConstIterator listit;
+  for (listit = list.begin(); listit != list.end(); ++listit)
   {
-    str=list->current()->name();
+    str=(*listit)->name();
     method_comp->addItem(str);
-    if(list->current()->isPublic())
+    if((*listit)->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_var"), str );
-    if(list->current()->isProtected())
+    if((*listit)->isProtected())
       methodCombo->insertItem(SmallIcon("CVprotected_var"), str );
-    if(list->current()->isPrivate())
+    if((*listit)->isPrivate())
       methodCombo->insertItem(SmallIcon("CVprivate_var"), str );
   }
   lb->sort();

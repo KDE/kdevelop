@@ -51,7 +51,7 @@ public: // Public methods
    * @param list List of all global namespaces.
    * @param parent Parent item of all namespaces.
    */
-  void addScopes( QList<ParsedScopeContainer> *list, QListViewItem *parent );
+  void addScopes( QValueList<ParsedScopeContainer*> list, QListViewItem *parent );
 
   /**
    * Add a scope to the the view.
@@ -65,7 +65,7 @@ public: // Public methods
   void updateClass( ParsedClass *aClass, QListViewItem *parent );
 
   /** Add a list of classes to the view. */
-  void addClasses( QList<ParsedClass> *list, QListViewItem *parent );
+  void addClasses( QValueList<ParsedClass*> list, QListViewItem *parent );
 
   /** Add a class to the view. */
   QListViewItem *addClass( ParsedClass *aClass, QListViewItem *parent );
@@ -97,7 +97,7 @@ public: // Public methods
    * @param parent Parent to add the structs to.
    * @param filter Tells which items to show.
    */
-  void addStructs( QList<ParsedStruct> *list,
+  void addStructs( QValueList<ParsedStruct*> list,
                    QListViewItem *parent,
                    CTHFilter filter );
 
@@ -106,7 +106,7 @@ public: // Public methods
                             CTHFilter filter = CTHALL );
 
   /** Add all methods to the view. */
-  void addMethods( QList<ParsedMethod> *list,  QListViewItem *parent,
+  void addMethods( QValueList<ParsedMethod*> list,  QListViewItem *parent,
                    CTHFilter filter = CTHALL );
 
   /** Add one method to the tree. */
@@ -118,17 +118,17 @@ public: // Public methods
                                CTHFilter filter = CTHALL );
 
   /** Add all signals to the view. */
-  void addAttributes( QList<ParsedAttribute> *list, QListViewItem *parent,
+  void addAttributes( QValueList<ParsedAttribute*> list, QListViewItem *parent,
                       CTHFilter filter = CTHALL );
 
   /** Add one attribute to the view. */
   void addAttribute( ParsedAttribute *aAttr, QListViewItem *parent );
 
   /** Add a list of global functions to the view. */
-  void addGlobalFunctions( QList<ParsedMethod> *list, QListViewItem *parent );
+  void addGlobalFunctions( QValueList<ParsedMethod*> list, QListViewItem *parent );
 
   /** Add a list of global variables to the view. */
-  void addGlobalVariables( QList<ParsedAttribute> *list, QListViewItem *parent );
+  void addGlobalVariables( QValueList<ParsedAttribute*> list, QListViewItem *parent );
 
   /** Add a global function to the view. */
   void addGlobalFunc( ParsedMethod *aMethod, QListViewItem *parent );
@@ -137,7 +137,7 @@ public: // Public methods
   void addGlobalVar( ParsedAttribute *aAttr, QListViewItem *parent );
 
   /** Add a list of global structures to the view. */
-  void addGlobalStructs( QList<ParsedStruct> *list,
+  void addGlobalStructs( QValueList<ParsedStruct*> list,
                          QListViewItem *parent );
 
   /** Add all signals to the view. */

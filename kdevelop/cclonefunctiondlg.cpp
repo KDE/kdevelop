@@ -140,13 +140,14 @@ CCloneFunctionDlg::CCloneFunctionDlg(CClassView* class_tree, QWidget *parent, co
 	allclasses->insertItem(templates);
 
 	// create list of all classes
-  QList<ParsedClass>* all = API::getInstance()->classStore()->getSortedClassList();
-	for (ParsedClass* i=all->first(); i != 0; i=all->next() ) {
+        QValueList<ParsedClass*> all = API::getInstance()->classStore()->getSortedClassList();
+        QValueList<ParsedClass*>::ConstIterator allit;
+        for (allit = all.begin(); allit != all.end(); ++allit) {
+            ParsedClass *i = *allit;
 		allclasses->insertItem(i->name());
 	  if (i->name() == parentname)
 	  	allclasses->setCurrentItem(allclasses->count()-1);
 	}
-	delete (all);
 	slotNewClass( allclasses->currentText () );
 
 	// change methods on class selection
@@ -182,10 +183,12 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 	  // set/get attributes
 	  {
       ParsedClass *theClass = API::getInstance()->classStore()->getClassByName( classname );
-    	QList<ParsedAttribute> *list = theClass->getSortedAttributeList();
+    	QValueList<ParsedAttribute*> list = theClass->getSortedAttributeList();
 
       ParsedAttribute* attr;
-      for ( attr=list->first(); attr != 0; attr=list->next() ) {
+      QValueList<ParsedAttribute*>::ConstIterator listit;
+      for (listit = list.begin(); listit != list.end(); ++listit) {
+         attr = *listit;
          QString name = attr->name();
          QString type = attr->type();
          type.replace( QRegExp("[&\\*]"), "" );
@@ -193,7 +196,6 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
          methods->insertItem(type + "& get" + name + "()");
          methods->insertItem("void set" + name + "(const " + type + "& )" );
       }
-      delete list;
     }
 
 	  // operators
@@ -240,26 +242,27 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
   ParsedClass *theClass = API::getInstance()->classStore()->getClassByName( name );
 	QList<ParsedMethod> *implList = new QList<ParsedMethod>;
 	QList<ParsedMethod> *availList = new QList<ParsedMethod>;
-  QList<ParsedMethod> *all = theClass->getSortedMethodList();
-
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  QValueList<ParsedMethod*> all = theClass->getSortedMethodList();
+  QValueList<ParsedMethod*>::ConstIterator allit;
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
   	if (! (i->isDestructor() || i->isConstructor()))
             methods->insertItem(i->asString());
-	delete (all);
-	delete (implList);
-	delete (availList);
+  }
 
 	// all slots
   all = theClass->getSortedSlotList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
       methods->insertItem(i->asString());
-	delete (all);
+  }
 
   // all signals
   all = theClass->getSortedSignalList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
       methods->insertItem(i->asString());
-	delete (all);
+  }
 }
 /** get the selected method */
 bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment,
@@ -306,34 +309,34 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
 ParsedMethod* CCloneFunctionDlg::searchMethod(ParsedClass *theClass, QString selected)
 {
  	QString str;
-  QList<ParsedMethod> *all = theClass->getSortedMethodList();
+  QValueList<ParsedMethod*> all = theClass->getSortedMethodList();
   // check methods
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  QValueList<ParsedMethod*>::ConstIterator allit;
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
       if ( selected == i->asString()) {
-	        delete (all);
 	        return i;
 	    }
-	delete (all);
+  }
 
 	// not found - try all slot
   all = theClass->getSortedSlotList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
      if ( selected == i->asString()) {
-	        delete (all);
 	        return i;
 	    }
-	delete (all);
-
+  }
 	// not found - try all slot
   all = theClass->getSortedSignalList();
-  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  for (allit = all.begin(); allit != all.end(); ++allit) {
+      ParsedMethod *i = *allit;
      if ( selected == i->asString()) {
-	        delete (all);
 	        return i;
 	    }
+  }
 
 	// oops
-	delete (all);
 	return NULL;
 }
 #include "cclonefunctiondlg.moc"

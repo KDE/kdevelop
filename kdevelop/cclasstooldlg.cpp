@@ -296,7 +296,7 @@ void CClassToolDlg::setStore( ClassStore *aStore )
 {
   REQUIRE( "Valid store", aStore != NULL );
 
-  QStringList *list;
+  QStringList list;
 
   store = aStore;
 
@@ -305,8 +305,7 @@ void CClassToolDlg::setStore( ClassStore *aStore )
 
   // Fetch the list and update the combobox.
   list = store->getSortedClassNameList();
-  classCombo.insertStringList( *list );
-  delete list;
+  classCombo.insertStringList( list );
 }
 
 /*---------------------------------------- CClassToolDlg::setClass()
@@ -360,7 +359,7 @@ void CClassToolDlg::setClass( ParsedClass *aClass )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassToolDlg::addClasses( QList<ParsedClass> *list )
+void CClassToolDlg::addClasses( QValueList<ParsedClass*> list )
 {
   ParsedClass *aClass;
   QListViewItem *root;
@@ -371,10 +370,10 @@ void CClassToolDlg::addClasses( QList<ParsedClass> *list )
   // Insert root item(the current class);
   root = classTree.treeH->addRoot( currentClass->name(), THCLASS );
 
-  for( aClass = list->first();
-       aClass != NULL;
-       aClass = list->next() )
+  QValueList<ParsedClass*>::ConstIterator listit;
+  for (listit = list.begin(); listit != list.end(); ++listit)
   {
+    aClass = *listit;
     ((CClassTreeHandler *)classTree.treeH)->addClass( aClass, root );
   }
   classTree.setOpen( root, true );
@@ -609,14 +608,13 @@ void CClassToolDlg::viewChildren()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<ParsedClass> *list;
+  QValueList<ParsedClass*> list;
 
   currentOperation = CTCHILD;
   changeCaption();
 
   list = store->getClassesByParent( currentClass->name() );
   addClasses( list );
-  delete list;
 }
 
 /** View all classes that has this class as an attribute. */
@@ -624,14 +622,13 @@ void CClassToolDlg::viewClients()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<ParsedClass> *list;
+  QValueList<ParsedClass*> list;
 
   currentOperation = CTCLIENT;
   changeCaption();
 
   list = store->getClassClients( currentClass->name() );
   addClasses( list );
-  delete list;
 }
 
 /** View all classes that this class has as attributes. */
@@ -639,14 +636,13 @@ void CClassToolDlg::viewSuppliers()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<ParsedClass> *list;
+  QValueList<ParsedClass*> list;
 
   currentOperation = CTSUPP;
   changeCaption();
 
   list = store->getClassSuppliers( currentClass->name() );
   addClasses( list );
-  delete list;
 }
 
 /** View methods in this class and parents. */

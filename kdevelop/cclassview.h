@@ -68,12 +68,11 @@ private: // Private classes
   class SubfolderClassList
   {
   public:
-    SubfolderClassList(const QString& sfname, QList<ParsedClass>* pCL) {
+    SubfolderClassList(const QString& sfname, QValueList<ParsedClass*> pCL) {
       subfolderName = sfname;
       pClassList = pCL;
     }
     ~SubfolderClassList() {
-      delete pClassList;
     }
     bool operator<(const SubfolderClassList& scl) {
       return (subfolderName < scl.subfolderName);
@@ -82,7 +81,7 @@ private: // Private classes
       return (subfolderName == scl.subfolderName);
     }
     QString subfolderName;
-    QList<ParsedClass>* pClassList;
+    QValueList<ParsedClass*> pClassList;
     QListViewItem* pFolderItem;
   };
 

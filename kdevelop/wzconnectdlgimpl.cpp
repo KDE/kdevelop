@@ -476,10 +476,9 @@ void CClassPropertiesDlgImpl::slotBtnApply()
             break;
     }
 
-    if ( workClassAttrList )
+    if ( !workClassAttrList.isEmpty() )
     {
-      workClassAttrList -> clear();
-      delete workClassAttrList;
+      workClassAttrList . clear();
     }
     accept();
 }
@@ -542,12 +541,14 @@ void CClassPropertiesDlgImpl::slotAddSlotState(int)
 void CClassPropertiesDlgImpl::slotImplMethodSelected(const QString& strMethod)
 {
     bool btrue;
-    QList < ParsedMethod> * l =  currentClass -> getSortedMethodList();
+    QValueList<ParsedMethod*> l =  currentClass -> getSortedMethodList();
     QString am;
     kdDebug() << "in slotImplMethodSelected:" << endl;
     kdDebug() << "getting instance of " << strMethod.data() << endl;
-    for ( implMethod = l -> first() ; implMethod; implMethod = l -> next())
+    QValueList<ParsedMethod*>::ConstIterator lit;
+    for (lit = l.begin(); lit != l.end(); ++lit)
     {
+        implMethod = *lit;
         am = implMethod -> asString ();
         kdDebug() << "mathing " << am.data() << endl;
         if ( am == strMethod ) break;
@@ -556,8 +557,9 @@ void CClassPropertiesDlgImpl::slotImplMethodSelected(const QString& strMethod)
     {
         kdDebug() << "no methods... trying in slots list..." << endl;
         l = currentClass -> getSortedSlotList();
-        for ( implMethod = l -> first() ; implMethod; implMethod = l -> next())
-        {
+        
+        for (lit = l.begin(); lit != l.end(); ++lit) {
+            implMethod = *lit;
             am = implMethod -> asString ();
             kdDebug() << "matching " << am.data() << endl;
             if ( (am == strMethod) && (strMethod != implMethod -> name()) ) break;
@@ -709,7 +711,7 @@ void CClassPropertiesDlgImpl::slotSigNameChanged( const QString& )
 void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
 {
     ParsedMethod* meth;
-    QList <ParsedMethod>* methList;
+    QValueList <ParsedMethod*> methList;
     if (classOfSig == 0)
     {
       kdDebug() << "no member class selected,..." << endl;
@@ -723,8 +725,6 @@ void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
     methList = currentClass -> getSortedSlotList();
     setSlotTabSlotList ( methList, true);
     kdDebug() << "CClassPropertiesDlgImpl::slotSigSignalSelected() - signal '" << strSignalMethod.data() << "' selected.." << endl;
-    delete methList;
-
 }
 /*
  * protected slot
@@ -842,7 +842,6 @@ void CClassPropertiesDlgImpl::updateData( int  )
 void CClassPropertiesDlgImpl::init()
 {
     int x;
-    sigClassList.setAutoDelete( false );
     sigClassList.clear();
     strSlotMethod = "";
     strSignalMethod = "";
@@ -900,7 +899,6 @@ void CClassPropertiesDlgImpl::init()
     }
     setMinimumSize( 540, 500 );
     Member = "";
-    workClassAttrList = 0;
     bgVarProperty -> setEnabled(true);
 
    // auto completion on types
@@ -917,9 +915,13 @@ void CClassPropertiesDlgImpl::init()
    typeCompletion->addItem("char");
    typeCompletion->addItem("unsigned char");
    // add list of all classes
-   QList<ParsedClass>* all = API::getInstance()->classStore()->getSortedClassList();
-   for (ParsedClass* i=all->first(); i != 0; i=all->next() )
-     typeCompletion->addItem(i->name());
+   QValueList<ParsedClass*> all = API::getInstance()->classStore()->getSortedClassList();
+   QValueList<ParsedClass*>::ConstIterator allit;
+   for (allit = all.begin(); allit != all.end(); ++allit)
+       {
+           ParsedClass *i = *allit;
+           typeCompletion->addItem(i->name());
+       }
 
    connect(leVarType_2,SIGNAL(returnPressed(const QString&)),typeCompletion,SLOT(addItem(const QString&)));
    connect(leMethType_2,SIGNAL(returnPressed(const QString&)),typeCompletion,SLOT(addItem(const QString&)));
@@ -936,7 +938,7 @@ void CClassPropertiesDlgImpl::setClass ( ParsedClass* aClass )
     // update Signals Tab data:
     setSigTabAttrList ( workClassAttrList );
     // Get slot list:
-    QList<ParsedMethod> *MethList = aClass ->getSortedSlotList();
+    QValueList<ParsedMethod*> MethList = aClass ->getSortedSlotList();
 
     // update Slots Tab data:
     setSlotTabSlotList ( MethList );
@@ -946,27 +948,28 @@ void CClassPropertiesDlgImpl::setClass ( ParsedClass* aClass )
     MethList = aClass -> getSortedMethodList();
     // update Connect Implementation Tab data:
     setImplTabMethList ( MethList,false );
-    delete MethList;
 }
 /**  */
-void CClassPropertiesDlgImpl::setSigTabAttrList ( QList <ParsedAttribute>* AttrList )
+void CClassPropertiesDlgImpl::setSigTabAttrList ( QValueList <ParsedAttribute*> AttrList )
 {
     ParsedAttribute * Attr;
     int apos,pos;
     QString strType, strItem;
-    if (AttrList == NULL )
+    if (AttrList.isEmpty() )
       return;
 
     cbSigMemberList_2 -> clear();
     strItem = currentClass -> name() + "* this";
     cbSigMemberList_2 -> insertItem ( strItem );
-    if ( AttrList -> count() == 0 )
+    if ( AttrList . count() == 0 )
     {
         kdDebug() << "no attributes in class "<< currentClass -> name().data () << endl;
         return;
     }
-    for ( Attr = AttrList -> first() ; Attr; Attr = AttrList -> next())
+    QValueList<ParsedAttribute*>::ConstIterator AttrIt;
+    for (AttrIt = AttrList.begin(); AttrIt != AttrList.end(); ++AttrIt)
     {
+        Attr = *AttrIt;
         strType = Attr -> type();
         //kdDebug() << "type of " << Attr -> name .data() << " is " << strType.data() << endl;
         apos = strType.find('*'); // remove pointer modifier if any
@@ -1010,7 +1013,7 @@ void CClassPropertiesDlgImpl::setSigTabAttrList ( QList <ParsedAttribute>* AttrL
      leSigClassName -> setText( currentClass -> name() );
 }
 /** Fill in current class's slots member in ComboBox :*/
-void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<ParsedMethod> * list, bool bmatchsig)
+void CClassPropertiesDlgImpl::setSlotTabSlotList ( QValueList<ParsedMethod*> list, bool bmatchsig)
 {
     ParsedMethod* meth;
     cbSlotMemberList_2 -> clear();
@@ -1020,10 +1023,8 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<ParsedMethod> * list, b
     ParsedArgument *sigArgIt;
     ParsedArgument *slotArgIt;
     bool match = false;
-    if(!list)
-      return;
 
-    if ( list -> isEmpty())
+    if ( list . isEmpty())
     {
         kdDebug() << "no slot members ...." << endl;
         //signalMethod = NULL;
@@ -1045,13 +1046,16 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<ParsedMethod> * list, b
     {   // Find the class where the signal method belongs:
         ParsedClass* aClass = NULL;
         signalMethod = NULL;
-        if (!sigClassList.isEmpty())
-            for ( aClass = sigClassList.first(); aClass; aClass = sigClassList.next())
+        if (!sigClassList.isEmpty()) {
+            QValueList<ParsedClass*>::ConstIterator sigClassListIt;
+            for (sigClassListIt = sigClassList.begin(); sigClassListIt != sigClassList.end(); ++sigClassListIt)
             {
+                aClass = *sigClassListIt;
                 kdDebug() << "checking in class " << aClass -> name().data() << endl;
                 if( (signalMethod = aClass -> getSignalByNameAndArg( strSignalMethod )) != NULL)
                   break;
             }
+        }
     }
     if( !signalMethod )
     {
@@ -1059,8 +1063,10 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<ParsedMethod> * list, b
         return;
     }
     sigArgs = signalMethod -> arguments;
-    for (meth = list -> first() ; meth; meth = list -> next())
+    QValueList<ParsedMethod*>::ConstIterator listit;
+    for (listit = list.begin(); listit != list.end(); ++listit)
     {
+        meth = *listit;
         if( bmatchsig )
         {
             match = false;
@@ -1107,13 +1113,15 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<ParsedMethod> * list, b
     kdDebug() << "slotMethod set to '" << slotMethod -> name().data() << endl;
 }
 /**  */
-void CClassPropertiesDlgImpl::setImplTabMethList ( QList<ParsedMethod>* mlist, bool bclear)
+void CClassPropertiesDlgImpl::setImplTabMethList ( QValueList<ParsedMethod*> mlist, bool bclear)
 {
     ParsedMethod* meth;
     if(bclear) cbImplMethodList_2 -> clear();
     QString strMeth;
-    for ( meth = mlist -> first(); meth; meth = mlist -> next())
+    QValueList<ParsedMethod*>::ConstIterator methit;
+    for (methit = mlist.begin(); methit != mlist.end(); ++methit)
     {
+        meth = *methit;
         strMeth = meth -> asString( );
         //kdDebug() << "method " << strMeth.data() << " ends on line#" << meth -> definitionEndsOnLine << endl;
         cbImplMethodList_2 -> insertItem ( strMeth );
@@ -1177,10 +1185,10 @@ void CClassPropertiesDlgImpl::getClassNameFromString( const QString & aName, QSt
 /**  */
 void CClassPropertiesDlgImpl::setSignalsMemberList( ParsedClass* aClass, bool bClear)
 {
-    QList<ParsedMethod> *siglist = aClass -> getSortedSignalList();
+    QValueList<ParsedMethod*> siglist = aClass -> getSortedSignalList();
     QString item;
     if ( bClear ) cbSigSignalList_2 -> clear();
-    if ( (siglist == (QList<ParsedMethod> *)0) || ( siglist -> isEmpty()) )
+    if ( siglist . isEmpty() )
     {
         kdDebug() << "CClassPropertiesDlgImpl::setSignalsMemberList() : class " << aClass -> name().data() << " has no signal members." << endl;
         // ToDo: KMessageBox::warning(...)...
@@ -1189,8 +1197,10 @@ void CClassPropertiesDlgImpl::setSignalsMemberList( ParsedClass* aClass, bool bC
         return;
     }
     ParsedMethod* sig;
-    for ( sig = siglist -> first() ; sig; sig = siglist -> next())
+    QValueList<ParsedMethod*>::ConstIterator methit;
+    for (methit = siglist.begin(); methit != siglist.end(); ++methit)
     {
+        sig = *methit;
         item = sig -> asString( );
         cbSigSignalList_2 -> insertItem( item );
     }
@@ -1272,7 +1282,7 @@ void CClassPropertiesDlgImpl::getMemberFromString ( const QString& str, QString&
     int spos;
     ParsedAttribute* aAttr;
 //    QList < ParsedAttribute>  *l;
-    if (!workClassAttrList)
+    if (workClassAttrList.isEmpty())
       workClassAttrList = currentClass -> getSortedAttributeList();
 
     spos = str.length() - str.find(" ");
@@ -1283,8 +1293,9 @@ void CClassPropertiesDlgImpl::getMemberFromString ( const QString& str, QString&
     //if( spos == -1) spos = 0;
     newName = str.right(spos-1);
     kdDebug() << "parsed name: '" << newName.data() << "'" << endl;
-    for (aAttr=workClassAttrList->first(); aAttr; aAttr = workClassAttrList->next())
-    {
+    QValueList<ParsedAttribute*>::ConstIterator attrIt;
+    for (attrIt = workClassAttrList.begin(); attrIt != workClassAttrList.end(); ++attrIt) {
+        ParsedAttribute *aAttribute = *attrIt;
         if (aAttr -> name() == newName)
         {
             attrMember = aAttr;
@@ -1348,7 +1359,7 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(ParsedClass* aClass, bool bClear)
       return false;
     QStringList faileParse = NULL;
     ParsedMethod* meth;
-    QList <ParsedMethod> *mList;
+    QValueList <ParsedMethod*> mList;
     ParsedParent* parent;
     ParsedClass* Class;
     QList <ParsedParent> prList;
@@ -1392,7 +1403,7 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(ParsedClass* aClass, bool bClear)
         );
     }
     mList = aClass -> getSortedSignalList();
-    if (!mList || ( mList -> count() == 0 ) )
+    if ( mList.isEmpty() )
     {
         kdDebug()  << "no signals in class " << aClass -> name().data() << endl;
         //QString Message = i18n("There are no signal members in class") + " " + aClass -> name;
@@ -1400,8 +1411,10 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(ParsedClass* aClass, bool bClear)
         return false;
     }
     sigClassList.append (aClass);
-    for ( meth = mList -> first(); meth; meth = mList -> next())
+    QValueList<ParsedMethod*>::ConstIterator methit;
+    for (methit = mList.begin(); methit != mList.end(); ++methit)
     {
+        meth = *methit;
         asString = meth -> asString ( );
         cbSigSignalList_2 -> insertItem( asString );
     }
@@ -1412,26 +1425,21 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(ParsedClass* aClass, bool bClear)
 
 
 /** This build a list of ParsedAttribute items from the current class and its parents classes */
-QList <ParsedAttribute>* CClassPropertiesDlgImpl::getAllParentAttr(ParsedClass* aClass, bool /*initList*/)
+QValueList <ParsedAttribute*> CClassPropertiesDlgImpl::getAllParentAttr(ParsedClass* aClass, bool /*initList*/)
 {
     ParsedParent* pr;
     QList <ParsedParent> prList;
-    QList <ParsedAttribute> *attrList=NULL;
+    QValueList <ParsedAttribute*> attrList;
     ParsedClass* Class;
-    QList<ParsedAttribute> *prAttrList=NULL;
-    QList<ParsedAttribute> *aClassAttrList;
+    QValueList<ParsedAttribute*> prAttrList;
+    QValueList<ParsedAttribute*> aClassAttrList;
     ParsedAttribute * aAttribute;
     PIAccess Export;
-    if(! aClass ) return NULL;
+    if(! aClass ) return QValueList<ParsedAttribute*>();
 
     prList = aClass -> parents;
     if ( prList.count() > 0)
     {
-        if (attrList == NULL )
-        {
-            attrList = new QList <ParsedAttribute>;
-            attrList -> clear();
-        }
         for ( pr = prList.first(); pr ; pr = prList.next())
         {
             Class = store -> hasClass( pr -> name() ) ?
@@ -1439,20 +1447,21 @@ QList <ParsedAttribute>* CClassPropertiesDlgImpl::getAllParentAttr(ParsedClass* 
                     : unParsedClass ( pr -> name() );
             if(! Class ) continue;
             prAttrList = getAllParentAttr( Class );
-            if(!prAttrList) continue;
-            for ( aAttribute = prAttrList -> first(); aAttribute; aAttribute = prAttrList -> next())
-            {
+            if(prAttrList.isEmpty()) continue;
+            QValueList<ParsedAttribute*>::ConstIterator attrIt;
+            for (attrIt = aClassAttrList.begin(); attrIt != aClassAttrList.end(); ++attrIt) {
+                aAttribute = *attrIt;
                 Export = aAttribute -> access();
                 switch(Export)
                 {
                     case PIE_PUBLIC:
-                        attrList -> append ( aAttribute );
+                        attrList . append ( aAttribute );
                         break;
                     case PIE_PROTECTED:
-                        if( Class -> isProtected() ) attrList -> append( aAttribute );
+                        if( Class -> isProtected() ) attrList . append( aAttribute );
                         break;
                     case PIE_PRIVATE:
-                        if( Class -> isPrivate() ) attrList -> append( aAttribute );
+                        if( Class -> isPrivate() ) attrList . append( aAttribute );
                         break;
                     default:
                         break;
@@ -1462,13 +1471,11 @@ QList <ParsedAttribute>* CClassPropertiesDlgImpl::getAllParentAttr(ParsedClass* 
     }
 
     aClassAttrList = aClass -> getSortedAttributeList();
-    if (! attrList )
-    {
-        attrList = new QList <ParsedAttribute>;
-        attrList -> clear();
+    QValueList<ParsedAttribute*>::ConstIterator attrIt;
+    for (attrIt = aClassAttrList.begin(); attrIt != aClassAttrList.end(); ++attrIt) {
+        aAttribute = *attrIt;
+        attrList . append( aAttribute );
     }
-    for ( aAttribute = aClassAttrList -> first(); aAttribute; aAttribute = aClassAttrList -> next() ) attrList -> append( aAttribute );
-      attrList -> append( aAttribute );
 
     return attrList;
 }

@@ -183,7 +183,7 @@ private: // Private methods
    *
    * @param list List of classes to add.
    */
-  void addClasses( QList<ParsedClass> *list );
+  void addClasses( QValueList<ParsedClass*> list );
   void addClassAndAttributes( ParsedClass *aClass );
   void addClassAndMethods( ParsedClass *aClass );
   void addClassAndSlots( ParsedClass *aClass );

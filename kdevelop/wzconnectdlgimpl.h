@@ -70,11 +70,11 @@ public:
  */
   bool isModified( int tabw );
   /**  */
-  void setImplTabMethList ( QList<ParsedMethod> *MethList, bool bclear=true);
+  void setImplTabMethList ( QValueList<ParsedMethod*> MethList, bool bclear=true);
   /**  */
-  void setSlotTabSlotList ( QList<ParsedMethod> *MethList , bool bmatchsig=false);
+  void setSlotTabSlotList ( QValueList<ParsedMethod*> MethList , bool bmatchsig=false);
   /**  */
-  void setSigTabAttrList ( QList<ParsedAttribute> *AttrList );
+  void setSigTabAttrList ( QValueList<ParsedAttribute*> AttrList );
   /**  */
   void setClass ( ParsedClass* aClass );;
   void setStore ( ClassStore* s) { store = s; }
@@ -94,7 +94,7 @@ public:
   bool fillSignalCombo(ParsedClass* aClass, bool bClear = true);
 
   /** This build a list of ParsedAttribute items from the current class and its parents classes */
-  QList <ParsedAttribute>* getAllParentAttr(ParsedClass*, bool initList=true);
+  QValueList <ParsedAttribute*> getAllParentAttr(ParsedClass*, bool initList=true);
 
   /** static member to hold completion */
   static KCompletion* typeCompletion;
@@ -171,7 +171,7 @@ private: // Private attributes
         If value is 0 ( NULL ) then the default class member [ this ]  is used*/
   ParsedAttribute* attrMember;
   /**  */
-  QList <ParsedAttribute>* workClassAttrList;
+  QValueList <ParsedAttribute*> workClassAttrList;
   CClassToolDlg* CTDlg;
   /**  */
   bool bMemberIsPointer;
@@ -198,7 +198,7 @@ protected: // Protected attributes
   /**  */
   QStrList argList;
   /**  */
-  QList <ParsedClass> sigClassList;
+  QValueList <ParsedClass*> sigClassList;
   QString Member;
 };
 
