@@ -20,5 +20,5 @@ OtherFilter::OtherFilter()
 
 void OtherFilter::processLine( const QString& line )
 {
-	emit item( new MakeItem( line ) );
+  emit item( new MakeItem( line ) );
 }

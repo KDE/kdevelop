@@ -28,6 +28,7 @@ CompileErrorFilter::CompileErrorFilter( OutputFilter& next )
 
 const QValueList<CompileErrorFilter::ErrorFormat>& CompileErrorFilter::errorFormats()
 {
+
 	static QValueList<ErrorFormat> formats
 		= QValueList<ErrorFormat>()
 
@@ -45,7 +46,7 @@ const QValueList<CompileErrorFilter::ErrorFormat>& CompileErrorFilter::errorForm
 
 void CompileErrorFilter::processLine( const QString& line )
 {
-	bool hasmatch = false;
+  bool hasmatch = false;
 	QString file;
 	int lineNum;
 	QString text;

@@ -9,6 +9,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdatetime.h>
+#include <kdebug.h>
+
 #include "makeactionfilter.h"
 #include "makeactionfilter.moc"
 #include "makeitem.h"
@@ -47,10 +50,15 @@ const QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormat
 
 void MakeActionFilter::processLine( const QString& line )
 {
+  QTime t;
+  t.start();
+
 	bool hasmatch = false;
 	QString act;
 	QString file;
 	QString tool;
+  //FIXME: This is very slow, possibly due to the regexr matching. It can take
+  //900-1000ms to execute on an Athlon XP 2000+, while the UI is completely blocked.
 	QValueList<ActionFormat>::const_iterator it = actionFormats().begin();
 	for( ; it != actionFormats().end(); ++it )
 	{
@@ -63,6 +71,8 @@ void MakeActionFilter::processLine( const QString& line )
 		tool    = (*it).tool;
 		break;
 	}
+  if (t.elapsed() > 100)
+    kdDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
 
 	if ( hasmatch )
 	{
@@ -72,4 +82,5 @@ void MakeActionFilter::processLine( const QString& line )
 	{
 		OutputFilter::processLine( line );
 	}
+
 }

@@ -19,17 +19,20 @@ CommandContinuationFilter::CommandContinuationFilter( OutputFilter& next )
 
 void CommandContinuationFilter::processLine( const QString& line )
 {
-	m_text += line;
+  bool foundLineCont = false;
+  QString s = line.stripWhiteSpace();
+  if (s.endsWith("\\"))
+  {
+    m_text += s.left(s.length() - 1);
+    foundLineCont = true;
+  } else
+  {
+    m_text += line;
+  }
 
-	QRegExp continuation( "(.*)\\\\\\s*$" );
-
-	if ( continuation.search( m_text ) == -1 )
+	if ( !foundLineCont )
 	{
 		OutputFilter::processLine( m_text );
 		m_text = "";
-	}
-	else
-	{
-		m_text = continuation.cap(1);
 	}
 }

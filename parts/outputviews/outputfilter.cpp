@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include "outputfilter.h"
+#include <qdatetime.h>
+#include <kdebug.h>
 
 OutputFilter::OutputFilter( OutputFilter& next )
 	: m_next( next )
@@ -18,5 +20,5 @@ OutputFilter::OutputFilter( OutputFilter& next )
 
 void OutputFilter::processLine( const QString& line )
 {
-	m_next.processLine( line );
+ m_next.processLine( line );
 }

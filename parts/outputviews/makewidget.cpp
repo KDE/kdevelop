@@ -478,20 +478,25 @@ bool MakeWidget::appendToLastLine( const QString& text )
 	removeParagraph( paragraphs() - 1 );
 	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
 
+
+
 	return true;
 }
 
 void MakeWidget::insertItem( MakeItem* item )
 {
+
+
 	m_items.push_back( item );
 
 	if ( !item->visible( m_compilerOutputLevel ) )
 		return;
 
-	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
+	//SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
 
 	m_paragraphToItem.insert( m_paragraphs++, item );
 	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
+
 }
 
 bool MakeWidget::brightBg()
@@ -553,6 +558,7 @@ void MakeWidget::refill()
 		m_paragraphToItem.insert( m_paragraphs++, m_items[i] );
 		append( m_items[i]->formattedText( m_compilerOutputLevel, brightBg() ) );
 	}
+
 }
 
 void MakeWidget::slotVeryShortCompilerOutput() { setCompilerOutputLevel(eVeryShort); }
