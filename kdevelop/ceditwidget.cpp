@@ -118,7 +118,7 @@ QString CEditWidget::getName(){
  * Returns:
  *   int          The line at which the file got loaded.
  *-----------------------------------------------------------------*/
-int CEditWidget::loadFile(QString filename, int mode) {
+int CEditWidget::loadFile(QString filename, int /*mode*/) {
   KWrite::loadFile(filename);
   return 0;
 }
@@ -251,7 +251,7 @@ void CEditWidget::deleteInterval( uint startAt, uint endAt )
 void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
 {
   assert( toInsert != NULL );
-  assert( atLine >= 0 );
+//  assert( atLine >= 0 );      uint is always >=0 ???
   
   int pos=0;
   QString txt;
@@ -324,7 +324,7 @@ int CEditWidget::getLinePos( const char *buf, uint aLine )
   return pos + 1;
 }
 
-void CEditWidget::enterEvent ( QEvent * e){
+void CEditWidget::enterEvent ( QEvent * /*e*/){
   setFocus();
 }
 

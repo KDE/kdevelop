@@ -386,7 +386,7 @@ void GrepDialog::childExited()
 }
 
 
-void GrepDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
+void GrepDialog::receivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
     buf += QString(buffer, buflen+1);
     processOutput();

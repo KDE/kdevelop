@@ -146,7 +146,7 @@ void CGfxClassTreeWindow::InitializeTree(QList<CClassTreeNode> *forest)
 * Returns:
 *  -
 *-----------------------------------------------------------------*/
-void CGfxClassTreeWindow::resizeEvent(QResizeEvent *resevent)
+void CGfxClassTreeWindow::resizeEvent(QResizeEvent */*resevent*/)
 {
   m_treescrollview->resize(width(),height()-m_foldbtn->height());
 }

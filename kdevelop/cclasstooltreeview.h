@@ -44,7 +44,7 @@ protected: // Implementations of virtual methods.
   KPopupMenu *getCurrentPopup();                                               
 
   /** Refresh this view using the current project. */
-  void refresh( CProject *proj ) {}
+  void refresh( CProject */*proj*/ ) {}
 
 private: // Popupmenus
  

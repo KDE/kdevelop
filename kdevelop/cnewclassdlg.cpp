@@ -43,7 +43,7 @@ CNewClassDlg::CNewClassDlg( CProject* prj, const char* dir, QWidget *parent, con
 }
 
 /** constructs the dialog. If dir is != 0, the class is generated in dir */
-void CNewClassDlg::initDialog(const char* dir=0){
+void CNewClassDlg::initDialog(const char* dir /*=0*/){
   subdirName = dir;
   header_modified =false;
   impl_modified = false;

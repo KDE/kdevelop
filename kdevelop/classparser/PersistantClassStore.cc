@@ -150,7 +150,7 @@ void CPersistantClassStore::close()
 }
 
 /** Store a class in the database. */
-void CPersistantClassStore::storeClass( CParsedClass *aClass )
+void CPersistantClassStore::storeClass( CParsedClass * /*aClass*/ )
 {
   //  assert( isOpen );
   //  assert( aClass != NULL );
@@ -202,7 +202,7 @@ bool CPersistantClassStore::exists()
  ********************************************************************/
 
 /** Check if a class exists in the store. */
-bool CPersistantClassStore::hasClass( const char *aName )
+bool CPersistantClassStore::hasClass( const char * /*aName*/ )
 {
   //  REQUIRE( "Store is open", isOpen );
 

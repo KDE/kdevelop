@@ -33,7 +33,7 @@
 #include "cupdatekdedocdlg.h"
 #include "ccreatedocdatabasedlg.h"
 
-void CKDevInstall::slotReceivedStdout(KProcess*,char* buffer,int){
+void CKDevInstall::slotReceivedStdout(KProcess*,char* /*buffer*/,int){
   
 }
 void CKDevInstall::slotReceivedStderr(KProcess*,char*,int){
@@ -772,7 +772,7 @@ void CKDevInstall::slotAuto() // proceed >>
   qt_test=true;
 
   QString qt_testfile; // for tests if the path really is the qt-doc path
-  char *qt_dirs[]={"/usr/local/qt/html",
+  const char *qt_dirs[]={"/usr/local/qt/html",
 		"/usr/local/lib/qt/html",
 		"/usr/lib/qt/html",
 		"/usr/lib/qt/doc/html",

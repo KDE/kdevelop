@@ -1232,7 +1232,7 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
 }
 
     
-void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString /*_parent*/)
 {
     KDlgPropertyBase* props = wid->getProps();
    

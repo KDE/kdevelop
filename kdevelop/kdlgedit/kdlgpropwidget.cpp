@@ -1208,7 +1208,7 @@ QString AdvLvi_Bool::getText()
 }
 
 //void AdvLvi_Bool::btnPressed()
-void AdvLvi_Bool::activated( const char* s )
+void AdvLvi_Bool::activated( const char* /*s*/ )
 {
   propEntry->value = getText();
 //  cbBool->setText(cbBool->isChecked() ? "true" : "false");
@@ -1249,7 +1249,7 @@ QString AdvLvi_Orientation::getText()
     return QString();
 }
 
-void AdvLvi_Orientation::activated( const char* s )
+void AdvLvi_Orientation::activated( const char* /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();
@@ -1385,7 +1385,7 @@ QString AdvLvi_BgMode::getText()
     return QString();
 }
 
-void AdvLvi_BgMode::activated( const char* s )
+void AdvLvi_BgMode::activated( const char* /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();
@@ -1476,13 +1476,13 @@ QString AdvLvi_Cursor::getText()
 }
 
 
-void AdvLvi_Cursor::activated( const char* s )
+void AdvLvi_Cursor::activated( const char* /*s*/ )
 {
   propEntry->value = getText();
 }
 
 
-AdvLvi_Varname::AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0)
+AdvLvi_Varname::AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name /*=0*/)
   : AdvLvi_String(parent, parCKD, dpe, name)
 {
   connect(leInput, SIGNAL(textChanged(const char *)), this, SLOT(VarnameChanged()) );
@@ -1532,7 +1532,7 @@ QString AdvLvi_ComboList::getText()
     return QString();
 }
 
-void AdvLvi_ComboList::activated( const char* s )
+void AdvLvi_ComboList::activated( const char* /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();

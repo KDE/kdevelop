@@ -107,7 +107,7 @@ void CTreeView::setTreeHandler( CTreeHandler *aHandler )
  *   QListViewItem  The item.
  *   NULL           No item was found.
  *-----------------------------------------------------------------*/
-QListViewItem *CTreeView::findByName( const char *aName )
+QListViewItem *CTreeView::findByName( const char */*aName*/ )
 {
   debug( "CTreeView::findByName NOT IMPLEMENTED YET!" );
   return NULL;
@@ -172,7 +172,7 @@ void CTreeView::mousePressEvent(QMouseEvent * event)
  *   -
  *-----------------------------------------------------------------*/
 void CTreeView::slotRightButtonPressed(QListViewItem *item,
-                                       const QPoint &p,int i)
+                                       const QPoint & /*p*/,int /*i*/)
 {
   KPopupMenu *popup;
 

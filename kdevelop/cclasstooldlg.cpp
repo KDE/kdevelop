@@ -631,7 +631,7 @@ void CClassToolDlg::slotVirtuals()
   viewVirtuals();
 }
 
-void CClassToolDlg::slotExportComboChoice(int idx)
+void CClassToolDlg::slotExportComboChoice(int /*idx*/)
 {
   QString str;
 
@@ -664,7 +664,7 @@ void CClassToolDlg::slotExportComboChoice(int idx)
   }
 }
 
-void CClassToolDlg::slotClassComboChoice(int idx)
+void CClassToolDlg::slotClassComboChoice(int /*idx*/)
 {
   QString className=classCombo.currentText();
   // className.replace(QRegExp("::"), ".");

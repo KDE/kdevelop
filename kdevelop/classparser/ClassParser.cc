@@ -1207,7 +1207,7 @@ int CClassParser::checkClassDecl()
   bool isMultiDecl = false;
   int retVal = CP_IS_OTHER;
   bool exit = false;
-  CParsedLexem *aLexem;
+//  CParsedLexem *aLexem;
 
   while( !exit )
   {

@@ -972,7 +972,7 @@ CClassToolDlg *CClassView::createCTDlg()
  *-----------------------------------------------------------------*/
 bool CClassView::validClassDecl( const char *className, 
                                  const char *declName, 
-                                 THType type )
+                                 THType /*type*/ )
 {
   bool retVal = false;
   QString str = i18n( "No item selected." );
