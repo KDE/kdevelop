@@ -107,7 +107,7 @@ void TextLine::replace(int pos, int delLen, const QChar *insText, int insLen,
   }
 
   i = (insLen - delLen);
-  if (i != 0 || realloc) {
+  if (i != 0){// || realloc) {
     if (i <= 0) {
       //text to replace longer than new text
       for (z = pos + delLen; z < len; z++) {
