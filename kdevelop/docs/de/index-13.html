@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Benutzerhandbuch zu KDevelop: Questions and Answers</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Weiter</A>
+ <A HREF="index-12.html">Zurück</A>
+ <A HREF="index.html#toc13">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="Questions and Answers"></A> <A NAME="s13">13. Questions and Answers</A></H3>
+
+<P>This section adresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
+mailinglist during experiences with the current versions of KDevelop as well as bug reporting in general.
+<P>
+<H3><A NAME="Bug Reporting"></A> <A NAME="ss13.1">13.1 Bug Reporting </A>
+</H3>
+
+<P>Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
+the KDevelop development team a bug report either by your email-client or by the bug-report dialog. All bug-reports are collected on
+the KDevelop website and can be reviewed on 
+<A HREF="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html">fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html</A>. You can also receive all bug-reports via subscription to the
+bug-report mailinglist by sending an empty email to 
+<A HREF="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de">kdevelop-bug-report-request@fara3.cs.uni-potsdam.de</A> with "subscribe <EM>your_email_adress</EM>" as the body contents.
+<P>To send bug reports, please use this email adress by your mail program. If you want to use KDevelop for direct bug-reporting, choose
+"Bug Report" from the "Help" menu. You are presented the report dialog that lets you enter all necessary information about the bug you
+found. After pressing "OK", the dialog's contents is sent to the mailinglist automatically.
+<P>
+<H3><A NAME="ss13.2">13.2 Where to get Information</A>
+</H3>
+
+<P><B>Q:</B> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
+<P><B>A:</B>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailinglist at 
+<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A>. Send a mail with an empty header and
+"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
+If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
+the FAQ up to date.
+<P>The KDevelop Homepage at 
+<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A> also contains a mailing-list archive that allows you to browse the
+mails already send by the subscribers, so you should look there first as most problems should have been adressed already by the team or
+other users.
+<P>
+<H3><A NAME="ss13.3">13.3 Library and System Problems</A>
+</H3>
+
+<P>
+<P><B>Q:</B> Wrong JPEG library version: library is 61, caller expects 62
+<P><B>A:</B>  There are 2 ways.
+<OL>
+<LI> When the kdelibs are installed it installs header files for the
+jpeg libraries, these are version 61,  however most distributions
+(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
+from /opt/kde/include. The pukka include  file for version 62 should
+then be picked up. However looking at the  error message above it may
+be the other way round, in any case ensure  you only have on version
+of the header file, the library and that  they are consistent.
+
+It is useful to use the locate command to verify that I have
+the correct version of a library and header files e.g.
+updatedb
+locate libjpeg
+locate jpeglib
+</LI>
+<LI> You must recompiled kdesupport without jpeg
+library (./configure --with-libjpeg --with-libgif).</LI>
+</OL>
+<P>
+<P><B>Q:</B>
+<BLOCKQUOTE><CODE>
+<PRE>
+make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
+aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+make[2]: *** [Makefile.in] Error 1
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
+"aclocal" manually, then it will compile.
+<P>
+<P><B>Q:</B>  What must i do, if configure said ,that i need giflib23.
+<P><B>A:</B>  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+<P>
+<P><B>Q:</B> How can I convert a KDevelop 0.2 project to a 0.3 one?
+<P><B>A:</B> Please change the AC_OUTPUT in the configure.in to a oneline version
+<P>for example:
+old version:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile \
+kdevelop/kwrite/Makefile \
+kdevelop/templates/Makefile
+)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+new version:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
+<BLOCKQUOTE><CODE>
+<PRE>
+/usr/lib/libqt.so:
+warning: multiple common of `QArrayT&lt;char&gt; type_info node'
+ckdevelop.o: warning: previous common is here
+ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
+ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)':
+ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o: In function `CKDevelop::slotFileClose(void)':
+ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
+unsigned short, char const *,...)'
+ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
+short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
+exit status  make[2]: ***
+[kdevelop] Error 1  make[2]: Leaving directory
+'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
+make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
+`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
+make: *** [all-recursive-am] Error 2
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
+them or get an updated rpm of the kdelibs from 
+<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P>
+<H3><A NAME="ss13.4">13.4 Usage Questions</A>
+</H3>
+
+<P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
+<P><B>A:</B>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
+<P>
+<P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
+<P><B>A:</B> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
+added files will be included as well.
+<P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
+<P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
+automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
+according *.moc.cpp file and rebuild the project.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-14.html">Weiter</A>
+ <A HREF="index-12.html">Zurück</A>
+ <A HREF="index.html#toc13">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

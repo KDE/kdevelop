@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Benutzerhandbuch zu KDevelop: Build Settings</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-10.html">Weiter</A>
+ <A HREF="index-8.html">Zurück</A>
+ <A HREF="index.html#toc9">Inhaltsverzeichnis</A>
+</P>
+<H3><A NAME="Build Settings"></A> <A NAME="s9">9. Build Settings</A></H3>
+
+<P>The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
+used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
+compilation preferences as well.. After changing the project options, you should invoke "make clean" or "rebuild all" to compile
+your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
+information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
+in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
+<P>For a release build of your application or for distributing the sourcecode package, you should watch the following standard
+settings:
+<P>
+<UL>
+<LI>disable debugging</LI>
+<LI>enable optimization and set optimization level to <B>-02</B></LI>
+<LI>set the compiler warnings to <B>-Wall</B></LI>
+<LI>for each new release, increase the version number and update the project.lsm file for version and requirements.</LI>
+</UL>
+<P>
+<H3><A NAME="ss9.1">9.1 General Options</A>
+</H3>
+
+<P>The first page of the Project Options dialog sets the general options for your project. These are project name and number, the
+handbook sgml file which is used for generating a set of HTML files that are included in the project and specific information
+about the author. The short description field is for additional information that you want to include like the program's purpose
+and the like.
+<P>
+<H3><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Compiler Options</A>
+</H3>
+
+<P>The compiler options page sets the compiler flags towards your target, debugging and additional.
+<P>
+<H4>Target</H4>
+
+<P>The target box contains three options that can be set:
+<P>Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
+which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
+option sets the -b flag to the compiler. Usually you would leave this to the default.
+<P>only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
+correctness in regards to the syntax, but doesn't check anything beyond that.
+<P>Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
+is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
+optimization level below from 1 to 3.
+<P>For a release version of your application, enable optimization and set the level to 2.
+<P>
+<H4>Debugging</H4>
+
+<P>Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
+debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
+context to the sourcecode.
+<P>Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
+Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
+the binary size will increase by the debugging level.
+<P>Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
+program that displays caller graphs of your program's function.
+<P>Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
+the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
+the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
+<P>For a release of your project, disable any debugging.
+<P>
+<H4>Additional Options</H4>
+
+<P>The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
+environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
+description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
+<B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the compiler.
+<P>
+<P>
+<H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
+</H3>
+
+<P>The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
+explanations are taken from the man page for GCC, egcs version 1.1.1.
+The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
+<P>
+<DL>
+<DT><B>-Wall</B><DD><P>Standard `-W' options combined.
+<P>
+<DT><B>-W</B><DD><P>Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
+information.
+<P>
+<DT><B>-Wtraditional</B><DD><P>Warn about certain constructs that behave differently in traditional and ANSI C.
+<P>
+<DT><B>-Wundef</B><DD><P>"Warn if an undefined identifier is evaluated in an `#if' directive.
+<P>
+<DT><B>-Wshadow</B><DD><P>Warn whenever a local variable shadows another local variable.
+<P>
+<DT><B>-Wid-clash-LEN</B><DD><P>Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
+that will compile with certain obsolete, brain-damaged compilers.
+<P>
+<DT><B>-Wlarger-then-LEN</B><DD><P>Warn whenever an object of larger than LEN bytes is defined.
+<P>
+<DT><B>-Wpointer-arith</B><DD><P>Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
+size of 1, for convenience in calculations with void * pointers and pointers to functions.
+<P>
+<DT><B>-Wbad-function-cast</B><DD><P>Warn whenever a function call is cast to a non-matching type. Forexample, warn if <CODE>int malloc()</CODE> is
+cast to <CODE>anything *.</CODE>
+<P>
+<DT><B>-Wcast-equal</B><DD><P>Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
+const char * is cast to an ordinary char *.
+<P>
+<DT><B>-Wcast-align</B><DD><P>Warn whenever a pointer is cast such that the required alignment of the target is increased. For example, warn
+if a char * is cast to an int * on machines where integers can only be accessed at two- or four-byte boundaries.
+<P>
+<DT><B>-Wwrite-strings</B><DD><P>Give string constants the type const char[length] so that copying the address of one into a non-const char *
+pointer will get a warning. These warnings will help you find at compile time code that can try to write into a string constant,
+but only if you have been very careful about using const in declarations and prototypes. Otherwise, it will just be a nuisance;
+this is why we did not make `-Wall' request these warnings.
+<P>
+<DT><B>-Wconversion</B><DD><P>Warn if a prototype causes a type conversion that is different from what would happen to the same argument in the absence of a
+prototype. This includes conversions of fixed point to floating and vice versa, and conversions changing the width or signedness
+of a fixed point argument except when the same as the default promotion.
+<P>
+<DT><B>-Wsign-compare</B><DD><P>Warn when a comparison between signed and unsigned values could produce an incorrect result when the signed
+value is converted to unsigned.
+<P>
+<DT><B>-Waggregate-return</B><DD><P>Warn if any functions that return
+structures or unions are defined or called. (In languages where you can return an array, this also elicits a warning.)
+<P>
+<DT><B>-Wmissing-prototypes</B><DD><P>Warn if a global function is defined without a previous prototype declaration. This warning is issued even if the definition
+itself provides a prototype. The aim is to detect global functions that fail to be declared in header files.
+<P>
+<DT><B>-Wmissing-declarations</B><DD><P>Warn if a global function is defined without a previous declaration. Do so even if the definition
+itself provides a prototype. Use this option to detect global functions that are not declared in header files. -Wredundant-decls
+Warn if anything is declared more than once in the same scope, even in cases where multiple declaration is valid and changes nothing.
+<P>
+<DT><B>-Wredundant-decls</B><DD><P>Warn if anything is declared more than once in the same scope even in cases where multiple declaration is
+valid and changes nothing.
+<P>
+<DT><B>-Wnested-externs</B><DD><P>Warn if an extern declaration is encountered within an function.
+<P>
+<DT><B>-Winline</B><DD><P>Warn if a function can not be inlined, and either it was declared as inline, or else the -fin*line-functions option was given.
+<P>
+<DT><B>-Wold-style-cast</B><DD><P>Warn if an old-style (C-style) cast is used within a program
+<P>
+<DT><B>-Woverloaded-virtual</B><DD><P>(C++ only.) In a derived class, the definitions of virtual functions must match the type signature of a
+virtual function declared in the base class. Use this option to request warnings when a derived class declares a function that may
+be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
+the base class, but with a type signature that doesn't match any virtual functions from the base class.
+<P>
+<DT><B>-Wsynth</B><DD><P>Warn when g++'s synthesis behavoir does not match that of cfront.
+<P>
+<DT><B>make all warnings into errors</B><DD><P>(-Werror) Treat warnings as errors; abort compilation after any warning.
+<P>
+</DL>
+<P>For a release of your project, it is recommended to enable <B>-Wall</B>.
+<P>
+<H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
+</H3>
+
+<P>The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
+libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
+KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
+not listed as checkboxes, use the <B>"additonal libraries"</B> field.
+<P>
+<H4>Linker Flags</H4>
+
+<P>
+<DL>
+<DT><B>remove all symbol table and relocation information from the executable:</B><DD><P>This means that all redundant information will be
+removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
+a development stage and not released as final, you should leave this option disabled.
+<P>
+<DT><B>prevent using shared libraries:</B><DD><P>This option disables the use of shared libraries on systems that support this. On systems
+using no shared libraries, this option will have no effect.
+<P>
+<DT><B>additional flags:</B><DD><P>Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
+available options can be taken from the man page for <B>ld</B> or your compiler manpage.
+</DL>
+<P>
+<H4>Libraries</H4>
+
+<P>The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
+development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
+symbol tables.
+<DL>
+<DT><B>X11</B><DD><P>The X11 library. Recommended for all X-Window programs.
+<P>
+<DT><B>Xext</B><DD><P>The X11 extension library. Also most X-Window programs depend on Xext.
+<P>
+<DT><B>qt</B><DD><P>The Qt library. Recommended for Qt and KDE applications.
+<P>
+<DT><B>kdecore</B><DD><P>The KDE Core library; contains the classes for KDE Application frameworks.
+<P>
+<DT><B>kdeui</B><DD><P>The KDE User Interface library; contains KDE-specific widgets.
+<P>
+<DT><B>khtmlw</B><DD><P>The KHTML Widget library.
+<P>
+<DT><B>kfm</B><DD><P>The KFM library containing classes for KFM functions.
+<P>
+<DT><B>kfile</B><DD><P>The KFile library. Contains file dialogs etc.
+<P>
+<DT><B>kspell</B><DD><P>The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<P>
+<DT><B>kab</B><DD><P>The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<P>
+</DL>
+
+<B>additional libraries:</B> Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
+libraries with the -l option; for the example -lkom.
+<P>
+<H4>Make</H4>
+
+<P>As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
+en/disabled. The available settings are:
+<P>
+<DL>
+<DT><B></B><DD><P>
+<DT><B>Print debug information</B><DD><P>prints out all information about the project files and what make determines for rebuilding them.
+<DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
+error)
+<DT><B>Print the data base</B><DD><P>prints out the make-database for the current process which contains the changes from the last
+build-run. 
+<DT><B>Environment variables</B><DD><P>give the current environment variables a higher priority than the currently used variables in
+the Makefiles.
+<DT><B>No built-in rules</B><DD><P>doesn't use built-in rules for make.
+<DT><B>Touch files</B><DD><P>don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
+<DT><B>Ignore all errors</B><DD><P>Ignores all errors that occur
+<DT><B>Silent operation</B><DD><P>doesn't print out any information about the build-process
+<DT><B>Print working directory</B><DD><P>prints the current directory during the make-process.
+<DT><B>job number</B><DD><P>sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
+<DT><B>set modified</B><DD><P>sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
+means that the file will be processed by make and compiled if it is a source file.
+<DT><B>additional options</B><DD><P>set additional options to make; those can be found in your local man page for "GNU Make". 
+</DL>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-10.html">Weiter</A>
+ <A HREF="index-8.html">Zurück</A>
+ <A HREF="index.html#toc9">Inhaltsverzeichnis</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

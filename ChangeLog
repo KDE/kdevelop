@@ -1,3 +1,8 @@
+1999-06-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added documentation to the handbooks
+	* removed khtmlw/khtml question on docupdate dialog, only khtmlw supported (due to KDE 1.1.2)
+	* started german translation of the user manual
+	
 1999-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Autoconfified Qt and kdelibs doc path
 

@@ -1,60 +1,62 @@
 <!doctype linuxdoc system>
 <article>
-<title>The User Manual to KDevelop
+<title>Benutzerhandbuch zu KDevelop
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
 
 <date>Version 2.0 , Apr 11,1999
 <abstract>
-The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0. This handbook itself is part of
-the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
-id="Copyright" name="Copyright"> for more information.
+Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.0. Dieses Handbuch ist Teil der KDevelop
+Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License lizensiert; siehe <ref id="Copyright"
+name="Copyright">.
 </abstract>
 <toc>
 
-<sect>Introduction
+<sect>Einführung
 <p>
+Da alles auf Erden seine Mode hat, scheint die heutige Computerwelt immer mehr zur Benutzung freier Software auch für kommerzielle
+Zwecke zu tendieren. Man ist sich mittlerweile einig, das Linux (genauso wie andere Projekte wie der Apache Webserver, die Perl
+Skriptsprache und die GNU Tools), beweist, das freie Software qualitativ genauso gut sein kann wie kommerzielle Software. Doch trotz
+der Qualität hat der Endbenuzter immer noch unter den kryptischen Kommandos vieler Unix-Systeme zu leiden. Damit Linux weiter blühen
+kann, braucht es Applikationen, sowohl freie als auch kommerzielle, die einfach zu benutzen sind.
 
-As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for
-commercial purpose. The most popular free software project is Linux. It is now generally agreed that Linux, (as well as other projects
-such as the Apache web server, the Perl language and GNU suite of tools), proves that free software can be of as high a quality as
-commercial software. But despite the quality, end users must still suffer under the cryptic commands of any Unix Systems.For Linux to
-thrive, it needs applications, both free and commercial, and ease of use.
+Das <idx/KDE/ Projekt versucht dieses Loch zu schließen, indem ein einfache Desktop und die zugehörigen Bibliotheken bereitgestellt
+wird um die Verfügbarkeit von GNU-basierter Software zu erweitern. Aber da speziell freie Software meist in der Freizeit der Autoren
+erstellt wird, ist die Frage für viele Programmierer wie sehr sie ihre gegenwärtige Entwicklungsumgebung mögen. KDevelop will einen
+weiteren großen Schritt machen: das Programmierleben einfacher und effizienter gestalten. Produkte, die mit KDevelop erstellt wurden,
+können eine höhere Stufe der Zuverlässigkeit und Funktionalität in der gleichen Entwicklungszeit erreichen.
 
-The <idx/KDE/ project tries to close this gap by providing an easy to use desktop and the companion libraries to extend the variety of
-available GUI-based software. But especially as free software is often made in the author's free time, the question for many
-programmers is how much they like the current code development environment. KDevelop wants to take another major step: making the
-programmer's life easier and more efficient: products created with KDevelop can reach a higher level of reliability and functionality
-in the same development period.
-
-To fulfill this goal, the KDevelop Integrated Development Environment provides many features that developers need as well as it
-wraps the functionality of third party projects such as <tt/make/ and the GNU C++ compilers and makes them an invisible, integrated
-part of the development process. KDevelop manages:
+Um dieses Ziel zu erreichen, stellt die KDevelop Integrierte Entwicklungsumgebung viele Features bereit, die Entwickler brauchen
+genauso, wie es die Funktionalität von anderer Projekte wie <tt/make/ und dem GNU C++ compiler verpackt und sie zu einem unsichtbaren,
+integrierten Teil des Entwicklungsprozesses macht. KDevelop beherrscht:
 
 <itemize>
-<item> All development tools needed for C++ programming like compiler, linker, automake and
-autoconf,
-<item> KAppWizard, which generates complete, ready-to-go sample applications,
-<item> Classgenerator, for creating new classes and integrating them into the current project,
-<item> File management for sources, headers, documentation etc. to be included in the project,
-<item> The creation of User-Handbooks written with SGML and the automatic generation of HTML-output with the KDE look and feel,
-<item> Automatic HTML-based API-documentation for your project's classes with cross-references to the used libraries,
-<item> Internationalization support for your application, allowing translators to easily add their target language to a project,
-<item> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in dialog editor,
-<item> Debugging your application by integrating KDbg,
-<item> Editing of project-specific pixmaps with KIconedit,
-<item> The inclusion of any other program you need for development by adding it to the "Tools"-menu according to your individual needs.
+<item> Alle Entwicklungswerkzeuge, die für C++ Programmierung benötigt werden, wie den Compiler, Linker, automake und autoconf,
+<item> KAppWizard, welcher vollständige, sofort ausführbare Rahmenapplikationen erstellt,
+<item> den Klassengenerator, um neue Klassen zu erzeugen und sie in das aktuelle Projekt zu integrieren,
+<item> Dateimanagement von Quellcode, Headerdateien, Dokumentation etc, die im Projekt eingebunden sind,
+<item> Die Erzeugung von Benutzerhandbüchern in SGML und die automatische Generierung in HTML-Ausgabe mit dem KDE look and feel,
+<item> Automatische HTML-basierte API-Dokumentation für die Klassen ihres Projekts mit Querreferenzierung zu den benutzten
+Bibliotheken,
+<item> Unterstüzung von Internationalisierung ihrer Applikation, die es Übersetzern erlaubt, ihre Zielsprache zu einem Projekt
+hinzuzufügen,
+<item> WYSIWYG (What you see is what you get, Was sie sehen, ist was sie bekommen)- Erzeugung von Benutzeroberflächen mit dem
+integrierten Dialogeditor,
+<item> Debuggen ihrer Applikation durch integrieren von KDbg,
+<item> Bearbeiten von Projekt-spezifischen Pixmaps mit KIconEdit,
+<item> Die Einbeziehugn jedes anderen Programms, das sie zur Entwicklung benötigen durch hinzufügen zum "Werkzeuge"-Menü nach ihren
+Individuellen Bedürfnissen.
 </itemize>
 
+KDevelop macht es zu einer Freude, mit allen Programmen unter einer Oberfläche zu arbeiten und spart Zeit durch Automatisierung von
+Standard-Entwicklungsprozessen, genauso wie es ihnen direkten und transparenten Zugriff auf alle Informationen bietet, die Sie
+brauchen. Die integrierten Browser Mechanismen wurden entworfen um Dokumentationsanfragen zu unterstützen, die Entwickler in Beziehung
+zu Ihrem Projekt haben.
 
-KDevelop makes it a joy to work with all programs in one place and saves time by automating standard development processes
-as well as giving you direct and transparent access to all information you need. The integrated browsing mechanisms are designed
-to support documentation requests that developers have in conjunction with their project.
+Der Klassen-Browser und der Fehler-Sucher bringen sie an jede Stelle ihres Projektcodes mit einem Mausklick ohne das sie nach Dateien
+suchen müssen; Dateibäume geben direkten Zugang zu Projektdateien und das integrierte Hilfesystem bietet eine praktischen Zugriff auf
+die Online-Dokumentation überall innerhalb der IDE.
 
-The class viewer and error finder bring you anywhere in the project code with a mouse click without needing to search for files; File
-trees give direct access to the project files and the integrated help system offers superb access to online-documentation from anywhere
-within the IDE.
-
-<sect1>Changes
+<sect1>Neuerungen
 <p>
 Since the last release, the main work was done in three different areas: the class viewer, the dialog editor and the
 "look-n'-feel" in general, including new editing functions and the creation of <idx/KDE/-applications. In order to accomplish all this,
@@ -63,265 +65,290 @@ Krahmer, who joined the team to implement an integrated dialog editor. Other wor
 <tt/grep/-dialog allowing expression search through all project files or even the whole system; extended configuration
 utilities; reviewed and extended documentation as well as a new project generator.
 
-<sect1>About this Handbook
+<sect1>Über dieses Handbuch
 <p>
-This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
-information about specific programming issues, we suggest reading the <htmlurl url="programming.html" name="KDevelop Programming
-Handbook"> included with KDevelop, which covers themes such as understanding generated application frameworks and how to create
-full-featured <idx/KDE/ applications using example projects.
+Dieses Benutzerhandbuch gibt dem Benutzer eine vollständige Übersicht über die KDevelop IDE und beschreibt den grundlegenden
+Entwicklungsprozess in Kürze. Für Informationen über spezifische Programmierfragen raten wir, das <htmlurl url="programming.html"
+name="KDevelop Programmierer Handbuch"> zu lesen, das mit KDevelop geliefert wird; dieses deckt Themen ab wie die Funktion der
+generierten Rahemenapplikationen oder wie vollständige <idx/KDE/ Applikationen erstellt werden.
 
-The design of this handbook is therefore separated into the following parts:
+Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
+
 <itemize>
-<item>Chapter <ref id="Installation" name="Installation">, covers the system requirements, installation and setting up of the KDevelop
-IDE. <item>Chapter <ref id="Programs" name="Programs">, tells you how programs are created with standard GNU development tools and
-how they are built.
-<item>Chapter <ref id="Development with KDevelop" name="Development with KDevelop">, takes you on a short tour describing the
-main functionality of the environment.
-<item>Chapter <ref id="Overview" name="Overview">, explains the menus and dialogs as well as keyboard shortcuts.
-<item>Chapter <ref id="The Help System" name="The Help System">, shows how to use the built-in documentation browser and
-additional help functions.
-<item>Chapter  <ref id="Working with the Editor" name="Working with the Editor">, explains the features of file management and
-editing.
-<item>Chapter <ref id="Projects" name="Projects">, describes the creation and maintaining of software projects.
-<item>Chapter <ref id="Build Settings" name="Build Settings">, contains a reference on how to set compiler and liker flags as well as project options.
-<item>Chapter <ref id="The Class Browser" name="The Class Browser">, tells you how to make use of KDevelop's powerful Class Browser.
-<item>Chapter <ref id="The Dialog Editor" name="The Dialog Editor">, features the integrated visual GUI constructor and how it
-generates C++ output.
-<item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you can set overall preferences for using KDevelop.
-<item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of KDevelop
-under different flavors of Unix systems and problem solutions in general.
+<item>Kapitel <ref id="Installation" name="Installation">, behandelt Systemanforderungen, Installation und Einrichtung der KDevelop IDE.
+<item>Kapitel <ref id="Programme" name="Programme">, beschreibt Ihnen, wie Programme mit den Standard-GNU Entwickungswerkzeugen erzeugt
+und erstellt werden.
+<item>Kapitel <ref id="Entwicklung mit KDevelop" name="Entwicklung mit KDevelop">, nimmt Sie mit auf eine kurze Reise, die Ihnen die
+Funktionalität der Entwicklungsumgebung beschreibt.
+<item>Kapitel <ref id="Übersicht" name="Übersicht">, erklärt sowohl die Menüs und Dialoge als auch Schnelltasten.
+<item>Kapitel <ref id="Das Hilfe-System" name="Das Hilfe-System">, zeigt die Benuztung des integrierten Dokumentationsbrowsers und
+zusätzliche Hilfe-funktionen.
+<item>Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, erklärt die Features des Dateimanagements und
+-bearbeitung.
+<item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
+<item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und
+Linker Flags und der Projekteinstellungen.
+<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt ihnen ausführlich, wie sie den KDevelp Klassenbrowser
+benutzen.
+<item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er ihnen
+C++ Code erzeugt.
+<item>Kapitel <ref id="Allgemeine Konfiguration" name="Allgemeine Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur
+Benutzung von KDevelop vornehmen.
+<item>Kapitel <ref id="Fragen und Antworten" name="Fragen und Antworten">, behandelt Fragen, die bei der Benutzung von KDevelop unter
+verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
 </itemize>
 
-For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
-work with the IDE as it covers the usage in depth. The understanding of how things are done the quickest way will save you a lot
-of time searching for functions and features as it will enable you to make use of first-class development tools even more simple.
+Für Programmieranfänger und neue Benutzer dieses Produkts empfehlen wir, sich in dieses Handbuch einzulesen bevor Sie damit beginnen,
+mit der IDE zu arbeiten, da es die Benutzung vollständig behandelt. Das Verständnis, wie Vorgänge am schnellsten zu erledigen sind,
+wird Ihnen viel Zeit ersparen, nach Funktionen und Features zu suchen, genauso, wie es Sie in die Lage versetzt, erstklassige
+Entwicklungswerkzeuge noch einfacher zu benutzen.
 
 <sect>Installation<label id="Installation">
 <p>
-<sect1>How to obtain KDevelop
+<sect1>Verfügbarkeit von KDevelop
 <p>
-KDevelop can be found either on the <idx/KDE/ Applications page (<htmlurl url="http://www.kde.org/current.html"
-name="http://www.kde.org/current.html">) or on the KDevelop homepage (<htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">).
-KDevelop is also available on Linux distributions, such as SuSE 6.1.
+KDevelop kann entweder auf der <idx/KDE/ Applikations-Seite (<htmlurl url="http://www.kde.org/current.html"
+name="http://www.kde.org/current.html">) oder auf der KDevelop Homepage (<htmlurl
+url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">)
+bezogen werden. Ebenso ist KDevelop auf Linux-Distributionen vorhanden, wie z.B. SuSE Linux 6.1.
 
-We're offering weekly snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
-KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
-into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
-KDoc and KDbg.
+Wir bieten außerdem wöchentliche Snapshots des KDevelop CVS Repositories auf unserer Homepage an für die, die auf dem aktuellen Stand
+von KDevelop sein wollen. Für gewöhnlich sind die Snapshots jedoch nicht zur Produktion geeignet, sondern zum Testen neuer Features und
+zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bietne wir verschiedene Software von dritter Seite an, die von
+KDevelop benötigt werden wie KDoc und KDbg.
 
-If you're experiencing problems with compiling or using KDevelop, please read the <ref id="Questions and Answers" name="Questions and
-Answers"> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
-subscribe to the KDevelop mailinglist at <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
-"kdevelop@fara3.cs.uni-potsdam.de"> by sending a mail with an empty header and "subscribe" as contents. Requests and problem report
-should only target the usage of the KDevelop IDE and not towards any questions that regard any implementation problem you may have
-while coding your own application. Anyway, all mails send to the mailinglist should be written in English, so that all participants can
-take part on discussions and are able to provide better help. The mailinglist is also intended for those users willing to contribute
-and who found solutions for any problems they experienced, so we can fix errors and include that knowledge to give beginners an even
-more qualified first-hand help.
-An good way to report problems is to send the output you get by starting kdevelop from the console or to copy and paste the
-contents of KDevelop's internal Messages-window.
+Wenn Sie Probleme mit der Compilierung oder Benutzung von KDevelop haben, lesen Sie bitte das Kapitel <ref id="Fragen und Antworten"
+name="Fragen und Antworten"> dieses Handbuchs oder die FAQ-Datei, die im KDevelop-Paket enthalten ist. Sollte Ihr Problem nicht
+behandelt sein, tragen Sie sich in die KDevelop Mailingliste <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name =
+"kdevelop@fara3.cs.uni-potsdam.de"> ein, indem Sie eine Email mit leerer Kopfzeile und "subscribe" als Inhalt an obige Adresse senden.
+Anfragen und Problemberichte sollten sich jedoch nur auf die Benutzung der KDevelop IDE beziehen und nicht auf ein
+Implementierungsproblem, das bei der Codierung Ihrer eigenen Applikation entstanden ist.
 
-<sect1>Requirements
+Auch sollten alle Mails, die an diese Mailingliste gerichtet sind, in Englisch gehalten sein, damit alle Teilnehmer sich and der
+Diskussion beteiligen können und eine bessere Hilfe bereitstellen können. Die Mailingliste ist ebenso dazu gedacht, Benutzern, die zum
+KDevelop Projekt beitragen möchten ein Forum zu bieten; auch solche Mails sind willkommen, die Lösungen zu Problemen enthalten, die
+bei der Benutzung entstanden, damit wir Fehler korrigieren und dies integrieren können, um Anfängern eine noch qualifizierte Hilfe aus
+erster Hand zu bieten.
+
+Ein guter Weg, Probleme zu berichten, ist das übersenden der Ausgabe, die Sie beim starten von KDevelop aus einer Konsole heraus
+erhalten, oder den Inhalt des "Meldungen" Fensters von KDevelop in Ihren Bericht zu kopieren.
+
+<sect1>Anforderungen
 <p>
-In order to successfully compile and use KDevelop, you need the following programs and libraries which are available on most platforms
-as distribution packages and thereby can be installed easily.
+Um KDevelop erfolgreich zu Compilieren und zu Benutzen muß Ihr System die folgenden Programme und Bibliotheken enthalten, die auf den
+meisten Plattformen als Pakete enthalten sind und daher einfach zu installieren sind.
+
 <p>
-<bf>Required:</bf>
+<bf>Benötigt:</bf>
 <itemize>
-<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>GNU make (or compatible), available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>perl 5.004, available at <htmlurl url="http://www.perl.com" name="http://www.perl.com">
-<item>autoconf 2.12, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>automake 1.2, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>g++ 2.7.2/g++ 2.8.1/egcs 1.1 (oder kompatibler Compiler), erhältlich auf <htmlurl url="http://www.gnu.org"
+name="http://www.gnu.org">
+<item>GNU make (or compatible), erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>perl 5.004, erhältlich auf <htmlurl url="http://www.perl.com" name="http://www.perl.com">
+<item>autoconf 2.12, erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>automake 1.2, erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>flex 2.5.4, 
-<item>GNU gettext, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
-<item>Qt 1.42, avaliable at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
-<item><idx/KDE/ 1.1.x, available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">
+<item>GNU gettext, erhältlich auf <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>Qt 1.42, erhältlich auf  <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item><idx/KDE/ 1.1.x, erhältlich auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">
 </itemize>
 <p>
 <bf>Optional:</bf>
 <itemize>
-<item>a2ps or enscript for printing support
-<item>ghostview or kghostview for printing preview
-<item>glimpse 4.0 for the search index, available at <htmlurl url="http://glimpse.cs.arizona.edu" name="http://glimpse.cs.arizona.edu">
-<item>sgmltools 1.0, available at <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
-<item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with KDoc, KSgml2Html, KTranslator (available at <htmlurl
-url="http://developer.kde.org" name="http://developer.kde.org">)
-<item>KDbg, available at <htmlurl url="http://members.telecom.at/~johsixt/kdbg.html" name="http://members.telecom.at/~johsixt/kdbg.html">
-<item>KIconEdit (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
+<item>a2ps oder enscript zur Nutzung der Druckfunktionen
+<item>ghostview oder kghostview zur Druckvorschau
+<item>glimpse 4.0 für die Nutzung des Suchindexes, erhältlich auf <hmlurl url="http://glimpse.cs.arizona.edu"
+name="http://glimpse.cs.arizona.edu">
+<item>sgmltools 1.0, erhältlich auf <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
+<item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with KDoc, KSgml2Html, KTranslator
+(erhältlich auf <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">)
+<item>KDbg, erhältlich auf <htmlurl url="http://members.telecom.at/~johsixt/kdbg.html"
+name="http://members.telecom.at/~johsixt/kdbg.html">
+<item>KIconEdit (erhältlich auf <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
 </itemize>
 
-KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM.
+KDevelop wurde getestet mit SuSE Linux 5.2 auf einem AMD K6 200 mit 64 MB RAM und FreeBSD 3.0-Release, SuSE Linux 6.0 auf Intel Pentium
+200 MMX, 128 MB Ram
 
-As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including a2ps and enscript as packages or
-rpm's, so you should have no problem installing the required third-party software.
+Soweit den Autoren bekannt ist, enthält SuSE Linux und FreeBSD alle benötigten Programme, inklusive a2ps und enscript als Pakete order
+RPM's, sodaß Sie keine Probleme haben sollten, die benötigte zusätzliche Software zu installieren.
 
-<bf>Documentation:</bf>	
+<bf>Dokumentation:</bf>	
 
-For creating the <idx/KDE/ library documentation, you need the kdelibs package in source available on your
-system as provided by the KDE project or included with the source packages of your distribution and <bf>KDoc</bf> (included in the
-<idx/KDE-SDK/).
+Um die <idx/KDE/ Bibliotheks-Dokumentation zu erstellen, benötigen Sie das kdelibs Paket im Quellcode, wie es vom KDE Projekt
+bereitgestellt wird oder in den Quellpaketen ihrer Distribution enthalten ist und <bf/KDoc/ (enthalten im <idx/KDE-SDK/).
 
-Also we're offering a C/C++ Reference on our homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> that is integrated into the documentation browser after it's
-installation. Download the package and copy the source file as <tt/root/ into your <idx/KDE/ directory and untar it with <tt/tar zxvf
-c_c++_reference.tar.gz/, then the reference is available in the documentation tree; otherwise selecting the reference book in the
-browser shows an error page with the KDevelop homepage URL offering a download and describes the installation process.
-<sect1>Compilation and Installation
+Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf <htmlurl
+url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> an, die
+nach ihrer Installation im Dokumentationsbrowser verfügbar ist. Laden Sie das Paket herunter und kopieren Sie es als <tt/root/ in Ihr
+<idx/KDE/ Verzeichnis und entpacken Sie es mit <tt/tar zxvf c_c++_reference.tar.gz/. Bei Nichtinstallation zeigt die Auswahl der
+Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der Sie das Paket erhalten können und
+beschreibt den Installationsvorgang.
+
+<sect1>Compilierung und Installation
 <p>
-In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
+Um KDevelop auf Ihrem System zu compilieren und installieren, geben sie folgendes im Hauptverzeichnis der KDevelop Distribution ein:
 
 <tscreen><verb>
 	&percnt ./configure
 	&percnt make
 
-	(as root)
+	(als root)
 	
 	&percnt make install
 </verb></tscreen>
 
 
-<p>Since KDevelop uses <tt>autoconf</tt> you should have not trouble compiling it.
+<p>
+Da KDevelop <tt/autoconf/ benutzt, sollten sie keine Probleme haben, es zu übersetzen.
 
-In order to compile the KDevelop CVS snapshot, type the following :
+Um KDevelop CVS Snapshots zu compilieren, geben Sie folgendes ein:
+
 <tscreen><verb>
 	&percnt make -f Makefile.cvs
 	&percnt ./configure
 	&percnt make
 
-	change as `root` and type:
+	Wechseln Sie auf <tt/root/ und geben Sie ein:
 	
 	&percnt make install
 </verb></tscreen>
 
-If your system's make-command is <tt/gmake/, type <tt/gmake/ instead of <tt/make/.
+Wenn das make-Kommando Ihres Systems <tt/gmake/ lautet, geben Sie <tt/gmake/ anstatt <tt/make/ ein.
 
-<sect1>Starting KDevelop
+
+<sect1>Starten von KDevelop
 <p>
-If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4". As KDevelop supports <idx/KDE/-Mime-types, you can also start by selecting a
-KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the <idx/KDE/ File Manager which will start KDevelop
-and load the project.
-Under other window managers, open a console and type:
+Wenn Sie <idx/KDE/ als Window-Manager benutzen, können Sie KDevelop starten, indem Sie
+"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4" auswählen. Da KDevelop die <idx/KDE/-Mime Typen unterstützt, können Sie
+KDevelop auch mit einem Projekt starten, indem sie eine KDevelop Projektdatei ("*.kdevprj", dargestellt mit dem Projekt-Icon) im
+<idx/KDE/ Dateimanager (kfm) auswählen.
+
+Unter anderen Winow-Managern öffnen Sie eine Konsole und geben ein:
 <tscreen><verb>
 &percnt kdevelop
 </verb></tscreen>
 
-To start Kdevelop with an existing project, change into the project-directory and type:
+Um KDevelop mit einem besteheneden Projekt zu starten, wechseln Sie in das Projekt-Verzeichnis und geben ein:
 
 <tscreen><verb> 	
 &percnt kdevelop  &lt;yourProject&gt;.kdevprj
 </verb></tscreen>
 
-Under each user account KDevelop will invoke the <ref id="The Installation Program" name="automatic installation"> process on the
-first start, allowing a quick configuration of the most needed options. If your installation is messed up, you can reconfigure KDevelop
-any time either by entering
+Unter jedem Benutzerzugang wird KDevelop einen <ref id="Das Installationsprogramm" name="automatischen Installationsvorgang">
+beim ersten Start aufrufen, der eine Schnellkonfiguration für die benötigten Einstellungen vornimmt. Wenn Ihre Installation verloren
+gehen sollte, können Sie KDevelop jederzeit Re-konfigurieren, indem sie
 
 <tscreen><verb> 	
 &percnt kdevelop  --setup
 </verb></tscreen>
 
-or, when using KDE, by choosing "K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup".
+eingeben, oder, wenn sie KDE benutzen,"K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup" auswählen.
 
-<sect1>The Installation Program<label id="The Installation Program">
+<sect1>Das Installationsprogramm<label id="Das Installationsprogramm">
 <p>
-KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
-kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
-set up your KDevelop environment.
+KDevelop enthält ein automatisches Installationsmodul, das aufgerufen wird wenn KDevelop zum ersten Mal gestartet wird oder die
+Benutzer-Konfigurationsdatei kdeveloprc nicht existiert. Wir raten, die folgenden Installationsschritte mit der Auswahl von "Weiter"
+durchzuführen, um Ihr System zu prüfen und KDevelop einzurichten.
 
+Die Tasten des Installationsdialoges führen folgende Aktionen aus:
 
-The Installation dialog's buttons execute the following actions:
 <p>
-<bf>Help:</bf>  Will open  the KDEHelp program.
+<bf>Hilfe:</bf> Öffnet KDEHelp.
 <p>
-<bf>Proceed:</bf> This starts the installation process and executes the following actions:
+<bf>Weiter:</bf> Dies started den Installationsprozess und führt folgendes aus:
 
 <enum>
-<item> Checking for make/gmake, autoconf, autoheader, automake and perl for the creation and compilation of new applications
-generated by KDevelop. If gmake is installed, the make-command will be set automatically to use gmake.  Other comandline options
-to your make program can be set in the setup dialog accessed by the options menu later, an introduction into development under Unix is
-explained in section <ref id="Programs" name="Programs">.
+<item> Prüfen nach make/gmake, autoconf, autoheader, automake und Perl um neue Applikationen, die mit KDevelop erstellt wurden zu
+erzeugen und zu compilieren. Wenn gmake installiert ist, wird das make-Kommando automatisch auf gmake eingestellt. Andere
+Kommandozeilenoptionen zu ihrem Erstellungsprogramm können Sie später im Setup Dialog, der über das "Einstellungen"-Menü zu erreichen
+ist, vornehmen; eine Einführung zu Entwicklung unter Unix befindet sich im Abschnitt <ref id="Programme" name="Programme">.
 
-<item> Checking for KDoc and Glimpse.  Those will allow to create a new <idx/KDE-library/ documentation and a search index
-automatically in a later setup step if found.
+<item> Prüfen nach KDoc und Glimpse. Diese werden das Erzeugen einer neuen <idx/KDE-Bibliothek/s Dokumentation und eines Suchindexes
+in einem späteren Einstellungsschritt ermöglichen, wenn sie gefunden werden.
 
-<item> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
-allow correct printing. If neither program is installed, you can do this at any time lateron at your option without having to run the
-setup again.
+<item> Prüfen nach a2ps und enscript, um sicherzustellen, das die Druckfunktionen verfügbar sind. Eines dieser Programme muß
+installiert sein, um korrektes Drucken zu ermöglichen. Wenn keines installiert ist, können Sie dies jederzeit nachholen um das Drucken
+zu ermöglichen, ohne das Setup erneut durchzuführen.
 
-<item> Checking for KDbg, KIconedit and KTranslator.  We encourage you to install those programs as they are good
-helpers for creating complete <idx/KDE/-applications. Note that KDbg is used directly for debugging your current project within
-KDevelop; KIconedit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator
-are then configured to be available in the "Tools" menu of the KDevelop menu bar if they are found. Other tools can be added to the
-Tools-menu by selecting "Tools..." in the Options menu later.
+<item> Prüfen nach KDbg, KIconedit und KTranslator. Wir ermutigen Sie, diese Programme zu installieren, da sie gute Helfer bei der
+Erstellung von vollständigen <idx/KDE/-Applikationen sind. Beachten Sie, das KDbg direkt zum debuggen ihres aktuellen Projekts
+innerhalb von KDevelop verwendet wird; KIconedit wird benötigt, um Pixmaps, die in den Dateibäumen ausgewählt werden zu betrachten und
+zu bearbeiten. Die Programme KDbg, KIconedit und KTranslator werden gleichzeitig im "Werkzeuge"-Menü der Menüleiste von KDevelop
+eingerichtet. Andere Werkzeuge können später hinzugefügt werden, indem Sie "Werkzeuge..." im Einstellungen-Menü aufrufen.
 
-<item> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
-needed program is recommended.
+<item> Zusammenfassung der geprüften Programme: Das Installationsprogramm listet diese Programme mit -gefunden oder -nicht gefunden
+auf. Zusätzliche Hinweise signalisieren Ihnen, wenn ein benötigtes Programm erforderlich ist.
 
-<item>Detection of your Qt-online documentation path: this checks for several standard paths in your system for the documentation and
-sets the path automatically. If your Qt-Documentation could not be found either because it is not installed or your system keeps it at
-a different location, a message will appear that asks you to set the correct path manually or to continue. Choosing the button to set
-the path will return to the main installation window and shows an editing field with a button on the right of it to choose the path.
-Usually this is in the qt/html directory. After doing so, the installation can continue with the selection of "Proceed" again.
+<item>Erkennung des Pfades zur Qt-Online Dokumentation: Dies prüft verschiedene Standardpfade in Ihrem System nach der Dokumentation
+und setzt den Pfad automatisch. Wenn Ihre Qt-Dokumentation nicht gefunden wurde, weil sie nicht installiert ist oder sich an einem
+anderen Ort befindet, werden Sie aufgefordert, entweder den korrekten Pfad manuell zu setzen oder fortzufahren. Bei Auswahl zum Setzen
+des Pfades wird im Haupt-Installationsfenster eine Editierleiste mit einem Ordner-Knopf auf der rechten Seite angezeigt, mit dem Sie
+den Pfad auswählen können. Normalerweise ist dies das qt/html Verzeichnis. Nach Beendigung können Sie mit der Auswahl von
+"Weiter" mit der Installation fortfahren.
 
-<item> If KDoc was detected, you are asked to create/update your <idx/KDE/-library documentation.  For that, you need to have the
-kde-libraries in source form. For Linux-Users who have installed <idx/KDE/ from a distribution, we suggest to copying and extracting
-the source of the kdelibs-package to your system; Free BSD users who installed the kdelibs as a package should look for their according
-distfile package of the ports-collection.   If none of these cases match your situation, you should download the sources from <htmlurl
-url="http://www.kde.org" name="http://www.kde.org"> and untar the sources on your system. If you wish to use the documentation package
-provided by <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">, cancel the creation and continue with creating
-the search index. After the installer finished and KDevelop has been started, set the path to the extracted documentation package in
-the KDevelop Setup dialog and run the search index setup again, which can be found at the same setup page of the dialog.
+<item> Wenn KDoc gefunden wurde, werden Sie zur Erzeugung/Update Ihrer <idx/KDE/-Bibilotheks-Dokumentation aufgefordert. Dazu benötigen
+Sie die KDE-Bibliotheken als Quellpaket. Linux-Benutzer, die <idx/KDE/ mit Ihrer Distribution installiert haben, sollten das zugehörige
+kdelibs-Quellpaket auf Ihr System kopieren und entpacken; FreeBSd Benutzer sollten nach dem zugehörigen Distfile Package in der
+Ports-Collection suchen.  Wenn dieses bei Ihnen nicht zutrifft, sollten Sie das Quellpaket durch Download von <htmlurl
+url="http://www.kde.org" name="http://www.kde.org"> beziehen und auf Ihrem System entpacken. Wenn Sie das Dokumentations-Paket, das auf
+<htmlurl url="http://developer.kde.org" name="http://developer.kde.org"> bereitgestellt wird, benutzen möchten, beenden Sie die
+Generierung mit "Abbrechen" und fahren Sie mit der Erstellung des Suchindexes fort. Nach Beendigung der Installation und dem Start von
+KDevelop setzen Sie dann den Pfad zum extrahierten Dokumentationssatz im KDevelop Setup Dialog und erzeugen dann den Suchindex erneut.
+Alle erforderlichen Einstellungen dazu finden Sie im Setup Dialog.
 
-The "Update <idx/KDE/-Library documentation" dialog is set up to use a default path for the location of the documentation in
-$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library sources you
-extracted on the sytem with the selection button on top of the dialog and press OK. As an example, if you got the kdelibs.tar.gz
-package from <htmlurl url="http://www.kde.org" name="http://www.kde.org"> and downloaded it to your home directory, you should open a
-console or terminal and enter "tar zxvf kdelibs.tar.gz". This will untar the sources into a directory $HOME/kdelibs, which then
-contains the sources for each library in a subdirectory, e.g. for kdecore, this would be in /home/rnolden/kdelibs/kdecore. Now, the
-path you have to enter in the KDE-Library documentation dialog would be the path to all libraries, in the example
-/home/rnolden/kdelibs. After pressing the OK button, a message in the installation window shows that the documentation generation is in progress and you
-should wait for the next message.
+Der "KDE-Bibilotheks-Dokumentation aktualisieren" Dialog ist voreingestellt, die Dokumentation im Verzeichnis
+$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation zu erstellen. Das einzige, was Sie tun müssen, ist den Pfad zum entpackten
+Quellpaket der Bibliotheken mit dem Auswahl-Knopf im oberen Teil des Dialoges anzugeben und mit "OK" zu bestätigen. Als Beispiel sei
+angenommen, das Sie die Bibliothek als kdelibs.tar.gz Paket von <htmlurl url="http://www.kde.org" name="http://www.kde.org"> bezogen
+und in Ihrem Home-Verzeichnis haben. Öffnen Sie eine Konsole oder Terminal und geben sie dort "tar zxvf kdelibs.tar.gz" ein. Dies wird
+das Quellpaket in ein Verzeichnis $HOME/kdelibs entpacken, das dann die Quelldateien jeder Bibliothek in einem Unterverzeichnis
+enthält, z.B. wäre dies für kdecore /home/rnolden/kdelibs/kdecore. Der Pfad, den Sie im Aktualisierungs-Dialog angeben müssen, wäre
+dann der zu allen Bibliotheken, hier also /home/rnolden/kdelibs.
+
+Nachdem Sie "OK" gewählt haben, wird ihnen im Installationsfenster angezeigt, das die Erstellung der Dokumentation durchgeführt wird.
+Warten Sie dann bis zur nächsten Meldung.
 <p>
 
-<bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the installation of a complete HTML documentation
-for each user would be a waste of disk space. In this case, ask your system administrator to run KDevelop under the root account to
-allow write access to the system's root directory. Then install the documentation within the <idx/KDE/-directory, under
-$KDEDIR/share/apps/kdevelop/KDE-Documentation. The correct path can then be set up later in the KDevelop setup dialog, available in the
-"Options"-menu.
+<bf>Anmerkung:</bf> Auf Multi-User Systemen oder Systemen mit Disk-Quotas für Benutzeraccounts würde die Installation eiener kompletten
+HTML Dokumentation separat für jeden Benutzer unnötig Plattenplatz verbrauchen. Fragen Sie in diesem Fall Ihren Systemadministrator,
+KDevelop unter dem root-Account laufen zu lassen, um Schreibzugriff auf das Wurzelverzeichnis des Systems zu erhalten. Dann
+installieren Sie die Dokumentation im <idx/KDE/-Verzeichnis unter $KDEDIR/share/apps/kdevelop/KDE-Documentation. Der korrekte Pfad für
+Einzelbenutzer kann dann später im KDevelop Setup Dialog über das "Einstellungen" Menü gesetzt werden.
 
-<item> If the system check found the Glimpse program on your system, you are offered to create a search database. The
-search database can be created with the options of including the KDE-documentation and the Qt-documentation (default). Additionally
-the KDevelop documentation is included and will be indexed.  If you have other documentation that you want indexed you
-can select the directories and add them to the indexing process as well.
+<item> Wenn die Systemprüfung das Programm Glimpse gefunden hat, wird Ihnen die Erstellung einer Suchdatenbank angeboten. Die
+Suchdatenbank kann mit der Option erstellt werden, die KDE- und Qt-Dokumentation einzubeziehen (Standardeinstellung). Zusätzlich ist
+die KDevelop Dokumentation inbegriffen und wird indiziert. Wenn Sie weitere Dokumentationen besitzen, die Sie ebenfalls indizieren
+möchten, können Sie die Verzeichnisse auswählen und der Indexerstellung hinzufügen.
 
-<item> During the creation of the search index, the installation window will show a message that this is in progress.
+<item> Während der Erstellung des Suchindexes zeigt das Installationsfenster Ihnen eine Nachricht, das dies ausgeführt wird. Warten Sie
+danach bis zur Aufforderung zum nächsten Schritt.
 
-<item> If all installation steps were done correctly,  a final message states that KDevelop will be started
-after pressing OK. Mind that you can set up additional options like auto saving in the
-<ref id="General Configuration" name="KDevelop Setup"> dialog that can be accessed through the options menu.
+<item> Wenn alle Installationsschritte erfolgreich durchgeführt wurden, zeigt Ihnen eine abschließende Dialogbox an, das KDevelop
+gestartet wird, nachdem Sie "OK" wählen. Beachten Sie, das Sie zusätzliche Optionen wie automatisches Speichern im <ref
+id="Konfiguration" name="KDevelop Setup"> Dialog, der über das "Einstellungen" Menü aufgerufen wird, einstellen können.
 </enum>
 
-<bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
-to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
-to set all options yourself with the configuration dialogs provided in the options-menu.
+<bf>Abbrechen:</bf> Zeigt eine Warnhinweis an, das der Installationsprozess abgebrochen wird. Diese Warnung erlaubt es Ihnen, nochmals
+zur Installation zurückzukehren ("Zurück") oder KDevelop mit den Standardeinstellungen zu starten ("Fortfahren"). Bedenken Sie, das Sie
+in diesem Fall alle Optionen mit Hilfe der Konfigurationsdialoge des "Einstellungen" Menüs selbst vornehmen müssen.
 
 
-<sect>Programs<label id="Programs">
+<sect>Programme<label id="Programme">
 <p>
-Now that KDevelop installed successfully and the most commonly used options are set, you are probably wondering if it keeps what
-it promises. This Chapter gives you a guideline to how programs are created using the GNU tools in general and especially what
-part KDevelop plays in this game.
-<sect1>The Compiler<label id="The Compiler">
-<p>
-The compiler is actually the program on your system that has to be installed as a minimum to create running programs; he is the
-one that compiles the source code into object files and creates the program.
+Nachdem KDevelop erfolgreich installiert und die allgemeinen Einstellungen vorgenommen sind, möchten Sie wahrscheinlich wissen, ob die
+IDE hält, was sie verspricht. Dieses Kapitel gibt Ihnen einen Leitfaden, wie Programme allgemein mit den GNU Werkzeugen erzeugt werden
+und welchen Teil speziell KDevelop in diesem Prozeß übernimmt.
 
-Normally, you would start like this:
-Open an editor of your choice - don't use a word-processor. Type in something like this to create the source for your first
-program:
+<sect1>Der Compiler<label id="Der Compiler">
+<p>
+Der Compiler ist letztlich das Programm auf Ihrem System, das mindestens installiert sein muß um laufende Programme zu erzeugen; er ist
+derjenige, der den Quellcode in Objektdateien übersetzt und das Programm erzeugt.
+
+Normalerweise würden Sie so starten:
+Öffnen Sie einen Editor Ihrer Wahl - benutzen Sie keine Textverarbeitung. Geben Sie etwa dieses ein, um den Quellcode Ihres ersten
+Programmes zu schreiben:
+
 
 <tscreen><verb>
 #include <iostream.h>
@@ -332,76 +359,89 @@ cout << "Hello World" << endl;
 
 }
 </verb></tscreen>
-Well, actually all the program will do is to print out the string "Hello World" to your standard output. But this is just the
-source code for the program to be build, not the program itself. Therefore, we need a compiler, in this case a C++-compiler like
-g++. Then we can save the file with the source code, as, let's say, myprogram.cpp and invoke the compiler with the filename
-(on a console):
+
+Nun, alles, was das Programm tun wird, ist den String "Hello World" auf Ihrer Standardausgabe auszugeben. Aber dies ist nur der
+Quellcode für ein zu erstellendes Programm, nicht das Programm selbst. Daher benötigen Sie einen Compiler, in diesem Fall ein
+C++-Compiler wie etwa g++. Dann können Sie den Quellcode als Datei speichern, sagen wir als myprogram.cpp und den Compiler mit dem
+Dateinamen aufrufen (auf einer Konsole):
 
 <tscreen><verb>
 g++ -o myprogram myprogram.cpp
 </verb></tscreen>
-Then we can start our program- just type <tt/myprogram/  on the console, and the program prints out the string; then exits.
 
-<sect1>Make and Makefiles<label id="Make">
+Danach können wir unser Programm starten- geben Sie einfach <tt/myprogram/ auf der Konsole ein, und das Programm gibt den String aus
+und beendet sich.
+
+<sect1>Make und Makefiles<label id="Make">
 <p>
-I have everything I need: an editor, a compiler and I can execute my own C++ program. But it isn't all that easy. What happens if
-you have more than one source file ? And, do you have to compile all sources over and over again only if you changed one file ?
-Compiling will become more and more complicated and time-consuming, because you have to type in all the commands and options
-yourself. Therefore, you could write a so-called "Makefile". You could also call it some other name except the name of the program
-to build. Then, you should have the tool <tt/make/ or <tt/gmake/ installed, or any other tool that is capable of keeping track of
-a project's compilation. Insert all your compiler commands in a certain syntax into that Makefile and save it; then you will only
-have to type <tt/make/ or <tt/gmake/ on the console in the directory where your Makefile is located, and then make takes over,
-leading the compiler to create your application. The make utility has many other advantages and can be used to a lot of purposes.
-To get a complete overview, open a console and type:
+Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
+ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
+wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und Zeitraubender, weil Sie alle Kommandos
+und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
+nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <tt/make/ oder <tt/gmake/ installiert haben,
+oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
+Erstellungssyntax in das Makefile ein und speichern Sie es; danach brauchen Sie nur noch <tt/make/ oder <tt/gmake/ auf der Konsole in
+dem Verzeichnis einzugeben, wo sich das Makefile befindet; make übernimmt dann und bringt den Compiler dazu Ihr Programm zu erzeugen.
+Das Make-Werkzeug hat noch viele weitere Vorteile und kann zu vielen Zwecken verwendet werden. Um eine Übersicht zu bekommen, öffnen
+Sie eine Konsole und geben Sie ein:
 
 <tt/man make/
 
-or search for "GNU Make" in KDEHelp, "System GNU Info contents".
-At least, you have an insight, why a developer needs the make utility for making it easier to compile his application.
-Now, writing Makefiles is not only handwork until now, you also have to dig yourself into the whole syntax and options. But here
-is the good news about KDevelop and any Make-utility: You just have to set the Make-Command in the <ref id="General Configuration"
-name="KDevelop Setup"> dialog, and then you're done. All projects generated with KDevelop will use that Make command to build the
-target application, and no typing at all. Just hit the buttons on the toolbar of KDevelop, beginning with the one after the second
-separator line, or choose the desired function for Make in the "Build" menu.
+oder suchen sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents".
 
-The toolbar and the build-menu then offer the most-common functions that you need to let make do the dirty work:
+Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug beötigt, um den Ubersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
+das schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
+Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="General
+Configuration" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
+Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
+Werkzeugleiste oder wählen Sie die gewünschte Funktion aus dem "Erstellen" Menü.
+
+Die Werkzeugleiste und das "Erstellen"-Menü bieten die meist benutzten Funktionen, um make die Arbeit erledigen zu lassen:
 
 <itemize>
-<item> Compile File: is only active if you're working on a source file. It invokes make with the correct command to compile only
-the current source.
-<item> Make: just calls make and creates your target.
-<item> Rebuild all: rebuilds the whole project
-<item> Clean/Rebuild all: cleans the project directory first and then runs make again.
-<item> Stop Build: cancels the current process- this is mostly used if you watch make working and staring at your sources. Then-
-ahh- I forgot about this line...and you have to correct your code. Just hit Stop, correct the error you found by yourself and run
-Make again.
+<item> Datei compilieren: ist nur aktiv, wenn Sie an einer Quellcode-Datei arbeiten. Diese Funktion ruft make mit dem korrekten
+Kommando auf, nur die aktuelle Quelldatei zu übersetzen.
+<item> Erstellen: ruft make auf und erzeugt das Zielobjekt (die Applikation)
+<item> Alles neu erstellen: löscht alle schon übersetzten Dateien und erstellt das Projekt neu
+<item> Säubern/alles neu erstellen: löscht alle übersetzten Dateien inklusive der Konfigurationsdateien des Projekts und erstellt alles
+neu
+<item> Stoppen: beendet den aktuellen Prozeß
+<item> Ausführen: erstellt die Zieldatei und führt das Programm aus
+<item> Mit Argumenten ausführen: erstellt die Zieldatei und gibt Ihnen die Möglichkeit, dem Programm vor seiner Ausführung
+Kommandozeilenoptionen zu übergeben.
+<item> Debuggen: erstellt die Zieldatei und startet KDbg mit dem Programm, um es zu debuggen
 </itemize>
 
-But this is not the only way how KDevelop works together with make- for <idx/KDE/ applications, there are some things that are special,
-like creating the message files for internationalization. These functions are also included, so no worry about these things
-anymore.
+Aber dies ist nicht das einzige, wo KDevelop mit make zusammenarbeitet- bei <idx/KDE/ Applikationen sind einige Dinge speziell auf die
+Unterstützung des Entwicklers abgestimmt wie die Erzeugung der Messages-Datei für die Internationalisierung Ihres Projekts. Diese
+Funktionen sind ebenfalls sorgfältig integriert, sodaß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
 
-Until now, you know about sources, the compiler and why make is needed. In the next section, we'll discuss how it comes that
-projects created with KDevelop automatically can be compiled on most other Unix-platforms using the <tt/configure-/ script.
+Bis jetzt wissen Sie schon einiges über Quelldateien, den Compiler und warum make benötigt wird. Im nächsten Abschnitt werden wir
+besprechen, warum Projekte, die mit KDevelop erstellt wurden, automatisch durch Verwendung eines <tt/configure/-Scripts auf den meisten
+Unix-Plattformen übersetzt werden können.
 
 <sect1>Configure<label id="Configure">
 <p>
-The title of this section lets you probably question: Configure ? What has to be configured ? Or who ?
-Well, assume you have written a program including a Makefile. Then you like to distribute it, but the binary compiled does only
-run on your system or on systems that are compatible with yours. To support other platforms like different Unix-systems or
-machines like Alpha's or RISC's, you have to recompile the program. The easiest way would be to copy the source package to the
-target machine and run <tt/make/ again. But what if the target machine uses another compiler command or has in some other way a
-problem to build your binary ? Not to mention more difficult issues like installation paths for your program and documentation-
-e.g. <idx/KDE/ can be installed in <tt//opt/kde/ on one machine, while it is installed under <tt//usr/local/kde/ on another. In this
-case, you would have to rewrite the Makefile each time to ensure a correct compilation and installation of your product.
+Der Titel dieses Abschnitts- Configure, bedeutend soviel wie Konfiguriere - läßt Sie wahrscheinlich fragen: Konfiguriere ? Was muß
+konfiguriert werden ? Oder wer ?
 
-Fortunately, GNU-tools have even more to provide than that mighty <tt/make/- the commonly used automake and autoconf
-packages. It sounds good to hear something with "auto"- seems like something about application design can be done quick and easy,
-which exactly hits the point.
+Nun, gehen wir davon aus, das Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
+compilierte Binärdatei läuft nur auf Ihrem System und auf solchen, die mit Ihrem kompatibel sind. Um andere Plattformen zu unterstützen
+wie die verschiedenen Unix-Systeme oder Maschinen wie Alpha's oder RISC's müssen Sie ihr Programm neu übersetzen. Der einfachste Weg
+wäre, das Quellpaket auf die Zielmaschine zu kopieren und <tt/make/ nochmals laufen zu lassen. Aber was wäre, wenn die Zielmaschine
+einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein erstellen des Programms verhindert ? Nicht zu
+erwähnen die schwierigeren Dinge wie der Installationspfad für Ihr Programm und Dokumentation- z.B. kann <idx/KDE/ auf einer Maschine
+unter <tt//opt/kde/ installiert sein, auf einer anderen aber unter <tt/usr/local/kde/. In diesem Fall müßten Sie das Makefile immer
+bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
 
-Automake's purpose is generally to create a so-called <tt/Makefile.in/ from a file <tt/Makefile.am/ which you have to write for
-your project. This Makefile.am consists of macros which can be interpreted and reduce the complexity that make offers, so a
-Makefile.am is written safer and quicker than the final Makefile.
+Glücklicherweise haben die GNU-Werkzeuge noch mehr zu bieten als das mächtige <tt/make/- die allgemein genutzten Pakete automake und
+autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations Design einfach und schnell gemacht werden kann,
+was auch genau den Punkt trifft.
+
+Der Zweck von Automake ist generell, die sogenannten <tt/Makefile.in/'s aus der Datei <tt/Makefile.am/ zu erstellen, die Sie für Ihr
+Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
+Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
+Makefile.
 
 Having this said, who is finally creating me my Makefile ? Now, here comes autoconf. Autoconf requires several macro files
 for the project. That are those Makefile.in's generated by automake and a file called <tt/configure.in/, also containing macros.
@@ -3338,6 +3378,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </article>
+
+
+
+
 
 
 

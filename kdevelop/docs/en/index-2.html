@@ -132,7 +132,7 @@ browser shows an error page with the KDevelop homepage URL offering a download a
 <H3><A NAME="ss2.4">2.4 Starting KDevelop</A>
 </H3>
 
-<P>If you use KDE as your window manager, KDevelop can be started either with choosing
+<P>If you use KDE as your window manager, KDevelop can be started by choosing
 "K"-&gt;"Applications"-&gt;"KDevelop"-&gt;"KDevelop 0.4". As KDevelop supports KDE-Mime-types, you can also start by selecting a
 KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the KDE File Manager which will start KDevelop
 and load the project.
@@ -221,13 +221,8 @@ package from
 console or terminal and enter "tar zxvf kdelibs.tar.gz". This will untar the sources into a directory $HOME/kdelibs, which then
 contains the sources for each library in a subdirectory, e.g. for kdecore, this would be in /home/rnolden/kdelibs/kdecore. Now, the
 path you have to enter in the KDE-Library documentation dialog would be the path to all libraries, in the example
-/home/rnolden/kdelibs.
-
-If the path was set correctly, you are asked if your documentation should be created using the khtml or the khtmlw library. Both are
-providing a HTML-widget which are used to create windows that can display HTML files and is used by KDEHelp and KFM. As the classes are
-the same in both libraries, we decided to include only one library for documentation to avoid confusion due to the fact that the header
-files containing the classes differ in their filename. After pressing the OK button, a message in the installation window shows that it
-is in progress and you should wait for the next message.
+/home/rnolden/kdelibs. After pressing the OK button, a message in the installation window shows that the documentation generation is in progress and you
+should wait for the next message.
 <P>
 <P><B>NOTE:</B> On a multi-user system or systems with disk-quotas for user accounts, the installation of a complete HTML documentation
 for each user would be a waste of disk space. In this case, ask your system administrator to run KDevelop under the root account to
