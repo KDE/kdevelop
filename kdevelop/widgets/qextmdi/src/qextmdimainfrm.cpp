@@ -31,6 +31,7 @@
 #include <qobjcoll.h>
 #ifndef NO_KDE2
 #include <kmenubar.h>
+#include <kapplication.h>
 #endif
 #include <qtoolbutton.h>
 #include <qlayout.h>
@@ -1148,9 +1149,15 @@ void QextMdiMainFrm::switchToTabPageMode()
    if (pCover) {
       if (m_pWinList->count() > 1) { // note: with only 1 page we haven't already tabbed widgets
          // set the first page as active page
+#if !defined(NO_KDE2) && (QT_VERSION < 300)
          KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
          if (pTab)
             pTab->setVisiblePage(pRemActiveWindow);
+#else
+         QTabWidget* pTab = (QTabWidget*) pCover->parentWidget()->parentWidget();
+         if (pTab)
+            pTab->showPage(pRemActiveWindow);
+#endif
       }
       pRemActiveWindow->setFocus();
    }

@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -873,8 +873,10 @@ void CPrjOptionsDlg::addMakePage()
   grid2->addWidget(m_job_number,0,1);
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
+#if (QT_VERSION < 300)
   m_job_number->setFrameStyle( 50 );
   m_job_number->setLineWidth( 2 );
+#endif
   m_job_number->setRange( 1, 99 );
   m_job_number->setSteps( 1, 0 );
   m_job_number->setPrefix( "" );

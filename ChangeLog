@@ -1,3 +1,6 @@
+2001-09-26  F@lk Brettschneider <falk@kdevelop.org>
+    * ported to Qt3 except kdevelop's output view
+
 2001-08-29  F@lk Brettschneider <falk@kdevelop.org>
     * changed version number to 2.0.1
 

@@ -3,7 +3,7 @@
                              -------------------                                         
 
     begin                : 5 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    copyright            : (C) 1998 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -353,6 +353,7 @@ static QPixmap *getCacheBuffer( QSize sz )
 
 int CMakeOutputWidget::mapToView( int xIndex, int line )
 {
+#if (QT_VERSION < 300)
     int lr_marg = hMargin();
     int align = alignment();
 
@@ -368,6 +369,9 @@ int CMakeOutputWidget::mapToView( int xIndex, int line )
       if ( align == Qt::AlignRight )
         w += wcell - wrow;
     return lr_marg + w;
+#else
+    return 0; // dummy, 'cause never used
+#endif
 }
 
 // --------------------------------------------------------------------------------
@@ -376,6 +380,7 @@ int CMakeOutputWidget::mapToView( int xIndex, int line )
 
 void CMakeOutputWidget::paintCell(QPainter* painter, int row, int /*col*/)
 {
+#if (QT_VERSION < 300)
   int lr_marg = hMargin();
   bool markIsOn = hasMarkedText();
   int align = alignment();
@@ -518,6 +523,7 @@ void CMakeOutputWidget::paintCell(QPainter* painter, int row, int /*col*/)
   p.end();
   painter->drawPixmap( updateR.left(), updateR.top(), *buffer,
      0, 0, updateR.width(), updateR.height() );
+#endif // QT_VERSION < 300     
 }
 
 #include "coutputwidget.moc"
