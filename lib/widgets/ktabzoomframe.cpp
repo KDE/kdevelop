@@ -231,6 +231,7 @@ void KTabZoomFrame::selected(int index)
     if (i->m_index == index)
     {
       d->m_stack->raiseWidget(i->m_widget);
+      i->m_widget->setFocus();
       d->m_title->setText(i->m_title);
       i->m_widget->setFocus();
       return;
