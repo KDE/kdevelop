@@ -15,15 +15,17 @@
 
 #include <qwidget.h>
 #include <qstring.h>
-#include <qlistview.h>
+//#include <qlistview.h>
 #include <qtooltip.h>
+
+#include <klistview.h>
 
 #include "bookmarks_part.h"
 
 class BookmarksPart;
 class BookmarkItem;
 
-class BookmarksWidget : public QListView, public QToolTip
+class BookmarksWidget : public KListView, public QToolTip
 {
 	Q_OBJECT
 
