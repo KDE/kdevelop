@@ -211,6 +211,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
     if ( !preferredName.isEmpty() ) {
       KTrader::OfferList::Iterator it;
       for (it = offers.begin(); it != offers.end(); ++it) {
+        kdDebug(9000) << "Offer: " << (*it)->name() << endl;
         if ((*it)->name() == preferredName) {
           ptr = (*it);
         }
