@@ -264,6 +264,8 @@ class KWriteDoc : QObject {
 
     void indent(KWriteView *, VConfig &);
     void unIndent(KWriteView *, VConfig &);
+    void comment(KWriteView *, VConfig &);
+    void unComment(KWriteView *, VConfig &);
 
     QList<TextLine> contents;
     QColor colors[5];

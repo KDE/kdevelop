@@ -474,6 +474,12 @@ class KWrite : public QWidget {
     /** Moves the current line or the selection one position to the left
     */
     void unIndent();
+    /** Adds "//" at the beginning of the current line or of each line in the selection
+    */
+    void comment();
+    /** Removes "//" at the beginning of the current line or of each line in the selection
+    */
+    void unComment();
     /** Selects all text
     */
     void selectAll();
