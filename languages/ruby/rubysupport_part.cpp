@@ -1,7 +1,7 @@
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qfileinfo.h>
-
+#include <qpopupmenu.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -26,6 +26,9 @@
 #include "rubyconfigwidget.h"
 #include "domutil.h"
 
+#include "qtdesignerrubyintegration.h"
+#include "rubyimplementationwidget.h"
+
 typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
 static const KAboutData data("kdevrubysupport", I18N_NOOP("Language"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( &data ) )
@@ -45,10 +48,13 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   kdDebug() << "Creating RubySupportPart" << endl;
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
+  connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+  connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+        this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
   connect( partController(), SIGNAL(savedFile(const KURL&)),
   	this, SLOT(savedFile(const KURL&)) );
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-             this, SLOT(projectConfigWidget(KDialogBase*)) );
+        this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
 
 
@@ -422,6 +428,60 @@ KMimeType::List RubySupportPart::mimeTypes( )
     if( mime )
 	list << mime;
     return list;
+}
+
+KDevDesignerIntegration *RubySupportPart::designer(KInterfaceDesigner::DesignerType type)
+{
+    KDevDesignerIntegration *des = 0;
+    switch (type)
+    {
+        case KInterfaceDesigner::QtDesigner:
+            des = m_designers[type];
+            if (des == 0)
+            {
+                RubyImplementationWidget *impl = new RubyImplementationWidget(this);
+                des = new QtDesignerRubyIntegration(this, impl);
+                des->loadSettings(*project()->projectDom(),
+                    "kdevrubysupport/designerintegration");
+                m_designers[type] = des;
+            }
+            break;
+    }
+    return des;
+}
+
+void RubySupportPart::projectClosed( )
+{
+    for (QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it =  m_designers.begin();
+        it != m_designers.end(); ++it)
+    {
+        kdDebug() << "calling save settings fro designer integration" << endl;
+        it.data()->saveSettings(*project()->projectDom(), "kdevrubysupport/designerintegration");
+    }
+}
+
+void RubySupportPart::contextMenu( QPopupMenu * popup, const Context * context )
+{
+    if (context->hasType(Context::FileContext)){
+        const FileContext *fc = static_cast<const FileContext*>(context);
+        //this is a .ui file and only selection contains only one such file
+        if (fc->fileName().endsWith(".ui"))
+        {
+            m_contextFileName = fc->fileName();
+            int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
+            popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
+        }
+    }
+}
+
+void RubySupportPart::slotCreateSubclass()
+{
+    QFileInfo fi(m_contextFileName);
+    if (fi.extension(false) != "ui")
+        return;
+    QtDesignerRubyIntegration *des = dynamic_cast<QtDesignerRubyIntegration*>(designer(KInterfaceDesigner::QtDesigner));
+    if (des)
+        des->selectImplementation(m_contextFileName);
 }
 
 #include "rubysupport_part.moc"

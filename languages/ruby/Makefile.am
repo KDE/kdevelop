@@ -1,14 +1,18 @@
 #Here resides the Ruby support part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/designer_integration \
+	-I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
+	-I$(top_builddir)/lib/designer_integration $(all_includes)
 SUBDIRS = app_templates file_templates doc
 
 
 kde_module_LTLIBRARIES = libkdevrubysupport.la
 libkdevrubysupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevrubysupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+libkdevrubysupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
+	$(top_builddir)/lib/designer_integration/libdesignerintegration.la
 
-libkdevrubysupport_la_SOURCES = rubysupport_part.cpp rubyconfigwidgetbase.ui rubyconfigwidget.cpp
+libkdevrubysupport_la_SOURCES = rubysupport_part.cpp rubyconfigwidgetbase.ui \
+		rubyconfigwidget.cpp qtdesignerrubyintegration.cpp rubyimplementationwidget.cpp
 
 METASOURCES = AUTO
 
@@ -20,3 +24,4 @@ rc_DATA = kdevrubysupport.rc
 
 picsdirdir = $(kde_datadir)/kdevrubysupport/pics
 picsdir_DATA = ruby_config.png ruby_run.png
+noinst_HEADERS = qtdesignerrubyintegration.h rubyimplementationwidget.h
