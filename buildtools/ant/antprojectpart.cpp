@@ -481,7 +481,6 @@ void AntProjectPart::projectConfigWidget(KDialogBase *dlg)
 
   m_antOptionsWidget->Properties->setNumRows(m_antOptions.m_properties.count());
   m_antOptionsWidget->Properties->setNumCols(2);
-  m_antOptionsWidget->Properties->setRowStretchable(1,true);
 
   QMap<QString,QString>::Iterator it;
   int i=0;
