@@ -42,11 +42,12 @@
 
 #include <qheader.h>
 #include <qdir.h>
+#include <qstylesheet.h>
 
 // namespace ?!?
 
 ClassViewWidget::ClassViewWidget( ClassViewPart * part )
-    : KListView( 0, "ClassViewWidget" ), m_part( part ), m_projectDirectoryLength( 0 )
+    : KListView( 0, "ClassViewWidget" ), QToolTip( viewport() ), m_part( part ), m_projectDirectoryLength( 0 )
 {
     addColumn( "" );
     header()->hide();
@@ -656,12 +657,21 @@ void FunctionDomBrowserItem::setup( )
     ClassViewItem::setup();
 
     QString iconName;
+	QString methodType;
+
+	if ( m_dom->isSignal() )
+		methodType = "signal";
+	else if (m_dom->isSlot() ) 
+		methodType = "slot";
+	else
+		methodType = "meth";
+
     if( m_dom->access() == CodeModelItem::Private )
-        iconName = "CVprivate_meth";
+        iconName = "CVprivate_" + methodType;
     else if( m_dom->access() == CodeModelItem::Protected )
-        iconName = "CVprotected_meth";
+        iconName = "CVprotected_" + methodType;
     else
-        iconName = "CVpublic_meth";
+        iconName = "CVpublic_" + methodType;
 
     setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, listView()->m_part->instance()) );
 
@@ -809,6 +819,96 @@ bool FunctionDomBrowserItem::hasImplementation() const
     CodeModelUtils::findFunctionDefinitions( FindOp(m_dom), fileList, lst );
 
     return !lst.isEmpty();
+}
+
+void ClassViewWidget::maybeTip( QPoint const & p )
+{
+	kdDebug(0) << "ClassViewWidget::maybeTip()" << endl;
+
+	ClassViewItem * item = dynamic_cast<ClassViewItem*>( itemAt( p ) );
+	if ( !item ) return;
+	
+	QString tooltip;
+	
+	if ( item->isNamespace() )
+	{
+		NamespaceDomBrowserItem * nitem = dynamic_cast<NamespaceDomBrowserItem*>( item );
+		if ( nitem )
+		{
+			tooltip = nitem->dom()->scope().join("::") + "::" + nitem->dom()->name();
+		}
+	}
+	else if ( item->isClass() )
+	{
+		ClassDomBrowserItem * citem = dynamic_cast<ClassDomBrowserItem*>( item );
+		if ( citem )
+		{
+			tooltip = citem->dom()->scope().join("::") + "::" 
+				+ citem->dom()->name() + " : " 
+				+ citem->dom()->baseClassList().join(", ");
+		}
+	}
+	else if ( item->isFunction() )
+	{
+		FunctionDomBrowserItem * fitem = dynamic_cast<FunctionDomBrowserItem*>( item );
+		if ( fitem )
+		{
+			QString access;
+			if ( fitem->dom()->access() == CodeModelItem::Private )
+				access = "[private] ";
+			else if ( fitem->dom()->access() == CodeModelItem::Protected )
+				access = "[protected] ";
+			else if ( fitem->dom()->access() == CodeModelItem::Public )
+				access = "[public] ";
+
+			QStringList arguments;
+			ArgumentList const & list = fitem->dom()->argumentList();
+			ArgumentList::ConstIterator it( list.begin() );
+			while ( it != list.end() )
+			{
+				arguments << (*it)->type();
+				++it;
+			}
+			
+			QString strstatic = fitem->dom()->isStatic() ? QString( "[static] " ) : QString::null;
+			QString strsignal = fitem->dom()->isSignal() ? QString( "[signal] " ) : QString::null;
+			QString strslot = fitem->dom()->isSlot() ? QString( "[slot] " ) : QString::null;
+			QString strresult = !fitem->dom()->resultType().isEmpty() ? fitem->dom()->resultType() + " " : QString::null;
+			
+			QString strconstant = fitem->dom()->isConstant() ? QString( " [const]" ) : QString::null;
+			QString strabstract = fitem->dom()->isAbstract() ? QString( " [abstract]" ) : QString::null;
+			
+			tooltip = access + strstatic + strsignal + strslot + strresult
+				+ fitem->dom()->scope().join("::") + "::" + fitem->dom()->name() 
+				+ "(" + arguments.join(", ") + ")" + strconstant + strabstract;
+		}
+	}
+	else if ( item->isVariable() )
+	{
+		VariableDomBrowserItem * vitem = dynamic_cast<VariableDomBrowserItem*>( item );
+		if ( vitem )
+		{
+			QString access;
+			if ( vitem->dom()->access() == CodeModelItem::Private )
+				access = "[private] ";
+			else if ( vitem->dom()->access() == CodeModelItem::Protected )
+				access = "[protected] ";
+			else if ( vitem->dom()->access() == CodeModelItem::Public )
+				access = "[public] ";
+
+			QString strstatic = vitem->dom()->isStatic() ? QString( "[static] " ) : QString::null;
+			tooltip = access + strstatic + vitem->dom()->type() + " " + vitem->dom()->name();
+		}	
+	}
+	
+	kdDebug(0) << tooltip << endl;
+	
+	QRect r = itemRect( item );
+
+	if ( item && r.isValid() && !tooltip.isEmpty() )
+	{
+		tip( r, QString("<qt><pre>") + QStyleSheet::escape( tooltip ) + QString("</pre></qt>") );
+	}
 }
 
 

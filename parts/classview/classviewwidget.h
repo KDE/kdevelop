@@ -26,6 +26,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qtooltip.h>
 #include <codemodel.h>
 
 class KDevProject;
@@ -38,7 +39,7 @@ class FunctionDomBrowserItem;
 class VariableDomBrowserItem;
 class KSelectAction;
 
-class ClassViewWidget : public KListView
+class ClassViewWidget : public KListView, public QToolTip
 {
     Q_OBJECT
 public:
@@ -67,6 +68,7 @@ private slots:
 
 protected:
     void contentsContextMenuEvent( QContextMenuEvent* );
+	void maybeTip( QPoint const & );
 
 private slots:
     void slotProjectOpened();
