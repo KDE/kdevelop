@@ -3686,6 +3686,7 @@ void CKDevelop::slotTCurrentTab(int item){
 }
 
 void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
+  setActiveWindow();
   switchToFile(filename,linenumber);
 }
 
