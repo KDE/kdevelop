@@ -2823,7 +2823,7 @@ void CKDevelop::slotNewStatus()
     config = m_docViewManager->currentEditView()->config();
   statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
-  setMainCaption();
+//?????  setMainCaption();
 }
 
 void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
@@ -3493,7 +3493,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
-//    setMainCaption();  is called by slotNewStatus()
+//    setMainCaption();
     slotNewLineColumn();
   }
   if (m_docViewManager->curDocIsCppFile()){
@@ -3509,7 +3509,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
-//    setMainCaption();  is called by slotNewStatus()
+//    setMainCaption();
     slotNewLineColumn();
   }
 
@@ -3580,9 +3580,8 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
       enableCommand(ID_EDIT_COPY);
     else
       disableCommand(ID_EDIT_COPY);
-
-    setMainCaption(BROWSER);
   }
+  setMainCaption();
 }
 
 void CKDevelop::slotLogFileTreeSelected(QString file){
