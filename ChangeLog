@@ -1,3 +1,6 @@
+2002-11-08 Sebastian Kratzert <skratzert@gmx.de>
+    * Reenabled KDELibsKDoc folder and made it removable
+
 2002-11-07 F@lk Brettschneider <falk@kdevelop.org>
     * extended interface class KDevTopLevel in a way that parts can specify view icons and tab-tooltips
     * adapted all parts to use this feature, now KDevelop in one of the 3 MDI modes looks more like KDevelop-2
