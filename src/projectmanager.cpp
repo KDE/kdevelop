@@ -119,7 +119,7 @@ bool ProjectManager::loadProjectFile(const QString &fileName)
     fin.close();
     return false;
   }
-  if (m_info->m_document.doctype().name() != "kdevelop")
+  if (m_info->m_document.documentElement().nodeName() != "kdevelop")
   {
     KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("This is not a valid project file."));
     fin.close();
