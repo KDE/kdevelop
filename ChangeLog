@@ -1,10 +1,14 @@
-1999-08-12 Sandy Merier   <smeier@rz.uni-potsdam.de>
+1999-08-15 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* reorganize of enable/disable edit commands like copy/cut/paste
+	  now they are only active, if you can perform these commands
+
+1999-08-12 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commited bugfix by Juergen Vigina, fixed problem in KDlgPropertyBase::dumpFontPropCall
 	* fixed problem in KDlgEdit::generateKLedLamp
 
 1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
-        * deactivating 'file save', if file in edit window isn't modified
-        * deactivating certain file commands, if Doc- or Tools-Tab is active
+	* deactivating 'file save', if file in edit window isn't modified
+	* deactivating certain file commands, if Doc- or Tools-Tab is active
 
 1999-08-11 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* added .hh .H .hpp to header-extensions
@@ -14,8 +18,8 @@
 	* bug-fix: selecting a C-project causes a wrong app-wizard-page-title
           i. e. "Headertemplate for .c-files" instead of "Headertemplate for .h-files"
           and "Headertemplate for .cpp-files" instead of "Headertemplate for .c-files"
-        * an asterisk in the caption is shown, if a file of an edit-window is modified
-        * switching to Tools-Tab changes now the caption
+	* an asterisk in the caption is shown, if a file of an edit-window is modified
+	* switching to Tools-Tab changes now the caption
 
 1999-08-10 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* kdevelop should now compile on gcc 2.95, thanks to Christian Kirsch <ck@held.mind.de> for the infos
