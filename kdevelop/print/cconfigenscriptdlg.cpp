@@ -603,15 +603,15 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
 	i18n("If you wish to print a userlogin, then check it."));
 
   KQuickHelp::add(fancyHeaderButton,
-	i18n("If you will a fancy header, then check it."));
+	i18n("If you want a fancy header, then check it."));
 
   KQuickHelp::add(filenameLine,
 	i18n("If you wish to print the filenames, then check it."));
 
   KQuickHelp::add(qtarch_Label_21,
   KQuickHelp::add(filenameSize,
-	i18n("Here you can choose, if the filename from the last '/'\n"
-	     "is print, or if the full filename is print.")));
+	i18n("Here you can choose, if the only the basename,\n"
+	     "or the fully qualified filename is printed.")));
 
   KQuickHelp::add(qtarch_Label_25,
   KQuickHelp::add(filenamePosition,
@@ -623,7 +623,7 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
   KQuickHelp::add(qtarch_Label_23,
   KQuickHelp::add(hostnameSize,
 	i18n("Here you can choose, if the hostname up to the first\n"
-	     "'.' is print, or the full hostname is print.")));
+	     "dot , or the full hostname is printed.")));
 
   KQuickHelp::add(loginPosition,
 	i18n("Here you can set the position in the header."));
@@ -1028,7 +1028,7 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
 
   KQuickHelp::add(currentTimeAmpm,
   KQuickHelp::add(modificationTimeAmpm,
-	i18n("Here you can choose, if you time will be printed in\n"
+	i18n("Here you can choose, if your time will be printed in\n"
 	     "am/pm format or in 24h format.")));
 }
 
