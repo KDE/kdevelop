@@ -4,7 +4,7 @@
 # General configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = CVS_pre_3.0.0
+PROJECT_NUMBER         = 3.0.0_alpha5
 OUTPUT_DIRECTORY       = doc/api
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
