@@ -13,6 +13,7 @@
 #define _SPLITTER_H_
 
 #include <qlist.h>
+#include <qvaluelist.h>
 #include <qframe.h>
 
 class SplitterHandle;

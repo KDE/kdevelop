@@ -13,7 +13,7 @@
 #include <kdebug.h>
 #include <kprocess.h>
 #include "processwidget.h"
-
+#include <qpainter.h>
 
 ProcessListBoxItem::ProcessListBoxItem(const QString &s, Type type)
     : QListBoxText(s), t(type)

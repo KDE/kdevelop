@@ -12,6 +12,7 @@
 #include <qframe.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <qstyle.h>
 #include <kdebug.h>
 
 #include "splitter.h"
