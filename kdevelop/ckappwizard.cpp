@@ -2266,7 +2266,7 @@ void CKAppWizard::slotProcessExited() {
   // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   else if(kdenormaloglitem->isSelected())
   {
-     project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lqgl -lMesaGL -lXmu -lXext -lX11");
+     project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIB_QGL)");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
     project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
@@ -2411,7 +2411,34 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.install_location = "";
     project->addFileToProject ("TODO",fileInfo);
     
-  } 
+  }
+
+  QDir toplevel(prj_dir, "README.*", 0, QDir::Files | QDir::Readable);
+  for (unsigned i=0; i<toplevel.count(); i++)
+  {
+    fileInfo.rel_name = toplevel[i];
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (toplevel[i], fileInfo);
+  }
+
+  QFileInfo news(prj_dir + "/NEWS");
+  if (news.exists())
+  {
+    if (gnufiles->isChecked())
+    {
+     fileInfo.rel_name = "NEWS";
+     fileInfo.type = DATA;
+     fileInfo.dist = true;
+     fileInfo.install = false;
+     fileInfo.install_location = "";
+     project->addFileToProject ("NEWS",fileInfo);
+    }
+    else
+      QFile(prj_dir + "/NEWS").remove();
+  }
 
   if (lsmfile->isChecked()) {
     fileInfo.rel_name = namelow + ".lsm";
