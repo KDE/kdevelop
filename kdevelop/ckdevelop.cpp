@@ -449,11 +449,35 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
 }
 
 void CKDevelop::slotOptionsKDevelop(){
-  slotStatusMsg(i18n("Setting up KDevelop..."));
+  slotStatusMsg(i18n("Setting up Documentation paths..."));
   CKDevSetupDlg setup;
   setup.show();
   slotStatusMsg(IDS_DEFAULT); 
 }
+
+void CKDevelop::slotOptionsDocBrowser(){
+   slotStatusMsg(i18n("Configuring Documentation Browser..."));
+
+//   KHTMLWidget* htmlview;
+//   browser_widget->htmlview=getKHTMLWidget();
+
+   CDocBrowserOptionsDlg browserOptions;
+
+   connect( browserOptions.fontOptions, SIGNAL(fontSize(int)),
+		 browser_widget, SLOT(slotDocFontSize( int )) );
+   connect( browserOptions.fontOptions, SIGNAL(standardFont( const char * )),
+		 browser_widget, SLOT(slotDocStandardFont( const char * )) );
+   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const char * )),
+		 browser_widget, SLOT(slotDocFixedFont( const char * )) );
+   connect( browserOptions.colorOptions, SIGNAL(colorsChanged(const QColor&, const QColor&,
+			const QColor&, const QColor&, const bool, const bool)),
+		 browser_widget, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
+            		const QColor&, const QColor&, const bool, const bool)) );
+
+   browserOptions.show();
+   slotStatusMsg(IDS_DEFAULT);
+}
+
 
 void CKDevelop::slotDocBack(){
   slotStatusMsg(i18n("Switching to last page..."));
@@ -1236,8 +1260,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_OPTIONS_TREEVIEW,              i18n("Enables / disables the treeview"))
   ON_STATUS_MSG(ID_OPTIONS_OUTPUTVIEW,            i18n("Enables / disables the outputview"))
 
-  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,       i18n("Set up the KDevelop environment"))
-
+  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              i18n("Set up the KDevelop environment"))
+  ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  i18n("Configures the Browser options"))
 
 
   ON_STATUS_MSG(ID_HELP_CONTENT,                  i18n("Switch to KDevelop's User Manual"))
@@ -1245,5 +1269,9 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
 
 

@@ -188,6 +188,7 @@ void CKDevelop::init(){
   browser_widget = new CDocBrowser(s_tab_view,"browser");  
   prev_was_search_result= false;
   //init
+  browser_widget->setDocBrowserOptions();
 
   connect(browser_widget,SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
 	  this,SLOT(slotURLSelected(KHTMLView*,const char*,int,const char*)));
@@ -437,7 +438,10 @@ void CKDevelop::initMenu(){
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("&KDevelop..."),this,
 		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);    
-  menuBar()->insertItem(i18n("&Options"), options_menu);    
+  options_menu->insertItem(i18n("Documentation-Browser"),this,
+		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
+
+  menuBar()->insertItem(i18n("&Options"), options_menu);
   menuBar()->insertSeparator();
 
 
@@ -575,3 +579,6 @@ void CKDevelop::initProject(){
   }
   
 }
+
+
+

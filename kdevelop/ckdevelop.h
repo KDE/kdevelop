@@ -142,6 +142,8 @@ public:
   void slotOptionsSyntaxHighlighting();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
+  void slotOptionsDocBrowser();
+
 
   void slotToolsKIconEdit();
   void slotToolsKDbg();
@@ -298,3 +300,4 @@ private:
 };
 
 #endif
+

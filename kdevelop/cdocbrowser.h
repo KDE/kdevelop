@@ -24,8 +24,13 @@
 #include <htmlview.h>
 #include <kiconloader.h>
 #include <kapp.h>
-#include "structdef.h"
 #include <qstring.h>
+#include <qtabdlg.h>
+#include <qcombo.h>
+#include <qstrlist.h>
+#include <kconfig.h>
+#include "structdef.h"
+
 
 /** 
   *the documentation browser, attention!: only a prototype
@@ -40,7 +45,125 @@ public:
   ~CDocBrowser();
   /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
   void showURL(QString url,bool reload=false);
+  void setDocBrowserOptions();
+
+public slots:
+  void slotDocFontSize(int);
+  void slotDocStandardFont(const char *);
+  void slotDocFixedFont(const char *);
+  void slotDocColorsChanged(const QColor&, const QColor&,
+            		const QColor&, const QColor&, const bool, const bool);
 protected:
   QString old_url;
+
+private:
+	// html view preferences
+	static int  fSize;
+	static QString standardFont;
+	static QString fixedFont;
+
+	static QColor bgColor;
+	static QColor textColor;
+	static QColor linkColor;
+	static QColor vLinkColor;
+	static bool   underlineLinks;
+	static bool   forceDefaults;
+
 };
+
+
+//-----------------------------------------------------------------------------
+// Adapted from options.h & options.cpp of
+//
+// KDE Help Options
+//
+// (c) Martin R. Jones 1996
+//
+
+
+
+//-----------------------------------------------------------------------------
+
+class CDocBrowserFont : public QWidget
+{
+	Q_OBJECT
+
+public:
+	CDocBrowserFont( QWidget *parent = NULL, const char *name = NULL);
+
+public slots:
+	void	slotApplyPressed();
+	void	slotFontSize( int );
+	void	slotStandardFont( const char *n );
+	void	slotFixedFont( const char *n );
+
+signals:
+	void	fontSize( int );
+	void	standardFont( const char * );
+	void	fixedFont( const char * );
+
+private:
+	void	readOptions();
+	void	getFontList( QStrList &list, const char *pattern );
+	void	addFont( QStrList &list, const char *xfont );
+
+private:
+	int	fSize;
+	QString	stdName;
+	QString	fixedName;
+	QStrList standardFonts;
+	QStrList fixedFonts;
+};
+
+//-----------------------------------------------------------------------------
+
+class CDocBrowserColor : public QWidget
+{
+	Q_OBJECT
+public:
+	CDocBrowserColor( QWidget *parent = NULL, const char *name = NULL );
+
+signals:
+	void	colorsChanged( const QColor &bg, const QColor &text,
+                const QColor &link, const QColor &vlink, const bool underline,
+                const bool forceDefaults );
+
+protected slots:
+	void	slotApplyPressed();
+	void	slotBgColorChanged( const QColor &col );
+	void	slotTextColorChanged( const QColor &col );
+	void	slotLinkColorChanged( const QColor &col );
+	void	slotVLinkColorChanged( const QColor &col );
+	void    slotUnderlineLinksChanged( bool uline );
+	void    slotForceDefaultChanged( bool force );
+
+private:
+	void	readOptions();
+
+private:
+	QColor bgColor;
+	QColor textColor;
+	QColor linkColor;
+	QColor vLinkColor;
+	bool   underlineLinks;
+        bool   forceDefault;
+	bool   changed;
+};
+
+
+//-----------------------------------------------------------------------------
+
+class CDocBrowserOptionsDlg : public QTabDialog
+{
+	Q_OBJECT
+public:
+	CDocBrowserOptionsDlg( QWidget *parent = NULL, const char *name=NULL);
+//	~CDocBrowserOptionsDlg();
+
+	CDocBrowserFont *fontOptions;
+	CDocBrowserColor *colorOptions;
+
+};
+
 #endif
+
