@@ -14,8 +14,7 @@
  *                                                                         *
  ***************************************************************************/
 
-/** Here resides the Import-existing-dialog of the Automake Manager **/
-/** (a Gideon build tool part) **/
+/** Here resides the Import-existing-dialog of the Automake Manager (a Gideon build tool part) **/
 
 #include <qapplication.h>
 #include <qgroupbox.h>
@@ -114,8 +113,6 @@ void KImportIconView::somethingDropped ( bool dropped )
 ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent, const char* name, bool modal, WFlags fl )
         : ImportExistingDlgBase ( parent, name, modal, fl )
 {
-	m_bImportingFiles = true;
-
 	m_spitem = spitem;
 	m_titem = titem;
 
@@ -144,15 +141,13 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 	init();
 }
 
-ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
+/*ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
         : ImportExistingDlgBase ( parent, name, modal, fl )
 {
 	m_spitem = spitem;
 
 	m_part = part;
 	m_widget = widget;
-
-	m_bImportingFiles = false;
 
     KFile::Mode mode = KFile::Directory;
 
@@ -173,7 +168,7 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
     setIcon ( SmallIcon ( "fileimport.png" ) );
 
     init();
-}
+}*/
 
 /*
  *  Destroys the object and frees any allocated resources
@@ -267,7 +262,7 @@ void ImportExistingDialog::importItems()
 	if ( duplicateList.count() > 0 )
 	{
 		if ( KMessageBox::warningContinueCancelList ( this, i18n (
-																		"The following file(s) already exit(s) in the target!\n"
+																		"The following file(s) already exist(s) in the target!\n"
 																		"Press Continue to import only the new files.\n"
 																		"Press Cancel to abort the complete import." ),
 																		duplicateList, "Warning", KGuiItem ( i18n ( "Continue" ) ) ) == KMessageBox::Cancel )
@@ -281,8 +276,7 @@ void ImportExistingDialog::importItems()
 	
 	for ( ; itemList.current(); ++itemList )
 	{
-		if ( m_bImportingFiles && ( *itemList )->isFile() ||
-			!m_bImportingFiles && ( *itemList )->isDir() )
+		if ( !( *itemList )->isDir() )
 		{
 			importView->insertItem ( ( *itemList ) );
 		}

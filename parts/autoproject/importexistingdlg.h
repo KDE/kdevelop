@@ -20,10 +20,8 @@
 #ifndef IMPORTEXISTINGDLG_H
 #define IMPORTEXISTINGDLG_H
 
-//#include <qvariant.h>
 #include <qdialog.h>
 #include <kfile.h>
-//#include <kiconview.h>
 
 #include "importexistingdlgbase.h"
 #include "kfiledndiconview.h"
@@ -61,7 +59,7 @@ class ImportExistingDialog : public ImportExistingDlgBase
 
 public:
     ImportExistingDialog( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-    ImportExistingDialog( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+//    ImportExistingDialog( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ImportExistingDialog();
 
 private:
@@ -70,13 +68,10 @@ private:
 
     AutoProjectPart* m_part;
 	AutoProjectWidget* m_widget;
-	
-	bool m_bImportingFiles;
 
 	TargetItem* m_titem;
 	SubprojectItem* m_spitem;
 	
-/*	KURL::List m_addedFiles;*/
   	KFileItemList m_importList;
 
 protected:

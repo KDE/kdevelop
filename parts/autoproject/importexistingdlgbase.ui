@@ -450,7 +450,7 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout9</cstring>
+                <cstring>Layout10</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -483,18 +483,18 @@
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>cancelButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cancel</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
                         <cstring>okButton</cstring>
                     </property>
                     <property name="text">
                         <string>OK</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
                     </property>
                 </widget>
             </hbox>

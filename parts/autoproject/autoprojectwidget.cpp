@@ -209,6 +209,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
     overviewButtonBox->setStretchFactor(spacer1, 1);
 
     overview = new KListView(overviewBox, "project overview widget");
+
     overview->setResizeMode(QListView::LastColumn);
     overview->setSorting(-1);
     overview->header()->hide();
@@ -473,7 +474,7 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
                 m_activeTarget = (*tit);
                 overview->setSelected(m_activeSubproject, true);
 				overview->viewport()->update();
-				overview->setContentsPos ( 0, ( ( spcount - 10 ) * spitem->height() ) ); // scroll to the active subproject - a little bit ugly but I didn't get it work
+				overview->ensureItemVisible ( m_activeSubproject );
             } else {
                 details->viewport()->update();
             }
@@ -619,10 +620,10 @@ void AutoProjectWidget::slotAddSubproject()
 
 void AutoProjectWidget::slotAddExistingSubproject()
 {
-    ImportExistingDialog dlg(m_part, this, m_shownSubproject,
+/*    ImportExistingDialog dlg(m_part, this, m_shownSubproject,
                              this, "add existing subprojects");
     dlg.setCaption(i18n("Add Existing Subprojects"));
-    dlg.exec();
+    dlg.exec();*/
 }
 
 
