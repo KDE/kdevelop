@@ -668,11 +668,11 @@ void CClassView::slotClassViewSelected()
   // Only react on clicks on the left mousebutton.
   if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER )
   {
-    slotViewDefinition();
+    slotViewDeclaration();
   }
   else if( mouseBtn == MidButton && treeH->itemType() != THFOLDER )
   {
-    slotViewDeclaration();
+    slotViewDefinition();
   }
 
   // Set it back, so next time only if user clicks again we react.
