@@ -88,7 +88,7 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
-  
+	ok_button->setDefault( TRUE );
   
   cancel_button = new QPushButton( this, "chancel_button" );
   cancel_button->setGeometry( 190, 120, 100, 30 );
@@ -113,4 +113,5 @@ CGroupPropertiesDlg::~CGroupPropertiesDlg(){
 void CGroupPropertiesDlg::slotOK(){
   accept();
 }
+
 

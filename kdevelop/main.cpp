@@ -19,7 +19,7 @@
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
-#include <kwmmapp.h>
+#include <kapp.h>
 
 
 int main(int argc, char* argv[]) {
@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
   int rc = a.exec();
   return rc;
 }
+
 
 
 

@@ -2,7 +2,10 @@
 	* fixed project loading for commandline
 	* changed KDevelop to use KApplication
 	* fixed manual creation to use ksgml only if prj->isKDEProject()
-
+	* changed doctree to display all folders as root items and added icons to treehandler for doc,folder open and book open
+	* added the KDevelop manual chapters to the doc tree
+	* TODO: add pixmap change for folders and books if tree is opened or closed.
+	
 1999-05-30  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* change the interface of make-options
 	* implemented the internal of make-options

@@ -279,9 +279,12 @@ void CTreeHandler::readIcons()
 
   // Load the icons
   icons[ THFOLDER ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
+  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadMiniIcon( "folder_open.xpm" ) );
   icons[ THCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
   icons[ THPROJECT ] = new QPixmap( il->loadMiniIcon( "kwm.xpm" ) );
   icons[ THBOOK ] = new QPixmap( il->loadMiniIcon( "mini-book1.xpm" ) );
+  icons[ THBOOK_OPEN ] = new QPixmap( il->loadMiniIcon( "mini-book2.xpm" ) );
+  icons[ THDOC ] = new QPixmap( il->loadMiniIcon( "mini-doc.xpm") );
   icons[ THSTRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
   icons[ THPUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
   icons[ THPROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
@@ -303,3 +306,6 @@ void CTreeHandler::readIcons()
 
   CTreeHandler::iconsRead = true;
 }
+
+
+

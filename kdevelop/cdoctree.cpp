@@ -84,11 +84,12 @@ void CDocTree::initPopups()
 void CDocTree::refresh(CProject* prj)
 { 
 
-  QListViewItem* top_item;
+//  QListViewItem* top_item;
   QListViewItem* project_item;
   QListViewItem* others_item;
   QListViewItem* lib_item;
   QListViewItem* kdevelop_item;
+	QListViewItem* pages_item;
   QStrList others_list;
   char *others_str;
   QString kde_path;
@@ -101,18 +102,39 @@ void CDocTree::refresh(CProject* prj)
   treeH->clear();
  
   // Add the top item.
-  top_item = treeH->addRoot( i18n("Documentation"), THFOLDER );
+//  top_item = treeH->addRoot( i18n("Documentation"), THFOLDER );
   
   // kdevelop
-  kdevelop_item = treeH->addItem( i18n("KDevelop"), THFOLDER, top_item );
-  treeH->addItem( i18n("Manual"), THBOOK, kdevelop_item );
-  treeH->addItem( i18n("Tutorial"), THBOOK, kdevelop_item );
+  kdevelop_item = treeH->addRoot( i18n("KDevelop"), THFOLDER );
+//  kdevelop_item = treeH->addItem( i18n("KDevelop"), THFOLDER, top_item );
+//  treeH->addItem( i18n("User Manual"), THBOOK, kdevelop_item );
+  pages_item = treeH->addItem( i18n("User Manual"), THBOOK, kdevelop_item );
+  treeH->addItem( i18n("Programming Handbook"), THBOOK, kdevelop_item );
   treeH->addItem( i18n("C/C++ Reference"), THBOOK, kdevelop_item );
   treeH->setLastItem( kdevelop_item );
 
+  treeH->addItem( i18n("Introduction"), THDOC, pages_item );
+  treeH->addItem( i18n("Installation"), THDOC, pages_item );
+  treeH->addItem( i18n("Programs"), THDOC, pages_item );
+  treeH->addItem( i18n("Development with KDevelop"), THDOC, pages_item );
+  treeH->addItem( i18n("Overview"), THDOC, pages_item );
+  treeH->addItem( i18n("The Help System"), THDOC, pages_item );
+	treeH->addItem( i18n("Working with the Editor"), THDOC, pages_item );
+	treeH->addItem( i18n("Projects"), THDOC, pages_item );
+	treeH->addItem( i18n("Build Settings"), THDOC, pages_item );
+	treeH->addItem( i18n("The Class Browser"), THDOC, pages_item );
+	treeH->addItem( i18n("The Dialog Editor"), THDOC, pages_item );
+	treeH->addItem( i18n("General Configuration"), THDOC, pages_item );
+	treeH->addItem( i18n("Questions and Answers"), THDOC, pages_item );
+	treeH->addItem( i18n("Authors"), THDOC, pages_item );
+	treeH->addItem( i18n("Thanks"), THDOC, pages_item );
+	treeH->addItem( i18n("Copyright"), THDOC, pages_item );
+  treeH->setLastItem( pages_item );
+
   //Qt/KDE Libraries
-  lib_item = treeH->addItem( i18n("Qt/KDE Libraries"), THFOLDER, top_item );
-  
+  lib_item = treeH->addRoot( i18n("Qt/KDE Libraries"), THFOLDER );
+//  lib_item = treeH->addItem( i18n("Qt/KDE Libraries"), THFOLDER, top_item );
+
   config_kdevelop->setGroup("Doc_Location");
   kde_path=config_kdevelop->readEntry("doc_kde");
 
@@ -141,7 +163,8 @@ void CDocTree::refresh(CProject* prj)
   treeH->setLastItem( lib_item );
 
   // Others
-  others_item = treeH->addItem( i18n("Others"), THFOLDER, top_item );
+  others_item = treeH->addRoot( i18n("Others"), THFOLDER );
+//  others_item = treeH->addItem( i18n("Others"), THFOLDER, top_item );
   config_kdevelop->setGroup("Other_Doc_Location");
   config_kdevelop->readListEntry("others_list",others_list);
   for(others_str=others_list.first();
@@ -153,8 +176,9 @@ void CDocTree::refresh(CProject* prj)
   treeH->setLastItem( others_item );
 
   // current Project
-  project_item = treeH->addItem( i18n("Current Project"), THFOLDER, top_item );
-  
+  project_item = treeH->addRoot( i18n("Current Project"), THFOLDER );
+//  project_item = treeH->addItem( i18n("Current Project"), THFOLDER, top_item );
+
   // add the Project-Doc
   if(prj != 0){
       if(prj->valid)
@@ -167,7 +191,7 @@ void CDocTree::refresh(CProject* prj)
   treeH->setLastItem( project_item );
 
   // Open all documentation folders.
-  setOpen ( top_item,true );
+//  setOpen ( top_item,true );
   setOpen ( lib_item,true );
   setOpen ( kdevelop_item,true );
   setOpen ( others_item,true );
@@ -248,110 +272,168 @@ void CDocTree::slotDocumentationProp(){
 }
 
 void CDocTree::slotSelectionChanged(QListViewItem* item){
-    QString text = item->text(0);
-    m_text = text;
-    if (item->childCount() > 0) return; // no action
+  QString text = item->text(0);
+  m_text = text;
+//  if (item->childCount() > 0) return; // no action
+	
+  KLocale *kloc = KApplication::getKApplication()->getLocale();
+
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+
+  config_kdevelop->setGroup("Doc_Location");
     
-    KLocale *kloc = KApplication::getKApplication()->getLocale();
-    
-    QString strpath = KApplication::kde_htmldir().copy() + "/";
-    QString file;
-    
-    config_kdevelop->setGroup("Doc_Location");
-    
-    if(text == i18n("Tutorial") ){
-	// first try the locale setting
-	file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
-	if( !QFileInfo( file ).exists() ){
+	if(text == i18n("Programming Handbook") ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
+		if( !QFileInfo( file ).exists() ){
 	    // not found: use the default
 	    file = strpath + "default/" + "kdevelop/tutorial.html";
-	}
+		}
 	
-	emit fileSelected(file);
-	return;
-    }
-    if(text == i18n("Manual") ){
-	// first try the locale setting
-	file = strpath + kloc->language() + '/' + "kdevelop/index.html";
+		emit fileSelected(file);
+		return;
+  }
+  if(text == i18n("User Manual") ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/index.html";
 	
-	if( !QFileInfo( file ).exists() ){
-	    // not found: use the default
+		if( !QFileInfo( file ).exists() ){
+	 // not found: use the default
 	    file = strpath + "default/" + "kdevelop/index.html";
-	}
-	emit fileSelected(file);
-	return;
-    }
-    if(text == i18n("C/C++ Reference") ){
-	// first try the locale setting
-	file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+		}
+		emit fileSelected(file);
+		return;
+  }
 	
-	if( !QFileInfo( file ).exists() ){
+	QString indexpage="";
+  if(text == i18n("Introduction") )
+  	indexpage="1";
+  if(text == i18n("Installation") )
+  	indexpage="2";
+  if(text == i18n("Programs") )
+  	indexpage="3";
+  if(text == i18n("Development with KDevelop") )
+  	indexpage="4";
+  if(text == i18n("Overview"))
+  	indexpage="5";
+  if(text == i18n("The Help System"))
+  	indexpage="6";
+  if(text == i18n("Working with the Editor"))
+  	indexpage="7";
+  if(text == i18n("Projects"))
+  	indexpage="8";
+  if(text == i18n("Build Settings"))
+  	indexpage="9";
+  if(text == i18n("The Class Browser"))
+  	indexpage="10";
+  if(text == i18n("The Dialog Editor"))
+  	indexpage="11";
+  if(text == i18n("General Configuration"))
+  	indexpage="12";
+  if(text == i18n("Questions and Answers"))
+  	indexpage="13";
+  if(text == i18n("Authors"))
+  	indexpage="14";
+  if(text == i18n("Thanks"))
+  	indexpage="15";
+  if(text == i18n("Copyright"))
+  	indexpage="16";
+ 	  	
+  if( indexpage != "" ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/index-"+indexpage +".html";
+		if( !QFileInfo( file ).exists() ){
+	 // not found: use the default
+	    file = strpath + "default/" + "kdevelop/index-"+ indexpage +".html";
+		}
+		emit fileSelected(file);
+		return;
+  }
+
+  if(text == i18n("C/C++ Reference") ){
+		// first try the locale setting
+		file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+	
+		if( !QFileInfo( file ).exists() ){
 	    // not found: use the default
 	    file = strpath + "default/" + "kdevelop/reference/C/cref.html";
-	}
-	if( !QFileInfo( file ).exists() ){
+		}
+		if( !QFileInfo( file ).exists() ){
 	    // show the translated error page
 	    file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
-	}
-	if( !QFileInfo( file ).exists() ){
+		}
+		if( !QFileInfo( file ).exists() ){
 	    // not found: use the default error page
 	    file = strpath + "default/" + "kdevelop/cref.html";
-	}
-	emit fileSelected(file);
-	return;
-    }
-    if(text == i18n("Qt-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_qt") + "index.html");
-	return;
-    }
-    if(text == i18n("KDE-Core-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdecore/index.html");
-	return;
-    }
-    if(text == i18n("KDE-UI-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdeui/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KFile-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kfile/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KHTMLW-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "khtmlw/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KHTML-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "khtml/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KFM-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kfmlib/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KDEutils-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdeutils/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KAB-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kab/index.html");
-	return;
-    }
-    if(text == i18n("KDE-KSpell-Library") ){
-	emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kspell/index.html");
-	return;
-    }
-    if(text == i18n("API-Documentation") ){
-	emit fileSelected("API-Documentation");
-	return;
-    }
-    if(text == i18n("User-Manual") ){
-	emit fileSelected("User-Manual");
-	return;
-    }
+		}
+		emit fileSelected(file);
+		return;
+  }
+  if(text == i18n("Qt-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_qt") + "index.html");
+		return;
+  }
+  if(text == i18n("KDE-Core-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdecore/index.html");
+		return;
+  }
+  if(text == i18n("KDE-UI-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdeui/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KFile-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kfile/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KHTMLW-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "khtmlw/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KHTML-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "khtml/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KFM-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kfmlib/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KDEutils-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kdeutils/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KAB-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kab/index.html");
+		return;
+  }
+  if(text == i18n("KDE-KSpell-Library") ){
+		emit fileSelected(config_kdevelop->readEntry("doc_kde") + "kspell/index.html");
+		return;
+  }
+  if(text == i18n("API-Documentation") ){
+		emit fileSelected("API-Documentation");
+		return;
+  }
+  if(text == i18n("User-Manual") ){
+		emit fileSelected("User-Manual");
+		return;
+  }
     
-    config_kdevelop->setGroup("Other_Doc_Location");
-    QFileInfo file_info(config_kdevelop->readEntry(text));
-    if(file_info.isFile()){
-	emit fileSelected(config_kdevelop->readEntry(text));
-    }
+  config_kdevelop->setGroup("Other_Doc_Location");
+  QFileInfo file_info(config_kdevelop->readEntry(text));
+  if(file_info.isFile()){
+		emit fileSelected(config_kdevelop->readEntry(text));
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
