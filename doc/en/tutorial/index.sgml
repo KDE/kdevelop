@@ -1754,7 +1754,7 @@ The appendix also contains the complete sourcecode for this package to read thro
 
 <chapt>Copyright <label id="Copyright">
 <p> <tscreen><verb>
-KDevelop Copyright 1998,1999 The KDevelop Team.
+KDevelop Copyright 1998,1999,2000 The KDevelop Team.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
