@@ -84,7 +84,7 @@ private:
   void setupActions();
 
   void closeActivePart();
-  void closePart(KParts::Part *part);
+  bool closePart(KParts::Part *part);
 
   QPopupMenu *contextPopupMenu();
 

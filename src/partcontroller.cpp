@@ -310,28 +310,37 @@ void PartController::closeActivePart()
 }
 
 
-void PartController::closePart(KParts::Part *part)
+bool PartController::closePart(KParts::Part *part)
 {
-  if (part->inherits("KParts::ReadWritePart"))
+  if (part->inherits("KParts::ReadOnlyPart"))
   {
-    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
+    KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(part);
 
-    if (rw_part->isModified())
+    if (!ro_part->closeURL())
     {
-      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
-	          i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-	          i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
-      if (res == KMessageBox::Cancel)
-        return;
-      if (res == KMessageBox::Ok)
-        rw_part->save();
+      return false;
     }
   }
+
+  // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
+  // get called from the destroyed signal of the part being deleted below.
+  // The call chain from that looks like this:
+  // QObject::destroyed()
+  //   KParts::PartManager::slotWidgetDestroyed() -> setActivePart() -> activePartChanged()
+  //     TopLevelXXX::createGUI()
+  //       KXMLGUIFactory::removeClient()
+  // But then KXMLGUIFactory tries to remove the already-deleted part.
+  // Normally this would work, because the factory uses a QGuardedPtr to the part.
+  // But the QGuardedPtr is connected to the _same_ destroyed() slot that got us to
+  // that point (slots are called in an undefined order)!
+  removePart( part );
 
   if (part->widget())
     TopLevel::getInstance()->removeView(part->widget());
   
   delete part;
+
+  return true;
 }
 
 
@@ -372,7 +381,7 @@ void PartController::saveAllFiles()
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
       rw_part->save();
 
-      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().url()), 2000);
+      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
     }
 }
 
@@ -451,22 +460,12 @@ bool PartController::closeDocuments(const QStringList &documents)
   for (it=documents.begin(); it != documents.end(); ++it)
   {
     KParts::Part *part = partForURL(KURL(*it));
-    if (!part || !part->inherits("KParts::ReadWritePart"))
-      continue;
 
-    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
-    if (rw_part->isModified())
-    {
-      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
-        i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-	i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
-      if (res == KMessageBox::Cancel)
-        return false;
-      if (res == KMessageBox::Ok)
-        rw_part->save();
-    }
+    if (!part)
+      continue;
     
-    closePart(part);
+    if(!closePart(part))
+      return false;
   }
 
   return true;
@@ -478,22 +477,8 @@ bool PartController::readyToClose()
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
   {
-    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
-    if (!rw_part)
-      continue;
-
-    if (rw_part->isModified())
-    {
-      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(), 
-		  i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-		  i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
-
-      if (res == KMessageBox::Cancel)
-        return false;
-
-      if (res == KMessageBox::Ok)
-        rw_part->save();
-    }
+    if(!closePart(*it))
+      return false;
   }
 
   return true;
