@@ -35,13 +35,13 @@
     <tocsect3 name="Exercises" url="ch02lev1sec7.html"/>
   </tocsect2>
   <tocsect2 name="The Qt Toolkit" url="ch03.html">
-    <tocsect3 name="What It Is For (Look and Feel)" url="ch03lev1sec2.html"/>
-    <tocsect3 name="Inside the Qt Toolkit" url="ch03lev1sec3.html"/>
-    <tocsect3 name="Signals and Slots" url="ch03lev1sec4.html"/>
-    <tocsect3 name=")" url="ch03lev1sec5.html"/>
-    <tocsect3 name="The Utility Classes" url="ch03lev1sec6.html"/>
-    <tocsect3 name="Special Features (ImageIO, OpenGL, Mesa)" url="ch03lev1sec7.html"/>
-    <tocsect3 name="Summary" url="ch03lev1sec8.html"/>
+    <tocsect3 name="What It Is For (Look and Feel)" url=""/>
+    <tocsect3 name="Inside the Qt Toolkit" url="ch03lev1sec2.html"/>
+    <tocsect3 name="Signals and Slots" url="ch03lev1sec3.html"/>
+    <tocsect3 name="Meta Object Compiler (moc)" url="ch03lev1sec4.html"/>
+    <tocsect3 name="The Utility Classes" url="ch03lev1sec5.html"/>
+    <tocsect3 name="Special Features (ImageIO, OpenGL, Mesa)" url="ch03lev1sec6.html"/>
+    <tocsect3 name="Summary" url="ch03lev1sec7.html"/>
     <tocsect3 name="Exercises" url="ch03lev1sec8.html"/>
   </tocsect2>
   <tocsect2 name="Creating Custom KDE Widgets" url="ch04.html">
