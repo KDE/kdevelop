@@ -42,3 +42,6 @@ void KDevCoreIface::forwardProjectClosed()
     kdDebug(9000) << "dcop emitting project closed" << endl;
     emitDCOPSignal("projectClosed()", QByteArray());
 }
+
+
+#include "KDevCoreIface.moc"
