@@ -16,7 +16,9 @@ SOURCES += childproperty.cpp  pcombobox.cpp  \
 	ppixmapedit.cpp \
 	propertylist.cpp  pspinbox.cpp \
 	propertywidgetproxy.cpp plinestyleedit.cpp \
-	qeditlistbox.cpp pcolorbutton.cpp test.cpp
+	qeditlistbox.cpp pcolorbutton.cpp \
+	pdoublenuminput.cpp qfloatinput.cpp \
+	test.cpp
 
 HEADERS += childproperty.h pcombobox.h \
 	pdummywidget.h ppointedit.h \
@@ -31,6 +33,7 @@ HEADERS += childproperty.h pcombobox.h \
 	multiproperty.h pyesnobutton.h \
 	psymbolcombo.h pstringlistedit.h \
 	pcheckbox.h plinestyleedit.h \
-	qeditlistbox.h pcolorbutton.h
+	qeditlistbox.h pcolorbutton.h \
+	pdoublenuminput.h qfloatinput.h
 
 IMAGES += undo.xpm

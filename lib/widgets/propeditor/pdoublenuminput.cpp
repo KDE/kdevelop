@@ -26,6 +26,7 @@
 #endif
 
 #include <limits.h>
+#include <math.h>
 #include <qlayout.h>
 
 namespace PropertyLib{

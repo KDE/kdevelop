@@ -101,10 +101,9 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PUrlEdit(KFile::File, property));
         case Property::DirectoryURL:
             return new Machine(new PUrlEdit(KFile::Directory, property));
+#endif
         case Property::Double:
             return new Machine(new PDoubleNumInput(property));
-
-#endif
         case Property::Pixmap:
             return new Machine(new PPixmapEdit(property));
 
