@@ -22,7 +22,7 @@ dnl    Boston, MA 02111-1307, USA.
 dnl IMPORTANT NOTE: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 dnl This is an unofficial acinclude.m4 only for KDevelop to support NetBSD
 dnl Please do not use this version for other packages until it has been
-dnl accepted by KDE and committed in their repository.
+dnl substituted by an official one.
 dnl !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 dnl ------------------------------------------------------------------------
@@ -138,8 +138,8 @@ ac_cxxflags_safe="$CXXFLAGS"
 ac_ldflags_safe="$LDFLAGS"
 ac_libs_safe="$LIBS"
 
-CXXFLAGS="$CXXFLAGS -I$qt_incdir $all_includes"
-LDFLAGS="-L$qt_libdir $all_libraries"
+CXXFLAGS="$CXXFLAGS $all_includes"
+LDFLAGS="$all_libraries"
 LIBS="$LIBS $LIBQT -lkdecore"
 
 cat > conftest.$ac_ext <<EOF
@@ -187,18 +187,15 @@ AC_REQUIRE([KDE_USE_QT])
 AC_MSG_CHECKING([for KDE paths])
 kde_result=""
 
-dnl get paths from kde installed on netbsd
-dnl until now it's only valid for KDE 1.x
-if test "$kde_qtver" = "1"; then
-  case $host in                   dnl this *is* NetBSD specific
-     *-*-netbsd* )
-        KDE_GET_KDE_1_X_PATHS
-     ;;
-  esac
-fi
-
 AC_CACHE_VAL(kde_cv_all_paths,
 [
+
+  dnl get paths from kde 
+  dnl it's only valid for KDE 1.x
+  if test "$kde_qtver" = "1"; then
+        KDE_GET_KDE_1_X_PATHS
+  fi
+
   if test -z "$kde_htmldir"; then
     kde_htmldir='\$(prefix)/share/doc/HTML'
   fi
