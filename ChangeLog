@@ -1,4 +1,7 @@
-2003-02-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+2003-02-27 F@lk Brettschneider <falkbr@kdevelop.org>
+	* make-outputview: now context menu allows to disable line wrapping, to set a short and smart compiler output (good for novices) and to suppress directory navigation messages. (TODO: save this to KConfig)
+
+2003-02-26  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* parts/cppsupport: fix nasty inner class bug (part of bug 45998). Determine
         whether we are at global scope, and then insert class/struct accordingly to
         class store. This one goes for you Roberto ;)
