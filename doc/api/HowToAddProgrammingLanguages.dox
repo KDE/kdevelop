@@ -6,7 +6,7 @@
 
 \section LSupport List of things to have "complete" support of a given language in KDevelop
 
-  - Implement interface KDevlLanguageSupport
+  - Implement interface KDevLanguageSupport
   - Language parser for class browser
   - UI subclassing
     - (if the language has Qt bindings)
@@ -17,17 +17,16 @@
   - Syntax highlighter
     - (add to QEditor if not available elsewhere)
 	.
-  - Build tool (make/ant/etc)
   - \ref applicationTemplates
   - \ref sourceFileTemplates
   - Source code abbreviations
     - (ife expands to an if else statement, etc)
 	.
-  - Source formatter (prettyprint functionality)
+  - \ref sourceFormater (prettyprint functionality)
   - \ref debuggerSupport
     - (gdb/jdb/??? integration)
   - \ref compilerPlugins
-  - KDevLang project template
+  - Build tool (make/ant/etc)
   .
 
 \section Expl Explanations, hints, tips, and all around Good Things To Know, regarding that list
@@ -109,6 +108,56 @@ functionality for your language. The problem reporter catches errors
 reported by a parser and displays it in a problem reporter view.
 <code>parts/javasupport</code>, <code>parts/adasupport</code>, <code>parts/pascalsupport</code> and <code>parts/cppsupport</code> have problem reporters.
 
+\section Templ Templates
+
+\subsection applicationTemplates Application Wizard Templates
+
+<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddApplicationTemplates (HowToAddApplicationTemplates.dox file)
+and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
+
+\subsection sourceFileTemplates Source File Templates
+
+Another thing to do is to create <B>file create templates</B>. They are prototypes for a source files of your language. These prototypes are placed in
+<code>parts/filecreate/file-templates</code> dir or <code>languages/YOURLANGUAGE/file_templates</code> and have names equal to the extensions of language source files.
+The description of the prototypes is placed in <code>parts/filecreate/template-info.xml</code>.
+
+Consult FileCreatePart (parts/filecreate/README.dox file) and \ref howToAddFileTemplates for further information.
+
+\subsection CdAbbr Code Abbreviation Templates
+
+KDevelop has a support for <B>code abbreviations</B> so you can add some predefined abbreviations to your language support. Take <code>parts/cppsupport/cpptemplates</code> as an example.
+
+
+\section sourceFormater Source Code Formater
+
+Implement a KDevSourceFormater class interface.
+To obtain source formatter functionality (that is already available to
+c-based languages) you can extend astyle library (<code>lib/astyle</code>) that is used by KDevelop to format sources.
+Take a look at AStylePart for an example how to do it.
+
+\section documentationTopics Documentation topics
+
+Add them to doc/extras for an example see doc/extras/python.toc and doc/extras/python.index
+
+\section debuggerSupport Debugger Support
+
+The last thing to have a complete language support in KDevelop is to
+write a <B>Debugger support</B>. KDevelop already provides GDB support
+(<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
+
+\section compilerPlugins Compiler plugins
+
+There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options.
+Compiler plugins must implement KDevCompilerOptions interface.
+
+\section Editor Language Editor
+
+To edit source files KDevelop uses any editor that supports the KTextEditor
+interface. In case none of the editors does support advanced editing of sources
+written in your language (like code folding, syntax highlighting, line
+indentation) you can improve QEditor included in KDevelop (<code>parts/qeditor</code>).
+By creating QEditorIndenter and QSourceColorizer descendants you can provide the support for an automatic indentation and syntax highlighting that will be available for sure in KDevelop.
+
 \section PrManag Build Tools
 
 The language support is important, but it is unusable without a <B>build tool</B>
@@ -144,47 +193,8 @@ Also available:
 Choose your build tool and if the existing build tools doesn't fit
 in, extend generic build tool via build system plugin.
 
-\section Templ Templates
-
-\subsection applicationTemplates Application Wizard Templates
-
-<B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddApplicationTemplates (HowToAddApplicationTemplates.dox file)
-and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
-
-\subsection sourceFileTemplates Source File Templates
-
-Another thing to do is to create <B>file create templates</B>. They are prototypes for a source files of your language. These prototypes are placed in
-<code>parts/filecreate/file-templates</code> dir or <code>languages/YOURLANGUAGE/file_templates</code> and have names equal to the extensions of language source files.
-The description of the prototypes is placed in <code>parts/filecreate/template-info.xml</code>.
-
-Consult FileCreatePart (parts/filecreate/README.dox file) and \ref howToAddFileTemplates for further information.
-
-\subsection CdAbbr Code Abbreviation Templates
-
-KDevelop has a support for <B>code abbreviations</B> so you can add some predefined abbreviations to your language support. Take <code>parts/cppsupport/cpptemplates</code> as an example.
-
-\section Editor Language Editor
-
-To edit source files KDevelop uses any editor that supports the KTextEditor
-interface. In case none of the editors does support advanced editing of sources
-written in your language (like code folding, syntax highlighting, line
-indentation) you can improve QEditor included in KDevelop (<code>parts/qeditor</code>). By creating QEditorIndenter and QSourceColorizer descendants you can provide the support for an automatic indentation and syntax highlighting that will be available for sure in KDevelop.
-
-To obtain source formatter functionality (that is already available to
-c-based languages) you can extend astyle library (<code>lib/astyle</code>) that is used by KDevelop to format sources.
-
-\section debuggerSupport Debugger Support
-
-The last thing to have a complete language support in KDevelop is to
-write a <B>debugger support</B>. KDevelop already provides GDB support
-(<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
-
-\section compilerPlugins Compiler plugins
-
-There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options. Compiler plugins must implement KDevCompilerOptions interface.
-
 \section MiscInf Other Info
 
-See also \ref howToAddPlugins (HowToAddPlugins.dox file) for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
+See also \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file) for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
 
 */
