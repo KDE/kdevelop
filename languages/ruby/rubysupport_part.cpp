@@ -227,8 +227,9 @@ void RubySupportPart::parse(const QString &fileName)
 
 void RubySupportPart::slotRun () {
   QString file;
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
   if(ro_part) file = ro_part->url().path();
+//	file = project()->mainProgram();
 
   QString cmd = interpreter() + " " + file;
   startApplication(cmd);
@@ -236,15 +237,14 @@ void RubySupportPart::slotRun () {
 
 QString RubySupportPart::interpreter() {
     QString prog = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/interpreter");
-    if (prog.isEmpty())
-        prog = "ruby";
+    if (prog.isEmpty()) prog = "ruby";
     return prog;
 }
 
 
 void RubySupportPart::startApplication(const QString &program) {
-    kdDebug() << "starting application" << program << endl;
-    appFrontend()->startAppCommand(QString::QString(), program, TRUE);
+		bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
+    appFrontend()->startAppCommand(project()->projectDirectory(), program, inTerminal);
 }
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>RubyConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -15,44 +15,68 @@
     <property name="caption">
         <string>Form1</string>
     </property>
-    <grid>
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>interpreterEdit</cstring>
         </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Ruby &amp;interpreter:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>interpreterEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="0" column="1">
-            <property name="name">
-                <cstring>interpreterEdit</cstring>
-            </property>
-        </widget>
-        <spacer row="1" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>40</height>
-                </size>
-            </property>
-        </spacer>
-    </grid>
+        <property name="geometry">
+            <rect>
+                <x>218</x>
+                <y>13</y>
+                <width>370</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>terminalCheckbox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>41</y>
+                <width>578</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Run applications in terminal</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Check this if you want your applications to be opened in terminal window.</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>12</x>
+                <y>13</y>
+                <width>200</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>3</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Ruby &amp;interpreter:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>interpreterEdit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This is the path (or just name, if in $PATH) to Ruby interpreter. Defaults to "ruby"</string>
+        </property>
+    </widget>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
