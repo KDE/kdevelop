@@ -1,3 +1,12 @@
+1999-03-29 Pascal Krahmer <pascal@beast.de>
+        * fixed another segfault bug
+        * since now only one item can be selected at the same time
+        * "items"-view now selects the item selected in the listview
+        * properties of the selected item are shown now
+        * improved "Cursor"-property edit widget (now it is also possible to set a file as cursor).
+          However up to now the properties are ignored.
+
+
 1999-03-28 Jonas Nordin <jonas.nordin@cenacle.se>
 	* implemented possibilty to add methods and attributes to the 
 	  classes in the classview from their popupmenus.

@@ -29,7 +29,7 @@ void CKDevelop::initKDlg(){
 
   kdlg_widgets_view= new KDlgWidgets(kdlg_tabctl,"widgets_view");
   kdlg_dialogs_view = new KDlgDialogs(kdlg_tabctl,"dialogs_view");
-  kdlg_items_view = new KDlgItems(kdlg_tabctl,"items_view");
+  kdlg_items_view = new KDlgItems(this,kdlg_tabctl,"items_view");
 
   kdlg_tabctl->addTab(kdlg_widgets_view,i18n("Widgets"));
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
