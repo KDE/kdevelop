@@ -4,7 +4,7 @@
 
 #include <qguardedptr.h>
 #include <qptrlist.h>
-#include <qlistbox.h>
+#include <qlistbox.h> 
 
 
 #include <kparts/part.h>
@@ -29,7 +29,6 @@ public:
  
 private slots:
 
-  void partAdded(KParts::Part *part);
   void partRemoved(KParts::Part *part);
   void activePartChanged(KParts::Part *part);
 
@@ -44,8 +43,6 @@ private slots:
 
   void updateActions();
 
-  void recentFileSelected(const QString &url);
-
 
 private:
 
@@ -57,15 +54,9 @@ private:
   void addHistoryEntry(HistoryEntry *entry);
   QPtrList<HistoryEntry> m_history;
 
-  void addRecentEntry(KParts::Part *part);
-
   KToolBarPopupAction *m_backAction, *m_forwardAction;
 
   bool m_restoring;
-
-  QPtrList<KURL> m_recentUrls;
-
-  QGuardedPtr<QListBox> m_recentList;
 
 };
 

@@ -8,6 +8,8 @@
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 
+#include <ktexteditor/editor.h>
+
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
@@ -35,21 +37,11 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 
   setXMLFile("kdevhistory.rc");
 
-  connect(partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(partAdded(KParts::Part*)));
   connect(partController(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(partRemoved(KParts::Part*)));
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
-
-  m_recentList = new QListBox;
-  m_recentList->setCaption(i18n("Recent Files"));
-  m_recentList->setIcon( SmallIcon("history") );
-  mainWindow()->embedSelectView(m_recentList, i18n("Recent"), i18n("recent files"));
-  connect(m_recentList, SIGNAL(selected(const QString &)),
-	  this, SLOT(recentFileSelected(const QString &)));
-
   setupActions();
 
   m_history.setAutoDelete(true);
-  m_recentUrls.setAutoDelete(true);
 
   updateActions();
 }
@@ -57,9 +49,6 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 
 HistoryPart::~HistoryPart()
 {
-  if (m_recentList)
-    mainWindow()->removeView(m_recentList);
-  delete m_recentList;
 }
 
 
@@ -91,7 +80,7 @@ void HistoryPart::backAboutToShow()
 
   int savePos = m_history.at();
   for (int i=0; i<10 && m_history.prev(); ++i)
-    popup->insertItem(m_history.current()->m_url.prettyURL());
+    popup->insertItem(m_history.current()->m_url.fileName() );
 
   m_history.at(savePos);
 }
@@ -104,7 +93,7 @@ void HistoryPart::forwardAboutToShow()
 
   int savePos = m_history.at();
   for (int i=0; i<10 && m_history.next(); ++i)
-    popup->insertItem(m_history.current()->m_url.prettyURL());
+    popup->insertItem(m_history.current()->m_url.fileName() );
 
   m_history.at(savePos);
 }
@@ -112,7 +101,7 @@ void HistoryPart::forwardAboutToShow()
 
 void HistoryPart::backPopupActivated(int id)
 {
-  int by = m_backAction->popupMenu()->indexOf(id)+1;
+  int by = m_backAction->popupMenu()->indexOf(id);
 
   saveState(partController()->activePart());
   for (int i=0; i < by; ++i)
@@ -162,72 +151,9 @@ void HistoryPart::addHistoryEntry(HistoryEntry *entry)
   updateActions();
 }
 
-
-void HistoryPart::addRecentEntry(KParts::Part *part)
-{
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
-  if (!part)
-    return;
-
-  const KURL &url = ro_part->url();
-
-  QPtrListIterator<KURL> it(m_recentUrls);
-  for ( ; it.current(); ++it)
-    if (*it.current() == url)
-    {
-      m_recentUrls.remove(it.current());
-      break;
-    }
-
-  m_recentUrls.prepend(new KURL(url));
-
-  m_recentList->clear();
-  it.toFirst();
-  for ( ; it.current(); ++it)
-  {
-    m_recentList->insertItem(it.current()->prettyURL());
-  }
-}
-
-
-void HistoryPart::recentFileSelected(const QString &url)
-{
-  KURL theURL(url);
-
-  mainWindow()->lowerView(m_recentList);
-
-  KParts::Part *part = 0;
-
-  QPtrListIterator<KParts::Part> it(*partController()->parts());
-  for ( ; it.current(); ++it)
-  {
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-    if (ro_part && ro_part->url() == theURL)
-    {
-      part = it.current();
-      break;
-    }
-  }
-
-  if (part)
-  {
-    partController()->setActivePart(part);
-    if (part->widget())
-    {
-      mainWindow()->raiseView(part->widget());
-      part->widget()->setFocus();
-    }
-
-    return;
-  }
-
-  partController()->editDocument(KURL(url));
-}
-
-
 void HistoryPart::saveState(KParts::Part *part)
 {
-  if (!part)
+  if (!part || !part->inherits( "KTextEditor::Editor" ) )
     return;
 
   HistoryEntry *entry = m_history.current();
@@ -272,7 +198,7 @@ void HistoryPart::backActivated()
   if(m_history.prev()==0L) m_history.first();
 
   restoreState();
-}
+} 
 
 
 void HistoryPart::forwardActivated()
@@ -285,22 +211,16 @@ void HistoryPart::forwardActivated()
 }
 
 
-void HistoryPart::partAdded(KParts::Part *part)
-{
-  kdDebug(9031) << "partAdded=" << part << endl;
-}
-
-
 void HistoryPart::activePartChanged(KParts::Part *part)
 {
-  if (!part || m_restoring)
+  kdDebug(9031) << "HistoryPart::activePartChanged()" << endl;
+  
+  if (!part || m_restoring || !part->inherits( "KTextEditor::Editor" ) )
     return;
 
   HistoryEntry *entry = new HistoryEntry(part);
 
   addHistoryEntry(entry);
-
-  addRecentEntry(part);
 }
 
 
