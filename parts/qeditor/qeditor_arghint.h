@@ -42,7 +42,6 @@ public:
 
     virtual void show();
     virtual bool eventFilter( QObject*, QEvent* );
-    // virtual QSize sizeHint() const;
 
 signals:
     void argHintHidden();

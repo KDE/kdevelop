@@ -173,34 +173,14 @@ void QEditorArgHint::setCurrentFunction( int currentFunction )
         }
 
         adjustSize();
-        // resize( sizeHint() );
     }
 }
 
 void QEditorArgHint::show()
 {
-    // resize( sizeHint() );
-    adjustSize();
     QFrame::show();
+    adjustSize();
 }
-
-
-#if 0
-QSize QEditorArgHint::sizeHint() const
-{
-    QSize sz = d->layout->sizeHint();
-
-    // adjust width
-    int w = 0;
-    QIntDictIterator<QLabel> it( d->labelDict );
-    while( it.current() ){
-        w = QMAX( w, it.current()->sizeHint().width() );
-        ++it;
-    }
-    kdDebug() << "-------------> width = " << w << endl;
-    return QSize( w, sz.height() );
-}
-#endif
 
 bool QEditorArgHint::eventFilter( QObject*, QEvent* e )
 {
