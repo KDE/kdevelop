@@ -173,14 +173,21 @@ void CKDevelop::setMainCaption(int tab_item)
 	     kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
                   break;
           case TOOLS:
-	     kdev_caption="Tools - KDevelop " + version ;
+	     kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
                   break;
           default:
 	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
 	      kdev_caption+= version +
              	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
 	      if (edit_widget->isModified())
+                  {
+                     enableCommand(ID_FILE_SAVE);
 	        kdev_caption+= " *";
+                  }
+                  else
+                  {
+                    disableCommand(ID_FILE_SAVE);
+                  }
                   break;
       }
       setCaption(kdev_caption);
@@ -542,19 +549,16 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
     edit_widget = cpp_widget;
-    s_tab_view->setCurrentTab(CPP);
+//    s_tab_view->setCurrentTab(CPP);
     
     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
       enableCommand(ID_BUILD_COMPILE_FILE);
   }
   else{
     edit_widget = header_widget;
-    s_tab_view->setCurrentTab(HEADER);
+//    s_tab_view->setCurrentTab(HEADER);
     disableCommand(ID_BUILD_COMPILE_FILE);
   }
-  
-  edit_widget->setFocus();
-  
   
   // search the current file which would be changed
   
@@ -585,6 +589,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   if (!bForceReload && filename == edit_widget->getName()){
       //    cerr << endl <<endl << "Filename:" << filename 
       // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
+      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+      edit_widget->setFocus();
       return;
   }
 
@@ -611,6 +617,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       }
       else
       {
+         edit_widget->setName(filename);     // inserted to stop flickering of caption
          edit_widget->setText(info->text);
       }
       edit_widget->setName(filename);
@@ -618,7 +625,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      setMainCaption();
+      //      setMainCaption();  is handled by setCurrentTab()
+      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+      edit_widget->setFocus();
       return;
     }
   }
@@ -640,10 +649,12 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   edit_widget->clear();
   edit_widget->loadFile(filename,1);
   edit_widget->setName(filename);
-  edit_widget->setFocus();
+//  edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-  setMainCaption();
+  //      setMainCaption();  is handled by setCurrentTab()
+  s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
+  edit_widget->setFocus();
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
