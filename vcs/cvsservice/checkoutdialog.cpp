@@ -64,10 +64,10 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
-    QWidget *parent, const char *name, WFlags )
-    : KDialogBase( parent, name? name : "checkoutdialog", true, i18n("CVS Checkout"),
+    QWidget *parent, const char *name, WFlags ) :
+    DCOPObject( "CheckoutDialogDCOPIface" ),
+    KDialogBase( parent, name? name : "checkoutdialog", true, i18n("CVS Checkout"),
         Ok | Cancel, Ok, true ),
-      DCOPObject( "CheckoutDialogDCOPIface" ),
     m_service( cvsService ), m_job( 0 )
 {
     m_base = new CheckoutDialogBase( this, "checkoutdialogbase" );
