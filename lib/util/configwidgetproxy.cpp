@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kiconloader.h>
 
 #include <kdevcore.h>
 
@@ -33,25 +34,21 @@
 
 ConfigWidgetProxy::ConfigWidgetProxy( KDevCore * core )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	connect( core, SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget( KDialogBase*)) );
 	connect( core, SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(slotProjectConfigWidget( KDialogBase*)) );
 }
 
 ConfigWidgetProxy::~ConfigWidgetProxy()
+{}
+
+void ConfigWidgetProxy::createGlobalConfigPage( QString const & title, unsigned int pagenumber, QString const & icon )
 {
-	kdDebug() << k_funcinfo << endl;
+	_globalTitleMap.insert( pagenumber, qMakePair( title, icon ) );
 }
 
-void ConfigWidgetProxy::createGlobalConfigPage( QString const & title, unsigned int pagenumber )
+void ConfigWidgetProxy::createProjectConfigPage( QString const & title, unsigned int pagenumber, QString const & icon )
 {
-	_globalTitleMap.insert( pagenumber, title);
-}
-
-void ConfigWidgetProxy::createProjectConfigPage( QString const & title, unsigned int pagenumber )
-{
-	_projectTitleMap.insert( pagenumber, title);
+	_projectTitleMap.insert( pagenumber, qMakePair( title, icon ) );
 }
 
 void ConfigWidgetProxy::removeConfigPage( int pagenumber )
@@ -62,12 +59,10 @@ void ConfigWidgetProxy::removeConfigPage( int pagenumber )
 
 void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	TitleMap::Iterator it = _globalTitleMap.begin();
 	while ( it != _globalTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data() ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, KIcon::SizeMedium ) ), it.key() );
 		++it;
 	}
 
@@ -77,12 +72,10 @@ void ConfigWidgetProxy::slotConfigWidget( KDialogBase * dlg )
 
 void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	TitleMap::Iterator it = _projectTitleMap.begin();
 	while ( it != _projectTitleMap.end() )
 	{
-		_pageMap.insert( dlg->addVBoxPage( it.data() ), it.key() );
+		_pageMap.insert( dlg->addVBoxPage( it.data().first, it.data().first, BarIcon( it.data().second, KIcon::SizeMedium ) ), it.key() );
 		++it;
 	}
 	
@@ -92,15 +85,11 @@ void ConfigWidgetProxy::slotProjectConfigWidget( KDialogBase * dlg )
 
 void ConfigWidgetProxy::slotConfigWidgetDestroyed( )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	_pageMap.clear();
 }
 
 void ConfigWidgetProxy::slotAboutToShowPage( QWidget * page )
 {
-	kdDebug() << k_funcinfo << endl;
-	
 	if ( !page ) return;
 	
 	PageMap::Iterator it = _pageMap.find( page );

@@ -74,14 +74,14 @@ public:
 	* @param title The title of the config page, shown in the settings dialog
 	* @param pagenumber A per-proxy unique identifier, used when responding to insertConfigWidget() signal
 	*/
-	void createGlobalConfigPage( QString const & title, unsigned int pagenumber );
+	void createGlobalConfigPage( QString const & title, unsigned int pagenumber, QString const & icon = "kdevelop" );
 	
 	/**
 	* Tell the proxy you want a page in the Project Settings. 
 	* @param title The title of the config page, shown in the settings dialog
 	* @param pagenumber A per-proxy unique identifier, used when responding to insertConfigWidget() signal
 	*/
-	void createProjectConfigPage( QString const & title, unsigned int pagenumber );
+	void createProjectConfigPage( QString const & title, unsigned int pagenumber, QString const & icon = "kdevelop" );
 	
 	/**
 	* Remove a config page from the proxy. Next time the settings dialog opens, this page will not be available.
@@ -105,7 +105,7 @@ private slots:
 	void slotAboutToShowPage( QWidget * page );
 
 private:
-	typedef QMap<unsigned int, QString> TitleMap;
+	typedef QMap<unsigned int, QPair<QString,QString> > TitleMap;
 	typedef QMap<QWidget*, int> PageMap;
 	
 	TitleMap _globalTitleMap;
