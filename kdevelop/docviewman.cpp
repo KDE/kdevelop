@@ -67,8 +67,10 @@ DocViewMan::DocViewMan( CKDevelop* parent )
   m_docBookmarksList.setAutoDelete(true);
   m_docBookmarksTitleList.setAutoDelete(true);
 
-  m_pKateFactory = static_cast<KParts::Factory*>
-                   (KLibLoader::self()->factory("katepart"));
+  KService::Ptr kateService = KService::serviceByDesktopName( "katepart" );
+  if ( kateService )
+    m_pKateFactory = static_cast<KParts::Factory*>
+                     (KLibLoader::self()->factory(kateService->library().local8Bit()));
   if (!m_pKateFactory) {
     KMessageBox::sorry(0L, i18n("This version of KDevelop uses Kate as its internal editor, "
                                 "but Kate could not be found on your system! Please check "
