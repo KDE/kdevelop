@@ -3215,13 +3215,13 @@ const char* PascalStoreWalker::tokenNames[] = {
 	"DOT",
 	"\"library\"",
 	"SEMI",
+	"\"end\"",
 	"\"exports\"",
 	"COMMA",
 	"\"index\"",
 	"\"name\"",
 	"\"uses\"",
 	"\"unit\"",
-	"\"end\"",
 	"\"interface\"",
 	"\"implementation\"",
 	"\"begin\"",
@@ -3246,6 +3246,7 @@ const char* PascalStoreWalker::tokenNames[] = {
 	"\"public\"",
 	"\"alias\"",
 	"INTERRUPT",
+	"\"export\"",
 	"\"register\"",
 	"\"pascal\"",
 	"\"cdecl\"",
@@ -3321,6 +3322,8 @@ const char* PascalStoreWalker::tokenNames[] = {
 	"\"shl\"",
 	"\"shr\"",
 	"\"not\"",
+	"\"true\"",
+	"\"false\"",
 	"AT",
 	"PLUSEQ",
 	"MINUSEQ",
@@ -3358,13 +3361,10 @@ const char* PascalStoreWalker::tokenNames[] = {
 	"\"break\"",
 	"\"continue\"",
 	"\"dispose\"",
-	"\"export\"",
 	"\"exit\"",
-	"\"false\"",
 	"\"inherited\"",
 	"\"new\"",
 	"\"self\"",
-	"\"true\"",
 	"METHOD",
 	"ADDSUBOR",
 	"ASSIGNEQUAL",
@@ -3378,6 +3378,7 @@ const char* PascalStoreWalker::tokenNames[] = {
 	"WS",
 	"COMMENT_1",
 	"COMMENT_2",
+	"COMMENT_3",
 	"EXPONENT",
 	0
 };
@@ -3385,28 +3386,28 @@ const char* PascalStoreWalker::tokenNames[] = {
 const unsigned long PascalStoreWalker::_tokenSet_0_data_[] = { 262144UL, 172032UL, 0UL, 0UL, 0UL, 0UL };
 // ARGDECL "var" "procedure" "function" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_0(_tokenSet_0_data_,6);
-const unsigned long PascalStoreWalker::_tokenSet_1_data_[] = { 512UL, 262144UL, 3968176136UL, 0UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_1_data_[] = { 512UL, 262144UL, 3641384976UL, 1UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // SCALARTYPE "array" "integer" "boolean" "char" DOTDOT "real" "string" 
 // "packed" "record" "set" "file" POINTER IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_1(_tokenSet_1_data_,12);
-const unsigned long PascalStoreWalker::_tokenSet_2_data_[] = { 0UL, 0UL, 4UL, 25165824UL, 2952790016UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_2_data_[] = { 0UL, 0UL, 8UL, 50331648UL, 2147483648UL, 13UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_2(_tokenSet_2_data_,12);
-const unsigned long PascalStoreWalker::_tokenSet_3_data_[] = { 4194432UL, 2048UL, 2701131780UL, 4223598592UL, 4027580428UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_3_data_[] = { 4194432UL, 2048UL, 1107296264UL, 4152229889UL, 2155872329UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // FUNC_CALL DOT EQUAL NUM_INT LBRACK "set" POINTER LE GE LTH GT NOT_EQUAL 
 // "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT LBRACK2 STRING_LITERAL 
 // "chr" "nil" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_3(_tokenSet_3_data_,12);
-const unsigned long PascalStoreWalker::_tokenSet_4_data_[] = { 4194432UL, 2048UL, 2701197316UL, 4223598592UL, 4027580428UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_4_data_[] = { 4194432UL, 2048UL, 1107427336UL, 4152229889UL, 2155872329UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // FUNC_CALL DOT EQUAL NUM_INT DOTDOT LBRACK "set" POINTER LE GE LTH GT 
 // NOT_EQUAL "in" PLUS MINUS "or" STAR SLASH "div" "mod" "and" "not" AT 
 // LBRACK2 STRING_LITERAL "chr" "nil" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_4(_tokenSet_4_data_,12);
-const unsigned long PascalStoreWalker::_tokenSet_5_data_[] = { 272UL, 16384UL, 268566528UL, 0UL, 611072UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_5_data_[] = { 272UL, 16384UL, 537133056UL, 0UL, 4888576UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // BLOCK PROC_CALL COLON ASSIGN "case" "goto" "if" "while" "repeat" "for" 
 // "with" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_5(_tokenSet_5_data_,12);
-const unsigned long PascalStoreWalker::_tokenSet_6_data_[] = { 4194304UL, 0UL, 2164260864UL, 0UL, 1048584UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalStoreWalker::_tokenSet_6_data_[] = { 4194304UL, 0UL, 33554432UL, 1UL, 8388672UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // DOT LBRACK POINTER AT LBRACK2 IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalStoreWalker::_tokenSet_6(_tokenSet_6_data_,12);
 

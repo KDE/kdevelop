@@ -136,9 +136,13 @@ program
 library
     : LIBRARY^ identifier SEMI!
       (usesClause)?
-      block
+      libraryBlock
       exportsClause
-      DOT!
+      END! DOT!
+    ;
+
+libraryBlock
+    : declarationPart (statementPart)?
     ;
 
 exportsClause
@@ -147,7 +151,7 @@ exportsClause
     ;
 
 exportsList
-    : exportsEntry ( COMMA! exportsEntry )*
+    : exportsEntry ( COMMA! exportsEntry )* (SEMI!)?
     ;
 
 exportsEntry
@@ -257,16 +261,16 @@ statementPart
     ;
 
 procedureDeclaration
-    : procedureHeader SEMI! subroutineBlock SEMI!
+    : procedureHeader subroutineBlock SEMI!
     ;
 
 procedureHeadersPart
-    : ( procedureHeader | functionHeader ) SEMI! ( callModifiers SEMI! )
+    : procedureHeader | functionHeader // ) SEMI! ( callModifiers SEMI! )
     ;
 
 procedureHeader
     : PROCEDURE^ ( identifier | qualifiedMethodIdentifier )
-      formalParameterList SEMI! (modifiers SEMI!)*
+      (formalParameterList)? SEMI! (modifiers SEMI!)*
     ;
 
 qualifiedMethodIdentifier
@@ -281,16 +285,23 @@ subroutineBlock
     ;
 
 functionDeclaration
-    : functionHeader SEMI! subroutineBlock SEMI!
+    : functionHeader subroutineBlock SEMI!
     ;
 
 functionHeader
-    : FUNCTION^ ( identifier | qualifiedMethodIdentifier )
-      formalParameterList COLON! type SEMI! (modifiers SEMI!)*
+    : (FUNCTION^ identifier COLON! type SEMI!)=> FUNCTION^ identifier COLON! type SEMI! (modifiers SEMI!)*
+    | (FUNCTION^ identifier COLON! COLON! identifier COLON! type SEMI!)=> FUNCTION^ qualifiedMethodIdentifier COLON! type SEMI! (modifiers SEMI!)*
+    | (FUNCTION^ identifier COLON! COLON! identifier LPAREN!)=> FUNCTION^ qualifiedMethodIdentifier formalParameterList COLON! type SEMI! (modifiers SEMI!)*
+    | FUNCTION^ identifier formalParameterList COLON! type SEMI! (modifiers SEMI!)*
+    ;
+
+functionHeaderEnding
+    : (COLON! type SEMI!)=> COLON! type SEMI! (modifiers SEMI!)*
+    | formalParameterList COLON! type SEMI! (modifiers SEMI!)*
     ;
 
 formalParameterList
-    : LPAREN! parameterDeclaration ( SEMI! parameterDeclaration ) RPAREN!
+    : LPAREN! parameterDeclaration ( SEMI! parameterDeclaration )* RPAREN!
     ;
 
 parameterDeclaration
@@ -326,7 +337,7 @@ externalDirective
     ;
 */
 modifiers
-    : PUBLIC! | (ALIAS! stringConstant) | INTERRUPT! | callModifiers
+    : PUBLIC! | (ALIAS! stringConstant) | INTERRUPT! | callModifiers | EXPORT!
     ;
 
 callModifiers
@@ -420,7 +431,17 @@ structuredType
     ;
 
 arrayType
-    : ARRAY^ LBRACK! ordinalType ( COMMA! ordinalType )* RBRACK! OF! type
+    : ARRAY^ LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK! OF! type
+    ;
+
+arrayIndexType
+    : ordinalType
+    | (expression DOTDOT!)=> arraySubrangeType
+    | enumeratedType
+    ;
+
+arraySubrangeType
+    : expression DOTDOT! expression
     ;
 
 recordType
@@ -584,9 +605,10 @@ term
     : factor ( (STAR! | SLASH! | DIV! | MOD! | AND! | SHL! | SHR!) factor )*
     ;
 
-//TODO: destinguish between identifiers, typecasts and function calls -> semantic predicate
+//TODO: distinguish between identifiers, typecasts and function calls -> semantic predicate
 factor
     : ( LPAREN! expression LPAREN! )
+//    | (qualifiedMethodIdentifier2 LBRACK!)=> qualifiedMethodIdentifier2 LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
     | identifierOrValueTypecastOrFunctionCall
 //    | identifier
 //    | functionCall
@@ -596,15 +618,24 @@ factor
     | setConstructor
 //    | valueTypecast
     | addressFactor
+    | TRUE
+    | FALSE
+//    | identifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
     ;
 
 //FIXME: is this correct?
 identifierOrValueTypecastOrFunctionCall
     : (identifier LPAREN! expression COMMA!)=> identifier LPAREN! expressions RPAREN!
     | (identifier LPAREN! expression RPAREN!)=> identifier LPAREN! expression RPAREN!
+//    | (qualifiedMethodIdentifier2 LPAREN! expression COMMA!)=> qualifiedMethodIdentifier2 LPAREN! expressions RPAREN!
+//    | (identifier DOT)=> qualifiedMethodIdentifier2
     | identifier
     ;
 
+/*qualifiedMethodIdentifier2
+    : identifier DOT identifier
+    ;
+*/
 //( functionIdentifier | methodDesignator | qualifiedMethodDesignator | variableReference )
 functionCall
     : identifier (actualParameterList)?
@@ -648,6 +679,13 @@ assignmentStatement
     : identifier assignmentOperator expression
     ;
 
+identifierOrArrayIdentifier
+    : identifier
+//    | (qualifiedMethodIdentifier LBRACK!)=> qualifiedMethodIdentifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
+//    | qualifiedMethodIdentifier
+    | identifier LBRACK! arrayIndexType ( COMMA! arrayIndexType )* RBRACK!
+    ;
+
 assignmentOperator
     : ASSIGN! | PLUSEQ | MINUSEQ | STAREQ | SLASHQE
     ;
@@ -673,7 +711,9 @@ repetitiveStatement
     ;
 
 compoundStatement
-    : BEGIN! statement ( SEMI! statement )* END!
+    : BEGIN! END!
+    | BEGIN! (SEMI!)+ END!
+    | BEGIN! statement (SEMI! (statement)?)* END!
     ;
 
 ifStatement
@@ -801,7 +841,7 @@ exceptionStatement
     ;
 
 tryStatement
-    : TRY^ statement ( SEMI! statement )* exceptOrFinallyPart END!
+    : TRY^ (statements)? exceptOrFinallyPart END!
     ;
 
 exceptOrFinallyPart
@@ -1128,6 +1168,11 @@ COMMENT_2
            '}'
 		{$setType(ANTLR_USE_NAMESPACE(antlr)Token::SKIP);}
 	;
+
+COMMENT_3
+    : "//" (~'\n')* '\n'
+    {$setType(ANTLR_USE_NAMESPACE(antlr)Token::SKIP);}
+    ;
 
 // an identifier.  Note that testLiterals is set to true!  This means
 // that after we match the rule, we look in the literals table to see

@@ -167,6 +167,7 @@ void PascalParser::library() {
 			}
 			break;
 		}
+		case EXPORTS:
 		case BEGIN:
 		case LABEL:
 		case CONST:
@@ -186,7 +187,7 @@ void PascalParser::library() {
 		}
 		}
 		}
-		block();
+		libraryBlock();
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
@@ -194,6 +195,7 @@ void PascalParser::library() {
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
+		match(END);
 		match(DOT);
 		library_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -215,10 +217,10 @@ void PascalParser::unit() {
 	RefPascalAST unit_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp5_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp6_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp5_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp5_AST));
+			tmp6_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp6_AST));
 		}
 		match(UNIT);
 		identifier();
@@ -305,10 +307,10 @@ void PascalParser::programHeading() {
 	RefPascalAST programHeading_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp8_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp9_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp8_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp8_AST));
+			tmp9_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp9_AST));
 		}
 		match(PROGRAM);
 		identifier();
@@ -358,10 +360,10 @@ void PascalParser::usesClause() {
 	RefPascalAST usesClause_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp12_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp13_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp12_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp12_AST));
+			tmp13_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp13_AST));
 		}
 		match(USES);
 		identifierList();
@@ -417,10 +419,10 @@ void PascalParser::identifier() {
 	RefPascalAST identifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp14_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp15_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp14_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp14_AST));
+			tmp15_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp15_AST));
 		}
 		match(IDENT);
 		identifier_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -437,16 +439,60 @@ void PascalParser::identifier() {
 	returnAST = identifier_AST;
 }
 
+void PascalParser::libraryBlock() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST libraryBlock_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		declarationPart();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{
+		switch ( LA(1)) {
+		case BEGIN:
+		{
+			statementPart();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case EXPORTS:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		libraryBlock_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_5);
+		} else {
+			throw;
+		}
+	}
+	returnAST = libraryBlock_AST;
+}
+
 void PascalParser::exportsClause() {
 	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
 	RefPascalAST exportsClause_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp15_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp16_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp15_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp15_AST));
+			tmp16_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp16_AST));
 		}
 		match(EXPORTS);
 		exportsList();
@@ -459,718 +505,12 @@ void PascalParser::exportsClause() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_5);
-		} else {
-			throw;
-		}
-	}
-	returnAST = exportsClause_AST;
-}
-
-void PascalParser::exportsList() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST exportsList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		exportsEntry();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == COMMA)) {
-				match(COMMA);
-				exportsEntry();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop9;
-			}
-			
-		}
-		_loop9:;
-		} // ( ... )*
-		exportsList_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_5);
-		} else {
-			throw;
-		}
-	}
-	returnAST = exportsList_AST;
-}
-
-void PascalParser::exportsEntry() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST exportsEntry_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		identifier();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{
-		switch ( LA(1)) {
-		case LITERAL_index:
-		{
-			RefPascalAST tmp17_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-			if ( inputState->guessing == 0 ) {
-				tmp17_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp17_AST));
-			}
-			match(LITERAL_index);
-			integerConstant();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case DOT:
-		case COMMA:
-		case LITERAL_name:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		{
-		switch ( LA(1)) {
-		case LITERAL_name:
-		{
-			RefPascalAST tmp18_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-			if ( inputState->guessing == 0 ) {
-				tmp18_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp18_AST));
-			}
-			match(LITERAL_name);
-			stringConstant();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case DOT:
-		case COMMA:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		exportsEntry_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
 			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
 	}
-	returnAST = exportsEntry_AST;
-}
-
-void PascalParser::integerConstant() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST integerConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefPascalAST s_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	RefPascalAST n_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		switch ( LA(1)) {
-		case NUM_INT:
-		{
-			unsignedInteger();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			integerConstant_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case PLUS:
-		case MINUS:
-		{
-			sign();
-			if (inputState->guessing==0) {
-				s_AST = returnAST;
-			}
-			unsignedInteger();
-			if (inputState->guessing==0) {
-				n_AST = returnAST;
-			}
-			if ( inputState->guessing==0 ) {
-				integerConstant_AST = RefPascalAST(currentAST.root);
-#line 839 "pascal.g"
-				integerConstant_AST=RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST))));
-#line 623 "PascalParser.cpp"
-				currentAST.root = integerConstant_AST;
-				if ( integerConstant_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-					integerConstant_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
-					  currentAST.child = integerConstant_AST->getFirstChild();
-				else
-					currentAST.child = integerConstant_AST;
-				currentAST.advanceChildToEnd();
-			}
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_7);
-		} else {
-			throw;
-		}
-	}
-	returnAST = integerConstant_AST;
-}
-
-void PascalParser::stringConstant() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST stringConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		switch ( LA(1)) {
-		case STRING_LITERAL:
-		{
-			string();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			stringConstant_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case CHR:
-		{
-			constantChr();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			stringConstant_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_8);
-		} else {
-			throw;
-		}
-	}
-	returnAST = stringConstant_AST;
-}
-
-void PascalParser::identifierList() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST identifierList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		identifier();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == COMMA)) {
-				match(COMMA);
-				identifier();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop345;
-			}
-			
-		}
-		_loop345:;
-		} // ( ... )*
-		if ( inputState->guessing==0 ) {
-			identifierList_AST = RefPascalAST(currentAST.root);
-#line 826 "pascal.g"
-			identifierList_AST = RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(IDLIST)))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(identifierList_AST))));
-#line 725 "PascalParser.cpp"
-			currentAST.root = identifierList_AST;
-			if ( identifierList_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
-				identifierList_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
-				  currentAST.child = identifierList_AST->getFirstChild();
-			else
-				currentAST.child = identifierList_AST;
-			currentAST.advanceChildToEnd();
-		}
-		identifierList_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_9);
-		} else {
-			throw;
-		}
-	}
-	returnAST = identifierList_AST;
-}
-
-void PascalParser::interfacePart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST interfacePart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp20_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp20_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp20_AST));
-		}
-		match(INTERFACE);
-		{
-		switch ( LA(1)) {
-		case USES:
-		{
-			usesClause();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case IMPLEMENTATION:
-		case CONST:
-		case TYPE:
-		case PROCEDURE:
-		case FUNCTION:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		{ // ( ... )*
-		for (;;) {
-			switch ( LA(1)) {
-			case CONST:
-			{
-				constantDeclarationPart();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-				break;
-			}
-			case TYPE:
-			{
-				typeDeclarationPart();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-				break;
-			}
-			case PROCEDURE:
-			case FUNCTION:
-			{
-				procedureHeadersPart();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-				break;
-			}
-			default:
-			{
-				goto _loop21;
-			}
-			}
-		}
-		_loop21:;
-		} // ( ... )*
-		interfacePart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_10);
-		} else {
-			throw;
-		}
-	}
-	returnAST = interfacePart_AST;
-}
-
-void PascalParser::implementationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST implementationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp21_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp21_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp21_AST));
-		}
-		match(IMPLEMENTATION);
-		{
-		switch ( LA(1)) {
-		case USES:
-		{
-			usesClause();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case END:
-		case BEGIN:
-		case INITIALIZATION:
-		case LABEL:
-		case CONST:
-		case RESOURCESTRING:
-		case TYPE:
-		case VAR:
-		case PROCEDURE:
-		case FUNCTION:
-		case CONSTRUCTOR:
-		case DESTRUCTOR:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		declarationPart();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		implementationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_11);
-		} else {
-			throw;
-		}
-	}
-	returnAST = implementationPart_AST;
-}
-
-void PascalParser::initializationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST initializationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp22_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp22_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp22_AST));
-		}
-		match(INITIALIZATION);
-		statement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == SEMI)) {
-				match(SEMI);
-				statement();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop31;
-			}
-			
-		}
-		_loop31:;
-		} // ( ... )*
-		initializationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_12);
-		} else {
-			throw;
-		}
-	}
-	returnAST = initializationPart_AST;
-}
-
-void PascalParser::finalizationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST finalizationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp24_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp24_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp24_AST));
-		}
-		match(FINALIZATION);
-		statement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == SEMI)) {
-				match(SEMI);
-				statement();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop34;
-			}
-			
-		}
-		_loop34:;
-		} // ( ... )*
-		finalizationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_13);
-		} else {
-			throw;
-		}
-	}
-	returnAST = finalizationPart_AST;
-}
-
-void PascalParser::realizationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST realizationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp26_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp26_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp26_AST));
-		}
-		match(BEGIN);
-		statement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == SEMI)) {
-				match(SEMI);
-				statement();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop26;
-			}
-			
-		}
-		_loop26:;
-		} // ( ... )*
-		realizationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_13);
-		} else {
-			throw;
-		}
-	}
-	returnAST = realizationPart_AST;
-}
-
-void PascalParser::constantDeclarationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST constantDeclarationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp28_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp28_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp28_AST));
-		}
-		match(CONST);
-		{ // ( ... )+
-		int _cnt44=0;
-		for (;;) {
-			if ((LA(1) == IDENT) && (LA(2) == EQUAL)) {
-				constantDeclaration();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else if ((LA(1) == IDENT) && (LA(2) == COLON)) {
-				typedConstantDeclaration();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				if ( _cnt44>=1 ) { goto _loop44; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
-			}
-			
-			_cnt44++;
-		}
-		_loop44:;
-		}  // ( ... )+
-		constantDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_2);
-		} else {
-			throw;
-		}
-	}
-	returnAST = constantDeclarationPart_AST;
-}
-
-void PascalParser::typeDeclarationPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST typeDeclarationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp29_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp29_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp29_AST));
-		}
-		match(TYPE);
-		{ // ( ... )+
-		int _cnt51=0;
-		for (;;) {
-			if ((LA(1) == IDENT)) {
-				typeDeclaration();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				if ( _cnt51>=1 ) { goto _loop51; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
-			}
-			
-			_cnt51++;
-		}
-		_loop51:;
-		}  // ( ... )+
-		typeDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_2);
-		} else {
-			throw;
-		}
-	}
-	returnAST = typeDeclarationPart_AST;
-}
-
-void PascalParser::procedureHeadersPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST procedureHeadersPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		{
-		switch ( LA(1)) {
-		case PROCEDURE:
-		{
-			procedureHeader();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case FUNCTION:
-		{
-			functionHeader();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		match(SEMI);
-		{
-		callModifiers();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		match(SEMI);
-		}
-		procedureHeadersPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_14);
-		} else {
-			throw;
-		}
-	}
-	returnAST = procedureHeadersPart_AST;
+	returnAST = exportsClause_AST;
 }
 
 void PascalParser::declarationPart() {
@@ -1235,13 +575,333 @@ void PascalParser::declarationPart() {
 			}
 			default:
 			{
-				goto _loop38;
+				goto _loop41;
 			}
 			}
 		}
-		_loop38:;
+		_loop41:;
 		} // ( ... )*
 		declarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_7);
+		} else {
+			throw;
+		}
+	}
+	returnAST = declarationPart_AST;
+}
+
+void PascalParser::statementPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST statementPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		compoundStatement();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		statementPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_3);
+		} else {
+			throw;
+		}
+	}
+	returnAST = statementPart_AST;
+}
+
+void PascalParser::exportsList() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST exportsList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		exportsEntry();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == COMMA)) {
+				match(COMMA);
+				exportsEntry();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop11;
+			}
+			
+		}
+		_loop11:;
+		} // ( ... )*
+		{
+		switch ( LA(1)) {
+		case SEMI:
+		{
+			match(SEMI);
+			break;
+		}
+		case END:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		exportsList_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_6);
+		} else {
+			throw;
+		}
+	}
+	returnAST = exportsList_AST;
+}
+
+void PascalParser::exportsEntry() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST exportsEntry_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		identifier();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{
+		switch ( LA(1)) {
+		case LITERAL_index:
+		{
+			RefPascalAST tmp19_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			if ( inputState->guessing == 0 ) {
+				tmp19_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp19_AST));
+			}
+			match(LITERAL_index);
+			integerConstant();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case SEMI:
+		case END:
+		case COMMA:
+		case LITERAL_name:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		{
+		switch ( LA(1)) {
+		case LITERAL_name:
+		{
+			RefPascalAST tmp20_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			if ( inputState->guessing == 0 ) {
+				tmp20_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp20_AST));
+			}
+			match(LITERAL_name);
+			stringConstant();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case SEMI:
+		case END:
+		case COMMA:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		exportsEntry_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_8);
+		} else {
+			throw;
+		}
+	}
+	returnAST = exportsEntry_AST;
+}
+
+void PascalParser::integerConstant() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST integerConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefPascalAST s_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	RefPascalAST n_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case NUM_INT:
+		{
+			unsignedInteger();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			integerConstant_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case PLUS:
+		case MINUS:
+		{
+			sign();
+			if (inputState->guessing==0) {
+				s_AST = returnAST;
+			}
+			unsignedInteger();
+			if (inputState->guessing==0) {
+				n_AST = returnAST;
+			}
+			if ( inputState->guessing==0 ) {
+				integerConstant_AST = RefPascalAST(currentAST.root);
+#line 879 "pascal.g"
+				integerConstant_AST=RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST))));
+#line 794 "PascalParser.cpp"
+				currentAST.root = integerConstant_AST;
+				if ( integerConstant_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
+					integerConstant_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+					  currentAST.child = integerConstant_AST->getFirstChild();
+				else
+					currentAST.child = integerConstant_AST;
+				currentAST.advanceChildToEnd();
+			}
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_9);
+		} else {
+			throw;
+		}
+	}
+	returnAST = integerConstant_AST;
+}
+
+void PascalParser::stringConstant() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST stringConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case STRING_LITERAL:
+		{
+			string();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			stringConstant_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case CHR:
+		{
+			constantChr();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			stringConstant_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_10);
+		} else {
+			throw;
+		}
+	}
+	returnAST = stringConstant_AST;
+}
+
+void PascalParser::identifierList() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST identifierList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		identifier();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == COMMA)) {
+				match(COMMA);
+				identifier();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop375;
+			}
+			
+		}
+		_loop375:;
+		} // ( ... )*
+		if ( inputState->guessing==0 ) {
+			identifierList_AST = RefPascalAST(currentAST.root);
+#line 866 "pascal.g"
+			identifierList_AST = RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(IDLIST)))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(identifierList_AST))));
+#line 896 "PascalParser.cpp"
+			currentAST.root = identifierList_AST;
+			if ( identifierList_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
+				identifierList_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
+				  currentAST.child = identifierList_AST->getFirstChild();
+			else
+				currentAST.child = identifierList_AST;
+			currentAST.advanceChildToEnd();
+		}
+		identifierList_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
@@ -1252,7 +912,427 @@ void PascalParser::declarationPart() {
 			throw;
 		}
 	}
-	returnAST = declarationPart_AST;
+	returnAST = identifierList_AST;
+}
+
+void PascalParser::interfacePart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST interfacePart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp22_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp22_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp22_AST));
+		}
+		match(INTERFACE);
+		{
+		switch ( LA(1)) {
+		case USES:
+		{
+			usesClause();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case IMPLEMENTATION:
+		case CONST:
+		case TYPE:
+		case PROCEDURE:
+		case FUNCTION:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		{ // ( ... )*
+		for (;;) {
+			switch ( LA(1)) {
+			case CONST:
+			{
+				constantDeclarationPart();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				break;
+			}
+			case TYPE:
+			{
+				typeDeclarationPart();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				break;
+			}
+			case PROCEDURE:
+			case FUNCTION:
+			{
+				procedureHeadersPart();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				break;
+			}
+			default:
+			{
+				goto _loop24;
+			}
+			}
+		}
+		_loop24:;
+		} // ( ... )*
+		interfacePart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_12);
+		} else {
+			throw;
+		}
+	}
+	returnAST = interfacePart_AST;
+}
+
+void PascalParser::implementationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST implementationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp23_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp23_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp23_AST));
+		}
+		match(IMPLEMENTATION);
+		{
+		switch ( LA(1)) {
+		case USES:
+		{
+			usesClause();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case END:
+		case BEGIN:
+		case INITIALIZATION:
+		case LABEL:
+		case CONST:
+		case RESOURCESTRING:
+		case TYPE:
+		case VAR:
+		case PROCEDURE:
+		case FUNCTION:
+		case CONSTRUCTOR:
+		case DESTRUCTOR:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		declarationPart();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		implementationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_13);
+		} else {
+			throw;
+		}
+	}
+	returnAST = implementationPart_AST;
+}
+
+void PascalParser::initializationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST initializationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp24_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp24_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp24_AST));
+		}
+		match(INITIALIZATION);
+		statement();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == SEMI)) {
+				match(SEMI);
+				statement();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop34;
+			}
+			
+		}
+		_loop34:;
+		} // ( ... )*
+		initializationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_14);
+		} else {
+			throw;
+		}
+	}
+	returnAST = initializationPart_AST;
+}
+
+void PascalParser::finalizationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST finalizationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp26_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp26_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp26_AST));
+		}
+		match(FINALIZATION);
+		statement();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == SEMI)) {
+				match(SEMI);
+				statement();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop37;
+			}
+			
+		}
+		_loop37:;
+		} // ( ... )*
+		finalizationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_6);
+		} else {
+			throw;
+		}
+	}
+	returnAST = finalizationPart_AST;
+}
+
+void PascalParser::realizationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST realizationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp28_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp28_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp28_AST));
+		}
+		match(BEGIN);
+		statement();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == SEMI)) {
+				match(SEMI);
+				statement();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop29;
+			}
+			
+		}
+		_loop29:;
+		} // ( ... )*
+		realizationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_6);
+		} else {
+			throw;
+		}
+	}
+	returnAST = realizationPart_AST;
+}
+
+void PascalParser::constantDeclarationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST constantDeclarationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp30_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp30_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp30_AST));
+		}
+		match(CONST);
+		{ // ( ... )+
+		int _cnt47=0;
+		for (;;) {
+			if ((LA(1) == IDENT) && (LA(2) == EQUAL)) {
+				constantDeclaration();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else if ((LA(1) == IDENT) && (LA(2) == COLON)) {
+				typedConstantDeclaration();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				if ( _cnt47>=1 ) { goto _loop47; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+			}
+			
+			_cnt47++;
+		}
+		_loop47:;
+		}  // ( ... )+
+		constantDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_2);
+		} else {
+			throw;
+		}
+	}
+	returnAST = constantDeclarationPart_AST;
+}
+
+void PascalParser::typeDeclarationPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST typeDeclarationPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp31_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp31_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp31_AST));
+		}
+		match(TYPE);
+		{ // ( ... )+
+		int _cnt54=0;
+		for (;;) {
+			if ((LA(1) == IDENT)) {
+				typeDeclaration();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				if ( _cnt54>=1 ) { goto _loop54; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+			}
+			
+			_cnt54++;
+		}
+		_loop54:;
+		}  // ( ... )+
+		typeDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_2);
+		} else {
+			throw;
+		}
+	}
+	returnAST = typeDeclarationPart_AST;
+}
+
+void PascalParser::procedureHeadersPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST procedureHeadersPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case PROCEDURE:
+		{
+			procedureHeader();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			procedureHeadersPart_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case FUNCTION:
+		{
+			functionHeader();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			procedureHeadersPart_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_15);
+		} else {
+			throw;
+		}
+	}
+	returnAST = procedureHeadersPart_AST;
 }
 
 void PascalParser::statement() {
@@ -1331,36 +1411,12 @@ void PascalParser::statement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
 	}
 	returnAST = statement_AST;
-}
-
-void PascalParser::statementPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST statementPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		compoundStatement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		statementPart_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_3);
-		} else {
-			throw;
-		}
-	}
-	returnAST = statementPart_AST;
 }
 
 void PascalParser::labelDeclarationPart() {
@@ -1389,11 +1445,11 @@ void PascalParser::labelDeclarationPart() {
 				}
 			}
 			else {
-				goto _loop41;
+				goto _loop44;
 			}
 			
 		}
-		_loop41:;
+		_loop44:;
 		} // ( ... )*
 		match(SEMI);
 		labelDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -1402,7 +1458,7 @@ void PascalParser::labelDeclarationPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1431,11 +1487,11 @@ void PascalParser::resourcestringDeclarationPart() {
 				}
 			}
 			else {
-				goto _loop47;
+				goto _loop50;
 			}
 			
 		}
-		_loop47:;
+		_loop50:;
 		} // ( ... )*
 		resourcestringDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -1443,7 +1499,7 @@ void PascalParser::resourcestringDeclarationPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1477,11 +1533,11 @@ void PascalParser::variableDeclarationPart() {
 				}
 			}
 			else {
-				goto _loop54;
+				goto _loop57;
 			}
 			
 		}
-		_loop54:;
+		_loop57:;
 		} // ( ... )*
 		match(SEMI);
 		variableDeclarationPart_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -1490,7 +1546,7 @@ void PascalParser::variableDeclarationPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1514,7 +1570,7 @@ void PascalParser::procedureAndFunctionDeclarationPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1538,7 +1594,7 @@ void PascalParser::label() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_17);
+			consumeUntil(_tokenSet_18);
 		} else {
 			throw;
 		}
@@ -1568,7 +1624,7 @@ void PascalParser::constantDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_18);
+			consumeUntil(_tokenSet_19);
 		} else {
 			throw;
 		}
@@ -1603,7 +1659,7 @@ void PascalParser::typedConstantDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_18);
+			consumeUntil(_tokenSet_19);
 		} else {
 			throw;
 		}
@@ -1632,7 +1688,7 @@ void PascalParser::stringConstantDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_19);
+			consumeUntil(_tokenSet_20);
 		} else {
 			throw;
 		}
@@ -1658,7 +1714,7 @@ void PascalParser::string() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_20);
+			consumeUntil(_tokenSet_21);
 		} else {
 			throw;
 		}
@@ -1688,7 +1744,7 @@ void PascalParser::typeDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_18);
+			consumeUntil(_tokenSet_19);
 		} else {
 			throw;
 		}
@@ -1715,9 +1771,9 @@ void PascalParser::variableDeclaration() {
 		}
 		match(COLON);
 		if ( inputState->guessing==0 ) {
-#line 241 "pascal.g"
+#line 245 "pascal.g"
 			c_AST->setType(VARDECL);
-#line 1721 "PascalParser.cpp"
+#line 1777 "PascalParser.cpp"
 		}
 		type();
 		if (inputState->guessing==0) {
@@ -1729,7 +1785,7 @@ void PascalParser::variableDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -1847,7 +1903,7 @@ void PascalParser::type() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -1908,7 +1964,7 @@ void PascalParser::procedureAndFunctionDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1926,7 +1982,6 @@ void PascalParser::procedureDeclaration() {
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
-		match(SEMI);
 		subroutineBlock();
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -1938,7 +1993,7 @@ void PascalParser::procedureDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1956,7 +2011,6 @@ void PascalParser::functionDeclaration() {
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
-		match(SEMI);
 		subroutineBlock();
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -1968,7 +2022,7 @@ void PascalParser::functionDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -1997,7 +2051,7 @@ void PascalParser::constructorDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -2026,7 +2080,7 @@ void PascalParser::destructorDeclaration() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_16);
+			consumeUntil(_tokenSet_17);
 		} else {
 			throw;
 		}
@@ -2040,35 +2094,93 @@ void PascalParser::compoundStatement() {
 	RefPascalAST compoundStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		match(BEGIN);
-		statement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		if ((LA(1) == BEGIN) && (LA(2) == END)) {
+			match(BEGIN);
+			match(END);
+			compoundStatement_AST = static_cast<RefPascalAST>(currentAST.root);
 		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == SEMI)) {
-				match(SEMI);
-				statement();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		else if ((LA(1) == BEGIN) && (LA(2) == SEMI)) {
+			match(BEGIN);
+			{ // ( ... )+
+			int _cnt310=0;
+			for (;;) {
+				if ((LA(1) == SEMI)) {
+					match(SEMI);
 				}
+				else {
+					if ( _cnt310>=1 ) { goto _loop310; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+				}
+				
+				_cnt310++;
 			}
-			else {
-				goto _loop282;
-			}
-			
+			_loop310:;
+			}  // ( ... )+
+			match(END);
+			compoundStatement_AST = static_cast<RefPascalAST>(currentAST.root);
 		}
-		_loop282:;
-		} // ( ... )*
-		match(END);
-		compoundStatement_AST = static_cast<RefPascalAST>(currentAST.root);
+		else if ((LA(1) == BEGIN) && (_tokenSet_24.member(LA(2)))) {
+			match(BEGIN);
+			statement();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			{ // ( ... )*
+			for (;;) {
+				if ((LA(1) == SEMI)) {
+					match(SEMI);
+					{
+					switch ( LA(1)) {
+					case BEGIN:
+					case NUM_INT:
+					case CASE:
+					case GOTO:
+					case IF:
+					case WHILE:
+					case REPEAT:
+					case FOR:
+					case WITH:
+					case RAISE:
+					case TRY:
+					case IDENT:
+					{
+						statement();
+						if (inputState->guessing==0) {
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						}
+						break;
+					}
+					case SEMI:
+					case END:
+					{
+						break;
+					}
+					default:
+					{
+						throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+					}
+					}
+					}
+				}
+				else {
+					goto _loop313;
+				}
+				
+			}
+			_loop313:;
+			} // ( ... )*
+			match(END);
+			compoundStatement_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_23);
+			consumeUntil(_tokenSet_25);
 		} else {
 			throw;
 		}
@@ -2082,14 +2194,14 @@ void PascalParser::procedureHeader() {
 	RefPascalAST procedureHeader_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp58_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp61_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp58_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp58_AST));
+			tmp61_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp61_AST));
 		}
 		match(PROCEDURE);
 		{
-		if ((LA(1) == IDENT) && (LA(2) == LPAREN)) {
+		if ((LA(1) == IDENT) && (LA(2) == SEMI || LA(2) == LPAREN)) {
 			identifier();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -2106,9 +2218,25 @@ void PascalParser::procedureHeader() {
 		}
 		
 		}
-		formalParameterList();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		{
+		switch ( LA(1)) {
+		case LPAREN:
+		{
+			formalParameterList();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case SEMI:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
 		}
 		match(SEMI);
 		{ // ( ... )*
@@ -2121,11 +2249,11 @@ void PascalParser::procedureHeader() {
 				match(SEMI);
 			}
 			else {
-				goto _loop66;
+				goto _loop68;
 			}
 			
 		}
-		_loop66:;
+		_loop68:;
 		} // ( ... )*
 		procedureHeader_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -2133,7 +2261,7 @@ void PascalParser::procedureHeader() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_24);
+			consumeUntil(_tokenSet_26);
 		} else {
 			throw;
 		}
@@ -2191,7 +2319,7 @@ void PascalParser::subroutineBlock() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_25);
+			consumeUntil(_tokenSet_27);
 		} else {
 			throw;
 		}
@@ -2205,68 +2333,866 @@ void PascalParser::functionHeader() {
 	RefPascalAST functionHeader_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp62_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp62_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp62_AST));
+		bool synPredMatched74 = false;
+		if (((LA(1) == FUNCTION) && (LA(2) == IDENT))) {
+			int _m74 = mark();
+			synPredMatched74 = true;
+			inputState->guessing++;
+			try {
+				{
+				match(FUNCTION);
+				identifier();
+				match(COLON);
+				type();
+				match(SEMI);
+				}
+			}
+			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+				synPredMatched74 = false;
+			}
+			rewind(_m74);
+			inputState->guessing--;
 		}
-		match(FUNCTION);
-		{
-		if ((LA(1) == IDENT) && (LA(2) == LPAREN)) {
+		if ( synPredMatched74 ) {
+			RefPascalAST tmp65_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			if ( inputState->guessing == 0 ) {
+				tmp65_AST = astFactory->create(LT(1));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp65_AST));
+			}
+			match(FUNCTION);
 			identifier();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 			}
-		}
-		else if ((LA(1) == IDENT) && (LA(2) == COLON)) {
-			qualifiedMethodIdentifier();
+			match(COLON);
+			type();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 			}
+			match(SEMI);
+			{ // ( ... )*
+			for (;;) {
+				if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+					modifiers();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(SEMI);
+				}
+				else {
+					goto _loop76;
+				}
+				
+			}
+			_loop76:;
+			} // ( ... )*
+			functionHeader_AST = static_cast<RefPascalAST>(currentAST.root);
 		}
 		else {
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		
-		}
-		formalParameterList();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		match(COLON);
-		type();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		match(SEMI);
-		{ // ( ... )*
-		for (;;) {
-			if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
-				modifiers();
+			bool synPredMatched78 = false;
+			if (((LA(1) == FUNCTION) && (LA(2) == IDENT))) {
+				int _m78 = mark();
+				synPredMatched78 = true;
+				inputState->guessing++;
+				try {
+					{
+					match(FUNCTION);
+					identifier();
+					match(COLON);
+					match(COLON);
+					identifier();
+					match(COLON);
+					type();
+					match(SEMI);
+					}
+				}
+				catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+					synPredMatched78 = false;
+				}
+				rewind(_m78);
+				inputState->guessing--;
+			}
+			if ( synPredMatched78 ) {
+				RefPascalAST tmp69_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				if ( inputState->guessing == 0 ) {
+					tmp69_AST = astFactory->create(LT(1));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp69_AST));
+				}
+				match(FUNCTION);
+				qualifiedMethodIdentifier();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				match(COLON);
+				type();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 				}
 				match(SEMI);
+				{ // ( ... )*
+				for (;;) {
+					if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+						modifiers();
+						if (inputState->guessing==0) {
+							astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+						}
+						match(SEMI);
+					}
+					else {
+						goto _loop80;
+					}
+					
+				}
+				_loop80:;
+				} // ( ... )*
+				functionHeader_AST = static_cast<RefPascalAST>(currentAST.root);
 			}
 			else {
-				goto _loop73;
-			}
-			
+				bool synPredMatched82 = false;
+				if (((LA(1) == FUNCTION) && (LA(2) == IDENT))) {
+					int _m82 = mark();
+					synPredMatched82 = true;
+					inputState->guessing++;
+					try {
+						{
+						match(FUNCTION);
+						identifier();
+						match(COLON);
+						match(COLON);
+						identifier();
+						match(LPAREN);
+						}
+					}
+					catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+						synPredMatched82 = false;
+					}
+					rewind(_m82);
+					inputState->guessing--;
+				}
+				if ( synPredMatched82 ) {
+					RefPascalAST tmp73_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					if ( inputState->guessing == 0 ) {
+						tmp73_AST = astFactory->create(LT(1));
+						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp73_AST));
+					}
+					match(FUNCTION);
+					qualifiedMethodIdentifier();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					formalParameterList();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(COLON);
+					type();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(SEMI);
+					{ // ( ... )*
+					for (;;) {
+						if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+							modifiers();
+							if (inputState->guessing==0) {
+								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							}
+							match(SEMI);
+						}
+						else {
+							goto _loop84;
+						}
+						
+					}
+					_loop84:;
+					} // ( ... )*
+					functionHeader_AST = static_cast<RefPascalAST>(currentAST.root);
+				}
+				else if ((LA(1) == FUNCTION) && (LA(2) == IDENT)) {
+					RefPascalAST tmp77_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+					if ( inputState->guessing == 0 ) {
+						tmp77_AST = astFactory->create(LT(1));
+						astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp77_AST));
+					}
+					match(FUNCTION);
+					identifier();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					formalParameterList();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(COLON);
+					type();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(SEMI);
+					{ // ( ... )*
+					for (;;) {
+						if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+							modifiers();
+							if (inputState->guessing==0) {
+								astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+							}
+							match(SEMI);
+						}
+						else {
+							goto _loop86;
+						}
+						
+					}
+					_loop86:;
+					} // ( ... )*
+					functionHeader_AST = static_cast<RefPascalAST>(currentAST.root);
+				}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
 		}
-		_loop73:;
-		} // ( ... )*
-		functionHeader_AST = static_cast<RefPascalAST>(currentAST.root);
+		}}
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_24);
+			consumeUntil(_tokenSet_26);
 		} else {
 			throw;
 		}
 	}
 	returnAST = functionHeader_AST;
+}
+
+void PascalParser::qualifiedMethodIdentifier() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST qualifiedMethodIdentifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		identifier();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		match(COLON);
+		match(COLON);
+		identifier();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		qualifiedMethodIdentifier_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_28);
+		} else {
+			throw;
+		}
+	}
+	returnAST = qualifiedMethodIdentifier_AST;
+}
+
+void PascalParser::formalParameterList() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST formalParameterList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		match(LPAREN);
+		parameterDeclaration();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{ // ( ... )*
+		for (;;) {
+			if ((LA(1) == SEMI)) {
+				match(SEMI);
+				parameterDeclaration();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+			}
+			else {
+				goto _loop96;
+			}
+			
+		}
+		_loop96:;
+		} // ( ... )*
+		match(RPAREN);
+		formalParameterList_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_29);
+		} else {
+			throw;
+		}
+	}
+	returnAST = formalParameterList_AST;
+}
+
+void PascalParser::modifiers() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST modifiers_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case PUBLIC:
+		{
+			match(PUBLIC);
+			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case ALIAS:
+		{
+			{
+			match(ALIAS);
+			stringConstant();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			}
+			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case INTERRUPT:
+		{
+			match(INTERRUPT);
+			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case REGISTER:
+		case PASCAL:
+		case CDECL:
+		case STDCALL:
+		case POPSTACK:
+		case SAVEREGISTERS:
+		case INLINE:
+		case SAFECALL:
+		case NEAR:
+		case FAR:
+		{
+			callModifiers();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case EXPORT:
+		{
+			match(EXPORT);
+			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_22);
+		} else {
+			throw;
+		}
+	}
+	returnAST = modifiers_AST;
+}
+
+void PascalParser::externalDirective() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST externalDirective_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp90_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp90_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp90_AST));
+		}
+		match(EXTERNAL);
+		{
+		switch ( LA(1)) {
+		case STRING_LITERAL:
+		case CHR:
+		{
+			stringConstant();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			{
+			switch ( LA(1)) {
+			case LITERAL_name:
+			{
+				{
+				RefPascalAST tmp91_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				if ( inputState->guessing == 0 ) {
+					tmp91_AST = astFactory->create(LT(1));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp91_AST));
+				}
+				match(LITERAL_name);
+				stringConstant();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				}
+				break;
+			}
+			case LITERAL_index:
+			{
+				{
+				RefPascalAST tmp92_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				if ( inputState->guessing == 0 ) {
+					tmp92_AST = astFactory->create(LT(1));
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp92_AST));
+				}
+				match(LITERAL_index);
+				integerConstant();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				}
+				break;
+			}
+			case ANTLR_USE_NAMESPACE(antlr)Token::EOF_TYPE:
+			case SEMI:
+			case END:
+			case EXPORTS:
+			case BEGIN:
+			case INITIALIZATION:
+			case LABEL:
+			case CONST:
+			case RESOURCESTRING:
+			case TYPE:
+			case VAR:
+			case PROCEDURE:
+			case FUNCTION:
+			case CONSTRUCTOR:
+			case DESTRUCTOR:
+			{
+				break;
+			}
+			default:
+			{
+				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+			}
+			}
+			}
+			break;
+		}
+		case ANTLR_USE_NAMESPACE(antlr)Token::EOF_TYPE:
+		case SEMI:
+		case END:
+		case EXPORTS:
+		case BEGIN:
+		case INITIALIZATION:
+		case LABEL:
+		case CONST:
+		case RESOURCESTRING:
+		case TYPE:
+		case VAR:
+		case PROCEDURE:
+		case FUNCTION:
+		case CONSTRUCTOR:
+		case DESTRUCTOR:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		externalDirective_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_27);
+		} else {
+			throw;
+		}
+	}
+	returnAST = externalDirective_AST;
+}
+
+void PascalParser::functionHeaderEnding() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST functionHeaderEnding_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case COLON:
+		{
+			match(COLON);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(SEMI);
+			{ // ( ... )*
+			for (;;) {
+				if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+					modifiers();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(SEMI);
+				}
+				else {
+					goto _loop91;
+				}
+				
+			}
+			_loop91:;
+			} // ( ... )*
+			functionHeaderEnding_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case LPAREN:
+		{
+			formalParameterList();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(COLON);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(SEMI);
+			{ // ( ... )*
+			for (;;) {
+				if (((LA(1) >= PUBLIC && LA(1) <= FAR))) {
+					modifiers();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+					match(SEMI);
+				}
+				else {
+					goto _loop93;
+				}
+				
+			}
+			_loop93:;
+			} // ( ... )*
+			functionHeaderEnding_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_0);
+		} else {
+			throw;
+		}
+	}
+	returnAST = functionHeaderEnding_AST;
+}
+
+void PascalParser::parameterDeclaration() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST parameterDeclaration_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		switch ( LA(1)) {
+		case IDENT:
+		{
+			valueParameter();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case VAR:
+		{
+			variableParameter();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case CONST:
+		{
+			constantParameter();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_30);
+		} else {
+			throw;
+		}
+	}
+	returnAST = parameterDeclaration_AST;
+}
+
+void PascalParser::valueParameter() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST valueParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		bool synPredMatched100 = false;
+		if (((LA(1) == IDENT) && (LA(2) == COMMA || LA(2) == COLON))) {
+			int _m100 = mark();
+			synPredMatched100 = true;
+			inputState->guessing++;
+			try {
+				{
+				identifierList();
+				match(COLON);
+				match(ARRAY);
+				match(OF);
+				}
+			}
+			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+				synPredMatched100 = false;
+			}
+			rewind(_m100);
+			inputState->guessing--;
+		}
+		if ( synPredMatched100 ) {
+			identifierList();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(COLON);
+			match(ARRAY);
+			match(OF);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			valueParameter_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else if ((LA(1) == IDENT) && (LA(2) == COMMA || LA(2) == COLON)) {
+			identifierList();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(COLON);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			valueParameter_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_30);
+		} else {
+			throw;
+		}
+	}
+	returnAST = valueParameter_AST;
+}
+
+void PascalParser::variableParameter() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST variableParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp103_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp103_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp103_AST));
+		}
+		match(VAR);
+		identifierList();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{
+		switch ( LA(1)) {
+		case COLON:
+		{
+			untypedParameterPart();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case SEMI:
+		case RPAREN:
+		case RBRACK:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		variableParameter_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_30);
+		} else {
+			throw;
+		}
+	}
+	returnAST = variableParameter_AST;
+}
+
+void PascalParser::constantParameter() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST constantParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		RefPascalAST tmp104_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		if ( inputState->guessing == 0 ) {
+			tmp104_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp104_AST));
+		}
+		match(CONST);
+		identifierList();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		{
+		switch ( LA(1)) {
+		case COLON:
+		{
+			untypedParameterPart();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case SEMI:
+		case RPAREN:
+		case RBRACK:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		constantParameter_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_30);
+		} else {
+			throw;
+		}
+	}
+	returnAST = constantParameter_AST;
+}
+
+void PascalParser::untypedParameterPart() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST untypedParameterPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		bool synPredMatched105 = false;
+		if (((LA(1) == COLON) && (LA(2) == ARRAY))) {
+			int _m105 = mark();
+			synPredMatched105 = true;
+			inputState->guessing++;
+			try {
+				{
+				match(COLON);
+				match(ARRAY);
+				match(OF);
+				type();
+				}
+			}
+			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+				synPredMatched105 = false;
+			}
+			rewind(_m105);
+			inputState->guessing--;
+		}
+		if ( synPredMatched105 ) {
+			match(COLON);
+			match(ARRAY);
+			match(OF);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			untypedParameterPart_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else if ((LA(1) == COLON) && (_tokenSet_31.member(LA(2)))) {
+			match(COLON);
+			type();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			untypedParameterPart_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_30);
+		} else {
+			throw;
+		}
+	}
+	returnAST = untypedParameterPart_AST;
 }
 
 void PascalParser::callModifiers() {
@@ -2346,543 +3272,12 @@ void PascalParser::callModifiers() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
 	}
 	returnAST = callModifiers_AST;
-}
-
-void PascalParser::qualifiedMethodIdentifier() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST qualifiedMethodIdentifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		identifier();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		match(COLON);
-		match(COLON);
-		identifier();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		qualifiedMethodIdentifier_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_26);
-		} else {
-			throw;
-		}
-	}
-	returnAST = qualifiedMethodIdentifier_AST;
-}
-
-void PascalParser::formalParameterList() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST formalParameterList_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		match(LPAREN);
-		parameterDeclaration();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{
-		match(SEMI);
-		parameterDeclaration();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		}
-		match(RPAREN);
-		formalParameterList_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_27);
-		} else {
-			throw;
-		}
-	}
-	returnAST = formalParameterList_AST;
-}
-
-void PascalParser::modifiers() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST modifiers_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		switch ( LA(1)) {
-		case PUBLIC:
-		{
-			match(PUBLIC);
-			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case ALIAS:
-		{
-			{
-			match(ALIAS);
-			stringConstant();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			}
-			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case INTERRUPT:
-		{
-			match(INTERRUPT);
-			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case REGISTER:
-		case PASCAL:
-		case CDECL:
-		case STDCALL:
-		case POPSTACK:
-		case SAVEREGISTERS:
-		case INLINE:
-		case SAFECALL:
-		case NEAR:
-		case FAR:
-		{
-			callModifiers();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			modifiers_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_21);
-		} else {
-			throw;
-		}
-	}
-	returnAST = modifiers_AST;
-}
-
-void PascalParser::externalDirective() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST externalDirective_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp84_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp84_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp84_AST));
-		}
-		match(EXTERNAL);
-		{
-		switch ( LA(1)) {
-		case STRING_LITERAL:
-		case CHR:
-		{
-			stringConstant();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			{
-			switch ( LA(1)) {
-			case LITERAL_name:
-			{
-				{
-				RefPascalAST tmp85_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-				if ( inputState->guessing == 0 ) {
-					tmp85_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp85_AST));
-				}
-				match(LITERAL_name);
-				stringConstant();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-				}
-				break;
-			}
-			case LITERAL_index:
-			{
-				{
-				RefPascalAST tmp86_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-				if ( inputState->guessing == 0 ) {
-					tmp86_AST = astFactory->create(LT(1));
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp86_AST));
-				}
-				match(LITERAL_index);
-				integerConstant();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-				}
-				break;
-			}
-			case ANTLR_USE_NAMESPACE(antlr)Token::EOF_TYPE:
-			case SEMI:
-			case END:
-			case BEGIN:
-			case INITIALIZATION:
-			case LABEL:
-			case CONST:
-			case RESOURCESTRING:
-			case TYPE:
-			case VAR:
-			case PROCEDURE:
-			case FUNCTION:
-			case CONSTRUCTOR:
-			case DESTRUCTOR:
-			{
-				break;
-			}
-			default:
-			{
-				throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-			}
-			}
-			}
-			break;
-		}
-		case ANTLR_USE_NAMESPACE(antlr)Token::EOF_TYPE:
-		case SEMI:
-		case END:
-		case BEGIN:
-		case INITIALIZATION:
-		case LABEL:
-		case CONST:
-		case RESOURCESTRING:
-		case TYPE:
-		case VAR:
-		case PROCEDURE:
-		case FUNCTION:
-		case CONSTRUCTOR:
-		case DESTRUCTOR:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		externalDirective_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_25);
-		} else {
-			throw;
-		}
-	}
-	returnAST = externalDirective_AST;
-}
-
-void PascalParser::parameterDeclaration() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST parameterDeclaration_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		switch ( LA(1)) {
-		case IDENT:
-		{
-			valueParameter();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case VAR:
-		{
-			variableParameter();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		case CONST:
-		{
-			constantParameter();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			parameterDeclaration_AST = static_cast<RefPascalAST>(currentAST.root);
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_28);
-		} else {
-			throw;
-		}
-	}
-	returnAST = parameterDeclaration_AST;
-}
-
-void PascalParser::valueParameter() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST valueParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		bool synPredMatched79 = false;
-		if (((LA(1) == IDENT) && (LA(2) == COMMA || LA(2) == COLON))) {
-			int _m79 = mark();
-			synPredMatched79 = true;
-			inputState->guessing++;
-			try {
-				{
-				identifierList();
-				match(COLON);
-				match(ARRAY);
-				match(OF);
-				}
-			}
-			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched79 = false;
-			}
-			rewind(_m79);
-			inputState->guessing--;
-		}
-		if ( synPredMatched79 ) {
-			identifierList();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			match(COLON);
-			match(ARRAY);
-			match(OF);
-			type();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			valueParameter_AST = static_cast<RefPascalAST>(currentAST.root);
-		}
-		else if ((LA(1) == IDENT) && (LA(2) == COMMA || LA(2) == COLON)) {
-			identifierList();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			match(COLON);
-			type();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			valueParameter_AST = static_cast<RefPascalAST>(currentAST.root);
-		}
-		else {
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_28);
-		} else {
-			throw;
-		}
-	}
-	returnAST = valueParameter_AST;
-}
-
-void PascalParser::variableParameter() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST variableParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp91_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp91_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp91_AST));
-		}
-		match(VAR);
-		identifierList();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{
-		switch ( LA(1)) {
-		case COLON:
-		{
-			untypedParameterPart();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case SEMI:
-		case RPAREN:
-		case RBRACK:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		variableParameter_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_28);
-		} else {
-			throw;
-		}
-	}
-	returnAST = variableParameter_AST;
-}
-
-void PascalParser::constantParameter() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST constantParameter_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		RefPascalAST tmp92_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-		if ( inputState->guessing == 0 ) {
-			tmp92_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp92_AST));
-		}
-		match(CONST);
-		identifierList();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{
-		switch ( LA(1)) {
-		case COLON:
-		{
-			untypedParameterPart();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			break;
-		}
-		case SEMI:
-		case RPAREN:
-		case RBRACK:
-		{
-			break;
-		}
-		default:
-		{
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		}
-		}
-		constantParameter_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_28);
-		} else {
-			throw;
-		}
-	}
-	returnAST = constantParameter_AST;
-}
-
-void PascalParser::untypedParameterPart() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST untypedParameterPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		bool synPredMatched84 = false;
-		if (((LA(1) == COLON) && (LA(2) == ARRAY))) {
-			int _m84 = mark();
-			synPredMatched84 = true;
-			inputState->guessing++;
-			try {
-				{
-				match(COLON);
-				match(ARRAY);
-				match(OF);
-				type();
-				}
-			}
-			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched84 = false;
-			}
-			rewind(_m84);
-			inputState->guessing--;
-		}
-		if ( synPredMatched84 ) {
-			match(COLON);
-			match(ARRAY);
-			match(OF);
-			type();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			untypedParameterPart_AST = static_cast<RefPascalAST>(currentAST.root);
-		}
-		else if ((LA(1) == COLON) && (_tokenSet_29.member(LA(2)))) {
-			match(COLON);
-			type();
-			if (inputState->guessing==0) {
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-			}
-			untypedParameterPart_AST = static_cast<RefPascalAST>(currentAST.root);
-		}
-		else {
-			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
-		}
-		
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_28);
-		} else {
-			throw;
-		}
-	}
-	returnAST = untypedParameterPart_AST;
 }
 
 void PascalParser::expression() {
@@ -2917,12 +3312,13 @@ void PascalParser::expression() {
 		}
 		case DOT:
 		case SEMI:
-		case COMMA:
 		case END:
+		case COMMA:
 		case LPAREN:
 		case RPAREN:
 		case FINALIZATION:
 		case OF:
+		case DOTDOT:
 		case RBRACK:
 		case THEN:
 		case ELSE:
@@ -2948,7 +3344,7 @@ void PascalParser::expression() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_30);
+			consumeUntil(_tokenSet_32);
 		} else {
 			throw;
 		}
@@ -2962,10 +3358,10 @@ void PascalParser::typedConstant() {
 	RefPascalAST typedConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		bool synPredMatched99 = false;
-		if (((_tokenSet_31.member(LA(1))) && (_tokenSet_32.member(LA(2))))) {
-			int _m99 = mark();
-			synPredMatched99 = true;
+		bool synPredMatched120 = false;
+		if (((_tokenSet_33.member(LA(1))) && (_tokenSet_34.member(LA(2))))) {
+			int _m120 = mark();
+			synPredMatched120 = true;
 			inputState->guessing++;
 			try {
 				{
@@ -2973,12 +3369,12 @@ void PascalParser::typedConstant() {
 				}
 			}
 			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched99 = false;
+				synPredMatched120 = false;
 			}
-			rewind(_m99);
+			rewind(_m120);
 			inputState->guessing--;
 		}
-		if ( synPredMatched99 ) {
+		if ( synPredMatched120 ) {
 			constant();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -2986,10 +3382,10 @@ void PascalParser::typedConstant() {
 			typedConstant_AST = static_cast<RefPascalAST>(currentAST.root);
 		}
 		else {
-			bool synPredMatched101 = false;
+			bool synPredMatched122 = false;
 			if (((LA(1) == LPAREN) && (LA(2) == IDENT))) {
-				int _m101 = mark();
-				synPredMatched101 = true;
+				int _m122 = mark();
+				synPredMatched122 = true;
 				inputState->guessing++;
 				try {
 					{
@@ -2999,12 +3395,12 @@ void PascalParser::typedConstant() {
 					}
 				}
 				catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-					synPredMatched101 = false;
+					synPredMatched122 = false;
 				}
-				rewind(_m101);
+				rewind(_m122);
 				inputState->guessing--;
 			}
-			if ( synPredMatched101 ) {
+			if ( synPredMatched122 ) {
 				recordConstant();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -3012,10 +3408,10 @@ void PascalParser::typedConstant() {
 				typedConstant_AST = static_cast<RefPascalAST>(currentAST.root);
 			}
 			else {
-				bool synPredMatched103 = false;
-				if (((LA(1) == LPAREN) && (_tokenSet_33.member(LA(2))))) {
-					int _m103 = mark();
-					synPredMatched103 = true;
+				bool synPredMatched124 = false;
+				if (((LA(1) == LPAREN) && (_tokenSet_35.member(LA(2))))) {
+					int _m124 = mark();
+					synPredMatched124 = true;
 					inputState->guessing++;
 					try {
 						{
@@ -3023,19 +3419,19 @@ void PascalParser::typedConstant() {
 						}
 					}
 					catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-						synPredMatched103 = false;
+						synPredMatched124 = false;
 					}
-					rewind(_m103);
+					rewind(_m124);
 					inputState->guessing--;
 				}
-				if ( synPredMatched103 ) {
+				if ( synPredMatched124 ) {
 					arrayConstant();
 					if (inputState->guessing==0) {
 						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 					}
 					typedConstant_AST = static_cast<RefPascalAST>(currentAST.root);
 				}
-				else if ((_tokenSet_34.member(LA(1))) && (_tokenSet_35.member(LA(2)))) {
+				else if ((_tokenSet_36.member(LA(1))) && (_tokenSet_37.member(LA(2)))) {
 					proceduralConstant();
 					if (inputState->guessing==0) {
 						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -3051,7 +3447,7 @@ void PascalParser::typedConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -3119,9 +3515,9 @@ void PascalParser::constant() {
 				}
 				if ( inputState->guessing==0 ) {
 					constant_AST = RefPascalAST(currentAST.root);
-#line 860 "pascal.g"
+#line 900 "pascal.g"
 					constant_AST=RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(n_AST))));
-#line 3125 "PascalParser.cpp"
+#line 3521 "PascalParser.cpp"
 					currentAST.root = constant_AST;
 					if ( constant_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 						constant_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3142,9 +3538,9 @@ void PascalParser::constant() {
 				}
 				if ( inputState->guessing==0 ) {
 					constant_AST = RefPascalAST(currentAST.root);
-#line 862 "pascal.g"
+#line 902 "pascal.g"
 					constant_AST=RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(s2_AST))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(id_AST))));
-#line 3148 "PascalParser.cpp"
+#line 3544 "PascalParser.cpp"
 					currentAST.root = constant_AST;
 					if ( constant_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 						constant_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -3163,7 +3559,7 @@ void PascalParser::constant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_36);
+			consumeUntil(_tokenSet_38);
 		} else {
 			throw;
 		}
@@ -3206,11 +3602,11 @@ void PascalParser::recordConstant() {
 				}
 			}
 			else {
-				goto _loop113;
+				goto _loop134;
 			}
 			
 		}
-		_loop113:;
+		_loop134:;
 		} // ( ... )*
 		match(RPAREN);
 		recordConstant_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -3219,7 +3615,7 @@ void PascalParser::recordConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -3300,11 +3696,11 @@ void PascalParser::arrayConstant() {
 				}
 			}
 			else {
-				goto _loop108;
+				goto _loop129;
 			}
 			
 		}
-		_loop108:;
+		_loop129:;
 		} // ( ... )*
 		match(RPAREN);
 		arrayConstant_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -3313,7 +3709,7 @@ void PascalParser::arrayConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_37);
+			consumeUntil(_tokenSet_39);
 		} else {
 			throw;
 		}
@@ -3337,7 +3733,7 @@ void PascalParser::proceduralConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -3351,10 +3747,10 @@ void PascalParser::addressConstant() {
 	RefPascalAST addressConstant_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp105_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp127_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp105_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp105_AST));
+			tmp127_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp127_AST));
 		}
 		match(NUM_INT);
 		addressConstant_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -3363,7 +3759,7 @@ void PascalParser::addressConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -3422,7 +3818,7 @@ void PascalParser::simpleType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3470,7 +3866,7 @@ void PascalParser::subrangeTypeOrTypeIdentifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3484,10 +3880,10 @@ void PascalParser::enumeratedType() {
 	RefPascalAST enumeratedType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		bool synPredMatched126 = false;
+		bool synPredMatched147 = false;
 		if (((LA(1) == LPAREN) && (LA(2) == IDENT))) {
-			int _m126 = mark();
-			synPredMatched126 = true;
+			int _m147 = mark();
+			synPredMatched147 = true;
 			inputState->guessing++;
 			try {
 				{
@@ -3497,12 +3893,12 @@ void PascalParser::enumeratedType() {
 				}
 			}
 			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched126 = false;
+				synPredMatched147 = false;
 			}
-			rewind(_m126);
+			rewind(_m147);
 			inputState->guessing--;
 		}
-		if ( synPredMatched126 ) {
+		if ( synPredMatched147 ) {
 			match(LPAREN);
 			assignedEnumList();
 			if (inputState->guessing==0) {
@@ -3529,7 +3925,7 @@ void PascalParser::enumeratedType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_40);
 		} else {
 			throw;
 		}
@@ -3543,10 +3939,10 @@ void PascalParser::stringType() {
 	RefPascalAST stringType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp111_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp133_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp111_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp111_AST));
+			tmp133_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp133_AST));
 		}
 		match(STRING);
 		{
@@ -3580,7 +3976,7 @@ void PascalParser::stringType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3678,7 +4074,7 @@ void PascalParser::structuredType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3692,10 +4088,10 @@ void PascalParser::pointerType() {
 	RefPascalAST pointerType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp115_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp137_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp115_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp115_AST));
+			tmp137_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp137_AST));
 		}
 		match(POINTER);
 		typeIdentifier();
@@ -3708,7 +4104,7 @@ void PascalParser::pointerType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3722,10 +4118,10 @@ void PascalParser::proceduralType() {
 	RefPascalAST proceduralType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		bool synPredMatched160 = false;
+		bool synPredMatched185 = false;
 		if (((LA(1) == PROCEDURE || LA(1) == FUNCTION) && (LA(2) == IDENT))) {
-			int _m160 = mark();
-			synPredMatched160 = true;
+			int _m185 = mark();
+			synPredMatched185 = true;
 			inputState->guessing++;
 			try {
 				{
@@ -3734,12 +4130,12 @@ void PascalParser::proceduralType() {
 				}
 			}
 			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched160 = false;
+				synPredMatched185 = false;
 			}
-			rewind(_m160);
+			rewind(_m185);
 			inputState->guessing--;
 		}
-		if ( synPredMatched160 ) {
+		if ( synPredMatched185 ) {
 			proceduralTypePart1();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -3767,7 +4163,7 @@ void PascalParser::proceduralType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3870,7 +4266,7 @@ void PascalParser::ordinalType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_38);
+			consumeUntil(_tokenSet_40);
 		} else {
 			throw;
 		}
@@ -3925,7 +4321,7 @@ void PascalParser::realType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -3949,7 +4345,7 @@ void PascalParser::typeIdentifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_39);
+			consumeUntil(_tokenSet_41);
 		} else {
 			throw;
 		}
@@ -4020,11 +4416,11 @@ void PascalParser::assignedEnumList() {
 				}
 			}
 			else {
-				goto _loop131;
+				goto _loop152;
 			}
 			
 		}
-		_loop131:;
+		_loop152:;
 		} // ( ... )*
 		assignedEnumList_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -4032,7 +4428,7 @@ void PascalParser::assignedEnumList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_40);
+			consumeUntil(_tokenSet_42);
 		} else {
 			throw;
 		}
@@ -4046,10 +4442,10 @@ void PascalParser::unsignedInteger() {
 	RefPascalAST unsignedInteger_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp139_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp161_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp139_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp139_AST));
+			tmp161_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp161_AST));
 		}
 		match(NUM_INT);
 		unsignedInteger_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -4058,7 +4454,7 @@ void PascalParser::unsignedInteger() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_41);
+			consumeUntil(_tokenSet_43);
 		} else {
 			throw;
 		}
@@ -4072,14 +4468,14 @@ void PascalParser::arrayType() {
 	RefPascalAST arrayType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp140_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp162_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp140_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp140_AST));
+			tmp162_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp162_AST));
 		}
 		match(ARRAY);
 		match(LBRACK);
-		ordinalType();
+		arrayIndexType();
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
@@ -4087,17 +4483,17 @@ void PascalParser::arrayType() {
 		for (;;) {
 			if ((LA(1) == COMMA)) {
 				match(COMMA);
-				ordinalType();
+				arrayIndexType();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 				}
 			}
 			else {
-				goto _loop140;
+				goto _loop161;
 			}
 			
 		}
-		_loop140:;
+		_loop161:;
 		} // ( ... )*
 		match(RBRACK);
 		match(OF);
@@ -4111,7 +4507,7 @@ void PascalParser::arrayType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4125,10 +4521,10 @@ void PascalParser::recordType() {
 	RefPascalAST recordType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp145_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp167_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp145_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp145_AST));
+			tmp167_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp167_AST));
 		}
 		match(RECORD);
 		{ // ( ... )*
@@ -4140,11 +4536,11 @@ void PascalParser::recordType() {
 				}
 			}
 			else {
-				goto _loop143;
+				goto _loop168;
 			}
 			
 		}
-		_loop143:;
+		_loop168:;
 		} // ( ... )*
 		match(END);
 		recordType_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -4153,7 +4549,7 @@ void PascalParser::recordType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4167,10 +4563,10 @@ void PascalParser::objectType() {
 	RefPascalAST objectType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp147_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp169_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp147_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp147_AST));
+			tmp169_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp169_AST));
 		}
 		match(OBJECT);
 		{
@@ -4239,7 +4635,7 @@ void PascalParser::objectType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4253,10 +4649,10 @@ void PascalParser::classType() {
 	RefPascalAST classType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp149_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp171_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp149_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp149_AST));
+			tmp171_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp171_AST));
 		}
 		match(CLASS);
 		{
@@ -4331,7 +4727,7 @@ void PascalParser::classType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4345,10 +4741,10 @@ void PascalParser::setType() {
 	RefPascalAST setType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp151_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp173_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp151_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp151_AST));
+			tmp173_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp173_AST));
 		}
 		match(SET);
 		match(OF);
@@ -4362,7 +4758,7 @@ void PascalParser::setType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4376,10 +4772,10 @@ void PascalParser::fileType() {
 	RefPascalAST fileType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp153_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp175_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp153_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp153_AST));
+			tmp175_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp175_AST));
 		}
 		match(FILE);
 		match(OF);
@@ -4393,12 +4789,103 @@ void PascalParser::fileType() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
 	}
 	returnAST = fileType_AST;
+}
+
+void PascalParser::arrayIndexType() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST arrayIndexType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		if (((LA(1) >= INTEGER && LA(1) <= CHAR))) {
+			ordinalType();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			arrayIndexType_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else {
+			bool synPredMatched164 = false;
+			if (((_tokenSet_36.member(LA(1))) && (_tokenSet_44.member(LA(2))))) {
+				int _m164 = mark();
+				synPredMatched164 = true;
+				inputState->guessing++;
+				try {
+					{
+					expression();
+					match(DOTDOT);
+					}
+				}
+				catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
+					synPredMatched164 = false;
+				}
+				rewind(_m164);
+				inputState->guessing--;
+			}
+			if ( synPredMatched164 ) {
+				arraySubrangeType();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				arrayIndexType_AST = static_cast<RefPascalAST>(currentAST.root);
+			}
+			else if ((LA(1) == LPAREN) && (LA(2) == IDENT)) {
+				enumeratedType();
+				if (inputState->guessing==0) {
+					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+				}
+				arrayIndexType_AST = static_cast<RefPascalAST>(currentAST.root);
+			}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_45);
+		} else {
+			throw;
+		}
+	}
+	returnAST = arrayIndexType_AST;
+}
+
+void PascalParser::arraySubrangeType() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST arraySubrangeType_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		expression();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		match(DOTDOT);
+		expression();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		arraySubrangeType_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_45);
+		} else {
+			throw;
+		}
+	}
+	returnAST = arraySubrangeType_AST;
 }
 
 void PascalParser::fieldList() {
@@ -4436,7 +4923,7 @@ void PascalParser::fieldList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_42);
+			consumeUntil(_tokenSet_46);
 		} else {
 			throw;
 		}
@@ -4466,7 +4953,7 @@ void PascalParser::fixedField() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_42);
+			consumeUntil(_tokenSet_46);
 		} else {
 			throw;
 		}
@@ -4480,10 +4967,10 @@ void PascalParser::variantPart() {
 	RefPascalAST variantPart_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp157_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp180_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp157_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp157_AST));
+			tmp180_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp180_AST));
 		}
 		match(CASE);
 		{
@@ -4520,11 +5007,11 @@ void PascalParser::variantPart() {
 				}
 			}
 			else {
-				goto _loop149;
+				goto _loop174;
 			}
 			
 		}
-		_loop149:;
+		_loop174:;
 		} // ( ... )*
 		variantPart_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -4532,7 +5019,7 @@ void PascalParser::variantPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_42);
+			consumeUntil(_tokenSet_46);
 		} else {
 			throw;
 		}
@@ -4547,9 +5034,9 @@ void PascalParser::variant() {
 	
 	try {      // for error handling
 		{ // ( ... )+
-		int _cnt152=0;
+		int _cnt177=0;
 		for (;;) {
-			if ((_tokenSet_31.member(LA(1)))) {
+			if ((_tokenSet_33.member(LA(1)))) {
 				constant();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -4557,12 +5044,12 @@ void PascalParser::variant() {
 				match(COMMA);
 			}
 			else {
-				if ( _cnt152>=1 ) { goto _loop152; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+				if ( _cnt177>=1 ) { goto _loop177; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
 			}
 			
-			_cnt152++;
+			_cnt177++;
 		}
-		_loop152:;
+		_loop177:;
 		}  // ( ... )+
 		match(COLON);
 		match(LPAREN);
@@ -4575,11 +5062,11 @@ void PascalParser::variant() {
 				}
 			}
 			else {
-				goto _loop154;
+				goto _loop179;
 			}
 			
 		}
-		_loop154:;
+		_loop179:;
 		} // ( ... )*
 		match(RPAREN);
 		variant_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -4588,7 +5075,7 @@ void PascalParser::variant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_43);
+			consumeUntil(_tokenSet_47);
 		} else {
 			throw;
 		}
@@ -4653,7 +5140,7 @@ void PascalParser::proceduralTypePart1() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_22);
+			consumeUntil(_tokenSet_23);
 		} else {
 			throw;
 		}
@@ -4679,7 +5166,7 @@ void PascalParser::heritage() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_44);
+			consumeUntil(_tokenSet_48);
 		} else {
 			throw;
 		}
@@ -4698,7 +5185,7 @@ void PascalParser::componentList() {
 		case IDENT:
 		{
 			{ // ( ... )+
-			int _cnt171=0;
+			int _cnt196=0;
 			for (;;) {
 				if ((LA(1) == IDENT)) {
 					fieldDefinition();
@@ -4707,12 +5194,12 @@ void PascalParser::componentList() {
 					}
 				}
 				else {
-					if ( _cnt171>=1 ) { goto _loop171; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+					if ( _cnt196>=1 ) { goto _loop196; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt171++;
+				_cnt196++;
 			}
-			_loop171:;
+			_loop196:;
 			}  // ( ... )+
 			break;
 		}
@@ -4738,21 +5225,21 @@ void PascalParser::componentList() {
 		case DESTRUCTOR:
 		{
 			{ // ( ... )+
-			int _cnt174=0;
+			int _cnt199=0;
 			for (;;) {
-				if ((_tokenSet_45.member(LA(1)))) {
+				if ((_tokenSet_49.member(LA(1)))) {
 					methodDefinition();
 					if (inputState->guessing==0) {
 						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 					}
 				}
 				else {
-					if ( _cnt174>=1 ) { goto _loop174; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+					if ( _cnt199>=1 ) { goto _loop199; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt174++;
+				_cnt199++;
 			}
-			_loop174:;
+			_loop199:;
 			}  // ( ... )+
 			break;
 		}
@@ -4772,7 +5259,7 @@ void PascalParser::componentList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
@@ -4815,7 +5302,7 @@ void PascalParser::objectVisibilitySpecifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
@@ -4845,7 +5332,7 @@ void PascalParser::fieldDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_46);
+			consumeUntil(_tokenSet_50);
 		} else {
 			throw;
 		}
@@ -4910,7 +5397,7 @@ void PascalParser::methodDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_47);
+			consumeUntil(_tokenSet_51);
 		} else {
 			throw;
 		}
@@ -4924,10 +5411,10 @@ void PascalParser::constructorHeader() {
 	RefPascalAST constructorHeader_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp175_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp198_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp175_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp175_AST));
+			tmp198_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp198_AST));
 		}
 		match(CONSTRUCTOR);
 		{
@@ -4958,7 +5445,7 @@ void PascalParser::constructorHeader() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -4972,10 +5459,10 @@ void PascalParser::destructorHeader() {
 	RefPascalAST destructorHeader_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp176_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp199_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp176_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp176_AST));
+			tmp199_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp199_AST));
 		}
 		match(DESTRUCTOR);
 		{
@@ -5006,7 +5493,7 @@ void PascalParser::destructorHeader() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -5124,7 +5611,7 @@ void PascalParser::methodDirectives() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_47);
+			consumeUntil(_tokenSet_51);
 		} else {
 			throw;
 		}
@@ -5143,7 +5630,7 @@ void PascalParser::classComponentList() {
 		case IDENT:
 		{
 			{ // ( ... )+
-			int _cnt195=0;
+			int _cnt220=0;
 			for (;;) {
 				if ((LA(1) == IDENT)) {
 					fieldDefinition();
@@ -5152,12 +5639,12 @@ void PascalParser::classComponentList() {
 					}
 				}
 				else {
-					if ( _cnt195>=1 ) { goto _loop195; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+					if ( _cnt220>=1 ) { goto _loop220; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt195++;
+				_cnt220++;
 			}
-			_loop195:;
+			_loop220:;
 			}  // ( ... )+
 			break;
 		}
@@ -5187,9 +5674,9 @@ void PascalParser::classComponentList() {
 		case PROPERTY:
 		{
 			{ // ( ... )+
-			int _cnt199=0;
+			int _cnt224=0;
 			for (;;) {
-				if ((_tokenSet_48.member(LA(1)))) {
+				if ((_tokenSet_52.member(LA(1)))) {
 					{
 					switch ( LA(1)) {
 					case PROCEDURE:
@@ -5220,12 +5707,12 @@ void PascalParser::classComponentList() {
 					}
 				}
 				else {
-					if ( _cnt199>=1 ) { goto _loop199; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
+					if ( _cnt224>=1 ) { goto _loop224; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());}
 				}
 				
-				_cnt199++;
+				_cnt224++;
 			}
-			_loop199:;
+			_loop224:;
 			}  // ( ... )+
 			break;
 		}
@@ -5245,7 +5732,7 @@ void PascalParser::classComponentList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
@@ -5294,7 +5781,7 @@ void PascalParser::classVisibilitySpecifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
@@ -5393,7 +5880,7 @@ void PascalParser::classMethodDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_49);
+			consumeUntil(_tokenSet_53);
 		} else {
 			throw;
 		}
@@ -5407,10 +5894,10 @@ void PascalParser::propertyDefinition() {
 	RefPascalAST propertyDefinition_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp188_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp211_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp188_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp188_AST));
+			tmp211_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp211_AST));
 		}
 		match(PROPERTY);
 		identifier();
@@ -5458,7 +5945,7 @@ void PascalParser::propertyDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_49);
+			consumeUntil(_tokenSet_53);
 		} else {
 			throw;
 		}
@@ -5553,7 +6040,7 @@ void PascalParser::classMethodDirectives() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_49);
+			consumeUntil(_tokenSet_53);
 		} else {
 			throw;
 		}
@@ -5645,7 +6132,7 @@ void PascalParser::directiveVariants() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_21);
+			consumeUntil(_tokenSet_22);
 		} else {
 			throw;
 		}
@@ -5688,10 +6175,10 @@ void PascalParser::propertyInterface() {
 		switch ( LA(1)) {
 		case LITERAL_index:
 		{
-			RefPascalAST tmp197_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp220_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp197_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp197_AST));
+				tmp220_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp220_AST));
 			}
 			match(LITERAL_index);
 			integerConstant();
@@ -5726,7 +6213,7 @@ void PascalParser::propertyInterface() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_50);
+			consumeUntil(_tokenSet_54);
 		} else {
 			throw;
 		}
@@ -5830,7 +6317,7 @@ void PascalParser::propertySpecifiers() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_49);
+			consumeUntil(_tokenSet_53);
 		} else {
 			throw;
 		}
@@ -5859,11 +6346,11 @@ void PascalParser::propertyParameterList() {
 				}
 			}
 			else {
-				goto _loop221;
+				goto _loop246;
 			}
 			
 		}
-		_loop221:;
+		_loop246:;
 		} // ( ... )*
 		match(RBRACK);
 		propertyParameterList_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -5872,7 +6359,7 @@ void PascalParser::propertyParameterList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_51);
+			consumeUntil(_tokenSet_55);
 		} else {
 			throw;
 		}
@@ -5886,10 +6373,10 @@ void PascalParser::readSpecifier() {
 	RefPascalAST readSpecifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp201_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp224_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp201_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp201_AST));
+			tmp224_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp224_AST));
 		}
 		match(LITERAL_read);
 		fieldOrMethod();
@@ -5902,7 +6389,7 @@ void PascalParser::readSpecifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_52);
+			consumeUntil(_tokenSet_56);
 		} else {
 			throw;
 		}
@@ -5916,10 +6403,10 @@ void PascalParser::writeSpecifier() {
 	RefPascalAST writeSpecifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp202_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp225_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp202_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp202_AST));
+			tmp225_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp225_AST));
 		}
 		match(LITERAL_write);
 		fieldOrMethod();
@@ -5932,7 +6419,7 @@ void PascalParser::writeSpecifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_53);
+			consumeUntil(_tokenSet_57);
 		} else {
 			throw;
 		}
@@ -5950,10 +6437,10 @@ void PascalParser::defaultSpecifier() {
 		case DEFAULT:
 		{
 			{
-			RefPascalAST tmp203_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp226_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp203_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp203_AST));
+				tmp226_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp226_AST));
 			}
 			match(DEFAULT);
 			{
@@ -5994,10 +6481,10 @@ void PascalParser::defaultSpecifier() {
 		}
 		case LITERAL_nodefault:
 		{
-			RefPascalAST tmp204_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp227_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp204_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp204_AST));
+				tmp227_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp227_AST));
 			}
 			match(LITERAL_nodefault);
 			defaultSpecifier_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -6013,7 +6500,7 @@ void PascalParser::defaultSpecifier() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_49);
+			consumeUntil(_tokenSet_53);
 		} else {
 			throw;
 		}
@@ -6037,7 +6524,7 @@ void PascalParser::fieldOrMethod() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_52);
+			consumeUntil(_tokenSet_56);
 		} else {
 			throw;
 		}
@@ -6092,11 +6579,11 @@ void PascalParser::simpleExpression() {
 				}
 			}
 			else {
-				goto _loop238;
+				goto _loop263;
 			}
 			
 		}
-		_loop238:;
+		_loop263:;
 		} // ( ... )*
 		simpleExpression_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -6104,7 +6591,7 @@ void PascalParser::simpleExpression() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_54);
+			consumeUntil(_tokenSet_58);
 		} else {
 			throw;
 		}
@@ -6171,7 +6658,7 @@ void PascalParser::expressionSign() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_34);
+			consumeUntil(_tokenSet_36);
 		} else {
 			throw;
 		}
@@ -6241,11 +6728,11 @@ void PascalParser::term() {
 				}
 			}
 			else {
-				goto _loop242;
+				goto _loop267;
 			}
 			
 		}
-		_loop242:;
+		_loop267:;
 		} // ( ... )*
 		term_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -6253,7 +6740,7 @@ void PascalParser::term() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_55);
+			consumeUntil(_tokenSet_59);
 		} else {
 			throw;
 		}
@@ -6363,6 +6850,28 @@ void PascalParser::factor() {
 			factor_AST = static_cast<RefPascalAST>(currentAST.root);
 			break;
 		}
+		case TRUE:
+		{
+			RefPascalAST tmp251_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			if ( inputState->guessing == 0 ) {
+				tmp251_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp251_AST));
+			}
+			match(TRUE);
+			factor_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
+		case FALSE:
+		{
+			RefPascalAST tmp252_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			if ( inputState->guessing == 0 ) {
+				tmp252_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp252_AST));
+			}
+			match(FALSE);
+			factor_AST = static_cast<RefPascalAST>(currentAST.root);
+			break;
+		}
 		default:
 		{
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -6373,7 +6882,7 @@ void PascalParser::factor() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_56);
+			consumeUntil(_tokenSet_60);
 		} else {
 			throw;
 		}
@@ -6387,10 +6896,10 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 	RefPascalAST identifierOrValueTypecastOrFunctionCall_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		bool synPredMatched250 = false;
+		bool synPredMatched275 = false;
 		if (((LA(1) == IDENT) && (LA(2) == LPAREN))) {
-			int _m250 = mark();
-			synPredMatched250 = true;
+			int _m275 = mark();
+			synPredMatched275 = true;
 			inputState->guessing++;
 			try {
 				{
@@ -6401,12 +6910,12 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 				}
 			}
 			catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-				synPredMatched250 = false;
+				synPredMatched275 = false;
 			}
-			rewind(_m250);
+			rewind(_m275);
 			inputState->guessing--;
 		}
-		if ( synPredMatched250 ) {
+		if ( synPredMatched275 ) {
 			identifier();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -6420,10 +6929,10 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 			identifierOrValueTypecastOrFunctionCall_AST = static_cast<RefPascalAST>(currentAST.root);
 		}
 		else {
-			bool synPredMatched252 = false;
+			bool synPredMatched277 = false;
 			if (((LA(1) == IDENT) && (LA(2) == LPAREN))) {
-				int _m252 = mark();
-				synPredMatched252 = true;
+				int _m277 = mark();
+				synPredMatched277 = true;
 				inputState->guessing++;
 				try {
 					{
@@ -6434,12 +6943,12 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 					}
 				}
 				catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& pe) {
-					synPredMatched252 = false;
+					synPredMatched277 = false;
 				}
-				rewind(_m252);
+				rewind(_m277);
 				inputState->guessing--;
 			}
-			if ( synPredMatched252 ) {
+			if ( synPredMatched277 ) {
 				identifier();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -6452,7 +6961,7 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 				match(RPAREN);
 				identifierOrValueTypecastOrFunctionCall_AST = static_cast<RefPascalAST>(currentAST.root);
 			}
-			else if ((LA(1) == IDENT) && (_tokenSet_56.member(LA(2)))) {
+			else if ((LA(1) == IDENT) && (_tokenSet_60.member(LA(2)))) {
 				identifier();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -6468,7 +6977,7 @@ void PascalParser::identifierOrValueTypecastOrFunctionCall() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_56);
+			consumeUntil(_tokenSet_60);
 		} else {
 			throw;
 		}
@@ -6527,7 +7036,7 @@ void PascalParser::unsignedConstant() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_56);
+			consumeUntil(_tokenSet_60);
 		} else {
 			throw;
 		}
@@ -6550,6 +7059,8 @@ void PascalParser::setConstructor() {
 		case PLUS:
 		case MINUS:
 		case NOT:
+		case TRUE:
+		case FALSE:
 		case AT:
 		case STRING_LITERAL:
 		case CHR:
@@ -6571,11 +7082,11 @@ void PascalParser::setConstructor() {
 					}
 				}
 				else {
-					goto _loop263;
+					goto _loop288;
 				}
 				
 			}
-			_loop263:;
+			_loop288:;
 			} // ( ... )*
 			break;
 		}
@@ -6596,7 +7107,7 @@ void PascalParser::setConstructor() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_56);
+			consumeUntil(_tokenSet_60);
 		} else {
 			throw;
 		}
@@ -6621,7 +7132,7 @@ void PascalParser::addressFactor() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_56);
+			consumeUntil(_tokenSet_60);
 		} else {
 			throw;
 		}
@@ -6649,11 +7160,11 @@ void PascalParser::expressions() {
 				}
 			}
 			else {
-				goto _loop259;
+				goto _loop284;
 			}
 			
 		}
-		_loop259:;
+		_loop284:;
 		} // ( ... )*
 		expressions_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -6661,7 +7172,7 @@ void PascalParser::expressions() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_40);
+			consumeUntil(_tokenSet_42);
 		} else {
 			throw;
 		}
@@ -6712,7 +7223,7 @@ void PascalParser::functionCall() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_57);
+			consumeUntil(_tokenSet_61);
 		} else {
 			throw;
 		}
@@ -6735,6 +7246,8 @@ void PascalParser::actualParameterList() {
 		case PLUS:
 		case MINUS:
 		case NOT:
+		case TRUE:
+		case FALSE:
 		case AT:
 		case STRING_LITERAL:
 		case CHR:
@@ -6765,7 +7278,7 @@ void PascalParser::actualParameterList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_57);
+			consumeUntil(_tokenSet_61);
 		} else {
 			throw;
 		}
@@ -6812,7 +7325,7 @@ void PascalParser::setGroup() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_58);
+			consumeUntil(_tokenSet_45);
 		} else {
 			throw;
 		}
@@ -6876,14 +7389,14 @@ void PascalParser::simpleStatement() {
 			break;
 		}
 		default:
-			if ((LA(1) == IDENT) && (_tokenSet_59.member(LA(2)))) {
+			if ((LA(1) == IDENT) && (_tokenSet_62.member(LA(2)))) {
 				assignmentStatement();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 				}
 				simpleStatement_AST = static_cast<RefPascalAST>(currentAST.root);
 			}
-			else if ((LA(1) == IDENT) && (_tokenSet_60.member(LA(2)))) {
+			else if ((LA(1) == IDENT) && (_tokenSet_63.member(LA(2)))) {
 				procedureStatement();
 				if (inputState->guessing==0) {
 					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -6899,7 +7412,7 @@ void PascalParser::simpleStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -6972,7 +7485,7 @@ void PascalParser::structuredStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7004,7 +7517,7 @@ void PascalParser::assignmentStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7054,7 +7567,7 @@ void PascalParser::procedureStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7079,7 +7592,7 @@ void PascalParser::gotoStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7093,10 +7606,10 @@ void PascalParser::raiseStatement() {
 	RefPascalAST raiseStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp245_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp270_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp245_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp245_AST));
+			tmp270_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp270_AST));
 		}
 		match(RAISE);
 		{
@@ -7158,7 +7671,7 @@ void PascalParser::raiseStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7181,10 +7694,10 @@ void PascalParser::assignmentOperator() {
 		}
 		case PLUSEQ:
 		{
-			RefPascalAST tmp248_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp273_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp248_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp248_AST));
+				tmp273_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp273_AST));
 			}
 			match(PLUSEQ);
 			assignmentOperator_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -7192,10 +7705,10 @@ void PascalParser::assignmentOperator() {
 		}
 		case MINUSEQ:
 		{
-			RefPascalAST tmp249_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp274_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp249_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp249_AST));
+				tmp274_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp274_AST));
 			}
 			match(MINUSEQ);
 			assignmentOperator_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -7203,10 +7716,10 @@ void PascalParser::assignmentOperator() {
 		}
 		case STAREQ:
 		{
-			RefPascalAST tmp250_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp275_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp250_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp250_AST));
+				tmp275_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp275_AST));
 			}
 			match(STAREQ);
 			assignmentOperator_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -7214,10 +7727,10 @@ void PascalParser::assignmentOperator() {
 		}
 		case SLASHQE:
 		{
-			RefPascalAST tmp251_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp276_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp251_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp251_AST));
+				tmp276_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp276_AST));
 			}
 			match(SLASHQE);
 			assignmentOperator_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -7233,12 +7746,71 @@ void PascalParser::assignmentOperator() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_34);
+			consumeUntil(_tokenSet_36);
 		} else {
 			throw;
 		}
 	}
 	returnAST = assignmentOperator_AST;
+}
+
+void PascalParser::identifierOrArrayIdentifier() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST identifierOrArrayIdentifier_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
+		if ((LA(1) == IDENT) && (LA(2) == ANTLR_USE_NAMESPACE(antlr)Token::EOF_TYPE)) {
+			identifier();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			identifierOrArrayIdentifier_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else if ((LA(1) == IDENT) && (LA(2) == LBRACK)) {
+			identifier();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			match(LBRACK);
+			arrayIndexType();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			{ // ( ... )*
+			for (;;) {
+				if ((LA(1) == COMMA)) {
+					match(COMMA);
+					arrayIndexType();
+					if (inputState->guessing==0) {
+						astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+					}
+				}
+				else {
+					goto _loop300;
+				}
+				
+			}
+			_loop300:;
+			} // ( ... )*
+			match(RBRACK);
+			identifierOrArrayIdentifier_AST = static_cast<RefPascalAST>(currentAST.root);
+		}
+		else {
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_0);
+		} else {
+			throw;
+		}
+	}
+	returnAST = identifierOrArrayIdentifier_AST;
 }
 
 void PascalParser::repetitiveStatement() {
@@ -7285,7 +7857,7 @@ void PascalParser::repetitiveStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7328,7 +7900,7 @@ void PascalParser::conditionalStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7352,7 +7924,7 @@ void PascalParser::exceptionStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7366,10 +7938,10 @@ void PascalParser::withStatement() {
 	RefPascalAST withStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp252_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp280_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp252_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp252_AST));
+			tmp280_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp280_AST));
 		}
 		match(WITH);
 		recordVariableList();
@@ -7387,7 +7959,7 @@ void PascalParser::withStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7401,10 +7973,10 @@ void PascalParser::ifStatement() {
 	RefPascalAST ifStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp254_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp282_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp254_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp254_AST));
+			tmp282_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp282_AST));
 		}
 		match(IF);
 		expression();
@@ -7417,14 +7989,14 @@ void PascalParser::ifStatement() {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
 		{
-		if ((LA(1) == ELSE) && (_tokenSet_61.member(LA(2)))) {
+		if ((LA(1) == ELSE) && (_tokenSet_24.member(LA(2)))) {
 			match(ELSE);
 			statement();
 			if (inputState->guessing==0) {
 				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 			}
 		}
-		else if ((_tokenSet_15.member(LA(1))) && (_tokenSet_62.member(LA(2)))) {
+		else if ((_tokenSet_16.member(LA(1))) && (_tokenSet_64.member(LA(2)))) {
 		}
 		else {
 			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
@@ -7437,7 +8009,7 @@ void PascalParser::ifStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7451,10 +8023,10 @@ void PascalParser::caseStatement() {
 	RefPascalAST caseStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp257_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp285_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp257_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp257_AST));
+			tmp285_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp285_AST));
 		}
 		match(CASE);
 		expression();
@@ -7468,7 +8040,7 @@ void PascalParser::caseStatement() {
 		}
 		{ // ( ... )*
 		for (;;) {
-			if ((LA(1) == SEMI) && (_tokenSet_31.member(LA(2)))) {
+			if ((LA(1) == SEMI) && (_tokenSet_33.member(LA(2)))) {
 				match(SEMI);
 				caseListElement();
 				if (inputState->guessing==0) {
@@ -7476,11 +8048,11 @@ void PascalParser::caseStatement() {
 				}
 			}
 			else {
-				goto _loop287;
+				goto _loop318;
 			}
 			
 		}
-		_loop287:;
+		_loop318:;
 		} // ( ... )*
 		{
 		switch ( LA(1)) {
@@ -7502,11 +8074,11 @@ void PascalParser::caseStatement() {
 					}
 				}
 				else {
-					goto _loop290;
+					goto _loop321;
 				}
 				
 			}
-			_loop290:;
+			_loop321:;
 			} // ( ... )*
 			break;
 		}
@@ -7527,7 +8099,7 @@ void PascalParser::caseStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7541,10 +8113,10 @@ void PascalParser::forStatement() {
 	RefPascalAST forStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp264_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp292_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp264_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp264_AST));
+			tmp292_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp292_AST));
 		}
 		match(FOR);
 		identifier();
@@ -7567,7 +8139,7 @@ void PascalParser::forStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7581,10 +8153,10 @@ void PascalParser::repeatStatement() {
 	RefPascalAST repeatStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp267_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp295_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp267_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp267_AST));
+			tmp295_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp295_AST));
 		}
 		match(REPEAT);
 		statement();
@@ -7601,11 +8173,11 @@ void PascalParser::repeatStatement() {
 				}
 			}
 			else {
-				goto _loop298;
+				goto _loop329;
 			}
 			
 		}
-		_loop298:;
+		_loop329:;
 		} // ( ... )*
 		match(UNTIL);
 		expression();
@@ -7618,7 +8190,7 @@ void PascalParser::repeatStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7632,10 +8204,10 @@ void PascalParser::whileStatement() {
 	RefPascalAST whileStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp270_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp298_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp270_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp270_AST));
+			tmp298_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp298_AST));
 		}
 		match(WHILE);
 		expression();
@@ -7653,7 +8225,7 @@ void PascalParser::whileStatement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_16);
 		} else {
 			throw;
 		}
@@ -7671,10 +8243,10 @@ void PascalParser::caseListElement() {
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
 		}
-		RefPascalAST tmp272_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp300_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp272_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp272_AST));
+			tmp300_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp300_AST));
 		}
 		match(COLON);
 		statement();
@@ -7687,7 +8259,7 @@ void PascalParser::caseListElement() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_63);
+			consumeUntil(_tokenSet_65);
 		} else {
 			throw;
 		}
@@ -7715,17 +8287,17 @@ void PascalParser::constList() {
 				}
 			}
 			else {
-				goto _loop294;
+				goto _loop325;
 			}
 			
 		}
-		_loop294:;
+		_loop325:;
 		} // ( ... )*
 		if ( inputState->guessing==0 ) {
 			constList_AST = RefPascalAST(currentAST.root);
-#line 705 "pascal.g"
+#line 745 "pascal.g"
 			constList_AST = RefPascalAST(astFactory->make((new ANTLR_USE_NAMESPACE(antlr)ASTArray(2))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(astFactory->create(CONSTLIST)))->add(static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(constList_AST))));
-#line 7729 "PascalParser.cpp"
+#line 8301 "PascalParser.cpp"
 			currentAST.root = constList_AST;
 			if ( constList_AST!=static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) &&
 				constList_AST->getFirstChild() != static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST) )
@@ -7740,7 +8312,7 @@ void PascalParser::constList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_51);
+			consumeUntil(_tokenSet_55);
 		} else {
 			throw;
 		}
@@ -7762,20 +8334,20 @@ void PascalParser::forList() {
 		switch ( LA(1)) {
 		case TO:
 		{
-			RefPascalAST tmp274_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp302_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp274_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp274_AST));
+				tmp302_AST = astFactory->create(LT(1));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp302_AST));
 			}
 			match(TO);
 			break;
 		}
 		case DOWNTO:
 		{
-			RefPascalAST tmp275_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp303_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp275_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp275_AST));
+				tmp303_AST = astFactory->create(LT(1));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp303_AST));
 			}
 			match(DOWNTO);
 			break;
@@ -7796,7 +8368,7 @@ void PascalParser::forList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_64);
+			consumeUntil(_tokenSet_66);
 		} else {
 			throw;
 		}
@@ -7820,7 +8392,7 @@ void PascalParser::initialValue() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_65);
+			consumeUntil(_tokenSet_67);
 		} else {
 			throw;
 		}
@@ -7844,7 +8416,7 @@ void PascalParser::finalValue() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_64);
+			consumeUntil(_tokenSet_66);
 		} else {
 			throw;
 		}
@@ -7872,11 +8444,11 @@ void PascalParser::recordVariableList() {
 				}
 			}
 			else {
-				goto _loop307;
+				goto _loop338;
 			}
 			
 		}
-		_loop307:;
+		_loop338:;
 		} // ( ... )*
 		recordVariableList_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -7884,7 +8456,7 @@ void PascalParser::recordVariableList() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_64);
+			consumeUntil(_tokenSet_66);
 		} else {
 			throw;
 		}
@@ -7917,10 +8489,10 @@ void PascalParser::variable() {
 		switch ( LA(1)) {
 		case AT:
 		{
-			RefPascalAST tmp277_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp305_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp277_AST = astFactory->create(LT(1));
-				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp277_AST));
+				tmp305_AST = astFactory->create(LT(1));
+				astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp305_AST));
 			}
 			match(AT);
 			identifier();
@@ -7948,10 +8520,10 @@ void PascalParser::variable() {
 			switch ( LA(1)) {
 			case LBRACK:
 			{
-				RefPascalAST tmp278_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefPascalAST tmp306_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				if ( inputState->guessing == 0 ) {
-					tmp278_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp278_AST));
+					tmp306_AST = astFactory->create(LT(1));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp306_AST));
 				}
 				match(LBRACK);
 				expression();
@@ -7968,21 +8540,21 @@ void PascalParser::variable() {
 						}
 					}
 					else {
-						goto _loop312;
+						goto _loop343;
 					}
 					
 				}
-				_loop312:;
+				_loop343:;
 				} // ( ... )*
 				match(RBRACK);
 				break;
 			}
 			case LBRACK2:
 			{
-				RefPascalAST tmp281_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefPascalAST tmp309_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				if ( inputState->guessing == 0 ) {
-					tmp281_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp281_AST));
+					tmp309_AST = astFactory->create(LT(1));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp309_AST));
 				}
 				match(LBRACK2);
 				expression();
@@ -7999,21 +8571,21 @@ void PascalParser::variable() {
 						}
 					}
 					else {
-						goto _loop314;
+						goto _loop345;
 					}
 					
 				}
-				_loop314:;
+				_loop345:;
 				} // ( ... )*
 				match(RBRACK2);
 				break;
 			}
 			case DOT:
 			{
-				RefPascalAST tmp284_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefPascalAST tmp312_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				if ( inputState->guessing == 0 ) {
-					tmp284_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp284_AST));
+					tmp312_AST = astFactory->create(LT(1));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp312_AST));
 				}
 				match(DOT);
 				identifier();
@@ -8024,21 +8596,21 @@ void PascalParser::variable() {
 			}
 			case POINTER:
 			{
-				RefPascalAST tmp285_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+				RefPascalAST tmp313_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 				if ( inputState->guessing == 0 ) {
-					tmp285_AST = astFactory->create(LT(1));
-					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp285_AST));
+					tmp313_AST = astFactory->create(LT(1));
+					astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp313_AST));
 				}
 				match(POINTER);
 				break;
 			}
 			default:
 			{
-				goto _loop315;
+				goto _loop346;
 			}
 			}
 		}
-		_loop315:;
+		_loop346:;
 		} // ( ... )*
 		variable_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
@@ -8046,7 +8618,7 @@ void PascalParser::variable() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_66);
+			consumeUntil(_tokenSet_68);
 		} else {
 			throw;
 		}
@@ -8060,10 +8632,10 @@ void PascalParser::operatorDefinition() {
 	RefPascalAST operatorDefinition_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp286_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp314_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp286_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp286_AST));
+			tmp314_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp314_AST));
 		}
 		match(OPERATOR);
 		{
@@ -8152,7 +8724,7 @@ void PascalParser::assignmentOperatorDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_67);
+			consumeUntil(_tokenSet_69);
 		} else {
 			throw;
 		}
@@ -8210,7 +8782,7 @@ void PascalParser::arithmeticOperatorDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_67);
+			consumeUntil(_tokenSet_69);
 		} else {
 			throw;
 		}
@@ -8269,7 +8841,7 @@ void PascalParser::comparisonOperatorDefinition() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_67);
+			consumeUntil(_tokenSet_69);
 		} else {
 			throw;
 		}
@@ -8283,12 +8855,69 @@ void PascalParser::tryStatement() {
 	RefPascalAST tryStatement_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp307_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp335_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp307_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp307_AST));
+			tmp335_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp335_AST));
 		}
 		match(TRY);
+		{
+		switch ( LA(1)) {
+		case BEGIN:
+		case NUM_INT:
+		case CASE:
+		case GOTO:
+		case IF:
+		case WHILE:
+		case REPEAT:
+		case FOR:
+		case WITH:
+		case RAISE:
+		case TRY:
+		case IDENT:
+		{
+			statements();
+			if (inputState->guessing==0) {
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+			}
+			break;
+		}
+		case EXCEPT:
+		case FINALLY:
+		{
+			break;
+		}
+		default:
+		{
+			throw ANTLR_USE_NAMESPACE(antlr)NoViableAltException(LT(1), getFilename());
+		}
+		}
+		}
+		exceptOrFinallyPart();
+		if (inputState->guessing==0) {
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
+		}
+		match(END);
+		tryStatement_AST = static_cast<RefPascalAST>(currentAST.root);
+	}
+	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
+		if( inputState->guessing == 0 ) {
+			reportError(ex);
+			consume();
+			consumeUntil(_tokenSet_16);
+		} else {
+			throw;
+		}
+	}
+	returnAST = tryStatement_AST;
+}
+
+void PascalParser::statements() {
+	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
+	RefPascalAST statements_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+	
+	try {      // for error handling
 		statement();
 		if (inputState->guessing==0) {
 			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
@@ -8303,29 +8932,24 @@ void PascalParser::tryStatement() {
 				}
 			}
 			else {
-				goto _loop330;
+				goto _loop366;
 			}
 			
 		}
-		_loop330:;
+		_loop366:;
 		} // ( ... )*
-		exceptOrFinallyPart();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		match(END);
-		tryStatement_AST = static_cast<RefPascalAST>(currentAST.root);
+		statements_AST = static_cast<RefPascalAST>(currentAST.root);
 	}
 	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_15);
+			consumeUntil(_tokenSet_70);
 		} else {
 			throw;
 		}
 	}
-	returnAST = tryStatement_AST;
+	returnAST = statements_AST;
 }
 
 void PascalParser::exceptOrFinallyPart() {
@@ -8420,7 +9044,7 @@ void PascalParser::exceptOrFinallyPart() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
@@ -8471,11 +9095,11 @@ void PascalParser::exceptionHandlers() {
 					}
 				}
 				else {
-					goto _loop339;
+					goto _loop369;
 				}
 				
 			}
-			_loop339:;
+			_loop369:;
 			} // ( ... )*
 			{
 			switch ( LA(1)) {
@@ -8511,52 +9135,12 @@ void PascalParser::exceptionHandlers() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_13);
+			consumeUntil(_tokenSet_6);
 		} else {
 			throw;
 		}
 	}
 	returnAST = exceptionHandlers_AST;
-}
-
-void PascalParser::statements() {
-	returnAST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	ANTLR_USE_NAMESPACE(antlr)ASTPair currentAST;
-	RefPascalAST statements_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
-	
-	try {      // for error handling
-		statement();
-		if (inputState->guessing==0) {
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-		}
-		{ // ( ... )*
-		for (;;) {
-			if ((LA(1) == SEMI)) {
-				match(SEMI);
-				statement();
-				if (inputState->guessing==0) {
-					astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(returnAST));
-				}
-			}
-			else {
-				goto _loop336;
-			}
-			
-		}
-		_loop336:;
-		} // ( ... )*
-		statements_AST = static_cast<RefPascalAST>(currentAST.root);
-	}
-	catch (ANTLR_USE_NAMESPACE(antlr)RecognitionException& ex) {
-		if( inputState->guessing == 0 ) {
-			reportError(ex);
-			consume();
-			consumeUntil(_tokenSet_13);
-		} else {
-			throw;
-		}
-	}
-	returnAST = statements_AST;
 }
 
 void PascalParser::exceptionHandler() {
@@ -8596,7 +9180,7 @@ void PascalParser::exceptionHandler() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_68);
+			consumeUntil(_tokenSet_71);
 		} else {
 			throw;
 		}
@@ -8613,10 +9197,10 @@ void PascalParser::sign() {
 		switch ( LA(1)) {
 		case PLUS:
 		{
-			RefPascalAST tmp318_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp345_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp318_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp318_AST));
+				tmp345_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp345_AST));
 			}
 			match(PLUS);
 			sign_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -8624,10 +9208,10 @@ void PascalParser::sign() {
 		}
 		case MINUS:
 		{
-			RefPascalAST tmp319_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+			RefPascalAST tmp346_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 			if ( inputState->guessing == 0 ) {
-				tmp319_AST = astFactory->create(LT(1));
-				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp319_AST));
+				tmp346_AST = astFactory->create(LT(1));
+				astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp346_AST));
 			}
 			match(MINUS);
 			sign_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -8643,7 +9227,7 @@ void PascalParser::sign() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_69);
+			consumeUntil(_tokenSet_72);
 		} else {
 			throw;
 		}
@@ -8657,10 +9241,10 @@ void PascalParser::constantChr() {
 	RefPascalAST constantChr_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp320_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp347_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp320_AST = astFactory->create(LT(1));
-			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp320_AST));
+			tmp347_AST = astFactory->create(LT(1));
+			astFactory->makeASTRoot(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp347_AST));
 		}
 		match(CHR);
 		match(LPAREN);
@@ -8675,7 +9259,7 @@ void PascalParser::constantChr() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_70);
+			consumeUntil(_tokenSet_73);
 		} else {
 			throw;
 		}
@@ -8718,7 +9302,7 @@ void PascalParser::unsignedNumber() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_71);
+			consumeUntil(_tokenSet_74);
 		} else {
 			throw;
 		}
@@ -8732,10 +9316,10 @@ void PascalParser::unsignedReal() {
 	RefPascalAST unsignedReal_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 	
 	try {      // for error handling
-		RefPascalAST tmp323_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
+		RefPascalAST tmp350_AST = static_cast<RefPascalAST>(ANTLR_USE_NAMESPACE(antlr)nullAST);
 		if ( inputState->guessing == 0 ) {
-			tmp323_AST = astFactory->create(LT(1));
-			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp323_AST));
+			tmp350_AST = astFactory->create(LT(1));
+			astFactory->addASTChild(currentAST, static_cast<ANTLR_USE_NAMESPACE(antlr)RefAST>(tmp350_AST));
 		}
 		match(NUM_REAL);
 		unsignedReal_AST = static_cast<RefPascalAST>(currentAST.root);
@@ -8744,7 +9328,7 @@ void PascalParser::unsignedReal() {
 		if( inputState->guessing == 0 ) {
 			reportError(ex);
 			consume();
-			consumeUntil(_tokenSet_71);
+			consumeUntil(_tokenSet_74);
 		} else {
 			throw;
 		}
@@ -8759,7 +9343,7 @@ RefPascalAST PascalParser::getAST()
 
 void PascalParser::initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory )
 {
-	factory.setMaxNodeType(188);
+	factory.setMaxNodeType(189);
 }
 const char* PascalParser::tokenNames[] = {
 	"<0>",
@@ -8787,13 +9371,13 @@ const char* PascalParser::tokenNames[] = {
 	"DOT",
 	"\"library\"",
 	"SEMI",
+	"\"end\"",
 	"\"exports\"",
 	"COMMA",
 	"\"index\"",
 	"\"name\"",
 	"\"uses\"",
 	"\"unit\"",
-	"\"end\"",
 	"\"interface\"",
 	"\"implementation\"",
 	"\"begin\"",
@@ -8818,6 +9402,7 @@ const char* PascalParser::tokenNames[] = {
 	"\"public\"",
 	"\"alias\"",
 	"INTERRUPT",
+	"\"export\"",
 	"\"register\"",
 	"\"pascal\"",
 	"\"cdecl\"",
@@ -8893,6 +9478,8 @@ const char* PascalParser::tokenNames[] = {
 	"\"shl\"",
 	"\"shr\"",
 	"\"not\"",
+	"\"true\"",
+	"\"false\"",
 	"AT",
 	"PLUSEQ",
 	"MINUSEQ",
@@ -8930,13 +9517,10 @@ const char* PascalParser::tokenNames[] = {
 	"\"break\"",
 	"\"continue\"",
 	"\"dispose\"",
-	"\"export\"",
 	"\"exit\"",
-	"\"false\"",
 	"\"inherited\"",
 	"\"new\"",
 	"\"self\"",
-	"\"true\"",
 	"METHOD",
 	"ADDSUBOR",
 	"ASSIGNEQUAL",
@@ -8950,6 +9534,7 @@ const char* PascalParser::tokenNames[] = {
 	"WS",
 	"COMMENT_1",
 	"COMMENT_2",
+	"COMMENT_3",
 	"EXPONENT",
 	0
 };
@@ -8957,20 +9542,20 @@ const char* PascalParser::tokenNames[] = {
 const unsigned long PascalParser::_tokenSet_0_data_[] = { 2UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // EOF 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_0(_tokenSet_0_data_,6);
-const unsigned long PascalParser::_tokenSet_1_data_[] = { 536870912UL, 177924UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_1_data_[] = { 1073741824UL, 177924UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
 // "uses" "begin" "label" "const" "resourcestring" "type" "var" "procedure" 
 // "function" "constructor" "destructor" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_1(_tokenSet_1_data_,8);
-const unsigned long PascalParser::_tokenSet_2_data_[] = { 2147483648UL, 177990UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "implementation" "begin" "initialization" "label" "const" "resourcestring" 
-// "type" "var" "procedure" "function" "constructor" "destructor" 
+const unsigned long PascalParser::_tokenSet_2_data_[] = { 100663296UL, 177990UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "exports" "implementation" "begin" "initialization" "label" "const" 
+// "resourcestring" "type" "var" "procedure" "function" "constructor" "destructor" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_2(_tokenSet_2_data_,8);
-const unsigned long PascalParser::_tokenSet_3_data_[] = { 2202009602UL, 177988UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI "exports" "end" "begin" "initialization" "label" "const" 
+const unsigned long PascalParser::_tokenSet_3_data_[] = { 121634818UL, 177988UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" "begin" "initialization" "label" "const" 
 // "resourcestring" "type" "var" "procedure" "function" "constructor" "destructor" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_3(_tokenSet_3_data_,8);
-const unsigned long PascalParser::_tokenSet_4_data_[] = { 2638217218UL, 706736UL, 2198011904UL, 4294965472UL, 104246523UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "index" "name" "end" LPAREN RPAREN "finalization" 
+const unsigned long PascalParser::_tokenSet_4_data_[] = { 994050050UL, 706736UL, 101056512UL, 4294963649UL, 833972167UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" COMMA "index" "name" LPAREN RPAREN "finalization" 
 // EQUAL COLON "procedure" "function" "of" DOTDOT ASSIGN LBRACK RBRACK 
 // POINTER "constructor" "destructor" "class" "property" "read" "write" 
 // "default" "nodefault" LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" 
@@ -8978,264 +9563,279 @@ const unsigned long PascalParser::_tokenSet_4_data_[] = { 2638217218UL, 706736UL
 // SLASHQE "then" "else" "do" "until" "to" "downto" LBRACK2 RBRACK2 "except" 
 // "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_4(_tokenSet_4_data_,12);
-const unsigned long PascalParser::_tokenSet_5_data_[] = { 4194304UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT 
+const unsigned long PascalParser::_tokenSet_5_data_[] = { 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "exports" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_5(_tokenSet_5_data_,6);
-const unsigned long PascalParser::_tokenSet_6_data_[] = { 71303168UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT COMMA 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_6(_tokenSet_6_data_,6);
-const unsigned long PascalParser::_tokenSet_7_data_[] = { 2503999490UL, 177988UL, 0UL, 63712UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "name" "end" "begin" "initialization" "label" "const" 
-// "resourcestring" "type" "var" "procedure" "function" "constructor" "destructor" 
-// "class" "property" "read" "write" "default" "nodefault" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_7(_tokenSet_7_data_,8);
-const unsigned long PascalParser::_tokenSet_8_data_[] = { 2638217218UL, 177988UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "index" "name" "end" "begin" "initialization" "label" 
-// "const" "resourcestring" "type" "var" "procedure" "function" "constructor" 
-// "destructor" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_8(_tokenSet_8_data_,8);
-const unsigned long PascalParser::_tokenSet_9_data_[] = { 16777216UL, 16416UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI RPAREN COLON RBRACK 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_9(_tokenSet_9_data_,8);
-const unsigned long PascalParser::_tokenSet_10_data_[] = { 0UL, 2UL, 0UL, 0UL, 0UL, 0UL };
-// "implementation" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_10(_tokenSet_10_data_,6);
-const unsigned long PascalParser::_tokenSet_11_data_[] = { 2147483648UL, 68UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "begin" "initialization" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_11(_tokenSet_11_data_,6);
-const unsigned long PascalParser::_tokenSet_12_data_[] = { 2147483648UL, 128UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "finalization" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_12(_tokenSet_12_data_,6);
-const unsigned long PascalParser::_tokenSet_13_data_[] = { 2147483648UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_6_data_[] = { 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // "end" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_6(_tokenSet_6_data_,6);
+const unsigned long PascalParser::_tokenSet_7_data_[] = { 100663296UL, 68UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "exports" "begin" "initialization" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_7(_tokenSet_7_data_,6);
+const unsigned long PascalParser::_tokenSet_8_data_[] = { 184549376UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" COMMA 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_8(_tokenSet_8_data_,6);
+const unsigned long PascalParser::_tokenSet_9_data_[] = { 788529154UL, 177988UL, 0UL, 127424UL, 0UL, 0UL, 0UL, 0UL };
+// EOF SEMI "end" "exports" COMMA "name" "begin" "initialization" "label" 
+// "const" "resourcestring" "type" "var" "procedure" "function" "constructor" 
+// "destructor" "class" "property" "read" "write" "default" "nodefault" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_9(_tokenSet_9_data_,8);
+const unsigned long PascalParser::_tokenSet_10_data_[] = { 1056964610UL, 177988UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// EOF SEMI "end" "exports" COMMA "index" "name" "begin" "initialization" 
+// "label" "const" "resourcestring" "type" "var" "procedure" "function" 
+// "constructor" "destructor" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_10(_tokenSet_10_data_,8);
+const unsigned long PascalParser::_tokenSet_11_data_[] = { 16777216UL, 16416UL, 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI RPAREN COLON RBRACK 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_11(_tokenSet_11_data_,8);
+const unsigned long PascalParser::_tokenSet_12_data_[] = { 0UL, 2UL, 0UL, 0UL, 0UL, 0UL };
+// "implementation" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_12(_tokenSet_12_data_,6);
+const unsigned long PascalParser::_tokenSet_13_data_[] = { 33554432UL, 68UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "begin" "initialization" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_13(_tokenSet_13_data_,6);
-const unsigned long PascalParser::_tokenSet_14_data_[] = { 0UL, 168450UL, 0UL, 0UL, 0UL, 0UL };
-// "implementation" "const" "type" "procedure" "function" 
+const unsigned long PascalParser::_tokenSet_14_data_[] = { 33554432UL, 128UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "finalization" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_14(_tokenSet_14_data_,6);
-const unsigned long PascalParser::_tokenSet_15_data_[] = { 2164260864UL, 128UL, 0UL, 0UL, 100698112UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_15_data_[] = { 0UL, 168450UL, 0UL, 0UL, 0UL, 0UL };
+// "implementation" "const" "type" "procedure" "function" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_15(_tokenSet_15_data_,6);
+const unsigned long PascalParser::_tokenSet_16_data_[] = { 50331648UL, 128UL, 0UL, 0UL, 805584896UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // SEMI "end" "finalization" "else" "until" "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_15(_tokenSet_15_data_,12);
-const unsigned long PascalParser::_tokenSet_16_data_[] = { 2147483648UL, 177988UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "begin" "initialization" "label" "const" "resourcestring" "type" 
-// "var" "procedure" "function" "constructor" "destructor" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_16(_tokenSet_16_data_,8);
-const unsigned long PascalParser::_tokenSet_17_data_[] = { 2231369728UL, 16512UL, 0UL, 0UL, 100698112UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI COMMA "end" "finalization" COLON "else" "until" "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_17(_tokenSet_17_data_,12);
-const unsigned long PascalParser::_tokenSet_18_data_[] = { 2147483648UL, 177990UL, 0UL, 96UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "implementation" "begin" "initialization" "label" "const" "resourcestring" 
-// "type" "var" "procedure" "function" "constructor" "destructor" IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_16(_tokenSet_16_data_,12);
+const unsigned long PascalParser::_tokenSet_17_data_[] = { 100663296UL, 177988UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "exports" "begin" "initialization" "label" "const" "resourcestring" 
+// "type" "var" "procedure" "function" "constructor" "destructor" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_17(_tokenSet_17_data_,8);
+const unsigned long PascalParser::_tokenSet_18_data_[] = { 184549376UL, 16512UL, 0UL, 0UL, 805584896UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" COMMA "finalization" COLON "else" "until" "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_18(_tokenSet_18_data_,12);
-const unsigned long PascalParser::_tokenSet_19_data_[] = { 2147483648UL, 177988UL, 0UL, 96UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "end" "begin" "initialization" "label" "const" "resourcestring" "type" 
-// "var" "procedure" "function" "constructor" "destructor" IDENT 
+const unsigned long PascalParser::_tokenSet_19_data_[] = { 100663296UL, 177990UL, 0UL, 192UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "exports" "implementation" "begin" "initialization" "label" "const" 
+// "resourcestring" "type" "var" "procedure" "function" "constructor" "destructor" 
+// IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_19(_tokenSet_19_data_,12);
-const unsigned long PascalParser::_tokenSet_20_data_[] = { 2638217218UL, 720884UL, 33619968UL, 4294904032UL, 103197699UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "index" "name" "end" "begin" LPAREN RPAREN "initialization" 
-// "finalization" "label" "const" "resourcestring" EQUAL "type" "var" COLON 
-// "procedure" "function" "of" DOTDOT RBRACK "constructor" "destructor" 
-// "class" "property" LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" 
-// "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "then" "else" "do" "until" 
-// "to" "downto" RBRACK2 "except" "finally" IDENT 
+const unsigned long PascalParser::_tokenSet_20_data_[] = { 100663296UL, 177988UL, 0UL, 192UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "exports" "begin" "initialization" "label" "const" "resourcestring" 
+// "type" "var" "procedure" "function" "constructor" "destructor" IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_20(_tokenSet_20_data_,12);
-const unsigned long PascalParser::_tokenSet_21_data_[] = { 16777216UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_21_data_[] = { 1061158914UL, 720884UL, 67239936UL, 4294840768UL, 825581575UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" COMMA "index" "name" "begin" LPAREN RPAREN 
+// "initialization" "finalization" "label" "const" "resourcestring" EQUAL 
+// "type" "var" COLON "procedure" "function" "of" DOTDOT RBRACK "constructor" 
+// "destructor" "class" "property" LE GE LTH GT NOT_EQUAL "in" "is" PLUS 
+// MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "then" "else" 
+// "do" "until" "to" "downto" RBRACK2 "except" "finally" IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_21(_tokenSet_21_data_,12);
+const unsigned long PascalParser::_tokenSet_22_data_[] = { 16777216UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // SEMI 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_21(_tokenSet_21_data_,6);
-const unsigned long PascalParser::_tokenSet_22_data_[] = { 16777216UL, 2080UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_22(_tokenSet_22_data_,6);
+const unsigned long PascalParser::_tokenSet_23_data_[] = { 16777216UL, 2080UL, 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // SEMI RPAREN EQUAL RBRACK 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_22(_tokenSet_22_data_,8);
-const unsigned long PascalParser::_tokenSet_23_data_[] = { 2202009602UL, 178116UL, 0UL, 96UL, 100698112UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI "exports" "end" "begin" "initialization" "finalization" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_23(_tokenSet_23_data_,8);
+const unsigned long PascalParser::_tokenSet_24_data_[] = { 0UL, 4UL, 536870920UL, 0UL, 206215168UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "begin" NUM_INT "case" "goto" "if" "while" "repeat" "for" "with" "raise" 
+// "try" IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_24(_tokenSet_24_data_,12);
+const unsigned long PascalParser::_tokenSet_25_data_[] = { 121634818UL, 178116UL, 0UL, 192UL, 805584896UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" "begin" "initialization" "finalization" 
 // "label" "const" "resourcestring" "type" "var" "procedure" "function" 
 // "constructor" "destructor" "else" "until" "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_23(_tokenSet_23_data_,12);
-const unsigned long PascalParser::_tokenSet_24_data_[] = { 16777216UL, 526368UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI RPAREN EQUAL "of" RBRACK 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_24(_tokenSet_24_data_,8);
-const unsigned long PascalParser::_tokenSet_25_data_[] = { 2164260866UL, 177988UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
-// EOF SEMI "end" "begin" "initialization" "label" "const" "resourcestring" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_25(_tokenSet_25_data_,12);
+const unsigned long PascalParser::_tokenSet_26_data_[] = { 16777216UL, 1818406UL, 67108864UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "implementation" "begin" RPAREN "label" "const" "resourcestring" 
+// EQUAL "type" "var" "procedure" "forward" "function" "of" "external" 
+// RBRACK "constructor" "destructor" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_26(_tokenSet_26_data_,8);
+const unsigned long PascalParser::_tokenSet_27_data_[] = { 117440514UL, 177988UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
+// EOF SEMI "end" "exports" "begin" "initialization" "label" "const" "resourcestring" 
 // "type" "var" "procedure" "function" "constructor" "destructor" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_25(_tokenSet_25_data_,8);
-const unsigned long PascalParser::_tokenSet_26_data_[] = { 0UL, 16UL, 0UL, 0UL, 0UL, 0UL };
-// LPAREN 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_26(_tokenSet_26_data_,6);
-const unsigned long PascalParser::_tokenSet_27_data_[] = { 16777216UL, 16416UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_27(_tokenSet_27_data_,8);
+const unsigned long PascalParser::_tokenSet_28_data_[] = { 16777216UL, 16400UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI LPAREN COLON 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_28(_tokenSet_28_data_,6);
+const unsigned long PascalParser::_tokenSet_29_data_[] = { 16777216UL, 16416UL, 0UL, 0UL, 0UL, 0UL };
 // SEMI RPAREN COLON 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_27(_tokenSet_27_data_,6);
-const unsigned long PascalParser::_tokenSet_28_data_[] = { 16777216UL, 32UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_29(_tokenSet_29_data_,6);
+const unsigned long PascalParser::_tokenSet_30_data_[] = { 16777216UL, 32UL, 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // SEMI RPAREN RBRACK 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_28(_tokenSet_28_data_,8);
-const unsigned long PascalParser::_tokenSet_29_data_[] = { 0UL, 426000UL, 3976003580UL, 25165953UL, 2952790016UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_30(_tokenSet_30_data_,8);
+const unsigned long PascalParser::_tokenSet_31_data_[] = { 0UL, 426000UL, 3657039864UL, 50331907UL, 2147483648UL, 13UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // LPAREN "procedure" "function" "array" NUM_INT "integer" "shortint" "smallint" 
 // "longint" "int64" "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL 
 // LONGBOOL "char" "real" "single" "double" "extended" "comp" "string" 
 // "packed" "record" "set" "file" POINTER "object" "class" PLUS MINUS STRING_LITERAL 
 // "chr" NUM_REAL IDENT 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_29(_tokenSet_29_data_,12);
-const unsigned long PascalParser::_tokenSet_30_data_[] = { 2235564032UL, 524464UL, 33554432UL, 0UL, 103197696UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT SEMI COMMA "end" LPAREN RPAREN "finalization" "of" RBRACK "then" 
-// "else" "do" "until" "to" "downto" RBRACK2 "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_30(_tokenSet_30_data_,12);
-const unsigned long PascalParser::_tokenSet_31_data_[] = { 0UL, 0UL, 4UL, 25165824UL, 2952790016UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_31(_tokenSet_31_data_,12);
-const unsigned long PascalParser::_tokenSet_32_data_[] = { 16777216UL, 16UL, 4UL, 0UL, 2147483648UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI LPAREN NUM_INT NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_32_data_[] = { 188743680UL, 524464UL, 67239936UL, 0UL, 825581568UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// DOT SEMI "end" COMMA LPAREN RPAREN "finalization" "of" DOTDOT RBRACK 
+// "then" "else" "do" "until" "to" "downto" RBRACK2 "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_32(_tokenSet_32_data_,12);
-const unsigned long PascalParser::_tokenSet_33_data_[] = { 0UL, 16UL, 4UL, 25165824UL, 2952790016UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// LPAREN NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_33_data_[] = { 0UL, 0UL, 8UL, 50331648UL, 2147483648UL, 13UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_33(_tokenSet_33_data_,12);
-const unsigned long PascalParser::_tokenSet_34_data_[] = { 0UL, 16UL, 16777220UL, 25165824UL, 4026531852UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// LPAREN NUM_INT LBRACK PLUS MINUS "not" AT STRING_LITERAL "chr" "nil" 
-// NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_34_data_[] = { 16777216UL, 16UL, 8UL, 0UL, 0UL, 12UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI LPAREN NUM_INT NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_34(_tokenSet_34_data_,12);
-const unsigned long PascalParser::_tokenSet_35_data_[] = { 16777216UL, 16UL, 50331652UL, 4294901760UL, 4026531855UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI LPAREN NUM_INT LBRACK RBRACK LE GE LTH GT NOT_EQUAL "in" "is" PLUS 
-// MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "not" AT STRING_LITERAL 
-// "chr" "nil" NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_35_data_[] = { 0UL, 16UL, 8UL, 50331648UL, 2147483648UL, 13UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// LPAREN NUM_INT PLUS MINUS STRING_LITERAL "chr" NUM_REAL IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_35(_tokenSet_35_data_,12);
-const unsigned long PascalParser::_tokenSet_36_data_[] = { 2231369730UL, 182304UL, 33619968UL, 2272UL, 0UL, 0UL, 0UL, 0UL };
-// EOF SEMI COMMA "end" RPAREN EQUAL COLON "procedure" "function" DOTDOT 
+const unsigned long PascalParser::_tokenSet_36_data_[] = { 0UL, 16UL, 33554440UL, 50331648UL, 2147483768UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// LPAREN NUM_INT LBRACK PLUS MINUS "not" "true" "false" AT STRING_LITERAL 
+// "chr" "nil" NUM_REAL IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_36(_tokenSet_36_data_,12);
+const unsigned long PascalParser::_tokenSet_37_data_[] = { 16777216UL, 16UL, 100663304UL, 4294836224UL, 2147483775UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI LPAREN NUM_INT LBRACK RBRACK LE GE LTH GT NOT_EQUAL "in" "is" PLUS 
+// MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "not" "true" 
+// "false" AT STRING_LITERAL "chr" "nil" NUM_REAL IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_37(_tokenSet_37_data_,12);
+const unsigned long PascalParser::_tokenSet_38_data_[] = { 184549378UL, 182304UL, 67239936UL, 4544UL, 0UL, 0UL, 0UL, 0UL };
+// EOF SEMI "end" COMMA RPAREN EQUAL COLON "procedure" "function" DOTDOT 
 // RBRACK "constructor" "destructor" "class" "property" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_36(_tokenSet_36_data_,8);
-const unsigned long PascalParser::_tokenSet_37_data_[] = { 83886080UL, 32UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI COMMA RPAREN 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_37(_tokenSet_37_data_,6);
-const unsigned long PascalParser::_tokenSet_38_data_[] = { 83886080UL, 2080UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI COMMA RPAREN EQUAL RBRACK 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_38(_tokenSet_38_data_,8);
-const unsigned long PascalParser::_tokenSet_39_data_[] = { 2298478592UL, 165936UL, 33554432UL, 63712UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "index" "end" LPAREN RPAREN EQUAL "procedure" "function" RBRACK 
+const unsigned long PascalParser::_tokenSet_39_data_[] = { 150994944UL, 32UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI COMMA RPAREN 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_39(_tokenSet_39_data_,6);
+const unsigned long PascalParser::_tokenSet_40_data_[] = { 150994944UL, 2080UL, 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI COMMA RPAREN EQUAL RBRACK 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_40(_tokenSet_40_data_,8);
+const unsigned long PascalParser::_tokenSet_41_data_[] = { 318767104UL, 165936UL, 67108864UL, 127424UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" "index" LPAREN RPAREN EQUAL "procedure" "function" RBRACK 
 // "constructor" "destructor" "class" "property" "read" "write" "default" 
 // "nodefault" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_39(_tokenSet_39_data_,8);
-const unsigned long PascalParser::_tokenSet_40_data_[] = { 0UL, 32UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_41(_tokenSet_41_data_,8);
+const unsigned long PascalParser::_tokenSet_42_data_[] = { 0UL, 32UL, 0UL, 0UL, 0UL, 0UL };
 // RPAREN 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_40(_tokenSet_40_data_,6);
-const unsigned long PascalParser::_tokenSet_41_data_[] = { 2503999490UL, 720884UL, 33619968UL, 4294965472UL, 103197699UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "name" "end" "begin" LPAREN RPAREN "initialization" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_42(_tokenSet_42_data_,6);
+const unsigned long PascalParser::_tokenSet_43_data_[] = { 792723458UL, 720884UL, 67239936UL, 4294963648UL, 825581575UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" COMMA "name" "begin" LPAREN RPAREN "initialization" 
 // "finalization" "label" "const" "resourcestring" EQUAL "type" "var" COLON 
 // "procedure" "function" "of" DOTDOT RBRACK "constructor" "destructor" 
 // "class" "property" "read" "write" "default" "nodefault" LE GE LTH GT 
 // NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" "mod" "and" 
 // "shl" "shr" "then" "else" "do" "until" "to" "downto" RBRACK2 "except" 
 // "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_41(_tokenSet_41_data_,12);
-const unsigned long PascalParser::_tokenSet_42_data_[] = { 2147483648UL, 32UL, 268435456UL, 0UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "end" RPAREN "case" IDENT 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_42(_tokenSet_42_data_,12);
-const unsigned long PascalParser::_tokenSet_43_data_[] = { 2164260864UL, 32UL, 268435456UL, 0UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "end" RPAREN "case" IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_43(_tokenSet_43_data_,12);
-const unsigned long PascalParser::_tokenSet_44_data_[] = { 2147483648UL, 2260992UL, 0UL, 3320UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_44_data_[] = { 0UL, 16UL, 100794376UL, 4294836224UL, 2147483775UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// LPAREN NUM_INT DOTDOT LBRACK RBRACK LE GE LTH GT NOT_EQUAL "in" "is" 
+// PLUS MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "not" 
+// "true" "false" AT STRING_LITERAL "chr" "nil" NUM_REAL IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_44(_tokenSet_44_data_,12);
+const unsigned long PascalParser::_tokenSet_45_data_[] = { 134217728UL, 0UL, 67108864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// COMMA RBRACK 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_45(_tokenSet_45_data_,8);
+const unsigned long PascalParser::_tokenSet_46_data_[] = { 33554432UL, 32UL, 536870912UL, 0UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "end" RPAREN "case" IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_46(_tokenSet_46_data_,12);
+const unsigned long PascalParser::_tokenSet_47_data_[] = { 50331648UL, 32UL, 536870912UL, 0UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" RPAREN "case" IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_47(_tokenSet_47_data_,12);
+const unsigned long PascalParser::_tokenSet_48_data_[] = { 33554432UL, 2260992UL, 0UL, 6640UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "public" "private" "protected" "constructor" 
 // "destructor" "class" "published" "property" IDENT 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_44(_tokenSet_44_data_,12);
-const unsigned long PascalParser::_tokenSet_45_data_[] = { 0UL, 163840UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_48(_tokenSet_48_data_,12);
+const unsigned long PascalParser::_tokenSet_49_data_[] = { 0UL, 163840UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
 // "procedure" "function" "constructor" "destructor" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_45(_tokenSet_45_data_,8);
-const unsigned long PascalParser::_tokenSet_46_data_[] = { 2147483648UL, 163840UL, 0UL, 2272UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_49(_tokenSet_49_data_,8);
+const unsigned long PascalParser::_tokenSet_50_data_[] = { 33554432UL, 163840UL, 0UL, 4544UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" "class" "property" 
 // IDENT 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_46(_tokenSet_46_data_,12);
-const unsigned long PascalParser::_tokenSet_47_data_[] = { 2147483648UL, 163840UL, 0UL, 96UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_50(_tokenSet_50_data_,12);
+const unsigned long PascalParser::_tokenSet_51_data_[] = { 33554432UL, 163840UL, 0UL, 192UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_47(_tokenSet_47_data_,8);
-const unsigned long PascalParser::_tokenSet_48_data_[] = { 0UL, 163840UL, 0UL, 2272UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_51(_tokenSet_51_data_,8);
+const unsigned long PascalParser::_tokenSet_52_data_[] = { 0UL, 163840UL, 0UL, 4544UL, 0UL, 0UL, 0UL, 0UL };
 // "procedure" "function" "constructor" "destructor" "class" "property" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_48(_tokenSet_48_data_,8);
-const unsigned long PascalParser::_tokenSet_49_data_[] = { 2147483648UL, 163840UL, 0UL, 2272UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_52(_tokenSet_52_data_,8);
+const unsigned long PascalParser::_tokenSet_53_data_[] = { 33554432UL, 163840UL, 0UL, 4544UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" "class" "property" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_49(_tokenSet_49_data_,8);
-const unsigned long PascalParser::_tokenSet_50_data_[] = { 2147483648UL, 163840UL, 0UL, 63712UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_53(_tokenSet_53_data_,8);
+const unsigned long PascalParser::_tokenSet_54_data_[] = { 33554432UL, 163840UL, 0UL, 127424UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" "class" "property" 
 // "read" "write" "default" "nodefault" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_50(_tokenSet_50_data_,8);
-const unsigned long PascalParser::_tokenSet_51_data_[] = { 0UL, 16384UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_54(_tokenSet_54_data_,8);
+const unsigned long PascalParser::_tokenSet_55_data_[] = { 0UL, 16384UL, 0UL, 0UL, 0UL, 0UL };
 // COLON 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_51(_tokenSet_51_data_,6);
-const unsigned long PascalParser::_tokenSet_52_data_[] = { 2147483648UL, 163840UL, 0UL, 59616UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_55(_tokenSet_55_data_,6);
+const unsigned long PascalParser::_tokenSet_56_data_[] = { 33554432UL, 163840UL, 0UL, 119232UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" "class" "property" 
 // "write" "default" "nodefault" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_52(_tokenSet_52_data_,8);
-const unsigned long PascalParser::_tokenSet_53_data_[] = { 2147483648UL, 163840UL, 0UL, 51424UL, 0UL, 0UL, 0UL, 0UL };
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_56(_tokenSet_56_data_,8);
+const unsigned long PascalParser::_tokenSet_57_data_[] = { 33554432UL, 163840UL, 0UL, 102848UL, 0UL, 0UL, 0UL, 0UL };
 // "end" "procedure" "function" "constructor" "destructor" "class" "property" 
 // "default" "nodefault" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_53(_tokenSet_53_data_,8);
-const unsigned long PascalParser::_tokenSet_54_data_[] = { 2235564032UL, 524464UL, 33554432UL, 8323072UL, 103197696UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT SEMI COMMA "end" LPAREN RPAREN "finalization" "of" RBRACK LE GE 
-// LTH GT NOT_EQUAL "in" "is" "then" "else" "do" "until" "to" "downto" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_57(_tokenSet_57_data_,8);
+const unsigned long PascalParser::_tokenSet_58_data_[] = { 188743680UL, 524464UL, 67239936UL, 16646144UL, 825581568UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// DOT SEMI "end" COMMA LPAREN RPAREN "finalization" "of" DOTDOT RBRACK 
+// LE GE LTH GT NOT_EQUAL "in" "is" "then" "else" "do" "until" "to" "downto" 
 // RBRACK2 "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_54(_tokenSet_54_data_,12);
-const unsigned long PascalParser::_tokenSet_55_data_[] = { 2235564032UL, 524464UL, 33554432UL, 134152192UL, 103197696UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT SEMI COMMA "end" LPAREN RPAREN "finalization" "of" RBRACK LE GE 
-// LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" "then" "else" "do" 
-// "until" "to" "downto" RBRACK2 "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_55(_tokenSet_55_data_,12);
-const unsigned long PascalParser::_tokenSet_56_data_[] = { 2235564032UL, 524464UL, 33554432UL, 4294901760UL, 103197699UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// DOT SEMI COMMA "end" LPAREN RPAREN "finalization" "of" RBRACK LE GE 
-// LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" "mod" 
-// "and" "shl" "shr" "then" "else" "do" "until" "to" "downto" RBRACK2 "except" 
-// "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_56(_tokenSet_56_data_,12);
-const unsigned long PascalParser::_tokenSet_57_data_[] = { 2164260864UL, 128UL, 0UL, 0UL, 100698120UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "end" "finalization" AT "else" "until" "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_57(_tokenSet_57_data_,12);
-const unsigned long PascalParser::_tokenSet_58_data_[] = { 67108864UL, 0UL, 33554432UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// COMMA RBRACK 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_58(_tokenSet_58_data_,8);
-const unsigned long PascalParser::_tokenSet_59_data_[] = { 0UL, 0UL, 131072UL, 0UL, 240UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// ASSIGN PLUSEQ MINUSEQ STAREQ SLASHQE 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_58(_tokenSet_58_data_,12);
+const unsigned long PascalParser::_tokenSet_59_data_[] = { 188743680UL, 524464UL, 67239936UL, 268304384UL, 825581568UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// DOT SEMI "end" COMMA LPAREN RPAREN "finalization" "of" DOTDOT RBRACK 
+// LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" "then" "else" 
+// "do" "until" "to" "downto" RBRACK2 "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_59(_tokenSet_59_data_,12);
-const unsigned long PascalParser::_tokenSet_60_data_[] = { 2164260864UL, 144UL, 0UL, 0UL, 100698112UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "end" LPAREN "finalization" "else" "until" "except" "finally" 
+const unsigned long PascalParser::_tokenSet_60_data_[] = { 188743680UL, 524464UL, 67239936UL, 4294836224UL, 825581575UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// DOT SEMI "end" COMMA LPAREN RPAREN "finalization" "of" DOTDOT RBRACK 
+// LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" 
+// "mod" "and" "shl" "shr" "then" "else" "do" "until" "to" "downto" RBRACK2 
+// "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_60(_tokenSet_60_data_,12);
-const unsigned long PascalParser::_tokenSet_61_data_[] = { 0UL, 4UL, 268435460UL, 0UL, 25776896UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "begin" NUM_INT "case" "goto" "if" "while" "repeat" "for" "with" "raise" 
-// "try" IDENT 
+const unsigned long PascalParser::_tokenSet_61_data_[] = { 50331648UL, 128UL, 0UL, 0UL, 805584960UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" "finalization" AT "else" "until" "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_61(_tokenSet_61_data_,12);
-const unsigned long PascalParser::_tokenSet_62_data_[] = { 2202009602UL, 178132UL, 285212676UL, 25165920UL, 4287224588UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI "exports" "end" "begin" LPAREN "initialization" "finalization" 
-// "label" "const" "resourcestring" "type" "var" "procedure" "function" 
-// NUM_INT LBRACK "case" "constructor" "destructor" PLUS MINUS "not" AT 
-// "goto" "if" "else" "while" "repeat" "until" "for" "with" "raise" "try" 
-// "except" "finally" "on" STRING_LITERAL "chr" "nil" NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_62_data_[] = { 0UL, 0UL, 262144UL, 0UL, 1920UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// ASSIGN PLUSEQ MINUSEQ STAREQ SLASHQE 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_62(_tokenSet_62_data_,12);
-const unsigned long PascalParser::_tokenSet_63_data_[] = { 2164260864UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "end" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_63(_tokenSet_63_data_,6);
-const unsigned long PascalParser::_tokenSet_64_data_[] = { 0UL, 0UL, 0UL, 0UL, 8192UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "do" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_64(_tokenSet_64_data_,12);
-const unsigned long PascalParser::_tokenSet_65_data_[] = { 0UL, 0UL, 0UL, 0UL, 393216UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// "to" "downto" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_65(_tokenSet_65_data_,12);
-const unsigned long PascalParser::_tokenSet_66_data_[] = { 67108864UL, 0UL, 0UL, 0UL, 8192UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// COMMA "do" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_66(_tokenSet_66_data_,12);
-const unsigned long PascalParser::_tokenSet_67_data_[] = { 0UL, 0UL, 0UL, 0UL, 0UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+const unsigned long PascalParser::_tokenSet_63_data_[] = { 50331648UL, 144UL, 0UL, 0UL, 805584896UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" LPAREN "finalization" "else" "until" "except" "finally" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_63(_tokenSet_63_data_,12);
+const unsigned long PascalParser::_tokenSet_64_data_[] = { 121634818UL, 178132UL, 570425352UL, 50331840UL, 4233025656UL, 15UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" "begin" LPAREN "initialization" "finalization" 
+// "label" "const" "resourcestring" "type" "var" "procedure" "function" 
+// NUM_INT LBRACK "case" "constructor" "destructor" PLUS MINUS "not" "true" 
+// "false" AT "goto" "if" "else" "while" "repeat" "until" "for" "with" 
+// "raise" "try" "except" "finally" "on" STRING_LITERAL "chr" "nil" NUM_REAL 
 // IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_64(_tokenSet_64_data_,12);
+const unsigned long PascalParser::_tokenSet_65_data_[] = { 50331648UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_65(_tokenSet_65_data_,6);
+const unsigned long PascalParser::_tokenSet_66_data_[] = { 0UL, 0UL, 0UL, 0UL, 65536UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "do" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_66(_tokenSet_66_data_,12);
+const unsigned long PascalParser::_tokenSet_67_data_[] = { 0UL, 0UL, 0UL, 0UL, 3145728UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "to" "downto" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_67(_tokenSet_67_data_,12);
-const unsigned long PascalParser::_tokenSet_68_data_[] = { 2164260864UL, 0UL, 0UL, 0UL, 2048UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// SEMI "end" "else" 
+const unsigned long PascalParser::_tokenSet_68_data_[] = { 134217728UL, 0UL, 0UL, 0UL, 65536UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// COMMA "do" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_68(_tokenSet_68_data_,12);
-const unsigned long PascalParser::_tokenSet_69_data_[] = { 0UL, 0UL, 4UL, 0UL, 2147483648UL, 1UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// NUM_INT NUM_REAL IDENT 
+const unsigned long PascalParser::_tokenSet_69_data_[] = { 0UL, 0UL, 0UL, 0UL, 0UL, 8UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// IDENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_69(_tokenSet_69_data_,12);
-const unsigned long PascalParser::_tokenSet_70_data_[] = { 2638217218UL, 720884UL, 33619968UL, 4294904032UL, 103197699UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "index" "name" "end" "begin" LPAREN RPAREN "initialization" 
-// "finalization" "label" "const" "resourcestring" EQUAL "type" "var" COLON 
-// "procedure" "function" "of" DOTDOT RBRACK "constructor" "destructor" 
-// "class" "property" LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" 
-// "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "then" "else" "do" "until" 
-// "to" "downto" RBRACK2 "except" "finally" 
+const unsigned long PascalParser::_tokenSet_70_data_[] = { 33554432UL, 0UL, 0UL, 0UL, 805306368UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// "end" "except" "finally" 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_70(_tokenSet_70_data_,12);
-const unsigned long PascalParser::_tokenSet_71_data_[] = { 2235564034UL, 706736UL, 33619968UL, 4294904032UL, 103197699UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
-// EOF DOT SEMI COMMA "end" LPAREN RPAREN "finalization" EQUAL COLON "procedure" 
+const unsigned long PascalParser::_tokenSet_71_data_[] = { 50331648UL, 0UL, 0UL, 0UL, 16384UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// SEMI "end" "else" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_71(_tokenSet_71_data_,12);
+const unsigned long PascalParser::_tokenSet_72_data_[] = { 0UL, 0UL, 8UL, 0UL, 0UL, 12UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// NUM_INT NUM_REAL IDENT 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_72(_tokenSet_72_data_,12);
+const unsigned long PascalParser::_tokenSet_73_data_[] = { 1061158914UL, 720884UL, 67239936UL, 4294840768UL, 825581575UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" "exports" COMMA "index" "name" "begin" LPAREN RPAREN 
+// "initialization" "finalization" "label" "const" "resourcestring" EQUAL 
+// "type" "var" COLON "procedure" "function" "of" DOTDOT RBRACK "constructor" 
+// "destructor" "class" "property" LE GE LTH GT NOT_EQUAL "in" "is" PLUS 
+// MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" "then" "else" 
+// "do" "until" "to" "downto" RBRACK2 "except" "finally" 
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_73(_tokenSet_73_data_,12);
+const unsigned long PascalParser::_tokenSet_74_data_[] = { 188743682UL, 706736UL, 67239936UL, 4294840768UL, 825581575UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
+// EOF DOT SEMI "end" COMMA LPAREN RPAREN "finalization" EQUAL COLON "procedure" 
 // "function" "of" DOTDOT RBRACK "constructor" "destructor" "class" "property" 
 // LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" 
 // "mod" "and" "shl" "shr" "then" "else" "do" "until" "to" "downto" RBRACK2 
 // "except" "finally" 
-const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_71(_tokenSet_71_data_,12);
+const ANTLR_USE_NAMESPACE(antlr)BitSet PascalParser::_tokenSet_74(_tokenSet_74_data_,12);
 
 

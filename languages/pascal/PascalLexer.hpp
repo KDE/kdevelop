@@ -25,7 +25,7 @@
 #include <antlr/CharScanner.hpp>
 class PascalLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public PascalTokenTypes
 {
-#line 1026 "pascal.g"
+#line 1066 "pascal.g"
 
 private:
         ProblemReporter* m_problemReporter;
@@ -101,6 +101,7 @@ public:
 	public: void mWS(bool _createToken);
 	public: void mCOMMENT_1(bool _createToken);
 	public: void mCOMMENT_2(bool _createToken);
+	public: void mCOMMENT_3(bool _createToken);
 	public: void mIDENT(bool _createToken);
 	public: void mSTRING_LITERAL(bool _createToken);
 	public: void mNUM_INT(bool _createToken);
@@ -113,6 +114,8 @@ private:
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
+	static const unsigned long _tokenSet_3_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
 };
 
 #endif /*INC_PascalLexer_hpp_*/

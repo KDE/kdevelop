@@ -70,7 +70,7 @@ void BackgroundParser::run()
 
         kdDebug() << "16" << endl;
 
-        parser.program();
+        parser.compilationUnit();
 
         kdDebug() << "17" << endl;
 

@@ -218,16 +218,16 @@ void PascalSupportPart::parse( const QString & fileName )
         lexer.resetErrors();
         parser.resetErrors();
 
-        parser.program();
+        parser.compilationUnit();
         int errors = lexer.numberOfErrors() + parser.numberOfErrors();
         RefPascalAST ast = parser.getAST();
 
         if( errors == 0 && ast != antlr::nullAST ){
             kdDebug(9013) << "-------------------> start StoreWalker" << endl;
-            PascalStoreWalker walker;
+/*            PascalStoreWalker walker;
             walker.setFileName( fileName );
             walker.setCodeModel( codeModel() );
-            walker.program( ast );
+            walker.compilationUnit( ast );*/
         }
 
     } catch( antlr::ANTLRException& ex ){

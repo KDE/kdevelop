@@ -91,7 +91,10 @@ public:
 	public: void usesClause();
 	public: void block();
 	public: void identifier();
+	public: void libraryBlock();
 	public: void exportsClause();
+	public: void declarationPart();
+	public: void statementPart();
 	public: void exportsList();
 	public: void exportsEntry();
 	public: void integerConstant();
@@ -105,9 +108,7 @@ public:
 	public: void constantDeclarationPart();
 	public: void typeDeclarationPart();
 	public: void procedureHeadersPart();
-	public: void declarationPart();
 	public: void statement();
-	public: void statementPart();
 	public: void labelDeclarationPart();
 	public: void resourcestringDeclarationPart();
 	public: void variableDeclarationPart();
@@ -129,16 +130,17 @@ public:
 	public: void procedureHeader();
 	public: void subroutineBlock();
 	public: void functionHeader();
-	public: void callModifiers();
 	public: void qualifiedMethodIdentifier();
 	public: void formalParameterList();
 	public: void modifiers();
 	public: void externalDirective();
+	public: void functionHeaderEnding();
 	public: void parameterDeclaration();
 	public: void valueParameter();
 	public: void variableParameter();
 	public: void constantParameter();
 	public: void untypedParameterPart();
+	public: void callModifiers();
 	public: void expression();
 	public: void typedConstant();
 	public: void constant();
@@ -165,6 +167,8 @@ public:
 	public: void classType();
 	public: void setType();
 	public: void fileType();
+	public: void arrayIndexType();
+	public: void arraySubrangeType();
 	public: void fieldList();
 	public: void fixedField();
 	public: void variantPart();
@@ -211,6 +215,7 @@ public:
 	public: void gotoStatement();
 	public: void raiseStatement();
 	public: void assignmentOperator();
+	public: void identifierOrArrayIdentifier();
 	public: void repetitiveStatement();
 	public: void conditionalStatement();
 	public: void exceptionStatement();
@@ -232,9 +237,9 @@ public:
 	public: void arithmeticOperatorDefinition();
 	public: void comparisonOperatorDefinition();
 	public: void tryStatement();
+	public: void statements();
 	public: void exceptOrFinallyPart();
 	public: void exceptionHandlers();
-	public: void statements();
 	public: void exceptionHandler();
 	public: void sign();
 	public: void constantChr();
@@ -248,10 +253,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 189;
+	static const int NUM_TOKENS = 190;
 #else
 	enum {
-		NUM_TOKENS = 189
+		NUM_TOKENS = 190
 	};
 #endif
 	
@@ -399,6 +404,12 @@ private:
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_70;
 	static const unsigned long _tokenSet_71_data_[];
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_71;
+	static const unsigned long _tokenSet_72_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_72;
+	static const unsigned long _tokenSet_73_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_73;
+	static const unsigned long _tokenSet_74_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_74;
 };
 
 #endif /*INC_PascalParser_hpp_*/
