@@ -21,11 +21,12 @@
 
 #include <kdebug.h>
 
-CppCodeCompletion::CppCodeCompletion ( KEditor::Editor* pEditor )
+CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 {
-	m_pEditor = pEditor;
+	m_pEditor = pCore->editor();
+	m_pStore = pStore;
 
-	connect ( pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
+	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
 
 	kdDebug ( 9007 ) << "constructor of CppCodeCompletion" << endl;
@@ -69,6 +70,15 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		return;
 	}
 
+	//kdDebug ( 9007 ) << "!!!!!!!!!!!Before!!!!!!!!!!!!!!!!" << endl;
+
+	CppCodeCompletionParser parser ( pEditIface, m_pStore );
+	parser.setLine ( pEditIface->line ( nLine ) );
+	//kdDebug ( 9007 ) << parser.getCompletionText ( nCol ) << " => " << parser.getNodePos ( nCol ) << endl;
+
+
+	//kdDebug ( 9007 ) << "!!!!!!!!!!!Afterwards!!!!!!!!!!!!!!!!" << endl;
+
 	if ( pEditIface->line ( nLine ) == "test(")
 	{
 		/*QValueList < KEditor::CompletionEntry > entryList;
@@ -85,10 +95,10 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		QStringList functionList;
 		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";
 		functionList.append ( strFunction );
-		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
+/*		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
 		functionList.append ( strFunction );
 		strFunction = "int setCurrentEditor ( NEdit* e, const char* name )";
-		functionList.append ( strFunction );
+		functionList.append ( strFunction );*/
 
 		pCompletionIface->showArgHint ( functionList, "()", "," );
 	}

@@ -161,4 +161,4 @@ void ToolsConfig::updateList()
   _list->setUpdatesEnabled(true);
   _list->repaint();
 }
-#include "toolsconfig.moc"
+// #include "toolsconfig.moc"

@@ -263,4 +263,4 @@ QStringList TreeView::dirList(const QString& rPath)
   return dirlist;
 }
 
-#include "treeview.moc"
+// #include "treeview.moc"

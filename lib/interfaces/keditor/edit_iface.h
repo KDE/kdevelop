@@ -35,6 +35,8 @@ public:
   virtual QString line(uint line) const = 0;
   virtual bool setLine(const QString &text, uint line) = 0;
 
+  virtual bool hasSelectedText();
+
   virtual DCOPRef dcopInterface() const;
 
   static EditDocumentIface *interface(Document *doc);

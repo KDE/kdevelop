@@ -22,13 +22,19 @@
 
 #include "keditor/editor.h"
 #include "keditor/edit_iface.h"
+#include "classstore.h"
+#include "parsedclass.h"
+#include "parsedmethod.h"
+#include "kdevcore.h"
+
+#include "cppcodecompletionparser.h"
 
 class CppCodeCompletion : public QObject
 {
 	Q_OBJECT
 
 	public:
-		CppCodeCompletion ( KEditor::Editor* pEditor );
+		CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore );
 		virtual ~CppCodeCompletion();
 
 	protected slots:
@@ -37,6 +43,7 @@ class CppCodeCompletion : public QObject
 
 	private:
 		KEditor::Editor* m_pEditor;
+		ClassStore* m_pStore;
 };
 
 #endif

@@ -55,7 +55,7 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
     connect( core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
              this, SLOT(documentActivated(KEditor::Document*)) );
 
-    m_pCompletion = new CppCodeCompletion ( core()->editor() );
+    m_pCompletion = new CppCodeCompletion ( core(), classStore() );
     
     KAction *action;
 

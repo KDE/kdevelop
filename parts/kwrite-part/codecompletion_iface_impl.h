@@ -17,7 +17,7 @@ class CodeCompletionIfaceImpl : public KEditor::CodeCompletionDocumentIface {
   
   CodeCompletionIfaceImpl(KWrite *edit,KEditor::Document *parent, KEditor::Editor *editor);
  
-  virtual void showArgHint ( QStringList functionList, QString strWrapping, QString strDelimiter );
+  virtual void showArgHint ( QStringList functionList, const QString& strWrapping, const QString& strDelimiter );
   virtual void showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset=0);
   bool eventFilter( QObject *o, QEvent *e );
   

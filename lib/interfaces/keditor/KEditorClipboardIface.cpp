@@ -61,4 +61,4 @@ void KEditor::ClipboardDocumentDCOPIface::forwardCopyAvailable(KEditor::Document
   
   emitDCOPSignal("copyAvailable(DCOPRef,bool)", data);
 }
-#include "KEditorClipboardIface.moc"
+//#include "KEditorClipboardIface.moc.cpp"

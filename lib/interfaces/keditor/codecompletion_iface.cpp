@@ -16,7 +16,7 @@ KEditor::CodeCompletionDocumentIface *KEditor::CodeCompletionDocumentIface::inte
   return static_cast<KEditor::CodeCompletionDocumentIface*>(doc->queryInterface("KEditor::CodeCompletionDocumentIface"));
 }
 
-void KEditor::CodeCompletionDocumentIface::showArgHint ( QStringList functionList, QString strWrapping, QString strDelimiter)
+/*void KEditor::CodeCompletionDocumentIface::showArgHint ( const QStringList& functionList, const QString& strWrapping, const QString& strDelimiter)
 {
-}
-#include "codecompletion_iface.moc"
+}*/
+//#include "codecompletion_iface.moc.cpp"

@@ -92,4 +92,4 @@ DCOPRef KEditor::EditorDCOPIface::currentDocument()
 
 
 
-#include "KEditorIface.moc"
+//#include "KEditorIface.moc.cpp"

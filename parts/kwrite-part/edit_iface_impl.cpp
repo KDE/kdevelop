@@ -82,5 +82,11 @@ bool EditIfaceImpl::setLine(const QString &text, uint line)
   return true;
 }
 
+bool EditIfaceImpl::hasSelectedText()
+{
+	return (( KWriteDoc* ) m_edit->document())->hasMarkedText();
+}
+
+
 
 #include "edit_iface_impl.moc"

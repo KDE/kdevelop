@@ -27,7 +27,9 @@ public:
            
   virtual QString line(uint line) const;
   virtual bool setLine(const QString &text, uint line);
-  
+
+  virtual bool hasSelectedText();
+
 
 private:
 

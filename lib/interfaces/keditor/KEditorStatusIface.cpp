@@ -62,4 +62,4 @@ void KEditor::StatusDocumentDCOPIface::forwardMessage(KEditor::Document *doc, co
   emitDCOPSignal("message(DCOPRef,const QString&)", data);
 }
 
-#include "KEditorStatusIface.moc"
+//#include "KEditorStatusIface.moc.cpp"

@@ -61,7 +61,7 @@ class KDevArgHint : public QFrame
 
 	public:
 		void setFunctionText ( int nFunc, const QString& strText );
-		void setArgMarkInfos ( QString strWrapping, QString strDelimiter );
+		void setArgMarkInfos ( const QString& strWrapping, const QString& strDelimiter );
 		void reset();
 		void nextArg();
 		void prevArg();

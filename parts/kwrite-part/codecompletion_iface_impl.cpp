@@ -173,7 +173,7 @@ void CodeCompletionIfaceImpl::updateBox(bool newCoordinate){
   m_completionPopup->show();
 }
 
-void CodeCompletionIfaceImpl::showArgHint ( QStringList functionList, QString strWrapping, QString strDelimiter )
+void CodeCompletionIfaceImpl::showArgHint ( QStringList functionList, const QString& strWrapping, const QString& strDelimiter )
 {
 	m_pArgHint->reset();
 
@@ -203,4 +203,4 @@ void CodeCompletionIfaceImpl::slotCursorPosChanged()
 }
 
 
-#include "codecompletion_iface_impl.moc"
+// #include "codecompletion_iface_impl.moc"

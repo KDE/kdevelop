@@ -208,31 +208,43 @@ void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, in
 		return;
 	}
 
+	if ( pEditIface->hasSelectedText() )
+	{
+		hide();
+		return;
+	}
+
 	QString strCurLine = pEditIface->line ( nLine );
 	//strCurLine = strCurLine.left ( nCol );
-	QString strLineToCol = strCurLine.left ( nCol );
+	QString strLineToCursor = strCurLine.left ( nCol );
+	QString strLineAfterCursor = strCurLine.mid ( nCol, ( strCurLine.length() - nCol ) );
 
 	// only for testing
-	strCurLine = strLineToCol;
+	//strCurLine = strLineToCursor;
 
-	int nBegin = strCurLine.findRev ( m_strArgWrapping[0] );
+	int nBegin = strLineToCursor.findRev ( m_strArgWrapping[0] );
 
-	if ( nBegin == -1 || nBegin != -1 && strCurLine.findRev ( m_strArgWrapping[1] ) != -1)
+	if ( nBegin == -1 || // the first wrap was not found
+	nBegin != -1 && strLineToCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // || // the first and the second wrap were found before the cursor
+	//nBegin != -1 && strLineAfterCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // the first wrap was found before the cursor and the second beyond
+	{
 		hide();
+		//m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
+	}
 	else if ( nBegin != -1 )
 		show();
 
-	int nNumDelimiter = 0;
+	int nCountDelimiter = 0;
 
 	while ( nBegin != -1 )
 	{
-		nBegin = strCurLine.find ( m_strArgDelimiter, nBegin + 1 );
+		nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
 
 		if ( nBegin != -1 )
-			nNumDelimiter++;
+			nCountDelimiter++;
 	}
 
-	setCurArg ( nNumDelimiter + 1 );
+	setCurArg ( nCountDelimiter + 1 );
 }
 
 void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )
@@ -247,7 +259,7 @@ void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )
 	updateState();
 }
 
-void KDevArgHint::setArgMarkInfos ( QString strWrapping, QString strDelimiter )
+void KDevArgHint::setArgMarkInfos ( const QString& strWrapping, const QString& strDelimiter )
 {
 	if ( strWrapping.isEmpty() || strDelimiter.isEmpty() )
 		return;
@@ -323,4 +335,4 @@ QString KDevArgHint::markCurArg()
 	return strFuncText;
 }
 
-#include "codecompletion_arghint.moc"
+// #include "codecompletion_arghint.moc"

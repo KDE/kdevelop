@@ -12,7 +12,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       tokenizer.cpp \
 			       addclassmethoddlg.cpp \
 			       addclassattributedlg.cpp \
-			       cppcodecompletion.cpp
+			       cppcodecompletion.cpp \
+			       cppcodecompletionparser.cpp
 
 EXTRA_DIST = tokenizer.l
 tokenizer.cpp: tokenizer.l
