@@ -121,11 +121,13 @@ void RemoveFileDialog::accept()
 		}
 	}
 
+	QString fileItemName;
 	FileItem *fitem = static_cast<FileItem*>(target->firstChild());
 	while (fitem) {
 		if (fitem->text(0) == fileName) {
 			QListView *lv = fitem->listView();
 			lv->setSelected(fitem, false);
+			fileItemName = fitem->name;
 			target->sources.remove(fitem);
 			break;
 		}
@@ -151,7 +153,7 @@ void RemoveFileDialog::accept()
 	QValueList<QDomNode> nodesToRemove;
 	while ( !n.isNull() ) {
 		QDomNamedNodeMap attr = n.attributes();
-		QString fpath = subProject->path + QString("/") + fitem->name;
+		QString fpath = subProject->path + QString("/") + fileItemName;
 		QString relpath = fpath.remove(0, m_part->projectDirectory().length());
 		if ((attr.item(0).nodeValue() == relpath)
 			|| (attr.item(1).nodeValue() == relpath) )
