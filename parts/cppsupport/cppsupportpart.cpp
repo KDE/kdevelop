@@ -14,6 +14,7 @@
 #include "cppsupportpart.h"
 #include "problemreporter.h"
 
+#include <qmessagebox.h>
 #include <qdir.h>
 #include <qdom.h>
 #include <qfileinfo.h>
@@ -560,6 +561,13 @@ void CppSupportPart::slotNewClass()
 
 void CppSupportPart::addMethod(const QString &className)
 {
+    ParsedClass *pc = classStore()->getClassByName(className);
+    
+    if (!pc) {
+	QMessageBox::critical(0,"Error","Please select a class !");
+	return;
+    }
+    
     CppAddMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
@@ -568,7 +576,6 @@ void CppSupportPart::addMethod(const QString &className)
     pm->setDeclaredInScope(className);
 
     int atLine = -1;
-    ParsedClass *pc = classStore()->getClassByName(className);
 
     if (pm->isSignal()) {
         for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
@@ -640,6 +647,13 @@ void CppSupportPart::addMethod(const QString &className)
 
 void CppSupportPart::addAttribute(const QString &className)
 {
+    ParsedClass *pc = classStore()->getClassByName(className);
+
+    if (!pc) {
+	QMessageBox::critical(0,"Error","Please select a class !");
+	return;
+    }    
+    
     AddClassAttributeDialog dlg(0, "attrDlg");
     if( !dlg.exec() )
       return;
@@ -648,8 +662,7 @@ void CppSupportPart::addAttribute(const QString &className)
     pa->setDeclaredInScope(className);
 
     int atLine = -1;
-    ParsedClass *pc = classStore()->getClassByName(className);
-
+    
     for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
         ParsedAttribute *attr = pc->attributeIterator.current();
         if (attr->access() == pa->access() &&
