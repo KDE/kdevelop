@@ -1,3 +1,8 @@
+2001-05-27  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on TabPage mode, (land in sight!) ;
+    * File->Close(), Window->Close(), Window->CloseAll() fixed,
+      DocViewMan improved therefore, should better consider outside/inside changes now
+
 2001-05-26  F@lk Brettschneider <falk@kdevelop.org>
     * further work on TabPage MDI mode
     * bugfix: 0L pointer accesses in kwrite lib fixed (important for TabPage mode session loading)
