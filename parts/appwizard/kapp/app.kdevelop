@@ -1,49 +1,119 @@
-<?xml version="1.0"?>
+<?xml version = '1.0'?>
 <kdevelop>
- <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
-  <projectmanagement>KDevKDEAutoProject</projectmanagement>
-  <primarylanguage>C++</primarylanguage>
-  <keywords>
-   <keyword>C++</keyword>
-   <keyword>Code</keyword>
-   <keyword>Qt</keyword>
-   <keyword>KDE</keyword>
-  </keywords>
- </general>
- <kdevautoproject>
   <general>
-   <activetarget>src/$APPNAMELC$</activetarget>
+    <author>$AUTHOR$</author>
+    <email>$EMAIL$</email>
+    <version>$VERSION$</version>
+    <projectmanagement>KDevKDEAutoProject</projectmanagement>
+    <primarylanguage>C++</primarylanguage>
+    <keywords>
+      <keyword>C++</keyword>
+      <keyword>Code</keyword>
+      <keyword>Qt</keyword>
+      <keyword>KDE</keyword>
+    </keywords>
+    <projectdirectory>.</projectdirectory>
+    <absoluteprojectpath>false</absoluteprojectpath>
+    <description></description>
+    <ignoreparts/>
   </general>
-  <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
-  </run>
- </kdevautoproject>
- <kdevfileview>
-  <groups>
-   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-   <group pattern="*.ui" name="User Interface" />
-   <group pattern="*.png" name="Icons" />
-   <group pattern="*.po;*.ts" name="Translations" />
-   <group pattern="*" name="Others" />
-  </groups>
- </kdevfileview>
- <kdevdoctreeview>
-  <ignoretocs>
-   <toc>gtk</toc>
-   <toc>gnustep</toc>
-   <toc>python</toc>
-   <toc>php</toc>
-   <toc>perl</toc>
-  </ignoretocs>
- </kdevdoctreeview>
- <kdevdebugger>
-  <general>
-   <dbgshell>libtool</dbgshell>
-  </general>
- </kdevdebugger>
+  <kdevautoproject>
+    <general>
+      <activetarget>src/$APPNAMELC$</activetarget>
+      <useconfiguration>debug</useconfiguration>
+    </general>
+    <run>
+      <mainprogram>src/$APPNAMELC$</mainprogram>
+      <programargs></programargs>
+      <terminal>false</terminal>
+      <envvars/>
+    </run>
+    <make>
+      <envvars>
+        <envvar value="1" name="WANT_AUTOCONF_2_5" />
+        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+      </envvars>
+      <abortonerror>false</abortonerror>
+      <numberofjobs>1</numberofjobs>
+      <dontact>false</dontact>
+      <makebin></makebin>
+    </make>
+    <configurations>
+      <optimized>
+        <configargs/>
+        <builddir>optimized</builddir>
+        <topsourcedir/>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <cxxflags/>
+        <f77flags/>
+      </optimized>
+      <debug>
+        <configargs>--enable-debug=full</configargs>
+        <builddir>debug</builddir>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompiler>GccOptions</ccompiler>
+        <cxxcompiler>GppOptions</cxxcompiler>
+        <f77compiler>G77Options</f77compiler>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <cxxflags></cxxflags>
+        <f77flags></f77flags>
+      </debug>
+    </configurations>
+  </kdevautoproject>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+      <group pattern="*.ui" name="User Interface" />
+      <group pattern="*.png" name="Icons" />
+      <group pattern="*.po;*.ts" name="Translations" />
+      <group pattern="*" name="Others" />
+    </groups>
+    <tree>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+    </tree>
+  </kdevfileview>
+  <kdevdoctreeview>
+    <ignoretocs>
+      <toc>gtk</toc>
+      <toc>gnustep</toc>
+      <toc>python</toc>
+      <toc>php</toc>
+      <toc>perl</toc>
+    </ignoretocs>
+    <projectdoc>
+      <userdocDir>/home/okuti/testprj/$APPNAMELC$/html/</userdocDir>
+      <apidocDir>/home/okuti/testprj/$APPNAMELC$/html/</apidocDir>
+    </projectdoc>
+  </kdevdoctreeview>
+  <kdevdebugger>
+    <general>
+      <dbgshell>libtool</dbgshell>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
+      <breakonloadinglibs>true</breakonloadinglibs>
+      <separatetty>false</separatetty>
+      <floatingtoolbar>false</floatingtoolbar>
+      <runappinappdirectory>true</runappinappdirectory>
+    </general>
+    <display>
+      <staticmembers>false</staticmembers>
+      <demanglenames>true</demanglenames>
+    </display>
+  </kdevdebugger>
   <kdevfilecreate>
     <filetypes/>
     <useglobaltypes>
@@ -52,4 +122,29 @@
       <type ext="h" />
     </useglobaltypes>
   </kdevfilecreate>
+  <kdevcvs>
+    <cvsoptions>-f</cvsoptions>
+    <commitoptions></commitoptions>
+    <updateoptions>-dP</updateoptions>
+    <addoptions></addoptions>
+    <removeoptions>-f</removeoptions>
+    <diffoptions>-u3 -p</diffoptions>
+    <logoptions></logoptions>
+    <rshoptions></rshoptions>
+  </kdevcvs>
+  <cppsupportpart>
+    <codecompletion/>
+    <filetemplates>
+      <choosefiles>false</choosefiles>
+      <interfaceURL></interfaceURL>
+      <implementationURL></implementationURL>
+      <interfacesuffix>.h</interfacesuffix>
+      <implementationsuffix>.cpp</implementationsuffix>
+      <lowercasefilenames>true</lowercasefilenames>
+    </filetemplates>
+  </cppsupportpart>
+  <kdevclassview>
+    <folderhierarchy>true</folderhierarchy>
+    <depthoffolders>2</depthoffolders>
+  </kdevclassview>
 </kdevelop>

@@ -14,6 +14,8 @@ install( "${src}/template-kapp/app.kdevelop",          "${dest}/${APPNAMELC}.kde
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
+mkdir( "${dest}/debug", 0777 );
+mkdir( "${dest}/optimized", 0777 );
 mkdir( "${dest}/po", 0777 );
 install( "${src}/template-common/kde-Makefile.am",     "${dest}/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.cvs",    "${dest}/Makefile.cvs" );
