@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-11-29 21:59+0100\n"
+"POT-Creation-Date: 2000-02-26 20:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "Add member variable"
 msgstr ""
 
-#: caddclassattributedlg.cpp:69
+#: caddclassattributedlg.cpp:69 dbg/vartree.cpp:124
 msgid "Variable"
 msgstr ""
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid "You can enter a description of the member function here."
 msgstr ""
 
-#: caddclassmethoddlg.cpp:141 cclasstooltreeview.cpp:63 cclassview.cpp:187
+#: caddclassmethoddlg.cpp:141 cclasstooltreeview.cpp:63 cclassview.cpp:191
 msgid "Method"
 msgstr ""
 
@@ -177,13 +177,13 @@ msgstr ""
 msgid "Destination Directory"
 msgstr ""
 
-#: caddexistingfiledlg.cpp:207 caddexistingfiledlg.cpp:213 ckdevelop.cpp:1417
-#: ckdevelop.cpp:1428 cmakemanualdlg.cpp:72 cnewclassdlg.cpp:230
-#: cnewclassdlg.cpp:235 cnewclassdlg.cpp:240 cnewclassdlg.cpp:264
-#: cnewfiledlg.cpp:254 cnewfiledlg.cpp:259 cnewfiledlg.cpp:263
-#: cnewfiledlg.cpp:267 cnewfiledlg.cpp:271 cnewfiledlg.cpp:275
-#: cnewfiledlg.cpp:279 cnewfiledlg.cpp:283 cnewfiledlg.cpp:287
-#: cnewfiledlg.cpp:291 kdlgedit/kdlgnewdialogdlg.cpp:403
+#: caddexistingfiledlg.cpp:207 caddexistingfiledlg.cpp:213 ckdevelop.cpp:2294
+#: ckdevelop.cpp:2306 cmakemanualdlg.cpp:72 cnewclassdlg.cpp:209
+#: cnewclassdlg.cpp:214 cnewclassdlg.cpp:219 cnewclassdlg.cpp:249
+#: cnewfiledlg.cpp:255 cnewfiledlg.cpp:260 cnewfiledlg.cpp:264
+#: cnewfiledlg.cpp:268 cnewfiledlg.cpp:272 cnewfiledlg.cpp:276
+#: cnewfiledlg.cpp:280 cnewfiledlg.cpp:284 cnewfiledlg.cpp:288
+#: cnewfiledlg.cpp:292 cnewfiledlg.cpp:296 kdlgedit/kdlgnewdialogdlg.cpp:403
 #: kdlgedit/kdlgnewdialogdlg.cpp:406 kdlgedit/kdlgnewdialogdlg.cpp:409
 #: kdlgedit/kdlgnewdialogdlg.cpp:412 kdlgedit/kdlgnewdialogdlg.cpp:415
 #: kdlgedit/kdlgnewdialogdlg.cpp:418 kdlgedit/kdlgnewdialogdlg.cpp:421
@@ -198,7 +198,7 @@ msgstr ""
 msgid "You must choose a valid dir as a destination!"
 msgstr ""
 
-#: caddnewtranslationdlg.cpp:34 ckdevelop_init.cpp:351
+#: caddnewtranslationdlg.cpp:34 ckdevelop_init.cpp:393
 msgid "Add new Translation File"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgstr ""
 msgid "Language:"
 msgstr ""
 
-#: caddnewtranslationdlg.cpp:215
+#: caddnewtranslationdlg.cpp:219
 msgid "Your sourcecode is already translated to all supported languages."
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "sendmail command :"
 msgstr ""
 
-#: cbugreportdlg.cpp:110 ckdevelop_noslot.cpp:508 ckdevelop_project.cpp:273
+#: cbugreportdlg.cpp:110 ckdevelop_noslot.cpp:638 ckdevelop_project.cpp:287
 msgid "Attention"
 msgstr ""
 
@@ -321,7 +321,7 @@ msgstr ""
 msgid "Error Location :"
 msgstr ""
 
-#: cbugreportdlg.cpp:369 ckdevsetupdlg.cpp:389 cnewfiledlg.cpp:66
+#: cbugreportdlg.cpp:369 ckdevsetupdlg.cpp:616 cnewfiledlg.cpp:67
 #: cprjoptionsdlg.cpp:144
 msgid "General"
 msgstr ""
@@ -411,8 +411,20 @@ msgstr ""
 msgid "Class:"
 msgstr ""
 
-#: cclasstooldlg.cpp:116 cclasstooldlg.cpp:589
+#: cclasstooldlg.cpp:116 cclasstooldlg.cpp:641
 msgid "All"
+msgstr ""
+
+#: cclasstooldlg.cpp:117
+msgid "Public"
+msgstr ""
+
+#: cclasstooldlg.cpp:118
+msgid "Protected"
+msgstr ""
+
+#: cclasstooldlg.cpp:119
+msgid "Private"
 msgstr ""
 
 #: cclasstooldlg.cpp:198
@@ -439,198 +451,199 @@ msgstr ""
 msgid "Show methods"
 msgstr ""
 
-#: cclasstooldlg.cpp:395
+#: cclasstooldlg.cpp:446
 msgid "Parents"
 msgstr ""
 
-#: cclasstooldlg.cpp:398
+#: cclasstooldlg.cpp:449
 msgid "Children"
 msgstr ""
 
-#: cclasstooldlg.cpp:401
+#: cclasstooldlg.cpp:452
 msgid "Clients"
 msgstr ""
 
-#: cclasstooldlg.cpp:404
+#: cclasstooldlg.cpp:455
 msgid "Suppliers"
 msgstr ""
 
-#: cclasstooldlg.cpp:408
+#: cclasstooldlg.cpp:459
 msgid " attributes"
 msgstr ""
 
-#: cclasstooldlg.cpp:412
+#: cclasstooldlg.cpp:463
 msgid " methods"
 msgstr ""
 
-#: cclasstooldlg.cpp:416
+#: cclasstooldlg.cpp:467
 msgid " virtual methods"
 msgstr ""
 
-#: cclasstooldlg.cpp:419
+#: cclasstooldlg.cpp:470
 msgid "Class Tool Dialog"
 msgstr ""
 
-#: cclasstooldlg.cpp:423
+#: cclasstooldlg.cpp:474
 msgid " of class "
 msgstr ""
 
-#: cclasstooltreeview.cpp:59 cclassview.cpp:163
+#: cclasstooltreeview.cpp:59 cclassview.cpp:167
 msgid "Class"
 msgstr ""
 
 #: cclasstooltreeview.cpp:60 cclasstooltreeview.cpp:65
-#: cclasstooltreeview.cpp:69 cclassview.cpp:164 cclassview.cpp:184
-#: cclassview.cpp:189 cclassview.cpp:195 cclassview.cpp:203 cclassview.cpp:209
+#: cclasstooltreeview.cpp:69 cclassview.cpp:168 cclassview.cpp:188
+#: cclassview.cpp:193 cclassview.cpp:199 cclassview.cpp:207 cclassview.cpp:213
 msgid "Go to declaration"
 msgstr ""
 
-#: cclasstooltreeview.cpp:64 cclassview.cpp:188 cclassview.cpp:202
+#: cclasstooltreeview.cpp:64 cclassview.cpp:192 cclassview.cpp:206
 #: gfxview/GfxClassBox.cpp:404
 msgid "Go to definition"
 msgstr ""
 
-#: cclasstooltreeview.cpp:68 cclassview.cpp:194
+#: cclasstooltreeview.cpp:68 cclassview.cpp:198
 msgid "Attribute"
 msgstr ""
 
-#: cclassview.cpp:151
+#: cclassview.cpp:155
 msgid "Project"
 msgstr ""
 
-#: cclassview.cpp:152
+#: cclassview.cpp:156 cclassview.cpp:219 crealfileview.cpp:289
 msgid "New file..."
 msgstr ""
 
-#: cclassview.cpp:153 ckdevelop_init.cpp:731
+#: cclassview.cpp:157 cclassview.cpp:220 ckdevelop_init.cpp:868
+#: crealfileview.cpp:290
 msgid "New class..."
 msgstr ""
 
-#: cclassview.cpp:155 cclassview.cpp:215
+#: cclassview.cpp:159 cclassview.cpp:222 crealfileview.cpp:292
 msgid "Add Folder..."
 msgstr ""
 
-#: cclassview.cpp:157 print/cprintdlg.cpp:367
+#: cclassview.cpp:161 print/cprintdlg.cpp:367
 msgid "Options..."
 msgstr ""
 
-#: cclassview.cpp:158
+#: cclassview.cpp:162
 msgid "Graphical classview.."
 msgstr ""
 
-#: cclassview.cpp:165 ckdevelop_init.cpp:734
+#: cclassview.cpp:169 ckdevelop_init.cpp:871
 msgid "Add member function..."
 msgstr ""
 
-#: cclassview.cpp:166 ckdevelop_init.cpp:736
+#: cclassview.cpp:170 ckdevelop_init.cpp:873
 msgid "Add member variable..."
 msgstr ""
 
-#: cclassview.cpp:171
+#: cclassview.cpp:175
 msgid "Parent classes..."
 msgstr ""
 
-#: cclassview.cpp:172
+#: cclassview.cpp:176
 msgid "Child classes..."
 msgstr ""
 
-#: cclassview.cpp:173
+#: cclassview.cpp:177
 msgid "Classtool..."
 msgstr ""
 
-#: cclassview.cpp:183
+#: cclassview.cpp:187
 msgid "Struct"
 msgstr ""
 
-#: cclassview.cpp:191 ckdevelop_classview.cpp:423
+#: cclassview.cpp:195 ckdevelop_classview.cpp:440
 msgid "Delete method"
 msgstr ""
 
-#: cclassview.cpp:201
+#: cclassview.cpp:205
 msgid "Slot"
 msgstr ""
 
-#: cclassview.cpp:205
+#: cclassview.cpp:209
 msgid "Delete slot"
 msgstr ""
 
-#: cclassview.cpp:208
+#: cclassview.cpp:212
 msgid "Signal"
 msgstr ""
 
-#: cclassview.cpp:211
+#: cclassview.cpp:215
 msgid "Delete signal"
 msgstr ""
 
-#: cclassview.cpp:214 crealfileview.cpp:287
+#: cclassview.cpp:218 crealfileview.cpp:288
 msgid "Folder"
 msgstr ""
 
-#: cclassview.cpp:216
+#: cclassview.cpp:223
 msgid "Delete Folder..."
 msgstr ""
 
-#: cclassview.cpp:350
+#: cclassview.cpp:412
 msgid "Namespaces"
 msgstr ""
 
-#: cclassview.cpp:356
+#: cclassview.cpp:418
 msgid "Structures"
 msgstr ""
 
-#: cclassview.cpp:363
+#: cclassview.cpp:425
 msgid "Functions"
 msgstr ""
 
-#: cclassview.cpp:370
+#: cclassview.cpp:433
 msgid "Variables"
 msgstr ""
 
-#: cclassview.cpp:447
+#: cclassview.cpp:511
 msgid "Graphical classview"
 msgstr ""
 
-#: cclassview.cpp:877
+#: cclassview.cpp:978
 msgid "No item selected."
 msgstr ""
 
-#: cclassview.cpp:884
+#: cclassview.cpp:985
 msgid "The class:"
 msgstr ""
 
-#: cclassview.cpp:886 cclassview.cpp:895
+#: cclassview.cpp:987 cclassview.cpp:996
 msgid "couldn't be found."
 msgstr ""
 
-#: cclassview.cpp:893
+#: cclassview.cpp:994
 msgid "The struct:"
 msgstr ""
 
-#: cclassview.cpp:901
+#: cclassview.cpp:1002
 msgid "Not found"
 msgstr ""
 
-#: cclassview.cpp:934
+#: cclassview.cpp:1085
 msgid "Delete class"
 msgstr ""
 
-#: cclassview.cpp:935
+#: cclassview.cpp:1086
 msgid "Are you sure you want to delete this class?"
 msgstr ""
 
-#: cclassview.cpp:1000
+#: cclassview.cpp:1169
 msgid "Delete attribute"
 msgstr ""
 
-#: cclassview.cpp:1001
+#: cclassview.cpp:1170
 msgid "Are you sure you want to delete this attribute?"
 msgstr ""
 
-#: cclassview.cpp:1035
+#: cclassview.cpp:1204
 msgid "Delete folder"
 msgstr ""
 
-#: cclassview.cpp:1036
+#: cclassview.cpp:1205
 msgid "Are you sure you want to delete this folder?"
 msgstr ""
 
@@ -638,78 +651,90 @@ msgstr ""
 msgid "Create Search Database..."
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:44
+#: ccreatedocdatabasedlg.cpp:42
+msgid "Index engine :"
+msgstr ""
+
+#: ccreatedocdatabasedlg.cpp:46
+msgid "Glimpse"
+msgstr ""
+
+#: ccreatedocdatabasedlg.cpp:53
+msgid "ht://Dig"
+msgstr ""
+
+#: ccreatedocdatabasedlg.cpp:70
 msgid "Index Size"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:55
+#: ccreatedocdatabasedlg.cpp:81
 msgid "tiny size"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:68
+#: ccreatedocdatabasedlg.cpp:94
 msgid "small size"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:80
+#: ccreatedocdatabasedlg.cpp:106
 msgid "medium size"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:94
+#: ccreatedocdatabasedlg.cpp:120
 msgid "Index Options"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:105
+#: ccreatedocdatabasedlg.cpp:131
 msgid "index the QT documentation"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:118
+#: ccreatedocdatabasedlg.cpp:144
 msgid "index the KDE documentation"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:133
+#: ccreatedocdatabasedlg.cpp:159
 msgid "additional directories to index"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:183 print/cfileprintdlg.cpp:464
+#: ccreatedocdatabasedlg.cpp:209 print/cfileprintdlg.cpp:464
 msgid "add"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:195
+#: ccreatedocdatabasedlg.cpp:221
 msgid "remove"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:252
+#: ccreatedocdatabasedlg.cpp:278
 #, c-format
 msgid ""
 "builds a medium-size index (20-30% of the size\n"
 "of all files), allowing faster search."
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:255
+#: ccreatedocdatabasedlg.cpp:281
 msgid ""
 "Build a small index rather than tiny (meaning 7-9%\n"
 "of the sizes of all files - your mileage may vary)\n"
 "allowing faster search."
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:259
+#: ccreatedocdatabasedlg.cpp:285
 #, c-format
 msgid "a tiny index (2-3% of the total size of all files)"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:271 ccreatedocdatabasedlg.cpp:276
+#: ccreatedocdatabasedlg.cpp:297 ccreatedocdatabasedlg.cpp:302
 msgid "No Database created!"
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:271
+#: ccreatedocdatabasedlg.cpp:297
 msgid "The KDE-Documentation-Path isn't set correctly."
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:276
+#: ccreatedocdatabasedlg.cpp:302
 msgid "The Qt-Documentation-Path isn't set correctly."
 msgstr ""
 
-#: ccreatedocdatabasedlg.cpp:331
+#: ccreatedocdatabasedlg.cpp:365
 msgid "Select Directory..."
 msgstr ""
 
@@ -725,85 +750,85 @@ msgstr ""
 msgid "You have to specify a foldername."
 msgstr ""
 
-#: cdocbrowser.cpp:61 ckdevelop_init.cpp:871 ckdevelop_kdlginit.cpp:224
+#: cdocbrowser.cpp:61 ckdevelop_init.cpp:1025 ckdevelop_kdlginit.cpp:256
 msgid "Forward"
 msgstr ""
 
-#: cdocbrowser.cpp:64 ckdevelop_init.cpp:414
-msgid "Add Bookmark"
+#: cdocbrowser.cpp:64 ckdevelop_init.cpp:456
+msgid "Toggle Bookmark"
 msgstr ""
 
 #: cdocbrowser.cpp:65
 msgid "View in new window"
 msgstr ""
 
-#: cdocbrowser.cpp:67 cdocbrowser.cpp:279 cdocbrowser.cpp:286
-#: ceditwidget.cpp:389
+#: cdocbrowser.cpp:67 cdocbrowser.cpp:293 cdocbrowser.cpp:300
+#: ceditwidget.cpp:396
 msgid "grep: "
 msgstr ""
 
-#: cdocbrowser.cpp:68 cdocbrowser.cpp:280 cdocbrowser.cpp:287
-#: ceditwidget.cpp:390
+#: cdocbrowser.cpp:68 cdocbrowser.cpp:294 cdocbrowser.cpp:301
+#: ceditwidget.cpp:397
 msgid "look up: "
 msgstr ""
 
-#: cdocbrowser.cpp:151 ckdevelop.cpp:2228
+#: cdocbrowser.cpp:165 ckdevelop.cpp:3163
 msgid "Not found!"
 msgstr ""
 
-#: cdocbrowser.cpp:151
+#: cdocbrowser.cpp:165
 msgid "\" not found!"
 msgstr ""
 
-#: cdocbrowser.cpp:348
+#: cdocbrowser.cpp:364
 msgid "Small"
 msgstr ""
 
-#: cdocbrowser.cpp:352
+#: cdocbrowser.cpp:368
 msgid "Medium"
 msgstr ""
 
-#: cdocbrowser.cpp:356
+#: cdocbrowser.cpp:372
 msgid "Large"
 msgstr ""
 
-#: cdocbrowser.cpp:360
+#: cdocbrowser.cpp:376
 msgid "Standard Font"
 msgstr ""
 
-#: cdocbrowser.cpp:377
+#: cdocbrowser.cpp:393
 msgid "Fixed Font"
 msgstr ""
 
-#: cdocbrowser.cpp:516
+#: cdocbrowser.cpp:533
 msgid "Background Color:"
 msgstr ""
 
-#: cdocbrowser.cpp:524
+#: cdocbrowser.cpp:541
 msgid "Normal Text Color:"
 msgstr ""
 
-#: cdocbrowser.cpp:532
+#: cdocbrowser.cpp:549
 msgid "URL Link Color:"
 msgstr ""
 
-#: cdocbrowser.cpp:540
+#: cdocbrowser.cpp:557
 msgid "Followed Link Color:"
 msgstr ""
 
-#: cdocbrowser.cpp:548
+#: cdocbrowser.cpp:565
 msgid "Underline links"
 msgstr ""
 
-#: cdocbrowser.cpp:556
+#: cdocbrowser.cpp:573
 msgid "Always use my colors"
 msgstr ""
 
-#: cdocbrowser.cpp:644
+#: cdocbrowser.cpp:661
 msgid "Documentation Browser Options"
 msgstr ""
 
-#: cdocbrowser.cpp:657 cdocbrowser.cpp:658
+#: cdocbrowser.cpp:674 cdocbrowser.cpp:675
 msgid "Colors"
 msgstr ""
 
@@ -823,6 +848,10 @@ msgstr ""
 msgid "Here you can browse through the disc to select a file for the entry."
 msgstr ""
 
+#: ceditwidget.cpp:398 dbg/vartree.cpp:67
+msgid "Watch: "
+msgstr ""
+
 #: cexecuteargdlg.cpp:37
 msgid "Arguments: "
 msgstr ""
@@ -831,7 +860,7 @@ msgstr ""
 msgid "Clear Arguments"
 msgstr ""
 
-#: cfilepropdlg.cpp:33 ckdevelop_init.cpp:354
+#: cfilepropdlg.cpp:33 ckdevelop_init.cpp:396
 msgid "File Properties"
 msgstr ""
 
@@ -847,7 +876,7 @@ msgstr ""
 msgid "Installation"
 msgstr ""
 
-#: cfilepropdlg.cpp:120 kwrite/highlight.cpp:2151
+#: cfilepropdlg.cpp:120 kwrite/highlight.cpp:2266
 msgid "Size:"
 msgstr ""
 
@@ -883,8 +912,8 @@ msgid ""
 "Other values can be found in the Makefile"
 msgstr ""
 
-#: cfinddoctextdlg.cpp:38 ckdevelop_init.cpp:690 ckdevelop_init.cpp:884
-#: ckdevelop_kdlginit.cpp:228
+#: cfinddoctextdlg.cpp:38 ckdevelop_init.cpp:827 ckdevelop_init.cpp:1038
+#: ckdevelop_kdlginit.cpp:260
 msgid "Search for Help on..."
 msgstr ""
 
@@ -904,162 +933,199 @@ msgstr ""
 msgid "Filters:"
 msgstr ""
 
-#: ckappwizard.cpp:36
+#: ckappwizard.cpp:39
 msgid "Application Wizard"
 msgstr ""
 
-#: ckappwizard.cpp:56
+#: ckappwizard.cpp:59
 msgid "exit the CKAppWizard"
 msgstr ""
 
-#: ckappwizard.cpp:58
+#: ckappwizard.cpp:61
 msgid "Create"
 msgstr ""
 
-#: ckappwizard.cpp:60
+#: ckappwizard.cpp:63
 msgid "creating the project"
 msgstr ""
 
-#: ckappwizard.cpp:64
+#: ckappwizard.cpp:67
 msgid "set all changes back"
 msgstr ""
 
-#: ckappwizard.cpp:75 ckappwizard.cpp:111
+#: ckappwizard.cpp:78 ckappwizard.cpp:114
 msgid "Applications"
 msgstr ""
 
-#: ckappwizard.cpp:135
+#: ckappwizard.cpp:138
 msgid "Label:"
 msgstr ""
 
-#: ckappwizard.cpp:152
+#: ckappwizard.cpp:142 ckappwizard.cpp:2538 ckappwizard.cpp:2539
+#: doctreeview.cpp:560 doctreeview.cpp:599 doctreeview.cpp:606
+msgid "Others"
+msgstr ""
+
+#: ckappwizard.cpp:146
+msgid "custom project"
+msgstr ""
+
+#: ckappwizard.cpp:155
 msgid "Terminal"
 msgstr ""
 
-#: ckappwizard.cpp:156
+#: ckappwizard.cpp:159
 msgid "C++"
 msgstr ""
 
-#: ckappwizard.cpp:157
+#: ckappwizard.cpp:160
 msgid "C"
 msgstr ""
 
-#: ckappwizard.cpp:159 cprjoptionsdlg.cpp:768
+#: ckappwizard.cpp:162 cprjoptionsdlg.cpp:768
 msgid "Qt"
 msgstr ""
 
-#: ckappwizard.cpp:164 ckappwizard.cpp:173
+#: ckappwizard.cpp:166
+msgid "QextMDI"
+msgstr ""
+
+#: ckappwizard.cpp:167
+msgid "Qt 2.1 MDI"
+msgstr ""
+
+#: ckappwizard.cpp:168
+msgid "Qt 2.x SDI"
+msgstr ""
+
+#: ckappwizard.cpp:169 ckappwizard.cpp:179
 msgid "Normal"
 msgstr ""
 
-#: ckappwizard.cpp:166
+#: ckappwizard.cpp:171
 msgid "KDE"
 msgstr ""
 
-#: ckappwizard.cpp:172
+#: ckappwizard.cpp:175
+msgid "KDE 2 MDI"
+msgstr ""
+
+#: ckappwizard.cpp:176
+msgid "KDE 2 Normal"
+msgstr ""
+
+#: ckappwizard.cpp:177
+msgid "KDE 2 Mini"
+msgstr ""
+
+#: ckappwizard.cpp:178
+msgid "Normal-OpenGL"
+msgstr ""
+
+#: ckappwizard.cpp:180
 msgid "Mini"
 msgstr ""
 
-#: ckappwizard.cpp:189
+#: ckappwizard.cpp:196
 msgid "Generate settings"
 msgstr ""
 
-#: ckappwizard.cpp:201
+#: ckappwizard.cpp:208
 msgid "Projectname:"
 msgstr ""
 
-#: ckappwizard.cpp:226
+#: ckappwizard.cpp:233
 msgid "Projectdirectory:"
 msgstr ""
 
-#: ckappwizard.cpp:265
+#: ckappwizard.cpp:272
 msgid "Versionnumber:"
 msgstr ""
 
-#: ckappwizard.cpp:290 cprjoptionsdlg.cpp:83
+#: ckappwizard.cpp:297 cprjoptionsdlg.cpp:83
 msgid "Author:"
 msgstr ""
 
-#: ckappwizard.cpp:315 cprjoptionsdlg.cpp:96
+#: ckappwizard.cpp:322 cprjoptionsdlg.cpp:96
 msgid "Email:"
 msgstr ""
 
-#: ckappwizard.cpp:340
+#: ckappwizard.cpp:347
 msgid "generate sources and headers"
 msgstr ""
 
-#: ckappwizard.cpp:352
+#: ckappwizard.cpp:359
 msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
 msgstr ""
 
-#: ckappwizard.cpp:364
+#: ckappwizard.cpp:371
 msgid "User-Documentation"
 msgstr ""
 
-#: ckappwizard.cpp:376
+#: ckappwizard.cpp:383
 msgid "API-Documentation"
 msgstr ""
 
-#: ckappwizard.cpp:388
+#: ckappwizard.cpp:395
 msgid "lsm-File - Linux Software Map"
 msgstr ""
 
-#: ckappwizard.cpp:400
+#: ckappwizard.cpp:407
 msgid ".kdelnk-File"
 msgstr ""
 
-#: ckappwizard.cpp:412
+#: ckappwizard.cpp:419
 msgid "Program-Icon"
 msgstr ""
 
-#: ckappwizard.cpp:436
+#: ckappwizard.cpp:443
 msgid "Mini-Icon"
 msgstr ""
 
-#: ckappwizard.cpp:460
+#: ckappwizard.cpp:467
 msgid ""
 "Insert your project name here. This is\n"
 "also the name of the directory where your Project\n"
 "will be created."
 msgstr ""
 
-#: ckappwizard.cpp:466
+#: ckappwizard.cpp:473
 msgid "Enter the toplevel-directory of your project.\n"
 msgstr ""
 
-#: ckappwizard.cpp:469
+#: ckappwizard.cpp:476
 msgid ""
 "Set the initial version number of your project here.\n"
 "The number will be used in the about-dialog as well as for\n"
 "determining the project's package numbering for distribution."
 msgstr ""
 
-#: ckappwizard.cpp:474
+#: ckappwizard.cpp:481
 msgid ""
 "Insert your name or the development team name here. This will be used\n"
 "for adding your name as the author to all generated files of your project."
 msgstr ""
 
-#: ckappwizard.cpp:478
+#: ckappwizard.cpp:485
 msgid ""
 "Enter your email adress here. This will be\n"
 "used for file header information."
 msgstr ""
 
-#: ckappwizard.cpp:481
+#: ckappwizard.cpp:488
 msgid ""
 "Generate a HTML-based documentation set\n"
 "for your project classes including cross-references to\n"
 "the used libraries."
 msgstr ""
 
-#: ckappwizard.cpp:485
+#: ckappwizard.cpp:492
 msgid ""
 "Generate a preset documentation handbook in HTML\n"
 "by an SGML file included with your package."
 msgstr ""
 
-#: ckappwizard.cpp:487
+#: ckappwizard.cpp:494
 msgid ""
 "Create a lsm-file for your project. The Linux Software Map\n"
 "is a file generally used for projects for distribution purpose and contains\n"
@@ -1068,7 +1134,7 @@ msgid ""
 "the end-user."
 msgstr ""
 
-#: ckappwizard.cpp:491
+#: ckappwizard.cpp:498
 msgid ""
 "Generate a set of GNU standard files for your project.\n"
 "These will give the end-user of the sourcepackage an overview about\n"
@@ -1076,19 +1142,19 @@ msgid ""
 "protocol your changes."
 msgstr ""
 
-#: ckappwizard.cpp:495
+#: ckappwizard.cpp:502
 msgid ""
 "Add a program icon to your project that represents\n"
 "your application in the window manager."
 msgstr ""
 
-#: ckappwizard.cpp:497
+#: ckappwizard.cpp:504
 msgid ""
 "Add a mini program icon to your project that is used\n"
 "for window-manager popup menus."
 msgstr ""
 
-#: ckappwizard.cpp:499
+#: ckappwizard.cpp:506
 msgid ""
 "Add a KDE link file which is installed in\n"
 "the KDE panel of the end-user. By default, your application's\n"
@@ -1097,80 +1163,80 @@ msgid ""
 "for the link file later."
 msgstr ""
 
-#: ckappwizard.cpp:504
+#: ckappwizard.cpp:511
 msgid ""
 "Lets you select another icon for your program\n"
 "than the sample program icon provided by the Application\n"
 "Wizard."
 msgstr ""
 
-#: ckappwizard.cpp:507
+#: ckappwizard.cpp:514
 msgid ""
 "Lets you select another mini-icon for your program\n"
 "than the sample program icon provided by the Application\n"
 "Wizard."
 msgstr ""
 
-#: ckappwizard.cpp:527
+#: ckappwizard.cpp:534
 msgid "Version Control System Support"
 msgstr ""
 
-#: ckappwizard.cpp:550
+#: ckappwizard.cpp:557
 msgid "vcs support"
 msgstr ""
 
-#: ckappwizard.cpp:575
+#: ckappwizard.cpp:582
 msgid "vcs location"
 msgstr ""
 
-#: ckappwizard.cpp:612
+#: ckappwizard.cpp:619
 msgid "repository in vcs"
 msgstr ""
 
-#: ckappwizard.cpp:637
+#: ckappwizard.cpp:644
 msgid "vendor tag"
 msgstr ""
 
-#: ckappwizard.cpp:662
+#: ckappwizard.cpp:669
 msgid "log message"
 msgstr ""
 
-#: ckappwizard.cpp:687
+#: ckappwizard.cpp:694
 msgid "release tag"
 msgstr ""
 
-#: ckappwizard.cpp:714
+#: ckappwizard.cpp:721
 msgid ""
 "Here you can enter the log message for the\n"
 "version control system."
 msgstr ""
 
-#: ckappwizard.cpp:719
+#: ckappwizard.cpp:726
 msgid ""
 "Here you can choose the vendor tag, which your project\n"
 "has in the version control system."
 msgstr ""
 
-#: ckappwizard.cpp:724
+#: ckappwizard.cpp:731
 msgid ""
 "Here you can choose a special pointer for the first\n"
 "entry in the version control system."
 msgstr ""
 
-#: ckappwizard.cpp:729
+#: ckappwizard.cpp:736
 msgid ""
 "Here you can choose the version control system,\n"
 "which you want to use."
 msgstr ""
 
-#: ckappwizard.cpp:735
+#: ckappwizard.cpp:742
 msgid ""
 "Here you can choose where your vcsroot loction should be.\n"
 "At the moment we only support local vs. And be sure, you\n"
 "have read and write access in the location."
 msgstr ""
 
-#: ckappwizard.cpp:741
+#: ckappwizard.cpp:748
 msgid ""
 "Here you can see the repository of your project in the\n"
 "version control system. The repository is dependend on\n"
@@ -1178,252 +1244,308 @@ msgid ""
 "repository direct."
 msgstr ""
 
-#: ckappwizard.cpp:753
+#: ckappwizard.cpp:760
 msgid "Headertemplate for .h-files"
 msgstr ""
 
-#: ckappwizard.cpp:765
+#: ckappwizard.cpp:772
 msgid "headertemplate for .h-files"
 msgstr ""
 
-#: ckappwizard.cpp:777 ckappwizard.cpp:850
+#: ckappwizard.cpp:784 ckappwizard.cpp:857
 msgid "Load..."
 msgstr ""
 
-#: ckappwizard.cpp:789 ckappwizard.cpp:862
+#: ckappwizard.cpp:796 ckappwizard.cpp:869
 msgid "New"
 msgstr ""
 
-#: ckappwizard.cpp:807 ckappwizard.cpp:879
+#: ckappwizard.cpp:814 ckappwizard.cpp:886
 msgid ""
 "Press this button to select an\n"
 "existing header template file"
 msgstr ""
 
-#: ckappwizard.cpp:809 ckappwizard.cpp:881
+#: ckappwizard.cpp:816 ckappwizard.cpp:888
 msgid "Clears the pre-set headertemplate"
 msgstr ""
 
-#: ckappwizard.cpp:810 ckappwizard.cpp:882
+#: ckappwizard.cpp:817 ckappwizard.cpp:889
 msgid "Edit your headertemplate here"
 msgstr ""
 
-#: ckappwizard.cpp:812
+#: ckappwizard.cpp:819
 msgid ""
 "Use a standard\n"
 "headertemplate for your headerfiles"
 msgstr ""
 
-#: ckappwizard.cpp:826 ckappwizard.cpp:1375 ckappwizard.cpp:1582
+#: ckappwizard.cpp:833 ckappwizard.cpp:1527 ckappwizard.cpp:1919
 msgid "Headertemplate for .cpp-files"
 msgstr ""
 
-#: ckappwizard.cpp:838 ckappwizard.cpp:1376 ckappwizard.cpp:1585
+#: ckappwizard.cpp:845 ckappwizard.cpp:1528 ckappwizard.cpp:1922
 msgid "headertemplate for .cpp-files"
 msgstr ""
 
-#: ckappwizard.cpp:884
+#: ckappwizard.cpp:891
 msgid ""
 "Use a standard\n"
 "headertemplate for your implementation files"
 msgstr ""
 
-#: ckappwizard.cpp:898
+#: ckappwizard.cpp:905
 msgid "Processes"
 msgstr ""
 
-#: ckappwizard.cpp:928
+#: ckappwizard.cpp:935
 msgid "Displays the normal output of the project generator"
 msgstr ""
 
-#: ckappwizard.cpp:930
+#: ckappwizard.cpp:937
 msgid "Displays warnings and errormessages of the project generator"
 msgstr ""
 
-#: ckappwizard.cpp:941 ckappwizard.cpp:2343
+#: ckappwizard.cpp:948 ckappwizard.cpp:2745
 msgid "Directory"
 msgstr ""
 
-#: ckappwizard.cpp:959
+#: ckappwizard.cpp:966
 msgid "Select your template for Header-file headers"
 msgstr ""
 
-#: ckappwizard.cpp:970
+#: ckappwizard.cpp:977
 msgid "Select your template for C-file headers"
 msgstr ""
 
-#: ckappwizard.cpp:972
+#: ckappwizard.cpp:979
 msgid "Select your template for Cpp-file headers"
 msgstr ""
 
-#: ckappwizard.cpp:995
+#: ckappwizard.cpp:1002
 msgid "sgml2html and ksgml2html do not exist!"
 msgstr ""
 
-#: ckappwizard.cpp:996
+#: ckappwizard.cpp:1003
 msgid ""
 "If you want to generate the user-documentation, you need one of these "
-"programs.\n"
-"If you do not have one, the user-documentation will not be generate."
+"programs."
 msgstr ""
 
-#: ckappwizard.cpp:997
+#: ckappwizard.cpp:1003 dbgpsdlg.cpp:64
 msgid "Ok"
 msgstr ""
 
-#: ckappwizard.cpp:1024
+#: ckappwizard.cpp:1031
 msgid " already exists!"
 msgstr ""
 
-#: ckappwizard.cpp:1024
+#: ckappwizard.cpp:1031
 msgid "It isn't possible to generate a new project into an existing directory."
 msgstr ""
 
-#: ckappwizard.cpp:1037 ckappwizard.cpp:1378 ckappwizard.cpp:1396
-#: ckappwizard.cpp:1403 ckappwizard.cpp:1421 ckappwizard.cpp:1426
-#: ckappwizard.cpp:1444 ckappwizard.cpp:1452 ckappwizard.cpp:1475
-#: ckappwizard.cpp:1501 ckappwizard.cpp:1520
+#: ckappwizard.cpp:1249 ckappwizard.cpp:1530 ckappwizard.cpp:1548
+#: ckappwizard.cpp:1557 ckappwizard.cpp:1576 ckappwizard.cpp:1586
+#: ckappwizard.cpp:1604 ckappwizard.cpp:1609 ckappwizard.cpp:1627
+#: ckappwizard.cpp:1634 ckappwizard.cpp:1652 ckappwizard.cpp:1657
+#: ckappwizard.cpp:1675 ckappwizard.cpp:1682 ckappwizard.cpp:1700
+#: ckappwizard.cpp:1707 ckappwizard.cpp:1725 ckappwizard.cpp:1732
+#: ckappwizard.cpp:1750 ckappwizard.cpp:1757 ckappwizard.cpp:1775
+#: ckappwizard.cpp:1789 ckappwizard.cpp:1812 ckappwizard.cpp:1838
+#: ckappwizard.cpp:1857
 msgid "Exit"
 msgstr ""
 
-#: ckappwizard.cpp:1399
+#: ckappwizard.cpp:1551
 msgid ""
 "Create a KDE-application with session-management, menubar, toolbar, "
 "statusbar and support for a document-view codeframe model."
 msgstr ""
 
-#: ckappwizard.cpp:1424
+#: ckappwizard.cpp:1580
+msgid ""
+"Create a KDE-application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model. OpenGL(tm) "
+"(Mesa3D) support is added."
+msgstr ""
+
+#: ckappwizard.cpp:1607
 msgid "Create a KDE-application with an empty main widget."
 msgstr ""
 
-#: ckappwizard.cpp:1447
+#: ckappwizard.cpp:1630
+msgid ""
+"Create a KDE-2 application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model."
+msgstr ""
+
+#: ckappwizard.cpp:1655
+msgid "Create a KDE-2 application with an empty main widget."
+msgstr ""
+
+#: ckappwizard.cpp:1678
+msgid ""
+"Create a KDE-2 MDI (Multiple Document Interface) application with menubar, "
+"toolbar, statusbar and support for a document-view codeframe model."
+msgstr ""
+
+#: ckappwizard.cpp:1703
 msgid ""
 "Create a Qt-Application with a main window containing a menubar, toolbar and "
 "statusbar, including support for a generic document-view model."
 msgstr ""
 
-#: ckappwizard.cpp:1457
+#: ckappwizard.cpp:1728
+msgid ""
+"Create a Qt-2.x Application with a main window containing a menubar, toolbar "
+"and statusbar, including support for a single document-view interface (SDI) "
+"model."
+msgstr ""
+
+#: ckappwizard.cpp:1753
+msgid ""
+"Create a Qt-2.1 Application with a main window containing a menubar, toolbar "
+"and statusbar, including support for a multiple document interface (MDI) "
+"model."
+msgstr ""
+
+#: ckappwizard.cpp:1778
+msgid ""
+"Create an MDI framework based on the QextMDI library and Qt2.0x. Allows to "
+"switch between both modes, Toplevel and Childframe. Requires QextMDI!!! "
+"(www.geocities.com/gigafalk/qextmdi.htm)"
+msgstr ""
+
+#: ckappwizard.cpp:1781
+msgid "Important hint for a QextMDI project"
+msgstr ""
+
+#: ckappwizard.cpp:1782
+msgid ""
+"If you choose this kind of project:\n"
+"\n"
+"An environment variable QEXTMDIDIR should be set!\n"
+"Because the wizard searches\n"
+"the header files in:  $(QEXTMDIDIR)/include\n"
+"and libqextmdi.so in: $(QEXTMDIDIR)/lib"
+msgstr ""
+
+#: ckappwizard.cpp:1794
 msgid "Headertemplate for .c-files"
 msgstr ""
 
-#: ckappwizard.cpp:1458
+#: ckappwizard.cpp:1795
 msgid "headertemplate for .c-files"
 msgstr ""
 
-#: ckappwizard.cpp:1479
+#: ckappwizard.cpp:1816
 msgid ""
 "Create a C application. The program will run in a terminal and doesn't "
 "contain any support for classes and Graphical User Interface."
 msgstr ""
 
-#: ckappwizard.cpp:1482
+#: ckappwizard.cpp:1819
 msgid ""
 "Create a C++ application. The program will run in a terminal and doesn't "
 "contain any support for a Graphical User Interface."
 msgstr ""
 
-#: ckappwizard.cpp:1523
+#: ckappwizard.cpp:1860
 msgid ""
 "Creates an empty project to work with existing development projects. "
 "KDevelop will not take care of any Makefiles as those are supposed to be "
 "included with your old project."
 msgstr ""
 
-#: ckappwizard.cpp:1553
+#: ckappwizard.cpp:1890
 msgid ""
 "Contains all KDE-compliant\n"
 "project types."
 msgstr ""
 
-#: ckappwizard.cpp:1558
+#: ckappwizard.cpp:1895
 msgid ""
 "Contains all Qt-based\n"
 "project types."
 msgstr ""
 
-#: ckappwizard.cpp:1563
+#: ckappwizard.cpp:1900
 msgid ""
 "Contains all C/C++-terminal\n"
 "project types."
 msgstr ""
 
-#: ckappwizard.cpp:1574
+#: ckappwizard.cpp:1911
 msgid "Contains all individual project types."
 msgstr ""
 
-#: ckappwizard.cpp:2174 ckappwizard.cpp:2175 doctreeview.cpp:516
-#: doctreeview.cpp:543 doctreeview.cpp:550
-msgid "Others"
-msgstr ""
-
-#: ckappwizard.cpp:2195 ckappwizard.cpp:2196
+#: ckappwizard.cpp:2561 ckappwizard.cpp:2562
 msgid "Translations"
 msgstr ""
 
-#: ckappwizard.cpp:2201 ckappwizard.cpp:2202 ckdevelop_kdlginit.cpp:43
+#: ckappwizard.cpp:2567 ckappwizard.cpp:2568 ckdevelop_kdlginit.cpp:43
 #: kdlgedit/kdlgdialogs.cpp:68 kdlgedit/kdlgdialogs.cpp:71
 msgid "Dialogs"
 msgstr ""
 
-#: ckappwizard.cpp:2218 ckappwizard.cpp:2219
+#: ckappwizard.cpp:2584 ckappwizard.cpp:2585
 msgid "Sources"
 msgstr ""
 
-#: ckappwizard.cpp:2226 ckappwizard.cpp:2227
+#: ckappwizard.cpp:2592 ckappwizard.cpp:2593
 msgid "Headers"
 msgstr ""
 
-#: ckdevelop.cpp:71
+#: ckdevelop.cpp:80 ckdevelop.cpp:87
 msgid "Creating new file..."
 msgstr ""
 
-#: ckdevelop.cpp:73 ckdevelop.cpp:92 ckdevelop.cpp:102 ckdevelop.cpp:142
-#: ckdevelop.cpp:149 ckdevelop.cpp:262 ckdevelop.cpp:304 ckdevelop.cpp:321
-#: ckdevelop.cpp:400 ckdevelop.cpp:442 ckdevelop.cpp:451 ckdevelop.cpp:456
-#: ckdevelop.cpp:461 ckdevelop.cpp:466 ckdevelop.cpp:476 ckdevelop.cpp:484
-#: ckdevelop.cpp:503 ckdevelop.cpp:520 ckdevelop.cpp:526 ckdevelop.cpp:541
-#: ckdevelop.cpp:557 ckdevelop.cpp:1018 ckdevelop.cpp:1091 ckdevelop.cpp:1104
-#: ckdevelop.cpp:1119 ckdevelop.cpp:1131 ckdevelop.cpp:1150 ckdevelop.cpp:1161
-#: ckdevelop.cpp:1203 ckdevelop.cpp:1324 ckdevelop.cpp:1342 ckdevelop.cpp:1355
-#: ckdevelop.cpp:1369 ckdevelop.cpp:1385 ckdevelop.cpp:1395 ckdevelop.cpp:1541
-#: ckdevelop.cpp:1566 ckdevelop.cpp:2007 ckdevelop.cpp:2348
-#: ckdevelop_noslot.cpp:435 ckdevelop_project.cpp:219
-#: ckdevelop_project.cpp:532 ckdevelop_project.cpp:565
-#: ckdevelop_project.cpp:612
+#: ckdevelop.cpp:82 ckdevelop.cpp:89 ckdevelop.cpp:124 ckdevelop.cpp:134
+#: ckdevelop.cpp:174 ckdevelop.cpp:181 ckdevelop.cpp:294 ckdevelop.cpp:341
+#: ckdevelop.cpp:358 ckdevelop.cpp:470 ckdevelop.cpp:512 ckdevelop.cpp:521
+#: ckdevelop.cpp:526 ckdevelop.cpp:531 ckdevelop.cpp:545 ckdevelop.cpp:555
+#: ckdevelop.cpp:563 ckdevelop.cpp:582 ckdevelop.cpp:599 ckdevelop.cpp:605
+#: ckdevelop.cpp:631 ckdevelop.cpp:647 ckdevelop.cpp:1788 ckdevelop.cpp:1861
+#: ckdevelop.cpp:1874 ckdevelop.cpp:1889 ckdevelop.cpp:1901 ckdevelop.cpp:1920
+#: ckdevelop.cpp:1931 ckdevelop.cpp:1979 ckdevelop.cpp:2130 ckdevelop.cpp:2187
+#: ckdevelop.cpp:2200 ckdevelop.cpp:2214 ckdevelop.cpp:2230 ckdevelop.cpp:2240
+#: ckdevelop.cpp:2429 ckdevelop.cpp:2454 ckdevelop.cpp:2906 ckdevelop.cpp:3282
+#: ckdevelop_noslot.cpp:564 ckdevelop_project.cpp:223
+#: ckdevelop_project.cpp:631 ckdevelop_project.cpp:685
 msgid "Ready."
 msgstr ""
 
-#: ckdevelop.cpp:78 ckdevelop.cpp:96
+#: ckdevelop.cpp:93 ckdevelop.cpp:128
 msgid "Opening file..."
 msgstr ""
 
-#: ckdevelop.cpp:107
+#: ckdevelop.cpp:139
 msgid "Closing file..."
 msgstr ""
 
-#: ckdevelop.cpp:117
+#: ckdevelop.cpp:149
 msgid "Save?"
 msgstr ""
 
-#: ckdevelop.cpp:118
+#: ckdevelop.cpp:150
 msgid "The document was modified,save?"
 msgstr ""
 
-#: ckdevelop.cpp:154
+#: ckdevelop.cpp:186
 msgid "Closing all files..."
 msgstr ""
 
-#: ckdevelop.cpp:167
+#: ckdevelop.cpp:199
 msgid "Save changed files ?"
 msgstr ""
 
-#: ckdevelop.cpp:168 ckdevelop_project.cpp:64
+#: ckdevelop.cpp:200 ckdevelop_project.cpp:64
 msgid ""
 "The project\n"
 "\n"
 msgstr ""
 
-#: ckdevelop.cpp:169 ckdevelop_project.cpp:65
+#: ckdevelop.cpp:201 ckdevelop_project.cpp:65
 msgid ""
 "\n"
 "\n"
@@ -1431,1540 +1553,1876 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ckdevelop.cpp:171 ckdevelop_project.cpp:67
+#: ckdevelop.cpp:203 ckdevelop_project.cpp:67
 msgid "Save all"
 msgstr ""
 
-#: ckdevelop.cpp:246 ckdevelop_init.cpp:161 ckdevelop_init.cpp:1114
-#: ckdevelop_noslot.cpp:119 ckdevelop_noslot.cpp:120 ckdevelop_noslot.cpp:224
-#: ckdevelop_noslot.cpp:1243 ckdevelop_project.cpp:167
-#: ckdevelop_project.cpp:1105
+#: ckdevelop.cpp:278 ckdevelop_init.cpp:198 ckdevelop_init.cpp:1312
+#: ckdevelop_noslot.cpp:205 ckdevelop_noslot.cpp:206 ckdevelop_noslot.cpp:310
+#: ckdevelop_noslot.cpp:1385 ckdevelop_project.cpp:170
+#: ckdevelop_project.cpp:1170
 msgid "Untitled.h"
 msgstr ""
 
-#: ckdevelop.cpp:247 ckdevelop_init.cpp:171 ckdevelop_init.cpp:1122
-#: ckdevelop_noslot.cpp:91 ckdevelop_noslot.cpp:224 ckdevelop_noslot.cpp:1251
-#: ckdevelop_project.cpp:168 ckdevelop_project.cpp:1010
-#: ckdevelop_project.cpp:1016 ckdevelop_project.cpp:1106
+#: ckdevelop.cpp:279 ckdevelop_init.cpp:208 ckdevelop_init.cpp:1320
+#: ckdevelop_noslot.cpp:177 ckdevelop_noslot.cpp:310 ckdevelop_noslot.cpp:1393
+#: ckdevelop_project.cpp:171 ckdevelop_project.cpp:1075
+#: ckdevelop_project.cpp:1081 ckdevelop_project.cpp:1171
 msgid "Untitled.cpp"
 msgstr ""
 
-#: ckdevelop.cpp:278 ckdevelop_noslot.cpp:601
+#: ckdevelop.cpp:310 ckdevelop.cpp:414 ckdevelop_noslot.cpp:732
 msgid "File modified"
 msgstr ""
 
-#: ckdevelop.cpp:289
+#: ckdevelop.cpp:322
 msgid "Saving file "
 msgstr ""
 
-#: ckdevelop.cpp:305
+#: ckdevelop.cpp:342
 msgid "File "
 msgstr ""
 
-#: ckdevelop.cpp:308
+#: ckdevelop.cpp:345
 msgid " not saved."
 msgstr ""
 
-#: ckdevelop.cpp:310
+#: ckdevelop.cpp:347
 msgid " saved."
 msgstr ""
 
-#: ckdevelop.cpp:316
+#: ckdevelop.cpp:353
 msgid "Save file as..."
 msgstr ""
 
-#: ckdevelop.cpp:328
+#: ckdevelop.cpp:373
 msgid "Saving all changed files..."
 msgstr ""
 
-#: ckdevelop.cpp:331
+#: ckdevelop.cpp:376
 msgid "Autosaving..."
 msgstr ""
 
-#: ckdevelop.cpp:424
+#: ckdevelop.cpp:494
 msgid "Exiting..."
 msgstr ""
 
-#: ckdevelop.cpp:440
+#: ckdevelop.cpp:510
 msgid "Cutting..."
 msgstr ""
 
-#: ckdevelop.cpp:445
+#: ckdevelop.cpp:515
 msgid "Copying..."
 msgstr ""
 
-#: ckdevelop.cpp:454
+#: ckdevelop.cpp:524
 msgid "Pasting selection..."
 msgstr ""
 
-#: ckdevelop.cpp:459
+#: ckdevelop.cpp:529
 msgid "Inserting file contents..."
 msgstr ""
 
-#: ckdevelop.cpp:464 grepdialog.cpp:317
+#: ckdevelop.cpp:535 grepdialog.cpp:317
 msgid "Searching..."
 msgstr ""
 
-#: ckdevelop.cpp:469
+#: ckdevelop.cpp:548
 msgid "Repeating last search..."
 msgstr ""
 
-#: ckdevelop.cpp:479 ckdevelop.cpp:489
+#: ckdevelop.cpp:558 ckdevelop.cpp:568
 msgid "Searching in Files..."
 msgstr ""
 
-#: ckdevelop.cpp:524
+#: ckdevelop.cpp:603
 msgid "Replacing..."
 msgstr ""
 
-#: ckdevelop.cpp:539
+#: ckdevelop.cpp:629
 msgid "Selecting all..."
 msgstr ""
 
-#: ckdevelop.cpp:555
+#: ckdevelop.cpp:645
 msgid "Switching to selected line..."
 msgstr ""
 
-#: ckdevelop.cpp:715
+#: ckdevelop.cpp:805
 msgid "Compiling "
 msgstr ""
 
-#: ckdevelop.cpp:744 ckdevelop.cpp:756
-msgid "Running "
+#: ckdevelop.cpp:842 ckdevelop.cpp:870 ckdevelop.cpp:1316
+msgid "Project sources has been modified"
 msgstr ""
 
-#: ckdevelop.cpp:751
+#: ckdevelop.cpp:843 ckdevelop.cpp:871
+msgid "Should the project be rebuild before starting the application?"
+msgstr ""
+
+#: ckdevelop.cpp:906
 msgid "Execute with Arguments"
 msgstr ""
 
-#: ckdevelop.cpp:779
-msgid "Running  "
+#: ckdevelop.cpp:922
+msgid "Running "
 msgstr ""
 
-#: ckdevelop.cpp:779
-msgid "  in KDbg"
+#: ckdevelop.cpp:937 ckdevelop.cpp:942 ckdevelop.cpp:947 ckdevelop.cpp:952
+msgid "Press Enter to continue!"
 msgstr ""
 
-#: ckdevelop.cpp:802
+#: ckdevelop.cpp:1230
+msgid "Debug running process..."
+msgstr ""
+
+#: ckdevelop.cpp:1237
+#, c-format
+msgid "Attach to process %d in %s"
+msgstr ""
+
+#: ckdevelop.cpp:1259
+msgid "Enter core file to examine..."
+msgstr ""
+
+#: ckdevelop.cpp:1265
+#, c-format
+msgid "Examine core file %s in %s"
+msgstr ""
+
+#: ckdevelop.cpp:1286
+msgid "Enter executable to debug..."
+msgstr ""
+
+#: ckdevelop.cpp:1291 ckdevelop.cpp:1408
+#, c-format
+msgid "Running %s in %s"
+msgstr ""
+
+#: ckdevelop.cpp:1317
+msgid "Should the project be rebuild before starting the debug session?"
+msgstr ""
+
+#: ckdevelop.cpp:1359 ckdevelop_init.cpp:728 ckdevelop_init.cpp:946
+#: ckdevelop_kdlginit.cpp:213
+msgid "Debug with arguments"
+msgstr ""
+
+#: ckdevelop.cpp:1366
+#, c-format
+msgid "Debug with arguments (%s) in %s"
+msgstr ""
+
+#: ckdevelop.cpp:1480
+#, c-format
+msgid "Running %s in internal debugger"
+msgstr ""
+
+#: ckdevelop.cpp:1563
 msgid "Running make..."
 msgstr ""
 
-#: ckdevelop.cpp:870
+#: ckdevelop.cpp:1632
 msgid "Running make clean-command "
 msgstr ""
 
-#: ckdevelop.cpp:900
+#: ckdevelop.cpp:1665
 msgid "Running make clean and rebuilding all..."
 msgstr ""
 
-#: ckdevelop.cpp:932
+#: ckdevelop.cpp:1698
 msgid "Running make distclean..."
 msgstr ""
 
-#: ckdevelop.cpp:950
+#: ckdevelop.cpp:1718
 msgid "Running autoconf/automake suite..."
 msgstr ""
 
-#: ckdevelop.cpp:968
+#: ckdevelop.cpp:1736
 msgid "Configure with Arguments"
 msgstr ""
 
-#: ckdevelop.cpp:977
+#: ckdevelop.cpp:1746
 msgid "Running ./configure..."
 msgstr ""
 
-#: ckdevelop.cpp:1013
+#: ckdevelop.cpp:1782
 msgid "Killing current process..."
 msgstr ""
 
-#: ckdevelop.cpp:1082
+#: ckdevelop.cpp:1852
 msgid "Setting up the Editor..."
 msgstr ""
 
-#: ckdevelop.cpp:1095
+#: ckdevelop.cpp:1865
 msgid "Setting up the Editor's colors..."
 msgstr ""
 
-#: ckdevelop.cpp:1110
+#: ckdevelop.cpp:1880
 msgid "Setting up syntax highlighting default colors..."
 msgstr ""
 
-#: ckdevelop.cpp:1122
+#: ckdevelop.cpp:1892
 msgid "Setting up syntax highlighting colors..."
 msgstr ""
 
-#: ckdevelop.cpp:1134
+#: ckdevelop.cpp:1904
 msgid "Configuring Documentation Browser..."
 msgstr ""
 
-#: ckdevelop.cpp:1154
+#: ckdevelop.cpp:1924
 msgid "Configuring Tools-Menu entries..."
 msgstr ""
 
-#: ckdevelop.cpp:1189
+#: ckdevelop.cpp:1959
 msgid "Setting up KDevelop..."
 msgstr ""
 
-#: ckdevelop.cpp:1252
+#: ckdevelop.cpp:2028
 msgid "Updating KDE-Libs documentation..."
 msgstr ""
 
-#: ckdevelop.cpp:1256
+#: ckdevelop.cpp:2032
 msgid "Generating Documentation..."
 msgstr ""
 
-#: ckdevelop.cpp:1272
+#: ckdevelop.cpp:2053
 msgid "Creating Search Database..."
 msgstr ""
 
-#: ckdevelop.cpp:1321
+#: ckdevelop.cpp:2128
 msgid "Opening bookmark..."
 msgstr ""
 
-#: ckdevelop.cpp:1332
+#: ckdevelop.cpp:2177
 msgid "Switching to last page..."
 msgstr ""
 
-#: ckdevelop.cpp:1346
+#: ckdevelop.cpp:2191
 msgid "Switching to next page..."
 msgstr ""
 
-#: ckdevelop.cpp:1359 ckdevelop.cpp:1374
+#: ckdevelop.cpp:2204 ckdevelop.cpp:2219
 msgid "Opening history page..."
 msgstr ""
 
-#: ckdevelop.cpp:1389
+#: ckdevelop.cpp:2234
 msgid "Reloading page..."
 msgstr ""
 
-#: ckdevelop.cpp:1417
+#: ckdevelop.cpp:2294
 msgid "You must select a text for searching the documentation!"
 msgstr ""
 
-#: ckdevelop.cpp:1426
+#: ckdevelop.cpp:2303
 msgid "Searching selected text in documentation..."
 msgstr ""
 
-#: ckdevelop.cpp:1428
+#: ckdevelop.cpp:2306
 msgid ""
 "KDevelop couldn't find the search database.\n"
 " Do you want to generate it now?"
 msgstr ""
 
-#: ckdevelop.cpp:1455
+#: ckdevelop.cpp:2343
 msgid "Searching for Help on..."
 msgstr ""
 
-#: ckdevelop.cpp:1529
+#: ckdevelop.cpp:2417
 msgid "No Project API documentation !"
 msgstr ""
 
-#: ckdevelop.cpp:1529
+#: ckdevelop.cpp:2417
 msgid ""
 "The Project API documentation is not present.\n"
 "Would you like to generate it now ?"
 msgstr ""
 
-#: ckdevelop.cpp:1539
+#: ckdevelop.cpp:2427
 msgid "Switching to project API Documentation..."
 msgstr ""
 
-#: ckdevelop.cpp:1553
+#: ckdevelop.cpp:2441
 msgid "No Project manual found !"
 msgstr ""
 
-#: ckdevelop.cpp:1554
+#: ckdevelop.cpp:2442
 msgid ""
 "The Project manual documentation is not present.\n"
 "Would you like to generate the handbook  now ?"
 msgstr ""
 
-#: ckdevelop.cpp:1564
+#: ckdevelop.cpp:2452
 msgid "Switching to project Manual..."
 msgstr ""
 
-#: ckdevelop.cpp:1646 ckdevelop_init.cpp:716 ckdevelop_kdlginit.cpp:255
+#: ckdevelop.cpp:2534 ckdevelop_init.cpp:853 ckdevelop_kdlginit.cpp:287
 msgid "About KDevelop..."
 msgstr ""
 
-#: ckdevelop.cpp:1648
+#: ckdevelop.cpp:2536
 msgid "\t   KDevelop Version "
 msgstr ""
 
-#: ckdevelop.cpp:1932
+#: ckdevelop.cpp:2816
 #, c-format
 msgid "Line: %d Col: %d"
 msgstr ""
 
-#: ckdevelop.cpp:2228
+#: ckdevelop.cpp:3163
 msgid "\" not found in documentation!"
 msgstr ""
 
-#: ckdevelop.cpp:2255
+#: ckdevelop.cpp:3189
 msgid "Search for: "
 msgstr ""
 
-#: ckdevelop.cpp:2257
+#: ckdevelop.cpp:3191
 msgid "Title"
 msgstr ""
 
-#: ckdevelop.cpp:2257
+#: ckdevelop.cpp:3191
 msgid "Hits"
 msgstr ""
 
-#: ckdevelop.cpp:2353
+#: ckdevelop.cpp:3287
 msgid "*** failed ***\n"
 msgstr ""
 
-#: ckdevelop.cpp:2354
+#: ckdevelop.cpp:3288
 msgid "*** success ***\n"
 msgstr ""
 
-#: ckdevelop.cpp:2356
+#: ckdevelop.cpp:3290
 #, c-format
 msgid "*** exit-code: %i ***\n"
 msgstr ""
 
-#: ckdevelop.cpp:2400 ckdevelop.cpp:2404 ckdevelop.cpp:2408 ckdevelop.cpp:2412
-msgid "Press Enter to continue!"
-msgstr ""
-
-#: ckdevelop.cpp:2434
+#: ckdevelop.cpp:3344
 msgid "*** process exited with error(s) ***\n"
 msgstr ""
 
-#: ckdevelop.cpp:2690
+#: ckdevelop.cpp:3614
 msgid "Qt-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2691 ckdevelop.cpp:2700
+#: ckdevelop.cpp:3615 ckdevelop.cpp:3624
 msgid "File not found!"
 msgstr ""
 
-#: ckdevelop.cpp:2696
+#: ckdevelop.cpp:3620
 msgid "KDE-Core-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2696
+#: ckdevelop.cpp:3620
 msgid "KDE-UI-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2697
+#: ckdevelop.cpp:3621
 msgid "KDE-KFile-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2697
+#: ckdevelop.cpp:3621
 msgid "KDE-KHTMLW-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2698
+#: ckdevelop.cpp:3622
 msgid "KDE-KFM-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2698
+#: ckdevelop.cpp:3622
 msgid "KDE-KDEutils-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2699
+#: ckdevelop.cpp:3623
 msgid "KDE-KAB-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2699
+#: ckdevelop.cpp:3623
 msgid "KDE-KSpell-Library"
 msgstr ""
 
-#: ckdevelop.cpp:2861
+#: ckdevelop.cpp:3798
 msgid "Creates a new file"
 msgstr ""
 
-#: ckdevelop.cpp:2862
+#: ckdevelop.cpp:3799
 msgid "Opens an existing file"
 msgstr ""
 
-#: ckdevelop.cpp:2863
+#: ckdevelop.cpp:3800
 msgid "Closes the actual file"
 msgstr ""
 
-#: ckdevelop.cpp:2865
+#: ckdevelop.cpp:3802
 msgid "Save the actual document"
 msgstr ""
 
-#: ckdevelop.cpp:2866
+#: ckdevelop.cpp:3803
 msgid "Save the document as..."
 msgstr ""
 
-#: ckdevelop.cpp:2867
+#: ckdevelop.cpp:3804
 msgid "Save all changed files"
 msgstr ""
 
-#: ckdevelop.cpp:2869
+#: ckdevelop.cpp:3806
 msgid "Prints the current document"
 msgstr ""
 
-#: ckdevelop.cpp:2873
+#: ckdevelop.cpp:3810
 msgid "Exits the program"
 msgstr ""
 
-#: ckdevelop.cpp:2875
+#: ckdevelop.cpp:3812
 msgid "Reverts the last editing step"
 msgstr ""
 
-#: ckdevelop.cpp:2876
+#: ckdevelop.cpp:3813
 msgid "Re-execute the last undone step"
 msgstr ""
 
-#: ckdevelop.cpp:2878
+#: ckdevelop.cpp:3815
 msgid "Cuts the selected section and puts it to the clipboard"
 msgstr ""
 
-#: ckdevelop.cpp:2879
+#: ckdevelop.cpp:3816
 msgid "Copys the selected section to the clipboard"
 msgstr ""
 
-#: ckdevelop.cpp:2880
+#: ckdevelop.cpp:3817
 msgid "Pastes the clipboard contents to actual position"
 msgstr ""
 
-#: ckdevelop.cpp:2882
+#: ckdevelop.cpp:3819
 msgid "Inserts a file at the current position"
 msgstr ""
 
-#: ckdevelop.cpp:2884
+#: ckdevelop.cpp:3821
 msgid "Searchs the file for an expression"
 msgstr ""
 
-#: ckdevelop.cpp:2885
+#: ckdevelop.cpp:3822
 msgid "Repeats the last search"
 msgstr ""
 
-#: ckdevelop.cpp:2886
+#: ckdevelop.cpp:3823
 msgid "Searchs and replace expression"
 msgstr ""
 
-#: ckdevelop.cpp:2887
+#: ckdevelop.cpp:3824
 msgid ""
 "Opens the search in files dialog to search for expressions over several files"
 msgstr ""
 
-#: ckdevelop.cpp:2889
+#: ckdevelop.cpp:3826
+msgid "Run program to this cursor position"
+msgstr ""
+
+#: ckdevelop.cpp:3827
+msgid "Run the program until this function/method ends"
+msgstr ""
+
+#: ckdevelop.cpp:3828
+msgid ""
+"Try to display this variable whenever the application execution is paused"
+msgstr ""
+
+#: ckdevelop.cpp:3831
 msgid "Moves the selection to the right"
 msgstr ""
 
-#: ckdevelop.cpp:2890
+#: ckdevelop.cpp:3832
 msgid "Moves the selection to the left"
 msgstr ""
 
-#: ckdevelop.cpp:2892
+#: ckdevelop.cpp:3833
+msgid "Adds // to the beginning of each selected line"
+msgstr ""
+
+#: ckdevelop.cpp:3834
+msgid "Removes // from the beginning of each selected line"
+msgstr ""
+
+#: ckdevelop.cpp:3836
 msgid "Selects the whole document contents"
 msgstr ""
 
-#: ckdevelop.cpp:2893
+#: ckdevelop.cpp:3837
 msgid "Deselects the whole document contents"
 msgstr ""
 
-#: ckdevelop.cpp:2894
+#: ckdevelop.cpp:3838
 msgid "Inverts the current selection"
 msgstr ""
 
-#: ckdevelop.cpp:2897
+#: ckdevelop.cpp:3841
 msgid "Goes to Line Number..."
 msgstr ""
 
-#: ckdevelop.cpp:2898
+#: ckdevelop.cpp:3842
 msgid "Switches to the file and line the next error was reported"
 msgstr ""
 
-#: ckdevelop.cpp:2899
+#: ckdevelop.cpp:3843
 msgid "Switches to the file and line the previous error was reported"
 msgstr ""
 
-#: ckdevelop.cpp:2901
+#: ckdevelop.cpp:3845
 msgid "Enables / disables the treeview"
 msgstr ""
 
-#: ckdevelop.cpp:2902
+#: ckdevelop.cpp:3846
 msgid "Enables / disables the outputview"
 msgstr ""
 
-#: ckdevelop.cpp:2904 ckdevelop.cpp:3012
+#: ckdevelop.cpp:3848 ckdevelop.cpp:3972
 msgid "Enables / disables the standard toolbar"
 msgstr ""
 
-#: ckdevelop.cpp:2905
+#: ckdevelop.cpp:3849
 msgid "Enables / disables the browser toolbar"
 msgstr ""
 
-#: ckdevelop.cpp:2906 ckdevelop.cpp:3013
+#: ckdevelop.cpp:3850 ckdevelop.cpp:3973
 msgid "Enables / disables the statusbar"
 msgstr ""
 
-#: ckdevelop.cpp:2908 ckdevelop.cpp:3015
+#: ckdevelop.cpp:3852 ckdevelop.cpp:3975
 msgid "Refreshes current view"
 msgstr ""
 
-#: ckdevelop.cpp:2909
+#: ckdevelop.cpp:3853
 msgid "Opens the current document in the KFM browser"
 msgstr ""
 
-#: ckdevelop.cpp:2910
+#: ckdevelop.cpp:3854
 msgid "Generates a new project with Application Wizard"
 msgstr ""
 
-#: ckdevelop.cpp:2911
+#: ckdevelop.cpp:3855
 msgid "Opens an existing project"
 msgstr ""
 
-#: ckdevelop.cpp:2912
+#: ckdevelop.cpp:3856
 msgid "Closes the current project"
 msgstr ""
 
-#: ckdevelop.cpp:2913
+#: ckdevelop.cpp:3857
 msgid "Adds an existing file to the project"
 msgstr ""
 
-#: ckdevelop.cpp:2914
+#: ckdevelop.cpp:3858
 msgid "Adds a new language for internationalization to the project"
 msgstr ""
 
-#: ckdevelop.cpp:2915
+#: ckdevelop.cpp:3859
 msgid "Removes file from the project"
 msgstr ""
 
-#: ckdevelop.cpp:2917
+#: ckdevelop.cpp:3861
 msgid "Creates a new Class frame structure and files"
 msgstr ""
 
-#: ckdevelop.cpp:2919
+#: ckdevelop.cpp:3863
 msgid "Shows the current file properties"
 msgstr ""
 
-#: ckdevelop.cpp:2920
+#: ckdevelop.cpp:3864
 msgid "Sets project and compiler options"
 msgstr ""
 
-#: ckdevelop.cpp:2921
+#: ckdevelop.cpp:3865
 msgid "Invokes make to create the message file by extracting all i18n() macros"
 msgstr ""
 
-#: ckdevelop.cpp:2922
+#: ckdevelop.cpp:3866
 msgid "Creates the Project's API with KDoc"
 msgstr ""
 
-#: ckdevelop.cpp:2923
+#: ckdevelop.cpp:3867
 msgid "Creates the Project's User Manual with the sgml-file"
 msgstr ""
 
-#: ckdevelop.cpp:2924
+#: ckdevelop.cpp:3868
 msgid "Creates distribution packages from the current project"
 msgstr ""
 
-#: ckdevelop.cpp:2925
+#: ckdevelop.cpp:3869
 msgid "Creates a tar.gz file from the current project sources"
 msgstr ""
 
-#: ckdevelop.cpp:2927
+#: ckdevelop.cpp:3871
 msgid "Compiles the current sourcefile"
 msgstr ""
 
-#: ckdevelop.cpp:2928
+#: ckdevelop.cpp:3872
 msgid "Generates the sourcefiles for the dialog"
 msgstr ""
 
-#: ckdevelop.cpp:2929
+#: ckdevelop.cpp:3873
 msgid "Invokes make-command"
 msgstr ""
 
-#: ckdevelop.cpp:2930
+#: ckdevelop.cpp:3874
 msgid "Rebuilds the program"
 msgstr ""
 
-#: ckdevelop.cpp:2931
+#: ckdevelop.cpp:3875
 msgid "Invokes make clean and rebuild all"
 msgstr ""
 
-#: ckdevelop.cpp:2932
+#: ckdevelop.cpp:3876
 msgid "Stops make immediately"
 msgstr ""
 
-#: ckdevelop.cpp:2933
+#: ckdevelop.cpp:3877
 msgid "Invokes make-command and runs the program"
 msgstr ""
 
-#: ckdevelop.cpp:2934
+#: ckdevelop.cpp:3878
 msgid "Lets you set run-arguments to the binary and invokes the make-command"
 msgstr ""
 
-#: ckdevelop.cpp:2936
-msgid "Invokes make and KDbg debugging the binary"
-msgstr ""
-
-#: ckdevelop.cpp:2937
+#: ckdevelop.cpp:3879
 msgid "Invokes make distclean and deletes all compiled files"
 msgstr ""
 
-#: ckdevelop.cpp:2938
+#: ckdevelop.cpp:3880
 msgid "Invokes automake and co."
 msgstr ""
 
-#: ckdevelop.cpp:2939
+#: ckdevelop.cpp:3881
 msgid "Invokes ./configure"
 msgstr ""
 
-#: ckdevelop.cpp:2942
+#: ckdevelop.cpp:3883
+msgid "Invokes the debugger on the current project executable"
+msgstr ""
+
+#: ckdevelop.cpp:3884
+msgid "Various startups for the debugger"
+msgstr ""
+
+#: ckdevelop.cpp:3885
+msgid ""
+"Lets you debug your project app after specifying arguments for your app."
+msgstr ""
+
+#: ckdevelop.cpp:3886
+msgid "Examine a core file"
+msgstr ""
+
+#: ckdevelop.cpp:3887
+msgid "Debug an app other than the current project executable"
+msgstr ""
+
+#: ckdevelop.cpp:3888
+msgid "Attach to running process"
+msgstr ""
+
+#: ckdevelop.cpp:3889
+msgid "Continues app execution"
+msgstr ""
+
+#: ckdevelop.cpp:3890
+msgid "Continues app execution until reaching the current cursor position"
+msgstr ""
+
+#: ckdevelop.cpp:3891
+msgid "Kills the app and exits the debugger"
+msgstr ""
+
+#: ckdevelop.cpp:3892 ckdevelop_init.cpp:740 ckdevelop_kdlginit.cpp:225
+msgid "Step into"
+msgstr ""
+
+#: ckdevelop.cpp:3893
+msgid "Step instr"
+msgstr ""
+
+#: ckdevelop.cpp:3894 ckdevelop_init.cpp:738 ckdevelop_kdlginit.cpp:223
+msgid "Step over"
+msgstr ""
+
+#: ckdevelop.cpp:3895
+msgid "Step over instr"
+msgstr ""
+
+#: ckdevelop.cpp:3896
+msgid "Run to end of function"
+msgstr ""
+
+#: ckdevelop.cpp:3897
+msgid "Various views into the app"
+msgstr ""
+
+#: ckdevelop.cpp:3898
+msgid "Interuppt the app"
+msgstr ""
+
+#: ckdevelop.cpp:3900
 msgid "Changes to the KDevelop dialogeditor"
 msgstr ""
 
-#: ckdevelop.cpp:2943
+#: ckdevelop.cpp:3901
 msgid "Changes to KDevelop project editor"
 msgstr ""
 
-#: ckdevelop.cpp:2945
+#: ckdevelop.cpp:3903
 msgid "Sets the Editor's behavoir"
 msgstr ""
 
-#: ckdevelop.cpp:2946
+#: ckdevelop.cpp:3904
 msgid "Sets the Editor's colors"
 msgstr ""
 
-#: ckdevelop.cpp:2947
+#: ckdevelop.cpp:3905
 msgid "Sets the highlighting default colors"
 msgstr ""
 
-#: ckdevelop.cpp:2948
+#: ckdevelop.cpp:3906
 msgid "Sets the highlighting colors"
 msgstr ""
 
-#: ckdevelop.cpp:2949
+#: ckdevelop.cpp:3907
 msgid "Configures the Browser options"
 msgstr ""
 
-#: ckdevelop.cpp:2950
+#: ckdevelop.cpp:3908
 msgid "Configures the Tools-Menu entries"
 msgstr ""
 
-#: ckdevelop.cpp:2951
+#: ckdevelop.cpp:3909
 msgid "Configures printing options"
 msgstr ""
 
-#: ckdevelop.cpp:2952
+#: ckdevelop.cpp:3910
 msgid "Configures the printer to use enscript"
 msgstr ""
 
-#: ckdevelop.cpp:2953
+#: ckdevelop.cpp:3911
 msgid "Configures the printer to use a2ps"
 msgstr ""
 
-#: ckdevelop.cpp:2954
+#: ckdevelop.cpp:3912
 msgid "Configures KDevelop"
 msgstr ""
 
-#: ckdevelop.cpp:2956
+#: ckdevelop.cpp:3914
 msgid "Sets a bookmark to the current window file"
 msgstr ""
 
-#: ckdevelop.cpp:2957
-msgid "Adds a bookmark to the current window file"
+#: ckdevelop.cpp:3915
+msgid "Toggles a bookmark to the current window file"
 msgstr ""
 
-#: ckdevelop.cpp:2958
-msgid "Clears the bookmark list for the current window"
+#: ckdevelop.cpp:3916
+msgid "Goes to the next bookmark in the current window file"
 msgstr ""
 
-#: ckdevelop.cpp:2960
+#: ckdevelop.cpp:3917
+msgid "Goes to the previous bookmark in the current window file"
+msgstr ""
+
+#: ckdevelop.cpp:3918
+msgid "Clears the bookmarks for the current window"
+msgstr ""
+
+#: ckdevelop.cpp:3920
 msgid "Switchs to last browser page"
 msgstr ""
 
-#: ckdevelop.cpp:2961
+#: ckdevelop.cpp:3921
 msgid "Switchs to next browser page"
 msgstr ""
 
-#: ckdevelop.cpp:2963
+#: ckdevelop.cpp:3923
 msgid "Reloads the current browser page"
 msgstr ""
 
-#: ckdevelop.cpp:2964
+#: ckdevelop.cpp:3924
 msgid "Cancels the document request"
 msgstr ""
 
-#: ckdevelop.cpp:2967
+#: ckdevelop.cpp:3927
 msgid "Searchs the selected text in the documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2968
+#: ckdevelop.cpp:3928
 msgid "Lets you search individually for an expression"
 msgstr ""
 
-#: ckdevelop.cpp:2970
+#: ckdevelop.cpp:3930
 msgid "Switchs to KDevelop's User Manual"
 msgstr ""
 
-#: ckdevelop.cpp:2971
+#: ckdevelop.cpp:3931
 msgid "Switchs to the KDevelop Programming Handbook"
 msgstr ""
 
-#: ckdevelop.cpp:2972
+#: ckdevelop.cpp:3932
 msgid "Opens the Tip of the Day dialog with hints for using KDevelop"
 msgstr ""
 
-#: ckdevelop.cpp:2974
+#: ckdevelop.cpp:3934
 msgid "Switchs to the C/C++-Reference"
 msgstr ""
 
-#: ckdevelop.cpp:2975
+#: ckdevelop.cpp:3935
 msgid "Switchs to the QT-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2976
+#: ckdevelop.cpp:3936
 msgid "Switchs to the KDE-Core-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2977
+#: ckdevelop.cpp:3937
 msgid "Switchs to the KDE-GUI-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2978
+#: ckdevelop.cpp:3938
 msgid "Switchs to the KDE-File-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2979
+#: ckdevelop.cpp:3939
 msgid "Switchs to the KDE-Html-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2980
+#: ckdevelop.cpp:3940
 msgid "Switchs to the project's API-Documentation"
 msgstr ""
 
-#: ckdevelop.cpp:2981
+#: ckdevelop.cpp:3941
 msgid "Switchs to the project's User-Manual"
 msgstr ""
 
-#: ckdevelop.cpp:2983
+#: ckdevelop.cpp:3943
 msgid "Enter the KDevelop Homepage"
 msgstr ""
 
-#: ckdevelop.cpp:2984
+#: ckdevelop.cpp:3944
 msgid "Sends a bug-report email to the KDevelop Team"
 msgstr ""
 
-#: ckdevelop.cpp:2986
+#: ckdevelop.cpp:3946
 msgid "Some information about the dialog editor..."
 msgstr ""
 
-#: ckdevelop.cpp:2987
+#: ckdevelop.cpp:3947
 msgid "Programmer's Hall of Fame..."
 msgstr ""
 
-#: ckdevelop.cpp:2989
+#: ckdevelop.cpp:3949
 msgid "Switchs to declaration/implementation"
 msgstr ""
 
-#: ckdevelop.cpp:2990
+#: ckdevelop.cpp:3950
 msgid "Switchs to the method's declaration"
 msgstr ""
 
-#: ckdevelop.cpp:2991
+#: ckdevelop.cpp:3951
 msgid "Switchs to the method's definition"
 msgstr ""
 
-#: ckdevelop.cpp:2992
+#: ckdevelop.cpp:3952
 msgid "Opens the graphical inheritance tree"
 msgstr ""
 
-#: ckdevelop.cpp:2993
+#: ckdevelop.cpp:3953
 msgid "Opens the classtool dialog"
 msgstr ""
 
-#: ckdevelop.cpp:2994
+#: ckdevelop.cpp:3954
 msgid "Displays the inherited classes of the current class"
 msgstr ""
 
-#: ckdevelop.cpp:2995
+#: ckdevelop.cpp:3955
 msgid "Displays the classes who inherit the current class"
 msgstr ""
 
-#: ckdevelop.cpp:2996
+#: ckdevelop.cpp:3956
 msgid "Creates a new folder"
 msgstr ""
 
-#: ckdevelop.cpp:2997
+#: ckdevelop.cpp:3957
 msgid "Deletes the current folder"
 msgstr ""
 
-#: ckdevelop.cpp:2998
+#: ckdevelop.cpp:3958
 msgid "Deletes the current class"
 msgstr ""
 
-#: ckdevelop.cpp:2999
+#: ckdevelop.cpp:3959
 msgid "Goes to the class declaration"
 msgstr ""
 
-#: ckdevelop.cpp:3000
+#: ckdevelop.cpp:3960
 msgid "Opens the New Method dialog"
 msgstr ""
 
-#: ckdevelop.cpp:3001
+#: ckdevelop.cpp:3961
 msgid "Deletes the current class method"
 msgstr ""
 
-#: ckdevelop.cpp:3002
+#: ckdevelop.cpp:3962
 msgid "Creates a new attribute for the current class"
 msgstr ""
 
-#: ckdevelop.cpp:3003
+#: ckdevelop.cpp:3963
 msgid "Deletes the current class attribute"
 msgstr ""
 
-#: ckdevelop.cpp:3004
+#: ckdevelop.cpp:3964
 msgid "Creates a virtual method"
 msgstr ""
 
-#: ckdevelop.cpp:3005
+#: ckdevelop.cpp:3965
 msgid "Adds a signal/slot mechanism"
 msgstr ""
 
-#: ckdevelop.cpp:3007
+#: ckdevelop.cpp:3967
 msgid "Closes the current dialog"
 msgstr ""
 
-#: ckdevelop.cpp:3008
+#: ckdevelop.cpp:3968
 msgid "Saves the current dialog"
 msgstr ""
 
-#: ckdevelop.cpp:3009
+#: ckdevelop.cpp:3969
 msgid "Saves the current dialog under a new filename"
 msgstr ""
 
-#: ckdevelop.cpp:3011
+#: ckdevelop.cpp:3971
 msgid "Enables/Disables the properties window"
 msgstr ""
 
-#: ckdevelop.cpp:3016
+#: ckdevelop.cpp:3976
 msgid "Sets the grid size of the editing widget grid snap"
 msgstr ""
 
-#: ckdevelop.cpp:3019
+#: ckdevelop.cpp:3979
 msgid "Lets you create a new logical file group"
 msgstr ""
 
-#: ckdevelop.cpp:3020
+#: ckdevelop.cpp:3980
 msgid "Removes the selected logical file group"
 msgstr ""
 
-#: ckdevelop.cpp:3021
+#: ckdevelop.cpp:3981
 msgid "Shows the group's properties"
 msgstr ""
 
-#: ckdevelop.cpp:3022
+#: ckdevelop.cpp:3982
 msgid "Displays the absolute / relative path"
 msgstr ""
 
-#: ckdevelop.cpp:3023
+#: ckdevelop.cpp:3983
 msgid "Deletes the selected file"
 msgstr ""
 
-#: ckdevelop.cpp:3026
-msgid "Shows files, that aren't registered in the project"
+#: ckdevelop.cpp:3986
+msgid "Show files that aren't registered as project files"
 msgstr ""
 
-#: ckdevelop.cpp:3028 grepdialog.cpp:165 grepdialog.cpp:382 grepdialog.cpp:401
+#: ckdevelop.cpp:3987
+msgid "Updates file/directory from repository"
+msgstr ""
+
+#: ckdevelop.cpp:3988
+msgid "Commits file/directory to the repository"
+msgstr ""
+
+#: ckdevelop.cpp:3989
+msgid "Adds file/directory to the repository"
+msgstr ""
+
+#: ckdevelop.cpp:3990
+msgid "Deletes file from disk and removes it from the repository"
+msgstr ""
+
+#: ckdevelop.cpp:3992 grepdialog.cpp:165 grepdialog.cpp:382 grepdialog.cpp:401
 msgid "Ready"
 msgstr ""
 
-#: ckdevelop_classview.cpp:424
+#: ckdevelop_classview.cpp:441
 msgid "Are you sure you want to delete this method?"
 msgstr ""
 
-#: ckdevelop_classview.cpp:439
+#: ckdevelop_classview.cpp:456
 msgid "//Del by KDevelop: "
 msgstr ""
 
-#: ckdevelop_classview.cpp:444
+#: ckdevelop_classview.cpp:461
 msgid "Method missing"
 msgstr ""
 
-#: ckdevelop_classview.cpp:444
+#: ckdevelop_classview.cpp:461
 msgid "Couldn't find the method to delete."
 msgstr ""
 
-#: ckdevelop_classview.cpp:447
+#: ckdevelop_classview.cpp:464
 msgid "Class missing"
 msgstr ""
 
-#: ckdevelop_classview.cpp:447
+#: ckdevelop_classview.cpp:464
 msgid "Couldn't find the class which has the method to delete."
 msgstr ""
 
-#: ckdevelop_init.cpp:76 ckdevelop_kdlginit.cpp:403
+#: ckdevelop_init.cpp:108 ckdevelop_kdlginit.cpp:445
 msgid "Welcome to KDevelop!"
 msgstr ""
 
-#: ckdevelop_init.cpp:114
+#: ckdevelop_init.cpp:152
 msgid "messages"
 msgstr ""
 
-#: ckdevelop_init.cpp:115
+#: ckdevelop_init.cpp:153
 msgid "stdout"
 msgstr ""
 
-#: ckdevelop_init.cpp:116
+#: ckdevelop_init.cpp:154
 msgid "stderr"
 msgstr ""
 
-#: ckdevelop_init.cpp:143
+#: ckdevelop_init.cpp:181
 msgid "CV"
 msgstr ""
 
-#: ckdevelop_init.cpp:144
+#: ckdevelop_init.cpp:182
 msgid "LFV"
 msgstr ""
 
-#: ckdevelop_init.cpp:145
+#: ckdevelop_init.cpp:183
 msgid "RFV"
 msgstr ""
 
-#: ckdevelop_init.cpp:146
+#: ckdevelop_init.cpp:184
 msgid "DOC"
 msgstr ""
 
-#: ckdevelop_init.cpp:199
+#: ckdevelop_init.cpp:236
 msgid "Header/Reso&urce Files"
 msgstr ""
 
-#: ckdevelop_init.cpp:200
+#: ckdevelop_init.cpp:237
 msgid "&C/C++ Files"
 msgstr ""
 
-#: ckdevelop_init.cpp:201
+#: ckdevelop_init.cpp:238
 msgid "&Documentation-Browser"
 msgstr ""
 
-#: ckdevelop_init.cpp:202
+#: ckdevelop_init.cpp:239
 msgid "Tool&s"
 msgstr ""
 
-#: ckdevelop_init.cpp:249
+#: ckdevelop_init.cpp:285
 msgid "Save All"
 msgstr ""
 
-#: ckdevelop_init.cpp:265
+#: ckdevelop_init.cpp:301
 msgid "Indent"
 msgstr ""
 
-#: ckdevelop_init.cpp:268
+#: ckdevelop_init.cpp:304
 msgid "Unindent"
 msgstr ""
 
-#: ckdevelop_init.cpp:271
+#: ckdevelop_init.cpp:307
+msgid "Comment"
+msgstr ""
+
+#: ckdevelop_init.cpp:310
+msgid "Uncomment"
+msgstr ""
+
+#: ckdevelop_init.cpp:313
 msgid "Insert File"
 msgstr ""
 
-#: ckdevelop_init.cpp:276
+#: ckdevelop_init.cpp:318
 msgid "Repeat Search"
 msgstr ""
 
-#: ckdevelop_init.cpp:281
+#: ckdevelop_init.cpp:323
 msgid "Search in Files"
 msgstr ""
 
-#: ckdevelop_init.cpp:284
+#: ckdevelop_init.cpp:326
 msgid "Search selection in Files"
 msgstr ""
 
-#: ckdevelop_init.cpp:287
+#: ckdevelop_init.cpp:329
 msgid "Select All"
 msgstr ""
 
-#: ckdevelop_init.cpp:290 ckdevelop_init.cpp:498
+#: ckdevelop_init.cpp:332 ckdevelop_init.cpp:602
 msgid "Deselect All"
 msgstr ""
 
-#: ckdevelop_init.cpp:293 ckdevelop_init.cpp:499
+#: ckdevelop_init.cpp:335 ckdevelop_init.cpp:603
 msgid "Invert Selection"
 msgstr ""
 
-#: ckdevelop_init.cpp:297
+#: ckdevelop_init.cpp:339
 msgid "Goto Line"
 msgstr ""
 
-#: ckdevelop_init.cpp:300
+#: ckdevelop_init.cpp:342
 msgid "Next Error"
 msgstr ""
 
-#: ckdevelop_init.cpp:303
+#: ckdevelop_init.cpp:345
 msgid "Previous Error"
 msgstr ""
 
-#: ckdevelop_init.cpp:306
+#: ckdevelop_init.cpp:348
 msgid "Sourcecode Editor"
 msgstr ""
 
-#: ckdevelop_init.cpp:309
+#: ckdevelop_init.cpp:351
 msgid "Dialog Editor"
 msgstr ""
 
-#: ckdevelop_init.cpp:312
+#: ckdevelop_init.cpp:354
 msgid "Toogle Tree-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:315
+#: ckdevelop_init.cpp:357
 msgid "Toogle Output-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:318
+#: ckdevelop_init.cpp:360
 msgid "Toolbar"
 msgstr ""
 
-#: ckdevelop_init.cpp:321
+#: ckdevelop_init.cpp:363
 msgid "Browser-Toolbar"
 msgstr ""
 
-#: ckdevelop_init.cpp:324
+#: ckdevelop_init.cpp:366
 msgid "Statusbar"
 msgstr ""
 
-#: ckdevelop_init.cpp:327
+#: ckdevelop_init.cpp:369
 msgid "Preview dialog"
 msgstr ""
 
-#: ckdevelop_init.cpp:329
+#: ckdevelop_init.cpp:371
 msgid "Refresh"
 msgstr ""
 
-#: ckdevelop_init.cpp:332
+#: ckdevelop_init.cpp:374
 msgid "Graphical Classview"
 msgstr ""
 
-#: ckdevelop_init.cpp:336
+#: ckdevelop_init.cpp:378
 msgid "New Project"
 msgstr ""
 
-#: ckdevelop_init.cpp:339 ckdevelop_init.cpp:772 ckdevelop_kdlginit.cpp:333
+#: ckdevelop_init.cpp:381 ckdevelop_init.cpp:910 ckdevelop_kdlginit.cpp:365
 msgid "Open Project"
 msgstr ""
 
-#: ckdevelop_init.cpp:342
+#: ckdevelop_init.cpp:384
 msgid "Close Project"
 msgstr ""
 
-#: ckdevelop_init.cpp:345
+#: ckdevelop_init.cpp:387
 msgid "New Class"
 msgstr ""
 
-#: ckdevelop_init.cpp:348
+#: ckdevelop_init.cpp:390
 msgid "Add existing File(s)"
 msgstr ""
 
-#: ckdevelop_init.cpp:357
+#: ckdevelop_init.cpp:399
 msgid "Make messages and merge"
 msgstr ""
 
-#: ckdevelop_init.cpp:360
+#: ckdevelop_init.cpp:402
 msgid "Make API-Doc"
 msgstr ""
 
-#: ckdevelop_init.cpp:363
+#: ckdevelop_init.cpp:405
 msgid "Make User-Manual..."
 msgstr ""
 
-#: ckdevelop_init.cpp:366
+#: ckdevelop_init.cpp:408
 msgid "Make Source-tgz"
 msgstr ""
 
-#: ckdevelop_init.cpp:369
+#: ckdevelop_init.cpp:411
 msgid "Project options"
 msgstr ""
 
-#: ckdevelop_init.cpp:374
+#: ckdevelop_init.cpp:416
 msgid "Compile File"
 msgstr ""
 
-#: ckdevelop_init.cpp:377 ckdevelop_init.cpp:800 ckdevelop_kdlginit.cpp:355
+#: ckdevelop_init.cpp:419 ckdevelop_init.cpp:938 ckdevelop_kdlginit.cpp:388
 msgid "Make"
 msgstr ""
 
-#: ckdevelop_init.cpp:380
+#: ckdevelop_init.cpp:422
 msgid "Rebuild All"
 msgstr ""
 
-#: ckdevelop_init.cpp:383
+#: ckdevelop_init.cpp:425
 msgid "Clean/Rebuild all"
 msgstr ""
 
-#: ckdevelop_init.cpp:386
+#: ckdevelop_init.cpp:428
 msgid "Stop process"
 msgstr ""
 
-#: ckdevelop_init.cpp:389
+#: ckdevelop_init.cpp:431
 msgid "Execute"
 msgstr ""
 
-#: ckdevelop_init.cpp:392
+#: ckdevelop_init.cpp:434
 msgid "Execute with arguments"
 msgstr ""
 
-#: ckdevelop_init.cpp:395 ckdevelop_init.cpp:803 ckdevelop_kdlginit.cpp:358
-msgid "Debug"
-msgstr ""
-
-#: ckdevelop_init.cpp:398
+#: ckdevelop_init.cpp:440
 msgid "DistClean"
 msgstr ""
 
-#: ckdevelop_init.cpp:401
+#: ckdevelop_init.cpp:443
 msgid "Autoconf and automake"
 msgstr ""
 
-#: ckdevelop_init.cpp:404
+#: ckdevelop_init.cpp:446
 msgid "Configure..."
 msgstr ""
 
-#: ckdevelop_init.cpp:417
-msgid "Clear Bookmarks"
-msgstr ""
-
-#: ckdevelop_init.cpp:423
-msgid "Search Marked Text"
-msgstr ""
-
-#: ckdevelop_init.cpp:426
-msgid "Search for Help on"
-msgstr ""
-
-#: ckdevelop_init.cpp:430
-msgid "Toggle Last"
-msgstr ""
-
-#: ckdevelop_init.cpp:455 ckdevelop_kdlginit.cpp:80
-msgid "&New..."
-msgstr ""
-
-#: ckdevelop_init.cpp:458
-msgid "Close All"
-msgstr ""
-
-#: ckdevelop_init.cpp:461 ckdevelop_kdlginit.cpp:85
-msgid "Save &As..."
+#: ckdevelop_init.cpp:459
+msgid "Next Bookmark"
 msgstr ""
 
 #: ckdevelop_init.cpp:462
-msgid "Save A&ll"
+msgid "Previous Bookmark"
 msgstr ""
 
-#: ckdevelop_init.cpp:475 ckdevelop_kdlginit.cpp:95
-msgid "U&ndo"
+#: ckdevelop_init.cpp:465
+msgid "Clear Bookmarks"
 msgstr ""
 
-#: ckdevelop_init.cpp:476 ckdevelop_kdlginit.cpp:96
-msgid "R&edo"
+#: ckdevelop_init.cpp:471
+msgid "Search Marked Text"
+msgstr ""
+
+#: ckdevelop_init.cpp:474
+msgid "Search for Help on"
+msgstr ""
+
+#: ckdevelop_init.cpp:478
+msgid "Toggle Last"
 msgstr ""
 
 #: ckdevelop_init.cpp:482
-msgid "In&dent"
+msgid "Debug start"
 msgstr ""
 
-#: ckdevelop_init.cpp:483
-msgid "&Unindent"
+#: ckdevelop_init.cpp:485
+msgid "Debug start other"
 msgstr ""
 
-#: ckdevelop_init.cpp:486
-msgid "&Insert File..."
+#: ckdevelop_init.cpp:488
+msgid "Debug start with args"
 msgstr ""
 
-#: ckdevelop_init.cpp:489
-msgid "&Search..."
+#: ckdevelop_init.cpp:491
+msgid "Debug examine core"
 msgstr ""
 
-#: ckdevelop_init.cpp:490
-msgid "&Repeat Search"
-msgstr ""
-
-#: ckdevelop_init.cpp:492
-msgid "&Replace..."
-msgstr ""
-
-#: ckdevelop_init.cpp:493
-msgid "&Search in Files..."
+#: ckdevelop_init.cpp:494
+msgid "Debug other executable"
 msgstr ""
 
 #: ckdevelop_init.cpp:497
-msgid "Select &All"
+msgid "Debug attach"
 msgstr ""
 
-#: ckdevelop_init.cpp:506
-msgid "Goto &Line..."
+#: ckdevelop_init.cpp:501
+msgid "Debug run"
 msgstr ""
 
-#: ckdevelop_init.cpp:509
-msgid "&Next Error"
+#: ckdevelop_init.cpp:504
+msgid "Debug run to cursor"
 msgstr ""
 
-#: ckdevelop_init.cpp:511
-msgid "&Previous Error"
+#: ckdevelop_init.cpp:507
+msgid "Debug stop"
 msgstr ""
 
-#: ckdevelop_init.cpp:514
-msgid "&Dialog Editor"
+#: ckdevelop_init.cpp:510
+msgid "Debug step into"
+msgstr ""
+
+#: ckdevelop_init.cpp:513
+msgid "Debug step into instr"
 msgstr ""
 
 #: ckdevelop_init.cpp:516
+msgid "Debug step over"
+msgstr ""
+
+#: ckdevelop_init.cpp:519
+msgid "Debug step over instr"
+msgstr ""
+
+#: ckdevelop_init.cpp:522
+msgid "Debug step out"
+msgstr ""
+
+#: ckdevelop_init.cpp:525
+msgid "Debug viewers"
+msgstr ""
+
+#: ckdevelop_init.cpp:528
+msgid "Debug interrupt"
+msgstr ""
+
+#: ckdevelop_init.cpp:531
+msgid "Debug toggle breakpoint"
+msgstr ""
+
+#: ckdevelop_init.cpp:556 ckdevelop_kdlginit.cpp:80
+msgid "&New..."
+msgstr ""
+
+#: ckdevelop_init.cpp:559
+msgid "Close All"
+msgstr ""
+
+#: ckdevelop_init.cpp:562 ckdevelop_kdlginit.cpp:85
+msgid "Save &As..."
+msgstr ""
+
+#: ckdevelop_init.cpp:563
+msgid "Save A&ll"
+msgstr ""
+
+#: ckdevelop_init.cpp:576 ckdevelop_kdlginit.cpp:95
+msgid "U&ndo"
+msgstr ""
+
+#: ckdevelop_init.cpp:577 ckdevelop_kdlginit.cpp:96
+msgid "R&edo"
+msgstr ""
+
+#: ckdevelop_init.cpp:583
+msgid "In&dent"
+msgstr ""
+
+#: ckdevelop_init.cpp:584
+msgid "Uninden&t"
+msgstr ""
+
+#: ckdevelop_init.cpp:586
+msgid "C&omment"
+msgstr ""
+
+#: ckdevelop_init.cpp:587
+msgid "Unco&mment"
+msgstr ""
+
+#: ckdevelop_init.cpp:590
+msgid "&Insert File..."
+msgstr ""
+
+#: ckdevelop_init.cpp:593
+msgid "&Search..."
+msgstr ""
+
+#: ckdevelop_init.cpp:594
+msgid "Repeat Searc&h"
+msgstr ""
+
+#: ckdevelop_init.cpp:596
+msgid "&Replace..."
+msgstr ""
+
+#: ckdevelop_init.cpp:597
+msgid "Search in &Files..."
+msgstr ""
+
+#: ckdevelop_init.cpp:601
+msgid "Select &All"
+msgstr ""
+
+#: ckdevelop_init.cpp:610
+msgid "Goto &Line..."
+msgstr ""
+
+#: ckdevelop_init.cpp:613
+msgid "&Next Error"
+msgstr ""
+
+#: ckdevelop_init.cpp:615
+msgid "&Previous Error"
+msgstr ""
+
+#: ckdevelop_init.cpp:618
+msgid "&Dialog Editor"
+msgstr ""
+
+#: ckdevelop_init.cpp:620
 msgid "&Tree-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:518 ckdevelop_kdlginit.cpp:112
+#: ckdevelop_init.cpp:622 ckdevelop_kdlginit.cpp:112
 msgid "&Output-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:521 ckdevelop_kdlginit.cpp:115
-msgid "&Toolbar"
+#: ckdevelop_init.cpp:625 ckdevelop_kdlginit.cpp:115
+msgid "Toolb&ar"
 msgstr ""
 
-#: ckdevelop_init.cpp:523
+#: ckdevelop_init.cpp:627
 msgid "&Browser-Toolbar"
 msgstr ""
 
-#: ckdevelop_init.cpp:525 ckdevelop_kdlginit.cpp:116
-msgid "Status&bar"
+#: ckdevelop_init.cpp:629 ckdevelop_kdlginit.cpp:116
+msgid "&Statusbar"
 msgstr ""
 
-#: ckdevelop_init.cpp:528 ckdevelop_kdlginit.cpp:118
+#: ckdevelop_init.cpp:632 ckdevelop_kdlginit.cpp:118
 msgid "&Refresh"
 msgstr ""
 
-#: ckdevelop_init.cpp:537 ckdevelop_kdlginit.cpp:131
-#: ckdevelop_kdlginit.cpp:335
+#: ckdevelop_init.cpp:641 ckdevelop_kdlginit.cpp:131
+#: ckdevelop_kdlginit.cpp:367
 msgid "New..."
 msgstr ""
 
-#: ckdevelop_init.cpp:542
+#: ckdevelop_init.cpp:646
 msgid "Open &recent project..."
 msgstr ""
 
-#: ckdevelop_init.cpp:544 ckdevelop_kdlginit.cpp:133
+#: ckdevelop_init.cpp:648 ckdevelop_kdlginit.cpp:133
 msgid "C&lose"
 msgstr ""
 
-#: ckdevelop_init.cpp:547 ckdevelop_kdlginit.cpp:136
+#: ckdevelop_init.cpp:651 ckdevelop_kdlginit.cpp:136
 msgid "&New Class..."
 msgstr ""
 
-#: ckdevelop_init.cpp:549 ckdevelop_kdlginit.cpp:138
+#: ckdevelop_init.cpp:653 ckdevelop_kdlginit.cpp:138
 msgid "&Add existing File(s)..."
 msgstr ""
 
-#: ckdevelop_init.cpp:551 ckdevelop_kdlginit.cpp:142
+#: ckdevelop_init.cpp:655 ckdevelop_kdlginit.cpp:142
 msgid "Add new &Translation File..."
 msgstr ""
 
-#: ckdevelop_init.cpp:557 ckdevelop_kdlginit.cpp:144
+#: ckdevelop_init.cpp:661 ckdevelop_kdlginit.cpp:144
 msgid "&File Properties..."
 msgstr ""
 
-#: ckdevelop_init.cpp:561
+#: ckdevelop_init.cpp:665
 msgid "Make &messages and merge"
 msgstr ""
 
-#: ckdevelop_init.cpp:562
+#: ckdevelop_init.cpp:666
 msgid "Make AP&I-Doc"
 msgstr ""
 
-#: ckdevelop_init.cpp:564
+#: ckdevelop_init.cpp:668
 msgid "Make &User-Manual..."
 msgstr ""
 
-#: ckdevelop_init.cpp:569 ckdevelop_kdlginit.cpp:155
+#: ckdevelop_init.cpp:673 ckdevelop_kdlginit.cpp:155
 msgid "&Source-tgz"
 msgstr ""
 
-#: ckdevelop_init.cpp:570
+#: ckdevelop_init.cpp:674
 msgid "Make &Distribution"
 msgstr ""
 
-#: ckdevelop_init.cpp:573
+#: ckdevelop_init.cpp:677
 msgid "O&ptions..."
 msgstr ""
 
-#: ckdevelop_init.cpp:583 ckdevelop_kdlginit.cpp:171
+#: ckdevelop_init.cpp:687 ckdevelop_kdlginit.cpp:171
 msgid "&Project"
 msgstr ""
 
-#: ckdevelop_init.cpp:589
+#: ckdevelop_init.cpp:693
 msgid "Compile &File"
 msgstr ""
 
-#: ckdevelop_init.cpp:591 ckdevelop_kdlginit.cpp:184
+#: ckdevelop_init.cpp:695 ckdevelop_kdlginit.cpp:184
 msgid "&Make"
 msgstr ""
 
-#: ckdevelop_init.cpp:598 ckdevelop_kdlginit.cpp:185
+#: ckdevelop_init.cpp:702 ckdevelop_kdlginit.cpp:185
 msgid "&Rebuild all"
 msgstr ""
 
-#: ckdevelop_init.cpp:601 ckdevelop_kdlginit.cpp:187
+#: ckdevelop_init.cpp:705 ckdevelop_kdlginit.cpp:187
 msgid "&Clean/Rebuild all"
 msgstr ""
 
-#: ckdevelop_init.cpp:604 ckdevelop_kdlginit.cpp:190
+#: ckdevelop_init.cpp:708 ckdevelop_kdlginit.cpp:190
 msgid "&Stop Build"
 msgstr ""
 
-#: ckdevelop_init.cpp:607
+#: ckdevelop_init.cpp:711
 msgid "&Execute"
 msgstr ""
 
-#: ckdevelop_init.cpp:608
+#: ckdevelop_init.cpp:712
 msgid "Execute &with Arguments..."
 msgstr ""
 
-#: ckdevelop_init.cpp:609 ckdevelop_kdlginit.cpp:196
-msgid "&Debug..."
-msgstr ""
-
-#: ckdevelop_init.cpp:611
+#: ckdevelop_init.cpp:715
 msgid "DistC&lean"
 msgstr ""
 
-#: ckdevelop_init.cpp:612
+#: ckdevelop_init.cpp:716
 msgid "&Autoconf and automake"
 msgstr ""
 
-#: ckdevelop_init.cpp:613 ckdevelop_kdlginit.cpp:200
+#: ckdevelop_init.cpp:717 ckdevelop_kdlginit.cpp:200
 msgid "C&onfigure..."
 msgstr ""
 
-#: ckdevelop_init.cpp:615 ckdevelop_kdlginit.cpp:204
+#: ckdevelop_init.cpp:719 ckdevelop_kdlginit.cpp:204
 msgid "&Build"
 msgstr ""
 
-#: ckdevelop_init.cpp:622 ckdevelop_kdlginit.cpp:209
+#: ckdevelop_init.cpp:725 ckdevelop_init.cpp:943 ckdevelop_kdlginit.cpp:210
+msgid "Examine core file"
+msgstr ""
+
+#: ckdevelop_init.cpp:726 ckdevelop_init.cpp:944 ckdevelop_kdlginit.cpp:211
+msgid "Debug another executable"
+msgstr ""
+
+#: ckdevelop_init.cpp:727 ckdevelop_init.cpp:945 ckdevelop_kdlginit.cpp:212
+#: dbgpsdlg.cpp:50
+msgid "Attach to process"
+msgstr ""
+
+#: ckdevelop_init.cpp:733 ckdevelop_kdlginit.cpp:218
+msgid "Start (other)..."
+msgstr ""
+
+#: ckdevelop_init.cpp:736 ckdevelop_init.cpp:950 ckdevelop_kdlginit.cpp:221
+#: ckdevelop_kdlginit.cpp:392 dbgtoolbar.cpp:263
+msgid "Run"
+msgstr ""
+
+#: ckdevelop_init.cpp:737 ckdevelop_kdlginit.cpp:222
+msgid "Run to cursor"
+msgstr ""
+
+#: ckdevelop_init.cpp:739 ckdevelop_init.cpp:974 ckdevelop_kdlginit.cpp:224
+msgid "Step over instr."
+msgstr ""
+
+#: ckdevelop_init.cpp:741 ckdevelop_init.cpp:979 ckdevelop_kdlginit.cpp:226
+msgid "Step into instr."
+msgstr ""
+
+#: ckdevelop_init.cpp:742 ckdevelop_kdlginit.cpp:227 dbgtoolbar.cpp:281
+msgid "Step out"
+msgstr ""
+
+#: ckdevelop_init.cpp:745 ckdevelop_kdlginit.cpp:230 dbgtoolbar.cpp:284
+msgid "Viewers"
+msgstr ""
+
+#: ckdevelop_init.cpp:748 ckdevelop_kdlginit.cpp:233 dbgtoolbar.cpp:266
+msgid "Interrupt"
+msgstr ""
+
+#: ckdevelop_init.cpp:751 ckdevelop_kdlginit.cpp:236
+msgid "Debu&g"
+msgstr ""
+
+#: ckdevelop_init.cpp:757 ckdevelop_kdlginit.cpp:242
 msgid "&Tools"
 msgstr ""
 
-#: ckdevelop_init.cpp:629
+#: ckdevelop_init.cpp:764
 msgid "&Enscript..."
 msgstr ""
 
-#: ckdevelop_init.cpp:633
+#: ckdevelop_init.cpp:768
 msgid "&Editor..."
 msgstr ""
 
-#: ckdevelop_init.cpp:635
+#: ckdevelop_init.cpp:770
 msgid "Editor &Colors..."
 msgstr ""
 
-#: ckdevelop_init.cpp:637
+#: ckdevelop_init.cpp:772
 msgid "Editor &Defaults..."
 msgstr ""
 
-#: ckdevelop_init.cpp:640
+#: ckdevelop_init.cpp:775
 msgid "&Syntax Highlighting..."
 msgstr ""
 
-#: ckdevelop_init.cpp:643 ckdevelop_kdlginit.cpp:215
+#: ckdevelop_init.cpp:778 ckdevelop_kdlginit.cpp:247
 msgid "Documentation &Browser..."
 msgstr ""
 
-#: ckdevelop_init.cpp:646
+#: ckdevelop_init.cpp:781
 msgid "Configure &Printer..."
 msgstr ""
 
-#: ckdevelop_init.cpp:647
+#: ckdevelop_init.cpp:782
 msgid "Tools..."
 msgstr ""
 
-#: ckdevelop_init.cpp:650 ckdevelop_kdlginit.cpp:218
+#: ckdevelop_init.cpp:785 ckdevelop_kdlginit.cpp:250
 msgid "&KDevelop Setup..."
 msgstr ""
 
-#: ckdevelop_init.cpp:658
+#: ckdevelop_init.cpp:793
 msgid "&Window"
 msgstr ""
 
-#: ckdevelop_init.cpp:664
-msgid "&Set Bookmark..."
+#: ckdevelop_init.cpp:800
+msgid "&Toggle Bookmark"
 msgstr ""
 
-#: ckdevelop_init.cpp:665
-msgid "&Add Bookmark..."
+#: ckdevelop_init.cpp:801
+msgid "&Next Bookmark"
 msgstr ""
 
-#: ckdevelop_init.cpp:666
+#: ckdevelop_init.cpp:802
+msgid "&Previous Bookmark"
+msgstr ""
+
+#: ckdevelop_init.cpp:803
 msgid "&Clear Bookmarks"
 msgstr ""
 
-#: ckdevelop_init.cpp:676
+#: ckdevelop_init.cpp:813
 msgid "&Header Window"
 msgstr ""
 
-#: ckdevelop_init.cpp:677
+#: ckdevelop_init.cpp:814
 msgid "C/C++ &Window"
 msgstr ""
 
-#: ckdevelop_init.cpp:678
+#: ckdevelop_init.cpp:815
 msgid "&Browser Window"
 msgstr ""
 
-#: ckdevelop_init.cpp:680
+#: ckdevelop_init.cpp:817
 msgid "Book&marks"
 msgstr ""
 
-#: ckdevelop_init.cpp:685
+#: ckdevelop_init.cpp:822
 msgid "&Back"
 msgstr ""
 
-#: ckdevelop_init.cpp:686
+#: ckdevelop_init.cpp:823
 msgid "&Forward"
 msgstr ""
 
-#: ckdevelop_init.cpp:688 ckdevelop_kdlginit.cpp:226
+#: ckdevelop_init.cpp:825 ckdevelop_kdlginit.cpp:258
 msgid "&Search Marked Text"
 msgstr ""
 
-#: ckdevelop_init.cpp:693 ckdevelop_init.cpp:877 ckdevelop_kdlginit.cpp:230
-#: doctreeview.cpp:227
+#: ckdevelop_init.cpp:830 ckdevelop_init.cpp:1031 ckdevelop_kdlginit.cpp:262
+#: doctreeview.cpp:267
 msgid "User Manual"
 msgstr ""
 
-#: ckdevelop_init.cpp:694 ckdevelop_kdlginit.cpp:231 doctreeview.cpp:229
+#: ckdevelop_init.cpp:831 ckdevelop_kdlginit.cpp:263 doctreeview.cpp:269
 msgid "Programming Handbook"
 msgstr ""
 
-#: ckdevelop_init.cpp:695 ckdevelop_kdlginit.cpp:232 ckdevsetupdlg.cpp:224
+#: ckdevelop_init.cpp:832 ckdevelop_kdlginit.cpp:264 ckdevsetupdlg.cpp:224
 #: ktipofday.cpp:27
 msgid "Tip of the Day"
 msgstr ""
 
-#: ckdevelop_init.cpp:696 ckdevelop_kdlginit.cpp:233
+#: ckdevelop_init.cpp:833 ckdevelop_kdlginit.cpp:265
 msgid "KDevelop Homepage"
 msgstr ""
 
-#: ckdevelop_init.cpp:697 ckdevelop_kdlginit.cpp:234
+#: ckdevelop_init.cpp:834 ckdevelop_kdlginit.cpp:266
 msgid "Bug Report..."
 msgstr ""
 
-#: ckdevelop_init.cpp:699 ckdevelop_kdlginit.cpp:236
+#: ckdevelop_init.cpp:836 ckdevelop_kdlginit.cpp:268
 msgid "C/C++-Reference"
 msgstr ""
 
-#: ckdevelop_init.cpp:700 ckdevelop_kdlginit.cpp:237
+#: ckdevelop_init.cpp:837 ckdevelop_kdlginit.cpp:269
 msgid "&Qt-Library"
 msgstr ""
 
-#: ckdevelop_init.cpp:701 ckdevelop_kdlginit.cpp:238
+#: ckdevelop_init.cpp:838 ckdevelop_kdlginit.cpp:270
 msgid "KDE-&Core-Library"
 msgstr ""
 
-#: ckdevelop_init.cpp:703 ckdevelop_kdlginit.cpp:240
+#: ckdevelop_init.cpp:840 ckdevelop_kdlginit.cpp:272
 msgid "KDE-&GUI-Library"
 msgstr ""
 
-#: ckdevelop_init.cpp:705 ckdevelop_kdlginit.cpp:242
+#: ckdevelop_init.cpp:842 ckdevelop_kdlginit.cpp:274
 msgid "KDE-&KFile-Library"
 msgstr ""
 
-#: ckdevelop_init.cpp:707 ckdevelop_kdlginit.cpp:244
+#: ckdevelop_init.cpp:844 ckdevelop_kdlginit.cpp:276
 msgid "KDE-&HTML-Library"
 msgstr ""
 
-#: ckdevelop_init.cpp:710 ckdevelop_kdlginit.cpp:247
+#: ckdevelop_init.cpp:847 ckdevelop_kdlginit.cpp:279
 msgid "Project &API-Doc"
 msgstr ""
 
-#: ckdevelop_init.cpp:713 ckdevelop_kdlginit.cpp:250
+#: ckdevelop_init.cpp:850 ckdevelop_kdlginit.cpp:282
 msgid "Project &User-Manual"
 msgstr ""
 
-#: ckdevelop_init.cpp:724
+#: ckdevelop_init.cpp:861
 msgid "Goto declaration"
 msgstr ""
 
-#: ckdevelop_init.cpp:726
+#: ckdevelop_init.cpp:863
 msgid "Goto definition"
 msgstr ""
 
-#: ckdevelop_init.cpp:729
+#: ckdevelop_init.cpp:866
 msgid "Goto class declaration"
 msgstr ""
 
-#: ckdevelop_init.cpp:738
+#: ckdevelop_init.cpp:875
 msgid "Show graphical classview"
 msgstr ""
 
-#: ckdevelop_init.cpp:774
+#: ckdevelop_init.cpp:912
 msgid "Open File"
 msgstr ""
 
-#: ckdevelop_init.cpp:779
+#: ckdevelop_init.cpp:917
 msgid "Save File"
 msgstr ""
 
-#: ckdevelop_init.cpp:799
+#: ckdevelop_init.cpp:937
 msgid "Compile file"
 msgstr ""
 
-#: ckdevelop_init.cpp:801 ckdevelop_kdlginit.cpp:356
+#: ckdevelop_init.cpp:939 ckdevelop_kdlginit.cpp:389
 msgid "Rebuild"
 msgstr ""
 
-#: ckdevelop_init.cpp:804 ckdevelop_kdlginit.cpp:359
-msgid "Run"
+#: ckdevelop_init.cpp:941 ckdevelop_kdlginit.cpp:391
+msgid "Debug"
 msgstr ""
 
-#: ckdevelop_init.cpp:812
+#: ckdevelop_init.cpp:958
 msgid "Switch to the dialogeditor"
 msgstr ""
 
-#: ckdevelop_init.cpp:813
+#: ckdevelop_init.cpp:959
 msgid "Tree-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:814
+#: ckdevelop_init.cpp:960
 msgid "Output-View"
 msgstr ""
 
-#: ckdevelop_init.cpp:825 ckdevelop_kdlginit.cpp:380
-msgid "What's this...?"
+#: ckdevelop_init.cpp:968 ckdevelop_kdlginit.cpp:412 dbgtoolbar.cpp:305
+msgid "Continue with app execution. May start the app"
 msgstr ""
 
-#: ckdevelop_init.cpp:837 ckdevelop_init.cpp:842
+#: ckdevelop_init.cpp:969 ckdevelop_kdlginit.cpp:413 dbgtoolbar.cpp:307
+msgid "Execute one line of code, but run through functions"
+msgstr ""
+
+#: ckdevelop_init.cpp:970 ckdevelop_kdlginit.cpp:414 dbgtoolbar.cpp:309
+msgid "Execute one line of code, stepping into fn if appropriate"
+msgstr ""
+
+#: ckdevelop_init.cpp:971 ckdevelop_kdlginit.cpp:415 dbgtoolbar.cpp:311
+msgid "Execute to end of current stack frame"
+msgstr ""
+
+#: ckdevelop_init.cpp:991 ckdevelop_init.cpp:996
 msgid "Classes"
 msgstr ""
 
-#: ckdevelop_init.cpp:848 ckdevelop_init.cpp:852
+#: ckdevelop_init.cpp:1002 ckdevelop_init.cpp:1006
 msgid "Methods"
 msgstr ""
 
-#: ckdevelop_init.cpp:860
+#: ckdevelop_init.cpp:1014
 msgid "Declaration/Definition"
 msgstr ""
 
-#: ckdevelop_init.cpp:882
+#: ckdevelop_init.cpp:1036
 msgid "Search Text in Documenation"
 msgstr ""
 
-#: ckdevelop_init.cpp:911
+#: ckdevelop_init.cpp:1046 ckdevelop_kdlginit.cpp:422
+msgid "What's this...?"
+msgstr ""
+
+#: ckdevelop_init.cpp:1074
 msgid "xxxxxxxxxxxxxxxxxxxx"
 msgstr ""
 
-#: ckdevelop_init.cpp:912
+#: ckdevelop_init.cpp:1075
 msgid "Line: 00000 Col: 000"
 msgstr ""
 
-#: ckdevelop_init.cpp:916
+#: ckdevelop_init.cpp:1079
 msgid " INS "
 msgstr ""
 
-#: ckdevelop_init.cpp:918
+#: ckdevelop_init.cpp:1081
 msgid "yyyyyyyyyyyyyy"
 msgstr ""
 
-#: ckdevelop_init.cpp:1103 ckdevelop_noslot.cpp:1236
+#: ckdevelop_init.cpp:1266
+msgid "KDevelop failed to shutdown correctly previously"
+msgstr ""
+
+#: ckdevelop_init.cpp:1267
+msgid ""
+"KDevelop failed to shutdown correctly previously\n"
+"Would you like to start with the last loaded project?"
+msgstr ""
+
+#: ckdevelop_init.cpp:1293 ckdevelop_noslot.cpp:1378
 msgid "Starting..."
 msgstr ""
 
-#: ckdevelop_init.cpp:1104 ckdevelop_noslot.cpp:1237
+#: ckdevelop_init.cpp:1294 ckdevelop_noslot.cpp:1379
 msgid ""
 "Initializing last project...\n"
 "Please wait...\n"
+msgstr ""
+
+#: ckdevelop_init.cpp:1498
+msgid "breakpoint"
+msgstr ""
+
+#: ckdevelop_init.cpp:1499
+msgid "frame stack"
+msgstr ""
+
+#: ckdevelop_init.cpp:1500
+msgid "disassemble"
+msgstr ""
+
+#: ckdevelop_init.cpp:1501
+msgid "VAR"
+msgstr ""
+
+#: ckdevelop_init.cpp:1505
+msgid "debugger"
 msgstr ""
 
 #: ckdevelop_kdlginit.cpp:42
@@ -2996,7 +3454,7 @@ msgid "&Properties-View"
 msgstr ""
 
 #: ckdevelop_kdlginit.cpp:121
-msgid "&Preview dialog"
+msgid "Pr&eview dialog"
 msgstr ""
 
 #: ckdevelop_kdlginit.cpp:123
@@ -3028,7 +3486,7 @@ msgid "&Generate Sources..."
 msgstr ""
 
 #: ckdevelop_kdlginit.cpp:180
-msgid "&Generate Complete Sources..."
+msgid "Ge&nerate Complete Sources..."
 msgstr ""
 
 #: ckdevelop_kdlginit.cpp:193
@@ -3047,77 +3505,77 @@ msgstr ""
 msgid "&Autoconf"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:254
+#: ckdevelop_kdlginit.cpp:286
 msgid "Dialog editor notes..."
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:337
+#: ckdevelop_kdlginit.cpp:369
 msgid "Save Dialog"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:354
+#: ckdevelop_kdlginit.cpp:387
 msgid "Generate Sources"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:369
+#: ckdevelop_kdlginit.cpp:402
 msgid "Switch to edit-mode"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:370
+#: ckdevelop_kdlginit.cpp:403
 msgid "Tree View"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:371
+#: ckdevelop_kdlginit.cpp:404
 msgid "Output View"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:391
+#: ckdevelop_kdlginit.cpp:433
 msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:394 ckdevelop_kdlginit.cpp:395
+#: ckdevelop_kdlginit.cpp:436 ckdevelop_kdlginit.cpp:437
 msgid "xxxxxxxxxxxxxx"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:396
+#: ckdevelop_kdlginit.cpp:438
 msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
 msgstr ""
 
-#: ckdevelop_kdlginit.cpp:401
+#: ckdevelop_kdlginit.cpp:443
 msgid "        "
 msgstr ""
 
-#: ckdevelop_noslot.cpp:91 ckdevelop_noslot.cpp:224 ckdevelop_project.cpp:1014
-#: ckdevelop_project.cpp:1107
+#: ckdevelop_noslot.cpp:177 ckdevelop_noslot.cpp:310
+#: ckdevelop_project.cpp:1079 ckdevelop_project.cpp:1172
 msgid "Untitled.c"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:179
+#: ckdevelop_noslot.cpp:265
 msgid "Tools"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:268
+#: ckdevelop_noslot.cpp:354
 msgid "Save as new type of document?"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:269
+#: ckdevelop_noslot.cpp:355
 msgid ""
 "Do you really want to save the file\n"
 "as another type of document?"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:274 ckdevelop_project.cpp:315
+#: ckdevelop_noslot.cpp:360 ckdevelop_project.cpp:336
 msgid "File exists!"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:275 ckdevelop_project.cpp:316
+#: ckdevelop_noslot.cpp:361 ckdevelop_project.cpp:337
 msgid ""
 "\n"
 "The file\n"
 "\n"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:276 ckdevelop_project.cpp:318
+#: ckdevelop_noslot.cpp:362 ckdevelop_project.cpp:339
 msgid ""
 "\n"
 "\n"
@@ -3125,22 +3583,22 @@ msgid ""
 "Do you want overwrite the old one?\n"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:399
+#: ckdevelop_noslot.cpp:515
 msgid "Scanning project files..."
 msgstr ""
 
-#: ckdevelop_noslot.cpp:508 ckdevelop_project.cpp:273
+#: ckdevelop_noslot.cpp:638 ckdevelop_project.cpp:287
 msgid ""
 "\n"
 "\n"
 "File does not exist!"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:1212
+#: ckdevelop_noslot.cpp:1354
 msgid "Exit KDevelop"
 msgstr ""
 
-#: ckdevelop_noslot.cpp:1213
+#: ckdevelop_noslot.cpp:1355
 msgid ""
 "There is unsaved data.\n"
 "Do you really want to quit?"
@@ -3154,53 +3612,69 @@ msgstr ""
 msgid "Save changed project files ?"
 msgstr ""
 
-#: ckdevelop_project.cpp:261
+#: ckdevelop_project.cpp:275
 msgid "Copying files..."
 msgstr ""
 
-#: ckdevelop_project.cpp:262
+#: ckdevelop_project.cpp:276
 msgid "please wait..."
 msgstr ""
 
-#: ckdevelop_project.cpp:403
+#: ckdevelop_project.cpp:302
+msgid "Preparing file: "
+msgstr ""
+
+#: ckdevelop_project.cpp:327
+msgid "Add to project: "
+msgstr ""
+
+#: ckdevelop_project.cpp:356
+msgid "Copy and add to project: "
+msgstr ""
+
+#: ckdevelop_project.cpp:437
 msgid ""
 "You have modified the projectversion.\n"
 "We will regenerate all Makefiles now."
 msgstr ""
 
-#: ckdevelop_project.cpp:405 ckdevelop_project.cpp:1123
+#: ckdevelop_project.cpp:439 ckdevelop_project.cpp:1188
 msgid "Running automake/autoconf and configure..."
 msgstr ""
 
-#: ckdevelop_project.cpp:430
+#: ckdevelop_project.cpp:475
 msgid "Running configure..."
 msgstr ""
 
-#: ckdevelop_project.cpp:510
+#: ckdevelop_project.cpp:587
 msgid "Opening project..."
 msgstr ""
 
-#: ckdevelop_project.cpp:587
+#: ckdevelop_project.cpp:647
 msgid "Creating a new frame application..."
 msgstr ""
 
-#: ckdevelop_project.cpp:669
+#: ckdevelop_project.cpp:653
+msgid "ApplicationWizard"
+msgstr ""
+
+#: ckdevelop_project.cpp:745
 msgid "Creating pot-file in /po..."
 msgstr ""
 
-#: ckdevelop_project.cpp:689
+#: ckdevelop_project.cpp:766
 msgid "Creating project API-Documentation..."
 msgstr ""
 
-#: ckdevelop_project.cpp:814
+#: ckdevelop_project.cpp:864
 msgid "Creating project Manual..."
 msgstr ""
 
-#: ckdevelop_project.cpp:858
+#: ckdevelop_project.cpp:909
 msgid "Running make dist..."
 msgstr ""
 
-#: ckdevelop_project.cpp:1121
+#: ckdevelop_project.cpp:1186
 msgid ""
 "You have added a new subdir to the project.\n"
 "We will regenerate all Makefiles now."
@@ -3342,12 +3816,48 @@ msgstr ""
 msgid ""
 "Debug program\n"
 "\n"
-"Opens KDbg in the tools window with your actualprogram and allows you to "
-"execute it step by stepby setting breakpoints in the sourcecode.Note that "
-"you have to open your sourcecodes in KDbgto access it."
+"Runs your program in the debugger you have chosen (by default the internal "
+"debugger is used) All debuggers should allow you to execute your program "
+"step by step by setting breakpoints in the sourcecode."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:162
+#: ckdevelop_whatsthis.cpp:161
+msgid ""
+"Continue application execution\n"
+"\n"
+"Continues the execution of your application in the debugger. This only has "
+"affect when the application has been halted by the debugger (ie. a "
+"breakpoint has been activated or the interrupt was pressed)."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:169
+msgid ""
+"Step into\n"
+"\n"
+"Executes exactly one line of source. If the source line is a call to a "
+"function then execution will stop after the function has been entered "
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:176
+msgid ""
+"Step over\n"
+"\n"
+"Executes one line of source in the current source file. If the source line "
+"is a call to a function the whole function is executed and the app will stop "
+"at the line following the function call."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:184
+msgid ""
+"Step out of\n"
+"\n"
+"Executes the application until the currently executing function is "
+"completed. The debugger will then display the line after the original call "
+"to that function. If we are in the outermost frame (ie in main()), then this "
+"operation has no affect."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:193
 msgid ""
 "Stop\n"
 "\n"
@@ -3355,7 +3865,7 @@ msgid ""
 "affects make-commands as well as documentation generation."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:169
+#: ckdevelop_whatsthis.cpp:200
 msgid ""
 "Dialogeditor\n"
 "\n"
@@ -3364,7 +3874,7 @@ msgid ""
 "editor button or Sourcecode-editor from the View-menu."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:176
+#: ckdevelop_whatsthis.cpp:207
 msgid ""
 "Sourcecode Editor\n"
 "\n"
@@ -3373,7 +3883,7 @@ msgid ""
 "in the KDevelop toolbar or by choosing Dialogeditor in the View-menu."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:183
+#: ckdevelop_whatsthis.cpp:214
 msgid ""
 "Output-View\n"
 "\n"
@@ -3382,7 +3892,7 @@ msgid ""
 "closed."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:192
+#: ckdevelop_whatsthis.cpp:223
 msgid ""
 "Tree-View\n"
 "\n"
@@ -3391,15 +3901,14 @@ msgid ""
 "closed."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:200
+#: ckdevelop_whatsthis.cpp:231
 msgid ""
 "Classes\n"
 "\n"
-"Choosing a class will switch to the header file where the class is "
-"declarated."
+"Choosing a class will switch to the header file where the class is declared."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:204
+#: ckdevelop_whatsthis.cpp:235
 msgid ""
 "Methods\n"
 "\n"
@@ -3407,7 +3916,7 @@ msgid ""
 "the implementation of the chosen class."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:209
+#: ckdevelop_whatsthis.cpp:240
 msgid ""
 "Documentation-Back\n"
 "\n"
@@ -3416,7 +3925,7 @@ msgid ""
 "Selecting an entry will open the according page in the browser window."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:216
+#: ckdevelop_whatsthis.cpp:247
 msgid ""
 "Documentation-Forward\n"
 "\n"
@@ -3424,7 +3933,7 @@ msgid ""
 "will show you a popup menu to browse visited pages forward."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:221
+#: ckdevelop_whatsthis.cpp:252
 msgid ""
 "Search Marked Text\n"
 "\n"
@@ -3434,7 +3943,7 @@ msgid ""
 "following the link."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:228
+#: ckdevelop_whatsthis.cpp:259
 msgid ""
 "Search for Help on...\n"
 "\n"
@@ -3442,7 +3951,7 @@ msgid ""
 "in the documentation directly using the search database."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:232
+#: ckdevelop_whatsthis.cpp:263
 msgid ""
 "Class Viewer\n"
 "\n"
@@ -3451,7 +3960,7 @@ msgid ""
 "right button popup-menu allows more specialized functionality."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:238
+#: ckdevelop_whatsthis.cpp:269
 msgid ""
 "Logical File Viewer\n"
 "\n"
@@ -3460,7 +3969,7 @@ msgid ""
 "popup-menu allows more specialized functionality."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:244
+#: ckdevelop_whatsthis.cpp:275
 msgid ""
 "Real File Viewer\n"
 "\n"
@@ -3468,7 +3977,7 @@ msgid ""
 "gives access to all files."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:248
+#: ckdevelop_whatsthis.cpp:279
 msgid ""
 "Documentation Tree\n"
 "\n"
@@ -3476,7 +3985,7 @@ msgid ""
 "KDevelop manuals. Can be configured individually by right-button menu."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:253
+#: ckdevelop_whatsthis.cpp:284
 msgid ""
 "Widgets\n"
 "\n"
@@ -3485,7 +3994,7 @@ msgid ""
 "the buttons or in the KDevelop documentation. "
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:259
+#: ckdevelop_whatsthis.cpp:290
 msgid ""
 "Dialogs\n"
 "\n"
@@ -3493,7 +4002,7 @@ msgid ""
 "dispay the dialog for editing."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:263
+#: ckdevelop_whatsthis.cpp:294
 msgid ""
 "Properties\n"
 "\n"
@@ -3503,7 +4012,7 @@ msgid ""
 "containing a list with all used widget items."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:270
+#: ckdevelop_whatsthis.cpp:301
 msgid ""
 "Widget Editing Window\n"
 "\n"
@@ -3515,7 +4024,7 @@ msgid ""
 "added by choosing them on the widgets-window on the left."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:278
+#: ckdevelop_whatsthis.cpp:309
 msgid ""
 "Header/Resource Files\n"
 "\n"
@@ -3524,7 +4033,7 @@ msgid ""
 "the cursor position by line and column."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:284
+#: ckdevelop_whatsthis.cpp:315
 msgid ""
 "C/C++ Files\n"
 "\n"
@@ -3532,7 +4041,7 @@ msgid ""
 "insert/overwrite key as well as the cursor position by line and column."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:289
+#: ckdevelop_whatsthis.cpp:320
 msgid ""
 "Documentation Browser\n"
 "\n"
@@ -3541,7 +4050,7 @@ msgid ""
 "documentation tree to switch between various parts of the documentation."
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:295
+#: ckdevelop_whatsthis.cpp:326
 msgid ""
 "Messages\n"
 "\n"
@@ -3551,7 +4060,7 @@ msgid ""
 "cursor to the line that caused the compiler error/warning. "
 msgstr ""
 
-#: ckdevelop_whatsthis.cpp:309
+#: ckdevelop_whatsthis.cpp:340
 msgid ""
 "StdErr\n"
 "\n"
@@ -3559,14 +4068,55 @@ msgid ""
 "the cerr function to debug."
 msgstr ""
 
+#: ckdevelop_whatsthis.cpp:343
+msgid ""
+"Variable Tree\n"
+"\n"
+"The variable tree allows you to see the variable values as you step through "
+"your program using the internal debugger. Click the RMB on items in this "
+"view to get a popup menu.\n"
+"To speed up stepping through your code leave the tree items closed and add "
+"the variable(s) to the watch section.\n"
+"To change a variable value in your running app use a watch variable (eg a=5)."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:356
+msgid ""
+"Breakpoint list\n"
+"\n"
+"Displays a list of breakpoints with their current status. Clicking on a "
+"breakpoint item with the RMB displays a popupmenu so you may manipulate the "
+"breakpoint. Double clicking will take to the source in the editor window."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:365
+msgid ""
+"Frame stack display\n"
+"\n"
+"Often referred to as the \"call stack\", this is a list showing what "
+"function is currently active and who called each function to get to this "
+"point in your program. By clicking on an item you can see the values in any "
+"of the previous calling functions See the VAR tab for these frame variables."
+msgstr ""
+
+#: ckdevelop_whatsthis.cpp:377
+msgid ""
+"Machine code display\n"
+"\n"
+"A machine code view into your running executable with the current "
+"instruction highlighted. You can step instruction by instruction using the "
+"debuggers toolbar buttons of \"step over\" instruction and \"step into\" "
+"instruction."
+msgstr ""
+
 #: ckdevinstall.cpp:46
 msgid ""
-"The program glimpse is not installed,\n"
+"Neither glimpse nor htdig is installed,\n"
 "therefore KDevelop can not index your\n"
 "documentation to provide a proper help\n"
 "functionality. We advise to install glimpse\n"
-"and create the searchdatabase later by choosing\n"
-"KDevelop Setup in the Options menu .\n"
+"or htdig and create the searchdatabase later by\n"
+"choosing KDevelop Setup in the Options menu.\n"
 "\n"
 "As this is the last step of the Installation\n"
 "process, KDevelop will be started now.\n"
@@ -3636,9 +4186,9 @@ msgstr ""
 msgid "Proceed >>"
 msgstr ""
 
-#: ckdevinstall.cpp:293 ckdevinstall.cpp:314 ckdevsetupdlg.cpp:442
-#: ckdevsetupdlg.cpp:460 ckdevsetupdlg.cpp:521 ckdevsetupdlg.cpp:539
-#: cupdatekdedocdlg.cpp:260
+#: ckdevinstall.cpp:293 ckdevinstall.cpp:314 ckdevsetupdlg.cpp:668
+#: ckdevsetupdlg.cpp:686 ckdevsetupdlg.cpp:769 ckdevsetupdlg.cpp:789
+#: ckdevsetupdlg.cpp:833 ckdevsetupdlg.cpp:848 cupdatekdedocdlg.cpp:260
 msgid "The selected path is not correct!"
 msgstr ""
 
@@ -3664,11 +4214,11 @@ msgstr ""
 msgid "        Automatic installation in progress... "
 msgstr ""
 
-#: ckdevinstall.cpp:357
+#: ckdevinstall.cpp:359
 msgid "Syntax-Highlighting"
 msgstr ""
 
-#: ckdevinstall.cpp:357
+#: ckdevinstall.cpp:359
 msgid ""
 "\n"
 "Now you can choose the Syntax-Highlighting style\n"
@@ -3679,69 +4229,69 @@ msgid ""
 "Which one do you want to use ?"
 msgstr ""
 
-#: ckdevinstall.cpp:362
+#: ckdevinstall.cpp:364
 msgid "Emacs style"
 msgstr ""
 
-#: ckdevinstall.cpp:362
+#: ckdevinstall.cpp:364
 msgid "KWrite default"
 msgstr ""
 
-#: ckdevinstall.cpp:539
+#: ckdevinstall.cpp:541
 msgid "Checking needed programs..."
 msgstr ""
 
-#: ckdevinstall.cpp:609
+#: ckdevinstall.cpp:617
 msgid " was found."
 msgstr ""
 
-#: ckdevinstall.cpp:610
+#: ckdevinstall.cpp:618
 msgid " was not found."
 msgstr ""
 
-#: ckdevinstall.cpp:679
+#: ckdevinstall.cpp:687
 msgid "KPaint"
 msgstr ""
 
-#: ckdevinstall.cpp:694 ckdevinstall.cpp:699
+#: ckdevinstall.cpp:722 ckdevinstall.cpp:728
 msgid " -- search functionality will not be provided\n"
 msgstr ""
 
-#: ckdevinstall.cpp:704
+#: ckdevinstall.cpp:748
 msgid " -- generation of new frame applications will not be possible\n"
 msgstr ""
 
-#: ckdevinstall.cpp:707
+#: ckdevinstall.cpp:751
 msgid "  -- printing available\n"
 msgstr ""
 
-#: ckdevinstall.cpp:709
+#: ckdevinstall.cpp:753
 msgid " -- printing can only use lpr\n"
 msgstr ""
 
-#: ckdevinstall.cpp:713
+#: ckdevinstall.cpp:757
 msgid "Program test results"
 msgstr ""
 
-#: ckdevinstall.cpp:713
+#: ckdevinstall.cpp:757
 msgid ""
 "The following results have been determined for your system:\n"
 "\n"
 " "
 msgstr ""
 
-#: ckdevinstall.cpp:760
+#: ckdevinstall.cpp:804
 msgid "Qt Documentation found"
 msgstr ""
 
-#: ckdevinstall.cpp:760
+#: ckdevinstall.cpp:804
 msgid ""
 "\n"
 "The Qt-Documentation has been found at:\n"
 "\n"
 msgstr ""
 
-#: ckdevinstall.cpp:761
+#: ckdevinstall.cpp:805
 msgid ""
 "\n"
 "\n"
@@ -3749,7 +4299,7 @@ msgid ""
 " "
 msgstr ""
 
-#: ckdevinstall.cpp:764
+#: ckdevinstall.cpp:808
 msgid ""
 "\n"
 "The Qt-library documentation could not\n"
@@ -3759,24 +4309,24 @@ msgid ""
 " "
 msgstr ""
 
-#: ckdevinstall.cpp:770
+#: ckdevinstall.cpp:814
 msgid ""
 "    Please choose your Qt-Documentation path by pushing the selection button "
 "above."
 msgstr ""
 
-#: ckdevinstall.cpp:812
+#: ckdevinstall.cpp:856
 msgid "KDE-Library Documentation found"
 msgstr ""
 
-#: ckdevinstall.cpp:812
+#: ckdevinstall.cpp:856
 msgid ""
 "\n"
 "The KDE-Library-Documentation has been found at:\n"
 "\n"
 msgstr ""
 
-#: ckdevinstall.cpp:822
+#: ckdevinstall.cpp:866
 msgid ""
 "\n"
 "The Program KDoc was not found on your system,\n"
@@ -3787,7 +4337,7 @@ msgid ""
 " "
 msgstr ""
 
-#: ckdevinstall.cpp:827
+#: ckdevinstall.cpp:871
 msgid ""
 "\n"
 "Now KDevelop will create a new KDE-library\n"
@@ -3800,7 +4350,7 @@ msgid ""
 " "
 msgstr ""
 
-#: ckdevinstall.cpp:852
+#: ckdevinstall.cpp:896
 msgid ""
 "                Creating KDE documentation                                   "
 "                                                                    Please "
@@ -3809,7 +4359,7 @@ msgid ""
 "      "
 msgstr ""
 
-#: ckdevinstall.cpp:863
+#: ckdevinstall.cpp:907
 msgid ""
 "\n"
 "\n"
@@ -4053,45 +4603,209 @@ msgid ""
 "Qt-library version."
 msgstr ""
 
-#: ckdevsetupdlg.cpp:383
+#: ckdevsetupdlg.cpp:372
+msgid "Create also KDOC-reference of your project"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:382
+msgid ""
+"Create KDOC-reference of your project\n"
+"\n"
+"If this is enabled, on creating the API-Documentation KDoc creates also\n"
+"a cross reference file of your project into the seleceted kdoc-reference\n"
+"directory."
+msgstr ""
+
+#: ckdevsetupdlg.cpp:410
 msgid "Directories"
 msgstr ""
 
-#: ckdevsetupdlg.cpp:390
+#: ckdevsetupdlg.cpp:430
+msgid "Use external debugger"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:435
+msgid ""
+"Select internal or external debugger\n"
+"\n"
+"Choose whether to use an external debugger\n"
+"or the internal debugger within kdevelop\n"
+"The internal debugger is a frontend to gdb"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:443
+msgid "External"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:449
+msgid "Select debug command:"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:459
+msgid ""
+"Identify the external debugger\n"
+"\n"
+"Enter the program name you wish to run\n"
+"as your debugger"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:466
+msgid "Internal"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:472
+msgid "Display static members"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:476
+msgid ""
+"Display static members\n"
+"\n"
+"Displaying static members makes gdb slower in\n"
+"producing data within kde and qt.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on.\n"
+"But if you need to debug into these values then\n"
+"check this option"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:486
+msgid "Display mangled names"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:490
+msgid ""
+"Display mangled names\n"
+"\n"
+"When displaying the disassembled code you\n"
+"can elect to see the methods mangled names\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+
+#: ckdevsetupdlg.cpp:497
+msgid "Try setting BPs on lib load"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:501
+msgid ""
+"Set pending breakpoints on loading a library\n"
+"\n"
+"If GDB hasn't seen a library that will be loaded via\n"
+"\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
+"We can get gdb to stop on a library load and hence\n"
+"try to set the pending breakpoints. See docs for more\n"
+"details and a \"gotcha\" relating to this behaviour.\n"
+"\n"
+"If you are not \"dlopen\"ing libs leave this off."
+msgstr ""
+
+#: ckdevsetupdlg.cpp:511
+msgid "Enable floating toolbar"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:515
+msgid ""
+"Enable flaoting toolbar\n"
+"\n"
+"Use the floating toolbar. This toolbar always stays\n"
+"on top of all windows so that if the app covers KDevelop\n"
+"you have control of the app though the small toolbar\n"
+"Also this toolbar can be docked to the panel\n"
+"This toolbar is in addition to the toolbar in KDevelop"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:532
+msgid "Qt 2.x / KDE path"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:537
+msgid "Qt 2.x directory:"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:554
+msgid ""
+"Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:560
+msgid "KDE 2.x directory:"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:576
+msgid ""
+"Set the root directory path leading to your KDE 2 includes/libraries, e.g. "
+"/opt/kde2"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:586
+msgid "Default Project Path"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:593
+msgid "Project Path:"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:611
+msgid "Set the start directory where to create/load projects here"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:617
 msgid "Keys"
 msgstr ""
 
-#: ckdevsetupdlg.cpp:391 cnewclassdlg.cpp:109
+#: ckdevsetupdlg.cpp:618 cnewclassdlg.cpp:105
 msgid "Documentation"
 msgstr ""
 
-#: ckdevsetupdlg.cpp:442
+#: ckdevsetupdlg.cpp:619
+msgid "Debugger"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:620
+msgid "Path"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:668
 msgid ""
 "The chosen path does not lead to the\n"
 "Qt-library documentation. Do you really want to save\n"
 "this value?"
 msgstr ""
 
-#: ckdevsetupdlg.cpp:460
+#: ckdevsetupdlg.cpp:686
 msgid ""
 "The chosen path does not lead to the\n"
 "KDE-library documentation. Do you really want to save\n"
 "this value?"
 msgstr ""
 
-#: ckdevsetupdlg.cpp:521
+#: ckdevsetupdlg.cpp:769
 msgid ""
 "The chosen path does not lead to the\n"
 "Qt-library documentation. Please choose the\n"
 "correct path."
 msgstr ""
 
-#: ckdevsetupdlg.cpp:539
+#: ckdevsetupdlg.cpp:789
 msgid ""
 "The chosen path does not lead to the\n"
 "KDE-library documentation. Please choose the\n"
 "correct path or choose 'Update' to create a new\n"
 "documentation"
+msgstr ""
+
+#: ckdevsetupdlg.cpp:833
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-2.x root directory. Please choose the\n"
+"correct path."
+msgstr ""
+
+#: ckdevsetupdlg.cpp:848
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-2.x root directory. Please choose the\n"
+"correct path."
 msgstr ""
 
 #: clogfileview.cpp:215
@@ -4122,35 +4836,35 @@ msgstr ""
 msgid "Remove Group"
 msgstr ""
 
-#: clogfileview.cpp:236 clogfileview.cpp:248 crealfileview.cpp:274
-#: doctreeview.cpp:556 doctreeview.cpp:729
+#: clogfileview.cpp:236 clogfileview.cpp:248 crealfileview.cpp:275
+#: doctreeview.cpp:612 doctreeview.cpp:803
 msgid "Properties..."
 msgstr ""
 
-#: clogfileview.cpp:243 crealfileview.cpp:269
+#: clogfileview.cpp:243 crealfileview.cpp:270
 msgid "Remove File from Project..."
 msgstr ""
 
-#: clogfileview.cpp:245 crealfileview.cpp:271 crealfileview.cpp:281
+#: clogfileview.cpp:245 crealfileview.cpp:272 crealfileview.cpp:283
 msgid "Remove File from Disk..."
 msgstr ""
 
-#: clogfileview.cpp:257 crealfileview.cpp:254 crealfileview.cpp:288
-#: crealfileview.cpp:310
+#: clogfileview.cpp:257 crealfileview.cpp:259 crealfileview.cpp:297
+#: crealfileview.cpp:322
 msgid "Update"
 msgstr ""
 
-#: clogfileview.cpp:260 crealfileview.cpp:256 crealfileview.cpp:290
-#: crealfileview.cpp:313
+#: clogfileview.cpp:260 crealfileview.cpp:260 crealfileview.cpp:298
+#: crealfileview.cpp:324
 msgid "Commit"
 msgstr ""
 
-#: clogfileview.cpp:263 crealfileview.cpp:258 crealfileview.cpp:292
-#: crealfileview.cpp:316
+#: clogfileview.cpp:263 crealfileview.cpp:261 crealfileview.cpp:299
+#: crealfileview.cpp:326
 msgid "Add to Repository"
 msgstr ""
 
-#: clogfileview.cpp:266 crealfileview.cpp:260 crealfileview.cpp:294
+#: clogfileview.cpp:266 crealfileview.cpp:263 crealfileview.cpp:301
 msgid "Remove from Repository (and Disk)"
 msgstr ""
 
@@ -4162,7 +4876,7 @@ msgstr ""
 msgid "New Group ..."
 msgstr ""
 
-#: clogfileview.cpp:358 crealfileview.cpp:389
+#: clogfileview.cpp:358 crealfileview.cpp:400
 #, c-format
 msgid ""
 "Do you really want to remove the file\n"
@@ -4189,15 +4903,73 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: cnewclassdlg.cpp:33
+#: cnewclassdlg.cpp:50
 msgid "Class Generator"
 msgstr ""
 
-#: cnewclassdlg.cpp:38
+#: cnewclassdlg.cpp:55
 msgid "Classname"
 msgstr ""
 
-#: cnewclassdlg.cpp:47
+#: cnewclassdlg.cpp:66
+msgid "Baseclass"
+msgstr ""
+
+#: cnewclassdlg.cpp:85 print/cconfigenscriptdlg.cpp:154
+msgid "Header"
+msgstr ""
+
+#: cnewclassdlg.cpp:95
+msgid "Impl."
+msgstr ""
+
+#: cnewclassdlg.cpp:116
+msgid "Inheritance"
+msgstr ""
+
+#: cnewclassdlg.cpp:122
+msgid "public"
+msgstr ""
+
+#: cnewclassdlg.cpp:128
+msgid "protected"
+msgstr ""
+
+#: cnewclassdlg.cpp:133
+msgid "private"
+msgstr ""
+
+#: cnewclassdlg.cpp:139
+msgid "Additional Options"
+msgstr ""
+
+#: cnewclassdlg.cpp:145
+msgid "use header/cpp-templates"
+msgstr ""
+
+#: cnewclassdlg.cpp:151
+msgid "generate a QWidget-Childclass"
+msgstr ""
+
+#: cnewclassdlg.cpp:209 kdlgedit/kdlgnewdialogdlg.cpp:403
+msgid "You must enter a classname!"
+msgstr ""
+
+#: cnewclassdlg.cpp:214 kdlgedit/kdlgnewdialogdlg.cpp:406
+msgid "You must enter a name for the header-file!"
+msgstr ""
+
+#: cnewclassdlg.cpp:219 kdlgedit/kdlgnewdialogdlg.cpp:409
+msgid "You must enter a name for the implementation-file!"
+msgstr ""
+
+#: cnewclassdlg.cpp:249
+msgid ""
+"Sorry, but KDevelop is not able to add classes to existing header or "
+"implementation files."
+msgstr ""
+
+#: cnewclassdlg.cpp:434
 msgid ""
 "Insert your new classname here.\n"
 "Please try to keep some standards\n"
@@ -4206,11 +4978,7 @@ msgid ""
 "a class for a KDE-project."
 msgstr ""
 
-#: cnewclassdlg.cpp:55
-msgid "Baseclass"
-msgstr ""
-
-#: cnewclassdlg.cpp:64
+#: cnewclassdlg.cpp:439
 msgid ""
 "Insert the baseclass from which your new class\n"
 "will be derived from. If you have checked\n"
@@ -4219,11 +4987,7 @@ msgid ""
 "new class will not have a parent class."
 msgstr ""
 
-#: cnewclassdlg.cpp:79 print/cconfigenscriptdlg.cpp:154
-msgid "Header"
-msgstr ""
-
-#: cnewclassdlg.cpp:88
+#: cnewclassdlg.cpp:445
 msgid ""
 "Insert your header filename here.\n"
 "It is automatically inserted while\n"
@@ -4231,11 +4995,7 @@ msgid ""
 "still edit it afterwards."
 msgstr ""
 
-#: cnewclassdlg.cpp:94
-msgid "Impl."
-msgstr ""
-
-#: cnewclassdlg.cpp:103
+#: cnewclassdlg.cpp:450
 msgid ""
 "Insert your implementation filename here.\n"
 "It is automatically inserted while\n"
@@ -4243,7 +5003,7 @@ msgid ""
 "still edit it afterwards."
 msgstr ""
 
-#: cnewclassdlg.cpp:119
+#: cnewclassdlg.cpp:455
 msgid ""
 "Insert a short description for your new class\n"
 "here for documenation purposes. This will be used\n"
@@ -4251,35 +5011,7 @@ msgid ""
 "after the class is created."
 msgstr ""
 
-#: cnewclassdlg.cpp:125
-msgid "Inheritence"
-msgstr ""
-
-#: cnewclassdlg.cpp:131
-msgid "public"
-msgstr ""
-
-#: cnewclassdlg.cpp:137
-msgid "protected"
-msgstr ""
-
-#: cnewclassdlg.cpp:142
-msgid "private"
-msgstr ""
-
-#: cnewclassdlg.cpp:148
-msgid "Additional Options"
-msgstr ""
-
-#: cnewclassdlg.cpp:154
-msgid "use header/cpp-templates"
-msgstr ""
-
-#: cnewclassdlg.cpp:160
-msgid "generate a QWidget-Childclass"
-msgstr ""
-
-#: cnewclassdlg.cpp:169
+#: cnewclassdlg.cpp:461
 msgid ""
 "This offers additional options to your new class.\n"
 "If you check `use header/cpp-templates`, your name and\n"
@@ -4289,174 +5021,164 @@ msgid ""
 "using baseclasses derived from QWidget, e.g. QDialog."
 msgstr ""
 
-#: cnewclassdlg.cpp:184
+#: cnewclassdlg.cpp:470
 msgid ""
 "Check here your inheritance from the chosen baseclass.\n"
 "You can derive from a baseclass as public,protected\n"
 "or private."
 msgstr ""
 
-#: cnewclassdlg.cpp:230 kdlgedit/kdlgnewdialogdlg.cpp:403
-msgid "You must enter a classname!"
-msgstr ""
-
-#: cnewclassdlg.cpp:235 kdlgedit/kdlgnewdialogdlg.cpp:406
-msgid "You must enter a name for the header-file!"
-msgstr ""
-
-#: cnewclassdlg.cpp:240 kdlgedit/kdlgnewdialogdlg.cpp:409
-msgid "You must enter a name for the implementation-file!"
-msgstr ""
-
-#: cnewclassdlg.cpp:264
-msgid ""
-"Sorry, but KDevelop is not able to add classes to existing header or "
-"implementation files."
-msgstr ""
-
-#: cnewfiledlg.cpp:45 cnewfiledlg.cpp:407
+#: cnewfiledlg.cpp:45 cnewfiledlg.cpp:419
 msgid "lsm File - Linux Software Map"
 msgstr ""
 
-#: cnewfiledlg.cpp:46 cnewfiledlg.cpp:404
+#: cnewfiledlg.cpp:46 cnewfiledlg.cpp:416
 msgid "kdelnk-File - for the KDE-Menu"
 msgstr ""
 
-#: cnewfiledlg.cpp:47 cnewfiledlg.cpp:410
+#: cnewfiledlg.cpp:47 cnewfiledlg.cpp:422
 msgid "Icon (*.xpm)"
 msgstr ""
 
-#: cnewfiledlg.cpp:52 cnewfiledlg.cpp:398
-msgid "english (.sgml)"
+#: cnewfiledlg.cpp:52 cnewfiledlg.cpp:407
+msgid "LinuxDoc SGML (english) (*.sgml)"
 msgstr ""
 
-#: cnewfiledlg.cpp:57 cnewfiledlg.cpp:381
+#: cnewfiledlg.cpp:53 cnewfiledlg.cpp:410
+msgid "DocBook SGML (english) (*.docbook)"
+msgstr ""
+
+#: cnewfiledlg.cpp:58 cnewfiledlg.cpp:390
 msgid "C/C++ Header (*.h,*.hxx)"
 msgstr ""
 
-#: cnewfiledlg.cpp:58 cnewfiledlg.cpp:378
+#: cnewfiledlg.cpp:59 cnewfiledlg.cpp:387
 msgid "C/C++ File (*.cpp,*.c,*.cc,*.C ...)"
 msgstr ""
 
-#: cnewfiledlg.cpp:59 cnewfiledlg.cpp:384
+#: cnewfiledlg.cpp:60 cnewfiledlg.cpp:393
 msgid "Empty Textfile"
 msgstr ""
 
-#: cnewfiledlg.cpp:60 cnewfiledlg.cpp:387
+#: cnewfiledlg.cpp:61 cnewfiledlg.cpp:396
 msgid "Qt/KDE Dialog (*.kdevdlg)"
 msgstr ""
 
-#: cnewfiledlg.cpp:61 cnewfiledlg.cpp:390
+#: cnewfiledlg.cpp:62 cnewfiledlg.cpp:399
 msgid "Lexical File (*.l, *.ll, *.lxx, *.l++)"
 msgstr ""
 
-#: cnewfiledlg.cpp:64
+#: cnewfiledlg.cpp:65
 msgid "Choose the type of the new file here."
 msgstr ""
 
-#: cnewfiledlg.cpp:67
+#: cnewfiledlg.cpp:68
 msgid "Manuals"
 msgstr ""
 
-#: cnewfiledlg.cpp:68
+#: cnewfiledlg.cpp:69
 msgid "Linux/KDE"
 msgstr ""
 
-#: cnewfiledlg.cpp:84
+#: cnewfiledlg.cpp:85
 msgid "Filename:"
 msgstr ""
 
-#: cnewfiledlg.cpp:97
+#: cnewfiledlg.cpp:98
 msgid "Enter a name for your new file here."
 msgstr ""
 
-#: cnewfiledlg.cpp:106
+#: cnewfiledlg.cpp:107
 msgid "use Template"
 msgstr ""
 
-#: cnewfiledlg.cpp:109
+#: cnewfiledlg.cpp:110
 msgid "Check this if you want to use a template."
 msgstr ""
 
-#: cnewfiledlg.cpp:121 cprjoptionsdlg.cpp:49
+#: cnewfiledlg.cpp:122 cprjoptionsdlg.cpp:49
 msgid "Project Options"
 msgstr ""
 
-#: cnewfiledlg.cpp:140
+#: cnewfiledlg.cpp:141
 msgid "add to Project"
 msgstr ""
 
-#: cnewfiledlg.cpp:143
+#: cnewfiledlg.cpp:144
 msgid "Check this if you want to add the new file to your project."
 msgstr ""
 
-#: cnewfiledlg.cpp:152 kdlgedit/kdlgnewdialogdlg.cpp:291
+#: cnewfiledlg.cpp:153 kdlgedit/kdlgnewdialogdlg.cpp:291
 msgid "Location:"
 msgstr ""
 
-#: cnewfiledlg.cpp:165
+#: cnewfiledlg.cpp:166
 msgid "Enter the directory where the new file will be located."
 msgstr ""
 
-#: cnewfiledlg.cpp:179
+#: cnewfiledlg.cpp:180
 msgid "Here you can choose a directory where the new file will be located."
 msgstr ""
 
-#: cnewfiledlg.cpp:254
+#: cnewfiledlg.cpp:255
 msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
 msgstr ""
 
-#: cnewfiledlg.cpp:259
+#: cnewfiledlg.cpp:260
 msgid "The filename must end with .h or .hxx!"
 msgstr ""
 
-#: cnewfiledlg.cpp:263
+#: cnewfiledlg.cpp:264
 msgid "The filename must end with .lsm !"
 msgstr ""
 
-#: cnewfiledlg.cpp:267
+#: cnewfiledlg.cpp:268
 msgid "The filename must end with .kdelnk !"
 msgstr ""
 
-#: cnewfiledlg.cpp:271
+#: cnewfiledlg.cpp:272
 msgid "The filename must end with .sgml !"
 msgstr ""
 
-#: cnewfiledlg.cpp:275
+#: cnewfiledlg.cpp:276
+msgid "The filename must end with .docbook !"
+msgstr ""
+
+#: cnewfiledlg.cpp:280
 msgid "The filename must end with .kdevdlg !"
 msgstr ""
 
-#: cnewfiledlg.cpp:279
+#: cnewfiledlg.cpp:284
 msgid "The filename must end with .xpm !"
 msgstr ""
 
-#: cnewfiledlg.cpp:283
+#: cnewfiledlg.cpp:288
 msgid "The filename must end with .l, .ll, .lxx or .l++ !"
 msgstr ""
 
-#: cnewfiledlg.cpp:287
+#: cnewfiledlg.cpp:292
 msgid "You must enter a filename!"
 msgstr ""
 
-#: cnewfiledlg.cpp:291 kdlgedit/kdlgnewdialogdlg.cpp:421
+#: cnewfiledlg.cpp:296 kdlgedit/kdlgnewdialogdlg.cpp:421
 msgid "You must choose a location,that is in your project-dir!"
 msgstr ""
 
-#: cnewfiledlg.cpp:301
+#: cnewfiledlg.cpp:306
 msgid "Files exists!"
 msgstr ""
 
-#: cnewfiledlg.cpp:302
+#: cnewfiledlg.cpp:307
 msgid ""
 "You have added a file to the project that already exists.\n"
 "Do you want overwrite the old one?"
 msgstr ""
 
-#: cnewfiledlg.cpp:346
+#: cnewfiledlg.cpp:355
 msgid "Information..."
 msgstr ""
 
-#: cnewfiledlg.cpp:346
+#: cnewfiledlg.cpp:355
 msgid ""
 "Please make sure, that you have added\n"
 "\"AM_LEX_PROG\" to your configure.in!"
@@ -4500,7 +5222,7 @@ msgstr ""
 msgid "Version Control:"
 msgstr ""
 
-#: cprjoptionsdlg.cpp:118 cprjoptionsdlg.cpp:1264
+#: cprjoptionsdlg.cpp:118 cprjoptionsdlg.cpp:1290
 msgid "None"
 msgstr ""
 
@@ -4552,19 +5274,6 @@ msgid ""
 "distribution packages. i386v is intended for\n"
 "cross-compilers to build a binary for an intel\n"
 "machine running Unix System V."
-msgstr ""
-
-#: cprjoptionsdlg.cpp:185
-msgid "only syntax check"
-msgstr ""
-
-#: cprjoptionsdlg.cpp:187
-msgid ""
-"This option sets the compiler\n"
-"to <i>-fsyntax-only</i>\n"
-"which lets you check your code for\n"
-"syntax-errors but doesn't do anything\n"
-"else beyond that."
 msgstr ""
 
 #: cprjoptionsdlg.cpp:195
@@ -5016,18 +5725,34 @@ msgstr ""
 msgid "additional options"
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1071
+#: cprjoptionsdlg.cpp:1077
+msgid "Rebuild behaviour on run/debug:"
+msgstr ""
+
+#: cprjoptionsdlg.cpp:1087
+msgid "warning on modification"
+msgstr ""
+
+#: cprjoptionsdlg.cpp:1088
+msgid "only on modification"
+msgstr ""
+
+#: cprjoptionsdlg.cpp:1089
+msgid "always rebuild"
+msgstr ""
+
+#: cprjoptionsdlg.cpp:1091
 msgid "Make Options"
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1073
+#: cprjoptionsdlg.cpp:1093
 msgid ""
 "Pressing the folder button lets you choose\n"
 "a file which will be set modified. This will\n"
 "recompile the file on the next build run."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1077
+#: cprjoptionsdlg.cpp:1097
 msgid ""
 "Print  debugging  information  in  addition to normal\n"
 "processing. The debugging information tells you which\n"
@@ -5038,13 +5763,21 @@ msgid ""
 "thing  interesting about how make decides what to do."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1086
+#: cprjoptionsdlg.cpp:1106
 msgid ""
 "Set any other additional options for your\n"
 "make-program here."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1090
+#: cprjoptionsdlg.cpp:1110
+msgid ""
+"Set the rebuild type on pressing run/debug here. This allows you to select "
+"if you either\n"
+"want to rebuild always on run/debug or rebuild only on modifications or\n"
+"give you first a warning on modification of your sources."
+msgstr ""
+
+#: cprjoptionsdlg.cpp:1114
 msgid ""
 "Print  the data base (rules and variable values) that\n"
 "results from reading the makefiles; then  execute  as\n"
@@ -5052,20 +5785,20 @@ msgid ""
 "the version information."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1095
+#: cprjoptionsdlg.cpp:1119
 msgid ""
 "Eliminate  use  of the built-in implicit rules.  Also\n"
 "clear out the default list  of  suffixes  for  suffix\n"
 "rules."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1099
+#: cprjoptionsdlg.cpp:1123
 msgid ""
 "Give variables taken from the environment  precedence\n"
 "over variables from makefiles."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1102
+#: cprjoptionsdlg.cpp:1126
 msgid ""
 "Continue  as  much as possible after an error. While\n"
 "the target that failed, and those that depend on it,\n"
@@ -5073,7 +5806,7 @@ msgid ""
 "targets can be processed all the same."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1107
+#: cprjoptionsdlg.cpp:1131
 msgid ""
 "Touch  files  (mark  them  up  to date without really\n"
 "changing them) instead  of  running  their  commands.\n"
@@ -5081,7 +5814,7 @@ msgid ""
 "in order to fool future invocations of make."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1112
+#: cprjoptionsdlg.cpp:1136
 msgid ""
 "Print  a  message  containing  the  working directory\n"
 "before and after other processing.  This may be  use­\n"
@@ -5089,26 +5822,26 @@ msgid ""
 "of recursive make commands."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1117
+#: cprjoptionsdlg.cpp:1141
 msgid ""
 "Silent operation; do not print the commands as they\n"
 "are executed."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1120
+#: cprjoptionsdlg.cpp:1144
 msgid ""
 "Ignore all errors in commands executed to\n"
 "remake files."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1124
+#: cprjoptionsdlg.cpp:1148
 msgid ""
 "Specifies the number of jobs (commands) to run\n"
 "simultaneously. If you have a single CPU-System\n"
 "it is not recommended to choose more then 2."
 msgstr ""
 
-#: cprjoptionsdlg.cpp:1128
+#: cprjoptionsdlg.cpp:1152
 msgid ""
 "Pretend that the target file has just been  modified.\n"
 "It  is  almost the same as running a touch command on\n"
@@ -5117,39 +5850,39 @@ msgid ""
 "of make."
 msgstr ""
 
-#: crealfileview.cpp:157
+#: crealfileview.cpp:160
 msgid "registered"
 msgstr ""
 
-#: crealfileview.cpp:162 crealfileview.cpp:175
+#: crealfileview.cpp:165 crealfileview.cpp:178
 msgid "VCS"
 msgstr ""
 
-#: crealfileview.cpp:164 crealfileview.cpp:177
+#: crealfileview.cpp:167 crealfileview.cpp:180
 msgid "local"
 msgstr ""
 
-#: crealfileview.cpp:246
+#: crealfileview.cpp:251
 msgid "RFV Options"
 msgstr ""
 
-#: crealfileview.cpp:247
+#: crealfileview.cpp:252
 msgid "Show non-project Files"
 msgstr ""
 
-#: crealfileview.cpp:268
+#: crealfileview.cpp:269
 msgid "File (Registered)"
 msgstr ""
 
-#: crealfileview.cpp:279
+#: crealfileview.cpp:281
 msgid "Add File to Project..."
 msgstr ""
 
-#: crealfileview.cpp:319
+#: crealfileview.cpp:328
 msgid "Remove from Repository (and disk)"
 msgstr ""
 
-#: crealfileview.cpp:378
+#: crealfileview.cpp:389
 #, c-format
 msgid ""
 "Do you want to add the file\n"
@@ -5157,12 +5890,12 @@ msgid ""
 "to the project ?"
 msgstr ""
 
-#: crealfileview.cpp:379 cupdatekdedocdlg.cpp:362 cupdatekdedocdlg.cpp:391
+#: crealfileview.cpp:390 cupdatekdedocdlg.cpp:362 cupdatekdedocdlg.cpp:405
 #: kdlgedit/kdlgedit.cpp:152
 msgid "Question"
 msgstr ""
 
-#: crealfileview.cpp:400
+#: crealfileview.cpp:411
 #, c-format
 msgid ""
 "Do you really want to delete the file\n"
@@ -5376,7 +6109,7 @@ msgid ""
 "the old documentation in\n"
 msgstr ""
 
-#: cupdatekdedocdlg.cpp:362 cupdatekdedocdlg.cpp:391
+#: cupdatekdedocdlg.cpp:362 cupdatekdedocdlg.cpp:405
 msgid ""
 "The Qt-Documentation path is not set correctly.\n"
 "If you want your KDE-library documentation to\n"
@@ -5386,91 +6119,135 @@ msgid ""
 "Do you want to set the Qt-Documentation path first ?"
 msgstr ""
 
-#: cupdatekdedocdlg.cpp:487
+#: cupdatekdedocdlg.cpp:501
 msgid "New KDE Documentation Directory..."
 msgstr ""
 
-#: cupdatekdedocdlg.cpp:495
+#: cupdatekdedocdlg.cpp:509
 msgid "KDE Libs Directory..."
 msgstr ""
 
-#: doctreeview.cpp:215
+#: dbgtoolbar.cpp:107
+msgid "Dock to panel"
+msgstr ""
+
+#: dbgtoolbar.cpp:108
+msgid "Dock to panel and iconify kDevelop"
+msgstr ""
+
+#: dbgtoolbar.cpp:203
+msgid "KDevelop debugger: Click to execute one line of code (\"step\")"
+msgstr ""
+
+#: dbgtoolbar.cpp:223
+msgid "Activate"
+msgstr ""
+
+#: dbgtoolbar.cpp:224
+msgid "Activate (KDevelop gets focus)"
+msgstr ""
+
+#: dbgtoolbar.cpp:306
+msgid "Interrupt the app execution"
+msgstr ""
+
+#: dbgtoolbar.cpp:308
+msgid "Execute one assembler instruction, but run through functions"
+msgstr ""
+
+#: dbgtoolbar.cpp:310
+msgid "Execute one assembler instruction, stepping into fn if appropriate"
+msgstr ""
+
+#: dbgtoolbar.cpp:312
+msgid "Memory, dissemble, registers, library viewers"
+msgstr ""
+
+#: dbgtoolbar.cpp:313
+msgid "Set focus on KDevelop"
+msgstr ""
+
+#: dbgtoolbar.cpp:314
+msgid "Set focus on window that had focus when \"kdev\" was pressed"
+msgstr ""
+
+#: doctreeview.cpp:255
 msgid "KDevelop"
 msgstr ""
 
-#: doctreeview.cpp:225
+#: doctreeview.cpp:265
 msgid "Welcome !"
 msgstr ""
 
-#: doctreeview.cpp:231
+#: doctreeview.cpp:271
 msgid "Tutorials"
 msgstr ""
 
-#: doctreeview.cpp:233
+#: doctreeview.cpp:273
 msgid "KDE Library Reference"
 msgstr ""
 
-#: doctreeview.cpp:235
+#: doctreeview.cpp:275
 msgid "KDE 2 Developer Guide"
 msgstr ""
 
-#: doctreeview.cpp:237
+#: doctreeview.cpp:277
 msgid "C/C++ Reference"
 msgstr ""
 
-#: doctreeview.cpp:391
+#: doctreeview.cpp:434
 msgid "Qt/KDE Libraries"
 msgstr ""
 
-#: doctreeview.cpp:412
+#: doctreeview.cpp:455
 msgid "Qt Library"
 msgstr ""
 
-#: doctreeview.cpp:413
+#: doctreeview.cpp:456
 msgid "KDE Core Library"
 msgstr ""
 
-#: doctreeview.cpp:414
+#: doctreeview.cpp:457
 msgid "KDE UI Library"
 msgstr ""
 
-#: doctreeview.cpp:415
+#: doctreeview.cpp:458
 msgid "KDE KFile Library"
 msgstr ""
 
-#: doctreeview.cpp:416
+#: doctreeview.cpp:459
 msgid "KDE HTMLW Library"
 msgstr ""
 
-#: doctreeview.cpp:417
+#: doctreeview.cpp:460
 msgid "KDE KAB Library"
 msgstr ""
 
-#: doctreeview.cpp:418
+#: doctreeview.cpp:461
 msgid "KDE KSpell Library"
 msgstr ""
 
-#: doctreeview.cpp:433
+#: doctreeview.cpp:477
 msgid "Documentation Base"
 msgstr ""
 
-#: doctreeview.cpp:544 doctreeview.cpp:551 doctreeview.cpp:678
+#: doctreeview.cpp:600 doctreeview.cpp:607 doctreeview.cpp:752
 msgid "Add Entry..."
 msgstr ""
 
-#: doctreeview.cpp:553
+#: doctreeview.cpp:609
 msgid "Remove Entry"
 msgstr ""
 
-#: doctreeview.cpp:571
+#: doctreeview.cpp:627
 msgid "Current Project"
 msgstr ""
 
-#: doctreeview.cpp:591
+#: doctreeview.cpp:649
 msgid "API documentation"
 msgstr ""
 
-#: doctreeview.cpp:593
+#: doctreeview.cpp:651
 msgid "User manual"
 msgstr ""
 
@@ -5612,6 +6389,121 @@ msgstr ""
 msgid "The virtual method implementation has been added."
 msgstr ""
 
+#: dbg/breakpointdialog.cpp:45
+#, c-format
+msgid "Filename: %s at line: %d"
+msgstr ""
+
+#: dbg/breakpointdialog.cpp:47
+msgid "Breakpoint"
+msgstr ""
+
+#: dbg/breakpointdialog.cpp:58
+msgid "&Conditional"
+msgstr ""
+
+#: dbg/breakpointdialog.cpp:70
+msgid "&Ignore count"
+msgstr ""
+
+#: dbg/breakpointdialog.cpp:84
+msgid "&Enable"
+msgstr ""
+
+#: dbg/brkptmanager.cpp:199
+msgid "Remove breakpoint"
+msgstr ""
+
+#: dbg/brkptmanager.cpp:200 kwrite/kwview.cpp:111
+msgid "Edit breakpoint"
+msgstr ""
+
+#: dbg/brkptmanager.cpp:201 kwrite/kwview.cpp:112
+msgid "Clear all breakpoints"
+msgstr ""
+
+#: dbg/brkptmanager.cpp:202
+msgid "Display source code"
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:220
+msgid "Debugger stopped"
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:462 dbg/gdbcontroller.cpp:696
+msgid "gdb message:\n"
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:695
+msgid "Mismatched core file"
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:697
+msgid "Any symbols gdb resolves are suspect"
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:725
+msgid "No such file or directory."
+msgstr ""
+
+#: dbg/gdbcontroller.cpp:1152
+msgid ""
+"gdb cannot use the tty* or pty* devices\n"
+"Check the settings on /dev/tty* and /dev/pty*\n"
+"\n"
+"As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
+"and/or add the user to the tty group using\n"
+"\"usermod -G tty username\""
+msgstr ""
+
+#: dbg/memview.cpp:55
+msgid "Memory/Misc viewer"
+msgstr ""
+
+#: dbg/memview.cpp:65
+msgid "Start:"
+msgstr ""
+
+#: dbg/memview.cpp:78
+msgid "Amount/End address (memory/disassemble):"
+msgstr ""
+
+#: dbg/memview.cpp:89
+msgid "MemoryView:"
+msgstr ""
+
+#: dbg/memview.cpp:97
+msgid "Memory"
+msgstr ""
+
+#: dbg/memview.cpp:98
+msgid "Disassemble"
+msgstr ""
+
+#: dbg/memview.cpp:99
+msgid "Registers"
+msgstr ""
+
+#: dbg/memview.cpp:100
+msgid "Libraries"
+msgstr ""
+
+#: dbg/vartree.cpp:125 kdlgedit/kdlgpropwidget.cpp:720
+msgid "Value"
+msgstr ""
+
+#: dbg/vartree.cpp:152
+msgid "Delete watch variable"
+msgstr ""
+
+#: dbg/vartree.cpp:155
+msgid "Toggle watchpoint"
+msgstr ""
+
+#: dbg/vartree.cpp:694
+msgid "Watch"
+msgstr ""
+
 #: gfxview/GfxClassBox.cpp:406
 msgid "Print subtree"
 msgstr ""
@@ -5636,14 +6528,6 @@ msgid ""
 "\"kdlgedit/kdlgeditwidget.h\" file and recompile the program."
 msgstr ""
 
-#: kdlgedit/kdlgdialogs.cpp:69 kdlgedit/kdlgdialogs.cpp:72
-msgid "New Dialog..."
-msgstr ""
-
-#: kdlgedit/kdlgdialogs.cpp:73
-msgid "Delete Dialog..."
-msgstr ""
-
 #: kdlgedit/kdlgedit.cpp:128
 msgid "KDevelop Dialog Editor: "
 msgstr ""
@@ -5654,11 +6538,11 @@ msgid ""
 "Do you want to save it?"
 msgstr ""
 
-#: kdlgedit/kdlgedit.cpp:1338 kdlgedit/kdlgedit.cpp:1374
+#: kdlgedit/kdlgedit.cpp:1374 kdlgedit/kdlgedit.cpp:1410
 msgid "Dialog editor (WYSIWYG Preview)"
 msgstr ""
 
-#: kdlgedit/kdlgedit.cpp:1339
+#: kdlgedit/kdlgedit.cpp:1375
 msgid ""
 "Error loading kdlgloader library (libkdlgloader.so).\n"
 "\n"
@@ -5669,21 +6553,29 @@ msgid ""
 "you can also get the library on the KDevelop website."
 msgstr ""
 
-#: kdlgedit/kdlgedit.cpp:1375
+#: kdlgedit/kdlgedit.cpp:1411
 msgid "Error saving temporary dialog file."
 msgstr ""
 
-#: kdlgedit/kdlgedit.cpp:1384
+#: kdlgedit/kdlgedit.cpp:1420
 msgid ""
 "Do you really want to delete the selected dialog?\n"
 "        There is no way to restore it!"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:247 kdlgedit/kdlgeditwidget.cpp:739
+#: kdlgedit/kdlgdialogs.cpp:69 kdlgedit/kdlgdialogs.cpp:72
+msgid "New Dialog..."
+msgstr ""
+
+#: kdlgedit/kdlgdialogs.cpp:73
+msgid "Delete Dialog..."
+msgstr ""
+
+#: kdlgedit/kdlgeditwidget.cpp:249 kdlgedit/kdlgeditwidget.cpp:749
 msgid "Add item"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:248 kdlgedit/kdlgeditwidget.cpp:740
+#: kdlgedit/kdlgeditwidget.cpp:250 kdlgedit/kdlgeditwidget.cpp:750
 msgid ""
 "Into which widget do you want to insert this item ?\n"
 "\n"
@@ -5691,21 +6583,21 @@ msgid ""
 "widget respectively to the selected items' parent widget."
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:251 kdlgedit/kdlgeditwidget.cpp:743
+#: kdlgedit/kdlgeditwidget.cpp:253 kdlgedit/kdlgeditwidget.cpp:753
 msgid "&Main"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:251 kdlgedit/kdlgeditwidget.cpp:743
+#: kdlgedit/kdlgeditwidget.cpp:253 kdlgedit/kdlgeditwidget.cpp:753
 msgid "&Selected"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:311
+#: kdlgedit/kdlgeditwidget.cpp:316
 msgid ""
 "<b><u><brown>QuickHelp<black></u></b>\n"
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:315
+#: kdlgedit/kdlgeditwidget.cpp:320
 msgid ""
 "<b><i>Raise</i></b>\n"
 "\n"
@@ -5713,7 +6605,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:316
+#: kdlgedit/kdlgeditwidget.cpp:321
 msgid ""
 "<b><i>Lower</i></b>\n"
 "\n"
@@ -5722,7 +6614,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:317
+#: kdlgedit/kdlgeditwidget.cpp:322
 msgid ""
 "<b><i>Raise to top</i></b>\n"
 "\n"
@@ -5730,7 +6622,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:318
+#: kdlgedit/kdlgeditwidget.cpp:323
 msgid ""
 "<b><i>Raise to bottom</i></b>\n"
 "\n"
@@ -5738,7 +6630,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:319
+#: kdlgedit/kdlgeditwidget.cpp:324
 msgid ""
 "<b><i>Copy</i></b>\n"
 "\n"
@@ -5747,7 +6639,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:320
+#: kdlgedit/kdlgeditwidget.cpp:325
 msgid ""
 "<b><i>Delete</i></b>\n"
 "\n"
@@ -5755,7 +6647,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:321
+#: kdlgedit/kdlgeditwidget.cpp:326
 msgid ""
 "<b><i>Cut</i></b>\n"
 "\n"
@@ -5765,7 +6657,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:324
+#: kdlgedit/kdlgeditwidget.cpp:329
 msgid ""
 "<b>Note :</b> Since the selected item is the main widget only few of the "
 "normally available functions are enabled. Open another item's help to get "
@@ -5773,7 +6665,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:326
+#: kdlgedit/kdlgeditwidget.cpp:331
 msgid ""
 "<b><i>Paste</i></b>\n"
 "\n"
@@ -5782,18 +6674,18 @@ msgid ""
 "\n"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:410
+#: kdlgedit/kdlgeditwidget.cpp:415
 #, c-format
 msgid ""
 "Error reading dialog file (line %d) :\n"
 "   Could not insert item (%s). Seems like I don't know it :-("
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:412 kdlgedit/kdlgeditwidget.cpp:524
+#: kdlgedit/kdlgeditwidget.cpp:417 kdlgedit/kdlgeditwidget.cpp:530
 msgid "&Ignore"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:522
+#: kdlgedit/kdlgeditwidget.cpp:528
 msgid ""
 "Error while reading the dialog file.\n"
 "\n"
@@ -5801,11 +6693,11 @@ msgid ""
 "dialog may be loaded and saved incorrectly."
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:530
+#: kdlgedit/kdlgeditwidget.cpp:536
 msgid "Aborted reading dialog file"
 msgstr ""
 
-#: kdlgedit/kdlgeditwidget.cpp:532
+#: kdlgedit/kdlgeditwidget.cpp:538
 msgid ""
 "Reading aborted !\n"
 "\n"
@@ -5977,14 +6869,14 @@ msgstr ""
 msgid "Grid Size :"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:62
+#: kdlgedit/kdlgpropwidget.cpp:63
 msgid ""
 "<i>Group</i>\n"
 "\n"
 "This group contains general properties like <i>Name</i>or <i>Text</i>."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:63
+#: kdlgedit/kdlgpropwidget.cpp:64
 msgid ""
 "<i>Group</i>\n"
 "\n"
@@ -5992,7 +6884,7 @@ msgid ""
 "like <i>Width</i>or <i>Height</i>."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:64
+#: kdlgedit/kdlgpropwidget.cpp:65
 msgid ""
 "<i>Group</i>\n"
 "\n"
@@ -6002,7 +6894,7 @@ msgid ""
 "<i>Pixmap</i>is an example for such an appearance property."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:65
+#: kdlgedit/kdlgpropwidget.cpp:66
 msgid ""
 "<i>Group</i>\n"
 "\n"
@@ -6015,7 +6907,7 @@ msgid ""
 "<i>Connections</i>might be a pretty good example."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:67
+#: kdlgedit/kdlgpropwidget.cpp:68
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6024,7 +6916,7 @@ msgid ""
 "argument it is set to this value."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:68
+#: kdlgedit/kdlgpropwidget.cpp:69
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6032,7 +6924,7 @@ msgid ""
 "editor and in the program."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:69
+#: kdlgedit/kdlgpropwidget.cpp:70
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6040,7 +6932,7 @@ msgid ""
 "mouse or keyboard events)."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:71
+#: kdlgedit/kdlgpropwidget.cpp:72
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6048,7 +6940,7 @@ msgid ""
 "items' pointer."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:72
+#: kdlgedit/kdlgpropwidget.cpp:73
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6056,7 +6948,7 @@ msgid ""
 "in programs, not in this editor)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:73
+#: kdlgedit/kdlgpropwidget.cpp:74
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6064,7 +6956,7 @@ msgid ""
 "has effects in programs, not in this editor)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:74
+#: kdlgedit/kdlgpropwidget.cpp:75
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6072,7 +6964,7 @@ msgid ""
 "mechanism. (Only has effects in programs, not in this editor)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:75
+#: kdlgedit/kdlgpropwidget.cpp:76
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6083,7 +6975,7 @@ msgid ""
 "<i>not</i>enable this property for more than one dialog item !"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:76
+#: kdlgedit/kdlgpropwidget.cpp:77
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6092,35 +6984,35 @@ msgid ""
 "transfers it to this widget)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:78
+#: kdlgedit/kdlgpropwidget.cpp:79
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The X coordinate of the widget relative to its parent widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:79
+#: kdlgedit/kdlgpropwidget.cpp:80
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The Y coordinate of the widget relative to its parent widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:80
+#: kdlgedit/kdlgpropwidget.cpp:81
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The width of the widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:81
+#: kdlgedit/kdlgpropwidget.cpp:82
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The height of the widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:82
+#: kdlgedit/kdlgpropwidget.cpp:83
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6128,7 +7020,7 @@ msgid ""
 "smaller than this value."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:83
+#: kdlgedit/kdlgpropwidget.cpp:84
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6136,7 +7028,7 @@ msgid ""
 "smaller than this value."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:84
+#: kdlgedit/kdlgpropwidget.cpp:85
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6144,7 +7036,7 @@ msgid ""
 "larger than this value."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:85
+#: kdlgedit/kdlgpropwidget.cpp:86
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6152,35 +7044,35 @@ msgid ""
 "larger than this value."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:86
+#: kdlgedit/kdlgpropwidget.cpp:87
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "If <i>true</i>the widget size cannot be changed."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:87 kdlgedit/kdlgpropwidget.cpp:88
+#: kdlgedit/kdlgpropwidget.cpp:88 kdlgedit/kdlgpropwidget.cpp:89
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "Sets in how many pixel steps the item should be resized."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:90
+#: kdlgedit/kdlgpropwidget.cpp:91
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The background mode of the widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:91
+#: kdlgedit/kdlgpropwidget.cpp:92
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "The background color of the widget. Overrides the BgMode property."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:92
+#: kdlgedit/kdlgpropwidget.cpp:93
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6188,7 +7080,7 @@ msgid ""
 "changes the frames etc."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:93
+#: kdlgedit/kdlgpropwidget.cpp:94
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6196,7 +7088,7 @@ msgid ""
 "all widgets run correctly with background images. (i.e. the QLineEdit)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:94
+#: kdlgedit/kdlgpropwidget.cpp:95
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6204,14 +7096,14 @@ msgid ""
 "operation can be pretty slow."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:95
+#: kdlgedit/kdlgpropwidget.cpp:96
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
 "Sets the font which should be used for drawing text in the widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:96
+#: kdlgedit/kdlgpropwidget.cpp:97
 msgid ""
 "<i>Class : Any</i>\n"
 "\n"
@@ -6219,14 +7111,14 @@ msgid ""
 "widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:98
+#: kdlgedit/kdlgpropwidget.cpp:99
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
 "The text which will appear on the button."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:99
+#: kdlgedit/kdlgpropwidget.cpp:100
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6236,7 +7128,7 @@ msgid ""
 "dialogs."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:100
+#: kdlgedit/kdlgpropwidget.cpp:101
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6245,14 +7137,14 @@ msgid ""
 "keyboard input focus."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:101
+#: kdlgedit/kdlgpropwidget.cpp:102
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
 "When enabled, the button keeps pressed until it is pressed again."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:102
+#: kdlgedit/kdlgpropwidget.cpp:103
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6260,7 +7152,7 @@ msgid ""
 "down by default."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:103
+#: kdlgedit/kdlgpropwidget.cpp:104
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6268,14 +7160,14 @@ msgid ""
 "draw one if disabled."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:104
+#: kdlgedit/kdlgpropwidget.cpp:105
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
 "When enabled, the button will resize itself whenever the contents change."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:105
+#: kdlgedit/kdlgpropwidget.cpp:106
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6284,7 +7176,7 @@ msgid ""
 "isToggleButton is enabled."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:106
+#: kdlgedit/kdlgpropwidget.cpp:107
 msgid ""
 "<i>Class : QPushButton</i>\n"
 "\n"
@@ -6292,14 +7184,14 @@ msgid ""
 "a pixmap on the button."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:108
+#: kdlgedit/kdlgpropwidget.cpp:109
 msgid ""
 "<i>Class : QLineEdit</i>\n"
 "\n"
 "This text is set to the lineedit after it is created."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:109
+#: kdlgedit/kdlgpropwidget.cpp:110
 msgid ""
 "<i>Class : QLineEdit</i>\n"
 "\n"
@@ -6307,35 +7199,42 @@ msgid ""
 "enabled, otherwise to draw itself without any frame."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:110
+#: kdlgedit/kdlgpropwidget.cpp:111
 msgid ""
 "<i>Class : QLineEdit</i>\n"
 "\n"
 "Sets the maximum length of the text in the editor."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:111
+#: kdlgedit/kdlgpropwidget.cpp:112
 msgid ""
 "<i>Class : QLineEdit</i>\n"
 "\n"
 "Set the cursor position for this line edit."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:112
+#: kdlgedit/kdlgpropwidget.cpp:113
 msgid ""
 "<i>Class : QLineEdit</i>\n"
 "\n"
 "When enabled the text is initially selected."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:113
+#: kdlgedit/kdlgpropwidget.cpp:114
 msgid ""
 "<i>Class : QGroupBox</i>\n"
 "\n"
 "Sets the groupbox title that is displayed in the box frame."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:114
+#: kdlgedit/kdlgpropwidget.cpp:115
+msgid ""
+"<i>Class : QButtonGroup</i>\n"
+"\n"
+"Sets the buttongroup title that is displayed in the box frame."
+msgstr ""
+
+#: kdlgedit/kdlgpropwidget.cpp:116
 msgid ""
 "<i>Class : QProgressBar</i>\n"
 "\n"
@@ -6344,7 +7243,7 @@ msgid ""
 "progress step displayed to (int)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:115
+#: kdlgedit/kdlgpropwidget.cpp:117
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
@@ -6352,14 +7251,14 @@ msgid ""
 "displayed using the current font."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:116
+#: kdlgedit/kdlgpropwidget.cpp:118
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
 "Sets the text of the widget."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:117
+#: kdlgedit/kdlgpropwidget.cpp:119
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
@@ -6367,56 +7266,56 @@ msgid ""
 "disabled."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:118
+#: kdlgedit/kdlgpropwidget.cpp:120
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
 "Sets the widget text to read only; disables text input."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:119
+#: kdlgedit/kdlgpropwidget.cpp:121
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
 "Sets overwrite enabled or disabled."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:120
+#: kdlgedit/kdlgpropwidget.cpp:122
 msgid ""
 "<i>Class : QMultiLineEdit</i>\n"
 "\n"
 "Marks the whole text selected."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:121
+#: kdlgedit/kdlgpropwidget.cpp:123
 msgid ""
 "<i>Class : QScrollBar</i>\n"
 "\n"
 "Sets the maximum slider value; used in constructor"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:122
+#: kdlgedit/kdlgpropwidget.cpp:124
 msgid ""
 "<i>Class : QScrollBar</i>\n"
 "\n"
 "Sets the minimum slider value; used in constructor"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:123
+#: kdlgedit/kdlgpropwidget.cpp:125
 msgid ""
 "<i>Class : QScrollBar</i>\n"
 "\n"
 "Sets the orientation of the scrollbar to horizontal or vertical"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:124
+#: kdlgedit/kdlgpropwidget.cpp:126
 msgid ""
 "<i>Class : QScrollBar</i>\n"
 "\n"
 "Sets the initial value of the scrollbar in the constructor"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:125
+#: kdlgedit/kdlgpropwidget.cpp:127
 msgid ""
 "<i>Class : QScrollBar</i>\n"
 "\n"
@@ -6424,35 +7323,35 @@ msgid ""
 "otherwise only on mouse release."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:127
+#: kdlgedit/kdlgpropwidget.cpp:129
 msgid ""
 "<i>Class : QSlider</i>\n"
 "\n"
 "sets the maximum slider value; used in constructor"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:128
+#: kdlgedit/kdlgpropwidget.cpp:130
 msgid ""
 "<i>Class : QSlider</i>\n"
 "\n"
 "sets the minimum slider value; used in constructor"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:129
+#: kdlgedit/kdlgpropwidget.cpp:131
 msgid ""
 "<i>Class : QSlider</i>\n"
 "\n"
 "sets the orientation of the slider to horizontal or vertical"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:130
+#: kdlgedit/kdlgpropwidget.cpp:132
 msgid ""
 "<i>Class : QSlider</i>\n"
 "\n"
 "uses QRangeControl::setValue() to set the value"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:131
+#: kdlgedit/kdlgpropwidget.cpp:133
 msgid ""
 "<i>Class : QSlider</i>\n"
 "\n"
@@ -6460,7 +7359,7 @@ msgid ""
 "otherwise only on mouse release."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:132
+#: kdlgedit/kdlgpropwidget.cpp:134
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
@@ -6468,7 +7367,7 @@ msgid ""
 "user drags the mouse outside (below or above) the list box."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:133
+#: kdlgedit/kdlgpropwidget.cpp:135
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
@@ -6477,21 +7376,21 @@ msgid ""
 "width exceeds the list box width."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:134
+#: kdlgedit/kdlgpropwidget.cpp:136
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
 "Enables an automatic (vertical) scroll bar."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:135
+#: kdlgedit/kdlgpropwidget.cpp:137
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
 "Enables a bottom scroll bar."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:136
+#: kdlgedit/kdlgpropwidget.cpp:138
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
@@ -6499,14 +7398,14 @@ msgid ""
 "new items when the user drags the mouse inside the list box. "
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:137
+#: kdlgedit/kdlgpropwidget.cpp:139
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
 "Enables smooth list box scrolling."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:138
+#: kdlgedit/kdlgpropwidget.cpp:140
 msgid ""
 "<i>Class : QListBox</i>\n"
 "\n"
@@ -6514,7 +7413,7 @@ msgid ""
 "displayed using the current font."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:139
+#: kdlgedit/kdlgpropwidget.cpp:141
 msgid ""
 "<i>Class : QListbox</i>\n"
 "\n"
@@ -6522,11 +7421,11 @@ msgid ""
 "disabled."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:292
+#: kdlgedit/kdlgpropwidget.cpp:294
 msgid "Sorry, there is no help available for this property."
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:312
+#: kdlgedit/kdlgpropwidget.cpp:314
 msgid ""
 "\n"
 "\n"
@@ -6535,27 +7434,23 @@ msgid ""
 "Website</link><+></i>"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:717
+#: kdlgedit/kdlgpropwidget.cpp:719
 msgid "Property"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:718
-msgid "Value"
-msgstr ""
-
-#: kdlgedit/kdlgpropwidget.cpp:1168
+#: kdlgedit/kdlgpropwidget.cpp:1170
 msgid "(not defined)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:1349 kdlgedit/kdlgpropwidget.cpp:1410
+#: kdlgedit/kdlgpropwidget.cpp:1351 kdlgedit/kdlgpropwidget.cpp:1412
 msgid "(not set)"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:1588
+#: kdlgedit/kdlgpropwidget.cpp:1590
 msgid "List of QStrings"
 msgstr ""
 
-#: kdlgedit/kdlgpropwidget.cpp:1615 kdlgedit/kdlgpropwidget.cpp:1634
+#: kdlgedit/kdlgpropwidget.cpp:1617 kdlgedit/kdlgpropwidget.cpp:1636
 msgid "row(s) entered."
 msgstr ""
 
@@ -6619,7 +7514,7 @@ msgid ""
 "libraries to a Qt project."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:238
+#: kdlgedit/kdlgwidgets.cpp:243
 msgid ""
 "This will insert a QWidget to the dialog.\n"
 "Such an item may have several children items\n"
@@ -6632,60 +7527,66 @@ msgid ""
 "widgets they can bring to the top."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:247
+#: kdlgedit/kdlgwidgets.cpp:252
 msgid ""
 "A QLabel can be used in order to display\n"
 "some text or pixmap information in the dialog."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:248
+#: kdlgedit/kdlgwidgets.cpp:253
 msgid ""
 "This is the normal button often used in\n"
 "dialogs (i.e. the \"Ok\"-Button)."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:249
+#: kdlgedit/kdlgwidgets.cpp:254
 msgid "Lets user can (de-)select some settings."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:250
+#: kdlgedit/kdlgwidgets.cpp:255
 msgid "Lets the user choose between several options."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:251
+#: kdlgedit/kdlgwidgets.cpp:256
 msgid ""
 "A combo box lets the user set a value by selecting\n"
 "it from a drop-down menu or by inserting the value,\n"
 "if the box is write enabled"
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:252
+#: kdlgedit/kdlgwidgets.cpp:257
 msgid ""
 "Allows choosing numeric values by up-\n"
 "and down buttons or insertion if write enabled."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:253
+#: kdlgedit/kdlgwidgets.cpp:258
 msgid "Provides a single-column list of items that can be scrolled."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:254
+#: kdlgedit/kdlgwidgets.cpp:259
 msgid ""
 "Provides a groupbox frame with title to indicate that\n"
 "child widgets within the box belong together."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:255
+#: kdlgedit/kdlgwidgets.cpp:260
+msgid ""
+"Provides a buttongroup frame with title to indicate that\n"
+"child widgets within the box belong together."
+msgstr ""
+
+#: kdlgedit/kdlgwidgets.cpp:261
 msgid ""
 "Inserts a text field giving the user the\n"
 "possibility to enter of change a text."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:256
+#: kdlgedit/kdlgwidgets.cpp:262
 msgid "Offers a multi-line editor."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:257
+#: kdlgedit/kdlgwidgets.cpp:263
 msgid ""
 "Indicates the range of a value and sets the current value\n"
 "by a slider as well as up- and down buttons; often used\n"
@@ -6694,128 +7595,128 @@ msgid ""
 "can be changed to another part of the widgets' contents."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:258
+#: kdlgedit/kdlgwidgets.cpp:264
 msgid "Sets a value in a program-defined range by a slider."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:259
+#: kdlgedit/kdlgwidgets.cpp:265
 msgid ""
 "Displays the progress of an action that takes a longer time to be finished."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:260
+#: kdlgedit/kdlgwidgets.cpp:266
 msgid ""
 "Displays a number in the style of LC-displays\n"
 "often used in clocks."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:261
+#: kdlgedit/kdlgwidgets.cpp:267
 msgid "A list view lets your application display a multi-column list or tree."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:263
+#: kdlgedit/kdlgwidgets.cpp:269
 msgid ""
 "'KSeparator' is a small class to provide a identically look of horizontal or "
 "vertical lines in all KDE applications."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:265
+#: kdlgedit/kdlgwidgets.cpp:271
 msgid "Just like QComboBox."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:267
+#: kdlgedit/kdlgwidgets.cpp:273
 msgid "This is a button displaying the selected color."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:268
+#: kdlgedit/kdlgwidgets.cpp:274
 msgid "A push button that looks like a keyboard key."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:269
+#: kdlgedit/kdlgwidgets.cpp:275
 msgid "Restricted Editline: Only selected Characters are valid input."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:271
+#: kdlgedit/kdlgwidgets.cpp:277
 msgid "A Progress indicator widget."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:272
+#: kdlgedit/kdlgwidgets.cpp:278
 msgid "A collapsible treelist widget"
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:273
+#: kdlgedit/kdlgwidgets.cpp:279
 msgid "A CDE-style LED lamp widget."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:274
+#: kdlgedit/kdlgwidgets.cpp:280
 msgid "Lets the user choose a date."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:275
+#: kdlgedit/kdlgwidgets.cpp:281
 msgid "Views a calendar in a tableview."
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:284
+#: kdlgedit/kdlgwidgets.cpp:290
 msgid "QT-Widgets"
 msgstr ""
 
-#: kdlgedit/kdlgwidgets.cpp:287
+#: kdlgedit/kdlgwidgets.cpp:293
 msgid "KDE-Widgets"
 msgstr ""
 
-#: kwrite/highlight.cpp:2073
+#: kwrite/highlight.cpp:2188
 msgid "Normal:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2083 kwrite/kwdialog.cpp:421
+#: kwrite/highlight.cpp:2198 kwrite/kwdialog.cpp:426
 msgid "Selected:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2090
+#: kwrite/highlight.cpp:2205
 msgid "Bold"
 msgstr ""
 
-#: kwrite/highlight.cpp:2141
+#: kwrite/highlight.cpp:2256
 msgid "Family:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2249
+#: kwrite/highlight.cpp:2364
 msgid "Default Item Styles"
 msgstr ""
 
-#: kwrite/highlight.cpp:2253 kwrite/highlight.cpp:2324
+#: kwrite/highlight.cpp:2368 kwrite/highlight.cpp:2439
 msgid "Item:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2271
+#: kwrite/highlight.cpp:2386
 msgid "Default Font"
 msgstr ""
 
-#: kwrite/highlight.cpp:2308
+#: kwrite/highlight.cpp:2423
 msgid "Config Select"
 msgstr ""
 
-#: kwrite/highlight.cpp:2312
+#: kwrite/highlight.cpp:2427
 msgid "Highlight:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2331
+#: kwrite/highlight.cpp:2446
 msgid "Highlight Auto Select"
 msgstr ""
 
-#: kwrite/highlight.cpp:2335
+#: kwrite/highlight.cpp:2450
 msgid "File Extensions:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2342
+#: kwrite/highlight.cpp:2457
 msgid "Mime Types:"
 msgstr ""
 
-#: kwrite/highlight.cpp:2349
+#: kwrite/highlight.cpp:2464
 msgid "Item Style"
 msgstr ""
 
-#: kwrite/highlight.cpp:2358
+#: kwrite/highlight.cpp:2473
 msgid "Item Font"
 msgstr ""
 
@@ -6888,7 +7789,7 @@ msgid "&Word Wrap"
 msgstr ""
 
 #: kwrite/kwdialog.cpp:264
-msgid "Replace &Tabs"
+msgid "&Replace Tabs"
 msgstr ""
 
 #: kwrite/kwdialog.cpp:265
@@ -6927,75 +7828,99 @@ msgstr ""
 msgid "&Toggle Old"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:327
+#: kwrite/kwdialog.cpp:301
+msgid "A&uto Copy"
+msgstr ""
+
+#: kwrite/kwdialog.cpp:331
 msgid "Wrap Words At:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:337
+#: kwrite/kwdialog.cpp:341
 msgid "Tab Width:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:347
+#: kwrite/kwdialog.cpp:351
 msgid "Undo steps:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:407
+#: kwrite/kwdialog.cpp:412
 msgid "Background:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:414
+#: kwrite/kwdialog.cpp:419
 msgid "Text Background:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:428
+#: kwrite/kwdialog.cpp:433
 msgid "Found:"
 msgstr ""
 
-#: kwrite/kwdialog.cpp:435
+#: kwrite/kwdialog.cpp:440
 msgid "Selected + Found:"
 msgstr ""
 
-#: kwrite/kwview.cpp:1127
+#: kwrite/kwview.cpp:107
+msgid "Toggle bookmark"
+msgstr ""
+
+#: kwrite/kwview.cpp:108
+msgid "Clear all bookmarks"
+msgstr ""
+
+#: kwrite/kwview.cpp:110
+msgid "Toggle breakpoint"
+msgstr ""
+
+#: kwrite/kwview.cpp:114
+msgid "LMB sets breakpoints"
+msgstr ""
+
+#: kwrite/kwview.cpp:115
+msgid "LMB sets bookmarks"
+msgstr ""
+
+#: kwrite/kwview.cpp:1526
 msgid "Vertical Selections On"
 msgstr ""
 
-#: kwrite/kwview.cpp:1127
+#: kwrite/kwview.cpp:1526
 msgid "Vertical Selections Off"
 msgstr ""
 
-#: kwrite/kwview.cpp:1186
+#: kwrite/kwview.cpp:1585
 msgid "The specified File does not exist"
 msgstr ""
 
-#: kwrite/kwview.cpp:1196
+#: kwrite/kwview.cpp:1595
 msgid "You have specified a directory"
 msgstr ""
 
-#: kwrite/kwview.cpp:1206
+#: kwrite/kwview.cpp:1605
 msgid "You do not have read permission to this file"
 msgstr ""
 
-#: kwrite/kwview.cpp:1222 kwrite/kwview.cpp:1252
+#: kwrite/kwview.cpp:1621 kwrite/kwview.cpp:1651
 msgid "An Error occured while trying to open this Document"
 msgstr ""
 
-#: kwrite/kwview.cpp:1236
+#: kwrite/kwview.cpp:1635
 msgid "You do not have write permission to this file"
 msgstr ""
 
-#: kwrite/kwview.cpp:1289
+#: kwrite/kwview.cpp:1688
 msgid "Loading..."
 msgstr ""
 
-#: kwrite/kwview.cpp:1297 kwrite/kwview.cpp:1418
+#: kwrite/kwview.cpp:1696 kwrite/kwview.cpp:1817
 msgid "Inserted"
 msgstr ""
 
-#: kwrite/kwview.cpp:1302 kwrite/kwview.cpp:1427
+#: kwrite/kwview.cpp:1701 kwrite/kwview.cpp:1826
 msgid "Read"
 msgstr ""
 
-#: kwrite/kwview.cpp:1311 kwrite/kwview.cpp:1369
+#: kwrite/kwview.cpp:1710 kwrite/kwview.cpp:1768
 msgid ""
 "KWrite is already waiting\n"
 "for an internet job to finish\n"
@@ -7003,73 +7928,73 @@ msgid ""
 "Alternatively stop the running one."
 msgstr ""
 
-#: kwrite/kwview.cpp:1319 kwrite/kwview.cpp:1377
+#: kwrite/kwview.cpp:1718 kwrite/kwview.cpp:1776
 msgid "Waiting for KFM..."
 msgstr ""
 
-#: kwrite/kwview.cpp:1325 kwrite/kwview.cpp:1390
+#: kwrite/kwview.cpp:1724 kwrite/kwview.cpp:1789
 msgid "Could not start or find KFM"
 msgstr ""
 
-#: kwrite/kwview.cpp:1352
+#: kwrite/kwview.cpp:1751
 msgid "Saving..."
 msgstr ""
 
-#: kwrite/kwview.cpp:1360 kwrite/kwview.cpp:1437
+#: kwrite/kwview.cpp:1759 kwrite/kwview.cpp:1836
 msgid "Wrote"
 msgstr ""
 
-#: kwrite/kwview.cpp:1471
+#: kwrite/kwview.cpp:1870
 msgid ""
 "The current Document has been modified.\n"
 "Would you like to save it?"
 msgstr ""
 
-#: kwrite/kwview.cpp:1482
+#: kwrite/kwview.cpp:1881
 msgid ""
 "Could not save the document.\n"
 "Open a new document anyways?"
 msgstr ""
 
-#: kwrite/kwview.cpp:1530
+#: kwrite/kwview.cpp:1929
 msgid "No changes need to be saved"
 msgstr ""
 
-#: kwrite/kwview.cpp:1551
+#: kwrite/kwview.cpp:1950
 msgid ""
 "A Document with this Name already exists.\n"
 "Do you want to overwrite it?"
 msgstr ""
 
-#: kwrite/kwview.cpp:1756 kwrite/kwview.cpp:1946
+#: kwrite/kwview.cpp:2175 kwrite/kwview.cpp:2368
 msgid "End of document reached"
 msgstr ""
 
-#: kwrite/kwview.cpp:1757 kwrite/kwview.cpp:1947
+#: kwrite/kwview.cpp:2176 kwrite/kwview.cpp:2369
 msgid "Continue from the beginning"
 msgstr ""
 
-#: kwrite/kwview.cpp:1759 kwrite/kwview.cpp:1770 kwrite/kwview.cpp:1780
+#: kwrite/kwview.cpp:2178 kwrite/kwview.cpp:2189 kwrite/kwview.cpp:2199
 msgid "Find"
 msgstr ""
 
-#: kwrite/kwview.cpp:1767 kwrite/kwview.cpp:1958
+#: kwrite/kwview.cpp:2186 kwrite/kwview.cpp:2380
 msgid "Beginning of document reached"
 msgstr ""
 
-#: kwrite/kwview.cpp:1768 kwrite/kwview.cpp:1959
+#: kwrite/kwview.cpp:2187 kwrite/kwview.cpp:2381
 msgid "Continue from the end"
 msgstr ""
 
-#: kwrite/kwview.cpp:1781
+#: kwrite/kwview.cpp:2200
 msgid "Search string not found!"
 msgstr ""
 
-#: kwrite/kwview.cpp:1931 kwrite/kwview.cpp:1945 kwrite/kwview.cpp:1957
+#: kwrite/kwview.cpp:2353 kwrite/kwview.cpp:2367 kwrite/kwview.cpp:2379
 msgid "replace(s) made"
 msgstr ""
 
-#: kwrite/kwview.cpp:2072
+#: kwrite/kwview.cpp:2575
 msgid "Line"
 msgstr ""
 
