@@ -302,7 +302,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
 	{
 		KService::Ptr preferredApp = KServiceTypeProfile::preferredService( MimeType->name(), "Application" );
-		if ( preferredApp->desktopEntryName() == "designer" )
+		if ( preferredApp && preferredApp->desktopEntryName() == "designer" )
 		{
 			KRun::runURL(url, MimeType->name() );
 			return;
