@@ -247,3 +247,19 @@ void Kpp::buildDone(KProcess *proc){
 void Kpp::rpmBuildSlot(){
 	startBuild();
 }
+
+void Kpp::setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc){
+ currentProject->importProject(appName, appVer, appAuth, appEmail, configOpts,appDesc);
+        cout << "Project Name: " << currentProject->getProjectName() << endl;
+        cout << "Author: " << currentProject->getAuthor() << endl;
+        cout << "Version: " << currentProject->getVersion() << endl;
+        cout << "Info: " << currentProject->getInfo() << endl;
+        cout << "Configure Options:" << currentProject->getConfig() << endl;
+        QMultiLineEdit_1->setText(currentProject->getInfo());
+        QLineEdit_1->setText(currentProject->getProjectName());
+        QLineEdit_4->setText(currentProject->getAuthor());
+        QLineEdit_9->setText(currentProject->getAuthor());
+        QLineEdit_2->setText(currentProject->getVersion());
+        QLineEdit_5->setText(currentProject->getConfig());
+        updateSpec();
+}

@@ -41,6 +41,8 @@ public:
   void setConfig( KConfig *theConfig);
   /** start the rpm build process */
   bool startBuild();
+  /** allow kdevelop to set up the kpp dialog **/
+  void setProjectData(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc);
 
 private: // Private methods
   /** Update the spec object to the current data in the dialog */

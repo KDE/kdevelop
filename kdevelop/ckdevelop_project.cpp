@@ -1142,6 +1142,13 @@ void CKDevelop::slotProjectMakeDistRPM(){
  rpmbuilder = new Kpp(0,"KPP",true);
  connect(rpmbuilder, SIGNAL(finished()), this, SLOT(slotdoneWithKpp()));
  connect(rpmbuilder, SIGNAL(building()), this, SLOT(slotrpmbuildProcess()));
+ rpmbuilder->setProjectData(    prj->getProjectName(),
+                                prj->getVersion(),
+                                prj->getAuthor(),
+                                prj->getEmail(),
+                                prj->getConfigureArgs(),
+                                "blah blah blah who in the heck made this a strlist and not a stringlist?");
+ //(prj->getShortInfo()).join(',')
  rpmbuilder->show();
 }
 

@@ -41,6 +41,7 @@ public:
 	~ckdevelProject();
   /** This will load the selected project file and populate the internal data structure. */
   bool loadProject(QString qsFileName);
+  void importProject(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc);
   /** Returns the short info from the current project. */
   QString getInfo();
   /** Returns the author & email of the current project.
@@ -52,6 +53,7 @@ It will be formatted as AuthorName <emailaddress> */
   QString getProjectName();
   /** The configure options */
   QString getConfig();
+
 private: // Private attributes
   /** The version number from the current project */
   QString qsVersion;

@@ -109,5 +109,13 @@ QString ckdevelProject::getConfig(){
   return qsConfig;
 
 }
-
+void ckdevelProject::importProject(QString appName, QString appVer, QString appAuth, QString appEmail, QString configOpts, QString appDesc)
+{
+        qsProjectName = appName;
+        qsVersion = appVer;
+        qsAuthor = appAuth;
+        qsEmailAddress = appEmail;
+        qsConfig = configOpts;
+        qsInfo = appDesc;
+}
 
