@@ -267,6 +267,7 @@ public:
   virtual void embedPartView(QWidget *view, const QString &title);
   virtual void embedSelectView(QWidget *view, const QString &title);
   virtual void embedOutputView(QWidget *view, const QString &title);
+  virtual void embedSelectViewRight(QWidget *view, const QString &title);
   virtual void removeView(QWidget *view);
   virtual void raiseView(QWidget *view);
   virtual void lowerView(QWidget *view);

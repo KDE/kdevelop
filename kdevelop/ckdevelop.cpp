@@ -4860,6 +4860,12 @@ void CKDevelop::embedSelectView(QWidget *view, const QString &name)
     connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
     m_selectViews.append(child);
 }
+
+void CKDevelop::embedSelectViewRight(QWidget *view, const QString &title)
+{
+    // simply added to make the damn thing compile... implement if you need it...
+}
+
 void CKDevelop::embedOutputView(QWidget *view, const QString &name)
 {
     QextMdiChildView *child = wrapper(view, name);
