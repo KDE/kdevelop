@@ -20,6 +20,9 @@
 #include "contentsview.h"
 
 #include <qheader.h>
+#include <qlayout.h>
+
+#include <klistview.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevdocumentationplugin.h>
@@ -29,17 +32,21 @@
 #include "docutils.h"
 
 ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
-     :KListView(parent, name), m_widget(parent)
+     :QWidget(parent, name), m_widget(parent)
 {
-    addColumn("Contents");
-    header()->hide();
-    setResizeMode(AllColumns);
-    setRootIsDecorated(true);
-    setSorting(-1);
+    QVBoxLayout *cl = new QVBoxLayout(this, 0, 0);
+    m_view = new KListView(this);
+    cl->addWidget(m_view);
     
-    connect(this, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
+    m_view->addColumn("Contents");
+    m_view->header()->hide();
+    m_view->setResizeMode(QListView::AllColumns);
+    m_view->setRootIsDecorated(true);
+    m_view->setSorting(-1);
+    
+    connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
         this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
-    connect(this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
         this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
@@ -64,6 +71,11 @@ void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const
         return;
     
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, true, true);
+}
+
+void ContentsView::focusInEvent(QFocusEvent */*e*/)
+{
+    m_view->setFocus();
 }
 
 #include "contentsview.moc"

@@ -281,6 +281,9 @@ public:
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 
+    enum TrollProjectView { SubprojectView, DetailsView };
+    void setLastFocusedView(TrollProjectView view);
+    
 public slots:
     void slotBuildTarget();
     void slotRebuildTarget();
@@ -299,6 +302,9 @@ public slots:
     void slotNewFile();
     void slotRemoveFile();
 
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
+    
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
@@ -363,6 +369,8 @@ private:
     SubqmakeprojectItem *m_rootSubproject;
     TrollProjectPart *m_part;
 
+    TrollProjectView m_lastFocusedView;
+    
     friend class ChooseSubprojectDlg;
 };
 

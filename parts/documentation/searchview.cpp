@@ -313,4 +313,9 @@ void SearchView::askSearchTerm()
     m_edit->setFocus();
 }
 
+void SearchView::focusInEvent(QFocusEvent */*e*/)
+{
+    m_edit->setFocus();
+}
+
 #include "searchview.moc"

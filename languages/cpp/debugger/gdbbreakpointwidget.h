@@ -60,6 +60,9 @@ public slots:
     void slotParseGDBBreakpointSet(char *str, int BPKey);
 
     void slotRefreshBP(const QString &filename);
+    
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
 
 private slots:
     void slotRemoveBreakpoint();

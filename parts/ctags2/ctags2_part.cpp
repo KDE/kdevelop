@@ -52,9 +52,9 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
 	
 	m_widget = new CTags2Widget(this);
 
-	QWhatsThis::add(m_widget, i18n("WHAT DOES THIS PART DO?"));
-
-	mainWindow()->embedOutputView( m_widget, "CTAGS", "enter a tooltip" );
+	QWhatsThis::add(m_widget, i18n("<b>CTAGS</b><p>Result view for a tag lookup. Click a line to go to the corresponding place in the code."));
+	m_widget->setCaption(i18n("CTAGS Lookup"));
+	mainWindow()->embedOutputView( m_widget, "CTAGS", "CTAGS lookup results" );
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );

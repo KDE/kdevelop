@@ -399,6 +399,11 @@ bool ReplaceWidget::shouldTerminate()
     return b;
 }
 
+void ReplaceWidget::focusInEvent( QFocusEvent * /* e*/ )
+{
+    _listview->setFocus();
+}
+
 //END Helpers
 
 #include "replace_widget.moc"

@@ -67,6 +67,7 @@
 #include "addfilesdialog.h"
 #include "urlutil.h"
 #include "pathutil.h"
+#include "trolllistview.h"
 
 #define VALUES_PER_ROW  1
 
@@ -400,7 +401,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     connect ( projectconfButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureProject () ) );
 
     // Project tree
-    overview = new KListView(overviewContainer, "project overview widget");
+    overview = new TrollListView(this, overviewContainer, SubprojectView, "project overview widget");
     overview->setResizeMode(QListView::LastColumn);
     overview->setSorting(-1);
     overview->header()->hide();
@@ -497,7 +498,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows a file to be excluded from specified scopes."));
 
     // detail tree
-    details = new KListView(detailContainer, "details widget");
+    details = new TrollListView(this, detailContainer, DetailsView, "details widget");
     details->setRootIsDecorated(true);
     details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
@@ -3276,6 +3277,24 @@ SubqmakeprojectItem * TrollProjectWidget::findSubprojectForScope( Subqmakeprojec
     if (!scope->isScope)
         return scope;
     return findSubprojectForScope(dynamic_cast<SubqmakeprojectItem *>(scope->parent()));
+}
+
+void TrollProjectWidget::focusInEvent( QFocusEvent */*e*/ )
+{
+    switch (m_lastFocusedView)
+    {
+        case DetailsView:
+            details->setFocus();
+            break;
+        case SubprojectView:
+        default:
+            overview->setFocus();
+    }    
+}
+
+void TrollProjectWidget::setLastFocusedView( TrollProjectView view )
+{
+    m_lastFocusedView = view;
 }
 
 

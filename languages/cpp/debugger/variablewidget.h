@@ -53,6 +53,9 @@ public:
 
     virtual void setEnabled(bool b);
 
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
+
 public slots:
     void slotAddWatchVariable();
     void slotAddWatchVariable(const QString &ident);

@@ -171,4 +171,9 @@ void IndexView::askSearchTerm( )
     m_edit->setFocus();
 }
 
+void IndexView::focusInEvent(QFocusEvent */*e*/)
+{
+    m_edit->setFocus();
+}
+
 #include "indexview.moc"

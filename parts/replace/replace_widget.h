@@ -36,6 +36,9 @@ public:
 public slots:
     void showDialog();
     void stopButtonClicked( KDevPlugin * );
+    
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
 
 private slots:
     void find();

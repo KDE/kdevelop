@@ -14,6 +14,7 @@
 #include <qlabel.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
+#include <qfocusdata.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -135,6 +136,15 @@ void CTags2Widget::updateDBDateLabel( )
 	{
 		datetime_label->setText( i18n("No CTAGS database found") );
 	}
+}
+
+void CTags2Widget::focusInEvent( QFocusEvent * /*e*/ )
+{
+	input_edit->setFocus();
+/*	QFocusData *fd = focusData();
+	QWidget *next = fd->next();
+	if (next)
+		next->setFocus();*/
 }
 
 #include "ctags2_widget.moc"

@@ -184,6 +184,9 @@ public:
 	void emitRemovedFiles(const QStringList &fileList);
 
 	void parse(SubprojectItem *item);
+ 
+        enum AutoProjectView { SubprojectView, DetailsView };
+        void setLastFocusedView(AutoProjectView view);
 
 public slots:
 	void slotOverviewSelectionChanged(QListViewItem *item);
@@ -193,6 +196,8 @@ protected:
 	void initOverview ( QWidget* parent );
 	void initDetailview ( QWidget* parent );
 	void initActions ();
+        
+        virtual void focusInEvent(QFocusEvent *e);
 
 private:
 
@@ -211,6 +216,8 @@ private:
 	TargetItem *m_activeTarget;
 	TargetItem *m_choosenTarget;
 	SubprojectItem *m_shownSubproject;
+ 
+        AutoProjectView m_lastFocusedView;
 };
 
 #endif

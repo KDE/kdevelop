@@ -59,6 +59,7 @@ public slots:
 
 protected:
     void showBookmarks();
+    virtual void focusInEvent(QFocusEvent *e);
 
 protected slots:
     void itemExecuted(QListViewItem *item, const QPoint &p, int col);

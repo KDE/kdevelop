@@ -41,6 +41,7 @@ class AutoDetailsView : public KListView
 	
 	protected:
 		void initActions ();
+		virtual void focusOutEvent(QFocusEvent *e);
 		
 	private slots:
 		void slotDetailsExecuted(QListViewItem *item);

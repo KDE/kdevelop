@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CTags2WidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>CTags2WidgetBase</string>
+        <string></string>
     </property>
     <vbox>
         <property name="name">
@@ -144,8 +144,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>input_edit</sender>

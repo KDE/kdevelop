@@ -856,4 +856,9 @@ void AutoSubprojectView::slotCleanSubproject( )
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "clean" );
 }
 
+void AutoSubprojectView::focusOutEvent( QFocusEvent */* e*/ )
+{
+    m_widget->setLastFocusedView(AutoProjectWidget::SubprojectView);
+}
+
 #include "autosubprojectview.moc"

@@ -906,6 +906,11 @@ void GDBBreakpointWidget::slotAddBreakpoint( )
 
 /***************************************************************************/
 
+void GDBBreakpointWidget::focusInEvent( QFocusEvent */* e*/ )
+{
+    m_table->setFocus();
+}
+
 }
 
 

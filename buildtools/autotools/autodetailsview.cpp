@@ -479,4 +479,9 @@ void AutoDetailsView::slotSetActiveTarget()
 	DomUtil::writeEntry( dom, "/kdevautoproject/general/activetarget", targetPath );
 }
 
+void AutoDetailsView::focusOutEvent(QFocusEvent */*e*/)
+{
+    m_widget->setLastFocusedView(AutoProjectWidget::DetailsView);
+}
+
 #include "autodetailsview.moc"

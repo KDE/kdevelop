@@ -33,7 +33,10 @@ public:
 	//@todo - just push the search tag into the widget lookup widget, the rest is automatic!
 	
 	void updateDBDateLabel();
-	
+
+protected:
+	void focusInEvent( QFocusEvent *e );
+		
 private slots:
     virtual void line_edit_changed();
     virtual void line_edit_changed_delayed();

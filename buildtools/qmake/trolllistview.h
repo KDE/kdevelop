@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mksat.net                                                 *
+ *   adymo@mksat.net                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,34 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef CONTENTSVIEW_H
-#define CONTENTSVIEW_H
+#ifndef TROLLLISTVIEW_H
+#define TROLLLISTVIEW_H
 
-#include <qwidget.h>
+#include <klistview.h>
 
-class DocumentationWidget;
-class QListViewItem;
-class KListView;
+#include "trollprojectwidget.h"
 
-class ContentsView : public QWidget
+class TrollListView : public KListView
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    ContentsView(DocumentationWidget *parent, const char *name = 0);
-    ~ContentsView();
-    
-    KListView *view() const { return m_view; }
-
-protected slots:
-    void itemExecuted(QListViewItem *item, const QPoint &p, int col);
-    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
-
+    TrollListView(TrollProjectWidget *widget, QWidget *parent, TrollProjectWidget::TrollProjectView view, const char *name = 0);
+    ~TrollListView();
 protected:
-    virtual void focusInEvent(QFocusEvent *e);
-    
+    virtual void focusOutEvent(QFocusEvent *e);
+
 private:
-    DocumentationWidget *m_widget;
-    KListView *m_view;
+    TrollProjectWidget *m_widget;
+    TrollProjectWidget::TrollProjectView m_view;
 };
 
 #endif

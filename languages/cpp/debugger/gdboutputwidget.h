@@ -45,6 +45,9 @@ public slots:
 
     void slotGDBCmd();
 
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
+
 signals:
     void userGDBCmd(const QString &cmd);
     void breakInto();

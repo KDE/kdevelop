@@ -273,4 +273,9 @@ void BookmarkView::itemMouseButtonPressed(int button, QListViewItem *item, const
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
 }
 
+void BookmarkView::focusInEvent(QFocusEvent */*e*/)
+{
+    m_view->setFocus();
+}
+
 #include "bookmarkview.moc"

@@ -47,6 +47,9 @@ protected slots:
     void showIndex(const QString &term);
 
     void itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos);
+
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
     
 private:
     DocumentationWidget *m_widget;

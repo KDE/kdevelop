@@ -45,12 +45,8 @@ DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     m_tab = new QToolBox(this);
     l->addWidget(m_tab);
     
-    QWidget *contentsContainter = new QWidget(this);
-    QVBoxLayout *cl = new QVBoxLayout(contentsContainter, 0, 0);
     m_contents = new ContentsView(this);
-    m_contents->reparent(contentsContainter, QPoint(0,0));
-    cl->addWidget(m_contents);
-    m_tab->addItem(contentsContainter, i18n("Contents"));
+    m_tab->addItem(m_contents, i18n("Contents"));
     
     m_index = new IndexView(this);
     m_tab->addItem(m_index, i18n("Index"));
@@ -72,6 +68,7 @@ void DocumentationWidget::tabChanged(int t)
 {
     if (!m_tab->item(t))
         return;
+    m_tab->item(t)->setFocus();
     if (m_tab->item(t) == m_index)
         m_part->emitIndexSelected(m_index->indexBox());
 }
@@ -106,6 +103,17 @@ void DocumentationWidget::lookInDocumentationIndex(const QString &term)
     m_index->setSearchTerm(term);
     //adymo: let's allow the user to press enter here ;)
 //    m_index->searchInIndex();
+}
+
+void DocumentationWidget::focusInEvent(QFocusEvent */*e*/)
+{
+    if (m_tab->currentItem())
+        m_tab->currentItem()->setFocus();
+}
+
+KListView * DocumentationWidget::contents( ) const
+{
+    return m_contents->view();
 }
 
 #include "documentation_widget.moc"

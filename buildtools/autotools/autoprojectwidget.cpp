@@ -854,5 +854,22 @@ void AutoProjectWidget::setActiveSubproject( SubprojectItem * spitem )
     m_activeSubproject = spitem;
 }
 
+void AutoProjectWidget::focusInEvent( QFocusEvent */*e*/ )
+{
+    switch (m_lastFocusedView)
+    {
+        case DetailsView:
+            m_detailView->setFocus();
+            break;
+        case SubprojectView:
+        default:
+            m_subprojectView->setFocus();
+    }
+}
+
+void AutoProjectWidget::setLastFocusedView( AutoProjectView view )
+{
+    m_lastFocusedView = view;
+}
 
 #include "autoprojectwidget.moc"

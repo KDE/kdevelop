@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rï¿½er
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -63,6 +63,7 @@ class AutoSubprojectView : public KListView
 						const QString &lhs, const QString &rhs);
 		void parseSUBDIRS(SubprojectItem *item,
 						const QString &lhs, const QString &rhs);
+		virtual void focusOutEvent(QFocusEvent *e);
 
 	private:
 		AutoProjectWidget* m_widget;

@@ -53,8 +53,9 @@ protected slots:
     void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
 
 protected:
-    void runHtdig(const QString &arg);
+    virtual void focusInEvent(QFocusEvent *e);
     
+    void runHtdig(const QString &arg);
     void analyseSearchResults();
 
 private:

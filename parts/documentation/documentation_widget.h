@@ -31,6 +31,7 @@ class QToolBox;
 class KListBox;
 class SearchView;
 class BookmarkView;
+class KListView;
 
 class DocumentationWidget : public QWidget
 {
@@ -41,7 +42,7 @@ public:
 
     DocumentationPart *part() const { return m_part; }
 
-    ContentsView *contents() const { return m_contents; }
+    KListView *contents() const;
     KListBox *index() const;
 
 public slots:
@@ -50,6 +51,9 @@ public slots:
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
     
+protected:
+    virtual void focusInEvent(QFocusEvent *e);
+
 protected slots:
     void tabChanged(int t);
 
