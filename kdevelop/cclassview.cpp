@@ -330,6 +330,24 @@ void CClassView::refreshClassByName( const char *aName )
   }
 }
 
+/*------------------------------------- CClassView::viewGraphicalTree()
+ * viewGraphicalTree()
+ *   View graphical classtree.
+ *
+ * Parameters:
+ *   
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::viewGraphicalTree()
+{
+  QList<CClassTreeNode> *forest = store->asForest();
+  CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
+  cb->setCaption(i18n("Graphical classview"));
+  cb->InitializeTree(forest);
+  cb->show();
+}
+
 /*------------------------------------- CClassView::viewDefinition()
  * viewDefinition()
  *   Views a definition of an item.
@@ -667,11 +685,7 @@ void CClassView::slotProjectOptions()
 
 void CClassView::slotGraphicalView()
 {
-  QList<CClassTreeNode> *forest = store->asForest();
-  CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
-  cb->setCaption(i18n("Graphical classview"));
-  cb->InitializeTree(forest);
-  cb->show();
+  viewGraphicalTree();
 }
 
 void CClassView::slotFileNew()

@@ -15,9 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#ifndef CCLASSVIEW_H
-#define CCLASSVIEW_H
+#ifndef _CCLASSVIEW_H
+#define _CCLASSVIEW_H
 
 #include <kapp.h>
 #include <qstring.h>
@@ -68,6 +67,9 @@ public: // Public refreshmethods
   void refreshClassByName( const char *aName );
 
 public: // Public methods
+
+  /** View graphical classtree. */
+  void viewGraphicalTree();
 
   /** Views the definition. */
   void viewDefinition( const char *className, const char *declName, THType type );
