@@ -37,7 +37,7 @@
 
 enum
 { 
-  CP_IS_OTHER, 
+  CP_IS_OTHER,
   CP_IS_OPERATOR, CP_IS_OPERATOR_IMPL,
   CP_IS_ATTRIBUTE, CP_IS_ATTR_IMPL,
   CP_IS_MULTI_ATTRIBUTE, CP_IS_MULTI_ATTR_IMPL,
@@ -150,18 +150,20 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
   }
 }
 
-/*---------------------------------------- CClassParser::parseStruct()
- * parseStruct()
- *   Parse a structure.
+/*---------------------------------- CClassParser::fillInParsedStruct()
+ * fillInParsedStruct()
+ *   Parse a structure using header declaration from stack.
  *
  * Parameters:
- *   -
+ *   aContainer  Container to store the parsed struct in.
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseStruct( CParsedContainer *aContainer )
+void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
 {
   assert( aContainer != NULL );
+  assert( lexem == '{' );
 
   CParsedStruct *aStruct = new CParsedStruct();
 
@@ -169,38 +171,52 @@ void CClassParser::parseStruct( CParsedContainer *aContainer )
   aStruct->setDefinedOnLine( getLineno() );
   aStruct->setDefinedInFile( currentFile );
 
+  // Check for a name on the stack
+  if( !lexemStack.isEmpty() && lexemStack.top()->type == ID )
+    aStruct->setName( lexemStack.top()->text );
+
+  // Remove all lexema from the stack.
+  emptyStack();
+
+  // Jump to first declaration or to '}'.
   getNextLexem();
 
-  // Check if this struct has a name
+  parseStructDeclarations( aStruct );
+
+  // Skip '}'
+  getNextLexem();
+
+  // If we find a name here we use the typedef name as the struct name.
   if( lexem == ID )
-  {
     aStruct->setName( getText() );
-    getNextLexem();
-  }
-
-  switch( lexem )
-  {
-    case '{': // A struct definition.
-      // Jump to first declaration or to '}'.
-      getNextLexem();
-
-      parseStructDeclarations( aStruct );
-
-      // Skip '}'
-      getNextLexem();
-
-      // If we find a name here we use the typedef name as the struct name.
-      if( lexem == ID )
-        aStruct->setName( getText() );
-      break;
-    case ';': // Forward declaration.
-      delete aStruct;
-      aStruct = NULL;
-      break;
-  }
   
   if( aStruct != NULL && !aStruct->name.isEmpty() )
     aContainer->addStruct( aStruct );
+}
+
+/*---------------------------------------- CClassParser::parseStruct()
+ * parseStruct()
+ *   Parse a struct.
+ *
+ * Parameters:
+ *   aContainer  Container to store the parsed struct in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseStruct( CParsedContainer *aContainer )
+{
+  while( lexem != 0 && lexem != '{' && lexem !=';' )
+  {
+    PUSH_LEXEM();
+    getNextLexem();
+  }
+
+  // If we find a forward declaration we just ignore everything.
+  if( lexem == ';' || lexem == 0)
+    emptyStack();
+  else
+    fillInParsedStruct( aContainer );
 }
 
 /*---------------------------------------- CClassParser::parseEnum()
@@ -798,6 +814,7 @@ void CClassParser::parseMethodImpl(bool isOperator)
 int CClassParser::checkClassDecl()
 {
   bool isImpl = false;
+  bool isStruct = false;
   bool isOperator = false;
   bool isMultiDecl = false;
   int retVal = CP_IS_OTHER;
@@ -807,23 +824,31 @@ int CClassParser::checkClassDecl()
   {
     switch( lexem )
     {
+      case CPSTRUCT:
+        isStruct = true;
+        break;
       case CLCL:
         isImpl = true;
+        isStruct = false;
         break;
       case CPOPERATOR:
         isOperator = true;
+        isStruct = false;
         break;
       case ',':
         isMultiDecl = true;
+        isStruct = false;
         break;
     }
 
     PUSH_LEXEM();
     getNextLexem();
 
-    exit = ( ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) || 
-             ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
-             ( lexem == 0 ) ); 
+    exit =
+      ( isStruct && ( lexem == '(' || lexem == ';' || lexem == '=' || lexem == '{' ) )||
+      ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) || 
+      ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
+      ( lexem == 0 ); 
   }
 
   // If we find a '(' it's a function of some sort.
@@ -833,6 +858,11 @@ int CClassParser::checkClassDecl()
       retVal = ( isImpl ? CP_IS_OPERATOR_IMPL : CP_IS_OPERATOR );
     else
       retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+  }
+  else if( lexem == '{' )
+  {
+    if( isStruct )
+      retVal = CP_IS_STRUCT;
   }
   else if( lexem != 0 ) // Attribute
   {
@@ -1008,8 +1038,6 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
         isStatic = true;
         break;
       case CPSTRUCT:
-        parseStruct( &store.globalContainer );
-        break;
       case CONST:
       case ID:
         // Ignore everything that hasn't got any scope declarator.
@@ -1119,6 +1147,12 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
     case CP_IS_MULTI_ATTRIBUTE:
       fillInMultipleVariable( aContainer );
       break;
+    case CP_IS_STRUCT:
+      fillInParsedStruct( aContainer );
+      break;
+    case CP_IS_OTHER:
+      emptyStack();
+      break;
   }
 }
 
@@ -1189,10 +1223,9 @@ void CClassParser::parseToplevel()
         skipBlock();
         break;
       case STATIC:
+        isStatic = true;
         break;
       case CPSTRUCT:
-        parseStruct( &store.globalContainer );
-        break;
       case CONST:
       case ID:
         parseMethodAttributes( &store.globalContainer );

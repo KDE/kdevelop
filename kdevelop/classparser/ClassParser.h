@@ -127,10 +127,19 @@ private: // Private methods
   /** Remove all elements from the stack. */
   void emptyStack();
 
-  /** Parse all structure declarations. */
+  /** Parse all structure declarations.
+   * @param aStruct The struct that holds the declarations.
+   */
   void parseStructDeclarations( CParsedStruct *aStruct);
 
-  /** Parse a structure. */
+  /** Parse a structure using header declaration from stack.
+   * @param aContainer Container to store the parsed struct in.
+   */
+  void fillInParsedStruct( CParsedContainer *aContainer );
+
+  /** Parse a structure. 
+   * @param aContainer Container to store the parsed struct in.
+   */
   void parseStruct( CParsedContainer *aContainer );
 
   /** Parse an enumeration. */
