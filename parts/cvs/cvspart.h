@@ -14,15 +14,15 @@
 
 class Context;
 
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class CvsPart : public KDevPart
+class CvsPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    CvsPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    CvsPart( QObject *parent, const char *name, const QStringList & );
     ~CvsPart();
 
 private slots:

@@ -4,6 +4,6 @@ Type=Service
 Exec=blubb
 Comment=CVS Integration
 Name=KDevCvs
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevcvs
 X-KDevelop-Scope=Project

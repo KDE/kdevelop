@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevcvs.la
 libkdevcvs_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcvs_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevcvs_la_SOURCES = cvsfactory.cpp \
-			cvspart.cpp \
+libkdevcvs_la_SOURCES = cvspart.cpp \
 			commitdlg.cpp
 
 METASOURCES = AUTO

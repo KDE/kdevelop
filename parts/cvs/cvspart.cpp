@@ -14,16 +14,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kprocess.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "commitdlg.h"
-#include "cvsfactory.h"
 #include "cvspart.h"
 
+typedef KGenericFactory<CvsPart> CvsFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
-CvsPart::CvsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin( parent, name )
 {
     setInstance(CvsFactory::instance());
 
