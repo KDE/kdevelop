@@ -19,16 +19,18 @@ public:
     ~KDevAppFrontend();
 
     /**
+     * Returns whether the application is currently running.
+     */
+    virtual bool isRunning() = 0;
+
+public slots:
+    /**
      * The component shall start to execute an app-like command.
      * Running the application is always asynchronous.
      * If inTerminal is true, the program is started in an external
      * konsole.
      */
     virtual void startAppCommand(const QString &program, bool inTerminal) = 0;
-    /**
-     * Returns whether the application is currently running.
-     */
-    virtual bool isRunning() = 0;
     /**
      * Inserts a string into the view.
      */
