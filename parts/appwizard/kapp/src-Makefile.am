@@ -11,7 +11,7 @@ INCLUDES         = $(all_includes)
 $APPNAMELC$_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # the libraries to link against.
-$APPNAMELC$_LDADD   = $(LIB_KFILE)
+$APPNAMELC$_LDADD   = $(LIB_KFILE) $(LIB_KDEPRINT)
 
 # which sources should be compiled for $APPNAMELC$
 $APPNAMELC$_SOURCES = main.cpp $APPNAMELC$.cpp $APPNAMELC$view.cpp \
