@@ -77,6 +77,9 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
   connect(this,
           SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem*)));
+  connect( this,
+          SIGNAL(returnPressed(QListViewItem *)),
+          SLOT(slotSelectionChanged(QListViewItem *)) );
 }
 
 CRealFileView::~CRealFileView(){

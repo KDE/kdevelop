@@ -1984,6 +1984,38 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem( i18n("Debug toggle breakpoint"), "DebugToggleBreakpoint", (unsigned int) 0);
   accel->connectItem( "DebugToggleBreakpoint", m_pParent, SLOT(slotDebugToggleBreakpoint()), true, ID_DEBUG_TOGGLE_BP);
 
+  // activation of certain tool-views
+  accel->insertItem( i18n("Goto Previous Window"), "GotoPrevWin", IDK_GOTO_PREVWIN);
+  accel->connectItem("GotoPrevWin", m_pParent, SLOT(activatePrevWin()), true, 0);
+
+  accel->insertItem( i18n("class tree"), "ActivateTreeView_Class", ID_ACTIVATETREEVIEW_CLASS);
+  accel->connectItem( "ActivateTreeView_Class", m_pParent, SLOT(slotActivateTView_Class()), true, 0);
+  accel->insertItem( i18n("files of project"), "ActivateTreeView_LFV", ID_ACTIVATETREEVIEW_LFV);
+  accel->connectItem( "ActivateTreeView_LFV", m_pParent, SLOT(slotActivateTView_LFV()), true, 0);
+  accel->insertItem( i18n("view on project directory"), "ActivateTreeView_RFV", ID_ACTIVATETREEVIEW_RFV);
+  accel->connectItem( "ActivateTreeView_RFV", m_pParent, SLOT(slotActivateTView_RFV()), true, 0);
+  accel->insertItem( i18n("documentation"), "ActivateTreeView_Doc", ID_ACTIVATETREEVIEW_DOC);
+  accel->connectItem( "ActivateTreeView_Doc", m_pParent, SLOT(slotActivateTView_Doc()), true, 0);
+  accel->insertItem( i18n("debugger variable watch view"), "ActivateTreeView_VAR", ID_ACTIVATETREEVIEW_VAR);
+  accel->connectItem( "ActivateTreeView_VAR", m_pParent, SLOT(slotActivateTView_VAR()), true, 0);
+
+  accel->insertItem( i18n("output of KDevelop"), "ActivateOutputView_Messages", ID_ACTIVATEOUTPUTVIEW_MESSAGES);
+  accel->connectItem( "ActivateOutputView_Messages", m_pParent, SLOT(slotActivateOView_Messages()), true, 0);
+  accel->insertItem( i18n("messages of started program"), "ActivateOutputView_StdInStdOut", ID_ACTIVATEOUTPUTVIEW_STDINSTDOUT);
+  accel->connectItem( "ActivateOutputView_StdInStdOut", m_pParent, SLOT(slotActivateOView_StdInStdOut()), true, 0);
+  accel->insertItem( i18n("error messages of started program"), "ActivateOutputView_StdErr", ID_ACTIVATEOUTPUTVIEW_STDERR);
+  accel->connectItem( "ActivateOutputView_StdErr", m_pParent, SLOT(slotActivateOView_StdErr()), true, 0);
+  accel->insertItem( i18n("embedded konsole window"), "ActivateOutputView_Konsole", ID_ACTIVATEOUTPUTVIEW_KONSOLE);
+  accel->connectItem( "ActivateOutputView_Konsole", m_pParent, SLOT(slotActivateOView_Konsole()), true, 0);
+  accel->insertItem( i18n("debugger breakpoints"), "ActivateOutputView_BrkptManager", ID_ACTIVATEOUTPUTVIEW_BRKPTMANAGER);
+  accel->connectItem( "ActivateOutputView_BrkptManager", m_pParent, SLOT(slotActivateOView_BrkptManager()), true, 0);
+  accel->insertItem( i18n("debugger function call stack"), "ActivateOutputView_FrameStack", ID_ACTIVATEOUTPUTVIEW_FRAMESTACK);
+  accel->connectItem( "ActivateOutputView_FrameStack", m_pParent, SLOT(slotActivateOView_FrameStack()), true, 0);
+  accel->insertItem( i18n("debugger disassemble view"), "ActivateOutputView_Disassemble", ID_ACTIVATEOUTPUTVIEW_DISASSEMBLE);
+  accel->connectItem( "ActivateOutputView_Disassemble", m_pParent, SLOT(slotActivateOView_Disassemble()), true, 0);
+  accel->insertItem( i18n("debugger control view"), "ActivateOutputView_Dbg", ID_ACTIVATEOUTPUTVIEW_DBG);
+  accel->connectItem( "ActivateOutputView_Dbg", m_pParent, SLOT(slotActivateOView_Dbg()), true, 0);
+
   accel->readSettings(0, false);
 }
 

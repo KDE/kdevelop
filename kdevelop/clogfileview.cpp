@@ -54,6 +54,8 @@ CLogFileView::CLogFileView(bool s_path, QWidget*parent,const char* name)
   popup = 0;
   connect(this,SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem *)));
+  connect( this,SIGNAL(returnPressed(QListViewItem *)),
+          SLOT(slotSelectionChanged(QListViewItem *)) );
   preselectitem = ""; // no preselect
   firstitemselect = false;
   allgroups_opened= false;

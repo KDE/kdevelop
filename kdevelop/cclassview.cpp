@@ -134,6 +134,8 @@ CClassView::CClassView(QWidget* parent, const char* name) :
 
   connect (this, SIGNAL(executed(QListViewItem *, const QPoint &, int )),
            SLOT(slotClassViewSelected()));
+  connect (this, SIGNAL(returnPressed(QListViewItem *)),
+           SLOT(slotClassViewSelected()));
   // the signal used to be reemitted from CTreeView, it doesnt make sense
   // any longer and it's therefore replaced (rokrau 6/18/01)
   //connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));

@@ -266,7 +266,7 @@ void CKDevelop::initView()
   konsole_widget->setCaption(i18n("Konsole"));
   addToolWindow(konsole_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("embedded konsole window"), i18n("Konsole"));
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
   m_docViewManager->initKeyAccel(accel, this);

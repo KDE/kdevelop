@@ -1,6 +1,12 @@
 2001-11-02  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: disable the disassemble when it's hidden
     * bugfix ;-): ALT+0 till ALT+9 switches the views in tab page mode
+    * good news for the keyboard freaks! New accelerators:
+      - CTRL+SHIFT+C or L or R or D or V switches_to/activates the tree tool-views
+      - CTRL+SHIFT+M or O or E or K or B or F or A or G switches_to/activates the output tool-views
+    * bugfix: tree views inherit KListView now --> fixed the single/double click problem (uses KDE settings now)
+    * bugfix: click/return on *already-selected* tree-view item fires the selection signal as well
+      --> so click on DOC-tree-->Qtlibrary always goes back again to start page (don't care if a sublink on the startpage has been clicked)
 
 2001-11-02  jbb <jbb@kdevelop.org>
     * bugfix for 27/10/2001 patch (repaired switching the files (KDE2 version))

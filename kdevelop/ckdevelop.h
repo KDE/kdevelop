@@ -765,6 +765,21 @@ public:
    */
   //void slotTagDeclaration(QString tag);
 
+  // activate certain tool-views (slots for accels)
+  void slotActivateTView_Class();
+  void slotActivateTView_LFV();
+  void slotActivateTView_RFV();
+  void slotActivateTView_Doc();
+  void slotActivateTView_VAR();
+  void slotActivateOView_Messages();
+  void slotActivateOView_StdInStdOut();
+  void slotActivateOView_StdErr();
+  void slotActivateOView_Konsole();
+  void slotActivateOView_BrkptManager();
+  void slotActivateOView_FrameStack();
+  void slotActivateOView_Disassemble();
+  void slotActivateOView_Dbg();
+
 protected: // Protected methods
 
   /** The user selected a class in the classcombo.

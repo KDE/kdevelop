@@ -432,6 +432,20 @@
 #define IDK_GOTO_EDITORVIEW9                                    ALT+Key_9
 #define IDK_GOTO_EDITORVIEW10                                   ALT+Key_0
 
+#define ID_ACTIVATETREEVIEW_CLASS                               CTRL+SHIFT+Key_C
+#define ID_ACTIVATETREEVIEW_LFV                                 CTRL+SHIFT+Key_L
+#define ID_ACTIVATETREEVIEW_RFV                                 CTRL+SHIFT+Key_R
+#define ID_ACTIVATETREEVIEW_DOC                                 CTRL+SHIFT+Key_D
+#define ID_ACTIVATETREEVIEW_VAR                                 CTRL+SHIFT+Key_V
+#define ID_ACTIVATEOUTPUTVIEW_MESSAGES                          CTRL+SHIFT+Key_M
+#define ID_ACTIVATEOUTPUTVIEW_STDINSTDOUT                       CTRL+SHIFT+Key_O
+#define ID_ACTIVATEOUTPUTVIEW_STDERR                            CTRL+SHIFT+Key_E
+#define ID_ACTIVATEOUTPUTVIEW_KONSOLE                           CTRL+SHIFT+Key_K
+#define ID_ACTIVATEOUTPUTVIEW_BRKPTMANAGER                      CTRL+SHIFT+Key_B
+#define ID_ACTIVATEOUTPUTVIEW_FRAMESTACK                        CTRL+SHIFT+Key_F
+#define ID_ACTIVATEOUTPUTVIEW_DISASSEMBLE                       CTRL+SHIFT+Key_A
+#define ID_ACTIVATEOUTPUTVIEW_DBG                               CTRL+SHIFT+Key_G
+
 ///////////////////////////////////////////////////////////////////
 // MACROS FOR THE CONNECT OF YOUR SIGNALS TO CORRESPONDENT SLOTS
 // IN YOUR MAIN IMPLEMENTATION OF MENUBAR AND TOOLBAR

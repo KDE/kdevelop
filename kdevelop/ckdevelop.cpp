@@ -4196,6 +4196,94 @@ void CKDevelop::slotViewODebuggerView()
   adjustTOutputToolButtonState();
 }
 
+void CKDevelop::slotActivateTView_Class()
+{
+  dockManager->findWidgetParentDock(class_tree->parentWidget())->makeDockVisible();
+  class_tree->setFocus();
+}
+
+void CKDevelop::slotActivateTView_LFV()
+{
+  dockManager->findWidgetParentDock(log_file_tree->parentWidget())->makeDockVisible();
+  log_file_tree->setFocus();
+}
+
+void CKDevelop::slotActivateTView_RFV()
+{
+  dockManager->findWidgetParentDock(real_file_tree->parentWidget())->makeDockVisible();
+  real_file_tree->setFocus();
+}
+
+void CKDevelop::slotActivateTView_Doc()
+{
+  dockManager->findWidgetParentDock(doc_tree->parentWidget())->makeDockVisible();
+  doc_tree->setFocus();
+}
+
+void CKDevelop::slotActivateTView_VAR()
+{
+  if (dbgController != 0L) {  // when debugging, only
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+    var_viewer->setFocus();
+  }
+}
+
+void CKDevelop::slotActivateOView_Messages()
+{
+  dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
+  messages_widget->setFocus();
+}
+
+void CKDevelop::slotActivateOView_StdInStdOut()
+{
+  dockManager->findWidgetParentDock(stdin_stdout_widget->parentWidget())->makeDockVisible();
+  stdin_stdout_widget->setFocus();
+}
+
+void CKDevelop::slotActivateOView_StdErr()
+{
+  dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
+  stderr_widget->setFocus();
+}
+
+void CKDevelop::slotActivateOView_Konsole()
+{
+  dockManager->findWidgetParentDock(konsole_widget->parentWidget())->makeDockVisible();
+  konsole_widget->setFocus();
+}
+
+void CKDevelop::slotActivateOView_BrkptManager()
+{
+  dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
+  brkptManager->setFocus();
+}
+
+void CKDevelop::slotActivateOView_FrameStack()
+{
+  if (dbgController != 0L) {  // when debugging, only
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
+    frameStack->setFocus();
+  }
+}
+
+void CKDevelop::slotActivateOView_Disassemble()
+{
+  if (dbgController != 0L) {  // when debugging, only
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+    disassemble->setFocus();
+  }
+}
+
+void CKDevelop::slotActivateOView_Dbg()
+{
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  if (dbgController != 0L) {  // when debugging, only
+    dockManager->findWidgetParentDock(dbg_widget->parentWidget())->makeDockVisible();
+    dbg_widget->setFocus();
+  }
+#endif
+}
+
 void CKDevelop::statusCallback(int id_){
   switch(id_)
   {
