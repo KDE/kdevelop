@@ -89,7 +89,7 @@ static int chownpty(int fd, int grant)
             ::exit(1);
 
         QString path = locate("exe", BASE_CHOWN);
-        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
+        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)0, NULL);
         ::exit(1); // should not be reached
     }
     if (pid > 0) {
