@@ -30,7 +30,7 @@
 #include <qsocketnotifier.h>
 #include <qstring.h>
 
-/*
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -64,7 +64,7 @@
 #include <qintdict.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-*/
+/*
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -76,6 +76,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/stat.h>
+*/
 
 #define FIFO_FILE "/tmp/debug_tty"
 
@@ -142,15 +143,11 @@ STTY::STTY(bool ext, const QString &termAppName) :
   else
   {
     fout = findTTY();
-    ttySlave = QString(tty_slave);
-    ferr = findTTY();
-
-    if (fout >= 0 && ferr >= 0)
+    if (fout >= 0 )
     {
+      ttySlave = QString(tty_slave);
       out = new QSocketNotifier(fout, QSocketNotifier::Read);
       connect( out, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
-      err = new QSocketNotifier(ferr, QSocketNotifier::Read);
-      connect( err, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
     }
   }
 }
@@ -168,11 +165,11 @@ STTY::~STTY()
     delete out;
   }
 
-  if ( err )
-  {
-    ::close( ferr );
-    delete err;
-  }
+//  if ( err )
+//  {
+//    ::close( ferr );
+//    delete err;
+//  }
 }
 
 // **************************************************************************
@@ -247,7 +244,7 @@ int STTY::findTTY()
         sprintf(tty_slave,"/dev/tty%c%c",*s3,*s4);
         if ((ptyfd = open(pty_master, O_RDWR)) >= 0)
         {
-          if (geteuid() == 0 || access(tty_slave,R_OK|W_OK) == 0)
+          if (geteuid() == 0 || access(tty_slave, R_OK|W_OK) == 0)
             break;
 
           close(ptyfd);
@@ -267,11 +264,13 @@ int STTY::findTTY()
       fprintf(stderr,"kdevelop: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
       fprintf(stderr,"        : This means the session can be eavesdroped.\n");
       fprintf(stderr,"        : Make sure konsole_grantpty is installed and setuid root.\n");
-      close(ptyfd);
-      return -1;  // failed
     }
 
     ::fcntl(ptyfd, F_SETFL, O_NDELAY);
+#ifdef TIOCSPTLCK
+    int flag = 0;
+    ioctl(ptyfd, TIOCSPTLCK, &flag); // unlock pty
+#endif
   }
 
   return ptyfd;
@@ -332,8 +331,9 @@ bool STTY::findExternalTTY(const QString &termApp)
     const char* end       = 0;
 
     ::execlp( prog,       prog,
-              "-name",    "debugio",
-              "-title",   "kdevelop: Program output",
+//              "-name",    "debugio",
+//              "-title",   "kdevelop: Program output",
+              "-caption", "kdevelop: Debug application console",
               "-e",       "sh",
               "-c",       scriptStr,
               end);
