@@ -8,7 +8,7 @@
 
 #define ENABLEDEBUGOUTPUT
 #include "dbg.h"
-
+#include <kdebug.h>
 #include "scope.h"
 #include <string.h>
 
@@ -93,11 +93,11 @@ CScope::increase( const int iScope )
             return;
         }
         else {
-            errln( "EE: CScope::increase overflow" );
+            kdDebug(9007) << "EE: CScope::increase overflow" << endl;
         }
     }
     else {
-        errln( "EE: CScope::increase iScope > MAXSCOPES" );
+        kdDebug(9007) << "EE: CScope::increase iScope > MAXSCOPES" << endl;
     }
 }
 
@@ -115,7 +115,7 @@ CScope::decrease( const int iScope )
         }
     }
     else {
-        errln( "EE: CScope::decrease iScope < 0" );
+        kdDebug(9007) << "EE: CScope::decrease iScope < 0" << endl;
     }
 }
 

@@ -1214,13 +1214,13 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
         }
         else
         {
-            kdDebug(90007) << "No method by the name " << name
+            kdDebug(9007) << "No method by the name " << name
                            << "found in class " << path << endl;
           aMethod.out();
         }
       }
       else
-        qWarning( "No class by the name %s found", path.data() );
+        kdDebug(9007) << "No class by the name " << path << " found" << endl;
     }
   }
 }

@@ -11,6 +11,7 @@
 
 #include "cppccparser.h"
 #include "dbg.h"
+#include <kdebug.h>
 
 
 #define PUSH_LEXEM( ) lexemStack.push( new CParsedLexem( lexem, getText( ) ) )
@@ -34,7 +35,7 @@ CppCCParser::parse( const QString& file, const int iCCLine_ )
         return true;
     }
     else {
-        errln( "EE: CppCCParser::parse file '" << file.latin1( ) << "' couldn't opened" );
+        kdDebug(9007) << "EE: CppCCParser::parse file '" << file << "' couldn't opened" << endl;
     }
 
     return false;
@@ -51,7 +52,7 @@ CppCCParser::parse( const QString* string, const int iCCLine_ )
         return true;
     }
     else {
-        errln( "EE: CppCCParser::parse string = 0" );
+        kdDebug(9007) << "EE: CppCCParser::parse string = 0" << endl;
     }
 
     return false;
@@ -70,7 +71,7 @@ CppCCParser::parse( const QString* string, const QString variable )
         return true;
     }
     else {
-        errln( "EE: CppCCParser::parse string = 0" );
+        kdDebug(9007) << "EE: CppCCParser::parse string = 0" << endl;
     }
 
     return false;
@@ -89,7 +90,7 @@ CppCCParser::parse( const QString& file, const QString variable )
         return true;
     }
     else {
-        errln( "EE: CppCCParser::parse file '" << file.latin1( ) << "' couldn't opened" );
+        kdDebug(9007) << "EE: CppCCParser::parse file '" << file << "' couldn't opened" << endl;
     }
 
     return false;
@@ -180,13 +181,13 @@ CppCCParser::parseFunctionHead( )
             case CPUNION   : outln( "const, volatile, union found - skipping" ); break;
 
 	    // shouldn't happen
-	    case CPSTATIC  : errln( "CPSTATIC found - skipping" );
+            case CPSTATIC  : kdDebug(9007) << "CPSTATIC found - skipping" << endl;
 
             case '*'    : outln( " + POINTER"   ); pVar->iVariableType = CPPOINTER  ; break;
             case '&'    : outln( " + REFERENCE" ); pVar->iVariableType = CPREFERENCE; break;
 
             case '('    :
-		errln( "EE: ( found - shouldn't be, or ?" );
+		kdDebug(9007) << "EE: ( found - shouldn't be, or ?" << endl;
 		break;
 
             // these are the signs for a variable's end
@@ -209,13 +210,13 @@ CppCCParser::parseFunctionHead( )
                     break;
                 }
                 else {
-                    errln( "WW: unexpected else in ," );
+                    kdDebug(9007) << "WW: unexpected else in ," << endl;
                 }
                 break;
 
             case ':'    :
                 // full qualifier found - not handled yet
-                errln( "EE: : found, skipping to '{'" );
+                kdDebug(9007) << "EE: : found, skipping to '{'" << endl;
                 skipToLexem( '{' );
                 break;
 
@@ -307,8 +308,8 @@ CppCCParser::parseFunctionBody( )
 
             case CPSTRUCT  : // to handle: struct m x;
             case CPUNION   :
-                errln( "### struct / union found +++ not handled yet - ignoring" );
-                errln( "### place structs / unions in header-file !" );
+                kdDebug(9007) << "### struct / union found +++ not handled yet - ignoring" << endl;
+                kdDebug(9007) << "### place structs / unions in header-file !" << endl;
                 skipBlock( ); // currently skips to fileend if: struct m x;
                 skipToLexem( ';' );
                 break;
@@ -380,7 +381,7 @@ CppCCParser::parseFunctionBody( )
                     skipCommand( );
                 }
                 else {
-                    errln( "WW: unexpected else in CLCL" );
+                    kdDebug(9007) << "WW: unexpected else in CLCL" << endl;
                 }
                 break;
 
@@ -468,7 +469,7 @@ CppCCParser::parseFunctionBody( )
                     break;
                 }
                 else {
-                    errln( "WW: unexpected else in -" );
+                    kdDebug(9007) << "WW: unexpected else in -" << endl;
                 }
                 break;
 
@@ -493,7 +494,7 @@ CppCCParser::parseFunctionBody( )
                     break;
                 }
                 else {
-                    errln( "WW: unexpected else in ." );
+                    kdDebug(9007) << "WW: unexpected else in ." << endl;
                 }
                 break;
 
@@ -507,7 +508,7 @@ CppCCParser::parseFunctionBody( )
                     break;
                 }
                 else {
-                    errln( "  parseFunctionBody default value, else" );
+                    kdDebug(9007) << "  parseFunctionBody default value, else" << endl;
                     pVar->sVariableName = getText( );
                     bWithinVariable = true;
                 }
@@ -526,7 +527,7 @@ CppCCParser::parseFunctionBody( )
 void
 CppCCParser::postProcessVariables( )
 {
-    errln( "-- post-processing started --" );
+    kdDebug(9007) << "-- post-processing started --" << endl;
     // if we found only one or none vars we just copy the one var
     CParsedVariable* pVar;
     if( varList.count( ) <= 1 ){
@@ -548,13 +549,13 @@ CppCCParser::postProcessVariables( )
         }
     }
     varList.clear( );
-    errln( "-- post-processing ended --" );
+    kdDebug(9007) << "-- post-processing ended --" << endl;
 }
 
 void
 CppCCParser::debugPrint( )
 {
-    errln( "-- debugPrint start --" );
+    kdDebug(9007) << "-- debugPrint start --" << endl;
 
     errln( "Number of variables (" << varList.count( ) << ")" );
     for( int i = 0; i < varList.count( ); i++ ){
@@ -587,7 +588,7 @@ CppCCParser::debugPrint( )
         errmsg( "  Scope                  : " ); varList.at( i )->scope.debugOutput( ); errln ( "" );
     }
 
-    errln( "-- debugPrint end --" );
+    kdDebug(9007) << "-- debugPrint end --" << endl;
 }
 
 void
