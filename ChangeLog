@@ -1,3 +1,7 @@
+2001-11-19  F@lk Brettschneider <falk@kdevelop.org>
+    * alphabetic sorting of folders in classview
+    * folder entries in classview have deeper structure than 1 level now
+
 2001-11-13  F@lk Brettschneider <falk@kdevelop.org>
     * dangerous memory leak in QextMdiChildView fixed
     * no #if 0 in highlighting.cpp
