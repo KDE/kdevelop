@@ -4138,7 +4138,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
     ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
 
-    ON_STATUS_MSG(ID_TOOLS_DESIGNER,                        i18n("Start QT's disigner (dialog editor)"))
+    ON_STATUS_MSG(ID_TOOLS_DESIGNER,                        i18n("Start QT's designer (dialog editor)"))
 
     ON_STATUS_MSG(ID_OPTIONS_EDITOR,                        i18n("Sets the Editor's behavoir"))
     ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,                 i18n("Sets the Editor's colors"))
