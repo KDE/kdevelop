@@ -56,18 +56,32 @@ void PerforcePart::setupActions()
 {
     actionEdit = new KAction( i18n("Edit"), 0, this, SLOT(slotActionEdit()),
                 actionCollection(), "perforce_edit" );
+    actionEdit->setToolTip(i18n("Edit"));
+    actionEdit->setWhatsThis(i18n("<b>Edit</b><p>Opens file(s) in a client workspace for edit."));
     actionRevert = new KAction( i18n("Revert"), 0, this, SLOT(slotActionRevert()),
                 actionCollection(), "perforce_revert" );
+    actionRevert->setToolTip(i18n("Revert"));
+    actionRevert->setWhatsThis(i18n("<b>Revert</b><p>Discards changes made to open files."));
     actionSubmit = new KAction( i18n("Submit"), 0, this, SLOT(slotActionCommit()),
                 actionCollection(), "perforce_submit" );
+    actionSubmit->setToolTip(i18n("Submit"));
+    actionSubmit->setWhatsThis(i18n("<b>Submit</b><p>Sends changes made to open files to the depot."));
     actionSync = new KAction( i18n("Sync"), 0, this, SLOT(slotActionUpdate()),
                 actionCollection(), "perforce_sync" );
+    actionSync->setToolTip(i18n("Sync"));
+    actionSync->setWhatsThis(i18n("<b>Sync</b><p>Copies files from the depot into the workspace."));
     actionDiff = new KAction( i18n("Diff Against Repository"), 0, this, SLOT(slotActionDiff()),
                 actionCollection(), "perforce_diff" );
+    actionDiff->setToolTip(i18n("Diff against repository"));
+    actionDiff->setWhatsThis(i18n("<b>Diff against repository</b><p>Compares a client workspace file to a revision in the depot."));
     actionAdd = new KAction( i18n("Add to Repository"), 0, this, SLOT(slotActionAdd()),
                 actionCollection(), "perforce_add" );
+    actionAdd->setToolTip(i18n("Add to repository"));
+    actionAdd->setWhatsThis(i18n("<b>Add to repository</b><p>Open file(s) in a client workspace for addition to the depot."));
     actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotActionRemove()),
                 actionCollection(), "perforce_remove" );
+    actionRemove->setToolTip(i18n("Remove from repository"));
+    actionRemove->setWhatsThis(i18n("<b>Remove from repository</b><p>Open file(s) in a client workspace for deletion from the depot."));
 }
 
 void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
@@ -81,23 +95,30 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
         KPopupMenu *sub = new KPopupMenu(popup);
         QString name = fi.fileName();
         sub->insertTitle( i18n("Actions for %1").arg(name) );
-	
-        sub->insertItem( i18n("Edit"),
+
+        int id = sub->insertItem( i18n("Edit"),
                            this, SLOT(slotEdit()) );
-        sub->insertItem( i18n("Revert"),
+        sub->setWhatsThis(id, i18n("<b>Edit</b><p>Opens file(s) in a client workspace for edit."));
+        id = sub->insertItem( i18n("Revert"),
                            this, SLOT(slotRevert()) );
-        sub->insertItem( i18n("Submit"),
+        sub->setWhatsThis(id, i18n("<b>Revert</b><p>Discards changes made to open files."));
+        id = sub->insertItem( i18n("Submit"),
                            this, SLOT(slotCommit()) );
-        sub->insertItem( i18n("Sync"),
+        sub->setWhatsThis(id, i18n("<b>Submit</b><p>Sends changes made to open files to the depot."));
+        id = sub->insertItem( i18n("Sync"),
                            this, SLOT(slotUpdate()) );
+        sub->setWhatsThis(id, i18n("<b>Sync</b><p>Copies files from the depot into the workspace."));
         sub->insertSeparator();
-        sub->insertItem( i18n("Diff Against Repository"),
+        id = sub->insertItem( i18n("Diff Against Repository"),
                           this, SLOT(slotDiff()) );
-        sub->insertItem( i18n("Add to Repository"),
+        sub->setWhatsThis(id, i18n("<b>Diff against repository</b><p>Compares a client workspace file to a revision in the depot."));
+        id = sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
-        sub->insertItem( i18n("Remove From Repository"),
+        sub->setWhatsThis(id, i18n("<b>Add to repository</b><p>Open file(s) in a client workspace for addition to the depot."));
+        id = sub->insertItem( i18n("Remove From Repository"),
                            this, SLOT(slotRemove()) );
-        popup->insertItem(i18n("Perforce"), sub);
+        sub->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Open file(s) in a client workspace for deletion from the depot."));
+        id = popup->insertItem(i18n("Perforce"), sub);
     }
 }
 
