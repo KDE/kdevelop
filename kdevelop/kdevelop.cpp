@@ -63,6 +63,10 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     menuBar()->removeItemAt( 6);
     menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, 6);
 
+    // TODO: read from KConfig
+    moveToolBar( m_pTaskBar, QMainWindow::Bottom);
+    m_pTaskBar->show();
+
     resize(800,600); // temp
 }
 
