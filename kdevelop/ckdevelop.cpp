@@ -2575,7 +2575,7 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 void CKDevelop::slotHelpHistoryForward( int id_){
   slotStatusMsg(i18n("Opening history page..."));
 
-  int cur=history_list.at()+1;  
+  int cur=history_list.at()+1;
   QString str = history_list.at(cur+id_);
   if (str != 0){
     if(!bKDevelop)
@@ -3273,35 +3273,35 @@ void CKDevelop::slotDocumentDone()
 //  }
 
   if (s_tab_view->getCurrentTab()==BROWSER)
-     setMainCaption(BROWSER);
+    setMainCaption(BROWSER);
 
   if (pos!=-1)
-   url_wo_ref = actualURL.left(pos);
+    url_wo_ref = actualURL.left(pos);
 
   // insert into the history-list
   // the following if-statement isn't necessary, because
   //   slotDocumentDone isn't called in the other cases [use of KFMclient for non file://....htm(l)]
-  if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1){
-   // http aren't added to the history list ...
-
-   if (found == -1)
-   {
-    if(cur == 0 ){
-      history_list.append(actualURL);
-      history_title_list.append(actualTitle);
+  if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1)
+  {
+    // http aren't added to the history list ...
+    if (found == -1)
+    {
+      if(cur == 0 )
+      {
+        history_list.append(actualURL);
+        history_title_list.append(actualTitle);
+      }
+      else
+      {
+        history_list.insert(cur,actualURL);
+        history_title_list.insert(cur, actualTitle);
+      }
     }
-    else{
-      history_list.insert(cur,actualURL);
-      history_title_list.insert(cur, actualTitle);
-    }
-   }
-   else
-   {
-     // the desired URL was already found in the list
-
-     if (actualURL.contains("kdevelop/search_result.html") &&
-  history_title_list.at(found)!=actualTitle)
-     {
+    else
+    {
+      // the desired URL was already found in the list
+      if (actualURL.contains("kdevelop/search_result.html") && history_title_list.at(found)!=actualTitle)
+      {
          // this means... a new search_result.html is selected and an old one
          // was found in list
          //   so append it at the end
@@ -3311,65 +3311,59 @@ void CKDevelop::slotDocumentDone()
          cur=history_list.count();
          history_list.insert(cur,actualURL);
          history_title_list.insert(cur, actualTitle);
-     }
-     else
-     if (prev_was_search_result)
-      {
-         // this means... sort the found entry after the search_result.html-entry
-         //   so we can always use the back button to get the last search results
-         history_list.remove(found);
-         history_title_list.remove(found);
-         // correct cur after removing a list element
-         if (found<cur)
-           cur--;
-         history_list.insert(cur,actualURL);
-         history_title_list.insert(cur, actualTitle);
       }
       else
       {
-         cur=found;
+        if (prev_was_search_result)
+        {
+          // this means... sort the found entry after the search_result.html-entry
+          //   so we can always use the back button to get the last search results
+          history_list.remove(found);
+          history_title_list.remove(found);
+          // correct cur after removing a list element
+          if (found<cur)
+            cur--;
+          history_list.insert(cur,actualURL);
+          history_title_list.insert(cur, actualTitle);
+        }
+        else
+          cur=found;
       }
-   }
+    }
 
-   // set now the pointer of the history list
-   history_list.at(cur);
+    // set now the pointer of the history list
+    history_list.at(cur);
 
-   // reorganize the prev- and the next-historylist
-   history_next->clear();
-   history_prev->clear();
+    // reorganize the prev- and the next-historylist
+    history_next->clear();
+    history_prev->clear();
     
-   int i;
-   for ( i =0 ; i < cur; i++){
+    int i;
+    for ( i =0 ; i < cur; i++)
        history_prev->insertItem(history_title_list.at(i));
-   }
 
-   for (i = cur+1 ; i < (int) history_list.count(); i++){
+    for (i = cur+1 ; i < (int) history_list.count(); i++)
        history_next->insertItem(history_title_list.at(i));
-   }
 
-   // disable the back button if necessary
-   if (cur == 0){ // no more backwards
-   disableCommand(ID_HELP_BACK);
-   }
-   else {
-   enableCommand(ID_HELP_BACK);
-   }
+    // disable the back button if were at the start of the list
+    if (cur == 0)
+      disableCommand(ID_HELP_BACK);
+    else
+      enableCommand(ID_HELP_BACK);
 
-   // disable the forward button if necessary
-   if (cur >= ((int) history_list.count())-1){ // no more forwards
-   disableCommand(ID_HELP_FORWARD);
-   }
-   else {
-   enableCommand(ID_HELP_FORWARD);
-   }
-
+    // disable the forward button if we're at the end of the list
+    if (cur >= ((int) history_list.count())-1)
+      disableCommand(ID_HELP_FORWARD);
+    else
+      enableCommand(ID_HELP_FORWARD);
   }
 
   prev_was_search_result=false;
   disableCommand(ID_HELP_BROWSER_STOP);
 }
 
-void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
+void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
+{
   messages_widget->insertAtEnd(QCString(buffer,buflen+1));
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();

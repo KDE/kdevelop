@@ -1305,8 +1305,7 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
   								this, SLOT(slotURLSelected(KHTMLView*,const QString&,int,const char*))); 	
 
-  connect(browser_widget, SIGNAL(completed()),
-                  this, SLOT(slotDocumentDone(KHTMLView*)));
+  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));

@@ -70,16 +70,16 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   doc_pop->insertItem(BarIcon("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
   doc_pop->insertSeparator();
   doc_pop->insertItem(BarIcon("copy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
-	doc_pop->insertItem(i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
-	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
+  doc_pop->insertItem(i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
+  doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
-	doc_pop->insertItem(BarIcon("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
+  doc_pop->insertItem(BarIcon("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
-	
+  
 //  view()->setFocusPolicy( QWidget::StrongFocus );
   connect(this, SIGNAL( popupMenu( const QString&, const QPoint & ) ),
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
-	connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
+  connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
 }
 
@@ -97,21 +97,13 @@ void CDocBrowser::slotViewInKFM()
 
 void CDocBrowser::showURL(QString url, bool reload)
 {
- //read the htmlfile
-  //cerr << "URL:" << url << "\n";
+  // in some cases KHTMLView return "file:/file:/...." (which might be a bug in kdoc?)
+  // Anyway clean up the url from this error
+  if (url.left(12)=="file:/file:/")
+    url=url.mid(6, url.length());
 
   QString url_wo_ref=url; // without ref
   QString ref;
-        // in some cases KHTMLView return "file:/file:/...."
-        //  this will be here workarounded... and also on
-        //  slotURLonUrl in ckdevelop.cpp
-  QString corr=url;
-
-  if (corr.left(6)=="file:/")
-    corr=corr.mid(6, corr.length());
-
-  if (corr.left(5)=="file:")
-    url=corr;
 
   complete_url=url;
 
@@ -131,10 +123,10 @@ void CDocBrowser::showURL(QString url, bool reload)
   }
   // workaround for kdoc2 malformed urls in crossreferences to Qt-documentation
   if(url.contains("file%253A/"))
-		url.replace( QRegExp("file%253A/"), "" );
-		
+    url.replace( QRegExp("file%253A/"), "" );
+    
   if(url.contains("file%3A/"))
-		url.replace( QRegExp("file%3A/"), "" );
+    url.replace( QRegExp("file%3A/"), "" );
 
 //  setURLCursor( KCursor::waitCursor() );
   kapp->setOverrideCursor( Qt::waitCursor );
@@ -181,11 +173,14 @@ void CDocBrowser::showURL(QString url, bool reload)
     gotoAnchor(ref);
   else
     if (url_wo_ref == old_url)
-     view()->setContentsPos(0,0);
+      view()->setContentsPos(0,0);
 
 //  if (url_wo_ref == old_url)
-//     emit documentDone(this);  // simulate documentDone to put it in history...
+//    emit completed();  // simulate documentDone to put it in history...
+
   old_url = url_wo_ref;
+
+  emit completed();  // simulate documentDone to put it in history...
 }
 
 QString CDocBrowser::currentURL(){
@@ -199,7 +194,7 @@ void CDocBrowser::setDocBrowserOptions(){
 
   QString fs = config->readEntry( "BaseFontSize" );
   if ( !fs.isEmpty() )
-	fSize = fs.toInt();
+  fSize = fs.toInt();
   fs = "times";
   standardFont = config->readEntry( "StandardFont", fs );
 
@@ -232,8 +227,8 @@ void CDocBrowser::slotDocFontSize(int size){
 //  htmlview->setDefaultFontBase( size );
 //  htmlview->parse();
   showURL(complete_url, true);
-//	busy = true;
-//	emit enableMenuItems();
+//  busy = true;
+//  emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocStandardFont(const QString& n){
@@ -243,8 +238,8 @@ void CDocBrowser::slotDocStandardFont(const QString& n){
 //  htmlview->setStandardFont( n );
 //  htmlview->parse();
   showURL(complete_url, true);
-//	busy = true;
-//	emit enableMenuItems();
+//  busy = true;
+//  emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocFixedFont(const QString& n){
@@ -254,12 +249,12 @@ void CDocBrowser::slotDocFixedFont(const QString& n){
 //  htmlview->setFixedFont( n );
 //  htmlview->parse();
   showURL(complete_url, true);
-//	busy = true;
-//	emit enableMenuItems();
+//  busy = true;
+//  emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
-	const QColor &link, const QColor &vlink, const bool uline, const bool force)
+  const QColor &link, const QColor &vlink, const bool uline, const bool force)
 {
 #warning FIXME KHTMLSettings
 //  KHTMLView* htmlview=view();
@@ -269,8 +264,8 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 //  htmlview->setUnderlineLinks(uline);
 //  htmlview->parse();
   showURL(complete_url, true);
-//	busy = true;
-//	emit enableMenuItems();){
+//  busy = true;
+//  emit enableMenuItems();){
 }
 
 void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
@@ -326,7 +321,7 @@ void CDocBrowser::slotSearchText(){
   emit signalSearchText();
 }
 void CDocBrowser::slotGrepText(){
-	QString text = selectedText();
+  QString text = selectedText();
 
   emit signalGrepText(text);
 }
@@ -340,11 +335,11 @@ void CDocBrowser::slotURLForward(){
 }
 
 void CDocBrowser::slotSetFileTitle( const QString& title ){
-	m_title= title;
+  m_title= title;
 }
 
 QString CDocBrowser::currentTitle(){
-	return (m_refTitle.isEmpty()) ? m_title : m_refTitle+" - "+m_title;	
+  return (m_refTitle.isEmpty()) ? m_title : m_refTitle+" - "+m_title;  
 }
 
 
@@ -353,8 +348,7 @@ void  CDocBrowser::urlSelected ( const QString &url, int button, int state, cons
   KHTMLPart::urlSelected (url, button, state,_target);
 
   KURL cURL = completeURL( url );
-  openURL( cURL ) ;
-  show();
+  showURL( cURL.url() ) ;
 }
 
 //
@@ -368,139 +362,139 @@ void  CDocBrowser::urlSelected ( const QString &url, int button, int state, cons
 //-----------------------------------------------------------------------------
 
 CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
-	: QWidget( parent, name )
+  : QWidget( parent, name )
 {
-	readOptions();
+  readOptions();
 
-	QRadioButton *rb;
-	QLabel *label;
+  QRadioButton *rb;
+  QLabel *label;
 
-	QButtonGroup *bg = new QButtonGroup( i18n("Font Size"), this );
-	bg->setExclusive( TRUE );
-	bg->setGeometry( 15, 15, 300, 50 );
+  QButtonGroup *bg = new QButtonGroup( i18n("Font Size"), this );
+  bg->setExclusive( TRUE );
+  bg->setGeometry( 15, 15, 300, 50 );
 
-	rb = new QRadioButton( i18n("Small"), bg );
-	rb->setGeometry( 10, 20, 80, 20 );
-	rb->setChecked( fSize == 3 );
+  rb = new QRadioButton( i18n("Small"), bg );
+  rb->setGeometry( 10, 20, 80, 20 );
+  rb->setChecked( fSize == 3 );
 
-	rb = new QRadioButton( i18n("Medium"), bg );
-	rb->setGeometry( 100, 20, 80, 20 );
-	rb->setChecked( fSize == 4 );
+  rb = new QRadioButton( i18n("Medium"), bg );
+  rb->setGeometry( 100, 20, 80, 20 );
+  rb->setChecked( fSize == 4 );
 
-	rb = new QRadioButton( i18n("Large"), bg );
-	rb->setGeometry( 200, 20, 80, 20 );
-	rb->setChecked( fSize == 5 );
+  rb = new QRadioButton( i18n("Large"), bg );
+  rb->setGeometry( 200, 20, 80, 20 );
+  rb->setChecked( fSize == 5 );
 
-	label = new QLabel( i18n("Standard Font"), this );
-	label->setGeometry( 15, 90, 100, 20 );
+  label = new QLabel( i18n("Standard Font"), this );
+  label->setGeometry( 15, 90, 100, 20 );
 
-	QComboBox *cb = new QComboBox( false, this );
-	cb->setGeometry( 120, 90, 180, 25 );
-	getFontList( standardFonts, "-*-*-*-*-*-*-*-*-*-*-p-*-*-*" );
-	cb->insertStringList( standardFonts );
-	
+  QComboBox *cb = new QComboBox( false, this );
+  cb->setGeometry( 120, 90, 180, 25 );
+  getFontList( standardFonts, "-*-*-*-*-*-*-*-*-*-*-p-*-*-*" );
+  cb->insertStringList( standardFonts );
+  
   int i=0;
   for ( QStringList::Iterator it = standardFonts.begin(); it != standardFonts.end(); ++it, i++ )
-	{
-		if (stdName == *it)
+  {
+    if (stdName == *it)
     {
-			cb->setCurrentItem( i );
+      cb->setCurrentItem( i );
       break;
     }
-	}
-	connect( cb, SIGNAL( activated( const QString& ) ),
-		        SLOT( slotStandardFont( const QString& ) ) );
+  }
+  connect( cb, SIGNAL( activated( const QString& ) ),
+            SLOT( slotStandardFont( const QString& ) ) );
 
-	label = new QLabel( i18n( "Fixed Font"), this );
-	label->setGeometry( 15, 130, 100, 20 );
+  label = new QLabel( i18n( "Fixed Font"), this );
+  label->setGeometry( 15, 130, 100, 20 );
 
-	cb = new QComboBox( false, this );
-	cb->setGeometry( 120, 130, 180, 25 );
-	getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-m-*-*-*" );
-	getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-c-*-*-*" );
-	cb->insertStringList( fixedFonts );
-	
-	i=0;
+  cb = new QComboBox( false, this );
+  cb->setGeometry( 120, 130, 180, 25 );
+  getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-m-*-*-*" );
+  getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-c-*-*-*" );
+  cb->insertStringList( fixedFonts );
+  
+  i=0;
   for ( QStringList::Iterator it = fixedFonts.begin(); it != fixedFonts.end(); ++it, i++ )
-	{
-		if ( fixedName == *it )
+  {
+    if ( fixedName == *it )
     {
-			cb->setCurrentItem( i );
+      cb->setCurrentItem( i );
       break;
     }
-	}
-	connect( cb, SIGNAL( activated( const QString& ) ),
-		SLOT( slotFixedFont( const QString& ) ) );
+  }
+  connect( cb, SIGNAL( activated( const QString& ) ),
+    SLOT( slotFixedFont( const QString& ) ) );
 
-	connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
+  connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
 }
 
        
 void CDocBrowserFont::readOptions()
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DocBrowserAppearance" );
-	
-	QString fs = config->readEntry( "BaseFontSize" );
-	if ( !fs.isEmpty() )
-	{
-		fSize = fs.toInt();
-		if ( fSize < 3 )
-			fSize = 3;
-		else if ( fSize > 5 )
-			fSize = 5;
-	}
-	else
-		fSize = 3;
+  KConfig *config = KGlobal::config();
+  config->setGroup( "DocBrowserAppearance" );
+  
+  QString fs = config->readEntry( "BaseFontSize" );
+  if ( !fs.isEmpty() )
+  {
+    fSize = fs.toInt();
+    if ( fSize < 3 )
+      fSize = 3;
+    else if ( fSize > 5 )
+      fSize = 5;
+  }
+  else
+    fSize = 3;
 
-	stdName = config->readEntry( "StandardFont" );
-	if ( stdName.isEmpty() )
-		stdName = "times";
+  stdName = config->readEntry( "StandardFont" );
+  if ( stdName.isEmpty() )
+    stdName = "times";
 
-	fixedName = config->readEntry( "FixedFont" );
-	if ( fixedName.isEmpty() )
-		fixedName = "courier";
+  fixedName = config->readEntry( "FixedFont" );
+  if ( fixedName.isEmpty() )
+    fixedName = "courier";
 }
 
 void CDocBrowserFont::getFontList( QStringList &list, const char *pattern )
 {
-	int num;
+  int num;
 
-	char **xFonts = XListFonts( qt_xdisplay(), pattern, 2000, &num );
+  char **xFonts = XListFonts( qt_xdisplay(), pattern, 2000, &num );
 
-	for ( int i = 0; i < num; i++ )
-	{
-		addFont( list, xFonts[i] );
-	}
+  for ( int i = 0; i < num; i++ )
+  {
+    addFont( list, xFonts[i] );
+  }
 
-	XFreeFontNames( xFonts );
+  XFreeFontNames( xFonts );
 }
 
 void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
 {
-	const char *ptr = strchr( xfont, '-' );
-	if ( !ptr )
-		return;
-	
-	ptr = strchr( ptr + 1, '-' );
-	if ( !ptr )
-		return;
+  const char *ptr = strchr( xfont, '-' );
+  if ( !ptr )
+    return;
+  
+  ptr = strchr( ptr + 1, '-' );
+  if ( !ptr )
+    return;
 
-	QString font = ptr + 1;
+  QString font = ptr + 1;
 
-	int pos;
-	if ( ( pos = font.find( '-' ) ) > 0 )
-	{
-		font.truncate( pos );
+  int pos;
+  if ( ( pos = font.find( '-' ) ) > 0 )
+  {
+    font.truncate( pos );
 
-		if ( font.find( "open look", 0, false ) >= 0 )
-			return;
+    if ( font.find( "open look", 0, false ) >= 0 )
+      return;
 
-		
+    
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-  	{
-  			if ( *it == font )
-  				return;
+    {
+        if ( *it == font )
+          return;
     }
 
     list.append( font );
@@ -509,41 +503,41 @@ void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
 
 void CDocBrowserFont::slotApplyPressed()
 {
-	QString o;
+  QString o;
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DocBrowserAppearance" );
+  KConfig *config = KGlobal::config();
+  config->setGroup( "DocBrowserAppearance" );
 
-	QString fs;
-	fs.setNum( fSize );
-	o = config->writeEntry( "BaseFontSize", fs );
-	if ( o.isNull() || o.toInt() != fSize )
-		emit fontSize( fSize );
+  QString fs;
+  fs.setNum( fSize );
+  o = config->writeEntry( "BaseFontSize", fs );
+  if ( o.isNull() || o.toInt() != fSize )
+    emit fontSize( fSize );
 
-	o = config->writeEntry( "StandardFont", stdName );
-	if ( o.isNull() || o != stdName )
-		emit standardFont( stdName );
+  o = config->writeEntry( "StandardFont", stdName );
+  if ( o.isNull() || o != stdName )
+    emit standardFont( stdName );
 
-	o = config->writeEntry( "FixedFont", fixedName );
-	if ( o.isNull() || o != fixedName )
-		emit fixedFont( fixedName );
+  o = config->writeEntry( "FixedFont", fixedName );
+  if ( o.isNull() || o != fixedName )
+    emit fixedFont( fixedName );
 
-	config->sync();
+  config->sync();
 }
 
 void CDocBrowserFont::slotFontSize( int i )
 {
-	fSize = i+3;
+  fSize = i+3;
 }
 
 void CDocBrowserFont::slotStandardFont( const QString& n )
 {
-	stdName = n;
+  stdName = n;
 }
 
 void CDocBrowserFont::slotFixedFont( const QString& n )
 {
-	fixedName = n;
+  fixedName = n;
 }
 
 //-----------------------------------------------------------------------------
@@ -551,156 +545,156 @@ void CDocBrowserFont::slotFixedFont( const QString& n )
 CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
     : QWidget( parent, name )
 {
-	readOptions();
+  readOptions();
 
-	KColorButton *colorBtn;
-	QLabel *label;
+  KColorButton *colorBtn;
+  QLabel *label;
 
-	label = new QLabel( i18n("Background Color:"), this );
-	label->setGeometry( 35, 20, 150, 25 );
+  label = new QLabel( i18n("Background Color:"), this );
+  label->setGeometry( 35, 20, 150, 25 );
 
-	colorBtn = new KColorButton( bgColor, this );
-	colorBtn->setGeometry( 185, 20, 80, 30 );
-	connect( colorBtn, SIGNAL( changed( const QColor & ) ),
-		SLOT( slotBgColorChanged( const QColor & ) ) );
+  colorBtn = new KColorButton( bgColor, this );
+  colorBtn->setGeometry( 185, 20, 80, 30 );
+  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
+    SLOT( slotBgColorChanged( const QColor & ) ) );
 
-	label = new QLabel( i18n("Normal Text Color:"), this );
-	label->setGeometry( 35, 60, 150, 25 );
+  label = new QLabel( i18n("Normal Text Color:"), this );
+  label->setGeometry( 35, 60, 150, 25 );
 
-	colorBtn = new KColorButton( textColor, this );
-	colorBtn->setGeometry( 185, 60, 80, 30 );
-	connect( colorBtn, SIGNAL( changed( const QColor & ) ),
-		SLOT( slotTextColorChanged( const QColor & ) ) );
+  colorBtn = new KColorButton( textColor, this );
+  colorBtn->setGeometry( 185, 60, 80, 30 );
+  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
+    SLOT( slotTextColorChanged( const QColor & ) ) );
 
-	label = new QLabel( i18n("URL Link Color:"), this );
-	label->setGeometry( 35, 100, 150, 25 );
+  label = new QLabel( i18n("URL Link Color:"), this );
+  label->setGeometry( 35, 100, 150, 25 );
 
-	colorBtn = new KColorButton( linkColor, this );
-	colorBtn->setGeometry( 185, 100, 80, 30 );
-	connect( colorBtn, SIGNAL( changed( const QColor & ) ),
-		SLOT( slotLinkColorChanged( const QColor & ) ) );
+  colorBtn = new KColorButton( linkColor, this );
+  colorBtn->setGeometry( 185, 100, 80, 30 );
+  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
+    SLOT( slotLinkColorChanged( const QColor & ) ) );
 
-	label = new QLabel( i18n("Followed Link Color:"), this );
-	label->setGeometry( 35, 140, 150, 25 );
+  label = new QLabel( i18n("Followed Link Color:"), this );
+  label->setGeometry( 35, 140, 150, 25 );
 
-	colorBtn = new KColorButton( vLinkColor, this );
-	colorBtn->setGeometry( 185, 140, 80, 30 );
-	connect( colorBtn, SIGNAL( changed( const QColor & ) ),
-		SLOT( slotVLinkColorChanged( const QColor & ) ) );
+  colorBtn = new KColorButton( vLinkColor, this );
+  colorBtn->setGeometry( 185, 140, 80, 30 );
+  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
+    SLOT( slotVLinkColorChanged( const QColor & ) ) );
 
-	QCheckBox *underlineBox = new QCheckBox( i18n("Underline links"),
-	                                        this);
-	underlineBox->setGeometry(35, 180, 250, 30 );
-	underlineBox->setChecked(underlineLinks);
-	connect( underlineBox, SIGNAL( toggled( bool ) ),
-		SLOT( slotUnderlineLinksChanged( bool ) ) );
+  QCheckBox *underlineBox = new QCheckBox( i18n("Underline links"),
+                                          this);
+  underlineBox->setGeometry(35, 180, 250, 30 );
+  underlineBox->setChecked(underlineLinks);
+  connect( underlineBox, SIGNAL( toggled( bool ) ),
+    SLOT( slotUnderlineLinksChanged( bool ) ) );
 
-	QCheckBox *forceDefaultBox = new QCheckBox(
+  QCheckBox *forceDefaultBox = new QCheckBox(
                     i18n("Always use my colors"), this);
-	forceDefaultBox->setGeometry(35, 210, 250, 30 );
-	forceDefaultBox->setChecked(forceDefault);
-	connect( forceDefaultBox, SIGNAL( toggled( bool ) ),
-		SLOT( slotForceDefaultChanged( bool ) ) );
+  forceDefaultBox->setGeometry(35, 210, 250, 30 );
+  forceDefaultBox->setChecked(forceDefault);
+  connect( forceDefaultBox, SIGNAL( toggled( bool ) ),
+    SLOT( slotForceDefaultChanged( bool ) ) );
 }
 
 void CDocBrowserColor::readOptions()
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DocBrowserAppearance" );
-	
-	bgColor = config->readColorEntry( "BgColor", &white );
-	textColor = config->readColorEntry( "TextColor", &black );
-	linkColor = config->readColorEntry( "LinkColor", &blue );
-	vLinkColor = config->readColorEntry( "VLinkColor", &magenta );
-	underlineLinks = config->readBoolEntry( "UnderlineLinks", TRUE );
-	forceDefault = config->readBoolEntry( "ForceDefaultColors", true );
+  KConfig *config = KGlobal::config();
+  config->setGroup( "DocBrowserAppearance" );
+  
+  bgColor = config->readColorEntry( "BgColor", &white );
+  textColor = config->readColorEntry( "TextColor", &black );
+  linkColor = config->readColorEntry( "LinkColor", &blue );
+  vLinkColor = config->readColorEntry( "VLinkColor", &magenta );
+  underlineLinks = config->readBoolEntry( "UnderlineLinks", TRUE );
+  forceDefault = config->readBoolEntry( "ForceDefaultColors", true );
 
-	changed = false;
+  changed = false;
 }
 
 void CDocBrowserColor::slotApplyPressed()
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DocBrowserAppearance" );
+  KConfig *config = KGlobal::config();
+  config->setGroup( "DocBrowserAppearance" );
 
-	config->writeEntry( "BgColor", bgColor );
-	config->writeEntry( "TextColor", textColor );
-	config->writeEntry( "LinkColor", linkColor );
-	config->writeEntry( "VLinkColor", vLinkColor );
-	config->writeEntry( "UnderlineLinks", underlineLinks );
-	config->writeEntry( "ForceDefaultColors", forceDefault );
+  config->writeEntry( "BgColor", bgColor );
+  config->writeEntry( "TextColor", textColor );
+  config->writeEntry( "LinkColor", linkColor );
+  config->writeEntry( "VLinkColor", vLinkColor );
+  config->writeEntry( "UnderlineLinks", underlineLinks );
+  config->writeEntry( "ForceDefaultColors", forceDefault );
 
-	if ( changed )
-	    emit colorsChanged( bgColor, textColor, linkColor, vLinkColor,
+  if ( changed )
+      emit colorsChanged( bgColor, textColor, linkColor, vLinkColor,
                 underlineLinks, forceDefault );
 
-	config->sync();
+  config->sync();
 }
 
 void CDocBrowserColor::slotBgColorChanged( const QColor &col )
 {
-	if ( bgColor != col )
-    	    changed = true;
-	bgColor = col;
+  if ( bgColor != col )
+          changed = true;
+  bgColor = col;
 }
 
 void CDocBrowserColor::slotTextColorChanged( const QColor &col )
 {
-	if ( textColor != col )
-	    changed = true;
-	textColor = col;
+  if ( textColor != col )
+      changed = true;
+  textColor = col;
 }
 
 void CDocBrowserColor::slotLinkColorChanged( const QColor &col )
 {
-	if ( linkColor != col )
-    	    changed = true;
-	linkColor = col;
+  if ( linkColor != col )
+          changed = true;
+  linkColor = col;
 }
 
 void CDocBrowserColor::slotVLinkColorChanged( const QColor &col )
 {
-	if ( vLinkColor != col )
-    	    changed = true;
-	vLinkColor = col;
+  if ( vLinkColor != col )
+          changed = true;
+  vLinkColor = col;
 }
 
 void CDocBrowserColor::slotUnderlineLinksChanged( bool ulinks )
 {
-	if ( underlineLinks != ulinks )
-    	    changed = true;
-	underlineLinks = ulinks;
+  if ( underlineLinks != ulinks )
+          changed = true;
+  underlineLinks = ulinks;
 }
 
 void CDocBrowserColor::slotForceDefaultChanged( bool force )
 {
-	if ( forceDefault != force )
-    	    changed = true;
-	forceDefault = force;
+  if ( forceDefault != force )
+          changed = true;
+  forceDefault = force;
 }
 
 //-----------------------------------------------------------------------------
 
 
 CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name )
-	: QTabDialog( parent, name,TRUE ){
-	setCaption( i18n("Documentation Browser Options") );
+  : QTabDialog( parent, name,TRUE ){
+  setCaption( i18n("Documentation Browser Options") );
 
-	resize( 350, 330 );
+  resize( 350, 330 );
 
         setOKButton( i18n("OK") );
         setCancelButton( i18n("Cancel") );
         setApplyButton( i18n("Apply") );
 
-	fontOptions = new CDocBrowserFont( this, i18n("Fonts") );
-	addTab( fontOptions, i18n("Fonts") );
-	connect( this, SIGNAL( applyButtonPressed() ),
-		fontOptions, SLOT( slotApplyPressed() ) );
+  fontOptions = new CDocBrowserFont( this, i18n("Fonts") );
+  addTab( fontOptions, i18n("Fonts") );
+  connect( this, SIGNAL( applyButtonPressed() ),
+    fontOptions, SLOT( slotApplyPressed() ) );
 
-	colorOptions = new CDocBrowserColor( this, i18n("Colors") );
-	addTab( colorOptions, i18n("Colors") );
-	connect( this, SIGNAL( applyButtonPressed() ),
-		colorOptions, SLOT( slotApplyPressed() ) );
+  colorOptions = new CDocBrowserColor( this, i18n("Colors") );
+  addTab( colorOptions, i18n("Colors") );
+  connect( this, SIGNAL( applyButtonPressed() ),
+    colorOptions, SLOT( slotApplyPressed() ) );
 }
 
 

@@ -918,10 +918,13 @@ void CKDevInstall::slotAuto() // proceed >>
       kde_test=false;
   }
 
-  for ( QStringList::Iterator it = kde_dirs.begin(); it != kde_dirs.end(); ++it )
+  for ( QStringList::Iterator it = kde_dirs.begin(); !kde_test && it != kde_dirs.end(); ++it )
   {
     if(QFileInfo((*it)+"/kdecore/index.html").exists())
+    {
+      dir = (*it);
       kde_test=false;
+    }
   };
 
   if (!kde_test) {
