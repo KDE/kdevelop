@@ -29,6 +29,7 @@
 #include "ccconfigwidget.h"
 #include "subclassingdlg.h"
 #include "addmethoddialog.h"
+#include "addattributedialog.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -732,6 +733,10 @@ void CppSupportPart::addAttribute(const QString &className)
 	return;
     }
 
+    AddAttributeDialog dlg( this, pc, mainWindow()->main() );
+    dlg.exec();
+
+#if 0
     AddClassAttributeDialog dlg(classStore(), ccClassStore(), 0, "attrDlg");
     if( !dlg.exec() )
       return;
@@ -776,6 +781,7 @@ void CppSupportPart::addAttribute(const QString &className)
         kdDebug(9007) << "no edit" << endl;
 
     delete pa;
+#endif
 }
 
 
