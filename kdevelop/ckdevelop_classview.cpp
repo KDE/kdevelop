@@ -36,6 +36,8 @@
 #include <kdebug.h>
 #include "wzconnectdlgimpl.h"
 
+using namespace std;
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
