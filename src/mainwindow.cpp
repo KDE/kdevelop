@@ -284,6 +284,8 @@ void MainWindow::init()
           SIGNAL(sig_saveAdditionalViewProperties(const QString&, QDomElement*)),
           this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
 
+  connect(this,SIGNAL(viewActivated(KMdiChildView*)),this,SLOT(slotViewActivated(KMdiChildView*)));
+
   if (!isFakingSDIApplication()) {
     QPopupMenu *menu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
     unsigned int count = menuBar()->count();
@@ -302,6 +304,12 @@ void MainWindow::init()
   }
 }
 
+
+void MainWindow::slotViewActivated(KMdiChildView* view) {
+	kdDebug()<<"void MainWindow::slotViewActivated(KMdiChildView*)"<<endl;
+	QWidget *w=view->childAt(5,5);
+	PartController::getInstance()->slotCurrentChanged(w);
+}
 
 MainWindow::~MainWindow()
 {

@@ -135,7 +135,7 @@ private slots:
   void slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl);
   void slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl);
   void slotToggleViewbar();
-
+  void slotViewActivated(KMdiChildView* view);
 private:
 
   /** Fills the show-hide menu for a tool view (output or tree view) */

@@ -747,10 +747,13 @@ void PartController::slotCloseOtherWindows()
 
 void PartController::slotCurrentChanged(QWidget *w)
 {
+
+  kdDebug()<<"slotCurrentChanged***********************************+"<<endl;
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     if (it.current()->widget() == w)
     {
+      kdDebug()<<"found it**************************************"<<endl;
       setActivePart(it.current(), w);
       break;
     }
