@@ -89,6 +89,7 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
 #endif
+   QPoint		   m_undockPositioningOffset;
 
 // methods
 public:
@@ -104,6 +105,7 @@ public:
    virtual bool event(QEvent* e);
    virtual void setSysButtonsAtMenuPosition();
 	virtual int taskBarHeight() { return m_pTaskBar->height(); };
+	virtual void setUndockPositioningOffset( QPoint offset) { m_undockPositioningOffset = offset; };
 
 public slots:
    /**

@@ -125,10 +125,10 @@ public:
 	*/
 	void setClient(QextMdiChildView *w);
 	/**
-	* Reparents the client widget to 0 (desktop)
+	* Reparents the client widget to 0 (desktop), moves with an offset from the original position
 	* Removes the event filter.
 	*/
-	void unsetClient();
+	void unsetClient( QPoint positionOffset = QPoint(0,0));
 	/**
 	* Sets the window icon ponter : assumes 16x16 pixmaps that SHOULD BE NOT DELETED
 	* until this object is destroyed.

@@ -569,7 +569,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
 //============ unsetClient ============//
 
-void QextMdiChildFrm::unsetClient()
+void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 {
 	if(!m_pClient)return;
 	
@@ -589,7 +589,7 @@ void QextMdiChildFrm::unsetClient()
 
 	//Kewl...the reparent function has a small prob now..
 	//the new toplelvel widgets gets not reenabled for dnd
-	m_pClient->reparent(0,0,mapToGlobal(pos())-pos(),true);
+	m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,true);
 
    // remember the focus policies using the dictionary and reset them
    QObjectList *list = m_pClient->queryList( "QWidget" );

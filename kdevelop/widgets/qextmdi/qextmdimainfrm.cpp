@@ -220,9 +220,9 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd)
 	//Destroys the QextMdiChildFrm that contained it
 	if(!pWnd->parent())return;
 	QextMdiChildFrm *lpC=pWnd->mdiParent();
-	lpC->unsetClient();
+	lpC->unsetClient( m_undockPositioningOffset);
 	pWnd->youAreDetached();
-	m_pTaskBar->setActiveButton(pWnd);  //F.B.
+	m_pTaskBar->setActiveButton(pWnd);
 	m_pMdi->destroyChild(lpC,false); //Do not focus the new top child , we loose focus...
 }
 
@@ -434,12 +434,13 @@ void QextMdiMainFrm::closeActiveView()
  */
 void QextMdiMainFrm::switchToToplevelMode()
 {
-   int i = 0;
-	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
-		if( w->isAttached())
-		   i++;
-			detachWindow(w);
-	}
+   for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
+      if( w->isAttached()) {
+         if( w->isMaximized())
+            w->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
+         detachWindow(w);
+      }
+   }
 }
 
 /**
