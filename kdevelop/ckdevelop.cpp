@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
+#include "ckdevelop.moc"
 #include "api.h"
 #include "core.h"
 

@@ -17,6 +17,7 @@
 
 
 #include "cprjaddopts.h"
+#include "cprjaddopts.moc"
 #include "cproject.h"
 
 #include <qlabel.h>

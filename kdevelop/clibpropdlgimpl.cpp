@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "clibpropdlgimpl.h"
+#include "clibpropdlgimpl.moc"
 #include "cproject.h"
 
 #include <qbuttongroup.h>

@@ -19,6 +19,7 @@
  *
  */
 #include "caddtemplatedialog.h"
+#include "caddtemplatedialog.moc"
 #include <qlineedit.h>
 
 CAddTemplateDialog::CAddTemplateDialog( QWidget* parent, const char* name )

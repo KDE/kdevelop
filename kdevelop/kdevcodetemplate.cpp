@@ -19,6 +19,7 @@
  *
  */
 #include "kdevcodetemplate.h"
+#include "kdevcodetemplate.moc"
 #include "docviewman.h"
 
 #include <qdom.h>

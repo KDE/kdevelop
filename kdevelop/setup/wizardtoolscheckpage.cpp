@@ -29,6 +29,7 @@
 #include "ccreatedocdatabasedlg.h"
 #include "ckdevinstallstate.h"
 #include "wizardtoolscheckpage.h"
+#include "wizardtoolscheckpage.moc"
 
 WizardToolsCheckPage::WizardToolsCheckPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)

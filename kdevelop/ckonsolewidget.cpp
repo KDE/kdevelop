@@ -8,7 +8,7 @@
 
 
 #include "ckonsolewidget.h"
-
+#include "ckonsolewidget.moc"
 
 class CKonsoleWidgetPrivate
 {

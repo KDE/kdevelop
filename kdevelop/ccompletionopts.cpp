@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "ccompletionopts.h"
+#include "ccompletionopts.moc"
 #include "ckdevelop.h"
 #include <qcheckbox.h>
 

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "kdevcodecompletion.h"
+#include "kdevcodecompletion.moc"
 #include "simpleparser.h"
 #include "ckdevelop.h"
 #include "kdevregexp.h"

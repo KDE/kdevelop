@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "cprjcompopts.h"
+#include "cprjcompopts.moc"
 #include "cproject.h"
 #include "kdevsession.h"
 

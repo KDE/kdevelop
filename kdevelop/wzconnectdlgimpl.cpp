@@ -14,6 +14,7 @@
  ****************************************************************************/
 
 #include "wzconnectdlgimpl.h"
+#include "wzconnectdlgimpl.moc"
 #include "api.h"
 #include "cclasstooldlg.h"
 #include "cclonefunctiondlg.h"

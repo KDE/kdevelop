@@ -31,6 +31,7 @@
 #include <kstddirs.h>
 #include <kprocess.h>
 #include "kpp.h"
+#include "kpp.moc"
 #include <kmessagebox.h>
 #include <qpushbutton.h>
 

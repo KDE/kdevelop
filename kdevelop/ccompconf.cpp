@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "ccompconf.h"
+#include "ccompconf.moc"
 
 #include <qtoolbutton.h>
 #include <qlineedit.h>

@@ -17,6 +17,7 @@
 
 #include "../cproject.h"
 #include "ctagsdialog_impl.h"
+#include "ctagsdialog_impl.moc"
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>

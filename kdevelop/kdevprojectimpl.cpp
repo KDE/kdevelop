@@ -1,5 +1,6 @@
 
 #include "kdevprojectimpl.h"
+#include "kdevprojectimpl.moc"
 #include "ckdevelop.h"
 #include "cproject.h"
 

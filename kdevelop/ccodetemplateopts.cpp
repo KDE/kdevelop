@@ -19,6 +19,7 @@
  *
  */
 #include "ccodetemplateopts.h"
+#include "ccodetemplateopts.moc"
 #include "caddtemplatedialog.h"
 #include "kdevcodetemplate.h"
 
