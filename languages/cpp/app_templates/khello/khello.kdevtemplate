@@ -127,5 +127,5 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 
 [MSG]
 Type=message
-Comment=A KDE Hello world programm was created in %{dest}
+Comment=A KDE Hello world program was created in %{dest}
 
