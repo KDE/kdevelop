@@ -129,8 +129,9 @@ public:
 
   void switchToWorkspace(int id);
 
-  /**@param filename the absolute filename
-      @param bForceReload if true then enforce updating widget text from file
+  /** Switch the view to a certain file.
+   * @param filename the absolute filename
+   * @param bForceReload if true then enforce updating widget text from file
    */
   void switchToFile(QString filename, bool bForceReload=false); // filename = abs
 
@@ -152,23 +153,25 @@ public:
   KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
   KStatusBar*  kdlg_get_statusbar() { return kdlg_statusbar; }
   CTabCtl* kdlg_get_tabctl() { return  kdlg_tabctl;}
+  /** Get the current project. */
   CProject* getProject() {return prj;}
 
 
  public slots:
 
- 	void enableCommand(int id_);
+  void enableCommand(int id_);
   void disableCommand(int id_);
 
   ////////////////////////
   // FILE-Menu entries
   ///////////////////////
  
- 	/** generate a new file*/
-	 void slotFileNew();
+  /** generate a new file*/
+  void slotFileNew();
   /**open a file*/
   void slotFileOpen();
-  /** opens a file from the file_open_popup that is a delayed popup menu installed in the open file button of the toolbar */
+  /** opens a file from the file_open_popup that is a delayed popup menu 
+   *installed in the open file button of the toolbar */
   void slotFileOpen( int id_ );
   /** close the cuurent file*/
   void slotFileClose();
@@ -186,7 +189,7 @@ public:
   
   ////////////////////////
   // EDIT-Menu entries
-	///////////////////////
+  ///////////////////////
   /** Undo last editing step */
   void slotEditUndo();
   /** Redo last editing step */
@@ -205,8 +208,8 @@ public:
   void slotEditRepeatSearch();
   /** search in files, use grep and find*/
   void slotEditSearchInFiles();
-	/** runs ispell check on the actual editwidget */
-	void slotEditSpellcheck();
+  /** runs ispell check on the actual editwidget */
+  void slotEditSpellcheck();
   /** opens the search and replace dialog */
   void slotEditReplace();
   void slotEditIndent();
@@ -310,10 +313,10 @@ public:
   /** shows the Browser configuration dialog */
   void slotOptionsDocBrowser();
   /** shows the Tools-menu configuration dialog */
-	void slotOptionsToolsConfigDlg();
-	/** shows the spellchecker config dialog */
-	void slotOptionsSpellchecker();
-	/** shows the configuration dialog for enscript-printing */
+  void slotOptionsToolsConfigDlg();
+  /** shows the spellchecker config dialog */
+  void slotOptionsSpellchecker();
+  /** shows the configuration dialog for enscript-printing */
   void slotOptionsConfigureEnscript();
   /** shows the configuration dialog for a2ps printing */
   void slotOptionsConfigureA2ps();
@@ -340,7 +343,8 @@ public:
   void slotBookmarksSet();
   void slotBookmarksAdd();
   void slotBookmarksClear();
-	void slotBoomarksBrowserSelected(int);
+  void slotBoomarksBrowserSelected(int);
+
   ////////////////////////
   // HELP-Menu entries
   ///////////////////////
@@ -348,12 +352,14 @@ public:
   void slotHelpBack();
   /** goes one page forward in the documentatio browser */
   void slotHelpForward();
-  /** goes to the page in the history list by delayed popup menu on the back-button on the browser toolbar */
-	void slotHelpHistoryBack( int id_);
-  /** goes to the page in the history list by delayed popup menu on the forward-button on the browser toolbar */
-	void slotHelpHistoryForward(int id_);
-	/** reloads the currently opened page */
-	void slotHelpBrowserReload();
+  /** goes to the page in the history list by delayed popup menu on the 
+   *  back-button on the browser toolbar */
+  void slotHelpHistoryBack( int id_);
+  /** goes to the page in the history list by delayed popup menu on the
+   * forward-button on the browser toolbar */
+  void slotHelpHistoryForward(int id_);
+  /** reloads the currently opened page */
+  void slotHelpBrowserReload();
   /** search marked text */
   void slotHelpSearchText();
   /** search marked text with a text string */
@@ -503,7 +509,7 @@ public:
   QString searchToolGetURL(QString str);
   void refreshClassCombo();
   void refreshMethodCombo( CParsedClass *aClass );
-  void  saveCurrentWorkspaceIntoProject();
+  void saveCurrentWorkspaceIntoProject();
 
   void switchToKDevelop();
   void switchToKDlgEdit();
@@ -511,26 +517,29 @@ public:
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 protected:
-	/** reads all options and initializes values*/
-	void readOptions();
-	/** saves all options on queryExit() */
-	void saveOptions();
-	/* save the project of the current window and close the swallow widget. If project closing is cancelled, returns false */
-	virtual bool queryClose();
-	/* saves all options by calling saveOptions() */
-	virtual bool queryExit();
-	/* saves the currently opened project by the session manager and write the project file to the session config*/
-	virtual void saveProperties(KConfig* );
-	/** initializes the session windows and opens the projects of the last session*/
-	virtual void readProperties(KConfig* );
+  /** reads all options and initializes values*/
+  void readOptions();
+  /** saves all options on queryExit() */
+  void saveOptions();
+  /** save the project of the current window and close the swallow widget. 
+   * If project closing is cancelled, returns false */
+  virtual bool queryClose();
+  /** saves all options by calling saveOptions() */
+  virtual bool queryExit();
+  /** saves the currently opened project by the session manager and write 
+   * the project file to the session config*/
+  virtual void saveProperties(KConfig* );
+  /** initializes the session windows and opens the projects of the last
+   * session */
+  virtual void readProperties(KConfig* );
 	
 private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
-	QPopupMenu* bookmarks_menu;
-	QPopupMenu* doc_bookmarks;
+  QPopupMenu* bookmarks_menu;
+  QPopupMenu* doc_bookmarks;
 
   QPopupMenu* project_menu;
   QPopupMenu* workspaces_submenu;
@@ -541,10 +550,10 @@ private:
   QPopupMenu* help_menu;
   QWhatsThis* whats_this;
 	
-	QPopupMenu* history_prev;
-	QPopupMenu* history_next;
-	QPopupMenu* file_open_popup;
-	QStrList file_open_list;	
+  QPopupMenu* history_prev;
+  QPopupMenu* history_next;
+  QPopupMenu* file_open_popup;
+  QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
   QPopupMenu* kdlg_file_menu;
   QPopupMenu* kdlg_edit_menu;
@@ -581,11 +590,16 @@ private:
   
   
   KIconLoader icon_loader;
-  KShellProcess process; // for tools,compiler,make,kodc
-  KShellProcess appl_process; //only for selfmade appl
-  KShellProcess shell_process; // for kdoc,sgmltools ...
-  KShellProcess search_process; // search with glimpse
-  CProject* prj; // at the moment only one project at the same time
+  /** for tools,compiler,make,kodc */
+  KShellProcess process;
+  /** only for selfmade appl */
+  KShellProcess appl_process;
+  /**  for kdoc,sgmltools ... */
+  KShellProcess shell_process;
+  /** search with glimpse */
+  KShellProcess search_process;
+  /** at the moment only one project at the same time */
+  CProject* prj;
 
   KAccel *accel;
   KConfig* config;
@@ -593,23 +607,35 @@ private:
 
   // for the browser
   QStrList history_list;
-	QStrList history_title_list;
-	QStrList doc_bookmarks_list;
-	QStrList doc_bookmarks_title_list;
+  QStrList history_title_list;
+  QStrList doc_bookmarks_list;
+  QStrList doc_bookmarks_title_list;
 	
   QList<TEditInfo> edit_infos;
 
+  ///////////////////////////////
   //some widgets for the mainview
-  CTabCtl* s_tab_view; // the tabbar for the sourcescode und browser 
-  CTabCtl* t_tab_view; // the tabbar for the trees
-  CTabCtl* o_tab_view; // the tabbar for the output_widgets 
+  ///////////////////////////////
 
-  CTabCtl* kdlg_tabctl;  // the tabbar for the kdlg view
-  KDlgEditWidget* kdlg_edit_widget; // the editing view of kdlg
-  KDlgPropWidget* kdlg_prop_widget; // the properties window of kdlg
-  KDlgWidgets* kdlg_widgets_view;  // the first tab of kdlg_tabctl
-  KDlgDialogs* kdlg_dialogs_view;  // the second tab of kldg_tabctl
-  KDlgItems*   kdlg_items_view;    // the third tab of kldg_tabctl
+  /** The tabbar for the sourcescode und browser. */
+  CTabCtl* s_tab_view;
+  /** The tabbar for the trees. */
+  CTabCtl* t_tab_view;
+  /** The tabbar for the output_widgets. */
+  CTabCtl* o_tab_view;
+
+  /** The tabbar for the kdlg view. */
+  CTabCtl* kdlg_tabctl;
+  /** The editing view of kdlg. */
+  KDlgEditWidget* kdlg_edit_widget;
+  /** The properties window of kdlg. */
+  KDlgPropWidget* kdlg_prop_widget;
+  /** The first tab of kdlg_tabctl. */
+  KDlgWidgets* kdlg_widgets_view;
+  /** The second tab of kldg_tabctl. */
+  KDlgDialogs* kdlg_dialogs_view;
+  /** the third tab of kldg_tabctl. */
+  KDlgItems*   kdlg_items_view;
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources
@@ -617,13 +643,20 @@ private:
   CDocBrowser* browser_widget;
   KSwallowWidget* swallow_widget;
  
-  CClassView* class_tree; // the classview
-  CLogFileView* log_file_tree; // the logical filetree
-  CRealFileView* real_file_tree; // the real filetree
-  CDocTree* doc_tree; // the documentation tre
+  /** The classview. */
+  CClassView* class_tree;
+  /** The logical filetree. */
+  CLogFileView* log_file_tree;
+  /** The real filetree. */
+  CRealFileView* real_file_tree;
+  /** The documentation tree. */
+  CDocTree* doc_tree;
   
-  COutputWidget* messages_widget; // output for the compiler ...
+  /** Output for the compiler ... */
+  COutputWidget* messages_widget;
+  /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
+  /** stderr output. */
   COutputWidget* stderr_widget;
 
   int tree_view_pos;
@@ -675,60 +708,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
