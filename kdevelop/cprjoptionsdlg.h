@@ -32,6 +32,8 @@ class CPrjCompOpts;
 class CPrjAddOpts;
 class KDevSession;
 
+#include <qstring.h>
+#include <qstringlist.h>
 #include <kdialogbase.h>
 #include "cprjconfchange.h"
 
@@ -57,6 +59,9 @@ private:
   void addLinkerPage();
   void addMakePage();
   void addBinPage();
+  bool removeLibFromList(QStringList& libs, const QString& lib1,
+               const QString& lib2 = QString::null);
+
 
 protected:
 	CPrjCompOpts* compdlg;

@@ -229,15 +229,32 @@ void CPrjOptionsDlg::addCompilerWarningsPage()
 // stupid littly helper function to find out whether a desired lib
 // is in the StringList. Returns true if lib1 or lib2 has been found
 // and also removes them from the list.
-bool removeLibFromList( QStringList& libs, const QString& lib1, const QString& lib2 = QString::null )
+// This also checks multiple occurrence of the same libname
+bool CPrjOptionsDlg::removeLibFromList( QStringList& libs, const QString& lib1,
+               const QString& lib2)
 {
   bool fnd = false;
-  if ( !lib1.isEmpty() && ( libs.remove( lib1 ) > 0 ) ) {
-    fnd = true;
+  QStringList::Iterator it;
+
+  for (it=libs.begin(); it!=libs.end();)
+  {
+    if (!lib1.isEmpty() && (*it)==lib1)
+    {
+      it=libs.remove(it);
+      fnd=true;
+    }
+    else
+    {
+      if (!lib2.isEmpty() && (*it)==lib2)
+      {
+        it=libs.remove(it);
+        fnd=true;
+      }
+      else
+        ++it;
+    }
   }
-  if ( !lib2.isEmpty() && ( libs.remove( lib2 ) > 0 ) ) {
-    fnd = true;
-  }
+
   return fnd;
 }
 
@@ -385,8 +402,10 @@ void CPrjOptionsDlg::addLinkerPage()
   l_math=new QCheckBox(libs_group,"l_math");
   grid4->addWidget (l_math,0,3);
   l_math->setText("math");
-  l_math->setChecked(l_khtml->isChecked() ||
-                     removeLibFromList(ldAdds, "-lm"));
+  /* The order here is important... first remove any additional "-lm" string, then test
+     if l_khtml is checked
+  */
+  l_math->setChecked(removeLibFromList(ldAdds, "-lm") || l_khtml->isChecked());
   QWhatsThis::add(l_math, i18n("Math library"));
 
   QLabel* addit_ldadd_label;
