@@ -49,43 +49,136 @@ public:
 
   KDevPartController(QWidget *parent);
 
-  virtual void setEncoding(const QString &serviceType) = 0;
+  /**
+   * Call before a call to @ref editDocument to set the encoding of the document to be opened
+   * @param encoding the encoding to open as
+   */
+  virtual void setEncoding(const QString &encoding) = 0;
+  
+  /**
+   * Open a new or existing document
+   * @param url the URL of the document to open
+   * @param lineNum the line number to place the cursor at, if applicable
+   * @param col the column number to place the cursor at, if applicable
+   */
   virtual void editDocument(const KURL &url, int lineNum=-1, int col=-1) = 0;
+  
+  /**
+   * Show a HTML document in the documentation viewer
+   * @param url the URL of the document to view
+   * @param context a string used to identify a specific documentation viewer
+   */
   virtual void showDocument(const KURL &url, const QString &context = QString::null) = 0;
+  
+  /**
+   * Embed a part into the main area of the mainwindow
+   * @param part the part to embed
+   * @param name the name of the part
+   * @param shortDescription currently not used (??)
+   */
   virtual void showPart( KParts::Part* part, const QString& name, const QString& shortDescription ) = 0;
-  virtual KParts::Part* findOpenDocument(const KURL& url) = 0;
-
-  virtual void saveAllFiles() = 0;
-  virtual void revertAllFiles() = 0;
-  /** true if the file has been modified outside KDevelop */
-  virtual bool isDirty(KParts::ReadOnlyPart*) = 0;
-  virtual bool closePartForWidget( const QWidget* widget ) = 0;
-  virtual bool closePartForURL( const KURL & url ) = 0;
+  
+  /**
+   * Find the embedded part corresponding to a given URL
+   * @param url the URL of the document
+   * @return the corresponding part, 0 if not found.
+   */
+  virtual KParts::ReadOnlyPart * partForURL( const KURL & url ) = 0;
+    
+  /**
+   * Find the embedded part corresponding to a given main widget
+   * @param widget the parts main widget
+   * @return the corresponding part, 0 if not found
+   */
+  virtual KParts::Part * partForWidget( const QWidget * widget ) = 0;
+  
+  /**
+   * Returns a list of open documents
+   * @return the list of URLs 
+   */
+  virtual KURL::List openURLs() = 0;
 
   /**
-   * Use to query the state of a document
+   * Save all open files
    */
-  virtual DocumentState documentState( KURL const & ) = 0;
+  virtual void saveAllFiles() = 0;
+  
+  /**
+   * Save a list of files
+   * @param list the list of URLs to save
+   */
+  virtual void saveFiles( const KURL::List & list) = 0;
+  
+  /**
+   * Reload all open files
+   */
+  virtual void revertAllFiles() = 0;
+  
+  /**
+   * Reload a list of files
+   * @param list the list of URLs to reload
+   */
+  virtual void revertFiles( const KURL::List & list ) = 0;
+  
+  /**
+   * Close all open files
+   */
+  virtual bool closeAllFiles() = 0;
+  
+  /**
+   * Close a list of files
+   * @param list a list of URLs for the files to close
+   */
+  virtual bool closeFiles( const KURL::List & list ) = 0;
+  
+  /**
+   * Close this part (close the window/tab for this part)
+   * @param part the part to close
+   * @return 
+   */
+  virtual bool closePart( KParts::Part * part ) = 0;  
+  
+  /**
+   * Activate this part
+   * @param part the part to activate
+   */
+  virtual void activatePart( KParts::Part * part ) = 0;
+
+  /**
+   * Check the state of a document
+   * @param url the URL to check 
+   * @return the DocumentState enum corresponding to the document state
+   */
+  virtual DocumentState documentState( KURL const & url ) = 0;
 
 signals:
 
   /**
    * Emitted when a document has been saved.
    */
-  void savedFile(const QString &fileName);
   void savedFile( const KURL & );
 
   /**
    * Emitted when a document has been loaded.
    */
-  void loadedFile(const QString &fileName);
   void loadedFile( const KURL & );
 
   /**
    * Emitted when a file has been modified outside of KDevelop
    */
-  void fileDirty(const QString &fileName);
   void fileDirty( const KURL & );
+  
+  /**
+   * this is typically emitted when an editorpart does "save as"
+   * which will change the part's URL
+   */
+  void partURLChanged( KParts::ReadOnlyPart * );
+
+  /**
+   *  this is emitted when the document changes, 
+   *  either internally or on disc
+   */
+  void documentChangedState( const KURL &, DocumentState );
   
 
 };
