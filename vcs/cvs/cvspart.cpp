@@ -1033,6 +1033,13 @@ void CvsPart::slotProjectOpened()
 {
     kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << endl;
 
+    // Avoid bothering the user if this project has no support for CVS
+    if (!isValidDirectory( project()->projectDirectory() ))
+    {
+        kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
+        return;
+    }
+
     CvsOptions *options = CvsOptions::instance();
     options->load( *projectDom() );
 
@@ -1056,9 +1063,31 @@ void CvsPart::slotProjectClosed()
 {
     kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << endl;
 
+    // Avoid bothering the user if this project has no support for CVS
+    if (!isValidDirectory( project()->projectDirectory() ))
+    {
+        kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
+        return;
+    }
+
     CvsOptions *options = CvsOptions::instance();
     options->save( *projectDom() );
     delete options;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsPart::isValidDirectory( const QString &dirPath ) const
+{
+    QDir cvsdir( dirPath );
+    QString entriesFileName = dirPath + QDir::separator() + "Entries";
+    QString rootFileName = dirPath + QDir::separator()  + "Entries";
+    QString repoFileName = dirPath + QDir::separator()  + "Repository";
+
+    return cvsdir.exists() &&
+        QFile::exists( entriesFileName ) &&
+        QFile::exists( rootFileName ) &&
+        QFile::exists( repoFileName );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

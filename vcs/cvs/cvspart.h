@@ -53,6 +53,11 @@ public:
     */
     virtual void createNewProject( const QString& dir );
 
+    /**
+    * Check if the directory is valid for the project
+    */
+    virtual bool isValidDirectory( const QString &dirPath ) const;
+
 private slots:
     //! Add menu items binded to cvs operations' slots to @p popup, using
     //! data in @p context.
