@@ -210,56 +210,75 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	insert( e->text(), FALSE );
 	e->accept();
     } else if (e->state() == Qt::ControlButton) {
+	bool bRemove = false;
         switch (e->key()) {
         case Qt::Key_Backspace:
-            if (!hasSelectedText()) {
-                removeSelection();
-                moveCursor( MoveWordBackward, true );
-            }
-            removeSelectedText();
-            break;
-        case Qt::Key_Delete:
-            if (!hasSelectedText()) {
-                removeSelection();
-                moveCursor( MoveWordForward, true );
-            }
-            removeSelectedText();
-            break;
+	    bRemove = true;
+	    if (!hasSelectedText()) {
+		removeSelection();
+	    }
 	case Qt::Key_Left: {
 	    QTextCursor* cur = textCursor();
-	    if (cur->index() > 0 && cur->paragraph()->at(cur->index()-1)->c.isSpace()) {
-		moveCursor( MoveWordBackward, false );
+	    if (cur->index() < 1) { 
+		moveCursor( MoveBackward, bRemove ); break; 
 	    }
-	    // end of previous word
+	    QChar c(cur->paragraph()->at(cur->index()-1)->c);   
 	    bool firstMove = true; // make sure we do move
-	    while (cur->index() > 0 && (!isDelimiter(cur->paragraph()->at(cur->index()-1)->c)) || firstMove) {
-		moveCursor( MoveBackward, false ); firstMove = false; cur = textCursor();
+	    if (c.isSpace()) {
+		while (cur->index() > 0 && (cur->paragraph()->at(cur->index()-1)->c.isSpace() || firstMove)) {
+		    moveCursor( MoveBackward, bRemove ); firstMove = false; cur = textCursor();
+		}
 	    }
-	    while (cur->index() > 0 && isDelimiter(cur->paragraph()->at(cur->index()-1)->c)) {
-		moveCursor( MoveBackward, false ); cur = textCursor();
+	    else if (isDelimiter(c)) {
+		while (cur->index() > 0 && (isDelimiter(cur->paragraph()->at(cur->index()-1)->c) || firstMove)) {
+		    moveCursor( MoveBackward, bRemove ); firstMove = false; cur = textCursor();
+		}
+	    }
+	    else if (!isDelimiter(c)) {
+		while (cur->index() > 0 && (!isDelimiter(cur->paragraph()->at(cur->index()-1)->c) || firstMove)) {
+		    moveCursor( MoveBackward, bRemove ); firstMove = false; cur = textCursor();
+		}
 	    }
 	    }
 	    break;
+        case Qt::Key_Delete:
+	    bRemove = true;
+	    if (!hasSelectedText()) {
+		removeSelection();
+	    }
 	case Qt::Key_Right: {
 	    QTextCursor* cur = textCursor();
-	    if (cur->paragraph()->at(cur->index())->c.isSpace()) {
-		moveCursor( MoveWordForward, false );
-		break;
+	    if (cur->atParagEnd()) {
+		moveCursor( MoveForward, bRemove ); break; 
 	    }
-	    // beginning of next word
+	    QChar c(cur->paragraph()->at(cur->index())->c);
 	    bool firstMove = true; // make sure we do move
-	    while ((!isDelimiter(cur->paragraph()->at(cur->index())->c) || firstMove) && !cur->atParagEnd()) {
-		moveCursor( MoveForward, false ); firstMove = false; cur = textCursor();
+	    if (c.isSpace()) {
+		while (!cur->atParagEnd() && (cur->paragraph()->at(cur->index())->c.isSpace() || firstMove)) {
+		    moveCursor( MoveForward, bRemove ); firstMove = false; cur = textCursor();
+		}
 	    }
-	    while (isDelimiter(cur->paragraph()->at(cur->index())->c) && !cur->atParagEnd()) {
-		moveCursor( MoveForward, false ); cur = textCursor();
+	    else if (!isDelimiter(c)) {
+		while (!cur->atParagEnd() && (!isDelimiter(cur->paragraph()->at(cur->index())->c) || firstMove)) {
+		    moveCursor( MoveForward, bRemove ); firstMove = false; cur = textCursor();
+		}
+	    }
+	    else if (isDelimiter(c)) {
+		while (!cur->atParagEnd() && (isDelimiter(cur->paragraph()->at(cur->index())->c) || firstMove)) {
+		    moveCursor( MoveForward, bRemove ); firstMove = false; cur = textCursor();
+		}
 	    }
 	    }
 	    break;
         default:
-        	KTextEdit::keyPressEvent( e );
+	    KTextEdit::keyPressEvent( e );
+	    break;
         }
-    } else if( e->key() == Key_Backspace ){
+	if (bRemove) {
+	    removeSelectedText();
+        }
+    } 
+    else if( e->key() == Key_Backspace ){
 	if( backspaceIndentEnabled() ){
 	    backspaceIndent( e );
 	} else {
