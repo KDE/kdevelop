@@ -378,6 +378,9 @@ void CUpdateKDEDocDlg::OK(){
           //  it would block KDevelop
 	  if (!QFileInfo(qt_kdoc).exists())
           {
+            // try to create, if doesn´t qt2kdoc would fail
+            QDir().mkdir(new_doc_path+"kdoc-reference");
+
             cmd = "qt2kdoc --url=file:";
             cmd += qtPath;
             cmd += " --outdir=";
