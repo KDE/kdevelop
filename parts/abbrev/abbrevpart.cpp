@@ -1,8 +1,10 @@
 /***************************************************************************
  *   Copyright (C) 2002 Roberto Raggi                                      *
- *   roberto@kdevelop.org                                                 *
+ *   roberto@kdevelop.org                                                  *
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +26,7 @@
 #include <kgenericfactory.h>
 #include <kaction.h>
 #include <kconfig.h>
+#include <kio/netaccess.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -124,7 +127,7 @@ void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
 
     if( !docIface || !docIface->widget() )
 	return;
-    
+
     disconnect( docIface, 0, this, 0 );
     disconnect( docIface->widget(), 0, this, 0 );
 
@@ -142,7 +145,12 @@ void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
 void AbbrevPart::load()
 {
     KStandardDirs *dirs = AbbrevFactory::instance()->dirs();
-    QStringList files = dirs->findAllResources("codetemplates", QString::null, false, true);
+    QString localTemplatesFile = locateLocal("codetemplates", "templates", AbbrevFactory::instance());
+    QStringList files;
+    if (KIO::NetAccess::exists(localTemplatesFile))
+        files << localTemplatesFile;
+    else
+        files = dirs->findAllResources("codetemplates", QString::null, false, true);
 
     QStringList::ConstIterator it;
     for (it = files.begin(); it != files.end(); ++it) {
@@ -169,25 +177,26 @@ void AbbrevPart::load()
 
 void AbbrevPart::save()
 {
-    QString fn = AbbrevFactory::instance()->dirs()->saveLocation("data", "codetemplates", true);
+    QString fn = AbbrevFactory::instance()->dirs()->saveLocation("codetemplates", "", true);
     kdDebug(9028) << "fn = " << fn << endl;
 
     QDomDocument doc( "Templates" );
-    QAsciiDictIterator<CodeTemplate> it( m_templates );
     QDomElement root = doc.createElement( "Templates" );
     doc.appendChild( root );
-    while( it.current() ){
-        CodeTemplate* templ = it.current();
+
+    QPtrList<CodeTemplate> templates = m_templates.allTemplates();
+    CodeTemplate *templ;
+    for (templ = templates.first(); templ; templ = templates.next())
+    {
         QDomElement e = doc.createElement( "Template" );
-        e.setAttribute( "name", it.currentKey() );
+        e.setAttribute( "name", templ->name );
         e.setAttribute( "description", templ->description );
         e.setAttribute( "suffixes", templ->suffixes );
         e.setAttribute( "code", templ->code );
         root.appendChild( e );
-        ++it;
     }
 
-    QFile f( fn );
+    QFile f( fn + "templates" );
     if( f.open(IO_WriteOnly) ){
         QTextStream stream( &f );
         stream << doc.toString();
@@ -245,12 +254,26 @@ void AbbrevPart::slotExpandText()
 
 QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString &text, const QString &prefix)
 {
-    QMap<QString, bool> map;
     QValueList<KTextEditor::CompletionEntry> entries;
+
+    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
+        kdDebug() << "no rw part" << endl;
+        return entries;
+    }
+
+    QString suffix = part->url().url();
+    int pos = suffix.findRev('.');
+    if (pos != -1)
+        suffix.remove(0, pos+1);
+    kdDebug() << "AbbrevPart::findAllWords with suffix " << suffix << endl;
+
+    QMap<QString, bool> map;
     QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
 
     int idx = 0;
-    int pos = 0;
+    pos = 0;
     int len = 0;
     while ( (pos = rx.search(text, idx)) != -1 ) {
 	len = rx.matchedLength();
@@ -264,13 +287,12 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         idx = pos + len + 1;
     }
 
-    QAsciiDictIterator<CodeTemplate> it( m_templates );
-    while( it.current() ) {
-	KTextEditor::CompletionEntry e;
-	e.text = it.current()->description + " <abbrev>";
-	e.userdata = it.currentKey();
-	entries << e;
-	++it;
+    QMap<QString, CodeTemplate*> m = m_templates[suffix];
+    for (QMap<QString, CodeTemplate*>::const_iterator it = m.begin(); it != m.end() ; ++it) {
+        KTextEditor::CompletionEntry e;
+        e.text = it.data()->description + " <abbrev>";
+        e.userdata = it.key();
+        entries << e;
     }
 
     return entries;
@@ -307,27 +329,15 @@ void AbbrevPart::slotExpandAbbrev()
     QString word = currentWord();
     kdDebug(9028) << "Expanding word " << word << " with suffix " << suffix << "." << endl;
 
-    QAsciiDictIterator<CodeTemplate> it(m_templates);
-    for (; it.current(); ++it) {
-        if (it.currentKey() != word)
-            continue;
-        QString suffixes = it.current()->suffixes;
-        int pos = suffixes.find('(');
-        if (pos == -1)
-            continue;
-        suffixes.remove(0, pos+1);
-        pos = suffixes.find(')');
-        if (pos == -1)
-            continue;
-        suffixes.remove(pos, suffixes.length()-pos);
-        QStringList suffixList = QStringList::split(",", suffixes);
-        if (!suffixList.contains(suffix))
+    QMap<QString, CodeTemplate*> m = m_templates[suffix];
+    for (QMap<QString, CodeTemplate*>::const_iterator it = m.begin(); it != m.end() ; ++it) {
+        if (it.key() != word)
             continue;
 
         uint line, col;
         cursoriface->cursorPositionReal(&line, &col);
         editiface->removeText( line, col-word.length(), line, col );
-        insertChars(it.current()->code );
+        insertChars(it.data()->code );
     }
 }
 
@@ -393,20 +403,13 @@ void AbbrevPart::addTemplate( const QString& templ,
                               const QString& suffixes,
                               const QString& code)
 {
-    CodeTemplate* t = m_templates.find( templ.latin1() );
-    if( !t ){
-        t = new CodeTemplate();
-        m_templates.insert( templ.latin1(), t );
-    }
-    t->description = descr;
-    t->suffixes = suffixes;
-    t->code = code;
+    m_templates.insert(templ, descr, code, suffixes);
 }
 
 
-void AbbrevPart::removeTemplate( const QString& templ )
+void AbbrevPart::removeTemplate( const QString &suffixes, const QString &name )
 {
-    m_templates.remove( templ.latin1() );
+    m_templates.remove( suffixes, name );
 }
 
 
@@ -415,9 +418,9 @@ void AbbrevPart::clearTemplates()
     m_templates.clear();
 }
 
-QAsciiDictIterator<CodeTemplate> AbbrevPart::templates() const
+CodeTemplateList AbbrevPart::templates() const
 {
-    return QAsciiDictIterator<CodeTemplate>( m_templates );
+    return m_templates;
 }
 
 void AbbrevPart::slotActivePartChanged( KParts::Part* part )
@@ -445,7 +448,7 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 
     if( !editIface || !viewCursorIface || !completionIface )
     	return;
-    
+
     disconnect( part->widget(), 0, this, 0 );
     disconnect( doc, 0, this, 0 );
 
@@ -501,6 +504,18 @@ void AbbrevPart::slotTextChanged()
 void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QString* text )
 {
     kdDebug(9028) << "AbbrevPart::slotFilterInsertString()" << endl;
+    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
+        kdDebug() << "no rw part" << endl;
+        return;
+    }
+
+    QString suffix = part->url().url();
+    int pos = suffix.findRev('.');
+    if (pos != -1)
+        suffix.remove(0, pos+1);
+    kdDebug() << "AbbrevPart::slotFilterInsertString with suffix " << suffix << endl;
 
     if( !entry || !text || !viewCursorIface || !editIface )
 	return;
@@ -512,7 +527,7 @@ void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QS
         uint line, col;
         viewCursorIface->cursorPositionReal( &line, &col );
         editIface->removeText( line, col-currentWord().length(), line, col );
-	insertChars( m_templates[entry->userdata.latin1()]->code );
+	insertChars( m_templates[suffix][entry->userdata]->code );
     }
 }
 
@@ -538,6 +553,94 @@ void AbbrevPart::slotAboutToShowCompletionBox()
 {
     kdDebug(9028) << "AbbrevPart::slotAboutToShowCompletionBox()" << endl;
     m_inCompletion = true;
+}
+
+CodeTemplateList::CodeTemplateList( )
+{
+    allCodeTemplates.setAutoDelete(true);
+}
+
+CodeTemplateList::~ CodeTemplateList( )
+{
+}
+
+QMap< QString, CodeTemplate * > CodeTemplateList::operator [ ]( QString suffix )
+{
+    kdDebug() << "CodeTemplateList::operator []" << endl;
+    QMap< QString, CodeTemplate * > selectedTemplates;
+    for (QMap<QString, QMap<QString, CodeTemplate* > >::const_iterator it = templates.begin(); it != templates.end(); ++it)
+    {
+        kdDebug() << "CodeTemplateList::operator [] - suffixes " << it.key() << endl;
+        if (QStringList::split(",", it.key()).contains(suffix))
+        {
+            kdDebug() << "CodeTemplateList::operator [] - suffixes " << it.key() << " contains " << suffix << endl;
+
+            QMap<QString, CodeTemplate* > m = it.data();
+            for (QMap<QString, CodeTemplate* >::const_iterator itt = m.begin(); itt != m.end(); ++itt)
+            {
+                kdDebug() << "x" << endl;
+                selectedTemplates[itt.key()] = itt.data();
+            }
+        }
+    }
+    return selectedTemplates;
+}
+
+void CodeTemplateList::insert( QString name, QString description, QString code, QString suffixes )
+{
+    QString origSuffixes = suffixes;
+//    QStringList suffixList;
+    int pos = suffixes.find('(');
+    if (pos == -1)
+        return;
+    suffixes.remove(0, pos+1);
+    pos = suffixes.find(')');
+    if (pos == -1)
+        return;
+    suffixes.remove(pos, suffixes.length()-pos);
+//    suffixList = QStringList::split(",", suffixes);
+
+    CodeTemplate *t;
+    if (templates.contains(suffixes) && templates[suffixes].contains(name))
+    {
+        kdDebug() << "found template for suffixes " << suffixes << " and name " << name << endl;
+        t = templates[suffixes][name];
+    }
+    else
+    {
+        kdDebug() << "creating template for suffixes " << suffixes << " and name " << name << endl;
+        t = new CodeTemplate();
+        allCodeTemplates.append(t);
+        templates[suffixes][name] = t;
+    }
+    t->name = name;
+    t->description = description;
+    t->code = code;
+    t->suffixes = origSuffixes;
+    if (!m_suffixes.contains(origSuffixes))
+        m_suffixes.append(origSuffixes);
+}
+
+QPtrList< CodeTemplate > CodeTemplateList::allTemplates( ) const
+{
+    return allCodeTemplates;
+}
+
+void CodeTemplateList::remove( const QString & suffixes, const QString & name )
+{
+    allCodeTemplates.remove(templates[suffixes][name]);
+    templates[suffixes].remove(name);
+}
+
+void CodeTemplateList::clear( )
+{
+    templates.clear();
+    allCodeTemplates.clear();
+}
+
+QStringList CodeTemplateList::suffixes( )
+{
+    return m_suffixes;
 }
 
 #include "abbrevpart.moc"

@@ -1,8 +1,10 @@
 /***************************************************************************
  *   Copyright (C) 2002 Roberto Raggi                                      *
- *   roberto@kdevelop.org                                                 *
+ *   roberto@kdevelop.org                                                  *
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,7 +16,8 @@
 #ifndef _ABBREVPART_H_
 #define _ABBREVPART_H_
 
-#include <qasciidict.h>
+#include <qmap.h>
+#include <qptrlist.h>
 #include "kdevplugin.h"
 
 #include <ktexteditor/codecompletioninterface.h>
@@ -32,11 +35,30 @@ namespace KTextEditor{
 }
 
 struct CodeTemplate {
+    QString name;
     QString description;
     QString code;
     QString suffixes;
 };
 
+class CodeTemplateList {
+public:
+    CodeTemplateList();
+    ~CodeTemplateList();
+
+    QMap<QString, CodeTemplate* > operator[](QString suffix);
+    void insert(QString name, QString description, QString code, QString suffixes);
+    void remove(const QString &suffixes, const QString &name);
+    void clear();
+    QStringList suffixes();
+
+    QPtrList<CodeTemplate> allTemplates() const;
+
+private:
+    QMap<QString, QMap<QString, CodeTemplate* > > templates;
+    QPtrList<CodeTemplate> allCodeTemplates;
+    QStringList m_suffixes;
+};
 
 class AbbrevPart : public KDevPlugin
 {
@@ -45,15 +67,15 @@ class AbbrevPart : public KDevPlugin
 public:
     AbbrevPart( QObject *parent, const char *name, const QStringList & );
     ~AbbrevPart();
-    
+
     bool autoWordCompletionEnabled() const;
     void setAutoWordCompletionEnabled( bool enabled );
 
     void addTemplate(const QString &templ, const QString &descr,
                      const QString &suffixes, const QString &code);
-    void removeTemplate(const QString &templ);
+    void removeTemplate(const QString &suffixes, const QString &name);
     void clearTemplates();
-    QAsciiDictIterator<CodeTemplate> templates() const;
+    CodeTemplateList templates() const;
 
 private slots:
     void slotExpandText();
@@ -73,7 +95,8 @@ private:
     QString currentWord() const;
     QValueList<KTextEditor::CompletionEntry> findAllWords(const QString &text, const QString &prefix);
     void insertChars( const QString &chars );
-    QAsciiDict<CodeTemplate> m_templates;
+//    QAsciiDict<CodeTemplate> m_templates;
+    CodeTemplateList m_templates;
     bool m_inCompletion;
     int m_prevLine;
     int m_prevColumn;

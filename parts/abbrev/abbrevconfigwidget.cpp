@@ -1,8 +1,10 @@
 /***************************************************************************
  *   Copyright (C) 2002 Roberto Raggi                                      *
- *   roberto@kdevelop.org                                                 *
+ *   roberto@kdevelop.org                                                  *
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,19 +28,22 @@ AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const 
     : AbbrevConfigWidgetBase(parent, name)
 {
     m_part = part;
-    
-    QAsciiDictIterator<CodeTemplate> it(part->templates());
-    while( it.current() ){
-        CodeTemplate* templ = it.current();
+
+    qWarning("creating abbrevconfigwidget for %d abbrevs", part->templates().allTemplates().count());
+    QPtrList<CodeTemplate> templates = part->templates().allTemplates();
+    CodeTemplate *templ;
+    for (templ = templates.first(); templ; templ = templates.next())
+    {
+        qWarning("creating item for code template ");
         new QListViewItem( listTemplates,
-                           QString::fromLatin1(it.currentKey()),
+                           templ->name,
                            templ->description,
                            templ->suffixes,
                            templ->code );
-        ++it;
     }
-    
+
     checkWordCompletion->setChecked( part->autoWordCompletionEnabled() );
+    listTemplates->setSorting(2);
 }
 
 
@@ -48,13 +53,8 @@ AbbrevConfigWidget::~AbbrevConfigWidget()
 
 void AbbrevConfigWidget::addTemplate()
 {
-    QStringList suffixesList;
-    QAsciiDictIterator<CodeTemplate> it(m_part->templates());
-    for (; it.current(); ++it) {
-        QString suffixes = it.current()->suffixes;
-        if (!suffixesList.contains(suffixes))
-            suffixesList << suffixes;
-    }
+    QStringList suffixesList = m_part->templates().suffixes();
+
     AddTemplateDialog dlg( suffixesList, this );
     if( dlg.exec() ){
         QString templ = dlg.templ();
@@ -71,6 +71,8 @@ void AbbrevConfigWidget::addTemplate()
 
 void AbbrevConfigWidget::removeTemplate()
 {
+    if (!listTemplates->selectedItem())
+        return;
     delete listTemplates->selectedItem();
 }
 
@@ -96,7 +98,7 @@ void AbbrevConfigWidget::codeChanged()
 void AbbrevConfigWidget::accept()
 {
     m_part->clearTemplates();
-    
+
     QListViewItem* item = listTemplates->firstChild();
     while( item ){
         m_part->addTemplate( item->text(0),
@@ -105,7 +107,7 @@ void AbbrevConfigWidget::accept()
                              item->text(3) );
         item = item->nextSibling();
     }
-    
+
     m_part->setAutoWordCompletionEnabled( checkWordCompletion->isChecked() );
 }
 
