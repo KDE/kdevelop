@@ -370,12 +370,13 @@ CCConfigWidget::slotAddPPPath( )
 void
 CCConfigWidget::slotRemovePPPath( )
 {
-    QString text = lvPCSPaths->selectedItem( )->text( 1 );
+//    QString text = lvPCSPaths->selectedItem( )->text( 1 );
 
 // it's user friendlier, john :)
 //    int answer = KMessageBox::warningYesNo( 0, i18n( "Delete entry ?\n" ) + text );
 //    if( answer == KMessageBox::Yes )
-        delete lvPCSPaths->selectedItem( );
+	QListViewItem * item = lvPCSPaths->selectedItem();
+        if (item) delete item;
 	
     m_bChangedPPPath = true;
 }

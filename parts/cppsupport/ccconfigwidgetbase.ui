@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -190,7 +190,7 @@
                                     <property name="clickable">
                                         <bool>true</bool>
                                     </property>
-                                    <property name="resizeable">
+                                    <property name="resizable">
                                         <bool>true</bool>
                                     </property>
                                 </column>
@@ -201,7 +201,7 @@
                                     <property name="clickable">
                                         <bool>true</bool>
                                     </property>
-                                    <property name="resizeable">
+                                    <property name="resizable">
                                         <bool>true</bool>
                                     </property>
                                 </column>
@@ -1275,13 +1275,13 @@
 <connections>
     <connection>
         <sender>btAddPath</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotAddPPPath()</slot>
     </connection>
     <connection>
         <sender>btRemovePath</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotRemovePPPath()</slot>
     </connection>
@@ -1379,4 +1379,12 @@
     <slot access="protected">slotSetCHWindow( )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
