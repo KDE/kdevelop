@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui >
-<kpartgui version="1" name="gideon" >
+<kpartgui version="2" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_new"/>
@@ -56,6 +56,8 @@
   <Menu name="build">
     <text>&amp;Build</text>
     <Merge/>
+    <Separator/>
+    <Action name="stop_processes"/>
   </Menu>
   <Merge/>
   <Menu name="tools">

@@ -98,12 +98,25 @@ void TopLevelMDI::createActions()
   KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
   KAction *action;
-
+  
+  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop", 
+                Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
+                actionCollection(), "stop_processes" );
+  m_stopProcesses->setStatusText(i18n("Stop all running processes"));
+  m_stopProcesses->setEnabled( false );
+  
+  connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
+           this, SLOT(slotActiveProcessCountChanged(uint)) );
+           
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText(i18n("Lets you customize KDevelop") );
 }
 
+void TopLevelMDI::slotActiveProcessCountChanged( uint active )
+{
+  m_stopProcesses->setEnabled( active > 0 );
+}
 
 void TopLevelMDI::slotQuit()
 {

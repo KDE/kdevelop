@@ -1,4 +1,8 @@
 2002-05-25  John Firebaugh <jfirebaugh@kde.org>
+	* Add stop button. Core emits signal when processes begin/end.
+	  TopLevel* connects and enables/disables stop button.
+
+2002-05-25  John Firebaugh <jfirebaugh@kde.org>
 	* Move project actions to ProjectManager. Removes much code
 	  code duplication in toplevel_*.cpp.
 	* Allow opening project via command line/konqueror.

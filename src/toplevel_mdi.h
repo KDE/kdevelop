@@ -62,7 +62,7 @@ private slots:
 
   void slotQuit();
   void slotSettings();
-
+  void slotActiveProcessCountChanged( uint active );
 
 private:
   
@@ -77,6 +77,8 @@ private:
   void saveSettings();
   void saveMDISettings();
   void loadMDISettings();
+  
+  KAction* m_stopProcesses;
   
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
   QMap<QextMdiChildView*,QWidget*> m_childViewMap;

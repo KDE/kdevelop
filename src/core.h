@@ -34,7 +34,10 @@ public slots:
 
   void slotQuit();
   
+signals:
 
+  void activeProcessCountChanged( uint active );
+  
 private slots:
 
   void wantsToQuit();
@@ -46,7 +49,8 @@ protected:
 
   
 private:
-
+  uint m_activeProcesses;
+  
   static Core *s_instance;
   
 };

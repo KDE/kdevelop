@@ -56,6 +56,7 @@ private slots:
 
   void slotQuit();
   void slotSettings();
+  void slotActiveProcessCountChanged( uint active );
 
 
 private:
@@ -67,6 +68,8 @@ private:
   void createActions();
 
   void saveSettings();
+
+  KAction* m_stopProcesses;
 
   QTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_bottomBar;
