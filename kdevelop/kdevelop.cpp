@@ -166,9 +166,6 @@ void KDevelop::initActions(){
           actionCollection(), "project_make_user_doc");
   m_paProjectMakeDistSourceTgz = new KAction( i18n("&Source-tgz"), 0, this, SLOT( slotProjectMakeDistSourceTgz() ),
           actionCollection(), "project_dist_targz");
-  // Separator
-  m_paProjectOptions = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
-          actionCollection(), "project_options");
 
   /////////////////////////////////////
   // Build Menu
@@ -487,9 +484,6 @@ void KDevelop::initHelp(){
 
   m_paProjectMakeDistSourceTgz->setStatusText( i18n("Creates a tar.gz file from the current project sources") );
 //  m_paProjectMakeDistSourceTgz->setWhatsThis(  );
-
-  m_paProjectOptions->setStatusText( i18n("Sets project and compiler options") );
-//  m_paProjectOptions->setWhatsThis(  );
 
   // Build Actions
   m_paBuildCompileFile->setStatusText( i18n("Compiles the current sourcefile") );

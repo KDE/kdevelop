@@ -12,11 +12,13 @@ libkdevelop_la_LIBADD = $(top_srcdir)/kdevelop/classparser/libkdevclassstore.la 
 			$(top_srcdir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
 			$(LIB_KPARTS)
 
-libkdevelop_la_SOURCES = ctoolclass.cpp cproject.cpp kdevcomponent.cpp kdevversioncontrol.cpp \
-			 kdevlanguagesupport.cpp processview.cpp
+libkdevelop_la_SOURCES = kdevcomponent.cpp kdevversioncontrol.cpp \
+			 kdevlanguagesupport.cpp kdevcompileroptions.cpp \
+			 ctoolclass.cpp cproject.cpp processview.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
-kdevelopinclude_HEADERS = ctoolclass.h cproject.h kdevcomponent.h kdevversioncontrol.h \
-			  kdevlanguagesupport.h processview.h ctreehandler.h
+kdevelopinclude_HEADERS = kdevcomponent.h kdevversioncontrol.h \
+			  kdevlanguagesupport.h kdevcompileroptions.h \
+			  ctoolclass.h cproject.h processview.h ctreehandler.h
 
 METASOURCES = AUTO

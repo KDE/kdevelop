@@ -13,6 +13,7 @@ kdevelop/widgets/Makefile \
 kdevelop/widgets/qextmdi/Makefile \
 kdevelop/plugin/Makefile \
 kdevelop/plugin/print/Makefile \
+kdevelop/plugin/gccoptions/Makefile \
 kdevelop/plugin/projectmanagement/Makefile \
 kdevelop/plugin/projectmanagement/kde_projectspace/Makefile \
 kdevelop/plugin/projectmanagement/kde_projectspace/res/Makefile \

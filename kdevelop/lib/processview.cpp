@@ -70,6 +70,7 @@ ProcessView::~ProcessView()
 
 void ProcessView::startJob(const QString &dir, const QString &command)
 {
+    clear();
     childproc->clearArguments();
     QDir::setCurrent(dir);
 

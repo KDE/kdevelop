@@ -40,6 +40,7 @@ private slots:
     void slotProjectClose();
     void slotProjectAddExistingFiles();
     void slotProjectAddNewTranslationFile();
+    void slotProjectOptions();
     void slotStop();
     void slotOptionsKDevelopSetup();
 

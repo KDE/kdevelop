@@ -1,3 +1,6 @@
+2000-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Preliminary version of a compiler options dialog framework
+
 2000-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Implemented stop button and corresponding 'events'
 	* Added updateSourceInfo() signal to KDevLanguageSupport

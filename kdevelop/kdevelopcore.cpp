@@ -9,6 +9,7 @@
 
 #include "ClassStore.h"
 #include "cproject.h"
+#include "projectoptionsdlg.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
@@ -96,12 +97,15 @@ void KDevelopCore::initActions()
     action->setEnabled(false);
     action->setStatusText( i18n("Adds a new language for internationalization to the project") );
 
+    action = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
+                          m_kdevelopgui->actionCollection(), "project_options");
+    action->setStatusText( i18n("Sets project and compiler options") );
 
     action = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
                           m_kdevelopgui->actionCollection(), "options_kdevelop_setup");
     action->setStatusText( i18n("Configures KDevelop") );
 
-    action = new KAction( i18n("&Stop"), "stop", 0, this, SLOT( slotStop() ),
+    action = new KAction( i18n("&Stop"), "stop_proc", 0, this, SLOT( slotStop() ),
                           m_kdevelopgui->actionCollection(), "stop_everything");
     action->setEnabled(false);
 }
@@ -267,6 +271,7 @@ void KDevelopCore::loadProject(const QString &fileName)
     ac->action("project_add_existing_files")->setEnabled(true);
     ac->action("project_add_translation")->setEnabled(true);
     ac->action("project_file_properties")->setEnabled(true);
+    ac->action("project_options")->setEnabled(true);
 
     ((KRecentFilesAction*)ac->action("project_open_recent"))->addURL(KURL(fileName));
     
@@ -312,6 +317,7 @@ void KDevelopCore::unloadProject()
     ac->action("project_add_existing_files")->setEnabled(false);
     ac->action("project_add_translation")->setEnabled(false);
     ac->action("project_file_properties")->setEnabled(false);
+    ac->action("project_options")->setEnabled(false);
 }
 
 
@@ -377,6 +383,14 @@ void KDevelopCore::slotProjectAddNewTranslationFile()
 }
 
 
+void KDevelopCore::slotProjectOptions()
+{
+    ProjectOptionsDialog *dlg = new ProjectOptionsDialog(m_kdevelopgui, "project options dialog");
+    dlg->exec();
+    delete dlg;
+}
+
+
 void KDevelopCore::slotStop()
 {
     QListIterator<KDevComponent> it(m_components);
@@ -431,6 +445,11 @@ void KDevelopCore::running(bool runs)
         m_runningcomponents.append(comp);
     else
         m_runningcomponents.remove(comp);
+
+    kdDebug(9000) << "Running components" << endl;
+    QListIterator<KDevComponent> it(m_runningcomponents);
+    for (; it.current(); ++it)
+        kdDebug(9000) << comp->name() << endl;
 
     KActionCollection *ac = m_kdevelopgui->actionCollection();
     ac->action("stop_everything")->setEnabled(!m_runningcomponents.isEmpty());

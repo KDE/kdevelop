@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=GNU C++ compiler
+Name=GppOptions
+ServiceTypes=KDevelop/CompilerOptions
+X-KDE-Library=libkdevgccoptions
+X-KDevelop-Language=C++
+X-KDevelop-Args=g++
