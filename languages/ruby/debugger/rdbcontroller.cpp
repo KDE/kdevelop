@@ -401,7 +401,7 @@ void RDBController::parseProgramLocation(char *buf)
 	int sourceLine = 0;
 	
     //  "1: a = 1"
-    QRegExp display_re("^(\\d+):\\s(.*)$");
+    QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
 	
     //  "/opt/qt/src/widgets/qlistview.rb:1558:puts 'hello world'"
     QRegExp sourcepos_re("^([^:]+):(\\d+):(.*)$");
@@ -551,9 +551,9 @@ void RDBController::parseDisplay(char *buf, char * expr)
 // Updates the watch expressions with current values
 void RDBController::parseUpdateDisplay(char *buf)
 {
-    varTree_->viewport()->setUpdatesEnabled(false);
+	varTree_->viewport()->setUpdatesEnabled(false);
 	
-    QRegExp display_re("^(\\d+):\\s([^\n]*)\n");
+    QRegExp display_re("(\\d+):\\s([^\n]*)\n");
 	
 	int pos = display_re.search(buf);
 	while (pos != -1) {
