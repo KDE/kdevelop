@@ -690,9 +690,7 @@ void VarItem::checkForRequests()
     // On the other hand, if it's empty, there is no reason to go on...
     if ( cache_.isEmpty() ) return;
 
-    if (	isExpandable() 
-			&& (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) ) 
-	{
+    if (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) {
         waitingForData();
         emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
     }

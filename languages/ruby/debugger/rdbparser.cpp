@@ -119,14 +119,15 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		@sleeper=#<Thread:0x3008fd18 sleep>,
  	//		@temp={"z"=>"zed", "p"=>"pee"}>
 	//
-	QRegExp ppref_re("(#<\\w+:0x[\\da-f]+)\n");
+	QRegExp ppref_re("(#<\\w+:0x[\\da-f]+[^\n]*)\n");
 	QRegExp ppvalue_re("\\s*([\\w@$-]+)=([^\n]+)[,>]\n");
 	
 	pos = ppref_re.search(buf);
 	if (pos != -1) {
+		parent->setText(ValueCol, ppref_re.cap(1));
 		pos  += ppref_re.matchedLength();
 		pos = ppvalue_re.search(buf, pos);
-		
+				
 		while (pos != -1) {
 			varName = ppvalue_re.cap(1);
 			value = ppvalue_re.cap(2).latin1();
@@ -218,7 +219,7 @@ void RDBParser::setItem(TrimmableItem *parent, const QString &varName,
         break;
 
     case typeReference:
-        item->setText(ValueCol, value);
+//        item->setText(ValueCol, value);
         item->setCache(value);
 		// If there's a comma, there must be a list of things
 		// to expand
