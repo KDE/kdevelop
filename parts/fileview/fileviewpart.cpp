@@ -55,7 +55,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     : KDevPlugin("FileView", "fileview", parent, name ? name : "FileViewPart"),
     m_widget( 0 )
 {
-    setInstance(FileViewFactory::instance());
+    setInstance( FileViewFactory::instance() );
     //    setXMLFile("kdevfileview.rc");
 
     m_widget = new PartWidget( this );
@@ -93,35 +93,42 @@ void FileViewPart::projectConfigWidget( KDialogBase *dlg )
 
 void FileViewPart::loadSettings()
 {
-    QDomDocument &dom =  *projectDom();
-    QString cn;
-    QString defaultColorName = white.name();
+    KConfig *cfg = instance()->config();
+    QColor fallbackColor = white;
 
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/fileaddedcolor", defaultColorName );
-    vcsColors.added.setNamedColor( cn );
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/fileupdatecolor", defaultColorName );
-    vcsColors.updated.setNamedColor( cn );
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/filemodifiedcolor", defaultColorName );
-    vcsColors.modified.setNamedColor( cn );
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/filestickycolor", defaultColorName );
-    vcsColors.sticky.setNamedColor( cn );
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/fileconflictcolor", defaultColorName );
-    vcsColors.conflict.setNamedColor( cn );
-    cn = DomUtil::readEntry( dom, "/kdevfileviewpart/fileunknowncolor", defaultColorName );
-    vcsColors.unknown.setNamedColor( cn );
+    if (cfg->hasGroup( "VCS Colors" ))
+    {
+        KConfigGroupSaver gs( cfg, "VCS Colors" );
+        vcsColors.added = cfg->readColorEntry( "FileAddedColor", &fallbackColor );
+        vcsColors.updated = cfg->readColorEntry( "FileUpdatedColor", &fallbackColor );
+        vcsColors.sticky = cfg->readColorEntry( "FileStickyColor", &fallbackColor );
+        vcsColors.modified = cfg->readColorEntry( "FileModifiedColor", &fallbackColor );
+        vcsColors.conflict = cfg->readColorEntry( "FileConflictColor", &fallbackColor );
+        vcsColors.unknown = cfg->readColorEntry( "FileUnknownColor", &fallbackColor );
+        vcsColors.defaultColor = cfg->readColorEntry( "DefaultColor", &fallbackColor );
+    }
+    else
+    {
+        vcsColors.added = vcsColors.updated = vcsColors.sticky = vcsColors.sticky =
+            vcsColors.modified = vcsColors.conflict = vcsColors.unknown =
+            vcsColors.defaultColor = fallbackColor;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void FileViewPart::storeSettings()
 {
-    QDomDocument &dom =  *projectDom();
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/fileaddedcolor", vcsColors.added.name() );
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/fileupdatecolor", vcsColors.updated.name() );
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/filemodifiedcolor", vcsColors.modified.name() );
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/filestickycolor", vcsColors.sticky.name() );
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/fileconflictcolor", vcsColors.conflict.name() );
-    DomUtil::writeEntry( dom, "/kdevfileviewpart/fileunknowncolor", vcsColors.unknown.name() );
+    KConfig *cfg = instance()->config();
+    // VCS colors
+    KConfigGroupSaver gs( cfg, "VCS Colors" );
+    cfg->writeEntry( "FileAddedColor", vcsColors.added );
+    cfg->writeEntry( "FileUpdatedColor", vcsColors.updated );
+    cfg->writeEntry( "FileStickyColor", vcsColors.sticky );
+    cfg->writeEntry( "FileModifiedColor", vcsColors.modified );
+    cfg->writeEntry( "FileConflictColor", vcsColors.conflict );
+    cfg->writeEntry( "FileUnknownColor", vcsColors.unknown );
+    cfg->writeEntry( "DefaultColor", vcsColors.defaultColor );
 }
 
 #include "fileviewpart.moc"

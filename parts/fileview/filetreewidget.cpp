@@ -64,12 +64,14 @@ class MyFileTreeViewItem : public KFileTreeViewItem
 {
 public:
     MyFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch, bool pf )
-       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf ), m_status( VCSFileInfo::Unknown )
+       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( pf ),
+         m_statusColor( FileViewPart::vcsColors.unknown )
     {
         hideOrShow();
     }
     MyFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false ), m_status( VCSFileInfo::Directory )
+       : KFileTreeViewItem( parent, item, branch ), m_isProjectFile( false ),
+       m_statusColor( FileViewPart::vcsColors.defaultColor ) // @todo color for directory?
     {
         hideOrShow();
     }
@@ -78,7 +80,6 @@ public:
     //! Update content
     void hideOrShow();
     //! update VCS info for this directory
-    //void updateVCSInfo( const VCSFileInfoMap &vcsFileInfo );
     void setVCSInfo( const VCSFileInfo &info );
     bool setProjectFile( QString const & path, bool pf );
 
@@ -92,18 +93,14 @@ public:
     void setFileName( const QString &p ) { setText( FILENAME_COLUMN, p ); }
     void setWorkingRev( const QString &p ) { setText( WORKREVISION_COLUMN, p ); }
     void setRepositoryRev( const QString &p ) { setText( REPOREVISION_COLUMN, p ); }
-    void setStatus( const VCSFileInfo::FileState status )
-    {
-        m_status = status;
-        setText( STATUS_COLUMN, VCSFileInfo::state2String( status ) );
-    }
+    void setStatus( const VCSFileInfo::FileState status );
 
 protected:
     virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 
 private:
     bool m_isProjectFile;
-    VCSFileInfo::FileState m_status;
+    QColor &m_statusColor; // cached
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,6 +131,41 @@ void MyFileTreeViewItem::setVCSInfo( const VCSFileInfo &info )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void MyFileTreeViewItem::setStatus( const VCSFileInfo::FileState status )
+{
+    setText( STATUS_COLUMN, VCSFileInfo::state2String( status ) );
+    // Update color too
+    switch (status)
+    {
+        case VCSFileInfo::Added:
+            m_statusColor = FileViewPart::vcsColors.added;
+            break;
+        case VCSFileInfo::Uptodate:
+            m_statusColor = FileViewPart::vcsColors.updated;
+            break;
+        case VCSFileInfo::Modified:
+            m_statusColor = FileViewPart::vcsColors.modified;
+            break;
+        case VCSFileInfo::Conflict:
+            m_statusColor = FileViewPart::vcsColors.conflict;
+            break;
+        case VCSFileInfo::Sticky:
+            m_statusColor = FileViewPart::vcsColors.sticky;
+            break;
+        case VCSFileInfo::Unknown:
+            m_statusColor = FileViewPart::vcsColors.unknown;
+            break;
+        case VCSFileInfo::Directory:
+        default:
+            // No color change
+            m_statusColor = FileViewPart::vcsColors.defaultColor;
+            //kdDebug() << "MyFileTreeViewItem::paintCell(): Unknown color!" << endl;
+            break;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 bool MyFileTreeViewItem::setProjectFile( QString const & path, bool pf )
 {
     kdDebug( 9017 ) << "MyFileTreeViewItem::setProjectFile(): " + path << endl;
@@ -160,7 +192,7 @@ bool MyFileTreeViewItem::setProjectFile( QString const & path, bool pf )
 ///////////////////////////////////////////////////////////////////////////////
 
 void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
-                             int column, int width, int alignment)
+    int column, int width, int alignment)
 {
     if ( listView()->showNonProjectFiles() && isProjectFile() )
     {
@@ -170,35 +202,9 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
     }
 
     // paint cell in a different color
-    QColor itemColor;
-    switch (m_status)
-    {
-        case VCSFileInfo::Added:
-            itemColor = FileViewPart::vcsColors.added;
-            break;
-        case VCSFileInfo::Uptodate:
-            itemColor = FileViewPart::vcsColors.updated;
-            break;
-        case VCSFileInfo::Modified:
-            itemColor = FileViewPart::vcsColors.modified;
-            break;
-        case VCSFileInfo::Conflict:
-            itemColor = FileViewPart::vcsColors.conflict;
-            break;
-        case VCSFileInfo::Sticky:
-            itemColor = FileViewPart::vcsColors.sticky;
-            break;
-        case VCSFileInfo::Unknown:
-            itemColor = FileViewPart::vcsColors.unknown;
-            break;
-        default:
-            // No color change
-            //kdDebug() << "MyFileTreeViewItem::paintCell(): Unknown color!" << endl;
-            break;
-    }
     QColorGroup mycg( cg );
 //    kdDebug() << "MyFileTreeViewItem::paintCell(): itemColor == " << itemColor.name() << endl;
-    mycg.setColor( QColorGroup::Background, itemColor );
+    mycg.setColor( QColorGroup::Background, m_statusColor );
 //    kdDebug() << "MyFileTreeViewItem::paintCell(): mycg.background() == " << mycg.background().name() << endl;
 //    p->setBackgroundColor( itemColor );
 
@@ -244,7 +250,7 @@ public:
 
     virtual KFileTreeViewItem* createTreeViewItem( KFileTreeViewItem* parent, KFileItem* fileItem )
     {
-        kdDebug(9017) << "MyFileTreeBranch::createTreeViewItem(): " + fileItem->url().path() << endl;
+//        kdDebug(9017) << "MyFileTreeBranch::createTreeViewItem(): " + fileItem->url().path() << endl;
         if (!parent || !fileItem)
             return 0;
 
@@ -259,20 +265,15 @@ public:
         {
             QString fileName = fileURL.fileName();
             QString dirName = URLUtil::extractPathNameRelative( lv->projectDirectory(), fileURL.directory() );
-            kdDebug(9017) << "searching for file: " + fileName + " in directory " + dirName << endl;
+//            kdDebug(9017) << "searching for file: " + fileName + " in directory " + dirName << endl;
 
             const VCSFileInfoMap &vcsFiles = *infoProvider->status( dirName );
-            kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
+//            kdDebug(9017) << "Dir has " << vcsFiles.count() << " registered files!" << endl;
 
             if (vcsFiles.contains( fileName ))
-            {
                 newItem->setVCSInfo( vcsFiles[ fileName ] );
-                //kdDebug(9017) << "Found vcs info: " << vcsFileInfo.toString() << endl;
-                if (URLUtil::isDirectory(fileURL))
-                    newItem->setStatus( VCSFileInfo::Directory );
-            }
-            else
-                kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
+//            else
+//                kdDebug(9017) << "!!!No VCS info for this file!!!" << endl;
         }
         return newItem;
     }

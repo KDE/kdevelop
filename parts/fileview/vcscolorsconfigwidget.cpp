@@ -40,7 +40,7 @@ VCSColors &VCSColors::operator=( const VCSColors &others )
     sticky = others.sticky;
     unknown = others.unknown;
     updated = others.updated;
-
+    defaultColor = others.defaultColor;
     return *this;
 }
 
@@ -71,6 +71,7 @@ void VCSColorsConfigWidget::getColors( VCSColors &vcsColors ) const
     vcsColors.sticky = fileStickyColorCombo->color();
     vcsColors.unknown = fileUnknownColorCombo->color();
     vcsColors.updated = fileUpdatedColorCombo->color();
+    vcsColors.defaultColor = defaultColorCombo->color();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,6 +84,7 @@ void VCSColorsConfigWidget::setColors( const VCSColors &vcsColors )
     fileStickyColorCombo->setColor( vcsColors.sticky );
     fileUnknownColorCombo->setColor( vcsColors.unknown );
     fileUpdatedColorCombo->setColor( vcsColors.updated );
+    defaultColorCombo->setColor( vcsColors.defaultColor );
 }
 
 /*$SPECIALIZATION$*/

@@ -30,6 +30,7 @@ struct VCSColors
     QColor sticky;
     QColor conflict;
     QColor unknown;
+    QColor defaultColor;
 };
 
 class VCSColorsConfigWidget : public VCSColorsConfigWidgetBase

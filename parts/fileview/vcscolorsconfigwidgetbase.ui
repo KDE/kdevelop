@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>VCSColorsConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>312</width>
-            <height>230</height>
+            <height>260</height>
         </rect>
     </property>
     <property name="caption">
@@ -168,12 +168,36 @@
                         </widget>
                     </hbox>
                 </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6_2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel6_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Default</string>
+                            </property>
+                        </widget>
+                        <widget class="KColorCombo">
+                            <property name="name">
+                                <cstring>defaultColorCombo</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </vbox>
         </widget>
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kcolorcombo.h</includehint>
     <includehint>kcolorcombo.h</includehint>
     <includehint>kcolorcombo.h</includehint>
     <includehint>kcolorcombo.h</includehint>
