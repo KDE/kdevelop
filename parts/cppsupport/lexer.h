@@ -15,6 +15,7 @@
 #include <qstring.h>
 #include <qmemarray.h>
 #include <qmap.h>
+#include <qvaluestack.h>
 
 enum Type {
     Token_eof = 0,
@@ -199,6 +200,7 @@ private:
     const QChar* readCharLiteral( const QChar* ptr );
     const QChar* readStringLiteral( const QChar* ptr );
     const QChar* readNumberLiteral( const QChar* ptr );
+    const QChar* handleDirective( const QString& directive, const QChar* ptr );
 
 private:
     QMemArray< Token > m_tokens;
@@ -215,6 +217,7 @@ private:
     bool m_recordComments;
     bool m_recordWhiteSpaces;
     bool m_startLine;
+    QValueStack<int> m_directiveStack;
 };
 
 

@@ -11,6 +11,8 @@
 
 #include "lexer.h"
 #include "lexer.moc"
+#include <qregexp.h>
+#include <kdebug.h>
 
 using namespace std;
 
@@ -32,9 +34,10 @@ static struct {
     { "emit", Token_emit },
     // Qt keywords -- end
 
+    { "__asm__", Token_asm },
+    { "__int64", Token_int }, 
     { "and", Token_and },
     { "and_eq", Token_and_eq },
-    { "__asm__", Token_asm },
     { "asm", Token_asm },
     { "auto", Token_auto },
     { "bitand", Token_bitand },
@@ -59,7 +62,7 @@ static struct {
     { "explicit", Token_explicit },
     { "export", Token_export },
     { "extern", Token_extern },
-    { "false", Token_false },
+//    { "false", Token_false },
     { "float", Token_float },
     { "for", Token_for },
     { "friend", Token_friend },
@@ -92,7 +95,7 @@ static struct {
     { "template", Token_template },
     { "this", Token_this },
     { "throw", Token_throw },
-    { "true", Token_true },
+//    { "true", Token_true },
     { "try", Token_try },
     { "typedef", Token_typedef },
     { "typeid", Token_typeid },
@@ -141,6 +144,16 @@ static struct {
     { "--", Token_decr },
     { "->", Token_arrow }
 };
+
+enum PreProcessorState
+{
+    PreProc_none,
+	    
+    // states
+    PreProc_in_group,
+    PreProc_skip
+};
+
 
 Lexer::Lexer()
     : m_recordComments( false ),
@@ -226,11 +239,19 @@ void Lexer::tokenize()
     const QChar* ptr = m_buffer;
 
     QMap< QString, int >::Iterator op_it;
+    QRegExp qt_rx( "Q[A-Z]{1,2}_[A-Z_]+" );
+    QRegExp typelist_rx( "K_TYPELIST_[0-9]+" );
 
     m_startLine = true;
 
     m_size = 0;
     while( ptr < m_endPtr ){
+	
+	int preproc_state = PreProc_none;
+	
+	if( m_directiveStack.size() ){
+	    preproc_state = m_directiveStack.top();
+	}
 
         if( m_size == (int)m_tokens.size() ){
             m_tokens.resize( m_tokens.size() + 5000 );
@@ -244,25 +265,33 @@ void Lexer::tokenize()
 
         if( ptr >= m_endPtr ){
             break;
-        } else if( m_startLine && *ptr == '#' ){
-            // skip for now
-            while( ptr<m_endPtr ){
-                // skip line
-                const QChar* base = ptr;
-                while( ptr<m_endPtr && *ptr != '\n' )
-                    ++ptr;
-
-                QString line( base, ptr - base );
-                line = line.stripWhiteSpace();
-                if( !line.endsWith("\\") )
-                    break;
-
-                if( ptr < m_endPtr ){
-                    ++ptr; // skip \n
-                    newline( ptr );
-                }
+        } else if( *ptr == '/' && *(ptr+1) == '/' ){
+            const QChar* end = readLineComment( ptr );
+            if( recordComments() ){
+                m_tokens[ m_size++ ] = Token( Token_comment, ptr, end - ptr );
             }
-            //m_tokens[ m_size++ ] = Token( Token_preproc, ptr, 1 );
+            ptr = end;
+        } else if( *ptr == '/' && *(ptr+1) == '*' ){
+            const QChar* end = readMultiLineComment( ptr );
+            if( recordComments() ){
+                m_tokens[ m_size++ ] = Token( Token_comment, ptr, end - ptr );
+            }
+            ptr = end;
+        } else if( m_startLine && *ptr == '#' ){
+	    
+	    ++ptr; // skip #
+	    ptr = readWhiteSpaces( ptr, false );	    // skip white spaces
+	    
+	    const QChar* eptr = readIdentifier( ptr ); // read the directive
+	    QString directive( ptr, eptr - ptr );	    
+	    
+	    ptr = handleDirective( directive, eptr );
+            //m_tokens[ m_size++ ] = Token( Token_preproc, ptr, 1 );	    
+	} else if( preproc_state == PreProc_skip ){
+	    // skip line and continue
+	    while( ptr && !ptr->isNull() && *ptr != '\n' )
+		++ptr;
+	    continue;
         } else if( *ptr == '\'' ){
             const QChar* end = readCharLiteral( ptr );
             m_tokens[ m_size++ ] = Token( Token_char_literal, ptr, end - ptr );
@@ -281,28 +310,22 @@ void Lexer::tokenize()
             } else {
                 QMap< QString, SkipType >::Iterator pos = m_words.find( ide );
                 if( pos != m_words.end() ){
-                    if( *pos == SkipWordAndArguments ){
-                        end = skip( end, '(', ')' );
-                    }
-                } else
+		    if( *pos == SkipWordAndArguments ){
+		        end = skip( readWhiteSpaces(end, false), '(', ')' );
+		    }
+		} else if( qt_rx.exactMatch(ide) || ide.endsWith("EXPORT") || ide.startsWith("Q_EXPORT") ){
+		    end = skip( readWhiteSpaces(end, false), '(', ')' );
+		} else if( typelist_rx.exactMatch(ide) ){
+                    m_tokens[ m_size++ ] = Token( Token_identifier, ptr, end - ptr );		    
+		    end = skip( readWhiteSpaces(end, false), '(', ')' );
+		} else{
                     m_tokens[ m_size++ ] = Token( Token_identifier, ptr, end - ptr );
-            }
+		}
+	    }
             ptr = end;
         } else if( ptr->isNumber() ){
             const QChar* end = readNumberLiteral( ptr );
             m_tokens[ m_size++ ] = Token( Token_number_literal, ptr, end - ptr );
-            ptr = end;
-        } else if( *ptr == '/' && *(ptr+1) == '/' ){
-            const QChar* end = readLineComment( ptr );
-            if( recordComments() ){
-                m_tokens[ m_size++ ] = Token( Token_comment, ptr, end - ptr );
-            }
-            ptr = end;
-        } else if( *ptr == '/' && *(ptr+1) == '*' ){
-            const QChar* end = readMultiLineComment( ptr );
-            if( recordComments() ){
-                m_tokens[ m_size++ ] = Token( Token_comment, ptr, end - ptr );
-            }
             ptr = end;
         } else if( (op_it = m_operators.find(ch3)) != m_operators.end() ){
             m_tokens[ m_size++ ] = Token( *op_it, ptr, 3 );
@@ -388,12 +411,12 @@ const QChar* Lexer::readCharLiteral( const QChar* ptr )
             ++ptr;
             return ptr;
         } else {
-        	if( *ptr == '\n' ){
-            	newline( ptr+1 );
-        	}
+	    if( *ptr == '\n' ){
+		newline( ptr+1 );
+	    }
 
-            ++ptr;
-		}
+	    ++ptr;
+	}
     }
 
     return ptr;
@@ -417,11 +440,11 @@ const QChar* Lexer::readStringLiteral( const QChar* ptr )
             ++ptr;
             return ptr;
         } else {
-        	if( *ptr == '\n' ){
-            	newline( ptr+1 );
-        	}
-            ++ptr;
-		}
+	    if( *ptr == '\n' ){
+	        newline( ptr+1 );
+	    }
+	    ++ptr;
+	}
     }
 
     return ptr;
@@ -449,8 +472,9 @@ void Lexer::addSkipWord( const QString& word, SkipType skipType )
 const QChar* Lexer::skip( const QChar* ptr, const QChar& l, const QChar& r )
 {
     int count = 0;
-    while( ptr<m_endPtr && ptr->isSpace() )
-        ++ptr;
+
+    if( ptr<m_endPtr && *ptr != l )
+        return ptr;
 
     while( ptr<m_endPtr ){
         if( *ptr == l )
@@ -464,6 +488,59 @@ const QChar* Lexer::skip( const QChar* ptr, const QChar& l, const QChar& r )
             break;
 
     }
+
     return ptr;
 }
 
+const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr )
+{
+    // skip for now
+    kdDebug(9007) << "handle directive " << directive << endl;
+    
+    if( directive == "include" ){
+    } else if( directive == "define" ){
+    } else if( directive == "undef" ){
+    } else if( directive == "line" ){
+    } else if( directive == "error" ){
+    } else if( directive == "pragma" ){
+    } else if( directive == "if" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( ptr && *ptr == '0' )
+	    m_directiveStack.push( PreProc_skip );
+	else
+	    m_directiveStack.push( PreProc_in_group );
+    } else if( directive == "ifdef" ){
+	m_directiveStack.push( PreProc_in_group );
+    } else if( directive == "ifndef" ){
+	m_directiveStack.push( PreProc_in_group );
+    } else if( directive == "elif" ){
+	// ignore elif
+	(void) m_directiveStack.pop();
+	m_directiveStack.push( PreProc_skip );	
+    } else if( directive == "else" ){
+	// ignore else
+	int st = m_directiveStack.top();
+	(void) m_directiveStack.pop();
+	m_directiveStack.push( st == PreProc_skip ? PreProc_in_group : PreProc_skip );
+    } else if( directive == "endif" ){	
+	(void) m_directiveStack.pop();
+    }
+    
+    while( ptr<m_endPtr ){
+	// skip line
+	const QChar* base = ptr;
+	while( ptr<m_endPtr && *ptr != '\n' )
+	    ++ptr;
+	
+	QString line( base, ptr - base );
+	line = line.stripWhiteSpace();
+	if( !line.endsWith("\\") )
+	    break;
+	
+	if( ptr < m_endPtr ){
+	    ++ptr; // skip \n
+	    newline( ptr );
+	}
+    }
+    return ptr;
+}
