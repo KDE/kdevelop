@@ -320,21 +320,21 @@ ProjectFileType CProject::getType( const char *aFile )
       
       // Check for a known extension.
       if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
-	  ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" || ext == ".ui" )
-	retVal = CPP_SOURCE;
-	// .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
+    ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" || ext == ".ui" )
+  retVal = CPP_SOURCE;
+  // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
       else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" || ext == ".H" || ext == ".hh" )
-	retVal = CPP_HEADER;
+  retVal = CPP_HEADER;
       else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
-	retVal = LEXICAL;
+  retVal = LEXICAL;
       else if( ext == ".idl" )
-	retVal = CORBA_SOURCE;
+  retVal = CORBA_SOURCE;
       else if( ext == ".kdevdlg" )
-	retVal = KDEV_DIALOG;
+  retVal = KDEV_DIALOG;
       else if( ext == ".po" )
-	retVal = PO;
+  retVal = PO;
       else if( ext == ".ts" )
-	retVal = QT_TS;
+  retVal = QT_TS;
     }
   
   return retVal;
@@ -489,15 +489,15 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
 
       slash2_pos = makefile_name.findRev('/',slash_pos-1);
       if(slash2_pos != -1 && makefile_name != "/"){
-	makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
-	check_makefile_list.append(makefile_name);
-	kdDebug() << "append to check_makefile_list: " << makefile_name << endl;
+  makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
+  check_makefile_list.append(makefile_name);
+  kdDebug() << "append to check_makefile_list: " << makefile_name << endl;
       } 
       else{
-	makefile_name = "";
+  makefile_name = "";
       }
       if (makefile_name == "/Makefile.am") {
-	break;
+  break;
       }
     }
 
@@ -514,18 +514,18 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
     if(makefile_list.find(makefile_name) == -1){
       makefileaminfo.rel_name = makefile_name;
       if(makefile_name_org == makefile_name){ // the first makefileam
-	if(info.type == CPP_SOURCE ) 
+  if(info.type == CPP_SOURCE ) 
         {
           makefileaminfo.type = "static_library"; // cool
           createLibraryMakefileAm(makefile_name, "static");
         }
-	else makefileaminfo.type = "normal";
+  else makefileaminfo.type = "normal";
 
-	addMakefileAmToProject(makefile_name,makefileaminfo);
+  addMakefileAmToProject(makefile_name,makefileaminfo);
       }
       else{
-	makefileaminfo.type = "normal";
-	addMakefileAmToProject(makefile_name,makefileaminfo);
+  makefileaminfo.type = "normal";
+  addMakefileAmToProject(makefile_name,makefileaminfo);
       }
     }
   }
@@ -540,7 +540,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
     config.setGroup(makefile_name);
 
     if(config.readEntry("type", "") != "prog_main" &&
-	config.readEntry("type", "") != "shared_library")
+  config.readEntry("type", "") != "shared_library")
     {
       config.writeEntry("type","static_library");
     }
@@ -561,9 +561,9 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
       config.readListEntry("sub_dirs",sub_dirs);
       
       if(sub_dirs.find(subdir) == -1){
-	new_subdir = true;
-	sub_dirs.append(subdir);
-	config.writeEntry("sub_dirs",sub_dirs);
+  new_subdir = true;
+  sub_dirs.append(subdir);
+  config.writeEntry("sub_dirs",sub_dirs);
       }
     }
     else{
@@ -574,9 +574,9 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
       config.readListEntry("sub_dirs",sub_dirs);
       
       if(sub_dirs.find(subdir) == -1){
-	new_subdir = true;
-	sub_dirs.append(subdir);
-	config.writeEntry("sub_dirs",sub_dirs);
+  new_subdir = true;
+  sub_dirs.append(subdir);
+  config.writeEntry("sub_dirs",sub_dirs);
       
       }
       makefile_name = "";
@@ -649,7 +649,8 @@ void CProject::updateMakefilesAm(){
 
 }
 
-void CProject::updateMakefileAm(QString makefile){
+void CProject::updateMakefileAm(QString makefile)
+{
   setKDevelopWriteArea(makefile);
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
@@ -675,278 +676,292 @@ void CProject::updateMakefileAm(QString makefile){
   QStrList source_files;
   QStrList po_files;
   QString pos;
+
   config.setGroup(makefile);
   config.readListEntry("files",files);
   config.readListEntry("sub_dirs",subdirs);
-  if(file.open(IO_ReadOnly)){ // read the makefileam
-    while(!stream.eof()){
+
+  if(file.open(IO_ReadOnly))
+  { // read the makefileam
+    while(!stream.eof())
       list.append(stream.readLine());
-    }
   }
   file.close();
 
-  for(str = list.first(); !customfile && str != 0;str = list.next()){
+  for(str = list.first(); !customfile && str != 0;str = list.next())
+  {
     if (str.find(QRegExp("\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
       customfile=true;
   }
 
-  if(file.open(IO_WriteOnly)){
-    for(str = list.first();str != 0;str = list.next()){ // every line
-      if(!customfile && str == "####### kdevelop will overwrite this part!!! (begin)##########"){
- 	stream << str << "\n";
-	
-	//***************************generate needed things for the main makefile*********
-	if (config.readEntry("type") == "prog_main"){ // the main makefile
-	  stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
-	  getSources(makefile,source_files);
-	  for(str= source_files.first();str !=0;str = source_files.next()){
-	    sources =  str + " " + sources ;
-	  }
-	  //	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
-	  //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
-	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
-    /********************* QT 2 INTERNATIONALIZATION **************/	
-	  if(isQt2Project()){
-	    QString all_srces;
-	    QString uifiles;
-	    QStrList src_list=getSources();
-  	  for(str= src_list.first();str !=0;str = src_list.next()){
-        str.replace( QRegExp(getProjectDir()+getSubDir()), "" );
-  	    if(str.right(3)==".ui")
-  	      uifiles = str + " " + uifiles;
-  	    else
-    	    all_srces =  str + " " + all_srces ;
-  	  }
-	
-	    // add a separate SOURCES and INTERFACES line for lupdate to get translations
-  	  stream << "SOURCES = " << all_srces  << "\n";
-      stream << "INTERFACES = " << uifiles << "\n";
-      // add a TRANSLATIONS line for lupdate/lrelease containing all .ts files
-      QStrList ts_files;
-      getTSFiles(makefile,ts_files);
+  if(file.open(IO_WriteOnly))
+  {
+    for(str = list.first();str != 0;str = list.next())
+    { // every line
+      if (!customfile && str == "####### kdevelop will overwrite this part!!! (begin)##########")
+      {
+        stream << str << "\n";
+  
+        //***************************generate needed things for the main makefile*********
+        if (config.readEntry("type") == "prog_main")
+        { // the main makefile
+          stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
+          getSources(makefile,source_files);
+          for(str= source_files.first();str !=0;str = source_files.next())
+            sources =  str + " " + sources ;
 
-      QString tsstr, tsfiles;
-  	  for(tsstr= ts_files.first();tsstr !=0;tsstr = ts_files.next()){
-	      tsfiles =  tsstr + " " + tsfiles ;
-  	  }
-  	  stream << "TRANSLATIONS = " << tsfiles << "\n";
-	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
-  	  stream << "KDE_OPTIONS = qtonly\n";
-	  }
-	
-    /********************* QT 2 INTERNATIONALIZATION END **************/	
-	
-	  if(static_libs.isEmpty()){
-	    stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
-	  }
-	  else{ // we must link some libs
-	    stream << getBinPROGRAM()  <<  "_LDADD   = ";
-	    for(libname = static_libs.first();libname != 0;libname = static_libs.next()){
-	      stream << libname.replace(QRegExp("^"+getSubDir()),"./") << " "; // remove the subdirname
-	    }
-	    stream << getLDADD();
-	  }
-	  
-	  if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "normal_gnome") {
-	    stream << " $(LIBSOCKET)" << "\n";
-	  }
-	  else{
-	    stream << "\n";
-	  }
-	  
-	}
-	//***************************generate needed things for static_library*********
-	config.setGroup(makefile);
-	if(config.readEntry("type") == "static_library"){
-	  getSources(makefile,source_files);
-	  for(str= source_files.first();str !=0;str = source_files.next()){
-	    sources =  str + " " + sources ;
-	  }
-	  QDir dir(getDir(makefile));
-          QString type=getProjectType();
-          if (type!="normal_cpp" && type != "normal_c")
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-
-          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
+          //    stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
+          //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
+          stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
+          /********************* QT 2 INTERNATIONALIZATION **************/
+          if(isQt2Project())
           {
-	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
-	  }
-          else
-           if (QFileInfo(getProjectDir() + "automoc").exists())
-           {
-	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
-           }
+            QString all_srces;
+            QString uifiles;
+            QStrList src_list=getSources();
+            for(str= src_list.first();str !=0;str = src_list.next())
+            {
+              str.replace( QRegExp(getProjectDir()+getSubDir()), "" );
+              if(str.right(3)==".ui")
+                uifiles = str + " " + uifiles;
+              else
+                all_srces =  str + " " + all_srces ;
+            }
+  
+            // add a separate SOURCES and INTERFACES line for lupdate to get translations
+            stream << "SOURCES = " << all_srces  << "\n";
+            stream << "INTERFACES = " << uifiles << "\n";
+            // add a TRANSLATIONS line for lupdate/lrelease containing all .ts files
+            QStrList ts_files;
+            getTSFiles(makefile,ts_files);
 
+            QString tsstr, tsfiles;
+            for(tsstr= ts_files.first();tsstr !=0;tsstr = ts_files.next())
+              tsfiles =  tsstr + " " + tsfiles ;
 
-	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
-	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
-    if(isQt2Project())	
-	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
-  	  stream << "KDE_OPTIONS = qtonly\n";
-	}
-
-	//***************************generate needed things for shared_library*********
-	config.setGroup(makefile);
-	if(config.readEntry("type") == "shared_library" ){
-	  getSources(makefile,source_files);
-	  for(str= source_files.first();str !=0;str = source_files.next()){
-	    sources =  str + " " + sources ;
-	  }
-	  QDir dir(getDir(makefile));
-          QString type=getProjectType();
-      if( (type == "kio_slave") )
-	 {
-		stream << "kde_module_LTLIBRARIES = kio_" << dir.dirName() << ".la\n\n";
-	}
-	else
-	{
-	  stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
-     }
-          if (type!="normal_cpp" && type != "normal_c")
-		{
-	    		stream << "\nINCLUDES = $(all_includes)\n\n";
-             stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
-			if( type == "kpart_plugin")
-			{
-				stream << "\nLDADD = " << getLDADD() << "\n\n";
-				stream << "\nlib" << dir.dirName() << "_la_LIBADD = " << getLDADD() << "\n\n";
-				stream << "\nlib" << dir.dirName() << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
-			}
-		}
-          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
-          {
-			          if( (type == "kio_slave") )
-						stream << "kio_" << dir.dirName() << "_la_METASOURCES=AUTO\n\n";
-					else
-	   					 stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
-	  }
-          else
-           if (QFileInfo(getProjectDir() + "automoc").exists())
-           {
-			 if( (type == "kio_slave") )
-				stream << "kio_" << dir.dirName() <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
-			else
-	    stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
-           }
-       if( (type == "kio_slave") )
-		{
-			stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
-			stream << "kio_" << dir.dirName() << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
-			stream << "kio_" << dir.dirName() << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
-		}
-	  else
-	  stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
-    if(isQt2Project())	
-	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
-  	  stream << "KDE_OPTIONS = qtonly\n";
-	}
-
-	//***************************generate needed things for a po makefile*********
-	if (config.readEntry("type") == "po" && (!isKDE2Project())){ // a po makefile - KDE2 Projects have PO_FILES=AUTO in it.
-	  getPOFiles(makefile,po_files);
-	  for(str= po_files.first();str !=0;str = po_files.next()){
-	    pos =  str + " " + pos ;
-	  }
-	  
-	  stream <<  "POFILES = " << pos << "\n";
-	}
- 
-	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
-//	QString type=getProjectType();
-  if(!(isKDE2Project() || isQt2Project()) ){  // KDE2 and Qt2 use KDE큦 admin dir which contains am_edit
-        if (makefile==QString("Makefile.am"))
-        {
-          if (QFileInfo(getProjectDir() + "am_edit").exists())
-          {
-           stream << "dist-hook:\n\t-perl am_edit\n";
-      	  }
-          else if (QFileInfo(getProjectDir() + "automoc").exists())
-          {
-           stream << "dist-hook:\n\t-perl automoc\n";
+            stream << "TRANSLATIONS = " << tsfiles << "\n";
+            // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+            stream << "KDE_OPTIONS = qtonly\n";
           }
-       }
-  }
-	//************SUBDIRS***************
-	if(!subdirs.isEmpty()){ // the SUBDIRS key
-	  stream << "\nSUBDIRS = ";
-	  for(str2 = subdirs.first();str2 !=0;str2 = subdirs.next()){
-	    stream << str2 << " ";
-	  }
-	}
-	stream << "\n";
-	//************EXTRA_DIST************
-	dist_str = "\nEXTRA_DIST = ";
-	bool dist_write=false;
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("dist")){
-	    dist_str = dist_str + getName(str2) + " ";
-	    dist_write = true;
-	  }
-	}
-	if (dist_write){
-	  stream << dist_str << "\n";
-	}
-	//**************install-data-local****************
-	bool install_data=false;
-	QString install_data_str = "\ninstall-data-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install") && config.readEntry("type") != "SCRIPT"){
-	    install_data_str = install_data_str + "\t$(mkinstalldirs) " 
-	      + getDir(config.readEntry("install_location")) + "\n";
-	    install_data_str = install_data_str + "\t$(INSTALL_DATA) $(srcdir)/" +
-	      getName(str2) + " " + config.readEntry("install_location") + "\n";
-	    
-	    install_data = true;
-	  }
-	}
-	if(install_data){
-	  stream << install_data_str;
-	}
-	
-	//**************install-exec-local****************
-	bool install_exec=false;
-	QString install_exec_str = "\ninstall-exec-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install") && config.readEntry("type") == "SCRIPT"){
-	    install_exec_str = install_exec_str + "\t$(mkinstalldirs) " 
-	      + getDir(config.readEntry("install_location")) + "\n";
-	    install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
-	      getName(str2) + " " + config.readEntry("install_location") + "\n";
-	    install_exec = true;
-	  }
-	}
-	if(install_exec){
-	  stream << install_exec_str;
-	}
-	
-	//**************uninstall-local*******************
-	bool uninstall_local=false;
-	QString uninstall_local_str = "\nuninstall-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install")) {
-	    uninstall_local_str = uninstall_local_str + "\t-rm -f " + 
-	      config.readEntry("install_location") +"\n";
-	    uninstall_local=true;
-	  }
-	}
-	if(uninstall_local){
-	  stream << uninstall_local_str;
-	}
-	stream << "\n";	
-	found = true;
+  
+          /********************* QT 2 INTERNATIONALIZATION END **************/
+  
+          if(static_libs.isEmpty())
+            stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
+          else
+          { // we must link some libs
+            stream << getBinPROGRAM()  <<  "_LDADD   = ";
+            for(libname = static_libs.first();libname != 0;libname = static_libs.next())
+              stream << libname.replace(QRegExp("^"+getSubDir()),"./") << " "; // remove the subdirname
+
+            stream << getLDADD();
+          }
+
+          if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "normal_gnome")
+            stream << " $(LIBSOCKET)" << "\n";
+          else
+            stream << "\n";
+
+        }
+        //***************************generate needed things for static_library*********
+        config.setGroup(makefile);
+        if(config.readEntry("type") == "static_library")
+        {
+          getSources(makefile,source_files);
+          for(str= source_files.first();str !=0;str = source_files.next())
+            sources =  str + " " + sources;
+
+          QDir dir(getDir(makefile));
+          QString type=getProjectType();
+          if (type!="normal_cpp" && type != "normal_c")
+            stream << "\nINCLUDES = $(all_includes)\n\n";
+
+          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
+            stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
+          else
+            if (QFileInfo(getProjectDir() + "automoc").exists())
+              stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+
+          stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
+          stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
+          if(isQt2Project())
+            // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+            stream << "KDE_OPTIONS = qtonly\n";
+        }
+
+        //***************************generate needed things for shared_library*********
+        config.setGroup(makefile);
+        if(config.readEntry("type") == "shared_library" )
+        {
+          getSources(makefile,source_files);
+          for(str= source_files.first();str !=0;str = source_files.next())
+            sources =  str + " " + sources ;
+
+          QDir dir(getDir(makefile));
+          QString type=getProjectType();
+          if( (type == "kio_slave") )
+            stream << "kde_module_LTLIBRARIES = kio_" << dir.dirName() << ".la\n\n";
+          else
+            stream << "lib_LTLIBRARIES = lib" << dir.dirName() << ".la\n\n";
+
+          if (type!="normal_cpp" && type != "normal_c")
+          {
+            stream << "\nINCLUDES = $(all_includes)\n\n";
+            stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
+            if( type == "kpart_plugin")
+            {
+              stream << "\nLDADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << dir.dirName() << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << dir.dirName() << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
+            }
+          }
+          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
+          {
+            if( (type == "kio_slave") )
+              stream << "kio_" << dir.dirName() << "_la_METASOURCES=AUTO\n\n";
+            else
+              stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
+          }
+          else
+          {
+            if (QFileInfo(getProjectDir() + "automoc").exists())
+            {
+              if( (type == "kio_slave") )
+                stream << "kio_" << dir.dirName() <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+              else
+                stream << "lib" << dir.dirName() << "_la_METASOURCES = USE_AUTOMOC\n\n";
+            }
+          }
+
+          if( (type == "kio_slave") )
+          {
+            stream << "kio_" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+            stream << "kio_" << dir.dirName() << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
+            stream << "kio_" << dir.dirName() << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+          }
+          else
+            stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+
+          if(isQt2Project())
+            // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+            stream << "KDE_OPTIONS = qtonly\n";
+        }
+
+        //***************************generate needed things for a po makefile*********
+        if (config.readEntry("type") == "po" && (!isKDE2Project()))
+        { // a po makefile - KDE2 Projects have PO_FILES=AUTO in it.
+          getPOFiles(makefile,po_files);
+          for(str= po_files.first();str !=0;str = po_files.next())
+            pos =  str + " " + pos ;
+
+          stream <<  "POFILES = " << pos << "\n";
+        }
+ 
+        // ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
+        //  QString type=getProjectType();
+        if(!(isKDE2Project() || isQt2Project()) )
+        {  // KDE2 and Qt2 use KDE큦 admin dir which contains am_edit
+          if (makefile==QString("Makefile.am"))
+          {
+            if (QFileInfo(getProjectDir() + "am_edit").exists())
+              stream << "dist-hook:\n\t-perl am_edit\n";
+            else
+              if (QFileInfo(getProjectDir() + "automoc").exists())
+                 stream << "dist-hook:\n\t-perl automoc\n";
+          }
+        }
+
+        //************SUBDIRS***************
+        if(!subdirs.isEmpty())
+        { // the SUBDIRS key
+          stream << "\nSUBDIRS = ";
+          for(str2 = subdirs.first();str2 !=0;str2 = subdirs.next()){
+            stream << str2 << " ";
+          }
+        }
+        stream << "\n";
+
+        //************EXTRA_DIST************
+        dist_str = "\nEXTRA_DIST = ";
+        bool dist_write=false;
+        for(str2 = files.first();str2 !=0;str2 = files.next())
+        {
+          config.setGroup(str2);
+          if (config.readBoolEntry("dist"))
+          {
+            dist_str = dist_str + getName(str2) + " ";
+            dist_write = true;
+          }
+        }
+        if (dist_write)
+          stream << dist_str << "\n";
+
+        //**************install-data-local****************
+        bool install_data=false;
+        QString install_data_str = "\ninstall-data-local:\n";
+        for(str2 = files.first();str2 !=0;str2 = files.next())
+        {
+          config.setGroup(str2);
+          if (config.readBoolEntry("install") && config.readEntry("type") != "SCRIPT")
+          {
+            install_data_str = install_data_str + "\t$(mkinstalldirs) "
+              + getDir(config.readEntry("install_location")) + "\n";
+            install_data_str = install_data_str + "\t$(INSTALL_DATA) $(srcdir)/" +
+              getName(str2) + " " + config.readEntry("install_location") + "\n";
+
+            install_data = true;
+          }
+        }
+        if(install_data)
+          stream << install_data_str;
+
+        //**************install-exec-local****************
+        bool install_exec=false;
+        QString install_exec_str = "\ninstall-exec-local:\n";
+        for(str2 = files.first();str2 !=0;str2 = files.next())
+        {
+          config.setGroup(str2);
+          if (config.readBoolEntry("install") && config.readEntry("type") == "SCRIPT")
+          {
+            install_exec_str = install_exec_str + "\t$(mkinstalldirs) "
+              + getDir(config.readEntry("install_location")) + "\n";
+            install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
+              getName(str2) + " " + config.readEntry("install_location") + "\n";
+            install_exec = true;
+          }
+        }
+
+        if(install_exec)
+          stream << install_exec_str;
+
+        //**************uninstall-local*******************
+        bool uninstall_local=false;
+        QString uninstall_local_str = "\nuninstall-local:\n";
+        for(str2 = files.first();str2 !=0;str2 = files.next())
+        {
+          config.setGroup(str2);
+          if (config.readBoolEntry("install"))
+          {
+            uninstall_local_str = uninstall_local_str + "\t-rm -f " +
+              config.readEntry("install_location") +"\n";
+            uninstall_local=true;
+          }
+        }
+        if(uninstall_local)
+          stream << uninstall_local_str;
+
+        stream << "\n";
+        found = true;
       }
 
-    if(found == false){
-	stream << str +"\n";
+      if(found == false)
+        stream << str +"\n";
+
+      if(!customfile && str =="####### kdevelop will overwrite this part!!! (end)############")
+      {
+        stream << str + "\n";
+        found = false;
       }
-    if(!customfile && str =="####### kdevelop will overwrite this part!!! (end)############"){
-      stream << str + "\n";
-      found = false;
-    } 
     } // end for
   }// end writeonly
   file.close();
@@ -1035,7 +1050,7 @@ void CProject::getPOFiles(QString rel_name_makefileam,QStrList& po_files){
     {
       info = getFileInfo(file);
       if(info.type == PO){
-	po_files.append(getName(file));
+  po_files.append(getName(file));
       }
     }
   }
@@ -1057,7 +1072,7 @@ void CProject::getTSFiles(QString makefileam, QStrList& ts_files){
     {
       info = getFileInfo(file);
       if(info.type == QT_TS){
-      	ts_files.append(getName(file));
+        ts_files.append(getName(file));
       }
     }
   }
@@ -1085,7 +1100,7 @@ void CProject::setSourcesHeaders(){
     // switch( getType( file ) )
 //     {
 //       case CPP_SOURCE:
-    // 	cpp_files.append(getProjectDir()+file);
+    //   cpp_files.append(getProjectDir()+file);
 //         break;
 //       case CPP_HEADER:        
 //         header_files.append(getProjectDir()+file);
@@ -1159,7 +1174,7 @@ void CProject::removeLFVGroup(QString name){
 
 void CProject::addMakefileAmToProject(QString rel_name,TMakefileAmInfo info){
 
-	cerr << "Create " << rel_name << endl;
+  cerr << "Create " << rel_name << endl;
         for ( QString subdir=info.sub_dirs.first(); subdir != 0; subdir=info.sub_dirs.next() )
             cerr << subdir << endl;
 
@@ -1206,7 +1221,7 @@ void CProject::updateConfigureIn(){
       config.setGroup("General");
       config.readListEntry("makefiles",makefile_list);  
       for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){
-	stream << makefile.remove(makefile.length()-3,3) << " ";
+  stream << makefile.remove(makefile.length()-3,3) << " ";
       }
       stream << ")\n";
       
@@ -1459,13 +1474,13 @@ QString CProject::readGroupEntry( const QString& group, const QString& tag, cons
 bool CProject::isKDEProject()
 {
   if (getProjectType() == "normal_kde" || getProjectType() == "mini_kde" || getProjectType() == "normalogl_kde")
-  		return true;
+      return true;
   return false;
 }
 bool CProject::isKDE2Project()
 {
   if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kpart_plugin")
-  		return true;
+      return true;
   return false;
 }
 bool CProject::isQtProject(){
@@ -1525,24 +1540,39 @@ QString CProject::getExecutable()
 
 QString CProject::getLibtoolDir()
 {
-  if (isAScript(getExecutable()))
-  {
-    QString dir = readGroupEntry( "Config for BinMakefileAm", "libtool_dir", getProjectDir());
-    if (!dir.isEmpty() && dir.right(1) != "/")
-      dir+="/";
-    if (QFile::exists(dir+"libtool"))
-      return dir;
-  }
-  return QString::null;
+  QString dir = readGroupEntry( "Config for BinMakefileAm", "libtool_dir", "");
+  if (!dir.isEmpty() && dir.right(1) != "/")
+    dir+="/";
+
+  return dir;
 }
 
 // **************************************************************************
 
 QString CProject::getLibtool()
 {
-  QString libtool = getLibtoolDir();
+  QString dir = getLibtoolDir();
+  QString libtool;
+
+  if (dir.isEmpty())
+  {
+    // Now try the projects root dir and see if one exists there
+    dir = getProjectDir();
+    if (!dir.isEmpty())
+    {
+      if (dir.right(1) != "/")
+        dir+="/";
+
+      libtool = dir+"libtool";
+    }
+  }
+  else
+    libtool=dir+"libtool";
+
   if (!libtool.isEmpty())
-    return libtool+"libtool";
+    if (QFile::exists(libtool))
+      return libtool;
+
   return QString::null;
 }
 
