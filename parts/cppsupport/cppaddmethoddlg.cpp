@@ -67,6 +67,9 @@ CppAddMethodDialog::CppAddMethodDialog(ClassStore *_store, const QString &classN
 
     connect( pbOk, SIGNAL( clicked() ), SLOT( accept() ) );
     connect( pbCancel, SIGNAL( clicked() ), SLOT( reject() ) );
+    
+    GroupItem->setEnabled(false);
+    
 #ifdef TEST_DEBUG_ONLY
     // test only
    pbHelp->setEnabled(true);
@@ -125,7 +128,7 @@ void CppAddMethodDialog::slotToggleModifier()
     edType->setEnabled(true);
     edType->clear();
     edName->clear();    
-    rbPublic->setChecked(true);
+    //rbPublic->setChecked(true);
 
     if (rbSignal->isChecked()) {
         rbPublic->setEnabled(false);
@@ -186,6 +189,7 @@ void CppAddMethodDialog::accept()
 /** add new Paramter */
 void CppAddMethodDialog::slotNewPara()
 {
+    if (!GroupItem->isEnabled()) GroupItem->setEnabled(true);
   lbPara->insertItem(" ");
   lbPara->setSelected(lbPara->count()-1, true);
   paraType->setFocus();
@@ -196,8 +200,14 @@ void CppAddMethodDialog::slotNewPara()
 void CppAddMethodDialog::slotDelPara(){
   int curr = lbPara->currentItem();
   editactive = true;
-  if (curr >= 0)
-    lbPara->removeItem(curr);
+  if (curr >= 0) {
+      lbPara->removeItem(curr);
+      paraType->clear();
+      paraName->clear();
+      paraDefault->clear();
+      paraDocu->clear();
+      GroupItem->setEnabled(false);
+  }
   editactive = false;
 }
     
@@ -251,6 +261,7 @@ void CppAddMethodDialog::slotDownPara()
 void CppAddMethodDialog::slotParaHighLight( QListBoxItem * ){
    kdDebug() << "slot ParaHighlight called "<< editactive << endl;
    if (! editactive) {
+       if(!(GroupItem->isEnabled())) GroupItem->setEnabled(true);
       editactive = true;
       QString txt = lbPara->currentText();
       int docupos = txt.find(COMM);
