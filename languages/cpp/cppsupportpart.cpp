@@ -1504,7 +1504,7 @@ void CppSupportPart::saveProjectSourceInfo( )
     createIgnorePCSFile();
 
     QDataStream stream( &f );
-    QMap<QString, Q_ULONG> offsets;
+    QMap<QString, uint> offsets;
 
     QString pcs( "PCS" );
     stream << pcs << KDEV_PCS_VERSION;
@@ -1518,7 +1518,7 @@ void CppSupportPart::saveProjectSourceInfo( )
   stream << dom->name() << toTime_t(m_timestamp[ dom->name() ]);
 #endif
 	offsets.insert( dom->name(), stream.device()->at() );
-	stream << (Q_ULONG)0; // dummy offset
+	stream << (uint)0; // dummy offset
     }
 
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
