@@ -2,12 +2,12 @@
 #include <kurlrequester.h>
 
 #include "subclassesdlg.h"
-
+#include "subclassesdlg.moc"
 SubclassesDlg::SubclassesDlg(QString form, DomUtil::PairList &config, QString projectDir, QWidget* parent, const char* name, bool modal, WFlags fl)
 : SubclassesDlgBase(parent,name, modal,fl), m_form(form), m_config(config), m_projectDir(projectDir)
 {
     subclass_url->setEnabled(false);
-     
+
     DomUtil::PairList::iterator it;
     for ( it = config.begin(); it != config.end(); ++it )
     {
@@ -24,7 +24,7 @@ SubclassesDlg::~SubclassesDlg()
 void SubclassesDlg::accept()
 {
     QPtrList<DomUtil::Pair> pairsToRemove;
-    
+
     DomUtil::PairList::iterator it;
     for ( it = m_config.begin(); it != m_config.end(); ++it )
     {
@@ -33,18 +33,18 @@ void SubclassesDlg::accept()
             pairsToRemove.append(&(*it));
         }
     }
-    
+
     DomUtil::Pair *pair;
     for ( pair = pairsToRemove.first(); pair; pair = pairsToRemove.next() )
     {
         m_config.remove(*pair);
     }
-    
+
     for (int i = 0; i < subclasses_box->count(); ++i)
     {
         m_config << DomUtil::Pair(subclasses_box->text(i).remove(0,m_projectDir.length()), m_form);
     }
-    
+
     SubclassesDlgBase::accept();
 }
 
@@ -56,16 +56,16 @@ void SubclassesDlg::newRelation()
     subclasses_box->setCurrentItem(subclasses_box->count()-1);
     subclass_url->setEnabled(true);
     subclass_url->setURL("");
-    subclass_url->setFocus();    
+    subclass_url->setFocus();
 }
 
 void SubclassesDlg::removeRelation()
 {
     if (subclasses_box->currentItem() > -1)
     {
-        QListBoxItem *item = subclasses_box->item(subclasses_box->currentItem());      
+        QListBoxItem *item = subclasses_box->item(subclasses_box->currentItem());
         int itemIdx = subclasses_box->currentItem();
-        
+
         if (item->prev())
         {
             subclasses_box->setCurrentItem(item->prev());
