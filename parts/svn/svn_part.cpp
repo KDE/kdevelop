@@ -32,10 +32,12 @@
 #include <qvbox.h>
 #include <qregexp.h>
 #include <qinputdialog.h>
+#include <ktempfile.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "kdevappfrontend.h"
+#include "kdevdifffrontend.h"
 #include "commitdlg.h"
 #include "svn_part.h"
 #include <subversion-1/svn_pools.h>
@@ -44,6 +46,8 @@
 #include <subversion-1/svn_utf.h>
 #include <subversion-1/svn_sorts.h>
 #include <subversion-1/svn_time.h>
+#include <subversion-1/svn_opt.h>
+#include <subversion-1/svn_wc.h>
 #include <apr_hash.h>
 #include <apr_tables.h>
 #include "svnoptionswidget.h"
@@ -95,39 +99,32 @@ void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
 		KPopupMenu *sub = new KPopupMenu(popup);
 		QString name = fi.fileName();
 		sub->insertTitle( i18n("Actions for %1").arg(name) );
-		sub->insertItem( i18n("Commit (repository)"),
-				this, SLOT(slotCommit()) );
-		sub->insertItem( i18n("Update (repository)"),
-				this, SLOT(slotUpdate()) );
+		sub->insertItem( i18n("Commit (repository)"), this, SLOT(slotCommit()) );
+		sub->insertItem( i18n("Update (repository)"), this, SLOT(slotUpdate()) );
+		sub->insertSeparator(); sub->insertItem( i18n("Add to Repository (local)"), this, SLOT(slotAdd()) );
+		sub->insertItem( i18n("Remove From Repository (local)"), this, SLOT(slotRemove()) );
 		sub->insertSeparator();
-		sub->insertItem( i18n("Add to Repository (local)"),
-				this, SLOT(slotAdd()) );
-		sub->insertItem( i18n("Remove From Repository (local)"),
-				this, SLOT(slotRemove()) );
+		sub->insertItem( i18n("Revert file (local)") , this, SLOT(slotRevert()) );
+		sub->insertItem( i18n("Status (local)") , this, SLOT(slotStatusLocal()) );
+		sub->insertItem( i18n("Status (repository)") , this, SLOT(slotStatusRemote()) );
 		sub->insertSeparator();
-		sub->insertItem( i18n("Revert file (local)") ,
-				this, SLOT(slotRevert()) );
-		sub->insertItem( i18n("Status (local)") ,
-				this, SLOT(slotStatusLocal()) );
-		sub->insertItem( i18n("Status (remote)") ,
-				this, SLOT(slotStatusRemote()) );
-		sub->insertSeparator();
-		sub->insertItem( i18n("Diff to Repository (repository)"),
-				this, SLOT(slotDiff()) );
-		sub->insertItem( i18n("Log (repository)"),
-				this, SLOT(slotLog()) );
+		sub->insertItem( i18n("Diff (repository)"), this, SLOT(slotDiff()) );
+		sub->insertItem( i18n("Log (repository)"), this, SLOT(slotLog()) );
 		if (fi.isDir())
-			sub->insertItem( i18n("Cleanup (local)"),
-					this, SLOT(slotCleanup()) );
+			sub->insertItem( i18n("Cleanup (local)"), this, SLOT(slotCleanup()) );
 		popup->insertItem(i18n("Subversion"), sub);
 	}
 }
 
 #define EDITOR_PREFIX_TXT "SVN:"
 //stolen in svn cmndline code and modified
-svn_error_t *SvnPart::get_log_message (const char **log_msg, apr_array_header_t *commit_items,
-		void * /*baton*/, apr_pool_t *pool)
+svn_error_t *SvnPart::get_log_message (const char **log_msg, 
+		const char **tmp_file,
+		apr_array_header_t *commit_items,
+		void * /*baton*/,
+		apr_pool_t *pool)
 {
+	*tmp_file = NULL;
 	const char *default_msg = "\n"
 		EDITOR_PREFIX_TXT 
 		" ---------------------------------------------------------------------\n" 
@@ -137,8 +134,7 @@ svn_error_t *SvnPart::get_log_message (const char **log_msg, apr_array_header_t 
 		EDITOR_PREFIX_TXT " Current status of the target files and directories:\n"
 		EDITOR_PREFIX_TXT "\n";
 	svn_stringbuf_t *message = NULL;
-//	struct log_msg_baton *lmb = (log_msg_baton*)baton;
-	
+
 	if (! (commit_items || commit_items->nelts))
 	{
 		*log_msg = "";
@@ -176,14 +172,12 @@ svn_error_t *SvnPart::get_log_message (const char **log_msg, apr_array_header_t 
 			if (item->state_flags & SVN_CLIENT_COMMIT_ITEM_PROP_MODS)
 				prop_mod = 'M';
 
-			svn_stringbuf_appendcstr (tmp_message, EDITOR_PREFIX_TXT);
-			svn_stringbuf_appendcstr (tmp_message, "   ");
-			svn_stringbuf_appendbytes (tmp_message, &text_mod, 1); 
-			svn_stringbuf_appendbytes (tmp_message, &prop_mod, 1); 
-			svn_stringbuf_appendcstr (tmp_message, "   ");
-			svn_stringbuf_appendcstr (tmp_message, path);
-			svn_stringbuf_appendcstr (tmp_message, "\n");
-		}
+			  svn_stringbuf_appendbytes (tmp_message, &text_mod, 1); 
+			  svn_stringbuf_appendbytes (tmp_message, &prop_mod, 1); 
+			  svn_stringbuf_appendcstr (tmp_message, "   ");
+			  svn_stringbuf_appendcstr (tmp_message, path);
+			  svn_stringbuf_appendcstr (tmp_message, "\n");
+	}
 
 		CommitDialog d;
 		d.resize(400,400);
@@ -259,12 +253,12 @@ svn_error_t *SvnPart::promptUser(char **result, const char *prompt, svn_boolean_
 		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Normal, QString::null, &ok, NULL );
 		if (!ok)
-			return svn_error_create (0, 0, NULL, pool, "Authentification aborted"); 
+			return svn_error_create (0, 0, NULL, "Authentification aborted"); 
 	} else {
 		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Password, QString::null, &ok, NULL );
 		if (!ok)
-			return svn_error_create (0, 0, NULL, pool, "Authentification aborted"); 
+			return svn_error_create (0, 0, NULL, "Authentification aborted"); 
 	}
 		
 	err = svn_utf_cstring_to_utf8 ((const char **)result, text, NULL, pool);
@@ -283,18 +277,15 @@ svn_client_auth_baton_t *SvnPart::createAuthBaton() {
 
 	auth_baton->prompt_callback = SvnPart::promptUser;
 	auth_baton->prompt_baton = NULL;
+	auth_baton->store_auth_info=TRUE;
 
-	//I am not sure this will ever be used, since projects should be imported manually for now
-	//so login/pass should be in .svn/ dirs
-	//actually this baton could be saved and reused, but I don't know how the client lib will handle this
-	//and, what happens if I change of project ?
 	if (!auth_username.isEmpty()) {
 		auth_baton->username = auth_username;
-		auth_baton->overwrite = TRUE;
+		auth_baton->got_new_auth_info=TRUE;
 	}
 	if (!auth_password.isEmpty()) {
 		auth_baton->password = auth_password;
-		auth_baton->overwrite = TRUE;
+		auth_baton->got_new_auth_info=TRUE;
 	}
 	return auth_baton;
 }
@@ -325,10 +316,17 @@ void SvnPart::slotStatus(bool remote) {
 	
 	kdDebug() << "SVN status " << popupfile << " Remote : " << remote << endl;
 
-	svn_error_t * err = svn_client_status (&statushash, &youngest,
-                   popupfile.utf8(), auth_baton, recursive, verbose, remote,
-                   false, //do it an option ? (no_ignore)
-                   pool);
+	svn_error_t * err = svn_client_status (&statushash, 
+		&youngest,
+        	popupfile.utf8(), 
+		auth_baton, 
+		recursive, 
+		true, //get_all
+		true, //update
+		false, //do it an option ? (no_ignore)
+		NULL,//notify_func //TODO
+		NULL,//notify_baton
+		pool);
 	if (err) {
 		Error(err);
 		return;
@@ -385,8 +383,6 @@ void SvnPart::slotCommit() {
 	apr_array_header_t *targets = apr_array_make (pool, 5, sizeof (const char *));
 	apr_array_header_t *condensed_targets;
 	svn_client_get_commit_log_t log_msg_func=SvnPart::get_log_message;
-	const char *xml_dst=NULL;
-	svn_revnum_t revision=SVN_INVALID_REVNUM;
 	svn_boolean_t nonrecursive=!recursive;
 
 	kdDebug() << "SVN commit " << popupfile << endl;
@@ -420,7 +416,7 @@ void SvnPart::slotCommit() {
 	//commit
 	error = svn_client_commit (&commit_info, notify_func, notify_baton, auth_baton, targets,
 			log_msg_func, make_log_msg_baton(base_dir,pool),
-			xml_dst, revision, nonrecursive, pool);
+			/*xml_dst, revision,*/ nonrecursive, pool);
 	if (error) {
 		Error(error);
 		return;
@@ -437,13 +433,12 @@ void SvnPart::slotCommit() {
 
 void SvnPart::slotUpdate() {
 	svn_client_auth_baton_t *auth_baton = createAuthBaton();
-	const char *xml_src=NULL; //not used here
-	svn_client_revision_t revision;
+	svn_opt_revision_t revision;
 
 	svn_wc_notify_func_t notify_func=NULL;
 	void *notify_baton=NULL;
 
-	revision.kind = svn_client_revision_unspecified;//not sure about that one ;)
+	revision.kind = svn_opt_revision_head;//not sure about that one ;)
 
 	//we could use the condensed targets array, see the cmdline 'svn' code for that
 	//though our path is already quite clean
@@ -451,12 +446,43 @@ void SvnPart::slotUpdate() {
 	
 	get_notifier (&notify_func, &notify_baton, FALSE, FALSE, pool);
 	
-	svn_error_t *err = svn_client_update (auth_baton, popupfile.utf8(), xml_src, &revision, 
+	svn_error_t *err = svn_client_update (auth_baton, popupfile.utf8(), &revision, 
 			recursive, notify_func, notify_baton, pool);
 	if (err)
 		Error(err);
 	else//idem: remove ?
 		svnMsg("Done");
+}
+
+void SvnPart::slotDiff() {
+	svn_client_auth_baton_t *auth_baton=createAuthBaton();
+	svn_boolean_t recurse=recursive;
+	svn_opt_revision_t revision_start,revision_end;
+	revision_start.kind = svn_opt_revision_base;
+	revision_end.kind = svn_opt_revision_working;
+	apr_file_t *outfile, *errfile;
+	apr_array_header_t *options;
+	const char *extensions = "";
+	
+	options = svn_cstring_split (extensions, " \t\n\r", TRUE, pool);
+	KTempFile tmpOut, tmpErr;
+	QString tmpOutName = tmpOut.name();
+	QString tmpErrName = tmpErr.name();
+	///XXX error control
+	apr_file_open(&outfile, tmpOutName.utf8(), APR_WRITE, 0600, pool);
+	apr_file_open(&errfile, tmpErrName.utf8(), APR_WRITE, 0600, pool);
+	
+	kdDebug() << "SVN diff " << popupfile.utf8() << endl;
+	svn_error_t *err = svn_client_diff (options, auth_baton, popupfile.utf8(), &revision_start,
+			popupfile.utf8(), &revision_end, recurse, outfile, errfile, pool);
+	if (err)
+		Error(err);
+	else {//idem : remove ?
+		svnMsg("Done");
+		if (diffFrontend())
+			diffFrontend()->openURL(tmpOutName);
+		svnLog(tmpErr.textStream()->read());
+	}
 }
 
 void SvnPart::slotAdd() {
@@ -466,7 +492,7 @@ void SvnPart::slotAdd() {
 
 	kdDebug() << "SVN add " << popupfile.utf8() << endl;
 	get_notifier (&notify_func, &notify_baton, FALSE, FALSE, pool);
-	svn_error_t *err= svn_client_add (popupfile.utf8(), recurse,notify_func,notify_baton,pool);
+	svn_error_t *err = svn_client_add (popupfile.utf8(), recurse,notify_func,notify_baton,pool);
 	if (err)
 		Error(err);
 	else//idem : remove ?
@@ -573,11 +599,11 @@ void SvnPart::slotLog() {
 	svn_client_auth_baton_t *auth_baton=createAuthBaton();
 	apr_array_header_t *targets = apr_array_make (pool, 5, sizeof (const char *));
 	struct log_message_receiver_baton lb;
-	svn_client_revision_t start;
-	svn_client_revision_t end;
+	svn_opt_revision_t start;
+	svn_opt_revision_t end;
 
-	start.kind=svn_client_revision_head;
-	end.kind=svn_client_revision_number;
+	start.kind=svn_opt_revision_head;
+	end.kind=svn_opt_revision_number;
 	end.value.number=1;
 
 	winlog->clear();
@@ -626,8 +652,8 @@ svn_error_t *SvnPart::log_msg_receiver(void *baton, apr_hash_t *changed_paths, s
 		/* Convert date to a format for humans. */
 		apr_time_t time_temp;
 
-		SVN_ERR (svn_time_from_nts (&time_temp, date, pool));
-		date = svn_time_to_human_nts(time_temp, pool);
+		SVN_ERR (svn_time_from_cstring (&time_temp, date, pool));
+		date = svn_time_to_human_cstring(time_temp, pool);
 	}
 	else
 		date = "(no date)";
@@ -708,9 +734,6 @@ svn_error_t *SvnPart::log_msg_receiver(void *baton, apr_hash_t *changed_paths, s
 	me->svnLog(SEP_STRING);
 
 	return SVN_NO_ERROR;
-}
-
-void SvnPart::slotDiff() {
 }
 
 void SvnPart::generate_status_codes (char *str_status,
@@ -959,7 +982,7 @@ void SvnPart::notify (void *baton, const char *path, svn_wc_notify_action_t acti
 							statchar_buf[0] = 'C';
 						else if (content_state == svn_wc_notify_state_merged)
 							statchar_buf[0] = 'G';
-						else if (content_state == svn_wc_notify_state_modified)
+						else if (content_state == svn_wc_notify_state_changed)
 							statchar_buf[0] = 'U';
 					}
 
@@ -967,7 +990,7 @@ void SvnPart::notify (void *baton, const char *path, svn_wc_notify_action_t acti
 						statchar_buf[1] = 'C';
 					else if (prop_state == svn_wc_notify_state_merged)
 						statchar_buf[1] = 'G';
-					else if (prop_state == svn_wc_notify_state_modified)
+					else if (prop_state == svn_wc_notify_state_changed)
 						statchar_buf[1] = 'U';
 
 					me->svnMsg (QString(statchar_buf)+QString(" ")+ QString(path_native));

@@ -55,8 +55,8 @@ class SvnPart : public KDevPlugin
 		static svn_error_t *log_msg_receiver(void *baton, apr_hash_t *changed_paths, svn_revnum_t rev, 
 				const char *author, const char *date, const char *msg, apr_pool_t *pool);
 		//to create logs for the lib
-		static svn_error_t *get_log_message (const char **log_msg, apr_array_header_t *commit_items,
-				void *baton, apr_pool_t *pool);
+		static svn_error_t *get_log_message (const char **log_msg, const char **tmp_file,apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
+
 		void *make_log_msg_baton (const char *base_dir, apr_pool_t *pool);
 		// to receive notifications from the svn lib
 		static void notify (void *baton, const char *path, svn_wc_notify_action_t action,
