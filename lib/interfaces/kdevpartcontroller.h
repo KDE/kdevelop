@@ -74,7 +74,7 @@ public:
    * Embed a part into the main area of the mainwindow
    * @param part the part to embed
    * @param name the name of the part
-   * @param shortDescription currently not used (??)
+   * @param shortDescription currently not used (?)
    */
   virtual void showPart( KParts::Part* part, const QString& name, const QString& shortDescription ) = 0;
   
