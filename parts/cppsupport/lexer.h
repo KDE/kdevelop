@@ -207,6 +207,9 @@ public:
 
     int tokenPosition( const Token& token ) const;
     void getTokenPosition( const Token& token, int* line, int* col );
+    
+protected:
+    int nextToken( int pos, Token& token );
 
 private:
     void tokenize();
@@ -225,6 +228,7 @@ private:
     int findOperator3( int pos );
     int findOperator2( int pos );
     int handleDirective( const QString& directive, int pos );
+    void addToken( const Token& tk );
 
 private:
     Driver* m_driver;
@@ -244,6 +248,7 @@ private:
     int m_currentLine;
     int m_currentColumn;
     bool m_skipWordsEnabled;
+    bool m_skipping;
 };
 
 
@@ -615,5 +620,12 @@ inline QString Lexer::toString( const Token& token ) const
 {
     return m_source.mid( token.position(), token.length() );
 }
+
+inline void Lexer::addToken( const Token& tk )
+{
+    if( !m_skipping )
+	m_tokens[ m_size++ ] = tk;
+}
+
 
 #endif
