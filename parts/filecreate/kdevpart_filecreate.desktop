@@ -7,3 +7,4 @@ Name=KDevFileCreate
 Icon=kdevelop
 ServiceTypes=KDevelop/CreateFile
 X-KDE-Library=libkdevfilecreate
+X-KDevelop-Scope=Global
