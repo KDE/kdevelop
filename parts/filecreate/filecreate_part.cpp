@@ -367,69 +367,44 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     subtype = selectedFileType->subtypeRef();
   }
 
+  QString fullPath = selectedURL.path();
+  // add appropriate extension, if not already there
+  if (!ext.isNull() & ext!="" & !fullPath.endsWith("." + ext)) fullPath+="." + ext;
+
+  QString filename = URLUtil::filename(fullPath);
+  kdDebug(9034) << "full path = " << fullPath << endl;
+
+  // add in subtype, if specified
+  if (!subtype.isEmpty())
+      ext += "-" + subtype;
+
+  // create file from template
+  if (!FileTemplate::exists(this, ext) ||
+      !FileTemplate::copy(this, ext, fullPath) ) {
+      // no template, create a blank file instead
+      QFile f(fullPath);
+      f.open( IO_WriteOnly );
+      f.close();
+  }
   if (dialog.addToProject())
   {
     // work out the path relative to the project directory
     QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
-
-    // add appropriate extension, if not already there
-    if (!ext.isNull() & ext!="" & !relToProj.endsWith("." + ext)) relToProj+="." + ext;
-
-    QString filename = URLUtil::filename(relToProj);
-
-    kdDebug(9034) << "relative to proj dir = " << relToProj << endl;
-    kdDebug(9034) << "filename = " << filename << endl;
-
-    // add in subtype, if specified
-    if (!subtype.isEmpty())
-        ext += "-" + subtype;
-
-    // create file from template, and add it to the project
-    if (!FileTemplate::exists(this, ext) ||
-        !FileTemplate::copy(this, ext, project()->projectDirectory() + relToProj) ) {
-        // no template, create a blank file instead
-        QFile f(project()->projectDirectory() + relToProj);
-        f.open( IO_WriteOnly );
-        f.close();
-    }
-
     project()->addFile(relToProj.mid(1));
-
-    // tell the caller what we did
-    result.filename = filename;
-    result.dir = URLUtil::directory(relToProj);
-    result.status = KDevCreateFile::CreatedFile::STATUS_OK;
   }
-  else //this is for non-project files
+  else
   {
-    QString fullPath = selectedURL.path();
-    // add appropriate extension, if not already there
-    if (!ext.isNull() & ext!="" & !fullPath.endsWith("." + ext)) fullPath+="." + ext;
-
-    QString filename = URLUtil::filename(fullPath);
-
-    kdDebug(9034) << "full path = " << fullPath << endl;
-    kdDebug(9034) << "filename = " << filename << endl;
-
-    // add in subtype, if specified
-    if (!subtype.isEmpty())
-        ext += "-" + subtype;
-
-    // create file from template, and add it to the project
-    if (!FileTemplate::exists(this, ext) ||
-        !FileTemplate::copy(this, ext, fullPath) ) {
-        // no template, create a blank file instead
-        QFile f(fullPath);
-        f.open( IO_WriteOnly );
-        f.close();
-    }
     KURL url;
     url.setPath(fullPath);
     partController()->editDocument(url);
-    result.filename = filename;
-    result.dir = URLUtil::directory(fullPath);
-    result.status = KDevCreateFile::CreatedFile::STATUS_OK;
   }
+  
+  QString fileName = URLUtil::filename(fullPath);
+  kdDebug(9034) << "file name = " << filename << endl;
+  
+  result.filename = fileName;
+  result.dir = URLUtil::directory(fullPath);
+  result.status = KDevCreateFile::CreatedFile::STATUS_OK;
 
   return result;
 }
