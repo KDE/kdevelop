@@ -1027,11 +1027,21 @@ void CKDevelop::slotDebugSetArgs()
   if (args.isEmpty())
     QString args=prj->getExecuteArgs();
 
-  CExecuteArgDlg argdlg(this,"Arguments",i18n("Set debug arguments"),args);
+  CExecuteArgDlg argdlg(this,"Arguments",i18n("Debug with arguments"), args);
   if (argdlg.exec())
   {
-    prj->setDebugArgs(argdlg.getArguments());		
+    args = argdlg.getArguments();
+    prj->setDebugArgs(args);		
     prj->writeProject();
+
+    slotStatusMsg(QString().sprintf(i18n("Debug with arguments (%s) in %s"),
+                            args.data(), dbgExternalCmd.data()));
+
+    setupInternalDebugger();
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    dbgController->slotStart(prj->getBinPROGRAM(), args);
+    brkptManager->slotSetPendingBPs();
+    slotDebugRun();
   }
 }
 
@@ -1108,7 +1118,7 @@ void CKDevelop::slotBuildDebug()
 
     setupInternalDebugger();
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), prj->getDebugArgs());
+    dbgController->slotStart(prj->getBinPROGRAM(), QString());
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
     return;
@@ -3613,14 +3623,12 @@ void CKDevelop::statusCallback(int id_){
 
   ON_STATUS_MSG(ID_DEBUG_START,                  			    i18n("Invokes the debugger on the current project executable"))
   ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
-  ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Arguments for the debugger"))
-  ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine core file"))
-  ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Run other app than the current project executable"))
-//  ON_STATUS_MSG(ID_DEBUG_NORMAL,                          i18n(""))
+  ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Lets you debug your project app after specifying arguments for your app."))
+  ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine a core file"))
+  ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Debug an app other than the current project executable"))
   ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
-
   ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
-  ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution stopping at current cursor position"))
+  ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution until reaching the current cursor position"))
   ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
   ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
   ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
