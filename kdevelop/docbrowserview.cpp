@@ -27,7 +27,7 @@ DocBrowserView::DocBrowserView(QWidget* parent,char* name) : QextMdiChildView(na
 
 void DocBrowserView::resizeEvent (QResizeEvent *e){
 //  QextMdiChildView::resizeEvent(e);
-  KHTMLView* view=browser->htmlView();
+  KHTMLView* view=browser->view();
   view->resize(e->size());
 //  browser->resize(e->size());
 }

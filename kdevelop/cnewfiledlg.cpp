@@ -25,11 +25,14 @@
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qwhatsthis.h>
+#include <qlayout.h> 
+
 #include <ktabctl.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+
 #include "cnewfiledlg.h"
 #include "cgeneratenewfile.h"
 #include "cproject.h"

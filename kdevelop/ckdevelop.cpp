@@ -2363,7 +2363,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 //	    browser_widget->widget()->setFocus();
 //	    browser_widget->setFocus();
 	
-	    if (browser_widget->isTextSelected())
+	    if (browser_widget->hasSelection())
 		enableCommand(ID_EDIT_COPY);
 	    else
 		disableCommand(ID_EDIT_COPY);
