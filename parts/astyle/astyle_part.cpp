@@ -64,7 +64,6 @@ void AStylePart::beautifySource()
   while (formatter.hasMoreLines())
 	os << formatter.nextLine().c_str() << endl;
 
-  iface->setText(output);
   // workaround for kate clearing undo history on setText()
   iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
   iface->insertText( 0, 0, output);
