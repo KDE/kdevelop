@@ -57,6 +57,5 @@ Position=Top
 KDevScripting=false
 
 [UI]
-MDIStyle=0
+MDIStyle=1
 MDIMode=4
-MajorUIMode=QextMDI
