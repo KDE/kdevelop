@@ -61,9 +61,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 
 
   KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
-  newAction->setText( i18n("Create a new file", "New...") );
   newAction->setWhatsThis( i18n("<b>New file</b><p>Creates a new file. Also adds it the project if the <b>Add to project</b> checkbox is turned on.") );
-  newAction->setToolTip( i18n("New file") );
+  newAction->setToolTip( i18n("Create a new file") );
 
   m_filetypes.setAutoDelete(true);
 
