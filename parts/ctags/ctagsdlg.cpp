@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcheckbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qhbox.h>
@@ -45,73 +46,250 @@ struct CTagsExtensionMapping {
 };
 
 
-static CTagsKindMapping kindMappingC[] = {
-    { 'c', I18N_NOOP("class")            },
-    { 'd', I18N_NOOP("macro")            },
-    { 'e', I18N_NOOP("enumerator")       },
-    { 'f', I18N_NOOP("function")         },
-    { 'g', I18N_NOOP("enumeration")      },
-    { 'm', I18N_NOOP("member")           }, 
-    { 'n', I18N_NOOP("namespace")        },
-    { 'p', I18N_NOOP("prototype")        },
-    { 's', I18N_NOOP("struct")           },
-    { 't', I18N_NOOP("typedef")          },
-    { 'u', I18N_NOOP("union")            },
-    { 'v', I18N_NOOP("variable")         },
-    { 'x', I18N_NOOP("external variable")},
-    { 0  , 0                             }
+static CTagsKindMapping kindMappingAsm[] = {
+    { 'd', I18N_NOOP("define")              },
+    { 'l', I18N_NOOP("label")               },
+    { 'm', I18N_NOOP("macro")               },
+    { 0  , 0                                }
 };
 
 
-static CTagsKindMapping kindMappingJava[] = {
-    { 'c', I18N_NOOP("class")            },
-    { 'f', I18N_NOOP("field")            },
-    { 'i', I18N_NOOP("interface")        },
-    { 'm', I18N_NOOP("method")           },
-    { 'p', I18N_NOOP("package")          },
-    { 0  , 0                   }
+static CTagsKindMapping kindMappingAsp[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 's', I18N_NOOP("subroutine")          },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingAwk[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingBeta[] = {
+    { 'f', I18N_NOOP("fragment definition") },
+    { 'p', I18N_NOOP("any pattern")         },
+    { 's', I18N_NOOP("slot")                },
+    { 'v', I18N_NOOP("pattern")             },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingC[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'd', I18N_NOOP("macro")               },
+    { 'e', I18N_NOOP("enumerator")          },
+    { 'f', I18N_NOOP("function")            },
+    { 'g', I18N_NOOP("enumeration")         },
+    { 'm', I18N_NOOP("member")              }, 
+    { 'n', I18N_NOOP("namespace")           },
+    { 'p', I18N_NOOP("prototype")           },
+    { 's', I18N_NOOP("struct")              },
+    { 't', I18N_NOOP("typedef")             },
+    { 'u', I18N_NOOP("union")               },
+    { 'v', I18N_NOOP("variable")            },
+    { 'x', I18N_NOOP("external variable")   },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingCobol[] = {
+    { 'p', I18N_NOOP("paragraph")           },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingEiffel[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'f', I18N_NOOP("feature")             },
+    { 'l', I18N_NOOP("local entity")        },
+    { 0  , 0                                }
 };
 
 
 static CTagsKindMapping kindMappingFortran[] = {
-    { 'b', I18N_NOOP("block")         },
-    { 'c', I18N_NOOP("common")        },
-    { 'e', I18N_NOOP("entry")         },
-    { 'f', I18N_NOOP("function")      },
-    { 'i', I18N_NOOP("interface")     },
-    { 'k', I18N_NOOP("type component")},
-    { 'l', I18N_NOOP("label")         },
-    { 'L', I18N_NOOP("local")         },
-    { 'm', I18N_NOOP("module")        },
-    { 'n', I18N_NOOP("namelist")      },
-    { 'p', I18N_NOOP("program")       },
-    { 's', I18N_NOOP("subroutine")    },
-    { 't', I18N_NOOP("type")          },
-    { 'v', I18N_NOOP("variable")      },
-    { 0  , 0                }
+    { 'b', I18N_NOOP("block")               },
+    { 'c', I18N_NOOP("common")              },
+    { 'e', I18N_NOOP("entry")               },
+    { 'f', I18N_NOOP("function")            },
+    { 'i', I18N_NOOP("interface")           },
+    { 'k', I18N_NOOP("type component")      },
+    { 'l', I18N_NOOP("label")               },
+    { 'L', I18N_NOOP("local")               },
+    { 'm', I18N_NOOP("module")              },
+    { 'n', I18N_NOOP("namelist")            },
+    { 'p', I18N_NOOP("program")             },
+    { 's', I18N_NOOP("subroutine")          },
+    { 't', I18N_NOOP("type")                },
+    { 'v', I18N_NOOP("variable")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingJava[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'f', I18N_NOOP("field")               },
+    { 'i', I18N_NOOP("interface")           },
+    { 'm', I18N_NOOP("method")              },
+    { 'p', I18N_NOOP("package")             },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingLisp[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingMake[] = {
+    { 'm', I18N_NOOP("macro")               },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingPascal[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 'p', I18N_NOOP("procedure")           },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingPerl[] = {
+    { 's', I18N_NOOP("subroutine")          },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingPHP[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingPython[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingRexx[] = {
+    { 's', I18N_NOOP("subroutine")          },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingRuby[] = {
+    { 'c', I18N_NOOP("class")               },
+    { 'f', I18N_NOOP("function")            },
+    { 'm', I18N_NOOP("mixin")               },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingScheme[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 's', I18N_NOOP("set")                 },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingSh[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingSlang[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 'n', I18N_NOOP("namespace")           },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingTcl[] = {
+    { 'p', I18N_NOOP("procedure")           },
+    { 0  , 0                                }
+};
+
+
+static CTagsKindMapping kindMappingVim[] = {
+    { 'f', I18N_NOOP("function")            },
+    { 0  , 0                                }
 };
 
 
 static CTagsExtensionMapping extensionMapping[] = {
-    { "c++",  kindMappingC       },
-    { "cc",   kindMappingC       },
-    { "cp" ,  kindMappingC       },
-    { "cpp",  kindMappingC       },
-    { "cxx",  kindMappingC       },
-    { "h"  ,  kindMappingC       },
-    { "h++",  kindMappingC       },
-    { "hh" ,  kindMappingC       },
-    { "hp" ,  kindMappingC       },
-    { "hpp",  kindMappingC       },
-    { "hxx",  kindMappingC       },
-    { "java", kindMappingJava    },
-    { "f"   , kindMappingFortran },
-    { "for" , kindMappingFortran },
-    { "ftn" , kindMappingFortran },
-    { "f77" , kindMappingFortran },
-    { "f90" , kindMappingFortran },
-    { "f95" , kindMappingFortran },
-    { 0     , 0               }
+    { "asm",    kindMappingAsm     },
+    { "s",      kindMappingAsm     },
+    { "S",      kindMappingAsm     },
+    { "asp",    kindMappingAsp     },
+    { "asa",    kindMappingAsp     },
+    { "awk",    kindMappingAwk     },
+    { "c++",    kindMappingC       },
+    { "cc",     kindMappingC       },
+    { "cp" ,    kindMappingC       },
+    { "cpp",    kindMappingC       },
+    { "cxx",    kindMappingC       },
+    { "h"  ,    kindMappingC       },
+    { "h++",    kindMappingC       },
+    { "hh" ,    kindMappingC       },
+    { "hp" ,    kindMappingC       },
+    { "hpp",    kindMappingC       },
+    { "hxx",    kindMappingC       },
+    { "beta",   kindMappingBeta    },
+    { "cob",    kindMappingCobol   },
+    { "COB",    kindMappingCobol   },
+    { "e",      kindMappingEiffel  },
+    { "f"   ,   kindMappingFortran },
+    { "for" ,   kindMappingFortran },
+    { "ftn" ,   kindMappingFortran },
+    { "f77" ,   kindMappingFortran },
+    { "f90" ,   kindMappingFortran },
+    { "f95" ,   kindMappingFortran },
+    { "java",   kindMappingJava    },
+    { "cl",     kindMappingLisp    },
+    { "clisp",  kindMappingLisp    },
+    { "el",     kindMappingLisp    },
+    { "l",      kindMappingLisp    },
+    { "lisp",   kindMappingLisp    },
+    { "lsp",    kindMappingLisp    },
+    { "ml",     kindMappingLisp    },
+    { "mak",    kindMappingMake    },
+    { "p",      kindMappingPascal  },
+    { "pas",    kindMappingPascal  },
+    { "pl",     kindMappingPerl    },
+    { "pm",     kindMappingPerl    },
+    { "perl",   kindMappingPerl    },
+    { "php",    kindMappingPHP     },
+    { "php3",   kindMappingPHP     },
+    { "phtml",  kindMappingPHP     },
+    { "py",     kindMappingPython  },
+    { "python", kindMappingPython  },
+    { "cmd",    kindMappingRexx    },
+    { "rexx",   kindMappingRexx    },
+    { "rx",     kindMappingRexx    },
+    { "rb",     kindMappingRuby    },
+    { "sch",    kindMappingScheme  },
+    { "scheme", kindMappingScheme  },
+    { "scm",    kindMappingScheme  },
+    { "sm",     kindMappingScheme  },
+    { "SCM",    kindMappingScheme  },
+    { "SM",     kindMappingScheme  },
+    { "sh",     kindMappingSh      },
+    { "SH",     kindMappingSh      },
+    { "bsh",    kindMappingSh      },
+    { "bash",   kindMappingSh      },
+    { "ksh",    kindMappingSh      },
+    { "zsh",    kindMappingSh      },
+    { "sl",     kindMappingSlang   },
+    { "tcl",    kindMappingTcl     },
+    { "wish",   kindMappingTcl     },
+    { "vim",    kindMappingVim     },
+    { 0     , 0                    }
 };
 
 
@@ -199,6 +377,9 @@ CTagsDialog::CTagsDialog(KDevPart *part)
     kinds_listview->header()->hide();
     kinds_listview->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 
+    regexp_box = new QCheckBox(i18n("&Regular expression match"), this);
+    regexp_box->setChecked(true);
+    
     KButtonBox *actionbox = new KButtonBox(this, Qt::Vertical);
     actionbox->addStretch();
     QPushButton *search_button = actionbox->addButton(i18n("&Search"));
@@ -211,14 +392,15 @@ CTagsDialog::CTagsDialog(KDevPart *part)
     results_listbox->setMinimumHeight(fm.lineSpacing()*10);
     results_listbox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 
-    QGridLayout *layout = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
-    layout->addRowSpacing(2, 10);
+    QGridLayout *layout = new QGridLayout(this, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
+    layout->addRowSpacing(3, 10);
     layout->addWidget(tag_label, 0, 0);
     layout->addWidget(tag_edit, 0, 1);
     layout->addWidget(kinds_label, 1, 0);
-    layout->addWidget(kinds_listview, 1, 1);
-    layout->addMultiCellWidget(actionbox, 0, 1, 2, 2);
-    layout->addMultiCellWidget(results_listbox, 3, 3, 0, 2);
+    layout->addWidget(regexp_box, 1, 1);
+    layout->addWidget(kinds_listview, 2, 1);
+    layout->addMultiCellWidget(actionbox, 0, 2, 2, 2);
+    layout->addMultiCellWidget(results_listbox, 4, 4, 0, 2);
 
     connect( search_button, SIGNAL(clicked()), this, SLOT(slotSearch()) );
     connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -266,11 +448,24 @@ void CTagsDialog::slotSearch()
     }
     results_listbox->clear();
 
-    // Do the search
-    CTagsTagInfoList *result = m_tags->find(tag_edit->text());
-    if (!result)
-        return;
-    
+    if (regexp_box->isChecked()) {
+        // Do the regexp search
+        QRegExp re("^" + tag_edit->text() + "$");
+        QDictIterator<CTagsTagInfoList> it(*m_tags);
+        for (; it.current(); ++it)
+            if (re.find(it.currentKey(), 0) != -1)
+                insertResult(it.current(), kindStringList);
+    } else {
+        // Do the exact search
+        CTagsTagInfoList *result = m_tags->find(tag_edit->text());
+        if (result)
+            insertResult(result, kindStringList);
+    }
+}
+
+
+void CTagsDialog::insertResult(CTagsTagInfoList *result, const QStringList &kindStringList)
+{
     // Iterate over all found items, check if they have one of the wanted
     // kinds, and insert them in the result box
     CTagsTagInfoListIterator it;

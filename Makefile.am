@@ -1,9 +1,12 @@
 SUBDIRS = lib parts plugins src doc pics
 
-EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING admin
+EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
 
 apps_DATA = gideon.desktop
 appsdir = $(kde_appsdir)/Development
+
+mime_DATA = x-kdevelop.desktop
+mimedir = $(kde_mimedir)/application
 
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in

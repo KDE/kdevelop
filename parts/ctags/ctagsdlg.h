@@ -15,6 +15,7 @@
 #include <qdialog.h>
 #include <qdict.h>
 
+class QCheckBox;
 class QLineEdit;
 class QListBox;
 class QListBoxItem;
@@ -39,11 +40,13 @@ private slots:
     void slotExecuted(QListBoxItem *item);
     
 private:
+    void insertResult(CTagsTagInfoList *result, const QStringList &kindStringList);
     void ensureTagsLoaded();
     bool createTagsFile();
     void loadTagsFile(const QString &fileName);
     
     QLineEdit *tag_edit;
+    QCheckBox *regexp_box;
     QListView *kinds_listview;
     QListBox *results_listbox;
     
