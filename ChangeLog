@@ -1,3 +1,7 @@
+2003-01-04 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+	* UI-subclassing finnished in qmake manager.
+    (activate by rightclicking on a ui-file)
+
 2003-01-04 Roberto Raggi <roberto@kdevelop.org>
 	* Added Auto Expand mode
 
