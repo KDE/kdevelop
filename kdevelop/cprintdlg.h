@@ -41,7 +41,8 @@ public:
   ~CPrintDlg();
   void init();
   bool lookProgram(QString name);
-  QString files;
+  QString createFileString();
+  QString files,globalpara,prj_str;
 
 public slots:
     void slotProgramActivated(int);
@@ -66,7 +67,7 @@ protected:
  QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
  CConfigEnscriptDlg *enscriptconf;  
  CConfigA2psDlg *a2psconf;
- QString string,globalpara;
+ QString string,oldfiles;
  KShellProcess *process,*process2;
  KSimpleConfig *settings;
 };

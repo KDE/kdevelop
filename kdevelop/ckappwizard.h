@@ -122,6 +122,7 @@ private:
   KIconLoader* loader;
   QMultiLineEdit *errOutput,*output;
   KProcess *p,*q;
+  KSimpleConfig* settings;
   CProject *project;
   QStrList sub_dir_list;
 };

@@ -27,6 +27,7 @@
 #include <kapp.h>
 #include "ctoolclass.h"
 #include <kmsgbox.h>
+#include "cproject.h"
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDialog(parent, name, true){
   init();
@@ -35,7 +36,8 @@ CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDi
   slotPrettyPrintClicked(false);
   string = "";
   globalpara = "";
-  files = (QString) edittab;
+  oldfiles = (QString) edittab;
+  files = createFileString();
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -485,15 +487,15 @@ void CPrintDlg::init(){
 
   okButton = new QPushButton( mainwidget, "okButton" );
   okButton->setText(("Ok"));
-  okButton->setGeometry( 20, 440, 100, 30 );
+  okButton->setGeometry( 370, 440, 100, 30 );
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
   previewButton = new QPushButton( mainwidget, "previewButton" );
   previewButton->setText(("Preview"));
-  previewButton->setGeometry( 140, 440, 100, 30 );
+  previewButton->setGeometry( 20, 440, 100, 30 );
   connect(previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
   cancelButton->setText(i18n("Cancel"));
-  cancelButton->setGeometry( 260, 440, 100, 30 );
+  cancelButton->setGeometry( 480, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
 
   mainwidget->show();
@@ -800,6 +802,7 @@ void CPrintDlg::slotPreviewClicked() {
     KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
     return;
   }
+  files = createFileString();
   QString dir,data1,data2,text;
   if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
     dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.html";
@@ -926,6 +929,7 @@ void CPrintDlg::slotOkClicked() {
       return;
     }
   }
+  files = createFileString();
   QString dir,data1,data2,text;
   process = new KShellProcess();
   if (programCombBox->currentItem()==1) {
@@ -962,3 +966,47 @@ void CPrintDlg::slotOkClicked() {
   reject();
 }
 
+QString CPrintDlg::createFileString() {
+  globalpara = "";
+  QString str = "";
+  QString sources = "";
+  QString dir = "";
+  QString underdir = "";
+  //  QStrList *filelist = 0;
+  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("LastSettings");
+  globalpara = settings->readEntry("FileSettings");
+  settings->setGroup("Files");
+  prj_str = settings->readEntry("project_file");
+  CProject *project = new CProject(prj_str);
+  project->readProject();
+  prj_str.truncate(prj_str.findRev("/"));
+  underdir = prj_str.right(prj_str.findRev("/") -1);
+  if (!strcmp(globalpara,"current")) {
+    delete (settings);
+    return oldfiles;
+  }
+  else if (!strcmp(globalpara,"cppFiles")) {
+    for(str= project->getSources().first();str !=0;str = project->getSources().next()){
+      sources =  prj_str + underdir + "/" + str + " " + sources ;
+    }
+    delete (settings);
+    return sources;
+  }
+//   else if (!strcmp(globalpara,"allFiles")) {
+//     project->getAllFiles(filelist);
+//     for(str= filelist->first();str !=0;str = filelist->next()){
+//       sources =  prj_str + underdir + "/" + str + " " + sources ;
+//     }
+//     delete (settings);
+//     return sources;
+//   }
+  else if (!strcmp(globalpara,"headerFiles")) {
+    for(str= project->getHeaders().first();str !=0;str = project->getHeaders().next()){
+      sources =  prj_str + underdir + "/" + str + " " + sources ;
+    }
+    delete (settings);
+    return sources;
+  } 
+  return oldfiles;
+}

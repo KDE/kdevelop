@@ -2357,6 +2357,9 @@ QString CConfigEnscriptDlg::createParameters(int i) {
     globalpara.append(" -j");
   }
   if (alignFileList->currentItem()==0) {
+    globalpara.append(" --file-align=1");
+  }
+  else {
     globalpara.append(" --file-align=2");
   }
   globalpara.append(" -L");
@@ -2394,8 +2397,8 @@ QString CConfigEnscriptDlg::createParameters(int i) {
     globalpara.append(" --ul-font=");
     globalpara.append(underlayFontButton->text());
     globalpara.append(" --ul-gray=");
-    float zahl;
-    zahl = underlayGray->value() / 10;
+    float zahl = 0.8;
+    zahl = ((QString) underlayGray->text()).toFloat() / 10;
     globalpara.append(parameters.setNum(zahl));
     globalpara.append(" --ul-style=");
     globalpara.append(underlayStyle->text(underlayStyle->currentItem()));
@@ -2717,7 +2720,7 @@ void CConfigEnscriptDlg::loadSettings() {
   underlayAngleDefault->setChecked(false);
   }
   underlayAngle->setValue((settings->readEntry("UnderlayAngle")).toInt());
-  underlayGray->setValue((settings->readEntry("UnderlayGray")).toInt());
+  underlayGray->setValue((settings->readEntry("UnderlayGray")).toFloat());
   underlayStyle->setCurrentItem((settings->readEntry("UnderlayStyle")).toInt());
   slotLoginClicked();
   slotUnderlayButtonClicked();

@@ -261,7 +261,6 @@ void CKDevelop::slotFilePrint(){
   QString file;
   slotFileSave();
   file = edit_widget->getName();
-  //  cout << file << endl;
   CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
   printerdlg->resize(600,480);
   printerdlg->exec(); 
@@ -1782,7 +1781,6 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
-
 
 
 

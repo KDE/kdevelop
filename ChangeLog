@@ -1,3 +1,12 @@
+1999-03-02 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* add some buttons in the a2ps-,enscript- and printdialog
+	* implemented all previewbuttons in the dialogs
+	* implemented the printing on printer
+	* add some buttons in the filedialog
+	* implemented the current-,all cpps-,all headerbuttons in the filedialog
+	* fixed many bugs
+	* only the filedialog don´t work completely
+
 1999-03-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added an empty KProgressBar in the statusbar to use with several slots
   * updated documentation

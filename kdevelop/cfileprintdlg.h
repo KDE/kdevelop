@@ -24,7 +24,10 @@
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qradiobutton.h>
+#include <qspinbox.h>
 #include <kfiledialog.h>
+#include <kdatepik.h>
+#include <ksimpleconfig.h>
 
 /** the KDE-Fileprintdialog
   *@author Stefan Heidrich
@@ -44,26 +47,31 @@ public slots:
  void slotSelfChoosenFileAddClicked();
  void slotSelfChoosenFileCleanClicked();
  void slotSelfChoosenFileDeleteClicked();
-  
+ void slotDateDlgClicked();  
+ void slotOkClicked();
+
 protected:
     QListBox* selfChoosenFilesMultiLine;
     QPushButton* selfChoosenFilesCleanButton;
     QPushButton* selfChoosenFilesDeleteButton;
     QPushButton* selfChoosenFilesAddButton;
     QLineEdit* selfChoosenFileLine;
-    QPushButton* selfChoosenFilesPushButton,*okButton,*cancelButton,*helpButton;
-    QRadioButton* currentButton;
-    QRadioButton* allInBufferButton;
     QRadioButton* allInProjectButton;
     QRadioButton* selfChoosenFilesButton;
     QRadioButton* changedFilesButton;
-    QLineEdit* dateBetweenLine;
-    QLineEdit* dateAndLine;
-    QLineEdit* timeAndLine;
-    QLineEdit* timeBetweenLine;
-    QLineEdit* timeSinceLine;
-    QLabel* dateSinceLine;
+    QSpinBox* dateSinceLine;
+    QSpinBox* timeSinceLine;
+    QRadioButton* headerFilesButton;
+    QRadioButton* cppFilesButton;
+    QPushButton* endTimeButton;
+    QPushButton* beginTimeButton;
+    QPushButton* endDateButton;
+    QPushButton* beginDateButton;
+    QPushButton* selfChoosenFilesPushButton,*okButton,*cancelButton,*helpButton;
+    QRadioButton* currentButton;
     QButtonGroup *qtarch_ButtonGroup_143;
+    QLabel* qtarch_Label_86;
+    QLabel* qtarch_Label_87;
     QLabel* qtarch_Label_84;
     QLabel* qtarch_Label_83;
     QLabel* qtarch_Label_81;
@@ -74,6 +82,8 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_142;
     QButtonGroup* qtarch_ButtonGroup_141;
     QButtonGroup* qtarch_ButtonGroup_140;
+    KDatePicker* datepik;
+    KSimpleConfig *settings;
 };
 #endif // CFILEPRINTDLG
 
