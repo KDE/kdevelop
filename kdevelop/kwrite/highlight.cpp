@@ -1192,7 +1192,9 @@ GenHighlight::GenHighlight(const char *name) : Highlight(name) {
 }
 
 
-int GenHighlight::doHighlight(int ctxNum, TextLine *textLine) {
+int GenHighlight::doHighlight(int ctxNum, TextLine *textLine){
+  if (!textLine) return 0;
+
   HlContext *context;
   const char *str, *s1, *s2;
   char lastChar;

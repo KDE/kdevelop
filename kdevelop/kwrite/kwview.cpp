@@ -1259,7 +1259,8 @@ void KWriteView::paintEvent(QPaintEvent *e) {
         ctxNum = 0;
       if (kWriteDoc->highlight)
         ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
-      textLine->setContext(ctxNum);
+      if (textLine)
+        textLine->setContext(ctxNum);
     }
 
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd, kWrite->flags() & cfShowTabs);

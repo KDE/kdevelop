@@ -485,6 +485,8 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    if (m_mdiMode == QextMdi::TabPageMode) {
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
+      pDockW->setWidget(0L);
+      delete pDockW;
    }
    else if (pWnd->isAttached()) {
       pWnd->mdiParent()->hide();

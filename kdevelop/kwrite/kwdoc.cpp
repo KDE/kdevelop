@@ -2210,6 +2210,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd, b
   }
 
   textLine = contents.at(line);
+  if (!textLine) return;
   len = textLine->length();
   s = textLine->getText();
 

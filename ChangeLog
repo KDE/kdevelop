@@ -1,3 +1,7 @@
+2001-05-26  F@lk Brettschneider <falk@kdevelop.org>
+    * further work on TabPage MDI mode
+    * bugfix: 0L pointer accesses in kwrite lib fixed (important for TabPage mode session loading)
+
 2001-05-24  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: solved event timing problem with KDE's window manager on a flood of mixed show, hide and reparent events on app startup
               --> now we hide the main widget until readDockConfig has finished

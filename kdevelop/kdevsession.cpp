@@ -342,11 +342,14 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
   bool bAttached = (bool) viewEl.attribute( "Attach", "1").toInt();
 
   // restore appearence
-  if ( (!pMDICover->isAttached()) && (bAttached) ) {
-    pMDICover->attach();
-  }
-  if ( (pMDICover->isAttached()) && (!bAttached) ) {
-    pMDICover->detach();
+  QextMdi::MdiMode mdiMode = ((QextMdiMainFrm*)m_pDocViewMan->parent())->mdiMode();
+  if (mdiMode != QextMdi::TabPageMode) {
+    if ((!pMDICover->isAttached()) && (bAttached) ) {
+      pMDICover->attach();
+    }
+    if ( (pMDICover->isAttached()) && (!bAttached) ) {
+      pMDICover->detach();
+    }
   }
   if (nMinMaxMode == 0) {
     pMDICover->setInternalGeometry(QRect(nLeft, nTop, nWidth, nHeight));
