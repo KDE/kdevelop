@@ -18,5 +18,4 @@ GenericName[xx]=xxQEditor Supportxx
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;text/x-sql;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KTextEditor/Document,KTextEditor/Editor
 X-KDE-Library=libqeditorpart
-X-KDevelop-Version=1
 Type=Service
