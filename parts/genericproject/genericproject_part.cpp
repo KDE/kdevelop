@@ -181,7 +181,8 @@ QString GenericProjectPart::buildDirectory( ) const
 
 QStringList GenericProjectPart::allFiles( ) const
 {
-    return QStringList();
+    QStringList path;
+    return allFiles( m_mainBuild, path );
 }
 
 void GenericProjectPart::addFiles( const QStringList & fileList )
@@ -336,6 +337,47 @@ BuildFileItem * GenericProjectPart::createFileItem( const QDomElement & el, Buil
 KDevBuildSystem *GenericProjectPart::buildSystem( ) const
 {
     return m_buildSystem;
+}
+
+QStringList GenericProjectPart::allFiles( BuildGroupItem * group, QStringList& path ) const
+{
+    QStringList fileList;
+
+    if( group != m_mainBuild )
+        path.push_back( group->name() );
+
+    const QValueList<BuildTargetItem*> targets = group->targets();
+    for( QValueList<BuildTargetItem*>::ConstIterator it=targets.begin(); it!=targets.end(); ++it )
+    {
+	fileList += allFiles( *it, path );
+    }
+
+    const QValueList<BuildGroupItem*> groups = group->groups();
+    for( QValueList<BuildGroupItem*>::ConstIterator it=groups.begin(); it!=groups.end(); ++it )
+    {
+	fileList += allFiles( *it, path );
+    }
+
+    if( group != m_mainBuild )
+        path.pop_back();
+
+    return fileList;
+}
+
+QStringList GenericProjectPart::allFiles( BuildTargetItem * target, QStringList& path ) const
+{
+    QStringList fileList;
+
+    const QValueList<BuildFileItem*> files = target->files();
+    for( QValueList<BuildFileItem*>::ConstIterator it=files.begin(); it!=files.end(); ++it )
+    {
+	const BuildFileItem* file = *it;
+	QString fileName = path.size() ? path.join( "/" ) + QString::fromLatin1( "/" ) + file->name() : file->name();
+
+	fileList.push_back( fileName );
+    }
+
+    return fileList;
 }
 
 #include "genericproject_part.moc"

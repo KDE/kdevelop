@@ -51,8 +51,13 @@ public:
     virtual void removeFile(const QString &fileName);
 
     KDevBuildSystem *buildSystem() const;
+    
 signals:
     void mainGroupChanged( BuildGroupItem* group );
+    
+private:
+    QStringList allFiles( BuildGroupItem* group, QStringList& path ) const;
+    QStringList allFiles( BuildTargetItem* target, QStringList& path ) const;
 
 private:
     KDevBuildSystem *m_buildSystem;
