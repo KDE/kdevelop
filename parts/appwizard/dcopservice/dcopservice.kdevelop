@@ -16,6 +16,7 @@
  </general>
  <kdevautoproject>
   <general>
+   <useconfiguration>debug</useconfiguration>
   </general>
     <configurations>
       <optimized>
