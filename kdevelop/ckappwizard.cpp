@@ -2410,7 +2410,8 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install_location = "";
   project->addFileToProject (namelow + ".kdevprj",fileInfo);
 
-  if(project->isKDE2Project() || project->isQt2Project()){
+  if(project->isKDE2Project() || project->isQt2Project() ||
+     project->getProjectType()=="normal_cpp" || project->getProjectType()=="normal_c"){
   fileInfo.rel_name = "admin";
   fileInfo.type = DATA;
   fileInfo.dist = true;
