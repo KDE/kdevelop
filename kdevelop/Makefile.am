@@ -82,7 +82,7 @@ install-data-local:
 	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
 	$(mkinstalldirs) $(kde_confdir)
 	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
-	$(mkinstalldirs) $(kde_mimedir)	
+	$(mkinstalldirs) $(kde_mimedir)/application	
 	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
 
 # remove ALL you have installed in install-data-local or install-exec-local
