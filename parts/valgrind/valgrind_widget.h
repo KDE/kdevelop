@@ -10,6 +10,7 @@
 class ValgrindPart;
 class KListView;
 class QListViewItem;
+class QPopupMenu;
 
 class ValgrindWidget : public QWidget
 {
@@ -27,11 +28,16 @@ signals:
   
 private slots:
   void executed( QListViewItem* item );
+  void slotContextMenu( KListView* l, QListViewItem* i, const QPoint& p );
+  void expandAll();
+  void collapseAll();
+  void aboutToShowPopup();
     
 private:
   KListView* lv;
   int msgNumber;
   ValgrindPart* _part;
+  QPopupMenu* popup;
 };
 
 

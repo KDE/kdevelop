@@ -1,5 +1,6 @@
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qpopupmenu.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
@@ -98,9 +99,17 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
   lv->setRootIsDecorated( true );
   lv->setAllColumnsShowFocus( true );
   vbl->addWidget( lv );
-  
+ 
+  popup = new QPopupMenu( lv, "valPopup" );
+  popup->insertItem( i18n( "Expand all items" ), this, SLOT(expandAll()), 0, 0 );
+  popup->insertItem( i18n( "Collapse all items" ), this, SLOT(collapseAll()), 0, 1 );
+
+  connect( popup, SIGNAL(aboutToShow()),
+           this, SLOT(aboutToShowPopup()) ); 
   connect( lv, SIGNAL(executed(QListViewItem*)),
            this, SLOT(executed(QListViewItem*)) );
+  connect( lv, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+           this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 
@@ -157,6 +166,39 @@ void ValgrindWidget::executed( QListViewItem* lvi )
     _part->topLevel()->statusBar()->message( vli->message(), 10000 );
     _part->topLevel()->lowerView( this );
   }
+}
+
+void ValgrindWidget::expandAll()
+{
+  QListViewItem* child = lv->firstChild();
+  while ( child ) {
+    child->setOpen( true );
+    child = child->nextSibling();
+  }
+}
+
+void ValgrindWidget::collapseAll()
+{
+  QListViewItem* child = lv->firstChild();
+  while ( child ) {
+    child->setOpen( false );
+    child = child->nextSibling();
+  }
+}
+
+void ValgrindWidget::aboutToShowPopup()
+{
+  bool en = (lv->firstChild() != 0);
+  popup->setItemEnabled( 0, en );
+  popup->setItemEnabled( 1, en );
+}
+
+void ValgrindWidget::slotContextMenu( KListView* l, QListViewItem* /*i*/, const QPoint& p )
+{
+  if ( l != lv )
+    return;
+
+  popup->exec( p );
 }
 
 #include "valgrind_widget.moc"
