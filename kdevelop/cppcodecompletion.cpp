@@ -388,7 +388,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
  if( current.length() ) { l << current; /*kdDebug() << "add word " << current << endl;*/ current = ""; }
 
     QStringList l;
-    int index = 0;
+    unsigned int index = 0;
     QString current;
     while( index < text.length() ){
         QChar ch = text[ index ];
@@ -880,7 +880,7 @@ void CppCodeCompletion::completeText()
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
     QString expr;
-    if( start_expr != contents.length() - 1 ){
+    if( start_expr != int(contents.length()) - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
         expr = expr.stripWhiteSpace();
     }
@@ -889,7 +889,7 @@ void CppCodeCompletion::completeText()
     while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
         --idx;
     }
-    if( idx != expr.length() - 1 ){
+    if( idx != int(expr.length()) - 1 ){
         ++idx;
         word = expr.mid( idx ).stripWhiteSpace();
         expr = expr.left( idx ).stripWhiteSpace();

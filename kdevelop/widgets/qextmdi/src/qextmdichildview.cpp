@@ -725,6 +725,18 @@ void QextMdiChildView::hide()
    QWidget::hide();
 }
 
+//============= raise ===============//
+
+void QextMdiChildView::raise()
+{
+   if(mdiParent() != 0L) {
+      mdiParent()->raise();
+      // XXXCTL what's about Z-order? L.B. 2002/02/10
+   }
+   QWidget::raise();
+}
+
+
 #ifndef NO_INCLUDE_MOCFILES
 #include "qextmdichildview.moc"
 #endif

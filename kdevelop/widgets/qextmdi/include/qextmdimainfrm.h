@@ -48,6 +48,7 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdom.h>
+#include <qguardedptr.h>
 
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
@@ -247,8 +248,8 @@ protected:
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::FrameDecor   m_frameDecoration;
    bool                    m_bSDIApplication;
-   KDockWidget*            m_pDockbaseAreaOfDocumentViews;
-   KDockWidget*            m_pDockbaseOfTabPage;
+   QGuardedPtr<KDockWidget> m_pDockbaseAreaOfDocumentViews;
+   QGuardedPtr<KDockWidget> m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
    bool                    m_bClearingOfWindowMenuBlocked;
 

@@ -1,3 +1,8 @@
+2002-02-25  F@lk Brettschneider <falk@kdevelop.org>
+    * trying to catch some mysterious crashes by QGuardedPtr
+    * synchronization with original QextMDI version
+    * gcc warnings fixed
+
 2002-02-24  Walter Tasin <tasin@kdevelop.org>
     * bugfix/workaround:
       if builddir==srcdir and inside the created Makefiles contains the srcdir as
