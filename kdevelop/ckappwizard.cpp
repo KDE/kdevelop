@@ -2265,19 +2265,19 @@ void CKAppWizard::slotProcessExited() {
   project->setCXXFLAGS ("-O0 -g3 -Wall");   // default value is to use debugging
 
   if ( kickeritem->isSelected()) {
-   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)");
+   project->setLDADD( " $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)");
   }
   if ( kpartitem->isSelected()) {
-   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
+   project->setLDADD( " $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
   }
   if ( kioslaveitem->isSelected()) {
-   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO)");
+   project->setLDADD( " $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO)");
   }
   if ( kcmoduleitem->isSelected()) {
-   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) ");
+   project->setLDADD( " $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) ");
   }
   if ( kthemeitem->isSelected()) {
-   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)");
+   project->setLDADD( " $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)");
   }
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) ");
@@ -2286,10 +2286,10 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE) ");
   }
   else if (qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
-    project->setLDADD (" -lXext -lX11 $(LIB_QT)");
+    project->setLDADD (" $(LIB_QT)");
   }
   else if (qextmdiitem->isSelected()) {
-    project->setLDADD (" -lXext -lX11 $(LIB_QT) -lqextmdi");
+    project->setLDADD (" $(LIB_QT) -lqextmdi");
   }
   else if (gnomenormalitem->isSelected()) {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
