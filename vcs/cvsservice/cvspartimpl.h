@@ -182,9 +182,11 @@ public:
 
 signals:
     void warning( const QString &msg );
-    // Emitted when the component has terminated checkout operation
-    // @param checkedDir directory where the module has been checked out
-    //        (will be empty if the operation failed)
+    /**
+    * Emitted when the component has terminated checkout operation
+    * @param checkedDir directory where the module has been checked out
+    *        (will be empty if the operation failed)
+    */
     void checkoutFinished( QString checkedDir );
 
 private slots:
@@ -216,7 +218,7 @@ private:
     *   @return true if the @p url is present in CVS/Entry file
     */
     static bool isRegisteredInRepository( const QString &projectDirectory, const KURL &url );
-    /*
+    /**
     * Ideally this function will take a bunch of URLs and validate them (they are valid files,
     * are files registered in CVS, are on a supported filesystem, ...). Currently checks
     * only for files belonging to the repository ;)
@@ -226,7 +228,7 @@ private:
     */
     static void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
 
-    /*
+    /**
     * Add file(s) to their respective ignore list. This means that, for example, if you
     * add '/home/mario/src/myprj/mylib/module1/bad.cpp' then the string 'bad.cpp' will be
     * appended to file '/home/mario/src/myprj/mylib/module1/.cvsignore'.
@@ -236,7 +238,7 @@ private:
     static void addToIgnoreList( const QString &projectDirectory, const KURL &url );
     static void addToIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 
-    /*
+    /**
     * Remove file(s) from their respective .ignore files. As specified for @see addToIgnoreList
     * function, this means that, for example, if you remove '/home/mario/src/myprj/mylib/module1/bad.cpp'
     * then a search for the string 'bad.cpp' will be performed on file
@@ -247,12 +249,12 @@ private:
     */
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
-    /*
+    /**
     * Implementation for requesting user input when files are added to / removed from project
     */
     void addFilesToProject( const QStringList &filesToAdd );
     void removedFilesFromProject(const QStringList &filesToRemove);
-    /*
+    /**
     * Check each file in the list against CVS and returns a new list with the files
     * currently registered in the repository: if none is registered the returned list
     * is (quite rightly) empty.
@@ -279,12 +281,12 @@ private:
     CvsService_stub *m_cvsService;
     Repository_stub *m_repository;
 
-    // Used for storing module path between start and ending of check-out
+    /** Used for storing module path between start and ending of check-out */
     QString modulePath;
 
     CVSFileInfoProvider *m_fileInfoProvider;
     JobScheduler *m_scheduler;
-    // Reference to owner part
+    /** Reference to owner part */
     CvsServicePart *m_part;
 
     //! Reference to widget integrated in the "bottom tabbar" (IDEAL)
@@ -293,12 +295,14 @@ private:
 
     //! Urls which to work upon
     const KURL::List &urlList() const;
-    //! @param relativeToProjectDir if true paths will be provided as relative to project directory,
-    //! as absolute paths otherwise
-    //! @return These are the file path contained in the urls provided for convenience
-    //! has been requested for.
+    /**
+    * @param relativeToProjectDir if true paths will be provided as relative to project directory,
+    * as absolute paths otherwise
+    * @return These are the file path contained in the urls provided for convenience
+    * has been requested for.
+    */
     QStringList fileList( bool relativeToProjectDir = true ) const;
-    //! Last operation type: we save it so we can retrieve and use in slot*Exited()
+    /** Last operation type: we save it so we can retrieve and use in slot*Exited() */
     CvsOperation lastOperation() const;
 
     // Both this data members are set by prepareOperation() method
