@@ -62,7 +62,10 @@
                 </sizepolicy>
             </property>
             <property name="toolTip" stdset="0">
-                <string>i.e. KDevelop/Plugin, KParts/ReadWritePart, ...</string>
+                <string></string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;h2&gt;Service type&lt;/h2&gt;Here you put the Service type (i.e. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;)</string>
             </property>
         </widget>
         <widget class="QLabel">
@@ -97,7 +100,10 @@
                 </sizepolicy>
             </property>
             <property name="toolTip" stdset="0">
-                <string>i. e. ([X-KDevelop-Scope]='Global')</string>
+                <string></string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;h2&gt;Costraints&lt;/h2&gt;You can further refine your query by writing additional costraints in you query such as i. e. &lt;i&gt;([X-KDevelop-Scope]='Global')&lt;/i&gt;)</string>
             </property>
         </widget>
         <widget class="QLabel">
