@@ -58,6 +58,7 @@ signals:
    void clicked(QextMdiChildView*);
    void leftMouseButtonClicked(QextMdiChildView*);
    void rightMouseButtonClicked(QextMdiChildView*);
+   void buttonTextChanged(int);
 public slots:
    void setNewText(const QString&);
 protected slots:
@@ -87,8 +88,9 @@ public:		// Construction & Destruction
 	QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
 	QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
 protected:
-   void layoutTaskBar( int taskBarWidth = 0);
    void resizeEvent( QResizeEvent*);
+protected slots:
+   void layoutTaskBar( int taskBarWidth = 0);
 public slots:
 	void setActiveButton(QextMdiChildView *win_ptr);
 private:
