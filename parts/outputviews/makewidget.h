@@ -27,6 +27,13 @@ class MakeWidget : public QTextEdit {
     Q_OBJECT
 
 public:
+    enum EOutputLevel { // appropriate to the ID's in the button group of settingswidget.ui
+	 eVeryShort = 0
+	,eShort
+	,eFull
+    };
+    
+public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
 
@@ -44,7 +51,7 @@ public slots:
 protected:
     void paletteChange(const QPalette& oldPalette);
     virtual QPopupMenu *createPopupMenu( const QPoint& pos );
-
+    
 private slots:
     void insertStdoutLine(const QString& line);
     void insertStderrLine(const QString& line);
@@ -54,7 +61,9 @@ private slots:
     void horizScrollingOn() { m_horizScrolling = true; }
     void horizScrollingOff() { m_horizScrolling = false; }
     void toggleLineWrapping();
-    void toggleCompilerOutput();
+    void slotVeryShortCompilerOutput();
+    void slotShortCompilerOutput();
+    void slotFullCompilerOutput();
     void toggleShowDirNavigMessages();
     
 private:
@@ -69,7 +78,9 @@ private:
     bool matchLeaveDir( const QString& line, QString& dir );
     QString getOutputColor( Type type );
     void updateColors();
+    void setCompilerOutputLevel(EOutputLevel level);
 
+// attributes    
     QStringList commandList;
     QStringList dirList;
     QString currentCommand;
@@ -86,7 +97,7 @@ private:
     bool m_vertScrolling, m_horizScrolling;
     
     bool m_bLineWrapping;
-    bool m_bShortCompilerOutput;
+    EOutputLevel m_compilerOutputLevel;
     bool m_bShowDirNavMsg;
     
     QRegExp m_errorGccRx;
@@ -112,6 +123,7 @@ private:
     QRegExp m_installFile;
     int m_fileNameGroup;
     
+    QStringList m_veryShortOutput;
     QStringList m_shortOutput;
     QStringList m_fullOutput;
 };

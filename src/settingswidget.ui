@@ -33,20 +33,6 @@
                 <string>&amp;Load last project on startup</string>
             </property>
         </widget>
-        <widget class="Line">
-            <property name="name">
-                <cstring>line1</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>GroupBox1</cstring>
@@ -126,7 +112,7 @@
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>Layout4</cstring>
+                        <cstring>Layout9</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -140,7 +126,7 @@
                         </property>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>Layout3</cstring>
+                                <cstring>Layout6</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -152,22 +138,55 @@
                                 <property name="spacing">
                                     <number>6</number>
                                 </property>
-                                <widget class="QCheckBox">
+                                <widget class="QLayoutWidget">
                                     <property name="name">
-                                        <cstring>lineWrappingCheckBox</cstring>
+                                        <cstring>Layout3</cstring>
                                     </property>
-                                    <property name="text">
-                                        <string>Line &amp;Wrapping</string>
-                                    </property>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="spacing">
+                                            <number>6</number>
+                                        </property>
+                                        <widget class="QCheckBox">
+                                            <property name="name">
+                                                <cstring>lineWrappingCheckBox</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Line &amp;Wrapping</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QCheckBox">
+                                            <property name="name">
+                                                <cstring>dirNavigMsgCheckBox</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;Directory Navigation Messages</string>
+                                            </property>
+                                        </widget>
+                                    </vbox>
                                 </widget>
-                                <widget class="QCheckBox">
+                                <spacer>
                                     <property name="name">
-                                        <cstring>dirNavigMsgCheckBox</cstring>
+                                        <cstring>Spacer4</cstring>
                                     </property>
-                                    <property name="text">
-                                        <string>&amp;Directory Navigation Messages</string>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
                                     </property>
-                                </widget>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>0</width>
+                                            <height>30</height>
+                                        </size>
+                                    </property>
+                                </spacer>
                             </vbox>
                         </widget>
                         <widget class="QButtonGroup">
@@ -189,10 +208,30 @@
                                 </property>
                                 <widget class="QRadioButton">
                                     <property name="name">
+                                        <cstring>veryShortCompilerOutputRadioButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Very short</string>
+                                    </property>
+                                    <property name="buttonGroupId">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Only warnings, errors and the files which are compiled</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
                                         <cstring>shortCompilerOutputRadioButton</cstring>
                                     </property>
                                     <property name="text">
                                         <string>&amp;Short</string>
+                                    </property>
+                                    <property name="buttonGroupId">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>suppresses all the compiler flags, and formats to something readable</string>
                                     </property>
                                 </widget>
                                 <widget class="QRadioButton">
@@ -201,6 +240,12 @@
                                     </property>
                                     <property name="text">
                                         <string>F&amp;ull</string>
+                                    </property>
+                                    <property name="buttonGroupId">
+                                        <number>2</number>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>the unmodified output of the compiler</string>
                                     </property>
                                 </widget>
                             </vbox>
@@ -293,7 +338,7 @@
             <property name="sizeHint">
                 <size>
                     <width>0</width>
-                    <height>247</height>
+                    <height>240</height>
                 </size>
             </property>
         </spacer>

@@ -1,3 +1,7 @@
+2003-03-07 F@lk Brettschneider <falkbr@kdevelop.org>
+	* added third level called "Very short compiler output"
+	* now you can switch between the output versions without recompiling
+
 2003-03-06 Stephane ANCELOT <sancelot@free.fr>
 	* enhanced grepview, there is no need to display the filename in each line
 

@@ -220,10 +220,12 @@ void MakeWidget::startNextJob()
     parags = 0;
     moved = false;
     
+    m_veryShortOutput.clear();
     m_shortOutput.clear(); // clear the shadow string lists
     m_fullOutput.clear();
 
     insertLine2(currentCommand, Diagnostic);
+    insertLine2(currentCommand, Diagnostic, &m_veryShortOutput);
     insertLine2(currentCommand, Diagnostic, &m_shortOutput);
     insertLine2(currentCommand, Diagnostic, &m_fullOutput);
     childproc->clearArguments();
@@ -406,6 +408,7 @@ void MakeWidget::slotProcessExited(KProcess *)
     }
 
     insertLine2(s, t);
+    insertLine2(s, t, &m_veryShortOutput);
     insertLine2(s, t, &m_shortOutput);
     insertLine2(s, t, &m_fullOutput);
 
@@ -568,6 +571,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
 	if (m_bShowDirNavMsg) {
 	    insertLine2(line, Diagnostic);
+	    insertLine2(line, Diagnostic, &m_veryShortOutput);
 	    insertLine2(line, Diagnostic, &m_shortOutput);
 	    insertLine2(line, Diagnostic, &m_fullOutput);
 	}
@@ -588,6 +592,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         delete dir;
 	if (m_bShowDirNavMsg) {
 	    insertLine2(line, Diagnostic);
+	    insertLine2(line, Diagnostic, &m_veryShortOutput);
 	    insertLine2(line, Diagnostic, &m_shortOutput);
 	    insertLine2(line, Diagnostic, &m_fullOutput);
 	}
@@ -676,15 +681,24 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     
     // append it to this textedit widget
     bool bShortOutputExprMatched = !shortOutput.isEmpty();
-    if (m_bShortCompilerOutput && bShortOutputExprMatched) {
+    if (m_compilerOutputLevel != eFull && bShortOutputExprMatched) {
 	insertLine2(shortOutput, StyledDiagnostic);
     }
-    else {
+    else if (!(m_compilerOutputLevel == eVeryShort && type == Diagnostic)){
 	insertLine2(line, type);
     }
+    
     // also store the short and long version in stringlists to allow switching on the fly
     insertLine2(line, type, &m_fullOutput);
-    insertLine2(bShortOutputExprMatched ? shortOutput : line, bShortOutputExprMatched ? StyledDiagnostic : type, &m_shortOutput);
+    QString ln = line; // because line is const
+    if (bShortOutputExprMatched) {
+	ln = shortOutput;
+	type = StyledDiagnostic;
+    }
+    insertLine2(ln, type, &m_shortOutput);
+    if (type != Diagnostic) {
+	insertLine2(ln, type, &m_veryShortOutput);
+    }
 }
 
 void MakeWidget::paletteChange(const QPalette& /*oldPalette*/)
@@ -777,10 +791,12 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
     pMenu->setItemChecked(id, m_bLineWrapping);
     
     pMenu->insertSeparator();
-    id = pMenu->insertItem(i18n("Short compiler output"), this, SLOT(toggleCompilerOutput()) );
-    pMenu->setItemChecked(id, m_bShortCompilerOutput);
-    id = pMenu->insertItem(i18n("Full compiler output"), this, SLOT(toggleCompilerOutput()) );
-    pMenu->setItemChecked(id, !(m_bShortCompilerOutput));
+    id = pMenu->insertItem(i18n("Very short compiler output"), this, SLOT(slotVeryShortCompilerOutput()) );
+    pMenu->setItemChecked(id, m_compilerOutputLevel == eVeryShort);
+    id = pMenu->insertItem(i18n("Short compiler output"), this, SLOT(slotShortCompilerOutput()) );
+    pMenu->setItemChecked(id, m_compilerOutputLevel == eShort);
+    id = pMenu->insertItem(i18n("Full compiler output"), this, SLOT(slotFullCompilerOutput()) );
+    pMenu->setItemChecked(id, m_compilerOutputLevel == eFull);
     
     pMenu->insertSeparator();
     id = pMenu->insertItem(i18n("Show directory navigation messages"), this, SLOT(toggleShowDirNavigMessages()));
@@ -804,25 +820,44 @@ void MakeWidget::toggleLineWrapping()
     }
 }
 
-void MakeWidget::toggleCompilerOutput()
+void MakeWidget::slotVeryShortCompilerOutput() { setCompilerOutputLevel(eVeryShort); }
+void MakeWidget::slotShortCompilerOutput() { setCompilerOutputLevel(eShort); }
+void MakeWidget::slotFullCompilerOutput() { setCompilerOutputLevel(eFull); }
+
+void MakeWidget::setCompilerOutputLevel(EOutputLevel level)
 {
-    m_bShortCompilerOutput = !m_bShortCompilerOutput;
+    m_compilerOutputLevel = level;
     KConfig *pConfig = kapp->config();
     pConfig->setGroup("MakeOutputView");
-    pConfig->writeEntry("ShortCompilerOutput", m_bShortCompilerOutput);
+    pConfig->writeEntry("CompilerOutputLevel", (int) level);
     pConfig->sync();
     clear();
-    if (m_bShortCompilerOutput) {
-	QStringList::Iterator it = m_shortOutput.begin();
-	while (it != m_shortOutput.end()) {
-	    append(*it); it++;
+    switch (level) {
+    case eVeryShort:
+	{
+	    QStringList::Iterator it = m_veryShortOutput.begin();
+	    while (it != m_veryShortOutput.end()) {
+		append(*it); it++;
+	    }
 	}
-    }
-    else {
-	QStringList::Iterator it = m_fullOutput.begin();
-	while (it != m_fullOutput.end()) {
-	    append(*it); it++;
+	break;
+    case eShort:
+	{
+	    QStringList::Iterator it = m_shortOutput.begin();
+	    while (it != m_shortOutput.end()) {
+		append(*it); it++;
+	    }
 	}
+	break;
+    case eFull:
+	{
+	    QStringList::Iterator it = m_fullOutput.begin();
+	    while (it != m_fullOutput.end()) {
+		append(*it); it++;
+	    }
+	}
+	break;
+    default:;
     }
 }
 
@@ -841,7 +876,7 @@ void MakeWidget::updateSettingsFromConfig()
     pConfig->setGroup("MakeOutputView");
     setFont(pConfig->readFontEntry("Messages Font"));
     m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
-    m_bShortCompilerOutput = pConfig->readBoolEntry("ShortCompilerOutput", true);
+    m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eShort);
     m_bShowDirNavMsg = pConfig->readBoolEntry("ShowDirNavigMsg", false);
 }
 

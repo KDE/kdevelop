@@ -211,15 +211,12 @@ void MainWindowShare::slotSettings()
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    config->setGroup("MakeView");
+    config->setGroup("MakeOutputView");
     gsw->setMessageFont(config->readFontEntry("Messages Font"));
     gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
     gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
-    int id = config->readBoolEntry("ShortCompilerOutput",true) ?
-	     gsw->compilerOutputButtonGroup->id(gsw->shortCompilerOutputRadioButton) :
-	     gsw->compilerOutputButtonGroup->id(gsw->fullCompilerOutputRadioButton);
-    gsw->compilerOutputButtonGroup->setButton(id);
+    gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",1));
     config->setGroup("General Options");
     gsw->setApplicationFont(config->readFontEntry("Application Font"));
     gsw->changeMessageFontButton->setText(gsw->messageFont().family());
@@ -236,7 +233,8 @@ void MainWindowShare::slotSettings()
     config->writeEntry("Messages Font",gsw->messageFont());
     config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
     config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
-    config->writeEntry("ShortCompilerOutput",gsw->compilerOutputButtonGroup->selected() == gsw->shortCompilerOutputRadioButton);
+    QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
+    config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
     config->sync();
     API::getInstance()->makeFrontend()->updateSettingsFromConfig();
 }
