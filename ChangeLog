@@ -1,3 +1,6 @@
+2001-08-22 Sandy Meier <smeier@kdevelop.org>
+	* all 1500 php global functions are now available for code completion (incl. prototype) 
+
 2001-08-10 Victor Röder <victor_roeder@gmx.de>
 	* reimplemented CppCodeCompletion::getEntryListForClass() and getEntryListForClassOfNamespace()
 		both work with the two recursive functions getParent...ListForClass()

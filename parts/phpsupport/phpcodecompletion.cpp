@@ -21,6 +21,12 @@
 #include "parsedclass.h"
 #include "parsedmethod.h"
 #include "kdevcore.h"
+#include <qfile.h>
+#include <qtextstream.h>
+#include "phpsupportfactory.h"
+#include <kinstance.h>
+#include <kstddirs.h>
+
 
 PHPCodeCompletion::PHPCodeCompletion(KDevCore* core,ClassStore* store){
   m_editor = core->editor();
@@ -31,45 +37,39 @@ PHPCodeCompletion::PHPCodeCompletion(KDevCore* core,ClassStore* store){
 
   connect(m_editor, SIGNAL(documentActivated(KEditor::Document*)),
 	  this, SLOT(documentActivated(KEditor::Document*)));
+
+  readGlobalPHPFunctionsFile();
   
-  FunctionCompletionEntry e;
-  e.prefix = "int";
-  e.text = "mysql_affected_rows";
-  e.postfix ="()";
-  e.comment = "Get number of affected rows in previous MySQL operation.";
-  e.prototype = "int mysql_affected_rows (resoure link_identifier,String)";
-  m_globalFunctions.append(e);
-  
-  e.prefix = "int";
-  e.text = "mysql_change_user";
-  e.postfix ="()";
-  e.comment = "Change logged in user of the active connection.";
-  m_globalFunctions.append(e);
-
-  e.prefix = "resource";
-  e.text = "mysql_db_query";
-  e.postfix ="()";
-  e.comment = "Send a MySQL query";
-  m_globalFunctions.append(e);
-
-  e.prefix = "array";
-  e.text = "mysql_fetch_array";
-  e.postfix ="()";
-  m_globalFunctions.append(e);
-
-  e.prefix = "array";
-  e.text = "mysql_fetch_assoc";
-  e.postfix ="()";
-  m_globalFunctions.append(e);
-
-  e.prefix = "int";
-  e.text = "mysql_num_fields";
-  e.postfix ="()";
-  m_globalFunctions.append(e);
    
 }
 
 PHPCodeCompletion::~PHPCodeCompletion(){
+}
+
+void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
+  KStandardDirs *dirs = PHPSupportFactory::instance()->dirs();
+  QString phpFuncFile = dirs->findResource("data","kdevphpsupport/phpfunctions");
+  KRegExp lineReg(":([0-9A-Za-z_]+) ([0-9A-Za-z_]+)(\\(.*\\))");
+  FunctionCompletionEntry e;
+  QFile f(phpFuncFile);
+  if ( f.open(IO_ReadOnly) ) {    // file opened successfully
+      QTextStream t( &f );        // use a text stream
+      QString s;
+      while ( !t.eof() ) {        // until end of file...
+	  s = t.readLine();       // line of text excluding '\n'
+	  if(lineReg.match(s)){
+	      e.prefix = lineReg.group(1);
+	      e.text = lineReg.group(2);
+	      e.postfix ="()";
+	      e.prototype = QString(lineReg.group(1)) + " " + QString(lineReg.group(2)) + 
+		  "(" + QString(lineReg.group(3)) + ")";
+	      m_globalFunctions.append(e);
+	  }
+          
+      }
+      f.close();
+  }
+  
 }
 void PHPCodeCompletion::argHintHided(){
   cerr << "PHPCodeCompletion::argHintHided" << endl ;

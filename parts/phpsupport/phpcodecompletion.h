@@ -57,6 +57,8 @@ protected slots:
   bool checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
   bool checkForNewInstanceArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
 
+  void readGlobalPHPFunctionsFile();
+
   QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
   QString getClassName(QString varName,QString maybeInstanceOf);
   QString searchCurrentClassName();

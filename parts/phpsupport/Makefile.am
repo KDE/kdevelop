@@ -14,7 +14,7 @@ libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
 				phpnewclassdlgbase.ui phpnewclassdlg.cpp
 
 METASOURCES = AUTO
-
+SUBDIRS = data
 servicedir = $(kde_servicesdir)
 service_DATA = kdevphpsupport.desktop
 
