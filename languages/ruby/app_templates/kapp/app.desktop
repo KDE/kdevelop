@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=ruby %{APPNAMELC}/main.rb %i %m -caption "%c"
 Icon=%{APPNAMELC}
 Type=Application
 DocPath=%{APPNAMELC}/%{APPNAMELC}.html
 Comment=A KDE KPart Application
+Comment[br]=Ur meziant Kpart evit KDE
 Comment[ca]=Una aplicació KPart per a KDE
 Comment[cy]=Cymhwysiad KPart KDE
 Comment[da]=Et KDE KPart program
@@ -36,6 +36,5 @@ Comment[sv]=Ett KDE Kpart-program
 Comment[ta]=கெடி கெபார்ட்  பயன்பாடு 
 Comment[tg]=Ба кор андохтани KPart барои KDE
 Comment[uk]=Програма KPart для KDE
-Comment[xx]=xxA KDE KPart Applicationxx
 Comment[zh_CN]=一个 KDE KPart 应用程序
 Terminal=false
