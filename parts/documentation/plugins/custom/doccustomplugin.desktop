@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DocCustomPlugin
+Exec=blubb
+Comment=Documentation plugin for all types of documentation
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdoccustomplugin
