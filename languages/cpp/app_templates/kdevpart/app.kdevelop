@@ -98,4 +98,10 @@
       <type ext="h" />
     </useglobaltypes>
   </kdevfilecreate>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docurl>${APPNAMELC}.tag</docurl>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>

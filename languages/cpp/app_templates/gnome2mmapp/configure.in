@@ -1,8 +1,8 @@
 # generated 2004/4/12 12:12:12 EDT by amp8165@localhost.(none)
 # using glademm V2.0.0
 
-AC_INIT(src/gnome2mm.cc)
-AM_INIT_AUTOMAKE(gnome2mm, 0.0)
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(%{APPNAMELC}, %{VERSION})
 AM_CONFIG_HEADER(config.h)
 
 dnl Pick up the Gnome macros.
@@ -45,11 +45,13 @@ fi
 
 AC_LANG_CPLUSPLUS
 
+AM_PATH_GNOMEMM(1.2.2,, AC_MSG_ERROR(Cannot find a matching GNOME-- library: Please install version 1.2.2 or newer))
+
 # GNOME-CONFIG script knows about gnomemm:
 # ('gnome-config' is installed by GNOME)
-GNOMEMM_CFLAGS="`$GNOME_CONFIG --cflags gnomemm gnomeui`" 
-GNOMEMM_LIBS="`$GNOME_CONFIG --libs gnomemm gnomeui`"
-AC_SUBST(GNOMEMM_CFLAGS)
-AC_SUBST(GNOMEMM_LIBS)
+#GNOMEMM_CFLAGS="`$GNOME_CONFIG --cflags gnomemm gnomeui`" 
+#GNOMEMM_LIBS="`$GNOME_CONFIG --libs gnomemm gnomeui`"
+#AC_SUBST(GNOMEMM_CFLAGS)
+#AC_SUBST(GNOMEMM_LIBS)
 
 AC_OUTPUT(Makefile src/Makefile)

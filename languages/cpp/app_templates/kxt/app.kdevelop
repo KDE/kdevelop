@@ -151,4 +151,10 @@
     <folderhierarchy>true</folderhierarchy>
     <depthoffolders>2</depthoffolders>
   </kdevclassview>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docurl>${APPNAMELC}.tag</docurl>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>

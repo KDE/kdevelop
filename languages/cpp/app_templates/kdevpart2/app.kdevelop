@@ -133,4 +133,10 @@
       <argumentsHintDelay>400</argumentsHintDelay>
     </codecompletion>
   </kdevcppsupport>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docurl>${APPNAMELC}.tag</docurl>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>
