@@ -27,6 +27,7 @@ private slots:
 
 private:
   UIChooserPart* m_pMyPart;
+  QWidget * _lastMode;
 };
 
 
