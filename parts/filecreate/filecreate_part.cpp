@@ -76,15 +76,20 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   // having to change the source, as this is not considered 'user-friendly'
   // these days, I'm led to believe.
   selectWidget(1);
-
-
 }
 
 
 FileCreatePart::~FileCreatePart()
 {
-  for(int c=0;c<m_numWidgets;c++)
-    if (m_availableWidgets[c]) delete m_availableWidgets[c];
+  for(int c=0;c<m_numWidgets;c++){
+    if (TypeChooser* chooser = m_availableWidgets[c]) {
+
+       if( QWidget* as_widget = dynamic_cast<QWidget*>(chooser) )
+           mainWindow()->removeView( as_widget );
+
+       delete chooser;
+    }
+  }
 }
 
 void FileCreatePart::configWidget(KDialogBase *dlg)
