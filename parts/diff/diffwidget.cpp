@@ -14,6 +14,8 @@
 #include <qpopupmenu.h>
 #include <qcursor.h>
 
+#include <kconfig.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <ktempfile.h>
@@ -34,11 +36,19 @@ QStringList KDiffTextEdit::extParts;
 
 KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): QTextEdit( parent, name )
 {
+  KConfig* config = kapp->config();
+  config->setGroup( "Diff" );
+  _highlight = config->readBoolEntry( "Highlight", true );
+
   searchExtParts();
 }
 
 KDiffTextEdit::~KDiffTextEdit()
 {
+  KConfig* config = kapp->config();
+  
+  config->setGroup( "Diff" );
+  config->writeEntry( "Highlight", _highlight );
 }
 
 QPopupMenu* KDiffTextEdit::createPopupMenu()
@@ -49,20 +59,66 @@ QPopupMenu* KDiffTextEdit::createPopupMenu()
 QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
 {
   QPopupMenu* popup = QTextEdit::createPopupMenu( p );
-  if ( extParts.isEmpty() )
-    return popup;
   if ( !popup )
     popup = new QPopupMenu( this );
-
+  
   int i = 0;
+
+  if ( extParts.isEmpty() )
+    return popup;
+
   for ( QStringList::Iterator it = extParts.begin(); it != extParts.end(); ++it ) {
     popup->insertItem( i18n( "Show in %1" ).arg( *it ), i + POPUP_BASE, i );
-    ++i;
+    i++;
   }
-  popup->insertSeparator( i );
+  if ( !extParts.isEmpty() )
+    popup->insertSeparator( i );
   connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
 
+  popup->insertItem( i18n( "Highlight syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 0 );
+  popup->setItemChecked( POPUP_BASE - 1, _highlight );
+  popup->insertSeparator( 1 );
+
   return popup;
+}
+
+void KDiffTextEdit::toggleSyntaxHighlight()
+{
+  _highlight = !_highlight;
+  if ( _highlight )
+    applySyntaxHighlight();
+  else
+    clearSyntaxHighlight();
+}
+
+void KDiffTextEdit::applySyntaxHighlight()
+{
+  // the diff has been loaded so we apply a simple highlighting
+  static QColor cAdded( 190, 190, 237);
+  static QColor cRemoved( 190, 237, 190 );
+
+  if ( !_highlight )
+    return;
+
+  int paragCount = paragraphs();
+  for ( int i = 0; i < paragCount; ++i ) {
+    QString txt = text( i );
+    if ( txt.length() > 0 ) {
+      if ( txt.startsWith( "+" ) || txt.startsWith( ">" ) ) {
+        setParagraphBackgroundColor( i, cAdded );
+      } else if ( txt.startsWith( "-" ) || txt.startsWith( "<" ) ) {
+        setParagraphBackgroundColor( i, cRemoved );
+      }
+    }
+  }    
+}
+
+void KDiffTextEdit::clearSyntaxHighlight()
+{
+  int paragCount = paragraphs();
+  for ( int i = 0; i < paragCount; ++i ) {
+    clearParagraphBackground( i );
+  }    
 }
 
 void KDiffTextEdit::searchExtParts()
@@ -199,22 +255,8 @@ void DiffWidget::populateExtPart()
 // internally for the TextEdit only!
 void DiffWidget::slotFinished()
 {
-  // the diff has been loaded so we apply a simple highlighting
-  static QColor cAdded( 190, 190, 237);
-  static QColor cRemoved( 190, 237, 190 );
-
-  int paragCount = te->paragraphs();
-  for ( int i = 0; i < paragCount; ++i ) {
-    QString txt = te->text( i );
-    if ( txt.length() > 0 ) {
-      if ( txt.startsWith( "+" ) || txt.startsWith( ">" ) ) {
-        te->setParagraphBackgroundColor( i, cAdded );
-      } else if ( txt.startsWith( "-" ) || txt.startsWith( "<" ) ) {
-        te->setParagraphBackgroundColor( i, cRemoved );
-      }
-    }
-  }
-  populateExtPart();
+    te->applySyntaxHighlight();
+    populateExtPart();
 }
 
 void DiffWidget::setDiff( const QString& diff )

@@ -35,6 +35,8 @@ class KDiffTextEdit: public QTextEdit
 public:
   KDiffTextEdit( QWidget* parent = 0, const char* name = 0 );
   virtual ~KDiffTextEdit();
+  void applySyntaxHighlight();
+  void clearSyntaxHighlight();
 
 signals:
   void externalPartRequested( const QString& partName );
@@ -45,11 +47,12 @@ protected:
 
 private slots:
   void popupActivated( int );
+  void toggleSyntaxHighlight();
 
 private:
   static void searchExtParts();
   static QStringList extParts;
-  bool highlight;
+  bool _highlight;
 };
 
 class DiffWidget : public QWidget
