@@ -389,6 +389,9 @@ void MainWindowIDEAl::loadSettings() {
     config->setGroup("LeftBar");
     m_leftBar->loadSettings(config);
 
+    config->setGroup("RightBar");
+    m_rightBar->loadSettings(config);
+    
     config->setGroup("BottomBar");
     m_bottomBar->loadSettings(config);
 }
@@ -402,6 +405,9 @@ void MainWindowIDEAl::saveSettings() {
     config->setGroup("LeftBar");
     m_leftBar->saveSettings(config);
 
+    config->setGroup("RightBar");
+    m_leftBar->saveSettings(config);
+    
     config->setGroup("BottomBar");
     m_bottomBar->saveSettings(config);
 }
@@ -635,7 +641,7 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
         else
           kdDebug(9000) <<  "KAction( \"view_next_window\") __not__ found.in MainWindowIDEAl\n" << endl;;
       }    
-  }
+  } 
   return FALSE;  // standard event processing
 }
 
