@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
   else{
     if(bInstall){
       CKDevInstall* install=new CKDevInstall(0,"install");
+      start_logo->close();
       install->show();
       delete install;
     }

@@ -1,5 +1,6 @@
 1999-08-05 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* implemented the source generation for qlistview (kdlgedit)
+	* fixed start_logo problem (Bug#1646)
 
 1999-08-05  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* fixed the problem with ksgml2html messagebox
