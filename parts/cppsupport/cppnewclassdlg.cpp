@@ -5,6 +5,8 @@
 *   Benoit.Cerrina@writeme.com                                            *
 *   Copyright (C) 2002 by Bernd Gehrmann                                  *
 *   bernd@kdevelop.org                                                    *
+*   Copyright (C) 2003 by Eray Ozkural <erayo@cs.bilkent.edu.tr>          *
+*   bernd@kdevelop.org                                                    *
 *   Copyright (C) 2003 by Alexander Dymo                                  *
 *   cloudtemple@mksat.net                                                 *
 *                                                                         *
@@ -62,24 +64,24 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
     //    name_handler_combo->setCurrentText(m_parse);
     baseclasses_view->setSorting(-1);
     constructors_view->setSorting(-1);
-    
+
     accessMenu = new QPopupMenu(this);
-    accessMenu->insertItem(i18n("Use as private"), 
+    accessMenu->insertItem(i18n("Use as private"),
         this, SLOT(changeToPrivate()), 0, 1);
-    accessMenu->insertItem(i18n("Use as protected"), 
+    accessMenu->insertItem(i18n("Use as protected"),
         this, SLOT(changeToProtected()), 0, 2);
-    accessMenu->insertItem(i18n("Use as public"), 
+    accessMenu->insertItem(i18n("Use as public"),
         this, SLOT(changeToPublic()), 0, 3);
     accessMenu->insertSeparator();
     accessMenu->insertItem(i18n("Unset"),
         this, SLOT(changeToInherited()), 0, 5);
-        
+
     overMenu = new QPopupMenu(this);
-    overMenu->insertItem(i18n("Extend base class functionality"), 
+    overMenu->insertItem(i18n("Extend base class functionality"),
         this, SLOT(extendFunctionality()), 0, 11);
-    overMenu->insertItem(i18n("Replace base class method"), 
+    overMenu->insertItem(i18n("Replace base class method"),
         this, SLOT(replaceFunctionality()), 0, 12);
-        
+
     comp = basename_edit->completionObject();
     setCompletion(m_part->classStore());
     setCompletion(m_part->ccClassStore());
@@ -110,7 +112,7 @@ void CppNewClassDialog::nameHandlerChanged(const QString &text)
 void CppNewClassDialog::classNameChanged(const QString &text)
 {
     QString str = text;
-    
+
     if (!headerModified) {
         QString header = str + interface_suffix;
         if (lowercase_filenames)
@@ -149,7 +151,7 @@ void CppNewClassDialog::checkObjCInheritance(int val)
     namespace_edit->setEnabled(!val);
     class_tabs->setTabEnabled(tab2, !val);
     if (val && (baseclasses_view->childCount() > 1))
-        if (KMessageBox::warningContinueCancel(this, 
+        if (KMessageBox::warningContinueCancel(this,
         i18n("Objective C does not support multiple inheritance.\nOnly the first base class in the list will be taken into account."),
         i18n("Warning"), KStdGuiItem::cont(), "Check Objective C inheritance rules" ) == KMessageBox::Cancel)
         objc_box->setChecked(false);
@@ -174,19 +176,19 @@ void CppNewClassDialog::checkQWidgetInheritance(int val)
         objc_box->setEnabled(!val);
 	gtk_box->setEnabled(!val);
     }
-    
-    
+
+
     if (val)
     {
         addBaseClass();
         basename_edit->setText("QWidget");
-        constructors_cpp_edit->append(classname_edit->text() + "::" + classname_edit->text() + 
+        constructors_cpp_edit->append(classname_edit->text() + "::" + classname_edit->text() +
             "(QWidget *parent, const char *name):\n    QWidget(parent, name)\n{\n}\n");
         constructors_h_edit->append(classname_edit->text() + "(QWidget *parent, const char *name);\n");
     }
-    
+
     if (val && (baseclasses_view->childCount() > 1))
-        if (KMessageBox::warningContinueCancel(this, 
+        if (KMessageBox::warningContinueCancel(this,
             i18n("Multiple inheritance requires QObject derivative to be first and unique in base class list."),
             i18n("Warning"), KStdGuiItem::cont(), "Check QWidget inheritance rules" ) == KMessageBox::Cancel)
             childclass_box->setChecked(false);
@@ -196,7 +198,7 @@ void CppNewClassDialog::qobject_box_stateChanged(int val)
 {
     if ( childclass_box->isChecked() )
 	return;
-    
+
     objc_box->setEnabled(!val);
     gtk_box->setEnabled(!val);
 }
@@ -205,10 +207,10 @@ void CppNewClassDialog::gtk_box_stateChanged(int val)
 {
     class_tabs->setTabEnabled(tab2, !val);
     childclass_box->setEnabled(!val);
-    objc_box->setEnabled(!val);    
+    objc_box->setEnabled(!val);
     qobject_box->setEnabled(!val);
     namespace_edit->setEnabled(!val);
-    
+
     basename_edit->setEnabled(!val);
     virtual_box->setEnabled(!val);
     public_button->setEnabled(!val);
@@ -261,7 +263,7 @@ void CppNewClassDialog::addBaseClass()
     basename_edit->setFocus();
     baseclasses_view->setSelected(it, true);
 }
-    
+
 void CppNewClassDialog::remBaseClass()
 {
     bool basename_focused = false;
@@ -278,7 +280,7 @@ void CppNewClassDialog::remBaseClass()
         if (it->itemBelow())
             baseclasses_view->setSelected(it->itemBelow(), true);
         else if (it->itemAbove())
-            baseclasses_view->setSelected(it->itemAbove(), true);        
+            baseclasses_view->setSelected(it->itemAbove(), true);
         delete it;
         if (baseclasses_view->childCount() == 0)
             setStateOfInheritanceEditors(false);
@@ -296,7 +298,7 @@ void CppNewClassDialog::remBaseClassOnly()
         if (it->itemBelow())
             baseclasses_view->setSelected(it->itemBelow(), true);
         else if (it->itemAbove())
-            baseclasses_view->setSelected(it->itemAbove(), true);        
+            baseclasses_view->setSelected(it->itemAbove(), true);
         delete it;
         if (baseclasses_view->childCount() == 0)
             setStateOfInheritanceEditors(false);
@@ -323,7 +325,7 @@ void CppNewClassDialog::remClassFromAdv(QString text)
             if (para) constructors_cpp_edit->removeParagraph(*para);
         }*/
         delete it;
-    }    
+    }
 }
 
 void CppNewClassDialog::currBaseNameChanged(const QString &text)
@@ -349,7 +351,7 @@ void CppNewClassDialog::currBasePrivateSet()
     {
         setAccessForBase(baseclasses_view->selectedItem()->text(0), "private");
         baseclasses_view->selectedItem()->setText(1, (virtual_box->isChecked()?"virtual ":"") + QString("private"));
-    }    
+    }
 }
 
 void CppNewClassDialog::currBaseProtectedSet()
@@ -367,14 +369,14 @@ void CppNewClassDialog::currBasePublicSet()
     {
         setAccessForBase(baseclasses_view->selectedItem()->text(0), "public");
         baseclasses_view->selectedItem()->setText(1, (virtual_box->isChecked()?"virtual ":"") + QString("public"));
-    }    
+    }
 }
 
 void CppNewClassDialog::currBaseVirtualChanged(int val)
 {
     if ( baseclasses_view->selectedItem() )
     {
-        baseclasses_view->selectedItem()->setText(1, QString(val?"virtual ":"") + 
+        baseclasses_view->selectedItem()->setText(1, QString(val?"virtual ":"") +
          QString(private_button->isChecked()?"private":"") +
          QString(protected_button->isChecked()?"protected":"") +
          QString(public_button->isChecked()?"public":""));
@@ -470,7 +472,7 @@ void CppNewClassDialog::updateConstructorsOrder()
     QListViewItemIterator it( baseclasses_view );
     QListViewItem *c_it;
     QListViewItem *fc_it = 0;
-    
+
     while ( it.current() )
     {
         if ( (c_it = constructors_view->findItem(it.current()->text(0), 0)) )
@@ -547,8 +549,8 @@ void CppNewClassDialog::reloadAdvancedInheritance(bool /*clean*/)
 /*    clearConstructorsList(clean);
     clearMethodsList(clean);
     clearUpgradeList(clean);
-        
-    QListViewItemIterator it( baseclasses_view );          
+
+    QListViewItemIterator it( baseclasses_view );
     while ( it.current() )
     {
         if (! (it.current()->text(0).isNull()) )
@@ -574,7 +576,7 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
         QListViewItem *access_methods = new QListViewItem(access, i18n("Methods"));
         QListViewItem *access_slots = new QListViewItem(access, i18n("Slots (Qt-specific)"));
         QListViewItem *access_attrs = new QListViewItem(access, i18n("Attributes"));
-        
+
         ParsedMethod *method = 0;
         myClass->methodIterator.toFirst();
         while ( (method = myClass->methodIterator.current()) != 0)
@@ -587,8 +589,8 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
             else
             {
                 addToMethodsList(over_methods, method);
-                
-                // display only public and protected methods of the base class 
+
+                // display only public and protected methods of the base class
                 if ( (!method->isDestructor()) && (!method->isPrivate()) )
                 {
                     // see what modifier is given for the base class
@@ -604,7 +606,7 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
             }
             ++(myClass->methodIterator);
         }
-        
+
         ParsedAttribute *attr = 0;
         myClass->attributeIterator.toFirst();
         while ( (attr = myClass->attributeIterator.current()) != 0 )
@@ -628,7 +630,7 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
         while ( (slot = myClass->slotIterator.current()) != 0 )
         {
             addToMethodsList(over_slots, slot);
-            
+
             if (!slot->isPrivate())
             {
                 QString inhModifier;
@@ -642,7 +644,7 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
             }
             ++(myClass->slotIterator);
         }
-                
+
         parsedClasses << clName;
     }
 }
@@ -696,7 +698,7 @@ void CppNewClassDialog::clear_selection_button_clicked()
         if ( (curr = dynamic_cast<PCheckListItem<ParsedMethod*>* >(it.current()) ) )
             curr->setOn(false);
         ++it;
-    }           
+    }
 }
 
 void CppNewClassDialog::clearConstructorsList(bool clean)
@@ -704,7 +706,7 @@ void CppNewClassDialog::clearConstructorsList(bool clean)
     if (clean)
         constructors_view->clear();
 /*    else
-    {  
+    {
         QListViewItemIterator it( constructors_view );
         while ( it.current() )
         {
@@ -745,7 +747,7 @@ void CppNewClassDialog::setAccessForItem(QListViewItem *curr, QString newAccess,
 void CppNewClassDialog::setAccessForBase(QString baseclass, QString newAccess)
 {
     QListViewItem *base;
-    
+
     if ( (base = access_view->findItem(baseclass, 0)) )
     {
         QListViewItemIterator it( base );
@@ -846,7 +848,7 @@ void CppNewClassDialog::to_constructors_list_clicked()
                 base += base.isEmpty() ? ": " : ", ";
                 base += curr->parent()->text(0);
                 params_h += params_h.isEmpty() ? "" : ", ";
-                
+
                 //fill arguments for both constructor and base class initializer
                 //parser does not allow to process default values now ?!
                 ParsedArgument *arg;
@@ -858,7 +860,7 @@ void CppNewClassDialog::to_constructors_list_clicked()
                     cparams += cparams.isEmpty() ? "" : ", ";
                     cparams += arg->type() + " ";
                     if (arg->name().isNull())
-                    {                        
+                    {
                         cparams += QString("arg%1").arg(unnamed);
                         bparams += QString("arg%1").arg(unnamed++);
                     }
@@ -875,10 +877,10 @@ void CppNewClassDialog::to_constructors_list_clicked()
         }
         ++it;
     }
-    
+
     constructor_cpp += params_cpp + ")" + base + QString("\n{\n}\n\n\n");
     constructor_h += params_h + ");\n\n";
-    
+
     constructors_h_edit->append(constructor_h);
     constructors_cpp_edit->append(constructor_cpp);
 }
@@ -888,7 +890,7 @@ void CppNewClassDialog::updateClassStore()
 }
 
 
-        
+
 
 bool CppNewClassDialog::ClassGenerator::validateInput()
 {
@@ -897,13 +899,13 @@ bool CppNewClassDialog::ClassGenerator::validateInput()
     KMessageBox::error(&dlg, i18n("You must enter a classname."));
     return false;
   }
-    
-  header = dlg.header_edit->text().simplifyWhiteSpace(); 
+
+  header = dlg.header_edit->text().simplifyWhiteSpace();
   if (header.isEmpty()) {
     KMessageBox::error(&dlg, i18n("You must enter a name for the header file."));
     return false;
   }
-  implementation = dlg.implementation_edit->text().simplifyWhiteSpace(); 
+  implementation = dlg.implementation_edit->text().simplifyWhiteSpace();
   if (implementation.isEmpty() ){
     KMessageBox::error(&dlg, i18n("You must enter a name for the implementation file."));
     return false;
@@ -925,7 +927,7 @@ bool CppNewClassDialog::ClassGenerator::generate()
 {
   if (!validateInput())
     return false;
-   
+
   common_text();
 
   gen_implementation();
@@ -946,14 +948,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
     subDir += project->activeDirectory() + "/";
   headerPath = subDir + header;
   implementationPath = subDir + implementation;
-    
+
   if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
     KMessageBox::error(&dlg, i18n("KDevelop is not able to add classes "
 				  "to existing header or implementation files."));
     return;
   }
-    
-  namespaceStr = dlg.namespace_edit->text(); 
+
+  namespaceStr = dlg.namespace_edit->text();
   childClass = dlg.childclass_box->isChecked();
   objc = dlg.objc_box->isChecked();
   qobject = dlg.qobject_box->isChecked();
@@ -963,9 +965,9 @@ void CppNewClassDialog::ClassGenerator::common_text()
     /*UNUSED! QListViewItem* it = */ new QListViewItem(dlg.baseclasses_view, "QWidget", "public");
   if (objc && (dlg.baseclasses_view->childCount() == 0))
     /*UNUSED! QListViewItem* it = */ new QListViewItem(dlg.baseclasses_view, "NSObject", "public");
-    
+
   doc = dlg.documentation_edit->text();
-    
+
   if (!namespaceStr.isEmpty()) {
     namespaceBeg = "namespace " + namespaceStr + " {\n";
     namespaceEnd = "}\n";
@@ -978,18 +980,18 @@ void CppNewClassDialog::ClassGenerator::common_text()
   if (!dlg.constructors_h_edit->text().isEmpty())
   {
       advConstructorsHeader = "    " + dlg.constructors_h_edit->text();
-#if KDE_VERSION > 305      
-      advConstructorsHeader.replace("\n", "\n    "); 
-#else      
-#endif      
+#if KDE_VERSION > 305
+      advConstructorsHeader.replace("\n", "\n    ");
+#else
+#endif
   }
   if (!dlg.constructors_cpp_edit->text().isEmpty())
-  { 
+  {
       advConstructorsSource = dlg.constructors_cpp_edit->text();
   }
-  
+
   //advanced method overriding
-  
+
   advH_public = QString::null;
   advH_public_slots = QString::null;
   advH_protected = QString::null;
@@ -997,7 +999,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
   advH_private = QString::null;
   advH_private_slots = QString::null;
   advCpp = QString::null;
-  
+
   QListViewItemIterator it( dlg.methods_view );
   while ( it.current() )
   {
@@ -1013,16 +1015,16 @@ void CppNewClassDialog::ClassGenerator::common_text()
           adv_h = curr->item()->isSlot() ? &advH_protected_slots : &advH_protected;
         if (curr->item()->isPublic())
           adv_h = curr->item()->isSlot() ? &advH_public_slots : &advH_public;
-      
+
         if (advCpp.isNull()) advCpp += "\n\n";
-          
+
         genMethodDeclaration(curr->item(), className, adv_h, &advCpp,
             (curr->text(1) == i18n("extend")) ? true : false, curr->parent()->parent()->text(0));
       }
     }
     ++it;
   }
-  
+
   //advanced access control and upgrading
   QListViewItemIterator ita( dlg.access_view );
   while ( ita.current() )
@@ -1040,7 +1042,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 
 	    if ((*adv_h).isNull())
     	        *adv_h += "\n\n";
-            
+
             *adv_h += QString("    using ") + curr->parent()->parent()->text(0) + "::"  + curr->item()->name() + ";\n";
         }
     }
@@ -1055,7 +1057,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
 
 	    if ((*adv_h).isNull())
     	        *adv_h += "\n\n";
-	                
+
             QString methodName = curr_m->item()->name();
             if (!methodName.contains(QRegExp("^[a-zA-z_]")))
                 methodName = "operator" + methodName;
@@ -1066,7 +1068,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
   }
 }
 
-void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *method, 
+void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *method,
     QString className, QString *adv_h, QString *adv_cpp, bool extend, QString baseClassName )
 {
     if ((*adv_h).isNull())
@@ -1078,7 +1080,7 @@ void CppNewClassDialog::ClassGenerator::genMethodDeclaration(ParsedMethod *metho
 	+ (method->isStatic() ? QString("static ") : QString(""))
 	+ method->type() + " " + methodName + "(";
     *adv_cpp += method->type() + " " + className + "::" + methodName + "(";
-    
+
     ParsedArgument *arg;
     QString bparams;
     QString cparams;
@@ -1112,7 +1114,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 {
 
   // implementation
-        
+
   QString classImpl;
   if (dlg.filetemplate_box->isChecked()) {
     QDomDocument dom = *dlg.m_part->projectDom();
@@ -1182,7 +1184,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
       + QString("\n"
 		"$CLASSNAME$::~$CLASSNAME$()\n"
 		"{\n"
-		"}\n") 
+		"}\n")
       + advCpp
       + namespaceEnd;
   }
@@ -1192,7 +1194,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
     relPath += "../";
   args = childClass? "QWidget *parent, const char *name" : "";
   QString baseInitializer;
-  
+
   if (childClass && (dlg.baseclasses_view->childCount() == 0))
     baseInitializer = "  : QWidget(parent, name)";
   else if (dlg.baseclasses_view->childCount() != 0)
@@ -1203,22 +1205,22 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
       if (!it.current()->text(0).isNull())
       {
         baseInitializer += " : ";
-        if (childClass && (baseInitializer == " : ")) 
+        if (childClass && (baseInitializer == " : "))
           baseInitializer += it.current()->text(0) + "(parent, name)";
         else
           baseInitializer += it.current()->text(0) + "()";
-      }       
+      }
       ++it;
     }
     baseInitializer += "\n";
-  } 
-   
+  }
+
   classImpl.replace(QRegExp("\\$HEADER\\$"), relPath+header);
   classImpl.replace(QRegExp("\\$BASEINITIALIZER\\$"), baseInitializer);
   classImpl.replace(QRegExp("\\$CLASSNAME\\$"), className);
   classImpl.replace(QRegExp("\\$ARGS\\$"), args);
   classImpl.replace(QRegExp("\\$FILENAME\\$"), implementation);
-      
+
   QFile ifile(implementationPath);
   if (!ifile.open(IO_WriteOnly)) {
     KMessageBox::error(&dlg, "Cannot write to implementation file");
@@ -1244,7 +1246,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
     else
       classIntf  = FileTemplate::read(dlg.m_part, "h");
   }
-        
+
   if (objc) {
     classIntf = QString("\n"
 			"#ifndef _$HEADERGUARD$_\n"
@@ -1287,7 +1289,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
         "void $CLASSNAME$_delete($CLASSNAME$* self);\n"
         "gboolean $CLASSNAME$_init($CLASSNAME$* self);\n"
         "void $CLASSNAME$_end($CLASSNAME$* self);\n\n\n"
-        "#endif\n");  
+        "#endif\n");
   }
   else {
     classIntf = QString("\n"
@@ -1296,7 +1298,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 			"\n"
 			"$INCLUDEBASEHEADER$\n"
 			"\n")
-      + namespaceBeg 
+      + namespaceBeg
       + QString("/**\n"
 		" * $DOC$\n"
 		" * $AUTHOR$\n"
@@ -1318,7 +1320,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       + namespaceEnd
       +     "#endif\n";
   }
-                   
+
   QString headerGuard = namespaceStr.upper() + header.upper();
   headerGuard.replace(QRegExp("\\."),"_");
   QString includeBaseHeader;
@@ -1330,7 +1332,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   {
     includeBaseHeader = "#include <qobject.h>";
   }
-    
+
   if (objc) {
     if (dlg.baseclasses_view->firstChild())
       if (dlg.baseclasses_view->firstChild()->text(0) != "NSObject")
@@ -1346,11 +1348,11 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
       ++it;
     }
   }
-    
+
   QString author = DomUtil::readEntry(*dlg.m_part->projectDom(), "/general/author");
-    
+
   QString inheritance;
-  if (dlg.baseclasses_view->childCount() > 0) 
+  if (dlg.baseclasses_view->childCount() > 0)
   {
     inheritance += " : ";
 
@@ -1384,14 +1386,14 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   classIntf.replace(QRegExp("\\$AUTHOR\\$"), author);
   classIntf.replace(QRegExp("\\$DOC\\$"), doc);
   classIntf.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  if (dlg.baseclasses_view->childCount() > 0) 
+  if (dlg.baseclasses_view->childCount() > 0)
     classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
   classIntf.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
   classIntf.replace(QRegExp("\\$QOBJECT\\$"), qobjectStr);
   classIntf.replace(QRegExp("\\$ARGS\\$"), args);
   classIntf.replace(QRegExp("\\$FILENAME\\$"), header);
 
-        
+
   QFile hfile(headerPath);
   if (!hfile.open(IO_WriteOnly)) {
     KMessageBox::error(&dlg, "Cannot write to header file");
