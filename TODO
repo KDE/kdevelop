@@ -21,12 +21,7 @@ High priority tasks!
     UI Childframe mode, view-taskbar missing
   - docking state of all toolviews not restored after Gideon restart
   - editor options dialog missing when all views are closed
-
-* version control
-  - Trying to commit a single file results in commit of the whole directory
-    when message not given!
-    cvs commit -m ChangeLog
-    
+   
 * debugger
   - Trying to call the debugger for the Gideon project itself just
      shows an error message (have to be smart about libtool)
@@ -67,6 +62,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
     
 * interoperability
   - import/export 2.1-projects<-->Gideon-projects
+  - version control: integration with Cervisia??
 
 3. Missing UIs (other than 2)
 -----------------------------
