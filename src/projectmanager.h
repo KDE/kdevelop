@@ -98,6 +98,8 @@ private:
   static ProjectManager *s_instance;
 
   ProjectSession* m_pProjectSession;
+  
+  KDevPlugin *m_vcsPlugin;
 };
 
 

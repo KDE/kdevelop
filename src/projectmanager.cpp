@@ -638,6 +638,10 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
 
 void ProjectManager::loadVCSSupport()
 {
+  m_vcsPlugin = 0;
+  if (m_info->m_vcsPlugin.isEmpty())
+    return;
+  
   KService::Ptr vcsService = KService::serviceByDesktopName(m_info->m_vcsPlugin);
   if (!vcsService) {
     // this is for backwards compatibility with pre-alpha6 projects
@@ -661,15 +665,15 @@ void ProjectManager::loadVCSSupport()
   }
 
   PluginController::getInstance()->integratePart( vcsPart );
+  m_vcsPlugin = vcsPart;
 }
 
 void ProjectManager::unloadVCSSupport()
 {
-  if (KDevPlugin *vcsPlugin = PluginController::getInstance()->extension("KDevelop/VersionControl"))
+  if (m_vcsPlugin)
   {
-    KDevVersionControl *vcs = static_cast<KDevVersionControl*>(vcsPlugin);
-    PluginController::getInstance()->removePart( vcs );
-    delete vcs;
+    PluginController::getInstance()->removePart(m_vcsPlugin);
+    delete m_vcsPlugin;
   }
 }
 
