@@ -15,8 +15,8 @@
 <P ALIGN="RIGHT">
 
 <A HREF="index-12.html">Next</A>
- <A HREF="index-10.html">Previous</A>
- <A HREF="index.html#toc11">Table of Contents</A>
+<A HREF="index-10.html">Previous</A>
+<A HREF="index.html#toc11">Table of Contents</A>
 </P>
 <H3><A NAME="s11">11. Extended Views</A></H3>
 
@@ -265,7 +265,7 @@ time ? This will reduce performance most often and lead to a so-called "flicker"
 there are some ways to reduce this behavoir. Instead of calling <CODE>repaint()</CODE>, we could call <CODE>repaint(false)</CODE> as well. This
 will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
 erase it anyway, because all the data will be overwritten anyway. In conjunction with <CODE>QScrollView</CODE>, we will reduce the painting
-even more: we limit the update method to call <CODE>repaint()</CODE> on the viewport() widget, because that will call 
+even more: we limit the update method to call <CODE>repaint()</CODE> on the viewport() widget, because that will call
 <CODE>viewportPaintEvent()</CODE>. On the other hand, the painting area we use is the rectangle containing the document contents, which, when the
 document size is smaller than the viewport size. So we can limit the paint event to the rectangle of the viewport where the document 
 is displayed, whose visible width and height we can retrieve and compose to the rectangle. Additionally, we use the erase parameter with false,
@@ -274,8 +274,8 @@ so the document area doesn´t get erased:
 <HR>
 <PRE>
 void KScribbleView::update(KScribbleView* pSender){
-if(pSender != this)
-viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  if(pSender != this)
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </PRE>
 <HR>
@@ -288,8 +288,8 @@ save a whole range of picture formats and thereby we will remove the restriction
 <P ALIGN="RIGHT">
 
 <A HREF="index-12.html">Next</A>
- <A HREF="index-10.html">Previous</A>
- <A HREF="index.html#toc11">Table of Contents</A>
+<A HREF="index-10.html">Previous</A>
+<A HREF="index.html#toc11">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>

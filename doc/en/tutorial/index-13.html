@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Copyright </TITLE>
+<TITLE>KDE Application Tutorials: Adding Printing Functionality</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,36 +14,58 @@
  
 <P ALIGN="RIGHT">
 
-Next <A HREF="index-12.html">Previous</A>
- <A HREF="index.html#toc13">Table of Contents</A>
+<A HREF="index-14.html">Next</A>
+<A HREF="index-12.html">Previous</A>
+<A HREF="index.html#toc13">Table of Contents</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s13">13. Copyright </A></H3>
+<H3><A NAME="s13">13. Adding Printing Functionality</A></H3>
 
-<P> 
-<BLOCKQUOTE><CODE>
+<P>
+<P>In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
+do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
+<EM>KScribble</EM> or chooses "Print" from the "File" menu, the <CODE>slotFilePrint()</CODE> method is called in <CODE>KScribbleApp</CODE>.
+This method detects which child window is currently activ and creates a printer instance of the class <CODE>QPrinter</CODE>. Then it calls
+the widget´s printing method, <CODE>KScribbleView::print()</CODE>. Here, the framework already contains the base implementation - which
+already shows you that for printing you just have to use <CODE>QPainter</CODE> which then draws on the printer. This method also calls the
+printing dialog.
+<P>What we have to do here is to use <CODE>QPainter</CODE> methods to draw the pixmap of the document connected to the view. As
+<CODE>QPainter</CODE> already offers a whole set of methods <CODE>drawPixmap()</CODE>, we will of course use one of them:
+<P>
+<HR>
 <PRE>
-KDevelop Copyright 1998,1999 The KDevelop Team.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+void KScribbleView::print(QPrinter *pPrinter)
+{
+  if (pPrinter->setup(this))
+  {
+    QPainter p;
+    p.begin(pPrinter);
+                
+    ///////////////////////////////
+    // TODO: add your printing code here
+->      p.drawPixmap(0,0,doc->buffer);
+    ///////////////////////////////
+    p.end();
+  }
+}
 </PRE>
-</CODE></BLOCKQUOTE>
+<HR>
+<P>Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
+<P>You can just go ahead and test it - now you can print any graphics that <EM>KScribble</EM> is able to open.
+<P>This is now the end of our trour through creating a KDE 2 application. You can find the source package of KScribble
+completely with an extension that adds cut, copy, paste and undo functions as well as drag´n drop here:
+<P>
+<A HREF="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz">$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz</A>        
+The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
+After untarring the tarball with <CODE>tar zxvf kscribble-1.0.tar.gz</CODE>, load the project and call "Automake and autoconf" from the
+"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
+and Qt 2.1, so you have to change them manually to match your installation path for these options.
+<P>The appendix also contains the complete sourcecode for this package to read through online.
 <P>
 <P ALIGN="RIGHT">
 
-Next <A HREF="index-12.html">Previous</A>
- <A HREF="index.html#toc13">Table of Contents</A>
+<A HREF="index-14.html">Next</A>
+<A HREF="index-12.html">Previous</A>
+<A HREF="index.html#toc13">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
