@@ -130,7 +130,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
         if( line.startsWith("(") || line.isEmpty() ){
             // pass
         }
-        else if( decl_rx.exactMatch(simplifyLine) ){
+        else if( !simplifyLine.isEmpty() && decl_rx.exactMatch(simplifyLine) ){
             // parse a declaration
             QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
             QString rest = simplifyLine.mid( decl_rx.pos(2) )
