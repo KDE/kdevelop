@@ -350,9 +350,19 @@ void MainWindowShare::slotSettings()
     gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
     gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
     gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+
+    config->setGroup("Global Settings Dialog");
+    int height = config->readNumEntry( "Height", 600 );
+    int width = config->readNumEntry( "Width", 800 );
+    
+    dlg.resize( width, height );
+  
     Core::getInstance()->doEmitConfigWidget(&dlg);
-    dlg.resize( 800, 600);
     dlg.exec();
+
+    config->setGroup("Global Settings Dialog");
+    config->writeEntry( "Height", dlg.size().height() );
+    config->writeEntry( "Width", dlg.size().width() );
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
