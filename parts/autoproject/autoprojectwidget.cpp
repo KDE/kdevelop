@@ -720,7 +720,8 @@ SubprojectItem* AutoProjectWidget::selectedSubproject()
 }
 
 TargetItem *AutoProjectWidget::createTargetItem( const QString &name,
-                                                 const QString &prefix, const QString &primary )
+                                                 const QString &prefix, const QString &primary,
+						 bool take )
 {
 	bool group = !( primary == "PROGRAMS" || primary == "LIBRARIES"
 	                || primary == "LTLIBRARIES" || primary == "JAVA" );
@@ -740,10 +741,11 @@ TargetItem *AutoProjectWidget::createTargetItem( const QString &name,
 	// Workaround because of QListView not being able to create
 	// items without actually inserting them
 	TargetItem *titem = new TargetItem( m_detailView, group, text );
-	m_detailView->takeItem( titem );
 	titem->name = name;
 	titem->prefix = prefix;
 	titem->primary = primary;
+	if( take )
+	    m_detailView->takeItem( titem );
 
 	return titem;
 }

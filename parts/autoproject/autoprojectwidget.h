@@ -126,7 +126,8 @@ public:
 	* Creates a TargetItem instance without a parent item.
 	*/
 	TargetItem *createTargetItem(const QString &name,
-								const QString &prefix, const QString &primary);
+				     const QString &prefix, const QString &primary, 
+				     bool take=true );
 	/**
 	* Creates a FileItem instance without a parent item.
 	*/

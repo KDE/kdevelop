@@ -168,7 +168,7 @@ void AddTargetDialog::accept()
 	flagslist.append(ldflagsother_edit->text());
 	QString ldflags = flagslist.join(" ");
 
-	TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
+	TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, false);
 	// m_detailsView->insertItem ( titem );
 	m_subproject->targets.append(titem);
 
