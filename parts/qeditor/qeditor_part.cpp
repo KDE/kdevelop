@@ -192,7 +192,8 @@ void QEditorPart::readConfig( KConfig* config )
 
 void QEditorPart::writeConfig( KConfig* config )
 {
-    config->writeEntry( "TabStop", m_currentView->tabStop() );
+    if ( m_currentView )
+	config->writeEntry( "TabStop", m_currentView->tabStop() );
 }
 
 bool QEditorPart::openFile()
