@@ -629,7 +629,17 @@ static int listHeight( QListView *l, int sl )
 /*    if ( l->childCount() > 0 )
         return QMIN( l->childCount(), (uint)sl) * l->firstChild()->height();
     else*/
-        return l->sizeHint().height();
+
+    int prefH = 0;
+    if ( l->childCount() > 0 )
+        prefH = l->childCount() * l->firstChild()->height();
+
+    if (l->header()->isVisible())
+        prefH += l->header()->sizeHint().height() + 5;
+    else
+        prefH += 5;
+
+    return prefH < l->sizeHint().height() ? prefH : l->sizeHint().height();
 }
 
 
@@ -648,6 +658,7 @@ void QComboView::popup()
     QListView* lb = d->listView();
     lb->triggerUpdate( );
     lb->installEventFilter( this );
+    lb->viewport()->installEventFilter( this );
     d->mouseWasInsidePopup = FALSE;
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
@@ -849,10 +860,10 @@ bool QComboView::eventFilter( QObject *object, QEvent *event )
 //                qWarning("event filter:: emu");
                 QWidget *mouseW = QApplication::widgetAt( e->globalPos(), TRUE );
 //                if ( mouseW == d->listView()->viewport() ) { //###
-                if ( mouseW == d->listView() ) { //###
-                    QMouseEvent m( QEvent::MouseMove, e->pos(), e->globalPos(),
-                        LeftButton, LeftButton );
-                    QApplication::sendEvent( object, &m ); //### Evil
+                if ( mouseW == d->listView()->viewport() ) {
+                    QListViewItem *sel = d->listView()->itemAt(e->pos());
+                    if (sel)
+                        d->listView()->setCurrentItem(sel);
                     return TRUE;
                 }
             }
