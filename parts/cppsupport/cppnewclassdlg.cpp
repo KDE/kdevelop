@@ -48,6 +48,25 @@
 #include "parsedmethod.h"
 #include "classgeneratorconfig.h"
 
+QString QRegExp_escape(const QString& str )
+{
+#if QT_VERSION >= 0x030100
+    return QRegExp::escape(str);
+#else
+    // this block is copyrighted by Trolltech AS (GPL)
+    static const char meta[] = "$()*+.?[\\]^{|}";
+    QString quoted = str;
+    int i = 0;
+
+    while ( i < (int) quoted.length() ) {
+       if ( strchr(meta, quoted[i].latin1()) != 0 )
+           quoted.insert( i++, "\\" );
+       i++;
+    }
+    return quoted;
+#endif
+}
+
 CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const char *name)
 	: CppNewClassDialogBase(parent, name)
 {
@@ -1002,7 +1021,7 @@ bool CppNewClassDialog::ClassGenerator::validateInput()
   className = dlg.classname_edit->text().simplifyWhiteSpace();
   QString temp = className;
   className.replace(QRegExp("template *<.*> *(class *)?"), "");
-  templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  templateStr = temp.replace(QRegExp(QRegExp_escape(className)), "");
   templateStr.replace(QRegExp(" *class *$"), "");
 
   templateParams = templateStr;
@@ -1722,7 +1741,7 @@ QString CppNewClassDialog::templateStrFormatted(const QString &name )
   QString className = name.simplifyWhiteSpace();
   QString temp = className;
   className.replace(QRegExp("template *<.*> *(class *)?"), "");
-  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp_escape(className)), "");
   templateStr.replace(QRegExp(" *class *$"), "");
   return templateStr;
 }
@@ -1737,7 +1756,7 @@ QString CppNewClassDialog::templateParamsFormatted( const QString &name )
   QString className = name.simplifyWhiteSpace();
   QString temp = className;
   className.replace(QRegExp("template *<.*> *(class *)?"), "");
-  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp_escape(className)), "");
   templateStr.replace(QRegExp(" *class *$"), "");
 
   QString templateParams = templateStr;
@@ -1753,7 +1772,7 @@ QString CppNewClassDialog::templateActualParamsFormatted( const QString & name)
   QString className = name.simplifyWhiteSpace();
   QString temp = className;
   className.replace(QRegExp("<.*> *"), "");
-  QString templateStr = temp.replace(QRegExp(QRegExp::escape(className)), "");
+  QString templateStr = temp.replace(QRegExp(QRegExp_escape(className)), "");
   return templateStr;
 }
 
