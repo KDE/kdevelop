@@ -1162,7 +1162,7 @@ void CKDevelop::slotProjectMakeTags()
 	
 	// set up command line options for exuberant ctags
 	//cerr << "in CKDevelop::slotProjectMakeTags \n";
-	QString ctags_cmd = "/devl/rkrause/bin/ctags";
+	QString ctags_cmd = "ctags";
 	QString ctags_opt_tot = "--totals=yes" ;
 	QString ctags_opt_excmd = "--excmd=pattern" ;
 	QString ctags_opt_scope = "--file-scope=no" ;
