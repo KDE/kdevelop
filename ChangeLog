@@ -1,3 +1,9 @@
+1999-09-24 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+        * improvements on new key-acceleration system
+	* solving segfault on redefinition of short-cuts
+          and new key definitions
+        * implementing dialog short-cuts into new system
+
 1999-09-24 The KDevelop Team <kdevelop-team@barney.cs.uni-potsdam.de>
 	* KDevelop 1.0 Beta3 released
 
