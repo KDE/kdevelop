@@ -81,11 +81,13 @@ void scopeOfNode( AST* ast, QStringList& scope )
     break;
 
     case NodeType_FunctionDefinition:
+ #if 0
         if( ((FunctionDefinitionAST*)ast)->nestedName() ){
 	    s = ((FunctionDefinitionAST*)ast)->nestedName()->text();
 	    if( s )
 	       scope.push_back( s );
 	}
+#endif
 	break;
 
     default:

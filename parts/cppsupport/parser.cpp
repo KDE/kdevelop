@@ -66,7 +66,7 @@ using namespace std;
 
 #define AST_FROM_TOKEN(node, tk) \
     AST::Node node = CreateNode<AST>(); \
-    UPDATE_POS( node, (tk), (tk)+1 ); 
+    UPDATE_POS( node, (tk), (tk)+1 );
 
 struct ParserPrivateData
 {
@@ -91,7 +91,7 @@ Parser::~Parser()
 
 bool Parser::reportError( const Error& err )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
     if( m_problems < m_maxProblems ){
 	++m_problems;
 	int line=0, col=0;
@@ -111,7 +111,7 @@ bool Parser::reportError( const Error& err )
 
 bool Parser::reportError( const QString& msg )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
     if( m_problems < m_maxProblems ){
 	++m_problems;
 	int line=0, col=0;
@@ -131,7 +131,7 @@ void Parser::syntaxError()
 
 bool Parser::skipUntil( int token )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntil()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntil()" << endl;
     while( !lex->lookAhead(0).isNull() ){
 	if( lex->lookAhead(0) == token )
 	    return true;
@@ -144,7 +144,7 @@ bool Parser::skipUntil( int token )
 
 bool Parser::skipUntilDeclaration()
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilDeclaration()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilDeclaration()" << endl;
 
     while( !lex->lookAhead(0).isNull() ){
 
@@ -193,7 +193,7 @@ bool Parser::skipUntilDeclaration()
 
 bool Parser::skipUntilStatement()
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
 
     while( !lex->lookAhead(0).isNull() ){
 	switch( lex->lookAhead(0) ){
@@ -267,7 +267,7 @@ bool Parser::skip( int l, int r )
 
 bool Parser::skipConstantExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipConstantExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipConstantExpression()" << endl;
 
     int start = lex->index();
 
@@ -316,7 +316,7 @@ bool Parser::skipConstantExpression( AST::Node& node )
 
 bool Parser::skipAssignmentExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipAssignmentExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipAssignmentExpression()" << endl;
 
     int start = lex->index();
 
@@ -361,7 +361,7 @@ bool Parser::skipAssignmentExpression( AST::Node& node )
 
 bool Parser::skipCommaExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipCommaExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipCommaExpression()" << endl;
 
     int start = lex->index();
 
@@ -387,7 +387,7 @@ bool Parser::skipCommaExpression( AST::Node& node )
 
 bool Parser::skipExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpression()" << endl;
 
     int start = lex->index();
 
@@ -446,42 +446,46 @@ bool Parser::skipExpression( AST::Node& node )
 
 bool Parser::parseName( NameAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseName()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseName()" << endl;
 
     int start = lex->index();
 
-    NestedNameSpecifierAST::Node nestedName;
-    AST::Node unqualifedName;
-    bool isGlobal = false;
+    NameAST::Node ast = CreateNode<NameAST>();
 
     if( lex->lookAhead(0) == Token_scope ){
-        isGlobal = true;
+        ast->setGlobal( true );
 	lex->nextToken();
     }
 
-    bool hasNestedName = parseNestedNameSpecifier( nestedName );
-    if( parseUnqualifiedName(unqualifedName) ){
-        //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "----------> name parsed!!" << endl;
+    int idx = lex->index();
 
-	NameAST::Node ast = CreateNode<NameAST>();
-	node = ast;
-	node->setGlobal( isGlobal );
-	if( hasNestedName )
-	    node->setNestedName( nestedName );
-	node->setUnqualifedName( unqualifedName );
-	node->setText( toString(start, lex->index()) );
-	UPDATE_POS( node, start, lex->index() );
+    while( true ){
+        ClassOrNamespaceNameAST::Node n;
+        if( !parseUnqualifiedName(n) )
+	    return false;
 
-	return true;
+	if( lex->lookAhead(0) == Token_scope ){
+	    lex->nextToken();
+	    ast->addClassOrNamespaceName( n );
+	} else {
+	    ast->setUnqualifedName( n );
+	    break;
+	}
     }
 
-    lex->setIndex( start );
-    return false;
+    if( idx == lex->index() )
+        return false;
+
+    UPDATE_POS( ast, start, lex->index() );
+    ast->setText( toString(start, lex->index()) );
+    node = ast;
+
+    return true;
 }
 
 bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
 
     int start = lex->index();
 
@@ -510,7 +514,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 
 bool Parser::parseDeclaration( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaration()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaration()" << endl;
 
     int start = lex->index();
 
@@ -541,11 +545,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
     default:
         {
-	    lex->setIndex( start );
-
-	    TypeSpecifierAST::Node spec;
-	    InitDeclaratorListAST::Node declarators;
-	    AST::Node declarator;
+	    // lex->setIndex( start );
 
 	    GroupAST::Node storageSpec;
 	    parseStorageClassSpecifier( storageSpec );
@@ -553,9 +553,12 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    GroupAST::Node cv;
 	    parseCvQualify( cv );
 
+	    TypeSpecifierAST::Node spec;
+	    AST::Node declarator;
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
 	        spec->setCvQualify( cv );
-	        parseInitDeclaratorList(declarators);
+                InitDeclaratorListAST::Node declarators;
+		parseInitDeclaratorList(declarators);
 	        ADVANCE( ';', ";" );
 
 		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
@@ -577,7 +580,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 
 bool Parser::parseLinkageSpecification( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageSpecification()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageSpecification()" << endl;
 
     int start = lex->index();
 
@@ -618,7 +621,7 @@ bool Parser::parseLinkageSpecification( DeclarationAST::Node& node )
 
 bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageBody()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageBody()" << endl;
 
     int start = lex->index();
 
@@ -659,7 +662,7 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 
 bool Parser::parseNamespace( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNamespace()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNamespace()" << endl;
 
     int start = lex->index();
 
@@ -713,7 +716,7 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
 
 bool Parser::parseUsing( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsing()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsing()" << endl;
 
     int start = lex->index();
 
@@ -756,7 +759,7 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
 
 bool Parser::parseUsingDirective( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsingDirective()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsingDirective()" << endl;
 
     int start = lex->index();
 
@@ -784,7 +787,7 @@ bool Parser::parseUsingDirective( DeclarationAST::Node& node )
 
 bool Parser::parseOperatorFunctionId( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperatorFunctionId()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperatorFunctionId()" << endl;
 
     int start = lex->index();
 
@@ -828,7 +831,7 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 
 bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node, bool reportError )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgumentList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgumentList()" << endl;
 
     int start = lex->index();
 
@@ -860,7 +863,7 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node, boo
 
 bool Parser::parseTypedef( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypedef()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypedef()" << endl;
 
     int start = lex->index();
 
@@ -894,7 +897,7 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
 
 bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAsmDefinition()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAsmDefinition()" << endl;
 
     ADVANCE( Token_asm, "asm" );
     ADVANCE( '(', '(' );
@@ -910,7 +913,7 @@ bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
 
 bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
 
     int start = lex->index();
 
@@ -954,7 +957,7 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 
 bool Parser::parseOperator( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperator()" << endl;
     QString text = lex->lookAhead( 0 ).toString();
     
     switch( lex->lookAhead(0) ){
@@ -1014,7 +1017,7 @@ bool Parser::parseOperator( AST::Node& /*node*/ )
 
 bool Parser::parseCvQualify( GroupAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCvQualify()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCvQualify()" << endl;
 
     int start = lex->index();
 
@@ -1038,7 +1041,7 @@ bool Parser::parseCvQualify( GroupAST::Node& node )
         return false;
 
 
-    //kdDebug(9007) << "-----------------> token = " << lex->lookAhead(0).toString() << endl;
+    //kdDebug(9007)<< "-----------------> token = " << lex->lookAhead(0).toString() << endl;
     UPDATE_POS( ast, start, lex->index() );
 
     node = ast;
@@ -1076,14 +1079,19 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 
     TypeSpecifierAST::Node ast = CreateNode<TypeSpecifierAST>();
     if( isIntegral ){
+        ClassOrNamespaceNameAST::Node cl = CreateNode<ClassOrNamespaceNameAST>();
+
 	AST::Node n = CreateNode<AST>();
 	UPDATE_POS( n, start, lex->index() );
+	cl->setName( n );
+	UPDATE_POS( cl, start, lex->index() );
 
         NameAST::Node name = CreateNode<NameAST>();
-	name->setUnqualifedName( n );
+	name->setUnqualifedName( cl );
 	name->setText( toString(start, lex->index()) );
 	UPDATE_POS( name, start, lex->index() );
 	ast->setName( name );
+
     } else {
         NameAST::Node name;
         if( !parseName(name) ){
@@ -1101,7 +1109,7 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 
 bool Parser::parsePtrOperator( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePtrOperator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePtrOperator()" << endl;
 
     int start = lex->index();
 
@@ -1131,7 +1139,7 @@ bool Parser::parsePtrOperator( AST::Node& node )
 
 bool Parser::parseTemplateArgument( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgument()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgument()" << endl;
 
     int start = lex->index();
     if( parseTypeId(node) ){
@@ -1149,7 +1157,7 @@ bool Parser::parseTemplateArgument( AST::Node& node )
 
 bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeSpecifier()" << endl;
 
     GroupAST::Node cv;
     parseCvQualify( cv );
@@ -1168,7 +1176,7 @@ bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
 }
 bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
 
     int start = lex->index();
 
@@ -1240,7 +1248,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 
 	ParameterDeclarationClauseAST::Node params;
 	if( !parseParameterDeclarationClause(params) ){
-	    //kdDebug(9007) << "----------------------> not a parameter declaration, maybe an initializer!?" << endl;
+	    //kdDebug(9007)<< "----------------------> not a parameter declaration, maybe an initializer!?" << endl;
 	    lex->setIndex( index );
 	    goto update_node;
 	}
@@ -1285,7 +1293,7 @@ update_node:
 
 bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
     int start = lex->index();
 
     DeclaratorAST::Node ast = CreateNode<DeclaratorAST>();
@@ -1383,7 +1391,7 @@ update_node:
 
 bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumSpecifier()" << endl;
 
     int start = lex->index();
 
@@ -1434,7 +1442,7 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 
 bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateParameterList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateParameterList()" << endl;
 
     AST::Node param;
     if( !parseTemplateParameter(param) ){
@@ -1455,7 +1463,7 @@ bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
 
 bool Parser::parseTemplateParameter( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateParameter()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateParameter()" << endl;
 
     AST::Node typeParam;
     int tk = lex->lookAhead( 0 );
@@ -1473,7 +1481,7 @@ bool Parser::parseTemplateParameter( AST::Node& /*node*/ )
 
 bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeParameter()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeParameter()" << endl;
 
     switch( lex->lookAhead(0) ){
 
@@ -1565,7 +1573,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 
 bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseStorageClassSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseStorageClassSpecifier()" << endl;
 
     int start = lex->index();
     GroupAST::Node ast = CreateNode<GroupAST>();
@@ -1594,7 +1602,7 @@ bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )
 
 bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionSpecifier()" << endl;
 
     int start = lex->index();
     GroupAST::Node ast = CreateNode<GroupAST>();
@@ -1622,7 +1630,7 @@ bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 
 bool Parser::parseTypeId( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeId()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeId()" << endl;
 
     TypeSpecifierAST::Node spec;
     if( !parseTypeSpecifier(spec) ){
@@ -1637,7 +1645,7 @@ bool Parser::parseTypeId( AST::Node& /*node*/ )
 
 bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclaratorList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclaratorList()" << endl;
 
     int start = lex->index();
 
@@ -1658,7 +1666,7 @@ bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
 	}
 	ast->addInitDeclarator( decl );
     }
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclaratorList() -- end" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclaratorList() -- end" << endl;
 
     UPDATE_POS( ast, start, lex->index() );
     ast->setText( toString(start, lex->index()) );
@@ -1669,7 +1677,7 @@ bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
 
 bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclarationClause()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclarationClause()" << endl;
 
     int start = lex->index();
 
@@ -1703,7 +1711,7 @@ good:
 
 bool Parser::parseParameterDeclarationList( ParameterDeclarationListAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclarationList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclarationList()" << endl;
 
     int start = lex->index();
 
@@ -1737,7 +1745,7 @@ bool Parser::parseParameterDeclarationList( ParameterDeclarationListAST::Node& n
 
 bool Parser::parseParameterDeclaration( ParameterDeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclaration()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseParameterDeclaration()" << endl;
 
     int start = lex->index();
 
@@ -1780,7 +1788,7 @@ bool Parser::parseParameterDeclaration( ParameterDeclarationAST::Node& node )
 
 bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseClassSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseClassSpecifier()" << endl;
 
     int start = lex->index();
 
@@ -1849,7 +1857,7 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 
 bool Parser::parseAccessSpecifier( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAccessSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAccessSpecifier()" << endl;
 
     int start = lex->index();
 
@@ -1870,7 +1878,7 @@ bool Parser::parseAccessSpecifier( AST::Node& node )
 
 bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemberSpecification()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemberSpecification()" << endl;
 
     int start = lex->index();
 
@@ -1946,7 +1954,7 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
 
 bool Parser::parseCtorInitializer( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCtorInitializer()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCtorInitializer()" << endl;
 
     if( lex->lookAhead(0) != ':' ){
 	return false;
@@ -1963,7 +1971,7 @@ bool Parser::parseCtorInitializer( AST::Node& /*node*/ )
 
 bool Parser::parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseElaboratedTypeSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseElaboratedTypeSpecifier()" << endl;
 
     int start = lex->index();
 
@@ -1999,13 +2007,13 @@ bool Parser::parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node )
 
 bool Parser::parseDeclaratorId( NameAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaratorId()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaratorId()" << endl;
     return parseName( node );
 }
 
 bool Parser::parseExceptionSpecification( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExceptionSpecification()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExceptionSpecification()" << endl;
     
     if( lex->lookAhead(0) != Token_throw ){
 	return false;
@@ -2021,7 +2029,7 @@ bool Parser::parseExceptionSpecification( AST::Node& node )
 
 bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumerator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumerator()" << endl;
 
     int start = lex->index();
 
@@ -2055,7 +2063,7 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 
 bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclarator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclarator()" << endl;
 
     int start = lex->index();
 
@@ -2079,7 +2087,7 @@ bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& node )
 
 bool Parser::parseBaseClause( BaseClauseAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBaseClause()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBaseClause()" << endl;
 
     int start = lex->index();
     if( lex->lookAhead(0) != ':' ){
@@ -2113,7 +2121,7 @@ bool Parser::parseBaseClause( BaseClauseAST::Node& node )
 
 bool Parser::parseInitializer( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitializer()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitializer()" << endl;
 
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
@@ -2136,7 +2144,7 @@ bool Parser::parseInitializer( AST::Node& node )
 
 bool Parser::parseMemInitializerList( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializerList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializerList()" << endl;
 
     AST::Node init;
     if( !parseMemInitializer(init) ){
@@ -2157,7 +2165,7 @@ bool Parser::parseMemInitializerList( AST::Node& /*node*/ )
 
 bool Parser::parseMemInitializer( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializer()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializer()" << endl;
 
     NameAST::Node initId;
     if( !parseMemInitializerId(initId) ){
@@ -2174,7 +2182,7 @@ bool Parser::parseMemInitializer( AST::Node& /*node*/ )
 
 bool Parser::parseTypeIdList( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeIdList()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeIdList()" << endl;
 
     AST::Node typeId;
     if( !parseTypeId(typeId) ){
@@ -2196,7 +2204,7 @@ bool Parser::parseTypeIdList( AST::Node& /*node*/ )
 
 bool Parser::parseBaseSpecifier( BaseSpecifierAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBaseSpecifier()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBaseSpecifier()" << endl;
 
     int start = lex->index();
     BaseSpecifierAST::Node ast = CreateNode<BaseSpecifierAST>();
@@ -2235,7 +2243,7 @@ bool Parser::parseBaseSpecifier( BaseSpecifierAST::Node& node )
 
 bool Parser::parseInitializerClause( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitializerClause()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitializerClause()" << endl;
         
     if( lex->lookAhead(0) == '{' ){
 	if( !skip('{','}') ){
@@ -2254,113 +2262,19 @@ bool Parser::parseInitializerClause( AST::Node& /*node*/ )
 
 bool Parser::parseMemInitializerId( NameAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializerId()" << endl;
-    
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializerId()" << endl;
+
     return parseName( node );
-}
-
-
-// nested-name-specifier
-//   class-or-namespace-name "::" nested-name-specifier-opt
-//   class-or-namespace-name "::" "template"-opt unqualified-id
-bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNestedNameSpecifier()" << endl;
-
-    int start = lex->index();
-    bool ok = false;
-
-    NestedNameSpecifierAST::Node nns = CreateNode<NestedNameSpecifierAST>();
-
-    int startId = start;
-    while( lex->lookAhead(0) == Token_identifier ){
-
-	startId = lex->index();
-
-	ClassOrNamespaceNameAST::Node classOrNamespaceName = CreateNode<ClassOrNamespaceNameAST>();
-
-	if( lex->lookAhead(1) == '<' ){
-	    lex->nextToken(); // skip template name
-
-	    AST::Node name = CreateNode<AST>();
-	    UPDATE_POS( name, startId, lex->index() );
-	    classOrNamespaceName->setName( name );
-
-	    lex->nextToken(); // skip <
-
-	    TemplateArgumentListAST::Node args;
-	    if( !parseTemplateArgumentList(args) ){
-		lex->setIndex( startId );
-		return false;
-	    }
-
-	    if( lex->lookAhead(0) != '>' ){
-		lex->setIndex( startId );
-		return false;
-	    }
-
-	    lex->nextToken(); // skip >
-
-	    args->setText( toString(startId, lex->index()) );
-	    UPDATE_POS( args, startId, lex->index() );
-
-	    classOrNamespaceName->setTemplateArgumentList( args );
-
-	    if ( lex->lookAhead(0) == Token_scope ) {
-
-		UPDATE_POS( classOrNamespaceName, startId, lex->index() );
-
-		lex->nextToken();
-		ok = true;
-
-		nns->addClassOrNamespaceName( classOrNamespaceName );
-
-	    } else {
-		lex->setIndex( startId );
-		break;
-	    }
-
-	} else if( lex->lookAhead(1) == Token_scope ){
-	    lex->nextToken(); // skip name
-
-	    AST::Node name = CreateNode<AST>();
-	    UPDATE_POS( name, startId, lex->index() );
-	    classOrNamespaceName->setName( name );
-
-	    classOrNamespaceName->setText( toString(startId, lex->index()) );
-	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );
-	    nns->addClassOrNamespaceName( classOrNamespaceName );
-
-	    lex->nextToken(); // skip ::
-	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier ){
-		lex->nextToken(); // skip optional template keyword
-	    }
-	    ok = true;
-
-	} else
-	    break;
-    }
-
-    if ( !ok ) {
-	lex->setIndex( startId );
-	return false;
-    }
-
-    node = nns;
-    UPDATE_POS( node, start, lex->index() );
-    node->setText( toString(start,lex->index()-1) );
-    
-    return true;
 }
 
 bool Parser::parsePtrToMember( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePtrToMember()" << endl;
-    
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePtrToMember()" << endl;
+
     if( lex->lookAhead(0) == Token_scope ){
 	lex->nextToken();
     }
-    
+
     while( lex->lookAhead(0) == Token_identifier ){
 	lex->nextToken();
 	
@@ -2375,21 +2289,34 @@ bool Parser::parsePtrToMember( AST::Node& /*node*/ )
     return false;
 }
 
-bool Parser::parseUnqualifiedName( AST::Node& node )
+bool Parser::parseUnqualifiedName( ClassOrNamespaceNameAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnqualifiedName()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnqualifiedName()" << endl;
 
     int start = lex->index();
     bool isDestructor = false;
 
+    ClassOrNamespaceNameAST::Node ast = CreateNode<ClassOrNamespaceNameAST>();
+
     if( lex->lookAhead(0) == Token_identifier ){
+        int startName = lex->index();
+        AST::Node n = CreateNode<AST>();
 	lex->nextToken();
+	UPDATE_POS( n, startName, lex->index() );
+	ast->setName( n );
     } else if( lex->lookAhead(0) == '~' && lex->lookAhead(1) == Token_identifier ){
+        int startName = lex->index();
+        AST::Node n = CreateNode<AST>();
 	lex->nextToken(); // skip ~
 	lex->nextToken(); // skip classname
+	UPDATE_POS( n, startName, lex->index() );
+	ast->setName( n );
 	isDestructor = true;
     } else if( lex->lookAhead(0) == Token_operator ){
-	return parseOperatorFunctionId( node );
+        AST::Node n;
+	if( !parseOperatorFunctionId(n) )
+	    return false;
+	ast->setName( n );
     } else
 	return false;
 
@@ -2406,13 +2333,15 @@ bool Parser::parseUnqualifiedName( AST::Node& node )
 
 	    if( lex->lookAhead(0) != '>' ){
 		lex->setIndex( index );
-	    } else
+	    } else {
 		lex->nextToken();
+	        ast->setTemplateArgumentList( args );
+	    }
 	}
     }
 
-    AST::Node ast = CreateNode<AST>();
     UPDATE_POS( ast, start, lex->index() );
+    ast->setText( toString(start, lex->index()) );
     node = ast;
 
     return true;
@@ -2436,7 +2365,7 @@ bool Parser::parseStringLiteral( AST::Node& /*node*/ )
 
 bool Parser::skipExpressionStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpressionStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpressionStatement()" << endl;
 
     int start = lex->index();
 
@@ -2455,7 +2384,7 @@ bool Parser::skipExpressionStatement( StatementAST::Node& node )
 
 bool Parser::parseStatement( StatementAST::Node& node ) // thanks to fiore@8080.it ;)
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseStatement()" << endl;
     switch( lex->lookAhead(0) ){
 
     case Token_while:
@@ -2510,7 +2439,7 @@ bool Parser::parseStatement( StatementAST::Node& node ) // thanks to fiore@8080.
 	break;
     }
 
-    //kdDebug(9007) << "------------> try with declaration statement" << endl;
+    //kdDebug(9007)<< "------------> try with declaration statement" << endl;
     if ( parseDeclarationStatement(node) )
 	return true;
 
@@ -2519,7 +2448,7 @@ bool Parser::parseStatement( StatementAST::Node& node ) // thanks to fiore@8080.
 
 bool Parser::parseCondition( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCondition()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCondition()" << endl;
 
     int index = lex->index();
 
@@ -2544,7 +2473,7 @@ bool Parser::parseCondition( AST::Node& /*node*/ )
 
 bool Parser::parseWhileStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseWhileStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseWhileStatement()" << endl;
     int start = lex->index();
     
     ADVANCE( Token_while, "while" );
@@ -2574,7 +2503,7 @@ bool Parser::parseWhileStatement( StatementAST::Node& node )
 
 bool Parser::parseDoStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDoStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDoStatement()" << endl;
     int start = lex->index();
     
     ADVANCE( Token_do, "do" );
@@ -2608,7 +2537,7 @@ bool Parser::parseDoStatement( StatementAST::Node& node )
 
 bool Parser::parseForStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseForStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseForStatement()" << endl;
     int start = lex->index();
     
     ADVANCE( Token_for, "for" );
@@ -2645,7 +2574,7 @@ bool Parser::parseForStatement( StatementAST::Node& node )
 
 bool Parser::parseForInitStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseForInitStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseForInitStatement()" << endl;
     
     if ( parseDeclarationStatement(node) )
 	return true;
@@ -2655,7 +2584,7 @@ bool Parser::parseForInitStatement( StatementAST::Node& node )
 
 bool Parser::parseCompoundStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCompoundStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCompoundStatement()" << endl;
     int start = lex->index();
 
     if( lex->lookAhead(0) != '{' ){
@@ -2690,7 +2619,7 @@ bool Parser::parseCompoundStatement( StatementAST::Node& node )
 
 bool Parser::parseIfStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseIfStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseIfStatement()" << endl;
     
     int start = lex->index();
     
@@ -2734,7 +2663,7 @@ bool Parser::parseIfStatement( StatementAST::Node& node )
 
 bool Parser::parseSwitchStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSwitchStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSwitchStatement()" << endl;
     int start = lex->index();
     ADVANCE( Token_switch, "switch" );
     
@@ -2764,7 +2693,7 @@ bool Parser::parseSwitchStatement( StatementAST::Node& node )
 
 bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLabeledStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLabeledStatement()" << endl;
     switch( lex->lookAhead(0) ){
     case Token_identifier:
     case Token_default:
@@ -2802,7 +2731,7 @@ bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
 
 bool Parser::parseBlockDeclaration( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBlockDeclaration()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBlockDeclaration()" << endl;
     switch( lex->lookAhead(0) ) {
     case Token_typedef:
 	return parseTypedef( node );
@@ -2870,7 +2799,7 @@ bool Parser::parseNamespaceAliasDefinition( DeclarationAST::Node& /*node*/ )
 
 bool Parser::parseDeclarationStatement( StatementAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarationStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarationStatement()" << endl;
 
     int start = lex->index();
 
@@ -2884,13 +2813,13 @@ bool Parser::parseDeclarationStatement( StatementAST::Node& node )
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 
-    //kdDebug(9007) << "---------------------> found a block declaration" << endl;
+    //kdDebug(9007)<< "---------------------> found a block declaration" << endl;
     return true;
 }
 
 bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarationInternal()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarationInternal()" << endl;
 
     int start = lex->index();
 
@@ -2920,7 +2849,7 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 
 	    switch( lex->lookAhead(0) ){
 	    case ';':
-		if( !declarator->declarator()->declaratorId()->nestedName() ){
+	        {
 		    lex->nextToken();
 
 		    InitDeclaratorListAST::Node declarators = CreateNode<InitDeclaratorListAST>();
@@ -2941,6 +2870,7 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 		    node = ast;
 		    UPDATE_POS( node, start, lex->index() );
 		    return true;
+
 		}
 		break;
 
@@ -3023,7 +2953,6 @@ start_decl:
 	    return true;
 	}
 
-	NestedNameSpecifierAST::Node nestedName;
 	InitDeclaratorListAST::Node declarators;
 
 	InitDeclaratorAST::Node decl;
@@ -3087,7 +3016,7 @@ start_decl:
 
 bool Parser::parseFunctionBody( StatementListAST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionBody()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseFunctionBody()" << endl;
 
     int start = lex->index();
     if( lex->lookAhead(0) != '{' ){
@@ -3144,7 +3073,7 @@ bool Parser::parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node )
 
 bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTryBlockStatement()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTryBlockStatement()" << endl;
 
     if( lex->lookAhead(0) != Token_try ){
 	return false;
@@ -3184,7 +3113,7 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 
 bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePrimarExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePrimarExpression()" << endl;
     
 
     switch( lex->lookAhead(0) ){
@@ -3238,7 +3167,7 @@ bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
 	case '(':
 	    {
 		lex->nextToken();
-		//kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "token = " << lex->lookAhead(0).toString() << endl;
+		//kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "token = " << lex->lookAhead(0).toString() << endl;
 		AST::Node expr;
 		if( !parseExpression(expr) ){
 		    return false;
@@ -3271,7 +3200,7 @@ bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
 
 bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePostfixExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePostfixExpression()" << endl;
 
     int start = lex->index();
     AST::Node expr;
@@ -3346,7 +3275,7 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 
 bool Parser::parseUnaryExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnaryExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnaryExpression()" << endl;
         
     int start = lex->index();
     
@@ -3394,7 +3323,7 @@ bool Parser::parseUnaryExpression( AST::Node& node )
 
 bool Parser::parseNewExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewExpression()" << endl;
     if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_new )
         lex->nextToken();
 
@@ -3424,7 +3353,7 @@ bool Parser::parseNewExpression( AST::Node& /*node*/ )
 
 bool Parser::parseNewTypeId( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewTypeId()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewTypeId()" << endl;
     TypeSpecifierAST::Node typeSpec;
     if( parseTypeSpecifier(typeSpec) ){
 	AST::Node declarator;
@@ -3437,7 +3366,7 @@ bool Parser::parseNewTypeId( AST::Node& /*node*/ )
 
 bool Parser::parseNewDeclarator( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewDeclarator()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewDeclarator()" << endl;
     AST::Node ptrOp;
     if( parsePtrOperator(ptrOp) ){
 	AST::Node declarator;
@@ -3460,7 +3389,7 @@ bool Parser::parseNewDeclarator( AST::Node& /*node*/ )
 
 bool Parser::parseNewInitializer( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewInitializer()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNewInitializer()" << endl;
     if( lex->lookAhead(0) != '(' )
         return false;
 
@@ -3474,7 +3403,7 @@ bool Parser::parseNewInitializer( AST::Node& /*node*/ )
 
 bool Parser::parseDeleteExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeleteExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeleteExpression()" << endl;
     if( lex->lookAhead(0) == Token_scope && lex->lookAhead(1) == Token_delete )
         lex->nextToken();
 
@@ -3491,7 +3420,7 @@ bool Parser::parseDeleteExpression( AST::Node& /*node*/ )
 
 bool Parser::parseCastExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCastExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCastExpression()" << endl;
 
     int index = lex->index();
 
@@ -3515,7 +3444,7 @@ bool Parser::parseCastExpression( AST::Node& /*node*/ )
 
 bool Parser::parsePmExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser:parsePmExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser:parsePmExpression()" << endl;
     AST::Node expr;
     if( !parseCastExpression(expr) )
         return false;
@@ -3532,7 +3461,7 @@ bool Parser::parsePmExpression( AST::Node& /*node*/ )
 
 bool Parser::parseMultiplicativeExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMultiplicativeExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMultiplicativeExpression()" << endl;
     AST::Node expr;
     if( !parsePmExpression(expr) )
         return false;
@@ -3550,7 +3479,7 @@ bool Parser::parseMultiplicativeExpression( AST::Node& /*node*/ )
 
 bool Parser::parseAdditiveExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAdditiveExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAdditiveExpression()" << endl;
     AST::Node expr;
     if( !parseMultiplicativeExpression(expr) )
         return false;
@@ -3567,7 +3496,7 @@ bool Parser::parseAdditiveExpression( AST::Node& /*node*/ )
 
 bool Parser::parseShiftExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseShiftExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseShiftExpression()" << endl;
     AST::Node expr;
     if( !parseAdditiveExpression(expr) )
         return false;
@@ -3584,7 +3513,7 @@ bool Parser::parseShiftExpression( AST::Node& /*node*/ )
 
 bool Parser::parseRelationalExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseRelationalExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseRelationalExpression()" << endl;
     AST::Node expr;
     if( !parseShiftExpression(expr) )
         return false;
@@ -3602,7 +3531,7 @@ bool Parser::parseRelationalExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseEqualityExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEqualityExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEqualityExpression()" << endl;
     AST::Node expr;
     if( !parseRelationalExpression(expr, templArgs) )
         return false;
@@ -3619,7 +3548,7 @@ bool Parser::parseEqualityExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseAndExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAndExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAndExpression()" << endl;
     AST::Node expr;
     if( !parseEqualityExpression(expr, templArgs) )
         return false;
@@ -3636,7 +3565,7 @@ bool Parser::parseAndExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseExclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExclusiveOrExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExclusiveOrExpression()" << endl;
     AST::Node expr;
     if( !parseAndExpression(expr, templArgs) )
         return false;
@@ -3653,7 +3582,7 @@ bool Parser::parseExclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInclusiveOrExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInclusiveOrExpression()" << endl;
     AST::Node expr;
     if( !parseExclusiveOrExpression(expr, templArgs) )
         return false;
@@ -3670,7 +3599,7 @@ bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalAndExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalAndExpression()" << endl;
 
     AST::Node expr;
     if( !parseInclusiveOrExpression(expr, templArgs) )
@@ -3688,7 +3617,7 @@ bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
 
     AST::Node expr;
     if( !parseLogicalAndExpression(expr, templArgs) )
@@ -3706,7 +3635,7 @@ bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
 
 bool Parser::parseConditionalExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseConditionalExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseConditionalExpression()" << endl;
     AST::Node expr;
     if( !parseLogicalOrExpression(expr) )
         return false;
@@ -3728,7 +3657,7 @@ bool Parser::parseConditionalExpression( AST::Node& /*node*/ )
 
 bool Parser::parseAssignmentExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAssignmentExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAssignmentExpression()" << endl;
     AST::Node expr;
     if( lex->lookAhead(0) == Token_throw && !parseThrowExpression(expr) )
         return false;
@@ -3747,13 +3676,13 @@ bool Parser::parseAssignmentExpression( AST::Node& /*node*/ )
 
 bool Parser::parseConstantExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseConstantExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseConstantExpression()" << endl;
     return parseConditionalExpression( node );
 }
 
 bool Parser::parseExpression( AST::Node& node )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExpression()" << endl;
     int start = lex->index();
 
     if( !parseCommaExpression(node) )
@@ -3764,7 +3693,7 @@ bool Parser::parseExpression( AST::Node& node )
 
 bool Parser::parseCommaExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCommaExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCommaExpression()" << endl;
     AST::Node expr;
     if( !parseAssignmentExpression(expr) )
         return false;
@@ -3781,7 +3710,7 @@ bool Parser::parseCommaExpression( AST::Node& /*node*/ )
 
 bool Parser::parseThrowExpression( AST::Node& /*node*/ )
 {
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseThrowExpression()" << endl;
+    //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseThrowExpression()" << endl;
     if( lex->lookAhead(0) != Token_throw )
         return false;
 

@@ -36,7 +36,6 @@ enum NodeType
 
     NodeType_TemplateArgumentList = 1000,
     NodeType_ClassOrNamespaceName,
-    NodeType_NestedNameSpecifier,
     NodeType_Name,
     NodeType_Declaration,
     NodeType_TypeSpecifier,
@@ -74,8 +73,7 @@ enum NodeType
     NodeType_ParameterDeclarationClause,
     NodeType_Group,
     NodeType_AccessDeclaration,
-    NodeType_UnqualifiedName,
-    
+
     NodeType_Custom = 2000
 };
 
@@ -188,55 +186,6 @@ private:
     void operator = ( const ClassOrNamespaceNameAST& source );
 };
 
-class NestedNameSpecifierAST: public AST
-{
-public:
-    typedef std::auto_ptr<NestedNameSpecifierAST> Node;
-    enum { Type = NodeType_NestedNameSpecifier };
-
-public:
-    NestedNameSpecifierAST();
-
-    void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
-    QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
-
-private:
-    QPtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
-
-private:
-    NestedNameSpecifierAST( const NestedNameSpecifierAST& source );
-    void operator = ( const NestedNameSpecifierAST& source );
-};
-
-class UnqualifiedNameAST: public AST
-{
-public:
-    typedef std::auto_ptr<UnqualifiedNameAST> Node;
-    enum { Type = NodeType_UnqualifiedName };
-
-public:
-    UnqualifiedNameAST();
-
-    AST* name() { return m_name.get(); }
-    void setName( AST::Node& name );
-
-    bool isDestructor() const { return m_isDestructor; }
-    void setIsDestructor( bool isDestructor );
-
-    TemplateArgumentListAST* templateArgumentList() { return m_templateArgumentList.get(); }
-    void setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList );
-
-private:
-    AST::Node m_name;
-    bool m_isDestructor;
-    TemplateArgumentListAST::Node m_templateArgumentList;
-
-private:
-    UnqualifiedNameAST( const UnqualifiedNameAST& source );
-    void operator = ( const UnqualifiedNameAST& source );
-};
-
-
 class NameAST: public AST
 {
 public:
@@ -249,16 +198,16 @@ public:
     bool isGlobal() const { return m_global; }
     void setGlobal( bool b );
 
-    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
-    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
+    QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
 
-    AST* unqualifiedName() { return m_unqualifiedName.get(); }
-    void setUnqualifedName( AST::Node& unqualifiedName );
+    ClassOrNamespaceNameAST* unqualifiedName() { return m_unqualifiedName.get(); }
+    void setUnqualifedName( ClassOrNamespaceNameAST::Node& unqualifiedName );
 
 private:
     bool m_global;
-    NestedNameSpecifierAST::Node m_nestedName;
-    AST::Node m_unqualifiedName;
+    ClassOrNamespaceNameAST::Node m_unqualifiedName;
+    QPtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
 
 private:
     NameAST( const NameAST& source );
@@ -1084,10 +1033,7 @@ public:
     
     InitDeclaratorAST* initDeclarator() { return m_initDeclarator.get(); }
     void setInitDeclarator( InitDeclaratorAST::Node& initDeclarator );
-    
-    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
-    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
-    
+
     StatementListAST* functionBody() { return m_functionBody.get(); }
     void setFunctionBody( StatementListAST::Node& functionBody );
     
@@ -1095,7 +1041,6 @@ private:
     GroupAST::Node m_functionSpecifier;
     GroupAST::Node m_storageSpecifier;
     TypeSpecifierAST::Node m_typeSpec;
-    NestedNameSpecifierAST::Node m_nestedName;
     InitDeclaratorAST::Node m_initDeclarator;
     StatementListAST::Node m_functionBody;
 

@@ -54,8 +54,7 @@ public /*rules*/ :
     bool parseTemplateDeclaration( DeclarationAST::Node& node );
     bool parseDeclarationInternal( DeclarationAST::Node& node );
     
-    bool parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node );
-    bool parseUnqualifiedName( AST::Node& node );
+    bool parseUnqualifiedName( ClassOrNamespaceNameAST::Node& node );
     bool parseStringLiteral( AST::Node& node );
     bool parseName( NameAST::Node& node );
     bool parseOperatorFunctionId( AST::Node& node );

@@ -22,8 +22,6 @@ QString nodeTypeToString( NodeType type )
 	return "TemplateArgumentList";
     case NodeType_ClassOrNamespaceName:
 	return "ClassOrNamespaceName";
-    case NodeType_NestedNameSpecifier:
-	return "NestedNameSpecifier";
     case NodeType_Name:
 	return "Name";
     case NodeType_Declaration:
@@ -98,8 +96,6 @@ QString nodeTypeToString( NodeType type )
 	return "Group";
     case NodeType_AccessDeclaration:
 	return "AccessDeclaration";
-    case NodeType_UnqualifiedName:
-	return "UnqualifiedName";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -177,6 +173,7 @@ void AST::removeChild( AST* child )
 NameAST::NameAST()
     : m_global( false )
 {
+    m_classOrNamespaceNameList.setAutoDelete( true );
 }
 
 void NameAST::setGlobal( bool b )
@@ -184,16 +181,19 @@ void NameAST::setGlobal( bool b )
     m_global = b;
 }
 
-void NameAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
-{
-    m_nestedName = nestedName;
-    if( m_nestedName.get() ) m_nestedName->setParent( this );
-}
-
-void NameAST::setUnqualifedName( AST::Node& unqualifiedName )
+void NameAST::setUnqualifedName( ClassOrNamespaceNameAST::Node& unqualifiedName )
 {
     m_unqualifiedName = unqualifiedName;
     if( m_unqualifiedName.get() ) m_unqualifiedName->setParent( this );
+}
+
+void NameAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName )
+{
+    if( !classOrNamespaceName.get() )
+        return;
+
+    classOrNamespaceName->setParent( this );
+    m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
 }
 
 // ------------------------------------------------------------------------
@@ -395,22 +395,6 @@ void ClassOrNamespaceNameAST::setTemplateArgumentList( TemplateArgumentListAST::
     m_templateArgumentList = templateArgumentList;
     if( m_templateArgumentList.get() ) m_templateArgumentList->setParent( this );
 }
-
-// ------------------------------------------------------------------------
-NestedNameSpecifierAST::NestedNameSpecifierAST()
-{
-    m_classOrNamespaceNameList.setAutoDelete( true );
-}
-
-void NestedNameSpecifierAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName )
-{
-    if( !classOrNamespaceName.get() )
-        return;
-
-    classOrNamespaceName->setParent( this );
-    m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
-}
-
 
 // ------------------------------------------------------------------------
 TypeSpecifierAST::TypeSpecifierAST()
@@ -689,12 +673,6 @@ void FunctionDefinitionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
     if( m_typeSpec.get() ) m_typeSpec->setParent( this );
 }
     
-void FunctionDefinitionAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
-{
-    m_nestedName = nestedName;
-    if( m_nestedName.get() ) m_nestedName->setParent( this );
-}
-
 void FunctionDefinitionAST::setInitDeclarator( InitDeclaratorAST::Node& initDeclarator )
 {
     m_initDeclarator = initDeclarator;
@@ -934,27 +912,3 @@ void AccessDeclarationAST::addAccess( AST::Node& access )
     access->setParent( this );
     m_accessList.append( access.release() );
 }
-
-// --------------------------------------------------------------------------
-UnqualifiedNameAST::UnqualifiedNameAST()
-    : m_isDestructor( false )
-{
-}
-
-void UnqualifiedNameAST::setName( AST::Node& name )
-{
-    m_name = name;
-    if( m_name.get() ) m_name->setParent( this );
-}
-
-void UnqualifiedNameAST::setIsDestructor( bool isDestructor )
-{
-    m_isDestructor = isDestructor;
-}
-
-void UnqualifiedNameAST::setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList )
-{
-    m_templateArgumentList = templateArgumentList;
-    if( m_templateArgumentList.get() ) m_templateArgumentList->setParent( this );
-}
-

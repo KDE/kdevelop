@@ -29,7 +29,7 @@ StoreWalker::~StoreWalker()
 
 void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 {
-    m_currentScope.clear();    
+    m_currentScope.clear();
     m_currentContainer = m_store->globalScope();
     m_currentClass = 0;
     m_currentAccess = PIE_PUBLIC;
@@ -188,13 +188,12 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     ast->getEndPosition( &endLine, &endColumn );
 
     QString id = d->declaratorId()->unqualifiedName()->text();
-    NestedNameSpecifierAST* nestedName = d->declaratorId()->nestedName();
 
     QStringList scope = m_currentScope;
-    if( nestedName ){
+    if( d->declaratorId()->classOrNamespaceNameList().count() ){
         if( d->declaratorId()->isGlobal() )
 	    scope.clear();
-	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
+	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
 	while( it.current() ){
 	    if( it.current()->name() ){
@@ -282,7 +281,6 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
 
-
     PIAccess oldAccess = m_currentAccess;
     bool oldInSlots = m_inSlots;
     bool oldInSignals = m_inSignals;
@@ -301,7 +299,7 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	QString shortFileName = fileInfo.baseName();
 	className.sprintf( "(%s_%d)", shortFileName.latin1(), m_anon++ );
     } else {
-	className = ast->name()->text();
+	className = ast->name()->unqualifiedName()->text();
     }
 
     ParsedClass* klass = new ParsedClass();
@@ -404,11 +402,10 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	id = t->declaratorId()->unqualifiedName()->text();
 
     QStringList scope = m_currentScope;
-    if( d->declaratorId() && d->declaratorId()->nestedName() ){
+    if( d->declaratorId() && d->declaratorId()->classOrNamespaceNameList().count() ){
         if( d->declaratorId()->isGlobal() )
 	    scope.clear();
-        NestedNameSpecifierAST* nestedName = d->declaratorId()->nestedName();
-	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
+	QPtrList<ClassOrNamespaceNameAST> l = d->declaratorId()->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
 	while( it.current() ){
 	    if( it.current()->name() )

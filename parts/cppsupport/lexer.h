@@ -131,7 +131,8 @@ enum SkipType {
     SkipWordAndArguments
 };
 
-class Token{
+class Token
+{
 public:
     Token();
     Token( int type, const QChar* position, int length );
@@ -175,7 +176,8 @@ private:
     friend class Parser;
 }; // class Token
 
-class Lexer {
+class Lexer 
+{
 public:
     Lexer( Driver* driver );
     ~Lexer();
@@ -186,6 +188,10 @@ public:
     bool recordWhiteSpaces() const;
     void setRecordWhiteSpaces( bool record );
 
+    bool skipWordsEnabled() const;
+    void enableSkipWords();
+    void disableSkipWords();
+    
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord );
 
@@ -208,6 +214,8 @@ private:
     void tokenize();
     bool isValid( const QChar* ptr ) const;
     void newline( const QChar* ptr );
+    void nextChar( const QChar*& ptr );
+    void nextChar( const QChar*& ptr, int n );
     const QChar* skip( const QChar* ptr, const QChar& l, const QChar& r );
     const QChar* readIdentifier( const QChar* ptr);
     const QChar* readWhiteSpaces( const QChar* ptr, bool skipNewLine=true );
@@ -216,6 +224,8 @@ private:
     const QChar* readCharLiteral( const QChar* ptr );
     const QChar* readStringLiteral( const QChar* ptr );
     const QChar* readNumberLiteral( const QChar* ptr );
+    int findOperator3( const QChar* ptr );
+    int findOperator2( const QChar* ptr );
     const QChar* handleDirective( const QString& directive, const QChar* ptr );
 
 private:
@@ -224,8 +234,6 @@ private:
     int m_size;
     QMemArray< const QChar* > m_startLineVector;
     int m_lastLine;
-    QMap< QString, int > m_keywords;
-    QMap< QString, int > m_operators;
     QMap< QString, SkipType > m_words;
     int m_index;
     QString m_source;
@@ -238,6 +246,7 @@ private:
     
     int m_currentLine;
     int m_currentColumn;
+    bool m_skipWordsEnabled;
 };
 
 
@@ -426,5 +435,194 @@ inline bool Lexer::isValid( const QChar* ptr ) const
     return ptr < m_endPtr;
 }
 
+inline void Lexer::newline( const QChar* ptr )
+{
+    if( m_lastLine == (int)m_startLineVector.size() ){
+        m_startLineVector.resize( m_startLineVector.size() + 1000 );
+    }
+        
+    m_startLineVector[ m_lastLine++ ] = ptr;
+    
+    m_currentLine = m_lastLine;
+    m_currentColumn = 0;        
+    m_startLine = true;        
+}
 
+inline void Lexer::nextChar( const QChar*& ptr ) 
+{
+    if(*ptr == '\n') {
+	++ptr; 
+	newline( ptr );
+    } else {
+	++m_currentColumn; 
+	++ptr;
+    }
+}
+
+inline void Lexer::nextChar( const QChar*& ptr, int n ) 
+{
+    m_currentColumn += n; 
+    ptr += n;    
+}
+
+inline const QChar* Lexer::readIdentifier( const QChar* ptr )
+{
+    while( isValid(ptr) && (ptr->isLetterOrNumber() || *ptr == '_') )
+        nextChar( ptr );
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readWhiteSpaces( const QChar* ptr, bool skipNewLine )
+{
+    while( isValid(ptr) && ptr->isSpace() ){
+        if( *ptr == '\n' && !skipNewLine )
+            break;
+
+        nextChar( ptr );
+    }
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readLineComment( const QChar* ptr )
+{
+    while( isValid(ptr) && *ptr != '\n' )
+        nextChar( ptr );
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readMultiLineComment( const QChar* ptr )
+{
+    while( isValid(ptr) ){
+        if( isValid(ptr+1) && *ptr == '*' && *(ptr+1) == '/' ){
+            nextChar( ptr, 2 );
+            return ptr;
+        }
+        nextChar( ptr );
+    }
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readCharLiteral( const QChar* ptr )
+{
+    if( *ptr != '\'' )
+        return ptr;
+
+    nextChar( ptr ); // skip '
+
+    while( isValid(ptr) ){
+        int len = m_endPtr - ptr;
+
+        if( len>=2 && (*ptr == '\\' && *(ptr+1) == '\'') ){
+            nextChar( ptr, 2 );
+        } else if( len>=2 && (*ptr == '\\' && *(ptr+1) == '\\') ){
+            nextChar( ptr, 2 );
+        } else if( *ptr == '\'' ){
+            nextChar( ptr );
+            return ptr;
+        } else {
+	    nextChar( ptr );
+	}
+    }
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readStringLiteral( const QChar* ptr )
+{
+    if( *ptr != '"' )
+        return ptr;
+
+    nextChar( ptr ); // skip "
+
+    while( isValid(ptr) ){
+        int len = m_endPtr - ptr;
+
+        if( len>=2 && *ptr == '\\' && *(ptr+1) == '"' ){
+            nextChar( ptr, 2 );
+        } else if( len>=2 && *ptr == '\\' && *(ptr+1) == '\\' ){
+            nextChar( ptr, 2 );
+        } else if( *ptr == '"' ){
+            nextChar( ptr );
+            return ptr;
+        } else {
+	    nextChar( ptr );
+	}
+    }
+
+    return ptr;
+}
+
+inline const QChar* Lexer::readNumberLiteral( const QChar* ptr )
+{
+    while( isValid(ptr) && (ptr->isLetterOrNumber() || *ptr == '.') )
+        nextChar( ptr );
+
+    return ptr;
+}
+
+inline int Lexer::findOperator3( const QChar* ptr )
+{
+    int n = int(m_endPtr - ptr);
+    
+    if( n >= 3){
+	if( *ptr == '<' && *(ptr+1) == '<' && *(ptr+2) == '=' ) return Token_assign;
+	else if( *ptr == '>' && *(ptr+1) == '<' && *(ptr+2) == '=' ) return Token_assign; 
+	else if( *ptr == '-' && *(ptr+1) == '>' && *(ptr+2) == '*' ) return Token_ptrmem; 
+	else if( *ptr == '.' && *(ptr+1) == '.' && *(ptr+2) == '.' ) return Token_ellipsis;
+    } 
+    
+    return -1;
+}
+
+inline int Lexer::findOperator2( const QChar* ptr )
+{
+    int n = int(m_endPtr - ptr);
+    
+    if( n>=2 ){
+	if( *ptr == ':' && *(ptr+1) == ':' ) return Token_scope;
+	else if( *ptr == '.' && *(ptr+1) == '*' ) return Token_ptrmem;
+	else if( *ptr == '+' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '-' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '*' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '/' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '%' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '^' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '&' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '|' && *(ptr+1) == '=' ) return Token_assign;
+	else if( *ptr == '<' && *(ptr+1) == '<' ) return Token_shift;
+	else if( *ptr == '>' && *(ptr+1) == '>' ) return Token_shift;
+	else if( *ptr == '=' && *(ptr+1) == '=' ) return Token_eq;
+	else if( *ptr == '!' && *(ptr+1) == '=' ) return Token_eq;
+	else if( *ptr == '<' && *(ptr+1) == '=' ) return Token_leq;
+	else if( *ptr == '>' && *(ptr+1) == '=' ) return Token_geq;
+	else if( *ptr == '&' && *(ptr+1) == '&' ) return Token_and;
+	else if( *ptr == '|' && *(ptr+1) == '|' ) return Token_or;
+	else if( *ptr == '+' && *(ptr+1) == '+' ) return Token_incr;
+	else if( *ptr == '-' && *(ptr+1) == '-' ) return Token_decr;
+	else if( *ptr == '-' && *(ptr+1) == '>' ) return Token_arrow;
+    }
+    
+    return -1;
+}
+
+inline bool Lexer::skipWordsEnabled() const
+{
+    return m_skipWordsEnabled;
+}
+
+inline void Lexer::enableSkipWords()
+{
+    m_skipWordsEnabled = true;
+}
+
+inline void Lexer::disableSkipWords()
+{
+    m_skipWordsEnabled = false;
+}
+
+    
 #endif
