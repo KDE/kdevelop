@@ -34,6 +34,6 @@ Comment[ta]=ஷெல் ஸ்கிரிப்ட் மூல வடிவ�
 Comment[xx]=xxShell script based build systemxx
 Comment[zh_CN]=基于 Shell 脚本的编译系统
 ServiceTypes=KDevelop/BuildSystems
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-BuildSystem=ShellScript
 X-KDE-Library=libkdevbuildscript

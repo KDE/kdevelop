@@ -35,6 +35,6 @@ Name[ta]=Pgf77 விருப்பங்கள்
 Name[xx]=xxPgf77Optionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Fortran
 X-KDevelop-Args=pgf77

@@ -58,5 +58,5 @@ GenericName[xx]=xxRuby Supportxx
 GenericName[zh_CN]=Ruby 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevrubysupport
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Ruby

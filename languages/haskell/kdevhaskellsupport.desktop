@@ -58,4 +58,4 @@ GenericName[zh_CN]=Haskell 语言支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevhaskellsupport
 X-KDevelop-Language=Haskell
-X-KDevelop-Version=1
+X-KDevelop-Version=2

@@ -32,4 +32,4 @@ Comment[xx]=xxGenericProjectxx
 Comment[zh_CN]=常规项目
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevgenericproject
-X-KDevelop-Version=1
+X-KDevelop-Version=2

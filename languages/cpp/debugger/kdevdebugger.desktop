@@ -59,6 +59,6 @@ GenericName[zh_CN]=调试器前端
 Icon=
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdebugger
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Scope=Project
 X-KDevelop-ProgrammingLanguages=C,C++

@@ -58,6 +58,6 @@ GenericName[xx]=xxC Supportxx
 GenericName[zh_CN]=C 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcppsupport
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=C
 X-KDevelop-Args=C

@@ -61,5 +61,5 @@ GenericName[xx]=xxQMake Projectxx
 GenericName[zh_CN]=QMake 项目
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Args=

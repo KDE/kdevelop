@@ -33,6 +33,6 @@ Name[ta]=Pghpf விருப்பங்கள்
 Name[xx]=xxPghpfOptionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Fortran
 X-KDevelop-Args=pghpf

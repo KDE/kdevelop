@@ -36,6 +36,6 @@ Name[ta]=Dccவிருப்பங்கள்
 Name[xx]=xxDccOptionsxx
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevdccoptions
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Pascal
 X-KDevelop-Args=dcc

@@ -63,5 +63,5 @@ GenericName[xx]=xxAutomake Projectxx
 GenericName[zh_CN]=Automake 项目
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevautoproject
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Args=

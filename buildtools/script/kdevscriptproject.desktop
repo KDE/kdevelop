@@ -58,4 +58,4 @@ GenericName[xx]=xxScripting Language Projectxx
 GenericName[zh_CN]=脚本语言项目
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevscriptproject
-X-KDevelop-Version=1
+X-KDevelop-Version=2

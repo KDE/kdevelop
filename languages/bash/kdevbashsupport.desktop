@@ -58,5 +58,5 @@ GenericName[xx]=xxBash Supportxx
 GenericName[zh_CN]=Bash 支持
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevbashsupport
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Bash

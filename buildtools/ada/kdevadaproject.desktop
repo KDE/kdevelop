@@ -64,5 +64,5 @@ GenericName[xx]=xxAda Projectxx
 GenericName[zh_CN]=Ada 项目
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevadaproject
-X-KDevelop-Version=1
+X-KDevelop-Version=2
 X-KDevelop-Language=Ada
