@@ -45,7 +45,7 @@
   static bool beginComment(MyLexer *lex);
   static void inComment(MyLexer *lex);
   static bool endComment(MyLexer *lex);
-  int yywrap();
+  extern "C" int yywrap(); 
 %}
 
 WS           [[:blank:]\r]+
@@ -205,4 +205,4 @@ static bool endComment(MyLexer *lex)
  return true;
 }
 
-int yywrap() { return 1; }
+extern "C" int yywrap() { return 1; }
