@@ -215,12 +215,6 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
     m_presetEncoding = QString::null;
   }
 
-  if ( mimeType == "text/html" )
-  {
-    showDocument( url, "" );
-    return;
-  }
-
   if (mimeType.startsWith("text/")
       || mimeType == "application/x-zerosize"
       || mimeType == "application/x-desktop"
