@@ -29,7 +29,7 @@
 static const KAboutData data("kdevfilelist", I18N_NOOP("FileList"), "1.0");
 
 typedef KDevGenericFactory<FileListPart> filelistFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( &data ) )
 
 FileListPart::FileListPart(QObject *parent, const char *name, const QStringList& )
         : KDevPlugin("filelist", "filelist", parent, name ? name : "FileListPart" )
