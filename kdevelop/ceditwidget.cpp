@@ -278,8 +278,8 @@ void CEditWidget::deleteInterval( uint startAt, uint endAt )
   toggleModified( true );
 }
 
-/*------------------------------------- CEditWidget::deleteInterval()
- * deleteInterval()
+/*------------------------------------- CEditWidget::insertAtLine()
+ * insertAtLine()
  *   Insert the string at the given line.
  *
  * Parameters:
