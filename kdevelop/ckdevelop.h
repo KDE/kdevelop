@@ -103,6 +103,8 @@ public:
   void initStatusBar();
   void initWhatsThis();
   void initProject(bool witharg);
+  void initDebugger();
+
 
   /** Remove a specified file from the edit_infos struct
    *  and leave the widgets in a proper state
@@ -345,6 +347,7 @@ public:
   void slotBuildStop();
   void slotBuildRun();
   void slotBuildRunWithArgs();
+  void slotBuildDebug();
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
@@ -369,7 +372,6 @@ public:
   void slotDebugStatus(const QString& status, int statusFlag);
   /** Shows the debugger output */
   void slotDebugReceivedStdout(const char* buffer);
-
 
   ////////////////////////
   // TOOLS-Menu entries
@@ -841,9 +843,7 @@ private:
   CRealFileView* real_file_tree;
   /** The documentation tree. */
   DocTreeView* doc_tree;
-  /** The debugger's tree of local variable's */
-  VarViewer* var_viewer;
- 
+
   /** Output from the compiler ... */
   COutputWidget* messages_widget;
   /** stdin and stdout output. */
@@ -895,13 +895,21 @@ private:
   int lasttab;
   QString lastfile;
 
-  // debugger additions
-  DbgController*      dbgController;
-  FrameStack*         frameStack;
-  BreakpointManager*  brkptManager;
+  /** debugger additions */
+  DbgController* dbgController;
+
+  /** The debugger's tree of local variable's */
+  VarViewer* var_viewer;
+
+  /** */
+  FrameStack* frameStack;
+  BreakpointManager* brkptManager;
 
   /** debugger dialog */
   COutputWidget* dbg_widget;
+
+  bool dbgInternal;
+  QString dbgExternalCmd;
 };
 
 #endif

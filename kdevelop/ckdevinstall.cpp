@@ -344,7 +344,7 @@ void CKDevInstall::slotAuto() // proceed >>
   glimpseindex=false;
   bool a2ps=false;
   bool enscript=false;
-  bool kdbg=false;
+  bool dbg=false;
   bool kiconedit=false;
   bool ktranslator=false;
 	bool kpaint=false;
@@ -590,7 +590,7 @@ void CKDevInstall::slotAuto() // proceed >>
     enscript=true;
   }
   if(CToolClass::searchInstProgram("kdbg")){
-    kdbg=true;
+    dbg=true;
   }
   if(CToolClass::searchInstProgram("kiconedit")){
     kiconedit=true;
@@ -650,15 +650,15 @@ void CKDevInstall::slotAuto() // proceed >>
     kdoc_str="kdoc"+found+"\n";
   else
     kdoc_str="kdoc"+not_found+" -- generating API-documentations will not be possible\n";
-  QString kdbg_str;
-  if(kdbg){
-    kdbg_str="kdbg"+found+"\n";
+  QString dbg_str;
+  if(dbg){
+    dbg_str="kdbg"+found+"\n";
 		tools_exe.append("kdbg");
-		tools_entry.append("K&Debugger");
+		tools_entry.append("K&Dbg");
 		tools_argument.append(" ");
 	}
   else
-    kdbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
+    dbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
   QString kiconedit_str;
   if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";
@@ -712,7 +712,7 @@ void CKDevInstall::slotAuto() // proceed >>
   {
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
-                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
+                  +print_str+dbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
 
 	config->setGroup("ToolsMenuEntries");
 	config->writeEntry("Tools_exe",tools_exe);

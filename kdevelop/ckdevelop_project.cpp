@@ -148,7 +148,8 @@ bool CKDevelop::slotProjectClose(){
     stderr_widget->clear();
     kdlg_dialogs_view->clear();
 
-    slotDebugStop();
+    if (dbgController)
+      slotDebugStop();
 
     kdlgedit->slotFileSave();
     

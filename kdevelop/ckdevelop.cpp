@@ -766,11 +766,9 @@ void CKDevelop::slotBuildRunWithArgs(){
 
 void CKDevelop::slotDebugRun()
 {
-  if(!prj->getBinPROGRAM())
-    slotBuildMake();
-
   if (!dbgController)
   {
+//  	enableToolBar(KToolBar::Show,ID_DEBUG_TOOLBAR);
     dbgController = new GDBController(var_viewer->varTree(), frameStack);
 
     connect(  dbgController,    SIGNAL(rawGDBBreakpointList (char*)),
@@ -823,11 +821,12 @@ void CKDevelop::slotDebugRun()
     connect(  cpp_widget,       SIGNAL(stepOutOff()),
               dbgController,    SLOT(slotStepOutOff()));
 
-    setDebugMenuProcess(true);
-
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
     dbgController->slotStart(prj->getBinPROGRAM(), prj->getExecuteArgs());
   }
+
+	// Ensure the toolbar is on
+	setDebugMenuProcess(true);
 
   // If there's BP's waiting to be set then do this now
   brkptManager->slotSetPendingBPs();
@@ -839,6 +838,8 @@ void CKDevelop::slotDebugRun()
 void CKDevelop::slotDebugStop()
 {
   setDebugMenuProcess(false);
+//  enableToolBar(KToolBar::Hide,ID_DEBUG_TOOLBAR);
+
   delete dbgController;
   dbgController = 0;
   brkptManager->reset();
@@ -940,15 +941,46 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
     slotStatusMsg(msg);
 }
 
-/*
-void CKDevelop::slotBuildDebug(){
+void CKDevelop::setDebugMenuProcess(bool enable)
+{
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,        enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_MEMVIEW,    enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,       enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,       enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STOP,       enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RESTART,    enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_BREAK_INTO, enable);
 
-  if(!CToolClass::searchProgram("kdbg")){
-    return;
-  }
+  if (enable)
+    saveTimer->stop();  // stop the autosaving
+  else
+    if(bAutosave)
+      saveTimer->start(saveTimeout); // maybe restart autosaving
+}
+
+void CKDevelop::slotBuildDebug(){
 
   if(!bKDevelop)
     switchToKDevelop();
+
+// TODO: jbb-991220 - This code isn't quite right
+// The slotBuildMake needs to be above the Internal debugger but it must
+// run to completion before starting _any_ debugger. I've put the internal
+// debugger above the make for now.
+// If fact we should only "make" when "dirty" and we should ask
+// before "make"ing.
+
+  if (dbgInternal)
+  {
+    slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
+                    (prj->getBinPROGRAM()).data()));
+    slotDebugRun();
+    return;
+  }
+
+  if(!CToolClass::searchProgram(dbgExternalCmd)){
+    return;
+  }
 
 //   maybe the sources have changed, so it has to be compiled
 //
@@ -958,18 +990,18 @@ void CKDevelop::slotBuildDebug(){
 
   showOutputView(false);
   showTreeView(false);
-  
-  slotStatusMsg(i18n("Running  ")+prj->getBinPROGRAM()+i18n("  in KDbg"));
+
+  slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
+                (prj->getBinPROGRAM()).data(), dbgExternalCmd.data()));
+//  slotStatusMsg(i18n("Running  ")+prj->getBinPROGRAM()+i18n("  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  swallow_widget->setExeString("kdbg "+ prj->getBinPROGRAM());
+  swallow_widget->setExeString(dbgExternalCmd+ " " + prj->getBinPROGRAM());
   swallow_widget->sWExecute();
   swallow_widget->init();
-  
 }
-*/
 
 void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
@@ -1210,7 +1242,7 @@ void CKDevelop::slotBuildStop(){
 
 // void CKDevelop::slotToolsKDbg(){
 
-//   if(!CToolClass::searchProgram("kdbg")){
+//   if(!CToolClass::searchProgram(dbgExternalCmd)){
 //     return;
 //   }
 //   if(!bKDevelop)
@@ -1220,7 +1252,7 @@ void CKDevelop::slotBuildStop(){
 
 //   s_tab_view->setCurrentTab(TOOLS);
 //   swallow_widget->sWClose(false);
-//   swallow_widget->setExeString("kdbg");
+//   swallow_widget->setExeString(dbgExternalCmd);
 //   swallow_widget->sWExecute();
 //   swallow_widget->init();
 // }
@@ -1381,6 +1413,9 @@ void CKDevelop::slotOptionsKDevelop(){
   }
 
   delete setup;
+
+  // This might have changed
+  initDebugger();
 
   accel->readSettings();
   setKeyAccel();
@@ -3004,26 +3039,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_REBUILD_ALL:
   	slotBuildRebuildAll();
   	break;
-//****************************  	
-  case ID_DEBUG_RUN:
-    slotDebugRun();
+  case ID_BUILD_DEBUG:
+    slotBuildDebug();
     break;
-  case ID_DEBUG_STEP:
-    dbgController->slotStepInto();
-    break;
-  case ID_DEBUG_NEXT:
-    dbgController->slotStepOver();
-    break;
-  case ID_DEBUG_STOP:
-    slotDebugStop();
-    break;
-  case ID_DEBUG_BREAK_INTO:
-    dbgController->slotBreakInto();
-    break;
-  case ID_DEBUG_BRKPT:    // change this name
-    slotDebugMemoryView();
-    break;
-//****************************  	
   case ID_BUILD_RUN:
     slotBuildRun();
     break;
@@ -3072,6 +3090,31 @@ void CKDevelop::slotToolbarClicked(int item){
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
     }		
+    break;
+
+  case ID_DEBUG_RUN:
+    ASSERT(dbgInternal);
+    slotDebugRun();
+    break;
+  case ID_DEBUG_STEP:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotStepInto();
+    break;
+  case ID_DEBUG_NEXT:
+    ASSERT(dbgInternal);
+    dbgController->slotStepOver();
+    break;
+  case ID_DEBUG_STOP:
+    ASSERT(dbgInternal);
+    slotDebugStop();
+    break;
+  case ID_DEBUG_BREAK_INTO:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotBreakInto();
+    break;
+  case ID_DEBUG_MEMVIEW:    // change this name
+    ASSERT(dbgInternal && dbgController);
+    slotDebugMemoryView();
     break;
   }
 }
@@ -3158,7 +3201,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
   ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
 
-//  ON_STATUS_MSG(ID_DEBUG_RUN,                   			    i18n("Invokes make and KDbg debugging the binary"))
+  ON_STATUS_MSG(ID_BUILD_DEBUG,                  			    i18n("Invokes make and starts debugging the binary"))
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
@@ -3253,19 +3296,3 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

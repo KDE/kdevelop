@@ -652,8 +652,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       //      setMainCaption();  is handled by setCurrentTab()
       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
       edit_widget->setFocus();
+
       // Need to get the breakpoints displayed in this file (if any)
-      brkptManager->refreshBP(filename);
+      if (brkptManager)
+        brkptManager->refreshBP(filename);
       return;
     }
   }
@@ -683,7 +685,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
   edit_widget->setFocus();
   // Need to get the breakpoints displayed in this file (if any)
-  brkptManager->refreshBP(filename);
+  if (brkptManager)
+    brkptManager->refreshBP(filename);
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
@@ -848,7 +851,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     }
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
-    enableCommand(ID_DEBUG_RUN);
+    enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
     enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
@@ -873,7 +876,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);
-    disableCommand(ID_DEBUG_RUN);
+    disableCommand(ID_BUILD_DEBUG);
     disableCommand(ID_BUILD_MAKE);
     disableCommand(ID_BUILD_REBUILD_ALL);
     disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
@@ -892,33 +895,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
       saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
     else
       saveTimer->stop();  // stop the autosaving if make or something is running
-  }
-}
-
-void CKDevelop::setDebugMenuProcess(bool enable){
-
-  if (enable)
-  {
-    enableCommand(ID_DEBUG_RUN);
-    enableCommand(ID_DEBUG_NEXT);
-    enableCommand(ID_DEBUG_STEP);
-    enableCommand(ID_DEBUG_BRKPT);
-    enableCommand(ID_DEBUG_RESTART);
-    enableCommand(ID_DEBUG_STOP);
-    enableCommand(ID_DEBUG_BREAK_INTO);
-    saveTimer->stop();  // stop the autosaving
-
-  }
-  else
-  {
-//    disableCommand(ID_DEBUG_RUN);
-    disableCommand(ID_DEBUG_NEXT);
-    disableCommand(ID_DEBUG_STEP);
-    disableCommand(ID_DEBUG_STOP);
-    disableCommand(ID_DEBUG_RESTART);
-    disableCommand(ID_DEBUG_BREAK_INTO);
-    if(bAutosave)
-      saveTimer->start(saveTimeout); // maybe restart autosaving
   }
 }
 

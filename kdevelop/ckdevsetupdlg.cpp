@@ -173,7 +173,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
 						       "yourself, including turning on and\n"
 						       "off the outputwindow.")));	
 
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
+//  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   
   QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
   startupGroup->setGeometry( 10, 260, 400, 70 );
@@ -386,11 +386,68 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   docGroup->insert( kde_button );
   docGroup->lower();
   
+  // ****************** the Debugger Tab ***************************
+
+  config->setGroup("Debug");
+  bool useExternalDbg = config->readBoolEntry("Use external debugger", false);
+  QString dbg_cmd=config->readEntry("External debugger program","kdbg");
+
+  w3 = new QWidget( this, "debug" );
+
+  dbgExternalCheck = new QCheckBox( w3, "dbgExternal" );
+  dbgExternalCheck->setGeometry( 20, 10, 210, 25 );
+  dbgExternalCheck->setText(i18n("Use external debugger"));
+  dbgExternalCheck->setAutoRepeat( FALSE );
+  dbgExternalCheck->setAutoResize( FALSE );
+  dbgExternalCheck->setChecked(useExternalDbg);
+
+  QButtonGroup* dbgExternalGroup;
+  dbgExternalGroup = new QButtonGroup( w3, "dbgExternalGroup" );
+  dbgExternalGroup->setGeometry( 10, 40, 400, 70 );
+  dbgExternalGroup->setFrameStyle( 49 );
+  dbgExternalGroup->setTitle(i18n( "External" ));
+  dbgExternalGroup->setAlignment( 1 );
+  dbgExternalGroup->lower();
+
+  QLabel* dbgSelectLabel;
+  dbgSelectLabel = new QLabel( w3, "dbgSelectLabel" );
+  dbgSelectLabel->setGeometry( 20, 70, 210, 25 );
+  dbgSelectLabel->setText(i18n("Select debug command:"));
+  dbgSelectLabel->setAlignment( 289 );
+  dbgSelectLabel->setMargin( -1 );
+
+  dbgExternalSelectLineEdit = new QLineEdit( w3, "dbgExternalSelectLineEdit" );
+  dbgExternalSelectLineEdit->setGeometry( 270, 70, 130, 25 );
+  dbgExternalSelectLineEdit->setText(dbg_cmd);
+
+  QButtonGroup* dbgInternalGroup;
+  dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
+  dbgInternalGroup->setGeometry( 10, 120, 400, 90 );
+  dbgInternalGroup->setFrameStyle( 49 );
+  dbgInternalGroup->setTitle(i18n( "Internal" ));
+  dbgInternalGroup->setAlignment( 1 );
+  dbgInternalGroup->lower();
+
+// TODO jbb 991220: More to add
+//  dbgBreakOnLoadingLibrary(true),
+//  dbgForceBPSet(true),
+//  dbgDisplayStaticMembers(false),
+//  dbgAsmDemangle(true)
+
+  slotSetDebug();
+  connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
+
+  KQuickHelp::add(dbgExternalGroup,
+		  KQuickHelp::add(dbgSelectLabel,
+		  KQuickHelp::add(dbgExternalSelectLineEdit,i18n("Debug program\n\n"
+							  "Select your system's debug program.\n" ))));
+
+  // *********** tabs ****************
   addTab(w1, i18n("General"));
   addTab(w2, i18n("Keys"));
   addTab( w, i18n("Documentation" ));
-  
-  
+  addTab(w3, i18n("Debugger" ));
+
   // **************set the button*********************
   setDefaultButton(i18n("Default"));
   setOkButton(i18n("OK"));
@@ -399,7 +456,6 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   connect( this, SIGNAL(applyButtonPressed()), SLOT(slotOkClicked()) );
   connect( this, SIGNAL(applyButtonPressed()),parent, SLOT(slotOptionsMake()) );
   resize(440,420);
-  
 }
 
 void CKDevSetupDlg::slotDefault(){
@@ -420,7 +476,6 @@ void CKDevSetupDlg::slotDefault(){
   // keychooser tab
   if(w2->isVisible())
     w21->allDefault();
-
 }
 
 void CKDevSetupDlg::slotOkClicked(){
@@ -500,6 +555,10 @@ void CKDevSetupDlg::slotOkClicked(){
 	config->setGroup("TipOfTheDay");
   config->writeEntry("show_tod",tipDayCheck->isChecked());
 
+  config->setGroup("Debug");
+  config->writeEntry("Use external debugger", dbgExternalCheck->isChecked());
+  config->writeEntry("External debugger program", dbgExternalSelectLineEdit->text());
+
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
   config->sync();
@@ -552,3 +611,16 @@ void CKDevSetupDlg::slotKDEUpdateReq(){
   if (kde_doc_path != new_path)
     kde_edit->setText(new_path);
 }
+
+void CKDevSetupDlg::slotSetDebug()
+{
+  bool externalDbg = dbgExternalCheck->isChecked();
+  dbgExternalSelectLineEdit->setEnabled(externalDbg);
+
+//    dbgInternalGroup->setChecked(true);
+//    dbgBreakOnLoadingLibrary(true),
+//    dbgForceBPSet(true),
+//    dbgDisplayStaticMembers(false),
+//    dbgAsmDemangle(true)
+}
+

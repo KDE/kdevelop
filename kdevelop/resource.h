@@ -141,7 +141,7 @@
 #define ID_DEBUG_STEP               14340
 #define ID_DEBUG_NEXT               14350
 #define ID_DEBUG_RESTART            14360
-#define ID_DEBUG_BRKPT              14370
+#define ID_DEBUG_MEMVIEW            14370
 #define ID_DEBUG_BREAK_INTO         14380
 
 ///////////////////////////////////////////////////////////////////
@@ -302,7 +302,7 @@
 // Toolbar ID's
 #define ID_BROWSER_TOOLBAR 1
 #define ID_KDLG_TOOLBAR 2
-
+#define ID_DEBUG_TOOLBAR 3
 
 ///////////////////////////////////////////////////////////////////
 // ID's for the statusbar

@@ -192,6 +192,7 @@ void CKDevelop::initKDlgMenuBar(){
 
   kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
 	kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
+  kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
 
   kdlg_build_menu->insertSeparator();
   kdlg_build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -302,7 +303,8 @@ void CKDevelop::initKDlgMenuBar(){
  
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_RUN_WITH_ARGS);
-  disableCommand(ID_DEBUG_RUN);
+  disableCommand(ID_BUILD_DEBUG);
+//  disableCommand(ID_DEBUG_RUN);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
   disableCommand(ID_BUILD_STOP);
@@ -354,7 +356,7 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
-//	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_DEBUG_START, false, i18n("Debug"));
+	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
