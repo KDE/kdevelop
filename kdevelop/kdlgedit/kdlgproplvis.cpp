@@ -61,7 +61,7 @@ void AdvLvi_Base::refreshItem()
   KDlgItem_Base *selit = dlgedit->kdlg_get_edit_widget()->selectedWidget();
   if (selit)
       //    ((KDlgItem_QWidget*)selit)->repaintItem((QFrame*)selit->getItem());
-      selit->repaintItem((QFrame*)selit->getItem());
+      selit->repaintItem();
 
   if (propEntry->name.upper() == "NAME")
     dlgedit->kdlg_get_items_view()->refreshList();

@@ -27,8 +27,6 @@
 #define KDLGEDIT_VERSION_STR "0.1alpha"    // version of the dialog editor
 #define KDEVELOP_VERSION_STR "0.4"         // version of kdevelop
 
-#define MAX_WIDGETCOLS_PER_LINE 2          // defines up to which column in the property
-					   // view a widget can be inserted
 
 #define MAX_WIDGETS_PER_DIALOG 128         // maximum count of items/widgets in the main widget
 #define MAX_ENTRYS_PER_WIDGET 64           // maximum count of child items/widgets per widget

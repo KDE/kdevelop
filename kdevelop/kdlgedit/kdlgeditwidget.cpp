@@ -69,7 +69,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD, KDlgEdit *dlged,
   edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
   edgeFrame->setFrameStyle(rulh->frameStyle());
 
-  main_widget = new KDlgItem_QWidget( this, KDlgItem_Base::Main, this);
+  main_widget = new KDlgItem_QWidget( this, KDlgItem_Base::Main, 0);
   selected_widget = 0;
   selectWidget(main_widget);
 
@@ -128,11 +128,11 @@ int KDlgEditWidget::raiseSelected(bool updateMe)
 
   int res = 0;
 
-  if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
+  if (((KDlgItem_QWidget*)selectedWidget())->parentItem())
     {
-      if (!((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb())
+      if (!((KDlgItem_QWidget*)selectedWidget())->parentItem()->getChildDb())
         return -4;
-      res = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb()->raiseItem(selectedWidget());
+      res = ((KDlgItem_QWidget*)selectedWidget())->parentItem()->getChildDb()->raiseItem(selectedWidget());
     }
   else
     {
@@ -157,11 +157,11 @@ int KDlgEditWidget::lowerSelected(bool updateMe)
 
   int res = 0;
 
-  if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
+  if (((KDlgItem_QWidget*)selectedWidget())->parentItem())
     {
-      if (!((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb())
+      if (!((KDlgItem_QWidget*)selectedWidget())->parentItem()->getChildDb())
         return -4;
-      res = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb()->lowerItem(selectedWidget());
+      res = ((KDlgItem_QWidget*)selectedWidget())->parentItem()->getChildDb()->lowerItem(selectedWidget());
     }
   else
     {
@@ -208,11 +208,11 @@ void KDlgEditWidget::slot_deleteSelected()
   deselectWidget();
   selected_widget = 0;
 
-  if (dummy->parentWidgetItem)
+  if (dummy->parentItem())
     {
-      if (!dummy->parentWidgetItem->getChildDb())
+      if (!dummy->parentItem()->getChildDb())
         return;
-      dummy->parentWidgetItem->getChildDb()->removeItem(dummy);
+      dummy->parentItem()->getChildDb()->removeItem(dummy);
     }
   else
     {
@@ -220,7 +220,7 @@ void KDlgEditWidget::slot_deleteSelected()
     }
 
   dummy->deleteMyself();
-  delete dummy->getItem();
+  delete dummy->widget();
   delete dummy;
   selected_widget = 0;
   selectWidget(mainWidget());
@@ -258,8 +258,9 @@ void KDlgEditWidget::slot_pasteSelected()
   KDlgItem_QWidget *parent_widget = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
-        (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem))
+      if (selectedWidget()->role() == KDlgItem_Base::Container)
+          //    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
+          //        (((KDlgItem_QWidget*)selectedWidget())->parentItem()))
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -270,10 +271,10 @@ void KDlgEditWidget::slot_pasteSelected()
 
         if (res == 1)
           {
-            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
-                parent_widget = (KDlgItem_QWidget*)selectedWidget();
-            else if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
-                parent_widget = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem;
+              //            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+              parent_widget = (KDlgItem_QWidget*)selectedWidget();
+              //            else if (((KDlgItem_QWidget*)selectedWidget())->parentItem())
+              //                parent_widget = (KDlgItem_QWidget*)((KDlgItem_QWidget*)selectedWidget())->parentItem();
           }
         else if (res == 2)
           return;
@@ -310,7 +311,7 @@ void KDlgEditWidget::slot_pasteSelected()
             {
               lst->getProps()->setProp_Value("X","10");
               lst->getProps()->setProp_Value("Y","10");
-              lst->getItem()->move(10,10);
+              lst->widget()->move(10,10);
             }
         }
 
@@ -664,7 +665,7 @@ void KDlgEditWidget::saveWidget( KDlgItem_QWidget *wid, QTextStream *t, int deep
         *t << sDeep << "   " << wid->getProps()->getProp(i)->name << "=\"" << wid->getProps()->getProp(i)->value << "\"\n";
     }
 
-  if (wid->itemClass().upper() == "QWIDGET")
+  if (qstrcmp(wid->itemClass(), "QWidget") == 0)
     {
       KDlgItemDatabase *cdb = wid->getChildDb();
       if (cdb)
@@ -758,8 +759,9 @@ bool KDlgEditWidget::addItem(QString Name)
   KDlgItem_Base *par = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
-        (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem))
+      if (selectedWidget()->role() == KDlgItem_Base::Container)
+          //    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
+          //        (((KDlgItem_QWidget*)selectedWidget())->parentItem()))
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -770,10 +772,10 @@ bool KDlgEditWidget::addItem(QString Name)
 
         if (res == 1)
           {
-            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+              //            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
                 par = selectedWidget();
-            else if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
-                par = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem;
+                //            else if (((KDlgItem_QWidget*)selectedWidget())->parentItem())
+                //                par = ((KDlgItem_QWidget*)selectedWidget())->parentItem();
           }
         else if (res == 2)
           return true;
@@ -787,12 +789,14 @@ KDlgItem_QWidget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
   if (!par)
     return 0;
 
-  KDlgItem_QWidget *wid = 0;
+  KDlgItem_Base *wid = 0;
 
   #define macro_CreateIfRightOne(a,typ) \
     if (QString(a).upper() == Name.upper()) \
       { \
-        wid = (KDlgItem_QWidget*)new typ( this, par->getItem() ); \
+        wid = new typ(this, par); \
+        wid->repaintItem(); \
+        wid->widget()->show(); \
         if (wid->getProps()->getProp("VarName")->value == "") \
           { \
             typeCounter.increase(a); \
@@ -834,14 +838,10 @@ KDlgItem_QWidget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     return 0;
 
   par->addChild( wid );
-  if (par != main_widget)
-    wid->parentWidgetItem = (KDlgItem_QWidget*)par;
-
-//  wid->repaintItem();
 
   dlgedit->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
-  return wid;
+  return (KDlgItem_QWidget*)wid;
 }
 
 

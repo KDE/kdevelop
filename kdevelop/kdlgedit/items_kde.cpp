@@ -22,22 +22,11 @@
  ***************************************************************************/
 
 
-KDlgItem_KColorButton::KDlgItem_KColorButton(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KColorButton::KDlgItem_KColorButton(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KColorButton(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KColorButton::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KColorButton(parentit->widget(), "KDlgEdit KColorButton"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KColorButton::addMyPropEntrys()
@@ -55,14 +44,11 @@ void KDlgItem_KColorButton::addMyPropEntrys()
   props->addProp("DisplayedColor", "",             "General",        ALLOWED_COLOR);
 }
 
-void KDlgItem_KColorButton::repaintItem(KColorButton *it)
+void KDlgItem_KColorButton::repaintItem()
 {
-  KColorButton *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    KColorButton *itm = (KColorButton*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -93,22 +79,11 @@ void KDlgItem_KColorButton::repaintItem(KColorButton *it)
  ***************************************************************************/
 
 
-KDlgItem_KDatePicker::KDlgItem_KDatePicker(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KDatePicker::KDlgItem_KDatePicker(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KDatePicker(parent);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KDatePicker::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KDatePicker(parentit->widget()));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KDatePicker::addMyPropEntrys()
@@ -120,14 +95,11 @@ void KDlgItem_KDatePicker::addMyPropEntrys()
   props->addProp("SetDate",    "",             "General",           ALLOWED_STRING);
 }
 
-void KDlgItem_KDatePicker::repaintItem(KDatePicker *it)
+void KDlgItem_KDatePicker::repaintItem()
 {
-  KDatePicker *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    KDatePicker *itm = (KDatePicker*)widget();
 }
 
 
@@ -136,23 +108,14 @@ void KDlgItem_KDatePicker::repaintItem(KDatePicker *it)
  ***************************************************************************/
 
 
-KDlgItem_KDateTable::KDlgItem_KDateTable(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KDateTable::KDlgItem_KDateTable(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KDateTable(parent);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
+    setWidget(new KDateTable(parentit->widget()));
+    addMyPropEntrys();
+    repaintItem();
 }
 
-void KDlgItem_KDateTable::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
-}
 
 void KDlgItem_KDateTable::addMyPropEntrys()
 {
@@ -163,14 +126,11 @@ void KDlgItem_KDateTable::addMyPropEntrys()
   props->addProp("SetDate",    "",             "General",           ALLOWED_STRING);
 }
 
-void KDlgItem_KDateTable::repaintItem(KDateTable *it)
+void KDlgItem_KDateTable::repaintItem()
 {
-  KDateTable *itm = it ? it : getItem();
-
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    KDlgItem_Base::repaintItem();
+    
+    KDateTable *itm = (KDateTable*)widget();
 }
 
 
@@ -179,22 +139,11 @@ void KDlgItem_KDateTable::repaintItem(KDateTable *it)
  ***************************************************************************/
 
 
-KDlgItem_KLed::KDlgItem_KLed(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KLed::KDlgItem_KLed(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KLed(KLed::green, parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KLed::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KLed(KLed::green, parentit->widget(), "KDlgEdit KLed"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KLed::addMyPropEntrys()
@@ -206,14 +155,12 @@ void KDlgItem_KLed::addMyPropEntrys()
 
 }
 
-void KDlgItem_KLed::repaintItem(KLed *it)
+void KDlgItem_KLed::repaintItem()
 {
-  KLed *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    KLed *itm = (KLed*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
 }
 
 
@@ -222,22 +169,11 @@ void KDlgItem_KLed::repaintItem(KLed *it)
  ***************************************************************************/
 
 
-KDlgItem_KProgress::KDlgItem_KProgress(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KProgress::KDlgItem_KProgress(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KProgress(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KProgress::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KProgress(parentit->widget(), "KDlgEdit KProgress"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KProgress::addMyPropEntrys()
@@ -255,14 +191,11 @@ void KDlgItem_KProgress::addMyPropEntrys()
   props->addProp("isTextEnable", "",           "Appearance",        ALLOWED_BOOL );
 }
 
-void KDlgItem_KProgress::repaintItem(KProgress *it)
+void KDlgItem_KProgress::repaintItem()
 {
-  KProgress *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    KProgress *itm = (KProgress*)widget();
 }
 
 
@@ -271,22 +204,11 @@ void KDlgItem_KProgress::repaintItem(KProgress *it)
  ***************************************************************************/
 
 
-KDlgItem_KKeyButton::KDlgItem_KKeyButton(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KKeyButton::KDlgItem_KKeyButton(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KKeyButton("K", parent);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KKeyButton::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KKeyButton("K", parentit->widget()));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KKeyButton::addMyPropEntrys()
@@ -298,16 +220,13 @@ void KDlgItem_KKeyButton::addMyPropEntrys()
   props->addProp("Text",         "",                  "General",        ALLOWED_STRING);
 }
 
-void KDlgItem_KKeyButton::repaintItem(KKeyButton *it)
+void KDlgItem_KKeyButton::repaintItem()
 {
-  KKeyButton *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    KKeyButton *itm = (KKeyButton*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
-
-  itm->setText(Prop2Str("Text"));
+    itm->setText(Prop2Str("Text"));
 }
 
 
@@ -316,22 +235,11 @@ void KDlgItem_KKeyButton::repaintItem(KKeyButton *it)
  ***************************************************************************/
 
 
-KDlgItem_KRestrictedLine::KDlgItem_KRestrictedLine(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KRestrictedLine::KDlgItem_KRestrictedLine(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KRestrictedLine(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KRestrictedLine::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KRestrictedLine(parentit->widget(), "KDlgEdit KRestrictedLine"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KRestrictedLine::addMyPropEntrys()
@@ -341,14 +249,11 @@ void KDlgItem_KRestrictedLine::addMyPropEntrys()
 
 }
 
-void KDlgItem_KRestrictedLine::repaintItem(KRestrictedLine *it)
+void KDlgItem_KRestrictedLine::repaintItem()
 {
-  KRestrictedLine *itm = it ? it : getItem();
+  KRestrictedLine *itm = (KRestrictedLine*)widget();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+  KDlgItem_Base::repaintItem();
 }
 
 
@@ -357,22 +262,11 @@ void KDlgItem_KRestrictedLine::repaintItem(KRestrictedLine *it)
  ***************************************************************************/
 
 
-KDlgItem_KSeparator::KDlgItem_KSeparator(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_KSeparator::KDlgItem_KSeparator(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new KSeparator(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_KSeparator::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new KSeparator(parentit->widget(), "KDlgEdit KSeparator"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_KSeparator::addMyPropEntrys()
@@ -383,14 +277,12 @@ void KDlgItem_KSeparator::addMyPropEntrys()
   props->addProp("Orientation",           "Horizontal",       "General",        ALLOWED_ORIENTATION);
 }
 
-void KDlgItem_KSeparator::repaintItem(KSeparator *it)
+void KDlgItem_KSeparator::repaintItem()
 {
-  KSeparator *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    KSeparator *itm = (KSeparator*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
 
   if(Prop2Str("Orientation") == "Horizontal"){
     itm->setOrientation(KSeparator::HLine);

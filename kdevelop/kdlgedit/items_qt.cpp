@@ -22,121 +22,37 @@
  ***************************************************************************/
 
 
-KDlgItem_QWidget::MyWidget::MyWidget(KDlgItem_QWidget *wid, bool ismain,
-                                     QWidget *parent, const char *name)
-  : QFrame(parent, name)
+KDlgItem_QWidget::KDlgItem_QWidget(KDlgEditWidget *editwid, Role role, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, role)
 {
-  parentObject = wid;
-  if (ismain)
-    setFrameStyle( QFrame::WinPanel | QFrame::Raised );
-  else
-    {
-      setFrameStyle( QFrame::Panel | QFrame::Plain );
-      setLineWidth(1);
-    }
-  show();
-}
-
-#include <iostream.h>
-void KDlgItem_QWidget::MyWidget::paintEvent( QPaintEvent *e)
-{
-  QFrame::paintEvent(e);
-
-  QPainter p(this);
-  p.setClipRect(e->rect());
-
-  int x,y;
-  int gx = parentObject->getEditWidget()->gridSizeX();
-  int gy = parentObject->getEditWidget()->gridSizeY();
-
-  if ((gx<=1) || (gy<=1))
-    {
-      if ((gx>1) || (gy>1))
-        {
-          QPen oldpen = p.pen();
-          QPen newpen(QColor(255,128,128),0,DashDotLine);
-          p.setPen(newpen);
-          if (gx <= 1)
-            {
-              for (y = 0; y < height(); y+=gy)
-                p.drawLine(3,y,width()-6,y);
-            }
-          else
-            {
-              for (x = 0; x < width(); x+=gx)
-                p.drawLine(x,3,x,height()-6);
-            }
-          p.setPen(oldpen);
-        }
-    }
-  else
-    {
-      for (x = 0; x < width(); x+=gx)
-       for (y = 0; y < height(); y+=gy)
-         p.drawPoint(x,y);
-    }
+    QWidget *parent = parentit? parentit->widget() : editwid;
+    setWidget(new QWidget(parent, "KDlgEdit Main"));
+    childs = new KDlgItemDatabase();
 }
 
 
-KDlgItem_QWidget::KDlgItem_QWidget(KDlgEditWidget *editwid, Role role,
-                                   QWidget *parent, const char *name)
-   : KDlgItem_Base(editwid, role, parent, name)
+KDlgItem_QWidget::KDlgItem_QWidget(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+   : KDlgItem_Base(editwid, parentit, Container)
 {
-  parentWidgetItem = 0;
-  childs = new KDlgItemDatabase();
-  item = new MyWidget(this, role==Main, parent);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
+    QWidget *parent = parentit? parentit->widget() : editwid;
+    setWidget(new QWidget(parent, "KDlgEdit Container"));
+    childs = new KDlgItemDatabase();
 }
 
-KDlgItem_QWidget::KDlgItem_QWidget(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-   : KDlgItem_Base(editwid, Container, parent, name)
-{
-  parentWidgetItem = 0;
-  childs = new KDlgItemDatabase();
-  item = new MyWidget(this, false, parent);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
 
 void KDlgItem_QWidget::addMyPropEntrys()
 {
 }
 
-void KDlgItem_QWidget::recreateItem()
+
+void KDlgItem_QWidget::repaintItem()
 {
-  KDlgItem_Base *it = childs->getFirst();
-  while (it)
-  {
-    ((KDlgItem_QWidget*)it)->recreateItem();
-    it = childs->getNext();
-  }
+    KDlgItem_Base::repaintItem();
 
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
-  return;
-}
-
-void KDlgItem_QWidget::repaintItem(QFrame *it)
-{
-  QWidget *itm = it ? it : item;
-
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
-
-  if (role() == Main)
-    {
-      getEditWidget()->horizontalRuler()->setRange(0,item->width());
-      getEditWidget()->verticalRuler()->setRange(0,item->height());
+    if (role() == Main) {
+        getEditWidget()->horizontalRuler()->setRange(0,widget()->width());
+        getEditWidget()->verticalRuler()->setRange(0,widget()->height());
     }
-
-
 }
 
 
@@ -145,22 +61,11 @@ void KDlgItem_QWidget::repaintItem(QFrame *it)
  ***************************************************************************/
 
 
-KDlgItem_QLineEdit::KDlgItem_QLineEdit(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QLineEdit::KDlgItem_QLineEdit(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QLineEdit(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QLineEdit::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QLineEdit(parentit->widget(), "KDlgEdit QLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QLineEdit::addMyPropEntrys()
@@ -175,14 +80,11 @@ void KDlgItem_QLineEdit::addMyPropEntrys()
   props->addProp("isTextSelected", "",       "General",        ALLOWED_BOOL);
 }
 
-void KDlgItem_QLineEdit::repaintItem(QLineEdit *it)
+void KDlgItem_QLineEdit::repaintItem()
 {
-  QLineEdit *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QLineEdit *itm = (QLineEdit*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -213,27 +115,15 @@ void KDlgItem_QLineEdit::repaintItem(QLineEdit *it)
  ***************************************************************************/
 
 
-KDlgItem_QPushButton::KDlgItem_QPushButton(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QPushButton::KDlgItem_QPushButton(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QPushButton(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QPushButton::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QPushButton(parentit->widget(), "KDlgEdit QPushButton"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QPushButton::addMyPropEntrys()
 {
-
   props->addProp("Text",           "Button",       "General",        ALLOWED_STRING);
   props->addProp("isDefault",      "",             "General",        ALLOWED_BOOL);
   props->addProp("isAutoDefault" , "",             "General",        ALLOWED_BOOL);
@@ -242,18 +132,14 @@ void KDlgItem_QPushButton::addMyPropEntrys()
   props->addProp("isMenuButton",   "",             "General",        ALLOWED_BOOL);
   props->addProp("isAutoResize",   "",             "General",        ALLOWED_BOOL);
   props->addProp("isAutoRepeat",   "",             "General",        ALLOWED_BOOL);
-
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }
 
-void KDlgItem_QPushButton::repaintItem(QPushButton *it)
+void KDlgItem_QPushButton::repaintItem()
 {
-  QPushButton *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QPushButton *itm = (QPushButton*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -279,22 +165,11 @@ void KDlgItem_QPushButton::repaintItem(QPushButton *it)
  ***************************************************************************/
 
 
-KDlgItem_QLabel::KDlgItem_QLabel(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QLabel::KDlgItem_QLabel(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QLabel(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QLabel::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QLabel(parentit->widget(), "KDlgEdit QLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QLabel::addMyPropEntrys()
@@ -308,14 +183,11 @@ void KDlgItem_QLabel::addMyPropEntrys()
   props->addProp("Margin",         "",            "Appearance",     ALLOWED_INT);
 }
 
-void KDlgItem_QLabel::repaintItem(QLabel *it)
+void KDlgItem_QLabel::repaintItem()
 {
-  QLabel *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QLabel *itm = (QLabel*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -332,22 +204,11 @@ void KDlgItem_QLabel::repaintItem(QLabel *it)
  ***************************************************************************/
 
 
-KDlgItem_QLCDNumber::KDlgItem_QLCDNumber(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QLCDNumber::KDlgItem_QLCDNumber(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QLCDNumber(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QLCDNumber::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QLCDNumber(parentit->widget(), "KDlgEdit QLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QLCDNumber::addMyPropEntrys()
@@ -359,14 +220,11 @@ void KDlgItem_QLCDNumber::addMyPropEntrys()
   props->addProp("NumDigits",       "",        "General",        ALLOWED_INT);
 }
 
-void KDlgItem_QLCDNumber::repaintItem(QLCDNumber *it)
+void KDlgItem_QLCDNumber::repaintItem()
 {
-  QLCDNumber *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QLCDNumber *itm = (QLCDNumber*)widget();
 
   int i = props->getIntFromProp("NumDigits",4);
   if (i<=0) i=1;
@@ -381,22 +239,11 @@ void KDlgItem_QLCDNumber::repaintItem(QLCDNumber *it)
  ***************************************************************************/
 
 
-KDlgItem_QRadioButton::KDlgItem_QRadioButton(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QRadioButton::KDlgItem_QRadioButton(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QRadioButton(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QRadioButton::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QLineEdit(parentit->widget(), "KDlgEdit QRadioButton"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QRadioButton::addMyPropEntrys()
@@ -408,18 +255,14 @@ void KDlgItem_QRadioButton::addMyPropEntrys()
   props->addProp("isChecked",      "",                  "General",        ALLOWED_BOOL);
   props->addProp("isAutoResize",   "",                  "General",        ALLOWED_BOOL);
   props->addProp("isAutoRepeat",   "",                  "General",        ALLOWED_BOOL);
-
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }
 
-void KDlgItem_QRadioButton::repaintItem(QRadioButton *it)
+void KDlgItem_QRadioButton::repaintItem()
 {
-  QRadioButton *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QRadioButton *itm = (QRadioButton*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -442,22 +285,11 @@ void KDlgItem_QRadioButton::repaintItem(QRadioButton *it)
  ***************************************************************************/
 
 
-KDlgItem_QCheckBox::KDlgItem_QCheckBox(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QCheckBox::KDlgItem_QCheckBox(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QCheckBox(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QCheckBox::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QCheckBox(parentit->widget(), "KDlgEdit QLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QCheckBox::addMyPropEntrys()
@@ -469,18 +301,14 @@ void KDlgItem_QCheckBox::addMyPropEntrys()
   props->addProp("isChecked",      "",               "General",        ALLOWED_BOOL);
   props->addProp("isAutoResize",   "",               "General",        ALLOWED_BOOL);
   props->addProp("isAutoRepeat",   "",               "General",        ALLOWED_BOOL);
-
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }
 
-void KDlgItem_QCheckBox::repaintItem(QCheckBox *it)
+void KDlgItem_QCheckBox::repaintItem()
 {
-  QCheckBox *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QCheckBox *itm = (QCheckBox*)widget();
 
   if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
@@ -503,28 +331,18 @@ void KDlgItem_QCheckBox::repaintItem(QCheckBox *it)
  ***************************************************************************/
 
 
-KDlgItem_QComboBox::KDlgItem_QComboBox(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QComboBox::KDlgItem_QComboBox(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QComboBox(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QComboBox::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QComboBox(parentit->widget(), "KDlgEdit QComboBox"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QComboBox::addMyPropEntrys()
 {
   if (!props)
     return;
+  
   props->addProp("isAutoResize",   "",                  "General",        ALLOWED_BOOL);
   props->addProp("Entries",        "",                  "General",        ALLOWED_MULTISTRING);
   props->addProp("CurrentItem",    "",                  "General",        ALLOWED_INT);
@@ -537,14 +355,12 @@ void KDlgItem_QComboBox::addMyPropEntrys()
 
 }
 
-void KDlgItem_QComboBox::repaintItem(QComboBox *it)
+void KDlgItem_QComboBox::repaintItem()
 {
-  QComboBox *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    QComboBox *itm = (QComboBox*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
   itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
 
   itm->clear();
@@ -569,32 +385,18 @@ void KDlgItem_QComboBox::repaintItem(QComboBox *it)
  ***************************************************************************/
 
 
-KDlgItem_QListBox::KDlgItem_QListBox(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QListBox::KDlgItem_QListBox(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QListBox(parent, name);
-  item->installEventFilter(this);
-  item->setMouseTracking(true);
-  ((QScrollView*)item)->viewport()->installEventFilter(this);
-  ((QScrollView*)item)->viewport()->setMouseTracking(true);
-  item->show();
-  ((QScrollView*)item)->viewport()->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QListBox::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
-  ((QScrollView*)item)->viewport()->setMouseTracking(true);
+    setWidget(new QListBox(parentit->widget(), "KDlgEdit QListBox"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QListBox::addMyPropEntrys()
 {
   if (!props)
     return;
+  
   props->addProp("isAutoUpdate",   "",             "General",        ALLOWED_BOOL);
   props->addProp("isAutoScroll",   "",             "General",        ALLOWED_BOOL);
   props->addProp("isAutoScrollBar",   "",          "General",        ALLOWED_BOOL);
@@ -603,18 +405,15 @@ void KDlgItem_QListBox::addMyPropEntrys()
   props->addProp("isDragSelect",   "",             "General",        ALLOWED_BOOL);
   props->addProp("isSmoothScrolling",   "",             "General",        ALLOWED_BOOL);
   props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
-
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);
 }
 
-void KDlgItem_QListBox::repaintItem(QListBox *it)
+void KDlgItem_QListBox::repaintItem()
 {
-  QListBox *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    QListBox *itm = (QListBox*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
   itm->setAutoUpdate(Prop2Bool("isAutoUpdate") == 1 ? TRUE : FALSE);
   itm->setAutoScroll(Prop2Bool("isAutoScroll") == 1 ? TRUE : FALSE);
   itm->setAutoScrollBar(Prop2Bool("isAutoScrollBar") == 1 ? TRUE : FALSE);
@@ -633,22 +432,11 @@ void KDlgItem_QListBox::repaintItem(QListBox *it)
  ***************************************************************************/
 
 
-KDlgItem_QMultiLineEdit::KDlgItem_QMultiLineEdit(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QMultiLineEdit::KDlgItem_QMultiLineEdit(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QMultiLineEdit(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QMultiLineEdit::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QMultiLineEdit(parentit->widget(), "KDlgEdit QMultiLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QMultiLineEdit::addMyPropEntrys()
@@ -663,14 +451,11 @@ void KDlgItem_QMultiLineEdit::addMyPropEntrys()
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);
 }
 
-void KDlgItem_QMultiLineEdit::repaintItem(QMultiLineEdit *it)
+void KDlgItem_QMultiLineEdit::repaintItem()
 {
-  QMultiLineEdit *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QMultiLineEdit *itm = (QMultiLineEdit*)widget();
 
   itm->setAutoUpdate(Prop2Bool("isAutoUpdate") == 1 ? TRUE : FALSE);
   itm->setReadOnly(Prop2Bool("isReadOnly") == 1 ? TRUE : FALSE);
@@ -710,22 +495,11 @@ void KDlgItem_QMultiLineEdit::repaintItem(QMultiLineEdit *it)
  ***************************************************************************/
 
 
-KDlgItem_QProgressBar::KDlgItem_QProgressBar(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QProgressBar::KDlgItem_QProgressBar(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QProgressBar(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QProgressBar::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QProgressBar(parentit->widget(), "KDlgEdit QLineEdit"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QProgressBar::addMyPropEntrys()
@@ -737,14 +511,11 @@ void KDlgItem_QProgressBar::addMyPropEntrys()
   
 }
 
-void KDlgItem_QProgressBar::repaintItem(QProgressBar *it)
+void KDlgItem_QProgressBar::repaintItem()
 {
-  QProgressBar *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QProgressBar *itm = (QProgressBar*)widget();
 }
 
 
@@ -753,22 +524,11 @@ void KDlgItem_QProgressBar::repaintItem(QProgressBar *it)
  ***************************************************************************/
 
 
-KDlgItem_QSpinBox::KDlgItem_QSpinBox(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QSpinBox::KDlgItem_QSpinBox(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QSpinBox(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QSpinBox::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QSpinBox(parentit->widget(), "KDlgEdit QSpinBox"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QSpinBox::addMyPropEntrys()
@@ -786,14 +546,12 @@ void KDlgItem_QSpinBox::addMyPropEntrys()
   
 }
 
-void KDlgItem_QSpinBox::repaintItem(QSpinBox *it)
+void KDlgItem_QSpinBox::repaintItem()
 {
-  QSpinBox *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
+    QSpinBox *itm = (QSpinBox*)widget();
 
-  KDlgItem_Base::repaintItem(itm);
 
   if (!Prop2Str("Suffix").isNull())
     itm->setSuffix(Prop2Str("Suffix"));
@@ -814,22 +572,11 @@ void KDlgItem_QSpinBox::repaintItem(QSpinBox *it)
  ***************************************************************************/
 
 
-KDlgItem_QSlider::KDlgItem_QSlider(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QSlider::KDlgItem_QSlider(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QSlider(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QSlider::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QSlider(parentit->widget(), "KDlgEdit QSlider"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QSlider::addMyPropEntrys()
@@ -845,14 +592,11 @@ void KDlgItem_QSlider::addMyPropEntrys()
   
 }
 
-void KDlgItem_QSlider::repaintItem(QSlider *it)
+void KDlgItem_QSlider::repaintItem()
 {
-  QSlider *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QSlider *itm = (QSlider*)widget();
 
   itm->setTracking(Prop2Bool("isTracking") == 1 ? TRUE : FALSE);
   
@@ -874,22 +618,11 @@ void KDlgItem_QSlider::repaintItem(QSlider *it)
  ***************************************************************************/
 
 
-KDlgItem_QScrollBar::KDlgItem_QScrollBar(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QScrollBar::KDlgItem_QScrollBar(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QScrollBar(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QScrollBar::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QScrollBar(parentit->widget(), "KDlgEdit QScrollBar"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QScrollBar::addMyPropEntrys()
@@ -904,14 +637,11 @@ void KDlgItem_QScrollBar::addMyPropEntrys()
   
 }
 
-void KDlgItem_QScrollBar::repaintItem(QScrollBar *it)
+void KDlgItem_QScrollBar::repaintItem()
 {
-  QScrollBar *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QScrollBar *itm = (QScrollBar*)widget();
 
   itm->setTracking(Prop2Bool("isTracking") == 1 ? TRUE : FALSE);
   
@@ -934,22 +664,11 @@ void KDlgItem_QScrollBar::repaintItem(QScrollBar *it)
  ***************************************************************************/
 
 
-KDlgItem_QGroupBox::KDlgItem_QGroupBox(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QGroupBox::KDlgItem_QGroupBox(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QGroupBox(parent, name);
-  item->installEventFilter(this);
-  item->show();
-  item->setMouseTracking(true);
-  repaintItem();
-}
-
-void KDlgItem_QGroupBox::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
+    setWidget(new QGroupBox(parentit->widget(), "KDlgEdit QGroupBox"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QGroupBox::addMyPropEntrys()
@@ -960,14 +679,11 @@ void KDlgItem_QGroupBox::addMyPropEntrys()
   
 }
 
-void KDlgItem_QGroupBox::repaintItem(QGroupBox *it)
+void KDlgItem_QGroupBox::repaintItem()
 {
-  QGroupBox *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QGroupBox *itm = (QGroupBox*)widget();
 
   if (!Prop2Str("Title").isNull())
     itm->setTitle(Prop2Str("Title"));
@@ -979,25 +695,11 @@ void KDlgItem_QGroupBox::repaintItem(QGroupBox *it)
  ***************************************************************************/
 
 
-KDlgItem_QListView::KDlgItem_QListView(KDlgEditWidget *editwid, QWidget *parent, const char *name)
-  : KDlgItem_Base(editwid, Widget, parent, name)
+KDlgItem_QListView::KDlgItem_QListView(KDlgEditWidget *editwid, KDlgItem_Base *parentit)
+    : KDlgItem_Base(editwid, parentit, Widget)
 {
-  addMyPropEntrys();
-  parentWidgetItem = 0;
-  item = new QListView(parent, name);
-  item->installEventFilter(this);
-  item->setMouseTracking(true);
-  ((QScrollView*)item)->viewport()->installEventFilter(this);
-  ((QScrollView*)item)->viewport()->setMouseTracking(true);
-  item->show();
-  repaintItem();
-}
-
-void KDlgItem_QListView::recreateItem()
-{
-  item->recreate((QWidget*)parent(), 0, item->pos(), true);
-  item->setMouseTracking(true);
-  ((QScrollView*)item)->viewport()->setMouseTracking(true);
+    setWidget(new QListView(parentit->widget(), "KDlgEdit QListView"));
+    addMyPropEntrys();
 }
 
 void KDlgItem_QListView::addMyPropEntrys()
@@ -1017,12 +719,9 @@ void KDlgItem_QListView::addMyPropEntrys()
   props->addProp("isRootDecorated",    "",              "Appearance",     ALLOWED_BOOL);
 }
 
-void KDlgItem_QListView::repaintItem(QListView *it)
+void KDlgItem_QListView::repaintItem()
 {
-  QListView *itm = it ? it : getItem();
+    KDlgItem_Base::repaintItem();
 
-  if ((!itm) || (!props))
-    return;
-
-  KDlgItem_Base::repaintItem(itm);
+    QListView *itm = (QListView*)widget();
 }

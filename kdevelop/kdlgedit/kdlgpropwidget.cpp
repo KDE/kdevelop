@@ -273,7 +273,7 @@ void KDlgPropWidget::helpRequested(QListViewItem *it)
             {
               if (pph->name.upper() == QString(it->text(0)).upper())
                 {
-                  if ((pph->type.isEmpty()) || (pph->type.upper() == bi->itemClass().upper()))
+                  if ((pph->type.isEmpty()) || (pph->type.upper() == bi->itemClass()))
                     {
                       st = pph->help;
                       break;

@@ -20,31 +20,10 @@
 #ifdef CLASSNAME
 #ifdef CLASSDESC
 
-#ifdef ISCONTAINER
-protected:
-    class MyWidget : public QFrame
-    {
-      public:
-//        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, const char* name = 0);
-        MyWidget(KDlgItem_QWidget *wid, bool ismain, QWidget *parent=0, const char *name = 0); 
-      protected:
-        KDlgItem_QWidget *parentObject;
-        virtual void paintEvent ( QPaintEvent *e );
-    };
-#endif
-
 public:
-    CLASSNAME( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
-    virtual void recreateItem();
+    CLASSNAME(KDlgEditWidget *editwid, KDlgItem_Base *parentit);
     virtual ~CLASSNAME() {}
-#ifdef ISCONTAINER
-    virtual QString itemClass() { return QString("QWidget"); }
-    virtual MyWidget* getItem() { return (MyWidget*)item; }
-#else
-    virtual QString itemClass() { return item->className(); }
-    virtual WIDGETTYPE* getItem() { return (WIDGETTYPE*)item; }
-#endif
-    virtual void repaintItem(WIDGETTYPE *it = 0);
+    virtual void repaintItem();
     virtual void addMyPropEntrys();
 
 #undef CLASSDESC

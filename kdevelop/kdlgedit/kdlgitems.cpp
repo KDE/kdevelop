@@ -62,16 +62,12 @@ void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
   if (!edwid)
     return;
 
-  if (((MyTreeListItem*)it)->getItem())
-    {
-      if ( ((MyTreeListItem*)it)->getItem() != edwid->selectedWidget() )
+  if (!((MyTreeListItem*)it)->getItem())
+    return;
+
+  if ( ((MyTreeListItem*)it)->getItem() != edwid->selectedWidget() )
         edwid->selectWidget( ((MyTreeListItem*)it)->getItem() );
 //      treelist->setSelected(it,true);
-    }
-  else
-    {
-      return;
-    }
 
   KPopupMenu phelp;
   phelp.setTitle( edwid->selectedWidget()->itemClass() );

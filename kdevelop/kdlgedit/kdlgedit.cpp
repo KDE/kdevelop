@@ -693,7 +693,7 @@ void KDlgEdit::generateWidget(KDlgItem_QWidget *wid, QTextStream *stream,QString
 #undef generateIfWidget
 
 
-  if (wid->itemClass().upper() == "QWIDGET"){
+  if (qstrcmp(wid->itemClass(), "QWidget") == 0){
     if(wid->getProps()->getPropValue("VarName") != "this"){
       variables.append("QWidget *"+wid->getProps()->getPropValue("VarName")+";");
     }

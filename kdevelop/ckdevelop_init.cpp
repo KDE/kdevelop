@@ -63,7 +63,7 @@
 
 extern KGuiCmdManager cmdMngr;
 
-CKDevelop::CKDevelop(bool witharg)
+CKDevelop::CKDevelop()
     : search_process("/bin/sh")
 {
   version = VERSION;
@@ -83,7 +83,7 @@ CKDevelop::CKDevelop(bool witharg)
 	
   readOptions();
 	
-  initProject(witharg);
+  initProject();
   setToolmenuEntries();
 	
 //  error_parser = new CErrorMessageParser;
@@ -221,6 +221,9 @@ void CKDevelop::initView(){
   //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
     
   editors = new QList<EditorView>();
+
+//  swallow_widget = new KSwallowWidget(s_tab_view);
+//  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
 
 
 #warning FIXME MDI stuff
@@ -1075,11 +1078,12 @@ void CKDevelop::initConnections(){
 
 }
 
-void CKDevelop::initProject(bool witharg){
+void CKDevelop::initProject()
+{
 
   config->setGroup("General Options");
   bool bLastProject;
-  if(!witharg)
+  if(!kapp->argc() > 1)
     bLastProject= config->readBoolEntry("LastProject",true);
   else
     bLastProject=false;

@@ -1,3 +1,9 @@
+1999-10-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Again rewritten the widget wrappers. Now widgets with
+	  children (like QScrollView) are handled correctly and
+	  the API for the generation of new widgets is small
+	  and nice.
+
 1999-10-24 Sandy Meier    <smeier@rz.uni-potsdam.de>
 	* commited first experimental!!! MDI version, based on QextMDI
 

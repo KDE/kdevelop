@@ -171,7 +171,9 @@ AdvListViewItem::AdvListViewItem(AdvListViewItem *parent, QString a, QString b)
 
 
 AdvListViewItem::~AdvListViewItem()
-{}
+{
+    delete colwid;
+}
 
 
 void AdvListViewItem::setColumnWidget(AdvLvi_Base *wp)

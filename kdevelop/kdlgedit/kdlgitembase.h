@@ -19,7 +19,7 @@
 #ifndef _KDLGITEMBASE_H_
 #define _KDLGITEMBASE_H_
 
-#include <qobject.h>
+#include <qwidget.h>
 
 
 class KDlgEditWidget;
@@ -39,18 +39,37 @@ class KDlgItem_Base : public QObject
 
 public:
     enum Role { Main, Container, Widget };
-    /**
-     * @param editwid The editwidget which creates the item.
-     * @param parent The parent widget (used to create the child). Get it through the KDlgItem_Base::getItem() method of the parent items' class.
-     * @param ismainwidget Is TRUE the ites cannot be moved and if it is resized, the rulers are also resized.
-     * @param name Just passed to the items' widgets' constructor
-    */
-    KDlgItem_Base( KDlgEditWidget* editwid, Role role,
-                   QWidget *parent=0, const char *name=0 );
+
+    KDlgItem_Base(KDlgEditWidget *editWidget, KDlgItem_Base *parentItem, Role role);
     virtual ~KDlgItem_Base() { }
 
+    /**
+     * The role the item is playing.
+     * It can only be set in the constructor.
+     */
     Role role()
         { return rol; }
+    /**
+     * The 'real' widget that this object is representing.
+     * It can only be set in the constructor.
+     */
+    QWidget *widget()
+        { return wid; }
+    /**
+     * The KDlgEditWidget object which created this item.
+     */
+    KDlgEditWidget* getEditWidget()
+        { return editwid; }
+    /**
+     * The parent item of this item. This is always a container.
+     */
+    KDlgItem_Base *parentItem()
+        { return parentit; }
+    /**
+     * Whether this item is selected.
+     */
+    bool isSelected()
+        { return isItemActive; }
     
     virtual void recreateItem();
 
@@ -58,12 +77,8 @@ public:
      * Returns the type of the items class. Has to be overloaded in order to return the right type.
      * (i.e. returns "QPushButton" for a PushButton item.
     */
-    virtual QString itemClass();
-
-    /**
-     * Returns a pointer to the items widget.
-    */
-    virtual QWidget *getItem() { return item; }
+    virtual const char *itemClass()
+        { return widget()->className(); }
 
     /**
      * Rebuilds the item from its properties. If <i>it</i> is 0 the
@@ -74,7 +89,7 @@ public:
      * This makes sense since every widget in QT inherites QWidget so
      * you won't need to set the properties of the QWidget in your code.
     */
-    virtual void repaintItem(QWidget *it = 0);
+    virtual void repaintItem();
 
     /**
      * Returns a pointer to the properties of this item. See KDlgPropertyBase for
@@ -101,11 +116,6 @@ public:
     bool addChild(KDlgItem_Base *itm);
 
     /**
-     * Returns a pointer to the KDlgEditWidget class which created this item.
-    */
-    KDlgEditWidget* getEditWidget() { return editWidget; }
-
-    /**
      * Has to be overloaded ! Sets the state if this item to selected. (That means the border and the rectangles are painted)
     */
     virtual void select();
@@ -121,34 +131,38 @@ public:
     void deleteMyself();
 
     void execContextMenu();
-    bool isItemActive;
-    KDlgItem_QWidget *parentWidgetItem;
     
-public:
-    //    void moveRulers(QWidget *widget, QMouseEvent *e);
 protected:
+    void setWidget(QWidget *widget);
 
-    enum Corner { NoCorner, TopLeft, TopRight, BottomLeft, BottomRight,
-                  MiddleTop, MiddleBottom, MiddleLeft, MiddleRight };
-                  
     virtual bool eventFilter( QObject *o, QEvent *e);
     int Prop2Bool(QString name);
     int Prop2Int(QString name, int defaultval=0);
     QString Prop2Str(QString name);
 
     KDlgItemDatabase *childs;
-    QWidget *item;
     KDlgPropertyBase *props;
-    KDlgEditWidget* editWidget;
 
 private:
+    enum Corner { NoCorner, TopLeft, TopRight, BottomLeft, BottomRight,
+                  MiddleTop, MiddleBottom, MiddleLeft, MiddleRight };
+                  
     Corner cornerForPos(QPoint pos);
     bool getResizeCoords(Corner c, int diffx, int diffy, int *x, int *y, int *w, int *h);
     void setMouseCursorToEdge(Corner c);
     void moveRulers(QPoint relpos);
     void paintCorners(QPainter *p);
+    void paintGrid(QPainter *p);
+    void widgetPaintEvent(QWidget *w, QPaintEvent *e);
+    void widgetMousePressEvent(QWidget *w, QMouseEvent *e);
+    void widgetMouseReleaseEvent(QWidget *w, QMouseEvent *e);
+    void widgetMouseMoveEvent(QWidget *w, QMouseEvent *e);
     
     Role rol;
+    QWidget *wid;
+    KDlgEditWidget* editwid;
+    KDlgItem_Base *parentit;
+    bool isItemActive;
     bool inPaintEvent;
     Corner pressedEdge;
     QPoint startPnt, lastPnt;
