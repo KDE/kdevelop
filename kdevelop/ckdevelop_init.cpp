@@ -111,6 +111,7 @@ CKDevelop::~CKDevelop(){
   // from Constructur... delete everything which is not constructed
   //   with a binding to the application
 //  delete error_parser;
+   mdi_main_frame->setMenuForSDIModeSysButtons( 0L);   // tell QextMDI that the menubar is destructed
 }
 
 void CKDevelop::initView(){
@@ -162,31 +163,37 @@ void CKDevelop::initView(){
   dockbase_class_tree->setCaption("");
   class_tree = new CClassView(0L,"cv");
   dockbase_class_tree->setWidget(class_tree);
+  dockbase_class_tree->setToolTipString(i18n("class tree view"));
 
   dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("kdevelop.xpm"));
   dockbase_log_file_tree->setCaption("");
   log_file_tree = new CLogFileView(0L,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree->setWidget(log_file_tree);
+  dockbase_log_file_tree->setToolTipString(i18n("logical file tree view"));
 
   dockbase_real_file_tree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )) );
   dockbase_real_file_tree->setCaption("");
   real_file_tree = new CRealFileView(0L,"RFV");
   dockbase_real_file_tree->setWidget(real_file_tree);
+  dockbase_real_file_tree->setToolTipString(i18n("real file tree view"));
 
 	dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
 	dockbase_var_viewer->setCaption("");
   var_viewer    = new VarViewer(0L,"VARTab");
   dockbase_var_viewer->setWidget(var_viewer);
+  dockbase_var_viewer->setToolTipString(i18n("variables tree view (for debugging)"));
 
   dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"));
   dockbase_doc_tree->setCaption("");
   doc_tree = new DocTreeView(0L,"DOC");
   dockbase_doc_tree->setWidget(doc_tree);
+  dockbase_doc_tree->setToolTipString(i18n("documentation tree view"));
 
   dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"));
   dockbase_widprop_split_view->setCaption("");
   widprop_split_view = new WidgetsPropSplitView(0L,"DLG");
   dockbase_widprop_split_view->setWidget(widprop_split_view);
+  dockbase_widprop_split_view->setToolTipString(i18n("dialog editor view"));
 
   initDlgEditor();
 

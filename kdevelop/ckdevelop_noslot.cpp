@@ -707,8 +707,8 @@ void CKDevelop::readOptions(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
   }
-  else
-    dockbase_o_tab_view->hide();
+  else;
+//FALK    dockbase_o_tab_view->hide();
 
   bool treeview=config->readBoolEntry("show_tree_view", true);
   int tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
