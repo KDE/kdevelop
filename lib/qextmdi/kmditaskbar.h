@@ -45,6 +45,8 @@ class KMdiMainFrm;
 class KMdiChildView;
 class KMdiTaskBar;
 
+class KMdiTaskBarButtonPrivate;
+
 /**
   * @short Internal class.
   *
@@ -115,8 +117,13 @@ protected:
    * Internally we must remember the real text because the button text can be abbreviated.
    */
    QString m_actualText;
+
+private:
+   KMdiTaskBarButtonPrivate *d;
 };
 
+
+class KMdiTaskBarPrivate;
 /**
  * @short Internal class.
  *
@@ -204,6 +211,9 @@ protected:
    QLabel*                       m_pStretchSpace;
    bool                          m_layoutIsPending;
    bool                          m_bSwitchedOn;
+
+private:
+   KMdiTaskBarPrivate *d;
 };
 
 #endif //_KMDITASKBAR_H_

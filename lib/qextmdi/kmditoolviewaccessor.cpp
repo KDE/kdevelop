@@ -63,7 +63,7 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 	//mdiMainFrm->m_pToolViews->insert(d->widget,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-	else kdDebug()<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }
@@ -137,7 +137,7 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString&
 	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-	else kdDebug()<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }
@@ -150,7 +150,12 @@ bool KMdiToolViewAccessor::eventFilter(QObject *o, QEvent *e) {
 	return false;
 }
 
-void KMdiToolViewAccessor::show(KDockWidget::DockPosition pos, QWidget* pTargetWnd ,int percent)
+void KMdiToolViewAccessor::placeAndShow(KDockWidget::DockPosition pos, QWidget* pTargetWnd ,int percent)
+{
+	place(pos,pTargetWnd,percent);
+	show();	
+}
+void KMdiToolViewAccessor::place(KDockWidget::DockPosition pos, QWidget* pTargetWnd ,int percent)
 {
     Q_ASSERT(d->widgetContainer);
     if (!d->widgetContainer) return;
@@ -209,6 +214,13 @@ void KMdiToolViewAccessor::hide() {
 	if (!d->widgetContainer) return;
 	d->widgetContainer->undock();
 }
+
+void KMdiToolViewAccessor::show() {
+	Q_ASSERT(d->widgetContainer);
+	if (!d->widgetContainer) return;
+	d->widgetContainer->makeDockVisible();
+}
+
 
 #ifndef NO_INCLUDE_MOCFILES
 //# include "kmditoolviewaccessor.moc"

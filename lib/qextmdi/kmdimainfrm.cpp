@@ -210,27 +210,31 @@ public:
 
    switch (mdiMode) {
 	case KMdi::IDEAlMode:
+			kdDebug(760)<<"switch(mdiMode): IDEAlMode"<<endl;
 			switchToIDEAlMode();
 		break;
 	case KMdi::TabPageMode:
+			kdDebug(760)<<"switch(mdiMode): TabPageMode"<<endl;
 			switchToTabPageMode();
 		break;
 	case KMdi::ToplevelMode:
+			kdDebug(760)<<"switch(mdiMode): TopLevelMode"<<endl;
 			switchToToplevelMode();
 		break;
 	default:
 		m_mdiMode=KMdi::ChildframeMode;
+		kdDebug(760)<<"switch(mdiMode): default"<<endl;
 		break;
-   }   
+   }
 
    // drag end timer
    m_pDragEndTimer = new QTimer();
    connect(m_pDragEndTimer, SIGNAL(timeout()), this, SLOT(dragEndTimeOut()));
 }
 
-void KMdiMainFrm::setStandardMDIMenuEnabled() {
+void KMdiMainFrm::setStandardMDIMenuEnabled(bool showModeMenu) {
   setMenuForSDIModeSysButtons(menuBar());
-  m_mdiGUIClient=new KMDIPrivate::KMDIGUIClient(this);
+  m_mdiGUIClient=new KMDIPrivate::KMDIGUIClient(this,showModeMenu);
   connect(m_mdiGUIClient,SIGNAL(toggleTop()),this,SIGNAL(toggleTop()));
   connect(m_mdiGUIClient,SIGNAL(toggleLeft()),this,SIGNAL(toggleLeft()));
   connect(m_mdiGUIClient,SIGNAL(toggleRight()),this,SIGNAL(toggleRight()));
@@ -366,7 +370,7 @@ KMdiChildView* KMdiMainFrm::createWrapper(QWidget *view, const QString& name, co
   if (wndIcon) {
       pMDICover->setIcon(*wndIcon);
   }
-
+  pMDICover->trackIconAndCaptionChanges(view);
   return pMDICover;
 }
 
@@ -413,6 +417,8 @@ void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags)
 //      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
      
       m_documentTabWidget->addTab(pWnd, pWnd->icon() ? *(pWnd->icon()) : QPixmap(),pWnd->tabCaption());
+	connect(pWnd,SIGNAL(iconOrCaptionUdpated(QWidget*,QPixmap,const QString&)),
+		m_documentTabWidget,SLOT(updateView(QWidget*,QPixmap,const QString&)));
 
 #if 0
       KDockWidget* pCover = createDockWidget( pWnd->name(),
@@ -548,105 +554,12 @@ KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::Do
 
       KDockWidget *pCover=mtva->d->widgetContainer;
 
-      mtva->show(pos, pTargetWnd,percent);
+      mtva->place(pos, pTargetWnd,percent);
 
    }
 
-#if 0
-//      pCover->setWidget( pToolView);
-//      pCover->setToolTipString( tabToolTip);
-      pCover->setDockWindowTransient(this,true);
-
-      KDockWidget* pTargetDock = 0L;
-        // Should we dock to ourself?
-      bool DockToOurself = false;
-      if(m_pDockbaseAreaOfDocumentViews)
-      {
-        if (pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = true;
-      }
-      if (pTargetWnd == this) DockToOurself = true;
-      if (DockToOurself) pTargetDock = m_pDockbaseAreaOfDocumentViews;
-      else if(pTargetWnd != 0L) {
-         pTargetDock = dockManager->findWidgetParentDock( pTargetWnd);
-         if (!pTargetDock) {
-            if (pTargetWnd->parentWidget() && pTargetWnd->parentWidget()->inherits("KMdiChildView")) {
-               pTargetDock = dockManager->findWidgetParentDock( pTargetWnd->parentWidget());
-            }
-         }
-      }
-      if (pTargetDock) {
-         pCover->manualDock( pTargetDock, pos, percent);
-//check      pCover->show();
-      }
-   }
-#endif
    return mtva;
 
-#if 0
-   KMdiChildView* pToolView = 0L;
-   QRect r = pWnd->geometry();
-
-   // if pWnd is not a KMdiChildView already, cover it by such widget
-   if (pWnd->inherits("KMdiChildView")) {
-      pToolView = (KMdiChildView*) pWnd;
-   }
-   else {
-      pToolView = new KMdiChildView( pWnd->caption());
-      QHBoxLayout* pLayout = new QHBoxLayout( pToolView, 0, -1, "internal_kmdichildview_layout");
-      pWnd->reparent( pToolView, QPoint(0,0));
-      pToolView->setName( pWnd->name());
-      pToolView->setFocusPolicy( pWnd->focusPolicy());
-      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
-      pToolView->setIcon( wndIcon);
-      pToolView->setCaption( pWnd->caption());
-      QApplication::sendPostedEvents();
-      pLayout->addWidget( pWnd);
-   }
-
-   // if docking is not desired, add the toolview as stay-on-top toplevel view
-   if (pos == KDockWidget::DockNone) {
-      pToolView->reparent(this, Qt::WType_TopLevel | Qt::WType_Dialog, r.topLeft(), pToolView->isVisible());
-      QObject::connect( pToolView, SIGNAL(childWindowCloseRequest(KMdiChildView*)), this, SLOT(childWindowCloseRequest(KMdiChildView*)) );
-      QObject::connect( pToolView, SIGNAL(focusInEventOccurs(KMdiChildView*)), this, SLOT(activateView(KMdiChildView*)) );
-      m_pToolViews->append(pToolView);
-      pToolView->m_bToolView = true;
-      pToolView->setGeometry(r);
-   }
-   else {   // add (and dock) the toolview as DockWidget view
-      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
-      KDockWidget* pCover = createDockWidget( pToolView->name(),
-                                              wndIcon,
-                                              0L,  // parent
-                                              pToolView->caption(),
-                                              tabCaption );
-      pCover->setWidget( pToolView);
-      pCover->setToolTipString( tabToolTip);
-      pCover->setDockWindowTransient(this,true);
-
-      KDockWidget* pTargetDock = 0L;
-        // Should we dock to ourself?
-      bool DockToOurself = false;
-      if(m_pDockbaseAreaOfDocumentViews)
-      {
-        if (pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = true;
-      }
-      if (pTargetWnd == this) DockToOurself = true;
-      if (DockToOurself) pTargetDock = m_pDockbaseAreaOfDocumentViews;
-      else if(pTargetWnd != 0L) {
-         pTargetDock = dockManager->findWidgetParentDock( pTargetWnd);
-         if (!pTargetDock) {
-            if (pTargetWnd->parentWidget() && pTargetWnd->parentWidget()->inherits("KMdiChildView")) {
-               pTargetDock = dockManager->findWidgetParentDock( pTargetWnd->parentWidget());
-            }
-         }
-      }
-      if (pTargetDock) {
-         pCover->manualDock( pTargetDock, pos, percent);
-//check      pCover->show();
-      }
-   }
-
-#endif
 }
 
 //============ attachWindow ============//
@@ -1236,7 +1149,7 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KMdiDockWidget>* pRootDockWidgetL
             }
             if (!found) {
                pRootDockWidgetList->append( (KMdiDockWidget*)pDockW);
-               kdDebug()<<"pRootDockWidgetList->append("<<pDockW->name()<<");"<<endl;
+               kdDebug(760)<<"pRootDockWidgetList->append("<<pDockW->name()<<");"<<endl;
                QPoint p = pDockW->mapToGlobal( pDockW->pos())-pDockW->pos();
                QRect r( p.x(),
                         p.y()+m_undockPositioningOffset.y(),
@@ -1247,7 +1160,7 @@ void KMdiMainFrm::findRootDockWidgets(QPtrList<KMdiDockWidget>* pRootDockWidgetL
          }
          else {
             pRootDockWidgetList->append( (KMdiDockWidget*)pRootDockW);
-            kdDebug()<<"pRootDockWidgetList->append("<<pDockW->name()<<");"<<endl;
+            kdDebug(760)<<"pRootDockWidgetList->append("<<pDockW->name()<<");"<<endl;
             QPoint p = pRootDockW->mapToGlobal( pRootDockW->pos())-pRootDockW->pos();
             QRect r( p.x(),
                      p.y()+m_undockPositioningOffset.y(),
@@ -1421,7 +1334,7 @@ void KMdiMainFrm::switchToChildframeMode()
       m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
       m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
       m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
-      kdDebug()<<"!swtichToChildframeMode: m_pDockbaseAreaOfDocumentViews"<<endl;
+      kdDebug(760)<<"!swtichToChildframeMode: m_pDockbaseAreaOfDocumentViews"<<endl;
    }
    if (m_pDockbaseAreaOfDocumentViews->isTopLevel()) {
       // set this dock to main view
@@ -1430,13 +1343,13 @@ void KMdiMainFrm::switchToChildframeMode()
       m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
       m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
 //REMOVE      m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
-      kdDebug()<<"swtichToChildframeMode: m_pDockbaaseAreaOfDocumentViews->isTopLevel()"<<endl;
+      kdDebug(760)<<"swtichToChildframeMode: m_pDockbaaseAreaOfDocumentViews->isTopLevel()"<<endl;
    }
    m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi); //JW
    m_pDockbaseAreaOfDocumentViews->show();
 //return; //debug
    if ( (m_mdiMode == KMdi::TabPageMode) || (m_mdiMode == KMdi::IDEAlMode)) {
-     kdDebug()<<"switchToChildFrameMode: trying to dock back toolviews"<<endl;
+     kdDebug(760)<<"switchToChildFrameMode: trying to dock back toolviews"<<endl;
       QPtrListIterator<KMdiDockWidget> it4( rootDockWidgetList);
       for (; it4.current(); ++it4 ) {
          KDockWidget* pDockW = it4.current();
@@ -1556,7 +1469,7 @@ void KMdiMainFrm::finishTabPageMode()
          KMdiChildView* pView = it.current();
          if( pView->isToolView())
             continue;
-         kdDebug()<<"KMdiMainFrm::finishTabPageMode: in loop"<<endl;
+         kdDebug(760)<<"KMdiMainFrm::finishTabPageMode: in loop"<<endl;
          QSize mins = pView->minimumSize();
          QSize maxs = pView->maximumSize();
          QSize sz = pView->size();
@@ -1614,6 +1527,9 @@ void KMdiMainFrm::setupTabbedDocumentViewSpace() {
       for( ; it4.current(); ++it4) {
         KMdiChildView* pView = it4.current();
         m_documentTabWidget->addTab(pView, pView->icon() ? *(pView->icon()) : QPixmap(),pView->tabCaption());	
+	connect(pView,SIGNAL(iconOrCaptionUdpated(QWidget*,QPixmap,const QString&)),
+		m_documentTabWidget,SLOT(updateView(QWidget*,QPixmap,const QString&)));
+
       }
 
 
@@ -1630,7 +1546,7 @@ void KMdiMainFrm::setIDEAlModeStyle(int flags)
 void KMdiMainFrm::switchToIDEAlMode()
 {
 
-   kdDebug()<<"SWITCHING TO IDEAL"<<endl;
+   kdDebug(760)<<"SWITCHING TO IDEAL"<<endl;
    KMdiChildView* pRemActiveWindow = activeWindow();
 
    if (m_mdiMode == KMdi::IDEAlMode) {
@@ -1697,7 +1613,7 @@ void KMdiMainFrm::findToolViewsDockedToMain(QPtrList<KMdiDockWidget>* list,KMdiD
       KDockTabGroup *tg=dynamic_cast<KDockTabGroup*>(widget->
         getWidget());
       if (tg) {
-        kdDebug()<<"KDockTabGroup found"<<endl;
+        kdDebug(760)<<"KDockTabGroup found"<<endl;
         for (int i=0;i<tg->count();i++)
           list->append((KMdiDockWidget*)static_cast<KMdiDockWidget*>(
             tg->page(i)));
@@ -1705,11 +1621,11 @@ void KMdiMainFrm::findToolViewsDockedToMain(QPtrList<KMdiDockWidget>* list,KMdiD
         list->append((KMdiDockWidget*)widget);
   }
   else
-    kdDebug()<<"setupToolViewsForIDEALMode: no  widget found"<<endl;
+    kdDebug(760)<<"setupToolViewsForIDEALMode: no  widget found"<<endl;
 
 
     } else
-  kdDebug()<<"No main dock widget found"<<endl;
+  kdDebug(760)<<"No main dock widget found"<<endl;
 
 
 }
@@ -1834,10 +1750,10 @@ void KMdiMainFrm::finishIDEAlMode(bool full)
       int bottomHeight=m_bottomContainer->height();
 
 
-//      kdDebug()<<"leftNames"<<leftNames<<endl;
-//      kdDebug()<<"rightNames"<<rightNames<<endl;
-//      kdDebug()<<"topNames"<<topNames<<endl;
-//      kdDebug()<<"bottomNames"<<bottomNames<<endl;
+//      kdDebug(760)<<"leftNames"<<leftNames<<endl;
+//      kdDebug(760)<<"rightNames"<<rightNames<<endl;
+//      kdDebug(760)<<"topNames"<<topNames<<endl;
+//      kdDebug(760)<<"bottomNames"<<bottomNames<<endl;
 
      delete m_leftContainer;
         m_leftContainer=0;
@@ -1924,7 +1840,7 @@ void KMdiMainFrm::idealToolViewsToStandardTabs(QStringList widgetNames,KDockWidg
   QStringList::iterator it=widgetNames.begin();
   KDockWidget *dwpd=manager()->getDockWidgetFromName(*it);
   if (!dwpd) {
-//		 kdDebug()<<"Fatal error in finishIDEAlMode"<<endl; 
+    kdDebug(760)<<"Fatal error in finishIDEAlMode"<<endl;
     return;
   }
   dwpd->manualDock(mainDock,pos,20);
@@ -1932,7 +1848,7 @@ void KMdiMainFrm::idealToolViewsToStandardTabs(QStringList widgetNames,KDockWidg
   for (;it!=widgetNames.end();++it) {
     KDockWidget *tmpdw=manager()->getDockWidgetFromName(*it);
           if (!tmpdw) {
-//        	         kdDebug()<<"Fatal error in finishIDEAlMode"<<endl;
+                  kdDebug(760)<<"Fatal error in finishIDEAlMode"<<endl;
                   return;
           }
     tmpdw->manualDock(dwpd,KDockWidget::DockCenter,20);

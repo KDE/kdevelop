@@ -98,7 +98,8 @@ void ToggleToolViewAction::slotWidgetDestroyed()
 }
 
 
-KMDIGUIClient::KMDIGUIClient(KMdiMainFrm* mdiMainFrm,const char* name): QObject( mdiMainFrm,name ), KXMLGUIClient( mdiMainFrm )
+KMDIGUIClient::KMDIGUIClient(KMdiMainFrm* mdiMainFrm,bool showMDIModeAction, const char* name): QObject( mdiMainFrm,name ), 
+KXMLGUIClient( mdiMainFrm )
 {
    m_mdiMode=KMdi::ChildframeMode;
    m_mdiMainFrm=mdiMainFrm;
@@ -120,12 +121,15 @@ KMDIGUIClient::KMDIGUIClient(KMdiMainFrm* mdiMainFrm,const char* name): QObject(
     }
  
     m_toolMenu=new KActionMenu(i18n("Tool &Views"),actionCollection(),"kmdi_toolview_menu");
-    m_mdiModeAction=new KSelectAction(i18n("MDI Mode"),0,actionCollection());
-    QStringList modes;
-    modes<<i18n("&Toplevel Mode")<<i18n("C&hildframe Mode")<<i18n("Ta&b Page Mode")<<i18n("I&DEAL Mode");
-    m_mdiModeAction->setItems(modes);
-    connect(m_mdiModeAction,SIGNAL(activated(int)),this,SLOT(changeViewMode(int)));
-    connect(m_mdiMainFrm,SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)),
+    if (showMDIModeAction) {
+	    m_mdiModeAction=new KSelectAction(i18n("MDI Mode"),0,actionCollection());
+	    QStringList modes;
+	    modes<<i18n("&Toplevel Mode")<<i18n("C&hildframe Mode")<<i18n("Ta&b Page Mode")<<i18n("I&DEAL Mode");
+	    m_mdiModeAction->setItems(modes);
+	    connect(m_mdiModeAction,SIGNAL(activated(int)),this,SLOT(changeViewMode(int)));
+    } else m_mdiModeAction=0;
+
+     connect(m_mdiMainFrm,SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)),
 	this,SLOT(mdiModeHasBeenChangedTo(KMdi::MdiMode)));
 
     m_gotoToolDockMenu=new KActionMenu(i18n("Tool &Docks"),actionCollection(),"kmdi_tooldock_menu");
@@ -198,20 +202,21 @@ void KMDIGUIClient::setupActions()
 //             this, SLOT(blah()),actionCollection(),"nothing"));
 
       QPtrList<KAction> addList;
-      if (m_toolViewActions.count()<3) 
+      if (m_toolViewActions.count()<3)
 	for (int i=0;i<m_toolViewActions.count();i++)
 		addList.append(m_toolViewActions.at(i));
       else
         addList.append(m_toolMenu);
       if (m_mdiMode==KMdi::IDEAlMode) addList.append(m_gotoToolDockMenu);
-      addList.append(m_mdiModeAction);
-      kdDebug()<<"KMDIGUIClient::setupActions: plugActionList"<<endl;
+      if (m_mdiModeAction) addList.append(m_mdiModeAction);
+      kdDebug(760)<<"KMDIGUIClient::setupActions: plugActionList"<<endl;
       plugActionList( actionListName, addList );
 
 //    connectToActionContainers();
 }
 
 void KMDIGUIClient::addToolView(KMdiToolViewAccessor* mtva) {
+	kdDebug(760)<<"*****void KMDIGUIClient::addToolView(KMdiToolViewAccessor* mtva)*****"<<endl;
 	KAction *a=new ToggleToolViewAction(i18n("Show %1").arg(mtva->wrappedWidget()->caption()),
 		QString::null,dynamic_cast<KMdiDockWidget*>(mtva->wrapperWidget()),m_mdiMainFrm,actionCollection(),"nothing");
 	connect(a,SIGNAL(destroyed(QObject*)),this,SLOT(actionDeleted(QObject*)));
@@ -236,22 +241,24 @@ void KMDIGUIClient::clientAdded( KXMLGUIClient *client )
 
 
 void KMDIGUIClient::mdiModeHasBeenChangedTo(KMdi::MdiMode mode) {
-	kdDebug()<<"KMDIGUIClient::mdiModeHasBennChangeTo"<<endl;
+	kdDebug(760)<<"KMDIGUIClient::mdiModeHasBennChangeTo"<<endl;
 	m_mdiMode=mode;
-	switch (mode) {
-		case KMdi::ToplevelMode:
-			m_mdiModeAction->setCurrentItem(0);
-			break;
-		case KMdi::ChildframeMode:
-			m_mdiModeAction->setCurrentItem(1);
-			break;
-		case KMdi::TabPageMode:
-			m_mdiModeAction->setCurrentItem(2);
-			break;
-		case KMdi::IDEAlMode:
-			m_mdiModeAction->setCurrentItem(3);
-			break;
-		default: Q_ASSERT(0);
+        if (m_mdiModeAction) {
+		switch (mode) {
+			case KMdi::ToplevelMode:
+				m_mdiModeAction->setCurrentItem(0);
+				break;
+			case KMdi::ChildframeMode:
+				m_mdiModeAction->setCurrentItem(1);
+				break;
+			case KMdi::TabPageMode:
+				m_mdiModeAction->setCurrentItem(2);
+				break;
+			case KMdi::IDEAlMode:
+				m_mdiModeAction->setCurrentItem(3);
+				break;
+			default: Q_ASSERT(0);
+		}
 	}
 	setupActions();
 

@@ -55,6 +55,10 @@ void KMdiDocumentViewTabWidget::removePage ( QWidget * w ) {
 	if (count()<2) tabBar()->hide();
 }
 
+
+void KMdiDocumentViewTabWidget::updateView(QWidget* w,QPixmap icon,const QString& caption) {
+	changeTab(w,icon,caption);
+}
 #ifndef NO_INCLUDE_MOCFILES
 #include "kmdidocumentviewtabwidget.moc"
 #endif

@@ -33,6 +33,9 @@
 
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrm;
 
+
+class KMdiChildFrmCaptionPrivate;
+
 /**
 * @short Internal class.
 *
@@ -119,6 +122,9 @@ protected: // Protected attributes
    * True if the child knows that it is currently being dragged.
    */
    bool              m_bChildInDrag;
+
+private:
+   KMdiChildFrmCaptionPrivate *d;
 };
 
 #endif //_KMDICAPTION_H_

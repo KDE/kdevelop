@@ -64,7 +64,9 @@ public:
 	~KMdiToolViewAccessor();
 	QWidget *wrapperWidget();
 	QWidget *wrappedWidget();
-	void show(KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L,int percent = 50);
+	void place(KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L,int percent = 50);
+	void placeAndShow(KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L,int percent = 50);
+	void show();
 public slots:
 	void setWidgetToWrap(QWidget* widgetToWrap, const QString& tabToolTip = 0, const QString& tabCaption = 0);
 	void hide();

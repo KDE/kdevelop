@@ -38,7 +38,7 @@ class KMDIGUIClient : public QObject,
 {
     Q_OBJECT
 public:
-    KMDIGUIClient( KMdiMainFrm *mdiMainFrm, const char *name = 0 );
+    KMDIGUIClient( KMdiMainFrm *mdiMainFrm, bool showMDIModeAction, const char *name = 0 );
     virtual ~KMDIGUIClient();
 
     void addToolView(KMdiToolViewAccessor*);

@@ -33,6 +33,12 @@
 
 #include "kmdichildfrm.h"
 #include "kmdichildview.h"
+#ifndef Q_WS_WIN //temporary fix for QKW
+# define KMDI_EXPORT
+#endif
+
+
+class KMdiChildAreaPrivate;
 
 /**
   * @short Internal class.
@@ -159,6 +165,15 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildArea : public QFrame
      */
      void setMdiCaptionInactiveBackColor(const QColor &clr);
 
+     /**
+     * Gets all caption colors, consistent with current WM settings 
+     * (or other Desktop settings e.g. system settings for win32).
+     * This method is useful not only for KMDI child windows.
+     * Colors are returned via activeBG, activeFG, inactiveBG, inactiveFG references.
+     */
+     static void getCaptionColors( const QPalette &pal, 
+         QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG );
+
   public slots:
      /**
      * Cascades the windows resizing it to the minimum size.
@@ -244,6 +259,9 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildArea : public QFrame
      * Note: Detached MDI views can remain.
      */
      void lastChildFrmClosed();
+
+   private:
+     KMdiChildAreaPrivate *d;
 };
 
 #endif   // _KMDICHILDAREA_H_

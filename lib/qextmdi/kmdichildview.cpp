@@ -40,6 +40,9 @@
 #include "kmdichildfrm.h"
 #include "kmdidefines.h"
 #include "kmdichildview.h"
+#include <kdebug.h>
+#include <qiconset.h>
+
 
 //============ KMdiChildView ============//
 
@@ -53,6 +56,7 @@ KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, con
   ,m_bInterruptActivation(false)
   ,m_bMainframesActivateViewIsPending(false)
   ,m_bFocusInEventIsPending(false)
+  ,m_trackChanges(0)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if(caption != 0L) {
@@ -70,6 +74,7 @@ KMdiChildView::KMdiChildView( const QString& caption, QWidget* parentWidget, con
    // store the current time
    updateTimeStamp();
 }
+
 
 //============ KMdiChildView ============//
 
@@ -100,6 +105,11 @@ KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
 
 KMdiChildView::~KMdiChildView()
 {
+    kdDebug(760)<<"~KMdiChildView()"<<endl;
+}
+
+void KMdiChildView::trackIconAndCaptionChanges(QWidget *view) {
+	m_trackChanges=view;
 }
 
 //============== internal geometry ==============//
@@ -631,6 +641,15 @@ bool KMdiChildView::eventFilter(QObject *obj, QEvent *e )
          delete list;                        // delete the list, not the objects
       }
    }
+   else
+        if (e->type()==QEvent::IconChange) {
+            qDebug("KMDiChildView:: QEvent:IconChange intercepted\n");
+	    if  (obj==this)
+		iconOrCaptionUdpated(this,icon()?(*icon()):QPixmap(),caption());
+	    else if (obj==m_trackChanges)
+		setIcon(m_trackChanges->icon()?(*(m_trackChanges->icon())):QPixmap());
+        }
+
    return false;                           // standard event processing
 }
 

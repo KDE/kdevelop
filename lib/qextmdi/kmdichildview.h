@@ -39,6 +39,8 @@
 
 #include "kmdichildfrm.h"
 
+class KMdiChildViewPrivate;
+
 /**
   * @short Base class for all your special view windows.
   *
@@ -429,6 +431,8 @@ protected:
    */
    virtual void resizeEvent(QResizeEvent *e);
 
+   void trackIconAndCaptionChanges(QWidget *view);
+
 protected slots:
    void slot_childDestroyed();
 
@@ -511,6 +515,13 @@ signals:
    * Signals this has been detached
    */
    void isDetachedNow();
+
+   void iconOrCaptionUdpated(QWidget*,QPixmap,const QString&);
+
+
+  private:
+   KMdiChildViewPrivate *d;
+   QWidget *m_trackChanges;
 };
 
 inline KMdiChildFrm *KMdiChildView::mdiParent() const
