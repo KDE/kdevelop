@@ -24,6 +24,7 @@
 #include "cproject.h"
 
 //#include <kapp.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
@@ -827,7 +828,7 @@ void DocTreeProjectFolder::refresh()
     ListViewFolderItem::refresh();
 
     setExpandable(false);
-    if (project && project->valid)
+    if (project && project->isValid())
         {
             setExpandable(true);
             api_item = new ListViewBookItem(this, i18n("API documentation"),
@@ -840,7 +841,7 @@ void DocTreeProjectFolder::refresh()
 void DocTreeProjectFolder::handleRightButtonPressed(QListViewItem *item,
                                                    const QPoint &p)
 {
-    if (project && project->valid){
+    if (project && project->isValid()){
       if ( item == this)
       {
           KPopupMenu pop(i18n("Project"));

@@ -1,3 +1,25 @@
+2001-02-26  jbb <jbb@kdevelop.org>
+    * Fixed: Window placement at startup was wrong
+             Screen width missed iconBorder width adjustment.
+             patch Jens Zurheide <jens.zurheide@gmx.de>
+
+2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: CPrint dialog had problems with null params.
+             based on patch from 
+             Ravikiran Rajagopal <ravi@ee.eng.ohio-state.edu> 
+
+2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: Creating a cpp project didn't work.
+
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Fixed: kimport was run directly requiring perl to be in
+      /usr/bin. This was incorrect. When this failed it revealed
+      a crash in the classparser which should not be called if
+      reading the project files failed.
+
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Remove restriction on version numbers
+
 2001-02-24  jbb <jbb@kdevelop.org>
     * Fixed: after a distclean if the qt dir wasn't entered then the
       configure args ended up being "--with-qt-dir= ". This failed the

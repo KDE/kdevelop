@@ -114,7 +114,7 @@ void CLogFileView::refresh(CProject* prj)
   treeH->clear();
   dict->clear();
   // Not a valid project.
-  if (!prj->valid)
+  if (!prj->isValid())
   {
     return;
   }

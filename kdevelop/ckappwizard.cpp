@@ -314,7 +314,7 @@ void CKAppWizard::initPages()
   versionline->setFontPropagation( QWidget::NoChildren );
   versionline->setPalettePropagation( QWidget::NoChildren );
   versionline->setText( "" );
-  versionline->setValidator( new KFloatValidator( versionline ) );
+//  versionline->setValidator( new KFloatValidator( versionline ) );
   versionline->setMaxLength( 32767 );
   versionline->setEchoMode( QLineEdit::Normal );
   versionline->setFrame( TRUE );
@@ -2231,8 +2231,8 @@ void CKAppWizard::slotProcessExited() {
   dir.setPath(direct);
 
   project = new CProject(prj_str);
-  project->readProject();
-  project->setKDevPrjVersion("1.3");
+  project->createEmptyProject();
+  project->setKDevPrjVersion(KDEVELOP_PRJ_VERSION);
 
   // Remove sources now... if desired
   if (!generatesource->isChecked())

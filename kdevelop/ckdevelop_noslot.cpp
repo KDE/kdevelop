@@ -1108,7 +1108,7 @@ void CKDevelop::readOptions()
 {
   //default geometry on first startup, saved geometry is set by applyMainWindowSettings afterwards
 //  setGeometry(QApplication::desktop()->width()/2-400, QApplication::desktop()->height()/2-300, 800, 600);
-	showMaximized();
+//  showMaximized();
   applyMainWindowSettings(config);
 
   config->setGroup("General Options");
@@ -1286,12 +1286,19 @@ void CKDevelop::readProperties(KConfig* sess_config){
   filename = kapp->sessionConfig()->readEntry("project_file","");
 
   QFile file(filename);
-  if (file.exists()){
-    if(!(readProjectFile(filename))){
-      KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
-                            filename);
+  if (file.exists())
+  {
+    if(!(readProjectFile(filename)))
+    {
+      KMessageBox::error(0,
+                        i18n("Unable to read the project file. Perhaps its\n"
+                              "an old unsupported project file, or you do not\n"
+                              "have read/write permissions for this project"),
+                              filename);
+      return;
     }
-    else{  // projectfile successfully read
+    else
+    {  // projectfile successfully read
       filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
       QFile _file(filename);
 
