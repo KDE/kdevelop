@@ -185,7 +185,7 @@ void AddApplicationDialog::accept()
         }
     }
     if (!titem) {
-        titem = m_widget->createTargetItem("", prefix, "DATA");
+        titem = m_widget->createTargetItem("", prefix, "DATA", false);
         subProject->targets.append(titem);
     }
     // Add this file to the target
