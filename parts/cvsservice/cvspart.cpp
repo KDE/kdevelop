@@ -627,6 +627,10 @@ void CvsPart::slotProjectClosed()
     CvsOptions *options = CvsOptions::instance();
     options->save( project() );
     delete options;
+
+    // When files are added to project they may be added to/removed from repository too
+    disconnect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
+    disconnect( project(), SIGNAL(removedFilesFromProject(const QStringList&)), this, SLOT(slotRemovedFilesFromProject(const QStringList &)) );
 }
 
 #include "cvspart.moc"

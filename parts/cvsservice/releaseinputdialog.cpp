@@ -44,9 +44,9 @@ QString ReleaseInputDialog::release() const
         return QString::null;
 
     if (isDate())
-        return  "-D " + releaseInfo;
+        return  " -D " + releaseInfo; // Look at the leading white space!!
     else
-        return  "-r " + releaseInfo;
+        return  " -r " + releaseInfo;
 
 }
 

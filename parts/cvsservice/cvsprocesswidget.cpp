@@ -44,21 +44,39 @@ int g_dcopErrCounter = 0;
 
 
 CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name )
-    : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_service( service ), m_job( 0 ),
-    m_goodStyle( 0 ), m_errorStyle( 0 ), m_infoStyle( 0 )
+    : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_service( service ), m_job( 0 )
 {
     setReadOnly( true );
     setTextFormat( Qt::LogText );
 
-    m_goodStyle = new QStyleSheetItem( styleSheet(), "goodtag" );
-    m_goodStyle->setColor( "darkgreen" );
+    QStyleSheetItem *style = 0;
+    style = new QStyleSheetItem( styleSheet(), "goodtag" );
+    style->setColor( "black" );
 
-    m_errorStyle = new QStyleSheetItem( styleSheet(), "errortag" );
-    m_errorStyle->setColor( "red" );
-    m_errorStyle->setFontWeight( QFont::Bold );
+    style = new QStyleSheetItem( styleSheet(), "errortag" );
+    style->setColor( "red" );
+    style->setFontWeight( QFont::Bold );
 
-    m_infoStyle = new QStyleSheetItem( styleSheet(), "infotag" );
-    m_infoStyle->setColor( "blue" );
+    style = new QStyleSheetItem( styleSheet(), "infotag" );
+    style->setColor( "blue" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_conflict" );
+    style->setColor( "red" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_added" );
+    style->setColor( "green" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_removed" );
+    style->setColor( "yellow" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_updated" );
+    style->setColor( "lightblue" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_modified" );
+    style->setColor( "darkgreen" );
+
+    style = new QStyleSheetItem( styleSheet(), "cvs_unknown" );
+    style->setColor( "gray" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,6 +121,10 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
     // create a DCOP stub for the non-concurrent cvs job
     if (m_job)
     {
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
+
         delete m_job;
         m_job = 0;
     }
@@ -142,9 +164,6 @@ void CvsProcessWidget::cancelJob()
     if (!m_job)
         return;
     m_job->cancel();
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
     delete m_job; m_job = 0;
 
     showInfo( i18n("*** Job canceled by user request ***") );
@@ -163,10 +182,6 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
     g_dcopExitCounter++;
     kdDebug() << "MYDCOPDEBUG: dcopExitCounter == " << g_dcopExitCounter << endl;
 #endif
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
-    disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
-
     QString exitMsg = i18n("Job finished with exitCode == %1");
     showInfo( exitMsg.arg( exitStatus) );
 
@@ -256,7 +271,22 @@ void CvsProcessWidget::showOutput( const QStringList &msg )
     for (QStringList::const_iterator it = msg.begin(); it != msg.end(); ++it)
     {
         // TODO: here we can interpret lines as [C], [M], ...
-        append( "<goodtag>" + (*it) + "</goodtag>" );
+        const QString &line = (*it);
+
+        if (line.startsWith( "C " ))
+            append( "<cvs_conflict>" + line + "</cvs_conflict>" );
+        else if (line.startsWith( "M " ))
+            append( "<cvs_modified>" + line + "</cvs_modified>" );
+        else if (line.startsWith( "A " ))
+            append( "<cvs_added>" + line + "</cvs_added>" );
+        else if (line.startsWith( "R " ))
+            append( "<cvs_removed>" + line + "</cvs_removed>" );
+        else if (line.startsWith( "U " ))
+            append( "<cvs_updated>" + line + "</cvs_updated>" );
+        else if (line.startsWith( "? " ))
+            append( "<cvs_unknown>" + line + "</cvs_unknown>" );
+        else // default
+            append( "<goodtag>" + (*it) + "</goodtag>" );
     }
 }
 

@@ -441,8 +441,8 @@ void CvsServiceImpl::slotDiffFinished( bool normalExit, int exitStatus )
 {
     core()->running( m_part, false );
 
-    QString diff = processWidget()->outputString(),
-        err = processWidget()->errorsString();
+    QString diff = processWidget()->output().join("\n"),
+        err = processWidget()->errors().join("\n");
 
     kdDebug( 9999 ) << "diff = " << diff << endl;
     kdDebug( 9999 ) << "err = " << err << endl;

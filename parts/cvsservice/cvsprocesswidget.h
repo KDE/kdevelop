@@ -43,8 +43,8 @@ public:
 
     virtual void clear();
 
-    QString outputString() const { return m_output.join("\n"); }
-    QString errorsString() const { return m_errors.join("\n"); }
+    QStringList output() const { return m_output; }
+    QStringList errors() const { return m_errors; }
 
 k_dcop:
     // Connect this part with job's DCOP reference
@@ -63,10 +63,6 @@ private:
     CvsPart *m_part;
     CvsService_stub *m_service;
     CvsJob_stub *m_job;
-
-    QStyleSheetItem *m_goodStyle,
-        *m_errorStyle,
-        *m_infoStyle;
 
     // A temporary buffer for storing characters as they arrive. CVS is not
     // kind enough to present us whole strings :-(
