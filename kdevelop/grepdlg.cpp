@@ -181,7 +181,7 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::dirButtonClicked()
 {
-    dir_edit->setText(KDirDialog::getDirectory(dir_edit->text()));
+    dir_edit->setText(KFileDialog::getExistingDirectory(dir_edit->text()));
 }
 
 

@@ -338,7 +338,7 @@ void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
 }
 
 void CCreateDocDatabaseDlg::slotDirButtonClicked(){
-  QString name=KFileBaseDialog::getDirectory(dir_edit->text(),this,i18n("Select Directory..."));
+  QString name=KFileDialog::getExistingDirectory(dir_edit->text(),this,i18n("Select Directory..."));
   if(!name.isEmpty()){
     dir_edit->setText(name);
   }

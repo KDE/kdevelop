@@ -196,7 +196,7 @@ void CAddExistingFileDlg::sourceButtonClicked(){
 
 
 void CAddExistingFileDlg::destinationButtonClicked(){
- QString name=KDirDialog::getDirectory(destination_edit->text(),this,i18n("Destination Directory"));
+ QString name=KFileDialog::getExistingDirectory(destination_edit->text(),this,i18n("Destination Directory"));
  if(!name.isEmpty()){
     destination_edit->setText(name);
   }

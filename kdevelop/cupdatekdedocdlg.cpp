@@ -420,7 +420,7 @@ void CUpdateKDEDocDlg::slotDelRecentRadioButtonClicked(){
 
 
 void CUpdateKDEDocDlg::slotDocButtonClicked(){
-  QString name = KDirDialog::getDirectory(doc_edit->text(),this,i18n("New KDE Documentation Directory..."));
+  QString name = KFileDialog::getExistingDirectory(doc_edit->text(),this,i18n("New KDE Documentation Directory..."));
   if(!name.isEmpty()){
     doc_edit->setText(name);
   }
@@ -428,7 +428,7 @@ void CUpdateKDEDocDlg::slotDocButtonClicked(){
 
 
 void CUpdateKDEDocDlg::slotSourceButtonClicked(){
-  QString dir = KDirDialog::getDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
+  QString dir = KFileDialog::getExistingDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
   if(!dir.isEmpty()){
       source_edit->setText(dir);
   }

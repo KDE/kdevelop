@@ -300,7 +300,7 @@ CKDevInstall::~CKDevInstall(){
 void CKDevInstall::slotQTpressed()
 {
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("doc_qt", QT_DOCDIR));
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
     config->setGroup("Doc_Location");
@@ -324,7 +324,7 @@ void CKDevInstall::slotQTpressed()
 void CKDevInstall::slotKDEpressed()
 {
   QString dir;
-  dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
     config->setGroup("Doc_Location");
