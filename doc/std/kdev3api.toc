@@ -17,6 +17,7 @@
 </tocsect1>
 <tocsect1 name="Planned tasks" url="index.html#PlannedTasks">
 	<tocsect2 name="High priority tasks!" url="HighPriTasks.html"/>
+	<tocsect2 name="Future Tasks!" url="FutureTasks.html"/>
 </tocsect1>
 <tocsect1 name="Class Hierarchy" url="hierarchy.html">
 </tocsect1>
