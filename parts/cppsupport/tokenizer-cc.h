@@ -23,8 +23,8 @@
  * /Jonas
  */
 
-#ifndef _TOKENIZER_H_INCLUDED
-#define _TOKENIZER_H_INCLUDED
+#ifndef _TOKENIZER_CC_H_INCLUDED
+#define _TOKENIZER_CC_H_INCLUDED
 
 #define CPCLASS        258
 #define CPPUBLIC       259
