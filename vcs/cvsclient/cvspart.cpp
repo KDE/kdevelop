@@ -976,6 +976,8 @@ void CvsPart::tag( const KURL::List& urlList )
 
 void CvsPart::addToIgnoreList( const KURL::List& urlList )
 {
+	if ( !project() ) return;
+
     CvsUtils::addToIgnoreList( project()->projectDirectory(), urlList );
 }
 
@@ -983,6 +985,8 @@ void CvsPart::addToIgnoreList( const KURL::List& urlList )
 
 void CvsPart::removeFromIgnoreList( const KURL::List& urlList )
 {
+	if ( !project() ) return;
+
     CvsUtils::removeFromIgnoreList( project()->projectDirectory(), urlList );
 }
 
