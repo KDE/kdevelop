@@ -53,18 +53,24 @@ Most &kdevelop; features are provided by KParts. These are basically application
 </para>
 
 <para>
-There are quite a lot of default configuration subdirectories in <filename class="directory">$KDEDIR/share/apps/</filename> whose names all start with a <filename>kdev</filename> sequence. Most of them are for &kdevelop; internal use only. They might be deliberately grouped for readability as follows:
+There are quite a lot of default configuration subdirectories in <filename class="directory">$KDEDIR/share/apps/</filename> whose names all start with a <filename>kdev</filename> sequence. Most of them are for &kdevelop; internal use only. They might be deliberately grouped for readability as:
+<simplelist>
+  <member><link linkend="app-files-default-apps-stdalone">Stand-alone Applications</link></member>
+  <member><link linkend="app-files-default-apps-task">Task Specific Parts</link></member>
+  <member><link linkend="app-files-default-apps-project">Project Generation Parts</link></member>
+  <member><link linkend="app-files-default-apps-lang">Language Specific Parts</link></member>
+</simplelist>
 </para>
 
 <itemizedlist>
-  <listitem><itemizedlist>
+  <listitem id="app-files-default-apps-stdalone"><itemizedlist>
     <title>Stand-alone Applications</title>
     <listitem><para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE.</para></listitem>
-    <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; documentation browser.</para></listitem>
+    <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; Assistant documentation browser.</para></listitem>
     <listitem><para><filename class="directory">kdevdesigner/</filename> and <filename class="directory">kdevdesignerpart/</filename> &mdash; provide menu bar and tool bars of the stand-alone &kdevelop; user interface designer.</para></listitem>
   </itemizedlist></listitem>
 
-  <listitem><itemizedlist>
+  <listitem><itemizedlist id="app-files-default-apps-task">
     <title>Task Specific Parts</title>
     <listitem>
       <para><filename class="directory">kdevabbrev/</filename> &mdash; contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin:</para>
@@ -131,7 +137,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem><para><filename class="directory">kdevvalgrind/</filename> &mdash; provides the <guimenuitem>Valgrind Memory Leak Check</guimenuitem> and <guimenuitem>Profile with KCachegrind</guimenuitem> entries in the <guimenu>Debug</guimenu> menu used by the <guilabel>Valgrind Frontend</guilabel> plugin.</para></listitem>
   </itemizedlist></listitem>
 
-  <listitem><itemizedlist>
+  <listitem><itemizedlist id="app-files-default-apps-project">
     <title>Project Generation Parts</title>
     <listitem><para><filename class="directory">kdevadaproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build an Ada application.</para></listitem>
     <listitem><para><filename class="directory">kdevantproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu when the Ant project generator is used.</para></listitem>
@@ -143,7 +149,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem><para><filename class="directory">kdevtrollproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build an application using the &Qt; QMake project manager.</para></listitem>
   </itemizedlist></listitem>
 
-  <listitem><itemizedlist>
+  <listitem><itemizedlist id="app-files-default-apps-lang">
     <title>Language Specific Parts</title>
     <listitem><para><filename class="directory">kdevadasupport/</filename> &mdash; provides entries in the <guimenu>Tools</guimenu> menu and according tool bar icons needed to develop Ada applications.</para></listitem>
     <listitem><para><filename class="directory">kdevbashsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Bash scripts.</para></listitem>
@@ -181,44 +187,67 @@ There are quite a lot of default configuration subdirectories in <filename class
 <title>User Oriented Configuration</title>
 
 <para>
-All information about user defined settings is kept in the <filename class="directory">$KDEHOME/share/apps/</filename> and <filename class="directory">$KDEHOME/share/config/</filename> directories. This includes any changes made to the <link linkend="app-files-default">&kdevelop; default settings</link>.
+All information about user defined settings is kept in the <link linkend="app-files-user-apps"><filename class="directory">$KDEHOME/share/apps/</filename></link> and <link linkend="app-files-user-config"><filename class="directory">$KDEHOME/share/config/</filename></link> directories. This includes any changes made to the <link linkend="app-files-default">&kdevelop; default settings</link>.
 </para>
+
+<sect2 id="app-files-user-apps">
+<title>Application Specific Configuration</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- app-files-user-apps -->
+
+<sect2 id="app-files-user-config">
+<title>Resource Cofiguration Files</title>
 
 <para>
 There are two groups of &kdevelop; configuration files in the <filename class="directory">$KDEHOME/share/config/</filename> directory, distiguished by their surrounding character sequences:
 <simplelist>
-  <member><quote>doc...pluginrc</quote> denotes <link linkend="app-files-user-config-doc">files used by the documentation plugin.</link></member>
-  <member><quote>kdev...rc</quote> denotes configuration <link linkend="app-files-user-config-kdev">files used by &kdevelop;</link> itself and its available plugins.</member>
+  <member><quote><filename>doc...pluginrc</filename></quote> denotes <link linkend="app-files-user-config-doc">files used by the documentation plugin.</link></member>
+  <member><quote><filename>kdev...rc</filename></quote> denotes configuration <link linkend="app-files-user-config-kdev">files used by &kdevelop;</link> itself and its available plugins.</member>
 </simplelist>
 </para>
 
 <itemizedlist id="app-files-user-config-kdev">
 <title>Configuration Files Used by &kdevelop;</title>
-  <listitem><para><filename>kdevabbrevrc</filename> &mdash; holds the current state of the <guilabel>Abbreviations</guilabel> configuration provided by the <guilabel>Abbreviation Expansion</guilabel> plugin. New abbreviation definitions will however go into <filename>$KDEHOME/share/apps/kdevabbrev/templates/templates</filename>.</para></listitem>
-  <listitem><para><filename>kdevassistantrc</filename> &mdash; holds some configuration states specific of the stand-alone  &kdevelop; documentation browser. Most other global configuration will be shared with the &kdevelop; IDE <filename>kdeveloprc</filename> file.</para></listitem>
-  <listitem><para><filename>kdevassistantuimode4rc</filename> &mdash; holds the current MDI configuration states (dock positions &etc;) of the stand-alone  &kdevelop; documentation browser.</para></listitem>
-  <listitem><para><filename>kdevclassviewrc</filename> &mdash; holds the <guilabel>View Mode</guilabel> setting of the <guilabel>Classes</guilabel> class browser tab provided by the <guilabel>Class View</guilabel> project plugin. Changes in this setting will be globally updated whenever the current project is closed.</para></listitem>
-  <listitem><para><filename>kdevcppsupportrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevdocumentationrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdeveloprc</filename> &mdash; </para></listitem>
+  <listitem>
+    <para><filename>kdevabbrevrc</filename> &mdash; holds the current state of the <guilabel>Abbreviations</guilabel> configuration provided by the <guilabel>Abbreviation Expansion</guilabel> plugin.</para>
+    <note><para>This only records whether the abbreviations will be used or not. The actual definitions of new abbreviations will go into the <filename>$KDEHOME/share/apps/kdevabbrev/templates/templates</filename> file.</para></note>
+  </listitem>
+  <listitem>
+    <para><filename>kdevassistantrc</filename> &mdash; holds some configuration states specific of the stand-alone  &kdevelop; Assistant documentation browser.</para>
+    <note><para>Most common configuration settings are shared with the &kdevelop; IDE <filename>kdeveloprc</filename> file.</para></note>
+  </listitem>
+  <listitem><para><filename>kdevassistantuimode4rc</filename> &mdash; holds the current MDI configuration states (dock positions &etc;) of the stand-alone  &kdevelop; Assistant documentation browser.</para></listitem>
+  <listitem>
+    <para><filename>kdevclassviewrc</filename> &mdash; holds the <guilabel>View Mode</guilabel> setting of the <guilabel>Classes</guilabel> class browser tab provided by the <guilabel>Class View</guilabel> project plugin.</para>
+    <note><para>This is a global setting, although the <guilabel>Class View</guilabel> plugin may be disabled on a per project basis. Any change in this setting will be globally updated whenever the current project is closed and thus affect all subsequently loaded projects.</para></note>
+  </listitem>
+  <listitem><para><filename>kdevcppsupportrc</filename> &mdash; holds some settings used to set up CPP source files. In particular you will find the settings made on the <guilabel>C++ Class Generator</guilabel> configuration dialog in here.</para></listitem>
+  <listitem><para><filename>kdevdocumentationrc</filename> &mdash; holds actual settings the <guilabel>Documentation</guilabel> plugin uses.</para></listitem>
+  <listitem><para><filename>kdeveloprc</filename> &mdash; holds the global settings the &kdevelop; IDE and the &kdevelop; Assistant stand-alone documentation browser will use.</para></listitem>
   <listitem><para><filename>kdevelopuimode4rc</filename> &mdash;  holds the current MDI configuration states (dock positions &etc;) of the  &kdevelop; IDE.</para></listitem>
-  <listitem><para><filename>kdevfileselectorrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevfileviewrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevfilterrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevgrepviewrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevsnippetrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>kdevtoolsrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevfileselectorrc</filename> &mdash; holds actual settings the <guilabel>File Selector</guilabel> plugin uses.</para></listitem>
+  <listitem><para><filename>kdevfileviewrc</filename> &mdash; holds the actual filename color settings the <guilabel>CVS Integration (Cervisia)</guilabel> project plugin uses for display.</para></listitem>
+  <listitem><para><filename>kdevfilterrc</filename> &mdash; holds actual settings the <guilabel>Shell Filtering and Insertion</guilabel> plugin uses.</para></listitem>
+  <listitem><para><filename>kdevgrepviewrc</filename> &mdash; holds actual settings the <guilabel>Grep Frontend</guilabel> plugin uses.</para></listitem>
+  <listitem><para><filename>kdevsnippetrc</filename> &mdash; holds actual settings the <guilabel>Code Snippets</guilabel> plugin uses.</para></listitem>
+  <listitem><para><filename>kdevtoolsrc</filename> &mdash; holds actual settings the <guilabel>Tools Menu Addition</guilabel> plugin uses.</para></listitem>
 </itemizedlist>
 
 <itemizedlist id="app-files-user-config-doc">
 <title>Configuration Files Used by the Documentation Plugin</title>
-  <listitem><para><filename>docchmpluginrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>doccustompluginrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>docdevhelppluginrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>docdoxygenpluginrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>dockdevtocpluginrc</filename> &mdash; </para></listitem>
-  <listitem><para><filename>docqtpluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>docchmpluginrc</filename> &mdash; holds information about the actual &Microsoft; CHM help files as defined on the <guilabel>CHM Documentation Collection</guilabel> configuration page.</para></listitem>
+  <listitem><para><filename>doccustompluginrc</filename> &mdash; holds information about any custom documentation file defined on the <guilabel>Custom Documentation Collection</guilabel> configuration page.</para></listitem>
+  <listitem><para><filename>docdevhelppluginrc</filename> &mdash; holds information about the actual GNOME 2 DevHelp documentation files as defined on the <guilabel>Devhelp Documentation Collection</guilabel> configuration page.</para></listitem>
+  <listitem><para><filename>docdoxygenpluginrc</filename> &mdash; holds information about the actual Doxygen generated API documentations as defined on the <guilabel>Doxygen Documentation Collection</guilabel> configuration page.</para></listitem>
+  <listitem><para><filename>dockdevtocpluginrc</filename> &mdash; holds information about the actual KDevelopTOC structured documentation files as defined on the <guilabel>KDevelopTOC Documentation Collection</guilabel> configuration page.</para></listitem>
+  <listitem><para><filename>docqtpluginrc</filename> &mdash; holds information about the QT documentation files actually included on the <guilabel> Documentation Collection</guilabel>Qt configuration page.</para></listitem>
 </itemizedlist>
+
+</sect2> <!-- app-files-user-config -->
 
 </sect1> <!-- app-files-user -->
 
@@ -229,8 +258,26 @@ There are two groups of &kdevelop; configuration files in the <filename class="d
 <title>Project Dependent Configuration</title>
 
 <para>
-(... to be written ...)
+Most project dependend configuration is kept in the <filename>&lt;project-name&gt;.kdevelop</filename> and <filename>&lt;project-name&gt;.kdevses</filename> &kdevelop; project configuration files rather than in separate files as the other, more global, configuration settings. In short, those files are meant for:
 </para>
+<simplelist>
+  <member><filename>&lt;project-name&gt;.kdevelop</filename> &mdash; global project configuration information.</member>
+  <member><filename>&lt;project-name&gt;.kdevses</filename> &mdash; configuration information needed to restore the specific behaviours of the running session.</member>
+</simplelist>
+<para>
+Both are &XML; coded files. They can be viewed and (cautiously) altered using any text editor.
+</para>
+
+<formalpara>
+<title>Persistant Code Store Files</title>
+
+<para>There is a third project dependend configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistant Code Store. This is a binary coded file holding a parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistant Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
+</para>
+</formalpara>
+
+<note><para>
+There can be additional Persistant Code Store files be set up on the <guilabel>Code Completion</guilabel> tab of the <guilabel>C++ Specific</guilabel> project configuration page. Information about these additional <filename>.pcs</filename> is kept globally in the <filename class="directory">$KDEHOME/share/apps/kdevcppsupport/pcs/</filename> directory.
+</para></note>
 
 </sect1> <!-- app-files-project -->
 

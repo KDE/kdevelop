@@ -48,7 +48,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-09-29</date>
+  <date>2004-10-01</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -216,7 +216,7 @@ Here you will find information on the following topics:
     </para></listitem>
 
     <listitem><para>
-    <link linkend="app-files">Configuration Files Used by &kdevelop;</link> &mdash; lists the files kdevelop uses to save its internal information.
+    <link linkend="app-files">Configuration Files Used by &kdevelop;</link> &mdash; lists the files kdevelop uses to save its internal information. This is particularly useful in case something went wrong with your setup.
     </para></listitem>
 
     <listitem><para>
@@ -251,6 +251,7 @@ Information on these topics is availabe:
   <member><link linkend="nutshellitem-compilation">Compilation</link></member>
   <member><link linkend="nutshellitem-automake">&automanag;</link></member>
   <member><link linkend="nutshellitem-compilemake">Compile/Make Problems</link></member>
+  <member><link linkend="nutshellitem-others">Other Topics</link></member>
 </simplelist>
 
 <itemizedlist id="nutshellitem-look-and-feel">
@@ -269,7 +270,7 @@ Information on these topics is availabe:
     <simplelist>
       <member><computeroutput>MDIStyle=0</computeroutput>: icons only</member>
       <member><computeroutput>MDIStyle=1</computeroutput>: text only (default)</member>
-      <member><computeroutput>MDIStyle=2</computeroutput>: icons only on smaller tabs (not very useful)</member>
+      <!--<member><computeroutput>MDIStyle=2</computeroutput>: icons only on smaller tabs (not very useful)</member>-->
       <member><computeroutput>MDIStyle=3</computeroutput>: icons and text</member>
     </simplelist>
   </listitem>
@@ -349,7 +350,7 @@ Information on these topics is availabe:
     <formalpara id="nutshell-compilemsg-detail">
     <title><link linkend="setup-main-compile">Missing detail in compilation messages</link></title>
     <para>
-    If during compilations you notice some valuable information is missing in the <guilabel>Messages Output View</guilabel> window, it may be that the level of message detail is set too low. Right-click in the window and select another detail level from the context menu.<!-- they are programmers, so they should know what a context menu is -->
+    If during compilations you notice some valuable information is missing in the <guilabel>Messages Output View</guilabel> window, it may be that the level of message detail is set too low. Right-click in the window and select another detail level from the context menu.<!-- they are programmers, so they should know what a context menu is. (Re: But they keep on asking just about this one all the time!! bp) -->
     </para>
     </formalpara>
   </listitem>
@@ -413,6 +414,18 @@ Information on these topics is availabe:
 
     <para>
     There are several error messages concerning too old versions of <application>autoconf</application> &etc; prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
+    </para>
+    </formalpara>
+  </listitem>
+</itemizedlist>
+
+<itemizedlist id="nutshellitem-others">
+<title>Other Topics</title>
+  <listitem>
+    <formalpara id="nutshell-others-files">
+    <title><link linkend="app-files">Configuration Files used by &kdevelop;</link></title>
+    <para>
+    Usually you should not need to care, but this is very useful to know in case something went wrong with your setup.
     </para>
     </formalpara>
   </listitem>
