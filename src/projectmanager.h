@@ -40,6 +40,7 @@ public:
 
 public slots:
   bool loadProject( const KURL& url);
+  bool loadKDevelop2Project( const KURL& url);
   bool closeProject();
 
 private slots:

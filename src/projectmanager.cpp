@@ -7,7 +7,6 @@
 
 class QDomDocument;
 
-
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -19,6 +18,9 @@ class QDomDocument;
 #include <kaction.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#include <kprocess.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -115,8 +117,19 @@ void ProjectManager::slotOpenProject()
 {
   QString defaultProjectsDir = kapp->config()->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/");
 
-  KURL url = KFileDialog::getOpenURL(defaultProjectsDir, "*.kdevelop", TopLevel::getInstance()->main(), i18n("Open Project"));
-  loadProject(url);
+  KURL url = KFileDialog::getOpenURL(defaultProjectsDir,
+		i18n("*.kdevelop|KDevelop 3 Project Files\n"
+		     "*.kdevprj|KDevelop 2 Project Files"),
+		TopLevel::getInstance()->main(), i18n("Open Project") );
+
+  if( url.isEmpty() )
+      return;
+
+  QFileInfo fileInfo( url.path() );
+  if( fileInfo.extension() == "kdevprj" )
+      loadKDevelop2Project( url );
+  else
+      loadProject( url );
 }
 
 void ProjectManager::slotProjectOptions()
@@ -593,6 +606,30 @@ bool ProjectManager::projectLoaded() const
 ProjectSession* ProjectManager::projectSession() const
 {
   return m_pProjectSession;
+}
+
+bool ProjectManager::loadKDevelop2Project( const KURL & url )
+{
+    if( url.isMalformed() || !url.isLocalFile() ){
+        KMessageBox::sorry(0, i18n("Invalid URL."));
+        return false;
+    }
+
+    QString cmd = KGlobal::dirs()->findExe( "kdevprj2kdevelop" );
+    if (cmd.isEmpty()) {
+        KMessageBox::sorry(0, i18n("You don't have 'kdevprj2kdevelop' installed."));
+        return false;
+    }
+
+    QFileInfo fileInfo( url.path() );
+
+    KProcess proc;
+    proc.setWorkingDirectory( fileInfo.dirPath(true) );
+    proc << cmd << KShellProcess::quote( url.path() );
+    proc.start( KProcess::Block );
+
+    QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
+    return loadProject( KURL(projectFile) );
 }
 
 #include "projectmanager.moc"
