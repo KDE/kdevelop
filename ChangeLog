@@ -1,3 +1,6 @@
+2000-12-11  Ralf Nolden <nolden@kde.org>
+  * fixed underDir bug, now underDir is only used in custom projects where the bin program can be set.
+
 2000-12-08  Ralf Nolden <nolden@kde.org>
   * removed Tools-widget and replaced tool calls with KProcess calls
 

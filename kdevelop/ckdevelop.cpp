@@ -927,17 +927,13 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   bool bContinue=true;
    // rest from the buildRun
   appl_process.clearArguments();
-//  QDir::setCurrent(prj->getProjectDir());
+  QDir::setCurrent(prj->getProjectDir());
 
   QString underDir=prj->pathToBinPROGRAM();
   if (underDir.isEmpty())
     underDir = prj->getProjectDir() + prj->getSubDir();
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
-
-  // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
-  // the current dir is resetted to the project dir at the end of this function after the kprocess call.
-  QDir::setCurrent(underDir);
 
   stdin_stdout_widget->clear();
   stderr_widget->clear();
@@ -967,9 +963,10 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
+       QDir::setCurrent(underDir);
        o_tab_view->setCurrentTab(STDINSTDOUT);
        QString term = "xterm";
-       QString exec_str = term + " -e sh -c '" + underDir +  program + "'";
+       QString exec_str = term + " -e sh -c '" +  program + "'";
 
        if(CToolClass::searchInstProgram("konsole"))
        {
@@ -977,37 +974,47 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        }
        if(CToolClass::searchInstProgram("ksh"))
        {
-         exec_str = term + " -e ksh -c '" + underDir + program +
+         exec_str = term + " -e ksh -c '" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        if(CToolClass::searchInstProgram("csh"))
        {
-         exec_str = term +" -e csh -c '" + underDir +program +
+         exec_str = term +" -e csh -c '" + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("tcsh"))
        {
-          exec_str =  term +" -e tcsh -c '" + underDir + program +
+          exec_str =  term +" -e tcsh -c '" +  program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("bash"))
        {
-          exec_str =  term +" -e bash -c '" + underDir + program +
+          exec_str =  term +" -e bash -c '" +  program +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
        cerr << endl << "EXEC:" << exec_str;
     }
-    else if (prj->getProjectType().find("kde2", 0, false) != -1) {
+    else if (prj->isKDE2Project()) {
        //a KDE2 application
+       // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
+       // the current dir is resetted to the project dir at the end of this function after the kprocess call.
+       QDir::setCurrent(underDir);
        const QString oldGroup = config->group();
        config->setGroup("QT2");
-       QString kde2dir =  QString("KDEDIR=") + config->readEntry("kde2dir") + " ";
+       QString kde2dir =  QString("KDEDIRS=") + config->readEntry("kde2dir") + " ";
        config->setGroup(oldGroup);
 
        appl_process << kde2dir <<  program;
        cerr << endl << "EXEC:" << kde2dir << program;
        o_tab_view->setCurrentTab(STDERR);
+    }
+    else if(prj->isKDEProject() || prj->isQtProject() || prj->isQt2Project())
+    {
+      QDir::setCurrent(underDir);
+      appl_process << program;
+      cerr << endl << "EXEC:" << program;
+      o_tab_view->setCurrentTab(STDERR);
     }
     else
     {
@@ -1314,13 +1321,20 @@ void CKDevelop::slotDebugAttach()
                             pid, dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
-        // the current dir is resetted to the project dir at the end of this function after the kprocess call.
-        QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
-        dbgController->slotAttachTo(pid);
-        QDir::setCurrent(prj->getProjectDir());
+        if(prj->isKDE2Project()){
+          // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
+          // the current dir is resetted to the project dir at the end of this function after the kprocess call.
+          QDir::setCurrent(underDir);
+          dbgController->slotStart(binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+          dbgController->slotAttachTo(pid);
+          QDir::setCurrent(prj->getProjectDir());
+        }
+        else{
+          dbgController->slotStart(underDir+binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+          dbgController->slotAttachTo(pid);
+        }
       }
     }
   }
@@ -1356,9 +1370,15 @@ void CKDevelop::slotDebugExamineCore()
                                 coreFile.data(), dbgExternalCmd.data()));
 
         setupInternalDebugger();
+        if(prj->isKDE2Project()){
         QDir::setCurrent(underDir);
         dbgController->slotStart(binProgram, QString(),
              (isAScript(binProgram)) ? libtool : QString());
+        }
+        else{
+        dbgController->slotStart(underDir+binProgram, QString(),
+             (isAScript(binProgram)) ? libtool : QString());
+        }
         dbgController->slotCoreFile(coreFile);
         QDir::setCurrent(prj->getProjectDir());
       }
@@ -1473,9 +1493,15 @@ void CKDevelop::slotStartDebugRunWithArgs()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, args,
-             (isAScript(binProgram)) ? libtool : QString());
+    if(prj->isCustomProject()){
+      dbgController->slotStart(underDir+binProgram, args,
+               (isAScript(binProgram)) ? libtool : QString());
+    }
+    else{
+      QDir::setCurrent(underDir);
+      dbgController->slotStart(binProgram, args,
+               (isAScript(binProgram)) ? libtool : QString());
+    }
     brkptManager->slotSetPendingBPs();
     QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
@@ -1507,9 +1533,15 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
+    if(prj->isCustomProject()){
+      dbgController->slotStart(underDir+binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+    }
+    else{
+      QDir::setCurrent(underDir);
+      dbgController->slotStart(binProgram, QString(),
+               (isAScript(binProgram)) ? libtool : QString());
+    }
     brkptManager->slotSetPendingBPs();
     QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
