@@ -7,7 +7,6 @@
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <ignoreparts>
-   <part>KDevFileView</part>
   </ignoreparts>
  </general>
  <kdevautoproject>

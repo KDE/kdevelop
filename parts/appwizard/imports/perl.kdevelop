@@ -7,7 +7,6 @@
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Perl</primarylanguage>
   <ignoreparts>
-   <part>KDevFileView</part>
   </ignoreparts>
  </general>
  <kdevscriptproject>
