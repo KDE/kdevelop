@@ -212,14 +212,16 @@ void MakeWidget::startNextJob()
     currentCommand = *it;
     commandList.remove(it);
     
-    if (currentCommand.contains(" gmake") 
-	&& !currentCommand.contains("configure ") 
-	&& !currentCommand.contains(" Makefile.cvs")
-	&& !currentCommand.contains(" clean")
-	&& !currentCommand.contains(" package-messages")
-	&& !currentCommand.contains(" install")) 
-    { m_bCompiling = true; }
-    else { m_bCompiling = false; }
+    int i = currentCommand.findRev(" gmake");
+    if (i == -1) { m_bCompiling = false; }
+    else {
+	QString s = currentCommand.right(currentCommand.length() - i);
+	if (s.contains("configure ") || s.contains(" Makefile.cvs") ||
+	    s.contains(" clean")     || s.contains(" package-messages") ||
+	    s.contains(" install")) 
+	{ m_bCompiling = false; }
+	else { m_bCompiling = true; }	    
+    }
 
     it =  dirList.begin();
     QString dir = *it;
