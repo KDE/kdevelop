@@ -24,6 +24,7 @@ class KURL;
 class KAction;
 class CvsWidget;
 class CvsForm;
+class KProcess;
 
 /**
 * Implementation for a cvs command line tool wrapper: it let to do all common
@@ -83,11 +84,6 @@ private slots:
 	void slotLog();
 	void slotDiff();
 	/**
-	* Diss is called by slotDiff() to display "cvs diff" results in the
-	* diff part, if available.
-	*/
-	void slotDiffFinished( const QString& diff, const QString& err );
-	/**
 	* Adds a configuration widget (for properly configuring CVS command-line options)
 	* and adds it to @p dlg.
 	*/
@@ -105,6 +101,15 @@ private slots:
 	* operation).
 	*/
 	void doneOperation();
+
+	/**
+	 * Called when the user wishes to stop an operation.
+	 */
+	void slotStopButtonClicked(KDevPlugin*);
+
+	void processExited();
+        void receivedStdout(KProcess*,char*,int);
+	void receivedStderr(KProcess*,char*,int);
 
 private:
 	/**
@@ -124,6 +129,10 @@ private:
 	* (if not, returns false since it avoid performing CVS operation)
 	*/
 	bool isRegisteredInRepository();
+        /**
+        * Display "cvs diff" results in the diff part.
+        */
+        void diffFinished( const QString& diff, const QString& err );
 
 private:
 	// The value for overriding the $CVS_RSH env variable
@@ -143,6 +152,8 @@ private:
 	// Ok this is a very bad hack but I see no other solution for now.
 	bool invokedFromMenu;
 
+	KProcess* proc;
+	QString stdOut, stdErr;
 
 	// Actions
 	KAction *actionCommit,

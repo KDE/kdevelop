@@ -52,6 +52,8 @@ CvsPart::CvsPart( QObject *parent, const char *fileName, const QStringList & )
 	: KDevVersionControl( "CVS", "cvs", parent, fileName ? fileName : "CvsPart" ),
 	invokedFromMenu( true )
 {
+	proc = 0;
+
 	setInstance( CvsFactory::instance() );
 
 	setXMLFile( "kdevcvspart.rc" );
@@ -62,6 +64,8 @@ CvsPart::CvsPart( QObject *parent, const char *fileName, const QStringList & )
 		this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
+	connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+		this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
 	m_widget = new CvsWidget( this );
 	mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") );
@@ -339,14 +343,21 @@ void CvsPart::slotLog()
 
 void CvsPart::slotDiff()
 {
+	if ( proc ) {
+		KMessageBox::sorry( 0, i18n("Another diff operation is pending.") );
+		return;
+	}
+
 	if (!prepareOperation())
 		return;
 
 	kdDebug(9000) << "slotDiff()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
 	QStringList args;
-	QStringList env;
 	QString str;
+	proc = new KProcess();
+	stdOut = QString::null;
+	stdErr = QString::null;
 
 	QDomDocument &dom = *this->projectDom();
 
@@ -372,16 +383,70 @@ void CvsPart::slotDiff()
 
 	QString crsh = DomUtil::readEntry(dom,"/kdevcvs/rshoptions",default_rsh);
 	if ( !crsh.isEmpty() )
-	env << "CVS_RSH=" + crsh;
+		proc->setEnvironment( "CVS_RSH", crsh );
+	proc->setWorkingDirectory( dirName );
+	*proc << "cvs";
+	*proc << args;
 
-	ExecCommand* cmv = new ExecCommand( "cvs", args, dirName, env, this );
-	connect( cmv, SIGNAL(finished( const QString&, const QString& )),
-			this, SLOT(slotDiffFinished( const QString&, const QString& )) );
+	bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+	if ( !ok ) {
+		KMessageBox::error( 0, 
+			i18n("Could not invoke CVS"),
+			i18n("Error Invoking Command") );
+		delete proc;
+		proc = 0;
+		return;
+	}
+
+	connect( proc, SIGNAL(processExited(KProcess*)),
+		this, SLOT(processExited()) );
+	connect( proc, SIGNAL(receivedStdout(KProcess*,char*,int)),
+		this, SLOT(receivedStdout(KProcess*,char*,int)) );
+	connect( proc, SIGNAL(receivedStderr(KProcess*,char*,int)),
+		this, SLOT(receivedStderr(KProcess*,char*,int)) );
+
+	core()->running( this, true );
 
 	doneOperation();
 }
 
-void CvsPart::slotDiffFinished( const QString& diff, const QString& err )
+void CvsPart::processExited()
+{
+	core()->running( this, false );
+
+	if ( proc->normalExit() )
+		diffFinished( stdOut, stdErr );
+
+	stdOut = QString::null;
+	stdErr = QString::null;
+
+	delete proc;
+	proc = 0;
+}
+
+void CvsPart::receivedStdout( KProcess*, char* buffer, int buflen )
+{
+	stdOut += QString::fromUtf8( buffer, buflen );
+}
+
+void CvsPart::receivedStderr( KProcess*, char* buffer, int buflen )
+{
+	stdErr += QString::fromUtf8( buffer, buflen );
+}
+
+void CvsPart::slotStopButtonClicked( KDevPlugin* which )
+{
+	if ( which != 0 && which != this )
+		return;
+	if ( !proc )
+		return;
+	if ( !proc->kill() ) {
+		KMessageBox::sorry( 0, i18n("Unable to kill process, you might want to kill it by hand.") );
+		return;
+	}
+}
+
+void CvsPart::diffFinished( const QString& diff, const QString& err )
 {
     if ( diff.isNull() && err.isNull() )
 	{
