@@ -1831,19 +1831,26 @@ void CKDevelop::slotBuildMakeClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
-  QString makefile("Makefile");
-  if(!QFileInfo(QDir::current(), makefile).exists())
-  {
-    QDir::setCurrent(prj->getProjectDir()+prj->getSubDir());
-    error_parser->setStartDir(prj->getProjectDir()+prj->getSubDir());
-  }
-  else
-    error_parser->setStartDir(prj->getProjectDir());
 
-  process.clearArguments();
-  process << make_cmd << "clean";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  QString makeCleanDir = prj->getDirWhereMakeWillBeCalled();
+  if (makeCleanDir.isEmpty())
+    makeCleanDir = prj->getProjectDir();
+  QDir::setCurrent(makeCleanDir);
+
+  QString makefile("Makefile");
+  if(QFileInfo(QDir::current(), makefile).exists()) {
+    error_parser->setStartDir(makeCleanDir);
+    process.clearArguments();
+    process << make_cmd << "clean";
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  }
+  else {
+    QMessageBox::warning(this, i18n("KDevelop - Make Clean"),
+                         QString(i18n("Cannot run Make Clean.\n\nThere is no Makefile in\n"))+" "+
+                         makeCleanDir+"\n\n"+
+                         i18n("Set the right location of Makefile in Project->Options->Make Options."));
+    setToolMenuProcess(true);
+  }
 }
 
 void CKDevelop::slotBuildAutoconf(){

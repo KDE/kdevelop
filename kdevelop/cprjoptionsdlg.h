@@ -129,12 +129,13 @@ protected:
   QCheckBox* m_silent_operation;
   QCheckBox* m_ignor_errors;
   QComboBox* m_rebuild_combo;
-
   QLabel* m_job_number_label;
   QLabel* m_optional_label;
   QLabel* m_rebuild_label;
   QLabel* m_set_modify_label;
-
+  QLabel* m_makestartpoint_label;
+  QLineEdit* m_makestartpoint_line;
+  QPushButton* m_makestartpoint_dir;
 private:
   QString old_version;
   QString old_ldflags;
@@ -156,6 +157,7 @@ protected slots:
   void slotOptimize_level_changed(int v);
   void slotDebug_level_changed(int v);
   void slotBinaryClicked();
+  void slotFileDialogMakeStartPointClicked();
 };
 
 #endif

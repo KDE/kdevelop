@@ -56,7 +56,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   prjname_label = new QLabel( w, "prjname_label" );
   prjname_label->setGeometry( 10, 10, 170, 20 );
   prjname_label->setText( i18n("Project name:") );
-  
+
   prjname_edit = new QLineEdit( w, "prjname_edit" );
   prjname_edit->setGeometry( 10, 30, 170, 30 );
   prjname_edit->setText( prj_info->getProjectName() );
@@ -909,7 +909,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
 
   m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
-  m_print_debug_info->setGeometry( 10, 20, 190, 25 );
+  m_print_debug_info->setGeometry( 10, 20, 220, 25 );
   m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
   m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
   m_print_debug_info->setFontPropagation( QWidget::NoChildren );
@@ -919,7 +919,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_print_debug_info->setAutoResize( FALSE );
 
   m_cont_after_error = new QCheckBox( w5, "m_cont_after_error" );
-  m_cont_after_error->setGeometry( 200, 20, 170, 25 );
+  m_cont_after_error->setGeometry( 240, 20, 190, 25 );
   m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
   m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
   m_cont_after_error->setFontPropagation( QWidget::NoChildren );
@@ -929,7 +929,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_cont_after_error->setAutoResize( FALSE );
 
   m_print_data_base = new QCheckBox( w5, "m_print_data_base" );
-  m_print_data_base->setGeometry( 375, 20, 170, 25 );
+  m_print_data_base->setGeometry( 445, 20, 190, 25 );
   m_print_data_base->setFocusPolicy( QWidget::TabFocus );
   m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
   m_print_data_base->setFontPropagation( QWidget::NoChildren );
@@ -949,7 +949,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_env_variables->setAutoResize( FALSE );
 
   m_no_rules = new QCheckBox( w5, "m_no_rules" );
-  m_no_rules->setGeometry( 200, 50, 170, 25 );
+  m_no_rules->setGeometry( 240, 50, 190, 25 );
   m_no_rules->setFocusPolicy( QWidget::TabFocus );
   m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
   m_no_rules->setFontPropagation( QWidget::NoChildren );
@@ -959,7 +959,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_no_rules->setAutoResize( FALSE );
 
   m_touch_files = new QCheckBox( w5, "m_touch_files" );
-  m_touch_files->setGeometry( 375, 50, 170, 25 );
+  m_touch_files->setGeometry( 445, 50, 190, 25 );
   m_touch_files->setFocusPolicy( QWidget::TabFocus );
   m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
   m_touch_files->setFontPropagation( QWidget::NoChildren );
@@ -979,7 +979,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_ignor_errors->setAutoResize( FALSE );
 
   m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
-  m_silent_operation->setGeometry( 200, 80, 170, 25 );
+  m_silent_operation->setGeometry( 240, 80, 190, 25 );
   m_silent_operation->setFocusPolicy( QWidget::TabFocus );
   m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
   m_silent_operation->setFontPropagation( QWidget::NoChildren );
@@ -989,7 +989,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_silent_operation->setAutoResize( FALSE );
 
   m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
-  m_print_work_dir->setGeometry( 375, 80, 170, 25 );
+  m_print_work_dir->setGeometry( 445, 80, 190, 25 );
   m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
   m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_print_work_dir->setFontPropagation( QWidget::NoChildren );
@@ -1009,7 +1009,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_job_number_label->setMargin( -1 );
 
   m_job_number = new QSpinBox( w5, "m_job_number" );
-  m_job_number->setGeometry( 120, 110, 60, 25 );
+  m_job_number->setGeometry( 130, 110, 50, 25 );
   m_job_number->setFocusPolicy( QWidget::StrongFocus );
   m_job_number->setBackgroundMode( QWidget::PaletteBackground );
   m_job_number->setFontPropagation( QWidget::NoChildren );
@@ -1023,6 +1023,26 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_job_number->setSpecialValueText( "" );
   m_job_number->setWrapping( FALSE );
 
+  m_rebuild_label = new QLabel( w5, "m_rebuild_label" );
+  m_rebuild_label->setGeometry( 200, 110, 250, 25 );
+  m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
+  m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_rebuild_label->setFontPropagation( QWidget::NoChildren );
+  m_rebuild_label->setPalettePropagation( QWidget::NoChildren );
+  m_rebuild_label->setText(i18n("Rebuild behaviour on run/debug:"));
+  m_rebuild_label->setAlignment( 289 );
+  m_rebuild_label->setMargin( -1 );
+
+  m_rebuild_combo = new QComboBox( w5, "m_rebuild_label" );
+  m_rebuild_combo->setGeometry( 430, 110, 170, 25 );
+  m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
+  m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
+  m_rebuild_combo->setFontPropagation( QWidget::NoChildren );
+  m_rebuild_combo->setPalettePropagation( QWidget::NoChildren );
+  m_rebuild_combo->insertItem(i18n("warning on modification"));
+  m_rebuild_combo->insertItem(i18n("only on modification"));
+  m_rebuild_combo->insertItem(i18n("always rebuild"));
+
   m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
   m_set_modify_label->setGeometry( 10, 150, 100, 25 );
   m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
@@ -1034,7 +1054,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_set_modify_label->setMargin( -1 );
 
   m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
-  m_set_modify_line->setGeometry( 120, 150, 330, 25 );
+  m_set_modify_line->setGeometry( 130, 150, 430, 25 );
   m_set_modify_line->setMinimumSize( 0, 0 );
   m_set_modify_line->setMaximumSize( 32767, 32767 );
   m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
@@ -1047,7 +1067,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_set_modify_line->setFrame( TRUE );
 
   m_set_modify_dir = new QPushButton( w5, "m_set_modify_dir" );
-  m_set_modify_dir->setGeometry( 460, 150, 30, 25 );
+  m_set_modify_dir->setGeometry( 570, 150, 30, 25 );
   m_set_modify_dir->setMinimumSize( 0, 0 );
   m_set_modify_dir->setMaximumSize( 32767, 32767 );
   m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
@@ -1061,7 +1081,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_set_modify_dir->setAutoResize( FALSE );
   
   m_optional_label = new QLabel( w5, "m_optional_label" );
-  m_optional_label->setGeometry( 10, 190, 100, 25 );
+  m_optional_label->setGeometry( 10, 190, 115, 25 );
   m_optional_label->setFocusPolicy( QWidget::NoFocus );
   m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
   m_optional_label->setFontPropagation( QWidget::NoChildren );
@@ -1071,7 +1091,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_optional_label->setMargin( -1 );
 
   m_optional_line = new QLineEdit( w5, "m_optional_line" );
-  m_optional_line->setGeometry( 120, 190, 370, 25 );
+  m_optional_line->setGeometry( 130, 190, 470, 25 );
   m_optional_line->setMinimumSize( 0, 0 );
   m_optional_line->setMaximumSize( 32767, 32767 );
   m_optional_line->setFocusPolicy( QWidget::StrongFocus );
@@ -1083,25 +1103,40 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   m_optional_line->setEchoMode( QLineEdit::Normal );
   m_optional_line->setFrame( TRUE );
 
-  m_rebuild_label = new QLabel( w5, "m_rebuild_label" );
-  m_rebuild_label->setGeometry( 10, 235, 250, 25 );
-  m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
-  m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
-  m_rebuild_label->setFontPropagation( QWidget::NoChildren );
-  m_rebuild_label->setPalettePropagation( QWidget::NoChildren );
-  m_rebuild_label->setText(i18n("Rebuild behaviour on run/debug:"));
-  m_rebuild_label->setAlignment( 289 );
-  m_rebuild_label->setMargin( -1 );
+  m_makestartpoint_label = new QLabel( w5, "m_makestartpoint_label" );
+  m_makestartpoint_label->setGeometry( 10, 230, 100, 25 );
+  m_makestartpoint_label->setFocusPolicy( QWidget::NoFocus );
+  m_makestartpoint_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_makestartpoint_label->setFontPropagation( QWidget::NoChildren );
+  m_makestartpoint_label->setPalettePropagation( QWidget::NoChildren );
+  m_makestartpoint_label->setText(i18n("Run make in"));
+  m_makestartpoint_label->setAlignment( 289 );
+  m_makestartpoint_label->setMargin( -1 );
 
-  m_rebuild_combo = new QComboBox( w5, "m_rebuild_label" );
-  m_rebuild_combo->setGeometry( 270, 235, 220, 25 );
-  m_rebuild_combo->setFocusPolicy( QWidget::NoFocus );
-  m_rebuild_combo->setBackgroundMode( QWidget::PaletteBase );
-  m_rebuild_combo->setFontPropagation( QWidget::NoChildren );
-  m_rebuild_combo->setPalettePropagation( QWidget::NoChildren );
-  m_rebuild_combo->insertItem(i18n("warning on modification"));
-  m_rebuild_combo->insertItem(i18n("only on modification"));
-  m_rebuild_combo->insertItem(i18n("always rebuild"));
+  m_makestartpoint_line = new QLineEdit( w5, "m_makestartpoint_line" );
+  m_makestartpoint_line->setGeometry( 130, 230, 430, 25 );
+  m_makestartpoint_line->setMinimumSize( 0, 0 );
+  m_makestartpoint_line->setMaximumSize( 32767, 32767 );
+  m_makestartpoint_line->setFocusPolicy( QWidget::StrongFocus );
+  m_makestartpoint_line->setBackgroundMode( QWidget::PaletteBase );
+  m_makestartpoint_line->setFontPropagation( QWidget::NoChildren );
+  m_makestartpoint_line->setPalettePropagation( QWidget::NoChildren );
+  m_makestartpoint_line->setText(i18n(""));
+  m_makestartpoint_line->setMaxLength( 32767 );
+  m_makestartpoint_line->setEchoMode( QLineEdit::Normal );
+  m_makestartpoint_line->setFrame( TRUE );
+
+  m_makestartpoint_dir = new QPushButton( w5, "m_makestartpoint_dir" );
+  m_makestartpoint_dir->setGeometry( 570, 230, 30, 25 );
+  m_makestartpoint_dir->setMinimumSize( 0, 0 );
+  m_makestartpoint_dir->setMaximumSize( 32767, 32767 );
+  m_makestartpoint_dir->setFocusPolicy( QWidget::TabFocus );
+  m_makestartpoint_dir->setBackgroundMode( QWidget::PaletteBackground );
+  m_makestartpoint_dir->setFontPropagation( QWidget::NoChildren );
+  m_makestartpoint_dir->setPalettePropagation( QWidget::NoChildren );
+  m_makestartpoint_dir->setPixmap(pix);
+  m_makestartpoint_dir->setAutoRepeat( FALSE );
+  m_makestartpoint_dir->setAutoResize( FALSE );
 
   addTab(w5,i18n("Make Options"));
 
@@ -1170,7 +1205,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 					   "modification  time is changed only in the imagination\n"
 					   "of make."));
 
+  KQuickHelp::add(m_makestartpoint_label,
+  KQuickHelp::add(m_makestartpoint_line, i18n("Often if you click on 'Build' or 'Make Clean',\n"
+                  "you just want to run a Makefile from a certain subdirectory.\n"
+                  "Specify the location of that Makefile here.\n"
+                  "It will be your new root-Makefile then.")));
+
   connect(m_set_modify_dir,SIGNAL(clicked()),SLOT(slotFileDialogClicked()));
+  connect(m_makestartpoint_dir,SIGNAL(clicked()),SLOT(slotFileDialogMakeStartPointClicked()));
 
   settings = kapp->getConfig();
   settings->setGroup("MakeOptionsSettings");
@@ -1225,6 +1267,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 	m_job_number->setValue(settings->readNumEntry ("JobNumber"));
 
 	m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
+	
+	QString dirWhereMakeWillBeCalled = prj_info->getDirWhereMakeWillBeCalled();
+	if (dirWhereMakeWillBeCalled.isEmpty())
+	    dirWhereMakeWillBeCalled = prj_info->getProjectDir();
+	m_makestartpoint_line->setText(dirWhereMakeWillBeCalled);
 
 //************************** binary selection *************************//
   QWidget* w6 = new QWidget( this, "bin" );
@@ -1616,6 +1663,11 @@ void CPrjOptionsDlg::ok(){
 
   prj_info->setMakeOptions (text);
 
+  if (m_makestartpoint_line->text() != prj_info->getProjectDir())
+    prj_info->setDirWhereMakeWillBeCalled(m_makestartpoint_line->text());
+  else
+    prj_info->setDirWhereMakeWillBeCalled("");
+
   /******** binary options *********/
   prj_info->setBinPROGRAM( binary_edit->text());
 
@@ -1646,4 +1698,11 @@ void CPrjOptionsDlg::slotBinaryClicked(){
   if (!dir.isEmpty()){
     binary_edit->setText(dir);
   }
+}
+
+void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
+  QString file,dir;
+  dir = prj_info->getProjectDir();
+  file = filedialog->getDirectory(dir,this,"Dir");
+  m_makestartpoint_line->setText(file);
 }

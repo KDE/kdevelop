@@ -1,3 +1,8 @@
+2000-10-31 Falk Brettschneider <falk@kdevelop.org>
+  +++ The undeads strike back on Halloween! ;-) +++
+  * Now, in Project->Options->Make Options, you can set the location of the Makefile that should be processed by a call of make.
+  * At the moment it works only for 'Make clean' but it is going to be changed for the Rest of the 'Build' menu.
+
 2000-10-31 Ralf Nolden <nolden@kde.org>
   * fixed one more bug, there was a ) too much left in the ldadd line in the templates generated since sunday night.
   * get KDoc from KDE_2_0_BRANCH, this is a fixed version which works with creating the KDE 2 API and the project API
