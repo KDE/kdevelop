@@ -33,6 +33,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qstringlist.h>
+#include <qdir.h>
 #include <keditcl.h>
 #include <kseparator.h>
 #include <kmessagebox.h>
@@ -531,7 +532,7 @@ void CKAppWizard::slotDirDialogClicked() {
 
 // connection of hload
 void CKAppWizard::slotHeaderDialogClicked() {
-  KFileDialog *headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true,true);
+  KFileDialog *headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true);
   headerdialog->setCaption (i18n("Select your template for Header-file headers"));
   if(headerdialog->exec()){
     hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
@@ -541,7 +542,7 @@ void CKAppWizard::slotHeaderDialogClicked() {
 
 // connection of cppload
 void CKAppWizard::slotCppDialogClicked() {
-  KFileDialog *cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true,true);
+  KFileDialog *cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true);
   cppdialog->setCaption( (citem->isSelected()) ?
                          i18n("Select your template for C-file headers")
                          :
@@ -1298,7 +1299,7 @@ void CKAppWizard::slotMiniIconButtonClicked() {
   mload.selectIcon(name2,"*");
   if (!name2.isNull() )
 #warning FIXME mini icons?
-    miniload->setPixmap(KGlobal::iconLoader()->loadApplicationIcon(name2));
+    miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2));
 }
 
 // activate and deactivate the iconbutton
@@ -1915,11 +1916,8 @@ bool CKAppWizard::generatedProject(){
 }
 
 void CKAppWizard::slotLocationButtonClicked() {
-  KFileDialog *dirdialog = KFileDialog::getExistingDirectory(dir,this,"Directory");
-  dir = dirdialog->dirPath() + "cvsroot";
+  dir = KFileDialog::getExistingDirectory(dir, this, "Directory") + "cvsroot";
   vsLocation->setText(dir);
-  delete (dirdialog);
-
 }
 
 
