@@ -35,3 +35,5 @@ service_DATA = kdevadasupport.desktop
 
 rcdir = $(kde_datadir)/kdevadasupport
 rc_DATA = kdevadasupport.rc
+
+KDE_OPTIONS = nofinal

@@ -13,6 +13,7 @@
 
 #include <qstylesheet.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 
 #include "ktexteditor/cursorinterface.h"
@@ -122,15 +123,16 @@ ExitStatusItem::ExitStatusItem( bool normalExit, int exitStatus )
 	: m_normalExit( normalExit )
 	, m_exitStatus( exitStatus )
 {
+	m_text = i18n("*** Compilation aborted ***");
+	if ( m_normalExit && m_exitStatus )
+		m_text = i18n("*** Exited with status: %1 ***").arg( m_exitStatus );
+	if ( m_normalExit )
+		m_text = i18n("*** Success ***");
 }
 
 QString ExitStatusItem::text( EOutputLevel )
 {
-	if ( m_normalExit && m_exitStatus )
-		return i18n("*** Exited with status: %1 ***").arg( m_exitStatus );
-	if ( m_normalExit )
-		return i18n("*** Success ***");
-	return i18n("*** Compilation aborted ***");
+	return m_text;	
 }
 
 bool DirectoryItem::m_showDirectoryMessages = true;
