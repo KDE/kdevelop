@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -80,7 +80,7 @@ QStringList ClassStore::getSortedClassNameList()
     QMap<QString, ParsedClass*>::ConstIterator it;
     for (it = m_allClasses.begin(); it != m_allClasses.end(); ++it)
         list.append(it.key());
-    
+
     list.sort();
     return list;
 }
@@ -91,7 +91,7 @@ QValueList<ParsedClass*> ClassStore::getSortedClassList()
     QValueList<ParsedClass*> retVal;
 
     QStringList list = getSortedClassNameList();
-    
+
     // Now collect the list of parsed classes
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it)
@@ -122,7 +122,7 @@ QStringList ClassStore::getSortedStructNameList()
     QMap<QString, ParsedClass*>::ConstIterator it;
     for (it = m_allStructs.begin(); it != m_allStructs.end(); ++it)
         list.append(it.key());
-    
+
     list.sort();
     return list;
 }
@@ -133,7 +133,7 @@ QValueList<ParsedClass*> ClassStore::getSortedStructList()
     QValueList<ParsedClass*> retVal;
 
     QStringList list = getSortedStructNameList();
-    
+
     // Now collect the list of parsed structs
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it)
@@ -164,7 +164,7 @@ QStringList ClassStore::getSortedScopeNameList()
     QMap<QString, ParsedScopeContainer*>::ConstIterator it;
     for (it = m_allScopes.begin(); it != m_allScopes.end(); ++it)
         list.append(it.key());
-    
+
     list.sort();
     return list;
 }
@@ -175,7 +175,7 @@ QValueList<ParsedScopeContainer*> ClassStore::getSortedScopeList()
     QValueList<ParsedScopeContainer*> retVal;
 
     QStringList list = getSortedScopeNameList();
-    
+
     // Now collect the list of parsed scopes
     QStringList::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it)
@@ -210,7 +210,7 @@ void ClassStore::addScope(ParsedScopeContainer *scope)
     REQUIRE( "Valid scope", scope != NULL );
     REQUIRE( "Valid scope name", !scope->name().isEmpty() );
     REQUIRE( "Unique scope path", !hasScope( scope->path() ) );
-    
+
     m_allScopes.insert(scope->path(), scope);
 }
 
@@ -233,34 +233,34 @@ void ClassStore::addScope(ParsedScopeContainer *scope)
 QList<ClassTreeNode> *ClassStore::asForest()
 {
     ParsedClass *aClass;
-    ParsedParent *aParent;  
+    ParsedParent *aParent;
     ClassTreeNode *childNode;
     ClassTreeNode *parentNode;
     QDict<ClassTreeNode> ctDict;
     QList<ClassTreeNode> *retVal = new QList<ClassTreeNode>;
-    
+
     // Iterate over all parsed classes.
     for ( m_globalScope->classIterator.toFirst();
           m_globalScope->classIterator.current();
           ++m_globalScope->classIterator ) {
         aClass = m_globalScope->classIterator.current();
-        
+
         // Check if we have added the child.
         childNode = ctDict.find( aClass->name() );
-        
+
         // If not in the table already, we add a new node.
         if ( childNode == NULL ) {
             childNode = new ClassTreeNode();
-            
+
             ctDict.insert( aClass->name(), childNode );
         } else if ( !childNode->isInSystem() )
             retVal->removeRef( childNode );
-        
+
         // Set childnode values.
         childNode->setName( aClass->name() );
         childNode->setClass( aClass );
         childNode->setIsInSystem( true );
-        
+
         // If this class has no parent, we add it as a rootnode in the forest.
         if ( aClass->parents.count() == 0)
             retVal->append( childNode );
@@ -278,17 +278,17 @@ QList<ClassTreeNode> *ClassStore::asForest()
                     parentNode = new ClassTreeNode();
                     parentNode->setName( aParent->name() );
                     parentNode->setIsInSystem( false );
-                    
+
                     retVal->append( parentNode );
                     ctDict.insert( parentNode->name(), parentNode );
                 }
-                
+
                 // Add the child to the parent node.
                 parentNode->addChild( childNode );
             }
         }
     }
-    
+
     return retVal;
 }
 
@@ -301,7 +301,7 @@ QList<ClassTreeNode> *ClassStore::asForest()
 QValueList<ParsedClass*> ClassStore::getClassesByParent(const QString &name)
 {
     REQUIRE1( "Valid classname length", name.length() > 0, QValueList<ParsedClass*>() );
-    
+
     QValueList<ParsedClass*> retVal;
 
     QMap<QString, ParsedClass*>::ConstIterator it;
@@ -309,7 +309,7 @@ QValueList<ParsedClass*> ClassStore::getClassesByParent(const QString &name)
         if ( (*it)->hasParent(name) )
             retVal.append(*it);
     }
-    
+
     return retVal;
 }
 
@@ -323,9 +323,9 @@ QValueList<ParsedClass*> ClassStore::getClassesByParent(const QString &name)
 QValueList<ParsedClass*> ClassStore::getClassClients(const QString &name)
 {
     REQUIRE1( "Valid classname length", name.length() > 0, QValueList<ParsedClass*>() );
-    
+
     QValueList<ParsedClass*> retVal;
-    
+
     QMap<QString, ParsedClass*>::ConstIterator it;
     for (it = m_allClasses.begin(); it != m_allClasses.end(); ++it) {
         // A class is never its own client
@@ -341,11 +341,11 @@ QValueList<ParsedClass*> ClassStore::getClassClients(const QString &name)
                 break;
             }
         }
-            
+
         if ( found )
             retVal.append(*it);
     }
-    
+
     return retVal;
 }
 
@@ -360,9 +360,9 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers(const QString &name)
 {
     REQUIRE1( "Valid classname length", name.length() > 0, QValueList<ParsedClass*>() );
     REQUIRE1( "Class exists", hasClass(name), QValueList<ParsedClass*>() );
-    
+
     QValueList<ParsedClass*> retVal;
-    
+
     ParsedClass *klass = getClassByName(name);
     for ( klass->attributeIterator.toFirst();
           klass->attributeIterator.current();
@@ -378,7 +378,7 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers(const QString &name)
         str.replace(  QRegExp("int"), "" );
         str.replace(  QRegExp("char"), "" );
         str.stripWhiteSpace();
-        
+
         // If this isn't the class and the string contains data, we check for it.
         if ( str != name && !str.isEmpty() ) {
             kdDebug(9005) << "Checking if '" << str << "' is a class" << endl;
@@ -387,7 +387,7 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers(const QString &name)
                 retVal.append(toAdd);
         }
     }
-    
+
     return retVal;
 }
 
@@ -398,7 +398,7 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers(const QString &name)
  *
  * Parameters:
  *   aName      Name of the class.
- *   implList   The list that will contain the implemented virtual 
+ *   implList   The list that will contain the implemented virtual
  *              methods.
  *   availList  The list hat will contain the available virtual
  *              methods.
@@ -409,11 +409,11 @@ void ClassStore::getVirtualMethodsForClass(const QString &name,
 {
     REQUIRE( "Valid classname length", name.length() > 0 );
     REQUIRE( "Class exists", hasClass(name) );
-    
+
     // Start by reseting the lists.
     implList->clear();
     availList->clear();
-    
+
     // Try to fetch the class
     ParsedClass *aClass = getClassByName(name);
     if ( aClass != NULL ) {
@@ -438,7 +438,7 @@ void ClassStore::getVirtualMethodsForClass(const QString &name,
                         availList->append( *it );
                 }
             }
-            
+
         }
     }
 }
@@ -465,12 +465,12 @@ void ClassStore::removeWithReferences(const QString &fileName, ParsedScopeContai
             } else
                 klass->removeWithReferences(fileName);
         }
-        
+
         // Move to the next class if we aren't already there due
         // to the class being removed.
         if (klass == scope->classIterator.current())
             ++scope->classIterator;
-        
+
         klass = scope->classIterator.current();
     }
 }
@@ -492,7 +492,7 @@ void ClassStore::removeWithReferences(const QString &fileName)
         if ( (*it)->declaredInFile() == fileName )
             m_allStructs.remove( it );
     }
-    m_globalScope->removeWithReferences(fileName);
+    removeWithReferences(fileName, m_globalScope);
 }
 
 
@@ -608,13 +608,13 @@ void ClassStore::addToIndexRecursive(ParsedScopeContainer *scope)
     addScope(scope);
 
     QValueList<ParsedScopeContainer*> scopeList = scope->getSortedScopeList();
-    
+
     QValueList<ParsedScopeContainer*>::ConstIterator scopeIt;
     for (scopeIt = scopeList.begin(); scopeIt != scopeList.end(); ++scopeIt)
         addToIndexRecursive(*scopeIt);
 
     QValueList<ParsedClass*> classList = scope->getSortedClassList();
-    
+
     QValueList<ParsedClass*>::ConstIterator classIt;
     for (classIt = classList.begin(); classIt != classList.end(); ++classIt)
         addClass(*classIt);
