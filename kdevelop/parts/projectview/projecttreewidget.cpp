@@ -53,6 +53,13 @@ void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoi
 void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
   cerr << "kdevelop (projectview): ProjectTreeWidget::setProjectSpace" << endl;
   m_pProjectSpace = pProjectSpace;
+  if(m_projectFileGroups.isEmpty()){ // there was no ProjectView tag in the projectfile
+    createDefaultFileGroups();
+  }
+  refresh();
+}
+void ProjectTreeWidget::refresh(){
+  clear();
   ProjectItem* pProjectItem =0;
   GroupItem* pGroupItem = 0;
   FileItem* pFileItem =0;
@@ -70,11 +77,7 @@ void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
   QPixmap projectSpacePixmap = pLoader->loadIcon("buttons",KIcon::Small);
   QPixmap projectPixmap = pLoader->loadIcon("queue",KIcon::Small);
   
-  
-  QRegExp rexExp("",true,true);
-  if(m_projectFileGroups.isEmpty()){ // there was no ProjectView tag in the projectfile
-    createDefaultFileGroups();
-  }
+  QRegExp regExp("",true,true);
   pProjects = m_pProjectSpace->allProjects();
   defaultFileGroups = m_pProjectSpace->defaultFileGroups();
 
@@ -85,7 +88,6 @@ void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
   pProjectSpaceItem->setPixmap(0,projectSpacePixmap);
   
   
-  cerr << "kdevelop (projectview): init (end)" << endl;
   for(pProject=pProjects->first();pProject !=0;pProject=pProjects->next()){ // projects
     cerr << "kdevelop (projectview): project found" << endl;
     pProjectItem = new ProjectItem(pProjectSpaceItem);
@@ -114,8 +116,8 @@ void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
       
       for ( QStringList::Iterator filterIt = filters.begin(); filterIt != filters.end(); ++filterIt ) {
 	//cerr << "FILTER" << *filterIt << endl;
-	rexExp.setPattern(*filterIt);
-	files = fileNames.grep(rexExp);
+	regExp.setPattern(*filterIt);
+	files = fileNames.grep(regExp);
 	// files
 	for ( QStringList::Iterator fileIt = files.begin(); fileIt != files.end(); ++fileIt ) {
 	  //cerr << "FILE" << *fileIt << endl;
@@ -140,6 +142,7 @@ void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){
       pFileItem->setAbsFileName(*fileIt);
     }
   } // end for projects
+  
 }
 void ProjectTreeWidget::readProjectSpaceGlobalConfig(QDomDocument& doc){
   cerr << "kdevelop (projectview/projecttreewidget): readProjectSpaceGlobalConfig:" << endl;
@@ -248,9 +251,7 @@ QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
     for(pAction=pList->first();pAction!=0;pAction= pList->next()){
       pAction->plug(pPopup,-1);// add all available actions to the popupmenu
     }
-    
   }
-
   return pPopup;
 }
 
@@ -258,11 +259,96 @@ void ProjectTreeWidget::slotOpenFile(){
 }
 
 void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
+  // this method isn't optimized, just a first try
   cerr << endl << "kdevelop (projectview): ProjectTreeWidget::addedFileToProject";
+
+  QString projectName = pNode->projectName();
+  QList<FileGroup> fileGroups;
+  QString fileName= pNode->absoluteFileName();
+  QFileInfo fileInfo(fileName);
+  QStringList filters;
+  fileGroups = m_projectFileGroups[pNode->projectName()];
+  FileGroup* pFileGroup=0;
+  QRegExp regExp("",true,true);
+  QString foundFileGroup = "";
+  
+  for(pFileGroup=fileGroups.first();pFileGroup !=0
+	;pFileGroup=fileGroups.next()){ // groups
+    
+    filters = QStringList::split(';',pFileGroup->filter());
+    for ( QStringList::Iterator filterIt = filters.begin(); filterIt != filters.end(); ++filterIt ) {
+      regExp.setPattern(*filterIt);
+      if(fileName.contains(regExp) != 0){
+	cerr << endl << "filter GROUP found" << pFileGroup->name() << endl;
+	foundFileGroup = pFileGroup->name();
+      }
+    }
+  }
+
+  // ok, and now add it to the tree
+  // first search the projectitem
+  QListViewItem* pProjectSpaceItem = firstChild();
+  QListViewItem* pProjectItem = pProjectSpaceItem->firstChild();
+  QListViewItem* pTmpItem =0;
+  QListViewItem* pGroupItem =0;
+  
+  // get the projectItem
+  for(pTmpItem =pProjectItem;pTmpItem !=0;pTmpItem = pProjectSpaceItem->nextSibling()){
+    if(pTmpItem->text(0) == projectName){
+      pProjectItem = pTmpItem;
+    }
+  }
+  if(foundFileGroup != ""){ // group found
+    // ok found, now search the group in the tree 
+    QListViewItemIterator it(pProjectItem); 
+    for(;it.current();++it){
+      if(it.current()->text(0) == foundFileGroup){
+	GroupItem* pTmpGroupItem = static_cast<GroupItem*>(it.current());
+	FileItem* pFileItem = new FileItem(pTmpGroupItem);
+	pFileItem->setText(0,fileInfo.fileName());
+	pFileItem->setPixmap(0,KMimeType::pixmapForURL(fileName,0,KIcon::Small));
+	pFileItem->setAbsFileName(fileName);
+	pFileItem->setProjectName(pNode->projectName());
+	return; // only one file,done
+      }
+    }
+  }
+  else { // group found, add it to the end
+    ProjectItem* pProject = static_cast<ProjectItem*>(pProjectItem);
+    FileItem* pFileItem = new FileItem(pProject);
+    pFileItem->setText(0,fileInfo.fileName());
+    pFileItem->setPixmap(0,KMimeType::pixmapForURL(fileName,0,KIcon::Small));
+    pFileItem->setAbsFileName(fileName);
+  }
+  
 }
 
 void ProjectTreeWidget::removedFileFromProject(KDevFileNode* pNode){
   cerr << endl << "kdevelop (projectview): ProjectTreeWidget::removeFileFromProject";
+  QString projectName = pNode->projectName();
+  QString fileName= pNode->absoluteFileName();
+
+  QListViewItem* pProjectSpaceItem = firstChild();
+  QListViewItem* pProjectItem = pProjectSpaceItem->firstChild();
+  QListViewItem* pTmpItem=0;
+
+  // get the projectItem
+  for(pTmpItem =pProjectItem;pTmpItem !=0;pTmpItem = pProjectSpaceItem->nextSibling()){
+    if(pTmpItem->text(0) == projectName){
+      pProjectItem = pTmpItem;
+    }
+  }
+
+  QListViewItemIterator it(pProjectItem);
+  for(;it.current();++it){
+    ProjectTreeItem* pItem = static_cast<ProjectTreeItem*>(it.current());
+    if(pItem->inherits("FileItem")){
+      FileItem* pFileItem = static_cast<FileItem*>(it.current());
+      if(pFileItem->absFileName() == fileName){ // found
+	delete pFileItem;
+      }
+    }
+  }
 }
 
 void ProjectTreeItem::paintCell( QPainter * p, const QColorGroup & cg,

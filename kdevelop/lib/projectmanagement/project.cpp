@@ -62,14 +62,16 @@ RegisteredFile* Project::file(QString relFileName){
       return pFile;
     }
   }
-  cerr << endl << "kdevelop (project): Project::fileProperties() return 0!";
+  cerr << endl << "kdevelop (project): Project::fileProperties() return 0!:" << relFileName;
+  dump();
   return 0;
 }
 RegisteredFile* Project::fileAbsolute(QString absFileName){
   QString relFile = CToolClass::getRelativeFile(m_absPath,absFileName);
   RegisteredFile* pFile= file(relFile);
   if(pFile == 0){
-    cerr << endl << "kdevelop (project): Project::filePropertiesAbsolute() return 0!";
+    cerr << endl << "kdevelop (project): Project::filePropertiesAbsolute() return 0!:" << absFileName;
+    dump();
   }
   return pFile;
 }

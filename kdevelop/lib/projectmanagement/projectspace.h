@@ -124,6 +124,8 @@ class ProjectSpace : public KDevComponent {
 
  signals:
   void sigAddedFileToProject(KDevFileNode* pNode);
+  void sigRemovedFileFromProject(KDevFileNode* pNode);
+  void sigAddedProject(KDevNode* pNode);
 
   protected slots:
     virtual void slotProjectSetActivate( int id);

@@ -48,16 +48,21 @@ public:
     void writeProjectSpaceGlobalConfig(QDomDocument& doc);
     void addedFileToProject(KDevFileNode* pNode);
     void removedFileFromProject(KDevFileNode* pNode);
+    /** clears the tree and repaint it again*/
+    void refresh();
+    
     
     
     protected slots:
       void slotRightButtonPressed( QListViewItem* item, const QPoint&,int);
     void    slotOpenFile();
+    
  protected:
     void createDefaultFileGroups();
     QPopupMenu* createPopup(ProjectTreeItem* item);
     ProjectSpace* m_pProjectSpace;
     // the "document"
+    // projectName,fileGroup
     QMap<QString,QList< FileGroup> > m_projectFileGroups;
 
     ProjectView* m_pProjectView;

@@ -77,6 +77,8 @@ private slots:
     void needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode);
     /** from a Projectspace*/
     void addedFileToProject(KDevFileNode* pNode);
+    void removedFileFromProject(KDevFileNode* pNode);
+    void addedProject(KDevNode* pNode);
 
 private:
     KDevelop *m_pKDevelopGUI;

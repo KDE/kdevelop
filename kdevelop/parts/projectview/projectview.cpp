@@ -49,7 +49,7 @@ void ProjectView::projectSpaceOpened(ProjectSpace *pProjectSpace){
 }
   
 void ProjectView::projectSpaceClosed(){
-
+  m_pProjectTree->clear();
 }
 
 
@@ -79,4 +79,8 @@ void ProjectView::addedFileToProject(KDevFileNode* pNode){
 }   
 void ProjectView::removedFileFromProject(KDevFileNode* pNode){
   m_pProjectTree->removedFileFromProject(pNode);
+}
+
+void ProjectView::addedProject(KDevNode*){
+  m_pProjectTree->refresh();
 }

@@ -83,8 +83,8 @@ void AppWizard::accept(){
     m_pProjectspace->setVersion(version_edit->text());
     m_pProjectspace->generateDefaultFiles();
   }
+  generateDefaultFiles(); // generate and add files to project
   m_pProjectspace->addProject(m_pProject);
-  generateDefaultFiles();
   m_pProjectspace->writeGlobalDocument();
   m_pProjectspace->writeUserDocument();
   if(!m_pProjectspace->saveConfig()){

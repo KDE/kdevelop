@@ -377,6 +377,11 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
     // some special connections only from the projectspace interface
     connect( m_pProjectSpace, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
              this, SLOT(addedFileToProject(KDevFileNode*)) );
+    connect( m_pProjectSpace, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
+             this, SLOT(removedFileFromProject(KDevFileNode*)) );
+    connect( m_pProjectSpace, SIGNAL(sigAddedProject(KDevNode*)),
+	     this, SLOT(addedProject(KDevNode*)) );
+	
 
     // some actions
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
@@ -578,7 +583,9 @@ void KDevelopCore::running(bool runs)
 
 void KDevelopCore::gotoSourceFile(const QString &fileName, int lineNo)
 {
-    kdDebug(9000) << "KDevelopCore::gotoSourceFile" << endl;
+  kdDebug(9000) << "KDevelopCore::gotoSourceFile File:" << fileName 
+		<< " Line: " << QString::number(lineNo) 
+		<< endl;
 }
 
 
@@ -651,5 +658,18 @@ void KDevelopCore::addedFileToProject(KDevFileNode* pNode) {
     (*it)->addedFileToProject(pNode);
   }
 }
-
+void KDevelopCore::removedFileFromProject(KDevFileNode* pNode) {
+  kdDebug(9000) << "KDevelopCore::removedFileFromProject" << endl;  
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){ // every component
+    (*it)->removedFileFromProject(pNode);
+  }
+}
+void KDevelopCore::addedProject(KDevNode* pNode){
+  kdDebug(9000) << "KDevelopCore::addedProject" << endl;  
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){ // every component
+    (*it)->addedProject(pNode);
+  }
+}
 #include "kdevelopcore.moc"

@@ -134,6 +134,8 @@ void ProjectSpace::addProject(Project* pProject){
   cerr << endl << "enter ProjectSpace::addProject";
   m_pProjects->append (pProject);
   setCurrentProject(pProject);
+  KDevNode* pNode = new KDevNode(m_name,pProject->name());
+  emit sigAddedProject(pNode);
 }
 void ProjectSpace::setCurrentProject(Project* prj){
   m_pCurrentProject = prj;
@@ -341,7 +343,7 @@ bool ProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement){
     if(pProject != 0){
       pProject->readGlobalConfig(doc,projectElement);
       pProject->setAbsolutePath(CToolClass::getAbsolutePath(m_path,pProject->relativePath()));
-      addProject(pProject);
+      m_pProjects->append (pProject);
     }
     else {
       cerr << "\nProjectSpace::readGlobalConfig:  pProjectnot created!";
@@ -693,6 +695,7 @@ void ProjectSpace::slotRenameFile(KDevNode* pNode){
     return;
   }
   KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  KDevFileNode* pNewFileNode=0;
   QString absFileName = pFileNode->absoluteFileName();
   QString projectName = pFileNode->projectName();
 
@@ -717,8 +720,7 @@ void ProjectSpace::slotRenameFile(KDevNode* pNode){
 	cerr << "dirPath:" << info.dirPath() << endl;
 	RegisteredFile* pRegFile = pProject->file(filePath + info.fileName());
 	pRegFile->setRelativeFile(filePath + newName);
-	KDevFileNode* pNode = new KDevFileNode(info.dirPath() + "/" +newName,m_name,pProject->name());
-	emit sigAddedFileToProject(pNode); // inform the other components
+	pNewFileNode = new KDevFileNode(info.dirPath() + "/" +newName,m_name,pProject->name());
       }
       else {
 	kdDebug(9000) << "slotRenameFile() No Project found:" << projectName << endl;	
@@ -727,6 +729,8 @@ void ProjectSpace::slotRenameFile(KDevNode* pNode){
       KURL srcURL(absFileName);
       KURL destURL(info.dirPath() +"/" + newName);
       KIO::SimpleJob* pJob = KIO::rename(srcURL,destURL,false);
+      emit sigRemovedFileFromProject(pFileNode);
+      emit sigAddedFileToProject(pNewFileNode); // inform the other components
     }
   }
 }
@@ -755,6 +759,7 @@ void ProjectSpace::slotDeleteFile(KDevNode* pNode){
   }
   KURL srcURL(absFileName);
   KIO::DeleteJob* pJob = KIO::del(srcURL);
+  emit sigRemovedFileFromProject(pFileNode);
   
 }
 void ProjectSpace::slotRemoveFileFromProject(KDevNode* pNode){
@@ -776,6 +781,7 @@ void ProjectSpace::slotRemoveFileFromProject(KDevNode* pNode){
   Project* pProject = project(projectName);
   if(pProject != 0){
     pProject->removeFile(absFileName);
+    emit sigRemovedFileFromProject(pFileNode);
   }
   else {
     kdDebug(9000) << "slotDeleteFile() No Project found:" << projectName << endl;	
@@ -790,6 +796,7 @@ void ProjectSpace::slotMoveFileTo(KDevNode* pNode){
     return;
   }
   KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  KDevFileNode* pNewFileNode=0;
   QString absFileName = pFileNode->absoluteFileName();
   QString projectName = pFileNode->projectName();
 
@@ -809,14 +816,15 @@ void ProjectSpace::slotMoveFileTo(KDevNode* pNode){
     pNewFile->setRelativeFile(relFile);
     pProject->removeFile(pFile);
     pProject->addFile(pNewFile);
-    KDevFileNode* pNode = new KDevFileNode(dir + "/" +info.fileName(),m_name,pProject->name());
-    emit sigAddedFileToProject(pNode); // inform the other components
+    pNewFileNode = new KDevFileNode(dir + "/" +info.fileName(),m_name,pProject->name());
+    
   }
   
   KURL srcURL(absFileName);
   KURL destURL(dir + "/" + info.fileName());
   KIO::FileCopyJob* pJob = KIO::file_move(srcURL,destURL);
-  
+  emit sigRemovedFileFromProject(pFileNode);
+  emit sigAddedFileToProject(pNewFileNode); // inform the other components
 }
 void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
   kdDebug(9000) << "slotCopyFileTo called:";
@@ -826,6 +834,7 @@ void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
     return;
   }
   KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  KDevFileNode* pNewFileNode=0;
   QString absFileName = pFileNode->absoluteFileName();
   QString projectName = pFileNode->projectName();
 
@@ -844,13 +853,13 @@ void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
     kdDebug(9000) << "relFile" <<  relFile << endl;
     pNewFile->setRelativeFile(relFile);
     pProject->addFile(pNewFile);
-    KDevFileNode* pNode = new KDevFileNode(dir + "/" + info.fileName(),m_name,pProject->name());
+    pNewFileNode = new KDevFileNode(dir + "/" + info.fileName(),m_name,pProject->name());
     kdDebug(9000) << "emit sigAddedFileToProject";
-    emit sigAddedFileToProject(pNode); // inform the other components
   }
   
   KURL srcURL(absFileName);
   KURL destURL(dir + "/" + info.fileName());
   KIO::FileCopyJob* pJob = KIO::file_copy(srcURL,destURL);
+  emit sigAddedFileToProject(pNewFileNode); // inform the other components
 }
 #include "projectspace.moc"

@@ -99,6 +99,10 @@ public:
     virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
     /**
+     * A project has been added to the project
+     */
+    virtual void addedProject(KDevNode* pNode);
+    /**
      * A file has been added to the project
      */
     virtual void addedFileToProject(KDevFileNode* pNode);

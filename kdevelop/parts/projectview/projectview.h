@@ -38,6 +38,7 @@ public:
     virtual void setKDevNodeActions(QList<KAction>* pActions);
     virtual void addedFileToProject(KDevFileNode* pNode);
     virtual void removedFileFromProject(KDevFileNode* pNode);
+    virtual void addedProject(KDevNode* pNode);
     
 
    

@@ -62,6 +62,8 @@ void KDevComponent::classStoreOpened(ClassStore*)
 void KDevComponent::classStoreClosed()
 {
 }
+void KDevComponent::addedProject(KDevNode*){
+}
 
 void KDevComponent::addedFileToProject(KDevFileNode*)
 {

@@ -1,3 +1,7 @@
+2000-11-18  Sandy Meier  <smeier@kdevelop.org>
+	* implemented "smart update" on file adding,removing (ProjectView) 
+	* on all other events the ProjectView is redrawn completely
+
 2000-11-14  Sandy Meier  <smeier@kdevelop.org>
 	* implemented yet another new concept "KDevNodes and KDevNodeAction" (the old FileActions were removed)
 	please read README.devel for an explanation
