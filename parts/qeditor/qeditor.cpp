@@ -389,12 +389,12 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( new CppParser(this) );
+        //setBackgroundParser( new CppParser(this) );
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        setBackgroundParser( new CppParser(this) );
+        //setBackgroundParser( new CppParser(this) );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
@@ -409,7 +409,7 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
-        setBackgroundParser( new PythonParser(this) );
+        //setBackgroundParser( new PythonParser(this) );
     } else if( m_language == "xml" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
