@@ -27,6 +27,7 @@
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name) : KWizard(parent,name,true){
   
   gen_prj = false;
+setCaption(i18n("Application Wizard"));
   init();
   initPages();
   slotDefaultClicked();    
@@ -650,7 +651,7 @@ void CKAppWizard::slotMiniClicked() {
 
 // connection of qta
 void CKAppWizard::slotQtClicked() {
-  pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
+  pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
   widget1b->setBackgroundPixmap(pm);
   apidoc->setEnabled(true);
   apidoc->setChecked(true);

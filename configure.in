@@ -63,7 +63,6 @@ AC_OUTPUT(Makefile \
 	kdevelop/tools/Makefile \
 	kdevelop/docs/Makefile \
 	kdevelop/docs/en/Makefile \
-	kdevelop/docs/ru/Makefile \
 	kdevelop/toolbar/Makefile \
 	kdevelop/pics/Makefile \
 	kdevelop/pics/mini/Makefile \

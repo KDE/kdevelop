@@ -33,5 +33,19 @@ see INSTALL in the same directory
 Have fun!
 							 The KDevelop-Team
 
+FAQ:
+
+How can I convert a KDevelop 0.2 project to a 0.3 one?
+
+1. please change the AC_OUTPUT in the configure.in to a oneline version
+
+for example: 
+old version AC_OUTPUT(Makefile \
+		kdevelop/kwrite/Makefile \
+		kdevelop/templates/Makefile
+)
+new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+
+2. That's all. :-)
 
 

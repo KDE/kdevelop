@@ -1,4 +1,4 @@
-SUBDIRS = en ru
+SUBDIRS = en
 
 
 

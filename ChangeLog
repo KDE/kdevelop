@@ -1,3 +1,7 @@
+1999-03-07 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* added qt-base-appl screenshot
+	* serveral changes to make kdevelop ready for 0.3 :-)
+
 1999-03-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
         * completed empty documentation entries and updated the installation documentation
 	  with a descriptive help for the installation process
