@@ -112,9 +112,24 @@ public /*rules*/ :
     bool parseInitializer();
     bool parseBaseSpecifierList();
     bool parseBaseSpecifier();
-    bool parseExpressionList();
     bool parseInitializerClause();
     bool parseMemInitializerId();
+
+    // expression
+    bool parseExpression();
+
+    // statement
+    bool parseCondition();
+    bool parseStatement();
+    bool parseExpressionStatement();
+    bool parseWhileStatement();
+    bool parseDoStatement();
+    bool parseForStatement();
+    bool parseCompoundStatement();
+    bool parseForInitStatement();
+    bool parseIfStatement();
+    bool parseSwitchStatement();
+    bool parseLabeledStatement();
 
     bool isConstructorDecl();
     bool skipUntil( int token );

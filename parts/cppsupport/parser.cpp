@@ -204,9 +204,9 @@ bool Parser::parseName()
         lex->nextToken();
     }
 
-    parseNestedNameSpecifier();
-    parseUnqualiedName();
-    return true;
+    if( parseNestedNameSpecifier() )
+    	return parseUnqualiedName();
+    return false;
 }
 
 bool Parser::parseTranslationUnit()
@@ -1298,8 +1298,9 @@ bool Parser::parseConstantExpression()
                 return false;
             }
             lex->nextToken();
-        } else if( tk == ',' || tk == ';' || tk == '<'
-            || tk == Token_assign || tk == ']' || tk == ')' || tk == '}' ){
+        } else if( tk == ',' || tk == ';' || tk == '<' ||
+                   tk == Token_assign || tk == ']' ||
+                   tk == ')' || tk == '}' || tk == ':' ){
             break;
         } else {
             l << lex->lookAhead( 0 ).toString();
@@ -1339,12 +1340,7 @@ bool Parser::parseFunctionBody()
         return false;
     }
 
-    if( !skip('{', '}') ){
-        reportError( i18n("missing }") );
-    }
-    lex->nextToken();
-
-    return true;
+    return parseCompoundStatement();
 }
 
 bool Parser::parseParameterDeclarationClause()
@@ -1576,26 +1572,6 @@ bool Parser::parseDeclaratorId()
     return parseName();
 }
 
-bool Parser::parseCommaExpression()
-{
-    //kdDebug(9007) << "Parser::parseCommaExpression()" << endl;
-
-#warning "TODO Parser::parseCommaExpression()"
-
-    while( !lex->lookAhead(0).isNull() ){
-        int tk = lex->lookAhead( 0 );
-        if( tk == '(' ){
-            if( !skip('(',')') ){
-                return false;
-            }
-        } else if( tk == ']' || tk == ';' ){
-            break;
-        }
-        lex->nextToken();
-    }
-    return true;
-}
-
 bool Parser::parseExceptionSpecification()
 {
     //kdDebug(9007) << "Parser::parseExceptionSpecification()" << endl;
@@ -1742,7 +1718,7 @@ bool Parser::parseInitializer()
         }
     } else if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
-        if( !parseExpressionList() ){
+        if( !parseCommaExpression() ){
             reportError( i18n("Expression expected") );
             return false;
         }
@@ -1786,7 +1762,7 @@ bool Parser::parseMemInitializer()
         return false;
     }
     ADVANCE( '(', '(' );
-    if( !parseExpressionList() ){
+    if( !parseCommaExpression() ){
         reportError( i18n("Expression expected") );
         return false;
     }
@@ -1899,21 +1875,20 @@ bool Parser::parseMemInitializerId()
 }
 
 
-bool Parser::parseExpressionList()
+bool Parser::parseCommaExpression()
 {
-    //kdDebug(9007) << "Parser::parseExpressionList()" << endl;
+    //kdDebug(9007) << "Parser::parseCommaExpression()" << endl;
 
-    while( !lex->lookAhead(0).isNull() ){
-        int tk = lex->lookAhead( 0 );
-        if( tk == '(' ){
-            if( !skip('(', ')') ){
-                reportError( i18n(") missing") );
-            } else
-                lex->nextToken();
-        } else if( tk == ')' ){
-            break;
-        } else
-            lex->nextToken();
+    if( !parseExpression() )
+    	return false;
+
+    while( lex->lookAhead(0) == ',' ){
+    	lex->nextToken();
+
+    	if( !parseExpression() ){
+            reportError( i18n("expression expected") );
+            return false;
+        }
     }
     return true;
 }
@@ -1921,6 +1896,8 @@ bool Parser::parseExpressionList()
 bool Parser::parseNestedNameSpecifier()
 {
     //kdDebug(9007) << "Parser::parseNestedNameSpecifier()" << endl;
+
+    int index = lex->index();
 
     if( lex->lookAhead(0) != Token_scope &&
         lex->lookAhead(0) != Token_identifier ){
@@ -1937,8 +1914,8 @@ bool Parser::parseNestedNameSpecifier()
             }
 
             if( lex->lookAhead(0) != '>' ){
-                reportError( i18n("> expected") );
-                skipUntil( '>' );
+            	lex->setIndex( index );
+            	return false;
             }
             lex->nextToken(); // skip >
 
@@ -2030,7 +2007,7 @@ bool Parser::parseUnqualiedName()
 
 void Parser::dump()
 {
-    kdDebug(9007) << dom->toString() << endl;
+    //kdDebug(9007) << dom->toString() << endl;
 }
 
 bool Parser::parseStringLiteral()
@@ -2049,3 +2026,281 @@ bool Parser::parseStringLiteral()
     }
     return true;
 }
+
+bool Parser::parseExpression()
+{
+    //kdDebug(9007) << "Parser::parseExpression()" << endl;
+
+    bool ok = false;
+    while( !lex->lookAhead(0).isNull() ){
+        int tk = lex->lookAhead( 0 );
+
+        if( tk == '(' ){
+            if( !skip('(', ')') ){
+                return false;
+            } else
+                lex->nextToken();
+        } else if( tk == '[' ){
+            if( !skip('[', ']') ){
+                return false;
+            } else
+                lex->nextToken();
+        } else if( tk == ';' || tk == ',' ||
+                   tk == ']' || tk == ')' ){
+            break;
+        } else
+            lex->nextToken();
+
+        ok = true;
+    }
+
+    return ok;
+}
+
+
+bool Parser::parseExpressionStatement()
+{
+    //kdDebug(9007) << "Parser::parseExpressionStatement()" << endl;
+    parseCommaExpression();
+    if( lex->lookAhead(0) != ';' ){
+    	reportError( i18n("; expected") );
+        skipUntil( ';' );
+    }
+    lex->nextToken(); // skip ;
+
+    return true;
+}
+
+bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
+{
+    //kdDebug(9007) << "Parser::parseStatement()" << endl;
+    switch( lex->lookAhead(0) ){
+
+    case Token_while:
+        return parseWhileStatement();
+
+    case Token_do:
+        return parseDoStatement();
+
+    case Token_for:
+        return parseForStatement();
+
+    case Token_if:
+        return parseIfStatement();
+
+    case Token_switch:
+        return parseSwitchStatement();
+
+    case Token_case:
+    case Token_default:
+        return parseLabeledStatement();
+
+    case Token_break:
+    case Token_continue:
+        lex->nextToken();
+        ADVANCE( ';', ";" );
+        return true;
+
+    case Token_goto:
+        lex->nextToken();
+        ADVANCE( Token_identifier, "identifier" );
+        ADVANCE( ';', ";" );
+        return true;
+
+    case Token_return:
+        lex->nextToken();
+        parseCommaExpression();
+        ADVANCE( ';', ";" );
+        return true;
+
+    case '{':
+        return parseCompoundStatement();
+
+    case Token_identifier:
+        if( parseLabeledStatement() )
+            return true;
+        break;
+    }
+
+    return parseExpressionStatement();
+}
+
+bool Parser::parseCondition()
+{
+    //kdDebug(9007) << "Parser::parseCondition()" << endl;
+
+    int index = lex->index();
+    if( parseTypeSpecifier() ){
+    	if( parseDeclarator() && lex->lookAhead(0) == '=' ) {
+            lex->nextToken();
+
+            if( !parseAssignmentExpression() ){
+                reportError( i18n("expression expected") );
+            }
+            return true;
+        }
+        lex->setIndex( index );
+    }
+
+    return parseCommaExpression();
+}
+
+
+bool Parser::parseWhileStatement()
+{
+    //kdDebug(9007) << "Parser::parseWhileStatement()" << endl;
+    ADVANCE( Token_while, "while" );
+    ADVANCE( '(' , "(" );
+    if( !parseCondition() ){
+    	reportError( i18n("condition expected") );
+        skipUntil( ')' );
+    }
+    ADVANCE( ')', ")" );
+
+    if( !parseStatement() ){
+    	reportError( i18n("statement expected") );
+        // TODO: skipUntilStatement();
+    }
+
+    return true;
+}
+
+bool Parser::parseDoStatement()
+{
+    //kdDebug(9007) << "Parser::parseDoStatement()" << endl;
+    ADVANCE( Token_do, "do" );
+    if( !parseStatement() ){
+    	reportError( i18n("statement expected") );
+        // TODO: skipUntilStatement();
+    }
+    ADVANCE( Token_while, "while" );
+    ADVANCE( '(' , "(" );
+    if( !parseCommaExpression() ){
+    	reportError( i18n("expression expected") );
+        skipUntil( ')' );
+    }
+    ADVANCE( ')', ")" );
+    ADVANCE( ';', ";" );
+
+    return true;
+}
+
+bool Parser::parseForStatement()
+{
+    //kdDebug(9007) << "Parser::parseForStatement()" << endl;
+    ADVANCE( Token_for, "for" );
+    ADVANCE( '(', "(" );
+
+    //kdDebug(9007) << "1 token = " << lex->lookAhead(0).toString() << endl;
+    if( !parseForInitStatement() ){
+    	reportError( i18n("for initialization expected") );
+    }
+    //kdDebug(9007) << "2 token = " << lex->lookAhead(0).toString() << endl;
+
+    parseCondition();
+    ADVANCE( ';', ";" );
+    parseCommaExpression();
+    ADVANCE( ')', ")" );
+
+    return parseStatement();
+}
+
+bool Parser::parseForInitStatement()
+{
+    //kdDebug(9007) << "Parser::parseForInitStatement()" << endl;
+    return parseExpressionStatement();
+}
+
+bool Parser::parseCompoundStatement()
+{
+    //kdDebug(9007) << "Parser::parseCompoundStatement()" << endl;
+    if( lex->lookAhead(0) != '{' ){
+    	return false;
+    }
+    lex->nextToken();
+
+    while( !lex->lookAhead(0).isNull() ){
+        if( lex->lookAhead(0) == '}' )
+            break;
+
+    	if( !parseStatement() )
+            break;
+    }
+
+    if( lex->lookAhead(0) != '}' ){
+    	reportError( i18n("} expected") );
+        skipUntil( '}' );
+    }
+    lex->nextToken();
+    return true;
+}
+
+bool Parser::parseIfStatement()
+{
+    //kdDebug(9007) << "Parser::parseIfStatement()" << endl;
+
+    ADVANCE( Token_if, "if" );
+
+    ADVANCE( '(' , "(" );
+    if( !parseCondition() ){
+    	reportError( i18n("condition expected") );
+        skipUntil( ')' );
+    }
+    ADVANCE( ')', ")" );
+
+    if( !parseStatement() ){
+    	reportError( i18n("statement expected") );
+        // TODO: skipUntilStatement();
+    }
+
+    while( lex->lookAhead(0) == Token_else ){
+    	lex->nextToken();
+        if( !parseStatement() ) {
+            reportError( i18n("statement expected") );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Parser::parseSwitchStatement()
+{
+    //kdDebug(9007) << "Parser::parseSwitchStatement()" << endl;
+    ADVANCE( Token_switch, "switch" );
+
+    ADVANCE( '(' , "(" );
+    if( !parseCondition() ){
+    	reportError( i18n("condition expected") );
+        skipUntil( ')' );
+    }
+    ADVANCE( ')', ")" );
+
+    return parseStatement();
+}
+
+bool Parser::parseLabeledStatement()
+{
+    //kdDebug(9007) << "Parser::parseLabeledStatement()" << endl;
+    switch( lex->lookAhead(0) ){
+    case Token_identifier:
+    case Token_default:
+        if( lex->lookAhead(1) == ':' ){
+            lex->nextToken();
+            lex->nextToken();
+            return parseStatement();
+        }
+        break;
+
+    case Token_case:
+        lex->nextToken();
+        if( !parseConstantExpression() ){
+            reportError( i18n("expression expected") );
+            skipUntil( ':' );
+        }
+        ADVANCE( ':', ":" );
+        return parseStatement();
+    }
+    return false;
+}
+
