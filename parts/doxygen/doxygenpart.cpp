@@ -93,17 +93,6 @@ void DoxygenPart::adjustDoxyfile()
   // Do some checks and improve the configuration a bit
   Config::instance()->check();
 
-  QFile f(fileName);
-  if (f.open(IO_ReadOnly))
-  {
-    QTextStream is(&f);
-
-    Config::instance()->parse(QFile::encodeName(fileName));
-    Config::instance()->convertStrToVal();
-
-    f.close();
-  }
-
   // set "General/PROJECT_NAME"
   ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
   if (name)
