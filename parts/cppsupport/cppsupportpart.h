@@ -22,7 +22,7 @@ class ParsedAttribute;
 class ClassStore;
 class Context;
 class CClassParser;
-
+namespace KEditor { class Document; }
 
 class CppSupportPart : public KDevLanguageSupport
 {
@@ -39,6 +39,7 @@ protected:
     virtual void addAttribute(const QString &className);
 
 private slots:
+    void documentActivated(KEditor::Document *doc);
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
@@ -46,6 +47,7 @@ private slots:
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
 
+    void slotSwitchHeader();
     void slotGotoIncludeFile();
     // Internal
     void initialParse();

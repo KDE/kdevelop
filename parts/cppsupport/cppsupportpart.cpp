@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <kregexp.h>
 
+#include "keditor/editor.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "classstore.h"
@@ -40,13 +41,30 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 {
     setInstance(CppSupportFactory::instance());
     
+    setXMLFile("kdevcppsupport.rc");
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+    connect( core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
+             this, SLOT(documentActivated(KEditor::Document*)) );
+    
+    KAction *action;
 
+    action = new KAction(i18n("Switch header/implementation"), Key_F12,
+                         this, SLOT(slotSwitchHeader()),
+                         actionCollection(), "edit_switchheader");
+    action->setStatusText( i18n("Switch between header and implementation files") );
+    action->setWhatsThis( i18n("Switch between header and implementation files\n\n"
+                               "If you are currently looking at a header file, this "
+                               "brings you to the corresponding implementation file. "
+                               "If you are looking at an implementation file (.cpp etc.), "
+                               "this brings you to the corresponding header file.") );
+    action->setEnabled(false);
+    
     m_parser = 0;
     withcpp = cpp;
 }
@@ -55,6 +73,22 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 CppSupportPart::~CppSupportPart()
 {
     delete m_parser;
+}
+
+
+void CppSupportPart::documentActivated(KEditor::Document *doc)
+{
+    bool enabled = false;
+
+    if (doc) {
+        QFileInfo fi(doc->url().path());
+        QString ext = fi.extension();
+        ;
+        if (QStringList::split(',', "c,cc,cpp,cxx,C,h,hxx").contains(ext))
+            enabled = true;
+    }
+
+    actionCollection()->action("edit_switchheader")->setEnabled(enabled);
 }
 
 
@@ -183,6 +217,36 @@ void CppSupportPart::savedFile(const QString &fileName)
     if (project()->allSourceFiles().contains(fileName)) {
         maybeParse(fileName);
         emit updatedSourceInfo();
+    }
+}
+
+
+void CppSupportPart::slotSwitchHeader()
+{
+    QFileInfo fi(core()->editor()->currentDocument()->url().path());
+    QString path = fi.filePath();
+    QString ext = fi.extension();
+    QString base = path.left(path.length()-ext.length());
+    kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
+    QStringList candidates;
+    if (ext == "h" || ext == "hxx") {
+        candidates << (base + ".c");
+        candidates << (base + ".cc");
+        candidates << (base + ".cpp");
+        candidates << (base + ".cxx");
+        candidates << (base + ".C");
+    } else if (QStringList::split(',', "c,cc,cpp,cxx,C").contains(ext)) {
+        candidates << (base + ".h");
+        candidates << (base + ".hxx");
+    }
+    
+    QStringList::ConstIterator it;
+    for (it = candidates.begin(); it != candidates.end(); ++it) {
+        kdDebug(9007) << "Trying " << (*it) << endl;
+        if (QFileInfo(*it).exists()) {
+            core()->gotoSourceFile(*it);
+            return;
+        }
     }
 }
 

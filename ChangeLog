@@ -3,6 +3,7 @@
 	* Implemented modification of build order of subprojects
 	* Fixed update of prefixes list
 	* Fixed update of include directory list
+	* Switch header/implementation
 
 2001-06-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

@@ -30,7 +30,7 @@ AStylePart::AStylePart(KDevApi *api, QObject *parent, const char *name)
 	 
   setXMLFile("kdevpart_astyle.rc");
 	   
-  _action = new KAction(i18n("&Reformat source"), "kdevelop_astyle", 0,
+  _action = new KAction(i18n("&Reformat source"), 0,
 			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
   _action->setEnabled(false);
 

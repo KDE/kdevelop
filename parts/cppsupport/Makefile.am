@@ -21,3 +21,6 @@ METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevcppsupport.desktop kdevcsupport.desktop
+
+rcdir = $(kde_datadir)/kdevcppsupport
+rc_DATA = kdevcppsupport.rc
