@@ -1,3 +1,7 @@
+2001-12-12  Roland Krause  <rokrau@klondike.dyndns.org>
+    * fixed the kate part as a replacement for the internal editor on branch
+      KDEVELOP_2_BRANCH to work with KDE-3 and the KTextEditor
+
 2001-12-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: grottenh‰ﬂliches flickering removed when switching between maximized MDI editor views
       Thanks to QextMDI-superguru Lars Beikirch <lars.beikirch@gmx.net>

@@ -70,7 +70,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   /* we need to find an editor part, if we dont we should probably end
    * the application (rokrau 6/28/01)
    */
-  m_pKateFactory = static_cast<KParts::Factory*>(KLibLoader::self()->factory("libkatecore"));
+  m_pKateFactory = static_cast<KParts::Factory*>(KLibLoader::self()->factory("libkatepart"));
   if (!m_pKateFactory) {
     KMessageBox::sorry(0L,
                        i18n("KDevelop cannot continue :-(\n") +
@@ -1511,28 +1511,28 @@ QString DocViewMan::docName(QObject* pDoc) const
 //-----------------------------------------------------------------------------
 void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
 {
-//  debug("DocViewMan::installBMPopup");
-//
-//    // Install editor bookmark popup menu
-//  QPopupMenu* code_bookmarks = new QPopupMenu();
-//
-//  connect(code_bookmarks,SIGNAL(aboutToShow()),
-//          this,SLOT(updateCodeBMPopup()));
-//  connect(code_bookmarks,SIGNAL(activated(int)),
-//          this,SLOT(gotoCodeBookmark(int)));
-//
-//
-//  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-//                      i18n("Code &Window"),code_bookmarks,31000);
-//
-//    // Install browser bookmark popup menu
-//  m_pDocBookmarksMenu = new QPopupMenu();
-//
-//  connect(m_pDocBookmarksMenu,SIGNAL(activated(int)),
-//          this,SLOT(gotoDocBookmark(int)));
-//
-//  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-//                      i18n("&Browser Window"), m_pDocBookmarksMenu,31010);
+  debug("DocViewMan::installBMPopup");
+
+    // Install editor bookmark popup menu
+  QPopupMenu* code_bookmarks = new QPopupMenu();
+
+  connect(code_bookmarks,SIGNAL(aboutToShow()),
+          this,SLOT(updateCodeBMPopup()));
+  connect(code_bookmarks,SIGNAL(activated(int)),
+          this,SLOT(gotoCodeBookmark(int)));
+
+
+  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+                      i18n("Code &Window"),code_bookmarks,31000);
+
+    // Install browser bookmark popup menu
+  m_pDocBookmarksMenu = new QPopupMenu();
+
+  connect(m_pDocBookmarksMenu,SIGNAL(activated(int)),
+          this,SLOT(gotoDocBookmark(int)));
+
+  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+                      i18n("&Browser Window"), m_pDocBookmarksMenu,31010);
 
 }
 

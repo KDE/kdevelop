@@ -39,8 +39,8 @@
 #include "debug.h"
 #include "kpp.h"
 #include "docviewman.h"
-#include <../../kate-cvs/interfaces/document.h>
-#include <../../kate-cvs/interfaces/view.h>
+#include <kate/document.h>
+#include <kate/view.h>
 #include "kdevsession.h"
 
 #include <qprogressdialog.h>

@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkdevelopgfxview.la
 INCLUDES = $(all_includes)
 
 
-LDFLAGS =   
+LDFLAGS =     
 
 
 libkdevelopgfxview_la_LDFLAGS = -version-info 2:0
