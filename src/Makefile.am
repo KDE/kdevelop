@@ -12,7 +12,7 @@ rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc eventsrc
 
 # default KDevelop	 configuration
-datadir = $(kde_confdir)
-data_DATA = gideonrc
+gideondatadir = $(kde_confdir)
+gideondata_DATA = gideonrc
 
 SUBDIRS = profiles

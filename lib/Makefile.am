@@ -2,8 +2,16 @@
 # which may be linked by any plugin or part. This is installed
 # as a shared library, including header files
 
-
 INCLUDES = $(all_includes)
+
+if include_qextmdi
+QEXTMDI_SUBDIR=qextmdi
+endif
+
+if include_compat
+COMPAT_SUBDIR=compat
+LIB_KDEVCOMPAT=$(top_builddir)/lib/compat/libkdevcompat.la
+endif
 
 lib_LTLIBRARIES = libkdevelop.la
 libkdevelop_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0

@@ -96,3 +96,4 @@ void CppCodeCompletionConfig::setIncludeGlobalFunctions( bool b )
     m_includeGlobalFunctions = b;
 }
 
+#include "cppcodecompletionconfig.moc"

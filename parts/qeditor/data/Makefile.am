@@ -1,2 +1,2 @@
-data_DATA = highlighting.xml qt.xml
-datadir = $(kde_datadir)/qeditorpart/highlight
+qeditordata_DATA = highlighting.xml qt.xml
+qeditordatadir = $(kde_datadir)/qeditorpart/highlight

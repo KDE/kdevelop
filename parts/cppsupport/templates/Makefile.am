@@ -1,2 +1,2 @@
-data_DATA = default.cpp default.h
-datadir = $(kde_datadir)/kdevcppsupport/templates
+templatesdata_DATA = default.cpp default.h
+templatesdatadir = $(kde_datadir)/kdevcppsupport/templates

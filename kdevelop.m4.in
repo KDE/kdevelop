@@ -139,7 +139,7 @@ if test "$enable_scripting" = "yes"; then
   KDE_CHECK_PYTHON
   SCRIPTING_SUBDIR=scripting
 fi
-  AC_SUBST(SCRIPTING_SUBDIR)
+  AM_CONDITIONAL(include_scripting, test -n "$SCRIPTING_SUBDIR")
 ])
 
 
@@ -397,8 +397,8 @@ AC_MSG_RESULT($enable_svnsupport)
  	AC_SUBST(SVNLD)
  	AC_SUBST(SVNINC)
  	AC_SUBST(SVNLIBS)
- 	AC_SUBST(SVN_SUBDIR)
 fi
+	AM_CONDITIONAL(include_svn, test -n "$SVN_SUBDIR")
 ])
 
 dnl  **********
@@ -508,8 +508,8 @@ AC_DEFUN(KDEV_CHECK_MDI,
   fi
  
   AC_SUBST(LIB_KDEVMDI)
-  AC_SUBST(QEXTMDI_SUBDIR)
   AC_SUBST(KDEVMDI_INCLUDES)
+  AM_CONDITIONAL(include_qextmdi, test -n "$QEXTMDI_SUBDIR")
 ])
 
 dnl  **********
@@ -553,10 +553,8 @@ AC_DEFUN(KDEV_CHECK_COMPAT,
   else
     AC_MSG_RESULT(yes)
     COMPAT_SUBDIR=compat
-    LIB_KDEVCOMPAT="../lib/compat/libkdevcompat.la"
   fi
-AC_SUBST(COMPAT_SUBDIR)
-AC_SUBST(LIB_KDEVCOMPAT)
+AM_CONDITIONAL(include_compat, test -n "$COMPAT_SUBDIR")
 ])
 
 dnl  **********
@@ -599,6 +597,6 @@ AC_DEFUN(KDEV_CHECK_QEDITOR,
     AC_MSG_RESULT(yes)
     QEDITOR_SUBDIR=qeditor
   fi
-AC_SUBST(QEDITOR_SUBDIR)
+AM_CONDITIONAL(include_qeditor, test -n "$QEDITOR_SUBDIR")
 ])
 
