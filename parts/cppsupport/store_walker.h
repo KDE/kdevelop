@@ -14,9 +14,15 @@
 
 #include "tree_parser.h"
 
-class ClassStore;
+#include <qstringlist.h>
+#include <classstore.h>
+
+class ParsedContainer;
+class ParsedClassContainer;
 class ParsedScopeContainer;
 class ParsedClass;
+class ParsedAttribute;
+class ParsedMethod;
 
 class StoreWalker: public TreeParser
 {
@@ -39,22 +45,34 @@ public:
     virtual void parseSimpleDeclaration( SimpleDeclarationAST* );
     virtual void parseFunctionDefinition( FunctionDefinitionAST* );
     virtual void parseLinkageBody( LinkageBodyAST* );
-    
+    virtual void parseAccessDeclaration( AccessDeclarationAST* );
+
     // type-specifier
     virtual void parseTypeSpecifier( TypeSpecifierAST* );
     virtual void parseClassSpecifier( ClassSpecifierAST* );
     virtual void parseEnumSpecifier( EnumSpecifierAST* );
     virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
-    
+
     virtual void parseTypeDeclaratation( TypeSpecifierAST* typeSpec );
-    virtual void parseDeclaration( TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
-    
+    virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
+    virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
+    virtual void parseFunctionArguments( DeclaratorAST* declarator, ParsedMethod* method );
+
+private:
+    ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );
+    ParsedAttribute* findOrInsertAttribute( ParsedClassContainer* scope, const QString& name );
+    QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
+
 private:
     QString m_fileName;
+    QStringList m_currentScope;
     ClassStore* m_store;
-    ParsedScopeContainer* m_currentScope;
+    ParsedScopeContainer* m_currentScopeContainer;
     ParsedClass* m_currentClass;
-    
+    PIAccess m_currentAccess;
+    bool m_inSlots;
+    bool m_inSignals;
+
 private:
     StoreWalker( const StoreWalker& source );
     void operator = ( const StoreWalker& source );
