@@ -63,7 +63,16 @@ const char *filepatterns[] = {
     "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.inl,*.idl,*.c,*.m,*.mm,*.M",
     "*.cpp,*.cc,*.C,*.c++,*.cxx,*.inl,*.c,*.m,*.mm,*.M",
     "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl",
+    "*.adb",
+    "*.f",
+    "*.html,*.htm",
+    "*.hs",
     "*.java",
+    "*.js",
+    "*.php,*.php3,*.php4",
+    "*.pl",
+    "*.pp,*.pas",
+    "*.py",
     "*.rb",
     "*",
     0
@@ -148,16 +157,21 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(recursive_box);
 
-    ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
-    ignore_scm_box->setChecked(true);
-    dir_checks_layout->addSpacing(10);
-    dir_checks_layout->addWidget(ignore_scm_box);
-
     case_sens_box = new QCheckBox(i18n("C&ase sensitive"), this);
     case_sens_box->setChecked(true);
     dir_checks_layout->addSpacing(10);
     dir_checks_layout->addWidget(case_sens_box);
     
+    keep_output_box = new QCheckBox(i18n("New view"), this);
+    keep_output_box->setChecked(true);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(keep_output_box);
+    
+    ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
+    ignore_scm_box->setChecked(true);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(ignore_scm_box);
+
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
     search_button = new QPushButton(i18n("&Search"), this);
@@ -287,7 +301,7 @@ void GrepDialog::show()
     // not beautiful, but works with all window
     // managers and Qt versions
     if (isVisible())
-	QDialog::hide();
+        QDialog::hide();
     QDialog::show();
     pattern_combo->setFocus();
 }
@@ -301,7 +315,6 @@ void GrepDialog::slotSynchDirectory( )
 		if ( url.isLocalFile() )
 		{
 			dir_combo->setEditText( url.upURL().path( +1 ) );
-//			url_requester->lineEdit()->setText( url.upURL().path( +1 ) );
 		}
 	}
 }

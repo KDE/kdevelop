@@ -191,6 +191,9 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 
 void GrepViewWidget::searchActivated()
 {
+	if ( grepdlg->keepOutputFlag() )
+		slotKeepOutput();
+	
 	m_curOutput->setLastFileName("");
 	m_curOutput->setMatchCount( 0 );
 
@@ -314,10 +317,7 @@ void GrepViewWidget::popupMenu(QListBoxItem*, const QPoint& p)
 	if(m_curOutput->isRunning()) return;
 
 	KPopupMenu rmbMenu;
-
-	if (static_cast<ProcessWidget*>(m_tabWidget->currentPage()) == m_curOutput && m_curOutput->count() > 0)
-		rmbMenu.insertItem(i18n("Keep Output"), this, SLOT(slotKeepOutput()));
-
+	
 	if(KAction *findAction = m_part->actionCollection()->action("edit_grep"))
 	{
 		rmbMenu.insertTitle(i18n("Find in Files"));
@@ -328,6 +328,8 @@ void GrepViewWidget::popupMenu(QListBoxItem*, const QPoint& p)
 
 void GrepViewWidget::slotKeepOutput( )
 {
+	if ( m_lastPattern == QString::null ) return;
+	
 	m_tabWidget->changeTab(m_curOutput, m_lastPattern);
 
 	m_curOutput = new GrepViewProcessWidget(m_tabWidget);
@@ -337,8 +339,8 @@ void GrepViewWidget::slotKeepOutput( )
 	connect( m_curOutput, SIGNAL(returnPressed(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
 	connect( m_curOutput, SIGNAL(processExited(KProcess* )), this, SLOT(slotSearchProcessExited()) );
 	connect( m_curOutput, SIGNAL(contextMenuRequested( QListBoxItem*, const QPoint&)), this, SLOT(popupMenu(QListBoxItem*, const QPoint&)));
-
-	m_closeButton->setEnabled( true );
+	
+	m_tabWidget->showPage( m_curOutput );
 }
 
 void GrepViewWidget::slotCloseCurrentOutput( )

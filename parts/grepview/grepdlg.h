@@ -47,14 +47,17 @@ public:
 	{ return files_combo->currentText(); }
     QString directoryString() const
 	{ return dir_combo->currentText(); }
-    bool recursiveFlag() const
-	{ return recursive_box->isChecked(); }
-    void show();
+	
+	bool recursiveFlag() const
+		{ return recursive_box->isChecked(); }
+	bool ignoreSCMDirsFlag() const
+		{ return ignore_scm_box->isChecked(); }
+	bool caseSensitiveFlag() const
+		{ return case_sens_box->isChecked(); }
+	bool keepOutputFlag() const
+		{ return keep_output_box->isChecked(); }
 
-    bool ignoreSCMDirsFlag() const
-        { return ignore_scm_box->isChecked(); }
-    bool caseSensitiveFlag() const
-        { return case_sens_box->isChecked(); }
+	void show();
 
 signals:
     void searchClicked();
@@ -74,6 +77,7 @@ private:
     QCheckBox *recursive_box;
     QCheckBox *ignore_scm_box;
     QCheckBox *case_sens_box;
+    QCheckBox *keep_output_box;
     KConfig* config;
     QPushButton *search_button;
 	QPushButton *synch_button;
