@@ -101,7 +101,10 @@ void RunOptionsWidget::accept()
       else
         DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "executable");
     
-    DomUtil::writeEntry(m_dom, m_configGroup + "/run/customdirectory", customRunDirectory_edit->text());
+    QString customDir = customRunDirectory_edit->text();
+    if (customDir.right(1) != "/")
+        customDir += "/";
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/customdirectory", customDir);
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
@@ -137,9 +140,9 @@ void RunOptionsWidget::browseCustomDirectory()
     // if after the dialog execution the OK button was selected:
         path = dlg->url().path();
         if (path.right(1) != "/")
-            path = path + "/";   // I find these lines dumb. Why the hell do I always have to add this???
-                                 // In *nix whenever a path has a / in the end it is a directory, period!
-                                 // Why does the url() return without this? Even if I add .directory(false, false)?
+            path += "/";   // I find these lines dumb. Why the hell do I always have to add this???
+                           // In *nix whenever a path has a / in the end it is a directory, period!
+                           // Why does the url() return without this? Even if I add .directory(false, false)?
         if (!path.isEmpty()) {
             customRunDirectory_edit->setText(path);
         }
