@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=A plugins that aims to persist source bookmarks (not quite finished)
-Comment[fr]=Un module externe pour gérer des signets dans les sources d'un programme.
+Comment=Plugin that provides navigation and overview of active source bookmarks and persists them between sessions.
+Comment[xx]=xxPlugin that provides navigation and overview of active source bookmarks and persists them between sessions.xx
 Name=KDevBookmarks
-GenericName=Persistant Source Bookmarks
-GenericName[fr]=Gestion des signets
+Name[sv]=KDevelop bokmÃ¤rken
+Name[xx]=xxKDevBookmarksxx
+GenericName=Bookmarks
+GenericName[xx]=xxBookmarksxx
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Project
