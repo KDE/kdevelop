@@ -110,7 +110,7 @@ void CvsDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 void CvsDialog::startCommand(const char *cmd)
 {
     resultbox->append(cmd);
-    childproc = new KShellProcess();
+    childproc = new KShellProcess("/bin/sh");
     *childproc << cmd;
 
     connect( childproc, SIGNAL(processExited(KProcess *)),

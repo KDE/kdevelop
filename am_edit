@@ -643,6 +643,8 @@ sub tag_TOPLEVEL()
   my @restfiles = ();
   opendir (THISDIR, ".");
   foreach $entry (readdir(THISDIR)) {
+    next if (-d $entry);
+
     next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile/ || $entry =~ /~$/ || $entry =~ /^#.*#$/ || $entry =~ /.gmo$/);
 
     if ($entry =~ /\.po$/) {
@@ -682,7 +684,7 @@ sub tag_SUBDIRS ()
   opendir (THISDIR, ".");
   foreach $entry (readdir(THISDIR)) {
     next if ($entry eq "CVS" || $entry =~ /^\./);
-    if (-d $entry) {
+    if (-d $entry && -f $entry . "/Makefile.in") {
       $subdirs .= " $entry";
       next;
     }
@@ -1166,7 +1168,7 @@ sub addMocRules ()
       # Add extra *.moc.cpp files created for USE_AUTOMOC because they
       # aren't included in the normal *.moc clean rules.
       appendLines ("$cleantarget-metasources:\n\t-rm -f $cleanMoc\n");
-      $target_adds{"$cleantarget-am"} .= "$cleantarget-files ";
+      $target_adds{"$cleantarget-am"} .= "$cleantarget-metasources ";
     }
   }
 

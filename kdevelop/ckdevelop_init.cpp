@@ -47,7 +47,10 @@
 
 
 CKDevelop::CKDevelop(bool witharg)
-    : shell_process("/bin/sh")
+    : process("/bin/sh"),
+      appl_process("/bin/sh"),
+      shell_process("/bin/sh"),
+      search_process("/bin/sh")
 {
   version = VERSION;
   project=false;// no project

@@ -697,7 +697,7 @@ void DocTreeView::slotSelectionChanged(QListViewItem *item)
     // We assume here that ALL (!) items in the list view
     // are KListViewItem's
     KListViewItem *kitem = static_cast<KListViewItem*>(item);
-    if (!kitem->ident().isEmpty())
+    if (kitem && !kitem->ident().isEmpty())
         emit fileSelected(kitem->ident());
 }
 

@@ -478,6 +478,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
+  filename = QFileInfo(filename).absFilePath();
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
