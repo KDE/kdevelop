@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "Oliver.Kellogg@t-online.de");
   aboutData.addCredit( "Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
-  aboutData.addCredit("Dominik Haumann" , I18N_NOOP("Application wizard, application templates, bug fixes"), "dhdev@gmx.de");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
