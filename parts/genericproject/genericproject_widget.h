@@ -109,13 +109,8 @@ private:
     BuildGroupItem* m_activeGroup;
     BuildTargetItem* m_activeTarget;
 
-    QMap<GenericGroupListViewItem*, BuildGroupItem*> m_itemToGroup;
     QMap<BuildGroupItem*, GenericGroupListViewItem*> m_groupToItem;
-
-    QMap<GenericTargetListViewItem*, BuildTargetItem*> m_itemToTarget;
     QMap<BuildTargetItem*, GenericTargetListViewItem*> m_targetToItem;
-
-    QMap<GenericFileListViewItem*, BuildFileItem*> m_itemToFile;
     QMap<BuildFileItem*, GenericFileListViewItem*> m_fileToItem;
 
     KAction *newGroupAction;

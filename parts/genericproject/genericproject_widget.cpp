@@ -187,11 +187,8 @@ void GenericProjectWidget::slotMainGroupChanged( BuildGroupItem * mainGroup )
 {
     m_overviewListView->clear();
 
-    m_itemToGroup.clear();
     m_groupToItem.clear();
-    m_itemToTarget.clear();
     m_targetToItem.clear();
-    m_itemToFile.clear();
     m_fileToItem.clear();
 
     if( !mainGroup )
@@ -204,7 +201,6 @@ void GenericProjectWidget::slotMainGroupChanged( BuildGroupItem * mainGroup )
 
 void GenericProjectWidget::fillGroupItem( BuildGroupItem * group, GenericGroupListViewItem * item )
 {
-    m_itemToGroup.insert( item, group );
     m_groupToItem.insert( group, item );
 
     QValueList<BuildGroupItem*> groups = group->groups();
@@ -224,11 +220,11 @@ void GenericProjectWidget::slotItemSelected( QListViewItem * item )
     GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
     GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
 
-    if( groupItem && m_itemToGroup.contains(groupItem) )
-        emit groupSelected( m_itemToGroup[groupItem] );
-    else if( targetItem && m_itemToTarget.contains(targetItem) ){
+    if( groupItem && groupItem->groupItem() )
+        emit groupSelected( groupItem->groupItem() );
+    else if( targetItem && targetItem->targetItem() ){
         kdDebug() << "set active target" << endl;
-        m_activeTarget = m_itemToTarget[ targetItem ];
+        m_activeTarget = targetItem->targetItem();
         emit targetSelected( m_activeTarget );
     }
 //    else if( fileItem && m_itemToFile.contains(fileItem) )
@@ -243,9 +239,7 @@ void GenericProjectWidget::showDetails( BuildGroupItem * groupItem )
 
     m_detailsListView->clear();
 
-    m_itemToTarget.clear();
     m_targetToItem.clear();
-    m_itemToFile.clear();
     m_fileToItem.clear();
 
     if( !groupItem )
@@ -256,7 +250,6 @@ void GenericProjectWidget::showDetails( BuildGroupItem * groupItem )
     while( it != targets.end() ){
         GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, *it );
         m_targetToItem.insert( *it, createdItem );
-        m_itemToTarget.insert( createdItem, *it );
         fillTarget( *it, createdItem );
         createdItem->setOpen( true );
         ++it;
@@ -270,7 +263,6 @@ void GenericProjectWidget::fillTarget( BuildTargetItem * target, GenericTargetLi
     while( it != files.end() ){
 	GenericFileListViewItem* createdItem = new GenericFileListViewItem( targetItem, *it );
 	m_fileToItem.insert( *it, createdItem );
-	m_itemToFile.insert( createdItem, *it );
 	++it;
     }
 }
@@ -290,19 +282,16 @@ GenericGroupListViewItem * GenericProjectWidget::addGroup( BuildGroupItem * grou
         kdDebug() << "creating GenericGroupListViewItem from parent group" << endl;
         createdItem = new GenericGroupListViewItem( m_groupToItem[group->parentGroup()], group );
         m_groupToItem.insert( group, createdItem );
-        m_itemToGroup.insert( createdItem, group );
     } else if( group->parentGroup() ){
         kdDebug() << "creating GenericGroupListViewItem from parent group (wo map)" << endl;
         addGroup( group->parentGroup() );
         createdItem = new GenericGroupListViewItem( m_groupToItem[group->parentGroup()], group );
         m_groupToItem.insert( group, createdItem );
-        m_itemToGroup.insert( createdItem, group );
         m_groupToItem[group->parentGroup()]->setExpandable( true );
     } else {
         kdDebug() << "creating GenericGroupListViewItem standalone" << endl;
         createdItem = new GenericGroupListViewItem( m_overviewListView, group );
         m_groupToItem.insert( group, createdItem );
-        m_itemToGroup.insert( createdItem, group );
     }
     return createdItem;
 }
@@ -317,7 +306,6 @@ void GenericProjectWidget::addTarget( BuildTargetItem * target )
         GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, target );
         m_detailsListView->takeItem(createdItem);
         m_targetToItem.insert( target, createdItem );
-        m_itemToTarget.insert( createdItem, target );
 
         showDetails(target->parentGroup());
     }
@@ -331,7 +319,6 @@ void GenericProjectWidget::addFile( BuildFileItem * file )
     if( m_targetToItem.contains(file->parentTarget()) ){
 	GenericFileListViewItem* createdItem = new GenericFileListViewItem( m_targetToItem[file->parentTarget()], file );
 	m_fileToItem.insert( file, createdItem );
-	m_itemToFile.insert( createdItem, file );
     }
 }
 
@@ -612,17 +599,17 @@ void GenericProjectWidget::slotAddFiles( )
     QStringList fileList = KFileDialog::getOpenFileNames( startDir );
     if( fileList.isEmpty() )
 	return;
-    
+
     QStringList lst;
     for( QStringList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
     {
 	QString absFileName = *it;
 	if( !absFileName.startsWith(m_part->projectDirectory()) )
 	    continue;
-	
+
 	lst << absFileName.mid( m_part->projectDirectory().length() + 1 );
     }
-    
+
     m_part->addFiles( lst );
 }
 
@@ -760,26 +747,44 @@ void GenericProjectWidget::takeGroup( GenericGroupListViewItem * it )
     if (group->groups().count() == 0)
     {
         m_groupToItem.remove( group );
-        m_itemToGroup.remove( it );
         delete group;
         delete it;
     }
 }
 
-void GenericProjectWidget::takeTarget( GenericTargetListViewItem * it )
+void GenericProjectWidget::takeTarget( GenericTargetListViewItem * item )
 {
-    BuildTargetItem *target = it->targetItem();
+    kdDebug() << "============> takeTarget" << endl;
+
+    BuildTargetItem *target = item->targetItem();
+    if( !target ){
+	kdDebug() << "============> no target!!!!!" << endl;
+	return;
+    }
+
+    QStringList fileList;
+    QValueList<BuildFileItem*> files = target->files();
+    for( QValueList<BuildFileItem*>::Iterator it=files.begin(); it!=files.end(); ++ it )
+    {
+	QString path = (*it)->url().path();
+	kdDebug() << "============> remove: " << path << endl;
+	if( !path.startsWith(m_part->projectDirectory()) )
+	    continue;
+
+	fileList << path.mid( m_part->projectDirectory().length() + 1 );
+    }
+
+    delete item;
     m_targetToItem.remove( target );
-    m_itemToTarget.remove( it );
     delete target;
-    delete it;
+
+    kdDebug() << "===========> remove files: " << fileList.join( ", " );
 }
 
 void GenericProjectWidget::takeFile( GenericFileListViewItem * it )
 {
     BuildFileItem *file = it->fileItem();
     m_fileToItem.remove( file );
-    m_itemToFile.remove( it );
     delete file;
     delete it;
 }
@@ -790,17 +795,17 @@ void GenericProjectWidget::slotItemExecuted( QListViewItem * item )
     GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
     GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
 
-    if( groupItem && m_itemToGroup.contains(groupItem) )
-        emit groupExecuted( m_itemToGroup[groupItem] );
-    else if( targetItem && m_itemToTarget.contains(targetItem) ){
+    if( groupItem && groupItem->groupItem() )
+        emit groupExecuted( groupItem->groupItem() );
+    else if( targetItem && targetItem->targetItem() ){
         kdDebug() << "set active target while execute" << endl;
-        m_activeTarget = m_itemToTarget[ targetItem ];
+        m_activeTarget = targetItem->targetItem();
         emit targetExecuted( m_activeTarget );
     }
-    else if( fileItem && m_itemToFile.contains(fileItem) )
+    else if( fileItem )
     {
         kdDebug() << "emit fileExecuted()" << endl;
-        emit fileExecuted( m_itemToFile[fileItem] );
+        emit fileExecuted( fileItem->fileItem() );
     }
 }
 

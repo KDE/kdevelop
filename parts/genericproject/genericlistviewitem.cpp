@@ -32,7 +32,6 @@ GenericListViewItem::GenericListViewItem( bool bold, QListViewItem * parent, con
 
 GenericListViewItem::~ GenericListViewItem( )
 {
-//    delete m_buildItem;
 }
 
 BuildBaseItem* GenericListViewItem::buildItem( ) const

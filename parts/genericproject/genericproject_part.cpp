@@ -190,16 +190,16 @@ void GenericProjectPart::addFiles( const QStringList & fileList )
     BuildTargetItem *tit = m_widget->activeTarget();
     if (!tit)
         return;
-    
+
     for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it)
     {
 	if( tit->fileByName(QFileInfo(*it).fileName()) != 0 )
 	    continue;
-	
+
 	QString absFilename = m_projectDir + QString::fromLatin1( "/" ) + (*it);
 	addFilePrivate( *it, tit );
     }
- 
+
     kdDebug() << "======> files: " << fileList.join( ", " ) << endl;
     emit addedFilesToProject( fileList );
 }
@@ -375,11 +375,12 @@ QStringList GenericProjectPart::allFiles( BuildTargetItem * target, QStringList&
 {
     QStringList fileList;
 
+    int prjdir = m_projectDir.length() + 1;
     const QValueList<BuildFileItem*> files = target->files();
     for( QValueList<BuildFileItem*>::ConstIterator it=files.begin(); it!=files.end(); ++it )
     {
 	const BuildFileItem* file = *it;
-	QString fileName = path.size() ? path.join( "/" ) + QString::fromLatin1( "/" ) + file->name() : file->name();
+	QString fileName = file->url().path().mid( prjdir );
 
 	fileList.push_back( fileName );
     }
