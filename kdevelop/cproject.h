@@ -24,11 +24,13 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qfileinfo.h>
-#include <ksimpleconfig.h>
 
 
 class VersionControl;
+class KSimpleConfig;
 
+// the currently supported version.
+#define KDEVELOP_PRJ_VERSION "1.3"
 
 /** This type defines the different types that can 
   * exist in a project. 
@@ -125,7 +127,7 @@ struct TWorkspace {
   * classview_tree: a treestructure of all classes.
   * makefiles: all makefiles in the project
   * project_type: at the moment "normal_cpp","mini_kde","normal_kde","normal_qt"
-  * 										"normalogl_kde" added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  *                     "normalogl_kde" added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   * author: name of the author
   * sub_dir: name of main subdir, not "po"
   * project_name: it's clear
@@ -148,11 +150,12 @@ struct TWorkspace {
   *
   *@author Sandy Meier
   */
-class CProject  {
+class CProject
+{
 
 public: 
   /** construtor */
-  CProject(QString file); 
+  CProject(const QString& file);
   /** destructor */
   ~CProject();
 
@@ -160,109 +163,105 @@ public:
 public: // Methods to store project options
 
   /** These are not kdevelop spacific, but they are needed for KPP to operate on a
-			project by project basis **/
+      project by project basis **/
 
-	/** store the RPM revision number **/
-	void setKPPRPMVersion(const char* version) { writeGroupEntry("KPP", "kpp_version", version);}
+  /** store the RPM revision number **/
+  void setKPPRPMVersion(const QString& version) { writeGroupEntry("KPP", "kpp_version", version);}
 
-	/** store the License type **/
-	void setKPPLicenceType( const char*license) { writeGroupEntry("KPP", "kpp_license", license);}
+  /** store the License type **/
+  void setKPPLicenceType( const QString& license) { writeGroupEntry("KPP", "kpp_license", license);}
 
-	/** store the URL **/
-	void setKPPURL(const char* url) { writeGroupEntry("KPP", "kpp_url", url);}
+  /** store the URL **/
+  void setKPPURL(const QString& url) { writeGroupEntry("KPP", "kpp_url", url);}
 
-	/** store the application group **/
-	void setKPPAppGroup(const char* appgrp) { writeGroupEntry("KPP", "kpp_appgrp", appgrp);}
+  /** store the application group **/
+  void setKPPAppGroup(const QString& appgrp) { writeGroupEntry("KPP", "kpp_appgrp", appgrp);}
 
-	/** store the build root **/
-	void setKPPBuildRoot(const char* buildroot) { writeGroupEntry("KPP", "kpp_bldroot", buildroot);}
+  /** store the build root **/
+  void setKPPBuildRoot(const QString& buildroot) { writeGroupEntry("KPP", "kpp_bldroot", buildroot);}
 
-	/** store the one line summary **/
-	void setKPPSummary(const char* summary) { writeGroupEntry("KPP", "kpp_summary", summary);}
+  /** store the one line summary **/
+  void setKPPSummary(const QString& summary) { writeGroupEntry("KPP", "kpp_summary", summary);}
 
-	/** store the icon information **/
-	void setKPPIcon(const char* icon) {writeGroupEntry("KPP", "kpp_icon", icon);}
-
-
-	/** get the RPM revision number **/
-	QString getKPPRPMVersion() { return readGroupEntry( "KPP", "kpp_version" ); }
-
-	/** get the License type **/
-	QString getKPPLicenceType() { return readGroupEntry("KPP", "kpp_license");}
-
-	/** get the URL **/
-	QString getKPPURL() { return readGroupEntry("KPP", "kpp_url");}
-
-	/** get the application group **/
-	QString getKPPAppGroup() { return readGroupEntry("KPP", "kpp_appgrp");}
-
-	/** get the build root **/
-	QString getKPPBuildRoot() { return readGroupEntry("KPP", "kpp_bldroot");}
-
-	/** get the one line summary **/
-	QString getKPPSummary() { return readGroupEntry("KPP", "kpp_summary");}
-
-	/** get the icon information **/
-	QString getKPPIcon() {return readGroupEntry("KPP", "kpp_icon");}
-
-	
+  /** store the icon information **/
+  void setKPPIcon(const QString& icon) {writeGroupEntry("KPP", "kpp_icon", icon);}
 
 
+  /** get the RPM revision number **/
+  QString getKPPRPMVersion() { return readGroupEntry( "KPP", "kpp_version" ); }
+
+  /** get the License type **/
+  QString getKPPLicenceType() { return readGroupEntry("KPP", "kpp_license");}
+
+  /** get the URL **/
+  QString getKPPURL() { return readGroupEntry("KPP", "kpp_url");}
+
+  /** get the application group **/
+  QString getKPPAppGroup() { return readGroupEntry("KPP", "kpp_appgrp");}
+
+  /** get the build root **/
+  QString getKPPBuildRoot() { return readGroupEntry("KPP", "kpp_bldroot");}
+
+  /** get the one line summary **/
+  QString getKPPSummary() { return readGroupEntry("KPP", "kpp_summary");}
+
+  /** get the icon information **/
+  QString getKPPIcon() {return readGroupEntry("KPP", "kpp_icon");}
 
   /** Store the version of the kdevprj file format*/
-  void setKDevPrjVersion(const char* version) { writeGroupEntry( "General", "kdevprj_version", version ); }
+  void setKDevPrjVersion(const QString& version) { writeGroupEntry( "General", "kdevprj_version", version ); }
 
   /** Store the project type: {normal_cpp,normal_kde,mini_kde,normal_empty,normal_qt} */
-  /** 								{normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support} */
-  void setProjectType(const char *type)       { writeGroupEntry( "General", "project_type", type ); }
+  /**                 {normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support} */
+  void setProjectType(const QString& type)       { writeGroupEntry( "General", "project_type", type ); }
 
   /** Store the projectname. */
-  void setProjectName(const char *name)       { writeGroupEntry( "General", "project_name", name ); }
+  void setProjectName(const QString& name)       { writeGroupEntry( "General", "project_name", name ); }
 
   /** the mainsubdir, not "po"*/
-  void setSubDir(const char *dirname)         { writeGroupEntry( "General", "sub_dir", dirname ); }
+  void setSubDir(const QString& dirname)         { writeGroupEntry( "General", "sub_dir", dirname ); }
 
   /** Store the authors name. */
-  void setAuthor(const char *name)            { writeGroupEntry( "General", "author", name ); }
+  void setAuthor(const QString& name)            { writeGroupEntry( "General", "author", name ); }
 
   /** Store the authors eMail-address. */
-  void setEmail(const char *email)            { writeGroupEntry( "General", "email", email ); }
+  void setEmail(const QString& email)            { writeGroupEntry( "General", "email", email ); }
 
   /** Store the project version. */
-  void setVersion(const char *version)        { writeGroupEntry( "General", "version",version ); }
+  void setVersion(const QString& version)        { writeGroupEntry( "General", "version",version ); }
 
   /** Store the name of version control system */
-  void setVCSystem(const char *vcsystem);
+  void setVCSystem(const QString& vcsystem);
 
     /** Store the classview tree. */
-  void setClassViewTree( const char *tree )   { writeGroupEntry( "General", "classview_tree", tree ); }
+  void setClassViewTree( const QString& tree )   { writeGroupEntry( "General", "classview_tree", tree ); }
 
   /** at the moment only an english sgmlfile in docs/en/ */
-  void setSGMLFile(const char *name)          { writeGroupEntry( "General", "sgml_file", name ); }
+  void setSGMLFile(const QString& name)          { writeGroupEntry( "General", "sgml_file", name ); }
 
   /** if yes the makefiles in the project are modified from KDevelop*/
   void setModifyMakefiles(bool enable=true);
   
 
   /** Store options for make( f.e. "-k" for "make -k"*/
-  void setMakeOptions(const char *options)    { writeGroupEntry( "General", "make_options", options ); }
+  void setMakeOptions(const QString& options)    { writeGroupEntry( "General", "make_options", options ); }
 
   /** Store the commandline execution arguments for the project binary */
-  void setExecuteArgs(const char *args)       { writeGroupEntry( "General", "execute_args", args ); }
+  void setExecuteArgs(const QString& args)       { writeGroupEntry( "General", "execute_args", args ); }
 
   /** Store the commandline execution arguments for debugging  */
-  void setDebugArgs(const char *args)         { writeGroupEntry( "General", "debug_args", args ); }
+  void setDebugArgs(const QString& args)         { writeGroupEntry( "General", "debug_args", args ); }
 
   /** Store the additional arguments for configure */
-  void setConfigureArgs(const char *args)     { writeGroupEntry( "General", "configure_args", args ); }
+  void setConfigureArgs(const QString& args)     { writeGroupEntry( "General", "configure_args", args ); }
   
-  void setBinPROGRAM(const char *name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
+  void setBinPROGRAM(const QString& name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
 
-  void setPathToBinPROGRAM(const char *name)  { writeGroupEntry( "Config for BinMakefileAm", "path_to_bin_program", name ); }
+  void setPathToBinPROGRAM(const QString& name)  { writeGroupEntry( "Config for BinMakefileAm", "path_to_bin_program", name ); }
 
   void setLibtoolDir(const QString& dir)      { writeGroupEntry( "Config for BinMakefileAm", "libtool_dir", dir); }
 
-  void setDirWhereMakeWillBeCalled(const char *name)  { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
+  void setDirWhereMakeWillBeCalled(const QString& name)  { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
 
   /** Store all open groups in the LFV*/
   void setLFVOpenGroups(QStrList groups);
@@ -270,23 +269,24 @@ public: // Methods to store project options
   void setShortInfo(QStrList short_info);
 
   /** Store the linker flags. */
-  void setLDFLAGS(QString flags);
-  void setLDADD(QString libstring);
+  void setLDFLAGS(const QString& flags);
+  void setLDADD(const QString& libstring);
 
   /** Store the C++ compiler flags. */
-  void setCXXFLAGS(QString flags);
-  void setAdditCXXFLAGS(QString flags);
+  void setCXXFLAGS(const QString& flags);
+  void setAdditCXXFLAGS(const QString& flags);
 
-  void setFilters(QString group,QStrList& filters);
+  void setFilters(const QString& group,QStrList& filters);
 
-  void setActiveTarget(QString target);
+  void setActiveTarget(const QString& target);
+
 public: // Methods to fetch project options
 
   /** Fetch the version of the kdevprj file format*/
   QString getKDevPrjVersion() { return readGroupEntry( "General", "kdevprj_version" ); }
 
   /** Fetch the type: {normal_cpp,normal_kde,mini_kde} */
-  /** 		(normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support */
+  /**     (normalogl_kde added by Robert Wheat, 01-22-2000, OpenGL(tm) support */
   QString getProjectType()    { return readGroupEntry( "General", "project_type" ); }
 
   /** Fetch the name of the project. */
@@ -355,13 +355,13 @@ public: // Methods to fetch project options
   QString getCXXFLAGS();
   QString getAdditCXXFLAGS();
 
-  void getFilters(QString group,QStrList& filters);
+  void getFilters(const QString& group,QStrList& filters);
 
-  TFileInfo getFileInfo(QString filename);
+  TFileInfo getFileInfo(const QString& filename);
 
-  TMakefileAmInfo getMakefileAmInfo(QString rel_name);
+  TMakefileAmInfo getMakefileAmInfo(const QString& rel_name);
 
-  TDialogFileInfo getDialogFileInfo(QString rel_filename);
+  TDialogFileInfo getDialogFileInfo(const QString& rel_filename);
 
 public: // Public queries
 
@@ -392,10 +392,12 @@ public: // Public queries
   void getAllTopLevelDialogs(QStrList& list);
 
   /** Get all sources for this makefile */
-  void getSources(QString rel_name_makefileam,QStrList& sources);
+  void getSources(const QString& rel_name_makefileam,QStrList& sources);
 
   /** Get all po files for this makefile */
-  void getPOFiles(QString rel_name_makefileam,QStrList& po_files);
+  void getPOFiles(const QString& rel_name_makefileam,QStrList& po_files);
+
+  bool isValid() const    { return valid; }
 
   bool isKDEProject();
   bool isKDE2Project();
@@ -403,53 +405,55 @@ public: // Public queries
   bool isQt2Project();
   bool isCustomProject();
   /** check if a subdir is in the project (registered). */
-//  bool isDirInProject(QString rel_name);
+//  bool isDirInProject(const QString& rel_name);
 
-  
 
-  /** Method that returns the filetype for a given file by looking at 
+
+  /** Method that returns the filetype for a given file by looking at
    * it's extension.
    * @param aFile The filename to check.
    */
-  static ProjectFileType getType( const char *aFile );
+  static ProjectFileType getType( const QString& aFile );
 
   /** Return the type matching a string.
    * @param aStr The string representation of a type.
    */
-  ProjectFileType getTypeFromString( const char *aStr );
+  ProjectFileType getTypeFromString( const QString& aStr );
 
-  /** Return a string matching a type. 
+  /** Return a string matching a type.
    * @param aType The type to get the string for.
    */
-  const char *getTypeString( ProjectFileType aType );
+  QString getTypeString( ProjectFileType aType );
 
 public: // Public methods
 
   /** if ace_group == empty insert prepend at the grouplist*/
-  void addLFVGroup(QString name,QString ace_group);
-  void removeLFVGroup(QString name);
+  void addLFVGroup(const QString& name, const QString& ace_group);
+  void removeLFVGroup(const QString& name);
   void writeFileInfo(TFileInfo info);
   void writeDialogFileInfo(TDialogFileInfo info);
   //  void writeMakefileAmInfo(TMakefileAmInfo info);
   /** return true if a new subdir was added to the project*/
   bool addFileToProject(QString rel_name,TFileInfo info);
-  bool addDialogFileToProject(QString rel_name,TDialogFileInfo info);
-  void removeFileFromProject(QString rel_name);
-  void setKDevelopWriteArea(QString makefile);
-  void addMakefileAmToProject(QString rel_name,TMakefileAmInfo info);
+  bool addDialogFileToProject(const QString& rel_name,TDialogFileInfo info);
+  void removeFileFromProject(const QString& rel_name);
+  void setKDevelopWriteArea(const QString& makefile);
+  void addMakefileAmToProject(const QString& rel_name,TMakefileAmInfo info);
 
   void updateConfigureIn();
   void updateMakefilesAm();
   void changeLibraryType(const QString &makefile, const QString &type);
   void createLibraryMakefileAm(const QString &makefile, const QString &type);
   //  void createBinMakefileAm();
-  void updateMakefileAm(QString makefile);
+  void updateMakefileAm(const QString& makefile);
+
   /** read the projectfile */
-  bool readProject(); 
+  bool readProject();
+  /** create a new project file ready for entries to be added */
+  bool createEmptyProject();
   /** write the projectfile to the disk*/
-  void writeProject(); 
-  /** true if the project was read*/
-  bool valid;
+  void writeProject();
+
   void  writeWorkspace(TWorkspace ws);
   TWorkspace getWorkspace(int id);
   void setCurrentWorkspaceNumber(int id);
@@ -462,7 +466,7 @@ public: // Public methods
   void clearMakefileAmChanged();
   /** returns the Qt translation files (*.ts) in the project
  */
-  void getTSFiles(QString makefileam, QStrList& ts_files);
+  void getTSFiles(const QString& makefileam, QStrList& ts_files);
 
   QString getRunFromDir();
 
@@ -474,11 +478,11 @@ public: // Public methods
 
 protected:
 
-  /** Write an entry to the project file. 
+  /** Write an entry to the project file.
    * @param group Name of the group.
    * @param tag   The value-tag e.g version.
    * @param entry The string to store. */
-  void writeGroupEntry( const char *group, const char *tag, const char *entry );
+  void writeGroupEntry( const QString& group, const QString& tag, const QString& entry );
 
   /** Read an entry from the project file and return it.
    * @param group Name of the group.
@@ -487,10 +491,10 @@ protected:
 
   void setSourcesHeaders();
   void getAllStaticLibraries(QStrList& libs);
-  QString getDir(QString rel_name);
-  QString getName(QString rel_name);
+  QString getDir(const QString& rel_name);
+  QString getName(const QString& rel_name);
 
-protected: // Protected attributes
+private: // Protected attributes
 
   /** The actual project file. */
   QString prjfile;
@@ -510,7 +514,9 @@ protected: // Protected attributes
   /** Maps a ProjectFileType to a string. */
   QString *ptStringMap;
   
-  KSimpleConfig config;
-  
+  KSimpleConfig* config;
+
+  /** true if the project was read*/
+  bool valid;
 };
 #endif

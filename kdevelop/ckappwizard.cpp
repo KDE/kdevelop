@@ -2231,8 +2231,8 @@ void CKAppWizard::slotProcessExited() {
   dir.setPath(direct);
 
   project = new CProject(prj_str);
-  project->readProject();
-  project->setKDevPrjVersion("1.3");
+  project->createEmptyProject();
+  project->setKDevPrjVersion(KDEVELOP_PRJ_VERSION);
 
   // Remove sources now... if desired
   if (!generatesource->isChecked())
