@@ -491,12 +491,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         MakeMemberHelper(text,atline,atcol);
         if(!text.isEmpty())
         {
-	 m_backgroundParser->lock();
          id = popup->insertItem( i18n( "Make Member"),
                 this, SLOT( slotMakeMember() ) );
          popup->setWhatsThis( id, i18n("<b>Make member</b><p>Creates a class member function in implementation file "
                               "based on the member declaration at the current line."));
-	 m_backgroundParser->unlock();
         }
         
 	if((source_header_candidate = sourceOrHeaderCandidate()) != QString::null)
@@ -1106,12 +1104,17 @@ void CppSupportPart::MakeMemberHelper(QString& text, int& atLine, int& atColumn)
 
 	    text += declStr + "\n{\n}";
 	}
-
-	translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
+ 
+        m_backgroundParser->unlock();
+        
+        QString implFile = findSourceFile();
+        
+        m_backgroundParser->lock();
+	translationUnit = m_backgroundParser->translationUnit( implFile );
 	if( translationUnit ){
 	    translationUnit->getEndPosition( &atLine, &atColumn );
 	} else {
-	    atLine = m_activeEditor->numLines() - 1;
+	    atLine = -2;
 	    atColumn = 0;
 	}
          kdDebug() << "at line in mm: " << atLine << endl;
@@ -1127,17 +1130,14 @@ MakeMemberHelper(text,atLine,atColumn);
 
 if(!text.isEmpty())
 { 
-
-
-
- m_backgroundParser->unlock();
-
  QString implFile = findSourceFile();
 
  if(!implFile.isEmpty() ){
     partController()->editDocument( KURL( implFile ) );
     kapp->processEvents( 500 );
  }
+ if (atLine == -2)
+    atLine = m_activeEditor->numLines() - 1;
 
  m_backgroundParser->lock();
 
