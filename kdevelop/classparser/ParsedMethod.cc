@@ -195,6 +195,57 @@ void CParsedMethod::out()
  *                                                                   *
  ********************************************************************/
 
+/*---------------------------------- CParsedAttribute::asHeaderCode()
+ * asHeaderCode()
+ *   Return the attributes code for the headerfile. NB. If the name
+ *  includes the parameters the parameter list is ignored.
+ *
+ * Parameters:
+ *   str              String to store the result in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedMethod::asHeaderCode( QString &str )
+{
+  str = "  " + comment + "\n  ";
+
+  if( isVirtual )
+    str += "virtual ";
+
+  if( isStatic )
+    str += "static ";
+
+  str += type + " " + name;
+
+  if( isConst )
+    str += " const";
+
+  str += ";\n";
+}
+
+/*------------------------------------------ CParsedMethod::asCppCode()
+ * asCppCode()
+ *  Return this method as a implementation stub. NB. If the name
+ *  includes the parameters the parameter list is ignored.
+ *
+ * Parameters:
+ *   buf            Buffer to store the result in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedMethod::asCppCode( QString &str )
+{
+  str = comment + "\n";
+  str += type + " " + declaredInClass + "::" + name;
+
+  if( isConst )
+    str += " const";
+
+  str += "{\n}\n";
+}
+
 /*------------------------------------------ CParsedMethod::isEqual()
  * isEqual()
  *   Is the supplied method equal to this one(regarding type, name 

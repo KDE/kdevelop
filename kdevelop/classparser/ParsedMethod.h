@@ -89,6 +89,12 @@ public: // Public attributes
 
 public: // Public queries
 
+  /** Return this methods' header code. */
+  void asHeaderCode( QString &str );
+
+  /** Return this method as a implementation stub. */
+  void asCppCode( QString &buf );
+
   /** Is the supplied method equal to this one
     * (regarding type, name and signature)? */
   bool isEqual( CParsedMethod &method );

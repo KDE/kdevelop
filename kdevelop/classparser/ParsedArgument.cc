@@ -110,6 +110,30 @@ void CParsedArgument::setType( const char *aType )
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------------ CParsedArgument::toString()
+ * toString()
+ *   Return the object as a string(for tooltips etc).
+ *
+ * Parameters:
+ *   str              String to store the result in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedArgument::toString( QString &str )
+{
+  str = type + " " + name;
+}
+
+/*---------------------------------------------- CParsedArgument::out()
+ * out()
+ *   Output this object to stdout.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CParsedArgument::out()
 {
   cout << type;

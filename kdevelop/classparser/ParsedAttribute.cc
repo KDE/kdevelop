@@ -245,6 +245,29 @@ void CParsedAttribute::setComment( const char *aComment )
  *                                                                   *
  ********************************************************************/
 
+/*---------------------------------- CParsedAttribute::asHeaderCode()
+ * asHeaderCode()
+ *   Return the attributes code for the headerfile.
+ *
+ * Parameters:
+ *   str              String to store the result in.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedAttribute::asHeaderCode( QString &str )
+{
+  str = "  " + comment + "\n  ";
+
+  if( isConst )
+    str += "const ";
+
+  if( isStatic )
+    str += "static ";
+
+  str += type + " " + name + ";\n";
+}
+
 /*-------------------------------------- CParsedAttribute::toString()
  * toString()
  *   Return the object as a string(for tooltips etc).

@@ -114,7 +114,10 @@ public: // Public methods to set attribute values
   /** Set the comment. */
   void setComment( const char *aComment );
 
-public: // Public attributes
+public: // Public queries
+
+  /** Return the attributes code for the headerfile. */
+  void asHeaderCode( QString &str );
 
   /** Return the object as a string(for tooltips etc) */
   void toString( QString &str );

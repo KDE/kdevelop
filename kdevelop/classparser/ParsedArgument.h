@@ -45,10 +45,12 @@
 class CParsedArgument
 {
 public: // Constructor & Destructor
+
   CParsedArgument();
   ~CParsedArgument();
 
 public: // Public attributes
+
   /** The name of the argument. */
   QString name;
 
@@ -56,14 +58,18 @@ public: // Public attributes
   QString type;
 
 public: // Public methods to set attribute values
+
   /** Set the argument name */
   void setName( const char *aName );
 
   /** Set the type */
   void setType( const char *aType );
 
-public: // Public attributes
-  
+public: // Public queries
+
+  /** Return this arguments as a string. */
+  void toString( QString &str );
+
   /** Output this object to stdout */
   void out();
 };
