@@ -551,7 +551,7 @@ void QEditorPart::setupHighlighting()
     mode->name = "c++";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.cpp" << "*.cxx" << "*.cc" << "*.C" << "*.c++" << "*.c" <<
-                       "*.m" << "*.mm" << "*.M" << "*.inl" << "*.tlh" << "*.diff" <<
+                       "*.m" << "*.mm" << "*.M" << "*.inl" << "*.tlh" << "*.diff" << "*.patch" << "*.moc" << "*.xpm" <<
                        "*.h" << "*.hpp" << "*.hh" << "*.hxx" << "*.h++" << "*.H";
     m_modes.append( mode );
 
@@ -584,13 +584,14 @@ void QEditorPart::setupHighlighting()
     mode = new HLMode;
     mode->name = "xml";
     mode->section = "Markup";
-    mode->extensions = QStringList() << "*.xml" << "*.xslt" << "*.rc" << "*rc" << "*.ui";
+    mode->extensions = QStringList() << "*.xml" << "*.xslt" << "*.rc" << "*rc" << "*.ui" <<
+                                        "*.html" << "*.htm" << "*.kdevelop" << "*.kdevses" ;
     m_modes.append( mode );
 
     mode = new HLMode;
     mode->name = "qmake";
     mode->section = "Programming";
-    mode->extensions = QStringList() << "*.pro";
+    mode->extensions = QStringList() << "*.pro" << "*Makefile" << "*Makefile.am" << "*Makefile.in";
     m_modes.append( mode );
 }
 
