@@ -63,6 +63,7 @@ dnl add here all your Makefiles. This are created by configure
 AC_OUTPUT(
 Makefile
 kdevelop/Makefile \
+kdevelop/widgets/Makefile \
 kdevelop/widgets/qextmdi/Makefile \
 kdevelop/plugin/Makefile \
 kdevelop/plugin/print/Makefile \
