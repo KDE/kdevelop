@@ -79,14 +79,12 @@ protected:
     QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr, SimpleContext* ctx );
 
     QValueList<KTextEditor::CompletionEntry> getEntryListForClass( QString strClass );
-    QValueList<KTextEditor::CompletionEntry> getEntryListForNamespace( const QString& strNamespace );
-    QValueList<KTextEditor::CompletionEntry> getEntryListForStruct( const QString& strStruct );
-    QValueList<KTextEditor::CompletionEntry> getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace );
 
     /* methods which are called recursively by getEntryListForClass(...) */
     /* These are utility functions which add a layer above the ClassStore API */
     QString getTypeOfMethod( ParsedContainer*, const QString& );
     QString getTypeOfAttribute( ParsedContainer*, const QString& );
+    ParsedClass* getClassByName( const QString& className );
 
     QValueList<ParsedMethod*> getMethodListForClassAndAncestors( ParsedClass* pClass );
     QValueList<ParsedAttribute*> getAttributeListForClassAndAncestors( ParsedClass* pClass );
@@ -107,7 +105,7 @@ private:
     KTextEditor::ViewCursorInterface* m_pCursorIface;
     KTextEditor::EditInterface* m_pEditIface;
     KTextEditor::CodeCompletionInterface* m_pCompletionIface;
-    
+
     QString m_currentClassName;
     bool m_bArgHintShow;
     bool m_bCompletionBoxShow;

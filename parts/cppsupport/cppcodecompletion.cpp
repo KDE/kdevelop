@@ -499,6 +499,19 @@ CppCodeCompletion::getNodeDelimiter( int nNode, int nLine )
     return QString::null;
 }
 
+ParsedClass* CppCodeCompletion::getClassByName( const QString& className )
+{
+    ParsedClass* cl = m_pStore->getClassByName( className );
+    if( !cl )
+        cl = m_pStore->getStructByName( className );
+    if( !cl )
+        cl = m_pCCStore->getClassByName( className );
+    if( !cl )
+        cl = m_pCCStore->getStructByName( className );
+
+    return cl;
+}
+
 /**** Here begin some ClassStore queries - I think they are nearly stable */
 /**** (expected that nothing else is mentioned) ****/
 
@@ -508,9 +521,7 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
     QValueList< KTextEditor::CompletionEntry > entryList;
 
     // first we look into the cc-classstore and then in project-classstore
-    ParsedClass* pClass = m_pCCStore->getClassByName( strClass );
-    if( !pClass )
-        pClass = m_pStore->getClassByName( strClass );
+    ParsedClass* pClass = getClassByName( strClass );
 
     // found absolutely nothing
     if( !pClass ){
@@ -572,110 +583,6 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
 
     return entryList;
 }
-
-QValueList< KTextEditor::CompletionEntry >
-CppCodeCompletion::getEntryListForClassOfNamespace( QString strClass, const QString& strNamespace )
-{
-    QValueList< KTextEditor::CompletionEntry > entryList;
-
-    ParsedScopeContainer* pScope = m_pCCStore->getScopeByName ( strNamespace );
-    if( pScope ){
-        ParsedClass* pClass = pScope->getClassByName( strClass );
-        if ( pClass ){
-            // Load the methods, slots, signals of the current class and its parents into the list
-            QValueList<ParsedMethod*> methodList = getMethodListForClassAndAncestors( pClass );
-
-            QValueList<ParsedMethod*>::ConstIterator methodIt;
-            for (methodIt = methodList.begin(); methodIt != methodList.end(); ++methodIt) {
-                if( (*methodIt)->isStatic( ) ) {
-                    KTextEditor::CompletionEntry entry;
-                    entry.text = (*methodIt)->name();
-                    m_CHCommentList.append( (*methodIt)->comment( ) );
-                    entry.postfix = "()";
-                    entryList << entry;
-                } else
-                    kdDebug( 9007 ) << "rejecting: '" << (*methodIt)->name( ) << "'" << endl;
-            }
-
-            KTextEditor::CompletionEntry entry;
-            entry.text = "--- Attributes";
-            entryList << entry;
-
-            // Load the attributes of the current class and its parents into the list
-
-            QValueList<ParsedAttribute*> attrList = getAttributeListForClassAndAncestors( pClass );
-
-            QValueList<ParsedAttribute*>::ConstIterator attrIt;
-            for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
-                if( (*attrIt)->isStatic( ) ){
-                    KTextEditor::CompletionEntry entry;
-                    entry.prefix = (*attrIt)->type( );
-                    entry.text = (*attrIt)->name();
-		    m_CHCommentList.append( (*attrIt)->comment( ) );
-                    // needed ? entry.postfix = "";
-                    entryList << entry;
-                }
-                else
-                    kdDebug( 9007 ) << "rejecting: '" << (*attrIt)->name( ) << "'" << endl;
-            }
-        }
-    }
-
-    return entryList;
-}
-
-QValueList< KTextEditor::CompletionEntry >
-CppCodeCompletion::getEntryListForNamespace( const QString& strNamespace )
-{
-    kdDebug( 9007 ) << "getEntryListForNamespace starts with '" << strNamespace << "'" << endl;
-
-    QValueList< KTextEditor::CompletionEntry > entryList;
-    ParsedScopeContainer* pScope = m_pCCStore->getScopeByName( strNamespace );
-
-    if( pScope ){
-	QValueList<ParsedClass*> classList = pScope->getSortedClassList( );
-
-        QValueList<ParsedClass*>::ConstIterator classIt;
-        for (classIt = classList.begin(); classIt != classList.end(); ++classIt) {
-	    KTextEditor::CompletionEntry entry;
-	    entry.text = (*classIt)->name( );
-	    m_CHCommentList.append( (*classIt)->comment( ) );
-	    // needed ? entry.postfix = "";
-	    entryList << entry;
-	}
-    }
-
-    return entryList;
-}
-
-QValueList< KTextEditor::CompletionEntry >
-CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
-{
-    QValueList< KTextEditor::CompletionEntry > entryList;
-
-    // FIXME: is this right for namespaces?
-    // or should it be store->getStructByName()?
-    ParsedScopeContainer* pScope = m_pCCStore->globalScope();
-    if( pScope ){
-
-        ParsedClass* pStruct = pScope->getStructByName( strStruct );
-        if ( pStruct ){
-            QValueList<ParsedAttribute*> attrList = pStruct->getSortedAttributeList();
-            QValueList<ParsedAttribute*>::ConstIterator attrIt;
-
-            for (attrIt = attrList.begin(); attrIt != attrList.end(); ++attrIt) {
-                KTextEditor::CompletionEntry entry;
-                entry.text = (*attrIt)->name( );
-		m_CHCommentList.append( (*attrIt)->comment( ) );
-                // needed ? entry.postfix = "";
-                entryList << entry;
-            }
-        }
-    }
-
-    return entryList;
-}
-
 
 QString
 CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
@@ -899,7 +806,7 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
 
 
     SimpleVariable v_this = ctx->findVariable( "this" );
-    ParsedClass* pThis = sigma->getClassByName( v_this.type );
+    ParsedClass* pThis = getClassByName( v_this.type );
     QString type;
 
     if( exprs.count() == 0 ){
@@ -971,11 +878,9 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
     }
 
     type = purify( type );
-    ParsedContainer* pContainer = sigma->getClassByName( type );
-    if( !pContainer ){
-        pContainer = sigma->globalScope()->getStructByName( type );
-        kdDebug(9007) << "is a struct??" << endl;
-    }
+    kdDebug(9007) << "---------------------> type = " << type << endl;
+
+    ParsedContainer* pContainer = getClassByName( type );
     kdDebug(9007) << "pContainer = " << pContainer << endl;
     while( pContainer && exprs.count() ){
 
@@ -991,16 +896,10 @@ CppCodeCompletion::evaluateExpression( const QString& expr,
         } else if( (first_paren_index = e.find('(')) != -1 ){
             e = e.left( first_paren_index );
             type = getTypeOfMethod( pContainer, e );
-            pContainer = sigma->getClassByName( type );
-            if( !pContainer ){
-                pContainer = sigma->globalScope()->getStructByName( type );
-            }
+            pContainer = getClassByName( type );
         } else {
             type = getTypeOfAttribute( pContainer, e );
-            pContainer = sigma->getClassByName( type );
-            if( !pContainer ){
-                pContainer = sigma->globalScope()->getStructByName( type );
-            }
+            pContainer = getClassByName( type );
         }
     }
 
@@ -1196,9 +1095,7 @@ CppCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const QString& 
 
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-        pClass = m_pCCStore->getClassByName( pParent->name() );
-        if( !pClass )
-            pClass = m_pStore->getClassByName( pParent->name() );
+        pClass = getClassByName( pParent->name() );
 
         QString type = getTypeOfMethod( pClass, name );
         type = purify( type );
@@ -1228,10 +1125,7 @@ CppCodeCompletion::getTypeOfAttribute( ParsedContainer* pContainer, const QStrin
 
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-        ParsedClass* pClass;
-        pClass = m_pCCStore->getClassByName( pParent->name() );
-        if( !pClass )
-            pClass = m_pStore->getClassByName( pParent->name() );
+        ParsedClass* pClass = getClassByName( pParent->name() );
 
         QString type = getTypeOfAttribute( pClass, name );
         type = purify( type );
@@ -1252,7 +1146,7 @@ QValueList<ParsedMethod*> CppCodeCompletion::getMethodListForClassAndAncestors( 
     QPtrList<ParsedParent> parentList = pClass->parents;
 
     for ( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
-        pClass = m_pCCStore->getClassByName( pPClass->name( ) );
+        pClass = getClassByName( pPClass->name( ) );
 
         if ( pClass )
             retVal += getMethodListForClassAndAncestors(pClass);
@@ -1272,7 +1166,7 @@ QValueList<ParsedAttribute*> CppCodeCompletion::getAttributeListForClassAndAnces
     QPtrList<ParsedParent> parentList = pClass->parents;
     for( ParsedParent* pPClass = parentList.first( ); pPClass != 0; pPClass = parentList.next( ) ) {
 
-        pClass = m_pCCStore->getClassByName( pPClass->name( ) );
+        pClass = getClassByName( pPClass->name( ) );
         if ( pClass )
             retVal += getAttributeListForClassAndAncestors( pClass );
         else {
@@ -1292,9 +1186,7 @@ QStringList CppCodeCompletion::getGlobalSignatureList(const QString &functionNam
 
 QStringList CppCodeCompletion::getSignatureListForClass( QString strClass, QString strMethod )
 {
-     ParsedClass* pClass = m_pCCStore->getClassByName( strClass );
-     if( !pClass )
-         pClass = m_pStore->getClassByName ( strClass );
+     ParsedClass* pClass = getClassByName( strClass );
      if ( !pClass )
          return QStringList();
 
@@ -1315,7 +1207,7 @@ QStringList CppCodeCompletion::getParentSignatureListForClass( ParsedClass* pCla
     QPtrList<ParsedParent> parentList = pClass->parents;
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pStore->getClassByName ( pParentClass->name() );
+        pClass = getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {

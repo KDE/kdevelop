@@ -25,7 +25,6 @@
 #include <qpair.h>
 #include <qvaluestack.h>
 #include <qstringlist.h>
-#include <qasciidict.h>
 #include <qmap.h>
 
 class Lexer;
@@ -136,29 +135,29 @@ public:
     virtual void addDependence( const QString& fileName, const Dependence& dep );
     virtual void addMacro( const QString& fileName, const Macro& macro );
     virtual void addProblem( const QString& fileName, const Problem& problem );
-    
+
     virtual QString currentFileName() const { return m_currentFileName; }
     virtual TranslationUnitAST::Node parseFile( const QString& fileName, const QString& contents );
-    
+
     QMap<QString, Dependence> dependences( const QString& fileName ) const;
     QMap<QString, Macro> macros( const QString& fileName ) const;
     QValueList<Problem> problems( const QString& fileName ) const;
-    
+
 protected:
     virtual void setupLexer( Lexer* lexer );
     virtual void setupParser( Parser* parser );
-    
+
 private:
-    QMap<QString, Dependence>* findOrInsertDependenceList( const QString& fileName );
-    QMap<QString, Macro>* findOrInsertMacroList( const QString& fileName );
-    QValueList<Problem>* findOrInsertProblemList( const QString& fileName );
+    QMap<QString, Dependence>& findOrInsertDependenceList( const QString& fileName );
+    QMap<QString, Macro>& findOrInsertMacroList( const QString& fileName );
+    QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
 
 private:
     QString m_currentFileName;
-    QAsciiDict< QMap<QString, Dependence> > m_dependences;
-    QAsciiDict< QMap<QString, Macro> > m_macros;
-    QAsciiDict< QValueList<Problem> > m_problems;
-    
+    QMap< QString, QMap<QString, Dependence> > m_dependences;
+    QMap< QString, QMap<QString, Macro> > m_macros;
+    QMap< QString, QValueList<Problem> > m_problems;
+
 private:
     Driver( const Driver& source );
     void operator = ( const Driver& source );
