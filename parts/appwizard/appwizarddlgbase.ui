@@ -1,377 +1,318 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>AppWizardDialogBase</class>
-<widget>
-    <class>QWizard</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWizard">
+    <property name="name">
         <cstring>AppWizardDlgBase</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>544</width>
+            <width>563</width>
             <height>551</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Create New Project</string>
     </property>
-    <widget>
-        <class>QWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QWidget">
+        <property name="name">
             <cstring>generalPage</cstring>
         </property>
-        <attribute>
-            <name>title</name>
+        <attribute name="title">
             <string>General</string>
         </attribute>
         <grid>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>11</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget row="0"  column="0"  rowspan="2"  colspan="1" >
-                <class>QListView</class>
+            <widget class="QListView" row="0" column="0" rowspan="2" colspan="1">
                 <column>
-                    <property>
-                        <name>text</name>
+                    <property name="text">
                         <string>Column 1</string>
                     </property>
-                    <property>
-                        <name>clickable</name>
+                    <property name="clickable">
                         <bool>true</bool>
                     </property>
-                    <property>
-                        <name>resizeable</name>
+                    <property name="resizeable">
                         <bool>true</bool>
                     </property>
                 </column>
-                <property stdset="1">
-                    <name>name</name>
+                <property name="name">
                     <cstring>templates_listview</cstring>
                 </property>
-                <property stdset="1">
-                    <name>maximumSize</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>7</vsizetype>
+                        <horstretch>1</horstretch>
+                        <verstretch>1</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="maximumSize">
                     <size>
                         <width>32767</width>
                         <height>32767</height>
                     </size>
                 </property>
-                <property stdset="1">
-                    <name>rootIsDecorated</name>
+                <property name="rootIsDecorated">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget row="2"  column="0"  rowspan="1"  colspan="2" >
-                <class>QGroupBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                <property name="name">
                     <cstring>GroupBox1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>title</name>
+                <property name="title">
                     <string>Properties</string>
                 </property>
                 <grid>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget row="1"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
                             <cstring>location_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;Location:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>dest_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="2"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
                             <cstring>author_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;Author:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>author_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="1"  column="1"  rowspan="1"  colspan="4" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="4">
+                        <property name="name">
                             <cstring>dest_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="0"  column="1"  rowspan="1"  colspan="4" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="4">
+                        <property name="name">
                             <cstring>appname_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="3"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
                             <cstring>version_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;Version:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>version_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="0"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
                             <cstring>appname_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>Application &amp;name:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>appname_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="1"  column="5" >
-                        <class>QToolButton</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QToolButton" row="1" column="5">
+                        <property name="name">
                             <cstring>dest_button</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>30</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>30</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="text">
                             <string>....</string>
                         </property>
                     </widget>
-                    <widget row="3"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="3" column="1">
+                        <property name="name">
                             <cstring>version_edit</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>0.1</string>
                         </property>
                     </widget>
-                    <widget row="3"  column="2" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="3" column="2">
+                        <property name="name">
                             <cstring>license_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>L&amp;icense:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>license_combo</cstring>
                         </property>
                     </widget>
-                    <widget row="3"  column="3"  rowspan="1"  colspan="2" >
-                        <class>QComboBox</class>
+                    <widget class="QComboBox" row="3" column="3" rowspan="1" colspan="2">
                         <item>
-                            <property>
-                                <name>text</name>
+                            <property name="text">
                                 <string>GPL</string>
                             </property>
                         </item>
                         <item>
-                            <property>
-                                <name>text</name>
+                            <property name="text">
                                 <string>BSD</string>
                             </property>
                         </item>
                         <item>
-                            <property>
-                                <name>text</name>
+                            <property name="text">
                                 <string>QPL</string>
                             </property>
                         </item>
                         <item>
-                            <property>
-                                <name>text</name>
+                            <property name="text">
                                 <string>LGPL</string>
                             </property>
                         </item>
                         <item>
-                            <property>
-                                <name>text</name>
+                            <property name="text">
                                 <string>Custom</string>
                             </property>
                         </item>
-                        <property stdset="1">
-                            <name>name</name>
+                        <property name="name">
                             <cstring>license_combo</cstring>
                         </property>
                     </widget>
-                    <widget row="2"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
                             <cstring>author_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="2"  column="2"  rowspan="1"  colspan="2" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
+                        <property name="name">
                             <cstring>email_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>&amp;Email:</string>
                         </property>
-                        <property>
-                            <name>buddy</name>
+                        <property name="buddy" stdset="0">
                             <cstring>email_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="2"  column="4" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="2" column="4">
+                        <property name="name">
                             <cstring>email_edit</cstring>
                         </property>
                     </widget>
                 </grid>
             </widget>
-            <widget row="0"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="0" column="1">
+                <property name="name">
                     <cstring>icon_label</cstring>
                 </property>
-                <property stdset="1">
-                    <name>minimumSize</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
                     <size>
                         <width>250</width>
                         <height>180</height>
                     </size>
                 </property>
-                <property stdset="1">
-                    <name>maximumSize</name>
+                <property name="maximumSize">
                     <size>
                         <width>250</width>
                         <height>180</height>
                     </size>
                 </property>
-                <property stdset="1">
-                    <name>scaledContents</name>
-                    <bool>false</bool>
-                </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>WinPanel</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Sunken</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="scaledContents">
+                    <bool>false</bool>
+                </property>
+                <property name="alignment">
                     <set>AlignCenter</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="1"  column="1" >
-                <class>QMultiLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QMultiLineEdit" row="1" column="1">
+                <property name="name">
                     <cstring>desc_textview</cstring>
                 </property>
-                <property stdset="1">
-                    <name>enabled</name>
+                <property name="enabled">
                     <bool>true</bool>
                 </property>
-                <property stdset="1">
-                    <name>focusPolicy</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>7</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+                <property name="focusPolicy">
                     <enum>NoFocus</enum>
                 </property>
-                <property stdset="1">
-                    <name>wordWrap</name>
-                    <enum>WidgetWidth</enum>
-                </property>
-                <property stdset="1">
-                    <name>readOnly</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
-            </widget>
-        </grid>
-    </widget>
-    <widget>
-        <class>QWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>fileHeadersPage</cstring>
-        </property>
-        <attribute>
-            <name>title</name>
-            <string>File headers</string>
-        </attribute>
-        <grid>
-            <property stdset="1">
-                <name>margin</name>
-                <number>11</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget row="1"  column="0" >
-                <class>QMultiLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>filetemplate_edit</cstring>
+                <property name="wordWrap">
+                    <enum>WidgetWidth</enum>
                 </property>
-            </widget>
-            <widget row="0"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel7</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>File template</string>
+                <property name="readOnly">
+                    <bool>true</bool>
                 </property>
             </widget>
         </grid>
@@ -384,7 +325,54 @@
         <receiver>AppWizardDlgBase</receiver>
         <slot>templatesTreeViewClicked(QListViewItem*)</slot>
     </connection>
-    <slot access="public">templatesTreeViewClicked(QListViewItem*)</slot>
+    <connection>
+        <sender>author_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>version_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>projectNameChanged()</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>projectLocationChanged()</slot>
+    </connection>
+    <connection>
+        <sender>dest_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>license_combo</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>licenseChanged()</slot>
+    </connection>
+    <connection>
+        <sender>dest_button</sender>
+        <signal>clicked()</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>destButtonClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>templates_listview</tabstop>
@@ -394,6 +382,14 @@
     <tabstop>email_edit</tabstop>
     <tabstop>version_edit</tabstop>
     <tabstop>license_combo</tabstop>
-    <tabstop>filetemplate_edit</tabstop>
 </tabstops>
+<slots>
+    <slot access="protected">licenseChanged()</slot>
+    <slot access="protected">destButtonClicked()</slot>
+    <slot access="protected">projectLocationChanged()</slot>
+    <slot access="protected">projectNameChanged()</slot>
+    <slot access="protected">templatesTreeViewClicked(QListViewItem*)</slot>
+    <slot access="protected">textChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

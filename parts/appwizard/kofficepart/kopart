@@ -4,3 +4,4 @@ Name=KOffice Part
 Icon=kopart.png
 Category=C++/KDE
 Comment=Generates a framework for a full KOffice Application.
+FileTemplates=h,CStyle,cpp,CStyle

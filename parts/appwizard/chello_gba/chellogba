@@ -5,3 +5,4 @@ Icon=chellogba.png
 Category=C/GBA
 Comment=Generates a simple "Hello world" program for the Gameboy Advance. You will need the "devkitadvance" to compile it. See README.devel for more details.
 ShowFileAfterGeneration=README.devel
+FileTemplates=h,CStyle,c,CStyle

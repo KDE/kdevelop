@@ -4,4 +4,4 @@ Name=KHTMLPart plugin
 Icon=kpartplugin.png
 Category=C++/KDE
 Comment=Generates a plugin for the KHTML part.
-
+FileTemplates=h,CStyle,cpp,CStyle

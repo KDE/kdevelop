@@ -61,13 +61,14 @@ void AppWizardPart::slotNewProject()
 {
     kdDebug(9010) << "new project" << endl;
     AppWizardDialog dlg(this, 0, "app wizard");
-    connect(makeFrontend(),SIGNAL(commandFinished(QString)),this,SLOT(slotCommandFinished(QString)));
-    if(dlg.exec() == QDialog::Accepted){
-      m_creationCommand = dlg.getCommandLine();
-      m_projectFileName = dlg.getProjectLocation() +"/" + dlg.getProjectName() + ".kdevelop";
-      m_showFileAfterGeneration = dlg.getShowFileAfterGeneration();
-    }else{
-      disconnect(makeFrontend(),0,this,0);
+    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
+             this, SLOT(slotCommandFinished(const QString&)) );
+    if (dlg.exec()) {
+        m_creationCommand = dlg.getCommandLine();
+        m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName() + ".kdevelop";
+        m_showFileAfterGeneration = dlg.getShowFileAfterGeneration();
+    } else {
+      disconnect(makeFrontend(), 0, this, 0);
     }
 }
 
@@ -78,16 +79,19 @@ void AppWizardPart::slotImportProject()
     dlg.exec();
 }
 
-void AppWizardPart::slotCommandFinished(QString command){
-  if(m_creationCommand == command){
-    // load the created project and maybe the first file (README...)
-    core()->openProject(m_projectFileName);  // opens the project
-    if(m_showFileAfterGeneration != ""){
-      KURL u;
-      u.setPath(m_showFileAfterGeneration);
-      partController()->editDocument(u);
+
+void AppWizardPart::slotCommandFinished(const QString &command)
+{
+    if (m_creationCommand == command){
+        // load the created project and maybe the first file (README...)
+        core()->openProject(m_projectFileName);  // opens the project
+        if (!m_showFileAfterGeneration.isEmpty()) {
+            KURL u;
+            u.setPath(m_showFileAfterGeneration);
+            partController()->editDocument(u);
+        }
+        disconnect(makeFrontend(), 0, this, 0);
     }
-    disconnect(makeFrontend(),0,this,0);
-  }
 }
+
 #include "appwizardpart.moc"

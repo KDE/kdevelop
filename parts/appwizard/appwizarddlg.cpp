@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2001 by Sandy Meier                                     *
  *   smeier@kdevelop.org                                                   *
@@ -50,70 +50,69 @@
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
     : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0)
 {
-  templates_listview->header()->hide();
-  m_projectLocationWasChanged=false;
+    helpButton()->hide();
+    templates_listview->header()->hide();
 
-  KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
-  m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
-  
-  kdDebug(9010) << "Templates: " << endl;
-  QString category;
-  QString destDir;
-  QStringList categories;
-  QStringList::Iterator it;
-  for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
-    kdDebug(9010) << (*it) << endl;
-    ApplicationInfo* pInfo = new ApplicationInfo();
-    KConfig config(KGlobal::dirs()->findResource("apptemplates", *it));
-    config.setGroup("General");
-    pInfo->templateName = (*it);
-    pInfo->name = config.readEntry("Name");
-    pInfo->icon = config.readEntry("Icon");
-    pInfo->comment = config.readEntry("Comment");
-    pInfo->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration","");
-    destDir = config.readEntry("DefaultDestinatonDir","HOMEDIR");
-    destDir = destDir.replace(QRegExp("HOMEDIR"),QDir::homeDirPath());
-    pInfo->defaultDestDir = destDir;
-    category = config.readEntry("Category");
-    // format category to a unique status
-    if(category.right(1) == "/"){
-      category.remove(category.length()-1,1); // remove /
-    }
-    if(category.left(1) != "/"){
-      category.prepend("/"); // prepend /
+    m_part = part;
+    m_projectLocationWasChanged=false;
+    m_appsInfo.setAutoDelete(true);
+    m_tempFiles.setAutoDelete(true);
+    
+    KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
+    QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
+    
+    kdDebug(9010) << "Templates: " << endl;
+    QStringList categories;
+
+    QStringList::Iterator it;
+    for (it = m_templateNames.begin(); it != m_templateNames.end(); ++it) {
+        kdDebug(9010) << (*it) << endl;
+        KConfig config(KGlobal::dirs()->findResource("apptemplates", *it));
+        config.setGroup("General");
+
+        ApplicationInfo *info = new ApplicationInfo;
+        info->templateName = (*it);
+        info->name = config.readEntry("Name");
+        info->icon = config.readEntry("Icon");
+        info->comment = config.readEntry("Comment");
+        info->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration");
+        info->fileTemplates = config.readEntry("FileTemplates");
+        QString destDir = config.readEntry("DefaultDestinatonDir", "HOMEDIR");
+        destDir = destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
+        info->defaultDestDir = destDir;
+        QString category = config.readEntry("Category");
+        // format category to a unique status
+        if (category.right(1) == "/")
+            category.remove(category.length()-1, 1); // remove /
+        if (category.left(1) != "/")
+            category.prepend("/"); // prepend /
+        categories.append(category);
+        info->category = category;
+        m_appsInfo.append(info);
     }
 
-    categories.append(category);
-    pInfo->category = category;
-    m_appsInfo.append(pInfo);
-  }
-  categories.sort();
-  for (it = categories.begin(); it != categories.end(); ++it) {
-    insertCategoryIntoTreeView(*it);
-  }
-  ApplicationInfo* pInfo=0;
-  QListViewItem* pItem=0;
-  for(pInfo=m_appsInfo.first();pInfo!=0;pInfo=m_appsInfo.next()){
-    pItem = m_categoryMap.find(pInfo->category);
-    if(pItem !=0){
-      pItem = new QListViewItem(pItem,pInfo->name);
-      //      pItem->setPixmap(0, SmallIcon("resource"));
-      pInfo->pItem = pItem;
-    }
-    else{
-      kdDebug(9010) << "Error can't find category in categoryMap: " << pInfo->category << endl;
-    }
-  }
+    // Insert categories into list view
+    categories.sort();
+    for (it = categories.begin(); it != categories.end(); ++it)
+        insertCategoryIntoTreeView(*it);
 
-
-  QString author, email;
-  AppWizardUtil::guessAuthorAndEmail(&author, &email);
-  author_edit->setText(author);
-  email_edit->setText(email);
-  dest_edit->setText(QDir::homeDirPath()+"/");
-  filetemplate_edit->setFont(KGlobalSettings::fixedFont());
-  QFontMetrics fm(filetemplate_edit->fontMetrics());
-  filetemplate_edit->setMinimumSize(fm.width("X")*81, fm.lineSpacing()*22);
+    // Insert items into list view
+    QListIterator<ApplicationInfo> ait(m_appsInfo);
+    for (; ait.current(); ++ait) {
+        QListViewItem *item = m_categoryMap.find(ait.current()->category);
+        if (item)
+            item = new QListViewItem(item, ait.current()->name);
+        else
+            kdDebug(9010) << "Error can't find category in categoryMap: "
+                          << ait.current()->category << endl;
+        ait.current()->item = item;
+    }
+    
+    QString author, email;
+    AppWizardUtil::guessAuthorAndEmail(&author, &email);
+    author_edit->setText(author);
+    email_edit->setText(email);
+    dest_edit->setText(QDir::homeDirPath()+"/");
 
     /*    //add a new page (fileprops)
 	  QString projectname = "Test";
@@ -154,35 +153,14 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
-    helpButton()->hide();
 
-    connect( appname_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(textChanged()) );
-    connect( dest_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(textChanged()) );
-    connect( appname_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(projectNameChanged()) );
-    connect( dest_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(projectLocationChanged()) );
-    connect( author_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(textChanged()) );
-    connect( version_edit, SIGNAL(textChanged(const QString&)),
-             this, SLOT(textChanged()) );
-    connect( license_combo, SIGNAL(activated(int)),
-             this, SLOT(licenseChanged()) );
-    connect( dest_button, SIGNAL(clicked()),
-             this, SLOT(destButtonClicked()) );
-    licenseChanged();
-    tempFile = 0;
-    m_part = part;
+    //    licenseChanged();
     nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
 
 AppWizardDialog::~AppWizardDialog()
-{
-    delete tempFile;
-}
+{}
 
 
 void AppWizardDialog::textChanged()
@@ -193,7 +171,7 @@ void AppWizardDialog::textChanged()
         || dest_edit->text().isEmpty()
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();
-    setFinishEnabled(fileHeadersPage, !invalid);
+    setFinishEnabled(m_lastPage, !invalid);
     nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
@@ -262,7 +240,25 @@ void AppWizardDialog::licenseChanged()
 
     str += " ***************************************************************************/\n";
 
-    filetemplate_edit->setText(str);
+    QValueList<AppWizardFileTemplate>::Iterator it;
+    for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
+        QString style = (*it).style;
+        QMultiLineEdit *edit = (*it).edit;
+        
+        QString text;
+        if (style == "CStyle") {
+            text = str;
+        } else if (style == "ShellStyle") {
+            text = str;
+            text.replace(QRegExp("\\*|/"), "#");
+            text.replace(QRegExp("\n ##"), "\n##");
+            text.replace(QRegExp("\n #"), "\n# ");
+        }
+            
+        edit->setText(text);
+    }
+
+    textChanged(); // Update Next/Finish button
 }
 
 
@@ -324,128 +320,176 @@ void AppWizardDialog::accept()
         default: ;
         }
 
-    if (!tempFile) {
-        tempFile = new KTempFile();
-	//        tempFile->setAutoDelete(true);
+    QStringList templateFiles;
+    QValueList<AppWizardFileTemplate>::Iterator it;
+    for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
+        KTempFile *tempFile = new KTempFile();
+        m_tempFiles.append(tempFile);
+
+        QFile f;
+        f.open(IO_WriteOnly, tempFile->handle());
+        QTextStream temps(&f);
+        temps << (*it).edit->text();
+        f.flush();
+
+        templateFiles << (*it).suffix;
+        templateFiles << tempFile->name();
     }
-    // KTempFile sucks
-    QFile f;
-    f.open(IO_WriteOnly, tempFile->handle());
-    QTextStream temps(&f);
-    temps << filetemplate_edit->text();
-    f.flush();
 
+    m_cmdline = "perl ";
+    m_cmdline += script;
+    m_cmdline += " --author=";
+    m_cmdline += KShellProcess::quote(author_edit->text());
+    m_cmdline += " --email=";
+    m_cmdline +=  KShellProcess::quote(email_edit->text());
+    m_cmdline += " --version=";
+    m_cmdline +=  KShellProcess::quote(version_edit->text());
+    m_cmdline += " --appname=";
+    m_cmdline +=  KShellProcess::quote(appname_edit->text());
+    m_cmdline += " --dest=";
+    m_cmdline +=  KShellProcess::quote(dest_edit->text());
+    m_cmdline += " --source=";
+    m_cmdline +=  KShellProcess::quote(source);
+    m_cmdline += " --license=";
+    m_cmdline +=  KShellProcess::quote(license);
+    m_cmdline += " --licensefile=";
+    m_cmdline += KShellProcess::quote(licensefile);
+    m_cmdline += " --filetemplates=";
+    m_cmdline += KShellProcess::quote(templateFiles.join(","));
 
-    cmdline = "perl ";
-    cmdline += script;
-    cmdline += " --author=";
-    cmdline += KShellProcess::quote(author_edit->text());
-    cmdline += " --email=";
-    cmdline +=  KShellProcess::quote(email_edit->text());
-    cmdline += " --version=";
-    cmdline +=  KShellProcess::quote(version_edit->text());
-    cmdline += " --appname=";
-    cmdline +=  KShellProcess::quote(appname_edit->text());
-    cmdline += " --dest=";
-    cmdline +=  KShellProcess::quote(dest_edit->text());
-    cmdline += " --source=";
-    cmdline +=  KShellProcess::quote(source);
-    cmdline += " --license=";
-    cmdline +=  KShellProcess::quote(license);
-    cmdline += " --licensefile=";
-    cmdline += KShellProcess::quote(licensefile);
-    cmdline += " --filetemplate=";
-    cmdline += KShellProcess::quote(tempFile->name());
-
-    m_part->makeFrontend()->queueCommand(QString::null, cmdline);
+    m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
 
     QWizard::accept();
 }
 
-void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
-  kdDebug(9010) << "TemplateCategory: " << completeCategoryPath << endl;
-  QStringList categories = QStringList::split("/",completeCategoryPath);
-  QStringList::Iterator it;
-  QString category ="";
-  QListViewItem* pItem=0;
-  QListViewItem* pParentItem=0;
-  for( it = categories.begin(); it != categories.end(); ++it ){
-    category = category + "/"+ *it;
-    pItem = m_categoryMap.find(category);
-    if(pItem == 0){ // not found, create it
-      if(pParentItem==0){
-	pParentItem = new QListViewItem(templates_listview,*it);
-      }
-      else{
-	pParentItem = new QListViewItem(pParentItem,*it);
-      }
-      pParentItem->setPixmap(0, SmallIcon("folder"));
-      //pParentItem->setOpen(true);
-      kdDebug(9010) << "Category: " << category << endl;
-      m_categoryMap.insert(category,pParentItem);
-    }
-    else{
-      pParentItem = pItem;
-    }
-  }
-}
 
+void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
+{
+    // Delete old file template pages
+    while (!m_fileTemplates.isEmpty()) {
+        QMultiLineEdit *edit = m_fileTemplates.first().edit;
+        removePage(edit);
+        delete edit;
+        m_fileTemplates.remove(m_fileTemplates.begin());
+    }
+    m_lastPage = 0;
+    
+    ApplicationInfo *info = templateForItem(item);
+    if (info) {
+        m_pCurrentAppInfo = info;
+        if (!info->icon.isEmpty()) {
+            QFileInfo fi(info->templateName);
+            QDir dir(fi.dir());
+            dir.cdUp();
+            QPixmap pm;
+            pm.load(dir.filePath("template-" + fi.fileName() + "/" + info->icon));
+            icon_label->setPixmap(pm);
+        } else {
+            icon_label->clear();
+        }
+        desc_textview->setText(info->comment);
+        dest_edit->setText(info->defaultDestDir);
+        m_projectLocationWasChanged = false;
+        projectNameChanged(); // set the dest new
 
-void AppWizardDialog::templatesTreeViewClicked(QListViewItem* pItem){
-  ApplicationInfo* pInfo=0;
-  for(pInfo=m_appsInfo.first();pInfo!=0;pInfo=m_appsInfo.next()){
-    if(pInfo->pItem == pItem){
-      if (!pInfo->icon.isEmpty()) {
-        QFileInfo fi(pInfo->templateName);
-        QDir dir(fi.dir());
-        dir.cdUp();
-        QPixmap pm;
-        pm.load(dir.filePath("template-" + fi.fileName() + "/" + pInfo->icon));
-        icon_label->setPixmap(pm);
-      } else {
+        // Create new file template pages
+        QStringList l = QStringList::split(",", info->fileTemplates);
+        QStringList::ConstIterator it = l.begin();
+        while (it != l.end()) {
+            AppWizardFileTemplate fileTemplate;
+            fileTemplate.suffix = *it;
+            ++it;
+            if (it != l.end())
+                fileTemplate.style = *it;
+            ++it;
+
+            QMultiLineEdit *edit = new QMultiLineEdit(this);
+            edit->setFont(KGlobalSettings::fixedFont());
+            if (it == l.end())
+                m_lastPage = edit;
+            fileTemplate.edit = edit;
+            addPage(edit, i18n("Template for .%1 files").arg(fileTemplate.suffix));
+            m_fileTemplates.append(fileTemplate);
+        }
+        licenseChanged(); // update template editors
+    } else {
         icon_label->clear();
-      }
-      desc_textview->setText(pInfo->comment);
-      dest_edit->setText(pInfo->defaultDestDir);
-      m_pCurrentAppInfo = pInfo;
-      m_projectLocationWasChanged = false;
-      projectNameChanged(); // set the dest new
-      return;
+        desc_textview->clear();
     }
-  }
-  icon_label->setPixmap(QPixmap());
-  desc_textview->setText(QString());
-
 }
 
 
-void AppWizardDialog::destButtonClicked(){
-  QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
-						    "Project Location" );
-  if(!dir.isEmpty()){
-    dest_edit->setText(dir);
-  }
+void AppWizardDialog::destButtonClicked()
+{
+    QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
+                                                      "Project Location" );
+    if(!dir.isEmpty())
+        dest_edit->setText(dir);
 }
 
-QString AppWizardDialog::getShowFileAfterGeneration(){
-  if(m_pCurrentAppInfo !=0){
-    if(m_pCurrentAppInfo->showFileAfterGeneration !=""){
-      return dest_edit->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
+
+void AppWizardDialog::projectNameChanged()
+{
+    // Location was already edited by hand => don't change
+    if (!m_projectLocationWasChanged && m_pCurrentAppInfo)
+        dest_edit->setText(m_pCurrentAppInfo->defaultDestDir
+                           + "/" + appname_edit->text().lower());
+}
+
+
+void AppWizardDialog::projectLocationChanged()
+{
+    if (dest_edit->hasFocus())
+        m_projectLocationWasChanged = true;
+}
+
+
+void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategoryPath)
+{
+    kdDebug(9010) << "TemplateCategory: " << completeCategoryPath << endl;
+    QStringList categories = QStringList::split("/", completeCategoryPath);
+    QString category ="";
+    QListViewItem* pParentItem=0;
+
+    QStringList::ConstIterator it;
+    for (it = categories.begin(); it != categories.end(); ++it) {
+        category = category + "/" + *it;
+        QListViewItem *item = m_categoryMap.find(category);
+        if (!item) { // not found, create it
+            if (!pParentItem)
+                pParentItem = new QListViewItem(templates_listview,*it);
+            else
+                pParentItem = new QListViewItem(pParentItem,*it);
+
+            pParentItem->setPixmap(0, SmallIcon("folder"));
+            //pParentItem->setOpen(true);
+            kdDebug(9010) << "Category: " << category << endl;
+            m_categoryMap.insert(category,pParentItem);
+        } else {
+            pParentItem = item;
+        }
     }
-  }
-  return "";
 }
-void AppWizardDialog::projectNameChanged(){
-  if(!m_projectLocationWasChanged){
-    if(m_pCurrentAppInfo !=0){
-      dest_edit->setText(m_pCurrentAppInfo->defaultDestDir + "/" + QString(appname_edit->text()).lower());
-    }
-  }
-  
+
+
+ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
+{
+    ApplicationInfo *info = 0;
+    QListIterator<ApplicationInfo> it(m_appsInfo);
+    for (; it.current(); ++it)
+        if (it.current()->item == item)
+            return it.current();
+
+    return 0;
 }
-void AppWizardDialog::projectLocationChanged(){
-  if(dest_edit->hasFocus()){
-    m_projectLocationWasChanged = true;
-  }
+
+
+QString AppWizardDialog::getShowFileAfterGeneration()
+{
+    if (m_pCurrentAppInfo && !m_pCurrentAppInfo->showFileAfterGeneration.isEmpty())
+        return dest_edit->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
+
+    return QString();
 }
+
 #include "appwizarddlg.moc"

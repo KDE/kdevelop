@@ -4,4 +4,4 @@ Name=Application framework (KParts)
 Icon=kpartapp.png
 Category=C++/KDE
 Comment=Generates a complex KDE application with a KParts shell and a KPart component.
-
+FileTemplates=h,CStyle,cpp,CStyle

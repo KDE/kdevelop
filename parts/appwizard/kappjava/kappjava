@@ -4,3 +4,4 @@ Name=Application framework
 Icon=kappjava.png
 Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
+FileTemplates=java,CStyle

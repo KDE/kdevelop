@@ -26,16 +26,27 @@ class KTempFile;
 
 #include "appwizarddlgbase.h"
 
-class ApplicationInfo {
-public:
-  QString templateName;
-  QString name;
-  QString comment;
-  QString icon;
-  QString category;
-  QString defaultDestDir;
-  QString showFileAfterGeneration;
-  QListViewItem* pItem; // item pointer to the listview
+
+struct ApplicationInfo
+{
+    QString templateName;
+    QString name;
+    QString comment;
+    QString icon;
+    QString category;
+    QString defaultDestDir;
+    QString showFileAfterGeneration;
+    QString fileTemplates;
+    
+    QListViewItem *item; // item pointer to the listview
+};
+
+
+struct AppWizardFileTemplate
+{
+    QString suffix;
+    QString style;
+    QMultiLineEdit *edit;
 };
 
 
@@ -46,33 +57,33 @@ class AppWizardDialog : public AppWizardDialogBase
 public:
     AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
-    virtual void templatesTreeViewClicked(QListViewItem*);
-    QString getProjectName(){ return appname_edit->text();}
-    QString getProjectLocation(){ return dest_edit->text();}
+    QString getProjectName() { return appname_edit->text(); }
+    QString getProjectLocation() { return dest_edit->text(); }
+    QString getCommandLine() { return m_cmdline; }
     QString getShowFileAfterGeneration();
-    QString getCommandLine(){ return cmdline;}
- protected:
+
+protected:
+    virtual void templatesTreeViewClicked(QListViewItem*);
+    virtual void textChanged();
+    virtual void licenseChanged();
+    virtual void destButtonClicked();
+    virtual void projectNameChanged();    
+    virtual void projectLocationChanged();
     virtual void accept();
 
-private slots:
-    void textChanged();
-    void licenseChanged();
-    void destButtonClicked();
-    void projectNameChanged();    
-    void projectLocationChanged();
-    
 private:
-    void insertIntoTreeView(ApplicationInfo* pInfo);
-    void insertCategoryIntoTreeView(QString completeCategoryPath);
-    QStringList m_templateNames;
-    KTempFile *tempFile;
+    ApplicationInfo *templateForItem(QListViewItem *item);
+    void insertCategoryIntoTreeView(const QString &completeCategoryPath);
+
     QList<ApplicationInfo> m_appsInfo;
+    QValueList<AppWizardFileTemplate> m_fileTemplates;
     QDict<QListViewItem> m_categoryMap; //store the category name and the pointer in the treeview
 
     AppWizardPart *m_part;
+    QWidget *m_lastPage;
+    QString m_cmdline;
+    QList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
-    /** the cmdline for the makefrontend*/
-    QString cmdline;
     bool m_projectLocationWasChanged;
 };
 

@@ -3,3 +3,4 @@
 Name=Simple Python script
 Category=Python
 Comment=This generates a simplistic Hello world program in Python using Tkinter
+FileTemplates=py,ShellStyle

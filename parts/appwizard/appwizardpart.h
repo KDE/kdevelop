@@ -30,7 +30,7 @@ public:
 private slots:
     void slotNewProject();
     void slotImportProject();
-    void slotCommandFinished(QString command);
+    void slotCommandFinished(const QString &command);
     
 private:
     AppWizardDialog *m_dialog;

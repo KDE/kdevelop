@@ -39,15 +39,15 @@ sub initGideon
 {
         autoflush STDOUT 1;
 
-        GetOptions( 'author=s'      => \$AUTHOR,
-                    'email=s'       => \$EMAIL,
-                    'version=s'     => \$VERSION,
-                    'source=s'      => \$src,
-                    'dest=s'        => \$dest,
-                    'appname=s'     => \$APPNAME,
-                    'filetemplate:s'=> \$FILETEMPLATE,
-                    'license=s'     => \$LICENSE,
-                    'licensefile:s' => \$LICENSEFILE ) || die "Wrong options\n";
+        GetOptions( 'author=s'        => \$AUTHOR,
+                    'email=s'         => \$EMAIL,
+                    'version=s'       => \$VERSION,
+                    'source=s'        => \$src,
+                    'dest=s'          => \$dest,
+                    'appname=s'       => \$APPNAME,
+                    'filetemplates:s' => \$FILETEMPLATES,
+                    'license=s'       => \$LICENSE,
+                    'licensefile:s'   => \$LICENSEFILE ) || die "Wrong options\n";
 
         $APPNAMELC = lc $APPNAME;
         $APPNAMEUC = uc $APPNAME;
@@ -59,10 +59,14 @@ sub initGideon
 
 sub installFileTemplate
 {
-        return if $FILETEMPLATE eq "";
+        return if $FILETEMPLATES eq "";
 
         print "Installing file template\n";
-        install( $FILETEMPLATE, "${dest}/.gideon-filetemplate" );
+        mkdir( "${dest}/templates", 0777 );
+        my %templates = split(/,/, $FILETEMPLATES);
+        while (($suffix, $filename) = each %templates) {
+                install( $filename, "${dest}/templates/$suffix" );
+        }
 }
 
 

@@ -4,3 +4,4 @@ Name=Kicker Applet
 Icon=kicker.png
 Category=C++/KDE
 Comment=Generates a framework for an applet that embeds into the KDE panel
+FileTemplates=h,CStyle,cpp,CStyle

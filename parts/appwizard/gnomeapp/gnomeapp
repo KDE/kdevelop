@@ -4,3 +4,4 @@ Name=Application framework
 Icon=gnomeapp.png
 Category=C/GNOME
 Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
+FileTemplates=h,CStyle,c,CStyle

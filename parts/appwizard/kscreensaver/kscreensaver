@@ -4,4 +4,5 @@ Name=KDE Screen Saver
 Icon=kscreensaver.png
 Category=C++/KDE
 Comment=Generates a framework for a KDE screensaver.
+FileTemplates=h,CStyle,cpp,CStyle
 

@@ -235,14 +235,20 @@
             <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
+                    <vsizetype>3</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="minimumSize">
+                <size>
+                    <width>30</width>
+                    <height>0</height>
+                </size>
+            </property>
             <property name="maximumSize">
                 <size>
-                    <width>32</width>
+                    <width>30</width>
                     <height>32767</height>
                 </size>
             </property>

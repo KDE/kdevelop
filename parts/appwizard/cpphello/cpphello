@@ -4,3 +4,4 @@ Name=Simple Hello world program
 Icon=cpphello.png
 Category=C++
 Comment=Generates a simple Hello world program in C++
+FileTemplates=h,CStyle,cpp,CStyle
