@@ -37,6 +37,8 @@ DiffDialog::DiffType DiffDialog::requestedDiff() const
         return diffArbitrary;
     else if (diffLocalOtherRadio->isChecked())
         return diffLocalOther;
+    else if (diffLocalBaseRadio->isChecked())
+        return diffLocalBASE;
     else
         return diffLocalHEAD;
 }
@@ -49,6 +51,8 @@ QString DiffDialog::revA() const
         return revaEdit->text();
     else  if (requestedDiff() == diffLocalOther)
         return revOtherEdit->text();
+    else  if (requestedDiff() == diffLocalHEAD)
+        return "HEAD";
     else
         return QString::null;
 }

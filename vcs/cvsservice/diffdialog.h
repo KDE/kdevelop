@@ -30,7 +30,7 @@ public:
     QString revB() const;
 
 private:
-    enum  DiffType { diffLocalHEAD, diffLocalOther, diffArbitrary };
+    enum  DiffType { diffLocalBASE, diffLocalHEAD, diffLocalOther, diffArbitrary };
 
     DiffType requestedDiff() const;
 };

@@ -35,16 +35,30 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>diffLocalHeadRadio</cstring>
+                        <cstring>diffLocalBaseRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Local copy and HEAD</string>
+                        <string>&amp;Local copy and BASE</string>
                     </property>
                     <property name="accel">
                         <string>Alt+L</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>diffLocalHeadRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Local copy and &amp;HEAD</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -263,6 +277,7 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>diffLocalBaseRadio</tabstop>
     <tabstop>diffLocalHeadRadio</tabstop>
     <tabstop>diffLocalOtherRadio</tabstop>
     <tabstop>revOtherEdit</tabstop>
