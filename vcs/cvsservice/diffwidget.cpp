@@ -37,8 +37,9 @@
 static const int POPUP_BASE = 130977;
 
 QStringList KDiffTextEdit::extParts;
+QStringList KDiffTextEdit::extPartsTranslated;
 
-KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ) : QTextEdit( parent, name )
+KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): QTextEdit( parent, name )
 {
   KConfig* config = kapp->config();
   config->setGroup( "Diff" );
@@ -68,11 +69,11 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
 
   int i = 0;
 
-  for ( QStringList::Iterator it = extParts.begin(); it != extParts.end(); ++it ) {
+  for ( QStringList::Iterator it = extPartsTranslated.begin(); it != extPartsTranslated.end(); ++it ) {
     popup->insertItem( i18n( "Show in %1" ).arg( *it ), i + POPUP_BASE, i );
     i++;
   }
-  if ( !extParts.isEmpty() )
+  if ( !extPartsTranslated.isEmpty() )
     popup->insertSeparator( i );
   connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
 
@@ -144,7 +145,7 @@ void KDiffTextEdit::clearSyntaxHighlight()
     clearParagraphBackground( i );
   }
 }
-
+ 
 void KDiffTextEdit::searchExtParts()
 {
   // only execute once
@@ -154,11 +155,12 @@ void KDiffTextEdit::searchExtParts()
   init = true;
 
   // search all parts that can handle text/x-diff
-  KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "'KParts/ReadOnlyPart' in ServiceTypes");
+  KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "('KParts/ReadOnlyPart' in ServiceTypes) and ('text/x-diff' in ServiceTypes)");
   KTrader::OfferList::const_iterator it;
   for ( it = offers.begin(); it != offers.end(); ++it ) {
     KService::Ptr ptr = (*it);
-    extParts << ptr->name();
+    extPartsTranslated << ptr->name();
+    extParts << ptr->desktopEntryName();
   }
   return;
 }

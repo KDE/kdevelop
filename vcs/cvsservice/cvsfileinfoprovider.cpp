@@ -136,10 +136,10 @@ QString CVSFileInfoProvider::projectDirectory() const
 VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
 {
     QRegExp rx_recordStart( "^=+$" );
-    QRegExp rx_fileName( "^\\b(File: (\\.|-|\\w)+)\\b" );
-    QRegExp rx_fileStatus( "(Status: (\\.|-|\\s|\\w)+)" );
-    QRegExp rx_fileWorkRev( "^(\\s+Working revision:\\W+(\\d+\\.?)+)$" );
-    QRegExp rx_fileRepoRev( "^\\s+(Repository revision:\\W+(\\d+\\.?)+)" );
+    QRegExp rx_fileName( "^File: (\\.|\\-|\\w)+" );
+    QRegExp rx_fileStatus( "Status: (\\.|-|\\s|\\w)+" );
+    QRegExp rx_fileWorkRev( "\\bWorking revision:" );
+    QRegExp rx_fileRepoRev( "\\bRepository revision:" );
     //QRegExp rx_stickyTag( "\\s+(Sticky Tag:\\W+(w+|\\(none\\)))" );
     //QRegExp rx_stickyDate( "" ); // @todo but are they useful?? :-/
     //QRegExp rx_stickyOptions( "" ); //@todo
@@ -154,19 +154,17 @@ VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
 
     VCSFileInfoMap *vcsStates = new VCSFileInfoMap;
 
-    int state = 0,
-        lastAcceptableState = 4;
+    int state = 0;
+    const int lastAcceptableState = 4;
     // This is where the dirty parsing is done: from a string stream representing the
     // 'cvs log' output we build a map with more useful strunctured data ;-)
     for (QStringList::const_iterator it=stringStream.begin(); it != stringStream.end(); ++it)
     {
-        const QString &s = (*it);
-
-
+        QString s = (*it).stripWhiteSpace();
         kdDebug(9006) << ">> Parsing: " << s << endl;
 
-        if (state == 0 && rx_recordStart.exactMatch( s ))
-            ++state;
+        if (rx_recordStart.exactMatch( s ))
+            state = 1;
         else if (state == 1 && rx_fileName.search( s ) >= 0 && rx_fileStatus.search( s ) >= 0)    // FileName
         {
             fileName = rx_fileName.cap().replace( "File:", "" ).stripWhiteSpace();
@@ -176,13 +174,27 @@ VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
         }
         else if (state == 2 && rx_fileWorkRev.search( s ) >= 0)
         {
-            workingRevision = rx_fileWorkRev.cap().replace( "Working revision:", "" ).stripWhiteSpace();
-            ++state;
+            workingRevision = s.replace( "Working revision:", "" ).stripWhiteSpace();
+
+            QRegExp rx_revision( "\\b(((\\d)+\\.?)*|New file!)" );
+            if (rx_revision.search( workingRevision ) >= 0)
+            {
+                workingRevision = rx_revision.cap();
+                kdDebug(9006) << ">> WorkRev: " << workingRevision << endl;
+                ++state;
+            }
         }
         else if (state == 3 && rx_fileRepoRev.search( s ) >= 0)
         {
-            repositoryRevision = rx_fileRepoRev.cap().replace( "Repository revision:", "" ).stripWhiteSpace();
-            ++state; // Reset so we skip all other stuff for this record
+            repositoryRevision = s.replace( "Repository revision:", "" ).stripWhiteSpace();
+
+            QRegExp rx_revision( "\\b(((\\d)+\\.?)*|No revision control file)" );
+            if (rx_revision.search( s ) >= 0)
+            {
+                repositoryRevision = rx_revision.cap();
+                kdDebug(9006) << ">> RepoRev: " << repositoryRevision << endl;
+                ++state;
+            }
         }
 /*
         else if (state == 4 && rx_stickyTag.search( s ) >= 0)
@@ -198,7 +210,6 @@ VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
                 String2EnumState( fileStatus ) );
             kdDebug(9006) << "== Inserting: " << vcsInfo.toString() << endl;
             vcsStates->insert( fileName, vcsInfo );
-            state = 0;
         }
     }
     return vcsStates;
@@ -220,8 +231,10 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
         return VCSFileInfo::Added;
     else if (stateAsString == "Unresolved Conflict")
         return VCSFileInfo::Conflict;
-    else if (stateAsString == "Needs Patch" || stateAsString == "Needs Checkout")
-        return VCSFileInfo::Unknown;
+    else if (stateAsString == "Needs Patch")
+        return VCSFileInfo::NeedsPatch;
+    else if (stateAsString == "Needs Checkout")
+        return VCSFileInfo::NeedsCheckout;
     else
         return VCSFileInfo::Unknown; /// \FIXME exhaust all the previous cases first ;-)
 }
