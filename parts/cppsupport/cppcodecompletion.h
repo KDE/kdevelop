@@ -52,8 +52,6 @@ public:
     
     virtual int expressionAt( const QString& text, int index );
     virtual QStringList splitExpression( const QString& text );
-
-    virtual QString getMethodBody( int line, int column, QString* classname );
     
     QValueList<KTextEditor::CompletionEntry> findAllEntries( const QString& type, bool includePrivate, bool isInstance );
     
