@@ -157,10 +157,12 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_pCursorIface = 0;
     m_pEditIface   = 0;
     m_pCompletionIface = 0;
+    m_ccTimer = new QTimer( this );
+    connect( m_ccTimer, SIGNAL(timeout()), this, SLOT(completeText()) );
 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
-
+    
     QObject::connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	    	      this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 }
@@ -232,8 +234,8 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
                  SLOT( slotCursorPositionChanged() ) );
 */
-//	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
-//		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
+	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
+		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
@@ -303,6 +305,7 @@ CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/
 
     // should be done once and destroyed by destructor, shouldn't it ?
     if( !m_pParser ) m_pParser = new CppCCParser( );
+    
 
     // we use more than once
     int nNodePos = getNodePos( nLine, nCol );
@@ -424,6 +427,18 @@ CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/
         // remove the parsed variables from CppCCParser!
         m_pParser->variableList.clear( );
     }
+#else
+    m_ccTimer->stop();
+    
+    QString strCurLine = m_pEditIface->textLine( nLine );
+    QString ch = strCurLine.mid( nCol, 1 );
+    QString ch2 = strCurLine.mid( nCol-1, 2 );
+    
+    //kdDebug(9007) << "ch = " << ch << " -- ch2 = " << ch2 << endl;
+
+    if ( ch == "." || ch2 == "->" ){
+    	m_ccTimer->start( 500, true );
+    }    
 #endif
 }
 

@@ -20,6 +20,7 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qtimer.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/editinterface.h>
@@ -105,6 +106,7 @@ private:
 #ifdef DANIEL_CC
     CppCCParser* m_pParser;
 #endif
+    QTimer* m_ccTimer;
     KTextEditor::ViewCursorInterface* m_pCursorIface;
     KTextEditor::EditInterface* m_pEditIface;
     KTextEditor::CodeCompletionInterface* m_pCompletionIface;
