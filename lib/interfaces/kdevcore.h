@@ -117,8 +117,8 @@ private:
     class Private;
     Private *d;
 
-    EditorContext( const Context &);
-    EditorContext &operator=( const Context &);
+    EditorContext( const EditorContext &);
+    EditorContext &operator=( const EditorContext &);
 };
 
 
@@ -213,8 +213,8 @@ private:
     class Private;
     Private *d;
 
-    FileContext( const Context &);
-    FileContext &operator=( const Context &);
+    FileContext( const FileContext &);
+    FileContext &operator=( const FileContext &);
 };
 
 /**
@@ -245,8 +245,8 @@ private:
     class Private;
     Private *d;
 
-    ClassContext( const Context &);
-    ClassContext &operator=( const Context &);
+    ClassContext( const ClassContext &);
+    ClassContext &operator=( const ClassContext &);
 };
 
 /**
