@@ -391,7 +391,7 @@ CppSupportPart::initialParse( )
     bool createPreParseCS = true;
     QString pcsFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
     
-    QLabel* label = new QLabel( i18n( "Label" ), topLevel( )->statusBar( ) );
+    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
     label->setMinimumWidth( 600 );
     topLevel( )->statusBar( )->addWidget( label );
     label->show( );    
@@ -478,8 +478,10 @@ CppSupportPart::initialParse( )
     }
 
     if( createPreParseCS ){
-	if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false )
+	if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false ) {
+            delete label;
 	    return;
+        }
 
 	// ok, from here we're pre-parsing directories
 	kapp->setOverrideCursor( waitCursor );
