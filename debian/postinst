@@ -15,6 +15,14 @@ case "$1" in
     ;;
 esac
  
+if [ "$1" = configure ] && command -v install-docs >/dev/null 2>&1; then
+  install-docs -i /usr/share/doc-base/kdevelop-kdelibref
+  install-docs -i /usr/share/doc-base/kdevelop-tutorial
+  install-docs -i /usr/share/doc-base/kdevelop-addendum
+  install-docs -i /usr/share/doc-base/kdevelop-programming
+  install-docs -i /usr/share/doc-base/kdevelop-user
+fi
+
 #DEBHELPER#
  
 exit 0

@@ -193,6 +193,7 @@ if (@docs) {
 	}
 }
 
+if (@ARGV && $ARGV[0] eq 'docbase') { 
 # Create doc-base file
 
 if (-d "debian/doc-base") {
@@ -206,6 +207,7 @@ if (-d "debian/doc-base") {
 #        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
 }
 
+}
 
 # Create debian/menu files
 
