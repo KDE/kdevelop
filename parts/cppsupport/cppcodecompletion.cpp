@@ -27,6 +27,7 @@
 #include "tree_parser.h"
 #include "cpp_tags.h"
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmainwindow.h>
@@ -810,8 +811,8 @@ CppCodeCompletion::completeText( )
     }
 
     m_pSupport->backgroundParser()->unlock();
-    
-    
+
+
 
     if( !type.isEmpty() ){
         kdDebug(9007) << "type = " << type << endl;
@@ -824,47 +825,47 @@ CppCodeCompletion::completeText( )
 	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
-	    
+
 	    if( functionList.count() ){
 		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
 	    }
 	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type, true, isInstance );
-	    
-	    if( expr.isEmpty() ){	
+
+	    if( expr.isEmpty() ){
 		entryList += m_repository->getEntriesInScope( QStringList(), true );
 	    }
-	    
+
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     } else {
 	// maybe, you're tring to complete a C function
 	// NOTE: this can be a very huge task!
-	
+
 	kdDebug(9007) << "expr = " << expr << endl;
 	kdDebug(9007) << "word = " << word << endl;
-	
+
 	if( word.isEmpty() )
 	    word = expr;
-	
+
 	if( showArguments && word.length() ){
-	    
+
 	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
 
 	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
-	    
+
 	    if( functionList.count() ){
 		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
 	    }
-	    
+
 	} else if( !showArguments && word.length() ) {
 	    QValueList<KTextEditor::CompletionEntry> entryList = m_repository->getEntriesInScope( QStringList(), false );
-	    
+
 	    if( entryList.size() )
-		m_activeCompletion->showCompletionBox( entryList, word.length() );	
+		m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     }
 }
@@ -892,7 +893,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	while( it != parents.end() ){
 	    Tag& tag = *it;
 	    ++it;
-	    
+
 	    CppBaseClass<Tag> tagInfo( tag );
 
 	    kdDebug(9020) << "found base class " << tagInfo.baseClass() << endl;
@@ -1225,10 +1226,10 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    const Tag& tag = tags[ 0 ]; // hmmm
 	    if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
 		return tag.name();
-	    
+
 	    return tag.attribute( "t" ).toString();
 	}
-	
+
         QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
         kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
         QValueList<Tag>::Iterator it = parents.begin();
@@ -1305,6 +1306,9 @@ void CppCodeCompletion::setupCodeInformationRepository( )
 {
     // add all available pcs for now
 
+    m_pSupport->mainWindow()->statusBar()->message( i18n("Setup the code information repository. Please wait..."), 1000 );
+    kapp->processEvents();
+
     int id = 1;
     CppSupportPart* part = m_pSupport;
     QPtrListIterator<Catalog> it( part->catalogList() );
@@ -1314,7 +1318,7 @@ void CppCodeCompletion::setupCodeInformationRepository( )
 
         m_repository->addCatalog( QString::number(id++), catalog );
     }
-    
+
     (void) m_repository->getEntriesInScope( QStringList(), false );
 }
 
@@ -1355,7 +1359,7 @@ QString CppCodeCompletion::typeName( const QString& str )
 
 SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, int line, int col )
 {
-    kdDebug(9007) << "CppCodeCompletion::computeContext() -- main" << endl;	
+    kdDebug(9007) << "CppCodeCompletion::computeContext() -- main" << endl;
 
     SimpleContext* ctx = new SimpleContext();
 
@@ -1368,11 +1372,11 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 		while( it.current() ){
 		    ParameterDeclarationAST* param = it.current();
 		    ++it;
-		    
+
 		    SimpleVariable var;
 		    var.type = typeName( param->typeSpec()->text() );
 		    var.name = declaratorToString( param->declarator(), QString::null, true );
-		    
+
 		    if( !var.type.isEmpty() ){
 			ctx->add( var );
 			kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
@@ -1381,7 +1385,7 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 	    }
 	}
     }
-    
+
     computeContext( ctx, ast->functionBody(), line, col );
     return ctx;
 }

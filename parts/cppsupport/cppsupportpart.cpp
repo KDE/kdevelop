@@ -711,10 +711,15 @@ CppSupportPart::parseProject( )
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
 
-        maybeParse( fileInfo.absFilePath(), classStore() );
+        if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
+            QString absFilePath = fileInfo.absFilePath();
+            kdDebug(9000) << "parse file" << absFilePath << endl;
 
-	if( (n%5) == 0 )
-	    kapp->processEvents();
+            maybeParse( absFilePath, classStore() );
+
+	    if( (n%5) == 0 )
+	        kapp->processEvents();
+        }
 
 	if( m_projectClosed ){
 	    kdDebug(9007) << "ABORT" << endl;
