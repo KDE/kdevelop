@@ -44,4 +44,3 @@ $APPNAME$Part::~$APPNAME$Part()
 
 
 #include "$APPNAMELC$_part.moc"
-#include "kdevpart_part.moc"

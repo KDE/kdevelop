@@ -142,4 +142,3 @@ void $APPNAME$::optionsConfigureToolbars()
 }
 
 #include "$APPNAMELC$.moc"
-#include "app.moc"

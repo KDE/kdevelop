@@ -108,4 +108,3 @@ void $APPNAME$::blank()
     erase();
 }
 
-#include "dcopservice.moc"

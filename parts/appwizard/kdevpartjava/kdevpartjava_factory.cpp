@@ -111,4 +111,3 @@ KInstance *$APPNAME$Factory::instance()
 
 
 
-#include "kdevpartjava_factory.moc"
