@@ -24,8 +24,13 @@
 
 class CppSupportPart;
 class QTimer;
+class QTabBar;
+class QWidgetStack;
+class QGridLayout;
+class QLineEdit;
 class KDialogBase;
 class Problem;
+class KURL;
 
 namespace KParts{
     class Part;
@@ -36,7 +41,7 @@ namespace KTextEditor{
     class Document;
 }
 
-class ProblemReporter: public KListView{
+class ProblemReporter: public QWidget{
     Q_OBJECT
 public:
     ProblemReporter( CppSupportPart* part, QWidget* parent=0, const char* name=0 );
@@ -49,7 +54,7 @@ public slots:
     void reparse();
     void configure();
     void configWidget( KDialogBase* );
-
+    
 private slots:
     void slotPartAdded( KParts::Part* );
     void slotPartRemoved( KParts::Part* );
@@ -57,12 +62,31 @@ private slots:
     void slotTextChanged();
     void slotSelected( QListViewItem* );
     void slotFileParsed( const QString& fileName );
+    void slotTabSelected( int tabindex );
+    void slotFilter();    
+    void closedFile(const KURL &fileName);
 
 private:
     QString levelToString( int level ) const;
     int levelToMarkType( int level ) const;
-
+    void InitListView(KListView* listview);
+    void removeAllItems( QListView* listview, const QString& filename );
+    void filterList(KListView* listview, const QString& level);  
+    void updateCurrentWith(QListView* listview, const QString& level, const QString& filename);
+    void initCurrentList();
+    
 private:
+    QGridLayout* m_gridLayout;
+    QTabBar* m_tabBar;
+    QWidgetStack* m_widgetStack;
+    KListView* m_currentList;    
+    KListView* m_errorList;
+    KListView* m_fixmeList;
+    KListView* m_warningList;
+    KListView* m_todoList;
+    KListView* m_filteredList;    
+    QLineEdit* m_filterEdit;
+
     CppSupportPart* m_cppSupport;
     QGuardedPtr<KTextEditor::Document> m_document;
     KTextEditor::MarkInterface* m_markIface;

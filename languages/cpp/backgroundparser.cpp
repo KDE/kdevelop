@@ -55,7 +55,7 @@ public:
     virtual QString contents( const QString& fileName )
     {
       QString contents = QString::null;
-    
+
       if( !m_readFromDisk )
       {
             // GET LOCK
@@ -87,9 +87,9 @@ public:
         else
         {
           QFile f( fileName );
-          QTextStream stream( &f );
           if( f.open(IO_ReadOnly) ){
-              QString contents = stream.read();
+	      QTextStream stream( &f );
+              contents = stream.read();
               f.close();
           }
         }
@@ -255,10 +255,11 @@ void BackgroundParser::removeFile( const QString& fileName )
 
 Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bool lock )
 {
+
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( readFromDisk );
 
     m_driver->remove( fileName );
-    m_driver->parseFile( fileName );
+    m_driver->parseFile( fileName , false, true );
     m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
 						  // translation unit.
     TranslationUnitAST::Node translationUnit = m_driver->takeTranslationUnit( fileName );
@@ -267,7 +268,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, b
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
     unit->problems = m_driver->problems( fileName );
-
+    
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( false );
 
     if( lock )
@@ -312,12 +313,12 @@ TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
     return u->translationUnit;
 }
 
-QValueList<Problem> BackgroundParser::problems( const QString& fileName )
+QValueList<Problem> BackgroundParser::problems( const QString& fileName, bool readFromDisk, bool forceParse )
 {
     Unit* u = 0;
-    if( (u = findUnit(fileName)) == 0 ){
+    if( (u = findUnit(fileName)) == 0 || forceParse ){
 	m_fileList->remove( fileName );
-	u = parseFile( fileName, false );
+	u = parseFile( fileName, readFromDisk );
     }
 
     return u ? u->problems : QValueList<Problem>();
