@@ -128,6 +128,8 @@ void NewMainWindow::init() {
     createStatusBar();
 
     createGUI(0);
+    
+    readDockConfig(kapp->config());
 
     m_pMainWindowShare->init();
 	
@@ -429,6 +431,7 @@ void NewMainWindow::saveSettings()
     KConfig *config = kapp->config();
 
     ProjectManager::getInstance()->saveSettings();
+    writeDockConfig(config);
     saveMainWindowSettings(config, "Mainwindow");
 }
 
