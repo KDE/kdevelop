@@ -1,0 +1,4 @@
+Before committing a po file to cvs please use the command
+grep -v \#: pofile
+(where pofile is your <lang>.po)
+to delete the comments which take pretty much space
