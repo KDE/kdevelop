@@ -82,19 +82,20 @@ void Document::resetModifiedTime()
     return;
 
   struct stat buf;
-  ::stat(url().path(), &buf);
-  _mtime = buf.st_mtime;  
+  if (::stat(url().path(), &buf) == 0)
+    _mtime = buf.st_mtime; 
 }
 
 
 bool Document::modifiedOnDisc()
 {
   // we don't know about remote files
-  if (!url().isLocalFile())
+  if (!url().isLocalFile() || url().isEmpty())
     return false;
 
   struct stat buf;
-  ::stat(url().path(), &buf);
+  if (::stat(url().path(), &buf) != 0)
+    return false; // file doesn't exist
   if (buf.st_mtime == _mtime)
     return false;
 
