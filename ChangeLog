@@ -1,3 +1,7 @@
+2000-03-09 Ralf Nolden <rnolden@kdevelop.de>
+	* fixed manual and programming handbook error in description for
+construction of new dialogs
+
 2000-03-09 Walter Tasin  <tasin@kdevelop.de>
 	* fixing bug that creates problems with cvs-project generation
 	* updating framework of kdevelop

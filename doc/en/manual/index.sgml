@@ -2804,7 +2804,7 @@ In Dialogeditor mode, KDevelop changes the menubar, toolbar and statusbar slight
 
 <sect2><idx/Menubar/
 <p>
-<bf/<idx/"File"-menu/:/ replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
+<bf/<idx/"File"-menu/:/ "Open" allows to open a dialog definition file.
 
 <bf/<idx/"View"-menu/:/ replaces "Tree-View" with "Widgets-View", en/disabling the Widgets-View tabulators; adds "Properties-View" to
 en/disable the Properties-View and "Grid Size" to let you specify the grid size in pixels for horizontal and vertical values.
@@ -2830,9 +2830,11 @@ the project types KDE and Qt application, the <idx/dialog editor/ recognizes thi
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
 information about widget design, see <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook">.
 
-To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The "New
-Dialog" menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
-destination.
+To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The New File Dialog 
+appears where you can select the item Qt/KDE Dialog(*.kdevdlg). Enter the file name for your dialog to save the layout to.
+Then press OK and a new dialog will appear. When finished with the new dialog, select "Generate Complete Sources" from the Build-Menu. The
+dialog to generate the widget´s source file will appear. There you have to give KDevelop the dialog-specific information about the baseclass, 
+the source file names and destination.
 
 <sect1>Dialog Class
 <p>
