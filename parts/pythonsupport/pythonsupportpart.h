@@ -15,6 +15,7 @@
 
 #include "kdevlanguagesupport.h"
 
+class KDialogBase;
 
 class PythonSupportPart : public KDevLanguageSupport
 {
@@ -28,17 +29,23 @@ protected:
     virtual KDevLanguageSupport::Features features();
 
 private slots:
+    void projectConfigWidget(KDialogBase *dlg);
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
     void addedFileToProject(const QString &fileName);
     void removedFileFromProject(const QString &fileName);
-
+    void slotExecute();
+    void slotExecuteString();
+    void slotStartInterpreter();
+    
     // Internal
     void initialParse();
     void slotPydoc();
     
 private:
+    QString interpreter();
+    void startApplication(const QString &program);
     void maybeParse(const QString fileName);
     void parse(const QString &fileName);
 };

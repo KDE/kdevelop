@@ -14,19 +14,24 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <qvbox.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
+#include "domutil.h"
 
 #include "pythonsupportpart.h"
 #include "pythonsupportfactory.h"
+#include "pythonconfigwidget.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
 
@@ -42,8 +47,26 @@ PythonSupportPart::PythonSupportPart(KDevApi *api, QObject *parent, const char *
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     KAction *action;
+
+    action = new KAction( i18n("Execute program"), "exec", 0,
+                          this, SLOT(slotExecute()),
+                          actionCollection(), "build_exec" );
+    action->setStatusText( i18n("Runs the Python program") );
+    
+    action = new KAction( i18n("Execute string..."), "exec", 0,
+                          this, SLOT(slotExecuteString()),
+                          actionCollection(), "build_execstring" );
+    action->setStatusText( i18n("Executes a string as Python code") );
+
+    action = new KAction( i18n("Start Python interpreter"), "exec", 0,
+                          this, SLOT(slotStartInterpreter()),
+                          actionCollection(), "build_runinterpreter" );
+    action->setStatusText( i18n("Starts the Python interpreter without a program") );
+
     action = new KAction( i18n("Python documentation..."), 0,
                           this, SLOT(slotPydoc()),
                           actionCollection(), "help_pydoc" );
@@ -53,6 +76,14 @@ PythonSupportPart::PythonSupportPart(KDevApi *api, QObject *parent, const char *
 
 PythonSupportPart::~PythonSupportPart()
 {}
+
+
+void PythonSupportPart::projectConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Python"));
+    PythonConfigWidget *w = new PythonConfigWidget(*projectDom(), vbox, "python config widget");
+    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+}
 
 
 void PythonSupportPart::projectOpened()
@@ -156,7 +187,6 @@ void PythonSupportPart::parse(const QString &fileName)
     while (!stream.atEnd()) {
         rawline = stream.readLine();
         line = rawline.stripWhiteSpace().latin1();
-        //        kdDebug(9014) << "regex match line: " << line << endl;
         if (classre.match(line)) {
             
             lastClass = new ParsedClass;
@@ -211,6 +241,60 @@ void PythonSupportPart::parse(const QString &fileName)
     
     f.close();
 }
+
+
+QString PythonSupportPart::interpreter()
+{
+    QString prog = DomUtil::readEntry(*projectDom(), "/kdevpythonsupport/run/interpreter");
+    if (prog.isEmpty())
+        prog = "python";
+
+    return prog;
+}
+
+
+void PythonSupportPart::startApplication(const QString &program)
+{
+    QString cmd;
+    if (DomUtil::readBoolEntry(*projectDom(), "/kdevpythonsupport/run/terminal")) {
+        cmd = "konsole -e /bin/sh -c '";
+        cmd += program;
+        cmd += "; echo \"\n";
+        cmd += i18n("Press Enter to continue!");
+        cmd += "\";read'";
+    } else {
+        cmd = program;
+    }
+
+    appFrontend()->startAppCommand(cmd);
+}
+
+
+void PythonSupportPart::slotExecute()
+{
+    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    QString cmd = interpreter() + " " + program;
+    startApplication(cmd);
+}
+
+
+void PythonSupportPart::slotStartInterpreter()
+{
+    startApplication(interpreter());
+}
+
+
+void PythonSupportPart::slotExecuteString()
+{
+    bool ok;
+    QString cmd = KLineEditDlg::getText(i18n("String to execute"), QString::null, &ok, 0);
+    if (ok) {
+        cmd.prepend("'");
+        cmd.append("'");
+        startApplication(cmd);
+    }
+}
+
 
 void PythonSupportPart::slotPydoc()
 {
