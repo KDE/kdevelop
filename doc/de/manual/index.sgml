@@ -260,7 +260,7 @@ Wenn das make-Kommando Ihres Systems <tt/gmake/ lautet, geben Sie <tt/gmake/ ans
 <sect>Starten von KDevelop
 <p>
 Wenn Sie <idx/KDE/ als Window-Manager benutzen, können Sie KDevelop starten, indem Sie
-"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4" auswählen. Da KDevelop die <idx/KDE/-Mime Typen unterstützt, können Sie
+"K"&rarr"Entwicklung"&rarr"KDevelop 1.2" auswählen. Da KDevelop die <idx/KDE/-Mime Typen unterstützt, können Sie
 KDevelop auch mit einem Projekt starten, indem Sie eine KDevelop Projektdatei ("*.kdevprj", dargestellt mit dem Projekt-Icon) im
 <idx/KDE/ Dateimanager (kfm) auswählen.
 
@@ -283,7 +283,7 @@ gehen sollte, können Sie KDevelop jederzeit rekonfigurieren, indem Sie
 &percnt kdevelop  --setup
 </verb></tscreen>
 
-eingeben, oder, wenn Sie KDE benutzen,"K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup" auswählen.
+eingeben, oder, wenn Sie KDE benutzen,"K"&rarr"Entwicklung"&rarr"KDevelop Setup" auswählen.
 
 <sect>Das Installationsprogramm<label id="Das Installationsprogramm">
 <p>
@@ -545,7 +545,7 @@ zu jagen; vorausgesetzt daß die heutigen Computer konzipiert sind, diese durch e
 Codes gefunden werden, wenn sie die Ausführung eines Programms mit der Nachricht "Segmentation fault" (Speicherverletzung) beenden.
 GNU bietet dazu ein weiteres Werkzeug, <tt/gdb/, den GNU Debugger. Dieses Terminalprogramm erlaubt es, die internen Werte einer
 Applikation und die Ausführung durch setzen von Haltepunkten im Code zu beobachten. Gdb stoppt die Ausführung jedes mal, wenn das
-Programm an einen Haltepunkt kommt. Aber wie die meisten Werkzeuge wird auch der debugger von einem anderen Programm gesteuert, das ein
+Programm an einen Haltepunkt kommt. Aber wie die meisten Werkzeuge wird auch der Debugger von einem anderen Programm gesteuert, das ein
 Frontend dazu bietet und es erlaubt, die Werte einfach zu beobachten und Haltepunkte im Code zu setzen.
 
 Zu diesem Zweck wird die Applikation Ihres Projekts standardmäßig mit der Compileroption zum Debuggen erzeugt und speichert daher
