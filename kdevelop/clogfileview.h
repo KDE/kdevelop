@@ -92,6 +92,11 @@ protected:
     void selectedNewFile();
     void showFileProperties(QString file);
     void selectedFileRemove(QString file);
+    /**
+     * This signal is a helper to remove the file also from the actual editlist
+     */
+    void removeFileFromEditlist(const QString &absfilename);
+
     void selectedGroupProp();
     void logFileTreeSelected(QString);
     void menuItemHighlighted(int);

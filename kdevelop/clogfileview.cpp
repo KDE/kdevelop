@@ -369,36 +369,30 @@ void CLogFileView::slotFileDelete()
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-  QString name = dict->find(currentItem());
-  name = project->getProjectDir() + name;
-  KShellProcess* proc = new KShellProcess;
-  QFileInfo info(name);
-  QString command = "rm -f " + name;
-  //  cerr << "\n\n" << command << "\n\n";
-  *proc << command;
-  proc->start();
+  QString fullname = getFullFilename(currentItem());
+  QString name = getFileName(currentItem());
 
-  if(show_path) {
-	  emit selectedFileRemove(currentItem()->text(0));
-  }
-  else{
-	  emit selectedFileRemove(dict->find(currentItem()));
-	}
-  
+  QFile::remove(fullname);
+
+  emit selectedFileRemove(name);
+  emit removeFileFromEditlist(fullname);
 }
 
 
-QString CLogFileView::getFileName(QListViewItem* item){
-	if(show_path){
-		return item->text(0);
-	}
- 	return  dict->find(item);
+QString CLogFileView::getFileName(QListViewItem* item)
+{
+  QString name;
+  if(show_path)
+    name=item->text(0);
+  else
+    name=dict->find(item);
+  return name;
 }
 
 
 QString CLogFileView::getFullFilename(QListViewItem* item)
 {
-    return project->getProjectDir() + getFileName(item);
+  return project->getProjectDir() + getFileName(item);
 }
 
 
