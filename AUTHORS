@@ -27,6 +27,9 @@ QEditor part, help for code-completion:
 Qt 3 port, various patches
   Harald Fernengel <harry@kdevelop.org>
 
+Patches:
+domseichter@t-online.de (Dominik Seichter)
+
 Other software included in the source package:
 
 * KDE 2.0 Development Book 
