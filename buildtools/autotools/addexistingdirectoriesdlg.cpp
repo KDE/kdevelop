@@ -223,7 +223,7 @@ void AddExistingDirectoriesDialog::slotOk()
 
         // Create a Makefile in the new subdirectory
 
-        QDir dir( m_spitem->path );
+        QDir dir( m_spitem->path + "/" + name );
         QFile f( dir.filePath("Makefile.am") );
         if (f.exists()) {
             m_widget->getSubprojectView()->parse( newitem );
