@@ -1117,7 +1117,21 @@ void CKDevelop::newSubDir(){
   showOutputView(true);
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
-  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+//  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  shell_process << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+            if (!prj->getCXXFLAGS().isEmpty())
+                  shell_process << prj->getCXXFLAGS() << " ";
+            if (!prj->getAdditCXXFLAGS().isEmpty())
+                  shell_process << prj->getAdditCXXFLAGS();
+  }
+  shell_process  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+                shell_process << prj->getLDFLAGS();
+  shell_process  << "\" ";
+  shell_process << make_cmd << " -f Makefile.dist  && ./configure" << prj->getConfigureArgs();
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 

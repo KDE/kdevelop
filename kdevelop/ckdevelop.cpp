@@ -720,6 +720,21 @@ void CKDevelop::slotBuildCompileFile(){
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+	QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+	process << flaglabel;
+	if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty()) {
+		if (!prj->getCXXFLAGS().isEmpty()) {
+			process << prj->getCXXFLAGS() << " ";
+		}
+		if (!prj->getAdditCXXFLAGS().isEmpty()) {
+			process << prj->getAdditCXXFLAGS();
+		}
+	}
+	process  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty()) {
+		process << prj->getLDFLAGS();
+	}
+  process  << "\" ";
   process << make_cmd << fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
@@ -784,6 +799,20 @@ void CKDevelop::slotBuildMake(){
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  process << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+            if (!prj->getCXXFLAGS().isEmpty())
+                  process << prj->getCXXFLAGS() << " ";
+            if (!prj->getAdditCXXFLAGS().isEmpty())
+                  process << prj->getAdditCXXFLAGS();
+  }
+  process  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+                process << prj->getLDFLAGS();
+  process  << "\" ";
+
   if(!prj->getMakeOptions().isEmpty()){
     process << make_cmd << prj->getMakeOptions();
   }
@@ -880,7 +909,8 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   shell_process  << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
          shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-  shell_process  << "\" "<< "./configure && " << make_cmd;
+//  shell_process  << "\" "<< "./configure && " << make_cmd;
+	shell_process  << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
 
   beep = true;
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
