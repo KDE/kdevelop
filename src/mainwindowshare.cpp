@@ -322,7 +322,8 @@ void MainWindowShare::slotSettings()
     config->writeEntry( "Height", dlg.size().height() );
     config->writeEntry( "Width", dlg.size().width() );
 
-    ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
+    if ( dlg.result() != QDialog::Rejected )
+        ShellExtension::getInstance()->acceptGlobalSettingsPage(&dlg);
 }
 
 void MainWindowShare::slotConfigureEditors()
@@ -466,3 +467,4 @@ void MainWindowShare::slotActivePartChanged( KParts::Part * part )
 }
 
 #include "mainwindowshare.moc"
+//kate: space-indent on; indent-width 4;
