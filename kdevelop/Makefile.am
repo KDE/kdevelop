@@ -9,11 +9,11 @@ EXTRA_DIST = kdevelop.desktop kdevelop.xpm mini-kdevelop.xpm caddclassattributed
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
-	$(INSTALL_DATA) kdevelop.desktop $(kde_appsdir)/Applications/kdevelop.desktop
+	$(INSTALL_DATA) $(srcdir)/kdevelop.desktop $(kde_appsdir)/Applications/kdevelop.desktop
 	$(mkinstalldirs) $(kde_icondir)/medium/locolor/apps/
-	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)/medium/locolor/apps/kdevelop.xpm
+	$(INSTALL_DATA) $(srcdir)/kdevelop.xpm $(kde_icondir)/medium/locolor/apps/kdevelop.xpm
 	$(mkinstalldirs) $(kde_icondir)/small/locolor/apps/
-	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_icondir)/small/locolor/apps/kdevelop.xpm
+	$(INSTALL_DATA) $(srcdir)/mini-kdevelop.xpm $(kde_icondir)/small/locolor/apps/kdevelop.xpm
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/kdevelop.desktop

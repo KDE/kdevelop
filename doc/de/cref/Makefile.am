@@ -2,7 +2,7 @@ EXTRA_DIST =index.html
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/reference/C/
-	$(INSTALL_DATA) index.html $(kde_htmldir)/de/kdevelop/reference/C/index.html
+	$(INSTALL_DATA) $(srcdir)/index.html $(kde_htmldir)/de/kdevelop/reference/C/index.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/de/kdevelop/reference/C/index.html

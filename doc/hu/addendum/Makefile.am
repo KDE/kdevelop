@@ -5,17 +5,17 @@ EXTRA_DIST =index.sgml logotp3.png \
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/hu/kdevelop/addendum
-	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/hu/kdevelop/addendum/logotp3.png
-	$(INSTALL_DATA) index.html $(kde_htmldir)/hu/kdevelop/addendum/index.html
-	$(INSTALL_DATA) index-1.html $(kde_htmldir)/hu/kdevelop/addendum/index-1.html
-	$(INSTALL_DATA) index-2.html $(kde_htmldir)/hu/kdevelop/addendum/index-2.html
-	$(INSTALL_DATA) index-3.html $(kde_htmldir)/hu/kdevelop/addendum/index-3.html
-	$(INSTALL_DATA) index-4.html $(kde_htmldir)/hu/kdevelop/addendum/index-4.html
-	$(INSTALL_DATA) index-5.html $(kde_htmldir)/hu/kdevelop/addendum/index-5.html
-	$(INSTALL_DATA) index-6.html $(kde_htmldir)/hu/kdevelop/addendum/index-6.html
-	$(INSTALL_DATA) index-7.html $(kde_htmldir)/hu/kdevelop/addendum/index-7.html
-	$(INSTALL_DATA) index-8.html $(kde_htmldir)/hu/kdevelop/addendum/index-8.html
-	$(INSTALL_DATA) index-9.html $(kde_htmldir)/hu/kdevelop/addendum/index-9.html
+	$(INSTALL_DATA) $(srcdir)/logotp3.png $(kde_htmldir)/hu/kdevelop/addendum/logotp3.png
+	$(INSTALL_DATA) $(srcdir)/index.html $(kde_htmldir)/hu/kdevelop/addendum/index.html
+	$(INSTALL_DATA) $(srcdir)/index-1.html $(kde_htmldir)/hu/kdevelop/addendum/index-1.html
+	$(INSTALL_DATA) $(srcdir)/index-2.html $(kde_htmldir)/hu/kdevelop/addendum/index-2.html
+	$(INSTALL_DATA) $(srcdir)/index-3.html $(kde_htmldir)/hu/kdevelop/addendum/index-3.html
+	$(INSTALL_DATA) $(srcdir)/index-4.html $(kde_htmldir)/hu/kdevelop/addendum/index-4.html
+	$(INSTALL_DATA) $(srcdir)/index-5.html $(kde_htmldir)/hu/kdevelop/addendum/index-5.html
+	$(INSTALL_DATA) $(srcdir)/index-6.html $(kde_htmldir)/hu/kdevelop/addendum/index-6.html
+	$(INSTALL_DATA) $(srcdir)/index-7.html $(kde_htmldir)/hu/kdevelop/addendum/index-7.html
+	$(INSTALL_DATA) $(srcdir)/index-8.html $(kde_htmldir)/hu/kdevelop/addendum/index-8.html
+	$(INSTALL_DATA) $(srcdir)/index-9.html $(kde_htmldir)/hu/kdevelop/addendum/index-9.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/hu/kdevelop/addendum/logotp3.png

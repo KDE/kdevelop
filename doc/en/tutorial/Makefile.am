@@ -12,23 +12,23 @@ EXTRA_DIST = index.sgml logotp3.png \
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/tutorial
-	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/en/kdevelop/tutorial/logotp3.png
-	$(INSTALL_DATA) index.html $(kde_htmldir)/en/kdevelop/tutorial/index.html
-	$(INSTALL_DATA) index-1.html $(kde_htmldir)/en/kdevelop/tutorial/index-1.html
-	$(INSTALL_DATA) index-2.html $(kde_htmldir)/en/kdevelop/tutorial/index-2.html
-	$(INSTALL_DATA) index-3.html $(kde_htmldir)/en/kdevelop/tutorial/index-3.html
-	$(INSTALL_DATA) index-4.html $(kde_htmldir)/en/kdevelop/tutorial/index-4.html
-	$(INSTALL_DATA) index-5.html $(kde_htmldir)/en/kdevelop/tutorial/index-5.html
-	$(INSTALL_DATA) index-6.html $(kde_htmldir)/en/kdevelop/tutorial/index-6.html
-	$(INSTALL_DATA) index-7.html $(kde_htmldir)/en/kdevelop/tutorial/index-7.html
-	$(INSTALL_DATA) index-8.html $(kde_htmldir)/en/kdevelop/tutorial/index-8.html
-	$(INSTALL_DATA) index-9.html $(kde_htmldir)/en/kdevelop/tutorial/index-9.html
-	$(INSTALL_DATA) index-10.html $(kde_htmldir)/en/kdevelop/tutorial/index-10.html
-	$(INSTALL_DATA) index-11.html $(kde_htmldir)/en/kdevelop/tutorial/index-11.html
-	$(INSTALL_DATA) index-12.html $(kde_htmldir)/en/kdevelop/tutorial/index-12.html
-	$(INSTALL_DATA) index-13.html $(kde_htmldir)/en/kdevelop/tutorial/index-13.html
-	$(INSTALL_DATA) index-14.html $(kde_htmldir)/en/kdevelop/tutorial/index-14.html
-	$(INSTALL_DATA) index-15.html $(kde_htmldir)/en/kdevelop/tutorial/index-15.html
+	$(INSTALL_DATA) $(srcdir)/logotp3.png $(kde_htmldir)/en/kdevelop/tutorial/logotp3.png
+	$(INSTALL_DATA) $(srcdir)/index.html $(kde_htmldir)/en/kdevelop/tutorial/index.html
+	$(INSTALL_DATA) $(srcdir)/index-1.html $(kde_htmldir)/en/kdevelop/tutorial/index-1.html
+	$(INSTALL_DATA) $(srcdir)/index-2.html $(kde_htmldir)/en/kdevelop/tutorial/index-2.html
+	$(INSTALL_DATA) $(srcdir)/index-3.html $(kde_htmldir)/en/kdevelop/tutorial/index-3.html
+	$(INSTALL_DATA) $(srcdir)/index-4.html $(kde_htmldir)/en/kdevelop/tutorial/index-4.html
+	$(INSTALL_DATA) $(srcdir)/index-5.html $(kde_htmldir)/en/kdevelop/tutorial/index-5.html
+	$(INSTALL_DATA) $(srcdir)/index-6.html $(kde_htmldir)/en/kdevelop/tutorial/index-6.html
+	$(INSTALL_DATA) $(srcdir)/index-7.html $(kde_htmldir)/en/kdevelop/tutorial/index-7.html
+	$(INSTALL_DATA) $(srcdir)/index-8.html $(kde_htmldir)/en/kdevelop/tutorial/index-8.html
+	$(INSTALL_DATA) $(srcdir)/index-9.html $(kde_htmldir)/en/kdevelop/tutorial/index-9.html
+	$(INSTALL_DATA) $(srcdir)/index-10.html $(kde_htmldir)/en/kdevelop/tutorial/index-10.html
+	$(INSTALL_DATA) $(srcdir)/index-11.html $(kde_htmldir)/en/kdevelop/tutorial/index-11.html
+	$(INSTALL_DATA) $(srcdir)/index-12.html $(kde_htmldir)/en/kdevelop/tutorial/index-12.html
+	$(INSTALL_DATA) $(srcdir)/index-13.html $(kde_htmldir)/en/kdevelop/tutorial/index-13.html
+	$(INSTALL_DATA) $(srcdir)/index-14.html $(kde_htmldir)/en/kdevelop/tutorial/index-14.html
+	$(INSTALL_DATA) $(srcdir)/index-15.html $(kde_htmldir)/en/kdevelop/tutorial/index-15.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial/logotp3.png
