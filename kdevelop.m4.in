@@ -61,6 +61,7 @@ if test "$kdelibs_doxydir" = NO; then
 fi
 AC_DEFINE_UNQUOTED(KDELIBS_DOXYDIR, "$kdelibs_doxydir", [where KDE documentation is installed])
 ])
+AC_SUBST(kdelibs_doxydir)
 
 
 dnl
