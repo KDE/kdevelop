@@ -1215,17 +1215,17 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   QWidget* w6 = new QWidget( this, "bin" );
 
   QGroupBox* binary_box= new QGroupBox(w6,"binary_box");
-  binary_box->setGeometry(10,10,400,150);
+  binary_box->setGeometry(10,10,560,150);
   binary_box->setMinimumSize(0,0);
   binary_box->setTitle(i18n("Name"));
 
   QLabel* binary = new QLabel(w6,"binary_label");
-  binary->setGeometry(30,40,300,30);
+  binary->setGeometry(30,40,500,30);
   binary->setMinimumSize(0,0);
   binary->setText(i18n("Filename of binary that will be started on \"Execute\":"));
 
   binary_edit= new QLineEdit(w6,"binary_edit");
-  binary_edit->setGeometry(30,70,300,30);
+  binary_edit->setGeometry(30,70,470,30);
   binary_edit->setMinimumSize(0,0);
   binary_edit->setMaxLength( 32767 );
 
@@ -1236,7 +1236,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   }
 
   QPushButton* binary_button= new QPushButton(w6,"binary_button");
-  binary_button->setGeometry(340,70,30,30);
+  binary_button->setGeometry(510,70,30,30);
   binary_button->setMinimumSize(0,0);
   binary_button->setPixmap(pix);
 
