@@ -236,6 +236,7 @@ void CKDevelop::initView()
   s_tab_view = new CTabCtl(main);
   main->setWidget( s_tab_view );
 
+
 //  s_tab_view = new CTabCtl(topSplitter);
   s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
@@ -316,6 +317,9 @@ void CKDevelop::initView()
 
   // set the mainwidget
 //  setCentralWidget(mainSplitter);
+  main->manualDock(getMainDockWidget(), KDockWidget::DockCenter);
+  outputdock->manualDock(getMainDockWidget(), KDockWidget::DockBottom, 80);
+  treedock->manualDock(getMainDockWidget(), KDockWidget::DockLeft, 20);
 
   initKeyAccel();
   initMenuBar();
