@@ -24,12 +24,6 @@
 /* Define to 1 if NLS is requested.  */
 #undef ENABLE_NLS
 
-#undef QT_DOCDIR
-#undef KDELIBS_DOCDIR
-#undef KDOC_INDEXDIR
-#undef WITH_DOCBASE
-#undef WITH_KDOC2
-
 /* Name of package */
 #undef PACKAGE
 
