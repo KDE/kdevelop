@@ -1,3 +1,7 @@
+2001-05-08  rokrau@yahoo.com
+    * added F12 for switch to header/source
+    * added Edit menu entries for CTags related functionality
+
 2001-05-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: prevented annoying undock of output tool-views when calling Make or Run
     * bugfix: prevented annoying switch to class_tree tool-view when stepping through code with the internal debugger
