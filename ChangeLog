@@ -1,8 +1,15 @@
+2001-05-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Changed compiler frontend to use QTextView, instead of QListBox.
+	  Now copy&paste are possible, and the view scrolls to the end of the
+	  output (unless the user has clicked otherwise)
+	* Also fixed the shortcuts
+
 2001-05-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* Commited the new editor framework
-      Note that it is not yet active, as it is not yet
-      complete. But it is evolving...
+	  Note that it is not yet active, as it is not yet
+	  complete. But it is evolving...
 
 2001-05-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

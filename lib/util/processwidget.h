@@ -90,8 +90,6 @@ protected slots:
     void slotProcessExited(KProcess*);
 
 private:
-    void flushStdoutBuf();
-    void flushStderrBuf();
     KProcess *childproc;
     QString stdoutbuf;
     QString stderrbuf;

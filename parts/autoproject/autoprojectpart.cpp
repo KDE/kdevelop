@@ -44,7 +44,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name
 
     KAction *action;
 
-    action = new KAction( i18n("&Build project"), 0,
+    action = new KAction( i18n("&Build project"), Key_F9,
                           this, SLOT(slotBuild()),
                           actionCollection(), "project_build" );
     

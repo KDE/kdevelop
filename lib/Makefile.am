@@ -11,9 +11,10 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 			$(top_builddir)/lib/sourceinfo/libkdevsourceinfo.la \
 			$(top_builddir)/lib/util/libkdevutil.la \
 			$(top_builddir)/lib/kwrite/libkdevkwrite.la \
+			$(top_builddir)/lib/qt3stuff/libqt3widgets.la \
 			-lktexteditor -lkspell -lkdeprint $(LIB_KPARTS) $(LIB_KFILE)
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces sourceinfo kwrite util
+SUBDIRS = interfaces sourceinfo kwrite util qt3stuff
 

@@ -14,9 +14,6 @@
 
 * Implement modification of build order.
 
-* Change make frontend to use QTextView instead of QListBox, so
-  word wrapping can be implemented.
-
 * Perhaps use konsole part for the application frontend
 
 * Split the documentation tree in two halves, so that class lists

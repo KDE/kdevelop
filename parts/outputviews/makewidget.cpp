@@ -13,6 +13,8 @@
 #include <qapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <knotifyclient.h>
+#include <kprocess.h>
 #include <kregexp.h>
 
 #include "kdevcore.h"
@@ -20,52 +22,64 @@
 #include "makewidget.h"
 
 
-class MakeListBoxItem : public ProcessListBoxItem
+class MakeItem
 {
 public:
-    MakeListBoxItem(const QString &s,
-                    const QString &filename, int linenumber);
-    QString filename()
-        { return fn; }
-    int linenumber()
-        { return lineno; }
-    virtual bool isCustomItem();
-
-private:
-    QString fn;
-    int lineno;
+    MakeItem(int pg, const QString fn, int ln)
+        : parag(pg), fileName(fn), lineNum(ln)
+    {}
+    int parag;
+    QString fileName;
+    int lineNum;
 };
-
-MakeListBoxItem::MakeListBoxItem(const QString &s,
-                                 const QString &filename,
-                                 int linenumber)
-    : ProcessListBoxItem(s, Error), fn(filename), lineno(linenumber)
-{}
-
-
-bool MakeListBoxItem::isCustomItem()
-{
-    return true;
-}
 
 
 MakeWidget::MakeWidget(MakeViewPart *view)
-    : ProcessWidget(0, "make widget")
+    : QTextEdit(0, "make widget")
 {
-    connect( this, SIGNAL(highlighted(int)),
-             this, SLOT(lineHighlighted(int)) );
+    setWordWrap(WidgetWidth);
+    setWrapPolicy(Anywhere);
+    
+    childproc = new KShellProcess("/bin/sh");
+    
+    connect(childproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
+            this, SLOT(slotReceivedOutput(KProcess*,char*,int)) );
+    connect(childproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
+            this, SLOT(slotReceivedError(KProcess*,char*,int)) );
+    connect(childproc, SIGNAL(processExited(KProcess*)),
+            this, SLOT(slotProcessExited(KProcess*) )) ;
 
+    items.setAutoDelete(true);
+    parags = 0;
+    moved = false;
+    
     m_part = view;
 }
 
 
 MakeWidget::~MakeWidget()
-{}
+{
+    delete childproc;
+}
 
 
 void MakeWidget::startJob(const QString &dir, const QString &command)
 {
-    ProcessWidget::startJob(dir, command);
+    clear();
+    items.clear();
+    parags = 0;
+    moved = false;
+    
+    insertLine(command, Diagnostic);
+    childproc->clearArguments();
+    if (!dir.isNull()) {
+        kdDebug(9000) << "Changing to dir " << dir << endl;
+        QDir::setCurrent(dir);
+    }
+
+    *childproc << command;
+    childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+    
     dirstack.clear();
     dirstack.push(new QString(QDir::currentDirPath()));
 
@@ -74,68 +88,159 @@ void MakeWidget::startJob(const QString &dir, const QString &command)
 }
 
 
+
+void MakeWidget::killJob()
+{
+    childproc->kill();
+}
+
+
+bool MakeWidget::isRunning()
+{
+    return childproc->isRunning();
+}
+
+
 void MakeWidget::nextError()
 {
-    // Search for a custom (= error) item beginning from selected
-    // item or - if none is selected - from beginning
-    int count = numRows();
-    
-    for (int i = currentItem()+1; i < count; ++i)
-        if (item(i) && static_cast<ProcessListBoxItem*>(item(i))->isCustomItem()) {
-            setCurrentItem(i);
+    int parag, index;
+    if (moved)
+        getCursorPosition(parag, index);
+    else
+        parag = 0;
+
+    QListIterator<MakeItem> it(items);
+    for (; it.current(); ++it)
+        if ((*it)->parag > parag) {
+            moved = true;
+            parag = (*it)->parag;
+            document()->removeSelection(0);
+            setSelection(parag, 0, parag+1, 0, 0);
+            setCursorPosition(parag, 0);
+            ensureCursorVisible();
+            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
             return;
         }
-            
-    QApplication::beep();
+    
+    KNotifyClient::beep();
 }
 
 
 void MakeWidget::prevError()
 {
-    // Search for a custom (= error) item beginning from selected
-    // item or - if none is selected - from end
-    int cur = (currentItem() == -1)? numRows() : currentItem();
-    for (int i = cur; i >= 0; --i)
-        if (item(i) && static_cast<ProcessListBoxItem*>(item(i))->isCustomItem()) {
-            setCurrentItem(i);
+    int parag, index;
+    if (moved)
+        getCursorPosition(parag, index);
+    else
+        parag = 0;
+
+    QListIterator<MakeItem> it(items);
+    for (it.toLast(); it.current(); --it)
+        if ((*it)->parag < parag) {
+            moved = true;
+            parag = (*it)->parag;
+            document()->removeSelection(0);
+            setSelection(parag, 0, parag+1, 0, 0);
+            setCursorPosition(parag, 0);
+            ensureCursorVisible();
+            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
             return;
         }
-
-    QApplication::beep();
+            
+    KNotifyClient::beep();
 }
 
 
-void MakeWidget::childFinished(bool normal, int status)
+void MakeWidget::contentsMousePressEvent(QMouseEvent *e)
+{
+    QTextEdit::contentsMousePressEvent(e);
+    int parag, index;
+    getCursorPosition(parag, index);
+    searchItem(parag);
+}
+
+
+void MakeWidget::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Key_Return || e->key() == Key_Enter) {
+        int parag, index;
+        getCursorPosition(parag, index);
+        searchItem(parag);
+    } else
+        QTextEdit::keyPressEvent(e);
+}
+
+
+void MakeWidget::searchItem(int parag)
+{
+    QListIterator<MakeItem> it(items);
+    for (; it.current(); ++it) {
+        if ((*it)->parag == parag)
+            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
+        if ((*it)->parag >= parag)
+            return;
+    }
+}
+
+
+void MakeWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
+{
+    // Flush stderr buffer
+    if (!stderrbuf.isEmpty()) {
+        insertStderrLine(stderrbuf);
+        stderrbuf = "";
+    }
+    
+    stdoutbuf += QString::fromLatin1(buffer, buflen);
+    int pos;
+    while ( (pos = stdoutbuf.find('\n')) != -1) {
+        QString line = stdoutbuf.left(pos);
+        insertStdoutLine(line);
+        stdoutbuf.remove(0, pos+1);
+    }
+}
+
+
+void MakeWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
+{
+    // Flush stdout buffer
+    if (!stdoutbuf.isEmpty()) {
+        insertStdoutLine(stdoutbuf);
+        stdoutbuf = "";
+    }
+    
+    stderrbuf += QString::fromLatin1(buffer, buflen);
+    int pos;
+    while ( (pos = stderrbuf.find('\n')) != -1) {
+        QString line = stderrbuf.left(pos);
+        insertStderrLine(line);
+        stderrbuf.remove(0, pos+1);
+    }
+}
+
+
+void MakeWidget::slotProcessExited(KProcess *)
 {
     QString s;
-    ProcessListBoxItem::Type t;
+    Type t;
     
-    if (normal) {
-        if (status) {
-            s = i18n("*** Exited with status: %1 ***").arg(status);
-            t = ProcessListBoxItem::Error;
+    if (childproc->normalExit()) {
+        if (childproc->exitStatus()) {
+            s = i18n("*** Exited with status: %1 ***").arg(childproc->exitStatus());
+            t = Error;
         } else {
             s = i18n("*** Success ***");
-            t = ProcessListBoxItem::Diagnostic;
+            t = Diagnostic;
         }
     } else {
         s = i18n("*** Compilation aborted ***");
-        t = ProcessListBoxItem::Error;
+        t = Error;
     }
     
-    insertItem(new ProcessListBoxItem(s, t));
+    insertLine(s, t);
 
+    emit processExited(childproc->normalExit());
     m_part->core()->running(m_part, false);
-}
-
-
-void MakeWidget::lineHighlighted(int line)
-{
-    ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
-    if (i->isCustomItem()) {
-        MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-        m_part->core()->gotoSourceFile(gi->filename(), gi->linenumber());
-    }
 }
 
 
@@ -157,7 +262,7 @@ void MakeWidget::insertStdoutLine(const QString &line)
         delete dir;
     }
     
-    ProcessWidget::insertStdoutLine(line);
+    insertLine(line, Normal);
 }
 
 
@@ -190,10 +295,32 @@ void MakeWidget::insertStderrLine(const QString &line)
         if (dirstack.top())
             fn.prepend("/").prepend(*dirstack.top());
         kdDebug(9004) << "Path: " << fn << endl;
-        insertItem(new MakeListBoxItem(line, fn, row));
+        items.append(new MakeItem(parags, fn, row));
+        insertLine(line, Error);
+    } else {
+        insertLine(line, Diagnostic);
     }
-    else
-        ProcessWidget::insertStderrLine(line);
+}
+
+
+void MakeWidget::insertLine(const QString &line, Type type)
+{
+    ++parags;
+
+    QString color =
+        (type==Error)? "darkRed" :
+        (type==Diagnostic)? "black" :
+        "darkBlue";
+    bool move = textCursor()->parag() == document()->lastParag() && textCursor()->atParagEnd();
+
+    int paraFrom, indexFrom, paraTo, indexTo;
+    getSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
+    append(QString("<code><font color=\"%1\">%2</font></code><br>").arg(color).arg(line));
+    setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
+    
+    if (move)
+        moveCursor(MoveEnd, false, true);
+
 }
 
 #include "makewidget.moc"

@@ -1,6 +1,9 @@
 # Here reside the output view and make view parts.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	   -I$(top_srcdir)/lib/util \
+	   -I$(top_srcdir)/lib/qt3stuff \
+	   $(all_includes)
 
 lib_LTLIBRARIES = libkdevoutputviews.la
 libkdevoutputviews_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

@@ -13,36 +13,58 @@
 #define _MAKEWIDGET_H_
 
 #include <qstack.h>
-#include "processwidget.h"
+#include "qtextedit.h"
+#include "qrichtext_p.h"
 
 
 class MakeViewPart;
+class MakeItem;
+class KProcess;
 
 
-class MakeWidget : public ProcessWidget
+class MakeWidget : public QTextEdit
 {
     Q_OBJECT
+    
 public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
 
     void startJob(const QString &dir, const QString &command);
-
+    bool isRunning();
+    
+signals:
+    void processExited(bool success);
+    
 public slots:
+    void killJob();
     void nextError();
     void prevError();
     
 private slots:
-    void lineHighlighted(int line);
+    void slotReceivedOutput(KProcess *, char *buffer, int buflen);
+    void slotReceivedError(KProcess *, char *buffer, int buflen);
+    void slotProcessExited(KProcess *);
 
 private:
-    virtual void childFinished(bool normal, int status);
-    virtual void insertStdoutLine(const QString &line);
-    virtual void insertStderrLine(const QString &line);
+    virtual void contentsMousePressEvent(QMouseEvent *e);
+    virtual void keyPressEvent(QKeyEvent *e);
+    void searchItem(int parag);
     
-private:
-    MakeViewPart *m_part;
+    enum Type { Normal, Error, Diagnostic };
+    void insertLine(const QString &line, Type type);
+    void insertStdoutLine(const QString &line);
+    void insertStderrLine(const QString &line);
+    
+    KProcess *childproc;
+    QString stdoutbuf;
+    QString stderrbuf;
     QStack<QString> dirstack;
+    QList<MakeItem> items;
+    int parags;
+    bool moved;
+
+    MakeViewPart *m_part;
 };
 
 #endif
