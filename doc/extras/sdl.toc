@@ -1,0 +1,219 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>SDL</title>
+<base href="http://sdldoc.csn.ul.ie"/>
+<tocsect1 name="I. SDL Guide" url="guide.php">
+	<tocsect2 name="Preface" url="guidepreface.php">
+		<tocsect3 name="About SDL" url="guidepreface.php#GUIDEABOUTSDL" />
+		<tocsect3 name="About SDLdoc" url="guideaboutsdldoc.php" />
+		<tocsect3 name="Credits" url="guidecredits.php" />
+	</tocsect2>
+	<tocsect2 name="1. The Basics" url="guidethebasics.php">
+		<tocsect3 name="Introduction" url="guidethebasics.php#GUIDEINTRODUCTION" />
+		<tocsect3 name="Initializing SDL" url="guidebasicsinit.php" />
+	</tocsect2>
+	<tocsect2 name="2. Graphics and Video" url="guidevideo.php">
+		<tocsect3 name="Introduction to SDL Video" url="guidevideo.php#GUIDEVIDEOINTRO" />
+		<tocsect3 name="Using OpenGL With SDL" url="guidevideoopengl.php" />
+	</tocsect2>
+	<tocsect2 name="3. Input handling" url="guideinput.php">
+		<tocsect3 name="Handling Joysticks" url="guideinput.php#GUIDEINPUTJOYSTICK" />
+		<tocsect3 name="Handling the Keyboard" url="guideinputkeyboard.php" />
+	</tocsect2>
+	<tocsect2 name="4. Examples" url="guideexamples.php">
+		<tocsect3 name="Introduction" url="guideexamples.php#AEN369" />
+		<tocsect3 name="Event Examples" url="guideeventexamples.php" />
+		<tocsect3 name="Audio Examples" url="guideaudioexamples.php" />
+		<tocsect3 name="CDROM Examples" url="guidecdromexamples.php" />
+		<tocsect3 name="Time Examples" url="guidetimeexamples.php" />
+	</tocsect2>
+</tocsect1>
+<tocsect1 name="II. SDL Reference" url="reference.php">
+	<tocsect2 name="5. General" url="general.php">
+		<tocsect3 name="SDL_Init" url="sdlinit.php" />
+		<tocsect3 name="SDL_InitSubSystem" url="sdlinitsubsystem.php" />
+		<tocsect3 name="SDL_QuitSubSystem" url="sdlquitsubsystem.php" />
+		<tocsect3 name="SDL_Quit" url="sdlquit.php" />
+		<tocsect3 name="SDL_WasInit" url="sdlwasinit.php" />
+		<tocsect3 name="SDL_GetError" url="sdlgeterror.php" />
+	</tocsect2>
+	<tocsect2 name="6. Video" url="video.php">
+		<tocsect3 name="SDL_GetVideoSurface" url="sdlgetvideosurface.php" />
+		<tocsect3 name="SDL_GetVideoInfo" url="sdlgetvideoinfo.php" />
+		<tocsect3 name="SDL_VideoDriverName" url="sdlvideodrivername.php" />
+		<tocsect3 name="SDL_ListModes" url="sdllistmodes.php" />
+		<tocsect3 name="SDL_VideoModeOK" url="sdlvideomodeok.php" />
+		<tocsect3 name="SDL_SetVideoMode" url="sdlsetvideomode.php" />
+		<tocsect3 name="SDL_UpdateRect" url="sdlupdaterect.php" />
+		<tocsect3 name="SDL_UpdateRects" url="sdlupdaterects.php" />
+		<tocsect3 name="SDL_Flip" url="sdlflip.php" />
+		<tocsect3 name="SDL_SetColors" url="sdlsetcolors.php" />
+		<tocsect3 name="SDL_SetPalette" url="sdlsetpalette.php" />
+		<tocsect3 name="SDL_SetGamma" url="sdlsetgamma.php" />
+		<tocsect3 name="SDL_GetGammaRamp" url="sdlgetgammaramp.php" />
+		<tocsect3 name="SDL_SetGammaRamp" url="sdlsetgammaramp.php" />
+		<tocsect3 name="SDL_MapRGB" url="sdlmaprgb.php" />
+		<tocsect3 name="SDL_MapRGBA" url="sdlmaprgba.php" />
+		<tocsect3 name="SDL_GetRGB" url="sdlgetrgb.php" />
+		<tocsect3 name="SDL_GetRGBA" url="sdlgetrgba.php" />
+		<tocsect3 name="SDL_CreateRGBSurface" url="sdlcreatergbsurface.php" />
+		<tocsect3 name="SDL_CreateRGBSurfaceFrom" url="sdlcreatergbsurfacefrom.php" />
+		<tocsect3 name="SDL_FreeSurface" url="sdlfreesurface.php" />
+		<tocsect3 name="SDL_LockSurface" url="sdllocksurface.php" />
+		<tocsect3 name="SDL_UnlockSurface" url="sdlunlocksurface.php" />
+		<tocsect3 name="SDL_LoadBMP" url="sdlloadbmp.php" />
+		<tocsect3 name="SDL_SaveBMP" url="sdlsavebmp.php" />
+		<tocsect3 name="SDL_SetColorKey" url="sdlsetcolorkey.php" />
+		<tocsect3 name="SDL_SetAlpha" url="sdlsetalpha.php" />
+		<tocsect3 name="SDL_SetClipRect" url="sdlsetcliprect.php" />
+		<tocsect3 name="SDL_GetClipRect" url="sdlgetcliprect.php" />
+		<tocsect3 name="SDL_ConvertSurface" url="sdlconvertsurface.php" />
+		<tocsect3 name="SDL_BlitSurface" url="sdlblitsurface.php" />
+		<tocsect3 name="SDL_FillRect" url="sdlfillrect.php" />
+		<tocsect3 name="SDL_DisplayFormat" url="sdldisplayformat.php" />
+		<tocsect3 name="SDL_DisplayFormatAlpha" url="sdldisplayformatalpha.php" />
+		<tocsect3 name="SDL_WarpMouse" url="sdlwarpmouse.php" />
+		<tocsect3 name="SDL_CreateCursor" url="sdlcreatecursor.php" />
+		<tocsect3 name="SDL_FreeCursor" url="sdlfreecursor.php" />
+		<tocsect3 name="SDL_SetCursor" url="sdlsetcursor.php" />
+		<tocsect3 name="SDL_GetCursor" url="sdlgetcursor.php" />
+		<tocsect3 name="SDL_ShowCursor" url="sdlshowcursor.php" />
+		<tocsect3 name="SDL_GL_LoadLibrary" url="sdlglloadlibrary.php" />
+		<tocsect3 name="SDL_GL_GetProcAddress" url="sdlglgetprocaddress.php" />
+		<tocsect3 name="SDL_GL_GetAttribute" url="sdlglgetattribute.php" />
+		<tocsect3 name="SDL_GL_SetAttribute" url="sdlglsetattribute.php" />
+		<tocsect3 name="SDL_GL_SwapBuffers" url="sdlglswapbuffers.php" />
+		<tocsect3 name="SDL_CreateYUVOverlay" url="sdlcreateyuvoverlay.php" />
+		<tocsect3 name="SDL_LockYUVOverlay" url="sdllockyuvoverlay.php" />
+		<tocsect3 name="SDL_UnlockYUVOverlay" url="sdlunlockyuvoverlay.php" />
+		<tocsect3 name="SDL_DisplayYUVOverlay" url="sdldisplayyuvoverlay.php" />
+		<tocsect3 name="SDL_FreeYUVOverlay" url="sdlfreeyuvoverlay.php" />
+		<tocsect3 name="SDL_GLattr" url="sdlglattr.php" />
+		<tocsect3 name="SDL_Rect" url="sdlrect.php" />
+		<tocsect3 name="SDL_Color" url="sdlcolor.php" />
+		<tocsect3 name="SDL_Palette" url="sdlpalette.php" />
+		<tocsect3 name="SDL_PixelFormat" url="sdlpixelformat.php" />
+		<tocsect3 name="SDL_Surface" url="sdlsurface.php" />
+		<tocsect3 name="SDL_VideoInfo" url="sdlvideoinfo.php" />
+		<tocsect3 name="SDL_Overlay" url="sdloverlay.php" />
+	</tocsect2>
+	<tocsect2 name="7. Window Management" url="wm.php">
+		<tocsect3 name="SDL_WM_SetCaption" url="sdlwmsetcaption.php" />
+		<tocsect3 name="SDL_WM_GetCaption" url="sdlwmgetcaption.php" />
+		<tocsect3 name="SDL_WM_SetIcon" url="sdlwmseticon.php" />
+		<tocsect3 name="SDL_WM_IconifyWindow" url="sdlwmiconifywindow.php" />
+		<tocsect3 name="SDL_WM_ToggleFullScreen" url="sdlwmtogglefullscreen.php" />
+		<tocsect3 name="SDL_WM_GrabInput" url="sdlwmgrabinput.php" />
+	</tocsect2>
+	<tocsect2 name="8. Events" url="event.php">
+		<tocsect3 name="Introduction" url="event.php#AEN3307" />
+		<tocsect3 name="SDL Event Structures." url="eventstructures.php" />
+		<tocsect3 name="Event Functions." url="eventfunctions.php" />
+	</tocsect2>
+	<tocsect2 name="9. Joystick" url="joystick.php">
+		<tocsect3 name="SDL_NumJoysticks" url="sdlnumjoysticks.php" />
+		<tocsect3 name="SDL_JoystickName" url="sdljoystickname.php" />
+		<tocsect3 name="SDL_JoystickOpen" url="sdljoystickopen.php" />
+		<tocsect3 name="SDL_JoystickOpened" url="sdljoystickopened.php" />
+		<tocsect3 name="SDL_JoystickIndex" url="sdljoystickindex.php" />
+		<tocsect3 name="SDL_JoystickNumAxes" url="sdljoysticknumaxes.php" />
+		<tocsect3 name="SDL_JoystickNumBalls" url="sdljoysticknumballs.php" />
+		<tocsect3 name="SDL_JoystickNumHats" url="sdljoysticknumhats.php" />
+		<tocsect3 name="SDL_JoystickNumButtons" url="sdljoysticknumbuttons.php" />
+		<tocsect3 name="SDL_JoystickUpdate" url="sdljoystickupdate.php" />
+		<tocsect3 name="SDL_JoystickGetAxis" url="sdljoystickgetaxis.php" />
+		<tocsect3 name="SDL_JoystickGetHat" url="sdljoystickgethat.php" />
+		<tocsect3 name="SDL_JoystickGetButton" url="sdljoystickgetbutton.php" />
+		<tocsect3 name="SDL_JoystickGetBall" url="sdljoystickgetball.php" />
+		<tocsect3 name="SDL_JoystickClose" url="sdljoystickclose.php" />
+	</tocsect2>
+	<tocsect2 name="10. Audio" url="audio.php">
+		<tocsect3 name="SDL_AudioSpec" url="sdlaudiospec.php" />
+		<tocsect3 name="SDL_OpenAudio" url="sdlopenaudio.php" />
+		<tocsect3 name="SDL_PauseAudio" url="sdlpauseaudio.php" />
+		<tocsect3 name="SDL_GetAudioStatus" url="sdlgetaudiostatus.php" />
+		<tocsect3 name="SDL_LoadWAV" url="sdlloadwav.php" />
+		<tocsect3 name="SDL_FreeWAV" url="sdlfreewav.php" />
+		<tocsect3 name="SDL_AudioCVT" url="sdlaudiocvt.php" />
+		<tocsect3 name="SDL_BuildAudioCVT" url="sdlbuildaudiocvt.php" />
+		<tocsect3 name="SDL_ConvertAudio" url="sdlconvertaudio.php" />
+		<tocsect3 name="SDL_MixAudio" url="sdlmixaudio.php" />
+		<tocsect3 name="SDL_LockAudio" url="sdllockaudio.php" />
+		<tocsect3 name="SDL_UnlockAudio" url="sdlunlockaudio.php" />
+		<tocsect3 name="SDL_CloseAudio" url="sdlcloseaudio.php" />
+	</tocsect2>
+	<tocsect2 name="11. CD-ROM" url="cdrom.php">
+		<tocsect3 name="SDL_CDNumDrives" url="sdlcdnumdrives.php" />
+		<tocsect3 name="SDL_CDName" url="sdlcdname.php" />
+		<tocsect3 name="SDL_CDOpen" url="sdlcdopen.php" />
+		<tocsect3 name="SDL_CDStatus" url="sdlcdstatus.php" />
+		<tocsect3 name="SDL_CDPlay" url="sdlcdplay.php" />
+		<tocsect3 name="SDL_CDPlayTracks" url="sdlcdplaytracks.php" />
+		<tocsect3 name="SDL_CDPause" url="sdlcdpause.php" />
+		<tocsect3 name="SDL_CDResume" url="sdlcdresume.php" />
+		<tocsect3 name="SDL_CDStop" url="sdlcdstop.php" />
+		<tocsect3 name="SDL_CDEject" url="sdlcdeject.php" />
+		<tocsect3 name="SDL_CDClose" url="sdlcdclose.php" />
+		<tocsect3 name="SDL_CD" url="sdlcd.php" />
+		<tocsect3 name="SDL_CDtrack" url="sdlcdtrack.php" />
+	</tocsect2>
+	<tocsect2 name="12. Multi-threaded Programming" url="thread.php">
+		<tocsect3 name="SDL_CreateThread" url="sdlcreatethread.php" />
+		<tocsect3 name="SDL_ThreadID" url="sdlthreadid.php" />
+		<tocsect3 name="SDL_GetThreadID" url="sdlgetthreadid.php" />
+		<tocsect3 name="SDL_WaitThread" url="sdlwaitthread.php" />
+		<tocsect3 name="SDL_KillThread" url="sdlkillthread.php" />
+		<tocsect3 name="SDL_CreateMutex" url="sdlcreatemutex.php" />
+		<tocsect3 name="SDL_DestroyMutex" url="sdldestroymutex.php" />
+		<tocsect3 name="SDL_mutexP" url="sdlmutexp.php" />
+		<tocsect3 name="SDL_mutexV" url="sdlmutexv.php" />
+		<tocsect3 name="SDL_CreateSemaphore" url="sdlcreatesemaphore.php" />
+		<tocsect3 name="SDL_DestroySemaphore" url="sdldestroysemaphore.php" />
+		<tocsect3 name="SDL_SemWait" url="sdlsemwait.php" />
+		<tocsect3 name="SDL_SemTryWait" url="sdlsemtrywait.php" />
+		<tocsect3 name="SDL_SemWaitTimeout" url="sdlsemwaittimeout.php" />
+		<tocsect3 name="SDL_SemPost" url="sdlsempost.php" />
+		<tocsect3 name="SDL_SemValue" url="sdlsemvalue.php" />
+		<tocsect3 name="SDL_CreateCond" url="sdlcreatecond.php" />
+		<tocsect3 name="SDL_DestroyCond" url="sdldestroycond.php" />
+		<tocsect3 name="SDL_CondSignal" url="sdlcondsignal.php" />
+		<tocsect3 name="SDL_CondBroadcast" url="sdlcondbroadcast.php" />
+		<tocsect3 name="SDL_CondWait" url="sdlcondwait.php" />
+		<tocsect3 name="SDL_CondWaitTimeout" url="sdlcondwaittimeout.php" />
+	</tocsect2>
+	<tocsect2 name="13. Time" url="time.php">
+		<tocsect3 name="SDL_GetTicks" url="sdlgetticks.php" />
+		<tocsect3 name="SDL_Delay" url="sdldelay.php" />
+		<tocsect3 name="SDL_AddTimer" url="sdladdtimer.php" />
+		<tocsect3 name="SDL_RemoveTimer" url="sdlremovetimer.php" />
+		<tocsect3 name="SDL_SetTimer" url="sdlsettimer.php" />
+	</tocsect2>
+</tocsect1>
+<tocsect1 name="List of Tables">
+	<tocsect2 name="8-1. SDL Keysym definitions" url="sdlkey.php#AEN4336" />
+	<tocsect2 name="8-2. SDL modifier definitions" url="sdlkey.php#SDLMOD" />
+</tocsect1>
+	<tocsect1 name="List of Examples">
+	<tocsect2 name="1-1. Initializing SDL" url="guidebasicsinit.php#AEN60" />
+	<tocsect2 name="2-1. Initializing the Video Display" url="guidevideo.php#AEN71" />
+	<tocsect2 name="2-2. Initializing the Best Video Mode" url="guidevideo.php#AEN77" />
+	<tocsect2 name="2-3. Loading and Displaying a BMP File" url="guidevideo.php#AEN83" />
+	<tocsect2 name="2-4. getpixel()" url="guidevideo.php#AEN90" />
+	<tocsect2 name="2-5. putpixel()" url="guidevideo.php#AEN93" />
+	<tocsect2 name="2-6. Using putpixel()" url="guidevideo.php#AEN97" />
+	<tocsect2 name="2-7. Initializing SDL with OpenGL" url="guidevideoopengl.php#AEN114" />
+	<tocsect2 name="2-8. SDL and OpenGL" url="guidevideoopengl.php#AEN128" />
+	<tocsect2 name="3-1. Initializing SDL with Joystick Support" url="guideinput.php#AEN141" />
+	<tocsect2 name="3-2. Querying the Number of Available Joysticks" url="guideinput.php#AEN154" />
+	<tocsect2 name="3-3. Opening a Joystick" url="guideinput.php#AEN183" />
+	<tocsect2 name="3-4. Joystick Axis Events" url="guideinput.php#AEN191" />
+	<tocsect2 name="3-5. More Joystick Axis Events" url="guideinput.php#AEN195" />
+	<tocsect2 name="3-6. Joystick Button Events" url="guideinput.php#AEN203" />
+	<tocsect2 name="3-7. Joystick Ball Events" url="guideinput.php#AEN217" />
+	<tocsect2 name="3-8. Joystick Hat Events" url="guideinput.php#AEN244" />
+	<tocsect2 name="3-9. Querying Joystick Characteristics" url="guideinput.php#AEN265" />
+	<tocsect2 name="3-10. Reading Keyboard Events" url="guideinputkeyboard.php#AEN334" />
+	<tocsect2 name="3-11. Interpreting Key Event Information" url="guideinputkeyboard.php#AEN351" />
+	<tocsect2 name="3-12. Proper Game Movement" url="guideinputkeyboard.php#AEN363" />
+</tocsect1>
+</kdeveloptoc>
