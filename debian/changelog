@@ -1,3 +1,10 @@
+kdevelop (1:1.0beta4-19991030-1) unstable; urgency=low
+
+  * New upstream changes
+  * Disabled debug - is stripped anyway
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sat, 30 Oct 1999 09:02:41 +0200
+
 kdevelop (1:0.4-19990728-1) unstable; urgency=low
 
   * Added further manuals to doc-base

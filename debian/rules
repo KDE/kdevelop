@@ -4,9 +4,9 @@
 
 build:
 	dh_testdir
-	( CFLAGS="-g -O2 -pipe -Wall" \
+	( CFLAGS="-O2 -pipe -Wall" \
 	  CXXFLAGS="$$CFLAGS" \
-	  ./configure --enable-docbase --enable-kdoc2 --enable-debug --disable-rpath \
+	  ./configure --enable-docbase --enable-kdoc2 --disable-rpath \
 	  --libdir=/usr/X11R6/lib --includedir=/usr/include/kde )
  
 	make 
