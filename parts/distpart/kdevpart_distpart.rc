@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="distpart" library="libdistpartplugin" version="1">
+<MenuBar>
+ <Menu name="tools"><Text>&amp;Tools</Text>
+  <Action name="make_dist"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="extraToolBar">
+  <Action name="make_dist"/>
+</ToolBar>
+</kpartplugin>

@@ -5,7 +5,7 @@
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cppsupport pythonsupport perlsupport phpsupport fortransupport \
 	  autoproject scriptproject trollproject customproject \
-	  debugger javadebugger \
+	  debugger javadebugger distpart\
 	  konsole astyle tools ctags regexptest cvs doxygen \
 	  kwrite-part simple-editor nedit manager editor-chooser \
 	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Aids in building and publishing the final project.
+Name=KDevdistpart
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevdistpart
