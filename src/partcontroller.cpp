@@ -1,3 +1,8 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+
 #include <qpopupmenu.h>
 
 
@@ -273,7 +278,17 @@ QPopupMenu *PartController::contextPopupMenu()
 
 static bool urlIsEqual(const KURL &a, const KURL &b)
 {
-  // TODO: for local files, check inode identity!
+  if (a.isLocalFile() && b.isLocalFile())
+  {
+    struct stat aStat, bStat;
+
+    if ((::stat(QFile::encodeName(a.fileName()), &aStat) == 0)
+        && (::stat(QFile::encodeName(b.fileName()), &bStat) == 0))
+    {
+      return (aStat.st_dev == bStat.st_dev) && (aStat.st_ino == bStat.st_ino);
+    }
+  }
+  
   return a == b;
 }
 
