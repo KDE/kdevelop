@@ -150,7 +150,14 @@ public:
         if( m_breakpoint.isPending() && !m_breakpoint.isDbgProcessing() )
             emit listView()->publishBPState( m_breakpoint );
     }
-        
+    
+    void setConditional( const QString& text )
+    {
+        m_breakpoint.setConditional( text );
+        listView()->repaintItem( this );
+        emit listView()->publishBPState( m_breakpoint );
+    }
+    
     const Breakpoint& breakpoint() { return m_breakpoint; }
     
 private:
@@ -173,12 +180,25 @@ BreakpointWidget::BreakpointWidget(QWidget *parent, const char *name)
              SLOT(slotContextMenu(QListViewItem*)) );
     connect( this, SIGNAL(executed(QListViewItem*)),
              SLOT(slotExecuted(QListViewItem*)) );
+    connect( this, SIGNAL(itemRenamed(QListViewItem*, int, const QString&)),
+             SLOT(slotItemRenamed(QListViewItem*, int, const QString&)) );
 }
 
 /***************************************************************************/
 
 BreakpointWidget::~BreakpointWidget()
 {
+}
+
+/***************************************************************************/
+
+const QPtrList<Breakpoint> BreakpointWidget::breakpoints()
+{
+    QPtrList<Breakpoint> bps;
+    for( QListViewItemIterator it( this ); it.current(); ++it ) {
+        bps.append( &((BreakpointItem*)it.current())->breakpoint() );
+    }
+    return bps;
 }
 
 /***************************************************************************/
@@ -309,6 +329,16 @@ void BreakpointWidget::slotContextMenu(QListViewItem *item)
       if (res == idClearAll)
           removeAllBreakpoints();
    }
+}
+
+/***************************************************************************/
+    
+void BreakpointWidget::slotItemRenamed(QListViewItem *item, int col, const QString& text)
+{
+    if( col != Condition )
+        return;
+    BreakpointItem* bpItem = (BreakpointItem*)item;
+    bpItem->setConditional( text );
 }
 
 /***************************************************************************/

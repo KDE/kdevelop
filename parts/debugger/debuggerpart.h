@@ -43,6 +43,8 @@ private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void toggleBreakpoint();
     void contextWatch();
+    void projectOpened();
+    void projectClosed();
     void projectConfigWidget(KDialogBase *dlg);
     
     void slotRun();

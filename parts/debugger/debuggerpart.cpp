@@ -230,8 +230,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( topLevel()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
     
+    connect( core(), SIGNAL(projectOpened()),
+             this, SLOT(projectOpened()) );
+    connect( core(), SIGNAL(projectClosed()),
+             this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+    
     connect( partController(), SIGNAL(loadedFile(const QString &)),
              breakpointWidget, SLOT(refreshBP(const QString &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
@@ -279,6 +284,36 @@ void DebuggerPart::guiClientAdded( KXMLGUIClient* client )
     // Anyone know of a better way of doing this?
     if( client == this )
         stateChanged( QString("stopped") );
+}
+
+
+void DebuggerPart::projectOpened()
+{
+    QDomElement bpsElement = DomUtil::elementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
+    QDomElement bpElement = bpsElement.firstChild().toElement();
+    while( !bpElement.isNull() ) {
+        QString filename = bpElement.attribute( "file" );
+        int lineNum = bpElement.attribute( "line" ).toInt();
+        // TODO: restore condition
+        breakpointWidget->slotToggleBreakpoint( filename, lineNum );
+        bpElement = bpElement.nextSibling().toElement();
+    }
+}
+
+
+void DebuggerPart::projectClosed()
+{
+    QDomElement bpsElement = DomUtil::createElementByPath( *projectDom(), "/kdevdebugger/breakpoints" );
+    DomUtil::makeEmpty( bpsElement );
+    const QPtrList<Breakpoint> bps = breakpointWidget->breakpoints();
+    for( QPtrListIterator<Breakpoint> it( bps ); it.current(); ++it ) {
+        Breakpoint* bp = it.current();
+        QDomElement bpElement = bpsElement.ownerDocument().createElement( "breakpoint" );
+        bpElement.setAttribute( "file", bp->fileName() );
+        bpElement.setAttribute( "line", bp->lineNum() - 1 );
+        bpElement.setAttribute( "condition", bp->conditional() );
+        bpsElement.appendChild( bpElement );
+    }
 }
 
 

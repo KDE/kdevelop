@@ -37,6 +37,8 @@ public:
     BreakpointWidget( QWidget* parent=0, const char* name=0 );
     virtual ~BreakpointWidget();
     
+    const QPtrList<Breakpoint> breakpoints();
+    
     enum Column {
         Status     = 0,
         File       = 1,
@@ -63,6 +65,7 @@ public slots:
 private slots:
     void slotExecuted(QListViewItem *item);
     void slotContextMenu(QListViewItem *item);
+    void slotItemRenamed(QListViewItem *item, int col, const QString& text);
 
 signals:
     void publishBPState( const Breakpoint& );
