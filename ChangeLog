@@ -1,3 +1,11 @@
+2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
+        * now QextMDI can look like an SDI application! :-)  (the 4. MDI mode we have got)
+        * new QextMdiChildView constructor added (by Eva Brucherseifer, Thanks!)
+        * some 0L pointer access bugfixes
+        * bugfix: raise on click works now also for afterwards inserted child widgets
+        * setPixmap in childview calls setPixmap in childframe as expected
+        * taskbar button count == 0L works properly now
+
 2001-03-05 Omid Givi <omid@kdevelop.org>
 	* Implemented Project Space options dialog
 	* Enahnced Linker Options dialog
