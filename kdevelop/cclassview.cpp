@@ -333,10 +333,11 @@ void CClassView::refresh( CProject *proj )
   QString cur;
   for( cur = src.first(); cur != NULL; cur = src.next() )
   {
-		if (cur.contains(".ui"))
-			continue;
-    kdDebug() << "  parsing:[" << cur << "]" << endl;
-    cp->parse(static_cast<const char*>(cur));
+    if (!cur.contains(".ui")) 
+    {
+      kdDebug() << "  parsing:[" << cur << "]" << endl;
+      cp->parse(static_cast<const char*>(cur));
+    }
     emit setStatusbarProgress( ++currentCount );
   }
 
