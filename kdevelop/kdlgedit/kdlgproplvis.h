@@ -100,6 +100,25 @@ class AdvLvi_Int : public AdvLvi_Base
     void valInc();
     void valDec();
 };
+class AdvLvi_UInt : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_UInt(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    KRestrictedLine *leInput;
+    QPushButton *up, *down;
+
+  public slots:
+    void returnPressed();
+    void valInc();
+    void valDec();
+};
 
 class AdvLvi_ExtEdit : public AdvLvi_Base
 {

@@ -791,6 +791,9 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           case ALLOWED_INT:
             adv = new AdvLvi_Int( lv, pCKDevel, prop );
             break;
+	case ALLOWED_UINT:
+            adv = new AdvLvi_UInt( lv, pCKDevel, prop );
+            break;
           case ALLOWED_FILE:
             adv = new AdvLvi_Filename( lv, pCKDevel, prop );
             break;
@@ -1006,6 +1009,98 @@ void AdvLvi_Int::resizeEvent ( QResizeEvent *e )
 }
 
 void AdvLvi_Int::returnPressed()
+{
+  propEntry->value = leInput->text();
+  refreshItem();
+}
+
+AdvLvi_UInt::AdvLvi_UInt(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, parCKD, dpe, name )
+{
+  setGeometry(0,0,0,0);
+
+  leInput = new KRestrictedLine( this, 0, " 01234567890" );
+  leInput->setText(dpe->value.stripWhiteSpace());
+
+  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
+
+  up = new QPushButton("",this);
+  up->setAutoRepeat(true);
+  down = new QPushButton("",this);
+  down->setAutoRepeat(true);
+  connect(up, SIGNAL(clicked()), SLOT(valInc()));
+  connect(down, SIGNAL(clicked()), SLOT(valDec()));
+}
+
+void AdvLvi_UInt::valInc()
+{
+  QString val = leInput->text();
+
+  int dest = 0;
+
+  if (val.length() != 0)
+    {
+      bool ok = true;
+      dest = val.toInt(&ok);
+
+      if (!ok)
+        dest = 0;
+    }
+
+  dest++;
+  leInput->setText(QString().setNum(dest));
+
+}
+
+void AdvLvi_UInt::valDec()
+{
+  QString val = leInput->text();
+
+  int dest = 0;
+
+  if (val.length() != 0)
+    {
+      bool ok = true;
+      dest = val.toInt(&ok);
+
+      if (!ok)
+        dest = 0;
+    }
+
+  dest--;
+  if(dest== -1){ // no unsigned it?
+      dest=0;
+  }
+  leInput->setText(QString().setNum(dest));
+}
+
+
+QString AdvLvi_UInt::getText()
+{
+  if (leInput)
+    {
+      return leInput->text();
+    }
+  else
+    return QString();
+}
+
+void AdvLvi_UInt::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (leInput)
+    leInput->setGeometry(0,0,width()-15,height()+1);
+
+  if (up)
+    up->setGeometry(width()-15,0,15,(int)(height()/2));
+
+  if (down)
+    down->setGeometry(width()-15,(int)(height()/2)+1,15,(int)(height()/2));
+}
+
+void AdvLvi_UInt::returnPressed()
 {
   propEntry->value = leInput->text();
   refreshItem();

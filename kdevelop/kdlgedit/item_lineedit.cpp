@@ -66,7 +66,7 @@ void KDlgItem_LineEdit::addMyPropEntrys()
 
   props->addProp("Text",           "",       "General",        ALLOWED_STRING);
   props->addProp("hasFrame",       "",       "General",        ALLOWED_BOOL);
-  props->addProp("MaxLength",      "",       "General",        ALLOWED_INT);
+  props->addProp("MaxLength",      "",       "General",        ALLOWED_UINT);
   props->addProp("CursorPosition", "",       "General",        ALLOWED_INT);
   props->addProp("isTextSelected", "",       "General",        ALLOWED_BOOL);
 }
@@ -87,7 +87,10 @@ void KDlgItem_LineEdit::repaintItem(QLineEdit *it)
     itm->setText(Prop2Str("Text"));
 
   if (intIsDef("MaxLength"))
-    itm->setMaxLength(Prop2Int("MaxLength",32767));
+      //    if(Prop2Int("MaxLength") >=0){
+      itm->setMaxLength(Prop2Int("MaxLength",32767));
+  //    }
+
   else
     itm->setMaxLength(32767);
 

@@ -1,4 +1,5 @@
-
+1999-08-17 Sandy Meier    <smeier@rz.uni-potsdam.de>
+	* fixed bug in kdlgedit (#Bug1737)
 
 1999-08-15 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* reorganize of enable/disable edit commands like copy/cut/paste
