@@ -61,18 +61,18 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedMethod_finalize
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isConstructorMethod
+ * Method:    isConstructor
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isConstructorMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isConstructor
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isDestructorMethod
+ * Method:    isDestructor
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isDestructorMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isDestructor
   (JNIEnv *, jobject);
 
 /*
@@ -85,42 +85,42 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isEqual
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isObjectiveCMethod
+ * Method:    isObjectiveC
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isObjectiveCMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isObjectiveC
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isPureMethod
+ * Method:    isPure
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isPureMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isPure
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isSignalMethod
+ * Method:    isSignal
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isSignalMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isSignal
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isSlotMethod
+ * Method:    isSlot
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isSlotMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isSlot
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedMethod
- * Method:    isVirtualMethod
+ * Method:    isVirtual
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isVirtualMethod
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedMethod_isVirtual
   (JNIEnv *, jobject);
 
 /*
@@ -174,9 +174,17 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedMethod_setIsDestructor__Z
 /*
  * Class:     org_kde_koala_ParsedMethod
  * Method:    setIsObjectiveC
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ParsedMethod_setIsObjectiveC__
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedMethod
+ * Method:    setIsObjectiveC
  * Signature: (Z)V
  */
-JNIEXPORT void JNICALL Java_org_kde_koala_ParsedMethod_setIsObjectiveC
+JNIEXPORT void JNICALL Java_org_kde_koala_ParsedMethod_setIsObjectiveC__Z
   (JNIEnv *, jobject, jboolean);
 
 /*

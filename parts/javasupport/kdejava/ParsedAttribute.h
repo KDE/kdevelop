@@ -37,14 +37,6 @@ JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedAttribute_asString
 
 /*
  * Class:     org_kde_koala_ParsedAttribute
- * Method:    attributeType
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedAttribute_attributeType
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedAttribute
  * Method:    copy
  * Signature: (Lorg/kde/koala/ParsedAttribute;)V
  */
@@ -61,18 +53,10 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedAttribute_finalize
 
 /*
  * Class:     org_kde_koala_ParsedAttribute
- * Method:    inHFile
+ * Method:    isConst
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_inHFile
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedAttribute
- * Method:    isConstAttribute
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isConstAttribute
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isConst
   (JNIEnv *, jobject);
 
 /*
@@ -85,10 +69,18 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isEqual
 
 /*
  * Class:     org_kde_koala_ParsedAttribute
- * Method:    isStaticAttribute
+ * Method:    isInHFile
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isStaticAttribute
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isInHFile
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedAttribute
+ * Method:    isStatic
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedAttribute_isStatic
   (JNIEnv *, jobject);
 
 /*
@@ -178,6 +170,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedAttribute_setNamePos
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_ParsedAttribute_setType
   (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_kde_koala_ParsedAttribute
+ * Method:    type
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedAttribute_type
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

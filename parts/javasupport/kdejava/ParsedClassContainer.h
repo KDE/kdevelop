@@ -7,6 +7,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_kde_koala_ParsedClassContainer_PIT_UNKNOWN
+#define org_kde_koala_ParsedClassContainer_PIT_UNKNOWN 0L
+#undef org_kde_koala_ParsedClassContainer_PIT_CLASS
+#define org_kde_koala_ParsedClassContainer_PIT_CLASS 1L
+#undef org_kde_koala_ParsedClassContainer_PIT_METHOD
+#define org_kde_koala_ParsedClassContainer_PIT_METHOD 2L
+#undef org_kde_koala_ParsedClassContainer_PIT_ATTRIBUTE
+#define org_kde_koala_ParsedClassContainer_PIT_ATTRIBUTE 3L
+#undef org_kde_koala_ParsedClassContainer_PIT_STRUCT
+#define org_kde_koala_ParsedClassContainer_PIT_STRUCT 4L
+#undef org_kde_koala_ParsedClassContainer_PIT_SCOPE
+#define org_kde_koala_ParsedClassContainer_PIT_SCOPE 5L
+#undef org_kde_koala_ParsedClassContainer_PIE_GLOBAL
+#define org_kde_koala_ParsedClassContainer_PIE_GLOBAL 0L
+#undef org_kde_koala_ParsedClassContainer_PIE_PUBLIC
+#define org_kde_koala_ParsedClassContainer_PIE_PUBLIC 1L
+#undef org_kde_koala_ParsedClassContainer_PIE_PROTECTED
+#define org_kde_koala_ParsedClassContainer_PIE_PROTECTED 2L
+#undef org_kde_koala_ParsedClassContainer_PIE_PRIVATE
+#define org_kde_koala_ParsedClassContainer_PIE_PRIVATE 3L
 /*
  * Class:     org_kde_koala_ParsedClassContainer
  * Method:    addClass

@@ -25,6 +25,22 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ClassTreeNode_finalize
 
 /*
  * Class:     org_kde_koala_ClassTreeNode
+ * Method:    isInSystem
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ClassTreeNode_isInSystem
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassTreeNode
+ * Method:    name
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ClassTreeNode_name
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassTreeNode
  * Method:    newClassTreeNode
  * Signature: ()V
  */

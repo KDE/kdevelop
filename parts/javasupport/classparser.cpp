@@ -115,7 +115,7 @@ bool JavaClassParser::commentInRange( ParsedItem *aItem )
 
   int range;
 
-  range = (aItem->declaredOnLine - ( comment_end - 1 ) );
+  range = (aItem->declaredOnLine() - ( comment_end - 1 ) );
 
   return ( range > 0 && range <=2 );
 }
@@ -310,7 +310,8 @@ void JavaClassParser::fillInParsedVariableHead( ParsedAttribute *anAttr )
     }
   }
 
-  anAttr->type+=addDecl;
+
+  anAttr->setType(anAttr->type() + addDecl);
   anAttr->setDeclaredInFile( currentFile );
   anAttr->setDeclaredOnLine( /* declStart */ getLineno());
   anAttr->setDefinedInFile( currentFile );
@@ -342,7 +343,7 @@ void JavaClassParser::fillInParsedVariable( ParsedAttribute *anAttr )
 
   // Set values in the variable.
   if( !type.isEmpty() )
-    anAttr->setType( type + anAttr->type );
+    anAttr->setType( type + anAttr->type() );
 
   anAttr->setNamePos( type.length() );
 
@@ -416,9 +417,9 @@ void JavaClassParser::fillInMultipleVariable( ParsedContainer *aContainer )
        anAttr = list.next() )
   {
     // Only add attributes that have a name.
-    if( !anAttr->name.isEmpty() )
+    if( !anAttr->name().isEmpty() )
     {
-      anAttr->type = type + anAttr->type;
+      anAttr->setType(type + anAttr->type());
 
       aContainer->addAttribute( anAttr );
     }
@@ -505,13 +506,13 @@ void JavaClassParser::parseFunctionArgs( ParsedMethod *method )
     {
       // Move the values to the argument object.
       anArg = new ParsedArgument();
-      if( !anAttr->name.isEmpty() )
-        anArg->setName( anAttr->name );
+      if( !anAttr->name().isEmpty() )
+        anArg->setName( anAttr->name() );
 
-      if( !anAttr->type.isEmpty() )
-        anArg->setType( anAttr->type );
+      if( !anAttr->type().isEmpty() )
+        anArg->setType( anAttr->type() );
 
-      anArg->setNamePos( anAttr->posName );
+      anArg->setNamePos( anAttr->namePos() );
       // Add the argument to the method.
       method->addArgument( anArg );
       delete anAttr;
@@ -844,9 +845,9 @@ bool JavaClassParser::parseClassLexem( ParsedClass *aClass )
 
         if( store->hasClass( childClass->path() ) ) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( childClass->path() );
-  	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine );
-  	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile );
-  	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope );
+  	      parsedClassRef->setDeclaredOnLine( childClass->declaredOnLine() );
+  	      parsedClassRef->setDeclaredInFile( childClass->declaredInFile() );
+  	      parsedClassRef->setDeclaredInScope( childClass->declaredInScope() );
   	      delete childClass;
   	      childClass = parsedClassRef;
         } else {
@@ -988,7 +989,7 @@ void JavaClassParser::parseMethodAttributes( ParsedContainer *aContainer )
     case JAVA_IS_ATTRIBUTE:
       anAttr = new ParsedAttribute();
       fillInParsedVariable( anAttr );
-      if( !anAttr->name.isEmpty() )
+      if( !anAttr->name().isEmpty() )
         aContainer->addAttribute( anAttr );
       else
         delete anAttr;
@@ -1086,8 +1087,8 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
       	// don't put the class into the scope hierarchy yet, in case
       	// it is already in the store (when 'aClass' will need to be
       	// deleted, and the existing parsed class used instead).
-        QString savedClassPath = QString( aClass->declaredInScope );
-        QString classPath = aClass->declaredInScope;
+        QString savedClassPath = QString( aClass->declaredInScope() );
+        QString classPath = aClass->declaredInScope();
 
         if( classPath.isEmpty() && !scope->path().isEmpty() )
           classPath = scope->path();
@@ -1115,8 +1116,8 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         // Check if class is in the global store, add it if missing
         if( store->hasClass( aClass->path() ) ) {
   	      ParsedClass *	parsedClassRef = store->getClassByName( aClass->path() );
-  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine );
-  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile );
+  	      parsedClassRef->setDeclaredOnLine( aClass->declaredOnLine() );
+  	      parsedClassRef->setDeclaredInFile( aClass->declaredInFile() );
   	      delete aClass;
   	      aClass = parsedClassRef;
         } else {
@@ -1128,7 +1129,7 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
         aClass->setDeclaredInScope( savedClassPath );
         QString scopePath = scope->path();
 
-        if( aClass->declaredInScope.isEmpty() && !scopePath.isEmpty() )
+        if( aClass->declaredInScope().isEmpty() && !scopePath.isEmpty() )
         {
           aClass->setDeclaredInScope(scopePath);
           scope->addClass( aClass );

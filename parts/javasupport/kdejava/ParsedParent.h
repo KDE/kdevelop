@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     org_kde_koala_ParsedParent
+ * Method:    access
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedParent_access
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedParent
  * Method:    finalize
  * Signature: ()V
  */
@@ -37,6 +45,14 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedParent_isProtected
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedParent_isPublic
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedParent
+ * Method:    name
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedParent_name
   (JNIEnv *, jobject);
 
 /*

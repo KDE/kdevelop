@@ -7,6 +7,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_kde_koala_ParsedContainer_PIT_UNKNOWN
+#define org_kde_koala_ParsedContainer_PIT_UNKNOWN 0L
+#undef org_kde_koala_ParsedContainer_PIT_CLASS
+#define org_kde_koala_ParsedContainer_PIT_CLASS 1L
+#undef org_kde_koala_ParsedContainer_PIT_METHOD
+#define org_kde_koala_ParsedContainer_PIT_METHOD 2L
+#undef org_kde_koala_ParsedContainer_PIT_ATTRIBUTE
+#define org_kde_koala_ParsedContainer_PIT_ATTRIBUTE 3L
+#undef org_kde_koala_ParsedContainer_PIT_STRUCT
+#define org_kde_koala_ParsedContainer_PIT_STRUCT 4L
+#undef org_kde_koala_ParsedContainer_PIT_SCOPE
+#define org_kde_koala_ParsedContainer_PIT_SCOPE 5L
+#undef org_kde_koala_ParsedContainer_PIE_GLOBAL
+#define org_kde_koala_ParsedContainer_PIE_GLOBAL 0L
+#undef org_kde_koala_ParsedContainer_PIE_PUBLIC
+#define org_kde_koala_ParsedContainer_PIE_PUBLIC 1L
+#undef org_kde_koala_ParsedContainer_PIE_PROTECTED
+#define org_kde_koala_ParsedContainer_PIE_PROTECTED 2L
+#undef org_kde_koala_ParsedContainer_PIE_PRIVATE
+#define org_kde_koala_ParsedContainer_PIE_PRIVATE 3L
 /*
  * Class:     org_kde_koala_ParsedContainer
  * Method:    addAttribute
@@ -189,6 +209,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedContainer_setUseFullpath
  * Signature: ()Ljava/util/ArrayList;
  */
 JNIEXPORT jobject JNICALL Java_org_kde_koala_ParsedContainer_structList
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedContainer
+ * Method:    useFullPath
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedContainer_useFullPath
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

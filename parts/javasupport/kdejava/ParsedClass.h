@@ -7,6 +7,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef org_kde_koala_ParsedClass_PIT_UNKNOWN
+#define org_kde_koala_ParsedClass_PIT_UNKNOWN 0L
+#undef org_kde_koala_ParsedClass_PIT_CLASS
+#define org_kde_koala_ParsedClass_PIT_CLASS 1L
+#undef org_kde_koala_ParsedClass_PIT_METHOD
+#define org_kde_koala_ParsedClass_PIT_METHOD 2L
+#undef org_kde_koala_ParsedClass_PIT_ATTRIBUTE
+#define org_kde_koala_ParsedClass_PIT_ATTRIBUTE 3L
+#undef org_kde_koala_ParsedClass_PIT_STRUCT
+#define org_kde_koala_ParsedClass_PIT_STRUCT 4L
+#undef org_kde_koala_ParsedClass_PIT_SCOPE
+#define org_kde_koala_ParsedClass_PIT_SCOPE 5L
+#undef org_kde_koala_ParsedClass_PIE_GLOBAL
+#define org_kde_koala_ParsedClass_PIE_GLOBAL 0L
+#undef org_kde_koala_ParsedClass_PIE_PUBLIC
+#define org_kde_koala_ParsedClass_PIE_PUBLIC 1L
+#undef org_kde_koala_ParsedClass_PIE_PROTECTED
+#define org_kde_koala_ParsedClass_PIE_PROTECTED 2L
+#undef org_kde_koala_ParsedClass_PIE_PRIVATE
+#define org_kde_koala_ParsedClass_PIE_PRIVATE 3L
 /*
  * Class:     org_kde_koala_ParsedClass
  * Method:    addFriend
@@ -29,14 +49,6 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedClass_addParent
  * Signature: (Lorg/kde/koala/ParsedMethod;)V
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_ParsedClass_addSignal
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedClass
- * Method:    addSignalSlotMap
- * Signature: (Lorg/kde/koala/ParsedSignalSlot;)V
- */
-JNIEXPORT void JNICALL Java_org_kde_koala_ParsedClass_addSignalSlotMap
   (JNIEnv *, jobject, jobject);
 
 /*
@@ -101,6 +113,14 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedClass_hasParent
  * Signature: ()Z
  */
 JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedClass_hasVirtual
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedClass
+ * Method:    isSubClass
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedClass_isSubClass
   (JNIEnv *, jobject);
 
 /*

@@ -29,6 +29,14 @@ extern "C" {
 #define org_kde_koala_ParsedItem_PIE_PRIVATE 3L
 /*
  * Class:     org_kde_koala_ParsedItem
+ * Method:    access
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_access
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
  * Method:    asString
  * Signature: ()Ljava/lang/String;
  */
@@ -53,11 +61,75 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedItem_clearDefinition
 
 /*
  * Class:     org_kde_koala_ParsedItem
+ * Method:    comment
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_comment
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
  * Method:    copy
  * Signature: (Lorg/kde/koala/ParsedItem;)V
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_ParsedItem_copy
   (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    declarationEndsOnLine
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_declarationEndsOnLine
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    declaredInFile
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_declaredInFile
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    declaredInScope
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_declaredInScope
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    declaredOnLine
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_declaredOnLine
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    definedInFile
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_definedInFile
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    definedOnLine
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_definedOnLine
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedItem
+ * Method:    definitionEndsOnLine
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_definitionEndsOnLine
+  (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedItem
@@ -101,82 +173,18 @@ JNIEXPORT jboolean JNICALL Java_org_kde_koala_ParsedItem_isPublic
 
 /*
  * Class:     org_kde_koala_ParsedItem
- * Method:    itemAccess
+ * Method:    itemType
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemAccess
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemType
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_ParsedItem
- * Method:    itemComment
+ * Method:    name
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemComment
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDeclarationEndsOnLine
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemDeclarationEndsOnLine
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDeclaredInFile
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemDeclaredInFile
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDeclaredInScope
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemDeclaredInScope
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDeclaredOnLine
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemDeclaredOnLine
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDefinedInFile
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemDefinedInFile
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDefinedOnLine
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemDefinedOnLine
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemDefinitionEndsOnLine
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_itemDefinitionEndsOnLine
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    itemName
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemName
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_name
   (JNIEnv *, jobject);
 
 /*
@@ -185,14 +193,6 @@ JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedItem_itemName
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_ParsedItem_out
-  (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_ParsedItem
- * Method:    parsedItemType
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedItem_parsedItemType
   (JNIEnv *, jobject);
 
 /*

@@ -33,6 +33,22 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedArgument_finalize
 
 /*
  * Class:     org_kde_koala_ParsedArgument
+ * Method:    name
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedArgument_name
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedArgument
+ * Method:    namePos
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_org_kde_koala_ParsedArgument_namePos
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedArgument
  * Method:    newParsedArgument
  * Signature: ()V
  */
@@ -77,6 +93,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedArgument_setType
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedArgument_toString
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedArgument
+ * Method:    type
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_kde_koala_ParsedArgument_type
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

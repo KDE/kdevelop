@@ -145,14 +145,14 @@ public void addMethod(String className)
 
 	while (methodIterator.hasNext()) {
     	ParsedMethod meth = (ParsedMethod) methodIterator.next();
-     	if (meth.itemAccess() == pm.itemAccess() &&
-      		atLine < meth.itemDeclarationEndsOnLine())
-                atLine = meth.itemDeclarationEndsOnLine();
+     	if (meth.access() == pm.access() &&
+      		atLine < meth.declarationEndsOnLine())
+                atLine = meth.declarationEndsOnLine();
 	}
 
     String javaCode = asJavaCode(pm);
 
-    core().gotoSourceFile(new KURL(pc.itemDefinedInFile()), atLine);
+    core().gotoSourceFile(new KURL(pc.definedInFile()), atLine);
     System.out.println("####################" + "Adding at line " + atLine
                   + " " + javaCode
                   + "####################");
@@ -177,12 +177,12 @@ public void addAttribute(String className)
 	Iterator attributeIterator = pc.attributeList().iterator();
 	while (attributeIterator.hasNext()) {
 	   	ParsedAttribute attr = (ParsedAttribute) attributeIterator.next();
-        if (attr.itemAccess() == pa.itemAccess() &&
-            atLine < attr.itemDeclarationEndsOnLine())
-            atLine = attr.itemDeclarationEndsOnLine();
+        if (attr.access() == pa.access() &&
+            atLine < attr.declarationEndsOnLine())
+            atLine = attr.declarationEndsOnLine();
 	}
 
-    core().gotoSourceFile(new KURL(pc.itemDeclaredInFile()), atLine);
+    core().gotoSourceFile(new KURL(pc.declaredInFile()), atLine);
 
     pa = null;
 }
@@ -190,20 +190,20 @@ public void addAttribute(String className)
 
 public String asJavaCode(ParsedMethod pm)
 {
-    if (pm.isPureMethod() || pm.isSignalMethod())
+    if (pm.isPure() || pm.isSignal())
         return "";
 
-    String str = pm.itemComment();
+    String str = pm.comment();
     str += "\n";
 
     // Take the path and replace all . with ::
     String path = pm.path().replace( ':', '.' );
 
-    str += pm.attributeType();
+    str += pm.type();
     str += " ";
     str += pm.path();
 
-    if (pm.isConstAttribute())
+    if (pm.isConst())
         str += " final";
 
     str += "{\n}\n";
@@ -215,10 +215,10 @@ public String asJavaCode(ParsedMethod pm)
 public String asJavaCode(ParsedAttribute pa)
 {
     String str = "  ";
-    str += pa.itemComment();
+    str += pa.comment();
     str += "\n  ";
 
-    if (pa.isStaticAttribute())
+    if (pa.isStatic())
         str += "static ";
 
     str += pa.asString();
