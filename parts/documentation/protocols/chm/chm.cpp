@@ -29,6 +29,7 @@
 #include <kglobal.h>
 #include <kurl.h>
 #include <kmimemagic.h>
+#include <ktempfile.h>
 
 #include "chm.h"
 
@@ -88,6 +89,32 @@ void ChmProtocol::get( const KURL& url )
 
     QByteArray theData;
 
+    //init..
+    //added by lucida lucida@users.sf.net
+    QString fname = QString();
+    QString chmpath = QString();
+    KTempFile f("",".html");
+    fname = f.name();
+    QTextStream *t = f.textStream();
+    QString firstPage = QString("");
+    QString m_strIndex = QString("");
+    QString tmpstr = QString("");
+    bool m_bIndex = 0;
+
+    //try get some page to display, if the chm missing index
+    ChmDirectoryMap::Iterator it;
+    for ( it = m_dirMap.begin(); it != m_dirMap.end(); ++it) {
+        tmpstr.sprintf("%s", it.key().latin1());
+        if ((m_strIndex == "") && 
+                        (tmpstr.endsWith(".htm") || tmpstr.endsWith(".html")))
+        m_strIndex = tmpstr;
+        if ((tmpstr == "/index.htm") || (tmpstr == "/index.html")) {
+        m_strIndex = tmpstr;
+        break;
+        }
+    }
+    m_strIndex.remove(0,1);
+    
     if (path == "/") {
         int offset = m_dirMap["/@contents"].offset;
         int length = m_dirMap["/@contents"].length;
@@ -107,7 +134,7 @@ void ChmProtocol::get( const KURL& url )
         QRegExp mergeParam("<param name=\"Merge\" value=\"(.*)\">", false);
         localParam.setMinimal(true);
 
-		int old = 0, pos = 0;
+        int old = 0, pos = 0;
         while ((pos = s.find(object, pos)) != -1) {
             output += s.mid(old, pos - old);
             pos += object.matchedLength();
@@ -116,28 +143,62 @@ void ChmProtocol::get( const KURL& url )
             QString name, local;
             if (obj.find(nameParam) != -1) {
                 name = nameParam.cap(1);
-				if (obj.find(localParam) != -1) {
-					local = localParam.cap(1);
-					output += "<a href=\"" + local + "\">" + name + "</a>";
-				} else {
-					output += name;
-				}
-			}
-			if (obj.find(mergeParam) != -1) {
-				QString link = mergeParam.cap(1);
-				QString href = link.left(link.find("::"));
-				QString path = m_chmFile.left(m_chmFile.findRev("/") + 1);
-				output += " (<a href=\"" + path + href + "\">link</a>)";
-			}
+                if (obj.find(localParam) != -1) {
+                    local = localParam.cap(1);
+                    //output += "<a href=\"" + local + "\">" + name + "</a>";
+                    //added by lucida lucida@users.sf.net
+                    if (local != "" && local != "/") {
+                        output += "<a target=\"browse\" href=\"" + url.url() + local + "\">" + name + "</a>";
+                        m_bIndex = 1;
+                        if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
+                    }
+                    else 
+                        output += name;
+                } else {
+                    output += name;
+                }
+            }
+            if (obj.find(mergeParam) != -1) {
+                QString link = mergeParam.cap(1);
+                QString href = link.left(link.find("::"));
+                QString path = m_chmFile.left(m_chmFile.findRev("/") + 1);
+                //output += " (<a href=\"" + path + href + "\">link</a>)";
+                m_bIndex = 1;
+                output += " (<a target=\"browse\" href=\"" + url.url() + path + href + "\">link</a>)";
+                if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
+            }
         }
-		output += s.mid(old);
+        output += s.mid(old);
+
+        //set left pane
+        //added by lucida, lucida@users.sf.net
+        QString lframe = QString("</HEAD><FRAMESET COLS=\"25%,*\">\n");
+        lframe += "<FRAME NAME=\"index\" src=\"file:"+ fname+"\"" + " marginwidth=\"0\"></FRAME>\n";
+        if (!m_bIndex) {
+            lframe = "</HEAD><FRAMESET>";
+            firstPage = url.url() + QString::fromLocal8Bit(m_strIndex.latin1()); 
+        }
         theData.resetRawData(&m_contents[offset], length);
         //KMimeMagicResult * result = KMimeMagic::self()->findBufferFileType( output, path );
         //kdDebug() << "Emitting mimetype " << result->mimeType() << endl;
         //mimeType( result->mimeType() );
-	QCString output1 = (QCString)(output.latin1()); 
-	data(output1); 
-	processedSize(output1.length());
+/*        QCString output1 = (QCString)(output.latin1()); 
+        data(output1); 
+        processedSize(output1.length());*/
+        
+        //construct the frame
+        //added by lucida lucida@users.sf.net
+        QString framestr = QString("<HTML><HEAD>\n");
+        framestr += lframe;
+        framestr += "<FRAME NAME=\"browse\" src=\"" + firstPage + "\">\n";
+        framestr += "</FRAME>\n";
+        framestr += "</FRAMESET></HTML>";
+        //write index file
+        //added by lucida lucida@users.sf.net
+        *t << QString::fromLocal8Bit(output.latin1()) << endl;
+
+        data(framestr.local8Bit());
+        processedSize(framestr.length());
     } else {
         int offset = m_dirMap[path].offset;
         int length = m_dirMap[path].length;
