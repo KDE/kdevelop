@@ -194,6 +194,23 @@ void CKDevSetupDlg::addGeneralTab()
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
+  
+  startupEditingCheck = new QCheckBox( autoswitchGroup, "autoStartupCheck" );
+  grid2->addWidget(startupEditingCheck,1,0);
+  startupEditingCheck->setText(i18n("start editing \"main\"-source file"));
+  startupEditingCheck->setAutoRepeat( FALSE );
+  startupEditingCheck->setAutoResize( FALSE );
+  bool startupEditing=config->readBoolEntry("StartupEditing",true);
+  startupEditingCheck->setChecked( startupEditing );
+
+  
+  QWhatsThis::add(startupEditingCheck, i18n("startup with editing main.cpp or main.c\n\n"
+					      "If this is enabled, KDevelop\n"
+					      "will try to load main.cpp or main.c\n"
+					      "after project creation.\n"
+					      "When disabled, KDevelop doesn't load\n"
+					      "a source file after project creation."));
+
   QWhatsThis::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
 					      "If this is enabled, KDevelop\n"
 					      "will automatically switch to\n"
@@ -273,6 +290,7 @@ void CKDevSetupDlg::addGeneralTab()
 	                  "Tip of the Day every time it starts."));
   grid->addWidget(startupGroup,3,0);
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutoswitch(bool)) );
+  connect( startupEditingCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsStartupEditing(bool)) );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   connect( autosaveTimeCombo, SIGNAL(activated(int)),parent(), SLOT(slotOptionsAutosaveTime(int)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutosave(bool)) );
@@ -891,6 +909,9 @@ void CKDevSetupDlg::slotOkClicked(){
   bool autoswitch=autoSwitchCheck->isChecked();
   config->writeEntry("Autoswitch",autoswitch);
 
+  bool startupEditing=startupEditingCheck->isChecked();
+  config->writeEntry("StartupEditing",startupEditing);
+  
   bool defaultcv=defaultClassViewCheck->isChecked();
   config->writeEntry("DefaultClassView",defaultcv);
 

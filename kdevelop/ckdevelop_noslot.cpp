@@ -862,6 +862,7 @@ void CKDevelop::readOptions()
     saveTimer->stop();
   }
   bAutoswitch=config->readBoolEntry("Autoswitch",true);
+  bStartupEditing=config->readBoolEntry("StartupEditing",true);
   bDefaultCV=config->readBoolEntry("DefaultClassView",true);
   make_cmd=config->readEntry("Make","make");
   //  make_with_cmd=config->readEntry("MakeWith","");
@@ -956,6 +957,8 @@ void CKDevelop::saveOptions(){
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
   config->writeEntry("Autosave",bAutosave);
+  config->writeEntry("StartupEditing",bStartupEditing);
+  
   config->writeEntry("Autosave Timeout",saveTimeout);
 
   config->writeEntry("Make",make_cmd);

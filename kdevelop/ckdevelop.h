@@ -505,6 +505,8 @@ public:
   void slotOptionsKDevelop();
   /** sets the make command after it is changed in the Setup dialog */
   void slotOptionsMake();
+  /** dis-/enables startup editing "main"-source after AppWizard */
+  void slotOptionsStartupEditing(bool);
   /** dis-/enables autosaving by setting in the Setup dialog */
   void slotOptionsAutosave(bool);
   /** sets the autosaving time intervall */
@@ -1027,6 +1029,9 @@ private:
   /** The autosave interval. */
   int saveTimeout;
 
+  /** startup with editing main.(cpp|c) after appwizard */
+  bool bStartupEditing;
+  
   bool bAutoswitch;
   bool bDefaultCV;
 //  bool bKDevelop;

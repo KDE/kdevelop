@@ -1,3 +1,9 @@
+2002-02-22  Walter Tasin <tasin@kdevelop.org>
+    * implementing a little usability feature:
+      after project creation KDevelop loads automatically main.cpp or
+      main.c (if present).
+      This feature is now switchable (Options/KDevelop Setup).
+      
 2002-02-21  Roberto Raggi <raggi@cli.di.unipi.it>
     * cppcodecompletion.cpp: no delay in comments any more! 
 

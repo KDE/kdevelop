@@ -2389,6 +2389,10 @@ void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
   bAutoswitch=autoswitch;
 }
 
+void CKDevelop::slotOptionsStartupEditing(bool startupEditing){
+  bStartupEditing=startupEditing;
+}
+
 void CKDevelop::slotOptionsDefaultCV(bool defaultcv){
   bDefaultCV=defaultcv;
 }

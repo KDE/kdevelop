@@ -712,23 +712,42 @@ void CKDevelop::slotProjectNewAppl(){
     }
 
     CProject* pProj = prepareToReadProjectFile(file);
-    if (pProj != 0L){
-      readProjectFile(file, pProj);
-  		KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-  		compile_combo->clear(); // on startup, the combo contains "compile configuration"
-  		QStringList configs;
-  		configs.append(i18n("(Default)"));
-  		compile_combo->insertStringList(configs);
-  		int idx=configs.findIndex(i18n("(Default)")); // find the index for the last config
-  		compile_combo->setCurrentItem(idx);
-  		compile_combo->setEnabled(true);
-		}
-    else
-      return;
-
-    QString type=prj->getProjectType();
+    if (pProj == 0L)
+       return;
+    
+    readProjectFile(file, pProj);
+    KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+    compile_combo->clear(); // on startup, the combo contains "compile configuration"
+    
+    QStringList configs;
+    configs.append(i18n("(Default)"));
+    compile_combo->insertStringList(configs);
+    int idx=configs.findIndex(i18n("(Default)")); // find the index for the last config
+    compile_combo->setCurrentItem(idx);
+    compile_combo->setEnabled(true);
 
     slotViewRefresh();        // a new project started, this is legitimate
+    
+    /* try now to open the file main.(cpp|c), if the option "StartupEditing" 
+       says so...
+     */
+    if (bStartupEditing)
+    {
+      QStrList sources=pProj->getSources();
+      QString srcname, fname;
+      for(srcname=sources.first(); srcname!=0 && fname.isEmpty(); 
+         srcname=sources.next())
+      {
+        QFileInfo fi(srcname);
+        if (fi.fileName()=="main.c" || fi.fileName()=="main.cpp") 
+          fname=srcname; 
+      }
+    
+      if (!fname.isEmpty() && QFile::exists(fname))
+      {
+        switchToFile(fname);
+      }
+    }  
   }
   slotStatusMsg(i18n("Ready."));
 }
