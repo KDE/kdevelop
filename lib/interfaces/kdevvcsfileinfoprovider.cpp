@@ -54,8 +54,8 @@ struct KDevVCSFileInfoProvider::Private
 // class KDevVCSFileInfoProvider
 ///////////////////////////////////////////////////////////////////////////////
 
-KDevVCSFileInfoProvider::KDevVCSFileInfoProvider( KDevVersionControl *parent )
-    : d(new Private( parent ))
+KDevVCSFileInfoProvider::KDevVCSFileInfoProvider( KDevVersionControl *parent, const char *name )
+    : QObject( parent, name ), d( 0 ) //d(new Private( parent ))
 {
 }
 
@@ -63,14 +63,15 @@ KDevVCSFileInfoProvider::KDevVCSFileInfoProvider( KDevVersionControl *parent )
 
 KDevVCSFileInfoProvider::~KDevVCSFileInfoProvider()
 {
-    delete d;
+//    delete d;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 KDevVersionControl *KDevVCSFileInfoProvider::owner() const
 {
-    return d->m_owner;
+//    return d->m_owner;
+    return static_cast<KDevVersionControl *>( parent() );
 }
 
 #include "kdevvcsfileinfoprovider.moc"

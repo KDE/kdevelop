@@ -53,7 +53,7 @@ public:
     /**
     * Constructor
     */
-    KDevVCSFileInfoProvider( KDevVersionControl *parent );
+    KDevVCSFileInfoProvider( KDevVersionControl *parent, const char *name );
     /**
     * Destructor
     */
