@@ -28,40 +28,6 @@
  *                                                                   *
  ********************************************************************/
 
-/*--------------------------------- CKDevelop::slotClassTreeSelected()
- * slotClassTreeSelected()
- *   Event when the user clicks on an item in the classtree.
- *
- * Parameters:
- *   index           Index of the clicked item.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CKDevelop::slotClassTreeSelected()
-{
-  int idxT;
-
-  // Only react on clicks on the left mousebutton.
-  if( class_tree->mouseBtn == LeftButton )
-  {
-    idxT = class_tree->treeH->itemType();
-
-    // If this is an function of some sort, go to the declaration.
-    if( idxT == THGLOBAL_FUNCTION || 
-        idxT == THPUBLIC_METHOD ||
-        idxT == THPROTECTED_METHOD ||
-        idxT == THPRIVATE_METHOD || 
-        idxT == THPUBLIC_SLOT || 
-        idxT == THPROTECTED_SLOT || 
-        idxT == THPRIVATE_SLOT )
-      CVGotoDeclaration( class_tree->currentItem() );
-    else // Goto the definition.
-      CVGotoDefinition( class_tree->currentItem() );
-  }
-    class_tree->mouseBtn = RightButton; // set it back, so next time only if user clicks again we react
-}
-
 /*--------------------------------- CKDevelop::slotClassChoiceCombo()
  * slotClassChoiceCombo()
  *   Event when the user selects an item in the classcombo.
@@ -129,9 +95,11 @@ void CKDevelop::slotMethodChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDeclaration()
+void CKDevelop::slotCVViewDeclaration( const char *className, 
+                                       const char *declName, 
+                                       THType type )
 {
-  CVGotoDeclaration( class_tree->currentItem() );
+  CVGotoDeclaration( className, declName, type );
 }
 
 /*-------------------------------- CKDevelop::slotCVViewDefinition()
@@ -144,9 +112,11 @@ void CKDevelop::slotCVViewDeclaration()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDefinition()
+void CKDevelop::slotCVViewDefinition(  const char *className, 
+                                       const char *declName, 
+                                       THType type )
 {
-  CVGotoDefinition( class_tree->currentItem() );
+  CVGotoDefinition( className, declName, type );
 }
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
@@ -183,7 +153,7 @@ void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
   }
 
   // Switch to the .h file.
-  CVGotoDefinition( item );  
+  CVGotoDefinition( aClass->name, NULL, THCLASS );  
 
   aMethod->asHeaderCode( toAdd );
 
@@ -215,6 +185,7 @@ void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
   // Switch to the .cpp file.
   switchToFile( aClass->implFilename );
 
+  // Add the code to the file.
   aMethod->asCppCode( toAdd );
   edit_widget->append( toAdd );
   edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
@@ -242,9 +213,6 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
   // Fetch the current item.
   item = class_tree->currentItem();
 
-  // Switch to the correct file.
-  CVGotoDefinition( item );  
-
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( item->text(0) );
   
@@ -255,6 +223,9 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
     if( aClass->attributeIterator.current()->export == aAttr->export )
       attr = aClass->attributeIterator.current();
   }
+
+  // Switch to the .h file.
+  CVGotoDefinition( aClass->name, NULL, THCLASS );  
 
   // If we find an attribute with the same export we don't need to output
   // the label as well.
@@ -279,6 +250,7 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
     atLine = aClass->definedOnLine + 2;
   }
 
+  // Add the code to the file.
   edit_widget->insertAtLine( toAdd, atLine );
   edit_widget->setCursorPosition( atLine, 0 );
   edit_widget->toggleModified( true );
@@ -291,6 +263,59 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
  *                                                                   *
  ********************************************************************/
 
+/*-------------------------------------- CKDevelop::CVClassSelected()
+ * CVClassSelected()
+ *   The class has been selected, make sure the classcombo updates.
+ *
+ * Parameters:
+ *   aName          Name of the class.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::CVClassSelected( const char *aName )
+{
+  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
+  bool found = false;
+  int i;
+
+  for( i=0; i< classCombo->count() && !found; i++ )
+    found = ( strcmp( classCombo->text( i ), aName ) == 0 );
+
+  if( found )
+  {
+    i--;
+    classCombo->setCurrentItem( i );
+    slotClassChoiceCombo( i );
+  }
+}
+
+/*-------------------------------------- CKDevelop::CVMethodSelected()
+ * CVMethodSelected()
+ *   A method has been selected, make sure the methodcombo updates.
+ *
+ * Parameters:
+ *   aName          Name of the method.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::CVMethodSelected( const char *aName )
+{
+  KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  bool found = false;
+  int i;
+
+  for( i=0; i< methodCombo->count() && !found; i++ )
+    found = ( strcmp( methodCombo->text( i ), aName ) == 0 );
+
+  if( found )
+  {
+    i--;
+    methodCombo->setCurrentItem( i );
+  }
+}
+
 /*-------------------------------------- CKDevelop::CVGotoDefinition()
  * CVGotoDefinition()
  *   Goto the definition of the item with the index in the tree.
@@ -301,86 +326,75 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDefinition(QListViewItem *item)
+void CKDevelop::CVGotoDefinition( const char *className, 
+                                  const char *declName, 
+                                  THType type )
 {
   CParsedClass *aClass;
   CParsedAttribute *aAttr = NULL;
   CParsedStruct *aStruct;
-  QListViewItem *parent;
   QString toFile;
-  int idxType;
   int toLine = -1;
 
+  // Fetch a class if one is passed.
+  if( className != NULL && strlen( className ) > 0 )
+  {
+    aClass = class_tree->store->getClassByName( className );
+    CVClassSelected( className );
+  }
+
   // Get the type of declaration at the index.
-  idxType = class_tree->treeH->itemType();
-  switch( idxType )
+  switch( type )
   {
     case THCLASS:
-      aClass = class_tree->store->getClassByName( item->text(0) );
       toFile = aClass->hFilename;
       toLine = aClass->definedOnLine;
       break;
     case THSTRUCT:
-      aStruct = class_tree->store->getGlobalStructByName( item->text(0) );
+      if( aClass )
+        aClass->getStructByName( declName );
+      else
+        aStruct = class_tree->store->getGlobalStructByName( declName );
+
       toFile = aStruct->definedInFile;
       toLine = aStruct->definedOnLine;
       break;
     case THPUBLIC_ATTR:
     case THPROTECTED_ATTR:
     case THPRIVATE_ATTR:
+      aAttr = aClass->getAttributeByName( declName );
+      break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
+      aAttr = aClass->getMethodByNameAndArg( declName );
+      CVMethodSelected( declName );
+      break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
-    case THGLOBAL_FUNCTION:
-    case THGLOBAL_VARIABLE:
+      aAttr = aClass->getSlotByNameAndArg( declName );
+      break;
     case THPUBLIC_SIGNAL:
     case THPROTECTED_SIGNAL:
     case THPRIVATE_SIGNAL:
-      parent = item->parent();
-      aClass = class_tree->store->getClassByName( parent->text(0) );
-      
-      // Fetch the attribute/method.
-      if( idxType == THPUBLIC_ATTR || 
-          idxType == THPROTECTED_ATTR ||
-          idxType == THPRIVATE_ATTR )
-      {
-        aAttr = aClass->getAttributeByName( item->text(0) );
-      }
-      else if( idxType == THPUBLIC_METHOD ||
-               idxType == THPROTECTED_METHOD ||
-               idxType == THPRIVATE_METHOD )
-      {
-        aAttr = aClass->getMethodByNameAndArg( item->text(0) );
-      }
-      else if( idxType == THPUBLIC_SLOT || 
-               idxType == THPROTECTED_SLOT || 
-               idxType == THPRIVATE_SLOT  )
-      {
-        aAttr = aClass->getSlotByNameAndArg( item->text(0) );
-      }
-      else if( idxType == THPUBLIC_SIGNAL ||
-               idxType == THPROTECTED_SIGNAL ||
-               idxType == THPRIVATE_SIGNAL )
-        aAttr = aClass->getSignalByNameAndArg( item->text(0) );
-      else if( idxType == THGLOBAL_FUNCTION )
-      {
-        aAttr = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
-      }
-      else if( idxType == THGLOBAL_VARIABLE )
-      {
-        aAttr = class_tree->store->getGlobalVarByName( item->text(0) );
-      }
-
-      assert( aAttr != NULL);
-
-      toFile = aAttr->definedInFile;
-      toLine = aAttr->definedOnLine;
+      aAttr = aClass->getSignalByNameAndArg( declName );
+      break;
+    case THGLOBAL_FUNCTION:
+      aAttr = class_tree->store->getGlobalFunctionByNameAndArg( declName );
+      break;
+    case THGLOBAL_VARIABLE:
+      aAttr = class_tree->store->getGlobalVarByName( declName );
       break;
     default:
       debug( "Clicked on unknown type." );
+  }
+
+  // Fetch the line and file from the attribute if the value is set.
+  if( aAttr != NULL )
+  {
+    toFile = aAttr->definedInFile;
+    toLine = aAttr->definedOnLine;
   }
 
   if( toLine != -1 )
@@ -400,32 +414,38 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDeclaration(QListViewItem *item)
+void CKDevelop::CVGotoDeclaration( const char *className, 
+                                   const char *declName, 
+                                   THType type )
 {
   CParsedClass *aClass;
   CParsedMethod *aMethod = NULL;
-  QListViewItem *parent;
 
-  switch( class_tree->treeH->itemType() )
+  if( className != NULL && strlen( className ) > 0 )
+  {
+    aClass = class_tree->store->getClassByName( className );
+    CVClassSelected( className );
+  }
+
+  switch( type )
   {
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
-      parent = item->parent();
-      aClass = class_tree->store->getClassByName( parent->text(0) );
       if( aClass )
-        aMethod = aClass->getSlotByNameAndArg( item->text(0) );      
+        aMethod = aClass->getSlotByNameAndArg( declName );      
       break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
-      parent = item->parent();
-      aClass = class_tree->store->getClassByName( parent->text(0) );
       if( aClass )
-        aMethod = aClass->getMethodByNameAndArg( item->text(0) );
+      {
+        aMethod = aClass->getMethodByNameAndArg( declName );
+        CVMethodSelected( declName );
+      }
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
+      aMethod = class_tree->store->getGlobalFunctionByNameAndArg( declName );
       break;
     default:
       break;
@@ -456,6 +476,7 @@ void CKDevelop::refreshClassCombo()
   methodCombo->clear();
 
   lb = classCombo->listBox();
+  lb->setAutoUpdate( false );
   // Add all classes.
   for( class_tree->store->classIterator.toFirst(); 
        class_tree->store->classIterator.current(); 
@@ -466,7 +487,8 @@ void CKDevelop::refreshClassCombo()
     // Add the class.
     lb->inSort( aClass->name );
   }
-
+  lb->setAutoUpdate( true );
+  
   // Update the method combo with the class from the classcombo.
   aClass = class_tree->store->getClassByName( classCombo->currentText() );
   if( aClass )
@@ -492,6 +514,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
 
   methodCombo->clear();
   lb = methodCombo->listBox();
+  lb->setAutoUpdate( false );
 
   // Add all methods, slots and signals of this class.
   for( aClass->methodIterator.toFirst(); 
@@ -509,4 +532,6 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
     aClass->slotIterator.current()->toString( str );
     lb->inSort( str );
   }
+
+  lb->setAutoUpdate( true );
 }
