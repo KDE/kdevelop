@@ -48,12 +48,13 @@ public:
     QMutex& mutex() { return m_mutex; }
     void lock() { m_mutex.lock(); }
     void unlock() { m_mutex.unlock(); }
-    
+
     QWaitCondition& canParse() { return m_canParse; }
     QWaitCondition& isEmpty() { return m_isEmpty; }
 
     bool filesInQueue();
 
+    QString fileToParse();
     void addFile( const QString& fileName );
     void removeFile( const QString& fileName );
     void removeAllFiles();
@@ -77,6 +78,7 @@ private:
     QWaitCondition m_isEmpty;
     QWaitCondition* m_consumed;
     QMutex m_mutex;
+    QMutex m_fileListMutex;
 
     CppSupportPart* m_cppSupport;
     bool m_close;

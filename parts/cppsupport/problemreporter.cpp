@@ -58,11 +58,11 @@ public:
     ProblemItem( QListView* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
 	: KListViewItem( parent, level, problem, file, line, column ) {}
-    
+
     ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
 		 const QString& file, const QString& line, const QString& column  )
 	: KListViewItem( parent, level, problem, file, line, column ) {}
-    
+
     int compare( QListViewItem* item, int column, bool ascending ) const {
 	if( column == 2 || column == 3 ){
 	    int a = text( column ).toInt();
@@ -73,7 +73,7 @@ public:
 	}
 	return KListViewItem::compare( item, column, ascending );
     }
-    
+
 };
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
@@ -166,12 +166,13 @@ void ProblemReporter::reparse()
 {
     if( !m_cppSupport->isValid() )
 	return;
-    
-    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
+
 
     m_timer->stop();
-    
+
+    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
     m_cppSupport->backgroundParser()->addFile( m_filename );
+    kdDebug(9007) << "---> file added" << endl;
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )

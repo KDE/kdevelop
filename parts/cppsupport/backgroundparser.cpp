@@ -242,7 +242,7 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::addFile( const QString& fileName )
 {
-    QMutexLocker locker( &m_mutex );
+    QMutexLocker locker( &m_fileListMutex );
     QString fn( fileName.unicode(), fileName.length() );
     bool added = false;
     if( m_fileList.find(fn) == m_fileList.end() ){
@@ -258,6 +258,7 @@ void BackgroundParser::removeAllFiles()
 {
     kdDebug(9007) << "BackgroundParser::removeAllFiles()" << endl;
     QMutexLocker locker( &m_mutex );
+    QMutexLocker locker2( &m_fileListMutex );
 
     QMap<QString, Unit*>::Iterator it = m_unitDict.begin();
     while( it != m_unitDict.end() ){
@@ -275,6 +276,8 @@ void BackgroundParser::removeAllFiles()
 void BackgroundParser::removeFile( const QString& fileName )
 {
     QMutexLocker locker( &m_mutex );
+    QMutexLocker locker2( &m_fileListMutex );
+
     Unit* unit = findUnit( fileName );
     m_unitDict.remove( fileName );
     if( unit ){
@@ -347,33 +350,21 @@ void BackgroundParser::close()
 bool BackgroundParser::filesInQueue()
 {
     QMutexLocker locker( &m_mutex );
-    int n = m_fileList.count();
-    return n;
+    QMutexLocker locker2( &m_fileListMutex );
+
+    return m_fileList.count();
 }
 
 void BackgroundParser::run()
 {
     while( true ){
 	if( m_close )
-	    QThread::exit();
+	    break;
 
-	while( m_fileList.isEmpty() ){
-	    if( m_close )
-	        break;
-
-            m_canParse.wait();
-	}
+        QString fileName = fileToParse();
 
 	if( m_close )
 	    break;
-
-        QString fileName;
-        {
-            QMutexLocker locker( &m_mutex );
- 	    fileName = m_fileList.front();
-	    fileName = QString( fileName.unicode(), fileName.length() );
-	    m_fileList.pop_front();
-	}
 
         {
             QMutexLocker locker( &m_mutex );
@@ -381,8 +372,10 @@ void BackgroundParser::run()
 
 	    if( unit ){
 	        m_unitDict.insert( fileName, unit );
+
                 KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	        KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
+
 	        if( m_consumed )
 	            m_consumed->wait();
 
@@ -390,15 +383,35 @@ void BackgroundParser::run()
 	        m_unitDict.remove( fileName );
 	    }
 
-	    //kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
-
-	    if( m_fileList.isEmpty() )
-	        m_isEmpty.wakeAll();
+	    {
+	       QMutexLocker locker( &m_fileListMutex );
+	       if( m_fileList.isEmpty() )
+	           m_isEmpty.wakeAll();
+	    }
         }
 
     }
 
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
+
+    QThread::exit();
+}
+
+QString BackgroundParser::fileToParse( )
+{
+    while( m_fileList.isEmpty() ){
+        if( m_close )
+            return QString::null;
+
+	m_canParse.wait();
+    }
+
+    QMutexLocker locker( &m_fileListMutex );
+    QString fileName = m_fileList.front();
+    fileName = QString( fileName.unicode(), fileName.length() );
+    m_fileList.pop_front();
+
+    return fileName;
 }
 
 

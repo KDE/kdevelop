@@ -275,9 +275,9 @@ void CppCodeCompletion::slotTimeout()
     if( !m_activeCursor || !m_activeEditor || !m_activeCompletion )
         return;
 
-    uint nLine, nCol;    
+    uint nLine, nCol;
     m_activeCursor->cursorPositionReal( &nLine, &nCol );
-    
+
     if( nLine != m_ccLine || nCol != m_ccColumn )
 	return;;
 
@@ -285,7 +285,7 @@ void CppCodeCompletion::slotTimeout()
     QChar ch = textLine[ nCol ];;
     if( ch.isLetterOrNumber() || ch == '_' )
 	return;
-        
+
     completeText();
 }
 
@@ -364,7 +364,7 @@ void
 CppCodeCompletion::slotTextChanged()
 {
     m_ccTimer->stop();
-    
+
     if( !m_activeCursor )
         return;
 
@@ -381,7 +381,7 @@ CppCodeCompletion::slotTextChanged()
     if ( ch == "(" || ch == "." || ch2 == "->" || ch2 == "::" ){
         m_ccLine = nLine;
         m_ccColumn = nCol;
-    	m_ccTimer->start( 500, true );
+    	m_ccTimer->start( 250, true );
     }
 }
 
@@ -516,7 +516,7 @@ QString
 CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
 {
     QString expr = e;
-    
+
     bool global = false;
     if( expr.startsWith("::") ){
 	expr = expr.mid( 2 );
@@ -571,7 +571,7 @@ CppCodeCompletion::completeText( )
 
     if( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
         return;
-        
+
     unsigned int line, column;
     m_activeCursor->cursorPositionReal( &line, &column );
 
@@ -583,7 +583,7 @@ CppCodeCompletion::completeText( )
 
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
-    
+
     kdDebug(9007) << "ch = " << ch << endl;
     kdDebug(9007) << "ch2 = " << ch2 << endl;
 
@@ -826,19 +826,19 @@ QStringList CppCodeCompletion::getGlobalSignatureList( const QString& functionNa
 QStringList CppCodeCompletion::getSignatureListForClass( const QString& className, const QString& functionName, bool isInstance )
 {
     QStringList retVal;
-    
+
     ParsedClass* pClass = dynamic_cast<ParsedClass*>( findContainer(className) );
     if ( !pClass ){
 	// check the pcs
 	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName, isInstance );
-	
-	QValueList<Tag> parents = m_repository->getBaseClassList( className ); 
+
+	QValueList<Tag> parents = m_repository->getBaseClassList( className );
 	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
 	while( it != parents.end() ){
 	    const Tag& tag = *it;
 	    ++it;
-	    
+
 	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
 	    retVal += getSignatureListForClass( tag.attribute("baseClass").toString(), functionName, isInstance );
 	}
@@ -846,16 +846,16 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	retVal = pClass->getSortedMethodSignatureList( functionName );
 	retVal += pClass->getSortedSlotSignatureList( functionName );
 	retVal += pClass->getSortedSignalSignatureList( functionName );
-	
+
 	QPtrList<ParsedParent> parentList = pClass->parents;
 	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
 	{
 	    // ParsedClass* baseClass = dynamic_cast<ParsedClass*>( findContainer(pParentClass->name()) );
 	    retVal += getSignatureListForClass( pParentClass->name(), functionName, isInstance );
 	}
-	    
+
     }
-        
+
     return retVal;
 }
 
@@ -864,15 +864,26 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
     if( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
 	return;
 
-    // sync
-    while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
-         m_pSupport->backgroundParser()->isEmpty().wait();
+#if 0
+    unsigned int line, column;
+    m_activeCursor->cursorPositionReal( &line, &column );
 
-    m_pSupport->backgroundParser()->lock();
+    QString strCurLine = m_activeEditor->textLine( line );
 
-    computeRecoveryPoints();
+    QString ch = strCurLine.mid( column-1, 1 );
+    QString ch2 = strCurLine.mid( column-2, 2 );
+#endif
 
-    m_pSupport->backgroundParser()->unlock();
+    //if( ch2 == "->" || ch == "." || ch == "(" )
+    {
+        // sync
+        //while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
+        //    m_pSupport->backgroundParser()->isEmpty().wait();
+
+        m_pSupport->backgroundParser()->lock();
+        computeRecoveryPoints();
+        m_pSupport->backgroundParser()->unlock();
+    }
 }
 
 ParsedClassContainer* CppCodeCompletion::findContainer( const QString& n, ParsedScopeContainer* container, const QStringList& imports )
@@ -956,7 +967,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		//entry.prefix = meth->type();
 
 		entry.text = meth->name() + "(";
-		
+
 		QString text;
 		for( ParsedArgument *pArg = meth->arguments.first();
 		pArg != 0;
@@ -965,7 +976,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 			text += ", ";
 		    text += pArg->toString();
 		}
-		
+
 		if( text.isEmpty() ){
 		    entry.text += ")";
 		} else {
@@ -1117,7 +1128,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	while( it != parents.end() ){
 	    const Tag& tag = *it;
 	    ++it;
-	    
+
 	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
 	    entryList += findAllEntries( tag.attribute("baseClass").toString(), false, isInstance );
 	}
@@ -1159,7 +1170,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 		return tag.name();
 	    return tag.attribute( "type" ).toString();
 	}
-		
+
         QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
         kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
         QValueList<Tag>::Iterator it = parents.begin();
@@ -1228,14 +1239,14 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    }
 	}
     }
-    
+
     return QString::null;
 }
 
 void CppCodeCompletion::setupCodeInformationRepository( )
 {
     // add all available pcs for now
-    
+
     int id = 1;
     CppSupportPart* part = m_pSupport;
     QPtrListIterator<Catalog> it( part->catalogList() );
@@ -1251,7 +1262,7 @@ QString CppCodeCompletion::typeName( const QString& str )
 {
     if( str.isEmpty() )
 	return QString::null;
-    
+
     Driver d;
     Lexer lex( &d );
     lex.setSource( str );
@@ -1260,25 +1271,25 @@ QString CppCodeCompletion::typeName( const QString& str )
     TypeSpecifierAST::Node typeSpec;
     if( parser.parseTypeSpecifier(typeSpec) ){
         NameAST* name = typeSpec->name();
-        
+
 	QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
-	
+
         QString type;
 	while( it.current() ){
 	    if( it.current()->name() ){
 	       type += it.current()->name()->text() + "::";
-	    } 
+	    }
 	    ++it;
 	}
-	
+
         if( name->unqualifiedName() && name->unqualifiedName()->name() ){
             type += name->unqualifiedName()->name()->text();
         }
- 
+
         return type;
     }
-    
+
     return QString::null;
 }
 
@@ -1319,7 +1330,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementAST* stmt,
 {
     if( !stmt )
         return;
-        
+
     switch( stmt->nodeType() )
     {
     case NodeType_IfStatement:
@@ -1354,16 +1365,16 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* a
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
-    
+
     if( line > endLine || (line == endLine && endColumn < col) )
 	return;
-    
+
     QPtrList<StatementAST> l( ast->statementList() );
     QPtrListIterator<StatementAST> it( l );
     while( it.current() ){
 	StatementAST* stmt = it.current();
 	++it;
-	
+
 	computeContext( ctx, stmt, line, col );
     }
 }
@@ -1402,19 +1413,19 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 {
     if( !ast->declaration() || ast->declaration()->nodeType() != NodeType_SimpleDeclaration )
 	return;
-    
+
     int startLine, startColumn;
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
-    
+
     if( line < startLine || (line == startLine && col <= startColumn) )
 	return;
- 
+
     SimpleDeclarationAST* simpleDecl = static_cast<SimpleDeclarationAST*>( ast->declaration() );
     TypeSpecifierAST* typeSpec = simpleDecl->typeSpec();
     QString type = typeName( typeSpec->text() );
-        
+
     InitDeclaratorListAST* initDeclListAST = simpleDecl->initDeclaratorList();
     if( !initDeclListAST )
         return;
@@ -1439,15 +1450,15 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 {
     if( !ast->typeSpec() || !ast->declarator() || !ast->declarator()->declaratorId() )
 	return;
-    
+
     int startLine, startColumn;
     int endLine, endColumn;
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
-        
+
     if( line < startLine || (line == startLine && col <= startColumn) )
 	return;
-    
+
     QString type = typeName( ast->typeSpec()->text() );
     SimpleVariable var;
     var.type = type;
