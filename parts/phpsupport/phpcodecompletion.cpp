@@ -35,7 +35,7 @@ PHPCodeCompletion::PHPCodeCompletion(KDevCore* core,ClassStore* store){
   e.text = "mysql_affected_rows";
   e.postfix ="()";
   e.comment = "Get number of affected rows in previous MySQL operation.";
-  e.prototype = "int mysql_affected_rows ([resource link_identifier])";
+  e.prototype = "int mysql_affected_rows (resoure link_identifier,String)";
   m_globalFunctions.append(e);
   
   e.prefix = "int";
@@ -74,7 +74,7 @@ void PHPCodeCompletion::documentActivated(KEditor::Document* doc){
   cerr << endl << "PHPCodeCompletion::documentActivated";
   m_cursorInterface = KEditor::CursorDocumentIface::interface(doc);
   if (!m_cursorInterface) { // no CursorDocument available
-    cerr << endl << "editor doesn't support the CursorDocumentIface";
+    cerr << "editor doesn't support the CursorDocumentIface" << endl;
     return;
   } 
   disconnect(m_cursorInterface, 0, this, 0 ); // to make sure that it is't connected twice
@@ -87,19 +87,19 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   //  cerr << endl << "PHPCodeCompletion::cursorPositionChanged:" << line << ":" << col;
   m_editInterface = KEditor::EditDocumentIface::interface(doc);
   if (!m_editInterface) { 
-    cerr << endl << "editor doesn't support the EditDocumentIface";
+    cerr << "editor doesn't support the EditDocumentIface" << endl;
     return;
   }
   m_codeInterface = KEditor::CodeCompletionDocumentIface::interface(doc);
   if (!m_codeInterface) { // no CodeCompletionDocument available
-    cerr << endl << "editor doesn't support the CodeCompletionDocumentIface";
+    cerr << "editor doesn't support the CodeCompletionDocumentIface" << endl;
     return;
   }
   m_currentLine = line;
   QString lineStr = m_editInterface->line(line);
   QString restLine = lineStr.mid(col);
   if(restLine.left(1) != " " && restLine.left(1) != "\t" && !restLine.isNull()){
-    cerr << endl << "no codecompletion because no empty character after cursor:" << restLine << ":";    
+    cerr << "no codecompletion because no empty character after cursor:" << restLine << ":" << endl;    
     return;
   }
   if(checkForVariable(doc,lineStr,col,line)){
@@ -112,9 +112,9 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
   if(checkForGlobalFunction(doc,lineStr,col)) {
     return;
   }
-  //   if(checkForArgHint(doc,lineStr,col,line)){
-  //    return;
-  //   }
+  if(checkForArgHint(doc,lineStr,col,line)){
+    return;
+  }
   
   /*
     QString lineStr = e_iface->line(line);
@@ -132,22 +132,22 @@ void PHPCodeCompletion::cursorPositionChanged(KEditor::Document *doc, int line, 
 bool PHPCodeCompletion::checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line){
   QString methodStart = lineStr.left(col);
   if(methodStart.right(2) != "->"){
-    cerr << endl << "checkForVariable: no '->' found";
+    cerr  << "checkForVariable: no '->' found" << endl;
     return false;
   }
   int varStart = methodStart.findRev("$");
   if(varStart ==-1){
-    cerr << endl << "checkForVariable: no '$' (variable start) found";
+    cerr << "checkForVariable: no '$' (variable start) found" << endl;
     return false;
   }
-  QString variableLine = methodStart.mid(varStart+1,methodStart.length() - 3);
-  cerr << endl << variableLine;
+  QString variableLine = methodStart.mid(varStart+1);
+  cerr << "VarLine:" << variableLine << endl;
   QString className ="";
   QStringList vars = QStringList::split("->",variableLine);
   for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
     className = this->getClassName("$" + (*it),className);
   }
-  cerr << endl << "Classname:" << className;
+  cerr << "Classname:" << className << endl;
 
   QValueList<KEditor::CompletionEntry> list = this->getClassMethodsAndVariables(className);
   if(list.count()>0){
