@@ -174,6 +174,9 @@ public slots:
     
 private slots:
     void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
+    
+private:
+    ProjectItemDom m_currentItem;
 };
 
 #endif

@@ -46,6 +46,8 @@ public:
     virtual bool build(ProjectItemDom dom = ProjectItemDom());
     virtual bool clean(ProjectItemDom dom = ProjectItemDom());
     virtual bool execute(ProjectItemDom dom = ProjectItemDom());
+    
+    QString buildCommand(ProjectItemDom dom);
 
 private slots:
     void projectConfigWidget(KDialogBase *dialog);

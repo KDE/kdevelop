@@ -1,4 +1,5 @@
 
+#include <config.h>
 #include "kdevmakebuilder.h"
 
 #include <kdevproject.h>
@@ -8,6 +9,7 @@
 #include <makeoptionswidget.h>
 
 #include <kgenericfactory.h>
+#include <kprocess.h>
 #include <kdialogbase.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -19,7 +21,7 @@ K_EXPORT_COMPONENT_FACTORY(libkdevmakebuilder, KGenericFactory<KDevMakeBuilder>(
 
 
 const QString &KDevMakeBuilder::builder =
-    KGlobal::staticQString("/kdevprojectmanager/builder/make");
+    KGlobal::staticQString("/kdevprojectmanager/builder");
     
 const QString &KDevMakeBuilder::makeTool =
     KGlobal::staticQString("/kdevprojectmanager/builder/make/makebin");
@@ -90,8 +92,8 @@ bool KDevMakeBuilder::build(ProjectItemDom dom)
     if (KDevMakeFrontend *make = project()->makeFrontend()) {
         if (ProjectFolderDom folder = dom->toFolder()) {
             // ### compile the folder
-            QString command = "make";
-            make->queueCommand(folder->name(), command); // ### use the make-tool variable
+            QString command = buildCommand(dom);
+            make->queueCommand(folder->name(), command);
             m_commands.append(qMakePair(command, dom));
             return true;
         } else if (ProjectTargetDom target = dom->toTarget()) {
@@ -145,5 +147,49 @@ void KDevMakeBuilder::commandFailed(const QString &command)
         
         emit failed();
     }
+}
+
+QString KDevMakeBuilder::buildCommand(ProjectItemDom item)
+{
+    QDomDocument &dom = *project()->projectDom();
+
+    QString cmdline = DomUtil::readEntry(dom, makeTool);
+    int prio = DomUtil::readIntEntry(dom, priority);
+    QString nice;
+    if (prio != 0) {
+        nice = QString("nice -n%1 ").arg(prio);
+    }
+
+    if (cmdline.isEmpty())
+        cmdline = MAKE_COMMAND;
+    if (!DomUtil::readBoolEntry(dom, abortOnError))
+        cmdline += " -k";
+    int jobs = DomUtil::readIntEntry(dom, numberOfJobs);
+    if (jobs != 0) {
+        cmdline += " -j";
+        cmdline += QString::number(jobs);
+    }
+    if (DomUtil::readBoolEntry(dom, dontAct))
+        cmdline += " -n";
+
+    cmdline += " ";
+#if 0 // ### enable me
+    cmdline += target;
+#endif 
+
+    cmdline.prepend(nice);
+    
+#if 0 // ### enable me
+    cmdline.prepend(project()->makeEnvironment());
+#endif
+
+    Q_ASSERT(item->toFolder());
+
+    QString dircmd = "cd ";
+    QString dir = item->toFolder()->name();
+    dircmd += KProcess::quote(dir);
+    dircmd += " && ";
+
+    return dircmd + cmdline;
 }
 

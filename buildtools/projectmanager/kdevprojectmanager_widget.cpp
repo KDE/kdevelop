@@ -20,6 +20,7 @@
 #include "kdevprojectmanager_widget.h"
 
 #include <kdevprojectimporter.h>
+#include <kdevprojectbuilder.h>
 
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
@@ -422,6 +423,8 @@ ProjectDetails::~ProjectDetails()
 
 void ProjectDetails::setCurrentItem(ProjectItemDom dom)
 {
+    m_currentItem = dom;
+    
     QString currentText;
     if (QListViewItem *sel = listView()->currentItem()) {
         currentText = sel->text(0);
@@ -513,9 +516,26 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
         if (!makefile.isEmpty()) {
             KPopupMenu menu(this);
             menu.insertTitle(i18n("Folder: %1").arg(folder->shortDescription()));
+            
             menu.insertItem(i18n("Edit"), 1000);
-            if (menu.exec(pt) == 1000)
-                part()->partController()->editDocument(KURL(makefile));
+            
+            if (part()->defaultBuilder()) {
+                menu.insertSeparator();
+                menu.insertItem(i18n("Build"), 1010);
+            }
+            
+            switch (menu.exec(pt)) {
+                case 1000: {
+                    part()->partController()->editDocument(KURL(makefile));
+                } break;
+                
+                case 1010: {
+                    if (KDevProjectBuilder *builder = part()->defaultBuilder())
+                        builder->build(projectItem->dom());
+                } break;
+                
+                default: break;
+            } // end switch
         }
     } 
 }
@@ -532,11 +552,23 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
     if (ProjectFileDom file = projectItem->dom()->toFile()) {
         KPopupMenu menu(this);
         menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
-        
+                    
         FileContext context(file->name(), false);
         part()->core()->fillContextMenu(&menu, &context);
         
-        menu.exec(pt);
+        if (part()->defaultBuilder()) {
+            menu.insertSeparator();
+            menu.insertItem(i18n("Build"), 1010);
+        }
+        
+        switch (menu.exec(pt)) {
+            case 1010: {
+                if (KDevProjectBuilder *builder = part()->defaultBuilder())
+                    builder->build(m_currentItem); // ### TODO: compile the target not subproject
+            } break;
+            
+            default: break;
+        } // end switch
     }
 }
 
