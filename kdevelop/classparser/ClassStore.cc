@@ -42,7 +42,7 @@ CClassStore::CClassStore()
   classes.setAutoDelete( true );
 
   // Initialize the persistant class store.
-  globalStore.setPath( "/tmp"  );
+  //  globalStore.setPath( "/tmp"  );
   globalStore.setFilename( "classes.db" );
 
   // Open the store if it exists, else create it.
