@@ -1,6 +1,6 @@
 EXTRA_DIST = tip.database
 
-SUBDIRS = manual welcome cref tutorial
+SUBDIRS = manual welcome cref tutorial kde_libref
 		
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/

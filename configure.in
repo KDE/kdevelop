@@ -101,6 +101,7 @@ doc/de/manual/Makefile \
 doc/de/welcome/Makefile \
 doc/de/cref/Makefile \
 doc/de/tutorial/Makefile \
+doc/de/kde_libref/Makefile \
 doc/en/Makefile \
 doc/en/addendum/Makefile \
 doc/en/cref/Makefile \
