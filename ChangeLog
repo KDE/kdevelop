@@ -13,7 +13,9 @@
 
 2000-01-24 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* Now REALLY fixed the kde2 app generation bugs...;-)
-
+	* fixed debug menu appearing twice in project editor (was: kdev_menubar -> kdlg_menubar cut&paste fault)
+	* added OpenGL application template by Robert.M.Wheat <belran@worldnet.att.net>
+		
 2000-01-23 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated the german manual
 	* chapter Build Settings translated

@@ -2956,7 +2956,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
 
    stream << "<HTML>";
    stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
-   stream << "</TITLE></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
+   stream << "</TITLE></HEAD><H1>Search String: '" << doc_search_display_text << "'</H1><HR><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
    stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
    QString numstr;
    for(str = sort_list.first();str != 0;str = sort_list.next() ){

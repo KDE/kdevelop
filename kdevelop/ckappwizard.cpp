@@ -177,6 +177,8 @@ void CKAppWizard::initPages(){
   kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kdeminiitem = new QListViewItem (kdeentry,i18n("Mini"));
   kdenormalitem = new QListViewItem (kdeentry,i18n("Normal"));
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  kdenormaloglitem = new QListViewItem(kdeentry, i18n("Normal-OpenGL"));
   
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
@@ -1043,6 +1045,11 @@ void CKAppWizard::generateEntries() {
   if (kdenormalitem->isSelected()) {
     entries << "kdenormal\n";
   }
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  else if (kdenormaloglitem->isSelected())
+  {
+    entries << "kdenormalogl\n";
+  } 
   else if (kdeminiitem->isSelected()) {
     entries << "kdemini\n";
   }
@@ -1247,6 +1254,11 @@ void CKAppWizard::okPermited() {
   else if (qt_2normalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt2.tar.gz";
   }
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  else if (kdenormaloglitem->isSelected())
+  {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normalogl.tar.gz";
+  }   
   else if (cppitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
   } 
@@ -1373,10 +1385,14 @@ void CKAppWizard::slotAppEnd() {
   kdeentry->removeItem (kdeminiitem);
   kdeentry->removeItem (kde2normalitem);
   kdeentry->removeItem (kde2miniitem);
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  kdeentry->removeItem(kdenormaloglitem);
   delete (kdenormalitem);
   delete (kdeminiitem);
   delete (kde2normalitem);
   delete (kde2miniitem);
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  delete(kdenormaloglitem);
   //delete (corbaitem);
   //delete (komitem);
   delete (kdeentry);
@@ -1459,6 +1475,37 @@ void CKAppWizard::slotApplicationClicked() {
 			   "menubar, toolbar, statusbar and support for a "
 			   "document-view codeframe model."));
   }
+ 
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support 
+  else if (kdenormaloglitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalOglApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(true);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit")))
+    {
+      okButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-application with session-management, "
+    												"menubar, toolbar, statusbar and support for a "
+    												"document-view codeframe model."
+    												" OpenGL(tm) (Mesa3D) support is added."));
+  }
+  
   else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
     widget1b->setBackgroundPixmap(pm);
@@ -1924,6 +1971,11 @@ void CKAppWizard::slotProcessExited() {
   } 
   else if (kdenormalitem->isSelected()) {
     project->setProjectType("normal_kde");
+  }
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  else if (kdenormaloglitem->isSelected())
+  {
+    project->setProjectType("normalogl_kde");
   } 
   else if (kde2miniitem->isSelected()) {
     project->setProjectType("mini_kde2");
@@ -1959,6 +2011,11 @@ void CKAppWizard::slotProcessExited() {
   else if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
   }
+  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  else if(kdenormaloglitem->isSelected())
+  {
+     project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lqgl -lMesaGL -lXmu -lXext -lX11");
+  }
   else if (kde2normalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
   }
@@ -1988,7 +2045,8 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
  // KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
-  if (kdenormalitem->isSelected() || kdeminiitem->isSelected() || kde2normalitem->isSelected() || kde2miniitem->isSelected()) {
+  // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  if (kdenormalitem->isSelected() || kdeminiitem->isSelected() || kde2normalitem->isSelected() || kde2miniitem->isSelected() || kdenormaloglitem->isSelected()) {
     sub_dir_list.append("po");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
@@ -2128,8 +2186,9 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
       project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
     }
   }
-  
-  if (kdenormalitem->isSelected() || kde2normalitem->isSelected() || qtnormalitem->isSelected() || qt_2normalitem->isSelected() ) {
+
+  // Appended 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
+  if (kdenormalitem->isSelected() || kde2normalitem->isSelected() || qtnormalitem->isSelected() || qt_2normalitem->isSelected() || kdenormaloglitem->isSelected()) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
       fileInfo.type = CPP_SOURCE;
@@ -2466,7 +2525,8 @@ void CKAppWizard::slotMakeEnd() {
       file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
     }
-    if (kdenormalitem->isSelected() || kde2normalitem->isSelected()|| qtnormalitem->isSelected()|| qt_2normalitem->isSelected()) {
+    // Appended 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
+    if (kdenormalitem->isSelected() || kde2normalitem->isSelected()|| qtnormalitem->isSelected()|| qt_2normalitem->isSelected() || kdenormaloglitem->isSelected()) {
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "view.cpp");
@@ -2551,5 +2611,3 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
-
-

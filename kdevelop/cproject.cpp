@@ -1190,8 +1190,11 @@ QString CProject::readGroupEntry( const char *group, const char *tag )
   config.setGroup( group );
   return config.readEntry( tag,"" );
 }
-bool CProject::isKDEProject(){
-  if (getProjectType() == "normal_kde" || getProjectType() == "mini_kde") return true;
+bool CProject::isKDEProject()
+{
+	// Modified by Robert Wheat, 10-23-1999, OpenGL support
+  if (getProjectType() == "normal_kde" || getProjectType() == "mini_kde" || getProjectType() == "normalogl_kde")
+  		return true;
   return false;
 }
 bool CProject::isQtProject(){

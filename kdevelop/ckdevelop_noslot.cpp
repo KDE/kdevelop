@@ -898,7 +898,10 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_DISTCLEAN);
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
-    if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+    // Modified by Robert Wheat, 10-23-1999, OpenGL support
+    if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde" &&
+    																prj->getProjectType() != "normalogl_kde")
+    {
       disableCommand(ID_PROJECT_MESSAGES);
     }
     else{

@@ -620,8 +620,10 @@ void CKDevelop::slotProjectNewAppl(){
   	}
 
     readProjectFile(file);
-    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") 
-	{
+    // Modified by Robert Wheat, 01-22-2000, OpenGL(tm) support
+    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde" ||
+    																prj->getProjectType() == "normalogl_kde") 
+	 {
       slotProjectMessages();
     }
   	slotViewRefresh();	// a new project started, this is legitimate

@@ -233,7 +233,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_debug_menu->insertItem(Icon("dbgbreak.xpm"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
   kdlg_debug_menu->insertItem(Icon("stop_proc.xpm"),   i18n("Stop"),             ID_DEBUG_STOP);
 
-  kdev_menubar->insertItem(i18n("&Debug"), kdlg_debug_menu);
+  kdlg_menubar->insertItem(i18n("&Debug"), kdlg_debug_menu);
   connect(kdlg_debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
 
   ///////////////////////////////////////////////////////////////////

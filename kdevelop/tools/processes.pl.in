@@ -63,11 +63,18 @@ else {
   if ($processes{APPLICATION} eq "kdemini") {
     changeMiniApp();
   }
-  elsif ($processes{APPLICATION} eq "cpp") {
-    changeTerminalCPPApp();
+  elsif ($processes{APPLICATION} eq "kdenormal") {
+    changeNormalApp();
   }
-  elsif ($processes{APPLICATION} eq "c") {
-    changeTerminalCApp();
+  # Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support
+  elsif ($processes{APPLICATION} eq "kdenormalogl") {
+    changeNormalOGLApp();
+  }
+  elsif ($processes{APPLICATION} eq "kde2mini") {
+    changeMiniApp();
+  }
+  elsif ($processes{APPLICATION} eq "kde2normal") {
+    changeNormalApp();
   }
   elsif ($processes{APPLICATION} eq "qtnormal") {
     changeQtApp();
@@ -75,14 +82,11 @@ else {
   elsif ($processes{APPLICATION} eq "qt2normal") {
     changeQtApp();
   }
-  elsif ($processes{APPLICATION} eq "kdenormal") {
-    changeNormalApp();
+  elsif ($processes{APPLICATION} eq "cpp") {
+    changeTerminalCPPApp();
   }
-  elsif ($processes{APPLICATION} eq "kde2mini") {
-    changeMiniApp();
-  }
-  elsif ($processes{APPLICATION} eq "kde2normal") {
-    changeNormalApp();
+  elsif ($processes{APPLICATION} eq "c") {
+    changeTerminalCApp();
   }
 }
 
@@ -124,7 +128,8 @@ if ($processes{VSSUPPORT} eq "cvs") {
     $copydes = $underDirectory . "/docs/en/.cvsignore";
     copy ("$copysrc", "$copydes");
 
-    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" || $processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal") {	
+# Modified by Robert Wheat, 01-22-2000, OpenGL(tm) Support
+    if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" || $processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal"||$processes{APPLICATION} eq "kdenormalogl") {
 #      chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
 #      $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
 #      system ("cp $copysrc $copydes");
@@ -507,6 +512,71 @@ sub changeNormalApp {
     
 }
 
+# Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support
+sub changeNormalOGLApp {
+
+    unpackFiles("normalogl.tar");
+    
+    #renamed the directory
+    printflush (STDOUT, "change files...\n");
+    chdir ($overDirectory);
+    rename ("skel", $nameLittle);
+    
+    #create the templatedirectory
+    condCopyTemplateFiles();
+
+    #Replacements in overDirectory  
+    chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+
+    #Replacements and name changing in underDirectory
+    chdir ($underDirectory);
+
+    rename ("kbase.cpp",     $nameLittle.".cpp");
+    rename ("kbase.h",       $nameLittle.".h");
+    rename ("kbasedoc.cpp",  $nameLittle."doc.cpp");
+    rename ("kbasedoc.h",    $nameLittle."doc.h");
+    rename ("kbaseview.cpp", $nameLittle."view.cpp");
+    rename ("kbaseview.h",   $nameLittle."view.h");
+
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.cpp");
+    replaceValuesInFile(\%changings, $nameLittle.".cpp");
+    replaceValuesInFile(\%changings, $nameLittle.".h");
+    replaceValuesInFile(\%changings, $nameLittle."doc.cpp");
+    replaceValuesInFile(\%changings, $nameLittle."view.cpp");
+    replaceValuesInFile(\%changings, $nameLittle."doc.h");
+    replaceValuesInFile(\%changings, $nameLittle."view.h");
+    replaceValuesInFile(\%changings, "resource.h");
+
+    #Replacements in documentation directory
+    chdir ($underDirectory."/docs/en");
+    replaceValuesInFile(\%changings, "Makefile.am");
+
+    condCopyGNUFiles();
+    condCopyLsmFile();
+    condCopyUserDocFiles();
+    
+    if ($processes{CPP} eq "yes") {
+        processCppTemplate("main.cpp");
+	processCppTemplate("$nameLittle.cpp");
+	processCppTemplate("${nameLittle}view.cpp");
+	processCppTemplate("${nameLittle}doc.cpp");
+    }
+    
+    if ($processes{HEADER} eq "yes") {
+	processHeaderTemplate("$nameLittle.h");
+	processHeaderTemplate("${nameLittle}view.h");
+	processHeaderTemplate("${nameLittle}doc.h");
+	processHeaderTemplate("resource.h");
+    }
+    
+    condCopyKdelnkFile();
+    condCopyProgIcons();
+    condCreateApiDoc();
+    
+}
 
 sub changeMiniApp {
 
