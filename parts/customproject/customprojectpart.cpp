@@ -17,6 +17,7 @@
 #include <qpopupmenu.h>
 #include <qregexp.h>
 #include <qpopupmenu.h>
+#include <qstringlist.h>
 #include <qtabwidget.h>
 #include <qvaluestack.h>
 #include <qvbox.h>
@@ -122,7 +123,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
 
     m_contextFileName = fcontext->fileName();
-    bool inProject = project()->allFiles().contains(m_contextFileName);
+    bool inProject = project()->allFiles().contains(m_contextFileName.mid ( project()->projectDirectory().length() + 1 ));
     QString popupstr = QFileInfo(m_contextFileName).fileName();
     if (m_contextFileName.startsWith(projectDirectory()+ "/"))
         m_contextFileName.remove(0, projectDirectory().length()+1);
@@ -253,37 +254,66 @@ QString CustomProjectPart::activeDirectory()
 
 QStringList CustomProjectPart::allFiles()
 {
-    QStringList res;
+//     QStringList res;
+// 
+//     QStringList::ConstIterator it;
+//     for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) {
+//         QString fileName = *it;
+//         if (!fileName.startsWith("/")) {
+//             fileName.prepend("/");
+//             fileName.prepend(m_projectDirectory);
+//         }
+//         res += fileName;
+//     }
+//     
+//     return res;
 
-    QStringList::ConstIterator it;
-    for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) {
-        QString fileName = *it;
-        if (!fileName.startsWith("/")) {
-            fileName.prepend("/");
-            fileName.prepend(m_projectDirectory);
-        }
-        res += fileName;
-    }
-    
-    return res;
+	// return all files relative to the project directory!
+	return m_sourceFiles;
 }
 
 
 void CustomProjectPart::addFile(const QString &fileName)
 {
-    m_sourceFiles.append(fileName);
-    kdDebug(9025) << "Emitting addedFileToProject" << endl;
-    emit addedFileToProject(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void CustomProjectPart::addFiles ( const QStringList& fileList )
+{
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		m_sourceFiles.append ( *it );
+	}
+	
+	kdDebug(9025) << "Emitting addedFilesToProject" << endl;
+	emit addedFilesToProject ( fileList );
+}
 
 void CustomProjectPart::removeFile(const QString &fileName)
 {
-    m_sourceFiles.remove(fileName);
-    kdDebug(9025) << "Emitting removedFileFromProject" << endl;
-    emit removedFileFromProject(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void CustomProjectPart::removeFiles ( const QStringList& fileList )
+{
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		m_sourceFiles.remove ( *it );
+	}
+	
+	kdDebug(9025) << "Emitting removedFilesFromProject" << endl;
+	emit removedFilesFromProject ( fileList );
+}
 
 QString CustomProjectPart::buildDirectory()
 {

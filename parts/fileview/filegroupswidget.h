@@ -25,15 +25,20 @@ class FileGroupsWidget : public KListView
 public:
     FileGroupsWidget(FileGroupsPart *part);
     ~FileGroupsWidget();
+    
 
 public slots:
     void refresh();
-    void addFile(const QString &fileName);
-    void removeFile(const QString &fileName);
+	void addFiles ( const QStringList& fileList );
+	void removeFiles ( const QStringList& fileList );
     
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+
+protected:
+	void addFile(const QString &fileName);
+	void removeFile(const QString &fileName);
 
 private:
     FileGroupsPart *m_part;

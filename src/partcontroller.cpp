@@ -25,6 +25,7 @@
 #include <khtml_part.h>
 
 #include "toplevel.h"
+#include "api.h"
 #include "core.h"
 #include "editorproxy.h"
 #include "documentationpart.h"
@@ -559,6 +560,7 @@ bool PartController::closeDocuments(const QStringList &documents)
   QStringList modFiles;
   for (it=documents.begin(); it != documents.end(); ++it) {
     KParts::Part *part = partForURL(KURL(*it));
+	kdDebug ( 9000 ) << "partForURL: " << *it << endl;
     if ( part && part->inherits("KParts::ReadWritePart") && ((KParts::ReadWritePart*)part)->isModified() )
       modFiles << (*it);
   }

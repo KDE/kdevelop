@@ -13,6 +13,7 @@
 
 #include <qdir.h>
 #include <qregexp.h>
+#include <qstringlist.h>
 #include <qvaluestack.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -179,29 +180,59 @@ QString ScriptProjectPart::activeDirectory()
 
 QStringList ScriptProjectPart::allFiles()
 {
-    QStringList res;
+/*    QStringList res;
 
     QStringList::ConstIterator it;
     for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it)
         res += (m_projectDirectory + "/" + (*it));
 
-    return res;
+    return res;*/
+	
+	// return all files relative to the project directory!
+	return m_sourceFiles;
 }
 
 void ScriptProjectPart::addFile(const QString &fileName)
 {
     kdDebug(9015) << "AddFile2" << fileName << endl;
-    m_sourceFiles.append(fileName);
-    emit addedFileToProject(fileName);
+	
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void ScriptProjectPart::addFiles ( const QStringList& fileList )
+{
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		m_sourceFiles.append ( ( *it ) );
+	}
+	
+	emit addedFilesToProject ( fileList );
+}
 
 void ScriptProjectPart::removeFile(const QString &fileName)
 {
-    m_sourceFiles.remove(fileName);
-    emit removedFileFromProject(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void ScriptProjectPart::removeFiles ( const QStringList& fileList )
+{
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		m_sourceFiles.remove ( ( *it ) );
+	}
+	
+	emit removedFilesFromProject ( fileList );
+}
 
 void ScriptProjectPart::slotNewFile()
 {

@@ -18,6 +18,7 @@
 
 #include "kdevproject.h"
 
+class QStringList;
 class KDialogBase;
 class AutoProjectWidget;
 class KSelectAction;
@@ -40,7 +41,9 @@ public:
     virtual QString activeDirectory();
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);
+	virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
+	virtual void removeFiles ( const QStringList& fileList );
 
     /**
      * automake specific methods.

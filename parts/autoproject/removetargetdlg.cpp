@@ -170,9 +170,13 @@ void RemoveTargetDialog::accept ()
 	// handling am_edit stuff
 	if ( m_titem->primary == "KDEICON" )
 		removeMap.insert ( "KDE_ICON", "" );
+	else if ( m_titem->primary == "KDEDOCS" )
+		removeMap.insert ( "KDE_DOCS", "" );
 	else
 		removeMap.insert ( varname, "" );
 		
+	// if we have no such line containing blabla_SOURCES, blabla_LDFLAGS, etc.
+	// they are ignored
 	removeMap.insert ( canonname + "_SOURCES", "" );
 	
 	if ( m_titem->primary == "PROGRAMS" || m_titem->primary == "LTLIBRARIES" )
@@ -187,7 +191,7 @@ void RemoveTargetDialog::accept ()
 	
 	removeMap.clear();
 	
-	// if we have another "blabla_PROGRAMS" or "blabla_LTLIBRARIES" target in the subproject
+	// if we have another "blabla_PROGRAMS" or "blabla_LTLIBRARIES" target in the same subproject
 	// check if it has an empty "blabla_LIBADD"-entry
 	if ( m_titem->primary == "PROGRAMS" || m_titem->primary == "LTLIBRARIES" )
 	{
@@ -215,18 +219,21 @@ void RemoveTargetDialog::accept ()
 	
 	progressBar->setTotalSteps ( m_titem->sources.count() );
 	
+	QStringList fileList;
+	
 	for ( FileItem* fitem = m_titem->sources.first(); fitem; fitem = m_titem->sources.next() )
 	{
 		if (removeCheckBox->isChecked())
 			QFile::remove(m_spitem->path + "/" + fitem->name);
 		
-		m_widget->emitRemovedFile ( fitem->name );
+		fileList.append ( m_spitem->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fitem->name );
 		
 		qApp->processEvents();
 		
 		progressBar->setValue ( progressBar->value() + 1 );
 	}
-
+	
+	m_widget->emitRemovedFiles ( fileList );
 
 	m_spitem->targets.remove ( m_titem );
 

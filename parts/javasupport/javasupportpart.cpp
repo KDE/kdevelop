@@ -1,7 +1,8 @@
 
 #include <qfileinfo.h>
-#include <qtimer.h>
 #include <qlistview.h>
+#include <qstringlist.h>
+#include <qtimer.h>
 #include <qvbox.h>
 
 #include <kgenericfactory.h>
@@ -100,10 +101,10 @@ QStringList JavaSupportPart::fileFilters()
 
 void JavaSupportPart::projectOpened()
 {
-    connect(project(), SIGNAL(addedFileToProject(const QString &)),
-            this, SLOT(addedFileToProject(const QString &)));
-    connect(project(), SIGNAL(removedFileFromProject(const QString &)),
-            this, SLOT(removedFileFromProject(const QString &)));
+    connect(project(), SIGNAL(addedFilesToProject(const QStringList &)),
+            this, SLOT(addedFilesToProject(const QStringList &)));
+    connect(project(), SIGNAL(removedFilesFromProject(const QStringList &)),
+            this, SLOT(removedFilesFromProject(const QStringList &)));
 
     QTimer::singleShot(0, this, SLOT(initialParse()));
 }
@@ -155,20 +156,32 @@ void JavaSupportPart::maybeParse(const QString &fileName)
 }
 
 
-void JavaSupportPart::addedFileToProject(const QString &fileName)
+void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    QString path = project()->projectDirectory() + "/" + fileName;
-    maybeParse( path );
-    emit updatedSourceInfo();
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		QString path = project()->projectDirectory() + "/" + ( *it );
+		maybeParse( path );
+	}
+	
+	emit updatedSourceInfo();
 }
 
 
-void JavaSupportPart::removedFileFromProject(const QString &fileName)
+void JavaSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    kdDebug(9013) << "JavaSupportPart::removedFileFromProject() -- " << fileName << endl;
-    QString path = project()->projectDirectory() + "/" + fileName;
-    classStore()->removeWithReferences(path);
-    emit updatedSourceInfo();
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		kdDebug(9013) << "JavaSupportPart::removedFileFromProject() -- " << ( *it ) << endl;
+		QString path = project()->projectDirectory() + "/" + ( *it );
+		classStore()->removeWithReferences(path);
+	}
+	
+	emit updatedSourceInfo();
 }
 
 
@@ -273,7 +286,7 @@ void JavaSupportPart::addClass()
         info = ac.info();
 
         if (ac.generate())
-            project()->addFile(info.javaFileName());
+            project()->addFile ( info.javaFileName() );
     }
 }
 
@@ -281,7 +294,7 @@ void JavaSupportPart::savedFile( const QString& fileName )
 {
     kdDebug() << "JavaSupportPart::savedFile()" << endl;
 
-    if (project()->allFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse( fileName );
         emit updatedSourceInfo();
     }

@@ -344,7 +344,7 @@ QStringList TrollProjectWidget::allFiles()
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
                 QListIterator<FileItem> fit(tit.current()->files);
                 for (; fit.current(); ++fit)
-                    res.append(path + "/" + (*fit)->name);
+                    res.append(path.mid ( projectDirectory().length() + 1 ) + "/" + (*fit)->name);
             }
         }
     }
@@ -954,6 +954,7 @@ void TrollProjectWidget::addFile(const QString &fileName)
     addFileToCurrentSubProject(GroupItem::NoType,fileWithNoSlash);
   updateProjectFile(m_shownSubproject);
   slotOverviewSelectionChanged(m_shownSubproject);
+  emitAddedFile ( fileName );
 }
 
 
@@ -1244,13 +1245,17 @@ FileItem *TrollProjectWidget::createFileItem(const QString &name)
 
 void TrollProjectWidget::emitAddedFile(const QString &fileName)
 {
-    emit m_part->addedFileToProject(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+    emit m_part->addedFilesToProject(fileList);
 }
 
 
 void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 {
-    emit m_part->removedFileFromProject(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+    emit m_part->removedFilesFromProject(fileList);
 }
 
 

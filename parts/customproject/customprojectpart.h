@@ -19,6 +19,7 @@
 
 class QListViewItem;
 class QPopupMenu;
+class QStringList;
 class KDialogBase;
 class CustomProjectWidget;
 class Context;
@@ -42,8 +43,10 @@ protected:
     virtual QString activeDirectory();
     virtual QStringList allFiles();
     virtual void addFile(const QString &fileName);
+	virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
-
+	virtual void removeFiles ( const QStringList &fileList );
+	
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);

@@ -11,23 +11,25 @@
 
 #include "phpsupportpart.h"
 
+#include <iostream>
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <qprogressbar.h>
+#include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qvbox.h>
+
+#include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <kregexp.h>
-#include <iostream>
 #include <khtmlview.h>
-#include <kprocess.h>
-#include <qstringlist.h>
+#include <klocale.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
+#include <kregexp.h>
 #include <kstatusbar.h>
-#include <kaction.h>
-#include <qprogressbar.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -300,10 +302,10 @@ void PHPSupportPart::projectOpened()
 {
     kdDebug(9018) << "projectOpened()" << endl;
 
-    connect( project(), SIGNAL(addedFileToProject(const QString &)),
-             this, SLOT(addedFileToProject(const QString &)) );
-    connect( project(), SIGNAL(removedFileFromProject(const QString &)),
-             this, SLOT(removedFileFromProject(const QString &)) );
+    connect( project(), SIGNAL(addedFilesToProject(const QStringList &)),
+             this, SLOT(addedFilesToProject(const QStringList &)) );
+    connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
+             this, SLOT(removedFilesFromProject(const QStringList &)) );
 
     // We want to parse only after all components have been
     // properly initialized
@@ -346,10 +348,10 @@ void PHPSupportPart::initialParse(){
     bar->show();
     
     for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-      kdDebug(9018) << "maybe parse " << (*it) << endl;
+      kdDebug(9018) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
       bar->setProgress(n);
       kapp->processEvents();
-      maybeParse(*it);
+      maybeParse(project()->projectDirectory() + "/" + *it);
       ++n;
     }
     topLevel()->statusBar()->removeWidget(bar);
@@ -362,18 +364,32 @@ void PHPSupportPart::initialParse(){
 }
 
 
-void PHPSupportPart::addedFileToProject(const QString &fileName)
+void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    kdDebug(9018) << "addedFileToProject()" << endl;
-    maybeParse(project()->projectDirectory() + "/" + fileName);
+    kdDebug(9018) << "addedFilesToProject()" << endl;
+	
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+	}
+	
     emit updatedSourceInfo();
 }
 
 
-void PHPSupportPart::removedFileFromProject(const QString &fileName)
+void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    kdDebug(9018) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
+    kdDebug(9018) << "removedFilesFromProject()" << endl;
+	
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+	}
+	
     emit updatedSourceInfo();
 }
 
@@ -382,7 +398,7 @@ void PHPSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9018) << "savedFile()" << endl;
 
-    if (project()->allFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
         emit updatedSourceInfo();
     }

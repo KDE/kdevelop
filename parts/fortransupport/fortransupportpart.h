@@ -14,6 +14,7 @@
 
 class FixedFormParser;
 class KDialogBase;
+class QStringList;
 
 #include "kdevlanguagesupport.h"
 
@@ -35,8 +36,8 @@ private slots:
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
-    void addedFileToProject(const QString &fileName);
-    void removedFileFromProject(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
 
     // Internal
     void initialParse();

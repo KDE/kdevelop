@@ -13,7 +13,9 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <qstringlist.h>
 #include <qwhatsthis.h>
+
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -245,33 +247,60 @@ QString AutoProjectPart::makeEnvironment()
 
 void AutoProjectPart::addFile(const QString &fileName)
 {
-    QString directory, name;
-    int pos = fileName.findRev('/');
-    if (pos != -1) {
-        directory = fileName.left(pos);
-        name = fileName.mid(pos+1);
-    } else {
-        name = fileName;
-    }
-
-    kdDebug(9020) << "Adding " << name
-                  << " to directory " << directory << endl;
-
-    if (directory != m_widget->activeDirectory()) {
-        KMessageBox::information(m_widget, i18n("File %1 will not be added to a target.")
-                                 .arg(fileName));
-        return;
-    }
-    
-    m_widget->addFile(name);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void AutoProjectPart::addFiles ( const QStringList& fileList )
+{
+	QString directory, name;
+	QStringList::ConstIterator it;
+	bool messageBoxShown = false;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		int pos = ( *it ).findRev('/');
+		if (pos != -1)
+		{
+			directory = ( *it ).left(pos);
+			name = ( *it ).mid(pos+1);
+		}
+		else
+		{
+			name = ( *it );
+		}
+		
+		if (directory != m_widget->activeDirectory() ||
+			directory.isEmpty())
+		{
+			if ( !messageBoxShown )
+			{
+				KMessageBox::information(m_widget, i18n("It seems that you don't have an Active Target specified!\nAutomake Manager supports this feature to 'activate' the target your currently working on.\nJust right-click a target and choose 'Make Target Active'."));
+				messageBoxShown = true;
+			}
+		}
+	}
+
+	m_widget->addFiles(fileList);
+}
 
 void AutoProjectPart::removeFile(const QString &fileName)
 {
-    m_widget->removeFile(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->removeFiles ( fileList );
 }
 
+void AutoProjectPart::removeFiles ( const QStringList& fileList )
+{
+	// FIXME: m_widget->removeFiles does nothing!
+	m_widget->removeFiles ( fileList );
+	
+	emit removedFilesFromProject ( fileList );
+}
 
 QStringList AutoProjectPart::allBuildConfigs()
 {

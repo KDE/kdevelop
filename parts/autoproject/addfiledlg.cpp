@@ -19,17 +19,20 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtextstream.h>
+
 #include <kbuttonbox.h>
 #include <kdialog.h>
+#include <klineedit.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
-#include <klineedit.h>
+#include <kurl.h>
 
 #include "filetemplate.h"
 #include "misc.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
+#include "kdevpartcontroller.h"
 
 AddFileDialog::AddFileDialog(AutoProjectPart *part, AutoProjectWidget *widget,
                              SubprojectItem *spitem, TargetItem *item,
@@ -97,7 +100,8 @@ void AddFileDialog::accept()
     
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
-    m_widget->emitAddedFile(subProject->path + "/" + name);
+	m_widget->emitAddedFile( subProject->path.mid ( m_part->project()->projectDirectory().length() + 1 ) + "/" + name );
+	m_part->partController()->editDocument ( KURL ( subProject->path + "/" + name ) );
     
     QDialog::accept();
 }

@@ -15,6 +15,7 @@
 
 #include "kdevlanguagesupport.h"
 
+class QStringList;
 
 class PerlSupportPart : public KDevLanguageSupport
 {
@@ -32,8 +33,8 @@ private slots:
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
-    void addedFileToProject(const QString &fileName);
-    void removedFileFromProject(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
     void slotExecute();
     void slotExecuteString();
     void slotStartInterpreter();

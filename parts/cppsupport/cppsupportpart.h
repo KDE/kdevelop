@@ -33,6 +33,7 @@ class ProblemReporter;
 class FileRepository;
 class QLabel;
 class QProgressBar;
+class QStringList;
 
 namespace KParts { class Part; }
 namespace KTextEditor { class EditInterface; };
@@ -93,8 +94,8 @@ private slots:
     void savedFile(const QString &fileName);
     void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);
-    void addedFileToProject(const QString &fileName);
-    void removedFileFromProject(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
 
     void slotNewClass();
     void slotSwitchHeader();

@@ -200,7 +200,7 @@
                             </size>
                         </property>
                         <property name="title">
-                            <string>Source Directory</string>
+                            <string>&amp;Source Directory</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string></string>
@@ -253,7 +253,7 @@
                                     <cstring>addAllButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add All</string>
+                                    <string>A&amp;dd All</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Import by creating symbolic links (recommended)</string>
@@ -264,7 +264,7 @@
                                     <cstring>addSelectedButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add Selected</string>
+                                    <string>&amp;Add Selected</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Import by copying (not recommended)</string>
@@ -373,7 +373,7 @@
                                     </size>
                                 </property>
                                 <property name="title">
-                                    <string>Add Following</string>
+                                    <string>Add &amp;Following</string>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -425,7 +425,7 @@
                                     <cstring>removeAllButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Remove All</string>
+                                    <string>R&amp;emove All</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes all added files.</string>
@@ -436,7 +436,7 @@
                                     <cstring>removeSelectedButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Remove Selected</string>
+                                    <string>&amp;Remove Selected</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes the selected files.</string>

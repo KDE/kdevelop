@@ -95,10 +95,10 @@ void PythonSupportPart::projectOpened()
 {
     kdDebug(9014) << "projectOpened()" << endl;
 
-    connect( project(), SIGNAL(addedFileToProject(const QString &)),
-             this, SLOT(addedFileToProject(const QString &)) );
-    connect( project(), SIGNAL(removedFileFromProject(const QString &)),
-             this, SLOT(removedFileFromProject(const QString &)) );
+    connect( project(), SIGNAL(addedFilesToProject(const QStringList &)),
+             this, SLOT(addedFilesToProject(const QStringList &)) );
+    connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
+             this, SLOT(removedFilesFromProject(const QStringList &)) );
 
     // We want to parse only after all components have been
     // properly initialized
@@ -129,8 +129,8 @@ void PythonSupportPart::initialParse()
         kapp->setOverrideCursor(waitCursor);
         QStringList files = project()->allFiles();
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-            kdDebug(9014) << "maybe parse " << (*it) << endl;
-            maybeParse(*it);
+            kdDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
+            maybeParse(project()->projectDirectory() + "/" + *it);
         }
         
         emit updatedSourceInfo();
@@ -141,19 +141,33 @@ void PythonSupportPart::initialParse()
 }
 
 
-void PythonSupportPart::addedFileToProject(const QString &fileName)
+void PythonSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    kdDebug(9014) << "addedFileToProject()" << endl;
-    maybeParse(project()->projectDirectory() + "/" + fileName);
+    kdDebug(9014) << "addedFilesToProject()" << endl;
+	
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+	}
+	
     emit updatedSourceInfo();
 }
 
 
-void PythonSupportPart::removedFileFromProject(const QString &fileName)
+void PythonSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    kdDebug(9014) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
-    emit updatedSourceInfo();
+	kdDebug(9014) << "removedFilesFromProject()" << endl;
+	
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+	}
+	
+	emit updatedSourceInfo();
 }
 
 
@@ -161,7 +175,7 @@ void PythonSupportPart::savedFile(const QString &fileName)
 {
     kdDebug(9014) << "savedFile()" << endl;
 
-    if (project()->allFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         maybeParse(fileName);
         emit updatedSourceInfo();
     }

@@ -1,3 +1,16 @@
+2002-12-18  Victor Röder  <victor_roeder@gmx.de>
+	* Added "Choose Target Dialog"
+	* Added SLOTS for removing/adding many files
+	  to KDevProject
+		-> Now KDevProject handles files with relative
+		   paths (to project directory)
+	* Replaced SIGNALS for removing/adding a single file
+		-> Adapted this to the other parts
+	* Fixed a "Add Subproject" bug
+	* Found other bugs to be fixed
+	* Minor improvments on Automake Manager
+		-> More to come
+
 2002-12-17 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
 	* Still working on extended DOM path/automatic subclassing from ui-templates in qmake-projects
 

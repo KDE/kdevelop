@@ -130,7 +130,7 @@ void AddSubprojectDialog::accept()
     cmdline += relmakefile;
     cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
     cmdline += relmakefile;
-    cmdline += " config.status";
+    cmdline += " ./config.status";
     m_part->makeFrontend()->queueCommand(m_widget->projectDirectory(), cmdline);
     
     QDialog::accept();

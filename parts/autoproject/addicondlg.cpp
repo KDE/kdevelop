@@ -106,7 +106,8 @@ void AddIconDialog::accept()
     m_target->insertItem(fitem);
 
     m_part->startMakeCommand(destdir, QString::fromLatin1("force-reedit"));
-    m_widget->emitAddedFile(destpath);
+	
+	m_widget->emitAddedFile(destpath);
 
     QDialog::accept();
 }

@@ -331,10 +331,10 @@ CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
-    connect( project( ), SIGNAL( addedFileToProject( const QString & ) ),
-             this, SLOT( addedFileToProject( const QString & ) ) );
-    connect( project( ), SIGNAL( removedFileFromProject( const QString &) ),
-             this, SLOT( removedFileFromProject( const QString & ) ) );
+    connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
+             this, SLOT( addedFilesToProject( const QStringList & ) ) );
+    connect( project( ), SIGNAL( removedFilesFromProject( const QStringList &) ),
+             this, SLOT( removedFilesFromProject( const QStringList & ) ) );
 			 
     // standard project classstore - displayed in classview - widget
     m_pParser     = new CClassParser( classStore( ) );
@@ -436,30 +436,47 @@ static QStringList reorder(const QStringList &list)
 
 
 
-void CppSupportPart::addedFileToProject(const QString &fileName)
+void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    kdDebug(9007) << "addedFileToProject()" << endl;
-    // changed - daniel
-    QString path = project()->projectDirectory() + "/" + fileName;
-    maybeParse( path, classStore( ), m_pParser );
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+	    kdDebug(9007) << "addedFilesToProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
+	
+		// changed - daniel
+		QString path = project()->projectDirectory() + "/" + ( *it );
+		maybeParse( path, classStore( ), m_pParser );
+		
+		partController()->editDocument ( KURL ( path ) );
+	}
+	
     emit updatedSourceInfo();
 }
 
 
-void CppSupportPart::removedFileFromProject(const QString &fileName)
+void CppSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    kdDebug(9007) << "removedFileFromProject()" << endl;
-    QString path = project()->projectDirectory() + "/" + fileName;
-    classStore()->removeWithReferences(path);
-    emit updatedSourceInfo();
+	
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		kdDebug(9007) << "removedFilesFromProject(): " << project()->projectDirectory() + "/" + ( *it ) << endl;
+		
+		QString path = project()->projectDirectory() + "/" + ( *it );
+		classStore()->removeWithReferences(path);
+	}
+	
+	emit updatedSourceInfo();
 }
 
 
 void CppSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9007) << "savedFile()" << endl;
+    kdDebug(9007) << "savedFile(): " << fileName.mid ( project()->projectDirectory().length() + 1 ) << endl;
 
-    if (project()->allFiles().contains(fileName)) {
+    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
         // changed - daniel
         maybeParse( fileName, classStore( ), m_pParser );
         emit updatedSourceInfo();
@@ -933,12 +950,14 @@ CppSupportPart::parseProject( )
     bar->show( );
 
     int n = 0;
+	QString filePath;
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
         kapp->processEvents( );
+		filePath = project()->projectDirectory() + "/" + ( *it );
 	label->setText( i18n( "Currently parsing: '%1'" )
-	                .arg( *it ) );
-        maybeParse( *it, classStore( ), m_pParser );
+	                .arg( filePath ) );
+        maybeParse( filePath, classStore( ), m_pParser );
     }
 
     kdDebug( 9007 ) << "updating sourceinfo" << endl;

@@ -498,8 +498,16 @@ bool ProjectManager::checkNewService(const KService::Ptr &service)
 
 bool ProjectManager::closeProjectSources()
 {
-  QStringList sources = API::getInstance()->project()->allFiles();
-  return PartController::getInstance()->closeDocuments(sources);
+	QStringList sources = API::getInstance()->project()->allFiles();
+	QStringList::iterator it;
+
+	for ( it = sources.begin(); it != sources.end(); ++it )
+	{
+		( *it ).prepend ( "/" );
+		( *it ).prepend ( API::getInstance()->project()->projectDirectory() );
+	}
+	
+	return PartController::getInstance()->closeDocuments(sources);
 }
 
 QString ProjectManager::projectFile() const

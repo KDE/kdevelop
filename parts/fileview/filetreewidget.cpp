@@ -14,6 +14,8 @@
 #include <qheader.h>
 #include <qpainter.h>
 #include <qregexp.h>
+#include <qstringlist.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -128,7 +130,14 @@ FileTreeWidget::~FileTreeWidget()
 
 void FileTreeWidget::openDirectory( const QString& dirName )
 {
-    m_projectFiles = m_part->project()->allFiles();
+	QStringList::iterator it;
+
+	QStringList fileList = m_part->project()->allFiles();
+		
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+    	m_projectFiles.append ( m_part->project()->projectDirectory() + "/" + ( *it ) );
+	}
     
     KURL url;
     url.setPath( dirName );

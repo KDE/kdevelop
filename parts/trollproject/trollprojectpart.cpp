@@ -145,15 +145,47 @@ QStringList TrollProjectPart::allFiles()
 
 void TrollProjectPart::addFile(const QString &fileName)
 {
-  m_widget->addFile(fileName);
+	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->addFiles ( fileList );
 }
 
+void TrollProjectPart::addFiles ( const QStringList &fileList )
+{
+	QStringList::ConstIterator it;
+	
+	for ( it = fileList.begin(); it != fileList.end(); ++it )
+	{
+		m_widget->addFile ( *it );
+	}
+	
+	emit addedFilesToProject ( fileList );
+}
 
 void TrollProjectPart::removeFile(const QString & /* fileName */)
 {
     // FIXME
+/*	QStringList fileList;
+	fileList.append ( fileName );
+	
+	this->removeFiles ( fileList );*/
 }
 
+void TrollProjectPart::removeFiles ( const QStringList& fileList )
+{
+// FIXME
+// 	QStringList::ConstIterator it;	
+// 	
+// 	it = fileList.begin();
+// 	
+// 	for ( ; it != fileList.end(); ++it )
+// 	{
+// 		FIXME
+// 	}
+
+	emit removedFilesFromProject ( fileList );
+}
 
 void TrollProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {

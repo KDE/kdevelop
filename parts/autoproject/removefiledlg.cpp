@@ -18,7 +18,9 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+
 #include <kbuttonbox.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <ksqueezedtextlabel.h>
 
@@ -131,7 +133,9 @@ void RemoveFileDialog::accept()
 	if (removeCheckBox->isChecked())
 		QFile::remove(subProject->path + "/" + fileName);
 
-	m_widget->emitRemovedFile(fileName);
+	kdDebug ( 9000 ) << "Removing file: " << subProject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName << endl;
+		
+	m_widget->emitRemovedFile ( subProject->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fileName );
 
 	QDialog::accept();
 }

@@ -47,6 +47,8 @@
 #include "autoprojectpart.h"
 #include "misc.h"
 
+#include "kdevpartcontroller.h"
+
 KImportIconView::KImportIconView ( const QString& strIntro, QWidget* parent, const char* name )
         : KFileDnDIconView ( parent, name )
 {
@@ -300,7 +302,7 @@ void ImportExistingDialog::importItems()
 
 void ImportExistingDialog::slotOk()
 {
-    	if ( importView->items()->count() == 0 ) QDialog::accept();
+	if ( importView->items()->count() == 0 ) QDialog::accept();
     
 	progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
@@ -375,6 +377,7 @@ void ImportExistingDialog::slotOk()
 	QString varname = canontargetname + "_SOURCES";
 	QMap<QString,QString> replaceMap;
 	FileItem* fitem = 0L;
+	QStringList fileList;
 
 	for ( ; items.current(); ++items )
 	{
@@ -385,10 +388,14 @@ void ImportExistingDialog::slotOk()
 		m_titem->sources.append ( fitem );
 		m_titem->insertItem ( fitem );
 
-		m_widget->emitAddedFile ( m_spitem->path + "/" + ( *items )->name() );
-
+		fileList.append ( m_spitem->path.mid ( m_part->project()->projectDirectory().length() + 1 ) + "/" + ( *items )->name() );
+		
 		progressBar->setValue ( progressBar->value() + 1 );
+		
+		m_part->partController()->editDocument ( KURL ( m_spitem->path + "/" + ( *items )->name() ) );
 	}
+	
+	m_widget->emitAddedFiles ( fileList );
 
 	AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
 

@@ -19,6 +19,7 @@
 
 #include <ktexteditor/editinterface.h>
 
+class QStringList;
 class PHPHTMLView;
 class KShellProcess;
 class KProcess;
@@ -43,8 +44,8 @@ private slots:
     void projectOpened();
     void projectClosed();
     void savedFile(const QString &fileName);
-    void addedFileToProject(const QString &fileName);
-    void removedFileFromProject(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
     void slotRun();
     void slotNewClass();
     void projectConfigWidget(KDialogBase *dlg);

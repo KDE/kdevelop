@@ -48,10 +48,14 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     // File groups
-    connect( project(), SIGNAL(addedFileToProject(const QString&)),
+    connect( project(), SIGNAL(addedFilesToProject(const QStringList&)),
+             m_filegroups, SLOT(addFiles(const QStringList&)) );
+    connect( project(), SIGNAL(removedFilesFromProject(const QStringList&)),
+             m_filegroups, SLOT(removeFiles(const QStringList&)) );
+/*    connect( project(), SIGNAL(addedFileToProject(const QString&)),
              m_filegroups, SLOT(addFile(const QString&)) );
     connect( project(), SIGNAL(removedFileFromProject(const QString&)),
-             m_filegroups, SLOT(removeFile(const QString&)) );
+             m_filegroups, SLOT(removeFile(const QString&)) );*/
     m_filegroups->refresh();
 }
 

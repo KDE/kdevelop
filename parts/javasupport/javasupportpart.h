@@ -6,6 +6,7 @@
 
 class JavaSupportPartData;
 class KDialogBase;
+class QStringList;
 
 class JavaSupportPart : public KDevLanguageSupport
 {
@@ -27,8 +28,8 @@ private slots:
     void projectOpened();
     void projectClosed();
 
-    void addedFileToProject(const QString &fileName);
-    void removedFileFromProject(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
 
     void initialParse();
     void savedFile( const QString& );

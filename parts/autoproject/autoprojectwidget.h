@@ -19,7 +19,7 @@
 #include <qdict.h>
 #include <qlistview.h>
 #include <qmap.h>
-#include <qstrlist.h>
+//#include <qstrlist.h>
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qtoolbutton.h>
@@ -34,7 +34,8 @@ class FileItem;
 class KPopupMenu;
 class KAction;
 class QToolButton;
-
+class ChooseTargetDialog;
+class QStringList;
 
 /**
 * Base class for all items appearing in ProjectOverview and ProjectDetails.
@@ -194,12 +195,12 @@ public:
 	* Adds a file to the active target. The argument must
 	* not contain / characters.
 	*/
-	void addFile(const QString &name);
+	void addFiles(const QStringList &list);
 	/**
 	* Removes the file fileName from the directory directory.
 	* (not implemented currently)
 	*/
-	void removeFile(const QString &fileName);
+	void removeFiles(const QStringList &list);
 
 	/**
 	* Returns the currently selected target. Returns 0 if
@@ -228,9 +229,23 @@ public:
 	* Creates a FileItem instance without a parent item.
 	*/
 	FileItem *createFileItem(const QString &name);
+	
+	/**
+	 * Returns the Subproject that contains the Active Target. The Active Target is a special target
+	 * to which e.g. all files are added to.
+	 */
+	SubprojectItem* activeSubproject ();
+	
+	/**
+	 * Returns the Active Target. The Active Target is a special target
+	 * to which e.g. all files are added to.
+	 */
+	TargetItem* activeTarget();
 
-	void emitAddedFile(const QString &name);
-	void emitRemovedFile(const QString &name);
+	void emitAddedFile ( const QString& name );
+	void emitAddedFiles(const QStringList &fileList);
+	void emitRemovedFile ( const QString& name );
+	void emitRemovedFiles(const QStringList &fileList);
 
 	void parse(SubprojectItem *item);
 
@@ -300,11 +315,14 @@ private:
 
 	KListView *overview;
 	KListView *details;
+	
+	//ChooseTargetDialog* chooseTargetDlg;
 
 	bool m_kdeMode;
 	AutoProjectPart *m_part;
 	SubprojectItem *m_activeSubproject;
 	TargetItem *m_activeTarget;
+	TargetItem *m_choosenTarget;
 	SubprojectItem *m_shownSubproject;
 };
 

@@ -59,7 +59,9 @@ protected:
   virtual QString activeDirectory();
   virtual QStringList allFiles();
   virtual void addFile(const QString &fileName);
+  virtual void addFiles ( const QStringList &fileList );
   virtual void removeFile(const QString &fileName);
+  virtual void removeFiles ( const QStringList& fileList );
 
 
 private slots:
