@@ -349,8 +349,26 @@ void MainWindow::createStatusBar()
 void MainWindow::createFramework()
 {
   PartController::createInstance(this);
-
+    connect(PartController::getInstance(), SIGNAL(fileDirty(const QString&)),
+            this, SLOT(fileDirty(const QString&)));
   setMenuForSDIModeSysButtons(menuBar());
+}
+
+void MainWindow::fileDirty(const QString& fileName)
+{
+    kdDebug()<<"Mainwindow::fileDirty"<<endl;
+    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+    for ( ; it.current(); ++it) {
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (!ro_part || !ro_part->url().isLocalFile())
+            continue;
+        if ( ro_part->url().path() == fileName ) { /// @todo URL comparison sucks...
+             if ( PartController::getInstance()->isDirty( ro_part ) ) 
+		ro_part->widget()->setIcon(SmallIcon("revert"));
+	     else
+                ro_part->widget()->setIcon(QPixmap());
+        }
+    }
 }
 
 
