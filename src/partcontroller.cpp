@@ -107,6 +107,9 @@ void PartController::setEncoding(const QString &encoding)
 
 void PartController::editDocument(const KURL &url, int lineNum)
 {
+  if( url.isMalformed() )
+    return;
+  
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
