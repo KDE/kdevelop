@@ -83,6 +83,7 @@ void QextMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
 void QextMdiTaskBarButton::setNewText(const QString& s)
 {
    setText( s);
+   emit buttonTextChanged( 0);
 }
 
 void QextMdiTaskBarButton::setText(const QString& s)
@@ -153,6 +154,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    QObject::connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(activateView(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(buttonTextChanged(int)), this, SLOT(layoutTaskBar(int)) );
 	
 	m_pButtonList->append(b);
 	b->setToggleButton( TRUE);
