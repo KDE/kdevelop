@@ -1694,18 +1694,19 @@ void CKDevelop::slotBuildMake(){
   if (!QFileInfo(makefileDir + "Makefile").exists()) {
     QString makefileGenerator;
     if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!\n");
+      makefileGenerator = i18n(" by Build->Configure!");
     else
-      makefileGenerator = i18n(". Possibly by tmake?\n");
+      makefileGenerator = i18n(". Possibly by tmake?");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to make (by running 'make') in\n\n %1\n\n"
-                              "but there is no Makefile in this directory.\n\n"
-                              "Hints:\n"
-                              "1. Possibly you forgot to create the Makefiles.\n"
-                              "   In that case create them%2\n"
-                              "2. Or this directory does not belong to your project.\n"
-                              "   Check the settings in Project->Options->MakeOptions!")
-                              .arg(makefileDir).arg(makefileGenerator));
+                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+                                  "You want to make (by running 'make') in\n\n %1\n\n"
+                                  "but there is no Makefile in this directory.\n\n"
+                                  "Hints:\n"
+                                  "1. Possibly you forgot to create the Makefiles.\n"
+                                  "   In that case create them%2\n\n"
+                                  "2. Or this directory does not belong to your project.\n"
+                                  "   Check the settings in Project->Options->MakeOptions!")
+                                  .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -1813,18 +1814,19 @@ void CKDevelop::slotBuildRebuildAll(){
   if (!QFileInfo(makefileDir + "Makefile").exists()) {
     QString makefileGenerator;
     if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!\n");
+      makefileGenerator = i18n(" by Build->Configure!");
     else
-      makefileGenerator = i18n(". Possibly by tmake?\n");
+      makefileGenerator = i18n(". Possibly by tmake?");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to rebuild (by running 'make clean;make') in\n\n%1\n\n"
-                              "but there is no Makefile in this directory.\n\n"
-                              "Hints:\n"
-                              "1. Possibly you forgot to create the Makefiles.\n"
-                              "   In that case create them%2"
-                              "2. Or this directory does not belong to your project.\n"
-                              "   Check the settings in Project->Options->MakeOptions!")
-                              .arg(makefileDir).arg(makefileGenerator));
+                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+                                "You want to rebuild (by running 'make clean;make') in\n\n%1\n\n"
+                                "but there is no Makefile in this directory.\n\n"
+                                "Hints:\n"
+                                "1. Possibly you forgot to create the Makefiles.\n"
+                                "   In that case create them%2\n\n"
+                                "2. Or this directory does not belong to your project.\n"
+                                "   Check the settings in Project->Options->MakeOptions!")
+                                .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -1886,17 +1888,18 @@ void CKDevelop::slotBuildCleanRebuildAll(){
       if (!QFileInfo(makefileDir + makefile).exists()) {
         QString makefileGenerator;
         if (prj->getProjectType() != "normal_empty")
-          makefileGenerator = i18n(" by Build->Configure!\n");
+          makefileGenerator = i18n(" by Build->Configure!");
         else
-          makefileGenerator = i18n(". Possibly by tmake?\n");
+          makefileGenerator = i18n(". Possibly by tmake?");
         QMessageBox::warning(this, i18n("%1 not found").arg(makefile),
-                             i18n("You want to distclean and build (by running 'make distclean;make') in\n\n%1\n\n"
-                                  "but there is no %2  in this directory.\n\n"
+                             i18n("%3 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+                                  "You want to distclean and build (by running 'make distclean;make') in\n\n%1\n\n"
+                                  "but there is no %2 in this directory.\n\n"
                                   "Hints:\n"
-                                  "1. Possibly you forgot to create them%3"
+                                  "1. Possibly you forgot to create them%3\n\n"
                                   "2. Or this directory does not belong to your project.\n"
                                   "   Check the settings in Project->Options->MakeOptions!")
-                              .arg(makefileDir).arg(makefile).arg(makefileGenerator));
+                                  .arg(makefileDir).arg(makefile).arg(makefileGenerator));
         setToolMenuProcess(true);
         return;
       }
@@ -1963,18 +1966,19 @@ void CKDevelop::slotBuildDistClean(){
   if (!QFileInfo(makefileDir + "Makefile").exists()) {
     QString makefileGenerator;
     if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!\n");
+      makefileGenerator = i18n(" by Build->Configure!");
     else
-      makefileGenerator = i18n(". Possibly by tmake?\n");
+      makefileGenerator = i18n(". Possibly by tmake?");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to distclean (by running 'make distclean') in\n\n%1\n\n"
-                              "but there is no Makefile in this directory.\n\n"
-                              "Hints:\n"
-                              "1. Possibly you forgot to create the Makefiles.\n"
-                              "   In that case create them%2"
-                              "2. Or this directory does not belong to your project.\n"
-                              "   Check the settings in Project->Options->MakeOptions!")
-                              .arg(makefileDir).arg(makefileGenerator));
+                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+                                  "You want to distclean (by running 'make distclean') in\n\n%1\n\n"
+                                  "but there is no Makefile in this directory.\n\n"
+                                  "Hints:\n"
+                                  "1. Possibly you forgot to create the Makefiles.\n"
+                                  "   In that case create them%2\n\n"
+                                  "2. Or this directory does not belong to your project.\n"
+                                  "   Check the settings in Project->Options->MakeOptions!")
+                                  .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -2019,18 +2023,19 @@ void CKDevelop::slotBuildMakeClean(){
   if (!QFileInfo(makefileDir + "Makefile").exists()) {
     QString makefileGenerator;
     if (prj->getProjectType() != "normal_empty")
-      makefileGenerator = i18n(" by Build->Configure!\n");
+      makefileGenerator = i18n(" by Build->Configure!");
     else
-      makefileGenerator = i18n(". Possibly by tmake?\n");
+      makefileGenerator = i18n(". Possibly by tmake?");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to clean up (by running 'make clean') in\n\n%1\n\n"
-                              "but there is no Makefile in this directory.\n\n"
-                              "Hints:\n"
-                              "1. Possibly you forgot to create the Makefiles.\n"
-                              "   In that case create them%2"
-                              "2. Or this directory does not belong to your project.\n"
-                              "   Check the settings in Project->Options->MakeOptions!")
-                              .arg(makefileDir).arg(makefileGenerator));
+                             i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
+                                  "You want to clean up (by running 'make clean') in\n\n%1\n\n"
+                                  "but there is no Makefile in this directory.\n\n"
+                                  "Hints:\n"
+                                  "1. Possibly you forgot to create the Makefiles.\n"
+                                  "   In that case create them%2\n\n"
+                                  "2. Or this directory does not belong to your project.\n"
+                                  "   Check the settings in Project->Options->MakeOptions!")
+                                  .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }

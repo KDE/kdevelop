@@ -545,7 +545,7 @@ void CKDevSetupDlg::addDebuggerTab()
 
   dbgLibCheck = new QCheckBox( dbgInternalGroup, "dbgMembers" );
   grid2->addWidget( dbgLibCheck,2,0);
-  dbgLibCheck->setText(i18n("Try setting BPs on lib load"));
+  dbgLibCheck->setText(i18n("Try setting breakpoints on lib load"));
   dbgLibCheck->setAutoRepeat( FALSE );
   dbgLibCheck->setAutoResize( FALSE );
   dbgLibCheck->setChecked(setBPsOnLibLoad);

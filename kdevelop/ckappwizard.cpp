@@ -1727,7 +1727,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 KIO Slave. \nKIOSlaves are the foundation for all protocols in KDE2.  If you want to create a new connector"));
+    apphelp->setText (i18n("Create a KDE-2 KIO Slave.\nKIOSlaves are the foundation for all protocols in KDE2."));
   }
   else if (kpartitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
