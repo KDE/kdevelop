@@ -117,11 +117,12 @@ void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
         ++pos;
     }
 
-    KParts::Part *rwpart = static_cast<KParts::Part*>
-        (m_part->partController()->activePart());
+    KParts::Part *rwpart
+        = dynamic_cast<KParts::Part*>(m_part->partController()->activePart());
+    QWidget *view = m_part->partController()->activeWidget();
 
     KTextEditor::ViewCursorInterface *cursorIface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (cursorIface) {
         kdDebug(9030) << "set cursor " << line << ", " << col << endl;
         cursorIface->setCursorPosition(line, col);

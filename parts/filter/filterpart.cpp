@@ -58,9 +58,11 @@ FilterPart::~FilterPart()
 void FilterPart::slotShellInsert()
 {
     // TODO: Disable menu item if no active part
+
     KParts::ReadWritePart *part
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    if (!part) {
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
         kdDebug(9029) << "no rw part" << endl;
         return;
     }
@@ -73,7 +75,7 @@ void FilterPart::slotShellInsert()
     }
 
     KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (!cursoriface) {
         kdDebug(9029) << "no viewcursor" << endl;
         return;
@@ -93,9 +95,11 @@ void FilterPart::slotShellInsert()
 void FilterPart::slotShellFilter()
 {
     // TODO: Disable menu item if no active part
+
     KParts::ReadWritePart *part
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    if (!part) {
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
         kdDebug(9029) << "no rw part" << endl;
         return;
     }
@@ -108,7 +112,7 @@ void FilterPart::slotShellFilter()
     }
 
     KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (!cursoriface) {
         kdDebug(9029) << "no viewcursor" << endl;
         return;

@@ -139,11 +139,12 @@ Anchor SourceNavPart::getCurrentPos()
     return Anchor();
 
   KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(partController()->activePart());
-  if ( !doc )
+  QWidget *view = partController()->activeWidget();
+  if ( !doc || !view )
     return Anchor();
 
   // hm, let's hope that this is the currently active view...
-  KTextEditor::ViewCursorInterface *cur = dynamic_cast<KTextEditor::ViewCursorInterface*>(doc->widget());
+  KTextEditor::ViewCursorInterface *cur = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
   if ( cur ) {
     cur->cursorPosition( &line, &col );
   }

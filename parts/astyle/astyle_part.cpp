@@ -48,11 +48,8 @@ AStylePart::~AStylePart()
 
 void AStylePart::beautifySource()
 {
-  KParts::Part *part = partController()->activePart();
-  if (!part)
-    return;
-  
-  KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*>(part);
+  KTextEditor::EditInterface *iface
+      = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
   if (!iface)
     return;
 

@@ -751,11 +751,9 @@ void CppSupportPart::addMethod(const QString &className)
     partController()->editDocument(pc->declaredInFile(), atLine);
     kdDebug(9007) << "Adding to .h: " << atLine << " " << headerCode << endl;
 
-    KParts::ReadWritePart *rwpart;
     KTextEditor::EditInterface *editiface;
 
-    rwpart = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    editiface = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
         editiface->insertLine(atLine, headerCode);
     else
@@ -766,8 +764,7 @@ void CppSupportPart::addMethod(const QString &className)
     partController()->editDocument(pc->definedInFile(), atLine);
     kdDebug(9007) << "Adding to .cpp: " << atLine << " " << cppCode << endl;
 
-    rwpart = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    editiface = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
         editiface->insertLine(atLine, cppCode);
     else
@@ -816,10 +813,8 @@ void CppSupportPart::addAttribute(const QString &className)
     partController()->editDocument(pc->declaredInFile(), atLine);
     kdDebug(9007) << "Adding at line " << atLine << " " << headerCode << endl;
 
-    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
-        (partController()->activePart());
     KTextEditor::EditInterface *editiface
-        = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+        = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
         editiface->insertLine(atLine, headerCode);
     else

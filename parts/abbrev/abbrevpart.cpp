@@ -160,7 +160,8 @@ void AbbrevPart::configWidget(KDialogBase *dlg)
 void AbbrevPart::slotExpandText()
 {
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    if (!part || !part->widget()) {
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
         kdDebug() << "no rw part" << endl;
         return;
     }
@@ -171,13 +172,13 @@ void AbbrevPart::slotExpandText()
         return;
     }
     KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-    if (!cursoriface) {
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
+    if (!cursoriface) { 
         kdDebug() << "no viewcursoriface" << endl;
         return;
     }
     KTextEditor::CodeCompletionInterface *completioniface
-        = dynamic_cast<KTextEditor::CodeCompletionInterface*>(part->widget());
+        = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
     if (!completioniface) {
         kdDebug() << "no codecompletioniface" << endl;
         return;
@@ -229,7 +230,8 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
 void AbbrevPart::slotExpandAbbrev()
 {
     KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    if (!part || !part->widget()) {
+    QWidget *view = partController()->activeWidget();
+    if (!part || !view) {
         kdDebug() << "no rw part" << endl;
         return;
     }
@@ -246,7 +248,7 @@ void AbbrevPart::slotExpandAbbrev()
         return;
     }
     KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (!cursoriface) {
         kdDebug() << "no viewcursoriface" << endl;
         return;

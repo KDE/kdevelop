@@ -514,13 +514,14 @@ void DebuggerPart::slotContinue()
 
 void DebuggerPart::slotRunToCursor()
 {
-    KParts::Part *part = partController()->activePart();
-    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>(part);
-    if (!rwpart || !rwpart->url().isLocalFile() || !rwpart->widget())
+    KParts::ReadWritePart *rwpart
+        = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    KTextEditor::ViewCursorInterface *cursorIface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
+    
+    if (!rwpart || !rwpart->url().isLocalFile() || !cursorIface)
         return;
 
-    KTextEditor::ViewCursorInterface *cursorIface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
   

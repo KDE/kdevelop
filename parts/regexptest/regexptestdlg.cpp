@@ -159,8 +159,10 @@ void RegexpTestDialog::insertQuoted()
             str += ch;
     }
 
-    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
-        (m_part->partController()->activePart());
+    KParts::ReadWritePart *rwpart
+        = dynamic_cast<KParts::ReadWritePart*>(m_part->partController()->activePart());
+    QWidget *view = m_part->partController()->activeWidget();
+    
     KTextEditor::EditInterface *editiface
         = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
     if (!editiface) {
@@ -168,7 +170,7 @@ void RegexpTestDialog::insertQuoted()
         return;
     }
     KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
     if (!cursoriface) {
         kdDebug() << "no viewcursor" << endl;
         return;
