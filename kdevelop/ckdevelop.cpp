@@ -1228,8 +1228,7 @@ void CKDevelop::slotBuildMake(){
     process << make_cmd;
   }
   beep = true;
-  
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
 // void CKDevelop::slotBuildMakeWith(){
@@ -1322,7 +1321,6 @@ void CKDevelop::slotBuildCleanRebuildAll(){
          shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
 //  shell_process  << "\" "<< "./configure && " << make_cmd;
 	shell_process  << "\" "<< "./configure " << prj->getConfigureArgs() << " && " << make_cmd;
-
   beep = true;
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
@@ -2940,44 +2938,44 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 	}
       }
 
-      // Warning: not every user has the current directory in his path !
-      if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
-	o_tab_view->setCurrentTab(STDINSTDOUT);
-	QString term = "xterm";
-	QString exec_str = term + " -e sh -c './" +  program + "'";
-	
-	if(CToolClass::searchInstProgram("konsole")){
-	  term = "konsole";
+  // Warning: not every user has the current directory in his path !
+  if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
+  	o_tab_view->setCurrentTab(STDINSTDOUT);
+  	QString term = "xterm";
+  	QString exec_str = term + " -e sh -c './" +  program + "'";
+  	
+  	if(CToolClass::searchInstProgram("konsole")){
+  	  term = "konsole";
+  	}
+  	if(CToolClass::searchInstProgram("ksh")){
+  	  exec_str = term + " -e ksh -c './" + program +
+  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+  	}
+  	if(CToolClass::searchInstProgram("csh")){
+  	  exec_str = term +" -e csh -c './" + program +
+  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+  	}
+  	if(CToolClass::searchInstProgram("tcsh")){
+  	  exec_str =  term +" -e tcsh -c './" + program +
+  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+  	}
+  	if(CToolClass::searchInstProgram("bash")){
+  	  exec_str =  term +" -e bash -c './" + program +
+  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+  	}
+  	appl_process << exec_str;
+  	cerr << endl << "EXEC:" << exec_str;
 	}
-	if(CToolClass::searchInstProgram("ksh")){
-	  exec_str = term + " -e ksh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-	}
-	if(CToolClass::searchInstProgram("csh")){
-	  exec_str = term +" -e csh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-	}
-	if(CToolClass::searchInstProgram("tcsh")){
-	  exec_str =  term +" -e tcsh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-	}
-	if(CToolClass::searchInstProgram("bash")){
-	  exec_str =  term +" -e bash -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-	}
-	appl_process << exec_str;
-	cerr << endl << "EXEC:" << exec_str;
-      }
-      else{
-	appl_process << "./" + program;
-	cerr << endl << "EXEC:" << "./" +program;
-	o_tab_view->setCurrentTab(STDERR);
-      }
-      setToolMenuProcess(false);
-      appl_process.start(KProcess::NotifyOnExit,KProcess::All);
-      next_job = "";
-      ready = false;
-    }
+  else{
+		appl_process << "./" + program;
+		cerr << endl << "EXEC:" << "./" +program;
+		o_tab_view->setCurrentTab(STDERR);
+  }
+  setToolMenuProcess(false);
+  appl_process.start(KProcess::NotifyOnExit,KProcess::All);
+  next_job = "";
+  ready = false;
+  }
       
     if (next_job == "refresh"){ // rest from the add projectfile
       refreshTrees();

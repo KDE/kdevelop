@@ -1,3 +1,8 @@
+2000-01-20 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* finished configuration for KDE 2 apps as in HEAD. Set qt2 and kde2 root path in kdevelop setup.
+	  ATTENTION: KDE libs have to be compiled with --prefix=/your_KDE2_DIR so that your KDE2 apps will link and run
+	  when using --prefix as well
+	
 2000-01-19
 	*a better workaround for the doc tab bug, I now have an explanation why it happened.
 

@@ -74,6 +74,7 @@ private:
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;
   QLineEdit* qt2_edit;
+  QLineEdit* kde2_edit;
 
   // Dbg external options
   QButtonGroup* dbgExternalGroup;
@@ -96,6 +97,7 @@ private:
   void slotKDEUpdateReq();
   void slotSetDebug();
   void slotQt2Clicked();
+  void slotKDE2Clicked();
 
 };
 

@@ -499,13 +499,18 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   w4 = new QWidget( this, "pat" );
   config->setGroup("QT2");
 
+  QGroupBox* kde2_box= new QGroupBox(w4,"NoName");
+  kde2_box->setGeometry(10,10,400,190);
+  kde2_box->setMinimumSize(0,0);
+  kde2_box->setTitle(i18n("Qt 2.x / KDE path"));
+
   QLabel* qt2= new QLabel(w4,"NoName");
-  qt2->setGeometry(10,10,100,30);
+  qt2->setGeometry(30,40,300,30);
   qt2->setMinimumSize(0,0);
   qt2->setText(i18n("Qt 2.x directory:"));
 
   qt2_edit= new QLineEdit(w4,"NoName");
-  qt2_edit->setGeometry(10,50,290,30);
+  qt2_edit->setGeometry(30,70,300,30);
   qt2_edit->setMinimumSize(0,0);
   qt2_edit->setMaxLength( 32767 );
 
@@ -513,7 +518,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   qt2_edit->setText(qt2_path);
 
   QPushButton* qt2_button= new QPushButton(w4,"NoName");
-  qt2_button->setGeometry(310,50,30,30);
+  qt2_button->setGeometry(340,70,30,30);
   qt2_button->setMinimumSize(0,0);
   qt2_button->setPixmap(pix);
 
@@ -521,8 +526,30 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   KQuickHelp::add(qt2_button,
   KQuickHelp::add(qt2,i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0"))));
 
-  connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
 
+  QLabel* kde2= new QLabel(w4,"NoName");
+  kde2->setGeometry(30,110,300,30);
+  kde2->setMinimumSize(0,0);
+  kde2->setText(i18n("KDE 2.x directory:"));
+
+  kde2_edit= new QLineEdit(w4,"NoName");
+  kde2_edit->setGeometry(30,150,300,30);
+  kde2_edit->setMinimumSize(0,0);
+
+  QString kde2_path= config->readEntry("kde2dir");
+  kde2_edit->setText(kde2_path);
+
+  QPushButton* kde2_button= new QPushButton(w4,"NoName");
+  kde2_button->setGeometry(340,150,30,30);
+  kde2_button->setMinimumSize(0,0);
+	kde2_button->setPixmap(pix);
+
+  KQuickHelp::add(kde2_edit,
+	KQuickHelp::add(kde2_button,
+	KQuickHelp::add(kde2,i18n("Set the root directory path leading to your KDE 2 includes/libraries, e.g. /opt/kde2"))));
+
+  connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
+  connect(kde2_button, SIGNAL(clicked()),SLOT(slotKDE2Clicked()));
 
   // *********** tabs ****************
   addTab(w1, i18n("General"));
@@ -648,6 +675,7 @@ void CKDevSetupDlg::slotOkClicked(){
 
   config->setGroup("QT2");
   config->writeEntry("qt2dir", qt2_edit->text());
+  config->writeEntry("kde2dir", kde2_edit->text());
 
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
@@ -729,10 +757,25 @@ void CKDevSetupDlg::slotQt2Clicked(){
     qt2_edit->setText(dir);
 
   }
-  QString qt_testfile=dir+"include/qapp.h"; // test if the path really is the qt-doc path
+  QString qt_testfile=dir+"include/qapp.h"; // test if the path really is the qt2 path
   if(!QFileInfo(qt_testfile).exists())
   	KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
                                                               "Qt-2.x root directory. Please choose the\n"
+                                                              "correct path."),KMsgBox::EXCLAMATION);
+
+}
+void CKDevSetupDlg::slotKDE2Clicked(){
+  QString dir;
+  config->setGroup("QT2");
+  dir = KFileDialog::getDirectory(config->readEntry("kde2dir"));
+  if (!dir.isEmpty()){
+    kde2_edit->setText(dir);
+
+  }
+  QString kde_testfile=dir+"include/kmessagebox.h"; // test if the path really is the kde2 path
+  if(!QFileInfo(kde_testfile).exists())
+  	KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+                                                              "KDE-2.x root directory. Please choose the\n"
                                                               "correct path."),KMsgBox::EXCLAMATION);
 
 }

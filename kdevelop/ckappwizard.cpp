@@ -164,15 +164,17 @@ void CKAppWizard::initPages(){
   qtentry->setOpen (TRUE);
   qtentry->sortChildItems (0,FALSE);
   //qtminiitem = new QListViewItem (qtentry,"Mini");
-  qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
   qt_2normalitem = new QListViewItem( qtentry, i18n("Qt 2.x SDI"));
-  
+  qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
+
   kdeentry = new QListViewItem (applications,i18n("KDE"));
   kdeentry->setExpandable (true);
   kdeentry->setOpen (TRUE);
   kdeentry->sortChildItems (0,FALSE);
   //komitem = new QListViewItem (kdeentry,"KOM");
   //corbaitem = new QListViewItem (kdeentry,"Corba");
+  kde2miniitem = new QListViewItem (kdeentry,i18n("KDE 2 Mini"));
+  kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kdeminiitem = new QListViewItem (kdeentry,i18n("Mini"));
   kdenormalitem = new QListViewItem (kdeentry,i18n("Normal"));
   
@@ -1044,6 +1046,12 @@ void CKAppWizard::generateEntries() {
   else if (kdeminiitem->isSelected()) {
     entries << "kdemini\n";
   }
+  if (kde2normalitem->isSelected()) {
+    entries << "kde2normal\n";
+  }
+  else if (kde2miniitem->isSelected()) {
+    entries << "kde2mini\n";
+  }
   /*  else if (corbaitem->isSelected()) {
       entries << "corba\n";
       }
@@ -1071,15 +1079,20 @@ void CKAppWizard::generateEntries() {
   else if (customprojitem->isSelected()) {
     entries << "customproj\n";
   }
-	if (qt_2normalitem->isSelected()) {
+	if (qt_2normalitem->isSelected() || kde2miniitem->isSelected() || kde2normalitem->isSelected()) {
   	entries << "CONFIGARG\n";
 
     KConfig * config = KApplication::getKApplication()->getConfig();
 		config->setGroup("QT2");
-		QString qtpath=config->readEntry("qt2dir");
-		if(qtpath.right(1) == "/")
-			qtpath="--with-qt-dir="+qtpath.remove(qtpath.length()-1,1);
-    entries << qtpath << "\n";
+		QString arg=config->readEntry("qt2dir");
+		if(arg.right(1) == "/")
+			arg="--with-qt-dir="+arg.remove(arg.length()-1,1);
+		if(kde2miniitem->isSelected() || kde2normalitem->isSelected()){
+  		QString kde2path=config->readEntry("kde2dir");
+  		if(kde2path.right(1) == "/")
+  			arg=arg+" --prefix="+kde2path.remove(kde2path.length()-1,1);
+		}
+    entries << arg << "\n";
 
   }
 
@@ -1222,6 +1235,12 @@ bool hasTemplate = true;
   else if (kdenormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
   } 
+  if (kde2miniitem->isSelected()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini2.tar.gz";
+  }
+  else if (kde2normalitem->isSelected()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal2.tar.gz";
+  }
   else if (qtnormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
   } 
@@ -1352,8 +1371,12 @@ void CKAppWizard::slotAppEnd() {
   delete (generatesource);
   kdeentry->removeItem (kdenormalitem);
   kdeentry->removeItem (kdeminiitem);
+  kdeentry->removeItem (kde2normalitem);
+  kdeentry->removeItem (kde2miniitem);
   delete (kdenormalitem);
   delete (kdeminiitem);
+  delete (kde2normalitem);
+  delete (kde2miniitem);
   //delete (corbaitem);
   //delete (komitem);
   delete (kdeentry);
@@ -1458,6 +1481,54 @@ void CKAppWizard::slotApplicationClicked() {
       okButton->setEnabled(true);
     }
     apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
+  }
+  if (kde2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(true);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2 application with session-management, "
+			   "menubar, toolbar, statusbar and support for a "
+			   "document-view codeframe model."));
+  }
+  else if (kde2miniitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(true);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2 application with an empty main widget."));
   }
   else if (qtnormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
@@ -1854,6 +1925,12 @@ void CKAppWizard::slotProcessExited() {
   else if (kdenormalitem->isSelected()) {
     project->setProjectType("normal_kde");
   } 
+  else if (kde2miniitem->isSelected()) {
+    project->setProjectType("mini_kde2");
+  }
+  else if (kde2normalitem->isSelected()) {
+    project->setProjectType("normal_kde2");
+  }
   else if (qtnormalitem->isSelected()) {
     project->setProjectType("normal_qt");
   } 
@@ -1876,25 +1953,34 @@ void CKAppWizard::slotProcessExited() {
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g3 -Wall");
   
-  if (kdenormalitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
-  }
-  else if (kdeminiitem->isSelected()) {
+  if (kdeminiitem->isSelected() || kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-  else if (qtnormalitem->isSelected()) {
+  else if (kdenormalitem->isSelected()) {
+    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
+  }
+  else if (kde2normalitem->isSelected()) {
+    project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
+  }
+  else if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
   }
-  else if (qt_2normalitem->isSelected()) {
-    project->setLDADD (" -lqt -lXext -lX11");
+
+  if(qt_2normalitem->isSelected() || kde2normalitem->isSelected() || kde2miniitem->isSelected()){
   	KConfig * config = KApplication::getKApplication()->getConfig();
 		config->setGroup("QT2");
 		QString qtpath=config->readEntry("qt2dir");
 		if(qtpath.right(1) == "/")
 			qtpath=qtpath.remove(qtpath.length()-1,1);
-    project->setConfigureArgs("--with-qt-dir="+qtpath);
-  }
-
+		if(qt_2normalitem->isSelected())
+	    project->setConfigureArgs("--with-qt-dir="+qtpath);
+  	else{	
+  		QString kde2path=config->readEntry("kde2dir");
+  		if(kde2path.right(1) == "/")
+  			kde2path=kde2path.remove(kde2path.length()-1,1);
+			project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
+		}
+	}
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
@@ -1902,7 +1988,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
  // KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
-  if (kdenormalitem->isSelected() || kdeminiitem->isSelected()) {
+  if (kdenormalitem->isSelected() || kdeminiitem->isSelected() || kde2normalitem->isSelected() || kde2miniitem->isSelected()) {
     sub_dir_list.append("po");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
@@ -2043,7 +2129,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     }
   }
   
-  if (kdenormalitem->isSelected() || qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+  if (kdenormalitem->isSelected() || kde2normalitem->isSelected() || qtnormalitem->isSelected() || qt_2normalitem->isSelected() ) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
       fileInfo.type = CPP_SOURCE;
@@ -2359,6 +2445,8 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();
   *q << "perl" << path1 + "processesend.pl";
+
+
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   
 }
@@ -2378,13 +2466,14 @@ void CKAppWizard::slotMakeEnd() {
       file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
     }
-    if (kdenormalitem->isSelected() || qtnormalitem->isSelected()|| qt_2normalitem->isSelected()) {
+    if (kdenormalitem->isSelected() || kde2normalitem->isSelected()|| qtnormalitem->isSelected()|| qt_2normalitem->isSelected()) {
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "view.cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "view.h");
     }
   }
+
   cancelButton->setEnabled(true);
   gen_prj = true;
 }

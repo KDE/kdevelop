@@ -38,6 +38,14 @@ else {
 	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
 	
 	}
+	elsif ($processes{APPLICATION} eq "kde2normal") {
+	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
+	
+	}
+	elsif ($processes{APPLICATION} eq "kde2mini") {
+	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
+	
+	}
 	else{
   	system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
 	}
