@@ -80,8 +80,6 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     pattern_combo->setFocus();
     pattern_combo->insertStringList(config->readListEntry("LastSearchItems"));
     pattern_combo->setInsertionPolicy(QComboBox::NoInsertion);
-    pattern_combo->setMaxCount(15);
-    pattern_combo->setDuplicatesEnabled(false);
     layout->addWidget(pattern_combo, 0, 1);
     
     QLabel *template_label = new QLabel(i18n("&Template:"), this);
@@ -116,9 +114,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     dir_combo = new QComboBox(true, this);
     dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
     dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
-    dir_combo->setMaxCount(15);
     dir_combo->setEditText(QDir::homeDirPath());
-    dir_combo->setDuplicatesEnabled(false);
 
     dir_label->setBuddy(dir_combo);
     dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
@@ -136,6 +132,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
     QPushButton *search_button = new QPushButton(i18n("&Search"), this);
+    search_button->setDefault(true);
     QPushButton *done_button = new QPushButton(i18n("Cancel"), this);
     button_layout->addStretch();
     button_layout->addWidget(search_button);
@@ -201,6 +198,7 @@ static QStringList qCombo2StringList( QComboBox* combo )
 
 GrepDialog::~GrepDialog()
 {
+    config->setGroup("GrepDialog");
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
     config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
