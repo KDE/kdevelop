@@ -1,7 +1,7 @@
 
-tools_DATA =  processesend.pl processes.pl
+tools_DATA =  processesend.pl processes.pl kimport
 
-EXTRA_DIST = processes.pl.in processesend.pl
+EXTRA_DIST = processes.pl.in processesend.pl kimport
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
 
