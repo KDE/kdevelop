@@ -51,7 +51,10 @@ void ValgrindDialog::setParameters( const QString& params )
 
 void ValgrindDialog::setValExecutable( const QString& ve )
 {
-  w->valExecutableEdit->setURL( ve );
+  if ( ve.isEmpty() )
+    w->valExecutableEdit->setURL( "valgrind" );
+  else
+    w->valExecutableEdit->setURL( ve );
 }
 
 static const QString leakCheckParam( "--leak-check=yes" );
