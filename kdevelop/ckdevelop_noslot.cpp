@@ -1432,6 +1432,3 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
-
-
-
