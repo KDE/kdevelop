@@ -143,7 +143,7 @@ private:
 
 DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
                                        const QString &dirName, const QString &context)
-    : DocTreeItem(parent, Doc, name, context),
+    : DocTreeItem(parent, Book, name, context),
       dirname(dirName)
 {
     QString fileName = dirName + "/index.html";
@@ -170,7 +170,7 @@ void DocTreeDoxygenBook::readTagFile()
     QFile f(tagName);
     if(!f.exists())
     {
-        tagName.remove(QRegExp("/html/"));
+        tagName.remove("/html/");
         f.setName( tagName );
     }
     if (!f.open(IO_ReadOnly)) {
@@ -213,7 +213,6 @@ public:
         { setExpandable(true); }
     void refresh();
 };
-
 
 void DocTreeDoxygenFolder::refresh()
 {
@@ -436,11 +435,9 @@ public:
     void refresh();
 };
 
-
 DocTreeBookmarksFolder::DocTreeBookmarksFolder(KListView *parent, const QString &context)
     : DocTreeItem(parent, Folder, i18n("Bookmarks"), context)
 {}
-
 
 void DocTreeBookmarksFolder::refresh()
 {
@@ -474,7 +471,6 @@ private:
     KDevProject *m_project;
     QString m_userdocDir, m_apidocDir;
 };
-
 
 DocTreeProjectFolder::DocTreeProjectFolder(KListView *parent, const QString &context)
     : DocTreeItem(parent, Folder, i18n("Current Project"), context), m_project(0)
@@ -550,7 +546,6 @@ private:
     QString filename;
 };
 
-
 DocTreeQtFolder::DocTreeQtFolder(KListView *parent, const QString &_fileName,
     const QString &context)
     : DocTreeItem(parent, Folder, i18n("Qt"), context)
@@ -577,13 +572,12 @@ void DocTreeQtFolder::refresh()
     
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("DCF").toElement();
-    kdDebug() << titleEl.attribute("title") << endl;
 
-    QString base;
-    //QListViewItem *lastChildItem = 0;
-    QDomElement childEl = docEl.firstChild().toElement();
-    while (!childEl.isNull()) {
-        if (childEl.tagName() == "section") {
+    QDomElement childEl = docEl.lastChild().toElement();
+    while (!childEl.isNull()) 
+    {
+        if (childEl.tagName() == "section") 
+        {
             QString ref = childEl.attribute("ref");
             QString title = childEl.attribute("title");
             
@@ -591,24 +585,33 @@ void DocTreeQtFolder::refresh()
             if( i > 0 ) 
             {
                 title = title.left(i);
-                DocTreeItem* item = new DocTreeItem(this, Doc, title, context());
+                DocTreeItem* item = item = new DocTreeItem(this, Book, title, context());
                 item->setFileName(fi.dirPath( true ) +"/"+ ref);
-                //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
+
+                QDomElement grandChild = childEl.lastChild().toElement();
+                while(!grandChild.isNull()) 
+                {
+                    if (grandChild.tagName() == "keyword") 
+                    {
+                        QString dref = grandChild.attribute("ref");
+                        QString dtitle = grandChild.text();
+            
+                        DocTreeItem* dItem = new DocTreeItem(item, Doc, dtitle, context());
+                        dItem->setFileName(fi.dirPath( true ) +"/"+ dref);
+                    }
+                    grandChild = grandChild.previousSibling().toElement();
+               }
+               //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
             }
-            childEl = childEl.nextSibling().toElement();            
-        }
-        else
-        {
-            docEl = docEl.nextSibling().toElement();            
+            childEl = childEl.previousSibling().toElement();            
         }
     }
-    sortChildItems(0, true);
 }
+
 
 /**************************************/
 /* The DocTreeViewWidget itself       */
 /**************************************/
-
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L )
