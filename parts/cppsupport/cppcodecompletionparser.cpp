@@ -131,6 +131,7 @@ QString CppCodeCompletionParser::getNodeText ( int nNode )
 				if ( m_strCurLine[nTo] == '-' && m_strCurLine[nTo + 1] == '>' ||
 					m_strCurLine[nTo] == ':' && m_strCurLine[nTo + 1] == ':' )
 				{
+					kdDebug ( 9007 ) << "strNodeText: " << m_strCurLine.mid ( nFrom, ( nTo - nFrom ) ) << endl;
 					return m_strCurLine.mid ( nFrom, ( nTo - nFrom ) );
 				}
 			}
@@ -192,6 +193,11 @@ QString CppCodeCompletionParser::getNodeDelimiter ( int nNode )
 	return "";
 }
 
+QString CppCodeCompletionParser::getCurrentClassname ( int nLine )
+{
+	return "";
+}
+
 QString CppCodeCompletionParser::getTypeOfObject ( const QString& strObject, int nLine )
 {
 	return "";
@@ -202,26 +208,7 @@ QString CppCodeCompletionParser::getReturnTypeOfMethod ( const QString& strMetho
 	return "";
 }
 
-QValueList<KEditor::CompletionEntry> CppCodeCompletionParser::getEntryListForClass ( const QString& strClass )
-{
-	QValueList<KEditor::CompletionEntry> list;
 
-	return list;
-}
-
-QValueList<KEditor::CompletionEntry> CppCodeCompletionParser::getEntryListForNamespace ( const QString& strNamespace )
-{
-	QValueList<KEditor::CompletionEntry> list;
-
-	return list;
-}
-
-QValueList<KEditor::CompletionEntry> CppCodeCompletionParser::getEntryListForStruct ( const QString& strStruct )
-{
-	QValueList<KEditor::CompletionEntry> list;
-
-	return list;
-}
 
 bool CppCodeCompletionParser::isMethod ( const QString& strNodeText )
 {

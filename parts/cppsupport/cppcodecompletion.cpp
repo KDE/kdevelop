@@ -29,11 +29,14 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
 
+//	m_pParser = new CppCodeCompletionParser ( m_pEditor, pStore );
+
 	kdDebug ( 9007 ) << "constructor of CppCodeCompletion" << endl;
 }
 
 CppCodeCompletion::~CppCodeCompletion()
 {
+	//delete m_pParser;
 }
 
 void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
@@ -70,18 +73,74 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		return;
 	}
 
-	//kdDebug ( 9007 ) << "!!!!!!!!!!!Before!!!!!!!!!!!!!!!!" << endl;
+	QString strCurLine = pEditIface->line ( nLine );
 
-	CppCodeCompletionParser parser ( pEditIface, m_pStore );
-	parser.setLine ( pEditIface->line ( nLine ) );
-	kdDebug ( 9007 ) << parser.getNodePos ( nCol ) << endl << parser.getNodeText ( parser.getNodePos ( nCol ) ) << endl << parser.getNodeDelimiter ( parser.getNodePos ( nCol ) ) << endl << parser.getCompletionText ( nCol ) << endl;
+	CppCodeCompletionParser* m_pParser = new CppCodeCompletionParser ( pEditIface, m_pStore );
+	m_pParser->setLineToBeParsed ( strCurLine );
 
-
-	//kdDebug ( 9007 ) << "!!!!!!!!!!!Afterwards!!!!!!!!!!!!!!!!" << endl;
-
-	if ( pEditIface->line ( nLine ) == "test(")
+	if ( strCurLine.right ( 2 ) == "::" )
 	{
-		/*QValueList < KEditor::CompletionEntry > entryList;
+		int nNodePos = m_pParser->getNodePos ( nCol );
+
+		if ( nNodePos )
+		{
+			QString strNodeText = m_pParser->getNodeText ( nNodePos );
+
+			QValueList<KEditor::CompletionEntry> completionList = getEntryListForNamespace ( strNodeText );
+			if ( completionList.count() > 0 )
+			{
+				kdDebug ( 9007 ) << "Namespace: strNodeText(" << strNodeText << ") found in ClassStore" << endl;
+				pCompletionIface->showCompletionBox ( completionList );
+				return;
+			}
+
+			completionList = getEntryListForClass ( strNodeText );
+			if ( completionList.count() > 0 )
+			{
+				kdDebug ( 9007 ) << "Class: strNodeText(" << strNodeText << ") found in ClassStore" << endl;
+				pCompletionIface->showCompletionBox ( completionList );
+
+//				QStringList functionList;
+				return;
+			}
+
+			completionList = getEntryListForClassOfNamespace ( strNodeText, m_pParser->getNodeText ( ( m_pParser->getNodePos ( nCol ) - 1 ) ) );
+			if ( completionList.count() > 0 )
+			{
+				kdDebug ( 9007 ) << "Class: strNodeText(" << strNodeText << ") found in (KEditor) ClassStore" << endl;
+				pCompletionIface->showCompletionBox ( completionList );
+
+//				QStringList functionList;
+				return;
+			}
+		}
+	}
+
+	if ( strCurLine.right ( 2 ) == "->" )
+	{
+		int nNodePos = m_pParser->getNodePos ( nCol );
+
+		if ( nNodePos )
+		{
+			QString strNodeText = m_pParser->getNodeText ( nNodePos );
+
+			QValueList<KEditor::CompletionEntry> completionList = getEntryListForStruct ( strNodeText );
+			if ( completionList.count() > 0 )
+			{
+				kdDebug ( 9007 ) << "Struct: strNodeText(" << strNodeText << ") found in ClassStore" << endl;
+				pCompletionIface->showCompletionBox ( completionList );
+				return;
+			}
+		}
+	}
+
+
+
+
+
+/*	if ( pEditIface->line ( nLine ) == "test(")
+	{
+		QValueList < KEditor::CompletionEntry > entryList;
 
 		KEditor::CompletionEntry entry;
 		entry.prefix = "int";
@@ -90,18 +149,227 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 
 		entryList.append ( entry );
 
-		pCompletionIface->showCompletionBox ( entryList, 0 );*/
+		pCompletionIface->showCompletionBox ( entryList, 0 );
 
 		QStringList functionList;
 		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";
 		functionList.append ( strFunction );
-/*		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
+		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
 		functionList.append ( strFunction );
 		strFunction = "int setCurrentEditor ( NEdit* e, const char* name )";
-		functionList.append ( strFunction );*/
+		functionList.append ( strFunction );
 
 		pCompletionIface->showArgHint ( functionList, "()", "," );
+	}*/
+
+	//doCodeCompletion ( pDoc, nLine, nCol );
+}
+
+bool CppCodeCompletion::doCodeCompletion ( KEditor::Document* pDoc, int nLine, int nCol )
+{
+	KEditor::EditDocumentIface* pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
+	if ( !pEditIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
+		return false;
 	}
+
+	KEditor::CodeCompletionDocumentIface* pCompletionIface = KEditor::CodeCompletionDocumentIface::interface ( pDoc );
+	if ( !pCompletionIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
+		return false;
+	}
+
+
+	CppCodeCompletionParser parser ( pEditIface, m_pStore );
+	parser.setLineToBeParsed ( pEditIface->line ( nLine ) );
+
+	QValueList<KEditor::CompletionEntry> completionList = getEntryListForStruct ( "Block" );
+
+	if ( completionList.count() > 0 )
+	{
+		pCompletionIface->showCompletionBox ( completionList );
+		return true;
+	}
+
+	//kdDebug ( 9007 ) << parser.getNodePos ( nCol ) << endl << parser.getNodeText ( parser.getNodePos ( nCol ) ) << endl << parser.getNodeDelimiter ( parser.getNodePos ( nCol ) ) << endl << parser.getCompletionText ( nCol ) << endl;
+
+
+
+	return false;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString strClass )
+{
+	QList<ParsedParent> parentsList;
+	QValueList<KEditor::CompletionEntry> entryList;
+	ParsedClass* pClass;
+
+	do
+	{
+		pClass = m_pStore->getClassByName ( strClass );
+
+		if ( pClass )
+		{
+			QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
+			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				KEditor::CompletionEntry entry;
+				entry.text = pMethod->name();
+				entry.postfix = "()";
+				entryList << entry;
+			}
+
+			pMethodList = pClass->getSortedSignalList();
+			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				KEditor::CompletionEntry entry;
+				entry.text = pMethod->name();
+				entry.postfix = "()";
+				entryList << entry;
+			}
+
+			pMethodList = pClass->getSortedSlotList();
+			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+			{
+				KEditor::CompletionEntry entry;
+				entry.text = pMethod->name();
+				entry.postfix = "()";
+				entryList << entry;
+			}
+
+			QList<ParsedAttribute>* pAttributeList = pClass->getSortedAttributeList();
+			for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+			{
+				KEditor::CompletionEntry entry;
+				entry.text = pAttribute->name();
+				entry.postfix = "";
+				entryList << entry;
+			}
+
+			if ( pClass->parents.count() != 0 )
+			{
+				ParsedParent* pParent = pClass->parents.first();
+				strClass = pParent->name();
+			}
+			else
+				strClass = "";
+		}
+	} while ( pClass != 0 );
+
+	return entryList;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForNamespace ( const QString& strNamespace )
+{
+	QValueList<KEditor::CompletionEntry> entryList;
+	ParsedScopeContainer *pScope = m_pStore->getScopeByName ( strNamespace );
+
+	if ( pScope )
+	{
+		QList<ParsedClass>* pClassList = pScope->getSortedClassList();
+
+		for ( ParsedClass *pClass = pClassList->first(); pClass != 0; pClass = pClassList->next() )
+		{
+			KEditor::CompletionEntry entry;
+			entry.text = pClass->name();
+			entry.postfix = "";
+			entryList << entry;
+		}
+	}
+
+	return entryList;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForStruct ( const QString& strStruct )
+{
+	QValueList<KEditor::CompletionEntry> entryList;
+	ParsedScopeContainer *pScope = &m_pStore->globalContainer;
+
+	if ( pScope )
+	{
+		ParsedStruct* pStruct = pScope->getStructByName ( strStruct );
+
+		if ( pStruct )
+		{
+			QList<ParsedAttribute>* pAttributeList = pStruct->getSortedAttributeList();
+
+			for ( ParsedAttribute *pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+			{
+				KEditor::CompletionEntry entry;
+				entry.text = pAttribute->name();
+				entry.postfix = "";
+				entryList << entry;
+			}
+		}
+	}
+
+	return entryList;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace )
+{
+	QValueList<KEditor::CompletionEntry> entryList;
+	ParsedScopeContainer *pScope = m_pStore->getScopeByName ( strNamespace );
+	ParsedClass* pClass;
+
+	if ( pScope )
+	{
+		do
+		{
+			pClass = pScope->getClassByName ( strClass );
+
+			if ( pClass )
+			{
+				QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
+				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+				{
+					KEditor::CompletionEntry entry;
+					entry.text = pMethod->name();
+					entry.postfix = "()";
+					entryList << entry;
+				}
+
+				pMethodList = pClass->getSortedSignalList();
+				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+				{
+					KEditor::CompletionEntry entry;
+					entry.text = pMethod->name();
+					entry.postfix = "()";
+					entryList << entry;
+				}
+
+				pMethodList = pClass->getSortedSlotList();
+				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+				{
+					KEditor::CompletionEntry entry;
+					entry.text = pMethod->name();
+					entry.postfix = "()";
+					entryList << entry;
+				}
+
+				QList<ParsedAttribute>* pAttributeList = pClass->getSortedAttributeList();
+				for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+				{
+					KEditor::CompletionEntry entry;
+					entry.text = pAttribute->name();
+					entry.postfix = "";
+					entryList << entry;
+				}
+
+				if ( pClass->parents.count() != 0 )
+				{
+					ParsedParent* pParent = pClass->parents.first();
+					strClass = pParent->name();
+				}
+				else
+					strClass = "";
+			}
+		} while ( pClass != 0 );
+	}
+
+	return entryList;
 }
 
 #include "cppcodecompletion.moc"

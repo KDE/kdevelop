@@ -41,9 +41,17 @@ class CppCodeCompletion : public QObject
 		void slotDocumentActivated ( KEditor::Document* pDoc );
 		void slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol );
 
+	protected:
+		bool doCodeCompletion ( KEditor::Document* pDoc, int nLine, int nCol );
+		QValueList<KEditor::CompletionEntry> getEntryListForClass ( QString strClass );
+		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );
+		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );
+		QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace );
+
 	private:
 		KEditor::Editor* m_pEditor;
 		ClassStore* m_pStore;
+		//CppCodeCompletionParser* m_pParser;
 };
 
 #endif

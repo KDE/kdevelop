@@ -42,17 +42,15 @@ class CppCodeCompletionParser
 		QString getNodeText ( int nNode );
 		QString getNodeDelimiter ( int nNode );
 		QString getTypeOfObject ( const QString& strObject, int nLine );
+		QString getCurrentClassname ( int nLine );
 		QString getReturnTypeOfMethod ( const QString& strMethod );
-		QValueList<KEditor::CompletionEntry> getEntryListForClass ( const QString& strClass );
-		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );
-		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );
 		bool isMethod ( const QString& strNodeText );
 		bool isObject ( const QString& strNodeText );
 		bool isClass ( const QString& strNodeText );
 		bool isStruct ( const QString& strNodeText );
 		bool isNamespace ( const QString& strNodeText );
 
-		void setLine ( const QString& strLine ) { m_strCurLine = strLine; };
+		void setLineToBeParsed ( const QString& strLine ) { m_strCurLine = strLine; };
 
 	private:
 		KEditor::EditDocumentIface* m_pEditIface;
