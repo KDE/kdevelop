@@ -45,8 +45,12 @@ DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     m_tab = new QToolBox(this);
     l->addWidget(m_tab);
     
+    QWidget *contentsContainter = new QWidget(this);
+    QVBoxLayout *cl = new QVBoxLayout(contentsContainter, 0, 0);
     m_contents = new ContentsView(this);
-    m_tab->addItem(m_contents, i18n("Contents"));
+    m_contents->reparent(contentsContainter, QPoint(0,0));
+    cl->addWidget(m_contents);
+    m_tab->addItem(contentsContainter, i18n("Contents"));
     
     m_index = new IndexView(this);
     m_tab->addItem(m_index, i18n("Index"));

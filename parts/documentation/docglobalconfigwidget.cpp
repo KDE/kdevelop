@@ -23,6 +23,7 @@
  ***************************************************************************/
 #include "docglobalconfigwidget.h"
 
+#include <qlayout.h>
 #include <qtoolbox.h>
 
 #include <kconfig.h>
@@ -51,8 +52,11 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
         it != m_part->m_plugins.constEnd(); ++it)
     {
-        DocConfigListView *view = new DocConfigListView(this);
-        int box = collectionsBox->addItem(view, (*it)->pluginName());
+        QWidget *contentsContainter = new QWidget(this);
+        QVBoxLayout *cl = new QVBoxLayout(contentsContainter, 0, 0);
+        DocConfigListView *view = new DocConfigListView(contentsContainter);
+        cl->addWidget(view);
+        int box = collectionsBox->addItem(contentsContainter, (*it)->pluginName());
         m_pluginBoxes[box] = *it;
         m_pluginViews[box] = view;
         (*it)->loadCatalogConfiguration(m_pluginViews[box]);
