@@ -47,8 +47,8 @@ CommitDialog::CommitDialog()
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
+    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
+    QPushButton *cancel = buttonbox->addButton(i18n("&Cancel"));
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
     ok->setDefault(true);
