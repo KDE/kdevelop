@@ -15,13 +15,12 @@ install( "${src}/template-kcmodule/module.kdevelop",   "${dest}/${APPNAMELC}.kde
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
 mkdir( "${dest}/po", 0777 );
-install( "${src}/template-common/app.desktop",         "${dest}/src/${APPNAMELC}.desktop" );
-install( "${src}/template-common/app.lsm",             "${dest}/src/${APPNAMELC}.lsm" );
 install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.am",     "${dest}/Makefile.am" );
 install( "${src}/template-common/kde-Makefile.cvs",    "${dest}/Makefile.cvs" );
 install( "${src}/template-common/kde-configure.in.in", "${dest}/configure.in.in" );
-install( "${src}/template-kcmodule/subdirs",          "${dest}/subdirs" );
+install( "${src}/template-kcmodule/module.desktop",    "${dest}/src/${APPNAMELC}.desktop" );
+install( "${src}/template-kcmodule/subdirs",           "${dest}/subdirs" );
 
 print "Installing application sources\n";
 install( "${src}/template-kcmodule/src-Makefile.am",   "${dest}/src/Makefile.am" );
