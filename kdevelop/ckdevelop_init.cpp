@@ -220,6 +220,21 @@ void CKDevelop::init(){
   initStatusBar();
   initWhatsThis();
 
+  // init General variables like autosave, autoswitch and make-command
+  config->setGroup("General Options");
+  bAutosave=config->readBoolEntry("Autosave",true);
+  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+  saveTimer=new QTimer(this);
+  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+  if(bAutosave){
+    saveTimer->start(saveTimeout);
+  }
+  else{
+    saveTimer->stop();
+  }
+  bAutoswitch=config->readBoolEntry("Autoswitch",true);
+  make_cmd=config->readEntry("Make","make");
+
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     output_view_pos=view->separatorPos();
@@ -287,6 +302,11 @@ void CKDevelop::initMenu(){
 
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
+  // submenu for setting printprograms
+  QPopupMenu* p3 = new QPopupMenu;
+  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_FILE_PRINT_A2PS);
+  p3->insertItem(i18n("&Enscript..."), this,
+		  SLOT(slotOptionsConfigureEnscript()),0,ID_FILE_PRINT_ENSCRIPT);
 
   QPixmap pix;
   file_menu = new QPopupMenu;
@@ -296,6 +316,7 @@ void CKDevelop::initMenu(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),
 			IDK_FILE_OPEN,ID_FILE_OPEN);
+  file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), IDK_FILE_CLOSE,ID_FILE_CLOSE);
 
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
@@ -304,8 +325,8 @@ void CKDevelop::initMenu(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
   file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
-  file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), IDK_FILE_CLOSE,ID_FILE_CLOSE);
-  file_menu->insertSeparator();
+  file_menu->insertItem(i18n("Printer Setup"),p3,ID_FILE_PRINT_SETUP);
+
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),IDK_FILE_PRINT,ID_FILE_PRINT);
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()), IDK_FILE_QUIT,ID_FILE_QUIT);
@@ -513,11 +534,6 @@ void CKDevelop::initMenu(){
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries
 
-  // submenu for setting printprograms
-  QPopupMenu* p3 = new QPopupMenu;
-  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_A2PS);
-  p3->insertItem(i18n("&Enscript..."), this,
-		 SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_ENSCRIPT);
   options_menu = new QPopupMenu;
   options_menu->insertItem(i18n("&Editor..."),this,
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
@@ -530,55 +546,17 @@ void CKDevelop::initMenu(){
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
   
+
+  options_menu->insertItem(i18n("Documentation &Browser..."),this,
+			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
+  options_menu->insertSeparator();
   options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
   options_menu->insertSeparator();
 
-  options_menu->insertItem(i18n("&Print options"),p3,ID_OPTIONS_PRINT);
-  options_menu->insertSeparator();
-  
-  options_menu->insertItem(i18n("Documentation &Browser..."),this,
-			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
-  options_menu->insertItem(i18n("&Documentation Path..."),this,
+  options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
-  options_menu->insertSeparator();
-  options_menu->insertItem(i18n("Update &KDE-Documentation..."),this,
-			   SLOT(slotDocUpdateKDEDocumentation()),0,ID_OPTIONS_UPDATE_KDE_DOCUMENTATION);
-  options_menu->insertItem(i18n("Create &Searchdatabase..."),this,
-			   SLOT(slotCreateSearchDatabase()),0,ID_OPTIONS_CREATE_SEARCHDATABASE);
-  options_menu->insertSeparator();
-  
-  
-  make_submenu = new QPopupMenu;
-  make_submenu->insertItem("&Make",ID_OPTIONS_MAKE_MAKE);
-  make_submenu->insertItem("&Gmake",ID_OPTIONS_MAKE_GMAKE);
-  make_submenu->insertItem("&Dmake",ID_OPTIONS_MAKE_DMAKE);
-  options_menu->insertItem(i18n("Make-&Command..."),make_submenu,ID_OPTIONS_MAKE);
-  connect(make_submenu, SIGNAL(activated(int)), SLOT(slotOptionsMake(int)));
-  options_menu->insertSeparator();
-  options_menu->insertItem(i18n("&Autosave"),this,SLOT(slotOptionsAutosave()),0,ID_OPTIONS_AUTOSAVE);
-  
-  config->setGroup("General Options");
-  bAutosave=config->readBoolEntry("Autosave",true);
-  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
-  saveTimer=new QTimer(this);
-  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
-  if(bAutosave){
-    options_menu->setItemChecked(ID_OPTIONS_AUTOSAVE, true);
-    saveTimer->start(saveTimeout);
-  }
-  else{
-    saveTimer->stop();
-  }
-  
-  make_cmd=config->readEntry("Make","make");
-  if(make_cmd=="make")
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE, true);
-  if(make_cmd=="gmake")
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE, true);
-  if(make_cmd=="dmake")
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE, true);
-  
+
   menuBar()->insertItem(i18n("&Options"), options_menu);
   
   ///////////////////////////////////////////////////////////////////
@@ -628,6 +606,7 @@ void CKDevelop::initMenu(){
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
   connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(p3,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
@@ -635,7 +614,6 @@ void CKDevelop::initMenu(){
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(make_submenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 }
@@ -655,9 +633,9 @@ void CKDevelop::initToolbar(){
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
+/*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
   toolBar()->insertButton(pix,ID_FILE_PRINT,true,i18n("Print"));
-
+*/
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,10,separatorLine);
@@ -841,91 +819,3 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

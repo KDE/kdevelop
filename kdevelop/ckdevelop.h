@@ -191,7 +191,9 @@ public:
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
-  void slotOptionsAutosave();
+  void slotOptionsAutosave(bool);
+  void slotOptionsAutosaveTime(int);
+  void slotOptionsAutoswitch(bool);
   void slotOptionsMake(int id);
 
   void slotDocBack();
@@ -286,7 +288,6 @@ private:
   QPopupMenu* build_menu;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
-  QPopupMenu* make_submenu;
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
   QWhatsThis* whats_this;
@@ -347,6 +348,7 @@ private:
   bool bAutosave;    // enable=true
   int saveTimeout;   // timeout time
 
+  bool bAutoswitch;
 //  KProgress* statProg;
   //some vars for the searchengine
   QString search_output;
@@ -363,6 +365,8 @@ private:
 };
 
 #endif
+
+
 
 
 

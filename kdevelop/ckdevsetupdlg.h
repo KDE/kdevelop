@@ -42,16 +42,27 @@ class CKDevSetupDlg : public QTabDialog
 public:
     CKDevSetupDlg( QWidget *parent=0, const char *name=0 );
 private:
+
   KConfig* config;
+
+  QCheckBox* autoSaveCheck;
+  QComboBox* autosaveTimeCombo;
+  QComboBox* makeSelectCombo;
+  QCheckBox* autoSwitchCheck;
+
   QLineEdit* kde_edit;
-  
   QLineEdit* qt_edit;
+
+
  private slots:
- void        ok();
+  void ok();
+
   void slotQtClicked();
   void slotKDEClicked();
-  
+
 
 };
 
 #endif
+
+

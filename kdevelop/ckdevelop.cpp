@@ -431,29 +431,31 @@ void CKDevelop::slotViewTTreeView(){
   
 }
 void CKDevelop::showTreeView(bool show){
-  if(show){
-    if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-      return; // it's already visible){
+  if(bAutoswitch)
+  {
+    if(show){
+      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+        return; // it's already visible){
+      }
+      else{
+        top_panner->setSeparatorPos(tree_view_pos);
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+      }
     }
     else{
-      top_panner->setSeparatorPos(tree_view_pos);
-      view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+        return; // it's already unvisible){
+      }
+      else{
+        view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+        tree_view_pos=top_panner->separatorPos();
+        top_panner->setSeparatorPos(0);
+      }
     }
-  }
-  else{
-    if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-      return; // it's already unvisible){
-    }
-    else{
-      view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-      tree_view_pos=top_panner->separatorPos();
-      top_panner->setSeparatorPos(0);
-    }
-  }
-  QRect rMainGeom= top_panner->geometry();
-  top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
-  top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-  
+    QRect rMainGeom= top_panner->geometry();
+    top_panner->resize(rMainGeom.width()-1,rMainGeom.height());
+    top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
+   }
 }
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -471,28 +473,30 @@ void CKDevelop::slotViewTOutputView(){
 }
 
 void CKDevelop::showOutputView(bool show){
-  if(show){
-    if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-      return; // it's already visible
+  if(bAutoswitch){
+    if(show){
+      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+        return; // it's already visible
+      }
+      else{
+        view->setSeparatorPos(output_view_pos);
+        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+      }
     }
     else{
-      view->setSeparatorPos(output_view_pos);
-      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+      if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+        return; //it's already unvisible
+      }
+      else{
+        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+        output_view_pos=view->separatorPos();
+        view->setSeparatorPos(100);
+      }
     }
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-  else{
-    if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-      return; //it's already unvisible
-    }
-    else{
-      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-      output_view_pos=view->separatorPos();
-      view->setSeparatorPos(100);
-    }
-  }
-  QRect rMainGeom= view->geometry();
-  view->resize(rMainGeom.width()-1,rMainGeom.height());
-  view->resize(rMainGeom.width()+1,rMainGeom.height());
 }
 
 void CKDevelop::slotViewRefresh(){
@@ -564,8 +568,9 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
 
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up Documentation paths..."));
-  CKDevSetupDlg setup;
-  setup.show();
+
+  CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup");
+  setup->show();
   slotStatusMsg(IDS_DEFAULT); 
 }
 
@@ -589,33 +594,44 @@ void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(IDS_DEFAULT);
 }
 
-void CKDevelop::slotOptionsAutosave(){
-  bAutosave=!bAutosave;
-  options_menu->setItemChecked(ID_OPTIONS_AUTOSAVE,bAutosave);
+void CKDevelop::slotOptionsAutosave(bool autosave){
+
+  bAutosave=autosave;
   if(bAutosave)
     saveTimer->start(saveTimeout);
   else
     saveTimer->stop();
 }
+
+void CKDevelop::slotOptionsAutosaveTime(int time){
+  switch(time){
+  case 0:
+    saveTimeout=3*60*1000;
+    break;
+  case 1:
+    saveTimeout=5*60*1000;
+    break;
+  case 2:
+    saveTimeout=15*60*1000;
+    break;
+  case 3:
+    saveTimeout=30*60*1000;
+    break;
+  }
+}
+
+void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
+  bAutoswitch=autoswitch;
+}
 void CKDevelop::slotOptionsMake(int id){
-  
   switch(id){
-  case ID_OPTIONS_MAKE_MAKE:
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,true);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,false);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,false);
+  case 0:
     make_cmd="make";
     break;
-  case ID_OPTIONS_MAKE_GMAKE:
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,false);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,true);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,false);
+  case 1:
     make_cmd="gmake";
     break;
-  case ID_OPTIONS_MAKE_DMAKE:
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_MAKE,false);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_GMAKE,false);
-    options_menu->setItemChecked(ID_OPTIONS_MAKE_DMAKE,true);
+  case 2:
     make_cmd="dmake";
     break;
   }
@@ -1563,9 +1579,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
-  case ID_FILE_PRINT:
+/*  case ID_FILE_PRINT:
     slotFilePrint();
-    break;
+    break;*/
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;
@@ -1615,11 +1631,15 @@ void CKDevelop::slotToolbarClicked(int item){
 BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_FILE_NEW,                                                   i18n("Creates a new file"))
   ON_STATUS_MSG(ID_FILE_OPEN,   							i18n("Opens an existing file"))
+  ON_STATUS_MSG(ID_FILE_CLOSE,       						i18n("Closes the actual file"))
 
   ON_STATUS_MSG(ID_FILE_SAVE,        						i18n("Save the actual document"))
   ON_STATUS_MSG(ID_FILE_SAVE_AS,     						i18n("Save the document as..."))
   ON_STATUS_MSG(ID_FILE_SAVE_ALL,    						i18n("Save all changed files"))
-  ON_STATUS_MSG(ID_FILE_CLOSE,       						i18n("Closes the actual file"))
+
+  ON_STATUS_MSG(ID_FILE_PRINT_SETUP,       			i18n("Configures printing options"))
+  ON_STATUS_MSG(ID_FILE_PRINT_A2PS,       			i18n("Configures the printer to use a2ps"))
+  ON_STATUS_MSG(ID_FILE_PRINT_ENSCRIPT,       	i18n("Configures the printer to use enscript"))
 
   ON_STATUS_MSG(ID_FILE_PRINT,       						i18n("Prints the current document"))
 
@@ -1687,15 +1707,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS, 			i18n("Sets the highlighting default colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			i18n("Sets the highlighting colors"))
   ON_STATUS_MSG(ID_OPTIONS_KEYS, 			                i18n("Sets the keyboard accelerators"))
-  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              			i18n("Set up the KDevelop environment"))
+  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		i18n("Configures KDevelop"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				i18n("Configures the Browser options"))
-  ON_STATUS_MSG(ID_OPTIONS_UPDATE_KDE_DOCUMENTATION,  		i18n("Update your KDE-Libs Documentation"))
-  ON_STATUS_MSG(ID_OPTIONS_CREATE_SEARCHDATABASE,    		i18n("Create a search database of the current Documentation"))
-  ON_STATUS_MSG(ID_OPTIONS_MAKE,                         i18n("Sets the make-program"))
-  ON_STATUS_MSG(ID_OPTIONS_MAKE_MAKE,                   i18n("Sets KDevelop to use make"))
-  ON_STATUS_MSG(ID_OPTIONS_MAKE_GMAKE,                  i18n("Sets KDevelop to use gmake"))
-  ON_STATUS_MSG(ID_OPTIONS_MAKE_DMAKE,                  i18n("Sets KDevelop to use dmake"))
-  ON_STATUS_MSG(ID_OPTIONS_AUTOSAVE,                    i18n("Enables / disables the autosave-function"))
 
   ON_STATUS_MSG(ID_DOC_BACK,                      			i18n("Switchs to last browser page"))
   ON_STATUS_MSG(ID_DOC_FORWARD,                   			i18n("Switchs to next browser page"))
@@ -1713,6 +1726,16 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -36,6 +36,10 @@
 
 #define ID_FILE_CLOSE               10060
 
+#define ID_FILE_PRINT_SETUP         10065
+#define ID_FILE_PRINT_A2PS          10066
+#define ID_FILE_PRINT_ENSCRIPT      10067
+
 #define ID_FILE_PRINT               10070
 
 #define ID_FILE_QUIT                10080
@@ -135,22 +139,12 @@
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS	     16025
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16030
 
-#define ID_OPTIONS_KEYS               	  	     16035
-#define ID_OPTIONS_PRINT                             16037
-#define ID_OPTIONS_A2PS                              16038
-#define ID_OPTIONS_ENSCRIPT                          16039
-#define ID_OPTIONS_KDEVELOP  			     16040
 #define ID_OPTIONS_DOCBROWSER			               16050
 
-#define ID_OPTIONS_UPDATE_KDE_DOCUMENTATION 	   16060
-#define ID_OPTIONS_CREATE_SEARCHDATABASE 	       16070
+#define ID_OPTIONS_KEYS               	  	     16035
 
-#define ID_OPTIONS_AUTOSAVE                      16075
+#define ID_OPTIONS_KDEVELOP  			     16040
 
-#define ID_OPTIONS_MAKE                 16080
-#define ID_OPTIONS_MAKE_MAKE            16081
-#define ID_OPTIONS_MAKE_GMAKE           16082
-#define ID_OPTIONS_MAKE_DMAKE           16083
 
 ///////////////////////////////////////////////////////////////////
 // Documentation-menu entries                    
