@@ -471,7 +471,7 @@ All in one dialog.</comment>
                         </property>
                         <property>
                             <name>toolTip</name>
-                            <string>Sorry - properties not yet implemented!</string>
+                            <string>Properties not yet implemented!</string>
                         </property>
                         <hbox>
                             <property stdset="1">
