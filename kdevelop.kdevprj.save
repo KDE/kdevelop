@@ -23,9 +23,9 @@ install_location=
 type=DATA
 
 [Config for BinMakefileAm]
-addcxxflags=-DGDB_MONITOR -DUSE_QTPRINT_SYSTEM
+addcxxflags=-DGDB_MONITOR
 bin_program=kdevelop
-cxxflags=-O0 -g3 -Wall
+cxxflags=\s-O1 -g3 -Wall
 ldadd=./widgets/qextmdi/src/libkdevelopqextmdi.la $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
@@ -38,11 +38,11 @@ type=DATA
 [General]
 AMChanged=false
 author=kdevelop-team
-configure_args=--enable-debug
+configure_args=
 email=kdevelop-team@kdevelop.org
 kdevprj_version=1.3
 lfv_open_groups=Images,User Interface
-make_options=-j1
+make_options=\s-j1
 makefiles=Makefile.am,po/Makefile.am,kdevelop/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/tools/Makefile.am,kdevelop/templates/Makefile.am,kdevelop/print/Makefile.am,kdevelop/pics/Makefile.am,kdevelop/pics/toolbar/Makefile.am,kdevelop/pics/misc/Makefile.am,kdevelop/pics/mini/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/kwrite/pix/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/examples/Makefile.am,kdevelop/dbg/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/kpp/Makefile.am,kdevelop/classparser/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,doc/en/about/Makefile.am,doc/en/tutorial/Makefile.am,doc/en/programming/Makefile.am,doc/en/manual/Makefile.am,doc/en/kde_libref/Makefile.am,doc/en/cref/Makefile.am,kdevelop/widgets/Makefile.am,kdevelop/widgets/qextmdi/Makefile.am,kdevelop/widgets/qextmdi/src/Makefile.am,kdevelop/widgets/qextmdi/res/Makefile.am,kdevelop/widgets/qextmdi/include/Makefile.am,kdevelop/ctags/Makefile.am
 modifyMakefiles=true
 project_name=Kdevelop

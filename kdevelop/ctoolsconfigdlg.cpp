@@ -31,6 +31,8 @@
 #include <qgrid.h>
 #include <qlayout.h>
 
+#include <kdebug.h>
+
 CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
 	setCaption(i18n("Tools-Menu Configuration"));
 
@@ -197,7 +199,7 @@ void CToolsConfigDlg::slotToolAdd()
   }
       	
   tools_listbox->insertItem(menutext);
-  toolList.append(CToolApp(menutext, executable, QString(" ") + arguments_edit->text(), output_check->isChecked()));		
+  toolList.append(CToolApp(menutext, executable, arguments_edit->text(), output_check->isChecked()));		
 }
 
 void CToolsConfigDlg::slotToolDelete()
@@ -272,6 +274,8 @@ void CToolsConfigDlg::slotShowToolProp(int index){
   menu_text_edit->setText( toolApp.getLabel() );
   arguments_edit->setText( toolApp.getArgs() );
   output_check->setChecked( toolApp.isOutputCaptured() );
+
+//  kdDebug() << toolApp.getExeName() << " " << toolApp.isOutputCaptured() << endl;
 
   delete_button->setEnabled( TRUE );
 

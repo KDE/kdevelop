@@ -2038,7 +2038,7 @@ void CKDevelop::slotToolsTool(int tool)
   process_call = toolApp.getExeName();
 
   if ( !argument.isEmpty() ) {
-    process_call += argument;
+    process_call += " " + argument;
   }
 
   kdDebug() << "Tool wanted <" << process_call << ">" << endl;
@@ -2054,10 +2054,11 @@ void CKDevelop::slotToolsTool(int tool)
   if ( toolApp.isOutputCaptured() ) {
     connect ( proc, SIGNAL(receivedStdout(KProcess*, char*, int)), this, SLOT(slotReceivedStdout(KProcess*, char*, int)));
     connect ( proc, SIGNAL(receivedStderr(KProcess*, char*, int)), this, SLOT(slotReceivedStderr(KProcess*, char*, int)));
+    connect ( proc, SIGNAL(processExited(KProcess*)), this, SLOT(slotToolProcessExited(KProcess*)));
+    proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+  } else {
+    proc->start( KProcess::DontCare, KProcess::NoCommunication );
   }
-  connect ( proc, SIGNAL(processExited(KProcess*)), this, SLOT(slotToolProcessExited(KProcess*)));
-
-  proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
 
 }
 

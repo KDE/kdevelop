@@ -23,6 +23,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 bool CToolClass::searchProgram(QString name, bool allowWarningMsg ){
   QStringList paths;
@@ -109,13 +110,11 @@ void CToolClass::readToolConfig(ToolAppList& toolList)
   config->readListEntry("Tools_entry",labelList);
   config->readListEntry("Tools_argument",argList);
   config->readListEntry("Tools_output",outputList);
-  config->readListEntry("Tools_newPane",paneList);
+  config->readListEntry("Tools_newpane",paneList);
 
-  bool isOutput, isNewPane;
   for (uint i = 0; i < exeList.count(); ++i) {
-    isOutput  = ( (outputList.at(i) != "0") && (outputList.at(i) != QString::null) );
-    isNewPane = ( (paneList.at(i) != "0") && (paneList.at(i) != QString::null) );
-    toolList.append( CToolApp(labelList.at(i), exeList.at(i), argList.at(i), isOutput, isNewPane) );
+    toolList.append( CToolApp(labelList.at(i), exeList.at(i), argList.at(i), (QString(outputList.at(i)).compare("1") == 0), (QString(paneList.at(i)).compare("1") == 0)) );
+//    kdDebug() << "Tool: " << "\"" << labelList.at(i) << "\" \"" << exeList.at(i) << "\" \"" << argList.at(i) << "\" \"" << outputList.at(i) << "\" \"" << paneList.at(i) << "\"" << endl;
   }
 }
 
