@@ -17,6 +17,7 @@
 #include <qlistview.h>
 #include <qgroupbox.h>
 #include <qhbox.h>
+#include <qregexp.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -24,6 +25,8 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <ktrader.h>
+#include <kurllabel.h>
+#include <kapplication.h>
 #include "domutil.h"
 
 #include "partselectwidget.h"
@@ -33,18 +36,21 @@ class PluginItem : public QCheckListItem
 {
 public:
     // name - "Name", label - "GenericName", info - "Comment"
-    PluginItem( QListView * parent, QString const & name, QString const & label, QString const & info)
+    PluginItem( QListView * parent, QString const & name, QString const & label,
+				QString const & info, QString const url = QString::null )
         : QCheckListItem( parent, label, QCheckListItem::CheckBox),
-        _name( name ), _info( info )
+        _name( name ), _info( info ), _url( url )
     {}
 
     QString info() { return _info; }
     QString name() { return _name; }
+	QString url()  { return _url; }
 
 private:
 
     QString _name;
     QString _info;
+	QString _url;
 };
 
 
@@ -90,16 +96,21 @@ void PartSelectWidget::init()
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
     groupBox2->layout()->setMargin( 11 );
-    QHBoxLayout * groupBox2Layout = new QHBoxLayout( groupBox2->layout() );
+    QVBoxLayout * groupBox2Layout = new QVBoxLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
     _pluginDescription = new QLabel( groupBox2 );
     _pluginDescription->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
+    _urlLabel = new KURLLabel( groupBox2 );
+
     groupBox2Layout->addWidget( _pluginDescription );
+    groupBox2Layout->addWidget( _urlLabel );
+
     layout->addWidget( groupBox2 );
 
     connect( _pluginList, SIGNAL( selectionChanged( QListViewItem * ) ), this, SLOT( itemSelected( QListViewItem * ) ) );
+	connect( _urlLabel, SIGNAL( leftClickedURL( const QString & ) ), this, SLOT( openURL( const QString & ) ) );
 
     if (_scope == Global)
         readGlobalConfig();
@@ -120,20 +131,27 @@ void PartSelectWidget::readGlobalConfig()
 
     for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
     {
-        /// @todo remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
-        QString Comment = (*it)->comment();
-        QString GenericName = (*it)->genericName();
-        if ( GenericName.isEmpty() )
-        {
-            GenericName = Comment;
-        }
-        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), GenericName, Comment );
-// ---------
+		// parse out any existing url to make it clickable
+		QString Comment = (*it)->comment();
+		QRegExp re("\\bhttp://[\\S]*");
+		re.search( Comment );
+		Comment.replace( re, "" );
 
-/// @todo enable this instead
-//        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), (*it)->comment() );
+		QString url;
+		if ( re.pos() > -1 )
+		{
+			url = re.cap();
+		}
+
+        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), Comment, url );
         item->setOn(config.readBoolEntry((*it)->name(), true));
     }
+
+	QListViewItem * first = _pluginList->firstChild();
+	if ( first )
+	{
+		_pluginList->setSelected( first, true );
+	}
 }
 
 
@@ -159,20 +177,27 @@ void PartSelectWidget::readProjectConfig()
     KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
     {
-/// @todo remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
-        QString Comment = (*it)->comment();
-        QString GenericName = (*it)->genericName();
-        if ( GenericName.isEmpty() )
-        {
-            GenericName = Comment;
-        }
-        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), GenericName, Comment );
-// --------------
+		// parse out any existing url to make it clickable
+		QString Comment = (*it)->comment();
+		QRegExp re("\\bhttp://[\\S]*");
+		re.search( Comment );
+		Comment.replace( re, "" );
 
-/// @todo enable this instead
-//        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), (*it)->comment() );
+		QString url;
+		if ( re.pos() > -1 )
+		{
+			url = re.cap();
+		}
+
+        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), Comment, url );
         item->setOn(!ignoreparts.contains((*it)->name()));
     }
+
+	QListViewItem * first = _pluginList->firstChild();
+	if ( first )
+	{
+		_pluginList->setSelected( first, true );
+	}
 }
 
 void PartSelectWidget::itemSelected( QListViewItem * item )
@@ -181,6 +206,22 @@ void PartSelectWidget::itemSelected( QListViewItem * item )
 
     PluginItem * pitem = static_cast<PluginItem*>( item );
     _pluginDescription->setText( pitem->info() );
+
+	if ( pitem->url().isEmpty() )
+	{
+		_urlLabel->hide();
+	}
+	else
+	{
+		_urlLabel->show();
+		_urlLabel->setURL( pitem->url() );
+		_urlLabel->setText( pitem->url() );
+	}
+}
+
+void PartSelectWidget::openURL( const QString & url )
+{
+	kapp->invokeBrowser( url );
 }
 
 void PartSelectWidget::saveProjectConfig()

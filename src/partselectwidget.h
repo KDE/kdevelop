@@ -17,12 +17,13 @@
 #include <qstringlist.h>
 
 class QListView;
+class KURLLabel;
 
 
 class PartSelectWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     /* for selection of project parts */
     PartSelectWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
@@ -38,6 +39,7 @@ signals:
 
 private slots:
     void itemSelected( QListViewItem * );
+    void openURL( const QString & );
 
 private:
     enum Scope { Global, Project };
@@ -47,12 +49,13 @@ private:
     void saveGlobalConfig();
     void readProjectConfig();
     void saveProjectConfig();
-    
+
     QDomDocument m_projectDom;
     Scope _scope;
 
     QListView * _pluginList;
     QLabel * _pluginDescription;
+    KURLLabel * _urlLabel;
 
 };
 
