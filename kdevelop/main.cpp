@@ -42,6 +42,11 @@ int main(int argc, char* argv[]) {
 
   if (a.isRestored()){
     RESTORE(CKDevelop);
+    if (bStartLogo) {
+	start_logo->close();
+	delete start_logo;
+	bStartLogo = false;
+      }
   }
   else{
     if(bInstall){
