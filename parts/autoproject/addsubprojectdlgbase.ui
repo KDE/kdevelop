@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>445</width>
-            <height>141</height>
+            <height>126</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,23 +35,21 @@
     <property name="caption">
         <string>Add New Subproject</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>fileGroupBox</cstring>
             </property>
             <property name="title">
-                <string>&amp;Subproject</string>
+                <string>Subproject</string>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>Layout3</cstring>
@@ -63,7 +61,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <widget class="QLabel">
                             <property name="name">
                                 <cstring>spStaticLabel</cstring>
@@ -87,7 +84,7 @@
                                 </font>
                             </property>
                             <property name="text">
-                                <string>Enter a new subproject name:</string>
+                                <string>Subproject &amp;name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>spEdit</cstring>
@@ -116,7 +113,7 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer>
+        <spacer row="1" column="0">
             <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
@@ -129,11 +126,11 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
                 <cstring>buttonLayout</cstring>
             </property>
@@ -144,7 +141,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>buttonSpacer</cstring>
@@ -183,7 +179,7 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <tabstops>
     <tabstop>spEdit</tabstop>
@@ -196,7 +192,6 @@
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 <includehints>
     <includehint>klineedit.h</includehint>
 </includehints>

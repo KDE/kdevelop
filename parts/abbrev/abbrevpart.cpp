@@ -69,12 +69,14 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     action = new KAction( i18n("Expand Text"), CTRL + Key_J,
                           this, SLOT(slotExpandText()),
                           actionCollection(), "edit_expandtext" );
-    action->setStatusText( i18n("Expand current word") );
-    action->setWhatsThis( i18n("Expand current word") );
+    action->setToolTip( i18n("Expand current word") );
+    action->setWhatsThis( i18n("Expand current word<p>Current word can be completed using the list of similar words in source files.") );
 
     action = new KAction( i18n("Expand Abbreviation"), CTRL + Key_L,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
+    action->setToolTip( i18n("Expand abbreviation") );
+    action->setWhatsThis( i18n("Expand abbreviation<p>Enable and configure abbreviations in <b>KDevelop Settings</b>, <b>Abbrevations</b> tab.") );
 
     load();
 

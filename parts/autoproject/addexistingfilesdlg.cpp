@@ -90,6 +90,14 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 	destGroupBoxLayout->addWidget ( importView );
 	//destGroupBoxLayout->setStretchFactor(dir, 2);
 
+    QWidget::setTabOrder(sourceSelector, addAllButton);
+    QWidget::setTabOrder(addAllButton, addSelectedButton);
+    QWidget::setTabOrder(addSelectedButton, importView);
+    QWidget::setTabOrder(importView, removeAllButton);
+    QWidget::setTabOrder(removeAllButton, removeSelectedButton);
+    QWidget::setTabOrder(removeSelectedButton, okButton);
+    QWidget::setTabOrder(okButton, cancelButton);
+
 	setIcon ( SmallIcon ( "fileimport.png" ) );
 
 	init();

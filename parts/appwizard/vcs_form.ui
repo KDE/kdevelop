@@ -37,7 +37,10 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Version control system:</string>
+                <string>&amp;Version control system:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>combo</cstring>
             </property>
         </widget>
         <widget class="QComboBox" row="0" column="1">

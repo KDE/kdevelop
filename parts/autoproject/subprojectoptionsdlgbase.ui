@@ -43,7 +43,7 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Compiler flags for C compiler (&amp;CFLAGS):</string>
+                            <string>Compiler flags for C compiler (CFLA&amp;GS):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>cflags_edit</cstring>
@@ -293,7 +293,7 @@
                                     <cstring>metasources_checkbox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatically generate metasources</string>
+                                    <string>Automatically &amp;generate metasources</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -591,7 +591,10 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Custom prefixes:</string>
+                            <string>C&amp;ustom prefixes:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>prefix_listview</cstring>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget" row="1" column="1">
@@ -769,7 +772,10 @@
                             </font>
                         </property>
                         <property name="text">
-                            <string>Order in which sub projects are built:</string>
+                            <string>O&amp;rder in which sub projects are built:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>buildorder_listview</cstring>
                         </property>
                     </widget>
                 </grid>
@@ -809,6 +815,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -928,13 +937,14 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>subprojectoptions_tabwidget</tabstop>
     <tabstop>cflags_edit</tabstop>
     <tabstop>cflags_button</tabstop>
     <tabstop>cxxflags_edit</tabstop>
     <tabstop>cxxflags_button</tabstop>
     <tabstop>fflags_edit</tabstop>
     <tabstop>fflags_button</tabstop>
+    <tabstop>subprojectoptions_tabwidget</tabstop>
+    <tabstop>metasources_checkbox</tabstop>
     <tabstop>insideinc_listview</tabstop>
     <tabstop>insidemoveup_button</tabstop>
     <tabstop>insidemovedown_button</tabstop>
@@ -948,6 +958,9 @@
     <tabstop>addprefix_button</tabstop>
     <tabstop>editprefix_button</tabstop>
     <tabstop>removeprefix_button</tabstop>
+    <tabstop>buildorder_listview</tabstop>
+    <tabstop>buildmoveup_button</tabstop>
+    <tabstop>buildmovedown_button</tabstop>
     <tabstop>okbutton</tabstop>
     <tabstop>cancelbutton</tabstop>
 </tabstops>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddApplicationDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -22,7 +22,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>GroupBox7</cstring>
@@ -34,13 +33,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QCheckBox" row="2" column="1">
                     <property name="name">
                         <cstring>terminal_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Start in &amp;terminal</string>
+                        <string>Start in t&amp;erminal</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="3">
@@ -64,7 +62,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <widget class="QPushButton">
                             <property name="name">
                                 <cstring>icon_button</cstring>
@@ -91,6 +88,12 @@
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
                             </property>
                         </spacer>
                     </hbox>
@@ -277,7 +280,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>&amp;Comment:</string>
+                        <string>Co&amp;mment:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>
@@ -298,6 +301,12 @@
             <property name="sizeType">
                 <enum>Preferred</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <widget class="QGroupBox">
             <property name="name">
@@ -310,7 +319,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>Layout5</cstring>
@@ -322,7 +330,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <widget class="QListView">
                             <column>
                                 <property name="text">
@@ -331,7 +338,7 @@
                                 <property name="clickable">
                                     <bool>true</bool>
                                 </property>
-                                <property name="resizeable">
+                                <property name="resizable">
                                     <bool>true</bool>
                                 </property>
                             </column>
@@ -353,7 +360,6 @@
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-
                                 <spacer>
                                     <property name="name">
                                         <cstring>Spacer4</cstring>
@@ -363,6 +369,12 @@
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
                                     </property>
                                 </spacer>
                                 <widget class="QPushButton">
@@ -391,6 +403,12 @@
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
                                     </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
                                 </spacer>
                             </vbox>
                         </widget>
@@ -402,7 +420,7 @@
                                 <property name="clickable">
                                     <bool>true</bool>
                                 </property>
-                                <property name="resizeable">
+                                <property name="resizable">
                                     <bool>true</bool>
                                 </property>
                             </column>
@@ -428,7 +446,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -438,6 +455,12 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -516,15 +539,14 @@
     <tabstop>okbutton</tabstop>
     <tabstop>cancelbutton</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">addTypeClicked()</slot>
     <slot access="protected">iconClicked()</slot>
     <slot access="protected">removeTypeClicked()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 </UI>

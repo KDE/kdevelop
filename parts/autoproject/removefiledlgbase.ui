@@ -103,12 +103,18 @@
                                 <cstring>removeCheckBox</cstring>
                             </property>
                             <property name="text">
-                                <string>Also remove it from disk</string>
+                                <string>Also &amp;remove it from disk</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
                             <property name="name">
                                 <cstring>noticeLabel</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>0</height>
+                                </size>
                             </property>
                             <property name="text">
                                 <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undelete the file!</string>
@@ -213,6 +219,11 @@
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>removeCheckBox</tabstop>
+    <tabstop>removeButton</tabstop>
+    <tabstop>cancelButton</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>

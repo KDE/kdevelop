@@ -15,93 +15,88 @@
     <property name="caption">
         <string>Remove Target from [SUBPROJECT]</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>targetBox</cstring>
             </property>
             <property name="title">
                 <string>Subproject Information</string>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="KSqueezedTextLabel" row="0" column="1">
                     <property name="name">
-                        <cstring>targetLayout</cstring>
+                        <cstring>directoryLabel</cstring>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <widget class="KSqueezedTextLabel" row="0" column="1">
-                            <property name="name">
-                                <cstring>directoryLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>[TARGET DIRECTORY]</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="1">
-                            <property name="name">
-                                <cstring>targetLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>[TARGET NAME]</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>directoryStaticLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Directory:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>targetStaticLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Target:</string>
-                            </property>
-                        </widget>
-                    </grid>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>[TARGET DIRECTORY]</string>
+                    </property>
                 </widget>
-            </hbox>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>targetLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>[TARGET NAME]</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>directoryStaticLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Directory:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>targetStaticLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Target:</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>fileGroupBox</cstring>
             </property>
@@ -120,11 +115,11 @@
             <property name="title">
                 <string>&amp;Target Information</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>removeLabel</cstring>
                     </property>
@@ -132,7 +127,7 @@
                         <string>[REMOVE QUESTION]</string>
                     </property>
                 </widget>
-                <widget class="QCheckBox">
+                <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
                         <cstring>removeCheckBox</cstring>
                     </property>
@@ -140,28 +135,34 @@
                         <string>Also &amp;remove it from disk</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
                         <cstring>textLabel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>0</height>
+                        </size>
                     </property>
                     <property name="text">
                         <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undo this operation! And please check your Makefile.am afterwards!</string>
                     </property>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="2" column="0">
             <property name="name">
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
                 <string>&amp;Dependencies to Other Subprojects</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KListBox">
+                <widget class="KListBox" row="0" column="0">
                     <property name="name">
                         <cstring>dependencyListBox</cstring>
                     </property>
@@ -172,9 +173,9 @@
                         <enum>NoSelection</enum>
                     </property>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
-        <widget class="KProgress">
+        <widget class="KProgress" row="3" column="0">
             <property name="name">
                 <cstring>progressBar</cstring>
             </property>
@@ -182,7 +183,7 @@
                 <bool>true</bool>
             </property>
         </widget>
-        <spacer>
+        <spacer row="4" column="0">
             <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
@@ -199,7 +200,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="5" column="0">
             <property name="name">
                 <cstring>buttonLayout</cstring>
             </property>
@@ -248,7 +249,7 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

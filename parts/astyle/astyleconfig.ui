@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AStyleConfig</class>
 <widget class="QWidget">
     <property name="name">
@@ -22,7 +22,6 @@
         <property name="margin">
             <number>0</number>
         </property>
-
         <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>ConfigTabs</cstring>
@@ -38,7 +37,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <spacer row="1" column="0">
                         <property name="name">
                             <cstring>Spacer1</cstring>
@@ -48,6 +46,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <widget class="QButtonGroup" row="0" column="0">
@@ -61,7 +65,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>Style_ANSI</cstring>
@@ -89,7 +92,7 @@
                                     <cstring>Style_GNU</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;GNU</string>
+                                    <string>G&amp;NU</string>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>4</number>
@@ -125,7 +128,7 @@
                                     <cstring>Style_KR</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Kernighan &amp;&amp; Ritchie</string>
+                                    <string>&amp;Kernighan &amp;&amp; Ritchie</string>
                                 </property>
                                 <property name="buttonGroupId">
                                     <number>2</number>
@@ -143,6 +146,12 @@
                         <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
                     </spacer>
                     <widget class="QGroupBox" row="0" column="1">
                         <property name="name">
@@ -155,7 +164,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QMultiLineEdit" row="0" column="0">
                                 <property name="name">
                                     <cstring>StyleExample</cstring>
@@ -413,7 +421,6 @@
                                 <property name="font">
                                     <font>
                                         <family>misc-fixed</family>
-                                        <pointsize>10</pointsize>
                                     </font>
                                 </property>
                                 <property name="frameShape">
@@ -450,7 +457,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>GroupBox1</cstring>
@@ -462,7 +468,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QCheckBox">
                                 <property name="name">
                                     <cstring>Indent_Switches</cstring>
@@ -484,7 +489,7 @@
                                     <cstring>Indent_Classes</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Indent c&amp;lasses</string>
+                                    <string>Indent cl&amp;asses</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -530,13 +535,15 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>Fill_Spaces</cstring>
                                 </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
+                                </property>
                                 <property name="text">
-                                    <string>Use &amp;spaces:</string>
+                                    <string>Use s&amp;paces:</string>
                                 </property>
                             </widget>
                             <widget class="QSpinBox" row="1" column="1">
@@ -571,13 +578,12 @@
                             <cstring>GroupBox2</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Continuation</string>
+                            <string>Contin&amp;uation</string>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QSpinBox" row="0" column="1">
                                 <property name="name">
                                     <cstring>Continue_MaxStatement</cstring>
@@ -631,19 +637,17 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>ButtonGroup9</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Brackets</string>
+                            <string>Brackets</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>Brackets_Break</cstring>
@@ -668,7 +672,7 @@
                                     <cstring>Brackets_Linux</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Linux style</string>
+                                    <string>Li&amp;nux style</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -678,13 +682,12 @@
                             <cstring>ButtonGroup10</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Padding</string>
+                            <string>Padding</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QCheckBox">
                                 <property name="name">
                                     <cstring>Pad_Parentheses</cstring>
@@ -698,7 +701,7 @@
                                     <cstring>Pad_Operators</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add spaces around &amp;operators</string>
+                                    <string>Add spaces around ope&amp;rators</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -708,13 +711,12 @@
                             <cstring>GroupBox7</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;One Liners</string>
+                            <string>One Liners</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QCheckBox">
                                 <property name="name">
                                     <cstring>Keep_Statements</cstring>
@@ -728,7 +730,7 @@
                                     <cstring>Keep_Blocks</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Keep one-line &amp;blocks</string>
+                                    <string>Keep one-line b&amp;locks</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -742,6 +744,12 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -757,6 +765,27 @@
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>Style_UserDefined</tabstop>
+    <tabstop>StyleExample</tabstop>
+    <tabstop>ConfigTabs</tabstop>
+    <tabstop>Fill_Tabs</tabstop>
+    <tabstop>Fill_Spaces</tabstop>
+    <tabstop>Fill_SpaceCount</tabstop>
+    <tabstop>Continue_MaxStatement</tabstop>
+    <tabstop>Continue_MinConditional</tabstop>
+    <tabstop>Indent_Switches</tabstop>
+    <tabstop>Indent_Cases</tabstop>
+    <tabstop>Indent_Classes</tabstop>
+    <tabstop>Indent_Brackets</tabstop>
+    <tabstop>Indent_Namespaces</tabstop>
+    <tabstop>Indent_Labels</tabstop>
+    <tabstop>Brackets_Break</tabstop>
+    <tabstop>Pad_Parentheses</tabstop>
+    <tabstop>Pad_Operators</tabstop>
+    <tabstop>Keep_Statements</tabstop>
+    <tabstop>Keep_Blocks</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>

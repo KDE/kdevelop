@@ -129,30 +129,54 @@ void AutoSubprojectView::initActions()
 
 	subProjectOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
 	                                       this, SLOT( slotSubprojectOptions() ), actions, "subproject options" );
+    subProjectOptionsAction->setWhatsThis(i18n("Options<p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
 	addSubprojectAction = new KAction( i18n( "Add Subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
+    addSubprojectAction->setWhatsThis(i18n("Add subproject<p>New subproject in currently selected subproject."));
 	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "folder_remove", 0,
 	                                   this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
-	addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
+    removeSubprojectAction->setWhatsThis(i18n("Remove subproject<p>Asks if the target should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
+    addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
 	                                           this, SLOT( slotAddExistingSubproject() ), actions, "add existing subproject" );
-	addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
+    addExistingSubprojectAction->setWhatsThis(i18n("Add existing subprojects<p>Imports subprojects containing Makefile.am."));
+    addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
 	                               this, SLOT( slotAddTarget() ), actions, "add target" );
-	addServiceAction = new KAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0,
+    addTargetAction->setWhatsThis(i18n("Add target<p>Target can be a binary program, library, script, also a collection of data or header files."));
+    addServiceAction = new KAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0,
 	                                this, SLOT( slotAddService() ), actions, "add service" );
-	addApplicationAction = new KAction( i18n( "Add Application..." ), "window_new", 0,
+    addServiceAction->setWhatsThis(i18n("Add service<p>Creates a service .desktop file."));
+    addApplicationAction = new KAction( i18n( "Add Application..." ), "window_new", 0,
 	                                    this, SLOT( slotAddApplication() ), actions, "add application" );
-	buildSubprojectAction = new KAction( i18n( "Build" ), "launch", 0,
+    addApplicationAction->setWhatsThis(i18n("Add application<p>Creates an application .desktop file."));
+    buildSubprojectAction = new KAction( i18n( "Build" ), "launch", 0,
 	                                     this, SLOT( slotBuildSubproject() ), actions, "add build subproject" );
-	forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
+    buildSubprojectAction->setWhatsThis(i18n("Build<p>Runs <b>make</b> from the directory of the selected subproject.<br>"
+                                             "Environment variables and make arguments can be specified "
+                                             "in the project settings dialog, <b>Make Options</b> tab."));
+    forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
 	                                     this, SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
-	cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0,
+    forceReeditSubprojectAction->setWhatsThis(i18n("Force Reedit<p>Runs <b>make force-reedit</b> from the directory of the selected subproject.<br>"
+                                                   "This recreates makefile (tip: and solves most of .moc related problems)<br>"
+                                                   "Environment variables and make arguments can be specified "
+                                                   "in the project settings dialog, <b>Make Options</b> tab."));
+    cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0,
 	                                     this, SLOT( slotCleanSubproject() ), actions, "clean subproject" );
+    cleanSubprojectAction->setWhatsThis(i18n("Clean<p>Runs <b>make clean</b> from the directory of the selected subproject.<br>"
+                                             "Environment variables and make arguments can be specified "
+                                             "in the project settings dialog, <b>Make Options</b> tab."));
     if (!m_part->isKDE())
         forceReeditSubprojectAction->setEnabled(false);
 	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0,
 	                                     this, SLOT( slotInstallSubproject() ), actions, "install subproject" );
+    installSubprojectAction->setWhatsThis(i18n("Install<p>Runs <b>make install</b> from the directory of the selected subproject.<br>"
+                                             "Environment variables and make arguments can be specified "
+                                             "in the project settings dialog, <b>Make Options</b> tab."));
 	installSuSubprojectAction = new KAction( i18n( "Install (as root user)" ), 0, 0,
 	                                     this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
+    installSuSubprojectAction->setWhatsThis(i18n("Install as root user<p>Runs <b>make install</b> command from the directory of the selected subproject with root priviledges.<br>"
+                              "It is executed via kdesu command.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Make Options</b> tab."));
 
 	connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
 	         this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint& ) ) );
@@ -316,24 +340,26 @@ void AutoSubprojectView::slotRemoveSubproject()
 	KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
 	return;
     }
-    
+
     RemoveSubprojectDialog dlg;
+    dlg.setCaption(i18n("Remove Subproject %1").arg(spitem->text(0)));
+    dlg.removeLabel->setText(i18n("Do you really want to remove subproject %1 with all targets and files?").arg(spitem->text(0)));
     if( dlg.exec() ){
-	
+
 	bool removeSources = dlg.removeCheckBox->isChecked();
-	
+
 	list.remove( it );
 	parent->variables[ "SUBDIRS" ] = list.join( " " );
 
 	parent->listView()->setSelected( parent, true );
 	kapp->processEvents( 500 );
-	
-	
+
+
 	if( removeSources ){
 	    kdDebug(9020) << "remove dir " << spitem->path << endl;
 	    AutoProjectPrivate::removeDir( spitem->path );
 	}
-	
+
 	if( m_widget->activeSubproject() == spitem ){
 	    m_widget->setActiveSubproject( 0 );
 	}

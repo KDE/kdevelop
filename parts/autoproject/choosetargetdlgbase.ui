@@ -49,7 +49,7 @@
                 <cstring>chooseTargetRadioButton</cstring>
             </property>
             <property name="text">
-                <string>&amp;Choose another target</string>
+                <string>Choose &amp;another target</string>
             </property>
         </widget>
         <spacer>
@@ -254,13 +254,15 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>newFilesListBox</tabstop>
     <tabstop>activeTargetRadioButton</tabstop>
     <tabstop>chooseTargetRadioButton</tabstop>
+    <tabstop>subprojectComboBox</tabstop>
+    <tabstop>targetComboBox</tabstop>
+    <tabstop>newFilesListBox</tabstop>
+    <tabstop>neverAskAgainCheckBox</tabstop>
     <tabstop>removeButton</tabstop>
     <tabstop>cancelButton</tabstop>
     <tabstop>newFilesListBox</tabstop>
-    <tabstop>neverAskAgainCheckBox</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

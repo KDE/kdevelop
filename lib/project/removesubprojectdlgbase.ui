@@ -58,7 +58,7 @@
                         <cstring>removeCheckBox</cstring>
                     </property>
                     <property name="text">
-                        <string>Also remove it from disk</string>
+                        <string>Also &amp;remove it from disk</string>
                     </property>
                 </widget>
                 <widget class="QLabel">

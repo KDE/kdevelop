@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddTemplateDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -22,7 +22,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>Layout1</cstring>
@@ -34,9 +33,8 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
@@ -84,7 +82,10 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>Template:</string>
+                <string>&amp;Template:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editTemplate</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -92,7 +93,10 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Description:</string>
+                <string>&amp;Description:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editDescription</cstring>
             </property>
         </widget>
         <widget class="QLineEdit" row="0" column="1">
@@ -106,7 +110,7 @@
             </property>
         </widget>
         <spacer row="3" column="1">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer4</cstring>
             </property>
             <property name="orientation">
@@ -118,7 +122,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>10</height>
                 </size>
             </property>
         </spacer>
@@ -132,7 +136,10 @@
                 <cstring>labelSuffixes</cstring>
             </property>
             <property name="text">
-                <string>Suffixes:</string>
+                <string>&amp;Suffixes:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>comboSuffixes</cstring>
             </property>
         </widget>
     </grid>
@@ -151,6 +158,13 @@
         <slot>reject()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>editTemplate</tabstop>
+    <tabstop>editDescription</tabstop>
+    <tabstop>comboSuffixes</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>

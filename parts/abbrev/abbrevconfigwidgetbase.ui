@@ -19,13 +19,12 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>checkWordCompletion</cstring>
             </property>
             <property name="text">
-                <string>Enable automatic word completion</string>
+                <string>&amp;Enable automatic word completion</string>
             </property>
         </widget>
         <widget class="QLabel">
@@ -33,7 +32,10 @@
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Templates:</string>
+                <string>&amp;Templates:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>listTemplates</cstring>
             </property>
         </widget>
         <widget class="QListView">
@@ -128,7 +130,10 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Code:</string>
+                <string>&amp;Code:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>editCode</cstring>
             </property>
         </widget>
         <widget class="QMultiLineEdit">
@@ -171,15 +176,15 @@
     <tabstop>buttonRemoveTemplate</tabstop>
     <tabstop>editCode</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">addTemplate()</slot>
     <slot access="protected">codeChanged()</slot>
     <slot access="protected">removeTemplate()</slot>
     <slot access="protected">selectionChanged()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

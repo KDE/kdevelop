@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>521</width>
-            <height>240</height>
+            <height>217</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,11 +35,11 @@
     <property name="caption">
         <string>Add New Created File to Target</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>targetBox</cstring>
             </property>
@@ -56,7 +56,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>targetLayout</cstring>
@@ -68,7 +67,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-
                         <widget class="KSqueezedTextLabel" row="0" column="1">
                             <property name="name">
                                 <cstring>directoryLabel</cstring>
@@ -129,7 +127,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>fileGroupBox</cstring>
             </property>
@@ -140,7 +138,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="KLineEdit" row="1" column="0">
                     <property name="name">
                         <cstring>fileEdit</cstring>
@@ -163,6 +160,14 @@
                 <widget class="QCheckBox" row="1" column="1">
                     <property name="name">
                         <cstring>templateCheckBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
                         <string>&amp;Use file template</string>
@@ -194,7 +199,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>Enter a new file name (with extension):</string>
+                        <string>New file &amp;name (with extension):</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>fileEdit</cstring>
@@ -202,7 +207,7 @@
                 </widget>
             </grid>
         </widget>
-        <spacer>
+        <spacer row="2" column="0">
             <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
@@ -215,11 +220,11 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>25</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="3" column="0">
             <property name="name">
                 <cstring>buttonLayout</cstring>
             </property>
@@ -230,7 +235,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>buttonSpacer</cstring>
@@ -269,7 +273,7 @@
                 </widget>
             </hbox>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
@@ -278,7 +282,6 @@
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-
 <includehints>
     <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klineedit.h</includehint>

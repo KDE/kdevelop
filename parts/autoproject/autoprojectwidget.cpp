@@ -26,6 +26,7 @@
 #include <qtextstream.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qtimer.h>
 
 #include <kdebug.h>
@@ -103,7 +104,8 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addSubprojectButton = new QToolButton( overviewButtonBox );
 	addSubprojectButton->setPixmap( SmallIcon( "folder_new" ) );
 	QToolTip::add
-		( addSubprojectButton, i18n( "Add new subproject" ) );
+		( addSubprojectButton, i18n( "Add subproject" ) );
+    QWhatsThis::add(addSubprojectButton, i18n("Add subproject<p>New subproject in currently selected subproject."));
 
 	/*    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
 		addExistingSubprojectButton->setPixmap(SmallIcon("fileimport"));
@@ -112,22 +114,28 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addTargetButton = new QToolButton( overviewButtonBox );
 	addTargetButton->setPixmap( SmallIcon( "targetnew_kdevelop" ) );
 	QToolTip::add
-		( addTargetButton, i18n( "Add new target" ) );
+		( addTargetButton, i18n( "Add target" ) );
+    QWhatsThis::add(addTargetButton, i18n("Add target<p>Target can be a binary program, library, script, also a collection of data or header files."));
 
 	addServiceButton = new QToolButton( overviewButtonBox );
 	addServiceButton->setPixmap( SmallIcon( "servicenew_kdevelop" ) );
 	QToolTip::add
-		( addServiceButton, i18n( "Add new service" ) );
+		( addServiceButton, i18n( "Add service" ) );
+    QWhatsThis::add(addServiceButton, i18n("Add service<p>Creates a service .desktop file."));
 
 	addApplicationButton = new QToolButton( overviewButtonBox );
 	addApplicationButton->setPixmap( SmallIcon( "window_new" ) );
 	QToolTip::add
-		( addApplicationButton, i18n( "Add new application" ) );
+		( addApplicationButton, i18n( "Add application" ) );
+    QWhatsThis::add(addApplicationButton, i18n("Add application<p>Creates an application .desktop file."));
 
 	buildSubprojectButton = new QToolButton( overviewButtonBox );
 	buildSubprojectButton->setPixmap( SmallIcon( "launch" ) );
 	QToolTip::add
 		( buildSubprojectButton, i18n( "Build" ) );
+    QWhatsThis::add(buildSubprojectButton, i18n("Build<p>Runs <b>make</b> from the directory of the selected subproject.<br>"
+                                                "Environment variables and make arguments can be specified "
+                                                "in the project settings dialog, <b>Make Options</b> tab."));
 
 	QWidget *spacer1 = new QWidget( overviewButtonBox );
 	overviewButtonBox->setStretchFactor( spacer1, 1 );
@@ -135,7 +143,8 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	subProjectOptionsButton = new QToolButton( overviewButtonBox );
 	subProjectOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
-		( subProjectOptionsButton, i18n( "Show options" ) );
+		( subProjectOptionsButton, i18n( "Options" ) );
+    QWhatsThis::add(subProjectOptionsButton, i18n("Options<p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
 
 	overviewButtonBox->setMaximumHeight( subProjectOptionsButton->height() );
 
@@ -159,21 +168,27 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addNewFileButton->setPixmap( SmallIcon( "filenew" ) );
 	QToolTip::add
 		( addNewFileButton, i18n( "Create new file" ) );
+    QWhatsThis::add(addNewFileButton, i18n("Create new file<p>New file will be created using <b>FileCreate</b> part if it is available."));
 
 	addExistingFileButton = new QToolButton( targetButtonBox );
 	addExistingFileButton->setPixmap( SmallIcon( "fileimport" ) );
 	QToolTip::add
 		( addExistingFileButton, i18n( "Add existing files" ) );
+    QWhatsThis::add(addExistingFileButton, i18n("Add existing files<p>Header files will not be included in SOURCES list of a target. "
+                                                "They will be added to noinst_HEADERS instead."));
 
 	removeButton = new QToolButton( targetButtonBox );
 	removeButton->setPixmap( SmallIcon( "editdelete" ) );
 	QToolTip::add
 		( removeButton, i18n( "Remove" ) );
+    QWhatsThis::add(removeButton, i18n("Remove<p>Shows a list of targets dependent on the selected target or file and asks for removal. Also asks if the target or file should be removed from disk."));
 
 	buildTargetButton = new QToolButton( targetButtonBox );
 	buildTargetButton->setPixmap( SmallIcon( "launch" ) );
 	QToolTip::add
 		( buildTargetButton, i18n( "Build" ) );
+    QWhatsThis::add(buildTargetButton, i18n("Build target<p>Constructs a series of make commands to build the selected target. "
+                                            "Also builds dependent targets."));
 
 	QWidget *spacer2 = new QWidget( targetButtonBox );
 	targetButtonBox->setStretchFactor( spacer2, 1 );
@@ -182,6 +197,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	targetOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
 		( targetOptionsButton, i18n( "Show options" ) );
+    QWhatsThis::add(targetOptionsButton, i18n("Options<p>Target options dialog that provides settings for LDFLAGS, LIBADD and DEPENDENCIES."));
 
 	targetButtonBox->setMaximumHeight( addNewFileButton->height() );
 

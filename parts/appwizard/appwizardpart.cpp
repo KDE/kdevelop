@@ -41,8 +41,8 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
     action = new KAction( i18n("&New Project..."), "window_new", 0,
                           this, SLOT(slotNewProject()),
                           actionCollection(), "project_new" );
-    action->setStatusText( i18n("Generates a new project from a template") );
-    action->setWhatsThis( i18n("New project\n\n"
+    action->setToolTip( i18n("Generate a new project from a template") );
+    action->setWhatsThis( i18n("New project<p>"
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
@@ -50,7 +50,8 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
     action = new KAction( i18n("&Import Existing Project..."),"wizard", 0,
                           this, SLOT(slotImportProject()),
                           actionCollection(), "project_import" );
-    action->setStatusText( i18n("Creates a project file for a given directory.") );
+    action->setToolTip( i18n("Import existing project") );
+    action->setWhatsThis( i18n("Import existing project<p>Creates a project file for a given directory.") );
 }
 
 
@@ -65,6 +66,7 @@ void AppWizardPart::slotNewProject()
     AppWizardDialog dlg(this, 0, "app wizard");
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
+    dlg.templates_listview->setFocus();
     if (dlg.exec()) {
         m_creationCommand = dlg.getCommandLine();
         m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName().lower() + ".kdevelop";
