@@ -1060,23 +1060,22 @@ void CKDevelop::initToolBar(){
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::initStatusBar(){
+void CKDevelop::initStatusBar()
+{
   kdev_statusbar= new KStatusBar(this,"KDevelop_statusbar");
   statProg = new QProgressBar(kdev_statusbar,"Progressbar");
-  
-  kdev_statusbar->insertItem("", ID_STATUS_MSG);
-//  kdev_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
-  kdev_statusbar->addWidget(statProg,150);
-  kdev_statusbar->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
-  kdev_statusbar->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
-//  kdev_statusbar->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
-  
-//  kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);
-  kdev_statusbar->changeItem("", ID_STATUS_EMPTY_2);
-  kdev_statusbar->changeItem("", ID_STATUS_EMPTY);
+//  statProg->setFixedWidth(200);
+
+  kdev_statusbar->insertFixedItem(" x ", ID_STATUS_DBG);
+  kdev_statusbar->insertItem("", ID_STATUS_MSG, 1);       // stretch to fit
+//  kdev_statusbar->addWidget(statProg, 0, true);
+  kdev_statusbar->insertFixedItem(i18n(" INS "), ID_STATUS_INS_OVR, true);
+  kdev_statusbar->insertFixedItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM, true);
+
   kdev_statusbar->changeItem("", ID_STATUS_LN_CLM);
-//  kdev_statusbar->setInsertOrder(KStatusBar::RightToLeft);
-//  kdev_statusbar->setAlignment(ID_STATUS_INS_OVR, AlignCenter);
+  kdev_statusbar->changeItem("", ID_STATUS_DBG);
+
+  kdev_statusbar->setItemAlignment (ID_STATUS_MSG, AlignLeft);
 
   setStatusBar(kdev_statusbar);
   enableStatusBar();
