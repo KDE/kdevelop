@@ -45,9 +45,9 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
   addWidget(_status, 0, true);
     
   _cursorPosition = new QLabel(this);
-  _cursorPosition->setFont(KGlobalSettings::fixedFont());
+  _cursorPosition->setAlignment(AlignCenter);
   // Same string as in setCursorPosition()
-  QString s2 = i18n("Line: %1, Col: %2").arg("xxxx").arg("xxxx");
+  QString s2 = i18n(" Line: %1 Col: %2 ").arg("xxxx").arg("xxxx");
   _cursorPosition->setMinimumWidth(_cursorPosition->fontMetrics().width(s2));
   addWidget(_cursorPosition, 0, true);
   
@@ -122,7 +122,7 @@ void StatusBar::setStatus(const QString &str)
 
 void StatusBar::setCursorPosition(int line, int col)
 {
-  _cursorPosition->setText(QString("Line: %1, Col: %2").arg(line).arg(col));
+  _cursorPosition->setText(QString(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
 
