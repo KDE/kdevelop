@@ -82,10 +82,12 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 
 		pCompletionIface->showCompletionBox ( entryList, 0 );*/
 
-		QValueList <QString> functionList;
-		QString strFunction = "int setCurrentEditor ( KWrite* e )";
+		QStringList functionList;
+		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";
 		functionList.append ( strFunction );
-		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, const char* name )";
+		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
+		functionList.append ( strFunction );
+		strFunction = "int setCurrentEditor ( NEdit* e, const char* name )";
 		functionList.append ( strFunction );
 
 		pCompletionIface->showArgHint ( functionList, "()", "," );

@@ -34,7 +34,7 @@ namespace KEditor {
       CodeCompletionDocumentIface(Document *parent, Editor *editor);
       static CodeCompletionDocumentIface *interface(Document *doc);
 
-      virtual void showArgHint ( QValueList <QString> functionList, QString strWrapping, QString strDelimiter );
+      virtual void showArgHint ( QStringList functionList, QString strWrapping, QString strDelimiter );
       virtual void showCompletionBox(QValueList<CompletionEntry> complList,int offset=0)=0;
 
     signals:
