@@ -1,3 +1,12 @@
+2002-01-18  Walter Tasin <tasin@kdevelop.org>
+    * bugfix: configure didn't recognize the argument given by the dialogbox the first
+      time (only after reloading the project)
+    * bugfix: On project creation neither the configure argument --prefix 
+      nor --enable-kde=no (for qextmdi projects) were not passed, unless 
+      --with-qt-dir was set.
+    * kdevelop compiled for KDE 3RC1/Beta2 creates kde/qt projects for QT 3 and KDE 3RC1/Beta2
+      from wishlist of Ralf ;-)
+
 2002-01-18  F@lk Brettschneider <falk@kdevelop.org>
     * default values for editor changed in setup, tool-view tabs default appearance changed
 
