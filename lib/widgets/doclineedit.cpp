@@ -20,6 +20,22 @@ void DocLineEdit::keyReleaseEvent( QKeyEvent * e )
     {
         emit downPressed();
     }
+    else if (e->key() == Qt::Key_PageUp)
+    {
+        emit pgupPressed();
+    }
+    else if (e->key() == Qt::Key_PageDown)
+    {
+        emit pgdownPressed();
+    }
+    else if (e->key() == Qt::Key_Home)
+    {
+        emit homePressed();
+    }
+    else if (e->key() == Qt::Key_End)
+    {
+        emit endPressed();
+    }
     else
         KLineEdit::keyReleaseEvent(e);
 }

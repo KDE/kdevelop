@@ -24,6 +24,10 @@ public:
 signals:
     void upPressed();
     void downPressed();
+    void pgupPressed();
+    void pgdownPressed();
+    void homePressed();
+    void endPressed();
 
 protected:
     virtual void keyReleaseEvent ( QKeyEvent * e );
