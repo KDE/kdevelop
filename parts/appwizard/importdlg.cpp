@@ -28,6 +28,8 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kcursor.h>
+#include <kfile.h>
+#include <kurlrequester.h>
 
 #include "kdevcore.h"
 #include "kdevversioncontrol.h"
@@ -44,6 +46,8 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
+    urlinput_edit->setCaption(i18n("Choose Directory to Import"));
+    urlinput_edit->setMode(KFile::Directory|KFile::ExistingOnly);
 
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     importNames = dirs->findAllResources("appimports", QString::null, false, true);
@@ -70,7 +74,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    QDir dir(dir_edit->text());
+    QDir dir(urlinput_edit->url());
     if (!dir.exists()) {
         KMessageBox::sorry(this, i18n("You have to choose a directory."));
         return;
@@ -129,14 +133,6 @@ void ImportDialog::accept()
 }
 
 
-void ImportDialog::dirButtonClicked()
-{
-    QString dir = KFileDialog::getExistingDirectory(QString::null, this,
-                                                    i18n("Choose Directory to Import"));
-    dir_edit->setText(dir);
-}
-
-
 // Checks if the directory dir and all of its subdirectories
 // (one level recursion) have files that follow patterns
 // patterns is comma-separated
@@ -170,8 +166,8 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
 
 void ImportDialog::dirChanged()
 {
-    QString dirName = dir_edit->text();
-    QDir dir(dir_edit->text());
+    QString dirName = urlinput_edit->url();
+    QDir dir(dirName);
     if (!dir.exists())
         return;
 
@@ -341,7 +337,7 @@ void ImportDialog::scanAvailableVCS()
 
 void ImportDialog::slotFinishedCheckout( QString destinationDir )
 {
-    dir_edit->setText( destinationDir );
+    urlinput_edit->setURL( destinationDir );
 
     setCursor( KCursor::arrowCursor() );
 //    setEnabled( true );

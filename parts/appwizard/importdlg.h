@@ -29,7 +29,6 @@ public:
 
 protected:
     virtual void accept();
-    virtual void dirButtonClicked();
     virtual void dirChanged();
 
 private slots:

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>512</width>
-            <height>330</height>
+            <width>437</width>
+            <height>280</height>
         </rect>
     </property>
     <property name="caption">
@@ -27,7 +27,7 @@
                 <string>&amp;Directory:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>dir_edit</cstring>
+                <cstring>urlinput_edit</cstring>
             </property>
         </widget>
         <widget class="QComboBox" row="1" column="1">
@@ -56,7 +56,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Fetch Module</string>
+                <string>Fetch &amp;Module</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -64,7 +64,10 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Fetch from:</string>
+                <string>&amp;Fetch from:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>vcsCombo</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -143,7 +146,7 @@
                 <cstring>email_edit</cstring>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="9" column="0" rowspan="1" colspan="4">
+        <widget class="QLayoutWidget" row="9" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout1</cstring>
             </property>
@@ -226,47 +229,6 @@
                 <cstring>project_combo</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>dir_edit</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="0" column="3">
-            <property name="name">
-                <cstring>dir_button</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>30</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>30</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>...</string>
-            </property>
-        </widget>
         <spacer row="7" column="2">
             <property name="name">
                 <cstring>Spacer2</cstring>
@@ -280,11 +242,11 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>40</height>
+                    <height>52</height>
                 </size>
             </property>
         </spacer>
-        <widget class="Line" row="8" column="0" rowspan="1" colspan="4">
+        <widget class="Line" row="8" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>line1</cstring>
             </property>
@@ -296,6 +258,11 @@
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>urlinput_edit</cstring>
             </property>
         </widget>
     </grid>
@@ -313,22 +280,8 @@
         <receiver>import_dialog</receiver>
         <slot>reject()</slot>
     </connection>
-    <connection>
-        <sender>dir_button</sender>
-        <signal>clicked()</signal>
-        <receiver>import_dialog</receiver>
-        <slot>dirButtonClicked()</slot>
-    </connection>
-    <connection>
-        <sender>dir_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>import_dialog</receiver>
-        <slot>dirChanged()</slot>
-    </connection>
 </connections>
 <tabstops>
-    <tabstop>dir_edit</tabstop>
-    <tabstop>dir_button</tabstop>
     <tabstop>vcsCombo</tabstop>
     <tabstop>fetchModuleButton</tabstop>
     <tabstop>name_edit</tabstop>
@@ -347,4 +300,9 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>
