@@ -36,9 +36,6 @@
 
 #define ID_FILE_CLOSE               10060
 
-#define ID_FILE_PRINT_SETUP         10065
-#define ID_FILE_PRINT_A2PS          10066
-#define ID_FILE_PRINT_ENSCRIPT      10067
 
 #define ID_FILE_PRINT               10070
 
@@ -142,6 +139,10 @@
 #define ID_OPTIONS_DOCBROWSER			               16050
 
 #define ID_OPTIONS_KEYS               	  	     16035
+
+#define ID_OPTIONS_PRINT         16036
+#define ID_OPTIONS_PRINT_A2PS          16037
+#define ID_OPTIONS_PRINT_ENSCRIPT      16038
 
 #define ID_OPTIONS_KDEVELOP  			     16040
 

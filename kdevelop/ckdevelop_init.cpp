@@ -302,11 +302,6 @@ void CKDevelop::initMenu(){
 
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
-  // submenu for setting printprograms
-  QPopupMenu* p3 = new QPopupMenu;
-  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_FILE_PRINT_A2PS);
-  p3->insertItem(i18n("&Enscript..."), this,
-		  SLOT(slotOptionsConfigureEnscript()),0,ID_FILE_PRINT_ENSCRIPT);
 
   QPixmap pix;
   file_menu = new QPopupMenu;
@@ -325,7 +320,6 @@ void CKDevelop::initMenu(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
   file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
-  file_menu->insertItem(i18n("Printer Setup"),p3,ID_FILE_PRINT_SETUP);
 
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),IDK_FILE_PRINT,ID_FILE_PRINT);
   file_menu->insertSeparator();
@@ -533,6 +527,11 @@ void CKDevelop::initMenu(){
 
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries
+  // submenu for setting printprograms
+  QPopupMenu* p3 = new QPopupMenu;
+  p3->insertItem(i18n("&A2ps..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_PRINT_A2PS);
+  p3->insertItem(i18n("&Enscript..."), this,
+		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
 
   options_menu = new QPopupMenu;
   options_menu->insertItem(i18n("&Editor..."),this,
@@ -545,18 +544,14 @@ void CKDevelop::initMenu(){
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
-  
-
   options_menu->insertItem(i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
-
-  
-  
-  
+  options_menu->insertSeparator();
   options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
 
-
+  options_menu->insertItem(i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
+  options_menu->insertSeparator();
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
 
@@ -636,9 +631,9 @@ void CKDevelop::initToolbar(){
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
-/*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
-  toolBar()->insertButton(pix,ID_FILE_PRINT,true,i18n("Print"));
-*/
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
+  toolBar()->insertButton(pix,ID_OPTIONS_PRINT,true,i18n("Print"));
+
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,10,separatorLine);
@@ -822,3 +817,5 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
