@@ -1,7 +1,29 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="MdiMainFrmComponent" version="1">
 <MenuBar>
- <Menu name="view">
+ <Menu name="window">
+   <Action name="close_view" />
+   <Action name="close_all_views" />
+   <Action name="iconify_all_views" />
+   <Separator/>
+   <Menu name="placing">
+     <text>&amp;Placing...</text>
+     <Action name="cascade_windows" />
+     <Action name="cascade_maximized" />
+     <Action name="expand_vertical" />
+     <Action name="expand_horizontal" />
+     <Action name="anodines_tile" />
+     <Action name="pragmas_tile" />
+     <Action name="tile_vertically" />
+   </Menu>
+   <Separator/>
+   <Menu name="dock_undock">
+     <text>&amp;Dock/Undock...</text>
+     <Action name="toplevel_mode" />
+     <Action name="childframe_mode" />
+     <Separator/>
+   </Menu>
+   <Separator/>
  </Menu>
 </MenuBar>
 </kpartgui>
