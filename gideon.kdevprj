@@ -186,16 +186,19 @@ type=DATA
 [Config for BinMakefileAm]
 addcxxflags=
 bin_program=gideon
+cflags=
+cppflags=
 cxxflags=\s-O1
 ldadd=
-ldflags=
+ldflags=\s  \s
 libtool_dir=
-path_to_bin_program=.
+path_to_bin_program=./src
 
 [General]
 AMChanged=false
 author=KDevelop Authors
-configure_args=--prefix=/usr/local/kde3 --with-qt=/usr/local/qt --enable-debug
+configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux\s
+dir_where_make_will_be_called=./
 email=kdevelop-devel@kdevelop.org
 kdevprj_version=1.3
 lfv_open_groups=

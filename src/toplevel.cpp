@@ -65,7 +65,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
     (void) new StatusBar(this);
 
     config->setGroup("General Options");
-    setGeometry(config->readRectEntry("Geomentry"));
+    setGeometry(config->readRectEntry("Geometry"));
     vertSplitter->setSizes(config->readIntListEntry("Vertical Splitter"));
     horzSplitter->setSizes(config->readIntListEntry("Horizontal Splitter"));
     closing = false;

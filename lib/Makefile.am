@@ -16,5 +16,3 @@ libkdevelop_la_SOURCES = dummy.cpp
 
 
 SUBDIRS = interfaces sourceinfo util structure $(QT3STUFFSUBDIR)
-
-

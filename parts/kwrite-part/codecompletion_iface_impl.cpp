@@ -40,7 +40,8 @@ CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document
   m_completionPopup->installEventFilter( this );
   m_completionPopup->setFocusProxy( m_completionListBox );
 
-  QFont font = m_edit->doc()->getTextFont(0,0);
+  KWriteDoc* doc=dynamic_cast<KWriteDoc*>(m_edit->document());
+  QFont font = doc->getTextFont(0,0);
   m_completionListBox->setFont(QFont(font.family(),font.pointSize()));
 
   m_pArgHint = new KDevArgHint ( m_edit );

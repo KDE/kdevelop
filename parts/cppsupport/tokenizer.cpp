@@ -852,7 +852,7 @@ YY_MALLOC_DECL
 YY_DECL
 	{
 	register yy_state_type yy_current_state;
-	register char *yy_cp, *yy_bp;
+	register char *yy_cp = NULL, *yy_bp = NULL;
 	register int yy_act;
 
 #line 67 "./tokenizer.l"
@@ -1954,7 +1954,7 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
-#include<unistd.h>
+extern "C" int isatty YY_PROTO(( int ));
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{

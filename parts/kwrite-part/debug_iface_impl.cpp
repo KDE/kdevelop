@@ -19,21 +19,24 @@ DebugIfaceImpl::DebugIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor:
 
 bool DebugIfaceImpl::markExecutionPoint(int line)
 {
-  m_edit->doc()->setExecutionPoint(line);
+  KWriteDoc* doc=dynamic_cast<KWriteDoc*>(m_edit->document());
+  doc->setExecutionPoint(line);
   return true;
 }
 
 
 bool DebugIfaceImpl::setBreakPoint(int line, bool enabled, bool pending)
 {
-  m_edit->doc()->setBreakpoint(line, 0, enabled, pending);
+  KWriteDoc* doc=dynamic_cast<KWriteDoc*>(m_edit->document());
+  doc->setBreakpoint(line, 0, enabled, pending);
   return true;
 }
 
 
 bool DebugIfaceImpl::unsetBreakPoint(int line)
 {
-  m_edit->doc()->setBreakpoint(line, -1, false, false);
+  KWriteDoc* doc=dynamic_cast<KWriteDoc*>(m_edit->document());
+  doc->setBreakpoint(line, -1, false, false);
   return true;
 }
 

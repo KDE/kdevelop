@@ -1615,6 +1615,15 @@ KWrite::~KWrite() {
   delete printer;
 }
 
+void KWrite::setInternalContextMenuEnabled(bool )
+{
+}
+
+bool KWrite::internalContextMenuEnabled() const
+{
+  return false;
+}
+
 void KWrite::setupActions()
 {
     fileRecent = KStdAction::openRecent(this, SLOT(slotOpenRecent(const KURL&)),
@@ -2009,7 +2018,7 @@ bool KWrite::isLastView() {
   return kWriteDoc->isLastView(1);
 }
 
-KWriteDoc *KWrite::doc() {
+KTextEditor::Document* KWrite::document() const {
   return kWriteDoc;
 }
 
@@ -3617,9 +3626,9 @@ void KWrite::slotFileStatusChanged()
 
     setEndOfLine->setCurrentItem(eol);
 
-    if ( !doc()->url().isEmpty() )
+    if ( !document()->url().isEmpty() )
         //set recent files popup menu
-        fileRecent->addURL(doc()->url());
+        fileRecent->addURL(document()->url());
 
 }
 void KWrite::slotNewUndo()
@@ -3883,7 +3892,8 @@ void KWIconBorder::paintLine(int i)
 {
     QPainter p(this);
 
-    int fontHeight = kWrite->doc()->fontHeight;
+    KWriteDoc* doc = dynamic_cast<KWriteDoc*>(kWrite->document());
+    int fontHeight = doc->fontHeight;
     int y = i*fontHeight - kWriteView->yPos;
     p.fillRect(0, y, iconBorderWidth-2, fontHeight, colorGroup().background());
     p.setPen(white);
@@ -3891,7 +3901,7 @@ void KWIconBorder::paintLine(int i)
     p.setPen(QColor(colorGroup().background()).dark());
     p.drawLine(iconBorderWidth-1, y, iconBorderWidth-1, y + fontHeight);
 
-    TextLine *line = kWrite->doc()->getTextLine(i);
+    TextLine *line = doc->getTextLine(i);
     if (!line)
         return;
 
@@ -3917,7 +3927,7 @@ void KWIconBorder::paintEvent(QPaintEvent* e)
 
     QRect updateR = e->rect();
 
-    KWriteDoc *doc = kWrite->doc();
+    KWriteDoc *doc = dynamic_cast<KWriteDoc*>(kWrite->document());
     int h = doc->fontHeight;
     int yPos = kWriteView->yPos;
     if (h) {
@@ -3934,7 +3944,7 @@ void KWIconBorder::mousePressEvent(QMouseEvent* e)
 {
     kWriteView->placeCursor( 0, e->y(), 0 );
 
-    KWriteDoc *doc = kWrite->doc();
+    KWriteDoc *doc = dynamic_cast<KWriteDoc*>(kWrite->document());
     int cursorOnLine = (e->y() + kWriteView->yPos) / doc->fontHeight;
     TextLine *line = doc->getTextLine(cursorOnLine);
 

@@ -384,7 +384,10 @@ KEditor::Editor *Core::editor()
   // is found at all!
   if (!_editor){
     KMessageBox::sorry(win, i18n("Can't find a Editor plugin :-(."));
-    exit(0);
+    // if you cant load the preferred editor, one could still choose
+    // a different editor, so ending here is not such a great idea after
+    // all (rokrau 12/19/01)
+    //exit(0);
   }
 
   // merge the GUI with ours

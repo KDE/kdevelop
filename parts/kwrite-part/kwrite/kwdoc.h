@@ -189,6 +189,8 @@ class KWriteDoc : public KTextEditor::Document {
 
 // view interaction
   public:
+    QPtrList<KTextEditor::View> views() const ;
+
     virtual void addView(KTextEditor::View *);
     virtual void removeView(KTextEditor::View *);
     bool ownedView(KWrite *);
@@ -360,7 +362,7 @@ protected:
     int fontHeight;
     int fontAscent;
 
-    QList<KWrite> views;
+    QPtrList<KTextEditor::View> viewList;
     bool newDocGeometry;
 
     TextLine::Ptr longestLine;

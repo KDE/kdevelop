@@ -304,6 +304,14 @@ class KWrite : public KTextEditor::View {
     */
     ~KWrite();
 
+    /**
+      These two functions are not really implemented. They are provided to
+      complete the KTextEditor implementation
+      (rokrau 12/20/01)
+    */
+    void setInternalContextMenuEnabled(bool enable);
+    bool internalContextMenuEnabled() const;
+
     virtual void setCursorPosition( int line, int col, bool mark = false );
     virtual void getCursorPosition( int *line, int *col );
 
@@ -371,7 +379,7 @@ class KWrite : public KTextEditor::View {
     /**
       Returns the document object
     */
-    KWriteDoc *doc();
+    KTextEditor::Document* document() const ;
 
     /*
       Bit 0 : undo possible, Bit 1 : redo possible.
