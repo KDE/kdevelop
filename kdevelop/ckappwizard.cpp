@@ -744,7 +744,7 @@ void CKAppWizard::initPages(){
 				
   /************************************************************/
   
-  // create the thirth page
+  // create the forth page
   page2 = new KWizardPage;
   widget2 = new QWidget(this);
   page2->w = widget2;
@@ -817,7 +817,7 @@ void CKAppWizard::initPages(){
 
   /************************************************************/
   
-  // create the fourth page
+  // create the fifth page
   page3 = new KWizardPage;
   widget3 = new QWidget(this);
   page3->w = widget3;
@@ -889,7 +889,7 @@ void CKAppWizard::initPages(){
 
   /************************************************************/
   
-  // create the fifth page
+  // create the sixth page
   page4 = new KWizardPage;
   widget4 = new QWidget(this);
   page4->w = widget4;
@@ -1460,7 +1460,7 @@ void CKAppWizard::slotApplicationClicked() {
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
-      setPage(3, i18n("Headertemplate for .c-files"));
+      setPage(4, i18n("Headertemplate for .c-files"));
       cppheader->setText( i18n("headertemplate for .c-files") );
     }
     apidoc->setEnabled(false);
@@ -1585,9 +1585,9 @@ void CKAppWizard::slotApplicationClicked() {
 void CKAppWizard::slotDefaultClicked(int page) {
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
 
-    setPage(3, i18n("Headertemplate for .cpp-files"));
-    if (page==3)
-     gotoPage(3);
+    setPage(4, i18n("Headertemplate for .cpp-files"));
+    if (page==4)
+     gotoPage(4);
     cppheader->setText( i18n("headertemplate for .cpp-files") );
 
   widget1b->setBackgroundPixmap(pm);
