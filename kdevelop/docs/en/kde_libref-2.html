@@ -92,6 +92,8 @@ inherited by <CODE>KTMainWindow</CODE>)</LI>
 <LI>internationalization by the locale object</LI>
 <LI>changing of the visible application objects by signals</LI>
 </UL>
+<BLOCKQUOTE>KDE 2 accesses the according instances by static methods provided by <CODE>KGlobal</CODE>.</BLOCKQUOTE>
+<P>
 <P><B>Dependencies:</B> -lkdecore -lqt
 <P><B>Includes:</B> <CODE>#include &lt;kapp.h&gt;</CODE>
 <P>The <CODE>kdeui</CODE> library additionally offers two classes that inherit <CODE>KApplication</CODE> for specialized purposes:
@@ -165,7 +167,6 @@ offers a set of functionality such as <CODE>KTMainWindow</CODE>
 <P>The KDE libraries offer a set of ready to use views which can be inherited to advance the desired functionality:
 <UL>
 <LI>KTabListBox: offers a multi-column list box where the user can change the rows with drag'n drop.</LI>
-<LI>KTreeList: inherited from QTableView, offering a collapsible tree. This could be used instead of QListView.</LI>
 <LI>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.</LI>
 <LI>KNewPanner: manages two child widgets like QSplitter.</LI>
 <LI>KHTMLView: a HTML-interpreting widget (khtmlw)</LI>
@@ -205,6 +206,7 @@ dialog either directly coded with geometry management or by creating it visually
 <LI>QPrintDialog</LI>
 <LI>QProgressDialog</LI>
 </UL>
+<BLOCKQUOTE>Qt 2.0 introduces a QColorDialog for selecting colors and a QFontDialog for font-selection as well </BLOCKQUOTE>
 <P>
 <H3><A NAME="ss2.4">2.4 Control Elements</A>
 </H3>
@@ -227,7 +229,6 @@ control elements that the Qt library provides, KDE offers:
 <LI>KSeparator: standard separator</LI>
 <LI>KSlider: slider widget</LI>
 <LI>KTabCtl: tabulator widget</LI>
-<LI>KTreeList: tree list widget</LI>
 </UL>
 <P>
 <H3><A NAME="ss2.5">2.5 General Purpose Classes</A>

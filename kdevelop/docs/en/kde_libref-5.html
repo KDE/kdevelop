@@ -92,17 +92,84 @@ character.
 </H3>
 
 <P>
-<P>Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
-provides. The KDE libraries are again offering another class to use with KDE applications, <CODE>KToolBar</CODE>; when using <CODE>KTMainWindow</CODE>
-these are created like the menu bar by the first call of <CODE>toolBar()</CODE>. As you can use as many toolbars as your application requires,
-you can create them with the number in the <CODE>toolBar()</CODE> method; if the method's parameter is empty, the first toolbar number is 0.
+<P>Toolbars are another component that enhance user interaction with symbols representing most needed functions that an application
+provides. The KDE libraries are again offering another class to use with KDE applications, <CODE>KToolBar</CODE>. As <CODE>KTMainWindow</CODE> already
+handles the geometry management for all user interface elements, it also provides methods to add toolbars. Now, the good thing is that
+you can use as many toolbars as your application may require and the creation is done easily with <CODE>toolBar()</CODE>. This method also
+takes a parameter which is the according toolbarnumber. The first toolbar has by default number 0, so the parameter can be left out
+there; the next has to be called with <CODE>toolBar(1)</CODE> etc. You can also make this more variable with a define for your toolbar and use
+a descriptive name; this avoids changing the toolbarnumber everywhere when you decide to set a toolbar to another position.
+<P>Now, when using a toolbar, you have many choices. The class <CODE>KToolBar</CODE> provides a whole set of methods to insert user elements such
+as buttons, which is probably the most recently used method, delayed popups, lineedits, combos and generally a widget of your choice.
+Further you need to know that toolbars are created with using the full width of the parent window - but that is configurable. All
+following toolbars are then appended to the end of the last toolbar. Also you can set the toolbar to show at a certain position. This
+is often used by applications that offer painting facilities. The following example shows you how to use a toolbar with
+<CODE>KTMainWindow</CODE>:
+<P>
+<P>1   // first call of toolBar() - creates the toolbar 0.
+2   toolBar()->insertButton(Icon("new.xpm"), ID_FILE_NEW, true, i18n("New File"));
+<P>3   QPopupMenu* select_menu = new QPopupMenu();
+4   toolBar()->insertButton(Icon("select.xpm"), ID_OPTIONS_SELECT, select_menu, true, i18n("Select Option"));
+<P>5   connect(toolBar(), SIGNAL(clicked( int )), SLOT( slotSelected( int )) );
+<P>
+<P>6   Foo::slotSelected( int id ){
+<P>7     switch (id ){
+<P>8       case ID_FILE_NEW:
+9         slotFileNew();
+10        break;
+11    }
+12  }
+
+The above explains some specialities for toolbars - we will discuss these now in detail. First of all, you see that we used the
+<CODE>toolBar()</CODE> method. This returns a pointer to the according toolbar and creates one if the toolbar doesn't exist. We use the
+<CODE>insertButton()</CODE> method to add a toolbar button representing the standard "New File" action. Now, when looking at the
+class-documentation of <CODE>KToolBar</CODE>, you see that there is a <CODE>QPixmap</CODE> required as the first parameter. Here, we only set the name
+of the pixmap embraced by the <CODE>Icon()</CODE> method. This is a macro which makes inserting icons very easy, provided by <CODE>kapp.h</CODE>. In
+fact, it makes the application's <CODE>KIconLoader</CODE> instance load the icon with the filename <CODE>new.xpm</CODE> for you using a list of
+standard directories within the KDE File System. Additionally, the icon <CODE>new.xpm</CODE> is already provided - you don't have to paint it
+yourself. The KDE libraries come with a whole set of toolbar icons that are ready to use for insertion. This is also the reason why,
+when testing an application, sometimes a button looks a bit scrambled although you have painted the pixmap - it just can't be found if
+it isn't installed at the correct location within the KDE FSSTD; whereas standard icons are already present.
+<P>The exact execution of the <CODE>Icon()</CODE> macro is therefore:
+<BLOCKQUOTE><CODE>
+<PRE>
+KApplication::getKApplication()->getIconLoader()->loadIcon("new.xpm")
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>which implicitely uses the <CODE>kapp</CODE> macro to get the application object. You see that using this macro saves lots of code but offers a
+very nice way to load an icon for a toolbar button.
+<P>The second parameter, the ID of the button, is a macro that our application specifies itself to name certain actions logically by a
+#define. Obviously, you could think that using another method of <CODE>KToolBar</CODE> would do the same when directly specifying the receiver
+object and the slot to call, but this way you save a lot of code. The first place is that you only have to write one <CODE>connect()</CODE>
+(line 5) to connect all toolbar elements. The other is, that by this way you can use the same ID for your toolbar items as well as for
+your menubar items. The following code completes this example with the according menubar action:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QPopupMenu* file_menu = new QPopupMenu();
+file_menu->insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),0,ID_FILE_NEW);
+
+connect(file_menu, SIGNAL(activated(int)), SLOT(slotSelected(int)));
+
+menuBar()->insertItem(file_menu, i18n(""));
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>By this, the <CODE>file_menu</CODE> is already connected to the <CODE>slotSelected()</CODE> method and the corresponding entry "New File" executes the
+same action. Just collect all your ID's as #defines into one file and you can keep a good overview over the used numbers (which
+naturally have to be integer values).
+<P>The next example in line 3 and 4 add a button that opens a popup menu when the user presses the button. This can be used if the button
+itself does not perform any action but represents a better access method for e.g. a list of entries. Just create your popup menu and
+insert it with the according ID and pointer as a button.
+<P>Besides the example you can do a lot of other things like making a button a toggle button. This is useful if the button executes an
+on/off action (which in the corresponding menubar popup is represented by a checkmark). See the complete reference of <CODE>KToolBar</CODE> for
+more information.
 <P>
 <H3><A NAME="ss5.3">5.3 The Statusbar</A>
 </H3>
 
-<P>KDE also provides the pendant to Qt's <CODE>QStatusBar</CODE>, <CODE>KStatusBar</CODE>. The statusbar can contain labels as well as widgets, such as
-progress bars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
-application and gives hints about the usage of commands e.g. over toolbars and menubars.
+<P>KDE also provides the pendant to Qt's <CODE>QStatusBar</CODE>, <CODE>KStatusBar</CODE>. The statusbar can contain labels
+as well as widgets, such as progress bars (those have to have the statusbar as parent). The statusbar is used to display information
+about the current state of the application and gives hints about the usage of commands e.g. over toolbars and menubars.
 <P>
 <H3><A NAME="Keyboard Accelerators"></A> <A NAME="ss5.4">5.4 Keyboard Accelerators</A>
 </H3>
@@ -131,9 +198,7 @@ KRestrictedLine: lineedit that only accepts certain input
 KSelector: value selector
 KSeparator: standard separator
 KSlider: slider widget
-KSpinBox: like QSpinBox
 KTabCtl: tabulator widget
-KTreeList: tree list widget
 <P>
 <P ALIGN="RIGHT">
 

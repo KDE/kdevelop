@@ -15,6 +15,8 @@ Public License; see <ref id="Copyright" name="Copyright"> for more information.
 
 <chapt>Introduction
 <p>
+<sect>What KDE provides
+<p>
 As the K Desktop Environment offers an easy way for application designers to offer their products with an intuitive way of user
 interaction, it provides all means to solve common tasks by a set of library classes that extend the facilities of the Qt toolkit.
 This also allows a unique look to applications as well as interaction with other programs and the window manager. This handbook
@@ -57,15 +59,39 @@ widgets that are ready to use and are already known to the user by the KDE deskt
 These should be used wherever a user setting is required as it simplifies the programmer's work, extends the application's facilities
 dramatically and provide a common look.
 
-The Qt library is addressed in this handbook as far as it offers solutions not provided by KDE.
+The Qt library is addressed in this handbook as far as it offers solutions not provided by KDE, but as information about event handling
+and the signal/slot mechanism is hard to find for developers, this turned out to be a special chapter in this handbook.
+
+<sect>Notes about KDE 2 / Qt 2.0
+<p>
+As you may have guessed, this handbook <bf/explicitely/ adresses <bf/KDE 1.x/ development using the <bf/Qt 1.4x/ libraries. You may
+ask "Hey, Qt's 2.0 version is released already, why not talk only about that ?" - but there are several issues that result in a need
+for a KDE 1.x reference.
+
+The issues that lead to this are first of all that developers should consider the KDE 1.x series the stable desktop and development
+environment. As long as KDE 2 (which introduces Qt 2.0 as well) is under development, programmers will have a hard time to follow the
+changes, which means a high time-consuming search for information and, if you experience bugs, error searching. There are projects
+covered by the KDE core team that ensure the KDE 2 libraries will work - the KDE itself as well as the supplying applications and the
+KOffice suite. Nevertheless, developers who are starting or developing projects for KDE now have the choice and those that want to rely
+on the stable environment will also want to port their applications to KDE 2 to make it usable on one hand and to implement
+improvements that are introduced by new library functions. Therefore information about where KDE and Qt differ from the 1.x series in
+future releases have been included as footnotes as far as changes are known to the author at the time of this writing and doesn't
+claim to be in any way complete. Explanations of classes that are still in the KDE 1.x API but are already removed in the current KDE 2
+API are left out to avoid any trouble when porting to KDE 2.
+
+In further versions of this handbook KDE 2 development will be addressed completely and the according chapters revisited for the
+changes this implies.
+
 
 <sect>About this Handbook
 <p>
-This handbook has been written in order to give developers a guideline to the usage of the KDE libraries in general in conjunction with
-the Qt library on X11 desktop systems. It cannot replace any programming knowledge that is needed for C++ programming and covers the Qt
-classes where necessary. You should in any case look at the page "Structure Overview" of the Qt online reference which contains a
-general guidance to the Qt library by class usage in general. This handbook tries to follow this structure to complete your knowledge
-about where KDE classes are appropriate and explains the technique of KDE application development by describing class usage on topics.
+This handbook has been written in order to give developers a guideline to the usage of the KDE 1.x libraries in general in conjunction
+with the Qt 1.4x library on X11 desktop systems. It cannot replace any programming knowledge that is needed for C++ programming and
+covers the Qt classes where necessary. You should in any case look at the page "Structure Overview" of the Qt online reference which
+contains a general guidance to the Qt library by class usage in general. This handbook tries to follow this structure to complete your
+knowledge about where KDE classes are appropriate and explains the technique of KDE application development by describing class usage
+on topics.
+
 
 <chapt>Class Categories
 <p>
@@ -137,6 +163,8 @@ The <tt/KApplication/ object provides:
 <item>internationalization by the locale object
 <item>changing of the visible application objects by signals
 </itemize>
+<footnote>KDE 2 accesses the according instances by static methods provided by <tt/KGlobal/.</footnote>
+
 
 <bf/Dependencies:/ -lkdecore -lqt
 
@@ -226,7 +254,6 @@ offers a set of functionality such as <tt/KTMainWindow/
 The KDE libraries offer a set of ready to use views which can be inherited to advance the desired functionality:
 <itemize>
 <item>KTabListBox: offers a multi-column list box where the user can change the rows with drag'n drop.
-<item>KTreeList: inherited from QTableView, offering a collapsible tree. This could be used instead of QListView.
 <item>KEdit: the base classes for the KEdit application offered with KDE. This could be used instead of QMultiLineEdit.
 <item>KNewPanner: manages two child widgets like QSplitter.
 <item>KHTMLView: a HTML-interpreting widget (khtmlw)
@@ -271,6 +298,7 @@ Additionally, the Qt library offers:
 <item>QPrintDialog
 <item>QProgressDialog
 </itemize>
+<footnote>Qt 2.0 introduces a QColorDialog for selecting colors and a QFontDialog for font-selection as well </footnote>
 
 <sect>Control Elements
 <p>
@@ -292,7 +320,6 @@ control elements that the Qt library provides, KDE offers:
 <item>KSeparator: standard separator
 <item>KSlider: slider widget
 <item>KTabCtl: tabulator widget
-<item>KTreeList: tree list widget
 </itemize>
 
 <sect>General Purpose Classes
@@ -395,7 +422,7 @@ collected in the KDE Control Center) such as keyboard accelerator configuration 
 Corresponding to the Qt class, the <tt/KApplication/ class provides a static function to access the application object within the
 application, <tt/KApplication::getKApplication()/. This solves the problem to pass the pointer to the application object. Further, the
 include file <tt/kapp.h/ provides a macro that can be used instead of the static function, <tt/kapp/. Whenever you need to access the
-application object, use this macro.
+application object, use this macro.<footnote>In KDE 2, the application object can be retrieved with <tt/KGlobal::kApp()/.</footnote>
 
 The <tt/KApplication/ object itself provides a set of instances that are commonly used in KDE applications and lets the programmer
 access them by functions. You will make extensive use of them as they avoid creating own instances. The following objects are
@@ -403,19 +430,22 @@ provided by their purpose:
 
 <descrip>
 <tag/<bf/KConfig// a configuration object that is used to read and store configuration settings in a resource file. Use the
-according methods of <tt/KConfigBase/ to read and write values. The configuration object is retrieved by <tt/kapp->getConfig()/, the
-session managment configuration by <tt/kapp->getSessionConfig()/
+according methods of <tt/KConfigBase/ to read and write values. The configuration object is retrieved by
+<tt/kapp->getConfig()/<footnote>For KDE 2 use <tt/KGlobal::config()/ to retrieve the config object</footnote>, the session managment
+configuration by <tt/kapp->getSessionConfig()/
 <p>
 <tag/<bf/KIconLoader// an object that loads icons into <tt/QPixmap/s by using the KDE File System. This takes away the need to
 search for any pixmap on the file system completely as only the filename has to be entered. Use the macro <tt/Icon("icon.xpm")/ to load
-an icon easily. The iconloader instance can be addressed by <tt/kapp->getIconLoader()/
+an icon easily. The iconloader instance can be addressed by <tt/kapp->getIconLoader()/<footnote>KDE 2 uses <tt/KGlobal::iconLoader()/
+to access the icon loader instance</footnote>
 <p>
 <tag/<bf/KLocale// an object that returns the actual localization settings. This makes applications appear in the language on the
 desktop chosen by the user globally. Use the macro <tt/klocale/ to access the application locale object. The klocale instance can be
-addressed by using <tt/kapp->getLocale()/ (as the macro klocale does already)
+addressed by using <tt/kapp->getLocale()/ (as the macro klocale does already)<footnote>Again, KDE 2 changes this with a static method
+of <tt/KGlobal::locale()/.</footnote>
 <p>
 <tag/<bf/KCharsets// the charset object currently set globally by the user. This translates key events to the correctly set
-charset. Retrieve the charsets instance with <tt/kapp->getCharsets()/.
+charset. Retrieve the charsets instance with <tt/kapp->getCharsets()/.<footnote>Replaced by <tt/KGlobal::charsets()/ in KDE2.</footnote>
 </descrip>
 <p>
 
@@ -428,8 +458,10 @@ To use the clipboard, the according <tt/QApplication/ class already provides a c
 can be used to exchange text and image data between applications (see <tt/QClipboard/).
 
 Internationalization is another keyword for KDE applications. This is supported by the <tt/KLocale/ object already mentioned above and
-is always used with the macro <tt/i18n()/ of <tt/kapp.h/. It just shortens the call of the KApplication pointer to the KLocale pointer
-and is read by gettext to extract all macro-embraced strings into an application message file that then can be translated.
+is always used with the macro <tt/i18n()/ of <tt/kapp.h/.
+
+It just shortens the call of the KApplication pointer to the KLocale pointer and is read by gettext to extract all macro-embraced
+strings into an application message file that then can be translated.
 
 At least, the <tt/KApplication/ already constructs a help menu that can be inserted into a menu bar the application may contain with a
 predefined (can be turned on/off) KDE hint dialog and your application's about dialog.
@@ -512,7 +544,8 @@ Now, when it comes to your own processing of commandlines, you can either access
 to exclude any of the above values in the <tt/main()/ function. Within the application itself (e.g. the mainwindow class),
 <tt/QApplication/ provides the methods <tt/argc()/ and <tt/argv()/ to process any other options given at the commandline. These can be
 accessed by the argument number, whereby the argument <tt/kapp->argv()[0]/ is the application name; any other following arguments can
-be processed with <tt/kapp->argv()[number]/.
+be processed with <tt/kapp->argv()[number]/.<footnote>KDE 2 has an additional class, <tt/KStartParams/, to parse additional
+command-line parameters.</footnote>
 
 <comment>The <tt/KApplication/ class uses different methods to change the application's style, fonts and colors by X11 Atoms which
 call all open KDE applications to change their values recursively throughout all widgets. This is done automatically when the user
@@ -806,8 +839,8 @@ depending on the access rights e.g. a private slot cannot be called by an instan
 instances of the same class can connect signals to this slot).
 
 Another restriction is the return type. As slots are most often called by signals, where should they deliver any return values ?
-Therefore, your slots will always have <tt/void/ as return type.
-
+Therefore, your slots will always have <tt/void/ as return type.<footnote>For all restrictions of implementing slots in classes, see
+the Qt online reference documentation, section <em/The Meta Object Compiler/.</footnote>
 
 <sect1>Connections
 <p>
@@ -944,9 +977,11 @@ the declarations as virtual protected to ensure reusability and consistency for 
 <p>
 The events sent to the application are, as described, converted by <tt/QEvent/ to Qt events. The event type can be found out by using
 the <tt/type()/ method of <tt/QEvent/, which can then be compared with the event that you want to know about. Now, the event type that
-<tt/type()/ delivers is an integer number; those are declared with #define in the file <tt/qevent.h/. After filtering events for the
-specialized event class, more information can be found out by explicit conversion to the event class to retrieve exact data about the
-event.
+<tt/type()/ delivers is an integer number; those are declared with #define in the file <tt/qevent.h/.<footnote>Qt 2.0 uses an <tt/enum/
+for all available event-types whose entries are similar to the current defines but generally leave out the <tt/Event_/ prefix. The
+event type can be retrieved as described above, so you only have to change the comparison of the event type.</footnote>After filtering
+events for the specialized event class, more information can be found out by explicit conversion to the event class to retrieve exact
+data about the event.
 
 <bf/Example:/
 <code>
@@ -977,7 +1012,6 @@ contains:
 <item><ref id="Mouse Events" name="Mouse Events">
 <item><ref id="Keyboard Events" name="Keyboard Events">
 <item><ref id="Drag'n Drop Events" name="Drag'n Drop Events">
-<item><ref id="Other Events" name="Other Events">
 </itemize>
 
 This will allow you to logically have a look at what might be interesting to reimplement or use before having to browse the Qt online
@@ -1046,7 +1080,9 @@ an event filter. Child events are inserting a child widget or removing it
 	<item>Event_LayoutHint
 	</itemize>
 </itemize>
-
+<footnote>Qt 2.0 includes another event class <tt/QWheelEvent/ to handle events that occur by wheel-mice. The <tt/QWidget/ class also
+provides an already existing event handler for this, <tt/wheelEvent(QWheelEvent*)/. Also all drag'n drop events have their
+event-handlers already in <tt/QWidget/, see the notes for drag'n drop</footnote>
 
 <sect2>Focus Events<label id="Focus Events">
 <p>
@@ -1187,7 +1223,8 @@ generating the <tt/QMouseEvent/ in <tt/QWidget::event()/:
 
 An example for reimplementing an enter and leave event is <tt/QToolButton/. The buttons in the toolbar have a automatic raising
 behavior in windows style, therefore the widget uses an enter event to raise the button in 3D and lowers it when the mouse leaves the
-widget area.
+widget area.<footnote>Wheel mice are offering an additional functionality for scrolling by the wheel. Qt 2.0 offers solutions for
+handling wheel events in a separate event class <tt/QWheelEvent/, therefore these are not handled as mouse-events.</footnote>
 
 <sect2>Keyboard Events<label id="Keyboard Events">
 <p>
@@ -1227,9 +1264,10 @@ can be found out with <tt/state()/, which returns the modifiers OR'ed together.
 
 <bf/Key Values/
 
-The key values for all keyboard keys are defined in the include file <tt/qkeycode.h/. The key that produced the event can be retrieved
-with <tt/key()/ and then compared to the defined keycode. The ASCII value can be found with <tt/ascii()/. Mind that the symbolic
-constants for key values are platform independent and allow the best usage as they are simple to remind.
+The key values for all keyboard keys are defined in the include file <tt/qkeycode.h/.<footnote>Qt 2.0 has all keycodes coded into
+namespaces of the class <tt/Qt/ located in <tt/qnamespace.h/, <tt/enum keys/.</footnote> The key that produced the event can be
+retrieved with <tt/key()/ and then compared to the defined keycode. The ASCII value can be found with <tt/ascii()/. Mind that the
+symbolic constants for key values are platform independent and allow the best usage as they are simple to remind.
 
 <sect3>Keyboard Accelerator Questions
 <p>
@@ -1278,14 +1316,16 @@ document and move the dragged object away from the current area. The area the dr
 application. After releasing the mouse button over there, he expects the data dragged to be dropped into the drop area. Therefore the
 drop area is also called a <tt/drop site/ or a <tt/drop sink/. The window system provides a protocol for this, the XDND protocol, which
 causes the emission of the according events. The application windows can support these events by providing methods to drag object out
-of the window and methods to accept a drop event. Qt implements this by a class <tt/QDropSite/. The widget that wants to use drag'n
-drop has to inherit this class additionally to the base widget class. Then, the <tt/QDropSite/ offers additional event handlers that
-convert the <tt/QEvent/ types for drag'n drop to one of the according specialized event classes.
+of the window and methods to accept a drop event. Qt implements this by a class <tt/QDropSite/.<footnote>Qt 2.0 makes this a lot
+easier. <tt/QWidget/ already contains all event handlers that are mentionend here for the class <tt/QDropSite/, therefore you only have
+to remove the inheritance from <tt/QDropSite/ of your drag'n drop enabled widget and add a call to <tt/setAcceptDrops(TRUE)/ in the
+widget's constructor.</footnote> The widget that wants to use drag'n drop has to inherit this class additionally to the base widget
+class. Then, the <tt/QDropSite/ offers additional event handlers that convert the <tt/QEvent/ types for drag'n drop to one of the
+according specialized event classes. The programmer also has to take care in his re-implementation of the mouse event handlers by which
+mouse button holding a drag can occur. Also, Qt currently provides two types of data to decode, text and images, which should be the
+most common usage. The following chart contains the window system events, the event classes handling these events and the event
+handlers of <tt/QDropSite/:
 
-The programmer also has to take care in his re-implementation of the mouse event handlers by which mouse button holding a drag can
-occur. Also, Qt currently provides two types of data to decode, text and images, which should be the most common usage.
-
-The following chart contains the window system events, the event classes handling these events and the event handlers of QDropSite:
 <itemize>
 <item>Event_DragEnter
 	<itemize>
@@ -1313,12 +1353,11 @@ The event handlers are all implemented as public and reimplementations should pr
 <bf/Note:/ the system event <tt/Event_DragResponse/ is automatically handled by the application object internally through the
 Qt implementation. It causes a <tt/QDragResponseEvent/ that accepts/rejects the drag action.
 
-<comment>KDE also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has been
-left out because this will be removed in KDE 2 and only the Qt implementation is going to be used with an extended implementation of
-the XDND protocol.</comment>
+<comment>KDE 1.x also contains another implementation of Drag'n Drop functionality. The description of using KDE 1.x Drag'n Drop has
+been left out because this will be removed in KDE 2 and only the Qt 2.0 implementation is going to be used with an extended
+implementation of the XDND protocol. You should use the Qt drag'n drop functionality as this can be ported easily to Qt 2.0
+and KDE 2 without any major problems.</comment>
 
-<sect2>Other Events<label id="Other Events">
-<p>
 
 
 <sect>QWidget Virtual Methods
@@ -1492,7 +1531,8 @@ Now, to come to the actual implementation of a synthetic event, you have to know
 constructor parameters for the event classes. The following list contains the constructors including the event-classes hierarchy:
 
 <descrip>
-<tag/QEvent(int type)/ <tt/type/ is one of the events declared in <tt/qevent.h/
+<tag/QEvent(int type)/ <tt/type/ is one of the events declared in <tt/qevent.h/<footnote>Qt 2.0 uses all events from an <tt/enum/
+instead of the #defines. See <tt/QEvent/. The types are almost the same except they leave out the <tt/Event_/ prefix.</footnote>
 
 <tag/QCloseEvent()/ takes no parameter. Mind that the accept flag is set to false
 
@@ -1679,16 +1719,93 @@ character.
 <sect>The Toolbar
 <p>
 
-Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
-provides. The KDE libraries are again offering another class to use with KDE applications, <tt/KToolBar/; when using <tt/KTMainWindow/
-these are created like the menu bar by the first call of <tt/toolBar()/. As you can use as many toolbars as your application requires,
-you can create them with the number in the <tt/toolBar()/ method; if the method's parameter is empty, the first toolbar number is 0.
+Toolbars are another component that enhance user interaction with symbols representing most needed functions that an application
+provides. The KDE libraries are again offering another class to use with KDE applications, <tt/KToolBar/. As <tt/KTMainWindow/ already
+handles the geometry management for all user interface elements, it also provides methods to add toolbars. Now, the good thing is that
+you can use as many toolbars as your application may require and the creation is done easily with <tt/toolBar()/. This method also
+takes a parameter which is the according toolbarnumber. The first toolbar has by default number 0, so the parameter can be left out
+there; the next has to be called with <tt/toolBar(1)/ etc. You can also make this more variable with a define for your toolbar and use
+a descriptive name; this avoids changing the toolbarnumber everywhere when you decide to set a toolbar to another position.
+
+Now, when using a toolbar, you have many choices. The class <tt/KToolBar/ provides a whole set of methods to insert user elements such
+as buttons, which is probably the most recently used method, delayed popups, lineedits, combos and generally a widget of your choice.
+Further you need to know that toolbars are created with using the full width of the parent window - but that is configurable. All
+following toolbars are then appended to the end of the last toolbar. Also you can set the toolbar to show at a certain position. This
+is often used by applications that offer painting facilities. The following example shows you how to use a toolbar with
+<tt/KTMainWindow/:
+
+</code>
+
+1   // first call of toolBar() - creates the toolbar 0.
+2   toolBar()->insertButton(Icon("new.xpm"), ID_FILE_NEW, true, i18n("New File"));
+
+3   QPopupMenu* select_menu = new QPopupMenu();
+4   toolBar()->insertButton(Icon("select.xpm"), ID_OPTIONS_SELECT, select_menu, true, i18n("Select Option"));
+
+5   connect(toolBar(), SIGNAL(clicked( int )), SLOT( slotSelected( int )) );
+
+
+6   Foo::slotSelected( int id ){
+
+7     switch (id ){
+
+8       case ID_FILE_NEW:
+9         slotFileNew();
+10        break;
+11    }
+12  }
+</code>
+The above explains some specialities for toolbars - we will discuss these now in detail. First of all, you see that we used the
+<tt/toolBar()/ method. This returns a pointer to the according toolbar and creates one if the toolbar doesn't exist. We use the
+<tt/insertButton()/ method to add a toolbar button representing the standard "New File" action. Now, when looking at the
+class-documentation of <tt/KToolBar/, you see that there is a <tt/QPixmap/ required as the first parameter. Here, we only set the name
+of the pixmap embraced by the <tt/Icon()/ method. This is a macro which makes inserting icons very easy, provided by <tt/kapp.h/. In
+fact, it makes the application's <tt/KIconLoader/ instance load the icon with the filename <tt/new.xpm/ for you using a list of
+standard directories within the KDE File System. Additionally, the icon <tt/new.xpm/ is already provided - you don't have to paint it
+yourself. The KDE libraries come with a whole set of toolbar icons that are ready to use for insertion. This is also the reason why,
+when testing an application, sometimes a button looks a bit scrambled although you have painted the pixmap - it just can't be found if
+it isn't installed at the correct location within the KDE FSSTD; whereas standard icons are already present.
+
+The exact execution of the <tt/Icon()/ macro is therefore:
+<tscreen><verb>
+KApplication::getKApplication()->getIconLoader()->loadIcon("new.xpm")
+</verb></tscreen>
+
+which implicitely uses the <tt/kapp/ macro to get the application object. You see that using this macro saves lots of code but offers a
+very nice way to load an icon for a toolbar button.
+
+The second parameter, the ID of the button, is a macro that our application specifies itself to name certain actions logically by a
+#define. Obviously, you could think that using another method of <tt/KToolBar/ would do the same when directly specifying the receiver
+object and the slot to call, but this way you save a lot of code. The first place is that you only have to write one <tt/connect()/
+(line 5) to connect all toolbar elements. The other is, that by this way you can use the same ID for your toolbar items as well as for
+your menubar items. The following code completes this example with the according menubar action:
+
+<tscreen><verb>
+QPopupMenu* file_menu = new QPopupMenu();
+file_menu->insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),0,ID_FILE_NEW);
+
+connect(file_menu, SIGNAL(activated(int)), SLOT(slotSelected(int)));
+
+menuBar()->insertItem(file_menu, i18n("&File"));
+</verb></tscreen>
+
+By this, the <tt/file_menu/ is already connected to the <tt/slotSelected()/ method and the corresponding entry "New File" executes the
+same action. Just collect all your ID's as #defines into one file and you can keep a good overview over the used numbers (which
+naturally have to be integer values).
+
+The next example in line 3 and 4 add a button that opens a popup menu when the user presses the button. This can be used if the button
+itself does not perform any action but represents a better access method for e.g. a list of entries. Just create your popup menu and
+insert it with the according ID and pointer as a button.
+
+Besides the example you can do a lot of other things like making a button a toggle button. This is useful if the button executes an
+on/off action (which in the corresponding menubar popup is represented by a checkmark). See the complete reference of <tt/KToolBar/ for
+more information.
 
 <sect>The Statusbar
 <p>
-KDE also provides the pendant to Qt's <tt/QStatusBar/, <tt/KStatusBar/. The statusbar can contain labels as well as widgets, such as
-progress bars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
-application and gives hints about the usage of commands e.g. over toolbars and menubars.
+KDE also provides the pendant to Qt's <tt/QStatusBar/, <tt/KStatusBar/. The statusbar can contain labels
+as well as widgets, such as progress bars (those have to have the statusbar as parent). The statusbar is used to display information
+about the current state of the application and gives hints about the usage of commands e.g. over toolbars and menubars.
 
 <sect>Keyboard Accelerators<label id="Keyboard Accelerators">
 <p>
@@ -1718,9 +1835,7 @@ KRestrictedLine: lineedit that only accepts certain input
 KSelector: value selector
 KSeparator: standard separator
 KSlider: slider widget
-KSpinBox: like QSpinBox
 KTabCtl: tabulator widget
-KTreeList: tree list widget
 
 <chapt>KDE Dialogs
 <p>
@@ -1931,6 +2046,8 @@ if(!the_directory.isEmpty())
 	// do something
 }
 </verb></tscreen>
+<footnote>Of course, you can also use <tt/KFileDialog/ instead of <tt/KFileBaseDialog/ if you like your API to be more
+consistent.</footnote>
 
 <sect2>Multiple Selections
 <p>
@@ -2164,6 +2281,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
+
 
 
 

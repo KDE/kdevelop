@@ -68,25 +68,34 @@ collected in the KDE Control Center) such as keyboard accelerator configuration 
 application, <CODE>KApplication::getKApplication()</CODE>. This solves the problem to pass the pointer to the application object. Further, the
 include file <CODE>kapp.h</CODE> provides a macro that can be used instead of the static function, <CODE>kapp</CODE>. Whenever you need to access the
 application object, use this macro.
+<BLOCKQUOTE>In KDE 2, the application object can be retrieved with <CODE>KGlobal::kApp()</CODE>.</BLOCKQUOTE>
 <P>The <CODE>KApplication</CODE> object itself provides a set of instances that are commonly used in KDE applications and lets the programmer
 access them by functions. You will make extensive use of them as they avoid creating own instances. The following objects are
 provided by their purpose:
 <P>
 <DL>
 <DT><B><B>KConfig</B></B><DD><P>a configuration object that is used to read and store configuration settings in a resource file. Use the
-according methods of <CODE>KConfigBase</CODE> to read and write values. The configuration object is retrieved by <CODE>kapp->getConfig()</CODE>, the
-session managment configuration by <CODE>kapp->getSessionConfig()</CODE>
+according methods of <CODE>KConfigBase</CODE> to read and write values. The configuration object is retrieved by
+<CODE>kapp->getConfig()</CODE>
+<BLOCKQUOTE>For KDE 2 use <CODE>KGlobal::config()</CODE> to retrieve the config object</BLOCKQUOTE>
+, the session managment
+configuration by <CODE>kapp->getSessionConfig()</CODE>
 <P>
 <DT><B><B>KIconLoader</B></B><DD><P>an object that loads icons into <CODE>QPixmap</CODE>s by using the KDE File System. This takes away the need to
 search for any pixmap on the file system completely as only the filename has to be entered. Use the macro <CODE>Icon("icon.xpm")</CODE> to load
 an icon easily. The iconloader instance can be addressed by <CODE>kapp->getIconLoader()</CODE>
+<BLOCKQUOTE>KDE 2 uses <CODE>KGlobal::iconLoader()</CODE>
+to access the icon loader instance</BLOCKQUOTE>
 <P>
 <DT><B><B>KLocale</B></B><DD><P>an object that returns the actual localization settings. This makes applications appear in the language on the
 desktop chosen by the user globally. Use the macro <CODE>klocale</CODE> to access the application locale object. The klocale instance can be
 addressed by using <CODE>kapp->getLocale()</CODE> (as the macro klocale does already)
+<BLOCKQUOTE>Again, KDE 2 changes this with a static method
+of <CODE>KGlobal::locale()</CODE>.</BLOCKQUOTE>
 <P>
 <DT><B><B>KCharsets</B></B><DD><P>the charset object currently set globally by the user. This translates key events to the correctly set
 charset. Retrieve the charsets instance with <CODE>kapp->getCharsets()</CODE>.
+<BLOCKQUOTE>Replaced by <CODE>KGlobal::charsets()</CODE> in KDE2.</BLOCKQUOTE>
 </DL>
 <P>
 <P>Further, the KApplication class provides you with the needed methods to access the KDE File System Standard. This will prevent you from
@@ -96,8 +105,9 @@ icon, current KDE fonts and session management support.
 <P>To use the clipboard, the according <CODE>QApplication</CODE> class already provides a clipboard object, <CODE>QApplication::clipboard()</CODE>, which
 can be used to exchange text and image data between applications (see <CODE>QClipboard</CODE>).
 <P>Internationalization is another keyword for KDE applications. This is supported by the <CODE>KLocale</CODE> object already mentioned above and
-is always used with the macro <CODE>i18n()</CODE> of <CODE>kapp.h</CODE>. It just shortens the call of the KApplication pointer to the KLocale pointer
-and is read by gettext to extract all macro-embraced strings into an application message file that then can be translated.
+is always used with the macro <CODE>i18n()</CODE> of <CODE>kapp.h</CODE>.
+<P>It just shortens the call of the KApplication pointer to the KLocale pointer and is read by gettext to extract all macro-embraced
+strings into an application message file that then can be translated.
 <P>At least, the <CODE>KApplication</CODE> already constructs a help menu that can be inserted into a menu bar the application may contain with a
 predefined (can be turned on/off) KDE hint dialog and your application's about dialog.
 <P>You should notice that <CODE>KApplication</CODE> has to be lead with:
@@ -176,6 +186,8 @@ to exclude any of the above values in the <CODE>main()</CODE> function. Within t
 <CODE>QApplication</CODE> provides the methods <CODE>argc()</CODE> and <CODE>argv()</CODE> to process any other options given at the commandline. These can be
 accessed by the argument number, whereby the argument <CODE>kapp->argv()[0]</CODE> is the application name; any other following arguments can
 be processed with <CODE>kapp->argv()[number]</CODE>.
+<BLOCKQUOTE>KDE 2 has an additional class, <CODE>KStartParams</CODE>, to parse additional
+command-line parameters.</BLOCKQUOTE>
 <P>
 <H4>Comment</H4>
 The <CODE>KApplication</CODE> class uses different methods to change the application's style, fonts and colors by X11 Atoms which
