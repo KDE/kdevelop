@@ -1,7 +1,8 @@
-kdevelop (1:1.1final-1) stable; urgency=low
+kdevelop (1:1.1final-20000228-1) stable; urgency=low
 
   * New upstream release
   * Recommend kdelibs-doc
+  * Don't include Makefiles
 
  -- Bernd Gehrmann <bernd@users.sourceforge.net>  Sun, 27 Feb 2000 12:00:00 +0100
 

@@ -710,9 +710,9 @@ void DocTreeView::refresh(CProject *prj)
 
     folder_kdevelop = new DocTreeKDevelopFolder(this);
     folder_kdelibs  = new DocTreeKDELibsFolder(this);
-//#ifdef WITH_DOCBASE
-//    folder_docbase  = new DocTreeDocbaseFolder(this);
-//#endif
+#ifdef WITH_DOCBASE
+    folder_docbase  = new DocTreeDocbaseFolder(this);
+#endif
     folder_others   = new DocTreeOthersFolder(this);
     folder_project  = new DocTreeProjectFolder(this);
 
