@@ -37,7 +37,7 @@ public:
   PartController(QWidget *toplevel);
 
   void setEncoding(const QString &encoding);
-  void editDocument(const KURL &url, int lineNum=-1);
+  void editDocument(const KURL &inputUrl, int lineNum=-1);
   void showDocument(const KURL &url, const QString &context = QString::null);
 
   bool closeDocuments(const QStringList &list);

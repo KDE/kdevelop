@@ -24,6 +24,7 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
+#include <kio/netaccess.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -31,6 +32,8 @@
 #include "editorproxy.h"
 #include "documentationpart.h"
 #include "ksavealldialog.h"
+
+#include "../lib/interfaces/kdevproject.h"
 
 #include "partcontroller.h"
 
@@ -111,11 +114,38 @@ void PartController::setEncoding(const QString &encoding)
 }
 
 
-void PartController::editDocument(const KURL &url, int lineNum)
+void PartController::editDocument(const KURL &inputUrl, int lineNum)
 {
-  if( url.isMalformed() )
-    return;
+  KURL url = inputUrl;
 
+  // Make sure the URL exists
+  if (!url.isValid() || !KIO::NetAccess::exists(url)) {
+    // Try to find this file in the current project's list instead
+    KDevProject* project = API::getInstance()->project();
+
+    if (project) {
+      QStringList fileList = project->allFiles();
+      
+      for (QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it) {
+        if ((*it).endsWith(url.url())) {
+          // Match! The first one is as good as any one, I guess...
+          url = project->projectDirectory() + "/" + *it;
+          break;
+        } 
+      }
+    }
+    
+    if (!url.isValid() || !KIO::NetAccess::exists(url)) {
+      // See if this url is relative to the current project's directory
+      url = project->projectDirectory() + "/" + url.url();
+    }
+    
+    if (!url.isValid() || !KIO::NetAccess::exists(url)) {
+      // Here perhaps we should prompt the user to find the file?
+      return;
+    }
+  }
+    
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
   {
@@ -562,7 +592,6 @@ bool PartController::closeDocuments(const QStringList &documents)
   QStringList modFiles;
   for (it=documents.begin(); it != documents.end(); ++it) {
     KParts::Part *part = partForURL(KURL(*it));
-	kdDebug ( 9000 ) << "partForURL: " << *it << endl;
     if ( part && part->inherits("KParts::ReadWritePart") && ((KParts::ReadWritePart*)part)->isModified() )
       modFiles << (*it);
   }
