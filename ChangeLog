@@ -1,3 +1,8 @@
+1999-10-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* rearranged kde and qt source templates to new automake/am_edit
+	* added docbook template based on kdesdk and newfiledlg code for that
+	* removed -lkfm on normal kdetemplate in CKAppWizard
+
 1999-10-02 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* many changes in the source templates
 	  generalize outfit (spacing between parameters etc.)

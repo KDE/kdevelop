@@ -795,41 +795,53 @@ void CKDevelop::slotProjectAPI(){
 
 void CKDevelop::slotProjectManual(){
 
-    CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
-    if(dlg.exec()){
-	
-	showOutputView(true);
-	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
-	setToolMenuProcess(false);
-	//  slotFileSaveAll();
-	slotStatusMsg(i18n("Creating project Manual..."));
-	messages_widget->clear();
-	
-	bool ksgml = true;
-	if(dlg.program == "sgml2html") ksgml = false;
-	prj->setSGMLFile(dlg.file);
-	CGenerateNewFile generator;
-	QFileInfo info(dlg.file);
-	
-	if(ksgml){
-	    
-	    QString nif_file = info.dirPath() + "/" + info.baseName()+ ".nif";
-	    if(!QFile::exists(nif_file)){
-		generator.genNifFile(nif_file);
-	    }
+	CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
+  if(dlg.exec()){
+
+		showOutputView(true);
+		error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+		setToolMenuProcess(false);
+		//  slotFileSaveAll();
+		slotStatusMsg(i18n("Creating project Manual..."));
+		messages_widget->clear();
+
+		if((dlg.file).right(8) == ".docbook"){
+			QFileInfo info(dlg.file);
+			if(!CToolClass::searchProgram("db2html"))
+	    	return;
+			
+			messages_widget->prepareJob(info.dirPath());
+			(*messages_widget) << "db2html -d /usr/lib/sgml/stylesheets/kde.dsl ";
+			(*messages_widget) << info.fileName();
+			messages_widget->startJob();
+
+		}
+		else{
+			bool ksgml = true;
+			if(dlg.program == "sgml2html") ksgml = false;
+			prj->setSGMLFile(dlg.file);
+			CGenerateNewFile generator;
+			QFileInfo info(dlg.file);
+
+			if(ksgml){
+				QString nif_file = info.dirPath() + "/" + info.baseName()+ ".nif";
+				if(!QFile::exists(nif_file)){
+					generator.genNifFile(nif_file);
+				}
+			}
+			messages_widget->prepareJob(info.dirPath());
+			if(ksgml){
+				(*messages_widget) << "ksgml2html";
+				(*messages_widget) << info.fileName();
+				(*messages_widget) << "en";
+			}
+			else{
+				(*messages_widget) << "sgml2html";
+				(*messages_widget) << info.fileName();
+			}
+			messages_widget->startJob();
+		}
 	}
-        messages_widget->prepareJob(info.dirPath());
-	if(ksgml){
-	    (*messages_widget) << "ksgml2html";
-	    (*messages_widget) << info.fileName();
-	    (*messages_widget) << "en";
-	}
-	else{
-	    (*messages_widget) << "sgml2html";
-	    (*messages_widget) << info.fileName();
-	}
-        messages_widget->startJob();
-    }
 }
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){

@@ -23,6 +23,7 @@
 #include "cproject.h"
 #include <kprocess.h>
 #include <kstddirs.h>
+#include <qstringlist.h>
 
 CGenerateNewFile::CGenerateNewFile(){
 }
@@ -122,8 +123,34 @@ QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
   return file.name();
 }
 
+QString  CGenerateNewFile::genEngDocbook(QString abs_name,CProject* prj){
+  QString template_handbook = locate("kdev_template","docbook_en_template");
+
+  QStrList list;
+  QString str;
+
+  QFile file(template_handbook);
+  QTextStream stream(&file);
+  if(file.open(IO_ReadOnly)){ // read the handbook_template
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+  file.setName(abs_name);
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str !=0;str = list.next()){
+
+      stream << prj->setInfosInString(str) << '\n';
+    }
+  }
+  file.close();
+  return file.name();
+
+}
+
 QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
-  
+
   QString template_handbook = locate("kdev_template","handbook_en_template");
 
   QStrList list;

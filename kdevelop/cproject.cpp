@@ -629,158 +629,158 @@ void CProject::updateMakefileAm(QString makefile){
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str != 0;str = list.next()){ // every line
       if(str == "####### kdevelop will overwrite this part!!! (begin)##########"){
- 	stream << str << "\n";
+ 				stream << str << "\n";
 	
-	//***************************generate needed things for the main makefile*********
-	if (config.readEntry("type") == "prog_main"){ // the main makefile
-	  stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
-	  getSources(makefile,source_files);
-	  for(str= source_files.first();str !=0;str = source_files.next()){
-	    sources =  str + " " + sources ;
-	  }
-	  //	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
-	  //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
-	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
-	  if(static_libs.isEmpty()){
-	    stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
-	  }
-	  else{ // we must link some libs
-	    stream << getBinPROGRAM()  <<  "_LDADD   = ";
-	    for(libname = static_libs.first();libname != 0;libname = static_libs.next()){
-	      stream << libname.replace(QRegExp("^"+getSubDir()),"./") << " "; // remove the subdirname
-	    }
-	    stream << getLDADD();
-	  }
-	  
-	  if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c") {
-	    stream << " $(LIBSOCKET)" << "\n";
-	  }
-	  else{
-	    stream << "\n";
-	  }
-#warning updateMakefileAm deletes LDFLAGS etc.
-	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-	    stream << getBinPROGRAM() << "_METASOURCES = USE_AUTOMOC\n\n";
-	    stream << getBinPROGRAM() << "_LDFLAGS = $(all_libraries) $(KDE_RPATH)\n\n";
-	    stream << "DISTCLEANFILES = $(" << getBinPROGRAM() << "_METASOURCES)\n\n";
-	  }
-	
-	}
-	//***************************generate needed things for static_library*********
-	config.setGroup(makefile);
-	if(config.readEntry("type") == "static_library"){
-	  getSources(makefile,source_files);
-	  for(str= source_files.first();str !=0;str = source_files.next()){
-	    sources =  str + " " + sources ;
-	  }
-	  QDir dir(getDir(makefile));
-	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
-	    stream << "\nINCLUDES = $(all_includes)\n\n";
-	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
-	  }
-	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
-	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
-	}
+				//***************************generate needed things for the main makefile*********
+				if (config.readEntry("type") == "prog_main"){ // the main makefile
+					stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
+					getSources(makefile,source_files);
+					for(str= source_files.first();str !=0;str = source_files.next()){
+						sources =  str + " " + sources ;
+					}
+					//	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
+					//stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
+					stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
+					if(static_libs.isEmpty()){
+						stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
+					}
+					else{ // we must link some libs
+						stream << getBinPROGRAM()  <<  "_LDADD   = ";
+						for(libname = static_libs.first();libname != 0;libname = static_libs.next()){
+							stream << libname.replace(QRegExp("^"+getSubDir()),"./") << " "; // remove the subdirname
+						}
+						stream << getLDADD();
+					}
 
-	//***************************generate needed things for a po makefile*********
-	if (config.readEntry("type") == "po"){ // a po makefile
-	  getPOFiles(makefile,po_files);
-	  for(str= po_files.first();str !=0;str = po_files.next()){
-	    pos =  str + " " + pos ;
-	  }
-	  
-	  stream <<  "POFILES = " << pos << "\n";
-	}
- 
-	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
-	if((getProjectType() != "normal_cpp")  && getProjectType() != "normal_c"&&
-                   (makefile == QString("Makefile.am"))){
-	  stream << "dist-hook:\n\t-perl automoc\n";
-	}
-	//************SUBDIRS***************
-	if(!subdirs.isEmpty()){ // the SUBDIRS key
-	  stream << "\nSUBDIRS = ";
-	  for(str2 = subdirs.first();str2 !=0;str2 = subdirs.next()){
-	    stream << str2 << " ";
-	  }
-	}
-	stream << "\n";
-	//************EXTRA_DIST************
-	dist_str = "\nEXTRA_DIST = ";
-	bool dist_write=false;
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("dist")){
-	    dist_str = dist_str + getName(str2) + " ";
-	    dist_write = true;
-	  }
-	}
-	if (dist_write){
-	  stream << dist_str << "\n";
-	}
-	//**************install-data-local****************
-	bool install_data=false;
-	QString install_data_str = "\ninstall-data-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install") && config.readEntry("type") != "SCRIPT"){
-	    install_data_str = install_data_str + "\t$(mkinstalldirs) " 
-	      + getDir(config.readEntry("install_location")) + "\n";
-	    install_data_str = install_data_str + "\t$(INSTALL_DATA) " +
-	      getName(str2) + " " + config.readEntry("install_location") + "\n";
-	    
-	    install_data = true;
-	  }
-	}
-	if(install_data){
-	  stream << install_data_str;
-	}
+					if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c") {
+						stream << " $(LIBSOCKET)" << "\n";
+					}
+					else{
+						stream << "\n";
+					}
+//////////////////////////////////////////////////////////////////////////////////////
+#warning updateMakefileAm deletes LDFLAGS etc.
+			if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
+				stream << "\nINCLUDES = $(all_includes)\n\n";
+				stream << getBinPROGRAM() << "_METASOURCES = USE_AUTOMOC\n\n";
+				stream << getBinPROGRAM() << "_LDFLAGS = $(all_libraries) $(KDE_RPATH)\n\n";
+				stream << "DISTCLEANFILES = $(" << getBinPROGRAM() << "_METASOURCES)\n\n";
+				stream << "messages:\n";
+
+			}
+//////////////////////////////////////////////////////////////////////////////////////
+				}
+				//***************************generate needed things for static_library*********
+				config.setGroup(makefile);
+				if(config.readEntry("type") == "static_library"){
+					getSources(makefile,source_files);
+					for(str= source_files.first();str !=0;str = source_files.next()){
+						sources =  str + " " + sources ;
+					}
+					QDir dir(getDir(makefile));
+					if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
+						stream << "\nINCLUDES = $(all_includes)\n\n";
+						stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+					}
+					stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
+					stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
+				}
+
+				//***************************generate needed things for a po makefile*********
+				if (config.readEntry("type") == "po"){ // a po makefile
+					getPOFiles(makefile,po_files);
+					for(str= po_files.first();str !=0;str = po_files.next()){
+						pos =  str + " " + pos ;
+					}
+
+					stream <<  "POFILES = " << pos << "\n";
+				}
+
+				// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
+				if((getProjectType() != "normal_cpp")  && getProjectType() != "normal_c"&&
+										(makefile == QString("Makefile.am"))){
+	//	  		stream << "dist-hook:\n\t-perl automoc\n";
+					stream << "dist-hook:\n\t-perl am_edit\n";
+				}
+				//************SUBDIRS***************
+				if(!subdirs.isEmpty()){ // the SUBDIRS key
+					stream << "\nSUBDIRS = ";
+					for(str2 = subdirs.first();str2 !=0;str2 = subdirs.next()){
+						stream << str2 << " ";
+				}
+			}
+			stream << "\n";
+			//************EXTRA_DIST************
+			dist_str = "\nEXTRA_DIST = ";
+			bool dist_write=false;
+			for(str2 = files.first();str2 !=0;str2 = files.next()){
+				config.setGroup(str2);
+				if (config.readBoolEntry("dist")){
+					dist_str = dist_str + getName(str2) + " ";
+					dist_write = true;
+				}
+			}
+			if (dist_write){
+				stream << dist_str << "\n";
+			}
+			//**************install-data-local****************
+			bool install_data=false;
+			QString install_data_str = "\ninstall-data-local:\n";
+			for(str2 = files.first();str2 !=0;str2 = files.next()){
+				config.setGroup(str2);
+				if (config.readBoolEntry("install") && config.readEntry("type") !="SCRIPT"){
+					install_data_str = install_data_str + "\t$(mkinstalldirs) "+getDir(config.readEntry("install_location")) + "\n"; 		    install_data_str =
+					install_data_str + "\t$(INSTALL_DATA) " + 	      getName(str2) + " " +config.readEntry("install_location") + "\n"; 	
+					install_data = true;
+				}
+			}
+			if(install_data){
+				stream << install_data_str;
+			}
 	
-	//**************install-exec-local****************
-	bool install_exec=false;
-	QString install_exec_str = "\ninstall-exec-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install") && config.readEntry("type") == "SCRIPT"){
-	    install_exec_str = install_exec_str + "\t$(mkinstalldirs) " 
-	      + getDir(config.readEntry("install_location")) + "\n";
-	    install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
-	      getName(str2) + " " + config.readEntry("install_location") + "\n";
-	    install_exec = true;
-	  }
-	}
-	if(install_exec){
-	  stream << install_exec_str;
-	}
+				//**************install-exec-local****************
+				bool install_exec=false;
+				QString install_exec_str = "\ninstall-exec-local:\n";
+				for(str2 = files.first();str2 !=0;str2 = files.next()){
+					config.setGroup(str2);
+					if (config.readBoolEntry("install") && config.readEntry("type") =="SCRIPT"){
+						install_exec_str = install_exec_str + "\t$(mkinstalldirs) "+ getDir(config.readEntry("install_location")) + "\n";
+						install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
+						getName(str2) + " " + config.readEntry("install_location") + "\n";
+						install_exec = true;
+					}
+				}
+				if(install_exec){
+		  		stream << install_exec_str;
+				}
 	
-	//**************uninstall-local*******************
-	bool uninstall_local=false;
-	QString uninstall_local_str = "\nuninstall-local:\n";
-	for(str2 = files.first();str2 !=0;str2 = files.next()){
-	  config.setGroup(str2);
-	  if (config.readBoolEntry("install")) {
-	    uninstall_local_str = uninstall_local_str + "\t-rm -f " + 
-	      config.readEntry("install_location") +"\n";
-	    uninstall_local=true;
-	  }
-	}
-	if(uninstall_local){
-	  stream << uninstall_local_str;
-	}
-	stream << "\n";	
-	found = true;
-      }
-      if(found == false){
-	stream << str +"\n";
-      }
-    if(str =="####### kdevelop will overwrite this part!!! (end)############"){
-      stream << str + "\n";
-      found = false;
-    } 
+				//**************uninstall-local*******************
+				bool uninstall_local=false;
+				QString uninstall_local_str = "\nuninstall-local:\n";
+				for(str2 = files.first();str2 !=0;str2 = files.next()){
+					config.setGroup(str2);
+					if (config.readBoolEntry("install")) {
+						uninstall_local_str = uninstall_local_str + "\t-rm -f " +
+						config.readEntry("install_location") +"\n";
+						uninstall_local=true;
+					}
+				}
+				if(uninstall_local){
+	  		stream << uninstall_local_str;
+				}
+				stream << "\n";	
+				found = true;
+   		}
+			if(found == false){
+				stream << str +"\n";
+   		}
+    	if(str =="####### kdevelop will overwrite this part!!! (end)############"){
+      	stream << str + "\n";
+      	found = false;
+    	}
     } // end for
-  }// end writeonly
-  file.close();
+	}// end writeonly
+	file.close();
   
 }
 
