@@ -1,29 +1,7 @@
-/*
-   Copyright (C) 1998, 1999 Jochen Wilhelmy
-                            digisnap@cs.tu-berlin.de
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public License
-    along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
-*/
-//   #include <sys/time.h>
-//   #include <unistd.h>
-
 #include <stdio.h>
 #include <qobject.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <qapp.h>
+#include <qclipbrd.h>
 #include <qfont.h>
 #include <qpainter.h>
 
@@ -122,7 +100,7 @@ void TextLine::del(int pos, int n) {
   }
 }
 
-int TextLine::length() const {
+int TextLine::length() {
   return len;
 }
 
@@ -171,11 +149,11 @@ void TextLine::removeSpaces() {
   while (len > 0 && text[len - 1] == ' ') len--;
 }
 
-int TextLine::firstChar() const {
+int TextLine::firstChar() {
   int z;
 
   z = 0;
-  while (z < len && (unsigned char) text[z] <= 32) z++;
+  while (z < len && text[z] <= 32) z++;
   return (z < len) ? z : -1;
 }
 
@@ -195,21 +173,21 @@ void TextLine::setAttr(int attribute) {
   attr = (attr & taSelectMask) | attribute;
 }
 
-int TextLine::getAttr(int pos) const {
+int TextLine::getAttr(int pos) {
   if (pos < len) return attribs[pos] & taAttrMask;
   return attr & taAttrMask;
 }
 
-int TextLine::getAttr() const {
+int TextLine::getAttr() {
   return attr & taAttrMask;
 }
 
-int TextLine::getRawAttr(int pos) const {
+int TextLine::getRawAttr(int pos) {
   if (pos < len) return attribs[pos];
   return (attr & taSelectMask) ? attr : attr | 256;
 }
 
-int TextLine::getRawAttr() const {
+int TextLine::getRawAttr() {
   return attr;
 }
 
@@ -217,7 +195,7 @@ void TextLine::setContext(int context) {
   ctx = context;
 }
 
-int TextLine::getContext() const {
+int TextLine::getContext() {
   return ctx;
 }
 
@@ -227,7 +205,7 @@ const char* TextLine::getString() {
   return text;
 }
 
-const char* TextLine::getText() const {
+const char* TextLine::getText() {
   return text;
 }
 
@@ -272,7 +250,7 @@ void TextLine::toggleSelectEol(int pos) {
 }
 
 
-int TextLine::numSelected() const {
+int TextLine::numSelected() {
   int z, n;
 
   n = 0;
@@ -280,37 +258,37 @@ int TextLine::numSelected() const {
   return n;
 }
 
-bool TextLine::isSelected(int pos) const {
+bool TextLine::isSelected(int pos) {
   if (pos < len) return (attribs[pos] & taSelected);
   return (attr & taSelected);
 }
 
-bool TextLine::isSelected() const {
+bool TextLine::isSelected() {
   return (attr & taSelected);
 }
 
-int TextLine::findSelected(int pos) const {
+int TextLine::findSelected(int pos) {
   while (pos < len && attribs[pos] & taSelected) pos++;
   return pos;
 }
 
-int TextLine::findUnSelected(int pos) const {
+int TextLine::findUnSelected(int pos) {
   while (pos < len && !(attribs[pos] & taSelected)) pos++;
   return pos;
 }
 
-int TextLine::findRevSelected(int pos) const {
+int TextLine::findRevSelected(int pos) {
   while (pos > 0 && attribs[pos - 1] & taSelected) pos--;
   return pos;
 }
 
-int TextLine::findRevUnSelected(int pos) const {
+int TextLine::findRevUnSelected(int pos) {
   while (pos > 0 && !(attribs[pos - 1] & taSelected)) pos--;
   return pos;
 }
 
 
-int TextLine::cursorX(int pos, int tabChars) const {
+int TextLine::cursorX(int pos, int tabChars) {
   int l, x, z;
 
   l = (pos < len) ? pos : len;
@@ -424,7 +402,9 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   highlight = 0L;
   tabChars = 8;
 
+  newDocGeometry = false;
   modified = false;
+  oldMarkState=false;
 
   undoList.setAutoDelete(true);
   undoState = 0;
@@ -436,12 +416,14 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
   setHighlight(0); //calls updateFontData()
   connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
-
-  newDocGeometry = false;
 }
 
 KWriteDoc::~KWriteDoc() {
   highlight->release();
+}
+
+int KWriteDoc::lastLine() const {
+  return (int) contents.count() - 1;
 }
 
 TextLine *KWriteDoc::textLine(int line) {
@@ -454,19 +436,11 @@ int KWriteDoc::textLength(int line) {
   return contents.at(line)->length();
 }
 
-void KWriteDoc::tagLineRange(int line, int x1, int x2) {
-  int z;
-
-  for (z = 0; z < (int) views.count(); z++) {
-    views.at(z)->tagLines(line, line, x1, x2);
-  }
-}
-
 void KWriteDoc::tagLines(int start, int end) {
   int z;
 
   for (z = 0; z < (int) views.count(); z++) {
-    views.at(z)->tagLines(start, end, 0, 0xffffff);
+    views.at(z)->tagLines(start,end);
   }
 }
 
@@ -529,194 +503,108 @@ int KWriteDoc::currentColumn(PointStruc &cursor) {
   return contents.at(cursor.y)->cursorX(cursor.x,tabChars);
 }
 
-void KWriteDoc::wordLeft(PointStruc &cursor) {
-  TextLine *textLine;
-
-  textLine = contents.at(cursor.y);
-  while (cursor.x > 0 && !highlight->isInWord(textLine->getChar(cursor.x -1))) {
-    cursor.x--;
-  }
-  while (cursor.x <= 0 && cursor.y > 0) {
-    cursor.y--;
-    textLine = contents.at(cursor.y);
-    cursor.x = textLine->length();
-    while (cursor.x > 0 && !highlight->isInWord(textLine->getChar(cursor.x -1))) {
-      cursor.x--;
-    }
-  }
-  while (cursor.x > 0 && highlight->isInWord(textLine->getChar(cursor.x -1))) {
-    cursor.x--;
-  }
-}
-
-void KWriteDoc::wordRight(PointStruc &cursor) {
-  TextLine *textLine;
-  int len;
-
-  textLine = contents.at(cursor.y);
-  len = textLine->length();
-  while (cursor.x < len && highlight->isInWord(textLine->getChar(cursor.x))) {
-    cursor.x++;
-  }
-  while (cursor.x < len && !highlight->isInWord(textLine->getChar(cursor.x))) {
-    cursor.x++;
-  }
-  while (cursor.x >= len && cursor.y < lastLine()) {
-    cursor.y++;
-    textLine = contents.at(cursor.y);
-    len = textLine->length();
-    cursor.x = 0;
-    while (cursor.x < len && !highlight->isInWord(textLine->getChar(cursor.x))) {
-      cursor.x++;
-    }
-  }
-}
-
-void KWriteDoc::insert(VConfig &c, const char *s, int len) {
+void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
   char b[256];
   int pos;
 
-  if (!s || !*s || !len) return;
-//  if (c.flags & cfDelOnInput) delMarkedText(c);
-
+  if (!s || !*s) return;
   recordStart(c.cursor);
   pos = 0;
   if (!(c.flags & cfVerticalSelect)) {
-    do {
+    while (*s != 0) {
       if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
-        if (pos >= 256) {
-          recordReplace(c.cursor, 0, b, pos);
-          c.cursor.x += pos;
-          pos = 0;
-        }
       } else if (*s == '\n') {
-        recordAction(KWAction::newLine, c.cursor);
-        recordReplace(c.cursor, 0, b, pos);
+        recordAction(KWAction::newLine,c.cursor);
+        recordReplace(c.cursor,0,b,pos);
         c.cursor.y++;
         c.cursor.x = 0;
         pos = 0;
       }
+      if (pos >= 256) {
+        recordReplace(c.cursor,0,b,pos);
+        c.cursor.x += pos;
+        pos = 0;
+      }
       s++;
-      len--;
-    } while (*s != 0 && len != 0);
+    }
+    if (pos > 0) {
+      recordReplace(c.cursor,0,b,pos);
+      c.cursor.x += pos;
+    }
   } else {
     int xPos;
 
     xPos = textWidth(c.cursor);
-    do {
+    while (*s != 0) {
       if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
-        if (pos >= 256) {
-          recordReplace(c.cursor, 0, b, pos);
-          c.cursor.x += pos;
-          pos = 0;
-        }
       } else if (*s == '\n') {
-        recordReplace(c.cursor, 0, b, pos);
+        recordReplace(c.cursor,0,b,pos);
         c.cursor.y++;
-        if (c.cursor.y >= numLines())
-          recordAction(KWAction::insLine, c.cursor);
-        c.cursor.x = textPos(contents.at(c.cursor.y), xPos);
+        if (c.cursor.y >= (int) contents.count()) {
+          recordAction(KWAction::insLine,c.cursor);
+        }
+        c.cursor.x = textPos(contents.at(c.cursor.y),xPos);
         pos = 0;
       }
       s++;
-      len--;
-    } while (*s != 0 && len != 0);
+      if (pos >= 256 || *s == 0) {
+        recordReplace(c.cursor,0,b,pos);
+        c.cursor.x += pos;
+        pos = 0;
+      }
+    }
   }
-  if (pos > 0) {
-    recordReplace(c.cursor, 0, b, pos);
-    c.cursor.x += pos;
-  }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
-void KWriteDoc::insertFile(VConfig &c, QIODevice &dev) {
+void KWriteDoc::insertFile(KWriteView *view, VConfig &c, QIODevice &dev) {
   char buf[256];
   int len;
   char b[256];
   int pos;
   char *s;
-  char last = '\0';
 
   recordStart(c.cursor);
   pos = 0;
   do {
-    len = dev.readBlock(buf, 256);
+    len = dev.readBlock(buf,256);
     s = buf;
     while (len > 0) {
       if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
-        if (pos >= 256) {
-          recordReplace(c.cursor, 0, b, pos);
-          c.cursor.x += pos;
-          pos = 0;
-        }
       } else if (*s == '\n' || *s == '\r') {
-        if (last != '\r' || *s != '\n') {
-          recordAction(KWAction::newLine, c.cursor);
-          recordReplace(c.cursor, 0, b, pos);
-          c.cursor.y++;
-          c.cursor.x = 0;
-          pos = 0;
+        recordAction(KWAction::newLine,c.cursor);
+        recordReplace(c.cursor,0,b,pos);
+        c.cursor.y++;
+        c.cursor.x = 0;
+        pos = 0;
+        if (len > 1 && *s == '\r' && s[1] == '\n') {
+          s++;
+          len--;
         }
-        last = *s;
+      }
+      if (pos >= 256) {
+        recordReplace(c.cursor,0,b,pos);
+        c.cursor.x += pos;
+        pos = 0;
       }
       s++;
       len--;
     }
   } while (s != buf);
   if (pos > 0) {
-    recordReplace(c.cursor, 0, b, pos);
+    recordReplace(c.cursor,0,b,pos);
     c.cursor.x += pos;
   }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
 void KWriteDoc::loadFile(QIODevice &dev) {
-  TextLine *textLine;
-  char buf[256];
-  int len;
-  char b[256];
-  int pos;
-  char *s;
-  char last = '\0';
-
-  clear();
-
-  textLine = contents.getFirst();
-  pos = 0;
-  do {
-    len = dev.readBlock(buf, 256);
-    s = buf;
-    while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
-        b[pos] = *s;
-        pos++;
-        if (pos >= 256) {
-          textLine->append(b, pos);
-          pos = 0;
-        }
-      } else if (*s == '\n' || *s == '\r') {
-        if (last != '\r' || *s != '\n') {
-          textLine->append(b, pos);
-          pos = 0;
-          textLine = new TextLine();
-          contents.append(textLine);
-          if (*s == '\r') eolMode = eolMacintosh;
-        } else eolMode = eolDos;
-        last = *s;
-      }
-      s++;
-      len--;
-    }
-  } while (s != buf);
-  textLine->append(b, pos);
-//
-/*
   TextLine *textLine;
   char buf[512];
   int len;
@@ -747,7 +635,7 @@ void KWriteDoc::loadFile(QIODevice &dev) {
       len--;
     }
   } while (s != buf);
-*/
+
 //  updateLines();
 }
 
@@ -759,12 +647,12 @@ void KWriteDoc::writeFile(QIODevice &dev) {
     dev.writeBlock(textLine->getText(),textLine->length());
     textLine = contents.next();
     if (!textLine) break;
-    if (eolMode != eolUnix) dev.putch('\r');
-    if (eolMode != eolMacintosh) dev.putch('\n');
+    if(eolMode != eolUnix) dev.putch('\r');
+    if(eolMode != eolMacintosh) dev.putch('\n');
   } while (true);
 }
 
-void KWriteDoc::insertChar(VConfig &c, char ch) {
+void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
   TextLine *textLine;
   int l, z;
   char buf[20];
@@ -807,42 +695,13 @@ void KWriteDoc::insertChar(VConfig &c, char ch) {
       strcpy(buf,"&Uuml;");
       l = z = 6;
     }*/
-    /*
-    if (ch == 'ä') {
-      strcpy(buf,"\"a");
-      l = z = 2;
-    }
-    if (ch == 'ö') {
-      strcpy(buf,"\"o");
-      l = z = 2;
-    }
-    if (ch == 'ü') {
-      strcpy(buf,"\"u");
-      l = z = 2;
-    }
-    if (ch == 'Ä') {
-      strcpy(buf,"\"A");
-      l = z = 2;
-    }
-    if (ch == 'Ö') {
-      strcpy(buf,"\"O");
-      l = z = 2;
-    }
-    if (ch == 'Ü') {
-      strcpy(buf,"\"U");
-      l = z = 2;
-    }
-    if (ch == 'ß') {
-      strcpy(buf,"\"s");
-      l = z = 2;
-    }*/
   }
   //l = length of string in buf[], z = cursor increment
 
   if (buf[0] == ' ' && c.flags & cfRemoveSpaces && c.cursor.x >= textLine->length()) {
     //do nothing if spaces will be removed and cursor behind end of line
     c.cursor.x += z;
-    c.view->updateCursor(c.cursor);
+    view->updateCursor(c.cursor);
     return;
   }
 
@@ -879,7 +738,7 @@ void KWriteDoc::insertChar(VConfig &c, char ch) {
         c.cursor.x -= pos;
       }
 
-      if (textLine == contents.getLast() || contents.next()->length() == 0) {
+      if (textLine == contents.getLast()) {
         //at end of doc: create new line
         actionCursor.x = pos;
         actionCursor.y = line;
@@ -897,10 +756,10 @@ void KWriteDoc::insertChar(VConfig &c, char ch) {
       line++;
     } while (true);
   }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
-void KWriteDoc::newLine(VConfig &c) {
+void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
 
   recordStart(c.cursor);
 
@@ -911,6 +770,7 @@ void KWriteDoc::newLine(VConfig &c) {
   } else {
     TextLine *textLine;
     int pos;
+
     textLine = contents.at(c.cursor.y);
     pos = textLine->firstChar();
     if (pos > c.cursor.x) c.cursor.x = pos;
@@ -929,10 +789,10 @@ void KWriteDoc::newLine(VConfig &c) {
     }
   }
 
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
-void KWriteDoc::killLine(VConfig &c) {
+void KWriteDoc::killLine(KWriteView *view, VConfig &c) {
 
   recordStart(c.cursor);
   c.cursor.x = 0;
@@ -940,10 +800,10 @@ void KWriteDoc::killLine(VConfig &c) {
   if (c.cursor.y < (int) contents.count() - 1) {
     recordAction(KWAction::killLine,c.cursor);
   }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
-void KWriteDoc::backspace(VConfig &c) {
+void KWriteDoc::backspace(KWriteView *view, VConfig &c) {
 
   if (c.cursor.x <= 0 && c.cursor.y <= 0) return;
   recordStart(c.cursor);
@@ -975,30 +835,34 @@ void KWriteDoc::backspace(VConfig &c) {
     c.cursor.x = contents.at(c.cursor.y)->length();
     recordAction(KWAction::delLine,c.cursor);
   }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
 
-void KWriteDoc::del(VConfig &c) {
+void KWriteDoc::del(KWriteView *view, VConfig &c) {
 
   if (c.cursor.x < contents.at(c.cursor.y)->length()) {
     recordStart(c.cursor);
     recordReplace(c.cursor,1);
-    recordEnd(c);
+    recordEnd(view,c);
   } else {
     if (c.cursor.y < (int) contents.count() -1) {
       recordStart(c.cursor);
       recordAction(KWAction::delLine,c.cursor);
-      recordEnd(c);
+      recordEnd(view,c);
     }
   }
 }
 
 void KWriteDoc::clipboardChanged() { //slot
 #if defined(_WS_X11_)
+  KWriteView *view;
   disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),
     this,SLOT(clipboardChanged()));
   deselectAll();
+  QString text=QApplication::clipboard()->text();
+  for (view = views.first(); view != 0L; view = views.next())
+      emit view->kWrite->clipboardStatus(view, !text.isEmpty());
   updateViews();
 #endif
 }
@@ -1151,7 +1015,7 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags) {
     textLine->setContext(ctxNum);
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));
-  tagLines(startLine, line - 1);
+  tagLines(startLine,line - 1);
 }
 
 
@@ -1183,16 +1047,20 @@ void KWriteDoc::updateMaxLength(TextLine *textLine) {
 void KWriteDoc::updateViews(KWriteView *exclude) {
   KWriteView *view;
   int flags;
-  bool markState = hasMarkedText();
+  bool markState=hasMarkedText();
 
   flags = (newDocGeometry) ? ufDocGeometry : 0;
   for (view = views.first(); view != 0L; view = views.next()) {
-    if (view != exclude) view->updateView(flags);
+    if (view != exclude) {
+         view->updateView(flags);
+    }
 
     // notify every view about the changed mark state....
-    if (oldMarkState != markState) emit view->kWrite->newMarkStatus();
+    if (oldMarkState!=markState)
+          emit view->kWrite->markStatus(view, markState);
   }
-  oldMarkState = markState;
+  oldMarkState=markState;
+
   newDocGeometry = false;
 }
 
@@ -1249,19 +1117,13 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
 }
 
 int KWriteDoc::textPos(TextLine *textLine, int xPos) {
-  int newXPos;
-
-  return textPos(textLine, xPos, newXPos);
-}
-
-int KWriteDoc::textPos(TextLine *textLine, int xPos, int &newXPos) {
-//  int len;
+  int len;
   int x, oldX;
   int z;
   char ch;
   Attribute *a;
 
-//  len = textLine->length();
+  len = textLine->length();
 
   x = oldX = z = 0;
   while (x < xPos) { // && z < len) {
@@ -1271,10 +1133,7 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos, int &newXPos) {
     x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
     z++;
   }
-  if (xPos - oldX < x - xPos && z > 0) {
-    z--;
-    newXPos = oldX;
-  } else newXPos = x;
+  if (xPos - oldX < x - xPos && z > 0) z--;
   return z;
 }
 
@@ -1286,10 +1145,10 @@ int KWriteDoc::textHeight() {
   return contents.count()*fontHeight;
 }
 
-void KWriteDoc::toggleRect(int start, int end, int x1, int x2) {
+void KWriteDoc::toggleRect(int x1, int y1, int x2, int y2) {
   int z;
   bool t;
-  int s, e, newX1, newX2;
+  int start, end;
   TextLine *textLine;
 
   if (x1 > x2) {
@@ -1297,126 +1156,123 @@ void KWriteDoc::toggleRect(int start, int end, int x1, int x2) {
     x1 = x2;
     x2 = z;
   }
-  if (start > end) {
-    z = start;
-    start = end;
-    end = z;
+  if (y1 > y2) {
+    z = y1;
+    y1 = y2;
+    y2 = z;
   }
 
   t = false;
-  for (z = start; z < end; z++) {
+  for (z = y1; z < y2; z++) {
     textLine = contents.at(z);
-    s = textPos(textLine, x1, newX1);
-    e = textPos(textLine, x2, newX2);
-    if (e > s) {
-      textLine->toggleSelect(s, e);
-      tagLineRange(z, newX1, newX2);
+    start = textPos(textLine,x1);
+    end = textPos(textLine,x2);
+    if (end > start) {
+      textLine->toggleSelect(start,end);
       t = true;
     }
   }
   if (t) {
-    end--;
-//    tagLines(start, end);
+    y2--;
+    tagLines(y1,y2);
 
-    if (start < selectStart) selectStart = start;
-    if (end > selectEnd) selectEnd = end;
+    if (y1 < selectStart) selectStart = y1;
+    if (y2 > selectEnd) selectEnd = y2;
   }
 }
 
-void KWriteDoc::selectTo(VConfig &c, PointStruc &cursor, int cXPos) {
-  //c.cursor = old cursor position
-  //cursor = new cursor position
+void KWriteDoc::selectTo(PointStruc &start, PointStruc &end, int flags) {
 
-  if (c.cursor.x != select.x || c.cursor.y != select.y) {
+  if (start.x != select.x || start.y != select.y) {
     //new selection
-    if (!(c.flags & cfKeepSelection)) deselectAll();
-    anchor = c.cursor;
-    aXPos = c.cXPos;
+    if (!(flags & cfKeepSelection)) deselectAll();
+    anchor = start;
   }
 
-  if (!(c.flags & cfVerticalSelect)) {
+  if (!(flags & cfVerticalSelect)) {
     //horizontal selections
     TextLine *textLine;
-    int x, y, sXPos;
-    int ex, ey, eXPos;
+    int x, y;
+    int xe, ye;
     bool sel;
 
-    if (cursor.y > c.cursor.y || (cursor.y == c.cursor.y && cursor.x > c.cursor.x)) {
-      x = c.cursor.x;
-      y = c.cursor.y;
-      sXPos = c.cXPos;
-      ex = cursor.x;
-      ey = cursor.y;
-      eXPos = cXPos;
+    if (end.y > start.y || (end.y == start.y && end.x > start.x)) {
+      x = start.x;
+      y = start.y;
+      xe = end.x;
+      ye = end.y;
       sel = true;
     } else {
-      x = cursor.x;
-      y = cursor.y;
-      sXPos = cXPos;
-      ex = c.cursor.x;
-      ey = c.cursor.y;
-      eXPos = c.cXPos;
+      x = end.x;
+      y = end.y;
+      xe = start.x;
+      ye = start.y;
       sel = false;
     }
-
-//    tagLines(y, ye);
-    if (y < ey) {
-      //tagLineRange(y, sXPos, 0xffffff);
-      tagLines(y, ey -1);
-      tagLineRange(ey, 0, eXPos);
-    } else tagLineRange(y, sXPos, eXPos);
+    tagLines(y,ye);
 
     if (y < selectStart) selectStart = y;
-    if (ey > selectEnd) selectEnd = ey;
+    if (ye > selectEnd) selectEnd = ye;
 
     textLine = contents.at(y);
+//    bufferLine->copy(textLine);
 
-    if (c.flags & cfXorSelect) {
+    if (flags & cfXorSelect) {
       //xor selection with old selection
-      while (y < ey) {
+      while (y < ye) {
         textLine->toggleSelectEol(x);
+//        optimizedDrawLine(paint,fm,*textLine,*bufferLine,y);
         x = 0;
         y++;
         textLine = contents.at(y);
+//        bufferLine->copy(textLine);
       }
-      textLine->toggleSelect(x, ex);
+      textLine->toggleSelect(x,xe);
+//      optimizedDrawLine(paint,fm,*textLine,*bufferLine,y);
     } else {
       //set selection over old selection
 
       if (anchor.y > y || (anchor.y == y && anchor.x > x)) {
-        if (anchor.y < ey || (anchor.y == ey && anchor.x < ex)) {
+        if (anchor.y < ye || (anchor.y == ye && anchor.x < xe)) {
           sel = !sel;
           while (y < anchor.y) {
-            textLine->selectEol(sel, x);
+            textLine->selectEol(sel,x);
+//            optimizedDrawLine(paint,fm,*textLine,*bufferLine,y);
             x = 0;
             y++;
             textLine = contents.at(y);
+//            bufferLine->copy(textLine);
           }
-          textLine->select(sel, x, anchor.x);
+          textLine->select(sel,x,anchor.x);
           x = anchor.x;
         }
         sel = !sel;
       }
-      while (y < ey) {
-        textLine->selectEol(sel, x);
+      while (y < ye) {
+        textLine->selectEol(sel,x);
+//        optimizedDrawLine(paint,fm,*textLine,*bufferLine,y);
         x = 0;
         y++;
         textLine = contents.at(y);
+//        bufferLine->copy(textLine);
       }
-      textLine->select(sel, x, ex);
+      textLine->select(sel,x,xe);
+//      optimizedDrawLine(paint,fm,*textLine,*bufferLine,y);
     }
   } else {
     //vertical (block) selections
-//    int ax, sx, ex;
+    int ax, sx, ex;
 
-//    ax = textWidth(anchor);
-//    sx = textWidth(start);
-//    ex = textWidth(end);
+    ax = textWidth(anchor);
+    sx = textWidth(start);
+    ex = textWidth(end);
 
-    toggleRect(c.cursor.y + 1, cursor.y + 1, aXPos, c.cXPos);
-    toggleRect(anchor.y, cursor.y + 1, c.cXPos, cXPos);
+    toggleRect(ax,start.y + 1,sx,end.y + 1);
+    toggleRect(sx,anchor.y,ex,end.y + 1);
+//    toggleRect(ax,start.y + 1,sx,end.y + 1);
+//    toggleRect(sx,anchor.y,ex,end.y);
   }
-  select = cursor;
+  select = end;
   optimizeSelection();
 }
 
@@ -1442,7 +1298,6 @@ void KWriteDoc::clear() {
 
   selectStart = 0xffffff;
   selectEnd = 0;
-  oldMarkState = false;
 
   foundLine = -1;
 
@@ -1455,7 +1310,7 @@ void KWriteDoc::clear() {
 
 
 void KWriteDoc::copy(int flags) {
-
+  KWriteView *view;
   if (selectEnd < selectStart) return;
 
   QString s = markedText(flags);
@@ -1464,6 +1319,9 @@ void KWriteDoc::copy(int flags) {
     disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),this,0);
 #endif
     QApplication::clipboard()->setText(s);
+    for (view = views.first(); view != 0L; view = views.next())
+      emit view->kWrite->clipboardStatus(view, !s.isEmpty());
+
 #if defined(_WS_X11_)
     connect(QApplication::clipboard(),SIGNAL(dataChanged()),
       this,SLOT(clipboardChanged()));
@@ -1471,22 +1329,22 @@ void KWriteDoc::copy(int flags) {
   }
 }
 
-void KWriteDoc::paste(VConfig &c) {
+void KWriteDoc::paste(KWriteView *view, VConfig &c) {
   QString s = QApplication::clipboard()->text();
   if (!s.isEmpty()) {
 //    unmarkFound();
-    insert(c, s);
+    insert(view,c,s);
   }
 }
 
 
-void KWriteDoc::cut(VConfig &c) {
+void KWriteDoc::cut(KWriteView *view, VConfig &c) {
 
   if (selectEnd < selectStart) return;
 
 //  unmarkFound();
   copy(c.flags);
-  delMarkedText(c);
+  delMarkedText(view,c);
 }
 
 void KWriteDoc::selectAll() {
@@ -1572,26 +1430,30 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
 
 QString KWriteDoc::text() {
   TextLine *textLine;
-  int len, lines, z, end, i;
+  int len, last, z, end;
 
   len = 1;
-  lines = numLines();
-  for (z = 0; z < lines; z++) {
+  last = lastLine();
+  for (z = 0; z <= last; z++) {
     textLine = contents.at(z);
     len += textLine->length() + 1;
   }
-  QString s;
-  s.resize(len);
-  len = 0;
-  for (z = 0; z < lines; z++) {
-    textLine = contents.at(z);
-    end = textLine->length();
-    for (i = 0; i < end; i++) s[len + i] = textLine->getChar(i);
-    len += end;
+  QString s(len);
+  // add first line without newline
+  textLine = contents.at(0);
+  len = textLine->length();
+  memcpy(s.data(), textLine->getText(), len);
+  // add remaining lines separated by newlines
+  for (z = 1; z <= last; z++) {
     s[len] = '\n';
     len++;
+    textLine = contents.at(z);
+    end = textLine->length();
+    memcpy(s.data()+len, textLine->getText(), end);
+    len += end;
   }
-  s[len] = '\0';
+  s.resize(len+1);
+//  s[len] = '\0';
   return s;
 }
 
@@ -1605,8 +1467,7 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
   while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
   len = end - start;
-  QString s;
-  s.resize(len +1);
+  QString s(len +1);
   for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
   s[len] = '\0';
   return s;
@@ -1619,13 +1480,18 @@ void KWriteDoc::setText(const char *s) {
 
   textLine = contents.getFirst();
   while (*s) {
-    if ((unsigned char) *s >= 32 || *s == '\t') {
-      textLine->append(*s);
-    } else if (*s == '\n') {
+    // search to end of line
+    const char* line = s;
+    while (*s && *s != '\n')
+      s++;
+    textLine->insert(0, line, s-line);
+    // if this is the last line and it did not end with a newline,
+    // do not add yet another line
+    if (*s == '\n') {
       textLine = new TextLine();
       contents.append(textLine);
+      s++;	// skip the newline
     }
-    s++;
   }
   updateLines();
 }
@@ -1642,8 +1508,7 @@ QString KWriteDoc::markedText(int flags) {
       len += textLine->numSelected();
       if (textLine->isSelected()) len++;
     }
-    QString s;
-    s.resize(len);
+    QString s(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
@@ -1668,8 +1533,7 @@ QString KWriteDoc::markedText(int flags) {
       textLine = contents.at(z);
       len += textLine->numSelected() + 1;
     }
-    QString s;
-    s.resize(len);
+    QString s(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
@@ -1690,7 +1554,7 @@ QString KWriteDoc::markedText(int flags) {
   }
 }
 
-void KWriteDoc::delMarkedText(VConfig &c) {
+void KWriteDoc::delMarkedText(KWriteView *view, VConfig &c) {
   TextLine *textLine;
   int end = 0;
 
@@ -1713,12 +1577,12 @@ void KWriteDoc::delMarkedText(VConfig &c) {
     if (textLine->isSelected()) recordAction(KWAction::delLine,c.cursor);
   }
   c.cursor.y++;
-  /*if (end < c.cursor.x)*/ c.cursor.x = end;
+  if (end < c.cursor.x) c.cursor.x = end;
 
   selectEnd = -1;
   select.x = -1;
 
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
 QColor &KWriteDoc::cursorCol(int x, int y) {
@@ -1814,11 +1678,10 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
 }
 */
 
-void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
+void KWriteDoc::paintTextLine(QPainter &paint, int line,
+                              int xStart, int xEnd) {
   int y;
   TextLine *textLine;
-  int len;
-  const char *s;
   int z, x;
   char ch;
   Attribute *a = 0L;
@@ -1826,97 +1689,71 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
   int xs;
   int xc, zc;
 
-//  struct timeval tv1, tv2, tv3;
-//  struct timezone tz;
-
   y = 0;//line*fontHeight - yPos;
   if (line >= (int) contents.count()) {
-    paint.fillRect(0, y, xEnd - xStart,fontHeight,colors[4]);
+    paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
     return;
   }
-
+//printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
+//printf("text = ");
   textLine = contents.at(line);
-  len = textLine->length();
-  s = textLine->getText();
 
-  x = 0;
   z = 0;
+  x = 0;
   do {
     xc = x;
-    zc = z;
-    if (z == len) break;
-    ch = s[z];//textLine->getChar(z);
+    ch = textLine->getChar(z);
     if (ch == '\t') {
       x += tabWidth - (x % tabWidth);
     } else {
       a = &attribs[textLine->getAttr(z)];
-      x += a->fm.width(&ch, 1);
+      x += a->fm.width(&ch,1);
     }
     z++;
   } while (x <= xStart);
-
-//gettimeofday(&tv1, &tz);
+  zc = z - 1;
 
   xs = xStart;
   attr = textLine->getRawAttr(zc);
   while (x < xEnd) {
     nextAttr = textLine->getRawAttr(z);
     if ((nextAttr ^ attr) & (taSelectMask | 256)) {
-      paint.fillRect(xs - xStart, y, x - xs, fontHeight, colors[attr >> taShift]);
+      paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
       xs = x;
       attr = nextAttr;
     }
-    if (z == len) break;
-    ch = s[z];//textLine->getChar(z);
+    ch = textLine->getChar(z);
     if (ch == '\t') {
       x += tabWidth - (x % tabWidth);
     } else {
       a = &attribs[attr & taAttrMask];
-      x += a->fm.width(&ch, 1);
+      x += a->fm.width(&ch,1);
     }
     z++;
   }
-  paint.fillRect(xs - xStart, y, xEnd - xs, fontHeight, colors[attr >> taShift]);
-  len = z;
-
-//gettimeofday(&tv2, &tz);
-
-  x = xc;
-  z = zc;
+  paint.fillRect(xs - xStart,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
+//int len = textLine->length();
   y += fontAscent -1;
   attr = -1;
-
-  while (z < len) {
-    ch = s[z];//textLine->getChar(z);
+  while (xc < xEnd) {
+    ch = textLine->getChar(zc);
     if (ch == '\t') {
-      if (z > zc) {
-        paint.drawText(x - xStart, y, &s[zc], z - zc);
-        x += a->fm.width(&s[zc], z - zc);
-      }
-      zc = z +1;
-      x += tabWidth - (x % tabWidth);
+      xc += tabWidth - (xc % tabWidth);
     } else {
-      nextAttr = textLine->getRawAttr(z);
+      nextAttr = textLine->getRawAttr(zc);
       if (nextAttr != attr) {
-        if (z > zc) {
-          paint.drawText(x - xStart, y, &s[zc], z - zc);
-          x += a->fm.width(&s[zc], z - zc);
-          zc = z;
-        }
         attr = nextAttr;
         a = &attribs[attr & taAttrMask];
-
-        if (attr & taSelectMask) paint.setPen(a->selCol);
-          else paint.setPen(a->col);
+        if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
         paint.setFont(a->font);
       }
+      paint.drawText(xc - xStart,y,&ch,1);
+      xc += a->fm.width(&ch,1);
+//if (zc < len) printf("%c",ch);
     }
-    z++;
+    zc++;
   }
-  if (z > zc) paint.drawText(x - xStart, y, &s[zc], z - zc);
 
-//gettimeofday(&tv3, &tz);
-//printf(" %d %d\n", tv2.tv_usec - tv1.tv_usec, tv3.tv_usec - tv2.tv_usec);
 //printf("\n");
 }
 
@@ -1942,7 +1779,7 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
     if (ch == '\t') {
       if (bufp > 0) {
         paint.drawText(x, y, buf, bufp);
-        x += paint.fontMetrics().width(buf, bufp);
+        x += a->fm.width(buf,bufp);
         bufp = 0;
       }
       x += tabWidth - (x % tabWidth);
@@ -1951,7 +1788,7 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
       if (nextAttr != attr || bufp >= 256) {
         if (bufp > 0) {
           paint.drawText(x, y, buf, bufp);
-          x += paint.fontMetrics().width(buf,bufp);
+          x += a->fm.width(buf,bufp);
           bufp = 0;
         }
         attr = nextAttr;
@@ -2000,7 +1837,7 @@ void KWriteDoc::setFileName(const char *s) {
 
   fName = s;
   for (view = views.first(); view != 0L; view = views.next()) {
-    emit view->kWrite->fileChanged();
+    emit view->kWrite->newCaption();
   }
 
   //highlight detection
@@ -2032,7 +1869,7 @@ void KWriteDoc::clearFileName() {
 
   fName.truncate(fName.findRev('/') +1);
   for (view = views.first(); view != 0L; view = views.next()) {
-    emit view->kWrite->fileChanged();
+    emit view->kWrite->newCaption();
   }
 }
 
@@ -2451,23 +2288,20 @@ void KWriteDoc::recordReplace(PointStruc &cursor,
   undoList.getLast()->insertAction(a);
 }
 
-void KWriteDoc::recordEnd(VConfig &c) {
-  recordEnd(c.view, c.cursor, c.flags);
+void KWriteDoc::recordEnd(KWriteView *view, VConfig &c) {
+  recordEnd(view,c.cursor,c.flags);
 }
 
 void KWriteDoc::recordEnd(KWriteView *view, PointStruc &cursor, int flags) {
 
-  //clear selection if option "persistent selections" is off
   if (!(flags & cfPersistent)) deselectAll();
-  //store end cursor position for redo
+
   undoList.getLast()->end = cursor;
   view->updateCursor(cursor);
 
-  if (tagStart <= tagEnd) {
-    optimizeSelection();
-    updateLines(tagStart,tagEnd,flags);
-    setModified(true);
-  }
+  optimizeSelection();
+  if (tagStart <= tagEnd) updateLines(tagStart,tagEnd,flags);
+  setModified(true);
   newUndo();
 }
 
@@ -2508,25 +2342,25 @@ void KWriteDoc::doActionGroup(KWActionGroup *g, int flags) {
   newUndo();
 }
 
-void KWriteDoc::undo(VConfig &c) {
+void KWriteDoc::undo(KWriteView *view, int flags) {
   KWActionGroup *g;
 
   if (currentUndo <= 0) return;
   currentUndo--;
   g = undoList.at(currentUndo);
-  doActionGroup(g, c.flags);
-  c.view->updateCursor(g->start);
+  doActionGroup(g,flags);
+  view->updateCursor(g->start);
 }
 
-void KWriteDoc::redo(VConfig &c) {
+void KWriteDoc::redo(KWriteView *view, int flags) {
   KWActionGroup *g;
 
-  if (currentUndo >= (int) undoList.count()) return;
+//  if (currentUndo >= (int) undoList.count()) return;
   g = undoList.at(currentUndo);
   if (!g) return;
   currentUndo++;
-  doActionGroup(g, c.flags);
-  c.view->updateCursor(g->end);
+  doActionGroup(g,flags);
+  view->updateCursor(g->end);
 }
 
 void KWriteDoc::setUndoSteps(int steps) {
@@ -2539,7 +2373,7 @@ void KWriteDoc::setPseudoModal(QWidget *w) {
   pseudoModal = w;
 }
 
-void KWriteDoc::indent(VConfig &c) {
+void KWriteDoc::indent(KWriteView *view, VConfig &c) {
   TextLine *textLine;
 
   c.flags |= cfPersistent;
@@ -2557,10 +2391,10 @@ void KWriteDoc::indent(VConfig &c) {
     }
     c.cursor.y--;
   }
-  recordEnd(c);
+  recordEnd(view,c);
 }
 
-void KWriteDoc::unIndent(VConfig &c) {
+void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
   char s[16];
   PointStruc cursor;
   TextLine *textLine;
@@ -2600,82 +2434,5 @@ void KWriteDoc::unIndent(VConfig &c) {
     }
     c.cursor.y--;
   }
-  recordEnd(c);
-}
-
-void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm) {
-  TextLine *textLine;
-  int x, line, count, attr;
-  char bracket, opposite, ch;
-  Attribute *a;
-
-  bm.eXPos = -1;
-
-  x = cursor.x -1;
-  if (x < 0) return;
-  line = cursor.y; //current line
-  count = 0; //bracket counter for nested brackets
-  textLine = contents.at(line);
-  bracket = textLine->getChar(x);
-  attr = textLine->getAttr(x);
-  if (bracket == '(' || bracket == '[' || bracket == '{') {
-    //get opposite bracket
-    opposite = ')';
-    if (bracket == '[') opposite = ']';
-    if (bracket == '{') opposite = '}';
-    //get attribute of bracket (opposite bracket must have the same attribute)
-    x++;
-    while (line - cursor.y < 20) {
-      //go to next line on end of line
-      while (x >= textLine->length()) {
-        line++;
-        if (line > lastLine()) return;
-        textLine = contents.at(line);
-        x = 0;
-      }
-      if (textLine->getAttr(x) == attr) {
-        //try to find opposite bracked
-        ch = textLine->getChar(x);
-        if (ch == bracket) count++; //same bracket : increase counter
-        if (ch == opposite) {
-          count--;
-          if (count < 0) goto found;
-        }
-      }
-      x++;
-    }
-  } else if (bracket == ')' || bracket == ']' || bracket == '}') {
-    opposite = '(';
-    if (bracket == ']') opposite = '[';
-    if (bracket == '}') opposite = '{';
-    x--;
-    while (cursor.y - line < 20) {
-
-      while (x < 0) {
-        line--;
-        if (line < 0) return;
-        textLine = contents.at(line);
-        x = textLine->length() -1;
-      }
-      if (textLine->getAttr(x) == attr) {
-        ch = textLine->getChar(x);
-        if (ch == bracket) count++;
-        if (ch == opposite) {
-          count--;
-          if (count < 0) goto found;
-        }
-      }
-      x--;
-    }
-  }
-  return;
-found:
-  //cursor position of opposite bracket
-  bm.cursor.x = x;
-  bm.cursor.y = line;
-
-  //x position (start and end) of related bracket
-  bm.sXPos = textWidth(textLine, x);
-  a = &attribs[attr];
-  bm.eXPos = bm.sXPos + a->fm.width(bracket);
+  recordEnd(view,c);
 }

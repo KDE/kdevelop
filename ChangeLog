@@ -1,3 +1,6 @@
+1999-10-12 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commited patch by Johannes Sixt, fixed the addition of empty lines by switching files
+
 1999-10-02 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* many changes in the source templates
 	  generalize outfit (spacing between parameters etc.)
