@@ -774,17 +774,19 @@ constructing your widget top down from left to right to ensure the consistancy o
 <H3><A NAME="ss6.6">6.6 Setting Widget Properties</A>
 </H3>
 
-<P>Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window automatically updates to the properties
-of the current widget. As all widgets are derived from <CODE>QWidget</CODE>, you can set the <CODE>QWidget</CODE> properties plus an amount of properties that are specific to the
-selected widget. Properties can be:
+<P>Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window
+automatically updates to the properties of the current widget. As all widgets are derived from <CODE>QWidget</CODE>, you can set the
+<CODE>QWidget</CODE> properties plus an amount of properties that are specific to the selected widget. Properties can be:
 <P>
 <UL>
 <LI>Integer values, such as the geometry of a widget or the font size</LI>
 <LI>Boolean values to enable/disable certain parameters of the widget. Set with combos containing true and false</LI>
 <LI>enumerable values of a widget, e.g. the palette. Set with combos containing all possible values</LI>
 <LI>Color values for e.g. the displayed color. Set with the KDE Color Dialog</LI>
-<LI>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the font. Set with the KDE Font Dialog</LI>
-<LI>File names for e.g. background pixmaps. Do not use gif images here as these may get unsupported by further Qt versions > 1.42</LI>
+<LI>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the
+font. Set with the KDE Font Dialog</LI>
+<LI>File names for e.g. background pixmaps. Do not use gif images here as these may get
+unsupported by further Qt versions > 1.42</LI>
 </UL>
 <P>
 <H3><A NAME="ss6.7">6.7 Integrating the Dialog</A>

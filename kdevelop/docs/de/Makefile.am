@@ -1,8 +1,9 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 	
-EXTRA_DIST = index-9.html index-1.html index-10.html index-11.html index-12.html index-13.html \
-							index-14.html index-15.html index-2.html index-3.html index-4.html index-5.html \
-							index-6.html index-7.html index-8.html index.html logotp3.gif tipdatabase index-16.html index.sgml
+EXTRA_DIST = logotp3.gif tipdatabase \
+						index.sgml \
+						index.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html \
+						index-9.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html \
+						index-16.html
 							
 install-data-local: 	
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/ 	
@@ -66,6 +67,4 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/de/kdevelop/index-14.html
 	-rm -f $(kde_htmldir)/de/kdevelop/index-15.html
 	-rm -f $(kde_htmldir)/de/kdevelop/index-16.html
-
-####### kdevelop will overwrite this part!!! (end)############
 

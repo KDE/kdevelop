@@ -10,7 +10,6 @@
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
-
 <toc>
 
 <chapt>Introduction
@@ -43,7 +42,7 @@ part of the development process. KDevelop manages:
 <item> Internationalization support for your application, allowing translators to easily add their target language to a project,
 <item> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in <idx/dialog editor/,
 <item> Debugging your application by integrating <idx/KDbg/,
-<item> Editing of project-specific <idx/pixmaps/ with KIconedit,
+<item> Editing of project-specific <idx/pixmaps/ with <idx/KIconEdit/,
 <item> The inclusion of any other program you need for development by adding it to the "<idx/Tools/"-menu according to your individual needs.
 </itemize>
 
@@ -151,7 +150,7 @@ as distribution packages and thereby can be installed easily.
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with <idx/KDoc/, KSgml2Html, <idx/KTranslator/ (available at <htmlurl
 url="http://developer.kde.org" name="http://developer.kde.org">)
 <item><idx/KDbg/, available at <htmlurl url="http://members.telecom.at/~johsixt/<idx/KDbg/.html" name="http://members.telecom.at/~johsixt/<idx/KDbg/.html">
-<item>KIconEdit (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
+<item><idx/KIconEdit/ (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
 </itemize>
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
@@ -253,9 +252,9 @@ automatically in a later <idx/setup/ step if found.
 allow correct <idx/printing/. If neither program is installed, you can do this at any time lateron at your option without having to run the
 <idx/setup/ again.
 
-<item> Checking for <idx/KDbg/, KIconedit and <idx/KTranslator/.  We encourage you to install those programs as they are good
+<item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
 helpers for creating complete <idx/KDE/-applications. Note that <idx/KDbg/ is used directly for <idx/debugging/ your current project within
-KDevelop; KIconedit is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, KIconedit and <idx/KTranslator/
+KDevelop; <idx/KIconEdit/ is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/
 are then configured to be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools can be added to the
 <idx/Tools/-menu by selecting "<idx/Tools/..." in the Options menu later.
 
@@ -535,7 +534,7 @@ one or the other way.
 <sect2>The Programming Environment
 <p>
 The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
-many other tools by simplifying their use. It's build-in Editor and Helpbrowser as well as the Class Browser reduce the amount of
+many other tools by simplifying their use. It's build-in Editor and <idx/Helpbrowser/ as well as the Class Browser reduce the amount of
 work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
 on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
 your project throughout all its details, keep the overview over your <idx/classes/ and don't have to use additional consoles for your
@@ -669,7 +668,7 @@ so you should have a look there first. Then we advise to have a closer look at t
 like the K<idx/HTML/ library contains very specialized <idx/widgets/ that a lot of programs make use of. It just simplifies application design like
 the predefined dialogs provided with Qt. For your own dialogs, those low-level <idx/widgets/ are the one you need. A dialog merely
 consists by a collection of different <idx/widgets/ combined together building the interface and is technically programmed by C++ code
-in a class that is derived from QWidget or a more specialized dialog class that inherits QWidget. The program using the widget
+in a class that is derived from <cdx/QWidget/ or a more specialized dialog class that inherits <cdx/QWidget/. The program using the widget
 therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are used.
 
 The <idx/dialog editor/ of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
@@ -699,7 +698,7 @@ would be to create the main view and additional dialogs by which the user can ch
 functions.
 
 To build your main-view, the generated source code for your application already contains a class in the form of
-&lt;YourApplication&gt;View which inherits the QWidget class (this is the minimal class that handles visual interfaces in Qt and
+&lt;YourApplication&gt;View which inherits the <cdx/QWidget/ class (this is the minimal class that handles visual interfaces in Qt and
 therefore in <idx/KDE/ as well). In general, there are three different ways how to extend the given class:
 <itemize>
 <item>remove the document-view structure and use one of the predefined "big" <idx/widgets/ already containing a lot of functionality-
@@ -830,11 +829,11 @@ starting by the windows, followed by the bars and the functions they provide.
 <p>
 The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
 window for headers and any other text files like the documentation <idx/SGML/'s, then the C/C++ window for sourcecodes. These are
-followed by the Documentation window displaying in <idx/HTML/-format. At last is the <idx/Tools/ window for external programs like KIconedit
+followed by the Documentation window displaying in <idx/HTML/-format. At last is the <idx/Tools/ window for external programs like <idx/KIconEdit/
 and <idx/KDbg/ which are embedded into the IDE. Any Tool that is registered can be accessed via the <idx/Tools/-menu; whereas the registration
 of third-party programs can easily be done by a <idx/configuration dialog/ (see <ref id="General Configuration" name="General
 Configuration">). For a description of the Editor windows functionality, see chapter <ref id="Working with the Editor" name="Working
-with the Editor">, and for the Helpbrowser, you should look at section <ref id="Using the Documentation Browser" name="Using the
+with the Editor">, and for the <idx/Helpbrowser/, you should look at section <ref id="Using the Documentation Browser" name="Using the
 Documentation Browser">.
 
 <sect> The Class Browser and Fileviewers
@@ -855,7 +854,7 @@ see <ref id="The Class Browser" name="The Class Browser"> for more detailed info
 The Logical File Viewer (<idx/LFV/) allows sorting files by filters in groups. Individual groups can be added by the properties
 entry of the project menu or by a right click on the tree items. This allows a more specialized search for files that you want to
 access quickly, in the first place only showing project-included files. According to their Mime-type, the files will be opened
-when selected. You will like the <idx/LFV/ for things like selecting <idx/pixmaps/- this will start KIconEdit (if installed on the system) in
+when selected. You will like the <idx/LFV/ for things like selecting <idx/pixmaps/- this will start <idx/KIconEdit/ (if installed on the system) in
 the <idx/Tools/-window and opens the chosen picture.
 
 <sect1>The Real File Viewer
@@ -1035,7 +1034,7 @@ Configure again.<p>
 
 <sect1>Calling <idx/Tools/
 <p>
-The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, KIconEdit and <idx/KTranslator/. These are
+The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
 "<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
 see <ref id="Configuring the &dquot;<idx/Tools/&dquot; Menu" name="Configuring the &dquot;<idx/Tools/&dquot; Menu">.
@@ -1051,7 +1050,7 @@ with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <item><bf/Editor Defaults.../ This sets the default display like font and fontsize for the <idx/editor/<p>
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
 languages, including <idx/HTML/.<p>
-<item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal Helpbrowser<p>
+<item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal <idx/Helpbrowser/<p>
 <item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s according to the used <idx/printing/ program, <idx/a2ps/
 or <idx/enscript/.<p>
 <itemize>
@@ -1062,7 +1061,7 @@ or <idx/enscript/.<p>
 be started in the <idx/Tools/-window.<p>
 <item><bf/KDevelop Setup/ Opens the KDevelop Setup dialog. The first tabulator configures general settings, followed by the
 key-configuration and the Documentation settings. The Documentation settings also include the generation of a new set of
-<idx/HTML/-library documentation and the rebuilding of the <idx/search index/ for the Helpbrowser.
+<idx/HTML/-library documentation and the rebuilding of the <idx/search index/ for the <idx/Helpbrowser/.
 </itemize>
 
 <sect1>The Window Menu
@@ -1092,7 +1091,7 @@ Header-Window.
 
 <sect1>Online Help
 <p>
-The Help-menu contains entries for navigating in the Helpbrowser as well as entries for library and online-documentation for the
+The Help-menu contains entries for navigating in the <idx/Helpbrowser/ as well as entries for library and online-documentation for the
 most recently used cases. Accessing additional online-documentation can be achieved with the <idx/DOC/-tree in the treeview
 automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
 <itemize>
@@ -1337,7 +1336,7 @@ Most of KDevelop's strength is accumulated in the Help System.  It is also to be
 KDE application with a complete set of help functionality, and is, in part, already realized in the template applications, so
 KDE/Qt <idx/application framework/s generated with the <idx/KAppWizard/ do already contain the basic functionality for statusbar help and
 documentation, that only has to be extended by the programmer. This section therefore introduces into the usage of the general
-help provided within the IDE as well as to show the usage of the Helpbrowser, which, by intelligent use, will make it very easy to
+help provided within the IDE as well as to show the usage of the <idx/Helpbrowser/, which, by intelligent use, will make it very easy to
 get the information you need for development.
 
 <sect>The "What's this ?"-Button and <idx/Quickhelp/
@@ -1427,11 +1426,11 @@ documentation.
 
 <sect1>Requirements
 <p>
-To make use of all features of the Helpbrowser, you should have <idx/KDoc/ and <idx/glimpse/ installed. <idx/KDoc/ will generate all kind of online
+To make use of all features of the <idx/Helpbrowser/, you should have <idx/KDoc/ and <idx/glimpse/ installed. <idx/KDoc/ will generate all kind of online
 classdocumentation for the <idx/KDE-libraries/ during the <idx/setup/ process, but can also invoked by option in the <ref id="General
 Configuration" name="KDevelop Setup">. For the generation of an <idx/API/ (Application Programming Interface) Documentation for your
 project's <idx/classes/, <idx/KDoc/ is also used and called by the Project-menu, entry "Make <idx/API/-Doc". This will process all current header files
-of the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the Helpbrowser. For
+of the project plus the addition of a cross-reference to the Qt and <idx/KDE-libraries/ if those are available in the <idx/Helpbrowser/. For
 the generation of the project handbooks, you should have <idx/KSgml2Html/ (provided with the <idx/KDE-SDK/) and, as a minimum, <idx/SGML/-tools
 installed on your system. To extend and change your project's online-documentation, you have to edit the documentation file for your
 project by selecting it in the <idx/RFV/. After saving your changes, call "Make User-Manual" from the Project-menu. In case <idx/SGML/tools detect
@@ -1473,9 +1472,9 @@ The documentation tree also contains the "Others" folder which is inteded to con
 documentation as described below. Finally, the Doc-Tree allows access to the <idx/API/ and the Manual for your current
 project.
 
-<sect1>Adding Documentation to the Helpbrowser
+<sect1>Adding Documentation to the <idx/Helpbrowser/
 <p>
-To customize your Helpbrowser, open the Tree-View and select the "<idx/DOC/" Tabulator. You will see an opened tree containing four folders.
+To customize your <idx/Helpbrowser/, open the Tree-View and select the "<idx/DOC/" Tabulator. You will see an opened tree containing four folders.
 The "Others" folder is, by default, empty. On a right mousebutton click over this folder, a context menu opens that has an entry "Add
 Entry". Select this to open the Add Entry dialog where you have to enter two values: the upper one for the name that will be displayed
 for the documentation within the Doc-tree, and, below that, a file-entry line. Here, you have to enter the path and filename to the
@@ -1504,7 +1503,7 @@ on..." icon from the toolbar, opening a search dialog where you can enter the ex
 Direct access to specific documentation is given by selecting the according icon in the "<idx/DOC/" -tree-view or by the help menu
 entries.
 
-The Helpbrowser also offers support for <idx/grep/ to search for a selection within your current project, e.g you've opened the documentation
+The <idx/Helpbrowser/ also offers support for <idx/grep/ to search for a selection within your current project, e.g you've opened the documentation
 page for the <tt/KTMainWindow/ class (KDEUI library) and you want to know where in your code <tt/KTMainWindow/ appears. Mark
 <tt/KTMainWindow/ and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
 your <idx/grep/ search directly. Then you can choose an result line to jump to the according sourcecode.
@@ -2333,7 +2332,7 @@ url="programming-11.html" name="The KDevelop Programming Handbook"> where questi
 All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
 installation, project name and version as well as the author name and email-address. As KDevelop uses <idx/SGML/-templates, it's very
 easy to extend the documentation to a full descriptive helpsystem. The only thing you have to do is editing the <idx/SGML/ file, placed
-in docs/en as index.sgml. The reference documentation included with your sgml-tools package can be added to the helpbrowser and
+in docs/en as index.sgml. The reference documentation included with your sgml-tools package can be added to the <idx/Helpbrowser/ and
 allow you direct access to special tags as well as a short description of how to extend the documentation. <idx/SGML/ has a lot of
 advantages, whereas <idx/KDE/ makes wide use by this documentation type with the additional <idx/KSgml2Html/ tool. This creates the typical
 <idx/KDE/-style documentation and makes it look nicer. Anyway, the sgmltools alone are enough to produce a html <idx/output/ that is already
@@ -2705,7 +2704,7 @@ you specific trees for your class. These are:
 <descrip>
 <tag/ Parents:/
 The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
-class behaves in one or the other way, e.g. for dialogs your parent class could be <tt/QWidget/ or <tt/QDialog/.
+class behaves in one or the other way, e.g. for dialogs your parent class could be <tt/<cdx/QWidget// or <tt/<cdx/QDialog//.
 <tag/Children:/
 Displays the children <idx/classes/ that inherit the current class.
 <tag/Clients:/
@@ -2821,13 +2820,13 @@ destination.
 The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
 Therefore, you have the following options:
 <enum>
-<item><bf/QWidget:/ the base class for all user interaction <idx/widgets/ provided by Qt. Used for main views and top-level <idx/widgets/.
-<item><bf/QFrame:/ inherits QWidget and is used by numerous <idx/widgets/ as a base class. This is useful for <idx/widgets/ that already want to
-have a QFrame functionality in addition to QWidget methods.
+<item><bf/<cdx/QWidget/:/ the base class for all user interaction <idx/widgets/ provided by Qt. Used for main views and top-level <idx/widgets/.
+<item><bf/<cdx/QFrame/:/ inherits <cdx/QWidget/ and is used by numerous <idx/widgets/ as a base class. This is useful for <idx/widgets/ that already want to
+have a <cdx/QFrame/ functionality in addition to <cdx/QWidget/ methods.
 <item><bf/Custom:/ inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
 provided by your project or the libraries.
-<item><bf/QDialog:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
-<item><bf/QTabDialog:/ inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
+<item><bf/<cdx/QDialog/:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
+<item><bf/<cdx/QTabDialog/:/ inherits <cdx/QDialog/ and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
 <idx/widgets/ that you create.
 </enum>
 
@@ -2943,7 +2942,7 @@ values for the properties group. All possible values are described below. Mind t
 label and button will have a property for their on-screen name, while lineedits will have properties for methods like <em/setText()/.
 
 For a complete list of the available values per item, you should see the classreference of the widget which explains the used methods
-and all possible values. Note that most values are implemented in QWidget and are used for all <idx/widgets/ that inherit QWidget. Also mind
+and all possible values. Note that most values are implemented in <cdx/QWidget/ and are used for all <idx/widgets/ that inherit <cdx/QWidget/. Also mind
 that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
 the widget's constructors.
 
@@ -3003,19 +3002,19 @@ Over a group folder, the according context menu offers:
 </itemize>
 
 
-<sect>KDevelop Setup<label id="KDevelop Setup">
+<sect><idx/KDevelop Setup/<label id="KDevelop Setup">
 <p>
-<bf>Make-command:</bf>
+<bf><idx/Make-command/:</bf>
 The General Options dialog lets you configure KDevelop's general settings.
 First, you should set the <idx/make-command/ available on your system. If the selected program does not exist,
 KDevelop will warn you the next time your're invoking a make command.
 
-<bf>Autosave:</bf>
+<bf><idx/Autosave/:</bf>
 
 If Autosave is checked, KDevelop will save all changed files periodically.  The autosaving time range can be set to 3, 5, 15 or 30 minutes.
 
 
-<bf>Autoswitch:</bf>
+<bf><idx/Autoswitch/:</bf>
 
 If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
 documentation in the Helpmenu, the Documentation browser will be opened, together with the documentation tree and the <idx/output/
@@ -3024,6 +3023,7 @@ Startup:
 
 For starting KDevelop, you have the option to enable/disable the startlogo to be shown during the time KDevelop loads.
 Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
+
 <sect>Changing Keyboard Shortcuts<label id="Changing Keyboard Shortcuts">
 <p>
 The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the

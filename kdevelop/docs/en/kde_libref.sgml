@@ -911,7 +911,7 @@ widgets. Mind that as a guideline to define own event handling, you should reimp
 not inherit <tt/QWidget/ and the more specialized event hanlers described below for all <tt/QWidget/ inherited classes. Also, preserve
 the declarations as virtual protected to ensure reusability and consistancy for your code.
 
-<sect1>Event Types
+<sect1>Event Types<label id="Event Types">
 <p>
 The events sent to the application are, as described, converted by <tt/QEvent/ to Qt events. The event type can be found out by using
 the <tt/type()/ method of <tt/QEvent/, which can then be compared with the event that you want to know about. Now, the event type that
@@ -1083,7 +1083,10 @@ method of <tt/QWidget/, these event types are converted from a <tt/QEvent/ to a 
 whereby <tt/QWidget/ provides a set of event handlers already. What is interesting about a mouse event is not only the type, but the
 other parameters, as mentioned, to implement certain actions on specific events. One of the most recently used event types are probably
 a right button press over a widget to open a context menu to allow quick access to commands that are available. This requires the exact
-position of the event's occurence and a comparison of the button type.
+position of the event's occurence and a comparison of the button type. Double clicks are processed by the user as producing a mouse
+press event followed by a mouse release event and another mouse press event. As the time between the release and the next press cannot
+be easily determined, the <tt/QApplication/ class has methods to define the click time which is by default 400 milliseconds:
+<tt/QApplication::setDoubleClickInterval(int ms)/ is what you need.
 
 The <tt/QMouseEvent/ class allows finding out the exact event by providing information about:
 <bf/Button type:/ using <tt/button()/
@@ -1129,6 +1132,10 @@ The provided event handlers are:
   <item>virtual void mouseMoveEvent ( QMouseEvent * )
   </itemize>
 </itemize>
+
+Thereby, the <tt/mouseDoubleClickEvent()/ by default only produces a mousePressEvent. You have to reimplement the
+<tt/mouseDoubleClickEvent()/ to receive the event and process it as it is produced as an hypothetic event, not produced by the window
+system under X11. Set the double click time with <tt/QApplication::setDoubleClickInterval()/.
 
 For MouseMove events, you have to watch that the mouse event is only handled if a button is pressed. This can be configured by
 <tt/QWidget::setMouseTracking(true)/ to receive all mouse movements as <tt/QMouseEvent/s in the event handler. The implementation
@@ -1417,14 +1424,248 @@ e.g. if your view area of your application wants to process a certain event that
 provides. Then you have to install the event filter at the place you like to; normally this would be in the constructor of your class.
 With removeEventFilter() you can stop the event filter from processing the events any time.
 
+<comment>Note: <tt/KApplication/ already has a global application event filter installed to filter out CTRL+ALT+F12 for
+KDebug</comment>
 
-<sect>Reimplementation of Event Handling
+<sect>Synthetic Events
+<p>
+Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections in brief.
+
+We saw that the application object receives the window system events, processes them and creates event objects from the classes the
+library provides. The converted event can then be handled by event handlers that are specialized on the event class to retrieve further
+information about the event. Finally, we can influence the event handling itself by installing event filters and overwriting provided
+event handlers.
+
+This does the "normal" job of an application to execute actions according to user invoked events. On the other side, this system offers
+another possibility: the fact that the events are converted to class instances can be reversed- a so-called synthetic event can be
+created which fakes an original window system event. The next advantage is that these events are independent of the underlying window
+system.
+
+A good possibility where this feature could be used would be e.g. for learning programs. Those are almost non-existant for Unix but
+could offer a market to teach beginners how to handle programs similar to commercial products already available on other platforms.
+Also this could be a part of a help-system which an application can provide.
+
+An example description how to implement this:
+
+Provide a help window with a button that invokes a step e.g. "Show me". On pressing the button, the cursor will move to the desired
+location, e.g. to a pushbutton on the screen. The implementation then has to find out the exact position of the button and calculate
+the center coordinates the mousepointer has to move to. Then the mousepointer could move there by construction of a <tt/QCursor/ and
+using <tt/setPos()/. The startposition can be found out in the mouseevent that called the function. Then, the cursor has to move
+visually by using <tt/setPos()/ in a loop where a <tt/QTimer/ could be used to run between positions to slow down the move so that the
+user can follow the mousepointer.
+
+<sect1>Creating Events
+<p>
+Now, to come to the actual implementation of a synthetic event, you have to know the event you want to create. Therefore, you need the
+constructor parameters for the event classes. The following list contains the constructors including the event-classes hierarchy:
+
+<descrip>
+<tag/QEvent(int type)/ <tt/type/ is one of the events declared in <tt/qevent.h/
+
+<tag/QCloseEvent()/ takes no parameter. Mind that the accept flag is set to false
+
+<tag/QFocusEvent(int type)/ <tt/type/ is either <tt/Event_FocusIn/ or <tt/Event_FocusOut/.
+
+<tag/QKeyEvent(int type, int key, int ascii, int state)/ takes <tt/Event_KeyPress/ and <tt/Event_KeyRelease/ as <tt/type/.
+<tt/key/ is one of the keys defined in <tt/qkeycode.h/. <tt/state/ is <tt/ShiftButton, ControlButton, AltButton/ OR'ed. 	
+
+<tag/QMouseEvent (int type, const QPoint & pos, int button, int state)/ The <tt/type/ parameter must be
+<tt/Event_MouseButtonPress, Event_MouseButtonRelease, Event_MouseButtonDblClick/ or <tt/Event_MouseMove/. The <tt/button/ is
+<tt/LeftButton, RightButton, MidButton, NoButton/. <tt/state/ is <tt/ShiftButton, ControlButton and AltButton/ OR'ed for event
+<tt/Event_MouseButtonRelease/, for events <tt/Event_MouseButtonPress, Event_MouseButtonDblClick/ <tt/state/ includes <tt/LeftButton,
+RightButton, MidButton/.
+	
+<tag/QMoveEvent(const QPoint & pos, const QPoint & oldPos)/ <tt/pos/ is the new postion the widget shall move to, <tt/oldPos/ the
+old postion. Retrieve the old position before creating the event with <tt/QWidget::pos()/.
+
+<tag/QPaintEvent(const QRect & paintRect) / raise a paint event to repaint the area <tt/paintRect/
+	
+<tag/QResizeEvent(const QSize & size, const QSize & oldSize)/ resizes the widget from <tt/oldSize/ to <tt/size/. Retrieve the old
+size before creating the event with <tt/QWidget::size()/.
+</descrip>
+
+An example on how to create an event would be:
+
+<tscreen><verb>
+QMouseEvent press_quit(Event_MouseButtonPress,
+                       quit_button->pos(), LeftButton, LeftButton);
+</verb></tscreen>
+
+This creates a mousePressEvent() for the widget <tt/quit_button/ with the left button.
+
+
+<sect1>Sending Events
+<p>
+After creation, the event has to be sent to the application instance to call it's execution. Thereby, two ways can be used: one that
+directly processes the event and one that will place the event in the event queue at the last position:
+
+Direct execution:
+<tscreen><verb>
+QApplication::sendEvent(quit_button, &amp;press_quit);
+</verb></tscreen>
+The <tt/sendEvent()/ waits for the result and returns true or false depending if the event has been accepted or not.
+
+
+Placement into event queue:
+<tscreen><verb>
+QApplication::postEvent(quit_button, &amp;press_quit);
+</verb></tscreen>
+<comment>The event for postEvent() must be allocated on the heap as it gets deleted immedeately after the posing.</comment>
+
+
+To turn a posted event into a send event, use <tt/sendPostedEvents(QObject * receiver, int event_type)/. This requires the options
+given at the constructor. As you may see, some constructors don't need an event type, therefore the according event tpye can be found
+in <ref id="Event Types" name="Event Types"> but is also simple to guess as they are only responsible for one event type. Example:
+<tt/QCloseEvent/ only takes <tt/Event_Close/, <tt/QPaintEvent/ only takes <tt/Event_Paint/.
+
+
+<sect>Event Precedence
 <p>
 
+In relation to influence the event behavoir of the application, the programmer often faces situations where long operations block the
+<tt/Event_Paint/ and lead to a scrambled look of the application windows. These situations can be solved either when using a
+progressdialog that indicates the operation progress or by event precedence. This means that the current event gets stopped and the
+event queue is processed. The class <tt/QApplication/ offers a solution for this by two methods which are identical except the
+parameters. One is <tt/processEvents()/, which processes pending events for 3 seconds or until there are no more events in the event
+queue. The other, more likely used method is <tt/processEvents(int maxtime)/, where <tt/maxtime/ is the time in milliseconds during
+which pending events can be processed.
 
+On one hand this means stopping the current long operation which then would take even longer to get finished, but the user cares more
+about the visible state of an application than if an operation which takes some time will take a second longer (or even parts of a
+second).
+
+KDE offers an additional library for I/O operations in the upcoming KDE 2, which is under development. This will allow running the long
+I/O operations outside the application's process as multithreading is not supported by Qt directly.
+
+
+<sect>Summary
+<p>
+After this long chapter about signals, slots and events, I want to append a short summary so you can recapitulate the collected
+knowledge about application behavoir.
+
+<itemize>
+<item>An application can communicate internally by signals and slots
+<item>Signals are sent out without caring about who will catch it
+<item>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access
+attribute
+<item>The user communicates with the application through the window system
+<item>The window system reports the events to the application
+<item>The application converts window system events to <tt/QEvent/s
+<item>The events are proceeded through an eventual application global event filter
+<item>The event that passes the filter gets forwarded to the according window e.g. the current modal window
+<item>The widget receives the event and can have an event filter that comes first when the reimplemented <tt/QObject::event()/ is
+called.
+<item>If the event passes the widget event filter, <tt/event()/ proceeds to convert it to the according <tt/Q***Event/ class
+<item>The event filters for these event types are called to react on the event
+</itemize>
+
+Further, we saw that the programmer can influence the behavoir by:
+
+<itemize>
+<item>reimplementing any stage of virtual methods filtering events
+<item>creating synthetic events
+<item>sending synthetic events directly or into the event queue
+<item>the event queue can be given precedence that stop long processes to allow execution of waiting events to be processed
+</itemize>
+
+Finally, I hope this has given at least experienced C++ programmers a good insight and explanation on how Qt and KDE work. I have
+collected the information by working myself into the class structure and I hope that this collection makes it a lot easier for other
+programmers to get started especially in the advanced chapters of application design and programming. The information value is
+therefore not granted to be exact; if you may find any misconcepted or incorrect information, please contact me via email.
 
 <chapt>User Control Elements
 <p>
+
+<sect>The Menubar<label id="The Menubar">
+<p>
+The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
+the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <tt/QMenuBar/, KDE offers the use of
+the class <tt/KMenuBar/. Additionally, the menubar is already constructed for the programmer when using <tt/KTMainWindow/ with the
+first call of <tt/menuBar()/.
+
+The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
+keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
+with the class <tt/QPopupMenu/, which itself only provides the popups, entries have to be inserted using the methods provided by
+<tt/QMenuData/.
+
+Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
+The menubar also makes use of the <tt/KApplication/ help menu already provided. Inserting the menu is just easy with
+
+<tscreen><verb>
+menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
+</verb></tscreen>
+
+Example construction of a menubar with using <tt/KTMainWindow/ and setting the menubar explicitely:
+<code>
+my_menubar=new KMenuBar(this,"my_menubar");
+
+file_menu = new QPopupMenu;
+file_menu->insertItem(Icon("filenew.xpm"),i18n("&amp;New..."),
+                      this,SLOT(slotFileNew()),0,ID_FILE_NEW);
+file_menu->insertItem(Icon("open.xpm"),i18n("&amp;Open..."),
+                      this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
+file_menu->insertItem(i18n("&amp;Close"),
+                      this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
+file_menu->insertSeparator();
+file_menu->insertItem(Icon("save.xpm"),i18n("&amp;Save"),
+                      this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
+file_menu->insertItem(i18n("Save &amp;As..."),
+                      this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
+file_menu->insertItem(Icon("save_all.xpm"),i18n("Save All"),
+                      this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+file_menu->insertSeparator();
+file_menu->insertItem(Icon("fileprint.xpm"),i18n("&amp;Print..."),
+                      this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
+file_menu->insertSeparator();
+file_menu->insertItem(i18n("E&amp;xit"),
+                      this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
+
+my_menubar->insertItem(i18n("&amp;File"), file_menu);
+
+setMenu(my_menubar);
+</code>
+
+The example creates a menubar and a popup menu first. Then the popup menu is filled with entries. The used method of <tt/QMenuData/
+here allows an implicit connection to the method to call when the popup menu emits SIGNAL(activated(int)). The zero parameters after
+the slot declaration is left out as the example assumes the program will use <tt/KAccel/ to set the according keyboard accelerators
+with <tt/changeMenuAccel()/. Further you can see that the integer value ID is inserted like the method name with all uppercase letters
+and underscores to separate the words. The menu id's themselve are set with #define in a separate file to keep track of the used
+numbers. You would think that you don't need the menu id if the <tt/activated()/ signal is already connected- in fact the id can be
+used to forward the singnal <tt/highlighted(int)/ to a method that compares the id by a switch statement and sets a statusbar
+helpmessage for the menuentry. You could as well do that for the signal <tt/activated(int)/ as well to call the according method by a
+switch statement. Then you have to add a <tt/connect()/ for each popup menu you want to use.
+
+You can as well insert a separator into the menubar with <tt/my_menubar->insertSeparator()/. This will align all entries inserted after
+the separator to the right in Motif style, in windows style this has no effect.
+
+The creation of a separate menubar allows the creation of several menubars which can be set as the actual menu with <tt/setMenu()/.
+This is how we did it in KDevelop to change the menubar when switching to the dialogeditor and back to the project editor.
+
+Finally, the apmersand in the menuentry sets the following character as the keyboard accelerator when the user presses ALT+ the
+character.
+
+<sect>The Toolbar
+<p>
+
+Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
+provides. The KDE libraries are again offering another class to use with KDE applications, <tt/KToolBar/; when using <tt/KTMainWindow/
+these are created like the menubar by the first call of <tt/toolBar()/. As you can use as many toolbars as your application requires,
+you can create them with the number in the <tt/toolBar()/ method; if the method's paramenter is empty, the first toolbar number is 0.
+
+<sect>The Statusbar
+<p>
+KDE also provides the pendant to Qt's <tt/QStatusBar/, <tt/KStatusBar/. The statusbar can contain labels as well as widgets, such as
+progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
+application and gives hints about the usage of commands e.g. over toolbars and menubars.
+
+<sect>Keyboard Accelerators<label id="Keyboard Accelerators">
+<p>
+KKeyDialog: keyboard accelerator configuration dialog
+
+KKeyChooser
+
+KAccel
+
 <sect>Other Widgets
 <p>
 Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
@@ -1448,47 +1689,6 @@ KSlider: slider widget
 KSpinBox: like QSpinBox
 KTabCtl: tabulator widget
 KTreeList: tree list widget
-
-<sect>The Menubar<label id="The Menubar">
-<p>
-The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
-the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <tt/QMenuBar/, KDE offers the use of
-the class <tt/KMenubar/. Additionally, the menubar is already constructed for the programmer when using <tt/KTMainWindow/ with the
-first call of <tt/menuBar()/.
-
-The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
-keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
-with the class <tt/QPopupMenu/, which itself only provides the popups, entries have to be inserted using the methods provided by
-<tt/QMenuData/.
-
-Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
-The menubar also makes use of the <tt/KApplication/ help menu already provided. Inserting the menu is just easy with
-
-<tscreen><verb>
-menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
-</verb></tscreen>
-
-<sect>The Toolbar
-<p>
-Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
-provides. The KDE libraries are again offering another class to use with KDE applications, <tt/KToolBar/; when using <tt/KTMainWindow/
-these are created like the menubar by the first call of <tt/toolBar()/. As you can use as many toolbars as your application requires,
-you can create them with the number in the <tt/toolBar()/ method; if the method's paramenter is empty, the first toolbar number is 0.
-
-<sect>The Statusbar
-<p>
-KDE also provides the pendant to Qt's <tt/QStatusBar/, <tt/KStatusBar/. The statusbar can contain labels as well as widgets, such as
-progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
-application and gives hints about the usage of commands e.g. over toolbars and menubars.
-
-<sect>Keyboard Accelerators<label id="Keyboard Accelerators">
-<p>
-KKeyDialog: keyboard accelerator configuration dialog
-
-KKeyChooser
-
-KAccel
-
 
 <chapt>KDE Dialogs
 <p>

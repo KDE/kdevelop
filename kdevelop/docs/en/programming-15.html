@@ -280,8 +280,9 @@ code, <CODE>cd</CODE> to KDE/kde-HEAD and
         setenv QTDIR $PWD     (if you use csh/tcsh, change this for bash)
         cd configs
         mv linux-g++-shared linux-g++-shared.orig
-        sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared  (Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)
-        ./configure
+        sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared
+  (Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)        
+  ./configure
         make
 </PRE>
 </CODE></BLOCKQUOTE>
@@ -323,10 +324,12 @@ when you compile the code in the kdelibs module.
 <UL>
 <LI>  We turned off the "-fno-rtti" option when compiling Qt 2.0 because it
 prevents KDE from linking.</LI>
-<LI> I usually put that long configure command into a file called <CODE>conf</CODE> and leave it in my CVS-HEAD directory.  Then I can do a <CODE>../conf</CODE> from any module and get a good configure.</LI>
+<LI> I usually put that long configure command into a file called <CODE>conf</CODE> and leave it in my CVS-HEAD directory.  Then I can do a
+<CODE>../conf</CODE> from any module and get a good configure.</LI>
 <LI> It seems that you need to compile and install qimageio (part of Qt)
 separately if you want to get koffice to compile.  Just <CODE>cd</CODE> to <CODE>/$QTDIR/extensions/imageio/src</CODE> and type <CODE>make install</CODE></LI>
-<LI> When you compile mico, be sure to configure it with <CODE>./configure --disable-mini-stl</CODE> (and any other options you want).  And be sure you have version 2.2.7!</LI>
+<LI> When you compile mico, be sure to configure it with <CODE>./configure --disable-mini-stl</CODE> (and any other options you want).
+And be sure you have version 2.2.7!</LI>
 </UL>
 <P>
 <H3><A NAME="ss15.4">15.4 Packaging and Submitting Code to KDE</A>
@@ -427,22 +430,15 @@ This should create:
 <LI> config.h</LI>
 </UL>
 
-You can now include config.h in your source code with <CODE>#include "../config.h"</CODE> and have your code compile differently on different systems based
-on the <CODE>#define</CODE>s.  Eh?  Well, different systems have slightly
-differnent ideas about implementing standards and such, and your
-code my need take this into account to be portable, i.e. to work on
-various Unices.  Take a look inside <CODE>config.h</CODE> for descriptions
-of the <CODE>#define</CODE>s.
-<P><B>Shared Libraries!</B>  If you are packaging a widget or other class
-you should be compiling a shared library.  Luckily, this is easy to do
-within the kexample packge.  You only need to change the Makefile.am
-that resides in your code's sudirectory.  Unluckily, now example
-for a shared-library Makefile.am is included.  So, I've included one
-in the next section.
-<EM>Note</EM>:  If you distribute a widget, you should also
-disrtribute a small program which tests the widget.  Put that
-program in the same package in another subdirectory and have it
-compile along with the widget.
+You can now include config.h in your source code with <CODE>#include "../config.h"</CODE> and have your code compile differently on
+different systems based on the <CODE>#define</CODE>s.  Eh?  Well, different systems have slightly differnent ideas about implementing
+standards and such, and your code my need take this into account to be portable, i.e. to work on various Unices.  Take a look inside
+<CODE>config.h</CODE> for descriptions of the <CODE>#define</CODE>s.
+<P><B>Shared Libraries!</B>  If you are packaging a widget or other class you should be compiling a shared library.  Luckily, this is
+easy to do within the kexample packge.  You only need to change the Makefile.am that resides in your code's sudirectory.  Unluckily,
+now example for a shared-library Makefile.am is included.  So, I've included one in the next section. <EM>Note</EM>:  If you distribute a
+widget, you should also disrtribute a small program which tests the widget.  Put that program in the same package in another
+subdirectory and have it compile along with the widget.
 <P>Next, make a compressed archive.  You can do it this way
 <BLOCKQUOTE><CODE>
 <PRE>

@@ -325,7 +325,7 @@ widgets. Mind that as a guideline to define own event handling, you should reimp
 not inherit <CODE>QWidget</CODE> and the more specialized event hanlers described below for all <CODE>QWidget</CODE> inherited classes. Also, preserve
 the declarations as virtual protected to ensure reusability and consistancy for your code.
 <P>
-<H4>Event Types</H4>
+<H4><A NAME="Event Types"></A> Event Types</H4>
 
 <P>The events sent to the application are, as described, converted by <CODE>QEvent</CODE> to Qt events. The event type can be found out by using
 the <CODE>type()</CODE> method of <CODE>QEvent</CODE>, which can then be compared with the event that you want to know about. Now, the event type that
@@ -495,7 +495,10 @@ method of <CODE>QWidget</CODE>, these event types are converted from a <CODE>QEv
 whereby <CODE>QWidget</CODE> provides a set of event handlers already. What is interesting about a mouse event is not only the type, but the
 other parameters, as mentioned, to implement certain actions on specific events. One of the most recently used event types are probably
 a right button press over a widget to open a context menu to allow quick access to commands that are available. This requires the exact
-position of the event's occurence and a comparison of the button type.
+position of the event's occurence and a comparison of the button type. Double clicks are processed by the user as producing a mouse
+press event followed by a mouse release event and another mouse press event. As the time between the release and the next press cannot
+be easily determined, the <CODE>QApplication</CODE> class has methods to define the click time which is by default 400 milliseconds:
+<CODE>QApplication::setDoubleClickInterval(int ms)</CODE> is what you need.
 <P>The <CODE>QMouseEvent</CODE> class allows finding out the exact event by providing information about:
 <B>Button type:</B> using <CODE>button()</CODE>
 <LI>NoButton</LI>
@@ -536,6 +539,9 @@ position of the event's occurence and a comparison of the button type.
 </UL>
 </LI>
 </UL>
+<P>Thereby, the <CODE>mouseDoubleClickEvent()</CODE> by default only produces a mousePressEvent. You have to reimplement the
+<CODE>mouseDoubleClickEvent()</CODE> to receive the event and process it as it is produced as an hypothetic event, not produced by the window
+system under X11. Set the double click time with <CODE>QApplication::setDoubleClickInterval()</CODE>.
 <P>For MouseMove events, you have to watch that the mouse event is only handled if a button is pressed. This can be configured by
 <CODE>QWidget::setMouseTracking(true)</CODE> to receive all mouse movements as <CODE>QMouseEvent</CODE>s in the event handler. The implementation
 therefore is on QWidget: the event is raised, <CODE>event()</CODE> asks if mousetracking is set to true. If not (default), the event is
@@ -810,13 +816,154 @@ e.g. if your view area of your application wants to process a certain event that
 provides. Then you have to install the event filter at the place you like to; normally this would be in the constructor of your class.
 With removeEventFilter() you can stop the event filter from processing the events any time.
 <P>
+<H4>Comment</H4>
+Note: <CODE>KApplication</CODE> already has a global application event filter installed to filter out CTRL+ALT+F12 for
+KDebug
 <P>
-<H3><A NAME="ss4.5">4.5 Reimplementation of Event Handling</A>
+<H3><A NAME="ss4.5">4.5 Synthetic Events</A>
+</H3>
+
+<P>Before describing what synthetic events are and how they can be used by the programmer, I want to review the last sections in brief.
+<P>We saw that the application object receives the window system events, processes them and creates event objects from the classes the
+library provides. The converted event can then be handled by event handlers that are specialized on the event class to retrieve further
+information about the event. Finally, we can influence the event handling itself by installing event filters and overwriting provided
+event handlers.
+<P>This does the "normal" job of an application to execute actions according to user invoked events. On the other side, this system offers
+another possibility: the fact that the events are converted to class instances can be reversed- a so-called synthetic event can be
+created which fakes an original window system event. The next advantage is that these events are independent of the underlying window
+system.
+<P>A good possibility where this feature could be used would be e.g. for learning programs. Those are almost non-existant for Unix but
+could offer a market to teach beginners how to handle programs similar to commercial products already available on other platforms.
+Also this could be a part of a help-system which an application can provide.
+<P>An example description how to implement this:
+<P>Provide a help window with a button that invokes a step e.g. "Show me". On pressing the button, the cursor will move to the desired
+location, e.g. to a pushbutton on the screen. The implementation then has to find out the exact position of the button and calculate
+the center coordinates the mousepointer has to move to. Then the mousepointer could move there by construction of a <CODE>QCursor</CODE> and
+using <CODE>setPos()</CODE>. The startposition can be found out in the mouseevent that called the function. Then, the cursor has to move
+visually by using <CODE>setPos()</CODE> in a loop where a <CODE>QTimer</CODE> could be used to run between positions to slow down the move so that the
+user can follow the mousepointer.
+<P>
+<H4>Creating Events</H4>
+
+<P>Now, to come to the actual implementation of a synthetic event, you have to know the event you want to create. Therefore, you need the
+constructor parameters for the event classes. The following list contains the constructors including the event-classes hierarchy:
+<P>
+<DL>
+<DT><B>QEvent(int type)</B><DD><P><CODE>type</CODE> is one of the events declared in <CODE>qevent.h</CODE>
+<P>
+<DT><B>QCloseEvent()</B><DD><P>takes no parameter. Mind that the accept flag is set to false
+<P>
+<DT><B>QFocusEvent(int type)</B><DD><P><CODE>type</CODE> is either <CODE>Event_FocusIn</CODE> or <CODE>Event_FocusOut</CODE>.
+<P>
+<DT><B>QKeyEvent(int type, int key, int ascii, int state)</B><DD><P>takes <CODE>Event_KeyPress</CODE> and <CODE>Event_KeyRelease</CODE> as <CODE>type</CODE>.
+<CODE>key</CODE> is one of the keys defined in <CODE>qkeycode.h</CODE>. <CODE>state</CODE> is <CODE>ShiftButton, ControlButton, AltButton</CODE> OR'ed.         
+<P>
+<DT><B>QMouseEvent (int type, const QPoint &amp; pos, int button, int state)</B><DD><P>The <CODE>type</CODE> parameter must be
+<CODE>Event_MouseButtonPress, Event_MouseButtonRelease, Event_MouseButtonDblClick</CODE> or <CODE>Event_MouseMove</CODE>. The <CODE>button</CODE> is
+<CODE>LeftButton, RightButton, MidButton, NoButton</CODE>. <CODE>state</CODE> is <CODE>ShiftButton, ControlButton and AltButton</CODE> OR'ed for event
+<CODE>Event_MouseButtonRelease</CODE>, for events <CODE>Event_MouseButtonPress, Event_MouseButtonDblClick</CODE> <CODE>state</CODE> includes <CODE>LeftButton,
+RightButton, MidButton</CODE>.
+<P>
+<DT><B>QMoveEvent(const QPoint &amp; pos, const QPoint &amp; oldPos)</B><DD><P><CODE>pos</CODE> is the new postion the widget shall move to, <CODE>oldPos</CODE> the
+old postion. Retrieve the old position before creating the event with <CODE>QWidget::pos()</CODE>.
+<P>
+<DT><B>QPaintEvent(const QRect &amp; paintRect) </B><DD><P>raise a paint event to repaint the area <CODE>paintRect</CODE>
+<P>
+<DT><B>QResizeEvent(const QSize &amp; size, const QSize &amp; oldSize)</B><DD><P>resizes the widget from <CODE>oldSize</CODE> to <CODE>size</CODE>. Retrieve the old
+size before creating the event with <CODE>QWidget::size()</CODE>.
+</DL>
+<P>An example on how to create an event would be:
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+QMouseEvent press_quit(Event_MouseButtonPress,
+                       quit_button->pos(), LeftButton, LeftButton);
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>This creates a mousePressEvent() for the widget <CODE>quit_button</CODE> with the left button.
+<P>
+<P>
+<H4>Sending Events</H4>
+
+<P>After creation, the event has to be sent to the application instance to call it's execution. Thereby, two ways can be used: one that
+directly processes the event and one that will place the event in the event queue at the last position:
+<P>Direct execution:
+<BLOCKQUOTE><CODE>
+<PRE>
+QApplication::sendEvent(quit_button, &amp;press_quit);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+The <CODE>sendEvent()</CODE> waits for the result and returns true or false depending if the event has been accepted or not.
+<P>
+<P>Placement into event queue:
+<BLOCKQUOTE><CODE>
+<PRE>
+QApplication::postEvent(quit_button, &amp;press_quit);
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<H4>Comment</H4>
+The event for postEvent() must be allocated on the heap as it gets deleted immedeately after the posing.
+<P>
+<P>To turn a posted event into a send event, use <CODE>sendPostedEvents(QObject * receiver, int event_type)</CODE>. This requires the options
+given at the constructor. As you may see, some constructors don't need an event type, therefore the according event tpye can be found
+in 
+<A HREF="#Event Types">Event Types</A> but is also simple to guess as they are only responsible for one event type. Example:
+<CODE>QCloseEvent</CODE> only takes <CODE>Event_Close</CODE>, <CODE>QPaintEvent</CODE> only takes <CODE>Event_Paint</CODE>.
+<P>
+<P>
+<H3><A NAME="ss4.6">4.6 Event Precedence</A>
 </H3>
 
 <P>
+<P>In relation to influence the event behavoir of the application, the programmer often faces situations where long operations block the
+<CODE>Event_Paint</CODE> and lead to a scrambled look of the application windows. These situations can be solved either when using a
+progressdialog that indicates the operation progress or by event precedence. This means that the current event gets stopped and the
+event queue is processed. The class <CODE>QApplication</CODE> offers a solution for this by two methods which are identical except the
+parameters. One is <CODE>processEvents()</CODE>, which processes pending events for 3 seconds or until there are no more events in the event
+queue. The other, more likely used method is <CODE>processEvents(int maxtime)</CODE>, where <CODE>maxtime</CODE> is the time in milliseconds during
+which pending events can be processed.
+<P>On one hand this means stopping the current long operation which then would take even longer to get finished, but the user cares more
+about the visible state of an application than if an operation which takes some time will take a second longer (or even parts of a
+second).
+<P>KDE offers an additional library for I/O operations in the upcoming KDE 2, which is under development. This will allow running the long
+I/O operations outside the application's process as multithreading is not supported by Qt directly.
 <P>
 <P>
+<H3><A NAME="ss4.7">4.7 Summary</A>
+</H3>
+
+<P>After this long chapter about signals, slots and events, I want to append a short summary so you can recapitulate the collected
+knowledge about application behavoir.
+<P>
+<UL>
+<LI>An application can communicate internally by signals and slots</LI>
+<LI>Signals are sent out without caring about who will catch it</LI>
+<LI>Slots are normal methods that can connect to signals and react as well as they can be called where allowed by their access
+attribute</LI>
+<LI>The user communicates with the application through the window system</LI>
+<LI>The window system reports the events to the application</LI>
+<LI>The application converts window system events to <CODE>QEvent</CODE>s</LI>
+<LI>The events are proceeded through an eventual application global event filter</LI>
+<LI>The event that passes the filter gets forwarded to the according window e.g. the current modal window</LI>
+<LI>The widget receives the event and can have an event filter that comes first when the reimplemented <CODE>QObject::event()</CODE> is
+called.</LI>
+<LI>If the event passes the widget event filter, <CODE>event()</CODE> proceeds to convert it to the according <CODE>Q***Event</CODE> class</LI>
+<LI>The event filters for these event types are called to react on the event</LI>
+</UL>
+<P>Further, we saw that the programmer can influence the behavoir by:
+<P>
+<UL>
+<LI>reimplementing any stage of virtual methods filtering events</LI>
+<LI>creating synthetic events</LI>
+<LI>sending synthetic events directly or into the event queue</LI>
+<LI>the event queue can be given precedence that stop long processes to allow execution of waiting events to be processed</LI>
+</UL>
+<P>Finally, I hope this has given at least experienced C++ programmers a good insight and explanation on how Qt and KDE work. I have
+collected the information by working myself into the class structure and I hope that this collection makes it a lot easier for other
+programmers to get started especially in the advanced chapters of application design and programming. The information value is
+therefore not granted to be exact; if you may find any misconcepted or incorrect information, please contact me via email.
 <P>
 <P ALIGN="RIGHT">
 

@@ -2158,17 +2158,19 @@ constructing your widget top down from left to right to ensure the consistancy o
 
 <sect>Setting Widget Properties
 <p>
-Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window automatically updates to the properties
-of the current widget. As all widgets are derived from <tt/QWidget/, you can set the <tt/QWidget/ properties plus an amount of properties that are specific to the
-selected widget. Properties can be:
+Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window
+automatically updates to the properties of the current widget. As all widgets are derived from <tt/QWidget/, you can set the
+<tt/QWidget/ properties plus an amount of properties that are specific to the selected widget. Properties can be:
 
 <itemize>
 <item>Integer values, such as the geometry of a widget or the font size
 <item>Boolean values to enable/disable certain parameters of the widget. Set with combos containing true and false
 <item>enumerable values of a widget, e.g. the palette. Set with combos containing all possible values
 <item>Color values for e.g. the displayed color. Set with the KDE Color Dialog
-<item>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the font. Set with the KDE Font Dialog
-<item>File names for e.g. background pixmaps. Do not use gif images here as these may get unsupported by further Qt versions > 1.42
+<item>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the
+font. Set with the KDE Font Dialog
+<item>File names for e.g. background pixmaps. Do not use gif images here as these may get
+unsupported by further Qt versions > 1.42
 </itemize>
 
 <sect>Integrating the Dialog
@@ -3597,8 +3599,9 @@ compiled code from the HEAD branch -- as well as Qt 2.0!
 	setenv QTDIR $PWD     (if you use csh/tcsh, change this for bash)
 	cd configs
 	mv linux-g++-shared linux-g++-shared.orig
-	sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared  (Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)
-	./configure
+	sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared
+  (Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.) 	
+  ./configure
 	make
 </verb></tscreen>
 
@@ -3637,10 +3640,12 @@ when you compile the code in the kdelibs module.
 <itemize>
 <item>  We turned off the "-fno-rtti" option when compiling Qt 2.0 because it
 prevents KDE from linking.
-<item> I usually put that long configure command into a file called <tt/conf/ and leave it in my CVS-HEAD directory.  Then I can do a <tt>../conf</tt> from any module and get a good configure.
+<item> I usually put that long configure command into a file called <tt/conf/ and leave it in my CVS-HEAD directory.  Then I can do a
+<tt>../conf</tt> from any module and get a good configure.
 <item> It seems that you need to compile and install qimageio (part of Qt)
 separately if you want to get koffice to compile.  Just <tt/cd/ to <tt>/$QTDIR/extensions/imageio/src</tt> and type <tt/make install/
-<item> When you compile mico, be sure to configure it with <tt>./configure --disable-mini-stl</tt> (and any other options you want).  And be sure you have version 2.2.7!
+<item> When you compile mico, be sure to configure it with <tt>./configure --disable-mini-stl</tt> (and any other options you want).
+And be sure you have version 2.2.7!
 </itemize>
 
 <sect> Packaging and Submitting Code to KDE
@@ -3725,23 +3730,16 @@ This should create:
 <item> kmyapp/Makfile
 <item> config.h
 </itemize>
-You can now include config.h in your source code with <tt>#include "../config.h"</tt> and have your code compile differently on different systems based
-on the <tt>#define</tt>s.  Eh?  Well, different systems have slightly
-differnent ideas about implementing standards and such, and your
-code my need take this into account to be portable, i.e. to work on
-various Unices.  Take a look inside <tt>config.h</tt> for descriptions
-of the <tt>#define</tt>s.
+You can now include config.h in your source code with <tt>#include "../config.h"</tt> and have your code compile differently on
+different systems based on the <tt>#define</tt>s.  Eh?  Well, different systems have slightly differnent ideas about implementing
+standards and such, and your code my need take this into account to be portable, i.e. to work on various Unices.  Take a look inside
+<tt>config.h</tt> for descriptions of the <tt>#define</tt>s.
 
-<bf>Shared Libraries!</bf>  If you are packaging a widget or other class
-you should be compiling a shared library.  Luckily, this is easy to do
-within the kexample packge.  You only need to change the Makefile.am
-that resides in your code's sudirectory.  Unluckily, now example
-for a shared-library Makefile.am is included.  So, I've included one
-in the next section.
-<em/Note/:  If you distribute a widget, you should also
-disrtribute a small program which tests the widget.  Put that
-program in the same package in another subdirectory and have it
-compile along with the widget.
+<bf>Shared Libraries!</bf>  If you are packaging a widget or other class you should be compiling a shared library.  Luckily, this is
+easy to do within the kexample packge.  You only need to change the Makefile.am that resides in your code's sudirectory.  Unluckily,
+now example for a shared-library Makefile.am is included.  So, I've included one in the next section. <em/Note/:  If you distribute a
+widget, you should also disrtribute a small program which tests the widget.  Put that program in the same package in another
+subdirectory and have it compile along with the widget.
 
 Next, make a compressed archive.  You can do it this way
 <tscreen><verb>
@@ -3892,6 +3890,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
 
 
 

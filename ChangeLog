@@ -1,3 +1,7 @@
+1999-07-05 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* finished the event handling chapter and updated ps/html docs
+	* cleaned the makefile.am's a bit
+
 1999-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Switch to (a slightly modified) am_edit
 
