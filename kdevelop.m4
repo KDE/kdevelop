@@ -43,7 +43,7 @@ kdelibs_docdirs=""
 ],
 )
 
-kdelibs_docdirs="/usr/doc/kdelibs-doc/html" 
+kdelibs_docdirs="/usr/doc/kdelibs-doc/html /opt/kde/share/doc/HTML/default/kdelibs"
 kdelibs_docdirs="$ac_kdelibs_docdirs $kdelibs_docdirs"
 AC_FIND_FILE(kdecore/index.html, $kdelibs_docdirs, kdelibs_docdir)
 AC_MSG_RESULT($kdelibs_docdir)
@@ -71,7 +71,10 @@ kdoc_indexdirs=""
 ],
 )
 
-kdoc_indexdirs="/usr/share/kdoc/index" 
+kdoc_indexdirs="/usr/share/kdoc/index"
+if test "$kdelibs_docdir" != ""; then 
+  kdoc_indexdirs="$kdoc_indexdirs $kdelibs_docdir/kdoc-reference"
+fi
 kdoc_indexdirs="$ac_qtdocdirs $kdoc_indexdirs"
 AC_FIND_FILE(kdecore.kdoc kdecore.kdoc.gz, $kdoc_indexdirs, kdoc_indexdir)
 AC_MSG_RESULT($kdoc_indexdir)
