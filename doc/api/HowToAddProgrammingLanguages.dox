@@ -19,6 +19,7 @@
   - \ref sectionProblemReporter - (parses source on the fly and reports syntax errors)
   - \ref sectionTemplates
     - \ref sectionApplicationTemplates
+    - \ref sectionApplicationImportTemplates
     - \ref sectionSourceFileTemplates
     - \ref sectionAbbreviationTemplates - (ife expands to an if else statement, etc)
     .
@@ -31,7 +32,7 @@
 
 List of optional things to support a given language in KDevelop:
   - \ref sectionEditor - Syntax highlighter - (add to QEditor if not available elsewhere)
-  - \section sectionBuildTool (make/ant/etc)
+  - \ref sectionBuildTool (make/ant/etc)
   .
 
 Take a look at \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) to see the current status/features of the programming languages currently supported by KDevelop.
