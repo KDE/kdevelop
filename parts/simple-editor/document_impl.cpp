@@ -41,7 +41,7 @@ bool DocumentImpl::openFile()
 {
   QFile f(m_file);
   if (!f.open(IO_ReadOnly))
-	return false;
+    return false;
 
   _widget->clear();
   
@@ -58,7 +58,7 @@ bool DocumentImpl::saveFile()
 {
   QFile f(m_file);
   if (!f.open(IO_WriteOnly))
-	return false;
+    return false;
 
   QTextStream ts(&f);
   ts << _widget->text();

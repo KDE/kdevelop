@@ -47,7 +47,7 @@ bool ClipboardIfaceImpl::copyAvailable()
 void ClipboardIfaceImpl::slotCopyAvailable(bool avail)
 {
   _available = avail;
-  emit ClipboardDocumentIface::copyAvailable(avail);
+  emit ClipboardDocumentIface::copyAvailable(document(), avail);
 }
 
 #include "clipboard_iface_impl.moc"

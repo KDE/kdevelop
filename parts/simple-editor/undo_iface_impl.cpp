@@ -43,14 +43,14 @@ bool UndoIfaceImpl::redoAvailable()
 void UndoIfaceImpl::slotUndoAvailable(bool avail)
 {
   _undo = avail;
-  emit UndoDocumentIface::undoAvailable(avail);
+  emit UndoDocumentIface::undoAvailable(document(), avail);
 }
 
 
 void UndoIfaceImpl::slotRedoAvailable(bool avail)
 {
   _redo = avail;
-  emit UndoDocumentIface::redoAvailable(avail);
+  emit UndoDocumentIface::redoAvailable(document(), avail);
 }
 
 

@@ -17,9 +17,9 @@ class KAboutData;
 class EditorTestPartFactory : public KParts::Factory
 {
   Q_OBJECT
-		  
+          
 public:
-		  
+          
   EditorTestPartFactory();
   virtual ~EditorTestPartFactory();
   
