@@ -329,6 +329,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 	ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
 	ParsedAttribute* attr = findOrInsertAttribute( c, it.current()->id()->text() );
 	attr->setType( "int" );
+	attr->setIsStatic( true );
 	
 	int startLine, startColumn;
 	int endLine, endColumn;
@@ -377,6 +378,24 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     ParsedAttribute* attr = findOrInsertAttribute( (m_currentClass ?
 						    (ParsedClassContainer*) m_currentClass :
 						    (ParsedClassContainer*) m_currentScopeContainer), id );
+    
+    bool isFriend = false;
+    bool isVirtual = false;
+    bool isStatic = false;
+    bool isInline = false;
+    bool isPure = decl->initializer() != 0;
+
+    if( storageSpec ){
+	QPtrList<AST> l = storageSpec->nodeList();
+	QPtrListIterator<AST> it( l );
+	while( it.current() ){
+	    QString text = it.current()->text();
+	    if( text == "friend" ) isFriend = true;
+	    else if( text == "static" ) isStatic = true;
+	    ++it;
+	}
+    }
+    
     int startLine, startColumn;
     int endLine, endColumn;
     decl->getStartPosition( &startLine, &startColumn );
@@ -387,6 +406,8 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     attr->setDeclarationEndsOnLine( endLine );
     attr->setDefinedOnLine( startLine );
     attr->setDefinedInFile( m_fileName );
+    if( isStatic )
+	attr->setIsStatic( true );
 }
 
 void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
