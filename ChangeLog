@@ -1,3 +1,10 @@
+1999-06-06 Pascal Krahmer
+        * added some item properties
+        * added some new property classes (try out the qlistbox/entries for example)
+        * added info dialog for the first use of the dlgedit
+        * fixed some bugs
+        * muuuuch more !
+
 1999-06-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added icons for the new items of the dialog editor
 	* added toolbar buttons to en/disable output and tree view

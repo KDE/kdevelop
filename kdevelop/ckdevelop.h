@@ -380,6 +380,8 @@ public:
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
+  void slotHelpDlgNotes();
+
   void slotGrepDialogItemSelected(QString filename,int linenumber);
   
   ////////////////////////

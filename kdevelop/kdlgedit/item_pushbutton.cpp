@@ -64,13 +64,13 @@ void KDlgItem_PushButton::addMyPropEntrys()
 {
 
   props->addProp("Text",           "Button",       "General",        ALLOWED_STRING);
-  props->addProp("isDefault",      "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoDefault" , "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isToggleButton", "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isToggledOn",    "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isMenuButton",   "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoResize",   "FALSE",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoRepeat",   "FALSE",        "General",        ALLOWED_BOOL);
+  props->addProp("isDefault",      "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoDefault" , "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggleButton", "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggledOn",    "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isMenuButton",   "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "false",        "General",        ALLOWED_BOOL);
 
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }

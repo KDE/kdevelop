@@ -2280,6 +2280,9 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switchs to the project's User-Manual"))
 
   ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
+  config->setGroup("General Options");
+
+  ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 	ON_STATUS_MSG(ID_KDLG_FILE_NEW,													i18n("Opens the New Dialog dialog to construct a new Widget"))

@@ -20,6 +20,7 @@
 #define INC_KTREELIST
 #include "items.h"
 #include "itemsglobal.h"
+#include <qpalette.h>
 
 #define CALLER_ITEMCLASS_NAME KDlgItem_KTreeList
 #define ITEMCLASS_NAME KDlgItem_KTreeList
@@ -68,6 +69,17 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+  props->addProp("isAutoUpdate",       "true",          "General",        ALLOWED_BOOL);
+
+  props->addProp("isBottomScrollbar",  "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("isScrollBar",        "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("isTreeDrawing",      "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("isShowItemText",     "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("isSmoothScrolling",  "false",         "Appearance",     ALLOWED_BOOL);
+  props->addProp("isTreeDrawing",      "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("TreeListBgColor",    "",              "Appearance",     ALLOWED_COLOR);
+  props->addProp("TreeListPalette",    "",              "Appearance",     ALLOWED_COLOR);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

@@ -23,6 +23,7 @@
 #include "items.h"
 #include <qpainter.h>
 #include <qfont.h>
+#include <qcolor.h>
 
 
 KDlgItemDatabase::KDlgItemDatabase()
@@ -228,6 +229,14 @@ void KDlgPropertyBase::setProp_Value  (QString n, QString value)
       setProp_Value(i,value);
 }
 
+void KDlgPropertyBase::setProp_Data  (QString n, QString data)
+{
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
+    if ((getProp(i)->name.upper() == n.upper()))
+      setProp_Data(i,data);
+}
+
 void KDlgPropertyBase::setProp_Group  (QString n, QString group)
 {
   int i;
@@ -271,7 +280,19 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("SizeIncX",           "",             "Geometry",       ALLOWED_INT);
   addProp("SizeIncY",           "",             "Geometry",       ALLOWED_INT);
 
-  addProp("BgMode",             "",             "Appearance",     ALLOWED_BGMODE);
+  addProp("BgMode",             "",             "Appearance",     ALLOWED_COMBOLIST,
+		"(not set)\n"
+		"FixedColor\n"
+		"FixedPixmap\n"
+		"NoBackground\n"	
+		"PaletteForeground\n"
+		"PaletteBackground\n"
+		"PaletteLight\n"
+		"PaletteMidlight\n"
+		"PaletteDark\n"
+		"PaletteMid\n"
+		"PaletteText\n"
+		"PaletteBase\n");
   addProp("BgColor",            "",             "Appearance",     ALLOWED_COLOR);
   addProp("BgPalColor",         "",             "Appearance",     ALLOWED_COLOR);
   addProp("BgPixmap",           "",             "Appearance",     ALLOWED_FILE);
@@ -534,4 +555,77 @@ QString KDlgLimitLines(QString src, unsigned maxlen)
   helptext = helptext + lastword;
 
   return helptext;
+}
+
+QString getLineOutOfString(QString src, int ln, QString sep)
+{
+  QString s = src+sep;
+  QString act = "";
+  int cnt = 0;
+  int savecnt = 5000;
+
+  while ((!s.isEmpty()) && (savecnt-->0))
+    {
+      if (s.left(sep.length()) == sep)
+        {
+          if (cnt == ln)
+            return act;
+          else
+            act = "";
+          cnt++;
+          s = s.right(s.length()-sep.length()+1);
+        }
+      else
+        {
+          act = act + s.left(1);
+        }
+      s = s.right(s.length()-1);
+    }
+
+  return QString();
+}
+
+
+
+int _igProp2Int(QString val, int defaultval)
+{
+  if (val.length() == 0)
+    return defaultval;
+
+  bool ok = true;
+  int dest = val.toInt(&ok);
+
+  return ok ? dest : defaultval;
+}
+
+long _ighex2long(QString dig)
+{
+  dig = dig.lower();
+  int v = _igProp2Int(dig,-1);
+  if (v == -1)
+    {
+      v = 0;
+      if (dig == "a") v = 10;
+      else if (dig == "b") v = 11;
+      else if (dig == "c") v = 12;
+      else if (dig == "d") v = 13;
+      else if (dig == "e") v = 14;
+      else if (dig == "f") v = 15;
+    }
+
+  return v;
+}
+
+QColor Str2Color(QString desc)
+{
+  int a = _ighex2long(desc.mid(2,1));
+  int b = _ighex2long(desc.mid(3,1));
+  int c = _ighex2long(desc.mid(4,1));
+  int d = _ighex2long(desc.mid(5,1));
+  int e = _ighex2long(desc.mid(6,1));
+  int f = _ighex2long(desc.mid(7,1));
+
+//  long col = f+e*0x10+d*0x100+c*0x1000+b*0x10000+a*0x100000;
+
+  return QColor(b+a*0x10, d+c*0x10, f+e*0x10);
 }

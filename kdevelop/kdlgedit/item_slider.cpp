@@ -71,7 +71,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   props->addProp("Value",      "",        "General",        ALLOWED_INT);
   props->addProp("MinValue",      "0",        "General",        ALLOWED_INT);
   props->addProp("MaxValue",      "99",        "General",        ALLOWED_INT);
-  props->addProp("isTracking",           "TRUE",       "General",        ALLOWED_BOOL);
+  props->addProp("isTracking",           "true",       "General",        ALLOWED_BOOL);
   props->addProp("Orientation",           "Horizontal",       "General",        ALLOWED_ORIENTATION);
   
 }

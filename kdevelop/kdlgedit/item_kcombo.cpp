@@ -28,8 +28,9 @@
 #include "item_all.cpp.inc"
 
 
+
 ITEMCLASS_NAME::MyWidget::MyWidget(ITEMCLASS_NAME* wid, QWidget* parent, const char* name )
-  : ITEMCLASS_TYPE(parent)
+  : ITEMCLASS_TYPE(parent,name)
 {
   parentObject = wid;
   isItemActive = false;
@@ -67,7 +68,9 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-
+  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("Text",           "",             "General",        ALLOWED_BOOL);
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -78,8 +81,7 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
+  itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
+  itm->setText(Prop2Str("Text"));
 }

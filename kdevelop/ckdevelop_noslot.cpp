@@ -26,6 +26,7 @@
 #include "ctoolclass.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "cdocbrowser.h"
+#include "./kdlgedit/kdlgreadmedlg.h"
 
 
 void CKDevelop::refreshTrees(){
@@ -338,6 +339,20 @@ void CKDevelop::switchToKDevelop(){
 
 }
 void CKDevelop::switchToKDlgEdit(){
+//   KConfig *config = kapp->getConfig();
+
+  if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
+    {
+      KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
+      readmedlg->exec();
+
+      if (!readmedlg->isShowAgain())
+        config->writeEntry("KDlgEdit_ShowReadme","false");
+
+      delete readmedlg;
+    }
+
+
   kdev_caption = caption();
   setCaption(kdlg_caption);
   bKDevelop=false;

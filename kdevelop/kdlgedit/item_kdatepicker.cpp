@@ -68,6 +68,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("FontSize",   "",             "Appearance",        ALLOWED_INT);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

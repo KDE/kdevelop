@@ -242,8 +242,11 @@ void CKDevelop::initKDlgMenuBar(){
 				      SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
   //  kdlg_help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   kdlg_help_menu->insertSeparator();
+  kdlg_help_menu->insertItem(i18n("Dialog editor notes..."),this, SLOT(slotHelpDlgNotes()),0,ID_HELP_DLGNOTES);
   kdlg_help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   kdlg_menubar->insertItem(i18n("&Help"),kdlg_help_menu);
+
+
 
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
@@ -415,176 +418,24 @@ void CKDevelop::initKDlgKeyAccel(){
   accel->readSettings();
 }
 
-void CKDevelop::setKDlgCaption(){
+void CKDevelop::setKDlgCaption()
+{
   setCaption(kdlg_caption);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#include "./kdlgedit/kdlgreadmedlg.h"
+
+void CKDevelop::slotHelpDlgNotes()
+{
+  KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
+  readmedlg->exec();
+
+  if (!readmedlg->isShowAgain())
+    config->writeEntry("KDlgEdit_ShowReadme","false");
+  else
+    config->writeEntry("KDlgEdit_ShowReadme","true");
+
+  delete readmedlg;
+}
 
 

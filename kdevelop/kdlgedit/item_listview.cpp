@@ -20,10 +20,11 @@
 #define INC_LISTVIEW
 #include "items.h"
 #include "itemsglobal.h"
+#include <qlistbox.h>
 
 #define CALLER_ITEMCLASS_NAME KDlgItem_ListView
 #define ITEMCLASS_NAME KDlgItem_ListView
-#define ITEMCLASS_TYPE QListView
+#define ITEMCLASS_TYPE QListBox
 
 #include "item_all.cpp.inc"
 
@@ -68,6 +69,18 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+  props->addProp("isAutoUpdate",       "true",          "General",        ALLOWED_BOOL);
+
+  props->addProp("vScrollBarMode",     "Auto",          "Appearance",     ALLOWED_COMBOLIST, "Auto\nAlwaysOff\nAlwaysOn");
+  props->addProp("hScrollBarMode",     "Auto",          "Appearance",     ALLOWED_COMBOLIST, "Auto\nAlwaysOff\nAlwaysOn");
+  props->addProp("TreeStepSize",       "",              "Appearance",     ALLOWED_INT);
+  props->addProp("Columns",            "",              "Appearance",     ALLOWED_MULTISTRING);
+  props->addProp("isMultiSelection",   "false",         "Appearance",     ALLOWED_BOOL);
+  props->addProp("isAllColumnsShowFocus", "false",      "Appearance",     ALLOWED_BOOL);
+  props->addProp("isRootDecorated",    "false",         "Appearance",     ALLOWED_BOOL);
+  props->addProp("ListViewFont",       "",              "Appearance",     ALLOWED_COLOR);
+  props->addProp("ListViewPalette",    "",              "Appearance",     ALLOWED_COLOR);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

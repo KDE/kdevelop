@@ -185,6 +185,7 @@
 #define ID_HELP_USER_MANUAL          18130
 #define ID_HELP_HOMEPAGE            18140
 #define ID_HELP_BUG_REPORT          18145
+#define ID_HELP_DLGNOTES            18149
 #define ID_HELP_ABOUT               18150
 
 #define ID_HELP_WHATS_THIS     			18160

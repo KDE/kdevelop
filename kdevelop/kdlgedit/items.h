@@ -382,13 +382,13 @@ class KDlgItem_GroupBox : public KDlgItem_Base
 #endif
 
 #ifdef INC_LISTVIEW
-#include <qlistview.h>
+#include <qlistbox.h>
 class KDlgItem_ListView : public KDlgItem_Base
 {
   Q_OBJECT
 
   #define classname KDlgItem_ListView
-  #define widgettype QListView
+  #define widgettype QListBox
   #define classdesc "QListView"
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"

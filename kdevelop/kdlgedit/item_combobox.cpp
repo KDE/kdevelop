@@ -66,7 +66,8 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoResize",   "FALSE",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

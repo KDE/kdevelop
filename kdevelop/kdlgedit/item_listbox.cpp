@@ -67,14 +67,15 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoUpdate",   "TRUE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoScroll",   "TRUE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoScrollBar",   "TRUE",          "General",        ALLOWED_BOOL);
-  props->addProp("isAutoBottomScrollBar",   "TRUE",          "General",        ALLOWED_BOOL);
-  props->addProp("isBottomScrollBar",   "FALSE",          "General",        ALLOWED_BOOL);
-  props->addProp("isDragSelect",   "TRUE",             "General",        ALLOWED_BOOL);
-  props->addProp("isSmoothScrolling",   "TRUE",             "General",        ALLOWED_BOOL);
-  
+  props->addProp("isAutoUpdate",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoScroll",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoScrollBar",   "true",          "General",        ALLOWED_BOOL);
+  props->addProp("isAutoBottomScrollBar",   "true",          "General",        ALLOWED_BOOL);
+  props->addProp("isBottomScrollBar",   "false",          "General",        ALLOWED_BOOL);
+  props->addProp("isDragSelect",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("isSmoothScrolling",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);
 }
 
@@ -96,5 +97,5 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   if(Prop2Str("setFixedVisibleLines") != ""){
     itm->setFixedVisibleLines(Prop2Int("setFixedVisibleLines"));
   }
-  
+
 }

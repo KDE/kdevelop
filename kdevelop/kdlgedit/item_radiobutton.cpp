@@ -69,9 +69,9 @@ void ITEMCLASS_NAME::addMyPropEntrys()
     return;
 
   props->addProp("Text",           "RadioButton",       "General",        ALLOWED_STRING);
-  props->addProp("isChecked",      "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoResize",   "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoRepeat",   "FALSE",             "General",        ALLOWED_BOOL);
+  props->addProp("isChecked",      "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "false",             "General",        ALLOWED_BOOL);
 
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }

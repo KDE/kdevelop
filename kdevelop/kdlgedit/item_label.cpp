@@ -70,7 +70,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 
   props->addProp("Text",           "Label",       "General",        ALLOWED_STRING);
   props->addProp("Buddy",          ""     ,       "C++ Code",       ALLOWED_STRING);
-  props->addProp("isAutoResize",   "FALSE",       "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "false",       "General",        ALLOWED_BOOL);
   props->addProp("Margin",         "",            "Appearance",     ALLOWED_INT);
 }
 

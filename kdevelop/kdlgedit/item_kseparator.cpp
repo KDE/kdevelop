@@ -68,6 +68,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("Orientation",           "Horizontal",       "General",        ALLOWED_ORIENTATION);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -82,4 +83,10 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   #define strIsDef(s) (!Prop2Str(s).isNull())
   #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
+  if(Prop2Str("Orientation") == "Horizontal"){
+    itm->setOrientation(KSeparator::HLine);
+  }
+  else{
+    itm->setOrientation(KSeparator::VLine);
+  }
 }

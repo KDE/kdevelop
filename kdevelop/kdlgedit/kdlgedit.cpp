@@ -33,10 +33,10 @@
 #define DONTINC_ALL
 #define INC_WIDGET
 #include "items.h"
+#include <kconfig.h>
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
-   
    connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
 	   SLOT(slotOpenDialog(QString)));
    connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(newDialog()),

@@ -26,6 +26,7 @@
 
 class KDlgItem_Base;
 class QFont;
+class QColor;
 
 QString KDlgLimitLines(QString src, unsigned maxlen = 40);
 
@@ -36,6 +37,9 @@ void KDlgItemsPaintRects(QPainter *p, int w, int h);
 
 QFont KDlgItemsGetFont(QString desc);
 
+QString getLineOutOfString(QString src, int ln, QString sep = "\n");
+
+QColor Str2Color(QString desc);
 
 /**
  * Paints the border and the rectangles of a selected item.
@@ -148,6 +152,11 @@ struct KDlgPropertyEntry
    * the allowed values for this property (see ALLOWED_* constants in defines.h)
   */
   int allowed;
+
+  /**
+   * can store some property-specific data.
+  */
+  QString data;
 };
 
 
@@ -174,13 +183,10 @@ class KDlgPropertyBase
     */
     int getEntryCount() { return numEntrys; }
 
-    #define testIfNrIsValid0(nr) if ((nr<0) || (nr>numEntrys)) return 0;
-    #define testIfNrIsValid(nr) if ((nr<0) || (nr>numEntrys)) return;
-
     /**
      * returns a pointer to the KDlgPropertyEntry (see above) given by <i>nr</i>
     */
-    KDlgPropertyEntry* getProp(int nr) { testIfNrIsValid0(nr); return &props[nr];  }
+    KDlgPropertyEntry* getProp(int nr) { if ((nr<0) || (nr>numEntrys)) return 0; else return &props[nr];  }
 
     /**
      * returns a pointer to the KDlgPropertyEntry (see above) given by <i>name</i>.
@@ -195,13 +201,14 @@ class KDlgPropertyBase
     /**
      * sets all entries of a propertyentry in one step.
     */
-    void setProp(int nr, QString name, QString value, QString group, int allowed)
-       { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; }
+    void setProp(int nr, QString name, QString value, QString group, int allowed, QString data = "")
+       { if ((nr<0) || (nr>numEntrys)) return; props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; props[nr].data = data; }
 
-    void setProp_Name   (int nr, QString name)  { testIfNrIsValid(nr); props[nr].name = name; }
-    void setProp_Value  (int nr, QString value) { testIfNrIsValid(nr); props[nr].value = value; }
-    void setProp_Group  (int nr, QString group) { testIfNrIsValid(nr); props[nr].group = group; }
-    void setProp_Allowed(int nr, int allowed)   { testIfNrIsValid(nr); props[nr].allowed = allowed; }
+    void setProp_Name   (int nr, QString name)  { if ((nr<0) || (nr>numEntrys)) return; props[nr].name = name; }
+    void setProp_Value  (int nr, QString value) { if ((nr<0) || (nr>numEntrys)) return; props[nr].value = value; }
+    void setProp_Group  (int nr, QString group) { if ((nr<0) || (nr>numEntrys)) return; props[nr].group = group; }
+    void setProp_Allowed(int nr, int allowed)   { if ((nr<0) || (nr>numEntrys)) return; props[nr].allowed = allowed; }
+    void setProp_Data   (int nr, QString data)  { if ((nr<0) || (nr>numEntrys)) return; props[nr].data = data; }
 
     void setProp_Name   (QString n, QString name);
     /**
@@ -210,13 +217,14 @@ class KDlgPropertyBase
     void setProp_Value  (QString n, QString value);
     void setProp_Group  (QString n, QString group);
     void setProp_Allowed(QString n, int allowed);
+    void setProp_Data   (QString n, QString data);
 
 
     /**
      * Adds a property to the end of the list.
     */
-    void addProp(QString name, QString value, QString group, int allowed )
-       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed); }
+    void addProp(QString name, QString value, QString group, int allowed, QString data = "" )
+       { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed, data); }
 
     /**
      * Returns an integer of the value field of a property. If there is no valid integer is entered it returns <i>defaultval</i>.

@@ -65,10 +65,10 @@ void KDlgItem_LineEdit::addMyPropEntrys()
     return;
 
   props->addProp("Text",           "",       "General",        ALLOWED_STRING);
-  props->addProp("hasFrame",       "TRUE",   "General",        ALLOWED_BOOL);
+  props->addProp("hasFrame",       "true",   "General",        ALLOWED_BOOL);
   props->addProp("MaxLength",      "",       "General",        ALLOWED_INT);
   props->addProp("CursorPosition",  "",       "General",        ALLOWED_INT);
-  props->addProp("isTextSelected", "FALSE",  "General",        ALLOWED_BOOL);
+  props->addProp("isTextSelected", "false",  "General",        ALLOWED_BOOL);
 }
 
 void KDlgItem_LineEdit::repaintItem(QLineEdit *it)

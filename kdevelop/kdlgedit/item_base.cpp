@@ -21,6 +21,7 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
+#include <qpalette.h>
 #include "itemsglobal.h"
 
 KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool ismainwidget, const char* name )
@@ -184,4 +185,5 @@ void KDlgItem_Base::repaintItem(QWidget *it)
       QWidget wid;
       itm->setFont(wid.font());
     }
+
 }

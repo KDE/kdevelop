@@ -67,11 +67,11 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoUpdate",   "TRUE",             "General",        ALLOWED_BOOL);
-  props->addProp("isReadOnly",   "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("isOverWriteMode",   "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("Text",           "",       "General",        ALLOWED_STRING);
-  props->addProp("isTextSelected", "FALSE",  "General",        ALLOWED_BOOL);
+  props->addProp("isAutoUpdate",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("isReadOnly",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isOverWriteMode",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("Text",           "",       "General",        ALLOWED_MULTISTRING);
+  props->addProp("isTextSelected", "false",  "General",        ALLOWED_BOOL);
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);
 }
 
@@ -91,8 +91,22 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   itm->setOverwriteMode(Prop2Bool("isOverWriteMode") == 1 ? TRUE : FALSE);
 
   if (strIsDef("Text"))
-    itm->setText(Prop2Str("Text"));
+  {
+    int i = 0;
+    QString src = Prop2Str("Text");
+    QString s;
+    QString dst;
 
+    s = getLineOutOfString(src,i,"\\n");
+    while (!s.isNull())
+      {
+        dst = dst + s + "\n";
+        i++;
+        s = getLineOutOfString(src,i,"\\n");
+      }
+
+    itm->setText( dst.left(dst.length()-1) );
+  }
 
   if (Prop2Bool("isTextSelected") == 1)
     itm->selectAll();

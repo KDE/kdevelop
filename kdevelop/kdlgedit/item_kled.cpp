@@ -68,6 +68,8 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("LedColor",   "false",           "Appearance",        ALLOWED_COMBOLIST,  "Yellow\nOrange\nRed\nGreen\nBlue"  );
+
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

@@ -20,6 +20,7 @@
 #define KDLGPROPLVIS_H
 
 #include <qwidget.h>
+#include <qdialog.h>
 
 /**
   *@author Pascal Krahmer
@@ -34,10 +35,15 @@ class KDlgItem_Base;
 class QButton;
 class QLineEdit;
 class QComboBox;
+class QCheckBox;
+class QLabel;
 class KDlgPropertyEntry;
 class KRestrictedLine;
 class KColorButton;
 class CKDevelop;
+class QGroupBox;
+class QMultiLineEdit;
+class QToolButton;
 
 class AdvLvi_Base : public QWidget
 {
@@ -46,6 +52,7 @@ class AdvLvi_Base : public QWidget
     AdvLvi_Base(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText() { return QString(); }
+    virtual QString getDisplayedText() { return QString(); }
     virtual void refreshItem();
 
   protected:
@@ -125,10 +132,12 @@ class AdvLvi_Bool : public AdvLvi_Base
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 
-    QComboBox *cbBool;
+//    QComboBox *cbBool;
+    QCheckBox *cbBool;
 
   public slots:
-    void activated( const char* );
+    void btnPressed();
+//  void activated( const char* );
 };
 class AdvLvi_Orientation : public AdvLvi_Base
 {
@@ -179,8 +188,10 @@ class AdvLvi_ColorEdit : public AdvLvi_Base
   protected:
     virtual void resizeEvent ( QResizeEvent * );
     KColorButton *btn;
+    QLineEdit *leInput;
 
   public slots:
+    void returnPressed();
     void changed ( const QColor &newColor );
 };
 
@@ -234,5 +245,61 @@ class AdvLvi_Varname : public AdvLvi_String
     void VarnameChanged();
 };
 
+class AdvLvi_ComboList : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_ComboList(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
 
+    virtual QString getText();
+
+
+  protected:
+    virtual void resizeEvent ( QResizeEvent * );
+
+    QComboBox *cbOrientation;
+
+  public slots:
+    void activated( const char* );
+};
+
+
+class dlgMultiLineEdit : public QDialog
+{
+     Q_OBJECT
+  public:
+      dlgMultiLineEdit(QWidget *parent=0, const char *name=0);
+
+      QString getText();
+  protected:
+      void initDialog();
+      QGroupBox *gbGroupBox;
+      QMultiLineEdit *mleStrings;
+      QLabel *lRowCnt;
+      QPushButton *btnCancel;
+      QPushButton *btnOk;
+  private:
+  public slots:
+      void textChanged( );
+};
+
+class AdvLvi_MultiString : public AdvLvi_Base
+{
+  Q_OBJECT
+  public:
+    AdvLvi_MultiString(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+
+    virtual QString getText();
+    virtual QString getDisplayedText() { return QString("[QStrings...]"); }
+
+
+  protected:
+    QString txt;
+    QToolButton *btnMore;
+
+    virtual void resizeEvent ( QResizeEvent * );
+
+  public slots:
+    void btnPressed();
+};
 #endif

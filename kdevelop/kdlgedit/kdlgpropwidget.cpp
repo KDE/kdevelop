@@ -22,7 +22,12 @@
 #include <qlistview.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qpopupmenu.h>
+#include <qmultilinedit.h>
+#include <qlabel.h>
+#include <qtoolbutton.h>
 #include <kfiledialog.h>
 #include <krestrictedline.h>
 #include <kspinbox.h>
@@ -31,6 +36,7 @@
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "items.h"
+#include "itemsglobal.h"
 #include "defines.h"
 
 
@@ -526,8 +532,10 @@ void AdvListViewItem::testAndResizeWidget(int column)
         {
           colwid[column]->hide();
 
-          if (colwid[column])
+          if (colwid[column]->getDisplayedText().isEmpty())
             setText(column, colwid[column]->getText());
+          else
+            setText(column, colwid[column]->getDisplayedText());
 
           colwid[column]->clearFocus();
         }
@@ -613,7 +621,12 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
               colwid[column]->hide();
 
               if (colwid[column])
-                setText(column, colwid[column]->getText());
+                {
+                  if (colwid[column]->getDisplayedText().isEmpty())
+                    setText(column, colwid[column]->getText());
+                  else
+                    setText(column, colwid[column]->getDisplayedText());
+                }
             }
 
 
@@ -744,11 +757,17 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           case ALLOWED_CURSOR:
             lvi->setColumnWidget(1, new AdvLvi_Cursor( lv, pCKDevel, prop ));
             break;
-          case ALLOWED_BGMODE:
-            lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, pCKDevel, prop ));
-            break;
+//          case ALLOWED_BGMODE:
+  //          lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, pCKDevel, prop ));
+    //        break;
           case ALLOWED_VARNAME:
             lvi->setColumnWidget(1, new AdvLvi_Varname( lv, pCKDevel, prop ));
+            break;
+          case ALLOWED_COMBOLIST:
+            lvi->setColumnWidget(1, new AdvLvi_ComboList( lv, pCKDevel, prop ));
+            break;
+          case ALLOWED_MULTISTRING:
+            lvi->setColumnWidget(1, new AdvLvi_MultiString( lv, pCKDevel, prop ));
             break;
        }
 
@@ -984,11 +1003,14 @@ AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *
   : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
-  cbBool = new QComboBox( FALSE, this );
-  cbBool->insertItem(i18n("TRUE"));
-  cbBool->insertItem(i18n("FALSE"));
-  cbBool->setCurrentItem(isValueTrue(dpe->value) ? 0 : 1);
-  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+//  cbBool = new QComboBox( FALSE, this );
+//  cbBool->insertItem(i18n("TRUE"));
+//  cbBool->insertItem(i18n("FALSE"));
+//  cbBool->setCurrentItem(isValueTrue(dpe->value) ? 0 : 1);
+  cbBool = new QCheckBox(isValueTrue(dpe->value) ? QString(i18n("true")) : QString(i18n("false")), this);
+  cbBool->setChecked(isValueTrue(dpe->value));
+  cbBool->setBackgroundMode( PaletteLight );
+  connect(cbBool, SIGNAL(clicked()), SLOT(btnPressed()));
 }
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
@@ -996,22 +1018,26 @@ void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
   AdvLvi_Base::resizeEvent( e );
 
   if (cbBool)
-    cbBool->setGeometry(0,0,width(),height()+1);
+    cbBool->setGeometry(5,0,width()-5,height()+1);
 }
 
 QString AdvLvi_Bool::getText()
 {
   if (cbBool)
-    return cbBool->currentItem() ? "FALSE" : "TRUE";
+    return cbBool->text();
   else
     return QString();
 }
 
-void AdvLvi_Bool::activated( const char* s )
+void AdvLvi_Bool::btnPressed()
+//void AdvLvi_Bool::activated( const char* s )
 {
-  propEntry->value = cbBool->currentItem() ? "FALSE" : "TRUE";
+  cbBool->setText(cbBool->isChecked() ? "true" : "false");
+  propEntry->value = cbBool->text();
   refreshItem();
 }
+
+
 AdvLvi_Orientation::AdvLvi_Orientation(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
   : AdvLvi_Base( parent, parCKD, dpe, name )
 {
@@ -1050,12 +1076,28 @@ void AdvLvi_Orientation::activated( const char* s )
   refreshItem();
 }
 
+
+
+
+
+
 AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
   : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
   btn = new KColorButton(this);
+  btn->setColor(Str2Color(dpe->value));
+  leInput = new QLineEdit(this);
+  leInput->setMaxLength(8);
+  if (!dpe->value.isEmpty())
+    {
+      char s[255];
+      sprintf(s,"0x%.2x%.2x%.2x",btn->color().red(),btn->color().green(),btn->color().blue());
+      leInput->setText(QString(s));
+    }
   connect(btn, SIGNAL(changed(const QColor&)), SLOT(changed(const QColor&)));
+  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 }
 
 void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
@@ -1064,14 +1106,14 @@ void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
 
   if (btn)
     btn->setGeometry(width()-height(),0,height(),height()+1);
+
+  if (leInput)
+    leInput->setGeometry(0,0,width()-15,height()+1);
 }
 
 QString AdvLvi_ColorEdit::getText()
 {
-  if (!btn) return QString();
-  char s[255];
-  sprintf(s,"0x%.2x%.2x%.2x",btn->color().red(),btn->color().green(),btn->color().blue());
-  return QString(s);
+  return leInput->text();
 }
 
 QString AdvLvi_intToHex(int i)
@@ -1083,11 +1125,16 @@ QString AdvLvi_intToHex(int i)
 
 void AdvLvi_ColorEdit::changed ( const QColor &newColor )
 {
-//  int l=0;
-//  sscanf((const char*)getText(), "%i", &l);
-//  QColor myColor(QColor((unsigned char)(l>>16),(unsigned char)(l>>8),(unsigned char)(l)));
-//  int res = KColorDialog::getColor( myColor );
   propEntry->value = "0x"+AdvLvi_intToHex(newColor.red())+AdvLvi_intToHex(newColor.green())+AdvLvi_intToHex(newColor.blue());
+  leInput->setText(propEntry->value);
+  leInput->setFocus();
+  refreshItem();
+}
+
+void AdvLvi_ColorEdit::returnPressed()
+{
+  propEntry->value = leInput->text();
+  btn->setColor(Str2Color(leInput->text()));
   refreshItem();
 }
 
@@ -1170,22 +1217,34 @@ AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEnt
   : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
+  int cnt = 1;
+
   cbBool = new QComboBox( TRUE, this );
-  cbBool->insertItem("");
-  cbBool->insertItem(i18n("(not set)"));
-  cbBool->insertItem("[handCursor]");
-  cbBool->insertItem("[arrowCursor]");
-  cbBool->insertItem("[upArrowCursor]");
-  cbBool->insertItem("[crossCursor]");
-  cbBool->insertItem("[waitCursor]");
-  cbBool->insertItem("[ibeamCursor]");
-  cbBool->insertItem("[sizeVerCursor]");
-  cbBool->insertItem("[sizeHorCursor]");
-  cbBool->insertItem("[sizeBDiagCursor]");
-  cbBool->insertItem("[sizeFDiagCursor]");
-  cbBool->insertItem("[sizeAllCursor]");
-  cbBool->insertItem("[blankCursor]");
-  cbBool->setCurrentItem(1);
+  #define InsertItem(n) cbBool->insertItem(n); if (QString(n).lower() == dpe->value.lower()) cbBool->setCurrentItem(cnt); cnt++;
+  if ((dpe->value.left(1) == "(") || (dpe->value.left(1) == "["))
+    {
+      cbBool->insertItem("");
+    }
+  else
+    {
+      cbBool->insertItem(dpe->value);
+    }
+  cbBool->setCurrentItem(0);
+  InsertItem(i18n("(not set)"));
+  InsertItem("[handCursor]");
+  InsertItem("[arrowCursor]");
+  InsertItem("[upArrowCursor]");
+  InsertItem("[crossCursor]");
+  InsertItem("[waitCursor]");
+  InsertItem("[ibeamCursor]");
+  InsertItem("[sizeVerCursor]");
+  InsertItem("[sizeHorCursor]");
+  InsertItem("[sizeBDiagCursor]");
+  InsertItem("[sizeFDiagCursor]");
+  InsertItem("[sizeAllCursor]");
+  InsertItem("[blankCursor]");
+  #undef InsertItem
+//  cbBool->setCurrentItem(1);
   cbBool->setAutoCompletion ( true );
   cbBool->setInsertionPolicy ( QComboBox::NoInsertion );
 
@@ -1227,7 +1286,7 @@ QString AdvLvi_Cursor::getText()
           cbBool->changeItem(cbBool->currentText(),0);
         }
 
-      QString s = cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString();
+      QString s = cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString("");
       propEntry->value = s;
       refreshItem();
 
@@ -1253,4 +1312,169 @@ AdvLvi_Varname::AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyE
 void AdvLvi_Varname::VarnameChanged()
 {
   pCKDevel->kdlg_get_edit_widget()->setVarnameChanged(true);
+}
+
+AdvLvi_ComboList::AdvLvi_ComboList(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name)
+  : AdvLvi_Base( parent, parCKD, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  cbOrientation = new QComboBox( FALSE, this );
+
+  int i = 0;
+  QString src = dpe->data;
+  QString s;
+
+  s = getLineOutOfString(src,i);
+  while (!s.isNull())
+    {
+      cbOrientation->insertItem(s);
+      if (s==dpe->value)
+        cbOrientation->setCurrentItem(i);
+      i++;
+      s = getLineOutOfString(src,i);
+    }
+
+  connect(cbOrientation, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+}
+
+void AdvLvi_ComboList::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+
+  if (cbOrientation)
+    cbOrientation->setGeometry(0,0,width(),height()+1);
+}
+
+QString AdvLvi_ComboList::getText()
+{
+  if (cbOrientation)
+    return cbOrientation->currentText();
+  else
+    return QString();
+}
+
+void AdvLvi_ComboList::activated( const char* s )
+{
+  propEntry->value = getText();
+  refreshItem();
+}
+
+
+
+
+AdvLvi_MultiString::AdvLvi_MultiString(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name )
+  : AdvLvi_Base( parent, parCKD, dpe, name )
+{
+  setGeometry(0,0,0,0);
+  btnMore = new QToolButton(this);
+  btnMore->setTextLabel("[QStrings...]");
+  btnMore->setUsesTextLabel(true);
+  txt = dpe->value;
+  connect( btnMore, SIGNAL( clicked() ), SLOT( btnPressed() ) );
+}
+
+QString AdvLvi_MultiString::getText()
+{
+  return txt;
+}
+
+void AdvLvi_MultiString::resizeEvent ( QResizeEvent *e )
+{
+  AdvLvi_Base::resizeEvent( e );
+  if (btnMore)
+    btnMore->setGeometry(0,0,width(),height());
+}
+
+void AdvLvi_MultiString::btnPressed()
+{
+  dlgMultiLineEdit *dlg = new dlgMultiLineEdit(this);
+  if (dlg->exec())
+    {
+      txt = dlg->getText();
+    }
+  delete dlg;
+
+  propEntry->value = txt;
+  refreshItem();
+}
+
+
+
+dlgMultiLineEdit::dlgMultiLineEdit(QWidget *parent, const char *name)
+  : QDialog(parent,name,true)
+{
+  resize(300,225);
+  setFixedSize(300,225);
+
+  gbGroupBox = new QGroupBox(this);
+  gbGroupBox->setGeometry(10,10,280,175);
+  gbGroupBox->setTitle(i18n("List of QStrings"));
+
+  mleStrings = new QMultiLineEdit(this);
+  mleStrings->setGeometry(20,30,260,130);
+
+  int i = 0;
+  QString src = ((AdvLvi_MultiString*)parent)->getText();
+  QString s;
+  QString dst;
+
+  s = getLineOutOfString(src,i,"\\n");
+  while (!s.isNull())
+    {
+      dst = dst + s + "\n";
+      i++;
+      s = getLineOutOfString(src,i,"\\n");
+    }
+
+  mleStrings->setText( dst.left(dst.length()-1) );
+
+  connect(mleStrings, SIGNAL(textChanged()), SLOT(textChanged()));
+
+  lRowCnt = new QLabel(this);
+  lRowCnt->setGeometry(20,160,200,20);
+  i = mleStrings->numLines();
+  if (mleStrings->text().isEmpty())
+    i = 0;
+  lRowCnt->setText(QString().setNum(i) + QString(" ") + QString(i18n("row(s) entered.")));
+
+  btnCancel = new QPushButton(this);
+  btnCancel->setGeometry(220,190,70,25);
+  btnCancel->setText(i18n("&Cancel"));
+  connect(btnCancel, SIGNAL(clicked()), SLOT(reject()));
+
+  btnOk = new QPushButton(this);
+  btnOk->setGeometry(145,190,70,25);
+  btnOk->setText(i18n("&Ok"));
+  connect(btnOk, SIGNAL(clicked()), SLOT(accept()));
+}
+
+void dlgMultiLineEdit::textChanged( )
+{
+  int i = mleStrings->numLines();
+  if (mleStrings->text().isEmpty())
+    i = 0;
+
+  lRowCnt->setText(QString().setNum(i) + QString(" ") + QString(i18n("row(s) entered.")));
+}
+
+QString dlgMultiLineEdit::getText()
+{
+   QString src = mleStrings->text();
+   QString dst = "";
+   int l = src.length();
+
+   for (int i = 0; i<l; i++)
+     {
+       if (src.left(1) == "\n")
+         dst = dst + "\\n";
+       else
+         dst = dst + src.left(1);
+
+       src = src.right(src.length()-1);
+     }
+
+   while (dst.right(2) == "\\n")
+     dst = dst.left(dst.length()-2);
+
+   return dst;
 }

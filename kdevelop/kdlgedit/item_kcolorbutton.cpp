@@ -28,8 +28,9 @@
 #include "item_all.cpp.inc"
 
 
+
 ITEMCLASS_NAME::MyWidget::MyWidget(ITEMCLASS_NAME* wid, QWidget* parent, const char* name )
-  : ITEMCLASS_TYPE(parent)
+  : ITEMCLASS_TYPE(parent,name)
 {
   parentObject = wid;
   isItemActive = false;
@@ -67,7 +68,17 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
+  props->addProp("Text",           "Button",       "General",        ALLOWED_STRING);
+  props->addProp("isDefault",      "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoDefault" , "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggleButton", "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isToggledOn",    "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isMenuButton",   "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "false",        "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "false",        "General",        ALLOWED_BOOL);
+  props->addProp("DisplayedColor", "false",        "General",        ALLOWED_COLOR);
 
+  props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -78,8 +89,30 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
-
   #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
+  if (strIsDef("Text"))
+    itm->setText(Prop2Str("Text"));
+
+  if (Prop2Str("Pixmap").isEmpty())
+    {
+      if (itm->pixmap())
+        itm->setPixmap(QPixmap());
+    }
+  else
+    itm->setPixmap(QPixmap(Prop2Str("Pixmap")));
+
+  itm->setDefault(Prop2Bool("isDefault") == 1 ? TRUE : FALSE);
+  itm->setIsMenuButton(Prop2Bool("isMenuButton") == 1 ? TRUE : FALSE);
+  itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
+  itm->setToggleButton(Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE);
+  itm->setOn((Prop2Bool("isToggledOn") == 1 ? TRUE : FALSE) && (Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE));
+
+  if (strIsDef("DisplayedColor"))
+    itm->setColor(Str2Color(Prop2Str("DisplayedColor")));
+  else
+    itm->setColor(QColor());
 }
+
+
+
