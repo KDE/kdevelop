@@ -462,10 +462,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            else
                candidate = m_activeFileName;
            kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
-           if (!candidate.isEmpty())
+           if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
            {
                 FileDom file2 = codeModel()->fileByName( candidate );
-                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->fileName() << endl;
+                kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
 
                 FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
                 for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it ){
