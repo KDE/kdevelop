@@ -32,6 +32,7 @@ QString VCSFileInfo::state2String( FileState state )
         case Modified: return "modified";
         case Conflict: return "conflict";
         case Sticky: return "sticky";
+        case Directory: return "directory";
         case Unknown:
         default:
             return "unknown";
