@@ -30,5 +30,3 @@ QWidget* KDevCompilerGcc::initOptionsWidget(QWidget* parent, QWidget* pdlg){
   setOptionsWidget(*gccw);
   return gccw;
 }
-
-#include "KDevCompilerGcc.moc"
