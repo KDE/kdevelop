@@ -701,9 +701,16 @@ void CProject::updateMakefileAm(QString makefile){
 	}
  
 	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
-	if((getProjectType() != "normal_cpp")  && getProjectType() != "normal_c"&&
-                   (makefile == QString("Makefile.am"))){
+	QString type=getProjectType();
+  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
+	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2")&& makefile == QString("Makefile.am"))
+	{
 	  stream << "dist-hook:\n\t-perl automoc\n";
+	}
+	if((type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2") &&
+      makefile==QString("Makefile.am"))
+  {
+	  stream << "dist-hook:\n\t-perl am_edit\n";
 	}
 	//************SUBDIRS***************
 	if(!subdirs.isEmpty()){ // the SUBDIRS key

@@ -298,9 +298,209 @@ framework as well (which has the differences as mentioned above: other method ca
 Now we will start jumping into development by creating the frame application for <em>KScribble</em>. Start KDevelop and choose
 "Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
 contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
-from the Qt section.
+from the Qt section. Then select "Next", enter "KScribble" as project name and "1.0" as version number. Add your name
+and email address into the according fields and you're done. Click on the "Create" button and KDevelop will generate our first version
+of <em>KScribble</em> while you can watch the output in the last page of the wizard. Finally, press "Exit" to return to KDevelop. In
+the output window you will see an additional message showing that the messages file has been set up for your project, which will be
+important to translate KScribble into other languages.
+
+<sect>Overview
+<p>
+Now it is important to have an understanding where to find what in the generated sources and where your place as a programmer can be
+found to make <em>KScribble</em> a unique KDE application.
+
+First of all, in the Classviewer you will see three already created classes, <tt>KScribbleApp</tt>, <tt>KScribbleDoc</tt> and
+<tt>KScribbleView</tt>. As explained above, each of them has a certain part within the application; the App class builds the main
+window and coordinates user interaction, the Doc class maintains the documents that an application can manipulate; finally the View
+class is responsible for user interaction with the child windows and communicates with the document connected to it. This has several
+consequences: to make a good use of the provided functionality, the programmer is bound to use the given View class. By default, the
+View inherits <tt>QWidget</tt> as a minimum requirement, but you're by far not limited to that. But inheriting from another class is
+not too much work and finally there is also the possibility to use a <tt>QMainWindow</tt> or <tt>KTMainWindow</tt> for example as the
+class to inherit and use another class that manages the view.
+
+In the next chapter we'll continue with extending <em>KScribble</em> to manage it's documents. After that we'll implement the user
+interaction and you will see the first functionality that is unique to our application: we can draw pictures, load and save them.
 
 
+<chapt>Defining the Documents
+<p>
+
+The first step when creating an application based on the Document-View model should always be to think what kind of data the
+application has to manage and how it will do that. So this will naturally require to define the document structure first by extending
+the document class, in our example <tt>KScribbleDoc</tt>. This class is stored in two files, <tt>kscribbledoc.h</tt>, containing the
+class declaration, and <tt>kscribbledoc.cpp</tt>, where we will find the implementation of the class methods.
+
+As <em>KScribble</em> will be a drawing application, we have to think what kind storing system we could use. The Qt library has a lot
+of possibilites which we will widely use and a lot of advantages especially for drawing operations and graphical data handling.
+Therefore, we will use an instance of the class <tt>QPixmap</tt> to serve us as a buffer - an invisible pixmap which we will use to
+draw into from the view instance. This also makes using multiple windows or views for the same document possible, as each view
+connected to the document will redraw it's contents whenever one of the views changed the buffer data.
+
+To add our data buffer, simply click on the <tt>KScribbleDoc</tt> item in the class viewer to open the class declaration in the editor.
+There we will also add some more what is needed: We'll use a <tt>QPen</tt> to draw with, a class that defines colors, pen width etc.
+
+#include <qpixmap.h>
+
+at the beginning of the header file where the other already used Qt headers are placed. Within the class declaration, add:
+
+	protected:
+		QPixmap buffer;
+
+
+		
+////////////////////////// kscribbledoc.h
+
+#include <qpen.h>
+#include <qpoint.h>
+#include <qpointarray.h>
+
+class declaration
+
+    const QString& title() const;
+
+    QPen currentPen(){ return pen;};	
+		
+		int penWidth()
+			{ return pen.width(); }
+	
+  public slots:
+    /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
+     * As this view normally repaints itself, it is excluded from the paintEvent.
+     */
+    void updateAllViews(KScribbleView *sender);
+	
+	protected:
+	
+		QPen pen;
+		QPointArray polyline;
+		QPixmap buffer;
+ 	
+  private:
+    /** the modified flag of the current document */
+    bool modified;
+
+//////////////////////////
+kscribbledoc.cpp
+
+bool KScribbleDoc::newDocument()
+{
+  /////////////////////////////////////////////////
+  // TODO: Add your document initialization code here
+ 	pen=QPen( Qt::red, 3 );
+ 	polyline=QPointArray(3);
+  /////////////////////////////////////////////////
+  modified=false;
+  return true;
+}
+
+bool KScribbleDoc::openDocument(const QString &filename, const char *format /*=0*/)
+{
+
+	QFile f( filename );
+	if ( !f.open( IO_ReadOnly ) )
+		return false;
+  /////////////////////////////////////////////////
+  // TODO: Add your document opening code here
+	if(!buffer.load( filename, "PNG" ))
+		return false;
+  /////////////////////////////////////////////////
+	f.close();
+
+
+bool KScribbleDoc::saveDocument(const QString &filename, const char *format /*=0*/)
+{
+	QFile f( filename );
+	if ( !f.open( IO_WriteOnly ) )
+		return false;
+
+  /////////////////////////////////////////////////
+  // TODO: Add your document saving code here
+	if(!buffer.save( filename, "PNG" ))
+		return false;
+  /////////////////////////////////////////////////
+
+  f.close();
+
+//////////////////////////
+kscribbleview.h
+
+  protected:
+		/** Pointer to the document connected to the widget */
+	  KScribbleDoc *doc;
+		
+		virtual void mousePressEvent( QMouseEvent *e );
+		virtual void mouseReleaseEvent( QMouseEvent *e );
+		virtual void mouseMoveEvent( QMouseEvent *e );
+		virtual void resizeEvent( QResizeEvent *e );
+		virtual void paintEvent( QPaintEvent *e );
+	
+  private:
+		bool mousePressed;
+/////////////////////////
+kscribbleview.cpp
+void KScribbleView::mousePressEvent( QMouseEvent *e )
+{
+  mousePressed = TRUE;
+  doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = e->pos();
+  doc->updateAllViews(this);
+}
+
+void KScribbleView::mouseReleaseEvent( QMouseEvent * )
+{
+	mousePressed = FALSE;
+  doc->updateAllViews(this);
+}
+
+void KScribbleView::mouseMoveEvent( QMouseEvent *e )
+{
+  if ( mousePressed ) {
+		
+    QPainter painter;
+    painter.begin( &doc->buffer );
+    painter.setPen( doc->currentPen() );
+    doc->polyline[2] = doc->polyline[1];
+    doc->polyline[1] = doc->polyline[0];
+    doc->polyline[0] = e->pos();
+    painter.drawPolyline( doc->polyline );
+    painter.end();
+
+    QRect r = doc->polyline.boundingRect();
+    r = r.normalize();
+    r.setLeft( r.left() - doc->penWidth() );
+    r.setTop( r.top() - doc->penWidth() );
+    r.setRight( r.right() + doc->penWidth() );
+    r.setBottom( r.bottom() + doc->penWidth() );
+
+	  doc->setModified();
+	  doc->updateAllViews(this);
+    bitBlt( this, r.x(), r.y(), &doc->buffer, r.x(), r.y(), r.width(), r.height() );
+  }
+}
+
+void KScribbleView::resizeEvent( QResizeEvent *e )
+{
+  QWidget::resizeEvent( e );
+
+  int w = width() > doc->buffer.width() ?
+  width() : doc->buffer.width();
+  int h = height() > doc->buffer.height() ?
+  height() : doc->buffer.height();
+
+  QPixmap tmp( doc->buffer );
+  doc->buffer.resize( w, h );
+  doc->buffer.fill( Qt::white );
+  bitBlt( &doc->buffer, 0, 0, &tmp, 0, 0, tmp.width(), tmp.height() );
+}
+
+void KScribbleView::paintEvent( QPaintEvent *e )
+{
+  QWidget::paintEvent( e );
+
+  QRect r = e->rect();
+
+  bitBlt( this, r.x(), r.y(), &doc->buffer, r.x(), r.y(), r.width(), r.height() );
+}
+/////////////////////////////////////
 
 <chapt>Copyright <label id="Copyright"> <p>
 <tscreen><verb>
