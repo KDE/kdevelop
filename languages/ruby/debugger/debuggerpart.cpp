@@ -89,7 +89,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     statusBarIndicator->show();
 
     // Setup widgets and dbgcontroller
-    variableWidget = new VariableWidget( 0, "variablewidget");
+    variableWidget = new VariableWidget( 0, "rdbVariablewidget");
 //     /*variableWidget*/->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
@@ -117,7 +117,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
     rdbBreakpointWidget->setIcon( SmallIcon("stop") );
     mainWindow()->embedOutputView(rdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
-    framestackWidget = new FramestackWidget( 0, "framestackWidget" );
+    framestackWidget = new FramestackWidget( 0, "rdbFramestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
     QWhatsThis::add
