@@ -246,6 +246,14 @@ bool ProjectManager::loadProject(const KURL &url)
   if (url.isMalformed())
     return false;
 
+  // reopen the already opened project?
+  if( url.path() == projectFile().path() )
+  {
+    if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
+        i18n("Are you sure you want to reload the current project?")) == KMessageBox::No)
+      return false;
+  }
+
   if( projectLoaded() && !closeProject() )
     return false;
 
