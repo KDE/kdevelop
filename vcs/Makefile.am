@@ -6,5 +6,5 @@ if include_svn
 SVN_SUBDIR = svn
 endif
 
-SUBDIRS = clearcase cvs $(CVSSERVICE_SUBDIR) perforce $(SVN_SUBDIR)
+SUBDIRS = cervisia clearcase cvs $(CVSSERVICE_SUBDIR) perforce $(SVN_SUBDIR)
 

@@ -8,4 +8,4 @@ if include_scripting
 SCRIPTING_SUBDIR = scripting
 endif
 
-SUBDIRS = filecreate appwizard doctreeview classview outputviews grepview fileview diff valgrind distpart konsole astyle tools ctags regexptest doxygen manager fileselector visualboyadvance tipofday abbrev filter uimode openwith history texttools replace closer partexplorer bookmarks fullscreen quickopen $(SCRIPTING_SUBDIR)
+SUBDIRS = abbrev appwizard astyle bookmarks classview closer ctags diff doctreeview filecreate fileview fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen manager fileselector tipofday filter uimode openwith history texttools replace partexplorer quickopen $(SCRIPTING_SUBDIR)

@@ -1,3 +1,3 @@
-## ada perl are out!
+## perl is out!
 
-SUBDIRS = ada cpp fortran haskell java pascal php python ruby sql xul
+SUBDIRS = ada bash cpp fortran haskell java pascal php python ruby sql xul
