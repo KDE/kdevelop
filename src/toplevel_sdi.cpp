@@ -212,7 +212,6 @@ void TopLevelSDI::lowerAllViews()
 
 void TopLevelSDI::moveRelativeTab(unsigned int n)
 {
-  kdDebug() << "moveRelativeTab: " << n << endl;
   if(m_tabWidget->count()) {
     int index = m_tabWidget->currentPageIndex();
 		
