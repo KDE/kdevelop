@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-class istream;
+#include <iostream.h>
 #include <unistd.h>
 
 /* Use prototypes in function declarations. */
@@ -852,7 +852,7 @@ YY_MALLOC_DECL
 YY_DECL
 	{
 	register yy_state_type yy_current_state;
-	register char *yy_cp, *yy_bp;
+	register char *yy_cp = NULL, *yy_bp = NULL;
 	register int yy_act;
 
 #line 67 "./tokenizer.l"

@@ -5,7 +5,7 @@
 
 #include <kinstance.h>
 #include <kaction.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "nedit_factory.h"
 #include "nedit_part.h"

@@ -19,7 +19,7 @@
 #define _PARSEDCONTAINER_H_
 
 #include <qdatastream.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
@@ -66,9 +66,9 @@ QStringList *getSortedIteratorNameList( QDictIterator<T> &itr )
  * @return List of sorted elements.
  */
 template<class T>
-QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
+QPtrList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
 {
-    QList<T> *retVal = new QList<T>();
+    QPtrList<T> *retVal = new QPtrList<T>();
     retVal->setAutoDelete( false );
 
     QStringList srted;
@@ -108,7 +108,7 @@ protected:
     QDict<ParsedAttribute> attributes;
     
     /** List of methods. */
-    QList<ParsedMethod> methods;
+    QPtrList<ParsedMethod> methods;
     
     /** All methods ordered by name and argument. */
     QDict<ParsedMethod> methodsByNameAndArg;
@@ -119,7 +119,7 @@ protected:
 public:
     
     /** Iterator for the methods. */
-    QListIterator<ParsedMethod> methodIterator;
+    QPtrListIterator<ParsedMethod> methodIterator;
     
     /** Iterator for the attributes. */
     QDictIterator<ParsedAttribute> attributeIterator;
@@ -166,7 +166,7 @@ public:
      * @param aName Name of the method.
      * @return List of methods matching the name.
      */
-    QList<ParsedMethod> *getMethodByName(const QString &aName);
+    QPtrList<ParsedMethod> *getMethodByName(const QString &aName);
     
     /**
      * Gets a method by using its name and arguments. 
@@ -190,7 +190,7 @@ public:
     ParsedAttribute *getAttributeByName(const QString &aName);
     
     /** Get all methods in sorted order. */
-    QList<ParsedMethod> *getSortedMethodList();
+    QPtrList<ParsedMethod> *getSortedMethodList();
 
     /**
      * Gets all attributes in their string reprentation in sorted order. 
@@ -199,7 +199,7 @@ public:
     QStringList *getSortedAttributeAsStringList();
     
     /** Gets all attributes in sorted order. */
-    QList<ParsedAttribute> *getSortedAttributeList();
+    QPtrList<ParsedAttribute> *getSortedAttributeList();
     
     /**
      * Gets the names of all structures in a sorted list.
@@ -208,7 +208,7 @@ public:
     QStringList *getSortedStructNameList();
     
     /** Gets all structs in sorted order. */
-    QList<ParsedStruct> *getSortedStructList();
+    QPtrList<ParsedStruct> *getSortedStructList();
 
     /**
      * Does a attribute exist in the store? 

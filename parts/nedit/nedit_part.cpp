@@ -35,7 +35,7 @@ NeditPart::~NeditPart()
 
 Document *NeditPart::document(const KURL &url)
 {
-  QListIterator<DocumentImpl> it(_documents);
+  QPtrListIterator<DocumentImpl> it(_documents);
   for ( ; it.current(); ++it)
     if (it.current()->url() == url)
       return it.current();
@@ -48,10 +48,10 @@ KEditor::Document *NeditPart::createDocument(QWidget *parentWidget, const KURL &
   DocumentImpl *impl = new DocumentImpl(this, parentWidget);
   if (!url.isEmpty())
     impl->openURL(url);
-             
+
   _documents.append(impl);
   connect(impl, SIGNAL(destroyed()), this, SLOT(documentDestroyed()));
-                 
+
   return impl;
 }
 
@@ -59,5 +59,5 @@ void NeditPart::documentDestroyed()
 {
   _documents.remove(static_cast<const DocumentImpl*>(sender()));
 }
- 
+
 #include "nedit_part.moc"

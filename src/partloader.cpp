@@ -12,7 +12,7 @@
 #include <qfile.h>
 #include <qobjectlist.h>
 #include <qwidget.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,16 +41,16 @@ static KLibFactory *outputviewsFactory = 0;
 
 static KLibFactory *factoryForService(KService *service)
 {
-    
+
     // Currently some factories are directly linked and hard-coded
     // for efficiency reasons
     // ### FIXME: when these hardcoded entries are removed, then install those
-    // parts into kde_moduledir (using kde_module_LTLIBRARIES) ! That's where 
-    // they belong, but we can't put them there currently, as gideon links 
+    // parts into kde_moduledir (using kde_module_LTLIBRARIES) ! That's where
+    // they belong, but we can't put them there currently, as gideon links
     // against them right now and we'll get unresolved symbols on startup as the
     // dynamic linker does not look in $kde_moduledir (for a good reason :)
     // (Simon)
-    
+
     if (service->name() == "KDevDocTreeView") {
         if (!doctreeviewFactory)
             doctreeviewFactory = static_cast<KLibFactory*>(init_libkdevdoctreeview());
@@ -76,7 +76,7 @@ static KLibFactory *factoryForService(KService *service)
             outputviewsFactory = static_cast<KLibFactory*>(init_libkdevoutputviews());
         return outputviewsFactory;
     }
-    
+
     return KLibLoader::self()->factory(QFile::encodeName(service->library()));
 }
 
@@ -110,14 +110,14 @@ KDevPart *PartLoader::loadService(KService *service, const char *className, KDev
         }
         kdDebug(9000) << "Does not have a KDevFactory" << endl;
         return 0;
-    }  
-    
+    }
+
     KDevPart *part = static_cast<KDevFactory*>(factory)->createPart(api, parent, args);
-    
+
     if (!part->inherits(className)) {
         kdDebug(9000) << "Part does not inherit " << className << endl;
         return 0;
     }
-    
+
     return part;
 }

@@ -47,7 +47,7 @@ void Splitter::setOrientation(Orientation orient)
                 handlelist.remove((uint)0);
             }
         }
-        
+
         _or = orient;
         doLayout();
     }
@@ -106,7 +106,7 @@ void Splitter::splitChild(QWidget *old, QWidget *w)
 {
 #if 0
     kdDebug(9000) << "splitChild - Old list of splitter children:" << endl;
-    QListIterator<QWidget> it1(childlist);
+    QPtrListIterator<QWidget> it1(childlist);
     for (; it1.current(); ++it1)
         kdDebug(9000) << it1.current()->name() << endl;
 #endif
@@ -195,14 +195,14 @@ void Splitter::doLayout()
             handlelist.at(i)->show();
             offset += handlelist.at(i)->width();
         }
-        
+
         if (childlist.count()) {
             childlist.at(i)->setGeometry(offset, 0, width()-offset, height());
             handlelist.at(i)->hide();
         }
-        
+
     } else {
-        
+
         int offset = 0;
         uint i;
         for (i=0; i+1 < childlist.count(); ++i) {
@@ -210,10 +210,10 @@ void Splitter::doLayout()
             childlist.at(i)->setGeometry(0, offset, width(), sizes[i]);
             offset += childlist.at(i)->height();
         }
-        
+
         if (childlist.count())
             childlist.at(i)->setGeometry(0, offset, width(), height()-offset);
-        
+
     }
 
     setUpdatesEnabled(true);

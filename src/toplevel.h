@@ -12,7 +12,7 @@
 #ifndef _TOPLEVEL_H_
 #define _TOPLEVEL_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <kparts/mainwindow.h>
 #include "statusbar.h"
 #include "kdevcore.h"
@@ -59,7 +59,7 @@ private:
     QSplitter *vertSplitter, *horzSplitter;
     QTabWidget *leftTabGroup, *lowerTabGroup;
     Splitter *mainSplitter;
-    QList<QWidget> leftWidgets, lowerWidgets;
+    QPtrList<QWidget> leftWidgets, lowerWidgets;
 };
 
 #endif

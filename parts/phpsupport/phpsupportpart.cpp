@@ -11,11 +11,10 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
-#include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qvbox.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
@@ -95,7 +94,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
-  configData = new PHPConfigData(projectDom());  
+  configData = new PHPConfigData(projectDom());
   m_parser = new  PHPParser(core(),classStore());
   m_codeCompletion = new  PHPCodeCompletion(core(),classStore());
 
@@ -114,7 +113,7 @@ void PHPSupportPart::documentActivated(KEditor::Document* doc){
   if (!m_cursorInterface) { // no CursorDocument available
     cerr << endl << "editor doesn't support the CursorDocumentIface";
     return;
-  } 
+  }
   m_editInterface = KEditor::EditDocumentIface::interface(doc);
   disconnect(m_editInterface, 0, this, 0 ); // to make sure that it is't connected twice
   connect(m_editInterface,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
@@ -122,13 +121,13 @@ void PHPSupportPart::documentActivated(KEditor::Document* doc){
 
 void PHPSupportPart::slotTextChanged(){
   cerr << "text changed" << endl;
-  QString fileName = core()->editor()->currentDocument()->url().directory() + "/" + 
+  QString fileName = core()->editor()->currentDocument()->url().directory() + "/" +
     core()->editor()->currentDocument()->url().fileName();
   int numLines = m_cursorInterface->numberOfLines();
 
   QStringList lines;
   for(int i=0;i<numLines;i++){
-    lines.append(m_editInterface->line(i));  
+    lines.append(m_editInterface->line(i));
   }
   classStore()->removeWithReferences(fileName);
   m_parser->parseLines(&lines,fileName);
@@ -165,7 +164,7 @@ void PHPSupportPart::slotNewClass(){
   dlg.show();
  }
 void PHPSupportPart::slotRun(){
-  KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());  
+  KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){
     core()->raiseWidget(m_phpErrorView);
@@ -257,11 +256,11 @@ void PHPSupportPart::executeInTerminal(){
   if(editor){
     file = editor->currentDocument()->url().path();
   }
-  
-  *phpExeProc << file; 
+
+  *phpExeProc << file;
   cerr << "kdevelop (phpsupport): " << file.latin1() << endl;
   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
-  
+
 
 
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
@@ -314,7 +313,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
       cerr << "remove and parse" << fileName.latin1() << endl;
         classStore()->removeWithReferences(fileName);
-        m_parser->parseFile(fileName); 
+        m_parser->parseFile(fileName);
     }
 }
 

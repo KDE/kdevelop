@@ -12,7 +12,7 @@
 #ifndef _CORE_H_
 #define _CORE_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "toplevel.h"
 #include "kdevcore.h"
@@ -120,14 +120,14 @@ private:
     KDevCoreIface *dcopIface;
     KDevApi *api;
     // All loaded parts
-    QList<KDevPart> parts;
+    QPtrList<KDevPart> parts;
     // The global, i.e. not project-related parts
-    QList<KDevPart> globalParts;
+    QPtrList<KDevPart> globalParts;
     // The local, i.e. project-related parts
-    QList<KDevPart> localParts;
-    QList<KDevPart> runningParts;
+    QPtrList<KDevPart> localParts;
+    QPtrList<KDevPart> runningParts;
     
-    QList<DocumentationPart> docParts;
+    QPtrList<DocumentationPart> docParts;
     
     KEditor::Editor *_editor;
 

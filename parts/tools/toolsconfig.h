@@ -3,7 +3,7 @@
 
 
 #include <qwidget.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpixmap.h>
 
 
@@ -64,7 +64,7 @@ private:
     QListBox *_list;
     QPushButton *_toList, *_toTree;
 
-    QList<Entry> _entries;
+    QPtrList<Entry> _entries;
 
   };
 

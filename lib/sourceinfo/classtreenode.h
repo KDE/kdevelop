@@ -18,7 +18,7 @@
 #ifndef _CLASSTREENODE_H_
 #define _CLASSTREENODE_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "parsedclass.h"
 
 
@@ -40,7 +40,7 @@ public:
     ParsedClass *theClass;
     
     /** All children of this class(if any). */
-    QList<ClassTreeNode> children;
+    QPtrList<ClassTreeNode> children;
     
     /** Is this class present in the system? */
     bool _isInSystem;

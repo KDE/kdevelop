@@ -18,7 +18,7 @@
 #ifndef _PARSEDMETHOD_H_
 #define _PARSEDMETHOD_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "parsedattribute.h"
 #include "parsedargument.h"
 
@@ -35,7 +35,7 @@ public:
     ~ParsedMethod();
     
     /** The methods arguments(if any) */
-    QList<ParsedArgument> arguments;
+    QPtrList<ParsedArgument> arguments;
     
 public:
     

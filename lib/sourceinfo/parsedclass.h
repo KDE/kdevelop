@@ -18,7 +18,7 @@
 #ifndef _PARSEDCLASS_H_
 #define _PARSEDCLASS_H_
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qstring.h>
@@ -43,13 +43,13 @@ public:
 private:
     
     /** List of all slots. */
-    QList<ParsedMethod> slotList;
+    QPtrList<ParsedMethod> slotList;
     
     /** All slots ordered by name and argument. */
     QDict<ParsedMethod> slotsByNameAndArg;
     
     /** List of all signals. */
-    QList<ParsedMethod> signalList;
+    QPtrList<ParsedMethod> signalList;
     
     /** All signals ordered by name and argument. */
     QDict<ParsedMethod> signalsByNameAndArg;
@@ -57,13 +57,13 @@ private:
 public:
     
     /** List with names of parent classes(if any). */
-    QList<ParsedParent> parents;
+    QPtrList<ParsedParent> parents;
     
     /** List of slots. */
-    QListIterator<ParsedMethod> slotIterator;
+    QPtrListIterator<ParsedMethod> slotIterator;
     
     /** List of signals. */
-    QListIterator<ParsedMethod> signalIterator;
+    QPtrListIterator<ParsedMethod> signalIterator;
 
 public:
     
@@ -142,13 +142,13 @@ public:
     ParsedMethod *getSlotByNameAndArg(const QString &aName);
     
     /** Gets all signals in sorted order. */
-    QList<ParsedMethod> *getSortedSignalList();
+    QPtrList<ParsedMethod> *getSortedSignalList();
     
     /** Gets all slots in sorted order. */
-    QList<ParsedMethod> *getSortedSlotList();
+    QPtrList<ParsedMethod> *getSortedSlotList();
     
     /** Gets all virtual methods. */
-    QList<ParsedMethod> *getVirtualMethodList();
+    QPtrList<ParsedMethod> *getVirtualMethodList();
     
     /**
      * Checks if this class has the named parent. 

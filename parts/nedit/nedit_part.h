@@ -1,7 +1,7 @@
 #ifndef __NEDIT_PART_H__
 #define __NEDIT_PART_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kparts/part.h>
 
@@ -24,7 +24,7 @@ class NeditPart : public KEditor::Editor
     void documentDestroyed();
 
   private:
-    QList <DocumentImpl> _documents;
+    QPtrList <DocumentImpl> _documents;
 };
 
 #endif

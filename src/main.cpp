@@ -11,7 +11,7 @@
 
 #include <stdlib.h>
 #include <kaboutdata.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
@@ -19,7 +19,7 @@
 #include "core.h"
 #include "config.h"
 
-#if 0	
+#if 0
 static KCmdLineOptions options[] =
 {
   { 0, 0, 0 }
@@ -50,6 +50,6 @@ int main(int argc, char *argv[])
 
     KApplication app;
     Core core;
-    
+
     return app.exec();
 }

@@ -13,7 +13,7 @@
 #define _COMMITDIALOG_H_
 
 #include <qdialog.h>
-#include <qmultilinedit.h>
+#include <qmultilineedit.h>
 
 
 class CommitDialog : public QDialog

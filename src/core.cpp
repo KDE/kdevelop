@@ -45,7 +45,6 @@
 #include "keditor/editor.h"
 #include "keditor/cursor_iface.h"
 #include "keditor/status_iface.h"
-#include "keditor/cursor_iface.h"
 #include "keditor/debug_iface.h"
 
 #include "filenameedit.h"
@@ -79,11 +78,11 @@ Core::Core()
     manager = new KParts::PartManager(win);
     connect( manager, SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(activePartChanged(KParts::Part*)) );
-    connect( manager, SIGNAL(partAdded(KParts::Part*)), 
+    connect( manager, SIGNAL(partAdded(KParts::Part*)),
              this, SLOT(partCountChanged())),
-    connect( manager, SIGNAL(partRemoved(KParts::Part*)), 
+    connect( manager, SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(partCountChanged()));
-      
+
     initActions();
     win->createGUI(0);
 
@@ -95,7 +94,7 @@ Core::Core()
     win->show();
 
     emit coreInitialized();
-    
+
     // load the project if needed
     KConfig* config = kapp->config();
     config->setGroup("General Options");
@@ -128,7 +127,7 @@ void Core::initActions()
     KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
     KAction *action;
-    
+
     action = new KAction( i18n("&Open file..."), "fileopen", CTRL+Key_O,
                           this, SLOT(slotOpenFile()),
                           actionCollection(), "file_open" );
@@ -148,7 +147,7 @@ void Core::initActions()
                           this, SLOT(slotSaveAll()),
                           actionCollection(), "file_save_all");
     _saveAll->setEnabled(false);
-    
+
     _revertAll = new KAction( i18n("&Revert all"), 0,
                           this, SLOT(slotRevertAll()),
                           actionCollection(), "file_revert_all");
@@ -158,7 +157,7 @@ void Core::initActions()
                           this, SLOT(slotCloseWindow()),
                           actionCollection(), "file_closewindow" );
     _closeWindow->setEnabled(false);
-    
+
     _killBuffer = new KAction( i18n("&Kill buffer"), 0,
                           this, SLOT(slotKillBuffer()),
                           actionCollection(), "file_killbuffer" );
@@ -193,7 +192,7 @@ void Core::initActions()
                           this, SLOT(slotStop()),
                           actionCollection(), "stop_processes");
     action->setStatusText( i18n("Stops all running subprocesses") );
-    action->setEnabled(false);   
+    action->setEnabled(false);
 }
 
 
@@ -217,7 +216,7 @@ void Core::initGlobalParts()
 {
     KService *service;
     KDevPart *part;
-    
+
     // Make frontend
     KTrader::OfferList makeFrontendOffers =
         KTrader::self()->query(QString::fromLatin1("KDevelop/MakeFrontend"), QString::null);
@@ -262,11 +261,11 @@ void Core::initGlobalParts()
 
 void Core::removeGlobalParts()
 {
-    QListIterator<KDevPart> it(globalParts);
+    QPtrListIterator<KDevPart> it(globalParts);
     for (; it.current(); ++it) {
         kdDebug(9000) << "Still have part " << it.current()->name() << endl;
     }
-        
+
     while (!globalParts.isEmpty()) {
         removePart(globalParts.first());
         globalParts.removeFirst();
@@ -315,11 +314,11 @@ void Core::activePartChanged(KParts::Part *part)
 void Core::partCountChanged()
 {
   // enable/disable actions according to the part status
-  
+
   bool rw_parts = false;
   bool ro_parts = false;
-  
-  QListIterator<KParts::Part> it(*partManager()->parts());
+
+  QPtrListIterator<KParts::Part> it(*partManager()->parts());
   for ( ; it.current(); ++it)
   {
       if (it.current()->inherits("KParts::ReadWritePart"))
@@ -359,10 +358,10 @@ KEditor::Editor *Core::editor()
   KConfig *config = kapp->config();
   config->setGroup("Editor");
   QString editor = config->readEntry("EmbeddedEditor", "KWriteEditorPart");
-  
+
   // ask the trader about the editors, using the preferred one if available
   KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString("Name == '%1'").arg(editor));
-  
+
   // try to load the editor
   KTrader::OfferList::Iterator it;
   for (it = offers.begin(); it != offers.end(); ++it)
@@ -377,18 +376,18 @@ KEditor::Editor *Core::editor()
     if (_editor)
       break;
   }
- 
+
   // Note: We should probably abort the application if no editor
-  // is found at all!  
+  // is found at all!
   if (!_editor)
     return 0;
-  
+
   // merge the GUI with ours
   win->factory()->addClient(_editor);
 
   // make the editor aware of part activations
   connect(partManager(), SIGNAL(activePartChanged(KParts::Part*)), _editor, SLOT(activePartChanged(KParts::Part*)));
-  
+
   return _editor;
 }
 
@@ -405,11 +404,11 @@ void Core::updateBufferMenu()
 {
     // TODO: Fix the documentation parts so they work properly
 
-    QList<KAction> bufferActions;
-    
+    QPtrList<KAction> bufferActions;
+
     win->unplugActionList("buffer_list");
-    
-    QListIterator<KParts::Part> it(*partManager()->parts());
+
+    QPtrListIterator<KParts::Part> it(*partManager()->parts());
     for ( ; it.current(); ++it)
     {
       kdDebug(9000) << "listing part: " << it.current()->className() << endl;
@@ -425,7 +424,7 @@ void Core::updateBufferMenu()
         bufferActions.append(action);
       }
     }
-    
+
     win->plugActionList("buffer_list", bufferActions);
 }
 
@@ -446,7 +445,7 @@ void Core::closeProject()
             removePart(api->languageSupport);
             api->languageSupport = 0;
         }
-        
+
         if (api->projectDom) {
             QFile fout(projectFile);
             if (fout.open(IO_WriteOnly)) {
@@ -491,10 +490,10 @@ void Core::openProject()
     QDomElement docEl = api->projectDom->documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     QDomElement projectEl = generalEl.namedItem("projectmanagement").toElement();
-    
+
     QString projectPlugin = projectEl.firstChild().toText().data();
     kdDebug(9000) << "Project plugin: " << projectPlugin << endl;
-    
+
     QDomElement primarylanguageEl = generalEl.namedItem("primarylanguage").toElement();
     QString language = primarylanguageEl.firstChild().toText().data();
     kdDebug(9000) << "Primary language: " << language << endl;
@@ -557,13 +556,13 @@ void Core::openProject()
     // Load local parts
     KTrader::OfferList localOffers
         = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
-                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Project'")); 
+                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Project'"));
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
-      
+
       if (ignoreparts.contains((*it)->name())){
 	continue; // do nothing
       }
-      
+
       if (loadparts.contains((*it)->name())){ // load the part if in loadparts
 	KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
         if (!part)
@@ -571,7 +570,7 @@ void Core::openProject()
 	initPart(part);
 	localParts.append(part);
       }
-      
+
       else { // check if the "new" part should be loaded or ignored
 	QVariant var = (*it)->property("X-KDevelop-ProgrammingLanguages");
 	QStringList langlist = var.asStringList();
@@ -604,13 +603,13 @@ void Core::openProject()
 	}
       }
     }
-    
-    // store the ignore parts to the projectfile    
+
+    // store the ignore parts to the projectfile
     if (ignorepartsEl.isNull()) {
       ignorepartsEl = api->projectDom->createElement("ignoreparts");
       generalEl.appendChild(ignorepartsEl);
     }
-    
+
     // Clear old entries
     while (!ignorepartsEl.firstChild().isNull()){
       ignorepartsEl.removeChild(ignorepartsEl.firstChild());
@@ -622,7 +621,7 @@ void Core::openProject()
       ignorepartsEl.appendChild(partEl);
       ignoreIterator++;
     }
-    
+
     // store the loaded parts
     if (loadpartsEl.isNull()) {
       loadpartsEl = api->projectDom->createElement("loadparts");
@@ -644,7 +643,7 @@ void Core::openProject()
     QFileInfo fi(projectFile);
     QString projectDir = fi.dirPath();
     kdDebug(9000) << "projectDir: " << projectDir << endl;
-    
+
     if (api->project)
         api->project->openProject(projectDir);
     emit projectOpened();
@@ -673,10 +672,10 @@ void Core::gotoFile(const KURL &url)
     QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
     if (!mimeType.startsWith("text/")) {
       	KParts::Factory *factory = 0;
-	
+
         // try to find a ReadWrite part that handles this type
        	KTrader::OfferList offers = KTrader::self()->query(mimeType, "KParts/ReadWritePart", QString::null, QString::null);
-        if (offers.count() > 0) {	  
+        if (offers.count() > 0) {
             // use the first offer
             KService::Ptr ptr = offers.first();
             factory = static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library().latin1()));
@@ -691,9 +690,9 @@ void Core::gotoFile(const KURL &url)
                 factory = static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library().latin1()));
 	    }
     	}
-	
+
         if (factory) {
-            // create a part	    
+            // create a part
             KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(win));
 
             // embed widget
@@ -701,15 +700,15 @@ void Core::gotoFile(const KURL &url)
 
             // inform the part manager
             partManager()->addPart(part);
-		
+
             // open the url
             part->openURL(url);
 
             updateBufferMenu();
-	    
+
             return;
-        }	
-	
+        }
+
         // try to start a new handling process
         new KRun(url);
     } else {
@@ -733,7 +732,7 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
         viewedURLs.append(url);
         updateBufferMenu();
     }
-        
+
     // Find a part to load into
     DocumentationPart *part = 0;
     if (embed == Replace && activePart && activePart->inherits("DocumentationPart"))
@@ -748,7 +747,7 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
             win->embedDocumentWidget(part->widget(),
                                      activePart? activePart->widget() : 0);
     }
-    
+
     part->gotoURL(url);
     win->raiseWidget(part->widget());
 
@@ -766,14 +765,14 @@ KEditor::Document *Core::createDocument(const KURL &url)
 
   connect(doc, SIGNAL(loaded(KEditor::Document*)), this, SLOT(slotDocumentLoaded(KEditor::Document*)));
   connect(doc, SIGNAL(saved(KEditor::Document*)), this, SLOT(slotDocumentSaved(KEditor::Document*)));
-  
+
   KEditor::StatusDocumentIface *status = KEditor::StatusDocumentIface::interface(doc);
   if (status)
   {
     connect(status, SIGNAL(message(KEditor::Document*,const QString &)), this, SLOT(message(KEditor::Document*,const QString &))),
     connect(status, SIGNAL(statusChanged(KEditor::Document*)), this, SLOT(slotUpdateStatusBar()));
   }
- 
+
   KEditor::CursorDocumentIface *cursor = KEditor::CursorDocumentIface::interface(doc);
  if (cursor)
    connect(cursor, SIGNAL(cursorPositionChanged(KEditor::Document*,int,int)), this, SLOT(slotUpdateStatusBar()));
@@ -784,7 +783,7 @@ KEditor::Document *Core::createDocument(const KURL &url)
     connect(debug, SIGNAL(breakPointToggled(KEditor::Document*,int)), this, SLOT(slotBreakPointToggled(KEditor::Document*,int)));
     connect(debug, SIGNAL(breakPointEnabledToggled(KEditor::Document*,int)), this, SLOT(slotBreakPointEnabled(KEditor::Document*,int)));
   }
-  
+
   partManager()->addPart(doc);
 
   return doc;
@@ -829,7 +828,7 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
         win->embedDocumentWidget(doc->widget(), activePart ? activePart->widget() : 0);
     }
 
-  if (doc->widget())    
+  if (doc->widget())
     win->raiseWidget(doc->widget());
 }
 
@@ -838,9 +837,9 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
     KURL url(fileName);
 
-    // TODO: This needs fixing: Disable all others, 
+    // TODO: This needs fixing: Disable all others,
     // load the file if not there yet.
-    
+
     gotoSourceFile(url, lineNum);
 
     KEditor::Document *doc = editor()->document(url);
@@ -857,7 +856,7 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 
 void Core::revertAllFiles()
 {
-    QListIterator<KParts::Part> it(*partManager()->parts());
+    QPtrListIterator<KParts::Part> it(*partManager()->parts());
     for ( ; it.current(); ++it)
     {
         if (it.current()->inherits("KParts::ReadWritePart"))
@@ -872,7 +871,7 @@ void Core::revertAllFiles()
 
 void Core::saveAllFiles()
 {
-    QListIterator<KParts::Part> it(*partManager()->parts());
+    QPtrListIterator<KParts::Part> it(*partManager()->parts());
     for ( ; it.current(); ++it)
         if (it.current()->inherits("KParts::ReadWritePart"))
         {
@@ -977,18 +976,18 @@ void Core::slotCloseWindow()
 {
     if (!activePart || !activePart->inherits("KParts::ReadWritePart"))
         return;
-        
+
     KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(activePart);
 
     if (rw_part->isModified())
     {
-        int res = KMessageBox::warningYesNo(win, 
+        int res = KMessageBox::warningYesNo(win,
                      i18n("The file %1 is modified.\n"
                           "Close this window anyway?").arg(rw_part->url().url()));
         if (res == KMessageBox::No)
             return;
     }
-            
+
     delete activePart;
 }
 
@@ -1000,7 +999,7 @@ void Core::splitWindow(Orientation orient)
 #if 0
 
     // TODO: Implement splitting
-    
+
     if (activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
@@ -1046,9 +1045,9 @@ void Core::slotKillBuffer()
                        "Close this window anyway?").arg(doc->url().url())))
             return;
 
-        QList<EditorPart> deletedParts;
+        QPtrList<EditorPart> deletedParts;
 
-        QListIterator<EditorPart> it1(editorParts);
+        QPtrListIterator<EditorPart> it1(editorParts);
         for (; it1.current(); ++it1) {
             if (it1.current()->editorDocument() == doc)
                 deletedParts.append(it1.current());
@@ -1056,7 +1055,7 @@ void Core::slotKillBuffer()
 
         // Kill all parts that are still looking at this document
         // - One may want to change this to Emacs' behaviour
-        QListIterator<EditorPart> it2(deletedParts);
+        QPtrListIterator<EditorPart> it2(deletedParts);
         for (; it2.current(); ++it2)
             delete it2.current()->widget();
 
@@ -1067,9 +1066,9 @@ void Core::slotKillBuffer()
         DocumentationPart *part = static_cast<DocumentationPart*>(activePart);
         KURL url = part->browserURL();
 
-        QList<DocumentationPart> deletedParts;
+        QPtrList<DocumentationPart> deletedParts;
 
-        QListIterator<DocumentationPart> it1(docParts);
+        QPtrListIterator<DocumentationPart> it1(docParts);
         for (; it1.current(); ++it1) {
             if (it1.current()->browserURL() == url)
                 deletedParts.append(it1.current());
@@ -1077,7 +1076,7 @@ void Core::slotKillBuffer()
 
         // Kill all parts that are still looking at this url
         // - One may want to change this to Emacs' behaviour
-        QListIterator<DocumentationPart> it2(deletedParts);
+        QPtrListIterator<DocumentationPart> it2(deletedParts);
         for (; it2.current(); ++it2)
             delete it2.current()->widget();
 
@@ -1090,7 +1089,7 @@ void Core::slotKillBuffer()
 
 void Core::slotQuit()
 {
-    QListIterator<KParts::Part> it(*partManager()->parts());
+    QPtrListIterator<KParts::Part> it(*partManager()->parts());
     for ( ; it.current(); ++it)
         {
             if (!it.current()->inherits("KParts::ReadWritePart"))
@@ -1100,8 +1099,8 @@ void Core::slotQuit()
 
             if (rw_part->isModified())
                 {
-                    int res = KMessageBox::warningYesNoCancel(win, 
-                                i18n("The file %1 is modified.\n" 
+                    int res = KMessageBox::warningYesNoCancel(win,
+                                i18n("The file %1 is modified.\n"
                                      "Save this file now?").arg(rw_part->url().url()));
                     if (res == KMessageBox::Yes)
                         rw_part->save();
@@ -1122,7 +1121,7 @@ void Core::slotQuit()
 
     // save the recent projects
     _recentProjectAction->saveEntries(config, "RecentProjects");
-    
+
     win->closeReal();
 }
 
@@ -1144,7 +1143,7 @@ void Core::slotProjectOpen()
     QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", win, i18n("Open project"));
     if (fileName.isNull())
       return;
-    
+
     closeProject();
     projectFile = fileName;
     openProject();
@@ -1164,8 +1163,8 @@ void Core::slotBufferSelected()
     // are two problems right now: a) the documentation part's
     // implementation is broken, and b) we need a better mechanism
     // than the URL to identify the parts.
-    
-    QListIterator<KParts::Part> it(*partManager()->parts());
+
+    QPtrListIterator<KParts::Part> it(*partManager()->parts());
     for ( ; it.current(); ++it)
     {
       if (!it.current()->inherits("KParts::ReadOnlyPart"))
@@ -1177,14 +1176,14 @@ void Core::slotBufferSelected()
           KParts::Part *activePart = partManager()->activePart();
 
           partManager()->setActivePart(it.current(), it.current()->widget());
- 
+
           if (!it.current()->widget())
               return;
 
-          if (activePart != ro_part)          
+          if (activePart != ro_part)
             win->embedDocumentWidget(it.current()->widget(), activePart ? activePart->widget() : 0);
-    
-          win->raiseWidget(it.current()->widget());    
+
+          win->raiseWidget(it.current()->widget());
         }
       }
 }
@@ -1201,11 +1200,11 @@ void Core::slotProjectOptions()
     KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "project options dialog");
-    
+
     QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
     PartSelectWidget *w = new PartSelectWidget(*api->projectDom, vbox, "part selection widget");
     connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-    
+
     emit projectConfigWidget(&dlg);
     dlg.exec();
 }
@@ -1222,15 +1221,15 @@ void Core::slotSettingsCustomize()
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    
-    
+
+
     vbox = dlg.addVBoxPage(i18n("Plugins"));
     PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
     connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 
     emit configWidget(&dlg);
     dlg.exec();
-    
+
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 }
@@ -1257,9 +1256,9 @@ void Core::slotUpdateStatusBar()
   if (status)
   {
     win->statusBar()->setStatus(status->status());
-    win->statusBar()->setModified(status->modified());    
+    win->statusBar()->setModified(status->modified());
   }
-  
+
   KEditor::CursorDocumentIface *cursor = KEditor::CursorDocumentIface::interface(doc);
   if (cursor)
   {
@@ -1268,7 +1267,7 @@ void Core::slotUpdateStatusBar()
      win->statusBar()->setCursorPosition(line, col);
   }
 
-  win->statusBar()->setEditorStatusVisible(true);  
+  win->statusBar()->setEditorStatusVisible(true);
 }
 
 

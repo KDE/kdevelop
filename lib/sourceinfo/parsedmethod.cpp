@@ -4,7 +4,7 @@
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,14 +12,14 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
 #include <iostream.h>
 #include <stdio.h>
 #include <qdatastream.h>
-#include <qregexp.h> 
+#include <qregexp.h>
 #include "parsedmethod.h"
 
 /*********************************************************************
@@ -83,7 +83,7 @@ ParsedMethod::~ParsedMethod()
 void ParsedMethod::addArgument( ParsedArgument *anArg )
 {
     ASSERT( anArg != NULL );
-    
+
     if ( anArg->type() != "void" )
         arguments.append( anArg );
 }
@@ -107,23 +107,23 @@ void ParsedMethod::addArgument( ParsedArgument *anArg )
 QString ParsedMethod::asString()
 {
     ParsedArgument *arg;
-    
+
     QString str = name();
 
    if ( _isObjectiveC )
      return str;
 
     str += "(";
-    
+
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
             str += ", ";
-        
+
         str += arg->toString();
     }
-    
+
     str += ")";
-    
+
     return str;
 }
 
@@ -141,10 +141,10 @@ void ParsedMethod::out()
 {
     ParsedArgument *arg;
     char buf[10];
-    
+
     if ( !comment().isEmpty() )
         cout << "    " << comment().latin1() << "\n";
-    
+
     cout << "    ";
     switch( access() )
         {
@@ -164,28 +164,28 @@ void ParsedMethod::out()
             cout << "";
             break;
         }
-    
+
     if ( isVirtual() )
         cout << "virtual ";
-    
+
     if ( isStatic() )
         cout << "static ";
-    
+
     if ( isSlot() )
         cout << "slot ";
-    
+
     if ( isSignal() )
         cout << "signal ";
-    
+
     cout << type().latin1()  << " " << name().latin1() << "( ";
-    
+
     for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
         if ( arg != arguments.getFirst() )
             cout << ", ";
-        
+
         arg->out();
     }
-    
+
     cout << ( isConst()? " ) const\n" : " )\n" );
     cout << "      declared @ line " << declaredOnLine()
          << " - " << declarationEndsOnLine() << endl;
@@ -203,7 +203,7 @@ void ParsedMethod::out()
 
 /*------------------------------------------- ParsedMethod::copy()
  * copy()
- *   Make this object a copy of the supplied object. 
+ *   Make this object a copy of the supplied object.
  *
  * Parameters:
  *   aMethod       Method to copy.
@@ -214,12 +214,12 @@ void ParsedMethod::out()
 void ParsedMethod::copy( ParsedMethod *aMethod )
 {
     ASSERT( aMethod != NULL );
-    
+
     ParsedArgument *newArg;
     ParsedArgument *anArg;
-    
+
     ParsedAttribute::copy( aMethod );
-    
+
     setIsVirtual( aMethod->isVirtual() );
     setIsSlot( aMethod->isSlot() );
     setIsSignal( aMethod->isSignal() );
@@ -231,7 +231,7 @@ void ParsedMethod::copy( ParsedMethod *aMethod )
           anArg = aMethod->arguments.next() ) {
         newArg = new ParsedArgument();
         newArg->copy( anArg );
-        
+
         addArgument( newArg );
     }
 }
@@ -239,7 +239,7 @@ void ParsedMethod::copy( ParsedMethod *aMethod )
 
 /*------------------------------------------ ParsedMethod::isEqual()
  * isEqual()
- *   Is the supplied method equal to this one(regarding type, name 
+ *   Is the supplied method equal to this one(regarding type, name
  *   and signature)?
  *
  * Parameters:
@@ -254,17 +254,17 @@ bool ParsedMethod::isEqual( ParsedMethod *method )
     ParsedArgument *m2;
 
     bool retVal = ParsedAttribute::isEqual( method );
-    
+
     if ( retVal )
         retVal = method->arguments.count() == arguments.count();
-    
+
     // If they have the same number of arguments we bother to check them.
     if ( retVal )
         for ( m1 = arguments.first(), m2 = method->arguments.first();
-              m1 != NULL && retVal; 
+              m1 != NULL && retVal;
               m1 = arguments.next(), m2 = method->arguments.next() )
             retVal = retVal && ( m1->type() == m2->type() );
-    
+
     return retVal;
 }
 
@@ -275,7 +275,7 @@ QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
 
     // Add arguments.
     s << arg.arguments.count();
-    QListIterator<ParsedArgument> it(arg.arguments);
+    QPtrListIterator<ParsedArgument> it(arg.arguments);
     for (; it.current(); ++it)
         s << *it.current();
 
@@ -283,7 +283,7 @@ QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
       << arg.declaredOnLine() << arg.declarationEndsOnLine()
       << (int)arg.isVirtual() << (int)arg.isPure() << (int)arg.isSlot() << (int)arg.isSignal()
       << (int)arg.isConstructor() << (int)arg.isDestructor() << (int)arg.isObjectiveC();
-    
+
     return s;
 }
 
@@ -291,7 +291,7 @@ QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
 QDataStream &operator>>(QDataStream &s, ParsedMethod &arg)
 {
     operator>>(s, (ParsedAttribute&) arg);
-    
+
     // Add arguments.
     uint n;
     s >> n;
@@ -305,7 +305,7 @@ QDataStream &operator>>(QDataStream &s, ParsedMethod &arg)
     int definitionEndsOnLine, declaredOnLine, declarationEndsOnLine;
     int isVirtual, isPure, isSlot, isSignal;
     int isConstructor, isDestructor, isObjectiveC;
-    
+
     s >> definitionEndsOnLine >> declaredInFile >> declaredOnLine >> declarationEndsOnLine
       >> isVirtual >> isPure >> isSlot >> isSignal >> isConstructor >> isDestructor >> isObjectiveC;
     arg.setDefinitionEndsOnLine(definitionEndsOnLine);
@@ -319,6 +319,6 @@ QDataStream &operator>>(QDataStream &s, ParsedMethod &arg)
     arg.setIsConstructor(isConstructor);
     arg.setIsDestructor(isDestructor);
     arg.setIsObjectiveC(isObjectiveC);
-    
+
     return s;
 }

@@ -9,7 +9,7 @@
 #include <kdialog.h>
 #include <kdesktopfile.h>
 #include <kiconloader.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 
 #include "toolsconfig.h"
@@ -101,9 +101,9 @@ void ToolsConfig::add(const QString &desktopFile)
   KDesktopFile df(desktopFile, true);
   if (df.readName().isEmpty())
     return;
-  
+
   Entry *entry = new Entry;
-  
+
   if (!df.readIcon().isEmpty())
     entry->icon = BarIcon(df.readIcon());
   entry->name = df.readName();
@@ -112,7 +112,7 @@ void ToolsConfig::add(const QString &desktopFile)
   _entries.append(entry);
 
   updateList();
-  
+
   checkButtons();
 }
 
@@ -127,7 +127,7 @@ void ToolsConfig::toList()
 
 void ToolsConfig::toTree()
 {
-  _entries.remove(_list->currentItem()); 
+  _entries.remove(_list->currentItem());
   updateList();
   checkButtons();
 }
@@ -139,7 +139,7 @@ void ToolsConfig::accept()
   config->setGroup("Tools");
 
   QStringList l;
-  QListIterator<Entry> it(_entries);
+  QPtrListIterator<Entry> it(_entries);
     for ( ; it.current(); ++it)
 	  l.append(it.current()->desktopFile);
 
@@ -154,10 +154,10 @@ void ToolsConfig::updateList()
 
   _list->clear();
 
-  QListIterator<Entry> it(_entries);
+  QPtrListIterator<Entry> it(_entries);
   for ( ; it.current(); ++it)
 	_list->insertItem(it.current()->icon, it.current()->name);
-  
+
   _list->setUpdatesEnabled(true);
   _list->repaint();
 }

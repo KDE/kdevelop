@@ -7,7 +7,7 @@
 #include <klocale.h>
 #include <kdialogbase.h>
 #include <kconfig.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdesktopfile.h>
 #include <kdebug.h>
 
@@ -50,8 +50,8 @@ void ToolsPart::configWidget(KDialogBase *dlg)
 
 void ToolsPart::updateMenu()
 {
-  QList<KAction> actions;  
-  
+  QList<KAction> actions;
+
   unplugActionList("tools_list");
 
   KConfig *config = kapp->config();

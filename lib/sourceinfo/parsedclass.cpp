@@ -4,7 +4,7 @@
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -43,13 +43,13 @@ ParsedClass::ParsedClass()
       signalIterator( signalList )
 {
     setItemType( PIT_CLASS );
-    
+
     parents.setAutoDelete( true );
     signalList.setAutoDelete( true );
     slotList.setAutoDelete( true );
     //signalMaps.setAutoDelete( true );
     classes.setAutoDelete( false );
-    
+
     _isSubClass = false;
 }
 
@@ -89,9 +89,9 @@ void ParsedClass::removeWithReferences( const QString &aFile )
 {
     REQUIRE( "Valid filename", aFile != NULL );
     REQUIRE( "Valid filename length", aFile.length() > 0 );
-    
+
     ParsedMethod *aMethod = NULL;
-    
+
     methodIterator.toFirst();
     while ( ( aMethod = methodIterator.current() ) != 0 ) {
         if ( aMethod->declaredInFile() == aFile ) {
@@ -112,7 +112,7 @@ void ParsedClass::removeWithReferences( const QString &aFile )
             ++methodIterator;
         }
     }
-    
+
     slotIterator.toFirst();
     while ( ( aMethod = slotIterator.current() ) != 0 ) {
         if ( aMethod->declaredInFile() == aFile ) {
@@ -133,7 +133,7 @@ void ParsedClass::removeWithReferences( const QString &aFile )
             ++slotIterator;
         }
     }
-    
+
     if ( declaredInFile() == aFile ) {
   	clearDeclaration();
     } else if ( definedInFile() == aFile ) {
@@ -158,7 +158,7 @@ void ParsedClass::removeMethod( ParsedMethod *aMethod )
     REQUIRE( "Valid methodname", !aMethod->name().isEmpty() );
 
     QString str = aMethod->asString();
-    
+
     if ( slotList.removeRef( aMethod ) ) {
         slotsByNameAndArg.remove( str );
     } else {
@@ -186,7 +186,7 @@ void ParsedClass::clearDeclaration()
     signalsByNameAndArg.clear();
     parents.clear();
     _friends.clear();
-    
+
     ParsedItem::clearDeclaration();
 }
 
@@ -224,10 +224,10 @@ void ParsedClass::addSignal( ParsedMethod *aMethod )
 {
     REQUIRE( "Valid signal", aMethod != NULL );
     REQUIRE( "Valid signal name", !aMethod->name().isEmpty()  );
-    
+
     aMethod->setDeclaredInScope( path() );
     signalList.append( aMethod );
-    
+
     QString str = aMethod->asString();
     signalsByNameAndArg.insert( str, aMethod );
 }
@@ -249,7 +249,7 @@ void ParsedClass::addSlot( ParsedMethod *aMethod )
     REQUIRE( "Valid slot name", !aMethod->name().isEmpty() );
 
     aMethod->setDeclaredInScope( path() );
-    
+
     slotList.append( aMethod );
     slotsByNameAndArg.insert( aMethod->asString(), aMethod );
 }
@@ -275,15 +275,15 @@ void ParsedClass::addSlot( ParsedMethod *aMethod )
 ParsedMethod *ParsedClass::getMethod( ParsedMethod *aMethod )
 {
     ParsedMethod *retVal = ParsedContainer::getMethod( aMethod );
-    
+
     // If none was found try with the slots.
     if ( !retVal ) {
-        for ( retVal = slotList.first(); 
+        for ( retVal = slotList.first();
               retVal != NULL && !retVal->isEqual( aMethod );
               retVal = slotList.next() )
             ;
     }
-    
+
     return retVal;
 }
 
@@ -304,7 +304,7 @@ ParsedMethod *ParsedClass::getSignalByNameAndArg( const QString &aName )
 {
     REQUIRE1( "Valid signal name", aName != NULL, NULL );
     REQUIRE1( "Valid signal name length", aName.length() > 0, NULL );
-    
+
     return signalsByNameAndArg.find( aName );
 }
 
@@ -325,14 +325,14 @@ ParsedMethod *ParsedClass::getSlotByNameAndArg( const QString &aName )
 {
     REQUIRE1( "Valid slot name", aName != NULL, NULL );
     REQUIRE1( "Valid slot name length", aName.length() > 0, NULL );
-    
+
     return slotsByNameAndArg.find( aName );
 }
 
 
 /*-------------------------------- ParsedClass::hasParent()
  * hasParent()
- *   Check if this class has the named parent. 
+ *   Check if this class has the named parent.
  *
  * Parameters:
  *   aName              Name of the parent to check.
@@ -344,14 +344,14 @@ bool ParsedClass::hasParent( const QString &aName )
 {
     REQUIRE1( "Valid parent name", aName != NULL, false );
     REQUIRE1( "Valid parent name length", aName.length() > 0, false );
-    
+
     ParsedParent *aParent;
-    
+
     for ( aParent = parents.first();
           aParent != NULL && aParent->name() != aName;
           aParent = parents.next() )
         ;
-    
+
     return aParent != NULL;
 }
 
@@ -368,34 +368,34 @@ bool ParsedClass::hasParent( const QString &aName )
 bool ParsedClass::hasVirtual()
 {
     bool retVal = false;
-    
+
     for ( methodIterator.toFirst();
           methodIterator.current() && !retVal;
           ++methodIterator )
         {
             retVal |= methodIterator.current()->isVirtual();
         }
-    
+
     return retVal;
 }
 
 
 /*------------------------------- ParsedClass::getSortedSignalList()
  * getSortedSignalList()
- *   Get all signals in sorted order. 
+ *   Get all signals in sorted order.
  *
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The sorted list.
+ *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QList<ParsedMethod> *ParsedClass::getSortedSignalList()
+QPtrList<ParsedMethod> *ParsedClass::getSortedSignalList()
 {
-    QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
+    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
     retVal->setAutoDelete( false );
 
     QStringList srted;
-    
+
     // Ok... This sucks. But I'm lazy.
     for ( signalIterator.toFirst();
           signalIterator.current();
@@ -405,31 +405,31 @@ QList<ParsedMethod> *ParsedClass::getSortedSignalList()
         }
 
     srted.sort();
-    
+
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
         retVal->append( getSignalByNameAndArg(*it) );
-    
+
     return retVal;
 }
 
 
 /*------------------------------- ParsedClass::getSortedSlotList()
  * getSortedSlotList()
- *   Get all slots in sorted order. 
+ *   Get all slots in sorted order.
  *
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The sorted list.
+ *   QPtrList<ParsedMethod> *  The sorted list.
  *-----------------------------------------------------------------*/
-QList<ParsedMethod> *ParsedClass::getSortedSlotList()
+QPtrList<ParsedMethod> *ParsedClass::getSortedSlotList()
 {
-    QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
+    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
     retVal->setAutoDelete( false );
-    
+
     QStringList srted;
-    
+
     // Ok... This sucks. But I'm lazy.
     for ( slotIterator.toFirst();
           slotIterator.current();
@@ -439,13 +439,13 @@ QList<ParsedMethod> *ParsedClass::getSortedSlotList()
         }
 
     srted.sort();
-    
+
     QStringList::ConstIterator it;
     for (it = srted.begin(); it != srted.end(); ++it)
         {
             retVal->append( getSlotByNameAndArg(*it) );
         }
-    
+
     return retVal;
 }
 
@@ -457,12 +457,12 @@ QList<ParsedMethod> *ParsedClass::getSortedSlotList()
  * Parameters:
  *   -
  * Returns:
- *   QList<ParsedMethod> *  The list.
+ *   QPtrList<ParsedMethod> *  The list.
  *-----------------------------------------------------------------*/
-QList<ParsedMethod> *ParsedClass::getVirtualMethodList()
+QPtrList<ParsedMethod> *ParsedClass::getVirtualMethodList()
 {
-    QList<ParsedMethod> *retVal = new QList<ParsedMethod>();
-    
+    QPtrList<ParsedMethod> *retVal = new QPtrList<ParsedMethod>();
+
     for ( methodIterator.toFirst();
           methodIterator.current();
           ++methodIterator )
@@ -470,7 +470,7 @@ QList<ParsedMethod> *ParsedClass::getVirtualMethodList()
             if ( methodIterator.current()->isVirtual() )
                 retVal->append( methodIterator.current() );
         }
-    
+
     return retVal;
 }
 
@@ -491,10 +491,10 @@ void ParsedClass::out()
     ParsedMethod *aMethod;
     //ParsedSignalSlot *aSS;
     char *str;
-    
+
     if ( !comment().isEmpty() )
         cout << comment().latin1() << endl;
-    
+
     cout << "Class " << path().latin1() << " @ line " << declaredOnLine();
     cout << " - " << declarationEndsOnLine() << endl;
     cout << "  Defined in files:" << endl;
@@ -527,7 +527,7 @@ void ParsedClass::out()
           classIterator.current();
           ++classIterator )
         classIterator.current()->out();
-    
+
     cout << endl;
 }
 
@@ -538,28 +538,28 @@ QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 
     // Add parents.
     s << arg.parents.count();
-    QListIterator<ParsedParent> parentIt(arg.parents);
+    QPtrListIterator<ParsedParent> parentIt(arg.parents);
     for (; parentIt.current(); ++parentIt)
         s << *parentIt.current();
-    
+
     // Add friends.
     s << arg.friends().count();
     QStringList::ConstIterator friendsIt;
     for (friendsIt = arg._friends.begin(); friendsIt != arg._friends.end(); ++friendsIt)
         s << (*friendsIt);
-    
+
     // Add signals.
     s << arg.signalList.count();
-    QListIterator<ParsedMethod> signalIt(arg.signalList);
+    QPtrListIterator<ParsedMethod> signalIt(arg.signalList);
     for (; signalIt.current(); ++signalIt)
         s << *signalIt.current();
 
     // Add slots.
     s << arg.slotList.count();
-    QListIterator<ParsedMethod> slotIt(arg.slotList);
+    QPtrListIterator<ParsedMethod> slotIt(arg.slotList);
     for (; slotIt.current(); ++slotIt)
         s << *slotIt.current();
-    
+
     return s;
 }
 
@@ -569,7 +569,7 @@ QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
     operator>>(s, (ParsedClassContainer&)arg);
 
     int n;
-    
+
     // Fetch parents
     s >> n;
     for (int i = 0; i < n; ++i) {
@@ -577,7 +577,7 @@ QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
         s >> (*parent);
         arg.addParent(parent);
     }
-    
+
     // Fetch friends
     s >> n;
     for (int i = 0; i < n; ++i) {
@@ -585,7 +585,7 @@ QDataStream &operator>>(QDataStream &s, ParsedClass &arg)
         s >> friendname;
         arg.addFriend(friendname);
     }
-    
+
     // Fetch signals
     s >> n;
     for (int i = 0; i < n; ++i) {

@@ -18,7 +18,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kconfig.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include "splitter.h"
 #include "statusbar.h"
@@ -37,7 +37,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
                                 this, SLOT(slotToggleSelectViews()),
                                 actionCollection(), "view_selectviews" );
     action->setChecked(true);
-    
+
     action = new KToggleAction( i18n("&Output views"), 0,
                                 this, SLOT(slotToggleOutputViews()),
                                 actionCollection(), "view_outputviews" );
@@ -54,7 +54,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
     leftTabGroup =  new QTabWidget(horzSplitter);
     mainSplitter =  new Splitter(horzSplitter, "main splitter");
     lowerTabGroup = new QTabWidget(vertSplitter);
-    
+
     vertSplitter->setResizeMode(horzSplitter, QSplitter::Stretch);
     vertSplitter->setResizeMode(lowerTabGroup, QSplitter::KeepSize);
     horzSplitter->setResizeMode(leftTabGroup, QSplitter::KeepSize);
@@ -63,7 +63,7 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
     setCentralWidget(vertSplitter);
 
     (void) new StatusBar(this);
-    
+
     config->setGroup("General Options");
     setGeometry(config->readRectEntry("Geomentry"));
     vertSplitter->setSizes(config->readIntListEntry("Vertical Splitter"));
@@ -86,7 +86,7 @@ bool TopLevel::queryClose()
 {
     if (closing)
         return true;
-    
+
     emit wantsToQuit();
     return false;
 }
@@ -129,7 +129,7 @@ void TopLevel::closeReal()
 void TopLevel::splitDocumentWidget(QWidget *w, QWidget *old, Orientation orient)
 {
     kdDebug(9000) << "splitting widget" << endl;
-    
+
     // Note: old must be != w
     Splitter *splitter = mainSplitter;
     if (old)
@@ -169,7 +169,7 @@ void TopLevel::embedDocumentWidget(QWidget *w, QWidget *old)
     Splitter *splitter = mainSplitter;
     if (old)
         splitter = static_cast<Splitter*>(old->parentWidget());
-    
+
     w->reparent(splitter, QPoint(0, 0));
 
     if (old) {
@@ -206,7 +206,7 @@ void TopLevel::raiseWidget(QWidget *w)
 {
     w->show();
     w->setFocus();
-    
+
     if (leftWidgets.contains(w))
         leftTabGroup->showPage(w);
     else if (lowerWidgets.contains(w))

@@ -1368,7 +1368,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this, updateR.x(), y, drawBuffer, 0, 0, updateR.width(), h);
     leftBorder->paintLine(line);
-    
+
     line++;
     y += h;
   }
@@ -1541,7 +1541,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char * name, bool HandleOw
   kWriteView->move(iconBorderWidth+2, 2);
   kWriteView->leftBorder = new KWIconBorder(this, kWriteView);
   kWriteView->leftBorder->setGeometry(2, 2, iconBorderWidth, iconBorderHeight);
-  
+
 
   doc->addView( this );
 
@@ -2240,6 +2240,9 @@ void KWrite::loadURL(const KURL &url, int flags) {
 */
   KURL u(url);
 
+  //user can cancel "open file"
+  if( u.isEmpty())
+      return;
   if (u.isMalformed()) {
       QString s = i18n("Malformed URL\n%1").arg(url.prettyURL());
       KMessageBox::sorry(this, s);
@@ -2824,7 +2827,7 @@ void KWrite::searchAgain(SConfig &s) {
 
   if( searchFor.isEmpty() ) {
     find();
-    return;			   
+    return;
   }
 
   do {
@@ -3891,7 +3894,7 @@ void KWIconBorder::paintLine(int i)
     TextLine *line = kWrite->doc()->getTextLine(i);
     if (!line)
         return;
-    
+
     if (line->isBookmarked())
         p.drawPixmap(2, y, QPixmap(bookmark_xpm));
     if (line && (line->breakpointId() != -1)) {
@@ -3911,7 +3914,7 @@ void KWIconBorder::paintEvent(QPaintEvent* e)
 {
     int lineStart = 0;
     int lineEnd = 0;
-    
+
     QRect updateR = e->rect();
 
     KWriteDoc *doc = kWrite->doc();
@@ -3921,7 +3924,7 @@ void KWIconBorder::paintEvent(QPaintEvent* e)
   	lineStart = (yPos + updateR.y()) / h;
         lineEnd = QMAX((yPos + updateR.y() + updateR.height()) / h, (int)doc->contents.count());
     }
-    
+
     for(int i = lineStart; i <= lineEnd; ++i)
         paintLine(i);
 }
@@ -3963,10 +3966,10 @@ void KWIconBorder::mousePressEvent(QMouseEvent* e)
             popup.insertSeparator();
             int idLmbSetsBreakpoints = popup.insertItem(i18n("LMB sets breakpoints"));
             int idLmbSetsBookmarks   = popup.insertItem(i18n("LMB sets bookmarks"));
-            
+
             popup.setItemChecked(idLmbSetsBreakpoints, lmbSetsBreakpoints);
             popup.setItemChecked(idLmbSetsBookmarks, !lmbSetsBreakpoints);
-            
+
             if (line->breakpointId() == -1) {
                 popup.setItemEnabled(idEditBreakpoint, false);
                 popup.setItemEnabled(idEnableBreakpoint, false);
@@ -3977,7 +3980,7 @@ void KWIconBorder::mousePressEvent(QMouseEvent* e)
                 line->toggleBookmark();
                 doc->tagLines(cursorOnLine, cursorOnLine);
                 doc->updateViews();
-            } else if (res == idToggleBreakpoint) 
+            } else if (res == idToggleBreakpoint)
                 emit kWrite->toggledBreakpoint(cursorOnLine);
             else if (res == idEditBreakpoint)
                 emit kWrite->editedBreakpoint(cursorOnLine);
