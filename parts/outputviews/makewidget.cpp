@@ -325,27 +325,16 @@ void MakeWidget::nextError()
 	else
 		parag = 0;
 
-	for ( int it = parag + 1;
-#if QT_VERSION >= 0x030100
-	      it < (int)m_items.count();
-#else
-	      it < m_items.size();
-#endif
-	      ++it )
-	{
-		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
-		if ( !item )
-			continue;
-		parag = it;
-		document()->removeSelection(0);
-		setSelection(parag, 0, parag+1, 0, 0);
-		setCursorPosition(parag, 0);
-		ensureCursorVisible();
-		searchItem( it );
-		return;
-	}
-
-	KNotifyClient::beep();
+    //if there are no errors after m_lastErrorSelected try again from the beginning
+    if (!scanErrorForward(parag))
+        if (m_lastErrorSelected != -1)
+        {
+            m_lastErrorSelected = -1;
+            if (!scanErrorForward(0))
+                KNotifyClient::beep();
+        }
+        else
+            KNotifyClient::beep();
 }
 
 void MakeWidget::prevError()
@@ -356,21 +345,21 @@ void MakeWidget::prevError()
 	else
 		parag = 0;
 
-	for ( int it = parag - 1; it >= 0; --it)
-	{
-		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
-		if ( !item )
-			continue;
-		parag = it;
-		document()->removeSelection(0);
-		setSelection(parag, 0, parag+1, 0, 0);
-		setCursorPosition(parag, 0);
-		ensureCursorVisible();
-		searchItem( it );
-		return;
-	}
-
-	KNotifyClient::beep();
+    //if there are no errors before m_lastErrorSelected try again from the end
+    if (!scanErrorBackward(parag))
+        if (m_lastErrorSelected != -1)
+        {
+            m_lastErrorSelected = -1;
+#if QT_VERSION >= 0x030100
+            parag = (int)m_items.count();
+#else
+            parag = m_items.size();
+#endif
+            if (!scanErrorBackward(parag))
+                KNotifyClient::beep();
+        }
+        else
+            KNotifyClient::beep();
 }
 
 void MakeWidget::contentsMouseReleaseEvent( QMouseEvent* e )
@@ -771,6 +760,47 @@ void MakeWidget::updateSettingsFromConfig()
 	m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
 	m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eVeryShort);
 	DirectoryItem::setShowDirectoryMessages( pConfig->readBoolEntry("ShowDirNavigMsg", false) );
+}
+
+bool MakeWidget::scanErrorForward( int parag )
+{
+	for ( int it = parag + 1;
+#if QT_VERSION >= 0x030100
+	      it < (int)m_items.count();
+#else
+	      it < m_items.size();
+#endif
+	      ++it )
+	{
+		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
+		if ( !item )
+			continue;
+		parag = it;
+		document()->removeSelection(0);
+		setSelection(parag, 0, parag+1, 0, 0);
+		setCursorPosition(parag, 0);
+		ensureCursorVisible();
+		searchItem( it );
+		return true;
+	}
+    return false;
+}
+
+bool MakeWidget::scanErrorBackward( int parag )
+{
+	for ( int it = parag - 1; it >= 0; --it)
+	{
+		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
+		if ( !item )
+			continue;
+		parag = it;
+		document()->removeSelection(0);
+		setSelection(parag, 0, parag+1, 0, 0);
+		setCursorPosition(parag, 0);
+		ensureCursorVisible();
+		searchItem( it );
+		return true;
+	}
 }
 
 #include "makewidget.moc"

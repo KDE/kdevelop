@@ -84,6 +84,9 @@ private:
     void refill();
     void createCursor(ErrorItem* e, KTextEditor::Document* doc);
 
+    bool scanErrorForward(int parag);
+    bool scanErrorBackward(int parag);
+
     DirectoryStatusMessageFilter  m_directoryStatusFilter;
     CompileErrorFilter            m_errorFilter;
     CommandContinuationFilter     m_continuationFilter;
