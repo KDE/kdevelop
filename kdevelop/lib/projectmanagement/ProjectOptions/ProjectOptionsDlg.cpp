@@ -20,7 +20,8 @@
 #include <qheader.h>
 #include <qlistview.h>
 #include <kiconloader.h>
-#include "InfoPageWidgetBase.h"
+#include "ProjectInfoWidget.h"
+#include "ProjectSpaceInfoWidget.h"
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include "klocale.h"
@@ -37,8 +38,7 @@
 
 ProjectOptionsDlg::ProjectOptionsDlg(QWidget *parent, const char *name, ProjectSpace *ps)
     : KDialogBase(TreeList, i18n("Current Project Options"), Apply|Ok|Cancel, Ok,
-                  parent, name)
-{
+                  parent, name){
   m_ps = ps;
 
   // Where do I get the right debug number for 'this'??
@@ -50,10 +50,16 @@ ProjectOptionsDlg::ProjectOptionsDlg(QWidget *parent, const char *name, ProjectS
 	
 	QWidget* optionsWidget;
 
-	// info page
-  vbox = addVBoxPage(i18n("Info"), i18n("Current Project General Information"),
+	// Project info page
+  vbox = addVBoxPage(i18n("Project"), i18n("Current Project Information"),
   									 KGlobal::iconLoader()->loadIcon("info", KIcon::Desktop, KIcon::SizeSmall));
-	optionsWidget = new InfoPageWidgetBase(vbox, "General Info Page");
+	optionsWidget = new ProjectInfoWidget(vbox, "Current Project Information", m_ps, this);
+	
+	// ProjectSpace info page
+  vbox = addVBoxPage(i18n("Project Space"), i18n("Project Space Information"),
+  									 KGlobal::iconLoader()->loadIcon("info", KIcon::Desktop, KIcon::SizeSmall));
+	optionsWidget = new ProjectSpaceInfoWidget(vbox, "Project Space Information", m_ps, this);
+	
 	
 	// compilers
   vbox = addVBoxPage(i18n("Compilers"), i18n("Compilers Options"),
