@@ -80,6 +80,8 @@ CvsServicePartImpl::CvsServicePartImpl( CvsServicePart *part, const char *name )
         m_widget = new CvsProcessWidget( m_cvsService, part, 0, "cvsprocesswidget" );
         m_scheduler = new DirectScheduler( m_widget );
         m_fileInfoProvider = new CVSFileInfoProvider( part, m_cvsService );
+    
+        connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     }
     else
     {
@@ -87,7 +89,6 @@ CvsServicePartImpl::CvsServicePartImpl( CvsServicePart *part, const char *name )
             "I could not request a valid CvsService!!!! :-((( " << endl;
     }
 
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -951,7 +952,10 @@ void CvsServicePartImpl::slotProjectOpened()
     kdDebug() << "CvsServicePartImpl::slotProjectOpened(): setting work directory to "
         << projectDirectory() << endl;
 
-    m_repository->setWorkingCopy( projectDirectory() );
+    if ( m_repository )
+    {
+        m_repository->setWorkingCopy( projectDirectory() );
+    }
 }
 
 

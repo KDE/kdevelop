@@ -114,6 +114,8 @@ CvsServicePart::~CvsServicePart()
 
 void CvsServicePart::init()
 {
+    if ( !m_impl->m_widget ) return;
+
     setupActions();
 
     // Re-route our implementation signal for when check-out finishes to the standard signal
