@@ -1,5 +1,6 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kurlrequester.h>
@@ -53,21 +54,38 @@ void ValgrindDialog::setValExecutable( const QString& ve )
   w->valExecutableEdit->setURL( ve );
 }
 
+static const QString leakCheckParam( "--leak-check=yes" );
+static const QString reachableParam( "--show-reachable=yes" );
+static const QString childrenParam( "--trace-children=yes" );
+
 QString ValgrindDialog::valParams() const
 {
   QString params = w->valParamEdit->text();
   if ( w->memleakBox->isChecked() )
-    params += " --leak-check=yes";
+    params += " " + leakCheckParam;
   if ( w->reachableBox->isChecked() )
-    params += " --show-reachable=yes";
+    params += " " + reachableParam;
   if ( w->childrenBox->isChecked() )
-    params += " --trace-children=yes";
+    params += " " + childrenParam;
   
   return params;
 }
 
 void ValgrindDialog::setValParams( const QString& params )
 {
-  w->valParamEdit->setText( params );
+  QString myParams = params;
+  if ( myParams.contains( leakCheckParam ) )
+    w->memleakBox->setChecked( true );
+  if ( myParams.contains( reachableParam ) )
+    w->reachableBox->setChecked( true );
+  if ( myParams.contains( childrenParam ) )
+    w->childrenBox->setChecked( true );
+  w->init();
+
+  myParams = myParams.replace( QRegExp( leakCheckParam ), "" );
+  myParams = myParams.replace( QRegExp( reachableParam ), "" );
+  myParams = myParams.replace( QRegExp( childrenParam ), "" );
+  myParams = myParams.stripWhiteSpace();
+  w->valParamEdit->setText( myParams );
 }
 
