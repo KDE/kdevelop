@@ -326,6 +326,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   proc->clearArguments();
   if (useGlimpse->isChecked())
   {
+    conf->setGroup("Doc_Location");
+    conf->writeEntry("searchengine","glimpse");
     *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " +
                     size_str +" -F -X -H "+ locateLocal("appdata","");
     proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
@@ -333,6 +335,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   }
   if (useHtDig->isChecked())
   {
+    conf->setGroup("Doc_Location");
+    conf->writeEntry("searchengine","htdig");
     *proc <<  "find " +
                 dirs +
                 " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " +

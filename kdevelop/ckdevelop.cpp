@@ -525,7 +525,7 @@ void CKDevelop::slotFilePrint(){
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
-//  saveOptions();
+  saveOptions();
   close();
 }
 
@@ -2605,6 +2605,7 @@ void CKDevelop::slotHelpSearchText(QString text){
     return;
   }
 
+
   /// stripping error causing \n's
   if(!text.isEmpty())
   {
@@ -2626,8 +2627,11 @@ void CKDevelop::slotHelpSearchText(QString text){
   text=realSearchText2regExp(text);  // change the text for using with regexp
   doc_search_text = text.copy();
 
+  config->setGroup("Doc_Location");
+  QString engine=config->readEntry("searchengine","htdig");
+
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  if(useGlimpse && !QFile::exists(locateLocal("appdata", ".glimpse_index")))
+  if(engine=="glimpse" && useGlimpse && !QFile::exists(locateLocal("appdata", ".glimpse_index")))
   {
     if (!useHtDig) {
       if(KMessageBox::questionYesNo(this,
@@ -2643,7 +2647,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
-  if (useGlimpse)
+  if (engine=="glimpse" && useGlimpse && QFile::exists(locateLocal("appdata", ".glimpse_index")))
   {
     search_process << "glimpse";
     search_process << "-H" << locateLocal("appdata", "");
@@ -2651,14 +2655,12 @@ void CKDevelop::slotHelpSearchText(QString text){
 
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
-  if (useHtDig)
+  if (useHtDig && engine=="htdig" )
   {
-#warning FIXME well I think this needs checking :-)
     search_process << "htsearch -c " +
                         locate("appdata", "tools/htdig.conf") +
-                        "format=&matchesperpage=30&words=" +
-                        encodeURL(text) +
-                        "\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
+                        " \"format=&matchesperpage=30&words=" +
+                        encodeURL(text) +"\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
                         locateLocal("appdata", "search_result.html");
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
@@ -3005,7 +3007,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 {
   int item=s_tab_view->getCurrentTab();
-  QString text=kapp->clipboard()->text();
+  QString text=QApplication::clipboard()->text();
   if(!bContents || item==BROWSER)
     disableCommand(ID_EDIT_PASTE);
   else
@@ -3647,17 +3649,17 @@ void CKDevelop::slotSTabSelected(int item){
 
   if (item == HEADER || item == CPP)
   {
-//    enableCommand(ID_FILE_SAVE);  // is handled by setMainCaption()
+   // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
     enableCommand(ID_FILE_CLOSE);
 
     enableCommand(ID_FILE_PRINT);
 
-    QString text=kapp->clipboard()->text();
-    if(text.isEmpty())
-      disableCommand(ID_EDIT_PASTE);
-    else
-      enableCommand(ID_EDIT_PASTE);
+//  QString text=QApplication::clipboard()->text();
+//  if(text.isEmpty())
+//    disableCommand(ID_EDIT_PASTE);
+//  else
+//    enableCommand(ID_EDIT_PASTE);
 
     enableCommand(ID_EDIT_INSERT_FILE);
     enableCommand(ID_EDIT_SEARCH);
@@ -4108,7 +4110,6 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
-    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_RPM,         i18n("Creates an RPM package from the current project sources"))
 
     ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
     ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))

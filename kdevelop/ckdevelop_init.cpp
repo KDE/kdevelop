@@ -219,6 +219,7 @@ void CKDevelop::initView()
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
   // set the mode of the tab headers
+  config->setGroup("General Options");
   int mode=config->readNumEntry("tabviewmode", 3);
   switch (mode){
     case 1:
@@ -670,11 +671,27 @@ void CKDevelop::initMenuBar(){
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
-
+  // set the mode of the tab headers
   view_tab_menu = new QPopupMenu;
   view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
   view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
   view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
+  config->setGroup("General Options");
+  int tabtext=config->readNumEntry("tabviewmode",3);
+  switch(tabtext){
+    case 1:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,true);
+      break;
+    case 2:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,true);
+      break;
+    case 3:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,true);
+      break;
+    default:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,true);
+      break;
+  }
 
   view_menu = new QPopupMenu;
   view_menu->insertItem(SmallIconSet("goto"),i18n("Goto &Line..."), this,
@@ -753,7 +770,6 @@ void CKDevelop::initMenuBar(){
 
   QPopupMenu*  p2 = new QPopupMenu;
   p2->insertItem(SmallIconSet("tgz"),i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
-  p2->insertItem(SmallIconSet("rpm"),i18n("&RPM Package"), this, SLOT(slotProjectMakeDistRPM()),0,ID_PROJECT_MAKE_DISTRIBUTION_RPM);
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   project_menu->insertSeparator();
 
@@ -1524,6 +1540,7 @@ void CKDevelop::initDebugger()
     disassemble->setFocusPolicy(QWidget::ClickFocus);
     var_viewer->setFocusPolicy(QWidget::NoFocus);
 
+    config->setGroup("General Options");
     int mode=config->readNumEntry("tabviewmode", 3);
     switch (mode){
       case 1:
