@@ -61,7 +61,6 @@ void Lexer::reset()
 
     m_currentLine = 0;
     m_currentColumn = 0;
-    m_skipping = false;
 }
   
 void Lexer::getTokenPosition( const Token& token, int* line, int* col )
@@ -69,92 +68,97 @@ void Lexer::getTokenPosition( const Token& token, int* line, int* col )
     token.getStartPosition( line, col );
 }
 
-int Lexer::nextToken( int ptr, Token& tk )
+void Lexer::tokenize()
 {
-    int op = 0;
-    int preproc_state = PreProc_none;
-    
-    if( m_directiveStack.size() ){
-	preproc_state = m_directiveStack.top();
-    }
-    
-    if( m_size == (int)m_tokens.size() ){
-	m_tokens.resize( m_tokens.size() + 5000 );
-    }
-    
-    ptr = readWhiteSpaces( ptr );
-    int startLine = m_currentLine;
-    int startColumn = m_currentColumn;
-    
-    QChar ch = m_source[ ptr ];
-    QChar ch1 = isValid( ptr + 1) ? m_source[ ptr + 1 ] : QChar::null;
-    
-    if( !isValid(ptr) ){
-	/* skip */
-    } else if( isValid(ptr+1) && ch == '/' && ch1 == '/' ){
-	int end = readLineComment( ptr );
-	if( recordComments() ){
-	    tk = Token( Token_comment, ptr, end - ptr );
-	    tk.setStartPosition( startLine, startColumn );
-	    tk.setEndPosition( m_currentLine, m_currentColumn );
+    int ptr = 0;
+    int op;
+
+    m_startLine = true;
+
+    m_size = 0;
+    while( isValid(ptr) ){
+
+	int preproc_state = PreProc_none;
+
+	if( m_directiveStack.size() ){
+	    preproc_state = m_directiveStack.top();
 	}
-	ptr = end;
-    } else if( ch == '/' && ch1 == '*' ){
-	int end = readMultiLineComment( ptr );
-	if( recordComments() ){
-	    tk = Token( Token_comment, ptr, end - ptr );
-	    tk.setStartPosition( startLine, startColumn );
-	    tk.setEndPosition( m_currentLine, m_currentColumn );
+
+	if( m_size == (int)m_tokens.size() ){
+	    m_tokens.resize( m_tokens.size() + 5000 );
 	}
-	ptr = end;
-    } else if( m_startLine && ch == '#' ){
-	
-	nextChar( ptr ); // skip #
-	ptr = readWhiteSpaces( ptr, false );	    // skip white spaces
-	
-	int eptr = readIdentifier( ptr ); // read the directive
-	QString directive = m_source.mid( ptr, eptr - ptr );
-	
-	ptr = handleDirective( directive, eptr );
-    } else if( preproc_state == PreProc_skip ){
-	// skip line and continue
-	while( isValid(ptr) && ch != '\n' )
-	    nextChar( ptr );
-	/* skip */
-    } else if( ch == '\'' ){
-	int end = readCharLiteral( ptr );
-	tk = Token( Token_char_literal, ptr, end - ptr );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-	ptr = end;
-    } else if( ch == '"' ){
-	int end = readStringLiteral( ptr );
-	tk = Token( Token_string_literal, ptr, end - ptr );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-	ptr = end;
-    } else if( ch.isLetter() || ch == '_' ){
-	int end = readIdentifier( ptr );
-	QString ide = m_source.mid( ptr, end - ptr );
-	int k = Lookup::find( &keyword, ide );
-	if( k != -1 ){
-	    tk = Token( k, ptr, end - ptr );
+
+	ptr = readWhiteSpaces( ptr );
+	int startLine = m_currentLine;
+	int startColumn = m_currentColumn;
+
+	QChar ch = m_source[ ptr ];
+	QChar ch1 = isValid( ptr + 1) ? m_source[ ptr + 1 ] : QChar::null;
+
+	if( !isValid(ptr) ){
+	    break;
+	} else if( isValid(ptr+1) && ch == '/' && ch1 == '/' ){
+	    int end = readLineComment( ptr );
+	    if( recordComments() ){
+		Token tk = Token( Token_comment, ptr, end - ptr );
+		tk.setStartPosition( startLine, startColumn );
+		tk.setEndPosition( m_currentLine, m_currentColumn );
+		m_tokens[ m_size++ ] = tk;
+	    }
+	    ptr = end;
+	} else if( ch == '/' && ch1 == '*' ){
+	    int end = readMultiLineComment( ptr );
+	    if( recordComments() ){
+		Token tk = Token( Token_comment, ptr, end - ptr );
+		tk.setStartPosition( startLine, startColumn );
+		tk.setEndPosition( m_currentLine, m_currentColumn );
+		m_tokens[ m_size++ ] = tk;
+	    }
+	    ptr = end;
+	} else if( m_startLine && ch == '#' ){
+
+	    nextChar( ptr ); // skip #
+	    ptr = readWhiteSpaces( ptr, false );	    // skip white spaces
+
+	    int eptr = readIdentifier( ptr ); // read the directive
+	    QString directive = m_source.mid( ptr, eptr - ptr );
+
+	    ptr = handleDirective( directive, eptr );
+	    //m_tokens[ m_size++ ] = Token( Token_preproc, ptr, 1 );
+	} else if( preproc_state == PreProc_skip ){
+	    // skip line and continue
+	    while( isValid(ptr) && ch != '\n' )
+		nextChar( ptr );
+	    continue;
+	} else if( ch == '\'' ){
+	    int end = readCharLiteral( ptr );
+	    Token tk = Token( Token_char_literal, ptr, end - ptr );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	} else {
-	    QMap<QString, Macro> macros = m_driver->macros( m_driver->currentFileName() );
-	    if( macros.contains(ide) ){
-		const Macro& m = macros[ ide ];
-		if( m.hasArguments() ){
-		    end = skip( readWhiteSpaces(end), '(', ')' );
-		}
-		m_source.insert( end, m.body() );
-		m_endPtr = m_source.length();		    
-	    } else if( m_skipWordsEnabled ){
+	    m_tokens[ m_size++ ] = tk;
+	    ptr = end;
+	} else if( ch == '"' ){
+	    int end = readStringLiteral( ptr );
+	    Token tk = Token( Token_string_literal, ptr, end - ptr );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	    m_tokens[ m_size++ ] = tk;
+	    ptr = end;
+	} else if( ch.isLetter() || ch == '_' ){
+	    int end = readIdentifier( ptr );
+	    QString ide = m_source.mid( ptr, end - ptr );
+	    int k = Lookup::find( &keyword, ide );
+	    if( k != -1 ){
+		Token tk = Token( k, ptr, end - ptr );
+		tk.setStartPosition( startLine, startColumn );
+		tk.setEndPosition( m_currentLine, m_currentColumn );
+		m_tokens[ m_size++ ] = tk;
+	    } else {
+	      if( m_skipWordsEnabled ){
 		QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
 		if( pos != m_words.end() ){
 		    if( (*pos).first == SkipWordAndArguments ){
-			end = skip( readWhiteSpaces(end), '(', ')' );
+			end = skip( readWhiteSpaces(end, false), '(', ')' );
 		    }
 		    if( !(*pos).second.isEmpty() ){
 			m_source.insert( end, (*pos).second );
@@ -165,68 +169,61 @@ int Lexer::nextToken( int ptr, Token& tk )
 		    ide.startsWith("Q_EXPORT") ||
 		    ide.startsWith("QM_EXPORT") ||
 		    ide.startsWith("QM_TEMPLATE")){
-		    
-		    end = skip( readWhiteSpaces(end), '(', ')' );
+
+		    end = skip( readWhiteSpaces(end, false), '(', ')' );
 		} else if( ide.startsWith("K_TYPELIST_") || ide.startsWith("TYPELIST_") ){
-		    tk = Token( Token_identifier, ptr, end - ptr );
+		    Token tk = Token( Token_identifier, ptr, end - ptr );
 		    tk.setStartPosition( startLine, startColumn );
 		    tk.setEndPosition( m_currentLine, m_currentColumn );
-		    end = skip( readWhiteSpaces(end), '(', ')' );
+		    m_tokens[ m_size++ ] = tk;
+		    end = skip( readWhiteSpaces(end, false), '(', ')' );
 		} else{
-		    tk = Token( Token_identifier, ptr, end - ptr );
+		    Token tk = Token( Token_identifier, ptr, end - ptr );
 		    tk.setStartPosition( startLine, startColumn );
 		    tk.setEndPosition( m_currentLine, m_currentColumn );
+		    m_tokens[ m_size++ ] = tk;
 		}
-	    } else {
-		tk = Token( Token_identifier, ptr, end - ptr );
-		tk.setStartPosition( startLine, startColumn );
-		tk.setEndPosition( m_currentLine, m_currentColumn );
+	      } else {
+		    Token tk = Token( Token_identifier, ptr, end - ptr );
+		    tk.setStartPosition( startLine, startColumn );
+		    tk.setEndPosition( m_currentLine, m_currentColumn );
+		    m_tokens[ m_size++ ] = tk;
+	      }
 	    }
+	    ptr = end;
+	} else if( ch.isNumber() ){
+	    int end = readNumberLiteral( ptr );
+	    Token tk = Token( Token_number_literal, ptr, end - ptr );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	    m_tokens[ m_size++ ] = tk;
+	    ptr = end;
+	} else if( -1 != (op = findOperator3(ptr)) ){
+	    Token tk = Token( op, ptr, 3 );
+	    nextChar( ptr, 3 );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	    m_tokens[ m_size++ ] = tk;
+	} else if( -1 != (op = findOperator2(ptr)) ){
+	    Token tk = Token( op, ptr, 2 );
+	    nextChar( ptr, 2 );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	    m_tokens[ m_size++ ] = tk;
+	} else {
+	    Token tk = Token( ch.latin1(), ptr, 1 );
+	    nextChar( ptr );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	    m_tokens[ m_size++ ] = tk;
 	}
-	ptr = end;
-    } else if( ch.isNumber() ){
-	int end = readNumberLiteral( ptr );
-	tk = Token( Token_number_literal, ptr, end - ptr );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-	ptr = end;
-    } else if( -1 != (op = findOperator3(ptr)) ){
-	tk = Token( op, ptr, 3 );
-	nextChar( ptr, 3 );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-    } else if( -1 != (op = findOperator2(ptr)) ){
-	tk = Token( op, ptr, 2 );
-	nextChar( ptr, 2 );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-    } else {
-	tk = Token( ch.latin1(), ptr, 1 );
-	nextChar( ptr );
-	tk.setStartPosition( startLine, startColumn );
-	tk.setEndPosition( m_currentLine, m_currentColumn );
-    }
-    
-    m_startLine = false;    
-    return ptr;
-}
-
-
-void Lexer::tokenize()
-{
-    int ptr = 0;
-    
-    m_startLine = true;
-    m_size = 0;
-    while( isValid(ptr) ){
-	Token tk;
-	ptr = nextToken( ptr, tk );
-	addToken( tk );
+	
+	m_startLine = false;
     }
     
     Token tk = Token( Token_eof, ptr, 0 );
     tk.setEndPosition( m_currentLine, m_currentColumn );
-    addToken( tk );
+    m_tokens[ m_size++ ] = tk;
 }
 
 void Lexer::resetSkipWords()
