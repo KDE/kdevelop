@@ -399,9 +399,9 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     {
       ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(this);
       dlg->exec();
-      BuildMode mode;
-      mode = (BuildMode) dlg->getBuildMode();
-      if (mode==BM_DEBUG)
+      QMakeBuildMode mode;
+      mode = dlg->getBuildMode();
+      if (mode==QBM_DEBUG)
         KMessageBox::error(this,i18n("Debug"));
       else
         KMessageBox::error(this,i18n("Release"));

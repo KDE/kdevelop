@@ -115,14 +115,10 @@
 </connections>
 <includes>
     <include location="local" impldecl="in declaration">configdefinitions.h</include>
-    <include location="local" impldecl="in implementation">projectconfigurationdlgbase.ui.h</include>
 </includes>
 <variables>
     <variable>BuildMode *buildMode</variable>
     <variable></variable>
 </variables>
-<slots>
-    <slot returnType="int">getBuildMode()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -9,29 +9,18 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _CARET_H_
-#define _CARET_H_
+#include "projectconfigurationdlg.h"
 
-#include <stdio.h>
-class Caret
+ProjectConfigurationDlg::ProjectConfigurationDlg(TrollProjectWidget *caller,QWidget* parent, const char* name, bool modal, WFlags fl)
+: ProjectConfigurationDlgBase(parent,name,modal,fl)
+//=================================================
 {
-  public:
-  long      m_row;
-  long      m_idx;
-            Caret();
-            Caret(const int row, const int idx);
-            Caret(const Caret& value);
-  bool      operator<(const Caret& compare);
-  bool      operator>(const Caret& compare);
-  bool      operator<=(const Caret& compare);
-  bool      operator>=(const Caret& compare);
-  bool      operator==(const Caret& compare);
-  bool      operator!=(const Caret& compare);
-  Caret     operator=(const Caret& value);
-  Caret     operator+(const Caret& value);
-  Caret     operator-(const Caret& value);
+  m_trollProjectWidget = caller;
+}
 
-};
 
-#endif
+QMakeBuildMode ProjectConfigurationDlg::getBuildMode()
+//====================================================
+{
 
+}
