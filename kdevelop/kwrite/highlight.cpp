@@ -2260,7 +2260,7 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   QFont defaultFont = KGlobalSettings::fixedFont();
   font.family = config->readEntry("Family", defaultFont.family());
   font.size = config->readNumEntry("Size", defaultFont.pointSize());
-#if 0
+#if QT_VERSION < 300
   // ### doesn't compile with Qt3
   font.charset = config->readEntry("Charset", QFont::encodingName(QFont::ISO_8859_1));//  "ISO-8859-1");
 #else
