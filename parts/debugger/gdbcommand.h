@@ -44,6 +44,8 @@ enum GDBCmd
   INITIALISE      = 'I',
   IDLE            = 'i',
 
+  BACKTRACE       = 'K',
+
   LOCALS          = 'L',
   LIBRARIES       = 'l',
 
@@ -55,15 +57,17 @@ enum GDBCmd
   PROGRAM_STOP    = 'S',
   SHARED_CONT     = 's',
 
-  THREAD          = 'T',
-  BACKTRACE       = 't',
+  INFOTHREAD      = 'T',
+  SWITCHTHREAD    = 't',
 
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',
 
   DETACH          = 'z',
 
-  WAIT            = '0'
+  WAIT            = '0',
+
+  WHATIS          = 'H'
 };
 
 #define RUNCMD      (true)

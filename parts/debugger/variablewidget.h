@@ -17,6 +17,7 @@
 #define _VARIABLEWIDGET_H_
 
 #include <klistview.h>
+#include <kcombobox.h>
 #include <qwidget.h>
 
 class KLineEdit;
@@ -24,13 +25,14 @@ class KLineEdit;
 namespace GDBDebugger
 {
 
+class TrimmableItem;
 class VarFrameRoot;
 class WatchRoot;
 class VarItem;
 class VariableTree;
 class DbgController;
 
-enum { VarNameCol = 0, ValueCol = 1 };
+enum { VarNameCol = 0, VarTypeCol = 1, ValueCol = 2 };
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
                 typeStruct, typeArray, typeQString, typeWhitespace,
                 typeName };
@@ -54,8 +56,10 @@ public slots:
 
 private:
     VariableTree *varTree_;
-    KLineEdit *watchVarEntry_;
+//    KLineEdit *watchVarEntry_;
     friend class VariableTree;
+
+    KHistoryCombo *watchVarEditor_;
 };
 
 /***************************************************************************/
@@ -88,9 +92,12 @@ public:
 signals:
     void toggleWatchpoint(const QString &varName);
     void selectFrame(int frameNo, int threadNo);
-    void expandItem(VarItem *item);
+    void expandItem(TrimmableItem *item);
     void expandUserItem(VarItem *item, const QCString &request);
     void setLocalViewState(bool localsOn);
+
+    // jw
+    void varItemConstructed(VarItem *item);
 
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
@@ -98,11 +105,15 @@ public slots:
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
 
+    // jw
+    void slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c);
+
 private:
     int activeFlag_;
     int currentThread_;
     //DbgController *controller;
 
+    friend class VarFrameRoot;
     friend class VarItem;
     friend class WatchRoot;
 };
@@ -111,7 +122,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class TrimmableItem : public QListViewItem
+class TrimmableItem : public KListViewItem
 {
 public:
     TrimmableItem(VariableTree *parent);
@@ -137,6 +148,14 @@ public:
     virtual QCString getCache();
     virtual QString key( int column, bool ascending ) const;
 
+    // jw
+    virtual void handleDoubleClicked(const QPoint &pos, int c) {}
+
+protected:
+
+    void paintCell( QPainter *p, const QColorGroup &cg,
+                    int column, int width, int align );
+
 private:
     int activeFlag_;
     bool waitingForData_;
@@ -159,11 +178,17 @@ public:
 
     void updateValue(char *data);
 
+    // jw
+    void updateType(char *data);
+
     void setCache(const QCString& value);
     QCString getCache();
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
+
+    // jw - overriden from TrimmableItem to handle renaming
+    void handleDoubleClicked(const QPoint &pos, int c);
 
 private:
     void checkForRequests();
@@ -174,6 +199,9 @@ private:
     QCString  cache_;
     DataType  dataType_;
     bool      highlight_;
+
+    // the non-cast type of the variable
+    QCString originalValueType_;
 };
 
 /***************************************************************************/

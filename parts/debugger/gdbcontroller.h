@@ -60,6 +60,7 @@ private:
     void parseBreakpointSet   (char *buf);
     void parseLocals          (char type, char *buf);
     void parseRequestedData   (char *buf);
+    void parseWhatis          (char *buf);
     void parseLine            (char *buf);
     void parseFrameSelected   (char *buf);
     //  void parseFileStart       (char *buf);
@@ -107,10 +108,13 @@ public slots:
     void slotRegisters();
     void slotLibraries();
 
-    void slotExpandItem(VarItem *parent);
+    void slotExpandItem(TrimmableItem *parent);
     void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
+
+    // jw - type determination requires a var object, so we do it here
+    void slotVarItemConstructed(VarItem *item);
 
 protected slots:
     void slotDbgStdout(KProcess *proc, char *buf, int buflen);

@@ -91,7 +91,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    mainWindow()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
+    mainWindow()->embedOutputView(variableWidget, i18n("Variables / Watch"), i18n("debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 
     breakpointWidget = new BreakpointWidget();
@@ -426,12 +426,17 @@ void DebuggerPart::setupController()
     controller = new GDBController(variableTree, framestackWidget, *projectDom());
 
     // variableTree -> controller
-    connect( variableTree,     SIGNAL(expandItem(VarItem*)),
-             controller,       SLOT(slotExpandItem(VarItem*)));
+//    connect( variableTree,     SIGNAL(expandItem(VarItem*)),
+//             controller,       SLOT(slotExpandItem(VarItem*)));
+    connect( variableTree,     SIGNAL(expandItem(TrimmableItem*)),
+             controller,       SLOT(slotExpandItem(TrimmableItem*)));
     connect( variableTree,     SIGNAL(expandUserItem(VarItem*, const QCString&)),
              controller,       SLOT(slotExpandUserItem(VarItem*, const QCString&)));
     connect( variableTree,     SIGNAL(setLocalViewState(bool)),
              controller,       SLOT(slotSetLocalViewState(bool)));
+    // jw
+    connect( variableTree,     SIGNAL(varItemConstructed(VarItem*)),
+             controller,       SLOT(slotVarItemConstructed(VarItem*)));
 
     // framestackWidget -> controller
     connect( framestackWidget, SIGNAL(selectFrame(int,int,bool)),

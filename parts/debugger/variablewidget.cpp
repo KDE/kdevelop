@@ -29,6 +29,8 @@
 #include <qcursor.h>
 #include <klocale.h>
 
+#include <qpoint.h>
+
 #if defined(DBG_MONITOR)
   #define DBG_DISPLAY(X)          {emit rawData(QString(X));}
 #else
@@ -46,13 +48,19 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     varTree_ = new VariableTree(this);
-    QLabel *label = new QLabel(i18n("Watch:"), this);
-    watchVarEntry_ = new KLineEdit(this);
+    QLabel *label = new QLabel(i18n("Expression to watch:"), this);
+
+    watchVarEditor_ = new KHistoryCombo(this, "var-to-watch editor");
+
+//    watchVarEntry_ = new KLineEdit(this);
+
     QPushButton *addButton = new QPushButton(i18n("Add"), this);
 
     QBoxLayout *watchEntry = new QHBoxLayout();
-    watchEntry->addWidget(watchVarEntry_);
     watchEntry->addWidget(label);
+//    watchEntry->addWidget(watchVarEntry_);
+    watchEntry->addWidget(watchVarEditor_);
+    watchEntry->setStretchFactor(watchVarEditor_, 1);
     watchEntry->addWidget(addButton);
 
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
@@ -60,7 +68,8 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     topLayout->addLayout(watchEntry);
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
-    connect( watchVarEntry_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
+    connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
+//    connect( watchVarEntry_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
 }
 
 // **************************************************************************
@@ -80,7 +89,6 @@ void VariableWidget::clear()
       ++it;
     }
   }
-
 }
 
 // **************************************************************************
@@ -96,9 +104,14 @@ void VariableWidget::setEnabled(bool bEnabled)
 
 void VariableWidget::slotAddWatchVariable()
 {
-    QString watchVar(watchVarEntry_->text());
+//    QString watchVar(watchVarEntry_->text());
+    QString watchVar(watchVarEditor_->currentText());
     if (!watchVar.isEmpty())
+    {
+        watchVarEditor_->clearEdit();
+        watchVarEditor_->addToHistory(watchVar);
         varTree_->slotAddWatchVariable(watchVar);
+    }
 }
 
 // **************************************************************************
@@ -106,7 +119,11 @@ void VariableWidget::slotAddWatchVariable()
 void VariableWidget::slotAddWatchVariable(const QString &ident)
 {
     if (!ident.isEmpty())
+    {
+        watchVarEditor_->clearEdit();
+        watchVarEditor_->addToHistory(ident);
         varTree_->slotAddWatchVariable(ident);
+    }
 }
 
 // **************************************************************************
@@ -123,13 +140,27 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setColumnWidthMode(0, Manual);
     setSorting(-1);
     QListView::setSelectionMode(QListView::Single);
+
+//  matter of taste..
+//    header()->setStretchEnabled(true);
+
     addColumn(i18n("Variable"));
+    addColumn(i18n("Type"));
     addColumn(i18n("Value"));
+
     // This may be a matter of taste... yes, I like it on
 //    header()->hide();
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
+
+/*
+    work in progress - disabled for now
+
+    // jw
+    connect( this, SIGNAL(doubleClicked(QListViewItem *item, const QPoint &pos, int c)),
+             SLOT(slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c)) );
+*/
 }
 
 // **************************************************************************
@@ -172,6 +203,25 @@ void VariableTree::slotAddWatchVariable(const QString &watchVar)
     kdDebug(9012) << "Add watch variable: " << watchVar << endl;
     VarItem *varItem = new VarItem(findWatch(), watchVar, typeUnknown);
     emit expandItem(varItem);
+}
+
+// **************************************************************************
+
+// jw
+void VariableTree::slotDoubleClicked(QListViewItem *item, const QPoint &pos, int c)
+{
+    kdDebug(9012) << " ### VariableTree::slotDoubleClicked 1" << endl;
+
+    if (item)
+    {
+        kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
+        TrimmableItem *titem = dynamic_cast<TrimmableItem*>(item);
+        if (titem)
+        {                                                                  
+            kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
+            titem->handleDoubleClicked(pos, c);
+        }
+    }
 }
 
 // **************************************************************************
@@ -300,7 +350,7 @@ QListViewItem *VariableTree::lastChild() const
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(VariableTree *parent)
-    : QListViewItem (parent, parent->lastChild()),
+    : KListViewItem (parent, parent->lastChild()),
       activeFlag_(0)
 {
     setActive();
@@ -309,7 +359,7 @@ TrimmableItem::TrimmableItem(VariableTree *parent)
 // **************************************************************************
 
 TrimmableItem::TrimmableItem(TrimmableItem *parent)
-    : QListViewItem (parent, parent->lastChild()),
+    : KListViewItem (parent, parent->lastChild()),
       activeFlag_(0),
       waitingForData_(false)
 {
@@ -320,6 +370,23 @@ TrimmableItem::TrimmableItem(TrimmableItem *parent)
 
 TrimmableItem::~TrimmableItem()
 {
+}
+
+// **************************************************************************
+
+void TrimmableItem::paintCell(QPainter *p, const QColorGroup &cg,
+                              int column, int width, int align)
+{
+    if ( !p )
+        return;
+    // make toplevel item (watch and frame items) names bold
+    if (column == 0 && !parent())
+    {
+        QFont f = p->font();
+        f.setBold(true);
+        p->setFont(f);
+    }
+    QListViewItem::paintCell( p, cg, column, width, align );
 }
 
 // **************************************************************************
@@ -436,6 +503,14 @@ VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataTyp
       highlight_(false)
 {
     setText(VarNameCol, varName);
+
+/*
+    setRenameEnabled(VarTypeCol, true);
+    setRenameEnabled(VarNameCol, true);
+*/
+
+    kdDebug(9012) << " ### VarItem::VarItem *CONSTR*" << endl;
+    emit ((VariableTree*)listView())->varItemConstructed(this);
 }
 
 // **************************************************************************
@@ -532,6 +607,37 @@ void VarItem::updateValue(char *buf)
 
     GDBParser::getGDBParser()->parseData(this, buf, true, false);
     setActive();
+}
+
+// **************************************************************************
+
+void VarItem::updateType(char *buf)
+{
+    kdDebug(9012) << " ### VarItem::updateType " << buf << endl;
+
+    QString str(buf);
+    int eq = str.find('=');
+    if (eq < 0)
+        return;
+    str.remove('\n');
+    str.remove('\r');
+    str = str.mid(eq + 1, 0xffff).stripWhiteSpace();
+
+    originalValueType_ = str.latin1();
+
+    setText(VarTypeCol, str);    
+}
+
+// **************************************************************************
+
+void VarItem::handleDoubleClicked(const QPoint &pos, int c)
+{
+    kdDebug(9012) << " ### VarItem::handleDoubleClicked 1" << endl;
+    if (c == VarTypeCol || c == ValueCol)
+    {
+        kdDebug(9012) << " ### VarItem::handleDoubleClicked 2" << endl;
+        static_cast<KListView*>(listView())->rename(this, c);
+    }
 }
 
 // **************************************************************************

@@ -27,6 +27,7 @@ namespace GDBDebugger
 
 class Breakpoint;
 class DbgCommand;
+class TrimmableItem;
 class VarItem;
 
 /***************************************************************************/
@@ -95,11 +96,14 @@ public slots:
     virtual void slotRegisters()                                            = 0;
     virtual void slotLibraries()                                            = 0;
 
-    virtual void slotExpandItem(VarItem *parent)                            = 0;
+    virtual void slotExpandItem(TrimmableItem *parent)                     = 0;
     virtual void slotExpandUserItem(VarItem *parent,
                                     const QCString &userRequest)            = 0;
     virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
     virtual void slotSetLocalViewState(bool onOff)                          = 0;
+
+    // jw - for optional additional commands and initialization
+    virtual void slotVarItemConstructed(VarItem */*item*/) {}
 
 protected slots:
     virtual void slotDbgStdout(KProcess *proc, char *buf, int buflen)       = 0;

@@ -385,7 +385,8 @@ void GDBController::actOnProgramPause(const QString &msg)
 
         // These two need to be actioned immediately. The order _is_ important
         if (stateIsOn(s_viewThreads))
-            queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD), true);
+            queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD), true);
+
         queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
         if (stateIsOn(s_viewLocals))
         {
@@ -826,6 +827,26 @@ void GDBController::parseRequestedData(char *buf)
     }
 }
 
+
+// **************************************************************************
+
+// jw
+void GDBController::parseWhatis(char *buf)
+{
+    if (GDBItemCommand *gdbItemCommand = dynamic_cast<GDBItemCommand*> (currentCmd_))
+    {
+        // Fish out the item from the command and let it deal with the data
+        VarItem *item = gdbItemCommand->getItem();
+        varTree_->viewport()->setUpdatesEnabled(false);
+
+        item->updateType(buf);
+//        item->trim();
+
+        varTree_->viewport()->setUpdatesEnabled(true);
+        //    varTree_->repaint();
+    }
+}
+
 // **************************************************************************
 
 // If the user gives us a bad program, catch that here.
@@ -969,13 +990,16 @@ char *GDBController::parseCmdBlock(char *buf)
         case DATAREQUEST:
             parseRequestedData        (buf);
             break;
+        case WHATIS:
+            parseWhatis               (buf);
+            break;
         case BPLIST:
             emit rawGDBBreakpointList (buf);
             break;
         case BACKTRACE:
             parseBacktraceList        (buf);
             break;
-        case THREAD:
+        case INFOTHREAD:
             parseThreadList           (buf);
             break;
         case DISASSEMBLE:
@@ -1128,7 +1152,8 @@ void GDBController::modifyBreakpoint( const Breakpoint& BP )
         // Note: this is NOT an info command, because gdb doesn't explictly tell
         // us that the breakpoint has been deleted, so if we don't have it the
         // BP list doesn't get updated.
-        queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+        queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD,
+                                BPLIST));
     }
 }
 
@@ -1336,10 +1361,14 @@ void GDBController::slotStop()
 void GDBController::slotCoreFile(const QString &coreFile)
 {
     setStateOff(s_silent);
-    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD, NOTINFOCMD, 0));
+    queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD,
+                                NOTINFOCMD, 0));
     if (stateIsOn(s_viewThreads))
-        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
+        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD,
+                                INFOTHREAD),true);
+
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+
     if (stateIsOn(s_viewLocals))
     {
         queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
@@ -1353,10 +1382,14 @@ void GDBController::slotAttachTo(int pid)
 {
     setStateOff(s_appNotStarted|s_programExited|s_silent);
     setStateOn(s_attached);
-    queueCmd(new GDBCommand(QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
+    queueCmd(new GDBCommand(
+        QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
     if (stateIsOn(s_viewThreads))
-        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
+        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD),
+                                        true);
+
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+
     if (stateIsOn(s_viewLocals))
     {
         queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
@@ -1371,7 +1404,9 @@ void GDBController::slotRun()
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", RUNCMD, NOTINFOCMD, 0));
+    queueCmd(new GDBCommand(
+                            stateIsOn(s_appNotStarted) ?"run" : "continue",
+                            RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1382,9 +1417,11 @@ void GDBController::slotRunUntil(const QString &fileName, int lineNum)
         return;
 
     if (fileName.isEmpty())
-        queueCmd(new GDBCommand(QCString().sprintf("until %d", lineNum), RUNCMD, NOTINFOCMD, 0));
+        queueCmd(new GDBCommand( QCString().sprintf("until %d", lineNum),
+                                RUNCMD, NOTINFOCMD, 0));
     else
-        queueCmd(new GDBCommand(QCString().sprintf("until %s:%d", fileName.latin1(), lineNum),
+        queueCmd(new GDBCommand(
+                QCString().sprintf("until %s:%d", fileName.latin1(), lineNum),
                                 RUNCMD, NOTINFOCMD, 0));
 }
 
@@ -1452,7 +1489,8 @@ void GDBController::slotBreakInto()
 void GDBController::slotBPState( const Breakpoint& BP )
 {
     // Are we in a position to do anything to this breakpoint?
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !BP.isPending() || BP.isActionDie())
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !BP.isPending() ||
+            BP.isActionDie())
         return;
 
     // We need this flag so that we can continue execution. I did use
@@ -1542,7 +1580,8 @@ void GDBController::slotMemoryDump(const QString &address, const QString &amount
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    QCString cmd = QCString().sprintf("x/%sb %s", amount.latin1(), address.latin1());
+    QCString cmd = QCString().sprintf("x/%sb %s", amount.latin1(),
+                                                  address.latin1());
     queueCmd(new GDBCommand(cmd, NOTRUNCMD, INFOCMD, MEMDUMP));
 }
 
@@ -1582,27 +1621,35 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
     //  if (frameNo != currentFrame_)
     if (threadNo != -1)
     {
-        // We don't switch threads if we on this thread. The -1 check is because the first time
-        // after a stop we're actually on this thread but the thread no had been reset to -1.
+        // We don't switch threads if we on this thread. The -1 check is
+        // because the first time after a stop we're actually on this thread
+        // but the thread number had been reset to -1.
         if (viewedThread_ != -1)
         {
             if (viewedThread_ != threadNo)
-                queueCmd(new GDBCommand(QCString().sprintf("thread %d", threadNo), NOTRUNCMD, INFOCMD, FRAME));
+                queueCmd(new GDBCommand(QCString().sprintf("thread %d", threadNo),
+                                NOTRUNCMD, INFOCMD, SWITCHTHREAD));
 
             if (needFrames)
-                queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+                queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD,
+                                        BACKTRACE));
 
-            if (needFrames || (viewedThread_ != threadNo) || (currentFrame_ != frameNo))
-                queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+            if (needFrames ||
+                (viewedThread_ != threadNo) ||
+                (currentFrame_ != frameNo))
+                queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo),
+                                NOTRUNCMD, INFOCMD, FRAME));
         }
     }
     else
     {
         if (currentFrame_ != frameNo)
-            queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+            queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo),
+                                        NOTRUNCMD, INFOCMD, FRAME));
     }
 
-    // Hold on to  this thread/frame so that we know where to put the local variables if generated.
+    // Hold on to  this thread/frame so that we know where to put the local
+    // variables if generated.
     viewedThread_ = threadNo;
     currentFrame_ = frameNo;
 
@@ -1624,7 +1671,6 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
         if (frame->needLocals())
         {
             // Add the frame params to the variable list
-//          frame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
             // and ask for the locals
             queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
             queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -1634,23 +1680,70 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
 
 // **************************************************************************
 
-// This is called when the user desires to see the details of an item, by
-// clicking open an varItem on the varTree.
-void GDBController::slotExpandItem(VarItem *item)
+void GDBController::slotVarItemConstructed(VarItem *item)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    switch (item->getDataType())
-    {
-    case typePointer:
-        queueCmd(new GDBPointerCommand(item));
-        break;
+    // jw - name and value come from "info local", for the type we
+    // send a "whatis <varName>" here.
+    queueCmd(new GDBItemCommand(item, QCString("whatis ") + item->fullName().latin1(),
+                                false, WHATIS));
+}
 
-    default:
-        queueCmd(new GDBItemCommand(item, QCString("print ") + item->fullName().latin1()));
-        break;
+// **************************************************************************
+
+// This is called when the user desires to see the details of an item, by
+// clicking open an varItem on the varTree.
+void GDBController::slotExpandItem(TrimmableItem *genericItem)
+{
+    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    VarItem *varItem;
+    if ((varItem = dynamic_cast<VarItem*>(genericItem)))
+    {
+        switch (varItem->getDataType())
+        {
+        case typePointer:
+            queueCmd(new GDBPointerCommand(varItem));
+            break;
+        
+        default:
+            queueCmd(new GDBItemCommand(varItem, QCString("print ") + varItem->fullName().latin1()));
+            break;
+        }
+        return;
     }
+
+/*
+    VarFrameRoot *frameRoot;
+    if ((frameRoot = dynamic_cast<VarFrameRoot*>(genericItem)))
+    {
+        kdDebug(9012) << " ### GDBController::slotExpandItem: varframeroot expanded." << endl;
+        if (frameRoot->requestedValueTypes())
+        {
+            kdDebug(9012) << " ### GDBController::slotExpandItem: requestedValueTypes == true" << endl;
+            // this was already done.
+            return;
+        }
+        // iterate over children (i.e. the variables)
+        QListViewItem *item = frameRoot->firstChild();
+
+        kdDebug(9012) << " ### GDBController::slotExpandItem: firstChild = " << (void*)item;
+
+        while (item)
+        {
+            varItem = dynamic_cast<VarItem*>(item);
+            if (varItem)
+            {
+                // for each variable, send a "whatis" command to gdb
+                queueCmd(new GDBItemCommand(varItem, QCString("whatis ") + varItem->fullName().latin1()));
+            }
+            item = item->nextSibling();
+        }
+    }    
+*/
 }
 
 // **************************************************************************
@@ -1669,7 +1762,8 @@ void GDBController::slotExpandUserItem(VarItem *item, const QCString &userReques
     if (userRequest.isEmpty())
         return;
 
-    queueCmd(new GDBItemCommand(item, QCString("print ")+userRequest.data(), false, DATAREQUEST));
+    queueCmd(new GDBItemCommand(item, QCString("print ")+userRequest.data(),
+                                        false, DATAREQUEST));
 }
 
 // **************************************************************************
@@ -1699,10 +1793,10 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
     if (gdbOutputLen_+buflen+1 > gdbSizeofBuf_)
     {
         gdbSizeofBuf_ = gdbOutputLen_+buflen+1;
-        char *newBuf = new char[gdbSizeofBuf_];     // ??? shoudn't this be malloc ???
+        char *newBuf = new char[gdbSizeofBuf_];
         if (gdbOutputLen_)
             memcpy(newBuf, gdbOutput_, gdbOutputLen_+1);
-        delete[] gdbOutput_;                        // ??? and free ???
+        delete[] gdbOutput_;
         gdbOutput_ = newBuf;
     }
 
