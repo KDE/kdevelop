@@ -145,7 +145,7 @@ QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
 }
 
 void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
-	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion") );
+	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion"), i18n("Subversion"), BarIcon( "misc", KIcon::SizeMedium) );
 	subversionOptionsWidgetImpl *w = new subversionOptionsWidgetImpl( (QWidget *)vbox, this, "svn config widget" );
 	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
