@@ -345,6 +345,10 @@ void CUpdateKDEDocDlg::OK(){
   
   conf->setGroup("Doc_Location");
   QString qtPath=conf->readEntry("doc_qt", QT_DOCDIR);
+  if(qtPath.right(1) != "/"){
+    qtPath += "/";
+  }
+
   bool qt_test=false;
   QString qt_testfile=qtPath+"classes.html";
   if(QFileInfo(qt_testfile).exists()){
