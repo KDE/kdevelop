@@ -46,7 +46,7 @@ void CKDevelop::slotClassTreeSelected()
     idxT = class_tree->indexType();
 
     // If this is an function of some sort, go to the declaration.
-    if( idxT == CVGLOBAL_FUNCTION || 
+    if( idxT == THGLOBAL_FUNCTION || 
         idxT == METHOD )
       CVGotoDeclaration( class_tree->currentItem() );
     else // Goto the definition.
@@ -139,6 +139,142 @@ void CKDevelop::slotCVViewDefinition()
   CVGotoDefinition( class_tree->currentItem() );
 }
 
+/*-------------------------------------- CKDevelop::slotCVAddMethod()
+ * slotCVAddMethod()
+ *   Event when the user adds a method to a class.
+ *
+ * Parameters:
+ *   aMethod         The method to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotCVAddMethod( CParsedMethod *aMethod )
+{
+  CParsedClass *aClass;
+  QListViewItem *item;
+  CParsedMethod *meth = NULL;
+  QString toAdd;
+  int atLine = -1;
+
+  // Fetch the current item from the tree.
+  item = class_tree->currentItem();
+
+  // Fetch the current class.
+  aClass = class_tree->store->getClassByName( item->text(0) );
+
+  // Search for a method with the same export as the one being added.
+  for( aClass->methodIterator.toFirst();
+       aClass->methodIterator.current() && meth == NULL;
+       ++aClass->methodIterator )
+  {
+    if( aClass->methodIterator.current()->export == aMethod->export )
+      meth = aClass->methodIterator.current();
+  }
+
+  // Switch to the .h file.
+  CVGotoDefinition( item );  
+
+  aMethod->asHeaderCode( toAdd );
+
+  if( meth )
+    atLine = meth->definedOnLine + 1;
+  else
+  {
+    switch( aMethod->export )
+    {
+      case PUBLIC:
+        toAdd = "public: // Public methods\n" + toAdd;
+        break;
+      case PROTECTED:
+        toAdd = "protected: // Protected methods\n" + toAdd;
+        break;
+      case PRIVATE:
+        toAdd = "private: // Private methods\n" + toAdd;
+        break;
+    }
+
+    atLine = aClass->definedOnLine + 2;
+  }
+
+  // Add the declaration.
+  edit_widget->insertAtLine( toAdd, atLine );
+  edit_widget->setCursorPosition( atLine, 0 );
+  edit_widget->toggleModified( true );
+
+  // Switch to the .cpp file.
+  switchToFile( aClass->implFilename );
+
+  aMethod->asCppCode( toAdd );
+  edit_widget->append( toAdd );
+  edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
+  edit_widget->toggleModified( true );
+}
+
+/*------------------------------------- CKDevelop::slotCVAddAttribute()
+ * slotCVAddAttribute()
+ *   Event when the user adds an attribute to a class.
+ *
+ * Parameters:
+ *   aAttr           The attribute to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
+{
+  QListViewItem *item;
+  CParsedClass *aClass;
+  CParsedAttribute *attr = NULL;
+  QString toAdd;
+  int atLine = -1;
+  
+  // Fetch the current item.
+  item = class_tree->currentItem();
+
+  // Switch to the correct file.
+  CVGotoDefinition( item );  
+
+  // Fetch the current class.
+  aClass = class_tree->store->getClassByName( item->text(0) );
+  
+  for( aClass->attributeIterator.toFirst();
+       aClass->attributeIterator.current() && attr == NULL;
+       ++aClass->attributeIterator )
+  {
+    if( aClass->attributeIterator.current()->export == aAttr->export )
+      attr = aClass->attributeIterator.current();
+  }
+
+  // If we find an attribute with the same export we don't need to output
+  // the label as well.
+  aAttr->asHeaderCode( toAdd );
+  if( attr )
+    atLine = attr->definedOnLine + 1;
+  else
+  {
+    switch( aAttr->export )
+    {
+      case PUBLIC:
+        toAdd = "public: // Public attributes\n" + toAdd;
+        break;
+      case PROTECTED:
+        toAdd = "protected: // Protected attributes\n" + toAdd;
+        break;
+      case PRIVATE:
+        toAdd = "private: // Private attributes\n" + toAdd;
+        break;
+    }
+
+    atLine = aClass->definedOnLine + 2;
+  }
+
+  edit_widget->insertAtLine( toAdd, atLine );
+  edit_widget->setCursorPosition( atLine, 0 );
+  edit_widget->toggleModified( true );
+}
+
+
 /*********************************************************************
  *                                                                   *
  *                          PUBLIC METHODS                           *
@@ -168,7 +304,7 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
   idxType = class_tree->indexType();
   switch( idxType )
   {
-    case CVCLASS:
+    case THCLASS:
       aClass = class_tree->store->getClassByName( item->text(0) );
       toFile = aClass->hFilename;
       toLine = aClass->definedOnLine;
@@ -186,9 +322,9 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
       toFile = aAttr->definedInFile;
       toLine = aAttr->definedOnLine;
       break;
-    case CVGLOBAL_FUNCTION:
-    case CVGLOBAL_VARIABLE:
-      aAttr = ( idxType == CVGLOBAL_FUNCTION ?
+    case THGLOBAL_FUNCTION:
+    case THGLOBAL_VARIABLE:
+      aAttr = ( idxType == THGLOBAL_FUNCTION ?
                 class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) ) :
                 class_tree->store->getGlobalVarByName( item->text(0) ) );
       toFile = aAttr->definedInFile;
@@ -229,7 +365,7 @@ void CKDevelop::CVGotoDeclaration(QListViewItem *item)
       if( aClass )
         aMethod = aClass->getMethodByNameAndArg( item->text(0) );
       break;
-    case CVGLOBAL_FUNCTION:
+    case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
       break;
   }
