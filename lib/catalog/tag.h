@@ -57,7 +57,7 @@ public:
     ~Tag();
 
     Tag& operator = ( const Tag& source );
-
+    
     QCString id() const
     {
         return data->id;
@@ -120,7 +120,7 @@ public:
 	detach();
         data->name = name;
     }
-
+    
     QStringList scope() const
     {
         return data->scope;
@@ -192,6 +192,8 @@ public:
 	    return data->endLine;
 	else if( name == "endColumn" )
 	    return data->endColumn;
+	else if( name == "prefix" )
+	    return data->name.left( 2 );
         return data->attributes[ name ];
     }
 
