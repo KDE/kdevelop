@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Source code formatter
+Name=KDevAStyle
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevastyle

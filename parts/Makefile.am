@@ -3,4 +3,5 @@
 # from KPart. 
 
 SUBDIRS = autoproject cppsupport javasupport doctreeview classview appwizard \
-	  outputviews grepview debugger konsole tipofday partselector $(PYTHON_SUBDIR)
+	  outputviews grepview debugger konsole tipofday partselector astyle \
+	  $(PYTHON_SUBDIR)

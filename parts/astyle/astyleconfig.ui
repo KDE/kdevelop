@@ -1,0 +1,950 @@
+<!DOCTYPE UI><UI>
+<class>AStyleConfig</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>AStyleConfig</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>568</width>
+            <height>363</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Artistic Style Configuration</string>
+    </property>
+    <property>
+        <name>layoutMargin</name>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>0</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="0"  column="0" >
+            <class>QTabWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>ConfigTabs</cstring>
+            </property>
+            <widget>
+                <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>tab</cstring>
+                </property>
+                <attribute>
+                    <name>title</name>
+                    <string>&amp;General</string>
+                </attribute>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <spacer row="1"  column="0" >
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Vertical</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget row="0"  column="0" >
+                        <class>QButtonGroup</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>StyleGroup</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Style</string>
+                        </property>
+                        <grid>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget row="1"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_ANSI</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;ANSI</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_Linux</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;Linux</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>3</number>
+                                </property>
+                            </widget>
+                            <widget row="4"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_GNU</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;GNU</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>4</number>
+                                </property>
+                            </widget>
+                            <widget row="5"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_JAVA</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;JAVA</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>5</number>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_UserDefined</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;User defined</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>0</number>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Style_KR</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Kernighan &amp;&amp; Ritchie</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>buttonGroupId</name>
+                                    <number>2</number>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="1"  column="1" >
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer1_2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Vertical</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget row="0"  column="1" >
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox4</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Example</string>
+                        </property>
+                        <grid>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget row="0"  column="0" >
+                                <class>QMultiLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>StyleExample</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>palette</name>
+                                    <palette>
+                                        <active>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>237</red>
+                                                <green>237</green>
+                                                <blue>237</blue>
+                                            </color>
+                                            <color>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
+                                            </color>
+                                            <color>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                        </active>
+                                        <disabled>
+                                            <color>
+                                                <red>128</red>
+                                                <green>128</green>
+                                                <blue>128</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>253</red>
+                                                <green>253</green>
+                                                <blue>253</blue>
+                                            </color>
+                                            <color>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
+                                            </color>
+                                            <color>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>128</red>
+                                                <green>128</green>
+                                                <blue>128</blue>
+                                            </color>
+                                            <color>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                        </disabled>
+                                        <inactive>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>253</red>
+                                                <green>253</green>
+                                                <blue>253</blue>
+                                            </color>
+                                            <color>
+                                                <red>110</red>
+                                                <green>110</green>
+                                                <blue>110</blue>
+                                            </color>
+                                            <color>
+                                                <red>146</red>
+                                                <green>146</green>
+                                                <blue>146</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>217</red>
+                                                <green>220</green>
+                                                <blue>194</blue>
+                                            </color>
+                                            <color>
+                                                <red>220</red>
+                                                <green>220</green>
+                                                <blue>220</blue>
+                                            </color>
+                                            <color>
+                                                <red>0</red>
+                                                <green>0</green>
+                                                <blue>0</blue>
+                                            </color>
+                                            <color>
+                                                <red>84</red>
+                                                <green>112</green>
+                                                <blue>152</blue>
+                                            </color>
+                                            <color>
+                                                <red>255</red>
+                                                <green>255</green>
+                                                <blue>255</blue>
+                                            </color>
+                                        </inactive>
+                                    </palette>
+                                </property>
+                                <property stdset="1">
+                                    <name>font</name>
+                                    <font>
+                                        <family>misc-fixed</family>
+                                        <pointsize>10</pointsize>
+                                    </font>
+                                </property>
+                                <property stdset="1">
+                                    <name>frameShape</name>
+                                    <enum>Box</enum>
+                                </property>
+                                <property stdset="1">
+                                    <name>frameShadow</name>
+                                    <enum>Plain</enum>
+                                </property>
+                                <property stdset="1">
+                                    <name>lineWidth</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>undoDepth</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>readOnly</name>
+                                    <bool>true</bool>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string></string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget>
+                <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>tab</cstring>
+                </property>
+                <attribute>
+                    <name>title</name>
+                    <string>&amp;Indention</string>
+                </attribute>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="1"  column="0"  rowspan="1"  colspan="2" >
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Indented &amp;entities</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Switches</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent &amp;Switches</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Cases</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent &amp;Cases</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Classes</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent C&amp;lasses</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Brackets</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent &amp;Brackets</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Namespaces</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent &amp;Namespaces</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Indent_Labels</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Indent &amp;Labels</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget row="0"  column="0" >
+                        <class>QButtonGroup</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ButtonGroup2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Filling</string>
+                        </property>
+                        <grid>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget row="1"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Fill_Spaces</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Use &amp;Spaces:</string>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="1" >
+                                <class>QSpinBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Fill_SpaceCount</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>enabled</name>
+                                    <bool>false</bool>
+                                </property>
+                                <property stdset="1">
+                                    <name>minValue</name>
+                                    <number>1</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>value</name>
+                                    <number>2</number>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Fill_Tabs</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Use &amp;Tabs</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Continuation</string>
+                        </property>
+                        <grid>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget row="0"  column="1" >
+                                <class>QSpinBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Continue_MaxStatement</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>value</name>
+                                    <number>40</number>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Maximum in statement:</string>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Minimum in Conditional:</string>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="1" >
+                                <class>QSpinBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Continue_MinConditional</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>specialValueText</name>
+                                    <string>Twice current</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>minValue</name>
+                                    <number>-1</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>value</name>
+                                    <number>-1</number>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget>
+                <class>QWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>tab</cstring>
+                </property>
+                <attribute>
+                    <name>title</name>
+                    <string>&amp;Other</string>
+                </attribute>
+                <vbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QButtonGroup</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ButtonGroup9</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Brackets</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Brackets_Break</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;Break</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Brackets_Attach</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;Attach</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Brackets_Linux</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>&amp;Linux style</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget>
+                        <class>QButtonGroup</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ButtonGroup10</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;Padding</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Pad_Parentheses</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Add spaces around &amp;Parentheses</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Pad_Operators</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Add spaces around &amp;Operators</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget>
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox7</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>&amp;One liners</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Keep_Statements</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Keep one-line &amp;statements</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QCheckBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Keep_Blocks</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Keep one-line &amp;blocks</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <spacer>
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Vertical</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>Fill_Spaces</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>Fill_SpaceCount</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+</UI>
