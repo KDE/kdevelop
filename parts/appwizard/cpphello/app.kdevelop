@@ -15,7 +15,7 @@
    <activetarget>src/$APPNAMELC$</activetarget>
   </general>
   <run>
-   <mainprogram>src/$APPNAMELC</mainprogram>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
    <terminal>true</terminal>
   </run>
  </kdevautoproject>
