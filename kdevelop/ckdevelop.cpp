@@ -18,6 +18,7 @@
 
 #include "ckdevelop.h"
 #include "api.h"
+#include "core.h"
 
 #include "cclassview.h"
 #include "setup/ccreatedocdatabasedlg.h"
@@ -2405,6 +2406,7 @@ void CKDevelop::slotOptionsKDevelop(){
 
     int curMdiMode = mdiMode();    // ask QextMDI what the current mode is
   CKDevSetupDlg* setup= new CKDevSetupDlg( accel, this, "Setup", curMdiMode);
+  Core::getInstance()->doEmitConfigWidget( setup );
   // setup->show();
   if (setup->exec())
   {

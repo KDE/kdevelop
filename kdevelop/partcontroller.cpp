@@ -64,7 +64,6 @@ bool PartListEntry::isEqual(const KURL &url)
 
 PartController *PartController::s_instance = 0;
 
-
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent)
 {
@@ -81,8 +80,9 @@ PartController::~PartController()
 
 void PartController::createInstance(QWidget *parent)
 {
-  if (!s_instance)
-    s_instance = new PartController(parent);
+    if (!s_instance){
+        s_instance = new PartController(parent);
+    }
 }
 
 

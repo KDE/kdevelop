@@ -475,6 +475,8 @@ Kate::Document* DocViewMan::createKWriteDoc(const QString& strFileName)
 
   pDoc->setDocName(strFileName);
 
+  PartController::getInstance()->addPart( pDoc );
+
   // Return the new document
   return pDoc;
 }

@@ -35,6 +35,7 @@ class PartController : public KDevPartController
 public:
 
   PartController(QWidget *toplevel);
+  ~PartController();
 
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, int lineNum=-1);
@@ -55,8 +56,6 @@ public slots:
 protected:
 
   PartController(QWidget *parent, QWidget *mainwindow, const char *name=0);
-  ~PartController();
-
 
 private slots:
 

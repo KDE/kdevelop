@@ -188,6 +188,8 @@ int main(int argc, char* argv[])
   config->setGroup("General Options");
   kdevelop->slotTCurrentTab(config->readNumEntry("LastActiveTree",DOC));
 
+  Core::getInstance()->doEmitCoreInitialized();
+
   if (args->count()) {
     kdevelop->slotOpenProject( KURL( args->arg(0) ) );
   }
@@ -195,8 +197,6 @@ int main(int argc, char* argv[])
   kdevelop->bStartupIsPending = false;  // see queryClose()
 
   args->clear();
-
-  Core::getInstance()->doEmitCoreInitialized();
 
   int rc = a.exec();
   return rc;
