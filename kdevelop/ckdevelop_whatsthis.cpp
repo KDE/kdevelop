@@ -40,7 +40,7 @@ void CKDevelop::initWhatsThis() {
 				"setting up a configuration for a release (final) version "
 				"and one for a debug version of a program, or different "
 				"configurations for cross-compiling a project.\n\n"
-				"The configuration (Default) can only be used stand-alone "
+				"The configuration (Default) can only be used standalone, "
 				"as the default build process means the build directory "
 				"is the same as the source directory. Other configurations "
 				"need a separate build directory.\n\n"

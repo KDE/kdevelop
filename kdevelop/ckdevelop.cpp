@@ -2003,13 +2003,13 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   if (makefile.isNull()) {
     QMessageBox::warning( this,
       i18n("Makefile not found"),
-      i18n("You want to build your project by running 'make'"
+      i18n("You want to build your project by running 'make', "
            "but there is no Makefile in this directory.\n\n"
            "Hints:\n"
-           "1. Possibly you forgot to create the Makefiles.\n"
-           "   In that case create them by running Build->Configure\n\n"
-           "2. Or this directory does not belong to your project.\n"
-            "   Check the settings in Project->Options->MakeOptions!") );
+           "1. You may have forgotten to create the Makefiles.\n"
+           "   In that case, create them by running Build->Configure\n\n"
+           "2. Alternatively, this directory does not belong to your project.\n"
+           "   Check the settings in Project->Options->MakeOptions.") );
     return false;
   }
 

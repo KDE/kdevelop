@@ -70,9 +70,9 @@ DocViewMan::DocViewMan( CKDevelop* parent )
   m_pKateFactory = static_cast<KParts::Factory*>
                    (KLibLoader::self()->factory("libkatepart"));
   if (!m_pKateFactory) {
-    KMessageBox::sorry(0L, i18n("This version of KDevelop uses kate as its internal editor, "
-                                "but kate could not be found on your system! Please check "
-                                "that kdebase and/or kate are installed correctly." ) );
+    KMessageBox::sorry(0L, i18n("This version of KDevelop uses Kate as its internal editor, "
+                                "but Kate could not be found on your system! Please check "
+                                "that kdebase and/or Kate are installed correctly." ) );
     ::exit(0);
   }
 

@@ -572,7 +572,7 @@ void CKDevelop::slotProjectOpenRecent( const KURL& url )
     if( KMessageBox::Yes == KMessageBox::questionYesNo(
           this, i18n( "This project no longer exists. "
                       "Do you want to remove it from the list?"),
-          i18n("File not Found: %1").arg( url.url() ) ) )
+          i18n("File Not Found: %1").arg( url.url() ) ) )
       pRecentProjects->removeURL(url);
     return;
   }
