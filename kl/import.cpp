@@ -34,7 +34,7 @@ QDir ddir;
 int pos;
 QString subdirs,appsdir,sources,includes,metasources,name,extradist,noinstheaders,ldadd,toplevel;
 QTextStream ts;
-QString str,temp;
+QString str;
 
 int analyze(QString dirstr);
 QString getString(QString str);
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
  if(argc<2)
   {
    cout << "Experimental convert of KDevelop projects" << endl;
-   cout << "Usage: import projectdir [kdevprjfile]" << endl;
+   cout << "Usage: import projectdir kdevprjfile" << endl;
    exit(1);
   }
 
@@ -97,7 +97,7 @@ int analyze(QString dirstr)
 {
  QDir dir(dirstr);
  QString makefilestr;
- 
+ QString temp;
  // Construct the Makefile.am string
  
  makefilestr = dirstr;
@@ -183,17 +183,17 @@ int analyze(QString dirstr)
   cout << "Appsdir: " << appsdir << endl;
  
  // Recursive calls to subdirs
- QStrList list = splitString(subdirs);
+/* QStrList list = splitString(subdirs);
  QString s = list.first();
- do
+ while(s)
   {
    dirstr+=toplevel;
    dir.cd(dirstr);
    analyze(s);
    s = list.next();
-  }
- while(s!=0);
-  
+  };
+*/
+
  // Close open Makefile.am
 
  makefile.close();
@@ -202,41 +202,42 @@ int analyze(QString dirstr)
 
 QString getString(QString str)
 {
-   pos = str.find("= ");
-   str.remove(0,pos+1);
+ QString temp;
+ pos = str.find("= ");
+ str.remove(0,pos+1);
 
-   // Now strip first and last whitespace
+ // Now strip first and last whitespace
  
-   str = str.stripWhiteSpace();
-   str = str.simplifyWhiteSpace();
-   pos = str.find("\\");
-   if(pos==-1);
-   else
-    do
-     {
+ str = str.stripWhiteSpace();
+ str = str.simplifyWhiteSpace();
+ pos = str.find("\\");
+ if(pos==-1);
+ else
+  do
+   {
    
-      // Read next line in temporary string
+    // Read next line in temporary string
+    
+    QString temp = ts.readLine();
+    
+    // Strip white spaces in temp string
       
-      QString temp = ts.readLine();
+    temp.stripWhiteSpace();
       
-      // Strip white spaces in temp string
+    // Append temp to str
       
-      temp.stripWhiteSpace();
+    str.append(temp);
       
-      // Append temp to str
+    // Replace \ thru white space
       
-      str.append(temp);
-      
-      // Replace \ thru white space
-      
-      str.replace(QRegExp("\\"),"");
-      str = str.stripWhiteSpace();
-     }
-    while(temp.find("\\")!=-1);
-   str = str.stripWhiteSpace();
-   str = str.simplifyWhiteSpace();
+    str.replace(QRegExp("\\"),"");
+    str = str.stripWhiteSpace();
+   }
+  while(temp.find("\\")!=-1);
+ str = str.stripWhiteSpace();
+ str = str.simplifyWhiteSpace();
 
-   // Finally, store in return string
+ // Finally, store in return string
   
  return(str);
 }
@@ -244,7 +245,7 @@ QString getString(QString str)
 QStrList splitString(QString str)
 {
  QStrList list;
- temp = "";
+ QString temp = "";
  if(str.find(" ")==-1)
   return(0);
  str+=' ';
