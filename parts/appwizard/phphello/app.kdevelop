@@ -13,6 +13,7 @@
    <part>KDevFileView</part>
    <part>KDevDoxygen</part>
    <part>KDevdistpart</part>
+   <part>KDevVisualBoyAdvance</part>
   </ignoreparts>
  </general>
  <kdevscriptproject>
@@ -28,6 +29,10 @@
    <toc>gnustep</toc>
    <toc>python</toc>
    <toc>perl</toc>
+   <toc>gnome1</toc>
+   <toc>ruby</toc>
+   <toc>stl</toc>
+   <toc>sw</toc>
   </ignoretocs>
  </kdevdoctreeview>
 <kdevphpsupport>
@@ -42,4 +47,10 @@
       <type ext="php"/>
     </useglobaltypes>
   </kdevfilecreate>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.php;*.phps;*.php3" name="PHP files" />
+      <group pattern="*.inc" name="Include files" />
+    </groups>
+  </kdevfileview>
 </kdevelop>
