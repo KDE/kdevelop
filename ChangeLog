@@ -1,3 +1,6 @@
+2000-01-09 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* the applicationwizard check, if the .kde/share/apps directory exists
+
 2000-01-09 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commited patch by Holger Schurig <holger@holger.om.org>, this adds syntax-highlighting for Pascal
 
