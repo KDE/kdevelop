@@ -13,12 +13,14 @@ namespace KEditor {
     QString text;
     QString prefix;
     QString postfix;
+    QString comment;
     
     bool operator==( const CompletionEntry &c ) const {
       return ( c.type == type &&
 	       c.text == text &&
 	       c.postfix == postfix &&
-	       c.prefix == prefix);
+	       c.prefix == prefix &&
+	       c.comment == comment);
     }
   };
 
@@ -32,11 +34,11 @@ namespace KEditor {
       CodeCompletionDocumentIface(Document *parent, Editor *editor);
       static CodeCompletionDocumentIface *interface(Document *doc);
 
-      virtual void showCompletionBox(QValueList<CompletionEntry>* complList)=0;
+      virtual void showCompletionBox(QValueList<CompletionEntry> complList,int offset=0)=0;
 
     signals:
-      void completionAborted(KEditor::Document *doc);
-      void completionDone(KEditor::Document *doc);
+      void completionAborted();
+      void completionDone();
       
       
     };
