@@ -97,7 +97,10 @@ void CKDevelop::initView(){
   // Main view panner
   ////////////////////////
 #warning view was a KNewPanner
-  view = new QSplitter(this, "view");
+  view = new QSplitter(Vertical,this, "view");
+
+#warning top_panner was a KNewPanner
+  top_panner = new QSplitter(Horizontal, view, "top_panner");
 
   ////////////////////////
   // Outputwindow
@@ -125,8 +128,6 @@ void CKDevelop::initView(){
   ////////////////////////
 
   //  s_tab_current = 0;
-#warning top_panner was a KNewPanner
-  top_panner = new QSplitter(Vertical, view, "top_panner");
   t_tab_view = new CTabCtl(top_panner);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
