@@ -2,15 +2,7 @@ INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 
-libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
-			       kdevlanguagesupport.cpp kdevversioncontrol.cpp \
-			       kdevmakefrontend.cpp kdevappfrontend.cpp kdevcompileroptions.cpp \
-			       kdevpartcontroller.cpp kdevapi.cpp kdevdifffrontend.cpp \
-			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
-			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
-			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
-			       KDevPartControllerIface.skel KDevPartControllerIface.cpp \
-			       kdevplugin.cpp kdevdebugger.cpp
+libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp 			       kdevlanguagesupport.cpp kdevversioncontrol.cpp 			       kdevmakefrontend.cpp kdevappfrontend.cpp kdevcompileroptions.cpp 			       kdevpartcontroller.cpp kdevapi.cpp kdevdifffrontend.cpp 			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp 			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp 			       KDevPartControllerIface.skel KDevPartControllerIface.cpp 			       kdevplugin.cpp kdevdebugger.cpp kdevglobalversioncontrol.cpp kdevglobalversioncontrol.h
 
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
