@@ -121,18 +121,20 @@ protected slots:
   void slotViewDefinition();
   void slotViewDeclaration();
   /** Views the definition. */
-  void slotViewDefinition( const char *className, const char *declName, THType type );
+  void slotViewDefinition( const char *parentPath, const char *itemName, 
+                           THType parentType, THType itemType );
   
   /** Views the declaration. */
-  void slotViewDeclaration( const char *className, const char *declName, THType type );
+  void slotViewDeclaration( const char *parentPath, const char *itemName, 
+                           THType parentType, THType itemType );
   void slotClassWizard();
 
 signals:
   void selectedFileNew();
   void selectedClassNew();
   void selectedProjectOptions();
-  void selectedViewDeclaration(const char *, const char *,THType);
-  void selectedViewDefinition(const char *, const char *,THType);
+  void selectedViewDeclaration(const char *, const char *,THType,THType);
+  void selectedViewDefinition(const char *, const char *,THType,THType);
 
   /** Emitted when a user wants to add an attribute.
    * @param aClass Class to add an attribute to.

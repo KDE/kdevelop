@@ -483,12 +483,13 @@ void CClassView::tip( const QPoint &p, QRect &r, QString &str )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotViewDefinition( const char *className, 
-                                     const char *declName, 
-                                     THType type )
+void CClassView::slotViewDefinition( const char *parentPath, 
+                                     const char *itemName, 
+                                     THType parentType,
+                                     THType itemType )
 {
-  if( validClassDecl( className, declName, type ) )
-    emit selectedViewDefinition( className, declName, type );
+  //  if( validClassDecl( className, declName, type ) )
+  emit selectedViewDefinition( parentPath, itemName, parentType, itemType );
 }
 
 /*------------------------------------- CClassView::viewDefinition()
@@ -500,12 +501,13 @@ void CClassView::slotViewDefinition( const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotViewDeclaration( const char *className, 
-                                      const char *declName, 
-                                      THType type )
+void CClassView::slotViewDeclaration( const char *parentPath, 
+                                      const char *itemName, 
+                                      THType parentType,
+                                      THType itemType )
 {
-  if( validClassDecl( className, declName, type ) )
-    emit selectedViewDeclaration( className, declName, type );
+  //  if( validClassDecl( className, declName, type ) )
+  emit selectedViewDeclaration( parentPath, itemName, parentType, itemType );
 }
 
 /*********************************************************************
@@ -845,12 +847,12 @@ CClassToolDlg *CClassView::createCTDlg()
   CClassToolDlg *ctDlg = new CClassToolDlg( NULL );
 
   connect( ctDlg, 
-           SIGNAL( signalViewDeclaration(const char *, const char *, THType ) ),
-           SLOT(slotViewDeclaration(const char *, const char *, THType ) ) );
+           SIGNAL( signalViewDeclaration(const char *, const char *, THType, THType ) ),
+           SLOT(slotViewDeclaration(const char *, const char *, THType, THType ) ) );
                    
   connect( ctDlg, 
-           SIGNAL( signalViewDefinition(const char *, const char *, THType ) ),
-           SLOT(slotViewDefinition(const char *, const char *, THType ) ) );
+           SIGNAL( signalViewDefinition(const char *, const char *, THType, THType ) ),
+           SLOT(slotViewDefinition(const char *, const char *, THType, THType ) ) );
 
   ctDlg->setStore( store );
   ctDlg->setClass( getCurrentClass() );
@@ -950,7 +952,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR || type == THSIGNAL || type == THNAMESPACE )
+        type == THPRIVATE_ATTR || type == THSIGNAL || type == THSCOPE )
       slotViewDeclaration();
     else
       slotViewDefinition();
@@ -959,7 +961,7 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR  || type == THSIGNAL || type == THNAMESPACE )
+        type == THPRIVATE_ATTR  || type == THSIGNAL || type == THSCOPE )
       slotViewDefinition();
     else
       slotViewDeclaration();
@@ -976,14 +978,16 @@ void CClassView::slotMethodNew()
 
 void CClassView::slotMethodDelete()
 {
-  const char *className;
-  const char *otherName;
-  THType idxType;
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName, 
+                                                 parentType, itemType );
 
-  emit signalMethodDelete( className, otherName );
+  emit signalMethodDelete( parentPath, itemName );
 }
 
 void CClassView::slotAttributeNew()
@@ -1062,26 +1066,37 @@ void CClassView::slotClassTool()
 
 void CClassView::slotViewDefinition() 
 {
-  const char *className;
-  const char *otherName;
-  THType idxType;
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, 
+                                                 itemName,
+                                                 parentType,
+                                                 itemType );
 
-  slotViewDefinition( className, otherName, idxType );
+  slotViewDefinition( parentPath, itemName, parentType, itemType );
 }
 
 void CClassView::slotViewDeclaration()
 {
-  const char *className;
-  const char *otherName;
-  THType idxType;
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, 
+                                                 itemName,
+                                                 parentType,
+                                                 itemType );
 
-  slotViewDeclaration( className, otherName, idxType );
+  cout << "Viewdeclaration: " << parentPath.data() << ", " 
+       << itemName.data() << endl;
+
+  slotViewDeclaration( parentPath, itemName, parentType, itemType );
 }
 
 void CClassView::slotClassWizard()
