@@ -80,7 +80,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     statusBarIndicator->show();
 
     // Setup widgets and dbgcontroller
-    variableWidget = new VariableWidget();
+    variableWidget = new VariableWidget( 0, "variablewidget");
     variableWidget->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
@@ -99,7 +99,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 
-    gdbBreakpointWidget = new GDBBreakpointWidget();
+    gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add
         (gdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
@@ -111,7 +111,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbBreakpointWidget->setIcon( SmallIcon("stop") );
     mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
-    framestackWidget = new FramestackWidget();
+    framestackWidget = new FramestackWidget( 0, "framestackWidget" );
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
     QWhatsThis::add
@@ -127,7 +127,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("Debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
 
-    disassembleWidget = new DisassembleWidget();
+    disassembleWidget = new DisassembleWidget( 0, "disassembleWidget" );
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
     QWhatsThis::add
@@ -143,7 +143,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                   i18n("Debugger disassemble view"));
     mainWindow()->setViewAvailable(disassembleWidget, false);
 
-    gdbOutputWidget = new GDBOutputWidget;
+    gdbOutputWidget = new GDBOutputWidget( 0, "gdbOutputWidget" );
     gdbOutputWidget->setEnabled(false);
     gdbOutputWidget->setIcon( SmallIcon("inline_image") );
     gdbOutputWidget->setCaption(i18n("GDB Output"));
@@ -172,7 +172,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     // Now setup the actions
     KAction *action;
 
-    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
+//    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
+    action = new KAction(i18n("&Start"), "dbgrun", CTRL+SHIFT+Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
@@ -603,7 +604,7 @@ bool DebuggerPart::startDebugger()
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Continue") );
-    ac->action("debug_run")->setIcon( "dbgrun" );
+//    ac->action("debug_run")->setIcon( "dbgrun" );
     ac->action("debug_run")->setStatusText( i18n("Continues the application execution") );
     ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
                                            "Continues the execution of your application in the "
@@ -660,7 +661,7 @@ void DebuggerPart::slotStopDebugger()
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
-    ac->action("debug_run")->setIcon( "1rightarrow" );
+//    ac->action("debug_run")->setIcon( "1rightarrow" );
     ac->action("debug_run")->setStatusText( i18n("Runs the program in the debugger") );
     ac->action("debug_run")->setWhatsThis( i18n("Start in debugger\n\n"
                                            "Starts the debugger with the project's main "
@@ -858,7 +859,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         stateChanged( QString("stopped") );
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("Restart") );
-        ac->action("debug_run")->setIcon( "1rightarrow" );
+//        ac->action("debug_run")->setIcon( "1rightarrow" );
         ac->action("debug_run")->setStatusText( i18n("Restart the program in the debugger") );
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
