@@ -19,7 +19,7 @@ File=%{kdevelop}/template-common/gnu.kdevtemplate
 
 [FILE1]
 Type=install
-Source=%{src}/template-kpartapp/app.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [FILE2]
@@ -34,7 +34,7 @@ Dest=%{dest}/Makefile.cvs
 
 [FILE4]
 Type=install
-Source=%{src}/template-kapp/subdirs
+Source=%{src}/subdirs
 Dest=%{dest}/subdirs
 
 [FILE5]
