@@ -30,7 +30,6 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 
 const QValueList<MakeActionFilter::ActionFormat>& MakeActionFilter::actionFormats()
 {
-a
 	static QValueList<ActionFormat> formats
 		= QValueList<ActionFormat>()
 
