@@ -20,48 +20,49 @@
 </P>
 <H3><A NAME="s13">13. CVS Integration</A></H3>
 
-<P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
-groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
-located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
-added or removed to the CVS by the developers.
-<P>Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
-at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
-receive the changes.
+<P>Kdevelop unterstützt auch die Verwaltung Ihrer Projekte mit Hilfe von CVS Archiven. CVS (Concurrent Version System) hat zum Ziel, 
+Gruppen von Entwicklern das voneinander unabhängige Arbeiten am gleichen Quellcode zu ermöglichen und die Änderungen im 
+Repositorium zu verschmelzen. Normalerweise befindet sich das Repositorium auf einem Server. Das anfängliche Archiv enthält 
+einen Grundstock an Dateien; die Verzeichnisse und Dateien werden dann von den Entwicklern dem CVS hinzugefügt oder aus ihm 
+entfernt.
+<P>Der Entwickler arbeitet lokal mit seiner Kopie des CVS Baumes. Er nimmt die Änderungen an seinen Dateien vor und testet, ob sein 
+Projekt weiterhin arbeitet, wenigstens insoweit, daß unvollständige Quellen nicht die Arbeit der anderen Entwickler, die seine 
+Änderungen erhalten, behindern oder unmöglich machen.
 <P>
-<H3><A NAME="ss13.1">13.1 Enabling CVS Support</A>
+<H3><A NAME="ss13.1">13.1 Einschalten der CVS Unterstützung</A>
 </H3>
 
-<P>As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
-KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
-the option for Version Control to "CVS".
+<P>Da CVS Unterstützung im allgemeinen nur von professionellen Entwicklern oder Firmen, sowie von KDE Entwicklern, die Ihre Projekte 
+über den KDE CVS Server verwalten benötigt wird, ist die Verwendung der CVS Kommandos in KDevelop optional. Die CVS 
+Unterstützung kann eingeschaltet werden, indem Sie im Projekt Optionen Dialog die Einstellung für Versionskontrolle auf "CVS" ändern.
 <P>
-<H3><A NAME="ss13.2">13.2 Using CVS Commands</A>
+<H3><A NAME="ss13.2">13.2 Verwendung von CVS Kommandos</A>
 </H3>
 
-<P>Then the following commands are available in the LFV and RFV by context menus:
-<P>Over a file not included in the repository:
+<P>Damit stehen Ihnen die folgenden Kommandos unter LFV und RFV zur Verfügung:
+<P>Für Dateien die nicht im Archiv sind:
 <UL>
-<LI><B>Add to Repository</B>: adds the file to the repository. The file is set up to be added and will be introduced to the repository
-on the next <CODE>commit</CODE> command that includes the directory where the added file is located locally.</LI>
+<LI><B>Zum Archiv hinzufügen</B>: Fügt die Datei zum Archiv hinzu. Die Datei wird als hinzuzufügen markiert, wird aber erst beim 
+nächsten <CODE>Änderungen einspielen</CODE> tatsächlich dem Archiv hinzugefügt.</LI>
 </UL>
-<P>Over a file included in the repository:
+<P>Für Dateien die bereits im Archiv sind:
 <UL>
-<LI><B>Update</B>: update the selected file with the CVS version</LI>
-<LI><B>Commit</B>: commit the selected file to the CVS repository</LI>
-<LI><B>Remove from Repository</B>: remove the file from the repository</LI>
+<LI><B>Aktualisieren</B>: Update der ausgewählten Datei von der CVS Version</LI>
+<LI><B>Änderungen einspielen</B>: Führt ein "commit" der ausgewählten Datei in das CVS Archiv aus</LI>
+<LI><B>Vom Archiv entfernen</B>: Entfernt die Datei aus dem Repositorium</LI>
 </UL>
-<P>Over a folder:
+<P>Für Verzeichnisse:
 <UL>
-<LI><B>Add</B>: adds the folder to the repository</LI>
-<LI><B>Remove</B>: removes the folder from the repository</LI>
-<LI><B>Update</B>: update the folder recursively to be in sync with the repository</LI>
-<LI><B>Commit</B>: commit any changes recursively to the repository</LI>
+<LI><B>Zum Archiv hinzufügen</B>: Fügt den Order zum Repositorium hinzu</LI>
+<LI><B>Vom Archiv entfernen</B>: Entfernt das Verzeichnis aus dem Repositorium</LI>
+<LI><B>Aktualisieren</B>: Synchronisiert das Verzeichnis rekursiv mit dem CVS Archiv</LI>
+<LI><B>Änderungen einspielen</B>: Führt ein rekursives "commit" in das CVS Archiv aus</LI>
 </UL>
-<P>The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
-the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
-successful or not.
-<P>As the CVS commands of KDevelop only work with the <CODE>cvs</CODE> system command and its commandline options, you should have no trouble to
-use the cvs features.
+<P>Die CVS Kommandos benötigen eine funktionierende Netzverbindung zum CVS Server. Wenn Sie ein Kommando aufrufen, sehen Sie 
+einen Dialog der Ihnen anzeigt, welches Kommando gesendet wurde und wie die Antwort des Servers war. Dadurch haben Sie eine 
+Kontrolle darüber, welche Aktionen tatsächlich durchgeführt wurden, und ob Ihr Kommando erfolgreich abgeschlossen werden konnte.
+<P>Da die CVS Kommandos von KDevelop nur mit dem <CODE>cvs</CODE> System Kommando und dessen Kommandozeilenoptionen arbeiten, sollten 
+Sie keine Probleme haben CVS zu benutzen.
 <P>
 <P>
 <P ALIGN="RIGHT">
