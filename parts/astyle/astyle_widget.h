@@ -3,6 +3,7 @@
 
 #include "astyleconfig.h"
 
+class AStylePart;
 class KDevPart;
 
 
@@ -12,7 +13,7 @@ class AStyleWidget : public AStyleConfig
     
 public:
 		  
-  AStyleWidget(QWidget *parent=0, const char *name=0);
+  AStyleWidget( AStylePart * part, QWidget *parent=0, const char *name=0 );
   ~AStyleWidget();
 
 
@@ -24,6 +25,11 @@ public slots:
 private slots:
 
   void styleChanged(int id);
+  void pageChanged();
+  
+private:
+
+	AStylePart * m_part;
 
 };
 

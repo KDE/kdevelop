@@ -105,8 +105,8 @@ void AStylePart::beautifySource()
 
 void AStylePart::configWidget(KDialogBase *dlg)
 {
-	QVBox *vbox = dlg->addVBoxPage(i18n("Source Formatter"), i18n("Source Formatter"), BarIcon( icon(), KIcon::SizeMedium));
-  AStyleWidget *w = new AStyleWidget(vbox, "astyle config widget");
+	QVBox *vbox = dlg->addVBoxPage(i18n("Formatting"), i18n("Formatting"), BarIcon( icon(), KIcon::SizeMedium));
+  AStyleWidget *w = new AStyleWidget(this, vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 
@@ -144,20 +144,22 @@ void AStylePart::activePartChanged(KParts::Part *part)
   _action->setEnabled(enabled);
 }
 
-QString AStylePart::formatSource( const QString text )
+QString AStylePart::formatSource( const QString text, AStyleWidget * widget )
 {
-  ASStringIterator is(text);
-  KDevFormatter formatter;
-
-  formatter.init(&is);
-
-  QString output;
-  QTextStream os(&output, IO_WriteOnly);
-
-  while (formatter.hasMoreLines())
-        os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
-
-  return output;
+	ASStringIterator is(text);
+	KDevFormatter * formatter = ( widget ? new KDevFormatter( widget ) : new KDevFormatter );
+	
+	formatter->init(&is);
+	
+	QString output;
+	QTextStream os(&output, IO_WriteOnly);
+	
+	while ( formatter->hasMoreLines() )
+		os << QString::fromUtf8( formatter->nextLine().c_str() ) << endl;
+		
+	delete formatter;
+	
+	return output;
 }
 
 void AStylePart::cursorPos( KParts::Part *part, uint * line, uint * col )

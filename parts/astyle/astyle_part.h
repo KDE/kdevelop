@@ -11,6 +11,7 @@ class KDialogBase;
 #include <kparts/part.h>
 #include <kdevsourceformatter.h>
 
+class AStyleWidget;
 
 class AStylePart : public KDevSourceFormatter
 {
@@ -21,7 +22,7 @@ public:
   AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
 
-  QString formatSource( const QString text );
+  QString formatSource( const QString text, AStyleWidget * widget = 0 );
 
 
 private slots:

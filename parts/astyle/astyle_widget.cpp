@@ -1,3 +1,4 @@
+#include "astyle_part.h"
 #include "astyle_widget.h"
 
 #include <qradiobutton.h>
@@ -14,10 +15,11 @@
 #include <kdevcore.h>
 
 
-AStyleWidget::AStyleWidget(QWidget *parent, const char *name)
- : AStyleConfig(parent, name)
+AStyleWidget::AStyleWidget( AStylePart * part, QWidget *parent, const char *name )
+ : AStyleConfig(parent, name), m_part ( part )
 {
   connect(StyleGroup, SIGNAL(clicked(int)), this, SLOT(styleChanged(int)));
+  connect(ConfigTabs, SIGNAL(currentChanged(QWidget*)), this, SLOT(pageChanged()) );
 
   // load settings
   KConfig *config = kapp->config();
@@ -32,7 +34,6 @@ AStyleWidget::AStyleWidget(QWidget *parent, const char *name)
   if (s == "GNU") id=4;
   if (s == "JAVA") id=5;
   StyleGroup->setButton(id);
-  styleChanged(id); 
 
   // fill
   if (config->readEntry("Fill", "Tabs") == "Tabs")
@@ -66,6 +67,8 @@ AStyleWidget::AStyleWidget(QWidget *parent, const char *name)
   // oneliner
   Keep_Statements->setChecked(config->readBoolEntry("KeepStatements", false));
   Keep_Blocks->setChecked(config->readBoolEntry("KeepBlocks", false));
+
+  styleChanged(id); 
 }
 
 
@@ -133,97 +136,24 @@ void AStyleWidget::accept()
 }
 
 
-void AStyleWidget::styleChanged(int id)
+void AStyleWidget::styleChanged( int id )
 {
-  ConfigTabs->setTabEnabled(tab_2, id == 0);
-  ConfigTabs->setTabEnabled(tab_3, id == 0);
+	QString sample = "namespace foospace { class Bar { public: int foo(); private: int m_foo; }; int Bar::foo() { switch (x) { case 1: break; default: break; } if (isBar) { bar(); return m_foo+1; } else return 0; } }";
 
-  StyleExample->clear();
+	ConfigTabs->setTabEnabled(tab_2, id == 0);
+	ConfigTabs->setTabEnabled(tab_3, id == 0);
+	
+	StyleExample->clear();
+	
+	StyleExample->setText( m_part->formatSource( sample, this ) );
+}
 
-  switch (id)
-  {
-   case 0:
-		   break;
-		   
-   case 1:
-		   StyleExample->setText(""
-			"namespace foospace\n"
-			"{\n"
-			"    int Foo()\n"
-			"    {\n"
-			"        if (isBar)\n"
-			"        {\n"
-			"             bar();\n"
-			"             return 1;\n"
-			"        }\n"
-			"        else\n"
-			"            return 0;\n"
-			"    }\n"
-			"}\n"
-		    "");
-		   break;
-
-   case 2:
-		   StyleExample->setText(""
-			"namespace foospace {\n"
-			"    int Foo() {\n"
-			"        if (isBar) {\n"
-			"             bar();\n"
-			"             return 1;\n"
-			"        } else\n"
-			"            return 0;\n"
-			"    }\n"
-			"}\n"
-		    "");
-		   break;
-		   
-   case 3:
-		   StyleExample->setText(""
-			"namespace foospace\n"
-			"{\n"
-			"        int Foo()\n"
-			"        {\n"
-			"                if (isBar) {\n"
-			"                        bar();\n"
-			"                        return 1;\n"
-			"                } else\n"
-			"                        return 0;\n"
-			"        }\n"
-			"}\n"
-		    "");
-		   break;
-
-   case 4:
-		   StyleExample->setText(""
-			"namespace foospace\n"
-			"  {\n"
-			"    int Foo()\n"
-			"      {\n"
-			"        if (isBar)\n"
-			"          {\n"
-			"             bar();\n"
-			"             return 1;\n"
-			"          }\n"
-			"        else\n"
-			"          return 0;\n"
-			"      }\n"
-			"  }\n"
-		    "");
-		   break;
-
-  case 5:
-    		   StyleExample->setText(""
-			"class foospace {\n"
-			"    int Foo() {\n"
-			"        if (isBar) {\n"
-			"             bar();\n"
-			"             return 1;\n"
-			"        } else\n"
-			"            return 0;\n"
-			"    }\n"
-			"}\n"
-		    "");
-  }
+void AStyleWidget::pageChanged( )
+{
+	if ( Style_UserDefined->isChecked() )
+	{
+		styleChanged( 0 );
+	}
 }
 
 

@@ -27,12 +27,17 @@ private:
 
 };
 
+class AStyleWidget;
 
 class KDevFormatter : public astyle::ASFormatter
 {
 public:
 
   KDevFormatter();
+  KDevFormatter( AStyleWidget * widget );
+  
+private:
+	bool predefinedStyle( const QString & style );
 
 };
 

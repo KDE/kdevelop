@@ -1,6 +1,12 @@
 #include "astyle_adaptor.h"
 
+#include "astyle_widget.h"
+
 #include <string>
+
+#include <qradiobutton.h>
+#include <qspinbox.h>
+#include <qcheckbox.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -36,60 +42,16 @@ string ASStringIterator::nextLine()
 
 KDevFormatter::KDevFormatter()
 {
-  KConfig *config = kapp->config();
-  config->setGroup("AStyle");
-
-  // style
-  QString s = config->readEntry("Style");
-  if (s == "ANSI")
-    {
-      setBracketIndent(false);
-      setSpaceIndentation(4);
-      setBracketFormatMode(BREAK_MODE);
-      setClassIndent(false);
-      setSwitchIndent(false);
-      setNamespaceIndent(false);
-      return;
-    }
-  if (s == "KR")
-    {
-      setBracketIndent(false);
-      setSpaceIndentation(4);
-      setBracketFormatMode(ATTACH_MODE);
-      setClassIndent(false);
-      setSwitchIndent(false);
-      setNamespaceIndent(false);
-      return;
-    }
-  if (s == "Linux")
-    {
-      setBracketIndent(false);
-      setSpaceIndentation(8);
-      setBracketFormatMode(BDAC_MODE);
-      setClassIndent(false);
-      setSwitchIndent(false);
-      setNamespaceIndent(false);
-      return;
-    }
-  if (s == "GNU")
-    {
-      setBlockIndent(true);
-      setSpaceIndentation(2);
-      setBracketFormatMode(BREAK_MODE);
-      setClassIndent(false);
-      setSwitchIndent(false);
-      setNamespaceIndent(false);
-      return;
-    }
-  if (s == "JAVA")
-    {
-      setJavaStyle();
-      setBracketIndent(false);
-      setSpaceIndentation(4);
-      setBracketFormatMode(ATTACH_MODE);
-      setSwitchIndent(false);
-      return;
-    }
+	KConfig *config = kapp->config();
+	config->setGroup("AStyle");
+	
+	// style
+	QString s = config->readEntry("Style");
+	
+	if ( predefinedStyle( s ) )
+	{
+		return;
+	}
 
   // fill
   if (config->readEntry("Fill", "Tabs") != "Tabs")
@@ -126,4 +88,131 @@ KDevFormatter::KDevFormatter()
   // oneliner
   setBreakOneLineBlocksMode(config->readBoolEntry("KeepBlocks", false));
   setSingleStatementsMode(config->readBoolEntry("KeepStatements", false));
+}
+
+KDevFormatter::KDevFormatter( AStyleWidget * widget )
+{	
+	if ( widget->Style_ANSI->isChecked() )
+	{
+		predefinedStyle( "ANSI" );
+		return;
+	}
+	if ( widget->Style_GNU->isChecked() )
+	{
+		predefinedStyle( "GNU" );
+		return;
+	}
+	if ( widget->Style_JAVA->isChecked() )
+	{
+		predefinedStyle( "JAVA" );
+		return;
+	}
+	if ( widget->Style_KR->isChecked() )
+	{
+		predefinedStyle( "KR" );
+		return;
+	}
+	if ( widget->Style_Linux->isChecked() )
+	{
+		predefinedStyle( "Linux" );
+		return;
+	}
+
+	// fill
+	if ( widget->Fill_Tabs->isChecked() )
+	{
+		setTabIndentation();
+	}
+	else
+	{
+		setSpaceIndentation( widget->Fill_SpaceCount->value() );
+	}
+	
+	// indent
+	setSwitchIndent( widget->Indent_Switches->isChecked() );
+	setClassIndent( widget->Indent_Classes->isChecked() );
+	setCaseIndent( widget->Indent_Cases->isChecked() );
+	setBracketIndent( widget->Indent_Brackets->isChecked() );
+	setNamespaceIndent( widget->Indent_Namespaces->isChecked() );
+	setLabelIndent( widget->Indent_Labels->isChecked() );
+	
+	// continuation
+	setMaxInStatementIndentLength( widget->Continue_MaxStatement->value() );
+	setMinConditionalIndentLength( widget->Continue_MinConditional->value() );
+	
+	// brackets
+	if ( widget->Brackets_Break->isChecked() )
+	{
+		setBracketFormatMode( BREAK_MODE );
+	}
+	else if ( widget->Brackets_Attach->isChecked() )
+	{
+		setBracketFormatMode( ATTACH_MODE );
+	}
+	else 
+	{
+		setBracketFormatMode( BDAC_MODE );
+	}
+	
+	// padding
+	setOperatorPaddingMode( widget->Pad_Operators->isChecked() );
+	setParenthesisPaddingMode( widget->Pad_Parentheses->isChecked() );
+	
+	// oneliner
+	setBreakOneLineBlocksMode( widget->Keep_Blocks->isChecked() );
+	setSingleStatementsMode( widget->Keep_Statements->isChecked() );
+}
+
+bool KDevFormatter::predefinedStyle( const QString & style )
+{
+	if (style == "ANSI")
+	{
+		setBracketIndent(false);
+		setSpaceIndentation(4);
+		setBracketFormatMode(BREAK_MODE);
+		setClassIndent(false);
+		setSwitchIndent(false);
+		setNamespaceIndent(false);
+		return true;
+	}
+	if (style == "KR")
+	{
+		setBracketIndent(false);
+		setSpaceIndentation(4);
+		setBracketFormatMode(ATTACH_MODE);
+		setClassIndent(false);
+		setSwitchIndent(false);
+		setNamespaceIndent(false);
+		return true;
+	}
+	if (style == "Linux")
+	{
+		setBracketIndent(false);
+		setSpaceIndentation(8);
+		setBracketFormatMode(BDAC_MODE);
+		setClassIndent(false);
+		setSwitchIndent(false);
+		setNamespaceIndent(false);
+		return true;
+	}
+	if (style == "GNU")
+	{
+		setBlockIndent(true);
+		setSpaceIndentation(2);
+		setBracketFormatMode(BREAK_MODE);
+		setClassIndent(false);
+		setSwitchIndent(false);
+		setNamespaceIndent(false);
+		return true;
+	}
+	if (style == "JAVA")
+	{
+		setJavaStyle();
+		setBracketIndent(false);
+		setSpaceIndentation(4);
+		setBracketFormatMode(ATTACH_MODE);
+		setSwitchIndent(false);
+		return true;
+	}
+	return false;
 }
