@@ -46,7 +46,7 @@ void DocTreeProjectConfigWidget::readConfig()
     QString apidocDir = DomUtil::readEntry(
         *m_project->projectDom() , 
         "/kdevdoctreeview/projectdoc/apidocDir", m_project->projectDirectory() + "/html/" );
-    apidocdirEdit->setURL( userdocDir );
+    apidocdirEdit->setURL( apidocDir );
     apidocdirEdit->fileDialog()->setMode( KFile::Directory );
 }
 
