@@ -25,6 +25,7 @@
 #include <qpainter.h>
 #include <qregexp.h>
 #include <qstringlist.h>
+#include "qcolor.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -91,9 +92,10 @@ public:
     void setFileName( const QString &p ) { setText( FILENAME_COLUMN, p ); }
     void setWorkingRev( const QString &p ) { setText( WORKREVISION_COLUMN, p ); }
     void setRepositoryRev( const QString &p ) { setText( REPOREVISION_COLUMN, p ); }
-    void setStatus( const VCSFileInfo::FileState status ) 
-    { 
-        m_status = status; setText( STATUS_COLUMN, VCSFileInfo::vcsState2String( status ) ); 
+    void setStatus( const VCSFileInfo::FileState status )
+    {
+        m_status = status;
+        setText( STATUS_COLUMN, VCSFileInfo::state2String( status ) );
     }
 
 protected:
@@ -165,29 +167,49 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
         QFont font( p->font() );
         font.setBold( true );
         p->setFont( font );
-
-        // @todo paint cell in a different color
-        switch (m_status)
-        {
-            case VCSFileInfo::Added: break;
-            case VCSFileInfo::Uptodate: break;
-            case VCSFileInfo::Modified: break;
-            case VCSFileInfo::Conflict: break;
-            case VCSFileInfo::Sticky: break;
-            case VCSFileInfo::Unknown:
-            default:
-                break;
-        }
     }
 
-    QListViewItem::paintCell(p, cg, column, width, alignment);
+    // paint cell in a different color
+    QColor itemColor;
+    switch (m_status)
+    {
+        case VCSFileInfo::Added:
+            itemColor = FileViewPart::vcsColors.added;
+            break;
+        case VCSFileInfo::Uptodate:
+            itemColor = FileViewPart::vcsColors.updated;
+            break;
+        case VCSFileInfo::Modified:
+            itemColor = FileViewPart::vcsColors.modified;
+            break;
+        case VCSFileInfo::Conflict:
+            itemColor = FileViewPart::vcsColors.conflict;
+            break;
+        case VCSFileInfo::Sticky:
+            itemColor = FileViewPart::vcsColors.sticky;
+            break;
+        case VCSFileInfo::Unknown:
+            itemColor = FileViewPart::vcsColors.unknown;
+            break;
+        default:
+            // No color change
+            //kdDebug() << "MyFileTreeViewItem::paintCell(): Unknown color!" << endl;
+            break;
+    }
+    QColorGroup mycg( cg );
+//    kdDebug() << "MyFileTreeViewItem::paintCell(): itemColor == " << itemColor.name() << endl;
+    mycg.setColor( QColorGroup::Background, itemColor );
+//    kdDebug() << "MyFileTreeViewItem::paintCell(): mycg.background() == " << mycg.background().name() << endl;
+//    p->setBackgroundColor( itemColor );
+
+    QListViewItem::paintCell( p, mycg, column, width, alignment );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 int MyFileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) const
 {
-    KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*> (i);
+    KFileTreeViewItem* rhs = dynamic_cast<KFileTreeViewItem*>( i );
     if (rhs)
     {
         if (rhs->isDir() && !isDir())
@@ -307,7 +329,7 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
     connect( m_actionToggleShowVCSFields, SIGNAL(toggled(bool)), this, SLOT(slotToggleShowVCSFields(bool)) );
 
-    // Reload ol' good settings
+    // Reload good ol' settings
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
     m_actionToggleShowVCSFields->setChecked( DomUtil::readBoolEntry(dom, "/kdevfileview/tree/showvcsfields") );
@@ -390,25 +412,10 @@ void FileTreeWidget::hideOrShow()
     // Need to skip the root item (which is the sub-directory)
     // i.e. "/home/devmario/src/kdevelop/parts/cvsservice"
     item = static_cast<MyFileTreeViewItem*>( item->firstChild() );
-/*
-    // Grab info from the info provider for this directory
-    KDevVCSFileInfoProvider *vcsInfoProvider = vcsFileInfoProvider();
-    VCSFileInfoMap vcsFiles;
-    if (vcsInfoProvider && item)
-    {
-        QString relDirPath = URLUtil::extractPathNameRelative( projectDirectory(), item->path() );
-        vcsFiles = vcsInfoProvider->status( relDirPath );
-    }
-*/
     // Now fill the sub-tree
     while (item)
     {
         item->hideOrShow();
-/*
-        QString fileName = item->url().fileName();
-        if (vcsFiles.contains( fileName ))
-            item->setVCSInfo( vcsFiles[fileName] );
-*/
         item = static_cast<MyFileTreeViewItem*>(item->nextSibling());
     }
 }
@@ -422,7 +429,7 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
 
     KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
 
-    if( ftitem->isDir() )
+    if (ftitem->isDir())
         return;
 
     m_part->partController()->editDocument( ftitem->url() );
@@ -437,7 +444,10 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 
     KPopupMenu popup( i18n("File Tree"), this );
 
-    if (item == this->firstChild() && !m_isSyncingWithRepository) // rootnode
+    // Show the "reload tree" menu-item only if it is requested for the root object
+    // and we don't have a sync-with-repository operation pending (which otherwise will
+    // kill the call-back's from working)
+    if (item == this->firstChild() && !m_isSyncingWithRepository)
     {
         int id = popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
         popup.setWhatsThis( id, i18n("<b>Reload tree</b><p>Reloads the project files tree.") );
@@ -449,18 +459,14 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 
     // Give a change for syncing status with remote repository: a file info provider must
     // be available and the item must be a directory (so we can safely use isExpandable()?)
-    if (vcsFileInfoProvider())
+    const MyFileTreeViewItem *myFileItem = static_cast<MyFileTreeViewItem *>( item );
+    if (vcsFileInfoProvider() && myFileItem->isDir())
     {
-        const MyFileTreeViewItem *myFileItem = static_cast<MyFileTreeViewItem *>( item );
-        // @fixme Is there a better way to find out if a node is a folder or leaf (i.e. playing with the
-        // QListView) ?
-        if (URLUtil::isDirectory( myFileItem->url() ))
-        {
-            m_vcsStatusRequestedItem = item;
-            int id = popup.insertItem( i18n( "Sync with repository"), this, SLOT( slotSyncWithRepository() ) );
-            popup.setWhatsThis( id,
-                i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.") );
-        }
+        m_vcsStatusRequestedItem = item;
+        popup.insertSeparator();
+        int id = popup.insertItem( i18n( "Sync with repository"), this, SLOT( slotSyncWithRepository() ) );
+        popup.setWhatsThis( id,
+            i18n("<b>Sync with repository</b><p>Synchronize file status with remote repository.") );
     }
     // If an item is selected, fill the file context with selected files' list
     if (item != 0)
