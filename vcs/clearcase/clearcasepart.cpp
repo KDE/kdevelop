@@ -38,7 +38,7 @@ typedef KDevGenericFactory<ClearcasePart> ClearcaseFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( data ) )
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
-        : KDevPlugin( &data, parent, name ? name : "ClearcasePart" ),
+        : KDevVersionControl( &data, parent, name ? name : "ClearcasePart" ),
         default_checkin(""),default_checkout(""),default_uncheckout("-rm"),
         default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
 {
