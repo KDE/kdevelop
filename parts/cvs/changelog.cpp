@@ -112,5 +112,5 @@ QString ChangeLogEntry::toString( const QString &startLineString ) const
 {
 	QString header = date + " " + authorName + " <" + authorEmail + ">\n";
 
-	return header + startLineString + lines.join( "\n" + startLineString ) + "\n";
+	return header + startLineString + lines.join( "\n" + startLineString ) + "\n\n";
 }

@@ -13,23 +13,30 @@
 #define _COMMITDIALOG_H_
 
 #include <qdialog.h>
-#include <qmultilineedit.h>
+#include <qstringlist.h>
 
+class QTextEdit;
+class QCheckBox;
 
 class CommitDialog : public QDialog
 {
 	Q_OBJECT
 public:
     CommitDialog();
-    QString logMessage()
-        { return edit->text(); }
+
+	// Returns the text of the log
+    QStringList logMessage() const;
+	// Returns true if the user requests the log message to be added to the general
+	// Changelog file
+	bool mustAddToChangeLog() const;
 
 protected slots:
 	// Override: must check for message not being void.
 	virtual void accept();
 
 private:
-    QMultiLineEdit *edit;
+    QTextEdit *textEdit;
+	QCheckBox *checkAddToChangelog;
 };
 
 #endif

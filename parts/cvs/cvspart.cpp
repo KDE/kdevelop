@@ -17,7 +17,6 @@
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <kurl.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -28,132 +27,121 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qguardedptr.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevdifffrontend.h"
 #include "kdevappfrontend.h"
-#include "commitdlg.h"
-#include "logform.h"
-#include "cvsform.h"
-#include "execcommand.h"
-#include "cvsoptionswidget.h"
 #include "domutil.h"
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 
 #include "urlfileutilities.h"
 #include "cvsentry.h"
+#include "changelog.h"
 #include "cvspart.h"
 #include "cvswidget.h"
 #include "cvs_commonoptions.h"
+#include "commitdlg.h"
+#include "logform.h"
+#include "cvsform.h"
+#include "execcommand.h"
+#include "cvsoptionswidget.h"
 
 #define zero_delete(p) { delete (p); (p) = 0; }
 
+using namespace UrlFileUtilities;
+
+///////////////////////////////////////////////////////////////////////////////
+// Constants
+///////////////////////////////////////////////////////////////////////////////
+
+const QString changeLogFileName = "ChangeLog";
+
+///////////////////////////////////////////////////////////////////////////////
+// Plugin factory
+///////////////////////////////////////////////////////////////////////////////
+
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
-
-using namespace UrlFileUtilities;
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsPart
 ///////////////////////////////////////////////////////////////////////////////
 
-// Private implementation
-struct CvsPart::Private
+CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
+	: KDevVersionControl( "KDevCvsPart", "kdevcvspart", parent, name ? name : "CVS" ),
+	form( 0 ), invokedFromMenu( true ), proc( 0 ),
+	actionCommit( 0 ), actionDiff( 0 ),	actionLog( 0 ),	actionAdd( 0 ),	actionRemove( 0 ),
+	actionUpdate( 0 ), actionReplace( 0 )
 {
-	Private( CvsPart *part ) : invokedFromMenu( true ),
-		proc( 0 ),
-		actionCommit( 0 ), actionDiff( 0 ),	actionLog( 0 ),	actionAdd( 0 ),	actionRemove( 0 ),
-		actionUpdate( 0 ), actionReplace( 0 ),
-		owner( part )
-	{}
+	setInstance( CvsFactory::instance() );
 
-	// Setup actions.
-	void setupActions();
-	// Updates Url forn the currently focused document
-	bool retrieveUrlFocusedDocument();
-	// Retrieves the fileName and dirName from the pathUrl
-	bool findPaths();
-	// Returns true if the file or directory indicated in @p url has been registered in the CVS
-	// (if not, returns false since it avoid performing CVS operation)
-	bool isRegisteredInRepository();
-	// Display "cvs diff" results in the diff part.
-	void diffFinished( const QString& diff, const QString& err );
-	// Call this every time a slot for cvs operations starts!! (It will setup the
-	// state (file/dir URL, ...).
-	// It will also display proper error messages so the caller must only exit if
-	// it fails (return false); if return true than basic requisites for cvs operation
-	// are satisfied.
-	bool prepareOperation();
-	// Call this every time a slot for cvs operations ends!! (It will restore the state for a new
-	// operation).
-	void doneOperation();
+	setXMLFile( "kdevcvspart.rc" );
 
-	// The value for overriding the $CVS_RSH env variable
-	QString cvs_rsh() const;
-	// Contains the url of the file or direcly for which the service has been invoked
-	KURL pathUrl;
-	// Contains the directory name
-	QString dirName;
-	// Contains the fileName (relative to dir)
-	QString fileName;
-	// Reference to widget integrated in the "bottom tabbar" (IDEAL)
-	QGuardedPtr<CvsWidget> m_widget;
-	// This is a pointer to the d->form used for collecting data about CVS project creation (used
-	// by the ApplicationWizard in example)
-	CvsForm *form;
-	// True if invoked from menu, false otherwise (i.e. called from context menu)
-	// Ok this is a very bad hack but I see no other solution for now.
-	bool invokedFromMenu;
-
-	KProcess* proc;
-	QString stdOut, stdErr;
-
-	// Actions
-	KAction *actionCommit,
-		*actionDiff,
-		*actionLog,
-		*actionAdd,
-		*actionRemove,
-		*actionUpdate,
-		*actionReplace;
-
-private:
-	CvsPart *owner;
-};
+	init();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::Private::setupActions()
+CvsPart::~CvsPart()
+{
+	if (m_widget)
+	{
+		mainWindow()->removeView( m_widget ); // Inform toplevel, that the output view is gone
+	}
+	delete m_widget;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::init()
+{
+	setupActions();
+
+	// Context menu
+	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+		this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+		this, SLOT(projectConfigWidget(KDialogBase*)) );
+	connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
+		this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+
+	m_widget = new CvsWidget( this );
+
+	mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::setupActions()
 {
 /*
 	KAction * action = new KAction( i18n("Import Cvs Repository..."),"wizard", 0,
 		this, SLOT(slotImportCvs()), actionCollection(), "cvs_import" );
 		action->setStatusText( i18n("Imports an existing CVS repository.") );
 */
-	actionCommit = new KAction( i18n("Commit"), 0, owner, SLOT(slotCommit()),
-		owner->actionCollection(), "cvs_commit" );
-	actionDiff = new KAction( i18n("Diff"), 0, owner, SLOT(slotDiff()),
-		owner->actionCollection(), "cvs_diff" );
-	actionLog = new KAction( i18n("Log"), 0, owner, SLOT(slotLog()),
-		owner->actionCollection(), "cvs_log" );
-	actionAdd = new KAction( i18n("Add"), 0, owner, SLOT(slotAdd()),
-		owner->actionCollection(), "cvs_add" );
-	actionRemove = new KAction( i18n("Remove From Repository"), 0, owner, SLOT(slotRemove()),
-		owner->actionCollection(), "cvs_remove" );
-	actionUpdate = new KAction( i18n("Update"), 0, owner, SLOT(slotUpdate()),
-		owner->actionCollection(), "cvs_update" );
-	actionReplace = new KAction( i18n("Replace with Copy From Repository"), 0, owner, SLOT(slotReplace()),
-		owner->actionCollection(), "cvs_replace" );
+	actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotCommit()),
+		actionCollection(), "cvs_commit" );
+	actionDiff = new KAction( i18n("Diff"), 0, this, SLOT(slotDiff()),
+		actionCollection(), "cvs_diff" );
+	actionLog = new KAction( i18n("Log"), 0, this, SLOT(slotLog()),
+		actionCollection(), "cvs_log" );
+	actionAdd = new KAction( i18n("Add"), 0, this, SLOT(slotAdd()),
+		actionCollection(), "cvs_add" );
+	actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotRemove()),
+		actionCollection(), "cvs_remove" );
+	actionUpdate = new KAction( i18n("Update"), 0, this, SLOT(slotUpdate()),
+		actionCollection(), "cvs_update" );
+	actionReplace = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotReplace()),
+		actionCollection(), "cvs_replace" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString CvsPart::Private::cvs_rsh() const
+QString CvsPart::cvs_rsh() const
 {
-	QDomDocument &dom = *owner->projectDom();
+	QDomDocument &dom = *projectDom();
 	QString env = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", default_rsh );
 	if ( !env.isEmpty() )
 		return QString( "CVS_RSH=" ) + KShellProcess::quote( env );
@@ -162,10 +150,10 @@ QString CvsPart::Private::cvs_rsh() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::Private::retrieveUrlFocusedDocument()
+bool CvsPart::retrieveUrlFocusedDocument()
 {
 	kdDebug(9000) << "CvsPart::retrieveUrlFocusedDocument() here!" << pathUrl.path() << endl;
-	KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( owner->partController()->activePart() );
+	KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
 	if (part)
 	{
 		pathUrl = part->url();
@@ -181,9 +169,9 @@ bool CvsPart::Private::retrieveUrlFocusedDocument()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::Private::findPaths()
+bool CvsPart::findPaths()
 {
-	if (!owner->project())
+	if (!project())
 	{
 		kdDebug(9000) << "CvsPart::findPaths(): No project???" << endl;
 		KMessageBox::sorry( 0, i18n("Open a project first.\n"
@@ -200,12 +188,12 @@ bool CvsPart::Private::findPaths()
 		return false;
 	}
 
-	kdDebug(9000) << "CvsPart::findPaths(): Project directory is " << owner->project()->projectDirectory() << endl;
+	kdDebug(9000) << "CvsPart::findPaths(): Project directory is " << project()->projectDirectory() << endl;
 	kdDebug(9000) << "CvsPart::findPaths(): Path is " << pathUrl.path() << endl;
 
 	// Ok, this an *ugly* hack: if the operation is requested for the project directory
 	// then the path must be "customized" because of the behaviour of KURL ...
-	if ( pathUrl.path() != owner->project()->projectDirectory() )
+	if ( pathUrl.path() != project()->projectDirectory() )
 	{
 	    dirName = pathUrl.directory();
     	fileName = pathUrl.fileName();
@@ -224,7 +212,7 @@ bool CvsPart::Private::findPaths()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::Private::prepareOperation()
+bool CvsPart::prepareOperation()
 {
 	if (!findPaths())
 	{
@@ -243,18 +231,18 @@ bool CvsPart::Private::prepareOperation()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::Private::doneOperation()
+void CvsPart::doneOperation()
 {
 	invokedFromMenu = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsPart::Private::isRegisteredInRepository()
+bool CvsPart::isRegisteredInRepository()
 {
 	kdDebug(9000) << "===> CvsPart::isRegisteredInRepository() here! " << endl;
 
-	if ( pathUrl.path() == owner->project()->projectDirectory() )
+	if ( pathUrl.path() == project()->projectDirectory() )
 	{
 		kdDebug(9000) << "===> Operation requested for projectDir(): true. " << endl;
 		return true;
@@ -293,7 +281,7 @@ bool CvsPart::Private::isRegisteredInRepository()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::Private::diffFinished( const QString& diff, const QString& err )
+void CvsPart::diffFinished( const QString& diff, const QString& err )
 {
     if (diff.isNull() && err.isNull() )
 	{
@@ -321,45 +309,8 @@ void CvsPart::Private::diffFinished( const QString& diff, const QString& err )
         return;
     }
 
-    Q_ASSERT( owner->diffFrontend() );
-    owner->diffFrontend()->showDiff( diff );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// class CvsPart
-///////////////////////////////////////////////////////////////////////////////
-
-CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
-	: KDevVersionControl( "KDevCvsPart", "kdevcvspart", parent, name ? name : "CVS" ),
-	d( new Private(this) )
-{
-	setInstance( CvsFactory::instance() );
-
-	setXMLFile( "kdevcvspart.rc" );
-
-	d->setupActions();
-
-	connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-		this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
-	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-		this, SLOT(projectConfigWidget(KDialogBase*)) );
-	connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
-		this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
-
-	d->m_widget = new CvsWidget( this );
-	mainWindow()->embedOutputView( d->m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-CvsPart::~CvsPart()
-{
-	if (d->m_widget)
-	{
-		mainWindow()->removeView( d->m_widget ); // Inform toplevel, that the output view is gone
-	}
-	delete d->m_widget;
-	delete d;
+    Q_ASSERT( diffFrontend() );
+    diffFrontend()->showDiff( diff );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -371,35 +322,27 @@ void CvsPart::slotImportCvs()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QWidget* CvsPart::newProjectWidget( QWidget *parent )
-{
-    d->form = new CvsForm( parent );
-    return d->form;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void CvsPart::createNewProject( const QString& dirName )
 {
 	kdDebug( 9000 ) << "====> CvsPart::createNewProject( const QString& )" << endl;
 
-	if (!d->form)
+	if (!form)
 		return;
 	QString init("");
 
-	if (d->form->init_check->isChecked())
+	if (form->init_check->isChecked())
 	{
-    	init = "cvs -d " + KShellProcess::quote(d->form->root_edit->text()) + " init && ";
+    	init = "cvs -d " + KShellProcess::quote(form->root_edit->text()) + " init && ";
 	}
     QString command = init + "cd " + KShellProcess::quote(dirName) +
-		" && cvs -d " + KShellProcess::quote(d->form->root_edit->text()) +
-		" import -m " + KShellProcess::quote(d->form->message_edit->text()) + " " +
-		KShellProcess::quote(d->form->repository_edit->text()) + " " +
-		KShellProcess::quote(d->form->vendor_edit->text()) + " " +
-		KShellProcess::quote(d->form->release_edit->text()) + " && sh " +
+		" && cvs -d " + KShellProcess::quote(form->root_edit->text()) +
+		" import -m " + KShellProcess::quote(form->message_edit->text()) + " " +
+		KShellProcess::quote(form->repository_edit->text()) + " " +
+		KShellProcess::quote(form->vendor_edit->text()) + " " +
+		KShellProcess::quote(form->release_edit->text()) + " && sh " +
 		locate("data","kdevcvs/buildcvs.sh") + " . " +
-		KShellProcess::quote(d->form->repository_edit->text()) + " " +
-		KShellProcess::quote(d->form->root_edit->text());
+		KShellProcess::quote(form->repository_edit->text()) + " " +
+		KShellProcess::quote(form->root_edit->text());
 
 	kdDebug( 9000 ) << "  ** Will run the following command: " << endl << command << endl;
 	kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
@@ -414,94 +357,115 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 	if (context->hasType( "file" ))
 	{
 		const FileContext *fcontext = static_cast<const FileContext*>( context );
-		// Here we must hope that fcontext->fileName() returns an absolute path ;(
-		d->pathUrl.setPath( fcontext->fileName() );
+		// FIXME: Here we must hope that fcontext->fileName() returns an absolute path ;(
+		pathUrl.setPath( fcontext->fileName() );
 
 		popup->insertSeparator();
 
-		kdDebug(9000) << "contextMenu() for file " << UrlFileUtilities::extractPathNameAbsolute( d->pathUrl ) << endl;
+		kdDebug(9000) << "contextMenu() for file " << UrlFileUtilities::extractPathNameAbsolute( pathUrl ) << endl;
 
-		QString fileName = d->pathUrl.fileName();
+		QString fileName = pathUrl.fileName();
 
 		KPopupMenu *subMenu = new KPopupMenu( popup );
 		subMenu->insertTitle( i18n("Actions for %1").arg(fileName) );
 
-		d->actionCommit->plug( subMenu );
-		d->actionLog->plug( subMenu );
-		d->actionUpdate->plug( subMenu );
-		d->actionAdd->plug( subMenu );
-		d->actionDiff->plug( subMenu );
+		actionCommit->plug( subMenu );
+		actionLog->plug( subMenu );
+		actionUpdate->plug( subMenu );
+		actionAdd->plug( subMenu );
+		actionDiff->plug( subMenu );
 
 		subMenu->insertSeparator();
 
-		d->actionRemove->plug( subMenu );
-		d->actionReplace->plug( subMenu );
+		actionRemove->plug( subMenu );
+		actionReplace->plug( subMenu );
 
 		popup->insertItem( i18n("CVS"), subMenu );
 
 		// If we are invoked from the context menu than the file is has been already specified,
 		// otherwise we use the current focused editor/viewer part.
-		d->invokedFromMenu = false;
+		invokedFromMenu = false;
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+QString CvsPart::buildCommitCmd( const QString _directoryName, const QString &_fileName, const QString _logMessage )
+{
+	QDomDocument &dom = *projectDom();
+
+	QString command( "cd " );
+	command += KShellProcess::quote( _directoryName );
+	command += " && ";
+	command += cvs_rsh(); // yes, it is already quoted
+	command += " cvs ";
+	command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
+	command += " commit ";
+	command += DomUtil::readEntry( dom, "/kdevcvs/commitoptions", default_commit );
+	command += " -m " + KShellProcess::quote( _logMessage );
+	command += " ";
+	command += KShellProcess::quote( _fileName );
+
+	return command;
+}
+
 void CvsPart::slotCommit()
 {
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-    kdDebug(9000) << "slotCommit()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+    kdDebug(9000) << "slotCommit()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
     CommitDialog dlg;
 	if (dlg.exec() == QDialog::Rejected)
 		return;
 
-	QDomDocument &dom = *this->projectDom();
+	// 1. Commit changes to the actual file
+	QString command = buildCommitCmd( dirName, fileName, dlg.logMessage().join( "" ) );
+	m_widget->startCommand( dirName, command ); //	makeFrontend()->queueCommand(dirName, command);
 
-	QString command( "cd " );
-	command += KShellProcess::quote( d->dirName );
-	command += " && ";
-	command += d->cvs_rsh(); // yes, it is already quoted
-	command += " cvs ";
-	command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
-	command += " commit ";
-	command += DomUtil::readEntry( dom, "/kdevcvs/commitoptions", default_commit );
-	command += " -m " + KShellProcess::quote( dlg.logMessage() );
-	command += " ";
-	command += KShellProcess::quote( d->fileName );
+	// 2. if requested to do so, add an entry to the Changelog too
+	if (dlg.mustAddToChangeLog())
+	{
+		// 2.1 Modify the Changelog
+		ChangeLogEntry entry;
+		entry.addLines( dlg.logMessage() );
+		entry.addToLog( this->project()->projectDirectory() + "/ChangeLog" );
 
-//	makeFrontend()->queueCommand(dirName, command);
-	d->m_widget->startCommand( d->dirName, command );
+		kdDebug( 9999 ) << " *** ChangeLog entry : " << entry.toString( "\t" ) << endl;
 
-	d->doneOperation();
+		// 2.2 Commit modifications (needed?)
+		//command = buildCommitCmd( this->project()->projectDirectory(), changeLogFileName, dlg.logMessage() );
+		//m_widget->startCommand( this->project()->projectDirectory(), command );
+	}
+
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotUpdate()
 {
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-    kdDebug(9000) << "slotUpdate()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+    kdDebug(9000) << "slotUpdate()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *this->projectDom();
+    QDomDocument &dom = *projectDom();
 
     QString command("cd ");
-    command += KShellProcess::quote( d->dirName );
-    command += " && " + d->cvs_rsh() + " cvs ";
+    command += KShellProcess::quote( dirName );
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
     command += " update ";
     command += DomUtil::readEntry( dom, "/kdevcvs/updateoptions", default_update );
     command += " ";
-    command += KShellProcess::quote( d->fileName );
+    command += KShellProcess::quote( fileName );
 
 //    makeFrontend()->queueCommand(dirName, command);
-    d->m_widget->startCommand( d->dirName, command );
+    m_widget->startCommand( dirName, command );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -510,124 +474,124 @@ void CvsPart::slotAdd()
 {
 	// cvs add requires only the file to exist (FIX: we don't check for "already
 	// present" condition and have faith in cvs command to report error).
-	if (!d->findPaths())
+	if (!findPaths())
 	{
 		kdDebug(9000) << "  ** slotAdd(): aborting since findPath() == false." << endl;
 		return;
 	}
 
-    kdDebug(9000) << "slotAdd()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+    kdDebug(9000) << "slotAdd()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *this->projectDom();
+    QDomDocument &dom = *projectDom();
 
     QString command("cd ");
-    command += KShellProcess::quote( d->dirName );
-    command += " && " + d->cvs_rsh() + " cvs ";
+    command += KShellProcess::quote( dirName );
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
     command += " add ";
     command += DomUtil::readEntry( dom, "/kdevcvs/addoptions", default_add );
     command += " ";
-    command += KShellProcess::quote( d->fileName );
+    command += KShellProcess::quote( fileName );
 
 //    makeFrontend()->queueCommand(dirName, command);
-    d->m_widget->startCommand( d->dirName, command );
+    m_widget->startCommand( dirName, command );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotRemove()
 {
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-    kdDebug(9000) << "slotRemove()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+    kdDebug(9000) << "slotRemove()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *this->projectDom();
+    QDomDocument &dom = *projectDom();
 
     QString command("cd ");
-    command += KShellProcess::quote( d->dirName );
-    command += " && " + d->cvs_rsh() + " cvs ";
+    command += KShellProcess::quote( dirName );
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
     command += " remove ";
     command += DomUtil::readEntry( dom, "/kdevcvs/removeoptions", default_remove );
     command += " ";
-    command += KShellProcess::quote( d->fileName );
+    command += KShellProcess::quote( fileName );
 
 //    makeFrontend()->queueCommand(dirName, command);
-    d->m_widget->startCommand( d->dirName, command );
+    m_widget->startCommand( dirName, command );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotReplace()
 {
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-    kdDebug(9000) << "slotReplace()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+    kdDebug(9000) << "slotReplace()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
-    QDomDocument &dom = *this->projectDom();
+    QDomDocument &dom = *projectDom();
 
     QString command("cd ");
-    command += KShellProcess::quote( d->dirName );
-    command += " && " + d->cvs_rsh() + " cvs ";
+    command += KShellProcess::quote( dirName );
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
     command += " update ";
     command += default_replace;
     command += " ";
-    command += KShellProcess::quote( d->fileName );
+    command += KShellProcess::quote( fileName );
 
 //    makeFrontend()->queueCommand(dirName, command);
-    d->m_widget->startCommand( d->dirName, command );
+    m_widget->startCommand( dirName, command );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotLog()
 {
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-	kdDebug(9000) << "slotLog(), request for : " << d->pathUrl.path() << endl;
+	kdDebug(9000) << "slotLog(), request for : " << pathUrl.path() << endl;
 
 	LogForm* f = new LogForm();
 	f->show();
 	// Form will do all the work
 	QString projectDir = project()->projectDirectory();
-	QString relPath = UrlFileUtilities::extractPathNameRelative( projectDir, d->pathUrl );
+	QString relPath = UrlFileUtilities::extractPathNameRelative( projectDir, pathUrl );
 
 	f->start( projectDir, relPath );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotDiff()
 {
-	if ( d->proc ) {
+	if ( proc ) {
 		KMessageBox::sorry( 0, i18n("Another diff operation is pending.") );
 		return;
 	}
 
-	if (!d->prepareOperation())
+	if (!prepareOperation())
 		return;
 
-	kdDebug(9000) << "slotDiff()" << "Dir = " << d->dirName << ", fileName = " << d->fileName << endl;
+	kdDebug(9000) << "slotDiff()" << "Dir = " << dirName << ", fileName = " << fileName << endl;
 
 	QStringList args;
 	QString str;
-	d->proc = new KProcess();
-	d->stdOut = QString::null;
-	d->stdErr = QString::null;
+	proc = new KProcess();
+	stdOut = QString::null;
+	stdErr = QString::null;
 
-	QDomDocument &dom = *this->projectDom();
+	QDomDocument &dom = *projectDom();
 
 	str = DomUtil::readEntry( dom, "/kdevcvs/cvsoptions", default_cvs );
 
@@ -647,29 +611,29 @@ void CvsPart::slotDiff()
 			args << *it;
 		}
 	}
-	args << d->fileName;
+	args << fileName;
 
 	QString crsh = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", default_rsh );
 	if ( !crsh.isEmpty() )
-		d->proc->setEnvironment( "CVS_RSH", crsh );
-	d->proc->setWorkingDirectory( d->dirName );
-	*d->proc << "cvs";
-	*d->proc << args;
+		proc->setEnvironment( "CVS_RSH", crsh );
+	proc->setWorkingDirectory( dirName );
+	*proc << "cvs";
+	*proc << args;
 
-	bool ok = d->proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
+	bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
 	if ( !ok ) {
 		KMessageBox::error( 0, i18n("Could not invoke CVS"), i18n("Error Invoking Command") );
-		zero_delete( d->proc );
+		zero_delete( proc );
 		return;
 	}
 
-	connect( d->proc, SIGNAL(processExited(KProcess*)),this, SLOT(processExited()) );
-	connect( d->proc, SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(receivedStdout(KProcess*,char*,int)) );
-	connect( d->proc, SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(receivedStderr(KProcess*,char*,int)) );
+	connect( proc, SIGNAL(processExited(KProcess*)),this, SLOT(processExited()) );
+	connect( proc, SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(receivedStdout(KProcess*,char*,int)) );
+	connect( proc, SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(receivedStderr(KProcess*,char*,int)) );
 
 	core()->running( this, true );
 
-	d->doneOperation();
+	doneOperation();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -678,27 +642,27 @@ void CvsPart::processExited()
 {
 	core()->running( this, false );
 
-	if ( d->proc->normalExit() )
-		d->diffFinished( d->stdOut, d->stdErr );
+	if ( proc->normalExit() )
+		diffFinished( stdOut, stdErr );
 
-	d->stdOut = QString::null;
-	d->stdErr = QString::null;
+	stdOut = QString::null;
+	stdErr = QString::null;
 
-	zero_delete( d->proc );
+	zero_delete( proc );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::receivedStdout( KProcess*, char* buffer, int buflen )
 {
-	d->stdOut += QString::fromUtf8( buffer, buflen );
+	stdOut += QString::fromUtf8( buffer, buflen );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::receivedStderr( KProcess*, char* buffer, int buflen )
 {
-	d->stdErr += QString::fromUtf8( buffer, buflen );
+	stdErr += QString::fromUtf8( buffer, buflen );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -707,9 +671,9 @@ void CvsPart::slotStopButtonClicked( KDevPlugin* which )
 {
 	if ( which != 0 && which != this )
 		return;
-	if ( !d->proc )
+	if ( !proc )
 		return;
-	if ( !d->proc->kill() ) {
+	if ( !proc->kill() ) {
 		KMessageBox::sorry( 0, i18n("Unable to kill process, you might want to kill it by hand.") );
 		return;
 	}
@@ -722,6 +686,17 @@ void CvsPart::projectConfigWidget( KDialogBase *dlg )
 	QVBox *vbox = dlg->addVBoxPage( i18n("CVS") );
 	CvsOptionsWidget *w = new CvsOptionsWidget( this, (QWidget *)vbox, "cvs config widget" );
 	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QWidget* CvsPart::newProjectWidget( QWidget *parent )
+{
+	if (!form)
+	{
+    	form = new CvsForm( parent );
+	}
+	return form;
 }
 
 #include "cvspart.moc"

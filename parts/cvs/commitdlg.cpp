@@ -13,7 +13,10 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
+#include <qtextedit.h>
 #include <qpushbutton.h>
+
 #include <kapplication.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
@@ -30,10 +33,13 @@ CommitDialog::CommitDialog()
     messagelabel->setMinimumSize(messagelabel->sizeHint());
     layout->addWidget(messagelabel, 0);
 
-    edit = new QMultiLineEdit(this);
-    QFontMetrics fm(edit->fontMetrics());
-    edit->setMinimumSize(fm.width("0")*40, fm.lineSpacing()*3);
-    layout->addWidget(edit, 10);
+    textEdit = new QTextEdit(this);
+    QFontMetrics fm(textEdit->fontMetrics());
+    textEdit->setMinimumSize(fm.width("0")*80, fm.lineSpacing()*3);
+    layout->addWidget(textEdit, 10);
+
+	checkAddToChangelog = new QCheckBox( "&Add entry to master Changelog too", this, "checkboxaddtochangelog" );
+	layout->addWidget( checkAddToChangelog, 0 );
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
@@ -49,6 +55,21 @@ CommitDialog::CommitDialog()
     adjustSize();
 }
 
+QStringList CommitDialog::logMessage() const
+{
+	QStringList textLines;
+	for (int i=0; i<textEdit->paragraphs(); ++i)
+	{
+		textLines << textEdit->text( i );
+	}
+	return textLines;
+}
+
+bool CommitDialog::mustAddToChangeLog() const
+{
+	return checkAddToChangelog->isChecked();
+}
+
 void CommitDialog::accept()
 {
 	if (logMessage().isEmpty()) {
@@ -62,21 +83,6 @@ void CommitDialog::accept()
 		}
 	}
 	QDialog::accept();
-/*
-	if (!logMessage().isEmpty()) {
-		QDialog::accept();
-	}
-	else {
-        int s = KMessageBox::warningContinueCancel( this,
-			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
-			i18n("CVS Commit Warning"),
-			KStdGuiItem::cont(),
-			i18n("askWhenCommittingEmptyLogs") );
-        if ( s == KMessageBox::Continue ) {
-			QDialog::accept();
-		}
-    }
-*/
 }
 
 #include "commitdlg.moc"
