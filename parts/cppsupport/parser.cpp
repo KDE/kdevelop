@@ -831,7 +831,6 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
 
-    qDebug( "------------------> Parser::parseTemplateDeclaration() " );
     int start = lex->index();
 
     AST::Node exp;
@@ -3551,7 +3550,7 @@ bool Parser::parseLogicalOrExpression( AST::Node& node, bool templArgs )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
 
     int start = lex->index();
-    
+
     AST::Node expr;
     if( !parseLogicalAndExpression(expr, templArgs) )
         return false;
@@ -3630,9 +3629,9 @@ bool Parser::parseConstantExpression( AST::Node& node )
 bool Parser::parseExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseExpression()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( !parseCommaExpression(node) )
         return false;
 
@@ -3646,7 +3645,7 @@ bool Parser::parseCommaExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseCommaExpression()" << endl;
     int start = lex->index();
-    
+
     AST::Node expr;
     if( !parseAssignmentExpression(expr) )
         return false;
