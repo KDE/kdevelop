@@ -18,4 +18,12 @@
     <excludepatterns>*~</excludepatterns>
   </general>
  </kdevscriptproject>
+ <kdevfilecreate>
+    <filetypes/>
+    <useglobaltypes>
+      <type ext="" />
+      <type ext="pl" />
+      <type ext="pm" />
+    </useglobaltypes>
+ </kdevfilecreate>
 </kdevelop>
