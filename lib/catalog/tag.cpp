@@ -90,3 +90,16 @@ void Tag::store( QDataStream& stream ) const
 	<< m_endColumn
 	<< m_attributes;
 }
+
+QDataStream& operator << ( QDataStream& s, const Tag& t)
+{
+  t.store( s );
+  return s;
+}
+
+QDataStream& operator >> ( QDataStream& s, Tag& t )
+{
+  t.load( s );
+  return s;
+}
+

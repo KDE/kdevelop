@@ -200,6 +200,9 @@ inline bool GCatalog<Tp>::isValid() const
 template <class Tp>
 inline void GCatalog<Tp>::addItem( Tp& tag )
 {
+    if( tag.name().isEmpty() )
+        return;
+
     QCString id = generateId();
 
     tag.setId( id );

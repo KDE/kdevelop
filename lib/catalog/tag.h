@@ -221,4 +221,7 @@ private:
     QMap<QCString, QVariant> m_attributes;
 };
 
+QDataStream& operator << ( QDataStream&, const Tag& );
+QDataStream& operator >> ( QDataStream&, Tag& );
+
 #endif
