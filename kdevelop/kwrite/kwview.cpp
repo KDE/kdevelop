@@ -946,16 +946,14 @@ void KWriteView::placeCursor(int x, int y, int flags) {
   update(c);
 }
 
-void KWriteView::focusInEvent(QFocusEvent *e) {
-
-/* Removed by HarryF (harry@bnro.de) because the cursor could disappear when 
-   opening and closing Popup Menus. (10/15/01)
-
-  // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
+void KWriteView::focusInEvent(QFocusEvent *e)
+{
+  // when we open a popup menu FocusIn and FocusOut is called for KWriteView which makes it very slow because of the triggered repaint
+  // (Falk: it seems to be useless that Qt does it that way!?! -> maybe bug of QT)
   if (e && ((e->reason())==QFocusEvent::Popup)) {
     return;
   }
-*/
+
   if (m_hasFocus)
     return;
   else
@@ -978,8 +976,14 @@ void KWriteView::focusInEvent(QFocusEvent *e) {
   emit kWrite->clipboardStatus(this, !text.isEmpty());
 }
 
-void KWriteView::focusOutEvent(QFocusEvent *) {
+void KWriteView::focusOutEvent(QFocusEvent *e) {
 //  printf("lost focus\n");
+
+  // when we open a popup menu FocusIn and FocusOut is called for KWriteView which makes it very slow because of the triggered repaint
+  // (Falk: it seems to be useless that Qt does it that way!?! -> maybe bug of QT)
+  if (e && ((e->reason())==QFocusEvent::Popup)) {
+    return;
+  }
 
   if (cursorTimer) {
     killTimer(cursorTimer);
