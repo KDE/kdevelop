@@ -1,3 +1,7 @@
+1999-03-23  Pascal Krahmer <pascal@beast.de>
+        * added tab "items" for kdlgedit
+        * some stuff in kdevelop/kdlgedit/*
+
 1999-03-23  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* extended the dialog editor view and added icons
 	* added config-saving for dialogeditor
