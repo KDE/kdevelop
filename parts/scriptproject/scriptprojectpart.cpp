@@ -97,6 +97,11 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
 
     QDomDocument &dom = *projectDom();
 
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevscriptproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevscriptproject/run/directoryradio", "executable");
+    }
+
     QString includepatterns
         = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
     QStringList includepatternList;

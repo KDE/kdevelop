@@ -181,6 +181,12 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
 {
     m_widget->openProject(dirName);
     m_projectName = projectName;
+
+    QDomDocument &dom = *projectDom();
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevtrollproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevtrollproject/run/directoryradio", "executable");
+    }
 }
 
 

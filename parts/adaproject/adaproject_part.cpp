@@ -103,6 +103,11 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
     m_projectDir = dirName;
     m_projectName = projectName;
 
+    QDomDocument &dom = *projectDom();
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevadaproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevadaproject/run/directoryradio", "executable");
+    }
 
     loadProjectConfig();
 

@@ -199,10 +199,16 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 
 	m_widget->openProject(dirName);
 
-    QString activeTarget = DomUtil::readEntry(*projectDom(), "/kdevautoproject/general/activetarget");
+    QDomDocument &dom = *projectDom();
+    QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
     kdDebug(9020) << "activeTarget " << activeTarget << endl;
     if (!activeTarget.isEmpty())
         m_widget->setActiveTarget(activeTarget);
+
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevautoproject/run/directoryradio", "executable");
+    }
 }
 
 

@@ -73,6 +73,13 @@ void AntProjectPart::openProject(const QString &dirName, const QString &projectN
   m_projectDirectory = dirName;
   m_projectName = projectName;
 
+  QDomDocument &dom = *projectDom();
+  // Set the default directory radio to "executable"
+  // FIXME: there is no kdevantproject so this will not work !
+  if (DomUtil::readEntry(dom, "/kdevantproject/run/directoryradio") == "" ) {
+    DomUtil::writeEntry(dom, "/kdevantproject/run/directoryradio", "executable");
+  }
+
   /// @todo read alternative build file from properties
   m_antOptions.m_buildXML = "build.xml";
 

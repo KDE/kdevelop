@@ -109,6 +109,11 @@ void PascalProjectPart::openProject(const QString &dirName, const QString &proje
     m_projectDir = dirName;
     m_projectName = projectName;
 
+    QDomDocument &dom = *projectDom();
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevpascalproject/run/directoryradio", "executable");
+    }
 
     loadProjectConfig();
 

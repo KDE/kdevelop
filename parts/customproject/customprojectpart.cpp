@@ -165,6 +165,12 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
     m_projectDirectory = dirName;
     m_projectName = projectName;
 
+    QDomDocument &dom = *projectDom();
+    // Set the default directory radio to "executable"
+    if (DomUtil::readEntry(dom, "/kdevcustomproject/run/directoryradio") == "" ) {
+        DomUtil::writeEntry(dom, "/kdevcustomproject/run/directoryradio", "executable");
+    }
+
     QFile f(dirName + "/" + projectName + ".filelist");
     if (f.open(IO_ReadOnly)) {
         QTextStream stream(&f);
