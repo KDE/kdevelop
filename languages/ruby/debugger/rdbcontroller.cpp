@@ -548,6 +548,27 @@ void RDBController::parseDisplay(char *buf, char * expr)
 
 // **************************************************************************
 
+// Updates the watch expressions with current values
+void RDBController::parseUpdateDisplay(char *buf)
+{
+    varTree_->viewport()->setUpdatesEnabled(false);
+	
+    QRegExp display_re("^(\\d+):\\s([^\n]*)\n");
+	
+	int pos = display_re.search(buf);
+	while (pos != -1) {
+		varTree_->watchRoot()->updateWatchVariable(display_re.cap(1).toInt(), display_re.cap(2));
+		
+		pos += display_re.matchedLength();
+		pos = display_re.search(buf, pos);
+	}
+
+    varTree_->viewport()->setUpdatesEnabled(true);
+    varTree_->repaint();
+}
+
+// **************************************************************************
+
 // This is called on program stop to process the global.
 void RDBController::parseGlobals(char *buf)
 {
@@ -624,6 +645,8 @@ void RDBController::parse(char *buf)
 		parseBreakpointSet(buf); 
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "display ", strlen("display ")) == 0) {
 		parseDisplay(buf, currentCmd_->rawDbgCommand().data() + strlen("display "));
+	} else if (currentCmd_->rawDbgCommand() == "display") {
+		parseUpdateDisplay(buf);
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "undisplay ", strlen("undisplay ")) == 0) {
 		;
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "method instance ", strlen("method instance ")) == 0) { 
@@ -1046,8 +1069,10 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
 		
 	if (frameNo > currentFrame_) {
     	queueCmd(new RDBCommand(QCString().sprintf("up %d", frameNo - currentFrame_), NOTRUNCMD, INFOCMD));
+        queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
 	} else if (frameNo < currentFrame_) {
     	queueCmd(new RDBCommand(QCString().sprintf("down %d", currentFrame_ - frameNo), NOTRUNCMD, INFOCMD));
+        queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
 	}
 
     // Hold on to  this thread/frame so that we know where to put the local
