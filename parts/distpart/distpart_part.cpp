@@ -33,7 +33,7 @@
 #include <kdialogbase.h>
 
 typedef KDevGenericFactory<DistpartPart> DistpartFactory;
-static const KAboutData data("kdevdistpart", I18N_NOOP("Project Distribution && Publishing"), "1.0");
+static const KAboutData data("kdevdistpart", I18N_NOOP("Distribution && Publishing"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( &data ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
@@ -44,7 +44,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
 
     setXMLFile("kdevpart_distpart.rc");
 
-    m_action =  new KAction( i18n("Project Distribution && Publishing"), "package", 0,
+    m_action =  new KAction( i18n("Distribution && Publishing"), "package", 0,
                              this, SLOT(show()),
                              actionCollection(), "make_dist" );
 
@@ -52,7 +52,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
     m_action->setWhatsThis(i18n("<b>Project distribution && publishing</b><p>Helps users package and publish their software."));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
-    m_dlg = new KDialogBase( widget() , "dist_part", false, i18n("Project Distribution && Publishing"), KDialogBase::Ok|KDialogBase::Cancel);
+    m_dlg = new KDialogBase( widget() , "dist_part", false, i18n("Distribution && Publishing"), KDialogBase::Ok|KDialogBase::Cancel);
     
     m_dialog = new DistpartDialog(this, m_dlg );
     m_dlg->setMainWidget(m_dialog);
