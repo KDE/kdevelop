@@ -57,18 +57,19 @@ include admin/deps.am
 ##
 
 #DOXYGEN_INPUT = src/profileengine lib buildtools/projectmanager/interfaces doc/api
-DOXYGEN_INPUT = lib/interfaces
+#DOXYGEN_INPUT = lib/interfaces
 
 ## Exclude the application wizard templates, and some file templates
-DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates *face_skel.cpp *.ui.h lib/qextmdi vcs/cvsclient
+#DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates *face_skel.cpp *.ui.h lib/qextmdi vcs/cvsclient
 
-DOXYGEN_EXAMPLE_PATH = languages/cpp/app_templates/khello languages/cpp/app_templates/kdevpart
+#DOXYGEN_EXAMPLE_PATH = languages/cpp/app_templates/khello languages/cpp/app_templates/kdevpart
 
 ## Use KDE Libs tag files
-DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
-DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils
+#DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
+#DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils
 
 ## Use Search engine (Versions 1.3.4 and above only!)
 DOXYGEN_SEARCHENGINE = YES
-
+DOXYGEN_EMPTY = YES
+DOXYGEN_PROJECTNAME = KDevelop Platform API
 include Doxyfile.am
