@@ -101,6 +101,8 @@ struct TFileInfo {
   bool install;
   /** install-location*/
   QString install_location;
+  /** belongs to following targets in the list (for SOURCES and HEADERS)*/
+  QStrList targetLst;
 };
 
 struct TWorkspace {
@@ -110,7 +112,8 @@ struct TWorkspace {
   QString cpp_file;
   QString browser_file;
   bool show_treeview;
-  bool show_output_view;  
+  bool show_output_view;
+  QString activeTarget;
 };
 
 /** this class includes the properties of a project and some methods to read
@@ -223,6 +226,7 @@ public: // Methods to store project options
 
   void setFilters(QString group,QStrList& filters);
 
+  void setActiveTarget(QString target);
 public: // Methods to fetch project options
 
   /** Fetch the version of the kdevprj file format*/
