@@ -39,11 +39,11 @@
 
 #include "kmultitabbar.h"
 #ifndef NO_INCLUDE_MOCFILES
-# include "kmultitabbar.moc"
+//# include "kmultitabbar.moc"
 #endif
 #include "kmultitabbar_p.h"
 #ifndef NO_INCLUDE_MOCFILES
-# include "kmultitabbar_p.moc"
+//# include "kmultitabbar_p.moc"
 #endif
 
 KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMultiTabBarMode bm):QScrollView(parent)

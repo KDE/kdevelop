@@ -14,6 +14,6 @@ libkdevelopqextmdi_la_SOURCES = kmdichildarea.cpp kmdichildfrm.cpp kmdichildfrmc
 KDE_OPTIONS = nofinal
 METASOURCES = AUTO
 
-AM_CXXFLAGS = -DNO_INCLUDE_MOCFILES
+#AM_CXXFLAGS = -DNO_INCLUDE_MOCFILES
 
 META_INCLUDES = $(srcdir)
