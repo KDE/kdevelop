@@ -60,6 +60,9 @@ ESCAPE_SEQUENCE [\\]({SIMPLE_ESCAPE}|{OCTAL_ESCAPE}|{HEX_ESCAPE})
 CCHAR [^'\\\n]|{ESCAPE_SEQUENCE}
 SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
+MACQPROP "Q_PROPERTY(".*")"
+MACQENUM "Q_ENUMS(".*")"
+
 %option yylineno
 %option C++ yymore
 
@@ -134,6 +137,10 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
+    /*========== for ignoring qt-specific macros dymo 24012003 ===*/
+<INITIAL>"Q_EXPLICIT"     {}
+<INITIAL>{MACQPROP}       {}
+<INITIAL>{MACQENUM}       {}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
