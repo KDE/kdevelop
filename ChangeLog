@@ -1,3 +1,7 @@
+1999-12-21  Falk Brettschneider  <gigafalk@yahoo.com>
+        * maximizing MDI views improved, still waiting for new KMenuBar that inherits QMenuBar ;-)
+	* MDI view taskbar can be switched on/off
+
 1999-12-16  Falk Brettschneider  <gigafalk@yahoo.com>
         * maximize switches to stacked SDI mode (like in KDevelop-1.0),
 	* MDI system optimized, bugs fixed
