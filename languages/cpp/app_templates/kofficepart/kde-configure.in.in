@@ -11,13 +11,13 @@ dnl AC_DEFINE(USE_QFD, 1, [Define if you prefer the Qt provided file dialog])
 KWMF_INCLUDES='-I$(KDEDIR)/lib/kwmf -I$(KDEDIR)/lib/kwmf'
 AC_SUBST(KWMF_INCLUDES)
 
-KSTORE_INCLUDES='-I$(KDEDIR)/include/kde'
+KSTORE_INCLUDES='-I$(KDEDIR)/include'
 AC_SUBST(KSTORE_INCLUDES)
 
-KOFFICECORE_INCLUDES='-I$(KDEDIR)/include/kde'
+KOFFICECORE_INCLUDES='-I$(KDEDIR)/include'
 AC_SUBST(KOFFICECORE_INCLUDES)
 
-KOFFICEUI_INCLUDES='-I$(KDEDIR)/include/kde'
+KOFFICEUI_INCLUDES='-I$(KDEDIR)/include'
 AC_SUBST(KOFFICEUI_INCLUDES)
 
 LIB_KOFFICEUI='$(KDEDIR)/lib/libkofficeui.la'
@@ -40,17 +40,3 @@ AC_LANG_CPLUSPLUS
 AC_CHECK_HEADERS(streambuf streambuf.h)
 AC_LANG_RESTORE
 
-dnl only use kdeprint if kprinter.h was found (recent kdelibs)
-AC_MSG_CHECKING([for kprinter.h (kdelibs>2.1)])
-AC_FIND_FILE(kprinter.h, $kde_includes, ac_kprinter_includes)
-
-if test -n "$ac_kprinter_includes" && test -r "$ac_kprinter_includes/kprinter.h"; then
-  AC_DEFINE(HAVE_KDEPRINT, 1, [Define if you have kprinter.h])
-  LIB_KDEPRINT=-lkdeprint
-  AC_MSG_RESULT([found in $ac_kprinter_includes])
-else
-  LIB_KDEPRINT=
-  AC_MSG_RESULT([not found -- QPrinter will be used instead])
-fi
-AC_SUBST(LIB_KDEPRINT)
-AC_DEFINE(HAVE_KDEPRINT_TESTED, 1, [Define if kdeprint was tested])
