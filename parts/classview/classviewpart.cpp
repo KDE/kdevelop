@@ -45,6 +45,7 @@
 #include "classviewwidget.h"
 #include "classviewpart.h"
 #include "hierarchydlg.h"
+#include "navigator.h"
 
 #include "klistviewaction.h"
 
@@ -60,10 +61,13 @@ static const KAboutData data("kdevclassview", I18N_NOOP("Class browser"), "1.0")
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( &data ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ), sync(false)
+    : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ), sync(false),
+    m_activeDocument(0), m_activeView(0), m_activeSelection(0), m_activeEditor(0), m_activeViewCursor(0)
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
+    
+    navigator = new Navigator(this);
 
     setupActions();
 
@@ -101,14 +105,18 @@ ClassViewPart::~ClassViewPart()
 void ClassViewPart::slotProjectOpened( )
 {
     connect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
+    connect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
     connect( languageSupport(), SIGNAL(aboutToRemoveSourceInfo(const QString& )), this, SLOT(removeFile(const QString&)));
     connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(addFile(const QString& )));
+    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), navigator, SLOT(addFile(const QString& )));
+    
 //    connect( languageSupport(), SIGNAL(addedSourceInfo(const QString& )), this, SLOT(refresh()));
 }
 
 void ClassViewPart::slotProjectClosed( )
 {
     disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), this, SLOT(refresh()) );
+    disconnect( languageSupport(), SIGNAL(updatedSourceInfo()), navigator, SLOT(refresh()) );
     m_namespaces->view()->clear();
     m_classes->view()->clear();
     m_functions->view()->clear();
@@ -116,10 +124,18 @@ void ClassViewPart::slotProjectClosed( )
 
 void ClassViewPart::setupActions( )
 {
+    m_functionsnav = new KListViewAction( new KComboView(true, 150, 0, "m_functionsnav_combo"), i18n("Functions Navigation"), 0, 0, 0, actionCollection(), "functionsnav_combo", true );
+    connect(m_functionsnav->view(), SIGNAL(activated(QListViewItem*)), navigator, SLOT(selectFunctionNav(QListViewItem*)));
+    connect(m_functionsnav->view(), SIGNAL(focusGranted()), navigator, SLOT(functionNavFocused()));
+    connect(m_functionsnav->view(), SIGNAL(focusLost()), navigator, SLOT(functionNavUnFocused()));
+    m_functionsnav->setToolTip(i18n("Functions in file"));
+    m_functionsnav->setWhatsThis(i18n("<b>Function navigator</b><p>Navigates over functions contained in the file."));
+    m_functionsnav->view()->setCurrentText(NAV_NODEFINITION);
+    
     m_followCode = new KAction(i18n("Synchronize"), "dirsynch", 0, this, SLOT(syncCombos()), actionCollection(), "sync_combos");
     m_followCode->setToolTip(i18n("Synchronize selectors"));
-    m_followCode->setWhatsThis(i18n("<b>Synchronize</b><p>Synchronize namespaces, classes and functions selectors with the current position in code."));
-
+    m_followCode->setWhatsThis(i18n("<b>Synchronize</b><p>Synchronize namespaces, classes and functions selectors with the current position in code."));    
+    
     m_namespaces = new KListViewAction( new KComboView(true, 150, 0, "m_namespaces_combo"), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo", true );
     connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
     connect( m_namespaces->view(), SIGNAL(focusGranted()), this, SLOT(focusNamespaces()) );
@@ -192,9 +208,17 @@ void ClassViewPart::setupActions( )
     }
 #endif
 
+    if (langHasFeature(KDevLanguageSupport::Classes))
+    {
+        KAction *ac = new KAction(i18n("Class Inheritance Diagram"), "view_tree", 0, this, SLOT(graphicalClassView()), actionCollection(), "inheritance_dia");
+        ac->setToolTip(i18n("Class inheritance diagram"));
+        ac->setWhatsThis(i18n("<b>Class inheritance diagram</b><p>Displays inheritance relationship between classes in project. "
+                                 "Note, it does not display classes outside inheritance hierarchy."));    
+    }
+
     popup->insertSeparator();
-    id = popup->insertItem(i18n("Inheritance Diagram"), this, SLOT(graphicalClassView()));
-    popup->setWhatsThis(id, i18n("<b>Inheritance diagram</b><p>Displays inheritance relationship between classes in project. "
+    id = popup->insertItem(i18n("Class Inheritance Diagram"), this, SLOT(graphicalClassView()));
+    popup->setWhatsThis(id, i18n("<b>Class inheritance diagram</b><p>Displays inheritance relationship between classes in project. "
                                  "Note, it does not display classes outside inheritance hierarchy."));
 }
 
@@ -656,6 +680,13 @@ void ClassViewPart::syncCombos( )
 
 void ClassViewPart::activePartChanged( KParts::Part * part)
 {
+    navigator->stopTimer();
+    if (m_activeView)
+    {
+        disconnect(m_activeView, SIGNAL(cursorPositionChanged()), 
+            navigator, SLOT(slotCursorPositionChanged()));
+    }
+    
     kdDebug() << "ClassViewPart::activePartChanged()" << endl;
 
     m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
@@ -669,9 +700,16 @@ void ClassViewPart::activePartChanged( KParts::Part * part)
     if (m_activeDocument)
     {
         m_activeFileName = URLUtil::canonicalPath( m_activeDocument->url().path() );
+        navigator->refreshNavBars(m_activeFileName);
+        navigator->syncFunctionNavDelayed(200);
 /*        if ( languageSupport()->mimeTypes().find(
             KMimeType::findByPath(m_activeFileName)) != languageSupport()->mimeTypes().end() )
             m_activeFileName = QString::null;*/
+    }
+    if( m_activeViewCursor )
+    {
+        connect(m_activeView, SIGNAL(cursorPositionChanged()),
+            navigator, SLOT(slotCursorPositionChanged()) );
     }
 }
 

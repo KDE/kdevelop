@@ -6,7 +6,8 @@ kde_module_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
 
-libkdevclassview_la_SOURCES = classviewpart.cpp classviewwidget.cpp digraphview.cpp viewcombos.cpp hierarchydlg.cpp
+libkdevclassview_la_SOURCES = classviewpart.cpp classviewwidget.cpp \
+	digraphview.cpp viewcombos.cpp hierarchydlg.cpp navigator.cpp 
 
 METASOURCES = AUTO
 
@@ -22,4 +23,4 @@ QTDIR = /home/bernd/kdesrc/qt-copy
 foo: digraphview.cpp digraphview.h
 	$(QTDIR)/bin/moc digraphview.h > digraphview.moc ; \
 	g++ digraphview.cpp -I$(QTDIR)/include -L$(QTDIR)/lib -L/usr/X11R6/lib -lqt -lX11 -lXext -o foo
-noinst_HEADERS =  viewcombos.h
+noinst_HEADERS = viewcombos.h navigator.h 

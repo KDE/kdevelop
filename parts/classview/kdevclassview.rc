@@ -1,12 +1,26 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevClassView" version="5">
+<kpartgui name="KDevClassView" version="7">
+<MenuBar>
+  <Menu name="project" >
+      <Action name="inheritance_dia" group="project_classes" />
+  </Menu>
+</MenuBar>
+
 <ToolBar name="browserToolBar">
   <text>Browser Toolbar</text>
-  <Action name="namespaces_combo" />
-  <Action name="classes_combo" />
-  <Action name="functions_combo" />
-  <Action name="view_popup" />
   <Separator/>
+  <Action name="functionsnav_combo" />
+<!--  <Action name="namespaces_combo" />
+  <Action name="classes_combo" />
+  <Action name="functions_combo" /> 
+  <Action name="view_popup" />
+  <Separator/>-->
 </ToolBar>
+<!--<ToolBar name="codeNavToolBar">
+  <text>Code Navigation Toolbar</text>
+  <Action name="functionsnav_combo" />
+  <Action name="goto_button" />
+  <Separator/>
+</ToolBar> -->
 </kpartgui>
 

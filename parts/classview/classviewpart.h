@@ -47,6 +47,7 @@ class KListViewAction;
 class QListViewItem;
 class KToolBarPopupAction;
 class NamespaceItem;
+class Navigator;
 
 class ClassViewPart : public KDevPlugin
 {
@@ -66,6 +67,9 @@ public:
     KListViewAction *m_functions;
 
     NamespaceItem *global_item;
+    
+    KListViewAction *m_functionsnav;
+    Navigator *navigator;
 
     void updateClassesForAdd(NamespaceDom nsdom);
     void updateFunctionsForAdd(ClassDom cldom);
@@ -125,6 +129,7 @@ private:
     friend class NamespaceItem;
     friend class ClassItem;
     friend class FunctionItem;
+    friend class Navigator;
 };
 
 

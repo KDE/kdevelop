@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCppSupport" version="7">
+<kpartgui name="KDevCppSupport" version="8">
 <MenuBar>
  <Menu name="edit">
   <Action name="edit_complete_text"/>
@@ -14,13 +14,12 @@
  </Menu>
 
  <Menu name="project">
-  <Action name="project_newclass"/>
+  <Action name="project_newclass" group="project_classes"/>
  </Menu>
 </MenuBar>
 
 <ToolBar name="browserToolBar" position="Top" iconText="IconOnly">
   <Action name="project_newclass"/>
-  <Separator />
 </ToolBar>
 </kpartgui>
 

@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+    Copyright (C) 2003-2004 Alexander Dymo <cloudtemple@mksat.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -95,6 +95,67 @@ void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
 	findFunctionDefinitions( pred, model_cast<NamespaceDom>(*it), lst );
 }
 #endif
+
+template <class Pred> void findFunctionDeclarations( Pred pred, const FileList& fileList, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceDom& ns, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceList& namespaceList, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const ClassList& classList, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionList& functionDefinitionList, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const ClassDom& klass, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionDefinitionDom& fun, FunctionList & lst );
+template <class Pred> void findFunctionDeclarations( Pred pred, FunctionList & lst );
+
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const FileList& fileList, FunctionList & lst )
+{
+    for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it )
+	findFunctionDeclarations( pred, model_cast<NamespaceDom>(*it), lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const NamespaceDom& ns, FunctionList & lst )
+{
+    findFunctionDeclarations( pred, ns->namespaceList(), lst );
+    findFunctionDeclarations( pred, ns->classList(), lst );
+    findFunctionDeclarations( pred, ns->functionList(), lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const NamespaceList& namespaceList, FunctionList & lst )
+{
+    for( NamespaceList::ConstIterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
+	findFunctionDeclarations( pred, *it, lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const ClassList& classList, FunctionList & lst )
+{
+    for( ClassList::ConstIterator it=classList.begin(); it!=classList.end(); ++it )
+	findFunctionDeclarations( pred, *it, lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const FunctionList& functionList, FunctionList & lst )
+{
+    for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
+	findFunctionDeclarations( pred, *it, lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const ClassDom& klass, FunctionList & lst )
+{
+    findFunctionDeclarations( pred, klass->classList(), lst );
+    findFunctionDeclarations( pred, klass->functionList(), lst );
+}
+
+template <class Pred>
+void findFunctionDeclarations( Pred pred, const FunctionDom& fun, FunctionList & lst )
+{
+    if( pred(fun) )
+	lst << fun;
+}
+
 
 struct Scope{
     ClassDom klass;
