@@ -14,18 +14,20 @@
 *                                                                   *
 * ------------------------------------------------------------------*
 *********************************************************************/
+%Start COMMENT PREPARSER
+
 %{
   #include <stdlib.h>
   #include <stdio.h>
-  #include <string.h>
   #include <ctype.h>
+  #include <qstring.h>
   #include "tokenizer.h"
   #include "FlexLexer.h"
 
   class MyLexer : public yyFlexLexer
   {
     public:
-    int yyinput() { return yyFlexLexer::yyinput(); }
+    int yyinput() { return yyFlexLexer::yyinput(); };
   };
 
   /* Continue parsing defines. */
@@ -41,11 +43,12 @@
   int comment_end = -1;
 
   /* Last parsed comment. */
-  char comment[2048];
+  QString comment;
 
   /* Function prototypes */
-  void eatPreparser(MyLexer *lex);
-  void eatComment(MyLexer *lex);
+  bool beginComment(MyLexer *lex);
+  void inComment(MyLexer *lex);
+  bool endComment(MyLexer *lex);
 %}
 
 WS           [ \t\r]+
@@ -65,181 +68,127 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 %option yylineno
 %%
     /*==============> Strip whitespace <==============*/
-{WS}         {}
+<INITIAL,COMMENT,PREPARSER>{WS}         {}
 
     /*==============> Special keyword <==============*/
-"class"         {return CPCLASS;}
-"public"        {return PUBLIC;}
-"protected"     {return PROTECTED;}
-"private"       {return PRIVATE;}
-"const"         {return CONST;}
-"static"        {return STATIC;}
-"virtual"       {return CPVIRTUAL;}
-"signals"       {return QTSIGNAL;}
-"slots"         {return QTSLOT;}
-"enum"          {return CPENUM;}
-"typedef"       {return CPTYPEDEF;}
-"friend"        {return CPFRIEND;}
-"struct"        {return CPSTRUCT;}
-"union"         {return CPUNION;}
-"operator"      {return CPOPERATOR;}
-"template"      {return CPTEMPLATE;}
-"throw"         {return CPTHROW;}
+<INITIAL>"class"         {return CPCLASS;}
+<INITIAL>"public"        {return PUBLIC;}
+<INITIAL>"protected"     {return PROTECTED;}
+<INITIAL>"private"       {return PRIVATE;}
+<INITIAL>"const"         {return CONST;}
+<INITIAL>"static"        {return STATIC;}
+<INITIAL>"virtual"       {return CPVIRTUAL;}
+<INITIAL>"signals"       {return QTSIGNAL;}
+<INITIAL>"slots"         {return QTSLOT;}
+<INITIAL>"enum"          {return CPENUM;}
+<INITIAL>"typedef"       {return CPTYPEDEF;}
+<INITIAL>"friend"        {return CPFRIEND;}
+<INITIAL>"struct"        {return CPSTRUCT;}
+<INITIAL>"union"         {return CPUNION;}
+<INITIAL>"operator"      {return CPOPERATOR;}
+<INITIAL>"template"      {return CPTEMPLATE;}
+<INITIAL>"throw"         {return CPTHROW;}
 
     /*==============> Ignored stuff <==============*/
-"Q_EXPORT"       {}
-"Q_EXPORTH"      {}
-"__BEGIN_DECLS"  {}
-"__END_DECLS"    {}
-"inline"         {}
-"volatile"       {}
-"afx_msg"        {}
+<INITIAL>"Q_EXPORT"       {}
+<INITIAL>"Q_EXPORTH"      {}
+<INITIAL>"__BEGIN_DECLS"  {}
+<INITIAL>"__END_DECLS"    {}
+<INITIAL>"inline"         {}
+<INITIAL>"volatile"       {}
+<INITIAL>"afx_msg"        {}
 
     /*==============> String <==============*/
-"L"?["]{SCHAR}*["]     {return STRING;}
-"L"?[']{CCHAR}+[']    {return STRING;}
+<INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
+<INITIAL>"L"?[']{CCHAR}+[']    {return STRING;}
 
     /*==============> Normal operators <==============*/
-":"          {return ':';}
-"::"         {return CLCL;}
-"~"          {return '~';}
-"="          {return '=';}
-"<"          {return '<';}
-">"          {return '>';}
-"&"          {return '&';}
-"+"          {return '+';}
-"-"          {return '-';}
-"*"          {return '*';}
-"/"          {return '/';}
-"%"          {return '%';}
-"|"          {return '|';}
-"^"          {return '^';}
-"!"          {return '!';}
+<INITIAL>":"          {return ':';}
+<INITIAL>"::"         {return CLCL;}
+<INITIAL>"~"          {return '~';}
+<INITIAL>"="          {return '=';}
+<INITIAL>"<"          {return '<';}
+<INITIAL>">"          {return '>';}
+<INITIAL>"&"          {return '&';}
+<INITIAL>"+"          {return '+';}
+<INITIAL>"-"          {return '-';}
+<INITIAL>"*"          {return '*';}
+<INITIAL>"/"          {return '/';}
+<INITIAL>"%"          {return '%';}
+<INITIAL>"|"          {return '|';}
+<INITIAL>"^"          {return '^';}
+<INITIAL>"!"          {return '!';}
 
     /*==============> End of Phrase <==============*/
-";"          {return ';';}
+<INITIAL>";"          {return ';';}
 
     /*==============> Comma <==============*/
-","          {return ',';}
+<INITIAL>","          {return ',';}
 
     /*==============> Paranthesis <==============*/
-"("          {return '(';}
-")"          {return ')';}
+<INITIAL>"("          {return '(';}
+<INITIAL>")"          {return ')';}
 
     /*==============> Brackets <==============*/
-"{"          {return '{';}
-"}"          {return '}';}
-"["          {return '[';}
-"]"          {return ']';}
+<INITIAL>"{"          {return '{';}
+<INITIAL>"}"          {return '}';}
+<INITIAL>"["          {return '[';}
+<INITIAL>"]"          {return ']';}
 
     /*==============> Identifiers <==============*/
-{ID}         {return ID;}
+<INITIAL>{ID}         {return ID;}
 
     /*==============> Numbers <==============*/
-{NUM}        {return NUM;}
+<INITIAL>{NUM}        {return NUM;}
 
     /*==============> Inrease the line counter at CR <==============*/
-"\n"         {line_num++;}
+<INITIAL,COMMENT>"\n"         {line_num++;}
  
     /*==============> Skip preprocessor directives <==============*/   
-"#"[acdeimpsuw ]     eatPreparser((MyLexer *)this);
- 
+<INITIAL>"#"[acdeimpsuw ]	{BEGIN (PREPARSER);}
+<PREPARSER>"\\\n"      {line_num++;}
+<PREPARSER>"\n"	       {line_num++; BEGIN (0);}
+
     /*==============> Strip // comments <==============*/
-"//"(.)*[\n<<EOF>>] {line_num++;}
+<INITIAL,COMMENT>"//"(.)*[\n<<EOF>>] {line_num++;}
 
     /*==============> Strip comments <==============*/
-"/*"                 eatComment((MyLexer *)this);
+<INITIAL,COMMENT,PREPARSER>"/*"  {beginComment((MyLexer *) this);
+                                  BEGIN (COMMENT);}
+
+<COMMENT>"*/"        { endComment((MyLexer *) this);
+                       BEGIN (0); }
+
+<COMMENT>.           {inComment((MyLexer *) this);}
 
     /*==============> All other characters are ignored <==============*/
-.            {}
+<INITIAL,PREPARSER>.  {}
 
 %%
 
-void eatPreparser(MyLexer *lex)
+bool beginComment(MyLexer *lex)
 {
-  char c='\0'; /* The current character from the input stream */
-  bool foundSlash=false;
-  bool cont=false;
-  bool done=false;
-
-  while ( !done )
-  {
-    c=lex->yyinput();
-
-    switch( c )
-    {
-      case '"': // Skip strings.
-        c=lex->yyinput();
-        while( c != '"' && c != EOF )
-          c=lex->yyinput();
-        break;
-      case '\\':
-        // Take care of escaped '\'
-        cont = !cont;
-        break;
-      case '\n':
-        done = !cont;
-        cont = false;
-        break;
-      case '/':
-        foundSlash = true;
-        break;
-      case '*':
-        if( foundSlash )
-          eatComment(lex);
-
-        foundSlash = false;
-        break;
-      case EOF:
-        done = 1;
-      default:
-        foundSlash = false;
-        break;
-    }
-  }
+ comment_start = lex->lineno();
+ comment="/*";
+ return true;
 }
 
-void eatComment(MyLexer *lex)
+void inComment(MyLexer *lex)
 {
-  bool done = false;  /* Tells when to exit the loop */
-  bool asteriscFound = false; /* Flags that we have found an asterisc. */
-  char c = '\0'; /* The current character from the input stream */
-  int offset = 2; /* Offset in the comment buffer. */
- 
-  /* Set the line where the comment starts. */
-  comment_start = lex->lineno();
+  int c=lex->yyinput();
 
-  /* Initialize the comment string. */
-  strcpy( comment, "/*" );
-
-  while( !done )
+  if (c==EOF)
   {
-    c = lex->yyinput();
-
-    /* Copy the character to the comment string. */
-    comment[ offset++ ] = c;
-
-    switch( c )
-    {
-      case '*':
-        asteriscFound = 1;
-        break;
-      case '/':
-        done = asteriscFound;
-        asteriscFound = 0;
-        break;
-      case EOF:
-        done = 1;
-        break;
-      default:
-        asteriscFound = 0;
-        break;
-    }
+    comment_end = lex->lineno();
   }
+  else
+   comment+=c;
+};
 
-  /* Add a NULL character at the end of the string. */
-  comment[ offset ] = '\0';
-
-  /* Set the line at which the comment ends. */
-  comment_end = lex->lineno();
+bool endComment(MyLexer *lex)
+{
+ comment_end = lex->lineno();
+ comment+="*/";
+ return true;
 }
+
