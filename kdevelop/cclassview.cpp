@@ -959,12 +959,12 @@ void CClassView::slotMethodNew()
 
 void CClassView::slotMethodDelete()
 {
-  const char *className;
-  const char *otherName;
+  QString className;
+  QString otherName;
   THType idxType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( className, otherName, &idxType );
 
   emit signalMethodDelete( className, otherName );
 }
@@ -1042,24 +1042,24 @@ void CClassView::slotClassTool()
 
 void CClassView::slotViewDefinition() 
 {
-  const char *className;
-  const char *otherName;
+  QString className;
+  QString otherName;
   THType idxType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( className, otherName, &idxType );
 
   slotViewDefinition( className, otherName, idxType );
 }
 
 void CClassView::slotViewDeclaration()
 {
-  const char *className;
-  const char *otherName;
+  QString className;
+  QString otherName;
   THType idxType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( &className, &otherName, &idxType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( className, otherName, &idxType );
 
   slotViewDeclaration( className, otherName, idxType );
 }
