@@ -55,4 +55,15 @@ typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
 
+extern int errno;
+
 #endif
+
+#ifndef YY_STACK_USED
+#define YY_STACK_USED 0
+#endif
+
+#ifndef YY_MAIN
+#define YY_MAIN 0
+#endif
+
