@@ -72,7 +72,7 @@ void perlparser::parseLines(QStringList* lines,const QString &fileName)
   QRegExp      isare("^[ \t]*@ISA[ \t=qw\\(\'\"]*([A-Za-z0-9_: ]*)");
   QRegExp   globalre("^[ \t]*our[ \t]+\\(*([ \t,$%@*+A-Za-z0-9_]*)\\)*.*");
   QRegExp   myre("^[ \t]*my[ \t]+\\(*([ \t,$%@*+A-Za-z0-9_]*)\\)*.*");
-  QRegExp      subre("^[ \t]*sub[ \t]+([A-Za-z0-9_]+)([A-Za-z0-9_]|([ \t]+[{])?)$");
+  QRegExp      subre("^[ \t]*sub[ \t]+([A-Za-z0-9_]+)([A-Za-z0-9_]|([ \t]*[{])?)$");
   QRegExp    blessre("bless[ \t]*[\\( ]*([,$%@*+A-Za-z0-9_]*).*;");
   QRegExp     namere("^[ \t]*([$%@*])([A-Za-z0-9_]*).*$");
   QRegExp  privatere("^_([A-Za-z0-9_]*)");
