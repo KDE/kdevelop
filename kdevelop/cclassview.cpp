@@ -101,6 +101,8 @@ void CClassView::initPopups()
   projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()));
   projectPopup.insertSeparator();
   projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
+  id = projectPopup.insertItem(i18n("Graphical classview..."), this, SLOT(slotGraphicalView()));
+  projectPopup.setItemEnabled( id, false );
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
@@ -646,6 +648,10 @@ void CClassView::buildInitalClassTree()
 void CClassView::slotProjectOptions()
 {
   emit selectedProjectOptions();
+}
+
+void CClassView::slotGraphicalView()
+{
 }
 
 void CClassView::slotFileNew()

@@ -83,6 +83,7 @@ signals:
 protected: // Protected signals and slots
   protected slots:
     void slotProjectOptions();
+    void slotGraphicalView();
     void slotFileNew();
     void slotClassNew();
     void slotClassDelete();
