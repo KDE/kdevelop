@@ -37,6 +37,8 @@
 #include <kregexp.h>
 #include <kurl.h>
 #include <qmessagebox.h>
+#include "classparser.h"
+
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -1185,7 +1187,14 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
         int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget..."));
         int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+        int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit subclass"));
         int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
+
+        if(!fitem->name.contains(".h") &&
+           !fitem->name.contains(".cpp"))
+        {
+          popup.removeItem(idUpdateWidgetclass);
+        }
 
         if(!fitem->name.contains(".ui"))
         {
@@ -1233,6 +1242,25 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
           m_part->addFiles(newFileNames);
         }
+        else if (r == idUpdateWidgetclass)
+        {
+          ClassStore classcontainer;
+          CClassParser parser(&classcontainer);
+          parser.parse(m_shownSubproject->path + "/" + fitem->name);
+          QStringList classes(classcontainer.getSortedClassNameList());
+          typedef QValueList<ParsedMethod*> SlotList;
+          for (uint i=0; i<classes.count(); i++)
+          {
+            QMessageBox::information(0,"Class",classes[i]);
+            ParsedClass *cls = classcontainer.getClassByName(classes[i]);
+            cls->out();
+            SlotList slotlist = cls->getSortedMethodList();
+            SlotList::iterator it;
+            for ( it = slotlist.begin(); it != slotlist.end(); ++it )
+              QMessageBox::information(0,"Slot",(*it)->asString());
+          }
+        }
+
 
     }
 }

@@ -35,6 +35,8 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   // ATTENTION: This method is central for the class. Almost all other methods rely on it
   //            so be careful!
   unsigned int i=startPos.m_row;
+  if (!m_buffer.count())
+    return Caret(-1,-1);
   QString line = m_buffer[i++];
   line = line.mid(startPos.m_idx,line.length()-startPos.m_idx);
   for (; i<=m_buffer.count(); i++)
