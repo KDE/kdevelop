@@ -1,3 +1,10 @@
+2002-04-09  Simon Hausmann <hausmann@kde.org>
+
+	* cleanups in the servicetype definitions. Added proper inheritance
+	and multiple defined propertyies
+	* some std:: namespace cleanups
+	* added KDevPlugin as successor of KDevPart
+
 2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again
 	* added DCOP interface for kdevpartcontroller
