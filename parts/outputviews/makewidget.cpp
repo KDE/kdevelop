@@ -216,9 +216,9 @@ void MakeWidget::startNextJob()
     if (i == -1) { m_bCompiling = false; }
     else {
 	QString s = currentCommand.right(currentCommand.length() - i);
-	if (s.contains("configure ") || s.contains(" Makefile.cvs") ||
-	    s.contains(" clean")     || s.contains(" package-messages") ||
-	    s.contains(" install")) 
+	if (s.contains("configure ")        || s.contains(" Makefile.cvs") ||
+	    s.contains(" clean")            || s.contains(" distclean") ||
+	    s.contains(" package-messages") ||  s.contains(" install")) 
 	{ m_bCompiling = false; }
 	else { m_bCompiling = true; }	    
     }
