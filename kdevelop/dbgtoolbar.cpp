@@ -69,6 +69,8 @@ class DbgMoveHandle : public QFrame
   private:
     QWidget*    parent_;
     QPoint      offset_;
+    bool        moving_;
+//    QRect       limit_;
 };
 
 // **************************************************************************
@@ -77,7 +79,9 @@ DbgMoveHandle::DbgMoveHandle(QWidget * parent,
                               const char * name, WFlags f, bool allowLines) :
   QFrame(parent, name, f, allowLines),
   parent_(parent),
-  offset_(QPoint(0,0))
+  offset_(QPoint(0,0)),
+  moving_(false)
+//  limit_(KWM::getWindowRegion(KWM::desktop(winId())))
 {
   setFrameStyle( QFrame::Panel|QFrame::Raised);
   setFixedHeight( 9 );
@@ -94,6 +98,10 @@ DbgMoveHandle::~DbgMoveHandle()
 void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
 {
   QFrame::mousePressEvent(e);
+  if (moving_)
+    return;
+
+  moving_ = true;
   offset_ = parent_->pos() - e->globalPos();
   setFrameStyle( QFrame::Panel|QFrame::Sunken);
   QApplication::setOverrideCursor(QCursor(sizeAllCursor));
@@ -106,6 +114,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
 void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
 {
   QFrame::mouseReleaseEvent(e);
+  moving_ = false;
   offset_ = QPoint(0,0);
   setFrameStyle( QFrame::Panel|QFrame::Raised);
   QApplication::restoreOverrideCursor();
@@ -118,7 +127,21 @@ void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
 void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
 {
   QFrame::mouseMoveEvent(e);
+  if (!moving_)
+    return;
+
   parent_->move(e->globalPos() + offset_);
+
+// I've had the window jump off the screen once. which made it impossible
+// to control the debugger. I tried the following code, but it wasn't good
+// enough. The screen edges didn't work nicely, because the desktop region
+// doesn't contain the panel or taskbar.
+
+//  QPoint moveTo = e->globalPos() + offset_;
+
+  // Make sure we never go outside the desktop region
+//  if (limit_.contains(moveTo))
+//    parent_->move(moveTo);
 }
 
 // **************************************************************************
@@ -192,13 +215,13 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   DbgButton*    bInterrupt  = new DbgButton(i18n("Interrupt"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  DbgButton*    bNext       = new DbgButton(i18n("Next"), pm, this);
+  DbgButton*    bNext       = new DbgButton(i18n("Step"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
-  DbgButton*    bStep       = new DbgButton(i18n("Step"), pm, this);
+  DbgButton*    bStep       = new DbgButton(i18n("Step in"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
-  DbgButton*    bFinish     = new DbgButton(i18n("Finish"), pm, this);
+  DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   DbgButton*    bView       = new DbgButton(i18n("View"), pm, this);
