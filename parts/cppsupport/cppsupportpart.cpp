@@ -99,6 +99,7 @@ void showMemUsage()
 {}
 #endif
 
+
 typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
@@ -617,9 +618,9 @@ void CppSupportPart::addMethod(const QString &className)
 	QMessageBox::critical(0,i18n("Error"),i18n("Please select a class!"));
 	return;
     }
-    
-#ifdef __ROBIDEON
-    
+
+#if 1
+
     AddMethodDialog dlg( this, pc, mainWindow()->main() );
     dlg.exec();
 #else

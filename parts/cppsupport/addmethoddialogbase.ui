@@ -483,6 +483,12 @@
         <receiver>AddMethodDialogBase</receiver>
         <slot>updateGUI()</slot>
     </connection>
+    <connection>
+        <sender>browseButton</sender>
+        <signal>clicked()</signal>
+        <receiver>AddMethodDialogBase</receiver>
+        <slot>browseImplementationFile()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>methods</tabstop>
@@ -504,6 +510,7 @@
     <slot>deleteCurrentMethod()</slot>
     <slot>currentChanged(QListViewItem*)</slot>
     <slot>updateGUI()</slot>
+    <slot>browseImplementationFile()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

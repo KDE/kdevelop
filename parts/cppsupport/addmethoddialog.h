@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (C) 2003 Roberto Raggi (roberto@kdevelop.org)
  *
  *  This program is free software; you can redistribute it and/or
@@ -30,19 +30,20 @@ class AddMethodDialog : public AddMethodDialogBase
 {
   Q_OBJECT
 public:
-    AddMethodDialog( CppSupportPart* cppSupport, ParsedClass* klass, 
+    AddMethodDialog( CppSupportPart* cppSupport, ParsedClass* klass,
 		     QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~AddMethodDialog();
-    
+
     virtual void addMethod();
     virtual void deleteCurrentMethod();
     virtual void currentChanged( QListViewItem* item );
     virtual void updateGUI();
-    
+    virtual void browseImplementationFile();
+
 protected:
     virtual void reject();
     virtual void accept();
-    
+
 private:
     CppSupportPart* m_cppSupport;
     ParsedClass* m_klass;
