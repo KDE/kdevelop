@@ -38,7 +38,7 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
     KAction *action;
     action = new KAction( i18n( "&Run" ), "exec", Key_F9, this, SLOT( slotRun() ), actionCollection(), "build_execute" );
 
-    dbAction = new SqlListAction( this, i18n( "&Database Connections" ), 0, this, SLOT(), actionCollection(), "connection_combo" );
+    dbAction = new SqlListAction( this, i18n( "&Database Connections" ), 0, this, SLOT(activeConnectionChanged()), actionCollection(), "connection_combo" );
 
     kdDebug( 9000 ) << "Creating SQLSupportPart" << endl;
 
@@ -65,6 +65,11 @@ QString SQLSupportPart::cryptStr(const QString& aStr)
 	result += (aStr[i].unicode() < 0x20) ? aStr[i] :
 		  QChar(0x1001F - aStr[i].unicode());
     return result;
+}
+
+void SQLSupportPart::activeConnectionChanged()
+{
+    // TODO
 }
 
 void SQLSupportPart::clearConfig()

@@ -40,6 +40,7 @@ private slots:
     void removedFilesFromProject(const QStringList &fileList);
     void parse();
     void loadConfig();
+    void activeConnectionChanged();
 
 private:
     void clearConfig();
