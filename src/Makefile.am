@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces 	   -I$(top_srcdir)/lib/sourceinfo 	   -I$(top_srcdir)/lib/util 	   -I$(top_srcdir)/lib 	   $(KDEVMDI_INCLUDES) 	   -I$(top_srcdir)/lib/structure 	   $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
 
 bin_PROGRAMS = gideon
 
@@ -6,7 +6,7 @@ gideon_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp projectmana
 
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la 	       	$(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) 		-lktexteditor 		$(top_builddir)/lib/interfaces/libkdevinterfaces.la 		$(LIB_KDEVMDI) 		$(top_builddir)/lib/libkdevelop.la
+gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor $(LIB_KDEVMDI) $(top_builddir)/lib/libkdevelop.la
 
 rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc eventsrc
