@@ -317,7 +317,7 @@ parameterDef returns [ ArgumentDom arg ] 			{
 	:	#(PARAMETER_DEF modifiers tp=typeSpec IDENT )
 								{
 								arg->setType( tp );
-								arg->setName( #IDENT->getText() );
+								arg->setName( #IDENT->getText().c_str() );
 								}
 	;
 
@@ -327,7 +327,7 @@ objectinitializer
 
 variableDeclarator [ VariableDom attr ]
 	:	IDENT						{
-								attr->setName( #IDENT->getText() );
+								attr->setName( #IDENT->getText().c_str() );
 								attr->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
 								}
 	|	LBRACK variableDeclarator[attr]
@@ -350,7 +350,7 @@ arrayInitializer
 methodHead [ FunctionDom meth ] { ArgumentDom arg; }
 	:	IDENT #( PARAMETERS (arg=parameterDef { meth->addArgument(arg); } )* ) (throwsClause)?
 	{
-	meth->setName( #IDENT->getText() );
+	meth->setName( #IDENT->getText().c_str() );
 	meth->setScope( m_currentScope );
 	meth->setStartPosition( #IDENT->getLine(), #IDENT->getColumn() );
 	}

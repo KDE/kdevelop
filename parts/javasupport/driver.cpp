@@ -120,7 +120,7 @@ RefJavaAST Driver::takeTranslationUnit( const QString& fileName )
 RefJavaAST Driver::translationUnit( const QString& fileName ) const
 {
     QMap<QString, RefJavaAST>::ConstIterator it = m_parsedUnits.find( fileName );
-    return it != m_parsedUnits.end() ? *it : 0;
+    return it != m_parsedUnits.end() ? *it : RefJavaAST();
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem )

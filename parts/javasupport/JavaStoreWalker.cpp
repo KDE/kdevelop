@@ -1323,7 +1323,7 @@ void JavaStoreWalker::methodHead(RefJavaAST _t,
 		}
 #line 352 "java.store.g"
 		
-			meth->setName( tmp49_AST_in->getText() );
+			meth->setName( tmp49_AST_in->getText().c_str() );
 			meth->setScope( m_currentScope );
 			meth->setStartPosition( tmp49_AST_in->getLine(), tmp49_AST_in->getColumn() );
 			
@@ -1353,7 +1353,7 @@ void JavaStoreWalker::variableDeclarator(RefJavaAST _t,
 			_t = _t->getNextSibling();
 #line 329 "java.store.g"
 			
-											attr->setName( tmp51_AST_in->getText() );
+											attr->setName( tmp51_AST_in->getText().c_str() );
 											attr->setStartPosition( tmp51_AST_in->getLine(), tmp51_AST_in->getColumn() );
 											
 #line 1360 "JavaStoreWalker.cpp"
@@ -1448,7 +1448,7 @@ void JavaStoreWalker::varInitializer(RefJavaAST _t) {
 #line 318 "java.store.g"
 		
 										arg->setType( tp );
-										arg->setName( tmp55_AST_in->getText() );
+										arg->setName( tmp55_AST_in->getText().c_str() );
 										
 #line 1454 "JavaStoreWalker.cpp"
 	}
