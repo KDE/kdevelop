@@ -27,7 +27,10 @@ public:
 
 protected:
     virtual void showEvent(QShowEvent *e);
-    
+
+protected slots:
+    void showRegExpEditor();
+
 private:
     virtual void somethingChanged();
     virtual void checkPOSIX();
@@ -36,6 +39,8 @@ private:
     virtual void insertQuoted();
 
     KDevPlugin *m_part;
+
+    QDialog * _regexp_dialog;
 };
 
 #endif

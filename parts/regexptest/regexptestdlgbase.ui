@@ -39,83 +39,6 @@
                 <cstring>pattern_edit</cstring>
             </property>
         </widget>
-        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>flavor_group</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Flavor</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>basicposix_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Basic POSIX syntax (used by grep)</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>A description of this syntax can be found in the grep manpage</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>extendedposix_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Extended POSIX syntax (used by egrep)</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>A description of this syntax can be found in the grep manpage</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>qregexp_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;QRegExp syntax</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>A description of this syntax can be found in the documentation of the QRegExp class</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>qregexp_min_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;QRegExp syntax (minimal)</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Matches a QRegExp non-greedy. Please read the QRegExp::setMinimal documentation for more details.</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>kregexp_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;KRegExp syntax</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>A description of this syntax can be found in the KDE API documentation.</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <widget class="QLabel" row="5" column="0">
             <property name="name">
                 <cstring>subgroups_label</cstring>
@@ -124,7 +47,7 @@
                 <string>Matched subgroups:</string>
             </property>
         </widget>
-        <widget class="QListView" row="5" column="1">
+        <widget class="QListView" row="5" column="1" rowspan="1" colspan="2">
             <column>
                 <property name="text">
                     <string>Group</string>
@@ -196,7 +119,7 @@
                 <cstring>teststring_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="3" column="1">
+        <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>teststring_edit</cstring>
             </property>
@@ -204,15 +127,7 @@
                 <string>Enter a string which will be matched against the regular expression</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
-            <property name="name">
-                <cstring>pattern_edit</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>enter a regulare expression, for example &lt;tt&gt;KD.*&lt;/tt&gt;, which matches all strings beginning with "KD"</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="4" column="1">
+        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>success_label</cstring>
             </property>
@@ -228,7 +143,7 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout4</cstring>
             </property>
@@ -286,6 +201,102 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>pattern_edit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>enter a regulare expression, for example &lt;tt&gt;KD.*&lt;/tt&gt;, which matches all strings beginning with "KD"</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>flavor_group</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Flavor</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>basicposix_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Basic POSIX syntax (used by grep)</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the grep manpage</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>extendedposix_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>E&amp;xtended POSIX syntax (used by egrep)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the grep manpage</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>qregexp_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;QRegExp syntax</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the documentation of the QRegExp class</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>qregexp_min_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>QRegExp syntax (&amp;minimal)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Matches a QRegExp non-greedy. Please read the QRegExp::setMinimal documentation for more details.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>kregexp_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;KRegExp syntax</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>A description of this syntax can be found in the KDE API documentation.</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QPushButton" row="0" column="2">
+            <property name="name">
+                <cstring>rxedit_button</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Edit...</string>
+            </property>
+            <property name="autoDefault">
+                <bool>false</bool>
+            </property>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -319,18 +330,27 @@
         <receiver>regexp_test_dialog</receiver>
         <slot>insertQuoted()</slot>
     </connection>
+    <connection>
+        <sender>rxedit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>regexp_test_dialog</receiver>
+        <slot>showRegExpEditor()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>pattern_edit</tabstop>
+    <tabstop>rxedit_button</tabstop>
     <tabstop>basicposix_button</tabstop>
-    <tabstop>extendedposix_button</tabstop>
     <tabstop>teststring_edit</tabstop>
     <tabstop>subgroups_listview</tabstop>
+    <tabstop>insertbutton</tabstop>
     <tabstop>cancelbutton</tabstop>
+    <tabstop>extendedposix_button</tabstop>
 </tabstops>
 <slots>
     <slot access="protected">insertQuoted()</slot>
     <slot>somethingChanged()</slot>
+    <slot access="protected">showRegExpEditor()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

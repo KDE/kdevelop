@@ -29,13 +29,15 @@
 #include <kparts/part.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/editinterface.h>
+#include <kparts/componentfactory.h>
+#include <kregexpeditorinterface.h>
 
 #include "kdevplugin.h"
 #include "kdevpartcontroller.h"
 
 
 RegexpTestDialog::RegexpTestDialog(KDevPlugin *part)
-    : RegexpTestDialogBase(0, "regexp test dialog", false)
+    : RegexpTestDialogBase(0, "regexp test dialog", false), _regexp_dialog(0)
 {
     pattern_edit->setFocus();
     pattern_edit->setFont(KGlobalSettings::fixedFont());
@@ -238,6 +240,24 @@ void RegexpTestDialog::insertQuoted()
     cursoriface->cursorPositionReal(&line, &col);
     editiface->insertText(line, col, str);
     reject();
+}
+
+void RegexpTestDialog::showRegExpEditor( )
+{
+    _regexp_dialog = KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
+
+    if ( _regexp_dialog )
+    {
+        KRegExpEditorInterface *editor =
+            static_cast<KRegExpEditorInterface *>( _regexp_dialog->qt_cast( "KRegExpEditorInterface" ) );
+
+        editor->setRegExp( pattern_edit->text() );
+
+        if ( _regexp_dialog->exec() == QDialog::Accepted )
+        {
+            pattern_edit->setText( editor->regExp() );
+        }
+    }
 }
 
 #include "regexptestdlg.moc"
