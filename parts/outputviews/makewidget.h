@@ -22,6 +22,7 @@
 class MakeViewPart;
 class MakeItem;
 class KProcess;
+class ProcessLineMaker;
 
 
 class MakeWidget : public QTextEdit
@@ -42,8 +43,8 @@ public slots:
     void prevError();
     
 private slots:
-    void slotReceivedOutput(KProcess *, char *buffer, int buflen);
-    void slotReceivedError(KProcess *, char *buffer, int buflen);
+    void insertStdoutLine(const QString& line);
+    void insertStderrLine(const QString& line);
     void slotProcessExited(KProcess *);
 
 private:
@@ -62,8 +63,7 @@ private:
     QStringList dirList;
     QString currentCommand;
     KProcess *childproc;
-    QString stdoutbuf;
-    QString stderrbuf;
+    ProcessLineMaker* procLineMaker;
     QStack<QString> dirstack;
     QList<MakeItem> items;
     int parags;

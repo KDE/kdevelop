@@ -15,7 +15,7 @@
 #include <qlistbox.h>
 
 class KProcess;
-
+class ProcessLineMaker;
 
 class ProcessListBoxItem : public QListBoxText
 {
@@ -48,10 +48,16 @@ public:
      * Returns whether a process is running in this view.
      */
     bool isRunning();
+    
+public slots:
     /**
      * Starts the child process.
      */
     void startJob(const QString &dir, const QString &command);
+    /**
+     * Kills the child processss.
+     */
+    void killJob();
     /**
      * Inserts one line from stdin into the listbox. This can
      * be overridden by subclasses to implement
@@ -65,12 +71,6 @@ public:
      * is used.
      */
     virtual void insertStderrLine(const QString &line);
-
-public slots:
-    /**
-     * Kills the child processss.
-     */
-    void killJob();
 
 protected:
     /**
@@ -89,14 +89,11 @@ protected:
     virtual QSize minimumSizeHint() const;
     
 protected slots:
-    void slotReceivedOutput(KProcess*, char*, int);
-    void slotReceivedError(KProcess*, char*, int);
     void slotProcessExited(KProcess*);
 
 private:
     KProcess *childproc;
-    QString stdoutbuf;
-    QString stderrbuf;
+    ProcessLineMaker* procLineMaker;
 };
 
 

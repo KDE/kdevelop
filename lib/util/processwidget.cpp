@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include "processwidget.h"
+#include "processlinemaker.h"
 
 #include <qdir.h>
 #include <kdebug.h>
@@ -49,13 +50,13 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
     setPalette(pal);
 
     childproc = new KShellProcess("/bin/sh");
+    procLineMaker = new ProcessLineMaker( childproc );
 
-    connect(childproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
-            this, SLOT(slotReceivedOutput(KProcess*,char*,int)) );
-    
-    connect(childproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-            this, SLOT(slotReceivedError(KProcess*,char*,int)) );
-    
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+             this, SLOT(insertStdoutLine(const QString&) ));
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+             this, SLOT(insertStderrLine(const QString&) ));
+
     connect(childproc, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotProcessExited(KProcess*) )) ;
 }
@@ -64,6 +65,7 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
 ProcessWidget::~ProcessWidget()
 {
     delete childproc;
+    delete procLineMaker;
 }
 
 
@@ -91,42 +93,6 @@ void ProcessWidget::killJob()
 bool ProcessWidget::isRunning()
 {
     return childproc->isRunning();
-}
-
-
-void ProcessWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
-{
-    // Flush stderr buffer
-    if (!stderrbuf.isEmpty()) {
-        insertStderrLine(stderrbuf);
-        stderrbuf = "";
-    }
-    
-    stdoutbuf += QString::fromLocal8Bit(buffer, buflen);
-    int pos;
-    while ( (pos = stdoutbuf.find('\n')) != -1) {
-        QString line = stdoutbuf.left(pos);
-        insertStdoutLine(line);
-        stdoutbuf.remove(0, pos+1);
-    }
-}
-
-
-void ProcessWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
-{
-    // Flush stdout buffer
-    if (!stdoutbuf.isEmpty()) {
-        insertStdoutLine(stdoutbuf);
-        stdoutbuf = "";
-    }
-    
-    stderrbuf += QString::fromLocal8Bit(buffer, buflen);
-    int pos;
-    while ( (pos = stderrbuf.find('\n')) != -1) {
-        QString line = stderrbuf.left(pos);
-        insertStderrLine(line);
-        stderrbuf.remove(0, pos+1);
-    }
 }
 
 

@@ -5,6 +5,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 noinst_LTLIBRARIES = libkdevutil.la
 
 libkdevutil_la_SOURCES = processwidget.cpp \
+			 processlinemaker.cpp \
 			 domutil.cpp \
 			 splitter.cpp \
 			 execcommand.cpp \

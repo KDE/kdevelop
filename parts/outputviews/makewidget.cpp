@@ -30,6 +30,7 @@
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
+#include "processlinemaker.h"
 
 #include "makeviewpart.h"
 
@@ -121,12 +122,14 @@ MakeWidget::MakeWidget(MakeViewPart *part)
     mimeSourceFactory()->setImage("warning", QImage((const char**)warning_xpm));
     mimeSourceFactory()->setImage("message", QImage((const char**)message_xpm));
 
-   childproc = new KShellProcess("/bin/sh");
+    childproc = new KShellProcess("/bin/sh");
+    procLineMaker = new ProcessLineMaker( childproc );
     
-    connect(childproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
-            this, SLOT(slotReceivedOutput(KProcess*,char*,int)) );
-    connect(childproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-            this, SLOT(slotReceivedError(KProcess*,char*,int)) );
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+             this, SLOT(insertStdoutLine(const QString&) ));
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+             this, SLOT(insertStderrLine(const QString&) ));
+    
     connect(childproc, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotProcessExited(KProcess*) )) ;
 
@@ -142,6 +145,7 @@ MakeWidget::~MakeWidget()
 {
     delete mimeSourceFactory();
     delete childproc;
+    delete procLineMaker;
 }
 
 
@@ -286,40 +290,14 @@ void MakeWidget::searchItem(int parag)
     }
 }
 
-
-void MakeWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
+void MakeWidget::insertStdoutLine(const QString& line)
 {
-    // Flush stderr buffer
-    if (!stderrbuf.isEmpty()) {
-        insertLine1(stderrbuf, Normal);
-        stderrbuf = "";
-    }
-    
-    stdoutbuf += QString::fromLocal8Bit(buffer, buflen);
-    int pos;
-    while ( (pos = stdoutbuf.find('\n')) != -1) {
-        QString line = stdoutbuf.left(pos);
-        insertLine1(line, Normal);
-        stdoutbuf.remove(0, pos+1);
-    }
+    insertLine1(line, Diagnostic);
 }
 
-
-void MakeWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
+void MakeWidget::insertStderrLine(const QString& line)
 {
-    // Flush stdout buffer
-    if (!stdoutbuf.isEmpty()) {
-        insertLine1(stdoutbuf, Diagnostic);
-        stdoutbuf = "";
-    }
-    
-    stderrbuf += QString::fromLocal8Bit(buffer, buflen);
-    int pos;
-    while ( (pos = stderrbuf.find('\n')) != -1) {
-        QString line = stderrbuf.left(pos);
-        insertLine1(line, Diagnostic);
-        stderrbuf.remove(0, pos+1);
-    }
+    insertLine1(line, Normal);
 }
 
 
