@@ -106,11 +106,11 @@ void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
             Q_ASSERT(!viewedThread_);
             return;                 // fatal
         }
-
-        frame = findFrame(frameNo, threadNo);
-        if (frame)
-            setSelected(frame, true);
     }
+
+    frame = findFrame(frameNo, threadNo);
+    if (frame)
+        setSelected(frame, true);
 
     emit selectFrame(frameNo, threadNo, !(frame));
 }
