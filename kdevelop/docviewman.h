@@ -28,6 +28,7 @@
 #include "qextmdichildview.h"
 #include "highlight.h"
 #include "structdef.h"      // needed for TEditInfo
+#include "cproject.h"
 
 class KWriteDoc;
 class CEditWidget;
