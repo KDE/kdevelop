@@ -3905,12 +3905,13 @@ Martin Piskernig		<htmlurl url="mailto:mpiskernig@kdevelop.de" name = "<mpiskern
 
 <itemize>
 <item>KDevelop 1.0: Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">
-<item>KDevelop 1.1, 1.2: Ralph Kocher      <htmlurl url="mailto:RKocher@t-online.de" name="<RKocher@t-online.de>">
+<item>KDevelop 1.1, 1.2, 1.3: Ralph Kocher      <htmlurl url="mailto:RKocher@t-online.de" name="<RKocher@t-online.de>">
 </itemize>
 
 <bf>Additions, patches and bugfixes:</bf>
 
 <itemize>
+<item>Stephan Kulow           <htmlurl url="mailto:coolo@kde.org" name="<coolo@kde.org>">
 <item>Pau Estalella Fernandez <htmlurl url="mailto:pef@upcnet.upc.es" name="<pef@upcnet.upc.es>">
 <item>Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
 <item>David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
