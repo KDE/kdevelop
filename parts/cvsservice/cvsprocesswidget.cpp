@@ -13,6 +13,7 @@
 #include <qregexp.h>
 
 #include <dcopref.h>
+#include <kstatusbar.h>
 #include <kdebug.h>
 
 #include "kdevpartcontroller.h"
@@ -27,58 +28,14 @@
 #include <cvsjob_stub.h>
 
 ///////////////////////////////////////////////////////////////////////////////
-// class CvsListBoxItem
-///////////////////////////////////////////////////////////////////////////////
-
-class CvsListBoxItem : public ProcessListBoxItem
-{
-public:
-    CvsListBoxItem( const QString &s1 );
-    QString fileName() { return filename; }
-    bool containsFileName() { return !filename.isEmpty(); }
-    virtual bool isCustomItem();
-
-private:
-    virtual void paint( QPainter *p );
-    QString str1;
-    QString filename;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-CvsListBoxItem::CvsListBoxItem( const QString &s1 )
-        : ProcessListBoxItem( s1, Normal ) {
-    str1 = s1;
-    QRegExp re("[ACMPRU?] (.*)");
-    if (re.exactMatch(s1)) filename = re.cap(1);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool CvsListBoxItem::isCustomItem()
-{
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void CvsListBoxItem::paint(QPainter *p)
-{
-    QFontMetrics fm = p->fontMetrics();
-    int y = fm.ascent()+fm.leading()/2;
-    int x = 3;
-
-    p->setPen(Qt::darkGreen);
-    p->drawText(x, y, str1);
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // class CvsProcessWidget
 ///////////////////////////////////////////////////////////////////////////////
 
 CvsProcessWidget::CvsProcessWidget( QCString appId, CvsPart *part, QWidget *parent, const char *name )
-    : KListBox( parent, name ), DCOPObject(), m_part( part ), m_job( 0 )
+    : QTextEdit( parent, name ), DCOPObject(), m_part( part ), m_job( 0 ),
+    m_goodStyle( 0 ), m_errorStyle( 0 )
 {
+    setReadOnly( true );
     // create a DCOP stub for the non-concurrent cvs job
     m_job = new CvsJob_stub( appId, "NonConcurrentJob" );
 
@@ -87,7 +44,14 @@ CvsProcessWidget::CvsProcessWidget( QCString appId, CvsPart *part, QWidget *pare
     connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     connectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
 
-    connect( this, SIGNAL(highlighted(int)), this, SLOT(slotLineHighlighted(int)) );
+//    connect( this, SIGNAL(highlighted(int)), this, SLOT(slotLineHighlighted(int)) );
+    setTextFormat( Qt::LogText );
+    m_goodStyle = new QStyleSheetItem( styleSheet(), "goodtag" );
+    m_goodStyle->setColor( "green" );
+
+    m_errorStyle = new QStyleSheetItem( styleSheet(), "errortag" );
+    m_errorStyle->setColor( "red" );
+    m_errorStyle->setFontWeight( QFont::Bold );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,11 +67,15 @@ bool CvsProcessWidget::startJob()
 {
     kdDebug() << "CvsProcessWidget::startJob() here!" << endl;
 
+    clear();
+
     m_part->mainWindow()->raiseView( this );
     m_part->core()->running( m_part, true );
 
     // get command line and add it to output buffer
     QString cmdLine = m_job->cvsCommand();
+    m_part->mainWindow()->statusBar()->message( cmdLine );
+
     kdDebug() << "Running: " << cmdLine << endl;
 
     // disconnect 3rd party slots from our signals
@@ -120,6 +88,8 @@ bool CvsProcessWidget::startJob( const QCString appId, const QCString objId )
 {
     kdDebug() << "CvsProcessWidget::startJob(const QCString, const QCString) here!" << endl;
 
+    clear();
+
     m_part->mainWindow()->raiseView( this );
     m_part->core()->running( m_part, true );
 
@@ -130,6 +100,8 @@ bool CvsProcessWidget::startJob( const QCString appId, const QCString objId )
 
     // get command line and add it to output buffer
     QString cmdLine = job.cvsCommand();
+    m_part->mainWindow()->statusBar()->message( cmdLine );
+
     kdDebug() << "Running: " << cmdLine << endl;
 
     // disconnect 3rd party slots from our signals
@@ -148,25 +120,10 @@ void CvsProcessWidget::cancelJob()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsProcessWidget::slotLineHighlighted( int line )
-{
-    ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
-    if (i->isCustomItem())
-    {
-        CvsListBoxItem *ci = static_cast<CvsListBoxItem*>( i );
-        if (ci->containsFileName())
-        {
-//            m_part->partController()->editDocument( dir + "/" + ci->fileName() );
-            m_part->mainWindow()->lowerView( this );
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 {
     m_part->core()->running( m_part, false );
+    m_part->mainWindow()->statusBar()->message( "Done CVS command ...", 2000 );
 
     emit jobFinished( normalExit, exitStatus );
 }
@@ -175,9 +132,9 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 
 void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 {
-    insertItem( new CvsListBoxItem( someOutput ) );
-
-    m_output += someOutput;
+    m_output += "<goodtag>" + someOutput + "</goodtag>";
+    append( "<goodtag>" + someOutput + "</goodtag>" );
+    scrollToBottom();
 
     kdDebug() << "OUTPUT: " << someOutput << endl;
 }
@@ -186,9 +143,9 @@ void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 
 void CvsProcessWidget::slotReceivedErrors( QString someErrors )
 {
-    insertItem( new CvsListBoxItem( someErrors ) );
-
-    m_errors += someErrors;
+    m_errors += "<errortag>" + someErrors + "</errortag>";
+    append( "<errortag>" + someErrors + "</errortag>" );
+    scrollToBottom();
 
     kdDebug() << "ERRORS: " << someErrors << endl;
 }

@@ -9,15 +9,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qbutton.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
 
-#include <kpassdlg.h>
-#include <knuminput.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
+#include <kcursor.h>
 #include <kdebug.h>
+
+#include <dcopref.h>
+#include <cvsjob_stub.h>
+#include <repository_stub.h>
+#include <cvsservice_stub.h>
+
+#include "checkoutdialogbase.h"
 
 #include "checkoutdialog.h"
 
@@ -28,41 +37,184 @@
 const QString SSS( ":" );  // Server String Separator :)
 
 ///////////////////////////////////////////////////////////////////////////////
+// class ModuleListViewItem
+///////////////////////////////////////////////////////////////////////////////
+
+class ModuleListViewItem : public KListViewItem
+{
+public:
+    ModuleListViewItem( KListView *listview,
+        const QString &moduleName, const QString &moduleComment )
+        : KListViewItem( listview )
+    {
+        setName( moduleName );
+        setComment( moduleComment );
+    }
+
+    void setName( const QString &aName ) { setText( 0, aName); }
+    QString name() const { return text(0); }
+    void setComment( const QString &aComment ) { setText(1, aComment); }
+    QString comment() const { return text(1); }
+
+//    virtual QString text() const { return name(); }
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // class CheckoutDialog
 ///////////////////////////////////////////////////////////////////////////////
 
-CheckoutDialog::CheckoutDialog( QWidget *parent, const char *name, WFlags f )
-    : CheckoutDialogBase( parent, name ? name : "checkoutdialog", f )
+CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
+    QWidget *parent, const char *name, WFlags f )
+    : KDialogBase( parent, "checkoutdialog", true, i18n("CVS checkout ..."),
+        Ok | Cancel, Ok, true ),
+    m_service( cvsService ), m_job( 0 )
 {
-    setWFlags( WDestructiveClose | getWFlags() );  // Auto-delete this window when closed
+    m_base = new CheckoutDialogBase( this, "checkoutdialogbase" );
+    setMainWidget( m_base );
 
- //   connect( fetchModulesButton, SIGNAL(clicked()), this, SLOT(slotFetchModulesList()) );
+    connect( m_base->fetchModulesButton, SIGNAL(clicked()), this, SLOT(slotFetchModulesList()) );
+    connect( m_base->chooseWorkDirButton, SIGNAL(clicked()), this, SLOT(slotSelectWorkDirList()) );
+
+    // DEBUG-LAZINESS here ;-)
+    setServerPath( ":pserver:marios@cvs.kde.org:/home/kde" );
+    setWorkDir( "/home/mario/src/test/prova_checkout" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 CheckoutDialog::~CheckoutDialog()
 {
+    delete m_job;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString CheckoutDialog::cvsRsh() const
 {
-    return cvsRshComboBox->text( cvsRshComboBox->currentItem() );
+    return m_base->cvsRshComboBox->currentText();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString CheckoutDialog::serverPath() const
 {
-    return serverPathLineEdit->text();
+    return m_base->serverPathLineEdit->text();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::setServerPath( const QString &aPath )
+{
+    m_base->serverPathLineEdit->setText( aPath );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CheckoutDialog::workDir() const
+{
+    return m_base->workDirEdit->text();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::setWorkDir( const QString &aDir )
+{
+    m_base->workDirEdit->setText( aDir );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CheckoutDialog::pruneDirs() const
+{
+    return m_base->pruneDirsCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CheckoutDialog::tag() const
+{
+    return m_base->tagEdit->text();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CheckoutDialog::module() const
+{
+    ModuleListViewItem *item = static_cast<ModuleListViewItem*>(
+        m_base->modulesListView->selectedItem()
+    );
+    if (!item)
+        return QString::null;
+
+    return item->name();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CheckoutDialog::slotFetchModulesList()
 {
+    setCursor( KCursor::waitCursor() );
+
+    if (serverPath().isEmpty() || workDir().isEmpty())
+        return;
+
+    DCOPRef job = m_service->moduleList( serverPath() );
+    if (!m_service->ok())
+        return;
+
+    m_job = new CvsJob_stub( job.app(), job.obj() );
+    // We only need to know when it finishes and then will grab the output
+    // by using m_job->output() :-)
+    connectDCOPSignal( job.app(), job.obj(), "jobFinished(bool,int)", "modulesListFetched(bool,int)", true );
+    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "receivedOutput(QString)", true );
+
+    kdDebug() << "Running: " << m_job->cvsCommand() << endl;
+    m_job->execute();
 }
 
-//#include "serverconfigurationwidget.moc.cpp"
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::modulesListFetched( bool /*normalExit*/, int /*exitStatus*/ )
+{
+    kdDebug(9000) << "CheckoutDialog::slotModulesListFetched() here!" << endl;
+
+    kdDebug(9000) << "Received: " << m_job->output().join( "\n" ) << endl;
+
+//    m_base->modulesListView->insertStringList( m_job->output() );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::receivedOutput( QString someOutput )
+{
+    setCursor( KCursor::arrowCursor() );
+
+    kdDebug( 9000 ) << " Received output: " << someOutput << endl;
+
+    // Fill the modules KListView if the list obtained is not empty
+    QStringList modules = m_job->output();
+    if (modules.count() <= 0)
+        return;
+
+    QStringList::iterator it = modules.begin();
+    for ( ; it != modules.end(); ++it )
+    {
+        QStringList l = QStringList::split( " ", (*it) );
+        // Now, l[0] is the module name, l[1] is ... another string ;-)
+        new ModuleListViewItem( m_base->modulesListView, l[0], l[1] );
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::slotSelectWorkDirList()
+{
+    kdDebug(9000) << "CheckoutDialog::slotSelectWorkDirList() here!" << endl;
+
+    QString workDir = KFileDialog::getExistingDirectory(
+        QString::null, this, "filedialog"
+    );
+    if (workDir.isEmpty())
+        return;
+    setWorkDir( workDir );
+}

@@ -13,9 +13,9 @@
 #define LOGFORM_H
 
 #include <dcopobject.h>
+#include <kdialogbase.h>
 
-#include <logformbase.h>
-
+class LogFormBase;
 class CvsJob_stub;
 class CvsService_stub;
 
@@ -24,15 +24,15 @@ Implementation for the form displaying 'cvs log' output.
 
 @author KDevelop Authors
 */
-class LogForm : public LogFormBase, public DCOPObject
+class LogForm : public KDialogBase, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
 public:
-    LogForm( QWidget *parent=0, const char *name=0, int flags=0 );
+    LogForm( CvsService_stub *cvsService, QWidget *parent=0, const char *name=0, int flags=0 );
     ~LogForm();
 
-    void start( CvsService_stub *cvsService, const QString &workDir, const QString &pathName );
+    void start( const QString &workDir, const QString &pathName );
 
 k_dcop:
     // Connect this part with job's DCOP reference
@@ -51,9 +51,12 @@ private:
 
 private:
     QString m_pathName;
+    LogFormBase *m_base;
+
     CvsService_stub *m_cvsService;
     CvsJob_stub *m_cvsLogJob,
         *m_cvsDiffJob;
+
     QString m_diffText;
 };
 

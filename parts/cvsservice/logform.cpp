@@ -22,6 +22,7 @@
 #include <cvsjob_stub.h>
 #include <cvsservice_stub.h>
 
+#include "logformbase.h"
 #include "cvsoptions.h"
 #include "logform.h"
 
@@ -29,15 +30,19 @@
 // class LogForm
 ///////////////////////////////////////////////////////////////////////////////
 
-LogForm::LogForm( QWidget *parent, const char *name, int flags )
-    : LogFormBase( parent, name, flags ), DCOPObject(),
-    m_cvsService( 0 ), m_cvsLogJob( 0 ), m_cvsDiffJob( 0 )
+LogForm::LogForm( CvsService_stub *cvsService,
+    QWidget *parent, const char *name, int flags )
+    : KDialogBase( parent, "logformdialog", true, i18n("CVS Log ..."),
+        Ok, Ok, true ),
+    m_cvsService( cvsService ), m_cvsLogJob( 0 ), m_cvsDiffJob( 0 )
 {
-    kdDebug() << "LogForm::LogForm()" << endl;
+    m_base = new LogFormBase( this, "logformbase" );
+    setMainWidget( m_base );
 
     setWFlags( getWFlags() | WDestructiveClose );
 
-    connect( contents, SIGNAL(linkClicked( const QString& )), this, SLOT(slotLinkClicked( const QString& )) );
+    connect( m_base->contents, SIGNAL(linkClicked( const QString& )),
+        this, SLOT(slotLinkClicked( const QString& )) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,20 +57,18 @@ LogForm::~LogForm()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void LogForm::start( CvsService_stub *cvsService, const QString &workDir, const QString &pathName )
+void LogForm::start( const QString &workDir, const QString &pathName )
 {
     kdDebug() << "LogForm::start() here! workDir = " << workDir << ", pathName = " << pathName << endl;
-
-    m_cvsService = cvsService;
 
     CvsOptions *options = CvsOptions::instance();
 
     // "cvs log" needs to be done on relative-path basis
     m_pathName = pathName;
 
-    DCOPRef job = cvsService->log( pathName );
+    DCOPRef job = m_cvsService->log( pathName );
     m_cvsLogJob = new CvsJob_stub( job.app(), job.obj() );
-    if (options->rsh().isEmpty())
+    if (!options->rsh().isEmpty())
     {
         job.call( "setRSH", options->rsh() );
     }
@@ -87,7 +90,7 @@ void LogForm::setText( const QString& text )
 {
     kdDebug() << "LogForm::setText()" << endl;
 
-    contents->clear();
+    m_base->contents->clear();
 
     QStringList l = QStringList::split( "----------------------------", text );
     QString header = l.front();
@@ -98,8 +101,8 @@ void LogForm::setText( const QString& text )
         if( !s )
             continue;
 
-        contents->append( s );
-        contents->append( "<hr>" );
+        m_base->contents->append( s );
+        m_base->contents->append( "<hr>" );
     }
 
 }
@@ -110,14 +113,14 @@ void LogForm::slotLinkClicked( const QString & link )
 {
     kdDebug() << "LogForm::slotLinkClicked()" << endl;
 
-    contents->clear();
+    m_base->contents->clear();
 
     QString ver = link.mid( link.findRev( "/" ) + 1 );
     QString v1 = ver.section( '_', 0, 0 );
     QString v2 = ver.section( '_', 1, 1 );
     if ( v1.isEmpty() || v2.isEmpty() )
     {
-        contents->append( "invalid link clicked" );
+        m_base->contents->append( "invalid link clicked" );
         return;
     }
 
@@ -165,7 +168,7 @@ void LogForm::slotJobExited( bool normalExit, int exitStatus )
     static QRegExp rx_date( "date: .* author: .* state: .* lines: .*" );
     // "revision" followed by one or more decimals followed by a optional dot
     static QRegExp rx_rev( "revision ((\\d+\\.?)+)" );
-    contents->setTextFormat( QTextBrowser::PlainText );
+    m_base->contents->setTextFormat( QTextBrowser::PlainText );
 
     QStringList lines = m_cvsLogJob->output();
     for (size_t i=0; i<lines.count(); ++i) {
@@ -180,25 +183,25 @@ void LogForm::slotJobExited( bool normalExit, int exitStatus )
                 QString lv = ver.left( ver.findRev( "." ) + 1 ) + QString::number( lastVer );
                 dstr += " [<a href=\"diff:/" + m_pathName + "/" + lv + "_" + ver + "\">diff to " + lv + "</a>]";
             }
-            contents->setTextFormat( QTextBrowser::RichText );
-            contents->append( dstr );
-            contents->setTextFormat( QTextBrowser::PlainText );
+            m_base->contents->setTextFormat( QTextBrowser::RichText );
+            m_base->contents->append( dstr );
+            m_base->contents->setTextFormat( QTextBrowser::PlainText );
         }
         else if ( rx_date.exactMatch(s) )
         {
-            contents->setTextFormat( QTextBrowser::RichText );
-            contents->append( "<i>" + s + "</i>" );
-            contents->setTextFormat( QTextBrowser::PlainText );
+            m_base->contents->setTextFormat( QTextBrowser::RichText );
+            m_base->contents->append( "<i>" + s + "</i>" );
+            m_base->contents->setTextFormat( QTextBrowser::PlainText );
         }
         else if ( rx_sep.exactMatch(s) || rx_sep2.exactMatch(s) )
         {
-            contents->append( "\n" );
-            contents->setTextFormat( QTextBrowser::RichText );
-            contents->append( "<hr>" );
-            contents->setTextFormat( QTextBrowser::PlainText );
+            m_base->contents->append( "\n" );
+            m_base->contents->setTextFormat( QTextBrowser::RichText );
+            m_base->contents->append( "<hr>" );
+            m_base->contents->setTextFormat( QTextBrowser::PlainText );
         } else
         {
-            contents->append( s );
+            m_base->contents->append( s );
         }
     }
 //    emit jobFinished( normalExit, exitStatus );
@@ -228,7 +231,7 @@ void LogForm::slotDiffFinished( bool normalExit, int exitStatus )
 
     if (normalExit)
     {
-       contents->setText( m_diffText );
+       m_base->contents->setText( m_diffText );
     }
     else
     {

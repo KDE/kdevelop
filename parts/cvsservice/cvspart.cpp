@@ -14,13 +14,15 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <kmessagebox.h>
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kurl.h>
 #include <kapplication.h>
+#include <kmainwindow.h>
+// Because of KShellProcess::quote()
+#include <kprocess.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -28,9 +30,6 @@
 
 #include <qdir.h>
 #include <qpopupmenu.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
@@ -40,18 +39,18 @@
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "urlutil.h"
-#include "execcommand.h"
 
-#include "cvsutils.h"
+#include "logform.h"
+#include "cvsform.h"
+#include "commitdlg.h"
+#include "checkoutdialog.h"
+
 #include "changelog.h"
+#include "cvsutils.h"
 #include "cvspart.h"
 #include "cvsprocesswidget.h"
 #include "cvsoptions.h"
-#include "commitdlg.h"
-#include "logform.h"
-#include "cvsform.h"
 #include "cvsoptionswidget.h"
-#include "checkoutdialog.h"
 
 #include <dcopref.h>
 #include <repository_stub.h>
@@ -292,7 +291,25 @@ void CvsPart::doneOperation()
 
 void CvsPart::slotCheckOut()
 {
-    (new CheckoutDialog(0))->show();
+    CheckoutDialog dlg( m_cvsService, mainWindow()->main()->centralWidget(),
+        "checkoutdialog" );
+
+    int result = dlg.exec();
+    if ( result == QDialog::Accepted )
+    {
+        DCOPRef job = m_cvsService->checkout(
+            dlg.workDir(), dlg.serverPath(), dlg.module(),
+            dlg.tag(), dlg.pruneDirs()
+        );
+        if (!m_cvsService->ok())
+        {
+            KMessageBox::sorry( mainWindow()->main(), i18n( "Unable to checkout" ) );
+            return;
+        }
+
+        m_widget->startJob();
+        connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,7 +320,6 @@ void CvsPart::createNewProject( const QString& dirName )
 
     if (!m_cvsConfigurationForm)
         return;
-    QString init("");
 
     // FIXME: Store rsh setting. Here doesn't store it in CvsOptions because:
     // createNewProject() is called _before_ projectOpened() signal is emitted.
@@ -315,11 +331,12 @@ void CvsPart::createNewProject( const QString& dirName )
     if ( !options->rsh().isEmpty() )
         rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->rsh() );
 
+    QString init;
     if (m_cvsConfigurationForm->mustInitRoot())
     {
         init = rsh_preamble + " cvs -d " + KShellProcess::quote( options->location() ) + " init && ";
     }
-    QString command = init + "cd " + KShellProcess::quote(dirName) +
+    QString cmdLine = init + "cd " + KShellProcess::quote(dirName) +
         " && " + rsh_preamble +
         " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->location()) +
         " import -m " + KShellProcess::quote(m_cvsConfigurationForm->message()) + " " +
@@ -334,10 +351,10 @@ void CvsPart::createNewProject( const QString& dirName )
 
     g_projectWasJustCreated = true;
 
-    kdDebug( 9000 ) << "  ** Will run the following command: " << endl << command << endl;
+    kdDebug( 9000 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
     kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
 
-    makeFrontend()->queueCommand( dirName, command );
+    makeFrontend()->queueCommand( dirName, cmdLine );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -810,10 +827,10 @@ void CvsPart::log( const KURL::List& urlList )
 
     QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
 
-    LogForm* f = new LogForm();
+    LogForm* f = new LogForm( m_cvsService );
     f->show();
     // Form will do all the work
-    f->start( m_cvsService, project()->projectDirectory(), fileList[0] );
+    f->start( project()->projectDirectory(), fileList[0] );
 
     doneOperation();
 }
@@ -947,6 +964,7 @@ void CvsPart::slotProjectClosed()
 void CvsPart::slotJobFinished( bool normalExit, int exitStatus )
 {
     // @todo Display something
+    KMessageBox::information( mainWindow()->main(), i18n( "Job finished!" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

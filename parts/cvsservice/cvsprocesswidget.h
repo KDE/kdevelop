@@ -12,13 +12,14 @@
 #ifndef _CVSPROCESSWIDGET_H_
 #define _CVSPROCESSWIDGET_H_
 
-#include <klistbox.h>
+#include <qtextedit.h>
 #include <dcopobject.h>
 
 class CvsPart;
 class CvsJob_stub;
+class QStyleSheetItem;
 
-class CvsProcessWidget : public KListBox, public DCOPObject
+class CvsProcessWidget : public QTextEdit, public DCOPObject
 {
     K_DCOP
     Q_OBJECT
@@ -43,12 +44,12 @@ k_dcop:
 signals:
     void jobFinished( bool normalExit, int exitStatus );
 
-private slots:
-    void slotLineHighlighted( int line );
-
 private:
     CvsPart *m_part;
     CvsJob_stub *m_job;
+
+    QStyleSheetItem *m_goodStyle,
+        *m_errorStyle;
 
     QString m_output,
         m_errors;
