@@ -151,8 +151,21 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
-		if( currentChar() == '(' )
-		    skip( '(', ')' );
+		if( currentChar() == '(' ){
+		    nextChar();
+		    while( currentChar() && currentChar() != '\n' ){
+			readWhiteSpaces( false );
+			QString arg = readArgument();
+			if( currentChar() == ',' ){
+			    nextChar();
+			} else if( currentChar() == ')' ){
+			    break;
+			}
+		    }
+		}
+		
+		if( currentChar() == ')' )
+		    nextChar();
 	    }
             QString body = QString(" ") + m.body() + QString(" ");
 	    m_source.insert( currentPosition(), body );
@@ -292,6 +305,36 @@ void Lexer::skip( int l, int r )
 
     m_currentLine = svCurrentLine;
     m_currentColumn = svCurrentColumn;
+}
+
+QString Lexer::readArgument()
+{
+    QString arg;
+    int count = 0;
+ 
+    while( currentChar() ){
+	
+	readWhiteSpaces( false );
+	
+	QChar ch = currentChar();
+	if( ch == '\n' ){
+	    break;
+	} else if( ch == ',' || ch == ')' && !count ){
+	    break;
+	} 
+	
+	Token tk;
+	nextToken( tk, true );
+	
+	if( tk == '(' ){
+	    ++count;
+	} else if( tk == ')' ){
+	    --count;
+	}
+	
+	arg += toString( tk );
+    }
+    return arg;
 }
 
 void Lexer::handleDirective( const QString& directive )
