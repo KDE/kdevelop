@@ -57,9 +57,6 @@ class CppCodeCompletion : public QObject
 
 		QString createTmpFileForParser (int iLine);
 
-		void loadPersistantClassStore( );
-		void savePersistantClassStore( );
-
 		QValueList<KEditor::CompletionEntry> getEntryListForClass ( QString strClass );
 		QValueList<KEditor::CompletionEntry> getEntryListForNamespace ( const QString& strNamespace );
 		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );

@@ -18,11 +18,9 @@
 #define CodeCompletion 0
 
 #include "cppcodecompletion.h"
-//#include "ParsedVariable.h"
 
 #include <kdebug.h>
 #include <kregexp.h>
-//#include <kmessagebox.h>
 #include <ktempfile.h>
 
 #include <qstring.h>
@@ -37,11 +35,6 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 
 	connect ( m_pEditor, SIGNAL ( documentActivated ( KEditor::Document* ) ),
 		this, SLOT ( slotDocumentActivated ( KEditor::Document* ) ) );
-	//segfault on kde3/qt3
-	/*	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
-		connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
-		connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
-	*/
 
 	m_pParser = 0;
 	m_pCursorIface = 0;
@@ -56,11 +49,7 @@ CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 
 CppCodeCompletion::~CppCodeCompletion()
 {
-	if ( m_pParser ) delete m_pParser;
-	if ( m_pTmpFile ) delete m_pTmpFile;
-	if ( m_pEditIface ) delete m_pEditIface;
-	if ( m_pCursorIface ) delete m_pCursorIface;
-	if ( m_pCompletionIface ) delete m_pCompletionIface;
+	delete m_pParser;
 }
 
 void CppCodeCompletion::slotArgHintHided()
@@ -95,6 +84,7 @@ void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 	}
 
 	#if CodeCompletion
+
 	disconnect ( m_pCursorIface, 0, this, 0 ); // to make sure that it isn't connected twice
 	connect ( m_pCursorIface, SIGNAL ( cursorPositionChanged ( KEditor::Document*, int, int ) ),
 		this, SLOT ( slotCursorPositionChanged ( KEditor::Document*, int, int ) ) );
@@ -102,6 +92,10 @@ void CppCodeCompletion::slotDocumentActivated ( KEditor::Document* pDoc )
 	disconnect ( m_pEditIface, 0, this, 0 ); // to make sure that it isn't connected twice
 	connect ( m_pEditIface, SIGNAL ( textChanged ( KEditor::Document*, int, int ) ),
 		this, SLOT ( slotTextChanged ( KEditor::Document*, int, int ) ) );
+
+	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
 
 	#endif
 }
@@ -118,15 +112,18 @@ void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int
 		return;
 	}
 
+	m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface ( pDoc );
+	if ( !m_pCompletionIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
+		return;
+	}
+
 	QString strCurLine = m_pEditIface->line ( nLine );
 
+	if ( !m_pParser ) m_pParser = new CppCCParser ();
+
 	//kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
-
-	if ( strCurLine.right ( 1 ) == "s" )
-	    savePersistantClassStore( );
-
-	if( strCurLine.right( 1 ) == "l" )
-	    loadPersistantClassStore( );
 
 	// CC for "Namespace::" for example
 	if ( strCurLine.right ( 2 ) == "::" )
@@ -166,6 +163,31 @@ void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int
 			}
 		}
 	}
+
+	if ( m_pEditIface->line ( nLine ) == "test(")
+	{
+		QValueList < KEditor::CompletionEntry > entryList;
+
+		KEditor::CompletionEntry entry;
+		entry.prefix = "int";
+		entry.text = "setCurrentEditor";
+		entry.postfix = "( KWrite* e )";
+
+		entryList.append ( entry );
+
+		//m_pCompletionIface->showCompletionBox ( entryList, 0 );
+
+		QStringList functionList;
+		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";
+		functionList.append ( strFunction );
+		strFunction = "int setCurrentEditor ( QMultiLineEdit* e, char* name )";
+		functionList.append ( strFunction );
+		strFunction = "int setCurrentEditor ( NEdit* e, const char* name )";
+		functionList.append ( strFunction );
+
+		m_pCompletionIface->showArgHint ( functionList, "()", "," );
+	}
+
 
 	if ( strCurLine.right ( 1 ) == "." )
 	{
@@ -263,39 +285,6 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 	kdDebug (9007) << "Name der Temp-Datei: " << m_pTmpFile->name() << endl;
 
 	return m_pTmpFile->name();
-}
-
-
-void
-CppCodeCompletion::loadPersistantClassStore( )
-{
-    kdDebug( 9007 ) << "Loading classstore" << endl;
-
-    if( m_pStore->open( "persistantstore.pcs", IO_ReadOnly ) ){
-	kdDebug( 9007 ) << "Reading persistant file" << endl;
-	m_pStore->wipeout( );
-	m_pStore->restoreAll( );
-	m_pStore->close( );
-    }
-
-    kdDebug( 9007 ) << "Size of classstore     : '" << sizeof( *m_pStore ) << "'" << endl;
-    kdDebug( 9007 ) << "Size of globalContainer: '" << sizeof( m_pStore->globalContainer ) << "'" << endl;
-
-//    m_pStore->out( );
-}
-
-void
-CppCodeCompletion::savePersistantClassStore( )
-{
-    kdDebug( 9007 ) << "Saving classstore" << endl;
-    kdDebug( 9007 ) << "Size of classstore     : '" << sizeof( *m_pStore ) << "'" << endl;
-    kdDebug( 9007 ) << "Size of globalContainer: '" << sizeof( m_pStore->globalContainer ) << "'" << endl;
-
-    if ( m_pStore->open ( "persistantstore.pcs", IO_WriteOnly ) ){
-	kdDebug ( 9007 ) << "Saving persistant file" << endl;
-	m_pStore->storeAll( );
-	m_pStore->close( );
-    }
 }
 
 
