@@ -7,7 +7,7 @@
 <table border="1">
     <tr>
       <th scope=col>Feature/Language</th>
-      <th scope=col>Ada (disabled)</th>
+      <th scope=col>Ada</th>
       <th scope="col">Bash</th>
       <th scope=col>C/C++</th>
       <th scope=col>Fortran</th>
