@@ -1,0 +1,7 @@
+# KDE Config File
+[General]
+Name=SuperWaba
+Icon=superwaba.png
+Category=Java
+Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
+FileTemplates=java
