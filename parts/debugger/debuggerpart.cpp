@@ -330,8 +330,8 @@ void DebuggerPart::setupController()
              controller,       SLOT(slotSetLocalViewState(bool)));
 
     // framestackWidget -> controller
-    connect( framestackWidget, SIGNAL(selectFrame(int)),
-             controller,       SLOT(slotSelectFrame(int)));
+    connect( framestackWidget, SIGNAL(selectFrame(int,int,bool)),
+             controller,       SLOT(slotSelectFrame(int,int,bool)));
 
     // breakpointWidget -> controller
     connect( breakpointWidget, SIGNAL(clearAllBreakpoints()),
