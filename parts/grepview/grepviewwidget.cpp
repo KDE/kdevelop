@@ -122,7 +122,7 @@ void GrepViewWidget::showDialog()
 
 static QString escape(const QString &str)
 {
-    QString escaped("[]\\^$");
+    QString escaped("[]{}()\\^$?.+-*");
     QString res;
 
     for (uint i=0; i < str.length(); ++i) {
@@ -147,8 +147,7 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 	}
     if (len > 0 && pattern[len-1] == '\n')
 	pattern.truncate(len-1);
-    // Then special chars are escaped.
-    grepdlg->setPattern(escape(pattern));
+    grepdlg->setPattern( pattern );
     grepdlg->show();
 }
 
@@ -170,7 +169,8 @@ void GrepViewWidget::searchActivated()
         }
 
     QString pattern = grepdlg->templateString();
-    pattern.replace(QRegExp("%s"), grepdlg->patternString());
+//    pattern.replace(QRegExp("%s"), grepdlg->patternString());
+    pattern.replace(QRegExp("%s"), escape( grepdlg->patternString() ) );
     pattern.replace(QRegExp("'"), "'\\''");
 
     QString filepattern = "find ";
