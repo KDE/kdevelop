@@ -168,7 +168,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   }
 
 	createGUI(0L);
-	stateChanged("no_file");
+
+	stateChanged("no_src");
 	stateChanged("no_project");
 	show();
 
@@ -582,9 +583,20 @@ void CKDevelop::initMenuBar(){
 	///////////////////////////////////////////////////////////////////
 	// Window-menu entries
 	//   menu_buffers = new QPopupMenu;
-//for now I am going to leave this menu as it is (rokrau 02/10/02)
-	menuBar()->insertItem(i18n("&Window"), windowMenu());
-	menuBar()->insertSeparator();
+	KActionMenu*
+	pActionMenu = new KActionMenu(i18n("&Window"),
+	              actionCollection(),"window_menu");
+	// this hack allows to integrate the QPopupMenu, have to ask falk what he
+	// thinks about this, maybe we should make a method in qextmdimainfrm for this
+	// in fact we have to do something since we can not just overwrite the pointer
+	// and hope for the best.... duuuhuhh
+
+	// (rokrau 02/19/02)
+	m_pWindowMenu = pActionMenu->popupMenu();
+	m_pWindowMenu->setCheckable( TRUE);
+	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
+//	kdDebug() << "in CKDevelop::initMenu(), m_pWindowMenu = "
+//	          << m_pWindowMenu << "\n";
 
 	///////////////////////////////////////////////////////////////////
 	// Bookmarks-menu entries
@@ -596,7 +608,6 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotBookmarksPrevious()),actionCollection(),"bookmarks_prev");
 	pAction = new KAction(i18n("&Clear Bookmarks"),0,this,
 	          SLOT(slotBookmarksClear()),actionCollection(),"bookmarks_clear");
-	KActionMenu*
 	pActionMenu = new KActionMenu(i18n("Code &Window"),SmallIconSet("bookmark_folder"),
 	              actionCollection(),"bookmarks_code");
 	KPopupMenu* pCodeBookmarksPopup = pActionMenu->popupMenu();

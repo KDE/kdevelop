@@ -176,6 +176,7 @@
     <Separator/>
     <Action name="options_setup" />
   </Menu>
+  <Action name="window_menu" />
   <Menu name="bookmarks">
     <text>Book&amp;marks</text>
     <Action name="bookmarks_toggle" />
@@ -215,8 +216,14 @@
   </Menu>
 </MenuBar>
 
-<State name="no_file">
+<State name="file_new>
+  <enable>
+    <Action name="file_new" />
+  </enable>
+</State>
+<State name="no_src">
   <disable>
+    <Action name="file_new" />
     <Action name="file_close" />
     <Action name="file_close_all" />
     <Action name="file_save" />
@@ -244,13 +251,18 @@
     <Action name="options_editor" />
   </disable>
   <enable>
-    <Action name="file_new" />
     <Action name="file_open" />
     <Action name="file_quit" />
   </enable>
 </State>
-<State name="no_project">
-  <disable>
+<State name="project_make_msg">
+  <enable>
+    <Action name="project_make_msg" />
+  </enable>
+</State>
+
+<State name="project">
+  <enable>
     <Action name="file_new" />
     <Action name="view_goto" />
     <Action name="view_next_error" />
@@ -270,24 +282,25 @@
     <Action name="project_build_rpm" />
     <Action name="project_conf_rpm" />
     <Action name="project_load_tags" />
-    <Action name="project_options" />
-    <Action name="build_compile" />
-    <Action name="build_make" />
-    <Action name="build_clean" />
-    <Action name="build_rebuild" />
-    <Action name="build_rebuild_all" />
-    <Action name="build_exec" />
-    <Action name="build_exec_args" />
-    <Action name="build_distclean" />
-    <Action name="build_autoconf" />
-    <Action name="build_configure" />
-    <Action name="build_stop" />
-   </disable>
+  </enable>
+</State>
+<State name="no_project">
   <enable>
     <Action name="project_new" />
     <Action name="project_generate" />
     <Action name="project_open" />
     <Action name="project_open_recent" />
+    <Action name="project_options" />
+  </enable>
+</State>
+<State name="build_stop">
+  <enable>
+    <Action name="build_stop" />
+  </enable>
+</State>
+<State name="build_compile">
+  <enable>
+    <Action name="build_compile" />
   </enable>
 </State>
 <State name="build">
@@ -331,4 +344,5 @@
     </Menu>
   </disable>
 </State>
+
 </kpartgui>

@@ -564,9 +564,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     }
   }
 
-	// this code really needs to be replaced with the KAction based
-	// stuff soon (rokrau 02/16/02)
-  // Enable or disable command
+	// Enable or disable compile command
 	if (CProject::getType(filename) == CPP_SOURCE){
 		KAction* pAction=actionCollection()->action("build_make");
 		if (pAction && pAction->isEnabled()) {
@@ -611,54 +609,59 @@ void CKDevelop::startDesigner()
 
 void CKDevelop::setToolMenuProcess(bool enable){
 
-  if (enable)
-    disableCommand(ID_BUILD_STOP);
-  else
-    enableCommand(ID_BUILD_STOP);
+	if (enable)
+		stateChanged("build_stop",true);
+		//disableCommand(ID_BUILD_STOP);
+	else
+		stateChanged("build_stop");
+		//enableCommand(ID_BUILD_STOP);
 
-  if (enable && project){
+	if (enable && project){
 
-    if (m_docViewManager->curDocIsCppFile()){
-      enableCommand(ID_BUILD_COMPILE_FILE);
-    }
-	  enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
-    enableCommand(ID_BUILD_RUN);
-    enableCommand(ID_BUILD_RUN_WITH_ARGS);
-    enableCommand(ID_DEBUG_START);
-    enableCommand(ID_DEBUG_START_OTHER);
-    enableCommand(ID_BUILD_MAKE);
-    enableCommand(ID_BUILD_REBUILD_ALL);
-    enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
-    enableCommand(ID_BUILD_DISTCLEAN);
-    enableCommand(ID_BUILD_MAKECLEAN);
-    enableCommand(ID_BUILD_AUTOCONF);
-    enableCommand(ID_BUILD_CONFIGURE);
-    QString type=prj->getProjectType();
-    if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
-    {
-      disableCommand(ID_PROJECT_MESSAGES);
-    }
-    else{
-      enableCommand(ID_PROJECT_MESSAGES);
-    }
+		if (m_docViewManager->curDocIsCppFile())
+			stateChanged("build_compile");
+			//enableCommand(ID_BUILD_COMPILE_FILE);
 
-    enableCommand(ID_PROJECT_CLOSE);
-    enableCommand(ID_PROJECT_NEW_CLASS);
-    enableCommand(ID_PROJECT_ADD_FILE_EXIST);
-    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-    enableCommand(ID_PROJECT_FILE_PROPERTIES);
-    enableCommand(ID_PROJECT_OPTIONS);
+		enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
 
-    enableCommand(ID_FILE_NEW);
+		stateChanged("build",true);
+//    enableCommand(ID_BUILD_RUN);
+//    enableCommand(ID_BUILD_RUN_WITH_ARGS);
+//    enableCommand(ID_DEBUG_START);
+//    enableCommand(ID_DEBUG_START_OTHER);
+//    enableCommand(ID_BUILD_MAKE);
+//    enableCommand(ID_BUILD_REBUILD_ALL);
+//    enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+//    enableCommand(ID_BUILD_DISTCLEAN);
+//    enableCommand(ID_BUILD_MAKECLEAN);
+//    enableCommand(ID_BUILD_AUTOCONF);
+//    enableCommand(ID_BUILD_CONFIGURE);
+
+		QString type=prj->getProjectType();
+		if (!(prj->isKDEProject()||prj->isKDE2Project()||prj->isQt2Project()))
+			stateChanged("project_make_msg");
+			//disableCommand(ID_PROJECT_MESSAGES);
+		else
+			stateChanged("project_make_msg",true);
+			//enableCommand(ID_PROJECT_MESSAGES);
+		stateChanged("project");
+//    enableCommand(ID_PROJECT_CLOSE);
+//    enableCommand(ID_PROJECT_NEW_CLASS);
+//    enableCommand(ID_PROJECT_ADD_FILE_EXIST);
+//    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+//    enableCommand(ID_PROJECT_FILE_PROPERTIES);
+//    enableCommand(ID_PROJECT_OPTIONS);
+		stateChanged("file_new");
+//    enableCommand(ID_FILE_NEW);
 
   //MB
-    enableCommand(ID_PROJECT_DOC_TOOL);
+//    enableCommand(ID_PROJECT_DOC_TOOL);
   //MB end
-    enableCommand(ID_PROJECT_MAKE_PROJECT_API);
-    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-    enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-    enableCommand(ID_PROJECT_MAKE_TAGS);
-    enableCommand(ID_PROJECT_LOAD_TAGS);
+//    enableCommand(ID_PROJECT_MAKE_PROJECT_API);
+//    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+//    enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+//    enableCommand(ID_PROJECT_MAKE_TAGS);
+//    enableCommand(ID_PROJECT_LOAD_TAGS);
   }
   else
 //  if (!enable)
