@@ -175,6 +175,12 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 
 void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
 {
+  // Bugfix for addWindow() using the wrong parent when a toolview is activated...
+  // Don't activate one unless necessary & possible
+  if (m_partViews.find(activeWindow()) == -1 && m_partViews.first()) {
+    activateView(m_partViews.first());
+  }
+
   QextMdiChildView *child = wrapper(view, name);
 
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
