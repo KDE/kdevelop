@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
+    Copyright (C) 2004 Matt Rogers <mattr@kde.org> 
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -103,26 +104,66 @@ public:
 	return ptr;
     }
 
+    /**
+     * Reset the CodeModel
+     */
     void wipeout();
 
+    //! Get the list of files in this code model
+    //! \return the FileList object that contains the list of files
     FileList fileList();
+
+    //! Get the list of files in this code model
+    //! This is a const version for convenience
+    //! \return the FileList object that contains the list of files
     const FileList fileList() const;
 
+    //! Check to see if a file is in this code model
+    //! \return true if @p name is in the file list
     bool hasFile( const QString& name ) const;
 
+    //! Get the FileDom object for a file
+    //! \param name the name of the file to get the FileDom object for
     FileDom fileByName( const QString& name );
+
+    /**
+     * Get the FileDom object for a file
+     * This is a const version provided for convenience
+     * \param name the name of the file to get the FileDom object for
+     */
     const FileDom fileByName( const QString& name ) const;
 
+    /**
+     * Add a file to the code model
+     * \param file the FileDom object to add to the code model
+     * \return true if the file was added successfully
+     */
     bool addFile( FileDom file );
+
+    //! Remove a file from the code model
+    //! \param file the FileDom object to add to the code model
     void removeFile( FileDom file  );
 
+    //! Get the global namespace
+    //! \return the NamespaceDom object that represents the global namespace
     const NamespaceDom globalNamespace() const;
 
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
     
 private:
+    /**
+     * Add a namespace to the code model
+     * \param target the NamespaceDom object that the namespace will be added to
+     * \param source the NamespaceDom object that contains the namespace to remove
+     */
     void addNamespace( NamespaceDom target, NamespaceDom source );
+
+    /**
+     * Remove a namespace from the code model
+     * \param target the NamespaceDom object that the namespace will be removed from
+     * \param source the NamespaceDom object that contains the namespace to remove
+     */
     void removeNamespace( NamespaceDom target, NamespaceDom source );
 
 private:
@@ -169,22 +210,43 @@ protected:
 public:
     virtual ~CodeModelItem();
 
+    //! Get the kind of item
     int kind() const { return m_kind; }
+
+    //! Set the kind of item
     void setKind( int kind ) { m_kind = kind; }
 
+    //! Get the name of the item
     QString name() const;
+
+    //! Set the name of the item
     void setName( const QString& name );
 
+    //! Get the file of the item
+    //! \return the FileDom object for the item
     FileDom file();
+
+    //! Get the file of the item
+    //! This is a const version provided for convenience
+    //! \return the FileDom object for the item
     const FileDom file() const;
 
+    //! Get the filename of the item
     QString fileName() const;
+
+    //! Set the filename of the item
     void setFileName( const QString& fileName );
 
+    //! Get the start position of the item
     void getStartPosition( int* line, int* col ) const;
+
+    //! Set the start position of the item
     void setStartPosition( int line, int col );
 
+    //! Get the end position of the item
     void getEndPosition( int* line, int* col ) const;
+
+    //! Set the end position of the item
     void setEndPosition( int line, int col );
 
     virtual bool isFile() const { return false; }
@@ -203,7 +265,12 @@ public:
     virtual void write( QDataStream& stream ) const;
 
 protected:
+
+    //! Get the code model for this item
     CodeModel* codeModel() { return m_model; }
+
+    //! Get the code model for this item
+    //! This is a const version provided for convenience
     const CodeModel* codeModel() const { return m_model; }
 
 private:
@@ -232,58 +299,182 @@ public:
     QStringList scope() const { return m_scope; }
     void setScope( const QStringList& scope ) { m_scope = scope; }
 
+    //! Get the list of base classes
     QStringList baseClassList() const;
+
+    //! Add a base class to the model
     bool addBaseClass( const QString& baseClass );
+
+    //! Remove a base class from the model
     void removeBaseClass( const QString& baseClass );
 
+    //! Get the list of classes in the model
     ClassList classList();
+
+    //! Get the list of classes in the model
+    //! This is a const version provided for convenience
     const ClassList classList() const;
+
+    //! Check if the class specified by \p name is in this model
     bool hasClass( const QString& name ) const;
+
+    //! Get a list of classes that match the name given by \p name
     ClassList classByName( const QString& name );
+
+    //! Get a list of classes that match the name given by \p name
+    //! This is a const version provided for convenience
     const ClassList classByName( const QString& name ) const;
+
+    //! Add a class to the model
     bool addClass( ClassDom klass );
+
+    //! Remove a class from the model
     void removeClass( ClassDom klass );
 
+    //! Get a list of functions in the model
     FunctionList functionList();
+
+    //! Get a list of functions in the model
+    //! This is a const version provided for convenience
     const FunctionList functionList() const;
+
+    //! Check if the function specified by \p name is in the model
     bool hasFunction( const QString& name ) const;
+
+    //! Get a list of functions that match the name given by \p name
     FunctionList functionByName( const QString& name );
+
+    //! Get a list of functions that match the name given by \p name
+    //! This is a const version provided for convenience
     const FunctionList functionByName( const QString& name ) const;
+
+    //! Add a function to the class model
+    //! \return true if adding the function was successful
+    //! \param fun the FunctionDom object to add to the model
     bool addFunction( FunctionDom fun );
+
+    //! Remove a function from the class model
+    //! \param fun the FunctionDom object to remove from the model
     void removeFunction( FunctionDom fun );
 
+    //! Get the list of function definitions
     FunctionDefinitionList functionDefinitionList();
+
+    //! Get the list of function definitions
+    //! This is a const version provided for convenience
     const FunctionDefinitionList functionDefinitionList() const;
+
+    //! Check if the function definition specified by \p name is in the model
+    //! \return true if the function definition was found
     bool hasFunctionDefinition( const QString& name ) const;
+
+    //! Get the list of functions that match the name given by \p name
+    //! If there are no matches, then the list returned is empty
+    //! \return the FunctionDefinitionList object containing the definitions that match
     FunctionDefinitionList functionDefinitionByName( const QString& name );
+
+    //! Get the list of functions that match the name given by \p name
+    //! If there are no matches, then the list returned is empty
+    //! This is a const version provided for convenience
+    //! \return the FunctionDefinitionList object containing the definitions that match
     const FunctionDefinitionList functionDefinitionByName( const QString& name ) const;
+
+    //! Add a function definition to the model
+    //! \param fun the FunctionDefinitionDom object to add to the model
+    //! \return true if the addition was successful
     bool addFunctionDefinition( FunctionDefinitionDom fun );
+
+    //! Remove a function definition from the model
+    //! \param fun the FunctionDefinitionDom object to remove from the model
     void removeFunctionDefinition( FunctionDefinitionDom fun );
 
+    //! Get the list of variables in the model
     VariableList variableList();
+
+    //! Get the list of variables in the model
+    //! This is a const version provided for convenience
     const VariableList variableList() const;
+
+    //! Check if the variable specified by \p name is in the model
     bool hasVariable( const QString& name ) const;
+
+    //! Get the variable specified by \p name
+    //! If there are no matches, then the VariableDom object returned is empty
+    //! \return a VariableDom object that matches the name specified
     VariableDom variableByName( const QString& name );
+
+    //! Get the variable specified by \p name
+    //! If there are no matches, then the VariableDom object returned is empty
+    //! \return a VariableDom object that matches the name specified
     const VariableDom variableByName( const QString& name ) const;
+
+    //! Add a variable to the model
+    //! \param var the VariableDom object to add to the model
+    //! \return true if the addition was successful
     bool addVariable( VariableDom var );
+
+    //! Remove a variable from the model
+    //! \param var the VariableDom object to remove from the model
     void removeVariable( VariableDom var );
 
+    //! Get the type alias list for this model
     TypeAliasList typeAliasList();
+
+    //! Get the type alias list for this model
+    //! This is a const version provided for convenience
     const TypeAliasList typeAliasList() const;
+
+    //! Check if the type alias specified by \p name is in the model
     bool hasTypeAlias( const QString& name ) const;
+
+    //! Get the list of type aliases that match \p name
+    //! If there are no matches, the TypeAliasList object is empty
+    //! \return a TypeAliasList object that contains the matches
     TypeAliasList typeAliasByName( const QString& name );
+
+    //! Get the list of type aliases that match \p name
+    //! If there are no matches, the TypeAliasList object is empty
+    //! \return a TypeAliasList object that contains the matches
     const TypeAliasList typeAliasByName( const QString& name ) const;
+
+    //! Add a type alias to the model
+    //! \param typeAlias the TypeAliasDom object to add to the model
+    //! \return true if the addition was successful
     bool addTypeAlias( TypeAliasDom typeAlias );
+
+    //! Remove a type alias from the model
+    //! \param typeAlias the TypeAliasDom object to remove from the model
     void removeTypeAlias( TypeAliasDom typeAlias );
-    
+
+    //! Get the list of enums in the model
     EnumList enumList();
+
+    //! Get the list of enums in the model
+    //! This is a const version provided for convenience
     const EnumList enumList() const;
+
+    //! Check if the enum specified by \p name is in the model
     bool hasEnum( const QString& name ) const;
+
+    //! Get the enum specified by \p name
+    //! The EnumDom object returned will be empty if no match is found
+    //! \return the EnumDom object that contains the match
     EnumDom enumByName( const QString& name );
+
+    //! Get the enum specified by \p name
+    //! The EnumDom object returned will be empty if no match is found
+    //! \return the EnumDom object that contains the match
     const EnumDom enumByName( const QString& name ) const;
+
+    //! Add an enum to the model
+    //! \param e the EnumDom object to add to the model
+    //! \return true if the addition was successful
     bool addEnum( EnumDom e );
+
+    //! Remove an enum from the model
+    //! \param e the EnumDom object to remove from the model
     void removeEnum( EnumDom e );
-    
+
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -314,12 +505,33 @@ public:
     virtual bool isClass() const { return false; }
     virtual bool isNamespace() const { return true; }
 
+    //! Get the list of namespaces in this model
     NamespaceList namespaceList();
+
+    //! Get the list of namespaces in this model
+    //! This is a const version provided for convenience
     const NamespaceList namespaceList() const;
+
+    //! Check if the namespace referenced by \p name is in the model
     bool hasNamespace( const QString& name ) const;
+
+    //! Get the namespace specified by \p name
+    //! If there are no matches, then the NamespaceDom object returned is empty
+    //! \return the NamespaceDom object that contains the match
     NamespaceDom namespaceByName( const QString& name );
+
+    //! Get the namespace specifed by \p name
+    //! If there are no matches, then the NamespaceDom object returned is empty
+    //! This is a const version provided for convenience
+    //! \return the NamespaceDom object that contains the match
     const NamespaceDom namespaceByName( const QString& name ) const;
+
+    //! Add a namespace to the model
+    //! \param ns the NamespaceDom object to add to the model
     bool addNamespace( NamespaceDom ns );
+
+    //! Remove the namespace from the model
+    //! \param ns the NamespaceDom object to remove from the model
     void removeNamespace( NamespaceDom ns );
 
     virtual void read( QDataStream& stream );
@@ -363,10 +575,16 @@ public:
 
     virtual bool isArgument() const { return true; }
 
+    //! Get the type of this argument
     QString type() const;
+
+    //! Set the type of this argument
     void setType( const QString& type );
 
+    //! Get the default value of this argument
     QString defaultValue() const;
+
+    //! Set the default value of this argument
     void setDefaultValue( const QString& defaultValue );
 
     virtual void read( QDataStream& stream );
@@ -392,15 +610,37 @@ public:
 
     virtual bool isFunction() const { return true; }
 
+    //! Get the scope of the function
     QStringList scope() const { return m_scope; }
+
+    //! Set the scope of the function
     void setScope( const QStringList& scope ) { m_scope = scope; }
 
+    /**
+     * Get the access level of the function
+     * Can be one of the following:
+     * \li Public
+     * \li Protected
+     * \li Private
+     */
     int access() const;
+
+    /**
+     * Set the access level of the function
+     * Can be one of the following:
+     * \li Public
+     * \li Protected
+     * \li Private
+     */
     void setAccess( int access );
 
+    //! Check if the function is a Qt signal
     bool isSignal() const;
+
+    //! Set the function to be a virtual function
     void setSignal( bool isSignal );
 
+    //! Check if the function is a Qt slot
     bool isSlot() const;
     void setSlot( bool isSlot );
 
@@ -422,9 +662,24 @@ public:
     QString resultType() const;
     void setResultType( const QString& type );
 
+    //! Get the list of arguments being passed to the function
+    //! If there are no arguments, then the list is empty
+    //! \return the ArgumentList object that contains the arguments for this function
     ArgumentList argumentList();
+
+    //! Get the list of arguments being passed to the function
+    //! If there are no arguments, then the list is empty
+    //! \return the ArgumentList object that contains the arguments for this function
+    //! This is a const version provided for convenience
     const ArgumentList argumentList() const;
+
+    //! Add an argument to the function
+    //! \param arg the ArgumentDom object to add as an argument to the function
+    //! \return true if the addition was successful
     bool addArgument( ArgumentDom arg );
+
+    //! Remove an argument from the function
+    //! \param arg the ArgumentDom object to remove from the function
     void removeArgument( ArgumentDom arg );
 
     virtual void read( QDataStream& stream );
@@ -590,3 +845,4 @@ private:
 
 
 #endif // _CODEMODEL_H_
+
