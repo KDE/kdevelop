@@ -445,7 +445,7 @@ class GenHighlight : public Highlight {
     virtual void init();
     virtual void done();
 
-    static const int nContexts = 32;
+    enum { nContexts = 32 };
     HlContext *contextList[nContexts];
 };
 

@@ -93,7 +93,7 @@ class IndentConfigTab : public QWidget
 
   protected:
 
-    static const int numFlags = 6;
+    enum { numFlags = 6 };
     static const int flags[numFlags];
     QCheckBox *opt[numFlags];
 };
@@ -109,7 +109,7 @@ class SelectConfigTab : public QWidget
 
   protected:
 
-    static const int numFlags = 6;
+    enum { numFlags = 6 };
     static const int flags[numFlags];
     QCheckBox *opt[numFlags];
 };
@@ -125,7 +125,7 @@ class EditConfigTab : public QWidget
 
   protected:
 
-    static const int numFlags = 9;
+    enum { numFlags = 9 };
     static const int flags[numFlags];
     QCheckBox *opt[numFlags];
     KIntNumInput *e1;
