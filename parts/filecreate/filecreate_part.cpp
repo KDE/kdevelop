@@ -210,12 +210,12 @@ void FileCreatePart::slotProjectOpened() {
         }
       }
     }
-    else { // it was probably an imported project
+/*    else { // it was probably an imported project
       // KLUDGE: we need a better way to determine file types
       // the current method looks a bit too restrictive
       addFileType( "cpp" );
       addFileType( "h" );
-    }
+    }*/
   }
 
   setShowSideTab(m_useSideTab);
