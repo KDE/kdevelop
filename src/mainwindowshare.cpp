@@ -502,4 +502,9 @@ void MainWindowShare::contextMenu(QPopupMenu* popup, const Context *)
   popup->setWhatsThis(id, i18n("<b>Show menubar</b><p>Lets you switch the menubar on/off."));
 }
 
+void MainWindowShare::slotActivePartChanged( KParts::Part * part )
+{
+    m_configureEditorAction->setEnabled( part && dynamic_cast<KTextEditor::Document*>(part) );
+}
+
 #include "mainwindowshare.moc"
