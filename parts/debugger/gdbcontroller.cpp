@@ -35,6 +35,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qtimer.h>
+#include <qfileinfo.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -142,6 +143,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_displayStaticMembers_(false),
         config_asmDemangle_(true),
         config_dbgTerminal_(false),
+        config_runAppInAppDirectory_(true),
         config_gdbPath_(),
         config_programArgs_()
 {
@@ -179,6 +181,7 @@ void GDBController::reConfig()
 {
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
     config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
+    config_runAppInAppDirectory_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/runappinappdirectory", true);
     config_gdbPath_               = DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath");
     config_programArgs_           = DomUtil::readEntry(dom, "/kdevdebugger/general/programargs");
 
@@ -1261,6 +1264,11 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         queueCmd(new GDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
     else
         queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
+
+    // Change the "Working directory" to the correct one
+    QFileInfo app(application);
+    if (config_runAppInAppDirectory_)
+        queueCmd(new GDBCommand(QCString("cd " + app.dirPath()), NOTRUNCMD, NOTINFOCMD));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
