@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,12 +38,19 @@ public:
     ProjectItem(Type type, QListView *parent, const QString &text);
     ProjectItem(Type type, ProjectItem *parent, const QString &text);
 
+    void paintCell(QPainter *p, const QColorGroup &cg,
+                   int column, int width, int alignment);
+    void setBold(bool b)
+    { bld = b; }
+    bool isBold() const
+    { return bld; }
     Type type()
-        { return typ; }
+    { return typ; }
     
 private:
     Type typ;
-    void init();
+    bool bld;
+    //void init();
 };
 
 
@@ -64,6 +71,7 @@ public:
 
 private:
     void init();
+    bool bld;
 };
 
 
@@ -140,7 +148,7 @@ public:
      **/
     QString projectDirectory();
     /**
-     * The directory of the currently active subproject.
+     * The directory of the currently shown subproject.
      */
     QString subprojectDirectory();
     /**
@@ -152,6 +160,9 @@ public:
      */
     bool kdeMode() const
     { return m_kdeMode; }
+
+    void setActiveTarget(const QString &targetPath);
+    QString activeTarget();
 
     TargetItem *createTargetItem(const QCString &name,
                                  const QCString &prefix, const QCString &primary);
@@ -172,9 +183,10 @@ private:
 
     KListView *overview;
     KListView *details;
-    SubprojectItem *activeSubproject;
+    SubprojectItem *shownSubproject;
     AutoProjectPart *m_part;
     bool m_kdeMode;
+    QString m_activeTarget;
 };
 
 #endif

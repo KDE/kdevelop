@@ -13,11 +13,11 @@
  </general>
  <kdevautoproject>
   <general>
-   <activedir>src</activedir>
+   <activetarget>src/$APPNAMELC$</activetarget>
   </general>
-  <general>
+  <run>
    <mainprogram>src/$APPNAMELC$</mainprogram>
-  </general>
+  </run>
  </kdevautoproject>
  <kdevfileview>
   <groups>

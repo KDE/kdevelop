@@ -1,3 +1,15 @@
+2002-04-21  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Implemented setting active target in autoproject
+	  part and set a default one in most app templates
+	* Set resize policy of list views to LastColumn
+
+2002-04-20  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* If no compiler is set explicitly by the user,
+	  use the options widget of the default compiler
+	  (Property X-KDevelop-Default in the .desktop file)
+
 2002-04-19  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* In script projects, scan the source file list

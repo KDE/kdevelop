@@ -11,8 +11,6 @@ libkdevautoproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevautoproject_la_SOURCES = autoprojectpart.cpp \
 				autoprojectwidget.cpp \
-				compileroptionswidget.cpp \
-				compileroptionswidgetbase.ui \
 				configureoptionswidget.cpp \
 				configureoptionswidgetbase.ui \
 				subprojectoptionsdlg.cpp \

@@ -145,8 +145,9 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     : KListView(parent, name)
 {
     setFrameStyle(Panel | Sunken);
+    setLineWidth(2);
+    setResizeMode(QListView::LastColumn);
     setSorting(0);
-    setLineWidth(2); 
     header()->hide();
     addColumn("");
 

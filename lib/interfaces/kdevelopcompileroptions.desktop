@@ -7,3 +7,6 @@ Name=KDevelop Compiler Options Dialog Interface
 
 [PropertyDef::X-KDevelop-Language]
 Type=QString
+
+[PropertyDef::X-KDevelop-Default]
+Type=bool

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>486</width>
-            <height>461</height>
+            <width>493</width>
+            <height>495</height>
         </rect>
     </property>
     <property name="caption">
@@ -363,7 +363,7 @@ doxygen or similar tools.</string>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout3</cstring>
             </property>
@@ -411,6 +411,20 @@ doxygen or similar tools.</string>
                     </property>
                 </widget>
             </hbox>
+        </widget>
+        <widget class="Line" row="6" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>Line1</cstring>
+            </property>
+            <property name="frameShape" stdset="0">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
         </widget>
     </grid>
 </widget>

@@ -10,6 +10,9 @@
   </ignoreparts>
  </general>
  <kdevautoproject>
+  <general>
+   <activetarget>src/$APPNAMELC$</activetarget>
+  </general>
   <run>
    <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>

@@ -8,3 +8,4 @@ ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevgccoptions
 X-KDevelop-Language=Fortran
 X-KDevelop-Args=g77
+X-KDevelop-Default=true

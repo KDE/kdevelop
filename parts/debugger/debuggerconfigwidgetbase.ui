@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>DebuggerConfigWidgetBase</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>debugger_config_widget</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,119 +12,95 @@
             <height>241</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Debugger Configuration</string>
     </property>
     <hbox>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>Layout4</cstring>
             </property>
             <vbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>programArgs_label</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Program &amp;arguments:</string>
                     </property>
-                    <property>
-                        <name>buddy</name>
+                    <property name="buddy" stdset="0">
                         <cstring>programArgs_edit</cstring>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>Arguments that are given to the application when it is debugged.</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLineEdit</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLineEdit">
+                    <property name="name">
                         <cstring>programArgs_edit</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>debuggingShell_label</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Debugging &amp;shell:</string>
                     </property>
-                    <property>
-                        <name>buddy</name>
+                    <property name="buddy" stdset="0">
                         <cstring>debuggingShell_edit</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLineEdit</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLineEdit">
+                    <property name="name">
                         <cstring>debuggingShell_edit</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>gdbPath_label</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Path to &amp;gdb:</string>
                     </property>
-                    <property>
-                        <name>buddy</name>
+                    <property name="buddy" stdset="0">
                         <cstring>gdbPath_edit</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLineEdit</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLineEdit">
+                    <property name="name">
                         <cstring>gdbPath_edit</cstring>
                     </property>
                 </widget>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Spacer1</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
@@ -137,53 +110,44 @@
             </vbox>
         </widget>
         <spacer>
-            <property>
-                <name>name</name>
+            <property name="name" stdset="0">
                 <cstring>Spacer3</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
-                <enum>Expanding</enum>
+            <property name="sizeType">
+                <enum>Minimum</enum>
             </property>
-            <property>
-                <name>sizeHint</name>
+            <property name="sizeHint">
                 <size>
                     <width>20</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>Layout5</cstring>
             </property>
             <vbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget>
-                    <class>QCheckBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QCheckBox">
+                    <property name="name">
                         <cstring>displayStaticMembers_box</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Display static &amp;members</string>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>Displaying static members makes gdb slower in
 producing data within kde and qt.
 It may change the "signature" of the data
@@ -192,35 +156,27 @@ But if you need to debug into these values then
 check this option</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QCheckBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QCheckBox">
+                    <property name="name">
                         <cstring>asmDemangle_box</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Display &amp;demangled names</string>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>When displaying the disassembled code you
 can select to see the methods mangled names
 However, non-mangled names are easier to read.</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QCheckBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QCheckBox">
+                    <property name="name">
                         <cstring>breakOnLoadingLibrary_box</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Try settings &amp;breakpoints on library loading</string>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>If GDB hasn't seen a library that will be loaded via
 "dlopen" then it'll refuse to set a breakpoint in that code.
 We can get gdb to stop on a library load and hence
@@ -230,18 +186,14 @@ details and a "gotcha" relating to this behaviour.
 If you are not "dlopen"ing libs leave this off.</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QCheckBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QCheckBox">
+                    <property name="name">
                         <cstring>enableFloatingToolBar_box</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Enabled &amp;floating toolbar</string>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>Use the floating toolbar. This toolbar always stays
 on top of all windows so that if the app covers KDevelop
 you have control of the app though the small toolbar
@@ -249,18 +201,14 @@ Also this toolbar can be docked to the panel
 This toolbar is in addition to the toolbar in KDevelop</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QCheckBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QCheckBox">
+                    <property name="name">
                         <cstring>dbgTerminal_box</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Enabled separate &amp;terminal for application IO</string>
                     </property>
-                    <property>
-                        <name>whatsThis</name>
+                    <property name="whatsThis" stdset="0">
                         <string>This allows you to enter terminal input when your
 application contains terminal input code (eg cin, fgets etc.)
 If you use terminal input in your app, then tick this option.
@@ -268,20 +216,16 @@ Otherwise leave this off.</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property>
-                        <name>name</name>
+                    <property name="name" stdset="0">
                         <cstring>Spacer2</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>orientation</name>
+                    <property name="orientation">
                         <enum>Vertical</enum>
                     </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
+                    <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property>
-                        <name>sizeHint</name>
+                    <property name="sizeHint">
                         <size>
                             <width>20</width>
                             <height>20</height>
@@ -292,4 +236,5 @@ Otherwise leave this off.</string>
         </widget>
     </hbox>
 </widget>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

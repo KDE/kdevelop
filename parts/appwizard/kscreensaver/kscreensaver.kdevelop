@@ -15,7 +15,7 @@
  </general>
 <kdevautoproject>
   <general>
-   <activedir>src</activedir>
+   <activetarget>src/lib$APPNAMELC$.la</activetarget>
   </general>
  </kdevautoproject>
  <kdevfileview>

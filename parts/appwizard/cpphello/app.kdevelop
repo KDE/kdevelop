@@ -12,7 +12,7 @@
  </general>
  <kdevautoproject>
   <general>
-   <activedir>src</activedir>
+   <activetarget>src/$APPNAMELC$</activetarget>
   </general>
   <run>
    <mainprogram>src/$APPNAMELC</mainprogram>

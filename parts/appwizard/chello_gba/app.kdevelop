@@ -15,7 +15,7 @@
  </general>
  <kdevautoproject>
   <general>
-   <activedir>src</activedir>
+   <activetarget>src/$APPNAMELC$</activetarget>
   </general>
   <run>
    <default_implementation>no</default_implementation>

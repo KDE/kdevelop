@@ -26,7 +26,6 @@
 #include "kdevappfrontend.h"
 #include "kdevtoplevel.h"
 #include "kdevpartcontroller.h"
-#include "compileroptionswidget.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
 #include "configureoptionswidget.h"
@@ -53,7 +52,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "The project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    "Makefile.am. The 'details' view in the lower half shows the "
-                                   "targets for the active subproject selected in the overview."));
+                                   "targets for the subproject selected in the overview."));
     
     topLevel()->embedSelectView(m_widget, i18n("Project"));
 
@@ -118,9 +117,6 @@ AutoProjectPart::~AutoProjectPart()
 void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Compiler Options"));
-    CompilerOptionsWidget *w1 = new CompilerOptionsWidget(this, vbox);
-    connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
     vbox = dlg->addVBoxPage(i18n("Configure Options"));
     ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
@@ -141,6 +137,12 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 {
     m_widget->openProject(dirName);
     m_projectName = projectName;
+
+    QDomDocument &dom = *projectDom();
+    QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
+    kdDebug(9020) << "activeTarget " << activeTarget << endl;
+    if (!activeTarget.isEmpty())
+        m_widget->setActiveTarget(activeTarget);
 }
 
 
@@ -172,9 +174,16 @@ QString AutoProjectPart::mainProgram()
 
 QString AutoProjectPart::activeDirectory()
 {
-    QDomDocument &dom = *projectDom();
+    QString target = m_widget->activeTarget();
+    if (target.isNull())
+        return QString::null;
+    
+    int pos = target.findRev('/');
+    QString directory = (pos != -1)? target.left(pos) : target;
+    kdDebug(9020) << "Active target: " << target
+                  << ", directory: " << directory << endl;
 
-    return DomUtil::readEntry(dom, "/kdevautoproject/general/activedir");
+    return directory;
 }
 
 
