@@ -5,19 +5,15 @@
 // 
 data Information
 {
-   Filename="/home/smeier/devel/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
+   Filename="/home/bartel/kde1/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
    KDevelopVersion="0.4"
    DlgEditVersion="0.1alpha"
-   LastChanged="Sun Jul 18 19:53:46 1999"
+   LastChanged="Wed Oct 20 16:12:24 1999"
 }
 
 data SessionManagement
 {
-   OpenedRoot_1="General"
-   OpenedRoot_2="C++ Code"
-   OpenedRoot_3="Appearance"
-   OpenedRoot_4="Geometry"
-   OpenedRootCount="4"
+   OpenedRootCount="0"
 }
 
 item QWidget

@@ -58,7 +58,7 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
 
   // Create the popupmenus.
   popup = 0;
-  showNonPrjFiles=false;
+  showNonPrjFiles=true;
   file_col = 0;
   connect(this,
           SIGNAL(selectionChanged(QListViewItem*)), 
@@ -167,7 +167,7 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
 						}
 				} else {
 						if (showNonPrjFiles) {
-								item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("registered") );
+								item = treeH->addItem( fl.current(), THC_FILE, parent,"");
 								vc=project->getVersionControl();
 								if (vc!=0) {
 										reg=vc->registeredState(directory+'/'+fl.current());
