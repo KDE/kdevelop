@@ -1,3 +1,6 @@
+2003-05-18 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Updated BookmarksPart - now bookmarks are saved to session file.
+
 2003-05-17 F@lk Brettschneider <falkbr@kdevelop.org>
     * renamed QextMdi classes and files to KMdi
 
@@ -16,7 +19,6 @@
                        docs/*.css
          doxy.path = /usr/doc/appname
          INSTALLS += doxy
-      
 
 2003-05-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Updated BookmarksPart - added tooltips && RMB actions
