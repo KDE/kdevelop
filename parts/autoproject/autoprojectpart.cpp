@@ -273,6 +273,7 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 		}
 		else
 		{
+                        directory = "";
 			name = ( *it );
 		}
 		

@@ -57,7 +57,7 @@
 #include "removetargetdlg.h"
 #include "choosetargetdialog.h"
 #include "autoprojectpart.h"
-
+#include "urlutil.h"
 
 static QString nicePrimary( const QString &primary )
 {
@@ -443,6 +443,27 @@ QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 	return res;
 }
 
+SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, bool pathIsAbsolute)
+{       kdDebug(9020) << "Looking for path " << path << endl;
+        
+        int prefixLen = projectDirectory().length() + 1;
+        for(QListViewItemIterator it = overview;it.current();++it)
+        {
+                SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
+                QString relpath = (spitem->path).mid(prefixLen);
+                relpath = (relpath==QString::null) ? "" : relpath;
+                kdDebug(9020) << " ... checking -" << spitem->path << "-" << endl;
+                kdDebug(9020) << " ... (tailored: -" << relpath << "- against -" << (pathIsAbsolute ? path.mid(prefixLen) : path) << "- )" << endl;
+                if ( relpath == (pathIsAbsolute ? path.mid(prefixLen) : path))
+                {
+                        kdDebug(9020) << "Found it!" << endl;
+                        return spitem;
+                }
+        }
+        kdDebug(9020) << "Not found" << endl;
+        return NULL;
+}
+
 QStringList AutoProjectWidget::allLibraries()
 {
 	int prefixlen = projectDirectory().length() + 1;
@@ -481,13 +502,14 @@ QStringList AutoProjectWidget::allFiles()
 			s.push( item->firstChild() );
 
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( item );
-		QString path = spitem->path;
+                // use URLUtil so paths in root project dir are worked out correctly
+                QString relPath = URLUtil::relativePath(projectDirectory(), spitem->path, URLUtil::SLASH_SUFFIX);
 		QListIterator<TargetItem> tit( spitem->targets );
 		for ( ; tit.current(); ++tit )
 		{
 			QListIterator<FileItem> fit( tit.current() ->sources );
 			for ( ; fit.current(); ++fit )
-				list.append( path.mid ( projectDirectory().length() + 1 ) + "/" + ( *fit ) ->name );
+				list.append( relPath + ( *fit ) ->name );
 		}
 	}
 
@@ -497,8 +519,8 @@ QStringList AutoProjectWidget::allFiles()
 
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
-		if ( !res.contains( *it ) )
-			res.append( *it );
+		if ( !res.contains( *it ) ) 
+                { res.append( *it ); kdDebug(9020) << "***INCLUDING " << (*it) << " in allFiles()" << endl; }
 
 	return res;
 }
@@ -586,7 +608,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 {
 	QDomDocument &dom = *m_part->projectDom();
 	QStringList fileList = list;
-	
+        
 	if ( DomUtil::readBoolEntry( dom, "/kdevautoproject/general/useactivetarget" ) )
 	{
 		QStringList::iterator it;
@@ -610,31 +632,69 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			m_activeTarget->insertItem( fitem );
 
 			// TODO: Merge with code in addfiledlg.cpp
-			QString canontargetname = AutoProjectTool::canonicalize( m_activeTarget->name );
-			QString varname = canontargetname + "_SOURCES";
-			m_activeSubproject->variables[ varname ] += ( " " + fileName );
-
-			QMap<QString, QString> replaceMap;
-			replaceMap.insert( varname, m_activeSubproject->variables[ varname ] );
-
-			AutoProjectTool::modifyMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
+                        addToTarget(fileName, m_activeSubproject, m_activeTarget);
+//			QString canontargetname = AutoProjectTool::canonicalize( m_activeTarget->name );
+//			QString varname = canontargetname + "_SOURCES";
+//			m_activeSubproject->variables[ varname ] += ( " " + fileName );
+//
+//			QMap<QString, QString> replaceMap;
+//			replaceMap.insert( varname, m_activeSubproject->variables[ varname ] );
+//
+//			AutoProjectTool::modifyMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
 		}
 	
 		emitAddedFiles ( list );
 	}
 	else
 	{
-		ChooseTargetDialog chooseTargetDlg ( this, fileList, this, "choose target dialog" );
+                // See if we can figure out the target for each file without asking the user
+                // I think it's a valid assumption that if a directory contains only one target
+                // the file can be added to that target (Julian Rockey linux at jrockey.com)
+                QStringList doManually, doneAutomatically;
+                for(QStringList::iterator it = fileList.begin();it!=fileList.end();++it)
+                {
+                        bool autoAdded = false;
+                        QString relativeDir = URLUtil::directory(*it);
+                        SubprojectItem* spitem = subprojectItemForPath(relativeDir);
+                        if (spitem)
+                        {
+                                QPtrList<TargetItem> titemList = spitem->targets;
+                                if (titemList.count()==1) {
+                                        addToTarget( URLUtil::filename(*it), spitem, titemList.first() );
+                                        doneAutomatically.append(*it);
+                                        autoAdded = true;
+                                }
+                        }
+                        // add to manual list if this file wasn't auto-added
+                        if (!autoAdded) doManually.append(*it);
+                }
+                if (doneAutomatically.count()>0) emitAddedFiles(doneAutomatically);
+                                        
+                // raise dialog for any files that weren't added automatically
+                if (doManually.count()>0) {
+		        ChooseTargetDialog chooseTargetDlg ( this, doManually, this, "choose target dialog" );
 
-		//chooseTargetDlg = new ChooseTargetDialog ( this, this, "choose target dialog" );
+		        //chooseTargetDlg = new ChooseTargetDialog ( this, this, "choose target dialog" );
 
-		if ( chooseTargetDlg.exec() && chooseTargetDlg.neverAskAgainCheckBox->isChecked() )
-		{
-			DomUtil::writeBoolEntry( dom, "/kdevautoproject/general/useactivetarget", true );
-		}
+		        if ( chooseTargetDlg.exec() && chooseTargetDlg.neverAskAgainCheckBox->isChecked() )
+		        {
+		        	DomUtil::writeBoolEntry( dom, "/kdevautoproject/general/useactivetarget", true );
+		        }
+                }
 	}
 }
 
+void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
+{
+	QString canontargetname = AutoProjectTool::canonicalize( titem->name );
+	QString varname = canontargetname + "_SOURCES";
+        spitem->variables[ varname ] += ( " " + fileName );
+
+	QMap<QString, QString> replaceMap;
+	replaceMap.insert( varname, spitem->variables[ varname ] );
+	
+        AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );       
+}
 
 void AutoProjectWidget::removeFiles( const QStringList &list )
 {

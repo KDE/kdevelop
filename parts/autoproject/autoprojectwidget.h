@@ -241,8 +241,16 @@ public:
 	 * to which e.g. all files are added to.
 	 */
 	TargetItem* activeTarget();
+        
+        /**
+         * Returns the sub project item, if any, for a given path. The path supplied can be either
+         * absolute, or relative to the project directory. If no subproject item is found for the
+         * path, null is returned.
+         */
+        SubprojectItem* subprojectItemForPath(const QString & path, bool pathIsAbsolute=false);
 	
-	/**
+        void addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem);
+        /**
 	 * Restores the last settings of the AutoProjectWidget
 	 */
 	void restoreSession ( const QDomElement* el );
