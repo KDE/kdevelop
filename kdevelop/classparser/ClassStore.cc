@@ -275,13 +275,13 @@ QList<CClassTreeNode> *CClassStore::asForest()
 {
   CParsedClass *aClass;
   CParsedClass *parentClass;
-  CParsedParent * aParent;
+  CParsedParent *aParent;
   CClassTreeNode *aNode;
-  CClassTreeNode *newNode;
   CClassTreeNode *parentNode;
   QDict<CClassTreeNode> dict;
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
 
+  // Iterate over all parsed classes.
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
@@ -299,7 +299,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
         aNode->setClass( aClass );
         aNode->setIsInSystem( true );
         
-        dict.insert( aClass->name, newNode );
+        dict.insert( aClass->name, aNode );
       }
       else // Already in the dict as a template
       {
@@ -323,7 +323,9 @@ QList<CClassTreeNode> *CClassStore::asForest()
         // Add a new node for the parent if not added already.
         if( parentNode == NULL )
         {
+          // Create the parentnode and add it to the result.
           parentNode = new CClassTreeNode();
+          retVal->append( parentNode );
 
           // Check for the class in the store.
           parentClass = getClassByName( aParent->name );
@@ -335,12 +337,12 @@ QList<CClassTreeNode> *CClassStore::asForest()
         }
 
         // Create the new node for the child.
-        newNode = new CClassTreeNode();
-        newNode->setClass( aClass );
-        newNode->setIsInSystem( true );
+        aNode = new CClassTreeNode();
+        aNode->setClass( aClass );
+        aNode->setIsInSystem( true );
 
         // Add it to the parent node.
-        parentNode->addChild( newNode );
+        parentNode->addChild( aNode );
       }
     }
   }
@@ -553,7 +555,7 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
     str = aClass->attributeIterator.current()->type;
 
     // Remove all unwanted stuff.
-    str = str.replace( "[\*&]", "" );
+    str = str.replace( "[\\*&]", "" );
     str = str.replace( "const", "" );
     str = str.replace( "void", "" );
     str = str.replace( "bool", "" );
