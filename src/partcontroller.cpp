@@ -18,8 +18,6 @@
 #include <ktexteditor/viewcursorinterface.h>
 
 
-#include "keditor/editor.h"
-#include "keditor/cursor_iface.h"
 #include "toplevel.h"
 #include "core.h"
 
@@ -78,9 +76,6 @@ PartController::PartController(QWidget *parent, QWidget *mainwindow, const char 
   connect(m_partManager, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
   connect(m_partManager, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
   connect(m_partManager, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
-
-  // TODO: get rid of this editor nonsense
-  (void) editor();
 
   setupActions();
 }
@@ -396,54 +391,6 @@ void PartController::updateMenuItems()
   m_closeWindowAction->setEnabled(hasReadOnlyParts);
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
-}
-
-
-KEditor::Editor *PartController::editor()
-{
-  // TODO: get rid of all this deprecated editor nonsense!
-
-  static KEditor::Editor *_editor = 0;
-
-  // only load the editor once
-  if (_editor)
-    return _editor;
-
-  // find the preferred editor
-  KConfig *config = kapp->config();
-  config->setGroup("Editor");
-  //  QString editor = config->readEntry("EmbeddedEditor", "KWriteEditorPart"); // dosn't work at the moment
-  QString editor = config->readEntry("EmbeddedEditor","EditorTestPart");
-
-
-  // ask the trader about the editors, using the preferred one if available
-  KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString("Name == '%1'").arg(editor));
-
-  // try to load the editor
-  KTrader::OfferList::Iterator it;
-  for (it = offers.begin(); it != offers.end(); ++it)
-  {
-    KLibFactory *factory = KLibLoader::self()->factory((*it)->library().latin1());
-    if (!factory)
-      continue;
-
-    // Note: The create function might return 0, in that
-    // case, we continue with our list
-    _editor = static_cast<KEditor::Editor*>(factory->create(TopLevel::getInstance(), "editor"));
-    if (_editor)
-      break;
-  }
-
-  // Note: We should probably abort the application if no editor
-  // is found at all!
-  if (!_editor){
-    KMessageBox::sorry(TopLevel::getInstance(), i18n("Can't find a Editor plugin :-(."));
-    exit(0);
-  }
-
-  connect(m_partManager, SIGNAL(activePartChanged(KParts::Part*)), _editor, SLOT(activePartChanged(KParts::Part*)));
-
-  return _editor;
 }
 
 

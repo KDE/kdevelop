@@ -21,12 +21,6 @@ namespace KParts
 class KAction;
 
 
-namespace KEditor
-{
-  class Editor;
-};
-
-
 #include "kdevpartcontroller.h"
 
 
@@ -45,10 +39,6 @@ public:
 
   static void createInstance(QWidget *parent, QWidget *mainwindow, const char *name=0);
   static PartController *getInstance();
-
-  // deprecated!
-  KEditor::Editor *editor();
-  KParts::PartManager *partManager() { return m_partManager; }
 
   void saveAllFiles();
   void revertAllFiles();

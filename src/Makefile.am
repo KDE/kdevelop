@@ -16,8 +16,7 @@ gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 	       	$(LIB_KDEUI) $(LIB_KPARTS) \
 		-lktexteditor \
 		$(top_builddir)/lib/interfaces/libkdevinterfaces.la \
-		$(top_builddir)/lib/libkdevelop.la \
-		$(top_builddir)/lib/interfaces/keditor/libkeditorinterface.la
+		$(top_builddir)/lib/libkdevelop.la
 
 #$(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
 #	       $(top_builddir)/parts/classview/libkdevclassview.la \

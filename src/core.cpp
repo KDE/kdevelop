@@ -131,21 +131,9 @@ void Core::message(const QString &str)
 }
 
 
-KParts::PartManager *Core::partManager() const
-{
-  return PartController::getInstance()->partManager();
-}
-
-
 void Core::openProject(const QString& projectFileName)
 {
   ProjectManager::getInstance()->loadProject(projectFileName);
-}
-
-
-KEditor::Editor *Core::editor()
-{
-  return PartController::getInstance()->editor();
 }
 
 

@@ -36,9 +36,7 @@ public:
   virtual void running(KDevPart *which, bool runs);
   virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void message(const QString &str);
-  virtual KParts::PartManager *partManager() const;
   virtual void openProject(const QString& projectFileName);
-  virtual KEditor::Editor *editor();
   virtual QStatusBar *statusBar() const;
 
   

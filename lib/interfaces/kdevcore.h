@@ -10,10 +10,6 @@
 
 class KDialogBase;
 
-namespace KEditor {
-  class Editor;
-}
-
 
 class QStatusBar;
 
@@ -220,18 +216,6 @@ public:
      */
     virtual void message(const QString &str) = 0;
    
-
-	/**
-	 * The manager used to manage the parts.
-	 */
-    virtual KParts::PartManager *partManager() const = 0;	
-
-
-    /**
-     * The interface to the editor used
-     */
-    virtual KEditor::Editor *editor() = 0;
-
 
     /**
      * The statusbar used
