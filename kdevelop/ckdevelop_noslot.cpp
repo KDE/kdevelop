@@ -476,6 +476,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList)
   kapp->processEvents(100);
   log_file_tree->storeState(pPrj);
   kapp->processEvents(100);
+  slotStatusMsg(i18n("Refreshing tree views..."));
   log_file_tree->refresh(pPrj);
 
   // Update RFV.
