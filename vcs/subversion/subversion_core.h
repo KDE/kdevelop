@@ -22,6 +22,8 @@
 
 #include <qobject.h>
 #include <qwidget.h>
+#include <kio/job.h>
+#include <kurl.h>
 
 class KDevProject;
 class subversionPart;
@@ -35,11 +37,22 @@ public:
   subversionCore(subversionPart *part);
   ~subversionCore();
 	QWidget *processWidget();
+	void update( const KURL::List&);
+	void checkout();
+	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
 
+private slots:
+	void slotEndCheckout( KIO::Job * job );
+	void slotResult( KIO::Job * job );
+
+signals:
+	void checkoutFinished( QString dir );
+	
 private:
 
 	subversionWidget *m_widget;
 	subversionPart *m_part;
+	QString wcPath;
 
 };
 

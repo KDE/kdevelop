@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevsubversion.la
 libkdevsubversion_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevsubversion_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevsubversion_la_SOURCES = subversion_part.cpp subversion_widget.cpp subversion_core.cpp subversion_project.cpp subversion_options_widget.cpp svn_co.ui
+libkdevsubversion_la_SOURCES = subversion_part.cpp subversion_widget.cpp subversion_core.cpp subversion_options_widget.cpp svn_co.ui subversionprojectwidget.ui
 
 METASOURCES = AUTO
 

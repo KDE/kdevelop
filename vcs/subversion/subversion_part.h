@@ -24,7 +24,6 @@
 #include <kdevplugin.h>
 #include <kurl.h>
 #include "kdevversioncontrol.h"
-#include <kio/job.h>
 
 class subversionCore;
 class subversionOptionsWidget;
@@ -46,10 +45,20 @@ public:
 	KDevVCSFileInfoProvider * fileInfoProvider() const;
 	bool isValidDirectory( const QString& dirPath);
 	void projectConfigWidget( KDialogBase *dlg );
+	bool urlFocusedDocument( KURL &url );
+	void restorePartialProjectSession(const QDomElement* );
+	void savePartialProjectSession(QDomElement* );
+	void setBaseURL(const KURL& url ) { base = url; }
+	KURL baseURL() { return base; }
+
+signals:
+	void finishedFetching( QString destinationDir );
 
 private slots:
 	void contextMenu( QPopupMenu *popup, const Context *context );
-	void slotResult( KIO::Job * job );
+	void slotActionUpdate();
+	void slotProjectClosed();
+	void slotProjectOpened();
   
 private:
     
@@ -65,7 +74,25 @@ private:
 	*actionRemoveFromIgnoreList;
 
 	subversionProjectWidget *m_projWidget;
+	KURL base;
 
+	//options
+	bool m_checkout_recurse;
+	bool m_update_recurse;
+	bool m_switch_recurse;
+	bool m_add_recurse;
+	bool m_remove_force;
+	bool m_commit_recurse;
+	bool m_diff_recurse;
+	bool m_merge_recurse;
+	bool m_merge_overwrite;
+	bool m_relocate_recurse;
+	bool m_revert_recurse;
+	bool m_resolve_recurse;
+	bool m_move_force;
+	bool m_propset_recurse;
+	bool m_propget_recurse;
+	bool m_proplist_recurse;
 };
 
 
