@@ -58,6 +58,8 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
 
+    setIcon ( SmallIcon ( "folder_new.png" ) );
+
     subProject = item;
     m_widget = widget;
     m_part = part;

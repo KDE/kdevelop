@@ -14,6 +14,8 @@
 
 #include <qdialog.h>
 
+#include "addfiledlgbase.h"
+
 class QCheckBox;
 class QLineEdit;
 class AutoProjectPart;
@@ -22,7 +24,7 @@ class SubprojectItem;
 class TargetItem;
 
 
-class AddFileDialog : public QDialog
+class AddFileDialog : public AddFileDlgBase
 {
     Q_OBJECT
 
@@ -36,9 +38,6 @@ protected:
     virtual void accept();
 
 private:
-    QCheckBox *usetemplate_box;
-    QLineEdit *filename_edit;
-    
     AutoProjectPart *m_part;
     AutoProjectWidget *m_widget;
     SubprojectItem *subProject;

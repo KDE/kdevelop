@@ -47,21 +47,27 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));
-    m_widget->setCaption(i18n("Project"));
+    m_widget->setCaption(i18n("Automake Manager"));
     QWhatsThis::add(m_widget, i18n("Project Tree\n\n"
                                    "The project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the subproject selected in the overview."));
     
-    topLevel()->embedSelectView(m_widget, i18n("Project"));
+    topLevel()->embedSelectView(m_widget, i18n("Automake Manager"));
 
     KAction *action;
 
     action = new KAction( i18n("Add Translation..."), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
-    if (!kde)
+	
+/*	action = new KAction ( i18n("&Import existing files and directories..."), "", 0,
+							this, SLOT ( slotImportExisting() ),
+							actionCollection(), "project_importexisting" );
+	action->setStatusText ( i18n ( "Import existing files and directories to the currently loaded project" ) );
+*/
+	if (!kde)
         action->setEnabled(false);
 
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
@@ -113,6 +119,10 @@ AutoProjectPart::~AutoProjectPart()
     delete m_widget;
 }
 
+/*void AutoProjectPart::slotImportExisting()
+{
+	ImportExistingDlg( this, m_widget, "import_existing", true ).exec();
+}*/
 
 void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
 {

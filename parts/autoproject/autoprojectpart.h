@@ -53,6 +53,7 @@ private slots:
     void slotMakeMessages();
     void slotConfigure();
     void slotExecute();
+    //void slotImportExisting();
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);

@@ -28,7 +28,12 @@ libkdevautoproject_la_SOURCES = autoprojectpart.cpp \
 				removefiledlg.cpp \
 				addprefixdlg.cpp \
 				addtranslationdlg.cpp \
-				misc.cpp
+				misc.cpp \
+				importexistingdlg.cpp \
+                importexistingdlgbase.ui \
+				fileselectorwidget.cpp \
+                addfiledlgbase.ui \
+                removefiledlgbase.ui
 
 METASOURCES = AUTO
 

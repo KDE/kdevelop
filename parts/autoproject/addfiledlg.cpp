@@ -22,6 +22,8 @@
 #include <kbuttonbox.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <ksqueezedtextlabel.h>
+#include <klineedit.h>
 
 #include "filetemplate.h"
 #include "misc.h"
@@ -32,39 +34,15 @@
 AddFileDialog::AddFileDialog(AutoProjectPart *part, AutoProjectWidget *widget,
                              SubprojectItem *spitem, TargetItem *item,
                              QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+    : AddFileDlgBase(parent, name, true)
 {
-    setCaption(i18n("Add File to Target"));
+    connect ( createButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
+    connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
 
-    QLabel *filename_label = new QLabel(i18n("&File name:"), this);
+    directoryLabel->setText ( spitem->path );
+    targetLabel->setText ( item->name );
 
-    filename_edit = new QLineEdit(this);
-    filename_edit->setFocus();
-    filename_label->setBuddy(this);
-    QFontMetrics fm(filename_edit->fontMetrics());
-    filename_edit->setMinimumWidth(fm.width('X')*35);
-
-    usetemplate_box = new QCheckBox(i18n("&Use file template"), this);
-    usetemplate_box->setChecked(true);
-        
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-
-    KButtonBox *buttonbox = new KButtonBox(this);
-    buttonbox->addStretch();
-    QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
-    ok_button->setDefault(true);
-    connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
-    buttonbox->layout();
-
-    QVBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
-    layout->addWidget(filename_label);
-    layout->addWidget(filename_edit);
-    layout->addWidget(usetemplate_box);
-    layout->addWidget(frame, 0);
-    layout->addWidget(buttonbox, 0);
+    setIcon ( SmallIcon ( "filenew.png" ) );
 
     m_part = part;
     m_widget = widget;
@@ -79,7 +57,7 @@ AddFileDialog::~AddFileDialog()
 
 void AddFileDialog::accept()
 {
-    QString name = filename_edit->text();
+    QString name = fileEdit->text();
     if (name.find('/') != -1) {
         KMessageBox::sorry(this, i18n("Please enter the file name without '/' and so on."));
         return;
@@ -95,12 +73,12 @@ void AddFileDialog::accept()
         child = child->nextSibling();
     }
         
-    if (usetemplate_box->isChecked()) {
+    if (templateCheckBox->isChecked()) {
         QString srcdir = m_widget->projectDirectory();
         QString destdir = subProject->subdir;
         QString destpath = destdir + "/" + name;
         if (QFileInfo(destpath).exists()) {
-            KMessageBox::sorry(this, i18n("A file with this name already exists."));
+            KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
             return;
         }
         FileTemplate::copy(m_part, "cpp", destpath);

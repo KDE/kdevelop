@@ -12,11 +12,14 @@
 #ifndef _AUTOPROJECTWIDGET_H_
 #define _AUTOPROJECTWIDGET_H_
 
+#include <qlayout.h>
 #include <qdict.h>
 #include <qlistview.h>
 #include <qmap.h>
 #include <qstrlist.h>
 #include <qvbox.h>
+#include <qhbox.h>
+#include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -25,6 +28,9 @@ class KListView;
 class SubprojectItem;
 class TargetItem;
 class FileItem;
+class KPopupMenu;
+class KAction;
+class QToolButton;
 
 
 /**
@@ -191,8 +197,23 @@ public:
     void emitRemovedFile(const QString &name);
     
 private slots:
+    void slotItemClicked ( QListViewItem* item );
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+
+    void slotAddApplication();
+    void slotSubprojectOptions();
+    void slotAddSubproject();
+    void slotAddExistingSubproject();
+    void slotAddTarget();
+    void slotAddService();
+    void slotBuildSubproject();
+    void slotTargetOptions ();
+    void slotAddNewFile();
+    void slotAddExistingFile();
+    void slotBuildTarget();
+    void slotRemoveFile();
+    void slotSetActiveTarget();
 
 private:
     void parsePrimary(SubprojectItem *item, QCString lhs, QCString rhs);
@@ -200,13 +221,35 @@ private:
     void parsePrefix(SubprojectItem *item, QCString lhs, QCString rhs);
     void parse(SubprojectItem *item);
 
+    QVBoxLayout* widgetLayout;
+    QHBox* overviewButtonBox, *targetButtonBox;
+    QVBox* overviewBox, *targetBox;
+    QToolButton* subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton, *addTargetButton, *addServiceButton, *addApplicationButton, *buildSubprojectButton, *targetOptionsButton, *addNewFileButton, *addExistingFileButton, *buildTargetButton, *removeFileButton;
+
+    //KPopupMenu* m_popup;
+    KAction* addApplicationAction;
+    KAction* subProjectOptionsAction;
+    KAction* addSubprojectAction;
+    KAction* addExistingSubprojectAction;
+    KAction* addTargetAction;
+    KAction* addServiceAction;
+    KAction* buildSubprojectAction;
+    KAction* targetOptionsAction;
+    KAction* addNewFileAction;
+    KAction* addExistingFileAction;
+    KAction* buildTargetAction;
+    KAction* setActiveTargetAction;
+    KAction* removeFileAction;
+
     KListView *overview;
     KListView *details;
+
     bool m_kdeMode;
     AutoProjectPart *m_part;
     SubprojectItem *m_shownSubproject;
     SubprojectItem *m_activeSubproject;
     TargetItem * m_activeTarget;
+    FileItem* m_activeFile;
 };
 
 #endif

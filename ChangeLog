@@ -1,3 +1,14 @@
+2002-04-24 Victor Röder <victor_roeder@gmx.de>
+	* renamed Project view to Automake Manager
+	* reorganized Automake Manager
+	* added lowerAllViews() to KDevTopLevel
+		-> only implemented for TopLevelSDI!
+	* added some pixmaps
+	* Some dialogs done with QT Designer
+		-> RemoveFileDlg
+		-> AddFileDlg
+		-> AddExistingDlg (does not work, yet)
+
 2002-04-24  F@lk Brettschneider  <falk@kdevelop.org>
         * bugfix for QFocusEvent::m_reason in QextMDI copy, it stabilizes the optimized focus mechanism
 

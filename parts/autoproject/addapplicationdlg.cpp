@@ -54,6 +54,8 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
     KMimeType::List::Iterator it;
     for (it = l.begin(); it != l.end(); ++it)
         new QListViewItem(availtypes_listview, (*it)->name());
+
+    setIcon ( SmallIcon ( "window_new" ) );
 }
 
 

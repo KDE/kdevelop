@@ -55,6 +55,8 @@ AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *sp
     for (it = l.begin(); it != l.end(); ++it)
         if (!(*it)->isType(KST_KMimeType))
             new QListViewItem(availtypes_listview, (*it)->name());
+
+    setIcon ( SmallIcon ( "servicenew_kdevelop.png" ) );
 }
 
 
