@@ -385,6 +385,8 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 				m_presetEncoding = QString::null;
 			}
 				
+			editorpart->openURL( url );
+
 			QWidget* widget = editorpart->widget();
 		
 			if (!widget) {
@@ -395,9 +397,6 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			}
 		
 			integratePart(editorpart, url, widget, true, activate);
-
-			editorpart->openURL( url );
-
 			EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
 			
 			addHistoryEntry( url, lineNum, col );
