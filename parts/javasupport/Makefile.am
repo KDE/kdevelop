@@ -12,7 +12,7 @@ libkdevjavasupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevjavasupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/antlr/src/libantlr.la $(top_builddir)/lib/catalog/libkdevcatalog.la
 
 libkdevjavasupport_la_SOURCES = JavaLexer.cpp KDevJavaSupportIface.cpp javasupportfactory.cpp \
-JavaRecognizer.cpp backgroundparser.cpp configproblemreporter.cpp  javasupportpart.cpp \
+JavaRecognizer.cpp backgroundparser.cpp configproblemreporter.ui  javasupportpart.cpp \
 JavaStoreWalker.cpp javasupport_utils.cpp problemreporter.cpp driver.cpp kdevdriver.cpp KDevJavaSupportIface.skel
 
 
