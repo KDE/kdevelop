@@ -18,10 +18,11 @@
 
 #include "problemreporter.h"
 #include "cppsupportpart.h"
-#include "kdevpartcontroller.h"
-#include "kdevmainwindow.h"
 #include "configproblemreporter.h"
 #include "backgroundparser.h"
+
+#include <kdevpartcontroller.h>
+#include <kdevmainwindow.h>
 
 #include <kdeversion.h>
 #include <kparts/part.h>
@@ -176,6 +177,7 @@ void ProblemReporter::slotSelected( QListViewItem* item )
     int line = item->text( 2 ).toInt();
     // int column = item->text( 3 ).toInt();
     m_cppSupport->partController()->editDocument( url, line-1 );
+    m_cppSupport->mainWindow()->lowerView( this );
 }
 
 void ProblemReporter::reportError( QString message,
