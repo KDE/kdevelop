@@ -1,3 +1,11 @@
+kdevelop (1:1.0-20000224-1.0) experimental; urgency=low
+
+  * Fixing pathing for doc-base files
+  * Minor cleanups 
+  * Fixing location of license files to match new location
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 24 Feb 2000 18:00:03 -0700
+
 kdevelop (1:1.0-19991201-1.0) unstable; urgency=low
 
   * Updating control file to specific section on a per package basis
