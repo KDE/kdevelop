@@ -2736,7 +2736,8 @@ void Config::check()
     alias=alias.stripWhiteSpace();
     if (alias.find(re)!=0)
     {
-      config_err("Illegal alias format `%s'. Use \"name=value\"\n",alias.data());
+      config_err("Illegal alias format `%s'. Use \"name=value\"\n",
+	  alias.data());
     }
     s=aliasList.next();
   }
@@ -2847,6 +2848,7 @@ void Config::check()
     filePatternList.append("*.inc");
     filePatternList.append("*.m");
     filePatternList.append("*.mm");
+    filePatternList.append("*.dox");
 #if !defined(_WIN32)
     // unix => case sensitive match => also include useful uppercase versions
     filePatternList.append("*.C");
@@ -2871,113 +2873,6 @@ void Config::check()
   {
     examplePatternList.append("*");
   }
-
-  // add default pattern if needed
-  //QStrList &imagePatternList = Config_getList("IMAGE_PATTERNS");
-  //if (imagePatternList.isEmpty())
-  //{
-  //  imagePatternList.append("*");
-  //}
-  
-  // more checks needed if and only if the search engine is enabled.
-//  if (Config_getBool("SEARCHENGINE"))
-//  {
-//    // check cgi name
-//    QCString &cgiName = Config_getString("CGI_NAME");
-//    if (cgiName.isEmpty())
-//    {
-//      config_err("Error: tag CGI_NAME: no cgi script name after the CGI_NAME tag.\n");
-//      exit(1);
-//    }
-//    // check cgi URL
-//    QCString &cgiURL = Config_getString("CGI_URL");
-//    if (cgiURL.isEmpty())
-//    {
-//      config_err("Error: tag CGI_URL: no URL to cgi directory specified.\n");
-//      exit(1);
-//    }
-//    else if (cgiURL.left(7)!="http://" && 
-//	     cgiURL.left(8)!="https://" &&
-//	     cgiURL.left(4)!="cgi:"
-//	    )
-//    {
-//      config_err("Error: tag CGI_URL: URL to cgi directory is invalid (must "
-//	  "start with http:// or https://).\n");
-//      exit(1);
-//    }
-//    // check documentation URL
-//    QCString &docURL = Config_getString("DOC_URL");
-//    if (docURL.isEmpty())
-//    {
-//      docURL = Config_getString("OUTPUT_DIRECTORY").copy().prepend("file://").append("html");
-//    }
-//    else if (docURL.left(7)!="http://" && 
-//	     docURL.left(8)!="https://" &&
-//	     docURL.left(7)!="file://"
-//	    )
-//    {
-//      config_err("Error: tag DOC_URL: URL to documentation is invalid or "
-//	  "not absolute.\n"); 
-//      exit(1);
-//    }
-//    // check absolute documentation path
-//    QCString &docAbsPath = Config_getString("DOC_ABSPATH");
-//    if (docAbsPath.isEmpty())
-//    {
-//      docAbsPath = Config_getString("OUTPUT_DIRECTORY")+"/html"; 
-//    }
-//    else if (docAbsPath[0]!='/' && docAbsPath[1]!=':')
-//    {
-//      config_err("Error: tag DOC_ABSPATH: path is not absolute!\n");
-//      exit(1);
-//    }
-//    // check path to doxysearch
-//    QCString &binAbsPath = Config_getString("BIN_ABSPATH");
-//    if (binAbsPath.isEmpty())
-//    {
-//      config_err("Error: tag BIN_ABSPATH: no absolute path to doxysearch "
-//	  "specified.\n");
-//      exit(1);
-//    }
-//    else if (binAbsPath[0]!='/' && binAbsPath[1]!=':')
-//    {
-//      config_err("Error: tag BIN_ABSPATH: path is not absolute!\n");
-//      exit(1);
-//    }
-//
-//  }
-//  // check perl path
-//  bool found=FALSE;
-//  QCString &perlPath = Config_getString("PERL_PATH");
-//  if (perlPath.isEmpty())
-//  {
-//    QFileInfo fi;
-//    fi.setFile("/usr/bin/perl");
-//    if (fi.exists()) 
-//    {
-//      perlPath="/usr/bin/perl";
-//      found=TRUE;
-//    }
-//    else
-//    {
-//      fi.setFile("/usr/local/bin/perl");
-//      if (fi.exists())
-//      {
-//	perlPath="/usr/local/bin/perl";
-//	found=TRUE;
-//      }
-//    }
-//  }
-//  if (!found)
-//  {
-//    QFileInfo fi(perlPath);
-//    if (!fi.exists())
-//    {
-//      config_warn("Warning: tag PERL_PATH: perl interpreter not found at default or"
-//	  "user specified (%s) location\n",
-//	  perlPath.data());
-//    }
-//  }
 
 #undef PUTENV
 #undef SEP
@@ -3085,9 +2980,9 @@ void Config::create()
                  "If the CREATE_SUBDIRS tag is set to YES, then doxygen will create \n"
                  "4096 sub-directories (in 2 levels) under the output directory of each output \n"
 		 "format and will distribute the generated files over these directories. \n"
-		 "Enabling this option can be useful when feeding doxygen a huge amount of source \n"
-		 "files, where putting all generated files in the same directory would otherwise \n"
-		 "cause performance problems for the file system. \n",
+		 "Enabling this option can be useful when feeding doxygen a huge amount of \n"
+		 "source files, where putting all generated files in the same directory would \n"
+		 "otherwise cause performance problems for the file system. \n",
 		 FALSE
                 );
   ce = addEnum(
@@ -3223,11 +3118,12 @@ void Config::create()
                     "This tag implements a quasi-intelligent brief description abbreviator \n"
                     "that is used to form the text in various listings. Each string \n"
                     "in this list, if found as the leading text of the brief description, will be \n"
-                    "stripped from the text and the result after processing the whole list, is used \n"
-		    "as the annotated text. Otherwise, the brief description is used as-is. If left \n"
-		    "blank, the following values are used (\"$name\" is automatically replaced with the \n"
-		    "name of the entity): \"The $name class\" \"The $name widget\" \"The $name file\" \n"
-		    "\"is\" \"provides\" \"specifies\" \"contains\" \"represents\" \"a\" \"an\" \"the\"\n"
+                    "stripped from the text and the result after processing the whole list, is \n"
+		    "used as the annotated text. Otherwise, the brief description is used as-is. \n"
+		    "If left blank, the following values are used (\"$name\" is automatically \n"
+		    "replaced with the name of the entity): \"The $name class\" \"The $name widget\" \n"
+		    "\"The $name file\" \"is\" \"provides\" \"specifies\" \"contains\" \n"
+		    "\"represents\" \"a\" \"an\" \"the\"\n"
                  );
   cb = addBool(
                     "ALWAYS_DETAILED_SEC",
@@ -3238,10 +3134,10 @@ void Config::create()
                  );
   cb = addBool(
                     "INLINE_INHERITED_MEMB",
-                    "If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all inherited \n"
-                    "members of a class in the documentation of that class as if those members were \n"
-		    "ordinary class members. Constructors, destructors and assignment operators of \n"
-		    "the base classes will not be shown. \n",
+                    "If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all \n"
+		    "inherited members of a class in the documentation of that class as if those \n"
+		    "members were ordinary class members. Constructors, destructors and assignment \n"
+		    "operators of the base classes will not be shown. \n",
 		    FALSE
                  );
   cb = addBool(
@@ -3335,8 +3231,8 @@ void Config::create()
                  );
   cb = addBool(
                     "OPTIMIZE_OUTPUT_FOR_C",
-                    "Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources \n"
-                    "only. Doxygen will then generate output that is more tailored for C. \n"
+                    "Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C \n"
+		    "sources only. Doxygen will then generate output that is more tailored for C. \n"
                     "For instance, some of the names that are used will be different. The list \n"
                     "of all members will be omitted, etc. \n",
                     FALSE
@@ -3549,6 +3445,22 @@ void Config::create()
                     "list will mention the files that were used to generate the documentation. \n",
                     TRUE
                 );
+  cb = addBool(
+                    "SHOW_DIRECTORIES",
+		    "If the sources in your project are distributed over multiple directories \n"
+		    "then setting the SHOW_DIRECTORIES tag to YES will show the directory hierarchy \n"
+		    "in the documentation.\n",
+		    TRUE
+              );
+  cs = addString(  "FILE_VERSION_FILTER",
+                   "The FILE_VERSION_FILTER tag can be used to specify a program or script that \n"
+		   "doxygen should invoke to get the current version for each file (typically from the \n"
+		   "version control system). Doxygen will invoke the program by executing (via \n"
+		   "popen()) the command <command> <input-file>, where <command> is the value of \n"
+		   "the FILE_VERSION_FILTER tag, and <input-file> is the name of an input file \n"
+		   "provided by doxygen. Whatever the progam writes to standard output \n"
+		   "is used as the file version. See the manual for examples. \n"
+              );
   
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Messages","configuration options related to warning and progress messages");
@@ -3582,12 +3494,22 @@ void Config::create()
 		    "don't exist or using markup commands wrongly. \n",
                     TRUE
                  );
+  cb = addBool(     "WARN_NO_PARAMDOC",
+                    "This WARN_NO_PARAMDOC option can be abled to get warnings for \n"
+		    "functions that are documented, but have no documentation for their parameters \n"
+		    "or return value. If set to NO (the default) doxygen will only warn about \n"
+		    "wrong or incomplete parameter documentation, but not about the absence of \n"
+		    "documentation.\n",
+                    FALSE
+                 );
   cs = addString(
                     "WARN_FORMAT",
                     "The WARN_FORMAT tag determines the format of the warning messages that \n"
                     "doxygen can produce. The string should contain the $file, $line, and $text \n"
                     "tags, which will be replaced by the file and line number from which the \n"
-                    "warning originated and the warning text. \n"
+                    "warning originated and the warning text. Optionally the format may contain \n"
+		    "$version, which will be replaced by the version of the file (if it could \n"
+		    "be obtained via FILE_VERSION_FILTER)\n"
                    ); 
   cs->setDefaultValue("$file:$line: $text");
   cs = addString(
@@ -3613,8 +3535,8 @@ void Config::create()
                     "FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp \n"
                     "and *.h) to filter out the source-files in the directories. If left \n"
                     "blank the following patterns are tested: \n"
-		    "*.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx *.hpp \n"
-		    "*.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm\n"
+		    "*.c *.cc *.cxx *.cpp *.c++ *.java *.ii *.ixx *.ipp *.i++ *.inl *.h *.hh *.hxx \n"
+		    "*.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm\n"
                  );
   cb = addBool(
                     "RECURSIVE",
@@ -3631,8 +3553,9 @@ void Config::create()
                  );
   cb = addBool(
                     "EXCLUDE_SYMLINKS",
-                    "The EXCLUDE_SYMLINKS tag can be used select whether or not files or directories \n"
-                    "that are symbolic links (a Unix filesystem feature) are excluded from the input. \n",
+                    "The EXCLUDE_SYMLINKS tag can be used select whether or not files or \n"
+		    "directories that are symbolic links (a Unix filesystem feature) are excluded \n"
+		    "from the input. \n",
                     FALSE
                  );
   cl->setWidgetType(ConfigList::FileAndDir);
@@ -4274,8 +4197,8 @@ void Config::create()
                     "If the SKIP_FUNCTION_MACROS tag is set to YES (the default) then \n"
 		    "doxygen's preprocessor will remove all function-like macros that are alone \n"
 		    "on a line, have an all uppercase name, and do not end with a semicolon. Such \n"
-		    "function macros are typically used for boiler-plate code, and will confuse the \n"
-		    "parser if not removed. \n",
+		    "function macros are typically used for boiler-plate code, and will confuse \n"
+		    "the parser if not removed. \n",
                     TRUE
                  );
   cb->addDependency("ENABLE_PREPROCESSING");
@@ -4334,10 +4257,11 @@ void Config::create()
   cb = addBool(
                     "CLASS_DIAGRAMS",
                     "If the CLASS_DIAGRAMS tag is set to YES (the default) Doxygen will \n"
-                    "generate a inheritance diagram (in HTML, RTF and LaTeX) for classes with base or \n"
-                    "super classes. Setting the tag to NO turns the diagrams off. Note that this \n"
-		    "option is superseded by the HAVE_DOT option below. This is only a fallback. It is \n"
-		    "recommended to install and use dot, since it yields more powerful graphs. \n",
+                    "generate a inheritance diagram (in HTML, RTF and LaTeX) for classes with base \n"
+		    "or super classes. Setting the tag to NO turns the diagrams off. Note that \n"
+		    "this option is superseded by the HAVE_DOT option below. This is only a \n"
+		    "fallback. It is recommended to install and use dot, since it yields more \n"
+		    "powerful graphs. \n",
                     TRUE
                  );
   cb = addBool(
@@ -4372,6 +4296,13 @@ void Config::create()
                     "class references variables) of the class with other documented classes. \n",
                     TRUE
                  );
+  cb->addDependency("HAVE_DOT");
+  cb = addBool(
+                    "GROUP_GRAPHS",
+                    "If the GROUP_GRAPHS and HAVE_DOT tags are set to YES then doxygen \n"
+                    "will generate a graph for groups, showing the direct groups dependencies\n",
+                    TRUE
+                 );                 
   cb->addDependency("HAVE_DOT");
   cb = addBool(
                     "UML_LOOK",
@@ -4423,6 +4354,15 @@ void Config::create()
                     TRUE
                  );
   cb->addDependency("HAVE_DOT");
+  cb = addBool(    
+                    "DIRECTORY_GRAPH",
+		    "If the DIRECTORY_GRAPH, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES \n"
+		    "then doxygen will show the dependencies a directory has on other directories \n"
+		    "in a graphical way. The dependency relations are determined by the #include\n"
+		    "relations between the files in the directories.\n",
+                    TRUE
+               );
+  cb->addDependency("HAVE_DOT");
   ce = addEnum(
                     "DOT_IMAGE_FORMAT",
                     "The DOT_IMAGE_FORMAT tag can be used to set the image format of the images \n"
@@ -4437,7 +4377,7 @@ void Config::create()
   cs = addString(
                     "DOT_PATH",
                     "The tag DOT_PATH can be used to specify the path where the dot tool can be \n"
-                    "found. If left blank, it is assumed the dot tool can be found on the path. \n"
+                    "found. If left blank, it is assumed the dot tool can be found in the path. \n"
                    );
   cs->setWidgetType(ConfigString::Dir);
   cs->addDependency("HAVE_DOT");
@@ -4472,15 +4412,35 @@ void Config::create()
                     "MAX_DOT_GRAPH_DEPTH",
                     "The MAX_DOT_GRAPH_DEPTH tag can be used to set the maximum depth of the \n"
                     "graphs generated by dot. A depth value of 3 means that only nodes reachable \n"
-                    "from the root by following a path via at most 3 edges will be shown. Nodes that \n"
-		    "lay further from the root node will be omitted. Note that setting this option to \n"
-		    "1 or 2 may greatly reduce the computation time needed for large code bases. Also \n"
-		    "note that a graph may be further truncated if the graph's image dimensions are \n"
-		    "not sufficient to fit the graph (see MAX_DOT_GRAPH_WIDTH and MAX_DOT_GRAPH_HEIGHT). \n"
-		    "If 0 is used for the depth value (the default), the graph is not depth-constrained. \n",
+                    "from the root by following a path via at most 3 edges will be shown. Nodes \n"
+		    "that lay further from the root node will be omitted. Note that setting this \n"
+		    "option to 1 or 2 may greatly reduce the computation time needed for large \n"
+		    "code bases. Also note that a graph may be further truncated if the graph's \n"
+		    "image dimensions are not sufficient to fit the graph (see MAX_DOT_GRAPH_WIDTH \n"
+		    "and MAX_DOT_GRAPH_HEIGHT). If 0 is used for the depth value (the default), \n"
+		    "the graph is not depth-constrained. \n",
                     0,1000,0
                 );
   ci->addDependency("HAVE_DOT");
+  cb = addBool(
+                    "DOT_TRANSPARENT",
+		    "Set the DOT_TRANSPARENT tag to YES to generate images with a transparent \n"
+		    "background. This is disabled by default, which results in a white background. \n"
+		    "Warning: Depending on the platform used, enabling this option may lead to \n"
+		    "badly anti-aliased labels on the edges of a graph (i.e. they become hard to \n"
+		    "read). \n",
+		    FALSE
+              );
+  cb->addDependency("HAVE_DOT");
+  cb = addBool(
+                    "DOT_MULTI_TARGETS",
+		    "Set the DOT_MULTI_TARGETS tag to YES allow dot to generate multiple output \n"
+		    "files in one run (i.e. multiple -o and -T options on the command line). This \n"
+		    "makes dot run faster, but since only newer versions of dot (>1.8.10) \n"
+		    "support this, this feature is disabled by default. \n",
+		    FALSE
+              );
+  cb->addDependency("HAVE_DOT");
   cb = addBool(
                     "GENERATE_LEGEND",
                     "If the GENERATE_LEGEND tag is set to YES (the default) Doxygen will \n"
@@ -4559,12 +4519,12 @@ static QCString configFileToString(const char *name)
         int fsize=f.size();
         QCString contents(fsize+2);
         f.readBlock(contents.data(),fsize);
+        f.close();
         if (fsize==0 || contents[fsize-1]=='\n') 
           contents[fsize]='\0';
         else
           contents[fsize]='\n'; // to help the scanner
         contents[fsize+1]='\0';
-        f.close();
         return contents;
       }
   }

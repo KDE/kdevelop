@@ -1,3 +1,6 @@
+2005-01-23 Amilcar Lucas <amilcar@kdevelop.org>
+ * Updated support for Doxygen up to 1.4.1
+
 2005-01-22 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Global scope plugins are once again optional.
  * Fixed source navigation history (by reducing the ambition to something that can work).
