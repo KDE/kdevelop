@@ -3,12 +3,14 @@
 #include "kwrite/kwdoc.h"
 #include "cppcodecompletion.h"
 #include "ceditwidget.h"
+#include "kdevregexp.h"
 #include "classparser/ClassStore.h"
 
 #include <kdebug.h>
 #include <qsizegrip.h>
 #include <qapplication.h>
 #include <qregexp.h>
+#include <qasciidict.h>
 #include <kregexp.h>
 
 #include "codecompletion_arghint.h"
@@ -35,16 +37,51 @@ public:
 static QString purify( const QString& decl )
 {
     QString s = decl;
-#if QT_VERSION >=300
-    QRegExp rx( "(\\*|&|\\bconst\\b)" );
-    s = s.replace( rx, "" ).simplifyWhiteSpace();
-#else
+
     QRegExp rx1( "\\*" );
     QRegExp rx2( "&" );
     QRegExp rx3( "[ \t\b\f]+const[ \t\n\r\f]+" );
     s = s.replace( rx1, "" ).replace( rx2, "" ).replace( rx3, "" ).simplifyWhiteSpace();
-#endif
-    kdDebug() << "purify " << decl << " -- " << s << endl;
+    return s;
+}
+
+static QString remove( QString text, const QChar& l, const QChar& r )
+{
+    QString s;
+
+    unsigned int index = 0;
+    int count = 0;
+    while( index < text.length() ){
+        if( text[index] == l ){
+            ++count;
+        } else if( text[index] == r ){
+            --count;
+        } else if( count == 0 ){
+            s += text[ index ];
+        }
+        ++index;
+    }
+    return s;
+}
+
+static QString remove_comment( QString text ){
+    QString s;
+    unsigned int index = 0;
+    bool skip = FALSE;
+    while( index < text.length() ){
+        if( text.mid(index, 2) == "/*" ){
+            skip = TRUE;
+            index += 2;
+            continue;
+        } else if( text.mid(index, 2) == "*/" ){
+            skip = FALSE;
+            index += 2;
+            continue;
+        } else if( !skip ){
+            s += text[ index ];
+        }
+        ++index;
+    }
     return s;
 }
 
@@ -749,66 +786,47 @@ QStringList CppCodeCompletion::getFunctionList( QString strMethod )
 
 QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
-#if QT_VERSION >=300
-    QRegExp regMethod ("\\s*([_\\w]+)\\s*::\\s*[~\\w_][\\w_]*\\s*\\(([^)]*)\\)\\s*[:{]");
-#else
-    QString wc("a-zA-Z_0-9"); // word char => \\w_
-    KRegExp regMethod ("\\s*(["+wc+"]+)\\s*::\\s*[~"+wc+"]["+wc+"]*\\s*\\(([^)]*)\\)\\s*[:{]");
-#endif
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
 
-    int iMethodBegin = 0;
+    QRegExp qt_rx( "Q_[A-Z]+" );
+    QRegExp newline_rx( "\n" );
+    QRegExp const_rx( "[ \t]*const[ \t]*" );
+    QRegExp comment_rx( "//[^\n]*" );
+    QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
+
     QString text;
-    QString strLine;
-    for( int i=iLine; i>0; --i ){
-        QString s = m_edit->textLine( i );
-#if QT_VERSION >=300
-        s = s.replace( QRegExp("\\bconst\\b"), "" );
-#else
-        s = s.replace( QRegExp("\\s*const\\s*"), "" );
-#endif
-        text.prepend( s ).simplifyWhiteSpace();
-
-        if( text.isEmpty()){
-            continue;
-        }
-
-#if QT_VERSION >=300
-        if( regMethod.match(text) != -1 ){
-#else
-        if( !text.isEmpty() && regMethod.match(text) ){
-#endif
-            iMethodBegin = i;
-            if( classname ){
-#if QT_VERSION >=300
-                *classname = regMethod.cap( 1 );
-#else
-                *classname = regMethod.group( 1 );
-#endif
-            }
-            break;
-        }
-
+    for( int i=0; i<iLine; ++i ){
+        text += m_edit->textLine( i ).simplifyWhiteSpace() + "\n";
     }
+    text += m_edit->textLine( iLine ).left( iCol );
 
-    if( iMethodBegin == 0 ){
-        kdDebug( 9007 ) << "no method declaration found" << endl;
+    text = remove_comment( text );
+    text = remove( text, '[', ']' );
+
+    text = text
+           .replace( qt_rx, "" )
+           .replace( const_rx, "" )
+           .replace( comment_rx, "" )
+           .replace( preproc_rx, "" )
+           .replace( newline_rx, " " );
+
+    QValueList<KDevRegExpCap> methods = regMethod.findAll( text );
+    if( methods.count() == 0 ){
+        kdDebug() << "no method found!!!" << endl;
         return QString::null;
     }
 
-    QString strCopy;
+    KDevRegExpCap m = methods.last();
 
-#if QT_VERSION >=300
-    strCopy += regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n";
-#else
-    strCopy += QString(regMethod.group( 2 )).replace( QRegExp(","), ";" ) + ";\n";
-#endif
-    for( int i = iMethodBegin; i < iLine; i++ )
-    {
-        strCopy += m_edit->textLine( i ) + "\n";
+    kdDebug() << "------------------------> m.start = " << m.start() << endl;
+    text = text.mid( m.start() );
+    regMethod.search( m.text() );
+    text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+    if( classname ){
+        *classname = regMethod.cap( 1 );
     }
-    strCopy += m_edit->textLine( iLine ).left( iCol );
 
-    return strCopy;
+    return text;
 }
 
 void CppCodeCompletion::completeText()
@@ -829,6 +847,7 @@ void CppCodeCompletion::completeText()
     contents = getMethodBody( nLine, nCol, &className );
     kdDebug() << "contents = " << contents << endl;
 
+    kdDebug() << "classname = " << className << endl;
     QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
     SimpleVariable v;
     v.name = "this";
@@ -841,28 +860,22 @@ void CppCodeCompletion::completeText()
     QString expr;
     if( start_expr != contents.length() - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );
-        expr = expr.simplifyWhiteSpace();
+        expr = expr.stripWhiteSpace();
     }
 
-#if QT_VERSION >=300
-    QRegExp rx( "^.*([_\\w]+)\\s*$" );
-    if( rx.exactMatch(expr) )
-    {
-        word = rx.cap( 1 );
-        expr = expr.left( rx.pos(1) );
+    int idx = expr.length() - 1;
+    while( expr[idx].isLetterOrNumber() || expr[idx] == '_' ){
+        --idx;
     }
-#else
-    KRegExp rx("^.*[^A-Za-z0-9]+([_A-Za-z0-9]+)\\s*$");
-    if( !expr.isEmpty() && rx.match(expr) )
-    {
-        word = rx.group( 1 );
-        expr = expr.left( rx.groupStart(1) );
+    if( idx != expr.length() - 1 ){
+        ++idx;
+        word = expr.mid( idx ).stripWhiteSpace();
+        expr = expr.left( idx ).stripWhiteSpace();
     }
-#endif
 
     kdDebug() << "prefix = |" << word << "|" << endl;
     kdDebug() << "expr = |" << expr << "|" << endl;
-    
+
     if( showArguments ){
         QString type = evaluateExpression( expr, variableList, m_pStore );
         QStringList functionList = getMethodListForClass( type, word );
