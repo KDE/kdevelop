@@ -33,11 +33,11 @@ public slots:
     
 protected slots:
 	void slotGetterSetterValuesChanged();
-	
+    virtual void slotRemovePCS();
+
 private slots:
     void catalogRegistered( Catalog* c );
     void catalogUnregistered( Catalog* c );
-	
 
 private:
     void initFileTemplatesTab();
@@ -45,17 +45,12 @@ private:
     
     void initCodeCompletionTab();
     void saveCodeCompletionTab();
-	
+
 	void initGetterSetterTab();
 	void saveGetterSetterTab();
 
 private:
     CppSupportPart* m_pPart;
-    QCheckListItem* m_includeGlobalFunctions;
-    QCheckListItem* m_includeTypes;
-    QCheckListItem* m_includeEnums;
-    QCheckListItem* m_includeTypedefs;
-    QListViewItem* m_pcsOptions;
     QMap<QCheckListItem*, Catalog*> m_catalogs;
 };
 

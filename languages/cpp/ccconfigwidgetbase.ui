@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>551</width>
-            <height>461</height>
+            <width>484</width>
+            <height>482</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,9 +18,6 @@
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
         </property>
         <widget class="QTabWidget">
             <property name="name">
@@ -120,205 +117,299 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>layout5</cstring>
+                            <cstring>groupBox4</cstring>
                         </property>
-                        <grid>
+                        <property name="title">
+                            <string>Code Completion Options</string>
+                        </property>
+                        <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <spacer row="1" column="0">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>spacer4_2</cstring>
+                                    <cstring>layout18</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>16</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel" row="1" column="2">
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkAutomaticCodeCompletion</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>1</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>Automatic c&amp;ode completion</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+O</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer14</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>31</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="KIntNumInput">
+                                        <property name="name">
+                                            <cstring>inputCodeCompletion</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>msec</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>textLabel1</cstring>
+                                    <cstring>layout19</cstring>
                                 </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkAutomaticArgumentsHint</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Automatic &amp;arguments hint</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer15</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>31</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="KIntNumInput">
+                                        <property name="name">
+                                            <cstring>inputArgumentsHint</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_2</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>msec</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>m_includeEnums</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>msec</string>
+                                    <string>Include Enums</string>
                                 </property>
                             </widget>
-                            <widget class="KIntNumInput" row="1" column="1">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>inputCodeCompletion</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="3" column="2">
-                                <property name="name">
-                                    <cstring>textLabel1_2</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                    <cstring>m_includeGlobalFunctions</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>msec</string>
+                                    <string>Include Global Functions</string>
                                 </property>
                             </widget>
-                            <widget class="KIntNumInput" row="3" column="1">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>inputArgumentsHint</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkAutomaticCodeCompletion</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>1</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
+                                    <cstring>m_includeTypedefs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic c&amp;ode completion</string>
+                                    <string>Include Typedefs</string>
                                 </property>
                             </widget>
-                            <spacer row="3" column="0">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>spacer4</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>16</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>checkAutomaticArgumentsHint</cstring>
+                                    <cstring>m_includeTypes</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic &amp;arguments hint</string>
+                                    <string>Include Types</string>
                                 </property>
                             </widget>
-                        </grid>
+                        </vbox>
                     </widget>
-                    <widget class="QLayoutWidget">
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>layout2</cstring>
+                            <cstring>groupBox5</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Code Completion Databases</string>
                         </property>
                         <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <spacer>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Column 1</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
                                 <property name="name">
-                                    <cstring>spacer3</cstring>
+                                    <cstring>advancedOptions</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                <property name="rootIsDecorated">
+                                    <bool>true</bool>
                                 </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>81</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>newPCSButton</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Create Code Completion Database...</string>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
                                 </property>
                             </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout6</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer12</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>31</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>newPCSButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QPushButton">
+                                        <property name="name">
+                                            <cstring>removePCSButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer13</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>31</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
                         </hbox>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer1</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>31</width>
-                                <height>18</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QListView">
-                        <column>
-                            <property name="text">
-                                <string>Column 1</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
-                        <property name="name">
-                            <cstring>advancedOptions</cstring>
-                        </property>
-                        <property name="rootIsDecorated">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizeMode">
-                            <enum>LastColumn</enum>
-                        </property>
                     </widget>
                 </vbox>
             </widget>
@@ -327,7 +418,7 @@
                     <cstring>TabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Get/Set Creation</string>
+                    <string>&amp;Accessors</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -628,6 +719,24 @@
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotGetterSetterValuesChanged()</slot>
     </connection>
+    <connection>
+        <sender>checkAutomaticCodeCompletion</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>inputCodeCompletion</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>checkAutomaticArgumentsHint</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>inputArgumentsHint</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>removePCSButton</sender>
+        <signal>clicked()</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotRemovePCS()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>interface_suffix</tabstop>
@@ -658,6 +767,7 @@
     <slot access="protected">slotSetCHWindow( )</slot>
     <slot>slotNewPCS()</slot>
     <slot access="protected">slotGetterSetterValuesChanged()</slot>
+    <slot access="protected">slotRemovePCS()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

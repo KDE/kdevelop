@@ -62,8 +62,8 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
     initFileTemplatesTab( );
     initCodeCompletionTab( );
 	initGetterSetterTab( );
-    inputCodeCompletion->setRange( 0, 2000, 100 );
-    inputArgumentsHint->setRange( 0, 2000, 100 );
+    inputCodeCompletion->setRange( 0, 2000, 100, false );
+    inputArgumentsHint->setRange( 0, 2000, 100, false );
 }
 
 void CCConfigWidget::initFileTemplatesTab( )
@@ -102,36 +102,20 @@ void CCConfigWidget::initCodeCompletionTab( )
     checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
     checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
 
-    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion Options") );
-    codeCompletionOptions->setExpandable( true );
-    codeCompletionOptions->setOpen( true );
-
-    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint Options") );
-
-    m_includeGlobalFunctions = new QCheckListItem( codeCompletionOptions, i18n("Include Global Functions"), QCheckListItem::CheckBox );
-    m_includeGlobalFunctions->setOn( c->includeGlobalFunctions() );
-
-    m_includeTypes = new QCheckListItem( codeCompletionOptions, i18n("Include Types"), QCheckListItem::CheckBox );
-    m_includeTypes->setOn( c->includeTypes() );
-
-    m_includeEnums = new QCheckListItem( codeCompletionOptions, i18n("Include Enums"), QCheckListItem::CheckBox );
-    m_includeEnums->setOn( c->includeEnums() );
-
-    m_includeTypedefs = new QCheckListItem( codeCompletionOptions, i18n("Include Typedefs"), QCheckListItem::CheckBox );
-    m_includeTypedefs->setOn( c->includeTypedefs() );
-    
-    m_pcsOptions = new QListViewItem( advancedOptions, i18n("Code Completion Databases") );
-    m_pcsOptions->setOpen( true );
-
+    m_includeGlobalFunctions->setChecked( c->includeGlobalFunctions() );
+    m_includeTypes->setChecked( c->includeTypes() );
+    m_includeEnums->setChecked( c->includeEnums() );
+    m_includeTypedefs->setChecked( c->includeTypedefs() );
+ 
     QValueList<Catalog*> catalogs = m_pPart->codeRepository()->registeredCatalogs();
     for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
     {
-	Catalog* c = *it;
-	QFileInfo dbInfo( c->dbName() );
-	QCheckListItem* item = new QCheckListItem( m_pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
-	item->setOn( c->enabled() );
-	
-	m_catalogs[ item ] = c;
+        Catalog* c = *it;
+        QFileInfo dbInfo( c->dbName() );
+        QCheckListItem* item = new QCheckListItem( advancedOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+        item->setOn( c->enabled() );
+
+        m_catalogs[ item ] = c;
     }
 }
 
@@ -145,10 +129,10 @@ void CCConfigWidget::saveCodeCompletionTab( )
     c->setAutomaticCodeCompletion( checkAutomaticCodeCompletion->isChecked() );
     c->setAutomaticArgumentsHint( checkAutomaticArgumentsHint->isChecked() );
 
-    c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isOn() );
-    c->setIncludeTypes( m_includeTypes->isOn() );
-    c->setIncludeEnums( m_includeEnums->isOn() );
-    c->setIncludeTypedefs( m_includeTypedefs->isOn() );
+    c->setIncludeGlobalFunctions( m_includeGlobalFunctions->isChecked() );
+    c->setIncludeTypes( m_includeTypes->isChecked() );
+    c->setIncludeEnums( m_includeEnums->isChecked() );
+    c->setIncludeTypedefs( m_includeTypedefs->isChecked() );
 
     for( QMap<QCheckListItem*, Catalog*>::Iterator it=m_catalogs.begin(); it!=m_catalogs.end(); ++it )
     {
@@ -165,10 +149,26 @@ void CCConfigWidget::slotNewPCS( )
     dlg.exec();
 }
 
+void CCConfigWidget::slotRemovePCS()
+{
+	if ( !advancedOptions->selectedItem() ) return;
+	
+	QString db = advancedOptions->selectedItem()->text(0);
+	QString question = i18n("Are you sure you want to remove the \"%1\" database?").arg( db );
+	
+	KStandardDirs *dirs =  m_pPart->instance()->dirs();
+	QString dbName = dirs->saveLocation( "data", "kdevcppsupport/pcs" ) + "/" + db + ".db";
+	
+	if ( KMessageBox::Yes == KMessageBox::questionYesNo( 0, question, i18n("Remove Database") ) )
+	{
+		m_pPart->removeCatalog( dbName );
+	}
+}
+
 void CCConfigWidget::catalogRegistered( Catalog * c )
 {
     QFileInfo dbInfo( c->dbName() );
-    QCheckListItem* item = new QCheckListItem( m_pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
+    QCheckListItem* item = new QCheckListItem( advancedOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
     item->setOn( c->enabled() );
 
     m_catalogs[ item ] = c;
@@ -280,5 +280,6 @@ void CCConfigWidget::saveGetterSetterTab( )
 	config->setParameterName(m_edtParameterName->text());
 	config->store();
 }
+
 
 #include "ccconfigwidget.moc"
