@@ -1,6 +1,6 @@
 <tip category="KDevelop|General">
 <html>
-<p>...that can select your autosaving time in the setup dialog?
+<p>...that you can select your autosaving time in the setup dialog?
 </html>
 </tip>
 
@@ -21,7 +21,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to change your applications version number, you can change it in the project options dialog, automatically updating your project.
+<p>If you want to change your application's version number, you can change it in the project options dialog, automatically updating your project.
 </html>
 </tip>
 
@@ -42,14 +42,14 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you changed your applications's classes, you should update your API documentation by selecting "Make API-Doc" from the Build-menu.
+<p>If you changed your applications' classes, you should update your API documentation by selecting "Make API-Doc" from the Build-menu.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>You can save time if you select "Compile File" from the build menu or the toolbar to only compile your current implementation file.
+<p>You can save time if you select "Compile File" from the Build menu or the toolbar, to only compile your current implementation file.
 </html>
 </tip>
 
@@ -84,14 +84,14 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you've found a bug in KDevelop, please let us know. Contact adresses are in the KDevelop Handbook.
+<p>If you have found a bug in KDevelop, please let us know. Contact addresses are in the KDevelop Handbook.
 </html>
 </tip>
 
 
 <tip category="KDevelop|General">
 <html>
-<p>If you want to add your own documentations to the documentation tree, click with the right mouse button on the "Others" entry in the tree. Then configure the path and entry name.
+<p>If you want to add your own documentation to the documentation tree, click with the right mouse button on the "Others" entry in the tree. Then configure the path and entry name.
 </html>
 </tip>
 
@@ -119,7 +119,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you compile your project and get an error, you can click on the error message to switch to the file and line the error occured.
+<p>If you compile your project and get an error, you can click on the error message to switch to the file and line where the error occurred.
 </html>
 </tip>
 
@@ -161,7 +161,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can even search for marked text even from within the documentation browser with a right button menu?
+<p>...that you can even search for marked text from within the documentation browser using the right button menu?
 </html>
 </tip>
 
@@ -175,7 +175,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you should keep your library documentations up to date after installing new libraries?
+<p>...that you should keep your library documentation up to date after installing new libraries?
 </html>
 </tip>
 
@@ -210,7 +210,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>...that you can bookmarks helpbrowser pages in the "Bookmarks" menu?
+<p>...that you can bookmark helpbrowser pages in the "Bookmarks" menu?
 </html>
 </tip>
 
