@@ -1593,7 +1593,6 @@ void CKDevelop::slotTagGotoFile(const CTag* tag)
             << "at line "   << tag->line()  << "\n";
   switchToFile(tag->file(),tag->line());
 }
-
 /**
  * Open all files that correspond to tag
  */
@@ -1615,6 +1614,40 @@ void CKDevelop::slotTagOpenFile(QString text)
       }
     }
   }
+}
+/**
+ * Switch between corresponding source and header files. Assumes that
+ * the files exist and that they have the same basename.
+ */
+void CKDevelop::slotTagSwitchTo()
+{
+  CEditWidget* pEditView = m_docViewManager->currentEditView();
+  if (pEditView) {
+    QFileInfo curFileInfo = QFileInfo(pEditView->getName());
+    QString curFileName = curFileInfo.fileName();
+    QString curFileExt = curFileInfo.extension(FALSE);
+    QString switchToName = curFileInfo.baseName();
+    // this assumes that your source files end in .cpp - that's BAD !!!
+    if (m_docViewManager->curDocIsHeaderFile()) {
+      switchToName = switchToName + ".cpp";
+    }
+    else if (m_docViewManager->curDocIsCppFile()) {
+      switchToName = switchToName + ".h";
+    }
+    kdDebug() << "in CKDevelop::slotTagSwitchTo():\n";
+    kdDebug() << "current filename: " << curFileName << "\n";
+    kdDebug() << "switch to filename: " << switchToName << "\n";
+    slotTagOpenFile(switchToName);
+  }
+}
+void CKDevelop::slotTagSearch()
+{
+  slotStatusMsg(i18n("Searching in CTags Database..."));
+  ctags_dlg->slotClear();
+  ctags_dlg->setTagType(searchTagsDialogImpl::all);
+  ctags_dlg->show();
+  ctags_dlg->raise();
+  slotStatusMsg(i18n("Ready."));
 }
 /**
  * Find and open files that contain definition corresponding to tag

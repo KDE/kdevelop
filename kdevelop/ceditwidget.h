@@ -219,6 +219,7 @@ public slots:
   void slotAddWatchVariable();
 
 signals:
+ void tagSwitchTo();
  void tagOpenFile(QString text);
  void tagDefinition(QString text);
  void tagDeclaration(QString text);

@@ -4072,6 +4072,7 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
 
 bool CKDevelop::isToolViewVisible(QWidget* pToolView)
 {
+#ifndef USE_KDE_2_1_1
   // pointer access checks
   if (pToolView == 0L) return false;
   if (pToolView->parentWidget() == 0L) return false;
@@ -4085,6 +4086,9 @@ bool CKDevelop::isToolViewVisible(QWidget* pToolView)
   QWidget* pTabWidget = pDock->parentDockTabGroup();
   bool bIsVisible = bVisible || (pTabWidget && pTabWidget->isVisible());
   return bIsVisible;
+#else //#ifndef USE_KDE_2_1_1
+  return false;
+#endif //#ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::fillToggleTreeViewsMenu()

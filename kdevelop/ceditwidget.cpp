@@ -401,21 +401,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
  ********************************************************************/
 
 void CEditWidget::slotEmitTagSwitchTo(){
-  // switch to header/source file (proof of concept, i.e. quick hack)
-  QFileInfo curFileInfo = QFileInfo(getName());
-  QString curFileName = curFileInfo.fileName();
-  QString curFileExt = curFileInfo.extension(FALSE);
-  QString switchToName = curFileInfo.baseName();
-  if ((curFileExt[0]=='h')||(curFileExt[0]=='H')) {
-    switchToName = switchToName + ".cpp";
-  }
-  else if ((curFileExt[0]=='c')||(curFileExt[0]=='C')) {
-    switchToName = switchToName + ".h";
-  }
-  kdDebug() << "in CEditWidget::slotEmitTagSwitchTo():\n";
-  kdDebug() << "current filename: " << curFileName << "\n";
-  kdDebug() << "switch to filename: " << switchToName << "\n";
-  emit tagOpenFile(switchToName);
+  emit tagSwitchTo();
 }
 void CEditWidget::slotEmitTagOpenFile(){
   emit tagOpenFile(searchtext);

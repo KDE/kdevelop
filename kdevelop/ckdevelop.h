@@ -761,6 +761,15 @@ public:
    */
   void slotTagOpenFile(QString tag);
   /**
+   * Switch between corresponding source and header files. Assumes that
+   * the files exist and that they have the same basename.
+   */
+  void slotTagSwitchTo();
+  /**
+   * Raise the CTags search dialog
+   */
+  void slotTagSearch();
+  /**
    * Find and open files that contain definition corresponding to tag
    */
   void slotTagDefinition(QString tag);

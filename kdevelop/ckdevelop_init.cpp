@@ -362,6 +362,12 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
   accel->connectItem( i18n("GrepSearch"), this, SLOT(slotEditSearchText() ) );
 
+  accel->insertItem( i18n("Search CTags Database"), "CTagsSearch", IDK_EDIT_TAGS_SEARCH );
+  accel->connectItem( "CTagsSearch", this, SLOT(slotTagSearch() ), true, ID_EDIT_TAGS_SEARCH );
+
+  accel->insertItem( i18n("Switch To Header/Source"), "CTagsSwitch", IDK_EDIT_TAGS_SWITCH );
+  accel->connectItem( "CTagsSwitch", this, SLOT(slotTagSwitchTo() ), true, ID_EDIT_TAGS_SWITCH );
+
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
   accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );
 
@@ -639,6 +645,9 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
+  edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Search &CTags Database..."), this, SLOT(slotTagSearch()),0,ID_EDIT_TAGS_SEARCH);
+  edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Switch to Header/Source..."), this, SLOT(slotTagSwitchTo()),0,ID_EDIT_TAGS_SWITCH);
+
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
@@ -1416,6 +1425,8 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH_BACK,"RepeatSearchBack" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SEARCH,"CTagsSearch" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_TAGS_SWITCH,"CTagsSwitch" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );

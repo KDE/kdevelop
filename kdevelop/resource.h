@@ -58,12 +58,8 @@
 #define ID_EDIT_REPEAT_SEARCH_BACK  11082
 #define ID_EDIT_REPLACE             11090
 
-#define ID_EDIT_TAGS_SWITCH         11100
-#define ID_EDIT_TAGS_OPEN           11105
-#define ID_EDIT_TAGS_DEFINITION     11110
-#define ID_EDIT_TAGS_DECLARATION    11115
-
 #define ID_EDIT_SEARCH_IN_FILES     11130
+
 
 #define ID_EDIT_RUN_TO_CURSOR	      11136
 #define ID_EDIT_STEP_OUT_OFF	      11137
@@ -79,6 +75,12 @@
 #define ID_EDIT_SELECT_ALL          11100
 #define ID_EDIT_DESELECT_ALL        11110
 #define ID_EDIT_INVERT_SELECTION    11120
+
+#define ID_EDIT_TAGS_OPEN           11200
+#define ID_EDIT_TAGS_DEFINITION     11210
+#define ID_EDIT_TAGS_DECLARATION    11220
+#define ID_EDIT_TAGS_SEARCH         11230
+#define ID_EDIT_TAGS_SWITCH         11240
 
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
@@ -377,6 +379,12 @@
 #define IDK_BUILD_RUN_WITH_ARGS       ALT+Key_F9
 
 #define IDK_BUILD_STOP								Key_F10
+
+//#define IDK_EDIT_TAGS_OPEN
+#define IDK_EDIT_TAGS_DEFINITION      Key_F11
+#define IDK_EDIT_TAGS_DECLARATION     SHIFT+Key_F11
+#define IDK_EDIT_TAGS_SWITCH          Key_F12
+#define IDK_EDIT_TAGS_SEARCH          SHIFT+Key_F12
 
 #define IDK_VIEW_PREVIEW							CTRL+Key_Space
 
