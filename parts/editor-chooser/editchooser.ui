@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>454</width>
-            <height>254</height>
+            <width>308</width>
+            <height>214</height>
         </rect>
     </property>
     <property stdset="1">
@@ -29,83 +29,66 @@
             <number>6</number>
         </property>
         <widget>
-            <class>QLabel</class>
+            <class>QGroupBox</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>TextLabel1</cstring>
+                <cstring>GroupBox1</cstring>
             </property>
             <property stdset="1">
-                <name>text</name>
-                <string>Select your preferred editor to embed:</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>Layout1</cstring>
+                <name>title</name>
+                <string>&amp;Embedded Editor</string>
             </property>
             <grid>
                 <property stdset="1">
                     <name>margin</name>
-                    <number>0</number>
+                    <number>11</number>
                 </property>
                 <property stdset="1">
                     <name>spacing</name>
                     <number>6</number>
                 </property>
-                <widget row="0"  column="0"  rowspan="3"  colspan="1" >
-                    <class>QListBox</class>
+                <widget row="0"  column="0" >
+                    <class>QComboBox</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>EditorList</cstring>
+                        <cstring>EditorPart</cstring>
                     </property>
                 </widget>
-                <spacer row="2"  column="1" >
-                    <property>
-                        <name>name</name>
-                        <cstring>Spacer1</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>orientation</name>
-                        <enum>Vertical</enum>
-                    </property>
-                    <property stdset="1">
-                        <name>sizeType</name>
-                        <enum>Expanding</enum>
-                    </property>
-                    <property>
-                        <name>sizeHint</name>
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget row="0"  column="1" >
-                    <class>QPushButton</class>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>ButtonUp</cstring>
+                        <cstring>TextLabel1</cstring>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Move &amp;Up</string>
-                    </property>
-                </widget>
-                <widget row="1"  column="1" >
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>ButtonDown</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>Move &amp;Down</string>
+                        <string>&lt;i&gt;Note:&lt;/i&gt; Changing the preferred Editor will not take
+effect until you restart KDevelop.</string>
                     </property>
                 </widget>
             </grid>
         </widget>
+        <spacer>
+            <property>
+                <name>name</name>
+                <cstring>Spacer1</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 </UI>

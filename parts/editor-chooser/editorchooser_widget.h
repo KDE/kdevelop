@@ -20,6 +20,9 @@ public:
 private slots:
 
   void load();
+  void save();
+
+  void accept();
 
 };
 
