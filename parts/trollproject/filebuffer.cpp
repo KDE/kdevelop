@@ -420,5 +420,15 @@ QStringList FileBuffer::getAllScopeNames(int depth)
     result.append(tmpScopeName);
   }
   return result;
-  
+
+}
+
+
+QStringList FileBuffer::getChildScopeNames()
+//========================================
+{
+  QStringList result;
+  for (unsigned int i=0; i<m_subBuffers.count(); i++)
+    result += m_subBuffers[i]->getScopeName();
+  return result;
 }

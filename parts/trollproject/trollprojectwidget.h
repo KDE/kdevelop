@@ -39,6 +39,7 @@ public:
     ProjectItem(Type type, QListView *parent, const QString &text);
     ProjectItem(Type type, ProjectItem *parent, const QString &text);
 
+    QString scopeString;
     Type type()
         { return typ; }
 
@@ -55,12 +56,13 @@ private:
 class SubprojectItem : public ProjectItem
 {
 public:
-    SubprojectItem(QListView *parent, const QString &text);
+    SubprojectItem(QListView *parent, const QString &text,const QString &scopeString);
     SubprojectItem(SubprojectItem *parent, const QString &text);
 
     QString subdir;
     QString path;
     QList<GroupItem> groups;
+    QList<SubprojectItem> scopes;
 
     QStringList subdirs;
     QStringList sources;
@@ -78,12 +80,13 @@ private:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType { Sources, Headers, Interfaces, Forms };
+    enum GroupType {Sources, Headers, Interfaces, Forms };
 
-    GroupItem(QListView *lv, GroupType type, const QString &text);
+    GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
     QList<FileItem> files;
     GroupType groupType;
+    SubprojectItem *owner;
 };
 
 
@@ -129,7 +132,7 @@ public:
      */
     QString subprojectDirectory();
 
-    GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name);
+    GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name, const QString &scopeName);
     FileItem *createFileItem(const QString &name);
 
     void updateProjectFile(QListViewItem *item);
@@ -144,7 +147,9 @@ private slots:
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
 private:
+    void buildProjectDetailTree(SubprojectItem *item, KListView *listviewControl);
     void removeFile(SubprojectItem *spitem, FileItem *fitem);
+    void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
 
     KListView *overview;

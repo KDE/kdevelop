@@ -58,9 +58,10 @@ ProjectItem::ProjectItem(Type type, ProjectItem *parent, const QString &text)
  * Class SubprojectItem
  */
 
-SubprojectItem::SubprojectItem(QListView *parent, const QString &text)
+SubprojectItem::SubprojectItem(QListView *parent, const QString &text, const QString &scopeString)
     : ProjectItem(Subproject, parent, text)
 {
+    this->scopeString=scopeString;
     init();
 }
 
@@ -83,9 +84,10 @@ void SubprojectItem::init()
  * Class GroupItem
  */
 
-GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text)
+GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const QString &scopeString)
     : ProjectItem(Group, lv, text)
 {
+    this->scopeString = scopeString;
     groupType = type;
     files.setAutoDelete(true);
     setPixmap(0, SmallIcon("tar"));
@@ -143,7 +145,7 @@ TrollProjectWidget::~TrollProjectWidget()
 
 void TrollProjectWidget::openProject(const QString &dirName)
 {
-    SubprojectItem *item = new SubprojectItem(overview, "/");
+    SubprojectItem *item = new SubprojectItem(overview, "/","");
     item->subdir = dirName.right(dirName.length()-dirName.findRev('/'));
     item->path = dirName;
     parse(item);
@@ -239,18 +241,49 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     }
 
     m_shownSubproject = static_cast<SubprojectItem*>(item);
+    buildProjectDetailTree(m_shownSubproject,details);
+}
 
-    // Insert all GroupItems and all of their children into the view
-    QListIterator<GroupItem> it2(m_shownSubproject->groups);
-    for (; it2.current(); ++it2) {
-        details->insertItem(*it2);
+void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *listviewControl)
+{
+  // Insert all GroupItems and all of their children into the view
+  if (listviewControl)
+  {
+    QListIterator<SubprojectItem> it1(item->scopes);
+    for (; it1.current(); ++it1)
+    {
+      listviewControl->insertItem(*it1);
+      buildProjectDetailTree(*it1,NULL);
+    }
+    QListIterator<GroupItem> it2(item->groups);
+    for (; it2.current(); ++it2)
+    {
+        listviewControl->insertItem(*it2);
         QListIterator<FileItem> it3((*it2)->files);
         for (; it3.current(); ++it3)
             (*it2)->insertItem(*it3);
         (*it2)->setOpen(true);
     }
+  }
+  else
+  {
+    QListIterator<SubprojectItem> it1(item->scopes);
+    for (; it1.current(); ++it1)
+    {
+      item->insertItem(*it1);
+      buildProjectDetailTree(*it1,NULL);
+    }
+    QListIterator<GroupItem> it2(item->groups);
+    for (; it2.current(); ++it2)
+    {
+        item->insertItem(*it2);
+        QListIterator<FileItem> it3((*it2)->files);
+        for (; it3.current(); ++it3)
+            (*it2)->insertItem(*it3);
+        (*it2)->setOpen(true);
+    }
+  }
 }
-
 
 void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 {
@@ -328,16 +361,17 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
   SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
   QString relpath = spitem->path.mid(projectDirectory().length());
-  spitem->m_FileBuffer.removeValues("SUBDIRS");
-  spitem->m_FileBuffer.setValues("SUBDIRS",spitem->subdirs,4);
-  spitem->m_FileBuffer.removeValues("SOURCES");
-  spitem->m_FileBuffer.setValues("SOURCES",spitem->sources,4);
-  spitem->m_FileBuffer.removeValues("HEADERS");
-  spitem->m_FileBuffer.setValues("HEADERS",spitem->headers,4);
-  spitem->m_FileBuffer.removeValues("FORMS");
-  spitem->m_FileBuffer.setValues("FORMS",spitem->forms,4);
-  spitem->m_FileBuffer.removeValues("INTERFACES");
-  spitem->m_FileBuffer.setValues("INTERFACES",spitem->interfaces,4);
+  FileBuffer *subBuffer=m_shownSubproject->m_FileBuffer.getSubBuffer(spitem->scopeString);
+  subBuffer->removeValues("SUBDIRS");
+  subBuffer->setValues("SUBDIRS",spitem->subdirs,4);
+  subBuffer->removeValues("SOURCES");
+  subBuffer->setValues("SOURCES",spitem->sources,4);
+  subBuffer->removeValues("HEADERS");
+  subBuffer->setValues("HEADERS",spitem->headers,4);
+  subBuffer->removeValues("FORMS");
+  subBuffer->setValues("FORMS",spitem->forms,4);
+  subBuffer->removeValues("INTERFACES");
+  subBuffer->setValues("INTERFACES",spitem->interfaces,4);
   spitem->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+spitem->subdir+".pro");
 }
 
@@ -348,16 +382,16 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &fi
   switch (titem->groupType)
   {
     case GroupItem::Interfaces:
-      m_shownSubproject->interfaces.append(filename);
+      titem->owner->interfaces.append(filename);
       break;
     case GroupItem::Sources:
-      m_shownSubproject->sources.append(filename);
+      titem->owner->sources.append(filename);
       break;
     case GroupItem::Headers:
-      m_shownSubproject->headers.append(filename);
+      titem->owner->headers.append(filename);
       break;
     case GroupItem::Forms:
-      m_shownSubproject->forms.append(filename);
+      titem->owner->forms.append(filename);
       break;
   }
 }
@@ -369,7 +403,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         return;
 
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-
     if (pvitem->type() == ProjectItem::Group) {
 
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
@@ -423,7 +456,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             addFileToCurrentSubProject(titem,filename);
           }
           // Update project file
-          updateProjectFile(m_shownSubproject);
+          updateProjectFile(titem->owner);
           // Update subprojectview
           slotOverviewSelectionChanged(m_shownSubproject);
         }
@@ -445,7 +478,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
               return;
             }
             addFileToCurrentSubProject(titem,filename);
-            updateProjectFile(m_shownSubproject);
+            updateProjectFile(titem->owner);
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
@@ -494,11 +527,11 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
 }
 
 
-GroupItem *TrollProjectWidget::createGroupItem(GroupItem::GroupType groupType, const QString &name)
+GroupItem *TrollProjectWidget::createGroupItem(GroupItem::GroupType groupType, const QString &name,const QString &scopeString)
 {
     // Workaround because for QListView not being able to create
     // items without actually inserting them
-    GroupItem *titem = new GroupItem(overview, groupType, name);
+    GroupItem *titem = new GroupItem(overview, groupType, name,scopeString);
     overview->takeItem(titem);
 
     return titem;
@@ -526,6 +559,85 @@ void TrollProjectWidget::emitRemovedFile(const QString &fileName)
 }
 
 
+void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, FileBuffer *buffer)
+{
+    if (scopeString!="")
+    {
+      QStringList scopeNames = QStringList::split(':',scopeString);
+      SubprojectItem *sitem = new SubprojectItem(overview, scopeNames[scopeNames.count()-1],scopeString);
+      sitem->path = item->path;
+      item->scopes.append(sitem);
+      item=sitem;
+    }
+
+    QString values;
+    FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
+    values = subBuffer->getValues("INTERFACES");
+    if (values != "")
+      item->interfaces = QStringList::split(' ',values);
+
+    values = subBuffer->getValues("FORMS");
+    if (values != "")
+      item->forms = QStringList::split(' ',values);
+
+    values = subBuffer->getValues("SOURCES");
+    if (values != "")
+      item->sources = QStringList::split(' ',values);
+
+    values = subBuffer->getValues("HEADERS");
+    if (values != "")
+      item->headers = QStringList::split(' ',values);
+
+    // Create list view items
+    GroupItem *titem = createGroupItem(GroupItem::Interfaces, "INTERFACES",scopeString);
+    item->groups.append(titem);
+    titem->owner = item;
+    if (!item->interfaces.isEmpty()) {
+        QStringList l = item->interfaces;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
+    item->groups.append(titem);
+    titem->owner = item;
+    if (!item->forms.isEmpty()) {
+        QStringList l = item->forms;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Sources, "SOURCES",scopeString);
+    item->groups.append(titem);
+    titem->owner = item;
+    if (!item->sources.isEmpty()) {
+        QStringList l = item->sources;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Headers, "HEADERS",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!item->headers.isEmpty()) {
+        QStringList l = item->headers;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            titem->files.append(fitem);
+        }
+    }
+    QStringList childScopes = subBuffer->getChildScopeNames();
+    for (unsigned int i=0; i<childScopes.count();i++)
+      parseScope(item,scopeString+(scopeString!="" ? ":" : "")+childScopes[i],buffer);
+}
+
 void TrollProjectWidget::parse(SubprojectItem *item)
 {
     QFileInfo fi(item->path);
@@ -537,69 +649,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.bufferFile(proname);
     item->m_FileBuffer.handleScopes();
 
-    QString values;
-    values = item->m_FileBuffer.getValues("INTERFACES");
-    if (values != "")
-      item->interfaces = QStringList::split(' ',values);
-
-    values = item->m_FileBuffer.getValues("FORMS");
-    if (values != "")
-      item->forms = QStringList::split(' ',values);
-
-    values = item->m_FileBuffer.getValues("SOURCES");
-    if (values != "")
-      item->sources = QStringList::split(' ',values);
-
-
-    values = item->m_FileBuffer.getValues("HEADERS");
-    if (values != "")
-      item->headers = QStringList::split(' ',values);
-
-
-    // Create list view items
-    GroupItem *titem = createGroupItem(GroupItem::Interfaces, "Interfaces");
-    item->groups.append(titem);
-    if (!item->interfaces.isEmpty()) {
-        QStringList l = item->interfaces;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Forms, "Forms");
-    item->groups.append(titem);
-    if (!item->forms.isEmpty()) {
-        QStringList l = item->forms;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Sources, "Sources");
-    item->groups.append(titem);
-    if (!item->sources.isEmpty()) {
-        QStringList l = item->sources;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Headers, "Headers");
-    item->groups.append(titem);
-    if (!item->headers.isEmpty()) {
-        QStringList l = item->headers;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-
-
-    values = item->m_FileBuffer.getValues("SUBDIRS");
+    parseScope(item,"",&(item->m_FileBuffer));
+    QString values = item->m_FileBuffer.getValues("SUBDIRS");
 
     if (values != "")
     {

@@ -30,6 +30,7 @@ public:
   // Scopes
   void            setScopeName(const QString &scopeName) {m_scopeName=scopeName;}
   QString         getScopeName() {return m_scopeName;}
+  QStringList     getChildScopeNames();
   bool            findNextScope(const Caret &pos, Caret& scopeStart, Caret& scopeEnd);
   Caret           findScopeEnd(Caret pos);
 
