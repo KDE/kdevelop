@@ -20,6 +20,7 @@
 #include "keditor/codecompletion_iface.h"
 
 #include <kdebug.h>
+#include <kregexp.h>
 
 CppCodeCompletion::CppCodeCompletion ( KDevCore* pCore, ClassStore* pStore )
 {
@@ -78,6 +79,8 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 	CppCodeCompletionParser* m_pParser = new CppCodeCompletionParser ( pEditIface, m_pStore );
 	m_pParser->setLineToBeParsed ( strCurLine );
 
+	//kdDebug ( 9007 ) << "Current Classname: " << m_pParser->getCurrentClassname ( nLine ) << endl;
+
 	if ( strCurLine.right ( 2 ) == "::" )
 	{
 		int nNodePos = m_pParser->getNodePos ( nCol );
@@ -116,6 +119,9 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		}
 	}
 
+//	QValueList<KEditor::CompletionEntry> completionList = m_pParser->getReturnTypeOfMethod ( "hallo()" );
+//	pCompletionIface->showCompletionBox ( completionList );
+
 	if ( strCurLine.right ( 2 ) == "->" )
 	{
 		int nNodePos = m_pParser->getNodePos ( nCol );
@@ -135,7 +141,26 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 	}
 
 
+	if ( strCurLine.right ( 1 ) == "." )
+	{
+		KRegExp reMethod ( "[ \t]*([A-Za-z_]+)[ \t]*\\(([0-9A-Za-z_,]*)\\)" );
+		int nNodePos = m_pParser->getNodePos ( nCol );
+		QString strNodeText = m_pParser->getNodeText ( nNodePos );
 
+		if ( reMethod.match ( strNodeText ) )
+		{
+			QString strType = m_pParser->getReturnTypeOfMethod ( nLine, nCol );
+
+			kdDebug ( 9007 ) << "Return type of " << strNodeText << ": " << strType << endl;
+
+			QValueList<KEditor::CompletionEntry> completionList = getEntryListForClass ( strType );
+			if ( completionList.count() > 0 )
+			{
+				pCompletionIface->showCompletionBox ( completionList );
+				return;
+			}
+		}
+	}
 
 
 /*	if ( pEditIface->line ( nLine ) == "test(")
@@ -200,19 +225,146 @@ bool CppCodeCompletion::doCodeCompletion ( KEditor::Document* pDoc, int nLine, i
 	return false;
 }
 
-QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString strClass )
+QList<ParsedMethod>* CppCodeCompletion::getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList )
 {
-	QList<ParsedParent> parentsList;
-	QValueList<KEditor::CompletionEntry> entryList;
-	ParsedClass* pClass;
+	QList<ParsedParent> parentList = pClass->parents;
 
-	do
+	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
 	{
-		pClass = m_pStore->getClassByName ( strClass );
+		pClass = m_pStore->getClassByName ( pParentClass->name() );
 
 		if ( pClass )
 		{
-			QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
+			QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
+			for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+			{
+				pList->append ( pMethod );
+			}
+
+			pTmpList = pClass->getSortedSlotList();
+			for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+			{
+				pList->append ( pMethod );
+			}
+
+			pTmpList = pClass->getSortedSignalList();
+			for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+			{
+				pList->append ( pMethod );
+			}
+
+			pList = getParentMethodListForClass ( pClass, pList );
+		}
+	}
+
+	return pList;
+}
+
+QList<ParsedAttribute>* CppCodeCompletion::getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList )
+{
+	QList<ParsedParent> parentList = pClass->parents;
+
+	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
+	{
+		pClass = m_pStore->getClassByName ( pParentClass->name() );
+
+		if ( pClass )
+		{
+			QList<ParsedAttribute>* pTmpList = pClass->getSortedAttributeList();
+			for ( ParsedAttribute* pAttribute = pTmpList->first(); pAttribute != 0; pAttribute = pTmpList->next() )
+			{
+				pList->append ( pAttribute );
+			}
+
+			pList = getParentAttributeListForClass ( pClass, pList );
+		}
+	}
+
+	return pList;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString strClass )
+{
+	QValueList<KEditor::CompletionEntry> entryList;
+
+	ParsedClass* pClass = m_pStore->getClassByName ( strClass );
+	if ( pClass )
+	{
+		QList<ParsedMethod>* pMethodList;
+		QList<ParsedAttribute>* pAttributeList;
+		
+		// Load the methods, slots, signals of the current class and its parents into the list
+		pMethodList = pClass->getSortedMethodList();
+
+		QList<ParsedMethod>* pTmpList = pClass->getSortedSlotList();
+		for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+		{
+			pMethodList->append ( pMethod );
+		}
+
+		pTmpList = pClass->getSortedSignalList();
+		for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+		{
+			pMethodList->append ( pMethod );
+		}
+
+		pMethodList = getParentMethodListForClass ( pClass, pMethodList );
+
+		for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+		{
+			KEditor::CompletionEntry entry;
+			entry.text = pMethod->name();
+			entry.postfix = "()";
+			entryList << entry;
+		}
+
+		// Load the attributes of the current class and its parents into the list
+		pAttributeList = pClass->getSortedAttributeList();
+
+		pAttributeList = getParentAttributeListForClass ( pClass, pAttributeList );
+
+		for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+		{
+			KEditor::CompletionEntry entry;
+			entry.text = pAttribute->name();
+			entry.postfix = "";
+			entryList << entry;
+		}
+	}
+
+	return entryList;
+}
+
+QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace )
+{
+	QValueList<KEditor::CompletionEntry> entryList;
+	ParsedScopeContainer *pScope = m_pStore->getScopeByName ( strNamespace );
+
+	if ( pScope )
+	{
+		QList<ParsedMethod>* pMethodList;
+		QList<ParsedAttribute>* pAttributeList;
+
+		ParsedClass* pClass = pScope->getClassByName ( strClass );
+		if ( pClass )
+		{
+			// Load the methods, slots, signals of the current class and its parents into the list
+			pMethodList = pClass->getSortedMethodList();
+
+			QList<ParsedMethod>* pTmpList = pClass->getSortedSlotList();
+			for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+			{
+				pMethodList->append ( pMethod );
+			}
+
+			pTmpList = pClass->getSortedSignalList();
+			for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+			{
+				pMethodList->append ( pMethod );
+			}
+
+			pMethodList = getParentMethodListForClass ( pClass, pMethodList );
+
 			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
 			{
 				KEditor::CompletionEntry entry;
@@ -221,25 +373,11 @@ QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( Q
 				entryList << entry;
 			}
 
-			pMethodList = pClass->getSortedSignalList();
-			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
-			{
-				KEditor::CompletionEntry entry;
-				entry.text = pMethod->name();
-				entry.postfix = "()";
-				entryList << entry;
-			}
+			// Load the attributes of the current class and its parents into the list
+			pAttributeList = pClass->getSortedAttributeList();
 
-			pMethodList = pClass->getSortedSlotList();
-			for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
-			{
-				KEditor::CompletionEntry entry;
-				entry.text = pMethod->name();
-				entry.postfix = "()";
-				entryList << entry;
-			}
+			pAttributeList = getParentAttributeListForClass ( pClass, pAttributeList );
 
-			QList<ParsedAttribute>* pAttributeList = pClass->getSortedAttributeList();
 			for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
 			{
 				KEditor::CompletionEntry entry;
@@ -247,16 +385,8 @@ QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClass ( Q
 				entry.postfix = "";
 				entryList << entry;
 			}
-
-			if ( pClass->parents.count() != 0 )
-			{
-				ParsedParent* pParent = pClass->parents.first();
-				strClass = pParent->name();
-			}
-			else
-				strClass = "";
 		}
-	} while ( pClass != 0 );
+	}
 
 	return entryList;
 }
@@ -303,70 +433,6 @@ QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForStruct ( 
 				entryList << entry;
 			}
 		}
-	}
-
-	return entryList;
-}
-
-QValueList<KEditor::CompletionEntry> CppCodeCompletion::getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace )
-{
-	QValueList<KEditor::CompletionEntry> entryList;
-	ParsedScopeContainer *pScope = m_pStore->getScopeByName ( strNamespace );
-	ParsedClass* pClass;
-
-	if ( pScope )
-	{
-		do
-		{
-			pClass = pScope->getClassByName ( strClass );
-
-			if ( pClass )
-			{
-				QList<ParsedMethod>* pMethodList = pClass->getSortedMethodList();
-				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
-				{
-					KEditor::CompletionEntry entry;
-					entry.text = pMethod->name();
-					entry.postfix = "()";
-					entryList << entry;
-				}
-
-				pMethodList = pClass->getSortedSignalList();
-				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
-				{
-					KEditor::CompletionEntry entry;
-					entry.text = pMethod->name();
-					entry.postfix = "()";
-					entryList << entry;
-				}
-
-				pMethodList = pClass->getSortedSlotList();
-				for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
-				{
-					KEditor::CompletionEntry entry;
-					entry.text = pMethod->name();
-					entry.postfix = "()";
-					entryList << entry;
-				}
-
-				QList<ParsedAttribute>* pAttributeList = pClass->getSortedAttributeList();
-				for ( ParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
-				{
-					KEditor::CompletionEntry entry;
-					entry.text = pAttribute->name();
-					entry.postfix = "";
-					entryList << entry;
-				}
-
-				if ( pClass->parents.count() != 0 )
-				{
-					ParsedParent* pParent = pClass->parents.first();
-					strClass = pParent->name();
-				}
-				else
-					strClass = "";
-			}
-		} while ( pClass != 0 );
 	}
 
 	return entryList;

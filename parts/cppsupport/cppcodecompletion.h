@@ -48,6 +48,8 @@ class CppCodeCompletion : public QObject
 		QValueList<KEditor::CompletionEntry> getEntryListForStruct ( const QString& strStruct );
 		QValueList<KEditor::CompletionEntry> getEntryListForClassOfNamespace ( QString strClass, const QString& strNamespace );
 
+		QList<ParsedMethod>* getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList );
+		QList<ParsedAttribute>* getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList );
 	private:
 		KEditor::Editor* m_pEditor;
 		ClassStore* m_pStore;
