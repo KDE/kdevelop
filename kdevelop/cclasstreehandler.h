@@ -109,9 +109,9 @@ public: // Public methods
   void addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent );
 
   /** Get the names and types of the currently selected class/declaration.
-   * class == NULL for global declarations. */
-  void getCurrentNames( const char **className,
-                        const char **declName, 
+   * class == QString::null for global declarations. */
+  void getCurrentNames( QString &className,
+                        QString &declName,
                         THType *idxType );
 
 private: // Private attributes
