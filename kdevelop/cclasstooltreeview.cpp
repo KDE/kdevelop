@@ -42,9 +42,6 @@ CClassToolTreeView::CClassToolTreeView(QWidget* parent /* = 0 */,const char* nam
   initPopups();
 
   setTreeHandler( new CClassTreeHandler() );
-
-  definitionCmd = NULL;
-  declarationCmd = NULL;
 }
 
 /*----------------------------------- CClassToolTreeView::initPopups()
@@ -77,38 +74,6 @@ void CClassToolTreeView::initPopups()
  *                          PUBLIC METHODS                           *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------ CClassToolTreeView::setDefinitionCmd()
- * setDefinitionCmd()
- *   Set the definition command.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassToolTreeView::setDefinitionCmd( CCommand *aCmd )
-{
-  assert( aCmd != NULL );
-
-  definitionCmd = aCmd;
-}
-
-/*------------------------------ CClassToolTreeView::setDeclarationCmd()
- * setDeclarationCmd()
- *   Set the declaration command.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassToolTreeView::setDeclarationCmd( CCommand *aCmd )
-{
-  assert( aCmd != NULL );
-
-  declarationCmd = aCmd;
-}
 
 /*********************************************************************
  *                                                                   *

@@ -22,7 +22,6 @@
 #define _CCLASSTOOLTREEVIEW_H_INCLUDED
 
 #include "ctreeview.h"
-#include "ccommand.h"
 
 //#include "cproject.h"
 class  CProject; 
@@ -36,14 +35,6 @@ public: // Constructor and Destructor
   CClassToolTreeView(QWidget* parent = 0,const char* name = 0);
   ~CClassToolTreeView() {}
 
-public: // Public methods
-
-  /** Set the definition command. */
-  void setDefinitionCmd( CCommand *aCmd );
-
-  /** Set the declaration command. */
-  void setDeclarationCmd( CCommand *aCmd );
-
 protected: // Implementations of virtual methods.
  
   /** Initialize popupmenus. */
@@ -54,14 +45,6 @@ protected: // Implementations of virtual methods.
 
   /** Refresh this view using the current project. */
   void refresh( CProject *proj ) {}
-
-private: // Private attributes
-
-  /** Command to execute to view a definition. */
-  CCommand *definitionCmd;
-
-  /** Command to execute to view a declaration. */
-  CCommand *declarationCmd;
 
 private: // Popupmenus
  

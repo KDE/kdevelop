@@ -342,22 +342,6 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
   classTree.setOpen( root, true );
 }
 
-/** Set the view definition command and its' argument. */
-void CClassToolDlg::setViewDefinitionCmd( CCommand *aCmd )
-{
-  assert( aCmd != NULL );
-
-  classTree.setDefinitionCmd( aCmd );
-}
-
-/** Set the view declaration command and its' argument. */
-void CClassToolDlg::setViewDeclarationCmd( CCommand *aCmd )
-{
-  assert( aCmd != NULL );
-
-  classTree.setDeclarationCmd( aCmd );
-}
-
 void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
 {
   QListViewItem *root;

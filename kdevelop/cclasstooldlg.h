@@ -29,7 +29,6 @@
 #include <qlayout.h> 
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
-#include "ccommand.h"
 #include "cclasstooltreeview.h"
 
 typedef enum _CTOperations
@@ -37,7 +36,11 @@ typedef enum _CTOperations
   CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE
 }CTDOperations;
 
-/** */
+/** This dialog gives the user the possibility to view classhierarchies,
+ * inherited methods and attributes. The user can also choose to filter
+ * based on export.
+ * @author Jonas Nordin
+ */
 class CClassToolDlg : public QDialog
 {
   Q_OBJECT
@@ -55,12 +58,6 @@ public: // Public methods to set attribute values
   /** Set the class to view. */
   void setClass( const char *aName );
   void setClass( CParsedClass *aClass );
-
-  /** Set the view definition command and its' argument. */
-  void setViewDefinitionCmd( CCommand *aCmd );
-
-  /** Set the view declaration command and its' argument. */
-  void setViewDeclarationCmd( CCommand *aCmd );
 
   /** View the parents of the current class. */
   void viewParents();
@@ -152,20 +149,6 @@ private: // Private attribues
 
  /** Stores what operation the user selected last. */
  CTDOperations currentOperation;
-
- /** Command to be executed when the users wants a definition. */
- CCommand *viewDefinitionCmd;
-
- /** Argument to the viewDefinitionCmd. */
- void *viewDefinitionArg;
-
- /** Command to be executed when the user wants a declaration. */
- CCommand *viewDeclarationCmd;
-
- /** Argument to the viewDeclarationCmd. */
- void *viewDeclarationArg;
-
- 
 
 private: // Private methods
 
