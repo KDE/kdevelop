@@ -362,6 +362,7 @@ void CClassView::refresh()
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
   methodList = store->globalContainer.getSortedMethodList();
+  cout << "Got " << methodList->count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
   delete methodList;
 
@@ -985,7 +986,7 @@ void CClassView::slotMethodDelete()
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName, 
-                                                 parentType, itemType );
+                                                 &parentType, &itemType );
 
   emit signalMethodDelete( parentPath, itemName );
 }
@@ -1072,10 +1073,9 @@ void CClassView::slotViewDefinition()
   THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, 
-                                                 itemName,
-                                                 parentType,
-                                                 itemType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 &parentType,
+                                                 &itemType );
 
   slotViewDefinition( parentPath, itemName, parentType, itemType );
 }
@@ -1088,10 +1088,8 @@ void CClassView::slotViewDeclaration()
   THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, 
-                                                 itemName,
-                                                 parentType,
-                                                 itemType );
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 &parentType, &itemType );
 
   slotViewDeclaration( parentPath, itemName, parentType, itemType );
 }
