@@ -65,7 +65,7 @@ void AppWizardPart::slotNewProject()
              this, SLOT(slotCommandFinished(const QString&)) );
     if (dlg.exec()) {
         m_creationCommand = dlg.getCommandLine();
-        m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName() + ".kdevelop";
+        m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName().lower() + ".kdevelop";
         m_showFileAfterGeneration = dlg.getShowFileAfterGeneration();
     } else {
       disconnect(makeFrontend(), 0, this, 0);
