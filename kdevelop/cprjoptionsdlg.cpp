@@ -304,7 +304,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_X11->setText("X11");
   l_X11->setChecked(ldadd.find(" -lX11 ") != -1);
   if (l_X11->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lX11"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lX11 "), "" );
   QWhatsThis::add(l_X11, i18n("X11 basics "));
 
   l_Xext=new QCheckBox(libs_group,"l_Xext");
@@ -312,7 +312,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_Xext->setText("Xext");
   l_Xext->setChecked(ldadd.find(" -lXext ") != -1);
   if (l_Xext->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lXext"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lXext "), "" );
   QWhatsThis::add(l_Xext, i18n("X11 extensions "));
 
   l_qt=new QCheckBox(libs_group,"l_qt");
@@ -321,7 +321,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_qt->setChecked((ldadd.find(" -lqt ") != -1) || (ldadd.find(" $(LIB_QT) ") != -1));
   if (l_qt->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lqt"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lqt "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_QT\\)"), "" );
   }
   QWhatsThis::add(l_qt, i18n("Qt"));
@@ -343,7 +343,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kdeui->setChecked((ldadd.find(" -lkdeui ")  != -1)|| (ldadd.find(" $(LIB_KDEUI) ") != -1));
   if (l_kdeui->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkdeui"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkdeui "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KDEUI\\)"), "" );
   }
   QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
@@ -354,7 +354,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_khtml->setChecked((ldadd.find(" -lkhtml ")  != -1) || (ldadd.find(" $(LIB_KHTML) ") != -1));
   if (l_khtml->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkhtml"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkhtml "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KHTML\\)"), "" );
   }
   QWhatsThis::add(l_khtml, i18n("KDE HTML widget"));
@@ -364,7 +364,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kfm->setText("kfm");
   l_kfm->setChecked(ldadd.find(" -lkfm ") != -1);
   if (l_kfm->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lkfm"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkfm "), "" );
   // TODO add note that this is KDE-1 only, or remove checkbox if project isn't a KDE-1 project
   QWhatsThis::add(l_kfm, i18n("KDE kfm functionality"));
 
@@ -374,7 +374,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kfile->setChecked((ldadd.find(" -lkfile ") != -1) || (ldadd.find(" $(LIB_KFILE) ") != -1));
   if (l_kfile->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkfile"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkfile "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KFILE\\)"), "" );
   }
   QWhatsThis::add(l_kfile, i18n("KDE file handling"));
@@ -385,7 +385,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kparts->setChecked((ldadd.find(" -lkparts ") != -1) || (ldadd.find(" $(LIB_KPARTS) ") != -1));
   if (l_kparts->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkparts"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkparts "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KPARTS\\)"), "" );
   }
   QWhatsThis::add(l_kparts, i18n("KDE component architecture"));
@@ -396,7 +396,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kspell->setChecked((ldadd.find(" -lkspell ") != -1) || (ldadd.find(" $(LIB_KSPELL) ") != -1));
   if (l_kspell->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkspell"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkspell "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KSPELL\\)"), "" );
   }
   QWhatsThis::add(l_kspell, i18n("KDE Spell checking"));
@@ -407,7 +407,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_kab->setChecked((ldadd.find(" -lkab ") != -1) || (ldadd.find(" $(LIB_KAB) ") != -1));
   if (l_kab->isChecked())
   {
-    ldadd = ldadd.replace( QRegExp(" -lkab"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lkab "), "" );
     ldadd = ldadd.replace( QRegExp(" \\$\\(LIB_KAB\\)"), "" );
   }
   QWhatsThis::add(l_kab, i18n("KDE addressbook"));
@@ -417,7 +417,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_math->setText("math");
   l_math->setChecked(l_khtml->isChecked() || (ldadd.find(" -lm ") != -1));
   if (l_math->isChecked())
-    ldadd = ldadd.replace( QRegExp(" -lm"), "" );
+    ldadd = ldadd.replace( QRegExp(" -lm "), "" );
   QWhatsThis::add(l_math, i18n("Math library"));
 
   QLabel* addit_ldadd_label;
