@@ -31,7 +31,7 @@ const char *type_map[] = {
 
 
 const char *size_map[] = {
-    "cr16", "cr22", "cr32", "cr48", "cr64"
+    "hi16", "hi22", "hi32", "hi48", "hi64", "hi128"
 };
 
 
@@ -51,6 +51,7 @@ AddIconDialog::AddIconDialog(AutoProjectPart *part, AutoProjectWidget *widget,
     size_combo->insertItem("32");
     size_combo->insertItem("48");
     size_combo->insertItem("64");
+    size_combo->insertItem("128");
 
     somethingChanged();
 
