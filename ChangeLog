@@ -1,3 +1,7 @@
+2001-05-31 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+    * switched to the new editor interface concept
+
 2001-05-31 Sandy Meier <smeier@kdevelop.org>
 	
 	* added initial php webserver/shell preview and config dialog (phpsupport)
@@ -93,7 +97,7 @@
 	* Added a new editor interface for debugging
 	  (breakpoints etc.)
 	* Added cast methods to the editor interfaces, so
-          you don't have to pass strings around any longer
+      you don't have to pass strings around any longer
 
 2001-05-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
