@@ -1,3 +1,7 @@
+2003-04-23 Harald Fernengel <harry@kdevelop.org>
+    * added SQL support part, including support for multiple connections,
+      sending queries and browsing their results
+
 2003-04-22 F@lk Brettschneider <falkbr@kdevelop.org>
     * compiles and works on KDE-3.0 again
 
