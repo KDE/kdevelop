@@ -16,7 +16,9 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 
 EXTRA_DIST = tokenizer.l
 tokenizer.cpp: tokenizer.l
-	flex -+ -otokenizer.cpp $(srcdir)/tokenizer.l
+	flex -+ -otokenizer.cpp $(srcdir)/tokenizer.l && cat tokenizer.cpp | \
+	sed -e "s,class istream;,#include <iostream\.h>," > tokenizer.cpp.tmp && \
+	mv tokenizer.cpp.tmp tokenizer.cpp
 
 METASOURCES = AUTO
 
