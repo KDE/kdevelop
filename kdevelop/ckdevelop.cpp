@@ -1828,7 +1828,14 @@ void CKDevelop::slotBuildMakeClean(){
   slotStatusMsg(i18n("Running make clean..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
-  error_parser->setStartDir(prj->getProjectDir());
+  QString makefile("Makefile");
+  if(!QFileInfo(QDir::current(), makefile).exists())
+  {
+    QDir::setCurrent(prj->getProjectDir()+prj->getSubDir());
+    error_parser->setStartDir(prj->getProjectDir()+prj->getSubDir());
+  }
+  else
+    error_parser->setStartDir(prj->getProjectDir());
 
   process.clearArguments();
   process << make_cmd << "clean";

@@ -1,3 +1,6 @@
+2000-10-19 Ralf Nolden <nolden@kde.org>
+  * added check for a Makefile in make clean in the base project dir, otherwise use subdir
+
 2000-10-18 Ralf Nolden <nolden@kde.org>
   * updated installer for linguist, gimp, kbabel (preferred over ktranslator if found)
   * added Qt linguist support for KDevelop´s Qt 2 projects. Allows adding translations, make messages and
