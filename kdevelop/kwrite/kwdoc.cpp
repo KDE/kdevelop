@@ -1678,8 +1678,88 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
 }
 */
 
-void KWriteDoc::paintTextLine(QPainter &paint, int line,
-                              int xStart, int xEnd) {
+// void KWriteDoc::paintTextLine(QPainter &paint, int line,
+//                               int xStart, int xEnd) {
+//   int y;
+//   TextLine *textLine;
+//   int z, x;
+//   char ch;
+//   Attribute *a = 0L;
+//   int attr, nextAttr;
+//   int xs;
+//   int xc, zc;
+
+//   y = 0;//line*fontHeight - yPos;
+//   if (line >= (int) contents.count()) {
+//     paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
+//     return;
+//   }
+// //printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
+// //printf("text = ");
+//   textLine = contents.at(line);
+
+//   z = 0;
+//   x = 0;
+//   do {
+//     xc = x;
+//     ch = textLine->getChar(z);
+//     if (ch == '\t') {
+//       x += tabWidth - (x % tabWidth);
+//     } else {
+//       a = &attribs[textLine->getAttr(z)];
+//       x += a->fm.width(&ch,1);
+//     }
+//     z++;
+//   } while (x <= xStart);
+//   zc = z - 1;
+
+//   xs = xStart;
+//   attr = textLine->getRawAttr(zc);
+//   while (x < xEnd) {
+//     nextAttr = textLine->getRawAttr(z);
+//     if ((nextAttr ^ attr) & (taSelectMask | 256)) {
+//       paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
+//       xs = x;
+//       attr = nextAttr;
+//     }
+//     ch = textLine->getChar(z);
+//     if (ch == '\t') {
+//       x += tabWidth - (x % tabWidth);
+//     } else {
+//       a = &attribs[attr & taAttrMask];
+//       x += a->fm.width(&ch,1);
+//     }
+//     z++;
+//   }
+//   paint.fillRect(xs - xStart,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
+// //int len = textLine->length();
+//   y += fontAscent -1;
+//   attr = -1;
+//   while (xc < xEnd) {
+//     ch = textLine->getChar(zc);
+//     if (ch == '\t') {
+//       xc += tabWidth - (xc % tabWidth);
+//     } else {
+//       nextAttr = textLine->getRawAttr(zc);
+//       if (nextAttr != attr) {
+//         attr = nextAttr;
+//         a = &attribs[attr & taAttrMask];
+//         if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
+//         paint.setFont(a->font);
+//       }
+//       paint.drawText(xc - xStart,y,&ch,1);
+//       xc += a->fm.width(&ch,1);
+// //if (zc < len) printf("%c",ch);
+//     }
+//     zc++;
+//   }
+
+// //printf("\n");
+// }
+////////////////////////////////////////////////////////////////////////
+void
+KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd)
+{
   int y;
   TextLine *textLine;
   int z, x;
@@ -1688,11 +1768,13 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
   int attr, nextAttr;
   int xs;
   int xc, zc;
+  static char aLB[256];
+  int aCnt, xcp;
 
   y = 0;//line*fontHeight - yPos;
   if (line >= (int) contents.count()) {
-    paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
-    return;
+      paint.fillRect(0,y,xEnd - xStart,fontHeight,colors[4]);
+      return;
   }
 //printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
 //printf("text = ");
@@ -1701,61 +1783,94 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
   z = 0;
   x = 0;
   do {
-    xc = x;
-    ch = textLine->getChar(z);
-    if (ch == '\t') {
-      x += tabWidth - (x % tabWidth);
-    } else {
-      a = &attribs[textLine->getAttr(z)];
-      x += a->fm.width(&ch,1);
-    }
-    z++;
+      xc = x;
+      ch = textLine->getChar(z);
+      if (ch == '\t') {
+          x += tabWidth - (x % tabWidth);
+      } else {
+          a = &attribs[textLine->getAttr(z)];
+          x += a->fm.width(&ch,1);
+      }
+      z++;
   } while (x <= xStart);
   zc = z - 1;
 
   xs = xStart;
   attr = textLine->getRawAttr(zc);
   while (x < xEnd) {
-    nextAttr = textLine->getRawAttr(z);
-    if ((nextAttr ^ attr) & (taSelectMask | 256)) {
-      paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
-      xs = x;
-      attr = nextAttr;
-    }
-    ch = textLine->getChar(z);
-    if (ch == '\t') {
-      x += tabWidth - (x % tabWidth);
-    } else {
-      a = &attribs[attr & taAttrMask];
-      x += a->fm.width(&ch,1);
-    }
-    z++;
+      nextAttr = textLine->getRawAttr(z);
+      if ((nextAttr ^ attr) & (taSelectMask | 256)) {
+          paint.fillRect(xs - xStart,y,x - xs,fontHeight,colors[attr >> taShift]);
+          xs = x;
+          attr = nextAttr;
+      }
+      ch = textLine->getChar(z);
+      if (ch == '\t') {
+          x += tabWidth - (x % tabWidth);
+      } else {
+          a = &attribs[attr & taAttrMask];
+          x += a->fm.width(&ch,1);
+      }
+      z++;
   }
+  
   paint.fillRect(xs - xStart,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
-//int len = textLine->length();
+
   y += fontAscent -1;
   attr = -1;
+  aCnt = 0;
+  xcp  = xc;
+
   while (xc < xEnd) {
-    ch = textLine->getChar(zc);
-    if (ch == '\t') {
-      xc += tabWidth - (xc % tabWidth);
-    } else {
-      nextAttr = textLine->getRawAttr(zc);
-      if (nextAttr != attr) {
-        attr = nextAttr;
-        a = &attribs[attr & taAttrMask];
-        if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
-        paint.setFont(a->font);
+      ch = textLine->getChar(zc);
+
+      if (ch == '\t') {
+          xc += tabWidth - (xc % tabWidth);
+          if(aCnt!=0) {
+              paint.drawText(xcp - xStart,y,aLB,aCnt);
+              aCnt = 0;
+          }
+          xcp  = xc;
+      } 
+
+      else {
+          nextAttr = textLine->getRawAttr(zc);
+          if (nextAttr != attr) {
+              
+              if(aCnt!=0) {
+                  paint.drawText(xcp - xStart,y,aLB,aCnt);
+                  aCnt = 0;
+                  xcp  = xc;
+              }
+
+              attr = nextAttr;
+              a = &attribs[attr & taAttrMask];
+              if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
+              paint.setFont(a->font);
+          }
+          
+          aLB[aCnt++] = ch;
+          xc += a->fm.width(&ch,1);
+
+          if(aCnt == 256) {
+              paint.drawText(xcp - xStart,y,aLB,aCnt);
+              aCnt = 0;
+              xcp  = xc;
+          }
+
       }
-      paint.drawText(xc - xStart,y,&ch,1);
-      xc += a->fm.width(&ch,1);
-//if (zc < len) printf("%c",ch);
-    }
-    zc++;
+      zc++;
   }
 
+  if(aCnt!=0) {
+      paint.drawText(xcp - xStart,y,aLB,aCnt);
+      aCnt = 0;
+      xcp  = xc;
+  }
 //printf("\n");
 }
+
+//////////////////////////////////////////////////////////////////////////
 
 void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
   TextLine *textLine;
