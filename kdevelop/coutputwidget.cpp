@@ -75,7 +75,7 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   m_buf(),
   m_enterDir("[^\n]*: Entering directory `(.*)'\n"),
   m_leaveDir("[^\n]*: Leaving directory `([^\n]*)'\n"),
-  m_errorGcc("([^: \t]+):([0-9]+)[:,].*")
+  m_errorGcc("^([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
   setReadOnly(true);        // -JROC uncommented again
