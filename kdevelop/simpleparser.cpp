@@ -91,7 +91,11 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
         .replace( rx, "" )
         .replace( strconst, "" )
         .replace( chrconst, "" )
-        .replace( QRegExp("static"), "" )
+        .replace( QRegExp("[ \t]*static[ \t]*"), "" )
+        .replace( QRegExp("[ \t]*unsigned[ \t]*"), "" )
+        .replace( QRegExp("[ \t]*signed[ \t]*"), "" )
+        .replace( QRegExp("[ \t]*volatile[ \t]*"), "" )
+        .replace( QRegExp("[ \t]*extern[ \t]*"), "" )
         .replace( QRegExp("\\{"), "{;" )
         .replace( QRegExp("\\}"), ";};" )
         ;
@@ -145,11 +149,11 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
                     var.name = *it;
                     ctx->add( var );
                 }
-//                qDebug( "ctx = %p - lev = %d - type = %s - vars = %s",
-//                        ctx,
-//                        lev,
-//                        type.latin1(),
-//                        vlist.join(", ").latin1() );
+                qDebug( "ctx = %p - lev = %d - type = %s - vars = %s",
+                        ctx,
+                        lev,
+                        type.latin1(),
+                        vlist.join(", ").latin1() );
             }
         }
     }

@@ -85,6 +85,7 @@ static QString remove( QString text, const QChar& l, const QChar& r )
 {
     QString s;
 
+
     unsigned int index = 0;
     int count = 0;
     while( index < text.length() ){
@@ -875,7 +876,7 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
                 kdDebug() << "------------------------> m.start = " << m.start() << endl;
                 contents = contents.mid( m.start() );
                 regMethod.search( m.text() );
-                text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+                contents.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
                 if( classname ){
                     *classname = regMethod.cap( 1 );
                 }

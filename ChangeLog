@@ -1,3 +1,6 @@
+2002-02-28  Roberto Raggi <raggi@cli.di.unipi.it>
+    * bugfix: completion for method's arguments
+	
 2002-02-28  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch for documentation browser configuration dialog sent by Jens Zurheide <jens.zurheide@gmx.de>
     * bugfix: a crash in setMainCaption because of dangling pointer DocViewMan::m_pCurrentEditView
