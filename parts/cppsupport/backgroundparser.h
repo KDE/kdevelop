@@ -19,6 +19,7 @@
 #include <qwaitcondition.h>
 #include <qmutex.h>
 #include <qasciidict.h>
+#include <kdebug.h>
 
 class CppSupportPart;
 class TranslationUnitAST;
@@ -26,8 +27,8 @@ class TranslationUnitAST;
 class Unit    
 {
 public:
-    Unit(): translationUnit( 0 ) {}
-    ~Unit() { delete translationUnit; }
+    Unit(): translationUnit( 0 ) { kdDebug(9007) << "++ Unit()" << endl; }
+    ~Unit() { kdDebug(9007) << "-- Unit()" << endl; delete translationUnit; }
     
     QString fileName;
     QValueList<Problem> problems;

@@ -176,9 +176,10 @@ Unit* BackgroundParser::findOrCreateUnit( const QString& fileName )
 {
     Unit* unit = 0;
     
-    m_unitDict.find( fileName );
+    unit = m_unitDict.find( fileName );
     if( !unit ){
 	unit = parseFile( fileName );
+	kdDebug(9007) << "------------------> insert " << fileName << endl;
 	m_unitDict.insert( fileName, unit );
     }
     
@@ -243,7 +244,9 @@ void BackgroundParser::run()
 #endif
 	    
 	    m_unitDict.remove( fileName );
+	    kdDebug(9007) << "------------------> remove " << fileName << endl;
 	    m_unitDict.insert( fileName, unit );
+	    kdDebug(9007) << "------------------> insert " << fileName << endl;
 
 	    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );

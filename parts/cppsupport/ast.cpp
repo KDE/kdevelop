@@ -273,11 +273,13 @@ void LinkageSpecificationAST::setDeclaration( DeclarationAST::Node& decl )
 // ------------------------------------------------------------------------
 TranslationUnitAST::TranslationUnitAST()
 {
+    kdDebug(9007) << "++ TranslationUnitAST::TranslationUnitAST()" << endl;
     m_declarations.setAutoDelete( true );
 }
 
 TranslationUnitAST::~TranslationUnitAST()
 {
+    kdDebug(9007) << "-- TranslationUnitAST::TranslationUnitAST()" << endl;
 }
 
 void TranslationUnitAST::addDeclaration( DeclarationAST::Node& ast )
@@ -440,6 +442,7 @@ void TypedefAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclara
 // ------------------------------------------------------------------------
 TemplateArgumentListAST::TemplateArgumentListAST()
 {
+    m_arguments.setAutoDelete( true );
 }
 
 TemplateArgumentListAST::~TemplateArgumentListAST()
