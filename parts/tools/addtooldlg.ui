@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>507</width>
-            <height>267</height>
+            <width>511</width>
+            <height>309</height>
         </rect>
     </property>
     <property name="caption">
@@ -129,7 +129,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="TreeView" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="KDevApplicationTree" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>tree</cstring>
             </property>
@@ -138,8 +138,8 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>TreeView</class>
-        <header location="local">treeview.h</header>
+        <class>KDevApplicationTree</class>
+        <header location="local">kapplicationtree.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

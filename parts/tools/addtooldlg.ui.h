@@ -6,11 +6,13 @@
 ** a constructor, and a destroy() slot in place of a destructor.
 *****************************************************************************/
 
-#include "treeview.h"
+#include <qheader.h>
+#include "kapplicationtree.h"
 
 void AddToolDialog::init()
 {
     connect( tree, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(treeSelectionChanged(QListViewItem*)) );
+    tree->header()->hide();
 }
 
 QString AddToolDialog::getApp()
@@ -20,9 +22,9 @@ QString AddToolDialog::getApp()
 
 void AddToolDialog::treeSelectionChanged( QListViewItem * lvi )
 {
-    TreeItem* item = dynamic_cast<TreeItem*> ( lvi );
-    if ( !item )
+    KDevAppTreeListItem* item = dynamic_cast<KDevAppTreeListItem*> ( lvi );
+    if ( !item || item->isDirectory() )
 	return;
-    execEdit->setText( item->exec() );
-    menutextEdit->setText( item->caption() );   
+    execEdit->setText( item->executable() );
+    menutextEdit->setText( item->text( 0 ) );   
 }

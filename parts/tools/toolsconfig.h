@@ -7,10 +7,9 @@
 #include <qpixmap.h>
 
 
-class TreeView;
 class QListBox;
 class QPushButton;
-
+class KDevApplicationTree;
 
 class Entry 
 {
@@ -60,7 +59,7 @@ private slots:
 
 private:
 
-    TreeView *_tree;
+    KDevApplicationTree *_tree;
     QListBox *_list;
     QPushButton *_toList, *_toTree;
 

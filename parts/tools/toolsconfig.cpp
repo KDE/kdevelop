@@ -5,6 +5,7 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
+#include <qheader.h>
 
 #include <kapplication.h>
 #include <kdesktopfile.h>
@@ -12,9 +13,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-
 #include "tools_part.h"
-#include "treeview.h"
+#include "kapplicationtree.h"
 
 
 ToolsConfig::ToolsConfig(QWidget *parent, const char *name)
@@ -35,7 +35,8 @@ void ToolsConfig::showEvent(QShowEvent *e)
       QHBoxLayout *hbox = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
       QVBoxLayout *vbox = new QVBoxLayout(hbox);
-      _tree = new TreeView(this);
+      _tree = new KDevApplicationTree(this);
+      _tree->header()->hide();
       QLabel *l = new QLabel(_tree, i18n("&Applications"), this);
       l->show();
       _tree->show();
@@ -120,10 +121,9 @@ void ToolsConfig::add(const QString &desktopFile)
 
 void ToolsConfig::toList()
 {
-  TreeItem *item = (TreeItem*)_tree->selectedItem();
-  if (item)
-    add(item->file());
-
+  KDevAppTreeListItem *item = dynamic_cast<KDevAppTreeListItem*>(_tree->selectedItem());
+  if (item && !item->desktopEntryPath().isEmpty())
+    add(item->desktopEntryPath());
   checkButtons();
 }
 
