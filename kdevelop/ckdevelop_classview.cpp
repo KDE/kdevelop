@@ -54,7 +54,7 @@ void CKDevelop::slotClassTreeSelected()
         idxT == THPRIVATE_METHOD || 
         idxT == THPUBLIC_SLOT || 
         idxT == THPROTECTED_SLOT || 
-        idxT == THPRIVATE_SLOT  )
+        idxT == THPRIVATE_SLOT )
       CVGotoDeclaration( class_tree->currentItem() );
     else // Goto the definition.
       CVGotoDefinition( class_tree->currentItem() );
@@ -302,6 +302,7 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
 {
   CParsedClass *aClass;
   CParsedAttribute *aAttr = NULL;
+  CParsedStruct *aStruct;
   QListViewItem *parent;
   QString toFile;
   int idxType;
@@ -316,6 +317,11 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
       toFile = aClass->hFilename;
       toLine = aClass->definedOnLine;
       break;
+    case THSTRUCT:
+      aStruct = class_tree->store->getGlobalStructByName( item->text(0) );
+      toFile = aStruct->definedInFile;
+      toLine = aStruct->definedOnLine;
+      break;
     case THPUBLIC_ATTR:
     case THPROTECTED_ATTR:
     case THPRIVATE_ATTR:
@@ -327,6 +333,9 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
     case THPRIVATE_SLOT:
     case THGLOBAL_FUNCTION:
     case THGLOBAL_VARIABLE:
+    case THPUBLIC_SIGNAL:
+    case THPROTECTED_SIGNAL:
+    case THPRIVATE_SIGNAL:
       parent = item->parent();
       aClass = class_tree->store->getClassByName( parent->text(0) );
       
@@ -349,6 +358,10 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
       {
         aAttr = aClass->getSlotByNameAndArg( item->text(0) );
       }
+      else if( idxType == THPUBLIC_SIGNAL ||
+               idxType == THPROTECTED_SIGNAL ||
+               idxType == THPRIVATE_SIGNAL )
+        aAttr = aClass->getSignalByNameAndArg( item->text(0) );
       else if( idxType == THGLOBAL_FUNCTION )
       {
         aAttr = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
@@ -470,8 +483,6 @@ void CKDevelop::refreshClassCombo()
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
 {
-  CParsedMethod *aMethod;
-  QList<CParsedMethod> *list;
   QListBox *lb;
   KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   QString str;
@@ -480,12 +491,11 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
   lb = methodCombo->listBox();
 
   // Add all methods, slots and signals of this class.
-  list = aClass->getMethods();
-  for( aMethod = list->first(); 
-       aMethod != NULL;
-       aMethod = list->next() )
+  for( aClass->methodIterator.toFirst(); 
+       aClass->methodIterator.current();
+       ++aClass->methodIterator )
   {
-    aMethod->toString( str );
+    aClass->methodIterator.current()->toString( str );
     lb->inSort( str );
   }
   
@@ -494,14 +504,6 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        ++aClass->slotIterator )
   {
     aClass->slotIterator.current()->toString( str );
-    lb->inSort( str );
-  }
-  
-  for( aMethod = aClass->signalList.first(); 
-       aMethod != NULL;
-       aMethod = aClass->signalList.next() )
-  {
-    aMethod->toString( str );
     lb->inSort( str );
   }
 }

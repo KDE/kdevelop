@@ -247,7 +247,8 @@ void CClassView::refresh()
   str = i18n( GLOBALROOTNAME );
   globals = treeH->addRoot( str, THFOLDER );
 
-  // Add all global functions and variables
+  // Add all global items.
+  ((CClassTreeHandler *)treeH)->addGlobalStructs( store->getSortedGlobalStructList(), globals );
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), globals );
   ((CClassTreeHandler *)treeH)->addGlobalVariables( store->getSortedGlobalVarList(), globals );
 
