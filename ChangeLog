@@ -1,9 +1,16 @@
+2001-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added for CustomProject part for projects not based
+	  on either automake or tmake/qmake
+	* Templates for C and C++ imports with custom Makefiles
+	* Fix in import dialog to substitute APPNAMELC correctly
+
 2001-07-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
-    * Extended the KEditor::EditIface a bit
-    * started to implement it in the editor parts
+	* Extended the KEditor::EditIface a bit
+	* started to implement it in the editor parts
 
-2001-07-05  Richard Dale <duke@tipitina.demon.co.uk
+2001-07-05  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Fixed crash in class tool attribute display. Method and attribute
           icons now displayed correctly

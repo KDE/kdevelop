@@ -1,21 +1,21 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
-  <projectmanagement>KDevCustomProject</projectmanagement>
-  <primarylanguage>C++</primarylanguage>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>C</primarylanguage>
   <ignoreparts>
    <part>KDevJavaDebugger</part>
    <part>KDevFileView</part>
   </ignoreparts>
  </general>
- <kdevcustomproject>
+ <kdevautoproject>
   <run>
    <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>
- </kdevcustomproject>
+ </kdevautoproject>
  <kdevdebugger>
   <general>
-   <dbgshell></dbgshell>
+   <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
 </kdevelop>

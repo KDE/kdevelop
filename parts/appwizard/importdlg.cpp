@@ -139,7 +139,7 @@ void ImportDialog::accept()
     
     while (!srcstream.atEnd()) {
         QString line = srcstream.readLine();
-        line.replace(QRegExp("$APPNAMELC$"), projectName);
+        line.replace(QRegExp("\\$APPNAMELC\\$"), projectName);
         deststream << line << endl;
     }
 
