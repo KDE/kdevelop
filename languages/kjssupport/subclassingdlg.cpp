@@ -262,6 +262,24 @@ void SubclassingDlg::readUiFile()
       newFunc->setAllreadyInSubclass();
     m_slots << newFunc;
   }
+
+  QDomElement connElem = DomUtil::elementByPathExt(doc,"connections");
+  QDomNodeList connnodes = connElem.childNodes();
+  for (unsigned int i=0; i<connnodes.count();i++)
+  {
+    QDomElement connelem = connnodes.item(i).toElement();
+    connections += "$NEWCLASS$.connect(";
+    if (connelem.namedItem("sender").toElement().text() == m_baseClassName)
+       connections += "this";
+    else
+       connections += "$NEWCLASS$.child('" + connelem.namedItem("sender").toElement().text() + "')";
+    connections += ", '" + connelem.namedItem("signal").toElement().text() + "', ";
+    if (connelem.namedItem("receiver").toElement().text() == m_baseClassName)
+       connections += "this";
+    else
+       connections += "$NEWCLASS$.child('" + connelem.namedItem("receiver").toElement().text() + "')";
+    connections += ", '" + connelem.namedItem("slot").toElement().text().remove("()") + "');\n";
+  }
 }
 
 SubclassingDlg::~SubclassingDlg()
@@ -373,8 +391,8 @@ void SubclassingDlg::accept()
   {
     loadBuffer(buffer,::locate("data", "kdevkjssupport/subclassing/subclass_template.js"));
     kdDebug() << "buffer: " << buffer << endl;
-    buffer = "var $NEWCLASS$ = Factory.loadui(\"$BASEFILENAME$\", this);\n\n" + buffer;
-    buffer = FileTemplate::read(m_kjsSupport, "js") + buffer;
+    buffer = "var $NEWCLASS$ = Factory.loadui(\"$BASEFILENAME$.ui\", this);\n\n" + buffer;
+    buffer = FileTemplate::read(m_kjsSupport, "js") + buffer + connections;
     kdDebug() << "buffer: " << buffer << endl;
     QFileInfo fi(m_filename + ".js");
     QString module = fi.baseName();

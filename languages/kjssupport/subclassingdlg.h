@@ -78,6 +78,7 @@ protected:
   QValueList<SlotItem*> m_slots;
   QValueList<SlotItem*> m_functions;
   kjsSupportPart* m_kjsSupport;
+  QString connections;
 };
 
 #endif
