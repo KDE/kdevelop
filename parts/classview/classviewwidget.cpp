@@ -120,21 +120,29 @@ void ClassViewWidget::buildTree(bool fromScratch)
  *   determineFolder("/proj/src/bla.cpp, "/proj", 2) => null
  *   determineFolder("/proj/bar.cpp", "/proj", 2) => null
  */
-static QString determineFolder(QString fileName, QString projectDir, int levels)
+QString ClassViewWidget::determineFolder(QString fileName, QString projectDir, int levels)
 {
     projectDir += "/";
     if (!fileName.startsWith(projectDir))
         return QString::null;
-    fileName.remove(0, projectDir.length());
-    int pos = fileName.find('/');
-    if (pos == -1)
-        return QString::null;
-    while (--levels > 0) {
-        pos = fileName.find('/', pos+1);
+    fileName.remove(0, projectDir.length()); // get relative path
+    int pos;
+    if (levels != -1) { // we're given a specific level
+        pos = fileName.find('/');
         if (pos == -1)
             return QString::null;
-    }
-    return fileName.left(pos);
+        while (--levels > 0) {
+            pos = fileName.find('/', pos+1);
+            if (pos == -1)
+                return QString::null;
+        }
+   }
+   else { // get the complete relative dir
+    pos = fileName.findRev('/');
+    if (pos == -1)
+        return QString::null;
+   }
+   return fileName.left(pos);
 }
 
 
@@ -144,28 +152,33 @@ static QString determineFolder(QString fileName, QString projectDir, int levels)
  * The output argument folders is filled with a mapping from
  * folder names to their list view items.
  */
-void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *organizerItem,
-                                                const QStringList &dirNames,
+void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
+                                                QStringList &dirNames,
                                                 QMap<QString, ClassTreeItem*> *folders)
-{
-    QStringList::ConstIterator it;
-    for (it = dirNames.begin(); it != dirNames.end(); ++it) {
-        QStringList subNames = QStringList::split('/', *it);
+{    
+    QStringList::ConstIterator sit;
+    for (sit = dirNames.begin(); sit != dirNames.end(); ++sit) {
+        QStringList l = QStringList::split('/', *sit);
+        QStringList::ConstIterator i;
         QString path;
-        
-        QStringList::ConstIterator sit;
-        for (sit = subNames.begin(); sit != subNames.end(); ++sit) {
-            QString parentPath = path;
+        for (i = l.begin(); i != l.end(); ++i) {
+            const QString & dir = *i;
+            ClassTreeItem *parent;
+            QMap<QString, ClassTreeItem*>::iterator folder = folders->find(path);
+            if (folder!=folders->end())
+                parent = *folder;
+            else
+                parent = classes;
             if (!path.isEmpty())
                 path += '/';
-            path += *sit;
-            if (folders->find(path) == folders->end()) {
-                QMap<QString, ClassTreeItem*>::ConstIterator fit = folders->find(parentPath);
-                ClassTreeItem *parentItem = (fit == folders->end())? organizerItem : *fit;
-                folders->insert(path, new ClassTreeOrganizerItem(parentItem, 0, *sit));
-            }
+            path += dir;
+            if (folders->find(path)==folders->end())
+                folders->insert(path, new ClassTreeOrganizerItem(parent, 0, dir));
         }
     }
+
+    // Sort folders
+    sortFolder(classes);
 }
 
 
@@ -173,9 +186,10 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *organizerItem,
  * Creates a flat list of folder items.
  */
 void ClassViewWidget::buildClassFolderFlatList(ClassTreeItem *organizerItem,
-                                               const QStringList &dirNames,
+                                               QStringList &dirNames,
                                                QMap<QString, ClassTreeItem*> *folders)
 {
+    dirNames.sort();
     ClassTreeItem *lastItem = 0;
     
     QStringList::ConstIterator it;
@@ -217,17 +231,18 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         QValueList<ParsedClass*> classList = store->getSortedClassList();
         QValueList<ParsedClass*>::ConstIterator it;
 
-        // Make a list of all directories under the project directory
+                // Make a list of all directories under the project directory
         QString projectDir = m_part->project()->projectDirectory();
         QStringList dirNames;
+        if (foldersAsHierarchy)
+            depth = -1;  // don't consider depth if hierarchical view
         for (it = classList.begin(); it != classList.end(); ++it) {
             QString fileName = (*it)->definedInFile();
             QString dirName = determineFolder(fileName, projectDir, depth);
             if (!dirName.isNull() && !dirNames.contains(dirName))
-                dirNames.append(dirName);
+                dirNames.append(dirName);                        
         }
-        dirNames.sort();
-
+        
         // Create folders
         QMap<QString, ClassTreeItem*> folders;
         if (foldersAsHierarchy)
@@ -337,6 +352,8 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
         setTreeState(oldTreeState);
 }
     
+// Sort folders recursively in a tree view
+// This forces a sorting of all items
 void ClassViewWidget::sortFolder(QListViewItem* item)
 {
     if (item!=0) {

@@ -36,16 +36,17 @@ private slots:
 
 private:
     void buildClassFolderHierarchy(ClassTreeItem *organizerItem,
-                                   const QStringList &dirNames,
+                                   QStringList &dirNames,
                                    QMap<QString, ClassTreeItem*> *folders);
     void buildClassFolderFlatList(ClassTreeItem *organizerItem,
-                                  const QStringList &dirNames,
+                                  QStringList &dirNames,
                                   QMap<QString, ClassTreeItem*> *folders);
     void buildTreeByCategory(bool fromScratch);
     void buildTreeByNamespace(bool fromScratch);
     void buildTree(bool fromScratch);
 
     static void sortFolder(QListViewItem* item);
+    static QString determineFolder(QString fileName, QString projectDir, int levels = -1);
 };
 
 #endif
