@@ -4,7 +4,7 @@ dcopservicedir = ${appwizarddatadir}/template-dcopservice
 templatedir = ${appwizarddatadir}/templates
 
 dcopservice_DATA = dcopservice.desktop   dcopservice.png \
-	dcopservice.h  src-Makefile.am\
+	dcopservice.h  src-Makefile.am main.cpp\
 	dcopservice.cpp  dcopservice.kdevelop subdirs
 
 template_DATA = dcopservice

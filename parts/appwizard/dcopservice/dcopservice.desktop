@@ -1,9 +1,8 @@
 [Desktop Entry]
-Encoding=UTF-8
+Type=Service
 Name=$APPNAME$
-Exec=$APPNAMELC$ %i %m -caption "%c"
-Icon=$APPNAMELC$
-Type=Application
-DocPath=$APPNAMELC$/$APPNAMELC$.html
-Comment=A KDE Screen Saver
-Terminal=0
+Exec=$APPNAMELC$
+X-DCOP-ServiceType=Unique
+X-KDE-StartupNotify=false
+Comment=Template for dcop services
+

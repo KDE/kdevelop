@@ -1,7 +1,5 @@
 #!/usr/bin/perl
-
 use gideon;
-
 initGideon();
 installFileTemplate();
 installLicense();
@@ -27,6 +25,7 @@ install( "${src}/template-dcopservice/src-Makefile.am",   "${dest}/src/Makefile.
 install( "${src}/template-dcopservice/dcopservice.cpp",         "${dest}/src/${APPNAMELC}.cpp" );
 install( "${src}/template-dcopservice/dcopservice.h",           "${dest}/src/${APPNAMELC}.h" );
 install( "${src}/template-dcopservice/dcopservice.desktop",           "${dest}/src/${APPNAMELC}.desktop" );
+install( "${src}/template-dcopservice/main.cpp",           "${dest}/src/main.cpp" );
 #install( "${src}/template-dcopservice/dcopserviceclient.cpp",         "${dest}/src/${APPNAMELC}client.cpp" );
 #install( "${src}/template-dcopservice/dcopserviceclient.h",           "${dest}/src/${APPNAMELC}client.h" );
 

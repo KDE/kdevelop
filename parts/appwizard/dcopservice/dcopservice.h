@@ -1,38 +1,36 @@
-// $APPNAME$ - Screensaver Template from KDevelop
-//
-// Copyright (c)  Ian Reinhart Geiser
-//
+/*
+ * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ */
+#ifndef _$APPNAME$_H
+#define _$APPNAME$_H
 
-#ifndef __$APPNAME$_H__
-#define __$APPNAME$_H__
+#include <qstringlist.h>
+#include <qstring.h>
+#include <dcopobject.h>
 
-#include <kscreensaver.h>
-#include "$APPNAMELC$ui.h"
-
-class $APPNAME$ : public KScreenSaver
+class $APPNAME$ :  public DCOPObject
 {
-    Q_OBJECT
-public:
-    $APPNAME$( WId drawable );
-    virtual ~$APPNAME$();
-private:
-    void readSettings();
-    void blank();
+	K_DCOP
+
+	private:
+		QStringList m_List;
+
+	public:
+		$APPNAME$();
+
+		~$APPNAME$();
+
+	k_dcop:
+		QString string(int);
+
+		QStringList list();
+
+		void add(QString);
+
+		bool remove(QString);
+
+		bool exit();
+
+
 };
-
-class $APPNAME$Setup : public $APPNAME$UI
-{
-    Q_OBJECT
-public:
-    $APPNAME$Setup( QWidget *parent = NULL, const char *name = NULL );
-
-private slots:
-    void slotOkPressed();
-    void slotCancelPressed();
-
-private:
-	void readSettings();
-    $APPNAME$ *saver;
-};
-
 #endif

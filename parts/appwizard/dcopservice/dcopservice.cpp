@@ -1,110 +1,50 @@
-// $APPNAMELC$ - Screensaver Template from KDevelop
-//
-// Copyright (c)  Ian Reinhart Geiser
-//
-
-#include <stdlib.h>
-#include <kapplication.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <qcheckbox.h>
-#include <qcolor.h>
-#include <kglobal.h>
+/*
+ * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
+ */
 #include "$APPNAMELC$.h"
-#include "$APPNAMELC$ui.h"
+#include <kdebug.h>
+#include <kapplication.h>
 
-// libkscreensaver interface
-extern "C"
+$APPNAME$::$APPNAME$() : DCOPObject("serviceInterface")
 {
-    const char *kss_applicationName = "$APPNAMELC$.kss";
-    const char *kss_description = I18N_NOOP( "$APPNAME$" );
-    const char *kss_version = "2.2.0";
-
-    $APPNAME$ *kss_create( WId id )
-    {
-        return new $APPNAME$( id );
-    }
-
-    QDialog *kss_setup()
-    {
-        return new $APPNAME$Setup();
-    }
-}
-
-//-----------------------------------------------------------------------------
-// dialog to setup screen saver parameters
-//
-$APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
-        : $APPNAME$UI( parent, name, TRUE )
-{
-    //TODO:
-    //Connect your signals and slots here to configure the screen saver.
-    connect( OkayPushButton, SIGNAL( released() ),
-             SLOT( slotOkPressed() ) );
-    connect( CancelPushButton, SIGNAL( released() ),
-             SLOT( slotCancelPressed() ) );
-}
-
-// read settings from config file
-
-void $APPNAME$Setup::readSettings()
-{
-    KConfig *config = KGlobal::config();
-    config->setGroup( "Settings" );
-    // TODO
-    // Add your config options here...
-    CheckBox1->setChecked(config->readBoolEntry( "somesetting", false ));
-}
-
-// Ok pressed - save settings and exit
-
-void $APPNAME$Setup::slotOkPressed()
-{
-    KConfig *config = KGlobal::config();
-    config->setGroup( "Settings" );
-    // TODO
-    // Add your config options here.
-    config->writeEntry( "somesetting", CheckBox1->isChecked() );
-    config->sync();
-
-    accept();
-}
-
-void $APPNAME$Setup::slotCancelPressed()
-{
-    reject();
-}
-//-----------------------------------------------------------------------------
-
-
-$APPNAME$::$APPNAME$( WId id ) : KScreenSaver( id )
-{
-    readSettings();
-    blank();
+	kdDebug() << "Starting new service... " << endl;
+	m_List = QStringList();
 }
 
 $APPNAME$::~$APPNAME$()
-{}
-
-// read configuration settings from config file
-
-
-void $APPNAME$::readSettings()
 {
-    KConfig *config = KGlobal::config();
-    config->setGroup( "Settings" );
-    // TODO
-    // Add your config options here...
-    bool somesetting = config->readBoolEntry( "somesetting", false );
+	kdDebug() << "Going away... " << endl;
 }
 
-
-void $APPNAME$::blank()
+QString $APPNAME$::string(int idx)
 {
-    //TODO
-    //Add your code to render the screen.
-    setBackgroundColor( QColor(black)  );
-    //	
-    erase();
+	return *m_List.at(idx);
 }
 
+QStringList $APPNAME$::list()
+{
+	return m_List;
+}
+
+void $APPNAME$::add(QString arg)
+{
+	kdDebug() << "Adding " << arg << " to the list" << endl;
+	m_List << arg;
+}
+
+bool $APPNAME$::remove(QString arg)
+{
+	QStringList::Iterator it = m_List.find(arg);
+	if (it != m_List.end())
+	{
+		m_List.remove(it);
+	}
+	else
+		return false;
+	return true;
+}
+
+bool $APPNAME$::exit()
+{
+	kapp->quit();
+}
