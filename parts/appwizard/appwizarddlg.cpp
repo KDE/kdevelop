@@ -58,6 +58,7 @@
 #include <kmacroexpander.h>
 #include <karchive.h>
 #include <ktar.h>
+#include <ktempdir.h>
 
 #include <qlayout.h>
 
@@ -364,6 +365,23 @@ void AppWizardDialog::accept()
     dir.cdUp();
     source = dir.absPath();
 
+	// Unpack template archive to temp dir, and get the name
+	
+	KTempDir archDir;
+	archDir.setAutoDelete(true);
+	KTar templateArchive( source + "/" + m_pCurrentAppInfo->sourceArchive, "application/x-gzip" );
+	if( templateArchive.open( IO_ReadOnly ) )
+	{
+		templateArchive.directory()->copyTo(archDir.name(), true);
+	}
+	else
+	{
+		KMessageBox::sorry(this, QString( i18n("The template %1 cannot be opened.")).arg( source + "/" + m_pCurrentAppInfo->sourceArchive ) );
+		templateArchive.close();
+		return;
+	}
+	templateArchive.close();
+			
 	// Build KMacroExpander map
 	QMap<QString,QString> subMap = m_customOptions->dataForm()->createPropertyMap(); 
 	kdDebug(9010) << "subMap size " << subMap.size() << endl;
@@ -374,7 +392,8 @@ void AppWizardDialog::accept()
 	subMap.insert("AUTHOR", author_edit->text() );
 	subMap.insert("EMAIL", email_edit->text() );
 	subMap.insert("VERSION", version_edit->text());
-	subMap.insert("src", source );
+	subMap.insert("src", archDir.name() );
+	subMap.insert("kdevelop", source );
 	subMap.insert("dest", finalLoc_label->text() );
 	subMap.insert("LICENSE", license_combo->currentText() );
 
