@@ -237,19 +237,18 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	    method->setType( text );
     }
 
-    ParsedMethod* m = cl->getMethod( method );
+    ParsedClass* klass = dynamic_cast<ParsedClass*>( cl );
+    
+    ParsedMethod* m = klass ? klass->getMethod( method ) : cl->getMethod( method );
+    
     bool isStored = m != 0;
-
-    if( m != 0 )
-    {
+    if( m != 0 ){
 	delete( method );
 	method = m;
     }
 
     method->setDefinedOnLine( startLine );
     method->setDefinedInFile( m_fileName );
-
-    ParsedClass* klass = dynamic_cast<ParsedClass*>( cl );
 
     if( !isStored && klass ){
 	if( m_inSlots )
