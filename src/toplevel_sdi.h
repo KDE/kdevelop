@@ -23,7 +23,7 @@ public:
   TopLevelSDI(QWidget* parent=0, const char *name=0);
   ~TopLevelSDI();
     
-  void embedPartView(QWidget *view, const QString &title);
+  void embedPartView(QWidget *view, const QString &title, const QString &toolTip);
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
   void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
   

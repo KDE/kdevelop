@@ -241,26 +241,27 @@ void TopLevelSDI::slotQuit()
 }
 
 
-void TopLevelSDI::embedPartView(QWidget *view, const QString &name)
+void TopLevelSDI::embedPartView(QWidget *view, const QString &name, const QString& toolTip)
 {
   m_tabWidget->addTab(view, name);
+  m_tabWidget->setTabToolTip(view, toolTip);
   m_tabWidget->showPage(view);
 }
 
 
-void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &/*toolTip*/)
+void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
-  m_leftBar->addTab(view, name);
+  m_leftBar->addTab(view, name, toolTip);
 }
 
-void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &/*toolTip*/)
+void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip)
 {
-	m_rightBar->addTab ( view, title );
+  m_rightBar->addTab (view, title, toolTip);
 }
 
-void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &/*toolTip*/)
+void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
-  m_bottomBar->addTab(view, name);
+  m_bottomBar->addTab(view, name, toolTip);
 }
 
 

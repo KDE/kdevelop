@@ -402,7 +402,7 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 }
 
 
-void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
+void TopLevelMDI::embedPartView(QWidget *view, const QString &name, const QString &/*toolTip*/)
 {
   QextMdiChildView *child = wrapper(view, name);
 

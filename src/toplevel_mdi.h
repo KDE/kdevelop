@@ -28,7 +28,7 @@ public:
   TopLevelMDI(QWidget* parent=0, const char *name=0);
   ~TopLevelMDI();
     
-  void embedPartView(QWidget *view, const QString &title);    //!< Embeds a view as part view in the main working area at position (0,0)
+  void embedPartView(QWidget *view, const QString &title, const QString &toolTip = QString::null );    //!< Embeds a view as part view in the main working area at position (0,0)
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as select view in the left docking area
   void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as output view in the bottom docking area
   

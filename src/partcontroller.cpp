@@ -243,7 +243,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 
 void PartController::integratePart(KParts::Part *part, const KURL &url)
 {
-  TopLevel::getInstance()->embedPartView(part->widget(), url.fileName());
+  TopLevel::getInstance()->embedPartView(part->widget(), url.fileName(), url.url());
 
   addPart(part);
 
