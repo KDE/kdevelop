@@ -1392,6 +1392,10 @@ CParsedClass *CClassParser::parseClassHeader()
 
       // Fetch the name of the parent.
       aLexem = lexemStack.pop();
+      if(aLexem == 0) {
+        cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+        return 0;
+      }
 
       // Only add . if the string contains something.
       if( !scopeStr.isEmpty() )
