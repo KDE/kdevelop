@@ -178,7 +178,7 @@ void AddTargetDialog::accept()
 		replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
 	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
-
+	
 	QDialog::accept();
 }
 
