@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <dcopclient.h>
+#include <qtimer.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -350,9 +351,19 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     int pid;
     d >> pid;
 
-    attachProcess(pid);
-    mainWindow()->raiseView(framestackWidget);
+    if (attachProcess(pid) && m_drkonqi.isEmpty()) {
+        m_drkonqi = kapp->dcopClient()->senderId();
+        QTimer::singleShot(15000, this, SLOT(slotCloseDrKonqi()));
+        mainWindow()->raiseView(framestackWidget);
+    }
+
     mainWindow()->main()->raise();
+}
+
+void DebuggerPart::slotCloseDrKonqi()
+{
+    kapp->dcopClient()->send(m_drkonqi, "MainApplication-Interface", "quit()", QByteArray());
+    m_drkonqi = "";
 }
 
 DebuggerPart::~DebuggerPart()
@@ -522,7 +533,7 @@ void DebuggerPart::setupController()
 }
 
 
-void DebuggerPart::startDebugger()
+bool DebuggerPart::startDebugger()
 {
     QString program;
     if (project())
@@ -543,7 +554,7 @@ void DebuggerPart::startDebugger()
                 mainWindow()->main(),
                 i18n("Could not locate the debugging shell '%1'.").arg( shell ),
                 i18n("Debugging shell not found.") );
-            return;
+            return false;
         }
     }
 
@@ -581,6 +592,7 @@ void DebuggerPart::startDebugger()
     }
 
     controller->slotStart(shell, program);
+    return true;
 }
 
 void DebuggerPart::slotStopDebugger()
@@ -672,12 +684,13 @@ void DebuggerPart::slotAttachProcess()
     attachProcess(pid);
 }
 
-void DebuggerPart::attachProcess(int pid)
+bool DebuggerPart::attachProcess(int pid)
 {
     mainWindow()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
 
-    startDebugger();
+    bool ret = startDebugger();
     controller->slotAttachTo(pid);
+    return ret;
 }
 
 

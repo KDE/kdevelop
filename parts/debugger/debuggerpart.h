@@ -83,10 +83,11 @@ private slots:
     void slotGotoSource(const QString &fileName, int lineNum);
 
     void slotDCOPApplicationRegistered(const QCString &appId);
+    void slotCloseDrKonqi();
 
 private:
-    void attachProcess(int pid);
-    void startDebugger();
+    bool attachProcess(int pid);
+    bool startDebugger();
     void setupController();
 
     QGuardedPtr<VariableWidget> variableWidget;
@@ -101,6 +102,7 @@ private:
     ProcessLineMaker* gdbLineMaker;
 
     QString m_contextIdent;
+    QCString m_drkonqi;
 };
 
 }
