@@ -10,31 +10,98 @@ apidox-am-yes:
 		$(LN_S) $$common_dir $(top_builddir)/apidocs/common; \
 	fi ;\
 	cp $(top_srcdir)/admin/Doxyfile.global Doxyfile; \
-	echo "PROJECT_NAME           = \"$(subdir) Library\"" >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## Project related configuration options                                      \
+	##--------------------------------------------------------------------------- \
+	echo "PROJECT_NAME           = \"KDevelop\"" >> Doxyfile; \
 	echo "PROJECT_NUMBER         = \"Version $(VERSION)\"" >> Doxyfile; \
-	echo "INPUT                  = $(srcdir)" >> Doxyfile; \
-	echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
 	echo "OUTPUT_DIRECTORY       = $(top_builddir)/apidocs" >> Doxyfile; \
-	echo "HTML_OUTPUT            = $(subdir)/html" >> Doxyfile; \
-	echo "LATEX_OUTPUT           = $(subdir)/latex" >> Doxyfile; \
-	echo "RTF_OUTPUT             = $(subdir)/rtf" >> Doxyfile; \
-	echo "MAN_OUTPUT             = $(subdir)/man" >> Doxyfile; \
-	echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
-	echo "GENERATE_MAN           = $(GENERATE_FLAG)" >> Doxyfile ;\
-	echo "GENERATE_LATEX         = $(GENERATE_FLAG)" >> Doxyfile ;\
+	echo "BRIEF_MEMBER_DESC      = YES" >> Doxyfile; \
+	echo "FULL_PATH_NAMES        = YES" >> Doxyfile; \
+	echo "STRIP_FROM_PATH        = $(PWD)/" >> Doxyfile; \
+	echo "ALIASES               += \"feature=\xrefitem features \\\"Feature(s)\\\" \\\"Features\\\"\" " >> Doxyfile; \
+	echo "ALIASES               += \"maintainer=\xrefitem maintainers \\\"Maintainer(s)\\\" \\\"Maintainers\\\"\" " >> Doxyfile; \
+	echo "ALIASES               += \"requirement=\xrefitem requirements \\\"Requirement(s)\\\" \\\"Requirements\\\"\" " >> Doxyfile; \
+	echo "ALIASES               += \"faq=\xrefitem FAQ \\\"F.A.Q.\\\" \\\"F.A.Q.\\\"\" " >> Doxyfile; \
+	echo "ALIASES               += \"authors=\xrefitem authors \\\"Author(s)\\\" \\\"Authors\\\"\" " >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## Build related configuration options                                        \
+	##--------------------------------------------------------------------------- \
+	echo "EXTRACT_ALL            = YES" >> Doxyfile; \
+	echo "EXTRACT_PRIVATE        = YES" >> Doxyfile; \
+	echo "EXTRACT_LOCAL_CLASSES  = YES" >> Doxyfile; \
+	echo "HIDE_UNDOC_CLASSES     = NO" >> Doxyfile; \
+	echo "SORT_MEMBER_DOCS       = YES" >> Doxyfile; \
+	echo "GENERATE_TODOLIST      = YES" >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## configuration options related to warning and progress messages             \
+	##--------------------------------------------------------------------------- \
+## coolo: The following line is not working \
+##	echo "WARN_FORMAT            = \"$$ file:$$ line: $$ text\"" >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the input files                           \
+	##--------------------------------------------------------------------------- \
+	echo "INPUT                  = src lib parts plugins Mainpage.dox" >> Doxyfile ;\
+	echo "FILE_PATTERNS         += *.H" >> Doxyfile ;\
 	if test -n "$(DOXYGEN_EXCLUDE)"; then \
 		patterns= ;\
 		dirs= ;\
 		for item in "$(DOXYGEN_EXCLUDE)"; do \
-			if test -d "$(srcdir)/$$item"; then \
-				dirs="$$dirs $(srcdir)/$$item/" ;\
+			if test -d "$(top_srcdir)/$$item"; then \
+				dirs="$$dirs $$item" ;\
 			else \
 				patterns="$$paterns $$item" ;\
 			fi ;\
 		done ;\
-		echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
-		echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
+## coolo: There is a bug and the two following lines are not working \
+##		echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
+##		echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
+		echo "EXCLUDE               += $(DOXYGEN_EXCLUDE)">> Doxyfile; \
 	fi ;\
+	echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## configuration options related to source browsing                           \
+	##--------------------------------------------------------------------------- \
+	echo "SOURCE_BROWSER         = NO" >> Doxyfile ;\
+	echo "VERBATIM_HEADERS       = NO" >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the alphabetical class index              \
+	##--------------------------------------------------------------------------- \
+	echo "IGNORE_PREFIX          = K" >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the HTML output                           \
+	##--------------------------------------------------------------------------- \
+	echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
+	echo "HTML_OUTPUT            = $(subdir)/html" >> Doxyfile; \
+##	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+##	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
+##	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
+	echo "HTML_HEADER            = " >> Doxyfile ;\
+	echo "HTML_FOOTER            = " >> Doxyfile ;\
+	echo "HTML_STYLESHEET        = " >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the LaTeX output                          \
+	##--------------------------------------------------------------------------- \
+	echo "GENERATE_LATEX         = NO" >> Doxyfile ;
+	echo "LATEX_OUTPUT           = $(subdir)/latex" >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the RTF output                            \
+	##--------------------------------------------------------------------------- \
+	echo "RTF_OUTPUT             = $(subdir)/rtf" >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the man page output                       \
+	##--------------------------------------------------------------------------- \
+	echo "GENERATE_MAN           = NO" >> Doxyfile ;\
+	echo "MAN_OUTPUT             = $(subdir)/man" >> Doxyfile; \
+	##--------------------------------------------------------------------------- \
+	## configuration options related to the Perl module output                    \
+	##--------------------------------------------------------------------------- \
+	##--------------------------------------------------------------------------- \
+	## Configuration options related to the preprocessor                          \
+	##--------------------------------------------------------------------------- \
+	##--------------------------------------------------------------------------- \
+	## Configuration::addtions related to external references                     \
+	##--------------------------------------------------------------------------- \
 	echo "TAGFILES = \\" >> Doxyfile; \
 	tags='$(DOXYGEN_REFERENCES) qt'; for tag in $$tags; do \
 		tagpath= ;\
@@ -55,8 +122,10 @@ apidox-am-yes:
 		fi ;\
 	done ;\
 	echo "GENERATE_TAGFILE       = $(top_builddir)/apidocs/$(subdir)/$(subdir).tag" >> Doxyfile ;\
-	echo "IGNORE_PREFIX          = K" >> Doxyfile ;\
-	echo "HAVE_DOT = $(KDE_HAVE_DOT)" >> Doxyfile ;\
+	##--------------------------------------------------------------------------- \
+	## Configuration options related to the dot tool                              \
+	##--------------------------------------------------------------------------- \
+	echo "HAVE_DOT = $(KDE_HAVE_DOT)" >> Doxyfile ; \
 	$(DOXYGEN) Doxyfile ;
 
 apidox-am-no:
