@@ -2034,7 +2034,7 @@ void CConfigEnscriptDlg::slotDefaultClicked() {
   slotNumberingPagesClicked();
 }
 
-void CConfigEnscriptDlg::slotCreateParameters() {
+QString CConfigEnscriptDlg::slotCreateParameters() {
   parameters = "";
   middlestr = "";
   leftstr = "";
@@ -2380,6 +2380,7 @@ void CConfigEnscriptDlg::slotCreateParameters() {
       globalpara.append(underlayAngle->text());
     }
   }
+  return globalpara;
 }
 
 void CConfigEnscriptDlg::slotNumberingPagesClicked() {

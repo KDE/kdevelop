@@ -26,12 +26,15 @@
 #include <string.h>
 #include <kapp.h>
 #include "ctoolclass.h"
+#include <kmsgbox.h>
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
   slotProgramActivated(0);
   slotPrintToFileClicked(false);
   slotPrettyPrintClicked(false);
+  string = "";
+  globalpara = "";
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -70,7 +73,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_8->setAlignment( 1 );
   
   qtarch_ButtonGroup_9 = new QButtonGroup( printwidget, "ButtonGroup_9" );
-  qtarch_ButtonGroup_9->setGeometry( 330, 290, 240, 120 );
+  qtarch_ButtonGroup_9->setGeometry( 330, 270, 240, 140 );
   qtarch_ButtonGroup_9->setMinimumSize( 0, 0 );
   qtarch_ButtonGroup_9->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_9->setFocusPolicy( QWidget::NoFocus );
@@ -82,7 +85,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->setAlignment( 1 );
   
   qtarch_ButtonGroup_34 = new QButtonGroup( printwidget, "ButtonGroup_34" );
-  qtarch_ButtonGroup_34->setGeometry( 350, 340, 200, 60 );
+  qtarch_ButtonGroup_34->setGeometry( 350, 330, 200, 60 );
   qtarch_ButtonGroup_34->setMinimumSize( 0, 0 );
   qtarch_ButtonGroup_34->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_34->setFocusPolicy( QWidget::NoFocus );
@@ -94,7 +97,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_34->setAlignment( 1 );
   
   qtarch_ButtonGroup_11 = new QButtonGroup( printwidget, "ButtonGroup_11" );
-  qtarch_ButtonGroup_11->setGeometry( 330, 220, 240, 60 );
+  qtarch_ButtonGroup_11->setGeometry( 330, 190, 240, 60 );
   qtarch_ButtonGroup_11->setMinimumSize( 0, 0 );
   qtarch_ButtonGroup_11->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_11->setFocusPolicy( QWidget::NoFocus );
@@ -107,7 +110,7 @@ void CPrintDlg::init(){
   
   QButtonGroup* qtarch_ButtonGroup_10;
   qtarch_ButtonGroup_10 = new QButtonGroup( printwidget, "ButtonGroup_10" );
-  qtarch_ButtonGroup_10->setGeometry( 330, 110, 240, 100 );
+  qtarch_ButtonGroup_10->setGeometry( 330, 110, 240, 60 );
   qtarch_ButtonGroup_10->setMinimumSize( 0, 0 );
   qtarch_ButtonGroup_10->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_10->setFocusPolicy( QWidget::NoFocus );
@@ -320,11 +323,10 @@ void CPrintDlg::init(){
   defaultCombBox->setBackgroundMode( QWidget::PaletteBackground );
   defaultCombBox->setFontPropagation( QWidget::NoChildren );
   defaultCombBox->setPalettePropagation( QWidget::NoChildren );
-  defaultCombBox->setInsertionPolicy( QComboBox::AtBottom );
   defaultCombBox->setSizeLimit( 10 );
   defaultCombBox->setAutoResize( FALSE );
   defaultCombBox->insertItem(i18n("settings"));
-  
+
   copySpinBox = new QSpinBox( printwidget, "copySpinBox" );
   copySpinBox->setGeometry( 180, 220, 120, 30 );
   copySpinBox->setMinimumSize( 0, 0 );
@@ -343,7 +345,7 @@ void CPrintDlg::init(){
   copySpinBox->setWrapping( FALSE );
   
   prettyPrintCheckBox = new QCheckBox( printwidget, "prettyPrintCheckBox" );
-  prettyPrintCheckBox->setGeometry( 350, 310, 110, 30 );
+  prettyPrintCheckBox->setGeometry( 350, 290, 110, 30 );
   prettyPrintCheckBox->setMinimumSize( 0, 0 );
   prettyPrintCheckBox->setMaximumSize( 32767, 32767 );
   prettyPrintCheckBox->setFocusPolicy( QWidget::TabFocus );
@@ -356,7 +358,7 @@ void CPrintDlg::init(){
   connect (prettyPrintCheckBox,SIGNAL(toggled(bool)),SLOT(slotPrettyPrintClicked(bool)));
   
   prettyColorCheckBox = new QCheckBox( printwidget, "prettyColorCheckBox" );
-  prettyColorCheckBox->setGeometry( 480, 310, 70, 30 );
+  prettyColorCheckBox->setGeometry( 480, 290, 70, 30 );
   prettyColorCheckBox->setMinimumSize( 0, 0 );
   prettyColorCheckBox->setMaximumSize( 32767, 32767 );
   prettyColorCheckBox->setFocusPolicy( QWidget::TabFocus );
@@ -368,7 +370,7 @@ void CPrintDlg::init(){
   prettyColorCheckBox->setAutoResize( FALSE );
   
   pageSide = new QComboBox( TRUE, printwidget, "pageSide" );
-  pageSide->setGeometry( 340, 240, 220, 30 );
+  pageSide->setGeometry( 340, 210, 220, 30 );
   pageSide->setMinimumSize( 0, 0 );
   pageSide->setMaximumSize( 32767, 32767 );
   pageSide->setFocusPolicy( QWidget::StrongFocus );
@@ -381,24 +383,9 @@ void CPrintDlg::init(){
   pageSide->insertItem(i18n("all"));
   pageSide->insertItem(i18n("odd"));
   pageSide->insertItem(i18n("even"));
-  pageSide->insertItem(i18n("first half"));
-  pageSide->insertItem(i18n("second half"));
   
-  sidePerPage = new QComboBox( FALSE, printwidget, "sidePerPage" );
-  sidePerPage->setGeometry( 340, 130, 220, 30 );
-  sidePerPage->setMinimumSize( 0, 0 );
-  sidePerPage->setMaximumSize( 32767, 32767 );
-  sidePerPage->setFocusPolicy( QWidget::StrongFocus );
-  sidePerPage->setBackgroundMode( QWidget::PaletteBackground );
-  sidePerPage->setFontPropagation( QWidget::NoChildren );
-  sidePerPage->setPalettePropagation( QWidget::NoChildren );
-  sidePerPage->setSizeLimit( 10 );
-  sidePerPage->setAutoResize( FALSE );
-  sidePerPage->insertItem(i18n( "one side of paper" ));
-  sidePerPage->insertItem(i18n( "two side of paper" ));
-
   pagePerSide = new QComboBox( FALSE, printwidget, "pagePerSide" );
-  pagePerSide->setGeometry( 340, 170, 220, 30 );
+  pagePerSide->setGeometry( 340, 130, 220, 30 );
   pagePerSide->setMinimumSize( 0, 0 );
   pagePerSide->setMaximumSize( 32767, 32767 );
   pagePerSide->setFocusPolicy( QWidget::StrongFocus );
@@ -424,7 +411,7 @@ void CPrintDlg::init(){
   connect (filesConfButton, SIGNAL(clicked()),SLOT(slotFilesConfClicked()));
   
   prettyCombBox = new QComboBox( FALSE, printwidget, "prettyCombBox" );
-  prettyCombBox->setGeometry( 360, 360, 180, 30 );
+  prettyCombBox->setGeometry( 360, 350, 180, 30 );
   prettyCombBox->setMinimumSize( 0, 0 );
   prettyCombBox->setMaximumSize( 32767, 32767 );
   prettyCombBox->setFocusPolicy( QWidget::StrongFocus );
@@ -474,12 +461,7 @@ void CPrintDlg::init(){
   mediaCombBox->setPalettePropagation( QWidget::NoChildren );
   mediaCombBox->setSizeLimit( 10 );
   mediaCombBox->setAutoResize( FALSE );
-  mediaCombBox->insertItem( "a4" );
-  mediaCombBox->insertItem( "a3" );
-  mediaCombBox->insertItem( "a5" );
-  mediaCombBox->insertItem( "a6" );
-  mediaCombBox->insertItem( "letter" );
-  
+
   printToFileButton = new QCheckBox( printwidget, "printToFileButton" );
   printToFileButton->setGeometry( 30, 110, 270, 30 );
   printToFileButton->setMinimumSize( 0, 0 );
@@ -503,9 +485,13 @@ void CPrintDlg::init(){
   okButton = new QPushButton( mainwidget, "okButton" );
   okButton->setText(("Ok"));
   okButton->setGeometry( 20, 440, 100, 30 );
+  previewButton = new QPushButton( mainwidget, "previewButton" );
+  previewButton->setText(("Preview"));
+  previewButton->setGeometry( 140, 440, 100, 30 );
+  connect(previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
   cancelButton->setText(i18n("Cancel"));
-  cancelButton->setGeometry( 140, 440, 100, 30 );
+  cancelButton->setGeometry( 260, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
 
   mainwidget->show();
@@ -514,20 +500,17 @@ void CPrintDlg::init(){
 void CPrintDlg::slotProgramActivated(int i) {
   if (i==1) 
     {
-      mediaCombBox->setEnabled(true);
       prettyPrintCheckBox->setEnabled(true);
       slotPrettyPrintClicked(false);
       formatCombBox->setEnabled(true);
       pageSide->setEnabled(true);
-      qtarch_ButtonGroup_35->setEnabled(true);
       qtarch_ButtonGroup_9->setEnabled(true);
       qtarch_ButtonGroup_11->setEnabled(true);
       qtarch_ButtonGroup_3->setEnabled(true);
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-	if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default"))) || 
-	    !(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
 	  defaultCombBox->removeItem(a);
 	  a--;
 	  j--;
@@ -541,15 +524,21 @@ void CPrintDlg::slotProgramActivated(int i) {
       defaultCombBox->insertItem(i18n("enscript default"));
       defaultCombBox->insertItem(i18n("lineprinter"));
       }
+      mediaCombBox->clear();
+      mediaCombBox->insertItem( "a4" );
+      mediaCombBox->insertItem( "a3" );
+      mediaCombBox->insertItem( "a5" );
+      mediaCombBox->insertItem( "legal" );
+      mediaCombBox->insertItem( "letter" );
+      mediaCombBox->insertItem( "a4dj" );
+      mediaCombBox->insertItem( "letterdj" );
     }
   else 
     { 
-      mediaCombBox->setEnabled(false);
       prettyPrintCheckBox->setEnabled(false);
       slotPrettyPrintClicked(false);
       formatCombBox->setEnabled(false);
       pageSide->setEnabled(false);
-      qtarch_ButtonGroup_35->setEnabled(false);
       qtarch_ButtonGroup_9->setEnabled(false);
       qtarch_ButtonGroup_11->setEnabled(false);
       qtarch_ButtonGroup_3->setEnabled(false);
@@ -562,15 +551,20 @@ void CPrintDlg::slotProgramActivated(int i) {
 	  a--;
 	  j--;
 	}
-	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output"))) ||
-	    !(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default"))) ||
+	    !(strcmp(defaultCombBox->text(a),i18n("a2ps default")))) {
 	  state++;
 	}
       }
       if (state == 0) {
       defaultCombBox->insertItem(i18n("a2ps default"));
-      defaultCombBox->insertItem(i18n("unix manual output"));
       }
+      mediaCombBox->clear();
+      mediaCombBox->insertItem( "a4" );
+      mediaCombBox->insertItem( "a3" );
+      mediaCombBox->insertItem( "a5" );
+      mediaCombBox->insertItem( "legal" );
+      mediaCombBox->insertItem( "letter" );
     }
 }
 
@@ -608,6 +602,237 @@ void CPrintDlg::slotCancelClicked() {
   reject();
 }
 
+void CPrintDlg::slotCreateParameters() {
+   QString parameters;
+  parameters = "";
+  if (programCombBox->currentItem()==0) {
+    if (defaultCombBox->currentItem()==0) {
+      if (strcmp (printerLine->text(),"lpr")) {
+	parameters = (QString) "-P" + printerLine->text();
+      }
+      parameters = parameters + (QString) " " + globalpara;
+      parameters = (QString) " -X" + mediaCombBox->text(mediaCombBox->currentItem());
+      if (pagePerSide->currentItem()==0) {
+	parameters.append(" -1");
+      }
+      else {
+	parameters.append(" -2");
+      }
+      if (paperCombBox->currentItem()==0) {
+	parameters.append(" -p");
+      }
+      else {
+	parameters.append(" -l");
+      }
+      parameters.append(" -#");
+      parameters.append(copySpinBox->text());
+    }
+    else {
+	parameters = "";
+      }
+  }
+  else {
+    if (defaultCombBox->currentItem()==0) {
+      if (strcmp (printerLine->text(),"lpr")) {
+	parameters = (QString) "--printer=" + printerLine->text();
+      }
+      parameters.append ((QString)" " + globalpara);
+      if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"a4")) {
+	parameters.append (" --media=A4");
+      }
+      else if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"a3")) {
+	parameters.append (" --media=A3");
+      }
+      else if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"a5")) {
+	parameters.append (" --media=A5");
+      }
+      else if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"legal")) {
+	parameters.append (" --media=Legal");
+      }
+      else if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"letter")) {
+	parameters.append (" --media=Letter");
+      }
+      else if (!strcmp(mediaCombBox->text(mediaCombBox->currentItem()),"a4dj")) {
+	parameters.append (" --media=A4dj");
+      }
+      else {
+	parameters.append (" --media=Letterdj");
+      }
+
+      if (!strcmp(pageSide->text(pageSide->currentItem()),"all")) {
+      }
+      else {
+	parameters.append ((QString)" --pages=" + pageSide->text(pageSide->currentItem()));
+      }
+      if (prettyColorCheckBox->isChecked()) {
+	parameters.append(" --color");
+      }
+      if (prettyPrintCheckBox->isChecked()) {
+	if (prettyCombBox->currentItem()==0) {
+	  parameters.append (" --pretty-print=ada");
+	}
+	else if (prettyCombBox->currentItem()==1) {
+	  parameters.append (" --pretty-print=awk");
+	}
+	else if (prettyCombBox->currentItem()==2) {
+	  parameters.append (" --pretty-print=c");
+	}
+	else if (prettyCombBox->currentItem()==3) {
+	  parameters.append (" --pretty-print=changelog");
+	}
+	else if (prettyCombBox->currentItem()==4) {
+	  parameters.append (" --pretty-print=cpp");
+	}
+	else if (prettyCombBox->currentItem()==5) {
+	  parameters.append (" --pretty-print=diff");
+	}
+	else if (prettyCombBox->currentItem()==6) {
+	  parameters.append (" --pretty-print=diffu");
+	}
+	else if (prettyCombBox->currentItem()==7) {
+	  parameters.append (" --pretty-print=delphi");
+	}
+	else if (prettyCombBox->currentItem()==8) {
+	  parameters.append (" --pretty-print=elisp");
+	}
+	else if (prettyCombBox->currentItem()==9) {
+	  parameters.append (" --pretty-print=fortran");
+	}
+	else if (prettyCombBox->currentItem()==10) {
+	  parameters.append (" --pretty-print=heskell");
+	}
+	else if (prettyCombBox->currentItem()==11) {
+	  parameters.append (" --pretty-print=html");
+	}
+	else if (prettyCombBox->currentItem()==12) {
+	  parameters.append (" --pretty-print=java");
+	}
+	else if (prettyCombBox->currentItem()==13) {
+	  parameters.append (" --pretty-print=javascript");
+	}
+	else if (prettyCombBox->currentItem()==14) {
+	  parameters.append (" --pretty-print=mail");
+	}
+	else if (prettyCombBox->currentItem()==15) {
+	  parameters.append (" --pretty-print=makefile");
+	}
+	else if (prettyCombBox->currentItem()==16) {
+	  parameters.append (" --pretty-print=nroff");
+	}
+	else if (prettyCombBox->currentItem()==17) {
+	  parameters.append (" --pretty-print=objc");
+	}
+	else if (prettyCombBox->currentItem()==18) {
+	  parameters.append (" --pretty-print=pascal");
+	}
+	else if (prettyCombBox->currentItem()==19) {
+	  parameters.append (" --pretty-print=perl");
+	}
+	else if (prettyCombBox->currentItem()==20) {
+	  parameters.append (" --pretty-print=postscript");
+	}
+	else if (prettyCombBox->currentItem()==21) {
+	  parameters.append (" --pretty-print=scheme");
+	}
+	else if (prettyCombBox->currentItem()==22) {
+	  parameters.append (" --pretty-print=sh");
+	}
+	else if (prettyCombBox->currentItem()==23) {
+	  parameters.append (" --pretty-print=sql");
+	}
+	else if (prettyCombBox->currentItem()==24) {
+	  parameters.append (" --pretty-print=states");
+	}
+	else if (prettyCombBox->currentItem()==25) {
+	  parameters.append (" --pretty-print=synopsys");
+	}
+	else if (prettyCombBox->currentItem()==26) {
+	  parameters.append (" --pretty-print=tcl");
+	}
+	else if (prettyCombBox->currentItem()==27) {
+	  parameters.append (" --pretty-print=verilog");
+	}
+	else {
+	  parameters.append (" --pretty-print=vhdl");
+	}
+      }
+      if (pagePerSide->currentItem()==1 && paperCombBox->currentItem()==0) {
+	parameters.append(" -r -U2");
+      }
+      else if (pagePerSide->currentItem()==1 && paperCombBox->currentItem()==1) {
+	parameters.append(" -r -2");
+      }
+      else {
+	parameters.append(" -1");
+	if (paperCombBox->currentItem()==0) {
+	  parameters.append(" -R");
+	}
+	else {
+	  parameters.append(" -r");
+	}
+      }
+      if (formatCombBox->currentItem()==0) {
+	parameters.append(" --language=PostScript");
+      }
+      else {
+	parameters.append(" --language=html");
+      }
+      parameters.append(" -#");
+      parameters.append(copySpinBox->text());
+    }
+    else 
+      if (defaultCombBox->currentItem()==1) {
+	parameters = "";
+      }
+      else {
+	parameters = "-l";
+      }
+  }
+  string = parameters;
+}
+
+void CPrintDlg::slotPreviewClicked() {
+  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    return;
+  }
+  QString dir,data1,data2,text;
+  slotCreateParameters();
+  dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
+  data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
+  data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
+  process = new KShellProcess();
+  cout << string << endl;
+  if (programCombBox->currentItem()==1) {
+    text = (QString) " --output="+ dir;
+    process = new KShellProcess();
+    *process << "enscript " + string + text + " " + data1 + " " + data2;
+  }
+  else {
+    *process << "a2ps -nP " + string + " " + data1 + " " + data2 + " >" + dir;
+  }
+  process->start(KProcess::Block,KProcess::AllOutput);
+  process2 = new KShellProcess();
+  if (lookProgram("gv")) {
+    *process2 << "gv";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
+  else if (lookProgram("ghostview")) {
+    *process2 << "ghostview";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
+  else if (lookProgram("kghostview")) {
+    *process2 << "kghostview";
+    *process2 << dir;
+    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    return;
+  }
+}
+
 void CPrintDlg::slotFilesConfClicked() {
  CFilePrintDlg *fileconf = new CFilePrintDlg(this, "filedialog");
  fileconf->exec(); 
@@ -622,6 +847,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     a2psconf = new CConfigA2psDlg(this, "confdialog");
     a2psconf->resize(600,430);
     a2psconf->exec(); 
+    globalpara = a2psconf->slotCreateParameters();
   }
   else
     if (prog==1) {
@@ -631,9 +857,28 @@ void CPrintDlg::slotPrintingConfClicked() {
       enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->exec(); 
+      globalpara = enscriptconf->slotCreateParameters();
     }
 }
 
 void CPrintDlg::slotPrintToFileDlgClicked() {
   printToFileLine->setText(KFileDialog::getOpenFileName());
+}
+
+bool CPrintDlg::lookProgram(QString name) {
+  StringTokenizer tokener;
+  bool found=false;
+  QString file;
+  QString complete_path = getenv("PATH");
+  
+  tokener.tokenize(complete_path,":");
+  
+  while(tokener.hasMoreTokens()){
+    file = QString(tokener.nextToken()) + "/" + name;
+    if(QFile::exists(file)){
+      found = true;
+      break;
+    }
+  }
+  return found;
 }

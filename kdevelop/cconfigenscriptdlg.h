@@ -77,7 +77,7 @@ public slots:
  void slotCurrentAmpmClicked(int);
  void slotModificationAmpmClicked(int);
  void slotPreviewClicked();
- void slotCreateParameters();
+ QString slotCreateParameters();
 
 protected:
     QCheckBox* headerButton;

@@ -93,6 +93,18 @@ void CConfigA2psDlg::init() {
 	boltFontButton->setAutoRepeat( FALSE );
 	boltFontButton->setAutoResize( FALSE );
 
+	alignFilesButton = new QCheckBox( this, "boltFontButton" );
+	alignFilesButton->setGeometry( 150, 90, 120, 30 );
+	alignFilesButton->setMinimumSize( 0, 0 );
+	alignFilesButton->setMaximumSize( 32767, 32767 );
+	alignFilesButton->setFocusPolicy( QWidget::TabFocus );
+	alignFilesButton->setBackgroundMode( QWidget::PaletteBackground );
+	alignFilesButton->setFontPropagation( QWidget::NoChildren );
+	alignFilesButton->setPalettePropagation( QWidget::NoChildren );
+	alignFilesButton->setText( "align files" );
+	alignFilesButton->setAutoRepeat( FALSE );
+	alignFilesButton->setAutoResize( FALSE );
+
 	printAsISOLatin = new QCheckBox( this, "printAsISOLatin" );
 	printAsISOLatin->setGeometry( 310, 120, 250, 30 );
 	printAsISOLatin->setMinimumSize( 0, 0 );
@@ -519,7 +531,6 @@ void CConfigA2psDlg::selectedProgram() {
   printAsISOLatin->setChecked(false);
   boltFontButton->setEnabled(true);
   boltFontButton->setChecked(false);
-  a2psFontSize->setEnabled(true);
   qtarch_Label_3->setEnabled(true);
 }
 
@@ -533,14 +544,6 @@ void CConfigA2psDlg::slotHeadertextClicked() {
     qtarch_Label_20->setEnabled(false);
   }
 }
-
-void CConfigA2psDlg::slotCurrentDateClicked() {
-  if (currentDateButton->isChecked()) {
-
-  }
-
-}
-
 
 void CConfigA2psDlg::slotDefaultClicked() {
   selectedProgram();
@@ -569,6 +572,10 @@ void CConfigA2psDlg::slotDefaultClicked() {
   slotFilenameClicked();
 
   replaceButton->setChecked(false);
+  fontsizeButton->setChecked(false);
+  linesButton->setChecked(false);
+  slotFontsizeClicked();
+  slotLinesClicked();
 }
 
 QString CConfigA2psDlg::slotCreateParameters() {
@@ -609,14 +616,19 @@ QString CConfigA2psDlg::slotCreateParameters() {
   else {
     parameters.append(" -ns");
   }
+  if (alignFilesButton->isChecked()) {
+    globalpara.append(" -c");
+  }
   if (numberingPagesList->currentItem()==0) {
     globalpara.append(" -r");
   }
   else {
     globalpara.append(" -nr");
   }
-  parameters.append(" -l");
-  parameters.append(linesPerPage->text());
+  if (linesButton->isChecked()) {
+    parameters.append(" -l");
+    parameters.append(linesPerPage->text());
+  }
   if (cutLinesButton->isChecked()) {
     globalpara.append(" -f");
   }
@@ -649,8 +661,10 @@ QString CConfigA2psDlg::slotCreateParameters() {
   }
   globalpara.append(" -t");
   globalpara.append(setTabSize->text());
-  parameters.append(" -F");
-  parameters.append(a2psFontSize->text());
+  if (fontsizeButton->isChecked()) {
+    parameters.append(" -F");
+    parameters.append(a2psFontSize->text());
+  }
   globalpara.append(parameters);
   return globalpara;
 }
@@ -722,12 +736,16 @@ void CConfigA2psDlg::slotFontsizeClicked() {
     qtarch_label->setEnabled(false);
     linesPerPage->setEnabled(false);
     qtarch_ButtonGroup_182->setEnabled(false);
+    qtarch_Label_3->setEnabled(true);
+    a2psFontSize->setEnabled(true);
   }
   else {
     linesButton->setEnabled(true);
-    qtarch_label->setEnabled(true);
-    linesPerPage->setEnabled(true);
+    qtarch_label->setEnabled(false);
+    linesPerPage->setEnabled(false);
     qtarch_ButtonGroup_182->setEnabled(true);
+    qtarch_Label_3->setEnabled(false);
+    a2psFontSize->setEnabled(false);
   }
 }
 
@@ -737,11 +755,15 @@ void CConfigA2psDlg::slotLinesClicked() {
     qtarch_Label_3->setEnabled(false);
     a2psFontSize->setEnabled(false);
     qtarch_ButtonGroup_20->setEnabled(false);
+    qtarch_label->setEnabled(true);
+    linesPerPage->setEnabled(true);
   }
   else {
     fontsizeButton->setEnabled(true);
-    qtarch_Label_3->setEnabled(true);
-    a2psFontSize->setEnabled(true);
+    qtarch_Label_3->setEnabled(false);
     qtarch_ButtonGroup_20->setEnabled(true);
+    a2psFontSize->setEnabled(false);
+    qtarch_label->setEnabled(false);
+    linesPerPage->setEnabled(false);
   }
 }

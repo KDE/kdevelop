@@ -49,17 +49,22 @@ public slots:
  void slotFilesConfClicked();
  void slotPrintingConfClicked();
  void slotPrintToFileDlgClicked();
+ void slotPreviewClicked();
+ void slotCreateParameters();
+ bool lookProgram(QString name);
 
 protected:
  QButtonGroup *paperFormatGroup,*qtarch_ButtonGroup_35,*qtarch_ButtonGroup_34,*qtarch_ButtonGroup_9,*qtarch_ButtonGroup_11,*qtarch_ButtonGroup_3;
  QPushButton *printingConfButton,*printToFileDlg,*filesConfButton,
-   *okButton,*cancelButton,*helpButton;
+   *okButton,*cancelButton,*previewButton;
  QLineEdit *printToFileLine,*printerLine;
  QComboBox *paperCombBox,*programCombBox,*formatCombBox,*defaultCombBox, 
-   *pageSide,*sidePerPage,*pagePerSide,*prettyCombBox,*mediaCombBox;
+   *pageSide,*pagePerSide,*prettyCombBox,*mediaCombBox;
  QSpinBox *copySpinBox;
  QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
  CConfigEnscriptDlg *enscriptconf;  
  CConfigA2psDlg *a2psconf;
+ QString string,globalpara;
+ KShellProcess *process,*process2;
 };
 #endif

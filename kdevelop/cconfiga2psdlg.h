@@ -44,7 +44,6 @@ public:
 public slots:
     QString slotCreateParameters();
  void slotDefaultClicked();
- void slotCurrentDateClicked();
  void slotHeadertextClicked();
  void selectedProgram();
  void slotOkClicked();
@@ -67,6 +66,7 @@ protected:
     QCheckBox* headerButton;
     QCheckBox* replaceButton;
     QCheckBox* cutLinesButton;
+    QCheckBox* alignFilesButton;
     QSpinBox* setTabSize;
     QSpinBox* a2psFontSize;
     QCheckBox* numberingLineButton;
