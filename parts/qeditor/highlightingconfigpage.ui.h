@@ -91,7 +91,7 @@ void HighlightingConfigPage::slotAdjustAllElements()
 {
   QFont changes;
   int diffFlags = 0;
-  if (KFontDialog::getFontDiff(changes, &diffFlags)) {
+  if (KFontDialog::getFontDiff(changes, diffFlags)) {
       for(uint c=0;c<listElements->count();c++) {
 	  QString id = listElements->text(c);
 	  QFont font = m_map[ id ].first;
