@@ -140,35 +140,28 @@ void RemoveFileDialog::accept()
 
 	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
-/*  TODO: review configuration cleanup in the project file after removing subclassing related source
-    TODO: crash is here ;)
-    QDomDocument &dom = *(m_part->projectDom());
-    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
-                                            "subclass","sourcefile", "uifile");
+//  review configuration cleanup in the project file after removing subclassing related source
+	QDomDocument &dom = *(m_part->projectDom());
     
-    DomUtil::PairList::iterator it;
-    for ( it = list.begin(); it != list.end(); ++it )
-    {
-        qWarning("first: %s, second: %s -> %s", (*it).first.latin1(),(*it).second.latin1(),
-            QString("/" + subProject->path + "/" + fitem->name).latin1() );
-        if ( ((*it).second == QString("/" + subProject->path + "/" + fitem->name) )
-            || ((*it).first == QString("/" + subProject->path + "/" + fitem->name) ) )
-        {
-            list.remove(*it);
-        }
-    }
-                                            
-    QDomElement el = DomUtil::elementByPath( dom,  "/kdevautoproject");
-    QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevautoproject/subclassing");
-    if ( (!el.isNull()) && (!el2.isNull()) ) 
-    {
-        el.removeChild(el2);
-    }
-    DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
-    m_widget->m_detailView->m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
-        "subclass","sourcefile", "uifile");
-    */
+	QDomElement el = dom.documentElement();
+	QDomNode el2 = el.namedItem("kdevautoproject");
+	QDomNode el3 = el2.namedItem("subclassing");
     
+	QDomNode n = el3.firstChild();
+	QValueList<QDomNode> nodesToRemove;
+	while ( !n.isNull() ) {
+		QDomNamedNodeMap attr = n.attributes();
+		QString fpath = subProject->path + QString("/") + fitem->name;
+		QString relpath = fpath.remove(0, m_part->projectDirectory().length());
+		if ((attr.item(0).nodeValue() == relpath)
+			|| (attr.item(1).nodeValue() == relpath) )
+			nodesToRemove.append(n);
+		n = n.nextSibling();
+	}
+	QValueList<QDomNode>::iterator it;
+	for ( it = nodesToRemove.begin(); it != nodesToRemove.end(); ++it )
+		el3.removeChild(*it);
+
 	if (removeCheckBox->isChecked())
 		QFile::remove(subProject->path + "/" + fileName);
 
