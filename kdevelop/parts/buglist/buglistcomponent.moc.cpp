@@ -1,7 +1,7 @@
 /****************************************************************************
 ** BugListComponent meta object code from reading C++ file 'buglistcomponent.h'
 **
-** Created: Tue Dec 19 21:15:11 2000
+** Created: Tue Dec 19 22:12:20 2000
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!

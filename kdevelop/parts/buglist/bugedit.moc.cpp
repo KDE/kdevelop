@@ -1,7 +1,7 @@
 /****************************************************************************
 ** BugEdit meta object code from reading C++ file 'bugedit.h'
 **
-** Created: Tue Dec 19 21:15:05 2000
+** Created: Tue Dec 19 22:12:14 2000
 **      by: The Qt MOC ($Id$)
 **
 ** WARNING! All changes made in this file will be lost!
