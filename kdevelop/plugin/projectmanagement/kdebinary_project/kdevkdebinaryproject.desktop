@@ -5,4 +5,5 @@ Comment=KDE Binary Project (handles 1 binary)
 Name=KDEBinaryProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevkdebinaryproject
+X-KDevelop-Compilers=KDevCompilerGcc KDevCompilerGpp
 Icon=java_src
