@@ -335,6 +335,7 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
   {
     ((CClassTreeHandler *)classTree.treeH)->addClass( aClass, root );
   }
+  classTree.setOpen( root, true );
 }
 
 /** Set the view definition command and its' argument. */
@@ -361,6 +362,8 @@ void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
   root = classTree.treeH->addRoot( aClass->name, THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addAttributesFromClass( aClass, root, comboExport );
+  
+  classTree.setOpen( root, true );
 }
 
 void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
@@ -371,6 +374,8 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
   root = classTree.treeH->addRoot( aClass->name, THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addMethodsFromClass( aClass, root, comboExport );
+
+  classTree.setOpen( root, true );
 }
 
 void CClassToolDlg::addAllClassMethods()
@@ -486,6 +491,8 @@ void CClassToolDlg::viewParents()
   {
     ((CClassTreeHandler *)classTree.treeH)->addClass( aParent->name, root );
   }
+
+  classTree.setOpen( root, true );
 }
 
 /** View the children of the current class. */
@@ -679,5 +686,3 @@ void CClassToolDlg::OK()
 {
   accept();
 }
-
-
