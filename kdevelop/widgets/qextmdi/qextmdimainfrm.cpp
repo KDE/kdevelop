@@ -150,6 +150,11 @@ void QextMdiMainFrm::closeEvent(QCloseEvent *e)
 
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 {
+   if( flags & QextMdi::ToolWindow) {
+      addToolWindow( pWnd);
+      return;
+   }
+
    QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
    QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
    QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
@@ -181,16 +186,25 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    }
 }
 
+//============ addWindow ============//
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QRect rectNormal, int flags)
 {
    addWindow( pWnd, flags);
    pWnd->setGeometry( rectNormal);
 }
 
+//============ addWindow ============//
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, int flags)
 {
    addWindow( pWnd, flags);
    pWnd->move( pos);
+}
+
+//============ addWindow ============//
+void QextMdiMainFrm::addToolWindow( QextMdiChildView* pWnd)
+{
+   QRect r = pWnd->geometry();
+   pWnd->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pWnd->isVisible());
 }
 
 //============ attachWindow ============//

@@ -51,7 +51,8 @@ typedef enum {
          Maximize    = 1,
          Minimize    = 2,
          Hide        = 4,
-         Detach      = 8
+         Detach      = 8,
+         ToolWindow  = 16
       } AddWindowFlags;
 
 }; //namespace
@@ -228,6 +229,7 @@ protected:
    virtual void focusInEvent(QFocusEvent *);
    virtual void createTaskBar();
    virtual void createMdiManager();
+   virtual void addToolWindow( QextMdiChildView* pWnd);
 
 protected slots: // Protected slots
    virtual void activateView(QextMdiChildView *pWnd);
