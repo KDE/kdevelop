@@ -6,6 +6,8 @@ noinst_LTLIBRARIES = libkdevextras.la
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 servicetypedir = $(kde_servicetypesdir)
 
-kdevelopinclude_HEADERS = kdevcompileroptions.h
-libkdevextras_la_SOURCES = kdevcompileroptions.cpp
-servicetype_DATA = kdevelopcompileroptions.desktop
+kdevelopinclude_HEADERS = kdevcompileroptions.h kdevvcsintegrator.h
+libkdevextras_la_SOURCES = kdevcompileroptions.cpp kdevvcsintegrator.cpp
+servicetype_DATA = kdevelopcompileroptions.desktop \
+	kdevelopvcsintegrator.desktop
+
