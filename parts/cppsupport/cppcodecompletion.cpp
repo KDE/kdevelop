@@ -639,19 +639,20 @@ CppCodeCompletion::completeText( )
     if( type ){
 
         QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
+	bool isInstance = !expr.endsWith( "::" );
 
 	if( showArguments ){
-	    QStringList functionList = getSignatureListForClass( type, word );
+	    QStringList functionList = getSignatureListForClass( type, word, isInstance );
 
 	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
-
+	    
             if( functionList.count() ){
 		m_activeCompletion->showArgHint( functionList, "()", "," );
 	    }
 	} else {
-	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type );
+	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type, true, isInstance );
 
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length(), false );
@@ -662,21 +663,21 @@ CppCodeCompletion::completeText( )
     ctx = 0;
 }
 
-QStringList CppCodeCompletion::getGlobalSignatureList(const QString &functionName)
+QStringList CppCodeCompletion::getGlobalSignatureList( const QString& functionName )
 {
     QStringList list = m_pSupport->classStore()->globalScope()->getSortedMethodSignatureList( functionName );
-    list += m_repository->getSignatureList( QStringList(), functionName );
+    list += m_repository->getSignatureList( QStringList(), functionName, true );
     return list;
 }
 
-QStringList CppCodeCompletion::getSignatureListForClass( const QString& className, const QString& functionName )
+QStringList CppCodeCompletion::getSignatureListForClass( const QString& className, const QString& functionName, bool isInstance )
 {
     QStringList retVal;
     
     ParsedClass* pClass = dynamic_cast<ParsedClass*>( findContainer(className) );
     if ( !pClass ){
 	// check the pcs
-	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName );
+	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName, isInstance );
 	
 	QValueList<Tag> parents = m_repository->getBaseClassList( className ); 
 	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
@@ -686,7 +687,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	    ++it;
 	    
 	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
-	    retVal += getSignatureListForClass( tag.attribute("baseClass").toString(), functionName );
+	    retVal += getSignatureListForClass( tag.attribute("baseClass").toString(), functionName, isInstance );
 	}
     } else {
 	retVal = pClass->getSortedMethodSignatureList( functionName );
@@ -697,7 +698,7 @@ QStringList CppCodeCompletion::getSignatureListForClass( const QString& classNam
 	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
 	{
 	    // ParsedClass* baseClass = dynamic_cast<ParsedClass*>( findContainer(pParentClass->name()) );
-	    retVal += getSignatureListForClass( pParentClass->name(), functionName );
+	    retVal += getSignatureListForClass( pParentClass->name(), functionName, isInstance );
 	}
 	    
     }
@@ -781,7 +782,7 @@ ParsedClassContainer* CppCodeCompletion::findContainer( const QString& name, Par
     return klass;
 }
 
-QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( const QString& type, bool includePrivate )
+QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( const QString& type, bool includePrivate, bool isInstance )
 {
     QValueList<KTextEditor::CompletionEntry> entryList;
 
@@ -798,7 +799,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		ParsedParent* p = it.current();
 		++it;
 
-		entryList += findAllEntries( p->name(), false );
+		entryList += findAllEntries( p->name(), false, isInstance );
 	    }
 	}
 
@@ -972,7 +973,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	}
     } else {
 	QStringList scope = QStringList::split( "::", type );
-	entryList = m_repository->getEntriesInScope( scope );
+	entryList = m_repository->getEntriesInScope( scope, isInstance );
 	QValueList<Tag> parents = m_repository->getBaseClassList( type ); // type or scope?
 	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
 	QValueList<Tag>::Iterator it = parents.begin();
@@ -981,7 +982,7 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 	    ++it;
 	    
 	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
-	    entryList += findAllEntries( tag.attribute("baseClass").toString(), false );
+	    entryList += findAllEntries( tag.attribute("baseClass").toString(), false, isInstance );
 	}
     }
 

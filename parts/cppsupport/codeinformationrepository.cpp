@@ -72,7 +72,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
     return QValueList<Tag>();
 }
 
-QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope )
+QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope, bool isInstance )
 {
     kdDebug(9020) << "CodeInformationRepository::getTagsInScope()" << endl;
     
@@ -92,27 +92,59 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 	<< Catalog::QueryArgument( "scope", scope );
-    tags += query( args );
+    
+    if( !isInstance ){
+	QValueList<Tag> temps = query( args );
+	QValueList<Tag>::Iterator it = temps.begin();
+	while( it != temps.end() ){
+	    const Tag& tag = *it;
+	    ++it;
+	    
+	    if( tag.hasAttribute("isStatic") && tag.attribute("isStatic").toBool() )
+		continue; // 
+	    
+	    tags << tag;
+	}
+    } else {
+	tags += query( args );
+    }
 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
     	<< Catalog::QueryArgument( "scope", scope );
-    tags += query( args );
     
-    args.clear();
-    args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
-    	<< Catalog::QueryArgument( "scope", scope );
-    tags += query( args );
+    if( !isInstance ){
+	QValueList<Tag> temps = query( args );
+	QValueList<Tag>::Iterator it = temps.begin();
+	while( it != temps.end() ){
+	    const Tag& tag = *it;
+	    ++it;
+	    
+	    if( tag.hasAttribute("isStatic") && tag.attribute("isStatic").toBool() )
+		continue; // 
+	    
+	    tags << tag;
+	}
+    } else {
+	tags += query( args );
+    }
+    
+    if( !isInstance ){
+	args.clear();
+	args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
+	    << Catalog::QueryArgument( "scope", scope );
+	tags += query( args );
+    }
     
     return tags;
 }
 
-QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope )
+QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance )
 {
     kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
     
     QValueList<KTextEditor::CompletionEntry> entryList;
-    QValueList<Tag> tags = getTagsInScope( scope );
+    QValueList<Tag> tags = getTagsInScope( scope, isInstance );
     
     QValueList<Tag>::Iterator it = tags.begin();
     while( it != tags.end() ){
@@ -162,7 +194,7 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
     return query( args );
 }
 
-QStringList CodeInformationRepository::getSignatureList( const QStringList & scope, const QString & functionName )
+QStringList CodeInformationRepository::getSignatureList( const QStringList & scope, const QString & functionName, bool /*isInstance*/ )
 {
     kdDebug(9020) << "CodeInformationRepository::getSignatureList()" << endl;
 

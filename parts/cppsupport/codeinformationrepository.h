@@ -29,11 +29,11 @@ public:
     virtual void removeCatalog( const QString& id );
 
 
-    QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope );
-    QStringList getSignatureList( const QStringList& scope, const QString& functionName );
+    QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance );
+    QStringList getSignatureList( const QStringList& scope, const QString& functionName, bool isInstance );
 
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
-    QValueList<Tag> getTagsInScope( const QStringList& scope );
+    QValueList<Tag> getTagsInScope( const QStringList& scope, bool isInstance );
     QValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );
     
     QValueList<Tag> getTagsInFile( const QString& fileName );

@@ -54,10 +54,10 @@ public:
 
     virtual QString getMethodBody( int line, int column, QString* classname );
     
-    QValueList<KTextEditor::CompletionEntry> findAllEntries( const QString& type, bool includePrivate=true );
+    QValueList<KTextEditor::CompletionEntry> findAllEntries( const QString& type, bool includePrivate, bool isInstance );
     
     QStringList getGlobalSignatureList( const QString& functionName );
-    QStringList getSignatureListForClass( const QString& className, const QString& functionName );
+    QStringList getSignatureListForClass( const QString& className, const QString& functionName, bool isInstance );
     
     QString typeOf( const QString& name, ParsedClassContainer* container = 0 );
     ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container = 0, 
