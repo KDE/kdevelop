@@ -976,8 +976,10 @@ char* GDBController::parseCmdBlock(char* buf)
       char lookup[3] = {BLOCK_START, *(buf+1), 0};
       if ((end = strstr(buf+2, lookup)))
       {
-        *end = 0;      // Make a null terminated c-string
-        end++;         // The real end!
+        if (*(end-1) == '\n')
+          *(end-1) = 0;   // fix this by clobbering the new line
+        *end = 0;         // Make a null terminated c-string
+        end++;            // The real end!
       }
       break;
     }
