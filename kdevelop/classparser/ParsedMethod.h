@@ -59,13 +59,19 @@ public: // Public attributes
   /** Is this methods declared virtual? */
   bool isVirtual;
 
+  /** Where the method is declared. */
+  int declaredOnLine;
+
 public: // Public methods to set attribute values
 
-  /** Add an argument to this method */
+  /** Add an argument to this method. */
   void addArgument( CParsedArgument *anArg );
 
-  /** Set the status if this is a virtual method */
+  /** Set the status if this is a virtual method. */
   void setIsVirtual( bool aState = true );
+
+  /** Set the line where the method was declared. */
+  void setDeclaredOnLine( int aLine ) { declaredOnLine = aLine; }
 
 public: // Public attributes
 

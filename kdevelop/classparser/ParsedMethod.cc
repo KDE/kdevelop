@@ -174,7 +174,7 @@ void CParsedMethod::out()
   if( isStatic )
     cout << "static ";
 
-  sprintf( buf, "%d", definedOnLine );
+  sprintf( buf, "%d", ( isInHFile ? definedOnLine : declaredOnLine ) );
   cout << type << " " << name << "( "; 
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
