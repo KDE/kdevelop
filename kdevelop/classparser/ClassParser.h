@@ -113,9 +113,6 @@ private: // Private methods
   /** Parse the arguments of a function. */
   void parseFunctionArgs( CParsedMethod *method );
 
-  /** Is this the name of a  constructor or destructor. */
-  bool isConstructorDestructor( const char *str );
-
   /** Check if virtual/static. */
   void parseModifiers( CParsedMethod *method );
 
