@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include <kprocess.h>
 #include <kapp.h>
-#include "../ctoolclass.h"
+#include "ctoolclass.h"
 
 /** the KDevelop-A2psConfigdialog
   *@author Stefan Heidrich

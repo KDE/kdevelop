@@ -66,12 +66,12 @@ typedef QValueList<CToolApp> ToolAppList;
 class CToolClass {
 public:
   /** search the program in the $PATH*/
-  static bool searchProgram(QString name, bool allowWarningMsg=true);
+  static bool searchProgram(const QString& name, bool allowWarningMsg=true);
   /** same as above but without warning message*/
-  static bool searchInstProgram(QString name) { return searchProgram( name, false); };
+  static bool searchInstProgram(const QString& name) { return searchProgram( name, false); };
 
   /** return the absolute filename if found, otherwise ""*/
-  static QString findProgram(QString name);
+  static QString findProgram(const QString& name);
   /** returns the relative path, to get from source_path to destpath (both are absolute)
       for examples:
       source_path: /home/smeier/testprj/

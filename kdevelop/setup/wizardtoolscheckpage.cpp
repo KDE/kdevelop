@@ -25,7 +25,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
-#include "ctoolclass.h"
+#include "../ctoolclass.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ckdevinstallstate.h"
 #include "wizardtoolscheckpage.h"
@@ -118,7 +118,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString dbg_str;
   if(dbg){
     dbg_str="kdbg"+found+"\n";
-    toolList.append(CToolApp("kdbg", "K&Dbg"));
+    toolList.append(CToolApp("K&Dbg", "kdbg"));
   }
   else
     dbg_str="kdbg"+not_found;
@@ -126,7 +126,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString kiconedit_str;
   if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";
-    toolList.append(CToolApp("kiconedit", "K&IconEdit"));
+    toolList.append(CToolApp("K&IconEdit", "kiconedit"));
   }
   else
     kiconedit_str="KIconedit"+not_found+i18n(" -- editing icons will not be possible\n");
@@ -134,7 +134,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString ark_str;
   if(ark){
     ark_str="Archiever (ark)"+found+"\n";
-    toolList.append(CToolApp("ark", "&Ark"));
+    toolList.append(CToolApp("&Ark", "ark"));
   }
   else
     ark_str="Archiever (ark)"+not_found+i18n(" -- viewing compressed files will not be possible\n");
@@ -142,11 +142,11 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString kpaint_str;
   if(gimp){
     kpaint_str="GIMP"+found+"\n";
-    toolList.append(CToolApp("gimp", "&GIMP"));
+    toolList.append(CToolApp("&GIMP", "gimp"));
   }
   else if(kpaint){
       kpaint_str="KPaint"+found+"\n";
-      toolList.append(CToolApp("kpaint", "K&Paint"));
+      toolList.append(CToolApp("K&Paint", "kpaint"));
   }
   else
     kpaint_str=i18n("GIMP/KPaint ")+not_found+"\n";
@@ -154,7 +154,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString designer_str;
   if(designer){
     designer_str="Qt Designer"+found+"\n";
-    toolList.append(CToolApp("designer", "&Qt Designer", " -client "));
+    toolList.append(CToolApp("&Qt Designer", "designer", " -client "));
   }
   else
     designer_str=i18n("Qt Designer")+not_found+"\n";
@@ -162,7 +162,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString linguist_str;
   if(linguist){
     linguist_str="Qt Linguist"+found+"\n";
-    toolList.append(CToolApp("linguist", "&Qt linguist"));
+    toolList.append(CToolApp("&Qt linguist", "linguist"));
   }
   else
     linguist_str=i18n("Qt Linguist")+not_found+"\n";
@@ -170,7 +170,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString ktranslator_str;
   if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
-    toolList.append(CToolApp("ktranslator", "K&Translator"));
+    toolList.append(CToolApp("K&Translator", "ktranslator"));
   }
   else
     ktranslator_str="KTranslator"+not_found+"\n";
@@ -178,7 +178,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   QString kbabel_str;
   if(kbabel){
     kbabel_str="KBabel"+found+"\n";
-    toolList.append(CToolApp("kbabel", "K&Babel"));
+    toolList.append(CToolApp("K&Babel", "kbabel"));
   }
   else
     kbabel_str="KBabel"+not_found+"\n";

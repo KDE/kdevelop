@@ -37,7 +37,7 @@
 #include <kfontdialog.h>
 #include <kprocess.h>
 #include <kapp.h>
-#include "../ctoolclass.h"
+#include "ctoolclass.h"
 
 class CConfigEnscriptDlg : public QTabDialog {
   Q_OBJECT

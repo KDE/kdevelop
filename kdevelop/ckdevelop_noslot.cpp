@@ -221,7 +221,7 @@ void CKDevelop::setMainCaption(int item)
       int ip=name.findRev("/",-1);
       capt = name.right(len-ip-1);
     }
-    if (capt.isNull()) {
+    if (prj && capt.isNull()) {
       capt = prj->getProjectName();
     }
     if (pCEW && pCEW->isModified())

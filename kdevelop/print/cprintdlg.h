@@ -29,7 +29,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <kfiledialog.h>
-#include "../ctoolclass.h"
+#include "ctoolclass.h"
 
 /** the KDE-Printdialog
   *@author Stefan Heidrich

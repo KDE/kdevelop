@@ -38,7 +38,7 @@
 #include <config.h>
 #endif
 
-#include "ctoolclass.h"
+#include "../ctoolclass.h"
 #include "wizardwelcomepage.h"
 #include "wizardchoosehlpage.h"
 #include "wizardcreatekdedocpage.h"

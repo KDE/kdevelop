@@ -25,30 +25,37 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-bool CToolClass::searchProgram(QString name, bool allowWarningMsg ){
-  QStringList paths;
-  bool found=false;
-  QString complete_path = getenv("PATH");
-  paths = QStringList::split ( ":", complete_path, FALSE );
+bool CToolClass::searchProgram(const QString& name, bool allowWarningMsg )
+{
+//  QStringList paths;
+//  bool found=false;
+//  QString complete_path = getenv("PATH");
+//  paths = QStringList::split ( ":", complete_path, FALSE );
+//
+//  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
+//  {
+//    if (QFile::exists((*it) + "/" + name))
+//    {
+//      found = true;
+//      break;
+//    }
+//  }
 
-  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
+  if (findProgram(name).isEmpty() && allowWarningMsg)
   {
-    if (QFile::exists((*it) + "/" + name))
-    {
-      found = true;
-      break;
-    }
-  }
-
-  if(!found && allowWarningMsg){
     KMessageBox::sorry(0,
                         i18n("KDevelop needs \"%1\" to work properly.\n\tPlease install it!").arg(name),
                         i18n("Program not found!"));
+    return false;
   }
-  return found;
+  return true;
 }
 
-QString CToolClass::findProgram(QString name){
+QString CToolClass::findProgram(const QString& name)
+{
+  if (name.left(1) == "/" && QFile::exists(name))
+    return name;
+
   QStringList paths;
   QString file="";
   QString complete_path = getenv("PATH");

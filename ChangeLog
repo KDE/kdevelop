@@ -1,3 +1,12 @@
+2001-06-29  jbb <jbb@kdevelop.org>
+    * bugfix: tools menu was built incorrectly - the label and exe were
+    * inadvertantly swapped.
+    * allowed full path name to be given for tool program whilst I was there.
+    * removed ctoolclass.cpp and h from setup dir - now we just have one copy
+    * in kdevelop dir. Lots of things use it ...
+    * fixed crash in kdevelop when no project but window title code wanted the
+    * prj. It was difficult to repeat. (read I couldn't...)
+    
 2001-06-27  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix in QextMDI: call base class method in ::focusInEvent(), otherwise focus problems can occur
       (bugfix supplied by Peter Zimmermann <peter.zimmermann@dr-baldeweg.de>)
