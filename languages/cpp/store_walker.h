@@ -49,8 +49,8 @@ public:
     virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
 
     virtual void parseTypeDeclaratation( TypeSpecifierAST* typeSpec );
-    virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
-    virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
+    virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString& comment = QString::null );
+    virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString& comment = QString::null );
     virtual void parseFunctionArguments( DeclaratorAST* declarator, FunctionDom method );
     virtual void parseBaseClause( BaseClauseAST* baseClause, ClassDom klass );
 

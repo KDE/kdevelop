@@ -96,7 +96,7 @@
 #include <domutil.h>
 #include <config.h>
 
-enum { KDEV_DB_VERSION = 5 };
+enum { KDEV_DB_VERSION = 6 };
 enum { KDEV_PCS_VERSION = 5 };
 
 QStringList CppSupportPart::m_sourceMimeTypes = QStringList() << "text/x-csrc" << "text/x-c++src";

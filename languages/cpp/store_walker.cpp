@@ -13,9 +13,12 @@
 #include "ast_utils.h"
 #include "urlutil.h"
 
+#include "tag_creator.h" //@todo only included for parseDoxygen, find better solution
+
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+
 
 StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
     : m_store( store ), m_anon( 0 )
@@ -219,7 +222,7 @@ void StoreWalker::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 
 	QPtrListIterator<InitDeclaratorAST> it( l );
 	while( it.current() ){
-	    parseDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current() );
+	    parseDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current(), ast->comment() );
 	    ++it;
 	}
     }
@@ -288,7 +291,9 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     method->setFileName( m_fileName );
     method->setStartPosition( startLine, startColumn );
     method->setEndPosition( endLine, endColumn );
-
+    if (! ast->comment().isNull() )
+        method->setDocumentation(ast->comment());
+        
     if( m_inSignals )
         method->setSignal( true );
 
@@ -368,6 +373,9 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     klass->setName( className );
 
     klass->setScope( m_currentScope );
+    
+    //if (!ast->comment().isNull())
+      //@todo einfuegen classdom docu  klass->set
 
     if( m_currentClass.top() )
 	m_currentClass.top()->addClass( klass );
@@ -437,7 +445,7 @@ void StoreWalker::parseTypeDeclaratation( TypeSpecifierAST* typeSpec )
     parseTypeSpecifier( typeSpec );
 }
 
-void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl )
+void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString& comment )
 {
     if( m_inStorageSpec )
 	    return;
@@ -448,7 +456,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	return;
 
     if( !d->subDeclarator() && d->parameterDeclarationClause() )
-	return parseFunctionDeclaration( funSpec, storageSpec, typeSpec, decl );
+	return parseFunctionDeclaration( funSpec, storageSpec, typeSpec, decl, comment );
 
     DeclaratorAST* t = d;
     while( t && t->subDeclarator() )
@@ -557,7 +565,7 @@ NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QStrin
 }
 
 void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec,
-					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl )
+					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl , const QString& comment )
 {
     bool isFriend = false;
     bool isVirtual = false;
@@ -606,6 +614,8 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setVirtual( isVirtual );
     method->setAbstract( isPure );
     parseFunctionArguments( d, method );
+    if (!comment.isNull())
+        method->setDocumentation(parseDoxygen(comment));
 
     if( m_inSignals )
         method->setSignal( true );
