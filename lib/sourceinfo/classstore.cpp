@@ -473,6 +473,8 @@ void ClassStore::removeWithReferences(const QString &fileName, ParsedScopeContai
 
         klass = scope->classIterator.current();
     }
+
+    scope->removeWithReferences( fileName );
 }
 
 
