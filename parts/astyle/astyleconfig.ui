@@ -744,7 +744,7 @@
                                     <cstring>Pad_Parentheses</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add spaces around &amp;Parentheses</string>
+                                    <string>Add spaces around &amp;parentheses</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -752,7 +752,7 @@
                                     <cstring>Pad_Operators</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add spaces around &amp;Operators</string>
+                                    <string>Add spaces around &amp;operators</string>
                                 </property>
                             </widget>
                         </vbox>

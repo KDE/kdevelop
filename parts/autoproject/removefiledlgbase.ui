@@ -39,7 +39,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Remove file from this target</string>
+        <string>Remove File From this Target</string>
     </property>
     <vbox>
         <property name="name">
@@ -56,7 +56,7 @@
                 <cstring>targetBox</cstring>
             </property>
             <property name="title">
-                <string>Target information</string>
+                <string>Target Information</string>
             </property>
             <hbox>
                 <property name="name">
@@ -161,7 +161,7 @@
                 </size>
             </property>
             <property name="title">
-                <string>File information</string>
+                <string>File Information</string>
             </property>
             <hbox>
                 <property name="name">
@@ -208,7 +208,7 @@
             </hbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
             <property name="orientation">
@@ -216,12 +216,6 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget">
@@ -239,7 +233,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>buttonSpacer</cstring>
                     </property>
                     <property name="orientation">
@@ -247,12 +241,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">

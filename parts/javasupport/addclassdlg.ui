@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Add class</string>
+        <string>Add Class</string>
     </property>
     <grid>
         <property name="name">
@@ -253,7 +253,7 @@
                         <cstring>Main</cstring>
                     </property>
                     <property name="text">
-                        <string>Create &amp;Main method</string>
+                        <string>Create &amp;main method</string>
                     </property>
                 </widget>
             </hbox>

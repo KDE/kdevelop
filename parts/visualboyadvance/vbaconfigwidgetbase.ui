@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>486</width>
+            <width>510</width>
             <height>367</height>
         </rect>
     </property>
@@ -60,7 +60,7 @@
                         <cstring>normalModeButton</cstring>
                     </property>
                     <property name="text">
-                        <string>normal Mode</string>
+                        <string>Normal mode</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -68,7 +68,7 @@
                         <cstring>tvModeButton</cstring>
                     </property>
                     <property name="text">
-                        <string>TV Mode</string>
+                        <string>TV mode</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -115,7 +115,7 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>additional Parameters:</string>
+                <string>Additional Parameters:</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
@@ -230,7 +230,7 @@
             </property>
         </widget>
         <spacer row="4" column="3">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
             <property name="orientation">
@@ -239,12 +239,6 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
         <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="3">
             <property name="name">
@@ -252,7 +246,7 @@
             </property>
         </widget>
         <spacer row="6" column="2">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
             <property name="orientation">
@@ -261,17 +255,8 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
     </grid>
 </widget>
-<includes>
-    <include location="local" impldecl="in implementation">vbaconfigwidgetbase.ui.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -30,7 +30,7 @@
                 <cstring>buildtool_group</cstring>
             </property>
             <property name="title">
-                <string>Build tool</string>
+                <string>Build Tool</string>
             </property>
             <vbox>
                 <property name="name">

@@ -50,7 +50,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Subproject information</string>
+                <string>Subproject Information</string>
             </property>
             <hbox>
                 <property name="name">
@@ -200,7 +200,7 @@
                             </size>
                         </property>
                         <property name="title">
-                            <string>Source directory</string>
+                            <string>Source Directory</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string></string>
@@ -361,7 +361,7 @@
                                     </size>
                                 </property>
                                 <property name="title">
-                                    <string>Add following</string>
+                                    <string>Add Following</string>
                                 </property>
                                 <vbox>
                                     <property name="name">
@@ -467,7 +467,7 @@
                         <cstring>helpButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Help</string>
+                        <string>&amp;Help</string>
                     </property>
                 </widget>
                 <spacer>
@@ -486,7 +486,7 @@
                         <cstring>okButton</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -494,7 +494,7 @@
                         <cstring>cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>

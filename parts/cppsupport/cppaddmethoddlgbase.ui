@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>858</width>
+            <width>868</width>
             <height>567</height>
         </rect>
     </property>
@@ -140,7 +140,7 @@
                                 <cstring>rbKonstruktor</cstring>
                             </property>
                             <property name="text">
-                                <string>Konstruktor</string>
+                                <string>Constructor</string>
                             </property>
                         </widget>
                     </hbox>

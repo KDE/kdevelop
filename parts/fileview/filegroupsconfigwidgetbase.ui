@@ -83,7 +83,7 @@
             </vbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer5</cstring>
             </property>
             <property name="orientation">
@@ -91,12 +91,6 @@
             </property>
             <property name="sizeType">
                 <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget">
@@ -114,7 +108,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer6</cstring>
                     </property>
                     <property name="orientation">
@@ -123,19 +117,13 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>addgroup_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Add group</string>
+                        <string>&amp;Add Group</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -143,11 +131,11 @@
                         <cstring>deletegroup_button</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Delete group</string>
+                        <string>&amp;Delete Group</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer3</cstring>
                     </property>
                     <property name="orientation">
@@ -155,12 +143,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -180,7 +162,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer4</cstring>
                     </property>
                     <property name="orientation">
@@ -189,17 +171,11 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
                 </spacer>
             </vbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer7</cstring>
             </property>
             <property name="orientation">
@@ -207,12 +183,6 @@
             </property>
             <property name="sizeType">
                 <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
     </hbox>

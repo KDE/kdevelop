@@ -229,10 +229,10 @@
                                                     <cstring>archiveNameLabel</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>&lt;b&gt;Archive Name Format: &lt;/b&gt;&lt;br&gt;
-%n - File Name &lt;BR&gt;
-%v - File Version &lt;BR&gt;
-%d - Date of Archive</string>
+                                                    <string>&lt;b&gt;Archive name format: &lt;/b&gt;&lt;br&gt;
+%n - File name &lt;BR&gt;
+%v - File version &lt;BR&gt;
+%d - Date of archive</string>
                                                 </property>
                                             </widget>
                                             <widget class="QLineEdit">
@@ -297,7 +297,7 @@
                             <cstring>fileListLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>File List:</string>
+                            <string>File list:</string>
                         </property>
                     </widget>
                 </grid>
@@ -332,7 +332,7 @@
                             <cstring>buildAllPushButton</cstring>
                         </property>
                         <property name="text">
-                            <string>Build Source and Binary Package</string>
+                            <string>Build Source &amp;&amp; Binary Package</string>
                         </property>
                     </widget>
                     <widget class="QPushButton" row="4" column="1">
@@ -560,7 +560,7 @@
                                     <cstring>archLabel</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Architecture Target&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
+                                    <string>Architecture target:&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -844,7 +844,7 @@
                                             <cstring>fileSubmissionLabel</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>File Submission List:</string>
+                                            <string>File submission list:</string>
                                         </property>
                                     </widget>
                                     <spacer>

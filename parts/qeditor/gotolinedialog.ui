@@ -106,10 +106,10 @@
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <number>276824143</number>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -123,10 +123,10 @@
                         <cstring>buttonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <number>276824131</number>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

@@ -51,8 +51,7 @@
                             <cstring>qtdocdirLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>Location of Qt HTML documentation
-(usually $QTDIR/doc/html):</string>
+                            <string>Location of Qt HTML documentation (usually $QTDIR/doc/html):</string>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">
@@ -227,7 +226,7 @@
                             <cstring>indexBookmarksBox</cstring>
                         </property>
                         <property name="text">
-                            <string>Index Bookmarks</string>
+                            <string>Index bookmarks</string>
                         </property>
                     </widget>
                     <spacer>

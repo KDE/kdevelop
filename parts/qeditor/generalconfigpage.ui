@@ -44,7 +44,7 @@
                         <cstring>checkWordWrap</cstring>
                     </property>
                     <property name="text">
-                        <string>Word Wrap</string>
+                        <string>Word wrap</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -52,7 +52,7 @@
                         <cstring>checkParenthesesMatching</cstring>
                     </property>
                     <property name="text">
-                        <string>Parentheses Matching</string>
+                        <string>Parentheses matching</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -60,7 +60,7 @@
                         <cstring>checkShowMarkers</cstring>
                     </property>
                     <property name="text">
-                        <string>Show Markers</string>
+                        <string>Show markers</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -68,7 +68,7 @@
                         <cstring>checkShowLineNumber</cstring>
                     </property>
                     <property name="text">
-                        <string>Show Line Number</string>
+                        <string>Show line number</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -76,7 +76,7 @@
                         <cstring>checkShowCodeFoldingMarkers</cstring>
                     </property>
                     <property name="text">
-                        <string>Show Folding Markers</string>
+                        <string>Show folding markers</string>
                     </property>
                 </widget>
             </vbox>

@@ -127,7 +127,7 @@
             </property>
         </widget>
         <spacer row="2" column="1">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer</cstring>
             </property>
             <property name="orientation">
@@ -135,12 +135,6 @@
             </property>
             <property name="sizeType">
                 <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
         <widget class="QLabel" row="3" column="0">
@@ -199,11 +193,11 @@
                         <cstring>insertbutton</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Insert quoted</string>
+                        <string>&amp;Insert Quoted</string>
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
@@ -211,12 +205,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">

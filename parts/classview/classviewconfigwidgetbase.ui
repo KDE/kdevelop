@@ -30,7 +30,7 @@
                 <cstring>depthLabel</cstring>
             </property>
             <property name="text">
-                <string>Organize classes in directories, beginning with a depth of</string>
+                <string>Organize classes in directories, beginning with a depth of:</string>
             </property>
         </widget>
         <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="3">
@@ -38,7 +38,7 @@
                 <cstring>classModeGroup</cstring>
             </property>
             <property name="title">
-                <string>Display classes</string>
+                <string>Display Classes</string>
             </property>
             <vbox>
                 <property name="name">

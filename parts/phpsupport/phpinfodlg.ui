@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>PHPInfoDlg</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>PHPInfoDlg</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,77 +12,52 @@
             <height>301</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Form1</string>
     </property>
     <grid>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget row="0"  column="0"  rowspan="1"  colspan="3" >
-            <class>QMultiLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QMultiLineEdit" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
                 <cstring>php_edit</cstring>
             </property>
         </widget>
-        <widget row="1"  column="1" >
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
                 <cstring>ok_button</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>OK</string>
+            <property name="text">
+                <string>&amp;OK</string>
             </property>
         </widget>
-        <spacer row="1"  column="2" >
-            <property>
-                <name>name</name>
+        <spacer row="1" column="2">
+            <property name="name">
                 <cstring>Spacer3</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property>
-                <name>sizeHint</name>
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
-        <spacer row="1"  column="0" >
-            <property>
-                <name>name</name>
+        <spacer row="1" column="0">
+            <property name="name">
                 <cstring>Spacer4</cstring>
             </property>
-            <property stdset="1">
-                <name>orientation</name>
+            <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <property stdset="1">
-                <name>sizeType</name>
+            <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property>
-                <name>sizeHint</name>
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
     </grid>
@@ -98,4 +70,5 @@
         <slot>accept()</slot>
     </connection>
 </connections>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

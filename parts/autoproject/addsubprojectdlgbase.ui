@@ -50,7 +50,7 @@
                 <cstring>fileGroupBox</cstring>
             </property>
             <property name="title">
-                <string>Subproject information</string>
+                <string>Subproject Information</string>
             </property>
             <vbox>
                 <property name="name">

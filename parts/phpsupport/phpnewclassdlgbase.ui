@@ -34,7 +34,7 @@
             </property>
         </widget>
         <spacer row="5" column="0" rowspan="1" colspan="3">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
             <property name="orientation">
@@ -43,19 +43,13 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
         <widget class="QPushButton" row="5" column="3" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>m_okButton</cstring>
             </property>
             <property name="text">
-                <string>OK</string>
+                <string>&amp;OK</string>
             </property>
         </widget>
         <widget class="QPushButton" row="5" column="5" rowspan="1" colspan="2">
@@ -63,7 +57,7 @@
                 <cstring>m_cancelButton</cstring>
             </property>
             <property name="text">
-                <string>Cancel</string>
+                <string>&amp;Cancel</string>
             </property>
         </widget>
         <widget class="KLineEdit" row="0" column="4" rowspan="1" colspan="3">
@@ -89,7 +83,7 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Class Template:</string>
+                <string>Class template:</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">

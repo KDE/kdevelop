@@ -87,7 +87,7 @@
                                     <cstring>callWebserver_radio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>using an existing webserver (local or remote)</string>
+                                    <string>Using an existing webserver (local or remote)</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -188,7 +188,7 @@ was compiled with PHP support.</string>
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Project root URL on webserver</string>
+                            <string>Project root URL on webserver:</string>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="0" column="1">
@@ -218,7 +218,7 @@ was compiled with PHP support.</string>
                                     <cstring>useDefaultFile_radio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>use this file as default</string>
+                                    <string>Use this file as default:</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -237,7 +237,7 @@ was compiled with PHP support.</string>
                                     <cstring>useCurrentFile_radio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>use current file in editor</string>
+                                    <string>Use current file in editor</string>
                                 </property>
                             </widget>
                         </grid>

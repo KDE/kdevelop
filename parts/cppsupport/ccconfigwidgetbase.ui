@@ -78,7 +78,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer65</cstring>
                                 </property>
                                 <property name="orientation">
@@ -87,19 +87,13 @@
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
                                 </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
                             </spacer>
                             <widget class="QLabel">
                                 <property name="name">
                                     <cstring>lbPCSFile</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Persistant Class Store &amp;File (information only):</string>
+                                    <string>Persistant class store &amp;file (information only):</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>lePCSFile</cstring>
@@ -116,7 +110,7 @@
                         </vbox>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer14</cstring>
                         </property>
                         <property name="orientation">
@@ -158,7 +152,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer70</cstring>
                                 </property>
                                 <property name="orientation">
@@ -166,12 +160,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Minimum</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QLabel">
@@ -230,7 +218,7 @@
                                         <number>6</number>
                                     </property>
                                     <spacer>
-                                        <property name="name" stdset="0">
+                                        <property name="name">
                                             <cstring>Spacer68</cstring>
                                         </property>
                                         <property name="orientation">
@@ -238,12 +226,6 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
                                         </property>
                                     </spacer>
                                     <widget class="QPushButton">
@@ -255,7 +237,7 @@
                                         </property>
                                     </widget>
                                     <spacer>
-                                        <property name="name" stdset="0">
+                                        <property name="name">
                                             <cstring>Spacer67</cstring>
                                         </property>
                                         <property name="orientation">
@@ -264,23 +246,17 @@
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
                                         </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
                                     </spacer>
                                     <widget class="QPushButton">
                                         <property name="name">
                                             <cstring>btRemovePath</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Remove selected Path</string>
+                                            <string>&amp;Remove Selected Path</string>
                                         </property>
                                     </widget>
                                     <spacer>
-                                        <property name="name" stdset="0">
+                                        <property name="name">
                                             <cstring>Spacer69</cstring>
                                         </property>
                                         <property name="orientation">
@@ -288,12 +264,6 @@
                                         </property>
                                         <property name="sizeType">
                                             <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
                                         </property>
                                     </spacer>
                                 </hbox>
@@ -355,7 +325,7 @@
                         </vbox>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer72_2</cstring>
                         </property>
                         <property name="orientation">
@@ -363,12 +333,6 @@
                         </property>
                         <property name="sizeType">
                             <enum>Minimum</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                     </spacer>
                     <widget class="QGroupBox">
@@ -451,7 +415,7 @@
                                 </vbox>
                             </widget>
                             <spacer row="2" column="0">
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer27</cstring>
                                 </property>
                                 <property name="orientation">
@@ -468,7 +432,7 @@
                                 </property>
                             </spacer>
                             <spacer row="1" column="1">
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer74</cstring>
                                 </property>
                                 <property name="orientation">
@@ -487,7 +451,7 @@
                         </grid>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer52</cstring>
                         </property>
                         <property name="orientation">
@@ -495,12 +459,6 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -685,7 +643,7 @@
                                                 <cstring>TextLabel1</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Filename</string>
+                                                <string>Filename:</string>
                                             </property>
                                         </widget>
                                         <widget class="KURLRequester">
@@ -1011,7 +969,7 @@
                                                 <cstring>TextLabel1_2</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Filename</string>
+                                                <string>Filename:</string>
                                             </property>
                                         </widget>
                                         <widget class="KURLRequester">
