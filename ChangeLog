@@ -1,4 +1,10 @@
-2004-11-17 Alexander Dymo <adymo@kdevelop.org>
+2004-11-22 Alexander Dymo <adymo@kdevelop.org>
+ * Implemented simple VCS integrators for Clearcase, Perforce and Subversion.
+ * Reenabled subversion support plugin.
+ * Imported svn kioslave from kdesdk HEAD into a compat library therefore svn 
+   will work on KDE<3.3.90 too.
+
+2004-11-21 Alexander Dymo <adymo@kdevelop.org>
  * Added KDevVCSIntegrator extra interface. VCS Integrator is a plugin which is used by
    application wizard to select a version control and possibly import newly created project
    into the VCS.
