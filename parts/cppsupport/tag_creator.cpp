@@ -590,9 +590,19 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 	bool isVirtual = baseSpecifier->isVirtual() != 0;
 
 	QString baseName;
-	if( baseSpecifier->name() )
-	    baseName = baseSpecifier->name()->text();
 
+	QPtrList<ClassOrNamespaceNameAST> l = baseSpecifier->name()->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
+	while( nameIt.current() ){
+	    if( nameIt.current()->name() ){
+		baseName += nameIt.current()->name()->text() + "::";
+	    }
+	    ++nameIt;
+	}
+	
+	if( baseSpecifier->name()->unqualifiedName() && baseSpecifier->name()->unqualifiedName()->name() )
+	    baseName += baseSpecifier->name()->unqualifiedName()->name()->text();
+	
 	Tag tag;
 	tag.setKind( Tag::Kind_Base_class );
 	tag.setFileName( m_fileName );
