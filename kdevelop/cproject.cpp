@@ -30,6 +30,7 @@ CProject::CProject(QString file)
   : config( file )
 {
   valid = false;
+  bMakefileamHasChanged=false;
   prjfile = file;
   vc = 0;
 
@@ -795,7 +796,7 @@ void CProject::updateMakefileAm(QString makefile){
     } // end for
   }// end writeonly
   file.close();
-  
+  bMakefileamHasChanged=true;
 }
 
 QString CProject::getDir(QString rel_name){

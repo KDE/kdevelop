@@ -102,6 +102,12 @@ bool CKDevelop::isProjectDirty()
   if (!bin_info.exists())
     isClean=false;
 
+  // check if a Makefile.am has changed
+  if (prj->getMakefileAmChanged())
+    isClean=false;
+  // clear the flag to get a new situation
+  prj->clearMakefileAmChanged();
+
   setInfoModified(header_widget->getName(), header_widget->isModified());
   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
