@@ -1,3 +1,7 @@
+2000-03-20 Walter Tasin  <tasin@kdevelop.de>
+	* KDevelop examines now if the created "binary" is a script
+	  and starts debugging the real binary inside .libs if necessary
+
 2000-03-18  Ralf Funken <rfunken@kdevelop.de>
 	* Updated german manual
         * Updated kdevelop.pot and de.po
