@@ -1,8 +1,8 @@
 #!perl -I/opt/kde3/share/apps/kdevappwizard/template-common
 
-use gideon;
+use kdevelop;
 
-initGideon();
+initKDevelop();
 installLicense();
 installAdmin();
 installGNU();

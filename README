@@ -1,11 +1,3 @@
-KDevelop 3.0 Alpha 7 Release
-----------------------------
-
-Since this project is code named Gideon, the binary that builds is called
-"gideon" instead of "kdevelop".  This will allow users to use older
-versions of kdevelop while still being able to experiment with this new
-version.
-
 KDE API Documentation
 ---------------------------
 If the KDE API documentation does not exist, it can be created
@@ -15,6 +7,12 @@ as follows:
 
   make apidox
   make apidox-install
+
+After that you should follow the instructions at:
+
+http://www.kdevelop.org/index.html?filename=branches_compiling.html
+
+to compile KDevelop
 
 
 For the graphical classbrowser, you need the program 'dot'

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use gideon;
+use kdevelop;
 
 initGideon();
 installFileTemplate();
