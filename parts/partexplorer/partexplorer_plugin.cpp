@@ -36,7 +36,7 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
     setXMLFile( "kdevpartexplorer.rc" );
 
     // this should be your custom internal widget
-    m_widget = new PartExplorerForm( mainWindow()->main()->centralWidget() );
+    m_widget = new PartExplorerForm( mainWindow()->main() );
 //    mainWindow()->embedSelectView( m_widget, i18n("PartExplorer"), i18n("Query system services"));
 
     KAction *action = new KAction( i18n("&Part Explorer"), 0, this, SLOT(slotShowForm()),
