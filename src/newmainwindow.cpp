@@ -182,7 +182,6 @@ void NewMainWindow::init() {
 
 NewMainWindow::~NewMainWindow() {
     TopLevel::invalidateInstance( this );
-    delete m_pWindowMenu;
 }
 
 void NewMainWindow::slotCoreInitialized( )
