@@ -26,9 +26,6 @@
             <property name="text">
                 <string>&amp;Load last project on startup</string>
             </property>
-            <property name="accel">
-                <string>Alt+L</string>
-            </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -138,9 +135,6 @@
                             <property name="text">
                                 <string>Line &amp;wrapping</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+W</string>
-                            </property>
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
@@ -148,9 +142,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Directory navigation messages</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+D</string>
                             </property>
                         </widget>
                     </vbox>
@@ -189,9 +180,6 @@
                             <property name="text">
                                 <string>&amp;Very short</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+V</string>
-                            </property>
                             <property name="buttonGroupId">
                                 <number>0</number>
                             </property>
@@ -214,9 +202,6 @@
                             <property name="text">
                                 <string>&amp;Short</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+S</string>
-                            </property>
                             <property name="buttonGroupId">
                                 <number>1</number>
                             </property>
@@ -238,9 +223,6 @@
                             </property>
                             <property name="text">
                                 <string>F&amp;ull</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+U</string>
                             </property>
                             <property name="buttonGroupId">
                                 <number>2</number>

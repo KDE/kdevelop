@@ -46,7 +46,7 @@ void VCSManagerProjectConfig::accept()
 
 void VCSManagerProjectConfig::setup( )
 {
-	vcsCombo->insertItem( i18n("no version control system", "None"), 0 );
+	vcsCombo->insertItem( i18n("No Version Control System", "None"), 0 );
 	m_vcsPluginNames << "";
 	
 	int current = 0;
