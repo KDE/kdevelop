@@ -33,7 +33,7 @@ public:
     void setCurrentConnectionName(const QString &name);
     QString currentConnectionName() const;
     void refresh();
-    
+
 private:
     SQLSupportPart *m_part;
     QComboBox* m_combo;

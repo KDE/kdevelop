@@ -12,6 +12,7 @@
 
 class SqlListAction;
 class SqlOutputWidget;
+class CodeModel;
 
 class SQLSupportPart : public KDevLanguageSupport
 {
@@ -44,9 +45,11 @@ private slots:
 
 private:
     void clearConfig();
+    void updateCatalog();
     SqlListAction* dbAction;
     SqlOutputWidget* m_widget;
     QStringList conNames;
+    CodeModel *m_store;
 };
 
 #endif

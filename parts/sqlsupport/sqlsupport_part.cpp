@@ -2,6 +2,7 @@
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qsqldatabase.h>
+#include <qsqlrecord.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -19,6 +20,7 @@
 #include "kdevlanguagesupport.h"
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
+#include "codemodel.h"
 
 #include "sqlsupport_part.h"
 #include "sqlconfigwidget.h"
@@ -44,8 +46,9 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
 
     connect( core(), SIGNAL( projectConfigWidget( KDialogBase* ) ),
              this, SLOT( projectConfigWidget( KDialogBase* ) ) );
-    connect( core(), SIGNAL( projectOpened() ), this, SLOT( projectOpened() ) );
-    connect( core(), SIGNAL( projectClosed() ), this, SLOT( projectClosed() ) );
+    connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
+    connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+    connect( core(), SIGNAL(languageChanged()), this, SLOT(projectOpened()) );
     connect( partController(), SIGNAL( savedFile( const QString& ) ), this, SLOT( savedFile( const QString& ) ) );
 
     m_widget = new SqlOutputWidget();
@@ -69,7 +72,7 @@ QString SQLSupportPart::cryptStr(const QString& aStr)
 
 void SQLSupportPart::activeConnectionChanged()
 {
-    /// @todo
+    updateCatalog();
 }
 
 void SQLSupportPart::clearConfig()
@@ -167,24 +170,64 @@ void SQLSupportPart::slotRun ()
     m_widget->showQuery( cName, doc->text() );
 }
 
+#if 0
+static QString dbCaption(const QSqlDatabase* db)
+{
+    QString res;
+    if (!db)
+        return res;
+    res = db->driverName();
+    res += QString::fromLatin1("@");
+    res += db->hostName();
+    if (db->port() >= 0)
+        res += QString::fromLatin1(":") + QString::number(db->port());
+    return res;
+}
+#endif
+
 void SQLSupportPart::parse()
 {
-    kdDebug( 9000 ) << "SQLSupport: initialParse()" << endl;
+    // TODO
+}
 
-    if ( project() ) {
-        kapp->setOverrideCursor( waitCursor );
-/*
-	QStringList files = project() ->allFiles();
-        for ( QStringList::Iterator it = files.begin(); it != files.end() ;++it ) {
-            kdDebug( 9014 ) << "maybe parse " << project() ->projectDirectory() + "/" + ( *it ) << endl;
-            parse( project() ->projectDirectory() + "/" + *it );
-        }
-*/
+void SQLSupportPart::updateCatalog()
+{
+    if (!project() || !dbAction)
+        return;
+
+    codeModel()->wipeout();
+
+    QString curConnection = dbAction->currentConnectionName();
+    if (curConnection.isEmpty()) {
         emit updatedSourceInfo();
-        kapp->restoreOverrideCursor();
-    } else {
-        kdDebug( 9000 ) << "No project" << endl;
+        return;
     }
+
+    FileDom dbf = codeModel()->create<FileModel>();
+    dbf->setName(dbAction->currentConnectionName());
+    QSqlDatabase *db = QSqlDatabase::database(dbAction->currentConnectionName(), true);
+
+    // tables are classes and fields are methods
+    if (db->isOpen()) {
+        QSqlRecord inf;
+        QStringList tables = db->tables();
+        for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it) {
+            ClassDom dbc = codeModel()->create<ClassModel>();
+            dbc->setName(*it);
+            inf = db->record(*it);
+            for (int i = 0; i < (int)inf.count(); ++i) {
+                FunctionDom dbv = codeModel()->create<FunctionModel>();
+                dbv->setName(inf.fieldName(i));
+                dbv->setResultType(QVariant::typeToName(inf.field(i)->type()));
+                dbc->addFunction(dbv);
+            }
+            dbf->addClass(dbc);
+        }
+    }
+
+    codeModel()->addFile(dbf);
+
+    emit updatedSourceInfo();
 }
 
 void SQLSupportPart::addedFilesToProject( const QStringList &fileList )
@@ -220,7 +263,7 @@ void SQLSupportPart::savedFile( const QString &fileName )
 
 KDevLanguageSupport::Features SQLSupportPart::features()
 {
-    return Features( 0 ); /// @todo ...
+    return Features( KDevLanguageSupport::Classes | KDevLanguageSupport::Functions );
 }
 
 KMimeType::List SQLSupportPart::mimeTypes( )
@@ -228,7 +271,7 @@ KMimeType::List SQLSupportPart::mimeTypes( )
     KMimeType::List list;
     KMimeType::Ptr mime = KMimeType::mimeType( "text/plain" );
     if( mime )
-	list << mime;
+        list << mime;
     return list;
 }
 

@@ -35,18 +35,18 @@ SqlListAction::SqlListAction(SQLSupportPart *part, const QString &text,
     m_combo->setEditable( false );
     m_combo->setAutoCompletion( true );
 #endif
-    
+
     m_combo->setMinimumWidth( 200 );
     m_combo->setMaximumWidth( 400 );
-    
+
     connect( m_combo, SIGNAL(activated(const QString&)), receiver, slot );
-    
+
     setShortcutConfigurable( false );
     setAutoSized( true );
 
     refresh();
 }
- 
+
 
 void SqlListAction::setCurrentConnectionName(const QString &name)
 {
@@ -85,8 +85,8 @@ void SqlListAction::refresh()
         cName = db->driverName();
         cName.append( "://" ).append( db->userName() ).append( "@" ).append( db->hostName() );
         cName.append( "/" ).append( db->databaseName() );
-        
-	m_combo->insertItem( db->open() ? SmallIcon( "ok" ) : SmallIcon( "no" ), cName );
+
+        m_combo->insertItem( db->open() ? SmallIcon( "ok" ) : SmallIcon( "no" ), cName );
     }
 }
 

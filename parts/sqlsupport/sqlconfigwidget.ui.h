@@ -167,7 +167,7 @@ void SqlConfigWidget::testDb()
     db->setHostName( dbTable->text( cr, 2 ) );
     bool ok;
     int port = dbTable->text( cr, 3 ).toInt( &ok );
-    if ( ok )
+    if (ok && port >= 0)
 	db->setPort( port );
     if ( db->open( dbTable->text( cr, 4 ), dbTable->text( cr, 5 ) ) ) {
 	KMessageBox::information( this, i18n("Connection successful") );
@@ -186,7 +186,7 @@ void SqlConfigWidget::testDb()
 void SqlConfigWidget::accept()
 {
     Q_ASSERT( doc );
-    
+
     QDomElement dbElem = DomUtil::createElementByPath( *doc, "/kdevsqlsupport/servers" );
     DomUtil::makeEmpty( dbElem );
 
