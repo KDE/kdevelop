@@ -38,6 +38,9 @@ const QString &KDevMakeBuilder::numberOfJobs =
 const QString &KDevMakeBuilder::dontAct = 
     KGlobal::staticQString("/kdevprojectmanager/builder/make/dontact");
 
+const QString &KDevMakeBuilder::environment = 
+    KGlobal::staticQString("/kdevprojectmanager/builder/make/envvars");
+    
 KDevMakeBuilder::KDevMakeBuilder(QObject *parent, const char *name, const QStringList &)
     : KDevProjectBuilder(parent, name)
 {
@@ -178,10 +181,7 @@ QString KDevMakeBuilder::buildCommand(ProjectItemDom item)
 #endif 
 
     cmdline.prepend(nice);
-    
-#if 0 // ### enable me
-    cmdline.prepend(project()->makeEnvironment());
-#endif
+    cmdline.prepend(makeEnvironment());
 
     Q_ASSERT(item->toFolder());
 
@@ -191,5 +191,21 @@ QString KDevMakeBuilder::buildCommand(ProjectItemDom item)
     dircmd += " && ";
 
     return dircmd + cmdline;
+}
+
+QString KDevMakeBuilder::makeEnvironment() const
+{
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*project()->projectDom(), environment, "envvar", "name", "value");
+
+    QString env;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        env += (*it).first;
+        env += "=";
+        env += KProcess::quote((*it).second);
+        env += " ";
+    }
+    return env;
 }
 

@@ -47,12 +47,14 @@ public:
     virtual bool clean(ProjectItemDom dom = ProjectItemDom());
     virtual bool execute(ProjectItemDom dom = ProjectItemDom());
     
-    QString buildCommand(ProjectItemDom dom);
-
 private slots:
     void projectConfigWidget(KDialogBase *dialog);
     void commandFinished(const QString &command);
     void commandFailed(const QString &command);
+    
+private:
+    QString buildCommand(ProjectItemDom dom);
+    QString makeEnvironment() const;
     
 private:
     KDevProject *m_project;
@@ -65,6 +67,7 @@ private:
     static const QString &abortOnError;
     static const QString &numberOfJobs;
     static const QString &dontAct; 
+    static const QString &environment; 
 };
 
 #endif // KDEVMAKEBUILDER_H
