@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Source Code Navigation
+Name=KDevSourceNav
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevsourcenav
+X-KDevelop-Scope=Global
