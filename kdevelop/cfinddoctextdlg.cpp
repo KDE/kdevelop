@@ -137,7 +137,7 @@ CManpageTextDlg::CManpageTextDlg(QWidget *parent, const char *name ) :
 
     btn = new QPushButton( i18n( "&Cancel" ), this );
     btn->setFixedSize( btn->sizeHint() );
-    connect( btn, SIGNAL( clicked() ), this, SLOT( cancel() ) );
+    connect( btn, SIGNAL( clicked() ), this, SLOT( reject() ) );
     hl->addWidget( btn );
 
     vl->activate();
