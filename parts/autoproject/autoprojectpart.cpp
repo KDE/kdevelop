@@ -465,6 +465,7 @@ void AutoProjectPart::slotMakeMessages()
 void AutoProjectPart::slotExecute()
 {
     QString program = buildDirectory() + "/" + mainProgram();
+    program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
     
     DomUtil::PairList envvars = 
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/envvars", "envvar", "name", "value");
