@@ -190,11 +190,16 @@ void CvsPart::slotDiff() {
     QStringList args;
 
     QDomDocument &dom = *this->projectDom();
+    QString cvsOpts = DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
+    QString diffOpts = DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff);
     
-    args << DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
-    args << "diff"; // cannot use "-u3 -p" since it will clash with ~/.cvsrc
-    args << DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff);
+    if ( !cvsOpts.isEmpty() )
+      args << cvsOpts; 
+    args << "diff";
+    if ( !diffOpts.isEmpty() )
+      args << diffOpts;
     args << name;
+
     ExecCommand* cmv = new ExecCommand( "cvs", args, dir, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
 	     this, SLOT(slotDiffFinished( const QString&, const QString& )) );
