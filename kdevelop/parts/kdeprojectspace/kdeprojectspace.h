@@ -44,6 +44,8 @@ public:
 	QList<FileGroup> defaultFileGroups();
 	protected slots:
   void slotProjectAddNewTranslationFile();
+
+
  protected:
 	KAboutData* m_pAboutData;
 };

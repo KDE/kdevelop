@@ -46,7 +46,8 @@ class Project : public QObject {
 
   /** returns all files*/
   QStringList allAbsoluteFileNames();
-  RegisteredFile fileProperties(QString filename);
+  RegisteredFile* file(QString relFileName);
+  RegisteredFile* fileAbsolute(QString absFileName);
 
   QString version();
   QString name();
@@ -67,6 +68,7 @@ class Project : public QObject {
   /** include in distribution,install no*/
   virtual void addFile(QString abs_filename);
   virtual void removeFile(RegisteredFile* file);
+  virtual void removeFile(QString absFilename);
 
   virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
   virtual bool writeUserConfig(QDomDocument& doc,QDomElement& projectElement);

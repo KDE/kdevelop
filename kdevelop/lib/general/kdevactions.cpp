@@ -21,6 +21,13 @@
 KDevFileAction::KDevFileAction (const QString& text, const QString& pix, int accel, QObject* parent, const char* name)
   : KAction(text,pix,accel,parent,name){
   m_absFileName = "not set";
+  m_projectName = "not set";
+}
+
+KDevFileAction::KDevFileAction( const QString& text,int accel, QObject* parent, const char* name)
+  : KAction(text,accel,parent,name) {
+  m_absFileName = "not set";
+  m_projectName = "not set";
 }
 
 void KDevFileAction::setAbsFileName(QString absFileName){
@@ -36,8 +43,8 @@ int KDevFileAction::plug( QWidget *widget, int index ){
 }
 
 void KDevFileAction::slotActivated(){
-  cerr <<  "KDevFileAction::slotActived: emit " << m_absFileName << endl;
-  emit activated(m_absFileName); // fire the filename
+  cerr <<  "KDevFileAction::slotActived: emit " << m_absFileName << ":" << m_projectName << endl;
+  emit activated(m_absFileName,m_projectName); // fire the filename
 }
 
 

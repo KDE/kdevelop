@@ -115,7 +115,6 @@ bool KDevelop::queryClose(){
 }
 bool KDevelop::queryExit(){
     kdDebug(9000) << "KDevelop::queryExit" << endl;
-
     saveCurrentDockAndMdiSzenario();
 
     // we must delete all embedded views, otherwise we get double deletion

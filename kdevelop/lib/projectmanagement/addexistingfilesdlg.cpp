@@ -77,6 +77,9 @@ AddExistingFilesDlg::~AddExistingFilesDlg(){
 
 
 void AddExistingFilesDlg::slotDirectorySelected(QString directory){
+  if(directory.right(1) != "/"){
+    directory = directory + "/";
+  }
   m_currentDir = directory;
   QDir dir(m_currentDir);
   dir.setNameFilter(m_pFileFilterComboBox->currentText());

@@ -17,7 +17,6 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <kaction.h>
-#include "kdevactions.h"
 
 class ProjectView;
 class QPopupMenu;

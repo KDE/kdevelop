@@ -21,7 +21,8 @@ class KDevFileAction : public KAction {
   Q_OBJECT
 public:
   KDevFileAction( const QString& text, const QString& pix, int accel = 0, QObject* parent = 0, const char* name = 0 );
-  // only QPopMenu at the moment
+  KDevFileAction( const QString& text,int accel = 0, QObject* parent = 0, const char* name = 0 );
+  
   int plug( QWidget *widget, int index );
   void setAbsFileName(QString absFileName);
   void setProjectName(QString projectName);
@@ -29,11 +30,11 @@ public:
   virtual ~KDevFileAction() {}
 
 protected slots:
-void slotActivated();
+virtual void slotActivated();
 
   signals:
 /** connect to this*/
-void activated(const QString& absFileName);
+void activated(const QString& absFileName,const QString& projectName);
   
 private:
   QString m_absFileName;

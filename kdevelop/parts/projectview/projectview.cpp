@@ -63,11 +63,11 @@ void ProjectView::writeProjectSpaceGlobalConfig(QDomDocument& doc){
   m_pProjectTree->writeProjectSpaceGlobalConfig(doc);
 }
 
-void ProjectView::setFileActions(QList<KDevFileAction>* pActions){
+void ProjectView::setFileActions(QList<KAction>* pActions){
   cerr << "kdevelop (projectview): setFileActions" << endl;
   m_pFileActions = pActions;
 }
-QList<KDevFileAction>* ProjectView::assembleFileActions(const QString& absFileName,const QString& projectName){
+QList<KAction>* ProjectView::assembleFileActions(const QString& absFileName,const QString& projectName){
   cerr << "kdevelop (projectview): ProjectView::assembleFileActions" << endl;
   // and now the trick :-)
   emit needFileActions(this,absFileName,projectName);

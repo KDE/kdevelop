@@ -30,11 +30,11 @@ public:
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
 
-    QList<KDevFileAction>* assembleFileActions(const QString& absFileName,const QString& projectName);
+    QList<KAction>* assembleFileActions(const QString& absFileName,const QString& projectName);
 
     virtual void readProjectSpaceGlobalConfig(QDomDocument& doc);
     virtual void writeProjectSpaceGlobalConfig(QDomDocument& doc);
-    virtual void setFileActions(QList<KDevFileAction>* pActions);
+    virtual void setFileActions(QList<KAction>* pActions);
 
    
 
@@ -44,7 +44,7 @@ protected:
     virtual void projectSpaceClosed();
 
     ProjectTreeWidget* m_pProjectTree;
-    QList<KDevFileAction>* m_pFileActions;
+    QList<KAction>* m_pFileActions;
 
  
     

@@ -239,10 +239,10 @@ QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
     pPopup->insertItem( i18n("Open"),this, SLOT(slotOpenFile()) );
     FileItem* pFileItem = static_cast<FileItem*>(pItem);
     // got the action from the part/kdevelopcomponent
-    QList<KDevFileAction>* pList = 
+    QList<KAction>* pList = 
       m_pProjectView->assembleFileActions(pFileItem->absFileName(),pFileItem->projectName());
     
-    KDevFileAction* pAction =0;
+    KAction* pAction =0;
     for(pAction=pList->first();pAction!=0;pAction= pList->next()){
       pAction->plug(pPopup,-1);// add all available actions to the popupmenu
     }

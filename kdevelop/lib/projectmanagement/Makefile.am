@@ -7,7 +7,7 @@ libkdevprojectmanagement_la_SOURCES =  addtreedlgbase.ui appwizard.cpp  automake
 		pmc.cpp project.cpp projectspace.cpp filepropspage.cpp \
 		registeredfile.cpp \
 		appwizardbase.ui filepropspagebase.ui addexistingfilesbase.ui \
-		addexistingfilesdlg.cpp flatdirtreeview.cpp  addtreedlg.cpp
+		addexistingfilesdlg.cpp flatdirtreeview.cpp  addtreedlg.cpp renamefiledlg.ui
 
 noinst_HEADERS = addtreedlgbase.h appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				pmc.h project.h projectspace.h \
@@ -30,6 +30,6 @@ METASOURCES = AUTO
 #	$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
 #		$(LIB_KFILE) $(LIB_KPARTS)
 
-projectspace.cpp: addexistingfilesbase.h
+projectspace.cpp: addexistingfilesbase.h renamefiledlg.h
 
 addexistingfilesdlg.cpp: addtreedlgbase.h

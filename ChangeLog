@@ -1,3 +1,10 @@
+2000-11-12 Sandy Meier <smeier@kdevelop.org>
+	* implemented fileaction: "copy to","move to","delete","remove file from project" (all ProjectSpace)
+	TODO: refresh the ProjectView
+	
+2000-11-07 Sandy Meier   <smeier@kdevelop.org>
+	* implemented fileaction rename, incl. rename dlg
+
 2000-10-31 Sandy Meier   <smeier@kdevelop.org>
 	* implemented Framework for FileActions within KDevelop
 	* every Component can now extend the popup menues in treeviews or similar by 

@@ -483,8 +483,10 @@ void KDevelopCore::slotProjectOpenRecent(const KURL &url)
 
 void KDevelopCore::slotProjectClose()
 {
+  if(m_pProjectSpace != 0){
     // Ask for confirmation?
     unloadProjectSpace();
+  }
 }
 
 
@@ -624,9 +626,9 @@ void KDevelopCore::readProjectSpaceUserConfig(QDomDocument& doc){
 }
 
 void KDevelopCore::needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName){
-  QList<KDevFileAction>* pAllList = new QList<KDevFileAction>;
-  QList<KDevFileAction>* pList=0;
-  KDevFileAction* pAction=0;
+  QList<KAction>* pAllList = new QList<KAction>;
+  QList<KAction>* pList=0;
+  KAction* pAction=0;
   QListIterator<KDevComponent> it(m_components);
   for (; it.current(); ++it){ // ask every component
     pList = (*it)->fileActions(absFileName,projectName);

@@ -30,7 +30,6 @@ class ProjectSpace;
 class ClassStore;
 class KDialogBase;
 class KAboutData;
-class KDevFileAction;
 
 
 
@@ -118,12 +117,12 @@ public:
   
   /** set the assembled Fileactions for the File absFileName, asked in needFileActions(QString),
    */
-  virtual  void setFileActions(QList<KDevFileAction>* pActions);
+  virtual  void setFileActions(QList<KAction>* pActions);
   /**
      return a list of KDevFileActions which are implemented by this component for this file
      and project,both together are unique
   */
-  virtual QList<KDevFileAction>* fileActions(const QString& absFileName,const QString& projectName);
+  virtual QList<KAction>* fileActions(const QString& absFileName,const QString& projectName);
   
 
     /** write the ProjectSpace related configuration to the document
@@ -163,7 +162,7 @@ signals:
   void running(bool runs);
   /** get all fileactions for this file from every component,
       set through setFileActions(QList<KDevFileAction>* actions);
-      assembled with QList<KDevFileAction>* fileActions(QString absFileName)
+      assembled with QList<KAction>* fileActions(QString absFileName)
       pWho is the sender
    */
   void needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName);

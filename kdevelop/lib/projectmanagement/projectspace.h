@@ -24,7 +24,7 @@
 #include <string.h>
 #include <ksimpleconfig.h>
 #include <qdom.h>
-#include "kdevactions.h"
+#include "kaction.h"
 class KAboutData;
 
 class FileGroup {
@@ -53,7 +53,7 @@ class ProjectSpace : public KDevComponent {
   // from KDevComponent
   void languageSupportOpened(KDevLanguageSupport *ls);
   void languageSupportClosed();
-  virtual QList<KDevFileAction>* fileActions(const QString& absFileName,const QString& projectName);
+  virtual QList<KAction>* fileActions(const QString& absFileName,const QString& projectName);
 
 
   /** nesessary to bootstrap a ProjectSpace*/
@@ -65,6 +65,7 @@ class ProjectSpace : public KDevComponent {
   virtual QList<FileGroup> defaultFileGroups();
   /** returns all registered projects*/
   QList<Project>* allProjects();
+  Project* project(QString projectName);
 
   virtual void setupGUI();
   void addProject(Project* prj);
@@ -130,10 +131,13 @@ class ProjectSpace : public KDevComponent {
   virtual void dump();
 
   protected slots:
-    void slotProjectSetActivate( int id);
-  void slotProjectAddExistingFiles();
-  void slotRenameFile(const QString& absFileName);
-  void slotMoveFile(const QString& absFileName);
+    virtual void slotProjectSetActivate( int id);
+  virtual void slotProjectAddExistingFiles();
+  virtual void slotRenameFile(const QString& absFileName,const QString& projectName);
+  virtual void slotDeleteFile(const QString& absFileName,const QString& projectName);
+  virtual void slotRemoveFileFromProject(const QString& absFileName,const QString& projectName);
+  virtual void slotMoveFileTo(const QString& absFileName,const QString& projectName);
+  virtual void slotCopyFileTo(const QString& absFileName,const QString& projectName);
 protected:
 
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);

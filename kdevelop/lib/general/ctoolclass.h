@@ -41,7 +41,7 @@ public:
       relative_path = ../../../user/lib/
    */      
   static QString getRelativePath(QString source_dir,QString dest_dir);
-
+  static QString getRelativeFile(QString source_dir,QString destFile);
   static QString getAbsolutePath(QString source_dir, QString rel_path);
   static QString getAbsoluteFile(QString sourceDir, QString relFile);
 

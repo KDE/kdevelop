@@ -142,15 +142,63 @@ QString CToolClass::escapetext(const char *szOldText, bool bForGrep)
   }
   return sRegExpString;
 }
+QString CToolClass::getRelativeFile(QString source_dir,QString destFile){
+  kdDebug(9000) << "getRelativeFile:" << source_dir <<endl;
+  kdDebug(9000) << "source_dir:" << source_dir <<endl;
+  kdDebug(9000) << "destFile:" << destFile <<endl;
+  
+  //normalize
+  if(source_dir.right(1) != "/"){
+    cerr << "add / to sourcedir" << endl;
+    source_dir = source_dir + "/";
+  }
+  destFile.remove(0,1); // remove beginning /
+  source_dir.remove(0,1); // remove beginning /
+  bool found = true;
+  int slash_pos=0;
+  
 
+  do {
+    slash_pos = destFile.find('/');
+    if (destFile.left(slash_pos) == source_dir.left(slash_pos)){
+      destFile.remove(0,slash_pos+1);
+      source_dir.remove(0,slash_pos+1);
+    }
+    else {
+      found = false;
+    }
+  }
+  while(found == true);
+
+  int slashes = source_dir.contains('/');
+  int i;
+  for(i=0;i < slashes;i++){
+    destFile.prepend("../");
+  }
+
+  kdDebug(9000) << "relFile:" << destFile <<endl;
+  return destFile;
+  
+}
 QString CToolClass::getRelativePath(QString source_dir,QString dest_dir){
+  kdDebug(9000) << "getRelativePath:" << source_dir <<endl;
   kdDebug(9000) << "source_dir:" << source_dir <<endl;
   kdDebug(9000) << "dest_dir:" << dest_dir <<endl;
 
+  //normalize
+  if(source_dir.right(1) != "/"){
+    cerr << "add / to sourcedir" << endl;
+    source_dir = source_dir + "/";
+  }
+  if(dest_dir.right(1) != "/"){
+    cerr << "add / to destdir" << endl;
+    dest_dir = dest_dir + "/";
+  }
+  
   // a special case , the dir are equals
   if (source_dir == dest_dir){
     kdDebug(9000) << "rel_dir:./" <<endl;
-    return "./";
+    return ""; // no relative path, maybe ./ ?
   }
   dest_dir.remove(0,1); // remove beginning /
   source_dir.remove(0,1); // remove beginning /

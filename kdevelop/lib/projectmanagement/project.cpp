@@ -47,7 +47,7 @@ QStringList Project::allSources(){
 
 /** returns all files*/
 QStringList Project::allAbsoluteFileNames(){
-  cerr  << "kdevelop (project): Project::allFileNames() " << endl;
+  cerr  << endl << "kdevelop (project): Project::allFileNames() ";
   QStringList list;
   RegisteredFile* pFile;
   for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
@@ -55,9 +55,23 @@ QStringList Project::allAbsoluteFileNames(){
   }
   return list;
 }
-RegisteredFile Project::fileProperties(QString filename){
-  RegisteredFile file;
-  return file;
+RegisteredFile* Project::file(QString relFileName){
+  RegisteredFile* pFile;
+  for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
+    if(relFileName == pFile->relativeFile()){
+      return pFile;
+    }
+  }
+  cerr << endl << "kdevelop (project): Project::fileProperties() return 0!";
+  return 0;
+}
+RegisteredFile* Project::fileAbsolute(QString absFileName){
+  QString relFile = CToolClass::getRelativeFile(m_absPath,absFileName);
+  RegisteredFile* pFile= file(relFile);
+  if(pFile == 0){
+    cerr << endl << "kdevelop (project): Project::filePropertiesAbsolute() return 0!";
+  }
+  return pFile;
 }
 QString Project::version(){
   return m_version;
@@ -96,14 +110,25 @@ void Project::addFile(RegisteredFile* pFile){
 }
 
 void Project::addFile(QString absFilename){
-  QString relFile = CToolClass::getRelativePath(m_absPath,absFilename);
+  QString relFile = CToolClass::getRelativeFile(m_absPath,absFilename);
   RegisteredFile* pFile = new RegisteredFile(relFile);
   m_pFiles->append(pFile);
 }
 
 
-void Project::removeFile(RegisteredFile* pFile){
+void Project::removeFile(RegisteredFile* /*pFile*/){
   //	  m_files->remove(file);
+}
+void Project::removeFile(QString absFilename){
+  QString relFile = CToolClass::getRelativeFile(m_absPath,absFilename);
+  RegisteredFile* pFile;
+  for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
+    if( pFile->relativeFile() == relFile){
+      if(m_pFiles->remove(pFile)){
+	cerr << endl << " Project::removeFile file '" + relFile + "' found and removed";
+      }
+    }
+  }
 }
 void Project::showAllFiles(){
   RegisteredFile* pFile;
@@ -122,7 +147,7 @@ void Project::dump(){
 }
 
 
-bool Project::readUserConfig(QDomDocument& doc,QDomElement& projectElement){
+bool Project::readUserConfig(QDomDocument& /*doc*/,QDomElement& projectElement){
   QDomElement filesElement = projectElement.namedItem("projecttest").toElement();
   if(filesElement.isNull()){
     cerr << "\nProject::readUserConfig no \"projecttest\" tag found!";
@@ -165,7 +190,7 @@ bool Project::writeUserConfig(QDomDocument& doc,QDomElement& projectElement){
   return true;
 }
 
-bool Project::readGlobalConfig(QDomDocument& doc,QDomElement& projectElement){
+bool Project::readGlobalConfig(QDomDocument&/*doc*/,QDomElement& projectElement){
   m_name = projectElement.attribute("name");
   m_relPath =  projectElement.attribute("relativePath");
 

@@ -30,12 +30,15 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <qtextstream.h>
-#include <kaction.h>
+#include <kdevactions.h>
 #include <kpopupmenu.h>
 #include <kaboutdata.h>
 #include <ktrader.h>
 #include <klibloader.h>
-
+#include <qlineedit.h>
+#include "renamefiledlg.h"
+#include <kio/job.h>
+#include <kfiledialog.h>
 void FileGroup::setName(QString name) {
   m_name = name;
 }
@@ -145,7 +148,7 @@ Project* ProjectSpace::currentProject(){
   return m_pCurrentProject;
 }
 
-void ProjectSpace::removeProject(QString name){
+void ProjectSpace::removeProject(QString /*name*/){
 }
 void ProjectSpace::generateDefaultFiles(){
   KShellProcess proc("/bin/sh");
@@ -208,7 +211,7 @@ QString ProjectSpace::absolutePath(){
   return m_path;
 }
 /** Store the name of version control system */
-void ProjectSpace::setVCSystem(QString vcsystem){
+void ProjectSpace::setVCSystem(QString /*vcsystem*/){
 }
 
 /** stored in the *_user files*/
@@ -632,48 +635,175 @@ QList<FileGroup> ProjectSpace::defaultFileGroups(){
 QList<Project>* ProjectSpace::allProjects(){
   return m_pProjects;
 }
+Project* ProjectSpace::project(QString projectName){
+  Project* pProject=0;
+  for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
+    if (pProject->name() == projectName){
+      return pProject;
+    }
+  }
+  kdDebug(9000)  << "kdevelop (project):  ProjectSpace::project()  return 0!" << endl;
+  return 0;
+}
 
-QList<KDevFileAction>* ProjectSpace::fileActions(const QString& absFileName,const QString& projectName){
-  QList<KDevFileAction>* pList = new QList<KDevFileAction>;
+QList<KAction>* ProjectSpace::fileActions(const QString& absFileName,const QString& projectName){
+  QList<KAction>* pList = new QList<KAction>;
 
   KDevFileAction* pAction;
   
-  
-  pAction = new KDevFileAction("Move to...","folder");
+  pList->append(new KActionSeparator());
+  pAction = new KDevFileAction("Move to...");
   pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
   pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotMoveToFile(const QString&)));
+  connect(pAction,SIGNAL(activated(const QString&,const QString&)),this,
+	  SLOT(slotMoveFileTo(const QString&,const QString&)));
   pList->append(pAction);
-
-  pAction = new KDevFileAction("Copy to...","folder");
+  
+  pAction = new KDevFileAction("Copy to...","editcopy");
   pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
   pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotCopyToFile(const QString&)));
+  connect(pAction,SIGNAL(activated(const QString&,const QString&)),this,
+	  SLOT(slotCopyFileTo(const QString&,const QString&)));
   pList->append(pAction);
 
-  pAction = new KDevFileAction("Rename...","folder");
+  pAction = new KDevFileAction("Rename...");
   pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
   pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotRenameFile(const QString&)));
+  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
+	  this,SLOT(slotRenameFile(const QString&,const QString&)));
   pList->append(pAction);
-  
-  pAction = new KDevFileAction("Delete File...","folder");
+
+  pList->append(new KActionSeparator());
+  pAction = new KDevFileAction("Remove from Project...");
   pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
   pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&)),this,SLOT(slotDeleteFile(const QString&)));
+  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
+	  this,SLOT(slotRemoveFileFromProject(const QString&,const QString&)));
   pList->append(pAction);
 
-  
-
-  
-  
+  pAction = new KDevFileAction("Delete File...","edittrash");
+  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
+  pAction->setProjectName(projectName);
+  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
+	  this,SLOT(slotDeleteFile(const QString&,const QString&)));
+  pList->append(pAction);
   return pList;
 }
-void ProjectSpace::slotRenameFile(const QString& absFileName){
-  kdDebug(9000) << "renameFile called: " <<  absFileName << endl;
-}
-void ProjectSpace::slotMoveFile(const QString& absFileName){
-  kdDebug(9000) << "moveFile called: " <<  absFileName << endl;
-}
 
+void ProjectSpace::slotRenameFile(const QString& absFileName,const QString& projectName){
+  kdDebug(9000) << "renameFile called: " <<  absFileName << endl;
+  
+  RenameFileDlg dlg(0,"renamedlg",true);
+  QFileInfo info(absFileName);
+  dlg.m_oldNameLineEdit->setText(info.fileName());
+  dlg.m_newNameLineEdit->setText(info.fileName());
+  dlg.m_newNameLineEdit->end(true);
+  dlg.m_newNameLineEdit->setFocus();
+  if(dlg.exec()){
+    QString newName = dlg.m_newNameLineEdit->text();
+    if(newName != ""){
+      Project* pProject = project(projectName);
+      if(pProject != 0){
+	cerr << "m_path:" << m_path << endl;
+	cerr << "relative Path:" << pProject->relativePath() << endl;
+	QString absProjectPath = CToolClass::getAbsolutePath(m_path,pProject->relativePath());
+	QString filePath = CToolClass::getRelativePath(absProjectPath,info.dirPath() +"/");
+	cerr << "filepath:" << filePath << endl;
+	cerr << "absProjectPath:" << absProjectPath << endl;
+	cerr << "dirPath:" << info.dirPath() << endl;
+	RegisteredFile* pRegFile = pProject->file(filePath + info.fileName());
+	pRegFile->setRelativeFile(filePath + newName);
+      }
+      else {
+	kdDebug(9000) << "slotRenameFile() No Project found:" << projectName << endl;	
+      }
+      // start rename
+      KURL srcURL(absFileName);
+      KURL destURL(info.dirPath() +"/" + newName);
+      KIO::SimpleJob* pJob = KIO::rename(srcURL,destURL,false);
+    }
+  }
+}
+void ProjectSpace::slotDeleteFile(const QString& absFileName,const QString& projectName){
+  kdDebug(9000) << "deleteFile called: " <<  absFileName << endl;
+  QFileInfo info(absFileName);
+  if (KMessageBox::warningYesNo(0, i18n("Do you really want to delete the file \"%1\"?\nThere is no way to restore it!").arg(info.fileName())) == KMessageBox::No){
+    return;
+  }
+  
+  Project* pProject = project(projectName);
+  if(pProject != 0){
+    pProject->removeFile(absFileName);
+  }
+  else {
+    kdDebug(9000) << "slotDeleteFile() No Project found:" << projectName << endl;	
+  }
+  KURL srcURL(absFileName);
+  KIO::DeleteJob* pJob = KIO::del(srcURL);
+  
+}
+void ProjectSpace::slotRemoveFileFromProject(const QString& absFileName,const QString& projectName){
+  kdDebug(9000) << "removeFileFromProject called: (KDE)" <<  absFileName << endl;
+  QFileInfo info(absFileName);
+  if (KMessageBox::warningYesNo(0, i18n("Do you really want to remove the file \"%1\"\nfrom project? It will remain on disk.").arg(info.fileName())) == KMessageBox::No){
+    return;
+  }
+
+  Project* pProject = project(projectName);
+  if(pProject != 0){
+    pProject->removeFile(absFileName);
+  }
+  else {
+    kdDebug(9000) << "slotDeleteFile() No Project found:" << projectName << endl;	
+  }
+  
+}
+void ProjectSpace::slotMoveFileTo(const QString& absFileName,const QString& projectName){
+  kdDebug(9000) << "slotMoveFileTo called: (KDE)" <<  absFileName << endl;
+  QString dir = KFileDialog::getExistingDirectory(QString::null,0,i18n("Destination directory..."));
+  if(dir.isEmpty()){
+    return; // cancel or no directory
+  }
+  QFileInfo info(absFileName);
+
+  Project* pProject = project(projectName);
+  if(pProject != 0){
+    RegisteredFile* pFile = pProject->fileAbsolute(absFileName);
+    RegisteredFile* pNewFile = new RegisteredFile(*pFile); // copy all properties
+    // change the filelocation
+    QString relFile = CToolClass::getRelativeFile(pProject->absolutePath(),dir +"/" + info.fileName());
+    kdDebug(9000) << "relFile" <<  relFile << endl;
+    pNewFile->setRelativeFile(relFile);
+    pProject->removeFile(pFile);
+    pProject->addFile(pNewFile);
+  }
+  
+  KURL srcURL(absFileName);
+  KURL destURL(dir + "/" + info.fileName());
+  KIO::FileCopyJob* pJob = KIO::file_move(srcURL,destURL);
+  
+}
+void ProjectSpace::slotCopyFileTo(const QString& absFileName,const QString& projectName){
+  kdDebug(9000) << "slotCopyFileTo called: (KDE)" <<  absFileName << endl;
+  QString dir = KFileDialog::getExistingDirectory(QString::null,0,i18n("Destination directory..."));
+  if(dir.isEmpty()){
+    return; // cancel or no directory
+  }
+  QFileInfo info(absFileName);
+  
+  Project* pProject = project(projectName);
+  if(pProject != 0){
+    RegisteredFile* pFile = pProject->fileAbsolute(absFileName);
+    RegisteredFile* pNewFile = new RegisteredFile(*pFile); // copy all properties
+    // change the filelocation
+    QString relFile = CToolClass::getRelativeFile(pProject->absolutePath(),dir +"/" + info.fileName());
+    kdDebug(9000) << "relFile" <<  relFile << endl;
+    pNewFile->setRelativeFile(relFile);
+    pProject->addFile(pNewFile);
+  }
+  
+  KURL srcURL(absFileName);
+  KURL destURL(dir + "/" + info.fileName());
+  KIO::FileCopyJob* pJob = KIO::file_copy(srcURL,destURL);
+}
 #include "projectspace.moc"

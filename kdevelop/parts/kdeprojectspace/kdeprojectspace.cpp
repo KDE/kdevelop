@@ -25,6 +25,22 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
+#include <qfileinfo.h>
+#include <kdebug.h>
+#include <qdir.h>
+#include <ctoolclass.h>
+#include <qdatetime.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <qtextstream.h>
+#include <kdevactions.h>
+#include <kpopupmenu.h>
+#include <kaboutdata.h>
+#include <ktrader.h>
+#include <klibloader.h>
+#include <qlineedit.h>
+
 
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
@@ -142,3 +158,4 @@ QList<FileGroup> KDEProjectSpace::defaultFileGroups(){
 
   return list;
 }
+

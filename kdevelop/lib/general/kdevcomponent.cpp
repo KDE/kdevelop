@@ -88,9 +88,9 @@ QWidget *KDevComponent::widget()
 KAboutData* KDevComponent::aboutPlugin(){
   return 0;
 }
-void KDevComponent::setFileActions(QList<KDevFileAction>*){
+void KDevComponent::setFileActions(QList<KAction>*){
 }
-QList<KDevFileAction>* KDevComponent::fileActions(const QString&,const QString&){
+QList<KAction>* KDevComponent::fileActions(const QString&,const QString&){
   return 0;
 }
 
