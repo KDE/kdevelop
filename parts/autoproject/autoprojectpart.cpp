@@ -470,19 +470,19 @@ QString AutoProjectPart::configureCommand()
         cmdline.prepend(QString("CC=%1 ").arg(cc));
     QString cflags = DomUtil::readEntry(dom, prefix + "cflags");
     if (!cflags.isEmpty())
-        cmdline.prepend(QString("CFLAGS=%1 ").arg(cflags));
+        cmdline.prepend(QString("CFLAGS=\"%1\" ").arg(cflags));
     QString cxx = DomUtil::readEntry(dom, prefix + "cxxcompilerbinary");
     if (!cxx.isEmpty())
         cmdline.prepend(QString("CXX=%1 ").arg(cxx));
     QString cxxflags = DomUtil::readEntry(dom, prefix + "cxxflags");
     if (!cxxflags.isEmpty())
-        cmdline.prepend(QString("CXXFLAGS=%1 ").arg(cxxflags));
+        cmdline.prepend(QString("CXXFLAGS=\"%1\" ").arg(cxxflags));
     QString f77 = DomUtil::readEntry(dom, prefix + "f77compilerbinary");
     if (!f77.isEmpty())
         cmdline.prepend(QString("F77=%1 ").arg(f77));
     QString fflags = DomUtil::readEntry(dom, prefix + "f77flags");
     if (!fflags.isEmpty())
-        cmdline.prepend(QString("FFLAGS=%1 ").arg(fflags));
+        cmdline.prepend(QString("FFLAGS=\"%1\" ").arg(fflags));
 
     QString configargs = DomUtil::readEntry(dom, prefix + "configargs");
     if (!configargs.isEmpty()) {
