@@ -408,7 +408,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 
   contents.setAutoDelete(true);
 
-	fileConfig = new KConfig(NULL, "kdevelop_srcfiles.cfg");
+	fileConfig = new KConfig();//FB? NULL, "kdevelop_srcfiles.cfg");
 
   colors[0] = white;
   colors[1] = darkBlue;
