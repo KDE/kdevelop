@@ -280,6 +280,10 @@ void DocTreeKDELibsFolder::refresh()
 /***************************************/
 
 
+/**
+ * API documentation created with the configure option --with-apidocs
+ * in kdelibs.
+ */
 class DocTreeDoxygenBook : public DocTreeItem
 {
 public:
