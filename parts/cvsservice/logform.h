@@ -30,7 +30,7 @@ class LogForm : public KDialogBase, public DCOPObject
     Q_OBJECT
 public:
     LogForm( CvsService_stub *cvsService, QWidget *parent=0, const char *name=0, int flags=0 );
-    ~LogForm();
+    virtual ~LogForm();
 
     void start( const QString &workDir, const QString &pathName );
 

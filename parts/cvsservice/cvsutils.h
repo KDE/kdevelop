@@ -15,7 +15,6 @@
 class KURL;
 class QString;
 class KURL::List;
-
 #include "cvspart.h"
 
 /**

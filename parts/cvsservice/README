@@ -22,6 +22,8 @@ Current features:
 * because this is a (buggy) direct conversion, as in parts/cvs.
 * it is possbile to 'add as binary' files to repository
 * checkout from remote repository ability added to the appwizard/importdlg
+* should handle :ext: repositories thanks to cvsservice
+* can tag / un-tag files
 
 To Do list
 
@@ -33,6 +35,6 @@ integrate them ;-)
 F.A.Q.
 
 Q: Does cvspart support login with :pserver: or :ext: ?
-A: You _must_ be logged in before using cvs operations because there is no
-   support for login (this will change if requests come).
+A: Well, I dunno ;-) I have no ssh repositories to test so feel free to provide 
+feedback on the subject :-)) 
 

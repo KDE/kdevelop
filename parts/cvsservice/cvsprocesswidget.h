@@ -16,7 +16,9 @@
 #include <dcopobject.h>
 
 class CvsPart;
+class DCOPRef;
 class CvsJob_stub;
+class CvsService_stub;
 class QStyleSheetItem;
 
 class CvsProcessWidget : public QTextEdit, public DCOPObject
@@ -24,13 +26,15 @@ class CvsProcessWidget : public QTextEdit, public DCOPObject
     K_DCOP
     Q_OBJECT
 public:
-    CvsProcessWidget( QCString appId, CvsPart *part, QWidget *parent, const char *name );
-    ~CvsProcessWidget();
+    CvsProcessWidget( CvsService_stub *service, CvsPart *part, QWidget *parent, const char *name );
+    virtual ~CvsProcessWidget();
 
     bool startJob();
-    bool startJob( const QCString appId, const QCString objId );
+    bool startJob( const DCOPRef &aJob );
 
     void cancelJob();
+
+    virtual void clear();
 
     QString output() const { return m_output; }
     QString errors() const { return m_errors; }
@@ -46,6 +50,7 @@ signals:
 
 private:
     CvsPart *m_part;
+    CvsService_stub *m_service;
     CvsJob_stub *m_job;
 
     QStyleSheetItem *m_goodStyle,

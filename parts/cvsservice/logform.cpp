@@ -15,6 +15,7 @@
 #include <qstringlist.h>
 
 #include <kmessagebox.h>
+#include <kcursor.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <dcopref.h>
@@ -59,10 +60,12 @@ LogForm::~LogForm()
 
 void LogForm::start( const QString &workDir, const QString &pathName )
 {
-    kdDebug() << "LogForm::start() here! workDir = " << workDir << ", pathName = " << pathName << endl;
+    kdDebug() << "LogForm::start() here! workDir = " << workDir <<
+        ", pathName = " << pathName << endl;
+
+    setCursor( KCursor::waitCursor() );
 
     CvsOptions *options = CvsOptions::instance();
-
     // "cvs log" needs to be done on relative-path basis
     m_pathName = pathName;
 
@@ -111,6 +114,8 @@ void LogForm::setText( const QString& text )
 
 void LogForm::slotLinkClicked( const QString & link )
 {
+    setCursor( KCursor::waitCursor() );
+
     kdDebug() << "LogForm::slotLinkClicked()" << endl;
 
     m_base->contents->clear();
@@ -156,6 +161,8 @@ void LogForm::slotLinkClicked( const QString & link )
 
 void LogForm::slotJobExited( bool normalExit, int exitStatus )
 {
+    setCursor( KCursor::arrowCursor() );
+
 //    m_part->core()->running( m_part, false );
     if (!normalExit)
     {

@@ -32,9 +32,7 @@ class CheckoutDialog;
 
 class CvsService_stub;
 class Repository_stub;
-
-// Available Cvs operations
-enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff };
+class CvsPartImpl;
 
 /**
 * Implementation for the CvsPart command line tool wrapper: it let to do all common
@@ -44,6 +42,8 @@ enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff
 class CvsPart : public KDevVersionControl
 {
     Q_OBJECT
+
+    friend class CvsPartImpl;
 
 public:
     // Standard constructor.
@@ -86,6 +86,8 @@ private slots:
     void slotActionRevert();
     void slotActionLog();
     void slotActionDiff();
+    void slotActionTag();
+    void slotActionUnTag();
     void slotActionAddToIgnoreList();
     void slotActionRemoveFromIgnoreList();
 
@@ -98,6 +100,8 @@ private slots:
     void slotRevert();
     void slotLog();
     void slotDiff();
+    void slotTag();
+    void slotUnTag();
     void slotAddToIgnoreList();
     void slotRemoveFromIgnoreList();
 
@@ -114,56 +118,18 @@ private slots:
     // Called when the user wishes to stop an operation.
     void slotStopButtonClicked( KDevPlugin* );
 
-    // Creates a working copy from remote repository
-    void slotCheckOut();
-
-    void slotJobFinished( bool normalExit, int exitStatus );
-    void slotDiffFinished( bool normalExit, int exitStatus );
-    void slotCheckoutFinished( bool normalExit, int exitStatus );
-
 private:
-    void login();
-    void logout();
-
-    // Implementation of CvsOperations
-    void commit( const KURL::List& urlList );
-    void update( const KURL::List& urlList );
-    void add( const KURL::List& urlList, bool binary = false );
-    void remove( const KURL::List& urlList );
-    void revert( const KURL::List& urlList );
-    void log( const KURL::List& urlList );
-    void diff( const KURL::List& urlList );
-    void addToIgnoreList( const KURL::List& urlList );
-    void removeFromIgnoreList( const KURL::List& urlList );
-
     void init();
-    bool requestCvsService();
-    void releaseCvsService();
-
-    // Setup actions.
     void setupActions();
     // Returns the KURL for the currently focused document, if there is any
     bool urlFocusedDocument( KURL &url );
-    // Call this every time a slot for cvs operations starts!! (It will setup the
-    // state (file/dir URL, ...).
-    // It will also display proper error messages so the caller must only exit if
-    // it fails (return false); if return true than basic requisites for cvs operation
-    // are satisfied.
-    bool prepareOperation( CvsOperation op );
-    // Call this every time a slot for cvs operations ends!! (It will restore the state for a new
-    // operation).
-    void doneOperation();
 
     // A list of KURLs of the files to be "operated" on (to be committed, added, removed, ...)
-    KURL::List urls;
+    KURL::List m_urls;
 
-    // Reference to widget integrated in the "bottom tabbar" (IDEAL)
-    QGuardedPtr<CvsProcessWidget> m_widget;
     // This is a pointer to the d->form used for collecting data about CVS project creation (used
     // by the ApplicationWizard in example)
     QGuardedPtr<CvsForm> m_cvsConfigurationForm;
-
-    QGuardedPtr<CheckoutDialog> m_checkoutDialog;
 
     // Actions
     KAction *actionCommit,
@@ -176,12 +142,12 @@ private:
         *actionRevert,
         *actionAddToIgnoreList,
         *actionRemoveFromIgnoreList,
+        *actionTag,
+        *actionUnTag,
         *actionLogin,
         *actionLogout;
 
-    CvsService_stub *m_cvsService;
-    Repository_stub *m_repository;
-    QCString            appId;      // cached DCOP clients app id
+    CvsPartImpl *m_impl;
 };
 
 #endif
