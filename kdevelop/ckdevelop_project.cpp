@@ -22,7 +22,7 @@
 #include "caddnewtranslationdlg.h"
 #include "cclassview.h"
 #include "ceditwidget.h"
-#include "cerrormessageparser.h"
+//#include "cerrormessageparser.h"
 #include "cfilepropdlg.h"
 #include "cgeneratenewfile.h"
 #include "ckappwizard.h"
@@ -165,7 +165,7 @@ bool CKDevelop::slotProjectClose()
     real_file_tree->clear();
     menu_buffers->clear();
 
-    messages_widget->clear();
+    messages_widget->start();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
 
@@ -449,7 +449,7 @@ void CKDevelop::slotProjectOptions(){
       KMessageBox::information(0,i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-      messages_widget->clear();
+      messages_widget->start();
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       QString makefile("Makefile.dist");
@@ -488,7 +488,7 @@ void CKDevelop::slotProjectOptions(){
       prj->updateMakefilesAm();
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running configure..."));
-      messages_widget->clear();
+      messages_widget->start();
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
@@ -719,7 +719,7 @@ void CKDevelop::slotProjectGenerate()
     return;
 
   slotStatusMsg(i18n("Generating project file..."));
-  messages_widget->clear();
+  messages_widget->start();
 
   QString dir;
   dir = KFileDialog::getExistingDirectory(QDir::currentDirPath());
@@ -764,7 +764,7 @@ void CKDevelop::slotProjectGenerate()
 
   showOutputView(true);
   setToolMenuProcess(false);
-  error_parser->toogleOff();
+//  error_parser->toogleOff();
 
   shell_process.clearArguments();
   shell_process << "echo"
@@ -859,7 +859,7 @@ void CKDevelop::slotProjectMessages(){
   }
   slotDebugStop();
 
-  error_parser->toogleOff();
+//  error_parser->toogleOff();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -867,8 +867,8 @@ void CKDevelop::slotProjectMessages(){
     slotStatusMsg(i18n("Creating pot-file in /po..."));
   else
     slotStatusMsg(i18n("Updating translation files..."));
-  messages_widget->clear();
-  error_parser->toogleOff();
+  messages_widget->start();
+//  error_parser->toogleOff();
   shell_process.clearArguments();
   //shellprocess << make_cmd;
   if(prj->isQt2Project()){
@@ -907,10 +907,10 @@ void CKDevelop::slotProjectAPI(){
     slotDebugStop();
     showOutputView(true);
     setToolMenuProcess(false);
-    error_parser->toogleOff();
+//    error_parser->toogleOff();
     slotFileSaveAll();
     slotStatusMsg(i18n("Creating project API-Documentation..."));
-    messages_widget->clear();
+    messages_widget->start();
     shell_process.clearArguments();
     shell_process << QString("cd '")+ dir + "' && ";
     shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
@@ -928,10 +928,10 @@ void CKDevelop::slotProjectAPI(){
     showOutputView(true);
 
     setToolMenuProcess(false);
-    error_parser->toogleOff();
+//    error_parser->toogleOff();
     slotFileSaveAll();
     slotStatusMsg(i18n("Creating project API-Documentation..."));
-    messages_widget->clear();
+    messages_widget->start();
 
     config->setGroup("Doc_Location");
     QString idx_path, link;
@@ -1077,11 +1077,11 @@ void CKDevelop::slotProjectManual(){
  if(prj->isKDE2Project()){
     slotDebugStop();
   	showOutputView(true);
-  	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+//  	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
   	setToolMenuProcess(false);
 	  slotFileSaveAll();
   	slotStatusMsg(i18n("Creating project Manual..."));
-  	messages_widget->clear();
+  	messages_widget->start();
     shell_process.clearArguments();
     shell_process << "cd '"+prj->getProjectDir()+"/doc"+"' && ";
     shell_process << make_cmd;
@@ -1096,12 +1096,12 @@ void CKDevelop::slotProjectManual(){
 	
   slotDebugStop();
 	showOutputView(true);
-	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+//	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
 	
 	setToolMenuProcess(false);
 	//  slotFileSaveAll();
 	slotStatusMsg(i18n("Creating project Manual..."));
-	messages_widget->clear();
+	messages_widget->start();
 	
 	bool ksgml = true;
 	if(dlg.program == "sgml2html") ksgml = false;
@@ -1137,11 +1137,11 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 
   slotDebugStop();
   showOutputView(true);
-  error_parser->toogleOff();
+//  error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make dist..."));
-  messages_widget->clear();
+  messages_widget->start();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
   shell_process << make_cmd << " dist";
@@ -1305,13 +1305,13 @@ void CKDevelop::slotdoneWithKpp(){
 void CKDevelop::slotrpmBuildProcess(){
   slotDebugStop();
   showOutputView(true);
-  error_parser->toogleOff();
+//  error_parser->toogleOff();
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Building RPMS..."));
-  messages_widget->clear();
+  messages_widget->start();
   beep = true;
-      rpmbuilder->hide();
+  rpmbuilder->hide();
 }
 
 /*********************************************************************
@@ -1537,7 +1537,7 @@ void CKDevelop::newSubDir(){
   KMessageBox::information(0,i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-  messages_widget->clear();
+  messages_widget->start();
   showOutputView(true);
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();

@@ -69,6 +69,7 @@ class KStatusBar;
 class CTabCtl;
 class CEditWidget;
 class COutputWidget;
+class CMakeOutputWidget;
 class CKDevAccel;
 class KProcess;
 class KWriteView;
@@ -231,6 +232,7 @@ public:
 
  public slots:
 
+  void slotSwitchToFile(QString filename, int line);
   void enableCommand(int id_);
   void disableCommand(int id_);
 
@@ -639,7 +641,7 @@ public:
   void slotBufferMenu(const QPoint& pos);
 
   void slotMenuBuffersSelected(int id);
-  void slotClickedOnMessagesWidget();
+//  void slotClickedOnMessagesWidget();
   
 
   void slotURLSelected(const QString& url,int,const char*);
@@ -918,7 +920,7 @@ private:
   DocTreeView* doc_tree;
 
   /** Output from the compiler ... */
-  COutputWidget* messages_widget;
+  CMakeOutputWidget* messages_widget;
   /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
   /** stderr output. */
@@ -932,7 +934,7 @@ private:
   int properties_view_pos;
   int workspace;
 
-  CErrorMessageParser* error_parser;
+//  CErrorMessageParser* error_parser;
   QString version;
   bool project;
 

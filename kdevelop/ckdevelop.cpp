@@ -23,7 +23,7 @@
 #include "ccreatedocdatabasedlg.h"
 #include "cdocbrowser.h"
 #include "ceditwidget.h"
-#include "cerrormessageparser.h"
+//#include "cerrormessageparser.h"
 #include "cexecuteargdlg.h"
 #include "cfinddoctextdlg.h"
 #include "ckdevaccel.h"
@@ -721,62 +721,66 @@ void CKDevelop::slotViewGotoLine(){
 }
 /** jump to the next error, based on the make output*/
 void CKDevelop::slotViewNextError(){
-  TErrorMessageInfo info = error_parser->getNext();
-  if(info.filename != ""){
-    messages_widget->setCursorPosition(info.makeoutputline-1,0);
-    switchToFile(info.filename,info.errorline-1);
-//    if(!bKDevelop){
-//      switchToKDevelop();
-//    }
-    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
-  }
-  else{
-    XBell(kapp->getDisplay(),100); // not a next found, beep
-  }
+  messages_widget->viewNextError();
 
-  //enable/disable the menus/toolbars
-  if(error_parser->hasNext()){
-    enableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  
-  if(error_parser->hasPrev()){
-    enableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
+//  TErrorMessageInfo info = error_parser->getNext();
+//  if(info.filename != ""){
+//    messages_widget->setCursorPosition(info.makeoutputline-1,0);
+//    switchToFile(info.filename,info.errorline-1);
+////    if(!bKDevelop){
+////      switchToKDevelop();
+////    }
+//    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
+//  }
+//  else{
+//    XBell(kapp->getDisplay(),100); // not a next found, beep
+//  }
+//
+//  //enable/disable the menus/toolbars
+//  if(error_parser->hasNext()){
+//    enableCommand(ID_VIEW_NEXT_ERROR);
+//  }
+//  else{
+//    disableCommand(ID_VIEW_NEXT_ERROR);
+//  }
+//
+//  if(error_parser->hasPrev()){
+//    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+//  }
+//  else{
+//    disableCommand(ID_VIEW_PREVIOUS_ERROR);
+//  }
 }
 /** jump to the previews error, based on the make output*/
 void CKDevelop::slotViewPreviousError(){
-  TErrorMessageInfo info = error_parser->getPrev();
-  if(info.filename != ""){
-    messages_widget->setCursorPosition(info.makeoutputline-1,0);
-    switchToFile(info.filename,info.errorline-1);
-//    if(!bKDevelop){
-//      switchToKDevelop();
-//    }
-    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
-  }
-  else{
-    XBell(kapp->getDisplay(),100); // not a previous found, beep
-  }
-  //enable/disable the menus/toolbars
-  if(error_parser->hasNext()){
-    enableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_NEXT_ERROR);
-  }
-  
-  if(error_parser->hasPrev()){
-    enableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
-  else{
-    disableCommand(ID_VIEW_PREVIOUS_ERROR);
-  }
+  messages_widget->viewPreviousError();
+
+//  TErrorMessageInfo info = error_parser->getPrev();
+//  if(info.filename != ""){
+//    messages_widget->setCursorPosition(info.makeoutputline-1,0);
+//    switchToFile(info.filename,info.errorline-1);
+////    if(!bKDevelop){
+////      switchToKDevelop();
+////    }
+//    slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
+//  }
+//  else{
+//    XBell(kapp->getDisplay(),100); // not a previous found, beep
+//  }
+//  //enable/disable the menus/toolbars
+//  if(error_parser->hasNext()){
+//    enableCommand(ID_VIEW_NEXT_ERROR);
+//  }
+//  else{
+//    disableCommand(ID_VIEW_NEXT_ERROR);
+//  }
+//
+//  if(error_parser->hasPrev()){
+//    enableCommand(ID_VIEW_PREVIOUS_ERROR);
+//  }
+//  else{
+//    disableCommand(ID_VIEW_PREVIOUS_ERROR);
+//  }
 }
 
 void CKDevelop::slotViewTTreeView(){
@@ -899,13 +903,13 @@ void CKDevelop::slotBuildCompileFile(){
     return;
   }
 
-  error_parser->reset();
-  error_parser->toogleOn();
+//  error_parser->reset();
+//  error_parser->toogleOn();
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Compiling %1").arg(pCurrentDoc->fileName()));
-  messages_widget->clear();
+  messages_widget->start();
   process.clearArguments();
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
@@ -913,7 +917,7 @@ void CKDevelop::slotBuildCompileFile(){
   QFileInfo fileinfo(pCurrentDoc->fileName());
   QString actualDir=fileinfo.dirPath();
   QDir::setCurrent(actualDir);
-  error_parser->setStartDir(actualDir);
+//  error_parser->setStartDir(actualDir);
 
   if (prj->getProjectType()!="normal_empty")
   {
@@ -1775,9 +1779,9 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 		slotDebugStop();
 	debug("save/generate dialog !\n");
 	// save/generate dialog if needed
-	error_parser->setStartDir(makefileDir);
-	error_parser->reset();
-	error_parser->toogleOn();
+//  error_parser->setStartDir(makefileDir);
+//	error_parser->reset();
+//	error_parser->toogleOn();
 	
 	debug("show output view !\n");
 	showOutputView(true);
@@ -1786,7 +1790,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 	debug("slotFileSaveAll !\n");
 	slotFileSaveAll();
 	debug("messages_widget-> clean() ! \n");
-	messages_widget->clear();
+	messages_widget->start();
 	
    debug("set make args !\n");
 	// set the make arguments
@@ -1874,8 +1878,8 @@ void CKDevelop::slotBuildConfigure(){
 
   showOutputView(true);
   setToolMenuProcess(false);
-  error_parser->toogleOff();
-  messages_widget->clear();
+//  error_parser->toogleOff();
+  messages_widget->start();
   slotFileSaveAll();
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
@@ -3270,60 +3274,60 @@ void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
   appl_process.writeStdin(&a,1);
 }
 */
-void CKDevelop::slotClickedOnMessagesWidget(){
-  TErrorMessageInfo info;
-  int x,y;
-
-  messages_widget->cursorPosition(&x,&y);
-  info = error_parser->getInfo(x+1);
-  if(info.filename != ""){
-//    if(!bKDevelop)
-//      switchToKDevelop();
-    messages_widget->setCursorPosition(info.makeoutputline,0);
-    switchToFile(info.filename,info.errorline-1);
-  }
-  else{
-     XBell(kapp->getDisplay(),100); // not a next found, beep
-  }
-    // switchToFile(error_filename);
-//     m_docViewManager->currentEditView()->setCursorPosition(error_line-1,0);
-//     m_docViewManager->currentEditView()->setFocus();
-  // int x,y;
-//   int error_line;
-//   QString text;
-//   QString error_line_str;
-//   QString error_filename;
-//   int pos1,pos2; // positions in the string
-//   QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
-
-  
- //  text = messages_widget->textLine(x);
-//   if((pos1=reg.match(text)) == -1) return; // not an error line
-
-//   // extract the error-line
-//   pos2 = text.find(':',pos1+1);
-//   error_line_str = text.mid(pos1+1,pos2-pos1-1);
-//   error_line = error_line_str.toInt();
-
-//   // extract the filename
-//   pos2 = text.findRev(' ',pos1);
-//   if (pos2 == -1) {
-//     pos2 = 0; // the filename is at the begining of the string
-//   }
-//   else { pos2++; }
-
-//   error_filename = text.mid(pos2,pos1-pos2);
-
-//   // switch to the file
-//   if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
-//     error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
-//   }
-//   if (QFile::exists(error_filename)){
-    
-    //  }
-
-
-}
+//void CKDevelop::slotClickedOnMessagesWidget(){
+//  TErrorMessageInfo info;
+//  int x,y;
+//
+//  messages_widget->cursorPosition(&x,&y);
+//  info = error_parser->getInfo(x+1);
+//  if(info.filename != ""){
+////    if(!bKDevelop)
+////      switchToKDevelop();
+//    messages_widget->setCursorPosition(info.makeoutputline,0);
+//    switchToFile(info.filename,info.errorline-1);
+//  }
+//  else{
+//     XBell(kapp->getDisplay(),100); // not a next found, beep
+//  }
+//    // switchToFile(error_filename);
+////     m_docViewManager->currentEditView()->setCursorPosition(error_line-1,0);
+////     m_docViewManager->currentEditView()->setFocus();
+//  // int x,y;
+////   int error_line;
+////   QString text;
+////   QString error_line_str;
+////   QString error_filename;
+////   int pos1,pos2; // positions in the string
+////   QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
+//
+//
+// //  text = messages_widget->textLine(x);
+////   if((pos1=reg.match(text)) == -1) return; // not an error line
+//
+////   // extract the error-line
+////   pos2 = text.find(':',pos1+1);
+////   error_line_str = text.mid(pos1+1,pos2-pos1-1);
+////   error_line = error_line_str.toInt();
+//
+////   // extract the filename
+////   pos2 = text.findRev(' ',pos1);
+////   if (pos2 == -1) {
+////     pos2 = 0; // the filename is at the begining of the string
+////   }
+////   else { pos2++; }
+//
+////   error_filename = text.mid(pos2,pos1-pos2);
+//
+////   // switch to the file
+////   if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
+////     error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
+////   }
+////   if (QFile::exists(error_filename)){
+//
+//    //  }
+//
+//
+//}
 void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
@@ -3355,14 +3359,14 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     { // rest from the rebuild all
       QString makefileDir=prj->getProjectDir() + prj->getSubDir();
       QDir::setCurrent(makefileDir);
-      error_parser->setStartDir(makefileDir);
+//      error_parser->setStartDir(makefileDir);
       if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
       {
         if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
         {
           QDir::setCurrent(prj->getProjectDir());
-          error_parser->setStartDir(prj->getProjectDir());
+//          error_parser->setStartDir(prj->getProjectDir());
         }
       }
       process.clearArguments();
@@ -3457,26 +3461,27 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 //     messages_widget->insertAt(result, x, y);
     messages_widget->insertAtEnd(result);
   }
-  if (ready)
-  { // start the error-message parser
-    QString str1 = messages_widget->text();
-      
-    if(error_parser->getMode() == CErrorMessageParser::MAKE){
-      error_parser->parseInMakeMode(&str1);
-    }
-    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//      error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-    // docbook file
-      error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
-    }
-      //enable/disable the menus/toolbars
-    if(error_parser->hasNext()){
-      enableCommand(ID_VIEW_NEXT_ERROR);
-    }
-    else{
-      disableCommand(ID_VIEW_NEXT_ERROR);
-    }
-  }
+
+//  if (ready)
+//  { // start the error-message parser
+//    QString str1 = messages_widget->text();
+//
+//    if(error_parser->getMode() == CErrorMessageParser::MAKE){
+//      error_parser->parseInMakeMode(&str1);
+//    }
+//    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+////      error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+//    // docbook file
+//      error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
+//    }
+//      //enable/disable the menus/toolbars
+//    if(error_parser->hasNext()){
+//      enableCommand(ID_VIEW_NEXT_ERROR);
+//    }
+//    else{
+//      disableCommand(ID_VIEW_NEXT_ERROR);
+//    }
+//  }
   if(beep && ready){
       XBell(kapp->getDisplay(),100); //beep :-)
       beep = false;
@@ -3741,6 +3746,12 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
 void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
   switchToFile(filename,linenumber);
 }
+
+void CKDevelop::slotSwitchToFile(QString filename, int line)
+{
+  switchToFile(filename, line);
+}
+
 
 void CKDevelop::slotToolbarClicked(int item){
   switch (item) {

@@ -21,7 +21,7 @@
 #include "cclassview.h"
 #include "cdocbrowser.h"
 #include "ceditwidget.h"
-#include "cerrormessageparser.h"
+//#include "cerrormessageparser.h"
 #include "ckdevaccel.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
@@ -152,7 +152,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   setDebugMenuProcess(false);
   setToolmenuEntries();
 
-  error_parser = new CErrorMessageParser;
+//  error_parser = new CErrorMessageParser;
 
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
@@ -168,7 +168,7 @@ CKDevelop::~CKDevelop()
 
   // from Constructur... delete everything which is not constructed
   //   with a binding to the application
-  delete error_parser;
+//  delete error_parser;
 }
 
 void CKDevelop::initView()
@@ -260,9 +260,9 @@ void CKDevelop::initView()
   // Outputwindow
   ////////////////////////
 	
-  messages_widget = new COutputWidget(o_tab_view);
+  messages_widget = new CMakeOutputWidget(o_tab_view);
   messages_widget->setFocusPolicy(QWidget::ClickFocus);
-  messages_widget->setReadOnly(TRUE);
+//  messages_widget->setReadOnly(TRUE);
 
   stdin_stdout_widget = new COutputWidget(o_tab_view);
   stdin_stdout_widget->setReadOnly(TRUE);
@@ -1278,7 +1278,8 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
 //  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
-  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
+  connect(messages_widget, SIGNAL(switchToFile(const QString&, int)),this,SLOT(slotSwitchToFile(const QString&, int)));
+
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));

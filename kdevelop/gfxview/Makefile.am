@@ -1,5 +1,5 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-lib_LTLIBRARIES = libkdevelopgfxview.la
+lib_LTLIBRARIES = libgfxview.la
 
 
 INCLUDES = $(all_includes)
@@ -7,12 +7,9 @@ INCLUDES = $(all_includes)
 
 LDFLAGS = 
 
+libgfxview_la_METASOURCES = AUTO
 
-libkdevelopgfxview_la_LDFLAGS = -version-info 2:0
-
-libkdevelopgfxview_la_METASOURCES = AUTO
-
-libkdevelopgfxview_la_SOURCES = GfxClassTreeWindow.cpp GfxClassTreeScrollView.cpp GfxClassTree.cpp GfxClassBox.cpp 
+libgfxview_la_SOURCES = GfxClassTreeWindow.cpp GfxClassTreeScrollView.cpp GfxClassTree.cpp GfxClassBox.cpp 
 
 
 EXTRA_DIST = GfxClassBox.cpp GfxClassBox.h GfxClassTree.cpp GfxClassTree.h GfxClassTreeScrollView.cpp GfxClassTreeScrollView.h GfxClassTreeWindow.cpp GfxClassTreeWindow.h 
