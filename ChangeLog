@@ -1,3 +1,6 @@
+1999-12-23 jbb <jbb@ihug.co.nz>
+	* force debug configuration update when app is running
+
 1999-12-20 jbb <jbb@ihug.co.nz>
 	* added debugger configuration - allows user to select between
       an external debugger of their choice or the internal debugger.
