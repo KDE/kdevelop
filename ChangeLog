@@ -1,3 +1,9 @@
+1999-01-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * completed Sandy's ToggleTreeView and ToggleOutputView 
+	  including saving of geometry parameters & tested it
+        * changed look of menubar and ordered items new
+          including changes in resource.h: TODO: review the ID_ values
+
 1999-01-27 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commit a patch from Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	 kdevelop should now compile on gcc 2.7.2 too

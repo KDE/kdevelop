@@ -286,14 +286,12 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   cerr << "QUIT4";
   config->setGroup("View Configuration");
 
-  config->writeEntry("show_tree_view",options_menu->isItemChecked(ID_OPTIONS_TREEVIEW));
-  config->writeEntry("show_output_view",options_menu->isItemChecked(ID_OPTIONS_OUTPUTVIEW));
-  config->writeEntry("tree_view_pos",top_panner->separatorPos());
-  config->writeEntry("output_view_pos",view->separatorPos());
+  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
+  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
 
-  config->writeEntry("show_std_toolbar",options_menu->isItemChecked(ID_OPTIONS_STD_TOOLBAR));
-  config->writeEntry("show_browser_toolbar",options_menu->isItemChecked(ID_OPTIONS_BROWSER_TOOLBAR));
-  config->writeEntry("show_statusbar",options_menu->isItemChecked(ID_OPTIONS_STATUSBAR));
+  config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
+  config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
+  config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   cerr << "QUIT3";
   //config->writeEntry("x",x());
   //config->writeEntry("y",y());
@@ -368,23 +366,23 @@ void CKDevelop::slotEditGotoLine(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotOptionsTStdToolbar(){
- if(options_menu->isItemChecked(ID_OPTIONS_STD_TOOLBAR)){
-   options_menu->setItemChecked(ID_OPTIONS_STD_TOOLBAR,false);
+ if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
+   view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
     enableToolBar(KToolBar::Hide);
   }
   else{
-    options_menu->setItemChecked(ID_OPTIONS_STD_TOOLBAR,true);
+    view_menu->setItemChecked(ID_VIEW_TOOLBAR,true);
     enableToolBar(KToolBar::Show);
   }
 
 }
 void CKDevelop::slotOptionsTBrowserToolbar(){
-  if(options_menu->isItemChecked(ID_OPTIONS_BROWSER_TOOLBAR)){
-    options_menu->setItemChecked(ID_OPTIONS_BROWSER_TOOLBAR,false);
+  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR)){
+    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,false);
     enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
   }
   else{
-    options_menu->setItemChecked(ID_OPTIONS_BROWSER_TOOLBAR,true);
+    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,true);
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
   }
 }
@@ -392,32 +390,36 @@ void CKDevelop::slotOptionsTBrowserToolbar(){
 void CKDevelop::slotOptionsTStatusbar(){
   
   bViewStatusbar=!bViewStatusbar;
-    options_menu->setItemChecked(ID_OPTIONS_STATUSBAR,bViewStatusbar);
+    view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
     enableStatusBar();
   
 }
 void CKDevelop::slotOptionsTTreeView(){
 
-  if(options_menu->isItemChecked(ID_OPTIONS_TREEVIEW)){
-    options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,false);
+
+
+  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
+    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+    config->writeEntry("tree_view_pos",top_panner->separatorPos());
     top_panner->setSeparatorPos(0);
   }
   else{
-    top_panner->setSeparatorPos(200);
-    options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,true);
+    top_panner->setSeparatorPos(config->readNumEntry("tree_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
   resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
   resize (width()+1,height());
- 
+
 }
 void CKDevelop::slotOptionsTOutputView(){
-  if(options_menu->isItemChecked(ID_OPTIONS_OUTPUTVIEW)){
-    options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,false);
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->writeEntry("output_view_pos",view->separatorPos());
     view->setSeparatorPos(view->height());
   }
   else{
-    view->setSeparatorPos(400);
-    options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,true);
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
   resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
   resize (width()+1,height());
@@ -427,25 +429,33 @@ void CKDevelop::slotOptionsRefresh(){
   refreshTrees();
 }
 void CKDevelop::slotOptionsEditor(){
+  slotStatusMsg(i18n("Setting up the Editor..."));
   cpp_widget->optDlg();
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
   edit_widget->writeConfig(config);
   edit_widget->doc()->writeConfig(config);
+  slotStatusMsg(IDS_DEFAULT);
+
 }
 void CKDevelop::slotOptionsEditorColors(){
+  slotStatusMsg(i18n("Setting up the Editor's colors..."));
   cpp_widget->colDlg();
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
   edit_widget->writeConfig(config);
   edit_widget->doc()->writeConfig(config);
+  slotStatusMsg(IDS_DEFAULT);
+
 }
 void CKDevelop::slotOptionsSyntaxHighlighting(){
+  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
   cpp_widget->hlDlg();
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
   edit_widget->writeConfig(config);
   edit_widget->doc()->writeConfig(config);
+  slotStatusMsg(IDS_DEFAULT);
 }
 
 void CKDevelop::slotOptionsKDevelop(){
@@ -457,9 +467,6 @@ void CKDevelop::slotOptionsKDevelop(){
 
 void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(i18n("Configuring Documentation Browser..."));
-
-//   KHTMLWidget* htmlview;
-//   browser_widget->htmlview=getKHTMLWidget();
 
    CDocBrowserOptionsDlg browserOptions;
 
@@ -1160,7 +1167,7 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_EDIT_CUT:
     slotEditCut();
     break;
-  case ID_OPTIONS_REFRESH:
+  case ID_VIEW_REFRESH:
     slotOptionsRefresh();
     break;
   case ID_BUILD_MAKE:
@@ -1186,7 +1193,6 @@ void CKDevelop::slotToolbarClicked(int item){
 
 
 BEGIN_STATUS_MSG(CKDevelop)
-
   ON_STATUS_MSG(ID_FILE_NEW_FILE,    i18n("Creates a new file"))
   ON_STATUS_MSG(ID_FILE_NEW_PROJECT, i18n("Generate a new project"))
   ON_STATUS_MSG(ID_FILE_OPEN_FILE,   i18n("Opens an existing file"))  
@@ -1213,7 +1219,6 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_EDIT_SEARCH,                  i18n("Search the file for an expression"))
   ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           i18n("Repeat the last search"))
   ON_STATUS_MSG(ID_EDIT_REPLACE,                 i18n("Search and replace expression"))
-  ON_STATUS_MSG(ID_EDIT_GOTO_LINE,               i18n("Go to Line Number..."))
 
 
   ON_STATUS_MSG(ID_DOC_BACK,                      i18n("Switch to last browser page"))
@@ -1224,11 +1229,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_DOC_KDE_GUI_LIBRARY,           i18n("Switch to the KDE-GUI-Documentation"))
   ON_STATUS_MSG(ID_DOC_KDE_KFILE_LIBRARY,          i18n("Switch to the KDE-File-Documentation"))
   ON_STATUS_MSG(ID_DOC_KDE_HTML_LIBRARY,          i18n("Switch to the KDE-Html-Documentation"))
-  ON_STATUS_MSG(ID_DOC_UPDATE_KDE_DOCUMENTATION,  i18n("Update your KDE-Libs Documentation"))
-  ON_STATUS_MSG(ID_DOC_CREATE_SEARCHDATABASE,    i18n("Create a search database of the current Documentation"))
   ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           i18n("Switch to the project's API-Documentation"))
   ON_STATUS_MSG(ID_DOC_USER_MANUAL,               i18n("Switch to the project's User-Manual"))
-
 
 
   ON_STATUS_MSG(ID_BUILD_RUN,                     i18n("Invoke make-command and run the program"))
@@ -1251,17 +1253,23 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_PROJECT_OPTIONS,               i18n("Set project and compiler options"))
 
 
-  ON_STATUS_MSG(ID_OPTIONS_REFRESH,               i18n("Refresh current view"))
+  ON_STATUS_MSG(ID_VIEW_REFRESH,               i18n("Refresh current view"))
+  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               i18n("Go to Line Number..."))
 
-  ON_STATUS_MSG(ID_OPTIONS_STD_TOOLBAR,           i18n("Enables / disables the standard toolbar"))
-  ON_STATUS_MSG(ID_OPTIONS_BROWSER_TOOLBAR,       i18n("Enables / disables the browser toolbar"))
-  ON_STATUS_MSG(ID_OPTIONS_STATUSBAR,             i18n("Enables / disables the statusbar"))
+  ON_STATUS_MSG(ID_VIEW_TOOLBAR,           i18n("Enables / disables the standard toolbar"))
+  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       i18n("Enables / disables the browser toolbar"))
+  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             i18n("Enables / disables the statusbar"))
 
-  ON_STATUS_MSG(ID_OPTIONS_TREEVIEW,              i18n("Enables / disables the treeview"))
-  ON_STATUS_MSG(ID_OPTIONS_OUTPUTVIEW,            i18n("Enables / disables the outputview"))
+  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              i18n("Enables / disables the treeview"))
+  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            i18n("Enables / disables the outputview"))
 
+  ON_STATUS_MSG(ID_OPTIONS_EDITOR,              i18n("Sets the Editor's behavoir"))
+  ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       i18n("Sets the Editor's colors"))
+  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, i18n("Sets the highlighting colors"))
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              i18n("Set up the KDevelop environment"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  i18n("Configures the Browser options"))
+  ON_STATUS_MSG(ID_OPTIONS_UPDATE_KDE_DOCUMENTATION,  i18n("Update your KDE-Libs Documentation"))
+  ON_STATUS_MSG(ID_OPTIONS_CREATE_SEARCHDATABASE,    i18n("Create a search database of the current Documentation"))
 
 
   ON_STATUS_MSG(ID_HELP_CONTENT,                  i18n("Switch to KDevelop's User Manual"))
@@ -1269,6 +1277,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
 
 
 

@@ -61,11 +61,25 @@
 #define ID_EDIT_SEARCH              11060
 #define ID_EDIT_REPEAT_SEARCH       11070
 #define ID_EDIT_REPLACE             11080
-#define ID_EDIT_GOTO_LINE           11090
+
+
 
 #define ID_EDIT_SELECT_ALL          11040
 #define ID_EDIT_DESELECT_ALL        11041
 #define ID_EDIT_INVERT_SELECTION    11042
+
+///////////////////////////////////////////////////////////////////
+// view-menu entries
+#define ID_VIEW_GOTO_LINE           11090
+
+#define ID_VIEW_TREEVIEW         15050
+#define ID_VIEW_OUTPUTVIEW       15060
+
+#define ID_VIEW_TOOLBAR      15020
+#define ID_VIEW_BROWSER_TOOLBAR  15030
+#define ID_VIEW_STATUSBAR        15040
+
+#define ID_VIEW_REFRESH          15010
 
 
 ///////////////////////////////////////////////////////////////////
@@ -73,7 +87,7 @@
 #define ID_DOC_BACK                 12010
 #define ID_DOC_FORWARD              12020
 
-#define ID_DOC_SEARCH_TEXT         12030
+#define ID_DOC_SEARCH_TEXT          12030
 
 #define ID_DOC_QT_LIBRARY           12040
 #define ID_DOC_KDE_CORE_LIBRARY     12050
@@ -81,8 +95,6 @@
 #define ID_DOC_KDE_KFILE_LIBRARY    12070
 #define ID_DOC_KDE_HTML_LIBRARY     12080
 
-#define ID_DOC_UPDATE_KDE_DOCUMENTATION 12085
-#define ID_DOC_CREATE_SEARCHDATABASE 12087
 
 #define ID_DOC_PROJECT_API_DOC      12090
 #define ID_DOC_USER_MANUAL          12100
@@ -118,20 +130,16 @@
 ///////////////////////////////////////////////////////////////////
 // options-menu entries 
 
-#define ID_OPTIONS_REFRESH          15010
 
-#define ID_OPTIONS_STD_TOOLBAR      15020
-#define ID_OPTIONS_BROWSER_TOOLBAR  15030
-#define ID_OPTIONS_STATUSBAR        15040
+#define ID_OPTIONS_EDITOR          	   	15065
+#define ID_OPTIONS_EDITOR_COLORS           	15066
+#define ID_OPTIONS_SYNTAX_HIGHLIGHTING 		15067
 
-#define ID_OPTIONS_TREEVIEW         15050
-#define ID_OPTIONS_OUTPUTVIEW       15060
+#define ID_OPTIONS_KDEVELOP  			15070
+#define ID_OPTIONS_DOCBROWSER			15071
 
-#define ID_OPTIONS_EDITOR           15065
-#define ID_OPTIONS_EDITOR_COLORS           15066
-#define ID_OPTIONS_SYNTAX_HIGHLIGHTING 15067
-#define ID_OPTIONS_KDEVELOP  15070
-#define ID_OPTIONS_DOCBROWSER		15071
+#define ID_OPTIONS_UPDATE_KDE_DOCUMENTATION 	12085
+#define ID_OPTIONS_CREATE_SEARCHDATABASE 	12087
 
 ///////////////////////////////////////////////////////////////////
 // tools-menu entries 
@@ -160,7 +168,38 @@
 #define ID_STATUS_INS_OVR           1002
 #define ID_STATUS_LN_CLM            1003
 #define ID_STATUS_EMPTY             1004
-#define IDS_DEFAULT                 "Ready."
+#define IDS_DEFAULT                 i18n("Ready.")
+
+
+///////////////////////////////////////////////////////////////////
+// MACROS FOR THE CONNECT OF YOUR SIGNALS TO CORRESPONDENT SLOTS
+// IN YOUR MAIN IMPLEMENTATION OF MENUBAR AND TOOLBAR
+///////////////////////////////////////////////////////////////////
+// Create class member in implementation for commandCallback
+#define BEGIN_CMD(class)         void class::commandCallback(int id_){ switch (id_){
+
+
+///////////////////////////////////////////////////////////////////
+// MENU CONNECTS
+#define CONNECT_CMD(submenu)           connect(submenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));connect(submenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)))
+
+
+///////////////////////////////////////////////////////////////////
+// TOOLBAR CONNECT
+#define CONNECT_TOOLBAR(ToolBar)        connect(ToolBar, SIGNAL(clicked(int)),SLOT(commandCallback(int)));connect(ToolBar, SIGNAL(highlighted(int,bool)), SLOT(statusCallback(int)))
+
+
+///////////////////////////////////////////////////////////////////
+// MACROS FOR GENERATING THE SWITCH CONSTRUCTION OF THE commandCallback(int) METHOD
+
+///////////////////////////////////////////////////////////////////
+// Create cases for entries and connect them with their functions
+#define ON_CMD(id, cmd_class_function, message)   case id:slotStatusMsg(message);cmd_class_function ;break;
+
+///////////////////////////////////////////////////////////////////
+// End class member in implementation for commandCallback
+#define END_CMD()      }}
+
 
 
 ///////////////////////////////////////////////////////////////////
@@ -176,5 +215,10 @@
  
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
-#define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT); }}
+#define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
+
+
+
 

@@ -98,16 +98,19 @@ void CKDevelop::init(){
   int w = config->readNumEntry("width");
   int h = config->readNumEntry("height");
   resize(w,h);
- 
+
+  // call bar functions to create bars
+
+  // create the main view
   view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Absolute,
   			config->readNumEntry("view_panner_pos"));  
   
   output_widget = new COutputWidget(kapp,view);
-  //output_widget->setFillColumnMode(80,true);
-  //  output_widget->setWordWrap(true);
-    output_widget->setReadOnly(TRUE);
-    //output_widget->setAutoIndentMode(true);
-    //    output_widget->setFocusPolicy(QWidget::ClickFocus);
+//  output_widget->setFillColumnMode(80,true);
+//  output_widget->setWordWrap(true);
+  output_widget->setReadOnly(TRUE);
+//  output_widget->setAutoIndentMode(true);
+//  output_widget->setFocusPolicy(QWidget::ClickFocus);
   connect(output_widget,SIGNAL(clicked()),this,SLOT(slotClickedOnOutputWidget()));
 
   
@@ -276,8 +279,6 @@ void CKDevelop::initMenu(){
 			SLOT(slotEditRepeatSearch()),Key_F3,ID_EDIT_REPEAT_SEARCH);
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Goto Line..."), this, SLOT(slotEditGotoLine()),0,ID_EDIT_GOTO_LINE);
-  edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
   edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
@@ -286,46 +287,75 @@ void CKDevelop::initMenu(){
   disableCommand(ID_EDIT_UNDO);
   disableCommand(ID_EDIT_REDO);
   menuBar()->insertSeparator();
-  
-  // documentation menu
-  documentation_menu = new QPopupMenu;
 
-  documentation_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
-  documentation_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("&Search Marked Text"),this, 
-				 SLOT(slotDocSText()),Key_F2,ID_DOC_SEARCH_TEXT);
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&Core-Library"),this, 
-				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&GUI-Library"),this, 
-				 SLOT(slotDocKDEGUILib()),0,ID_DOC_KDE_GUI_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&KFile-Library"),this, 
-				 SLOT(slotDocKDEKFileLib()),0,ID_DOC_KDE_KFILE_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&HTML-Library"),this, 
-				 SLOT(slotDocKDEHTMLLib()),0,ID_DOC_KDE_HTML_LIBRARY);
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("Project &API-Doc"),this, 
-				      SLOT(slotDocAPI()),0,ID_DOC_PROJECT_API_DOC);
-  
-  documentation_menu->insertItem(i18n("Project &User-Manual"),this, 
-				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
+  view_menu = new QPopupMenu;
+  view_menu->insertItem(i18n("&Goto Line..."), this, SLOT(slotEditGotoLine()),0,ID_VIEW_GOTO_LINE);
+  view_menu->insertSeparator();
+  config->setGroup("View Configuration");
+  bViewStatusbar = config->readBoolEntry("show_statusbar",true);
 
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("Update KDE-Documentation..."),this, 
-				 SLOT(slotDocUpdateKDEDocumentation()),0,ID_DOC_UPDATE_KDE_DOCUMENTATION);
-  documentation_menu->insertItem(i18n("Create Searchdatabase..."),this, 
-				 SLOT(slotCreateSearchDatabase()),0,ID_DOC_CREATE_SEARCHDATABASE);
- 
-  menuBar()->insertItem(i18n("&Documentation"), documentation_menu);
-  
-  disableCommand(ID_DOC_BACK);
-  disableCommand(ID_DOC_FORWARD);
-  disableCommand(ID_DOC_PROJECT_API_DOC);
-  disableCommand(ID_DOC_USER_MANUAL);
+  view_menu->insertItem(i18n("&Tree-View"),this, SLOT(slotOptionsTTreeView()),
+ 			   CTRL+Key_T,ID_VIEW_TREEVIEW);
+  view_menu->setItemChecked(ID_VIEW_TREEVIEW,config->readBoolEntry("show_tree_view",true));
+
+  view_menu->insertItem(i18n("&Output-View"),this, SLOT(slotOptionsTOutputView()),CTRL+Key_O,ID_VIEW_OUTPUTVIEW);
+  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,config->readBoolEntry("show_output_view",true));
+
+  view_menu->insertSeparator();
+  view_menu->insertItem(i18n("&Toolbar"),this,
+			   SLOT(slotOptionsTStdToolbar()),0,ID_VIEW_TOOLBAR);
+  view_menu->setItemChecked(ID_VIEW_TOOLBAR,config->readBoolEntry("show_std_toolbar", true));
+
+  view_menu->insertItem(i18n("&Browser-Toolbar"),this,
+			   SLOT(slotOptionsTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
+  view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,config->readBoolEntry("show_browser_toolbar",true));
+
+  view_menu->insertItem(i18n("Status&bar"),this,
+			   SLOT(slotOptionsTStatusbar()),CTRL+Key_B,ID_VIEW_STATUSBAR);
+  view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
+
+  view_menu->insertSeparator();
+  view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this,
+			   SLOT(slotOptionsRefresh()),0,ID_VIEW_REFRESH);
+
+  menuBar()->insertItem(i18n("&View"), view_menu);
   menuBar()->insertSeparator();
   
+  // project Menu
+  // first the submenu for adding projectfiles
+  QPopupMenu* p2 = new QPopupMenu;
+  p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
+  p2->insertItem(i18n("&Existing File(s)..."), this,
+		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
+
+  project_menu = new QPopupMenu;
+  project_menu->insertItem(i18n("&New Class..."), this,
+			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
+  project_menu->insertItem("&Add File(s) to Project",p2,ID_PROJECT_ADD_FILE);
+  //  project_menu->insertItem(i18n("&Remove File from Project"), this,
+  //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
+  //project_menu->insertSeparator();
+
+  project_menu->insertSeparator();		
+  project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
+			   ,0,ID_PROJECT_FILE_PROPERTIES);
+  project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
+
+  menuBar()->insertItem(i18n("&Project"), project_menu);
+  disableCommand(ID_PROJECT_ADD_FILE_NEW);
+  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+  disableCommand(ID_PROJECT_ADD_FILE);
+  //  disableCommand(ID_PROJECT_REMOVE_FILE);
+  disableCommand(ID_PROJECT_NEW_CLASS);
+  disableCommand(ID_PROJECT_FILE_PROPERTIES);
+  disableCommand(ID_PROJECT_OPTIONS);
+
+  // the bookmarks menu
+  // p = new QPopupMenu;
+//   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
+//   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
+//   p->insertSeparator();
+//   menuBar()->insertItem(i18n("&Bookmarks"),p);
 
 
   // build menu
@@ -358,77 +388,17 @@ void CKDevelop::initMenu(){
   disableCommand(ID_BUILD_MAKE_PROJECT_API);
   disableCommand(ID_BUILD_MAKE_USER_MANUAL);
 
-  // project Menu
-  // first the submenu for adding projectfiles
-  QPopupMenu* p2 = new QPopupMenu;
-  p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
-  p2->insertItem(i18n("&Existing File(s)..."), this, 
-		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
-
-  project_menu = new QPopupMenu;
-  project_menu->insertItem(i18n("&New Class..."), this, 
-			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
-  project_menu->insertItem("&Add File(s) to Project",p2,ID_PROJECT_ADD_FILE); 
-  //  project_menu->insertItem(i18n("&Remove File from Project"), this, 
-  //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
-  //project_menu->insertSeparator();
-  
-  project_menu->insertSeparator();		   
-  project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
-			   ,0,ID_PROJECT_FILE_PROPERTIES);
-  project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
-  
-  menuBar()->insertItem(i18n("&Project"), project_menu);
-  disableCommand(ID_PROJECT_ADD_FILE_NEW);
-  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-  disableCommand(ID_PROJECT_ADD_FILE);
-  //  disableCommand(ID_PROJECT_REMOVE_FILE);
-  disableCommand(ID_PROJECT_NEW_CLASS);
-  disableCommand(ID_PROJECT_FILE_PROPERTIES);
-  disableCommand(ID_PROJECT_OPTIONS);
-  
-  // the bookmarks menu
-  // p = new QPopupMenu;
-//   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
-//   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
-//   p->insertSeparator();
-//   menuBar()->insertItem(i18n("&Bookmarks"),p);
+  //the tools menu
+  tools_menu = new QPopupMenu;
+  //  tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
+  // tools_menu->insertItem(i18n("&Kdbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
+//  menuBar()->insertItem(i18n("&Tools"), tools_menu);
+ // menuBar()->insertSeparator();
 
   
 
   // options menu
   options_menu = new QPopupMenu;
-
- 
-  config->setGroup("View Configuration");
-  bViewStatusbar = config->readBoolEntry("show_statusbar");
-
- // options_menu->setCheckable(true);
-  config->setGroup("View Configuration");
-  options_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this, 
-			   SLOT(slotOptionsRefresh()),0,ID_OPTIONS_REFRESH);
-  options_menu->insertSeparator();
-  options_menu->insertItem(i18n("Toogle &Tree-View"),this, SLOT(slotOptionsTTreeView()),
- 			   CTRL+Key_T,ID_OPTIONS_TREEVIEW);
-  options_menu->setItemChecked(ID_OPTIONS_TREEVIEW,config->readBoolEntry("show_tree_view"));
-
-  //  options_menu->insertItem(i18n("Toogle &Output-View"),this, SLOT(slotOptionsTOutputView()),CTRL+Key_O,ID_OPTIONS_OUTPUTVIEW);
-  //  options_menu->setItemChecked(ID_OPTIONS_OUTPUTVIEW,config->readBoolEntry("show_output_view"));
-  options_menu->insertSeparator();
-  
-  options_menu->insertItem(i18n("Toogle &Std-Toolbar"),this, 
-			   SLOT(slotOptionsTStdToolbar()),0,ID_OPTIONS_STD_TOOLBAR);
-  options_menu->setItemChecked(ID_OPTIONS_STD_TOOLBAR,config->readBoolEntry("show_std_toolbar"));
-  
-  options_menu->insertItem(i18n("Toogle &Browser-Toolbar"),this,
-			   SLOT(slotOptionsTBrowserToolbar()),0,ID_OPTIONS_BROWSER_TOOLBAR);
-  options_menu->setItemChecked(ID_OPTIONS_BROWSER_TOOLBAR,config->readBoolEntry("show_browser_toolbar"));
-  
-  options_menu->insertItem(i18n("Toogle Status&bar"),this, 
-			   SLOT(slotOptionsTStatusbar()),CTRL+Key_B,ID_OPTIONS_STATUSBAR);
-  options_menu->setItemChecked(ID_OPTIONS_STATUSBAR,bViewStatusbar);
-  
-  options_menu->insertSeparator();
   options_menu->insertItem(i18n("&Editor..."),this,
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
   options_menu->insertItem(i18n("Editor-&Colors..."),this,
@@ -440,26 +410,59 @@ void CKDevelop::initMenu(){
 		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);    
   options_menu->insertItem(i18n("Documentation-Browser"),this,
 		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
+  options_menu->insertSeparator();
+  options_menu->insertItem(i18n("Update KDE-Documentation..."),this,
+				 SLOT(slotDocUpdateKDEDocumentation()),0,ID_OPTIONS_UPDATE_KDE_DOCUMENTATION);
+  options_menu->insertItem(i18n("Create Searchdatabase..."),this,
+				 SLOT(slotCreateSearchDatabase()),0,ID_OPTIONS_CREATE_SEARCHDATABASE);
+
 
   menuBar()->insertItem(i18n("&Options"), options_menu);
   menuBar()->insertSeparator();
 
-
   // the buffers menu
 
   menu_buffers = new QPopupMenu;
-  menuBar()->insertItem(i18n("&Buffers"), menu_buffers);
+  menuBar()->insertItem(i18n("&Window"), menu_buffers);
   
-  //the tools menu
-  tools_menu = new QPopupMenu;
-  //  tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
-  // tools_menu->insertItem(i18n("&Kdbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
-//  menuBar()->insertItem(i18n("&Tools"), tools_menu);
- // menuBar()->insertSeparator();
 
 
   // the helpmenu
+
   menuBar()->insertSeparator();
+  // documentation menu
+  documentation_menu = new QPopupMenu;
+  documentation_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
+  documentation_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
+  documentation_menu->insertSeparator();
+  documentation_menu->insertItem(i18n("&Search Marked Text"),this,
+				 SLOT(slotDocSText()),Key_F2,ID_DOC_SEARCH_TEXT);
+  documentation_menu->insertSeparator();
+  documentation_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
+  documentation_menu->insertItem(i18n("KDE-&Core-Library"),this,
+				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
+  documentation_menu->insertItem(i18n("KDE-&GUI-Library"),this,
+				 SLOT(slotDocKDEGUILib()),0,ID_DOC_KDE_GUI_LIBRARY);
+  documentation_menu->insertItem(i18n("KDE-&KFile-Library"),this,
+				 SLOT(slotDocKDEKFileLib()),0,ID_DOC_KDE_KFILE_LIBRARY);
+  documentation_menu->insertItem(i18n("KDE-&HTML-Library"),this,
+				 SLOT(slotDocKDEHTMLLib()),0,ID_DOC_KDE_HTML_LIBRARY);
+  documentation_menu->insertSeparator();
+  documentation_menu->insertItem(i18n("Project &API-Doc"),this,
+				      SLOT(slotDocAPI()),0,ID_DOC_PROJECT_API_DOC);
+
+  documentation_menu->insertItem(i18n("Project &User-Manual"),this,
+				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
+
+  menuBar()->insertItem(i18n("&Documentation"), documentation_menu);
+
+
+  disableCommand(ID_DOC_BACK);
+  disableCommand(ID_DOC_FORWARD);
+  disableCommand(ID_DOC_PROJECT_API_DOC);
+  disableCommand(ID_DOC_USER_MANUAL);
+
+
   // generate the help menu
   QPopupMenu* help_menu = new QPopupMenu();
   help_menu->insertItem(i18n("Contents"),this, SLOT(slotHelpContent()),Key_F1,ID_HELP_CONTENT);
@@ -504,7 +507,7 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
   
   toolBar()->insertSeparator();
-  toolBar()->insertButton(Icon("reload.xpm"),ID_OPTIONS_REFRESH, true,i18n("Refresh"));
+  toolBar()->insertButton(Icon("reload.xpm"),ID_VIEW_REFRESH, true,i18n("Refresh"));
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
   toolBar()->insertSeparator();
@@ -516,7 +519,7 @@ void CKDevelop::initToolbar(){
 
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   config->setGroup("View Configuration");
-  if(config->readBoolEntry("show_std_toolbar")){
+  if(config->readBoolEntry("show_std_toolbar", true)){
     enableToolBar(KToolBar::Show,0);
   }
   else{
@@ -540,7 +543,7 @@ void CKDevelop::initToolbar(){
 					    true,i18n("Search Text in Documenation"));
   
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
-  if(config->readBoolEntry("show_browser_toolbar")){
+  if(config->readBoolEntry("show_browser_toolbar", true)){
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
   }
   else{
@@ -579,6 +582,20 @@ void CKDevelop::initProject(){
   }
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

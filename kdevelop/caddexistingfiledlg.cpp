@@ -26,6 +26,7 @@
 #include <iostream.h>
 #include <qfiledialog.h>
 
+
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
@@ -203,6 +204,7 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
 
 
 
