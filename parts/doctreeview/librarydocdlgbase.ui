@@ -239,17 +239,18 @@
         <class>KURLRequester</class>
         <header location="global">kurlrequester.h</header>
         <sizehint>
-            <width>0</width>
-            <height>0</height>
+            <width>-1</width>
+            <height>-1</height>
         </sizehint>
         <container>0</container>
         <sizepolicy>
-            <hordata>0</hordata>
-            <verdata>7</verdata>
+            <hordata>7</hordata>
+            <verdata>0</verdata>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
         <pixmap>image0</pixmap>
+        <signal>textChanged(const QString &amp;str)</signal>
     </customwidget>
 </customwidgets>
 <images>
@@ -277,6 +278,15 @@
         <slot>reject()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>libName</tabstop>
+    <tabstop>docLocal</tabstop>
+    <tabstop>libSource</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonDefault</tabstop>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>buttonHelp</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
     <include location="global" impldecl="in implementation">kurlrequester.h</include>

@@ -41,6 +41,12 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     m_ignoreTocs = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoretocs", "toc");
     m_widget = widget;
     readConfig();
+    if (!m_part->project())
+    {
+//        extEditButton->setEnabled(false);
+        extEnableButton->setEnabled(false);
+        extDisableButton->setEnabled(false);
+    }
 }
 
 
