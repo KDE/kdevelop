@@ -1257,9 +1257,9 @@ void CKDevelop::slotDebugStop()
   }
 
   if (dbgInternal && dbgController) {
-    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
-    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
     dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
   }
   else {
     dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
@@ -1647,9 +1647,9 @@ void CKDevelop::setupInternalDebugger()
   setDebugMenuProcess(true);  // MUST be after dbgController
 
   if (dbgInternal && dbgController) {
-    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
-    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
     dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
   }
   else {
     dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();

@@ -1,3 +1,7 @@
+2001-07-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: disassemble tool-view works again
+    * bugfix: frame stack tool-view on/off-switch fixed
+
 2001-07-17  F@lk Brettschneider <falk@kdevelop.org>
     * reverted Harald's patch because of the message and feature freeze (Ralf's wish is my comand ;)
     * bugfix: step 3 to enable the restoring of the GUI also in TabPage MDI mode. Hopefully finished.
@@ -5,6 +9,7 @@
     Attention:
       In case of a messed up dock state, please, remove section [dock_setting_default] from $HOME/.kde/share/config/kdeveloprc!
     * default size if we start for the first time      
+    * code cleanup (KDE_2_1_1 and QTPRINTER stuff removed)
 
 2001-07-16  F@lk Brettschneider <falk@kdevelop.org>
     * some bugfixes in QextMDI (synchronized with Dr. Baldeweg AG sources of original QextMDI)
