@@ -39,7 +39,8 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedScopeContainer::ParsedScopeContainer()
-    : scopeIterator( scopes )
+    : scopes(),
+      scopeIterator( scopes )
 {
     setItemType( PIT_SCOPE );
     scopes.setAutoDelete( true );

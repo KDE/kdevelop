@@ -40,7 +40,8 @@ using namespace std;
  *   -
  *-----------------------------------------------------------------*/
 ParsedClassContainer::ParsedClassContainer()
-    : classIterator( classes )
+    : classes(),
+      classIterator( classes )
 {
     classes.setAutoDelete( false );
 }
