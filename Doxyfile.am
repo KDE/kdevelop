@@ -1,6 +1,6 @@
 ## generate API documentation with doxygen
 apidox-am-yes:
-	@if test "$(subdir)" == "."; then \
+	if test "$(subdir)" == "."; then \
 		$(mkinstalldirs) $(top_builddir)/apidocs/$(subdir) ;\
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			if test ! -x $(top_builddir)/apidocs/common; then \
@@ -147,6 +147,7 @@ apidox-am-yes:
 				fi ;\
 			done ;\
 		fi ;\
+		echo "GENERATE_TAGFILE       = " >> Doxyfile; \
 		##--------------------------------------------------------------------------- \
 		## Configuration options related to the dot tool                              \
 		##--------------------------------------------------------------------------- \
@@ -219,7 +220,7 @@ uninstall-apidox:
 
 apidox:
 	$(MAKE) apidox-am-@KDE_HAS_DOXYGEN@
-	@set fnord $(MAKEFLAGS); amf=$$2; if test -n '$(SUBDIRS)'; then \
+	set fnord $(MAKEFLAGS); amf=$$2; if test -n '$(SUBDIRS)'; then \
 	    list='$(SUBDIRS)'; \
 	    for subdir in $$list; do \
 		if grep '^include .*Doxyfile.am' $(srcdir)/$$subdir/Makefile.am; then \
