@@ -10,19 +10,16 @@
 <title>Configuration Files Used by &kdevelop;</title>
 
 <para>
-&kdevelop; uses a series of configuration files which are distributed amongst several directories. There are three main groups of configuration files to distinguish:
+&kdevelop; uses a series of configuration files which are distributed amongst several directories. There are two main groups of configuration files to distinguish:
 </para>
-<itemizedlist>
-  <listitem><para>
+<simplelist>
+  <member>
     <link linkend="app-files-default">&kdevelop; Default Configuration</link> &mdash; files set up when &kdevelop; was installed.
-  </para></listitem>
-  <listitem><para>
-    <link linkend="app-files-user">User Modified Configuration</link> &mdash; files which contain user modifications of the default settings.
-  </para></listitem>
-  <listitem><para>
-    <link linkend="app-files-project">Project Dependent Configuration</link> &mdash; files which hold configuration information specific to a given project.
-  </para></listitem>
-</itemizedlist>
+  </member>
+  <member>
+    <link linkend="app-files-user">User Oriented Configuration</link> &mdash; files which contain user modifications of the defaults as well as settings made by the &kdevelop; application itself and its plugins.
+  </member>
+</simplelist>
 
 <sect1 id="app-files-default">
 <title>&kdevelop; Default Configuration</title>
@@ -62,9 +59,9 @@ There are quite a lot of default configuration subdirectories in <filename class
 <itemizedlist>
   <listitem><itemizedlist>
     <title>Stand-alone Applications</title>
-    <listitem><para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE</para></listitem>
-    <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; documentation browser</para></listitem>
-    <listitem><para><filename class="directory">kdevdesigner/</filename> and <filename class="directory">kdevdesignerpart/</filename> &mdash; provide menu bar and tool bars of the stand-alone &kdevelop; user interface designer</para></listitem>
+    <listitem><para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE.</para></listitem>
+    <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; documentation browser.</para></listitem>
+    <listitem><para><filename class="directory">kdevdesigner/</filename> and <filename class="directory">kdevdesignerpart/</filename> &mdash; provide menu bar and tool bars of the stand-alone &kdevelop; user interface designer.</para></listitem>
   </itemizedlist></listitem>
 
   <listitem><itemizedlist>
@@ -80,7 +77,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem>
       <para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part:</para>
       <itemizedlist>
-        <listitem><para><filename class="directory">importfiles/</filename> &mdash; contains <filename>.kdevelop</filename> project files which control the initialization of the project.</para></listitem>
+        <listitem><para><filename class="directory">importfiles/</filename> &mdash; contains <filename>.kdevelop</filename> project files which control the initialization of a new project.</para></listitem>
         <listitem><para><filename class="directory">imports/</filename> &mdash; contains templates to set up project specific <filename>.desktop</filename> files.</para></listitem>
         <listitem><para><filename class="directory">template-common/</filename> &mdash; contains various files commonly included in the project source directories.</para></listitem>
         <listitem><para><filename class="directory">templates/</filename> &mdash; contains configuration files which describe the information to be included in a given project source directory.</para></listitem>
@@ -98,7 +95,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     </listitem>
     <listitem><para><filename class="directory">kdevcloser/</filename> &mdash; provides the <guimenu>Windows</guimenu> menu close entries.</para></listitem>
     <listitem><para><filename class="directory">kdevctags/</filename> &mdash; provides the <guimenuitem>CTags</guimenuitem> entry in the <guimenu>Tools</guimenu> menu for the <guilabel>CTags Frontend</guilabel> project plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevcvsservice/</filename> &mdash; provides the icon used by the <guilabel>CvsService</guilabel> tab and a short shell script used to add a new entry to the &cvs; repository, both used by the <guilabel>CVS Integration</guilabel> projct plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevcvsservice/</filename> &mdash; provides the icon used by the <guilabel>CvsService</guilabel> tab and a short shell script used to add a new entry to the &cvs; repository, both used by the <guilabel>CVS Integration</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevdebugger/</filename> &mdash; provides the <guimenu>Debug</guimenu> menu entries for the <guilabel>Debugger Frontend</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevdiff/</filename> &mdash; provides the <guimenuitem>Difference Viewer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu.</para></listitem>
     <listitem><para><filename class="directory">kdevdistpart/</filename> &mdash; provides the <guimenuitem>Distribution &amp; Publishing</guimenuitem> entry in the <guimenu>Project</guimenu> menu for the <guilabel>Final Packaging Support</guilabel> project plugin.</para></listitem>
@@ -106,7 +103,7 @@ There are quite a lot of default configuration subdirectories in <filename class
       <para><filename class="directory">kdevdocumentation/</filename> &mdash; contains files used by the <guilabel>Documentation</guilabel> plugin:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">en/</filename> and <filename class="directory">pics/</filename> &mdash; contain files used by the <application>htdig</application> search tool.</para></listitem>
-        <listitem><para><filename class="directory">tocs/</filename> &mdash; contain the default &kdevelop; documantation content description files (see the description in <link linkend="toc-file-structure">Basic Structure of &kdevelop; TOC Files</link>).</para></listitem>
+        <listitem><para><filename class="directory">tocs/</filename> &mdash; contain the default &kdevelop; documentation content description files (see the description in <link linkend="toc-file-structure">Basic Structure of &kdevelop; TOC Files</link>).</para></listitem>
         <listitem><para><filename>kdevpart_documentation.rc</filename> &mdash; provides the search related entries in the <guimenu>Help</guimenu> menu.</para></listitem>
       </itemizedlist>
     </listitem>
@@ -114,7 +111,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem>
       <para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard:</guilabel>
       <itemizedlist>
-        <listitem><para><filename class="directory">file-templates/</filename> &mdash; provides the initial text contents to be put into the new file of a given type.</para></listitem>
+        <listitem><para><filename class="directory">file-templates/</filename> &mdash; provides the initial text contents to be put into the new source file of a given type.</para></listitem>
         <listitem><para><filename>kdevpart_filecreate.rc</filename> &mdash; provides the <guimenuitem>New</guimenuitem> entry in the <guimenu>File</guimenu> menu.</para></listitem>
         <listitem><para><filename>template-info.xml</filename> &mdash; contains descriptions of the available file types to be displayed in the <guilabel>New File</guilabel> tool view.</para></listitem>
       </itemizedlist>
@@ -181,29 +178,47 @@ There are quite a lot of default configuration subdirectories in <filename class
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="app-files-user">
-<title>User Modified Configuration</title>
+<title>User Oriented Configuration</title>
 
 <para>
-All information about user modifications of the default settings is kept in the <filename class="directory">$KDEHOME/share/apps/</filename> and <filename class="directory">$KDEHOME/share/config/</filename> directories.
+All information about user defined settings is kept in the <filename class="directory">$KDEHOME/share/apps/</filename> and <filename class="directory">$KDEHOME/share/config/</filename> directories. This includes any changes made to the <link linkend="app-files-default">&kdevelop; default settings</link>.
 </para>
-
-<sect2 id="app-files-user-config">
-<title>&kdevelop; Configuration</title>
 
 <para>
-(... to be written ...)
+There are two groups of &kdevelop; configuration files in the <filename class="directory">$KDEHOME/share/config/</filename> directory, distiguished by their surrounding character sequences:
+<simplelist>
+  <member><quote>doc...pluginrc</quote> denotes <link linkend="app-files-user-config-doc">files used by the documentation plugin.</link></member>
+  <member><quote>kdev...rc</quote> denotes configuration <link linkend="app-files-user-config-kdev">files used by &kdevelop;</link> itself and its available plugins.</member>
+</simplelist>
 </para>
 
-</sect2> <!-- app-files-user-config -->
+<itemizedlist id="app-files-user-config-kdev">
+<title>Configuration Files Used by &kdevelop;</title>
+  <listitem><para><filename>kdevabbrevrc</filename> &mdash; holds the current state of the <guilabel>Abbreviations</guilabel> configuration provided by the <guilabel>Abbreviation Expansion</guilabel> plugin. New abbreviation definitions will however go into <filename>$KDEHOME/share/apps/kdevabbrev/templates/templates</filename>.</para></listitem>
+  <listitem><para><filename>kdevassistantrc</filename> &mdash; holds some configuration states specific of the stand-alone  &kdevelop; documentation browser. Most other global configuration will be shared with the &kdevelop; IDE <filename>kdeveloprc</filename> file.</para></listitem>
+  <listitem><para><filename>kdevassistantuimode4rc</filename> &mdash; holds the current MDI configuration states (dock positions &etc;) of the stand-alone  &kdevelop; documentation browser.</para></listitem>
+  <listitem><para><filename>kdevclassviewrc</filename> &mdash; holds the <guilabel>View Mode</guilabel> setting of the <guilabel>Classes</guilabel> class browser tab provided by the <guilabel>Class View</guilabel> project plugin. Changes in this setting will be globally updated whenever the current project is closed.</para></listitem>
+  <listitem><para><filename>kdevcppsupportrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevdocumentationrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdeveloprc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevelopuimode4rc</filename> &mdash;  holds the current MDI configuration states (dock positions &etc;) of the  &kdevelop; IDE.</para></listitem>
+  <listitem><para><filename>kdevfileselectorrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevfileviewrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevfilterrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevgrepviewrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevsnippetrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>kdevtoolsrc</filename> &mdash; </para></listitem>
+</itemizedlist>
 
-<sect2 id="app-files-user-apps">
-<title>Application Specific Configuration</title>
-
-<para>
-(... to be written ...)
-</para>
-
-</sect2> <!-- app-files-user-apps -->
+<itemizedlist id="app-files-user-config-doc">
+<title>Configuration Files Used by the Documentation Plugin</title>
+  <listitem><para><filename>docchmpluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>doccustompluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>docdevhelppluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>docdoxygenpluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>dockdevtocpluginrc</filename> &mdash; </para></listitem>
+  <listitem><para><filename>docqtpluginrc</filename> &mdash; </para></listitem>
+</itemizedlist>
 
 </sect1> <!-- app-files-user -->
 
