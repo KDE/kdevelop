@@ -76,6 +76,7 @@
       <toc>perl_bugs</toc>
       <toc>python_bugs</toc>
       <toc>ruby_bugs</toc>
+      <toc>wxwindows_bugs</toc>
     </ignoretocs>
     <projectdoc>
       <userdocDir>html/</userdocDir>
