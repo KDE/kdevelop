@@ -3,9 +3,9 @@
 <title>ADA</title>
 <base href="http://www.adahome.com/rm95"/>
 <tocsect1 name="General" url="rm9x-01.html">
-	<tocsect2 name="Scope" url="rm9x-01-01.htmll"></tocsect2>
-	<tocsect2 name="Normative References" url="rm9x-01-02.htmll"></tocsect2>
-	<tocsect2 name="Definitions" url="rm9x-01-03.htmll"></tocsect2>
+	<tocsect2 name="Scope" url="rm9x-01-01.html"></tocsect2>
+	<tocsect2 name="Normative References" url="rm9x-01-02.html"></tocsect2>
+	<tocsect2 name="Definitions" url="rm9x-01-03.html"></tocsect2>
 </tocsect1>
 <tocsect1 name="Lexical Elements" url="rm9x-02.html">
 	<tocsect2 name="Character Set" url="rm9x-02-01.html"></tocsect2>
