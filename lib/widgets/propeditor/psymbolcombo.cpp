@@ -84,8 +84,8 @@ void PSymbolCombo::selectChar()
     dv->addWidget(select);
 
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
-    QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
-    QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
+    QPushButton *pbOk = new QPushButton(i18n("&OK"), dia);
+    QPushButton *pbCancel = new QPushButton(i18n("&Cancel"), dia);
     QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
