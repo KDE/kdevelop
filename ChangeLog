@@ -1,3 +1,8 @@
+2002-02-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* refactored the core source completely
+	* sneaked in a new UI concept
+          (which Harald probably will replace with QextMDI soon)
+
 2002-02-24  Roberto Raggi <ragi@cli.di.unipi.it>
 	* improved code completion
 	* added quick hack for configuring the fonts for qeditor
