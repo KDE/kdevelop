@@ -1104,22 +1104,24 @@ void CKDevelop::setToolMenuProcess(bool enable){
     else{
       enableCommand(ID_PROJECT_MESSAGES);
     }
+
+    enableCommand(ID_PROJECT_CLOSE);
+    enableCommand(ID_PROJECT_NEW_CLASS);
+    enableCommand(ID_PROJECT_ADD_FILE_EXIST);
+    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+    enableCommand(ID_PROJECT_FILE_PROPERTIES);
+    enableCommand(ID_PROJECT_OPTIONS);
+
+    enableCommand(ID_FILE_NEW);
+
   //MB
   #ifndef WITH_KDOC2
     enableCommand(ID_PROJECT_DOC_TOOL);
   #endif
   //MB end
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
-
-//    // we don´t support docbook -> html, yet!
-//    if (prj->isKDE2Project())
-//      disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-//    else // ADDED make in projectdir/doc for user manual
-
     enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
-
     enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-
   }
   else
 //  if (!enable)

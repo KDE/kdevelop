@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     kdevelop->slotTCurrentTab(KGlobal::config()->readNumEntry("LastActiveTree",DOC));
     
     if (argc > 1){
-      if (QString(argv[1]) != "--setup")
+      if (QString(argv[1]) != "-setup")
         kdevelop->slotProjectOpenCmdl(argv[1]);
     }  
   }
