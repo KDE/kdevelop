@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Simple program
+Category=Pascal/Free Pascal
+Comment=Generates a simple program in Pascal
+FileTemplates=pp-program,PStyle,pp-unit,PStyle
