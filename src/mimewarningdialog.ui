@@ -12,6 +12,14 @@
             <height>248</height>
         </rect>
     </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>1</hsizetype>
+            <vsizetype>1</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
     <property name="caption">
         <string>Could Not Open File</string>
     </property>
@@ -21,17 +29,63 @@
         </property>
         <widget class="QLabel">
             <property name="name">
-                <cstring>text</cstring>
+                <cstring>text1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
-                <string>&lt;qt&gt;KDevelop could not open &lt;b&gt;%1&lt;/b&gt;
-&lt;br&gt;&lt;br&gt;
-No suitable viewer was found for the &lt;b&gt;%2&lt;/b&gt; mimetype.&lt;/qt&gt;</string>
+                <string>KDevelop could not open</string>
+            </property>
+        </widget>
+        <widget class="KSqueezedTextLabel">
+            <property name="name">
+                <cstring>text2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Some URL</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>text3</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&lt;qt&gt;No suitable viewer was found for the &lt;b&gt;%1&lt;/b&gt; mimetype.&lt;/qt&gt;</string>
             </property>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="frameShape">
                 <enum>GroupBoxPanel</enum>
@@ -84,11 +138,11 @@ No suitable viewer was found for the &lt;b&gt;%2&lt;/b&gt; mimetype.&lt;/qt&gt;<
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="sizeType">
-                                <enum>Expanding</enum>
+                                <enum>Fixed</enum>
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>42</width>
+                                    <width>24</width>
                                     <height>20</height>
                                 </size>
                             </property>

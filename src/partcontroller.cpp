@@ -38,6 +38,7 @@
 #include <kiconloader.h>
 #include <kuserprofile.h>
 #include <kencodingfiledialog.h>
+#include <ksqueezedtextlabel.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -455,7 +456,8 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	else
 	{
 		MimeWarningDialog dlg;
-		dlg.text->setText( dlg.text->text().arg(url.path()).arg(MimeType->name()) );
+		dlg.text2->setText( QString( "<qt><b>%1</b></qt>" ).arg(url.path()));
+		dlg.text3->setText( dlg.text3->text().arg(MimeType->name()) );
 		
 		if ( dlg.exec() == QDialog::Accepted )
 		{
