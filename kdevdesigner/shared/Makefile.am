@@ -1,4 +1,4 @@
-AM_CXXFLAGS=$(SHORTCXXFLAGS)
+CXXFLAGS=$(SHORTCXXFLAGS)
 INCLUDES = $(all_includes) -I$(top_srcdir)/lib/external_interfaces
 METASOURCES = AUTO
 libshared_la_LDFLAGS = $(all_libraries)

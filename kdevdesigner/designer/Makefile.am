@@ -1,6 +1,6 @@
 SUBDIRS = pics
 
-AM_CXXFLAGS=$(SHORTCXXFLAGS) -DDESIGNER
+CXXFLAGS=$(SHORTCXXFLAGS) -DDESIGNER
 INCLUDES = -I$(top_srcdir)/kdevdesigner/shared -I$(top_srcdir)/lib/external_interfaces $(all_includes)
 METASOURCES = AUTO
 kde_module_LTLIBRARIES =  libkdevdesignerpart.la
