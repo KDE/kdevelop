@@ -104,7 +104,7 @@ PartController *PartController::getInstance()
 }
 
 
-KParts::Part *PartController::getActivePart()
+KParts::Part *PartController::activePart()
 {
   return m_partManager->activePart();
 }

@@ -53,7 +53,7 @@ public:
   void saveAllFiles();
   void revertAllFiles();
 
-  KParts::Part *getActivePart();
+  KParts::Part *activePart();
 
 
 protected:

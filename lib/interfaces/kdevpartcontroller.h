@@ -28,7 +28,7 @@ public:
   virtual void saveAllFiles() = 0; 
   virtual void revertAllFiles() = 0;
 
-  virtual KParts::Part *getActivePart() = 0;
+  virtual KParts::Part *activePart() = 0;
 
 
 signals:

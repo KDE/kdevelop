@@ -48,7 +48,7 @@ AStylePart::~AStylePart()
 
 void AStylePart::beautifySource()
 {
-  KParts::Part *part = partController()->getActivePart();
+  KParts::Part *part = partController()->activePart();
   if (!part)
     return;
   
