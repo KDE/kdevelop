@@ -24,6 +24,7 @@
 #include <qlistbox.h>
 #include <qtabdialog.h>
 #include <qmultilinedit.h>
+
 #include <kapp.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -36,6 +37,7 @@
 #include <kkeydialog.h>
 #include <kaccel.h>
 
+#include "./kwrite/kguicommand.h"
 
 /** the setup dialog for kdevelop
   *@author Sandy Meier
@@ -43,8 +45,8 @@
 class CKDevSetupDlg : public QTabDialog
 {
     Q_OBJECT
-public:
-    CKDevSetupDlg( QWidget *parent=0, const char *name=0,KAccel* accel=0 );
+  public:
+    CKDevSetupDlg(QWidget *parent, KAccel *accel, KGuiCmdManager &cmdMngr, const char *name=0L);
   
 private:
   QWidget *w;

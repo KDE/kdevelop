@@ -28,7 +28,8 @@
 #include <klocale.h>
 
 // SETUP DIALOG
-CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa )
+CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
+  KGuiCmdManager &cmdMngr, const char *name)
   : QTabDialog( parent, name,TRUE )
 {
   accel = accel_pa;
@@ -384,6 +385,10 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   addTab(w1, i18n("General"));
   addTab(w2, i18n("Keys"));
+
+  KGuiCmdConfigTab *keys = new KGuiCmdConfigTab(this, &cmdMngr);
+  addTab(keys, i18n("KWrite Keys"));
+
   addTab( w, i18n("Documentation" ));
   
   

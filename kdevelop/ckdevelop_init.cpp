@@ -30,6 +30,7 @@
 #include <klocale.h>
 
 #include "./kwrite/kwdoc.h"
+#include "./kwrite/kguicommand.h"
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "cdocbrowser.h"
@@ -46,6 +47,7 @@
 #include <config.h>
 #endif
 
+extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop(bool witharg){
   version = VERSION;
@@ -249,7 +251,7 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()) );
 
   //edit menu  
-  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
+/*  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
   
   accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
   accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
@@ -263,23 +265,23 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
   accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ) );
-
+*/
   accel->insertItem( i18n("Insert File"), "InsertFile", "");
   accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()) );
-  
+/*
   accel->connectItem( KAccel::Find, this, SLOT(slotEditSearch() ) );
 
   accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
   accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
 
   accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ) );
-
+*/
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ) );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "GrepSearch", this, SLOT(slotEditSearchText() ) );
-
+/*
   accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
   accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ) );
   
@@ -288,11 +290,11 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem(i18n("Invert Selection"), "Invert Selection", "");
   accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()));
-
+*/
   //view menu
-  accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
+/*  accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
   accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
-
+*/
   accel->insertItem( i18n("Next Error"), "NextError",IDK_VIEW_NEXT_ERROR);
   accel->connectItem( "NextError", this, SLOT( slotViewNextError()) );
   
@@ -445,7 +447,18 @@ void CKDevelop::initMenuBar(){
   // NEW DISABLES HAVE TO BE ADDED THERE AFTER BOTH MENUBARS ARE CREATED COMPLETELY,
   // OTHERWISE KDEVELOP CRASHES !!!
 
+
+  // the command dispatcher for this instance of CKDevelop (i
+  // think for KDevelop this is always only one) gets its information
+  // from the command manager. at the moment only the kwrite related
+  // commands are done with this (jochen)
+  kdev_dispatcher = new KGuiCmdDispatcher(this, &cmdMngr);
+  kdev_dispatcher->connectCategory(ctCursorCommands, this, SLOT(doCursorCommand(int)));
+  kdev_dispatcher->connectCategory(ctEditCommands, this, SLOT(doEditCommand(int)));
+  kdev_dispatcher->connectCategory(ctStateCommands, this, SLOT(doStateCommand(int)));
+
   kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
+
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
   file_menu = new QPopupMenu;
@@ -468,40 +481,57 @@ void CKDevelop::initMenuBar(){
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
 
-  edit_menu = new QPopupMenu;
-  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-  edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
-  edit_menu->insertSeparator();
-  edit_menu->insertItem(Icon("cut.xpm"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-  edit_menu->insertItem(Icon("copy.xpm"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-  edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
-  edit_menu->insertSeparator();
-	edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+  edit_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
+  edit_menu->addCommand(ctEditCommands, cmUndo, Icon("undo.xpm"), ID_EDIT_UNDO);
+//  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
+  edit_menu->addCommand(ctEditCommands, cmRedo, Icon("redo.xpm"), ID_EDIT_REDO);
+//  edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
+  edit_menu->addCommand(ctEditCommands, cmCut, Icon("cut.xpm"), ID_EDIT_CUT);
+  edit_menu->addCommand(ctEditCommands, cmCopy, Icon("copy.xpm"), this, SLOT(slotEditCopy()), ID_EDIT_COPY);
+  edit_menu->addCommand(ctEditCommands, cmPaste, Icon("paste.xpm"), ID_EDIT_PASTE);
+//  edit_menu->insertItem(Icon("cut.xpm"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
+//  edit_menu->insertItem(Icon("copy.xpm"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
+//  edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
+  edit_menu->addCommand(ctEditCommands, cmIndent, Icon("indent.xpm"), ID_EDIT_INDENT);
+  edit_menu->addCommand(ctEditCommands, cmUnindent, Icon("unindent.xpm"), ID_EDIT_UNINDENT);
+//  edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+//  edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+
+  edit_menu->insertSeparator();
+  edit_menu->insertItem(i18n("&Insert File..."), this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
+
+  edit_menu->insertSeparator();
+  edit_menu->addCommand(ctFindCommands, cmFind, Icon("search.xpm"), this, SLOT(slotEditSearch()), ID_EDIT_SEARCH);
+  edit_menu->addCommand(ctFindCommands, cmFindAgain, this, SLOT(slotEditRepeatSearch()), ID_EDIT_REPEAT_SEARCH);
+//  edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
+//  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
-  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
+  edit_menu->addCommand(ctFindCommands, cmReplace, this, SLOT(slotEditReplace()), ID_EDIT_REPLACE);
+//  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(Icon("grep.xpm"),i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
-  edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
-  edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
+  edit_menu->addCommand(ctEditCommands, cmSelectAll, ID_EDIT_SELECT_ALL);
+  edit_menu->addCommand(ctEditCommands, cmDeselectAll, ID_EDIT_DESELECT_ALL);
+  edit_menu->addCommand(ctEditCommands, cmInvertSelection, ID_EDIT_INVERT_SELECTION);
+
+//  edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
+//  edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
+//  edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
   
   kdev_menubar->insertItem(i18n("&Edit"), edit_menu);
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
-  view_menu = new QPopupMenu;
-  view_menu->insertItem(i18n("Goto &Line..."), this,
-			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
+  view_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
+  view_menu->addCommand(ctFindCommands, cmGotoLine, this, SLOT(slotViewGotoLine()), ID_VIEW_GOTO_LINE);
+//  view_menu->insertItem(i18n("Goto &Line..."), this,
+//			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Next Error"),this,
 			SLOT(slotViewNextError()),0,ID_VIEW_NEXT_ERROR);
@@ -663,9 +693,9 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
   bookmarks_menu->insertSeparator();
 
-  QPopupMenu* header_bookmarks = new QPopupMenu();
+  KGuiCmdPopup* header_bookmarks = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu();
   header_widget->installBMPopup(header_bookmarks);
-  QPopupMenu* cpp_bookmarks = new QPopupMenu();
+  KGuiCmdPopup* cpp_bookmarks = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu();
   cpp_widget->installBMPopup(cpp_bookmarks);
 	
   doc_bookmarks = new QPopupMenu();
@@ -934,6 +964,8 @@ void CKDevelop::initStatusBar(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::initConnections(){
+  // the clipboard change signal is not needed in kwrite (jochen)
+  connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(slotClipboardChanged()));
 
   connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
   connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
@@ -976,10 +1008,7 @@ void CKDevelop::initConnections(){
   connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(cpp_widget, SIGNAL(markStatus(KWriteView *, bool)),
-      this, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
-  connect(cpp_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
+  connect(cpp_widget, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
   connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
@@ -988,10 +1017,7 @@ void CKDevelop::initConnections(){
   connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(header_widget, SIGNAL(markStatus(KWriteView *, bool)),
-      this, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
-  connect(header_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
+  connect(header_widget, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
   connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
@@ -1130,21 +1156,21 @@ if(bKDevelop){
 //    accel->disconnectItem(accel->stdAction( KAccel::Open ),(QObject*)kdlgedit, SLOT(slotFileOpen()) );
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Undo ), (QObject*)kdlgedit, SLOT(slotEditUndo()) );
-    accel->disconnectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Cut ), (QObject*)kdlgedit, SLOT(slotEditCut()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Copy ), (QObject*)kdlgedit, SLOT(slotEditCopy()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Paste ), (QObject*)kdlgedit, SLOT(slotEditPaste()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Undo ), (QObject*)kdlgedit, SLOT(slotEditUndo()) );
+//    accel->disconnectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Cut ), (QObject*)kdlgedit, SLOT(slotEditCut()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Copy ), (QObject*)kdlgedit, SLOT(slotEditCopy()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Paste ), (QObject*)kdlgedit, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
 
     accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()) );
     accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()) );
     accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
-    accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
-    accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
-    accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
-    accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
-    accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
+//    accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
+//    accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
+//    accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
+//    accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
+//    accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
 
     accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
     accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
@@ -1153,20 +1179,20 @@ if(bKDevelop){
     accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KAccel::Print );
     accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KAccel::Quit );
 
-    accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
+/*    accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KAccel::Cut );
     accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KAccel::Copy );
     accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KAccel::Paste );
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KAccel::Find );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KAccel::Replace );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KAccel::Replace );*/
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
+/*    accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
-		accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
+    accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");*/
 		
-    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+//    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
     accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
     accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
     accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
@@ -1191,22 +1217,22 @@ if(bKDevelop){
 //    accel->disconnectItem(accel->stdAction( KAccel::Open ), this, SLOT(slotFileOpen()) );
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , this, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , this, SLOT(slotFileSave()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Undo ), this, SLOT(slotEditUndo()) );
-    accel->disconnectItem( "Redo" , this, SLOT(slotEditRedo()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Cut ), this, SLOT(slotEditCut()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Copy ), this, SLOT(slotEditCopy()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Undo ), this, SLOT(slotEditUndo()) );
+//    accel->disconnectItem( "Redo" , this, SLOT(slotEditRedo()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Cut ), this, SLOT(slotEditCut()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Copy ), this, SLOT(slotEditCopy()) );
+//    accel->disconnectItem(accel->stdAction( KAccel::Paste ), this, SLOT(slotEditPaste()) );
     accel->disconnectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
 
     accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
 //    accel->connectItem( KAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()) );
     accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()) );
     accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()) );
-    accel->connectItem( KAccel::Undo , (QObject*)kdlgedit, SLOT(slotEditUndo()) );
-    accel->connectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
-    accel->connectItem( KAccel::Cut , (QObject*)kdlgedit, SLOT(slotEditCut()) );
-    accel->connectItem( KAccel::Copy , (QObject*)kdlgedit, SLOT(slotEditCopy()) );
-    accel->connectItem( KAccel::Paste , (QObject*)kdlgedit, SLOT(slotEditPaste()) );
+//    accel->connectItem( KAccel::Undo , (QObject*)kdlgedit, SLOT(slotEditUndo()) );
+//    accel->connectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
+//    accel->connectItem( KAccel::Cut , (QObject*)kdlgedit, SLOT(slotEditCut()) );
+//    accel->connectItem( KAccel::Copy , (QObject*)kdlgedit, SLOT(slotEditCopy()) );
+//    accel->connectItem( KAccel::Paste , (QObject*)kdlgedit, SLOT(slotEditPaste()) );
 
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );
     //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KAccel::Open );
@@ -1214,11 +1240,11 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KAccel::Save );
     accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KAccel::Quit );
 
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_UNDO, KAccel::Undo );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_REDO,"Redo" );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_CUT, KAccel::Cut );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_COPY, KAccel::Copy );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_PASTE, KAccel::Paste );
+//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_UNDO, KAccel::Undo );
+//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_REDO,"Redo" );
+//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_CUT, KAccel::Cut );
+//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_COPY, KAccel::Copy );
+//    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_PASTE, KAccel::Paste );
 
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
     accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );

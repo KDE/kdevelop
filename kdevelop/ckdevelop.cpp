@@ -61,6 +61,24 @@
 #include "vc/versioncontrol.h"
 
 
+extern KGuiCmdManager cmdMngr;
+
+////////////////////////
+// editor commands
+///////////////////////
+void CKDevelop::doCursorCommand(int cmdNum) {
+  if (edit_widget != 0L) edit_widget->doCursorCommand(cmdNum);
+}
+
+void CKDevelop::doEditCommand(int cmdNum) {
+  if (edit_widget != 0L) edit_widget->doEditCommand(cmdNum);
+}
+
+void CKDevelop::doStateCommand(int cmdNum) {
+  if (edit_widget != 0L) edit_widget->doStateCommand(cmdNum);
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
@@ -442,13 +460,15 @@ void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditCopy(){
-  slotStatusMsg(i18n("Copying..."));
-  if(s_tab_view->getCurrentTab()==2){
+//slotStatusMsg(i18n("Copying..."));
+  if(s_tab_view->getCurrentTab() == 2) {
+    slotStatusMsg(i18n("Copying..."));
     browser_widget->slotCopyText();
+    slotStatusMsg(i18n("Ready."));
   }
-	else
-    edit_widget->copyText();
-  slotStatusMsg(i18n("Ready."));
+//	else
+//    edit_widget->copyText();
+//slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditPaste(){
   slotStatusMsg(i18n("Pasting selection..."));
@@ -1151,8 +1171,18 @@ void CKDevelop::slotOptionsConfigureA2ps(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
-  CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
-  setup->show();
+  CKDevSetupDlg setup(this, accel, cmdMngr, "Setup");
+  //CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel); //delete?
+  //setup->show();
+	if (setup.exec()) {
+    // kwrite keys
+    cmdMngr.changeAccels();
+    cmdMngr.writeConfig(kapp->getConfig());
+  } else {
+    // cancel keys
+    cmdMngr.restoreAccels();
+  }
+	
 	accel->readSettings();
 	setKeyAccel();
   slotStatusMsg(i18n("Ready."));
@@ -1811,8 +1841,23 @@ void CKDevelop::slotNewStatus()
   setMainCaption();
 }
 
+
+void CKDevelop::slotMarkStatus() {
+
+  if (edit_widget != 0L) {
+    if (edit_widget->hasMarkedText()) {
+      enableCommand(ID_EDIT_CUT);
+      enableCommand(ID_EDIT_COPY);
+    } else{
+      disableCommand(ID_EDIT_CUT);
+      disableCommand(ID_EDIT_COPY);
+    }
+  }
+}
+
+
+/*
 void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
-{
 
   int item=s_tab_view->getCurrentTab();
   if (item==CPP)
@@ -1843,7 +1888,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
       }		
   }
 }
-
+*/
 void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
 {
   int item=s_tab_view->getCurrentTab();
@@ -1858,11 +1903,12 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
   }
 }
 
-void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
+void CKDevelop::slotClipboardChanged()
 {
-  int item=s_tab_view->getCurrentTab();
-  QString text=QApplication::clipboard()->text();
-  if(!bContents || item==BROWSER || item==TOOLS)
+  int item = s_tab_view->getCurrentTab();
+  QString text = QApplication::clipboard()->text();
+//  if(!bContents || item==BROWSER || item==TOOLS)
+  if(text.isEmpty() || item==BROWSER || item==TOOLS)
     disableCommand(ID_EDIT_PASTE);
   else
     enableCommand(ID_EDIT_PASTE);
@@ -2409,30 +2455,33 @@ void CKDevelop::slotTTabSelected(int item){
 void CKDevelop::slotSTabSelected(int item){
   lasttab = s_tab_view->getCurrentTab();
 
+  // if no edit widget is currently visible, then edit_widget stays 0L
+  edit_widget = 0L;
+
   if (item == HEADER || item == CPP)
   {
-   // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
-  enableCommand(ID_FILE_SAVE_AS);
-  enableCommand(ID_FILE_CLOSE);
+     // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
+    enableCommand(ID_FILE_SAVE_AS);
+    enableCommand(ID_FILE_CLOSE);
 
-  enableCommand(ID_FILE_PRINT);
+    enableCommand(ID_FILE_PRINT);
 
-  QString text=QApplication::clipboard()->text();
-  if(text.isEmpty())
-    disableCommand(ID_EDIT_PASTE);
-  else
-    enableCommand(ID_EDIT_PASTE);
+    QString text=QApplication::clipboard()->text();
+    if(text.isEmpty())
+      disableCommand(ID_EDIT_PASTE);
+    else
+      enableCommand(ID_EDIT_PASTE);
 
-  enableCommand(ID_EDIT_INSERT_FILE);
-  enableCommand(ID_EDIT_SEARCH);
-  enableCommand(ID_EDIT_REPEAT_SEARCH);
-  enableCommand(ID_EDIT_REPLACE);
-  enableCommand(ID_EDIT_SPELLCHECK);
-  enableCommand(ID_EDIT_INDENT);
-  enableCommand(ID_EDIT_UNINDENT);
-  enableCommand(ID_EDIT_SELECT_ALL);
-  enableCommand(ID_EDIT_DESELECT_ALL);
-  enableCommand(ID_EDIT_INVERT_SELECTION);
+    enableCommand(ID_EDIT_INSERT_FILE);
+    enableCommand(ID_EDIT_SEARCH);
+    enableCommand(ID_EDIT_REPEAT_SEARCH);
+    enableCommand(ID_EDIT_REPLACE);
+    enableCommand(ID_EDIT_SPELLCHECK);
+    enableCommand(ID_EDIT_INDENT);
+    enableCommand(ID_EDIT_UNINDENT);
+    enableCommand(ID_EDIT_SELECT_ALL);
+    enableCommand(ID_EDIT_DESELECT_ALL);
+    enableCommand(ID_EDIT_INVERT_SELECTION);
 
   }
 
@@ -2484,15 +2533,17 @@ void CKDevelop::slotSTabSelected(int item){
     else
       disableCommand(ID_EDIT_REDO);
 
-    QString str = edit_widget->markedText();
-    if(str.isEmpty()){
-      disableCommand(ID_EDIT_CUT);
-      disableCommand(ID_EDIT_COPY);
-    }
-    else{
+    slotMarkStatus();
+/*
+//    QString str = edit_widget->markedText();
+    if (edit_widget->hasMarkedText()){
       enableCommand(ID_EDIT_CUT);
       enableCommand(ID_EDIT_COPY);
-    }		
+    }
+    else{
+      disableCommand(ID_EDIT_CUT);
+      disableCommand(ID_EDIT_COPY);
+    }*/		
   }
 
   if(item == BROWSER || item == TOOLS)

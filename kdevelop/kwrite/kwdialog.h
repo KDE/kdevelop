@@ -4,9 +4,9 @@
 #define _KWDIALOG_H_
 
 #include <qdialog.h>
-#include <qlined.h>
-#include <qchkbox.h>
-#include <qradiobt.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <qlistbox.h>
 
 #include <kcolorbtn.h>

@@ -1,10 +1,30 @@
+/*
+   Copyright (C) 1998, 1999 Jochen Wilhelmy
+                            digisnap@cs.tu-berlin.de
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+*/
+
 #ifndef _HIGHLIGHT_H_
 #define _HIGHLIGHT_H_
 
 #include <qlist.h>
 //#include <qlistbox.h>
-#include <qchkbox.h>
-#include <qcombo.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qdialog.h>
 
 #include <kcolorbtn.h>
@@ -80,7 +100,7 @@ class HlKeyword : public HlItemWw {
     HlKeyword(int attribute, int context);
     virtual ~HlKeyword();
     void addWord(const char *);
-    void addList(char **);
+    void addList(const char **);
     virtual const char *checkHgl(const char *);
   protected:
     QList<KeywordData> words;
@@ -95,12 +115,6 @@ class HlInt : public HlItemWw {
 class HlFloat : public HlItemWw {
   public:
     HlFloat(int attribute, int context);
-    virtual const char *checkHgl(const char *);
-};
-
-class HlCSymbol : public HlItemWw {
-  public:
-    HlCSymbol(int attribute, int context);
     virtual const char *checkHgl(const char *);
 };
 
@@ -371,8 +385,6 @@ class HlContext {
     int ctx;
 };
 
-const int nContexts = 32;
-
 class GenHighlight : public Highlight {
   public:
     GenHighlight(const char *name);
@@ -382,7 +394,7 @@ class GenHighlight : public Highlight {
     virtual void makeContextList() = 0;
     virtual void init();
     virtual void done();
-//    const int nContexts = 32;
+    static const int nContexts = 32;
     HlContext *contextList[nContexts];
 };
 
@@ -402,14 +414,6 @@ class CppHighlight : public CHighlight {
   public:
     CppHighlight(const char *name);
     virtual ~CppHighlight();
-  protected:
-    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
-};
-
-class IdlHighlight : public CHighlight {
-  public:
-    IdlHighlight(const char *name);
-    virtual ~IdlHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
 };
@@ -605,4 +609,3 @@ class HighlightDialog : public QDialog {
 };
 
 #endif //_HIGHLIGHT_H_
-

@@ -27,6 +27,9 @@
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgitems.h"
 
+#include "./kwrite/kguicommand.h"
+
+extern KGuiCmdManager cmdMngr;
 
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor:";
@@ -70,6 +73,10 @@ void CKDevelop::initKDlg(){
 }
 
 void CKDevelop::initKDlgMenuBar(){
+
+  kdlg_dispatcher = new KGuiCmdDispatcher(this, &cmdMngr);
+  kdlg_dispatcher->setEnabled(false);
+
   kdlg_menubar=new KMenuBar(this,"KDlg_menubar");
   QPixmap pix;
   QString  path;
@@ -91,13 +98,13 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Edit-menu entries
 
-  kdlg_edit_menu= new QPopupMenu;
-  kdlg_edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), kdlgedit, SLOT(slotEditUndo()), 0, ID_KDLG_EDIT_UNDO);
-  kdlg_edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), kdlgedit, SLOT(slotEditRedo()), 0, ID_KDLG_EDIT_REDO);
+  kdlg_edit_menu = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu;
+  kdlg_edit_menu->addCommand(ctEditCommands, cmUndo, Icon("undo.xpm"), kdlgedit, SLOT(slotEditUndo()), ID_KDLG_EDIT_UNDO);
+  kdlg_edit_menu->addCommand(ctEditCommands, cmRedo, Icon("redo.xpm"), kdlgedit, SLOT(slotEditRedo()), ID_KDLG_EDIT_REDO);
   kdlg_edit_menu->insertSeparator();
-  kdlg_edit_menu->insertItem(Icon("cut.xpm"), i18n("C&ut"), kdlgedit, SLOT(slotEditCut()), 0, ID_KDLG_EDIT_CUT);
-  kdlg_edit_menu->insertItem(Icon("copy.xpm"), i18n("&Copy"), kdlgedit, SLOT(slotEditCopy()), 0, ID_KDLG_EDIT_COPY);
-  kdlg_edit_menu->insertItem(Icon("paste.xpm"), i18n("&Paste"), kdlgedit, SLOT(slotEditPaste()), 0, ID_KDLG_EDIT_PASTE);
+  kdlg_edit_menu->addCommand(ctEditCommands, cmCut, Icon("cut.xpm"), kdlgedit, SLOT(slotEditCut()), ID_KDLG_EDIT_CUT);
+  kdlg_edit_menu->addCommand(ctEditCommands, cmCopy, Icon("copy.xpm"), kdlgedit, SLOT(slotEditCopy()), ID_KDLG_EDIT_COPY);
+  kdlg_edit_menu->addCommand(ctEditCommands, cmPaste, Icon("paste.xpm"), kdlgedit, SLOT(slotEditPaste()), ID_KDLG_EDIT_PASTE);
   kdlg_edit_menu->insertSeparator();
   kdlg_edit_menu->insertItem(Icon("delete.xpm"), i18n("&Delete"), kdlgedit, SLOT(slotEditDelete()), 0, ID_KDLG_EDIT_DELETE);
 

@@ -48,6 +48,8 @@ class CKDevelop;
 #include <kaccel.h>
 #include <kprogress.h>
 
+#include "./kwrite/kguicommand.h"
+
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
@@ -201,6 +203,14 @@ public:
   void disableCommand(int id_);
 
   ////////////////////////
+  // editor commands
+  ///////////////////////
+
+  void doCursorCommand(int cmdNum);
+  void doEditCommand(int cmdNum);
+  void doStateCommand(int cmdNum);
+
+  ////////////////////////
   // FILE-Menu entries
   ///////////////////////
  
@@ -226,7 +236,7 @@ public:
   void slotFileQuit();
 
   ////////////////////////
-  // EDIT-Menu entries
+  // EDIT-Menu entries  (most of the slots are not needed any more (jochen))
   ///////////////////////
   /** Undo last editing step */
   void slotEditUndo();
@@ -516,11 +526,12 @@ public:
   /** change Statusbar status of INS and OVR */
   void slotNewStatus();
   /** change copy & cut status */
-  void slotCPPMarkStatus(KWriteView *, bool);
-  void slotHEADERMarkStatus(KWriteView *, bool);
+  void slotMarkStatus();
+//  void slotCPPMarkStatus(KWriteView *, bool);
+//  void slotHEADERMarkStatus(KWriteView *, bool);
   void slotBROWSERMarkStatus(KHTMLView *, bool);
   /** recognize change of Clipboard data */
-  void slotClipboardChanged(KWriteView *, bool);
+  void slotClipboardChanged();
   /** change Statusbar status of Line and Column */
   void slotNewLineColumn();
   void slotNewUndo();
@@ -672,8 +683,8 @@ private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
   QPopupMenu* recent_projects_menu;
-  QPopupMenu* edit_menu;
-  QPopupMenu* view_menu;
+  KGuiCmdPopup* edit_menu;
+  KGuiCmdPopup* view_menu;
   QPopupMenu* bookmarks_menu;
   QPopupMenu* doc_bookmarks;
 
@@ -699,7 +710,7 @@ private:
   QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
   QPopupMenu* kdlg_file_menu;
-  QPopupMenu* kdlg_edit_menu;
+  KGuiCmdPopup* kdlg_edit_menu;
   QPopupMenu* kdlg_view_menu;
   QPopupMenu* kdlg_project_menu;
   QPopupMenu* kdlg_build_menu;
@@ -711,6 +722,9 @@ private:
   QStrList tools_entry;
   QStrList tools_argument;
   	
+  KGuiCmdDispatcher *kdev_dispatcher;
+  KGuiCmdDispatcher *kdlg_dispatcher;
+
   KMenuBar* kdev_menubar;
   KMenuBar* kdlg_menubar;
 
