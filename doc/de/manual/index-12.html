@@ -24,12 +24,30 @@
 </H3>
 
 <P>
-<P>Standardmäßig verwendet KDevelop den internen Debugger. Dies kann unter 
-"Einstellungen" geändert werden. Wählen Sie "KDevelop setup" 
-und dann "Debugger" .
-<P>Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie 
-einen anderen Debugger verwenden wollen und geben Sie den Namen des externen Debuggers 
-ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
+<P>Standardmäßig verwendet KDevelop den internen Debugger. Dies kann unter "Einstellungen" geändert werden. Wählen Sie 
+"KDevelop setup" und dann "Debugger" .
+<P>Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
+Sie den Namen des externen Debuggers ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
+<P>Bei Auswahl des internen Debuggers erhalten Sie eine Anzahl zusätzlicher Optionen aus denen Sie auswählen können:
+<P>
+<UL>
+<LI>Zeige static members: Die Anzeige von statischen Elementen verlangsamt gdb bei der Datenenerzeugung in kde und qt. Die 
+"Signatur" der Daten auf die sich QString und friend-Funktionen verlassen, könnte verändert werden. Wenn Sie jedoch diese Werte 
+debuggen müssen, markieren Sie die Option</LI>
+<LI>Zeige Teil-Namen an: Bei der Anzeige von disassembliertem Code können Sie sich Teil-Namen der Methoden anzeigen lassen. 
+Vollständige Namen sind jedoch einfacher zu lesen.</LI>
+<LI>BPs beim Laden von Bibliotheken setzen: Hiermit wird versucht "schwebende" Breakpoints beim Laden von Bibliotheken zu
+setzen. Wenn GDB eine Bibliothek die mittels "dlopen" geladen werden soll noch nicht kennt, weigert er sich Unterbrechungen in 
+diesem Code anzunehmen. Es ist jedoch möglich beim Laden der Bibliothek anzuhalten und dann zu versuchen die "schwebenden" 
+Breakpunkte zu setzen. Im Kapitel 
+<A HREF="#Dynamische Bibliotheken und Unterbrechungen">Dynamische Bibliotheken und Unterbrechungen</A>
+finden Sie Details und Probleme dieser Vorgehensweise. Wenn Sie keine Bibliotheken mit "dlopen" öffnen, lassen Sie diese Option 
+ausgeschaltet.</LI>
+<LI>Schwebende Werkzeugleiste: Dies erlaubt Ihnen zusätzlich die Steuerung des Debuggers mit Hilfe der schwebenden 
+Werkzeugleiste. Die Werkzeugleiste ist bestens zum Debuggen von GUI Anwendungen geeignet. Details finden Sie unter 
+<A HREF="#Die schwebende Werkzeugleiste">Die schwebende Werkzeugleiste</A>.</LI>
+</UL>
+<P>
 <P>
 <H3><A NAME="ss12.2">12.2 Verwendung des internen Debuggers</A>
 </H3>
@@ -59,107 +77,30 @@ langen Liste lokaler Variablen zu suchen.</LI>
 <LI>Disassemble : Eine Ansicht des Assemblercodes der aktuell ausgeführten Anweisung</LI>
 </UL>
 <P>
-<H4>Details</H4>
+<P>
+<H4>Änderungen im Debugmenü und im Panel</H4>
 
 <P>
-<P>
-<H4>Unterbrechungen</H4>
+<H4>Im Panel</H4>
 
+<P>Ihnen stehen zwei normale und zwei Dropdown-Knöpfe zur Verfügung, sobald Sie den Debugger starten.
 <P>
-<P>Unterbrechungen können auf Quellcodezeilen gesetzt werden (sog. Breakpoints), 
-oder auch auf Variablen (sog. Watchpoints) . Beide Arten von Unterbrechung können 
-jederzeit gesetzt werden, Watchpoints auf lokale Variablen sind jedoch nur im jeweiligen
-Gültigkeitsbereich von Bedeutung. Sinnvoller ist die Verwendung von Watchpoints für 
-globale Variablen.
-<P>
-<H4>Setzen/Löschen von Unterbrechungen</H4>
+<H4>Im Debugmenü</H4>
 
-<P>
-<P>Klicken Sie im Editor in der gewünschten Zeile den schmalen "Icon"-Rand auf der linken 
-Seite des Quelltextes an, um eine Unterbrechung zu setzen. Nochmaliges Klicken entfernt 
-die Unterbrechung wieder.
-<P>
-<H4>Alternative Manipulation der Unterbrechungen via Menü</H4>
-
-<P>
-<P>Wenn Sie den Breakpoint entweder im Editor oder in der Breakpointliste mit der rechten 
-Maustaste anklicken, öffnet sich ein Menü mit Optionen. Dort können Sie die Unterbrechung 
-entfernen oder editieren, oder alle Unterbrechungen löschen.
-<P>
-<H4>Editieren von Unterbrechungen</H4>
-
-<P>
-<P>Benutzen Sie das eben beschriebene Menü um Unterbrechungen zu editieren.
-Es enthält die folgenden Einträge:
-<OL>
-<LI>Bedingung: Geben Sie eine Bedingung an, die erfüllt sein muß, damit 
-gdb die Programmausführung unterbricht.</LI>
-<LI>Ignoriere die nächsten: Wie oft der Code den Breakpoint passieren soll, bevor 
-gdb die Programmausführung unterbricht.</LI>
-<LI>Aktivieren: Wenn das Kontrollfeld aktiviert ist, hält gdb an dieser Stelle an, 
-sonst wird der Breakpoint ignoriert.</LI>
-</OL>
-<P>
-<H4>Alle Breakpoints löschen</H4>
-
-<P>
-<P>Entfernt alle Unterbrechungen für dieses Programm.
-<P>
-<H4>Setzen/Löschen von Watchpoints</H4>
-
-<P>
-<P>Klicken Sie in der Variablenansicht mit der rechten Maustaste auf eine Variable. 
-Es öffnet sich ein Popup Menü in dem Sie einen Watchpoint auf diese lokale Variable 
-setzen können. Diese Funktionalität ist auf den Gültigkeitsbereich dieser Variablen 
-eingeschränkt. Sobald der Gültigkeitsbereich verlassen werden soll, wird das Programm 
-angehalten und der Watchpoint gelöscht.
-<P>WARNUNG: Dies ist als problematisch bekannt. Seien Sie also vorsichtig, wenn Sie 
-Unterbrechungen auf lokale Variablen setzen.
-<P>Eine Unterbrechung kann auch gesetzt werden, indem Sie mit der rechten Maustaste auf eine 
-vorher eingegebene Unterbrechung klicken und "Watchpoint umschalten" auswählen.
-<P>
-<H4>Setzen/Löschen von Watch Variablen</H4>
-
-<P>
-<P>Am unteren Ende der Variablenansicht befindet sich das "Watch"-Feld 
-in dem man den Variablennamen eingeben kann, den man sich in der Watchliste 
-anzeigen lassen will. Geben Sie den Variablennamen gefolgt von &lt;RETURN&gt; ein oder 
-klicken Sie auf "Hinzufügen" . Ein Klick mit der rechten Maustaste auf den 
-Variablennamen in der Baumansicht öffnet ein Menü, in dem Sie die Variable wieder aus 
-der Liste entfernen können.
-<P>Sie können eine Watchvariable auch eingeben, indem Sie mit der rechten Maustaste im 
-Editorfenster auf den Variablennamen klicken. Dies öffnet ein Popoup Menü mit einem 
-"Beobachten : Variablenname" Eintrag.
-<P>
-<H4>Ändern von Variablenwerten</H4>
-
-<P>
-<P>Das ändern von Variablenwerten erfolgt mit Hilfe einer Watchvariablen. Wenn Sie eine 
-Variable "test" haben, können Sie die Variable auf 5 setzen, indem Sie 
-im Watch-Feld "test=5" eingeben und die Variable zur Liste hizufügen.
-Beachten Sie, daß "test" JEDESMAL auf 5 gesetzt wird, wenn das Programm an 
-dieser Stelle angehalten wird. Sie sollten eine Variable deshalb wieder aus der Liste entfernen nachdem sie 
-einmal gesetzt worden ist.
-<P>
-<H4>Die schwebende Werkzeugleiste</H4>
-
-<P>
-<P>Die Werkzeugleiste des internen Debuggers "schwebt" entweder über allen 
-angezeigten Fenstern, oder sie ist in die Kontrolleiste gedockt. Wenn sie gedockt ist, können 
-Sie den Code durch anklicken des gedockten Icons ausführen. Die dabei ausgeführte Funktion 
-ist die "Step Over" Funktion. Mit Hilfe der rechten Maustaste können sie die Werkzeugleiste 
-wiederherstellen und optional KDevelop den Fokus geben.
-<P>Die verfügbaren Funktionen sind:
+<P>Wenn Sie den Debugger starten, werden die zehn Einträge zu Steuerung des Debuggers eingeschaltet.
+<P>Verfügbare Funktionen: 
+<A NAME="Verfügbare Funktionen"></A> 
 <UL>
-<LI>Ausführen : Fortsetzen des Programmes von der aktuellen Stelle aus.</LI>
-<LI>Über Funktion  : Ausführen einer Codezeile. Alle in dieser Zeile enthaltenen Funktionen 
+<LI>Ausführen: Fortsetzen des Programmes von der aktuellen Stelle aus.</LI>
+<LI>Bis Cursor: Fortsetzen des Programmes bis zur aktuellen Cursorposition.</LI>
+<LI>Über Funktion: Ausführen einer Codezeile. Alle in dieser Zeile enthaltenen Funktionen 
 werden ausgeführt.</LI>
-<LI>Über Funktion A(ssembler) : Ausführen einer Assemblerinstruktion wie oben.</LI>
-<LI>In Funktion : Ausführen einer Codezeile. Wenn erforderlich wird aber in die enthaltenen 
+<LI>Über Maschinenanweisung: Ausführen einer Assemblerinstruktion wie oben.</LI>
+<LI>In Funktion: Ausführen einer Codezeile. Wenn erforderlich wird aber in die enthaltenen 
 Funktionen verzweigt und diese werden angezeigt.</LI>
-<LI>In Funktion A(ssembler) : Ausführen einer Assemblerinstruktion wie oben.</LI>
-<LI>Aus Funktion : Ausführen bis zum Ende des aktuellen Stackframes (Funktion).</LI>
-<LI>Ansehen : Erlaubt verschieden Ansichten der Daten.
+<LI>In Maschinenanweisung:  Ausführen einer Assemblerinstruktion wie oben.</LI>
+<LI>Aus Funktion: Ausführen bis zum Ende des aktuellen Stackframes (Funktion).</LI>
+<LI>Ansichten: Erlaubt verschieden Ansichten der Daten.
 Zur Zeit sind implementiert:
 <OL>
 <LI> Speicher</LI>
@@ -168,49 +109,111 @@ Zur Zeit sind implementiert:
 <LI> Bibliotheken</LI>
 </OL>
 </LI>
-<LI>Anhalten : Ausführung der Anwendung unterbrechen.</LI>
-<LI>Setze Fokus auf KDevelop : Setzt den Fokus auf KDevelop.</LI>
-<LI>Setze Fokus auf Applikation : Setzt den Fokus auf das Fenster das ihn hatte
-als "Setze Fokus auf KDevelop" gedrückt wurde. Dies ist ein Kompromiß, der 
-Fokus sollte eigentlich auf die zu debuggende Anwendung gesetzt werden, aber dies ist 
-schwierig. Wenn jemand eine bessere Lösung hat, laßt es uns wissen.</LI>
+<LI>Anhalten: Ausführung der Anwendung unterbrechen.</LI>
+<LI>Halt: Ausführung der Anwendung unterbrechen und Debugger beenden.</LI>
 </UL>
-<P>Wenn gdb das Programm unterbricht, weil z.B. ein Breakpoint erreicht wurde, 
-wird "Setze Fokus auf KDevelop" mit einem Highlight versehen. 
-Wir geben nicht automatisch KDevelop den Fokus, damit Sie die Ausgabe Ihres 
-Programmes sehen können. Klicken Sie auf "Setze Fokus auf KDevelop" 
-oder einen anderen Knopf um die gewünschte Funktion auszuführen.
 <P>
-<H3><A NAME="ss12.3">12.3 Dynamische Bibliotheken und Unterbrechungen</A>
-</H3>
+<P>
+<H4>Details</H4>
 
 <P>
-<P>Die Verwendung Breakpoints innerhalb von dynamischen Bibliotheken führt zu einem Problem, 
-für das es eine annehmbare Lösung gibt. 
-Das Problem ist, daß gdb keine Breakpoints akzeptiert, die innerhalb des Quellcodes einer dynamischen 
-Bibliothek liegen, solange diese noch nicht mittels dlopen geöffnet wurde. 
-<P>Die Lösung besteht darin, gdb dazu zu bringen uns zu benachrichtigen, wenn eine 
-dynamische Bibliothek geöffnet wurde. Das heißt, wenn der Benutzer dort eine Unterbrechung 
-setzt, markieren wir dies als "in der Schwebe", und wenn gdb anhält, weil die 
-Bibliothek geöffnet wurde, versuchen wir die Breakpoints zu setzen. Ist dies erfolgreich, wird 
-die Unterbrechung als aktiv markiert, wenn nicht, bleibt der Breakpoint "schwebend". In jedem Falle 
-wird anschließend ein "continue" ausgeführt.
+<H4>Unterbrechungen</H4>
+
+<P>Unterbrechungen können auf Quellcodezeilen gesetzt werden (sog. Breakpoints), oder auch auf Variablen (sog. Watchpoints) . Beide 
+Arten von Unterbrechung können jederzeit gesetzt werden, Watchpoints auf lokale Variablen sind jedoch nur im jeweiligen 
+Gültigkeitsbereich von Bedeutung. Sinnvoller ist die Verwendung von Watchpoints für globale Variablen.
+<P>
+<H4>Setzen/Löschen von Unterbrechungen</H4>
+
+<P>Klicken Sie im Editor in der gewünschten Zeile den schmalen "Icon"-Rand auf der linken Seite des Quelltextes an, um eine 
+Unterbrechung zu setzen. Nochmaliges Klicken entfernt die Unterbrechung wieder.
+<P>
+<H4>Alternative Manipulation der Unterbrechungen via Menü</H4>
+
+<P>Wenn Sie den Breakpoint entweder im Editor oder in der Breakpointliste mit der rechten Maustaste anklicken, öffnet sich ein Menü mit 
+Optionen. Dort können Sie die Unterbrechung entfernen oder editieren, oder alle Unterbrechungen löschen.
+<P>
+<H4>Editieren von Unterbrechungen</H4>
+
+<P>Benutzen Sie das eben beschriebene Menü um Unterbrechungen zu editieren. Es enthält die folgenden Einträge:
+<OL>
+<LI>Bedingung: Geben Sie eine Bedingung an, die erfüllt sein muß, damit gdb die Programmausführung unterbricht.</LI>
+<LI>Ignoriere die nächsten: Wie oft der Code den Breakpoint passieren soll, bevor gdb die Programmausführung unterbricht.</LI>
+<LI>Aktivieren: Wenn das Kontrollfeld aktiviert ist, hält gdb an dieser Stelle an, sonst wird der Breakpoint ignoriert.</LI>
+</OL>
+<P>
+<H4>Alle Breakpoints löschen</H4>
+
+<P>Entfernt alle Unterbrechungen für dieses Programm.
+<P>
+<H4>Setzen/Löschen von Watchpoints</H4>
+
+<P>Klicken Sie in der Variablenansicht mit der rechten Maustaste auf eine Variable. Es öffnet sich ein Popup Menü in dem Sie einen 
+Watchpoint auf diese lokale Variable setzen können. Diese Funktionalität ist auf den Gültigkeitsbereich dieser Variablen eingeschränkt. 
+Sobald der Gültigkeitsbereich verlassen werden soll, wird das Programm angehalten und der Watchpoint gelöscht.
+<P>WARNUNG: Dies ist als problematisch bekannt. Seien Sie also vorsichtig, wenn Sie Unterbrechungen auf lokale Variablen setzen.
+<P>Eine Unterbrechung kann auch gesetzt werden, indem Sie mit der rechten Maustaste auf eine vorher eingegebene Unterbrechung 
+klicken und "Watchpoint umschalten" auswählen.
+<P>
+<H4>Setzen/Löschen von Watch Variablen</H4>
+
+<P>Am unteren Ende der Variablenansicht befindet sich das "Watch"-Feld in dem man den Variablennamen eingeben kann, den man sich 
+in der Watchliste anzeigen lassen will. Geben Sie den Variablennamen gefolgt von &lt;RETURN&gt; ein oder klicken Sie auf 
+"Hinzufügen" . Ein Klick mit der rechten Maustaste auf den Variablennamen in der Baumansicht öffnet ein Menü, in dem Sie die 
+Variable wieder aus der Liste entfernen können.
+<P>Sie können eine Watchvariable auch eingeben, indem Sie mit der rechten Maustaste im Editorfenster auf den Variablennamen klicken. 
+Dies öffnet ein Popoup Menü mit einem "Beobachten : Variablenname" Eintrag.
+<P>
+<H4>Ändern von Variablenwerten</H4>
+
+<P>Das ändern von Variablenwerten erfolgt mit Hilfe einer Watchvariablen. Wenn Sie eine Variable "test" haben, können Sie die Variable 
+auf 5 setzen, indem Sie im Watch-Feld "test=5" eingeben und die Variable zur Liste hizufügen. Beachten Sie, daß "test" JEDESMAL 
+auf 5 gesetzt wird, wenn das Programm an dieser Stelle angehalten wird. Sie sollten eine Variable deshalb wieder aus der Liste 
+entfernen nachdem sie einmal gesetzt worden ist.
+<P>
+<H3><A NAME="Die schwebende Werkzeugleiste"></A> <A NAME="ss12.3">12.3 Die schwebende Werkzeugleiste </A>
+</H3>
+
+<P>Die schwebende Werkzeugleiste ist ein Feature des internen Debuggers, das den Komfort beim Debuggen von GUI Anwendungen 
+erheblich verbessert. Die Werkzeugleiste "schwebt" entweder über allen angezeigten Fenstern, oder sie ist in die Kontrolleiste gedockt. 
+Wenn sie gedockt ist, können Sie den Code durch anklicken des gedockten Icons ausführen. Die dabei ausgeführte Funktion ist die 
+"Step Over" Funktion. Mit Hilfe der rechten Maustaste können sie die Werkzeugleiste wiederherstellen und optional KDevelop den 
+Fokus geben.
+<P>Zusätzlich zu den 
+<A HREF="#Verfügbare Funktionen">Funktionen  des Debugmenüs</A>, bietet die schwebende Werkzeugleiste 
+zwei weitere Funktionen an:
+<UL>
+<LI>Setze Fokus auf KDevelop : Setzt den Fokus auf KDevelop.</LI>
+<LI>Setze Fokus auf Applikation : Setzt den Fokus auf das Fenster das ihn hatte als "Setze Fokus auf KDevelop" gedrückt wurde. 
+Dies ist ein Kompromiß, der Fokus sollte eigentlich auf die zu debuggende Anwendung gesetzt werden, aber dies ist schwierig. Wenn 
+jemand eine bessere Lösung hat, laßt es uns wissen.</LI>
+</UL>
+<P>Wenn gdb das Programm unterbricht, weil z.B. ein Breakpoint erreicht wurde, wird "Setze Fokus auf KDevelop" mit einem Highlight 
+versehen. Wir geben nicht automatisch KDevelop den Fokus, damit Sie die Ausgabe Ihres Programmes sehen können. Klicken Sie auf 
+"Setze Fokus auf KDevelop" oder einen anderen Knopf um die gewünschte Funktion auszuführen.
+<P>
+<H3><A NAME="Dynamische Bibliotheken und Unterbrechungen"></A> <A NAME="ss12.4">12.4 Dynamische Bibliotheken und Unterbrechungen </A>
+</H3>
+
+<P>Die Verwendung Breakpoints innerhalb von dynamischen Bibliotheken führt zu einem Problem, für das es eine annehmbare Lösung gibt. 
+Das Problem ist, daß gdb keine Breakpoints akzeptiert, die innerhalb des Quellcodes einer dynamischen Bibliothek liegen, solange 
+diese noch nicht mittels dlopen geöffnet wurde. 
+<P>Die Lösung besteht darin, gdb dazu zu bringen uns zu benachrichtigen, wenn eine dynamische Bibliothek geöffnet wurde. Das heißt, 
+wenn der Benutzer dort eine Unterbrechung setzt, markieren wir dies als "in der Schwebe", und wenn gdb anhält, weil die Bibliothek 
+geöffnet wurde, versuchen wir die Breakpoints zu setzen. Ist dies erfolgreich, wird die Unterbrechung als aktiv markiert, wenn nicht, 
+bleibt der Breakpoint "schwebend". In jedem Falle wird anschließend ein "continue" ausgeführt.
 <P>Dies ist als "lazy breakpoints" bekannt.
-<P>Dennoch müssen Sie vorsichtig sein. Wenn Sie versehentlich eine Unterbrechung in einer Datei 
-setzen, die absolut nichts mit Ihrem Programm zu tun hat, sie gehört also weder zu Ihrem Programm 
-noch zu irgendeiner dynamischen Bibliothek Ihres Projektes, wird dieser Breakpoint immer 
-"schwebend" bleiben. Dies kann nicht verhindert werden, da er zu einer dynamischen Bibliothek 
-gehören könnte. 
+<P>Dennoch müssen Sie vorsichtig sein. Wenn Sie versehentlich eine Unterbrechung in einer Datei setzen, die absolut nichts mit Ihrem 
+Programm zu tun hat, sie gehört also weder zu Ihrem Programm noch zu irgendeiner dynamischen Bibliothek Ihres Projektes, wird dieser 
+Breakpoint immer "schwebend" bleiben. Dies kann nicht verhindert werden, da er zu einer dynamischen Bibliothek gehören könnte. 
 <P>Das Problem der "schwebenden" Unterbrechungen ist folgendes:
-Wenn Sie "Über Funktion" in einer Codezeile anwenden, die ein dlopen enthält oder zu einem 
-dlopen führt, kann man nicht vorhersagen was passieren wird. Das dlopen wird von gdb 
-abgefangen, wodurch die Ausführung unterbrochen wird. Nun gibt es zwei Möglichkeiten, entweder
-gibt es dort "schwebende" Breakpoints, dann werden Sie als aktiv markiert und das anschließende 
-"continue" führt zu diesem Punkt. Oder es gibt keine, dann führt "continue" bis zur nächsten 
-Eingabeaufforderung oder direkt zum Programmende. Nichts von dem ist das, was erwartet wurde. 
-Aus diesem Grund wird bei "Über Funktion" kein "continue" ausgeführt, sondern das Programm bleibt 
-angehalten und der "Gestoppt" Zustand wird in der Statuszeile angezeigt. Der Framestack befindet sich 
-in der Routine die den Stop verursacht hat.
+Wenn Sie "Über Funktion" in einer Codezeile anwenden, die ein dlopen enthält oder zu einem dlopen führt, kann man nicht 
+vorhersagen was passieren wird. Das dlopen wird von gdb abgefangen, wodurch die Ausführung unterbrochen wird. Nun gibt es zwei 
+Möglichkeiten, entweder gibt es dort "schwebende" Breakpoints, dann werden Sie als aktiv markiert und das anschließende "continue" 
+führt zu diesem Punkt. Oder es gibt keine, dann führt "continue" bis zur nächsten Eingabeaufforderung oder direkt zum Programmende. 
+Nichts von dem ist das, was erwartet wurde. Aus diesem Grund wird bei "Über Funktion" kein "continue" ausgeführt, sondern das 
+Programm bleibt angehalten und der "Gestoppt" Zustand wird in der Statuszeile angezeigt. Der Framestack befindet sich in der Routine 
+die den Stop verursacht hat.
 <P>Es gibt keinen Ausweg aus dieser Situation, aber so konnte das Problem ein wenig abgemildert werden.
 <P>
 <P ALIGN="RIGHT">
