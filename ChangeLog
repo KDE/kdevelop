@@ -1,3 +1,8 @@
+2002-10-28 F@lk Brettschneider <falk@kdevelop.org>
+  * fix in parts/doctreeview: if the Qt docu isn't available via doxygen books,
+    fall back to the using of the Qt docu path set in the
+    Gideon options "Documentation tree I"
+     
 2002-10-31  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Since khelpcenter/htmlsearch is no more, put htdig configuration
