@@ -17,7 +17,7 @@ kdevelop_htdig_SOURCES = htdigindex.cpp
 # kdevelop_index_CXXFLAGS = -DINDEXER ## makes problems with automake 1.5 and am_edit (Walter/2.01.2002)
 
 kdevelop_htdig_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevelop_htdig_LDADD = $(top_builddir)/lib/util/libkdevutil.la $(LIB_KIO) $(LIB_KDEUI)
+kdevelop_htdig_LDADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KIO) $(LIB_KDEUI)
 
 kio_kdeapi_la_SOURCES = kio_kdeapi.cpp
 kio_kdeapi_la_LIBADD = $(LIB_KIO)
