@@ -23,41 +23,43 @@ class QDomDocument;
 class KDevPartController;
 
 
+class KDevApiPrivate;
+
 // 2002-02-08 add ccClassStore - daniel
 class KDevApi
 {
 public:
 
-    virtual KDevPartController *getPartController() = 0;
+    KDevApi();
+    virtual ~KDevApi();
+
+    virtual KDevPartController *partController() = 0;
+    virtual KDevCore *core() = 0;
+    virtual ClassStore *classStore() = 0;
+    virtual ClassStore *ccClassStore() = 0;
+
+    QDomDocument *projectDom();
+    void setProjectDom(QDomDocument *dom);
+
+    KDevProject *project();
+    void setProject(KDevProject *project);
+   
+    KDevMakeFrontend *makeFrontend();
+    void setMakeFrontend(KDevMakeFrontend *makeFrontend);
+
+    KDevAppFrontend *appFrontend();
+    void setAppFrontend(KDevAppFrontend *appFrontend);
+   
+    KDevLanguageSupport *languageSupport();
+    void setLanguageSupport(KDevLanguageSupport *languageSupport);
+
+    KDevVersionControl *versionControl();
+    void setVersionControl(KDevVersionControl *versionControl);
 
 
-    // TODO: Refactor everything below!
-    KDevApi()
-        : classStore(0),
-          projectDom(0),
-          core(0),
-          makeFrontend(0),
-          appFrontend(0),
-          project(0),
-          languageSupport(0),
-          versionControl(0),
-	  /* added by daniel */
-	  ccClassStore( 0 )
-        {}
-
-    ClassStore *classStore;
-    QDomDocument *projectDom;
-    KDevCore *core;
-    KDevMakeFrontend *makeFrontend;
-    KDevAppFrontend *appFrontend;
-    KDevProject *project;
-    KDevLanguageSupport *languageSupport;
-    KDevVersionControl *versionControl;
-    /**
-     * a new classstore for codecompletion
-     * added by daniel
-     */
-    ClassStore* ccClassStore;
+private:
+    
+    KDevApiPrivate *d;
 
 };
 
