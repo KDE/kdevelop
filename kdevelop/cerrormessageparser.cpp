@@ -75,7 +75,7 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString* sgmloutput,QString sgml
   out();
 //  cerr << endl << endl << ":::::::::";
 }
-void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
+void CErrorMessageParser::parseInMakeMode(QString* makeoutput){
   if(!isOn()) return;
   QStack<QString> stack;
   QStrList outputlist;
@@ -109,7 +109,7 @@ void CErrorMessageParser::parseInMakeMode(QString* makeoutput,QString startdir){
   int makeoutputline=0;
 
   QString* stack_str;
-  stack_str = new QString(startdir);
+  stack_str = new QString(startDir);
   stack.push(stack_str);
   
   QString error_str;
