@@ -41,21 +41,22 @@ private slots:
     void itemSelected( QListViewItem * );
     void openURL( const QString & );
     void selectProfile(QListViewItem* item);
+    void setAsDefault();
 
 private:
     void init();
     void readProjectConfig();
     void saveProjectConfig();
-    void fillProfilesList();
+//    void fillProfilesList();
 
     QDomDocument m_projectDom;
 
     QListView * _pluginList;
-    QComboView *_pluginProfile;
+//    QComboView *_pluginProfile;
     QLabel * _pluginDescription;
     KURLLabel * _urlLabel;
 
-    QString _profile;
+//    QString _profile;
 };
 
 #endif

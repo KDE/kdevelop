@@ -963,7 +963,13 @@ void AppWizardDialog::openAfterGeneration()
 		DomUtil::writeEntry(projectDOM, "/general/versioncontrol", service->property("X-KDevelop-VCSPlugin").toString());
 	}
 
-
+	
+	KConfig * config = kapp->config();
+	config->setGroup("IgnorePerDefault");
+	QStringList ignoreparts = config->readListEntry( "KDevelop" );
+	DomUtil::writeListEntry( projectDOM, "/general/ignoreparts", "part", ignoreparts );
+	
+	
 //FIXME PROFILES!!!!!!!!
 //BEGIN Plugin Profile
 
