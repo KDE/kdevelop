@@ -21,6 +21,8 @@ PartExplorerForm::PartExplorerForm( QWidget *parent, const char *name, WFlags fl
 	: PartExplorerFormBase( parent, name, fl )
 {
 	connect( buttonSearch, SIGNAL(clicked()), this, SLOT(slotSearchRequested())	);
+	connect( lineEditType, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+	connect( lineEditCostraints, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 }
 
 PartExplorerForm::~PartExplorerForm()
