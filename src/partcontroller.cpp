@@ -145,6 +145,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
       return;
     }
   }
+  
+  url.cleanPath(true);
     
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
