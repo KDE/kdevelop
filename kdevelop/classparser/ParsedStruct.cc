@@ -39,6 +39,8 @@
 *********************************************************************/
 
 #include "ParsedStruct.h"
+#include "ParsedItem.h"
+#include "ParsedClassItem.h"
 #include <iostream.h>
 #include <assert.h>
 
@@ -60,6 +62,7 @@
 CParsedStruct::CParsedStruct()
   : memberIterator( members )
 {
+  setItemType( PIT_STRUCT );
 }
 
 /*------------------------------------- CClassParser::~CClassParser()
@@ -80,23 +83,6 @@ CParsedStruct::~CParsedStruct()
  *                          PUBLIC METHODS                           *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------------- CClassParser::setName()
- * setName()
- *   Set the name of the structure.
- *
- * Parameters:
- *   aName             The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedStruct::setName( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  name = aName;
-}
 
 /*------------------------------------- CClassParser::addMember()
  * addMember()

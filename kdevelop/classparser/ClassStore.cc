@@ -131,7 +131,7 @@ void CClassStore::addGlobalFunction( CParsedMethod *aFunc )
 
   globalFunctions.append( aFunc );
   
-  aFunc->toString( str );
+  aFunc->asString( str );
   gfNameAndArg.insert( str, aFunc );
 }
 

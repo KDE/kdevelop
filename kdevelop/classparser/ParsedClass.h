@@ -44,14 +44,16 @@
 #include <qstrlist.h>
 #include <qdict.h>
 #include <qstring.h>
+#include "ParsedItem.h"
 #include "ParsedParent.h"
 #include "ParsedAttribute.h"
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
 #include "ParsedSignalText.h"
 #include "ParsedStruct.h"
-/** */
-class CParsedClass
+
+/** This is the representation of a class that has been parsed by the classparser.*/
+class CParsedClass : public CParsedItem
 {
 public: // Constructor & Destructor
 
@@ -81,14 +83,10 @@ private: // Private attributes
   /** All signals ordered by name and argument. */
   QDict<CParsedMethod> signalsByNameAndArg;
 
+  /** All structures declared in this class. */
+  QDict<CParsedStruct> structs;
 
 public: // Public attributes
-
-  /** Name of the parsed class. */
-  QString name;
-
-  /** Line at which the classdefinition starts. */
-  int definedOnLine;
 
   /** Filename of the .h file. */
   QString hFilename;
@@ -105,9 +103,6 @@ public: // Public attributes
   /** List with names of classes declared in this class(if any). */
   QStrList childClasses;
 
-  /** List with names of structures declared in this class(if any). */
-  QStrList structs;
-
   /** Iterator for the methods. */
   QListIterator<CParsedMethod> methodIterator;
 
@@ -120,6 +115,9 @@ public: // Public attributes
   /** List of signals. */
   QListIterator<CParsedMethod> signalIterator;
 
+  /** Iterator for the structures. */
+  QDictIterator<CParsedStruct> structIterator;
+
   /** List of signal<->slot mappings. */
   QList<CParsedSignalSlot> signalMaps;
   
@@ -127,12 +125,6 @@ public: // Public attributes
   QList<CParsedSignalText> textMaps;
 
 public: // Metods to set attribute values
-
-  /** Set the classname. */
-  void setName( const char *aName );
-
-  /** Set the line. */
-  void setDefinedOnLine( int aLine );
 
   /** Set the .h filename. */
   void setHFilename( const char *aName );
@@ -144,13 +136,13 @@ public: // Metods to set attribute values
   void addParent( CParsedParent *aParent );
 
   /** Add a struct. */
-  void addStruct( const char *aName ) { structs.append( aName ); }
+  void addStruct( CParsedStruct *aStruct );
 
   /** Add a friend. */
-  void addFriend( const char *aName ) { friends.append( aName ); }
+  void addFriend( const char *aName )      { friends.append( aName ); }
 
   /** Add a childclass. */
-  void addChildClass( const char *aName ) { childClasses.append( aName ); }
+  void addChildClass( const char *aName )  { childClasses.append( aName ); }
 
   /** Add an attribute. */
   void addAttribute( CParsedAttribute *anAttribute );
@@ -208,17 +200,16 @@ public: // Public queries
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );
 
+public: // Implementation of virtual methods
+
   /** Initialize the object from a persistant string. */
-  void fromPersistantString( const char *dataStr );
+  virtual void fromPersistantString( const char *dataStr );
 
   /** Return a string made for persistant storage. */
-  void asPersistantString( QString &dataStr );
-
-public: // Public methods
+  virtual const char *asPersistantString( QString &dataStr );
 
   /** Output the class as text on stdout. */
   void out();
-
 };
 
 #endif

@@ -50,9 +50,9 @@
  *-----------------------------------------------------------------*/
 CParsedMethod::CParsedMethod()
 {
+  setItemType( PIT_METHOD );
   arguments.setAutoDelete( true );
   isVirtual = false;
-  declaredOnLine = 0;
 }
 
 /*----------------------------------- CParsedMethod::~CParsedMethod()
@@ -112,8 +112,8 @@ void CParsedMethod::setIsVirtual( bool aState )
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------------ CParsedMethod::toString()
- * toString()
+/*------------------------------------------ CParsedMethod::asString()
+ * asString()
  *   Return the object as a string(for tooltips etc).
  *
  * Parameters:
@@ -122,7 +122,7 @@ void CParsedMethod::setIsVirtual( bool aState )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedMethod::toString( QString &str )
+const char *CParsedMethod::asString( QString &str )
 {
   CParsedArgument *arg;
 
@@ -140,6 +140,8 @@ void CParsedMethod::toString( QString &str )
   }
 
   str += ")";
+
+  return str;
 }
 
 /*---------------------------------------------- CParsedMethod::out()
@@ -159,14 +161,17 @@ void CParsedMethod::out()
   cout << "    ";
   switch( export )
   {
-    case PUBLIC:
+    case PIE_PUBLIC:
       cout << "public ";
       break;
-    case PROTECTED:
+    case PIE_PROTECTED:
       cout << "protected ";
       break;
-    case PRIVATE:
+    case PIE_PRIVATE:
       cout << "private ";
+      break;
+    case PIE_GLOBAL:
+      cout << "";
       break;
   }
 
@@ -257,7 +262,7 @@ void CParsedMethod::asCppCode( QString &str )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedMethod::asPersistantString( QString &dataStr )
+const char *CParsedMethod::asPersistantString( QString &dataStr )
 {
   QString str;
   QString intStr;
@@ -280,6 +285,8 @@ void CParsedMethod::asPersistantString( QString &dataStr )
   intStr.sprintf( "%d", declaredOnLine );
   dataStr += intStr + "\n";
   dataStr += declaredInFile + "\n";
+
+  return dataStr;
 }
 
 /*------------------------------------------ CParsedMethod::isEqual()

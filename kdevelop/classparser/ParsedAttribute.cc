@@ -50,11 +50,10 @@
  *-----------------------------------------------------------------*/
 CParsedAttribute::CParsedAttribute()
 {
+  setItemType( PIT_ATTRIBUTE );
   isConst = false;
   isStatic = false;
   isInHFile = true;
-  definedOnLine = -1;
-  export = CPGLOBAL;
 }
 
 /*----------------------------- CParsedAttribute::~CParsedAttribute()
@@ -76,58 +75,6 @@ CParsedAttribute::~CParsedAttribute()
  *                                                                   *
  ********************************************************************/
 
-/*--------------------------------------- CParsedAttribute::setName()
- * setName()
- *   Set the name of the attribute.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setName( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  name = aName;
-}
-
-/*---------------------------- CParsedAttribute::setDeclaredInClass()
- * setDeclaredInClass()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setDeclaredInClass( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  declaredInClass = aName;
-}
-
-
-/*---------------------------- CParsedAttribute::setDefinedInFile()
- * setDefinedInFile()
- *   Set the name of the file.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setDefinedInFile( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  definedInFile = aName;
-}
-
 /*--------------------------------------- CParsedAttribute::setType()
  * setType()
  *   Set the name of the class.
@@ -143,22 +90,6 @@ void CParsedAttribute::setType( const char *aType )
   assert( aType != NULL );
 
   type = aType;
-}
-
-/*------------------------------- CParsedAttribute::setDefinedOnLine()
- * setDefinedOnLine()
- *   Set the line where the attribute is defined.
- *
- * Parameters:
- *   aLine            The line where it is defined.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setDefinedOnLine( int aLine )
-{
-  
-  definedOnLine = aLine;
 }
 
 /*---------------------------------- CParsedAttribute::setIsInHFile()
@@ -206,41 +137,6 @@ void CParsedAttribute::setIsConst( bool aState )
   isConst = aState;
 }
 
-/*-------------------------------------- CParsedAttribute::setExport()
- * setExport()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setExport( int aExport )
-{
-  assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED || 
-          aExport == CPGLOBAL );
-
-  export = aExport;
-}
-
-/*--------------------------------------- CParsedAttribute::setComment()
- * setComment()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setComment( const char *aComment )
-{
-  assert( aComment != NULL );
-
-  comment = aComment;
-}
-
 /*********************************************************************
  *                                                                   *
  *                           PUBLIC METHODS                          *
@@ -270,8 +166,8 @@ void CParsedAttribute::asHeaderCode( QString &str )
   str += type + " " + name + ";\n";
 }
 
-/*-------------------------------------- CParsedAttribute::toString()
- * toString()
+/*-------------------------------------- CParsedAttribute::asString()
+ * asString()
  *   Return the object as a string(for tooltips etc).
  *
  * Parameters:
@@ -280,11 +176,11 @@ void CParsedAttribute::asHeaderCode( QString &str )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::toString( QString &str )
+const char * CParsedAttribute::asString( QString &str )
 {
-  str = type;
-  str += " ";
-  str += name;
+  str.sprintf( "%s %s", type.data(), name.data() );
+
+  return str;
 }
 
 /*------------------------------------------- CParsedAttribute::out()
@@ -304,14 +200,17 @@ void CParsedAttribute::out()
 
   switch( export )
   {
-    case PUBLIC:
+    case PIE_PUBLIC:
       cout << "public ";
       break;
-    case PROTECTED:
+    case PIE_PROTECTED:
       cout << "protected ";
       break;
-    case PRIVATE:
+    case PIE_PRIVATE:
       cout << "private ";
+      break;
+    case PIE_GLOBAL:
+      cout << "";
       break;
   }
 
@@ -350,9 +249,8 @@ bool CParsedAttribute::isEqual( CParsedAttribute &attr )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::asPersistantString( QString &dataStr )
+const char *CParsedAttribute::asPersistantString( QString &dataStr )
 {
-  QString str;
   QString intStr;
 
   dataStr = "";
@@ -373,4 +271,6 @@ void CParsedAttribute::asPersistantString( QString &dataStr )
   dataStr += intStr + "\n";
   dataStr += comment.find( "\n", false ) + "\n";
   dataStr += comment +"\n";
+
+  return dataStr;
 }

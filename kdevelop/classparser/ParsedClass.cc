@@ -52,8 +52,11 @@ CParsedClass::CParsedClass()
   : methodIterator( methods ),
     attributeIterator( attributes ),
     slotIterator( slotList ),
-    signalIterator( signalList )
+    signalIterator( signalList ),
+    structIterator( structs )
 {
+  setItemType( PIT_CLASS );
+
   parents.setAutoDelete( true );
   attributes.setAutoDelete( true );
   methods.setAutoDelete( true );
@@ -61,8 +64,6 @@ CParsedClass::CParsedClass()
   slotList.setAutoDelete( true );
   signalMaps.setAutoDelete( true );
   textMaps.setAutoDelete( true );
-
-  definedOnLine = -1;
 }
 
 /*------------------------------------- CParsedClass::~CParsedClass()
@@ -83,39 +84,6 @@ CParsedClass::~CParsedClass()
  *                    METHODS TO SET ATTRIBUTE VALUES                *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------------------- CParsedClass::setName()
- * setName()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::setName( const char *aName )
-{
-  assert( aName != NULL && strlen( aName ) > 0 );
-
-  name = aName;
-}
-
-
-/*---------------------------------- CParsedClass::setDefinedOnLine()
- * setDefinedOnLine()
- *   Set the line where the class is defined.
- *
- * Parameters:
- *   aLine            The line where it is defined.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClass::setDefinedOnLine( int aLine )
-{
-  definedOnLine = aLine;
-}
 
 /*---------------------------------- CParsedClass::setHFilename()
  * setHFilename()
@@ -168,6 +136,25 @@ void CParsedClass::addParent( CParsedParent *aParent )
   parents.append( aParent );
 }
 
+/*----------------------------------------- CParsedClass::addStruct()
+ * addStruct()
+ *   Add a structure.
+ *
+ * Parameters:
+ *   aStruct          The structure description.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::addStruct( CParsedStruct *aStruct ) 
+{
+  assert( aStruct != NULL );
+  assert( !aStruct->name.isEmpty() );
+
+  aStruct->setDeclaredInClass( name );
+  structs.insert( aStruct->name, aStruct );  
+}
+
 /*-------------------------------------- CParsedClass::addAttribute()
  * addAttribute()
  *   Add an attribute.
@@ -181,6 +168,7 @@ void CParsedClass::addParent( CParsedParent *aParent )
 void CParsedClass::addAttribute( CParsedAttribute *anAttribute )
 {
   assert( anAttribute != NULL );
+  assert( !anAttribute->name.isEmpty() );
 
   anAttribute->setDeclaredInClass( name );
   attributes.insert( anAttribute->name, anAttribute );
@@ -199,13 +187,14 @@ void CParsedClass::addAttribute( CParsedAttribute *anAttribute )
 void CParsedClass::addMethod( CParsedMethod *aMethod )
 {
   assert( aMethod != NULL );
+  assert( !aMethod->name.isEmpty() );
 
   QString str;
 
   aMethod->setDeclaredInClass( name );
   methods.append( aMethod );
 
-  aMethod->toString( str );
+  aMethod->asString( str );
   methodsByNameAndArg.insert( str, aMethod );
 }
 
@@ -227,7 +216,7 @@ void CParsedClass::addSignal( CParsedMethod *aMethod )
   signalList.append( aMethod );
 
   QString str;
-  aMethod->toString( str );
+  aMethod->asString( str );
   signalsByNameAndArg.insert( str, aMethod );
 }
 
@@ -250,7 +239,7 @@ void CParsedClass::addSlot( CParsedMethod *aMethod )
   aMethod->setDeclaredInClass( name );
   slotList.append( aMethod );
 
-  aMethod->toString( str );
+  aMethod->asString( str );
   slotsByNameAndArg.insert( str, aMethod );
 }
 
@@ -463,7 +452,7 @@ QList<CParsedMethod> *CParsedClass::getSortedMethodList()
        methodIterator.current();
        ++methodIterator )
   {
-    methodIterator.current()->toString( m );
+    methodIterator.current()->asString( m );
     srted.inSort( m );
   }
 
@@ -535,7 +524,7 @@ QList<CParsedMethod> *CParsedClass::getSortedSignalList()
        signalIterator.current();
        ++signalIterator )
   {
-    signalIterator.current()->toString( m );
+    signalIterator.current()->asString( m );
     srted.inSort( m );
   }
 
@@ -572,7 +561,7 @@ QList<CParsedMethod> *CParsedClass::getSortedSlotList()
        slotIterator.current();
        ++slotIterator )
   {
-    slotIterator.current()->toString( m );
+    slotIterator.current()->asString( m );
     srted.inSort( m );
   }
 
@@ -647,7 +636,7 @@ void CParsedClass::out()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClass::asPersistantString( QString &dataStr )
+const char *CParsedClass::asPersistantString( QString &dataStr )
 {
   CParsedParent *aParent;
   CParsedMethod *aMethod;
@@ -713,6 +702,8 @@ void CParsedClass::asPersistantString( QString &dataStr )
     aMethod->asPersistantString( str );
     dataStr += str;
   }
+
+  return dataStr;
 }
 
 /*--------------------------------- CParsedClass::fromPersistantString()
@@ -727,5 +718,4 @@ void CParsedClass::asPersistantString( QString &dataStr )
  *-----------------------------------------------------------------*/
 void CParsedClass::fromPersistantString( const char *dataStr )
 {
-  
 }

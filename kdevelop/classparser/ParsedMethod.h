@@ -59,12 +59,6 @@ public: // Public attributes
   /** Is this methods declared virtual? */
   bool isVirtual;
 
-  /** Where the method is declared. */
-  int declaredOnLine;
-
-  /** The file where the method were declared. */
-  QString declaredInFile;
-
 public: // Public methods to set attribute values
 
   /** Add an argument to this method. */
@@ -73,16 +67,10 @@ public: // Public methods to set attribute values
   /** Set the status if this is a virtual method. */
   void setIsVirtual( bool aState = true );
 
-  /** Set the line where the method was declared. */
-  void setDeclaredOnLine( int aLine ) { declaredOnLine = aLine; }
-
-  /** Set the file where the methods was declared. */
-  void setDeclaredInFile( const char *aFile ) { declaredInFile = aFile; }
-
 public: // Public attributes
 
   /** Return the object as a string(for tooltips etc) */
-  void toString( QString &str );
+  const char *asString( QString &str );
 
   /** Output this object to stdout */
   void out();
@@ -96,7 +84,7 @@ public: // Public queries
   void asCppCode( QString &buf );
 
   /** Return a string made for persistant storage. */
-  void asPersistantString( QString &dataStr );
+  const char *asPersistantString( QString &dataStr );
 
   /** Is the supplied method equal to this one
     * (regarding type, name and signature)? */
