@@ -23,5 +23,5 @@ int main(int argc, char *argv[])
       cout << "Drive " << i << "\"" << SDL_CDName(i) << "\"";
     }
   }
-  SDL.Quit();
+  SDL_Quit();
 }
