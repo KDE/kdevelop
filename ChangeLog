@@ -1,8 +1,20 @@
+2001-02-27 Omid Givi <omid@kdevelop.org>
+	* Added ServiceType for the KDevCompiler
+	* Defined the specializations of the class KDevCompiler as
+	  plug-ins. Now you can just plug the compilers in! ;-) 
+	* Added Services voor gcc and g++ (plug-ins)
+	* Replaced and made changes to Project so that every project
+	  can hold its own KDevCompilers. (Individual project options
+	  and stuff per Project)
+	* Defined the compilers that a project uses as an attribute
+	  for the Project service.
+	* Changed ProjectOptions to deal with the above.
+
 2001-02-24 Falk Brettschneider <falk@kdevelop.org>
 	* synchronized KDevelop's QextMDI copy with QextMDI-2.0pre
 	  (somewhere before 2.0-beta1)
 
-2001-02-20 Omid Givi <omid@givi.nl>
+2001-02-20 Omid Givi <omid@kdevelop.org>
 	* Added KDevComponentManager which is responsible for the
 	  creations of every component (through klibloader of
 	  course). Component Manager is also responsible for the
@@ -52,17 +64,17 @@
 	  communicate correctly, it'll not happen any more.
 	* Moved DCOP Interfaces into lib/Interfaces.
 
-2001-02-12 Omid Givi <omid@givi.nl>
+2001-02-12 Omid Givi <omid@kdevelop.org>
 	* Added Project Options are shown if there is a project space
 	  already open. If not: sorry message.
 
-2001-02-11 Omid Givi <omid@givi.nl>
+2001-02-11 Omid Givi <omid@kdevelop.org>
 	* Fixed bug: dealing with null pointers in
 	  NewProjectDlg::slotProjectSpaceSelected It happenned for example
 	  if you click on the area arround the items in the ListView and
 	  not exactly on the items.
 
-2001-02-09 Omid Givi <omid@givi.nl>
+2001-02-09 Omid Givi <omid@kdevelop.org>
 	* Created KDevCompiler. This represent a compiler Entity which
 	  holds compiler dependant attributes (like name, icon, pointer to
 	  the options widget, etc.) and provides some methods dealing with
