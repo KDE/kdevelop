@@ -1236,6 +1236,7 @@ void CKDevelop::showOutputView(bool show){
 }
 void CKDevelop::readOptions()
 {
+  readDockConfig();
   config->setGroup("General Options");
 
   /////////////////////////////////////////
@@ -1327,7 +1328,6 @@ void CKDevelop::readOptions()
 //	  treedock->hide();
 	}
 
-  readDockConfig();
 
   	
 	/////////////////////////////////////////
@@ -1395,11 +1395,11 @@ void CKDevelop::saveOptions(){
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
 
-  config->writeEntry("mainSplitterPos",mainSplitter->sizes());
-  config->writeEntry("topSplitterPos", topSplitter->sizes());
+//  config->writeEntry("mainSplitterPos",mainSplitter->sizes());
+//  config->writeEntry("topSplitterPos", topSplitter->sizes());
 
-  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
-  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
+//  config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
+//  config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
