@@ -14,8 +14,10 @@ Name[it]=Plugin di KDevelop
 Name[pt]='Plugin' do KDevelop
 Name[pt_BR]=Plugin do KDevelop
 Name[ru]=Модуль KDevelop
+Name[sl]=Vstavek za KDevelop
 Name[sr]=KDevelop-ов додатак
 Name[sv]=KDevelop insticksmodul
+Name[ta]=KDevelop  சொருகு
 Name[xx]=xxKDevelop Pluginxx
 Name[zh_CN]=KDevelop插件
 
@@ -24,6 +26,9 @@ Name[zh_CN]=KDevelop插件
 Type=int
 
 [PropertyDef::X-KDevelop-Scope]
+Type=QString
+
+[PropertyDef::X-KDevelop-Mode]
 Type=QString
 
 # only important for project plugins, you can add a list of programming languages which are supported

@@ -1,0 +1,13 @@
+[KDE Desktop Entry]
+Encoding=UTF-8
+BinaryPattern=kdevelop;
+Type=Application
+Exec=kdevassistant %u
+Icon=kdevelop
+DocPath=kdevelop/index.html
+Terminal=0
+Name=KDevelop Assistant
+GenericName=Documentation Viewer
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Development
+

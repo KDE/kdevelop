@@ -58,6 +58,7 @@
 #include "settingswidget.h"
 #include "api.h"
 #include "kdevmakefrontend.h"
+#include "toplevel.h"
 
 #include "mainwindowshare.h"
 
@@ -329,27 +330,31 @@ void MainWindowShare::slotSettings()
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pMainWnd,
                     "customization dialog");
 
-    QVBox *vbox = dlg.addVBoxPage(i18n("General"));
-    SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
-
-    gsw->projects_url->setMode((int)KFile::Directory);
-
+    SettingsWidget *gsw;
     KConfig* config = kapp->config();
-    config->setGroup("General Options");
-    gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    config->setGroup("MakeOutputView");
-    gsw->setMessageFont(config->readFontEntry("Messages Font"));
-    gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
-    gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
-    gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
-    gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",0));
-    config->setGroup("General Options");
-    gsw->setApplicationFont(config->readFontEntry("Application Font"));
-    gsw->changeMessageFontButton->setText(gsw->messageFont().family());
-    gsw->changeMessageFontButton->setFont(gsw->messageFont());
-    gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
-    gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
-    gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+    if (TopLevel::mode != TopLevel::AssistantMode)
+    {
+        QVBox *vbox = dlg.addVBoxPage(i18n("General"));
+        gsw = new SettingsWidget(vbox, "general settings widget");
+
+        gsw->projects_url->setMode((int)KFile::Directory);
+
+        config->setGroup("General Options");
+        gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+        config->setGroup("MakeOutputView");
+        gsw->setMessageFont(config->readFontEntry("Messages Font"));
+        gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
+        gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
+        gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
+        gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",0));
+        config->setGroup("General Options");
+        gsw->setApplicationFont(config->readFontEntry("Application Font"));
+        gsw->changeMessageFontButton->setText(gsw->messageFont().family());
+        gsw->changeMessageFontButton->setFont(gsw->messageFont());
+        gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
+        gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
+        gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
+    }
 
     config->setGroup("Global Settings Dialog");
     int height = config->readNumEntry( "Height", 600 );
@@ -364,8 +369,10 @@ void MainWindowShare::slotSettings()
     config->writeEntry( "Height", dlg.size().height() );
     config->writeEntry( "Width", dlg.size().width() );
 
-    config->setGroup("General Options");
-    config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
+    if (TopLevel::mode != TopLevel::AssistantMode)
+    {
+        config->setGroup("General Options");
+        config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 #if defined(KDE_IS_VERSION)
 # if KDE_IS_VERSION(3,1,3)
 #  ifndef _KDE_3_1_3_
@@ -374,20 +381,21 @@ void MainWindowShare::slotSettings()
 # endif
 #endif
 #if defined(_KDE_3_1_3_)
-    config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
+        config->writePathEntry("DefaultProjectsDir", gsw->projects_url->url());
 #else
-    config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
+        config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
 #endif
-    config->writeEntry("Application Font", gsw->applicationFont());
-    config->setGroup("MakeOutputView");
-    config->writeEntry("Messages Font",gsw->messageFont());
-    config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
-    config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
-    QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
-    config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
-    config->sync();
-    if( API::getInstance()->makeFrontend() )
-        API::getInstance()->makeFrontend()->updateSettingsFromConfig();
+        config->writeEntry("Application Font", gsw->applicationFont());
+        config->setGroup("MakeOutputView");
+        config->writeEntry("Messages Font",gsw->messageFont());
+        config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
+        config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
+        QButton* pSelButton = gsw->compilerOutputButtonGroup->selected();
+        config->writeEntry("CompilerOutputLevel",gsw->compilerOutputButtonGroup->id(pSelButton)); // id must be in sync with the enum!
+        config->sync();
+        if( API::getInstance()->makeFrontend() )
+            API::getInstance()->makeFrontend()->updateSettingsFromConfig();
+    }
 }
 
 void MainWindowShare::slotConfigureEditors()

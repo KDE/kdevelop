@@ -85,8 +85,9 @@ PluginController::PluginController()
 void PluginController::loadInitialPlugins()
 {
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
- 
-    loadDefaultParts();
+
+    if (TopLevel::mode != TopLevel::AssistantMode)
+        loadDefaultParts();
     loadCorePlugins();
     
     m_profile = QString::null;
@@ -328,6 +329,8 @@ KService::List PluginController::pluginServices( const QString &scope )
 
     if ( !scope.isEmpty() )
 	constraint += QString::fromLatin1( " and [X-KDevelop-Scope] == '%1'").arg( scope );
+    if (TopLevel::mode == TopLevel::AssistantMode)
+        constraint += QString::fromLatin1( " and [X-KDevelop-Mode] == 'AssistantMode'");
     return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ),
 	                           constraint );
 }

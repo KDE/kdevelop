@@ -121,7 +121,10 @@ void NewMainWindow::init() {
 
     setStandardToolBarMenuEnabled( true );
 
-    setXMLFile("kdevelopui.rc");
+    if (TopLevel::mode == TopLevel::AssistantMode)
+        setXMLFile("kdevassistantui.rc");
+    else
+        setXMLFile("kdevelopui.rc");
 
     createFramework();
     createActions();
@@ -276,6 +279,8 @@ void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, c
 {
 	if( !view ) return;
 	KMdiMainFrm::addToolWindow( view, KDockWidget::DockRight, getMainDockWidget(), 20, toolTip, name );
+     if (TopLevel::mode == TopLevel::AssistantMode)
+         raiseView(view);
 }
 
 void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) 

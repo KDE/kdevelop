@@ -21,14 +21,14 @@
 static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
-    { "+file(s)",		I18N_NOOP("Files to load"), 0 },
+/*    { "+file(s)",		I18N_NOOP("Files to load"), 0 },*/
     { 0,0,0 }
 };
 
 int main(int argc, char *argv[])
 {
-  static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment.");
-  KAboutData aboutData("kdevelop", I18N_NOOP("KDevelop"),
+  static const char description[] = I18N_NOOP("The KDevelop Integrated Development Environment:\nassistant and documentation viewer.");
+  KAboutData aboutData("kdevassistant", I18N_NOOP("KDevelop Assistant"),
                        VERSION, description, KAboutData::License_GPL,
                        I18N_NOOP("(c) 1999-2004, The KDevelop developers"), "", "http://www.kdevelop.org");
   aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Release coordinator, Overall improvements, Pascal support, C++ support, New File and Documentation parts"), "cloudtemple@mksat.net");
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
-  TopLevel::mode = TopLevel::IDEMode;
+  TopLevel::mode = TopLevel::AssistantMode;
   SplashScreen *splash = new SplashScreen;
 
   app.processEvents();
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 
   delete splash;
 
-  for( int i=0; i<args->count(); ++i ){
+/*  for( int i=0; i<args->count(); ++i ){
       kdDebug(9000) << "------> arg " << args->arg(i) << endl;
   }
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
       for( int a=0; a<args->count(); ++a ){
 	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
       }
-  }
+  }*/
   TopLevel::getInstance()->guiRestoringFinished();
   
   kapp->dcopClient()->registerAs("kdevelop");

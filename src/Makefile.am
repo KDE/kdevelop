@@ -1,6 +1,6 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/structure $(all_includes)
 
-bin_PROGRAMS = kdevelop
+bin_PROGRAMS = kdevelop kdevassistant
 
 kdevelop_SOURCES = main.cpp core.cpp partcontroller.cpp projectmanager.cpp plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp splashscreen.cpp projectsession.cpp mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp newmainwindow.cpp
 
@@ -17,3 +17,8 @@ kdevelopdata_DATA = kdeveloprc
 
 SUBDIRS = profiles
 noinst_HEADERS = languageselectwidget.h newmainwindow.h
+kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindow.cpp mainwindowshare.cpp newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp projectmanager.cpp projectsession.cpp settingswidget.cpp splashscreen.cpp statusbar.cpp toplevel.cpp generalinfowidgetbase.ui main_assistant.cpp
+kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la -lktexteditor $(LIB_KHTML) $(LIB_KDEVMDI) $(LIB_KPARTS) $(LIB_KDEUI)
+rc_assistantdir = $(kde_datadir)/kdevassistant
+rc_assistant_DATA =  kdevassistantui.rc

@@ -28,7 +28,10 @@ SplashScreen::SplashScreen()
 
   QLabel *pixmap = new QLabel(m_splash);
   QPixmap pm;
-  pm.load(locate("appdata", "pics/kdevelop-splash.png"));
+  if (TopLevel::mode == TopLevel::AssistantMode)
+      pm.load(locate("data", "kdevelop/pics/kdevelop-splash.png"));
+  else
+      pm.load(locate("appdata", "pics/kdevelop-splash.png"));
   pixmap->setPixmap(pm);
   vbox->addWidget(pixmap);
 

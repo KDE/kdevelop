@@ -2,7 +2,7 @@ SUBDIRS = lib parts languages buildtools editors vcs src pics doc mimetypes embe
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 
-apps_DATA = kdevelop.desktop
+apps_DATA = kdevelop.desktop kdevassistant.desktop
 appsdir = $(kde_appsdir)/Development
 
 mime_DATA = x-kdevelop.desktop

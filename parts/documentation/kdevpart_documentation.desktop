@@ -10,3 +10,4 @@ ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global
 X-KDE-Library=libkdevdocumentation
 X-KDevelop-Version=1
+X-KDevelop-Mode=AssistantMode

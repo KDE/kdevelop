@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="documentation" library="libdocumentationplugin" version="1">
 <MenuBar>
- <Menu name="tools"><Text>&amp;Tools</Text>
+<!-- <Menu name="tools"><Text>&amp;Tools</Text>
   <Action name="plugin_action"/>
- </Menu>
+ </Menu> -->
 </MenuBar>
-<ToolBar name="extraToolBar">
+<!--<ToolBar name="extraToolBar">
   <Action name="plugin_action"/>
-</ToolBar>
+</ToolBar> -->
 </kpartplugin>
