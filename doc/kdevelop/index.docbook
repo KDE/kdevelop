@@ -206,10 +206,16 @@ The information in this chapter is meant as a quick reference for a head start o
     <formalpara id="nutshell-IDEAl-tabs">
     <title>Force Smaller Tool View Tabs in IDEAl Mode</title>
     <para>
-      In more recent versions (most notably from CVS HEAD) &kdevelop; will start with large text-based tool tip tabs around the work area. You may revert to the older icon-only view to save space on smaller screens if you enter <computeroutput>MDIStyle=0</computeroutput> under the <computeroutput>[UI]</computeroutput> tag in your <filename>&amp;KDEHOME/share/config/kdeveloprc</filename> configuration file.
+      In more recent versions (most notably from CVS HEAD) &kdevelop; will start with large text-based tool tip tabs around the work area. You may change this look if you place a <computeroutput>MDIStyle</computeroutput> entry under the <computeroutput>[UI]</computeroutput> tag in your <filename>&amp;KDEHOME/share/config/kdeveloprc</filename> configuration file as follows:
     </para>
     </formalpara>
-    <para>(This is only preliminary effort. There will be a &GUI; configuration possibility very soon now.)</para>
+    <simplelist>
+      <member><computeroutput>MDIStyle = 0</computeroutput>: icons only</member>
+      <member><computeroutput>MDIStyle = 1</computeroutput>: text only (default)</member>
+      <member><computeroutput>MDIStyle = 2</computeroutput>: icons only on smaller tabs</member>
+      <member><computeroutput>MDIStyle = 3</computeroutput>: icons and text</member>
+    </simplelist>
+    <para>(This manual change effort is only preliminary. There will be a &GUI; configuration possibility some time in the future.)</para>
   </listitem>
 
   <listitem>
