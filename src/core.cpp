@@ -51,12 +51,6 @@ void Core::slotQuit()
 }
 
 
-void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
-{
-  PartController::getInstance()->editDocument(KURL(fileName), lineNum);
-}
-
-
 void Core::setBreakpoint(const QString &fileName, int lineNum, int id, bool enabled, bool pending)
 {
   kdDebug() << "Core::setBreakpoint" << endl;

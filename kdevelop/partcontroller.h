@@ -48,6 +48,10 @@ public:
 
   bool closeDocuments(const QStringList &list);
 
+  void gotoExecutionPoint(const KURL &url, int lineNum=-1);
+  void clearExecutionPoint();
+
+
 public slots:
 
   void slotCurrentChanged(QWidget *w);

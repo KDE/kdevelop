@@ -300,4 +300,15 @@ void PartController::revertAllFiles()
 }
 
 
+void PartController::gotoExecutionPoint(const KURL &url, int lineNum)
+{
+  editDocument(url, lineNum);
+}
+
+
+void PartController::clearExecutionPoint()
+{
+}
+
+
 #include "partcontroller.moc"

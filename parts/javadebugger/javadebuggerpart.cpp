@@ -361,7 +361,7 @@ void JavaDebuggerPart::slotStop()
     disassembleWidget->clear();
     disassembleWidget->slotActivate(false);
 
-    core()->gotoExecutionPoint(QString::null, 0);
+    partController()->clearExecutionPoint();
     //    delete floatingToolBar;
     //    floatingToolBar = 0;
 
@@ -449,7 +449,7 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_appBusy) {
         stateIndicator = "A";
-        core()->gotoExecutionPoint(QString::null, 0);
+       partController()->clearExecutionPoint();
     }
     
     if (state & (s_dbgNotStarted|s_appNotStarted))
@@ -457,7 +457,7 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_programExited) {
         stateIndicator = "E";
-        core()->gotoExecutionPoint(QString::null, 0);
+        partController()->clearExecutionPoint();
     }
     
     // And now? :-)
@@ -471,7 +471,7 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
 void JavaDebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 {
     // Debugger counts lines from 1
-    core()->gotoExecutionPoint(fileName, lineNum-1);
+    partController()->gotoExecutionPoint(fileName, lineNum-1);
 }
 
 

@@ -21,6 +21,7 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/markinterface.h>
 
 
 #include "toplevel.h"
@@ -632,6 +633,48 @@ bool PartController::readyToClose()
   }
 
   return true;
+}
+
+
+void PartController::clearExecutionPoint()
+{
+  // remove the execution point mark from all other documents
+  QPtrListIterator<PartListEntry> it(m_partList);
+  for ( ; it.current(); ++it)
+  {
+    KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(it.current()->part());
+    if (!iface)
+      continue;
+
+    for (KTextEditor::Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
+      if (mark->type == KTextEditor::MarkInterface::markType05)
+      {
+	kdDebug() << "removing mark in line " << mark->line << " from: " << ((KParts::ReadOnlyPart*)it.current()->part())->url().url() << endl;
+	iface->removeMark(mark->line, mark->type);
+      }
+  }
+}
+
+
+void PartController::gotoExecutionPoint(const KURL &url, int lineNum)
+{
+  // open the document in the editor
+  editDocument(url, lineNum);
+
+  // find the part displaying the document
+  KParts::Part *part = partForURL(url);
+  if (!part)
+    return;
+ 
+  clearExecutionPoint();
+
+  // set the mark to the right file
+  KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(part);
+  if (iface)
+  {
+    kdDebug() << "set execution point to " << lineNum << endl;
+    iface->setMark(lineNum, KTextEditor::MarkInterface::markType05);
+  }
 }
 
 

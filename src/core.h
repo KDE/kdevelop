@@ -18,7 +18,6 @@ public:
 
   ~Core();
 
-  virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0);
   virtual void setBreakpoint(const QString &fileName, int lineNum,
                              int id, bool enabled, bool pending);
   virtual void running(KDevPlugin *which, bool runs);

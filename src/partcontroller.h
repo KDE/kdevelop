@@ -49,6 +49,9 @@ public:
 
   bool readyToClose();
 
+  void gotoExecutionPoint(const KURL &url, int lineNum=-1);
+  void clearExecutionPoint();
+
 
 public slots:
 
@@ -57,7 +60,6 @@ public slots:
 
 protected:
 
-  PartController(QWidget *parent, QWidget *mainwindow, const char *name=0);
   ~PartController();
 
 
