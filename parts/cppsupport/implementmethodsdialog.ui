@@ -1,0 +1,129 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ImplementMethodsDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ImplementMethodsDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>520</width>
+            <height>359</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Implement Virtual Methods</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Select virtual methods to implement</string>
+            </property>
+        </widget>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>Method</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>MethodListView</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>81</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Ok</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>ImplementMethodsDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton2</sender>
+        <signal>clicked()</signal>
+        <receiver>ImplementMethodsDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">qvaluelist.h</include>
+    <include location="global" impldecl="in declaration">qguardedptr.h</include>
+    <include location="local" impldecl="in implementation">implementmethodsdialog.ui.h</include>
+</includes>
+<forwards>
+    <forward>class ParsedMethod;</forward>
+    <forward>class CppSupportPart;</forward>
+    <forward>class ParsedClass;</forward>
+</forwards>
+<variables>
+    <variable access="public">QValueList&lt;ParsedMethod*&gt; selectedMethods;</variable>
+    <variable>QGuardedPtr&lt;CppSupportPart&gt; m_part;</variable>
+</variables>
+<slots>
+    <slot>accept()</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
+    <function>setPart( CppSupportPart * part )</function>
+    <function returnType="int">implementMethods( ParsedClass * klass )</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
