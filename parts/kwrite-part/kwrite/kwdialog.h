@@ -15,6 +15,8 @@ class KIntNumInput;
 #include <kdialogbase.h>
 #include "kwview.h"
 
+class QComboBox;
+
 class SearchDialog : public KDialogBase
 {
     Q_OBJECT
