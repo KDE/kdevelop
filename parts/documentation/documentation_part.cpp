@@ -61,6 +61,8 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
     
     m_widget = new DocumentationWidget(this);
+    m_widget->setIcon(SmallIcon("contents"));
+    m_widget->setCaption(i18n("Documentation"));
 
     QWhatsThis::add(m_widget, i18n("<b>Documentation browser</b><p>"
         "The documentation browser gives access to various "
