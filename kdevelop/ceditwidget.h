@@ -24,6 +24,7 @@
 #include <kspell.h>
 #include "./kwrite/kwview.h"
 
+struct CEditWidgetPrivate;
 
 /** An abstraction layer for the editwidget.
   *@author Sandy Meier
@@ -73,6 +74,12 @@ public: // File related method
     //  void doSave(QString filename)   { KWrite::writeFile(filename); }
 
   bool modifiedOnDisk();
+
+  /**
+   * Returns whether this editor is editing the given file. It is important
+   * _not_ to decide this by comparing file names, but the inode/device no.
+   */
+  bool isEditing(const QString &filename);
     
 public: // Cursor placement methods
 
@@ -190,6 +197,8 @@ private:
  KSpell *kspell;
  KSpellConfig *ksc;
  int spell_offset;
+ CEditWidgetPrivate *d;
+    
  QDateTime  last_modified;
 };
 

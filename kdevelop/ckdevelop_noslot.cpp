@@ -20,6 +20,7 @@
 
 #include <qprogressdialog.h>
 #include <qsplitter.h>
+#include <qlist.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <kmenubar.h>
@@ -38,7 +39,7 @@
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 #include "editorview.h"
-#include "widgets/qextmdi/qextmdimainfrm.h"
+#include "mdiframe.h"
 
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/kguicommand.h"
@@ -613,21 +614,19 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 
   // and now MDI
   cerr << "filename:" << filename << endl;
-  for(editor_view=editors->first();editor_view != 0;editor_view=editors->next()){
-      cerr << editor_view->editor->getName() << "\n";
-      
-      if (editor_view->editor->getName() == filename ) { // if found in list
+  QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+  QListIterator<QextMdiChildView> it(editorviews);
+  for (; it.current(); ++it) {
+      EditorView *editor_view = static_cast<EditorView*>(it.current());
+      if (editor_view->editor->isEditing(filename) ) { 
+          cerr << "Already edited with name:" << editor_view->editor->fileName() << endl;
+          // This looks odd:
 	  mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
-	  //	  mdi_main_frame->taskbarButtonLeftClicked(edit_component);
 	  editor_view->setFocus();
 	  return;
       }
-      //
   }
-  //    }
-  //  }
-  // not found -> generate a new edit_info,loading
-  
+      
   // build a new info
  //  QFileInfo fileinfo(filename);
 //   info = new TEditInfo;
@@ -670,7 +669,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   new_editorview->editor->setName(filename);
 
   //connections
-  connect(new_editorview, SIGNAL(closing(EditorView*)), this, SLOT(slotEditorViewClosing(EditorView*)));
   connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 
   connect(new_editorview->editor, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
@@ -687,9 +685,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
       //  new_editorview->maximize(false);
   }
   //  new_editorview->setFocus();
-  
-  //add to the editors
-  editors->append(new_editorview);
   
 }
 
@@ -1361,11 +1356,8 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
 
 EditorView* CKDevelop::getCurrentEditorView(){
     QextMdiChildView * win = mdi_main_frame->activeWindow();
-    EditorView* editor_view;
-    if(win !=0L){
-	for(editor_view=editors->first();editor_view != 0;editor_view=editors->next()){
-	    if (editor_view == win ) return editor_view;// if found in list
-	}
-    }
-    return 0L;
+    if (win !=0 && win->inherits("EditorView"))
+      return static_cast<EditorView*>(win);
+
+    return 0;
 }

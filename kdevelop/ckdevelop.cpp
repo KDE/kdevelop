@@ -72,7 +72,7 @@
 #include "plugins/pluginmanagerdlg.h"
 #include "editorview.h"
 #include "widgets/qextmdi/qextmdichildview.h"
-#include "widgets/qextmdi/qextmdimainfrm.h"
+#include "mdiframe.h"
 #include "docbrowserview.h"
 #include "componentmanager.h"
 
@@ -2366,9 +2366,7 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
 void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
-void CKDevelop::slotEditorViewClosing(EditorView* editorview){
--    editors->remove(editorview);
-}
+
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
     editor_view = getCurrentEditorView();
     int type = CPP_HEADER;

@@ -16,10 +16,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ceditwidget.h"
+#include <sys/stat.h>
+#include <unistd.h>
 #include <iostream.h>
-#include "./kwrite/kwdoc.h"
-#include "./kwrite/highlight.h"
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -28,8 +27,20 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kiconloader.h>
-
+#include "./kwrite/kwdoc.h"
+#include "./kwrite/highlight.h"
 #include "resource.h"
+#include "ceditwidget.h"
+
+
+// We don't want to clutter the global namespace with this stuff.
+struct CEditWidgetPrivate
+{
+    dev_t dev;
+    ino_t ino;
+    time_t mtime;
+};
+
 
 HlManager hlManager; //highlight manager
 
@@ -68,6 +79,7 @@ CEditWidget::CEditWidget(QWidget* parent,const char* name)
   pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
+  d = new CEditWidgetPrivate();
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -81,6 +93,7 @@ CEditWidget::CEditWidget(QWidget* parent,const char* name)
  *-----------------------------------------------------------------*/
 CEditWidget::~CEditWidget() {
   delete doc();
+  delete d;
 }
 
 /*********************************************************************
@@ -117,21 +130,35 @@ QString CEditWidget::getName(){
  *   int          The line at which the file got loaded.
  *-----------------------------------------------------------------*/
 int CEditWidget::loadFile(QString filename, int mode) {
+  struct stat buf;
   KWrite::loadFile(filename);
-  last_modified = QFileInfo(filename).lastModified();
+  ::stat(filename, &buf);
+  d->ino = buf.st_ino;
+  d->dev = buf.st_dev;
+  d->mtime = buf.st_mtime;
   return 0;
 }
 
 void CEditWidget::doSave() {
+  struct stat buf;
   KWrite::save();
-  QFileInfo fi(getName());
-  last_modified = fi.lastModified();
+  ::stat(KWrite::fileName(), &buf);
+  d->mtime = buf.st_mtime;
 }
 
-bool  CEditWidget::modifiedOnDisk() {
-  QFileInfo fi(getName());
-  return fi.lastModified() != last_modified;
+bool CEditWidget::modifiedOnDisk() {
+  struct stat buf;
+  ::stat(KWrite::fileName(), &buf);
+  return buf.st_mtime != d->mtime;
 }
+
+bool CEditWidget::isEditing(const QString &filename)
+{
+  struct stat buf;
+  ::stat(filename, &buf);
+  return (buf.st_dev == d->dev) && (buf.st_ino == d->ino);
+}
+
 
 /*------------------------------------------- CEditWidget::setFocus()
  * setFocus()

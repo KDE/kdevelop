@@ -53,7 +53,7 @@
 #include "ckdevaccel.h"
 #include "componentmanager.h"
 #include "processview.h"
-#include "./widgets/qextmdi/qextmdimainfrm.h"
+#include "mdiframe.h"
 #include "editorview.h"
 #include "docbrowserview.h"
 
@@ -194,8 +194,7 @@ void CKDevelop::initView(){
 //   edit1->filename = header_widget->getName();
 //   edit2->filename = cpp_widget->getName();
 
-  mdi_main_frame = new QextMdiMainFrm(top_panner, "mdi_frame", 0);
-  //  mdi_main_frame->reparent(top_panner,0,QPoint(0,0));
+  mdi_main_frame = new MdiFrame(top_panner, "mdi_frame");
 
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   // let's go
@@ -213,8 +212,6 @@ void CKDevelop::initView(){
   //  swallow_widget = new KSwallowWidget(t_tab_view);
   //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
     
-  editors = new QList<EditorView>();
-
 //  swallow_widget = new KSwallowWidget(s_tab_view);
 //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
 

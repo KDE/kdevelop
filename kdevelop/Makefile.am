@@ -34,7 +34,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	doctreeview.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 	cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 	ctoolclass.cpp cdoctreepropdlg.cpp \
-	ckdevelop_whatsthis.cpp \
+	ckdevelop_whatsthis.cpp mdiframe.cpp \
 	 cfinddoctextdlg.cpp kstartuplogo.cpp ktipofday.cpp \
 	ckdevinstall.cpp ckdevelop_kdlginit.cpp \
 	caddclassmethoddlg.cpp caddclassattributedlg.cpp \
@@ -67,7 +67,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
 	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
-	ctreeview.h cexecuteargdlg.h \
+	ctreeview.h cexecuteargdlg.h mdiframe.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \

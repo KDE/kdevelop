@@ -57,7 +57,7 @@ class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
 class CEditWidget;
-class QextMdiMainFrm;
+class MdiFrame;
 class QextMdiChildView;
 class EditorView;
 class DocBrowserView;
@@ -526,9 +526,6 @@ public:
   void slotShowTools();*/
   void slotToggleLast();
 
-  // editorview related
-  void   slotEditorViewClosing(EditorView*);
-
   void slotURLSelected(const QString &url, const QString&, int button);
   void slotDocumentDone();
   void slotURLonURL(const QString &url);
@@ -756,9 +753,7 @@ private:
   CTabCtl* o_tab_view;
 
 
-  QextMdiMainFrm* mdi_main_frame;
-  /** all editor views */
-  QList<EditorView>* editors;
+  MdiFrame* mdi_main_frame;
 
   /** the current editor view or 0*/
   EditorView* editor_view;

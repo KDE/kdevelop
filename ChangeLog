@@ -1,3 +1,9 @@
+1999-11-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Solved the 'multiple file personalities' once
+	  and for all, even for hardlinks
+	* List of EditorViews is returned by MdiFrame,
+	  so redundant list in CKDevelop removed
+
 1999-11-06  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Don't use KGuiCmdKWMModuleApp (wow, what a class name :-)
 	* moved last_modified from EditorView to CEditWidget
