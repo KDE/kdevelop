@@ -365,7 +365,7 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
 
 void CUpdateKDEDocDlg::createShellProcessOutputWidget()
 {
-  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg");
+  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg", true);
   m_pShellProcessOutput->setCaption(i18n("Creating the KDE Documentation"));
   QVBoxLayout* pVL = new QVBoxLayout(m_pShellProcessOutput, 15, 7);
   QLabel* pLabel = new QLabel(i18n("Wait until the process has finished:"), m_pShellProcessOutput);
@@ -403,14 +403,14 @@ void CUpdateKDEDocDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  qDebug(test);
+  //qDebug(test);
 }
 void CUpdateKDEDocDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
 {
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  qDebug(test);
+  //qDebug(test);
 }
 
 void CUpdateKDEDocDlg::slotProcessExited(KProcess*)

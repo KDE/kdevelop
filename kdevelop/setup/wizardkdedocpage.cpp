@@ -39,7 +39,7 @@ void WizardKDEDocPage::showEvent(QShowEvent*)
 
   QStringList kde_dirs;
   kde_dirs  << "/opt/kde2/share/doc/HTML/en/kdelibs"     // normal dist
-//???            << "/opt/kde/share/doc/HTML/en/kdelibs"     // normal dist
+//!? conflict with KDE-1.x            << "/opt/kde/share/doc/HTML/en/kdelibs"     // normal dist
             << "/usr/share/doc/kdelibs"                 // Redhat 6.0
             << "/usr/local/kde/share/doc/kdelibs";      // other locations
 

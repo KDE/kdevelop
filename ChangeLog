@@ -1,3 +1,8 @@
+2001-06-21  F@lk Brettschneider <falk@kdevelop.org>
+   * finished the redesign of the KDevelop setup by a QWizard
+   * I noticed htdig hasn't got a htdig.conf file in the KDevelop installation
+     But how is it supposed to work then?
+
 2001-06-20  F@lk Brettschneider <falk@kdevelop.org>
    * revised view focus/activation handling:
      Now QextMdiChildView seems to emit the activated(this) signal properly

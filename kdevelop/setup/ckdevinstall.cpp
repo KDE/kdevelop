@@ -52,17 +52,6 @@
 #include "ckdevinstall.h"
 #include "ckdevinstallstate.h"
 
-void CKDevInstall::slotReceivedStdout(KProcess*,char* buffer,int count)
-{
-  QCString test(buffer, count);
-  qDebug(test);
-}
-void CKDevInstall::slotReceivedStderr(KProcess*,char* buffer, int count)
-{
-  QCString test(buffer, count);
-  qDebug(test);
-}
-
 CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
 : QWizard(parent,name)
   ,m_config(config)
@@ -74,15 +63,6 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
   QString kdeDocuPath = m_config->readEntry("doc_kde", KDELIBS_DOCDIR);
 
   m_pInstallState = new CKDevInstallState( qtDocuPath, kdeDocuPath);
-
-  connect(m_pInstallState->shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-          this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
-  connect(m_pInstallState->shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-          this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(m_pInstallState->shell_process,SIGNAL(processExited(KProcess*)),
-          this,SLOT(slotProcessExited(KProcess*) )) ;
 
   setCaption(i18n("KDevelop Setup"));
 
@@ -130,27 +110,7 @@ void CKDevInstall::slotHelp()
 
 void CKDevInstall::slotCancel()
 {
-  int result=KMessageBox::questionYesNo(this,
-            i18n("\n\nThis will exit the automatic installation process\n"
-                 "and start KDevelop with the default values !\n\n"
-                 "If you choose 'Continue', you will have to set all\n"
-                 "installation values manually in the KDevelop Setup\n"
-                 "dialog available in the options menu.\n\n "),
-            i18n("Warning"),i18n("Continue"),i18n("Back"));
-  if (result==KMessageBox::Yes)
-  {
-    m_config->setGroup("General Options");
-    m_config->writeEntry("Install",false);
-    m_config->sync();
-    close();
-  }
-  else
-    return;
-}
-
-void CKDevInstall::slotProcessExited(KProcess*)
-{
-  qDebug("????? slotProcessExited called");
+  qApp->quit();
 }
 
 void CKDevInstall::slotFinished()

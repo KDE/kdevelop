@@ -236,16 +236,19 @@ void CCreateDocDatabaseDlg::slotOkClicked()
   }
   else if (useHtDig->isChecked())
   {
-    *m_proc <<  "find " +
+    QString htdigConf = locate("appdata", "tools/htdig.conf");
+    if (!htdigConf.isEmpty()) {
+      *m_proc <<  "find " +
                 dirs +
                 " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " +
-                locate("appdata", "tools/htdig.conf") +
-                " - ; htmerge -v -s -c " +
-                locate("appdata", "tools/htdig.conf");
-    m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+                htdigConf + "  ; htmerge -v -s -c " + htdigConf;
+      m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+      slotShowToolProcessOutputDlg();
+    }
+    else {
+      KMessageBox::sorry(this, i18n("Couldn't find a htdig.conf"), i18n("htdig Execution Error"));
+    }
   }
-
-  slotShowToolProcessOutputDlg();
 }
 
 void CCreateDocDatabaseDlg::slotAddButtonClicked()
@@ -275,7 +278,7 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked()
 
 void CCreateDocDatabaseDlg::createShellProcessOutputWidget()
 {
-  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg");
+  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg", true);
   m_pShellProcessOutput->setCaption(i18n("Creating the KDE Documentation"));
   QVBoxLayout* pVL = new QVBoxLayout(m_pShellProcessOutput, 15, 7);
   QLabel* pLabel = new QLabel(i18n("Wait until the process has finished:"), m_pShellProcessOutput);
@@ -314,7 +317,7 @@ void CCreateDocDatabaseDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  qDebug(test);
+  //qDebug(test);
 }
 
 void CCreateDocDatabaseDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
@@ -322,7 +325,7 @@ void CCreateDocDatabaseDlg::slotReceivedStderr(KProcess*,char* buffer, int count
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  qDebug(test);
+  //qDebug(test);
 }
 
 void CCreateDocDatabaseDlg::slotProcessExited(KProcess*)

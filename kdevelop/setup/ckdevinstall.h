@@ -54,9 +54,6 @@ public:
 protected slots:
   void slotHelp();
   void slotCancel();
-  void slotReceivedStdout(KProcess*,char*,int);
-  void slotReceivedStderr(KProcess*,char*,int);
-  void slotProcessExited(KProcess*);
 	void slotFinished();
 	void slotEnableCreateKDEDocPage(bool bEnabled);
 
