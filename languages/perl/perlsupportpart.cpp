@@ -36,12 +36,12 @@
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "kdevappfrontend.h"
-#include "classstore.h"
+/*#include "classstore.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
-#include "parsedscript.h"
+#include "parsedscript.h"*/
 #include "domutil.h"
-#include "programmingbycontract.h"
+//#include "programmingbycontract.h"
 
 
 typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
@@ -116,19 +116,19 @@ void PerlSupportPart::projectClosed()
 
 void PerlSupportPart::maybeParse(const QString fileName)
 {
-    QFileInfo fi(fileName);
+/*    QFileInfo fi(fileName);
     QString path = fi.filePath();
     QString extension = fi.extension();
     if (extension == "pl" || extension == "pm") {
         kdDebug(9016) << "maybe " << fileName << endl;
         classStore()->removeWithReferences(fileName);
         parse(fileName);
-    }
+    }*/
 }
 
 QString PerlSupportPart::findLib( const QString& lib)
 {
-  QString result;
+/*  QString result;
 
   QString file=lib;
   file.replace( QRegExp("::"), QString("/"));
@@ -142,12 +142,12 @@ QString PerlSupportPart::findLib( const QString& lib)
      }
      ++inc;
   }
-  return result;
+  return result;*/
 }
 
 void PerlSupportPart::parseUseFiles()
 {
- QString filename;
+/* QString filename;
  kdDebug(9016) << "parse addional libs" << endl;
  //parse addional use files
  for (QStringList::Iterator it = m_usefiles.begin(); it != m_usefiles.end() ;++it) {
@@ -160,12 +160,12 @@ void PerlSupportPart::parseUseFiles()
            parse(filename);
          }
       }
- }
+ }*/
 }
 
 void PerlSupportPart::initialParse()
 {
-    kdDebug(9016) << "initialParse()" << endl;
+/*    kdDebug(9016) << "initialParse()" << endl;
 
     if (project()) {
         //copy from cpp support : give user some feedback
@@ -205,7 +205,7 @@ void PerlSupportPart::initialParse()
 
     } else {
         kdDebug(9016) << "No project" << endl;
-    }
+    }*/
 }
 
 
@@ -228,13 +228,13 @@ void PerlSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     kdDebug(9016) << "removedFilesFromProject()" << endl;
 
-	QStringList::ConstIterator it;
+/*	QStringList::ConstIterator it;
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
 		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
 	}
-
+*/
     emit updatedSourceInfo();
 }
 
@@ -260,7 +260,7 @@ KDevLanguageSupport::Features PerlSupportPart::features()
 }
 
 void PerlSupportPart::parse(const QString &fileName){
-  QFile f(fileName);
+/*  QFile f(fileName);
   if (!f.open(IO_ReadOnly))
       return;
   QTextStream stream(&f);
@@ -272,12 +272,12 @@ void PerlSupportPart::parse(const QString &fileName){
  }
  f.close();
  kdDebug(9016) << "parsing " << fileName << endl;
- this->parseLines(&list,fileName);
+ this->parseLines(&list,fileName);*/
 }
 
 void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
 {
-  QRegExp  packagere("^[ \t]*package[ \t]+([+A-Za-z0-9_:]*).*\\;");
+/*  QRegExp  packagere("^[ \t]*package[ \t]+([+A-Za-z0-9_:]*).*\\;");
   QRegExp     basere("^[ \t]*use[ \t]+base[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
   QRegExp      libre("^[ \t]*use[ \t]+lib[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
   QRegExp      usere("^[ \t]*use[ \t]+([+A-Za-z0-9_:]*).*\\;");
@@ -407,7 +407,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     }//package
 
   } // for lines loop
-}
+*/}
 
 
 QString PerlSupportPart::interpreter()
@@ -478,7 +478,7 @@ void PerlSupportPart::slotPerldocFAQ()
 
 void PerlSupportPart::addPackage(const QString& fileName ,int lineNr , const QString& name)
 {
- ParsedScopeContainer *p = 0;
+/* ParsedScopeContainer *p = 0;
  ParsedScopeContainer *s = 0;
 
  REQUIRE( "Valid package name",( ! name.isEmpty() ));
@@ -508,12 +508,12 @@ void PerlSupportPart::addPackage(const QString& fileName ,int lineNr , const QSt
  m_lastattr="";
  m_inpackage=true;
  m_inscript = false;
- m_inclass=false;
+ m_inclass=false;*/
 }
 
 void PerlSupportPart::addScript(const QString& fileName ,int lineNr ,const QString& name)
 {
- ParsedScript *p = 0;
+/* ParsedScript *p = 0;
 
  REQUIRE( "Valid script name",name.length() > 0 );
 
@@ -536,12 +536,12 @@ void PerlSupportPart::addScript(const QString& fileName ,int lineNr ,const QStri
  m_lastattr="";
  m_inpackage = false;
  m_inscript = true;
- m_inclass=false;
+ m_inclass=false;*/
 }
 
 void PerlSupportPart::addAttributetoPackage(const QString& fileName ,int lineNr ,const QString& name)
 {
- ParsedScopeContainer *p = 0;
+/* ParsedScopeContainer *p = 0;
  ParsedAttribute *attr=0;
 
  REQUIRE( "Valid attribute name",name.length() > 0 );
@@ -561,12 +561,12 @@ void PerlSupportPart::addAttributetoPackage(const QString& fileName ,int lineNr 
      }
  }
 
- m_lastattr=name;
+ m_lastattr=name;*/
 }
 
 void PerlSupportPart::addAttributetoScript(const QString& fileName ,int lineNr ,const QString& name)
 {
- ParsedScript *p = 0;
+/* ParsedScript *p = 0;
  ParsedAttribute *attr=0;
 
  REQUIRE( "Valid attribute name",name.length() > 0 );
@@ -585,12 +585,12 @@ void PerlSupportPart::addAttributetoScript(const QString& fileName ,int lineNr ,
        p->addAttribute(attr);
        m_lastattr=name;
      }
- }
+ }*/
 }
 
 void PerlSupportPart::addClass(const QString& fileName ,int lineNr ,const QString& name)
 {
- ParsedClass *p = 0;
+/* ParsedClass *p = 0;
  ParsedClass *c = 0;
  ParsedScopeContainer *s = 0;
 
@@ -617,12 +617,12 @@ void PerlSupportPart::addClass(const QString& fileName ,int lineNr ,const QStrin
  }
 
  m_inclass=true;
- m_lastclass=name;
+ m_lastclass=name;*/
 }
 
 void PerlSupportPart::addConstructor(const QString& classname,const QString& methodname)
 {
- QValueList<ParsedMethod*> list;
+/* QValueList<ParsedMethod*> list;
  ParsedClass  *c = 0;
  ParsedMethod *p = 0;
  ParsedMethod *n = 0;
@@ -653,12 +653,12 @@ void PerlSupportPart::addConstructor(const QString& classname,const QString& met
         classStore()->globalScope()->removeMethod(p);
      }
      list.clear();
- }
+ }*/
 }
 
 void PerlSupportPart::addGlobalSub(const QString& fileName ,int lineNr ,const QString& name ,bool privatesub)
 {
- QValueList<ParsedMethod*> list;
+/* QValueList<ParsedMethod*> list;
 
  REQUIRE( "Valid sub name",name.length() > 0 );
  REQUIRE( "Valid package name",m_lastpackage.length() > 0 );
@@ -677,12 +677,12 @@ void PerlSupportPart::addGlobalSub(const QString& fileName ,int lineNr ,const QS
  list.clear();
  //also add seperate to namespace
  addPackageSub(fileName,lineNr,name,privatesub);
- m_lastsub=name;
+ m_lastsub=name;*/
 }
 
 void PerlSupportPart::addScriptSub(const QString& fileName ,int lineNr ,const QString& name ,bool privatesub)
 {
-
+/*
  QValueList<ParsedMethod*> list;
  ParsedScript *s = 0;
 
@@ -704,12 +704,12 @@ void PerlSupportPart::addScriptSub(const QString& fileName ,int lineNr ,const QS
      }
      list.clear();
  }
- m_lastsub=name;
+ m_lastsub=name;*/
 }
 
 void PerlSupportPart::addClassMethod(const QString& fileName ,int lineNr ,const QString& name ,bool privatesub)
 {
- QValueList<ParsedMethod*> list;
+/* QValueList<ParsedMethod*> list;
  ParsedClass  *c = 0;
 
  REQUIRE( "Valid sub name",name.length() > 0 );
@@ -732,12 +732,12 @@ void PerlSupportPart::addClassMethod(const QString& fileName ,int lineNr ,const 
  }
  //also add seperate to namespace
  addPackageSub(fileName,lineNr,name,privatesub);
- m_lastsub=name;
+ m_lastsub=name;*/
 }
 
 void PerlSupportPart::addPackageSub(const QString& fileName ,int lineNr ,const QString& name ,bool privatesub)
 {
- ParsedMethod *p = 0;
+/* ParsedMethod *p = 0;
  ParsedScopeContainer *s = 0;
 
  REQUIRE( "Valid sub name",name.length() > 0 );
@@ -756,12 +756,12 @@ void PerlSupportPart::addPackageSub(const QString& fileName ,int lineNr ,const Q
        if (privatesub) { method->setAccess(PIE_PRIVATE);}
        s->addMethod(method);
      }
- }
+ }*/
 }
 
 void PerlSupportPart::addParentClass(const QString& parent ,const QString& child)
 {
- ParsedParent *p = 0;
+/* ParsedParent *p = 0;
  ParsedClass *c = 0;
 
  REQUIRE( "Valid parent name",parent.length() > 0 );
@@ -774,12 +774,12 @@ void PerlSupportPart::addParentClass(const QString& parent ,const QString& child
     p->setName(parent);
     p->setAccess(PIE_PUBLIC);
     c->addParent(p);
- }
+ }*/
 }
 
 void PerlSupportPart::addUseLib(const QString& lib)
 {
-
+/*
  REQUIRE( "Valid lib name",lib.length() > 0 );
 
  if (!classStore()->getScopeByName(lib)) {
@@ -788,12 +788,12 @@ void PerlSupportPart::addUseLib(const QString& lib)
       kdDebug(9016) << "add lib for later parsing [" << lib << "]" << endl;
       m_usefiles.append(lib);
     }
- }
+ }*/
 }
 
 void PerlSupportPart::getPerlINC() {
 
-
+/*
  m_INClist.clear();
 
  QString cmd = "/usr/bin/perl -e\" print join('|',@INC);\"";
@@ -816,7 +816,7 @@ void PerlSupportPart::getPerlINC() {
  pclose(fd);
  //get INC list so we can use it to parse "use" modules
  m_INClist = QStringList::split(QString("|"),result);
- kdDebug(9016) << "INC " << m_INClist.size() << " "<< result << endl;
+ kdDebug(9016) << "INC " << m_INClist.size() << " "<< result << endl;*/
 }
 
 KMimeType::List PerlSupportPart::mimeTypes( )
