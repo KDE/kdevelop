@@ -107,7 +107,7 @@ void CClassParser::parseClassHeader()
   // the new object and set some values.
   currentClass = new CParsedClass();
   currentClass->setName( lexer->YYText() );
-  currentClass->setDefinedOnLine( lexer->lineno() );
+  currentClass->setDefinedOnLine( lexer->lineno() - 1 );
   currentClass->setHFilename( currentFile );
   currentClass->setImplFilename( currentFile );
   
@@ -404,15 +404,16 @@ void CClassParser::addDeclaration( CParsedMethod *method,
 
       // Fetch the class.
       c = store.getClassByName( method->declaredInClass );
-      c->setImplFilename( currentFile );
       if( c != NULL )
       {
+        c->setImplFilename( currentFile );
+
         // Try to fetch a method with the same signature.
         m = c->getMethod( *method );
         if( m != NULL )
         {
           m->setDeclaredInFile( currentFile );
-          m->setDefinedOnLine( method->definedOnLine );
+          m->setDeclaredOnLine( method->declaredOnLine );
           m->setIsInHFile( false );
         }
       }
@@ -457,6 +458,7 @@ void CClassParser::parseDeclaration()
     // Get the type declaration.
     parseType( &type );
 
+  // Set the line on which the function is defined/declared.
   declLine = lexer->lineno() - 1;
 
   // Check for variable declarations with classreferences.
@@ -531,6 +533,7 @@ void CClassParser::parseDeclaration()
   // Set the common values.
   method->setType( type );
   method->setName( declName );
+  method->setDeclaredOnLine( declLine );
   method->setDefinedOnLine( declLine );
 
   // Add the declaration to the correct list.
