@@ -21,6 +21,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
@@ -60,7 +61,7 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    core()->embedWidget(variableWidget, KDevCore::SelectView, i18n("Watch"));
+    topLevel()->embedSelectView(variableWidget, i18n("Watch"));
     
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -71,7 +72,7 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
-    core()->embedWidget(breakpointWidget, KDevCore::OutputView, i18n("&Breakpoints"));
+    topLevel()->embedOutputView(breakpointWidget, i18n("&Breakpoints"));
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -84,7 +85,7 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    core()->embedWidget(framestackWidget, KDevCore::OutputView, i18n("&Frame stack"));
+    topLevel()->embedOutputView(framestackWidget, i18n("&Frame stack"));
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -96,7 +97,7 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                             "instruction using the debuggers toolbar "
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
-    core()->embedWidget(disassembleWidget, KDevCore::OutputView, i18n("Disassemble"));
+    topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"));
     
     VariableTree *variableTree = variableWidget->varTree();
 

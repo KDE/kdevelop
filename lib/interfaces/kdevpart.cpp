@@ -14,6 +14,11 @@ KDevPart::~KDevPart()
 {
 }
 
+KDevTopLevel *KDevPart::topLevel()
+{
+    return m_api->topLevel();
+}
+
 KDevCore *KDevPart::core()
 {
     return m_api->core();

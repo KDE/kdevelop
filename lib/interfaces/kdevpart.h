@@ -30,6 +30,7 @@ class KDevAppFrontend;
 class ClassStore;
 class KDevApi;
 class KDevPartController;
+class KDevTopLevel;
 
 
 // 2002-02-08 added ccClassStore( ) - daniel
@@ -52,6 +53,11 @@ public:
      * Destructs a component.
      */
     ~KDevPart();
+
+    /**
+     * Gives a reference to the toplevel widget.
+     */
+    KDevTopLevel *topLevel();
 
     /**
      * Gives a reference to the application core

@@ -8,7 +8,7 @@ libkdevinterfaces_la_SOURCES = kdevfactory.cpp kdevpart.cpp kdevcore.cpp kdevpro
 			       kdevpartcontroller.cpp kdevapi.cpp\
 			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
-			       KDevCoreIface.skel KDevCoreIface.cpp
+			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevfactory.h kdevpart.h kdevcore.h kdevproject.h \

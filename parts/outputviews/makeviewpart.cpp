@@ -17,6 +17,8 @@
 
 #include "kdevproject.h"
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
+
 #include "outputviewsfactory.h"
 #include "makewidget.h"
 #include "makeviewpart.h"
@@ -40,7 +42,7 @@ MakeViewPart::MakeViewPart(KDevApi *api, QObject *parent, const char *name)
                                    "This will automatically open the source file and set the "
                                    "cursor to the line that caused the compiler error/warning."));
 
-    core()->embedWidget(m_widget, KDevCore::OutputView, i18n("Messages"));
+    topLevel()->embedOutputView(m_widget, i18n("Messages"));
 
     KAction *action;
     action = new KAction( i18n("&Next error"), Key_F8, m_widget, SLOT(nextError()),

@@ -20,6 +20,7 @@
 
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
+#include "kdevtoplevel.h"
 #include "classstore.h"
 
 #include "classviewpart.h"
@@ -48,7 +49,7 @@ ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
                                       "and implementations. The right button popup menu allows more specialized "
                                       "functionality."));
 
-    core()->embedWidget(m_classtree, KDevCore::SelectView, i18n("Classes"));
+    topLevel()->embedSelectView(m_classtree, i18n("Classes"));
 
     classes_action = new ClassListAction(classStore(), i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
@@ -136,8 +137,8 @@ void ClassViewPart::updatedSourceInfo()
 void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
 {
     m_widgets.append(dlg);
-    core()->embedWidget(dlg, KDevCore::SelectView, i18n("Classtools"));
-    core()->raiseWidget(dlg);
+    topLevel()->embedSelectView(dlg, i18n("Classtools"));
+    topLevel()->raiseView(dlg);
 }
 
 

@@ -19,6 +19,7 @@
 #include <kregexp.h>
 
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "makeviewpart.h"
 #include "makewidget.h"
 
@@ -99,7 +100,7 @@ void MakeWidget::startNextJob()
     dirstack.clear();
     dirstack.push(new QString(dir));
 
-    m_part->core()->raiseWidget(this);
+    m_part->topLevel()->raiseView(this);
     m_part->core()->running(m_part, true);
 }
 

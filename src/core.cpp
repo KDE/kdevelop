@@ -44,35 +44,6 @@ Core::~Core()
 }
 
 
-void Core::embedWidget(QWidget *w, Role role, const QString &shortCaption)
-{
-  if (role == SelectView)
-    TopLevel::getInstance()->embedSelectView(w, shortCaption);
-  if (role == OutputView)
-    TopLevel::getInstance()->embedOutputView(w, shortCaption);
-}
-
-
-void Core::raiseWidget(QWidget *w)
-{
-  TopLevel::getInstance()->raiseView(w);
-}
-
-
-void Core::lowerWidget(QWidget *w)
-{
-  kdDebug() << "Lower Widget " << w << endl;
-
-  TopLevel::getInstance()->lowerView(w);
-}
-
-
-void Core::removeWidget(QWidget* w, Role)
-{
-  TopLevel::getInstance()->removeView(w);
-}
-
-
 void Core::gotoFile(const KURL &url)
 {
   PartController::getInstance()->editDocument(url);
@@ -135,12 +106,6 @@ void Core::message(const QString &str)
 void Core::openProject(const QString& projectFileName)
 {
   ProjectManager::getInstance()->loadProject(projectFileName);
-}
-
-
-QStatusBar *Core::statusBar() const
-{
-  return TopLevel::getInstance()->main()->statusBar();
 }
 
 

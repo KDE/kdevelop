@@ -17,6 +17,7 @@
 
 #include "kdevproject.h"
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "outputviewsfactory.h"
 #include "appoutputwidget.h"
 #include "appoutputviewpart.h"
@@ -36,7 +37,7 @@ AppOutputViewPart::AppOutputViewPart(KDevApi *api, QObject *parent, const char *
                                    "terminal-based application communication. Running terminal "
                                    "applications are using this instead of a terminal window."));
 
-    core()->embedWidget(m_widget, KDevCore::OutputView, i18n("Application"));
+    topLevel()->embedOutputView(m_widget, i18n("Application"));
 
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );
@@ -53,7 +54,7 @@ AppOutputViewPart::~AppOutputViewPart()
 void AppOutputViewPart::startAppCommand(const QString &command)
 {
     m_widget->startJob(QDir::homeDirPath(), command);
-    core()->raiseWidget(m_widget);
+    topLevel()->raiseView(m_widget);
 }
 
 

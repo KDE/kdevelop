@@ -20,11 +20,6 @@ public:
 
   ~Core();
 
-  virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
-  virtual void raiseWidget(QWidget *w);
-  virtual void removeWidget( QWidget* w, Role role );
-  virtual void lowerWidget(QWidget *w);
-
   virtual void gotoFile(const KURL &url);
   virtual void gotoDocumentationFile(const KURL& url, Embedding embed=Replace);
   virtual void gotoSourceFile(const KURL& url, int lineNum=0, Embedding embed=Replace);
@@ -37,7 +32,6 @@ public:
   virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void message(const QString &str);
   virtual void openProject(const QString& projectFileName);
-  virtual QStatusBar *statusBar() const;
 
   
   void doEmitProjectOpened() { emit projectOpened(); }

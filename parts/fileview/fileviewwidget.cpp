@@ -22,6 +22,8 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
+
 #include "fileviewpart.h"
 #include "fileviewconfigwidget.h"
 #include "fileviewwidget.h"
@@ -130,7 +132,7 @@ void FileViewWidget::slotItemExecuted(QListViewItem *item)
 
     FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
     m_part->core()->gotoFile(QString("file://") + fvfitem->fileName());
-    m_part->core()->lowerWidget(this);
+    m_part->topLevel()->lowerView(this);
 }
 
 

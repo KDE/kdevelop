@@ -18,6 +18,7 @@
 #include <kdialogbase.h>
 
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "grepconfigwidget.h"
 #include "grepviewwidget.h"
 #include "grepviewfactory.h"
@@ -48,7 +49,7 @@ GrepViewPart::GrepViewPart(KDevApi *api, QObject *parent, const char *name)
                                    "source file and set the cursor to the line "
                                    "with the match."));
 
-    core()->embedWidget(m_widget, KDevCore::OutputView, i18n("Grep"));
+    topLevel()->embedOutputView(m_widget, i18n("Grep"));
     
     KAction *action;
     
@@ -81,7 +82,7 @@ GrepViewPart::~GrepViewPart()
 
 void GrepViewPart::slotRaiseWidget()
 {
-    core()->raiseWidget(m_widget);
+    topLevel()->raiseView(m_widget);
 }
 
 

@@ -22,6 +22,8 @@ public:
 
   virtual KMainWindow *main() = 0;
 
+  KStatusBar *statusBar();
+
 };
 
 

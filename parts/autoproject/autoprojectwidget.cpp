@@ -24,6 +24,7 @@
 #include <kurl.h>
 
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "domutil.h"
 #include "misc.h"
 #include "subprojectoptionsdlg.h"
@@ -331,7 +332,7 @@ void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
         QString dirName = activeSubproject->path;
         FileItem *fitem = static_cast<FileItem*>(pvitem);
         m_part->core()->gotoFile(KURL(dirName + "/" + QString(fitem->name)));
-	m_part->core()->lowerWidget(this);
+	m_part->topLevel()->lowerView(this);
     }
 }
 

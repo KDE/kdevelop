@@ -19,6 +19,7 @@
 
 #include "domutil.h"
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "trollprojectfactory.h"
@@ -43,7 +44,7 @@ TrollProjectPart::TrollProjectPart(KDevApi *api, QObject *parent, const char *na
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
+    topLevel()->embedSelectView(m_widget, i18n("Project"));
 
     KAction *action;
 

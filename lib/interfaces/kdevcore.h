@@ -137,29 +137,6 @@ public:
     ~KDevCore();
 
     /**
-     * Embed the given widget into the user interface.
-     */
-    virtual void embedWidget(QWidget *, Role, const QString&) = 0;
-    /**
-     * Make the given widget visible. Useful e.g. for the compiler
-     * frontend which wants to be shown in the foreground when
-     * a command is started.
-     */
-    virtual void raiseWidget(QWidget *) = 0;
-
-
-    /**
-     * Make the given widget invisible. This may be ignored by
-     * some UI models.
-     */
-    virtual void lowerWidget(QWidget *) = 0;
-    
-    /**
-     * Remove the given widget from the user interface
-     */
-    virtual void removeWidget( QWidget*, Role ) = 0;
-    
-    /**
      * This method should be called by a part that wants to show a
      * context menu. The parameter context should be filled with
      * information about the context in which this happens (see
@@ -224,12 +201,6 @@ public:
     virtual void message(const QString &str) = 0;
    
 
-    /**
-     * The statusbar used
-     */
-    virtual QStatusBar *statusBar() const = 0;
-
-      
 signals:
 
     /**

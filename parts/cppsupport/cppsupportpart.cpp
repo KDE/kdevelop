@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kregexp.h>
 #include <kmessagebox.h>
+#include <kmainwindow.h>
+#include <kstatusbar.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -32,6 +34,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
 #include "classstore.h"
 #include "kdevpartcontroller.h"
 
@@ -143,7 +146,7 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
     // removeWidget is newly implemented by daniel
     if( setEnable == false ){
 	if( m_pCHWidget ){
-	    core( )->removeWidget( m_pCHWidget, m_CHSide );
+	    topLevel( )->removeView( m_pCHWidget );
 	    delete m_pCHWidget;
 	    m_pCHWidget = 0;
 	}
@@ -152,16 +155,14 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
     // enable it
     else {
 	if( m_pCHWidget )
-	    core( )->removeWidget( m_pCHWidget, m_CHSide );
+	    topLevel()->removeView( m_pCHWidget );
 	else
 	    m_pCHWidget = new CppSupportWidget( this );
 
 	if( setOutputView )
-	    m_CHSide = KDevCore::OutputView;
+	    topLevel()->embedOutputView( m_pCHWidget, i18n("Code Hinting"));
 	else
-	    m_CHSide = KDevCore::SelectView;
-
-	core( )->embedWidget( m_pCHWidget, m_CHSide, i18n( "Code Hinting" ) );	    
+	    topLevel()->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );	    
     }
 }
 
@@ -358,7 +359,7 @@ CppSupportPart::initialParse( )
 	    if( classStore( )->open( pcsFile + pcsFileExt( ), IO_ReadOnly ) ){
 
 		kdDebug ( 9007 ) << "loading pcs-file '" << pcsFile << pcsFileExt( ) << "'" << endl;
-		core( )->statusBar( )->message( i18n( "Waint please - loading classstore-file " )
+		topLevel()->statusBar( )->message( i18n( "Waint please - loading classstore-file " )
 		                                + pcsFile + pcsFileExt( ) );
 
 		kapp->processEvents( );
@@ -382,7 +383,7 @@ CppSupportPart::initialParse( )
 		kdDebug( 9007 ) << "loading persistant preparsed classstore: '"
                                 << pcsFile << ppFileExt( ) << "'" << endl;
 
-		core( )->statusBar( )->message( i18n( "Wait please - loading preparsed file: ")
+		topLevel()->statusBar( )->message( i18n( "Wait please - loading preparsed file: ")
                                                 + pcsFile + ppFileExt( ) );
 
 		kapp->processEvents( );
@@ -403,7 +404,7 @@ CppSupportPart::initialParse( )
     	    cerr << "persistant preparse file: '" << pcsFile << ppFileExt( )
                  << "' doesn't exist" << endl;
 
-	core( )->statusBar( )->message( i18n( "Done" ), 2000 );
+	topLevel()->statusBar( )->message( i18n( "Done" ), 2000 );
 
 	if( createProjectPCS == false && createPreParseCS == false )
 	    return;
@@ -416,10 +417,10 @@ CppSupportPart::initialParse( )
 
         QStringList files = project( )->allSourceFiles( );
 
-        QProgressBar* bar = new QProgressBar( files.count( ), core( )->statusBar( ) );
+        QProgressBar* bar = new QProgressBar( files.count( ), topLevel()->statusBar( ) );
 	bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
-	core( )->statusBar( )->addWidget( bar );
+	topLevel()->statusBar( )->addWidget( bar );
         bar->show( );
 
 	int n = 0;
@@ -429,7 +430,7 @@ CppSupportPart::initialParse( )
 	    maybeParse( *it, classStore( ), m_pParser );
 	}
 
-	core( )->statusBar( )->removeWidget( bar );
+	topLevel()->statusBar( )->removeWidget( bar );
 	delete bar;
 
 	emit updatedSourceInfo( );
@@ -450,15 +451,15 @@ CppSupportPart::initialParse( )
 			     .namedItem( "preparsing" ).toElement( )
 			     .firstChild( ).toElement( );	
 	
-	QLabel* label = new QLabel( i18n ( "Preparsing" ), core( )->statusBar( ) );
+	QLabel* label = new QLabel( i18n ( "Preparsing" ), topLevel()->statusBar( ) );
         label->setMinimumWidth( 600 );
-        core( )->statusBar( )->addWidget( label );
+        topLevel()->statusBar( )->addWidget( label );
 	label->show( );
 
-	QProgressBar* bar = new QProgressBar( 0, core( )->statusBar( ) );
+	QProgressBar* bar = new QProgressBar( 0, topLevel()->statusBar( ) );
 	bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
-	core( )->statusBar( )->addWidget( bar );
+	topLevel()->statusBar( )->addWidget( bar );
         bar->show( );
 
 	QDir    dirObject;
@@ -483,15 +484,15 @@ CppSupportPart::initialParse( )
 	}
 	
 
-	core( )->statusBar( )->removeWidget( bar );
+	topLevel()->statusBar( )->removeWidget( bar );
 	delete bar;
-	core( )->statusBar( )->removeWidget( label );
+	topLevel()->statusBar( )->removeWidget( label );
 	delete label;
 
 	kapp->restoreOverrideCursor( );
     }
 
-    core( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    topLevel()->statusBar( )->message( i18n( "Done" ), 2000 );
 }
 
 // better idea needed for not always calling with QProgressBar & QLabel

@@ -23,6 +23,7 @@
 
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
+#include "kdevtoplevel.h"
 #include "classstore.h"
 
 #include "classviewfactory.h"
@@ -493,13 +494,13 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getImplementation(&toFile, &toLine);
         m_part->core()->gotoSourceFile(toFile, toLine);
-	m_part->core()->lowerWidget(this);
+	m_part->topLevel()->lowerView(this);
     } else if (button == MidButton) {
         QString toFile;
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getDeclaration(&toFile, &toLine);
         m_part->core()->gotoSourceFile(toFile, toLine);
-	m_part->core()->lowerWidget(this);
+	m_part->topLevel()->lowerView(this);
     }
 }
 

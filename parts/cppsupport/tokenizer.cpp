@@ -735,7 +735,7 @@ goto find_rule; \
   class MyLexer : public yyFlexLexer
   {
     public:
-    char *gettext() {return yytext;};
+    char *getText() {return yytext;};
   };
 
   /* Line where a comment starts. */
@@ -1988,7 +1988,7 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
-#include<unistd.h>
+extern "C" int isatty YY_PROTO(( int ));
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{
@@ -2204,7 +2204,7 @@ static bool beginComment(MyLexer *lex)
 
 static void inComment(MyLexer *lex)
 {
-  char *text=lex->gettext();
+  char *text=lex->getText();
   comment+=text;
 };
 

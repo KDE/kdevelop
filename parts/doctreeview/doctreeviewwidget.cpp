@@ -28,6 +28,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
 
 #include "../../config.h"
 #include "misc.h"
@@ -587,7 +588,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
         return;
     
     m_part->core()->gotoDocumentationFile(ident);
-    m_part->core()->lowerWidget(this);
+    m_part->topLevel()->lowerView(this);
 }
 
 

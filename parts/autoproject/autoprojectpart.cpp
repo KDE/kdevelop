@@ -21,6 +21,7 @@
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevtoplevel.h"
 #include "compileroptionswidget.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
@@ -49,7 +50,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
+    topLevel()->embedSelectView(m_widget, i18n("Project"));
 
     KAction *action;
 

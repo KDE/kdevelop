@@ -6,6 +6,7 @@
 
 
 #include <kdevcore.h>
+#include "kdevtoplevel.h"
 
 
 #include "sourcebrowser_widget.h"
@@ -20,7 +21,7 @@ SourceBrowserPart::SourceBrowserPart(KDevApi *api, QObject *parent, const char *
   
   QWhatsThis::add(m_widget, i18n("Browse source files"));
   
-  core()->embedWidget(m_widget, KDevCore::OutputView, i18n("SourceBrowser"));
+  topLevel()->embedOutputView(m_widget, i18n("SourceBrowser"));
 }
 
 

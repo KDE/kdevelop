@@ -22,6 +22,8 @@
 #include <kstringhandler.h>
 
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
+
 #include "docsearchdlg.h"
 #include "docindexdlg.h"
 #include "doctreeviewpart.h"
@@ -52,7 +54,7 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
                                    "documentation and the KDevelop manuals. It can "
                                    "be configured individually."));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Books"));
+    topLevel()->embedSelectView(m_widget, i18n("Books"));
 
     KAction *action;
 
@@ -185,7 +187,7 @@ void DocTreeViewPart::slotManpage()
 
 void DocTreeViewPart::slotRaiseWidget()
 {
-    core()->raiseWidget(m_widget);
+    topLevel()->raiseView(m_widget);
 }
 
 

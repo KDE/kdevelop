@@ -19,6 +19,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
 
 #include "fileviewfactory.h"
 #include "fileviewwidget.h"
@@ -38,7 +39,7 @@ FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
                                      "The file viewer shows all files of the project, "
                                      "ins groups which can be configured by you."));
 
-    core()->embedWidget(m_filetree, KDevCore::SelectView, i18n("Files"));
+    topLevel()->embedSelectView(m_filetree, i18n("Files"));
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectChanged()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectChanged()) );

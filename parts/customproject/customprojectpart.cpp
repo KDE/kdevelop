@@ -20,6 +20,7 @@
 
 #include "domutil.h"
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "makeoptionswidget.h"
@@ -41,7 +42,7 @@ CustomProjectPart::CustomProjectPart(KDevApi *api, QObject *parent, const char *
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Project"));
     
-    core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
+    topLevel()->embedSelectView(m_widget, i18n("Project"));
 
     connect( m_widget, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );

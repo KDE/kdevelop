@@ -19,6 +19,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
 #include "grepdlg.h"
 #include "grepviewpart.h"
 #include "grepviewwidget.h"
@@ -170,7 +171,7 @@ void GrepViewWidget::searchActivated()
     command += " /dev/null";
     startJob("", command);
 
-    m_part->core()->raiseWidget(this);
+    m_part->topLevel()->raiseView(this);
     m_part->core()->running(m_part, true);
 }
 

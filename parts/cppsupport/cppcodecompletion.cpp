@@ -21,6 +21,8 @@
 #include <kdebug.h>
 #include <kregexp.h>
 #include <ktempfile.h>
+#include <kmainwindow.h>
+#include <kstatusbar.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -34,6 +36,9 @@
 #include <qstatusbar.h>
 
 #include <kdevpartcontroller.h>
+#include "kdevtoplevel.h"
+#include "kdevcore.h"
+
 
 
 static QValueList<KTextEditor::CompletionEntry>
@@ -220,7 +225,7 @@ CppCodeCompletion::slotCursorPositionChanged()
     m_pCursorIface->cursorPosition(&nLine, &nCol);
     QString text = typingTypeOf( nLine, nCol );
     if( !text.isEmpty( ) )
-	m_pCore->statusBar( )->message( text, 10000 );
+	m_pCore->message( text );
 }
 
 QString

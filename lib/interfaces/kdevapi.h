@@ -21,11 +21,11 @@ class KDevAppFrontend;
 class ClassStore;
 class QDomDocument;
 class KDevPartController;
+class KDevTopLevel;
 
 
 class KDevApiPrivate;
 
-// 2002-02-08 add ccClassStore - daniel
 class KDevApi
 {
 public:
@@ -33,11 +33,12 @@ public:
     KDevApi();
     virtual ~KDevApi();
 
+    virtual KDevTopLevel *topLevel() = 0;
     virtual KDevPartController *partController() = 0;
     virtual KDevCore *core() = 0;
     virtual ClassStore *classStore() = 0;
     virtual ClassStore *ccClassStore() = 0;
-
+    
     QDomDocument *projectDom();
     void setProjectDom(QDomDocument *dom);
 

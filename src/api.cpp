@@ -1,12 +1,19 @@
 #include "core.h"
 #include "classstore.h"
 #include "partcontroller.h"
+#include "toplevel.h"
 
 
 #include "api.h"
 
 
 API *API::s_instance = 0;
+
+
+KDevTopLevel *API::topLevel()
+{
+  return TopLevel::getInstance();
+}
 
 
 KDevPartController *API::partController()

@@ -14,6 +14,7 @@
 #include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevproject.h>
+#include "kdevtoplevel.h"
 #include <ktip.h>
 
 #include "fileselector_factory.h"
@@ -35,7 +36,7 @@ FileSelectorPart::FileSelectorPart(KDevApi *api, QObject *parent, const char *na
 	connect(core(),SIGNAL(projectOpened()),this,SLOT(slotProjectOpened()));
 
     m_filetree->setCaption(i18n("File Selector"));
-	core()->embedWidget(m_filetree, KDevCore::SelectView, i18n("FileSel"));
+	topLevel()->embedSelectView(m_filetree, i18n("FileSel"));
 
 }
 
@@ -44,7 +45,7 @@ void FileSelectorPart::fileSelected(const KFileItem *file)
   KURL u(file->url());
 
   core()->gotoSourceFile( u );
-  core()->lowerWidget(m_filetree);
+  topLevel()->lowerView(m_filetree);
 }
 
 void FileSelectorPart::slotProjectOpened(){

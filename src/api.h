@@ -12,6 +12,7 @@ class API : public KDevApi
 {
 public:
 
+  virtual KDevTopLevel *topLevel();
   virtual KDevPartController *partController();
   virtual KDevCore *core();
   virtual ClassStore *classStore();
