@@ -69,6 +69,9 @@ AC_PATH_KDE
 
 AM_INIT_AUTOMAKE(gideon, 0.2)
 AM_PROG_LEX
+if test -z "$LEXLIB"; then
+    AC_MSG_ERROR([You need to have flex installed.])
+fi
 AC_SUBST(LEXLIB)
 
 dnl KDEV_PATH_QTDOC
