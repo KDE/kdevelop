@@ -149,8 +149,6 @@ void KTabZoomWidget::addContent(QWidget *content)
 
 void KTabZoomWidget::selected(int index)
 {
-  qDebug( "KTabZoomWidget::selected" );
-
   calculateGeometry();
 
   if (d->m_docked)
@@ -169,6 +167,15 @@ void KTabZoomWidget::selected(int index)
     }
 }
 
+void KTabZoomWidget::isDocked() const
+{
+  return d->m_docked;
+}
+
+void KTabZoomWidget::isRaised() const
+{
+  return d->m_popup->isVisible();
+}
 
 void KTabZoomWidget::unselected()
 {
@@ -180,7 +187,6 @@ void KTabZoomWidget::unselected()
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
-  qDebug( "KTabZoomWidget::raiseWidget" );
   if ( !widget )
     widget = d->m_lastActiveWidget;
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())

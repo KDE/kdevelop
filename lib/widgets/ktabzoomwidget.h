@@ -36,7 +36,9 @@ public:
 
   void saveSettings(KConfig *config);
   void loadSettings(KConfig *config);
-  
+ 
+  bool isRaised() const;
+  bool isDocked() const;
 
 public slots:
 
