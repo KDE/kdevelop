@@ -1,20 +1,14 @@
+dataFiles = app.pl app.kdevelop camel.png
+template_DATA = perlhello
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-perlhellodir = ${appwizarddatadir}/template-perlhello
 templatedir = ${appwizarddatadir}/templates
 
-perlhello_DATA = app.pl app.kdevelop camel.png
-template_DATA = perlhello
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(perlhellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(perlhellodir)/script
+CLEANFILES = *.tar.gz

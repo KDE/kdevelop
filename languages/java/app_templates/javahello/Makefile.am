@@ -1,20 +1,14 @@
+dataFiles = Main.java build.xml javahello.filelist javahello.kdevelop
+template_DATA = javahello
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-javahellodir = ${appwizarddatadir}/template-javahello
 templatedir = ${appwizarddatadir}/templates
 
-javahello_DATA = Main.java build.xml javahello.filelist javahello.kdevelop
-template_DATA = javahello
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(javahellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(javahellodir)/script
+CLEANFILES = *.tar.gz

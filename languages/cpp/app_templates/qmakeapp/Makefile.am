@@ -1,21 +1,17 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-qmakeappdir = ${appwizarddatadir}/template-qmakeapp
-templatedir = ${appwizarddatadir}/templates
-
-qmakeapp_DATA = main.cpp qmakeapp.cpp qmakeapp.h qmakeapp.png qmakeapp.kdevelop qmakeapp.pro src.pro filesave.xpm fileopen.xpm fileprint.xpm
+dataFiles = main.cpp qmakeapp.cpp qmakeapp.h qmakeapp.png qmakeapp.kdevelop \
+	qmakeapp.pro src.pro filesave.xpm fileopen.xpm fileprint.xpm
 
 template_DATA = qmakeapp
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-perl = perl
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(qmakeappdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(qmakeappdir)/script
+CLEANFILES = *.tar.gz

@@ -1,20 +1,14 @@
+dataFiles = app.rb app.kdevelop
+template_DATA = rubyhello
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-rubyhellodir = ${appwizarddatadir}/template-rubyhello
 templatedir = ${appwizarddatadir}/templates
 
-rubyhello_DATA = app.rb app.kdevelop
-template_DATA = rubyhello
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(rubyhellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(rubyhellodir)/script
+CLEANFILES = *.tar.gz

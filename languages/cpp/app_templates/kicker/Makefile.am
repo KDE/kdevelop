@@ -1,20 +1,15 @@
+dataFiles = applet.cpp applet.h applet.desktop applet.kdevelop \
+	src-Makefile.am kicker.png subdirs
+template_DATA = kicker
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kickerdir = ${appwizarddatadir}/template-kicker
 templatedir = ${appwizarddatadir}/templates
 
-kicker_DATA = applet.cpp applet.h applet.desktop applet.kdevelop src-Makefile.am 	      kicker.png subdirs
-template_DATA = kicker
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kickerdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kickerdir)/script
+CLEANFILES = *.tar.gz

@@ -1,20 +1,18 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kdevpart2dir = ${appwizarddatadir}/template-kdevpart2
-templatedir = ${appwizarddatadir}/templates
-
-kdevpart2_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h 		kdevpart_widget.h kdevpart_widget.cpp 		kdevpart_part.rc kdevpart.desktop app.kdevelop kdevpart-configure.in.in README.dox
+dataFiles = src-Makefile.am kdevpart_part.cpp kdevpart_part.h\
+	kdevpart_widget.h kdevpart_widget.cpp \
+	kdevpart_part.rc kdevpart.desktop app.kdevelop \
+	kdevpart-configure.in.in README.dox
 template_DATA = kdevpart2
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-perl = perl
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kdevpart2dir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kdevpart2dir)/script
+CLEANFILES = *.tar.gz

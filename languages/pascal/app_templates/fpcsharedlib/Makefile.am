@@ -1,20 +1,14 @@
+dataFiles = main.pp app.kdevelop
+template_DATA = fpcsharedlib
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-fpcsharedlibdir = ${appwizarddatadir}/template-fpcsharedlib
 templatedir = ${appwizarddatadir}/templates
 
-fpcsharedlib_DATA = main.pp app.kdevelop
-template_DATA = fpcsharedlib
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(fpcsharedlibdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(fpcsharedlibdir)/script
+CLEANFILES = *.tar.gz

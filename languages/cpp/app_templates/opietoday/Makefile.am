@@ -1,21 +1,17 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-qtopiaappdir = ${appwizarddatadir}/template-opietoday
-templatedir = ${appwizarddatadir}/templates
-
-qtopiaapp_DATA = Makefile.am Example.png  app.kdevelop  app.pro exampleplugin.cpp  examplepluginimpl.cpp  examplepluginwidget.cpp exampleplugin.h  examplepluginimpl.h  examplepluginwidget.h    opietoday
+dataFiles = Makefile.am Example.png  app.kdevelop  app.pro exampleplugin.cpp \
+	examplepluginimpl.cpp  examplepluginwidget.cpp exampleplugin.h \
+	examplepluginimpl.h  examplepluginwidget.h opietoday
 
 template_DATA = opietoday
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(qtopiaappdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(qtopiaappdir)/script
+CLEANFILES = *.tar.gz

@@ -1,20 +1,15 @@
+dataFiles = app.c app.h menus.c menus.h main.c src-Makefile.am \
+	configure.in gnomeapp.png app.kdevelop app.desktop
+template_DATA = gnomeapp
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-gnomeappdir = ${appwizarddatadir}/template-gnomeapp
 templatedir = ${appwizarddatadir}/templates
 
-gnomeapp_DATA = app.c app.h menus.c menus.h main.c 		src-Makefile.am configure.in gnomeapp.png app.kdevelop app.desktop
-template_DATA = gnomeapp
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(gnomeappdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(gnomeappdir)/script
+CLEANFILES = *.tar.gz

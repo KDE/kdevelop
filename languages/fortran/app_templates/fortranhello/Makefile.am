@@ -1,20 +1,15 @@
+dataFiles = main.f src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs \
+	configure.in fortranhello.png app.kdevelop
+template_DATA = fortranhello
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-fortranhellodir = ${appwizarddatadir}/template-fortranhello
 templatedir = ${appwizarddatadir}/templates
 
-fortranhello_DATA = main.f src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs 		configure.in fortranhello.png app.kdevelop
-template_DATA = fortranhello
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(fortranhellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(fortranhellodir)/script
+CLEANFILES = *.tar.gz

@@ -1,20 +1,16 @@
+dataFiles = konqnavpanel.cpp konqnavpanel.h konqnavpanel.desktop \
+	konqnavpanel.kdevelop src-Makefile.am \
+	konqnavpanel.png subdirs
+template_DATA = konqnavpanel
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-konqnavpaneldir = ${appwizarddatadir}/template-konqnavpanel
 templatedir = ${appwizarddatadir}/templates
 
-konqnavpanel_DATA = konqnavpanel.cpp konqnavpanel.h konqnavpanel.desktop konqnavpanel.kdevelop src-Makefile.am 	      konqnavpanel.png subdirs
-template_DATA = konqnavpanel
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(konqnavpaneldir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(konqnavpaneldir)/script
+CLEANFILES = *.tar.gz

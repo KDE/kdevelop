@@ -1,23 +1,17 @@
-# some directories
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-khellodir = ${appwizarddatadir}/template-khello2
-templatedir = ${appwizarddatadir}/templates
-
-# all khello2 data files
-khello_DATA = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop \
+dataFiles = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop \
 	subdirs app.desktop preview.png widget.cpp widget.h widgetbase.ui
+
 template_DATA = khello2
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-perl = perl
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(khellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(khellodir)/script
+CLEANFILES = *.tar.gz

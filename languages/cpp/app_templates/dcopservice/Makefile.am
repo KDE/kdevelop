@@ -1,20 +1,16 @@
+dataFiles = dcopservice.desktop dcopservice.png dcopservice.h \
+	src-Makefile.am main.cpp dcopservice.cpp dcopservice.kdevelop \
+	subdirs
+template_DATA = dcopservice
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-dcopservicedir = ${appwizarddatadir}/template-dcopservice
 templatedir = ${appwizarddatadir}/templates
 
-dcopservice_DATA = dcopservice.desktop   dcopservice.png 	dcopservice.h  src-Makefile.am main.cpp	dcopservice.cpp  dcopservice.kdevelop subdirs
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-template_DATA = dcopservice
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(dcopservicedir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(dcopservicedir)/script
+CLEANFILES = *.tar.gz

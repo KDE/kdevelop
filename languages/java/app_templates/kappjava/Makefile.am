@@ -1,20 +1,15 @@
+dataFiles = app.java pref.java appview.java  app_client.java appui.rc \
+	src-Makefile.am kappjava.png app.kdevelop subdirs
+template_DATA = kappjava
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kappjavadir = ${appwizarddatadir}/template-kappjava
 templatedir = ${appwizarddatadir}/templates
 
-kappjava_DATA = app.java pref.java appview.java                 app_client.java appui.rc src-Makefile.am                 kappjava.png app.kdevelop subdirs
-template_DATA = kappjava
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kappjavadir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kappjavadir)/script
+CLEANFILES = *.tar.gz

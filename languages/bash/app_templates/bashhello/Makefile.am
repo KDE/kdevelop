@@ -1,15 +1,14 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-
 dataFiles = app.sh app.kdevelop
-
-templatedir = ${appwizarddatadir}/templates
 template_DATA = bashhello
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-chello.tar.gz:
-	$(TAR) -cf chello.tar -C $(srcdir) ${dataFiles}
-	gzip bashhello.tar
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = bashhello.tar.gz
+archive_DATA = ${template_DATA}.tar.gz
 
 CLEANFILES = *.tar.gz

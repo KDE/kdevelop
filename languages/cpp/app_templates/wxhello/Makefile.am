@@ -1,20 +1,17 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-wxhellodir = ${appwizarddatadir}/template-wxhello
-templatedir = ${appwizarddatadir}/templates
+dataFiles = src-Makefile.am app.cpp app.h app.kdevelop subdirs \
+	app.desktop wxhello.png
 
-wxhello_DATA = src-Makefile.am app.cpp app.h app.kdevelop subdirs app.desktop wxhello.png
 template_DATA = wxhello
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-perl = perl
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(wxhellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(wxhellodir)/script
+CLEANFILES = *.tar.gz

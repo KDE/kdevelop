@@ -1,20 +1,15 @@
+dataFiles = src-Makefile.am plugin_app.cpp plugin_impl.cpp plugin_impl.h \
+	noatunplugin.png plugin.plugin plugin.kdevelop subdirs
+template_DATA = noatunui
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-noatunplugindir = ${appwizarddatadir}/template-noatunui
 templatedir = ${appwizarddatadir}/templates
 
-noatunplugin_DATA = src-Makefile.am plugin_app.cpp plugin_impl.cpp plugin_impl.h noatunplugin.png plugin.plugin plugin.kdevelop subdirs
-template_DATA = noatunui
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(noatunplugindir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(noatunplugindir)/script
+CLEANFILES = *.tar.gz

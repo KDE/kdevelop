@@ -1,20 +1,15 @@
+dataFiles = main.cpp src-Makefile.am cpp-Makefile.am cpp-Makefile.cvs \
+	configure.in cpphello.png app.kdevelop
+template_DATA = cpphello
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-cpphellodir = ${appwizarddatadir}/template-cpphello
 templatedir = ${appwizarddatadir}/templates
 
-cpphello_DATA = main.cpp src-Makefile.am cpp-Makefile.am cpp-Makefile.cvs 		configure.in cpphello.png app.kdevelop
-template_DATA = cpphello
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(cpphellodir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(cpphellodir)/script
+CLEANFILES = *.tar.gz

@@ -1,16 +1,16 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-
 dataFiles = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs \
 	configure.in chello.png app.kdevelop
 
-templatedir = ${appwizarddatadir}/templates
 template_DATA = chello
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-chello.tar.gz:
-	$(TAR) -cf chello.tar -C $(srcdir) ${dataFiles}
-	gzip chello.tar
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
 archivedir = ${appwizarddatadir}
-archive_DATA = chello.tar.gz
+archive_DATA = ${template_DATA}.tar.gz
 
 CLEANFILES = *.tar.gz

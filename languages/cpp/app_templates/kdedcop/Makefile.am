@@ -1,21 +1,16 @@
+dataFiles = app.cpp app.h app_iface.h app.kdevelop main.cpp mainclass.cpp \
+	mainclass.h kdedcop.png src-Makefile.am subdirs
+
+template_DATA = kdedcop
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kdedcopdir = ${appwizarddatadir}/template-kdedcop
 templatedir = ${appwizarddatadir}/templates
 
-kdedcop_DATA = app.cpp app.h app_iface.h app.kdevelop main.cpp mainclass.cpp mainclass.h          kdedcop.png src-Makefile.am subdirs
-template_DATA = kdedcop
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kdedcopdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kdedcopdir)/script
-
+CLEANFILES = *.tar.gz

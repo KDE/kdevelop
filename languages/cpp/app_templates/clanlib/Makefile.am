@@ -1,22 +1,15 @@
-# some directories
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-clanlibdir = ${appwizarddatadir}/template-clanlib
-templatedir = ${appwizarddatadir}/templates
-
-clanlib_DATA = src-Makefile.am app-Makefile.am main.cpp app.kdevelop \
+dataFiles = src-Makefile.am app-Makefile.am main.cpp app.kdevelop \
 	app-configure.in app-autogen.sh
 template_DATA = clanlib
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(clanlibdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(clanlibdir)/script
+CLEANFILES = *.tar.gz

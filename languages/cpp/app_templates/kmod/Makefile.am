@@ -1,20 +1,15 @@
+dataFiles = src-Makefile kmod.kdevelop kmod-driver.c
+
+template_DATA = kmod
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kmoddir = ${appwizarddatadir}/template-kmod
 templatedir = ${appwizarddatadir}/templates
 
-kmod_DATA = src-Makefile kmod.kdevelop kmod-driver.c
-template_DATA = kmod
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kmoddir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kmoddir)/script
+CLEANFILES = *.tar.gz

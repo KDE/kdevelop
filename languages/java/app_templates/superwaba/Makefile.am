@@ -1,20 +1,14 @@
+dataFiles = superwaba.png sw.java src-Makefile sw.kdevelop sw.filelist
+template_DATA = superwaba
+### no need to change below:
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-superwabadir = ${appwizarddatadir}/template-superwaba
 templatedir = ${appwizarddatadir}/templates
 
-superwaba_DATA = superwaba.png sw.java src-Makefile sw.kdevelop sw.filelist
-template_DATA = superwaba
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-perl = perl
-
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(superwabadir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(superwabadir)/script
+CLEANFILES = *.tar.gz

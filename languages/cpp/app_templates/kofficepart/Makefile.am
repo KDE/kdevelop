@@ -1,21 +1,19 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kopartdir = ${appwizarddatadir}/template-kopart
-templatedir = ${appwizarddatadir}/templates
-
-kopart_DATA = kopart.kdevelop kopart_aboutdata.h kopart_part.cpp kopart_view.h src-Makefile.am 	kopart.png kopart_factory.cpp kopart_part.h subdirs kopart.desktop kopart.rc 	kopart_factory.h kopart_view.cpp x-kopart.desktop kde-configure.in.in main.cpp
+dataFiles = kopart.kdevelop kopart_aboutdata.h kopart_part.cpp kopart_view.h \
+	src-Makefile.am kopart.png kopart_factory.cpp kopart_part.h \
+	subdirs kopart.desktop kopart.rc kopart_factory.h \
+	kopart_view.cpp x-kopart.desktop kde-configure.in.in \
+	main.cpp
 
 template_DATA = kopart
+#### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-perl = perl
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
-
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kopartdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kopartdir)/script
+CLEANFILES = *.tar.gz

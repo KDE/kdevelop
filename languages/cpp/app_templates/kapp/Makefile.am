@@ -1,21 +1,18 @@
-appwizarddatadir = ${kde_datadir}/kdevappwizard
-commondatadir = ${appwizarddatadir}/template-common
-kappdir = ${appwizarddatadir}/template-kapp
-templatedir = ${appwizarddatadir}/templates
+dataFiles = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
+	appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
+	kapp.png app.kdevelop subdirs README
 
-kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h             appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am 	    kapp.png app.kdevelop subdirs README
 template_DATA = kapp
 
-DISTCLEANFILES = script.local
-EXTRA_DIST = script
+### no need to change below:
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+templatedir = ${appwizarddatadir}/templates
 
-perl = perl
+${template_DATA}.tar.gz:
+	$(TAR) -cf ${template_DATA}.tar -C $(srcdir) ${dataFiles}
+	gzip ${template_DATA}.tar
 
-script.local: ${srcdir}/script
-	cp ${srcdir}/script script.local ; \
-	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
+archivedir = ${appwizarddatadir}
+archive_DATA = ${template_DATA}.tar.gz
 
-install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kappdir)
-	$(INSTALL_DATA) script.local $(DESTDIR)$(kappdir)/script
-
+CLEANFILES = *.tar.gz
