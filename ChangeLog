@@ -1,3 +1,8 @@
+2004-03-12 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added NewMainWindow - a new MainWindow implementation - enable in toplevel.cpp to try it out.
+	* Major cleanup of PartController::editDocument()
+	* A few other minor improvements to the core.
+
 2004-03-05 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Reimplemented how FileTree finds selected items. Fixes crash when a file changes name from an external event.
 	
