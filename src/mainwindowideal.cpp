@@ -100,13 +100,6 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
     m_raiseLeftBar->setEnabled( false );
     m_raiseRightBar->setEnabled( false );
     m_raiseBottomBar->setEnabled( false );
-
-    // Add window menu to the menu bar
-    m_pWindowMenu = new QPopupMenu( main(), "window_menu");
-    m_pWindowMenu->setCheckable( TRUE);
-    menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
-
-    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
 }
 
 
@@ -122,6 +115,19 @@ void MainWindowIDEAl::init() {
     createStatusBar();
 
     createGUI(0);
+    
+    m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
+    
+    if( !m_pWindowMenu ){
+	// Add window menu to the menu bar
+	m_pWindowMenu = new QPopupMenu( main(), "window");
+	m_pWindowMenu->setCheckable( TRUE);
+	menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
+    }
+
+    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
+    
+    
     slotFillWindowMenu();  // Just in case there is no file open. The menu would then be empty.
 
     if ( PluginController::pluginServices().isEmpty() ) {

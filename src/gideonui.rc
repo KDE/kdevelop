@@ -72,6 +72,11 @@
     <DefineGroup name="tools_operations"/>
     <Merge/>
   </Menu>
+  <Menu name="window">
+    <text>&amp;Window</text>
+    <DefineGroup name="window_operations"/>
+    <Merge/>
+  </Menu>
   <Menu name="settings" noMerge="1">
     <text>&amp;Settings</text>
     <Action name="settings_show_menubar" />
