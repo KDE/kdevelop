@@ -215,6 +215,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
     m_presetEncoding = QString::null;
   }
 
+  kdDebug(9000) << "mimeType = " << mimeType << endl;
+  
   if (mimeType.startsWith("text/")
       || mimeType == "application/x-zerosize"
       || mimeType == "application/x-desktop"
@@ -222,9 +224,11 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
       || mimeType == "image/x-xpm"
       || mimeType == "application/x-perl")
   {
-    mimeType = "text/plain";
-    kapp->config()->setGroup("Editor");
-    preferred = kapp->config()->readEntry("EmbeddedKTextEditor", "");
+      mimeType = "text/plain";
+      kapp->config()->setGroup("Editor");
+      preferred = kapp->config()->readEntry("EmbeddedKTextEditor", "");
+  } else if( mimeType.startsWith("inode/") ){
+      return;
   }
 
   KParts::Factory *factory = 0;
@@ -244,28 +248,37 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum)
     }
   }
 
+  kdDebug(9000) << "factory = " << factory << endl;
+  
   if (factory)
   {
-    // Currently, only a single view per document is supported.
-    // So fall back (downgrade) from MDI-mode editor to SDI-mode editor
-    // (Note: This always works since KTextEditor::Document inherits KTextEditor::Editor)
-    if (className == "KTextEditor::Document") className = "KTextEditor::Editor";
-    // create the object of the desired class
-    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
-    KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
-    kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
-    if (extension && !encoding.isNull())
-    {
-      KParts::URLArgs args;
-      args.serviceType = mimeType + ";" + encoding;
-      extension->setURLArgs(args);
-    }
-    part->openURL(url);
-    integratePart(part, url);
-    EditorProxy::getInstance()->setLineNumber(part, lineNum);
+      // Currently, only a single view per document is supported.
+      // So fall back (downgrade) from MDI-mode editor to SDI-mode editor
+      // (Note: This always works since KTextEditor::Document inherits KTextEditor::Editor)
+      
+      if (className == "KTextEditor::Document") 
+	  className = "KTextEditor::Editor";
+      
+      // create the object of the desired class
+      KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
+      KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
+      kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
+      if (extension && !encoding.isNull())
+      {
+	  KParts::URLArgs args;
+	  args.serviceType = mimeType + ";" + encoding;
+	  extension->setURLArgs(args);
+      }
+      part->openURL(url);
+      
+      bool isTextEditor = className == "KTextEditor::Editor";
+      integratePart(part, url, isTextEditor );
+      
+      if( isTextEditor )
+	  EditorProxy::getInstance()->setLineNumber(part, lineNum);
   }
   else
-    KRun::runURL(url, mimeType);
+      KRun::runURL(url, mimeType);
 }
 
 
@@ -347,24 +360,27 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 }
 
 
-void PartController::integratePart(KParts::Part *part, const KURL &url)
+void PartController::integratePart(KParts::Part *part, const KURL &url, bool isTextEditor )
 {
   if (!part->widget()) {
     // TODO error handling
-    return; // to avoid later crash
+      kdDebug(9000) << "no widget for this part!!" << endl;
+      return; // to avoid later crash
   }
 
   TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
 
   addPart(part);
 
-  EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
-
+  if( isTextEditor ){
+      EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
+      
 #if KDE_VERSION < 310
-  // HACK: this is a workaround. The kate-part does not emit "completed" when
-  // it save a file yet.
-  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
+      // HACK: this is a workaround. The kate-part does not emit "completed" when
+      // it save a file yet.
+      connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
 #endif
+  }
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);

@@ -100,7 +100,7 @@ private:
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
 
-  void integratePart(KParts::Part *part, const KURL &url);
+  void integratePart(KParts::Part *part, const KURL &url, bool isTextEditor=false );
 
   void activatePart(KParts::Part *part);
 
