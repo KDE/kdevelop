@@ -71,9 +71,9 @@ void PHPSupportPart::maybeParse(const QString fileName)
   //    kdDebug(9007) << "maybeParse()" << endl;
     QFileInfo fi(fileName);
     QString path = fi.filePath();
-    if (fi.extension().contains("inc") || fi.extension().contains("php") 
+    if ((fi.extension().contains("inc") || fi.extension().contains("php") 
 	|| fi.extension().contains("html")
-	|| fi.extension().contains("php3")) {
+	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
         classStore()->removeWithReferences(fileName);
         parse(fileName);
     }
@@ -141,7 +141,7 @@ void PHPSupportPart::parse(const QString &fileName)
     QTextStream stream(&f);
 
     KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
-    KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\,]*)\\).*$");
+    KRegExp methodre("^[ \t]*function[ \t]*([0-9A-Za-z_]*)[ \t]*\\(([0-9A-Za-z_\\$\\, \t=&\\'\\\"]*)\\).*$");
     KRegExp varre("^[ \t]*var[ \t]*([0-9A-Za-z_\\$]+)[ \t;=].*$");
 
     ParsedClass *lastClass = 0;
