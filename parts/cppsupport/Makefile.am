@@ -24,6 +24,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       simpleparser.cpp \
 			       kdevregexp.cpp
 
+DISTCLEANFILES = tokenizer.cpp
+
 EXTRA_DIST = tokenizer.l tokenizer-cc.l
 tokenizer.cpp: tokenizer.l
 	flex -+ -otokenizer.cpp $(srcdir)/tokenizer.l && cat tokenizer.cpp | \
