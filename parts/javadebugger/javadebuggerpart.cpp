@@ -69,6 +69,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
     topLevel()->embedSelectView(variableWidget, i18n("Watch"));
+    topLevel()->setViewVisible(variableWidget, false);
     
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -93,6 +94,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "can see the values in any of the "
                                            "previous calling functions."));
     topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"));
+    topLevel()->setViewVisible(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -105,7 +107,8 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
     topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"));
-    
+    topLevel()->setViewVisible(disassembleWidget, false);
+
     VariableTree *variableTree = variableWidget->varTree();
 
     // variableTree -> framestackWidget
@@ -314,6 +317,10 @@ void JavaDebuggerPart::startDebugger()
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
     
+    topLevel()->setViewVisible(variableWidget, true);
+    topLevel()->setViewVisible(framestackWidget, true);
+    topLevel()->setViewVisible(disassembleWidget, true);
+
     // Floatinging tool bar can wait until later :-)
     //    if (enableFloatingToolBar) {
     //        floatingToolBar = new DbgToolBar(controller, this);
@@ -354,6 +361,10 @@ void JavaDebuggerPart::slotStop()
     ac->action("debug_stepintoinst")->setEnabled(false);
     ac->action("debug_stepout")->setEnabled(false);
     ac->action("debug_memview")->setEnabled(false);
+
+    topLevel()->setViewVisible(variableWidget, false);
+    topLevel()->setViewVisible(framestackWidget, false);
+    topLevel()->setViewVisible(disassembleWidget, false);
 
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
