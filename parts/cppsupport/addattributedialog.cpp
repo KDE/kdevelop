@@ -230,7 +230,7 @@ void AddAttributeDialog::addAttribute()
     // default values
     access->setCurrentText( "Protected" );
     storage->setCurrentText( "Normal" );
-    returnType->setCurrentText( "void" );
+    returnType->setCurrentText( "int" );
     declarator->setText( QString("attribute_%1").arg(++m_count) );
 
     returnType->setFocus();
