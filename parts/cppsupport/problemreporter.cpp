@@ -46,11 +46,11 @@ public:
 	ProblemItem( QListView* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
 		: QListViewItem( parent, level, problem, file, line, column ) {}
-		
+
 	ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
 				 const QString& file, const QString& line, const QString& column  )
 		: QListViewItem( parent, level, problem, file, line, column ) {}
-		
+
 	int compare( QListViewItem* item, int column, bool ascending ) const {
 		if( column == 3 || column == 4 ){
 			int a = text( column ).toInt();
@@ -61,7 +61,7 @@ public:
 		}
 		return QListViewItem::compare( item, column, ascending );
 	}
-		
+
 };
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
@@ -116,8 +116,8 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
     if( m_editor )
         connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-		
-	reparse();
+
+    m_timer->changeInterval( m_delay );
 }
 
 void ProblemReporter::slotTextChanged()

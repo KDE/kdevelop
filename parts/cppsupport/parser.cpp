@@ -55,7 +55,7 @@ Parser::Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer )
     translationUnit = dom->createElement( "TranslationUnit" );
     dom->appendChild( translationUnit );
 
-    m_maxErrors = 15;
+    m_maxErrors = 5;
     resetErrors();
 }
 
@@ -204,9 +204,8 @@ bool Parser::parseName()
         lex->nextToken();
     }
 
-    if( parseNestedNameSpecifier() )
-    	return parseUnqualiedName();
-    return false;
+    parseNestedNameSpecifier();
+    return parseUnqualiedName();
 }
 
 bool Parser::parseTranslationUnit()
@@ -303,18 +302,16 @@ bool Parser::parseLinkageBody()
         if( !parseDefinition() ){
             // error recovery
             syntaxError();
-            if( skipUntil(';') ){
-                lex->nextToken(); // skip ;
-            }
-        } else {
+//             if( skipUntil(';') ){
+//                 lex->nextToken(); // skip ;
+//             }
         }
     }
 
     if( lex->lookAhead(0) != '}' ){
         reportError( i18n("} expected") );
-        skipUntil( '}' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -340,9 +337,8 @@ bool Parser::parseNamespace()
 
             if( lex->lookAhead(0) != ';' ){
                 reportError( i18n("; expected") );
-                skipUntil( ';' );
-            }
-            lex->nextToken(); // skip ;
+            } else
+                lex->nextToken(); // skip ;
             return true;
         } else {
             reportError( i18n("namespace expected") );
@@ -352,11 +348,9 @@ bool Parser::parseNamespace()
 
     if( lex->lookAhead(0) != '{' ){
         reportError( i18n("{ expected") );
-        skipUntil( '{' );
     }
 
-    if( parseLinkageBody() ){
-    }
+    parseLinkageBody();
 
     return true;
 }
@@ -379,9 +373,8 @@ bool Parser::parseUsing()
 
         if( lex->lookAhead(0) != ';' ){
             reportError( i18n("; expected") );
-            skipUntil( ';' );
-        }
-        lex->nextToken(); // skip ;
+        } else
+            lex->nextToken(); // skip ;
         return true;
     }
 
@@ -396,9 +389,8 @@ bool Parser::parseUsing()
 
     if( lex->lookAhead(0) != ';' ){
         reportError( i18n("; expected") );
-        skipUntil( ';' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -420,9 +412,8 @@ bool Parser::parseUsingDirective()
 
     if( lex->lookAhead(0) != ';' ){
         reportError( i18n("} expected") );
-        skipUntil( ';' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -488,21 +479,20 @@ bool Parser::parseTypedef()
     }
     lex->nextToken();
 
-
+    //kdDebug(9007) << "token = " << lex->lookAhead(0).toString() << endl;
     if( !parseTypeSpecifier() ){
         reportError( i18n("Need a type specifier to declare") );
     }
 
+    //kdDebug(9007) << "token = " << lex->lookAhead(0).toString() << endl;
     if( !parseDeclarator() ){
         reportError( i18n("Need an identifier to declare") );
     }
 
     if( lex->lookAhead(0) != ';' ){
-        reportError( i18n("} expected") );
-        skipUntil( ';' );
-    }
-    lex->nextToken();
-
+        reportError( i18n("; expected") );
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -550,14 +540,12 @@ bool Parser::parseTemplateDeclaration()
 
         if( lex->lookAhead(0) != '>' ){
             reportError( i18n("> expected") );
-            skipUntil( '>' );
-        }
-        lex->nextToken();
+        } else
+            lex->nextToken();
     }
 
     if( !parseDefinition( ) ){
         reportError( i18n("expected a declaration") );
-    } else {
     }
 
     return true;
@@ -876,6 +864,7 @@ bool Parser::parseSimpleTypeSpecifier()
             break;
     }
 
+    //kdDebug(9007) << "!! token = " << lex->lookAhead(0).toString() << endl;
     return parseName();
 }
 
@@ -930,8 +919,7 @@ bool Parser::parseTypeSpecifier()
     if( parseClassSpecifier() || parseEnumSpecifier() ||
         parseElaboratedTypeSpecifier() || parseSimpleTypeSpecifier() ){
 
-        if( parseCvQualify(cv) ){
-        }
+        parseCvQualify( cv );
     } else
         return false;
 
@@ -942,21 +930,21 @@ bool Parser::parseDeclarator()
 {
     //kdDebug(9007) << "Parser::parseDeclarator()" << endl;
 
-    while( parsePtrOperator() ){
-    }
+    while( parsePtrOperator() )
+        ;
 
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 
         if( !parseDeclarator() ){
-//             reportError( "expected a nested declarator",
-//                          lex->lookAhead(0) );
             return false;
         }
+
         if( lex->lookAhead(0) != ')'){
             return false;
         }
         lex->nextToken();
+
     } else {
         if( !parseDeclaratorId() ){
             return false;
@@ -967,46 +955,40 @@ bool Parser::parseDeclarator()
             if( !parseConstantExpression() ){
                 reportError( i18n("Constant expression expected") );
                 return true;
-            } else {
             }
             return true;
         }
-
     }
 
     while( lex->lookAhead(0) == '[' ){
         lex->nextToken();
-        if( !parseCommaExpression() ){
-            reportError( i18n("Expression expected") );
-        } else {
-        }
+        parseCommaExpression();
 
         if( lex->lookAhead(0) != ']' ){
             reportError( i18n("] expected") );
-            skipUntil( ']' );
-        }
-        lex->nextToken();
+        } else
+            lex->nextToken();
     }
 
+    int index = lex->index();
     if( lex->lookAhead(0) == '(' ){
-        // parse function arguments
         lex->nextToken();
 
         if( !parseParameterDeclarationClause() ){
-            return false;
+            lex->setIndex( index );
+            return true;
         }
+
         if( lex->lookAhead(0) != ')' ){
-            reportError( i18n(") expected") );
-            skipUntil( ')' );
-        }
-        lex->nextToken();
+            lex->setIndex( index );
+            return true;
+        } else
+            lex->nextToken();
 
         QStringList cv;
-        if( parseCvQualify(cv) ){
-        }
+        parseCvQualify( cv );
 
-        if( parseExceptionSpecification() ){
-        }
+        parseExceptionSpecification();
     }
 
     return true;
@@ -1040,9 +1022,8 @@ bool Parser::parseEnumSpecifier()
 
     if( lex->lookAhead(0) != '}' ){
         reportError( i18n("} expected") );
-        skipUntil( '}' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -1222,10 +1203,6 @@ bool Parser::parseTypeId()
 bool Parser::parseAbstractDeclarator()
 {
     //kdDebug(9007) << "Parser::parseAbstractDeclarator()" << endl;
-
-#warning "TODO Parser::parseAbstractDeclarator()"
-#warning "resolve ambiguities between sub-abstract-declarator and function argument"
-
     while( parsePtrOperator() ){
     }
 
@@ -1233,51 +1210,44 @@ bool Parser::parseAbstractDeclarator()
         lex->nextToken();
 
         if( !parseDeclarator() ){
-//             reportError( "expected a nested declarator",
-//                          lex->lookAhead(0) );
             return false;
+
         }
         if( lex->lookAhead(0) != ')'){
-            reportError( i18n(") expected") );
-            skipUntil( ')' );
+            return false;
         }
         lex->nextToken();
+
     }
 
     while( lex->lookAhead(0) == '[' ){
         lex->nextToken();
-        if( !parseCommaExpression() ){
-            reportError( i18n("Expression expected") );
-            return false;
-        }
+        parseCommaExpression();
+
         if( lex->lookAhead(0) != ']' ){
             reportError( i18n("] expected") );
-            skipUntil( ']' );
-            return false;
-        }
-        lex->nextToken();
+        } else
+            lex->nextToken();
     }
 
+    int index = lex->index();
     if( lex->lookAhead(0) == '(' ){
-        // parse function arguments
         lex->nextToken();
 
         if( !parseParameterDeclarationClause() ){
-            return false;
+            lex->setIndex( index );
+            return true;
         }
+
         if( lex->lookAhead(0) != ')' ){
             reportError( i18n(") expected") );
-            skipUntil( ')' );
-        }
-        lex->nextToken();
-
+        } else
+            lex->nextToken();
 
         QStringList cv;
-        if( parseCvQualify(cv) ){
-        }
+        parseCvQualify( cv );
 
-        if( parseExceptionSpecification() ){
-        }
+        parseExceptionSpecification();
     }
 
     return true;
@@ -1323,8 +1293,7 @@ bool Parser::parseInitDeclaratorList()
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        if( parseInitDeclarator() ){
-        } else {
+        if( !parseInitDeclarator() ){
             parseError();
             break;
         }
@@ -1347,7 +1316,16 @@ bool Parser::parseParameterDeclarationClause()
 {
     //kdDebug(9007) << "Parser::parseParameterDeclarationClause()" << endl;
 
-    if( parseParameterDeclarationList() ){
+    if( !parseParameterDeclarationList() ){
+
+        if ( lex->lookAhead(0) == ')' )
+            return true;
+
+        if( lex->lookAhead(0) == Token_ellipsis ){
+            lex->nextToken();
+            return true;
+        }
+        return false;
     }
 
     if( lex->lookAhead(0) == ',' ){
@@ -1365,16 +1343,18 @@ bool Parser::parseParameterDeclarationList()
 {
     //kdDebug(9007) << "Parser::parseParameterDeclarationList()" << endl;
 
+    int index = lex->index();
     if( !parseParameterDeclaration() ){
+        lex->setIndex( index );
         return false;
     }
 
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        if( parseParameterDeclaration() ){
-        } else {
-            break;
+        if( !parseParameterDeclaration() ){
+            lex->setIndex( index );
+            return false;
         }
     }
     return true;
@@ -1384,18 +1364,18 @@ bool Parser::parseParameterDeclaration()
 {
     //kdDebug(9007) << "Parser::parseParameterDeclaration()" << endl;
 
+    int index = lex->index();
+
     // parse decl spec
     if( !parseTypeSpecifier() ){
+        lex->setIndex( index );
         return false;
     }
 
-    int index = lex->index();
-    if( parseDeclarator() ){
-    } else {
+    index = lex->index();
+    if( !parseDeclarator() ){
         lex->setIndex( index );
-        // optional abstract declarator
-        if( parseAbstractDeclarator() ){
-        }
+        parseAbstractDeclarator();
     }
 
     if( lex->lookAhead(0) == '=' ){
@@ -1425,8 +1405,7 @@ bool Parser::parseClassSpecifier()
         lex->nextToken();
     }
 
-    if( parseBaseClause() ){
-    }
+    parseBaseClause();
 
     if( lex->lookAhead(0) != '{' ){
         lex->setIndex( index );
@@ -1436,15 +1415,13 @@ bool Parser::parseClassSpecifier()
     ADVANCE( '{', '{' );
 
     if( lex->lookAhead(0) != '}' ){
-        if( parseMemberSpecificationList() ){
-        }
+        parseMemberSpecificationList();
     }
 
     if( lex->lookAhead(0) != '}' ){
         reportError( i18n("} expected") );
-        skipUntil( '}' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -1590,9 +1567,8 @@ bool Parser::parseExceptionSpecification()
 
     if( lex->lookAhead(0) != ')' ){
         reportError( i18n(") expected") );
-        skipUntil( ')' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -1718,15 +1694,12 @@ bool Parser::parseInitializer()
         }
     } else if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
-        if( !parseCommaExpression() ){
-            reportError( i18n("Expression expected") );
-            return false;
-        }
+        parseCommaExpression();
+
         if( lex->lookAhead(0) != ')' ){
             reportError( i18n(") expected") );
-            skipUntil( ')' );
-        }
-        lex->nextToken();
+        } else
+            lex->nextToken();
     } else
         return false;
 
@@ -1762,16 +1735,12 @@ bool Parser::parseMemInitializer()
         return false;
     }
     ADVANCE( '(', '(' );
-    if( !parseCommaExpression() ){
-        reportError( i18n("Expression expected") );
-        return false;
-    }
+    parseCommaExpression();
 
     if( lex->lookAhead(0) != ')' ){
         reportError( i18n(") expected") );
-        skipUntil( ')' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
 
     return true;
 }
@@ -1898,39 +1867,43 @@ bool Parser::parseNestedNameSpecifier()
     //kdDebug(9007) << "Parser::parseNestedNameSpecifier()" << endl;
 
     int index = lex->index();
-
-    if( lex->lookAhead(0) != Token_scope &&
-        lex->lookAhead(0) != Token_identifier ){
-        return false;
-    }
+    bool ok = false;
 
     while( lex->lookAhead(0) == Token_identifier ){
 
-        if( lex->lookAhead(1) == '<' ){
+         if( lex->lookAhead(1) == '<' ){
             lex->nextToken(); // skip template name
             lex->nextToken(); // skip <
 
-            if( parseTemplateArgumentList() ){
+            if( !parseTemplateArgumentList() ){
+                lex->setIndex( index );
+                return false;
             }
 
             if( lex->lookAhead(0) != '>' ){
-            	lex->setIndex( index );
-            	return false;
-            }
-            lex->nextToken(); // skip >
+                lex->setIndex( index );
+                return false;
+            } else
+                lex->nextToken(); // skip >
 
             if ( lex->lookAhead(0) == Token_scope ) {
                 lex->nextToken();
+                ok = true;
             } else
-                return true;
+                break;
 
         } else if( lex->lookAhead(1) == Token_scope ){
             lex->nextToken(); // skip name
-            lex->nextToken(); // skip name
+            lex->nextToken(); // skip scope
+            ok = true;
         } else
             break;
     }
 
+    if ( !ok ) {
+        lex->setIndex( index );
+        return false;
+    }
     return true;
 }
 
@@ -1956,18 +1929,6 @@ bool Parser::parsePtrToMember()
     return false;
 }
 
-bool Parser::parseQualifiedName()
-{
-    //kdDebug(9007) << "Parser::parseQualifiedName()" << endl;
-    parseNestedNameSpecifier();
-
-    if( lex->lookAhead(0) == Token_template ){
-        lex->nextToken();
-    }
-
-    return parseUnqualiedName();
-}
-
 bool Parser::parseUnqualiedName()
 {
     //kdDebug(9007) << "Parser::parseUnqualiedName()" << endl;
@@ -1987,18 +1948,18 @@ bool Parser::parseUnqualiedName()
 
     if( !isDestructor ){
 
+		int index = lex->index();
+
         if( lex->lookAhead(0) == '<' ){
             lex->nextToken();
 
             // optional template arguments
-            if( parseTemplateArgumentList() ){
-            }
+            parseTemplateArgumentList();
 
             if( lex->lookAhead(0) != '>' ){
-                reportError( i18n("> expected") );
-                skipUntil( '>' );
-            }
-            lex->nextToken();
+				lex->setIndex( index );
+            } else
+                lex->nextToken();
         }
     }
 
@@ -2122,6 +2083,9 @@ bool Parser::parseStatement() // thanks to fiore@8080.it ;-)
         break;
     }
 
+    if ( parseDeclarationStatement() )
+        return true;
+
     return parseExpressionStatement();
 }
 
@@ -2130,18 +2094,17 @@ bool Parser::parseCondition()
     //kdDebug(9007) << "Parser::parseCondition()" << endl;
 
     int index = lex->index();
+
     if( parseTypeSpecifier() ){
     	if( parseDeclarator() && lex->lookAhead(0) == '=' ) {
             lex->nextToken();
 
-            if( !parseAssignmentExpression() ){
-                reportError( i18n("expression expected") );
-            }
-            return true;
+            if( parseAssignmentExpression() )
+            	return true;
         }
-        lex->setIndex( index );
     }
 
+	lex->setIndex( index );
     return parseCommaExpression();
 }
 
@@ -2153,7 +2116,6 @@ bool Parser::parseWhileStatement()
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
     	reportError( i18n("condition expected") );
-        skipUntil( ')' );
     }
     ADVANCE( ')', ")" );
 
@@ -2177,7 +2139,6 @@ bool Parser::parseDoStatement()
     ADVANCE( '(' , "(" );
     if( !parseCommaExpression() ){
     	reportError( i18n("expression expected") );
-        skipUntil( ')' );
     }
     ADVANCE( ')', ")" );
     ADVANCE( ';', ";" );
@@ -2208,6 +2169,9 @@ bool Parser::parseForStatement()
 bool Parser::parseForInitStatement()
 {
     //kdDebug(9007) << "Parser::parseForInitStatement()" << endl;
+
+    if ( parseDeclarationStatement() )
+        return true;
     return parseExpressionStatement();
 }
 
@@ -2229,9 +2193,9 @@ bool Parser::parseCompoundStatement()
 
     if( lex->lookAhead(0) != '}' ){
     	reportError( i18n("} expected") );
-        skipUntil( '}' );
-    }
-    lex->nextToken();
+    } else
+        lex->nextToken();
+
     return true;
 }
 
@@ -2244,7 +2208,6 @@ bool Parser::parseIfStatement()
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
     	reportError( i18n("condition expected") );
-        skipUntil( ')' );
     }
     ADVANCE( ')', ")" );
 
@@ -2272,7 +2235,6 @@ bool Parser::parseSwitchStatement()
     ADVANCE( '(' , "(" );
     if( !parseCondition() ){
     	reportError( i18n("condition expected") );
-        skipUntil( ')' );
     }
     ADVANCE( ')', ")" );
 
@@ -2296,7 +2258,6 @@ bool Parser::parseLabeledStatement()
         lex->nextToken();
         if( !parseConstantExpression() ){
             reportError( i18n("expression expected") );
-            skipUntil( ':' );
         }
         ADVANCE( ':', ":" );
         return parseStatement();
@@ -2304,3 +2265,60 @@ bool Parser::parseLabeledStatement()
     return false;
 }
 
+bool Parser::parseBlockDeclaration()
+{
+    //kdDebug(9007) << "Parser::parseBlockDeclaration()" << endl;
+    switch( lex->lookAhead(0) ) {
+    case Token_using:
+        return parseUsing();
+    case Token_asm:
+        return parseAsmDefinition();
+    case Token_namespace:
+        return parseNamespaceAliasDefinition();
+    }
+
+    int index = lex->index();
+
+    if ( !parseIntegralDeclHead() ) {
+        //kdDebug(9007) << "--> not parseIntegralDeclHead()" << endl;
+        lex->setIndex( index );
+        return false;
+    }
+
+    if ( !parseInitDeclaratorList() ) {
+        //kdDebug(9007) << "--> not parseInitDeclaratorList()" << endl;
+        lex->setIndex( index );
+        return false;
+    }
+
+    return true;
+}
+
+bool Parser::parseNamespaceAliasDefinition()
+{
+    if ( lex->lookAhead(0) != Token_namespace ) {
+        return false;
+    }
+    lex->nextToken();
+    ADVANCE( Token_identifier,  "identifier" );
+    ADVANCE( '=', "=" );
+    return parseName();
+}
+
+bool Parser::parseDeclarationStatement()
+{
+    //kdDebug(9007) << "Parser::parseDeclarationStatement()" << endl;
+
+    int index = lex->index();
+
+    if ( !parseBlockDeclaration() )
+        return false;
+
+    if ( lex->lookAhead(0) != ';' ) {
+        lex->setIndex( index );
+        return false;
+    }
+    lex->nextToken();
+
+    return true;
+}

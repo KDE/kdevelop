@@ -48,9 +48,11 @@ public /*rules*/ :
 
     bool parseTranslationUnit();
     bool parseDefinition();
+    bool parseBlockDeclaration();
     bool parseLinkageSpecification();
     bool parseLinkageBody();
     bool parseNamespace();
+    bool parseNamespaceAliasDefinition();
     bool parseUsing();
     bool parseUsingDirective();
     bool parseTypedef();
@@ -58,7 +60,6 @@ public /*rules*/ :
     bool parseTemplateDeclaration();
     bool parseDeclaration();
     bool parseNestedNameSpecifier();
-    bool parseQualifiedName();
     bool parseUnqualiedName();
     bool parseStringLiteral();
     bool parseName();
@@ -130,6 +131,7 @@ public /*rules*/ :
     bool parseIfStatement();
     bool parseSwitchStatement();
     bool parseLabeledStatement();
+    bool parseDeclarationStatement();
 
     bool isConstructorDecl();
     bool skipUntil( int token );

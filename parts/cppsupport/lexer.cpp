@@ -445,3 +445,4 @@ const QChar* Lexer::skip( const QChar* ptr, const QChar& l, const QChar& r )
     }
     return ptr;
 }
+

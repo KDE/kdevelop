@@ -182,6 +182,7 @@ public:
 
     void reset();
 
+    int tokenPosition( const Token& token ) const;
     const Token& tokenAt( int position ) const;
     const Token& nextToken();
     const Token& lookAhead( int n ) const;
@@ -357,6 +358,10 @@ inline const Token& Lexer::lookAhead( int n ) const
     return m_tokens[ QMIN(m_index + n, m_size-1) ];
 }
 
+inline int Lexer::tokenPosition( const Token& token ) const
+{
+    return token.position() - m_buffer;
+}
 
 } // namespace CppSupport
 
