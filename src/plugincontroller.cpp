@@ -233,10 +233,10 @@ void PluginController::unloadGlobalPlugins()
 
 KService::List PluginController::pluginServices( const QString &scope )
 {
-    QString constraint;
+    QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
 
     if ( !scope.isEmpty() )
-	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1' and [X-KDevelop-Version] == %2" ).arg( scope ).arg(KDEVELOP_PLUGIN_VERSION);
+	constraint += QString::fromLatin1( " and [X-KDevelop-Scope] == '%1'").arg( scope );
     return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ),
 	                           constraint );
 }

@@ -493,8 +493,8 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
 
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
-			   QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(lang));
-//                           QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == '%2'").arg(m_info->m_language).arg(KDEVELOP_PLUGIN_VERSION));
+                           QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == %2").arg(m_info->m_language).arg(KDEVELOP_PLUGIN_VERSION));
+
   if (languageSupportOffers.isEmpty()) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("No language plugin for %1 found.")
@@ -536,7 +536,7 @@ void ProjectManager::unloadLanguageSupport()
 bool ProjectManager::loadCreateFileSupport() {
   kdDebug(9000) << "Looing for CreateFile support" << endl;
   KTrader::OfferList createFileOffers =
-    KTrader::self()->query(QString::fromLatin1("KDevelop/CreateFile"));
+    KTrader::self()->query(QString::fromLatin1("KDevelop/CreateFile"), QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION));
 
   if (createFileOffers.isEmpty()) {
     kdDebug(9000) << "No offers found" << endl;

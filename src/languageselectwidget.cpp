@@ -106,9 +106,9 @@ LanguageSelectWidget::~LanguageSelectWidget()
 void LanguageSelectWidget::readProjectConfig()
 {
     KTrader::OfferList languageSupportOffers =
-        KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"), QString::null);
- //                              QString::fromLatin1("[X-KDevelop-Version] == '%1'"
- //                              ).arg( KDEVELOP_PLUGIN_VERSION ));
+        KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
+                               QString::fromLatin1("[X-KDevelop-Version] == %1"
+                               ).arg( KDEVELOP_PLUGIN_VERSION ));
 
     QStringList languages = DomUtil::readListEntry(m_projectDom, "/general/secondaryLanguages", "language");
     QString language = DomUtil::readEntry(m_projectDom, "/general/primarylanguage");
