@@ -25,7 +25,7 @@ enum EOutputLevel
 class MakeItem
 {
 public:
-	enum Type { Normal, Error, Diagnostic };
+	enum Type { Normal, Error, Warning, Diagnostic };
 	MakeItem();
 	MakeItem( const QString& text );
 	virtual ~MakeItem();
@@ -115,18 +115,24 @@ public:
 	virtual QString text( EOutputLevel );
 };
 
+namespace KTextEditor { class Cursor; class Document; }
+
 class ErrorItem : public MakeItem
 {
 public:
-	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line );
+	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning );
+	virtual ~ErrorItem();
 
 	virtual bool append( const QString& text );
-	Type type() { return Error; }
+	Type type() { return m_isWarning ? Warning : Error; }
 	virtual bool visible( EOutputLevel ) { return true; }
 
 	QString fileName;
 	int lineNum;
 	QString m_error;
+	KTextEditor::Cursor* m_cursor;
+	KTextEditor::Document* m_doc;
+	bool m_isWarning;
 };
 
 class ActionItem : public MakeItem

@@ -30,6 +30,7 @@ class MakeViewPart;
 class MakeItem;
 class KProcess;
 class ProcessLineMaker;
+namespace KTextEditor { class Document; }
 
 class MakeWidget : public QTextEdit
 {
@@ -71,6 +72,8 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
+    void slotDocumentOpened(const QString& filename);
+    void slotDocumentClosed(QObject* doc);
 
 private:
     virtual void keyPressEvent(QKeyEvent *e);
@@ -79,6 +82,7 @@ private:
     QString directory(int parag) const;
     bool brightBg();
     void refill();
+    void createCursor(ErrorItem* e, KTextEditor::Document* doc);
 
     DirectoryStatusMessageFilter  m_directoryStatusFilter;
     CompileErrorFilter            m_errorFilter;

@@ -42,6 +42,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+    connect(m_widget, SIGNAL(processExited(KProcess*)), SIGNAL(processExited()));
 }
 
 
@@ -55,9 +56,13 @@ void AppOutputViewPart::slotStopButtonClicked( KDevPlugin* which )
 {
     if ( which != 0 && which != this )
         return;
-    m_widget->killJob();
+    stopApplication();
 }
 
+void AppOutputViewPart::stopApplication()
+{
+    m_widget->killJob();
+}
 
 /**
   * If directory is empty it will use the user's home directory.

@@ -15,6 +15,8 @@
 
 #include <klocale.h>
 
+#include "ktexteditor/cursorinterface.h"
+
 MakeItem::MakeItem()
 {
 }
@@ -34,6 +36,8 @@ QString MakeItem::color( bool bright_bg )
 	{
 	case Error:
 		return bright_bg ? "maroon" : "red";
+	case Warning:
+		return bright_bg ? "darkgreen" : "green";
 	case Diagnostic:
 		return bright_bg ? "black" : "white";
 	default:
@@ -46,6 +50,7 @@ QString MakeItem::icon()
 	switch ( type() )
 	{
 	case Error:
+	case Warning:
 		return "<img src=\"error\"></img><nobr> </nobr>";
 	case Diagnostic:
 		return "<img src=\"warning\"></img><nobr> </nobr>";
@@ -76,12 +81,20 @@ QString MakeItem::br()
     return br;
 }
 
-ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line )
+ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning )
 	: MakeItem( line )
 	, fileName(fn)
 	, lineNum(ln)
 	, m_error(tx)
+	, m_cursor(0L)
+	, m_doc(0L)
+	, m_isWarning(isWarning)
 {}
+
+ErrorItem::~ErrorItem()
+{
+	if (m_cursor) m_cursor->setPosition(uint(-2), uint(-2));
+}
 
 bool ErrorItem::append( const QString& text )
 {

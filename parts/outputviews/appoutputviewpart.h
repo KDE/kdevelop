@@ -28,11 +28,14 @@ public:
     AppOutputViewPart( QObject *parent, const char *name, const QStringList & );
     ~AppOutputViewPart();
 
-protected:
     virtual void startAppCommand(const QString &directory, const QString &command, bool inTerminal);
+    virtual void stopApplication();
     virtual bool isRunning();
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);
+
+signals:
+    void processExited();
 
 private slots:
     void slotStopButtonClicked(KDevPlugin*);

@@ -17,6 +17,9 @@
 #include "processlinemaker.h"
 #include "makeviewpart.h"
 #include "makeitem.h"
+#include "ktexteditor/document.h"
+#include "ktexteditor/cursorinterface.h"
+#include "ktexteditor/editinterface.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -217,6 +220,9 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	         this, SLOT(horizScrollingOn()) );
 	connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
 	         this, SLOT(horizScrollingOff()) );
+
+	connect( m_part->partController(), SIGNAL(loadedFile(const QString&)),
+	         this, SLOT(slotDocumentOpened(const QString&)) );
 }
 
 MakeWidget::~MakeWidget()
@@ -261,7 +267,7 @@ void MakeWidget::startNextJob()
 		     s.contains(" clean")            ||
 		     s.contains(" distclean")        ||
 		     s.contains(" package-messages") ||
-		     s.contains(" install") ) 
+		     s.contains(" install") )
 		{
 		    m_bCompiling = false;
 		}
@@ -491,7 +497,14 @@ void MakeWidget::searchItem(int parag)
 	{
 		// open the file
 		kdDebug(9004) << "Opening file: " << guessFileName(item->fileName, parag) << endl;
-		m_part->partController()->editDocument(guessFileName(item->fileName, parag), item->lineNum);
+		if (item->m_cursor) {
+			uint line, col;
+			item->m_cursor->position(&line, &col);
+			kdDebug() << "Cursor new position: " << col << endl;
+			m_part->partController()->editDocument(guessFileName(item->fileName, parag), line, col);
+		} else {
+			m_part->partController()->editDocument(guessFileName(item->fileName, parag), item->lineNum);
+		}
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
 	}
@@ -516,6 +529,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 		if (childproc->exitStatus())
 		{
 			KNotifyClient::event( "ProcessError", i18n("The process has finished with errors"));
+			emit m_part->commandFailed(currentCommand);
 		}
 		else
 		{
@@ -601,6 +615,10 @@ bool MakeWidget::appendToLastLine( const QString& text )
 
 void MakeWidget::insertItem( MakeItem* item )
 {
+	ErrorItem* e = dynamic_cast<ErrorItem*>(item);
+	if (e)
+		createCursor(e, 0L);
+
 	m_items.push_back( item );
 
 	if ( m_bCompiling && !item->visible( m_compilerOutputLevel ) )
@@ -610,7 +628,69 @@ void MakeWidget::insertItem( MakeItem* item )
 
 	m_paragraphToItem.insert( m_paragraphs++, item );
 	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
+}
 
+void MakeWidget::slotDocumentOpened( const QString & filename )
+{
+	KParts::Part* part = m_part->partController()->findOpenDocument(filename);
+	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
+
+	if (!doc) {
+		kdWarning() << k_funcinfo << "Couldn't find the document that was just opened." << endl;
+		return;
+	}
+
+	connect(part, SIGNAL(destroyed(QObject*)), this, SLOT(slotDocumentClosed(QObject*)) );
+
+	for (QValueVector<MakeItem*>::Iterator it = m_items.begin(); it != m_items.end(); ++it) {
+		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
+
+		if (!e || e->m_cursor) continue;
+
+		if (filename.endsWith(e->fileName))
+			createCursor(e, doc);
+	}
+}
+
+void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
+{
+	// Disabled for now - comment out to test. You need an up-to-date cvs head katepart to avoid mem leaks
+    return;
+
+	// try to get a KTextEditor::Cursor, so that we can retain position in
+	// a document even when it is edited
+	if (!doc)
+		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->findOpenDocument(guessFileName(e->fileName, m_paragraphs + 1)));
+
+	if (doc) {
+		KTextEditor::EditInterface* edit = dynamic_cast<KTextEditor::EditInterface*>(doc);
+		KTextEditor::CursorInterface* cursor = dynamic_cast<KTextEditor::CursorInterface*>(doc);
+		if (cursor) {
+			e->m_cursor = cursor->createCursor();
+			uint col = 0;
+			static QRegExp startOfText("[\\S]");
+			if (edit) {
+				int newcol = edit->textLine(e->lineNum).find(startOfText);
+				if (newcol != -1) col = uint(newcol);
+			}
+			e->m_cursor->setPosition(e->lineNum, col);
+			e->m_doc = doc;
+		}
+	}
+}
+
+void MakeWidget::slotDocumentClosed(QObject* doc)
+{
+	KTextEditor::Document* document = static_cast<KTextEditor::Document*>(doc);
+
+	for (QValueVector<MakeItem*>::Iterator it = m_items.begin(); it != m_items.end(); ++it) {
+		ErrorItem* e = dynamic_cast<ErrorItem*>(*it);
+
+		if (!e || e->m_doc != document) continue;
+
+		e->m_cursor = 0L;
+		e->m_doc = 0L;
+	}
 }
 
 bool MakeWidget::brightBg()

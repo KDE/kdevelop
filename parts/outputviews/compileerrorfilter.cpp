@@ -50,6 +50,7 @@ void CompileErrorFilter::processLine( const QString& line )
 	int lineNum = 0;
 	QString text;
 	int i = 0;
+	bool isWarning = false;
 	ErrorFormat* errFormats = errorFormats();
 	ErrorFormat* format = &errFormats[i];
 	while( !format->expression.isEmpty() )
@@ -61,6 +62,8 @@ void CompileErrorFilter::processLine( const QString& line )
         	        file    = regExp.cap( format->fileGroup );
 	                lineNum = regExp.cap( format->lineGroup ).toInt() - 1;
 	                text    = regExp.cap( format->textGroup );
+			if (regExp.cap(3).startsWith("warning", false))
+				isWarning = true;
 			break;
 		}
 
@@ -77,7 +80,7 @@ void CompileErrorFilter::processLine( const QString& line )
 
 	if ( hasmatch )
 	{
-		emit item( new ErrorItem( file, lineNum, text, line ) );
+		emit item( new ErrorItem( file, lineNum, text, line, isWarning ) );
 	}
 	else
 	{
