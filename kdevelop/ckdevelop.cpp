@@ -817,14 +817,14 @@ void CKDevelop::slotBuildStop(){
 // }
 
 void CKDevelop::slotToolsTool(int tool){
-    switch(tool){
+/*    switch(tool){
     case ID_TOOLS_KDLGEDIT:
 	return;
 	break;
     case ID_KDLG_TOOLS_KDEVELOP:
 	return;
 	break;
-    }
+    }*/
     if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
 	return;
     }

@@ -5,7 +5,12 @@
 	* fixed focus order in the Make Options tab of project options dialog, added FileOpen icon
 	* added status help messages missing
 	* en/disabled make distribution on processes
-	
+	* changed main() to use KWMModuleApplication...;-)
+	* created missing Icons for the dialogeditor
+	* added icons to editor/browser context menus.
+	* fixed bug in the normal kde template
+	* changed menus to use the Icon() macro of KApplication
+		
 1999-06-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed hiding of the progressbar in the statusbar
 	* added sessionmanagement

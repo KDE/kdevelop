@@ -22,6 +22,8 @@
 #include <qpopupmenu.h>
 #include <qclipboard.h>
 #include <assert.h>
+#include <kapp.h>
+#include <kiconloader.h>
 
 HlManager hlManager; //highlight manager
 
@@ -31,17 +33,17 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-  pop->insertItem(i18n("Undo"),this,SLOT(undo()),0,4);
-  pop->insertItem(i18n("Redo"),this,SLOT(redo()),0,5);
+  pop->insertItem(Icon("undo.xpm"),i18n("Undo"),this,SLOT(undo()),0,4);
+  pop->insertItem(Icon("redo.xpm"),i18n("Redo"),this,SLOT(redo()),0,5);
   pop->insertSeparator();
-  pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
-  pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
-  pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
+  pop->insertItem(Icon("cut.xpm"),i18n("Cut"),this,SLOT(cut()),0,1);
+  pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this,SLOT(copy()),0,2);
+  pop->insertItem(Icon("paste.xpm"),i18n("Paste"),this,SLOT(paste()),0,3);
   pop->setItemEnabled(1,false);
   pop->setItemEnabled(2,false);
   pop->setItemEnabled(3,false);
   pop->insertSeparator();
-  pop->insertItem("",this,SLOT(slotLookUp()),0,0);
+  pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,0);
   bookmarks.setAutoDelete(true);
 
 
@@ -255,7 +257,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     if(str.length() > 20 ){
       str = str.left(20) + "...";
     }
-    pop->changeItem(i18n("look up: ") + str,0); // the lookup entry
+    pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,0); // the lookup entry
 
 
     pop->popup(this->mapToGlobal(event->pos()));
@@ -265,4 +267,8 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
+
+
+
 

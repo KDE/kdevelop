@@ -329,24 +329,14 @@ void CKDevelop::initMenuBar(){
   file_menu = new QPopupMenu;
 
   file_menu->insertItem(Icon("filenew.xpm"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
-
+  file_menu->insertItem(Icon("open.xpm"),i18n("&Open..."), this, SLOT(slotFileOpen()),0 ,ID_FILE_OPEN);
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()),0,ID_FILE_CLOSE);
-
   file_menu->insertSeparator();
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
-  file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
-
+  file_menu->insertItem(Icon("save.xpm"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/saveall.xpm");
-  file_menu->insertItem(pix,i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+  file_menu->insertItem(Icon("saveall.xpm"),i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
-
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
-
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
@@ -357,24 +347,15 @@ void CKDevelop::initMenuBar(){
 // Edit-menu entries
 
   edit_menu = new QPopupMenu;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
-  edit_menu->insertItem(pix, i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
-  edit_menu->insertItem(pix, i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
+  edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
   edit_menu->insertSeparator();
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
-  edit_menu->insertItem(pix,i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
-  edit_menu->insertItem(pix,i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
-  edit_menu->insertItem(pix,i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+  edit_menu->insertItem(Icon("cut.xpm"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
+  edit_menu->insertItem(Icon("copy.xpm"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
+  edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+	edit_menu->insertItem(Icon("next.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+	edit_menu->insertItem(Icon("prev.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
@@ -405,7 +386,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Previous Error"),this,
 			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Dialog Editor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
+  view_menu->insertItem(Icon("newwidget.xpm"),i18n("&Dialog Editor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -571,8 +552,8 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
   help_menu = new QPopupMenu();
-  help_menu->insertItem(i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
-  help_menu->insertItem(i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
+  help_menu->insertItem(Icon("back.xpm"),i18n("&Back"),this, SLOT(slotHelpBack()),0,ID_HELP_BACK);
+  help_menu->insertItem(Icon("forward.xpm"),i18n("&Forward"),this, SLOT(slotHelpForward()),0,ID_HELP_FORWARD);
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
@@ -581,9 +562,9 @@ void CKDevelop::initMenuBar(){
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("User Manual"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
   help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Programming Handbook"),this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
-	help_menu->insertItem(i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
+	help_menu->insertItem(Icon("idea.xpm"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertItem(i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
+  help_menu->insertItem(Icon("filemail.xpm"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
@@ -628,71 +609,49 @@ void CKDevelop::initToolBar(){
   QString  path;
  
 //  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/openprj.xpm");
-  toolBar()->insertButton(pix,ID_PROJECT_OPEN, true,i18n("Open Project"));
+  toolBar()->insertButton(Icon("openprj.xpm"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  toolBar()->insertButton(pix,ID_FILE_OPEN, true,i18n("Open File"));
+  toolBar()->insertButton(Icon("open.xpm"),ID_FILE_OPEN, true,i18n("Open File"));
 	file_open_popup= new QPopupMenu();
 	connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
 	toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
 
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
-  toolBar()->insertButton(pix,ID_FILE_SAVE,true,i18n("Save File"));
+  toolBar()->insertButton(Icon("save.xpm"),ID_FILE_SAVE,true,i18n("Save File"));
 /*  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save_all.xpm");
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
-  toolBar()->insertButton(pix,ID_FILE_PRINT,false,i18n("Print"));
+  toolBar()->insertButton(Icon("print.xpm"),ID_FILE_PRINT,false,i18n("Print"));
 
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,10,separatorLine);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
-	toolBar()->insertButton(pix,ID_EDIT_UNDO,false,i18n("Undo"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
-	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Redo"));
+	
+	toolBar()->insertButton(Icon("undo.xpm"),ID_EDIT_UNDO,false,i18n("Undo"));
+	toolBar()->insertButton(Icon("redo.xpm"),ID_EDIT_REDO,false,i18n("Redo"));
 
   toolBar()->insertSeparator();
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_COPY, true,i18n("Copy"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
-  toolBar()->insertButton(pix,ID_EDIT_PASTE, true,i18n("Paste"));
+  toolBar()->insertButton(Icon("cut.xpm"),ID_EDIT_CUT,true,i18n("Cut"));
+  toolBar()->insertButton(Icon("copy.xpm"),ID_EDIT_COPY, true,i18n("Copy"));
+  toolBar()->insertButton(Icon("paste.xpm"),ID_EDIT_PASTE, true,i18n("Paste"));
 
   QFrame *separatorLine1= new QFrame(toolBar());
   separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,20,separatorLine1);
 
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/compfile.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_MAKE, false,i18n("Make"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/rebuild.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
+  toolBar()->insertButton(Icon("compfile.xpm"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
+  toolBar()->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
+  toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
-	
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/debugger.xpm");
-	toolBar()->insertButton(pix,ID_BUILD_DEBUG, false, i18n("Debug program"));
+	toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
   toolBar()->insertSeparator();
-	
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/run.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_RUN, false,i18n("Run"));
-
+  toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar()->insertSeparator();
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
-  toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
+  toolBar()->insertButton(Icon("stop.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
 
   QFrame *separatorLine2= new QFrame(toolBar());
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,30,separatorLine2);
-
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
-  toolBar()->insertButton(pix,ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
+  toolBar()->insertButton(Icon("newwidget.xpm"),ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
 
   QFrame *separatorLine3= new QFrame(toolBar());
   separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -1056,6 +1015,10 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
 
 
 

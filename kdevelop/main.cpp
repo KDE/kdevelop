@@ -19,13 +19,15 @@
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
-#include <kapp.h>
+#include <kwmmapp.h>
+
 
 
 int main(int argc, char* argv[]) {
   
   KStartupLogo* start_logo=0L;
-  KApplication a(argc,argv,"kdevelop");
+  KWMModuleApplication a(argc,argv,"kdevelop");
+	a.connectToKWM();
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
   bool bInstall=a.getConfig()->readBoolEntry("Install",true);
@@ -78,4 +80,5 @@ int main(int argc, char* argv[]) {
   int rc = a.exec();
   return rc;
 }
+
 
