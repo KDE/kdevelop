@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
+#include <kparts/factory.h>
 #include <kprocess.h>
 #include <krun.h>
 #include <kstdaction.h>
@@ -556,9 +557,59 @@ void Core::raiseWidget(QWidget *w)
 void Core::gotoFile(const KURL &url)
 {
     QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
-    if (!mimeType.startsWith("text/")) {
-        new KRun(url);
-    } else {
+    if (!mimeType.startsWith("text/")) 
+    {
+      	KParts::Factory *factory = 0;
+	
+   	// try to find a ReadWrite part that handles this type
+       	KTrader::OfferList offers = KTrader::self()->query(mimeType, "KParts/ReadWritePart", QString::null, QString::null);
+        if (offers.count() > 0)
+	{	  
+	    // use the first offer
+	    KService::Ptr ptr = offers.first();
+
+    	    // load the library	    
+	    factory = static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library()));
+	}
+
+	// if no ReadWritePart was available, try a ReadOnlyPart
+	if (!factory)
+	{
+	    offers = KTrader::self()->query(mimeType, "KParts/ReadOnlyPart", QString::null, QString::null);
+	    if (offers.count() > 0)
+	    {
+	    	// use the first offer
+	    	KService::Ptr ptr = offers.first();
+		
+	    	// load the library
+	    	factory = static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library()));
+	    }
+    	}
+	
+	if (factory)
+	{
+            // create a part	    
+	    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(win));
+
+	    // embed widget
+	    win->embedDocumentWidget(part->widget(), activePart ? activePart->widget() : 0);
+
+	    // inform the part manager
+	    partManager()->addPart(part);
+		
+	    // open the url
+	    part->openURL(url);
+
+	    updateBufferMenu();
+	    
+	    return;
+	}	
+	
+        // try to start a new handling process
+	new KRun(url);
+    } 
+    else 
+    {
         gotoSourceFile(url, 0, Replace);
     }
 }
@@ -788,7 +839,7 @@ void Core::wantsToQuit()
 
 void Core::openFileInteractionFinished(const QString &fileName)
 {
-    gotoSourceFile(KURL(fileName), 0);
+    gotoFile(KURL(fileName));
 }
 
 
