@@ -13,12 +13,13 @@
 #define _CVSPART_H_
 
 #include <kdialogbase.h>
+#include <qguardedptr.h>
 
 #include "kdevplugin.h"
 
 class Context;
 class QPopupMenu;
-
+class CvsWidget;
 
 class CvsPart : public KDevPlugin {
     Q_OBJECT
@@ -49,6 +50,7 @@ private slots:
 
 private:
     QString popupfile;
+    QGuardedPtr<CvsWidget> m_widget;
 };
 
 #endif

@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include "cvspart.h"
+#include "cvswidget.h"
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -28,8 +29,8 @@
 #include "logform.h"
 #include "execcommand.h"
 #include "cvsoptionswidget.h"
-
 #include "domutil.h"
+#include "kdevtoplevel.h"
 
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
@@ -43,9 +44,14 @@ default_remove("-f"),default_diff("-u3 -p"),default_log("") {
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
+    m_widget = new CvsWidget(this);
+    topLevel()->embedOutputView(m_widget, i18n("CVS"));
+    
 }
 
-CvsPart::~CvsPart() {}
+CvsPart::~CvsPart() {
+    delete m_widget;
+}
 
 
 void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
@@ -109,7 +115,8 @@ void CvsPart::slotCommit() {
     command += " ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+//    makeFrontend()->queueCommand(dir, command);
+    m_widget->startCommand(dir,command);
 }
 
 
@@ -135,7 +142,8 @@ void CvsPart::slotUpdate() {
     command += " ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+//    makeFrontend()->queueCommand(dir, command);
+    m_widget->startCommand(dir,command);
 }
 
 
@@ -155,7 +163,8 @@ void CvsPart::slotAdd() {
     command += " ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+//    makeFrontend()->queueCommand(dir, command);
+    m_widget->startCommand(dir,command);
 }
 
 
@@ -175,7 +184,8 @@ void CvsPart::slotRemove() {
     command += " ";
     command += name;
 
-    makeFrontend()->queueCommand(dir, command);
+//    makeFrontend()->queueCommand(dir, command);
+    m_widget->startCommand(dir,command);
 }
 
 void CvsPart::slotLog() {
