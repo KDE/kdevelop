@@ -265,7 +265,10 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
     atLine = aClass->declarationEndsOnLine;
   }
   else
+  {
     toAdd = headerCode;
+    atLine++;
+  }
 
   // Add the declaration.
   edit_widget->insertAtLine( toAdd, atLine );
