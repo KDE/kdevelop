@@ -109,3 +109,4 @@ void CFindDocTextDlg::slotFind()
 
 
 
+#include "cfinddoctextdlg.moc"

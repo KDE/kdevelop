@@ -689,3 +689,4 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 }
 
 
+#include "cdocbrowser.moc"

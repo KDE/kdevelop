@@ -833,3 +833,4 @@ void CFilePrintDlg::loadSettings() {
 
 
 
+#include "cfileprintdlg.moc"

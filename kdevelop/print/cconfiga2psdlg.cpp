@@ -1048,3 +1048,4 @@ void CConfigA2psDlg::loadSettings() {
   slotLinesClicked();
 }
 
+#include "cconfiga2psdlg.moc"

@@ -17,13 +17,12 @@ type=DATA
 addcxxflags=-DGDB_MONITOR
 bin_program=kdevelop
 cxxflags=-O0 -g3 -Wall
-ldadd=-lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT)
+ldadd= -lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT)
 ldflags=
 [General]
 AMChanged=false
 author=kdevelop-team
 configure_args=--with-qt-dir=/opt/qt-2.2 --prefix=/home/kde2/kde
-dir_where_make_will_be_called=
 email=
 kdevprj_version=1.3
 lfv_open_groups=pics

@@ -245,3 +245,4 @@ void CGfxClassTreeWindow::slotGotoClassDefinition(CParsedClass *pClass)
 }
 
 
+#include "GfxClassTreeWindow.moc"

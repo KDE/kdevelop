@@ -131,3 +131,4 @@ void CvsDialog::startCommand(const char *cmd)
 
     
 
+#include "cvsdialog.moc"

@@ -173,3 +173,4 @@ void CTabCtl::slotCurrentChanged(QWidget *)
 //}
 //
 //// **************************************************************************
+#include "ctabctl.moc"

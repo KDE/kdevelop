@@ -497,3 +497,4 @@ void CNewClassDlg::initQuickHelp(){
   QWhatsThis::add(public_button, privateMsg);
   QWhatsThis::add(private_button, privateMsg);
 }
+#include "cnewclassdlg.moc"

@@ -396,3 +396,4 @@ void CAddClassMethodDlg::slotCloneClicked(){
   }
 }
 
+#include "caddclassmethoddlg.moc"

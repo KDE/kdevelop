@@ -44,3 +44,4 @@ void COutputWidget::keyPressEvent ( QKeyEvent* event){
   QMultiLineEdit::keyPressEvent(event);
   emit keyPressed(event->ascii());
 }
+#include "coutputwidget.moc"

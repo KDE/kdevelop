@@ -718,3 +718,4 @@ void CClassToolDlg::OK()
 {
   accept();
 }
+#include "cclasstooldlg.moc"

@@ -2831,3 +2831,4 @@ void CKAppWizard::slotVendorEntry(const QString&)
     modifyVendor = true;
   }
 }
+#include "ckappwizard.moc"

@@ -241,3 +241,4 @@ void CAddClassAttributeDlg::enterEvent(QEvent* event){
     QDialog::enterEvent(event);
     typeEdit.setFocus();
 }
+#include "caddclassattributedlg.moc"

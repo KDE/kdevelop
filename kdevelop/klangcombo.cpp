@@ -99,3 +99,4 @@ QString KLanguageCombo::language(const char *lang)
 }
 
 
+#include "klangcombo.moc"

@@ -108,3 +108,4 @@ void CExecuteArgDlg::slotClose(){
 
 
 
+#include "cexecuteargdlg.moc"

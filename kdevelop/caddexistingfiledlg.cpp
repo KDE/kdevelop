@@ -191,3 +191,4 @@ bool CAddExistingFileDlg::isTemplateChecked()
  return template_checkbox->isChecked();
 }
 
+#include "caddexistingfiledlg.moc"

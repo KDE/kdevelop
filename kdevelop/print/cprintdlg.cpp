@@ -1334,3 +1334,4 @@ void CPrintDlg::loadSettings() {
 
 
 
+#include "cprintdlg.moc"

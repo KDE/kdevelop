@@ -2955,3 +2955,4 @@ void CConfigEnscriptDlg::loadSettings() {
 }
 
 
+#include "cconfigenscriptdlg.moc"

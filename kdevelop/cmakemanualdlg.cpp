@@ -82,3 +82,4 @@ void CMakeManualDlg::slotFileButtonClicked(){
     }    
 }
 
+#include "cmakemanualdlg.moc"

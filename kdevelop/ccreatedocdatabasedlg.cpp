@@ -362,3 +362,4 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
+#include "ccreatedocdatabasedlg.moc"

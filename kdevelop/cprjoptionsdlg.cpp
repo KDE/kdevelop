@@ -905,20 +905,26 @@ void CPrjOptionsDlg::addLinkerPage()
   }
   QWhatsThis::add(l_kdeui, i18n("KDE user interface"));
 
-  l_khtmlw=new QCheckBox(libs_group,"l_khtmlw");
-  grid4->addWidget(l_khtmlw,1,1);
-  l_khtmlw->setText("khtmlw");
-  if (ldadd.contains(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ")) {
-    l_khtmlw->setChecked(true);
-    pos=ldadd.find("-lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ");
-    ldadd.remove(pos,52);
-    //    cerr << "-htmlw OK" << endl;
+  l_khtml=new QCheckBox(libs_group,"l_khtml");
+  grid4->addWidget(l_khtml,1,1);
+  l_khtml->setText("khtml");
+//  if (ldadd.contains(" -lkhtml -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ")) {
+//    l_khtml->setChecked(true);
+//    pos=ldadd.find("-lkhtml -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ");
+//    ldadd.remove(pos,52);
+//    //    cerr << "-htmlw OK" << endl;
+//  } else {
+  if (ldadd.contains(" -lkhtml ")) {
+    l_khtml->setChecked(true);
+    pos=ldadd.find("-lkhtml ");
+    ldadd.remove(pos,8);
+    //    cerr << "-lhtml OK" << endl;
   } else {
-    l_khtmlw->setChecked(false);
+    l_khtml->setChecked(false);
   }
-  QWhatsThis::add(l_khtmlw, i18n("KDE HTML widget : "
-         "this includes -lkhtmlw, -lkimgio, -ljpeg, "
-         "-ltiff, -lpng, -lm, -ljscript."));
+  QWhatsThis::add(l_khtml, i18n("KDE HTML widget"));
+//         "this includes -lkhtml, -lkimgio, -ljpeg, "
+//         "-ltiff, -lpng, -lm, -ljscript."));
 
   l_kfm=new QCheckBox(libs_group,"l_kfm");
   grid4->addWidget(l_kfm,2,1);
@@ -975,7 +981,7 @@ void CPrjOptionsDlg::addLinkerPage()
   l_math=new QCheckBox(libs_group,"l_math");
   grid4->addWidget (l_math,0,3);
   l_math->setText("math");
-  if (l_khtmlw->isChecked() || ldadd.contains(" -lm ")) {
+  if (l_khtml->isChecked() || ldadd.contains(" -lm ")) {
     l_math->setChecked(true);
     pos=ldadd.find("-lm ");
     if (pos>=0)
@@ -1662,7 +1668,7 @@ void CPrjOptionsDlg::ok(){
 
   text= addit_ldadd->text();
 
-  if (l_math->isChecked() && !l_khtmlw->isChecked()) {
+  if (l_math->isChecked() && !l_khtml->isChecked()) {
     text+=" -lm";
   }
   if (l_kab->isChecked()) {
@@ -1677,8 +1683,9 @@ void CPrjOptionsDlg::ok(){
   if (l_kfm->isChecked()) {
     text+=" -lkfm";
   }
-  if (l_khtmlw->isChecked()) {
-    text+=" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript";
+  if (l_khtml->isChecked()) {
+//    text+=" -lkhtml -lkimgio -ljpeg -ltiff -lpng -lm -ljscript";
+    text+=" -lkhtml";
   }
   if (l_kdeui->isChecked()) {
     text+=" -lkdeui";
@@ -1966,3 +1973,4 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
     m_makestartpoint_line->setText(file);
   }
 }
+#include "cprjoptionsdlg.moc"

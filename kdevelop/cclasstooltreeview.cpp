@@ -158,3 +158,4 @@ void CClassToolTreeView::slotViewDeclaration()
     emit signalViewDeclaration( parentPath, itemName, parentType, itemType );
   }
 }
+#include "cclasstooltreeview.moc"

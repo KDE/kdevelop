@@ -1069,3 +1069,4 @@ void DocTreeView::slotSelectionChanged(QListViewItem *item)
     }
 }
 
+#include "doctreeview.moc"

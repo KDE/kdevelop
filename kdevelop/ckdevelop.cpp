@@ -4220,3 +4220,4 @@ void CKDevelop::statusCallback(int id_){
     default: slotStatusMsg(i18n("Ready"));
   }
 }
+#include "ckdevelop.moc"

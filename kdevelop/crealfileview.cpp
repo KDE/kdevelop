@@ -598,3 +598,4 @@ void CRealFileView::slotChangeToShared()
     refresh(project);
   }
 }
+#include "crealfileview.moc"

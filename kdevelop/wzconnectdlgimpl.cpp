@@ -85,3 +85,4 @@ void wzConnectDlgImpl::slotSourceClassSelected(const QString&)
     qWarning( "wzConnectDlgImpl::slotSourceClassSelected(const QString&) not yet implemented!" ); 
 }
 
+#include "wzconnectdlgimpl.moc"

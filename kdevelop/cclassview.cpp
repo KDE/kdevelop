@@ -1357,3 +1357,4 @@ void CClassView::slotGrepText(){
 
   emit signalGrepText(text);
 }
+#include "cclassview.moc"

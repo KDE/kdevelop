@@ -224,3 +224,4 @@ void CTreeView::slotMouseButtonClicked(int button, QListViewItem * item, const Q
 }
 
 /*-----------------------------------------------------------------*/
+#include "ctreeview.moc"

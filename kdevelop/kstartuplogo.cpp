@@ -69,3 +69,4 @@ bool KStartupLogo::event(QEvent* ev){
 
 
 
+#include "kstartuplogo.moc"

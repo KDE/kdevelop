@@ -143,3 +143,4 @@ void CDocTreePropDlg::slotFileButtonClicked(){
 
 
 
+#include "cdoctreepropdlg.moc"

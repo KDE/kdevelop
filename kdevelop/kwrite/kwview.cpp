@@ -2988,3 +2988,4 @@ void KWrite::slotToggleBreakpoint()
 {
   emit toggleBreakpoint(QString(kWriteDoc->fileName()), currentLine()+1);
 }
+#include "kwview.moc"

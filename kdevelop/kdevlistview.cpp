@@ -88,3 +88,4 @@ QListViewItem* KDevListViewItem::lastChild() const
 
   return child;
 }
+#include "kdevlistview.moc"

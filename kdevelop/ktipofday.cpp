@@ -96,3 +96,4 @@ void KTipofDay::slotNext()
 		f.close();
 	}
 }
+#include "ktipofday.moc"

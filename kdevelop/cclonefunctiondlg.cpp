@@ -170,3 +170,4 @@ CParsedMethod* CCloneFunctionDlg::getMethod(){
 	delete (all);
 	return NULL;									
 }
+#include "cclonefunctiondlg.moc"

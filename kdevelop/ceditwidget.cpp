@@ -373,3 +373,4 @@ void CEditWidget::slotAddWatchVariable(){
     emit addWatchVariable(searchtext);
 }
 
+#include "ceditwidget.moc"

@@ -108,7 +108,7 @@ protected:
   QCheckBox* l_qt;
   QCheckBox* l_kdecore;
   QCheckBox* l_kdeui;
-  QCheckBox* l_khtmlw;
+  QCheckBox* l_khtml;
   QCheckBox* l_kfm;
   QCheckBox* l_kfile;
   QCheckBox* l_kspell;

@@ -472,3 +472,4 @@ void DbgToolbar::slotActivateAndUndock()
 }
 
 // **************************************************************************
+#include "dbgtoolbar.moc"

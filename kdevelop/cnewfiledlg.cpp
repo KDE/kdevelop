@@ -549,3 +549,4 @@ void CNewFileDlg::slotListHighlighted(int){
 void CNewFileDlg::setLocation(QString location){
 	prj_loc_edit->setText(location);
 }
+#include "cnewfiledlg.moc"

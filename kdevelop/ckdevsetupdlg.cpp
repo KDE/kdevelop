@@ -928,3 +928,4 @@ void CKDevSetupDlg::slotPPathClicked(){
   }
 }
 // ---
+#include "ckdevsetupdlg.moc"

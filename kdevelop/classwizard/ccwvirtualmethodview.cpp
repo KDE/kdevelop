@@ -283,3 +283,4 @@ void CCWVirtualMethodView::slotAddMethod()
   }
 }
 
+#include "ccwvirtualmethodview.moc"

@@ -586,3 +586,4 @@ void CGfxClassTree::slotPrintSubTree(CGfxClassBox *abox)
   delete tmplist;
 }
 
+#include "GfxClassTree.moc"

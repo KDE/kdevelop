@@ -2559,3 +2559,4 @@ void HighlightDialog::done(int r) {
   writeback();
   QDialog::done(r);
 }
+#include "highlight.moc"

@@ -321,13 +321,13 @@ void CUpdateKDEDocDlg::OK(){
                     "rm -f -r kimgio/*.htm*;rm -f -r mediatool/*.htm*;"
                     "rm -f -r kdeutils/*.htm*;"
                     "rm -f -r jscript/*.htm*;rm -f -r kfile/*.htm*;"
-                    "rm -f -r khtmlw/*.htm*;rm -f -r kfmlib/*.htm*;"
+                    "rm -f -r khtml/*.htm*;rm -f -r kfmlib/*.htm*;"
                     "rm -f -r kab/*.htm*;rm -f -r kspell/*.htm*;"
           // use here rmdir (so the directory won't be deleted if there are other
           //  files than the documentation
                     "rmdir kdecore; rmdir kdeui;rmdir kio;"
                     "rmdir kimgio; rmdir mediatool; rmdir kdeutils;"
-                    "rmdir jscript; rmdir kfile; rmdir khtmlw; rmdir kfmlib;"
+                    "rmdir jscript; rmdir kfile; rmdir khtml; rmdir kfmlib;"
                     "rmdir kab; rmdir kspell";
           //  if the old path and the new doc path differs then
           //  delete the old doc dir
@@ -437,3 +437,4 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
 
 }
 
+#include "cupdatekdedocdlg.moc"

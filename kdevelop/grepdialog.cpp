@@ -403,3 +403,4 @@ void GrepDialog::slotClear()
 void  GrepDialog::setDirName(QString dir){
     dir_edit->setText(dir);
 }
+#include "grepdialog.moc"

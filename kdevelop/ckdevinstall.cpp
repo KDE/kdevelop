@@ -968,3 +968,4 @@ void CKDevInstall::slotCancel()
 }
 
 
+#include "ckdevinstall.moc"
