@@ -89,9 +89,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
   connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
-//FB  KConfig *config = KGlobal::config();
-//FB  KHTMLSettings* htmlsettings = settings();
-//FB  htmlsettings->init(config); // no reset, just additionally
+//XXX  KConfig *config = KGlobal::config();
+//XXX  KHTMLSettings* htmlsettings = settings();
+//XXX  htmlsettings->init(config); // no reset, just additionally
 
   kdDebug() << "End CDocBrowser creation !" << endl;
 }
@@ -172,7 +172,9 @@ QString CDocBrowser::currentURL(){
   return complete_url;
 }
 
-void CDocBrowser::setDocBrowserOptions(){
+void CDocBrowser::setDocBrowserOptions()
+{
+  kdDebug() << "CDocBrowser::setDocBrowserOptions called !" << endl;
 
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
@@ -210,8 +212,8 @@ void CDocBrowser::setDocBrowserOptions(){
 //  setStandardFont( standardFont );
   setURLCursor( KCursor::handCursor() );
 
-  KHTMLSettings* htmlsettings = settings();
-  htmlsettings->init(config); // no reset, just additionally
+//XXX  KHTMLSettings* htmlsettings = settings();
+//XXX  htmlsettings->init(config); // no reset, just additionally
 //  setDefaultFontBase( fSize );
 //  htmlsettings->setUnderlineLinks(underlineLinks);
 //  setForceDefault( forceDefaults );
