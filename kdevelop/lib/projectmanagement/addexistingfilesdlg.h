@@ -18,6 +18,9 @@
 #include "addexistingfilesbase.h"
 #include <qstring.h>
 #include <qlist.h>
+#include <qsemimodal.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 
 class AddExistingFilesDlg : public AddExistingFilesBase
@@ -37,13 +40,20 @@ public:
     void slotAddTreeClicked();
     void slotRemoveClicked();
     void slotRemoveAllClicked();
-
+    void scanDir(const QString& directory,QStringList& dirs);
+    void scanAbortedClicked();
       
  protected:
     QString m_currentDir;
     QStringList m_addedFiles;
     QStringList m_filters;
- 
+    QSemiModal* m_pScanningDlg;
+    QPushButton* m_pScanningAbortButton;
+    QLabel* m_pScanningFixedLabel;
+    QLabel* m_pScanningCountLabel;
+    
+    bool m_scanningAborted;
+    int m_Count;
 };
 
 

@@ -1,3 +1,6 @@
+2000-10-21 Sandy Meier   <smeier@kdevelop.org>
+	* implemented recursive file adding (frontend)
+
 2000-10-16   Falk Brettschneider  <falk@kdevelop.org>
 	* QextMdiMainFrm inherits KParts::DockMainWindow now
           (using KDE2-mode of QextMDI and kdelibs/kdeui of today)

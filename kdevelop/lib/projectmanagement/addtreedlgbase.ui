@@ -13,7 +13,7 @@
             <x>0</x>
             <y>0</y>
             <width>367</width>
-            <height>381</height>
+            <height>383</height>
         </rect>
     </property>
     <property stdset="1">
@@ -97,16 +97,12 @@
                         <string>&amp;OK</string>
                     </property>
                     <property stdset="1">
-                        <name>autoDefault</name>
-                        <bool>true</bool>
-                    </property>
-                    <property stdset="1">
                         <name>default</name>
                         <bool>true</bool>
                     </property>
                     <property stdset="1">
-                        <name>enabled</name>
-                        <bool>false</bool>
+                        <name>autoDefault</name>
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget>

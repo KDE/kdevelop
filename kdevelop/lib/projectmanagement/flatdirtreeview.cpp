@@ -34,6 +34,7 @@ FlatDirTreeView::~FlatDirTreeView(){
 }
 
 void FlatDirTreeView::setDirLocation(QString absPath){
+  m_currentDir = absPath;
   KIconLoader* pLoader = KGlobal::iconLoader();
   QPixmap openFolder = pLoader->loadIcon("folder_open",KIcon::Small);
   QPixmap closedFolder = pLoader->loadIcon("folder_yellow",KIcon::Small);
