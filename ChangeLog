@@ -3,6 +3,7 @@
       (Ctrl+Space on class name in class declaration, happened only sometimes)
     * bugfix: that crash on method removeWindowFromMdi(...) should also be fixed on KDE 2,
       was in a different #ifdef branch than the KDE 3 version
+    * bugfix: DocViewMan::doSelectURL crash on 0x0 pointer access (pBrowserView)
 
 2002-03-02  Walter Tasin <tasin@kdevelop.org>
     * bugfix: crash on KThemes (only on KDE 3)

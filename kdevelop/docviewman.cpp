@@ -95,7 +95,7 @@ void DocViewMan::doSelectURL(const QString& url)
     pBrowserView = createBrowserView(pDoc, true);
   }
 
-  if (pBrowserView->parentWidget()) {
+  if (pBrowserView && pBrowserView->parentWidget()) {
     pBrowserView->parentWidget()->setFocus();
   }
 }
