@@ -184,16 +184,8 @@ void AutoDetailsView::slotBuildTarget()
 	else
 		titem = static_cast <TargetItem*> ( selectedItem() );
 
-	QString name = titem->name;
-	if ( titem->primary == "LIBRARIES" )
-		name + ".a";
-	else if ( titem->primary == "LTLIBRARIES" )
-		name + ".la";
-	else if ( titem->primary == "KDEDOCS" )
-		name = "index.cache.bz2";
-
 	QString relpath = m_widget->selectedSubproject()->path.mid( m_part->projectDirectory().length() );
-	m_part->startMakeCommand( m_part->buildDirectory() + relpath, titem->name );
+	m_part->buildTarget(relpath, titem);
 
 	m_part->mainWindow()->lowerView( m_widget );
 }

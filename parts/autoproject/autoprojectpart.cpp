@@ -27,6 +27,7 @@
 #include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qwhatsthis.h>
+#include <qregexp.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -383,9 +384,8 @@ QString AutoProjectPart::topsourceDirectory()
         return projectDirectory() + "/" + topsourcedir;
 }
 
-void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
+QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QString &target)
 {
-    partController()->saveAllFiles();
 
     QString preCommand;
     QFileInfo fi1();
@@ -396,16 +396,16 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
                                                               "and no configure script for this project.\n"
                                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
-                return;
+                return 0;
             preCommand = makefileCvsCommand();
             if (preCommand.isNull())
-                return;
+                return 0;
             preCommand += " && ";
             preCommand += configureCommand() + " && ";
         } else {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run configure first?"));
             if (r == KMessageBox::No)
-                return;
+                return 0;
             preCommand = configureCommand() + " && ";
         }
     }
@@ -432,8 +432,53 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     dircmd += dir;
     dircmd += " && ";
 
-    m_buildCommand = preCommand + dircmd + cmdline;
-    makeFrontend()->queueCommand(dir, preCommand + dircmd + cmdline);
+    return preCommand + dircmd + cmdline;
+}
+
+
+void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
+{
+    partController()->saveAllFiles();
+
+    m_buildCommand = constructMakeCommandLine(dir, target);
+
+    if (!m_buildCommand.isNull())
+      makeFrontend()->queueCommand(dir, m_buildCommand);
+}
+
+
+/** Adds the make command for the libraries that the target depends on
+  * to the make frontend queue */
+void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
+{
+
+  QString addstr = (titem->primary == "PROGRAMS")? titem->ldadd : titem->libadd;
+  QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr); // list of dependencies
+  QString tdir;          // temp target directory
+  QString tname;         // temp target name
+  QString tcmd;          // temp command line
+  QStringList::Iterator l2it;
+  for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
+    QString dependency = *l2it;
+    if (dependency.startsWith("$(top_builddir)/")) {
+      // These are the internal libraries
+      dependency.remove("$(top_builddir)/");
+      tdir = buildDirectory();
+      if (!tdir.endsWith("/") && !tdir.isEmpty())
+        tdir += "/";
+      int pos = dependency.findRev('/');
+      if (pos == -1) {
+        tname = dependency;
+      } else {
+        tdir += dependency.left(pos+1);
+        tname = dependency.mid(pos+1);
+      }
+      tcmd = constructMakeCommandLine(tdir, tname);
+      if (!tcmd.isNull()) {
+        makeFrontend()->queueCommand( tdir, tcmd);
+      }
+    }
+  }
 }
 
 
@@ -441,6 +486,44 @@ void AutoProjectPart::slotBuild()
 {
     mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
+}
+
+
+void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
+{
+
+  if ( !titem )
+    return;
+
+  // Calculate the complete name of the target and store it in name
+  QString name = titem->name;
+  if ( titem->primary == "KDEDOCS" )
+    name = "index.cache.bz2";
+
+  // Calculate the full path of the target and store it in path
+  QString path = buildDirectory();
+  if (!path.endsWith("/") && !path.isEmpty())
+    path += "/";
+  if (relpath.at(0) == '/')
+    path += relpath.mid(1);
+  else
+    path += relpath;
+  
+  // Save all files once
+  partController()->saveAllFiles();
+
+  // Add the make command for the libraries that the target depends on to the make frontend queue
+  // if this recursive behavour is un-wanted comment the next line
+  queueInternalLibDependenciesBuild(titem);
+
+  // Calculate the "make" command line for the target
+  QString tcmd = constructMakeCommandLine( path, name );
+
+  // Call make
+  if (!tcmd.isNull()) {
+    m_buildCommand = tcmd;
+    makeFrontend()->queueCommand( path, tcmd);
+  }
 }
 
 
@@ -452,23 +535,11 @@ void AutoProjectPart::slotBuildActiveTarget()
   if ( !titem )
     return;
 
-  // Calculate the complete name of the target and store it in name
-  QString name = titem->name;
-  if ( titem->primary == "KDEDOCS" )
-    name = "index.cache.bz2";
-
-  // Calculate the full path of the active target and store it in path
-  QString path = buildDirectory();
-  if (!path.endsWith("/") && !path.isEmpty())
-    path += "/";
+  // Get the relative path of the active target
   QString relpath = m_widget->activeSubproject()->path.mid( projectDirectory().length() );
-  if (relpath.at(0) == '/')
-    path += relpath.mid(1);
-  else
-    path += relpath;
-  
-  // Call make
-  startMakeCommand( path, name );
+
+  // build it
+  buildTarget(relpath, titem);  
 }
 
 

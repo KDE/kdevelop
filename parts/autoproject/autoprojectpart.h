@@ -28,6 +28,7 @@ class QStringList;
 class KDialogBase;
 class AutoProjectWidget;
 class KSelectAction;
+class TargetItem;
 
 
 class AutoProjectPart : public KDevProject
@@ -65,6 +66,7 @@ public:
     QString currentBuildConfig();
     QString topsourceDirectory();
     void startMakeCommand(const QString &dir, const QString &target);
+    void buildTarget(QString relpath, TargetItem* titem);
 
     bool isDirty();
 
@@ -109,6 +111,10 @@ private:
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
+
+    // For make commands queueing
+    QString constructMakeCommandLine(const QString &dir, const QString &target);
+    void queueInternalLibDependenciesBuild(TargetItem* titem);
 };
 
 typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;
