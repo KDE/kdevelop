@@ -7,6 +7,11 @@
 
 struct SDL_Surface;
 
+/**
+ * @short This class is used for painting and supports some effects.
+ * Note: This is used in Blurscope. Feel free to remove this and
+ *       implement your own drawing routines!
+ */
 template<class Pixel> class Bitmap
 {
 public:
@@ -36,7 +41,11 @@ public:
     }
 };
 
-
+/**
+ * @short This class does:
+ * o set up view
+ * o drawing routines.
+ */
 class $APPNAME$View
 {
 public:
@@ -44,15 +53,21 @@ public:
     ~$APPNAME$View();
     
 protected:
+    /** Screen initialization with SDL. Note, that you can initialize OpenGL with SDL!  */
     void startVideo();
+    /** SDL event queue  */
     void checkInput();
+    /** Used in Blurscope. Feel free to implement your own drawing routines!  */
     void setupPalette(double dummy=0.0);
 
+    /** Draw everything.  */
     void repaint();
 
 private:
+    /** used for pipelining  */
     int mFd;
 
+    /** SDL screen surface  */
     SDL_Surface *surface;
     Bitmap<unsigned short> outputBmp;
     

@@ -1,6 +1,8 @@
 /*
  * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
  */
+ 
+/** Note: You only have to change plugin_$APPNAMELC$_impl.[h,cpp]  */
 
 #ifndef _PLUGIN_$APPNAMEUC$_H_
 #define _PLUGIN_$APPNAMEUC$_H_
@@ -23,6 +25,7 @@ public:
     $APPNAME$Scope();
     virtual ~$APPNAME$Scope();
 
+    /** @short create a new child process (using fork) with $APPNAME$View  */
     void init();
 
 protected:
