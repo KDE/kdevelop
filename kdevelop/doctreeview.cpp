@@ -370,6 +370,10 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const char *te
     QString doc_dir, idx_path;
     doc_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     idx_path= doc_dir + "/kdoc-reference";
+    QDir dir;
+    if(!dir.exists(idx_path))
+      idx_path= QDir::homeDirPath ()+ "/.kdoc";
+
     if (!doc_dir.isEmpty())
         {
             // If we have a kdoc2 index in either uncompressed
@@ -406,6 +410,10 @@ QString DocTreeKDELibsBook::locatehtml(const QString& libname)
     QString indexFile;
     indexFile =  kde_path + "/kdoc-reference/" + libname +".kdoc";
     if(!(QFile::exists(indexFile) || QFile::exists(indexFile+".gz"))){
+      indexFile =  QDir::homeDirPath ()+ "/.kdoc/" + libname +".kdoc";
+    }
+    if(!(QFile::exists(indexFile) || QFile::exists(indexFile+".gz")))
+    {
     // return the standard way to get to the index file if the kdoc file doesn´t exist    
         if (kde_path.right(1) != "/")
           kde_path= kde_path+"/";
@@ -611,7 +619,7 @@ void DocTreeKDELibsFolder::refresh()
       QDir d;
       d.setPath(index_path);
       if(!d.exists()){
-        index_path=QDir::homeDirPath ()+".kdoc";
+        index_path=QDir::homeDirPath ()+ "/.kdoc";
         d.setPath(index_path);
       }
       if(!d.exists())
