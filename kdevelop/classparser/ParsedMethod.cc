@@ -55,6 +55,8 @@ CParsedMethod::CParsedMethod()
   isVirtual = false;
   isSlot = false;
   isSignal = false;
+  isConstructor = false;
+  isDestructor = false;
 }
 
 /*----------------------------------- CParsedMethod::~CParsedMethod()

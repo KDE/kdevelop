@@ -1,49 +1,31 @@
-/********************************************************************
-* Name    : Definition of a parsed method.                          *
-* ------------------------------------------------------------------*
-* File    : ParsedMethod.h                                          *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Mon Mar 15 11:23:25 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Macros:                                                           *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Types:                                                            *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedMethod.h  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _CPARSEDMETHOD_H_INCLUDED
 #define _CPARSEDMETHOD_H_INCLUDED
 
 #include <qlist.h>
 #include "ParsedAttribute.h"
 #include "ParsedArgument.h"
-/** */
+
+/** This object is the general abstraction for a method that
+ * has been parsed by the classparser.
+ * @author Jonas Nordin
+ */
 class CParsedMethod : public CParsedAttribute
 {
 public: // Constructor & Destructor
@@ -59,11 +41,17 @@ public: // Public attributes
   /** Is this methods declared virtual? */
   bool isVirtual;
 
-  /** Is this really an slot. */
+  /** Is this a slot? */
   bool isSlot;
 
-  /** Is this really an signal. */
+  /** Is this a signal? */
   bool isSignal;
+
+  /** Is this a constructor? */
+  bool isConstructor;
+
+  /** Is this a destructor? */
+  bool isDestructor;
 
 public: // Public methods to set attribute values
 
@@ -73,17 +61,27 @@ public: // Public methods to set attribute values
   /** Set the status if this is a virtual method.
    * @param aState The new state.
    */
-  void setIsVirtual( bool aState = true )  { isVirtual = aState; }
+  void setIsVirtual( bool aState = true )      { isVirtual = aState; }
 
   /** Set the status if this is a slot. 
    * @param aState The new state.
    */
-  void setIsSlot( bool aState = true )     { isSlot = aState; }
+  void setIsSlot( bool aState = true )         { isSlot = aState; }
 
   /** Set the status if this is a signal. 
    * @param aState The new state.
    */
-  void setIsSignal( bool aState = true )   { isSignal = aState; }
+  void setIsSignal( bool aState = true )       { isSignal = aState; }
+
+  /** Set this method as a constructor.
+   * @param aState The new state.
+   */
+  void setIsConstructor( bool aState = true )  { isConstructor = aState; }
+
+  /** Set this method as a destructor.
+   * @param aState The new state.
+   */
+  void setIsDestructor( bool aState = true )   { isDestructor = aState; }
 
 public: // Public attributes
 
