@@ -413,6 +413,8 @@ CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
  *-----------------------------------------------------------------*/
 CParsedAttribute *CParsedClass::getAttributeByName( const char *aName )
 {    
+  assert( aName != NULL );
+
   return attributes.find( aName );
 }
 
