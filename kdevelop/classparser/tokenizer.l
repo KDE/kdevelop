@@ -19,6 +19,7 @@
   #include <stdio.h>
   #include <string.h>
   #include <ctype.h>
+  #include <qstring.h>
   #include "tokenizer.h"
   #include "FlexLexer.h"
 
@@ -41,7 +42,7 @@
   int comment_end = -1;
 
   /* Last parsed comment. */
-  char comment[2048];
+  QString comment;
 
   /* Function prototypes */
   void eatPreparser(MyLexer *lex);
@@ -63,17 +64,18 @@ CCHAR [^'\\\n]|{ESCAPE_SEQUENCE}
 SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %option yylineno
+%option C++ noyywrap
 %%
     /*==============> Strip whitespace <==============*/
 {WS}         {}
 
     /*==============> Special keyword <==============*/
 "class"         {return CPCLASS;}
-"public"        {return PUBLIC;}
-"protected"     {return PROTECTED;}
-"private"       {return PRIVATE;}
-"const"         {return CONST;}
-"static"        {return STATIC;}
+"public"        {return CPPUBLIC;}
+"protected"     {return CPPROTECTED;}
+"private"       {return CPPRIVATE;}
+"const"         {return CPCONST;}
+"static"        {return CPSTATIC;}
 "virtual"       {return CPVIRTUAL;}
 "signals"       {return QTSIGNAL;}
 "slots"         {return QTSLOT;}
@@ -210,14 +212,16 @@ void eatComment(MyLexer *lex)
   comment_start = lex->lineno();
 
   /* Initialize the comment string. */
-  strcpy( comment, "/*" );
+  //strcpy( comment, "/*" );
+  comment = "/*";
 
   while( !done )
   {
     c = lex->yyinput();
 
     /* Copy the character to the comment string. */
-    comment[ offset++ ] = c;
+    comment += c;
+    // comment[ offset++ ] = c;
 
     switch( c )
     {
@@ -238,7 +242,7 @@ void eatComment(MyLexer *lex)
   }
 
   /* Add a NULL character at the end of the string. */
-  comment[ offset ] = '\0';
+  //comment[ offset ] = '\0';
 
   /* Set the line at which the comment ends. */
   comment_end = lex->lineno();
