@@ -36,6 +36,8 @@
 #ifndef NO_KDE2
 #include <kmainwindow.h>
 #include <netwm_def.h>
+#include <kaction.h>
+#include <kparts/part.h>
 #undef  EXPORT_DOCKCLASS
 #define EXPORT_DOCKCLASS
 #else
@@ -68,6 +70,7 @@ class KDockManager;
 class KDockMainWindow;
 class KDockArea;
 class KDockContainer;
+class DockMainWindow;
 }
 
 class KDockSplitter;
@@ -1520,6 +1523,61 @@ private:
   bool m_overlapMode;
   int m_nonOverlapSize;
 };
+
+//===========================================================================
+#ifndef NO_KDE2
+
+class DockMainWindowPrivate;
+
+/**
+ * A KPart-aware main window with ability for docking widgets, whose user interface is described in XML.
+ *
+ * Inherit your main dock-window from this class
+ * and don't forget to call @ref setXMLFile() in the inherited constructor.
+ *
+ * It implements all internal interfaces in the case of a @ref KDockMainWindow as host:
+ * the builder and servant interface (for menu merging).
+ */
+class KDockWidget_Compat::DockMainWindow : public KDockWidget_Compat::KDockMainWindow, virtual public KParts::PartBase
+{
+  Q_OBJECT
+ public:
+  /**
+   * Constructor, same signature as @ref KDockMainWindow.
+   */
+  DockMainWindow( QWidget* parent = 0L, const char *name = 0L, WFlags f = WDestructiveClose );
+  /**
+   * Destructor.
+   */
+  virtual ~DockMainWindow();
+
+protected slots:
+
+  /**
+   * Create the GUI (by merging the host's and the active part's)
+   *
+   * Called on startup and whenever the active part changes
+   * For this you need to connect this slot to the
+   * @ref KPartManager::activePartChanged() signal
+   * @param part The active part (set to 0L if no part).
+   */
+  void createGUI( KParts::Part * part );
+
+  /**
+   * Called when the active part wants to change the statusbar message
+   * Reimplement if your dock-mainwindow has a complex statusbar
+   * (with several items)
+   */
+  virtual void slotSetStatusBarText( const QString & );
+
+protected:
+    virtual void createShellGUI( bool create = true );
+
+ private:
+  DockMainWindowPrivate *d;
+};
+
+#endif // NO_KDE2
 
 #endif
 
