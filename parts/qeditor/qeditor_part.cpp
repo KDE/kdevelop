@@ -164,6 +164,18 @@ void QEditorPart::setupActions()
 		 m_currentView, SLOT(indent()),
                  actionCollection(), "edit_indent" );
 
+    new KAction( i18n("Start Macro"), CTRL + Key_ParenLeft,
+		 m_currentView->editor(), SLOT(startMacro()),
+                 actionCollection(), "tools_start_macro" );
+
+    new KAction( i18n("Stop Macro"), CTRL + Key_ParenRight,
+		 m_currentView->editor(), SLOT(stopMacro()),
+                 actionCollection(), "tools_stop_macro" );
+
+    new KAction( i18n("Execute Macro"), CTRL + Key_E,
+		 m_currentView->editor(), SLOT(executeMacro()),
+                 actionCollection(), "tools_execute_macro" );
+
     new KAction( i18n("&Configure Editor..."), 0,
 		 this, SLOT(configDialog()),
                  actionCollection(), "settings_configure_editor" );

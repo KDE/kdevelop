@@ -112,6 +112,15 @@ static int backspace_indentForLine( QTextParag* parag, int tabwidth )
     return ind;
 }
 
+struct QEditorKey{
+    int key;
+    int ascii;
+    int state;
+    QString text;
+    bool autorep;
+    ushort count;
+};
+
 QEditor::QEditor( QWidget* parent, const char* name )
     : KTextEdit( parent, name )
 {
@@ -128,6 +137,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
     m_tabStop = 8;
     m_applicationMenu = 0;
     m_parser = 0;
+    m_recording = FALSE;
 
     document()->addSelection( ParenMatcher::Match );
     document()->addSelection( ParenMatcher::Mismatch );
@@ -173,6 +183,7 @@ void QEditor::setTabStop( int tabStop )
 
 void QEditor::keyPressEvent( QKeyEvent* e )
 {
+    kdDebug(9032) << "QEditor::keyPressEvent()" << endl;
     if( e->key() == Key_Tab ){
 	if( tabIndentEnabled() ){
 	    int parag, index;
@@ -487,4 +498,52 @@ void QEditor::refresh()
     sync();
     viewport()->repaint( true );
     ensureCursorVisible();
+}
+
+bool QEditor::event( QEvent* e )
+{
+    if( isRecording() && e->type() == QEvent::KeyPress ){
+        QKeyEvent* ke = (QKeyEvent*) e;
+        kdDebug(9032) << "recording" << endl;
+        QEditorKey* k = new QEditorKey;
+        k->key = ke->key();
+        k->ascii = ke->ascii();
+        k->state = ke->state();
+        k->text = ke->text();
+        k->autorep = ke->isAutoRepeat();
+        k->count = ke->count();
+
+        m_keys.append( k );
+    }
+    return QTextEdit::event( e );
+}
+
+void QEditor::startMacro()
+{
+    m_keys.clear();
+    setIsRecording( TRUE );
+}
+
+void QEditor::stopMacro()
+{
+    setIsRecording( FALSE );
+}
+
+void QEditor::executeMacro()
+{
+    QPtrListIterator<QEditorKey> it( m_keys );
+    while( it.current() ){
+        kdDebug(9032) << "send key" << endl;
+        QEditorKey* k = it.current();
+        ++it;
+
+        QKeyEvent e( QEvent::KeyPress,
+                     k->key,
+                     k->ascii,
+                     k->state,
+                     k->text,
+                     k->autorep,
+                     k->count );
+        QApplication::sendEvent( this, &e );
+    }
 }

@@ -52,11 +52,13 @@
 #endif
 
 #include <qstringlist.h>
+#include <qptrlist.h>
 
 class ParenMatcher;
 class QPopupMenu;
 class QSourceColorizer;
 class BackgroundParser;
+class QEditorKey;
 
 class QEditor: public KTextEdit
 {
@@ -64,6 +66,9 @@ class QEditor: public KTextEdit
 public:
     QEditor( QWidget* parent=0, const char* name=0 );
     virtual ~QEditor();
+
+    bool isRecording() const { return m_recording; }
+    void setIsRecording( bool b ) { m_recording = b; }
 
     QTextCursor* textCursor() const;
 
@@ -115,14 +120,18 @@ signals:
 
 public slots:
     void doGotoLine( int line );
-    void configChanged();
-    void refresh();
+    virtual void configChanged();
+    virtual void refresh();
+    virtual void startMacro();
+    virtual void stopMacro();
+    virtual void executeMacro();
 
 private slots:
     void doMatch( QTextCursor* );
     void slotCursorPositionChanged( int, int );
 
 protected:
+    virtual bool event( QEvent* );
     virtual void keyPressEvent( QKeyEvent* );
     virtual void backspaceIndent( QKeyEvent* );
 
@@ -137,6 +146,8 @@ private:
     int m_tabStop;
     QString m_electricKeys;
     QPopupMenu* m_applicationMenu;
+    bool m_recording;
+    QPtrList<QEditorKey> m_keys;
 };
 
 #endif

@@ -24,6 +24,9 @@
   <Action name="bookmarks" />
 
   <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
+    <Action name="tools_start_macro" />
+    <Action name="tools_stop_macro" />
+    <Action name="tools_execute_macro" />
   </Menu>
 
   <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
