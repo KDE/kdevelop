@@ -120,7 +120,7 @@ apidox-am-yes:
 			else \
 				tagpath=`ls -1 $(kde_htmldir)/en/*-apidocs/$$tag/$$tag.tag 2> /dev/null` ;\
 				if test -n "$$tagpath"; then \
-					path=`echo $$tagpath | sed -e "s,.*/\([^/]*-apidocs\)/$$tag/$$tag.tag,../../../\1/$$tag,"` ;\
+					path=`echo $$tagpath | sed -e "s,.*/\([^/]*-apidocs\)/$$tag/$$tag.tag,../../\1/$$tag,"` ;\
 				fi ;\
 			fi ;\
 			if test "$$tag" = qt; then \
@@ -150,7 +150,8 @@ apidox-am-yes:
 
 apidox-am-no:
 
-install-data-local: install-apidox
+## Let's only install the API documentation if the user explicitly invokes it's instalation
+##install-data-local: install-apidox
 
 ## install API documentation
 install-apidox:
@@ -168,6 +169,13 @@ install-apidox:
 		fi;
 		rm -f $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/common
 		$(LN_S) $(kde_libs_htmldir)/en/common $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/common
+		@echo ""
+		@echo ""
+		@echo "************************* Important ***************************"
+		@echo ""
+		@echo "The $(PACKAGE) API documentation was successfuly installed at:"
+		@echo "  $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/html"
+		@echo ""
 
 uninstall-local: uninstall-apidox
 
@@ -197,6 +205,16 @@ apidox:
 			(cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) GENERATE_FLAG=yes apidox) || exit 1; \
 		fi ; fi ;\
 	    done; \
+		echo ""; \
+		echo ""; \
+		echo "******************* Important *********************"; \
+		echo ""; \
+		echo "Before you can browse the API documentation you MUST issue:"; \
+		echo "  make install-apidox (as root)"; \
+		echo ""; \
+		echo "The API documentation will then be installed at:"; \
+		echo "  $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/html"; \
+		echo ""; \
 	fi
 
 .PHONY: apidox-am-yes apidox-am-no install-data-local install-apidox install-apidox uninstall-local uninstall-apidox uninstall-apidox apidox
