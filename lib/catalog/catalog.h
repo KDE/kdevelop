@@ -20,16 +20,49 @@
 #ifndef CATALOG_H
 #define CATALOG_H
 
-#include "gcatalog.h"
+#include <qvaluelist.h>
+#include <qpair.h>
+#include <qvariant.h>
+
+
 #include "tag.h"
 
-/**
-Catalog to store symbol information.
-*/
-class Catalog: public GCatalog<Tag>
+class Catalog
 {
 public:
-    Catalog(): GCatalog<Tag>() {}
+    typedef QPair<QCString, QVariant> QueryArgument;
+
+public:
+    Catalog();
+    virtual ~Catalog();
+
+    bool isValid() const;
+    QString dbName() const;
+    
+    bool enabled() const;
+    void setEnabled( bool en );
+
+    virtual void open( const QString& dbName );
+    virtual void close();
+    virtual void sync();
+
+    QValueList<QCString> indexList() const;
+    void addIndex( const QCString& name );
+
+    void addItem( Tag& tag );
+
+    Tag getItemById( const QCString& id );
+    QValueList<Tag> query( const QValueList<QueryArgument>& args );
+
+    QCString generateId();
+
+private:
+   class _Catalog_Private* d;
+
+private:
+    Catalog( const Catalog& source );
+    void operator = ( const Catalog& source );
 };
+
 
 #endif
