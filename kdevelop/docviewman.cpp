@@ -412,7 +412,11 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
   if (!pDoc)
     return 0L;
 
+	// Check if we must set the last modif date
   QFileInfo file_info(strFileName);
+	if(file_info.exists()) {
+		pDoc->setLastFileModifDate(file_info.lastModified());
+	}
     
   // Add the new doc to the list
   m_documentList.append(pDoc);

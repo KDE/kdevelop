@@ -1,3 +1,8 @@
+2001-04-07  Christian Couder <christian@kdevelop.org>
+    * Fix a bug due to the last modified attribute of the kwritedoc not
+    initialised. When we create a kwritedoc, now we check if the file exists
+    and if this is true the we set the last modified date.
+
 2001-04-08  jbb <jbb@kdevelop.org>
     * Add manpage display to menu
 
