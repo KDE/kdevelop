@@ -828,7 +828,7 @@ CppCodeCompletion::completeText( )
 	if( showArguments ){
 	    QStringList functionList = getSignatureListForClass( type, word, isInstance );
 
-	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && expr.isEmpty() /*|| functionList.count() == 0 */){
+	    if( expr.isEmpty() /*|| functionList.count() == 0 */){
 		functionList += getGlobalSignatureList( word );
 	    }
 
@@ -862,7 +862,7 @@ CppCodeCompletion::completeText( )
 
 	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
 
-	    if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() && functionList.count() == 0 ){
+	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
 
