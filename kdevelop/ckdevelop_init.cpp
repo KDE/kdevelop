@@ -31,7 +31,6 @@
 #include "doctreeview.h"
 #include "grepdialog.h"
 #include "./ctags/ctagsdialog_impl.h"
-#include "kstartuplogo.h"
 #include "ckonsolewidget.h"
 
 #include "./dbg/dbgcontroller.h"
@@ -114,13 +113,14 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   config = KGlobal::config();
 
-  config->setGroup("General Options");
-  start_logo=0L;
-  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-  {
-    start_logo= new KStartupLogo(this);
-    start_logo->show();
-  }
+// gallium - commented out (not required now)
+//  config->setGroup("General Options");
+//  start_logo=0L;
+//  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+//  {
+//    start_logo= new KStartupLogo(this);
+//    start_logo->show();
+//  }
 
   // ********* MDI stuff (falk) *******
   m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
@@ -155,8 +155,10 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   setAutoSaveSettings("CKDevelop");
 
   slotViewRefresh();
-  if(start_logo)
-    start_logo->raise();
+
+// gallium - commented this out
+//  if(start_logo)
+//    start_logo->raise();
 
   initDebugger();
   initWhatsThis();
@@ -1063,8 +1065,9 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
 {
   initProject(ignoreLastProject);
 
-  if (start_logo)
-    delete start_logo;
+// gallium - commented this out
+//  if (start_logo)
+//    delete start_logo;
 
   config->setGroup("TipOfTheDay");
   if(config->readBoolEntry("show_tod",true) && !kapp->isRestored())

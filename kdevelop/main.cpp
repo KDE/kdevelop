@@ -22,6 +22,7 @@
 
 #include "ckdevelop.h"
 #include "ckdevinstall.h"
+#include "kstartuplogo.h"
 
 #include <dcopclient.h>
 #include <kaboutdata.h>
@@ -44,6 +45,9 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char* argv[])
 {
+  KConfig* config;
+  KStartupLogo* start_logo;
+
   KAboutData aboutData( "kdevelop",
                         I18N_NOOP("KDevelop"),
                         VERSION,
@@ -82,8 +86,9 @@ int main(int argc, char* argv[])
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
 
-  KGlobal::config()->setGroup("General Options");
-  bool bInstall=KGlobal::config()->readBoolEntry("Install",true);
+  config = KGlobal::config();
+  config->setGroup("General Options");
+  bool bInstall=config->readBoolEntry("Install",true);
 
   if (args->isSet("setup"))
     bInstall = true; // start the setupwizard
@@ -100,19 +105,33 @@ int main(int argc, char* argv[])
       install->show();
       delete install;
     }
+
+  config->setGroup("General Options");
+  start_logo=NULL;
+  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+  {
+    start_logo= new KStartupLogo();
+    start_logo->show();
+    start_logo->raise();
+    QApplication::flushX();
+  }
+
     CKDevelop* kdevelop = new CKDevelop();
     /* rokrau: i believe this has to be set by hand           *
      * and i hope this doesnt screw things up badly,           *
      * the guys on #kde wouldn't give me an answer, no really */
     a.setMainWidget(kdevelop);
 
+   if (start_logo)
+	delete start_logo;
+
     kdevelop->completeStartup(args->count() == 0);
 
     if (bInstall)
       kdevelop->refreshTrees();  // this is because of the new documentation
 
-    KGlobal::config()->setGroup("General Options");
-    kdevelop->slotTCurrentTab(KGlobal::config()->readNumEntry("LastActiveTree",DOC));
+    config->setGroup("General Options");
+    kdevelop->slotTCurrentTab(config->readNumEntry("LastActiveTree",DOC));
     
     if (args->count())
       kdevelop->slotProjectOpenCmdl(args->arg(0));

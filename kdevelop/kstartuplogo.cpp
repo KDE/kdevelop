@@ -21,7 +21,7 @@
 #include <kstddirs.h>
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
-: QWidget(parent,name,WStyle_Customize | WStyle_NoBorder  ) { 	
+: QWidget(parent,name, WStyle_Customize | WStyle_NoBorder | WDestructiveClose ) { 	
   QPixmap pm;
   pm.load(locate("appdata", "pics/startlogo.png"));
   setBackgroundPixmap(pm);

@@ -1093,7 +1093,6 @@ private:
 
   bool lastShutdownOK;
   KStatusBar* m_statusBar;
-  KStartupLogo* start_logo;
 
 /** RPM stuff **/
       Kpp *rpmbuilder;
