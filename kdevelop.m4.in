@@ -488,7 +488,7 @@ AC_DEFUN(KDEV_CHECK_MDI,
       #include <kdeversion.h>
     ],
     [
-      #if KDE_VERSION < ((3<<16) | (1<<8) | (90))
+      #if KDE_VERSION < ((3<<16) | (1<<8) | (93))
          KDE_choke me
       #endif
     ],

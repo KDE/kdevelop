@@ -6,7 +6,7 @@
 #endif
 
 #if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+# if KDE_VERSION < KDE_MAKE_VERSION(3,1,93)
 #  ifndef OLDER_THAN_KDE_3_2
 #   define OLDER_THAN_KDE_3_2
 #  endif
