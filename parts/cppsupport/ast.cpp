@@ -303,12 +303,12 @@ void TypedefAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
     m_typeSpec = typeSpec;
 }
 
-AST* TypedefAST::initDeclaratorList()
+InitDeclaratorListAST* TypedefAST::initDeclaratorList()
 {
     return m_initDeclaratorList.get();
 }
 
-void TypedefAST::setInitDeclaratorList( AST::Node& initDeclaratorList )
+void TypedefAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList )
 {
     m_initDeclaratorList = initDeclaratorList;
 }
@@ -432,12 +432,40 @@ TypeSpecifierAST::~TypeSpecifierAST()
 // ------------------------------------------------------------------------
 ClassSpecifierAST::ClassSpecifierAST()
 {
+    m_declarations.setAutoDelete( true );
 }
 
 ClassSpecifierAST::~ClassSpecifierAST()
 {
 }
 
+AST* ClassSpecifierAST::classKey()
+{
+    return m_classKey.get();
+}
+
+void ClassSpecifierAST::setClassKey( AST::Node& classKey )
+{
+    m_classKey = classKey;
+}
+
+NameAST* ClassSpecifierAST::name()
+{
+    return m_name.get();
+}
+
+void ClassSpecifierAST::setName( NameAST::Node& name )
+{
+    m_name = name;
+}
+
+void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
+{
+    if( !declaration.get() )
+        return;
+	
+    m_declarations.append( declaration.release() );
+}
 
 // ------------------------------------------------------------------------
 EnumSpecifierAST::EnumSpecifierAST()
@@ -507,7 +535,6 @@ StatementAST::~StatementAST()
 }
 
 // ------------------------------------------------------------------------
-
 EnumeratorAST::EnumeratorAST()
 {
 }
@@ -534,5 +561,70 @@ AST* EnumeratorAST::expr()
 void EnumeratorAST::setExpr( AST::Node& expr )
 {
     m_expr = expr;
+}
+
+// ------------------------------------------------------------------------
+BaseClauseAST::BaseClauseAST()
+{
+    m_baseSpecifiers.setAutoDelete( true );
+}
+
+BaseClauseAST::~BaseClauseAST()
+{
+}
+
+void BaseClauseAST::addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier )
+{
+    if( !baseSpecifier.get() )
+        return;
+	
+    m_baseSpecifiers.append( baseSpecifier.release() );
+}
+
+// ------------------------------------------------------------------------
+BaseSpecifierAST::BaseSpecifierAST()
+{
+}
+
+BaseSpecifierAST::~BaseSpecifierAST()
+{
+}
+
+// ------------------------------------------------------------------------
+SimpleDeclarationAST::SimpleDeclarationAST()
+{
+}
+
+SimpleDeclarationAST::~SimpleDeclarationAST()
+{
+}
+
+TypeSpecifierAST* SimpleDeclarationAST::typeSpec()
+{
+    return m_typeSpec.get();
+}
+
+void SimpleDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
+{
+    m_typeSpec = typeSpec;
+}
+
+InitDeclaratorListAST* SimpleDeclarationAST::initDeclaratorList()
+{
+    return m_initDeclaratorList.get();
+}
+
+void SimpleDeclarationAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList )
+{
+    m_initDeclaratorList = initDeclaratorList;
+}
+
+// ------------------------------------------------------------------------
+InitDeclaratorListAST::InitDeclaratorListAST()
+{
+}
+
+InitDeclaratorListAST::~InitDeclaratorListAST()
+{
 }
 

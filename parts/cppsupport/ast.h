@@ -180,6 +180,40 @@ private:
     void operator = ( const TypeSpecifierAST& source );
 };
 
+class BaseSpecifierAST: public AST
+{
+public:
+    typedef std::auto_ptr<BaseSpecifierAST> Node;
+    
+public:
+    BaseSpecifierAST();
+    virtual ~BaseSpecifierAST();
+            
+private:
+    BaseSpecifierAST( const BaseSpecifierAST& source );
+    void operator = ( const BaseSpecifierAST& source );
+};
+
+class BaseClauseAST: public AST
+{
+public:
+    typedef std::auto_ptr<BaseClauseAST> Node;
+    
+public:
+    BaseClauseAST();
+    virtual ~BaseClauseAST();
+    
+    void addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier );
+    QPtrList<BaseSpecifierAST> baseSpecifiers() { return m_baseSpecifiers; }
+    
+private:
+    QPtrList<BaseSpecifierAST> m_baseSpecifiers;
+    
+private:
+    BaseClauseAST( const BaseClauseAST& source );
+    void operator = ( const BaseClauseAST& source );
+};
+
 class ClassSpecifierAST: public TypeSpecifierAST
 {
 public:
@@ -188,6 +222,20 @@ public:
 public:
     ClassSpecifierAST();
     virtual ~ClassSpecifierAST();    
+    
+    AST* classKey();
+    void setClassKey( AST::Node& classKey );
+    
+    NameAST* name();
+    void setName( NameAST::Node& name );
+    
+    void addDeclaration( DeclarationAST::Node& declaration );
+    QPtrList<DeclarationAST> declarations() { return m_declarations; }
+    
+private:
+    AST::Node m_classKey;
+    NameAST::Node m_name;
+    QPtrList<DeclarationAST> m_declarations;
     
 private:
     ClassSpecifierAST( const ClassSpecifierAST& source );
@@ -407,6 +455,20 @@ private:
     void operator = ( const UsingDirectiveAST& source );
 };
 
+class InitDeclaratorListAST: public AST
+{
+public:
+    typedef std::auto_ptr<InitDeclaratorListAST> Node;
+    
+public:
+    InitDeclaratorListAST();
+    virtual ~InitDeclaratorListAST();
+    
+private:
+    InitDeclaratorListAST( const InitDeclaratorListAST& source );
+    void operator = ( const InitDeclaratorListAST& source );
+};
+
 class TypedefAST: public DeclarationAST
 {
 public:
@@ -419,12 +481,12 @@ public:
     TypeSpecifierAST* typeSpec();
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
-    AST* initDeclaratorList();
-    void setInitDeclaratorList( AST::Node& initDeclaratorList );
+    InitDeclaratorListAST* initDeclaratorList();
+    void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
     
 private:
     TypeSpecifierAST::Node m_typeSpec;
-    AST::Node m_initDeclaratorList;
+    InitDeclaratorListAST::Node m_initDeclaratorList;
     
 private:
     TypedefAST( const TypedefAST& source );
@@ -457,6 +519,30 @@ private:
 private:
     TemplateDeclarationAST( const TemplateDeclarationAST& source );
     void operator = ( const TemplateDeclarationAST& source );
+};
+
+class SimpleDeclarationAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<SimpleDeclarationAST> Node;
+    
+public:
+    SimpleDeclarationAST();
+    virtual ~SimpleDeclarationAST();
+    
+    TypeSpecifierAST* typeSpec();
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+
+    InitDeclaratorListAST* initDeclaratorList();
+    void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
+    
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+    InitDeclaratorListAST::Node m_initDeclaratorList;
+        
+private:
+    SimpleDeclarationAST( const SimpleDeclarationAST& source );
+    void operator = ( const SimpleDeclarationAST& source );
 };
 
 class StatementAST: public AST

@@ -78,7 +78,7 @@ public /*rules*/ :
     bool parseTemplateParameter( AST::Node& node );
     bool parseStorageClassSpecifier( AST::Node& node );
     bool parseFunctionSpecifier( AST::Node& node );
-    bool parseInitDeclaratorList( AST::Node& node );
+    bool parseInitDeclaratorList( InitDeclaratorListAST::Node& node );
     bool parseInitDeclarator( AST::Node& node );
     bool parseParameterDeclarationClause( AST::Node& node );
     bool parseCtorInitializer( AST::Node& node );
@@ -100,9 +100,8 @@ public /*rules*/ :
     bool parseMemInitializerList( AST::Node& node );
     bool parseMemInitializer( AST::Node& node );
     bool parseInitializer( AST::Node& node );
-    bool parseBaseClause( AST::Node& node );
-    bool parseBaseSpecifierList( AST::Node& node );
-    bool parseBaseSpecifier( AST::Node& node );
+    bool parseBaseClause( BaseClauseAST::Node& node );
+    bool parseBaseSpecifier( BaseSpecifierAST::Node& node );
     bool parseInitializerClause( AST::Node& node );
     bool parseMemInitializerId( NameAST::Node& node );
     bool parseFunctionBody( AST::Node& node );
