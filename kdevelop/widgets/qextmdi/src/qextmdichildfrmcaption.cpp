@@ -70,6 +70,9 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
       m_bCanMove = TRUE;
       m_offset = mapToParent( e->pos());
    }
+   else if ( e->button() == RightButton) {
+      m_pParent->systemMenu()->popup( mapToGlobal( e->pos()));
+   }
 }
 
 //============= mouseReleaseEvent ============//
@@ -222,6 +225,8 @@ void QextMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 {
    m_pParent->maximizePressed();
 }
+
+//============= slot_moveViaSystemMenu ===========//
 
 void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
 {

@@ -86,6 +86,12 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
  : QFrame(parent, "qextmdi_childfrm")
   ,m_pClient(0)
   ,m_resizeMode(FALSE)
+  ,m_pIconButtonPixmap(0L)
+  ,m_pMinButtonPixmap(0L)
+  ,m_pMaxButtonPixmap(0L)
+  ,m_pRestoreButtonPixmap(0L)
+  ,m_pCloseButtonPixmap(0L)
+  ,m_pUndockButtonPixmap(0L)
   ,m_windowMenuID(0)
 {
    m_pCaption  = new QextMdiChildFrmCaption(this);
@@ -98,18 +104,6 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pClose    = new QToolButton(m_pCaption, "qextmdi_toolbutton_close");
    m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
 
-#if QT_VERSION > 209
-   m_pUnixIcon->setAutoRaise(TRUE);
-#endif
-#if QT_VERSION > 209
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
-      m_pMinimize->setAutoRaise(TRUE);
-      m_pMaximize->setAutoRaise(TRUE);
-      m_pClose->setAutoRaise(TRUE);
-      m_pUndock->setAutoRaise(TRUE);
-   }
-#endif
-
    QObject::connect(m_pWinIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
    QObject::connect(m_pUnixIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
@@ -118,39 +112,29 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
 
    m_pIconButtonPixmap = new QPixmap( filenew);
-   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
-      m_pMinButtonPixmap = new QPixmap( win_minbutton);
-      m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
-      m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
-      m_pCloseButtonPixmap = new QPixmap( win_closebutton);
-      m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
-   }
-   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
-      m_pMinButtonPixmap = new QPixmap( kde_minbutton);
-      m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
-      m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
-      m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
-      m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
-   }
-   else {
-      m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
-      m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
-      m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
-      m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
-      m_pUndockButtonPixmap = new QPixmap( kde2_undockbutton);
-   }
-
-   m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
+   redecorateButtons();
+//#if QT_VERSION > 209
+//   m_pUnixIcon->setAutoRaise(TRUE);
+//   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+//      m_pMinimize->setAutoRaise(TRUE);
+//      m_pMaximize->setAutoRaise(TRUE);
+//      m_pClose->setAutoRaise(TRUE);
+//      m_pUndock->setAutoRaise(TRUE);
+//   }
+//#endif
+//
+//   m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
+//   m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
+//   m_pClose->setPixmap( *m_pCloseButtonPixmap);
+//   m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+//   m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+//   m_pUndock->setPixmap( *m_pUndockButtonPixmap);
+//
    m_pWinIcon->setFocusPolicy(NoFocus);
-   m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
    m_pUnixIcon->setFocusPolicy(NoFocus);
-   m_pClose->setPixmap( *m_pCloseButtonPixmap);
    m_pClose->setFocusPolicy(NoFocus);
-   m_pMinimize->setPixmap( *m_pMinButtonPixmap);
    m_pMinimize->setFocusPolicy(NoFocus);
-   m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
    m_pMaximize->setFocusPolicy(NoFocus);
-   m_pUndock->setPixmap( *m_pUndockButtonPixmap);
    m_pUndock->setFocusPolicy(NoFocus);
 
    setFrameStyle(QFrame::WinPanel|QFrame::Raised);
@@ -966,6 +950,65 @@ void QextMdiChildFrm::slot_resizeViaSystemMenu()
    m_resizeMode = TRUE;
    m_iResizeCorner = QEXTMDI_RESIZE_BOTTOMLEFT;
    setResizeCursor( m_iResizeCorner);
+}
+
+void QextMdiChildFrm::redecorateButtons()
+{
+   if (m_pMinButtonPixmap)
+      delete m_pMinButtonPixmap;
+   if (m_pMaxButtonPixmap)
+      delete m_pMaxButtonPixmap;
+   if (m_pRestoreButtonPixmap)
+      delete m_pRestoreButtonPixmap;
+   if (m_pCloseButtonPixmap)
+      delete m_pCloseButtonPixmap;
+   if (m_pUndockButtonPixmap)
+      delete m_pUndockButtonPixmap;
+
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+      m_pMinButtonPixmap = new QPixmap( win_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( win_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( win_undockbutton);
+   }
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pMinButtonPixmap = new QPixmap( kde_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( kde_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
+   }
+   else {
+      m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( kde2_undockbutton);
+   }
+
+#if QT_VERSION > 209
+   m_pUnixIcon->setAutoRaise(TRUE);
+   if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
+      m_pMinimize->setAutoRaise(TRUE);
+      m_pMaximize->setAutoRaise(TRUE);
+      m_pClose->setAutoRaise(TRUE);
+      m_pUndock->setAutoRaise(TRUE);
+   }
+   else {
+      m_pMinimize->setAutoRaise(FALSE);
+      m_pMaximize->setAutoRaise(FALSE);
+      m_pClose->setAutoRaise(FALSE);
+      m_pUndock->setAutoRaise(FALSE);
+   }
+#endif
+
+   m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
+   m_pClose->setPixmap( *m_pCloseButtonPixmap);
+   m_pMinimize->setPixmap( *m_pMinButtonPixmap);
+   m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+   m_pUndock->setPixmap( *m_pUndockButtonPixmap);
 }
 
 #ifndef NO_INCLUDE_MOCFILES

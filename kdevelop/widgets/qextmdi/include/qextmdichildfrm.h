@@ -183,14 +183,18 @@ public:
    * It may be useful when setting the mdiCaptionFont of the MdiManager
    */
    void updateRects(){ resizeEvent(0); };
-   /** 
-   * Returns the system menu. 
+   /**
+   * Returns the system menu.
    */
    QPopupMenu* systemMenu();
-   /** 
+   /**
    * Returns the caption bar height 
    */
    inline int captionHeight() { return m_pCaption->height(); };
+   /**
+   * sets new raise behaviour and pixmaps of the buttons depending on the current decoration style
+   */
+   void redecorateButtons();
 
 public slots:
    /**
@@ -271,8 +275,8 @@ protected slots:
    * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it. 
    */
    void raiseAndActivate();
-   /** 
-   * Shows a system menu for child frame windows. 
+   /**
+   * Shows a system menu for child frame windows.
    */
    void showSystemMenu();
 

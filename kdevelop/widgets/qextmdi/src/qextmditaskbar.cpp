@@ -132,9 +132,9 @@ QString QextMdiTaskBarButton::actualText() const
 //####################################################################
 
 QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock)
- :QToolBar("TaskBar",parent,dock),
-  m_pCurrentFocusedWindow(0),
-  m_pStretchSpace(0)
+:  KToolBar( parent, "QextMdiTaskBar", /*honor_style*/ FALSE, /*readConfig*/ TRUE)
+   ,m_pCurrentFocusedWindow(0)
+   ,m_pStretchSpace(0)
 {
    m_pFrm = parent;
    m_pButtonList = new QList<QextMdiTaskBarButton>;
@@ -142,6 +142,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
    setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
    setFocusPolicy(NoFocus);
+   parent->moveToolBar( this, dock);
 }
 
 QextMdiTaskBar::~QextMdiTaskBar()

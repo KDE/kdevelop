@@ -27,7 +27,11 @@
 #ifndef _QEXTMDITASKBAR_H_
 #define _QEXTMDITASKBAR_H_
 
+#ifdef NO_KDE2
 #include <qtoolbar.h>
+#else
+#include <ktoolbar.h>
+#endif
 #include <qlist.h>
 #include <qpixmap.h>
 #include <qlabel.h>
@@ -111,6 +115,21 @@ protected:
    QString m_actualText;
 };
 
+#ifdef NO_KDE2
+/**
+  * @short The base class of QextMdiTaskBar in case of QextMDI without KDE2 support
+  *
+  */
+class DLL_IMP_EXP_QEXTMDICLASS KToolBar : public QToolBar
+{
+   Q_OBJECT
+public:
+   KToolBar( QMainWindow* parent, const char *name, bool /*honor_style = FALSE*/, bool /*readConfig = TRUE*/)
+      : QToolBar( name, parent, QMainWindow::Bottom) {};
+   ~KToolBar() {};
+};
+#endif
+
 /**
  * @short Internal class.
  *
@@ -118,7 +137,7 @@ protected:
  * QextMdiTaskBarButtons can be added or removed dynamically.<br>
  * The button sizes are adjusted dynamically, as well.
  */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public QToolBar
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public KToolBar
 {
    Q_OBJECT
 public:

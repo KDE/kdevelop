@@ -52,6 +52,7 @@
 #include "kde2_minbutton.xpm"
 #include "kde2_restorebutton.xpm"
 #include "kde2_closebutton.xpm"
+#include "kde2_closebutton_menu.xpm"
 
 #ifdef _OS_WIN32_
 QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
@@ -672,10 +673,6 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
       m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
       m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
       m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
-      m_pUndock->setAutoRaise(TRUE);
-      m_pMinimize->setAutoRaise(TRUE);
-      m_pRestore->setAutoRaise(TRUE);
-      m_pClose->setAutoRaise(TRUE);
    }
 
    m_pUndock->hide();
@@ -699,19 +696,26 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
    int menuW = m_pMainMenuBar->parentWidget()->width();
    int h;
    int y;
-   if (frameDecorOfAttachedViews() == QextMdi::Win95Look) {
+   if (frameDecorOfAttachedViews() == QextMdi::Win95Look)
       h = 16;
-      y = m_pMainMenuBar->height()/2-8;
+   else if (frameDecorOfAttachedViews() == QextMdi::KDE1Look)
+      h = 20;
+   else
+      h = 14;
+   y = m_pMainMenuBar->height()/2 - h/2;
+
+   if (frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+      int w = 27;
+      m_pUndock->setGeometry( ( menuW - ( w * 3) - 5), y, w, h);
+      m_pMinimize->setGeometry( ( menuW - ( w * 2) - 5), y, w, h);
+      m_pRestore->setGeometry( ( menuW - w - 5), y, w, h);
    }
    else {
-      h = 20;
-      y = m_pMainMenuBar->height()/2-10;
+      m_pUndock->setGeometry( ( menuW - ( h * 4) - 5), y, h, h);
+      m_pMinimize->setGeometry( ( menuW - ( h * 3) - 5), y, h, h);
+      m_pRestore->setGeometry( ( menuW - ( h * 2) - 5), y, h, h);
+      m_pClose->setGeometry( ( menuW - h - 5), y, h, h);
    }
-
-   m_pUndock->setGeometry( ( menuW - ( h * 4) - 5), y, h, h);
-   m_pMinimize->setGeometry( ( menuW - ( h * 3) - 5), y, h, h);
-   m_pRestore->setGeometry( ( menuW - ( h * 2) - 5), y, h, h);
-   m_pClose->setGeometry( ( menuW - h - 5), y, h, h);
 }
 
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
@@ -734,10 +738,15 @@ void QextMdiMainFrm::setMaximizeModeOn()
    m_pMinimize->show();
    QObject::connect( m_pRestore, SIGNAL(clicked()), pCurrentChild, SLOT(maximizePressed()) );
    m_pRestore->show();
-   QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
-   m_pClose->show();
 
-   m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
+   if (frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+      m_pMainMenuBar->insertItem( QPixmap(kde2_closebutton_menu), m_pMdi->topChild(), SLOT(closePressed()), 0, -1, 0);
+   }
+   else {
+      m_pMainMenuBar->insertItem( *pCurrentChild->icon(), pCurrentChild->systemMenu(), -1, 0);
+      QObject::connect( m_pClose, SIGNAL(clicked()), pCurrentChild, SLOT(closePressed()) );
+      m_pClose->show();
+   }
 }
 
 /** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */
@@ -932,6 +941,14 @@ void QextMdiMainFrm::setFrameDecorOfAttachedViews( int frameDecor)
       break;
    }
    setMenuForSDIModeSysButtons( m_pMainMenuBar);
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+   for( ; it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+      if( pView->isToolView())
+         continue;
+      if( pView->isAttached())
+         pView->mdiParent()->redecorateButtons();
+   }
 }
 
 #ifndef NO_INCLUDE_MOCFILES
