@@ -172,8 +172,7 @@ public:
     void setPosition( int position );
 
     QString text() const;
-    void setText( const QString& text );
-
+    
 private:
     int m_type;
     int m_position;
@@ -227,7 +226,6 @@ public:
     const Token& nextToken();
     const Token& lookAhead( int n ) const;
 
-    static QString toString( const Token& token );
     static int toInt( const Token& token );
 
     int tokenPosition( const Token& token ) const;
@@ -400,12 +398,7 @@ inline int Token::position() const
 
 inline QString Token::text() const
 {
-    return m_text;
-}
-
-inline void Token::setText( const QString & text )
-{
-    m_text = text;
+    return m_text.mid(m_position, m_length);
 }
 
 inline void Token::setStartPosition( int line, int column )
@@ -752,12 +745,6 @@ inline bool Lexer::preprocessorEnabled() const
 inline void Lexer::setPreprocessorEnabled( bool enabled )
 {
     m_preprocessorEnabled = enabled;
-}
-
-inline QString Lexer::toString( const Token& token )
-{
-    //return m_source.mid( token.position(), token.length() );
-    return token.text();
 }
 
 inline int Lexer::currentPosition() const
