@@ -630,7 +630,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 void CustomProjectPart::slotBuild()
 {
     m_lastCompilationFailed = false;
-    startMakeCommand(buildDirectory(), QString::fromLatin1(""));
+    startMakeCommand(buildDirectory(), DomUtil::readEntry(*projectDom(), "/kdevcustomproject/make/defaulttarget"));
 }
 
 

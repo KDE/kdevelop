@@ -38,6 +38,7 @@ CustomMakeConfigWidget::CustomMakeConfigWidget(CustomProjectPart* part, const QS
     prio_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/prio"));
     dontact_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makebin"));
+    defaultTarget_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/defaulttarget"));
     makeoptions_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makeoptions"));
 
     envs_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
@@ -119,6 +120,7 @@ void CustomMakeConfigWidget::accept()
     DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/prio", prio_box->value());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/make/defaulttarget", defaultTarget_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makeoptions", makeoptions_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/selectedenvironment", m_currentEnvironment);
     m_envWidget->accept();
