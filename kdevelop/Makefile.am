@@ -12,8 +12,9 @@ LFLAGS = -+
 bin_PROGRAMS = kdevelop
 
 # Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = main.cpp kdevelop.cpp kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp \
-		   newprojectdlg.cpp newprojectdlgbase.ui
+kdevelop_SOURCES = main.cpp newprojectdlg.cpp kdevelop.cpp \
+            kdevelopcore.cpp kdevelopfactory.cpp projectoptionsdlg.cpp \
+		    newprojectdlgbase.ui
 
 kdevelop_METASOURCES = kdevelop.moc kdevelopcore.moc projectoptionsdlg.moc newprojectdlg.moc
 
@@ -57,8 +58,4 @@ servicetype_DATA = kdevelopcomponent.desktop \
 
 messages:
 	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot
-
-# These rules are missing - why??? - should be generated automatically
-$(srcdir)/kdevelopcore.cpp: newprojectdlgbase.h
-$(srcdir)/newprojectdlg.cpp: newprojectdlgbase.h
 

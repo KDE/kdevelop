@@ -15,10 +15,6 @@ noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 
 METASOURCES = AUTO
 
-# These rules are missing - why??? - should be generated automatically
-$(srcdir)/appwizard.cpp: appwizardbase.h
-$(srcdir)/filepropspage.cpp: filepropspagebase.h
-
 #noinst_PROGRAMS = testprj
 
 #testprj_SOURCES = testprj.cpp
