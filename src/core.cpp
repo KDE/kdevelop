@@ -762,6 +762,12 @@ void Core::running(KDevPart *part, bool runs)
 }
 
 
+void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
+{
+    emit contextMenu(popup, context);
+}
+
+
 void Core::message(KEditor::Document *, const QString &str)
 {
     win->statusBar()->message(str);

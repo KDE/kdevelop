@@ -1,3 +1,10 @@
+2001-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Implemented Add subproject
+	* Fix for autoproject: allow ldflags to be
+	  added for programs, but disable libtool flags
+	* Popup menu contexts for classes, not yet used
+
 2001-06-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* let the user choose which editor part to load

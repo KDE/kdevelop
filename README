@@ -8,10 +8,3 @@ as follows: Install kdoc and the kdelibs sources. Then
 For the graphical classbrowser, you need the program 'dot'
 from the graphviz package which can be downloaded from
 www.graphviz.org. This is only a runtime dependency!
-
-There could be configure problems with the python scripting
-stuff. To disable its compilation completely, 
-
-  * remove the KDE_CHECK_PYTHON check from configure.in.in
-  * comment out the PYTHON_SUBDIR line in parts/Makefile.am
-  * rerun make -f Makefile.dist

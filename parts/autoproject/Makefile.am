@@ -27,6 +27,7 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				addapplicationdlgbase.ui \
 				addtargetdlg.cpp \
 				addtargetdlgbase.ui \
+				addsubprojectdlg.cpp \
 				addfiledlg.cpp \
 				removefiledlg.cpp \
 				addprefixdlg.cpp \

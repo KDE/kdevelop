@@ -30,6 +30,12 @@ private:
 };
 
 
+/**
+ * A context for the popup menu in the editor. In this case,
+ * linestr() returns the contents of the line in which the
+ * mouse button has been pressed, and col() returns the column
+ * number.
+ */
 class EditorContext : public Context
 {
 public:
@@ -48,6 +54,11 @@ private:
 };
 
 
+/**
+ * A context for the popup menu in the html widget. In this
+ * case, url() returns the URL of the page currently shown,
+ * and selection() returns the selected text.
+ */
 class DocumentationContext : public Context
 {
 public:
@@ -63,6 +74,26 @@ public:
 private:
     QString m_url;
     QString m_selection;
+};
+
+
+/**
+ * A context for the popup menu in class views. In this case,
+ * className() returns the name of the class, including its
+ * scope (i.e. namespace).
+ */
+class ClassContext : public Context
+{
+public:
+    ClassContext(const QString &classname)
+        : Context("class"), m_classname(classname) {}
+    ~ClassContext() {}
+
+    QString classname() const
+    { return m_classname; }
+
+private:
+    QString m_classname;
 };
 
 
@@ -97,6 +128,15 @@ public:
      * a command is started.
      */
     virtual void raiseWidget(QWidget *) = 0;
+    /**
+     * This method should be called by a part that wants to show a
+     * context menu. The parameter context should be filled with
+     * information about the context in which this happens (see
+     * EditorContext, DocumentationContext, ClassContext, ...).
+     * Essentially, this method emits the signal contextMenu()
+     * which other parts can use to hook in.
+     */
+    virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
     /**
      * "Goes" to a file. This is a generic method that is used
      * e.g. by file trees. For non-text files (i.e. files which

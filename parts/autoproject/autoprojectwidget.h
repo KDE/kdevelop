@@ -144,6 +144,10 @@ public:
      */
     QString subprojectDirectory();
     /**
+     * The build directory.
+     */
+    QString buildDirectory();
+    /**
      * Are we in KDE mode?
      */
     bool kdeMode() const

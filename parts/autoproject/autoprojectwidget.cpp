@@ -23,9 +23,11 @@
 #include <kurl.h>
 
 #include "kdevcore.h"
+#include "domutil.h"
 #include "misc.h"
 #include "subprojectoptionsdlg.h"
 #include "targetoptionsdlg.h"
+#include "addsubprojectdlg.h"
 #include "addtargetdlg.h"
 #include "addservicedlg.h"
 #include "addapplicationdlg.h"
@@ -278,6 +280,14 @@ QString AutoProjectWidget::subprojectDirectory()
 }
 
 
+QString AutoProjectWidget::buildDirectory()
+{
+    QDomDocument &dom = *m_part->projectDom();
+
+    return DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir");
+}
+
+
 void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
 {
     if (!item)
@@ -334,6 +344,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         SubprojectItem *spitem = static_cast<SubprojectItem*>(pvitem);
         KPopupMenu pop(i18n("Subproject"));
         int idOptions = pop.insertItem(i18n("Options..."));
+        int idAddSubproject = pop.insertItem(i18n("Add subproject..."));
         int idAddTarget = pop.insertItem(i18n("Add target..."));
         int idAddService = pop.insertItem(i18n("Add service desktop file..."));
         int idAddApplication = pop.insertItem(i18n("Add application desktop file..."));
@@ -341,6 +352,10 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         int r = pop.exec(p);
         if (r == idOptions) {
             SubprojectOptionsDialog(m_part, this, spitem, this, "subproject options dialog").exec();
+        }
+        else if (r == idAddSubproject) {
+            AddSubprojectDialog dlg(m_part, this, spitem, this, "add subproject dialog");
+            dlg.exec();
         }
         else if (r == idAddTarget) {
             AddTargetDialog dlg(this, spitem, this, "add target dialog");

@@ -99,7 +99,13 @@ void AddTargetDialog::primaryChanged()
         prefix_combo->insertItem(QString(it.key()));
 
     // Only enable ldflags stuff for libtool libraries
-    ldflags_group->setEnabled(primary_combo->currentItem() == 2);
+    bool lt = primary_combo->currentItem() == 2;
+    bool prog = primary_combo->currentItem() == 0;
+    allstatic_box->setEnabled(lt);
+    avoidversion_box->setEnabled(lt);
+    module_box->setEnabled(lt);
+    noundefined_box->setEnabled(lt);
+    ldflagsother_edit->setEnabled(lt || prog);
 }
 
 
@@ -138,14 +144,16 @@ void AddTargetDialog::accept()
         }
 
     QStringList flagslist;
-    if (allstatic_box->isChecked())
-        flagslist.append("-all-static");
-    if (avoidversion_box->isChecked())
-        flagslist.append("-avoid-version");
-    if (module_box->isChecked())
-        flagslist.append("-module");
-    if (noundefined_box->isChecked())
-        flagslist.append("-no-undefined");
+    if (primary == "LTLIBRARIES") {
+        if (allstatic_box->isChecked())
+            flagslist.append("-all-static");
+        if (avoidversion_box->isChecked())
+            flagslist.append("-avoid-version");
+        if (module_box->isChecked())
+            flagslist.append("-module");
+        if (noundefined_box->isChecked())
+            flagslist.append("-no-undefined");
+    }
     flagslist.append(ldflagsother_edit->text());
     QCString ldflags = flagslist.join(" ").latin1();
 
@@ -159,7 +167,7 @@ void AddTargetDialog::accept()
     QMap<QCString,QCString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     replaceMap.insert(canonname + "_SOURCES", "");
-    if (primary == "LTLIBRARIES")
+    if (primary == "LTLIBRARIES" || primary == "PROGRAMS")
         replaceMap.insert(canonname + "_LDFLAGS", ldflags);
 
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);

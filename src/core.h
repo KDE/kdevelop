@@ -48,6 +48,7 @@ protected:
     virtual void setBreakpoint(const QString &fileName, int lineNum,
                                int id, bool enabled, bool pending);
     virtual void running(KDevPart *which, bool runs);
+    virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
     virtual void message(const QString &str);
     virtual KParts::PartManager *partManager() const { return manager; };
 
