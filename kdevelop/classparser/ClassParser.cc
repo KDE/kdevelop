@@ -648,7 +648,9 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
     if (!lexemStack.isEmpty() &&
         (lexemStack.top()->type==ID
          || lexemStack.top()->type=='}'
-         || lexemStack.top()->type=='*' || lexemStack.top()->type=='&'))
+         || lexemStack.top()->type=='*'
+         || lexemStack.top()->type==','
+         || lexemStack.top()->type=='&'))
     {
       /* if the next item is also an ID or it is something like
          struct test {int a, int b} x, int &x
