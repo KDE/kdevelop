@@ -1,24 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Build beállítások</TITLE>
-<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Build beállítások</TITLE>
+ <LINK HREF="index-10.html" REL=next>
+ <LINK HREF="index-8.html" REL=previous>
+ <LINK HREF="index.html#toc9" REL=contents>
 </HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
-<FONT FACE="Helvetica">
-<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
-<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
-
- 
-<P ALIGN="RIGHT">
-
-<A HREF="index-10.html">Next</A>
-<A HREF="index-8.html">Previous</A>
-<A HREF="index.html#toc9">Table of Contents</A>
-</P>
-<H3><A NAME="Build Settings"></A> <A NAME="s9">9. Build beállítások</A></H3>
+<BODY>
+<A HREF="index-10.html">Tovább</A>
+<A HREF="index-8.html">Vissza</A>
+<A HREF="index.html#toc9">Tartalom</A>
+<HR>
+<H2><A NAME="Build Settings"></A> <A NAME="s9">9. Build beállítások</A></H2>
 
 <P>The Project Options dialog, accessed by the project menu, lets you specify all needed parameters for your project. Those will be
 used for the Makefile.am's and the configure.in script (e.g. version number change or compiler warnings ) and thereby set the
@@ -36,20 +30,20 @@ settings:
 <LI>for each new release, increase the version number and update the project.lsm file for version and requirements.</LI>
 </UL>
 <P>
-<H3><A NAME="ss9.1">9.1 General Options</A>
-</H3>
+<H2><A NAME="ss9.1">9.1 General Options</A>
+</H2>
 
 <P>The first page of the Project Options dialog sets the general options for your project. These are project name and number, the
 handbook sgml file which is used for generating a set of HTML files that are included in the project and specific information
 about the author. The short description field is for additional information that you want to include like the program's purpose
 and the like.
 <P>
-<H3><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Compiler Options</A>
-</H3>
+<H2><A NAME="Compiler Options"></A> <A NAME="ss9.2">9.2 Compiler Options</A>
+</H2>
 
 <P>The compiler options page sets the compiler flags towards your target, debugging and additional.
 <P>
-<H4>Target</H4>
+<H3>Target</H3>
 
 <P>The target box contains two options that can be set:
 <P>Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
@@ -60,7 +54,7 @@ is set to -O0, so no optimization will be used. If you enable optimization by ch
 optimization level below from 1 to 3.
 <P>For a release version of your application, enable optimization and set the level to 2.
 <P>
-<H4>Debugging</H4>
+<H3>Debugging</H3>
 
 <P>Right of the Target box, you can see the debugging-section. This means that you can set your Compiler to include information for
 debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
@@ -75,7 +69,7 @@ the preprocessor and the assembler. A compilation of a sourcefile will therefore
 the final output of the Compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
 <P>For a release of your project, disable any debugging.
 <P>
-<H4>Additional Options</H4>
+<H3>Additional Options</H3>
 
 <P>The text entry field on the bottom is intended for you to manually set any flags for the Compiler by setting the CXXFLAGS
 environment variable in the Makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
@@ -83,8 +77,8 @@ description of all available Compiler flags you should see your Compiler documen
 <B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the Compiler.
 <P>
 <P>
-<H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
-</H3>
+<H2><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
+</H2>
 
 <P>The following gives a description about the Compiler warning options that can be set on page 3 of the project options dialog. The
 explanations are taken from the man page for GCC, egcs version 1.1.1.
@@ -162,8 +156,8 @@ the base class, but with a type signature that doesn't match any virtual functio
 </DL>
 <P>For a release of your project, it is recommended to enable <B>-Wall</B>.
 <P>
-<H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
-</H3>
+<H2><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
+</H2>
 
 <P>
 <!--
@@ -175,7 +169,7 @@ libraries that your application uses to link them to your binary with the Linker
 KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes
 or functions that are not listed as checkboxes, use the <B>"additional libraries"</B> field.
 <P>
-<H4>Linker Flags</H4>
+<H3>Linker Flags</H3>
 
 <P>
 <!--
@@ -194,7 +188,7 @@ using no shared libraries, this option will have no effect.
 available options can be taken from the man page for <B>ld</B> or your Compiler manpage.
 </DL>
 <P>
-<H4>Libraries</H4>
+<H3>Libraries</H3>
 
 <P>The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
 development. You have to enable those libraries that your application uses, otherwise the Linker will complain about unresolved
@@ -225,8 +219,8 @@ symbol tables.
 <B>additional libraries:</B> Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
 <P>
-<H3><A NAME="Make Options"></A> <A NAME="ss9.5">9.5 Make Options</A>
-</H3>
+<H2><A NAME="Make Options"></A> <A NAME="ss9.5">9.5 Make Options</A>
+</H2>
 
 <P>As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
 en/disabled. The available settings are:
@@ -271,17 +265,9 @@ The default is to rebuild always.
 <P>
 </DL>
 <P>
-<P ALIGN="RIGHT">
-
-<A HREF="index-10.html">Next</A>
-<A HREF="index-8.html">Previous</A>
-<A HREF="index.html#toc9">Table of Contents</A>
-</P>
-<CENTER>
-<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
-</CENTER>    
-</FONT>
-
- 
+<HR>
+<A HREF="index-10.html">Tovább</A>
+<A HREF="index-8.html">Vissza</A>
+<A HREF="index.html#toc9">Tartalom</A>
 </BODY>
 </HTML>

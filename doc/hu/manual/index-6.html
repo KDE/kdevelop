@@ -1,24 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A Súgó Rendszer</TITLE>
-<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A Súgó Rendszer</TITLE>
+ <LINK HREF="index-7.html" REL=next>
+ <LINK HREF="index-5.html" REL=previous>
+ <LINK HREF="index.html#toc6" REL=contents>
 </HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
-<FONT FACE="Helvetica">
-<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
-<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
-
- 
-<P ALIGN="RIGHT">
-
-<A HREF="index-7.html">Next</A>
-<A HREF="index-5.html">Previous</A>
-<A HREF="index.html#toc6">Table of Contents</A>
-</P>
-<H3><A NAME="The Help System"></A> <A NAME="s6">6. A Súgó Rendszer</A></H3>
+<BODY>
+<A HREF="index-7.html">Tovább</A>
+<A HREF="index-5.html">Vissza</A>
+<A HREF="index.html#toc6">Tartalom</A>
+<HR>
+<H2><A NAME="The Help System"></A> <A NAME="s6">6. A Súgó Rendszer</A></H2>
 
 <P>Most of KDevelop's strength is accumulated in the Help System.  It is also to be understood as an example of how to extend your own
 KDE application with a complete set of help functionality, and is, in part, already realized in the template applications, so
@@ -27,8 +21,8 @@ documentation, that only has to be extended by the programmer. This section ther
 help provided within the IDE as well as to show the usage of the Helpbrowser, which, by intelligent use, will make it very easy to
 get the information you need for development.
 <P>
-<H3><A NAME="ss6.1">6.1 Az "Ez meg micsoda ?"-gomb és a Quickhelp gyorssegítség</A>
-</H3>
+<H2><A NAME="ss6.1">6.1 Az "Ez meg micsoda ?"-gomb és a Quickhelp gyorssegítség</A>
+</H2>
 
 <P>Looking at KDevelop's top toolbar, you will see the "What's this?" button on the right end. By selecting the button, the cursor
 will change to a pointer with a question mark on the right, as is the same as the button in the toolbar. Now, you can select any
@@ -44,13 +38,13 @@ Selecting this will pop up the help window. This is always useful for dialogs wh
 as you are not familiar with KDevelop. Mind that most dialogs offer a Help-button which will show you the detailed context-help
 for the dialog's options within the provided online-manual in the help-browser.
 <P>
-<H3><A NAME="ss6.2">6.2 The Statusbar Help</A>
-</H3>
+<H2><A NAME="ss6.2">6.2 The Statusbar Help</A>
+</H2>
 
 <P>The statusbar of KDevelop offers you many functions that inform you about the current activity state as well as "status messages"
 offering a short description for commands.
 <P>
-<H4>Statusbar Entries</H4>
+<H3>Statusbar Entries</H3>
 
 <P>The Statusbar contains:
 <OL>
@@ -63,7 +57,7 @@ mode. The mode can be changed by the INS-key on the keyboard.</LI>
 <LI> a column counter, indicating the current column position of the cursor in a line.</LI>
 </OL>
 <P>
-<H4>Help Messages</H4>
+<H3>Help Messages</H3>
 
 <P>The statusbar informs you about the action of menu entries if you select a menu within the menubar and select an action without
 executing it. Further, if you press on a toolbar icon, but without releasing the mousebutton, the help message for the button is
@@ -79,21 +73,21 @@ connection.
 for the documentation browser or a text file for the editing windows. Further, the Project name is displayed, so you have constant
 control where you are and what you're currently working at.
 <P>
-<H3><A NAME="ss6.3">6.3 Configuring the HTML Browser</A>
-</H3>
+<H2><A NAME="ss6.3">6.3 Configuring the HTML Browser</A>
+</H2>
 
 <P>The browser included in KDevelop is completely HTML-based, therefore you can specify the usual options like background and the
 like. You can set all preferences by the "Documentation Browser"-entry of the "Options"-menu.
 The configuration dialog shows you two tabulators; the first for setting the font preferences, the second for color selection.
 <P>
-<H4>Font Preferences</H4>
+<H3>Font Preferences</H3>
 
 <P>The first option for the font display is the size. Available are small, medium and large. The best display for normal use
 is set to small by default.
 For the font selection you have to specify a standard font for normal text as it appears in HTML documents; the fixed font is the
 one used for displaying e.g. code within the HTML file.
 <P>
-<H4>Color Preferences</H4>
+<H3>Color Preferences</H3>
 
 <P>The color preferences dialog allows configuration of background, normal text, URL Link and followed link color. The
 colored buttons on the right are displaying the current settings; selecting a button will result in opening the "Select Color"
@@ -103,15 +97,15 @@ window or by setting the values directly. The middle contains a preview for the 
 colors always independent of the page's preset ones. "Apply" will execute all changes, while "OK" will apply changes and close the
 dialog. "Cancel" leaves all settings untouched and exits the configuration.
 <P>
-<H3><A NAME="Using the Documentation Browser"></A> <A NAME="ss6.4">6.4 Using the Documentation Browser</A>
-</H3>
+<H2><A NAME="Using the Documentation Browser"></A> <A NAME="ss6.4">6.4 Using the Documentation Browser</A>
+</H2>
 
 <P>The documentation browser allows quick and easy access to all manuals and documentations that are provided with KDevelop or
 generated automatically, including online-documentation for the KDE-libraries and your project documentation. Plus, the
 Documentation Tree in the tree-view lets you customize a special "Others" folder that contains all individually added
 documentation.
 <P>
-<H4>Requirements</H4>
+<H3>Requirements</H3>
 
 <P>To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
 class-documentation for the KDE-libraries during the setup process, but can also invoked by option in the 
@@ -128,7 +122,7 @@ installation process, but can also be build with the
 the provided search functions see 
 <A HREF="#Using the Searchindex">Using the Searchindex</A>.
 <P>
-<H4>Provided Documentation</H4>
+<H3>Provided Documentation</H3>
 
 <P>The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
 the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
@@ -161,7 +155,7 @@ with the
 documentation as described below. Finally, the Doc-Tree allows access to the API and the Manual for your current
 project.
 <P>
-<H4>Adding Documentation to the Helpbrowser</H4>
+<H3>Adding Documentation to the Helpbrowser</H3>
 
 <P>To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree containing four folders.
 The "Others" folder is, by default, empty. On a right mousebutton click over this folder, a context menu opens that has an entry "Add
@@ -172,7 +166,7 @@ pushbutton on the right to open a file-chooser dialog. This allows a quick brows
 that only HTML-documentation can be selected, so only HTML files are allowed to choose. Selecting OK will add the entry to the Doc-tree
 and is available directly.
 <P>
-<H4><A NAME="Using the Searchindex"></A> Using the Searchindex</H4>
+<H3><A NAME="Using the Searchindex"></A> Using the Searchindex</H3>
 
 <P>KDevelop includes a set of functions to help you search information within HTML documentation. To use these features, your system
 needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
@@ -197,17 +191,9 @@ page for the <CODE>KTMainWindow</CODE> class (KDEUI library) and you want to kno
 <CODE>KTMainWindow</CODE> and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
 your grep search directly. Then you can choose an result line to jump to the according sourcecode.
 <P>
-<P ALIGN="RIGHT">
-
-<A HREF="index-7.html">Next</A>
-<A HREF="index-5.html">Previous</A>
-<A HREF="index.html#toc6">Table of Contents</A>
-</P>
-<CENTER>
-<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
-</CENTER>    
-</FONT>
-
- 
+<HR>
+<A HREF="index-7.html">Tovább</A>
+<A HREF="index-5.html">Vissza</A>
+<A HREF="index.html#toc6">Tartalom</A>
 </BODY>
 </HTML>

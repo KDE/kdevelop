@@ -1,33 +1,27 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Projektek</TITLE>
-<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Projektek</TITLE>
+ <LINK HREF="index-9.html" REL=next>
+ <LINK HREF="index-7.html" REL=previous>
+ <LINK HREF="index.html#toc8" REL=contents>
 </HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
-<FONT FACE="Helvetica">
-<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
-<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
-
- 
-<P ALIGN="RIGHT">
-
-<A HREF="index-9.html">Next</A>
-<A HREF="index-7.html">Previous</A>
-<A HREF="index.html#toc8">Table of Contents</A>
-</P>
-<H3><A NAME="Projects"></A> <A NAME="s8">8. Projektek</A></H3>
+<BODY>
+<A HREF="index-9.html">Tovább</A>
+<A HREF="index-7.html">Vissza</A>
+<A HREF="index.html#toc8">Tartalom</A>
+<HR>
+<H2><A NAME="Projects"></A> <A NAME="s8">8. Projektek</A></H2>
 
 <P>
 <P>
-<H3><A NAME="ss8.1">8.1 Projecttypes</A>
-</H3>
+<H2><A NAME="ss8.1">8.1 Projecttypes</A>
+</H2>
 
 <P>
 <P>
-<H4>Programs</H4>
+<H3>Programs</H3>
 
 <P>KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to
 delete it. It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all
@@ -54,6 +48,11 @@ have no problems to create a full-functional application by using Qt only.
 remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for KDE applications.</LI>
 <LI>a C program framework for C programmers. This is as well a terminal based application but only uses the C compiler.</LI>
 </UL>
+<P>Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
+required libraries as well as setting the according installation path in the KDevelop Setup dialog (see 
+<A HREF="index-14.html#General Configuration">General Configuration</A>) before generating a project to ensure everything 
+will work automatically. The KDevelop 1.2 Appwizard adds a GNOME-template so that developers wanting to use KDevelop to create
+GTK+-based applications can do so as well.
 <P>Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
@@ -63,7 +62,7 @@ the execution of the binary is also restricted to this lowercase project name.
 <P>Mind that KDevelop does not write any information into Makefiles or configuration files. You are responsible for any project behavior
 and build settings yourself.
 <P>
-<H4>Libraries</H4>
+<H3>Libraries</H3>
 
 <P>A general project-type to create libraries is not available at the moment. Anyway, building libraries is not impossible with KDevelop.
 Here are a few guidelines and workarounds:
@@ -72,20 +71,21 @@ Here are a few guidelines and workarounds:
 <LI>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
 these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
 Mind that the static library is part of the binary later and won't get installed.</LI>
-<LI>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
-subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
-the 
-<A HREF="../../default/kdevelop/programming/index-19.html">KDevelop Programming Handbook</A> offers a Makefile.am template. If the subdirectory's
-Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
-build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
-according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter 
-<A HREF="#Project Hacking">Project Hacking</A>.</LI>
-<LI>for installing a shared library, you have to watch the KDE-File-system Standard as explained in 
-<A HREF="../../default/kdevelop/programming/index-13.html">The KDevelop Programming Handbook</A></LI>
+<LI>to create a shared library KDevelop offers an easy way to turn a such created static library into a shared: Open the RFV on the
+left of KDevelop´s main window and browse to the created subdirectory. There, use the right mouse button over the subdirectory. The
+popup-menu offers the following options:
+<UL>
+<LI>update Makefile.am</LI>
+<LI>change to static lib</LI>
+<LI>change to shared lib</LI>
+</UL>
+
+Use "change to shared lib" to convert the default generated static library into a shared one. You can reverse your decision later if
+you decide that using it as a static library will work as well for your project- just do the same steps again and select "change to
+static lib".</LI>
 </UL>
 <P>
-<H4>Multiple Targets</H4>
+<H3>Multiple Targets</H3>
 
 <P>
 <P>For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
@@ -118,11 +118,11 @@ newtarget.pot</LI>
 Makefile.am outside the write area according to the needed settings</LI>
 </UL>
 <P>
-<H3><A NAME="ss8.2">8.2 New Projects</A>
-</H3>
+<H2><A NAME="ss8.2">8.2 New Projects</A>
+</H2>
 
 <P>
-<P>The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+<P>The KDevelop Application Wizard allows the creation of different types of projects, constructing a framework for each. All
 projects use the GNU standard development tools as described in the requirements section of this handbook.
 <P>For KDE applications there are six different frameworks:
 <UL>
@@ -145,16 +145,21 @@ document-view interface (SDI) model.</LI>
 <LI>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
 document interface (MDI) model.</LI>
 <LI>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
-Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).</LI>
+Requires the QextMDI library, see 
+<A HREF="http://www.geocities.com/gigafalk/qextmdi.htm">http://www.geocities.com/gigafalk/qextmdi.htm</A> for more information.</LI>
 </UL>
+<P>Further, the Application Wizard offers a template for creating GNOME-compliant applications with the GTK+ C-library with a ready-to-run
+mainwindow containing a menubar, toolbar and statusbar.
 <P>The two C and C++ -Application types offer a framework for creating commandline applications.
 <P>And last but not least you can create an empty projekt, e.g. to work with existing projects.
 <P>The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
+<P>For adding revision control to your project, see 
+<A HREF="index-13.html#CVS Integration">CVS Integration</A>.
 <P>
-<H3><A NAME="ss8.3">8.3 Opening and Closing of Projects</A>
-</H3>
+<H2><A NAME="ss8.3">8.3 Opening and Closing of Projects</A>
+</H2>
 
 <P>KDevelop is by default configured to open the last project loaded when starting. This allows a fast start, but you may want to
 change that to just start the IDE without any project. To prevent the default behavior, disable the "Load last project" option in
@@ -175,8 +180,8 @@ projectname.kdevprj</CODE>.
 Then you will be asked to save any changes before exiting. The available options for closing are the same than for closing a
 project before loading another.
 <P>
-<H3><A NAME="ss8.4">8.4 Editing a Project</A>
-</H3>
+<H2><A NAME="ss8.4">8.4 Editing a Project</A>
+</H2>
 
 <P>After you created a new project with the KAppWizard, the usual task is to extend the project by editing the already created
 sources and adding classes, pixmaps, pictures and whatelse you project needs. Now, editing a project means that you can change the
@@ -195,7 +200,7 @@ of documentation for online help enabling the end-user to help himself in case o
 <A HREF="#Project Hacking">Project Hacking</A> describes how you can eventually work around the KDevelop project
 management in special cases.
 <P>
-<H4><A NAME="Adding Files and Classes"></A> Adding and Removing Files and Classes</H4>
+<H3><A NAME="Adding Files and Classes"></A> Adding and Removing Files and Classes</H3>
 
 <P>Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
 need to create an new file which will contain the part of the class implementation you want to move. You can do this by choosing
@@ -221,7 +226,7 @@ are already given by the KAppWizard. To remove a file, you have additionally the
 or delete it completely. To remove a file from the project, select the file in the LFV or the RFV, press the right mouse button
 and select "remove". To delete a file, select "delete physically".
 <P>
-<H4><A NAME="Setting Project File Options"></A> Setting Project File Options</H4>
+<H3><A NAME="Setting Project File Options"></A> Setting Project File Options</H3>
 
 <P>The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
 files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
@@ -231,7 +236,7 @@ project is build and installed by end users, so you have to set up those locatio
 look in your Makefile.am where the location macros are specified.
 <P>
 <P>
-<H4><A NAME="Adding Translations"></A> Adding Translations</H4>
+<H3><A NAME="Adding Translations"></A> Adding Translations</H3>
 
 <P>As KDE allows configuring your desktop and the behavior of your applications, you also have the option to choose the language
 that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
@@ -273,7 +278,7 @@ this. Also read
 <A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A> and 
 <A HREF="../../default/kdevelop/programming/index-11.html">The KDevelop Programming Handbook</A> where questions about internationalization are covered again.
 <P>
-<H4><A NAME="Extending the Project Documentation"></A> Extending the Project Documentation</H4>
+<H3><A NAME="Extending the Project Documentation"></A> Extending the Project Documentation</H3>
 
 <P>All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
 installation, project name and version as well as the author name and email-address. As KDevelop uses SGML-templates, it's very
@@ -301,7 +306,7 @@ filename and enter CTRL+V to insert the clipboard contents (which was the instal
 way to specify the installation path. For more options about specifying installation destinations, see 
 <A HREF="../../default/kdevelop/programming/index-14.html">The KDevelop Programming Handbook</A>.
 <P>
-<H4><A NAME="Project Hacking"></A> Project Hacking</H4>
+<H3><A NAME="Project Hacking"></A> Project Hacking</H3>
 
 <P>When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
@@ -311,8 +316,8 @@ the Makefile.am macros and add all changes in the Makefile.am's after the sectio
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
 this will prevent using KDevelop for any changes related to project configuration.
 <P>
-<H3><A NAME="ss8.5">8.5 Compiler and Linker Flags for Projects</A>
-</H3>
+<H2><A NAME="ss8.5">8.5 Compiler and Linker Flags for Projects</A>
+</H2>
 
 <P>Each new project contains all needed options for the Compiler and Linker as well as general settings. By default, your project
 is set to use debugging by the -g flag, and warnings are set to the standard, -Wall. This ensures you can debug your application
@@ -322,8 +327,8 @@ configuring the correct settings with the Project Options dialog. See
 <A HREF="index-9.html#Build Settings">Build Settings</A> for more
 information how and where to set Compiler Options, Warnings and Linker Options.
 <P>
-<H3><A NAME="ss8.6">8.6 External Projects</A>
-</H3>
+<H2><A NAME="ss8.6">8.6 External Projects</A>
+</H2>
 
 <P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
 empty project file with your project name, version and type information as well as your name and email address.  Then copy all your
@@ -332,17 +337,9 @@ will be copied into your project directory and the Makefile.am's are updated.   
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
 compiled and installed after the conversion to ensure the project's consistency.
 <P>
-<P ALIGN="RIGHT">
-
-<A HREF="index-9.html">Next</A>
-<A HREF="index-7.html">Previous</A>
-<A HREF="index.html#toc8">Table of Contents</A>
-</P>
-<CENTER>
-<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
-</CENTER>    
-</FONT>
-
- 
+<HR>
+<A HREF="index-9.html">Tovább</A>
+<A HREF="index-7.html">Vissza</A>
+<A HREF="index.html#toc8">Tartalom</A>
 </BODY>
 </HTML>

@@ -1,24 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A Dialógusszerkesztõ</TITLE>
-<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+ <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
+ <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A Dialógusszerkesztõ</TITLE>
+ <LINK HREF="index-12.html" REL=next>
+ <LINK HREF="index-10.html" REL=previous>
+ <LINK HREF="index.html#toc11" REL=contents>
 </HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
-<FONT FACE="Helvetica">
-<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
-<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
-
- 
-<P ALIGN="RIGHT">
-
-<A HREF="index-12.html">Next</A>
-<A HREF="index-10.html">Previous</A>
-<A HREF="index.html#toc11">Table of Contents</A>
-</P>
-<H3><A NAME="The Dialog Editor"></A> <A NAME="s11">11. A Dialógusszerkesztõ</A></H3>
+<BODY>
+<A HREF="index-12.html">Tovább</A>
+<A HREF="index-10.html">Vissza</A>
+<A HREF="index.html#toc11">Tartalom</A>
+<HR>
+<H2><A NAME="The Dialog Editor"></A> <A NAME="s11">11. A Dialógusszerkesztõ</A></H2>
 
 <P>The KDevelop integrated dialog editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
 You see the direct appearance of your dialog as it will be presented to the user. Using the dialog editor is usually the first step you
@@ -37,11 +31,11 @@ browser. Just select the menu commands, and KDevelop reacts to your will.
 <P>The following chapters give you an overview of the dialog editor interface, how to create a new dialog initially and how set up the
 properties of the child widgets that your dialog contains.
 <P>
-<H3><A NAME="ss11.1">11.1 The Dialog Editor View</A>
-</H3>
+<H2><A NAME="ss11.1">11.1 The Dialog Editor View</A>
+</H2>
 
 <P>
-<H4>The Mainview</H4>
+<H3>The Mainview</H3>
 
 <P>The dialog editor's view is logically separated by:
 <UL>
@@ -54,12 +48,12 @@ editor. See
 <A HREF="#Setting Properties">Setting Properties</A> for information how to specialize the widget's behavior and look.</LI>
 </UL>
 <P>
-<H4>Menubar, Toolbar and Statusbar differences to KDevelop</H4>
+<H3>Menubar, Toolbar and Statusbar differences to KDevelop</H3>
 
 <P>In Dialogeditor mode, KDevelop changes the menubar, toolbar and statusbar slightly to provide the functionality you need for creating
 widgets. These are:
 <P>
-<H4>Menubar</H4>
+<H3>Menubar</H3>
 
 <P><B>"File"-menu:</B> replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
 <P><B>"View"-menu:</B> replaces "Tree-View" with "Widgets-View", en/disabling the Widgets-View tabulators; adds "Properties-View" to
@@ -67,18 +61,18 @@ en/disable the Properties-View and "Grid Size" to let you specify the grid size 
 <P><B>"Build"-menu:</B> replaces "Compile File" with "Generate Sources". This lets you actually generate the sources for your
 dialog.
 <P>
-<H4>Toolbar</H4>
+<H3>Toolbar</H3>
 
 <P>The toolbar contains a new icon for "New Dialog" as well as a replacement for "Compile File" by "Generate Sources".
 <P>
-<H4>Statusbar</H4>
+<H3>Statusbar</H3>
 
 <P>The statusbar is providing you information about the currently selected widget, especially displaying the values for X
 and Y size in the coordinate system. For Statusbar help, you are provided the same functionality than in Project-editing mode.
 <P>While changing widget size, the statusbar shows the current values for width and height of the selected widget.
 <P>
-<H3><A NAME="ss11.2">11.2 Creating a New Dialog</A>
-</H3>
+<H2><A NAME="ss11.2">11.2 Creating a New Dialog</A>
+</H2>
 
 <P>After creating your project skeleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
 the project types KDE and Qt application, the dialog editor recognizes this and offers widget construction by the widgets that are
@@ -91,7 +85,7 @@ Then press OK and a new dialog will appear. When finished with the new dialog, s
 dialog to generate the widget´s source file will appear. There you have to give KDevelop the dialog-specific information about the baseclass,
 the source file names and destination.
 <P>
-<H4>Dialog Class</H4>
+<H3>Dialog Class</H3>
 
 <P>The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
 Therefore, you have the following options:
@@ -110,7 +104,7 @@ widgets that you create.</LI>
 Class". The dialog editor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
 filename of the custom class has to be set.
 <P>
-<H4>Files</H4>
+<H3>Files</H3>
 
 <P>In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
 for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
@@ -125,7 +119,7 @@ overwritten each time the code is generated for your widget. The header and C++ 
 these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
 changes will get lost by the next code-creation.
 <P>
-<H4>Location</H4>
+<H3>Location</H3>
 
 <P>For generating the widget's sources, the dialog editor needs to know the location where these will go. The default value for the
 output directory is the current project subdirectory containing the sources already present.
@@ -135,8 +129,8 @@ geometry management for your widgets, you should make yourself accustomed with t
 class with the classgenerator and write your widget by hand. For more information, see 
 <A HREF="../../default/kdevelop/programming/index.html">The KDevelop Programming Handbook</A>.
 <P>
-<H3><A NAME="Adding Widgets"></A> <A NAME="ss11.3">11.3 Adding Widgets</A>
-</H3>
+<H2><A NAME="Adding Widgets"></A> <A NAME="ss11.3">11.3 Adding Widgets</A>
+</H2>
 
 <P>After specifying the dialogs or widgets class and filenames, you are ready to start creating the widget and filling it with contents.
 Adding low-level widgets to your dialog is a very easy task. Just select the widget you want to add from the "Widgets" tabulator on the
@@ -165,7 +159,7 @@ Over a selected widget, the context menu shows the class name of the selected it
 </UL>
 <P>After setting the size and position, you can edit the preferences for the selected item on the Preferences window.
 <P>
-<H4>The Widgets Tabulator</H4>
+<H3>The Widgets Tabulator</H3>
 
 <P>
 <!--
@@ -181,7 +175,7 @@ directions are possible. Then press the mousebutton and move the mouse while hol
 release the mouse. While resizing, the statusbar displays the current position of the item by X and Y values and the current size by
 W(Width) and H(Height) values.
 <P>
-<H4>The Dialogs Tabulator</H4>
+<H3>The Dialogs Tabulator</H3>
 
 <P>
 <!--
@@ -193,7 +187,7 @@ The dialogs tabulator is intended to let you open your project's dialogs by a mo
 don't delete these definition files.
 <P>On selecting a dialog, it will be shown as by the state it was saved in the last editing step in the Widget-Editor view.
 <P>
-<H4>The Items Tabulator</H4>
+<H3>The Items Tabulator</H3>
 
 <P>
 <!--
@@ -206,15 +200,15 @@ are then listed in the next tree-level.
 <P>On selecting an item, it gets marked in the editor view, as well as the properties are shown in the properties window.
 Using the items view is sometimes important if your widgets behavior depends on the parent-child relationship.
 <P>
-<H3><A NAME="The Widget Editor"></A> <A NAME="ss11.4">11.4 The Widget Editor</A>
-</H3>
+<H2><A NAME="The Widget Editor"></A> <A NAME="ss11.4">11.4 The Widget Editor</A>
+</H2>
 
 <P>The Widget Editor is the main view that is placed in the middle and where you are constructing your widget. After adding items, those
 can be selected and resized, as well as moved to the place you need them. Over all items, popup menus provide a quick access to
 functions like cut, copy and insert.
 <P>
-<H3><A NAME="Setting Properties"></A> <A NAME="ss11.5">11.5 Setting Properties</A>
-</H3>
+<H2><A NAME="Setting Properties"></A> <A NAME="ss11.5">11.5 Setting Properties</A>
+</H2>
 
 <P>
 <!--
@@ -234,8 +228,8 @@ default values as given in the widget's constructors.
 <P>A complete list of the supported properties that can be set in the properties window for each widget item.
 <P>
 <P>
-<H3><A NAME="ss11.6">11.6 Generating Files</A>
-</H3>
+<H2><A NAME="ss11.6">11.6 Generating Files</A>
+</H2>
 
 <P>
 <!--
@@ -250,17 +244,9 @@ add other methods you may need.
 <BLOCKQUOTE>See 
 <A HREF="../../default/kdevelop/programming/index-6.html">The KDevelop Programming Handbook, The Dialogeditor</A> for more information about widget properties and sourcecode generation.</BLOCKQUOTE>
 <P>
-<P ALIGN="RIGHT">
-
-<A HREF="index-12.html">Next</A>
-<A HREF="index-10.html">Previous</A>
-<A HREF="index.html#toc11">Table of Contents</A>
-</P>
-<CENTER>
-<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
-</CENTER>    
-</FONT>
-
- 
+<HR>
+<A HREF="index-12.html">Tovább</A>
+<A HREF="index-10.html">Vissza</A>
+<A HREF="index.html#toc11">Tartalom</A>
 </BODY>
 </HTML>

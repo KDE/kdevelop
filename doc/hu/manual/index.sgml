@@ -60,9 +60,9 @@ nagyszerû hozzáférést biztosít az online dokumentációhoz.
 
 <sect>Változások
 <p>
-A KDevelop 1.0-ás verziója a C/C++ fejlesztésekhez leginkább szükséges szolgáltatásokkal érkezik. A KDevelop kifejlesztésének során
-a projekt óriási fejlõdésen ment keresztül a 0.1-es verzió óta, amelyet a 0.2, 0.3 és a 0.4 verziók követtek; mindegyiket teszteltük,
-és a talált hibákat kijavítottuk. Úgy gondoljuk, hogy a jelenlegi lesz a KDE 1.x sorozathoz szánt végsõ verzió, amely olyan fejlesztõi
+A KDevelop 1.2-es verziója a C/C++ fejlesztésekhez leginkább szükséges szolgáltatásokkal érkezik. A KDevelop kifejlesztésének során
+a projekt óriási fejlõdésen ment keresztül a 1.0-ás végleges verzió óta, amelyet az 1.1-es verzió követett.
+ Úgy gondoljuk, hogy a jelenlegi lesz a KDE 1.x sorozathoz szánt végsõ verzió, amely olyan fejlesztõi
 környezetet nyújt, amilyet a programozók használni akarnak.
 
 A következõ területeken értünk el javulást:
@@ -71,7 +71,8 @@ A következõ területeken értünk el javulást:
 <item>gyors osztályelemzõ és ~böngészõ, grafikus osztály-fa nézettel, osztályok és elemeik dialógusalapú szerkesztésével,
 <item>CVS támogatás a leggyakrabban igényelt funkciókkal, mint például fájlok és könyvtárak hozzáadása, törlése, frissítése és jóváhagyása,
 <item>a KDevelop-pal együtt szállított frissített és kiterjesztett dokumentáció, amely pillanatnyilag öt kötetet számlál,
-<item>javított osztályelemzõ, dialógusszerkesztõ és hibakeresõ.
+<item>javított dialógusszerkesztõ és hibakeresõ,
+<item>frissített dokumentációs fa, amely közvetlenül elérhetõvé teszi az osztályok bármelyik eljárásának leírását 
 </itemize>
 
 Az IDE-rõl, a dokumentációjáról vagy a szolgáltatásairól bármilyen észrevételt örömmel fogadunk.
@@ -96,6 +97,9 @@ lesznek lefordítva.
 <item>A <ref id="Build Settings" name="Build beállítások"> fejezet referenciát tartalmaz a <idx/fordítóprogram/ és a linker, valamint a projekt beállításairól.
 <item><ref id="The Class Browser" name="Az Osztályböngészõ"> fejezet elmondja, hogyan használhatjuk ki a KDevelop hatékony Osztályböngészõjének a szolgáltatásait.
 <item><ref id="The Dialog Editor" name="A Dialógus szerkesztõ"> fejezet felvázolja a beépített <idx/GUI/ építõt, és az általa generált C++ <idx/kimenet/et.
+<item><ref id="The Internal Debugger" name="A belsõ nyomkövetõ"> fejezet áttekintést ad a nyomkövetés beállításairól és a belsõ nyomkövetõ használatáról
+<item>A <ref id="CVS Integration" name="Beépített CVS"> fejezet elmondja, hogyan kell a CVS és az RCS verziókövetõ rendszereket használni 
+az Ön KDevelop projektjében.
 <item>Az <ref id="General Configuration" name="Általános beállítások"> fejezet megmutatja, hogyan lehet a KDevelop-ban átlalánosan használt beállításokat megadni.
 <item>A <ref id="Questions and Answers" name="Kérdések és Válaszok"> fejezet a KDevelop különbözõ Unix rendszerek alatti használatát, és általános problémákat
 érintõ kérdéseket taglal.
@@ -105,6 +109,40 @@ Kezdõ programozóknak és a KDevelop új felhasználóinak melegen ajánljuk ezen kézi
 kezdenének, mivel annak használatát mélységében taglalja. Annak megértése, hogyan lehet valamit a leggyorsabban elérni rengeteg,
 funkció és szolgáltatások utáni keresés idejét spórolhatja meg a számunkra, mivel még egyszerûbbé teszi az elsõrangú fejlesztõeszközök
 használatát.
+
+<sect>About the KDevelop Project
+<p>
+The KDevelop project was started in summer of 1998 after KDE 1.0 was available on Linux/Unix to make the 
+attempt of creating an easy to use C/C++ IDE for programmers, especially targeting on the KDE desktop. Since 
+then the project has found a lot of helpers and supporters as well as sponsors who want to help the team 
+continue their work on this now widely recognized programming environment. Within one and a half year, the IDE 
+developed to a full-featured KDE application with the most possible functionality and stability as the 
+creators started to develop the IDE with the IDE itself at the time enough usability was given. Therefore bugs 
+were mostly found by the authors and could be fixed very quickly as well as needed extensions for programming 
+KDE applications. 
+
+The first official stable release was made with version 1.0 on December 6, 1999. Thereafter, the KDevelop Team 
+introduced more features and stability into the IDE by new code or code that was unstable before, which lead 
+to the second release as version 1.1 on February 28, 2000. 
+ 
+Since then, the project continud to integrate more functionality and simplifying the current codebase along
+with many translators who transfer KDevelop to as most languages as possible to provide the international 
+developer community the IDE in their own language, including the handbooks that ship with it. Many users 
+contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix 
+developers to make it even more stable and portable to other Unices.
+ 
+<sect>Printed Versions
+<p>
+A printed version of the complete KDevelop Documentation is available as the book titled <bf>Developing 
+Applications for Linux: KDE Edition</bf>, which can be ordered either online from the KDevelop website at 
+<htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org"> or at <htmlurl 
+url="http://www.opendocs.org" name="http://www.opendocs.org">. A share of the Gross Profits from the sales of 
+this book goes back to the KDevelop project to support continuing the further development of KDevelop.
+
+Printable versions of the KDevelop Documentation can also be obtained from the KDevelop website at <htmlurl 
+url="http://www.kdevelop.org" name="http://www.kdevelop.org"> in DVI, PostScript and PDF format both in A4 and 
+Letter size.
+
 
 <chapt><idx/Telepítés/<label id="Installation">
 <p>
@@ -118,21 +156,21 @@ Azok számára, akik követni akarják a KDevelop fejlesztésének menetét a honlapunk
 betekintést nyújtanak a KDevelop csapat fejlesztõi folyamatába. Különbözõ, a KDevelop-hoz szükséges mások által írt szoftvert is
 ajánlunk, mint például a <idx/KDoc/ és a <idx/KDbg/.
 
-Ha a KDevelop fordítása vagy használata során problémákba ütközöl, kérjük olvasd el a <ref id="Questions and Answers" name="Kérdések és Válaszok">
-fejezetet ebben a kézikönyvben, vagy a GYIK (FAQ) fájlt a KDevelop csomagból. Ha a problémádra nem találsz választ, kérjük
-íratkozz fel a KDevelop levelezési listára itt: <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">
-azáltal, hogy egy üres fejlécû levelet küldesz, és a levél tartalma csak egy szó: "subscribe" (felíratkozom). A kérdés lehetõleg a
-KDevelop IDE használatára vonatkozzon, és ne az általad írt alkalmazás kódolása során felmerülõ <idx/megvalósítási/ problémákra.
+Ha a KDevelop fordítása vagy használata során problémákba ütközik, kérjük olvassa el a <ref id="Questions and Answers" name="Kérdések és Válaszok">
+fejezetet ebben a kézikönyvben, vagy a GYIK (FAQ) fájlt a KDevelop csomagból. Ha a problémádra nem talál választ, kérjük
+íratkozzon fel a KDevelop levelezési listára itt: <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">
+azáltal, hogy egy üres fejlécû levelet küld, és a levél tartalma csak egy szó: "subscribe" (felíratkozom). A kérdés lehetõleg a
+KDevelop IDE használatára vonatkozzon, és ne az ön által írt alkalmazás kódolása során felmerülõ <idx/megvalósítási/ problémákra.
 Akárhogy is, minden a listára küldött levél nyelve lehetõleg angol legyen, hogy minden tag részt vehessen a probléma megvitatásában,
 és így jobban tudjunk segíteni. A levelezõlista azon felhasználók számára is készült, akik hozzá kívánnak járulni a fejlesztéshez,
 vagy megtalálták egy általuk ismert hibának a megoldását, így mi ki tudjuk küszöbölni a <idx/hibák/t és eltárolni ezt a tudást, hogy
 a kezdõknek még szakszerûbb segítséget nyújthassunk.
-A hibák bejelentésének egy bevált módszere ha elküldöd a <idx/kimenet/et a konzolból indított KDevelop után, vagy ha kimásolod és beilleszted
+A hibák bejelentésének egy bevált módszere ha elküldi a <idx/kimenet/et a konzolból indított KDevelop után, vagy ha kimásolja és beilleszti
 a KDevelop belsõ <idx/Üzenetek-ablak/ának tartalmát.
 
 <sect><idx/Rendszer követelmények/
 <p>
-Ahhoz hogy sikeresen lefordítsd és használd a KDevelop-ot, a következõ programokra és könyvtárakra lesz szükséged, melyek a legtöbb
+Ahhoz hogy sikeresen lefordítsa és használja a KDevelop-ot, a következõ programokra és könyvtárakra lesz szüksége, melyek a legtöbb
 platformon elérhetõk disztribúciós csomagokként, és ilyen módon könnyedén telepíthetõk.
 <p>
 <bf>Szükséges:</bf>
@@ -150,7 +188,7 @@ platformon elérhetõk disztribúciós csomagokként, és ilyen módon könnyedén telepí
 <p>
 <bf>Választható:</bf>
 <itemize>
-<item><idx/a2ps/ vagy <idx/enscript/ a <idx/nyomtatás/ támogatására
+<item><idx/enscript/ a <idx/nyomtatás/ támogatására
 <item>ghostview vagy kghostview a <idx/nyomtatás/i elõnézethez
 <item><idx/glimpse/ 4.0 a <idx/keresési index/hez, letölthetõ: <url url="http://glimpse.cs.arizona.edu">
 <item>sgmltools 1.0, letölthetõ: <url url="http://www.sgmltools.org">
@@ -164,7 +202,7 @@ platformon elérhetõk disztribúciós csomagokként, és ilyen módon könnyedén telepí
 A KDevelop SuSE Linux 5.2-es disztribúción lett tesztelve, hardver: AMD K6 200, 64MB RAM, továbbá FreeBSD 3.0-n és SuSE Linux 6.0-n, hardver: Intel
 200 MMX, 128MB RAM.
 
-A szerzõk tudomása szerint, a SuSE Linux és a FreeBSD minden szükséges csomagot tartalmaznak, beleértve az <idx/a2ps/-t és <idx/enscript/-et csomag
+A szerzõk tudomása szerint, a SuSE Linux és a FreeBSD minden szükséges csomagot tartalmaznak, beleértve az <idx/enscript/-et csomag
 vagy .rpm fájl formájában, így a szükséges más által írt szoftverek telepítésének nem kellene gondot okoznia.
 
 <bf>Dokumentáció:</bf>	
@@ -174,14 +212,14 @@ elérhetõ a rendszereden a disztribúcióban a KDE projekt részeként szállított for
 és a <bf><idx/KDoc/</bf>-ra (a <idx/KDE-SDK/-ban található).
 
 A honlapunkról (<url url="http://www.kdevelop.org">) ajánlunk még egy C/C++ <idx/Referenciát/, amely telepítése után a
-dokumentáció böngészõbe kerül integrálásra. Töltsd le a csomagot és másold be a forrás fájlt <tt/root/ felhasználóként
-a <idx/KDE/ könyvtárba és csomagold ki a <tt/tar zxvf c_c++_reference.tar.gz/ paranccsal, ezután a referencia elérhetõ lesz
-a dokumentációs fában; egyébként, ha a böngészõben a referenciakönyvet választod, egy hibaüzenet jelenik meg a KDevelop
+dokumentáció böngészõbe kerül integrálásra. Töltse le a csomagot és másolja be a forrás fájlt <tt/root/ felhasználóként
+a <idx/KDE/ könyvtárba és csomagolja ki a <tt/tar zxvf c_c++_reference.tar.gz/ paranccsal, ezután a referencia elérhetõ lesz
+a dokumentációs fában; egyébként, ha a böngészõben a referenciakönyvet választja, egy hibaüzenet jelenik meg a KDevelop
 honlap URL-lel, felajánlva a letöltést és leírva a telepítési eljárást.
 
 <sect>Fordítás és Telepítés
 <p>
-Ahhoz, hogy lefordítsd a KDevelop-ot és telepítsd a rendszeredre, a következõket gépeld be a KDevelop forrás disztribúció fõkönyvtárában:
+Ahhoz, hogy lefordítsa a KDevelop-ot és telepítse a rendszerére, a következõket gépelje be a KDevelop forrás disztribúció fõkönyvtárában:
 
 <tscreen><verb>
 	&percnt ./configure
@@ -195,26 +233,26 @@ Ahhoz, hogy lefordítsd a KDevelop-ot és telepítsd a rendszeredre, a következõket
 
 <p>Miután a KDevelop az <tt><idx/autoconf/</tt>-ot használja, a lefordításnak nem kellene problémát okoznia.
 
-KDevelop CVS levonat fordításához a következõket gépeld be:
+KDevelop CVS levonat fordításához a következõket gépelje be:
 <tscreen><verb>
 	&percnt make -f <idx/Makefile.cvs/
 	&percnt ./configure
 	&percnt make
 
-	menj át `root`-ba, és gépeld:
+	menjen át `root`-ba, és gépelje:
 	
 	&percnt make install
 </verb></tscreen>
 
-Ha a rendszered <idx/make-parancs/a a <tt/gmake/, írj <tt/gmake/-et a <tt/make/ helyett.
+Ha a rendszere <idx/make-parancs/a a <tt/gmake/, írjon <tt/gmake/-et a <tt/make/ helyett.
 
 <sect>A KDevelop elindítása
 <p>
-Ha ablakkezelõként <idx/KDE/-t használsz, a KDevelop a
-"K"&rarr"Fejlesztés"&rarr"KDevelop 1.0" útvonalon érhetõ el. Minthogy a KDevelop támogatja a <idx/KDE/-Mime-típusokat, egy
+Ha ablakkezelõként <idx/KDE/-t használ, a KDevelop a
+"K"&rarr"Fejlesztés"&rarr"KDevelop 1.2" útvonalon érhetõ el. Minthogy a KDevelop támogatja a <idx/KDE/-Mime-típusokat, egy
 KDevelop projekt fájlra ("*.kdevprj", a KDevelop projekt ikonnal jelezve) kattintva a <idx/KDE/ Fájlkezelõben is elindítható
 (az adott projekttel együtt).
-Más ablakkezelõk alatt nyiss meg egy konzolt és gépeld be:
+Más ablakkezelõk alatt nyisson meg egy konzolt és gépelje be:
 <tscreen><verb>
 &percnt kdevelop
 </verb></tscreen>
@@ -226,7 +264,7 @@ Létezõ projekttel a KDevelop-ot úgy indíthatjuk, hogy belépünk az adott projekt 
 </verb></tscreen>
 
 A KDevelop elsõ indításkor minden felhasználónál elindítja az <ref id="The Installation Program" name="automatikus telepítés"> programot,
-amely lehetõvé teszi a leggyakrabban használt választások gyors beállítását. Ha a telepítés el lett fuserálva, bármikor újrakonfigurálhatod
+amely lehetõvé teszi a leggyakrabban használt választások gyors beállítását. Ha a telepítés el lett fuserálva, bármikor újrakonfigurálhatja
  a KDevelop-ot begépelve:
 
 <tscreen><verb> 	
@@ -238,8 +276,8 @@ vagy, a KDE-t használva a "K"&rarr"Fejlesztés"&rarr"KDevelop Setup" menü kiválas
 <sect>A telepítõprogram<label id="The Installation Program">
 <p>
 A KDevelop tartalmaz egy automatikus telepítõ program modult, amely akkor kerül meghívásra, amikor a KDevelop-ot elindítják, de
-a kdeveloprc konfigurációs fájl nem létezik. Azt javasoljuk, kövesd a telepítés lépéseit a "Végrehajtás" kiválasztásával,
-hogy automatikusan ellenõrízze a rendszeredet és belõje a KDevelop környezetet.
+a kdeveloprc konfigurációs fájl nem létezik. Azt javasoljuk, kövesse a telepítés lépéseit a "Végrehajtás" kiválasztásával,
+hogy automatikusan ellenõrízze a rendszerét és belõje a KDevelop környezetet.
 
 A telepítõ dialógus nyomógombjai a következõ célokra szolgálnak:
 <p>
@@ -256,11 +294,11 @@ rövid ismertetõ a <ref id="Programs" name="Programok"> fejezetben található.
 <item> Ellenõrzi a <idx/KDoc/ és a <idx/glimpse/ meglétét. Ezek teszik lehetõvé az új <idx/KDE-Könyvtár/ dokumentáció és a <idx/keresõ index/
 automatikus létrehozását a <idx/telepítés/ egy késõbbi pontján, már ha megvannak.
 
-<item> Ellenõrzi az <idx/a2ps/ vagy az <idx/enscript/ jelenlétét, hogy biztosítsa a <idx/nyomtatás/ támogatottságát. A helyes nyomtatáshoz
-a két program valamelyikének rendelkezésre kell állnia. Ha egyik sincs telepítve, ezt bármikor a késõbbiekben megteheted anélkül, hogy
+<item> Ellenõrzi az <idx/enscript/ jelenlétét, hogy biztosítsa a <idx/nyomtatás/ támogatottságát. A helyes nyomtatáshoz
+a két program valamelyikének rendelkezésre kell állnia. Ha egyik sincs telepítve, ezt bármikor a késõbbiekben megteheti anélkül, hogy
 újra kellene futtatni a <idx/telepítõ/ programot.
 
-<item> Ellenõrzi a <idx/KDbg/, <idx/KIconEdit/ és <idx/KTranslator/ meglétét. Javasoljuk, hogy telepítsd ezeket a programokat, mivel
+<item> Ellenõrzi a <idx/KDbg/, <idx/KIconEdit/ és <idx/KTranslator/ meglétét. Javasoljuk, hogy telepítse ezeket a programokat, mivel
 kiváló segítséget nyújtanak komplett <idx/KDE/-alkalmazások létrehozásánál. Megjegyzendõ, hogy a <idx/KDbg/ közvetlenül elérhetõ a
 KDevelop-on belül az aktuális projekt nyomkövetésére; a <idx/KIconEdit/ a fájl-nézegetõ fában kijelölt <idx/pixmaps/-ek kirajzolására és
 szerkesztésére használatos. A <idx/KDbg/, <idx/KIconEdit/ és <idx/KTranslator/ programok -ha megvannak- úgy lesznek konfigurálva, hogy
@@ -316,6 +354,8 @@ after pressing OK. Mind that you can set up additional options like auto saving 
 <bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
 to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
 to set all options yourself with the <idx/configuration dialog/s provided in the options-menu.
+
+
 
 
 <chapt>Programok<label id="Programs">
@@ -1053,8 +1093,8 @@ Configure again.<p>
 <p><nidx/"Tools"-menu/
 The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
-"<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
-see <ref id="Configuring the "<idx/Tools/" Menu" name="Configuring the "<idx/Tools/" Menu">.
+"Tools"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
+see <ref id="Configuring the Tools Menu" name="Configuring the Tools Menu">.
 
 <sect1>Changing KDevelop's settings
 <p><nidx/"Options"-menu/
@@ -1122,19 +1162,19 @@ help on.
 <p>
 <item><bf/<idx/The User Manual to KDevelop/		<idx/F1// Opens the User's Manual to KDevelop index page (this handbook).
 <p>
-<item><bf/<idx/The KDevelop Programming Handbook//
+<item><bf/<idx/The KDevelop Programming Handbook// 
 Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handbook">
 index page. This handbook contains a complete programming guide to KDE development.
 <p>
-<item><bf/<idx/KDE Application Tutorials//
+<item><bf/<idx/KDE Application Tutorials// 
 Changes to the index page of the <htmlurl url="tutorial/index.html" name="KDE Application Tutorials"> handbook.
-This handbook explains how to build the Qt tutorial applications and introduces you to KDE programming by developing
+This handbook explains how to build the Qt tutorial applications and introduces you to KDE programming by developing 
 an example application.
 <p>
-<item><bf/<idx/The KDE Library Reference Guide//
+<item><bf/<idx/The KDE Library Reference Guide// 
 Changes to the index page of the <htmlurl url="kde_libref/index.html" name="KDE Library Reference Guide">. This handbook contains
 detailed information about using the KDE/Qt libraries separated on topics such as event handling. <p>
-<item><bf/<idx/The KDE 2 Developer´s Guide//
+<item><bf/<idx/The KDE 2 Developer´s Guide// 
 Changes to the index page of the <htmlurl url="addendum/index.html" name="KDE 2 Developer´s Guide">. This Handbook contains
 information about the most recent KDE development and how to prepare your application to be KDE 2-ready.
 <p>
@@ -1367,6 +1407,7 @@ Execute target after Build process               CTRL+F9
 Execute target with Arguments                    ALT+F9
 Stop the current process                         F10
 </code>
+
 
 <chapt>A Súgó Rendszer<label id="The Help System">
 <p>
@@ -2110,6 +2151,12 @@ remove the "Hello World" line in main() and construct your <idx/classes/ the sam
 <item>a C program framework for C programmers. This is as well a terminal based application but only uses the C compiler.
 </itemize>
 
+Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the 
+required libraries as well as setting the according installation path in the KDevelop Setup dialog (see <ref 
+id="General Configuration" name="General Configuration">) before generating a project to ensure everything 
+will work automatically. The KDevelop 1.2 Appwizard adds a GNOME-template so that developers wanting to use KDevelop to create
+GTK+-based applications can do so as well.
+
 Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
 configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
 as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
@@ -2130,16 +2177,17 @@ Here are a few guidelines and workarounds:
 <item>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
 these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
 Mind that the static library is part of the binary later and won't get installed.
-<item>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
-subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
-the <htmlurl url="../../default/kdevelop/programming/index-19.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
-Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
-build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
-project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original project-subdirectory
-according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter <ref
-id="Project Hacking" name="Project Hacking">.
-<item>for installing a shared library, you have to watch the KDE-File-system Standard as explained in <htmlurl
-url="../../default/kdevelop/programming/index-13.html" name="The KDevelop Programming Handbook">
+<item>to create a shared library KDevelop offers an easy way to turn a such created static library into a shared: Open the RFV on the
+left of KDevelop´s main window and browse to the created subdirectory. There, use the right mouse button over the subdirectory. The
+popup-menu offers the following options:
+<itemize>
+<item>update Makefile.am
+<item>change to static lib
+<item>change to shared lib
+</itemize>
+Use "change to shared lib" to convert the default generated static library into a shared one. You can reverse your decision later if
+you decide that using it as a static library will work as well for your project- just do the same steps again and select "change to
+static lib".
 </itemize>
 
 <sect1>Multiple Targets
@@ -2179,7 +2227,7 @@ Makefile.am outside the write area according to the needed settings
 <sect> <idx/New Project/s
 <p>
 
-The KDevelop Application Wizard allows the creation of thirteen different types of projects, constructing a framework for each. All
+The KDevelop Application Wizard allows the creation of different types of projects, constructing a framework for each. All
 projects use the GNU standard development tools as described in the requirements section of this handbook.
 
 For <idx/KDE/ applications there are six different frameworks:
@@ -2204,8 +2252,12 @@ document-view interface (SDI) model.
 <item>QT 2.1 MDI: Creates a Qt-2.1 Application with a main window containing a menubar, toolbar and statusbar, including support for a multiple 
 document interface (MDI) model.
 <item>QextMDI: Creates an MDI framework based on the QextMDI library and Qt2.0x. Allows to switch between both modes, Toplevel and Childframe. 
-Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm).
+Requires the QextMDI library, see <htmlurl url="http://www.geocities.com/gigafalk/qextmdi.htm" 
+name="http://www.geocities.com/gigafalk/qextmdi.htm"> for more information.
 </itemize>
+
+Further, the Application Wizard offers a template for creating GNOME-compliant applications with the GTK+ C-library with a ready-to-run
+mainwindow containing a menubar, toolbar and statusbar.
 
 The two C and C++ -Application types offer a framework for creating commandline applications.
 
@@ -2214,6 +2266,8 @@ And last but not least you can create an empty projekt, e.g. to work with existi
 The wizard asks for your project name, version and the location where the project directory will be build.  Further, your Name and
 Email address are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
 *.lsm file.
+
+For adding revision control to your project, see <ref id="CVS Integration" name="CVS Integration">.
 
 <sect>Opening and Closing of Projects
 <p>
@@ -3019,6 +3073,10 @@ the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Sh
 and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
 <item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
 The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+<item>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.
+<bf>Tip:</bf> This option is most useful, if you use it in combination with <ref id="The floating toolbar" name="the floating
+toolbar">, because this way, the terminal window won't be hidden behind the KDevelop window when you control the debugger.
 </itemize>
 <p>
 
@@ -3170,12 +3228,12 @@ gdb is not successful then we leave the breakpoint as pending. The next instruct
 
 This is known as "lazy breakpoints"
 
-However, this can lead to a problem when you use the "step over" command and step over code that will load a library. This will trigger a
-break on the library load, and, normally the debugger would do a "continue" (ie run to the next breakpoint or the end of the code). The user,
-however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere
+However, this can lead to a problem when you use the "step over" command and step over code that will load a library. This will trigger a 
+break on the library load, and, normally the debugger would do a "continue" (ie run to the next breakpoint or the end of the code). The user, 
+however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere 
 inside a dlopen command). This is disconcerting but cannot be helped.
 
-<chapt>Beépített CVS
+<chapt>Beépített CVS<label id="CVS Integration">
 <p>
 KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
 groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
@@ -3230,7 +3288,7 @@ use the cvs features.
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
 found by the according entry in the Options-menu.
 
-<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the "<idx/Tools/" Menu">
+<sect>Configuring the Tools Menu<label id="Configuring the Tools Menu">
 <p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
 
 As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
@@ -3316,7 +3374,7 @@ also setting the KDE Library Doc path automatically.
 <p>
 For those users who don't have a recent documentation of the <idx/KDE-libraries/, especially the documentation for the files
 installed on the system, the Update <idx/KDE-Documentation/ dialog creates a new one or updates existing documentations. This
-function requires your system to have <idx/KDoc/ and qt2<idx/KDoc/ installed, included in the <idx/KDE-SDK/ package. First of, you have
+function requires your system to have <idx/KDoc/ and qt2kdoc installed, included in the <idx/KDE-SDK/ package. First of, you have
 to set up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
 /home/rnolden/kdelibs-1.1/.
 
@@ -3339,8 +3397,18 @@ users who generate a new documentation from scratch.
 After pressing the OK button, KDevelop will create a subdirectory "<idx/KDoc/-reference" in the documentation path containing the <idx/KDoc/
 reference files.  First, the qt library documentation <idx/classes/ will be indexed to connect the Qt documentation with the
 documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by <tt/<cdx/qt2kdoc//. Finally, the KDE libs will be indexed and the documentation will be build with
+that it can be found by <tt/qt2kdoc/. Finally, the KDE libs will be indexed and the documentation will be build with
 cross-references to give browsing the most functionality.
+
+<comment><bf>NOTE:</bf> When using KDoc 2, you can add a set of documentation for the the libraries in the KDE-Base and KOffice
+package. To do this, create the KDE-Libs documentation as described above. Then reopen the dialog and choose the path to the
+<tt>kdoc.rules</tt> file in the kdebase package resp. the koffice package, which is located in kdebase in the root directory of the
+sources, in KOffice in koffice/lib. Select option 3 (Leave old Documentation untouched) and leave the output path below that option as
+it is. This will keep the kdelibs documentation and generate the kdebase-libraries (resp. the koffice-libraries) documentation to the
+same location with cross-references to the kdelibs documentation additionally. After generating the documentation the libraries are
+available in the documentation tree automatically. For further KDE packages coming with additional libraries you should look for the
+<tt>kdoc.rules</tt> file to generate additional documentation as with the KDE-Base and KOffice packages.</comment>
+
 
 <sect2>Create Search Database
 <p>
@@ -3356,33 +3424,42 @@ medium.  The higher the index size, the more the index files will grow. On the o
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
+<sect2>Create also KDOC-reference of your project
+<p>
+This option allows you to create a cross-reference file for your project when generating the API documentation 
+with KDoc. The cross-reference file will be placed in the references directory and make your project available 
+in the documentation tree. If you don´t have write access to the directory containing the reference files you 
+have to uncheck this option to generate the API documentation without errors.  
+
 <sect>Debugger <label id="Debugger">
 <p>
-The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different
-debugger and enter the name of the debugger to use. See your debuggers documentation on how to run it.
-
+The default setup for KDevelop is to use <ref id="The Internal Debugger" name="the internal debugger">. Click on "Use external
+debugger" if you wish to use a different debugger and enter the name of the debugger to use. See your debuggers documentation on
+how to run it.
 Selecting the internal debugger enables an additional set of options you can choose from:
 <p>
 <itemize>
-<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change
+<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change 
 the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.
-<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names.
+<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names. 
 However, non-mangled names are easier to read.
-<item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be
-loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set
-the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details
+<item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be 
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set 
+the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details 
 and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
-<item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons.
+<item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
 The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+<item>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.
 </itemize>
 
 <sect>Setting Paths <label id="Setting Paths">
 <p>
-On the paths tab you can enter the paths to your Qt 2.x and KDE 2 installations as well as where to create new projects. To learn
-more about installing Qt 2.x / KDE 2 and configuring KDevelop for Qt 2.x and KDE 2 read the
+On the paths tab you can enter the paths to your Qt 2.x and KDE 2 installations as well as where to create new projects. To learn 
+more about installing Qt 2.x / KDE 2 and configuring KDevelop for Qt 2.x and KDE 2 read the 
 <htmlurl url="tutorial/index.html" name="KDE Application Tutorials">.
 
-The default location for KDevelop to create new projects is in the user's home directory. If you want to change this behaviour you
+The default location for KDevelop to create new projects is in the user's home directory. If you want to change this behaviour you 
 can enter the desired location into the default project path field.
 
 <chapt>Kérdések és Válaszok<label id="Questions and Answers">
