@@ -84,7 +84,7 @@ void CKDevInstall::slotProcessExited(KProcess*){
     KMsgBox::message(this,i18n("Installation successful !"), i18n("\nThe installation process finished successfully.\n\n"
                                                           "The KDevelop Team wishes that you will enjoy our\n"
                                                           "program and we would be honoured for any feedback.\n\n"
-                                                          "The KDevelop Team\n"), KMsgBox::INFORMATION);
+                                                          "The KDevelop Team"), KMsgBox::INFORMATION);
 
   config->setGroup("General Options");
   config->writeEntry("Install",false);
@@ -292,7 +292,7 @@ void CKDevInstall::slotQTpressed()
     else{
       KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
                                                               "Qt-library documentation. Please choose the\n"
-                                                              "correct path.\n"),KMsgBox::EXCLAMATION);
+                                                              "correct path."),KMsgBox::EXCLAMATION);
     }
   }
 }
@@ -315,7 +315,7 @@ void CKDevInstall::slotKDEpressed()
                                                               "KDE-library documentation. Please choose 'Proceed'\n"
                                                               "in any case. If you don't have a documentation,\n"
                                                               "it will be generated automatically in one of the\n"
-                                                              "next steps\n"),KMsgBox::EXCLAMATION);
+                                                              "next steps"),KMsgBox::EXCLAMATION);
     }
   }
 
@@ -352,7 +352,7 @@ void CKDevInstall::slotAuto() // proceed >>
                                                                       "KDevelop will use. The options are to set\n"
                                                                       "the highlighting to Emacs stlye or to the default\n"
                                                                       "settings of KWrite (k.a. 'Extended Editor')\n\n"
-                                                                      "Which one do you want to use ?\n"),
+                                                                      "Which one do you want to use ?"),
                                                                       KMsgBox::QUESTION, i18n("Emacs style"),i18n("KWrite default"));
   if(highl_style==1){
     config->setGroup("Perl Highlight");
@@ -648,7 +648,7 @@ void CKDevInstall::slotAuto() // proceed >>
     print_str="a2ps / enscript"+not_found+" -- printing can only use lpr\n";
 
 
-  KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n")
+  KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
                   +print_str+kdbg_str+kiconedit_str+ktranslator_str, KMsgBox::INFORMATION);
 
@@ -693,13 +693,13 @@ void CKDevInstall::slotAuto() // proceed >>
   	  config->setGroup("Doc_Location");
     	config->writeEntry("doc_qt",qt);
 	 	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n"+qt
- 	   				+"\n\nThe correct path has been set.\n"),KMsgBox::INFORMATION);
+ 	   				+"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
 		}
   	else{  // return to the setup to set it manually ?
     	int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
       	                                            "be detected. Please insert the correct path\n"
         	                                          "to your Qt-documentation manually. Do you want\n"
-          	                                        "to set it now ?\n"),KMsgBox::QUESTION);
+          	                                        "to set it now ?\n "),KMsgBox::QUESTION);
  	   if(result==1){
 				hint_label->setGeometry( 40, 150, 440, 120 );
     		hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
@@ -714,14 +714,14 @@ void CKDevInstall::slotAuto() // proceed >>
     KMsgBox::message(this,i18n("Information"),i18n("\nThe Program KDoc was not found on your system,\n"
                                                 "a library documentation update can not be performed.\n"
                                                 "KDoc is part of the kdesdk package that can be obtained\n"
-                                                "from www.kde.org.\n\n"),KMsgBox::INFORMATION);
+                                                "from www.kde.org.\n\n "),KMsgBox::INFORMATION);
   else{
     KMsgBox::message(this,i18n("Information"), i18n("\nNow KDevelop will create a new KDE-library\n"
                                                     "documentation. For that, you need the kdelibs\n"
                                                     "package as the source package. If you don't have\n"
                                                     "the kdelibs as sources, we advise to obtain them\n"
                                                     "from www.kde.org. Mind that the sources should match\n"
-                                                    "your installed kdelibs version.\n\n"), KMsgBox::INFORMATION);
+                                                    "your installed kdelibs version.\n\n "), KMsgBox::INFORMATION);
 
     kde_dir->setCurrent(QDir::homeDirPath ());
     kde_dir->mkdir(".kde",false);
@@ -752,7 +752,7 @@ void CKDevInstall::slotCancel()
 							"and start KDevelop with the default values !\n\n"
 							"If you choose 'Continue', you will have to set all\n"
 							"installation values manually in the KDevelop Setup\n"
-							"dialog available in the options menu.\n\n"),KMsgBox::STOP,i18n("Continue"),i18n("Back"));
+							"dialog available in the options menu.\n\n "),KMsgBox::STOP,i18n("Continue"),i18n("Back"));
   if(result==1){
   config->setGroup("General Options");
   config->writeEntry("Install",false);
