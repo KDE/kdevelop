@@ -26,13 +26,15 @@
 #include <kstandarddirs.h>
 
 #include "appwizardfactory.h"
+#include "appwizardpart.h"
 #include "importdlg.h"
+#include "kdevcore.h"
 #include <qpushbutton.h>
 #include <kinstance.h>
 
 
-ImportDialog::ImportDialog(QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *name)
+    : QDialog(parent, name, true), m_part(part)
 {
     setCaption(i18n("Import Directory"));
 
@@ -149,6 +151,10 @@ void ImportDialog::accept()
     dest.close();
     src.close();
     
+    m_part->core()->openProject(dir.filePath(projectName + ".kdevelop"));
+
+    kdDebug(9010) << "OPENING PROJECT: " << dir.filePath(projectName + ".kdevelop") << endl;
+
     QDialog::accept();
 }
 

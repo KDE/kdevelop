@@ -18,13 +18,15 @@
 class QComboBox;
 class QLineEdit;
 
+class AppWizardPart;
+
 
 class ImportDialog : public QDialog
 {
     Q_OBJECT
     
 public:
-    ImportDialog( QWidget *parent=0, const char *name=0 );
+    ImportDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~ImportDialog();
 
 protected:
@@ -38,6 +40,9 @@ private:
     QLineEdit *name_edit;
     QLineEdit *dir_edit;
     QComboBox *project_combo;
+
+    AppWizardPart *m_part;
+
 };
 
 #endif

@@ -71,7 +71,7 @@ void AppWizardPart::slotNewProject()
 
 void AppWizardPart::slotImportProject()
 {
-    ImportDialog dlg(0, "import dialog");
+    ImportDialog dlg(this, 0, "import dialog");
     dlg.exec();
 }
 
