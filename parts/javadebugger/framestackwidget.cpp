@@ -1,7 +1,7 @@
 /***************************************************************************
-                          framestack.cpp  -  description                              
-                             -------------------                                         
-    begin                : Sun Aug 8 1999                                           
+                          framestack.cpp  -  description
+                             -------------------
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -30,6 +30,9 @@
 /***************************************************************************/
 /***************************************************************************/
 
+namespace JAVADebugger
+{
+
 FramestackWidget::FramestackWidget(QWidget *parent, const char *name)
     : QListBox(parent, name),
       currentFrame_(0),
@@ -38,7 +41,7 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name)
     connect( this, SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)) );
     connect( this, SIGNAL(selected(int)), SLOT(slotHighlighted(int)) );
 }
- 
+
 
 /***************************************************************************/
 
@@ -88,7 +91,7 @@ void FramestackWidget::parseJDBBacktraceList(char */*str*/)
 
 void FramestackWidget::updateDone()
 {
-    
+
     insertStrList(currentList_);
     currentFrame_ = 0;
 }
@@ -104,14 +107,14 @@ QCString FramestackWidget::getFrameParams(int frame)
                 if (char *paramEnd = parser.skipDelim(paramStart, '(', ')')) {
                     // allow for operator()(params)
                     if (paramEnd == paramStart+2) {
-                        if (*(paramEnd+1) == '(') { 
+                        if (*(paramEnd+1) == '(') {
                             paramStart = paramEnd+1;
                             paramEnd = parser.skipDelim(paramStart, '(', ')');
                             if (!paramEnd)
                                 return QCString();
                         }
                     }
-                    
+
                     // The parameters are contained _within_ the brackets.
                     if (paramEnd-paramStart > 2)
                         return QCString (paramStart+1, paramEnd-paramStart-1);
@@ -119,7 +122,7 @@ QCString FramestackWidget::getFrameParams(int frame)
             }
         }
     }
-    
+
     return QCString();
 }
 
@@ -142,11 +145,14 @@ QString FramestackWidget::getFrameName(int frame)
             }
         }
     }
-    
+
     return i18n("No stack");
 }
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
+
+}
+
 #include "framestackwidget.moc"

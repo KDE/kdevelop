@@ -26,16 +26,19 @@ class QLabel;
 
 /***************************************************************************/
 
+namespace JAVADebugger
+{
+
 class Dbg_PS_Dialog : public KDialog
 {
     Q_OBJECT
-    
+
 public:
     Dbg_PS_Dialog( QWidget *parent=0, const char *name=0 );
     ~Dbg_PS_Dialog();
-    
+
     int pidSelected();
-    
+
 private slots:
     void slotReceivedOutput(KProcess *proc, char *buffer, int buflen);
     void slotProcessExited();
@@ -47,5 +50,6 @@ private:
     QString   pidLines_;
     QString   pidCmd_;
 };
+}
 
 #endif

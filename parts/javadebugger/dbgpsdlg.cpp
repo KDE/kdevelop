@@ -42,6 +42,9 @@
 // For use with the internal debugger, but this dialog doesn't know anything
 // about why it's doing it.
 
+namespace JAVADebugger
+{
+
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       psProc_(0),
@@ -141,4 +144,6 @@ void Dbg_PS_Dialog::slotProcessExited()
 }
 
 /***************************************************************************/
+}
+
 #include "dbgpsdlg.moc"

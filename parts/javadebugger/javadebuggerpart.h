@@ -19,6 +19,9 @@
 
 #include <kgenericfactory.h>
 
+namespace JAVADebugger
+{
+
 class VariableWidget;
 class BreakpointWidget;
 class FramestackWidget;
@@ -26,6 +29,7 @@ class DisassembleWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
+
 
 class JavaDebuggerPart : public KDevPlugin
 {
@@ -54,7 +58,7 @@ private slots:
 private:
     void startDebugger();
     void setupController();
-    
+
     QGuardedPtr<VariableWidget> variableWidget;
     QGuardedPtr<BreakpointWidget> breakpointWidget;
     QGuardedPtr<FramestackWidget> framestackWidget;
@@ -64,5 +68,7 @@ private:
 };
 
 typedef KGenericFactory<JavaDebuggerPart> JavaDebuggerFactory;
+
+}
 
 #endif

@@ -39,6 +39,9 @@
 #include "memviewdlg.h"
 
 
+namespace JAVADebugger
+{
+
 K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
@@ -46,13 +49,13 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
       controller(0)
 {
     setInstance(JavaDebuggerFactory::instance());
-    
+
     setXMLFile("kdevjavadebugger.rc");
 
     //
     // Setup widgets and dbgcontroller
     //
-    
+
     variableWidget = new VariableWidget();
     variableWidget->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
@@ -70,7 +73,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "running app use a watch variable (eg a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
-    
+
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
@@ -81,7 +84,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
     mainWindow()->embedOutputView(breakpointWidget, i18n("&Breakpoints"), i18n("debugger breakpoints"));
-    
+
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
@@ -95,7 +98,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "previous calling functions."));
     mainWindow()->embedOutputView(framestackWidget, i18n("&Frame Stack"), i18n("debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
-    
+
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
@@ -114,7 +117,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     // variableTree -> framestackWidget
     connect( variableTree,     SIGNAL(selectFrame(int)),
              framestackWidget, SLOT(slotSelectFrame(int)));
-    
+
     // breakpointWidget -> this
     connect( breakpointWidget, SIGNAL(refreshBPState(Breakpoint*)),
              this,             SLOT(slotRefreshBPState(Breakpoint*)));
@@ -126,9 +129,9 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     //
     // Now setup the actions
     //
-    
+
     KAction *action;
-    
+
     action = new KAction(i18n("&Start"), "1rightarrow", 0,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
@@ -151,7 +154,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          actionCollection(), "debug_pause");
     action->setEnabled(false);
     action->setStatusText( i18n("Interrupts the application") );
-    
+
     action = new KAction(i18n("&Continue"), "dbgrun", 0,
                          this, SLOT(slotContinue()),
                          actionCollection(), "debug_cont");
@@ -207,7 +210,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          actionCollection(), "debug_memview");
     action->setEnabled(false);
     action->setStatusText( i18n("Various views into the application") );
-    
+
     connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( core(), SIGNAL(editedBreakpoint(const QString &, int)),
@@ -223,7 +226,7 @@ JavaDebuggerPart::~JavaDebuggerPart()
     mainWindow()->removeView(breakpointWidget);
     mainWindow()->removeView(framestackWidget);
     mainWindow()->removeView(disassembleWidget);
-  
+
     delete variableWidget;
     delete breakpointWidget;
     delete framestackWidget;
@@ -315,7 +318,7 @@ void JavaDebuggerPart::startDebugger()
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
-    
+
     mainWindow()->setViewAvailable(variableWidget, true);
     mainWindow()->setViewAvailable(framestackWidget, true);
     mainWindow()->setViewAvailable(disassembleWidget, true);
@@ -338,7 +341,7 @@ void JavaDebuggerPart::slotRun()
         slotStop();
 
     mainWindow()->statusBar()->message(i18n("Debugging program"));
-    
+
     startDebugger();
     controller->slotRun();
 }
@@ -421,7 +424,7 @@ void JavaDebuggerPart::slotStepOut()
 void JavaDebuggerPart::slotMemoryView()
 {
     // Hmm, couldn't this be made non-modal?
-    
+
     MemoryViewDialog *dlg = new MemoryViewDialog();
     connect( dlg,        SIGNAL(disassemble(const QString&, const QString&)),
              controller, SLOT(slotDisassemble(const QString&, const QString&)));
@@ -431,7 +434,7 @@ void JavaDebuggerPart::slotMemoryView()
              controller, SLOT(slotRegisters()));
     connect( dlg,        SIGNAL(libraries()),
              controller, SLOT(slotLibraries()));
-    
+
     connect( controller, SIGNAL(rawJDBMemoryDump(char*)),
              dlg,        SLOT(slotRawJDBMemoryView(char*)));
     connect( controller, SIGNAL(rawJDBDisassemble(char*)),
@@ -440,7 +443,7 @@ void JavaDebuggerPart::slotMemoryView()
              dlg,        SLOT(slotRawJDBMemoryView(char*)));
     connect( controller, SIGNAL(rawJDBLibraries(char*)),
              dlg,        SLOT(slotRawJDBMemoryView(char*)));
-    
+
     dlg->exec();
     delete dlg;
 }
@@ -451,7 +454,7 @@ void JavaDebuggerPart::slotRefreshBPState(Breakpoint *BP)
     if (BP->isActionDie())
         debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
                               -1, true, false);
-    else 
+    else
         debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
                               1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
 }
@@ -460,20 +463,20 @@ void JavaDebuggerPart::slotRefreshBPState(Breakpoint *BP)
 void JavaDebuggerPart::slotStatus(const QString &msg, int state)
 {
     QString stateIndicator("P");    // default to "paused"
-    
+
     if (state & s_appBusy) {
         stateIndicator = "A";
        debugger()->clearExecutionPoint();
     }
-    
+
     if (state & (s_dbgNotStarted|s_appNotStarted))
         stateIndicator = " ";
-    
+
     if (state & s_programExited) {
         stateIndicator = "E";
         debugger()->clearExecutionPoint();
     }
-    
+
     // And now? :-)
     kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
 
@@ -492,6 +495,8 @@ void JavaDebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 void JavaDebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
     partController()->editDocument(fileName, lineNum);
+}
+
 }
 
 #include "javadebuggerpart.moc"

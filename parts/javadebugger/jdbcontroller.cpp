@@ -4,7 +4,7 @@
 //    begin                : Mon Apr 16 2001
 //    copyright            : (C) 2001 by Oliver Strutynski
 //    email                : olistrut@gmx.net
-//    This code is heavily based on John Birch's original JDB Controller.               
+//    This code is heavily based on John Birch's original JDB Controller.
 // **************************************************************************
 // *                                                                        *
 // *   This program is free software; you can redistribute it and/or modify *
@@ -64,6 +64,9 @@ using namespace std;
 #endif
 
 
+namespace JAVADebugger
+{
+
 /**
  *
  * Does all the communication between jdb and the kdevelop's debugger code.
@@ -111,12 +114,12 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     KConfig *config = JavaDebuggerFactory::instance()->config();
     config->setGroup("Debug");
     Q_ASSERT(!config->readBoolEntry("Use external debugger", false));
-    
+
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
     config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
     config_jdbPath_               = config->readEntry("JDB path", "");
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
-    
+
 #if defined (JDB_MONITOR)
     cout << "Connect\n";
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
@@ -127,7 +130,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     connect(  this,   SIGNAL(showStepInSource(const QString&, int, const QString&)),
               SLOT(slotStepInSource(const QString&,int)));
 #endif
-    
+
     cmdList_.setAutoDelete(true);
 }
 
@@ -221,12 +224,12 @@ void JDBController::queueCmd(DbgCommand *cmd, bool executeNext)
     // add a run command.
     if (cmd->isARunCmd())
         removeInfoRequests();
-    
+
     if (executeNext)
         cmdList_.insert(0, cmd);
     else
         cmdList_.append (cmd);
-    
+
     executeCmd();
 }
 
@@ -238,11 +241,11 @@ void JDBController::queueCmd(DbgCommand *cmd, bool executeNext)
 // state will get updated.
 void JDBController::executeCmd()
 {
-    
+
     if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy)) {
         return;
    }
-    
+
 
     if (!currentCmd_) {
         if (cmdList_.isEmpty()) {
@@ -257,29 +260,29 @@ void JDBController::executeCmd()
           if (currentCmd_->expectReply()) {
               return;
           }
-        
+
           delete currentCmd_;
           if (cmdList_.isEmpty()) {
               currentCmd_ = 0;
-            
+
               return;
           }
-        
+
           currentCmd_ = cmdList_.take(0);
       }
     }
-    
+
     Q_ASSERT(currentCmd_ && currentCmd_->moreToSend());
 
     // Output command info for debugging purposes
     dbgProcess_->writeStdin(currentCmd_->cmdToSend().data(), currentCmd_->cmdLength());
     setStateOn(s_waitForWrite);
-    
+
     if (currentCmd_->isARunCmd()) {
         setStateOn(s_appBusy);
         setStateOff(s_appNotStarted|s_programExited|s_silent);
     }
-    
+
     JDB_DISPLAY("Written command: " + currentCmd_->cmdToSend());
     if (!stateIsOn(s_silent))
         emit dbgStatus ("", state_);
@@ -293,7 +296,7 @@ void JDBController::destroyCmds()
         delete currentCmd_;
         currentCmd_ = 0;
     }
-    
+
     while (!cmdList_.isEmpty())
         delete cmdList_.take(0);
 }
@@ -329,34 +332,34 @@ void JDBController::actOnProgramPause(const QString &msg)
     // We're only stopping if we were running, of course.
     if (stateIsOn(s_appBusy)) {
        DBG_DISPLAY("Acting on program paused: " + msg);
-       setStateOff(s_appBusy);                        
+       setStateOff(s_appBusy);
        // We're always at frame zero when the program stops
        // and we must reset the active flag
        currentFrame_ = 0;
        varTree_->setActiveFlag(); //               ????????????????????????????????????
        // These two need to be actioned immediately. The order _is_ important
        emit dbgStatus("", state_);
-       
+
        stackLineCount = 0;
 
        frameStack_->clearList();
 
        setStateOn(s_parsingOutput);
        queueCmd(new JDBCommand("where", NOTRUNCMD, NOTINFOCMD, BACKTRACE), TRUE);
-       
+
        executeCmd();
 
        varLineCount = 0;
        // delete localData
        localData.clear();
        nameQueue.clear(); // should actually be empty already
-       
-       
+
+
        setStateOn(s_parsingOutput);
        parsedThis = FALSE;
        queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS), FALSE);
        executeCmd();
-                                                                                                                        
+
     } else { cout << "Not running\n";}
 }
 
@@ -394,7 +397,7 @@ char* JDBController::parseLine(char *buf)
 
     // TODO: ignore empty lines
 
-    
+
     // Doing this copy should remove any alignment problems that
     // some systems have (eg Solaris).
 	// - jbb?
@@ -439,10 +442,10 @@ char* JDBController::parseLine(char *buf)
                 cout << "STEP: " << buf << "\n";
                 KRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
                 if (ex.match( QString(buf))) {
-                    cout << "MATCH\n";  
+                    cout << "MATCH\n";
                     curMethod = ex.group(2),
                     curLine = ex.group(3);
-                    
+
 
                     if (currentCmd_ && currentCmd_->typeMatch(STEP)) {
                         delete currentCmd_;
@@ -454,14 +457,14 @@ char* JDBController::parseLine(char *buf)
                     QString curFile = getFile(curClass);
                     cout << "Filename: " << curFile <<"\n";
                     emit showStepInSource(curFile, atoi(ex.group(3)), "");
-                                                                    
+
                     actOnProgramPause(QString("step completed, stopped in ") + ex.group(2));
-                    
+
                     return buf + QString(buf).length();
                 }
-                
+
             }
-    
+
     }
 
 	return 0;
@@ -472,7 +475,7 @@ char* JDBController::parseLine(char *buf)
 char* JDBController::parseInfo(char *buf)
 {
 
-    // Every string we are looking for has to match at the 
+    // Every string we are looking for has to match at the
     // beginning of buf!
     if (currentCmd_ && currentCmd_->typeMatch(BACKTRACE)) {
         return parseBacktrace(buf);
@@ -483,7 +486,7 @@ char* JDBController::parseInfo(char *buf)
         setStateOn(s_parsingLocals);
         if (char* tmp = parseDump(buf)) { return tmp; }
     }
-    
+
     return 0;
 }
 
@@ -514,22 +517,22 @@ char* JDBController::parseBacktrace(char* buf) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
-        
+
         setStateOff(s_parsingOutput);
-        
+
         frameStack_->updateDone();
         buf += exp->groupEnd(0);
-        delete exp;        
+        delete exp;
         return buf;
-        
+
     }
     }
-    
+
     // we know there will be a stack trace, so we just need to wait for
     // more data flowing in
     delete exp;
     return 0;
-}        
+}
 
 // **********************************************************************
 
@@ -548,17 +551,17 @@ char* JDBController::parseLocalVars(char* buf) {
         delete exp;
         return buf;
     }
-    
+
     exp->compile( "^No local variables");
     if (exp->match( QString(buf))) {
         DBG_DISPLAY(QString("No locals"));
-        
+
         // wait for prompt
         buf += exp->groupEnd(0);
         delete exp;
         return buf;
     }
-    
+
     // Seems as if Java outputs some very strange spaces sometimes
     // or \s is partly broken in KRegExp
     exp->compile( "^  ([^ ]+) \\= ([^\\(\n]+)\\s*\\(id\\=[0-9]*\\)");
@@ -567,7 +570,7 @@ char* JDBController::parseLocalVars(char* buf) {
         varLineCount++;
         cout << "Name: " << exp->group(1) << "\n";
         cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
-        
+
         // Queue current var for processing.
         // cout << "APPENDING: " << exp->group(1) << "\n";
         nameQueue.append(exp->group(1));
@@ -585,7 +588,7 @@ char* JDBController::parseLocalVars(char* buf) {
         varLineCount++;
         cout << "Name: " << exp->group(1) << "\n";
         cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
-        
+
         // primitive type, add directly
         analyzeDump(exp->group(0));
 
@@ -613,11 +616,11 @@ char* JDBController::parseLocalVars(char* buf) {
         buf += exp->groupEnd(0);
         delete exp;
         return buf;
-        
-        
+
+
     }
     delete exp;
-    
+
     return 0;
 }
 
@@ -627,19 +630,19 @@ char* JDBController::parseLocalVars(char* buf) {
 char* JDBController::parseDump(char* buf) {
     // Looking for dump output
     KRegExp *exp;
-    
+
     // compound object
     exp = new KRegExp( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
     if (exp->match( QString(buf))) {
         DBG_DISPLAY(QString("Found dump info"));
-        
+
         analyzeDump(exp->group(0));
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
-        
+
         buf +=  exp->groupEnd(0);
         delete exp;
         return buf;
@@ -657,7 +660,7 @@ char* JDBController::parseDump(char* buf) {
             currentCmd_ = 0;
         }
 
-        
+
         buf +=  exp->groupEnd(0);
         delete exp;
         return buf;
@@ -665,7 +668,7 @@ char* JDBController::parseDump(char* buf) {
 
     exp->compile("^No 'this'.  In native or static method\n");
     if (exp->match( QString(buf))) {
-        
+
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
             currentCmd_ = 0;
@@ -714,7 +717,7 @@ void JDBController::analyzeDump(QString data)
           localData.insert(name, item);
       } else { /* The object is already being referred to as a property */ }
       delete exp;
-      return; 
+      return;
 
   }
 
@@ -742,7 +745,7 @@ void JDBController::analyzeDump(QString data)
   }
 
 
-  
+
   exp->compile( "^([^ ]+) \\= instance of ([^[]+)\\[([0-9])+] \\(id\\=[0-9]+\\) {");
   if (exp->match(data)) {
       cout << "Array...\n";
@@ -766,14 +769,14 @@ void JDBController::analyzeDump(QString data)
           cout <<  QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]") << "\n";
           nameQueue.append(QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]"));
       }
-      
+
       delete exp;
       return;
-  }  
-  
+  }
+
   // case b
   // otherwise we need to extract all properties and add the name of the current var
-  // and link it with its properties 
+  // and link it with its properties
   exp->compile( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
   if (exp->match(data)) {
       cout << "COMPOUND DATA\n";
@@ -791,9 +794,9 @@ void JDBController::analyzeDump(QString data)
           /* The object is already being referred to as a property */
           item = localData[name];
       }
-          
 
-      
+
+
       unsigned int i = data.find("{")+1;
       exp = new KRegExp("^([^ \\:]+): ([^\n]+)");
       QString tmp;
@@ -812,16 +815,16 @@ void JDBController::analyzeDump(QString data)
                  if (!localData[fullName]) {
                      localData.insert(fullName, subItem);
                  } else { /* Oops */ }  // TODO: insert assertion
-                 
+
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);
-                 
+
                  //DBG_DISPLAY(QString("Appending Name: ") + name + QString(".") + exp->group(1));
                  //DBG_DISPLAY(QString("Value: ") + exp->group(2));
              } else if (QString(exp->group(2)).contains("[")) {
                  // Array property
                  // not parsed yet. just insert some dummy data
-                 
+
                  QString fullName = name + QString(".") + QString(exp->group(1));
 
                  JDBVarItem *subItem = new JDBVarItem();
@@ -832,7 +835,7 @@ void JDBController::analyzeDump(QString data)
 
                  //cout << "->Appending Name: " << name << "." << exp->group(1) << "\n";
                  //cout << "Value: " << exp->group(2) << " as " << (int)subItem << "\n";
-                 
+
                  // get array dimension andn queue elements for parsing
                  KRegExp *exp2 = new KRegExp("\\[([0-9]+)\\]");
                  if (exp2->match(exp->group(2))) {
@@ -845,9 +848,9 @@ void JDBController::analyzeDump(QString data)
                      // item.insertSibling(subItem);
                      item->siblings.append(subItem);
                  }
-                 
+
              } else {
-                 // property of non-primitive type, we will request additional 
+                 // property of non-primitive type, we will request additional
                  // information later
                  cout << "complex...\n";
                  QString fullName = name + QString(".") + QString(exp->group(1));
@@ -860,7 +863,7 @@ void JDBController::analyzeDump(QString data)
                  } else { /* Oops */ }  // TODO: insert assertion
 
                  cout << "appending: " << fullName << " as " << (int)subItem << "\n";
-                 
+
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);
 
@@ -870,10 +873,10 @@ void JDBController::analyzeDump(QString data)
          } else {
              i++;
          }
-      } 
-      
+      }
+
   }
-  
+
   delete exp; exp = 0;
 }
 
@@ -894,11 +897,11 @@ void JDBController::parseLocals()
     } else if (!parsedThis) {
         parsedThis = TRUE;
         queueCmd(new JDBCommand(QCString("dump this"), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
-       
+
     } else {
        parsedThis = FALSE;
        setStateOff(s_parsingLocals);
-       
+
        varUpdateDone();
     }
 }
@@ -943,8 +946,8 @@ char *JDBController::parse(char *buf)
         // Check for first prompt
         cout << QString(buf).left(20) << "\n";
         if (QString(buf).left(20) == "Initializing jdb...\n") { return buf+20; }
-        if (QString(buf) == "> ") { 
-            setStateOff(s_dbgNotStarted); 
+        if (QString(buf) == "> ") {
+            setStateOff(s_dbgNotStarted);
             emit debuggerStarted();
             return buf + 2;
         }
@@ -952,7 +955,7 @@ char *JDBController::parse(char *buf)
         return buf++;
     }
 
-    
+
     if (stateIsOn(s_appStarting)) {
         cout << "appstarting\n";
         char* unparsed = buf;
@@ -977,7 +980,7 @@ char *JDBController::parse(char *buf)
         while (*buf) {
             if ( (buf = parseLine(unparsed)) ) {
                 return buf; // application is stopped now
-                            // additional output will be ignored for 
+                            // additional output will be ignored for
                             // now. we parse it later on
             } else {
                 buf = ++unparsed;
@@ -999,7 +1002,7 @@ char *JDBController::parse(char *buf)
         }
         // Check if there are more vars to parse, otherwise update vartree widget
         parseLocals();
-        
+
         return orig;
 
     }
@@ -1011,10 +1014,10 @@ char *JDBController::parse(char *buf)
             parsed = parseCmdBlock(unparsed);
         else
             parsed = parseOther(unparsed);
-        
+
         if (!parsed)
             break;
-        
+
         // Move one beyond the end of the parsed data
         unparsed = parsed+1;
     }
@@ -1055,7 +1058,7 @@ void JDBController::modifyBreakpoint(Breakpoint *)
 void JDBController::slotStart(const QString &/*application*/, const QString &args, const QString &sDbgShell)
 {
     Q_ASSERT (!dbgProcess_ && !tty_);
-    
+
     // Remove .class suffix and leading path information from appname
     // (should not be there anyway)
 
@@ -1064,7 +1067,7 @@ void JDBController::slotStart(const QString &/*application*/, const QString &arg
         connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
         connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
     }
-    
+
     QString tty(tty_->getSlave());
 
     if (tty.isEmpty()) {
@@ -1081,16 +1084,16 @@ void JDBController::slotStart(const QString &/*application*/, const QString &arg
 
 	JDB_DISPLAY("\nStarting JDB - app:["+mainclass_+"] classpath:["+classpath_+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
 	dbgProcess_ = new KProcess;
-    
+
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
              this,        SLOT(slotDbgStdout(KProcess *, char *, int)) );
-    
+
     connect( dbgProcess_, SIGNAL(receivedStderr(KProcess *, char *, int)),
              this,        SLOT(slotDbgStderr(KProcess *, char *, int)) );
 
     connect( dbgProcess_, SIGNAL(wroteStdin(KProcess *)),
              this,        SLOT(slotDbgWroteStdin(KProcess *)) );
-    
+
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
@@ -1114,7 +1117,7 @@ void JDBController::slotStart(const QString &/*application*/, const QString &arg
     // Initialise jdb. At this stage jdb is sitting wondering what to do,
     // and to whom. Organise a few things, then set up the tty for the application,
     // and the application itself
-    
+
 }
 
 // **************************************************************************
@@ -1291,20 +1294,20 @@ void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         delete[] jdbOutput_;                        // ??? and free ???
         jdbOutput_ = newBuf;
     }
-    
+
     // Copy the data out of the KProcess buffer before it gets overwritten
     // and fake a string so we can use the string fns on this buffer
     memcpy(jdbOutput_+jdbOutputLen_, buf, buflen);
     jdbOutputLen_ += buflen;
     *(jdbOutput_+jdbOutputLen_) = 0;
-    
+
     if (char *nowAt = parse(jdbOutput_)) {
         Q_ASSERT(nowAt <= jdbOutput_+jdbOutputLen_+1);
         jdbOutputLen_ = strlen(nowAt);
         // Some bytes that weren't parsed need to be moved to the head of the buffer
         if (jdbOutputLen_)
             memmove(jdbOutput_, nowAt, jdbOutputLen_);     // Overlapping data
-        
+
     }
     // check the queue for any commands to send
     executeCmd();
@@ -1338,7 +1341,7 @@ void JDBController::slotDbgProcessExited(KProcess*)
     destroyCmds();
     state_ = s_appNotStarted|s_programExited|(state_&s_viewLocals);
     emit dbgStatus (i18n("Process exited"), state_);
-    
+
     JDB_DISPLAY(QString("\n(jdb) Process exited"));
 }
 
@@ -1367,13 +1370,13 @@ void JDBController::varUpdateDone()
     if (!it.toFirst()) { return; }
     // make sure we dont visit nodes more than once
     while (it.current()) {
-       
+
        if (!it.currentKey().contains(".")) {
            locals += it.current()->toString() + QString(",");
        }
        ++it;
     }
-    
+
     locals[locals.length()-1] = ' '; // remove trailing comma
     char* _l = new char[locals.length()];
     strcpy(_l, locals.latin1());
@@ -1387,7 +1390,7 @@ void JDBController::varUpdateDone()
     // so make sure we have one of those.
     if (!(frame = varTree_->findFrame(currentFrame_)))
         frame = new FrameRoot(varTree_, currentFrame_);
-    
+
     Q_ASSERT(frame);
     frame->setFrameName(frameStack_->getFrameName(currentFrame_));
 
@@ -1437,7 +1440,7 @@ void JDBController::slotDbgStatus(const QString &status, int state)
         s += QString("<silent>");
     if (state & s_viewLocals)
         s += QString("<viewing locals>");
-    
+
     DBG_DISPLAY((s+status).local8Bit().data());
 }
 
@@ -1460,16 +1463,14 @@ QString JDBVarItem::toString() {
             tmp += item->toString() + ",";
             delete item;
         }
-        
+
         tmp = name + " = {" +tmp;
         tmp[tmp.length()-1] = '}'; // remove trailing comma
         return tmp;
     }
 }
 
-
-
-
+}
 
 // **************************************************************************
 #include "jdbcontroller.moc"

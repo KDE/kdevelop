@@ -1,9 +1,9 @@
 /***************************************************************************
-                          breakpoint.h  -  description                              
-                             -------------------                                         
-    begin                : Tue Aug 10 1999                                           
-    copyright            : (C) 1999 by John Birch                         
-    email                : jbb@kdevelop.org                                     
+                          breakpoint.h  -  description
+                             -------------------
+    begin                : Tue Aug 10 1999
+    copyright            : (C) 1999 by John Birch
+    email                : jbb@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -25,12 +25,15 @@
 /***************************************************************************/
 /***************************************************************************/
 
+namespace JAVADebugger
+{
+
 class Breakpoint : public QListBoxItem
 {
 public:
     Breakpoint(bool temporary=false, bool enabled=true);
     virtual ~Breakpoint();
-    
+
     virtual QString dbgSetCommand() const                 = 0;
     virtual QString dbgRemoveCommand() const;
     virtual bool match(const Breakpoint* brkpt) const     = 0;
@@ -38,15 +41,15 @@ public:
     virtual void configureDisplay();
     virtual bool modifyDialog();
     virtual void reset();
-    
+
     int height(const QListBox *lb) const;
     int width(const QListBox *lb) const;
     void paint(QPainter *p);
-    
+
     void setActive(int active, int id);
     bool isActive(int active) const  {  return (  (active_ == active) ||
                                                   (s_pending_ && !s_actionClear_) ); }
-    
+
     void setEnabled(bool enabled)                 { s_changedEnable_ = (s_enabled_ != enabled);             s_enabled_ = enabled; }
     bool isEnabled() const                        { return s_enabled_; }
     void setTemporary(bool temporary)             { s_temporary_ = temporary; }
@@ -59,11 +62,11 @@ public:
     QString address() const                       { return address_; }
     void setConditional(const QString &condition) { s_changedCondition_ = (condition_ != condition);        condition_ = condition; }
     QString conditional() const                   { return condition_; }
-    
+
     bool changedCondition()                       { return s_changedCondition_; }
     bool changedIgnoreCount()                     { return s_changedIgnoreCount_; }
     bool changedEnable()                          { return s_changedEnable_; }
-    
+
     void setPending(bool pending)                 { s_pending_ = pending; }
     bool isPending() const                        { return s_pending_; }
     void setActionAdd(bool actionAdd)             { s_actionAdd_ = actionAdd; }
@@ -76,24 +79,24 @@ public:
     bool isDbgProcessing() const                  { return s_dbgProcessing_; }
     void setActionDie()                           { s_actionDie_ = true; s_actionClear_ = false; }
     bool isActionDie() const                      { return s_actionDie_; }
-    
+
     int key() const                               { return key_; }
     void setDbgId(int dbgId)                      { dbgId_ = dbgId; }
     int  dbgId() const                            { return dbgId_; }
     void setHits(int hits)                        { hits_ = hits; }
     int  hits() const                             { return hits_; }
-    
+
     virtual bool hasSourcePosition() const;
     virtual QString fileName() const;
     virtual int lineNum() const;
-    
+
 protected:
     // Ugggghh - this needs to be removed - it's
     // for the listbox display which seems to get confused
     // if you just change the strings position
     // (eg QString.data()). It works like this but...
     QString display_;
-    
+
 private:
     bool s_pending_             :1;
     bool s_actionAdd_           :1;
@@ -107,13 +110,13 @@ private:
     bool s_changedIgnoreCount_  :1;
     bool s_changedEnable_       :1;
     bool s_hardwareBP_          :1;     // assigned by jdb
-    
+
     int dbgId_;                         // assigned by jdb
     int hits_;                          // assigned by jdb
-    
+
     int key_;                           // internal unique key
     int active_;                        // counter incremented on receipt of all BP's
-    
+
     int ignoreCount_;
     QString address_;
     QString condition_;
@@ -131,11 +134,11 @@ public:
     virtual QString dbgSetCommand() const;
     virtual bool match(const Breakpoint *brkpt) const;
     virtual void configureDisplay();
-    
+
     QString fileName() const          { return fileName_; }
     int lineNum() const               { return lineNo_; }
     bool hasSourcePosition() const    { return true; }
-    
+
 private:
     QString fileName_;
     int lineNo_;
@@ -186,10 +189,13 @@ public:
     virtual QString dbgSetCommand() const;
     bool match(const Breakpoint *brkpt) const;
     virtual void configureDisplay();
-    
+
 private:
     QString varName_;
 };
+
+}
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/

@@ -48,6 +48,9 @@
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************
 
+namespace JAVADebugger
+{
+
 MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       start_(new KLineEdit(this)),
@@ -132,4 +135,7 @@ void MemoryViewDialog::slotMemoryDump()
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+
+}
+
 #include "memviewdlg.moc"

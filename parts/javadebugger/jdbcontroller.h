@@ -1,7 +1,7 @@
 /***************************************************************************
-                          jdbcontroller.h  -  description                              
-                             -------------------                                         
-    begin                : Sun Aug 8 1999                                           
+                          jdbcontroller.h  -  description
+                             -------------------
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -25,11 +25,15 @@
 #include <qstringlist.h>
 
 
+class KProcess;
+class QString;
+
+namespace JAVADebugger
+{
+
 class Breakpoint;
 class DbgCommand;
 class FramestackWidget;
-class KProcess;
-class QString;
 class VarItem;
 class VariableTree;
 class STTY;
@@ -43,7 +47,7 @@ public:
     QString value;
     QString name;
     QPtrList<JDBVarItem> siblings;
-   
+
 };
 
 
@@ -55,15 +59,15 @@ public:
 class JDBController : public DbgController
 {
     Q_OBJECT
-    
+
 public:
     JDBController(VariableTree *varTree, FramestackWidget *frameStack, QString projectDirectory, QString mainProgram);
     ~JDBController();
     void reConfig();
-    
+
 protected:
     void queueCmd(DbgCommand *cmd, bool executeNext=false);
-    
+
 private:
     QString getFile(QString className);
     void varUpdateDone();
@@ -77,20 +81,20 @@ private:
     char* parseDump           (char *buf);
     void parseLocals();
     void parseFrameSelected   (char *buf);
-    
+
     char *parse               (char *buf);
-    
+
     void pauseApp();
     void executeCmd ();
     void destroyCmds();
     void removeInfoRequests();
     void actOnProgramPause(const QString &msg);
     void programNoApp(const QString &msg, bool msgBox);
-    
+
     void setBreakpoint(const QCString &BPSetCmd, int key);
     void clearBreakpoint(const QCString &BPClearCmd);
     void modifyBreakpoint(Breakpoint *BP);
-    
+
     void setStateOn(int stateOn)    { state_ |= stateOn; }
     void setStateOff(int stateOff)  { state_ &= ~stateOff; }
     bool stateIsOn(int state)       { return state_  &state; }
@@ -109,29 +113,29 @@ public slots:
     void slotStart(const QString &application, const QString &args, const QString &sDbgShell=QString());
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
-    
-    void slotRun();                                            
+
+    void slotRun();
     void slotRunUntil(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
     void slotStepIntoIns();
     void slotStepOverIns();
     void slotStepOutOff();
-    
+
     void slotBreakInto();
     void slotBPState(Breakpoint *BP);
     void slotClearAllBreakpoints();
-    
+
     void slotDisassemble(const QString &start, const QString &end);
     void slotMemoryDump(const QString &start, const QString &amount);
     void slotRegisters();
     void slotLibraries();
-    
+
     void slotExpandItem(VarItem *parent);
     void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
     void slotSelectFrame(int frame);
     void slotSetLocalViewState(bool onOff);
-    
+
 protected slots:
     void slotDbgStdout(KProcess *proc, char *buf, int buflen);
     void slotDbgStderr(KProcess *proc, char *buf, int buflen);
@@ -140,10 +144,10 @@ protected slots:
     void slotStepInSource(const QString &fileName, int lineNum);
     void slotDbgStatus(const QString &status, int state);
     void slotDebuggerStarted();
-    
+
 private slots:
     void slotAbortTimedEvent();
-    
+
 signals:
     void rawData              (const QString &rawData);
     void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
@@ -159,20 +163,20 @@ signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
     void debuggerStarted      ();
-    
+
 private:
     FramestackWidget* frameStack_;
     VariableTree*     varTree_;
     int               currentFrame_;
-    
+
     int               state_;
     int               jdbSizeofBuf_;          // size of the output buffer
     int               jdbOutputLen_;          // amount of data in the output buffer
     char*             jdbOutput_;             // buffer for the output from kprocess
-    
+
     QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
-    
+
     STTY*             tty_;
     bool              programHasExited_;
 
@@ -183,5 +187,7 @@ private:
     bool    config_dbgTerminal_;
     QString config_jdbPath_;
 };
+
+}
 
 #endif

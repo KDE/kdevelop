@@ -1,7 +1,7 @@
 /***************************************************************************
-                          brkptmanager.cpp  -  description                              
-                             -------------------                                         
-    begin                : Sun Aug 8 1999                                           
+                          brkptmanager.cpp  -  description
+                             -------------------
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jbb@kdevelop.org
  ***************************************************************************/
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -27,6 +27,9 @@
 #include <ctype.h>
 #include <klocale.h>
 #include <qcursor.h>
+
+namespace JAVADebugger
+{
 
 /***************************************************************************/
 /***************************************************************************/
@@ -77,13 +80,13 @@ int BreakpointWidget::findIndex(const Breakpoint *breakpoint) const
     // NOTE:- The match doesn't have to be equal. Each type of BP
     // must decide on the match criteria.
     Q_ASSERT (breakpoint);
-    
+
     for (int index=0; index<(int)count(); index++) {
         Breakpoint *BP = (Breakpoint*)(item(index));
         if (breakpoint->match(BP))
             return index;
     }
-    
+
     return -1;
 }
 
@@ -97,7 +100,7 @@ Breakpoint *BreakpointWidget::findId(int dbgId) const
         if (BP->dbgId() == dbgId)
             return BP;
     }
-    
+
     return 0;
 }
 
@@ -111,7 +114,7 @@ Breakpoint *BreakpointWidget::findKey(int BPKey) const
         if (BP->key() == BPKey)
             return BP;
     }
-    
+
     return 0;
 }
 
@@ -124,7 +127,7 @@ void BreakpointWidget::addBreakpoint(Breakpoint *BP)
     BP->setActionAdd(true);
     BP->setPending(true);
     emit publishBPState(BP);
-    
+
     BP->configureDisplay();
     repaint();
 }
@@ -143,10 +146,10 @@ void BreakpointWidget::removeBreakpoint(Breakpoint *BP)
         BP->setPending(true);
         BP->setActionClear(true);
         emit publishBPState(BP);
-        
+
         BP->configureDisplay();
     }
-    
+
     repaint();
 }
 
@@ -158,7 +161,7 @@ void BreakpointWidget::modifyBreakpoint(Breakpoint *BP)
         BP->setPending(true);
         BP->setActionModify(true);
         emit publishBPState(BP);
-        
+
         BP->configureDisplay();
         repaint();
     }
@@ -172,7 +175,7 @@ void BreakpointWidget::toggleBPEnabled(Breakpoint *BP)
     BP->setPending(true);
     BP->setActionModify(true);
     emit publishBPState(BP);
-    
+
     BP->configureDisplay();
     repaint();
 }
@@ -186,7 +189,7 @@ void BreakpointWidget::removeAllBreakpoints()
         if (BP->isPending() && !BP->isDbgProcessing())
             removeBreakpoint(BP);
     }
-    
+
     if (count())
         emit clearAllBreakpoints();
 }
@@ -241,7 +244,7 @@ void BreakpointWidget::slotContextMenu(QListBoxItem *item)
 void BreakpointWidget::slotToggleBreakpoint(const QString &fileName, int lineNum)
 {
     FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
+
     int found = findIndex(fpBP);
     if (found >= 0) {
         delete fpBP;
@@ -255,7 +258,7 @@ void BreakpointWidget::slotToggleBreakpoint(const QString &fileName, int lineNum
 void BreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNum)
 {
     FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
+
     int found = findIndex(fpBP);
     delete fpBP;
     if (found >= 0)
@@ -267,7 +270,7 @@ void BreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNum)
 void BreakpointWidget::slotToggleBreakpointEnabled(const QString &fileName, int lineNum)
 {
     FilePosBreakpoint *fpBP = new FilePosBreakpoint(fileName, lineNum+1);
-    
+
     int found = findIndex(fpBP);
     delete fpBP;
     if (found >= 0) {
@@ -312,7 +315,7 @@ void BreakpointWidget::slotUnableToSetBPNow(int BPid)
         reset();
     else if (Breakpoint *BP = findId(BPid))
         BP->reset();
-    
+
     repaint();
 }
 
@@ -329,15 +332,15 @@ void BreakpointWidget::slotParseJDBBrkptList(char *str)
     //        breakpoint already hit 1 time
     // 4   breakpoint     keep y   0x0804a930 in main at main.cpp:28
     //        ignore next 6 hits
-    
+
     // Another example of a not too uncommon occurance
     // No breakpoints or watchpoints.
-    
+
     // Set the new active flag so that after we have read the
     // breakpoint list we can trim the breakpoints that have been
     // removed (temporary breakpoints do this)
     activeFlag_++;
-    
+
     // skip the first line which is the header
     while (str && (str = strchr(str, '\n'))) {
         str++;
@@ -352,51 +355,51 @@ void BreakpointWidget::slotParseJDBBrkptList(char *str)
             QString condition;
             while (str && (str = strchr(str, '\n'))) {
                 str++;
-                
+
                 // The char after a newline is a digit hence it's
                 // a new breakpt. Breakout to deal with this breakpoint.
                 if (isdigit(*str)) {
                     str--;
                     break;
                 }
-                
+
                 // We're only interested in these fields here.
                 if (strncmp(str, "\tbreakpoint already hit ", 24) == 0)
                     hits = atoi(str+24);
-                
+
                 if (strncmp(str, "\tignore next ", 13) == 0)
                     ignore = atoi(str+13);
-                
+
                 if (strncmp(str, "\tstop only if ", 14) == 0) {
                     char* EOL = strchr(str, '\n');
                     if (EOL)
                         condition = QCString(str+14, EOL-(str+13));
                 }
             }
-            
+
             if (Breakpoint *BP = findId(id)) {
                 BP->setActive(activeFlag_, id);
                 BP->setHits(hits);
                 BP->setIgnoreCount(ignore);
                 BP->setConditional(condition);
                 emit publishBPState(BP);
-                
+
                 BP->configureDisplay();
             }
         }
     }
-    
+
     // Remove any inactive breakpoints.
     for (int index=count()-1; index>=0; index--) {
         Breakpoint* BP = (Breakpoint*)(item(index));
         if (!BP->isActive(activeFlag_)) {
             BP->setActionDie();
             emit publishBPState(BP);
-            
+
             removeItem(index);
         }
     }
-    
+
     //  setAutoUpdate(true);
     repaint();
 }
@@ -410,9 +413,9 @@ void BreakpointWidget::slotParseJDBBreakpointSet(char *str, int BPKey)
     Breakpoint *BP = findKey(BPKey);
     if (!BP)
         return;   // Why ?? Possibly internal dbgController BPs that shouldn't get here!
-    
+
     BP->setDbgProcessing(false);
-    
+
     if ((strncmp(str, "Breakpoint ", 11) == 0))
         startNo = str+11;
     else {
@@ -422,14 +425,14 @@ void BreakpointWidget::slotParseJDBBreakpointSet(char *str, int BPKey)
         } else if ((strncmp(str, "Watchpoint ", 11) == 0))
             startNo = str+11;
     }
-    
+
     if (startNo) {
         int id = atoi(startNo);
         if (id) {
             BP->setActive(activeFlag_, id);
             BP->setHardwareBP(hardware);
             emit publishBPState(BP);
-            
+
             BP->configureDisplay();
             repaint();
         }
@@ -437,4 +440,7 @@ void BreakpointWidget::slotParseJDBBreakpointSet(char *str, int BPKey)
 }
 
 /***************************************************************************/
+
+}
+
 #include "breakpointwidget.moc"
