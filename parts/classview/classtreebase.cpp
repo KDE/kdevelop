@@ -527,7 +527,7 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     if (ctitem->isOrganizer())
         return;
 
-    if (button == MidButton) {
+    if (button == LeftButton) {
         QString toFile;
         int toLine = -1;
         ctitem->getDeclaration(&toFile, &toLine);
