@@ -143,7 +143,7 @@ public:
   bool fileSaveAs();
   bool saveFileFromTheCurrentEditWidget();
 
-  void refreshTrees();
+  void refreshTrees(QStrList * iFileList = NULL);
   void refreshTrees(TFileInfo *info);
 
   void setKeyAccel();
@@ -929,7 +929,7 @@ private:
 
   /** The controller for the debugging program (eg gdb) */
   DbgController* dbgController;
-
+  
   /** The floating toolbar - always on top */
   DbgToolbar* dbgToolbar;
 
@@ -943,22 +943,30 @@ private:
   FrameStack* frameStack;
 
   /** show disassembled code being run - on output tab */
-  Disassemble* disassemble;
+   Disassemble* disassemble;
+ 
+   /** debug aid. Switch on using compile switch GDB_MONITOR
+       or DBG_MONITOR  - on output tab */
 
-  /** debug aid. Switch on using compile switch GDB_MONITOR
-      or DBG_MONITOR  - on output tab */
   COutputWidget* dbg_widget;
 
   bool dbgInternal;
-
+  
   /** The external debugger command to run */
   QString dbgExternalCmd;
 
-  // Initiates a variety of debugging sessions and options
+  // Initiates a variety of debugging sessions.
   QPopupMenu* debugPopup;
 
   // Protect the gdbcontroller deletion.
-  bool dbgShuttingDown;
+   bool dbgShuttingDown;
+
+
+     /** memory effect on open file dialog box*/
+  QString _LastOpenDir;
+
+
+
 };
 
 #endif

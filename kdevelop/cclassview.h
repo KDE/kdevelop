@@ -28,6 +28,7 @@
 #include "cclasstreehandler.h"
 
 class CClassToolDlg;
+class QStrList;
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
@@ -74,9 +75,11 @@ public: // Public refreshmethods
   void refresh( CProject *proj );
 
   /** Refresh the view regarding a certain file.
-   * @param aFile The file to reparse.
+   * @param iHeaderList the header files to reparse.
+   * @param iSourceList the source files to reparse.
    */
-  void refresh( const char *aFile );
+  void refresh( QStrList * iHeaderList, QStrList * iSourceList );
+
 
   /** Refresh the whole view. */
   void refresh();

@@ -16,7 +16,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-
+#include <time.h>
 #include "cclassview.h"
 #include <assert.h>
 #include <kmsgbox.h>
@@ -24,6 +24,7 @@
 #include <qheader.h>
 #include <qprogressdialog.h> 
 #include <qmessagebox.h>
+#include <qstrlist.h>
 
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
@@ -106,6 +107,8 @@ void CClassView::CCVToolTip::maybeTip( const QPoint &p )
 CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   : CTreeView (parent, name)
 {
+  project = NULL;		//by default initialize it to null;
+
   // Create the popupmenus.
   initPopups();
 
@@ -119,6 +122,7 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   ((CClassTreeHandler *)treeH)->setStore( store );
 
   connect(this, SIGNAL(selectionChanged()), SLOT(slotClassViewSelected()));
+
 }
 
 /*------------------------------------------ CClassView::~CClassView()
@@ -243,7 +247,7 @@ void CClassView::initPopups()
  *-----------------------------------------------------------------*/
 void CClassView::refresh( CProject *proj )
 {
-  QProgressDialog progressDlg(NULL, "progressDlg", true );
+//  QProgressDialog progressDlg(NULL, "progressDlg", true );
   QStrList src;
   QStrList header;
   char *str;
@@ -295,6 +299,7 @@ void CClassView::refresh( CProject *proj )
 
 }
 
+
 /*---------------------------------------------- CClassView::refresh()
  * refresh()
  *   Reparse the file and redraw the view.
@@ -304,8 +309,51 @@ void CClassView::refresh( CProject *proj )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::refresh( const char *aFile)
+void CClassView::refresh( QStrList *iHeaderList, QStrList *iSourceList)
 {
+	if (!iHeaderList && ! iSourceList)
+	{
+		cerr << "invalid file list " << __FILE__ << ":" << __LINE__ << endl;
+		return;
+	}
+	
+	
+	// Initialize progressbar.
+	int lTotalCount = 0;
+	if (iHeaderList)	
+		lTotalCount += iHeaderList->count();
+		
+	if (iSourceList)
+		lTotalCount += iSourceList->count();
+		
+		
+  emit resetStatusbarProgress();
+  int lCurCount = 0;
+	emit setStatusbarProgress( lCurCount );
+  emit setStatusbarProgressSteps( lTotalCount );
+
+  const char* lCurFile;
+	//I iterate over all the headers I was passed as arguments and parse them
+	if (iHeaderList)
+		for (lCurFile = iHeaderList->first(); lCurFile; lCurFile = iHeaderList->next())
+		{
+			debug( "  parsing:[%s]", lCurFile );
+	    cp.parse( lCurFile );
+			emit setStatusbarProgress( ++lCurCount );
+		}
+		
+	//now I iterate over all the sources I was passed as arguments and parse them
+	if (iSourceList)
+		for (lCurFile = iSourceList->first(); lCurFile; lCurFile = iSourceList->next())
+		{
+			debug( "  parsing:[%s]", lCurFile );
+	    cp.parse( lCurFile );
+			emit setStatusbarProgress( ++lCurCount );
+		}
+		
+  //reset and refresh the tree
+	((CClassTreeHandler *)treeH)->clear();	
+	refresh();
 }
 
 /*---------------------------------------------- CClassView::refresh()
@@ -619,7 +667,7 @@ int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
 
   // Skip first '.
   pos++;
-  while( str[pos] != '\'' )
+  while( str[pos] != '\'' && str[pos] != ')' && str[pos] != '(' )
   {
     buf[idx]=str[pos];
     idx++;
@@ -629,9 +677,10 @@ int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
   // Add a null termination.
   buf[ idx ] = '\0';
 
+  //modif Benoit Cerrina 17 Dec 1999
   // Skip to next ' or to ')'.
-  pos++;
-  
+	//  pos++;      //I commented out this since we're already at the next '
+	//end modif
   return pos;
 }
 
@@ -647,6 +696,8 @@ int CClassView::getTreeStrItem( const char *str, int pos, char *buf )
  *-----------------------------------------------------------------*/
 void CClassView::buildTree( const char *str )
 {
+	time_t lStart = time(NULL);
+	clock_t lStartClock = clock();
   uint pos=0;
   QListViewItem *root=NULL;
   QListViewItem *parent=NULL;
@@ -655,8 +706,8 @@ void CClassView::buildTree( const char *str )
   char buf[50];
 
   debug( "CClassView::buildtree( treeStr )" );
-
-  while( pos < strlen( str ) )
+	uint lStringSize = strlen(str);
+  while( pos < lStringSize )
   {
     if( str[ pos ] == '(' )
     {
@@ -669,7 +720,10 @@ void CClassView::buildTree( const char *str )
         root = parent;
       }
       else
+      {
         parent = ((CClassTreeHandler *)treeH)->addItem( buf, THFOLDER, parent );
+        treeH->setLastItem( parent );
+      }
     }
 
     while( str[ pos ] == '\'' )
@@ -691,10 +745,17 @@ void CClassView::buildTree( const char *str )
       pos++;
       parent = parent->parent();
 
-      if( parent != NULL && parent != root )
-        treeH->setLastItem( parent );
+    }
+    else if (str[pos] != '(')					//the current character is not an '\'' (we are out of the inner loop) nor a '('
+    {
+    	cerr << "invalid tree string trying to recover" << endl;
+    	pos++;
     }
   }
+  classesItem = root;
+  cout << "buildTree(str) took " << (time(NULL) - lStart) << "ms to complete" << endl;
+  cout << "buildTree(str) took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+
 }
 
 /*----------------------------------------- CClassView::buildTreeStr()
@@ -721,9 +782,13 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
       {
         str += "('";
         str += item->text( 0 );
+        //modif Benoit Cerrina 17 dec 1999
+        //lets stay simple it's not working yet
+        /*
         str += "'";
         str += ( item->isOpen() ? "1" : "0" );
-        
+        */
+				//end modif
         buildTreeStr( item->firstChild(), str );
         str += ")";
       }
@@ -731,8 +796,13 @@ void CClassView::buildTreeStr( QListViewItem *item, QString &str )
       {
         str += "'";
         str += item->text( 0 );
+        //modif Benoit Cerrina 17 dec 1999
+        //lets stay simple it's not working yet
+        /*
         str += "'";
         str += ( item->isOpen() ? "1" : "0" );
+        */
+        //end modif
       }
 
       // Ignore globals folder.
@@ -771,6 +841,8 @@ void CClassView::asTreeStr(QString &str)
  *-----------------------------------------------------------------*/
 void CClassView::buildInitalClassTree()
 {
+	time_t start = time(NULL);
+	clock_t startClock = clock();
   QString str;
   CParsedClass *aPC;
   QListViewItem *folder;
@@ -838,8 +910,14 @@ void CClassView::buildInitalClassTree()
   ((CClassTreeHandler *)treeH)->addClasses( &rootList, classesItem );
 
   // Save the tree.
-  asTreeStr( str );
-  //  project->setClassViewTree( str );
+//  asTreeStr( str );
+  //Modif Benoit Cerrina 16 dec 99
+  //I uncommented the following line
+//  project->setClassViewTree( str );
+  //end modif
+
+  cout << "buildInitialClassTree took " << (time(NULL) - start) << " ms to complete" << endl;
+  cout << "buildInitialClassTree took " << (clock() - startClock) << " clock to complete" << endl;
 }
 
 /*----------------------------------------- CClassView::createCTDlg()

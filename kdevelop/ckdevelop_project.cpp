@@ -149,7 +149,7 @@ bool CKDevelop::slotProjectClose(){
     kdlg_dialogs_view->clear();
 
     if (dbgController)
-      slotDebugStop();
+			slotDebugStop();
 
     kdlgedit->slotFileSave();
     
@@ -267,7 +267,7 @@ void CKDevelop::slotAddExistingFiles(){
     
   i=0;
   progress.setProgress( i);
-
+  QStrList lNewFiles;
   for(file = files.first(); file !=0;file = files.next()){
     i++;
     copy = false;
@@ -357,11 +357,12 @@ void CKDevelop::slotAddExistingFiles(){
     }
 
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
+	lNewFiles.append(dest_name);
   }
   progress.setProgress( files.count() );
   // if (type != DATA)               // don't load data files (has to be tested if wanted)
-   switchToFile(dest_name);
-  refreshTrees();
+  switchToFile(dest_name);
+  refreshTrees(&lNewFiles);
     
   if(new_subdir){
     newSubDir();
@@ -453,6 +454,8 @@ void CKDevelop::slotProjectOptions(){
   }
   
 }
+
+
 void CKDevelop::slotProjectNewClass(){
   CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
   if(dlg->exec()){
@@ -484,8 +487,12 @@ void CKDevelop::slotProjectNewClass(){
       newSubDir();
 
     prj->updateMakefilesAm();
-
-    slotViewRefresh();
+	QStrList lToRefresh;
+	lToRefresh.autoDelete();
+	lToRefresh.append(source_file);
+	lToRefresh.append(header_file);
+	refreshTrees(&lToRefresh);
+    //slotViewRefresh();
   }
 }
 
@@ -500,42 +507,13 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 }
 
 void CKDevelop::slotProjectOpen(){
-  QString old_project = "";
+	QString old_project = "";
 
   
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
-			slotViewRefresh();
-      return;
-    }
-  }
-  slotStatusMsg(i18n("Opening project..."));
-  QString str;
-  str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
-  if (str.isEmpty() && old_project != ""){
-    readProjectFile(old_project);
-    slotViewRefresh();
-    return; //cancel
-  }
- 
- 
-  QFileInfo info(str);
-  
-  if (info.isFile()){
-    if(!(readProjectFile(str))){
-
-    KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
-    readProjectFile(old_project);
-		slotViewRefresh();
-    }
-  	else
-			slotViewRefresh();
-
-    slotStatusMsg(i18n("Ready."));
-  }	
-  
-  
+	slotStatusMsg(i18n("Opening project..."));
+	QString str;
+	str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+	slotProjectOpenCmdl(str);
 }
 
 void CKDevelop::slotProjectOpenRecent(int id_)
@@ -543,30 +521,36 @@ void CKDevelop::slotProjectOpenRecent(int id_)
   slotProjectOpenCmdl(recent_projects.at(id_));
 }
 
-void CKDevelop::slotProjectOpenCmdl(QString prjname){
+void CKDevelop::slotProjectOpenCmdl(QString prjname)
+{
+	QString old_project = "";
 
-  QString old_project = "";
+	prjname.replace(QRegExp("file:"),"");
+	QFileInfo info(prjname);
 
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
-      return;
-    }
-  }
-  prjname.replace(QRegExp("file:"),"");
+	if (info.isFile())		//if the new project file is not valid, do nothing
+	{
+		if(project)
+		{
+			old_project = prj->getProjectFile();
+			if(!slotProjectClose())		//the user may have pressed cancel in which case the state is undetermined
+			{
+				readProjectFile(old_project);
+				slotViewRefresh();
+				return;
+			}
+  		}
   
-  QFileInfo info(prjname);
+    	if(!(readProjectFile(prjname)))		//the readProjectFile is now garanteed not to modify the state if it fails
+		{
 
-  if (info.isFile()){
-    if(!(readProjectFile(prjname))){
-
-    KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
-    readProjectFile(old_project);
-    }
-
-    slotViewRefresh();
-    slotStatusMsg(i18n("Ready."));
-  }	
+		    KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+//		    readProjectFile(old_project);		//not needed anymore
+    	}
+		else
+			slotViewRefresh();
+		slotStatusMsg(i18n("Ready."));
+	}	
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -580,12 +564,6 @@ void CKDevelop::slotProjectNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
-      return;
-    }
-  }
   
   slotStatusMsg(i18n("Creating a new frame application..."));
   config->setGroup("General Options");
@@ -597,21 +575,31 @@ void CKDevelop::slotProjectNewAppl(){
   kappw.exec();
   QString file = kappw.getProjectFile();
   
-  if(kappw.generatedProject()){
+  if(kappw.generatedProject())
+  {
     config->setGroup("General Options");
     config->writeEntry("author_name",kappw.getAuthorName());
     config->writeEntry("author_email",kappw.getAuthorEmail());
     config->sync();
+	
+	if(project)		//now that we know that a new project will be built we can close the previous one
+	{
+    	old_project = prj->getProjectFile();
+    	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
+		{
+			readProjectFile(old_project);
+			slotViewRefresh();
+			return;
+		}
+  	}
+
     readProjectFile(file);
-    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") {
+    if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") 
+	{
       slotProjectMessages();
     }
+  	slotViewRefresh();	// a new project started, this is legitimate
   }
-  else if (old_project != ""){ // if cancel load the old project again
-    readProjectFile(old_project);
-  }
-  slotViewRefresh();
-  //cerr << kappw->getProjectFile();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -986,19 +974,33 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 
   prj->removeFileFromProject(rel_filename);
   prj->writeProject();
-  refreshTrees();
+  QStrList lDeletedFile;
+  lDeletedFile.autoDelete();
+  QString lAbsoluteFileName = prj->getProjectDir() + rel_filename;
+  lDeletedFile.append(lAbsoluteFileName);
+  refreshTrees(&lDeletedFile);
 }
 
 bool CKDevelop::readProjectFile(QString file){
   QString str;
   QString extension;
 
+/*
   prj = new CProject(file);
   if(!(prj->readProject())){
     return false;
   }
   else {
       project=true;
+  }
+*/
+CProject * lNewProject = new CProject(file);
+  if(!(lNewProject->readProject())){
+    return false;
+  }
+  else {
+      project=true;
+	  prj = lNewProject;
   }
 
   // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";

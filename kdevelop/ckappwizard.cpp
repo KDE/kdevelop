@@ -26,6 +26,9 @@
 #include "ctoolclass.h"
 #include <kmsgbox.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kconfig.h>
+#include <iostream.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
   q = new KShellProcess();
@@ -1603,8 +1606,13 @@ void CKAppWizard::slotDefaultClicked(int page) {
   miniload->setEnabled(true);
   iconload->setEnabled(true);
   generatesource->setChecked(true);  
-  directoryline->setText(QDir::homeDirPath()+ QString("/"));
-  dir = QDir::homeDirPath()+ QString("/");
+  //Benoit Cerrina 17 Dec 99
+  KConfig * lSettings = KApplication::getKApplication()->getConfig();
+  lSettings->setGroup("General Options");
+  dir = lSettings->readEntry ( "ProjectDefaultDir", QDir::homeDirPath()) + QString("/");
+  cout << dir << endl;
+  directoryline->setText(dir);
+  //end modif by Benoit Cerrina
   nameline->setText(0);
   okButton->setEnabled(false);
   miniload->setPixmap(QPixmap(KApplication::kde_icondir() + "/mini/application_settings.xpm"));

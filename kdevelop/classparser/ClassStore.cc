@@ -106,8 +106,7 @@ void CClassStore::removeWithReferences( const char *aFile )
     aClass = globalContainer.classIterator.current();
 
     // Remove the class if any of the files are the supplied one.
-    if( aClass->declaredInFile == aFile ||
-        aClass->definedInFile == aFile )
+    if( aClass->declaredInFile == aFile)
       removeClass( aClass->name );
   }
   

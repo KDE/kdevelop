@@ -1761,8 +1761,8 @@ void CClassParser::parseToplevel()
       parseGenericLexem( &store.globalContainer );
     else
       parseTopLevelLexem( &store.globalContainer );
+		kapp->processEvents(500);
 
-    //    kapp->processEvents();
     getNextLexem();
   }
 }

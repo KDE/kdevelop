@@ -22,6 +22,7 @@
 #define LAYOUT_BORDER (10)
 #include "cnewclassdlg.h"
 #include "cproject.h"
+#include "cgeneratenewfile.h"
 
 // SETUP DIALOG
 CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
@@ -282,12 +283,25 @@ void CNewClassDlg::ok(){
     implname = generator.genCPPFile(implname,prj_info);
   }
   else{
+
+//Added by Benoit Cerrina, Benoit.Cerrina@writeme.com
+//computes the relative position of the header and implementation
+//files in order for the #include statement to work correctly.
+//without this the generated file may not compile
+// 6 Dec 99
+  	QString name;
+  	QString empty("");
+  	handleCreateSubDirectory(prj_info, name,  headername, empty);
+  	handleCreateSubDirectory(prj_info, name,  implname, empty);
+//	not needed anymore  	
+/*
     QFile file(headername);
     file.open(IO_ReadWrite);
     file.close();
     file.setName(implname);
     file.open(IO_ReadWrite);
     file.close();
+*/
   }
 
 
@@ -309,11 +323,31 @@ void CNewClassDlg::ok(){
   }
   file.close();
 
+
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str != 0;str = list.next()){
       stream << str << "\n";
     }
-    stream << "\n#include \"" + QString(headerfile) + "\"\n\n" ;
+
+
+//Added by Benoit Cerrina, Benoit.Cerrina@writeme.com
+//computes the relative position of the header and implementation
+//files in order for the #include statement to work correctly.
+//without this the generated file may not compile
+// 6 Dec 99
+    QString lDirBackup;
+		QString lRelImplName =  impl_edit->text();
+									
+    for(int slash_pos = lRelImplName.findRev('/'); slash_pos != -1; slash_pos = lRelImplName.findRev('/', --slash_pos))
+    {
+    	lDirBackup += "../";
+    }
+    stream << "\n#include \"" + lDirBackup + QString(header_edit->text()) + "\"\n\n" ;
+
+
+//    stream << "\n#include \"" + QString(headerfile) + "\"\n\n" ;
+// end modification
+
     stream << classname + "::" + classname +"(" ;
     if (qwidget_check->isChecked()){
       stream << "QWidget *parent, const char *name ) : ";

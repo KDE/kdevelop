@@ -331,8 +331,11 @@ bool CKDevelop::fileSaveAs(){
           removeFileFromEditlist(oldName);
       }
     }
-
-    slotViewRefresh();
+	QStrList lToRefresh;
+	lToRefresh.append(oldName);
+	lToRefresh.append(name);
+	refreshTrees(&lToRefresh);
+//    slotViewRefresh();
   }
 
   if (bAutosave)
@@ -391,7 +394,9 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::refreshTrees(){
+void CKDevelop::refreshTrees(QStrList * iFileList){
+	time_t lStart = time(NULL);
+	clock_t lStartClock = clock();
   doc_tree->refresh(prj);
   if (!project){
     return; // no project
@@ -401,7 +406,40 @@ void CKDevelop::refreshTrees(){
   slotStatusMsg(i18n("Scanning project files..."));
 	setCursor(KCursor::waitCursor());
   statProg->show();
-  class_tree->refresh(prj);
+  if (iFileList)
+  {
+  	//first we'll separate the headers and the source files
+  	QStrList lHeaderList(FALSE);	//no deep copies
+  	QStrList lSourceList(FALSE);
+  	ProjectFileType lCurFileType;
+  	for (const char* lCurFile = iFileList->first(); lCurFile; lCurFile = iFileList->next())
+  	{
+  		lCurFileType = prj->getType(lCurFile);
+  		switch(lCurFileType)
+  		{
+  			case CPP_HEADER:
+  				lHeaderList.append(lCurFile);
+	  			break;
+  			case CPP_SOURCE:
+  				lSourceList.append(lCurFile);
+  				break;
+  			//skip all the other files
+  			default:
+  				break;
+  		}
+		}
+  	class_tree->refresh(&lHeaderList, &lSourceList);
+	}
+	else
+	{
+		time_t lStart = time(NULL);
+		clock_t lStartClock = clock();
+		class_tree->refresh(prj);
+		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
+ 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+
+	}
+
   statProg->reset();
   statProg->hide();
 
@@ -435,6 +473,8 @@ void CKDevelop::refreshTrees(){
   }
   
   slotStatusMsg(i18n("Ready."));
+  cout << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
+  cout << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 }
  
 /*------------------------------------------ CKDevelop::refreshTrees()
@@ -454,10 +494,10 @@ void CKDevelop::refreshTrees(TFileInfo *info)
     {
       // If this is a sourcefile we parse it and update the classview.
       if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
-	{
-	  class_tree->addFile( prj->getProjectDir() + info->rel_name );
-	  CVRefreshClassCombo();
-	}
+			{
+				class_tree->addFile( prj->getProjectDir() + info->rel_name );
+				CVRefreshClassCombo();
+			}
       
       // Update LFV.
       log_file_tree->storeState(prj);
@@ -652,10 +692,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       //      setMainCaption();  is handled by setCurrentTab()
       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
       edit_widget->setFocus();
-
       // Need to get the breakpoints displayed in this file (if any)
-      if (brkptManager)
-        brkptManager->refreshBP(filename);
+			if (brkptManager)
+	      brkptManager->refreshBP(filename);
       return;
     }
   }
@@ -685,8 +724,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
   edit_widget->setFocus();
   // Need to get the breakpoints displayed in this file (if any)
-  if (brkptManager)
-    brkptManager->refreshBP(filename);
+	if (brkptManager)
+	  brkptManager->refreshBP(filename);
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){

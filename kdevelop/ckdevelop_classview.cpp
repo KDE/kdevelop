@@ -690,16 +690,20 @@ void CKDevelop::CVRefreshClassCombo()
       savedIdx = i;
   }
   delete classList;
-
-  // Update the method combo with the class from the classcombo.
-  aClass = class_tree->store->getClassByName( savedClass );
-  if( aClass && savedIdx != -1 )
+	
+  if (!savedClass.isEmpty())
   {
-    classCombo->setCurrentItem( savedIdx );
-    CVRefreshMethodCombo( aClass );
-  }
-  else
-    methodCombo->clear();
+
+		// Update the method combo with the class from the classcombo.
+		aClass = class_tree->store->getClassByName( savedClass );
+		if( aClass && savedIdx != -1 )
+		{
+			classCombo->setCurrentItem( savedIdx );
+			CVRefreshMethodCombo( aClass );
+			return;
+		}
+	}
+	methodCombo->clear();
 }
 
 /*----------------------------------- CKDevelop::CVRefreshMethodCombo()
