@@ -110,6 +110,7 @@ KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) :
   setBackgroundColor(colorGroup().background());
   setGeometry ( 2, 2, iconBorderWidth, iconBorderHeight);
 
+  selectMenu.insertTitle(i18n("Breakpoints/Bookmarks"));
   selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
   selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
   selectMenu.insertSeparator();

@@ -3,7 +3,7 @@
 
 #include <qscrbar.h>
 #include <qiodev.h>
-#include <qpopmenu.h>
+#include <kpopupmenu.h>
 #include <kconfig.h>
 
 #include "kwdialog.h"
@@ -140,7 +140,7 @@ protected:
     KWriteDoc *kWriteDoc;
 		KWriteView *kWriteView;
 
-		QPopupMenu selectMenu;
+		KPopupMenu selectMenu;
 		/** action when user left clicks in border */
   	bool LMBIsBreakpoint;
     /** cursor is on line number */
