@@ -1,3 +1,12 @@
+2001-05-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Categorized all parts into Global or Project,
+	  so that they are either loaded at startup or
+	  at project loading time
+	* Added part selector which allows to configure
+	  the used parts both globally and on a per-
+	  project basis
+
 2001-05-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Back to KDialogBase for configuration dialogs

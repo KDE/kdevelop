@@ -6,3 +6,4 @@ Name=KDevJavaDebugger
 Icon=
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevjavadebugger
+X-KDevelop-Scope=Project

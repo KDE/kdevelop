@@ -5,3 +5,4 @@ Comment=Application Wizard
 Name=KDevAppWizard
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevappwizard
+X-KDevelop-Scope=Global

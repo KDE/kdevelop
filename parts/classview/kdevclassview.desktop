@@ -5,3 +5,4 @@ Comment=Class View
 Name=KDevClassView
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevclassview
+X-KDevelop-Scope=Project

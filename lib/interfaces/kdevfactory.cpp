@@ -29,4 +29,5 @@ KDevPart *KDevFactory::createPart(KDevApi *api, QObject *parent, const QStringLi
         emit objectCreated(part);
     return part;
 }
+
 #include "kdevfactory.moc"

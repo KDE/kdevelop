@@ -9,25 +9,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _PARTLOADER_H_
-#define _PARTLOADER_H_
+#ifndef _PARTSELECTWIDGET_H_
+#define _PARTSELECTWIDGET_H_
 
-#include <klibloader.h>
-#include <ktrader.h>
-#include <kservice.h>
+#include <qdialog.h>
+#include <qdom.h>
+#include <qstringlist.h>
 
-class KDevPart;
-class KDevApi;
+class QListView;
 
 
-class PartLoader
+class PartSelectWidget : public QWidget
 {
+    Q_OBJECT
+    
 public:
-    /**
-     * Loads a KDevelop part representing a service.
-     */
-    static KDevPart *loadService(KService *service, const char *className,
-                                 KDevApi *api, QObject *parent);
+    /* for selection of project parts */
+    PartSelectWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
+    /* for selection of global parts */
+    PartSelectWidget( QWidget *parent=0, const char *name=0 );
+    ~PartSelectWidget();
+
+public slots:
+   void accept();
+
+private:
+    enum Scope { Global, Project };
+
+    void init();
+    void readGlobalConfig();
+    void saveGlobalConfig();
+    void readProjectConfig();
+    void saveProjectConfig();
+    
+    QDomDocument m_projectDom;
+    Scope scope;
+    QListView *lv;
+    QStringList names;
 };
 
 #endif

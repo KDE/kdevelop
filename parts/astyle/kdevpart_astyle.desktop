@@ -6,3 +6,4 @@ Name=KDevAStyle
 Icon=kdevelop
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevastyle
+X-KDevelop-Scope=Project

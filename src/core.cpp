@@ -15,6 +15,7 @@
 #include <qmessagebox.h>
 #include <qtabdialog.h>
 #include <qtextstream.h>
+#include <qvbox.h>
 #include <dcopclient.h>
 #include <kapp.h>
 #include <kdebug.h>
@@ -51,6 +52,7 @@
 #include "bufferaction.h"
 #include "filenameedit.h"
 #include "importdlg.h"
+#include "partselectwidget.h"
 #include "toplevel.h"
 #include "partloader.h"
 #include "core.h"
@@ -95,7 +97,7 @@ Core::Core()
     (void) editor();
 #endif
     
-    initComponents(); 
+    initGlobalParts();
 
     win->show();
 
@@ -173,7 +175,7 @@ void Core::initActions()
     action = new KAction( i18n("&Customize KDevelop"), 0,
                           this, SLOT(slotSettingsCustomize()),
                           actionCollection(), "settings_customize" );
-    action->setStatusText( i18n("Lets you customize Gideon") );
+    action->setStatusText( i18n("Lets you customize KDevelop") );
 
     action = new KAction( i18n("&Stop"), "stop", 0,
                           this, SLOT(slotStop()),
@@ -183,54 +185,74 @@ void Core::initActions()
 }
 
 
-void Core::initComponent(KDevPart *part)
+void Core::initPart(KDevPart *part)
 {
-    kdDebug(9000) << "Init " << part->name() << endl;
-    components.append(part);
+    parts.append(part);
     win->guiFactory()->addClient(part);
 }
 
 
-void Core::removeComponent(KDevPart *part)
+void Core::removePart(KDevPart *part)
 {
     kdDebug(9000) << "Removing " << part->name() << endl;
     win->guiFactory()->removeClient(part);
-    components.remove(part);
+    parts.remove(part);
     delete part;
 }
 
 
-void Core::initComponents()
+void Core::initGlobalParts()
 {
-    // These two parts are compiled in, so we don't have to check loadByQuery's return value
-    KDevPart *makeFrontend =
-        PartLoader::loadByQuery(QString::fromLatin1("KDevelop/MakeFrontend"), QString::null, "KDevMakeFrontend",
-                                api, this);
-    initComponent(api->makeFrontend = static_cast<KDevMakeFrontend*>(makeFrontend));
-    KDevPart *appFrontend =
-        PartLoader::loadByQuery(QString::fromLatin1("KDevelop/AppFrontend"), QString::null, "KDevAppFrontend",
-                                api, this);
-    initComponent(api->appFrontend = static_cast<KDevAppFrontend*>(appFrontend));
+    KService *service;
+    KDevPart *part;
+    
+    // Make frontend
+    KTrader::OfferList makeFrontendOffers =
+        KTrader::self()->query(QString::fromLatin1("KDevelop/MakeFrontend"), QString::null);
+    if (makeFrontendOffers.isEmpty())
+        return;
+    service = *makeFrontendOffers.begin();
+    part = PartLoader::loadService(service, "KDevMakeFrontend", api, this);
+    initPart(api->makeFrontend = static_cast<KDevMakeFrontend*>(part));
 
-    QList<KDevPart> parts =
-        PartLoader::loadAllByQuery(QString::fromLatin1("KDevelop/Part"), QString::null, "KDevPart",
-                                   api, this, true);
+    // App frontend
+    KTrader::OfferList appFrontendOffers =
+        KTrader::self()->query(QString::fromLatin1("KDevelop/AppFrontend"), QString::null);
+    if (appFrontendOffers.isEmpty())
+        return;
+    service = *appFrontendOffers.begin();
+    part = PartLoader::loadService(service, "KDevAppFrontend", api, this);
+    initPart(api->appFrontend = static_cast<KDevAppFrontend*>(part));
 
-    QListIterator<KDevPart> it(parts);
-    for (; it.current(); ++it)
-        initComponent(*it);
+    // Global parts
+    KTrader::OfferList globalOffers
+        = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
+                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Global'"));
+    KConfig *config = KGlobal::config();
+    for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it) {
+	config->setGroup("Plugins");
+        if (!config->readBoolEntry((*it)->name(), true)) {
+            kdDebug(9000) << "Not loading " << (*it)->name() << endl;
+            continue;
+        }
+        part = PartLoader::loadService(*it, "KDevPart", api, this);
+        initPart(part);
+        globalParts.append(part);
+    }
 }
 
 
-void Core::removeComponents()
+void Core::removeGlobalParts()
 {
-    QListIterator<KDevPart> it(components);
+    QListIterator<KDevPart> it(globalParts);
     for (; it.current(); ++it) {
-        kdDebug(9000) << "Still have part " << (*it)->name() << endl;
+        kdDebug(9000) << "Still have part " << it.current()->name() << endl;
     }
         
-    while (!components.isEmpty())
-        removeComponent(components.first());
+    while (!globalParts.isEmpty()) {
+        removePart(globalParts.first());
+        globalParts.removeFirst();
+    }
 }
 
 
@@ -425,10 +447,17 @@ void Core::closeProject()
     if  (api->project) {
         emit projectClosed();
         api->project->closeProject();
+
+        while (!localParts.isEmpty()) {
+            removePart(localParts.first());
+            localParts.removeFirst();
+        }
+
         if (api->languageSupport) {
-            removeComponent(api->languageSupport);
+            removePart(api->languageSupport);
             api->languageSupport = 0;
         }
+        
         if (api->document) {
             QFile fout(projectFile);
             if (fout.open(IO_WriteOnly)) {
@@ -441,7 +470,7 @@ void Core::closeProject()
             delete api->document;
             api->document = 0;
         }
-        removeComponent(api->project);
+        removePart(api->project);
         api->project = 0;
     }
 
@@ -473,29 +502,55 @@ void Core::openProject()
     QDomElement docEl = api->document->documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     QDomElement projectEl = generalEl.namedItem("projectmanagement").toElement();
+    
     QString projectPlugin = projectEl.firstChild().toText().data();
     kdDebug(9000) << "Project plugin: " << projectPlugin << endl;
+    
     QDomElement primarylanguageEl = generalEl.namedItem("primarylanguage").toElement();
     QString language = primarylanguageEl.firstChild().toText().data();
     kdDebug(9000) << "Primary language: " << language << endl;
-    
-    KDevPart *project =
-        PartLoader::loadByName(projectPlugin, "KDevProject",
-                               api, this);
-    if (project)
-        initComponent(api->project = static_cast<KDevProject*>(project));
-    else
+
+    QStringList nonparts;
+    QDomElement nonpartsEl = generalEl.namedItem("nonparts").toElement();
+    QDomElement partEl = nonpartsEl.firstChild().toElement();
+    while (!partEl.isNull()) {
+        if (partEl.tagName() == "part")
+            nonparts << partEl.firstChild().toText().data();
+        partEl = partEl.nextSibling().toElement();
+    }
+
+    // Load project part
+    KService::Ptr projectService = KService::serviceByName(projectPlugin);
+    if (projectService) {
+        KDevPart *part = PartLoader::loadService(projectService, "KDevProject", api, this);
+        initPart(api->project = static_cast<KDevProject*>(part));
+    } else {
         KMessageBox::sorry(win, i18n("No project management plugin %1 found.").arg(projectPlugin));
-    
-    KDevPart *languageSupport =
-        PartLoader::loadByQuery(QString::fromLatin1("KDevelop/LanguageSupport"),
-                                QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(language),
-                                "KDevLanguageSupport",
-                                api, this);
-    if (languageSupport)
-        initComponent(api->languageSupport = static_cast<KDevLanguageSupport*>(languageSupport));
-    else
+        return;
+    }
+
+    // Load language support part
+    KTrader::OfferList languageSupportOffers
+        = KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
+                                 QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(language));
+    if (!languageSupportOffers.isEmpty()) {
+        KService *languageSupportService = *languageSupportOffers.begin();
+        KDevPart *part = PartLoader::loadService(languageSupportService, "KDevLanguageSupport", api, this);
+        initPart(api->languageSupport = static_cast<KDevLanguageSupport*>(part));
+    } else
         KMessageBox::sorry(win, i18n("No language plugin for %1 found.").arg(language));
+
+    // Load local parts
+    KTrader::OfferList localOffers
+        = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
+                                 QString::fromLatin1("[X-KDevelop-Scope] == 'Project'")); 
+    for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
+        if (nonparts.contains((*it)->name()))
+            continue;
+        KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
+        initPart(part);
+        localParts.append(part);
+    }
 
     QFileInfo fi(projectFile);
     QString projectDir = fi.dirPath();
@@ -781,11 +836,11 @@ void Core::setBreakpoint(const QString &fileName, int lineNum,
 void Core::running(KDevPart *part, bool runs)
 {
     if (runs)
-        runningComponents.append(part);
+        runningParts.append(part);
     else
-        runningComponents.remove(part);
+        runningParts.remove(part);
 
-    actionCollection()->action("stop_processes")->setEnabled(!runningComponents.isEmpty());
+    actionCollection()->action("stop_processes")->setEnabled(!runningParts.isEmpty());
 }
 
 
@@ -1050,7 +1105,7 @@ void Core::slotQuit()
                 this, SLOT(activePartChanged(KParts::Part*)) );
 
     closeProject();
-    removeComponents();
+    removeGlobalParts();
 
     win->closeReal();
 }
@@ -1135,6 +1190,11 @@ void Core::slotProjectOptions()
     KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "project options dialog");
+    
+    QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+    PartSelectWidget *w = new PartSelectWidget(*api->document, vbox, "part selection widget");
+    connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    
     emit projectConfigWidget(&dlg);
     dlg.exec();
 }
@@ -1145,6 +1205,10 @@ void Core::slotSettingsCustomize()
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "customization dialog");
+
+    QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+    PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
+    connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 
     emit configWidget(&dlg);
     dlg.exec();

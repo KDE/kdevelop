@@ -6,3 +6,4 @@ Name=KDevGrepView
 Icon=find
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevgrepview
+X-KDevelop-Scope=Global

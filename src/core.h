@@ -94,10 +94,12 @@ private slots:
 private:
     KActionCollection *actionCollection();
     void initActions();
-    void initComponent(KDevPart *comp);
-    void removeComponent(KDevPart *comp);
-    void initComponents();
-    void removeComponents();
+    
+    void initPart(KDevPart *part);
+    void removePart(KDevPart *part);
+    void initGlobalParts();
+    void removeGlobalParts();
+    
     DocumentationPart *createDocumentationPart();
 #ifdef NEW_EDITOR
     KEditor::Document *createDocument(const KURL &url);
@@ -115,8 +117,14 @@ private:
     KParts::Part *activePart;
     KDevCoreIface *dcopIface;
     KDevApi *api;
-    QList<KDevPart> components;
-    QList<KDevPart> runningComponents;
+    // All loaded parts
+    QList<KDevPart> parts;
+    // The global, i.e. not project-related parts
+    QList<KDevPart> globalParts;
+    // The local, i.e. project-related parts
+    QList<KDevPart> localParts;
+    QList<KDevPart> runningParts;
+    
     QList<DocumentationPart> docParts;
 #ifdef NEW_EDITOR
     KEditor::Editor *_editor;

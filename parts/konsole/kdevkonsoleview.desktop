@@ -6,3 +6,4 @@ Name=KDevKonsoleView
 Icon=konsole
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevkonsoleview
+X-KDevelop-Scope=Global

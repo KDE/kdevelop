@@ -6,3 +6,4 @@ Name=KDevDocTreeView
 Icon=mini-book1
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevdoctreeview
+X-KDevelop-Scope=Global

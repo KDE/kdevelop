@@ -80,13 +80,8 @@ static KLibFactory *factoryForService(KService *service)
 
 
 
-KDevPart *PartLoader::loadByName(const QString &name, const char *className,
-                                 KDevApi *api, QObject *parent)
+KDevPart *PartLoader::loadService(KService *service, const char *className, KDevApi *api, QObject *parent)
 {
-    KService::Ptr service = KService::serviceByName(name);
-    if (!service)
-        return 0;
-    
     QStringList args;
     QVariant prop = service->property("X-KDevelop-Args");
     if (prop.isValid())
@@ -108,80 +103,3 @@ KDevPart *PartLoader::loadByName(const QString &name, const char *className,
     
     return part;
 }
-
-
-KDevPart *PartLoader::loadByQuery(const QString &serviceType, const QString &constraint, const char *className,
-                                  KDevApi *api, QObject *parent)
-{
-    KTrader::OfferList offers = KTrader::self()->query(serviceType, constraint);
-    if (offers.isEmpty())
-        return 0;
-
-    KService *service = *offers.begin();
-
-    QStringList args;
-    QVariant prop = service->property("X-KDevelop-Args");
-    if (prop.isValid())
-        args = QStringList::split(" ", prop.toString());
-
-    kdDebug(9000) << "Loading service " << service->name() << endl;
-    KLibFactory *factory = factoryForService(service);
-    if (!factory->inherits("KDevFactory")) {
-        kdDebug(9000) << "Does not have a KDevFactory" << endl;
-        return 0;
-    }  
-    
-    KDevPart *part = static_cast<KDevFactory*>(factory)->createPart(api, parent, args);
-
-    if (!part->inherits(className)) {
-        kdDebug(9000) << "Part does not inherit " << className << endl;
-        return 0;
-    }
-
-    return part;
-}
-
-
-QList<KDevPart> PartLoader::loadAllByQuery(const QString &serviceType, const QString &constraint, const char *className,
-                                           KDevApi *api, QObject *parent, bool filter)
-{
-    KConfig *config = kapp->config();
-  
-    QList<KDevPart> list;
-    
-    KTrader::OfferList offers = KTrader::self()->query(serviceType, constraint);
-    if (offers.isEmpty())
-        return QList<KDevPart>();
-
-    for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it) {
-        KService *service = *it;
-
-	config->setGroup("Plugins");
-        if (filter && !config->readBoolEntry(service->name(), true))
-          continue;
-
-        QStringList args;
-        QVariant prop = service->property("X-KDevelop-Args");
-        if (prop.isValid())
-            args = QStringList::split(" ", prop.toString());
-
-        kdDebug(9000) << "Loading service " << service->name() << endl;
-        KLibFactory *factory = factoryForService(service);
-        if (!factory->inherits("KDevFactory")) {
-            kdDebug(9000) << "Does not have a KDevFactory" << endl;
-            continue;
-        }  
-        
-        KDevPart *part = static_cast<KDevFactory*>(factory)->createPart(api, parent, args);
-        
-        if (!part->inherits(className)) {
-            kdDebug(9000) << "Component does not inherit " << className << endl;
-            continue;
-        }
-        
-        list.append(part);
-    }
-    
-    return list;
-}
-
