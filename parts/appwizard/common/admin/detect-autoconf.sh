@@ -15,8 +15,12 @@ checkAutoconf()
 {
   if test -x "`$WHICH autoconf-2.5x`" ; then	
     AUTOCONF="`$WHICH autoconf-2.5x`"
+  elif test -x "`$WHICH autoconf-2.54`" ; then
+    AUTOCONF="`$WHICH autoconf-2.54`"
   elif test -x "`$WHICH autoconf-2.53`" ; then
     AUTOCONF="`$WHICH autoconf-2.53`"
+  elif test -x "`$WHICH autoconf-2.53a`" ; then
+    AUTOCONF="`$WHICH autoconf-2.53a`"
   elif test -x "`$WHICH autoconf-2.52`" ; then
     AUTOCONF="`$WHICH autoconf-2.52`"
   elif test -x "`$WHICH autoconf2.50`" ; then
@@ -29,9 +33,15 @@ checkAutoheader()
   if test -x "`$WHICH autoheader-2.5x`" ; then
     AUTOHEADER="`$WHICH autoheader-2.5x`"
     AUTOM4TE="`$WHICH autom4te-2.5x`"
+  elif test -x "`$WHICH autoheader-2.54`" ; then
+    AUTOHEADER="`$WHICH autoheader-2.54`"
+    AUTOM4TE="`$WHICH autom4te-2.54`"
   elif test -x "`$WHICH autoheader-2.53`" ; then
     AUTOHEADER="`$WHICH autoheader-2.53`"
     AUTOM4TE="`$WHICH autom4te-2.53`"
+  elif test -x "`$WHICH autoheader-2.53a`" ; then
+    AUTOHEADER="`$WHICH autoheader-2.53a`"
+    AUTOM4TE="`$WHICH autom4te-2.53a`"
   elif test -x "`$WHICH autoheader-2.52`" ; then
     AUTOHEADER="`$WHICH autoheader-2.52`"
   elif test -x "`$WHICH autoheader2.50`" ; then
@@ -42,12 +52,12 @@ checkAutoheader()
 checkAutomakeAclocal ()
 {
   if test -z "$UNSERMAKE"; then
-    if test -x "`$WHICH automake-1.5`" ; then
-      AUTOMAKE="`$WHICH automake-1.5`"
-      ACLOCAL="`$WHICH aclocal-1.5`"
-    elif test -x "`$WHICH automake-1.6`" ; then
+    if test -x "`$WHICH automake-1.6`" ; then
       AUTOMAKE="`$WHICH automake-1.6`"
       ACLOCAL="`$WHICH aclocal-1.6`"
+    elif test -x "`$WHICH automake-1.7`" ; then
+      AUTOMAKE="`$WHICH automake-1.7`"
+      ACLOCAL="`$WHICH aclocal-1.7`"
     fi
   else
      AUTOMAKE="$UNSERMAKE"
