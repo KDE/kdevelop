@@ -14,17 +14,17 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class FileViewWidget;
 
 
-class FileViewPart : public KDevPart
+class FileViewPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    FileViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    FileViewPart( QObject *parent, const char *name, const QStringList & );
     ~FileViewPart();
 
 public slots:

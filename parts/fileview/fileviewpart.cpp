@@ -16,19 +16,21 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
 
-#include "fileviewfactory.h"
 #include "fileviewwidget.h"
 #include "fileviewconfigwidget.h"
 #include "fileviewpart.h"
 
+typedef KGenericFactory<FileViewPart> FileViewFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) );
 
-FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(FileViewFactory::instance());
     //    setXMLFile("kdevfileview.rc");
