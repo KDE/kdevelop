@@ -251,6 +251,12 @@ class KWrite : public QWidget {
     /** Modified flag or config flags have changed
     */
     void newStatus();
+    /** reflects the mark state
+    */
+    void markStatus(KWriteView *, bool);
+    /** reflects the 'text in clipboard' state
+    */
+    void clipboardStatus(KWriteView *, bool);
     /** Emits messages for the status line
     */
     void statusMsg(const char *);
