@@ -35,6 +35,8 @@ private slots:
     void slotRemove();
     void slotEdit();
     void slotRevert();
+    void slotDiff();
+    void slotDiffFinished( const QString&, const QString& );
 
 private:
     /** calls p4 with the command cmd and appends the filename */

@@ -26,6 +26,8 @@
 
 #include <stdlib.h>
 
+#include "execcommand.h"
+
 CommitDialog::CommitDialog( QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Perforce Submit"), Ok|Cancel|Details )
 {
@@ -85,29 +87,20 @@ void CommitDialog::setFiles( const QStringList& lst )
 
 void CommitDialog::setDepotFiles( const QStringList& lst )
 {
-    KProcess* proc = new KProcess();
-    *proc << "p4" << "files";
+    QStringList args;
 
+    args << "files";
     for ( QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it ) {
-        *proc << (*it);
+        args << (*it);
     }
 
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(processExited(KProcess *)));
-    connect(proc, SIGNAL(receivedStdout(KProcess*, char*, int)),
-            this, SLOT(receivedStdout(KProcess*, char*, int)));
-
-    bool ok = proc->start( KProcess::NotifyOnExit, KProcess::Stdout );    
-    if ( !ok ) {
-        kdWarning() << "Could not start p4" << endl;
-        delete proc;
-    }
-
+    ExecCommand* cmd = new ExecCommand( "p4", args, QString::null, this );
+    connect( cmd, SIGNAL(finished( const QString&, const QString& )),
+	     this, SLOT(getFilesFinished( const QString&, const QString& )) );
 }
 
-void CommitDialog::receivedStdout (KProcess* /* proc */, char *buffer, int buflen)
+void CommitDialog::getFilesFinished( const QString& out, const QString& /* err */ )
 {
-    QString out = QString::fromLocal8Bit( buffer, buflen );
     QStringList lst = QStringList::split( QChar('\n'), out );
     for ( QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it ) {
         int pos = (*it).find( QChar('#') );
@@ -115,11 +108,6 @@ void CommitDialog::receivedStdout (KProcess* /* proc */, char *buffer, int bufle
             filesBox->insertItem( (*it).left( pos ) );
         }
     }
-}
-
-void CommitDialog::processExited( KProcess* proc )
-{
-    delete proc;
 }
 
 QString CommitDialog::changeList() const

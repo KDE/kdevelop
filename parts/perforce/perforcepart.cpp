@@ -25,8 +25,9 @@
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
+#include "kdevdifffrontend.h"
 #include "commitdlg.h"
-
+#include "execcommand.h"
 
 typedef KGenericFactory<PerforcePart> PerforceFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( "kdevperforce" ) );
@@ -65,6 +66,8 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
         sub->insertItem( i18n("Sync"),
                            this, SLOT(slotUpdate()) );
         sub->insertSeparator();
+	sub->insertItem( i18n("Diff to Repository"),
+			   this, SLOT(slotDiff()) );
         sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
         sub->insertItem( i18n("Remove From Repository"),
@@ -162,6 +165,53 @@ void PerforcePart::slotAdd()
 void PerforcePart::slotRemove()
 {
     execCommand( "delete" );
+}
+
+void PerforcePart::slotDiff()
+{
+    QString name;
+    QFileInfo fi(popupfile);
+
+    if ( fi.isDir() ) {
+	name = fi.absFilePath() + "...";
+    } else {
+	name = popupfile;
+    }
+    QStringList args;
+
+    args << "diff" << "-du"; // "du" means unified diff
+    args << name;
+    ExecCommand* cmv = new ExecCommand( "p4", args, QString::null, this );
+    connect( cmv, SIGNAL(finished( const QString&, const QString& )),
+             this, SLOT(slotDiffFinished( const QString&, const QString& )) );
+}
+
+void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
+{
+    if ( diff == QString::null && err == QString::null ) {
+        kdDebug(9000) << "p4 diff cancelled" << endl;
+        return; // user pressed cancel or an error occured
+    }
+
+    if ( diff.isEmpty() && !err.isEmpty() ) {
+        KMessageBox::detailedError( 0, i18n("P4 outputted errors during diffing."), err, i18n("Errors during diffing") );
+        return;
+    }
+
+    if ( !err.isEmpty() ) {
+        int s = KMessageBox::warningContinueCancelList( 0, i18n("P4 outputted errors during diffing. Do you still want to continue?"),
+                        QStringList::split( "\n", err, false ), i18n("Errors during diffing") );
+        if ( s != KMessageBox::Continue )
+            return;
+    }
+
+    if ( diff.isEmpty() ) {
+        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No differences found") );
+        return;
+    }
+
+    Q_ASSERT( diffFrontend() );
+    diffFrontend()->showDiff( diff );    
 }
 
 #include "perforcepart.moc"

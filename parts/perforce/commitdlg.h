@@ -44,8 +44,7 @@ protected slots:
     void accept();
 
 private slots:
-    void processExited( KProcess *proc );
-    void receivedStdout (KProcess *proc, char *buffer, int buflen);
+    void getFilesFinished( const QString& out, const QString& err );
 
 private:
     void setDepotFiles( const QStringList& lst );
