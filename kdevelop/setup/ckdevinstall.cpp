@@ -1,7 +1,7 @@
 /***************************************************************************
-                          ckdevinstall.cpp  -  description                              
-                             -------------------                                         
-    begin                : Thu Mar 4 1999                                           
+                          ckdevinstall.cpp  -  description
+                             -------------------
+    begin                : Thu Mar 4 1999
     copyright            : (C) 1999 by Ralf Nolden
     email                : Ralf.Nolden@post.rwth-aachen.de
  ***************************************************************************/
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -44,7 +44,7 @@
 
 CKDevInstallState::CKDevInstallState(const QString& qtDocuPath, const QString& kdeDocuPath)
  : highlightStyle(0)	// emacs
-	,qt_test(false)
+  ,qt_test(false)
   ,kde_test(false)
   ,successful(false)
 
@@ -79,7 +79,7 @@ void CKDevInstall::slotReceivedStderr(KProcess*,char* buffer, int count)
 
 CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
 : QWizard(parent,name)
-	,m_pInstallState(0L)
+  ,m_pInstallState(0L)
 {
   m_config = KGlobal::config();
 
@@ -87,29 +87,29 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
   m_config->setGroup("Doc_Location");
   QString qtDocuPath = m_config->readEntry("doc_qt", QT_DOCDIR);
   QString kdeDocuPath = m_config->readEntry("doc_kde", KDELIBS_DOCDIR);
-	
-	m_pInstallState = new CKDevInstallState( qtDocuPath, kdeDocuPath);
-	
+
+  m_pInstallState = new CKDevInstallState( qtDocuPath, kdeDocuPath);
+
   connect(m_pInstallState->shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	        this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+          this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
 
   connect(m_pInstallState->shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	        this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+          this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 
   connect(m_pInstallState->shell_process,SIGNAL(processExited(KProcess*)),
-	        this,SLOT(slotProcessExited(KProcess*) )) ;
+          this,SLOT(slotProcessExited(KProcess*) )) ;
 
   setCaption(i18n("KDevelop Installation"));
 
-  WizardWelcomePage* pWizWelcomePage 						= new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "pics/test.png");
-  WizardSyntaxHlPage* pWizSyntaxHlPage 					= new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "pics/test.png", m_pInstallState);
-  WizardUIModePage* pWizUIModePage							= new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "pics/test.png", m_pInstallState);
-  WizardToolsCheckPage* pWizToolsCheckPage 			= new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "pics/test.png", m_pInstallState);
-  WizardQtDocPage* pWizQtDocPage 								= new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "pics/test.png", m_pInstallState);
-  WizardKDEDocPage* pWizKDEDocPage 							= new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardCreateKDEDocPage* pWizCreateKDEDocPage 	= new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardIndexDocuPage* pWizIndexDocuPage 				= new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "pics/test.png", m_pInstallState);
-  WizardLastPage* pWizLastPage 									= new WizardLastPage(this,"last_page", i18n("Installation finished"), "pics/test.png", m_pInstallState);
+  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "pics/test.png");
+  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "pics/test.png", m_pInstallState);
+  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "pics/test.png", m_pInstallState);
+  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "pics/test.png", m_pInstallState);
+  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "pics/test.png", m_pInstallState);
+  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "pics/test.png", m_pInstallState);
+  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "pics/test.png", m_pInstallState);
+  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "pics/test.png", m_pInstallState);
+  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "pics/test.png", m_pInstallState);
 
   addPage(pWizWelcomePage, "Step 1 of 9");
   addPage(pWizSyntaxHlPage, "Step 2 of 9");
@@ -121,13 +121,14 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
   addPage(pWizIndexDocuPage, "Step 8 of 9");
   addPage(pWizLastPage, "Step 9 of 9");
 
+  setBackEnabled(pWizWelcomePage, false);
   setNextEnabled(pWizCreateKDEDocPage, false);
   setNextEnabled(pWizIndexDocuPage, false);
   setFinishEnabled(pWizLastPage, true);
 
   connect( pWizKDEDocPage, SIGNAL(enableCreateKDEDocPage(bool)), SLOT(slotEnableCreateKDEDocPage(bool)) );
-	connect( helpButton(), SIGNAL(clicked()), SLOT(slotHelp()) );
-	connect( cancelButton(), SIGNAL(clicked()), SLOT(slotCancel()) );
+  connect( helpButton(), SIGNAL(clicked()), SLOT(slotHelp()) );
+  connect( cancelButton(), SIGNAL(clicked()), SLOT(slotCancel()) );
   connect( pWizCreateKDEDocPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
   connect( pWizIndexDocuPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
 
@@ -146,16 +147,16 @@ void CKDevInstall::slotCancel()
 {
   int result=KMessageBox::questionYesNo(this,
             i18n("\n\nThis will exit the automatic installation process\n"
-			        "and start KDevelop with the default values !\n\n"
-					"If you choose 'Continue', you will have to set all\n"
-					"installation values manually in the KDevelop Setup\n"
-					"dialog available in the options menu.\n\n "),
+                 "and start KDevelop with the default values !\n\n"
+                 "If you choose 'Continue', you will have to set all\n"
+                 "installation values manually in the KDevelop Setup\n"
+                 "dialog available in the options menu.\n\n "),
             i18n("Warning"),i18n("Continue"),i18n("Back"));
   if(result==KMessageBox::Yes)
   {
     m_config->setGroup("General Options");
     m_config->writeEntry("Install",false);
-	  m_config->sync();
+    m_config->sync();
     close();
   }
   else
@@ -164,12 +165,12 @@ void CKDevInstall::slotCancel()
 
 void CKDevInstall::slotProcessExited(KProcess*)
 {
-	qDebug("????? slotProcessExited called");
+  qDebug("????? slotProcessExited called");
 }
 
 void CKDevInstall::slotFinished()
 {
-	// 1.) write the results of the syntax highlight mode page
+  // 1.) write the results of the syntax highlight mode page
   if (m_pInstallState->highlightStyle == 0) {
     m_config->setGroup("Perl Highlight");
     m_config->writeEntry("Mimetypes","application/x-perl");
@@ -221,8 +222,8 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
     m_config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
     m_config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-   	
-  	m_config->setGroup("IDL Highlight");
+
+    m_config->setGroup("IDL Highlight");
     m_config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
     m_config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
     m_config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
@@ -361,7 +362,7 @@ void CKDevInstall::slotFinished()
     m_config->setGroup("General Options");
     m_config->writeEntry("Make","gmake");
   }
-	
+
   // 3.) write the results of the Qt-docu page
   m_config->setGroup("Doc_Location");
   m_config->writeEntry("doc_qt",m_pInstallState->qt);
@@ -370,30 +371,30 @@ void CKDevInstall::slotFinished()
   m_config->setGroup("Doc_Location");
   m_config->writeEntry("doc_kde",m_pInstallState->kde);
 
-	// 5.) write the results of the KDE-docu-indexing page
+  // 5.) write the results of the KDE-docu-indexing page
   m_config->setGroup("General Options");
   m_config->writeEntry("Install",m_pInstallState->install);
 
-	// 6.) write the results of the doc database page
+  // 6.) write the results of the doc database page
   m_config->setGroup("Doc_Location");
   m_config->writeEntry("searchengine",m_pInstallState->searchEngine);
 
-	// 7.) write the results of the UI mode page
+  // 7.) write the results of the UI mode page
   m_config->setGroup("General Options");
- 	m_config->writeEntry("MDI mode", m_pInstallState->userInterfaceMode);
+  m_config->writeEntry("MDI mode", m_pInstallState->userInterfaceMode);
 
   m_config->sync();
 
   KProcess kdevelopTheProgram;
-	kdevelopTheProgram.setExecutable("kdevelop");
+  kdevelopTheProgram.setExecutable("kdevelop");
   if (!kdevelopTheProgram.start()) {
   }
-	qApp->quit();
+  qApp->quit();
 }
 
 void CKDevInstall::slotEnableCreateKDEDocPage(bool bEnabled)
 {
-	setAppropriate( page(5), bEnabled);
+  setAppropriate( page(7), bEnabled);
 }
 
 #include "ckdevinstall.moc"
