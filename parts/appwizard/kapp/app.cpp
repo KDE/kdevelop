@@ -85,7 +85,7 @@ void $APPNAME$::load(const KURL& url)
     }
     #endif
 
-    setCaption(url.url());
+    setCaption(url.prettyURL());
     m_view->openURL(url);
 }
 
@@ -139,7 +139,7 @@ void $APPNAME$::readProperties(KConfig *config)
 void $APPNAME$::dragEnterEvent(QDragEnterEvent *event)
 {
     // accept uri drops only
-    event->accept(QUriDrag::canDecode(event));
+    event->accept(KURLDrag::canDecode(event));
 }
 
 void $APPNAME$::dropEvent(QDropEvent *event)
@@ -147,17 +147,16 @@ void $APPNAME$::dropEvent(QDropEvent *event)
     // this is a very simplistic implementation of a drop event.  we
     // will only accept a dropped URL.  the Qt dnd code can do *much*
     // much more, so please read the docs there
-    QStrList uri;
+    KURL::List uri;
 
     // see if we can decode a URI.. if not, just ignore it
-    if (QUriDrag::decode(event, uri))
+    if (KURLDrag::decode(event, urls) && !urls.isEmpty())
     {
         // okay, we have a URI.. process it
-        QString url, target;
-        url = uri.first();
+        const KURL &url = urls.first();
 
         // load in the file
-        load(KURL(url));
+        load(url);
     }
 }
 
