@@ -39,7 +39,11 @@ QString DocUtils::noEnvURL(const QString &url)
 
 KURL DocUtils::noEnvURL(const KURL &url)
 {
-    return KURL(KURLCompletion::replacedPath(url.url(), true, true));
+    QString replaced = KURLCompletion::replacedPath(url.url(), true, true);
+    KURL kurl(replaced);
+    kurl.setQuery(url.query());
+    kurl.setRef(url.ref());
+    return kurl;
 }
 
 QString DocUtils::envURL(KURLRequester *req)
