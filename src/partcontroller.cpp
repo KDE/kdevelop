@@ -32,6 +32,7 @@
 #include <klineedit.h>
 #include <kshortcut.h>
 #include <kcompletion.h>
+#include <kdirwatch.h>
 
 #include "toplevel.h"
 #include "api.h"
@@ -57,9 +58,12 @@ struct HistoryEntry {
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent)
 {
+  dirWatcher = new KDirWatch( this );
+
   connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(updateMenuItems()));
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(updateMenuItems()));
   connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
+  connect(dirWatcher, SIGNAL(dirty(const QString&)), this, SLOT(dirty(const QString&)));
 
   m_history.setAutoDelete( true );
   m_restoring = false;
@@ -402,8 +406,12 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
-  if (ro_part && ro_part->url().isLocalFile())
+  if (ro_part && ro_part->url().isLocalFile()) {
+//    kdDebug(9000) << "KDirWatch: adding " << url.path() << endl;
+    dirWatcher->addFile( url.path() );
+    accessTimeMap[ ro_part ] = dirWatcher->ctime( url.path() );
     emit loadedFile(ro_part->url().path());
+  }
 
   // let's get notified when a document has been changed
   connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
@@ -412,10 +420,17 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
 void PartController::slotUploadFinished()
 {
-  const KParts::ReadWritePart *rw_part = dynamic_cast<const KParts::ReadWritePart*>(sender());
+  const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
 
-  if (rw_part && rw_part->url().isLocalFile())
-      emit savedFile(rw_part->url().path());
+  if (ro_part && ro_part->url().isLocalFile()) {
+      QString path = ro_part->url().path();
+      // can't use KDirWatch's ctime here since it might not be updated yet
+//      accessTimeMap[ ro_part ] = dirWatcher->ctime( path );
+      QFileInfo fi( path );
+//      kdDebug(9000) << "*** uploadFinished() " << fi.lastModified().toString( "mm:ss:zzz" ) << endl;
+      accessTimeMap[ ro_part ] = fi.lastModified();
+      emit savedFile( path );
+  }
 }
 
 
@@ -550,12 +565,16 @@ void PartController::slotSaveAllFiles()
 
 void PartController::saveFile(KParts::Part *part)
 {
-  if ( part && part->inherits("KParts::ReadWritePart") ) {
-    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
-    if( rw_part->isModified() ){
-      rw_part->save();
-      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
-    }
+  KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
+  if ( !rw_part )
+    return;
+  if ( isDirty( rw_part ) ) {
+    kdDebug(9000) << "DIRTY SAVE" << endl;
+  }
+
+  if( rw_part->isModified() ) {
+    rw_part->save();
+    TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().prettyURL()), 2000);
   }
 }
 
@@ -934,6 +953,26 @@ void PartController::showPart( KParts::Part* part, const QString& name, const QS
   // embed the part
   TopLevel::getInstance()->embedPartView( part->widget(), name, shortDescription );
   addPart( part );
+}
+
+void PartController::dirty( const QString& fileName )
+{
+//  kdDebug(9000) << "DIRRRRRTY: " << fileName << " " << dirWatcher->ctime( fileName ).toString( "mm:ss:zzz" ) << endl;
+  emit fileDirty( fileName );
+}
+
+bool PartController::isDirty( KParts::ReadOnlyPart* part )
+{
+  if ( !part || !part->url().isLocalFile() )
+    return false;
+
+//  kdDebug( 9000 ) << "isDirty?" << accessTimeMap[ part ].toString( "mm:zzz" ) << " : " << dirWatcher->ctime( part->url().path() ).toString( "mm:zzz" ) << endl;
+
+  if ( accessTimeMap.contains( part ) )
+    return ( accessTimeMap[ part ] < dirWatcher->ctime( part->url().path() ) );
+ 
+  accessTimeMap[ part ] = dirWatcher->ctime( part->url().path() );
+  return false;
 }
 
 #include "partcontroller.moc"

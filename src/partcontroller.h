@@ -4,14 +4,17 @@
 #include "kdevpartcontroller.h"
 
 #include <qwidget.h>
+#include <qdatetime.h>
 #include <qptrlist.h>
 #include <kurl.h>
+#include <qmap.h>
 
 namespace KParts
 {
   class Part;
   class Factory;
   class PartManager;
+  class ReadOnlyPart;
 };
 
 class QTabWidget;
@@ -21,6 +24,7 @@ class KToolBarPopupAction;
 class KRecentFilesAction;
 class DocumentationPart;
 class HistoryEntry;
+class KDirWatch;
 
 class PartController : public KDevPartController
 {
@@ -43,6 +47,7 @@ public:
 
   void saveAllFiles();
   void revertAllFiles();
+  bool isDirty(KParts::ReadOnlyPart* part);
 
   bool readyToClose();
 
@@ -90,6 +95,8 @@ private slots:
   void restoreState();
   void addHistoryEntry( HistoryEntry* entry );
 
+  void dirty( const QString& fileName );
+
 private:
   KURL findURLInProject(const KURL& url);
 
@@ -125,6 +132,8 @@ private:
   KToolBarPopupAction* m_backAction;
   KToolBarPopupAction* m_forwardAction;
   QPtrList< HistoryEntry > m_history;
+  KDirWatch* dirWatcher;
+  QMap< const KParts::ReadOnlyPart*, QDateTime > accessTimeMap;
   bool m_restoring;
 };
 

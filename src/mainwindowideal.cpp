@@ -244,8 +244,12 @@ void MainWindowIDEAl::createFramework() {
     connect( m_rightBar, SIGNAL(tabsChanged()), this, SLOT(slotRightTabsChanged()) );
     connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
 
-    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
-    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), 
+            this, SLOT(slotPartAdded(KParts::Part*)));
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), 
+            this, SLOT(slotStatusChange(KParts::Part*)));
+    connect(PartController::getInstance(), SIGNAL(fileDirty(const QString&)),
+            this, SLOT(fileDirty(const QString&)));
 }
 
 
@@ -643,7 +647,7 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
 	if ( rw_part->isModified() )
             tSet = SmallIconSet( "filesave" );
 	if ( ( m_tabWidget->tabLabel( rw_part->widget() ) == tLabel )
-             && ( m_tabWidget->tabIconSet( rw_part->widget() ).isNull() == tSet.isNull() ) )
+             && ( !m_tabWidget->tabIconSet( rw_part->widget() ).isNull() ) )
             return;
 
         m_tabWidget->changeTab( rw_part->widget(), tSet, tLabel );
@@ -651,12 +655,33 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
     }
 }
 
+void MainWindowIDEAl::fileDirty(const QString& fileName)
+{
+    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+    for ( ; it.current(); ++it) {
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (!ro_part || !ro_part->url().isLocalFile())
+            continue;
+        if ( ro_part->url().path() == fileName ) { // ###TODO URL comparison sucks...
+             if ( PartController::getInstance()->isDirty( ro_part ) ) {
+                    m_tabWidget->setTabIconSet( ro_part->widget(), SmallIconSet( "revert" ) );
+                    m_tabWidget->setTabToolTip( ro_part->widget(), i18n("Externally modified - %1").arg( ro_part->url().url() ) );
+             } else {
+                    m_tabWidget->setTabIconSet( ro_part->widget(), QIconSet() );
+                    m_tabWidget->setTabToolTip( ro_part->widget(), ro_part->url().url() );
+             }
+        }
+    }
+}
+
+
 void MainWindowIDEAl::slotDocChanged(const KURL& url)
 {
     QObject * senderobj = const_cast<QObject*>( sender() );
     DocumentationPart* doc = dynamic_cast<DocumentationPart*>( senderobj );
     if( !doc ) return;
     m_tabWidget->changeTab( doc->widget(), url.fileName() );
+    m_tabWidget->setTabToolTip( doc->widget(), url.url() );
 }
 
 void MainWindowIDEAl::slotBottomTabsChanged() {

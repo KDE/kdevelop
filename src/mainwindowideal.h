@@ -103,6 +103,7 @@ private slots:
   void slotBottomTabsChanged();
   void slotRightTabsChanged();
   void slotLeftTabsChanged();
+  void fileDirty(const QString& fileName);
 
 private:
 
