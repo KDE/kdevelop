@@ -1,4 +1,4 @@
-SUBDIRS = lib parts languages buildtools editors vcs plugins src pics doc mimetypes
+SUBDIRS = lib parts languages buildtools editors vcs src pics doc mimetypes
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 
@@ -17,9 +17,6 @@ install-data-local:
 	@echo ""
 	@echo "KDevelop 3.0 alpha7 has been installed."
 	@echo ""
-	@echo "Note: The binary name for the alpha releases is"
-	@echo "      'gideon'.  This will revert to 'kdevelop'"
-	@echo "      once 3.0 is considered stable."
 	@echo ""
 	@echo "***************************************************"
 
@@ -60,29 +57,16 @@ include admin/deps.am
 ## Doxygen stuff
 ##
 
-DOXYGEN_INPUT = src lib parts plugins doc/api
+DOXYGEN_INPUT = src lib parts languages buildtools editors vcs doc/api
 
 ## Exclude the application wizard templates
-DOXYGEN_EXCLUDE = parts/appwizard/kmod/ parts/appwizard/kbearplugin/ parts/appwizard/kbearimportfilter/ parts/appwizard/adahello/ parts/appwizard/qtopiasimple/ parts/appwizard/adahello/ parts/appwizard/chello_gba/ parts/appwizard/chello/ parts/appwizard/bashhello/ parts/appwizard/javahello/ parts/appwizard/imports/ parts/appwizard/gnomeapp/ parts/appwizard/fpcsharedlib/ parts/appwizard/fpchello/ parts/appwizard/fpcgtk/ parts/appwizard/fortranhello/ parts/appwizard/dcopservice/  parts/appwizard/cppsdlhello/ parts/appwizard/cpphello/ parts/appwizard/wxhello/ parts/appwizard/superwaba/ parts/appwizard/rubyhello/ parts/appwizard/qtopiaapp/ parts/appwizard/qmakesimple/ parts/appwizard/qmakeapp/ parts/appwizard/pythonhello/ parts/appwizard/pyqt/ parts/appwizard/prc-tool/ parts/appwizard/phphello/ parts/appwizard/perlhello/ parts/appwizard/pascalhello/ parts/appwizard/noatunui/ parts/appwizard/noatunvisual/ parts/appwizard/kscreensaver/ parts/appwizard/kpartplugin/ parts/appwizard/kpartapp/ parts/appwizard/konqnavpanel/ parts/appwizard/kofficepart/ parts/appwizard/kioslave/ parts/appwizard/kicker/ parts/appwizard/khello/ parts/appwizard/kdevpart2/ parts/appwizard/kdevpart/ parts/appwizard/kdedcop/ parts/appwizard/kcmodule/ parts/appwizard/kateplugin/ parts/appwizard/kateplugin2/ parts/appwizard/common/ parts/appwizard/kapp/ parts/appwizard/haskellhello/ parts/appwizard/xulhello/ parts/appwizard/kappjava/ parts/appwizard/kdevlang parts/appwizard/generichello parts/cppsupport/subclassing_template parts/pascalsupport/ parts/javasupport lib/antlr
+DOXYGEN_EXCLUDE = languages/ada/app_templates languages/cpp/app_templates languages/cpp/file_templates languages/cpp/subclassing_template languages/fortran/app_templates languages/haskell/app_templates languages/java/app_templates languages/pascal/app_templates languages/perl/app_templates languages/php/app_templates languages/python/app_templates languages/ruby/app_templates languages/sql/app_templates languages/xul/app_templates languages/pascal/ languages/java lib/antlr
 
 ## Use KDE Libs tag files
 DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
 DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
 
 ## Use Search engine (Versions 1.3.4 and above only!)
-DOXYGEN_SEARCHENGINE = NO
+DOXYGEN_SEARCHENGINE = YES
 
 include Doxyfile.am
-
-install-data-local: install-gideon-kdevelop
-
-## We need this until we change the application name from gideon back to kdevelop
-install-gideon-kdevelop:
-	@if test ! -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
-		pushd `pwd`;\
-		echo "*** Creating a softlink from kdevelop to gideon to make the menu item Help -> Gideon Handbook work:";\
-		cd $(DESTDIR)$(kde_htmldir)/en;\
-		echo $(LN_S) kdevelop gideon;\
-		$(LN_S) kdevelop gideon;\
-		popd;\
-	fi
