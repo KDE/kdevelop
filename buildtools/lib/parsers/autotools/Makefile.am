@@ -6,7 +6,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
         -I$(top_srcdir)/lib/interfaces/extensions -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets/propeditor \
         $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES = libkdevautotoolsparser.la
+noinst_LTLIBRARIES = libkdevautotoolsparser.la
 libkdevautotoolsparser_la_LDFLAGS = $(all_libraries) $(LIB_KIO)
 libkdevautotoolsparser_la_SOURCES = autotoolsast.cpp autotoolsdriver.cpp autotools_yacc.cpp
 
