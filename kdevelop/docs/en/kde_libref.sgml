@@ -61,7 +61,11 @@ The Qt library is adressed in this handbook as far as it offers solutions not pr
 
 <sect>About this Handbook
 <p>
-The descriptions for various classes are taken from the KDE library documentation.
+This handbook has been written in order to give developers a guideline to the usage of the KDE libraries in general in conjunction with
+the Qt library on X11 desktop systems. It cannot replace any programming knowledge that is needed for C++ programming and covers the Qt
+classes where necessary. You should in any case look at the page "Structure Overview" of the Qt online reference which contains a
+general guidance to the Qt library by class usage in general. This handbook tries to follow this structure to complete your knowledge
+about where KDE classes are appropriate and explains the technique of KDE application development by describing class usage on topics.
 
 <chapt>Class Categories
 <p>
@@ -315,6 +319,303 @@ the one that invoked it, you can only receive the current status of the applicat
 can be done with various intitialization values. Finally, the process can inform the application wether it has been terminated or
 ended. See <tt/KProcess/ for details.
 
+
+
+<chapt>Classes of KDE Applications
+<p>
+The KDE libraries, in conjunction with the Qt library, are providing developers a complete framework for application design. As KDE is
+targeted towards Unix Operating Systems running the graphical X11 System, you would think you would have to understand Unix and X11-
+but as the libraries are already encapsulating the complex graphics subsystem, you don't have to know about that in most cases. You are
+provided a complete application framework that contains all necessary parts of GUI application design, therefore is ready to use. If
+you're already familiar with Qt, KDE won't make too much difference in regards of using classes and widgets.
+
+Beginners, on the other hand, have a lot of problems in the sections of
+
+<itemize>
+<item>Application design with GUI components
+<item>Application parts
+<item>Widget construction
+</itemize>
+
+The following will help you to understand, where you will generally find classes used in KDE applications, including the according
+replacements of Qt classes for those developers that are familiar with Qt, but didn't make use of KDE libraries. These will be the
+application objects, their behavoir and creation.You will learn about:
+
+<itemize>
+<item>the most needed objects of a KDE application
+<item>the difference between your code and the application framework
+<item>KDE application classes that encapsulate the windowmanager communication
+<item>the class <tt/QWidget/ that all GUI components inherit
+<item>graphical objects
+<item>the system clipboard
+</itemize>
+
+More information about KDE applications can be found in the following sections:
+
+<list>
+<item><htmlurl url="programming.html" name="The KDevelop Programming Handbook">
+<item><htmlurl url="tutorial.html" name="KDE Application Tutorials Handbook">
+</list>
+
+For information about Qt application design, see the Qt online reference documentation.
+
+
+<sect>The Application Object
+<p>
+
+Generally, a KDE application has to be started with creating an instance (and only one!) of the class <tt/KApplication/, which is
+provided by the <tt/kdecore/ library. The class <tt/KApplication/ itself is derived from the according Qt class <tt/QApplication/.
+
+What happens exactly is that <tt/QApplication/ manages the application event queue, which means it processes events from the underlying
+window system to it's child objects, such as mouse movements or keyboard events. This is also the reason, why only one instance of
+<tt/KApplication/ can be declared and why this has to be the first thing the <tt/main()/ function executes.
+
+The <tt/KApplication/ class extends the Qt class in terms of providing additional functionality for a unique-looking application that
+integrates into other desktop components and can therefore be influenced in it's behavoir by control applications (in KDE generally
+collected in the KDE Control Center) such as keyboard accelerator configuration and GUI style.
+
+Corresponding to the Qt class, the <tt/KApplication/ class provides a static function to access the application object within the
+application, <tt/KApplication::getKApplication()/. This solves the problem to pass the pointer to the application object. Further, the
+include file <tt/kapp.h/ provides a macro that can be used instead of the static function, <tt/kapp/. Whenever you need to access the
+application object, use this macro.
+
+The <tt/KApplication/ object itself provides a set of instances that are commonly used in KDE applications and lets the programmer
+access them by functions. You will make extensive use of them as they avoid creating own instances. The following objects are
+provided by their purpose:
+
+<descrip>
+<tag/<bf/KConfig// a configuration object that is used to read and store configuration settings in a resource file. Use the
+according methods of <tt/KConfigBase/ to read and write values.
+<p>
+<tag/<bf/KIconLoader// an object that loads icons into <tt/QPixmap/s by using the KDE File System. This takes away the need to
+search for any pixmap on the file system completely as only the filename has to be entered. Use the macro <tt/Icon("icon.xpm")/ to load
+an icon easily
+<p>
+<tag/<bf/KLocale// an object that always returns the actual localization settings. This makes applications always
+appear in the same language on the desktop chosen by the user globally. Use the macro <tt/klocale/ to access the application locale
+object.
+<p>
+<tag/<bf/KCharsets// the charset object currently set globally by the user. This translates key events to the correctly set
+charset.
+</descrip>
+<p>
+
+Further, the KApplication class provides you with the needed methods to access the KDE File System Standard. This will prevent you from
+problems that will always occur when hardcoding any directories into the code (see <htmlurl url="programming.html" name="The KDevelop
+Programming Handbook"> for information about the KDE-FSS). The class also provides the needed access for the application icon and mini
+icon, current KDE fonts and session management support.
+
+To use the clipboard, the according <tt/QApplication/ class already provides a clipboard object, <tt/QApplication::clipboard()/, which
+can be used to exchange text and image data between applications (see <tt/QClipboard/).
+
+Internationalization is another keyword for KDE applications. This is supported by the <tt/KLocale/ object already created above and is
+always used with the macro <tt/i18n()/ of <tt/kapp.h/. It just shortens the call of the KApplication pointer to the KLocale pointer and
+is read by gettext to extract all macro-embraced strings into an application message file that then can be translated.
+
+At least, the <tt/KAppliation/ already constructs a help menu that can be inserted into a menubar the application may contain with a
+predefined (can be turned on/off) KDE hint dialog and your application's aboutdialog.
+
+You should notice that <tt/KApplication/ has to be lead with:
+
+<itemize>
+<item>creating the <tt/KApplication/ object at the beginning of the <tt/main()/ function
+<item>executing the application with <tt/exec()/ at the end of the <tt/main()/ function
+<item>terminating the application with calling the <tt/quit()/ slot function.
+</itemize>
+
+Using <tt/KApplication/, you are able to catch the following event signals:
+
+<itemize>
+<item>kdisplayPaletteChanged()
+<item>kdisplayStyleChanged()
+<item>kdisplayFontChanged()
+<item>appearanceChanged()
+<item>saveYourself()
+<item>shutDown()
+</itemize>
+
+As the widgets of your application will receive these signals, they will normally update themselves. The important signals for you will
+be in most cases <tt/saveYourself()/ and <tt/shutDown()/.
+
+You will be able to the windowmanager as well by the according static functions found in <tt/kwm.h/, which allows you to find the
+according values you need.
+
+<sect>Commandline Argument Processing
+<p>
+
+Finally, an application usually wants to process commandline options. Those are entered by the user if he started the application from
+a console for the reason to either start it non-graphically for any processing reasons the applcation may be capable to execute or to
+start the application with a file. This is also important to interact with filemanagers that can include your application to the list
+of those that open a mime-type automatically when called with a filename. The <tt/main()/ function therefore is constructed with the
+declaration
+
+<tscreen><verb>
+int main(int argc(), const char* argv[])
+</verb></tscreen>
+
+Thereby, <tt/argc()/ is the number of commandline options and the array <tt/argv[]/ actually contains the commandline option's texts.
+As the <tt/QApplication/ constructor is executed before the <tt/KApplication/, it is sufficient to know what is processed by possible
+options first. The already read options are automatically removed from the array and cannot be read after the <tt/KApplication/
+instance is declared:
+
+(taken from the Qt 1.42 online reference of <tt/QApplication/)
+<itemize>
+<item><bf/-nograb/, tells Qt to never grab the mouse or the keyboard.
+<item><bf/-sync/ (only under X11), switches to synchronous mode for debugging.
+<item><bf/-display/ display, sets the X display (default is $DISPLAY).
+<item><bf/-geometry/ geometry, sets the client geometry of the main widget.
+<item><bf/-fn/ or -font font, defines the application font.
+<item><bf/-bg/ or -background color, sets the default background color and an application palette (light and dark shades are
+calculated).
+<item><bf/-fg/ or -foreground color, sets the default foreground color.
+<item><bf/-name/ name, sets the application name.
+<item><bf/-title/ title, sets the application title (caption).
+<item><bf/-style=/ style, sets the application GUI style. Possible values are motif and windows
+<item><bf/-visual/ TrueColor, forces the application to use a TrueColor visual on an 8-bit display.
+<item><bf/-ncols/ count, limits the number of colors allocated in the color cube on a 8-bit display, if the application is using the
+QApplication::ManyColor color specification. If count is 216 then a 6x6x6 color cube is used (ie. 6 levels of red, 6 of green, and 6 of
+blue); for 108, a 3x3x3, and for other values, a cube approximately proportional to a 2x3x1 cube is used.
+<item><bf/-cmap/ causes the application to install a private color map on an 8-bit display.
+</itemize>
+
+Then, the <tt/KApplication/ processes commands whose values can be set within a <tt/.kdelnk/ file. Usually, those link files contain
+internationalized versions for the application description and the application name as well as some other values such as the icon and
+miniicon name. The commandline options to use these values are:
+<tscreen><verb>
+foo %i %m -caption \"%c\"
+</verb></tscreen>
+
+This will start the application with the value -icon something.xpm for %i and -miniicon for %m. The application caption can be set with
+the -caption value %c. The class <tt/KApplication/ also provides the according methods who return the values for these commandline
+arguments.
+
+Now, when it comes to your own processing of commandlines, you can either access them directly after the application object is declared
+to exclude any of the above values in the <tt/main()/ function. Within the application itself (e.g. the mainwindow class),
+<tt/QApplication/ provides the methods <tt/argc()/ and <tt/argv()/ to process any other options given at the commandline. These can be
+accessed by the argument number, whereby the argument <tt/kapp->argv()[0]/ is the application name; any other following arguments can
+be processed with <tt/kapp->argv()[number]/.
+
+<sect>Other Application Objects
+<p>
+By "Other Application Objects" we would describe any replacements of the <tt/KApplication/ class. The KDE library <tt/kdeui/ offers two
+more classes that inherit <tt/KApplication/ for more specific use in KDE appliations. Those are the class <tt/KControlApplication/ and
+<tt/KWMModuleApplication/.
+
+<sect1>KControlApplication
+<p>
+The <tt/KControlApplication/ is a class for specific applications that are intended to serve as setup modules. By providing a
+tabdialog, control modules can easily be created. The differences to <tt/KApplication/ are:
+
+<itemize>
+<item>uses <tt/-init/ as commandline option to call the method <tt/init()/. This one has to be overwritten to initialize the dialog
+settings.
+<item>the caption of the dialog has to be set independently of the <tt/KApplication/ way with <tt/setTitle()/
+<item>provides a complete widget frameset already where your control widgets have to be inserted.
+</itemize>
+
+To overwrite the virtual methods like <tt/init()/, you have to derive an application specific <tt/KControlApplication/ class from
+<tt/KControlApplication/. The class is generally used for control applications such as used in the KDE as separate programs.
+
+<sect1>KWMModuleApplication
+<p>
+KWMModuleApplication is another class that inherits <tt/KApplication/ for a certain purpose: the class provides methods that allow
+interaction with the windowmanager. An example for a KWMModuleApplication is the <tt/kpager/, who uses the signals that the
+windowmanager sends out to manage the windows with the static methods of KWM.
+
+To create a KWMModuleApplication, you first have to create your application instance and then call the method <tt/connectToKWM()/
+
+<sect1>Doking of Windows
+<p>
+Another issue to general KDE application design is the use of <tt/kpanel/ to display your running application symbolized. KDE users are
+probably familiar with the display settings symbol left of the clock in <tt/kpanel/.
+
+The way it runs is rather simple: You have to provide a widget that is the docked widget in the panel; therefore has to be a top-level
+window by calling the constructor with 0 as parent. Include the kwm.h header file and call
+
+<tscreen><verb>
+KWM::setDockWindow(mywidget->winID());
+</verb></tscreen>
+
+Mind that for undocking hiding the widget is not enough, you have to call <tt/destroy()/ (see <tt/QWidget/ for <tt/destroy()/ and
+<tt/create()/).
+
+<sect>The Main Window
+<p>
+As stated above, the first object to create for a KDE application is one instance of <tt/KApplication/. Indeed, it doesn't provide any
+widgets (visible user interfaces) except the about dialog similar to the <tt/QApplication/ class as a popup menu, but that isn't seen
+anywhere. Therefore, any application needs a top-widget to make itself visible.
+
+When it comes to the visible parts, the programmer generally is free to choose which widget he wants to derive from or use directly as
+his main window. It can be a simple <tt/QLabel/ as well as the improved <tt/KTMainWindow/ that supplies all needed objects for a usual
+desktop application.
+
+<sect1>General Rules
+<p>
+Generally it can be said that you probably would like to use ready components that are specialized. KDE supports this with the class
+<tt/KTMainWindow/ as a pendant to the Qt class <tt/QMainWindow/. Before describing the general guideline, we have a look at the
+exceptional: using any other widget.
+
+When using <tt/QApplication/ as the base application class, you would first create the application instance, then create the main
+widget. Now, it is save to register the widget as the top widget with the method <tt/setMainWidget()/, because the user can use the
+close button of the window to exit the window. He expects the application to be terminated, if the last window is closed, but to do so,
+you have to call the QApplication slot <tt/quit()/. You could do this in a derived class by a reimplementation of
+<tt/QWidget::closeEvent()/, but with the method <tt/setMainWidget()/ this is already done. Now, in any case of using widgets with
+<tt/KApplication/, things are almost the same with the difference that the according method of KDE is <tt/setTopWidget()/.
+The only exception is when using the class <tt/KTMainWindow/ who automatically does this in it's constructor (if there is no other
+topwidget).
+
+<sect1>Using KTMainWindow
+<p>
+As usual desktop applications provide a complete user interface following a common design rule for GUI programs, KDE provides a class
+that already is capable of all needed functions that an application may make use of, <tt/KTMainWindow/, which is located in the
+<tt/kdeui/ library. It is strongly connected to <tt/KApplication/ and therefore very easy to use. The class provides:
+
+<itemize>
+<item>session management support
+<item>a main widget
+<item>a menubar
+<item>as many toolbars as your application may require
+<item>a statusbar
+</itemize>
+
+The elements of the Widget themselves are already managed by <tt/KTMainWindow/'s geometry implementation, therefore you usually don't
+have to take care of that to reimplement an application specific instance for your program.
+
+
+<sect>The Menubar
+<p>
+The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
+the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <tt/QMenuBar/, KDE offers the use of
+the class <tt/KMenubar/. Additionally, the menubar is already constructed for the programmer when using <tt/KTMainWindow/ with the
+first call of <tt/menuBar()/.
+
+The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
+keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
+with the class <tt/QPopupMenu/, which itself only provides the popups, entries have to be inserted using the methods provided by
+<tt/QMenuData/.
+
+Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
+The menubar also makes use of the <tt/KApplication/ help menu already provided. Inserting the menu is just easy with
+
+<tscreen><verb>
+menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
+</verb></tscreen>
+
+<sect>The Toolbar
+<p>
+Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
+provides. The KDE libraries are again offering another class to use with KDE applications, <tt/KToolBar/; when using <tt/KTMainWindow/
+these are created like the menubar by the first call of <tt/toolBar()/. As you can use as many toolbars as your application requires,
+you can create them with the number in the <tt/toolBar()/ method; if the method's paramenter is empty, the first toolbar number is 0.
+
+<sect>The Statusbar
+<p>
+KDE also provides the pendant to Qt's <tt/QStatusBar/, <tt/KStatusBar/. The statusbar can contain labels as well as widgets, such as
+progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
+application and gives hints about the usage of commands e.g. over toolbars and menubars.
+
+
+
 <chapt>Copyright<label id="Copyright">
 <p>
 <tscreen><verb>
@@ -337,6 +638,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
 
 
 

@@ -21,7 +21,7 @@
 <H3><A NAME="s15">15. KDE Developer Information</A></H3>
 
 <P>This mini-HOWTO covers issues that are collected by David Sweet 
-<A HREF="mailto:dsweet@chaos.umd.edu">&lt;dsweet@chaos.umd.edu></A>  in his <EM>The KDE Developer's mini-HOWTO (May 21, 1999)</EM> and was mailed at the KDE-Developer's
+<A HREF="mailto:dsweet@chaos.umd.edu">&lt;dsweet@chaos.umd.edu></A>  in his <EM>The KDE Developer's mini-HOWTO (July 1, 1999)</EM> and was mailed at the KDE-Developer's
 mailinglist. It contains information about CVS and package uploading to the KDE website which will be of use when you want to publish
 your applications.
 <P>The current version of the original document can be found at: 
@@ -37,21 +37,45 @@ your applications.
 
 <P>The K Desktop Environment is an open source Unix desktop created by volunteers from around the world.  There are many ways to
 contribute to the project.  You can write new code, improve old code, write documentation, translate to other languages, create
-artwork, sounds, &amp; music, report bugs, and suggest new features.
-<P>KDE uses the Qt toolkit which is developed by Troll Tech (www.troll.no). The main components of the desktop are a file manager
-(kfm), window manager (kwm), and panel (kpanel).  There are many more utilities and applications which are included in the base
-distribution and available elsewhere.
+artwork, sounds, &amp; music, report bugs, and suggest new features.  If you would like to develop code, read on.  If you would like to
+contribute in another way, please visit the KDE web site (
+<A HREF="http://www.kde.org">http://www.kde.org</A>) for more
+information.
+<P>KDE uses the Qt toolkit which is developed by Troll Tech 
+<A HREF="http://www.troll.no">http://www.troll.no</A>). The main
+components of the desktop are a file manager (kfm), window manager (kwm), and panel (kpanel).  There are many more utilities and
+applications which are included in the base distribution and available elsewhere.
 <P>The primary programming language used for development is C++, although bindings are available for Python (pyKDE).
-<P>The currently released version of KDE is 1.1.1.  KDE 1.1.2 will introduce theme support (which allows users to dramatically change the
-appearance of their desktops) and include bugfixes.  One should expect KDE 1.1.2 to be released in about 4-6 months.  KDE 2.0 will
-include rewrites or major updates of kfm, khtmlw (an HTML widget), kpanel, kmail &amp; maybe kwm, unicode support, and much more.
+<P>The KDE code consists of libraries containing classes for e.g.:
+<P>
+<UL>
+<LI><B>(libkdecore)</B> an application base
+(KApplication), accessing configuration files (KConfig), launching
+external processs (KProcess)</LI>
+<LI><B>(libkdeui)</B> widgets (KEdit, KFontDialog,
+KToolBar, etc.)</LI>
+<LI><B>(libkfile)</B> utility classes like KFileDialog (a file
+dialog)</LI>
+<LI><B>(libkspell)</B> KSpell (a spellchecker).</LI>
+</UL>
+<P>Various desktop, configuration, and system administration utilities are also included in the distribution.  These are some of the
+things KDE developers work on.  A more recent creation is KOffice, a productivity suite which includes a word processor, spreadsheet,
+and presentation tool. The currently released version of KDE is 1.1.1.  KDE 1.2 will introduce theme support (which allows users to
+dramatically change the appearance of their desktops), the KDevelop IDE and other programming tools for
+KDE developers, and include bugfixes.  One should expect KDE 1.2 to be released in mid-July.  KDE 2.0, which is, perhaps, the main
+focus of development right now, will include rewrites or major updates of kfm, khtmlw (an HTML widget), kpanel, kmail &amp; maybe kwm,
+unicode support, and much more.
 <P>KDE 2.0 requires mico, a free CORBA implementation.  CORBA is used to make the new kfm (dubbed Konquerer) easily extensible and to
 create a document-centric user interface for KOffice.  The user can, for example, embed a chart created and edited with KSpread into a
-document which has text created and edited by KWord.  Here's a bit from Simon
-Hausmann about KOM/OpenParts:
-<P>OpenParts is based on KOM. It provides an easy way to graphically embed other application's "widgets" , provides a clever way to manage
-shared GUI elements, together with a CORBA/KOM interface/implementation of these, and it implements the basic support for the document
-view model, extensively used by KOffice. See kdenonbeta/corbadoc/komop.html in CVS for more.
+document which has text created and edited by KWord.  Here's a bit from Simon Hausmann about KOM/OpenParts:
+</I>]
+OpenParts is based on KOM. It provides an easy way to graphically
+embed other application's "widgets" , provides a clever way to manage
+shared GUI elements, together with a CORBA/KOM interface/implementation of
+these, and it implements the basic support for the document view model,
+extensively used by KOffice.
+
+See kdenonbeta/corbadoc/komop.html in CVS for more.
 <P>
 <H4>URLs</H4>
 
@@ -218,62 +242,257 @@ your editor of choice by setting the EDITOR or CVSEDITOR environment variable.)
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>
-<P>
 <H3><A NAME="ss15.3">15.3 Compiling and Safe Development Practices (with configure)</A>
 </H3>
 
-<P>Before you start downloading and compiling the latest sources you should be aware that there's a good chance they won't work!  They are
+<P>Before you start downloading and compiling the latest sources you
+should be aware that there's a good chance they won't work!  They are
 in a state of constant development so they could very well have bugs.
-<P>Knowing this, you should find a way to compile and run new KDE stuff without interfering with your existing stable KDE setup.  Here's
-one way, using the HEAD branch as an example.  We, again, assume your login is joedeveloper.  We also assume that your home directory
-is in /home/joedeveloper.  (This would be the case for Red Hat systems.)
-<P>Make a directory called KDE in the home directory of your *user* account.  You should not be doing any of this as root!  Make another
-called KDE/CVS-HEAD.  cd into that directory and get the KDE sources from the HEAD branch that you want.  The (minumum) modules needed
-to use an application are: kdesupport, kdelibs.  You should compile and install them in that order (see below for compiling).  Others
-you might want are: kdebase, kdeutils, kdegraphics, etc.
-<P>Now, make a directory called KDE/kde-HEAD.  This is where you'll store the compiled code from the HEAD branch -- as well as Qt 2.0!
-Let's get Qt 2.0 (snapshots are available from 
-<A HREF="ftp://ftp.troll.no/qt/snapshots">ftp://ftp.troll.no/qt/snapshots</A>.
-Get the latest one.  Don't expect it to work without a little help, though.  You can find some help on the Qt snapshot mailing list
-mentioned above.)  Put the sources in KDE/kde-HEAD. To compile the code, cd to KDE/kde-HEAD and
+<P>Knowing this, you should find a way to compile and run new KDE stuff
+without interfering with your existing stable KDE setup.  Here's one
+way, using the HEAD branch as an example.  We, again, assume your
+login is joedeveloper.  We also assume that your home directory is in
+/home/joedeveloper.  (This would be the case for Red Hat systems.)
+<P>
+<H4>Organizing</H4>
+
+<P>Make a directory called KDE in the home directory of your *user*
+account.  You should not be doing any of this as root!  Make another
+called KDE/CVS-HEAD.  cd into that directory and get the KDE sources
+from the HEAD branch that you want.  The (minumum) modules needed to
+use an application are: kdesupport, kdelibs.  You should compile and
+install them in that order (see below for compiling).  Others you
+might want are: kdebase, kdeutils, kdegraphics, etc. Now, make a
+directory called KDE/kde-HEAD.  This is where you'll store the
+compiled code from the HEAD branch -- as well as Qt 2.0!
+<P>
+<H4>Compiling Qt 2.0</H4>
+
+<P>Let's get Qt 2.0.  (Get the official release version.  It's
+available now).  Put the sources in KDE/kde-HEAD. To compile the
+code, <CODE>cd</CODE> to KDE/kde-HEAD and
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
-        
-        gzip -d qt-2.00beta-snapshot-1999xxxx.tar.gz
-        tar -xvf qt-2.00beta-snapshot-1999xxxx.tar
-        ln -s qt-2.00beta-snapshot-1999xxxx qt
+        gzip -d qt-2.00.tar.gz
+        tar -xvf qt-2.00.tar
+        ln -s qt-2.00 qt
         cd qt
         setenv QTDIR $PWD     (if you use csh/tcsh, change this for bash)
         cd configs
         mv linux-g++-shared linux-g++-shared.orig
-        sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared
-        make linux-g++-shared
+        sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared  (Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)
+        ./configure
         make
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>You should compare the files configs/linux-g++-shared and configs/linux-g++-shared.orig if you don't know what the sed is doing.
-The look up the -fno-rtti option of egcs.
-<P>Now, for the KDE code.  cd to KDE/CVS-HEAD/kdesupport.  Type
-<P>make -f Makefile.cvs
-<P>./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
---with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib
-<P>make
-<P>If all goes well, then
-<P>make install
-<P>If not, try to fix things, then type
-<P>make install
-<P>Repeat this process for the other modules.  You should alter the ./configure line to read
-<P>./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
---with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff --enable-tutorials
-<P>when you compile the code in the kdelibs module.
+<P>You should compare the files configs/linux-g++-shared and
+configs/linux-g++-shared.orig if you don't know what the sed is doing.
+Then look up the -fno-rtti option of <CODE>egcs</CODE> if you'd like to learn more.
 <P>
-<H3><A NAME="ss15.4">15.4 Compiling tips</A>
+<H4>Compiling KDE (HEAD)</H4>
+
+<P>
+<P>Now, for the KDE code.  <CODE>cd</CODE> to KDE/CVS-HEAD/kdesupport.  Type
+<BLOCKQUOTE><CODE>
+<PRE>
+        make -f Makefile.cvs
+        ./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+                        --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib   
+        make
+
+If all goes well, then
+        
+        make install
+
+If not, try to fix things, then type
+        
+        make install
+
+Repeat this process for the other modules.  You should alter the ./configure line to read
+
+        ./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+                        --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff --enable-tutorials
+
+when you compile the code in the kdelibs module.
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H4>Compiling tips</H4>
+
+<P>
+<UL>
+<LI>  We turned off the "-fno-rtti" option when compiling Qt 2.0 because it
+prevents KDE from linking.</LI>
+<LI> I usually put that long configure command into a file called <CODE>conf</CODE> and leave it in my CVS-HEAD directory.  Then I can do a <CODE>../conf</CODE> from any module and get a good configure.</LI>
+<LI> It seems that you need to compile and install qimageio (part of Qt)
+separately if you want to get koffice to compile.  Just <CODE>cd</CODE> to <CODE>/$QTDIR/extensions/imageio/src</CODE> and type <CODE>make install</CODE></LI>
+<LI> When you compile mico, be sure to configure it with <CODE>./configure --disable-mini-stl</CODE> (and any other options you want).  And be sure you have version 2.2.7!</LI>
+</UL>
+<P>
+<H3><A NAME="ss15.4">15.4 Packaging and Submitting Code to KDE</A>
 </H3>
 
-<P>We turned off the "-fno-rtti" option when compiling Qt 2.0 because it prevents KDE from linking. It seems that you need to compile and
-install qimageio (part of Qt) separately if you want to get koffice to compile.  [-- I'll provide instructions once I try this. --]
+<H4>Packaging</H4>
+
+<P>'Packing' means putting your (in this case source) code into some
+format that is
+<UL>
+<LI> easy for others to configure and install, and</LI>
+<LI> easy to transfer,</LI>
+<LI> can be indexed so that it is easy to find.</LI>
+</UL>
+<P>These three concepts are expanded upon in the next three subsections.
 <P>
+<H4>GNU Configure</H4>
+
+<P>The standard KDE application (or other code) source code package
+includes the GNU <CODE>configure</CODE> script which determines some
+information about the user's system and provides it to your
+source code as <CODE>#define</CODE> statements in a header file called
+<CODE>config.h</CODE>.
+<P>To get started with this, get the kdesdk from CVS using a
+method described above.  Then prepare kexample, an example
+package, for your application
+<BLOCKQUOTE><CODE>
+<PRE>
+   cd kdesdk
+   cd kexample
+   make -f Makefile.cvs
+   cd ..; cp -r kexample ~/KDE/kmyapp-0.0.1
+</PRE>
+</CODE></BLOCKQUOTE>
+
+(That last directory is just an example.  Replace kmyapp with your
+application's (or widget's) name, and replace 0.0.1 with its version
+number.)
+<P>Now, we'll put your source code into the example package.  Let's
+say your source code was in the directory &nbsp;/KDE/KMyApp:
+<BLOCKQUOTE><CODE>
+<PRE>
+   cd ~/KDE/kmyapp-0.0.1
+   mkdir kmyapp
+   cp ~/KDE/KMyApp/*.cpp kmyapp
+   cp ~/KDE/KMyApp/*.h kmyapp
+   (There may be other files to copy, but leave your old Makefile behind!)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+Now, edit kmyapp-0.0.1/Makefile.am and change the line
+<BLOCKQUOTE><CODE>
+<PRE>
+   SUBDIRS = kexample
+</PRE>
+</CODE></BLOCKQUOTE>
+
+to
+<BLOCKQUOTE><CODE>
+<PRE>
+   SUBDIRS = kmyapp
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<EM>Note</EM>:  kmyapp here refers to the subdirectory by that name.  You
+could include more subdirectories to be compiled.  For example:
+<BLOCKQUOTE><CODE>
+<PRE>
+   SUBDIRS = kmyapp kmysupportclass
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>Also edit the last line of configure.in to read
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile \
+          kmyapp/Makefile \
+          po/Makefile)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+The <CODE>po</CODE> directory contains translations of strings that you
+used in your code (this is about i18n(), which is not covered in this
+miniHOWTO).  We'll get to that it a minute.
+<P>Now we want to set up the Makefile for the kmyapp subdirectory.  Edit
+<CODE>kmyapp/Makefile.am</CODE> according to the instructions given in the
+comments.  They should be clear enough.
+<P>Now <CODE>cd ~/KDE/kmyapp</CODE> and type
+<BLOCKQUOTE><CODE>
+<PRE>
+   ./configure
+</PRE>
+</CODE></BLOCKQUOTE>
+
+This should create:
+<UL>
+<LI> Makefile</LI>
+<LI> kmyapp/Makfile</LI>
+<LI> config.h</LI>
+</UL>
+
+You can now include config.h in your source code with <CODE>#include "../config.h"</CODE> and have your code compile differently on different systems based
+on the <CODE>#define</CODE>s.  Eh?  Well, different systems have slightly
+differnent ideas about implementing standards and such, and your
+code my need take this into account to be portable, i.e. to work on
+various Unices.  Take a look inside <CODE>config.h</CODE> for descriptions
+of the <CODE>#define</CODE>s.
+<P><B>Shared Libraries!</B>  If you are packaging a widget or other class
+you should be compiling a shared library.  Luckily, this is easy to do
+within the kexample packge.  You only need to change the Makefile.am
+that resides in your code's sudirectory.  Unluckily, now example
+for a shared-library Makefile.am is included.  So, I've included one
+in the next section.
+<EM>Note</EM>:  If you distribute a widget, you should also
+disrtribute a small program which tests the widget.  Put that
+program in the same package in another subdirectory and have it
+compile along with the widget.
+<P>Next, make a compressed archive.  You can do it this way
+<BLOCKQUOTE><CODE>
+<PRE>
+   cd ~/KDE
+   tar -cvf kmyapp-0.1.1.tgz kmyapp-0.1.1
+</PRE>
+</CODE></BLOCKQUOTE>
+
+or however you like.  Just be sure that the archive expands to
+<EM>one</EM> directory containing all of the files.  This is neater and
+easier for the user to deal with.
+<P>
+<H4>Example Makfile.am for a Shared Library</H4>
+
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+# Example Makefile.am for a shared library.  It makes a library
+#  called "example" as libexample.so.2.1.2
+# This Makefile.am was taken from the kdelibs distribution and modified
+#  to serve as an example.
+#
+# David Sweet
+#
+
+INCLUDES=  $(all_includes)
+
+lib_LTLIBRARIES  = libexample.la
+
+# Note:  If you specify a:b:c as the version in the next line,
+#  the library that is made has version (a-c).c.b.  In this
+#  example, the version is 2.1.2.
+libexample_la_LDFLAGS = -version-info 3:2:1 $(all_libraries)
+
+include_HEADERS = header1.h header2.h\
+                  header3.h
+
+# Which headers shouldn't be installed when a   make install  is done?
+noinst_HEADERS = version.h
+
+libexample_la_SOURCES = code1.cpp code2.cpp
+                        code3.cpp
+
+#  USE_AUTOMOC is great.  This takes care of all of your  moc'ing
+#   dependencies.
+#  (You still need to include, for example, header1.moc in code1.cpp.)
+libexample_la_METASOURCES = USE_AUTOMOC
+</PRE>
+</CODE></BLOCKQUOTE>
 <P>
 <H3><A NAME="ss15.5">15.5 Submitting contributions</A>
 </H3>
@@ -308,11 +527,35 @@ from the source code. The source code should be packaged as a .tar.gz (or .tgz) 
 directory with all of your stuff in it. Within KDevelop, choose "Project"-"Create Distribution"-"tar.gz" which automatically creates
 the tar.gz file.
 <P>
-<H3><A NAME="ss15.6">15.6 Thanks</A>
+<H4>Submitting</H4>
+
+<P>If you are hacking at CVS, you should follow the commit procedure
+outlined above.  If you want to submit changes to code
+that you are not maintaining, you should first check with the
+maintainer of the application.  You can usually find his/her email address
+in the directory containing the source.  Also check the program's "About" box
+if it has one.  If no maintainer is specifically listed, you should
+contact the author.
+<P>If you are developing outside of CVS, you can submit your code
+(widgets, applications, etc.) via FTP to
+<A HREF="ftp://upload.kde.org/Incoming">ftp://upload.kde.org/Incoming</A><P>When you do this be sure to include an <CODE>.lsm</CODE> (Linux Software Map) file.
+This way your code can be automatically placed in the appropriate spot
+on ftp.kde.org and its mirrors and an announcement can be
+automatically sent to the kde-announce mailing list.
+<P><EM>Note</EM>: The <CODE>.lsm</CODE> file should be uploaded separately from the
+source code (as a plain ASCII file).  The source code should be
+packaged as a .tar.gz (or .tgz) or .tar.bz2.  This archive should
+expand to a single directory with all of your stuff in it.
+<P>
+<P>
+<H3><A NAME="ss15.6">15.6 Acknowledgements</A>
 </H3>
 
-<P>I'd like to thank the following people for their suggestions (in no particular order): Roberto Alsina, Waldo Bastian, Harri Porten,
-Samuel Wuethrich, Daniel Naber, Martin Konold.
+<P>I'd like to thank the following people for their suggestions (in no
+particular order): Roberto Alsina, Waldo Bastian, Harri Porten, Samuel
+Wuethrich, Daniel Naber, Martin Konold, and Pietro Iglio.
+<P>
+<P>
 <P>
 <P ALIGN="RIGHT">
 

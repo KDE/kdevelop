@@ -1810,7 +1810,7 @@ results.
 KDevelop offers also some more specialized functionality to use <idx/grep/ within the <idx/editor/s and the browser. Select the expression you want
 to search for in either of the windows and press SHIFT+F2 or select "<idx/grep/:&lt;your_expression&gt;" from the right button popup menu.
 This will ask <idx/grep/ to search for the selection in your project directory's files and will show the results immediately. Switching to
-the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
+the result works as described above. From within the editor window, it lasts to place the cursor over a word and start searching; the
 word under the cursor will be the search pattern.
 
 <sect1>Searching within Documentation
@@ -1894,10 +1894,10 @@ characters.
 <itemize>
 <item><bf/numbering lines:/  numbers all lines top-down if enabled
 <item><bf/numbering pages:/ allows selecting page-numbering mode by:
-<itemize>
-<item><bf/file single:/ numbers each file's pages beginning with 1
-<item><bf/file together:/  appends all following pages after the first for page numbering
-</itemize>
+  <itemize>
+  <item><bf/file single:/ numbers each file's pages beginning with 1
+  <item><bf/file together:/  appends all following pages after the first for page numbering
+  </itemize>
 <item><bf/lines per page:/  sets the maximum lines per page to be printed.
 </itemize>
 
@@ -1908,95 +1908,95 @@ characters.
 <itemize>
 <item><bf/Fancy Header:/ adds a fancy header
 <item><bf/Header Text:/ enables adding a header text
-<itemize>
-<item><bf/text:/ sets the text's contents
-<item><bf/position:/ sets the text's position to left, center or right
-</itemize>
+  <itemize>
+  <item><bf/text:/ sets the text's contents
+  <item><bf/position:/ sets the text's position to left, center or right
+  </itemize>
 <item><bf/Login:/ add the UserID to the header
-<itemize>
-<item><bf/login:/ enables adding UserID
-<item><bf/position:/ sets the position for the UserID
-</itemize>
+  <itemize>
+  <item><bf/login:/ enables adding UserID
+  <item><bf/position:/ sets the position for the UserID
+  </itemize>
 <item><bf/Filename:/ add the filename to the header
-<itemize>
-<item><bf/Size of filename:/ add filename as full or short, meaning full path or filename only
-<item><bf/Position:/ sets the position for the filename
-</itemize>
+  <itemize>
+  <item><bf/Size of filename:/ add filename as full or short, meaning full path or filename only
+  <item><bf/Position:/ sets the position for the filename
+  </itemize>
 <item><bf/Hostname:/ add the hostname to the header
-<itemize>
-<item><bf/hostname:/ enables adding hostname
-<item><bf/size of hostname:/ sets the size for hostname
-<item><bf/Position:/ sets the position for hostname
-</itemize>
+  <itemize>
+  <item><bf/hostname:/ enables adding hostname
+  <item><bf/size of hostname:/ sets the size for hostname
+  <item><bf/Position:/ sets the position for hostname
+  </itemize>
 </itemize>
 
 <sect3>Date & Time
 <p>
 <itemize>
 <item><bf/Current Date:/ include the current date
-<itemize>
-<item><bf/current date:/ enables current date adding
-<item><bf/positon:/ sets the position for the date entry
-<item><bf/format:/ sets the date format
-</itemize>
+  <itemize>
+  <item><bf/current date:/ enables current date adding
+  <item><bf/position:/ sets the position for the date entry
+  <item><bf/format:/ sets the date format
+  </itemize>
 <item><bf/Modification Date:/ include the last modification date
-<itemize>
-<item><bf/modification date:/ enables modification date adding
-<item><bf/position:/ sets the position for modification date entry
-<item><bf/format:/ sets the date format
-</itemize>
+  <itemize>
+  <item><bf/modification date:/ enables modification date adding
+  <item><bf/position:/ sets the position for modification date entry
+  <item><bf/format:/ sets the date format
+  </itemize>
 <item><bf/Current Time:/ include current time
-<itemize>
-<item><bf/current time:/ enables current time adding
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
-</itemize>
+  <itemize>
+  <item><bf/current time:/ enables current time adding
+  <item><bf/AM/PM:/ use AM/PM or 24h format
+  <item><bf/Position:/ sets the position for the time entry
+  <item><bf/Format:/ sets the time format
+  </itemize>
 <item><bf/Modification Time:/ include the last modification time
-<itemize>
-<item><bf/modification time:/ enables adding modification time
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
-</itemize>
+  <itemize>
+  <item><bf/modification time:/ enables adding modification time
+  <item><bf/AM/PM:/ use AM/PM or 24h format
+  <item><bf/Position:/ sets the position for the time entry
+  <item><bf/Format:/ sets the time format
+  </itemize>
 </itemize>
 
 <sect3>Layout
 <p>
 <itemize>
 <item><bf/Numbering & Border:/
-<itemize>
-<item><bf/numbering lines:/ adds line numbers to the document for <idx/printing/
-<item><bf/borders:/ adds a border to the pages for <idx/printing/
-<item><bf/numbering pages:/ numbers pages for <idx/printing/
-<item><bf/align files:/ appends files for page numbering
-<item><bf/lines per page:/ the maximum value for lines per page
-</itemize>
+  <itemize>
+  <item><bf/numbering lines:/ adds line numbers to the document for <idx/printing/
+  <item><bf/borders:/ adds a border to the pages for <idx/printing/
+  <item><bf/numbering pages:/ numbers pages for <idx/printing/
+  <item><bf/align files:/ appends files for page numbering
+  <item><bf/lines per page:/ the maximum value for lines per page
+  </itemize>
 <item><bf/Format and TAB:/
-<itemize>
-<item><bf/set TAB size:/ sets the TAB size for interpreting TABs
-<item><bf/font for header:/ sets the font used for the header text
-<item><bf/font for body:/ sets the font for the body text (file contents)
-</itemize>
+  <itemize>
+  <item><bf/set TAB size:/ sets the TAB size for interpreting TABs
+  <item><bf/font for header:/ sets the font used for the header text
+  <item><bf/font for body:/ sets the font for the body text (file contents)
+  </itemize>
 <item><bf/Text<idx/printing/:/
-<itemize>
-<item><bf/cut lines:/ cuts the lines if too large. If unchecked, lines are broken
-<item><bf/replace non-<idx/printing/ character by space:/ replaces characters that the <idx/printing/ charset doesn't support by space characters
-</itemize>
+  <itemize>
+  <item><bf/cut lines:/ cuts the lines if too large. If unchecked, lines are broken
+  <item><bf/replace non-<idx/printing/ character by space:/ replaces characters that the <idx/printing/ charset doesn't support by space characters
+  </itemize>
 <item><bf/Other Options:/
-<itemize>
-<item><bf/table of contents:/ adds a table of contents page that contains information about printed files, page numbers etc.
-<item><bf/Highlight bars:/
-<itemize>
-<item><bf/highlight bars:/ highlights rows for <idx/printing/
-<item><bf/cycle fo change:/ sets the number of rows to change highlight style
-</itemize>
-<item><bf/Wrapped line:/
-<itemize>
-<item><bf/mark wrapped lines:/ lines that are broken get marked for <idx/printing/
-<item><bf/value for wrapped line:/ the preset value for the new line the line is broken into.
-</itemize>
-</itemize>
+  <itemize>
+  <item><bf/table of contents:/ adds a table of contents page that contains information about printed files, page numbers etc.
+  <item><bf/Highlight bars:/
+    <itemize>
+    <item><bf/highlight bars:/ highlights rows for <idx/printing/
+    <item><bf/cycle fo change:/ sets the number of rows to change highlight style
+    </itemize>
+	<item><bf/Wrapped line:/
+    <itemize>
+    <item><bf/mark wrapped lines:/ lines that are broken get marked for <idx/printing/
+    <item><bf/value for wrapped line:/ the preset value for the new line the line is broken into.
+    </itemize>
+  </itemize>
 </itemize>
 
 <sect3>Underlay
@@ -2024,16 +2024,16 @@ characters.
 <item><bf/Output Format:/ for using <idx/enscript/ as <idx/printing/ program, you can choose between postscript or html <idx/printing/
 <item><bf/Default Printsettings:/ sets the default settings to use for <idx/printing/
 <item><bf/Out<idx/printing/:/
-<itemize>
-<item><bf/Page Printing:/ sets one or two pages on one sheet
-<item><bf/Pages:/ select all,odd or even for using <idx/enscript/
-<item><bf/Pretty Print:/
-<itemize>
-<item><bf/pretty-print:/ enables pretty-print mode for <idx/enscript/
-<item><bf/color:/ use color <idx/printing/
-<item><bf/Pretty Print Mode:/ sets the <idx/printing/ mode dependend on your file format
-</itemize>
-</itemize>
+  <itemize>
+  <item><bf/Page Printing:/ sets one or two pages on one sheet
+  <item><bf/Pages:/ select all,odd or even for using <idx/enscript/
+  <item><bf/Pretty Print:/
+    <itemize>
+    <item><bf/pretty-print:/ enables pretty-print mode for <idx/enscript/
+    <item><bf/color:/ use color <idx/printing/
+    <item><bf/Pretty Print Mode:/ sets the <idx/printing/ mode dependend on your file format
+    </itemize>
+  </itemize>
 </itemize>
 
 <sect2>File Selection
@@ -2042,33 +2042,33 @@ The file selection dialog is accessed by the "Files" button on the <idx/printing
 print out by certain criterias:
 <itemize>
 <item><bf/File Selection:/
-<itemize>
-<item><bf/current:/ the currently opened file visible in the editing window
-<item><bf/all in project:/ all files included in the project currently opened
-<item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
-<item><bf/all cpp files:/ prints out all source files of the project
-<item><bf/all headers:/ prints out all header files of the project
-<item><bf/changed files:/ allows specifying files that are changed in a timespan:
-</itemize>
+  <itemize>
+  <item><bf/current:/ the currently opened file visible in the editing window
+  <item><bf/all in project:/ all files included in the project currently opened
+  <item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
+  <item><bf/all cpp files:/ prints out all source files of the project
+  <item><bf/all headers:/ prints out all header files of the project
+  <item><bf/changed files:/ allows specifying files that are changed in a timespan:
+  </itemize>
 <item><bf/Changed Files:/
-<itemize>
-<item><bf/Between:/ specifies all files changed after:
-<itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
-</itemize>
-<item><bf/And:/ specifies all files changed before:
-<itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
-</itemize>
-</itemize>
-<item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
-<itemize>
-<item><bf/add:/ press this to add a file selected for <idx/printing/ in the lineedit field left
-<item><bf/delete:/ deletes a selected file from the <idx/printing/ list
-<item><bf/clear:/ clears the <idx/printing/ list
-</itemize>
+  <itemize>
+  <item><bf/Between:/ specifies all files changed after:
+    <itemize>
+    <item><bf/Date:/ the date the files were changed
+    <item><bf/Time:/ the time the files were changed
+    </itemize>
+  <item><bf/And:/ specifies all files changed before:
+    <itemize>
+    <item><bf/Date:/ the date the files were changed
+    <item><bf/Time:/ the time the files were changed
+    </itemize>
+  </itemize>
+  <item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
+  <itemize>
+  <item><bf/add:/ press this to add a file selected for <idx/printing/ in the lineedit field left
+  <item><bf/delete:/ deletes a selected file from the <idx/printing/ list
+  <item><bf/clear:/ clears the <idx/printing/ list
+  </itemize>
 </itemize>
 
 <sect2>Print Preview
@@ -2656,9 +2656,10 @@ working with large projects as they enhance working object-orientated on C++ pro
 
 <sect>The Classtools
 <p>
-The classtools are dialogs that makes it even more easier for the developer to get more information about his project's <idx/classes/. As the
-<idx/classviewer/ displays all objects by their occurence in the code, you sometimes want to get more information about <idx/classes/ without
-having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class <idx/attributes/.
+The classtools are dialogs that makes it even more easier for the developer to get more information about his project's <idx/classes/.
+The <idx/classviewer/ displays all objects by their occurence in the code, but you sometimes want to get more information about
+<idx/classes/ without having to look inside the code. Therefore, the classtool dialogs are specialized on displaying specific class
+<idx/attributes/.
 
 The classtool dialog is invoked by the popup menu over a class in the <idx/classviewer/. Select "Classtool", and the dialog will appear.
 To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
@@ -2667,7 +2668,7 @@ you specific trees for your class. These are:
 <descrip>
 <tag/ Parents:/
 The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
-class behaves in one or the other way, e.g. for dialogs your parent class could be <em/QWidget/ or <em/QDialog/.
+class behaves in one or the other way, e.g. for dialogs your parent class could be <tt/QWidget/ or <tt/QDialog/.
 <tag/Children:/
 Displays the children <idx/classes/ that inherit the current class.
 <tag/Clients:/
@@ -3336,6 +3337,14 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
+
+
+
+
+
+
 
 
 

@@ -93,16 +93,17 @@ working with large projects as they enhance working object-orientated on C++ pro
 <H3><A NAME="ss10.2">10.2 The Classtools</A>
 </H3>
 
-<P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the
-classviewer displays all objects by their occurence in the code, you sometimes want to get more information about classes without
-having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class attributes.
+<P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes.
+The classviewer displays all objects by their occurence in the code, but you sometimes want to get more information about
+classes without having to look inside the code. Therefore, the classtool dialogs are specialized on displaying specific class
+attributes.
 <P>The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
 To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
 you specific trees for your class. These are:
 <P>
 <DL>
 <DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
-class behaves in one or the other way, e.g. for dialogs your parent class could be <EM>QWidget</EM> or <EM>QDialog</EM>.
+class behaves in one or the other way, e.g. for dialogs your parent class could be <CODE>QWidget</CODE> or <CODE>QDialog</CODE>.
 <DT><B>Children:</B><DD><P>Displays the children classes that inherit the current class.
 <DT><B>Clients:</B><DD><P>Classes that make use of the selected class by an attribute in their class declaration
 <DT><B>Suppliers:</B><DD><P>The suppliers that give attributes to the selected class.

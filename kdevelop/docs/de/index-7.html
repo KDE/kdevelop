@@ -251,14 +251,13 @@ wiederholen" und "Ersetzen" im Menü "Bearbeiten"</LI>
 <P>
 <H4>Hervorhebungen</H4>
 
-<P>The syntax-highlighting mode of KDevelop's editor can be configured by two dialogs; first you can set default colors for
-syntax-highlihgting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
-fontsize for e.g. keywords. Select the default item and set all needed options.
-<P>The second configuration dialog is accessed by the "Syntax-Highlighting" entry in the "Options"-menu. This allows you to set the
-file filters for the programming language, e.g. *.cpp, *.h  for C++. Then select the item that you want to configure. If you wish
-to use the default values you've set in the "Editor Defaults" dialog, select the "default" checkboxes in the Item-style and
-Item-Font sections. This reads the default settings for the selected item. After pressing OK, your new values will be enabled and
-used by the editor.
+<P>Den Hervorhebungs-Modus des KDevelop Quellcode-Editors können Sie über zwei Dialoge konfigurieren; eine Standardeinstellung über das
+Dialogfeld "Editor-Voreinstellung" und eine Programmiersprachen-Spezifische im Dialogfeld "Hervorhebungen". Beide Dialoge erreichen Sie
+über das Menü "Einstellungen.
+<P>Im Dialog "Voreinstellungen" geben Sie für die Elemente (z.B. Schlüsselwörter) jeweils die Standardwerte ein, indem Sie Farbe,
+Schriftart und -größe angeben. Um eine Programmiersprachendarstellung anzupassen, geben Sie die entsprechenden Werte im
+"Hervorhebungen"-Dialog an. Dort können Sie die Standardwerte verwenden, indem Sie für die gewählten Elemente jeweils die Option
+"Standard" markieren.
 <P>
 <H3><A NAME="ss7.5">7.5 Suchen und Ersetzen</A>
 </H3>
@@ -266,92 +265,91 @@ used by the editor.
 <P>
 <H4>Suchen in einer Datei</H4>
 
-<P><B>&raquo; How to find one or more characters in the actual editing window</B>
+<P><B>&raquo; Wie Sie ein oder mehrere Zeichen im aktuellen Editor finden</B>
 <OL>
-<LI>Select "Search" from the "Edit"-menu. This opens the search dialog.</LI>
-<LI>Specify the expression to search for in the edit field. The drop-down menu offers selecting a previous search expression.</LI>
-<LI>Select additonal options like "Whole Words only"</LI>
-<LI>Press OK.</LI>
+<LI>Wählen Sie "Suchen" aus dem Menü "Bearbeiten". Dies öffnet die Suchen-Dialog</LI>
+<LI>Geben Sie den gesuchten Ausdruck im Editierfeld ein. Das Menü bietet die Auswahl eines bereits gesuchten Ausdrucks.</LI>
+<LI>Geben Sie zusätzliche Optionen an wie "Nur ganze Wörter"</LI>
+<LI>Bestätigen Sie mit OK.</LI>
 </OL>
-<P>To repeat searching for an expression entered in the search dialog, press F3.
+<P>Um eine Suche zu wiederholen, drücken Sie F3.
 <P>
 <H4>Suchen über mehrere Dateien</H4>
 
-<P>As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
-you want to search for the same expression overall your project. Therefore, KDevelop contains a <CODE>grep</CODE>-dialog, which
-lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
-Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
-the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
-lets you enter:
+<P>Da die Suchfunktion standardmäßig nur über die aktuelle Datei läuft, wären Sie darauf beschränkt. Oft benötigen Sie jedoch
+Suchfunktionen über Ihr ganzes Projekt. Daher bietet KDevelop einen <CODE>grep</CODE>-Dialog an, mit dem Sie diese Suchfunktion durchführen
+können. Dort können Sie das Startverzeichnis und/oder Dateierweiterung der zu durchsuchenden Dateien angeben, um die zur Suche
+benötigte Zeit zu reduzieren und die Ergebnisse auszugeben. Um eine Suche über mehrere Dateien durchzuführen, wählen Sie "Suche in
+Dateien" aus dem Menü "Bearbeiten". Der Suchdialog erscheint und läßt sie angeben:
 <P>
 <UL>
-<LI>The expression to search for (the pattern)</LI>
-<LI>The template used for the search</LI>
-<LI>The mime-type of files to search in</LI>
-<LI>The directory to start form</LI>
-<LI>If the search is recursive over all included subdirectories</LI>
+<LI>Der gesuchte Ausdruck</LI>
+<LI>Die Suchvorlage</LI>
+<LI>Die Dateierweiterung der zu durchsuchenden Dateien</LI>
+<LI>Das Startverzeichnis</LI>
+<LI>Ob die Suche rekursiv über alle Unterverzeichnisse durchgeführt werden soll</LI>
 </UL>
-<P>By default, the grep-dialog is set to start at your project directory and works recursively over implementation and header files.
-<P>You can even extend your search pattern by using the following options:
+<P>Standardmäßig ist der <CODE>grep</CODE>-Dialog auf das Projektverzeichnis und rekursive Suche über Implementations- und Headerdateien
+eingestellt.
+<P>Sie können die Suche weiter spezifizieren, indem Sie folgende Optionen verwenden:
 <P>
 <OL>
-<LI><B>.</B> Match any character</LI>
-<LI><B>^</B> Match the beginning of a line</LI>
-<LI><B>$</B> Match the end of a line</LI>
-<LI><B>\&lt; </B> Match the beginning of a word</LI>
-<LI><B>\> </B> Match the end of a word</LI>
+<LI><B>.</B> Jedes Zeichen</LI>
+<LI><B>^</B> Beginn einer Zeile</LI>
+<LI><B>$</B> Ende einer Zeile</LI>
+<LI><B>\&lt; </B> Anfang eines Wortes</LI>
+<LI><B>\> </B> Ende eines Wortes</LI>
 </OL>
-<P>For a repeating search, you can also use the availabel operators:
+<P>Um Suchen zu wiederholen, sind folgende Operatoren verfügbar:
 <OL>
-<LI><B>?</B> The preceding item matches less than once</LI>
-<LI><B>*</B> The preceding item is matched zero or more times</LI>
-<LI><B>+</B> The preceding item is matched once or more times</LI>
-<LI><B>{ n }</B> The preceding item is matched exactly <EM>n</EM> times</LI>
-<LI><B>{ n,}</B> The preceding item is matched <EM>n</EM> or more times</LI>
-<LI><B>{,n }</B> The preceding item matches less than <EM>n</EM> times</LI>
-<LI><B>{n,m}</B> The preceding item matches at least <EM>n</EM> times but less than <EM>m</EM> times</LI>
+<LI><B>?</B> Das vorherige Element höchstens einmal</LI>
+<LI><B>*</B> Das vorherige Element gar nicht oder mehrmals</LI>
+<LI><B>+</B> Das vorherige Element einmal oder mehrmals</LI>
+<LI><B>{ n }</B> Das vorherige Element genau <EM>n</EM> mal</LI>
+<LI><B>{ n,}</B> Das vorherige Element <EM>n</EM> mal und darüber</LI>
+<LI><B>{,n }</B> Das vorherige Element höchstens <EM>n</EM> mal</LI>
+<LI><B>{n,m}</B> Das vorherige Element mindestens <EM>n</EM> mal, aber weniger als <EM>m</EM> mal.</LI>
 </OL>
-<P>Backreferences to bracketed subexpressions are also available by the notation <EM>\n</EM>.
-<P>After specifying your search, press "Search". The results are then displayed in the result-window. To jump to a file and line
-number, select the resultline and press Enter or double click the result. The editor will automatically open the according file
-and place the cursor to the line of the result. This allows a complete specification for any search action and give out exact
-results.
-<P>KDevelop offers also some more specialized functionality to use grep within the editors and the browser. Select the expression you want
-to search for in either of the windows and press SHIFT+F2 or select "grep:&lt;your_expression&gt;" from the right button popup menu.
-This will ask grep to search for the selection in your project directory's files and will show the results immediately. Switching to
-the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
-word under the cursor will be the search pattern.
+<P>Rückwärtsreferenzen zu eingeklammerten Unterausdrücken sind durch die Notation <EM>\n</EM> verfügbar.
+<P>Nach der Spezifizierung der Suche betätigen Sie die Schaltfläche "Suchen". Die Ergebnisse werden dann im Ergebnis-Fenster angezeigt. Um
+zu einer Datei und Zeile zu springen, wählen Sie das Ergebnis aus und drücken Sie EINGABE oder doppelklicken Sie auf das Ergebnis. Der
+Editor öffnet dann automatisch die Datei und setzt den Cursor an die gewünschte Zeile. Dies erlaubt eine vollständige Spezifikation von
+Suchaktionen und liefert Ihnen exakte Ergebnisse.
+<P>KDevelop bietet darüberhinaus noch weitere spezielle Funktionen, mit der Sie grep innerhalb des Editors und Browsers verwenden können.
+Wählen Sie den Suchausdruck in einem Fenster aus und drücken Sie UMSCHALT+F2 oder wählen Sie "grep:&lt;Ihr_Ausdruck&gt;" aus dem
+Kontextmenü. Dies führt automatisch eine Suche über Ihr Projektverzeichnis aus und zeigt die Ergebnisse sofort an. Wechseln Sie
+zwischen den Ergebnissen wie vor. Innerhalb des Editors genügt es, den Cursor auf ein Wort zu plazieren; dieses wird dann als
+Suchausdruck verwendet.
 <P>
 <H4>Suchen innerhalb der Dokumentation</H4>
 
-<P>While working on a project, you often need to have information about the parameters of member functions you want to use- most
-often you remember the function's name that matches your needs, but the parameters are a very hard thing to keep in mind.
-Therefore, and for other purposes that may occur, KDevelop contains a search functionality that combines searching expressions
-that appear in your files with the documentation browser. To make use of this search functionality, you should have set up the
-documentation browser correctly and created the search database. For invoking a search through the documentation, do the
-following:
+<P>Wenn Sie an einem Projekt arbeiten, benötigen Sie oft Informationen über die Parameter von Memberfunktionen, die Sie verwenden möchten-
+meist behalten Sie den Funktionsnamen, den sie benutzen wollen, aber die Parameter sind sehr schwer zu merken. Daher und zu anderen
+Gelegenheiten bietet Ihnen KDevelop eine Suchfunktion, die die Suche nach Ausdrücken in Dateien innerhalb der Dokumentation ermöglicht.
+Um diese Suchfunktion zu verwenden, sollte der Dokumentationsbrowser korrekt eingerichtet sein und der Suchindex vorhanden sein. Eine
+Suche führen Sie durch, indem Sie:
 <P>
 <OL>
-<LI>place your cursor at the word you want to search or mark an expression</LI>
-<LI>select "Search Marked Text" from the "Help"-menu or press the right mouse button to open the context menu; then select "Look
-Up: "expression".</LI>
-<LI>after the search result page is displayed in the documentation browser, select the page that you think could contain the
-information you need.</LI>
-<LI>the selected documentation page is displayed and your search result is marked. To display the next result within the same
-documentation page, press F3.</LI>
+<LI>den Cursor auf dem gesuchten Wort plazieren oder eine Auswahl markieren</LI>
+<LI>Im Menü "Hilfe" den Eintrag "Suche Markierten Text", das entsprechende Werkzeugleistensymbol oder im Kontextmenü "Suche:
+Ausdruck" auswählen</LI>
+<LI>nachdem die Ergebnisseite im Dokumentationsbrowser erscheint, wählen Sie die Seite aus, die die gewünschte Information enthält</LI>
+<LI>die ausgewählte Dokumentationsseite wird mit markierem Ergebnis angezeigt. Um das nächste Ergebnis auf der selben Seite
+anzuzeigen, drücken Sie F3</LI>
 </OL>
-<P>This allows you to easily find the information you need. For using the results, the documentation browser allows marking a
-selection and copying it to the clipboard. Then return to the file you're editing and select "Paste" from the "Edit"-menu.
-<P>For a full description on how to use the Documentation, see 
-<@@ref>Using the Search IndexUsing the Search Index</A>.
+<P>Dies erlaubt es Ihnen, sehr einfach und schnell die gewünschte Information zu finden. Um die Ergebnisse besser zu verwenden, erlaubt
+der Dokumentationsbrowser, eine Auswahl zu markieren und in die Zwischenablage zu kopieren. Dann wechseln Sie zurück zum Editor und
+fügen den Inhalt der Zwischenablage über das Menü "Bearbeiten"-"Einfügen" and der gewünschten Stelle ein. Eine vollständige
+Beschreibung zur Verwendung der Dokumentation finden Sie unter 
+<@@ref>Verwendung des SuchindexesVerwendung des Suchindexes</A>.
 <P>
 <H4>Ersetzen von Text</H4>
 
-<P>For replacing an expression, select "Search and Replace" from the "Edit"-menu. The "Search and Replace"-dialog lets you specify
-the expression to be replaced as well as the replacement expression. Then press OK. The first expression which is found will be
-marked, so you can see where the expression is and in which context. Then you can specify by a dialog if the expression shall be
-replaced or not. When the search is finished by reaching the end of the current file, you will be asked if you want to start the
-search again from the beginning. If you're finished, select "Cancel".
+<P>Um einen Ausdruck zu ersetzen, wählen Sie "Suchen und Ersetzen" aus dem Menü "Bearbeiten". Das Dialogfeld "Suchen und Ersetzen" läßt
+Sie den zu ersetzenden Ausdruck und den Ersatztext angeben. Dann bestätigen Sie mit OK. Das erste Ergebnis wird markiert dargestellt,
+damit Sie sehen, wo sich der Ausdruck befindet und in welchem Kontext. Dann können Sie über ein Dialogfeld bestimmen, ob Sie die
+Textstelle ersetzen wollen oder nicht. Wenn das Dateiende erreicht wird, werden Sie gefragt, ob Sie die Suche am Anfang der Datei
+weiterführen möchten. Sind Sie mit dem ersetzen fertig, wählen Sie "Abbrechen".
 <P>
 <H3><A NAME="ss7.6">7.6 Drucken</A>
 </H3>
@@ -366,10 +364,10 @@ printing files.
 <P>
 <H4>Druckerkonfiguration</H4>
 
-<P>The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog, select the program
-by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the configuration for the
-selected program that will be used. Another way to configure the programs are selecting "Printer Configuration..." from the
-"Options"-menu; then select "a2ps" or "enscript".
+<P>Die Druckprogramme können beide über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; auf dem Druckdialog wählen Sie das
+zu verwendende Programm über die Combobox in der linken oberen Ecke. Dann betätigen Sie die Schaltfläche "Einstellungen" auf der
+rechten Seite. Dies öffnet den Konfigurationsdialog des gewählten Programms. Sie können die Programme ebenfalls konfigurieren, indem
+Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" das zu verwendende Programm auswählen (a2ps oder enscript).
 <P>
 <H4>Die a2ps Konfigurationseinstellungen</H4>
 
@@ -378,73 +376,74 @@ selected program that will be used. Another way to configure the programs are se
 
 <P>
 <UL>
-<LI><B>header:</B>  adds a header frame to the page</LI>
-<LI><B>filename:</B>  if checked, the header frame will contain the filename as its text</LI>
-<LI><B>login:</B>  adds the User ID to the right upper corner of the page</LI>
-<LI><B>borders:</B>  adds frame borders to the text page</LI>
-<LI><B>Date &amp; Time:</B>  adds the printing date and time</LI>
-<LI><B>align files:</B>  prints out files on the same page, available for two-page printing mode</LI>
-<LI><B>set TAB size:</B>  sets the TAB size for printing TABs</LI>
-<LI><B>headertext:</B> available, if filename is deselected and allows inserting another text to the header frame</LI>
-<LI><B>fontsize:</B>  sets the fontsize for the text. The default fontsize is 9</LI>
+<LI><B>Kopf:</B> fügt der Seite einen Kopfrahmen hinzu</LI>
+<LI><B>Dateiname:</B> verwendet den Dateinamen als Text des Kopfrahmens</LI>
+<LI><B>Login:</B> fügt die User ID auf der rechten oberen Ecke der Seite hinzu</LI>
+<LI><B>Rahmen:</B> zeichnet einen Rahmen um die Textseite</LI>
+<LI><B>Datum &amp; Zeit:</B> fügt Datum und Uhrzeit des Drucks ein</LI>
+<LI><B>Dateien ausrichten:</B> Druckt Dateien auf die gleiche Seite, verfügbar bei Zwei-Seiten Druck</LI>
+<LI><B>TAB-Größe:</B> setzt die zu verwendende Weite von Tabulatoren</LI>
+<LI><B>Kopftext:</B> Verfügbar, wenn Dateiname nicht verwendet wird und erlaubt das Einfügen von Text im Kopfrahmen</LI>
+<LI><B>Schriftgröße:</B> Setzt die zu verwendende Schriftgröße des Textes. Standardeinstellung beträt 9</LI>
 </UL>
 <P>
 <H4>Textdruck</H4>
 
 <P>
 <UL>
-<LI><B>cut lines:</B>  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.</LI>
-<LI><B>interpret TAB, BS and FF:</B> interpret TAB, Backspace and FastForward characters.</LI>
-<LI><B>replace non-printing character by space:</B> if the file contains non-printable characters, those will be replaced by space
-characters.</LI>
-<LI><B>print non-ASCII character as ISO-Latin 1:</B> prints characters not included in the ASCII format in ISO-Latin 1 mode output</LI>
-<LI><B>bold font:</B> prints the whole text in bold font mode.</LI>
+<LI><B>Zeilen abschneiden:</B> schneidet das Ende der Zeile ab, wenn sie über den Seitenrand hinausragt. Zeilen werden umgebrochen,
+wenn "Zeilen abschneiden" deaktiviert ist.</LI>
+<LI><B>Interpretiere TAB, BS and FF:</B> interpretiert TAB, Backspace und FastForward Zeichen.</LI>
+<LI><B>Ersetze nicht-druckbare Zeichen durch Leere:</B> ersetzt nicht-durckbare Zeichen durch Leerzeichen</LI>
+<LI><B>Drucke Nicht-ASCII Zeichen als ISO-Latin 1:</B> druckt Zeichen, die nicht im ASCII Zeichensatz enthalten sind, im ISO-Latin 1
+Ausgabemodus.</LI>
+<LI><B>Fettdruck:</B> Druckt den ganzen Text in Fettdruck</LI>
 </UL>
 <P>
 <H4>Nummerierung</H4>
 
 <P>
 <UL>
-<LI><B>numbering lines:</B>  numbers all lines top-down if enabled</LI>
-<LI><B>numbering pages:</B> allows selecting page-numbering mode by:
+<LI><B>Zeilen nummerieren:</B>  numbers all lines top-down if enabled</LI>
+<LI><B>Seiten nummerieren:</B> allows selecting page-numbering mode by:
 <UL>
-<LI><B>file single:</B> numbers each file's pages beginning with 1</LI>
-<LI><B>file together:</B>  appends all following pages after the first for page numbering</LI>
+<LI><B>Dateien einzeln:</B> numbers each file's pages beginning with 1</LI>
+<LI><B>Dateien zusammen:</B>  appends all following pages after the first for page numbering</LI>
 </UL>
 </LI>
-<LI><B>lines per page:</B>  sets the maximum lines per page to be printed.</LI>
+<LI><B>Zeilen pro Seite:</B>  sets the maximum lines per page to be printed.</LI>
 </UL>
 <P>
 <H4>Die enscript Konfigurationseinstellungen</H4>
 
 <P>
-<H4>Header</H4>
+<H4>Kopf</H4>
 
 <P>
 <UL>
-<LI><B>Fancy Header:</B> adds a fancy header</LI>
-<LI><B>Header Text:</B> enables adding a header text
+<LI><B>Eigener Kopf:</B> adds a fancy header</LI>
+<LI><B>Kopftext:</B> enables adding a header text
 <UL>
-<LI><B>text:</B> sets the text's contents</LI>
-<LI><B>position:</B> sets the text's position to left, center or right</LI>
+<LI><B>Text:</B> sets the text's contents</LI>
+<LI><B>Position:</B> sets the text's position to left, center or right</LI>
 </UL>
 </LI>
 <LI><B>Login:</B> add the UserID to the header
 <UL>
-<LI><B>login:</B> enables adding UserID</LI>
-<LI><B>position:</B> sets the position for the UserID</LI>
+<LI><B>Login:</B> enables adding UserID</LI>
+<LI><B>Position:</B> sets the position for the UserID</LI>
 </UL>
 </LI>
-<LI><B>Filename:</B> add the filename to the header
+<LI><B>Dateiname:</B> add the filename to the header
 <UL>
-<LI><B>Size of filename:</B> add filename as full or short, meaning full path or filename only</LI>
+<LI><B>Größe des Dateinamens:</B> add filename as full or short, meaning full path or filename only</LI>
 <LI><B>Position:</B> sets the position for the filename</LI>
 </UL>
 </LI>
 <LI><B>Hostname:</B> add the hostname to the header
 <UL>
-<LI><B>hostname:</B> enables adding hostname</LI>
-<LI><B>size of hostname:</B> sets the size for hostname</LI>
+<LI><B>Hostname:</B> enables adding hostname</LI>
+<LI><B>Größe des Hostnames:</B> sets the size for hostname</LI>
 <LI><B>Position:</B> sets the position for hostname</LI>
 </UL>
 </LI>
@@ -454,31 +453,31 @@ characters.</LI>
 
 <P>
 <UL>
-<LI><B>Current Date:</B> include the current date
+<LI><B>Aktuelles Datum:</B> include the current date
 <UL>
-<LI><B>current date:</B> enables current date adding</LI>
-<LI><B>positon:</B> sets the position for the date entry</LI>
-<LI><B>format:</B> sets the date format</LI>
+<LI><B>Aktuelles Datum:</B> enables current date adding</LI>
+<LI><B>Position:</B> sets the position for the date entry</LI>
+<LI><B>Format:</B> sets the date format</LI>
 </UL>
 </LI>
-<LI><B>Modification Date:</B> include the last modification date
+<LI><B>Änderungsdatum:</B> include the last modification date
 <UL>
-<LI><B>modification date:</B> enables modification date adding</LI>
-<LI><B>position:</B> sets the position for modification date entry</LI>
-<LI><B>format:</B> sets the date format</LI>
+<LI><B>Änderungsdaum:</B> enables modification date adding</LI>
+<LI><B>Position:</B> sets the position for modification date entry</LI>
+<LI><B>Format:</B> sets the date format</LI>
 </UL>
 </LI>
-<LI><B>Current Time:</B> include current time
+<LI><B>Aktuelle Uhrzeit:</B> include current time
 <UL>
-<LI><B>current time:</B> enables current time adding</LI>
+<LI><B>Aktuelle Uhrzeit:</B> enables current time adding</LI>
 <LI><B>AM</B>PM:/ use AM/PM or 24h format</LI>
 <LI><B>Position:</B> sets the position for the time entry</LI>
 <LI><B>Format:</B> sets the time format</LI>
 </UL>
 </LI>
-<LI><B>Modification Time:</B> include the last modification time
+<LI><B>Änderungsuhrzeit:</B> include the last modification time
 <UL>
-<LI><B>modification time:</B> enables adding modification time</LI>
+<LI><B>Änderungsuhrzeit:</B> enables adding modification time</LI>
 <LI><B>AM</B>PM:/ use AM/PM or 24h format</LI>
 <LI><B>Position:</B> sets the position for the time entry</LI>
 <LI><B>Format:</B> sets the time format</LI>
@@ -490,41 +489,42 @@ characters.</LI>
 
 <P>
 <UL>
-<LI><B>Numbering &amp; Border:</B>
+<LI><B>Nummerierung &amp; Rahmen:</B>
 <UL>
-<LI><B>numbering lines:</B> adds line numbers to the document for printing</LI>
-<LI><B>borders:</B> adds a border to the pages for printing</LI>
-<LI><B>numbering pages:</B> numbers pages for printing</LI>
-<LI><B>align files:</B> appends files for page numbering</LI>
-<LI><B>lines per page:</B> the maximum value for lines per page</LI>
+<LI><B>Zeilen nummerieren:</B> adds line numbers to the document for printing</LI>
+<LI><B>Rahmen:</B> adds a border to the pages for printing</LI>
+<LI><B>Seiten nummerieren:</B> numbers pages for printing</LI>
+<LI><B>Dateien ausrichten:</B> appends files for page numbering</LI>
+<LI><B>Zeilen pro Seite:</B> the maximum value for lines per page</LI>
 </UL>
 </LI>
-<LI><B>Format and TAB:</B>
+<LI><B>Schrift and TAB:</B>
 <UL>
-<LI><B>set TAB size:</B> sets the TAB size for interpreting TABs</LI>
-<LI><B>font for header:</B> sets the font used for the header text</LI>
-<LI><B>font for body:</B> sets the font for the body text (file contents)</LI>
+<LI><B>TAB-Größe:</B> sets the TAB size for interpreting TABs</LI>
+<LI><B>Schrift für Kopf:</B> sets the font used for the header text</LI>
+<LI><B>Schrift für Text:</B> sets the font for the body text (file contents)</LI>
 </UL>
 </LI>
-<LI><B>Textprinting:</B>
+<LI><B>Textdruck:</B>
 <UL>
-<LI><B>cut lines:</B> cuts the lines if too large. If unchecked, lines are broken</LI>
-<LI><B>replace non-printing character by space:</B> replaces characters that the printing charset doesn't support by space characters</LI>
+<LI><B>Zeilen abschneiden:</B> cuts the lines if too large. If unchecked, lines are broken</LI>
+<LI><B>Ersetze nicht-druckbare Zeichen durch leerzeichen:</B> replaces characters that the printing charset doesn't support by space
+characters</LI>
 </UL>
 </LI>
-<LI><B>Other Options:</B>
+<LI><B>Andere Optionen:</B>
 <UL>
-<LI><B>table of contents:</B> adds a table of contents page that contains information about printed files, page numbers etc.</LI>
-<LI><B>Highlight bars:</B>
+<LI><B>Inhaltsverzeichnis:</B> adds a table of contents page that contains information about printed files, page numbers etc.</LI>
+<LI><B>Hervorhebungsbalken:</B>
 <UL>
-<LI><B>highlight bars:</B> highlights rows for printing</LI>
-<LI><B>cycle fo change:</B> sets the number of rows to change highlight style</LI>
+<LI><B>Hervorhebung:</B> highlights rows for printing</LI>
+<LI><B>Zyklus der Änderung:</B> sets the number of rows to change highlight style</LI>
 </UL>
 </LI>
-<LI><B>Wrapped line:</B>
+<LI><B>Umgebrochene Zeile:</B>
 <UL>
-<LI><B>mark wrapped lines:</B> lines that are broken get marked for printing</LI>
-<LI><B>value for wrapped line:</B> the preset value for the new line the line is broken into.</LI>
+<LI><B>Markiere umgebrochene:</B> lines that are broken get marked for printing</LI>
+<LI><B>Wert für umgebrochene:</B> the preset value for the new line the line is broken into.</LI>
 </UL>
 </LI>
 </UL>

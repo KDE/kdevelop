@@ -100,49 +100,51 @@ erweitern.
 <H3><A NAME="ss10.2">10.2 Die Klassenwerkzeuge</A>
 </H3>
 
-<P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the
-classviewer displays all objects by their occurence in the code, you sometimes want to get more information about classes without
-having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class attributes.
-<P>The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
-To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
-you specific trees for your class. These are:
+<P>Die Klassenwerkzeuge sind Dialogfelder, die es dem Entwickler noch einfacher machen, informationen über die Klassen seines Projekts zu
+erhalten. Die Klassenansicht zeigt alle Objekte nach ihrer Erscheinung im Code an, aber manchmal benötigen Sie weitere Informationen,
+ohne unbedingt in den Code zu schauen. Daher sind die Klassenwerkzeuge darauf ausgerichtet, spezifische Klasseninformationen
+anzuzeigen.
+<P>Der Klassenwerkzeug-Dialog wird über ein Popup Menü über einer Klasse in der Klassenansicht aufgerufen. Wählen Sie "Klassenwerkzeuge",
+um zum Dialogfeld zu gelangen. Um informationen über eine Klasse zu erhalten, wählen Sie den Klassennamen in der Combobox am oberen
+Rand aus. Dann bieten Ihnen die Schaltflächen darunter folgende Funktionen zur Anzeige spezifischer Bäume Ihrer Klasse. Diese sind:
 <P>
 <DL>
-<DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
-class behaves in one or the other way, e.g. for dialogs your parent class could be <EM>QWidget</EM> or <EM>QDialog</EM>.
-<DT><B>Children:</B><DD><P>Displays the children classes that inherit the current class.
-<DT><B>Clients:</B><DD><P>Classes that make use of the selected class by an attribute in their class declaration
-<DT><B>Suppliers:</B><DD><P>The suppliers that give attributes to the selected class.
-<DT><B>Attributes:</B><DD><P>The attributes of the class by their name
-<DT><B>Methods:</B><DD><P>The Methods of the selected class
-<DT><B>Virtual Methods:</B><DD><P>The virtual methods that a class provides
+<DT><B> Parents:</B><DD><P>Die Eltern der ausgewählten Klasse (Klassen, die die Klasse beerbt). Dies ist nützlich in Bezug auf die Verwendung
+multipler Vererbung als auch um herauszufinden, warum die Klasse sich in der ein oder anderen Weise verhält, z.B. können Dialogfelder
+sowohl <CODE>QWidget</CODE> als auch <CODE>QDialog</CODE> beerben.
+<DT><B>Children:</B><DD><P>Zeigt alle Klassen an, die die aktuelle Klasse beerben.
+<DT><B>Clients:</B><DD><P>Klassen, die die ausgewählte Klasse durch Attribute in ihrer Klassendeklaration verwenden
+Classes that make use of the selected class by an attribute in their class declaration
+tag/Suppliers:/ Klassen, die durch Attribute der Klasse verwendet werden
+<DT><B>Attributes:</B><DD><P>Namen der Attribute der ausgewählten Klasse
+<DT><B>Methods:</B><DD><P>Methoden der ausgewählten Klasse
+<DT><B>Virtual Methods:</B><DD><P>Virtuelle Methoden der Klasse
 </DL>
 
-Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
-attribute value.
+Weiterhin erlaubt das Klassenwerzeug die sortierte Anzeige nach Modifizeirer-Attribut public, protected und private.
 <P>
-<H3><A NAME="ss10.3">10.3 Managing Classes</A>
+<H3><A NAME="ss10.3">10.3 Handhabung von Klassen</A>
 </H3>
 
-<P>The Class Browser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
-classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
-implementation header and, if the method requrires an attribute, to the declaration.
-<P><B>&raquo; How to add a method to a class</B>
+<P>Der Klassen-Browser erlaubt weiterhin das direkte Hinzufügen von Methoden und Attributen zu Klassen über Dialogfelder. Dies bedeutet,
+das Sie die Klassendeklaration und Implementationskopf nicht mehr selbst eingeben müssen. Nach dem Hinzufügen einer Methode müssen Sie
+lediglich die Formalparameter dem Implementationskopf hinzufügen (falls diese nicht in der Methodendeklaration enthalten sind).
+<P><B>&raquo; Wie man einer Klasse eine Methode hinzufügt</B>
 <P>
 <OL>
-<LI>select the class you want to add a method</LI>
-<LI>press the right mouse button; the popup menu appears</LI>
-<LI>select "Add member function".</LI>
-<LI>the "Add member function" dialog appears.</LI>
-<LI>insert the type, declaration and documentation for the method</LI>
-<LI>specify the access and the modifiers for the method</LI>
-<LI>press OK to exit the dialog</LI>
+<LI>wählen Sie die Klasse in der Klassenansicht aus, der Sie eine Methode hinzufügen möchten</LI>
+<LI>drücken Sie die rechte Maustaste; das Popup-Menü erscheint</LI>
+<LI>wählen Sie "Funktion hinzufügen"</LI>
+<LI>das Dialogfeld "Funktion hinzufügen" erscheint.</LI>
+<LI>geben Sie den Typ, Deklaration und Dokumentation der zu erstellenden Methode an</LI>
+<LI>geben Sie den Zugriff und die Modifizierer der Methode an</LI>
+<LI>bestätigen Sie mit OK, um den Dialog zu verlassen</LI>
 </OL>
-<P>For adding a variable, this is the same action, just with selecting "Add member variable" in the popup menu.
-<P>The difference between the actions of these dialogs is that the adding of a variable will add the variable to the classdeclaration,
-the adding of a method will add the method's declaration and the method's implementation header to the sources. As the classviewer
-directly updates himself, you have a direct access to the new method implementation, so you only have to fill out the code for the
-actual purpose of the method.
+<P>Um eine Variable hinzuzufügen führen Sie die gleichen Schritte aus, wählen dabei jedoch "Variable hinzufügen" im Popup-Menü.
+<P>Der Unterschied zwischen diesen Dialogen ist, das beim Hinzufügen einer Variable nur die Variable in der Klassendeklaration erklärt,
+das Hinzufügen einer Methode wird die Methdendeklaration und der Implementationskopf dem Quellcode hinzufügen. Da die Klassenansicht
+sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, sodaß Sie nur die Methode anspringen
+müssen, um den auszuführenden Code einzugeben.
 <P>
 <P ALIGN="RIGHT">
 

@@ -89,8 +89,8 @@ zusätzliche Hilfe-funktionen.
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
 <item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und
 Linker Flags und der Projekteinstellungen.
-<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelp Klassenbrowser
-benutzen.
+<item>Kapitel <ref id="Der Klassen-Browser" name="Der Klassen-Browser">, beschreibt Ihnen ausführlich, wie Sie den KDevelp
+Klassenbrowser benutzen.
 <item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen
 C++ Code erzeugt.
 <item>Kapitel <ref id="Allgemeine Konfiguration" name="Allgemeine Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur
@@ -1846,114 +1846,111 @@ wiederholen" und "Ersetzen" im Menü "Bearbeiten"
 
 <sect1>Hervorhebungen
 <p>
-The syntax-highlighting mode of KDevelop's editor can be configured by two dialogs; first you can set default colors for
-syntax-highlihgting by the "Editor Defaults" entry in the "Options"-menu. There, you can set colors and fonts as well as the
-fontsize for e.g. keywords. Select the default item and set all needed options.
+Den Hervorhebungs-Modus des KDevelop Quellcode-Editors können Sie über zwei Dialoge konfigurieren; eine Standardeinstellung über das
+Dialogfeld "Editor-Voreinstellung" und eine Programmiersprachen-Spezifische im Dialogfeld "Hervorhebungen". Beide Dialoge erreichen Sie
+über das Menü "Einstellungen.
 
-The second configuration dialog is accessed by the "Syntax-Highlighting" entry in the "Options"-menu. This allows you to set the
-file filters for the programming language, e.g. *.cpp, *.h  for C++. Then select the item that you want to configure. If you wish
-to use the default values you've set in the "Editor Defaults" dialog, select the "default" checkboxes in the Item-style and
-Item-Font sections. This reads the default settings for the selected item. After pressing OK, your new values will be enabled and
-used by the editor.
+Im Dialog "Voreinstellungen" geben Sie für die Elemente (z.B. Schlüsselwörter) jeweils die Standardwerte ein, indem Sie Farbe,
+Schriftart und -größe angeben. Um eine Programmiersprachendarstellung anzupassen, geben Sie die entsprechenden Werte im
+"Hervorhebungen"-Dialog an. Dort können Sie die Standardwerte verwenden, indem Sie für die gewählten Elemente jeweils die Option
+"Standard" markieren.
 
 <sect>Suchen und Ersetzen
 <p>
 <sect1>Suchen in einer Datei
 <p>
-<bf>&raquo How to find one or more characters in the actual editing window</bf>
+<bf>&raquo Wie Sie ein oder mehrere Zeichen im aktuellen Editor finden</bf>
 <enum>
-<item>Select "Search" from the "Edit"-menu. This opens the search dialog.
-<item>Specify the expression to search for in the edit field. The drop-down menu offers selecting a previous search expression.
-<item>Select additonal options like "Whole Words only"
-<item>Press OK.
+<item>Wählen Sie "Suchen" aus dem Menü "Bearbeiten". Dies öffnet die Suchen-Dialog
+<item>Geben Sie den gesuchten Ausdruck im Editierfeld ein. Das Menü bietet die Auswahl eines bereits gesuchten Ausdrucks.
+<item>Geben Sie zusätzliche Optionen an wie "Nur ganze Wörter"
+<item>Bestätigen Sie mit OK.
 </enum>
 
-To repeat searching for an expression entered in the search dialog, press F3.
+Um eine Suche zu wiederholen, drücken Sie F3.
 
 <sect1>Suchen über mehrere Dateien
 <p>
-As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
-you want to search for the same expression overall your project. Therefore, KDevelop contains a <tt/grep/-dialog, which
-lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
-Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
-the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
-lets you enter:
+Da die Suchfunktion standardmäßig nur über die aktuelle Datei läuft, wären Sie darauf beschränkt. Oft benötigen Sie jedoch
+Suchfunktionen über Ihr ganzes Projekt. Daher bietet KDevelop einen <tt/grep/-Dialog an, mit dem Sie diese Suchfunktion durchführen
+können. Dort können Sie das Startverzeichnis und/oder Dateierweiterung der zu durchsuchenden Dateien angeben, um die zur Suche
+benötigte Zeit zu reduzieren und die Ergebnisse auszugeben. Um eine Suche über mehrere Dateien durchzuführen, wählen Sie "Suche in
+Dateien" aus dem Menü "Bearbeiten". Der Suchdialog erscheint und läßt sie angeben:
 
 <itemize>
-<item>The expression to search for (the pattern)
-<item>The template used for the search
-<item>The mime-type of files to search in
-<item>The directory to start form
-<item>If the search is recursive over all included subdirectories
+<item>Der gesuchte Ausdruck
+<item>Die Suchvorlage
+<item>Die Dateierweiterung der zu durchsuchenden Dateien
+<item>Das Startverzeichnis
+<item>Ob die Suche rekursiv über alle Unterverzeichnisse durchgeführt werden soll
 </itemize>
 
-By default, the grep-dialog is set to start at your project directory and works recursively over implementation and header files.
+Standardmäßig ist der <tt/grep/-Dialog auf das Projektverzeichnis und rekursive Suche über Implementations- und Headerdateien
+eingestellt.
 
-You can even extend your search pattern by using the following options:
+Sie können die Suche weiter spezifizieren, indem Sie folgende Optionen verwenden:
 
 <enum>
-<item><bf/./ Match any character
-<item><bf/^/ Match the beginning of a line
-<item><bf/$/ Match the end of a line
-<item><bf/\< / Match the beginning of a word
-<item><bf/\> / Match the end of a word
+<item><bf/./ Jedes Zeichen
+<item><bf/^/ Beginn einer Zeile
+<item><bf/$/ Ende einer Zeile
+<item><bf/\< / Anfang eines Wortes
+<item><bf/\> / Ende eines Wortes
 </enum>
 
-For a repeating search, you can also use the availabel operators:
+Um Suchen zu wiederholen, sind folgende Operatoren verfügbar:
 <enum>
-<item><bf/?/ The preceding item matches less than once
-<item><bf/*/ The preceding item is matched zero or more times
-<item><bf/+/ The preceding item is matched once or more times
-<item><bf/{ n }/ The preceding item is matched exactly <em/n/ times
-<item><bf/{ n,}/ The preceding item is matched <em/n/ or more times
-<item><bf/{,n }/ The preceding item matches less than <em/n/ times
-<item><bf/{n,m}/ The preceding item matches at least <em/n/ times but less than <em/m/ times
+<item><bf/?/ Das vorherige Element höchstens einmal
+<item><bf/*/ Das vorherige Element gar nicht oder mehrmals
+<item><bf/+/ Das vorherige Element einmal oder mehrmals
+<item><bf/{ n }/ Das vorherige Element genau <em/n/ mal
+<item><bf/{ n,}/ Das vorherige Element <em/n/ mal und darüber
+<item><bf/{,n }/ Das vorherige Element höchstens <em/n/ mal
+<item><bf/{n,m}/ Das vorherige Element mindestens <em/n/ mal, aber weniger als <em/m/ mal.
 </enum>
 
-Backreferences to bracketed subexpressions are also available by the notation <em/\n/.
+Rückwärtsreferenzen zu eingeklammerten Unterausdrücken sind durch die Notation <em/\n/ verfügbar.
 
-After specifying your search, press "Search". The results are then displayed in the result-window. To jump to a file and line
-number, select the resultline and press Enter or double click the result. The editor will automatically open the according file
-and place the cursor to the line of the result. This allows a complete specification for any search action and give out exact
-results.
+Nach der Spezifizierung der Suche betätigen Sie die Schaltfläche "Suchen". Die Ergebnisse werden dann im Ergebnis-Fenster angezeigt. Um
+zu einer Datei und Zeile zu springen, wählen Sie das Ergebnis aus und drücken Sie EINGABE oder doppelklicken Sie auf das Ergebnis. Der
+Editor öffnet dann automatisch die Datei und setzt den Cursor an die gewünschte Zeile. Dies erlaubt eine vollständige Spezifikation von
+Suchaktionen und liefert Ihnen exakte Ergebnisse.
 
-KDevelop offers also some more specialized functionality to use grep within the editors and the browser. Select the expression you want
-to search for in either of the windows and press SHIFT+F2 or select "grep:&lt;your_expression&gt;" from the right button popup menu.
-This will ask grep to search for the selection in your project directory's files and will show the results immediately. Switching to
-the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
-word under the cursor will be the search pattern.
+KDevelop bietet darüberhinaus noch weitere spezielle Funktionen, mit der Sie grep innerhalb des Editors und Browsers verwenden können.
+Wählen Sie den Suchausdruck in einem Fenster aus und drücken Sie UMSCHALT+F2 oder wählen Sie "grep:&lt;Ihr_Ausdruck&gt;" aus dem
+Kontextmenü. Dies führt automatisch eine Suche über Ihr Projektverzeichnis aus und zeigt die Ergebnisse sofort an. Wechseln Sie
+zwischen den Ergebnissen wie vor. Innerhalb des Editors genügt es, den Cursor auf ein Wort zu plazieren; dieses wird dann als
+Suchausdruck verwendet.
 
 <sect1>Suchen innerhalb der Dokumentation
 <p>
-While working on a project, you often need to have information about the parameters of member functions you want to use- most
-often you remember the function's name that matches your needs, but the parameters are a very hard thing to keep in mind.
-Therefore, and for other purposes that may occur, KDevelop contains a search functionality that combines searching expressions
-that appear in your files with the documentation browser. To make use of this search functionality, you should have set up the
-documentation browser correctly and created the search database. For invoking a search through the documentation, do the
-following:
+Wenn Sie an einem Projekt arbeiten, benötigen Sie oft Informationen über die Parameter von Memberfunktionen, die Sie verwenden möchten-
+meist behalten Sie den Funktionsnamen, den sie benutzen wollen, aber die Parameter sind sehr schwer zu merken. Daher und zu anderen
+Gelegenheiten bietet Ihnen KDevelop eine Suchfunktion, die die Suche nach Ausdrücken in Dateien innerhalb der Dokumentation ermöglicht.
+Um diese Suchfunktion zu verwenden, sollte der Dokumentationsbrowser korrekt eingerichtet sein und der Suchindex vorhanden sein. Eine
+Suche führen Sie durch, indem Sie:
 
 <enum>
-<item>place your cursor at the word you want to search or mark an expression
-<item>select "Search Marked Text" from the "Help"-menu or press the right mouse button to open the context menu; then select "Look
-Up: "expression".
-<item>after the search result page is displayed in the documentation browser, select the page that you think could contain the
-information you need.
-<item>the selected documentation page is displayed and your search result is marked. To display the next result within the same
-documentation page, press F3.
+<item>den Cursor auf dem gesuchten Wort plazieren oder eine Auswahl markieren
+<item>Im Menü "Hilfe" den Eintrag "Suche Markierten Text", das entsprechende Werkzeugleistensymbol oder im Kontextmenü "Suche:
+Ausdruck" auswählen
+<item>nachdem die Ergebnisseite im Dokumentationsbrowser erscheint, wählen Sie die Seite aus, die die gewünschte Information enthält
+<item>die ausgewählte Dokumentationsseite wird mit markierem Ergebnis angezeigt. Um das nächste Ergebnis auf der selben Seite
+anzuzeigen, drücken Sie F3
 </enum>
 
-This allows you to easily find the information you need. For using the results, the documentation browser allows marking a
-selection and copying it to the clipboard. Then return to the file you're editing and select "Paste" from the "Edit"-menu.
-
-For a full description on how to use the Documentation, see <ref id="Using the Search Index" name="Using the Search Index">.
+Dies erlaubt es Ihnen, sehr einfach und schnell die gewünschte Information zu finden. Um die Ergebnisse besser zu verwenden, erlaubt
+der Dokumentationsbrowser, eine Auswahl zu markieren und in die Zwischenablage zu kopieren. Dann wechseln Sie zurück zum Editor und
+fügen den Inhalt der Zwischenablage über das Menü "Bearbeiten"-"Einfügen" and der gewünschten Stelle ein. Eine vollständige
+Beschreibung zur Verwendung der Dokumentation finden Sie unter <ref id="Verwendung des Suchindexes" name="Verwendung des Suchindexes">.
 
 <sect1>Ersetzen von Text
 <p>
-For replacing an expression, select "Search and Replace" from the "Edit"-menu. The "Search and Replace"-dialog lets you specify
-the expression to be replaced as well as the replacement expression. Then press OK. The first expression which is found will be
-marked, so you can see where the expression is and in which context. Then you can specify by a dialog if the expression shall be
-replaced or not. When the search is finished by reaching the end of the current file, you will be asked if you want to start the
-search again from the beginning. If you're finished, select "Cancel".
+Um einen Ausdruck zu ersetzen, wählen Sie "Suchen und Ersetzen" aus dem Menü "Bearbeiten". Das Dialogfeld "Suchen und Ersetzen" läßt
+Sie den zu ersetzenden Ausdruck und den Ersatztext angeben. Dann bestätigen Sie mit OK. Das erste Ergebnis wird markiert dargestellt,
+damit Sie sehen, wo sich der Ausdruck befindet und in welchem Kontext. Dann können Sie über ein Dialogfeld bestimmen, ob Sie die
+Textstelle ersetzen wollen oder nicht. Wenn das Dateiende erreicht wird, werden Sie gefragt, ob Sie die Suche am Anfang der Datei
+weiterführen möchten. Sind Sie mit dem ersetzen fertig, wählen Sie "Abbrechen".
 
 <sect>Drucken
 <p>
@@ -1967,146 +1964,148 @@ printing files.
 
 <sect1>Druckerkonfiguration
 <p>
-The printing programs can both be configured by selecting "Print" from the "File"-menu; on the printing dialog, select the program
-by the drop-down-menu in the left upper corner. Then press the "Options" button on the right. This opens the configuration for the
-selected program that will be used. Another way to configure the programs are selecting "Printer Configuration..." from the
-"Options"-menu; then select "a2ps" or "enscript".
+Die Druckprogramme können beide über die Auswahl von "Drucken" im Menü "Datei" konfiguriert werden; auf dem Druckdialog wählen Sie das
+zu verwendende Programm über die Combobox in der linken oberen Ecke. Dann betätigen Sie die Schaltfläche "Einstellungen" auf der
+rechten Seite. Dies öffnet den Konfigurationsdialog des gewählten Programms. Sie können die Programme ebenfalls konfigurieren, indem
+Sie im Menü "Einstellungen", Untermenü "Drucker konfigurieren" das zu verwendende Programm auswählen (a2ps oder enscript).
 
 <sect2>Die a2ps Konfigurationseinstellungen
 <p>
 <sect3>Druck
 <p>
 <itemize>
-<item><bf/header:/  adds a header frame to the page
-<item><bf/filename:/  if checked, the header frame will contain the filename as its text
-<item><bf/login:/  adds the User ID to the right upper corner of the page
-<item><bf/borders:/  adds frame borders to the text page
-<item><bf/Date & Time:/  adds the printing date and time
-<item><bf/align files:/  prints out files on the same page, available for two-page printing mode
-<item><bf/set TAB size:/  sets the TAB size for printing TABs
-<item><bf/headertext:/ available, if filename is deselected and allows inserting another text to the header frame
-<item><bf/fontsize:/  sets the fontsize for the text. The default fontsize is 9
+<item><bf/Kopf:/ fügt der Seite einen Kopfrahmen hinzu
+<item><bf/Dateiname:/ verwendet den Dateinamen als Text des Kopfrahmens
+<item><bf/Login:/ fügt die User ID auf der rechten oberen Ecke der Seite hinzu
+<item><bf/Rahmen:/ zeichnet einen Rahmen um die Textseite
+<item><bf/Datum & Zeit:/ fügt Datum und Uhrzeit des Drucks ein
+<item><bf/Dateien ausrichten:/ Druckt Dateien auf die gleiche Seite, verfügbar bei Zwei-Seiten Druck
+<item><bf/TAB-Größe:/ setzt die zu verwendende Weite von Tabulatoren
+<item><bf/Kopftext:/ Verfügbar, wenn Dateiname nicht verwendet wird und erlaubt das Einfügen von Text im Kopfrahmen
+<item><bf/Schriftgröße:/ Setzt die zu verwendende Schriftgröße des Textes. Standardeinstellung beträt 9
 </itemize>
 
 <sect3>Textdruck
 <p>
 <itemize>
-<item><bf/cut lines:/  cuts the line's contents if the line is too large to be printed. If deselected, lines will be broken.
-<item><bf/interpret TAB, BS and FF:/ interpret TAB, Backspace and FastForward characters.
-<item><bf/replace non-printing character by space:/ if the file contains non-printable characters, those will be replaced by space
-characters.
-<item><bf/print non-ASCII character as ISO-Latin 1:/ prints characters not included in the ASCII format in ISO-Latin 1 mode output
-<item><bf/bold font:/ prints the whole text in bold font mode.
+<item><bf/Zeilen abschneiden:/ schneidet das Ende der Zeile ab, wenn sie über den Seitenrand hinausragt. Zeilen werden umgebrochen,
+wenn "Zeilen abschneiden" deaktiviert ist.
+<item><bf/Interpretiere TAB, BS and FF:/ interpretiert TAB, Backspace und FastForward Zeichen.
+<item><bf/Ersetze nicht-druckbare Zeichen durch Leere:/ ersetzt nicht-durckbare Zeichen durch Leerzeichen
+<item><bf/Drucke Nicht-ASCII Zeichen als ISO-Latin 1:/ druckt Zeichen, die nicht im ASCII Zeichensatz enthalten sind, im ISO-Latin 1
+Ausgabemodus.
+<item><bf/Fettdruck:/ Druckt den ganzen Text in Fettdruck
 </itemize>
 
 <sect3>Nummerierung
 <p>
 <itemize>
-<item><bf/numbering lines:/  numbers all lines top-down if enabled
-<item><bf/numbering pages:/ allows selecting page-numbering mode by:
-<itemize>
-<item><bf/file single:/ numbers each file's pages beginning with 1
-<item><bf/file together:/  appends all following pages after the first for page numbering
-</itemize>
-<item><bf/lines per page:/  sets the maximum lines per page to be printed.
+<item><bf/Zeilen nummerieren:/  numbers all lines top-down if enabled
+<item><bf/Seiten nummerieren:/ allows selecting page-numbering mode by:
+  <itemize>
+  <item><bf/Dateien einzeln:/ numbers each file's pages beginning with 1
+  <item><bf/Dateien zusammen:/  appends all following pages after the first for page numbering
+  </itemize>
+<item><bf/Zeilen pro Seite:/  sets the maximum lines per page to be printed.
 </itemize>
 
 <sect2>Die enscript Konfigurationseinstellungen
 <p>
-<sect3>Header
+<sect3>Kopf
 <p>
 <itemize>
-<item><bf/Fancy Header:/ adds a fancy header
-<item><bf/Header Text:/ enables adding a header text
-<itemize>
-<item><bf/text:/ sets the text's contents
-<item><bf/position:/ sets the text's position to left, center or right
-</itemize>
+<item><bf/Eigener Kopf:/ adds a fancy header
+<item><bf/Kopftext:/ enables adding a header text
+  <itemize>
+  <item><bf/Text:/ sets the text's contents
+  <item><bf/Position:/ sets the text's position to left, center or right
+  </itemize>
 <item><bf/Login:/ add the UserID to the header
-<itemize>
-<item><bf/login:/ enables adding UserID
-<item><bf/position:/ sets the position for the UserID
-</itemize>
-<item><bf/Filename:/ add the filename to the header
-<itemize>
-<item><bf/Size of filename:/ add filename as full or short, meaning full path or filename only
-<item><bf/Position:/ sets the position for the filename
-</itemize>
+  <itemize>
+  <item><bf/Login:/ enables adding UserID
+  <item><bf/Position:/ sets the position for the UserID
+  </itemize>
+<item><bf/Dateiname:/ add the filename to the header
+  <itemize>
+  <item><bf/Größe des Dateinamens:/ add filename as full or short, meaning full path or filename only
+  <item><bf/Position:/ sets the position for the filename
+  </itemize>
 <item><bf/Hostname:/ add the hostname to the header
-<itemize>
-<item><bf/hostname:/ enables adding hostname
-<item><bf/size of hostname:/ sets the size for hostname
-<item><bf/Position:/ sets the position for hostname
-</itemize>
+  <itemize>
+  <item><bf/Hostname:/ enables adding hostname
+  <item><bf/Größe des Hostnames:/ sets the size for hostname
+  <item><bf/Position:/ sets the position for hostname
+  </itemize>
 </itemize>
 
 <sect3>Datum und Uhrzeit
 <p>
 <itemize>
-<item><bf/Current Date:/ include the current date
-<itemize>
-<item><bf/current date:/ enables current date adding
-<item><bf/positon:/ sets the position for the date entry
-<item><bf/format:/ sets the date format
-</itemize>
-<item><bf/Modification Date:/ include the last modification date
-<itemize>
-<item><bf/modification date:/ enables modification date adding
-<item><bf/position:/ sets the position for modification date entry
-<item><bf/format:/ sets the date format
-</itemize>
-<item><bf/Current Time:/ include current time
-<itemize>
-<item><bf/current time:/ enables current time adding
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
-</itemize>
-<item><bf/Modification Time:/ include the last modification time
-<itemize>
-<item><bf/modification time:/ enables adding modification time
-<item><bf/AM/PM:/ use AM/PM or 24h format
-<item><bf/Position:/ sets the position for the time entry
-<item><bf/Format:/ sets the time format
-</itemize>
+<item><bf/Aktuelles Datum:/ include the current date
+  <itemize>
+  <item><bf/Aktuelles Datum:/ enables current date adding
+  <item><bf/Position:/ sets the position for the date entry
+  <item><bf/Format:/ sets the date format
+  </itemize>
+<item><bf/Änderungsdatum:/ include the last modification date
+  <itemize>
+  <item><bf/Änderungsdaum:/ enables modification date adding
+  <item><bf/Position:/ sets the position for modification date entry
+  <item><bf/Format:/ sets the date format
+  </itemize>
+<item><bf/Aktuelle Uhrzeit:/ include current time
+  <itemize>
+  <item><bf/Aktuelle Uhrzeit:/ enables current time adding
+  <item><bf/AM/PM:/ use AM/PM or 24h format
+  <item><bf/Position:/ sets the position for the time entry
+  <item><bf/Format:/ sets the time format
+  </itemize>
+<item><bf/Änderungsuhrzeit:/ include the last modification time
+  <itemize>
+  <item><bf/Änderungsuhrzeit:/ enables adding modification time
+  <item><bf/AM/PM:/ use AM/PM or 24h format
+  <item><bf/Position:/ sets the position for the time entry
+  <item><bf/Format:/ sets the time format
+  </itemize>
 </itemize>
 
 <sect3>Layout
 <p>
 <itemize>
-<item><bf/Numbering & Border:/
-<itemize>
-<item><bf/numbering lines:/ adds line numbers to the document for printing
-<item><bf/borders:/ adds a border to the pages for printing
-<item><bf/numbering pages:/ numbers pages for printing
-<item><bf/align files:/ appends files for page numbering
-<item><bf/lines per page:/ the maximum value for lines per page
-</itemize>
-<item><bf/Format and TAB:/
-<itemize>
-<item><bf/set TAB size:/ sets the TAB size for interpreting TABs
-<item><bf/font for header:/ sets the font used for the header text
-<item><bf/font for body:/ sets the font for the body text (file contents)
-</itemize>
-<item><bf/Textprinting:/
-<itemize>
-<item><bf/cut lines:/ cuts the lines if too large. If unchecked, lines are broken
-<item><bf/replace non-printing character by space:/ replaces characters that the printing charset doesn't support by space characters
-</itemize>
-<item><bf/Other Options:/
-<itemize>
-<item><bf/table of contents:/ adds a table of contents page that contains information about printed files, page numbers etc.
-<item><bf/Highlight bars:/
-<itemize>
-<item><bf/highlight bars:/ highlights rows for printing
-<item><bf/cycle fo change:/ sets the number of rows to change highlight style
-</itemize>
-<item><bf/Wrapped line:/
-<itemize>
-<item><bf/mark wrapped lines:/ lines that are broken get marked for printing
-<item><bf/value for wrapped line:/ the preset value for the new line the line is broken into.
-</itemize>
-</itemize>
+<item><bf/Nummerierung & Rahmen:/
+  <itemize>
+  <item><bf/Zeilen nummerieren:/ adds line numbers to the document for printing
+  <item><bf/Rahmen:/ adds a border to the pages for printing
+  <item><bf/Seiten nummerieren:/ numbers pages for printing
+  <item><bf/Dateien ausrichten:/ appends files for page numbering
+  <item><bf/Zeilen pro Seite:/ the maximum value for lines per page
+  </itemize>
+<item><bf/Schrift and TAB:/
+  <itemize>
+  <item><bf/TAB-Größe:/ sets the TAB size for interpreting TABs
+  <item><bf/Schrift für Kopf:/ sets the font used for the header text
+  <item><bf/Schrift für Text:/ sets the font for the body text (file contents)
+  </itemize>
+<item><bf/Textdruck:/
+  <itemize>
+  <item><bf/Zeilen abschneiden:/ cuts the lines if too large. If unchecked, lines are broken
+  <item><bf/Ersetze nicht-druckbare Zeichen durch leerzeichen:/ replaces characters that the printing charset doesn't support by space
+characters
+	</itemize>
+<item><bf/Andere Optionen:/
+  <itemize>
+  <item><bf/Inhaltsverzeichnis:/ adds a table of contents page that contains information about printed files, page numbers etc.
+  <item><bf/Hervorhebungsbalken:/
+    <itemize>
+    <item><bf/Hervorhebung:/ highlights rows for printing
+    <item><bf/Zyklus der Änderung:/ sets the number of rows to change highlight style
+    </itemize>
+  <item><bf/Umgebrochene Zeile:/
+    <itemize>
+    <item><bf/Markiere umgebrochene:/ lines that are broken get marked for printing
+    <item><bf/Wert für umgebrochene:/ the preset value for the new line the line is broken into.
+    </itemize>
+  </itemize>
 </itemize>
 
 <sect3>Unterlegungen
@@ -2134,16 +2133,16 @@ characters.
 <item><bf/Output Format:/ for using enscript as printing program, you can choose between postscript or html printing
 <item><bf/Default Printsettings:/ sets the default settings to use for printing
 <item><bf/Outprinting:/
-<itemize>
-<item><bf/Page Printing:/ sets one or two pages on one sheet
-<item><bf/Pages:/ select all,odd or even for using enscript
-<item><bf/Pretty Print:/
-<itemize>
-<item><bf/pretty-print:/ enables pretty-print mode for enscript
-<item><bf/color:/ use color printing
-<item><bf/Pretty Print Mode:/ sets the printing mode dependend on your file format
-</itemize>
-</itemize>
+  <itemize>
+  <item><bf/Page Printing:/ sets one or two pages on one sheet
+  <item><bf/Pages:/ select all,odd or even for using enscript
+  <item><bf/Pretty Print:/
+    <itemize>
+    <item><bf/pretty-print:/ enables pretty-print mode for enscript
+    <item><bf/color:/ use color printing
+    <item><bf/Pretty Print Mode:/ sets the printing mode dependend on your file format
+    </itemize>
+  </itemize>
 </itemize>
 
 <sect2>Dateiauswahl
@@ -2152,33 +2151,33 @@ The file selection dialog is accessed by the "Files" button on the printing dial
 print out by certain criterias:
 <itemize>
 <item><bf/File Selection:/
-<itemize>
-<item><bf/current:/ the currently opened file visible in the editing window
-<item><bf/all in project:/ all files included in the project currently opened
-<item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
-<item><bf/all cpp files:/ prints out all source files of the project
-<item><bf/all headers:/ prints out all header files of the project
-<item><bf/changed files:/ allows specifying files that are changed in a timespan:
-</itemize>
+  <itemize>
+  <item><bf/current:/ the currently opened file visible in the editing window
+  <item><bf/all in project:/ all files included in the project currently opened
+  <item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
+  <item><bf/all cpp files:/ prints out all source files of the project
+  <item><bf/all headers:/ prints out all header files of the project
+  <item><bf/changed files:/ allows specifying files that are changed in a timespan:
+  </itemize>
 <item><bf/Changed Files:/
-<itemize>
-<item><bf/Between:/ specifies all files changed after:
-<itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
-</itemize>
-<item><bf/And:/ specifies all files changed before:
-<itemize>
-<item><bf/Date:/ the date the files were changed
-<item><bf/Time:/ the time the files were changed
-</itemize>
-</itemize>
-<item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
-<itemize>
-<item><bf/add:/ press this to add a file selected for printing in the lineedit field left
-<item><bf/delete:/ deletes a selected file from the printing list
-<item><bf/clear:/ clears the printing list
-</itemize>
+  <itemize>
+  <item><bf/Between:/ specifies all files changed after:
+    <itemize>
+    <item><bf/Date:/ the date the files were changed
+    <item><bf/Time:/ the time the files were changed
+    </itemize>
+  <item><bf/And:/ specifies all files changed before:
+    <itemize>
+    <item><bf/Date:/ the date the files were changed
+    <item><bf/Time:/ the time the files were changed
+    </itemize>
+  </itemize>
+  <item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
+  <itemize>
+  <item><bf/add:/ press this to add a file selected for printing in the lineedit field left
+  <item><bf/delete:/ deletes a selected file from the printing list
+  <item><bf/clear:/ clears the printing list
+  </itemize>
 </itemize>
 
 <sect2>Druckvorschau
@@ -2773,57 +2772,55 @@ erweitern.
 
 <sect>Die Klassenwerkzeuge
 <p>
-The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the
-classviewer displays all objects by their occurence in the code, you sometimes want to get more information about classes without
-having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class attributes.
+Die Klassenwerkzeuge sind Dialogfelder, die es dem Entwickler noch einfacher machen, informationen über die Klassen seines Projekts zu
+erhalten. Die Klassenansicht zeigt alle Objekte nach ihrer Erscheinung im Code an, aber manchmal benötigen Sie weitere Informationen,
+ohne unbedingt in den Code zu schauen. Daher sind die Klassenwerkzeuge darauf ausgerichtet, spezifische Klasseninformationen
+anzuzeigen.
 
-The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
-To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
-you specific trees for your class. These are:
+Der Klassenwerkzeug-Dialog wird über ein Popup Menü über einer Klasse in der Klassenansicht aufgerufen. Wählen Sie "Klassenwerkzeuge",
+um zum Dialogfeld zu gelangen. Um informationen über eine Klasse zu erhalten, wählen Sie den Klassennamen in der Combobox am oberen
+Rand aus. Dann bieten Ihnen die Schaltflächen darunter folgende Funktionen zur Anzeige spezifischer Bäume Ihrer Klasse. Diese sind:
 
 <descrip>
-<tag/ Parents:/
-The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
-class behaves in one or the other way, e.g. for dialogs your parent class could be <em/QWidget/ or <em/QDialog/.
-<tag/Children:/
-Displays the children classes that inherit the current class.
-<tag/Clients:/
+<tag/ Parents:/ Die Eltern der ausgewählten Klasse (Klassen, die die Klasse beerbt). Dies ist nützlich in Bezug auf die Verwendung
+multipler Vererbung als auch um herauszufinden, warum die Klasse sich in der ein oder anderen Weise verhält, z.B. können Dialogfelder
+sowohl <tt/QWidget/ als auch <tt/QDialog/ beerben.
+<tag/Children:/ Zeigt alle Klassen an, die die aktuelle Klasse beerben.
+<tag/Clients:/ Klassen, die die ausgewählte Klasse durch Attribute in ihrer Klassendeklaration verwenden
 Classes that make use of the selected class by an attribute in their class declaration
-<tag/Suppliers:/
-The suppliers that give attributes to the selected class.
-<tag/Attributes:/ The attributes of the class by their name
-<tag/Methods:/ The Methods of the selected class
-<tag/Virtual Methods:/ The virtual methods that a class provides
+tag/Suppliers:/ Klassen, die durch Attribute der Klasse verwendet werden
+<tag/Attributes:/ Namen der Attribute der ausgewählten Klasse
+<tag/Methods:/ Methoden der ausgewählten Klasse
+<tag/Virtual Methods:/ Virtuelle Methoden der Klasse
 </descrip>
-Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
-attribute value.
+Weiterhin erlaubt das Klassenwerzeug die sortierte Anzeige nach Modifizeirer-Attribut public, protected und private.
 
-<sect>Managing Classes
+<sect>Handhabung von Klassen
 <p>
-The Class Browser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
-classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
-implementation header and, if the method requrires an attribute, to the declaration.
+Der Klassen-Browser erlaubt weiterhin das direkte Hinzufügen von Methoden und Attributen zu Klassen über Dialogfelder. Dies bedeutet,
+das Sie die Klassendeklaration und Implementationskopf nicht mehr selbst eingeben müssen. Nach dem Hinzufügen einer Methode müssen Sie
+lediglich die Formalparameter dem Implementationskopf hinzufügen (falls diese nicht in der Methodendeklaration enthalten sind).
 
-<bf>&raquo How to add a method to a class</bf>
+<bf>&raquo Wie man einer Klasse eine Methode hinzufügt</bf>
 
 <enum>
-<item>select the class you want to add a method
-<item>press the right mouse button; the popup menu appears
-<item>select "Add member function".
-<item>the "Add member function" dialog appears.
-<item>insert the type, declaration and documentation for the method
-<item>specify the access and the modifiers for the method
-<item>press OK to exit the dialog
+<item>wählen Sie die Klasse in der Klassenansicht aus, der Sie eine Methode hinzufügen möchten
+<item>drücken Sie die rechte Maustaste; das Popup-Menü erscheint
+<item>wählen Sie "Funktion hinzufügen"
+<item>das Dialogfeld "Funktion hinzufügen" erscheint.
+<item>geben Sie den Typ, Deklaration und Dokumentation der zu erstellenden Methode an
+<item>geben Sie den Zugriff und die Modifizierer der Methode an
+<item>bestätigen Sie mit OK, um den Dialog zu verlassen
 </enum>
 
-For adding a variable, this is the same action, just with selecting "Add member variable" in the popup menu.
+Um eine Variable hinzuzufügen führen Sie die gleichen Schritte aus, wählen dabei jedoch "Variable hinzufügen" im Popup-Menü.
 
-The difference between the actions of these dialogs is that the adding of a variable will add the variable to the classdeclaration,
-the adding of a method will add the method's declaration and the method's implementation header to the sources. As the classviewer
-directly updates himself, you have a direct access to the new method implementation, so you only have to fill out the code for the
-actual purpose of the method.
+Der Unterschied zwischen diesen Dialogen ist, das beim Hinzufügen einer Variable nur die Variable in der Klassendeklaration erklärt,
+das Hinzufügen einer Methode wird die Methdendeklaration und der Implementationskopf dem Quellcode hinzufügen. Da die Klassenansicht
+sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, sodaß Sie nur die Methode anspringen
+müssen, um den auszuführenden Code einzugeben.
 
-<chapt>The Dialog Editor<label id="The Dialog Editor">
+<chapt>Der Dialog-Editor<label id="Der Dialog-Editor">
 <p>
 The KDevelop integrated Dialog Editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
 You see the direct appearance of your dialog as it will be presented to the user. Using the dialogeditor is usually the first step you
@@ -3454,6 +3451,14 @@ Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </book>
+
+
+
+
+
+
+
+
 
 
 
