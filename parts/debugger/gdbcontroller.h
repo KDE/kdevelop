@@ -173,7 +173,6 @@ private:
     bool    config_displayStaticMembers_;
     bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
-    bool    config_runAppInAppDirectory_;
     QString config_gdbPath_;
     QString config_dbgShell_;
 };

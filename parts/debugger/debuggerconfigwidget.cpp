@@ -57,7 +57,6 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     breakOnLoadingLibrary_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", true));
     dbgTerminal_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false));
     enableFloatingToolBar_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", false));
-    runAppInAppDirectory_box->setChecked(  DomUtil::readBoolEntry(dom, "/kdevdebugger/general/runappinappdirectory", true));
     // ??? DomUtil::readEntry(dom, "/kdevdebugger/general/allowforcedbpset");
 
     resize(sizeHint());
@@ -79,7 +78,6 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());
-    DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/runappinappdirectory", runAppInAppDirectory_box->isChecked());
 }
 
 }

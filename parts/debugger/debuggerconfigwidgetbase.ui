@@ -20,19 +20,6 @@
             <cstring>unnamed</cstring>
         </property>
 
-        <widget class="QCheckBox" row="9" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>runAppInAppDirectory_box</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Run the application in the application directory</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>If checked, uses the application directory
-as the working directory otherwise, uses
-the user home directory.</string>
-            </property>
-        </widget>
         <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>asmDemangle_box</cstring>

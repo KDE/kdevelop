@@ -143,7 +143,6 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_displayStaticMembers_(false),
         config_asmDemangle_(true),
         config_dbgTerminal_(false),
-        config_runAppInAppDirectory_(true),
         config_gdbPath_()
 {
     configure();
@@ -168,7 +167,6 @@ void GDBController::configure()
 {
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
     config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
-    config_runAppInAppDirectory_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/runappinappdirectory", true);
     config_gdbPath_               = DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath");
 
     bool old_displayStatic        = config_displayStaticMembers_;
