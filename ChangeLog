@@ -1,4 +1,8 @@
-2001-03-10  falk <falk@kdevelop.org>
+2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
+    * DocViewMan bugfixes
+    * adapted these CKDevelop slots: slotOptionsEditor, slotOptionsEditorColors, slotOptionsSyntaxHighlightingDefaults, slotOptionsSyntaxHighlighting
+
+2001-03-10  F@lk Brettschneider <falk@kdevelop.org>
     * DocViewMan improved (set/get current doc and view, delete views)
     * replaced all edit_widget in CKDevelop by m_docViewManager->currentEditView()
     * other MDI stuff
