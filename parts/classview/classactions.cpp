@@ -24,7 +24,9 @@ ClassListAction::ClassListAction(ClassStore *store, const QString &text, int acc
                                  const QObject *receiver, const char *slot,
                                  QObject *parent, const char *name)
     : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
-{}
+{
+    setComboWidth(120);
+}
  
 
 void ClassListAction::setCurrentItem(const QString &item)
@@ -52,7 +54,9 @@ MethodListAction::MethodListAction(ClassStore *store, const QString &text, int a
                                    const QObject *receiver, const char *slot,
                                    QObject *parent, const char *name)
     : KSelectAction(text, accel, receiver, slot, parent, name), m_store(store)
-{}
+{
+    setComboWidth(240);
+}
 
 
 void MethodListAction::refresh(const QString &className)
