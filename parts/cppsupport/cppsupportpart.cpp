@@ -16,6 +16,8 @@
 #include <qprogressdialog.h>
 #include <qstringlist.h>
 #include <qtimer.h>
+#include <qstatusbar.h>
+#include <qprogressbar.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -177,20 +179,26 @@ void CppSupportPart::initialParse()
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
-        QProgressDialog progress;
-        progress.setCancelButton(0);
         
         QStringList files = project()->allSourceFiles();
         
         int n = 0;
-        progress.setTotalSteps(files.count());
+        QProgressBar *bar = new QProgressBar(files.count(), core()->statusBar());
+        bar->setMinimumWidth(120);
+        bar->setCenterIndicator(true);
+        core()->statusBar()->addWidget(bar);
+        bar->show();
+                
         for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-            progress.setProgress(n);
+            bar->setProgress(n);
             kapp->processEvents();
             maybeParse(*it);
             ++n;
         }
         
+        core()->statusBar()->removeWidget(bar);
+        delete bar;
+
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
