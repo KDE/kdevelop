@@ -340,7 +340,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
 
     pop->changeItem(SmallIconSet("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
-    pop->changeItem(SmallIconSet("lookup"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
+    pop->changeItem(SmallIconSet("help"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
     pop->changeItem(SmallIconSet("dbgwatchvar"),i18n("Watch: ") + str,ID_EDIT_ADD_WATCH_VARIABLE); // the lookup entry
 
     pop->popup(this->mapToGlobal(event->pos()));

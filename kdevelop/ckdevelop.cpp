@@ -740,10 +740,12 @@ void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     toolBar()->setButton(ID_VIEW_TREEVIEW,false);
+    topSplitterPos=topSplitter->sizes();
     t_tab_view->hide();
   }
   else{
     t_tab_view->show();
+    topSplitter->setSizes(topSplitterPos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     toolBar()->setButton(ID_VIEW_TREEVIEW,true);
   }
@@ -757,10 +759,12 @@ void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
+    mainSplitterPos=mainSplitter->sizes();
     o_tab_view->hide();
   }
   else{
     o_tab_view->show();
+    mainSplitter->setSizes(mainSplitterPos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
@@ -815,7 +819,8 @@ void CKDevelop::slotViewTabIcons(){
     t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),"");
     t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),"");
     t_tab_view->changeTab(doc_tree,SmallIcon("contents"),"");
-    t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
+    if(var_viewer)
+      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
 
 }
 void CKDevelop::slotViewTabText(){
@@ -826,12 +831,14 @@ void CKDevelop::slotViewTabText(){
     t_tab_view->removePage(log_file_tree);
     t_tab_view->removePage(real_file_tree);
     t_tab_view->removePage(doc_tree);
-    t_tab_view->removePage(var_viewer);
+    if(var_viewer)
+      t_tab_view->removePage(var_viewer);
     t_tab_view->addTab(class_tree,i18n("Classes"));
     t_tab_view->addTab(log_file_tree,i18n("Groups"));
     t_tab_view->addTab(real_file_tree,i18n("Files"));
-    t_tab_view->addTab(doc_tree,i18n("Docs"));
-    t_tab_view->addTab(var_viewer,i18n("Watch"));
+    t_tab_view->addTab(doc_tree,i18n("Books"));
+    if(var_viewer)
+      t_tab_view->addTab(var_viewer,i18n("Watch"));
 
 }
 void CKDevelop::slotViewTabTextIcons(){
@@ -842,8 +849,9 @@ void CKDevelop::slotViewTabTextIcons(){
     t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
     t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
     t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
-    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Docs"));
-    t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
+    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Books"));
+    if(var_viewer)
+      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
 }
 
 

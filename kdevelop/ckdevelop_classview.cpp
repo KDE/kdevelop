@@ -95,7 +95,7 @@ void CKDevelop::slotMethodChoiceCombo(int index)
     // Make sure the next click on the wiz-button switch to declaration.
     cv_decl_or_impl = true;
 
-    // Switch to the method defintin
+    // Switch to the method defintion
     CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
   }
 }
@@ -555,12 +555,24 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
 {
   CParsedContainer *aContainer = NULL;
   CParsedMethod *aMethod = NULL;
-
+  CParsedAttribute *aAttr = NULL;
+  QString toFile;
+  int toLine = -1;
+  // to get around the method combo selection, we change the type to attribute if there is one of that name
   aContainer = CVGetContainer( parentPath, parentType );
-
+  if(aContainer->hasAttribute(itemName))
+    itemType=THPUBLIC_ATTR;
   // Get the type of declaration at the index.
   switch( itemType )
   {
+    // go to declaration if an attribute is selected
+    case THPUBLIC_ATTR:
+    case THPROTECTED_ATTR:
+    case THPRIVATE_ATTR:
+      if( aContainer )
+        aAttr = aContainer->getAttributeByName( itemName );
+      if(aAttr)
+        break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
@@ -587,6 +599,18 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
 
   if( aMethod )
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+  // Fetch the line and file from the attribute if the value is set.
+  if( aAttr )
+  {
+    toFile = aAttr->declaredInFile;
+    toLine = aAttr->declaredOnLine;
+    if( toLine != -1 )
+    {
+      debug( "  Switching to file %s @ line %d", toFile.data(), toLine );
+      switchToFile( toFile, toLine );
+    }
+  }
+
   else
     debug( "Couldn't find method %s::%s", parentPath, itemName );
 }
@@ -788,9 +812,22 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
     methodCombo->insertItem(SmallIcon("CVpublic_signal"), str );
   }
 
+  // ADD ATTRIBUTES
+  QList<CParsedAttribute> *list;
+  list = aClass->getSortedAttributeList();
+  for( list->first();
+       list->current();
+       list->next() )
+  {
+    str=list->current()->name;
+    if(list->current()->isPublic())
+      methodCombo->insertItem(SmallIcon("CVpublic_var"), str );
+    if(list->current()->isProtected())
+      methodCombo->insertItem(SmallIcon("CVprotected_var"), str );
+    if(list->current()->isPrivate())
+      methodCombo->insertItem(SmallIcon("CVprivate_var"), str );
+  }
   lb->sort();
-
-
   lb->setAutoUpdate( true );
 
   // Try to restore the saved value.

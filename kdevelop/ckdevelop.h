@@ -834,7 +834,8 @@ private:
 
   QSplitter* mainSplitter;
   QSplitter* topSplitter;
-
+  QValueList<int> mainSplitterPos;
+  QValueList<int> topSplitterPos;
   /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 

@@ -1280,42 +1280,47 @@ void CKDevelop::readOptions()
 
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop
-//	mainSplitter->setSeparatorPos(config->readNumEntry("viewSplitter_pos",80));
+  // SETTING MAIN PANNER
+  // set a default value for the splitter in pos
+	QValueList<int> pos;
+	pos << 520 << 80;
+	// initialize both values with 0 to set the splitter to default values if the
+	// entry is empty...KConfig really misses a default value here!
+  mainSplitterPos << 0 << 0;
+	mainSplitterPos=config->readIntListEntry("mainSplitterPos");
+	if(mainSplitterPos.first()==0)
+	  mainSplitterPos=pos;
+
 	bool outputview= config->readBoolEntry("show_output_view", true);
 	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
+    output_view_pos=config->readNumEntry("output_view_pos", 80);
+    mainSplitter->setSizes(mainSplitterPos);
 	}
 	else{
-    output_view_pos=config->readNumEntry("output_view_pos", 80);
+	  o_tab_view->hide();
 	}
+  // SETTING TOP PANNER
+  // set a default value for the splitter in pos
+	pos.clear();
+	pos << 200 << 600;
+	// initialize both values with 0 to set the splitter to default values if the
+	// entry is empty...KConfig really misses a default value here!
+	topSplitterPos << 0 << 0;
+	topSplitterPos=config->readIntListEntry("topSplitterPos");
+	if(topSplitterPos.first()==0)
+	  topSplitterPos=pos;
 	
-//  topSplitter->setSeparatorPos(config->readNumEntry("topSplitter_pos", 263));
 	bool treeview=config->readBoolEntry("show_tree_view", true);
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
+    topSplitter->setSizes(topSplitterPos);
 	}
-  else{
-    tree_view_pos=config->readNumEntry("tree_view_pos", 263);
-  }
-  // set the mode of the tab headers
-  int mode=config->readNumEntry("tabviewmode", 3);
-  switch (mode){
-    case 1:
-      slotViewTabText();
-      break;
-    case 2:
-      slotViewTabIcons();
-      break;
-    case 3:
-      slotViewTabTextIcons();
-      break;
-    default:
-      slotViewTabTextIcons();
-      break;
-  }
-
+	else{
+	  t_tab_view->hide();
+	}
 
 
   	
@@ -1383,12 +1388,8 @@ void CKDevelop::saveOptions(){
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
 
-//  config->writeEntry("mainSplitterPos",mainSplitter->separatorPos());
-//  config->writeEntry("topSplitterPos",topSplitter->separatorPos());
-
-  config->writeEntry("tree_view_pos",tree_view_pos);
-  config->writeEntry("output_view_pos",output_view_pos);
-  config->writeEntry("properties_view_pos", properties_view_pos);
+  config->writeEntry("mainSplitterPos",mainSplitter->sizes());
+  config->writeEntry("topSplitterPos", topSplitter->sizes());
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
@@ -1487,35 +1488,23 @@ void CKDevelop::readProperties(KConfig* sess_config){
     if(!(readProjectFile(filename))){
       KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
                             filename);
-      refreshTrees();
     }
-    else{
-      QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
-      connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
-      connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
-      progressDlg->setCaption(i18n("Starting..."));
-      progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
-      progressDlg->setProgress(0);
-      progressDlg->show();
-      refreshTrees();
-      delete progressDlg;
-    }
-    filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
-    QFile _file(filename);
-    
-    if (QFile::exists(filename)){
-      switchToFile(filename);
-      
-    }
-    
-    filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
-    if (QFile::exists(filename)){
-      switchToFile(filename);
+    else{  // projectfile successfully read
+      filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
+      QFile _file(filename);
+
+      if (QFile::exists(filename)){
+        switchToFile(filename);
+
+      }
+
+      filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
+      if (QFile::exists(filename)){
+        switchToFile(filename);
+      }
     }
   }
-  else{
-    refreshTrees(); // this refresh only the documentation tab,tree
-  }
+  refreshTrees();  // always used
 }
 
 void CKDevelop::saveProperties(KConfig* sess_config){

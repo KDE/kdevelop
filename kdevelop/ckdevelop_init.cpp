@@ -196,10 +196,29 @@ void CKDevelop::initView()
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
-  t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
-  t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
-  t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
-  t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Docs"));
+  // set the mode of the tab headers
+  int mode=config->readNumEntry("tabviewmode", 3);
+  switch (mode){
+    case 1:
+      t_tab_view->addTab(class_tree,i18n("Classes"));
+      t_tab_view->addTab(log_file_tree,i18n("Groups"));
+      t_tab_view->addTab(real_file_tree,i18n("Files"));
+      t_tab_view->addTab(doc_tree,i18n("Docs"));
+      break;
+    case 2:
+      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),"");
+      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),"");
+      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),"");
+      t_tab_view->addTab(doc_tree,SmallIcon("contents"),"");
+      break;
+    case 3:
+      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
+      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
+      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
+      t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Books"));
+      break;
+  }
+
 
   ////////////////////////
   // Right main window
@@ -1058,6 +1077,7 @@ void CKDevelop::initToolBar(){
 
   KComboBox* class_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
+  class_combo->setEnabled(false);
 
   // Method combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),
@@ -1068,6 +1088,7 @@ void CKDevelop::initToolBar(){
 
   KComboBox* choice_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
+  choice_combo->setEnabled(false);
 
   // Classbrowserwizard click button
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(BarIcon("classwiz"),
@@ -1489,6 +1510,7 @@ void CKDevelop::initDebugger()
     brkptManager  = new BreakpointManager(o_tab_view, "BPManagerTab");
     frameStack    = new FrameStack(o_tab_view, "FStackTab");
     disassemble   = new Disassemble(o_tab_view, "DisassembleTab");
+
     var_viewer    = new VarViewer(t_tab_view,"VARTab");
 
     brkptManager->setFocusPolicy(QWidget::ClickFocus);
@@ -1496,10 +1518,23 @@ void CKDevelop::initDebugger()
     disassemble->setFocusPolicy(QWidget::ClickFocus);
     var_viewer->setFocusPolicy(QWidget::NoFocus);
 
+    int mode=config->readNumEntry("tabviewmode", 3);
+    switch (mode){
+      case 1:
+        t_tab_view->addTab(var_viewer,i18n("Watch"));
+        break;
+      case 2:
+        t_tab_view->addTab(var_viewer,SmallIcon("brace"),"");
+        break;
+      case 3:
+        t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
+        break;
+    }
+
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));
     o_tab_view->addTab(frameStack,i18n("frame stack"));
     o_tab_view->addTab(disassemble,i18n("disassemble"));
-    t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
+
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(o_tab_view, "debuggerTab");
@@ -1559,7 +1594,8 @@ void CKDevelop::initDebugger()
     o_tab_view->setTabEnabled("BPManagerTab", dbgInternal);
     o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
     o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
-    t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
+
+//    t_tab_view->setTabEnabled("VARTab", dbgInternal && dbgController);
     brkptManager->setEnabled(dbgInternal);
     frameStack->setEnabled(dbgInternal && dbgController);
     disassemble->setEnabled(dbgInternal && dbgController);

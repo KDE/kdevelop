@@ -290,7 +290,7 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
       text = text.left(20) + "...";
     }
     doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(SmallIconSet("lookup"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("help"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
   }
   else
   {
@@ -298,7 +298,7 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,false);
     doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(SmallIconSet("lookup"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("help"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
 }

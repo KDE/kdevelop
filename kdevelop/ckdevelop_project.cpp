@@ -1115,13 +1115,6 @@ void CKDevelop::slotProjectManual(){
 }
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-#warning FIXME    mainSplitter->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-//    QRect rMainGeom = mainSplitter->geometry();
-//    mainSplitter->resize(rMainGeom.width()-1,rMainGeom.height());
-//    mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
 
   slotDebugStop();
   showOutputView(true);
@@ -1336,7 +1329,6 @@ bool CKDevelop::readProjectFile(QString file){
     enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
     enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
   }
-
   addRecentProject(file);
   return true;
 }
