@@ -137,7 +137,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
       //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
       QextMdiChildView* pMDICover = (QextMdiChildView*) pEditWidget->parentWidget();
-      pMDICover->activate();
+      if (pMDICover) {
+        pMDICover->activate();
+      }
       return;
     }
   }
