@@ -38,12 +38,9 @@
 #include <kparts/factory.h>
 
 #include "ckdevelop.h"
-//#include "kwdoc.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
 #include "khtmlview.h"
-// obsolete
-//#include "ceditwidget.h"
 #include "docviewman.h"
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
@@ -52,9 +49,6 @@
 #include "ckdevaccel.h"
 #include "kdevcodecompletion.h"
 
-//==============================================================================
-// class implementation
-//------------------------------------------------------------------------------
 DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
 : QObject( parent)
   ,m_pParent(parent)
@@ -69,30 +63,17 @@ DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
   ,m_bCloseActionPending(false)
 {
   m_MDICoverList.setAutoDelete(true);
+  m_docBookmarksList.setAutoDelete(true);
+  m_docBookmarksTitleList.setAutoDelete(true);
 
-  m_docBookmarksList.setAutoDelete(TRUE);
-  m_docBookmarksTitleList.setAutoDelete(TRUE);
-
-  /* we need to find an editor part, if we dont we should probably end
-   * the application (rokrau 6/28/01)
-   */
   m_pKateFactory = static_cast<KParts::Factory*>
                    (KLibLoader::self()->factory("libkatepart"));
   if (!m_pKateFactory) {
-    KMessageBox::sorry(0L,
-                       i18n("KDevelop cannot continue :-(\n") +
-                       i18n("This version of KDevelop uses kate as its internal editor,\n") +
-                       i18n("but the program can not find the library libkatecore on your system!\n\n") +
-                       i18n("Please check that kdebase and/or kate are installed correctly.\n") +
-                       i18n("We appreciate your patience and welcome questions on our mailing list and website\n\n") +
-                       i18n("http://www.kdevelop.org/") );
+    KMessageBox::sorry(0L, i18n("This version of KDevelop uses kate as its internal editor, "
+                                "but kate could not be found on your system! Please check "
+                                "that kdebase and/or kate are installed correctly." ) );
     ::exit(0);
   }
-
-//  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)),
-//      m_pParent, SLOT(slotViewSelected(QWidget*)) );
-//  connect( this, SIGNAL(sig_newStatus(const QString&)),
-//      m_pParent, SLOT(slotStatusMsg(const QString&)) );
 
   connect( this, SIGNAL(sig_viewActivated(QWidget*)),
            m_pParent, SLOT(slotViewSelected(QWidget*)) );
@@ -104,7 +85,6 @@ DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
   m_pCodeCompletion = new KDevCodeCompletion( this );
 }
 
-//------------------------------------------------------------------------------
 DocViewMan::~DocViewMan()
 {
 }
