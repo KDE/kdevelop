@@ -113,8 +113,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             case ConfigOption::O_Bool:
                 {
                     InputBool *inputBool = new InputBool
-                        ( option->name(),			  // key
-			  message(option->name()),                // name
+                        ( message(option->name()),                // name
                           pagebox,                                // widget
                           *((ConfigBool *)option)->valueRef()     // variable
                           );
@@ -229,8 +228,8 @@ void DoxygenConfigWidget::loadFile()
     QFile f(m_fileName);
     if (f.open(IO_ReadOnly)) {
         QTextStream is(&f);
-	
-        Config::instance()->parse(is.read().latin1(), QFile::encodeName(m_fileName));
+
+        Config::instance()->parse(QFile::encodeName(m_fileName));
         Config::instance()->convertStrToVal();
 
         f.close();

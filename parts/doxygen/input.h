@@ -33,12 +33,12 @@ class IInput
 };
 
 
-class InputBool : public QCheckBox, public IInput
+class InputBool : public QWidget, public IInput
 {
     Q_OBJECT
 
 public:
-    InputBool(const QCString &key, const QString &text, QWidget *parent, bool &flag);
+    InputBool(const QString &text, QWidget *parent, bool &flag);
     ~InputBool();
     
     virtual void init();
@@ -55,7 +55,7 @@ private slots:
 
 private:
     bool &state;
-    QCString key;
+    QCheckBox *cb;
 };
 
 

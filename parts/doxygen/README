@@ -1,7 +1,18 @@
-Note: In order to update to a newer doxygen version, copy over the files
-config.* from the addon/doxywizard directory in the doxygen sources. 
+To update to a newer doxygen version:
+-------------------------------------
 
-Note: The ConfigList class was missing an "init" implementation, so maybe
-you have to add it again when importing newer doxygen sources.
+1. Copy over the files config.* from the src directory in the doxygen sources. 
+
+2. The ConfigList class in config.h was missing a public "init" implementation,
+   so maybe you have to add it again when importing newer doxygen sources.
+    void init() { m_value.clear(); }
+
+4. The ConfigBool class in config.h was missing a public "setValueString"
+   implementation, so maybe you have to add it again when importing newer
+   doxygen sources:
+    void setValueString(const QCString &v) { m_valueString = v; };
+
+3. And add the new i18n strings to messages.cpp
+
 
 Everything else we can customize for our look & feel.

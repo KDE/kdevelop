@@ -74,19 +74,36 @@ void DoxygenPart::adjustDoxyfile()
     return;
 
   Config::instance()->init();
+  Config::instance()->check();
 
   QFile f(fileName);
   if (f.open(IO_ReadOnly))
   {
     QTextStream is(&f);
 
-    Config::instance()->parse(is.read().latin1(), QFile::encodeName(fileName));
+    Config::instance()->parse(QFile::encodeName(fileName));
     Config::instance()->convertStrToVal();
 
     f.close();
   }
 
   // insert input files
+  // set "General/PROJECT_NAME"
+  ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
+  if (name)
+  {
+    name->setDefaultValue(project()->projectName());
+    name->init();
+  }
+  // set "General/PROJECT_NUMBER"
+  ConfigString *version = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NUMBER"));
+  if (version) 
+  {
+    version->setDefaultValue("Someone should replace this with a pointer to the version");
+    version->init();
+  }
+
+  //insert input files into "Input/INPUT"  
   ConfigList *input_files = dynamic_cast<ConfigList*>(Config::instance()->get("INPUT"));
   if (input_files)
   {
@@ -94,45 +111,28 @@ void DoxygenPart::adjustDoxyfile()
     input_files->addValue(QFile::encodeName(project()->projectDirectory()));
   }
 
-  // file patterns
+  // insert file patters into "Input/FILE_PATTERNS"
   ConfigList *patterns = dynamic_cast<ConfigList*>(Config::instance()->get("FILE_PATTERNS"));
   if (patterns)
   {
-    patterns->init();
-    patterns->addValue("*.cpp");
-    patterns->addValue("*.cxx");
-    patterns->addValue("*.cc");
+    //patterns->init();
     patterns->addValue("*.C");
-    patterns->addValue("*.c++");
-    patterns->addValue("*.c");
-    patterns->addValue("*.inl");
     patterns->addValue("*.tlh");
     patterns->addValue("*.diff");
     patterns->addValue("*.patch");
     patterns->addValue("*.moc");
     patterns->addValue("*.xpm");
-    patterns->addValue("*.h");
-    patterns->addValue("*.hpp");
-    patterns->addValue("*.hh");
     patterns->addValue("*.hxx");
     patterns->addValue("*.h++");
     patterns->addValue("*.H");
-    patterns->addValue("*.java");
   }
 
   // recurse
+  // set "Input/RECURSIVE" to recurse into subdirectories
   ConfigBool *recursive = dynamic_cast<ConfigBool*>(Config::instance()->get("RECURSIVE"));
   if (recursive)
   {
     recursive->setValueString("yes");
-  }
-
-  // project name
-  ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
-  if (name)
-  {
-    name->setDefaultValue(project()->projectName());
-    name->init();
   }
 
   // write doxy file
@@ -164,7 +164,7 @@ void DoxygenPart::slotDoxygen()
     {
       QTextStream is(&f);
 
-      Config::instance()->parse(is.read().latin1(), QFile::encodeName(fileName));
+      Config::instance()->parse(QFile::encodeName(fileName));
       Config::instance()->convertStrToVal();
 
       f.close();

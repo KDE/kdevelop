@@ -110,12 +110,18 @@ static const char* const update_xpm_data[] =
 const char **update_xpm = (const char **)update_xpm_data;
 
 
-InputBool::InputBool(const QCString &k, const QString &text, QWidget * parent, bool &flag)
-    : QCheckBox(text, parent), state(flag), key(k)
+InputBool::InputBool(const QString &text, QWidget * parent, bool &flag)
+    : QWidget(parent), state(flag)
 {
+    QBoxLayout *layout = new QHBoxLayout(this);
+    cb = new QCheckBox(text,this);
+
     init();
+
+    layout->addWidget(cb);
+    layout->addStretch(1);
     
-    connect(this, SIGNAL(toggled(bool)), this, SLOT(valueChanged(bool)));
+    connect( cb, SIGNAL(toggled(bool)), this, SLOT(valueChanged(bool)));
 }
 
 
@@ -125,7 +131,7 @@ InputBool::~InputBool()
 
 void InputBool::init()
 {
-    setChecked(state);
+    cb->setChecked(state);
 }
 
 
@@ -133,7 +139,7 @@ void InputBool::valueChanged(bool s)
 {
     if (s != state) {
         emit changed();
-        emit toggle(key, s);
+        emit toggle(cb->text(), s);
     }
     state = s;
 }
@@ -141,7 +147,7 @@ void InputBool::valueChanged(bool s)
 
 void InputBool::setEnabled(bool b)
 {
-    QCheckBox::setEnabled(b);
+    cb->setEnabled(b);
 }
 
 
