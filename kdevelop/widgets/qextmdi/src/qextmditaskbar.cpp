@@ -314,8 +314,10 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
    if( ((allButtonsWidthHint) <= buttonAreaWidth) || (width() < parentWidget()->width())) {
       for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
          b->setText( b->actualText());
-         b->setFixedWidth( b->sizeHint().width());
-         b->show();
+         if (b->width() != b->sizeHint().width()) {
+            b->setFixedWidth( b->sizeHint().width());
+            b->show();
+         }
       }
    }
    else {
@@ -332,8 +334,10 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
       if(newButtonWidth > 0)
          for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
             b->fitText( b->actualText(), newButtonWidth);
-            b->setFixedWidth( newButtonWidth);
-            b->show();
+            if (b->width() != newButtonWidth) {
+               b->setFixedWidth( newButtonWidth);
+               b->show();
+            }
          }
    }
    m_layoutIsPending = FALSE;
@@ -346,6 +350,7 @@ void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
          layoutTaskBar( rse->size().width());
       }
    }
+   KToolBar::resizeEvent( rse);
 }
 
 #ifndef NO_INCLUDE_MOCFILES
