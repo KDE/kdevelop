@@ -628,13 +628,13 @@ case "$srcdir" in
     * )  rel_srcdir="../../$srcdir" ;;
 esac
 if test ! -e $srcdir/config.guess; then
-    (cd $srcdir && $LN_S $srcdir/admin/config.guess config.guess)
+    (cd $srcdir && $LN_S admin/config.guess config.guess)
 fi
 if test ! -e $srcdir/config.sub; then
-    (cd $srcdir && $LN_S $srcdir/admin/config.sub config.sub)
+    (cd $srcdir && $LN_S admin/config.sub config.sub)
 fi
 if test ! -e $srcdir/install-sh; then
-    (cd $srcdir && $LN_S $srcdir/admin/install-sh install-sh)
+    (cd $srcdir && $LN_S admin/install-sh install-sh)
 fi
 (cd $bdb/build_unix && \
 sh $rel_srcdir/$bdb/dist/configure $bdb_conf_flags) || \
