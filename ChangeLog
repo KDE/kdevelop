@@ -1,3 +1,6 @@
+2003-10-11 F@lk Brettschneider <falkbr@kdevelop.org>
+    * now I've started again fixing the MDI user interfaces which are quite broken at present
+
 2003-10-08  Tilman Vogel  <Tilman Vogel web de (dot at dot)>
     - added auto completion to the namespace field
     - added classes from all namespaces to the auto completion of the base
