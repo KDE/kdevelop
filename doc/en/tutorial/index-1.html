@@ -15,39 +15,38 @@
 <P ALIGN="RIGHT">
 
 <A HREF="index-2.html">Next</A>
- Previous <A HREF="index.html#toc1">Table of Contents</A>
+Previous<A HREF="index.html#toc1">Table of Contents</A>
 </P>
 <H3><A NAME="s1">1. Introduction</A></H3>
 
-<P>As KDE is currently becoming a standard for Unix System's desktops, more and more developers want to take advantage of the well-written
-API that the KDE project includes to create new applications that offer a GUI as well as an easy use of the classes provided with
-Qt/KDE. The KDevelop project therefore intends to provide an IDE which enables developers to create and extend their applications
-rapidly with the main focus on KDE. As beginners always have difficulties to get started, this handbook tries to explain certain
-aspects of application creation for KDE by describing how to create running applications with the sample code included with the Qt
-library by using the KDevelop IDE as well as creating KDE applications by examples.
-<P>Therefore, the next chapter will explain you how to create a project with KDevelop that is already a complete application; then we'll
-walk on to the Qt online documentation containing the sources for examples on how to use the Qt library.
-<P>This will give you a first understanding how the underlying Qt library functions and how to use the classes provided with it; Qt is the
-point where to get started as KDE is on top of the Qt library classes and KDE applications make a wide use of them.
-<P>Further, we'll cover on how to create a mini-KDE application with KDevelop's application wizard. From the minimum framework provided,
-we will create a running example KDE application that makes use of the KDE libraries and will explain the different parts of a KDE
-application in detail.
-<P>The KDevelop Team wishes you success in learing about KDE and Qt with this handbook and hope it will enable you to become another
-programmer contributing to the KDE project.
-<P>
-<H3><A NAME="ss1.1">1.1 What you should know already</A>
-</H3>
-
-<P>This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
-functionality. Further, it is assumed that you have read 
-<A HREF="../index.html">The User Manual to KDevelop</A> as well as
-<A HREF="../programming/index.html">The KDevelop Programming Handbook</A> and know how the KDevelop IDE works in general and
-what generated projects are.
+<P>This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
+to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
+model and the multiple document interface (MDI) model.
+<P>By this, you will also get a good idea of concepts that are coming up ahead: KDE 2 and the Qt 2.1 library, bringing new enhancements
+and technology to the programmer's hands that will improve application design and widen the possibilities that are open to use.
+Keywords such as widget themes, Inter-Process Communication and embedded applications are popularly talked about and will allow even
+more than one can think about right now.
+<P>Therefore, KDevelop 1.1, still based on KDE 1.1.x, provides developers some of the most requested possibilities: developing
+applications for KDE 2, while still running a stable desktop environment. This also implies that this tutorial will be based on a KDE 2
+application that already makes use of Qt-2.1, offering a solution for the mentioned MDI model - which we provide as a ready-to-go frame
+application. During this tutorial you will get a clear insight on how it works and this will also make it much easier to understand the
+document-view model as well - which is hard to understand even for advanced programmers. That will help you create other type of
+applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
+let's just go inside it - you will see what's coming up on you and how easy it actually is.
+<P>The tutorial covers several steps:
+<UL>
+<LI>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.</LI>
+<LI>understanding the basic concepts of MDI and document-view model.</LI>
+<LI>creating the generic framework for <EM>KScribble</EM> and explaining the concept of the framework.</LI>
+<LI>implementing the document class, who will provide the interface to read and write the document data as well as maintaining the
+document.</LI>
+<LI>implementing the view class to visualize the data. This class also takes over the interaction with the user.</LI>
+</UL>
 <P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-2.html">Next</A>
- Previous <A HREF="index.html#toc1">Table of Contents</A>
+Previous<A HREF="index.html#toc1">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Copyright </TITLE>
+<TITLE>KDE Application Tutorials: The MDI Framework</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,37 +14,39 @@
  
 <P ALIGN="RIGHT">
 
-Next <A HREF="index-3.html">Previous</A>
- <A HREF="index.html#toc4">Table of Contents</A>
+<A HREF="index-5.html">Next</A>
+<A HREF="index-3.html">Previous</A>
+<A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s4">4. Copyright </A></H3>
+<H3><A NAME="s4">4. The MDI Framework</A></H3>
 
+<P>If you're already familiar with previous versions of KDevelop, you will know that your IDE uses so-called "frameworks" as a starting
+point of application development. These frameworks by default contain a support for a generic document-view model, but were limited to
+SDI (Single Document Interface, one window with one view area) model structures. From KDevelop 1.1 on, the application wizard is
+capable of a lot more than the previous versions: it offers some new project types especially for those developers that want to stay
+up-to-date with the upcoming KDE 2 as well as for Qt 2.1. One major extension are MDI application frameworks for both, KDE 2 and Qt
+2.1. These frameworks differ only in the use of some library functions such as file dialogs or message boxes as well as the used
+toolbar and statusbar classes - the KDE version uses KDE 2 methods, the Qt version the according Qt functions.
+<P>To create the fist step of this tutorial application <EM>KScribble</EM>, be sure that you have followed the instructions in chapter 2
+of this tutorial handbook: setting up KDE 2. If that went all right, nothing can go wrong. If you couldn't set up the KDE 2 libraries,
+be sure that you have Qt-2.1 installed and set up KDevelop for that at least. You can follow this tutorial by choosing the according Qt
+framework as well (which has the differences as mentioned above: other method calls for dialogs and GUI components).
 <P>
-<BLOCKQUOTE><CODE>
-<PRE>
+<H3><A NAME="ss4.1">4.1 Creating an MDI Framework</A>
+</H3>
 
-KDevelop Copyright 1998,1999 The KDevelop Team.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-</PRE>
-</CODE></BLOCKQUOTE>
+<P>Now we will start jumping into development by creating the frame application for <EM>KScribble</EM>. Start KDevelop and choose
+"Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
+contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
+from the Qt section.
+<P>
+<P>
 <P>
 <P ALIGN="RIGHT">
 
-Next <A HREF="index-3.html">Previous</A>
- <A HREF="index.html#toc4">Table of Contents</A>
+<A HREF="index-5.html">Next</A>
+<A HREF="index-3.html">Previous</A>
+<A HREF="index.html#toc4">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
