@@ -7,8 +7,20 @@ bin_PROGRAMS = %{APPNAMELC}
 
 METASOURCES = AUTO
 
-rubysrc_DATA = main.rb %{APPNAMELC}.rb %{APPNAMELC}_client.rb  %{APPNAMELC}iface.rb  %{APPNAMELC}view.rb  pref.rb
+rubysrc_DATA = main.rb %{APPNAMELC}.rb %{APPNAMELC}_client.rb  %{APPNAMELC}iface.rb  \
+		%{APPNAMELC}view.rb  pref.rb %{APPNAMELC}ui.rc
+
 rubysrcdir = $(kde_datadir)/%{APPNAMELC}
+
+rubyui_DATA = 
+
+rubyuidir = $(kde_datadir)/%{APPNAMELC}
+
+%.rb: %.ui
+	$(RBUIC) -kde $< -o $@
+
+picsdirdir = $(kde_datadir)/%{APPNAMELC}/pics
+picsdir_DATA = hi16-app-%{APPNAMELC}.png hi32-app-%{APPNAMELC}.png
 
 service_DATA = %{APPNAMELC}.desktop
 servicedir = $(kde_servicesdir)

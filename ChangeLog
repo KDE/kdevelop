@@ -1,3 +1,8 @@
+2004-10-28  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Fixed Ruby KDE app and DCOP service templates so they work again.
+ * Implemented a 'Character Coding' ruby project option
+
 2004-10-27  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Implemented ruby class '@@' and '@' instance variables in the class browser. 

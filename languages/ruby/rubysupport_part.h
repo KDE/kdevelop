@@ -50,6 +50,7 @@ private slots:
 private:
     void startApplication(const QString &program);
     QString interpreter();
+    QString characterCoding();
 
     void maybeParse(const QString fileName);
     void parse(const QString &fileName);

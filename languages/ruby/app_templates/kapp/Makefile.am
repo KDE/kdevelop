@@ -1,4 +1,7 @@
-dataFiles = app.rb app.kdevelop app-Makefile.am app-configure.in.in
+dataFiles = app_client.rb appiface.rb app.rb appview.rb main.rb pref.rb app.cpp  \
+			appui.rc app.desktop app.kdevelop app-Makefile.am app-configure.in.in \
+			src-Makefile.am subdirs README
+
 templateName = kappruby
 
 ### no need to change below:

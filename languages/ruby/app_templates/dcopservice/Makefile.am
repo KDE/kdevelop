@@ -1,4 +1,4 @@
-dataFiles = dcopservice.desktop  \
+dataFiles = dcopservice.desktop app.cpp app-configure.in.in \
 	src-Makefile.am main.rb dcopservice.rb dcopservice.kdevelop \
 	subdirs
 templateName = dcopserviceruby

@@ -454,7 +454,12 @@ void RubySupportPart::parse(const QString &fileName)
 
 void RubySupportPart::slotRun () {
 	QFileInfo program(project()->mainProgram());
-    QString cmd = QString("%1 -C%2 %3").arg(interpreter()).arg(program.dirPath()).arg(program.fileName());
+    QString cmd = QString("%1 -K%2 -C%3 -I%4 %5")
+	                      .arg(interpreter())
+						  .arg(characterCoding())
+						  .arg(program.dirPath())
+						  .arg(program.dirPath())
+						  .arg(program.fileName() );
     startApplication(cmd);
 }
 
@@ -462,6 +467,27 @@ QString RubySupportPart::interpreter() {
     QString prog = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/interpreter");
     if (prog.isEmpty()) prog = "ruby";
     return prog;
+}
+
+QString RubySupportPart::characterCoding() {
+    int coding = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/charactercoding");
+	QString code("A");
+	
+	switch (coding) {
+	case 0:
+		code = "A";
+		break;
+	case 1:
+		code = "E";
+		break;
+	case 2:
+		code = "S";
+		break;
+	case 3:
+		code = "U";
+		break;
+	}
+    return code;
 }
 
 

@@ -8,13 +8,8 @@ require '%{APPNAMELC}view.rb'
 require 'pref.rb'
 
 description = I18N_NOOP("A KDE Application")
-
 version = "%{VERSION}"
-
-options = [
-    [ "+[URL]", I18N_NOOP( "Document to open" ), "" ] ]
-
-
+options = [ [ "+[URL]", I18N_NOOP( "Document to open" ), "" ] ]
 
 about = KDE::AboutData.new("%{APPNAMELC}", I18N_NOOP("%{APPNAME}"), version, description,
                      KDE::AboutData.License_%{LICENSE}, "(C) %{YEAR} %{AUTHOR}", nil, nil, "%{EMAIL}")

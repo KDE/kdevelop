@@ -1,14 +1,14 @@
 # KDE Config File
 [General]
-Name=Korundum DCOP Service
-Name[fr]=Un service DCOP pour Korundum
+Name=DCOP Service
+Name[fr]=Un service DCOP
 Icon=kdcop.png
 Category=Ruby/KDE
 Comment=Generates a framework for a KDE dcop service and client access library.
 Comment[fr]=Génère un squelette de programme pour la gestion d'un service DCOP pour KDE et un programme d'accés au bibliothéque.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/main.rb
-Archive=dcopservice.tar.gz
+Archive=dcopserviceruby.tar.gz
 
 [ADMIN]
 Type=include

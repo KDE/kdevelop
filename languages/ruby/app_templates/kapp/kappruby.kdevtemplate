@@ -8,7 +8,7 @@ Comment=Generates a simple Korundum application with one toplevel window, menus 
 Comment[fr]=Génère une simple application Korundum avec une fenêtre principale, des menus, et des barres d'outils. Une interface DCOP est aussi disponible et l'application peut être facilement contrôlée par des scripts.
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.rb
-Archive=kapp.tar.gz
+Archive=kappruby.tar.gz
 
 [ADMIN]
 Type=include
