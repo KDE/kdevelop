@@ -1,3 +1,7 @@
+2002-03-03  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: 0x0 pointer access in SimpleParser
+      (Ctrl+Space on class name in class declaration, happened only sometimes)
+
 2002-03-02  Walter Tasin <tasin@kdevelop.org>
     * bugfix: crash on KThemes (only on KDE 3)
     * using consequently namespace std for iostream inclusion

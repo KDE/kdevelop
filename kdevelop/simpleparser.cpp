@@ -142,7 +142,9 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
                     SimpleVariable var;
                     var.type = type;
                     var.name = *it;
-                    ctx->add( var );
+                    if (ctx) {
+                        ctx->add( var );
+                    }
                 }
                 qDebug( "ctx = %p - lev = %d - type = %s - vars = %s",
                         ctx,
