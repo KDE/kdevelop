@@ -282,8 +282,12 @@ void KTabZoomWidget::loadSettings(KConfig *config)
   if (d->m_docked)
   {
     KTZWidgetInfo *i=d->m_info.first();
-    if (i)
+    if (i) {
       d->m_tabBar->setActiveIndex(i->m_barIndex);
+    } else {
+      // np parts there to show so we just hide ourselves
+      setDockMode( false );
+    }
   }
 }
 
