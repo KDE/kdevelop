@@ -8,44 +8,45 @@
 
 #include "phpinfodlg.h"
 #include "phpconfigwidget.h"
+#include "phpconfigdata.h"
 
-PHPConfigWidget::PHPConfigWidget( QDomDocument* projectDom,QWidget* parent,  const char* name, WFlags fl )
+PHPConfigWidget::PHPConfigWidget(PHPConfigData* data,QWidget* parent,  const char* name, WFlags fl )
   : PHPConfigWidgetBase( parent, name, fl )
 {
-  dom = projectDom;
+  configData = data;
   m_phpInfo="";
  
+  PHPConfigData::InvocationMode mode = configData->getInvocationMode();
   // page "Invocation"
-  QString shellOrWeb = DomUtil::readEntry(*dom, "/kdevphpsupport/general/defaultInvocation");
-  if(shellOrWeb == "shell"){
+
+  if(mode == PHPConfigData::Shell){
     callPHPDirectly_radio->setChecked(true);
   }
-  if(shellOrWeb == "web"){
+  if(mode == PHPConfigData::Web){
     callWebserver_radio->setChecked(true);
   }
   
   // page webserver
-  QString weburl = DomUtil::readEntry(*dom, "/kdevphpsupport/webserver/weburl");
-  QString webCurrentOrDefault = DomUtil::readEntry(*dom, "/kdevphpsupport/webserver/fileInvocation");
-  QString webDefaultFile = DomUtil::readEntry(*dom, "/kdevphpsupport/webserver/defaultFile");
+  QString weburl = configData->getWebURL();
+  PHPConfigData::WebFileMode webFileMode = configData->getWebFileMode();
+  QString webDefaultFile = configData->getWebDefaultFile();
   
   if(weburl.isEmpty()) weburl = "http://localhost/"; 
   weburl_edit->setText(weburl);
   useDefaultFile_edit->setText(webDefaultFile);
-  if(webCurrentOrDefault == "current"){
+  
+  if(webFileMode == PHPConfigData::Current){
     useCurrentFile_radio->setChecked(true);
   }
-  if(webCurrentOrDefault == "default"){
+  if(webFileMode == PHPConfigData::Default){
     useDefaultFile_radio->setChecked(true);
   }
-  
-
+ 
   // page shell
   // todo,check were the php.exe is located
-  QString exepath = DomUtil::readEntry(*dom, "/kdevphpsupport/shell/phpexe");  
+  QString exepath = configData->getPHPExecPath();
   if(exepath.isEmpty()) exepath = "/usr/local/bin/php"; 
   exe_edit->setText(exepath);
-
 }
 
 /*  
@@ -61,23 +62,27 @@ void PHPConfigWidget::accept()
   cerr << endl << "PHPConfigWidget::accept()";
   // invocation
   if(callPHPDirectly_radio->isChecked()){
-    DomUtil::writeEntry(*dom, "/kdevphpsupport/general/defaultInvocation","shell");
+    configData->setInvocationMode(PHPConfigData::Shell);
   }
   if(callWebserver_radio->isChecked()){
-    DomUtil::writeEntry(*dom, "/kdevphpsupport/general/defaultInvocation","web");
+    configData->setInvocationMode(PHPConfigData::Web);
   }
 
-  // shell
-  DomUtil::writeEntry(*dom, "/kdevphpsupport/shell/phpexe", exe_edit->text());
   // webserver
-  DomUtil::writeEntry(*dom, "/kdevphpsupport/webserver/weburl", weburl_edit->text());
-  DomUtil::writeEntry(*dom, "/kdevphpsupport/webserver/defaultFile", useDefaultFile_edit->text());
+  configData->setWebURL(weburl_edit->text());  
+  configData->setWebDefaultFile(useDefaultFile_edit->text());  
+  
   if(useCurrentFile_radio->isChecked()){
-    DomUtil::writeEntry(*dom, "/kdevphpsupport/webserver/fileInvocation","current");
+    configData->setWebFileMode(PHPConfigData::Current);
   }
   if(useDefaultFile_radio->isChecked()){
-    DomUtil::writeEntry(*dom, "/kdevphpsupport/webserver/fileInvocation","default");
+    configData->setWebFileMode(PHPConfigData::Default);
   }
+  
+  // shell
+  configData->setPHPExePath(exe_edit->text());  
+
+  configData->storeConfig();
     
 }
 void PHPConfigWidget::slotZendButtonClicked()

@@ -64,27 +64,6 @@
                             <string>Please select, how KDevelop should execute your scripts.</string>
                         </property>
                     </widget>
-                    <spacer row="0"  column="0" >
-                        <property>
-                            <name>name</name>
-                            <cstring>Spacer15</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>orientation</name>
-                            <enum>Vertical</enum>
-                        </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
-                            <enum>Expanding</enum>
-                        </property>
-                        <property>
-                            <name>sizeHint</name>
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget row="1"  column="0"  rowspan="2"  colspan="1" >
                         <class>QButtonGroup</class>
                         <property stdset="1">
@@ -145,10 +124,9 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>description description description description description 
-description description description description description 
-description description description description description 
-description description description description description</string>
+                                    <string>The php executable is called directly. Ideal for developers who
+want to develop terminal or graphical applications in PHP. 
+You need a correctly installed php cgi version.</string>
                                 </property>
                                 <property stdset="1">
                                     <name>alignment</name>
@@ -176,10 +154,9 @@ description description description description description</string>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>description description description description description
-description description description description description
-description description description description description
-description description description description description</string>
+                                    <string>Uses an existing webserver. The pages are previewed in 
+the internal webbrowser. Please make sure that the webserver
+was compiled with PHP support.</string>
                                 </property>
                                 <property stdset="1">
                                     <name>alignment</name>
@@ -190,21 +167,6 @@ description description description description description</string>
                                 </property>
                             </widget>
                         </grid>
-                    </widget>
-                    <widget row="2"  column="1" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>PixmapLabel1</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>pixmap</name>
-                            <pixmap>image0</pixmap>
-                        </property>
-                        <property stdset="1">
-                            <name>scaledContents</name>
-                            <bool>false</bool>
-                        </property>
                     </widget>
                     <spacer row="1"  column="1" >
                         <property>
@@ -227,6 +189,21 @@ description description description description description</string>
                             </size>
                         </property>
                     </spacer>
+                    <widget row="2"  column="1" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PixmapLabel1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>pixmap</name>
+                            <pixmap>image0</pixmap>
+                        </property>
+                        <property stdset="1">
+                            <name>scaledContents</name>
+                            <bool>false</bool>
+                        </property>
+                    </widget>
                 </grid>
             </widget>
             <widget>
@@ -276,70 +253,53 @@ description description description description description</string>
                             <name>title</name>
                             <string>File</string>
                         </property>
-                        <widget>
-                            <class>QRadioButton</class>
+                        <grid>
                             <property stdset="1">
-                                <name>name</name>
-                                <cstring>useCurrentFile_radio</cstring>
+                                <name>margin</name>
+                                <number>11</number>
                             </property>
                             <property stdset="1">
-                                <name>geometry</name>
-                                <rect>
-                                    <x>11</x>
-                                    <y>19</y>
-                                    <width>153</width>
-                                    <height>19</height>
-                                </rect>
+                                <name>spacing</name>
+                                <number>6</number>
                             </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>use current file in editor</string>
-                            </property>
-                        </widget>
-                        <widget>
-                            <class>QRadioButton</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>useDefaultFile_radio</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>geometry</name>
-                                <rect>
-                                    <x>11</x>
-                                    <y>45</y>
-                                    <width>153</width>
-                                    <height>19</height>
-                                </rect>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>use this file as default</string>
-                            </property>
-                            <property stdset="1">
-                                <name>checked</name>
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget>
-                            <class>QLineEdit</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>useDefaultFile_edit</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>geometry</name>
-                                <rect>
-                                    <x>170</x>
-                                    <y>40</y>
-                                    <width>275</width>
-                                    <height>22</height>
-                                </rect>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string></string>
-                            </property>
-                        </widget>
+                            <widget row="1"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>useDefaultFile_radio</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>use this file as default</string>
+                                </property>
+                                <property stdset="1">
+                                    <name>checked</name>
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>useDefaultFile_edit</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="0" >
+                                <class>QRadioButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>useCurrentFile_radio</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>use current file in editor</string>
+                                </property>
+                            </widget>
+                        </grid>
                     </widget>
                     <spacer row="2"  column="1" >
                         <property>

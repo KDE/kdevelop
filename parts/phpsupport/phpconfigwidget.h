@@ -4,13 +4,14 @@
 #include "phpconfigwidgetbase.h"
 #include <qstring.h>
 class KProcess;
+class PHPConfigData;
 
 class PHPConfigWidget : public PHPConfigWidgetBase
 { 
     Q_OBJECT
 
 public:
-    PHPConfigWidget( QDomDocument* projectDom,QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    PHPConfigWidget( PHPConfigData* data,QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
     ~PHPConfigWidget();
 
 public slots:
@@ -24,6 +25,7 @@ public slots:
  private:
     QDomDocument* dom;
     QString m_phpInfo;
+    PHPConfigData* configData;
 
 };
 

@@ -23,6 +23,8 @@
 #include <khtmlview.h>
 #include <kprocess.h>
 #include <qstringlist.h>
+#include <kmessagebox.h>
+#include "keditor/editor.h"
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -31,6 +33,8 @@
 #include "phpsupportpart.h"
 #include "phpsupportfactory.h"
 #include "phpconfigwidget.h"
+#include "phpconfigdata.h"
+
 #include "phphtmlview.h"
 #include "phperrorview.h"
 
@@ -77,6 +81,8 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   core()->embedWidget(m_htmlView->view(), KDevCore::DocumentView, i18n("PHP"));
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)), 
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
+
+  configData = new PHPConfigData(document());
 }
 
 
@@ -84,21 +90,59 @@ PHPSupportPart::~PHPSupportPart()
 {}
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
+  cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename << line;
   core()->gotoSourceFile(filename,line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
-  PHPConfigWidget* w = new PHPConfigWidget(document(),vbox, "php config widget");
+  PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
   connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
 void PHPSupportPart::slotRun(){
-  executeOnWebserver();
+  configData = new PHPConfigData(document());
+  if(validateConfig()){
+    PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;
+    if(mode == PHPConfigData::Web){
+      executeOnWebserver();
+    }
+    else if(mode == PHPConfigData::Shell){
+      executeInTerminal();
+    }
+  }
+}
+
+bool PHPSupportPart::validateConfig(){
+  if(!configData->validateConfig()){
+    KMessageBox::information(0,"There is no configuration for executing a PHP file.\nPlease set the correct values in the next dialog.");
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize PHP Mode"),
+                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, 0,
+                    "php config dialog");
+    
+    QVBox *vbox = dlg.addVBoxPage(i18n("PHP Settings"));
+    PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
+    connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    dlg.exec();
+  }
+  if(configData->validateConfig()){
+    return true;
+  }
+  return false;
 }
 
 void PHPSupportPart::executeOnWebserver(){
-  QString weburl = DomUtil::readEntry(*document(), "/kdevphpsupport/webserver/weburl");
-  QString file = DomUtil::readEntry(*document(), "/kdevphpsupport/webserver/defaultFile");
+  QString file;
+  PHPConfigData::WebFileMode mode = configData->getWebFileMode();
+  QString weburl = configData->getWebURL();
+  if(mode == PHPConfigData::Current){
+    KEditor::Editor* editor = core()->editor();
+    if(editor){
+      file = QFileInfo(editor->currentDocument()->url().url()).fileName();
+    }
+  }
+  if(mode == PHPConfigData::Default){
+    file = configData->getWebDefaultFile();
+  }
   m_phpExeOutput="";
   m_htmlView->openURL(KURL(weburl + file));
   m_htmlView->show();

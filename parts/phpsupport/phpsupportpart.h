@@ -16,10 +16,12 @@
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
 
+
 class PHPHTMLView;
 class KShellProcess;
 class KProcess;
 class PHPErrorView;
+class PHPConfigData;
 
 class PHPSupportPart : public KDevLanguageSupport
 {
@@ -56,10 +58,12 @@ private:
     void parse(const QString &fileName);
     void executeOnWebserver();
     void executeInTerminal();
+    bool validateConfig();
     PHPHTMLView* m_htmlView;
     PHPErrorView* m_phpErrorView;
     KShellProcess* phpExeProc;
     QString m_phpExeOutput;
+    PHPConfigData* configData;
 };
 
 #endif

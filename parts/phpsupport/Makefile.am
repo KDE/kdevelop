@@ -8,7 +8,8 @@ libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KHTML)
 
 libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
 				phpsupportpart.cpp phpconfigwidgetbase.ui \
-				phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp phperrorview.cpp
+				phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp phperrorview.cpp \
+				phpconfigdata.cpp
 
 METASOURCES = AUTO
 
