@@ -1337,7 +1337,6 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   else if (dockEdgeStr == "Right")
     taskBarEdge = Right;
   moveToolBar( m_pTaskBar, taskBarEdge);
-  m_pTaskBar->show();
 }
 
 void CKDevelop::initProject(bool ignoreLastProject)
