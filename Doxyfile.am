@@ -60,6 +60,10 @@ apidox-am-yes:
 ##		echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
 		echo "EXCLUDE               += $(DOXYGEN_EXCLUDE)">> Doxyfile; \
 	fi ;\
+	## example path for howToAddTemplates.
+	echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
+	echo "EXAMPLE_PATTERNS       = " >> Doxyfile; \
+	echo "EXAMPLE_RECURSIVE      = NO" >> Doxyfile; \
 	echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
 	##--------------------------------------------------------------------------- \
 	## configuration options related to source browsing                           \

@@ -3,6 +3,89 @@
   */
 /** \page howToAddTemplates How to add templates to the application wizard
 
-Here you should describe how to add a template!
+Project templates provide the developer with a basic application framework.
+This is necessary for rapid application development (RAD) and makes it even
+for (unexperienced) 3rd party developer possible to create standard conforming
+applications like kedit as well as plugins for example for kdevelop or noatun.
 
-*/
+\section overview_intro Example: How To Create a Simple KDE Application Template "KHello"
+
+You can find this template in <code>$KDEDIR/share/apps/kdevappwizard/template-khello</code>.
+
+\subsection struct_step1 Step 1: Basic Skeleton
+
+Create a directory <code>khello</code> with the files
+<code><pre>
+    - khello/app.cpp
+    - khello/app.h
+    - khello/app.desktop
+    - khello/app.kdevelop
+    - khello/appui.rc
+    - khello/khello
+    - khello/main.cpp
+    - khello/preview.png
+    - khello/script
+    - khello/src-Makefile.am
+    - khello/subdirs
+    .
+</pre></code>
+
+\subsection detail_step2 Step 2: The Files in Detail
+
+Have a look into the files! There are some variables which the applicatin
+wizard will replace:
+<code><pre>
+    - $APPNAME$ ..... by the project name (KHello)
+    - $APPNAMELC$ ... by the project name in lowercase (khello)
+    - $APPNAMEUC$ ... by the project name in uppercase (KHELLO)
+    - $AUTHOR$ ...... by the author
+    - $EMAIL$ ....... by the e-mail address 
+    - $LICENSE$ ..... by the license
+    .
+</pre></code>
+
+
+\subsubsection detail_source The Soure Code khello/app.cpp, khello/app.h and khello/main.cpp
+
+This files contain the source code that should not be too special so that the
+user can implement his own imagination.
+There may be variables included (see "Step 2: The Files in Detail").
+
+\subsubsection detail_khello The File khello/khello
+
+It may look like this:
+\include khello/khello
+
+The application wizard looks into this file to get
+    - the information where to integrate the plugin into the the listview (<code>Category=</code>)
+    - the name (<code>Name=</code>) and the comment (<code>Comment=</code>)
+    - the preview image (<code>Icon=</code>)
+    - and the file templates the project uses (<code>FileTemplates=</code>).
+    .
+
+\attention The file <code>khello/khello</code> must have the same name as the directory!
+If the directory is <code>my_template</code> the file must be <code>my_template/my_template</code>.
+
+\subsubsection detail_addon Some Additional Files
+
+The file
+    - <code>khello/appui.rc</code> contains information about the toolbar and the menu
+    - <code>khello/preview.png</code> will be shown in the aplication wizard
+    - <code>khello/app.desktop</code> describes the application.
+    .
+
+\subsubsection detail_subdirs The File khello/subdirs
+
+\include khello/subdirs
+This file contains the list of subdirectories and can be found in the project root direcotry.\n
+It is necessary for the autotools.
+
+\subsubsection detail_src_Makefile The File khello/src-Makefile.am
+
+\include khello/src-Makefile.am
+
+\subsubsection detail_script The File khello/script
+
+\include khello/script
+
+ */
