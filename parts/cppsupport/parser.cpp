@@ -91,7 +91,7 @@ bool Parser::reportError( const Error& err )
 	int line=0, col=0;
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
-	
+
 	QString s = lex->lookAhead( 0 ).toString();
 	s = s.left( 30 ).stripWhiteSpace();
 	if( s.isEmpty() )
@@ -596,15 +596,15 @@ bool Parser::parseUsingDirective( DeclarationAST::Node& node )
 bool Parser::parseOperatorFunctionId( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseOperatorFunctionId()" << endl;
-    
+
     int start = lex->index();
 
     if( lex->lookAhead(0) != Token_operator ){
 	return false;
     }
-    lex->nextToken();    
+    lex->nextToken();
 
-    AST::Node op;    
+    AST::Node op;
     if( parseOperator(op) ){
 	AST::Node asn = CreateNode<AST>();
 	node = asn;
@@ -619,14 +619,14 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 	if( !parseSimpleTypeSpecifier(spec) ){
 	    parseError();
 	}
-	
+
 	GroupAST::Node cv2;
 	parseCvQualify(cv2);
 
 	AST::Node ptrOp;
 	while( parsePtrOperator(ptrOp) )
-  	    ;	    
-	
+  	    ;
+
 	AST::Node asn = CreateNode<AST>();
 	node = asn;
 	UPDATE_POS( node, start, lex->index() );
@@ -637,12 +637,12 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgumentList()" << endl;
-    
+
     int start = lex->index();
-    
+
     TemplateArgumentListAST::Node taln = CreateNode<TemplateArgumentListAST>();
     node = taln;
-    
+
     AST::Node templArg;
     if( !parseTemplateArgument(templArg) )
 	return false;
@@ -1054,8 +1054,13 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 
 	lex->nextToken();  // skip ')'
 
-	GroupAST::Node cv;
-	parseCvQualify( cv );  // or parse optional Token_const !?
+	int startConstant = lex->index();
+	if( lex->lookAhead(0) == Token_const ){
+	    lex->nextToken();
+	    AST::Node constant = CreateNode<AST>();
+	    UPDATE_POS( constant, startConstant, lex->index() );
+	    ast->setConstant( constant );
+	}
 
 	AST::Node except;
 	if( parseExceptionSpecification(except) ){
@@ -1495,23 +1500,21 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
     if( !parseParameterDeclarationList(params) ){
 
 	if ( lex->lookAhead(0) == ')' )
-	    return true;
+	    goto good;
 
-	if( lex->lookAhead(0) == Token_ellipsis ){
+	if( lex->lookAhead(0) == Token_ellipsis && lex->lookAhead(1) == ')' ){
 	    lex->nextToken();
-	    return true;
+	    goto good;
 	}
 	return false;
     }
 
-    if( lex->lookAhead(0) == ',' ){
+    if( lex->lookAhead(0) == ',' && lex->lookAhead(1) == Token_ellipsis ){
+	lex->nextToken();
 	lex->nextToken();
     }
 
-    if( lex->lookAhead(0) == Token_ellipsis ){
-	lex->nextToken();
-    }
-
+good:
     ParameterDeclarationClauseAST::Node ast = CreateNode<ParameterDeclarationClauseAST>();
     ast->setParameterDeclarationList( params );
     UPDATE_POS( ast, start, lex->index() );
@@ -2226,7 +2229,8 @@ bool Parser::parsePtrToMember( AST::Node& /*node*/ )
 bool Parser::parseUnqualifiedName( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnqualifiedName()" << endl;
-    
+
+    int start = lex->index();
     bool isDestructor = false;
 
     if( lex->lookAhead(0) == Token_identifier ){
@@ -2241,23 +2245,27 @@ bool Parser::parseUnqualifiedName( AST::Node& node )
 	return false;
 
     if( !isDestructor ){
-	
+
 	int index = lex->index();
-	
+
 	if( lex->lookAhead(0) == '<' ){
 	    lex->nextToken();
-	    
+
 	    // optional template arguments
 	    TemplateArgumentListAST::Node args;
 	    parseTemplateArgumentList( args );
-	    
+
 	    if( lex->lookAhead(0) != '>' ){
 		lex->setIndex( index );
 	    } else
 		lex->nextToken();
 	}
     }
-    
+
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
     return true;
 }
 
@@ -2266,7 +2274,7 @@ bool Parser::parseStringLiteral( AST::Node& /*node*/ )
     while( !lex->lookAhead(0).isNull() ) {
 	if( lex->lookAhead(0) == Token_identifier &&
 	    lex->lookAhead(0).toString() == "L" && lex->lookAhead(1) == Token_string_literal ) {
-	    
+
 	    lex->nextToken();
 	    lex->nextToken();
 	} else if( lex->lookAhead(0) == Token_string_literal ) {
@@ -2797,16 +2805,15 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     parseCvQualify( cv );
 
     int index = lex->index();
-
     NameAST::Node name;
     if( parseName(name) && lex->lookAhead(0) == '(' ){
 	// no type specifier, maybe a constructor or a cast operator??
 
 	lex->setIndex( index );
-
 	NestedNameSpecifierAST::Node nestedName;
 	parseNestedNameSpecifier( nestedName );
 	QString nestedNameText = toString( index, lex->index() );
+	lex->setIndex( index );
 
 	InitDeclaratorAST::Node declarator;
 	if( parseInitDeclarator(declarator) ){
@@ -2911,17 +2918,19 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	NestedNameSpecifierAST::Node nestedName;
 	InitDeclaratorListAST::Node declarators;
 
-	if( parseNestedNameSpecifier(nestedName) ) {
-	    // maybe a method declaration/definition
+	InitDeclaratorAST::Node decl;
+	int startDeclarator = lex->index();
+	bool maybeFunctionDefinition = false;
 
-	    InitDeclaratorAST::Node decl;
-	    if ( !parseInitDeclarator(decl) ) {
-		syntaxError();
-		return false;
+	if( parseInitDeclarator(decl) && lex->lookAhead(0) == '{' ){
+	    // function definition
+	    maybeFunctionDefinition = true;
+	} else {
+	    lex->setIndex( startDeclarator );
+	    if( !parseInitDeclaratorList(declarators) ){
+	        syntaxError();
+	        return false;
 	    }
-	} else if ( !parseInitDeclaratorList(declarators) ) {
-	    syntaxError();
-	    return false;
 	}
 
 	int endSignature = lex->index();
@@ -2930,7 +2939,6 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    {
 		lex->nextToken();
 		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
-		ast->setNestedName( nestedName );
 		ast->setText( toString(start, endSignature) );
 		ast->setTypeSpec( spec );
 		ast->setInitDeclaratorList( declarators );
@@ -2939,30 +2947,20 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    }
 	    return true;
 
-	case '=':
-	    {
-	        AST::Node init;
-	        if( parseInitializer(init) ){
-		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
-		    ast->setNestedName( nestedName );
-		    ast->setText( toString(start, endSignature) );
-		    ast->setTypeSpec( spec );
-		    node = ast;
-		    UPDATE_POS( node, start, lex->index() );
-		    return true;
-		}
-	    }
-	    break;
-
 	case '{':
 	    {
+	        if( !maybeFunctionDefinition ){
+		    syntaxError();
+		    return false;
+		}
+
 	        StatementListAST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
-		    ast->setNestedName( nestedName );
 		    ast->setText( toString(start, endSignature) );
 		    ast->setTypeSpec( spec );
 		    ast->setFunctionBody( funBody );
+		    ast->setInitDeclarator( decl );
 		    node = ast;
 		    UPDATE_POS( node, start, lex->index() );
 		    return true;
