@@ -280,6 +280,7 @@
 #define ID_STATUS_EMPTY             1004
 #define ID_STATUS_EMPTY_2           1005
 #define ID_STATUS_PROGRESS          1006
+#define ID_STATUS_DBG               1007
 
 ///////////////////////////////////////////////////////////////////
 // ID's for the statusbar
