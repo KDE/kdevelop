@@ -62,21 +62,26 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     }
 
     setProjectType("c");
-
+    connect( name_edit, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotProjectNameChanged( const QString & ) ) );
     scanAvailableVCS();
     connect( fetchModuleButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesFromRepository()) );
+    slotProjectNameChanged( name_edit->text() );
 }
 
 
 ImportDialog::~ImportDialog()
 {}
 
+void ImportDialog::slotProjectNameChanged( const QString &_text )
+{
+    ok_button->setEnabled( !_text.isEmpty() );
+}
 
 void ImportDialog::accept()
 {
     QDir dir(urlinput_edit->url());
-    if (!dir.exists()) {
+    if (urlinput_edit->url().isEmpty() || !dir.exists()) {
         KMessageBox::sorry(this, i18n("You have to choose a directory."));
         return;
     }
@@ -191,9 +196,9 @@ void ImportDialog::dirChanged()
         scanAutomakeProject(dirName);
         return;
     }
-    
+
     name_edit->setText(dir.dirName());
-    
+
     // QMake based?
     files = dir.entryList("*.pro");
     if (!files.isEmpty()) {

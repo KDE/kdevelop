@@ -34,7 +34,7 @@ protected:
 private slots:
     void slotFinishedCheckout( QString destinationDir );
     void slotFetchModulesFromRepository();
-
+    void slotProjectNameChanged( const QString &_text );
 private:
     void scanAvailableVCS();
     void scanLegacyKDevelopProject(const QString &fileName);
