@@ -42,16 +42,25 @@
 #include <config.h>
 #endif
 
-void CKDevInstall::slotReceivedStdout(KProcess*,char* /*buffer*/,int){
-  
+void CKDevInstall::slotReceivedStdout(KProcess*,char* buffer,int count)
+{
+  QCString test(buffer, count);
+  qDebug(test);
 }
-void CKDevInstall::slotReceivedStderr(KProcess*,char*,int){
+void CKDevInstall::slotReceivedStderr(KProcess*,char* buffer, int count)
+{
+  QCString test(buffer, count);
+  qDebug(test);
 }
-void CKDevInstall::slotProcessExited(KProcess*){
+
+void CKDevInstall::slotProcessExited(KProcess*)
+{
   QDir* finish_dir=new QDir();
-    if (!finished_glimpse){
-	finished_glimpse=true;
-	if((!glimpse || !glimpseindex) && (!htdig || !htsearch)){
+  if (!finished_glimpse)
+  {
+	  finished_glimpse=true;
+	  if((!glimpse || !glimpseindex) && (!htdig || !htsearch))
+	  {
 	    KMessageBox::information(this, i18n("Neither glimpse nor htdig is installed,\n"
 							    "therefore KDevelop can not index your\n"
 							    "documentation to provide a proper help\n"
@@ -68,30 +77,30 @@ void CKDevInstall::slotProcessExited(KProcess*){
 			config->sync();
 	    finish_dir->setCurrent(QDir::homeDirPath ());
 	    accept();
-	}
-	else{
+	  }
+	  else
+	  {
 	    KMessageBox::information(this,i18n("Now KDevelop will perform the last step\n"
 							   "of the installation process with indexing\n"
 							   "your documentation. This will provide an extended\n"
 							   "help functionality and will give you the information\n"
 							   "you need."));
 	    
-	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config, glimpse | glimpseindex, htdig);
-	    if(!dlg.exec()){
-		slotProcessExited(shell_process);
-	    }
-	    hint_label->setText(i18n("                 Creating search database                      "
-	                          "                                                             "
-	                          "                      Please wait...                           "
-	                          "                                                               "
-	                          "                                                               ") );
-	    return;
-	}
+	    CCreateDocDatabaseDlg dlg(this,"DLG", shell_process, config, glimpse | glimpseindex, htdig);
+	    if(!dlg.exec())
+		    slotProcessExited(shell_process);
 	
-    }
+	    hint_label->setText(i18n( "                 Creating search database                      "
+	                              "                                                             "
+	                              "                      Please wait...                           "
+	                              "                                                               "
+	                              "                                                               ") );
+	    return;
+	  }
+  }
     
     
-    KMessageBox::information(this,i18n("\nThe installation process finished successfully.\n\n"
+  KMessageBox::information(this,i18n("\nThe installation process finished successfully.\n\n"
                                        "The KDevelop Team wishes that you will enjoy our\n"
                                        "program and we would be honoured for any feedback.\n\n"
                                        "The KDevelop Team"),
@@ -104,26 +113,26 @@ void CKDevInstall::slotProcessExited(KProcess*){
   accept();
 }
 
-CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
-    // shellprocess
-    finished_glimpse=false;
+CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) :
+  QDialog(parent,name,true)
+{
+  // shellprocess
+  finished_glimpse=false;
 
-    qt_test=kde_test=true; // assuming worst case... everything must be checked
-    till_doc=false; // first we must run through all, maybe the second time only from qt-doc-search
+  qt_test=kde_test=true; // assuming worst case... everything must be checked
+  till_doc=false; // first we must run through all, maybe the second time only from qt-doc-search
 
-    shell_process = new KShellProcess();
-    connect(shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	    this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+  shell_process = new KShellProcess();
+  connect(shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+	        this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
     
-    connect(shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	    this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+  connect(shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	        this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
     
-    connect(shell_process,SIGNAL(processExited(KProcess*)),
-	    this,SLOT(slotProcessExited(KProcess*) )) ;
+  connect(shell_process,SIGNAL(processExited(KProcess*)),
+	        this,SLOT(slotProcessExited(KProcess*) )) ;
     
-    config = KGlobal::config();
-
-
+  config = KGlobal::config();
 	
   setCaption(i18n("KDevelop Installation"));
 
@@ -138,7 +147,6 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	}
 	main_frame->setFrameStyle( 33 );
 	main_frame->setLineWidth( 2 );
-
 
 	welcome_label = new QLabel( this, "Label_2" );
 	welcome_label->setGeometry( 40, 30, 440, 40 );
@@ -248,11 +256,11 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	}
 	hint_label->setFrameStyle( 33 );
 	hint_label->setText(i18n("This installation program will check your system for helper programs needed by KDevelop. "
-				"Also your documentation will be set up automatically."
-				 "  Choose 'Proceed` to invoke the automatic detection and the "
-				 "documentation generator. 'Help' will give more information about the installation."
-				 " Choosing 'Cancel' will stop the installation and KDevelop will be started without setting the initial"
-				 "values needed for proper functionality.") );
+				  "Also your documentation will be set up automatically."
+				  "  Choose 'Proceed` to invoke the automatic detection and the "
+				  "documentation generator. 'Help' will give more information about the installation."
+				  " Choosing 'Cancel' will stop the installation and KDevelop will be started without setting the initial"
+				  "values needed for proper functionality.") );
 	hint_label->setAlignment( 1316 );
 	hint_label->setMargin( -1 );
 	
@@ -938,7 +946,6 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   
 
-  QDir* kde_dir=new QDir();
 
   if(!kdoc && !perl)
     KMessageBox::information(this,i18n("\nThe Program KDoc was not found on your system,\n"
@@ -954,22 +961,27 @@ void CKDevInstall::slotAuto() // proceed >>
                                         "from www.kde.org. Mind that the sources should match\n"
                                         "your installed kdelibs version.\n\n "));
 
-    kde_dir->setCurrent(QDir::homeDirPath ());
-    kde_dir->mkdir(".kde",false);
-    kde_dir->mkdir(".kde/share",false);
-    kde_dir->mkdir(".kde/share/apps",false);
-    kde_dir->mkdir(".kde/share/apps/kdevelop",false);
-    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
+    QString docDir = locateLocal("appdata", "KDE-Documentation");
+    KStandardDirs::makeDir(docDir);
+
+//    QDir* kde_dir=new QDir();
+//    kde_dir->setCurrent(QDir::homeDirPath ());
+//    kde_dir->mkdir(".kde",false);
+//    kde_dir->mkdir(".kde/share",false);
+//    kde_dir->mkdir(".kde/share/apps",false);
+//    kde_dir->mkdir(".kde/share/apps/kdevelop",false);
+//    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
+
     config->setGroup("Doc_Location");
-    config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
+    config->writeEntry("doc_kde", docDir);
     config->sync();
     CUpdateKDEDocDlg dlg(shell_process, config,this,"test");
-    if(!dlg.exec()){
+    if (!dlg.exec()){
       slotProcessExited(shell_process);
     }
 
     if (dlg.isUpdated())
-        config->writeEntry("doc_kde",dlg.getDocPath());
+      config->writeEntry("doc_kde",dlg.getDocPath());
 
     auto_button->setEnabled(false);
     hint_label->setText(i18n("                Creating KDE documentation                           "
@@ -977,10 +989,9 @@ void CKDevInstall::slotAuto() // proceed >>
 			     "               Please wait...                           "
 			     "                                                               "
 			     "                                                               ") );
-    
   }
-  
 }
+
 void CKDevInstall::slotCancel()
 {
   int result=KMessageBox::questionYesNo(this,
