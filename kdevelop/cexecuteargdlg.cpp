@@ -26,7 +26,6 @@
 CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,QString arg ) : QDialog(parent,name,true) {
     //  prj = p_prj;
     arguments = arg;
-    resize(0,0);
     setCaption(titel);
     QVBoxLayout *vl = new QVBoxLayout(this,10);
     
@@ -42,8 +41,8 @@ CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,
     edit->setFocus();
     
     edit->setText(arguments);
-    connect( edit, SIGNAL( textChanged( const char * ) ),
-	     SLOT( slotTextChanged( const char * ) ) );
+    connect( edit, SIGNAL( textChanged( const QString & ) ),
+	     SLOT( slotTextChanged( const QString & ) ) );
     
     hl->addWidget( label );
     hl->addWidget( edit );
@@ -66,7 +65,7 @@ CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,
     btn->setText(i18n("OK"));
     btn->setFixedSize( btn->sizeHint() );
     btn->setDefault( true );
-    connect( btn, SIGNAL( clicked() ), this, SLOT( slotSetArg() ) );
+    connect( btn, SIGNAL( clicked() ), this, SLOT( accept() ) );
     hl->addWidget( btn );
     
     btn = new QPushButton(this,"Cancel");
@@ -79,15 +78,11 @@ CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,
     
     vl->activate();
 }
+
 CExecuteArgDlg::~CExecuteArgDlg(){
 }
 
-void CExecuteArgDlg::slotSetArg(){
-    
-    accept();
-}
-
-void CExecuteArgDlg::slotTextChanged( const char *t )
+void CExecuteArgDlg::slotTextChanged( const QString &t )
 {
     arguments = t;
 }
@@ -95,13 +90,3 @@ void CExecuteArgDlg::slotTextChanged( const char *t )
 void CExecuteArgDlg::slotClose(){
     edit->clear();
 }
-
-
-
-
-
-
-
-
-
-

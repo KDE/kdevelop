@@ -381,7 +381,7 @@ EditConfigTab::EditConfigTab(QWidget *parent, KWrite *kWrite,
   mainLayout = new QHBoxLayout(this, 10, 10);
 
   // checkboxes
-  cbLayout = new QVBoxLayout(this, 10, 2);
+  cbLayout = new QVBoxLayout(2);
   mainLayout->addLayout(cbLayout);
   configFlags = kWrite->config();
   for (z = 0; z < numFlags; z++) {
@@ -392,7 +392,7 @@ EditConfigTab::EditConfigTab(QWidget *parent, KWrite *kWrite,
   cbLayout->addStretch();
 
   // edit lines
-  leLayout = new QVBoxLayout(this, 10, 2);
+  leLayout = new QVBoxLayout(2);
   mainLayout->addLayout(leLayout);
 
   e1 = new KIntNumInput(QString::null, 20, 200, 1, kWrite->wordWrapAt(),

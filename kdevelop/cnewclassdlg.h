@@ -74,9 +74,9 @@ private:
   CProject* prj_info;
  private slots:
  void        ok();
-  void  slotClassEditChanged(const char*);
-  void  slotHeaderEditChanged(const char*);
-  void  slotImplEditChanged(const char*);
+  void  slotClassEditChanged(const QString &);
+  void  slotHeaderEditChanged(const QString &);
+  void  slotImplEditChanged(const QString &);
 };
 
 #endif

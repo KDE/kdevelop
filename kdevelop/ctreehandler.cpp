@@ -154,6 +154,11 @@ THType CTreeHandler::itemType( QListViewItem *item )
   const QPixmap *p;
   
   p = item->pixmap( 0 );
+
+  // Find a cleaner way to cope with this situation
+  if (!p)
+      return THC_FILE;
+  
   for( idx=0; 
        idx < THEND_POS && p->serialNumber() != icons[ idx ]->serialNumber();
        idx++ )

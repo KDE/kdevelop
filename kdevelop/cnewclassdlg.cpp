@@ -236,9 +236,12 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 	adjustSize();
 
 ////
-  connect(classname_edit,SIGNAL(textChanged(const char*)),SLOT(slotClassEditChanged(const char*)));
-  connect(header_edit,SIGNAL(textChanged(const char*)),SLOT(slotHeaderEditChanged(const char*)));
-  connect(impl_edit,SIGNAL(textChanged(const char*)),SLOT(slotImplEditChanged(const char*)));
+  connect(classname_edit, SIGNAL(textChanged(const QString &)),
+          SLOT(slotClassEditChanged(const QString &)));
+  connect(header_edit, SIGNAL(textChanged(const QString &)),
+          SLOT(slotHeaderEditChanged(const QString &)));
+  connect(impl_edit, SIGNAL(textChanged(const QString &)),
+          SLOT(slotImplEditChanged(const QString &)));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
   connect(ok_button,SIGNAL(clicked()),SLOT(ok()));
   
@@ -401,7 +404,7 @@ QString CNewClassDlg::getImplFile(){
   return m_impl_file;
 }
 
-void CNewClassDlg::slotClassEditChanged(const char* text){
+void CNewClassDlg::slotClassEditChanged(const QString &text){
   QString str = text;
   if(!header_modified){
     header_edit->setText(str.lower() + ".h");
@@ -413,14 +416,14 @@ void CNewClassDlg::slotClassEditChanged(const char* text){
 }
 
 
-void CNewClassDlg::slotHeaderEditChanged(const char*){
+void CNewClassDlg::slotHeaderEditChanged(const QString &){
   if(header_edit->hasFocus()){
     header_modified = true;
   }
 }
 
 
-void CNewClassDlg::slotImplEditChanged(const char*){
+void CNewClassDlg::slotImplEditChanged(const QString &){
   if(impl_edit->hasFocus()){
     impl_modified = true;
   }

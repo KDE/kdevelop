@@ -49,8 +49,8 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(p
     QLineEdit *edit = new QLineEdit( this );
     edit->setFixedHeight( edit->sizeHint().height() );
     edit->setFocus();
-    connect( edit, SIGNAL( textChanged( const char * ) ),
-		    SLOT( slotTextChanged( const char * ) ) );
+    connect( edit, SIGNAL( textChanged( const QString & ) ),
+		    SLOT( slotTextChanged( const QString & ) ) );
 
     hl->addWidget( label );
     hl->addWidget( edit );
@@ -78,12 +78,14 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(p
 
     vl->activate();
 }
+
+
 CFindDocTextDlg::~CFindDocTextDlg(){
 }
 
 
 
-void CFindDocTextDlg::slotTextChanged( const char *t )
+void CFindDocTextDlg::slotTextChanged( const QString &t )
 {
     text = t;
 }

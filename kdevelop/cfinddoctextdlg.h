@@ -36,7 +36,7 @@ public:
 	~CFindDocTextDlg();
 
 public slots:
-  void slotTextChanged( const char *t );
+  void slotTextChanged( const QString &t );
   void slotClose();
   void slotFind();
 

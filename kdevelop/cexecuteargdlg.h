@@ -37,8 +37,7 @@ class CExecuteArgDlg : public QDialog  {
     QString getArguments(){return arguments;}
     
     public slots:
-	void slotTextChanged(const char *t);
-    void slotSetArg();
+	void slotTextChanged(const QString &t);
     void slotClose();
     
 protected:
