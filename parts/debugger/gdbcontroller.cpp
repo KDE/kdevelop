@@ -173,6 +173,12 @@ GDBController::~GDBController()
 
 void GDBController::configure()
 {
+    // A a configure.gdb script will prevent these from uncontrolled growth...
+    config_configGdbScript_       = DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript");
+    config_runShellScript_        = DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript");
+    config_runGdbScript_          = DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript");
+
+//  add macros for reading QStrings? or in configGdbScript?
     config_forceBPSet_            = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/allowforcedbpset", true);
     config_dbgTerminal_           = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/separatetty", false);
     config_gdbPath_               = DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath");
@@ -226,8 +232,14 @@ void GDBController::configure()
                 queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
         }
 
+	if (!config_configGdbScript_.isEmpty()) {
+	    queueCmd(new GDBCommand("source " + config_configGdbScript_,
+				    NOTRUNCMD, NOTINFOCMD, 0));
+	}
+
         if (restart)
             queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+
     }
 }
 
@@ -1204,6 +1216,7 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
+    application_ = application;
     if (!shell.isEmpty())
     {
         *dbgProcess_ << "/bin/sh" << "-c" << shell + " " +config_gdbPath_
@@ -1418,9 +1431,41 @@ void GDBController::slotRun()
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(
-                            stateIsOn(s_appNotStarted) ?"run" : "continue",
-                            RUNCMD, NOTINFOCMD, 0));
+    if (stateIsOn(s_appNotStarted)) {
+
+	if (!config_runShellScript_.isEmpty()) {
+	    // Special for remote debug...
+	    QCString tty(tty_->getSlave().latin1());
+	    QCString options = QCString(" 2>&1 >") + tty + QCString(" <") + tty;
+
+	    KProcess *proc = new KProcess;
+
+	    *proc << "sh" << "-c";
+	    *proc << config_runShellScript_ + 
+		" " + application_.latin1() + options;
+	    proc->start(KProcess::DontCare);
+	}
+
+	if (!config_runGdbScript_.isEmpty()) {// gdb script at run is requested
+
+	    // Race notice: wait for the remote gdbserver/executable
+	    // - but that might be an issue for this script to handle...
+
+	    // Future: the shell script should be able to pass info (like pid)
+	    // to the gdb script...
+
+	    queueCmd(new GDBCommand("source " + config_runGdbScript_,
+				    RUNCMD, NOTINFOCMD, 0));
+
+	    // Note: script could contain "run" or "continue" 
+	}
+	else {
+	    queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
+	}
+    }
+    else {
+	queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+    }
 }
 
 // **************************************************************************

@@ -160,6 +160,7 @@ private:
 
     STTY*             tty_;
     QString           badCore_;
+    QString           application_;
 
     // Some state variables
     int               state_;
@@ -175,6 +176,9 @@ private:
     bool    config_dbgTerminal_;
     QString config_gdbPath_;
     QString config_dbgShell_;
+    QCString config_configGdbScript_;
+    QCString config_runShellScript_;
+    QCString config_runGdbScript_;
 };
 
 }

@@ -57,7 +57,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name)
     heading_->setFont(KGlobalSettings::fixedFont());
     heading_->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     heading_->setMaximumHeight(heading_->sizeHint().height());
-    heading_->setMinimumSize(heading_->sizeHint());
+//    heading_->setMinimumSize(heading_->sizeHint());
     topLayout->addWidget(heading_, 5);
 
     topLayout->addWidget(pids_, 5);

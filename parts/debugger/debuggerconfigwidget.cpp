@@ -52,6 +52,11 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     }
     debuggingShell_edit->setText( shell );
 
+    // Use setFile instead?
+    configGdbScript_edit->setText( DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript"));
+    runShellScript_edit ->setText( DomUtil::readEntry(dom, "/kdevdebugger/general/runShellScript"));
+    runGdbScript_edit   ->setText( DomUtil::readEntry(dom, "/kdevdebugger/general/runGdbScript"));
+
     displayStaticMembers_box->setChecked(  DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers", false));
     asmDemangle_box->setChecked(           DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames", true));
     breakOnLoadingLibrary_box->setChecked( DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", true));
@@ -72,6 +77,10 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeEntry(dom, "/kdevdebugger/general/programargs", programArgs_edit->text());
     DomUtil::writeEntry(dom, "/kdevdebugger/general/gdbpath", gdbPath_edit->text());
     DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->text());
+
+    DomUtil::writeEntry(dom, "/kdevdebugger/general/configGdbScript", configGdbScript_edit->text());
+    DomUtil::writeEntry(dom, "/kdevdebugger/general/runShellScript", runShellScript_edit ->text());
+    DomUtil::writeEntry(dom, "/kdevdebugger/general/runGdbScript", runGdbScript_edit   ->text());
 
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/staticmembers", displayStaticMembers_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/display/demanglenames", asmDemangle_box->isChecked());

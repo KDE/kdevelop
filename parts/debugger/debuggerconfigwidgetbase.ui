@@ -8,132 +8,143 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>718</width>
-            <height>421</height>
+            <width>557</width>
+            <height>372</height>
         </rect>
     </property>
     <property name="caption">
         <string>Debugger Configuration</string>
     </property>
-    <grid>
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>unnamed</cstring>
+            <cstring>programArgs_edit</cstring>
         </property>
-
-        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
+        <property name="geometry">
+            <rect>
+                <x>139</x>
+                <y>4</y>
+                <width>390</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>programArgs_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>121</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Program &amp;arguments:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>programArgs_edit</cstring>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Arguments that are given to the application when it is debugged.</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>debuggingShell_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>140</x>
+                <y>30</y>
+                <width>390</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>gdbPath_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>140</x>
+                <y>60</y>
+                <width>390</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>230</y>
+                <width>530</width>
+                <height>120</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Remote debugging</string>
+        </property>
+        <widget class="QLabel">
             <property name="name">
-                <cstring>asmDemangle_box</cstring>
+                <cstring>runGdbScript_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>80</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
             </property>
             <property name="text">
-                <string>Display &amp;demangled names</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>When displaying the disassembled code you
-can select to see the methods' mangled names.
-However, non-mangled names are easier to read.</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="6" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>enableFloatingToolBar_box</cstring>
-            </property>
-            <property name="text">
-                <string>Enable &amp;floating toolbar</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Use the floating toolbar. This toolbar always stays
-on top of all windows so that if the app covers KDevelop
-you have control of the app through the small toolbar. It
-can also be docked into the panel.
-
-This toolbar is in addition to the toolbar in KDevelop.</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>displayStaticMembers_box</cstring>
-            </property>
-            <property name="text">
-                <string>Display static &amp;members</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Displaying static members makes GDB slower in
-producing data within KDE and Qt.
-It may change the "signature" of the data
-which QString and friends rely on,
-but if you need to debug into these values then
-check this option.</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="7" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>dbgTerminal_box</cstring>
-            </property>
-            <property name="text">
-                <string>Enable separate &amp;terminal for application IO</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This allows you to enter terminal input when your
-application contains terminal input code (e.g. cin, fgets, etc.).
-If you use terminal input in your application then check this option.
-Otherwise leave it unchecked.</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>breakOnLoadingLibrary_box</cstring>
-            </property>
-            <property name="text">
-                <string>Try settings &amp;breakpoints on library loading</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>If GDB hasn't seen a library that will be loaded via
-"dlopen" then it will refuse to set a breakpoint in that code.
-We can get GDB to stop on a library load and hence
-try to set the pending breakpoints. See the documentation
-for more details and a "gotcha" relating to this behavior.
-
-If you are not "dlopen"ing libs then leave this unchecked.</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>gdbPath_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>gdbPath_label</cstring>
-            </property>
-            <property name="text">
-                <string>Path to &amp;gdb:</string>
+                <string>Run gdb script:</string>
+                <comment>Gdb script to be executed at run time.</comment>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>gdbPath_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="1" column="1">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>debuggingShell_edit</cstring>
+                <cstring>runShellScript_label</cstring>
             </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>debuggingShell_label</cstring>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>50</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
             </property>
             <property name="text">
-                <string>Debugging &amp;shell:</string>
+                <string>Run shell script:</string>
+                <comment>Shell script to be executed at run time</comment>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>debuggingShell_edit</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="0">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>programArgs_label</cstring>
+                <cstring>configGdbScript_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>20</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
             </property>
             <property name="text">
-                <string>Program &amp;arguments:</string>
+                <string>Config gdb script:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>programArgs_edit</cstring>
@@ -142,29 +153,290 @@ If you are not "dlopen"ing libs then leave this unchecked.</string>
                 <string>Arguments that are given to the application when it is debugged.</string>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
+        <widget class="QLineEdit">
             <property name="name">
-                <cstring>programArgs_edit</cstring>
+                <cstring>runShellScript_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>50</y>
+                    <width>360</width>
+                    <height>22</height>
+                </rect>
             </property>
         </widget>
-        <spacer row="8" column="1">
+        <widget class="QLineEdit">
             <property name="name">
-                <cstring>Spacer2</cstring>
+                <cstring>configGdbScript_edit</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>20</y>
+                    <width>360</width>
+                    <height>22</height>
+                </rect>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>runGdbScript_edit</cstring>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>60</height>
-                </size>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>80</y>
+                    <width>360</width>
+                    <height>22</height>
+                </rect>
             </property>
-        </spacer>
-    </grid>
+        </widget>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>debuggingShell_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>30</y>
+                <width>100</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Debugging &amp;shell:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>debuggingShell_edit</cstring>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>gdbPath_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>100</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Path to &amp;gdb:</string>
+        </property>
+        <property name="buddy" stdset="0">
+            <cstring>gdbPath_edit</cstring>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>displayStaticMembers_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>110</y>
+                <width>360</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Display static &amp;members</string>
+        </property>
+        <property name="accel">
+            <string>Alt+M</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Displaying static members makes GDB slower in
+producing data within KDE and Qt.
+It may change the "signature" of the data
+which QString and friends rely on,
+but if you need to debug into these values then
+check this option.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>asmDemangle_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>360</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Display &amp;demangled names</string>
+        </property>
+        <property name="accel">
+            <string>Alt+D</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>When displaying the disassembled code you
+can select to see the methods' mangled names.
+However, non-mangled names are easier to read.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>breakOnLoadingLibrary_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>150</y>
+                <width>360</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Try settings &amp;breakpoints on library loading</string>
+        </property>
+        <property name="accel">
+            <string>Alt+B</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>If GDB hasn't seen a library that will be loaded via
+"dlopen" then it will refuse to set a breakpoint in that code.
+We can get GDB to stop on a library load and hence
+try to set the pending breakpoints. See the documentation
+for more details and a "gotcha" relating to this behavior.
+
+If you are not "dlopen"ing libs then leave this unchecked.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>enableFloatingToolBar_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>170</y>
+                <width>360</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Enable &amp;floating toolbar</string>
+        </property>
+        <property name="accel">
+            <string>Alt+F</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Use the floating toolbar. This toolbar always stays
+on top of all windows so that if the app covers KDevelop
+you have control of the app through the small toolbar. It
+can also be docked into the panel.
+
+This toolbar is in addition to the toolbar in KDevelop.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>dbgTerminal_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>190</y>
+                <width>360</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Enable separate &amp;terminal for application IO</string>
+        </property>
+        <property name="accel">
+            <string>Alt+T</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>This allows you to enter terminal input when your
+application contains terminal input code (e.g. cin, fgets, etc.).
+If you use terminal input in your application then check this option.
+Otherwise leave it unchecked.</string>
+        </property>
+    </widget>
+    <spacer>
+        <property name="name">
+            <cstring>Spacer2</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>260</width>
+                <height>20</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>210</y>
+                <width>260</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </spacer>
+    <spacer>
+        <property name="name">
+            <cstring>Spacer2_2_2</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>270</width>
+                <height>16</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>90</y>
+                <width>270</width>
+                <height>16</height>
+            </rect>
+        </property>
+    </spacer>
+    <spacer>
+        <property name="name">
+            <cstring>Spacer2_2</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Vertical</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>270</width>
+                <height>16</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>350</y>
+                <width>270</width>
+                <height>16</height>
+            </rect>
+        </property>
+    </spacer>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
