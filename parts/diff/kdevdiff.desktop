@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Difference Viewer
+Comment[fr]=Afficheur de différences
 Name=KDevDiff
 ServiceTypes=KDevelop/DiffFrontend
 X-KDE-Library=libkdevdiff

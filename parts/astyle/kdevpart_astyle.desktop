@@ -6,6 +6,7 @@ Comment=A plugin for formatting of sourcecode according to a specified set of ru
 Comment[fr]=Un module externe pour le formatage des sources d'un programme. Ce module est disponible dans le menu « Outils ».
 Name=KDevAStyle
 GenericName=Source Code Formatter
+GenericName[fr]=Formatage du code source
 Icon=kdevelop
 ServiceTypes=KDevelop/SourceFormatter
 X-KDE-Library=libkdevastyle
