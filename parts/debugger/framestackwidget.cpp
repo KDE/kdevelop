@@ -189,7 +189,7 @@ QString FramestackWidget::getFrameName(int frameNo, int threadNo)
     if (frame)
     {
         QString frameStr = frame->text(0);
-        char *frameData = frameStr.local8Bit().data();
+        char *frameData = frameStr.latin1();
         if (char *paramStart = strchr(frameData, '('))
         {
             char *fnstart = paramStart-2;
