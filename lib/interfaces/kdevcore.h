@@ -128,7 +128,13 @@ public:
      * Puts a message in the status bar.
      */
     virtual void message(const QString &str) = 0;
-    
+   
+
+	/**
+	 * The manager used to manage the parts.
+	 */
+    virtual KParts::PartManager *partManager() const = 0;	
+	
 signals:
 
     /**
