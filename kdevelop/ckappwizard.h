@@ -103,14 +103,18 @@ void slotDirDialogClicked();
   void slotProcessExited();
   void slotMakeEnd();
   void slotApplicationClicked();
+  void slotLocationButtonClicked();
+  void slotVSBoxChanged(int);
+  void slotPrjVSLocationEntry();
+  void slotVendorEntry();
 
 private:
 
   QString m_author_email;
   QString  m_author_name;
-  bool  gen_prj, modifyDirectory;
+  bool  gen_prj, modifyDirectory,modifyPrjVSLocation,modifyVendor;
   QObject* o;
-  QWidget *widget0,*widget1,*widget2,*widget3,*widget4,*widget1a,*widget1b;
+  QWidget *widget0,*widget1,*widget1c,*widget2,*widget3,*widget4,*widget1a,*widget1b;
   QListView* applications;
   QLabel* apphelp;
   QPushButton* directoryload;
@@ -142,7 +146,7 @@ private:
   QCheckBox* cppheader;
   QMultiLineEdit* output;
   QMultiLineEdit* errOutput;
-  KWizardPage *page0,*page1,*page2,*page3,*page4;  
+  KWizardPage *page0,*page1,*page1a,*page2,*page3,*page4;
   KSeparator *separator0,*separator1,*separator2;
   KDirDialog* dirdialog;
   KFileDialog *headerdialog,*cppdialog;
@@ -174,7 +178,23 @@ private:
   // QListViewItem *gtkminiitem;
   QListViewItem *qtnormalitem;
   //  QListViewItem *qtminiitem;
+  QLineEdit* messageline;
+  QLabel* logMessage;
+  QLineEdit* vendorline;
+  QLabel* vendorTag;
+  QLineEdit* releaseline;
+  QLabel* releaseTag;
+  QLabel* vsInstall;
+  QLabel* projectVSLocation;
+  QLineEdit* projectlocationline;
+  QLineEdit* vsLocation;
+  QComboBox* vsBox;
+  QLabel* vsSupport;
+  QPushButton* locationbutton;
+  QButtonGroup* qtarch_ButtonGroup_1;
 };
 
 #endif
+
+
 

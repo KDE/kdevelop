@@ -1,3 +1,7 @@
+1999-07-29 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* added the vs tab to the applicationwizard
+	* only the visual not the internal works
+
 1999-07-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added CVS chapter to the manual and wrote new "Changes" section to chapter 1
 
