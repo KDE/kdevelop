@@ -256,14 +256,14 @@ bool CTagsPart::createTagsFile()
     kdDebug(9022) << "create tags file" << endl;
 
     QString cmd = "cd ";
-    cmd += project()->projectDirectory();
+    cmd += KShellProcess(project()->projectDirectory());
     cmd += " && ctags -n --c++-types=+px";
 
     QStringList l = project()->allFiles();
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
-        cmd += (*it);
         cmd += " ";
+        cmd += KShellProcess::quote(*it);
     }
 
     KShellProcess proc("/bin/sh");

@@ -339,7 +339,7 @@ void ImportExistingDialog::slotOk()
 
 			for ( ; it.current(); ++it )
 			{
-				KShellProcess proc("/bin/sh");
+				KProcess proc;
 
 				proc << "cp";
 				proc << ( *it )->url().path();
@@ -356,9 +356,10 @@ void ImportExistingDialog::slotOk()
 
 			for ( ; it.current(); ++it )
 			{
-				KShellProcess proc("/bin/sh");
+				KProcess proc;
 
-				proc << "ln -s";
+				proc << "ln";
+				proc << "-s";
 				proc << ( *it )->url().path();
 				proc << m_spitem->path;
 				proc.start(KProcess::DontCare);

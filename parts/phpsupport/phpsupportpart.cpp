@@ -270,7 +270,7 @@ void PHPSupportPart::executeInTerminal(){
     file = ro_part->url().path();
   }
 
-  *phpExeProc << file;
+  *phpExeProc << KShellProcess::quote(file);
   kdDebug(9018) << "" << file.latin1() << endl;
   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
 

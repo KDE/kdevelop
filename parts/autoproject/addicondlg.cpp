@@ -94,7 +94,7 @@ void AddIconDialog::accept()
     kdDebug(9020) << "Unknown: " << unknown << ", template: " << templateFileName << endl;
 
     if (!templateFileName.isEmpty()) {
-        KShellProcess proc("/bin/sh");
+        KProcess proc;
         proc << "cp";
         proc << templateFileName;
         proc << destpath;

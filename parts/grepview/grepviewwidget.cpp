@@ -143,23 +143,23 @@ void GrepViewWidget::showDialogWithPattern(QString pattern)
 void GrepViewWidget::searchActivated()
 {
     QString files;
+    // waba: code below breaks on filenames containing a ',' !!!
     QStringList filelist = QStringList::split(",", grepdlg->filesString());
     if (!filelist.isEmpty())
         {
             QStringList::Iterator it(filelist.begin());
-            files = "'" + (*it) + "'";
+            files = KShellProcess::quote(*it);
             ++it;
             for (; it != filelist.end(); ++it)
-                files += " -o -name '" + (*it) + "'";
+                files += " -o -name " + KShellProcess::quote(*it);
         }
 
     QString pattern = grepdlg->templateString();
     pattern.replace(QRegExp("%s"), grepdlg->patternString());
     pattern.replace(QRegExp("'"), "'\\''");
 
-    QString filepattern = "find '";
-    filepattern += grepdlg->directoryString();
-    filepattern += "'";
+    QString filepattern = "find ";
+    filepattern += KShellProcess::quote(grepdlg->directoryString());
     if (!grepdlg->recursiveFlag())
         filepattern += " -maxdepth 1";
     filepattern += " \\( -name ";

@@ -106,15 +106,15 @@ void CvsPart::slotCommit() {
     QDomDocument &dom = *this->projectDom();
 
     QString command("cd ");
-    command += dir;
+    command += KShellProcess::quote(dir);
     command += " && cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " commit ";
     command += DomUtil::readEntry(dom,"/kdevcvs/commitoptions",default_commit);
     command += " ";
-    command += message;
+    command += message; // Already quoted, see above
     command += " ";
-    command += name;
+    command += KShellProcess::quote(name);
 
 //    makeFrontend()->queueCommand(dir, command);
     m_widget->startCommand(dir,command);
@@ -135,13 +135,13 @@ void CvsPart::slotUpdate() {
     QDomDocument &dom = *this->projectDom();
 
     QString command("cd ");
-    command += dir;
+    command += KShellProcess::quote(dir);
     command += " && cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " update ";
     command += DomUtil::readEntry(dom,"/kdevcvs/updateoptions",default_update);
     command += " ";
-    command += name;
+    command += KShellProcess::quote(name);
 
 //    makeFrontend()->queueCommand(dir, command);
     m_widget->startCommand(dir,command);
@@ -156,13 +156,13 @@ void CvsPart::slotAdd() {
     QDomDocument &dom = *this->projectDom();
 
     QString command("cd ");
-    command += dir;
+    command += KShellProcess::quote(dir);
     command += " && cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " add ";
     command += DomUtil::readEntry(dom,"/kdevcvs/addoptions",default_add);
     command += " ";
-    command += name;
+    command += KShellProcess::quote(name);
 
 //    makeFrontend()->queueCommand(dir, command);
     m_widget->startCommand(dir,command);
@@ -177,13 +177,13 @@ void CvsPart::slotRemove() {
     QDomDocument &dom = *this->projectDom();
 
     QString command("cd ");
-    command += dir;
+    command += KShellProcess::quote(dir);
     command += " && cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " remove ";
     command += DomUtil::readEntry(dom,"/kdevcvs/removeoptions",default_remove);
     command += " ";
-    command += name;
+    command += KShellProcess::quote(name);
 
 //    makeFrontend()->queueCommand(dir, command);
     m_widget->startCommand(dir,command);
