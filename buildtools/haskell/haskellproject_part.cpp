@@ -50,7 +50,7 @@
 #include "haskellproject_part.h"
 
 typedef KGenericFactory<HaskellProjectPart> HaskellProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevhaskellproject, HaskellProjectFactory( "kdevhaskellproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevhaskellproject, HaskellProjectFactory( "kdevhaskellproject" ) )
 
 
 HaskellProjectPart::HaskellProjectPart(QObject *parent, const char *name, const QStringList& )
