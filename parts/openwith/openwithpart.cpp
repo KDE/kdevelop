@@ -56,7 +56,7 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     KTrader::OfferList::Iterator it;
     for (it = offers.begin(); it != offers.end(); ++it)
     {
-      KAction *action = new KAction((*it)->name(), 0, 0, QFile::encodeName( (*it)->desktopEntryPath() ).data());
+      KAction *action = new KAction((*it)->name(), (*it)->icon(), 0, 0, QFile::encodeName( (*it)->desktopEntryPath() ).data());
       connect(action, SIGNAL(activated()), this, SLOT(openWithService()));
       action->plug(sub);
     }
