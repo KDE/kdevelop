@@ -22,14 +22,13 @@ class KDevLanguageSupport;
 class CProject;
 class ProjectSpace;
 
-
 class KDevelopCore : QObject
 {
     Q_OBJECT
     
 public:
     KDevelopCore(KDevelop *gui);
-    ~KDevelopCore();
+    virtual ~KDevelopCore();
 
     void loadInitialComponents();
 
@@ -41,6 +40,7 @@ private:
     void unloadVersionControl();
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
+    void newFile();
     void loadProjectSpace(const QString &name);
     void unloadProjectSpace();
     void loadProject(const QString &fileName);
@@ -49,6 +49,7 @@ private:
 private slots:
     // Handling of actions
     void slotFilePrint();
+    void slotFileNew();
     void slotProjectOpen();
     void slotProjectOpenRecent(const KURL &url);
     void slotProjectClose();

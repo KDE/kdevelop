@@ -39,10 +39,17 @@ public:
 public slots:
   /** Embed the widgets of components in the GUI. */
   void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
+  /** stacking document views as tabbed KDockWidgets is default behaviour if no view handler library was found.
+   *  Usually connected in KDevelopCore::loadInitialComponents. */
+  void stackView( QWidget*);
 
 protected slots: // Protected slots
   /** reimplemented from KParts::MainWindow */
 //  void slotSetStatusBarText( const QString &text);
+
+signals:
+  void addView( QWidget*);
+
 private:
   /** sets up the KActions designed User Interface
 			for the toolbars and menubar */
@@ -53,7 +60,7 @@ private:
 
   // File Actions
 
-  KAction* m_paFileNew;
+//  KAction* m_paFileNew;
   KAction* m_paFileOpen;
   KAction* m_paFileClose;
   KAction* m_paFileCloseAll;
@@ -156,39 +163,10 @@ private:
   KAction* m_paHelpAboutKDE;
 
   //
-  // the covering dockwidgets for all views in KDevelop (using Dockwidgets of kdeui)
+  // the covering dockwidgets for all views
   //
-
-  /** The MDI-mainframe's dock cover */
-  KDockWidget* m_dockbaseMDIMainFrm;
-
-  /** The classview. */
-  KDockWidget* m_dockbaseClassTree;
-  /** The logical fileview. */
-  KDockWidget* m_dockbaseLogFileTree;
-  /** The real fileview. */
-  KDockWidget* m_dockbaseRealFileTree;
-  /** The debugger's tree of local variables */
-  KDockWidget* m_dockbaseVarView;
-  /** The documentation tree. */
-  KDockWidget* m_dockbaseDocTree;
-  /** splitview, contains a WidgetsView and a PropertyView */
-  KDockWidget* m_dockbaseWidPropSplitView;
-
-  /** Output from the compiler ... */
-  KDockWidget* m_dockbaseMessagesView;
-  /** Output from grep */
-  KDockWidget* m_dockbaseGrepView;
-  /** Output from the application */
-  KDockWidget* m_dockbaseOutputView;
-  /** Manages a list of breakpoints - Always active */
-  KDockWidget* m_dockbaseBrkptManagerView;
-  /** Manages a frame stack list */
-  KDockWidget* m_dockbaseFrameStackView;
-  /** show disassembled code being run */
-  KDockWidget* m_dockbaseDisassembleView;
-  /** debug aid. Switch on using compile switch GDB_MONITOR or DBG_MONITOR */
-  KDockWidget* m_dockbaseDbgWidgetView;			
+  /** The initial dock cover for document views */
+  KDockWidget* m_dockbaseAreaOfDocumentViews;
 
 private slots:
  void slotProjectNew();

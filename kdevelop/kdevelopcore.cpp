@@ -26,8 +26,8 @@
 #include "kdevversioncontrol.h"
 #include "kdevlanguagesupport.h"
 #include "kdevelopcore.h"
+#include "kdevviewhandler.h"
 #include "projectspace.h"
-
 
 KDevelopCore::KDevelopCore(KDevelop *gui)
     : QObject(gui, "kdevelop core")
@@ -84,6 +84,13 @@ void KDevelopCore::initActions()
                                "configure which printing program you wish "
                                "to use, and print your project files.") );
     
+    action = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
+                          m_kdevelopgui->actionCollection(), "file_new");
+    action->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
+    action->setWhatsThis(  i18n("New file\n\n"
+                                "Creates a new file "
+                                "and opens a default view, automatically") );
+
     action = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
                           m_kdevelopgui->actionCollection(), "project_open");
     action->setStatusText( i18n("Opens an existing project") );
@@ -125,43 +132,80 @@ void KDevelopCore::initActions()
 
 void KDevelopCore::loadInitialComponents()
 {
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
-    if (offers.isEmpty())
-        kdDebug(9000) << "No KDevelop components" << endl;
+  KTrader::OfferList::ConstIterator it;
 
-    KTrader::OfferList::ConstIterator it;
+  // first, load a view handling component (MDI main frame or KDockWidget-based view docking site or ...)
+  // (the precondition for other components which want to embed views!)
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component/ViewHandler");
+  if (offers.isEmpty()) {
+    kdDebug(9000) << "No KDevelop view-handler components. Setting to default (stacked KDockWidgets)..." << endl;
+    // create a default dockwidget (required as main widget)
+    QWidget* qw = new QWidget( m_kdevelopgui, "default");
+    m_kdevelopgui->embedWidget( qw, KDevComponent::AreaOfDocumentViews, "default view", 0L );
+    QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), m_kdevelopgui, SLOT(stackView(QWidget*)) );
+  }
+  else {
+    // check the list of hits and take the right one (TODO: chosen in kdevelop options)
+    // at the moment it's a trivial rule: take the first one it finds
     for (it = offers.begin(); it != offers.end(); ++it) {
-        
-        kdDebug(9000) << "Found Component " << (*it)->name() << endl;
-        KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+      kdDebug(9000) << "Found view-handler component " << (*it)->name() << endl;
+      KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
 
-        QStringList args;
-        QVariant prop = (*it)->property("X-KDevelop-Args");
-        if (prop.isValid())
-            args = QStringList::split(" ", prop.toString());
-        
-        QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(),
-                                       "KDevComponent", args);
-        
-        if (!obj->inherits("KDevComponent")) {
-            kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
-            return;
-        }
-        KDevComponent *comp = (KDevComponent*) obj;
+      QStringList args;
+      QVariant prop = (*it)->property("X-KDevelop-Args");
+      if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
 
-        if (!m_makefrontend && (*it)->hasServiceType("KDevelop/MakeFrontend")) {
-            m_makefrontend = comp;
-            kdDebug(9000) << "is make frontend" << endl;
-        }
-            
-        if (!m_appfrontend && (*it)->hasServiceType("KDevelop/AppFrontend")) {
-            m_appfrontend = comp;
-            kdDebug(9000) << "is app frontend" << endl;
-        }
+      QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(), "KDevComponent", args);
+      if (!obj->inherits("KDevComponent")) {
+        kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
+        return;
+      }
+      KDevViewHandler *vh = (KDevViewHandler*) obj;
+      QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), vh, SLOT(addView(QWidget*)) );
 
-        initComponent(comp);
-        m_kdevelopgui->guiFactory()->addClient(comp);
+      initComponent( vh);
+      m_kdevelopgui->guiFactory()->addClient( vh);
     }
+  }
+
+  // second, build the frame for view handling (MDI main frame or KDockWidget-based view docking site or ...)
+  KTrader::OfferList restOfOffers = KTrader::self()->query("KDevelop/Component");
+  if (restOfOffers.isEmpty())
+    kdDebug(9000) << "No other KDevelop components" << endl;
+
+  for (it = restOfOffers.begin(); it != restOfOffers.end(); ++it) {
+        
+    kdDebug(9000) << "Found Component " << (*it)->name() << endl;
+    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+
+    QStringList args;
+    QVariant prop = (*it)->property("X-KDevelop-Args");
+    if (prop.isValid())
+      args = QStringList::split(" ", prop.toString());
+
+    QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(),
+                                  "KDevComponent", args);
+
+    if (!obj->inherits("KDevComponent")) {
+      kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
+      return;
+    }
+    KDevComponent *comp = (KDevComponent*) obj;
+
+    if (!m_makefrontend && (*it)->hasServiceType("KDevelop/MakeFrontend")) {
+      m_makefrontend = comp;
+      kdDebug(9000) << "is make frontend" << endl;
+    }
+
+    if (!m_appfrontend && (*it)->hasServiceType("KDevelop/AppFrontend")) {
+      m_appfrontend = comp;
+      kdDebug(9000) << "is app frontend" << endl;
+    }
+
+    initComponent(comp);
+    m_kdevelopgui->guiFactory()->addClient(comp);
+  }
 }
 
 
@@ -275,6 +319,15 @@ void KDevelopCore::loadProjectSpace(const QString &name){
   initComponent(comp);
 }
 
+
+void KDevelopCore::newFile()
+{
+  //just a test!
+  QWidget* pEV = new QWidget(0L);
+  m_kdevelopgui->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
+  pEV->show();
+}
+
 void KDevelopCore::unloadProjectSpace(){
   m_components.remove(m_projectspace);
   delete m_projectspace;
@@ -323,7 +376,7 @@ void KDevelopCore::loadProject(const QString &fileName)
     ac->action("project_options")->setEnabled(true);
 
     ((KRecentFilesAction*)ac->action("project_open_recent"))->addURL(KURL(fileName));
-    
+
 #if 1
     // Hack to test the class viewer
     QListIterator<KDevComponent> it5(m_components);
@@ -389,6 +442,12 @@ void KDevelopCore::slotFilePrint()
     QDialog *dlg = (QDialog *)obj;
     dlg->exec();
     delete dlg;
+}
+
+void KDevelopCore::slotFileNew()
+{
+  kdDebug("running KDevelopCore::slotFileNew...");
+  newFile();
 }
 
 

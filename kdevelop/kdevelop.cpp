@@ -37,6 +37,7 @@
 
 
 KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
+  ,m_dockbaseAreaOfDocumentViews(0L)
 {
   initActions();
   initHelp();
@@ -60,7 +61,7 @@ void KDevelop::initActions(){
   /////////////////////////////////////
   // File Menu
   ////////////////////////////////////
-  m_paFileNew = KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new");
+//  m_paFileNew = KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new");
   m_paFileOpen = KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
   m_paFileClose = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(),  "file_close");
   m_paFileCloseAll = new KAction( i18n("Close All"), 0, this, SLOT( slotFileCloseAll() ), actionCollection(), "file_close_all");
@@ -307,12 +308,12 @@ void KDevelop::slotSetStatusBarText( const QString &text){
 /** initializes the help messages (whats this and
 statusbar help) on the KActions */
 void KDevelop::initHelp(){
-  m_paFileNew->setStatusText( i18n("Creates a new file") );
+/*  m_paFileNew->setStatusText( i18n("Creates a new file") );
   m_paFileNew->setWhatsThis( i18n("New file\n\n"
                                   "Opens the New file dialog to let you create "
                                   "a new project file. You can choose between "
                                   "several templates for creating the new file.") );
-
+*/
   m_paFileOpen->setStatusText( i18n("Opens an existing file") );
   m_paFileOpen->setWhatsThis( i18n("Open file\n\n"
  																	"Shows the Open file dialog to "
@@ -651,43 +652,60 @@ void KDevelop::initHelp(){
 
 void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
 {
-    // This is a hack to get the ball rolling...
-    static KDockWidget *leftWidget = 0L;
-    static KDockWidget::DockPosition leftpos = KDockWidget::DockLeft;
-    static KDockWidget *bottomWidget = 0L;
-    static KDockWidget::DockPosition bottompos = KDockWidget::DockBottom;
-    static KDockWidget *mfWidget = 0L;
-
-    KDockWidget *nextWidget = createDockWidget(QString(w->name()),
-                                               w->icon()? *w->icon() : QPixmap(),
-                                               0L,
-                                               w->caption(),
-                                               shortCaption);
-    nextWidget->setWidget(w);
-    nextWidget->setToolTipString(shortExplanation);
-    if (role == KDevComponent::SelectView) {
-        if(leftWidget)
-          nextWidget->manualDock(leftWidget, leftpos, 35);
-        leftWidget = nextWidget;
-        leftpos = KDockWidget::DockCenter;
-        nextWidget->show();
-    } else if (role == KDevComponent::OutputView) {
-        if(bottomWidget)
-          nextWidget->manualDock(bottomWidget, bottompos, 70);
-        bottomWidget = nextWidget;
-        bottompos = KDockWidget::DockCenter;
-        nextWidget->show();
-    } else if(role == KDevComponent::DocumentView) {
-        // MDI view mainframe widget
-        // another ugly hack to get it run, will be fixed soon...
-        nextWidget->setEnableDocking(KDockWidget::DockNone);
-        nextWidget->setDockSite(KDockWidget::DockCorner);
-        setView(nextWidget);
-        setMainDockWidget( nextWidget );
-        mfWidget = nextWidget;
-        ((KDockWidget*)(bottomWidget->parentWidget()->parentWidget()->parentWidget()))->manualDock(mfWidget,KDockWidget::DockBottom,70);
-        ((KDockWidget*)(leftWidget->parentWidget()->parentWidget()->parentWidget()))->manualDock(mfWidget,KDockWidget::DockLeft,35);
+  // document view area has to be created first
+  if ((role == KDevComponent::SelectView) || (role == KDevComponent::OutputView))
+    if (!m_dockbaseAreaOfDocumentViews) {
+      kdDebug(9000) << "KDevelop::embedWidget failed. (No available KDockWidget to dock to)" << endl;
+      return;
     }
+
+  KDockWidget *nextWidget = createDockWidget(QString(w->name()),
+                                             w->icon()? *w->icon() : QPixmap(),
+                                             0L,
+                                             w->caption(),
+                                             shortCaption);
+  nextWidget->setWidget(w);
+  nextWidget->setToolTipString(shortExplanation);
+
+  if (role == KDevComponent::SelectView) {
+    if (DockL.dock)
+      nextWidget->manualDock( DockL.dock, KDockWidget::DockCenter, 35);
+    else
+      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 35);
+    nextWidget->show();
+  }
+  else if (role == KDevComponent::OutputView) {
+    if (DockB.dock)
+      nextWidget->manualDock( DockB.dock, KDockWidget::DockCenter, 70);
+    else
+      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
+    nextWidget->show();
+  }
+  else if (role == KDevComponent::DocumentView) {
+    bool bUseQextMDI = true;  // TODO: make this configurable!
+    if( bUseQextMDI)
+      emit addView( w);
+    else
+      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
+  }
+  else if (role == KDevComponent::AreaOfDocumentViews) {
+    // the first document view is also the main dockwidget (is the MDI mainframe when using QextMDI or QWorkspace)
+    nextWidget->setEnableDocking(KDockWidget::DockNone);
+    nextWidget->setDockSite(KDockWidget::DockCorner);
+    setView(nextWidget);
+    setMainDockWidget( nextWidget );
+    m_dockbaseAreaOfDocumentViews = nextWidget;
+  }
+}
+
+void KDevelop::stackView( QWidget* w)
+{
+  KDockWidget *nextWidget = createDockWidget(QString(w->name()),
+                                             w->icon()? *w->icon() : QPixmap(),
+                                             0L,
+                                             w->caption());
+  nextWidget->setWidget( w);
+  nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockCenter);
 }
 
 void KDevelop::slotProjectNew(){
