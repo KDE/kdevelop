@@ -140,6 +140,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
 	m_pButtonList->setAutoDelete(true);
 	setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
+   setFocusPolicy(NoFocus);
 }
 
 QextMdiTaskBar::~QextMdiTaskBar()

@@ -112,7 +112,7 @@ void QextMdiChildFrmCaption::setCaption(const QString& text)
 int QextMdiChildFrmCaption::heightHint()
 {
 	int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
-#ifdef WIN32
+#ifdef _OS_WIN32_
 	if(hght<18)hght=18;
 #else // in case of Unix: KDE look
 	if(hght<20)hght=20;
@@ -134,7 +134,7 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 		p.fillRect(r,m_pParent->m_pManager->m_captionInactiveBackColor);
 		p.setPen(m_pParent->m_pManager->m_captionInactiveForeColor);
 	}
-#ifdef WIN32
+#ifdef _OS_WIN32_
 	r.setLeft(r.left()+19); //Shift the text after the icon
 #else // in case of Unix: KDE look
 	r.setLeft(r.left()+22); //Shift the text after the icon

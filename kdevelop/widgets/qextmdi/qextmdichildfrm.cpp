@@ -53,7 +53,7 @@
 #define QEXTMDI_RESIZE_BOTTOMRIGHT (8|4)
 
 #include "filenew.xpm"
-#ifdef WIN32
+#ifdef _OS_WIN32_
  #include "win_closebutton.xpm"
  #include "win_minbutton.xpm"
  #include "win_maxbutton.xpm"
@@ -67,6 +67,18 @@
  #include "kde_undockbutton.xpm"
 #endif
 
+//============ mousePressEvent ============//
+
+QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
+  : QLabel( parent, name)
+{
+}
+
+void QextMdiWin32IconButton::mousePressEvent( QMouseEvent*)
+{
+	emit pressed();
+}
+
 //============ QextMdiChildFrm ============//
 
 QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
@@ -78,8 +90,8 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pCaption  = new QextMdiChildFrmCaption(this);
    m_pManager  = parent;
 
-#ifdef WIN32
-	m_pIcon	   = new QLabel(m_pCaption, "qextmdi_pushbutton_icon");
+#ifdef _OS_WIN32_
+   m_pIcon	   = new QextMdiWin32IconButton(m_pCaption, "qextmdi_iconbutton_icon");
    m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
    m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
    m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
@@ -92,14 +104,14 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
 #endif
 
-//how do I do this with QLabel?   QObject::connect(m_pIcon,SIGNAL(clicked()),this,SLOT(showSystemMenu()));
+   QObject::connect(m_pIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
    QObject::connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
    QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
    QObject::connect(m_pUndock,SIGNAL(clicked()),this,SLOT(undockPressed()));
 
    m_pIconButtonPixmap = new QPixmap( filenew);
-#ifdef WIN32
+#ifdef _OS_WIN32_
    m_pMinButtonPixmap = new QPixmap( win_minbutton);
    m_pMaxButtonPixmap = new QPixmap( win_maxbutton);
    m_pRestoreButtonPixmap = new QPixmap( win_restorebutton);
@@ -135,7 +147,9 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    setMinimumSize(QSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH,QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT));
 
 	QObject::connect( this, SIGNAL(clickedInWindowMenu(int)),
-							m_pManager, SLOT(menuActivated(int)) );
+                     m_pManager, SLOT(menuActivated(int)) );
+
+   m_pSystemMenu = new QPopupMenu();
 }
 
 //============ ~QextMdiChildFrm ============//
@@ -701,7 +715,7 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 		captionHeight
 	);
 	//The buttons are caption children
-#ifdef WIN32
+#ifdef _OS_WIN32_
 	m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
 	m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
 	m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
@@ -764,4 +778,36 @@ void QextMdiChildFrm::slot_clickedInWindowMenu()
 void QextMdiChildFrm::setWindowMenuID( int id)
 {
 	m_windowMenuID = id;
+}
+
+/** Shows a system menu for child frame windows. */
+void QextMdiChildFrm::showSystemMenu()
+{
+   if( m_pSystemMenu != 0) {
+      m_pSystemMenu->clear();
+#ifdef _OS_WIN32_
+      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
+      if( state() == Maximized)
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),false);
+      m_pSystemMenu->insertItem(tr("&Move"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
+      if( state() == Normal)
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),false);
+#else
+      if( state() == Maximized)
+         m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
+      if( state() == Normal)
+         m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
+      m_pSystemMenu->insertItem(tr("&As symbol"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("M&ove"),this, SLOT(minimizePressed()));
+      m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(minimizePressed()));
+#endif
+      m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
+      m_pSystemMenu->insertSeparator();
+      m_pSystemMenu->insertItem(tr("&Close"),this, SLOT(closePressed()));
+      m_pSystemMenu->popup(mapToGlobal( QPoint(m_pIcon->pos().x(),
+           y()-pos().y()+m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_BORDER) ));
+   }
 }

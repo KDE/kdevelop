@@ -42,10 +42,24 @@ class QextMdiChildArea;
 class QextMdiChildView;
 
 /**
+  * @short Internal class, only used on Win32.
+  * This class provides a label widget that can process mouse click events.
+  */
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiWin32IconButton : public QLabel
+{
+	Q_OBJECT
+public:
+	QextMdiWin32IconButton( QWidget* parent, const char* name = 0);
+	virtual void mousePressEvent( QMouseEvent*);
+
+signals:
+	void pressed();
+};
+
+/**
   * @short Internal class.
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
-
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 {
 	friend class QextMdiChildArea;
@@ -67,11 +81,11 @@ public:
 protected:
 	QextMdiChildArea       *m_pManager;
 	QextMdiChildFrmCaption *m_pCaption;
-#ifdef WIN32
+#ifdef _OS_WIN32_
 	/**
 	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
 	*/
-	QLabel        *m_pIcon;
+	QextMdiWin32IconButton *m_pIcon;
 	QPushButton   *m_pMinimize;
 	QPushButton   *m_pMaximize;
 	QPushButton   *m_pClose;
@@ -96,6 +110,8 @@ protected:
    /** every child frame window has an temporary ID in the Window menu of the main frame. */
    int 				m_windowMenuID;
    QPixmap*       m_pUndockButtonPixmap;
+   /** imitates a system menu for child frame windows */
+   QPopupMenu* m_pSystemMenu;
 public:
 	/**
 	* Reparents the widget w to this QextMdiChildFrm (if this is not already done)
@@ -154,6 +170,8 @@ protected slots:
 	void closePressed();
 	void undockPressed();
 	void raiseAndActivate();
+  /** Shows a system menu for child frame windows. */
+  void showSystemMenu();
 protected:
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);

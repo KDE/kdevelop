@@ -40,7 +40,7 @@
    #define _DLL_IMP_EXP_MSG_
 #endif
 
-#ifdef WIN32
+#ifdef _OS_WIN32_
   /* QT linked libraries compiled with MSVC */
   #ifdef MAKEDLL_QEXTMDI
     /* for building qextmdi */
