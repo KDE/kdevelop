@@ -60,6 +60,7 @@ public slots:
     void lookInDocumentationIndex(const QString &term);
     void contextLookInDocumentationIndex();
     void contextFindDocumentation();
+    void findInDocumentation(const QString &term);
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
     void contextSearchInDocumentation();

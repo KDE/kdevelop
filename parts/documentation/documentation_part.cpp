@@ -58,6 +58,8 @@
 #include "contentsview.h"
 #include "find_documentation.h"
 
+#include "KDevDocumentationIface.h"
+
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
 
@@ -98,6 +100,8 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     setupActions();
     
     loadDocumentationPlugins();
+    
+    new KDevDocumentationIface(this);
 }
 
 DocumentationPart::~DocumentationPart()
@@ -292,6 +296,12 @@ void DocumentationPart::contextFindDocumentation()
     m_widget->findInDocumentation(m_contextStr);
 }
 
+void DocumentationPart::findInDocumentation(const QString &term)
+{
+    mainWindow()->raiseView(m_widget);
+    m_widget->findInDocumentation(term);
+}
+
 void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType(Context::EditorContext))
@@ -301,7 +311,7 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
         if (!ident.isEmpty()) 
         {
             m_contextStr = ident;
-            QString squeezed = KStringHandler::csqueeze(m_contextStr, 20);            
+            QString squeezed = KStringHandler::csqueeze(m_contextStr, 30);
             int id = -1;
             if (hasContextFeature(Finder)) {
                 id = popup->insertItem(i18n("Find Documentation: %1").arg(squeezed),
