@@ -63,6 +63,8 @@ To update to a newer doxygen version:
    -Be careful because doxygen uses the deprecated QRegExp::match() method while
    KDevelop uses the new QRegExp::search() and QRegExp::matchedLength() mehtods
    instead so you should not merge certain lines of code!!!
+   - Be careful because KDevlop uses the QFile::encodeName() function and the
+   original doxygen code doesn't. So do NOT delete the QFile::encodeName() calls.
 
    To do the merge on config.h you should use:
           $ kompare doxygen-location/addon/doxywizard/config.h    kdevelop-location/parts/doxygen/config.h
