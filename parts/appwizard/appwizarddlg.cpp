@@ -32,6 +32,7 @@
 #include <qtextview.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qvalidator.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
@@ -174,6 +175,17 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     nextButton()->setEnabled(false);
 //    nextButton()->setEnabled(!appname_edit->text().isEmpty());
+
+//    QRegExp appname_regexp ("[a-zA-Z][a-zA-Z0-9_]*"); //Non-Unicode version
+    /* appname will start with a letter, and will contain letters,
+       digits or underscores. */
+    QRegExp appname_regexp ("\\w+"); //Unicode version.
+    // How about names like "__" or "123" for project name? Are they legal?
+    QRegExpValidator *appname_edit_validator;
+    appname_edit_validator = new QRegExpValidator (appname_regexp,
+                                                   appname_edit,
+                                                   "AppNameValidator");
+    appname_edit->setValidator(appname_edit_validator);
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -350,6 +362,7 @@ void AppWizardDialog::accept()
       return;
     }
 
+/*  // this piece of code is rendered useless by the QValidator
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber() && appname[i] != '_') {
@@ -359,6 +372,7 @@ void AppWizardDialog::accept()
             appname_edit->setFocus();
             return;
         }
+*/
 
     QString source, script;
     QFileInfo finfo(m_pCurrentAppInfo->templateName);
