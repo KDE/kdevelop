@@ -1,3 +1,8 @@
+2002-12-16 Roberto Raggi <roberto@kdevelop.org>
+	* bugfix: useless "()" string is attached to the method declaration patch from Andreas Wuest <AndreasWuest@gmx.de>
+	* added emacs like wordwrap mode to qeditor
+	* added ocaml colorizer to qeditor
+	
 2002-12-16 F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: now Partloader loads editor part exactly as set in common Gideon editor settings
     * this makes the Kate editor now also availabe for the KDE-3.0.x-compiled Gideon.
