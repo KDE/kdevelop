@@ -110,6 +110,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
@@ -175,6 +181,8 @@
 </connections>
 <tabstops>
     <tabstop>menutextEdit</tabstop>
+    <tabstop>execEdit</tabstop>
+    <tabstop>paramEdit</tabstop>
     <tabstop>capturedBox</tabstop>
     <tabstop>okButton</tabstop>
     <tabstop>cancelButton</tabstop>
