@@ -957,7 +957,7 @@ void AutoProjectPart::slotMakeMessages()
 
 /** Checks if the currently selected main program or,
   * if no main Program was selected in the Run Options dialog,
-  * the currently active target is is to date and builds it if necessary.
+  * the currently active target is up-to-date and builds it if necessary.
   * In the end checks if the program is already running and if not calls the
   * slotExecute2() function to execute it or asks the user what to do.
   */
