@@ -79,7 +79,7 @@
                                 <cstring>rbSingle</cstring>
                             </property>
                             <property name="text">
-                                <string>single dialog for each variable of a snippet</string>
+                                <string>Single dialog for each variable within a snippet</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -88,7 +88,7 @@
                                 <bool>true</bool>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>You will get an inputdialog for every variable of a snippet</string>
+                                <string>An input dialog will be displayed for every variable within a snippet</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton" row="1" column="0">
@@ -96,7 +96,7 @@
                                 <cstring>rbAll</cstring>
                             </property>
                             <property name="text">
-                                <string>one dialog for all variables of a snippet</string>
+                                <string>One dialog for all variables within a snippet</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -105,7 +105,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>You will get a single dialog where you can enter the values for all variables of a snippet</string>
+                                <string>A single dialog will be displayed where you can enter the values for all variables within a snippet</string>
                             </property>
                         </widget>
                     </grid>

@@ -44,7 +44,7 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
 
   QWhatsThis::add(m_widget, i18n("<b>Code Snippet</b><p>This is a list of available snippets."));
 
-  mainWindow()->embedSelectViewRight( m_widget, i18n("Code Snippets"), i18n("Insert a codesnippet") );
+  mainWindow()->embedSelectViewRight( m_widget, i18n("Code Snippets"), i18n("Insert a code snippet") );
 
   connect( core(), SIGNAL( configWidget( KDialogBase * ) ), this, SLOT( slotConfigWidget( KDialogBase * ) ) );
 

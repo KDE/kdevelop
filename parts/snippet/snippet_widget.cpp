@@ -505,9 +505,9 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
     mapVar2Te[it.key()] = te;
     mapVar2Cb[it.key()] = cb;
 
-    QToolTip::add( cb, i18n("Enable this to save the value entered to the right as default value for this variable") );
+    QToolTip::add( cb, i18n("Enable this to save the value entered to the right as the default value for this variable") );
     QWhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
-                              "If you use the same variable later, even in an other snippet, the value entered to the right "
+                              "If you use the same variable later, even in another snippet, the value entered to the right "
 			      "will be the default value for that variable.") );
 
     i++;
@@ -619,9 +619,9 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
     te->setText((*mapSave)[var]);
   }
 
-  QToolTip::add( cb, i18n("Enable this to save the value entered to the right as default value for this variable") );
+  QToolTip::add( cb, i18n("Enable this to save the value entered to the right as the default value for this variable") );
   QWhatsThis::add( cb, i18n("If you enable this option, the value entered to the right will be saved. "
-                            "If you use the same variable later, even in an other snippet, the value entered to the right "
+                            "If you use the same variable later, even in another snippet, the value entered to the right "
                             "will be the default value for that variable.") );
 
   layout->addMultiCellLayout( layoutVar, 1, 1, 0, 1 );

@@ -250,7 +250,7 @@ bool ProjectManager::loadProject(const KURL &url)
   if( url.path() == projectFile().path() )
   {
     if (KMessageBox::questionYesNo(TopLevel::getInstance()->main(),
-        i18n("Really reload current project?")) == KMessageBox::No)
+        i18n("Are you sure you want to reload the current project?")) == KMessageBox::No)
       return false;
   }
 

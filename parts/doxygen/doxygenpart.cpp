@@ -77,7 +77,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     
     m_actionDocumentFunction = new KAction(i18n("Document Current Function"), 0, CTRL+SHIFT+Key_S, this, SLOT(slotDocumentFunction()), actionCollection(), "edit_document_function");
     m_actionDocumentFunction->setToolTip( i18n("Create a documentation template above a function"));
-    m_actionDocumentFunction->setWhatsThis(i18n("<b>Document Current Function</b><p>Creates a documentation template according to a functions signature above a function definition/declaration."));
+    m_actionDocumentFunction->setWhatsThis(i18n("<b>Document Current Function</b><p>Creates a documentation template according to a function's signature above a function definition/declaration."));
                   
     m_tmpDir.setAutoDelete(true);
     connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
