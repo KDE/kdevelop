@@ -1,3 +1,11 @@
+2003-06-07 Mario Scalas <mario.scalas@libero.it>
+	* Stepped back from using Pimpl in part design since it does only complicate code without any of its 
+	  advantages in this case 
+	* Added an option for adding the message for the commit operation to the master ChangeLog 
+	  (located in <projectDirectory>/ChangeLog): await for comments for further changes. 
+	* CommitDlg now uses QTextEdit instead of (deprecated) QMultiLineEdit 
+	* This log was written using the CvsPart! :) 
+
 2003-05-27 F@lk Brettschneider <falkbr@kdevelop.org>
     * compiles and runs on KDE-3.0 again
 
