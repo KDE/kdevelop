@@ -25,7 +25,7 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
   setBackgroundPixmap(pm);
 
-  setGeometry(QApplication::desktop()->width()/2-218, QApplication::desktop()->height()/2-158, 437,317);
+  setGeometry(QApplication::desktop()->width()/2-218, QApplication::desktop()->height()/2-158, 433,315);
 
 }
 KStartupLogo::~KStartupLogo(){
