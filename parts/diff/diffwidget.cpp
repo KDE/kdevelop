@@ -22,7 +22,7 @@
 #include <ktempfile.h>
 #include <kpopupmenu.h>
 #include <kiconloader.h>
-#include <kfiledialog.h> 
+#include <kfiledialog.h>
 #include <kmessagebox.h>
 
 #include <kparts/componentfactory.h>
@@ -50,14 +50,14 @@ KDiffTextEdit::KDiffTextEdit( QWidget* parent, const char* name ): QTextEdit( pa
 KDiffTextEdit::~KDiffTextEdit()
 {
   KConfig* config = kapp->config();
-  
+
   config->setGroup( "Diff" );
   config->writeEntry( "Highlight", _highlight );
 }
 
 QPopupMenu* KDiffTextEdit::createPopupMenu()
-{ 
-  return createPopupMenu( QPoint() ); 
+{
+  return createPopupMenu( QPoint() );
 }
 
 QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
@@ -65,7 +65,7 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
   QPopupMenu* popup = QTextEdit::createPopupMenu( p );
   if ( !popup )
     popup = new QPopupMenu( this );
-  
+
   int i = 0;
 
   for ( QStringList::Iterator it = extParts.begin(); it != extParts.end(); ++it ) {
@@ -78,7 +78,7 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
 
   popup->insertItem( SmallIconSet( "filesaveas" ), i18n( "&Save As..." ), this, SLOT(saveAs()), CTRL + Key_S, POPUP_BASE - 2, 0 );
   popup->setItemEnabled( POPUP_BASE - 2, length() > 0 );
-    
+
   popup->insertSeparator( 1 );
 
   popup->insertItem( i18n( "Highlight Syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 2 );
@@ -134,7 +134,7 @@ void KDiffTextEdit::applySyntaxHighlight()
         setParagraphBackgroundColor( i, cRemoved );
       }
     }
-  }    
+  }
 }
 
 void KDiffTextEdit::clearSyntaxHighlight()
@@ -142,7 +142,7 @@ void KDiffTextEdit::clearSyntaxHighlight()
   int paragCount = paragraphs();
   for ( int i = 0; i < paragCount; ++i ) {
     clearParagraphBackground( i );
-  }    
+  }
 }
 
 void KDiffTextEdit::searchExtParts()
@@ -152,7 +152,7 @@ void KDiffTextEdit::searchExtParts()
   if ( init )
     return;
   init = true;
-  
+
   // search all parts that can handle text/x-diff
   KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "'KParts/ReadOnlyPart' in ServiceTypes");
   KTrader::OfferList::const_iterator it;
@@ -169,7 +169,7 @@ void KDiffTextEdit::popupActivated( int id )
   if ( id < 0 || id > (int)extParts.count() )
     return;
 
-  emit externalPartRequested( extParts[ id ] ); 
+  emit externalPartRequested( extParts[ id ] );
 }
 
 DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
@@ -181,7 +181,7 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
   te = new KDiffTextEdit( this, "Main Diff Viewer" );
   te->setReadOnly( true );
   te->setTextFormat( QTextEdit::PlainText );
-  te->setMinimumSize( 300, 200 );
+//  te->setMinimumSize( 300, 200 );
   connect( te, SIGNAL(externalPartRequested(const QString&)), this, SLOT(loadExtPart(const QString&)) );
 
   QVBoxLayout* layout = new QVBoxLayout( this );
@@ -302,16 +302,16 @@ void DiffWidget::openURL( const KURL& url )
   connect( job, SIGNAL(data( KIO::Job *, const QByteArray & )),
            this, SLOT(slotAppend( KIO::Job*, const QByteArray& )) );
   connect( job, SIGNAL(result( KIO::Job * )),
-           this, SLOT(slotFinished()) );  
+           this, SLOT(slotFinished()) );
 }
 
 void DiffWidget::contextMenuEvent( QContextMenuEvent* /* e */ )
 {
   QPopupMenu* popup = new QPopupMenu( this );
-  
+
   if ( !te->isVisible() )
     popup->insertItem( i18n("Display &Raw Output"), this, SLOT(showTextEdit()) );
- 
+
   popup->exec( QCursor::pos() );
   delete popup;
 }

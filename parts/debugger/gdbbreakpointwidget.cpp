@@ -27,8 +27,8 @@
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qtable.h>
-#include <qtooltip.h>
 #include <qtoolbutton.h>
+#include <qtooltip.h>
 #include <qvbox.h>
 
 #include <stdlib.h>
@@ -171,7 +171,10 @@ void BreakpointTableRow::setRow()
 GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     QHBox(parent, name)
 {
-    QButtonGroup* toolbar = new QVButtonGroup( this );
+    QVBox* toolbar = new QVBox( this );
+
+    toolbar->setFrameStyle( QFrame::ToolBarPanel | QFrame::Plain );
+    toolbar->setLineWidth( 0 );
 
     m_add       = new QToolButton( toolbar, "add breakpoint" );
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
