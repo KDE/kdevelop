@@ -14,7 +14,6 @@
 
 #include "ast.h"
 
-#include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvaluestack.h>
@@ -27,7 +26,8 @@ class Token;
 class Error;
 class ProblemReporter;
 
-class Parser: public QObject{
+class Parser
+{
 public:
     Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer );
     virtual ~Parser();
@@ -42,8 +42,6 @@ public:
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
     /*TODO: remove*/ virtual void syntaxError();
     /*TODO: remove*/ virtual void parseError();
-
-    void dump();
 
 public /*rules*/ :
 

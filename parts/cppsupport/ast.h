@@ -131,6 +131,54 @@ private:
     void operator = ( const LinkageSpecificationAST& source );
 };
 
+class NamespaceAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<NamespaceAST> Ptr;
+    
+public:
+    NamespaceAST();
+    virtual ~NamespaceAST();
+    
+    QString namespaceName() const;
+    void setNamespaceName( const QString& name );
+    
+    LinkageBodyAST* linkageBody();
+    void setLinkageBody( LinkageBodyAST::Ptr& linkageBody );
+    
+private:
+    QString m_namespaceName;
+    LinkageBodyAST::Ptr m_linkageBody;
+    
+private:
+    NamespaceAST( const NamespaceAST& source );
+    void operator = ( const NamespaceAST& source );
+};
+
+class NamespaceAliasAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<NamespaceAliasAST> Ptr;
+    
+public:
+    NamespaceAliasAST();
+    virtual ~NamespaceAliasAST();
+    
+    QString namespaceName() const;
+    void setNamespaceName( const QString& name );
+    
+    NameAST* aliasName();
+    void setAliasName( NameAST::Ptr& name );
+    
+private:
+    QString m_namespaceName;
+    NameAST::Ptr m_aliasName;
+    
+private:
+    NamespaceAliasAST( const NamespaceAliasAST& source );
+    void operator = ( const NamespaceAliasAST& source );
+};
+
 class TranslationUnitAST: public AST
 {
 public:

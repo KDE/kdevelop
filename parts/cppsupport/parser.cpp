@@ -439,27 +439,37 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Ptr& node )
     return true;
 }
 
-bool Parser::parseNamespace( DeclarationAST::Ptr& /*node*/ )
+bool Parser::parseNamespace( DeclarationAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNamespace()" << endl;
+    
+    int start = lex->index();
+    
     if( lex->lookAhead(0) != Token_namespace ){
 	return false;
     }
     lex->nextToken();    
-    
-    QString namespaceName;
+
+    QString namespaceName;        
     if( lex->lookAhead(0) == Token_identifier ){
 	namespaceName = lex->lookAhead( 0 ).toString();
 	lex->nextToken();
     }
-        
+
     if ( lex->lookAhead(0) == '=' ) {
 	// namespace alias
 	lex->nextToken();
-	
+		
 	NameAST::Ptr name;
 	if( parseName(name) ){	    
 	    ADVANCE( ';', ";" );	    
+	
+	    NamespaceAliasAST::Ptr ast( new NamespaceAliasAST() );
+	    ast->setNamespaceName( namespaceName );
+	    ast->setAliasName( name );    
+	    ast->setStart( start );
+	    ast->setEnd( lex->index() );
+	    node = ast;
 	    return true;
 	} else {
 	    reportError( i18n("namespace expected") );
@@ -470,8 +480,16 @@ bool Parser::parseNamespace( DeclarationAST::Ptr& /*node*/ )
 	return false;
     }
 
+    NamespaceAST::Ptr ast( new NamespaceAST() );
+    ast->setNamespaceName( namespaceName );
+    
     LinkageBodyAST::Ptr linkageBody;
     parseLinkageBody( linkageBody );
+    
+    ast->setLinkageBody( linkageBody );
+    ast->setStart( start );
+    ast->setEnd( lex->index() );
+    node = ast;
     
     return true;
 }
@@ -1854,10 +1872,6 @@ bool Parser::parseUnqualifiedName( AST::Ptr& node )
     }
     
     return true;
-}
-
-void Parser::dump()
-{
 }
 
 bool Parser::parseStringLiteral( AST::Ptr& /*node*/ )

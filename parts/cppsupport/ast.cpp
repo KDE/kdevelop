@@ -145,3 +145,62 @@ void TranslationUnitAST::addDeclaration( DeclarationAST::Ptr& ast )
     m_declarations.append( ast.release() );
 }
 
+// ------------------------------------------------------------------------
+NamespaceAST::NamespaceAST()
+{
+}
+
+NamespaceAST::~NamespaceAST()
+{
+}
+
+QString NamespaceAST::namespaceName() const
+{
+    return m_namespaceName;
+}
+
+void NamespaceAST::setNamespaceName( const QString& name )
+{
+    m_namespaceName = name;
+}
+
+LinkageBodyAST* NamespaceAST::linkageBody()
+{
+    return m_linkageBody.get();
+}
+
+void NamespaceAST::setLinkageBody( LinkageBodyAST::Ptr& linkageBody )
+{
+    m_linkageBody = linkageBody;
+}
+
+
+// ------------------------------------------------------------------------
+NamespaceAliasAST::NamespaceAliasAST()
+{
+}
+
+NamespaceAliasAST::~NamespaceAliasAST()
+{
+}
+
+QString NamespaceAliasAST::namespaceName() const
+{
+    return m_namespaceName;
+}
+
+void NamespaceAliasAST::setNamespaceName( const QString& name )
+{
+    m_namespaceName = name;
+}
+
+NameAST* NamespaceAliasAST::aliasName()
+{
+    return m_aliasName.get();
+}
+
+void NamespaceAliasAST::setAliasName( NameAST::Ptr& name )
+{
+    m_aliasName = name;
+}
+
