@@ -659,7 +659,7 @@ void QextMdiChildView::slot_clickedInDockMenu()
 void QextMdiChildView::setMinimumSize( int minw, int minh)
 {
    QWidget::setMinimumSize( minw, minh);
-   if ( (mdiParent() != 0L) && (mdiParent()->state() == QextMdiChildFrm::Normal) ) {
+   if ( (mdiParent() != 0L) && (mdiParent()->state() != QextMdiChildFrm::Minimized) ) {
       mdiParent()->setMinimumSize( minw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
                                    minh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
                                         + QEXTMDI_MDI_CHILDFRM_SEPARATOR

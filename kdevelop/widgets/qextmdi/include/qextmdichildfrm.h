@@ -278,6 +278,13 @@ public:
    */
    void raiseAndActivate();
 
+   /** 
+   * Sets the minimum size of the widget to w by h pixels.
+   * It extends it's base clase method in a way that the minimum size of
+   * the child area will be set additionally if the view is maximized. 
+   */
+   virtual void setMinimumSize ( int minw, int minh );
+
 public slots:
    /**
    *

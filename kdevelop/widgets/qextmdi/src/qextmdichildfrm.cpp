@@ -148,7 +148,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
 
    setMouseTracking(TRUE);
 
-   setMinimumSize( QSize( QEXTMDI_MDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint()));
+   setMinimumSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint());
 
    m_pSystemMenu = new QPopupMenu();
 }
@@ -557,6 +557,21 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          break;
       }
    break;
+   }
+
+   QextMdiChildFrm*     pTopFrame = m_pManager->topChild();
+   QextMdiChildView*    pTopChild = 0L;
+   if (pTopFrame != 0L) {
+      pTopChild = pTopFrame->m_pClient;
+   }
+   if ( (pTopChild != 0L) && pTopChild->isMaximized() ) {
+      m_pManager->setMinimumSize(pTopChild->minimumWidth(), pTopChild->minimumHeight());
+      // XXX TODO: setting the maximum size doesn't work properly - fix this later
+      // m_pManager->setMaximumSize(pTopChild->maximumWidth(), pTopChild->maximumHeight());
+   }
+   else {
+      m_pManager->setMinimumSize(0, 0);
+      m_pManager->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
    }
 }
 
@@ -994,6 +1009,18 @@ void QextMdiChildFrm::raiseAndActivate()
    m_pCaption->setActive(TRUE);
    m_pManager->setTopChild(this,FALSE); //Do not focus by now...
 }
+
+//============= setMinimumSize ===============//
+
+void QextMdiChildFrm::setMinimumSize ( int minw, int minh )
+{
+   QWidget::setMinimumSize(minw, minh);
+   if (m_state == Maximized) {
+      m_pManager->setMinimumSize(minw, minh);
+   }
+}
+
+//============= systemMenu ===============//
 
 QPopupMenu* QextMdiChildFrm::systemMenu()
 {

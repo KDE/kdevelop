@@ -4,6 +4,9 @@
               before starting kdevelop for the first time
               (hint of Waldo Bastian, after message freeze we could provide an
               appropriate reset button in the GUI)
+    * added Lars Beikirch's <Lars.Beikirch@gmx.net> patch for QextMDI
+      concerning min/max sizes of childviews and maximized Childframe mode
+      (related to QextMDI but not to KDevelop)
 
 2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: debugging with Toplevel MDI mode works properly now

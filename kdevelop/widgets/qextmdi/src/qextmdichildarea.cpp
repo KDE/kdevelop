@@ -167,6 +167,17 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       }
       m_pZ->setAutoDelete(TRUE);
       m_pZ->append(lpC);
+      int nChildAreaMinW = 0,               nChildAreaMinH = 0;
+      int nChildAreaMaxW = QWIDGETSIZE_MAX, nChildAreaMaxH = QWIDGETSIZE_MAX;
+      if ( (pMaximizedChild != 0L) && (lpC->m_pClient != 0L) ) {
+         nChildAreaMinW = lpC->m_pClient->minimumWidth();
+         nChildAreaMinH = lpC->m_pClient->minimumHeight();
+         // XXX TODO: setting the maximum size doesn't work properly - fix this later
+         // nChildAreaMaxW = lpC->m_pClient->maximumWidth();
+         // nChildAreaMaxH = lpC->m_pClient->maximumHeight();
+      }
+      setMinimumSize(nChildAreaMinW, nChildAreaMinH);
+      setMaximumSize(nChildAreaMaxW, nChildAreaMaxH);
       if (pMaximizedChild) {
          const bool bDontAnimate = FALSE;
          // first maximize the new view
