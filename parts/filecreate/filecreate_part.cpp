@@ -256,6 +256,7 @@ void FileCreatePart::addFileType(const QString & filename) {
 void FileCreatePart::slotProjectClosed() {
   m_filetypes.clear();
   refresh();
+  QTimer::singleShot( 0, this, SLOT(slotGlobalInitialize()) );
 }
 
 void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
