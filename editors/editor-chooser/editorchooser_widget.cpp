@@ -4,7 +4,6 @@
 
 #include <kapplication.h>
 #include <kdeversion.h>
-#include <ktrader.h>
 #include <kservice.h>
 #include <kdebug.h>
 #include <kconfig.h>
@@ -16,16 +15,28 @@
 EditorChooserWidget::EditorChooserWidget(QWidget *parent, const char *name)
         : EditChooser(parent, name)
 {
-    load();
+    // ask the trader which editors he has to offer
+    m_offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
+
+	// remove the vim-part, it's known to crash
+	KTrader::OfferList::Iterator it = m_offers.begin();
+	while( it != m_offers.end() )
+	{
+		if ( (*it)->desktopEntryName() == "vimpart" )
+		{
+			m_offers.remove( it );
+			break;
+		}
+		++it;
+	}
+
+	load();
 }
 
 
 void EditorChooserWidget::load()
 {
     EditorPart->clear();
-
-    // ask the trader which editors he has to offer
-    KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
 
     // find the editor to use
     KConfig *config = kapp->config();
@@ -35,7 +46,7 @@ void EditorChooserWidget::load()
     // add the entries to the listview
     KTrader::OfferList::Iterator it;
     int index=-1, current=0;
-    for (it = offers.begin(); it != offers.end(); ++it)
+    for (it = m_offers.begin(); it != m_offers.end(); ++it)
     {
         EditorPart->insertItem((*it)->name());
         if ( (*it)->name() == editor )
@@ -68,10 +79,8 @@ void EditorChooserWidget::save()
     KConfig *config = kapp->config();
     config->setGroup("Editor");
 
-    KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
-
     KTrader::OfferList::Iterator it;
-    for (it = offers.begin(); it != offers.end(); ++it)
+    for (it = m_offers.begin(); it != m_offers.end(); ++it)
         if ( EditorPart->currentText() == (*it)->name() )
         {
             config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
@@ -101,10 +110,8 @@ void EditorChooserWidget::accept()
 
 void EditorChooserWidget::slotEditPartChanged( const QString & )
 {
-	KTrader::OfferList offers = KTrader::self()->query("text/plain", "'KTextEditor/Document' in ServiceTypes");
-
 	KTrader::OfferList::Iterator it;
-	for (it = offers.begin(); it != offers.end(); ++it)
+	for (it = m_offers.begin(); it != m_offers.end(); ++it)
 	{
 		if ( EditorPart->currentText() == (*it)->name() )
 		{

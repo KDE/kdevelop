@@ -3,7 +3,7 @@
 
 
 #include <qwidget.h>
-
+#include <ktrader.h>
 
 #include "editchooser.h"
 
@@ -25,6 +25,9 @@ private slots:
     void save();
 
     void accept();
+
+private:
+	KTrader::OfferList m_offers;
 
 };
 
