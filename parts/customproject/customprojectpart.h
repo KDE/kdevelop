@@ -21,6 +21,7 @@ class QListViewItem;
 class QPopupMenu;
 class KDialogBase;
 class CustomProjectWidget;
+class Context;
 
 
 class CustomProjectPart : public KDevProject
@@ -45,6 +46,9 @@ protected:
 
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
+    void contextMenu(QPopupMenu *popup, const Context *context);
+    void slotAddToProject();
+    void slotRemoveFromProject();
     void slotBuild();
     void slotClean();
     void slotExecute();
@@ -61,6 +65,7 @@ private:
     QStringList m_sourceFiles;
     QPopupMenu *m_targetMenu;
     QStringList m_targets;
+    QString m_contextFileName;
 };
 
 #endif

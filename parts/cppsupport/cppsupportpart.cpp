@@ -323,13 +323,17 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
     
     QRegExp re("[ \t]*#include *[<\"](.*)[>\"][ \t]*");
-    if (re.exactMatch(str) &&
-        !findHeader(project()->allFiles(), re.cap(1)).isEmpty()) {
-        popupstr = re.cap(1);
-        popup->insertSeparator();
-        popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
-                           this, SLOT(slotGotoIncludeFile()) );
-    }
+    if (!re.exactMatch(str))
+        return;
+    
+    QString popupstr = re.cap(1);
+    m_contextFileName = findHeader(project()->allFiles(), popupstr);
+    if (m_contextFileName.isEmpty())
+        return;
+    
+    popup->insertSeparator();
+    popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
+                       this, SLOT(slotGotoIncludeFile()) );
 }
 
 
@@ -606,9 +610,8 @@ void CppSupportPart::slotSwitchHeader()
 
 void CppSupportPart::slotGotoIncludeFile()
 {
-    QString fileName = findHeader(project()->allFiles(), popupstr);
-    if (!fileName.isEmpty())
-        partController()->editDocument(fileName, 0);
+    if (!m_contextFileName.isEmpty())
+        partController()->editDocument(m_contextFileName, 0);
 
 }
 

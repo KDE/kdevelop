@@ -119,7 +119,7 @@ private:
     CClassParser* m_pCCParser;
     
     bool withcpp;
-    QString popupstr;
+    QString m_contextFileName;
     
     bool m_bEnableCC;
     QGuardedPtr< CppSupportWidget > m_pCHWidget;

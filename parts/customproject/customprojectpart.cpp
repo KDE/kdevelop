@@ -16,6 +16,7 @@
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qregexp.h>
+#include <qpopupmenu.h>
 #include <qtabwidget.h>
 #include <qvaluestack.h>
 #include <qvbox.h>
@@ -108,11 +109,41 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 
 void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (context->hasType("file")) {
-    }
+    if (!context->hasType("file"))
+        return;
+
+    const FileContext *fcontext = static_cast<const FileContext*>(context);
+    if (fcontext->isDirectory())
+        return;
+
+    m_contextFileName = fcontext->fileName();
+    bool inProject = project()->allFiles().contains(m_contextFileName);
+    QString popupstr = QFileInfo(m_contextFileName).fileName();
+    if (m_contextFileName.startsWith(projectDirectory()+ "/"))
+        m_contextFileName.remove(0, projectDirectory().length()+1);
+    
+    popup->insertSeparator();
+    if (inProject)
+        popup->insertItem( i18n("Remove from Project: %1").arg(popupstr),
+                           this, SLOT(slotRemoveFromProject()) );
+    else
+        popup->insertItem( i18n("Add to Project: %1").arg(popupstr),
+                           this, SLOT(slotAddToProject()) );
 }
 
-    
+
+void CustomProjectPart::slotAddToProject()
+{
+    addFile(m_contextFileName);
+}
+
+
+void CustomProjectPart::slotRemoveFromProject()
+{
+    removeFile(m_contextFileName);
+}
+
+
 void CustomProjectPart::openProject(const QString &dirName, const QString &projectName)
 {
     m_projectDirectory = dirName;
@@ -222,11 +253,13 @@ QStringList CustomProjectPart::allFiles()
     QStringList::ConstIterator it;
     for (it = m_sourceFiles.begin(); it != m_sourceFiles.end(); ++it) {
         QString fileName = *it;
-        if (!fileName.startsWith("/"))
+        if (!fileName.startsWith("/")) {
             fileName.prepend("/");
-            fileName.prepend(m_projectDirectory());
+            fileName.prepend(m_projectDirectory);
+        }
         res += fileName;
-
+    }
+    
     return res;
 }
 
@@ -234,7 +267,7 @@ QStringList CustomProjectPart::allFiles()
 void CustomProjectPart::addFile(const QString &fileName)
 {
     m_sourceFiles.append(fileName);
-    kdDebug(9025) << "Emitting addFileToProject" << endl;
+    kdDebug(9025) << "Emitting addedFileToProject" << endl;
     emit addedFileToProject(fileName);
 }
 
@@ -242,7 +275,7 @@ void CustomProjectPart::addFile(const QString &fileName)
 void CustomProjectPart::removeFile(const QString &fileName)
 {
     m_sourceFiles.remove(fileName);
-    kdDebug(9025) << "Emitting removeFileFromProject" << endl;
+    kdDebug(9025) << "Emitting removedFileFromProject" << endl;
     emit removedFileFromProject(fileName);
 }
 
