@@ -277,7 +277,7 @@ static String[][] options =
 static void main(String[] cmdLineArgs)
 {
     KAboutData about = new KAboutData("$APPNAMELC$", "$APPNAME$", version, description,
-                     KAboutData.License_$LICENSE$, "(C) 2001 $AUTHOR$", null, null, "$EMAIL$");
+                     KAboutData.License_$LICENSE$, "(C) $YEAR$ $AUTHOR$", null, null, "$EMAIL$");
     about.addAuthor( "$AUTHOR$", null, "$EMAIL$" );
     KCmdLineArgs.init(cmdLineArgs, about);
     KCmdLineArgs.addCmdLineOptions(options);
