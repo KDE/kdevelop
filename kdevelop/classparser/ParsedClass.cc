@@ -418,6 +418,11 @@ void CParsedClass::out()
   cout << "  Signal to slot mappings:\n";
   for( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     aSS->out();
+  cout << "  Classes:\n";
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+    classIterator.current()->out();
   
   cout << endl;
 }
