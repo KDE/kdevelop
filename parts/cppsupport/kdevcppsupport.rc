@@ -6,7 +6,6 @@
   <Separator />
   <Action name="edit_complete_text"/>
   <Action name="edit_type_of_expression"/>
-  <Action name="edit_make_member"/>
  </Menu>
  <Menu name="project">
   <Action name="project_newclass"/>
