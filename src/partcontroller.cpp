@@ -256,11 +256,19 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			if (url.isRelativeURL(url.url())) {
 				KURL relURL(API::getInstance()->project()->projectDirectory(), url.url());
 		
+				kdDebug() << k_funcinfo << "Looking for file in project dir: " << API::getInstance()->project()->projectDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
 				if (relURL.isValid() && KIO::NetAccess::exists(url, false, 0)) {
 					url = relURL;
 					done = true;
 				}
-				kdDebug() << k_funcinfo << "Looking for file in project dir: " << API::getInstance()->project()->projectDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
+				else {
+					KURL relURL(API::getInstance()->project()->buildDirectory(), url.url());
+					kdDebug() << k_funcinfo << "Looking for file in build dir: " << API::getInstance()->project()->buildDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
+					if (relURL.isValid() && KIO::NetAccess::exists(url, false, 0)) {
+						url = relURL;
+						done = true;
+					}
+				}
 			}
 			
 			if (!done) {

@@ -431,6 +431,22 @@ static bool checkFileExists( const QString& file, QString& fName )
     return false;
 }
 
+void MakeWidget::specialCheck( const QString& file, QString& fName ) const
+{
+    QString firstLine = text(0);
+    QRegExp rx("cd \\'(.*)\\'.*");
+    if (rx.search(firstLine) != -1)
+    {
+        KURL url(rx.cap(1)+"/", file);
+        if (url.isValid())
+        {
+            kdDebug(9004) << "MakeWidget::specialCheck thinks that url is: " << url.url()
+                << " origin: " << file << endl;
+            fName = url.url();
+        }
+    }
+}
+
 QString MakeWidget::guessFileName( const QString& fName, int parag ) const
 {
     // pathological case
@@ -454,11 +470,12 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
         // no absolute path - let's guess.
         name = fName;
         if ( !checkFileExists( m_part->project()->projectDirectory() + "/" + fName, name ) &&
-	     !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) )
-            checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name );
+            !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) &&
+            !checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name ) )
+            specialCheck(fName, name);
     }
 
-    kdDebug(9004) << "Opening file: " << fName << endl;
+    kdDebug(9004) << "Opening file: " << name << endl;
 
     // GNU make resolves symlinks. if "name" is a real path to a file the
     // project know by symlink path, we need to return the symlink path

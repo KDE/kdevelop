@@ -78,6 +78,7 @@ private slots:
     void slotDocumentClosed(QObject* doc);
 
 private:
+    void specialCheck( const QString& file, QString& fName ) const;
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
     QString guessFileName( const QString& fName, int parag ) const;
