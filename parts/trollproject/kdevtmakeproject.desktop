@@ -2,8 +2,9 @@
 
 Type=Service
 Exec=blubb
-Comment=QMake project
-Name=KDevTrollProject
+Comment=TMake project
+Name=KDevTMakeProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
-X-KDevelop-Args=
+X-KDevelop-Args=TMake
+

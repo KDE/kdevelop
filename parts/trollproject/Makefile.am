@@ -28,7 +28,7 @@ libkdevtrollproject_la_SOURCES = caret.cpp\
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevtrollproject.desktop
+service_DATA = kdevtrollproject.desktop kdevtmakeproject.desktop
 
 rcdir = $(kde_datadir)/kdevtrollproject
 rc_DATA = kdevtrollproject.rc

@@ -30,7 +30,9 @@ class TrollProjectPart : public KDevProject
 public:
     TrollProjectPart( QObject *parent, const char *name, const QStringList &args );
     ~TrollProjectPart();
-
+    
+    bool isTMakeProject() const { return m_tmakeProject; }
+    
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
@@ -61,6 +63,7 @@ private:
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_qmakeHeader;
     QString m_projectName;
+    bool m_tmakeProject;
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;
 };
