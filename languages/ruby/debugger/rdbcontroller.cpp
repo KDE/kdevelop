@@ -101,7 +101,7 @@ RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack
         stdoutOutput_(new char[4096]),
         holdingZone_(),
         rdbOutputLen_(0),
-        rdbOutput_(new char[8192]),
+        rdbOutput_(new char[49152]),
 		socketNotifier_(0),
         currentCmd_(0),
 		currentPrompt_("(rdb:1) "),
@@ -1197,7 +1197,6 @@ void RDBController::slotReadFromSocket(int socket)
 	rdbOutputLen_ += bytesRead;
     *(rdbOutput_ + rdbOutputLen_) = 0;
 	
-//    kdDebug(9012) << "RDBController::slotReadFromSocket input: " << rdbOutput_ << endl;
 
     // Already parsing? then get out quick.
     if (parsing)
@@ -1214,6 +1213,8 @@ void RDBController::slotReadFromSocket(int socket)
     if (promptPos == -1) {
 		return;
 	}
+	
+    kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
 	
 	// Save the prompt, and remove it from the buffer
 	currentPrompt_ = prompt_re.cap(1).latin1();

@@ -59,6 +59,7 @@ public:
     virtual ~FrameStackItem();
 
 	virtual int rtti() const { return RTTI_FRAME_STACK_ITEM; }
+	virtual QString key(int column, bool ascending) const;
 
     int frameNo() { return frameNo_; }
     int threadNo() { return threadNo_; }
@@ -68,6 +69,7 @@ private:
     int frameNo_;
     int threadNo_;
 	QString frameName_;
+	QString key_;
 };
 
 /***************************************************************************/

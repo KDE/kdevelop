@@ -211,9 +211,10 @@ FrameStackItem::FrameStackItem(ThreadStackItem *parent, int frameNo, const QStri
         : QListViewItem(parent),
         frameNo_(frameNo),
         threadNo_(parent->threadNo()),
-		frameName_(frameName)
+		frameName_(frameName)		
 {
 	setText(0, frameDesc);
+	key_.sprintf("%.6d", frameNo_);
 }
 
 // **************************************************************************
@@ -222,6 +223,13 @@ FrameStackItem::~FrameStackItem()
 {
 }
 
+// **************************************************************************
+
+QString FrameStackItem::key(int /*column*/, bool /*ascending*/) const 
+{
+
+	return key_;
+}
 
 // **************************************************************************
 // **************************************************************************
