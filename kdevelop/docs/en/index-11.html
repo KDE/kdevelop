@@ -158,6 +158,7 @@ of them depend on each other, e.g. you have three radiobuttons, but ony want the
 <LI><B>QComboBox</B> - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
 box is write enabled.</LI>
 <LI><B>QListBox</B> - provides a single-column list of items that can be scrolled.</LI>
+<LI><B>QListView</B> - creates a multi-column list view that can be used to display e.g. file trees etc. in tree and table view.</LI>
 <LI><B>QMultiLineEdit</B> - offers a multi-line editor.</LI>
 <LI><B>QProgressBar</B> - displays the progress of an action that takes a longer time to be finished.</LI>
 <LI><B>QSpinBox</B> - allows choosing numeric values by up- and down buttons or insertion if write enabled.</LI>
@@ -166,11 +167,24 @@ box is write enabled.</LI>
 used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
 to another part of the widgets' contents.</LI>
 <LI><B>QGroupBox</B> - provides a groupbox frame with title to indicate that child widgets within the box belong together.</LI>
-<LI>More to come...</LI>
 </UL>
 <P><B>KDE-Widgets:</B>
 <UL>
-<LI>More to come...</LI>
+<LI><B>KColorButton</B> - a pushbutton displaying a selected color. On a button press, the KDE Color dialog is shown where the user can
+select another color. Often used for drawing applications or in any case where color values can be set.</LI>
+<LI><B>KCombo</B> - similar to <CODE>QComboBox</CODE>. Lets the user choose a value by a drop-down listbox.</LI>
+<LI><B>KDatePicker</B> - a complete widget to get a date value by the user.</LI>
+<LI><B>KDateTable</B> - a calendar table to select a date of a month. Used by <CODE>KDatePicker</CODE> to build the datepicker dialog.</LI>
+<LI><B>KKeyButton</B> - a button to select a key value. If the button is selected, it gets activated. Pressing a keyboard button will
+change the key value for the button which can be used to configure keybindings.</LI>
+<LI><B>KLed</B> - and LED (Light Emitting Diode) widget to display a certain state.</LI>
+<LI><B>KLedLamp</B> - and LED lamp that also supports click actions</LI>
+<LI><B>KProgress</B> - similar to <CODE>QProgressBar</CODE>, <CODE>KProgress</CODE> supports certain other values.</LI>
+<LI><B>KRestrictedLine</B> - a <CODE>QLineEdit</CODE> that only accepts certain user input. This can be used to restrict access to certain data
+by password dialogs.</LI>
+<LI><B>KSeparator</B> - a separator widget to be used in all cases where KDE applications require a separator to provide a unique look.
+Often used in dialogs to separate logical parts where <CODE>QGroupBox</CODE> doesn't fit.</LI>
+<LI><B>KTreeList</B> - a collapsable list view to display trees similar to <CODE>QListView</CODE>.</LI>
 </UL>
 <P>After you selected a widget item, it is placed with default sizes and values on the editing window and marked selected by a frame and
 darkened corners. To resize a widget, move your mouse over one of the dark spots and your cursor will change to display which resizing
@@ -253,6 +267,13 @@ properties that are specific to it. For a better understanding the inheritance t
 <A HREF="#QLabel">QLabel</A></LI>
 <LI>
 <A HREF="#QProgressBar">QProgressBar</A></LI>
+<LI>
+<A HREF="#QScrollView">QScrollView</A> (abstract for now)
+<UL>
+<LI>
+<A HREF="#QListView">QListView</A></LI>
+</UL>
+</LI>
 <LI>
 <A HREF="#QSpinBox">QSpinBox</A></LI>
 <LI>
@@ -531,6 +552,10 @@ display the progress, you have to call setProgress(int) to advance the progress 
 </UL>
 <P>
 <P>
+<H4><A NAME="QScrollView"></A> QScrollView Inherits <A HREF="#QWidget">QWidget</A> and <A HREF="#QFrame">QFrame</A>Inherited by <A HREF="#QListBox">QListBox</A>(abstract for now)Provides a scrollable widget that manages the display of a childwidget by a vertical and horizontal scrollbar.</H4>
+
+<H4><A NAME="QListView"></A> QListViewInherits <A HREF="#QWidget">QWidget</A>, <A HREF="#QFrame">QFrame</A> and <A HREF="#QListView">QListView</A>Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars throug <A HREF="#QScrollView">QScrollView</A>.</H4>
+
 <H4><A NAME="QSpinBox"></A> QSpinBox Properties </H4>
 
 <P>Inherits 
@@ -683,8 +708,105 @@ mouse release.</LI>
 </UL>
 <P>
 <P>
+<H3><A NAME="ss11.7">11.7 Properties of KDE supported Widgets</A>
+</H3>
+
 <P>
-<H3><A NAME="ss11.7">11.7 Generating Files</A>
+<UL>
+<LI>
+<A HREF="#QWidget">QWidget</A>
+<UL>
+<LI>
+<A HREF="#QButton">QButton</A> (abstract)
+<UL>
+<LI>
+<A HREF="#QPushButton">QPushButton</A>
+<UL>
+<LI>
+<A HREF="#KColorButton">KColorButton</A></LI>
+<LI>
+<A HREF="#KKeyButton">KKeyButton</A></LI>
+</UL>
+                </LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QComboBox">QComboBox</A>
+<UL>
+<LI>
+<A HREF="#KCombo">KCombo</A></LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QFrame">QFrame</A> (abstract for now)
+<UL>
+<LI>
+<A HREF="#KDatePicker">KDatePicker</A></LI>
+<LI>
+<A HREF="#KLedLamp">KLedLamp</A></LI>
+<LI>
+<A HREF="#KProgress">KProgress</A></LI>
+<LI>
+<A HREF="#KSeparator">KSeparator</A></LI>
+<LI>
+<A HREF="#QTableView">QTableView</A> (abstract)
+<UL>
+<LI>
+<A HREF="#KDateTable">KDateTable</A></LI>
+<LI>
+<A HREF="#KTreeList">KTreeList</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QLineEdit">QLineEdit</A>
+<UL>
+<LI>
+<A HREF="#KRestrictedLine">KRestrictedLine</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#KLed">KLed</A></LI>
+</UL>
+<P>
+<H4><A NAME="KColorButton"></A> KColorButton</H4>
+
+<P>
+<H4><A NAME="KKeyButton"></A> KKeyButton</H4>
+
+<P>
+<H4><A NAME="KCombo"></A> KCombo</H4>
+
+<P>
+<H4><A NAME="KDatePicker"></A> KDatePicker</H4>
+
+<P>
+<H4><A NAME="KLedLamp"></A> KLedLamp</H4>
+
+<P>
+<H4><A NAME="KProgress"></A> KProgress</H4>
+
+<P>
+<H4><A NAME="KSeparator"></A> KSeparator</H4>
+
+<P>
+<H4><A NAME="KDateTable"></A> KDateTable</H4>
+
+<P>
+<H4><A NAME="KTreeList"></A> KTreeList</H4>
+
+<P>
+<H4><A NAME="KRestrictedLine"></A> KRestrictedLine</H4>
+
+<P>
+<H4><A NAME="KLed"></A> KLed</H4>
+
+<P>
+<P>
+<H3><A NAME="ss11.8">11.8 Generating Files</A>
 </H3>
 
 <P>After creating a widget, you have to generate the sourcecode to make it available in your project. This can be done either with the

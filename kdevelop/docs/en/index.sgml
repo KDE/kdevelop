@@ -1197,6 +1197,14 @@ display next search hit on the same page         F3
 </code>
 <p>
 
+<sect3>Browser Shortcuts
+<p>
+<code>
+previous page																		 Alt+ LeftArrow
+next page																				 Alt+ Right Arrow
+</code>
+<p>
+
 <sect3>Managing Bookmarks
 <p>
 <code>
@@ -1220,7 +1228,7 @@ Symbol "Compile File"                            STRG+F10
 Symbol "Make"                                    F9
 Symbol "Execute"                                 STRG+F9
 Symbol "Execute with Arguments"                  ALT+F10
-Symbol "Dialog Editor"                            STRG+D
+Symbol "Dialog Editor"                           STRG+D
 Symbol "Search Marked Text"                      F2
 </code>
 <p>
@@ -1281,7 +1289,7 @@ The Statusbar contains:
 <enum>
 <item> a general message field, mostleft. This is used for help messages and displays the current activity.
 <item> the progressbar, indicating the progress for actions that require a comparably long time to be finished, such as saving
-files and the scan-progress of the Class Browser.
+files and the scan-progress of the Class Browser. The progressbar only appears during those processes are executed.
 <item> an Insert/Overwrite indicator. It shows the editor mode for insert actions by INS for Insert mode and OVR for Overwrite
 mode. The mode can be changed by the INS-key on the keyboard.
 <item> a line counter, displaying the current line the cursor is placed.
@@ -1520,13 +1528,14 @@ The following gives you a general guideline how to locate certain positions with
 </enum>
 
 Another way to set bookmarks would be to select "Add Bookmark" from the "Bookmarks"-menu. This sets a bookmark to the current line
-and appends it to the bookmarks-list.
+and appends it to the bookmarks-list. The documentation browser also offers setting a bookmark to the current page by a context menu
+entry "Add Bookmark".
 
 <bf>&raquo How to delete bookmarks</bf>
 
 The bookmarks are set for each editing window separately- mind that your bookmarks aren't connected to a certain file you set the
 bookmark for. To delete all bookmaks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the bookmarks for the
-window actually on top, either the Header window or the C++ window.
+window actually on top, either the Header window, the C++ window or the browser window.
 
 <bf>&raquo How to go to a bookmarked line</bf>
 
@@ -1535,6 +1544,8 @@ window actually on top, either the Header window or the C++ window.
 to view; either the C++-Window or the Header-Window entry.
 <item>Select the bookmarked line.
 </enum>
+
+Selecting a bookmark for the browser window will open the browser and loads the page.
 
 <sect1>Working with Keyboard Shortcuts
 <p>
@@ -2427,7 +2438,8 @@ available options can be taken from the man page for <bf/ld/ or your compiler ma
 The libraries section contains checkboxes for the most needed libraries in conjuction with <idx/Qt//<idx/KDE/ application
 development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
 symbol tables.
-<descrip> <tag/X11/The X11 library. Recommended for all X-Window programs.
+<descrip>
+<tag/X11/The X11 library. Recommended for all X-Window programs.
 <p>
 <tag/Xext/The X11 extension library. Also most X-Window programs depend on Xext.
 <p>
@@ -2450,6 +2462,30 @@ symbol tables.
 </descrip>
 <bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
+
+<sect2>Make
+<p>
+As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
+en/disabled. The available settings are:
+
+<descrip>
+<tag/
+
+<tag/Print debug information/ prints out all information about the project files and what make determines for rebuilding them.
+<tag/Continue after errors/ tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
+error)
+<tag/Print the data base/ prints out the make-database for the current process which contains the changes from the last
+build-run. <tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
+the Makefiles.
+<tag/No built-in rules/ doesn't use built-in rules for make.
+<tag/Touch files/ don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
+<tag/Ignore all errors/ Ignores all errors that occur
+<tag/Silent operation/ doesn't print out any information about the build-process
+<tag/Print working directory/ prints the current directory during the make-process.
+<tag/job number/ sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
+<tag/set modified/ sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
+means that the file will be processed by make and compiled if it is a source file.
+<tag/additional options/ set additional options to make; those can be found in your local man page for "GNU Make". </descrip>
 
 <sect>The Class Browser<label id="The Class Browser">
 <p>
@@ -2714,6 +2750,7 @@ of them depend on each other, e.g. you have three radiobuttons, but ony want the
 <item><bf/QComboBox/ - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
 box is write enabled.
 <item><bf/QListBox/ - provides a single-column list of items that can be scrolled.
+<item><bf/QListView/ - creates a multi-column list view that can be used to display e.g. file trees etc. in tree and table view.
 <item><bf/QMultiLineEdit/ - offers a multi-line editor.
 <item><bf/QProgressBar/ - displays the progress of an action that takes a longer time to be finished.
 <item><bf/QSpinBox/ - allows choosing numeric values by up- and down buttons or insertion if write enabled.
@@ -2722,12 +2759,25 @@ box is write enabled.
 used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
 to another part of the widgets' contents.
 <item><bf/QGroupBox/ - provides a groupbox frame with title to indicate that child widgets within the box belong together.
-<item>More to come...
 </itemize>
 
 <bf/KDE-Widgets:/
 <itemize>
-<item>More to come...
+<item><bf/KColorButton/ - a pushbutton displaying a selected color. On a button press, the KDE Color dialog is shown where the user can
+select another color. Often used for drawing applications or in any case where color values can be set.
+<item><bf/KCombo/ - similar to <tt/QComboBox/. Lets the user choose a value by a drop-down listbox.
+<item><bf/KDatePicker/ - a complete widget to get a date value by the user.
+<item><bf/KDateTable/ - a calendar table to select a date of a month. Used by <tt/KDatePicker/ to build the datepicker dialog.
+<item><bf/KKeyButton/ - a button to select a key value. If the button is selected, it gets activated. Pressing a keyboard button will
+change the key value for the button which can be used to configure keybindings.
+<item><bf/KLed/ - and LED (Light Emitting Diode) widget to display a certain state.
+<item><bf/KLedLamp/ - and LED lamp that also supports click actions
+<item><bf/KProgress/ - similar to <tt/QProgressBar/, <tt/KProgress/ supports certain other values.
+<item><bf/KRestrictedLine/ - a <tt/QLineEdit/ that only accepts certain user input. This can be used to restrict access to certain data
+by password dialogs.
+<item><bf/KSeparator/ - a separator widget to be used in all cases where KDE applications require a separator to provide a unique look.
+Often used in dialogs to separate logical parts where <tt/QGroupBox/ doesn't fit.
+<item><bf/KTreeList/ - a collapsable list view to display trees similar to <tt/QListView/.
 </itemize>
 
 After you selected a widget item, it is placed with default sizes and values on the editing window and marked selected by a frame and
@@ -2800,6 +2850,10 @@ properties that are specific to it. For a better understanding the inheritance t
 			<item><ref id="QLCDNumber" name="QLCDNumber">
 			<item><ref id="QLabel" name="QLabel">
 			<item><ref id="QProgressBar" name="QProgressBar">
+			<item><ref id="QScrollView" name="QScrollView"> (abstract for now)
+				<itemize>
+				<item><ref id="QListView" name="QListView">
+				</itemize>
 			<item><ref id="QSpinBox" name="QSpinBox">
 			<item><ref id="QTableView" name="QTableView"> (abstract)
 				<itemize>
@@ -3056,6 +3110,20 @@ display the progress, you have to call setProgress(int) to advance the progress 
 
 </itemize>
 <p>
+			
+<sect3>QScrollView <label id="QScrollView">
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+Inherited by <ref id="QListBox" name="QListBox">
+(abstract for now)
+
+Provides a scrollable widget that manages the display of a childwidget by a vertical and horizontal scrollbar.
+
+<sect4>QListView<label id="QListView">
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QListView" name="QListView">
+
+Provides a list view to display hierarchical data either in a table or a tree. Manages itself by scrollbars throug <ref
+id="QScrollView" name="QScrollView">.
 
 <sect3>QSpinBox Properties <label id="QSpinBox">
 <p>
@@ -3198,6 +3266,65 @@ mouse release.
 </itemize>
 <p>
 
+<sect1>Properties of KDE supported Widgets
+<p>
+<itemize>
+<item><ref id="QWidget" name="QWidget">
+	<itemize>
+	<item><ref id="QButton" name="QButton"> (abstract)
+		<itemize>
+		<item><ref id="QPushButton" name="QPushButton">
+  		<itemize>
+  		<item><ref id="KColorButton" name="KColorButton">
+  		<item><ref id="KKeyButton" name="KKeyButton">
+  		</itemize>		
+		</itemize>
+	<item><ref id="QComboBox" name="QComboBox">
+		<itemize>
+		<item><ref id="KCombo" name="KCombo">
+		</itemize>
+	<item><ref id="QFrame" name="QFrame"> (abstract for now)
+ 		<itemize>
+ 		<item><ref id="KDatePicker" name="KDatePicker">
+ 		<item><ref id="KLedLamp" name="KLedLamp">
+ 		<item><ref id="KProgress" name="KProgress">
+ 		<item><ref id="KSeparator" name="KSeparator">
+ 		<item><ref id="QTableView" name="QTableView"> (abstract)
+ 			<itemize>
+ 			<item><ref id="KDateTable" name="KDateTable">
+ 			<item><ref id="KTreeList" name="KTreeList">
+ 			</itemize>
+ 		</itemize>
+ 	<item><ref id="QLineEdit" name="QLineEdit">
+ 		<itemize>
+ 		<item><ref id="KRestrictedLine" name="KRestrictedLine">
+ 		</itemize>
+	</itemize>
+	<item><ref id="KLed" name="KLed">
+</itemize>
+
+<sect2>KColorButton<label id="KColorButton">
+<p>
+<sect2>KKeyButton<label id="KKeyButton">
+<p>
+<sect2>KCombo<label id="KCombo">
+<p>
+<sect2>KDatePicker<label id="KDatePicker">
+<p>
+<sect2>KLedLamp<label id="KLedLamp">
+<p>
+<sect2>KProgress<label id="KProgress">
+<p>
+<sect2>KSeparator<label id="KSeparator">
+<p>
+<sect2>KDateTable<label id="KDateTable">
+<p>
+<sect2>KTreeList<label id="KTreeList">
+<p>
+<sect2>KRestrictedLine<label id="KRestrictedLine">
+<p>
+<sect2>KLed<label id="KLed">
+<p>
 
 <sect1>Generating Files
 <p>
@@ -3215,6 +3342,7 @@ For more information about implementation of the widgets functions, see <em/The 
 <p>
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
 found by the according entry in the Options-menu.
+
 <sect1>Configuring the "Tools" Menu<label id="Configuring the &dquot;Tools&dquot; Menu">
 <p>
 As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
@@ -3225,6 +3353,30 @@ name and choose "Delete". To add a program, specify the menuentry, where a & is 
 already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
 is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
 usable without restarting KDevelop.
+
+<sect1>File Viewer Options
+<p>
+The Logical File Viewer can be configured by context menus completely. As it's intention is to separate files logically to keep a
+better overview over complex projects, one of the most used configurations is to create file groups. Those can be set by opening the
+context menu with a right mouse button click over the project icon displayed at the root of the tree. The menu offers:
+<itemize>
+<item>New File: Opens the New File dialog. Equals to the menubar command "File"-"New"
+<item>New Class: Opens the Classgenerator to create a new class. Equals to the menubar command "Project"-"New Class"
+<item>New Group: Opens a dialog to create a new group. There, set the group name and the file filter for the project files that will be
+displayed in this group.
+<item>Show relative path: displays the files with their path name starting from the main project directory if checked; otherwise only
+the filename is shown.
+</itemize>
+
+Over a group folder, the according context menu offers:
+
+<itemize>
+<item>New Group: Opens the New Group dialog as in the context menu described above.
+<item>Remove group: removes the group from the LFV.
+<item>Properties: Opens the properties of the group. There, you can edit the file filters by a list of wildcards separated by commas.
+</itemize>
+
+
 <sect1>KDevelop Setup<label id="KDevelop Setup">
 <p>
 <bf>Make-command:</bf>

@@ -103,7 +103,13 @@ void KDlgEdit::slotFileNew(){
 
 void KDlgEdit::slotFileOpen()
 {
-  
+  QString  name = KFileDialog::getOpenFileName("","*.kdevdlg",0);
+  if (name.isNull()){
+    return;
+  }
+  else{
+		slotOpenDialog(name);
+	}
 }
 void KDlgEdit::slotOpenDialog(QString file){
   if(file != dialog_file){

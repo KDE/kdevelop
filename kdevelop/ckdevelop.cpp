@@ -249,7 +249,7 @@ void CKDevelop::slotFileSaveAll(){
   // ooops...autosave switches tabs...
   int visibleTab=s_tab_view->getCurrentTab();
   // first the 2 current edits
-  edit_widget->setUpdatesEnabled(false);
+  view->setUpdatesEnabled(false);
 
   if(header_widget->isModified()){
     if(header_widget->getName() == "Untitled.h"){
@@ -303,10 +303,10 @@ void CKDevelop::slotFileSaveAll(){
   }
   // switch back to visible file
   switchToFile(visibleFile);
-  edit_widget->setUpdatesEnabled(true);
-  edit_widget->repaint();
+  view->setUpdatesEnabled(true);
   // switch back to visible tab
   s_tab_view->setCurrentTab(visibleTab);
+  view->repaint();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -484,6 +484,8 @@ void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
     tree_view_pos=top_panner->separatorPos();
     top_panner->setSeparatorPos(0);
   }
@@ -491,6 +493,8 @@ void CKDevelop::slotViewTTreeView(){
     top_panner->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
   }
   QRect rMainGeom= top_panner->geometry();
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -501,6 +505,8 @@ void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
   }
@@ -508,6 +514,8 @@ void CKDevelop::slotViewTOutputView(){
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
   QRect rMainGeom= view->geometry();
   view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -1091,6 +1099,9 @@ void CKDevelop::slotHelpBack(){
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
+  	enableCommand(ID_HELP_BROWSER_STOP);
+	  if(!bKDevelop)
+  	  switchToKDevelop();
   	s_tab_view->setCurrentTab(BROWSER);
 		browser_widget->showURL(str);
     enableCommand(ID_HELP_FORWARD);
@@ -1111,12 +1122,14 @@ void CKDevelop::slotHelpForward(){
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
   if (str != 0){
+	  if(!bKDevelop)
+  	  switchToKDevelop();
   	s_tab_view->setCurrentTab(BROWSER);
 		browser_widget->showURL(str);
     enableCommand(ID_HELP_BACK);
   }
   if (history_list.next() == 0){ // no more forwards
-   disableCommand(ID_HELP_FORWARD);
+   	disableCommand(ID_HELP_FORWARD);
     history_list.last(); // set it at last
   }
   else{
@@ -1130,6 +1143,8 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 	
   QString str = history_list.at(id_);
   if (str != 0){
+	  if(!bKDevelop)
+  	  switchToKDevelop();
   	s_tab_view->setCurrentTab(BROWSER);
 		browser_widget->showURL(str);
     enableCommand(ID_HELP_FORWARD);
@@ -1151,6 +1166,8 @@ void CKDevelop::slotHelpHistoryForward( int id_){
 	
   QString str = history_list.at(id_);
   if (str != 0){
+	  if(!bKDevelop)
+  	  switchToKDevelop();
   	s_tab_view->setCurrentTab(BROWSER);
 		browser_widget->showURL(str);
     enableCommand(ID_HELP_BACK);
@@ -1163,6 +1180,16 @@ void CKDevelop::slotHelpHistoryForward( int id_){
     history_list.prev();
   }
   slotStatusMsg(i18n("Ready."));
+}
+
+void CKDevelop::slotHelpBrowserReload(){
+	slotStatusMsg(i18n("Reloading page..."));
+  if(!bKDevelop)
+    switchToKDevelop();
+  s_tab_view->setCurrentTab(BROWSER);
+  browser_widget->setFocus();
+	browser_widget->showURL(browser_widget->currentURL(), true);
+	slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotHelpSearchText(QString text){
@@ -1182,6 +1209,7 @@ void CKDevelop::slotHelpSearchText(QString text){
     }
     return;
   }
+	enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
   search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
@@ -1455,6 +1483,7 @@ void CKDevelop::slotNewUndo(){
 
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
+	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
     switchToKDevelop();
   showOutputView(false);
@@ -1537,6 +1566,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
   for ( j = history_list.at()+1 ; j < history_list.count(); j++){
     history_next->insertItem(history_title_list.at(j));
   }
+	disableCommand(ID_HELP_BROWSER_STOP);
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
@@ -1618,6 +1648,7 @@ void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen)
   search_output = search_output + str;
 }
 void CKDevelop::slotSearchProcessExited(KProcess*){
+	disableCommand(ID_HELP_BROWSER_STOP);
   //  cerr << search_output;
   int pos=0;
   int nextpos=0;
@@ -2068,6 +2099,12 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_VIEW_REFRESH:
     slotViewRefresh();
     break;
+	case ID_VIEW_TREEVIEW:
+		slotViewTTreeView();
+		break;
+	case ID_VIEW_OUTPUTVIEW:
+		slotViewTOutputView();
+		break;
   case ID_BUILD_COMPILE_FILE:
   	slotBuildCompileFile();
   	break;
@@ -2098,6 +2135,17 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_HELP_FORWARD:
     slotHelpForward();
     break;
+	case ID_HELP_BROWSER_RELOAD:
+		slotHelpBrowserReload();
+		break;
+	case ID_HELP_BROWSER_STOP:
+		browser_widget->cancelAllRequests();
+	  shell_process.kill();
+		disableCommand(ID_HELP_BROWSER_STOP);
+		break;
+	case ID_HELP_CONTENTS:
+		slotHelpContents();
+		break;
   case ID_HELP_SEARCH_TEXT:
     slotHelpSearchText();
     break;
@@ -2250,3 +2298,16 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

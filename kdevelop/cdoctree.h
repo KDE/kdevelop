@@ -70,3 +70,5 @@ private: // Private attributes
   QString m_text;
 };
 #endif
+
+

@@ -164,6 +164,9 @@
 #define ID_HELP_BACK                 18010
 #define ID_HELP_FORWARD              18020
 
+#define ID_HELP_BROWSER_RELOAD			18022
+#define ID_HELP_BROWSER_STOP				18023
+
 #define ID_HELP_SEARCH_TEXT          18030
 #define ID_HELP_SEARCH              18040
 

@@ -218,6 +218,31 @@ symbol tables.
 <B>additional libraries:</B> Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
 <P>
+<H4>Make</H4>
+
+<P>As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
+en/disabled. The available settings are:
+<P>
+<DL>
+<DT><B></B><DD><P>
+<DT><B>Print debug information</B><DD><P>prints out all information about the project files and what make determines for rebuilding them.
+<DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occured (e.g. a file couldn't be compiled due to an
+error)
+<DT><B>Print the data base</B><DD><P>prints out the make-database for the current process which contains the changes from the last
+build-run. 
+<DT><B>Environment variables</B><DD><P>give the current environment variables a higher priority than the currently used variables in
+the Makefiles.
+<DT><B>No built-in rules</B><DD><P>doesn't use built-in rules for make.
+<DT><B>Touch files</B><DD><P>don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
+<DT><B>Ignore all errors</B><DD><P>Ignores all errors that occur
+<DT><B>Silent operation</B><DD><P>doesn't print out any information about the build-process
+<DT><B>Print working directory</B><DD><P>prints the current directory during the make-process.
+<DT><B>job number</B><DD><P>sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
+<DT><B>set modified</B><DD><P>sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
+means that the file will be processed by make and compiled if it is a source file.
+<DT><B>additional options</B><DD><P>set additional options to make; those can be found in your local man page for "GNU Make". 
+</DL>
+<P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-10.html">Next</A>

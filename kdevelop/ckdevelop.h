@@ -107,10 +107,7 @@ public:
   void initKDlgKeyAccel();
   /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
   void setKDlgCaption();
-  		
-  void enableCommand(int id_);
-  void disableCommand(int id_);
-	
+  			
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
@@ -150,6 +147,9 @@ public:
 
 
  public slots:
+
+ 	void enableCommand(int id_);
+  void disableCommand(int id_);
 
   ////////////////////////
   // FILE-Menu entries
@@ -343,6 +343,8 @@ public:
 	void slotHelpHistoryBack( int id_);
   /** goes to the page in the history list by delayed popup menu on the forward-button on the browser toolbar */
 	void slotHelpHistoryForward(int id_);
+	/** reloads the currently opened page */
+	void slotHelpBrowserReload();
   /** search marked text */
   void slotHelpSearchText();
   /** search marked text with a text string */
@@ -662,6 +664,7 @@ private:
 };
 
 #endif
+
 
 
 

@@ -35,12 +35,18 @@ void CKDevelop::initWhatsThis(){
 	
 	whats_this->add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
 																													"Shows the Open file dialog to "
-																													"select a file to be opened"));
+																													"select a file to be opened. Holding "
+																													"the button pressed will show a popup "
+																													"menu containing all filenames of your "
+																													"project's sources and header files. "
+																													"Selecting a filename on the menu will "
+																													"then open the file according to the "
+																													"file-type."));
 	
-	/*	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_OPEN),i18n("Open file\n\n"
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_OPEN),i18n("Open file\n\n"
 																													"Shows the Open file dialog to "
 																													"select a *.kdevdlg file to be opened"));
-	*/
+
 	whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "
 																													"editing view"));
@@ -161,20 +167,37 @@ void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_BUILD_STOP),build_stop_str);
 	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_STOP),build_stop_str);
 
-	whats_this->add(toolBar()->getButton(ID_TOOLS_KDLGEDIT),i18n("KDialogEdit\n\n"
+	whats_this->add(toolBar()->getButton(ID_TOOLS_KDLGEDIT),i18n("Dialogeditor\n\n"
 																											"This will switch to the internal dialog "
-																											"editor of kdevelop, called KDialogEdit. "
+																											"editor of the KDevelop IDE. "
 																											"There, you can also switch back to the "
-																											"editing mode by choosing the KDevelop "
-																											"button or KDevelop from the Tools-menu."));
+																											"editing mode by choosing the Sourcecode editor "
+																											"button or Sourcecode-editor from the View-menu."));
 																											
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_TOOLS_KDEVELOP),i18n("KDevelop\n\n"
-																											"This will switch to KDevelop editing mode "
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_TOOLS_KDEVELOP),i18n("Sourcecode Editor\n\n"
+																											"This will switch to the sourcecode editor "
 																											"providing the usual IDE interface. You can "
 																											"switch back to the dialogeditor by choosing "
-																											"the KDialogEdit button in the KDevelop toolbar "
-																											"or by choosing KDialogEdit in the Tools-menu."));
-																													
+																											"the Dialogeditor button in the KDevelop toolbar "
+																											"or by choosing Dialogeditor in the View-menu."));
+	
+	QString output=i18n("Output-View\n\n"
+											"Enables/ disables the output window. The "																
+											"state of the window is displayed by the "
+											"toggle button: if the button is pressed, "
+											"the window is open, otherwise closed.");
+											
+	whats_this->add(toolBar()->getButton(ID_VIEW_OUTPUTVIEW),output);
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_OUTPUTVIEW),output);
+	
+	QString treeview=i18n("Tree-View\n\n"
+											"Enables/ disables the tree window. The "																
+											"state of the window is displayed by the "
+											"toggle button: if the button is pressed, "
+											"the window is open, otherwise closed.");
+	whats_this->add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_TREEVIEW),treeview);
+											
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
 	                                                    "Choosing a class will switch to the header "
 	                                                    "file where the class is declarated."));
@@ -185,12 +208,16 @@ void CKDevelop::initWhatsThis(){
 	                                                    "implementation of the chosen class."));
 	
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_BACK),i18n("Documentation-Back\n\n"
-	                                                    "This opens the previous browser page in the "
-	                                                    "browser window. "));
+	                                                    "This opens the previously visited page in the "
+	                                                    "browser window. Holding the button pressed down "
+	                                                    "will open a popup menu showing the browser history. "
+	                                                    "Selecting an entry will open the according page in "
+	                                                    "the browser window."));
 	
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_FORWARD),i18n("Documentation-Forward\n\n"
-	                                                    "This opens the next opened browser page after "
-	                                                    "Documentation-Back was chosen."));
+	                                                    "This opens the next page in the history list. "
+	                                                    "Holding the button pressed will show you a popup "
+	                                                    "menu to browse visited pages forward."));
 	
 	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_SEARCH_TEXT),i18n("Search Marked Text\n\n"
 	                                                    "Uses the searchdatabase to look for the selected "
@@ -283,6 +310,13 @@ void CKDevelop::initWhatsThis(){
 whats_this->add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
 	                                  																												
 }
+
+
+
+
+
+
+
 
 
 

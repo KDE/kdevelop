@@ -41,7 +41,7 @@
 void CKDevelop::slotClassChoiceCombo(int index)
 {
   CParsedClass *aClass;
-  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);  
+  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->text( index );
 
   if (classname == "") return;
@@ -548,3 +548,4 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
 
   lb->setAutoUpdate( true );
 }
+

@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDevelop Programming Handbook: KDE Standards</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="tutorial-13.html">Next</A>
+<A HREF="tutorial-11.html">Previous</A>
+<A HREF="tutorial.html#toc12">Table of Contents</A>
+</P>
+<H3><A NAME="s12">12. KDE Standards</A></H3>
+
+<P>
+<H3><A NAME="ss12.1">12.1 File System Standard</A>
+</H3>
+
+<P>During the development of the K Desktop Environment, a major question was where to install KDE and it's files. Aware of the fact, that
+KDE offers a good way to design more and more user-friendly applications, this had to be solved and thereby the KDE File System
+Standard was created. It relies on the thought that KDE and all KDE compliang applications should use this standard to enable a
+consistant directory structure on the end-user machine, therfore certain files have specific destinations to integrate with the KDE and
+can be found by the KDE API, which offers methods to access the KDE file system.
+<P>As for now, the following describes version 0.0.4 of this standard. Actual documentation can be found on 
+<A HREF="http://www.kde.org">http://www.kde.org</A>.
+<P>KDE is usually installed in '/opt/kde', therefore all application files that are going to be installed are placed in one of the
+subdirectories. The application itself can access this directory by <CODE>kapp->kdedir()</CODE>, certain subdirectories can acessed as well by
+according methods documented in the <CODE>KApplication</CODE> class.
+<P>
+<UL>
+<LI>kdedir()/
+<UL>
+<LI>bin/  Application binaries directory</LI>
+<LI>lib/ standard kde libraries (libkdecore etc.)
+<UL>
+<LI>'appname'/ Application specific data that is platform dependent</LI>
+</UL>
+</LI>
+<LI>include/ standard kde header files</LI>
+<LI>parts/</LI>
+<LI>cgi-bin/ CGI programs for kdehelp</LI>
+<LI>share/
+<UL>
+<LI>doc/
+<UL>
+<LI>HTML/ HTML documentation directory
+<UL>
+<LI>default --> Link to kdedir()/share/doc/HTML/en</LI>
+<LI>'lang'/ language of the documentation set, e.g en for english, de for german
+<UL>
+<LI>'appname'/
+<UL>
+<LI>index.html  - the start page loaded by KDEHelp, usually the table of contents page</LI>
+<LI>other application help files, e.g. index-1.html, index-2.html (generated from the index.sgml file)</LI>
+</UL>
+        </LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+        </LI>
+<LI>config/</LI>
+<LI>applnk/
+<UL>
+<LI>System/</LI>
+<LI>Utilities/</LI>
+<LI>Applications/</LI>
+<LI>Games/</LI>
+<LI>kfind.kdelnk</LI>
+<LI>khelp.kdelnk</LI>
+<LI>khome.kdelnk</LI>
+<LI>krefresh.kdelnk</LI>
+</UL>
+</LI>
+<LI>mimelnk/
+<UL>
+<LI>magic</LI>
+<LI>text/</LI>
+<LI>audio/</LI>
+</UL>
+</LI>
+<LI>partlnk/
+<UL>
+<LI>.kdelnk</LI>
+</UL>
+</LI>
+<LI>icons/ Icons used in kdelnk files
+<UL>
+<LI>.xpm
+<LI>mini/ Mini Icons for kpanel</LI>
+</LI>
+</UL>
+</LI>
+<LI>toolbar/ Standard toolbar pixmaps (eg. fileopen.xpm)</LI>
+<LI>wallpapers/ Wallpapers used by kdisplay</LI>
+<LI>apps/       
+<UL>
+<LI>'appname'/
+<UL>
+<LI>toolbar/ Toolbar pixmaps</LI>
+<LI>pics/ Other application pixmaps</LI>
+<LI>application specific data (must be platform independent)</LI>
+</UL>
+</LI>
+<LI>'libname'/
+<UL>
+<LI>pics/</LI>
+<LI>locale/
+<UL>
+<LI>'lang'/
+<UL>
+<LI>LC_MESSAGES/
+<UL>
+<LI>'appname'.mo</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+                        </LI>
+</UL>
+        </LI>
+</UL>
+</LI>
+</UL>
+</LI>
+</UL>
+<P>
+<P>
+<H3><A NAME="ss12.2">12.2 Keybinding Standards</A>
+</H3>
+
+<P>
+<H3><A NAME="ss12.3">12.3 Icon Standards</A>
+</H3>
+
+<P>
+<H3><A NAME="ss12.4">12.4 Configuration Standards</A>
+</H3>
+
+<P>
+<H3><A NAME="ss12.5">12.5 Session Management</A>
+</H3>
+
+<P>
+<H3><A NAME="ss12.6">12.6 Installing KDE Applications</A>
+</H3>
+
+<P>During the last sections, we reviewed the KDE Standards as for version 1.1.x. When developing a KDE-compliant application, you also
+have to take care where your files will go on the end-user's machine. KDevelop makes it very easy to define the destination by setting
+file properties for each project file. To access the file properties, choose "Project"->"File-Properties", which shows all files
+included in the current project. Select the file you want to install and check "Install". This will enable you to enter the destination
+directory in the edit line below the checkbox. Now, as we don't want to hard-code any paths in our project because we cannot assure
+that KDE is installed in /opt/kde, we have to use Makefile macros for destination directories. On checking "Install", the edit line
+already contains the filename. Then you have to insert the destination directory by one of the following macros plus an eventual
+subdirectory. The <CODE>configure</CODE> script will expand the macros on the end-user's machine to the full path, therefore we only have to
+watch the correct macros. Mind that you are responsible to set these !
+<P>The supported macros are:
+<UL>
+<LI>$(kde_bindir)  expands to: <B>kdedir()/bin/</B> Application binary file (required)</LI>
+<LI>$(kde_appsdir)      expands to: <B>kdedir()/share/applnk/</B> Application kdelnk file (required)</LI>
+<LI>$(kde_icondir) expands to: <B>kdedir()/share/icons/.xpm</B>Application icon (required)</LI>
+<LI>
+<DL>
+<DT><B>$(kde_htmldir)</B><DD><P>expands to: <B>kdedir()/share/doc/default/HTML/</B> HTML documentation directory. You have
+to append <B>/en/&lt;yourfile&gt;.html </B>
+</DL>
+</LI>
+<LI>$(kde_minidir)       Where your mini icon should go to.</LI>
+<LI>$(kde_datadir)       Where you install application data. (Use a subdir))</LI>
+<LI>$(kde_locale        Where translation files should go to.(contains lang subdir)s)</LI>
+<LI>$(kde_cgidir)        Where cgi-bin executables should go to.</LI>
+<LI>$(kde_confdir)       Where config files should go to.</LI>
+<LI>$(kde_mimedir)       Where mimetypes should go to.</LI>
+<LI>$(kde_toolbardir)    Where general toolbar icons should go to.</LI>
+<LI>$(kde_wallpaperdir)  Where general wallpapers should go to.</LI>
+<LI>$(kde_partsdir)</LI>
+<LI>$(kde_sounddir)</LI>
+</UL>
+<P>What does this
+mean to application developers? A standard KDE application will install files into several places in the above structure. The only
+required items are the application binary, the application kdelnk file, the application icon and the application help files - all
+others are optional. The most common things that are installed are: Type of file Location Application binary (required) kdedir()/bin/
+Application help files (required)
+Application toolbar pixmaps
+kdedir()/share/apps//toolbar/
+Application platform independent data
+kdedir()/share/apps//
+Application platform specific data
+kdedir()/lib//
+kdedir()/share/apps//toolbar
+Toolbar icons for library widgets.
+kdedir()/share/apps//pics Any other bitmaps for library widgets.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="tutorial-13.html">Next</A>
+<A HREF="tutorial-11.html">Previous</A>
+<A HREF="tutorial.html#toc12">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

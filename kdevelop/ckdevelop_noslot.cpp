@@ -490,8 +490,7 @@ void CKDevelop::showTreeView(bool show){
         return; // it's already visible){
       }
       else{
-        top_panner->setSeparatorPos(tree_view_pos);
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+				slotViewTTreeView();
       }
     }
     else{
@@ -499,25 +498,19 @@ void CKDevelop::showTreeView(bool show){
         return; // it's already unvisible){
       }
       else{
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-        tree_view_pos=top_panner->separatorPos();
-        top_panner->setSeparatorPos(0);
+				slotViewTTreeView();
       }
     }
-    QRect rMainGeom= top_panner->geometry();
-    top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-    top_panner->resize(rMainGeom.width(),rMainGeom.height());
   }
 }
 void CKDevelop::showOutputView(bool show){
   if(bAutoswitch){
-    if(show){
-      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-        return; // it's already visible
+  	if(show){
+	  	if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+  	 		return; // it's already visible
       }
       else{
-        view->setSeparatorPos(output_view_pos);
-        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+				slotViewTOutputView();
       }
     }
     else{
@@ -525,14 +518,9 @@ void CKDevelop::showOutputView(bool show){
         return; //it's already unvisible
       }
       else{
-        view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-        output_view_pos=view->separatorPos();
-        view->setSeparatorPos(100);
+				slotViewTOutputView();
       }
     }
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-    view->resize(rMainGeom.width(),rMainGeom.height());
   }
 }
 void CKDevelop::readOptions(){
@@ -604,6 +592,8 @@ void CKDevelop::readOptions(){
 	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
     output_view_pos=view->separatorPos();
 	}
 	else{
@@ -615,6 +605,8 @@ void CKDevelop::readOptions(){
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
+		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
     tree_view_pos=top_panner->separatorPos();
 	}
   else{
@@ -820,6 +812,14 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
+
+
+
+
+
+
 
 
 

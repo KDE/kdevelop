@@ -69,7 +69,8 @@ public slots:
   void signalURLBack();
   void signalURLForward();
   void signalSearchText();
-
+	void signalBookmarkAdd();
+	void enableStop(int);	
 protected:
   QString old_url;
   QString m_title;
@@ -187,6 +188,7 @@ public:
 };
 
 #endif
+
 
 
 

@@ -40,6 +40,8 @@
 #include <kcolorbtn.h>
 #include <kcursor.h>
 
+#include "resource.h"
+
 int  CDocBrowser::fSize = 3;
 QString CDocBrowser::standardFont;
 QString CDocBrowser::fixedFont;
@@ -57,8 +59,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
   doc_pop->insertItem(Icon("forward.xpm"),i18n("Forward"),this,SLOT(slotURLForward()),0,1);
   doc_pop->insertSeparator();
   doc_pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this, SLOT(slotCopyText()),0,2);
+	doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,3);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(i18n("look up: "),this, SLOT(slotSearchText()),0,3);
+  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,4);
 
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
@@ -90,7 +93,7 @@ void CDocBrowser::showURL(QString url,bool reload){
 
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
-  htmlview->setCursor( KCursor::waitCursor() );
+//  htmlview->setCursor( KCursor::waitCursor() );
 
   QString ref = url;
   QString url_wo_ref; // without ref
@@ -111,6 +114,7 @@ void CDocBrowser::showURL(QString url,bool reload){
     int val;
     QFile file(str) ;
     if(file.exists()){
+	 		emit enableStop(ID_HELP_BROWSER_STOP);
       file.open(IO_ReadOnly);
       begin( url);
       do
@@ -131,7 +135,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       KMsgBox::message(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"),KMsgBox::INFORMATION);
        return;
     }
-  htmlview->setCursor( KCursor::arrowCursor() );
+//  htmlview->setCursor( KCursor::arrowCursor() );
   }
   
 
@@ -227,17 +231,17 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     QString text;
     getSelectedText(text);
     doc_pop->setItemEnabled(2,true);
-    doc_pop->setItemEnabled(3,true);
+    doc_pop->setItemEnabled(4,true);
 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),3);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),4);
   }
   else{
     doc_pop->setItemEnabled(2,false);
-    doc_pop->setItemEnabled(3,false);
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),3);
+    doc_pop->setItemEnabled(4,false);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),4);
   }
   doc_pop->popup(pnt);
 }
@@ -603,6 +607,8 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
+
 
 
 

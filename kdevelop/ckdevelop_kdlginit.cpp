@@ -178,7 +178,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_build_menu->insertItem(i18n("&Clean/Rebuild all"), this,
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
   kdlg_build_menu->insertSeparator();
-  kdlg_build_menu->insertItem(Icon("stop.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
+  kdlg_build_menu->insertItem(Icon("stop_proc.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   kdlg_build_menu->insertSeparator();
 
   kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
@@ -315,8 +315,6 @@ void CKDevelop::initKDlgMenuBar(){
 }
 
 void CKDevelop::initKDlgToolBar(){
-	QPixmap pix;
-  QString  path;
 
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("openprj.xpm"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
@@ -326,11 +324,11 @@ void CKDevelop::initKDlgToolBar(){
 
   QFrame *separatorLine= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,10,separatorLine);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine);
 
 	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("undo.xpm"),ID_KDLG_EDIT_UNDO,false,i18n("Undo"));
 	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("redo.xpm"),ID_KDLG_EDIT_REDO,false,i18n("Redo"));
-  toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
+
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("cut.xpm"),ID_KDLG_EDIT_CUT,true,i18n("Cut"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("copy.xpm"),ID_KDLG_EDIT_COPY, true,i18n("Copy"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("paste.xpm"),ID_KDLG_EDIT_PASTE, true,i18n("Paste"));
@@ -343,22 +341,26 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
-		toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
-  toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
+	toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
   toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("stop.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
 
   QFrame *separatorLine2= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,30,separatorLine2);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine2);
 
+	QPixmap pix;
   pix.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
   toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_TOOLS_KDEVELOP, true,i18n("Switch to edit-mode"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("tree_win.xpm"),ID_VIEW_TREEVIEW, true,i18n("Tree View"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(Icon("output_win.xpm"),ID_VIEW_OUTPUTVIEW, true,i18n("Output View"));
+	toolBar(ID_KDLG_TOOLBAR)->setToggle(ID_VIEW_TREEVIEW);
+	toolBar(ID_KDLG_TOOLBAR)->setToggle(ID_VIEW_OUTPUTVIEW);
 
   QFrame *separatorLine3= new QFrame(toolBar(ID_KDLG_TOOLBAR));
   separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,30,separatorLine3);
+  toolBar(ID_KDLG_TOOLBAR)->insertWidget(0,20,separatorLine3);
 
   QToolButton *btn_kdlg_what = whats_this->whatsThisButton(toolBar(ID_KDLG_TOOLBAR));
   QToolTip::add(btn_kdlg_what, i18n("What's this...?"));
@@ -416,6 +418,16 @@ void CKDevelop::initKDlgKeyAccel(){
 void CKDevelop::setKDlgCaption(){
   setCaption(kdlg_caption);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
