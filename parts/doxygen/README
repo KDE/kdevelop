@@ -7,6 +7,11 @@ It integrates a GUI into the "KDevelop Project Configuration dialog" to
 configure Doxygen (it reads and writes Doxygen Conpatible configuration files).
 
 
+Current Maintainer(s):
+----------------------
+Amilcar Lucas       a.lucas at tu-bs dot de
+
+
 Features:
 ---------
 
@@ -21,7 +26,9 @@ Features:
 Requirements:
 -------------
 
-You need to install the Doxygen binaries in your machine.
+You need to install the Doxygen binaries in your machine. This part supports
+all versions up to the version stated on the version.cpp file. As usual it is
+recomended to use the latest version.
 It is recomended that you also install dot (tool to generate graphical
 dependencies).
 
@@ -31,27 +38,33 @@ Caveats and known bugs:
 - It doesn't call the Config::check() function whenever you click "OK" in the
   configuration dialog. So the configuration is not checked and you don't
   get warning messages when you enter invalid settings.
+- It doesn't resize the configuration GUI properly.
 
 
 To update to a newer doxygen version:
 -------------------------------------
 
-1. Copy over the config.h and config.cpp files from the addon/doxywizard/
-   directory in the doxygen sources. You'll probably have to issue:
+1. Merge over the config.h and config.cpp files from the addon/doxywizard/
+   directory in the doxygen sources. You'll have to issue:
        $ ./configure --with-doxywizard && make
    to get the config.h and config.cpp files on this directory.
    You should also copy config.l if you'd like to do some debugging.
+   To do the merge you should use:
+       $ kompare doxygen-location/addon/doxywizard/config.cpp  kdevelop-location/parts/doxygen/config.cpp
+       $ kompare doxygen-location/addon/doxywizard/config.h    kdevelop-location/parts/doxygen/config.h
+   Be careful because doxygen uses the deprecated QList class while kedevelop
+   uses the new QPtrList so you should not merge certain lines of code!!!
 
-2. Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
+2. Replace _ALL_ references to the deprecated QList class with the new QPtrList
+   class in config.h and config.cpp
 
-3. Replace _ALL_ references to the deprecated QList class with the new QPtrList
-   class in config.h
+3. Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
 
 4. Add the new i18n strings to messages.cpp
 
 5. Update version.cpp
 
-6. Add anything else you needed to do, to get it to compile, to this file.
+6. Add anything else you needed to do, to get it to compile, to this README file.
 
 
 Everything else we can customize for our look & feel.

@@ -1,1 +1,1 @@
-char versionString[]="1.3-rc3Gideon";
+char versionString[]="1.3-Gideon";

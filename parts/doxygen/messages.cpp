@@ -182,6 +182,7 @@ QString message(const QCString &key)
     addMessage("DOTFILE_DIRS", i18n("Directories with extra dot files"));
     addMessage("MAX_DOT_GRAPH_WIDTH", i18n("Maximum graph width"));
     addMessage("MAX_DOT_GRAPH_HEIGHT", i18n("Maximum graph height"));
+    addMessage("MAX_DOT_GRAPH_DEPTH", i18n("Maximum graph depth"));
     addMessage("GENERATE_LEGEND", i18n("Generate legend"));
     addMessage("DOT_CLEANUP", i18n("Remove intermediate files"));
     addMessage("Search", i18n("Search"));
