@@ -222,10 +222,10 @@ void CKDevelop::initView()
   int mode=config->readNumEntry("tabviewmode", 3);
   switch (mode){
     case 1:
-      t_tab_view->addTab(class_tree,i18n("Classes"));
-      t_tab_view->addTab(log_file_tree,i18n("Groups"));
-      t_tab_view->addTab(real_file_tree,i18n("Files"));
-      t_tab_view->addTab(doc_tree,i18n("Docs"));
+      t_tab_view->addTab(class_tree,i18n("C&lasses"));
+      t_tab_view->addTab(log_file_tree,i18n("G&roups"));
+      t_tab_view->addTab(real_file_tree,i18n("File&s"));
+      t_tab_view->addTab(doc_tree,i18n("Boo&ks"));
       break;
     case 2:
       t_tab_view->addTab(class_tree,SmallIcon("CVclass"),"");
@@ -234,10 +234,10 @@ void CKDevelop::initView()
       t_tab_view->addTab(doc_tree,SmallIcon("contents"),"");
       break;
     case 3:
-      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
-      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
-      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
-      t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Books"));
+      t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("C&lasses"));
+      t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("G&roups"));
+      t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
+      t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
       break;
   }
 
@@ -721,7 +721,7 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(SmallIconSet("fileclose"),i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
   project_menu->insertSeparator();
-  project_menu->insertItem(SmallIconSet("CVclass"),i18n("&New Class..."), this,
+  project_menu->insertItem(SmallIconSet("classnew"),i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
 
@@ -947,12 +947,12 @@ void CKDevelop::initMenuBar(){
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("Goto class declaration"), this,
                                   SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
-  classbrowser_popup->insertItem( SmallIconSet("CVclass"),i18n("New class..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("classnew"),i18n("New class..."), this,
                                   SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
   classbrowser_popup->insertSeparator();
-  classbrowser_popup->insertItem( SmallIconSet("CVpublic_meth"),i18n("Add member function..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("methodnew"),i18n("Add member function..."), this,
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
-  classbrowser_popup->insertItem( SmallIconSet("CVpublic_var"),i18n("Add member variable..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("variablenew"),i18n("Add member variable..."), this,
                                   SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
   classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
@@ -1526,13 +1526,13 @@ void CKDevelop::initDebugger()
     int mode=config->readNumEntry("tabviewmode", 3);
     switch (mode){
       case 1:
-        t_tab_view->addTab(var_viewer,i18n("Watch"));
+        t_tab_view->addTab(var_viewer,i18n("W&atch"));
         break;
       case 2:
         t_tab_view->addTab(var_viewer,SmallIcon("brace"),"");
         break;
       case 3:
-        t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
+        t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("W&atch"));
         break;
     }
 

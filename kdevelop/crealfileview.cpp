@@ -314,7 +314,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
   case THFOLDER:
     popup = new KPopupMenu(i18n("Folder"));
     popup->insertItem( SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-    popup->insertItem( SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+    popup->insertItem( SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
     popup->insertSeparator();
     popup->insertItem( SmallIconSet("folder_new"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
 //    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);

@@ -227,7 +227,7 @@ KPopupMenu *CLogFileView::getCurrentPopup()
       popup = new KPopupMenu(i18n("Project/LFV"));
       popup->insertItem( SmallIconSet("filenew"),i18n("New File..."),
                          this, SLOT(slotNewFile()), 0, ID_FILE_NEW);
-      popup->insertItem( SmallIconSet("CVclass"), i18n("New Class..."),
+      popup->insertItem( SmallIconSet("classnew"), i18n("New Class..."),
                          this, SLOT(slotNewClass()), 0, ID_PROJECT_NEW_CLASS );
       popup->insertItem( i18n("New Group..."), 
                          this, SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP );
