@@ -33,7 +33,7 @@ as the KDE libraries and the design of User Interfaces. Also, you should have ma
 This handbook has been written to give developers an introduction into KDE application development with special regards to the KDevelop
 Integrated Development Environment. The reader will learn how to create his own application, what the framework automatically generated
 by the KAppWizard already offers and how it runs. By the following chapters, the user is introduced into certain aspects of GUI
-application design by a tutorial application, which we called <em/KScribble/.
+application design by a tutorial application, <em/KScribble/.
 
 <bf/In the next chapter/
 
@@ -141,7 +141,7 @@ QApplication a( argc, argv );
 QPushButton hello( "Hello world!" );
 hello.resize( 100, 30 );
 
-a.setMainWidget( &hello );
+a.setMainWidget( &amp;hello );
 hello.show();
 return a.exec();
 }
@@ -334,9 +334,9 @@ QApplication a( argc, argv );
 QPushButton hello( "Hello world!" );
 hello.resize( 100, 30 );
 
-a.setMainWidget( &hello );
+a.setMainWidget( &amp;hello );
 
-connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
 
 hello.show();
 return a.exec();
@@ -344,8 +344,8 @@ return a.exec();
 </code></tscreen>
 
 You see, the only addition to give the button more interaction is to use a <tt/connect()/ method:
-<tt/connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );/ is all you have to add. What is the meaning now ? The class declaration
-of <tt/QObject/ says about the <tt/connect()/ method:
+<tt/connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );/ is all you have to add. What is the meaning now ? The class
+declaration of <tt/QObject/ says about the <tt/connect()/ method:
 
 <tt/bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )/
 
@@ -400,9 +400,9 @@ KApplication a( argc, argv );
 QPushButton hello( "Hello world!" );
 hello.resize( 100, 30 );
 
-a.setTopWidget( &hello );
+a.setTopWidget( &amp;hello );
 
-connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );
+connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() );
 
 hello.show();
 return a.exec();
@@ -422,7 +422,7 @@ What you should have looked into additionally until now is the reference documen
 <tt/QWidget/ and <tt/QObject/ class and the KDE-Core library documentation for the <tt/KApplication/ class.
 
 
-<sect>Creating new Applications with KAppWizard<label id="Creating new Applications with KAppWizard">
+<sect>Creating new Applications<label id="Creating new Applications">
 <p>
 The KAppWizard, or also called the KDE Application Wizard, is intended to let you start working on new projects with KDevelop.
 Therefore, all your projects are first created by the wizard; then you can start building them and extend the already provided source
@@ -439,7 +439,8 @@ library only and doesn't contain KDE support. This is intended for projects that
 want to require KDE libraries by the end-user.
 <item>C++ Application: Is based on the C++ compiler only and runs in a console, therefore doesn't require X-Window.
 <item>Custom project: creates an empty project without any sourcecode. This is intended for already existing projects to port to
-KDevelop or for projects where you want to start from scratch.
+KDevelop or for projects where you want to start from scratch. Mind that you have to take care for makefiles and configure scripts all
+by yourself.
 </itemize>
 
 In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
@@ -701,32 +702,32 @@ text-editing view.
 Let's have a look at the code for the constructor and see how the instance is created:
 
 <tscreen><code>
-KScribbleApp::KScribbleApp()
-{
-  config=kapp->getConfig();
-	
-
-  ///////////////////////////////////////////////////////////////////
-  // call inits to invoke all other construction parts
-  initMenuBar();
-  initToolBar();
-  initStatusBar();
-  initKeyAccel();
-  initDocument();
-  initView();
-
-  readOptions();
-
-  ///////////////////////////////////////////////////////////////////
-  // disable menu and toolbar items at startup
-  disableCommand(ID_FILE_SAVE);
-  disableCommand(ID_FILE_SAVE_AS);
-  disableCommand(ID_FILE_PRINT);
-	
-  disableCommand(ID_EDIT_CUT);
-  disableCommand(ID_EDIT_COPY);
-  disableCommand(ID_EDIT_PASTE);
-}
+1   KScribbleApp::KScribbleApp()
+2   {
+3     config=kapp->getConfig();
+4	
+5
+6     ///////////////////////////////////////////////////////////////////
+7     // call inits to invoke all other construction parts
+8     initMenuBar();
+9     initToolBar();
+10    initStatusBar();
+11    initKeyAccel();
+12    initDocument();
+13    initView();
+14
+15    readOptions();
+16
+17    ///////////////////////////////////////////////////////////////////
+18    // disable menu and toolbar items at startup
+19    disableCommand(ID_FILE_SAVE);
+20    disableCommand(ID_FILE_SAVE_AS);
+21    disableCommand(ID_FILE_PRINT);
+22
+23    disableCommand(ID_EDIT_CUT);
+24    disableCommand(ID_EDIT_COPY);
+25    disableCommand(ID_EDIT_PASTE);
+26  }
 </code></tscreen>
 
 We see that our config instance of <tt/KConfig/ now points to the applications configuration, so we can operate
@@ -767,8 +768,8 @@ application. All menuentries have to be created in the order as they appear late
 at what place. As an example, we look at the following entries:
 
 <tscreen><verb>
-file_menu->insertItem(Icon("fileopen.xpm"), i18n("&Open..."), ID_FILE_OPEN );
-file_menu->insertItem(i18n("Open &recent"), recent_files_menu, ID_FILE_OPEN_RECENT );
+file_menu->insertItem(Icon("fileopen.xpm"), i18n("&amp;Open..."), ID_FILE_OPEN );
+file_menu->insertItem(i18n("Open &amp;recent"), recent_files_menu, ID_FILE_OPEN_RECENT );
 </verb></tscreen>
 
 The first one inserts the "Open..." entry. As we want to have it with an icon, we use the <tt/insertItem()/ method with the icon's
@@ -787,7 +788,7 @@ This means that the <tt/KApplication/ object already contains an Icon loader ins
 load the according icon. As our icons are all from the KDE libraries, we don't have to take care for anything else- they are installed
 on the sytem automatically, therefore we also don't have to include them into our application package to use them.
 
-After the icon parameter (which is optional), we insert the menuentry name by <tt/i18n("&Open...")/.  There, we have to watch two
+After the icon parameter (which is optional), we insert the menuentry name by <tt/i18n("&amp;Open...")/.  There, we have to watch two
 things: first, the entry is inserted with the <tt/i18n()/ method. Like the <tt/Icon()/ entry, it is a macro defined in <tt/kapp.h/ as
 well and calls the <tt/KLocale/ object of <tt/KApplication/ to translate the entry to the currently used language:
 
@@ -1214,16 +1215,139 @@ the classes without having to guess what purpose each class is for. We will lear
 for now it lasts to know that the documentation is generated by the <tt/KDoc/ program, which processes the header files and creates the
 HTML output, therefore all documentation is placed in the headers.
 
-<sect>Creating Views
+<sect>Application View Design
 <p>
+When developing an application with a graphical user interface, the main work takes place in providing a so-called "view" for the
+application. A view generally is a widget that displays the data of a document and provides methods to manipulate the document
+contents. This can be done by the user via the events he emits by the keyboard or the mouse; more complex operations are often
+processed by toolbars and menubars which interact with the view and the document. The statusbar then provides information about the
+document, view or application status. As an example, we look at how an editor is constructed and where we can find which part.
+
+An editor generally is supposed to provide an interface to view and/or change the contents of a text document for the user. If you
+start <em/KEdit/, you see the visual interface as the following:
+
+<itemize>
+<item>The menubar: providing complex operations as well as opening, saving and closing files and exiting the application.
+<item>The toolbar: offers icons which allow quicker access for most needed functions,
+<item>The statusbar: displays the status of the cursor position by the current row and column,
+<item>The view in the center of the window, displaying a document and offering a cursor connected to the keyboard and the mouse
+to operate on the data.
+</itemize>
+
+Now it's easy to understand, that a view is the most unique part of the application and the design of the view decides about the
+usablity and acceptability of an application. This means that one of the first steps in development is to determine the purpose of the
+application and what kind of view design would match best to allow any user to work with the application with a minimum of work
+learning how to handle the user interface.
+
+For some purposes like text editing and displaying HTML files, views are provided by the Qt and KDE libraries; we will discuss certain
+aspects of these high-level widgets in the next section. But for most applications new widgets have to be designed and implemented. It
+is that what makes a prgrammer also a designer and where his abilities on creativity are asked. Nevertheless, you should watch for
+intuitivity first. Remember that a lot of users won't accept an application that isn't
+
+<itemize>
+<item>graphically nice,
+<item>offering a lot of features,
+<item>easy to handle,
+<item>fast to learn how to use it.
+</itemize>
+Needless to say that stability is a mayor design goal. Nobody can prevent bugs, but a minimum can be reached at least by clever design
+goals and wide use of object-oriented design. C++ makes programming a joy if you know how to exploit it's capabilities- inheritance,
+information hiding and reusablitity of already existing code.
+
+When creating a KDE or Qt project, you always have to have a view that inherits <tt/QWidget/, either by direct inheriance or because
+the library widget you want to use inherits <tt/QWidget/. Therefore, the Application Wizard already constructed a view that is an
+instance of a class <tt/<yourapp>View/, which inherits <tt/QWidget/ already. The application creates your view in the method
+<tt/initView()/, where an instance is created and connected to the main widget as it's view with <tt/KTMainWidget::setView()/.
+
+This chapter therefore describes how to use library widgets for creating views of KDE or Qt applications that are generated with
+KDevelop, then we're looking at the libraries and what kind of views are already offered. Finally, we will extend the already provided
+view class of <em/KScribble/, <tt/KScribbleView/ in section <ref id="Creating your own Views" name="Creating your own Views">.
+
 <sect1>Using Library Views
 <p>
-<sect1>Qt Views
+When your application design has been set up, you first should look for already existing code that will make your life a lot easier. A
+part of this search is to look for a widget that can be used as a view or at least as a part of it; either directly or by inheritance.
+The KDE and Qt libraries already contain a set of widgets that can be used for this purpose. To use them, you have two options:
+
+<enum>
+<item> remove the new view class and create an instance of a library widget; then set this as the view,
+<item> change the inheritance of the provided view class to the class of the library widget to use.
+</enum>
+
+In either way, it is important to know that if the application framework is currently not linked against the library that contains the
+widget, the linker will fail. After you decided to use a certain widget, look for the library to link to; then open
+"Project"->"Options" from the KDevelop menubar. Switch to the "Linker Options" page and look for the checkmarks indicating the
+libraries that are currently used. If the library of your view widget is already checked, you can leave the project options untouched
+and start doing the necessary changes due to your choice. If not, and the linker options offer to add the library by a checkbox,
+check it and press "OK" to leave the project options dialog again. In any other case, add the library in the edit line below with the
+<tt/-l/ option. For libraries that your application has to search for before preparing the Makefiles by the <tt/configure/ script on
+the end-user machine, add the according search macro to the <tt/configure.in/ file located at the root directory of your project and
+add the macro to the edit line. Mind that you have to run "Build"->"Autoconf and automake" and "Build"->"Configure" before the
+Makefiles contain the correct expansion for the library macro.
+
+Also, if the include files for the library to add are not in the current include path (which can be seen by the <tt/-I/ options in the
+output window on "Make"), you have to add the path to the Project Options dialog -"Compiler Options" page with the <tt/-I/
+option or the according automake macro at the edit line for "Additional Options".
+
+<sect2>Qt Views
 <p>
-<sect1>KDE Views
+Looking at the first page of the Qt online documentation, you will find a link to "Widget Screenshots" where you can have a look at
+how the widgets Qt contains look like. These are ready to use and can be combined together to form complex widgets to create
+application views or dialogs. In the following, we'll discuss some of these which are very usable for creating application views, but
+keep in mind that the KDE libraries sometimes contain other widgets for the same purpose; those will be reviewed in the next section.
+
+Here are a set of hints for what purpose you could use which Qt component:
+<enum>
+<item>if your view area isn't big enough to display all your data, the user must be enabled to scroll over the document with bars on
+the left and bootom of the view. For this, Qt provides the class <tt/QScrollView/, which offers a scrollable child area. As explained,
+you could inherit your own widget from <tt/QScrollView/ or use an instance to manage your document's view widget.
+<item>to create a ScrollView yourself, inherit the View widget from <tt/QWidget/ and add vertical and horizontal <tt/QScrollBar/s.
+(this is done by KDE`s KHTMLView widget).
+<item>for text processing, use <tt/QMultiLineEdit/. This class provides a complete text editor widget that is already capable to cut,
+copy and paste text and is managed by a scrollview.
+<item>use <tt/QTableView/ to display data that is arranged in a table. As <tt/QTableView/ is managed by scrollbars as well, it offers a
+good solution for table calculation applications.
+<item>to display two different widgets or two widget instances at the same time, use <tt/QSplitter/. This allows to tile views by
+horizontal or vertical deviders. Netscape's Mail window is a good example how this would look like- the main view is separated by a
+splitter vertically, the right window then is devided again horizontally.
+<item><tt/QListView/ displays information in a list and tree. This is useful for creating file trees or any other hierarchical
+information you want to interact with.
+</enum>
+
+You see that Qt alone offers a whole set of widgets which are ready to use so you don't have to invent new solutions if these match
+your needs. The sideeffect when using standard widgets is that users already know how to handle them and only have to concentrate on
+the displayed data.
+
+<sect2>KDE Views
 <p>
-<sect1>Creating your own Views
+The KDE libraries were invented to make designing applications for the K Desktop Environment easier and capable of more functionality
+than what Qt alone is offering. To see what's available, we have a look at the documentation tree in KDevelop. You see that the KDE
+libraries start with <tt/kdecore/, which is a base for all KDE applications. Then,<tt/kdeui/ offers user interface elements. This is
+where we will find some useful things first. For creating new applications, the <tt/kdeui/ library offers:
+
+<enum>
+<item><tt/KTabListBox/: offers a multi-column listbox where the user can change the rows with drag'n drop.
+<item><tt/KTreeList/: inherited from <tt/QTableView/, offering a collapsable tree. This could be used instead of <tt/QListView/.
+<item><tt/KEdit/: the base classes for the <em/KEdit/ application offered with KDE. This could be used instead of <tt/QMultiLineEdit/.
+<item><tt/KPanner/ and <tt/KNewPanner/: manage two child widgets like <tt/QSplitter/.
+</enum>
+
+The <tt/khtmlw/ library on the other hand offers a complete HTML-interpreting widget that is ready to use. It is scrollable already,
+so you don't even have to take care for that. A possible use could be to integrate it as a preview widget for an HTML editor; used by
+applications such as KFM, KDEHelp and KDevelop to display HTML files.
+
+Now that you have a general overview of what is already provided, you may notice that for a lot of purposes already existing widgets
+can be used or combined together. KMail is an example as well as KDevelop itself makes use of library view components to display data.
+But for applications such as drawing programs or syntax-coloring editors, those can only be the beginning. In those cases, you often
+have to derive your view from an existing view or from <tt/QWidget/ to display your data and allow manipulation. As our example
+application <em/KScribble/, will be a small drawing program, we don't have any choice: we as well have to use <tt/QWidget/; therefore
+we can leave our framework untouched and start extending the implementation of the class <tt/KScribbleView/ until it is capable of
+offering user input. During the next section, we will do that by overwriting virtual methods provided by <tt/QWidget/ for user event
+handling; then we will connect certain functions to the toolbar and menubar and connect these to our widget.
+
+<sect1>Creating your own Views<label id="Creating your own Views">
 <p>
+
 <sect>Configuring Menubars and Toolbars<label id="Configuring Menubars and Toolbars">
 <p>
 <sect1>How does it work ?
@@ -1236,6 +1360,7 @@ HTML output, therefore all documentation is placed in the headers.
 <p>
 <sect1>Keyboard Accelerator Configuration
 <p>
+
 <sect>The Dialogeditor: Where your Dialogs are Build
 <p>
 <sect1>What the Dialogeditor provides
@@ -1246,16 +1371,20 @@ HTML output, therefore all documentation is placed in the headers.
 <p>
 <sect1>Integrating the Dialog
 <p>
-<sect>Printing
+
+<sect>Printing Support
 <p>
 <sect1>The Qt Print Dialog
 <p>
 <sect1>The QPainter Class
 <p>
+
 <sect>Help Functions
 <p>
+
 <sect1>Extending the Statusbar Help
 <p>
+
 <sect1>Adding Quickhelp
 <p>
 <sect1>The "What's This ? Button"
@@ -1280,6 +1409,178 @@ HTML output, therefore all documentation is placed in the headers.
 <p>
 <sect1>Special Tags
 <p>
+
+<sect>Internationalization
+<p>
+<sect1>What is i18n ?
+<p>
+<sect1>Translation Team Contacts
+<p>
+<sect1>How KDE supports Internationalization
+<p>
+<sect1>Enableing Internationalization Support
+<p>
+<sect1>Adding a Language to your Project
+<p>
+<sect1>Translations with KTranslator
+<p>
+
+<sect>KDE Standards
+<p>
+<sect1>File System Standard
+<p>
+During the development of the K Desktop Environment, a major question was where to install KDE and it's files. Aware of the fact, that
+KDE offers a good way to design more and more user-friendly applications, this had to be solved and thereby the KDE File System
+Standard was created. It relies on the thought that KDE and all KDE compliang applications should use this standard to enable a
+consistant directory structure on the end-user machine, therfore certain files have specific destinations to integrate with the KDE and
+can be found by the KDE API, which offers methods to access the KDE file system.
+
+As for now, the following describes version 0.0.4 of this standard. Actual documentation can be found on <htmlurl
+url="http://www.kde.org" name="http://www.kde.org">.
+
+KDE is usually installed in '/opt/kde', therefore all application files that are going to be installed are placed in one of the
+subdirectories. The application itself can access this directory by <tt/kapp->kdedir()/, certain subdirectories can acessed as well by
+according methods documented in the <tt/KApplication/ class.
+
+<itemize>
+<item>kdedir()/
+	<itemize>
+	<item>bin/  Application binaries directory
+	<item>lib/ standard kde libraries (libkdecore etc.)
+		<itemize>
+		<item>'appname'/ Application specific data that is platform dependent
+		</itemize>
+	<item>include/ standard kde header files
+	<item>parts/
+	<item>cgi-bin/ CGI programs for kdehelp
+	<item>share/
+		<itemize>
+		<item>doc/
+			<itemize>
+			<item>HTML/ HTML documentation directory
+				<itemize>
+				<item>default --> Link to kdedir()/share/doc/HTML/en
+				<item>'lang'/ language of the documentation set, e.g en for english, de for german
+					<itemize>
+					<item>'appname'/
+						<itemize>
+						<item>index.html  - the start page loaded by KDEHelp, usually the table of contents page
+						<item>other application help files, e.g. index-1.html, index-2.html (generated from the index.sgml file)
+						</itemize>	
+					</itemize>
+				</itemize>
+			</itemize>	
+		<item>config/
+		<item>applnk/
+			<itemize>
+			<item>System/
+			<item>Utilities/
+			<item>Applications/
+			<item>Games/
+			<item>kfind.kdelnk
+			<item>khelp.kdelnk
+			<item>khome.kdelnk
+			<item>krefresh.kdelnk
+			</itemize>
+		<item>mimelnk/
+			<itemize>
+			<item>magic
+			<item>text/
+			<item>audio/
+			</itemize>
+		<item>partlnk/
+			<itemize>	
+			<item><partname>.kdelnk
+			</itemize>
+		<item>icons/ Icons used in kdelnk files
+			<itemize>
+			<item><appname>.xpm
+			<item>mini/ Mini Icons for kpanel
+			</itemize>
+		<item>toolbar/ Standard toolbar pixmaps (eg. fileopen.xpm)
+		<item>wallpapers/ Wallpapers used by kdisplay
+		<item>apps/	
+			<itemize>
+			<item>'appname'/
+				<itemize>
+				<item>toolbar/ Toolbar pixmaps
+				<item>pics/ Other application pixmaps
+				<item>application specific data (must be platform independent)
+				</itemize>
+			<item>'libname'/
+				<itemize>
+				<item>pics/
+				<item>locale/
+					<itemize>
+					<item>'lang'/
+						<itemize>
+						<item>LC_MESSAGES/
+							<itemize>
+							<item>'appname'.mo
+							</itemize>
+						</itemize>
+					</itemize>
+				</itemize>			
+			</itemize>	
+		</itemize>
+	</itemize>
+</itemize>
+							
+
+<sect1>Keybinding Standards
+<p>
+<sect1>Icon Standards
+<p>
+<sect1>Configuration Standards
+<p>
+<sect1>Session Management
+<p>
+<sect1>Installing KDE Applications
+<p>
+During the last sections, we reviewed the KDE Standards as for version 1.1.x. When developing a KDE-compliant application, you also
+have to take care where your files will go on the end-user's machine. KDevelop makes it very easy to define the destination by setting
+file properties for each project file. To access the file properties, choose "Project"->"File-Properties", which shows all files
+included in the current project. Select the file you want to install and check "Install". This will enable you to enter the destination
+directory in the edit line below the checkbox. Now, as we don't want to hard-code any paths in our project because we cannot assure
+that KDE is installed in /opt/kde, we have to use Makefile macros for destination directories. On checking "Install", the edit line
+already contains the filename. Then you have to insert the destination directory by one of the following macros plus an eventual
+subdirectory. The <tt/configure/ script will expand the macros on the end-user's machine to the full path, therefore we only have to
+watch the correct macros. Mind that you are responsible to set these !
+
+The supported macros are:
+<itemize>
+<item>&dollar;(kde_bindir)  expands to: <bf>kdedir()/bin/</bf> Application binary file (required)
+<item>&dollar;(kde_appsdir)	expands to: <bf>kdedir()/share/applnk/</bf> Application kdelnk file (required)
+<item>&dollar;(kde_icondir) expands to: <bf>kdedir()/share/icons/<appname>.xpm</bf>Application icon (required)
+<item><descrip><tag/&dollar;(kde_htmldir)/ expands to: <bf>kdedir()/share/doc/default/HTML/</bf> HTML documentation directory. You have
+to append <bf>/en/&lt;yourfile&gt;.html </descrip>
+<item>&dollar;(kde_minidir)       Where your mini icon should go to.
+<item>&dollar;(kde_datadir)       Where you install application data. (Use a subdir))
+<item>&dollar;(kde_locale        Where translation files should go to.(contains lang subdir)s)
+<item>&dollar;(kde_cgidir)        Where cgi-bin executables should go to.
+<item>&dollar;(kde_confdir)       Where config files should go to.
+<item>&dollar;(kde_mimedir)       Where mimetypes should go to.
+<item>&dollar;(kde_toolbardir)    Where general toolbar icons should go to.
+<item>&dollar;(kde_wallpaperdir)  Where general wallpapers should go to.
+<item>&dollar;(kde_partsdir)
+<item>&dollar;(kde_sounddir)
+</itemize>
+
+What does this
+mean to application developers? A standard KDE application will install files into several places in the above structure. The only
+required items are the application binary, the application kdelnk file, the application icon and the application help files - all
+others are optional. The most common things that are installed are: Type of file Location Application binary (required) kdedir()/bin/
+Application help files (required)
+Application toolbar pixmaps
+kdedir()/share/apps/<appname>/toolbar/
+Application platform independent data
+kdedir()/share/apps/<appname>/
+Application platform specific data
+kdedir()/lib/<appname>/
+kdedir()/share/apps/<libname>/toolbar
+Toolbar icons for library widgets.
+kdedir()/share/apps/<libname>/pics Any other bitmaps for library widgets.
+
 <sect>Finding Errors
 <p>
 <sect1>Debugging Macros provided by Qt
@@ -1309,6 +1610,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
+
+
+
+
 
 
 

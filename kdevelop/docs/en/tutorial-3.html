@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The KDevelop Programming Handbook: Creating new Applications with KAppWizard</TITLE>
+<TITLE>The KDevelop Programming Handbook: Creating new Applications</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,7 +18,7 @@
 <A HREF="tutorial-2.html">Previous</A>
 <A HREF="tutorial.html#toc3">Table of Contents</A>
 </P>
-<H3><A NAME="Creating new Applications with KAppWizard"></A> <A NAME="s3">3. Creating new Applications with KAppWizard</A></H3>
+<H3><A NAME="Creating new Applications"></A> <A NAME="s3">3. Creating new Applications</A></H3>
 
 <P>The KAppWizard, or also called the KDE Application Wizard, is intended to let you start working on new projects with KDevelop.
 Therefore, all your projects are first created by the wizard; then you can start building them and extend the already provided source
@@ -35,7 +35,8 @@ library only and doesn't contain KDE support. This is intended for projects that
 want to require KDE libraries by the end-user.</LI>
 <LI>C++ Application: Is based on the C++ compiler only and runs in a console, therefore doesn't require X-Window.</LI>
 <LI>Custom project: creates an empty project without any sourcecode. This is intended for already existing projects to port to
-KDevelop or for projects where you want to start from scratch.</LI>
+KDevelop or for projects where you want to start from scratch. Mind that you have to take care for makefiles and configure scripts all
+by yourself.</LI>
 </UL>
 <P>In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
 also be the initial step of our tutorial, where you will create your first version of <EM>KScribble</EM>. For all other project types the
@@ -287,32 +288,32 @@ text-editing view.
 <BLOCKQUOTE><CODE>
 <HR>
 <PRE>
-KScribbleApp::KScribbleApp()
-{
-  config=kapp->getConfig();
-        
-
-  ///////////////////////////////////////////////////////////////////
-  // call inits to invoke all other construction parts
-  initMenuBar();
-  initToolBar();
-  initStatusBar();
-  initKeyAccel();
-  initDocument();
-  initView();
-
-  readOptions();
-
-  ///////////////////////////////////////////////////////////////////
-  // disable menu and toolbar items at startup
-  disableCommand(ID_FILE_SAVE);
-  disableCommand(ID_FILE_SAVE_AS);
-  disableCommand(ID_FILE_PRINT);
-        
-  disableCommand(ID_EDIT_CUT);
-  disableCommand(ID_EDIT_COPY);
-  disableCommand(ID_EDIT_PASTE);
-}
+1   KScribbleApp::KScribbleApp()
+2   {
+3     config=kapp->getConfig();
+4       
+5
+6     ///////////////////////////////////////////////////////////////////
+7     // call inits to invoke all other construction parts
+8     initMenuBar();
+9     initToolBar();
+10    initStatusBar();
+11    initKeyAccel();
+12    initDocument();
+13    initView();
+14
+15    readOptions();
+16
+17    ///////////////////////////////////////////////////////////////////
+18    // disable menu and toolbar items at startup
+19    disableCommand(ID_FILE_SAVE);
+20    disableCommand(ID_FILE_SAVE_AS);
+21    disableCommand(ID_FILE_PRINT);
+22
+23    disableCommand(ID_EDIT_CUT);
+24    disableCommand(ID_EDIT_COPY);
+25    disableCommand(ID_EDIT_PASTE);
+26  }
 </PRE>
 <HR>
 </CODE></BLOCKQUOTE>
@@ -351,8 +352,8 @@ at what place. As an example, we look at the following entries:
 <P>
 <BLOCKQUOTE><CODE>
 <PRE>
-file_menu->insertItem(Icon("fileopen.xpm"), i18n(""), ID_FILE_OPEN );
-file_menu->insertItem(i18n("Open "), recent_files_menu, ID_FILE_OPEN_RECENT );
+file_menu->insertItem(Icon("fileopen.xpm"), i18n("&amp;Open..."), ID_FILE_OPEN );
+file_menu->insertItem(i18n("Open &amp;recent"), recent_files_menu, ID_FILE_OPEN_RECENT );
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>The first one inserts the "Open..." entry. As we want to have it with an icon, we use the <CODE>insertItem()</CODE> method with the icon's
@@ -374,7 +375,7 @@ Additionally, it uses the following macro internally to get access to the applic
 <P>This means that the <CODE>KApplication</CODE> object already contains an Icon loader instance- we only have to get access to it; then it will
 load the according icon. As our icons are all from the KDE libraries, we don't have to take care for anything else- they are installed
 on the sytem automatically, therefore we also don't have to include them into our application package to use them.
-<P>After the icon parameter (which is optional), we insert the menuentry name by <CODE>i18n("")</CODE>.  There, we have to watch two
+<P>After the icon parameter (which is optional), we insert the menuentry name by <CODE>i18n("&amp;Open...")</CODE>.  There, we have to watch two
 things: first, the entry is inserted with the <CODE>i18n()</CODE> method. Like the <CODE>Icon()</CODE> entry, it is a macro defined in <CODE>kapp.h</CODE> as
 well and calls the <CODE>KLocale</CODE> object of <CODE>KApplication</CODE> to translate the entry to the currently used language:
 <P>
@@ -567,43 +568,43 @@ access the value afterwards; the group has to be set only once for reading a set
 <PRE>
 1   void KScribbleApp::readOptions()
 2   {
-3       
-4       config->setGroup("General Options");
+3
+4      config->setGroup("General Options");
 5
-6       // bar status settings
-7       bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
-8           view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
-9           if(!bViewToolbar)
-10      enableToolBar(KToolBar::Hide);
-11      
-12    bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
-13        view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
-14        if(!bViewStatusbar)
-15      enableStatusBar(KStatusBar::Hide);
-16      
-17        // bar position settings
-18        KMenuBar::menuPosition menu_bar_pos;
-19        menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
+6      // bar status settings
+7      bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+8      view_menu->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+9      if(!bViewToolbar)
+10       enableToolBar(KToolBar::Hide);
+11
+12     bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+13     view_menu->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+14     if(!bViewStatusbar)
+15       enableStatusBar(KStatusBar::Hide);
+16
+17     // bar position settings
+18     KMenuBar::menuPosition menu_bar_pos;
+19     menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("MenuBar Position", KMenuBar::Top);
 20
-21    KToolBar::BarPosition tool_bar_pos;
-22    tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
+21     KToolBar::BarPosition tool_bar_pos;
+22     tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
 23
-24        menuBar()->setMenuBarPos(menu_bar_pos);
-25    toolBar()->setBarPos(tool_bar_pos);
-26      
-27    // initialize the recent file list
-28        recent_files.setAutoDelete(TRUE);
-29        config->readListEntry("Recent Files",recent_files);
-30      
-31        uint i;
-32    for ( i =0 ; i &lt; recent_files.count(); i++){
-33      recent_files_menu->insertItem(recent_files.at(i));
-34    }
+24     menuBar()->setMenuBarPos(menu_bar_pos);
+25     toolBar()->setBarPos(tool_bar_pos);
+26
+27     // initialize the recent file list
+28     recent_files.setAutoDelete(TRUE);
+29     config->readListEntry("Recent Files",recent_files);
+30
+31     uint i;
+32     for ( i =0 ; i &lt; recent_files.count(); i++){
+33       recent_files_menu->insertItem(recent_files.at(i));
+34     }
 35
-36    QSize size=config->readSizeEntry("Geometry");
-37        if(!size.isEmpty())
-38      resize(size);
-}
+36     QSize size=config->readSizeEntry("Geometry");
+37     if(!size.isEmpty())
+38       resize(size);
+39   }
 </PRE>
 <HR>
 </CODE></BLOCKQUOTE>
@@ -705,7 +706,7 @@ if (app.isRestored()){
   int n = 1;
   while (KTMainWindow::canBeRestored(n)){
     (new KScribbleApp)->restore(n);
-     n++;
+    n++;
   }
 }
 </PRE>
@@ -726,24 +727,24 @@ session beginning, this information now is used to restore the document contents
 <PRE>
 void KScribbleApp::readProperties(KConfig*)
 {
-        QString filename = config->readEntry("filename","");
-        bool modified = config->readBoolEntry("modified",false);
+  QString filename = config->readEntry("filename","");
+  bool modified = config->readBoolEntry("modified",false);
   if( modified ){
-        bool b_canRecover;
-                QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
-        
-        if(b_canRecover){
-                        doc->openDocument(tempname);
-                        doc->setModified();
-                        QFileInfo info(filename);
-                        doc->pathName(info.absFilePath());
-                        doc->title(info.fileName());
-                        QFile::remove(tempname);
-                }
-        }
-        else if(!filename.isEmpty()){
-                doc->openDocument(filename);
-        }
+    bool b_canRecover;
+    QString tempname = kapp->checkRecoverFile(filename,b_canRecover);
+
+    if(b_canRecover){
+      doc->openDocument(tempname);
+      doc->setModified();
+      QFileInfo info(filename);
+      doc->pathName(info.absFilePath());
+      doc->title(info.fileName());
+      QFile::remove(tempname);
+    }
+  }
+  else if(!filename.isEmpty()){
+  doc->openDocument(filename);
+  }
   setCaption(kapp->appName()+": "+doc->getTitle());
 }               
 </PRE>

@@ -541,6 +541,7 @@ void CPrintDlg::init(){
   okButton = new QPushButton( mainwidget, "okButton" );
   okButton->setText(i18n("OK"));
   okButton->setGeometry( 370, 440, 100, 30 );
+	okButton->setDefault(true);
   connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
 
   cancelButton = new QPushButton( mainwidget, "cancelButton" );
