@@ -20,7 +20,7 @@
 class KDevPlugin;
 class QComboBox;
 
-#if KDE_VERSION < 310
+#if KDE_VERSION < 308
 // dummy class, because it doesn't exist on KDE-3.0
 class KWidgetAction : public KAction
 {
