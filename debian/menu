@@ -3,4 +3,13 @@
         section=Apps/Programming\
         hints="KDE"\
         title="KDevelop"\
-        command=kdevelop
+	kderemove="y"\
+        command="/usr/bin/kdevelop"
+
+?package(kdevelop):\
+	needs=x11\
+	section=Apps/Programming\
+	hints="KDE"\
+	title="KDevelop Setup"\
+	kderemove="y"\
+	command="/usr/bin/kdevelop --setup"

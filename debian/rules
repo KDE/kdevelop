@@ -5,10 +5,21 @@
 # This is the debhelper compatability version to use.
 export DH_COMPAT=3
 
-include debian/debiandirs
+-include debian/debiandirs
 
-debdir=$(shell pwd)/debian
-instdir=$(debdir)/tmp
+ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
+ifeq ($(ARCH),alpha)
+  COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee -ftemplate-depth-99"
+else
+  COMPILER_FLAGS=CXXFLAGS="-ftemplate-depth-99"
+endif
+
+build: build-stamp
+ 
+-include debian/debiandirs
+ 
+debian/debiandirs: debian/debianrules
+	perl -w debian/debianrules echodirs > debian/debiandirs
 
 configure: configure-stamp
 configure-stamp:
@@ -16,58 +27,101 @@ configure-stamp:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
+	$(COMPILER_FLAGS) \
 	./configure $(configkdevelop)
 
 	touch configure-stamp
 
-build:  configure-stamp build-stamp
-build-stamp:
-	dh_testdir
+build: build-stamp 
+build-stamp: configure
 	$(MAKE)
 
 	touch build-stamp
 
 debian-clean:
 	dh_testdir
-	rm -f build-stamp configure-stamp
-	dh_clean
-
+	-rm -f build-stamp configure-stamp
+	-rm -f debian/debiandirs
+	-rm -f debian/files
+	dh_clean -k
+	
 clean: debian-clean
-	-rm -f debian/debiandirs 
-	if test -d CVS; then \
-	make -f admin/Makefile.common cvs-clean ;\
-	fi
 	-make distclean
 
 install: build
-	dh_testdir
 	dh_testroot
-	dh_clean -k
-	dh_installdirs
-	install -d debian/tmp/etc/kde2
-	$(MAKE) prefix=/usr DESTDIR=$(debdir)/tmp install
-	sudo rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
-
-deb-common:
-	dh_movefiles
-	dh_undocumented
-	dh_installmenu
-	dh_installdocs
-	dh_installchangelogs
-	dh_link
-
-binary-indep:
+	dh_testdir
+	dh_clean -a
+	install -d debian/tmp/etc/kde3
+	$(MAKE) prefix=/usr DESTDIR=`pwd`/debian/tmp/ install
+	-rm -rf debian/tmp/home debian/tmp/blah \
+		debian/tmp/usr/share/applnk/Development/designer.desktop \
+		debian/tmp/usr/share/applnk/Development/linguist.desktop \
+		debian/tmp/usr/share/mimelnk/application/x-designer.desktop \
+		debian/tmp/usr/share/mimelnk/application/x-linguist.desktop \
+		debian/tmp/usr/bin/extractrc
+	cp kdevelop/kdeveloprc debian/tmp/etc/kde3/
+	perl -w debian/debianrules cleanup
+	perl -w debian/debianrules docbase
+	perl -w debian/debianrules kdevelop_postinst
+	install -d debian/tmp/usr/share/doc/kdevelop/examples
+	install -g root -m 644 debian/htdig.conf \
+		debian/tmp/usr/share/doc/kdevelop/examples
+	install -g root -m 644 debian/README-htdig.Debian \
+		debian/tmp/usr/share/doc/kdevelop
+	install -d debian/tmp/usr/share/doc/kdevelop/updates
+	install -g root -m 644 admin/conf.change.pl \
+		debian/tmp/usr/share/doc/kdevelop/updates
+	install -g root -m 644 admin/config.pl \
+		debian/tmp/usr/share/doc/kdevelop/updates
+	install -g root -m 644 debian/README-automake1.5.Debian \
+		debian/tmp/usr/share/doc/kdevelop
+	
+build-indep: install
+	chmod 755 debian/tmp/usr/share/apps/kdevelop/tools/*
+	dh_movefiles -i
+	dh_undocumented -i
+	dh_installmenu -i
+	dh_installdocs -i
+	dh_installchangelogs -i
 	dh_compress -X.database -i
+	dh_perl -i
+	dh_fixperms -i
 
-binary-arch: 
+binary-indep: build-indep
+	-rm -f debian/files
+#	dpkg-distaddfile kdevelop-doc doc optional
+#	dpkg-distaddfile kdevelop-data devel optional
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+build-arch:	install
+	dh_movefiles -a
+	dh_undocumented -a
+	dh_installmenu -a
+	dh_installdocs -a
+	dh_installchangelogs -a
 	dh_strip -a
 	dh_compress -X.database -a
+	dh_fixperms -a
+	dh_makeshlibs -a
+	dh_fixperms -a
 
+binary-arch: build-arch
+	-rm -f debian/files
+#	dpkg-distaddfile kdevelop devel optional
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+	
 # Below here is fairly generic really
 
-binary:	install binary-common binary-arch binary-indep
+binary: install build-indep build-arch
 	dh_fixperms
-	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
@@ -81,5 +135,3 @@ install-local:
 	sudo $(MAKE) prefix=/usr install
 
 .PHONY: binary binary-arch binary-indep clean install install-local
-
-

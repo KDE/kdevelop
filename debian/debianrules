@@ -1,0 +1,316 @@
+#!/usr/bin/perl -w
+
+use Shell qw(mv cp mkdir rm) ;
+use File::Find;
+use Cwd;
+
+$origPwd = `pwd`;
+chomp $origPwd;
+
+
+if (@ARGV && $ARGV[0] eq 'update') {
+  @packages = `ls -1d debian/*/DEBIAN`;
+  foreach $dir (@packages) {
+    chomp $dir;
+    next if (! -d $dir);
+    foreach $file (qw{postinst postrm preinst prerm}) {
+      next if (! -f "$dir/$file");
+      $found = 0;
+      open(IN, "$dir/$file");
+      open(OUT, ">/tmp/kde.dpkg");
+      while (<IN>) {
+	if (/^#KDEHELPER#/) {
+	    $found = 1;
+	    if (-d $dir . "/../usr/lib/mime/packages") {
+	      if ($file eq 'postinst') {
+		print OUT "# added by kderules\n";
+		print OUT 'case "$1" in' . "\n";
+		print OUT "  configure)\n";
+		print OUT "    if [ -x /usr/sbin/update-mime ]; then\n";
+		print OUT "       update-mime\n";
+		print OUT "    fi\n";
+		print OUT "  ;;\n";
+		print OUT "esac\n";
+	      } elsif ($file eq 'postrm') {
+		print OUT "# added by kderules\n";
+		print OUT 'case "$1" in' . "\n";
+		print OUT "   remove|purge)\n";
+		print OUT "    if [ -x /usr/sbin/update-mime ]; then\n";
+		print OUT "       update-mime\n";
+		print OUT "    fi\n";
+		print OUT "  ;;\n";
+		print OUT "esac\n";
+	      }
+	    }
+
+	    next;
+	  }
+	print OUT $_ . "\n";
+      }
+
+      close IN;
+      close OUT;
+
+      if ($found == 0) {
+	rm("/tmp/kde.dpkg");
+      } else {
+	mv("/tmp/kde.dpkg", "$dir/$file");
+	chown("root.root","dir/$file");
+	chmod(0755,"$dir/$file");
+      }
+    }
+  }
+  exit;
+}
+
+if (@ARGV && $ARGV[0] eq 'cleanup') {
+
+if (-d "debian/tmp/usr/share/config") {
+	if (! -d "debian/tmp/$kde_confdir") {
+	  system("mv debian/tmp/usr/share/config debian/tmp/$kde_confdir");
+	}
+}
+system("rm -f `find debian/ -name \".anchors\"`");
+system("chmod 755 debian/*preinst debian/*postinst");
+
+exit;
+}
+
+if (@ARGV && $ARGV[0] eq 'kdevelop_postinst') {
+open FILE, ">debian/kdevelop.postinst";
+print FILE "#!/bin/sh\n\nset -e\n\nldconfig\n\n#DEBHELPER#";
+close FILE;
+
+exit;
+}
+
+$QTDIR="/usr/share/qt";
+$kde_prefix="/usr";
+$kde_htmldir="$kde_prefix/share/doc/kde/HTML";
+$kde_icondir="$kde_prefix/share/icons";
+$kde_sounddir="$kde_prefix/share/sounds";
+$kde_datadir="$kde_prefix/share/apps";
+$kde_locale="$kde_prefix/share/locale";
+$kde_confdir="/etc/kde3";
+$kde_cgidir="$kde_prefix/lib/cgi-bin";
+$kde_appsdir="$kde_prefix/share/applnk";
+$kde_mimedir="$kde_prefix/share/mimelnk";
+$kde_wallpaperdir="$kde_prefix/share/wallpapers";
+$kde_bindir="$kde_prefix/bin";
+$kde_servicesdir="$kde_prefix/share/services";
+$kde_servicetypesdir="$kde_prefix/share/servicetypes";
+$kde_includedir="$kde_prefix/include/kde";
+$kde_libdir="$kde_prefix/lib";
+$mandir="$kde_prefix/share/man";
+$infodir="$kde_prefix/share/info";
+$IDL="$kde_bindir/cuteidl";
+$DCOPIDL="$kde_bindir/dcopidl";
+$DCOPIDL2CPP="$kde_bindir/dcopidl2cpp";
+$KDB2HTML="$kde_bindir/kdb2html";
+$MCOPIDL="$kde_bindir/mcopidl";
+$ARTSCCONFIG="$kde_bindir/artsc-config";
+
+if (@ARGV && $ARGV[0] eq 'echodirs') {
+  print STDOUT "export kde_htmldir=$kde_htmldir\n";
+  print STDOUT "export kde_appsdir=$kde_appsdir\n";
+  print STDOUT "export kde_icondir=$kde_icondir\n";
+  print STDOUT "export kde_sounddir=$kde_sounddir\n";
+  print STDOUT "export kde_datadir=$kde_datadir\n";
+  print STDOUT "export kde_cgidir=$kde_cgidir\n";
+  print STDOUT "export kde_locale=$kde_locale\n";
+  print STDOUT "export kde_confdir=$kde_confdir\n";
+  print STDOUT "export kde_mimedir=$kde_mimedir\n";
+  print STDOUT "export kde_wallpaperdir=$kde_wallpaperdir\n";
+  print STDOUT "export kde_bindir=$kde_bindir\n";
+  print STDOUT "export kde_servicesdir=$kde_servicesdir\n";
+  print STDOUT "export kde_servicetypesdir=$kde_servicetypesdir\n";
+  print STDOUT "export kde_includedir=$kde_includedir\n";
+  print STDOUT "export kde_libdir=$kde_libdir\n";
+  print STDOUT "export mandir=$mandir\n";
+  print STDOUT "export infodir=$infodir\n";
+  print STDOUT "export QTDIR=$QTDIR\n";
+  print STDOUT "export kde_prefix=$kde_prefix\n";
+  print STDOUT "export INSTALL_DATA=install -p -c -m 644\n";
+  print STDOUT "export IDL=$IDL\n";
+  print STDOUT "export DCOPIDL=$DCOPIDL\n";
+  print STDOUT "export DCOPIDL2CPP=$DCOPIDL2CPP\n";
+  print STDOUT "export KDB2HTML=$KDB2HTML\n";
+  print STDOUT "export MCOPIDL=$MCOPIDL\n";
+  print STDOUT "export ARTSCCONFIG=$ARTSCCONFIG\n";
+  print STDOUT "configkde=--disable-debug --disable-rpath --prefix=\$(kde_prefix) --libexecdir=\$(kde_bindir) --with-qt-includes=/usr/include/qt --mandir=\$(mandir) --infodir=\$(infodir)\n";
+  print STDOUT "configkdevelop=--disable-debug --enable-docbase --enable-kdoc2 --disable-rpath --libdir=\$(kde_libdir) --includedir=\$(kde_includedir) --with-qt-includes=/usr/include/qt --mandir=\$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kdelibs4-doc/html\n";
+  exit
+}
+
+open(CHANGELOG,"debian/changelog") or die "can't read debian/changelog : $!\n";
+$_ = <CHANGELOG>;
+close(CHANGELOG);
+/^(.*) \((.*)\) /;
+$package = $1;
+
+# Find documentation and install it
+sub docwanted {
+        local $dir = $File::Find::dir;
+        $dir =~ s/^$origPwd//;
+	if ($dir =~ /debian/) { return 0 ; }
+	if ($dir =~ /build/) { return 0 ; }
+	if ( ( /debian/ ) or ( /^INSTALL$/ ) or ( /^LICENSE$/ )
+	or ( /^ARTISTIC$/ ) or ( /^COPYING$/ ) ) { return 0 ; }
+	if ( (! /CVS/ )
+	and ( /^[A-Z]*$/ or /^README$/ or /^ChangeLog$/ or /lsm$/ or /SWALLOW/
+	or /^TODO$/ or /^kdedoc$/ or /Header/ or /Documentation/ or
+	   /Tutorial/ or /README\.htdig/ ) )
+	{
+		if ($dir) {
+		  $_ = "$dir/$_";
+		  $_ =~ s/^\///;
+		}
+		push @docs, "$_" ;
+	}
+}
+
+$pwd = './';
+
+find(\&docwanted, $pwd);
+if ($pwd =~ ?^(.*/)build_([^/]*)$?) {
+  $pwd = $1 . $2;
+  if (-d $pwd) {
+     find(\&docwanted, $pwd);
+  }
+}
+
+if (! -d "debian/tmp/usr/share/doc/$package") {
+	mkdir("-p", "debian/tmp/usr/share/doc/$package") ;
+}
+
+if (@docs) {
+       chdir($origPwd);
+       cp( "-a", @docs, "debian/tmp/usr/share/doc/$package") ;
+       if (-f "debian/tmp/usr/share/doc/$package/ChangeLog") {
+	  mv("debian/tmp/usr/share/doc/$package/ChangeLog",
+		"debian/tmp/usr/share/doc/$package/changelog");
+	}
+	if (-f "debian/tmp/usr/share/doc/$package/CHANGES") {
+	  mv("debian/tmp/usr/share/doc/$package/CHANGES",
+		"debian/tmp/usr/share/doc/$package/changelog");
+	}
+}
+
+if (@ARGV && $ARGV[0] eq 'docbase') {
+# Create doc-base file
+
+if (-d "debian/doc-base") {
+        if (! -d "debian/tmp/usr/share/doc-base") {
+                  mkdir("-p", "debian/tmp/usr/share/doc-base");
+        }
+        while (<debian/doc-base/*>) {
+                  cp( "-a", $_, "debian/tmp/usr/share/doc-base")
+                    unless (-d $_);
+        }
+#        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
+}
+
+}
+
+# Create debian/menu files
+
+sub findkdelnk {
+	/\.desktop$/ && push @lnkfiles, "$File::Find::dir/$_" ;
+}
+
+if (-d "debian/tmp/$kde_appsdir") {
+	find(\&findkdelnk,"debian/tmp/$kde_appsdir");
+}
+
+open MIME, ">debian/mailcap" or die "can't open debian/mailcap : $!\n";
+
+foreach $file (@lnkfiles) {
+	open KDELNK, $file;
+	undef %kdelnk;
+	while (<KDELNK>) {
+		/^#/ && next ;
+		/^\[KDE Desktop Entry\]/ && next ;
+		/^\s*$/ && next ;
+		chop ;
+		($what,$value) = split /=/ ;
+		$kdelnk{ucfirst lc $what}=$value;
+	}
+	close KDELNK;
+	if (defined $kdelnk{"Type"}) {
+		if ($kdelnk{"Type"} ne "Application" ) {
+			print STDERR "Type is not Application : $file !\n" ;
+			next ;
+		}
+	} else {
+		print STDERR "has no Type= defaults to Application : $file !\n" ;
+	}
+	if (! defined $kdelnk{"Exec"}) {
+		print STDERR "has no Exec= : $file !\n" ;
+		next ;
+	}
+
+	if (defined $kdelnk{"Mimetype"} && ! $kdelnk{"Mimetype"} eq '') {
+
+  	   $execline = $kdelnk{"Exec"};
+	   $execline =~ s/%f/%s/;
+	   $execline =~ s/%c/$kdelnk{"Name"}/;
+	   $execline =~ s/%i//;
+	   $execline =~ s/%m//;
+	   $execline =~ s/%u/%s/;
+	   $mimeline = $kdelnk{"Mimetype"};
+	   @mimetypes = split(';', $mimeline);
+	   foreach $mimetype (@mimetypes) {
+	   print MIME "$mimetype; $execline;" . 'test=test "$DISPLAY" != ""; priority=7' . "\n";
+	   }
+
+	}
+
+	$icon="";
+	if (not defined $kdelnk{"Name"}) {
+		print STDERR "No Name : $package $kdelnk\n";
+		next ;
+	}
+	if (defined $kdelnk{"Icon"}) {
+		$icon=$kdelnk{"Icon"} ;
+		if (! -f "debian/tmp/$kde_icondir/mini/$package.png" ) {
+			$icon="";
+		} else {
+			$icon="/$kde_icondir/mini/$package.png";
+		}
+	}
+	($kdelnk=$file) =~ s/^.*tmp// ;
+}
+
+if ((! -e "debian/menu") || (-z "debian/menu")) {
+	open MENU, ">debian/menu" or die "can't open debian/menu : $!\n";
+	print MENU "?package($package):\\\n" ;
+	print MENU "	needs=x11\\\n" ;
+	print MENU "	section=Apps/Programming\\\n" ;
+	print MENU "	hints=\"KDE\"\\\n" ;
+	print MENU "	title=\"KDevelop\"\\\n" ;
+	print MENU "	command=kdevelop" ;
+	if (-f $icon ) {
+		print MENU "\\\n	icon=$icon";
+	}
+	
+	if (-e "debian/menu.add") {
+		open MENUADD, "debian/menu.add" ;
+		while (<MENUADD>) {
+			print MENU $_ ;
+		}
+		close MENUADD;
+	}
+	close MENU;
+}
+
+close MENU;
+
+close MIME;
+
+if (-z "debian/mailcap") {
+  rm("debian/mailcap");
+} else {
+  mkdir("-p", "debian/tmp/usr/lib/mime/packages");
+  cp("debian/mailcap", "debian/tmp/usr/lib/mime/packages/$package");
+}
+
