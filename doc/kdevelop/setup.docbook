@@ -1078,9 +1078,9 @@ The thus displayed <link linkend="configure-docu-general">configuration page</li
   <member><link linkend="setup-docu-other">Other</link></member>
 </simplelist>
 
-<tip><para>
+<!--<tip><para>
 You should at least configure the <link linkend="setup-docu-textsearch">Full Text Search</link> section. It is mandatory to immediately access the &Qt; and &kde; Libraries API help from within a source text.
-</para></tip>
+</para></tip>-->
 
 <sect2 id="setup-docu-general">
 <title>Setting Up Documentation Collections</title>
@@ -1439,6 +1439,9 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
           <emphasis>(content structure)</emphasis>
         </member>
         <member>
+          <emphasis>(index structure)</emphasis>
+        </member>
+        <member>
           <computeroutput>&lt;/kdeveloptoc&gt;</computeroutput>
         </member>
       </simplelist>
@@ -1520,6 +1523,29 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
       <note><para>
       Any address combined of base and section &URL; must point to some displayable text file. Usually this will be an HTML-structured file. It is possible to link to anchor marks within such an HTML file using the standard # notation of the format: <filename>/base-url/section-url#anchor-mark</filename>.
       </para></note>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>index structure</term>
+    <listitem>
+      <simplelist>
+        <member>
+          <computeroutput>&lt;index&gt;</computeroutput>
+        </member>
+        <member>
+          <computeroutput>&lt;entry name="</computeroutput>
+          <emphasis>(index entry title)</emphasis>
+          <computeroutput>" url="</computeroutput>
+          <emphasis>(index section &URL;)</emphasis>
+          <computeroutput>"/&gt;</computeroutput>
+        </member>
+        <member>
+          <computeroutput>&lt;/index&gt;</computeroutput>
+        </member>
+      </simplelist>
+      <para>
+      Index is a plain list of index entries - pairs of title and &URL;. Index is not mandatory.
+      </para>
     </listitem>
   </varlistentry>
 </variablelist>
