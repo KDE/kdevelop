@@ -31,8 +31,6 @@ class KStartupLogo : public QWidget  {
 public: 
 	KStartupLogo(QWidget *parent=0, const char *name=0);
 	~KStartupLogo();
-protected:
-  virtual bool event(QEvent*);
 };
 
 #endif

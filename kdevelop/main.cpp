@@ -48,7 +48,6 @@ static KCmdLineOptions options[] =
 int main(int argc, char* argv[])
 {
   KConfig* config;
-//  KStartupLogo* start_logo;
 
   KAboutData aboutData( "kdevelop",
                         I18N_NOOP("KDevelop"),
@@ -159,56 +158,48 @@ int main(int argc, char* argv[])
   if (args->isSet("setup"))
     bInstall = true; // start the setupwizard
 
-//  if (kapp->isRestored())
-//  {
-//    RESTORE(CKDevelop);
-//  }
-//  else
+  if (bInstall)
   {
-    if (bInstall)
-    {
-      CKDevInstall* install = new CKDevInstall(0,"install", config);
-      a.setMainWidget(install);
-      install->show();
-      int retVal = a.exec();
-      return retVal;
-    }
+    CKDevInstall* install = new CKDevInstall(0,"install", config);
+    a.setMainWidget(install);
+    install->show();
+    int retVal = a.exec();
+    return retVal;
+  }
 
   config->setGroup("General Options");
-// commented this out, gallium. The code in CKDevelop makes the logo show for all the time until the former project is loaded and
-// that is the sense behind the logo, not only showing it until the mainwindow pops up :)
-//  start_logo=NULL;
-//  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-//  {
-//    start_logo= new KStartupLogo();
-//    start_logo->show();
-//    start_logo->raise();
-//    QApplication::flushX();
-//  }
-
-    CKDevelop* kdevelop = new CKDevelop();
-    a.setMainWidget(kdevelop);
-
-//   if (start_logo)
-//	delete start_logo;
-
-    kdevelop->completeStartup(args->count() == 0);
-
-    if (bInstall)
-      kdevelop->refreshTrees();  // this is because of the new documentation
-
-    config->setGroup("General Options");
-    kdevelop->slotTCurrentTab(config->readNumEntry("LastActiveTree",DOC));
-    
-    if (args->count()) {
-      // need full path name to find project and session files (rokrau 6/11/01)
-      QFileInfo arg0(args->arg(0));
-      kdevelop->slotProjectOpenCmdl(arg0.absFilePath());
-    }
-
-    kdevelop->bStartupIsPending = false;  // see queryClose()
+  KStartupLogo* start_logo = 0L;
+  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+  {
+    start_logo= new KStartupLogo();
+    start_logo->show();
   }
-  
+
+  CKDevelop* kdevelop = new CKDevelop();
+  a.setMainWidget(kdevelop);
+
+  start_logo->raise();
+  QApplication::flushX();
+
+  kdevelop->completeStartup(args->count() == 0);
+
+  if (start_logo)
+    delete start_logo;
+
+  if (bInstall)
+    kdevelop->refreshTrees();  // this is because of the new documentation
+
+  config->setGroup("General Options");
+  kdevelop->slotTCurrentTab(config->readNumEntry("LastActiveTree",DOC));
+
+  if (args->count()) {
+    // need full path name to find project and session files (rokrau 6/11/01)
+    QFileInfo arg0(args->arg(0));
+    kdevelop->slotProjectOpenCmdl(arg0.absFilePath());
+  }
+
+  kdevelop->bStartupIsPending = false;  // see queryClose()
+
   args->clear();
 
   int rc = a.exec();

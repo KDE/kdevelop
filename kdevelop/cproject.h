@@ -115,8 +115,6 @@ struct TWorkspace {
   QString header_file;
   QString cpp_file;
   QString browser_file;
-  bool show_treeview;
-  bool show_output_view;
   QString activeTarget;
 };
 

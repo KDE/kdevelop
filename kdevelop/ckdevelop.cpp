@@ -23,7 +23,6 @@
 #include "setup/ccreatedocdatabasedlg.h"
 #include "cdocbrowser.h"
 #include "ceditwidget.h"
-//#include "cerrormessageparser.h"
 #include "cexecuteargdlg.h"
 #include "cfinddoctextdlg.h"
 #include "ckdevaccel.h"
@@ -547,6 +546,10 @@ void CKDevelop::slotViewPreviousError(){
 //  }
 }
 
+/**
+* This method prepares the actual toggling which is done after by toggleGroupOfToolViewCovers(..).
+* It just collects the interesting tree views (actually their dockwidget covers) in a list.
+*/
 void CKDevelop::slotViewTTreeView()
 {
   // build a list of dockwidgets that covers some tree views
@@ -568,6 +571,10 @@ void CKDevelop::slotViewTTreeView()
   toggleGroupOfToolViewCovers(ID_VIEW_TREEVIEW, &dockWdgList);
 }
 
+/**
+* This method prepares the actual toggling which is done after by toggleGroupOfToolViewCovers(..).
+* It just collects the interesting output views (actually their dockwidget covers) in a list.
+*/
 void CKDevelop::slotViewTOutputView()
 {
   // build a list of dockwidgets that covers some tree views
@@ -597,6 +604,10 @@ void CKDevelop::slotViewTOutputView()
   toggleGroupOfToolViewCovers(ID_VIEW_OUTPUTVIEW, &dockWdgList);
 }
 
+/**
+* In step 1: this method checks the state of the tool-views and their positions.
+* In step 2: it toggles the tool-view group from the users point of view.
+*/
 void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolViewCoverList)
 {
   // find out if we have to toggle on or off (checking the toolbar button doesn't work! :( bug in kdeui?)
@@ -610,6 +621,9 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       bToggleOn = false;
   }
 
+	//----------------------
+	// Step 1: checks the state of the tool-views and their positions
+	//----------------------
   QListIterator<KDockWidget> it( *pToolViewCoverList);
   QList<KDockWidget> rootDockWidgetList;
   QListIterator<KDockWidget> it2( rootDockWidgetList);
@@ -661,6 +675,10 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
     }
   }
 
+	//----------------------
+	// Step 2: toggle the tool-view group from the users point of view
+	//----------------------
+
   // now really show/hide the chosen dockwidgets as well as toggling the view menu button
   if (bToggleOn) {
     // dock back whole groups of dockwidgets
@@ -672,11 +690,22 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
         }
       }
       else {
-        pCur->dockBack();
+        if (pCur->isDockBackPossible()) {
+          pCur->dockBack();
+        }
+        else {
+          // this is a weak attempt to emulate a dockBack() if it aint possible
+          // (one should actually fix KDockWidget in a way that dockBack() is always possible)
+          if (type == ID_VIEW_TREEVIEW)
+            pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 25);
+          else
+            pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
+          if (pCur->isTopLevel())
+            pCur->show();
+        }
       }
     }
-//    view_menu->setItemChecked(type, true);
-//    toolBar()->setButton(type, true);
+    toolBar()->setButton(type, true);
   }
   else{
     m_bToggleToolViewsIsPending = true;
@@ -688,8 +717,7 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       }
     }
     m_bToggleToolViewsIsPending = false;
-//    view_menu->setItemChecked(type, false);
-//    toolBar()->setButton(type, false);
+    toolBar()->setButton(type, false);
   }
 }
 
@@ -3029,55 +3057,11 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
   messages_widget->insertAtEnd(QCString(buffer,buflen+1));
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
-
-//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
-    
-//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-//   }
-//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-//   }
-
-//   //enable/disable the menus/toolbars
-//   if(error_parser->hasNext()){
-//     enableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-  
-//   if(error_parser->hasPrev()){
-//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAtEnd(QCString(buffer,buflen+1), CMakeOutputWidget::Diagnostic);
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
-//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
-//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-//   }
-//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-//   }
-
-//   //enable/disable the menus/toolbars
-//   if(error_parser->hasNext()){
-//     enableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-  
-//   if(error_parser->hasPrev()){
-//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   stdin_stdout_widget->insertAtEnd(QCString(buffer,buflen+1));
@@ -3437,27 +3421,6 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 //     messages_widget->insertAt(result, x, y);
     messages_widget->insertAtEnd(result);
   }
-
-//  if (ready)
-//  { // start the error-message parser
-//    QString str1 = messages_widget->text();
-//
-//    if(error_parser->getMode() == CErrorMessageParser::MAKE){
-//      error_parser->parseInMakeMode(&str1);
-//    }
-//    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-////      error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-//    // docbook file
-//      error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
-//    }
-//      //enable/disable the menus/toolbars
-//    if(error_parser->hasNext()){
-//      enableCommand(ID_VIEW_NEXT_ERROR);
-//    }
-//    else{
-//      disableCommand(ID_VIEW_NEXT_ERROR);
-//    }
-//  }
 
   if (ready && proc->normalExit()) {
 

@@ -59,7 +59,6 @@ class CRealFileView;
 class CLogFileView;
 class CAddExistingFileDlg;
 class QListViewItem;
-class CErrorMessageParser;
 class GrepDialog;
 class searchTagsDialogImpl;
 class KHTMLView;
@@ -75,7 +74,6 @@ class CMakeOutputWidget;
 class CKDevAccel;
 class KProcess;
 class KWriteView;
-class KStartupLogo;
 class CKonsoleWidget;
 class QStringList;
 class QPrinter;
@@ -90,7 +88,6 @@ class Breakpoint;
 class Disassemble;
 class DbgToolbar;
 class KStatusBarLabel;
-class KStartLogo;
 class Kpp;
 
 // MDI and related classes
@@ -310,7 +307,6 @@ public:
   void slotViewPreviousError();
   /** dis-/enables the treeview */
   void slotViewTTreeView();
-  void showTreeView(bool show=true);
   /** dis-/enables the outputview */
   void slotViewTOutputView();
   void showOutputView(bool show=true);
@@ -867,7 +863,12 @@ private:
 #else
   void printImpl(QStringList& list, KPrinter* printer);
 #endif
+  /** */
   bool isToolViewVisible(QWidget* pToolView);
+  /** */
+	void adjustTTreesToolButtonState();
+  /** */
+  void adjustTOutputToolButtonState();
 
 public:
   /** this attribute is true from construction until qApp->exec().
@@ -875,7 +876,6 @@ public:
   bool bStartupIsPending;
 
 private:
-  KStartupLogo* start_logo;
   KFileOpenWithHandler fowh;
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
@@ -984,12 +984,8 @@ private:
   /** A konsole */
   CKonsoleWidget *konsole_widget;
   
-  int tree_view_pos;
-  int output_view_pos;
-  int properties_view_pos;
   int workspace;
 
-//  CErrorMessageParser* error_parser;
   QString version;
   bool project;
 

@@ -23,7 +23,6 @@
 #include "caddnewtranslationdlg.h"
 #include "cclassview.h"
 #include "ceditwidget.h"
-//#include "cerrormessageparser.h"
 #include "cfilepropdlg.h"
 #include "cgeneratenewfile.h"
 #include "ckappwizard.h"
@@ -1022,7 +1021,6 @@ void CKDevelop::slotProjectManual(){
  if(prj->isKDE2Project()){
     slotDebugStop();
       showOutputView(true);
-//      error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
       setToolMenuProcess(false);
       slotFileSaveAll();
       slotStatusMsg(i18n("Creating project Manual..."));
@@ -1041,8 +1039,6 @@ void CKDevelop::slotProjectManual(){
     
   slotDebugStop();
     showOutputView(true);
-//    error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
-    
     setToolMenuProcess(false);
     //  slotFileSaveAll();
     slotStatusMsg(i18n("Creating project Manual..."));
@@ -1444,9 +1440,6 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   // save the current workspace
   current.id = workspace;
-  current.show_treeview = view_menu->isItemChecked(ID_VIEW_TREEVIEW);
-  current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
-
   prj->writeWorkspace(current);
 }
 
@@ -1606,7 +1599,7 @@ void CKDevelop::slotTagSwitchTo()
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
   // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
-  bool bToHeader;
+  bool bToHeader = true;
   if (m_docViewManager->curDocIsHeaderFile()) {
     if (bCTags) {
       int ntags;
@@ -1625,7 +1618,6 @@ void CKDevelop::slotTagSwitchTo()
   }
   else if (m_docViewManager->curDocIsCppFile()) {
     switchToName = switchToName + ".h";
-    bToHeader=true;
   }
   kdDebug() << "in CKDevelop::slotTagSwitchTo():\n";
   kdDebug() << "current filename: " << curFileName << "\n";

@@ -28,6 +28,9 @@
 #include "debug.h"
 #include "doctreeview.h"
 #include "./dbg/brkptmanager.h"
+#include "./dbg/vartree.h"
+#include "./dbg/framestack.h"
+#include "./dbg/disassemble.h"
 #include "ckonsolewidget.h"
 #include "docviewman.h"
 #include "kwdoc.h"
@@ -569,9 +572,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     konsole_widget->setDirectory(dirpart);
   }
 
-//FB  lastfile = pCurEditWidget->getName();
-//FB  lasttab = s_tab_view->getCurrentTab();
-
   QFileInfo fileInfo(filename);
   // check if the file exists
   if(!fileInfo.exists() && !isUntitled(filename)){
@@ -745,69 +745,73 @@ void CKDevelop::switchToWorkspace(int id){
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
 //  }
-  TWorkspace ws = prj->getWorkspace(id);
-  if(ws.show_output_view){
-    showOutputView(true);
-  }
-  else{showOutputView(false);}
-
-  if(ws.show_treeview){
-    showTreeView(true);
-  }
-  else{showTreeView(false);}
+  prj->getWorkspace(id);
 }
 
-void CKDevelop::showTreeView(bool show){
-  if(bAutoswitch)
-  {
-    if(show)
-    {
-      // This is a hack to get around some startup problems
-//temp-disabled      if(treedock->isVisible())
-//temp-disabled      {
-//temp-disabled        view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-//temp-disabled        return;
-//temp-disabled      }
-//temp-disabled      else
-//temp-disabled      {
-//temp-disabled        slotViewTTreeView();
-//temp-disabled      }
-    }
-    else
-    {
-      if(!view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-      {
-        return; // it's already unvisible){
-      }
-      else{
-                slotViewTTreeView();
-      }
-    }
-  }
-}
-void CKDevelop::showOutputView(bool show){
-  if(bAutoswitch){
-    if(show){
+void CKDevelop::showOutputView(bool show)
+{
+  if (bAutoswitch) {
+    if (show) {
       if (isToolViewVisible(messages_widget)) {
+				 // if it's a tab page, raise the messages_widget
          makeWidgetDockVisible(messages_widget->parentWidget());
       }
-//      if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-//        return; // it's already visible
-//      }
-      else{
+      else {
         slotViewTOutputView();
       }
     }
-    else{
-      if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    else {
+      if (!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)) {
         return; //it's already unvisible
       }
-      else{
+      else {
         slotViewTOutputView();
       }
     }
   }
 }
+
+void CKDevelop::adjustTTreesToolButtonState()
+{
+  bool bClassesChecked = isToolViewVisible(class_tree);
+  bool bGroupsChecked = isToolViewVisible(log_file_tree);
+  bool bFilesChecked = isToolViewVisible(real_file_tree);
+  bool bBooksChecked = isToolViewVisible(doc_tree);
+  bool bWatchChecked = isToolViewVisible(var_viewer);
+
+  if (dbgController != 0L) {  // if not debugging, don't consider the watch view
+    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked));
+  }
+  else {
+    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked));
+  }
+}
+
+void CKDevelop::adjustTOutputToolButtonState()
+{
+  bool bMessagesChecked = isToolViewVisible(messages_widget);
+  bool bStdOutChecked = isToolViewVisible(stdin_stdout_widget);
+  bool bStdErrChecked = isToolViewVisible(stderr_widget);
+  bool bKonsoleChecked = isToolViewVisible(konsole_widget);
+  bool bBreakpointsChecked = isToolViewVisible(brkptManager);
+  bool bDisassembleChecked = isToolViewVisible(disassemble);
+  bool bCallStackChecked = isToolViewVisible(frameStack);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  bool bDebuggerChecked = isToolViewVisible(dbg_widget);
+#endif
+
+  if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked));
+#else
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked));
+#endif
+  }
+  else {
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked));
+  }
+}
+
 void CKDevelop::readOptions()
 {
   //default geometry on first startup, saved geometry is set by applyMainWindowSettings afterwards
@@ -828,23 +832,6 @@ void CKDevelop::readOptions()
 
   // read setting whether to use the ctags search database
   bCTags = config->readBoolEntry("use_ctags", false);
-  /////////////////////////////////////////
-  // Outputwindow, TreeView, KDevelop
-  /////////////////////    
-
-    config->setGroup("dock_setting_default");
-    // settings just turned around...true is false and false is true ;-)
-    bool outputview= config->readBoolEntry("Output-View:visible", true);
-    if(outputview){
-      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
-        toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-    }
-    bool treeview=config->readBoolEntry("Tree-View:visible", true);
-    if(treeview){
-      view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-        toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-    }
-/////////////////////
 
   config->setGroup("General Options");
     /////////////////////////////////////////
@@ -1016,73 +1003,6 @@ bool CKDevelop::queryClose(){
   }
   return true;
 }
-
-/*... (rokrau 05/17/01)
-  I have a feeling that this function isn't called anymore
-  ...*/
-// void CKDevelop::readProperties(KConfig* sess_config){
-//   readOptions();
-//   QString filename;
-// //  filename = sess_config->readEntry("project_file","");
-//   filename = kapp->sessionConfig()->readEntry("project_file","");
-//
-//   QFile file(filename);
-//   if (file.exists())
-//   {
-//     if(!(readProjectFile(filename)))
-//     {
-//       KMessageBox::error(0,
-//                         i18n("Unable to read the project file. Perhaps its\n"
-//                               "an old unsupported project file, or you do not\n"
-//                               "have read/write permissions for this project"),
-//                               filename);
-//       return;
-//     }
-//     else
-//     {  // projectfile successfully read
-//       filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
-//       QFile _file(filename);
-//
-//       if (QFile::exists(filename)){
-//         switchToFile(filename);
-//
-//       }
-//
-//       filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
-//       if (QFile::exists(filename)){
-//         switchToFile(filename);
-//       }
-//     }
-//   }
-//   refreshTrees();  // always used
-// }
-
-/*... (rokrau 05/17/01)
-  I have a feeling that this function isn't called anymore
-  ...*/
-// void CKDevelop::saveProperties(KConfig* /*sess_config*/){
-//
-//   if(project){
-//     kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
-// //FB    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
-// //FB    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
-//     prj->setCurrentWorkspaceNumber(workspace);
-//     saveCurrentWorkspaceIntoProject();
-//     prj->writeProject();
-//   }
-//   if(bAutosave)
-//     slotFileSaveAll();
-//   else{
-//     // TEditInfo* info;
-//     // for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-//     //   if(info->modified){
-//     //     #warning FIXME missing method    setUnsavedData ( true );
-//     //     break;
-//     //   }
-//     // }
-//   }
-//   saveOptions();
-// }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){
   return (m_docViewManager->findKWriteDoc(abs_filename) != 0);

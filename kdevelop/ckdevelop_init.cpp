@@ -21,7 +21,6 @@
 #include "cclassview.h"
 #include "cdocbrowser.h"
 #include "ceditwidget.h"
-//#include "cerrormessageparser.h"
 #include "ckdevaccel.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
@@ -31,7 +30,6 @@
 #include "grepdialog.h"
 #include "./ctags/ctagsdialog_impl.h"
 #include "ckonsolewidget.h"
-#include "kstartuplogo.h"
 
 #include "./dbg/dbgcontroller.h"
 #include "./dbg/vartree.h"
@@ -113,14 +111,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   config = KGlobal::config();
 
-  config->setGroup("General Options");
-  start_logo=0L;
-  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-  {
-    start_logo= new KStartupLogo(this);
-    start_logo->show();
-  }
-
   // ********* MDI stuff (falk) *******
   m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
   m_pKDevSession = new KDevSession( m_docViewManager, "testtest");
@@ -155,22 +145,20 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   slotViewRefresh();
 
-  if(start_logo)
-    start_logo->raise();
-
   initDebugger();
   initWhatsThis();
 
   // read the previous dock szenario from kdeveloprc
   // (this has to be after all creation of dockwidget-covered tool-views
-  //readDockConfig(config);
+//DISABLED_UNTIL_SOME_BUGFIXES_ARE_MADE  readDockConfig(config);
 
   show();
 
+	adjustTTreesToolButtonState();
+	adjustTOutputToolButtonState();
+
   setDebugMenuProcess(false);
   setToolmenuEntries();
-
-//  error_parser = new CErrorMessageParser;
 
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
@@ -192,18 +180,6 @@ void CKDevelop::initView()
 {
   act_outbuffer_len=0;
   prj = 0;
-
-  if (config->hasGroup("dock_setting_default"))
-  {
-    // use the last placements
-//    readDockConfig(config);
-  }
-//  else
-//  {
-    // Set the default window placement
-//FB    outputdock->manualDock(maindock, KDockWidget::DockBottom, 80/*size relation in %*/);
-//FB    treedock->manualDock(maindock, KDockWidget::DockLeft, 30/*size relation in %*/);
-//  }
 
   ////////////////////////
   // Treeviews
@@ -618,8 +594,7 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
   //   menu_buffers = new QPopupMenu;
-//FB  menuBar()->insertItem(i18n("&Window"), menu_buffers);
-  menuBar()->insertItem(i18n("&Window"), windowMenu());//FB
+  menuBar()->insertItem(i18n("&Window"), windowMenu());
   menuBar()->insertSeparator();
 
   ///////////////////////////////////////////////////////////////////
@@ -1085,9 +1060,6 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
 {
   initProject(ignoreLastProject);
 
-  if (start_logo)
-    delete start_logo;
-
   config->setGroup("TipOfTheDay");
   if( !kapp->isRestored())
     slotHelpTipOfDay(false);
@@ -1095,10 +1067,8 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   // set the right default position for the MDI view taskbar
   config->setGroup("CKDevelop Toolbar QextMdiTaskBar");
   QString dockEdgeStr = config->readEntry("Position","Bottom");
-  QMainWindow::ToolBarDock taskBarEdge;
-  if (dockEdgeStr == "Bottom")
-    taskBarEdge = Bottom;
-  else if (dockEdgeStr == "Top")
+  QMainWindow::ToolBarDock taskBarEdge = Bottom;
+  if (dockEdgeStr == "Top")
     taskBarEdge = Top;
   else if (dockEdgeStr == "Left")
     taskBarEdge = Left;
@@ -1122,13 +1092,7 @@ void CKDevelop::initProject(bool ignoreLastProject)
   {
     if (!lastShutdownOK)
     {
-      if ( KMessageBox::No == KMessageBox::questionYesNo(this,
-                                i18n( "KDevelop failed to shutdown correctly previously"
-                                      "\nWould you like to start with the last loaded project?"),
-                          i18n("KDevelop failed to shutdown correctly previously")))
-      {
-        bLastProject = false;
-      }
+      bLastProject = false;
     }
 
     if (bLastProject)

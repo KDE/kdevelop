@@ -21,7 +21,7 @@
 #include <kstddirs.h>
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
-: QWidget(parent,name, WStyle_Customize | WStyle_NoBorder | WDestructiveClose ) { 	
+: QWidget(parent,name, WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose ) { 	
   QPixmap pm;
   pm.load(locate("appdata", "pics/startlogo.png"));
   setBackgroundPixmap(pm);
@@ -33,40 +33,4 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 KStartupLogo::~KStartupLogo(){
 }
  
-bool KStartupLogo::event(QEvent* ev){
-  raise();
-  return QWidget::event(ev);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "kstartuplogo.moc"

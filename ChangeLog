@@ -1,5 +1,18 @@
+2001-07-01  F@lk Brettschneider <falk@kdevelop.org>
+    * startlogo solution of gallium reactivated plus a little change by me
+      (now it as cool as Gallium programmed it but acts as Ralf wanted it to be.
+       Additionally, one can click it away to background if he dislikes it)
+      and the code doesn't bother huge class CKDevelop any more
+    * some code cleanup
+    * part 1 of fixing the treeviews/outputviews toolbutton state, not finished yet
+    * removed very annoying query-message "KDevelop was not shutdown correctly. Would you like..."
+      Sometimes it was OK, but most of the time it was not. E.g. if you started a second KDevelop.
+      Now it doesn't ask but simply avoids loading the project.
+    * removed loading/saving of tool-view states to the project file
+      (this is already done by read/writeDockState, and always made conflicts when having a .kdevprj in CVS.
+
 2001-06-29  rokrau@yahoo.com
-    * Fixed a seg fault in treehandler when clicking on class icon. 
+    * Fixed a seg fault in treehandler when clicking on class icon.
     * Fixed kdevprj.save to reflect the correct location of ctoolclass.*.
 
 2001-06-29  jbb <jbb@kdevelop.org>
@@ -10,7 +23,7 @@
     * in kdevelop dir. Lots of things use it ...
     * fixed crash in kdevelop when no project but window title code wanted the
     * prj. It was difficult to repeat. (read I couldn't...)
-    
+
 2001-06-27  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix in QextMDI: call base class method in ::focusInEvent(), otherwise focus problems can occur
       (bugfix supplied by Peter Zimmermann <peter.zimmermann@dr-baldeweg.de>)

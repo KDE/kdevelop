@@ -437,7 +437,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 {
   contents.setAutoDelete(true);
 
-  fileConfig = new KConfig();//FB? NULL, "kdevelop_srcfiles.cfg");
+  fileConfig = new KConfig();
 
   colors[0] = white;
   colors[1] = darkBlue;
@@ -454,7 +454,6 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   for (view = views.first(); view != 0L; view = views.next()) {
     emit view->kWrite->newCaption();
   }
-//FB Why that clear???  clearFileName();
 
 #if defined(QT_I18N) && defined(HAVE_NKF_H)
   JPcode = Nkf::EUC;

@@ -1371,8 +1371,6 @@ void  CProject::writeWorkspace(TWorkspace ws){
     default:
       config->setGroup("Workspace_1");
     }
-    config->writeEntry("show_treeview",ws.show_treeview);
-    config->writeEntry("show_outputview",ws.show_output_view);
     config->sync();
   }
 }
@@ -1403,8 +1401,6 @@ TWorkspace CProject::getWorkspace(int id){
     config->setGroup("Workspace_1");
   }
 
-  ws.show_treeview = config->readBoolEntry("show_treeview",true);
-  ws.show_output_view =config->readBoolEntry("show_outputview",true);
   return ws;
 }
 
