@@ -19,6 +19,7 @@
 #include <qfiledialog.h>
 #include <iostream.h>
 #include <kprocess.h>
+#include <kstddirs.h>
 #include <kdebug.h>
 #include <qdatetime.h>
 #include <pwd.h>
@@ -26,7 +27,25 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <ctoolclass.h>
+#include <qregexp.h>
 
+/************************************************** 
+ * Will return the capital letters of name
+ * i.e John Q. Customer will return JQC
+ * and if it's John Customer it will return JC
+ * CAVEAT it will return ALL capital letters
+ **************************************************/
+QString Initials(const QString name)
+{
+ QChar c;
+ QString ret;
+ for(uint i=0;i<name.length();i++)
+ {
+   c=name.at(i);
+   if(c.category() == QChar::Letter_Uppercase) ret+=c;
+ }
+ return ret; 
+}
 
 AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(parent,obj_name,true){
   // some code from kbugreport by David Faure
@@ -40,10 +59,17 @@ AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(pare
   }
   QString name = emailConf.readEntry( QString::fromLatin1("FullName"));
   QString company = emailConf.readEntry( QString::fromLatin1("Organization"));
-  
+  QString initials = emailConf.readEntry(QString::fromLatin1("Initials"),"Default");
+ 
+#warning FIXME is it safe to write to emailConf?
+  if(initials == QString("Default")) { 
+    initials=Initials(name);
+    emailConf.writeEntry("Initials",initials);
+  }
   email_edit->setText( fromaddr );
   author_edit->setText( name );
-  initial_edit->setText( "JD" );    // Get from config when available.
+  initial_edit->setText(initials);
+ // initial_edit->setText( "JD" );    // Get from config when available.
   company_edit->setText( company );
   
   // conntects
@@ -119,7 +145,7 @@ void AppWizard::generateDefaultFiles(){
   // untar/unzip the project
   proc.clearArguments();
   QString args = "xzvf " + m_projectTemplate + " -C " + absProjectPath;
-  cerr << "AppWizard::generateDefaultFiles():" << args;
+  kdDebug(9030) << "AppWizard::generateDefaultFiles():" << args << endl;
   proc << "tar";
   proc << args;
   proc.start(KProcess::Block,KProcess::AllOutput);
@@ -127,12 +153,29 @@ void AppWizard::generateDefaultFiles(){
 void AppWizard::slotNewHeader(){
   header_multiedit->clear();
 }
-void AppWizard::slotLoadHeader(){
-}
+/*
+ * Made it do something whether
+ * it is correct or not is another thing
+ * SDM 
+ */
 
+void AppWizard::slotLoadHeader()
+{
+   QFile headIODev(locate("appdata", "templates/header_template"));
+  if (headIODev.open(IO_ReadOnly))
+  {
+   QTextStream textStream(&headIODev);
+   header_multiedit->setText(textStream.read());
+  }
+}
+/* 
+ * Added date = QDate::currentDate() as 
+ * date() is invalid
+ * SDM
+ */
 
 void AppWizard::setInfosInString(QString& text){
-  QDate date;
+  QDate date = QDate::currentDate();
   text.replace(QRegExp("|NAME|"),m_pProject->name());
   text.replace(QRegExp("|NAMELITTLE|"),m_pProject->name().lower());
   text.replace(QRegExp("|YEAR|"),QString::number(date.year()));
@@ -156,11 +199,11 @@ void AppWizard::generateFile(QString abs_oldpos,QString abs_newpos){
       file.close();
     }
     else {
-      cerr << "\nERROR! couldn't open file to write:" << abs_newpos;
+      kdDebug(9030) << "ERROR! couldn't open file to write: " << abs_newpos << endl;
     }
   }
   else {
-    cerr << "\nERROR! couldn't open file to read:" << abs_oldpos;
+    kdDebug(9030)  << "ERROR! couldn't open file to read: " << abs_oldpos << endl;
   }
 }
 KAboutData* AppWizard::aboutPlugin(){
