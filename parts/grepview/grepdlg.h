@@ -12,6 +12,8 @@
 #ifndef _GREPDLG_H_
 #define _GREPDLG_H_
 
+#define IGNORE_SCM_DIRS
+
 #include <qdialog.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
@@ -42,6 +44,10 @@ public:
 	{ return dir_combo->currentText(); }
     bool recursiveFlag() const
 	{ return recursive_box->isChecked(); }
+#ifdef IGNORE_SCM_DIRS
+    bool ignoreSCMDirsFlag() const
+        { return ignore_scm_box->isChecked(); }
+#endif
 
 signals:
     void searchClicked();
@@ -55,6 +61,9 @@ private:
     QLineEdit *template_edit;
     QComboBox *dir_combo, *pattern_combo, *files_combo;
     QCheckBox *recursive_box;
+#ifdef IGNORE_SCM_DIRS
+    QCheckBox *ignore_scm_box;
+#endif
     KConfig* config;
 };
 

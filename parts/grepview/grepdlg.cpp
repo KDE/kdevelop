@@ -131,6 +131,13 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
 
+    #ifdef IGNORE_SCM_DIRS
+    ignore_scm_box = new QCheckBox(i18n("&Skip SCM dirs"), this);
+    ignore_scm_box->setChecked(true);
+    dir_layout->addSpacing(10);
+    dir_layout->addWidget(ignore_scm_box);
+    #endif
+
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
     QPushButton *search_button = new QPushButton(i18n("&Search"), this);

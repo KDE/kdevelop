@@ -181,7 +181,17 @@ void GrepViewWidget::searchActivated()
     filepattern += files;
     filepattern += " \\) -print";
 
+#ifdef IGNORE_SCM_DIRS
+    QString command = filepattern + " " ;
+    if (grepdlg->ignoreSCMDirsFlag()) {
+        command += "| grep -v \"SCCS/\" ";
+        command += "| grep -v \"CVS/\" ";
+    }
+    command += "| xargs " ;
+#else
     QString command = filepattern + " | xargs " ;
+#endif
+
     command += "egrep -n -e ";
     command += KShellProcess::quote(pattern);
     startJob("", command);
