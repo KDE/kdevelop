@@ -6,19 +6,12 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:listener AT thaldyron.com">Peter Robinson</a>
 
 \maintainer <a href="mailto:listener AT thaldyron.com">Peter Robinson</a>
-\maintainer <a href="mailto:2nd maintainer AT provider.com">2nd maintainer full name</a>
-...
-\maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\feature Haskell language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..

@@ -6,8 +6,6 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 
 \maintainer <a href="mailto:$EMAIL$">$AUTHOR$</a>
@@ -15,10 +13,8 @@ Consult \ref LangSupportStatus for an up to date status of this programming lang
 ...
 \maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\feature Fortran language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..

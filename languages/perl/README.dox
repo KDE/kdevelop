@@ -6,19 +6,15 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
-\unmaintained This part is currently un-maintained, and it's compilation disabled in languages/Makefile.am file
-
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
 \authors <a href="mailto:2nd author AT provider.com">2nd author full name</a>
 ...
 \authors <a href="mailto:nth author AT provider.com">nth author full name</a>
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\unmaintained This part is currently un-maintained, and it's compilation disabled in languages/Makefile.am file
+
+\feature perl language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..

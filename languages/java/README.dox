@@ -6,18 +6,14 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:jonas.nordin AT syncom.se">Jonas Nordin</a> Copyright (C) 1999
 \authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a> Copyright (C) 2000-2001
 \authors <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2002-2003
 
 \maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a> Copyright (C) 2002-2003
 
-\feature Describe the first feature
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\feature Java language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=javasupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">javasupport component at Bugzilla database</a>
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.

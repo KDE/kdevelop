@@ -14,6 +14,7 @@ app and NEdit in order to get it usable.
 \maintainer <a href="mailto:harry AT kdevelop.org">Harald Fernengel</a>
 
 \feature A KTextEditor interface for nedit (to embed it in KDevelop)
+\feature Take a look at \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) to see the current status/features of this editor.
 
 \requirement NEdit
 

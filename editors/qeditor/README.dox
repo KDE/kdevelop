@@ -26,6 +26,9 @@ This is a KTextEditor interface for Qeditor.
 \feature problem reporter marker widget
 \feature keyboard macro support
 \feature find/replace dialogs
+\feature Take a look at \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) to see the current status/features of this editor.
+
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=qeditor&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">qeditor component at Bugzilla database</a>
 
 \requirement QT 3.0.3
 

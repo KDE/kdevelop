@@ -1,13 +1,12 @@
 /** \class SQLSupportPart
 This is a SQL support plugin
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:harry AT kdevelop.org">Harald Fernengel</a>
 
 \maintainer <a href="mailto:harry AT kdevelop.org">Harald Fernengel</a>
 
-\feature SQL language
+\feature SQL language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..

@@ -10,7 +10,7 @@ and images.
 ...
 \authors <a href="mailto:nth author AT provider.com">nth author full name</a>
 
-\unmaintained This part is currently un-maintained
+\unmaintained This part is currently un-maintained, and it's compilation disabled in parts/Makefile.am file
 
 \feature Describe the first feature
 \feature Describe the second feature

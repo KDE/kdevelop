@@ -6,8 +6,6 @@ over several lines. You can even use some html commands in these lines like:
 <code>This is code</code>, html links <a href="http://somelocation">link text</a>,
 and images.
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:smeier AT kdevelop.org">Sandy Meier</a>
 
 \maintainer <a href="mailto:smeier AT kdevelop.org">Sandy Meier</a>
@@ -15,10 +13,8 @@ Consult \ref LangSupportStatus for an up to date status of this programming lang
 ...
 \maintainer <a href="mailto:nth maintainer AT provider.com">nth maintainer full name</a>
 
-\feature php syntax highlighting
-\feature Describe the second feature
-...
-\feature Describe the last feature
+\feature PHP language support
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=php+support&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">php support component at Bugzilla database</a>
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
@@ -33,7 +29,7 @@ Consult \ref LangSupportStatus for an up to date status of this programming lang
 \todo integrated preview (webserver support and execution with php.exe),including error message parser
 \todo syntax check with php.exe
 \todo extended classtools (new class,new function...) based on filetemplates
-\todo debugger and profiler support dbg(http://dd.cron.ru/dbg)
+\todo debugger and profiler support dbg (http://dd.cron.ru/dbg)
 \todo codecompletion (key words, functions (mysql_*), and current project)
 \todo html form support (dialogs for generating html code, tables...)
 \todo support for phpdoc

@@ -10,5 +10,6 @@ Supports bash language
 \feature runs bash script in external terminal
 \feature syntax highlighting and code folding via katepart
 \feature Code completion works for variables
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 */

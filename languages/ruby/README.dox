@@ -1,15 +1,15 @@
 /** \class RubySupportPart
 This is a Ruby support plugin
 
-Consult \ref LangSupportStatus for an up to date status of this programming language support part.
-
 \authors <a href="mailto:marek AT janukowicz.net">Marek Janukowicz</a>
 
 \maintainer <a href="mailto:marek AT janukowicz.net">Marek Janukowicz</a>
 
+\feature Ruby language support
 \feature .rb template for New File
 \feature Ruby project template for Application Wizard
 \feature "Run" option in menu
+\feature Consult \ref LangSupportStatus for a up to date features/status of this programming language support part.
 
 \bug Describe a the 1st bug that you know of, but probably hasn't been reported yet.
 ..
