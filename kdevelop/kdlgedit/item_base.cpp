@@ -109,6 +109,34 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   itm->setMinimumHeight(props->getIntFromProp("MinHeight",0));
   itm->setMaximumHeight(props->getIntFromProp("MaxHeight",32767));
 
+
+  QString val = Prop2Str("BgMode");
+  if (val.lower() == "fixedcolor")
+    itm->setBackgroundMode(QWidget::FixedColor);
+  else if (val.lower() == "fixedpixmap")
+    itm->setBackgroundMode(QWidget::FixedPixmap);
+  else if (val.lower() == "nobackground")
+    itm->setBackgroundMode(QWidget::NoBackground);
+  else if (val.lower() == "paletteforeground")
+    itm->setBackgroundMode(QWidget::PaletteForeground);
+  else if (val.lower() == "palettebackground")
+    itm->setBackgroundMode(QWidget::PaletteBackground);
+  else if (val.lower() == "palettelight")
+    itm->setBackgroundMode(QWidget::PaletteLight);
+  else if (val.lower() == "palettemidlight")
+    itm->setBackgroundMode(QWidget::PaletteMidlight);
+  else if (val.lower() == "palettedark")
+    itm->setBackgroundMode(QWidget::PaletteDark);
+  else if (val.lower() == "palettemid")
+    itm->setBackgroundMode(QWidget::PaletteMid);
+  else if (val.lower() == "palettetext")
+    itm->setBackgroundMode(QWidget::PaletteText);
+  else if (val.lower() == "palettebase")
+    itm->setBackgroundMode(QWidget::PaletteBase);
+  else
+    itm->setBackgroundMode(QWidget::PaletteBackground);
+
+
   ifBTrue("IsFixedSize")
     itm->setFixedSize( props->getIntFromProp("Width",itm->width()),
                        props->getIntFromProp("Height",itm->height()) );
@@ -144,4 +172,16 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setMask( QBitmap( str ) );
   else
     itm->setMask( QBitmap() );
+
+  setStr2Prop("Font");
+  if (strNotEmpty(str))
+    {
+    itm->setFont(KDlgItemsGetFont(str));
+//    itm->setFont(KDlgItemsGetFont("\"helvetica\" \"20\" \"75\" \"TRUE\""));
+    }
+  else
+    {
+      QWidget wid;
+      itm->setFont(wid.font());
+    }
 }

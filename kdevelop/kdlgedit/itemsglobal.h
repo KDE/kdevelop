@@ -25,6 +25,7 @@
 #include "defines.h"
 
 class KDlgItem_Base;
+class QFont;
 
 QString KDlgLimitLines(QString src, unsigned maxlen = 40);
 
@@ -32,6 +33,9 @@ QString KDlgLimitLines(QString src, unsigned maxlen = 40);
  * Paints the border and the rectangles of a selected item.
 */
 void KDlgItemsPaintRects(QPainter *p, int w, int h);
+
+QFont KDlgItemsGetFont(QString desc);
+
 
 /**
  * Paints the border and the rectangles of a selected item.

@@ -66,12 +66,13 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
-  props->addProp("Prefix",           "",       "General",        ALLOWED_STRING);
-  props->addProp("Suffix",           "",       "General",        ALLOWED_STRING);
-  props->addProp("Value",      "",        "General",        ALLOWED_INT);
-  props->addProp("MinValue",      "0",        "General",        ALLOWED_INT);
-  props->addProp("MaxValue",      "99",        "General",        ALLOWED_INT);
+  props->addProp("Prefix",               "",            "General",        ALLOWED_STRING);
+  props->addProp("Suffix",               "",            "General",        ALLOWED_STRING);
+  props->addProp("Value",                "",            "General",        ALLOWED_INT);
+  props->addProp("MinValue",             "0",           "General",        ALLOWED_INT);
+  props->addProp("MaxValue",             "99",          "General",        ALLOWED_INT);
   props->addProp("isWrapping",           "FALSE",       "General",        ALLOWED_BOOL);
+  props->addProp("SpecialValText",       ""     ,       "General",        ALLOWED_STRING);
   
 }
 

@@ -22,6 +22,7 @@
 #include <qmsgbox.h>
 #include "items.h"
 #include <qpainter.h>
+#include <qfont.h>
 
 
 KDlgItemDatabase::KDlgItemDatabase()
@@ -173,7 +174,7 @@ KDlgPropertyBase::KDlgPropertyBase(bool fillWithStdEntrys)
 int KDlgPropertyBase::getIntFromProp(int nr, int defaultval)
 {
   if ((nr > getEntryCount()) || (nr < 0))
-    return 0;
+    return defaultval;
 
   QString val = getProp(nr)->value.stripWhiteSpace();
 
@@ -435,6 +436,69 @@ int KDlgItemsIsValueTrue(QString val)
 
   return -1;
 }
+
+int __isValTrue(QString val, int defaultval )
+{
+  QString v(val.upper());
+
+  if (v=="FALSE" || v=="0" || v=="NO" || v=="NULL")
+    return 0;
+  if (v=="TRUE" || v=="1" || v=="YES")
+    return 1;
+
+  return defaultval;
+}
+
+int __Prop2Int(QString val, int defaultval)
+{
+  if (val.length() == 0)
+    return defaultval;
+
+  bool ok = true;
+  int dest = val.toInt(&ok);
+
+  return ok ? dest : defaultval;
+}
+
+
+QFont KDlgItemsGetFont(QString desc)
+{
+  QString name;
+  int size;
+  int thickness ;
+  bool italic = false;
+  QString dummy;
+
+  desc = desc.right(desc.length()-1);
+  desc = desc.left(desc.length()-1);
+
+  name = desc.left(desc.find('\"'));
+  desc = desc.right(desc.length()-desc.find('\"')-3);
+
+  if (name.isEmpty())
+    name = "helvetica";
+
+  dummy = desc.left(desc.find('\"'));
+  desc = desc.right(desc.length()-desc.find('\"')-3);
+
+  size = __Prop2Int(dummy,-32766);
+  if (size <= 0)
+    size = 12;
+
+  dummy = desc.left(desc.find('\"'));
+  desc = desc.right(desc.length()-desc.find('\"')-3);
+
+  thickness = __Prop2Int(dummy,-32766);
+  if (thickness <= 0)
+    thickness = 50;
+
+  if (__isValTrue(desc, -1) != -1)
+    italic = __isValTrue(desc,-1) ? true : false;
+
+  return QFont(name, size, thickness, italic);
+}
+
+
 
 QString KDlgLimitLines(QString src, unsigned maxlen)
 {
