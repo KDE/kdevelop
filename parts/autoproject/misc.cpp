@@ -80,7 +80,7 @@ void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCS
         return;
     QTextStream stream(&f);
     
-    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \\t]*:?=[ \\t]*(.*)$");
+    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
 
     while (!stream.eof()) {
         QString line;
