@@ -13,10 +13,7 @@
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description>KDevelop is an easy to use IDE (Integrated Development Environment) for developing applications under X11.</description>
-    <ignoreparts>
-      <part>KDevClearCase</part>
-      <part>KDevPerforce</part>
-    </ignoreparts>
+    <ignoreparts/>
     <secondaryLanguages/>
   </general>
   <kdevfileview>
@@ -119,7 +116,7 @@
     </run>
     <general>
       <useconfiguration>default</useconfiguration>
-      <activetarget>lib/interfaces/extensions/libkdevextensions.la</activetarget>
+      <activetarget>parts/annotation/libkdevannotation.la</activetarget>
     </general>
     <configurations>
       <default>
@@ -198,6 +195,14 @@
         <implementation class="ProfileEditor" path="/develop/kde/kdevelop/src/profileengine/editor/profileeditorbase.ui" implementationpath="/develop/kde/kdevelop/src/profileengine/editor/profileeditor.h" />
       </qtdesigner>
     </designerintegration>
+    <creategettersetter>
+      <prefixGet/>
+      <prefixSet>set</prefixSet>
+      <prefixVariable>m_,_</prefixVariable>
+      <parameterName>theValue</parameterName>
+      <inlineGet>true</inlineGet>
+      <inlineSet>true</inlineSet>
+    </creategettersetter>
   </kdevcppsupport>
   <kdevcvsservice>
     <recursivewhenupdate>true</recursivewhenupdate>
