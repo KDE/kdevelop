@@ -234,6 +234,7 @@
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542
+#define	ID_CV_TOOLBAR_COMPILE_CHOICE	14543
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 

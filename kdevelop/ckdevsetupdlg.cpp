@@ -61,6 +61,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
   addGeneralTab();
   addKeysTab();
   addDocTab();
+  addCompilerTab();
   addDebuggerTab();
   addQT2Tab();
   addUserInterfaceTab();
@@ -491,6 +492,15 @@ void CKDevSetupDlg::addDocTab()
                     "a cross reference file of your project into the selected kdoc-reference\n"
                     "directory."));
 
+}
+
+/** adds the compiler page for setting up the compile environment */
+void CKDevSetupDlg::addCompilerTab(){
+  compilerPage = addPage(i18n("Compiler"),i18n("Compiler Settings"),
+  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  compdlg = new CCompConf(compilerPage);
+  QGridLayout *grid = new QGridLayout(compilerPage);
+  grid->addWidget(compdlg,0,0);
 }
 
 void CKDevSetupDlg::addDebuggerTab()

@@ -40,6 +40,13 @@
 #include "docviewman.h"
 #include "kwdoc.h"
 #include "kdevsession.h"
+
+#include <qprogressdialog.h>
+#include <qlayout.h>
+#include <qmessagebox.h>
+#include <qstyle.h>
+
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
@@ -50,10 +57,6 @@
 #include <kstddirs.h>
 #include <kmessagebox.h>
 
-#include <qprogressdialog.h>
-#include <qlayout.h>
-#include <qmessagebox.h>
-#include <qstyle.h>
 #include <kurlrequester.h>
 #include <kemailsettings.h>
 
@@ -76,6 +79,8 @@ bool CKDevelop::slotProjectClose()
   log_file_tree->storeState(prj);
 
   // save the session
+  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	m_pKDevSession->setLastCompile(compile_combo->currentText());
   QString sessionFileName = prj->getProjectFile();
   sessionFileName = sessionFileName.left( sessionFileName.length() - 7);
   sessionFileName += "kdevses";
@@ -105,7 +110,8 @@ bool CKDevelop::slotProjectClose()
       
       toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
       toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
-      
+      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+
       // close all documents
       m_docViewManager->doCloseAllDocs();
 
@@ -139,7 +145,8 @@ bool CKDevelop::slotProjectClose()
       disableCommand(ID_CV_GRAPHICAL_VIEW);
       disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
       disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-      
+		  disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
+
       file_open_popup->clear();
       file_open_list.clear();
     }
@@ -351,23 +358,27 @@ void CKDevelop::slotProjectRemoveFile(){
 }
 
 void CKDevelop::slotProjectOptions(){
-  CPrjOptionsDlg prjdlg(prj,this,"optdialog");
-  QString shell = getenv("SHELL");
-  QString flagclabel;
-  QString flagcpplabel;
-  if(shell == "/bin/bash"){
-      flagclabel= "CFLAGS=\"";
-      flagcpplabel = "CXXFLAGS=\"";
-  }
-  else{
-    flagclabel="env CFLAGS=\"";
-    flagcpplabel= "env CXXFLAGS=\"";
-  }
-  
-  QString args=prj->getConfigureArgs();
-
+	QStringList configs;
+	QString shellcommand="";
+	// get the current config to set it as the config in the project options dialog
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+ 	QString curr=compile_combo->currentText();
+  CPrjOptionsDlg prjdlg(prj,m_pKDevSession,curr, this,"optdialog");
   if(prjdlg.exec()){
+ 		// refill the compile configs combobox
+ 		curr=compile_combo->currentText();
+ 		compile_combo->clear();
+ 		configs=m_pKDevSession->getCompileConfigs();
+ 		configs.prepend(i18n("(Default)"));
+ 		compile_combo->insertStringList(configs);
+ 		int idx=configs.findIndex(curr); // find the index for the last config
+ 		compile_combo->setCurrentItem(idx);
+ 		compile_combo->setEnabled(true);
+
+		//////////////////////////////////////
+		bool cfgure=false; // run configure for all configurations ?
     if (prjdlg.needConfigureInUpdate()){
+			cfgure=true;
       prj->updateConfigureIn();
       KMessageBox::information(0,i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."));
       setToolMenuProcess(false);
@@ -378,73 +389,95 @@ void CKDevelop::slotProjectOptions(){
       QString makefile("Makefile.dist");
       if(!QFileInfo(QDir::current(), makefile).exists())
         makefile="Makefile.cvs";
-      shell_process.clearArguments();
-      shell_process << make_cmd << " -f "+makefile+" && ";
-      // C++
-      shell_process << flagcpplabel;
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-      // c
-      shell_process << "\" " << flagclabel;
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-
-      shell_process  << "\" " << "LDFLAGS=\" " ;
-      if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-      shell_process  << "\" " << " ./configure" << args;
-
-      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-      return;
+      shellcommand += make_cmd + " -f "+makefile+" && ";
     }
     if(prjdlg.needMakefileUpdate()){
+    	cfgure=true;
       prj->updateMakefilesAm();
+		}
+		if(cfgure){ // yes, run configure for either only the default config (builddir=srcdir)
+							// or for all other configurations to update makefiles.
+			QString args, cppflags, cflags, cxxflags, addcxxflags, ldflags;
+			configs=m_pKDevSession->getCompileConfigs();
+			if(!configs.isEmpty()){ // only default used - run only in srcdir
+			  for (QStringList::Iterator it=configs.begin() ; it!=configs.end() ; ++it){
+      		QString vpath=m_pKDevSession->getVPATHSubdir( (*it) );
+      		QDir dir(vpath);
+      		// change to VPATH subdir, create it if not existant
+      		if(!dir.exists())
+      			dir.mkdir(vpath);
+      		if(it==configs.begin()) // first loop, leave out &&
+  	    		shellcommand+=" echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+      		else
+	      		shellcommand+=" && echo \""+i18n("Running configure in builddirectory %1").arg(vpath);
+      		shellcommand+="\" ";
+      		shellcommand +=" && cd "+vpath+" && ";
+      		config->setGroup("Compilearch "+
+      											m_pKDevSession->getArchitecture(*it)+"-"+
+      											m_pKDevSession->getPlatform(*it) );
+      		shellcommand += "CPP="+ config->readEntry("CPP","cpp") + " ";
+      		shellcommand += "CC=" + config->readEntry("CC","gcc") + " ";
+      		shellcommand += "CXX=" + config->readEntry("CXX","g++") + " ";
+      		cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
+      		cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
+      		cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
+      		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
+      		ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
+        	// this has to get over and over again per configuration
+       		shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
+       		shellcommand += "CFLAGS=\"" + cflags + "\" ";
+        		// if the project type is normal_c, the cflags were stored in the cxxflags
+        		// of the old project type. Therefore, when the project is normal_c, continue
+        		// to export the CXXFLAGS as CFLAGS.
+        	if(prj->getProjectType()=="normal_c"){
+        		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+        	}
+        	else{
+            shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+        	}
+		      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
+        	// the configure script is always in the project directory, no matter where we are
+					args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
+          shellcommand += prj->getProjectDir() +"/configure "+ args;
+				}
+			}
+			else{
+				args=prj->getConfigureArgs();
+			  QDir::setCurrent(prj->getProjectDir());
+     		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+     		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+     		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+     		// export CC, CXX, CPP
+     		config->setGroup("Compiler");
+     		QString arch=config->readEntry("Architecture","i386");
+     		QString platf=config->readEntry("Platform","linux");
+     		config->setGroup("Compilearch "+arch+"-"+platf);
+     		shell_process << "\" "<< "CPP="<< config->readEntry("CPP","cpp")<< " ";
+     		shell_process << "\" "<< "CC=" << config->readEntry("CC","gcc")<< " ";
+     		shell_process << "\" "<< "CXX=" << config->readEntry("CXX","g++")<< " ";
+    		shell_process << "\" "<< "CPPFLAGS=\"" << cppflags << "\" ";
+        shell_process << "\" "<< "CFLAGS=\"" << cflags << "\" ";			
+    		// if the project type is normal_c, the cflags were stored in the cxxflags
+    		// of the old project type. Therefore, when the project is normal_c, continue
+    		// to export the CXXFLAGS as CFLAGS.
+       	if(prj->getProjectType()=="normal_c"){
+       		shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+       	}
+       	else{
+           shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+       	}
+        shell_process  << "\" " << "LDFLAGS=\" " << ldflags << "\" ";
+				// the configure script is always in the project directory, no matter where we are
+			  shell_process << prj->getProjectDir() +"/configure "<< args;
+			}
       setToolMenuProcess(false);
-      slotStatusMsg(i18n("Running configure..."));
       messages_widget->start();
-      showOutputView(true);
-      QDir::setCurrent(prj->getProjectDir());
+      showOutputView(true);		
       shell_process.clearArguments();
-
-      // c++
-      shell_process << flagcpplabel;
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-      // c
-      shell_process  << "\" " << flagclabel;
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-
-
-      shell_process  << "\" " << "LDFLAGS=\" " ;
-      if (!prj->getLDFLAGS().isEmpty())
-    shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-      shell_process  << "\" " << " ./configure "  << args;
-
-      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-    }
+  		shell_process << shellcommand;
+  	  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+		}		
   }
-  
 }
 
 void CKDevelop::slotProjectNewClass(const char* folder)
@@ -581,6 +614,18 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
     if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
       debug("error during restoring of the KDevelop session !\n");
     }
+		else{ //fill in the configs into the toolbar
+		  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+			compile_combo->clear();
+			QStringList configs=m_pKDevSession->getCompileConfigs();
+			configs.prepend(i18n("(Default)"));
+			compile_combo->insertStringList(configs);
+			compile_combo->setEnabled(true);
+			int idx = configs.findIndex(m_pKDevSession->getLastCompile());
+			if(idx==-1)
+				idx=configs.findIndex(i18n("(Default)"));
+			compile_combo->setCurrentItem(idx);
+		}
     return pProj; // but it's unfinished here, we will call projectOpenCmdl_Part2 later
   }
   else {
@@ -667,8 +712,17 @@ void CKDevelop::slotProjectNewAppl(){
     }
 
     CProject* pProj = prepareToReadProjectFile(file);
-    if (pProj != 0L)
+    if (pProj != 0L){
       readProjectFile(file, pProj);
+  		KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  		compile_combo->clear(); // on startup, the combo contains "compile configuration"
+  		QStringList configs;
+  		configs.append(i18n("(Default)"));
+  		compile_combo->insertStringList(configs);
+  		int idx=configs.findIndex(i18n("(Default)")); // find the index for the last config
+  		compile_combo->setCurrentItem(idx);
+  		compile_combo->setEnabled(true);
+		}
     else
       return;
 
@@ -1469,6 +1523,7 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
 //  enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+  enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
   if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
   {

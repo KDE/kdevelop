@@ -33,6 +33,7 @@ class QButtonGroup;
 
 #include <kdialogbase.h>
 #include <kaccel.h>
+#include <ccompconf.h>
 
 //#ifdef HAVE_CONFIG_H
 //#include <config.h>
@@ -53,6 +54,8 @@ private:
   void addGeneralTab();
   void addKeysTab();
   void addDocTab();
+  /** adds the compiler page for setting up the compile environment */
+  void addCompilerTab();
   void addDebuggerTab();
   void addQT2Tab();
   void addUserInterfaceTab();
@@ -78,6 +81,8 @@ private:
   QFrame* generalPage;
   QFrame* keysPage;
   QFrame* debuggerPage;
+  QFrame* compilerPage;
+  CCompConf* compdlg;
 
   QString kde_doc_path;
   QString qt_doc_path;

@@ -1,3 +1,21 @@
+2001-12-02  Ralf Nolden <nolden@kde.org>
+	* commited the crosscompiling addition:
+		- compiler configuration dialog in the kdevelop setup
+		- project dialog: collected compiler settings+warnings into
+			one dialog that includes different setups for using VPATH subdirectories
+			(builddir!=srcdir)
+		- extended the session managment to store the values of the configurations
+			plus keep an xml tree permanently in memory, last loaded configuration reload
+			on project opening
+		- added the toolbar combo to select the configuration for the current build
+		- fixed configure, automake, make, run and debug calls to work with the new
+		  configurations
+		* this work is the implementation part of the report for the RWTH University of Aachen, Germany
+			(Studienarbeit: Erweiterung von KDevelop zur Cross-Platform Entwicklungsumgebung)
+		* please report bugs and wishes in regards to this particular commit to me so I can fix
+			them and complete the report for my university :)
+		* use $(LIB_QPE) by default on qt-only SDI application to create QPE apps
+			
 2001-11-21  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of August Hörandl <august.hoerandl@gmx.at>
        it adds completion to the typename in the classproperties dialog (attributes and members)

@@ -397,6 +397,9 @@ public:
   ///////////////////////
   /** compile the actual sourcefile using preset options */
   bool RunMake(const CMakefile::Type type, const QString& target);
+	/** run configure. config is the configuration, ask=true opens the
+			configure arguments dialog to edit the configure options.*/
+	void RunConfigure(const QString& conf, bool ask);
 
   void slotBuildMake();
   void slotBuildMakeClean();
@@ -942,6 +945,7 @@ private:
   /** QValueList containing the Tool Apps */
   ToolAppList toolList;
 
+  KCompletion* compile_comp;
   KCompletion* class_comp;
   KCompletion* method_comp;	
   /** If this to true, the user wants a beep after a

@@ -1027,7 +1027,17 @@ void CKDevelop::slotStartRun(bool bWithArgs)
    // rest from the buildRun
   appl_process.clearArguments();
 
-  QString runFromDir = prj->getRunFromDir();
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString conf=compile_combo->currentText();
+  QString runFromDir;
+  if(conf==i18n("(Default)"))
+		runFromDir = prj->getRunFromDir();
+	else{
+		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+		if(runFromDir.right(1)!="/")
+			runFromDir+="/";
+		runFromDir+=prj->getSubDir();
+	}
   QDir::setCurrent(runFromDir);
 
   QString libtool     = prj->getLibtool();
@@ -1057,6 +1067,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   if (bContinue)
   {
     slotStatusMsg(i18n("Running %1 (from %2)").arg(binProgram).arg(runFromDir));
+    cout << runFromDir << endl;
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
@@ -1402,7 +1413,18 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 
 void CKDevelop::slotDebugAttach()
 {
-  QDir::setCurrent(prj->getRunFromDir());
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString conf=compile_combo->currentText();
+  QString runFromDir;
+  if(conf==i18n("(Default)"))
+		runFromDir = prj->getRunFromDir();
+	else{
+		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+		if(runFromDir.right(1)!="/")
+			runFromDir+="/";
+		runFromDir+=prj->getSubDir();
+	}
+  QDir::setCurrent(runFromDir);
   if (dbgInternal)
   {
     QString libtool     = prj->getLibtool();;
@@ -1434,7 +1456,17 @@ void CKDevelop::slotDebugAttach()
 
 void CKDevelop::slotDebugExamineCore()
 {
-  QString runFromDir = prj->getRunFromDir();
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString conf=compile_combo->currentText();
+  QString runFromDir;
+  if(conf==i18n("(Default)"))
+		runFromDir = prj->getRunFromDir();
+	else{
+		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+		if(runFromDir.right(1)!="/")
+			runFromDir+="/";
+		runFromDir+=prj->getSubDir();
+	}
   QDir::setCurrent(runFromDir);
   if (dbgInternal)
   {
@@ -1539,7 +1571,18 @@ void CKDevelop::slotDebugRunWithArgs()
 
 void CKDevelop::slotStartDebugRunWithArgs()
 {
-  QDir::setCurrent(prj->getRunFromDir());
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString conf=compile_combo->currentText();
+  QString runFromDir;
+  if(conf==i18n("(Default)"))
+		runFromDir = prj->getRunFromDir();
+	else{
+		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+		if(runFromDir.right(1)!="/")
+			runFromDir+="/";
+		runFromDir+=prj->getSubDir();
+	}
+  QDir::setCurrent(runFromDir);
   QString libtool     = prj->getLibtool();;
   QString binProgram  = prj->getExecutable();
 
@@ -1571,7 +1614,17 @@ void CKDevelop::slotStartDebugRunWithArgs()
 
 void CKDevelop::slotStartDebug()
 {
-  QString runFromDir = prj->getRunFromDir();
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString conf=compile_combo->currentText();
+  QString runFromDir;
+  if(conf==i18n("(Default)"))
+		runFromDir = prj->getRunFromDir();
+	else{
+		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+		if(runFromDir.right(1)!="/")
+			runFromDir+="/";
+		runFromDir+=prj->getSubDir();
+	}
   QDir::setCurrent(runFromDir);
   QString libtool     = prj->getLibtool();;
   QString binProgram  = prj->getExecutable();
@@ -1760,46 +1813,83 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
                          i18n("Make command not found"));
     return false;
   }
-  // second, lets take care of compiler and linker flags
-  QString flags;
-  if ((prj->getProjectType()!="normal_empty") && (type!=CMakefile::cvs))
+  // second, lets take care of compiler and linker flags  !! formerly excluding normal_empty - why ? R.N.
+ 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+ 	QString conf=compile_combo->currentText();
+  QString flags, makefile;
+
+  if (type!=CMakefile::cvs)
   {
-    // compiler flags
-    if ((!prj->getCXXFLAGS().isEmpty()) ||
-        (!prj->getAdditCXXFLAGS().isEmpty())) {
-      flags = ((prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"");
-      // regular CXXFLAGS
-      if (!prj->getCXXFLAGS().isEmpty())
-        flags = flags
-              + prj->getCXXFLAGS().simplifyWhiteSpace()
-              + " ";
-      // additional CXXFLAGS
-      if (!prj->getAdditCXXFLAGS().isEmpty())
-        flags = flags
-              + prj->getAdditCXXFLAGS().simplifyWhiteSpace()
-              + " ";
-      flags = flags + "\"";
-    }
-    // linker flags
-    if (!prj->getLDFLAGS().isEmpty())
-      flags = flags + "LDFLAGS=\""
-            + prj->getLDFLAGS().simplifyWhiteSpace()
-            + "\"";
+   	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
+    if(conf==i18n("(Default)")){
+    	QDir::setCurrent(prj->getProjectDir());
+   		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+   		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+   		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+   		config->setGroup("Compiler");
+   		QString arch=config->readEntry("Architecture","i386");
+   		QString platf=config->readEntry("Platform","linux");
+   		group="Compilearch "+arch+"-"+platf;
+		}
+    else{
+    	QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+  		QDir dir(vpath);
+  		// change to VPATH subdir, create it if not existant
+  		if(!dir.exists())
+  			dir.mkdir(vpath);
+  		QDir::setCurrent(vpath);
+   		group="Compilearch "+
+   											m_pKDevSession->getArchitecture(conf)+"-"+
+   											m_pKDevSession->getPlatform(conf);
+   		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
+   		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
+   		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
+   		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+   		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
+   	}
+   	config->setGroup(group);
+   	flags += "CPP="+ config->readEntry("CPP","cpp")+ " ";
+   	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
+   	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
+  	flags += "CPPFLAGS=\"" + cppflags + "\" ";
+    flags += "CFLAGS=\"" + cflags + "\" ";			
+   	if(prj->getProjectType()=="normal_c"){
+   		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+   	}
+   	else{
+       flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+   	}
+    flags += "LDFLAGS=\"" + ldflags+ "\" " ;
   }
-  // finding the makefile is now real easy
-  QString makefile;
   if (type==CMakefile::cvs) {
     makefile=prj->getCvsMakefile();
-  }
-  else {
-    makefile=prj->getTopMakefile();
-    /* it is possible that we dont have a makefile
-       right away, then we make an extra pass at
-       finding and setting one */
     if (makefile.isNull()) {
-      prj->setTopMakefile();
+      QMessageBox::warning(0L,i18n("Makefile not found"),
+      i18n("The build-Makefile to create the configure-script "
+      			"wasn't found. Please make sure your toplevel "
+      			"source directory contains a build-Makefile with the "
+      			"respective calls to automake and autoconf to build "
+      			"the configure script. The filename may either be 'Makefile.cvs' "
+      			"or 'Makefile.dist'."));
+			return false;
+		}
+   	QDir::setCurrent(prj->getProjectDir());
+  }
+	// here comes the interesting stuff...
+  else {
+    if(conf==i18n("(Default)")){
       makefile=prj->getTopMakefile();
-    }
+      /* it is possible that we dont have a makefile
+         right away, then we make an extra pass at
+         finding and setting one */
+      if (makefile.isNull()) {
+        prj->setTopMakefile();
+        makefile=prj->getTopMakefile();
+      }
+		}
+		else
+			if(QFileInfo("Makefile").exists())
+				makefile="Makefile";
   }
   // if we still dont have a makefile something is really wrong
   if (makefile.isNull()) {
@@ -1819,8 +1909,10 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   }
   debug("makefile : %s !\n", makefile.data());
   // set the path where make will run
-  QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
-  QDir::setCurrent(makefileDir);
+	if(conf==i18n("(Default)")){ // only needed for default, VPATH dir already set above
+	  QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
+  	QDir::setCurrent(makefileDir);
+	}
   // Kill the debugger if it's running
   if (dbgController)
     slotDebugStop();
@@ -1886,52 +1978,98 @@ void CKDevelop::slotBuildCleanRebuildAll()
   slotBuildDistClean();
   next_job = "autoconf+configure+make";
 }
-void CKDevelop::slotBuildConfigure(){
-    //    QString shell = getenv("SHELL");
 
-  QString args=prj->getConfigureArgs();
-  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
-  if(argdlg.exec()){
-    prj->setConfigureArgs(argdlg.getArguments());    
-    prj->writeProject();
-  
-  } else {
-    return;
-  }
+void CKDevelop::RunConfigure(const QString& conf, bool ask){
+	QString args;
+	
+	if(conf==i18n("(Default)")){ // blddir=srcdir
+		args=prj->getConfigureArgs();
+	}
+	else{
+		args=m_pKDevSession->getConfigureArgs(conf);
+	}
+	if(ask){  // 	only open dialog when asked
+	  CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
+  	if(argdlg.exec()){
+  		if(conf==i18n("(Default)")){
+	    	prj->setConfigureArgs(argdlg.getArguments());
+  	  	prj->writeProject();
+  		}
+  		else{
+  			m_pKDevSession->setConfigureArgs(conf,argdlg.getArguments());
+	  	}
+  	}
+  	else{
+    	return;
+  	}
+	}
   slotDebugStop();
 
   slotStatusMsg(i18n("Running ./configure..."));
-  QString flaglabel;
-  /* This condition only works on Linux systems */
-  //  if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-      //  }
-      //  else{
-      //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-      //  }
-
   showOutputView(true);
   setToolMenuProcess(false);
 //  error_parser->toogleOff();
   messages_widget->start();
   slotFileSaveAll();
-  QDir::setCurrent(prj->getProjectDir());
+  if(conf==i18n("(Default)"))
+	  QDir::setCurrent(prj->getProjectDir());
+	else{
+		QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+		QDir dir(vpath);
+		// change to VPATH subdir, create it if not existant
+		if(!dir.exists())
+			dir.mkdir(vpath);
+		QDir::setCurrent(vpath);
+ 	}
   shell_process.clearArguments();
-  shell_process << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-      if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-      if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
+	// get all other strings	
+  if(conf==i18n("(Default)")){
+		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+		// export CC, CXX, CPP
+		config->setGroup("Compiler");
+		QString arch=config->readEntry("Architecture","i386");
+		QString platf=config->readEntry("Platform","linux");
+		group="Compilearch "+arch+"-"+platf;
   }
-  shell_process  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-  shell_process  << "\" "<< "./configure " << argdlg.getArguments();
+	else{
+		group="Compilearch "+
+											m_pKDevSession->getArchitecture(conf)+"-"+
+											m_pKDevSession->getPlatform(conf);
+		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
+		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
+		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
+		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
+	}
+ 	config->setGroup(group);
+ 	shell_process << "CPP=\""<< config->readEntry("CPP","cpp")<< "\" ";
+ 	shell_process << "CC=\"" << config->readEntry("CC","gcc")<< "\" ";
+ 	shell_process << "CXX=\"" << config->readEntry("CXX","g++")<< "\" ";
+	shell_process << "CPPFLAGS=\"" << cppflags << "\" ";
+  shell_process << "CFLAGS=\"" << cflags << "\" ";			
+ 	if(prj->getProjectType()=="normal_c"){
+ 		 shell_process << "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+ 	}
+ 	else{
+     shell_process << "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+ 	}
+  shell_process << "LDFLAGS=\"" + ldflags+ "\" " ;
+	// the configure script is always in the project directory, no matter where we are
+  shell_process  << prj->getProjectDir() +"/configure "<< args;
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
+
 }
+void CKDevelop::slotBuildConfigure(){
+	// get current config from combo and retrieve configure args
+	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+	QString curr=compile_combo->currentText();
+	RunConfigure(curr, true);
+}
+
 
 
 void CKDevelop::slotBuildStop(){
@@ -3383,18 +3521,16 @@ void CKDevelop::slotProcessExited(KProcess* proc)
 
     else if (next_job == make_cmd)
     { // rest from the rebuild all
-      QString makefileDir=prj->getProjectDir() + prj->getSubDir();
+     	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+    	QString conf=compile_combo->currentText();
+      QString makefileDir;
+      if(conf==i18n("(Default)"))
+    		makefileDir = prj->getProjectDir();
+    	else{
+    		makefileDir = m_pKDevSession->getVPATHSubdir(conf);
+    	}
       QDir::setCurrent(makefileDir);
 //      error_parser->setStartDir(makefileDir);
-      if (prj->getProjectType()=="normal_empty" &&
-       !QFileInfo(makefileDir+"Makefile").exists())
-      {
-        if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
-        {
-          QDir::setCurrent(prj->getProjectDir());
-//          error_parser->setStartDir(prj->getProjectDir());
-        }
-      }
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
         process << make_cmd << prj->getMakeOptions();

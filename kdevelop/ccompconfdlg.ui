@@ -1,0 +1,409 @@
+<!DOCTYPE UI><UI>
+<class>CCompConfDlg</class>
+<author>Ralf Nolden &lt;nolden@kde.org&gt;</author>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>CCompConfDlg</cstring>
+    </property>
+    <property stdset="1">
+        <name>enabled</name>
+        <bool>true</bool>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>470</width>
+            <height>294</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBox2</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>&amp;Build System Setup</string>
+            </property>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel5</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>This &amp;machine is a(n):</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>host_arch_cb</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel6</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;running on:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>unix_ver_cb</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>unix_ver_cb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>sizePolicy</name>
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                        </sizepolicy>
+                    </property>
+                    <property stdset="1">
+                        <name>editable</name>
+                        <bool>true</bool>
+                    </property>
+                    <property stdset="1">
+                        <name>duplicatesEnabled</name>
+                        <bool>false</bool>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Set you UNIX/Linux version here. Valid entries are e.g. linux, unixware etc.</string>
+                    </property>
+                </widget>
+                <widget row="1"  column="2" >
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>unix_ver_pb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>QComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>host_arch_cb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>sizePolicy</name>
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                        </sizepolicy>
+                    </property>
+                    <property stdset="1">
+                        <name>editable</name>
+                        <bool>true</bool>
+                    </property>
+                    <property stdset="1">
+                        <name>duplicatesEnabled</name>
+                        <bool>false</bool>
+                    </property>
+                    <property>
+                        <name>toolTip</name>
+                        <string>./configure --host=</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Specify your development machine's architecture here, e.g. i386, ppc </string>
+                    </property>
+                </widget>
+                <widget row="0"  column="2" >
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>host_arch_pb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>enabled</name>
+                        <bool>true</bool>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Add</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>target_gb</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>&amp;Target Compile System Setup</string>
+            </property>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="0"  column="2" >
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>target_arch_pb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>QComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>target_arch_cb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>editable</name>
+                        <bool>true</bool>
+                    </property>
+                    <property stdset="1">
+                        <name>duplicatesEnabled</name>
+                        <bool>false</bool>
+                    </property>
+                    <property>
+                        <name>toolTip</name>
+                        <string>./configure --target=</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Select you platform here. Your platform may be one of the named ones or another one you need to use for crosscompiling.</string>
+                    </property>
+                </widget>
+                <widget row="4"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>cxx_comp_le</cstring>
+                    </property>
+                    <property>
+                        <name>toolTip</name>
+                        <string>CXX environment variable</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Enter the C++ compiler command here. For a StronARM gcc crosscompiler, this would be arm-linux-g++</string>
+                    </property>
+                </widget>
+                <widget row="4"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel4</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>C++ C&amp;ompiler Command:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>cpp_comp_le</cstring>
+                    </property>
+                </widget>
+                <widget row="3"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel3</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;C Compiler Command:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>c_comp_le</cstring>
+                    </property>
+                </widget>
+                <widget row="3"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>c_comp_le</cstring>
+                    </property>
+                    <property>
+                        <name>toolTip</name>
+                        <string>CC environment variable</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Enter the C compiler command here. For a StronARM gcc crosscompiler, this would be arm-linux-gcc in /opt/cross/bin. Make sure your cross-compiler directory is in your PATH environment.</string>
+                    </property>
+                </widget>
+                <widget row="2"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>C P&amp;reprocessor Command:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>cpp_comp_le</cstring>
+                    </property>
+                </widget>
+                <widget row="2"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>cpp_comp_le</cstring>
+                    </property>
+                    <property>
+                        <name>toolTip</name>
+                        <string>./configure --prefix=</string>
+                    </property>
+                    <property>
+                        <name>whatsThis</name>
+                        <string>Enter the path to the cross-compiling environment of the selected architecture here. Example: arm-linux-gcc crosscompiler has it's environment in /opt/cross/arm-linux-gcc on a SuSE Linux system where the crosscompilers are located.</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;Architecture:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>target_arch_cb</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;Platform:</string>
+                    </property>
+                    <property>
+                        <name>buddy</name>
+                        <cstring>target_platform_cb</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QComboBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>target_platform_cb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>editable</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget row="1"  column="2" >
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>target_platform_pb</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Add</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer>
+            <property>
+                <name>name</name>
+                <cstring>Spacer1</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<connections>
+    <slot access="public">slotArchChanged(const QString&amp;)</slot>
+    <slot access="public">slotCCChanged(const QString&amp;)</slot>
+    <slot access="public">slotCXXChanged(const QString&amp;)</slot>
+    <slot access="public">slotCPPChanged(const QString&amp;)</slot>
+    <slot access="public">slotPlatformChanged(const QString&amp;)</slot>
+</connections>
+<tabstops>
+    <tabstop>host_arch_cb</tabstop>
+    <tabstop>host_arch_pb</tabstop>
+    <tabstop>unix_ver_cb</tabstop>
+    <tabstop>unix_ver_pb</tabstop>
+    <tabstop>target_arch_cb</tabstop>
+    <tabstop>target_arch_pb</tabstop>
+    <tabstop>target_platform_cb</tabstop>
+    <tabstop>target_platform_pb</tabstop>
+    <tabstop>cpp_comp_le</tabstop>
+    <tabstop>c_comp_le</tabstop>
+    <tabstop>cxx_comp_le</tabstop>
+</tabstops>
+</UI>

@@ -2293,7 +2293,7 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE) ");
   }
   else if (qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
-    project->setLDADD (" $(LIB_QT)");
+    project->setLDADD (" $(LIB_QPE) $(LIB_QT)");
   }
   else if (qextmdiitem->isSelected()) {
     project->setLDADD (" $(LIB_QT) -lqextmdi");

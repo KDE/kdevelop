@@ -18,6 +18,7 @@
 
 #include "ckdevelop.h"
 #include "cproject.h"
+#include "resource.h"
 
 #include "vc/versioncontrol.h"
 #include "ctoolclass.h"
@@ -30,6 +31,9 @@
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
 #include <klocale.h>
+#include <kmainwindow.h>
+#include <ktoolbar.h>
+#include <kcombobox.h>
 
 #include <qdir.h>
 #include <qregexp.h>
@@ -178,6 +182,18 @@ void CProject::setLDADD(const QString& libstring){
   writeGroupEntry( "Config for BinMakefileAm", "ldadd", libstring );
   config->setDollarExpansion(true);
 }
+/** No descriptions */
+void CProject::setCFLAGS(const QString& flags){
+  config->setDollarExpansion(false);
+  writeGroupEntry( "Config for BinMakefileAm", "cflags",flags );
+  config->setDollarExpansion(true);
+}
+/** No descriptions */
+void CProject::setCPPFLAGS(const QString& flags){
+  config->setDollarExpansion(false);
+  writeGroupEntry( "Config for BinMakefileAm", "cppflags",flags );
+  config->setDollarExpansion(true);
+}
 
 void CProject::setCXXFLAGS(const QString& flags){
   config->setDollarExpansion(false);
@@ -218,7 +234,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config->writeEntry("dist",info.dist);
   config->writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace(QRegExp("[\\$]"),"$$");
+										  info.install_location.replace(QRegExp("[\\$]"),"$$");
   config->writeEntry("install_location",info.install_location);
 
   config->writeEntry("baseclass",info.baseclass);
@@ -282,6 +298,22 @@ QString CProject::getLDADD(){
 bool CProject::getModifyMakefiles(){
     config->setGroup("General");
     return config->readBoolEntry("modifyMakefiles",true);
+}
+/** returns the preprocessor flags */
+QString CProject::getCPPFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
+  str = readGroupEntry( "Config for BinMakefileAm", "cppflags" );
+  config->setDollarExpansion(true);
+  return str;
+}
+/** returns the CFLAGS string */
+QString CProject::getCFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
+  str = readGroupEntry( "Config for BinMakefileAm", "cflags" );
+  config->setDollarExpansion(true);
+  return str;
 }
 
 QString CProject::getCXXFLAGS(){
@@ -1841,16 +1873,21 @@ QString CProject::findMakefile(const CMakefile::Type type, const QString& name)
 		 * If the user opens a distclean project he will also get this warning
 		 * which is sort of annoying, but I dont know of a way to prevent this.
 		 */
-		if (type==CMakefile::toplevel) {
-			QMessageBox::warning(0,i18n("Makefile not found"),
-			i18n("There is no makefile to build your application.\n"
-			     "Possibly you forgot to create the makefiles.\n"
-			     "In this case please run Build->Configure.\n"),
-			QMessageBox::Ok,
-			QMessageBox::NoButton,
-			QMessageBox::NoButton);
-		}
-		else if ((type==CMakefile::cvs) && !isCustomProject())
+		// I have to rethink this a bit where to get the info about either
+		// the session management or the mainwindow for the toolbar - anyway, I need to
+		// know whether we're using i18n("(Default)") or one of the configs... R.N.
+#warning fixme: toplevel makefile detection when using VPATH RalfN
+//	  if(type==CMakefile::toplevel){
+//			QMessageBox::warning(0,i18n("Makefile not found"),
+//			i18n("There is no makefile to build your application.\n"
+//			     "Possibly you forgot to create the makefiles.\n"
+//			     "In this case please run Build->Configure.\n"),
+//			QMessageBox::Ok,
+//			QMessageBox::NoButton,
+//			QMessageBox::NoButton);
+//		}
+//		else
+		if ((type==CMakefile::cvs) && !isCustomProject())
 		{
 			QMessageBox::warning(0,i18n("Makefile not found"),
 			i18n("There is no makefile to generate the configure script.\n"

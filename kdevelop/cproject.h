@@ -287,6 +287,10 @@ public: // Methods to store project options
   void setLDADD(const QString& libstring);
 
   /** Store the C++ compiler flags. */
+  /** No descriptions */
+  void setCPPFLAGS(const QString& flags);
+  /** No descriptions */
+  void setCFLAGS(const QString& flags);
   void setCXXFLAGS(const QString& flags);
   void setAdditCXXFLAGS(const QString& flags);
 
@@ -366,6 +370,10 @@ public: // Methods to fetch project options
   /** Fetch the librarys. */
   QString getLDFLAGS();
   QString getLDADD();
+  /** returns the preprocessor flags */
+  QString getCPPFLAGS();
+  /** returns the CFLAGS string */
+  QString getCFLAGS();
   QString getCXXFLAGS();
   QString getAdditCXXFLAGS();
 
@@ -580,4 +588,5 @@ private: // Protected attributes
  * author: rokrau
  **/
 CProject* currentProject();
+
 #endif
