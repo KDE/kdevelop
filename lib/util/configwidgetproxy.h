@@ -73,6 +73,7 @@ public:
 	* Tell the proxy you want a page in the Global Settings. 
 	* @param title The title of the config page, shown in the settings dialog
 	* @param pagenumber A per-proxy unique identifier, used when responding to insertConfigWidget() signal
+	* @param icon The name of the icon to use
 	*/
 	void createGlobalConfigPage( QString const & title, unsigned int pagenumber, QString const & icon = "kdevelop" );
 	
@@ -80,6 +81,7 @@ public:
 	* Tell the proxy you want a page in the Project Settings. 
 	* @param title The title of the config page, shown in the settings dialog
 	* @param pagenumber A per-proxy unique identifier, used when responding to insertConfigWidget() signal
+	* @param icon The name of the icon to use
 	*/
 	void createProjectConfigPage( QString const & title, unsigned int pagenumber, QString const & icon = "kdevelop" );
 	
