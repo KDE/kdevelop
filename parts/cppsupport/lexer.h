@@ -245,7 +245,9 @@ private:
     bool eof() const;
     
     // preprocessor (based on an article of Al Stevens on Dr.Dobb's journal)
+#if 0
     int testDefined();
+#endif
     int testIfLevel();
     int macroDefined();
     
@@ -650,7 +652,6 @@ inline void Lexer::disablePreprocessor()
 {
     m_preprocessorEnabled = false;
 }
-
 
 inline QString Lexer::toString( const Token& token ) const
 {

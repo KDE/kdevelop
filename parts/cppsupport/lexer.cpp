@@ -313,6 +313,7 @@ void Lexer::handleDirective( const QString& directive )
     m_preprocessorEnabled = preproc;
 }
 
+/*
 int Lexer::testDefined()
 {
     int n = 0;
@@ -333,7 +334,7 @@ int Lexer::testDefined()
     
     return 0;
 }
-
+*/
 int Lexer::testIfLevel()
 {
     int rtn = !m_skipping[ m_ifLevel++ ];
@@ -436,12 +437,14 @@ void Lexer::processElif()
     }
     
     if( !m_trueTest[m_ifLevel] ){
+#if 0
 	int n;
 	if( (n = testDefined()) != 0 ){
 	    int isdef = macroDefined();
 	    m_trueTest[m_ifLevel] = !((n == 1 && !isdef) || (n == -1 && isdef));
 	}
 	else
+#endif
 	    m_trueTest[ m_ifLevel ] = macroExpression() != 0;
 	m_skipping[ m_ifLevel ] = !m_trueTest[ m_ifLevel ];
     }
@@ -464,11 +467,13 @@ void Lexer::processEndif()
 void Lexer::processIf()
 {
     if( testIfLevel() ) {
+#if 0
 	int n;
 	if( (n = testDefined()) != 0 ) {
 	    int isdef = macroDefined();
 	    m_trueTest[ m_ifLevel ] = (n == 1 && isdef) || (n == -1 && !isdef);
 	} else
+#endif
 	    m_trueTest[ m_ifLevel ] = macroExpression() != 0;
 	m_skipping[ m_ifLevel ] = !m_trueTest[ m_ifLevel ];
     }
@@ -522,7 +527,7 @@ void Lexer::processUndef()
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
     m_driver->removeMacro( m_driver->currentFileName(), word );
-    qDebug( "remove definition for %s", word.latin1() );
+    // qDebug( "remove definition for %s", word.latin1() );
 }
 
 int Lexer::macroPrimary()
@@ -537,7 +542,7 @@ int Lexer::macroPrimary()
 	    return 0;
 	}
 	nextChar();
-	break;
+	return result;
 	
     case '+':
     case '-':
@@ -559,7 +564,11 @@ int Lexer::macroPrimary()
 	    nextToken( tk, false );
 	    switch( tk.type() ){
 	    case Token_identifier:
-		return 1;      // TODO: implement
+		if( toString(tk) == "defined" ){
+		    return macroPrimary();
+		}
+		// TODO: implement
+		return m_driver->macros(m_driver->currentFileName()).contains(  toString(tk) );
 	    case Token_number_literal:
 		return toString(tk).toInt();
 	    case Token_char_literal:
