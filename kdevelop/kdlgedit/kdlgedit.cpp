@@ -840,7 +840,7 @@ void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 	    QString s = getLineOutOfString(src,i,"\\n");
 	    while (!s.isNull())
 		{
-		    props->dumpPropCall(stream, "insertItem", s);
+		    props->dumpPropCall(stream, "insertItem", "\"" + s + "\"");
 		    i++;
 		    s = getLineOutOfString(src,i,"\\n");
 		}
