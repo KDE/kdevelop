@@ -631,7 +631,7 @@ class Context
 			for k in i..j
                 stdout.printf "%2.2x", obj[k]
 			end
-            stdout.printf "\n"
+            stdout.printf " %s\n", obj[i..j].dump
 			
 			i += 12
 		end

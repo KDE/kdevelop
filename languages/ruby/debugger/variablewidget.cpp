@@ -671,7 +671,7 @@ QString VarItem::typeFromValue(const QString& value)
 	} else if (value == "true" || value == "false") {
 		return QString("Boolean");
 	} else if (  QRegExp("^[-+]?[0-9_]+").exactMatch(value)
-				|| QRegExp("^[-+]?(0x|0|0b|\\?)").search(value) != -1 ) 
+				|| QRegExp("^[-+]?(0x|0|0b|\\?)[\\da-f]*$").search(value) != -1 ) 
 	{
 		return QString("Integer");
 	} else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(value)) {
