@@ -5,6 +5,8 @@
 	  and set minimum size to 175 (by Dominic Battre)
 	* Applied patch to fileselector to store filter history 
 	  (also by Dominic Battre)
+	* Added ability to select filename settings (lowercase,
+	  uppercase, mixedcase) when using the Add Class dialog
 
 2002-12-23 Caleb Tennis <caleb@aei-tech.com>
 	* Fixed bugs with python support; patches by Julian Rockney
