@@ -75,11 +75,11 @@ protected:
    * See @ref QextMdiChildView::setLastFocusableChildWidget
    */
    QWidget*    m_lastFocusableChildWidget;
-   /** 
-   * Every child view window has an temporary ID in the Window menu of the main frame. 
+   /**
+   * Every child view window has an temporary ID in the Window menu of the main frame.
    */
    int         m_windowMenuID;
-   /** 
+   /**
    * Holds a temporary information about if the MDI view state has changed but is not processed yet (pending state).
    * For example it could be that a 'maximize' is pending, if this variable is TRUE.
    */
@@ -94,6 +94,11 @@ private:
    * Internally used as indicator whether this QextMdiChildView is treated as document view or as tool view.
    */
    bool  m_bToolView;
+   /**
+   * Internally used by QextMdiMainFrm to store a temporary information that the method
+   * activate() is unnecessary and that it can by escaped.
+   */
+   bool  m_bInterruptActivation;
 
 // methods
 public:

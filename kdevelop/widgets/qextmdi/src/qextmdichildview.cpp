@@ -45,6 +45,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_stateChanged(TRUE)
   ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
+  ,m_bInterruptActivation(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption)
@@ -360,7 +361,15 @@ void QextMdiChildView::activate()
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
    }
-   emit gotFocus(this);
+
+   // check if someone wants that we interrupt the method (because it's probably unnecessary)
+   if (m_bInterruptActivation) {
+      m_bInterruptActivation = false;
+      return;   // nothing to do, we are the active childview, already
+   }
+   else {
+     emit gotFocus(this);
+   }
 }
 
 //============= focusOutEvent ===============//

@@ -567,9 +567,15 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
    bIncludeWindowPopup = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
-void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
+void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 {
-   m_pCurrentWindow = pWnd;
+   if (m_pCurrentWindow != pWnd) {
+      m_pCurrentWindow = pWnd;
+   }
+   else {
+      pWnd->m_bInterruptActivation = true;
+   }
+
    if (m_pTaskBar) {
       m_pTaskBar->setActiveButton(pWnd);
    }
