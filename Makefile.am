@@ -115,6 +115,7 @@ DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
                   parts/appwizard/xulhello/ \
                   parts/appwizard/kappjava/ \
                   parts/appwizard/kdevlang \
+                  parts/appwizard/generichello \
                   parts/cppsupport/subclassing_template \
                   parts/pascalsupport/ \
                   parts/javasupport \
@@ -138,10 +139,9 @@ install-apidox-kdevelop:
 		$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt ;\
 		echo $(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
 		$(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
-	fi
-
-## We need this until we change the application name from gideon back to kdevelop
-##install-am:
+	fi; \
+## We need this until we change the application name from gideon back to kdevelop \
+## install-am-kdevelop: \
 	if test -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
 		@echo "*** Creating a softlink from kdevelop to gidon to make the menu item Help -> Gideon Handbook work:"; \
 		echo $(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon; \
