@@ -57,7 +57,7 @@ public: // Public attributes
   QString name;
 
   /** Export type of the inheritance */
-  int export;
+  int exportattr;
 
 public: // Public methods to set attribute values
 
@@ -79,9 +79,9 @@ public: // Public methods
   void out();
 
 public: // Public queries
-  bool isPublic()    { return ( export == PUBLIC ); }
-  bool isProtected() { return ( export == PROTECTED ); }
-  bool isPrivate()   { return ( export == PRIVATE ); }
+  bool isPublic()    { return ( exportattr == PUBLIC ); }
+  bool isProtected() { return ( exportattr == PROTECTED ); }
+  bool isPrivate()   { return ( exportattr == PRIVATE ); }
 
 };
 

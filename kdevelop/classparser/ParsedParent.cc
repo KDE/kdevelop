@@ -101,7 +101,7 @@ void CParsedParent::setExport( int aExport )
 {
   assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED );
 
-  export = aExport;
+  exportattr = aExport;
 }
 
 /*********************************************************************
@@ -123,7 +123,7 @@ void CParsedParent::out()
 {
   cout << "    " << name << "(";
 
-  switch(export)
+  switch(exportattr)
   {
     case PUBLIC:
       cout << "public";
@@ -152,7 +152,7 @@ void CParsedParent::asPersistantString( QString &dataStr )
 {
   dataStr = "";
 
-  switch(export)
+  switch(exportattr)
   {
     case PUBLIC:
       dataStr += "public";

@@ -1,3 +1,11 @@
+1999-08-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Changed 'Log message' label for "bozos" who are
+	  patiently waiting for something to happen
+	  in that dialog :^)
+	* Changed some Ok -> OK according to KDE conventions
+	* 'export' is a keyword, so let's better not use
+	  it as a variable name
+
 1999-08-02 The KDevelop Team
 	* KDevelop 1.0 Beta 1 released
 	

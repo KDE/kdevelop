@@ -68,9 +68,10 @@ class GrepDialog;
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
-#include "./classparser/ParsedClass.h"
+//#include "./classparser/ParsedClass.h"
 
-
+class CParsedMethod;
+class CParsedClass;
 class KDlgEdit;
 class KDlgEditWidget;
 class KDlgPropWidget;

@@ -1023,7 +1023,7 @@ void CKAppWizard::slotOkClicked() {
     	i18n("The selected project directory already exists. If you\n "
     	"click 'OK', all files and subdirectories of the currently chosen\n "
 			"project directory will be deleted before a new project is going\n "
-			"to be generated."),KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {
+			"to be generated."),KMsgBox::EXCLAMATION,i18n("OK"),i18n("Cancel"))==2) {
 		
 		   return;
     }

@@ -1528,7 +1528,7 @@ dlgMultiLineEdit::dlgMultiLineEdit(QWidget *parent, const char *name)
 
   btnOk = new QPushButton(this);
   btnOk->setGeometry(145,190,70,25);
-  btnOk->setText(i18n("&Ok"));
+  btnOk->setText(i18n("&OK"));
   connect(btnOk, SIGNAL(clicked()), SLOT(accept()));
 }
 

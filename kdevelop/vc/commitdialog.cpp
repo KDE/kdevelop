@@ -14,7 +14,7 @@ CommitDialog::CommitDialog()
 
     QBoxLayout *layout = new QVBoxLayout(this, 10);
     
-    QLabel *messagelabel = new QLabel(i18n("Log message:"), this);
+    QLabel *messagelabel = new QLabel(i18n("Enter log message:"), this);
     messagelabel->setMinimumSize(messagelabel->sizeHint());
     layout->addWidget(messagelabel, 0);
     
@@ -25,7 +25,7 @@ CommitDialog::CommitDialog()
     
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("Ok"));
+    QPushButton *ok = buttonbox->addButton(i18n("OK"));
     QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
     connect( ok, SIGNAL(clicked()), SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
