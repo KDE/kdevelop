@@ -180,7 +180,7 @@ void ClassViewWidget::buildClassFolderHierarchy(ClassTreeItem *classes,
     // Sort folders
     setSorting(1, true); // turn sorting on
     sortFolder(classes);
-    setSorting(-1);      // we don't keep the whole view sorted
+    //setSorting(-1);      // we don't keep the whole view sorted
 }
 
 

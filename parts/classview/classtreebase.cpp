@@ -386,7 +386,7 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
-    setSorting(-1);
+    setSorting(1, true);
     header()->hide();
     addColumn(QString::null);
 
