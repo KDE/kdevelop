@@ -1,3 +1,8 @@
+2001-07-25  rokrau@yahoo.com
+    * bugfix: F12 now works without a project loaded. I've implemented this
+      somewhat reluctantly, it should work but KDevelop should be used with 
+      a project in general. It is not really intended as a file editor.
+
 2001-07-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: memory leaks were detected in QextMDI by Purify
     * bugfix: completed Harald's bugfix concerning the view state problem
