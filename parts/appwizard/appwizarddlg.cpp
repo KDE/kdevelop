@@ -63,6 +63,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 {
 	kdDebug( 9000 ) << "  ** AppWizardDialog::AppWizardDialog()" << endl;
 
+    connect( this, SIGNAL( selected( const QString & ) ), this, SLOT( pageChanged() ) );
+
     helpButton()->hide();
     templates_listview->header()->hide();
 
@@ -634,6 +636,12 @@ QStringList AppWizardDialog::getFilesToOpenAfterGeneration()
         (*it) = (*it).replace(QRegExp("APPNAME"), getProjectName());
     }
     return m_pCurrentAppInfo->openFilesAfterGeneration;
+}
+
+void AppWizardDialog::pageChanged()
+{
+	kdDebug(9010) << "AppWizardDialog::pageChanged()" << endl;
+	projectLocationChanged();
 }
 
 #include "appwizarddlg.moc"

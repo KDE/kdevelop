@@ -84,6 +84,9 @@ protected:
     virtual void projectLocationChanged();
     virtual void accept();
 
+protected slots:
+    void pageChanged();
+
 private:
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
