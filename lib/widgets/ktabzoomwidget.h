@@ -32,12 +32,19 @@ public:
   void lowerAllWidgets();
 
 
+public slots:
+
+  void setDockMode(bool docked);
+
+
 private slots:
 
   void selected(int index);
   void unselected();
 
   void widgetDeleted();
+
+  void adjustStrut();
 
 
 protected:

@@ -36,6 +36,8 @@ public:
   QBoxLayout                 *m_layout;
   KTabZoomFrame              *m_popup;
   QPtrList<KTZWidgetInfo>    m_info;
+  bool 			     m_docked;
+  QWidget		     *m_strut;
 
 };
 
@@ -48,6 +50,8 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
 
   d->m_tabPosition = pos;
   d->m_content = 0;
+  d->m_docked = false;
+  d->m_strut = 0;
 
   d->m_tabBar = new KTabZoomBar(this, pos);
   connect(d->m_tabBar, SIGNAL(selected(int)), this, SLOT(selected(int)));
@@ -61,6 +65,8 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
   d->m_popup = new KTabZoomFrame(parent, pos);
 
   connect(d->m_popup, SIGNAL(closeClicked()), this, SLOT(unselected()));
+  connect(d->m_popup, SIGNAL(dockToggled(bool)), this, SLOT(setDockMode(bool)));
+  connect(d->m_popup, SIGNAL(sizeChanged()), this, SLOT(adjustStrut()));
 
   d->m_popup->hide();
 
@@ -79,8 +85,6 @@ KTabZoomWidget::~KTabZoomWidget()
 
 void KTabZoomWidget::addTab(QWidget *widget, const QString &title)
 {
-  kdDebug(9000) << "AddTab: " << widget << endl;
-
   KTZWidgetInfo *info = new KTZWidgetInfo;
   info->m_widget = widget;
 
@@ -96,8 +100,6 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title)
 void KTabZoomWidget::widgetDeleted()
 {
   const QWidget *w = static_cast<const QWidget*>(sender());
-
-  kdDebug(9000) << "Widget deleted: " << w << endl;
 
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == w)
@@ -118,20 +120,26 @@ void KTabZoomWidget::addContent(QWidget *content)
 
   d->m_content = content;
 
+  d->m_strut = new QWidget(this);
+
   switch (d->m_tabPosition)
   {
   case KTabZoomPosition::Left:
   case KTabZoomPosition::Top:
     d->m_layout->addWidget(d->m_tabBar);
+    d->m_layout->addWidget(d->m_strut);
     d->m_layout->addWidget(d->m_content,1);
     break;
 
   case KTabZoomPosition::Right:
   case KTabZoomPosition::Bottom:
     d->m_layout->addWidget(d->m_content,1);
+    d->m_layout->addWidget(d->m_strut);
     d->m_layout->addWidget(d->m_tabBar);
     break;
   }
+
+  d->m_strut->hide();
 
   content->show();
 }
@@ -163,11 +171,14 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
 
 void KTabZoomWidget::lowerAllWidgets()
 {
-    for ( KTZWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
-    {
-        d->m_popup->hide();
-        d->m_tabBar->unsetButtons();
-    }
+  if (d->m_docked)
+    return;
+
+  for ( KTZWidgetInfo* i = d->m_info.first(); i != 0; i = d->m_info.next() )
+  {
+    d->m_popup->hide();
+    d->m_tabBar->unsetButtons();
+  }
 }
 
 
@@ -196,7 +207,8 @@ void KTabZoomWidget::calculateGeometry()
 
 void KTabZoomWidget::unselected()
 {
-  kdDebug(9000) << "Unselected" << endl;
+  if (d->m_docked)
+    return;
 
   d->m_popup->hide();
   d->m_tabBar->unsetButtons();
@@ -205,6 +217,9 @@ void KTabZoomWidget::unselected()
 
 void KTabZoomWidget::lowerWidget(QWidget *w)
 {
+  if (d->m_docked)
+    return;
+
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == w)
     {
@@ -220,6 +235,34 @@ void KTabZoomWidget::resizeEvent(QResizeEvent *ev)
   QWidget::resizeEvent(ev);
 
   calculateGeometry();
+}
+
+
+void KTabZoomWidget::setDockMode(bool docked)
+{
+  d->m_docked = docked;
+
+  if (!docked)
+  {
+    d->m_strut->hide();
+    return;
+  }
+
+  d->m_strut->show();
+
+  adjustStrut();
+}
+
+
+void KTabZoomWidget::adjustStrut()
+{
+  if (!d->m_docked)
+    return;
+
+  if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+    d->m_strut->setFixedWidth(d->m_popup->width());
+  else
+    d->m_strut->setFixedHeight(d->m_popup->height());
 }
 
 

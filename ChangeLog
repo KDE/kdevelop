@@ -5,6 +5,7 @@
 	* Added a custom layout manager to the IDEAl buttons
 	  unfortunately, only the horizontal ones stack. Someone
 	  forgot a "widthForHeight" in QLayoutItem...
+	* added sticky mode for IDEAl ui mode
 
 2002-06-23  Bernd Gehrmann  <bernd@mail.berlios.de>
 

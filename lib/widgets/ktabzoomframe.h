@@ -31,6 +31,8 @@ public slots:
 signals:
 
   void closeClicked();
+  void dockToggled(bool docked);
+  void sizeChanged();
 
   
 protected:
@@ -38,11 +40,12 @@ protected:
   void mousePressEvent(QMouseEvent *ev);
   void mouseReleaseEvent(QMouseEvent *ev);
   void mouseMoveEvent(QMouseEvent *ev);
- 
+
 
 private slots:
 
   void slotCloseButtonClicked();
+  void slotDockButtonToggled(bool toggle);
 
 
 private:

@@ -4,11 +4,16 @@
 #include <qtoolbutton.h>
 #include <qptrlist.h>
 #include <qframe.h>
+#include <qtimer.h>
+#include <qiconset.h>
 
 
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kapplication.h>
+
+
+#include "sticky.xpm"
 
 
 #include "ktabzoomframe.h"
@@ -38,6 +43,7 @@ public:
   bool                       m_sliding;
   QPoint                     m_slideStart;
   int                        m_initialPos, m_initialSize;
+  QToolButton		     *m_closeButton, *m_dockButton;
 
 };
 
@@ -84,17 +90,22 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   default:
     break;
   }
-  
-  QToolButton *btn = new QToolButton(arrow, f);
-  btn->setFixedSize(12,12);
-  hbox->addWidget(btn);
 
-  connect(btn, SIGNAL(clicked()), this, SLOT(slotCloseButtonClicked()));
+  d->m_dockButton = new QToolButton(f);
+  d->m_dockButton->setPixmap(QPixmap(sticky));
+  d->m_dockButton->setFixedSize(12,12);
+  d->m_dockButton->setToggleButton(true);
+  hbox->addWidget(d->m_dockButton);
 
-  /* btn = new QToolButton(f);
-  btn->setFixedSize(12,12);
-  hbox->addWidget(btn);
-  */
+  connect(d->m_dockButton, SIGNAL(toggled(bool)), this, SLOT(slotDockButtonToggled(bool)));
+
+  hbox->addSpacing(4);
+
+  d->m_closeButton = new QToolButton(arrow, f);
+  d->m_closeButton->setFixedSize(12,12);
+  hbox->addWidget(d->m_closeButton);
+
+  connect(d->m_closeButton, SIGNAL(clicked()), this, SLOT(slotCloseButtonClicked()));
 
   hbox->addSpacing(4);
 
@@ -161,6 +172,14 @@ void KTabZoomFrame::slotCloseButtonClicked()
 }
 
 
+void KTabZoomFrame::slotDockButtonToggled(bool toggle)
+{
+  d->m_closeButton->setEnabled(!toggle);
+  
+  emit dockToggled(toggle);
+}
+
+
 int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
 {
   int index = d->m_count++;
@@ -195,6 +214,7 @@ void KTabZoomFrame::selected(int index)
     {
       d->m_stack->raiseWidget(i->m_widget);
       d->m_title->setText(i->m_title);
+      i->m_widget->setFocus();
       return;
     }
 }
@@ -239,6 +259,8 @@ void KTabZoomFrame::mouseReleaseEvent(QMouseEvent *)
 {
   if (d->m_sliding)
     d->m_sliding = false;
+
+  emit sizeChanged();
 }
 
 
@@ -259,7 +281,6 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
 
   case KTabZoomPosition::Right:
     extend = d->m_slideStart.x() - ev->globalPos().x() + d->m_initialSize;
-    kdDebug(9000) << "New extent: " << extend << endl;
     if (extend < 250)
       extend = 250;
     setGeometry(d->m_initialPos - extend, y(), extend, height());
@@ -279,6 +300,8 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
     break;
   }
+
+  emit sizeChanged();
 }
 
 

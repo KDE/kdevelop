@@ -34,6 +34,7 @@ signals:
 
   void selected(int index);
   void unselected();
+  void docked();
 
 
 private slots:

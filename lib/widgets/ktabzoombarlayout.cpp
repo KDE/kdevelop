@@ -77,8 +77,6 @@ QSize KTabZoomBarLayout::sizeHint() const
   else
     sh = QSize(m_fontHeight + 2, completeSize());
 
-  kdDebug() << "SizeHint: w=" << sh.width() << ", h=" << sh.height() << endl;
-
   return sh;
 }
 
