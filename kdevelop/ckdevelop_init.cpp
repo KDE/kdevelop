@@ -911,12 +911,12 @@ void CKDevelop::initMenuBar(){
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("Goto class declaration"), this,
                                   SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
-  classbrowser_popup->insertItem( i18n("New class..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("CVclass"),i18n("New class..."), this,
                                   SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
   classbrowser_popup->insertSeparator();
-  classbrowser_popup->insertItem( i18n("Add member function..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_meth"),i18n("Add member function..."), this,
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
-  classbrowser_popup->insertItem( i18n("Add member variable..."), this,
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_var"),i18n("Add member variable..."), this,
                                   SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
   classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);

@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
 #include <kprocess.h>
+#include <kiconloader.h>
 
 #include <qfileinfo.h>
 #include <qlineedit.h>
@@ -224,9 +225,9 @@ KPopupMenu *CLogFileView::getCurrentPopup()
   {
     case THPROJECT:
       popup = new KPopupMenu(i18n("Project/LFV"));
-      popup->insertItem( i18n("New File..."),
+      popup->insertItem( SmallIconSet("filenew"),i18n("New File..."),
                          this, SLOT(slotNewFile()), 0, ID_FILE_NEW);
-      popup->insertItem( i18n("New Class..."),
+      popup->insertItem( SmallIconSet("CVclass"), i18n("New Class..."),
                          this, SLOT(slotNewClass()), 0, ID_PROJECT_NEW_CLASS );
       popup->insertItem( i18n("New Group..."), 
                          this, SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP );
@@ -249,7 +250,7 @@ KPopupMenu *CLogFileView::getCurrentPopup()
       break;
     case THC_FILE:
       popup = new KPopupMenu(i18n("File"));
-      popup->insertItem( i18n("New File..."),
+      popup->insertItem( SmallIconSet("filenew"), i18n("New File..."),
                          this,SLOT(slotNewFile()), 0, ID_FILE_NEW );
       popup->insertItem( i18n("Remove File from Project..."),
                          this,SLOT(slotFileRemove()), 0, ID_PROJECT_REMOVE_FILE );

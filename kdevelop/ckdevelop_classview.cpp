@@ -696,7 +696,7 @@ void CKDevelop::CVRefreshClassCombo()
        aClass != NULL;
        aClass = classList->next(), i++ )
   {
-    classCombo->insertItem( aClass->name );
+    classCombo->insertItem(SmallIcon("CVclass"), aClass->name );
     if( aClass->name == savedClass )
       savedIdx = i;
   }

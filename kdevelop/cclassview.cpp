@@ -163,28 +163,28 @@ void CClassView::initPopups()
   int id;
   // Project popup
   projectPopup.setTitle(i18n ("Project"));
-  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  projectPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  projectPopup.insertItem(SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
+  projectPopup.insertItem(SmallIconSet("folder"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
-  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
+  projectPopup.insertItem(SmallIconSet("configure"),i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
+  projectPopup.insertItem(SmallIconSet("graphview"),i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
 
 
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
-  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
-  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_meth"), i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_var"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
   //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
   //  classPopup.setItemEnabled( id, false );
 
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
-  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
+  classPopup.insertItem(SmallIconSet("CVstruct"), i18n("Classtool..."), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
   //  classPopup.insertSeparator();
   //  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
   //  classPopup.setItemEnabled( id, false );
@@ -226,8 +226,8 @@ void CClassView::initPopups()
 
   // Folder popup
   folderPopup.setTitle( i18n( "Folder" ) );
-  folderPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-  folderPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  folderPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  folderPopup.insertItem(SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   folderPopup.insertSeparator();
   folderPopup.insertItem( SmallIconSet("folder_new"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);

@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kpopupmenu.h>
+#include <kiconloader.h>
 
 #include <qdir.h>
 #include <qstringlist.h>
@@ -312,10 +313,10 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 
   case THFOLDER:
     popup = new KPopupMenu(i18n("Folder"));
-    popup->insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
-    popup->insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+    popup->insertItem( SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+    popup->insertItem( SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
     popup->insertSeparator();
-    popup->insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
+    popup->insertItem( SmallIconSet("folder_new"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
 //    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
     popup->insertSeparator();
     popup->insertItem(i18n("Update Makefile.am"), this, SLOT(slotUpdateMakefileAm()), 0, ID_PROJECT_UPDATE_AM);
