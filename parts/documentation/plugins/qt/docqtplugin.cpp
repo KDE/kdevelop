@@ -120,6 +120,14 @@ void DocQtPlugin::createTOC(DocumentationCatalogItem *item)
                     KURL keyUrl(fi.dirPath(true) + "/" + keyRef);
                     keyItem->setURL(keyUrl);
                 }
+                if (grandChild.tagName() == "section")
+                {
+                    QString keyRef = grandChild.attribute("ref");
+                    QString keyTitle = grandChild.attribute("title");
+                    DocumentationItem *keyItem = new DocumentationItem(DocumentationItem::Book, sectionItem, keyTitle);
+                    KURL keyUrl(fi.dirPath(true) + "/" + keyRef);
+                    keyItem->setURL(keyUrl);
+                }
                 grandChild = grandChild.previousSibling().toElement();
             }
         }
@@ -253,13 +261,13 @@ void DocQtPlugin::createIndex(IndexBox *index, DocumentationCatalogItem *item)
                     QString keyRef = grandChild.attribute("ref");
                     QString keyTitle = grandChild.text();
 
-                    IndexItemProto *ii = new IndexItemProto(this, item, index, keyTitle, title);
-                    ii->addURL(KURL(fi.dirPath(true) + "/" + keyRef));
+                    //adymo: a little hack to avoid unwanted elements
+                    if (keyRef != "qdir-example.html")
+                    {
+                        IndexItemProto *ii = new IndexItemProto(this, item, index, keyTitle, title);
+                        ii->addURL(KURL(fi.dirPath(true) + "/" + keyRef));
+                    }
                 }
-                //adymo: for qt.dcf load only first keyword with class name, not method names
-                //FIXME: make this configurable?
-                /*if (fi.fileName() == "qt.dcf")
-                    break;*/
                 grandChild = grandChild.nextSibling().toElement();
             }
         }

@@ -28,7 +28,7 @@
 #include <kurl.h>
 #include <kfile.h>
 
-#define CACHE_VERSION "2"
+#define CACHE_VERSION "3"
 
 class DocumentationItem: public KListViewItem
 {

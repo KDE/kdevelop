@@ -409,9 +409,11 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
             QString anchor = childEl.namedItem("anchor").firstChild().toText().data();
             QString arglist = childEl.namedItem("arglist").firstChild().toText().data();
             
-            IndexItemProto *indexItem = new IndexItemProto(this, item, index, membername,
-                i18n("%1::%2%3 Member Reference").arg(classname).arg(membername).arg(arglist));
-            indexItem->addURL(KURL(prefix + "#" + anchor));
+            if (classname != membername)
+            {
+                IndexItemProto *indexItem = new IndexItemProto(this, item, index, membername,i18n("%1::%2%3 Member Reference").arg(classname).arg(membername).arg(arglist));
+                indexItem->addURL(KURL(prefix + "#" + anchor));
+            }
         }
         childEl = childEl.nextSibling().toElement();
     }
