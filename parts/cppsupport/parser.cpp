@@ -332,23 +332,23 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDefinition()" << endl;
 
     int start = lex->index();
-    
+
     switch( lex->lookAhead(0) ){
-	
-    case ';':  
+
+    case ';':
 	lex->nextToken();
 	return true;
-	
-    case Token_extern: 
+
+    case Token_extern:
 	return parseLinkageSpecification( node );
-	
+
     case Token_namespace:
 	return parseNamespace( node );
-	
-    case Token_using: 
+
+    case Token_using:
 	return parseUsing( node );
-	
-    case Token_typedef: 
+
+    case Token_typedef:
 	return parseTypedef( node );
 
     case Token_asm:
@@ -360,7 +360,8 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 
     default:
         {
-	    int start = lex->index();
+	    lex->setIndex( start );
+
 	    TypeSpecifierAST::Node spec;
 	    InitDeclaratorListAST::Node declarators;
 	    AST::Node declarator;
@@ -426,34 +427,34 @@ bool Parser::parseLinkageSpecification( DeclarationAST::Node& node )
 	}
 	ast->setDeclaration( decl );
     }
-    
+
     UPDATE_POS( ast, start, lex->index() );
 
     node = ast;
-    
+
     return true;
 }
 
 bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageBody()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != '{' ){
 	return false;
     }
     lex->nextToken();
-    
+
     LinkageBodyAST::Node lba = CreateNode<LinkageBodyAST>();
     node = lba;
-        
+
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
-	
+
 	if( tk == '}' )
 	    break;
-	
+
 	DeclarationAST::Node def;
 	if( parseDefinition(def) ){
 	    node->addDeclaration( def );
@@ -462,12 +463,12 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 	    skipUntilDeclaration();
 	}
     }
-    
+
     if( lex->lookAhead(0) != '}' ){
 	reportError( i18n("} expected") );
     } else
 	lex->nextToken();
-    
+
     UPDATE_POS( node, start, lex->index() );
     return true;
 }
@@ -475,9 +476,9 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 bool Parser::parseNamespace( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNamespace()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_namespace ){
 	return false;
     }
@@ -536,7 +537,7 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
 	return false;
     }
     lex->nextToken();
-        
+
     if( lex->lookAhead(0) == Token_namespace ){
 	if( !parseUsingDirective(node) ){
 	    return false;
@@ -562,30 +563,30 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
     ast->setName( name );
 
     ADVANCE( ';', ";" );
-    
+
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
-    
+
     return true;
 }
 
 bool Parser::parseUsingDirective( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsingDirective()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_namespace ){
 	return false;
     }
     lex->nextToken();
-    
+
     NameAST::Node name;
     if( !parseName(name) ){
 	reportError( i18n("Namespace name expected") );
 	return false;
     }
-    
+
     ADVANCE( ';', ";" );
     
     UsingDirectiveAST::Node ast = CreateNode<UsingDirectiveAST>();
@@ -654,33 +655,33 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
     if( !parseTemplateArgument(templArg) )
 	return false;
     node->addArgument( templArg );
-    
+
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
-	
+
 	if( !parseTemplateArgument(templArg) ){
 	    parseError();
 	    break;
 	}
 	node->addArgument( templArg );
     }
-    
+
     UPDATE_POS( node, start, lex->index() );
-    
+
     return true;
 }
 
 bool Parser::parseTypedef( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypedef()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_typedef ){
 	return false;
     }
     lex->nextToken();
-    
+
     TypeSpecifierAST::Node spec;
     if( !parseTypeSpecifierOrClassSpec(spec) ){
 	reportError( i18n("Need a type specifier to declare") );
@@ -694,29 +695,29 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
     }
 
     ADVANCE( ';', ";" );
-    
+
     TypedefAST::Node ast = CreateNode<TypedefAST>();
     ast->setTypeSpec( spec );
     ast->setInitDeclaratorList( declarators );
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
-        
+
     return true;
 }
 
 bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseAsmDefinition()" << endl;
-    
+
     ADVANCE( Token_asm, "asm" );
     ADVANCE( '(', '(' );
-    
+
     AST::Node lit;
     parseStringLiteral( lit );
-    
+
     ADVANCE( ')', ')' );
     ADVANCE( ';', ';' );
-    
+
     return true;
 }
 
@@ -1002,17 +1003,11 @@ bool Parser::parseTemplateArgument( AST::Node& node )
 	return true;
     }
 #endif
-    int start = lex->index();
 
-    AST::Node expr;
-    if( !skipAssignmentExpression(expr) ){
+    if( !skipAssignmentExpression(node) ){
         return false;
     }
-    
-    AST::Node asn = CreateNode<AST>();
-    node = asn;
-    UPDATE_POS( node, start, lex->index() );
-    
+
     return true;
 }
 
