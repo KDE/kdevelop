@@ -225,12 +225,12 @@ void CClassToolDlg::setCallbacks()
   connect( &attributesBtn, SIGNAL(clicked()), SLOT(slotAttributes()));
   //  connect( &virtualsBtn, SIGNAL(clicked()), SLOT(slotVirtuals()));
   connect( &classTree, 
-           SIGNAL( signalViewDeclaration(const char *, const char *, THType ) ),
-           SLOT(slotCTViewDecl(const char *, const char *, THType ) ) );
+           SIGNAL( signalViewDeclaration(const char *, const char *, THType,THType ) ),
+           SLOT(slotCTViewDecl(const char *, const char *, THType,THType ) ) );
                    
   connect( &classTree, 
-           SIGNAL( signalViewDefinition(const char *, const char *, THType ) ),
-           SLOT(slotCTViewDef(const char *, const char *, THType ) ) );
+           SIGNAL( signalViewDefinition(const char *, const char *, THType,THType ) ),
+           SLOT(slotCTViewDef(const char *, const char *, THType,THType ) ) );
 }
 
 /*------------------------------------ CClassToolDlg::setActiveClass()
@@ -646,16 +646,16 @@ void CClassToolDlg::slotClassComboChoice(int idx)
 
 /** Slot from the classtree telling that the user wants to view a
  * declation. */
-void CClassToolDlg::slotCTViewDecl( const char *className, const char *declName, THType type )
+void CClassToolDlg::slotCTViewDecl( const char *className, const char *declName, THType type,THType type1)
 {
-  emit signalViewDeclaration( className, declName, type );
+  emit signalViewDeclaration( className, declName, type, type1 );
 }
 
 /** Slot from the classtree telling that the user wants to view a
  * defintion. */
-void CClassToolDlg::slotCTViewDef( const char *className, const char *declName, THType type )
+void CClassToolDlg::slotCTViewDef( const char *className, const char *declName, THType type,THType type1 )
 {
-  emit signalViewDefinition( className, declName, type );
+  emit signalViewDefinition( className, declName, type,type1 );
 }
 
 void CClassToolDlg::OK()
