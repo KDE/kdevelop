@@ -883,7 +883,7 @@ CppCodeCompletion::completeText( )
 			    word = expr.mid( idx ).stripWhiteSpace();
 			    expr = expr.left( idx ).stripWhiteSpace();
 		        }
-		    }
+		    }    
 
 		ctx = computeContext( def, line, column );
 
@@ -934,11 +934,8 @@ CppCodeCompletion::completeText( )
 
 	if( entryList.size() ){
 	    entryList = unique( entryList );
-#if KDE_VERSION > 305
 	    qHeapSort( entryList );
-#else
-	    // @todo
-#endif
+
 	    m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
     } else {
