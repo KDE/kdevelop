@@ -151,14 +151,21 @@ FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fil
 
 FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     : KListView(0, "file view widget"),
-    m_actionToggleShowNonProjectFiles( 0 )
+    m_actionToggleShowNonProjectFiles( 0 ), m_actionToggleDisplayLocation( 0 )
 {
+    /*
+	Setting Location ID to -1 so I can check if it has been loaded later.
+	If I dont, it will remove the name column and this is not too good :-)
+	Is there any better way to do this?
+    */
+    LocationID=-1;
+    
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
     addColumn(i18n("Name"));
-    addColumn(i18n("Location"));
+//    addColumn(i18n("Location"));
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -171,11 +178,16 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
     m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
+    m_actionToggleDisplayLocation = new KToggleAction( i18n("Display Location Column"), KShortcut(),
+        this, SLOT(slotToggleDisplayLocation()), this, "actiontoggleshowlocation" );
+    m_actionToggleDisplayLocation->setWhatsThis(i18n("<b>Display the Location Column</b><p>Displays a columne with the location of the files."));
+
     m_part = part;
     (void) translations; // supress compiler warning
 
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/groups/hidenonprojectfiles") );
+    m_actionToggleDisplayLocation->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/groups/hidenonlocation") );
 }
 
 
@@ -183,6 +195,7 @@ FileGroupsWidget::~FileGroupsWidget()
 {
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::writeBoolEntry( dom, "/kdevfileview/groups/hidenonprojectfiles", !m_actionToggleShowNonProjectFiles->isChecked() );
+    DomUtil::writeBoolEntry( dom, "/kdevfileview/groups/hidenonlocation", !m_actionToggleDisplayLocation->isChecked() );
 }
 
 
@@ -207,12 +220,11 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 
 void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
-    if (!item)
-        return;
     KPopupMenu popup(i18n("File Groups"), this);
     /// @todo Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
     popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Customize File Groups</b> dialog where the groups can be managed."));
+    if (item) {
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
@@ -231,7 +243,9 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         FileContext context(file_list);
         m_part->core()->fillContextMenu(&popup, &context);
     }
+    }
     m_actionToggleShowNonProjectFiles->plug( &popup );
+    m_actionToggleDisplayLocation->plug( &popup );
 
     int res = popup.exec(p);
     if (res == customizeId) {
@@ -286,6 +300,16 @@ void FileGroupsWidget::refresh()
     while (firstChild())
         delete firstChild();
 
+    if (m_actionToggleDisplayLocation->isChecked()) {
+        // Display the Location column
+	LocationID=addColumn(i18n("Location"));
+    }
+    else {
+        // Remove the Location column
+	//Need to check if the ID exists, if not do nothing!!
+	if (LocationID!=-1)
+	    removeColumn(LocationID);
+    }
     QDomDocument &dom = *m_part->projectDom();
     DomUtil::PairList list =
         DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group", "name", "pattern");
@@ -401,5 +425,11 @@ void FileGroupsWidget::slotToggleShowNonProjectFiles()
     refresh();
 }
 
+void FileGroupsWidget::slotToggleDisplayLocation()
+{
+    refresh();
+}
+
 
 #include "filegroupswidget.moc"
+
