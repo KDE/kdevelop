@@ -1,0 +1,136 @@
+<HTML>
+
+<HEAD>
+	<title>Üdvözöljük a KDevelop-ban!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+        <link rel="stylesheet" href="konq.css" type="text/css" />
+</HEAD>
+
+<BODY BGCOLOR=#3679AD LEFTMARGIN=0 TOPMARGIN=5>
+
+<TABLE BORDER=0 WIDTH=100% CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+     <COLGROUP>
+        <COL WIDTH=170>
+        <COL WIDTH=20>
+        <COL WIDTH=309>
+	<COL WIDTH=*>
+     </COLGROUP>
+	<TR HEIGHT=24>
+		<TD BGCOLOR=#505050 ALIGN=RIGHT></TD>
+		<TD class="deco" BGCOLOR=#505050 HEIGHT=22 COLSPAN=3></TD>
+	</TR>
+	<TR>
+		<TD WIDTH=190 COLSPAN=2 ROWSPAN=2> &nbsp;</TD>
+		<TD BGCOLOR=#DDDDDD><IMG WIDTH=309 HEIGHT=77 SRC="kdevelop.png"></TD>
+		<TD BGCOLOR=#DDDDDD BACKGROUND="lines.png">&nbsp;</TD>
+	</TR>
+
+	<TR>
+
+		<TD COLSPAN=2 BGCOLOR=#505050 ALIGN=RIGHT HEIGHT=22>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+	<TR>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu" HREF="intro.html">Bemutatkozás</A> &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menuactive">&nbsp; Tippek&nbsp;</TD>
+		<TD HEIGHT=20 class="menu">|</TD>
+		<TD HEIGHT=20 class="menu">&nbsp; <A class="menu"
+HREF="specs.html">Jellemző adatok</A> &nbsp;</TD>
+		<TD HEIGHT=20 class="menu">&nbsp</TD>
+	</TR>
+</TABLE>
+		</TD>
+	</TR>
+
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 class="shadow1" HEIGHT=9 COLSPAN=4></TD>
+	</TR>
+	<TR>
+		<TD COLSPAN=2 WIDTH=190></TD>
+		<TD COLSPAN=2 HEIGHT=41 COLSPAN=4></TD>
+	</TR>
+</TABLE>
+
+<!-- end of header -->
+
+
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+<TR>
+	<TD WIDTH=190></TD>
+	<TD  class="trans" BGCOLOR=#D0DFEC>
+
+		<TABLE WIDTH= 100% BORDER=0 CELLPADDING=0 CELLSPACING=0 CELLPADDING=0>
+		<TR>
+			<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+			<TD>&nbsp;</TD>
+		</TR>
+		<TR>
+			<TD WIDTH=20>&nbsp;</TD>
+			<TD VALIGN=TOP>
+
+<!-- here comes the content -->
+
+
+    <H3>Néhány tipp a program használatához<H3>
+<P>
+<UL>
+<LI>Az osztályböngészési lehetőség elérhető a standard eszköztárról és a böngésző-eszköztárról is. Az osztályböngészőhöz tartozó
+mindkét kombinált listában bekapcsolható a <b>szövegkiegészítés</b>, melynek típusa kiválasztható a felbukkanó menüből. Törölje a mező
+tartalmát és gépelje be a kívánt osztály nevének első néhány karakterét. A megjelenő listából már könnyen kiválasztható a keresett név.
+Ezután váltson át a tagfüggvények kombinált listájára, melyben megjelenik az osztály összes tagfüggvénye és attribútuma, beleértve az elérési ikont is.
+Használja ki itt is a szövegkiegészítési lehetőséget. Egy tagfüggvényt kiválasztva annak megvalósításához jut, attribútum esetén pedig
+annak deklarációjához.</LI>
+<LI>Használja az <b>Osztályvarázsló nyomógombját</b>, mely a tagfüggvények listájától jobbra látható a böngésző-eszköztárban! Az első kattintásra a tagfüggvény deklarációjához,
+a másodikra a megvalósításához juthat. Ha lenyomva tartja a gombot egy darabig, akkor megjelenik egy menü, melyből további
+műveleteket lehet elvégezni, például át lehet váltani az osztálydeklarációkhoz, új tagfüggvényt ill. attribútumot lehet felvenni.</LI>
+<LI>A <b>felhasználói felület</b> kialakítása még sohasem volt ilyen könnyű! A KDevelop-ban válassza az <b>"Új"</b> menüpontot a <b>"Fájl"</b> menüből, majd a megjelenő
+párbeszédablakban válassza a <b>"Qt Designer fájl (*.ui)"</b> opciót. A jobb oldalon írja be a fájl nevét és nyomja meg az OK gombot. Ekkor elindul a Qt
+Designer, és megkérdezi, hogy milyen típusú felületet szeretne kialakítani. Amikor elmenti az elkészült Designer
+fájlt, az <b>automatikusan beépül a fordítási folyamatba</b>.</LI>
+<LI><b>A létrehozott felület felhasználása</b> a programban ugyanolyan könnyű, mint a létrehozása volt. A Qt Designer fájl (*.ui) elkészítése után
+válassza az <b>"Új osztály"</b> menüpontot a "Projekt" menüben. Adja meg a létrehozni kívánt osztály és annak szülőosztályának nevét
+(ez attól függ, hogy milyen osztályt rendelt a <b>Designer fájlhoz a Qt Designer-ben</b>). Ezután <b>készítse</b> el azokat az eseménykezelőket,
+amelyeket a Designer-ben a felülethez rendelt és már kész is van az új felület osztálya!</LI>
+<LI>A fastruktúra-nézet és a kimeneti nézet ablakát bárhová áthelyezheti! Fogja meg a nézetablak címsorát az egérmutatóval és
+húzza át más helyre. Fekete színű keret mutatja az ablak új helyzetét, amíg el nem engedi az egérgombot.</LI>
+<LI>A <b>"Keresés fájlokban"</b> párbeszédablak többféle módon is előhívható. Használhatja a "Keresés fájlokban..." menüpontot a
+"Szerkesztés" menüből, a menüponthoz rendelt gyorsítóbillentyűt vagy a felbukkanó menüből a <b>"grep:"</b> menüpontot az osztályok fastruktúrájában,
+a szerkesztőablakokban és a dokumentációböngészőben.</LI>
+<LI>A <b>KDE/Qt API-dokumentáció</b> kezelése is sokkal könnyebbé vált a KDevelop beépített dokumentációböngészőjének
+és a dokumentációfa használatával. A KDevelop és a Qt Designer dokumentációján kívül bármikor újragenerálhatja a KDE API dokumentációját
+a "Jellemzők" menü "A KDevelop beállításai" menüpontján belül, a "Dokumentáció" lapon. Válassza <b>"A KDE dokumentációjának frissítése"</b> menüpontot, majd a megjelenő
+párbeszédablakban adja meg a kdelibs csomag forrásának elérési útját.</LI>
+<LI>A <b>"Keresés a dokumentációban"</b> menüponttal a <b>glimpse</b> vagy a <b>Ht://dig</b> segítségével létrehozott adatbázisban lehet a dokumentációban előforduló
+kifejezésekre keresni. Ugyanezt a funkciót a felbukkanó menüből is elérheti (a <b>"kikeresés:"</b> menüponttal), ha a szerkesztőablakban
+vagy a böngészőablakban a jobb egérgombbal kattint.</LI>
+</UL>
+</P>
+<P>&nbsp; <A HREF="specs.html">Tovább</A>  </P>
+
+
+<!-- End of text -->
+
+
+  		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+ 	</TR>
+	<TR>
+		<TD HEIGHT=20 WIDTH=20>&nbsp;</TD>
+		<TD>&nbsp;</TD>
+	</TR>
+
+</TABLE>
+
+		</TD>
+		<TD WIDTH=20>&nbsp;</TD>
+	</TR>
+	<TR>
+		<TD HEIGHT=50 COLSPAN=3>&nbsp;</TD>
+	</TR>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>
