@@ -98,7 +98,11 @@ private:
    * Internally used by QextMdiMainFrm to store a temporary information that the method
    * activate() is unnecessary and that it can by escaped.
    */
-   bool  m_bInterruptActivation;
+   bool m_bInterruptActivation;
+   /**
+mainframesActivateViewIsPending   * Internally used to prevent cycles between QextMdiMainFrm::activateView() and QextMdiChildView::activate().
+   */
+   bool mainframesActivateViewIsPending;
 
 // methods
 public:

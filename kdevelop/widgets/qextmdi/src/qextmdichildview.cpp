@@ -46,6 +46,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
   ,m_bInterruptActivation(FALSE)
+  ,mainframesActivateViewIsPending(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption)
@@ -350,7 +351,9 @@ void QextMdiChildView::activate()
    setFocus();
 
    // raise the view and push the taskbar button
-   emit focusInEventOccurs( this);
+   if (!mainframesActivateViewIsPending) {
+     emit focusInEventOccurs( this);
+   }
 
    if( m_focusedChildWidget != 0L) {
       m_focusedChildWidget->setFocus();
@@ -438,7 +441,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       }
       else {   // is toplevel
          if (!m_bFocusActivationIsPending) {
-            m_bFocusActivationIsPending = true;
+            m_bFocusActivationIsPending = TRUE;
             activate(); // sets the focus
             m_bFocusActivationIsPending = FALSE;
          }

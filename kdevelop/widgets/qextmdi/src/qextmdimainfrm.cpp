@@ -98,7 +98,7 @@ QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
    ,m_oldMainFrmHeight(0)
    ,m_oldMainFrmMinHeight(0)
    ,m_oldMainFrmMaxHeight(0)
-   ,m_bSDIApplication(false)
+   ,m_bSDIApplication(FALSE)
    ,m_pDockbaseAreaOfDocumentViews(0L)
    ,m_pDockbaseOfTabPage(0L)
    ,m_pTempDockSession(0L)
@@ -569,11 +569,13 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
 
 void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 {
+   pWnd->mainframesActivateViewIsPending = TRUE;
+
    if (m_pCurrentWindow != pWnd) {
       m_pCurrentWindow = pWnd;
    }
    else {
-      pWnd->m_bInterruptActivation = true;
+      pWnd->m_bInterruptActivation = TRUE;
    }
 
    if (m_pTaskBar) {
@@ -594,9 +596,10 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
             pWnd->raise();
          }
          m_pMdi->setTopChild(0L); // lose focus in the mainframe window
+         pWnd->setFocus();
       }
-      pWnd->setFocus();
    }
+   pWnd->mainframesActivateViewIsPending = FALSE;
 }
 
 void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
