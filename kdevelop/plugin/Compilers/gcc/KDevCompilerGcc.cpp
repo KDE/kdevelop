@@ -26,7 +26,8 @@ KDevCompilerGcc::~KDevCompilerGcc(){
 }
 
 QWidget* KDevCompilerGcc::initOptionsWidget(QWidget* parent, QWidget* pdlg){
-	GccCompilerOptionsWidget* gccw = new GccCompilerOptionsWidget(parent, "Gcc Option Widget", pdlg);
+	GccCompilerOptionsWidget* gccw = new GccCompilerOptionsWidget(parent, "Gcc Options Widget", pdlg);
+	gccw->setCompiler(this);
   setOptionsWidget(*gccw);
   return gccw;
 }

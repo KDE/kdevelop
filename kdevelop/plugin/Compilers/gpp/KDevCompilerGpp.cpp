@@ -27,7 +27,8 @@ KDevCompilerGpp::~KDevCompilerGpp(){
 }
 
 QWidget* KDevCompilerGpp::initOptionsWidget(QWidget* parent, QWidget* pdlg){
-	GppCompilerOptionsWidget* gppw = new GppCompilerOptionsWidget(parent, "Gpp Option Widget", pdlg);
+	GppCompilerOptionsWidget* gppw = new GppCompilerOptionsWidget(parent, "Gpp Options Widget", pdlg);
+	gppw->setCompiler(this);
   setOptionsWidget(*gppw);
   return gppw;
 }
