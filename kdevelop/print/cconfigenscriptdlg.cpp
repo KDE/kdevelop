@@ -2674,7 +2674,7 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
   QString dir,data1,data2,param,text;
   createParameters(0);
 
-  dir =  locate("appdata", "preview.ps");
+  dir =  locateLocal("appdata", "preview.ps");
   data1 = locate("appdata", "templates/preview1");
   data2 = locate("appdata", "templates/preview2");
   param = (QString) " --output="+ dir;

@@ -822,7 +822,7 @@ void CConfigA2psDlg::slotPreviewClicked() {
   }
   QString dir,data1,data2,text;
   slotCreateParameters();
-  dir =  locate("appdata", "preview.ps");
+  dir =  locateLocal("appdata", "preview.ps");
   data1 = locate("appdata", "templates/preview1");
   data2 = locate("appdata", "templates/preview2");
   process = new KShellProcess();

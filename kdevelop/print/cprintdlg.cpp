@@ -1014,10 +1014,10 @@ void CPrintDlg::slotPreviewClicked() {
   else {
     QString dir,data1,data2,text;
     if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
-      dir = locate("appdata", "preview.html");
+      dir = locateLocal("appdata", "preview.html");
     }
     else {
-      dir =  locate("appdata", "preview.ps");
+      dir =  locateLocal("appdata", "preview.ps");
     }
     data1 = locate("appdata", "templates/preview1");
     data2 = locate("appdata", "templates/preview2");

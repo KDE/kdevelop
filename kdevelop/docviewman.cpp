@@ -425,6 +425,8 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
     pDoc->readConfig(config);
   }
 
+  pDoc->setFileName(strFileName);
+
   // Return the new document
   return pDoc; 
 }
