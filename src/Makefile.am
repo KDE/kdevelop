@@ -17,7 +17,7 @@ rc_DATA = kdevelopui.rc eventsrc
 
 # default KDevelop configuration
 kdevelopdatadir = $(kde_confdir)
-kdevelopdata_DATA = kdeveloprc
+kdevelopdata_DATA = kdeveloprc kdevpluginprofilerc
 
 SUBDIRS = profiles
 noinst_HEADERS = languageselectwidget.h newmainwindow.h
