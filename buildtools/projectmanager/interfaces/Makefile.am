@@ -9,10 +9,8 @@ METASOURCES = AUTO
 lib_LTLIBRARIES = \
     libprojectmanager_interfaces.la
 
-libprojectmanager_interfaces_la_SOURCES = \
-    kdevprojectimporter.cpp \
-    kdevprojectmodel.cpp \
-    kdevprojectbuilder.cpp
+libprojectmanager_interfaces_la_SOURCES = kdevprojectimporter.cpp \
+	kdevprojectmodel.cpp kdevprojectbuilder.cpp kdevprojecteditor.cpp
 
 libprojectmanager_interfaces_la_LDFLAGS = \
     -no-undefined $(all_libraries) -version-info 1:0
@@ -24,4 +22,3 @@ servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = \
     kdevelopprojectimporter.desktop \
     kdevelopprojectbuilder.desktop
-
