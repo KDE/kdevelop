@@ -1,3 +1,10 @@
+2003-06-11 Hamish Rodda <rodda@kde.org>
+    * Implemented "Debug in KDevelop" hook into drkonqi (the KDE crash
+      handler). Press the button and kdevelop attaches to the process
+      and brings up the frame stack, as long as the binary name of the
+      process is the same as your binary.  Requires an update to
+      kdebase/drkonqi to work (runtime dependency).
+
 2003-06-07 Mario Scalas <mario.scalas@libero.it>
 	* Stepped back from using Pimpl in part design since it does only complicate code without any of its 
 	  advantages in this case 
