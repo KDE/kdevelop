@@ -101,8 +101,7 @@
                                     </font>
                                 </property>
                                 <property name="text">
-                                    <string>The php executable is called directly. Ideal for developers who
-want to develop terminal or graphical applications in PHP. 
+                                    <string>The php executable is called directly. Ideal for developers who want to develop terminal or graphical applications in PHP. 
 You need a correctly installed php cgi version.</string>
                                 </property>
                                 <property name="alignment">
