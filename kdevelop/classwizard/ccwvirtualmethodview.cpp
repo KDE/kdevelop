@@ -12,7 +12,7 @@ CCWVirtualMethodView::CCWVirtualMethodView( QWidget *parent, const char *name )
     topLayout( this, 5 ),
     classComboLayout( 5, "vfClassComboLayout" ),
     classLbl( this, "classLbl" ),
-    classCombo( this, "classCombo" ),
+    classCombo( false, this, "classCombo" ),
     listViewLayout( 5, "vfListViewLayout" ),
     availLayout( 5, "vfAvailLayout" ),
     availLbl( this, "availLbl" ),
@@ -122,22 +122,14 @@ void CCWVirtualMethodView::setCallbacks()
 void CCWVirtualMethodView::setStore( CClassStore *aStore )
 {
   assert( aStore != NULL );
-
-  QListBox *lb;
+  QStrList *list;
 
   store = aStore;
-
-  lb = classCombo.listBox();
-
-  // Add all classnames in sorted order.
-  for( store->classIterator.toFirst();
-       store->classIterator.current();
-       ++(store->classIterator) )
-  {
-    // Only add classes that has virtual methods.
-    if( store->classIterator.current()->hasVirtual() )
-      lb->inSort( store->classIterator.current()->name );
-  }
+  
+  // Fetch the list and update the combobox.
+  list = store->getSortedClassNameList();
+  classCombo.insertStrList( list );
+  delete list;
 }
 
 /*********************************************************************
