@@ -33,8 +33,8 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   initPages();
   m_author_email = author_email;
   m_author_name = author_name;
-  cerr << ":" << m_author_name << ":";
-  cerr << ":" << m_author_email << ":";
+  //cerr << ":" << m_author_name << ":";
+  //cerr << ":" << m_author_email << ":";
   
   slotDefaultClicked();    
 }
@@ -752,6 +752,21 @@ void CKAppWizard::slotNewCppButtonClicked() {
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
   QDir dir;
+  QString direct = directoryline->text();
+  QString a = directoryline->text();
+  if (a.right(1) == "/") { a.resize(a.length()); }
+  QString b = nameline->text();
+  direct.resize (a.length() - b.length());
+  dir.setPath(direct);
+  if (!dir.exists()) {
+  	KMsgBox msg (0,i18n("Directory does not exists!"),
+    i18n("The directory " + direct + " does not exists. If you \n"
+    		 "wish to install your project there, please create the \n"
+    		 "directory first."),16,i18n("Cancel"));
+    msg.show();     	
+			
+	return;
+  }
   KShellProcess p;
   dir.setPath(directoryline->text());
   if (dir.exists()) {

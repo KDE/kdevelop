@@ -1,3 +1,6 @@
+1999-06-13 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* fixed the directory bug in the applikation wizard 
+
 1999-06-12 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* many bugfixes
 	* commit patch by Walter Tasin
