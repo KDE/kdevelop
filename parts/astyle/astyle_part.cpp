@@ -4,6 +4,7 @@
 #include <qvbox.h>
 #include <qtextstream.h>
 
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
@@ -12,6 +13,8 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/document.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 #include <kdevcore.h>
 #include <kdevapi.h>
@@ -64,6 +67,10 @@ void AStylePart::beautifySource()
   while (formatter.hasMoreLines())
 	os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
 
+  uint col = 0;
+  uint line = 0;
+  cursorPos( partController()->activePart(), &col, &line );
+
 // pre 3.1.3 katepart clears undo history on setText()
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION > KDE_MAKE_VERSION(3,1,2)
@@ -76,6 +83,8 @@ void AStylePart::beautifySource()
   iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
   iface->insertText( 0, 0, output);
 #endif
+
+  setCursorPos( partController()->activePart(), col, line );
 }
 
 
@@ -136,5 +145,26 @@ QString AStylePart::formatSource( const QString text )
   return output;
 }
 
+void AStylePart::cursorPos( KParts::Part *part, uint * line, uint * col )
+{
+	if (!part || !part->inherits("KTextEditor::Document")) return;
+
+	KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+	if (iface)
+	{
+		iface->cursorPositionReal( line, col );
+	}
+}
+
+void AStylePart::setCursorPos( KParts::Part *part, uint line, uint col )
+{
+	if (!part || !part->inherits("KTextEditor::Document")) return;
+
+	KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+	if (iface)
+	{
+		iface->setCursorPositionReal( line, col );
+	}
+}
 
 #include "astyle_part.moc"

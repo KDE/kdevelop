@@ -1,7 +1,7 @@
 /*
- *  Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>   
+ *  Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
  */
- 
+
 
 #ifndef __KDEVPART_ASTYLE_H__
 #define __KDEVPART_ASTYLE_H__
@@ -17,7 +17,7 @@ class AStylePart : public KDevSourceFormatter
   Q_OBJECT
 
 public:
-   
+
   AStylePart(QObject *parent, const char *name, const QStringList &);
   ~AStylePart();
 
@@ -27,14 +27,17 @@ public:
 private slots:
 
   void activePartChanged(KParts::Part *part);
-		  
+
   void beautifySource();
- 
+
   void configWidget(KDialogBase *dlg);
 
 
 
 private:
+
+  void cursorPos( KParts::Part *part, uint * col, uint * line );
+  void setCursorPos( KParts::Part *part, uint col, uint line );
 
   KAction *_action;
 
