@@ -7,9 +7,9 @@ libkdevclassview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
 			     $(top_builddir)/kdevelop/classparser/libkdevclassparser.la $(LIB_KDEUI)
 
-libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp
+libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp
 
-noinst_HEADERS = main.h classview.h classactions.h caddclassmethoddlg.h caddclassattributedlg.h
+noinst_HEADERS = main.h classview.h classactions.h
 
 METASOURCES = AUTO
 
