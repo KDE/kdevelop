@@ -1,0 +1,144 @@
+/***************************************************************************
+ *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   bernd@kdevelop.org                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef MakeItem_h
+#define MakeItem_h
+
+#include <qstring.h>
+
+enum EOutputLevel
+{
+	// appropriate to the ID's in the button group of settingswidget.ui
+	eVeryShort = 0
+	,eShort
+	,eFull
+};
+
+class MakeItem
+{
+public:
+	enum Type { Normal, Error, Diagnostic };
+	MakeItem();
+	MakeItem( const QString& text );
+	virtual ~MakeItem();
+
+	virtual bool append( const QString& ) { return false; }
+	virtual Type type() { return Diagnostic; }
+	virtual bool visible( EOutputLevel ) { return true; }
+	virtual QString text( EOutputLevel ) { return m_text; }
+	virtual QString formattedText( EOutputLevel, bool bright_bg );
+	QString icon();
+	QString color( bool bright_bg );
+
+	static QString br();
+
+	QString m_text;
+};
+
+class CommandItem : public MakeItem
+{
+public:
+	CommandItem(const QString command)
+		: MakeItem( command )
+	{}
+
+	Type type() { return Diagnostic; }
+};
+
+class ExitStatusItem : public MakeItem
+{
+public:
+	ExitStatusItem( bool normalExit, int exitStatus );
+
+	Type type() { return m_normalExit && m_exitStatus == 0 ? Diagnostic : Error; }
+	QString text( EOutputLevel level );
+
+private:
+	bool m_normalExit;
+	int m_exitStatus;
+};
+
+class DirectoryItem : public MakeItem
+{
+public:
+	DirectoryItem( const QString& dir, const QString& text )
+		: MakeItem( text )
+		, directory( dir )
+	{}
+
+	Type type() { return Diagnostic; }
+
+	static void setShowDirectoryMessages( bool show ) { m_showDirectoryMessages = show; }
+	static bool getShowDirectoryMessages() { return m_showDirectoryMessages; }
+
+	QString directory;
+
+protected:
+	static bool m_showDirectoryMessages;
+};
+
+class EnteringDirectoryItem : public DirectoryItem
+{
+public:
+	EnteringDirectoryItem( const QString& dir, const QString& text )
+		: DirectoryItem( dir, text )
+	{}
+	bool visible( EOutputLevel )
+	{
+		return m_showDirectoryMessages;
+	}
+};
+
+class ExitingDirectoryItem : public DirectoryItem
+{
+public:
+	ExitingDirectoryItem( const QString& dir, const QString& text )
+		: DirectoryItem( dir, text )
+	{}
+	bool visible( EOutputLevel level )
+	{
+		return m_showDirectoryMessages && level > eVeryShort;
+	}
+};
+
+class ErrorItem : public MakeItem
+{
+public:
+	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line );
+
+	virtual bool append( const QString& text );
+	Type type() { return Error; }
+
+	QString fileName;
+	int lineNum;
+	QString m_error;
+};
+
+class ActionItem : public MakeItem
+{
+public:
+	ActionItem( const QString& action, const QString& file, const QString& tool, const QString& line )
+		: MakeItem( line )
+		, m_action( action )
+		, m_file( file )
+		, m_tool( tool )
+	{}
+
+	virtual QString text( EOutputLevel level );
+	virtual QString formattedText( EOutputLevel level, bool bright_bg );
+
+private:
+	QString m_action;
+	QString m_file;
+	QString m_tool;
+};
+
+#endif

@@ -15,24 +15,25 @@
 #include <qstack.h>
 #include <qregexp.h>
 #include <qtextedit.h>
+#include <qvaluevector.h>
 
+#include "outputfilter.h"
+#include "directorystatusmessagefilter.h"
+#include "compileerrorfilter.h"
+#include "commandcontinuationfilter.h"
+#include "makeactionfilter.h"
+#include "otherfilter.h"
+#include "makeitem.h"
 
 class MakeViewPart;
 class MakeItem;
 class KProcess;
 class ProcessLineMaker;
 
-
-class MakeWidget : public QTextEdit {
+class MakeWidget : public QTextEdit
+{
     Q_OBJECT
 
-public:
-    enum EOutputLevel { // appropriate to the ID's in the button group of settingswidget.ui
-	 eVeryShort = 0
-	,eShort
-	,eFull
-    };
-    
 public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
@@ -40,6 +41,7 @@ public:
     void queueJob(const QString &dir, const QString &command);
     bool isRunning();
     void updateSettingsFromConfig();
+    void processLine( const QString& line );
 
 public slots:
     void startNextJob();
@@ -47,11 +49,10 @@ public slots:
     void nextError();
     void prevError();
     void copy();
-    
+
 protected:
-    void paletteChange(const QPalette& oldPalette);
     virtual QPopupMenu *createPopupMenu( const QPoint& pos );
-    
+
 private slots:
     void insertStdoutLine(const QString& line);
     void insertStderrLine(const QString& line);
@@ -65,68 +66,41 @@ private slots:
     void slotShortCompilerOutput();
     void slotFullCompilerOutput();
     void toggleShowDirNavigMessages();
-    
+    void slotEnteredDirectory( EnteringDirectoryItem* );
+    void slotExitedDirectory( ExitingDirectoryItem* );
+    void insertItem( MakeItem* );
+
 private:
     virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
+	bool brightBg();
 
-    enum Type { Normal, Error, Diagnostic, StyledDiagnostic };
-    void insertLine1(const QString &line, Type type);
-    void insertLine2(const QString &line, Type type, QStringList* pStringList = 0L);
-    bool matchEnterDir( const QString& line, QString& dir );
-    bool matchLeaveDir( const QString& line, QString& dir );
-    QString getOutputColor( Type type );
-    void updateColors();
-    void setCompilerOutputLevel(EOutputLevel level);
+    DirectoryStatusMessageFilter  m_directoryStatusFilter;
+    CompileErrorFilter            m_errorFilter;
+    CommandContinuationFilter     m_continuationFilter;
+    MakeActionFilter              m_actionFilter;
+    OtherFilter                   m_otherFilter;
 
-// attributes    
+	bool appendToLastLine( const QString& text );
+	void setCompilerOutputLevel(EOutputLevel level);
+
     QStringList commandList;
     QStringList dirList;
     QString currentCommand;
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
     QStack<QString> dirstack;
-    QPtrList<MakeItem> items;
-    int parags;
+    QValueVector<MakeItem*> m_items;
     bool moved;
-    QString normalColor, errorColor, diagnosticColor;
 
     MakeViewPart *m_part;
-    
+
     bool m_vertScrolling, m_horizScrolling;
     bool m_bCompiling;
-    
+
     bool m_bLineWrapping;
     EOutputLevel m_compilerOutputLevel;
-    bool m_bShowDirNavMsg;
-    
-    QRegExp m_errorGccRx;
-    int m_errorGccFileGroup;
-    int m_errorGccRowGroup;
-    int m_errorGccTextGroup;
-
-    QRegExp m_errorFtnchekRx;
-    int m_errorFtnchekFileGroup;
-    int m_errorFtnchekRowGroup;
-    int m_errorFrnchekTextGroup;
-
-    QRegExp m_errorJadeRx;
-    int m_errorJadeFileGroup;
-    int m_errorJadeRowGroup;
-    int m_errorJadeTextGroup;
-
-    QRegExp m_compileFile1;
-    QRegExp m_compileFile2;
-    QRegExp m_compileFile3;
-    QRegExp m_mocFile;
-    QRegExp m_linkFile;
-    QRegExp m_installFile;
-    int m_fileNameGroup;
-    
-    QStringList m_veryShortOutput;
-    QStringList m_shortOutput;
-    QStringList m_fullOutput;
 };
 
 #endif

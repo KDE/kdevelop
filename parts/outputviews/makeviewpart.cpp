@@ -29,7 +29,7 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     : KDevMakeFrontend(parent, name)
 {
     setInstance(OutputViewsFactory::instance());
-    
+
     setXMLFile("kdevmakeview.rc");
 
     m_dcop = new KDevMakeFrontendIface(this);
