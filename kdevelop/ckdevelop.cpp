@@ -646,13 +646,19 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
     }
     else {
       KDockWidget* pUndockCandidate = 0L;
-      while (!pW->isTopLevel()) {
+      bool bFinished = false;
+      while (!bFinished) {
         if (pW->inherits("KDockWidget")) {
           pUndockCandidate = (KDockWidget*) pW;
           if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
             pRootDockW = pUndockCandidate;
         }
-        pW = pW->parentWidget();
+        if (pW->isTopLevel()) {
+          bFinished = true;
+        }
+        else {
+          pW = pW->parentWidget();
+        }
       }
     }
 
@@ -3477,7 +3483,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
   }
 
   if (m_docViewManager->curDocIsHeaderFile()){
-    if(bAutoswitch && (dbgController == 0L)){ // only switch when not debugging!
+    if(bAutoswitch && doc_tree->parentWidget()->isVisible()) {
       if ( bDefaultCV)
         makeWidgetDockVisible(class_tree->parentWidget());
       else
@@ -3491,7 +3497,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     slotNewLineColumn();
   }
   if (m_docViewManager->curDocIsCppFile()){
-    if(bAutoswitch && (dbgController == 0L)){   // only switch when not debugging!
+    if(bAutoswitch && doc_tree->parentWidget()->isVisible()) {
       if ( bDefaultCV)
         makeWidgetDockVisible(class_tree->parentWidget());
       else
