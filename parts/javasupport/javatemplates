@@ -1,0 +1,22 @@
+<!DOCTYPE Templates>
+<Templates>
+ <Template code="if( | ){
+} else {
+}" name="ife" description="if else" suffixes="Java (h,cpp)"/>
+ <Template code="private|" name="pr" description="private" suffixes="Java (h,cpp)"/>
+ <Template code="while( | ){
+}" name="whileb" description="while statement" suffixes="Java (h,cpp)"/>
+ <Template code="public|" name="pu" description="public"  suffixes="Java (h,cpp)"/>
+ <Template code="switch( | ){
+}" name="switchb" description="switch statement" suffixes="Java (h,cpp)"/>
+ <Template code="protected|" name="pro" description="protected" suffixes="Java (h,cpp)"/>
+ <Template code="for( |; ; ){
+}" name="forb" description="for statement" suffixes="Java (h,cpp)"/>
+ <Template code="class | {
+public:
+};" name="classd" description="class declaration" suffixes="Java (h,cpp)"/>
+ <Template code="struct | {
+};" name="structd" description="struct declaration" suffixes="Java (h,cpp)"/>
+ <Template code="if( | ){
+}" name="ifb" description="if statement" suffixes="Java (h,cpp)"/>
+</Templates>
