@@ -60,34 +60,16 @@ private: // Private attributes
   /** All parsed classes. */
   QDict<CParsedClass> classes;
 
-  /** All classes declared in other classes. */
-  QStrList subClasses;
-
-  /** All global variables. */
-  QDict<CParsedAttribute> globalVariables;
-
-  /** All global variables hashed on name and arg. */
-  QDict<CParsedMethod> gfNameAndArg;
-
-  /** All global functions. */
-  QList<CParsedMethod> globalFunctions;
-
-  /** All global structures. */
-  QDict<CParsedStruct> globalStructures;
+  /** Maps a filename to a number of classnames. **/
+  QDict<QStrList> filenameMap;
 
 public: // Public attributes
 
   /** Iterator for the classes */
   QDictIterator<CParsedClass> classIterator;
 
-  /** Iterator for the global variables */
-  QDictIterator<CParsedAttribute> gvIterator;
-
-  /** Iterator for the global functions ordered by name and arg. */
-  QDictIterator<CParsedMethod> gfIterator;
-    
-  /** Iterator for the global structures. */
-  QDictIterator<CParsedStruct> gsIterator;
+  /** Container that holds all functions, variables and structures. */
+  CParsedContainer globalContainer;
 
 public: // Public queries
 
@@ -97,23 +79,8 @@ public: // Public queries
   /** Tells if a class exists in the store. */
   bool hasClass( const char *aName );
 
-  /** Get the list with all global functions. */
-  QList<CParsedMethod> *getGlobalFunctions() { return &globalFunctions; }
-
   /** Fetches a class from the store by using its' name. */
   CParsedClass *getClassByName( const char *aName );
-
-  /** Fetches a global function from the store by using its' name. */
-  CParsedMethod *getGlobalFunctionByName( const char *aName );
-
-  /** Fetches a global function from the store by using its' name and arg. */
-  CParsedMethod *getGlobalFunctionByNameAndArg( const char *aName );
-
-  /** Fetches a global variable from the store by using its' name. */
-  CParsedAttribute *getGlobalVarByName( const char *aName );
-
-  /** Get a global structure from the store by using its' name. */
-  CParsedStruct *getGlobalStructByName( const char *aName );
 
   /** Fetches all classes with the named parent. */
   QList<CParsedClass> *getClassesByParent( const char *aName );
@@ -127,12 +94,6 @@ public: // Public queries
   /** Get all classes in sorted order. */
   QList<CParsedClass> *getSortedClasslist();
 
-  /** Get all global variables in a sorted list. */
-  QList<CParsedAttribute> *getSortedGlobalVarList();
-
-  /** Get all global structures in a sorted list. */
-  QList<CParsedStruct> *getSortedGlobalStructList();
-
 public: // Public Methods
 
   /** Remove all parsed classes. */
@@ -141,9 +102,6 @@ public: // Public Methods
   /** Add a classdefintion. */
   void addClass( CParsedClass *aClass );
 
-  /** Add a subclass definition. */
-  void addSubClass( CParsedClass *aClass );
-  
   /** Add a global variable. */
   void addGlobalVar( CParsedAttribute *aAttr );
 
@@ -154,10 +112,11 @@ public: // Public Methods
   void addGlobalStruct( CParsedStruct *aStruct );
 
   /** Store all parsed classes as a database. */
-  void storeAll( const char *aFilename );
+  void storeAll();
 
   /** Output this object as text on stdout */
   void out();
+
 };
 
 #endif

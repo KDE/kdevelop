@@ -49,15 +49,18 @@
  *   -
  *-----------------------------------------------------------------*/
 CClassStore::CClassStore() 
-  : classIterator( classes ),
-    gvIterator( globalVariables ),
-    gfIterator( gfNameAndArg ),
-    gsIterator( globalStructures )
+  : classIterator( classes )
 {
   classes.setAutoDelete( true );
-  globalVariables.setAutoDelete( true );
-  globalFunctions.setAutoDelete( true );
-  globalStructures.setAutoDelete( true );
+
+  // Initialize the persistant class store.
+  globalStore.setFilename( "classes.db" );
+
+  // Open the store if it exists, else create it.
+  if( globalStore.exists() )
+    globalStore.open();
+  else
+    globalStore.create();
 }
 
 /*---------------------------------------- CClassStore::~CClassStore()
@@ -91,68 +94,7 @@ CClassStore::~CClassStore()
 void CClassStore::wipeout()
 {
   classes.clear();
-  globalVariables.clear();
-  globalFunctions.clear();
-  globalStructures.clear();
-}
-
-/*-------------------------------------- CClassStore::addGlobalVar()
- * addGlobalVar()
- *   Add a global variable to the store.
- *
- * Parameters:
- *   aVar          The variable to add.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::addGlobalVar( CParsedAttribute *aVar )
-{
-  assert( aVar != NULL );
-  assert( !aVar->name.isEmpty() );
-
-  globalVariables.insert( aVar->name, aVar );
-}
-
-/*---------------------------------- CClassStore::addGlobalFunction()
- * addGlobalFunction()
- *   Add a global function to the store.
- *
- * Parameters:
- *   aFunc         The variable to add.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::addGlobalFunction( CParsedMethod *aFunc )
-{
-  assert( aFunc != NULL );
-  assert( !aFunc->name.isEmpty() );
-
-  QString str;
-
-  globalFunctions.append( aFunc );
-  
-  aFunc->asString( str );
-  gfNameAndArg.insert( str, aFunc );
-}
-
-/*------------------------------------ CClassStore::addGlobalStruct()
- * addGlobalStruct()
- *   Add a global structure.
- *
- * Parameters:
- *   aStruct       The structure to add.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::addGlobalStruct( CParsedStruct *aStruct )
-{
-  assert( aStruct != NULL );
-  assert( !aStruct->name.isEmpty() );
-  
-  globalStructures.insert( aStruct->name, aStruct );
+  globalContainer.clear();
 }
 
 /*------------------------------------------- CClassStore::storeAll()
@@ -165,7 +107,7 @@ void CClassStore::addGlobalStruct( CParsedStruct *aStruct )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassStore::storeAll( const char *aFilename )
+void CClassStore::storeAll()
 {
   QString str;
   for( classIterator.toFirst();
@@ -176,6 +118,7 @@ void CClassStore::storeAll( const char *aFilename )
     debug( "Storing:" );
     debug( "----------" );
     debug( str );
+    globalStore.storeClass( classIterator.current() );
     debug( "----------" );
   }
 }
@@ -199,24 +142,6 @@ void CClassStore::addClass( CParsedClass *aClass )
   classes.insert( aClass->name, aClass );
 }
 
-/*------------------------------------------- CClassStore::addSubClass()
- * addSubClass()
- *   Add a subclass to the store.
- *
- * Parameters:
- *   aClass        The class to add.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::addSubClass( CParsedClass *aClass )
-{
-  assert( aClass != NULL && !aClass->name.isEmpty() && !hasClass( aClass->name ) );
-
-  addClass( aClass );
-  subClasses.append( aClass->name );
-}
-
 /*------------------------------------------------- CClassStore::out()
  * out()
  *   Output this object to stdout.
@@ -228,8 +153,6 @@ void CClassStore::addSubClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassStore::out()
 {
-  CParsedMethod *aMethod;
-
   // Output all classes.
   for( classIterator.toFirst();
        classIterator.current();
@@ -237,23 +160,6 @@ void CClassStore::out()
     classIterator.current()->out();
 
   cout << "Global declarations\n";
-  cout << "  Functions:\n";
-  for( aMethod = globalFunctions.first(); 
-       aMethod != NULL; 
-       aMethod = globalFunctions.next() )
-    aMethod->out();
-
-  cout << "  Variables:\n";
-  for( gvIterator.toFirst();
-       gvIterator.current();
-       ++gvIterator )
-    gvIterator.current()->out();
-
-  cout << "  Structures:\n";
-  for( gsIterator.toFirst();
-       gsIterator.current();
-       ++gsIterator )
-    gsIterator.current()->out();
 }
 
 /*********************************************************************
@@ -274,9 +180,8 @@ void CClassStore::out()
 QList<CClassTreeNode> *CClassStore::asForest()
 {
   CParsedClass *aClass;
-  CParsedClass *parentClass;
-  CParsedParent *aParent;
-  CClassTreeNode *aNode;
+  CParsedParent *aParent;  
+  CClassTreeNode *childNode;
   CClassTreeNode *parentNode;
   QDict<CClassTreeNode> dict;
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
@@ -288,61 +193,47 @@ QList<CClassTreeNode> *CClassStore::asForest()
   {
     aClass = classIterator.current();
 
-    // If this class has no parent we just add it.
-    if( aClass->parents.count() == 0 )
+    // Check if we have added the child.
+    childNode = dict.find( aClass->name );
+    
+    // If not in the table already, we add a new node.
+    if( childNode == NULL )
     {
-      // Check if this node has already been added as a template.
-      aNode = dict.find( aClass->name );
-      if( aNode == NULL)
-      {
-        aNode = new CClassTreeNode();
-        aNode->setClass( aClass );
-        aNode->setIsInSystem( true );
-        
-        dict.insert( aClass->name, aNode );
-      }
-      else // Already in the dict as a template
-      {
-        aNode->setClass( aClass );
-        aNode->setIsInSystem( true );
-      }
-      
-      // Add to the output list.
-      retVal->append( aNode );
+      childNode = new CClassTreeNode();
+      dict.insert( aClass->name, childNode );
     }
+    
+    // Set childnode values.
+    childNode->setName( aClass->name );
+    childNode->setClass( aClass );
+    childNode->setIsInSystem( true );
+
+    // If this class has no parent, we add it as a rootnode in the forest.
+    if( aClass->parents.count() == 0 )
+      retVal->append( childNode );
     else // Has parents
     {
       // Add this class to its' parents.
-      for( aParent = aClass->parents.first();
+      for( aParent = childNode->theClass->parents.first();
            aParent != NULL;
-           aParent = aClass->parents.next() )
+           aParent = childNode->theClass->parents.next() )
       {
         // Check if we have added the parent already.
         parentNode = dict.find( aParent->name );
-
+        
         // Add a new node for the parent if not added already.
         if( parentNode == NULL )
         {
-          // Create the parentnode and add it to the result.
+          // Create the parentnode.
           parentNode = new CClassTreeNode();
-          retVal->append( parentNode );
-
-          // Check for the class in the store.
-          parentClass = getClassByName( aParent->name );
-          if( parentClass != NULL )
-          {
-            parentNode->setClass( parentClass );
-            parentNode->setIsInSystem( true );
-          }
+          parentNode->setName( aParent->name );
+          parentNode->setIsInSystem( false );
+          
+          dict.insert( parentNode->name, parentNode );
         }
-
-        // Create the new node for the child.
-        aNode = new CClassTreeNode();
-        aNode->setClass( aClass );
-        aNode->setIsInSystem( true );
-
-        // Add it to the parent node.
-        parentNode->addChild( aNode );
+        
+        // Add the child to the parent node.
+        parentNode->addChild( childNode );
       }
     }
   }
@@ -362,7 +253,8 @@ QList<CClassTreeNode> *CClassStore::asForest()
  *-----------------------------------------------------------------*/
 bool CClassStore::hasClass( const char *aName )
 {
-  return ( getClassByName( aName ) != NULL );
+  return classes.find( aName ) != NULL || globalStore.hasClass( aName );
+  //return classes.find( aName ) != NULL;
 }
 
 /*-------------------------------------- CClassStore::getClassByName()
@@ -379,80 +271,15 @@ bool CClassStore::hasClass( const char *aName )
 CParsedClass *CClassStore::getClassByName( const char *aName )
 {
   assert( aName != NULL );
-    
-  return classes.find( aName );
-}
 
-/*--------------------------- CClassStore::getGlobalFunctionByName()
- * getGlobalFunctionByName()
- *   Get a global function from the store by using its' name.
- *
- * Parameters:
- *   aName          Name of the function to fetch.
- *
- * Returns:
- *   CParsedMethod* The function we looked for.
- *   NULL           Otherwise.
- *-----------------------------------------------------------------*/
-CParsedMethod *CClassStore::getGlobalFunctionByName( const char *aName )
-{
-  CParsedMethod *retVal = NULL;
+  CParsedClass *aClass;
 
-  for( retVal = globalFunctions.first(); 
-       retVal != NULL && retVal->name != aName;
-       retVal = globalFunctions.next() )
-    ;
-    
-  return retVal;
-}
+  if( globalStore.hasClass( aName ) )
+    aClass = globalStore.getClassByName( aName );
+  else
+    aClass = classes.find( aName );
 
-/*----------------------- CClassStore::getGlobalFunctionByNameAndArg()
- * getGlobalFunctionByNameAndArg()
- *   Get a global function from the store by using its' name and 
- *   arguments.
- *
- * Parameters:
- *   aName          Name of the function to fetch.
- *
- * Returns:
- *   CParsedMethod* The function we looked for.
- *   NULL           Otherwise.
- *-----------------------------------------------------------------*/
-CParsedMethod *CClassStore::getGlobalFunctionByNameAndArg( const char *aName )
-{
-  return gfNameAndArg.find( aName );
-}
-
-/*--------------------------------- CClassStore::getGlobalVarByName()
- * getGlobalVarByName()
- *   Get a global variable from the store by using its' name.
- *
- * Parameters:
- *   aName             Name of the variable to fetch.
- *
- * Returns:
- *   CParsedAttribute* The variable we looked for.
- *   NULL              Otherwise.
- *-----------------------------------------------------------------*/
-CParsedAttribute *CClassStore::getGlobalVarByName( const char *aName )
-{
-  return globalVariables.find( aName );
-}
-
-/*--------------------------------- CClassStore::getGlobalStructByName()
- * getGlobalStructByName()
- *   Get a global structure from the store by using its' name.
- *
- * Parameters:
- *   aName             Name of the variable to fetch.
- *
- * Returns:
- *   CParsedStruct*    The structure we looked for.
- *   NULL              Otherwise.
- *-----------------------------------------------------------------*/
-CParsedStruct *CClassStore::getGlobalStructByName( const char *aName )
-{
-  return globalStructures.find( aName );
+  return aClass;
 }
 
 /*--------------------------------- CClassStore::getClassesByParent()
@@ -599,9 +426,7 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
        classIterator.current();
        ++classIterator )
   {
-    // Only add non-subclasses.
-    if( subClasses.find( classIterator.current()->name ) == -1 )
-      srted.inSort( classIterator.current()->name );
+    srted.inSort( classIterator.current()->name );
   }
 
   for( str = srted.first();
@@ -614,72 +439,3 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
   return retVal;
 }
 
-/*------------------------------ CClassStore::getSortedGlobalVarList()
- * getSortedGlobalVarList()
- *   Get all global variables in a sorted list.
- *
- * Parameters:
- *   -
- * Returns:
- *   QList<CParsedAttribute> * The variables.
- *-----------------------------------------------------------------*/
-QList<CParsedAttribute> *CClassStore::getSortedGlobalVarList()
-{
-  QList<CParsedAttribute> *retVal = new QList<CParsedAttribute>();
-  QStrList srted;
-  char *str;
-
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( gvIterator.toFirst();
-       gvIterator.current();
-       ++gvIterator )
-  {
-    srted.inSort( gvIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getGlobalVarByName( str ) );
-  }
-
-  return retVal;
-}
-
-/*------------------------------ CClassStore::getSortedGlobalStructList()
- * getSortedGlobalStructList()
- *   Get all global structures in a sorted list.
- *
- * Parameters:
- *   -
- * Returns:
- *   QList<CParsedAttribute> * The variables.
- *-----------------------------------------------------------------*/
-QList<CParsedStruct> *CClassStore::getSortedGlobalStructList()
-{
-  QList<CParsedStruct> *retVal = new QList<CParsedStruct>();
-  QStrList srted;
-  char *str;
-
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( gsIterator.toFirst();
-       gsIterator.current();
-       ++gsIterator )
-  {
-    srted.inSort( gsIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getGlobalStructByName( str ) );
-  }
-
-  return retVal;
-}
