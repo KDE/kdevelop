@@ -324,7 +324,7 @@
 <connections>
     <connection>
         <sender>templates_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
+        <signal>selectionChanged(QListViewItem*)</signal>
         <receiver>AppWizardDlgBase</receiver>
         <slot>templatesTreeViewClicked(QListViewItem*)</slot>
     </connection>
