@@ -1,3 +1,6 @@
+2000-10-18 Falk Brettschneider <falk@kdevelop.org>
+  * added Make Clean
+
 2000-10-18 Ralf Nolden <nolden@kde.org>
   * updated qt2 templates, mdi template uses QAction as well, fixed up am_edit for
     using tr instead of i18n and not adding klocale.h for qt templates
