@@ -274,6 +274,7 @@ void ConfigureOptionsWidget::configAdded()
     config_combo->clear();
     config_combo->insertStringList(allConfigs);
     configChanged(config);
+    setDirty(); // force saving
 }
 
 
