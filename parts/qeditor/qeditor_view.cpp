@@ -19,9 +19,15 @@
  *
  */
 
+/**
+ * find/replace adapted from KOffice KoText
+ * Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+ * Copyright (C) 2001, S.R.Haque <srhaque@iee.org>
+ * Copyright (C) 2001, David Faure <david@mandrakesoft.com>
+ */
+
 #include "qeditor_view.h"
 #include "qeditor_part.h"
-#include "qeditor_search.h"
 #include "qeditor.h"
 #include "qeditorcodecompletion_iface_impl.h"
 #include "linenumberwidget.h"
@@ -45,11 +51,15 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 	  m_document( document ),
 	  m_popupMenu( 0 )
 {
-    m_findDialog = new KoFindDialog();
-    m_findDialog->setOptions( KoFindDialog::FromCursor );
-
-    m_replaceDialog = new KoReplaceDialog();
-    m_replaceDialog->setOptions( KoReplaceDialog::FromCursor );
+    m_findDialog = new KoFindDialog( this, "FindDialog_0", long(KoFindDialog::FromCursor) );
+    m_replaceDialog = new KoReplaceDialog( this, "ReplaceDialog_0",
+                                           long(KoReplaceDialog::PromptOnReplace |
+                                           KoReplaceDialog::FromCursor) );
+    m_currentParag = 0;
+    m_find = 0;
+    m_replace = 0;
+    m_options = 0;
+    m_offset = 0;
 
     QHBoxLayout* lay = new QHBoxLayout( this );
 
@@ -150,192 +160,301 @@ KTextEditor::Document* QEditorView::document() const
 
 QPoint QEditorView::cursorCoordinates()
 {
-	QTextCursor *cursor = m_editor->textCursor();
-	QTextStringChar *chr = cursor->parag()->at( cursor->index() );
-	int h = cursor->parag()->lineHeightOfChar( cursor->index() );
-	int x = cursor->parag()->rect().x() + chr->x;
-	int y, dummy;
-	cursor->parag()->lineHeightOfChar( cursor->index(), &dummy, &y );
-	y += cursor->parag()->rect().y();
-	return m_editor->contentsToViewport( QPoint( x, y+h ) );
+    QTextCursor *cursor = m_editor->textCursor();
+    QTextStringChar *chr = cursor->parag()->at( cursor->index() );
+    int h = cursor->parag()->lineHeightOfChar( cursor->index() );
+    int x = cursor->parag()->rect().x() + chr->x;
+    int y, dummy;
+    cursor->parag()->lineHeightOfChar( cursor->index(), &dummy, &y );
+    y += cursor->parag()->rect().y();
+    return m_editor->contentsToViewport( QPoint( x, y+h ) );
 }
 
 void QEditorView::cursorPosition(unsigned int *line, unsigned int *col)
 {
-	*line = cursorLine();
-	*col = cursorColumn();
+    *line = cursorLine();
+    *col = cursorColumn();
 }
 
 void QEditorView::cursorPositionReal(unsigned int *line, unsigned int *col)
 {
-	*line = cursorLine();
-	*col = cursorColumnReal();
+    *line = cursorLine();
+    *col = cursorColumnReal();
 }
 
 bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 {
 #warning "TODO: implement QEditorView::setCursorPosition"
-	kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
+    kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
 
-	m_editor->setCursorPosition( line, col );
-	m_editor->ensureCursorVisible();
+    m_editor->setCursorPosition( line, col );
+    m_editor->ensureCursorVisible();
 
-	return true;
+    return true;
 }
 
 bool QEditorView::setCursorPositionReal(unsigned int line, unsigned int col)
 {
-	m_editor->setCursorPosition( line, col );
-	m_editor->ensureCursorVisible();
-	return true;
+    m_editor->setCursorPosition( line, col );
+    m_editor->ensureCursorVisible();
+    return true;
 }
 
 unsigned int QEditorView::cursorLine()
 {
-	int line, col;
-	m_editor->getCursorPosition( &line, &col );
-	return line;
+    int line, col;
+    m_editor->getCursorPosition( &line, &col );
+    return line;
 }
 
 unsigned int QEditorView::cursorColumn()
 {
-	const int tabwidth = 4;
-	int line, col;
+    const int tabwidth = 4;
+    int line, col;
 
-	m_editor->getCursorPosition( &line, &col );
-	QString text = m_editor->text( line ).left( col );
-	col = 0;
+    m_editor->getCursorPosition( &line, &col );
+    QString text = m_editor->text( line ).left( col );
+    col = 0;
 
-	for( int i=0; i<text.length(); ++i ){
-		if( text[ i ] == QChar('\t') ){
-			col += tabwidth - (col % tabwidth);
-		} else {
-			++col;
-		}
-	}
-	return col;
+    for( int i=0; i<text.length(); ++i ){
+        if( text[ i ] == QChar('\t') ){
+            col += tabwidth - (col % tabwidth);
+        } else {
+            ++col;
+        }
+    }
+    return col;
 }
 
 unsigned int QEditorView::cursorColumnReal()
 {
-	int line, col;
-	m_editor->getCursorPosition( &line, &col );
-	return col;
+    int line, col;
+    m_editor->getCursorPosition( &line, &col );
+    return col;
 }
 
 void QEditorView::copy( ) const
 {
-	m_editor->copy();
+    m_editor->copy();
 }
 
 void QEditorView::cut( )
 {
-	m_editor->cut();
+    m_editor->cut();
 }
 
 void QEditorView::paste( )
 {
-	m_editor->paste();
+    m_editor->paste();
 }
 
 void QEditorView::installPopup( class QPopupMenu *rmb_Menu )
 {
-	kdDebug() << "QEditorView::installPopup()" << endl;
-		m_popupMenu = rmb_Menu;
+    kdDebug() << "QEditorView::installPopup()" << endl;
+    m_popupMenu = rmb_Menu;
 }
 
 void QEditorView::showArgHint(QStringList functionList,
-							  const QString& strWrapping,
-							  const QString& strDelimiter)
+                              const QString& strWrapping,
+                              const QString& strDelimiter)
 {
-	m_pCodeCompletion->showArgHint( functionList, strDelimiter, strDelimiter );
+    m_pCodeCompletion->showArgHint( functionList, strDelimiter, strDelimiter );
 }
 
 void QEditorView::showCompletionBox(QValueList<KTextEditor::CompletionEntry> complList,
-									int offset,
-									bool casesensitive )
+                                    int offset,
+                                    bool casesensitive )
 {
-	m_pCodeCompletion->showCompletionBox( complList, offset, casesensitive );
+    m_pCodeCompletion->showCompletionBox( complList, offset, casesensitive );
 }
 
 QString QEditorView::currentTextLine() const
 {
-	int line, col;
-	m_editor->getCursorPosition( &line, &col );
-	return m_editor->text( line );
+    int line, col;
+    m_editor->getCursorPosition( &line, &col );
+    return m_editor->text( line );
 }
 
 void QEditorView::insertText( const QString& text )
 {
-	m_editor->insert( text );
+    m_editor->insert( text );
 }
 
 void QEditorView::setLanguage( const QString& language )
 {
-	m_editor->setLanguage( language );
+    m_editor->setLanguage( language );
 }
 
 QString QEditorView::language() const
 {
-	return m_editor->language();
+    return m_editor->language();
 }
 
 void QEditorView::contextMenuEvent( QContextMenuEvent* e )
 {
-	e->accept();
+    e->accept();
+}
+
+void QEditorView::indent()
+{
+    m_editor->indent();
 }
 
 void QEditorView::gotoLine()
 {
-	GotoLineDialog dlg;
-	dlg.setEditor( m_editor );
-	dlg.exec();
+    GotoLineDialog dlg;
+    dlg.setEditor( m_editor );
+    dlg.exec();
+}
+
+void QEditorView::proceed()
+{
+    // Start point
+    QTextParag * firstParag = m_editor->document()->firstParag();
+    int firstIndex = 0;
+
+    // 'From Cursor' option
+    QEditor* edit = m_editor;
+    if ( edit && ( m_options & KoFindDialog::FromCursor ) )
+    {
+        kdDebug() << "-----> 1" << endl;
+        firstParag = edit->textCursor()->parag();
+        firstIndex = edit->textCursor()->index();
+    } // no else here !
+
+    // 'Selected Text' option
+    if ( edit && ( m_options & KoFindDialog::SelectedText ) )
+    {
+        kdDebug() << "-----> 2" << endl;
+        if ( !firstParag ) // not set by 'from cursor'
+        {
+            kdDebug() << "-----> 3" << endl;
+            QTextCursor c1 = edit->document()->selectionStartCursor( QTextDocument::Standard );
+            firstParag = c1.parag();
+            firstIndex = c1.index();
+        }
+        kdDebug() << "-----> 4" << endl;
+        QTextCursor c2 = edit->document()->selectionEndCursor( QTextDocument::Standard );
+        // Find in the selection
+        (void) find_real( firstParag, firstIndex, c2.parag(), c2.index() );
+    }
+    else // Not 'find in selection', need to iterate over the framesets
+    {
+        kdDebug() << "-----> 5" << endl;
+        QTextParag * lastParag = edit->document()->lastParag();
+        kdDebug() << "-----> 6" << endl;
+        kdDebug() << "---> lastParag = " << lastParag << endl
+                  << "---> lastParag->length = " << lastParag->length() << endl;
+        (void) find_real( firstParag, firstIndex, lastParag, lastParag->length()-1 );
+    }
+}
+
+bool QEditorView::find_real( QTextParag* firstParag, int firstIndex,
+                             QTextParag* lastParag, int lastIndex )
+{
+    kdDebug() << "QEditorView::find_real()" << endl;
+    m_currentParag = firstParag;
+    m_offset = 0;
+
+    if( firstParag == lastParag ){
+        m_offset = firstIndex;
+        return process( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ) );
+    } else {
+        bool forw = ! (m_options & KoFindDialog::FindBackwards);
+        bool ret = true;
+        if( forw ){
+            m_offset = firstIndex;
+            QString str = m_currentParag->string()->toString();
+            str.truncate( str.length() - 1 ); // damn trailing space
+            ret = process( str.mid( firstIndex ) );
+            if (!ret) return false;
+        } else {
+            m_currentParag = lastParag;
+            ret = process( lastParag->string()->toString().left( lastIndex + 1 ) );
+            if (!ret) return false;
+        }
+
+        m_currentParag = forw ? firstParag->next() : lastParag->prev();
+        m_offset = 0;
+        QTextParag* endParag = forw ? lastParag : firstParag;
+        while( m_currentParag && m_currentParag != endParag ){
+            QString str = m_currentParag->string()->toString();
+            str = str.left( str.length() - 1 );
+            ret = process( str );
+
+            if (!ret) return false;
+            m_currentParag = forw ? m_currentParag->next() : m_currentParag->prev();
+        }
+        Q_ASSERT( endParag == m_currentParag );
+        if ( forw )
+        {
+            QString s = lastParag->string()->toString().left( lastIndex + 1 );
+            ret = process( s );
+        } else {
+            m_offset = firstIndex;
+            QString str = m_currentParag->string()->toString();
+            str.truncate( str.length() - 1 ); // damn trailing space
+            str = str.mid( firstIndex );
+            ret = process( str );
+        }
+        return ret;
+    }
 }
 
 void QEditorView::doFind()
 {
-#if 0
-	int startLine = 0;
-	int startCol = 0;
-	int endLine = -1;
-	int endCol = -1;
-
-	if( m_findDialog->options() & KoReplaceDialog::FromCursor ){
-		m_editor->getCursorPosition( &startLine, &startCol );
-	}
-
-	if( m_findDialog->options() & KoFindDialog::SelectedText ){
-		m_editor->getSelection( &startLine, &startCol, &endLine, &endCol );
-	}
-
-	QRegExp regexp( m_findDialog->pattern() );
-	unsigned int foundAtLine = 0;
-	unsigned int foundAtCol = 0;
-	unsigned int matchLen = 0;
-	bool backwards = m_findDialog->options() & KoFindDialog::FindBackwards ? true : 0;
-
-	bool found = m_document->searchText( startLine, startCol, regexp,
-										 &foundAtLine, &foundAtCol,
-										 &matchLen, backwards );
-	if( found && (endLine == -1 ||
-				  (!backwards && foundAtLine<=endLine && foundAtCol<=endCol) ||
-				  (backwards && startLine>=foundAtLine && startCol>=foundAtLine) ) ){
-		if( backwards ){
-			m_document->setSelection( foundAtLine, foundAtCol+matchLen, foundAtLine, foundAtCol );
-		} else {
-			m_document->setSelection( foundAtLine, foundAtCol, foundAtLine, foundAtCol+matchLen );
-		}
-	} else {
-		kapp->beep();
-	}
-	}
-#endif
+    if( m_findDialog->exec() ){
+        m_options = m_findDialog->options();
+        m_find = new KoFind( m_findDialog->pattern(), m_findDialog->options() );
+        connect( m_find, SIGNAL(highlight(const QString&,int,int,const QRect&)),
+                 this, SLOT(highlight(const QString&,int,int,const QRect&)) );
+        proceed();
+        delete m_find;
+        m_find = 0;
+    }
 }
 
 void QEditorView::doReplace()
 {
-#if 0
-	m_replaceDialog->exec();
-#endif
+    if( m_replaceDialog->exec() ){
+        m_options = m_replaceDialog->options();
+        m_replace = new KoReplace( m_replaceDialog->pattern(), m_replaceDialog->replacement(),
+                                   m_replaceDialog->options() );
+        connect( m_replace, SIGNAL(highlight(const QString&,int,int,const QRect&)),
+                 this, SLOT(highlight(const QString&,int,int,const QRect&)) );
+        connect( m_replace, SIGNAL(replace(const QString&,int,int,int,const QRect&)),
+                 this, SLOT(replace(const QString&,int,int,int,const QRect&)) );
+        proceed();
+        delete m_replace;
+        m_replace = 0;
+    }
 }
 
+bool QEditorView::process( const QString& _text )
+{
+    if( m_find ){
+        return m_find->find( _text, QRect() );
+    } else if( m_replace ) {
+        QString text( _text );
+        return m_replace->replace( text, QRect() );
+    }
+    return false;
+}
+
+void QEditorView::highlight( const QString& text, int matchingIndex, int matchedLength, const QRect& )
+{
+    m_editor->setSelection( m_currentParag->paragId(), matchingIndex,
+                            m_currentParag->paragId(), matchingIndex + matchedLength );
+}
+
+void QEditorView::replace( const QString&, int matchingIndex,
+                           int matchingLength, int matchedLength,
+                           const QRect &/*expose*/ )
+{
+    m_editor->setSelection( m_currentParag->paragId(), matchingIndex,
+                            m_currentParag->paragId(), matchingIndex + matchedLength );
+    m_editor->removeSelectedText();
+    m_editor->insertAt( m_replaceDialog->replacement(),
+                        m_currentParag->paragId(),
+                        matchingIndex );
+}

@@ -15,6 +15,8 @@
 	<Action name="edit_copy" group="edit_operations" />
 	<Action name="edit_paste" group="edit_operations" />
 	<Separator group="edit_operations" />
+	<Action name="edit_indent" group="edit_indent" />
+	<Separator group="edit_operations" />
 	<Action name="go_goto_line" group="edit_operations" />
 	<Action name="edit_find" group="find_operations" />
 	<Action name="edit_replace" group="find_operations" />

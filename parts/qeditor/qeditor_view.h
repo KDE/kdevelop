@@ -38,6 +38,9 @@ class MarkerWidget;
 class LevelWidget;
 class KoFindDialog;
 class KoReplaceDialog;
+class KoFind;
+class KoReplace;
+class QTextParag;
 
 class QEditorView:
     public KTextEditor::View,
@@ -76,14 +79,28 @@ public slots:
     void setLanguage( const QString& );
     void doFind();
     void doReplace();
+    void indent();
+
+protected slots:
+    void highlight( const QString&, int, int, const QRect& );
+    void replace( const QString&, int, int, int, const QRect& );
 
 protected:
     virtual void contextMenuEvent( QContextMenuEvent* );
+    void proceed();
+    bool find_real( QTextParag* firstParag, int firstIndex,
+                    QTextParag* lastParag, int lastIndex );
+    bool process( const QString& );
 
 private:
     QPopupMenu* m_popupMenu;
+    QTextParag* m_currentParag;
     KoFindDialog* m_findDialog;
     KoReplaceDialog* m_replaceDialog;
+    KoFind* m_find;
+    KoReplace* m_replace;
+    long m_options;
+    int m_offset;
 
 // ViewCursorInterface ----------------------------------------------------------------------
 public:

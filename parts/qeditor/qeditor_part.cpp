@@ -151,9 +151,13 @@ void QEditorPart::setupActions()
     KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
     KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
 
+    new KAction( i18n("&Indent"), CTRL + Key_I,
+		 m_editor, SLOT(indent()),
+                 actionCollection(), "edit_indent" );
+
     new KAction( i18n("&Configure Editor..."), 0,
-		 this, SLOT(configDialog()), actionCollection(),
-		 "settings_configure_editor" );
+		 this, SLOT(configDialog()),
+                 actionCollection(), "settings_configure_editor" );
 }
 
 void QEditorPart::setReadWrite(bool rw)
