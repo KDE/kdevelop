@@ -52,12 +52,20 @@ kdDebug() << "DocumentImpl " << this << " desctructed!!!" << endl;
 
 bool DocumentImpl::openFile()
 {
-  return m_document->openURL(KURL(m_file));
+  bool result = m_document->openURL(KURL(m_file));
+
+  if (result)
+    resetModifiedTime();
+
+  return result;
 }
 
 
 bool DocumentImpl::saveFile()
 {
+  if (!shouldBeSaved())
+    return false;
+
   QFile f(m_file);
   if (!f.open(IO_WriteOnly))
     return false;
@@ -66,6 +74,8 @@ bool DocumentImpl::saveFile()
   ts << m_document->text();
 
   f.close();
+
+  resetModifiedTime();
 
   return true;
 }
