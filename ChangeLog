@@ -1,3 +1,7 @@
+2003-05-12 Roberto Raggi <roberto@kdevelop.org>
+    * replaces KDevLanguageSupport::fileFilters() with
+      KDevLanguageSupport::mimeTypes()
+
 2003-05-11 Roberto Raggi <roberto@kdevelop.org>
     * autoproject: don't write empty variables in Makefile.am
     * autoproject: implemented the remove subproject feature

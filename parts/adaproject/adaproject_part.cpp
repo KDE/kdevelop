@@ -112,11 +112,17 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
     s.push(m_projectDir);
 
     QStringList includepatternList;
+
     if ( languageSupport() )
     {
-        kdDebug() << languageSupport()->fileFilters().join(",") << endl;
-        includepatternList = languageSupport()->fileFilters();
+	KMimeType::List list = languageSupport()->mimeTypes();
+	KMimeType::List::Iterator it = list.begin();
+	while( it != list.end() ){
+	    includepatternList += (*it)->patterns();
+	    ++it;
+	}
     }
+
     QString excludepatterns = "*~";
     QStringList excludepatternList = QStringList::split(",", excludepatterns);
 
@@ -125,6 +131,9 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
         dir.setPath(s.pop());
         kdDebug() << "AdaProjectPart::openProject examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
+	if( !dirEntries )
+	    break;
+
         QPtrListIterator<QFileInfo> it(*dirEntries);
         for (; it.current(); ++it) {
             QString fileName = it.current()->fileName();
@@ -195,19 +204,26 @@ void AdaProjectPart::listOfFiles(QStringList &result, QString path)
     QDir d(path);
     if (!d.exists())
         return;
-    QFileInfoList *entries = d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden);
-    for (QFileInfo *it = entries->first(); it; it = entries->next())
+    
+    const QFileInfoList *entries = d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden);
+    if( !entries )
+	return;
+    
+    QFileInfoListIterator it( *entries );
+    while( const QFileInfo* fileInfo = it.current() )
     {
-        if ((it->isDir()) && (!it->filePath() == path))
+	++it;
+	
+        if ((fileInfo->isDir()) && (!fileInfo->filePath() == path))
         {
-            qWarning("entering dir %s", it->dirPath().latin1());
-            listOfFiles(result, it->dirPath());
+            kdDebug() << "entering dir " << fileInfo->dirPath() << endl;
+            listOfFiles(result, fileInfo->dirPath());
         }
         else
         {
-            qWarning("adding to result: %s", it->filePath().latin1());
-            result << it->filePath();
-        }
+            kdDebug() << "adding to result: " << fileInfo->filePath() << endl;
+            result << fileInfo->filePath();
+      	}	
     }
 }
 

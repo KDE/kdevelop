@@ -87,15 +87,6 @@ KDevLanguageSupport::Features AdaSupportPart::features ()
         (Classes | Structs | Functions | Variables | Namespaces | Declarations);
 }
 
-
-QStringList AdaSupportPart::fileFilters ()
-{
-    QStringList r;
-    r << "*.ads" << "*.adb";
-    return r;
-}
-
-
 void AdaSupportPart::projectOpened ()
 {
     connect (project (), SIGNAL (addedFilesToProject (const QStringList &)),
@@ -278,5 +269,15 @@ void AdaSupportPart::savedFile (const QString& fileName)
         emit updatedSourceInfo ();
     }
 }
+
+KMimeType::List AdaSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    
+    list << KMimeType::mimeType( "text/x-adasrc" );
+    
+    return list;
+}
+
 
 #include "adasupportpart.moc"

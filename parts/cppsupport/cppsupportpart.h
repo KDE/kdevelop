@@ -77,7 +77,7 @@ signals:
 
 protected:
     virtual KDevLanguageSupport::Features features();
-    virtual QStringList fileFilters();
+    virtual KMimeType::List mimeTypes();
     virtual QString formatClassName(const QString &name);
     virtual QString unformatClassName(const QString &name);
     virtual void addMethod(const QString &className);

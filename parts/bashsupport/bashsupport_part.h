@@ -55,7 +55,7 @@ class BashSupportPart : public KDevLanguageSupport
 
 	protected:
 		virtual Features features();
-		virtual QStringList fileFilters();
+		virtual KMimeType::List mimeTypes();
 
 	private slots:
 		void slotRun();

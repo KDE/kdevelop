@@ -27,7 +27,7 @@ public:
     ~PascalSupportPart();
 
     virtual Features features();
-    virtual QStringList fileFilters();
+    virtual KMimeType::List mimeTypes();
 
 private slots:
     void projectOpened();

@@ -29,8 +29,18 @@ ScriptOptionsWidget::ScriptOptionsWidget(KDevPlugin *part,
 
     QString includepatterns
         = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
-    if (includepatterns.isNull() && part->languageSupport())
-        includepatterns = part->languageSupport()->fileFilters().join(",");
+    
+    if (includepatterns.isNull() && part->languageSupport()){
+	QStringList includepatternList; 
+	KMimeType::List list = part->languageSupport()->mimeTypes();
+	KMimeType::List::Iterator it = list.begin();
+	while( it != list.end() ){
+	    includepatternList += (*it)->patterns();
+	    ++it;
+	}
+	includepatterns = includepatternList.join( "," );
+    }
+    
     QString excludepatterns
         = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
     if (excludepatterns.isNull())

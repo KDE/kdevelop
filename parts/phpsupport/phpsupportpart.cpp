@@ -414,12 +414,13 @@ KDevLanguageSupport::Features PHPSupportPart::features()
         return Features(Classes | Functions);
 }
 
-
-QStringList PHPSupportPart::fileFilters()
+KMimeType::List PHPSupportPart::mimeTypes( )
 {
-    QStringList l;
-    l << "*.inc" << "*.php" << "*.html" << "*.php3";
-    return l;
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/plain" );
+    if( mime )
+	list << mime;
+    return list;
 }
 
 #include "phpsupportpart.moc"

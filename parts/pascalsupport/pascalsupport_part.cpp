@@ -81,11 +81,6 @@ PascalSupportPart::Features PascalSupportPart::features()
     return Features(Classes | Structs | Functions | Variables | Declarations);
 }
 
-QStringList PascalSupportPart::fileFilters()
-{
-    return QStringList::split(",", "*.p,*.pp,*.pas,*.dpr");
-}
-
 void PascalSupportPart::projectOpened()
 {
     connect(project(), SIGNAL(addedFilesToProject(const QStringList &)),
@@ -170,8 +165,9 @@ void PascalSupportPart::maybeParse( const QString & fileName )
 {
     kdDebug(9013) << "Maybe parse: " << fileName << endl;
 
-    if( !fileFilters().contains( QFileInfo( fileName ).extension() ) )
-        return;
+    KMimeType::Ptr mime = KMimeType::findByURL( fileName );
+    if( !mime || mime->name() != "text/x-pascal" )
+	return;
 
     mainWindow()->statusBar()->message( i18n("Parsing file: %1").arg(fileName) );
     parse( fileName );
@@ -220,6 +216,15 @@ void PascalSupportPart::parse( const QString & fileName )
                                          lexer.getLine(),
                                          lexer.getColumn() );
     }
+}
+
+KMimeType::List PascalSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/x-pascal" );
+    if( mime )
+	list << mime;
+    return list;
 }
 
 #include "pascalsupport_part.moc"

@@ -184,14 +184,6 @@ KDevLanguageSupport::Features BashSupportPart::features()
 	return Features(Variables | Functions);
 }
 
-
-QStringList BashSupportPart::fileFilters()
-{
-	QStringList l;
-	l << "*.sh";
-	return l;
-}
-
 void BashSupportPart::parse(const QString &fileName)
 {
 	QFileInfo fi(fileName);
@@ -426,5 +418,16 @@ void BashCodeCompletion::completionBoxAbort()
 {
 	kdDebug() << "aborted..." << endl;
 	m_completionBoxShow=false;
+}
+
+KMimeType::List BashSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    
+    KMimeType::Ptr mime = KMimeType::mimeType( "application/x-shellscript" );
+    if( mime )
+	list << mime;
+    
+    return list;
 }
 #include "bashsupport_part.moc"

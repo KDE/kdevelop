@@ -119,8 +119,12 @@ void PascalProjectPart::openProject(const QString &dirName, const QString &proje
     QStringList includepatternList;
     if ( languageSupport() )
     {
-        kdDebug(9033) << languageSupport()->fileFilters().join(",") << endl;
-        includepatternList = languageSupport()->fileFilters();
+	KMimeType::List list = languageSupport()->mimeTypes();
+	KMimeType::List::Iterator it = list.begin();
+	while( it != list.end() ){
+	    includepatternList += (*it)->patterns();
+	    ++it;
+	}
     }
     QString excludepatterns = "*~";
     QStringList excludepatternList = QStringList::split(",", excludepatterns);

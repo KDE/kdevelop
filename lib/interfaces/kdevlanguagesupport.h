@@ -7,6 +7,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <kmimetype.h>
 #include "kdevplugin.h"
 
 
@@ -33,12 +34,10 @@ public:
      */
     virtual Features features();
     /**
-     * Returns a typical filter list for the support language
-     * should be configurable in the languagesupport dialog
-     * example "*.cpp,*.h,*.c";
-     * used in grepview?, adding files
+     * Returns a typical mimetype list for the support language
+     * should be configurable in the languagesupport dialog.
      */
-    virtual QStringList fileFilters();
+    virtual KMimeType::List mimeTypes();
 
     /**
      * Formats a canonicalized class path as used by the class store
@@ -50,7 +49,7 @@ public:
      * The opposite of formatClassName().
      */
     virtual QString unformatClassName(const QString &name);
-    
+
     /**
      * Opens a "New class" dialog and adds the configured
      * class to the sources.

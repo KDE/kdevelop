@@ -14,11 +14,9 @@ KDevLanguageSupport::Features KDevLanguageSupport::features()
     return Features(0);
 }
 
-QStringList KDevLanguageSupport::fileFilters()
+KMimeType::List KDevLanguageSupport::mimeTypes()
 {
-    QStringList list;
-    list << "*";
-    return list;
+    return KMimeType::List();
 }
 
 QString KDevLanguageSupport::formatClassName(const QString &name)

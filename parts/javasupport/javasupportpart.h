@@ -19,7 +19,7 @@ public:
 
 protected:
     Features features();
-    QStringList fileFilters();
+    KMimeType::List mimeTypes();
     QStringList fileExtensions();
 
     void addClass();

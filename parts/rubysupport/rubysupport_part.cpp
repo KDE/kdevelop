@@ -82,11 +82,13 @@ KDevLanguageSupport::Features RubySupportPart::features() {
 }
 
 
-QStringList RubySupportPart::fileFilters() {
-    QStringList l;
-    l << "*.rb";
-    return l;
+KMimeType::List RubySupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/x-ruby" );
+    if( mime )
+	list << mime;
+    return list;
 }
-
 
 #include "rubysupport_part.moc"

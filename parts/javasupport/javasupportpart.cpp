@@ -89,14 +89,6 @@ KDevLanguageSupport::Features JavaSupportPart::features()
 }
 
 
-QStringList JavaSupportPart::fileFilters()
-{
-    QStringList r;
-    r << "*.java";
-    return r;
-}
-
-
 void JavaSupportPart::projectOpened()
 {
     connect(project(), SIGNAL(addedFilesToProject(const QStringList &)),
@@ -301,6 +293,15 @@ void JavaSupportPart::savedFile( const QString& fileName )
         maybeParse( fileName );
         emit updatedSourceInfo();
     }
+}
+
+KMimeType::List JavaSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/x-java" );
+    if( mime )
+	list << mime;
+    return list;
 }
 
 #include "javasupportpart.moc"

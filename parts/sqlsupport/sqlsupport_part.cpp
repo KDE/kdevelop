@@ -223,12 +223,13 @@ KDevLanguageSupport::Features SQLSupportPart::features()
     return Features( 0 ); // TODO...
 }
 
-
-QStringList SQLSupportPart::fileFilters()
+KMimeType::List SQLSupportPart::mimeTypes( )
 {
-    QStringList l;
-    l << "*.sql";
-    return l;
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/plain" );
+    if( mime )
+	list << mime;
+    return list;
 }
 
 #include "sqlsupport_part.moc"

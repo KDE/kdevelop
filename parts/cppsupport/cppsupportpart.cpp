@@ -598,16 +598,6 @@ KDevLanguageSupport::Features CppSupportPart::features()
         return Features (Structs | Functions | Variables | Declarations);
 }
 
-
-QStringList CppSupportPart::fileFilters()
-{
-    if (withcpp)
-        return QStringList::split(",", "*.c,*.C,*.cc,*.cpp,*.c++,*.cxx,*.m,*.mm,*.M,*.h,*.H,*.hh,*.hxx,*.hpp,*.inl,*.tlh,*.diff");
-    else
-        return QStringList::split(",", "*.c,*.h");
-}
-
-
 QString CppSupportPart::formatClassName(const QString &name)
 {
     QString res = name;
@@ -1063,6 +1053,30 @@ void CppSupportPart::setupCatalog( )
         m_catalogList.append( catalog );
         ++it;
     }
+}
+
+KMimeType::List CppSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    KMimeType::Ptr mime;
+    
+    mime = KMimeType::mimeType( "text/x-csrc" );
+    if( mime )
+	list << mime;
+    
+    mime = KMimeType::mimeType( "text/x-chdr" );
+    if( mime )
+	list << mime;
+    
+    mime = KMimeType::mimeType( "text/x-c++src" );
+    if( mime )
+	list << mime;
+    
+    mime = KMimeType::mimeType( "text/x-c++hdr" );
+    if( mime )
+	list << mime;
+    
+    return list;
 }
 
 #include "cppsupportpart.moc"

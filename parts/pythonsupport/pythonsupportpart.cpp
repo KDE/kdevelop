@@ -188,13 +188,14 @@ KDevLanguageSupport::Features PythonSupportPart::features()
 }
 
 
-QStringList PythonSupportPart::fileFilters()
+KMimeType::List PythonSupportPart::mimeTypes( )
 {
-    QStringList l;
-    l << "*.py";
-    return l;
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "text/x-python" );
+    if( mime )
+	list << mime;
+    return list;
 }
-
 
 void PythonSupportPart::parse(const QString &fileName)
 {

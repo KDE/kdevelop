@@ -260,14 +260,6 @@ KDevLanguageSupport::Features PerlSupportPart::features()
 //    return Functions;
 }
 
-
-QStringList PerlSupportPart::fileFilters()
-{
-    QStringList l;
-    l << "*.pl" << "*.pm";
-    return l;
-}
-
 void PerlSupportPart::parse(const QString &fileName){
   QFile f(fileName);
   if (!f.open(IO_ReadOnly))
@@ -826,6 +818,15 @@ void PerlSupportPart::getPerlINC() {
  //get INC list so we can use it to parse "use" modules
  m_INClist = QStringList::split(QString("|"),result);
  kdDebug(9016) << "INC " << m_INClist.size() << " "<< result << endl;
+}
+
+KMimeType::List PerlSupportPart::mimeTypes( )
+{
+    KMimeType::List list;
+    KMimeType::Ptr mime = KMimeType::mimeType( "application/x-perl" );
+    if( mime )
+	list << mime;
+    return list;
 }
 
 #include "perlsupportpart.moc"
