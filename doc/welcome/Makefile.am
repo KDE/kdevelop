@@ -1,11 +1,4 @@
-EXTRA_DIST =index.sgml logotp3.png \
-            index.html
+EXTRA_DIST = index.docbook
 
-install-data-local:
-	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/welcome
-	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/en/kdevelop/welcome/logotp3.png
-	$(INSTALL_DATA) index.html $(kde_htmldir)/en/kdevelop/welcome/index.html
-
-uninstall-local:
-	-rm -f $(kde_htmldir)/en/kdevelop/welcome/logotp3.png
-	-rm -f $(kde_htmldir)/en/kdevelop/welcome/index.html
+KDE_LANG = en
+KDE_DOCS = AUTO

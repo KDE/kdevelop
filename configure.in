@@ -77,6 +77,14 @@ kdevelop/pics/mini/Makefile \
 kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
+doc/Makefile \
+doc/welcome/Makefile \
+doc/manual/Makefile \
+doc/programming/Makefile \
+doc/tutorial/Makefile \
+doc/kde_libref/Makefile \
+doc/addendum/Makefile \
+doc/cref/Makefile \
 kdevelop/plugins/Makefile \
 kdevelop/plugins/prjstat/Makefile \
 kdevelop/widgets/Makefile \

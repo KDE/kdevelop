@@ -1,5 +1,5 @@
-SUBDIRS = pt zh_CN.GB2312 ru
+SUBDIRS = welcome manual programming tutorial kde_libref addendum cref
 
-tools_DATA = documentation
+tools_DATA = documentation tip.database
 
 toolsdir = $(kde_datadir)/kdevelop/tools/
