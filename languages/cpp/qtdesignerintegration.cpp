@@ -150,10 +150,13 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
     if (function.specifier == "pure virtual")
         return;
 
-    QString stri = "\n" + function.returnType + " " + klass->name() + "::" + function.function;
+    
+    //implementation
+    QString stri = function.returnType + " " + klass->name() + "::" + function.function;
     if (function.specifier == "static")
         stri = "static " + stri;
     stri += "\n{\n}\n";
+    stri = "\n" + stri;
         
     QFileInfo fi(klass->fileName());
     QString implementationFile = fi.absFilePath();
