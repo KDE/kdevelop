@@ -38,7 +38,6 @@ public:
     virtual ~ThreadStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
 
     int threadNo()
     { return threadNo_; }
@@ -59,7 +58,6 @@ public:
     virtual ~FrameStackItem();
 
     void setOpen(bool open);
-    QListViewItem *lastChild() const;
 
     int frameNo()
     { return frameNo_; }
@@ -85,7 +83,6 @@ public:
     FramestackWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
     virtual ~FramestackWidget();
 
-    QListViewItem *lastChild() const;
     void clear();
 
     void parseRDBThreadList(char *str);

@@ -61,17 +61,6 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
 FramestackWidget::~FramestackWidget()
 {}
 
-/***************************************************************************/
-
-QListViewItem *FramestackWidget::lastChild() const
-{
-    QListViewItem* child = firstChild();
-    if (child != 0)
-        while (QListViewItem* nextChild = child->nextSibling())
-            child = nextChild;
-
-    return child;
-}
 
 // **************************************************************************
 
@@ -282,7 +271,7 @@ FrameStackItem *FramestackWidget::findFrame(int frameNo, int threadNo)
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDesc)
-        : QListViewItem(parent, parent->lastChild()),
+        : QListViewItem(parent),
         frameNo_(-1),
         threadNo_(-1)
 {
@@ -297,7 +286,7 @@ FrameStackItem::FrameStackItem(FramestackWidget *parent, const QString &frameDes
 // **************************************************************************
 
 FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc)
-        : QListViewItem(parent, parent->lastChild()),
+        : QListViewItem(parent),
         frameNo_(-1),
         threadNo_(parent->threadNo())
 {
@@ -312,17 +301,6 @@ FrameStackItem::FrameStackItem(ThreadStackItem *parent, const QString &frameDesc
 FrameStackItem::~FrameStackItem()
 {}
 
-// **************************************************************************
-
-QListViewItem *FrameStackItem::lastChild() const
-{
-    QListViewItem* child = firstChild();
-    if (child != 0)
-        while (QListViewItem* nextChild = child->nextSibling())
-            child = nextChild;
-
-    return child;
-}
 
 // **************************************************************************
 
@@ -355,17 +333,6 @@ ThreadStackItem::ThreadStackItem(FramestackWidget *parent, const QString &thread
 ThreadStackItem::~ThreadStackItem()
 {}
 
-// **************************************************************************
-
-QListViewItem *ThreadStackItem::lastChild() const
-{
-    QListViewItem* child = firstChild();
-    if (child != 0)
-        while (QListViewItem* nextChild = child->nextSibling())
-            child = nextChild;
-
-    return child;
-}
 
 // **************************************************************************
 
