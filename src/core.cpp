@@ -185,9 +185,8 @@ void Core::initActions()
                           actionCollection(), "project_options" );
     action->setEnabled(false);
 
-    action = new KAction( i18n("&Customize KDevelop"), 0,
-                          this, SLOT(slotSettingsCustomize()),
-                          actionCollection(), "settings_customize" );
+    action = KStdAction::preferences( this, SLOT(slotSettingsCustomize()),
+                          actionCollection(), "settings_configure" );
     action->setStatusText( i18n("Lets you customize KDevelop") );
 
     action = new KAction( i18n("&Stop"), "stop", 0,

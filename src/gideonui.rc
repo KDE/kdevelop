@@ -49,7 +49,10 @@
   </Menu>
   <Menu name="settings">
     <text>&amp;Settings</text>
-    <Action name="settings_customize"/>
+    <Action name="settings_show_toolbar"/>
+    <Separator/>
+    <Action name="settings_configure_toolbars"/>
+    <Action name="settings_configure"/>
   </Menu>
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>

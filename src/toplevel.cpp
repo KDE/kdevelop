@@ -43,7 +43,10 @@ TopLevel::TopLevel(QWidget *parent, const char *name)
                                 actionCollection(), "view_outputviews" );
     action->setChecked(true);
 
-    KStdAction::configureToolbars(this, SLOT(slotOptionsEditToolbars()), actionCollection());
+    KStdAction::showToolbar( this, SLOT(slotShowToolbar()),
+                             actionCollection(), "settings_show_toolbar" );
+    KStdAction::configureToolbars( this, SLOT(slotOptionsEditToolbars()),
+                                   actionCollection(), "settings_configure_toolbars" );
 
     vertSplitter = new QSplitter(Vertical, this);
     horzSplitter = new QSplitter(Horizontal, vertSplitter);
