@@ -396,9 +396,6 @@ void CppSupportPart::projectClosed( )
 
     m_pCompletionConfig->store();
 
-    if( m_backgroundParser )
-	m_backgroundParser->removeAllFiles();
-
     delete m_pCompletion;
     m_pCompletion = 0;
     m_projectClosed = true;
