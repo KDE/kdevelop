@@ -39,18 +39,18 @@ binary-arch:	build
 	dh_testroot
 	dh_testdir
 	-rm -rf debian/tmp
-	make install DESTDIR=`pwd`/debian/tmp
-	perl -w admin/debianrules cleanup
-	dh_movefiles
+	$(MAKE) prefix=/usr DESTDIR=`pwd`/debian/tmp/ install
+	-rm -rf debian/tmp/home debian/tmp/blah
+	perl -w debian/debianrules cleanup
 	dh_undocumented 
+	dh_installmenu
 	dh_installdocs
 	dh_installchangelogs
 	dh_strip
 	dh_compress
 	dh_fixperms
+	chmod 755 debian/tmp/usr/share/apps/kdevelop/tools/*
 	dh_perl
-	dh_suidregister
-	dh_makeshlibs -V
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

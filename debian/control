@@ -7,7 +7,7 @@ Standards-Version: 3.2.1
 
 Package: kdevelop
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake, kdebase-libs
+Depends: ${shlibs:Depends}, ${perl:Depends}, autoconf, automake, kdebase-libs
 Recommends: make
 Suggests: libqt2.2-dev, qt2.2-doc, kdbg, kdelibs3-dev, kdebase, kdelibs3-doc, htdig, sgmltools, gettext, a2ps, enscript, gv
 Description: An IDE for Unix/X11

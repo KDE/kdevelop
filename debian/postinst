@@ -3,7 +3,6 @@
 set -e
 case "$1" in
     configure)
-      /sbin/ldconfig
       if [ -x /usr/sbin/install-docs ]; then
         /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-user
         /usr/sbin/install-docs -i /usr/share/doc-base/kdevelop-tutorial
