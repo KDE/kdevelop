@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const RefAdaAST AdaAST::nullAdaAST = static_cast<RefAdaAST>(antlr::nullAST);
+const RefAdaAST AdaAST::nullAdaAST(antlr::nullAST.get() );
 
 using namespace std;
 

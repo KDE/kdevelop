@@ -33,12 +33,13 @@ public:
         }
 
     void addChild( RefPascalAST c ) {
-        antlr::BaseAST::addChild( static_cast<antlr::RefAST>(c) );
+        antlr::RefAST n( c.get() );
+        antlr::BaseAST::addChild( n );
     }
 
     static antlr::RefAST factory( void ) {
-        antlr::RefAST ret = static_cast<antlr::RefAST>(RefPascalAST(new PascalAST));
-        return ret;
+        RefPascalAST n(new PascalAST);
+        return n.get();
     }
 
 private:

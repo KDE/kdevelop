@@ -42,7 +42,8 @@ public:
     }
 
     void addChild (RefAdaAST c) {
-        antlr::BaseAST::addChild (static_cast<antlr::RefAST>(c));
+        antlr::RefAST n( c.get() );
+        antlr::BaseAST::addChild (n);
     }
 
     RefAdaAST down () const {
@@ -58,8 +59,8 @@ public:
     } */
 
     static antlr::RefAST factory (void) {
-        antlr::RefAST ret = static_cast<antlr::RefAST> (RefAdaAST (new AdaAST));
-        return ret;
+      RefAdaAST n( new AdaAST );
+      return n.get();
     }
 
     static const RefAdaAST nullAdaAST;

@@ -15,7 +15,10 @@
 
 struct KDevCodeRepositoryData
 {
+    Catalog* mainCatalog;
     QValueList<Catalog*> catalogs;
+    
+    KDevCodeRepositoryData(): mainCatalog( 0 ) {}
 };
 
 KDevCodeRepository::KDevCodeRepository( )
@@ -26,6 +29,16 @@ KDevCodeRepository::KDevCodeRepository( )
 KDevCodeRepository::~KDevCodeRepository( )
 {
     delete( d );
+}
+
+Catalog* KDevCodeRepository::mainCatalog()
+{
+    return d->mainCatalog;
+}
+
+void KDevCodeRepository::setMainCatalog( Catalog * mainCatalog )
+{
+    d->mainCatalog = mainCatalog;
 }
 
 void KDevCodeRepository::registerCatalog( Catalog * catalog )

@@ -33,12 +33,13 @@ public:
         }
 
     void addChild( RefJavaAST c ) {
-        antlr::BaseAST::addChild( static_cast<antlr::RefAST>(c) );
+        antlr::RefAST n( c.get() );
+        antlr::BaseAST::addChild( n );
     }
 
     static antlr::RefAST factory( void ) {
-        antlr::RefAST ret = static_cast<antlr::RefAST>(RefJavaAST(new JavaAST));
-        return ret;
+        RefJavaAST n(new JavaAST);
+        return n.get();
     }
 
 private:

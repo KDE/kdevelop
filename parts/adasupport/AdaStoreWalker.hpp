@@ -27,7 +27,7 @@
 #include "parsedargument.h"
 
 #line 30 "AdaStoreWalker.hpp"
-class AdaStoreWalker : public antlr::TreeParser, public AdaStoreWalkerTokenTypes
+class AdaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaStoreWalkerTokenTypes
 {
 #line 29 "expandedada.store.g"
 
@@ -102,7 +102,7 @@ public:
 #line 34 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
-	void initializeASTFactory( antlr::ASTFactory& factory );
+	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return AdaStoreWalker::NUM_TOKENS;
@@ -308,15 +308,15 @@ private:
 #endif
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const antlr::BitSet _tokenSet_0;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const antlr::BitSet _tokenSet_1;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const antlr::BitSet _tokenSet_2;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const antlr::BitSet _tokenSet_3;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const antlr::BitSet _tokenSet_4;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
 };
 
 #endif /*INC_AdaStoreWalker_hpp_*/

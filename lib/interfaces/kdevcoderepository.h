@@ -29,6 +29,9 @@ class KDevCodeRepository : public QObject
 public:
     KDevCodeRepository();
     virtual ~KDevCodeRepository();
+    
+    Catalog* mainCatalog();
+    void setMainCatalog( Catalog* mainCatalog );
 
     QValueList<Catalog*> registeredCatalogs();
 

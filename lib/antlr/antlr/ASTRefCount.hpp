@@ -83,6 +83,8 @@ public:
 		}
 		return *this;
 	}
+	
+	ASTRefCount<AST> toRefAST() { return ASTRefCount<AST>( static_cast<AST*>(ref->ptr) ); }
 
 	operator T* ()  const { return ref ? static_cast<T*>(ref->ptr) : 0; }
 	T* operator->() const { return ref ? static_cast<T*>(ref->ptr) : 0; }

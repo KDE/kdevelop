@@ -15,7 +15,7 @@
 #include <antlr/BitSet.hpp>
 #include "AdaTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
-class AdaLexer : public antlr::CharScanner, public AdaTokenTypes
+class AdaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public AdaTokenTypes
 {
 #line 1883 "ada.g"
 
@@ -63,10 +63,10 @@ public:
 		return false;
 	}
 public:
-	AdaLexer(std::istream& in);
-	AdaLexer(antlr::InputBuffer& ib);
-	AdaLexer(const antlr::LexerSharedInputState& state);
-	antlr::RefToken nextToken();
+	AdaLexer(ANTLR_USE_NAMESPACE(std)istream& in);
+	AdaLexer(ANTLR_USE_NAMESPACE(antlr)InputBuffer& ib);
+	AdaLexer(const ANTLR_USE_NAMESPACE(antlr)LexerSharedInputState& state);
+	ANTLR_USE_NAMESPACE(antlr)RefToken nextToken();
 	public: void mCOMMENT_INTRO(bool _createToken);
 	public: void mDOT_DOT(bool _createToken);
 	public: void mLT_LT(bool _createToken);
@@ -107,21 +107,21 @@ public:
 private:
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const antlr::BitSet _tokenSet_0;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const antlr::BitSet _tokenSet_1;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const antlr::BitSet _tokenSet_2;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const antlr::BitSet _tokenSet_3;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const antlr::BitSet _tokenSet_4;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
 	static const unsigned long _tokenSet_5_data_[];
-	static const antlr::BitSet _tokenSet_5;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_5;
 	static const unsigned long _tokenSet_6_data_[];
-	static const antlr::BitSet _tokenSet_6;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_6;
 	static const unsigned long _tokenSet_7_data_[];
-	static const antlr::BitSet _tokenSet_7;
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_7;
 };
 
 #endif /*INC_AdaLexer_hpp_*/
