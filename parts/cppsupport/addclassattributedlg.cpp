@@ -81,7 +81,7 @@ void AddClassAttributeDialog::setWidgetValues()
     accessGrp.setFrameStyle( 49 );
     accessGrp.setTitle( i18n("Access") );
     
-    text = i18n("You can choose here whether you want the member variable\n"
+    text = i18n("Here you can choose whether you want the member variable\n"
                 "to be declared as public, protected or private.");
     QWhatsThis::add(&accessGrp, text);
     

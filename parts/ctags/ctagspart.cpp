@@ -83,9 +83,9 @@ void CTagsPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
     
     m_contextString = ident;
-    popup->insertItem( i18n("Goto ctags declaration: %1").arg(ident),
+    popup->insertItem( i18n("Go to ctags declaration: %1").arg(ident),
                        this, SLOT(slotGotoDeclaration()) );
-    popup->insertItem( i18n("Goto ctags definition: %1").arg(ident),
+    popup->insertItem( i18n("Go to ctags definition: %1").arg(ident),
                        this, SLOT(slotGotoDefinition()) );
 } 
 

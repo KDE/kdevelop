@@ -208,8 +208,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
                                "the line after the original call to that function. If "
-                               "we are in the outermost frame (i.e. in main()), then "
-                               "this operation has no effect.") );
+                               "program execution is in the outermost frame (i.e. in "
+                               "main()) then this operation has no effect.") );
 
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),
@@ -222,10 +222,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action->setStatusText( i18n("Loads a core file into the debugger") );
     action->setWhatsThis( i18n("Examine core file\n\n"
                                "This loads a core file, which is typically created "
-                               "after the application has crashed e.g. with a "
+                               "after the application has crashed, e.g. with a "
                                "segmentation fault. The core file contains an "
                                "image of the program memory at the time it crashed, "
-                               "allowing you a post-mortem analysis.") );
+                               "allowing you to do a post-mortem analysis.") );
 
     action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
                          this, SLOT(slotAttachProcess()),

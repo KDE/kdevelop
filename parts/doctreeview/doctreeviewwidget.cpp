@@ -704,7 +704,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	docConfigButton->setPixmap ( SmallIcon ( "configure" ) );
 	docConfigButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, docConfigButton->sizePolicy().hasHeightForWidth() ) );
 	docConfigButton->setEnabled ( false );
-	QToolTip::add ( docConfigButton, i18n ( "Customize the select documentation tree..." ) );
+	QToolTip::add ( docConfigButton, i18n ( "Customize the selected documentation tree..." ) );
 
 	QWidget *spacer = new QWidget(docToolbar);
 	docToolbar->setStretchFactor(spacer, 1);
@@ -724,18 +724,18 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	startButton = new QToolButton ( searchToolbar, "start searching" );
 	startButton->setPixmap ( SmallIcon ( "key_enter" ) );
 	startButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, startButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( startButton, i18n ( "Start searching." ) );
+	QToolTip::add ( startButton, i18n ( "Start searching" ) );
 
 	nextButton = new QToolButton ( searchToolbar, "next match button" );
 	nextButton->setPixmap ( SmallIcon ( "next" ) );
 	nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry." ) );
+	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry" ) );
 	nextButton->setEnabled( false );
 
 	prevButton = new QToolButton ( searchToolbar, "previous match button" );
 	prevButton->setPixmap ( SmallIcon ( "previous" ) );
 	prevButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, prevButton->sizePolicy().hasHeightForWidth() ) );
-	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry." ) );
+	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
 	prevButton->setEnabled( false );
 
 	docToolbar->setMaximumHeight ( docConfigButton->height() );

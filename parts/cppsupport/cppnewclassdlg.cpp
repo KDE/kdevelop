@@ -95,7 +95,7 @@ void CppNewClassDialog::accept()
     if (header.find('/') != -1 || implementation.find('/') != -1) {
         KMessageBox::error(this, i18n("Generated files will always be added to the "
                                       "active directory, so you must not give an "
-                                      "explicit sub directory."));
+                                      "explicit subdirectory."));
         return;
     }
 
@@ -107,7 +107,7 @@ void CppNewClassDialog::accept()
     QString implementationPath = subDir + implementation;
     
     if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
-        KMessageBox::error(this, i18n("Sorry, but KDevelop is not able to add classes "
+        KMessageBox::error(this, i18n("KDevelop is not able to add classes "
                                       "to existing header or implementation files."));
         return;
     }

@@ -106,14 +106,14 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                          this, SLOT(slotCompleteText()),
                          actionCollection(), "edit_complete_text");
     action->setStatusText( i18n("Complete current expression") );
-    action->setWhatsThis( i18n("Complete current expression.") );
+    action->setWhatsThis( i18n("Complete current expression") );
     action->setEnabled(false);
 
     action = new KAction(i18n("Type of Expression"), CTRL+Key_T,
                          this, SLOT(slotTypeOfExpression()),
                          actionCollection(), "edit_type_of_expression");
     action->setStatusText( i18n("Type of current expression") );
-    action->setWhatsThis( i18n("Type of current expression.") );
+    action->setWhatsThis( i18n("Type of current expression") );
     action->setEnabled(false);
 
     action = new KAction(i18n("New Class..."), "classnew", 0,

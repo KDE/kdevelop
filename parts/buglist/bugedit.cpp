@@ -148,7 +148,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     editBugID->setText (pBug->BugID);
     QWhatsThis::add (editBugID,
         i18n("This is used to uniquely identify the bug\n"
-              "across the lifespan of it's existence."));
+              "across the lifespan of its existence."));
 
     // LABEL: Description
     QLabel *lblDescription = new QLabel (i18n ("Description:"),GeneralLayout);
@@ -174,7 +174,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
              "break, or causes serious data loss, or introduces a security hole on "
              "systems where you install the package.\n\n"
              "GRAVE:\n"
-             "Makes the package in question unuseable or mostly so, or causes "
+             "Makes the package in question unusable or mostly so, or causes "
              "data loss, or introduces a security hole allowing access to the "
              "accounts of users who use the package.\n\n"
              "CRASH:\n"
@@ -233,7 +233,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     editPackage->setText (pBug->Package);
     QWhatsThis::add (editPackage,
 	    i18n("Enter the name of the package this\n"
-			 "bug occured in. Please do not enter\n"
+			 "bug occurred in. Please do not enter\n"
 			 "the version number at this time."));
 
     // LABEL: VersionNo
@@ -295,14 +295,14 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "who reported this bug."));
 
     // LABEL: ReportEMail
-    QLabel *lblReportEMail = new QLabel (i18n ("Reported by (EMail):"), GeneralLayout);
+    QLabel *lblReportEMail = new QLabel (i18n ("Reported by (Email):"), GeneralLayout);
 
     // LINEEDIT: ReportEMail
     editReportEMail = new QLineEdit(GeneralLayout);
     lblReportEMail->setBuddy (editReportEMail);
     editReportEMail->setText (pBug->ReportEMail);
     QWhatsThis::add (editReportEMail,
-	    i18n("Enter the e-mail address of the\n"
+	    i18n("Enter the email address of the\n"
 			 "person who reported this bug."));
 
     // SPACER!!!
@@ -333,14 +333,14 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "wish to assign this bug to."));
 
     // LABEL: AssignedEMail
-    QLabel *lblAssignedEMail = new QLabel (i18n ("Assigned to (EMail):"), GeneralLayout);
+    QLabel *lblAssignedEMail = new QLabel (i18n ("Assigned to (Email):"), GeneralLayout);
 
     // LINEEDIT: AssignedEMail
     editAssignedEMail = new QLineEdit(GeneralLayout);
     lblAssignedEMail->setBuddy (editAssignedEMail);
     editAssignedEMail->setText (pBug->AssignedEMail);
     QWhatsThis::add (editAssignedEMail,
-	    i18n("Enter the e-mail address of the person\n"
+	    i18n("Enter the email address of the person\n"
 			 "you wish to assign this bug to."));
 
     // SPACER!!!
@@ -359,13 +359,13 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     editRepeat->setText (pBug->Repeat);
     QWhatsThis::add (editRepeat,
 	    i18n("Enter the method used to repeat this\n"
-			 "error, if there is one.)."));
+			 "error, if there is one."));
 
     // LINEEDIT: Workaround
     editWorkaround = new QMultiLineEdit(pSheetWorkaround,"Workaround");
     editWorkaround->setText (pBug->Workaround);
     QWhatsThis::add (editWorkaround,
-	    i18n("Enter a workaround for the bug\n"
+	    i18n("Enter a workaround for the bug,\n"
 			 "if there is one."));
 
     // LINEEDIT: SysInfo
@@ -373,7 +373,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     editSysInfo->setText (pBug->SysInfo);
     QWhatsThis::add (editSysInfo,
 	    i18n("Enter a full description of your OS, including\n"
-			 "distribution, QT version, compilers, etc."));
+			 "distribution, Qt version, compilers, etc."));
 
     // Need a cancel button too.
     setOkButton (i18n("OK"));

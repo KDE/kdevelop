@@ -52,9 +52,9 @@ SourceNavPart::SourceNavPart(QObject *parent, const char *name, const QStringLis
 
   connect( partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)) );
 
-  navForward = new KToolBarPopupAction( KGuiItem( i18n("Navigate Forward"), "1rightarrow", i18n( "ToolTip" ), i18n( "Whats This" ) ),
+  navForward = new KToolBarPopupAction( KGuiItem( i18n("Navigate Forward"), "1rightarrow", i18n( "ToolTip" ), i18n( "What's This" ) ),
                                         0, this, SLOT(slotNavForward()), actionCollection(), "navForward" );
-  navBack = new KToolBarPopupAction( KGuiItem( i18n("Navigate Backwards"), "1leftarrow", i18n( "ToolTip" ), i18n( "Whats This" ) ),
+  navBack = new KToolBarPopupAction( KGuiItem( i18n("Navigate Backwards"), "1leftarrow", i18n( "ToolTip" ), i18n( "What's This" ) ),
                                      0, this, SLOT(slotNavBack()), actionCollection(), "navBack" );
 
   connect( navForward->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(fillForwardPopup()) );

@@ -88,41 +88,41 @@ protected:
 
 
 const char *arguments_flags[] = {
-    "arrayness",     I18N_NOOP("warn about inconsistent use of arguments that use arrays"),
-    "type",          I18N_NOOP("warn about dummy arguments of a data type different from "
+    "arrayness",     I18N_NOOP("Warn about inconsistent use of arguments that use arrays"),
+    "type",          I18N_NOOP("Warn about dummy arguments of a data type different from "
                                "the actual arguments"),
-    "function-type", I18N_NOOP("warn if the invocation assumes a different data type for the return type, "
+    "function-type", I18N_NOOP("Warn if the invocation assumes a different data type for the return type, "
                                "different from the actual return type"),
-    "number",        I18N_NOOP("warn about invoking a subprogram with an incorrect number of arguments"),
+    "number",        I18N_NOOP("Warn about invoking a subprogram with an incorrect number of arguments"),
     0,               0
 };
 
 
 const char *common_flags[] = {
-    "dimension", I18N_NOOP("corresponding arrays in each declaration of a block must agree in size "
+    "dimension", I18N_NOOP("Corresponding arrays in each declaration of a block must agree in size "
                            "and number of dimensions"),
-    "exact",     I18N_NOOP("the comparison of two blocks is done variable-by-variable"),
-    "length",    I18N_NOOP("warn if different declarations of the same block are not equal in total length"),
-    "type",      I18N_NOOP("in each declaration of a block, corresponding memory locations "
+    "exact",     I18N_NOOP("The comparison of two blocks is done variable-by-variable"),
+    "length",    I18N_NOOP("Warn if different declarations of the same block are not equal in total length"),
+    "type",      I18N_NOOP("In each declaration of a block, corresponding memory locations "
                            "must agree in data type"),
     0,           0
 };
 
 
 const char *truncation_flags[] = {
-    "int-div-exponent", I18N_NOOP("use of the result of integer division as an exponent"),
-    "int-div-real",     I18N_NOOP("conversion of an expression involving an integer division to real"),
-    "int-div-zero",     I18N_NOOP("division in an integer constant expression that yields a result of zero"),
+    "int-div-exponent", I18N_NOOP("Use of the result of integer division as an exponent"),
+    "int-div-real",     I18N_NOOP("Conversion of an expression involving an integer division to real"),
+    "int-div-zero",     I18N_NOOP("Division in an integer constant expression that yields a result of zero"),
     0,                  0
 };
 
 
 const char *usage_flags[] = {
-    "arg-alias",        I18N_NOOP("a scalar dummy argument is actually the same as another "
+    "arg-alias",        I18N_NOOP("A scalar dummy argument is actually the same as another "
                                   "and is (or may be) modified"),
-    "arg-array-alias",  I18N_NOOP("a dummy argument which is an array or array element "
+    "arg-array-alias",  I18N_NOOP("A dummy argument which is an array or array element "
                                   "is the same array as another and is modified"),
-    "arg-common-alias", I18N_NOOP("a scalar dummy argument is the same as a common variable in "
+    "arg-common-alias", I18N_NOOP("A scalar dummy argument is the same as a common variable in "
                                   "the subprogram, and either is modified"),
     0,                  0
 };
@@ -130,7 +130,7 @@ const char *usage_flags[] = {
 
 const char *f77_flags[] = {
     "accept-type",     I18N_NOOP("ACCEPT and TYPE I/O statements"),
-    "array-bounds",    I18N_NOOP("expressions defining array bounds that contain array "
+    "array-bounds",    I18N_NOOP("Expressions defining array bounds that contain array "
                                  "elements or function references"),
     "assignment-stmt", I18N_NOOP("Assignment statements involving arrays"),
     0,                 0

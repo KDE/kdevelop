@@ -135,11 +135,11 @@ void CommitDialog::accept()
 {
     if ( client().isEmpty() ) {
         setDetails( true );
-        KMessageBox::error( this, i18n("Please enter the p4 client name.") );
+        KMessageBox::error( this, i18n("Please enter the P4 client name.") );
         clientEdit->setFocus(); 
     } else if ( user().isEmpty() ) {
         setDetails( true );
-        KMessageBox::error( this, i18n("Please enter the p4 user.") );
+        KMessageBox::error( this, i18n("Please enter the P4 user.") );
         userEdit->setFocus();
     } else if ( filesBox->count() == 0 ) {
         setDetails( true );

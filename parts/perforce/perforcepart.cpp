@@ -66,7 +66,7 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
         sub->insertItem( i18n("Sync"),
                            this, SLOT(slotUpdate()) );
         sub->insertSeparator();
-	sub->insertItem( i18n("Diff to Repository"),
+	sub->insertItem( i18n("Diff Against Repository"),
 			   this, SLOT(slotDiff()) );
         sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
@@ -194,13 +194,13 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
     }
 
     if ( diff.isEmpty() && !err.isEmpty() ) {
-        KMessageBox::detailedError( 0, i18n("P4 outputted errors during diffing."), err, i18n("Errors during diffing") );
+        KMessageBox::detailedError( 0, i18n("P4 outputted errors during diff."), err, i18n("Errors During Diff") );
         return;
     }
 
     if ( !err.isEmpty() ) {
-        int s = KMessageBox::warningContinueCancelList( 0, i18n("P4 outputted errors during diffing. Do you still want to continue?"),
-                        QStringList::split( "\n", err, false ), i18n("Errors during diffing") );
+        int s = KMessageBox::warningContinueCancelList( 0, i18n("P4 outputted errors during diff. Do you still want to continue?"),
+                        QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
         if ( s != KMessageBox::Continue )
             return;
     }

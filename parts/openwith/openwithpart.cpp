@@ -42,7 +42,7 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 
   KPopupMenu *sub = new KPopupMenu(popup);
 
-  sub->insertItem(i18n("Open as utf8"), this, SLOT(openAsEncoding(int)));
+  sub->insertItem(i18n("Open as UTF-8"), this, SLOT(openAsEncoding(int)));
   
   QString mimeType = KMimeType::findByURL(m_url, 0, true, true)->name();
   KTrader::OfferList offers = KTrader::self()->query(mimeType, "Type == 'Application'");

@@ -172,7 +172,7 @@ void BugList::ParseFile ()
     // Try to open our bug tracking file.
     if (!file.open (IO_ReadOnly))
     {
-        QMessageBox (NULL, i18n("Can't read the bug tracking file %1.").arg(m_FileName));
+        QMessageBox (NULL, i18n("Unable to read the bug tracking file %1").arg(m_FileName));
         return;
     }
 
@@ -500,7 +500,7 @@ void BugList::WriteXMLFile ()
     QFile file (m_FileName);
     if (!file.open (IO_WriteOnly))
     {
-        QMessageBox (NULL, i18n("Can't save the bug tracking file."));
+        QMessageBox (NULL, i18n("Unable to save the bug tracking file"));
         return;
     }
     QTextStream s(&file);
@@ -727,8 +727,8 @@ void BugList::slotCloseClicked()
 
         Result = MB.warning (this,
             i18n ("The Bug List has Changed"),
-            i18n ("The bug list has been changed,\n"
-                  "do you want to save your changes?"),
+            i18n ("The bug list has been changed.\n"
+                  "Do you want to save your changes?"),
             QMessageBox::Yes | QMessageBox::Default,QMessageBox::No,QMessageBox::Cancel);
         if (Result == QMessageBox::Yes)
         {

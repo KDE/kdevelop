@@ -34,7 +34,7 @@ CppSupportWidget::setCHText( const QString& text )
 {
     clear( );
     if( text.isEmpty( ) )
-	setText( i18n( "No code hinting available for this method !" ) );
+	setText( i18n( "No code hinting available for this method" ) );
     else
 	setText( text );
 }

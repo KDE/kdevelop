@@ -44,7 +44,7 @@ QString message(const QCString &key)
     addMessage("INLINE_SOURCES", i18n("Inline sources"));
     addMessage("STRIP_CODE_COMMENTS", i18n("Hide special comment blocks"));
     addMessage("CASE_SENSE_NAMES", i18n("Use case-sensitive file names"));
-    addMessage("SHORT_NAMES", i18n("Generate shor file names"));
+    addMessage("SHORT_NAMES", i18n("Generate short file names"));
     addMessage("HIDE_SCOPE_NAMES", i18n("Hide name scopes"));
     addMessage("VERBATIM_HEADERS", i18n("Include headers verbatim"));
     addMessage("SHOW_INCLUDE_FILES", i18n("Show included files"));
@@ -59,11 +59,11 @@ QString message(const QCString &key)
     addMessage("GENERATE_TESTLIST", i18n("Generate Test-list"));
     addMessage("GENERATE_BUGLIST", i18n("Generate Bug-list"));
     addMessage("ALIASES", i18n("Aliases"));
-    addMessage("MAX_INITIALIZER_LINES", i18n("Maximum lines show for initializers"));
+    addMessage("MAX_INITIALIZER_LINES", i18n("Maximum lines shown for initializers"));
     addMessage("OPTIMIZE_OUTPUT_FOR_C", i18n("Optimize output for C"));
     addMessage("SHOW_USED_FILES", i18n("Show used files"));
     addMessage("Messages", i18n("Messages"));
-    addMessage("QUIET", i18n("Be quiet"));
+    addMessage("QUIET", i18n("Suppress output"));
     addMessage("WARNINGS", i18n("Show warnings"));
     addMessage("WARN_IF_UNDOCUMENTED", i18n("Warn about undocumented entitites"));
     addMessage("WARN_FORMAT", i18n("Warnings format"));
@@ -71,7 +71,7 @@ QString message(const QCString &key)
     addMessage("Input", i18n("Input"));
     addMessage("INPUT", i18n("Input files and directories"));
     addMessage("FILE_PATTERNS", i18n("Input patterns"));
-    addMessage("RECURSIVE", i18n("Recurse into subdirs"));
+    addMessage("RECURSIVE", i18n("Recurse into subdirectories"));
     addMessage("EXCLUDE", i18n("Exclude from input"));
     addMessage("EXCLUDE_PATTERNS", i18n("Exclude patterns"));
     addMessage("EXAMPLE_PATH", i18n("Path to examples"));
@@ -104,7 +104,7 @@ QString message(const QCString &key)
     addMessage("COMPACT_LATEX", i18n("Generate compact output"));
     addMessage("PAPER_TYPE", i18n("Paper type"));
     addMessage("EXTRA_PACKAGES", i18n("Include extra packages"));
-    addMessage("LATEX_HEADER", i18n("LaTeX Header-file"));
+    addMessage("LATEX_HEADER", i18n("LaTeX Header file"));
     addMessage("PDF_HYPERLINKS", i18n("Generate PDF hyperlinks"));
     addMessage("USE_PDFLATEX", i18n("Use pdflatex"));
     addMessage("LATEX_BATCHMODE", i18n("Use batch mode"));
@@ -138,7 +138,7 @@ QString message(const QCString &key)
     addMessage("HAVE_DOT", i18n("Use dot"));
     addMessage("CLASS_GRAPH", i18n("Generate class graphs"));
     addMessage("COLLABORATION_GRAPH", i18n("Generate collaboration graphs"));
-    addMessage("INCLUDE_GRAPH", i18n("Generate include grapys"));
+    addMessage("INCLUDE_GRAPH", i18n("Generate include graphs"));
     addMessage("INCLUDED_BY_GRAPH", i18n("Generate included-by graphs"));
     addMessage("GRAPHICAL_HIERARCHY", i18n("Generate graphical hierarchy"));
     addMessage("DOT_PATH", i18n("Path to dot"));

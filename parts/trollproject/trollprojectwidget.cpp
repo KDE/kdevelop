@@ -537,7 +537,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         {
           KMessageBox::error(this,i18n("Failed to create subdirectory. "
                                        "Do you have write permission "
-                                       "in the projectfolder?" ));
+                                       "in the project folder?" ));
           return;
         }
         spitem->subdirs.append(subdirname);
@@ -779,7 +779,7 @@ void TrollProjectWidget::slotNewFile()
     {
       KMessageBox::error(this,i18n("Failed to create new file. "
                                    "Do you have write permission "
-                                   "in the projectfolder?" ));
+                                   "in the project folder?" ));
       return;
     }
     newfile.close();
@@ -889,7 +889,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             {
               KMessageBox::error(this,i18n("Failed to create new file. "
                                            "Do you have write permission "
-                                           "in the projectfolder?" ));
+                                           "in the project folder?" ));
               return;
             }
             newfile.close();

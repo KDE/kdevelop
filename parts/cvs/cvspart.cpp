@@ -66,7 +66,7 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
 	sub->insertItem( i18n("Remove From Repository"),
 			 this, SLOT(slotRemove()) );
 	sub->insertSeparator();
-	sub->insertItem( i18n("Diff to Repository"),
+	sub->insertItem( i18n("Diff Against Repository"),
 			 this, SLOT(slotDiff()) );
 	sub->insertItem( i18n("Log"),
 			 this, SLOT(slotLog()) );
@@ -207,19 +207,19 @@ void CvsPart::slotDiffFinished( const QString& diff, const QString& err ) {
     }
 
     if ( diff.isEmpty() && !err.isEmpty() ) {
-	KMessageBox::detailedError( 0, i18n("CVS outputted errors during diffing."), err, i18n("Errors during diffing") );
+	KMessageBox::detailedError( 0, i18n("CVS outputted errors during diff."), err, i18n("Errors During Diff") );
 	return;
     }
 	
     if ( !err.isEmpty() ) {
-	int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diffing. Do you still want to continue?"),
-							QStringList::split( "\n", err, false ), i18n("Errors during diffing") );
+	int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
+							QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
 	if ( s != KMessageBox::Continue )
 	    return;
     }
 			
     if ( diff.isEmpty() ) {
-	KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No differences found") );
+	KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Differences Found") );
 	return;
     }
 		
@@ -228,7 +228,7 @@ void CvsPart::slotDiffFinished( const QString& diff, const QString& err ) {
 }
 		
 void CvsPart::projectConfigWidget(KDialogBase *dlg) {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Cvs"));
+    QVBox *vbox = dlg->addVBoxPage(i18n("CVS"));
     CvsOptionsWidget *w = new CvsOptionsWidget(this, (QWidget *)vbox, "cvs config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

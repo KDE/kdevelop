@@ -306,12 +306,12 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
   connect(bKDevFocus_, SIGNAL(clicked()), this,   SLOT(slotKdevFocus()));
   connect(bPrevFocus_, SIGNAL(clicked()), this,   SLOT(slotPrevFocus()));
     
-    QToolTip::add( bRun,        i18n("Continue with app execution. May start the app") );
-    QToolTip::add( bInterrupt,  i18n("Interrupt the app execution") );
+    QToolTip::add( bRun,        i18n("Continue with application execution. May start the application.") );
+    QToolTip::add( bInterrupt,  i18n("Interrupt the application execution") );
     QToolTip::add( bNext,       i18n("Execute one line of code, but run through functions") );
     QToolTip::add( bNexti,      i18n("Execute one assembler instruction, but run through functions") );
-    QToolTip::add( bStep,       i18n("Execute one line of code, stepping into fn if appropriate") );
-    QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into fn if appropriate") );
+    QToolTip::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate") );
+    QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate") );
     QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
     QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewers") );
     QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
