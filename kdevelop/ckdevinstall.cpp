@@ -225,9 +225,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	hint_label = new QLabel( this, "Label_5" );
 	hint_label->setGeometry( 40, 100, 440, 170 );
 	{
-	  QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-	  QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-	  QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+	  QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor((unsigned int) QRgb(16777215) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
+	  QColorGroup disabled( QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ) );
+	  QColorGroup active( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
 	  QPalette palette( normal, disabled, active );
 	  hint_label->setPalette( palette );
 	}

@@ -1,3 +1,7 @@
+1999-08-12 Sandy Merier   <smeier@rz.uni-potsdam.de>
+	* commited bugfix by Juergen Vigina, fixed problem in KDlgPropertyBase::dumpFontPropCall
+	* fixed problem in KDlgEdit::generateKLedLamp
+
 1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
         * deactivating 'file save', if file in edit window isn't modified
         * deactivating certain file commands, if Doc- or Tools-Tab is active

@@ -1127,8 +1127,16 @@ void KDlgEdit::generateKLed(KDlgItem_Widget *wid, QTextStream *stream,QString _p
 void KDlgEdit::generateKLedLamp(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
-
-    props->dumpConstruct(stream, "KLedLamp", _parent);
+    // because kledlamp allows only parent a parameter we can't use dumpContruct at this point :-(
+    
+    QString s = "  ";
+    s += props->getPropValue("VarName");
+    s += "= new ";
+    s += "KLedLamp";
+    s += "(";
+    s += _parent;
+    s += ");\n";
+    *stream << s;
     generateCommon(wid,stream,_parent);
 }
 
