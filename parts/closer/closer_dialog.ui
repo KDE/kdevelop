@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>388</width>
-            <height>504</height>
+            <width>403</width>
+            <height>571</height>
         </rect>
     </property>
     <property name="caption">
@@ -42,6 +42,14 @@
                     </property>
                 </widget>
             </vbox>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>path_check</cstring>
+            </property>
+            <property name="text">
+                <string>Show full paths</string>
+            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">

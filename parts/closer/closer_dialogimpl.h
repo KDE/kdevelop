@@ -12,7 +12,7 @@
 #ifndef CLOSER_DIALOGIMPL_H
 #define CLOSER_DIALOGIMPL_H
 
-#include <qstringlist.h>
+#include <kurl.h>
 
 #include "closer_dialog.h"
 
@@ -21,11 +21,13 @@ class CloserDialogImpl : public CloserDialog
     Q_OBJECT
 
 public:
-    CloserDialogImpl( QStringList const & fileList );
+    CloserDialogImpl( KURL::List const & fileList );
     ~CloserDialogImpl();
 
-    QStringList getCheckedFiles();
+    KURL::List getCheckedFiles();
 
+private slots:
+    void togglePaths( bool );    
 };
 
 #endif

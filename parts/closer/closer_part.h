@@ -13,9 +13,9 @@
 #define __KDEVPART_CLOSER_H__
 
 
-#include <qguardedptr.h>
 #include <kdevplugin.h>
-#include <ktexteditor/editor.h>
+#include <kparts/part.h>
+#include <kurl.h>
 
 
 class CloserPart : public KDevPlugin
@@ -30,12 +30,9 @@ public slots:
     void openDialog();
 
 private:
-    QStringList openFiles();
-    QString relativeProjectPath( QString path );
-    QString fullProjectPath( QString path );
-    void closeFiles( QStringList const & fileList );
-    KTextEditor::Editor * getEditorForFile( QString const & file );
-
+    KURL::List openFiles();
+    void closeFiles( KURL::List const & fileList );
+    KParts::ReadOnlyPart * partForURL( KURL const & url );
 };
 
 

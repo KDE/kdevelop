@@ -12,41 +12,84 @@
 #include <qstringlist.h>
 #include <qlistview.h>
 #include <qheader.h>
+#include <qcheckbox.h>
+
+#include <kdebug.h>
 
 #include "closer_dialogimpl.h"
 
 
-CloserDialogImpl::CloserDialogImpl( QStringList const & fileList )
+class CheckURL : public QCheckListItem
+{
+public:
+    CheckURL( QListView * lv, KURL const & url )
+        : QCheckListItem( lv, url.fileName(), QCheckListItem::CheckBox),
+        _url( url )
+    {}
+
+    KURL const & url() const { return _url; }
+
+    void showPath( bool showPaths )
+    {
+        if ( showPaths )
+        {
+            setText( 0, _url.path() );
+        }
+        else
+        {
+            setText( 0, _url.fileName() );
+        }
+    }
+
+private:
+    KURL _url;
+};
+
+
+CloserDialogImpl::CloserDialogImpl( KURL::List const & fileList )
     : CloserDialog( 0, 0, false, 0 )
 {
     files_listview->addColumn( "" );
     files_listview->header()->hide();
 
-    QStringList::ConstIterator it = fileList.begin();
+    KURL::List::ConstIterator it = fileList.begin();
     while ( it != fileList.end() )
     {
-        QCheckListItem * x = new QCheckListItem( files_listview, *it, QCheckListItem::CheckBox );
+        QCheckListItem * x = new CheckURL( files_listview, *it );
         x->setOn( true );
         ++it;
     }
+
+    connect( this->path_check, SIGNAL( toggled( bool ) ), this, SLOT( togglePaths( bool ) ) );
 }
 
 CloserDialogImpl::~CloserDialogImpl()
 {
 }
 
-QStringList CloserDialogImpl::getCheckedFiles()
+void CloserDialogImpl::togglePaths( bool showPaths )
 {
-    QStringList checkedFiles;
+    QListViewItemIterator it( files_listview );
+    while ( it.current() )
+    {
+        CheckURL * item = static_cast<CheckURL*>( it.current() );
+        item->showPath( showPaths );
+        ++it;
+    }
+}
 
-    QCheckListItem const * item = static_cast<QCheckListItem*>( files_listview->firstChild() );
+KURL::List CloserDialogImpl::getCheckedFiles()
+{
+    KURL::List checkedFiles;
+
+    CheckURL const * item = static_cast<CheckURL*>( files_listview->firstChild() );
     while ( item )
     {
         if ( item->isOn() )
         {
-            checkedFiles << item->text();
+            checkedFiles << item->url();
         }
-        item = static_cast<QCheckListItem*>( item->nextSibling() );
+        item = static_cast<CheckURL*>( item->nextSibling() );
     }
     return checkedFiles;
 }

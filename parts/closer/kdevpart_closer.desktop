@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Exec=
-Comment=Part for closing selected editor windows
+Comment=Part for closing selected windows
 Name=KDevcloser
+GenericName=Window Closer
+GenericName[sv]=Fönsterstängare
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
-X-KDevelop-Scope=Global
+X-KDevelop-Scope=Core
 X-KDE-Library=libkdevcloser

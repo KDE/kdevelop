@@ -20,9 +20,7 @@
 #include <kdebug.h>
 #include <kdevpartcontroller.h>
 #include <kparts/part.h>
-#include <ktexteditor/editor.h>
 #include <kdevproject.h>
-
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
@@ -34,15 +32,15 @@ typedef KGenericFactory<CloserPart> CloserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( "kdevcloser" ) );
 
 CloserPart::CloserPart(QObject *parent, const char *name, const QStringList& )
-    : KDevPlugin("Editor Window Closer", "closer", parent, name ? name : "closerPart" )
+    : KDevPlugin("Selected Window Closer", "closer", parent, name ? name : "closerPart" )
 {
     setInstance(CloserFactory::instance());
     setXMLFile("kdevpart_closer.rc");
 
-    KAction * action = new KAction( i18n("Close Editor Windows..."), CTRL+ALT+Key_W, this,
+    KAction * action = new KAction( i18n("Close Selected Windows..."), CTRL+ALT+Key_W, this,
         SLOT( openDialog() ), actionCollection(), "closer" );
 
-    action->setStatusText( i18n("Select editor windows to close") );
+    action->setStatusText( i18n("Select windows to close") );
 
     core()->insertNewAction( action );
 }
@@ -60,17 +58,17 @@ void CloserPart::openDialog()
     }
 }
 
-QStringList CloserPart::openFiles()
+KURL::List CloserPart::openFiles()
 {
-    QStringList openfiles;
+    KURL::List openfiles;
     if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
     {
         QPtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
-            if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
+            if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
             {
-                openfiles.append( relativeProjectPath( ed->url().path() ) );
+                openfiles.append( ro_part->url() );
             }
             ++it;
         }
@@ -78,59 +76,34 @@ QStringList CloserPart::openFiles()
     return openfiles;
 }
 
-void CloserPart::closeFiles( QStringList const & fileList )
+void CloserPart::closeFiles( KURL::List const & fileList )
 {
-    QStringList::ConstIterator it = fileList.begin();
+    KURL::List::ConstIterator it = fileList.begin();
     while ( it != fileList.end() )
     {
-        if ( KTextEditor::Editor * ed = getEditorForFile( fullProjectPath( *it ) ) )
+        if ( KParts::ReadOnlyPart * ro_part = partForURL( *it ) )
         {
-            ed->closeURL();
-            partController()->removePart( ed );
-            delete ed;
+            ro_part->closeURL();
+            partController()->removePart( ro_part );
+            delete ro_part;
         }
         ++it;
     }
 }
 
-KTextEditor::Editor * CloserPart::getEditorForFile( QString const & file )
+// reimplemented from PartController::partForURL to avoid linking
+KParts::ReadOnlyPart * CloserPart::partForURL( KURL const & url )
 {
-    if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
+    QPtrListIterator<KParts::Part> it( *partController()->parts() );
+    while( it.current() )
     {
-        QPtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* part = it.current() )
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (ro_part && url == ro_part->url())
         {
-            if ( KTextEditor::Editor * ed = dynamic_cast<KTextEditor::Editor *>( part ) )
-            {
-                if ( file == ed->url().path() )
-                {
-                    return ed;
-                }
-            }
-            ++it;
+            return ro_part;
         }
+        ++it;
     }
     return 0;
 }
-
-QString CloserPart::relativeProjectPath( QString path )
-{
-    QString project = this->project()->projectDirectory() + "/";
-    if ( path.left( project.length() ) == project )
-    {
-        path = path.mid( project.length() );
-    }
-    return path;
-}
-
-QString CloserPart::fullProjectPath( QString path )
-{
-    QString project = this->project()->projectDirectory() + "/";
-    if ( path.left(1) != "/" && path.left( project.length() ) != project )
-    {
-        path = project + path;
-    }
-    return path;
-}
-
 #include "closer_part.moc"
