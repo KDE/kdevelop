@@ -2,7 +2,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdi
 
 bin_PROGRAMS = kdevelop
 
-kdevelop_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp projectmanager.cpp plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp mainwindowideal.cpp statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp splashscreen.cpp projectsession.cpp mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp
+kdevelop_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp projectmanager.cpp plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp splashscreen.cpp projectsession.cpp mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)

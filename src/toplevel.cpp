@@ -7,7 +7,6 @@
 
 
 #include "mainwindow.h"
-#include "mainwindowideal.h"
 
 
 KDevMainWindow *TopLevel::s_instance = 0;
