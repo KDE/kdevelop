@@ -51,9 +51,6 @@ class ProjectSpace : public KDevComponent {
   ProjectSpace(QObject* parent=0,const char* name=0);
   ~ProjectSpace();
 
-  // from KDevComponent
-  void languageSupportOpened(KDevLanguageSupport *ls);
-  void languageSupportClosed();
   virtual QList<KAction> kdevNodeActions(KDevNode* pNode);
 
 
@@ -172,10 +169,6 @@ protected:
   QString m_email;
   QString m_company;
   QString m_author;
-
-  // the current languagesupport
-  KDevLanguageSupport* m_pLanguageSupport;
- 
  private:
   void fillActiveProjectPopupMenu();
   

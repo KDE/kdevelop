@@ -14,4 +14,6 @@ kdevelopinclude_HEADERS = kdevcomponent.h kdevversioncontrol.h \
 			  ctoolclass.h processview.h \
 			  kdevviewhandler.h kdevactions.h kdevnodes.h
 
+noinst_HEADERS = kdevapi.h
+
 METASOURCES = AUTO

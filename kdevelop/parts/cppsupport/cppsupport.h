@@ -34,8 +34,6 @@ public:
 
 protected:
     virtual void projectSpaceOpened();
-    virtual void languageSupportOpened();
-    virtual void editorManagerOpened();
 
     virtual bool hasFeature(Features feature);
     virtual void newClassRequested();
@@ -44,6 +42,7 @@ protected:
     virtual QStringList fileFilters();
 
 private slots:
+    void initialParse();
     void addedFileToProject(KDevFileNode* pNode);
     void removedFileFromProject(KDevFileNode* pNode);
     void savedFile(const QString &fileName);

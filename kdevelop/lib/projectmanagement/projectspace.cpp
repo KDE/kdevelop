@@ -54,11 +54,11 @@ QString FileGroup::filter(){
   return m_filter;
 }
 
-ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
+ProjectSpace::ProjectSpace(QObject* parent,const char* name)
+    : KDevComponent(parent,name){
   m_pProjects = new QList<Project>;
   m_pUserDoc = 0;
   m_pGlobalDoc = 0;
-  m_pLanguageSupport =0;
   m_pCurrentProject =0;
 }
 
@@ -97,8 +97,8 @@ void ProjectSpace::slotProjectAddExistingFiles()
 {
    kdDebug(9030) << "ProjectSpace::slotProjectAddExistingFiles" << endl;
    QStringList fileFilters;
-   if(m_pLanguageSupport != 0){
-     fileFilters = m_pLanguageSupport->fileFilters();
+   if(languageSupport() != 0){
+     fileFilters = languageSupport()->fileFilters();
    }
    else {
      fileFilters << "*"; // default
@@ -611,12 +611,8 @@ bool ProjectSpace::saveConfig(){
   file.close();
   return true;
 }
-void ProjectSpace::languageSupportOpened(KDevLanguageSupport *ls){
-  m_pLanguageSupport = ls;
-}
-void ProjectSpace::languageSupportClosed(){
-  m_pLanguageSupport = 0;
-}
+
+
 QList<FileGroup> ProjectSpace::defaultFileGroups(){
   QList<FileGroup> list;
   FileGroup* pGroup = new FileGroup();

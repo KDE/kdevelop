@@ -52,7 +52,7 @@ signals:
     
 protected:
     virtual void setupGUI();
-    virtual void languageSupportOpened();
+    virtual void projectSpaceOpened();
 
 private slots:
     void updatedSourceInfo();

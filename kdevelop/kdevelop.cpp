@@ -48,7 +48,6 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     m_MDICoverList.setAutoDelete( true);
 
     initActions();
-    //  initHelp();
 
     setXMLFile( "kdevelopui.rc" );
     m_pCore = new KDevelopCore(this);

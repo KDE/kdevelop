@@ -1,3 +1,7 @@
+2000-12-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Further KDevComponent minimization. All components
+	  can now be accessed already in setupGUI()
+
 2000-12-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Removed many methods from KDevComponents, now using
 	  a signal/slot oriented approach

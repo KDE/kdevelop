@@ -35,6 +35,7 @@ class KDialogBase;
 class KAboutData;
 class KDevNode;
 class KDevFileNode;
+class KDevApi;
 
 
 
@@ -112,15 +113,6 @@ public:
      * configuration to the DOM document, see #projectSpaceClosed()
      */
     virtual void projectSpaceOpened();
-    /**
-     * A new version control version has been created/destroyed
-     */
-    virtual void versionControlOpened();
-    /**
-     * A new language support object has been created/destroyed
-     */
-    virtual void languageSupportOpened();
-    virtual void editorManagerOpened();
 
     /** returns some data about this Component, should be static?*/
     virtual KAboutData* aboutPlugin();
@@ -132,17 +124,6 @@ public:
   
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
-    /**
-     * Executes a make-like command. The output of the command is put
-     * in a separate view and is parsed for error messages.
-     */
-    //    void executeMakeCommand(const QString &command);
-    /**
-     * Executes a command to start the application. The output of the command
-     * is put in a separate view (except for terminal applications, which
-     * are started in their own terminal emulator)
-     */
-    //    void executeAppCommand(const QString &command);
     /**
      * Marks the component as running (or not running). As long as at least one
      * component is running, the stop button is enabled. When it is pressed,
@@ -159,23 +140,10 @@ private:
     // These methods are not meaningful and are therefore forbidden
     void setWidget(QWidget *w);
     QWidget *widget();
-
-    /**
-     * To be replaced later...
-     */
-    void setupInternal(ProjectSpace *ps, ClassStore *cs,
-                       KDevVersionControl *vc, KDevLanguageSupport *ls,
-                       KDevEditorManager *em, KDevMakeFrontend *mf,
-                       KDevAppFrontend *af);
+    // Internal
     friend class KDevelopCore;
-    
-    ProjectSpace *m_projectSpace;
-    ClassStore *m_classStore;
-    KDevVersionControl *m_versionControl;
-    KDevLanguageSupport *m_languageSupport;
-    KDevEditorManager *m_editorManager;
-    KDevMakeFrontend *m_makeFrontend;
-    KDevAppFrontend *m_appFrontend;
+    void setupInternal(KDevApi *api);
+    KDevApi *m_api;
 };
 
 #endif

@@ -104,13 +104,12 @@ void ClassView::setupPopup()
 }
 
 
-void ClassView::languageSupportOpened()
+void ClassView::projectSpaceOpened()
 {
-    kdDebug(9003) << "ClassView::languageSupportOpened()" << endl;
+    kdDebug(9003) << "ClassView::projetSpaceOpened()" << endl;
 
     KDevLanguageSupport *ls = languageSupport();
-    if (ls)
-        connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(updatedSourceInfo()));
+    connect(ls, SIGNAL(sigUpdatedSourceInfo()), this, SLOT(updatedSourceInfo()));
     emit setLanguageSupport(ls);
 
     setupPopup();

@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include <qstringlist.h>
+#include <qtimer.h>
 #include <kdebug.h>
 
 #include "cppsupport.h"
@@ -38,32 +39,33 @@ CppSupport::CppSupport(QObject *parent, const char *name)
 
 
 CppSupport::~CppSupport()
-{}
+{
+    delete m_parser;
+}
 
 
 void CppSupport::projectSpaceOpened()
 {
     kdDebug(9007) << "CppSupport::projectSpaceOpened()" << endl;
+
     ProjectSpace *ps = projectSpace();
-        
-    if (ps) {
-        connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
-                 this, SLOT(addedFileToProject(KDevFileNode*)) );
-        connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
-                 this, SLOT(removedFileFromProject(KDevFileNode*)) );
-        m_parser = new CClassParser(classStore());
-    } else {
-        delete m_parser;
-        m_parser = 0;
-    }
+    connect( ps, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
+             this, SLOT(addedFileToProject(KDevFileNode*)) );
+    connect( ps, SIGNAL(sigRemovedFileFromProject(KDevFileNode*)),
+             this, SLOT(removedFileFromProject(KDevFileNode*)) );
+
+    KDevEditorManager *em = editorManager();
+    connect( em, SIGNAL(sigSavedFile(const QString&)),
+             this, SLOT(savedFile(const QString&)) );
+
+    m_parser = new CClassParser(classStore());
+    QTimer::singleShot(0, this, SLOT(initialParse()));
 }
 
 
-void CppSupport::languageSupportOpened()
+void CppSupport::initialParse()
 {
-    kdDebug(9007) << "CppSupport::languageSupportOpened()" << endl;
-    // At the time this method is called, all components are already
-    // loaded and notified about the project space and the class store?
+    kdDebug(9007) << "CppSupport::initialParse()" << endl;
     
     // quick hack
     Project* pProject = projectSpace()->currentProject();
@@ -74,18 +76,6 @@ void CppSupport::languageSupportOpened()
         }
 
         emit sigUpdatedSourceInfo();
-    }
-}
-
-
-void CppSupport::editorManagerOpened()
-{
-    kdDebug(9007) << "CppSupport::editorManagerOpened()" << endl;
-    KDevEditorManager *em = editorManager();
-    
-    if (em) {
-        connect( em, SIGNAL(sigSavedFile(const QString&)),
-                 this, SLOT(savedFile(const QString&)) );
     }
 }
 

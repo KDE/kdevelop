@@ -23,6 +23,7 @@ class KDevEditorManager;
 class KDevMakeFrontend;
 class KDevAppFrontend;
 class KDevViewHandler;
+class KDevApi;
 class ProjectSpace;
 
 class KDevelopCore : QObject
@@ -69,15 +70,7 @@ private:
     KDevelop *m_pKDevelopGUI;
     QList<KDevComponent> m_components;
     QList<KDevComponent> m_runningComponents;
-
-    KDevVersionControl *m_pVersionControl;
-    KDevLanguageSupport *m_pLanguageSupport;
-    KDevEditorManager *m_pEditorManager;
-    KDevMakeFrontend *m_pMakeFrontend;
-    KDevAppFrontend *m_pAppFrontend;
-    ClassStore *m_pClassStore;
-    ProjectSpace* m_pProjectSpace;
-    KDevViewHandler* m_pViewHandler;
+    KDevApi *m_api;
 };
 
 #endif

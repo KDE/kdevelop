@@ -30,22 +30,17 @@
 #include "kdevelopcore.h"
 #include "kdevviewhandler.h"
 #include "projectspace.h"
-#include "newprojectdlg.h"
+#include "kdevapi.h"
 #include "partloader.h"
+#include "newprojectdlg.h"
 
 
 KDevelopCore::KDevelopCore(KDevelop *pGUI)
     : QObject(pGUI, "kdevelop core")
-   ,m_pKDevelopGUI(pGUI)
-   ,m_pVersionControl(0L)
-   ,m_pLanguageSupport(0L)
-   ,m_pEditorManager(0)
-   ,m_pMakeFrontend(0L)
-   ,m_pAppFrontend(0L)
-   ,m_pProjectSpace(0L)
-   ,m_pViewHandler(0L)
+    ,m_pKDevelopGUI(pGUI)
 {
-    m_pClassStore = new ClassStore();
+    m_api = new KDevApi();
+    m_api->classStore = new ClassStore();
     initActions();
 }
 
@@ -63,10 +58,7 @@ void KDevelopCore::initComponent(KDevComponent *pComponent)
     connect( pComponent, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
              m_pKDevelopGUI, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
 
-    pComponent->setupInternal(m_pProjectSpace, m_pClassStore,
-                              m_pVersionControl, m_pLanguageSupport,
-                              m_pEditorManager, m_pMakeFrontend,
-                              m_pAppFrontend);
+    pComponent->setupInternal(m_api);
     pComponent->setupGUI();
     m_components.append(pComponent);
     m_pKDevelopGUI->guiFactory()->addClient(pComponent);
@@ -154,20 +146,20 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                            i18n("No valid project space component %1 found").arg(psService));
         return false;
     }
-    m_pProjectSpace = static_cast<ProjectSpace*>(psObj);
-    initComponent(m_pProjectSpace);
-    m_pProjectSpace->readConfig(fileName);
-    m_pProjectSpace->dump();
+    m_api->projectSpace = static_cast<ProjectSpace*>(psObj);
+    initComponent(m_api->projectSpace);
+    m_api->projectSpace->readConfig(fileName);
+    m_api->projectSpace->dump();
 
     // Language support component
-    QString lang = m_pProjectSpace->programmingLanguage();
+    QString lang = m_api->projectSpace->programmingLanguage();
     QObject *lsObj = PartLoader::loadByQuery(m_pKDevelopGUI,
                                              QString::fromLatin1("KDevelop/LanguageSupport"),
                                              QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(lang),
                                              "KDevLanguageSupport");
     if (lsObj) {
-        m_pLanguageSupport = static_cast<KDevLanguageSupport*>(lsObj);
-        initComponent(m_pLanguageSupport);
+        m_api->languageSupport = static_cast<KDevLanguageSupport*>(lsObj);
+        initComponent(m_api->languageSupport);
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No language support component for %1 found").arg(lang));
@@ -178,8 +170,8 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
     if (!vcService.isNull()) {
         QObject *vcObj = PartLoader::loadByName(m_pKDevelopGUI, vcService, "KDevVersionControl");
         if (vcObj) {
-            m_pVersionControl = static_cast<KDevVersionControl*>(vcObj);
-            initComponent(m_pVersionControl);
+            m_api->versionControl = static_cast<KDevVersionControl*>(vcObj);
+            initComponent(m_api->versionControl);
         } else {
             KMessageBox::sorry(m_pKDevelopGUI,
                                i18n("No valid version control component %1 found").arg(vcService));
@@ -192,8 +184,8 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                                              QString::null,
                                              "KDevEditorManager");
     if (emObj) {
-        m_pEditorManager = static_cast<KDevEditorManager*>(emObj);
-        initComponent(m_pEditorManager);
+        m_api->editorManager = static_cast<KDevEditorManager*>(emObj);
+        initComponent(m_api->editorManager);
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid editor manager component found"));
@@ -205,8 +197,8 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                                              QString::null,
                                              "KDevMakeFrontend");
     if (mfObj) {
-        m_pMakeFrontend = static_cast<KDevMakeFrontend*>(mfObj);
-        initComponent(m_pMakeFrontend);
+        m_api->makeFrontend = static_cast<KDevMakeFrontend*>(mfObj);
+        initComponent(m_api->makeFrontend);
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid make frontend component found"));
@@ -218,45 +210,20 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
                                              QString::null,
                                              "KDevAppFrontend");
     if (afObj) {
-        m_pAppFrontend = static_cast<KDevAppFrontend*>(afObj);
-        initComponent(m_pMakeFrontend);
+        m_api->appFrontend = static_cast<KDevAppFrontend*>(afObj);
+        initComponent(m_api->makeFrontend);
     } else {
         KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No valid application frontend component found"));
     }
 
-    // Temporary hack
-    QListIterator<KDevComponent> it0(m_components);
-    for (; it0.current(); ++it0)
-       (*it0)->setupInternal(m_pProjectSpace, m_pClassStore,
-                             m_pVersionControl, m_pLanguageSupport,
-                             m_pEditorManager, m_pMakeFrontend,
-                             m_pAppFrontend);
-    // Notifications
+    // Notification
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
         (*it1)->projectSpaceOpened();
     
-    if (m_pVersionControl) {
-        QListIterator<KDevComponent> it2(m_components);
-        for (; it2.current(); ++it2)
-            (*it2)->versionControlOpened();
-    }
-    
-    if (m_pLanguageSupport) {
-        QListIterator<KDevComponent> it3(m_components);
-        for (; it3.current(); ++it3)
-            (*it3)->languageSupportOpened();
-    }
-
-    if (m_pEditorManager) {
-        QListIterator<KDevComponent> it4(m_components);
-        for (; it4.current(); ++it4)
-            (*it4)->editorManagerOpened();
-    }
-
     // Restore window layout
-    QDomElement docel = m_pProjectSpace->readUserDocument()->documentElement();
+    QDomElement docel = m_api->projectSpace->readUserDocument()->documentElement();
     QDomElement layoutel = docel.namedItem("Layout").toElement();
     if (!layoutel.isNull())
         m_pKDevelopGUI->readDockConfig(layoutel);
@@ -275,11 +242,11 @@ bool KDevelopCore::openProjectSpace(const QString &fileName)
 void KDevelopCore::closeProjectSpace()
 {
     kdDebug(9000) << "KDevelopCore::closeProjectSpace" << endl;
-    if (!m_pProjectSpace)
+    if (!m_api->projectSpace)
         return;
     
     // Save window layout
-    QDomElement docel = m_pProjectSpace->readUserDocument()->documentElement();
+    QDomElement docel = m_api->projectSpace->readUserDocument()->documentElement();
     QDomElement layoutel = docel.namedItem("Layout").toElement();
     if (layoutel.isNull()) {
         layoutel = docel.ownerDocument().createElement("Layout");
@@ -288,46 +255,37 @@ void KDevelopCore::closeProjectSpace()
     m_pKDevelopGUI->writeDockConfig(layoutel);
 
     // Editor manager component
-    if (m_pEditorManager) {
-        QListIterator<KDevComponent> it1(m_components);
-        for (; it1.current(); ++it1)
-            (*it1)->editorManagerOpened();
-        m_components.remove(m_pEditorManager);
-        delete m_pEditorManager;
-        m_pEditorManager = 0;
+    if (m_api->editorManager) {
+        m_components.remove(m_api->editorManager);
+        delete m_api->editorManager;
+        m_api->editorManager = 0;
     }
 
     // Language support component
-    if (m_pLanguageSupport) {
-        QListIterator<KDevComponent> it2(m_components);
-        for (; it2.current(); ++it2)
-            (*it2)->languageSupportOpened();
-        m_components.remove(m_pLanguageSupport);
-        delete m_pLanguageSupport;
-        m_pLanguageSupport = 0;
+    if (m_api->languageSupport) {
+        m_components.remove(m_api->languageSupport);
+        delete m_api->languageSupport;
+        m_api->languageSupport = 0;
     }
 
     // Version control component
-    if (m_pVersionControl) {
-        QListIterator<KDevComponent> it3(m_components);
-        for (; it3.current(); ++it3)
-            (*it3)->versionControlOpened();
-        m_components.remove(m_pVersionControl);
-        delete m_pVersionControl;
-        m_pVersionControl = 0;
+    if (m_api->versionControl) {
+        m_components.remove(m_api->versionControl);
+        delete m_api->versionControl;
+        m_api->versionControl = 0;
     }
 
-    m_pClassStore->wipeout();
+    m_api->classStore->wipeout();
 
     // Project space component
     QListIterator<KDevComponent> it4(m_components);
     for (; it4.current(); ++it4)
         (*it4)->projectSpaceOpened();
     
-    m_pProjectSpace->saveConfig();
-    m_components.remove(m_pProjectSpace);
-    delete m_pProjectSpace;
-    m_pProjectSpace = 0L;
+    m_api->projectSpace->saveConfig();
+    m_components.remove(m_api->projectSpace);
+    delete m_api->projectSpace;
+    m_api->projectSpace = 0;
     
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("project_close")->setEnabled(false);
@@ -374,11 +332,10 @@ void KDevelopCore::slotFileNew()
 void KDevelopCore::slotProjectNew()
 {
     // if m_pProjectSpace == 0, create a new one
-    NewProjectDlg* pDlg = new NewProjectDlg(m_pProjectSpace);
+    NewProjectDlg* pDlg = new NewProjectDlg(m_api->projectSpace);
     if (pDlg->exec()) {
         if (pDlg->newProjectSpaceCreated()) {
-            if (m_pProjectSpace)
-                closeProjectSpace();
+            closeProjectSpace();
             QString file = pDlg->projectSpaceFile();
             kdDebug(9000) << "FILE" << file << endl;
             openProjectSpace(file);
@@ -475,7 +432,8 @@ void KDevelopCore::running(bool runs)
 
 KDevViewHandler* KDevelopCore::viewHandler()
 {
-   return m_pViewHandler;
+    //   return m_pViewHandler;
+    return 0;
 }
 
 

@@ -1,8 +1,5 @@
 #include "kdevcomponent.h"
-#include <qwidget.h>
-#include <qpopupmenu.h>
-#include <iostream.h>
-
+#include "kdevapi.h"
 
 
 KDevComponent::KDevComponent(QObject *parent, const char *name)
@@ -16,51 +13,42 @@ KDevComponent::~KDevComponent()
 
 ProjectSpace *KDevComponent::projectSpace()
 {
-    return m_projectSpace;
+    return m_api->projectSpace;
 }
 
 ClassStore *KDevComponent::classStore()
 {
-    return m_classStore;
+    return m_api->classStore;
 }
 
 KDevVersionControl *KDevComponent::versionControl()
 {
-    return m_versionControl;
+    return m_api->versionControl;
 }
 
 KDevLanguageSupport *KDevComponent::languageSupport()
 {
-    return m_languageSupport;
+    return m_api->languageSupport;
 }
 
 KDevEditorManager *KDevComponent::editorManager()
 {
-    return m_editorManager;
+    return m_api->editorManager;
 }
 
 KDevMakeFrontend *KDevComponent::makeFrontend()
 {
-    return m_makeFrontend;
+    return m_api->makeFrontend;
 }
 
 KDevAppFrontend *KDevComponent::appFrontend()
 {
-    return m_appFrontend;
+    return m_api->appFrontend;
 }
 
-void KDevComponent::setupInternal(ProjectSpace *ps, ClassStore *cs,
-                                  KDevVersionControl *vc, KDevLanguageSupport *ls,
-                                  KDevEditorManager *em, KDevMakeFrontend *mf,
-                                  KDevAppFrontend *af)
+void KDevComponent::setupInternal(KDevApi *api)
 {
-    m_projectSpace = ps;
-    m_classStore = cs;
-    m_versionControl = vc;
-    m_languageSupport = ls;
-    m_editorManager = em;
-    m_makeFrontend = mf;
-    m_appFrontend = af;
+    m_api = api;
 }
 
 void KDevComponent::setupGUI()
@@ -76,18 +64,6 @@ void KDevComponent::stopButtonClicked()
 }
 
 void KDevComponent::projectSpaceOpened()
-{
-}
-
-void KDevComponent::versionControlOpened()
-{
-}
-
-void KDevComponent::languageSupportOpened()
-{
-}
-
-void KDevComponent::editorManagerOpened()
 {
 }
 
