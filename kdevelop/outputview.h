@@ -1,5 +1,5 @@
 /***************************************************************************
-                             grepview.h
+                             outputview.h
                              -------------------                                         
     copyright            : (C) 1999 by The KDevelop Team
  ***************************************************************************/
@@ -13,41 +13,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPVIEW_H
-#define GREPVIEW_H
+#ifndef OUTPUTVIEW_H
+#define OUTPUTVIEW_H
 
 #include "processview.h"
 
-class GrepDialog;
-class CProject;
 
-
-class GrepView : public ProcessView
+class OutputView : public ProcessView
 {
     Q_OBJECT
 public:
-    GrepView(QWidget *parent, const char *name=0);
-    ~GrepView();
-
-    void showDialog();
-    void showDialogWithPattern(QString pattern);
+    OutputView(QWidget *parent, const char *name=0);
+    ~OutputView();
 
     // Component notifications:
     virtual void compilationAborted();
-    virtual void projectOpened(CProject *prj);
-
-signals:
-    void itemSelected(const QString &filename, int linenumber);
-    
-protected slots:
-    void searchActivated();
-    void lineHighlighted(int line);
-
-protected:
-    virtual void insertStdoutLine(const QString &line);
-    
-private:
-    GrepDialog *grepdlg;
 };
 
 #endif

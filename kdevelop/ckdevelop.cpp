@@ -935,34 +935,6 @@ void CKDevelop::slotBuildMake(){
   messages_widget->startJob();
 }
 
-// void CKDevelop::slotBuildMakeWith(){
-//   KLineEditDlg *box = new KLineEditDlg(i18n("Make with :"), make_with_cmd.data(), this, true);
-//   box->show();
-
-//   if (!box->result())   /* cancelled */
-//     return;
-
-//   make_with_cmd = box->text();
-//   delete box;
-
-//   showOutputView(true);
-//   setToolMenuProcess(false);
-//   slotFileSaveAll();
-//   slotStatusMsg(i18n("Running make..."));
-//   messages_widget->clear();
-
-//   if ( prj->getProjectType() == "normal_empty" ||
-//        prj->getProjectType() == "normal_java")
-//     QDir::setCurrent(prj->getProjectDir()); 
-//   else
-//     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-
-//   process.clearArguments();
-//   process << make_with_cmd;
-
-//   beep = true;
-//   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-// }
 
 void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
@@ -1056,8 +1028,6 @@ void CKDevelop::slotBuildDistClean(){
 
 
 void CKDevelop::slotBuildConfigure(){
-//    QString shell = getenv("SHELL");
-
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
     if(!argdlg.exec())
@@ -2318,12 +2288,6 @@ int CKDevelop::searchToolGetNumber(QString str){
   QString sub = str.right((str.length()-pos-2));
   return sub.toInt();
 }
-/*
-void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
-  char a = key;
-  appl_process.writeStdin(&a,1);
-}
-*/
 
 
 void CKDevelop::slotClickedOnMessagesWidget(int row){
@@ -2405,9 +2369,6 @@ void CKDevelop::slotProcessExited(KProcess *proc){
       ready = false;
     }
       
-    if (next_job == "refresh"){ // rest from the add projectfile
-      refreshTrees();
-    }
     next_job = "";
   }
   else {
@@ -2417,7 +2378,7 @@ void CKDevelop::slotProcessExited(KProcess *proc){
   }
   if (!result.isEmpty())
   {
-     messages_widget->insert(result);
+     messages_widget->insertStdoutLine(result);
   }
   if (ready){ // start the error-message parser
 #warning FIXME

@@ -19,6 +19,24 @@
 #include "processview.h"
 
 
+ProcessListBoxItem::ProcessListBoxItem(const QString &s)
+    : QListBoxText(s)
+{}
+
+
+bool ProcessListBoxItem::isErrorItem()
+{
+    return true;
+}
+
+
+void ProcessListBoxItem::paint(QPainter *p)
+{
+    p->setPen(Qt::darkRed);
+    QListBoxText::paint(p);
+}
+
+
 ProcessView::ProcessView(QWidget *parent, const char *name)
     : QListBox(parent, name)
 {
@@ -30,7 +48,7 @@ ProcessView::ProcessView(QWidget *parent, const char *name)
             this, SLOT(slotReceivedOutput(KProcess*,char*,int)) );
     
     connect(childproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
-            this, SLOT(slotReceivedOutput(KProcess*,char*,int)) );
+            this, SLOT(slotReceivedError(KProcess*,char*,int)) );
     
     connect(childproc, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotProcessExited(KProcess*) )) ;
@@ -68,6 +86,12 @@ KProcess &ProcessView::operator<<(const QString& arg)
 }
 
 
+bool ProcessView::isRunning()
+{
+    return childproc->isRunning();
+}
+
+
 void ProcessView::slotReceivedOutput(KProcess *, char *buffer, int buflen)
 {
     buf += QString::fromLatin1(buffer, buflen);
@@ -77,11 +101,18 @@ void ProcessView::slotReceivedOutput(KProcess *, char *buffer, int buflen)
         {
             QString item = buf.left(pos);
             if (!item.isEmpty())
-                insert(item);
+                insertStdoutLine(item);
             buf = buf.right(buf.length()-pos-1);
         }
     // TODO: emit a signal which is connected with a slot in CKDevelop
     // which calls o_tab_view->setCurrentTab(MESSAGES);
+}
+
+
+void ProcessView::slotReceivedError(KProcess *, char *buffer, int buflen)
+{
+    QString item = QString::fromLatin1(buffer, buflen);
+    insertStderrLine(item);
 }
 
 
@@ -91,7 +122,13 @@ void ProcessView::slotProcessExited(KProcess *)
 }
 
 
-void ProcessView::insert(const QString &line)
+void ProcessView::insertStdoutLine(const QString &line)
 {
     insertItem(line);
+}
+
+
+void ProcessView::insertStderrLine(const QString &line)
+{
+    insertItem(new ProcessListBoxItem(line));
 }

@@ -55,6 +55,7 @@ class CClassView;
 class DocTreeView;
 class MakeView;
 class GrepView;
+class OutputView;
 class CRealFileView;
 class CLogFileView;
 class KSwallowWidget;
@@ -808,6 +809,8 @@ private:
   MakeView *messages_widget;
   /** Output from grep */
   GrepView *grepview;
+  /** Output from the application */
+  OutputView *outputview;
   /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
   /** stderr output. */

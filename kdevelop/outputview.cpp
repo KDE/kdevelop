@@ -1,7 +1,8 @@
 /***************************************************************************
-                             grepview.h
+                             outputview.cpp
                              -------------------                                         
-    copyright            : (C) 1999 by The KDevelop Team
+
+    copyright            : (C) 1999 The KDevelop Team
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,41 +14,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPVIEW_H
-#define GREPVIEW_H
 
-#include "processview.h"
-
-class GrepDialog;
-class CProject;
+#include <klocale.h>
+#include "outputview.h"
 
 
-class GrepView : public ProcessView
+OutputView::OutputView(QWidget *parent, const char *name)
+    : ProcessView(parent, name)
 {
-    Q_OBJECT
-public:
-    GrepView(QWidget *parent, const char *name=0);
-    ~GrepView();
+}
 
-    void showDialog();
-    void showDialogWithPattern(QString pattern);
 
-    // Component notifications:
-    virtual void compilationAborted();
-    virtual void projectOpened(CProject *prj);
+OutputView::~OutputView()
+{}
 
-signals:
-    void itemSelected(const QString &filename, int linenumber);
-    
-protected slots:
-    void searchActivated();
-    void lineHighlighted(int line);
 
-protected:
-    virtual void insertStdoutLine(const QString &line);
-    
-private:
-    GrepDialog *grepdlg;
-};
-
-#endif
+void OutputView::compilationAborted()
+{
+    if (isRunning())
+        {
+            killJob();
+            insertItem(i18n("Killed process."));
+        }
+}

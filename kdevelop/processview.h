@@ -22,6 +22,20 @@
 class KProcess;
 
 
+class ProcessListBoxItem : public QListBoxText
+{
+public:
+    //    enum Type { Normal, Warning, Error };
+    
+    ProcessListBoxItem(const QString &s/*, Type t*/);
+
+    virtual bool isErrorItem();
+    
+private:
+    virtual void paint(QPainter *p);
+};
+
+
 class ProcessView : public QListBox, public Component
 {
     Q_OBJECT
@@ -30,11 +44,18 @@ public:
     ~ProcessView();
 
     /**
-     * Inserts one line into the listbox. This can
+     * Inserts one line from stdin into the listbox. This can
      * be overridden by subclasses to implement
      * syntax highlighting.
      */
-    virtual void insert(const QString &line);
+    virtual void insertStdoutLine(const QString &line);
+    /**
+     * Inserts one line from stderr into the listbox. This can
+     * be overridden by subclasses to implement
+     * syntax highlighting. By default, a ProcessListBoxItem
+     * is used.
+     */
+    virtual void insertStderrLine(const QString &line);
     /**
      * Clears the child process's arguments and changes
      * into the directory dir.
@@ -52,6 +73,10 @@ public:
      * Sets the next argument for the child process.
      */
     KProcess &operator<<(const QString& arg);
+    /**
+     * Returns whether a process is running in this view.
+     */
+    bool isRunning();
 
 signals:
     void processExited(KProcess *); 
@@ -59,11 +84,13 @@ signals:
 
 protected slots:
     void slotReceivedOutput(KProcess*, char*, int);
+    void slotReceivedError(KProcess*, char*, int);
     void slotProcessExited(KProcess*);
 
 private:
     KProcess *childproc;
     QString buf;
 };
+
 
 #endif

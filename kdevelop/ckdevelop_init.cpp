@@ -48,6 +48,7 @@
 #include "cerrormessageparser.h"
 #include "grepview.h"
 #include "makeview.h"
+#include "outputview.h"
 #include "ckdevaccel.h"
 
 #ifdef HAVE_CONFIG_H
@@ -112,6 +113,9 @@ void CKDevelop::initView(){
   grepview = new GrepView(o_tab_view, "grepview");
   components.append(grepview);
 
+  outputview = new OutputView(o_tab_view, "outputview");
+  components.append(outputview);
+
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
   stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
   
@@ -121,6 +125,7 @@ void CKDevelop::initView(){
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(grepview, i18n("search"));
+  o_tab_view->addTab(outputview, i18n("output"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
 

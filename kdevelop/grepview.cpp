@@ -22,7 +22,7 @@
 #include "misc.h"
 #include "qregexp.h"
 
-class GrepListBoxItem : public QListBoxText
+class GrepListBoxItem : public ProcessListBoxItem
 {
 public:
     GrepListBoxItem(const QString &s1, const QString &s2, const QString &s3);
@@ -30,9 +30,10 @@ public:
         { return str1; }
     int linenumber()
         { return str2.right(str2.length()-1).toInt()-1; }
-    virtual void paint(QPainter *p);
+    virtual bool isErrorItem();
 
 private:
+    virtual void paint(QPainter *p);
     QString str1, str2, str3;
 };
 
@@ -40,10 +41,17 @@ private:
 GrepListBoxItem::GrepListBoxItem(const QString &s1,
                                  const QString &s2,
                                  const QString &s3)
+    : ProcessListBoxItem(s1+s2+s3)
 {
     str1 = s1;
     str2 = s2;
     str3 = s3;
+}
+
+
+bool GrepListBoxItem::isErrorItem()
+{
+    return false;
 }
 
 
@@ -149,13 +157,17 @@ void GrepView::searchActivated()
 #include <iostream.h>
 void GrepView::lineHighlighted(int line)
 {
-    GrepListBoxItem *i = static_cast<GrepListBoxItem*>(item(line));
-    emit itemSelected(i->filename(), i->linenumber());
-    cout << "sel: " << i->filename() << "," << i->linenumber() << endl;
+    ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
+    if (!i->isErrorItem())
+        {
+            GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
+            emit itemSelected(gi->filename(), gi->linenumber());
+            cout << "sel: " << gi->filename() << "," << gi->linenumber() << endl;
+        }
 }
 
 
-void GrepView::insert(const QString &line)
+void GrepView::insertStdoutLine(const QString &line)
 {
     int pos;
     QString filename, linenumber, rest;
