@@ -133,30 +133,31 @@
 
 ///////////////////////////////////////////////////////////////////
 // Classviewer popup entries 
-#define ID_CV_WIZARD      					14510
-#define ID_CV_GRAPHICAL_VIEW				14511
+#define ID_CV_WIZARD                    14510
+#define ID_CV_GRAPHICAL_VIEW            14511
 
-#define ID_CV_VIEW_DECLARATION			14512
-#define ID_CV_VIEW_DEFINITION				14513
+#define ID_CV_VIEW_DECLARATION          14512
+#define ID_CV_VIEW_DEFINITION           14513
 
-#define ID_CV_CLASS_TOOL						14514
-#define ID_CV_CLASS_BASE_CLASSES		14515
-#define ID_CV_CLASS_DERIVED_CLASSES	14516
+#define ID_CV_CLASS_TOOL                14514
+#define ID_CV_CLASS_BASE_CLASSES        14515
+#define ID_CV_CLASS_DERIVED_CLASSES     14516
 
-#define ID_CV_FOLDER_NEW						14520
-#define ID_CV_FOLDER_DELETE					14521
+#define ID_CV_FOLDER_NEW                14520
+#define ID_CV_FOLDER_DELETE             14521
 
-#define ID_CV_CLASS_DELETE					14522
-#define ID_CV_VIEW_CLASS_DECLARATION			14523
+#define ID_CV_CLASS_DELETE              14522
+#define ID_CV_VIEW_CLASS_DECLARATION    14523
 
-#define ID_CV_METHOD_NEW						14524
-#define ID_CV_METHOD_DELETE					14525
+#define ID_CV_METHOD_NEW                14524
+#define ID_CV_METHOD_DELETE             14525
 
-#define ID_CV_ATTRIBUTE_NEW					14526
-#define ID_CV_ATTRIBUTE_DELETE			14527
+#define ID_CV_ATTRIBUTE_NEW             14526
+#define ID_CV_ATTRIBUTE_DELETE          14527
 
-#define ID_CV_IMPLEMENT_VIRTUAL			14530
-#define ID_CV_ADD_SLOT_SIGNAL				14531
+#define ID_CV_IMPLEMENT_VIRTUAL         14530
+#define ID_CV_ADD_SLOT_SIGNAL           14531
+#define ID_CV_CLASSWIZARD               14532
 
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
