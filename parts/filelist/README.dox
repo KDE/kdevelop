@@ -1,0 +1,12 @@
+/** \class filelist
+This plugin provides a filelist selectview of the currently open files. This is quite handy
+when the tabbar isn't wide enough to show all open files. 
+
+\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+\maintainer <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a>
+
+\todo File status feedback (externally/internally modified) - this however needs changes to 
+the PartController to make it signal these events (something that should happen anyway.)
+
+*/

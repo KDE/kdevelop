@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Provides a list of all currently open files. (Handy when the tabbar is just not wide enough.)
+Comment[xx]=xxfilelistxx
+Name=KDevfilelist
+GenericName=FileList
+GenericName[xx]=xxFileListxx
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevfilelist
+X-KDevelop-Version=1
