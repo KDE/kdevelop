@@ -510,7 +510,7 @@ void MakeWidget::insertItem( MakeItem* item )
 {
 	m_items.push_back( item );
 
-	if ( !item->visible( m_compilerOutputLevel ) )
+	if ( m_bCompiling && !item->visible( m_compilerOutputLevel ) )
 		return;
 
 	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
@@ -574,7 +574,7 @@ void MakeWidget::refill()
 	m_paragraphs = 0;
 	for( uint i = 0; i < m_items.size(); i++ )
 	{
-		if ( !m_items[i]->visible( m_compilerOutputLevel ) )
+		if ( m_bCompiling && !m_items[i]->visible( m_compilerOutputLevel ) )
 			continue;
 		m_paragraphToItem.insert( m_paragraphs++, m_items[i] );
 		append( m_items[i]->formattedText( m_compilerOutputLevel, brightBg() ) );
