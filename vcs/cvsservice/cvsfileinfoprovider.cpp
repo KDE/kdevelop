@@ -70,7 +70,8 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
         m_requestStatusJob = 0;
     }
 
-    DCOPRef job = m_cvsService->status( dirPath, false, false );
+    // path, recursive, tagInfo: hmmm ... we may use tagInfo for collecting file tags ...
+    DCOPRef job = m_cvsService->status( dirPath, true, false );
     m_requestStatusJob = new CvsJob_stub( job.app(), job.obj() );
 
     kdDebug() << "Running command : " << m_requestStatusJob->cvsCommand() << endl;
@@ -86,8 +87,6 @@ void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
     kdDebug(9006) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
     if (!normalExit)
         return;
-
-    kdDebug(9006) << m_requestStatusJob->output().join(" ") << endl;
 
     emit statusReady( parse( m_requestStatusJob->output() ), m_savedCallerData );
 }
@@ -138,7 +137,8 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
 
     int state = 0,
         lastAcceptableState = 4;
-
+    // This is where the dirty parsing is done: from a string stream representing the
+    // 'cvs log' output we build a map with more useful strunctured data ;-)
     for (QStringList::const_iterator it=stringStream.begin(); it != stringStream.end(); ++it)
     {
         const QString &s = (*it);
@@ -148,7 +148,7 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
             ++state;
         else if (state == 1 && rx_fileName.search( s ) >= 0 && rx_fileStatus.search( s ) >= 0)    // FileName
         {
-            fileName = rx_fileName.cap().replace( "File:", "" ).stripWhiteSpace();;
+            fileName = rx_fileName.cap().replace( "File:", "" ).stripWhiteSpace();
             fileStatus = rx_fileStatus.cap().replace( "Status:", "" ).stripWhiteSpace();
             ++state; // Next state
         }
@@ -169,14 +169,11 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
             ++state;
         }
 */
-        else if (state >= lastAcceptableState)
+        else if (state >= lastAcceptableState) // OK, parsed all useful info?
         {
-            // Package stuff and put into map
+            // Package stuff, put into map and get ready for a new record
             VCSFileInfo vcsInfo( fileName, workingRevision, repositoryRevision,
                 String2EnumState( fileStatus ) );
-
-//            kdDebug(9006) << vcsInfo.toString() << endl;;
-
             vcsStates.insert( fileName, vcsInfo );
             state = 0;
         }
