@@ -55,6 +55,7 @@
 #include "grepdialog.h"
 #include "cbugreportdlg.h"
 #include "../config.h"
+#include "structdef.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -440,7 +441,8 @@ void CKDevelop::slotViewNextError(){
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
-  }
+    }
+    slotStatusMsg(messages_widget->textLine(info.makeoutputline));
   }
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -469,7 +471,8 @@ void CKDevelop::slotViewPreviousError(){
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
-  }
+    }
+    slotStatusMsg(messages_widget->textLine(info.makeoutputline));
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep
@@ -1406,11 +1409,27 @@ void CKDevelop::slotHelpHomepage(){
   }
 }
 void CKDevelop::slotHelpBugReport(){
-  config->setGroup("General Options");
-  CBugReportDlg dlg(this,"bug",config->readEntry("author_name",""),config->readEntry("author_email",""),
-		    config->readEntry("kdevelop_bug_report_email","kdevelop-bug-report@fara3.cs.uni-potsdam.de"));
-  dlg.show();
-  
+    
+    config->setGroup("General Options");
+    TBugReportInfo info;
+    info.author = config->readEntry("author_name","");
+    info.email = config->readEntry("author_email","");
+    info.os = config->readEntry("os","");
+    info.kde_version = config->readEntry("kde_version","");
+    info.qt_version = config->readEntry("qt_version","");
+    info.compiler = config->readEntry("compiler","");
+
+    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","kdevelop-bug-report@fara3.cs.uni-potsdam.de"));
+    if( dlg.exec()){
+	config->writeEntry("author_name",dlg.name);
+	config->writeEntry("author_email",dlg.email_address);
+	config->writeEntry("os",dlg.os);
+	config->writeEntry("qt_version",dlg.qt_version);
+	config->writeEntry("kde_version",dlg.kde_version);
+	config->writeEntry("compiler",dlg.compiler);
+    }
+    
+    
 }
 void CKDevelop::slotHelpAbout(){
   QMessageBox aboutmsg(this, "About KDevelop");
@@ -1544,17 +1563,17 @@ void CKDevelop::slotStatusMsg(const char *text)
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
 //  statusBar()->clear();
-	statProg->hide();
-  statusBar()->changeItem(text, ID_STATUS_MSG );
+    statProg->hide();
+    statusBar()->changeItem(text, ID_STATUS_MSG );
 }
 
 
 void CKDevelop::slotStatusHelpMsg(const char *text)
 {
   ///////////////////////////////////////////////////////////////////
-  // change status message of whole statusbar temporary (text, msec)
-  statusBar()->message(text, 2000);
-	QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
+    // change status message of whole statusbar temporary (text, msec)
+    statusBar()->message(text, 2000);
+    QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
 
 }
 

@@ -225,7 +225,9 @@ void KDlgEdit::generateSourcecodeIfNeeded(){
   if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty()){ // no class generated
   }
   else{
-    buildGenerate(false);
+      if (((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
+	  buildGenerate(false);
+      }
   }
 }
 
@@ -289,7 +291,7 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
       ((CKDevelop*)parent())->slotFileClose();
   }
 
-  cerr << "genrate";
+  cerr << "generate";
   QFile file(prj->getProjectDir() + info.data_file);
   QTextStream stream( &file );
   if ( file.open(IO_WriteOnly) ){
@@ -1285,7 +1287,24 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
     *stream << varname_p + "setSizeIncrement("+props->getPropValue("SizeIncX")
       +","+props->getPropValue("SizeIncY")+");\n";
   }
+  //KQuickHelp::add(baseclass_edit, i18n("Insert the base
   /////////////////////////////////General///////////////////////////
+  //Quickhelp
+  if(props->getPropValue("Quickhelp") != ""){
+     if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+       if(local_includes.contains("#include <kquickhelp.h>") == 0){
+	 local_includes.append("#include <kquickhelp.h>");
+       }
+       *stream << "\tKQuickHelp::add("+ props->getPropValue("VarName") + ",i18n(\"" +props->getPropValue("Quickhelp")+ "\"));\n";
+     }
+  }
+  //ToolTip
+  if(props->getPropValue("ToolTip") != ""){
+    if(local_includes.contains("#include <qtooltip.h>") == 0){
+	 local_includes.append("#include <qtooltip.h>");
+    }
+    *stream << "\tQToolTip::add("+ props->getPropValue("VarName") + ",\"" +props->getPropValue("ToolTip")+ "\");\n";
+  }
   //IsHidden
   if(props->getPropValue("IsHidden") == "true"){
     *stream << varname_p + "hide();\n";
@@ -1336,16 +1355,17 @@ class PreviewDlg : public QDialog
                                  "you can also get the library on the KDevelop website." ));
             return;
           }
-        ldr->openDialog("/tmp/~~previewdlg~~.kdevdlg");
+	
+        ldr->openDialog(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg");
         wid->move(0,0);
         setGeometry(wid->geometry());
      }
-
-    ~PreviewDlg()
-      {
-        delete ldr;
-      }
-
+  
+  ~PreviewDlg()
+    {
+      delete ldr;
+    }
+  
   protected:
     KDlgLoader *ldr;
 };
@@ -1357,7 +1377,10 @@ void KDlgEdit::slotViewPreview()
   if (!((CKDevelop*)parent())->kdlg_get_edit_widget())
     return;
 
-  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/~~previewdlg~~.kdevdlg"))
+  QDir dir(KApplication::localkdedir()+"/share/apps/");
+  dir.mkdir("kdevelop");
+  
+  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg"))
     {
       QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
                            i18n("Error saving temporary dialog file."));

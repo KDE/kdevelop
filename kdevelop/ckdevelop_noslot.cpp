@@ -697,6 +697,7 @@ void CKDevelop::switchToKDlgEdit(){
   if(!kdlg_tabctl->isTabEnabled("widgets_view")){
     kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
   }
+  kdlg_tabctl->setFocus();
   this->setUpdatesEnabled(true);
   this->repaint();
 }
@@ -979,15 +980,15 @@ void CKDevelop::readOptions(){
 
 void CKDevelop::saveOptions(){
 	
-	config->setGroup("General Options");
-	config->writeEntry("Geometry", size() );
-
+  config->setGroup("General Options");
+  config->writeEntry("Geometry", size() );
+  
   config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
   config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
-	config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
-	config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
-
+  config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
+  config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
+  
   config->writeEntry("view_panner_pos",view->separatorPos());
   config->writeEntry("top_panner_pos",top_panner->separatorPos());
   config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
@@ -1019,25 +1020,25 @@ void CKDevelop::saveOptions(){
 
   config->setGroup("Files");
   config->writeEntry("browser_file",history_list.current());
-	config->writeEntry("doc_bookmarks", doc_bookmarks_list);
-	config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
-	config->writeEntry("Recent Projects", recent_projects);
-
-	config->sync();
+  config->writeEntry("doc_bookmarks", doc_bookmarks_list);
+  config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
+  config->writeEntry("Recent Projects", recent_projects);
+  
+  config->sync();
 }
 
 bool CKDevelop::queryExit(){
-	saveOptions();
-	return true;
+  saveOptions();
+  return true;
 }
 
 bool CKDevelop::queryClose(){
-  swallow_widget->sWClose(false);
+  swallow_widget->sWClose(false); // close the tools in the tools-tab
+  config->setGroup("Files");
   if(project){
-	  config->setGroup("Files");
     config->writeEntry("project_file",prj->getProjectFile());
-		config->writeEntry("cpp_file",cpp_widget->getName());
-  	config->writeEntry("header_file",header_widget->getName());
+    config->writeEntry("cpp_file",cpp_widget->getName());
+    config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1045,38 +1046,41 @@ bool CKDevelop::queryClose(){
       return false; //not close!
     }
   }
-	return true;
+  else{
+    config->writeEntry("project_file","");
+  }
+  return true;
 }
 
 void CKDevelop::readProperties(KConfig* sess_config){
   QString filename;
   filename = sess_config->readEntry("project_file","");
-
+  
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
       KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
-		else{
-   	  QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
-		  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
-  		connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
-			progressDlg->setCaption(i18n("Starting..."));
-   		progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
-   	  progressDlg->setProgress(0);
-   	  progressDlg->show();
+    else{
+      QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
+      connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
+      connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
+      progressDlg->setCaption(i18n("Starting..."));
+      progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
+      progressDlg->setProgress(0);
+      progressDlg->show();
       refreshTrees();
-			delete progressDlg;
-		}
+      delete progressDlg;
+    }
     filename = sess_config->readEntry("header_file",i18n("Untitled.h"));
     QFile _file(filename);
-
+    
     if (QFile::exists(filename)){
       switchToFile(filename);
-
+      
     }
-
+    
     filename = sess_config->readEntry("cpp_file", i18n("Untitled.cpp"));
     if (QFile::exists(filename)){
       switchToFile(filename);
@@ -1090,24 +1094,24 @@ void CKDevelop::readProperties(KConfig* sess_config){
 void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
-		sess_config->writeEntry("project_file",prj->getProjectFile());
-		sess_config->writeEntry("cpp_file",cpp_widget->getName());
-  	sess_config->writeEntry("header_file",header_widget->getName());
+    sess_config->writeEntry("project_file",prj->getProjectFile());
+    sess_config->writeEntry("cpp_file",cpp_widget->getName());
+    sess_config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
-	}	
-	if(bAutosave)
-		slotFileSaveAll();
-	else{
-	  TEditInfo* info;
-	  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-			if(info->modified){
-				setUnsavedData ( true );
-				break;
-			}
-		}
-	}
+  }	
+  if(bAutosave)
+    slotFileSaveAll();
+  else{
+    TEditInfo* info;
+    for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+      if(info->modified){
+	setUnsavedData ( true );
+	break;
+      }
+    }
+  }
 }
 
 bool  CKDevelop::isFileInBuffer(QString abs_filename){

@@ -59,7 +59,7 @@ protected:
   QLineEdit* author_edit;
   QLineEdit* version_edit;
   QLineEdit* prjname_edit;
-  QLineEdit* handbook_edit;
+  QCheckBox* modifymakefiles_checkbox;
   QMultiLineEdit* info_edit;
   // TAB GCC-options
   QComboBox* target;

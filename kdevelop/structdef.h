@@ -2,7 +2,6 @@
                      structdef.h -- some important struct definitions
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -36,4 +35,12 @@ struct TEditInfo {
   int cursor_col;
 };
 
+struct TBugReportInfo {
+    QString email;
+    QString author;
+    QString kde_version;
+    QString qt_version;
+    QString os;
+    QString compiler;
+};
 #endif

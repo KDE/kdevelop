@@ -100,19 +100,11 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(email_edit, i18n("Insert your email-address here")));
 
 
-
-  QLabel* handbook_label;
-  handbook_label = new QLabel( w, "handbook_label" );
-  handbook_label->setGeometry( 10, 220, 240, 20 );
-  handbook_label->setText( i18n("Handbook:") );
+  modifymakefiles_checkbox = new QCheckBox( w, "" );
+  modifymakefiles_checkbox->setGeometry( 10, 220, 280, 20 );
+  modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
+  modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
     
-  handbook_edit = new QLineEdit( w, "handbook_edit" );
-  handbook_edit->setGeometry( 10, 240, 240, 30 );
-  handbook_edit->setText( prj_info->getSGMLFile() );
-  KQuickHelp::add(handbook_label,
-  KQuickHelp::add(handbook_edit, i18n("Insert your Handbook-sgml-file name.\n"
-				      "Usually this is index.sgml")));
-
 
   QLabel* info_label;
   info_label=new QLabel(w,"info_label");
@@ -1218,8 +1210,6 @@ void CPrjOptionsDlg::ok(){
   prj_info->setEmail(text);
   text = version_edit->text();
   prj_info->setVersion(text);
-  text = handbook_edit->text();
-  prj_info->setSGMLFile(text);
   n=info_edit->numLines();
   for (i=0;(i!=n);i++) {
     text=info_edit->textLine(i);
@@ -1227,6 +1217,8 @@ void CPrjOptionsDlg::ok(){
   }
   prj_info->setShortInfo(short_info);
   text="";
+
+  prj_info->setModifyMakefiles(modifymakefiles_checkbox->isChecked());
   
   //********gcc-options***************
   if (target->currentItem()) {
@@ -1394,8 +1386,8 @@ void CPrjOptionsDlg::ok(){
     settings->writeEntry("PrintDebugInfo",TRUE);
   }
   else settings->writeEntry("PrintDebugInfo",FALSE);
-
- 	if (m_print_data_base->isChecked()) {
+  
+  if (m_print_data_base->isChecked()) {
     settings->writeEntry("PrintDataBase",TRUE);
   }
   else settings->writeEntry("PrintDataBase",FALSE);
@@ -1439,7 +1431,7 @@ void CPrjOptionsDlg::ok(){
 	settings->writeEntry("OptionalLine", m_optional_line->text());
 	settings->writeEntry("JobNumber", m_job_number->text());	
   settings->sync();
-  reject();	
+  // reject();	
 
   text = "";
 

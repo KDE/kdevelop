@@ -182,6 +182,10 @@ public: // Methods to store project options
   /** at the moment only an english sgmlfile in docs/en/ */
   void setSGMLFile(const char *name)          { writeGroupEntry( "General", "sgml_file", name ); }
 
+  /** if yes the makefiles in the project are modified from KDevelop*/
+  void setModifyMakefiles(bool enable=true);
+  
+
   /** Store options for make( f.e. "-k" for "make -k"*/
   void setMakeOptions(const char *options)    { writeGroupEntry( "General", "make_options", options ); }
 
@@ -237,6 +241,8 @@ public: // Methods to fetch project options
 
   /** Fetch the documentation file. */
   QString getSGMLFile()       { return readGroupEntry( "General", "sgml_file" ); }
+
+  bool getModifyMakefiles();
 
   /** Fetch the options for make( i.e "-k" for "make -k". */
   QString getMakeOptions()    { return readGroupEntry( "General", "make_options" ); }

@@ -257,6 +257,8 @@ void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
 
 void KDlgPropertyBase::fillWithStandardEntrys()
 {
+  addProp("QuickHelp",               "",       "General",        ALLOWED_STRING);
+  addProp("ToolTip",               "",       "General",        ALLOWED_STRING);
   addProp("Name",               "NoName",       "General",        ALLOWED_STRING);
   addProp("IsHidden",           "",             "General",        ALLOWED_BOOL);
   addProp("IsEnabled",          "",             "General",        ALLOWED_BOOL);

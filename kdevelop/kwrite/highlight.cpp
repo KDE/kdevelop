@@ -28,8 +28,9 @@ char *cppKeywords[] = {
   "class", "delete", "false", "friend", "inline", "new", "operator",
   "private", "protected", "public", "this", "true", "virtual", 0L};
 
+
 char *cppTypes[] = {
-  "bool", "const", 0L};
+  "bool", "const","mutable", 0L};
 
 char *javaKeywords[] = {
   "abstract", "break", "case", "cast", "catch", "class", "continue",

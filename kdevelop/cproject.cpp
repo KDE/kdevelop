@@ -106,6 +106,12 @@ void CProject::setCXXFLAGS(QString flags){
   config.setDollarExpansion(true);
 }
 
+void CProject::setModifyMakefiles(bool enable){
+    config.setGroup("General");
+    config.writeEntry("modifyMakefiles",enable);
+    config.sync();
+}
+
 void CProject::setAdditCXXFLAGS(QString flags){
   config.setDollarExpansion(false);
   writeGroupEntry( "Config for BinMakefileAm", "addcxxflags", flags );
@@ -190,6 +196,10 @@ QString CProject::getLDADD(){
   str = readGroupEntry( "Config for BinMakefileAm", "ldadd" );
   config.setDollarExpansion(true);
   return str;
+}
+bool CProject::getModifyMakefiles(){
+    config.setGroup("General");
+    return config.readBoolEntry("modifyMakefiles",true); 
 }
 
 QString CProject::getCXXFLAGS(){
@@ -557,13 +567,16 @@ void CProject::removeFileFromProject(QString rel_name){
 }
 
 void CProject::updateMakefilesAm(){
-
-  if ( getProjectType() == "normal_empty" )
+  config.setGroup("General");
+  
+  bool update = getModifyMakefiles();
+    
+  if ( getProjectType() == "normal_empty" || update == false)
     return;
-
+  
   QString makefile;
   QStrList makefile_list;
-  config.setGroup("General");
+  
   config.readListEntry("makefiles",makefile_list);  
   for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){ // every Makefile
     config.setGroup(makefile);

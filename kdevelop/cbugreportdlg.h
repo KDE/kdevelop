@@ -31,17 +31,25 @@
 #include <qstring.h>
 
 #include "cproject.h"
+#include "structdef.h"
 
 
-/** creates a dialog to fill in a bugreport and sends it to the KDevelop team
+/** creates a dialog to fill in a bugreport and sends it to the KDevelop Team
   *@author Stefan Bartel 
   */
 
 class CBugReportDlg : public QTabDialog  {
    Q_OBJECT
 public: 
-	CBugReportDlg(QWidget *parent=0, const char *name=0,QString author="",QString author_email="", QString bug_email="");
+	CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email);
 	~CBugReportDlg();
+	QString name;
+	QString email_address;
+	QString qt_version;
+	QString kde_version;
+	QString os;
+	QString compiler;
+	
 protected:
     // General Information
     QLineEdit* name_edit;
@@ -68,6 +76,7 @@ protected:
 
     QString strBugID;
     QString BugEmail;
+   
 
     //* sends the bugreport via the program "mail" to the bugreport-address of the KDevelop team
     bool sendEmail();

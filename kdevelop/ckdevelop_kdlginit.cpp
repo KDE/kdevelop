@@ -84,7 +84,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_file_menu->insertItem(Icon("save.xpm"), i18n("&Save"), kdlgedit, SLOT(slotFileSave()),0, ID_KDLG_FILE_SAVE);
   kdlg_file_menu->insertItem(i18n("Save &As..."), kdlgedit, SLOT(slotFileSaveAs()),0 ,ID_KDLG_FILE_SAVE_AS);
   kdlg_file_menu->insertSeparator();
-  kdlg_file_menu->insertItem(i18n("&Quit"), this, SLOT(slotFileQuit()), 0, ID_FILE_QUIT);
+  kdlg_file_menu->insertItem(i18n("E&xit"), this, SLOT(slotFileQuit()), 0, ID_FILE_QUIT);
 
   kdlg_menubar->insertItem(i18n("&File"), kdlg_file_menu);
 

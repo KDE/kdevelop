@@ -1,3 +1,15 @@
+1999-07-03 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* added "Modify Makefiles" to project options, TODO: make sgml handbook generation configurable
+	* bugreport remembers email/name/compiler/kde_version ... , BRNR [19:58,20.06.99]
+	* fixed problem with "preview dialog" in multiuser environments,
+ 	* added QuickHelp and Tooltip to the widgetsproperties : TODO: add this feature to "dialog preview"
+
+1999-07-02  Sandy Meier <smeier@rz.uni-potsdam.de> 
+	* next/previews error message are now displayed on statusbar
+	* fixed quit/exit problem, BugReport NumbeR: [13:35,01.07.99]
+	* fixed close project/exit kdevelop, BRNR: [13:22,01.07.99]
+	* fixed focus problem, when switching kdevelop/kdlgedit, BRNR  [16:33,21.06.99]
+
 1999-07-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* changed sgml masters to use <book> instead of <article> completly
 	* added more german documentation

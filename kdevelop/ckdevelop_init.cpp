@@ -41,9 +41,9 @@ CKDevelop::CKDevelop(){
   version = VERSION;
   project=false;// no project
   beep=false; // no beep
-	cv_decl_or_impl=true;
+  cv_decl_or_impl=true;
   file_open_list.setAutoDelete(TRUE);
-
+  
   config = kapp->getConfig();
   kdev_caption=kapp->getCaption();
 
@@ -307,23 +307,23 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", "");
   accel->connectItem( "Browser-Toolbar", this, SLOT(slotViewTBrowserToolbar()) );
 	
-	accel->insertItem( i18n("Statusbar"), "Statusbar", "");
-	accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()) );
+  accel->insertItem( i18n("Statusbar"), "Statusbar", "");
+  accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()) );
   
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
-	
-	accel->insertItem( i18n("Refresh"), "Refresh", "");
-	accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()) );
   
-	accel->insertItem( i18n("Graphical Classview"), "CVViewTree", "");
-	accel->connectItem( "CVViewTree", this, SLOT(slotClassbrowserViewTree()));
-	
-	// project menu
-	accel->insertItem( i18n("New Project"), "NewProject","");
-	accel->connectItem( "NewProject", this, SLOT(slotProjectNewAppl()) );
-	
-	accel->insertItem( i18n("Open Project"), "OpenProject", "");
-	accel->connectItem( "OpenProject", this, SLOT(slotProjectOpen()) );
+  accel->insertItem( i18n("Refresh"), "Refresh", "");
+  accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()) );
+  
+  accel->insertItem( i18n("Graphical Classview"), "CVViewTree", "");
+  accel->connectItem( "CVViewTree", this, SLOT(slotClassbrowserViewTree()));
+  
+  // project menu
+  accel->insertItem( i18n("New Project"), "NewProject","");
+  accel->connectItem( "NewProject", this, SLOT(slotProjectNewAppl()) );
+  
+  accel->insertItem( i18n("Open Project"), "OpenProject", "");
+  accel->connectItem( "OpenProject", this, SLOT(slotProjectOpen()) );
   
   accel->insertItem( i18n("Close Project"), "CloseProject", "");
   accel->connectItem("CloseProject", this, SLOT(slotProjectClose()) );
@@ -336,26 +336,26 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem(i18n("Add new Translation File"),"Add new Translation File", "");
   accel->connectItem("Add new Translation File", this, SLOT(slotProjectAddNewTranslationFile()) );
-	
-	accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
-	accel->connectItem("FileProperties", this, SLOT(slotProjectFileProperties() ) );
-	
-	accel->insertItem(i18n("Make messages and merge"), "MakeMessages", "");
-	accel->connectItem("MakeMessages", this, SLOT(slotProjectMessages()) );
-	
-	accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", "");
-	accel->connectItem("ProjectAPI", this, SLOT(slotProjectAPI()) );
-	
-	accel->insertItem(i18n("Make User-Manual"), "ProjectManual", "");
-	accel->connectItem("ProjectManual", this, SLOT(slotProjectManual()));
-	
-	accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", "");
-	accel->connectItem("Source-tgz", this, SLOT(slotProjectMakeDistSourceTgz()) );
+  
+  accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
+  accel->connectItem("FileProperties", this, SLOT(slotProjectFileProperties() ) );
+  
+  accel->insertItem(i18n("Make messages and merge"), "MakeMessages", "");
+  accel->connectItem("MakeMessages", this, SLOT(slotProjectMessages()) );
+  
+  accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", "");
+  accel->connectItem("ProjectAPI", this, SLOT(slotProjectAPI()) );
+  
+  accel->insertItem(i18n("Make User-Manual"), "ProjectManual", "");
+  accel->connectItem("ProjectManual", this, SLOT(slotProjectManual()));
+  
+  accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", "");
+  accel->connectItem("Source-tgz", this, SLOT(slotProjectMakeDistSourceTgz()) );
  	
- 	accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
-	accel->connectItem("ProjectOptions", this, SLOT(slotProjectOptions() ) );
-
-	
+  accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
+  accel->connectItem("ProjectOptions", this, SLOT(slotProjectOptions() ) );
+  
+  
   //build menu
   accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
   accel->connectItem( "CompileFile", this, SLOT( slotBuildCompileFile()) );
@@ -377,25 +377,25 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ) );
-	
-	accel->insertItem( i18n("Debug"), "BuildDebug", "");
-	accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()) );
-	
-	accel->insertItem( i18n("DistClean"), "BuildDistClean", "");
-	accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()) );
+  
+  accel->insertItem( i18n("Debug"), "BuildDebug", "");
+  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()) );
+  
+  accel->insertItem( i18n("DistClean"), "BuildDistClean", "");
+  accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()) );
   
   accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", "");
   accel->connectItem("BuildAutoconf", this,SLOT(slotBuildAutoconf()) );
   
   accel->insertItem( i18n("Configure"), "BuildConfigure", "");
   accel->connectItem( "BuildConfigure", this, SLOT(slotBuildConfigure()) );
- 
   
-//   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
-//   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ) );
-
+  
+  //   accel->insertItem( i18n("Make with"), "MakeWith", IDK_BUILD_MAKE_WITH );
+  //   accel->connectItem( "MakeWith", this, SLOT(slotBuildMakeWith() ) );
+  
   // Tools-menu
-
+  
   // Bookmarks-menu
   accel->insertItem( i18n("Add Bookmark"), "Add_Bookmarks", IDK_BOOKMARKS_ADD);
   accel->connectItem( "Add_Bookmarks", this, SLOT(slotBookmarksAdd() ) );
@@ -411,7 +411,7 @@ void CKDevelop::initKeyAccel(){
 
   accel->insertItem( i18n("Search for Help on"), "HelpSearch", "");
   accel->connectItem( "HelpSearch", this, SLOT(slotHelpSearch()) );
-
+  
   // Tab-Switch
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
   accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast() ) );
@@ -449,8 +449,8 @@ void CKDevelop::initMenuBar(){
   file_menu->insertSeparator();
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
   file_menu->insertSeparator();
-  file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
-
+  file_menu->insertItem(i18n("E&xit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
+  
   kdev_menubar->insertItem(i18n("&File"), file_menu);
 
 
