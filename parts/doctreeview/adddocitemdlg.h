@@ -19,7 +19,7 @@
 #include <qcheckbox.h>
 #include <kurlrequester.h>
 #include <kfile.h>
-
+class QPushButton;
 
 class AddDocItemDialog : public QDialog
 {
@@ -39,7 +39,7 @@ public:
 
 private slots:
     void setTitle(const QString &str);
-
+    void setLocationChanged(const QString & _text );
 private:
     QLineEdit *title_edit;
     KURLRequester *url_edit;
@@ -47,6 +47,7 @@ private:
     TitleType m_type;
     QString m_filter;
     QCheckBox *title_check;
+    QPushButton *m_pOk;
 };
 
 #endif

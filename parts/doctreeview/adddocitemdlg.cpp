@@ -22,7 +22,8 @@
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-
+#include <kstdguiitem.h>
+#include <klineedit.h>
 
 AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, TitleType checkDocTitle, QString title, QString url, QWidget *parent, const char *name)
     : QDialog(parent, name, true), m_mode(mode), m_type(checkDocTitle), m_filter(filter)
@@ -32,7 +33,7 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, TitleType c
     title_check = 0;
     if (m_type == Qt)
         title_check = new QCheckBox(i18n("Custom title"), this);
-    
+
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
     title_edit = new QLineEdit(this);
     title_edit->setText(title);
@@ -82,10 +83,10 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, TitleType c
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    ok->setDefault(true);
-    connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
+    m_pOk = buttonbox->addButton(KStdGuiItem::ok().text());
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
+    m_pOk->setDefault(true);
+    connect( m_pOk, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
@@ -97,11 +98,18 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, TitleType c
             connect(title_check, SIGNAL(toggled(bool)), title_edit, SLOT(setEnabled(bool)));
         connect(url_edit, SIGNAL(textChanged(const QString&)), this, SLOT(setTitle(const QString&)));
     }
+    connect( url_edit, SIGNAL(textChanged(const QString&)), this, SLOT(setLocationChanged(const QString&)));
+    setLocationChanged(url_edit->lineEdit()->text() );
 }
 
 
 AddDocItemDialog::~AddDocItemDialog()
 {}
+
+void AddDocItemDialog::setLocationChanged(const QString & _text )
+{
+    m_pOk->setEnabled( !_text.isEmpty() );
+}
 
 void AddDocItemDialog::setTitle(const QString &str)
 {
