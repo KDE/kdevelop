@@ -101,7 +101,6 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
     topLevel()->embedOutputView(breakpointWidget, i18n("Breakpoints"));
-    topLevel()->setViewVisible(breakpointWidget, false);
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -506,7 +505,6 @@ void DebuggerPart::startDebugger()
     
 
     topLevel()->setViewVisible(variableWidget, true);
-    topLevel()->setViewVisible(breakpointWidget, true);
     topLevel()->setViewVisible(framestackWidget, true);
     topLevel()->setViewVisible(disassembleWidget, true);
     topLevel()->setViewVisible(gdbOutputWidget, true);
@@ -547,7 +545,6 @@ void DebuggerPart::stopDebugger()
     disassembleWidget->setEnabled(false);
     
     topLevel()->setViewVisible(variableWidget, false);
-    topLevel()->setViewVisible(breakpointWidget, false);
     topLevel()->setViewVisible(framestackWidget, false);
     topLevel()->setViewVisible(disassembleWidget, false);
     topLevel()->setViewVisible(gdbOutputWidget, false);
