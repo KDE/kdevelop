@@ -41,6 +41,7 @@ protected:
     void removeFile(const QString &fileName);
 
 private:
+    QStringList allFilesRecursively( QString const & );
     FileGroupsPart *m_part;
 
     class KToggleAction *m_actionToggleShowNonProjectFiles;

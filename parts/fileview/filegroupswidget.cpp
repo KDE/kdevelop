@@ -99,7 +99,7 @@ FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fil
     setPixmap(0, SmallIcon("document"));
     QFileInfo fi(fileName);
     setText(0, fi.fileName());
-    setText(1, fi.dirPath() + "/");
+    setText(1, "./" + fi.dirPath());
 }
 
 FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
@@ -198,6 +198,41 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     }
 }
 
+QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
+{
+	QStringList filelist;
+	QString reldir = dir.mid( m_part->project()->projectDirectory().length() +1 );
+
+	// recursively fetch all files in subdirectories
+	QStringList subdirs = QDir( dir ).entryList( QDir::Dirs );
+	QValueListIterator<QString> it = subdirs.begin();
+	while ( it != subdirs.end() )
+	{
+		if ( *it != "." && *it != ".." )
+		{
+			filelist += allFilesRecursively( dir + "/"+ *it );
+		}
+		++it;
+	}
+	
+	// append the project relative directory path to all files in the current directory
+	QStringList dirlist = QDir( dir ).entryList( QDir::Files );
+	QValueListIterator<QString> itt = dirlist.begin();
+	while ( itt != dirlist.end() )
+	{
+		if ( reldir.isEmpty() )
+		{
+			filelist << *itt;
+		}
+		else
+		{
+			filelist << reldir + "/" + *itt;
+		}
+		++itt;
+	}
+	
+	return filelist;
+}
 
 void FileGroupsWidget::refresh()
 {
@@ -221,9 +256,7 @@ void FileGroupsWidget::refresh()
     QStringList allFiles;
     if (m_actionToggleShowNonProjectFiles->isChecked()) {
         // get all files in the project directory
-        QDir projectDir = m_part->project()->projectDirectory();
-        allFiles = projectDir.entryList(QDir::Files);
-        // @todo get all files in all subdirectories
+        allFiles = allFilesRecursively( m_part->project()->projectDirectory() );
     }
     else {
         // get all project files
