@@ -1,3 +1,13 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by Julian Rockey                                   *
+ *   linux@jrockey.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
 #include <qwhatsthis.h>
 #include <qdom.h>
 #include <qdir.h>
@@ -9,6 +19,8 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kstdaction.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
@@ -36,6 +48,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
+  KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
+  newAction->setStatusText( i18n("Creates a new file") );
   m_filetypes.setAutoDelete(true);
 
   m_availableWidgets[0] = new FileCreateWidget(this);
@@ -83,6 +97,10 @@ bool FileCreatePart::setWidget(FileCreateTypeChooser * widg) {
 
 void FileCreatePart::refresh() {
   if (widget()) widget()->refresh();
+}
+
+void FileCreatePart::slotNewFile() {
+  createNewFile();
 }
 
 void FileCreatePart::slotProjectOpened() {
@@ -249,35 +267,79 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   KURL projectURL( project()->projectDirectory() );
   KURL selectedURL;
 
+  KDialogBase * dialogBase = NULL;
+  FileCreateWidget2 * filetypeWidget = NULL;
+
+  KFileDialog * fileDialogWidget = NULL;  
+  
+  // If the file type (extension) is unknown, we're going to need to ask
   if (ext==QString::null) {
-    // can't handle unknown extension -- yet
-    // TODO: dialog to choose extension if extension (file type) not specified
-    result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
-    return result;
+    m_filedialogFiletype = NULL;
+    filetypeWidget = new FileCreateWidget2(this);
+    connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileCreateFileType *) ) ,
+             this, SLOT(slotNoteFiletype(const FileCreateFileType *)) );
+    filetypeWidget->refresh();
   }
 
+  // If the file name or path is unknown, we're going to need to ask  
   if (dir==QString::null || name==QString::null) {
-    // don't know directory and/or filename - find them out
-    
+
+    // if no path is known, start at project root
     if (dir==QString::null)
       dir=project()->projectDirectory();
-  
-    //QString filename = KFileDialog::getSaveFileName(dir, "*." + ext);
-    KFileDialog fd(dir, "*." + ext, 0, "New file", true);
-    projectURL = fd.baseURL();
-    kdDebug(9034) << "Base URL= " << projectURL.prettyURL().latin1() << endl;
 
-    int fdResult = fd.exec();
+    fileDialogWidget = new KFileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
+    projectURL = fileDialogWidget->baseURL();
+
+    dialogBase = fileDialogWidget;
+                   
+  }
+
+  // if no dialog has been created but there's a widget to be displayed,
+  // create a holding dialog and swallow the widget
+  if (!dialogBase && filetypeWidget) {
+    dialogBase = new KDialogBase(KDialogBase::Swallow, QString("New file"), KDialogBase::Ok|KDialogBase::Cancel,
+                                   KDialogBase::Ok, 0, "New file", true);
+    dialogBase->setMainWidget(filetypeWidget);
+  }
+  
+
+  // if there's a dialog display it
+  if (dialogBase) {
+
+    kdDebug(9034) << "Calling dialog..." << endl;
+    int fdResult = dialogBase->exec();
+    kdDebug(9034) << "Exited dialog..." << endl;
+
+    // deal with the results...
+
+    // if cancel was pressed, abort
     if (fdResult==QDialog::Rejected) {
       result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+      delete dialogBase;
       return result;
     }
 
-    selectedURL = fd.selectedURL();
-    if (!projectURL.isParentOf(selectedURL)) {
-      result.status = KDevCreateFile::CreatedFile::STATUS_NOTWITHINPROJECT;
-      return result;
+    // if there was a file path to be selected, store it
+    if (fileDialogWidget) {
+      selectedURL = fileDialogWidget->selectedURL();
+      if (!projectURL.isParentOf(selectedURL)) {
+        delete dialogBase;
+        result.status = KDevCreateFile::CreatedFile::STATUS_NOTWITHINPROJECT;
+        return result;
+      }
     }
+
+    // if there was a type to be chosen, store it
+    if (filetypeWidget) {
+      filetypeWidget = NULL; // deleted as reparented in KFileDialog
+      if (m_filedialogFiletype) {
+        ext = m_filedialogFiletype->ext();
+        subtype = m_filedialogFiletype->subtypeRef();
+      }
+    }
+
+    delete dialogBase; dialogBase=NULL;
 
   } else {
     // we know the directory and filename
@@ -312,6 +374,9 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   
 }
 
-
+void FileCreatePart::slotNoteFiletype(const FileCreateFileType * filetype) {
+  kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : "Null") << endl;
+  m_filedialogFiletype = filetype;
+}
 
 #include "filecreate_part.moc"

@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartplugin name="filecreate" library="libfilecreateplugin" version="1">
 <MenuBar>
- <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="plugin_action"/>
+ <Menu name="file">
+   <Action name="file_new"/>
  </Menu>
 </MenuBar>
 <ToolBar name="extraToolBar">
-  <Action name="plugin_action"/>
+  <Action name="file_new"/>
 </ToolBar>
 </kpartplugin>

@@ -1,3 +1,13 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by Julian Rockey                                   *
+ *   linux@jrockey.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
 #include <qptrlist.h>
 #include <qtimer.h>
 #include <qwhatsthis.h>
@@ -131,6 +141,9 @@ void FileCreateWidget2::slotCellSelected(int row, int col) {
 }
 
 void FileCreateWidget2::slotDoSelection() {
+  kdDebug(9034) << "widget2: slotDoSelection" << endl;
   if (m_selected) filetypeSelected(m_selected);
+  kdDebug(9034) << "widget2: slotDoSelection middle" << endl;
   if (currentSelection()>-1) removeSelection(currentSelection());
+  kdDebug(9034) << "widget2: slotDoSelection ending" << endl;
 }
