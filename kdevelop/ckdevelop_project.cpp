@@ -124,8 +124,9 @@ bool CKDevelop::slotProjectClose()
 
   setMainCaption();
 
-  ProjectManager::getInstance()->closeProject();
-  Core::getInstance()->doEmitProjectClosed();
+  // DISABLED robe 7/4/2002
+  // ProjectManager::getInstance()->closeProject();
+  // Core::getInstance()->doEmitProjectClosed();
 
   return true;
 }
@@ -437,7 +438,8 @@ void CKDevelop::slotProjectOptions(){
          KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
          QString curr=compile_combo->currentText();
   CPrjOptionsDlg prjdlg(prj,m_pKDevSession, curr, this,"optdialog");
-  Core::getInstance()->doEmitProjectConfigWidget( &prjdlg );
+  // DISABLED robe 7/4/2002
+  //Core::getInstance()->doEmitProjectConfigWidget( &prjdlg );
   if(prjdlg.exec()){
                  // refill the compile configs combobox
                  curr=compile_combo->currentText();
@@ -653,7 +655,8 @@ void CKDevelop::slotOpenProject( const KURL& url )
 
   pRecentProjects->addURL(url);
 //  shuffleProjectToTop(id);
-  Core::getInstance()->doEmitProjectOpened();
+  // DISABLED robe 7/4/2002
+  // Core::getInstance()->doEmitProjectOpened();
 }
 
 void CKDevelop::slotProjectNewAppl(){

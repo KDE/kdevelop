@@ -196,7 +196,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
           this, SLOT(createGUI(KParts::Part*)));
 
   KDevProjectImpl* prj = new KDevProjectImpl( API::getInstance(), this );
-  API::getInstance()->setProject( prj );
+  //API::getInstance()->setProject( prj ); // DISABLED robe 7/4/2002
+  API::getInstance()->setProject( 0 );
   (void) ProjectManager::getInstance();
 
   slotStatusMsg(i18n("Welcome to KDevelop!"));

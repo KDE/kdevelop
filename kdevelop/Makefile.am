@@ -1,4 +1,4 @@
-####### kdevelop will overwrite this part!!! (begin)##########
+###### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
 
 ## INCLUDES were found outside kdevelop specific part
@@ -18,7 +18,6 @@ kdevelop_LDADD += $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
         $(top_builddir)/parts/classview/libkdevclassview.la \
         $(top_builddir)/parts/grepview/libkdevgrepview.la \
         $(top_builddir)/parts/appwizard/libkdevappwizard.la \
-        $(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
         $(top_builddir)/parts/outputviews/libkdevoutputviews.la
 
 tokenizer.cpp: tokenizer.l
