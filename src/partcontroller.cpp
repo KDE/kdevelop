@@ -349,7 +349,7 @@ void PartController::saveAllFiles()
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
       rw_part->save();
 
-      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().url()));
+      TopLevel::getInstance()->statusBar()->message(i18n("Saved %1").arg(rw_part->url().url()), 2000);
     }
 }
 

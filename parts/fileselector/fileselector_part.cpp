@@ -47,7 +47,9 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 
 FileSelectorPart::~FileSelectorPart()
 {
-  topLevel()->removeView(m_filetree);
+  if (m_filetree)
+    topLevel()->removeView(m_filetree);
+  delete m_filetree;
 }
 
 

@@ -73,7 +73,8 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
 TrollProjectPart::~TrollProjectPart()
 {
-    topLevel()->removeView(m_widget);
+    if (m_widget)
+        topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

@@ -55,7 +55,8 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 
 HistoryPart::~HistoryPart()
 {
-  topLevel()->removeView(m_recentList);
+  if (m_recentList)
+    topLevel()->removeView(m_recentList);
   delete m_recentList;
 }
 

@@ -63,9 +63,12 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
 
 FileViewPart::~FileViewPart()
 {
-    topLevel()->removeView(m_filetree);
-    delete m_filetree;
+    if (m_filetree)
+        topLevel()->removeView(m_filetree);
+    if (m_filegroups)
     topLevel()->removeView(m_filegroups);
+
+    delete m_filetree;
     delete m_filegroups;
 }
 

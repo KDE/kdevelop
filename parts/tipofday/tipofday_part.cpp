@@ -30,7 +30,7 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
 
   KAction *action;
 
-  action = new KAction(i18n("&Tip of the Day..."), "kdevelop_tip", 0,
+  action = new KAction(i18n("&Tip of the Day..."), "idea", 0,
                        this, SLOT(showTip()), actionCollection(), "help_tipofday");
   action->setStatusText(i18n("Gives you another good tip how to use KDevelop"));
   action->setWhatsThis(i18n("Tip of the day\n\n"

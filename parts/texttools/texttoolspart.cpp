@@ -41,11 +41,9 @@ TextToolsPart::TextToolsPart(QObject *parent, const char *name, const QStringLis
 
 TextToolsPart::~TextToolsPart()
 {
-    if (m_widget) {
+    if (m_widget)
         topLevel()->removeView(m_widget);
-        delete m_widget;
-        m_widget = 0;
-    }
+    delete m_widget;
 }
 
 
@@ -74,16 +72,17 @@ void TextToolsPart::activePartChanged(KParts::Part *part)
         return;
     QString url = rwpart->url().url();
 
-    createWidget();
-    
     if (url.endsWith(".html")) {
         kdDebug(9030) << "set mode html" << endl;
+        createWidget();
         m_widget->setMode(TextToolsWidget::HTML, rwpart);
     } else if (url.endsWith(".docbook")) {
         kdDebug(9030) << "set mode Docbook" << endl;
+        createWidget();
         m_widget->setMode(TextToolsWidget::Docbook, rwpart);
     } else if (url.endsWith(".tex")) {
         kdDebug(9030) << "set mode LaTeX" << endl;
+        createWidget();
         m_widget->setMode(TextToolsWidget::LaTeX, rwpart);
     }
 }

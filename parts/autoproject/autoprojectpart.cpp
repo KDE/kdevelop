@@ -125,7 +125,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
 AutoProjectPart::~AutoProjectPart()
 {
-    topLevel()->removeView(m_widget);
+    if (m_widget)
+        topLevel()->removeView(m_widget);
     delete m_widget;
 }
 

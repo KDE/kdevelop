@@ -18,6 +18,8 @@
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
+class QLabel;
+class QPopupMenu;
 class KDialogBase;
 class VariableWidget;
 class BreakpointWidget;
@@ -26,7 +28,6 @@ class DisassembleWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
-class QPopupMenu;
 
 
 class DebuggerPart : public KDevPlugin
@@ -74,6 +75,7 @@ private:
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     DbgController *controller;
+    QLabel *statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
 
     EditorContext m_editorContext;

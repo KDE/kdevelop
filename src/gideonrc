@@ -53,6 +53,10 @@ NewLine=true
 Offset=-1
 Position=Top
 
+[Plugins]
+KDevFileSelector=false
+KDevScripting=false
+
 [UI]
 MDI mode=1
 MajorUIMode=mdi

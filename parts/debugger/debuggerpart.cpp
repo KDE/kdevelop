@@ -58,6 +58,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     setXMLFile("kdevdebugger.rc");
 
+    statusBarIndicator = new QLabel(" ", topLevel()->statusBar());
+    statusBarIndicator->setFixedWidth(15);
+    topLevel()->statusBar()->addWidget(statusBarIndicator, 0, true);
+    
     //
     // Setup widgets and dbgcontroller
     //
@@ -259,10 +263,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
 DebuggerPart::~DebuggerPart()
 {
-    topLevel()->removeView(variableWidget);
-    topLevel()->removeView(breakpointWidget);
-    topLevel()->removeView(framestackWidget);
-    topLevel()->removeView(disassembleWidget);
+    if (variableWidget)
+        topLevel()->removeView(variableWidget);
+    if (breakpointWidget)
+        topLevel()->removeView(breakpointWidget);
+    if (framestackWidget)
+        topLevel()->removeView(framestackWidget);
+    if (disassembleWidget)
+        topLevel()->removeView(disassembleWidget);
     
     delete variableWidget;
     delete breakpointWidget;
@@ -270,6 +278,7 @@ DebuggerPart::~DebuggerPart()
     delete disassembleWidget;
     delete controller;
     delete floatingToolBar;
+    delete statusBarIndicator;
 
     GDBParser::destroy();
 }
@@ -399,7 +408,7 @@ void DebuggerPart::slotRun()
     if (controller)
         slotStop();
 
-    topLevel()->statusBar()->message(i18n("Debugging program"));
+    topLevel()->statusBar()->message(i18n("Debugging program"), 1000);
     
     startDebugger();
     controller->slotRun();
@@ -411,14 +420,14 @@ void DebuggerPart::slotExamineCore()
     if (controller)
         slotStop();
 
-    topLevel()->statusBar()->message(i18n("Choose a core file to examine..."));
+    topLevel()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
     QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
     QString coreFile = KFileDialog::getOpenFileName(dirName);
     if (coreFile.isNull())
         return;
 
-    topLevel()->statusBar()->message(i18n("Examining core file %1").arg(coreFile));
+    topLevel()->statusBar()->message(i18n("Examining core file %1").arg(coreFile), 1000);
 
     startDebugger();
     controller->slotCoreFile(coreFile);
@@ -430,14 +439,14 @@ void DebuggerPart::slotAttachProcess()
     if (controller)
         slotStop();
 
-    topLevel()->statusBar()->message(i18n("Choose a process to attach to..."));
+    topLevel()->statusBar()->message(i18n("Choose a process to attach to..."), 1000);
 
     Dbg_PS_Dialog dlg;
     if (!dlg.exec() || !dlg.pidSelected())
         return;
 
     int pid = dlg.pidSelected();
-    topLevel()->statusBar()->message(i18n("Attaching to process %1").arg(pid));
+    topLevel()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
     
     startDebugger();
     controller->slotAttachTo(pid);
@@ -586,9 +595,10 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     // And now? :-)
     kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
+    statusBarIndicator->setText(stateIndicator);
 
     if (!msg.isEmpty())
-        topLevel()->statusBar()->message(msg);
+        topLevel()->statusBar()->message(msg, 1000);
 }
 
 

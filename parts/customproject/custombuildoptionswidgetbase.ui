@@ -64,7 +64,7 @@
             </vbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer19</cstring>
             </property>
             <property name="orientation">
@@ -73,19 +73,13 @@
             <property name="sizeType">
                 <enum>Minimum</enum>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
         <widget class="QLabel">
             <property name="name">
                 <cstring>builddir_label</cstring>
             </property>
             <property name="text">
-                <string>Build &amp;directory:</string>
+                <string>Run the build tool in the following &amp;directory:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>builddir_edit</cstring>
@@ -106,7 +100,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer38</cstring>
                     </property>
                     <property name="orientation">
@@ -130,7 +124,7 @@
             </hbox>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer39</cstring>
             </property>
             <property name="orientation">
@@ -138,12 +132,6 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
     </vbox>
