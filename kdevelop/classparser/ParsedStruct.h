@@ -84,6 +84,9 @@ public: // Public methods to set attribute values.
   /** Add an member to the structure. */
   void addMember( CParsedAttribute *anAttribute );
 
+  /** Fetch a member by using its' name. */
+  CParsedAttribute *getMemberByName( const char *aName );
+
   /** Output this object to stdout. */
   void out();
 

@@ -100,7 +100,7 @@ void CParsedStruct::setName( const char *aName )
 
 /*------------------------------------- CClassParser::addMember()
  * addMember()
- *   Add an member to the structure.
+ *   Add a member to the structure.
  *
  * Parameters:
  *   aMember           The new member.
@@ -113,6 +113,24 @@ void CParsedStruct::addMember( CParsedAttribute *aMember )
   assert( aMember != NULL );
 
   members.insert( aMember->name, aMember );
+}
+
+/*------------------------------------ CClassParser::getMemberByName()
+ * getMemberByName()
+ *   Fetch a member by using its' name.
+ *
+ * Parameters:
+ *   aName             The name of the member.
+ *
+ * Returns:
+ *   CParsedAttribute * The member.
+ *   NULL              The member was not found.
+ *-----------------------------------------------------------------*/
+CParsedAttribute *CParsedStruct::getMemberByName( const char *aName )
+{
+  assert( aName != NULL );
+
+  return members.find( aName );
 }
 
 /*------------------------------------------------- CClassStore::out()
