@@ -367,19 +367,32 @@ void CKDevelop::slotProjectRemoveFile(){
 
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
-  prjdlg.show();
-  if (prjdlg.needConfigureInUpdate()){
-    prj->updateConfigureIn();
-    KMsgBox::message(0,i18n("Information"),i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
-    setToolMenuProcess(false);
-    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-    messages_widget->clear();
-    showOutputView(true);
-    QDir::setCurrent(prj->getProjectDir());
-    shell_process.clearArguments();
-    shell_process << make_cmd << " -f Makefile.dist  && ./configure";
-    shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  if(prjdlg.exec()){
+    if (prjdlg.needConfigureInUpdate()){
+      prj->updateConfigureIn();
+      KMsgBox::message(0,i18n("Information"),i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+      setToolMenuProcess(false);
+      slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+      messages_widget->clear();
+      showOutputView(true);
+      QDir::setCurrent(prj->getProjectDir());
+      shell_process.clearArguments();
+      shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    }
+    else{
+      setToolMenuProcess(false);
+      slotStatusMsg(i18n("Running configure..."));
+      messages_widget->clear();
+      showOutputView(true);
+      QDir::setCurrent(prj->getProjectDir());
+      shell_process.clearArguments();
+      shell_process << "CXXFLAGS=\" " << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
+		    << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure";
+      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+    }
   }
+  
 }
 void CKDevelop::slotProjectNewClass(){
   CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);

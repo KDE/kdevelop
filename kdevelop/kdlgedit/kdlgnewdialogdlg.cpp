@@ -110,6 +110,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	qtabdialog_radio_button->setText( "QTabDialog" );
 	qtabdialog_radio_button->setAutoRepeat( FALSE );
 	qtabdialog_radio_button->setAutoResize( FALSE );
+	qtabdialog_radio_button->setEnabled(false);
 
 	qframe_radio_button = new QRadioButton( this, "qframe_radio_button" );
 	qframe_radio_button->setGeometry( 20, 70, 70, 30 );

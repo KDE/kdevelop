@@ -59,6 +59,7 @@ void CKDevelop::slotClassTreeSelected()
     else // Goto the definition.
       CVGotoDefinition( class_tree->currentItem() );
   }
+    class_tree->mouseBtn = RightButton; // set it back, so next time only if user clicks again we react
 }
 
 /*--------------------------------- CKDevelop::slotClassChoiceCombo()
@@ -77,6 +78,7 @@ void CKDevelop::slotClassChoiceCombo(int index)
   KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);  
   QString classname = classCombo->text( index );
 
+  if (classname == "") return;
   aClass = class_tree->store->getClassByName( classname );
   refreshMethodCombo( aClass );
 }
@@ -102,6 +104,7 @@ void CKDevelop::slotMethodChoiceCombo(int index)
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->text( index );
 
+  if (methodname == "") return;
   aClass = class_tree->store->getClassByName( classname );
   if( aClass )
   {

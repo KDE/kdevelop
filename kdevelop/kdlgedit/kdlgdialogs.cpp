@@ -65,6 +65,24 @@ void KDlgDialogs::initPopups(){
 }
   /** Get the current popupmenu. */
 KPopupMenu* KDlgDialogs::getCurrentPopup(){
+  KPopupMenu *popup = NULL;
+  
+  switch( treeH->itemType() )
+    {
+    case THPROJECT:
+      // popup = &project_pop;
+      break;
+    case THFOLDER:
+      //      popup = &group_pop;
+      break;
+    case THC_FILE:
+      //      popup = &file_pop;
+      break;
+    default:
+      break;
+    }
+
+  return popup;
 }
 /*********************************************************************
  *                                                                   *

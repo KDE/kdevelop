@@ -517,7 +517,7 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("browser_file",history_list.current());
   
   //save the dialog;
-  kdlgedit->slotFileSave();
+  //  kdlgedit->slotFileSave();
   
   config->setGroup("Files");
   config->writeEntry("project_file","");

@@ -1,3 +1,9 @@
+1999-05-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* the CXXFLAGS and LDFLAGS are given to "configure" and not hardcoded in the Makefile.am's
+	as in the past
+	* fixed the Solaris "rindex" problem (string.h)
+	* fixed some segfaults (new/close project, right mousebutton on dialogs and some others :-))
+
 1999-05-03  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* remove the new-app-dialog from kdevelop (sorry Ralf)
 	* finished the changes in kapplication-wizard

@@ -21,7 +21,6 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
-#include <string.h>
 #include "debug.h"
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
@@ -234,28 +233,33 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
 ProjectFileType CProject::getType( const char *aFile )
 {
   ProjectFileType retVal=DATA;
-  QString ext;
 
-  ext = rindex( aFile, '.' );
+  QString ext(aFile);
+  int pos = ext.findRev('.');
+
+  if (pos == -1 ){ return retVal;} // not found, so DATA
+  ext = ext.right(ext.length()-pos);
+  
+  //ext = rindex( aFile, '.' );
   if( !ext.isEmpty() )
-  {
-    // Convert to lowercase.
-    ext = ext.lower();
-
-    // Check for a known extension.
-    if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
-        ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" )
-      retVal = CPP_SOURCE;
-    else if( ext == ".h" || ext == ".hxx" )
-      retVal = CPP_HEADER;
-    else if( ext == ".idl" )
-      retVal = CORBA_SOURCE;
-    else if( ext == ".kdevdlg" )
-      retVal = KDEV_DIALOG;
-    else if( ext == ".po" )
-      retVal = PO;
-  }
-
+    {
+      // Convert to lowercase.
+      ext = ext.lower();
+      
+      // Check for a known extension.
+      if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
+	  ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" )
+	retVal = CPP_SOURCE;
+      else if( ext == ".h" || ext == ".hxx" )
+	retVal = CPP_HEADER;
+      else if( ext == ".idl" )
+	retVal = CORBA_SOURCE;
+      else if( ext == ".kdevdlg" )
+	retVal = KDEV_DIALOG;
+      else if( ext == ".po" )
+	retVal = PO;
+    }
+  
   return retVal;
 }
 
@@ -585,8 +589,8 @@ void CProject::updateMakefileAm(QString makefile){
 	  for(str= source_files.first();str !=0;str = source_files.next()){
 	    sources =  str + " " + sources ;
 	  }
-	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
-	  stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
+	  //	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
+	  //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
 	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
 	  if(static_libs.isEmpty()){
 	    stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();

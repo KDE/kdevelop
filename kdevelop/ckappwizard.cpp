@@ -105,7 +105,6 @@ void CKAppWizard::initPages(){
 	applications->setColumnAlignment( 0, 1 );
 	applications->setSorting (-1,FALSE);
 	applications->header()->hide();
-	applications->setStyle (MotifStyle);
 
 	// create another widget for a picture
 	widget1b = new QWidget( widget0, "widget1b" );
@@ -364,7 +363,7 @@ void CKAppWizard::initPages(){
 	gnufiles->setBackgroundMode( QWidget::PaletteBackground );
 	gnufiles->setFontPropagation( QWidget::NoChildren );
 	gnufiles->setPalettePropagation( QWidget::NoChildren );
-	gnufiles->setText( "GNU-Standart-Files (INSTALL,README,COPYING...)" );
+	gnufiles->setText( "GNU-Standard-Files (INSTALL,README,COPYING...)" );
 	gnufiles->setAutoRepeat( FALSE );
 	gnufiles->setAutoResize( FALSE );
 
