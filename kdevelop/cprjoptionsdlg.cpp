@@ -620,10 +620,10 @@ void CPrjOptionsDlg::setupTab4()
   l_remove_symbols=new QCheckBox(w4,"l_remove_symbols");
   l_remove_symbols->setGeometry(20,30,470,20);
   l_remove_symbols->setText(i18n("remove all symbol table and relocation information from the executable"));
-  if (ldflags.contains("-s ")) {
+  if (ldflags.contains(" -s ")) {
     l_remove_symbols->setChecked(true);
-    pos=ldflags.find(" -s ");
-    ldflags.remove(pos,4);
+    pos=ldflags.find("-s ");
+    ldflags.remove(pos,3);
     // cerr << "-s OK" << endl;
   } else {
     l_remove_symbols->setChecked(false);
@@ -636,9 +636,9 @@ void CPrjOptionsDlg::setupTab4()
   l_static=new QCheckBox(w4,"l_static");
   l_static->setGeometry(20,50,360,20);
   l_static->setText(i18n("prevent using shared libraries"));
-  if (ldflags.contains("-static")) {
+  if (ldflags.contains(" -static ")) {
     l_static->setChecked(true);
-    pos=ldflags.find(" -static");
+    pos=ldflags.find("-static ");
     ldflags.remove(pos,8);
     // cerr << "-static OK" << endl;
   } else {
@@ -655,8 +655,7 @@ void CPrjOptionsDlg::setupTab4()
 
   addit_ldflags=new QLineEdit(w4,"addit_ldflags");
   addit_ldflags->setGeometry(120,70,370,30);
-  ldflags.remove(ldflags.length()-1,1);
-  ldflags.remove(0,1);
+  ldflags=ldflags.stripWhiteSpace();
   addit_ldflags->setText(ldflags);
 
   QString text;
@@ -675,9 +674,9 @@ void CPrjOptionsDlg::setupTab4()
   l_X11=new QCheckBox(w4,"l_X11");
   l_X11->setGeometry(20,140,110,20);
   l_X11->setText("X11");
-  if (ldadd.contains("-lX11")) {
+  if (ldadd.contains(" -lX11 ")) {
     l_X11->setChecked(true);
-    pos=ldadd.find(" -lX11");
+    pos=ldadd.find("-lX11 ");
     ldadd.remove(pos,6);
     //cerr << "-lX11 OK" << endl;
   } else {
@@ -688,9 +687,9 @@ void CPrjOptionsDlg::setupTab4()
   l_Xext=new QCheckBox(w4,"l_Xext");
   l_Xext->setGeometry(20,160,110,20);
   l_Xext->setText("Xext");
-  if (ldadd.contains("-lXext")) {
+  if (ldadd.contains(" -lXext ")) {
     l_Xext->setChecked(true);
-    pos=ldadd.find(" -lXext");
+    pos=ldadd.find("-lXext ");
     ldadd.remove(pos,7);
     //cerr << "-lXext OK" << endl;
   } else {
@@ -701,9 +700,9 @@ void CPrjOptionsDlg::setupTab4()
   l_qt=new QCheckBox(w4,"l_qt");
   l_qt->setGeometry(20,180,110,20);
   l_qt->setText("qt");
-  if (ldadd.contains("-lqt")) {
+  if (ldadd.contains(" -lqt ")) {
     l_qt->setChecked(true);
-    pos=ldadd.find(" -lqt");
+    pos=ldadd.find("-lqt ");
     ldadd.remove(pos,5);
     //cerr << "-lqt OK" << endl;
   } else {
@@ -714,9 +713,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kdecore=new QCheckBox(w4,"l_kdecore");
   l_kdecore->setGeometry(20,200,110,20);
   l_kdecore->setText("kdecore");
-  if (ldadd.contains("-lkdecore")) {
+  if (ldadd.contains(" -lkdecore ")) {
     l_kdecore->setChecked(true);
-    pos=ldadd.find(" -lkdecore");
+    pos=ldadd.find("-lkdecore ");
     ldadd.remove(pos,10);
     //cerr << "-lkdecore OK" << endl;
   } else {
@@ -727,9 +726,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kdeui=new QCheckBox(w4,"l_kdeui");
   l_kdeui->setGeometry(140,140,110,20);
   l_kdeui->setText("kdeui");
-  if (ldadd.contains("-lkdeui")) {
+  if (ldadd.contains(" -lkdeui ")) {
     l_kdeui->setChecked(true);
-    pos=ldadd.find(" -lkdeui");
+    pos=ldadd.find("-lkdeui ");
     ldadd.remove(pos,8);
     //cerr << "-lkdeui OK" << endl;
   } else {
@@ -740,9 +739,9 @@ void CPrjOptionsDlg::setupTab4()
   l_khtmlw=new QCheckBox(w4,"l_khtmlw");
   l_khtmlw->setGeometry(140,160,110,20);
   l_khtmlw->setText("khtmlw");
-  if (ldadd.contains("-lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript")) {
+  if (ldadd.contains(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ")) {
     l_khtmlw->setChecked(true);
-    pos=ldadd.find(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript");
+    pos=ldadd.find("-lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript ");
     ldadd.remove(pos,52);
     //    cerr << "-htmlw OK" << endl;
   } else {
@@ -755,9 +754,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kfm=new QCheckBox(w4,"l_kfm");
   l_kfm->setGeometry(140,180,110,20);
   l_kfm->setText("kfm");
-  if (ldadd.contains("-lkfm")) {
+  if (ldadd.contains(" -lkfm ")) {
     l_kfm->setChecked(true);
-    pos=ldadd.find(" -lkfm");
+    pos=ldadd.find("-lkfm ");
     ldadd.remove(pos,6);
     //    cerr << "-lkfm OK" << endl;
   } else {
@@ -768,9 +767,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kfile=new QCheckBox(w4,"l_kfile");
   l_kfile->setGeometry(140,200,110,20);
   l_kfile->setText("kfile");
-  if (ldadd.contains("-lkfile")) {
+  if (ldadd.contains(" -lkfile ")) {
     l_kfile->setChecked(true);
-    pos=ldadd.find(" -lkfile");
+    pos=ldadd.find("-lkfile ");
     ldadd.remove(pos,8);
     //    cerr << "-lkfile OK" << endl;
   } else {
@@ -781,9 +780,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kspell=new QCheckBox(w4,"l_kspell");
   l_kspell->setGeometry(260,140,110,20);
   l_kspell->setText("kspell");
-  if (ldadd.contains("-lkspell")) {
+  if (ldadd.contains(" -lkspell ")) {
     l_kspell->setChecked(true);
-    pos=ldadd.find(" -lkspell");
+    pos=ldadd.find("-lkspell ");
     ldadd.remove(pos,9);
     //    cerr << "-lkspell OK" << endl;
   } else {
@@ -794,9 +793,9 @@ void CPrjOptionsDlg::setupTab4()
   l_kab=new QCheckBox(w4,"l_kab");
   l_kab->setGeometry(260,160,110,20);
   l_kab->setText("kab");
-  if (ldadd.contains("-lkab")) {
+  if (ldadd.contains(" -lkab ")) {
     l_kab->setChecked(true);
-    pos=ldadd.find(" -lkab");
+    pos=ldadd.find("-lkab ");
     ldadd.remove(pos,6);
     //    cerr << "-lkab OK" << endl;
   } else {
@@ -807,10 +806,11 @@ void CPrjOptionsDlg::setupTab4()
   l_math=new QCheckBox(w4,"l_math");
   l_math->setGeometry(380,140,105,20);
   l_math->setText("math");
-  if (ldadd.contains("-lm")) {
+  if (l_khtmlw->isChecked() || ldadd.contains(" -lm ")) {
     l_math->setChecked(true);
-    pos=ldadd.find(" -lm");
-    ldadd.remove(pos,4);
+    pos=ldadd.find("-lm ");
+    if (pos>=0)
+     ldadd.remove(pos,4);
     //    cerr << "-lm OK" << endl;
   } else {
     l_kspell->setChecked(false);
@@ -824,9 +824,8 @@ void CPrjOptionsDlg::setupTab4()
 
   addit_ldadd=new QLineEdit(w4,"addit_ldadd");
   addit_ldadd->setGeometry(140,230,350,30);
-  ldadd.remove(ldadd.length()-1,1);
-  ldadd.remove(0,1);
- 
+  ldadd=ldadd.stripWhiteSpace();
+
   addit_ldadd->setText(ldadd);
 
   text = i18n("Add additional libraries here.");
@@ -1286,7 +1285,7 @@ void CPrjOptionsDlg::ok4()
   
   text= addit_ldadd->text();
 
-  if (l_math->isChecked()) {
+  if (l_math->isChecked() && !l_khtmlw->isChecked()) {
     text+=" -lm";
   }
   if (l_kab->isChecked()) {

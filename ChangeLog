@@ -1,3 +1,8 @@
+1999-11-01 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* bugfix: similar library names caused trouble in reparse
+	  library flags (e.g. -lm and -lmysqlclient)
+	  Thanks to T. Regner for the hint
+                              
 1999-10-30 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* some cleanup in file handling (removed edit_infos, slotMenuBuffersSelected() and slotSCurrentTab();
 	* implemented closeEvent() in editorview.cpp
