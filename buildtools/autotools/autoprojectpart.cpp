@@ -198,7 +198,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute Program"), "exec", CTRL+Key_F9,
+        action = new KAction( i18n("Execute Program"), "exec", SHIFT+Key_F9,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
         action->setToolTip(i18n("Execute program"));
