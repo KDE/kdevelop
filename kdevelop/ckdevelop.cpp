@@ -681,10 +681,17 @@ void CKDevelop::slotViewTTreeView(){
     sizes << 0;
     top_panner->setSizes(sizes);
 */
-    t_tab_view->hide();
+    if (bKDevelop)
+     t_tab_view->hide();
+    else
+     kdlg_tabctl->hide();
+
   }
   else{
-    t_tab_view->show();
+    if (bKDevelop)
+     t_tab_view->show();
+    else
+     kdlg_tabctl->show();
 /*    QValueList<int> sizes;
     sizes << tree_view_pos;
     top_panner->setSizes(sizes);
