@@ -1075,6 +1075,8 @@ X      : cut
     }
     // insert the character at the current cursor.
     kWriteDoc->insertChar(this,c,e->ascii());
+    if (c.flags & cfHighlightBrackets)
+       kWriteDoc->newBracketMark(c.cursor, bm);
   } else {
     if (e->state() & ShiftButton) c.flags |= cfMark;
 

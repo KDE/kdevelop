@@ -1,3 +1,6 @@
+2002-03-19  August Hörandl  <august.hoerandl@gmx.at>
+    * bugfix: show open bracket after char insert 
+
 2002-03-19  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: reenabled error selection in make output view to make jump-to-error work again
     
