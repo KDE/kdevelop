@@ -1,3 +1,6 @@
+#include <klocale.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 #include <qpopupmenu.h>
 #include <kdebug.h>
 #include "ktabwidget.h"
@@ -17,8 +20,8 @@ KTabWidget::~KTabWidget()
 KTabBar::KTabBar(QWidget *parent, const char *name) : QTabBar(parent,name)
 {
   m_pPopupMenu = new QPopupMenu(this);
-  m_pPopupMenu->insertItem("Close", this, SLOT(closeWindowSlot()));
-  m_pPopupMenu->insertItem("Close Others", this, SLOT(closeOthersSlot()));
+  m_pPopupMenu->insertItem(SmallIcon("tab_remove"), i18n("&Close"), this, SLOT(closeWindowSlot()));
+  m_pPopupMenu->insertItem(SmallIcon("tab_remove"), i18n("Close &Others"), this, SLOT(closeOthersSlot()));
 }
 
 void KTabBar::closeWindowSlot()
