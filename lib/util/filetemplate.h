@@ -47,6 +47,11 @@ public:
      */
     static bool copy(KDevPlugin *part, const QString &name,
                      const QString &dest, Policy p = Default);
+    /**
+     * Translates a template name into a full path, or suggests a full path
+     * for the template in the project directory if it doesn't exist.
+     */
+    static QString fullPathForName(KDevPlugin *part, const QString &name, Policy p = Default);
 };
 
 #endif

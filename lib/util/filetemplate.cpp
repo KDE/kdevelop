@@ -16,6 +16,9 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 #include <qtextstream.h>
+
+#include <kstandarddirs.h>
+
 #include "kdevplugin.h"
 #include "kdevproject.h"
 #include "domutil.h"
@@ -23,20 +26,20 @@
 
 bool FileTemplate::exists(KDevPlugin *part, const QString &name, Policy p)
 {
-    QString fileName = (p == Default) ?
-       (part->project()->projectDirectory() + "/templates/" + name) : name;
+    //QString fileName = (p == Default) ?
+    //   (part->project()->projectDirectory() + "/templates/" + name) : name;
 
-    return QFile::exists(fileName);
+    return QFile::exists( fullPathForName(part,name,p) );
 }
 
 QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
 {
     
-    KDevProject *project = part->project();
-    QString fileName = (p == Default) ? (project->projectDirectory() +
-					 "/templates/" + name) : name;
+  //KDevProject *project = part->project();
+    //QString fileName = (p == Default) ? (project->projectDirectory() +
+//					 "/templates/" + name) : name;
  
-    return readFile(part, fileName);
+    return readFile(part, fullPathForName(part, name, p) );
 }
 
 
@@ -85,4 +88,18 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
     f.close();
 
     return true;
+}
+
+QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
+                                      Policy p) {
+    // if Policy is not default, full path is just the name
+    if (p!=Default) return name;
+    
+    // first try project-specific
+    QString fileName = (part->project()->projectDirectory() + "/templates/" + name);
+    if (!QFile::exists(fileName)) return fileName;
+    
+    // next try global
+    QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
+    return globalName == QString::null ? fileName : globalName;
 }
