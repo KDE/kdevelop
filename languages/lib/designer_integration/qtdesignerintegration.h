@@ -49,6 +49,8 @@ public slots:
     virtual void removeFunction(const QString& formName, KInterfaceDesigner::Function function);
 
     virtual void openFunction(const QString &formName, const QString &functionName);
+    
+    virtual void openSource(const QString &formName);
         
     virtual void saveSettings(QDomDocument dom, QString path);
     virtual void loadSettings(QDomDocument dom, QString path);

@@ -222,7 +222,13 @@ public slots:
     @param formName The name of a GUI form.
     @param functionName The name of a function to seek in the code for.*/
     void openFunction(DesignerType type, const QString &formName, const QString &functionName);
-    
+
+    /**Opens a form source requested by a GUI designer. No need to reimplement this slot
+    unless you want to use specific implementation of KDevDesignerIntegration interface.
+    @param type The type of integrated designer.
+    @param formName The name of a GUI form.*/
+    void openSource(DesignerType type, const QString &formName);
+        
 signals:
     /**Emitted when the content of the memory symbol store has been modified.*/
     void updatedSourceInfo();

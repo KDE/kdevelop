@@ -45,6 +45,7 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
+#include "kdevdesigner_part.h"
 
 static QString make_func_pretty( const QString &s )
 {
@@ -461,9 +462,13 @@ SourceEditor *FormFile::showEditor( bool askForUih )
     if ( !MainWindow::self )
 	return 0;
     showFormWindow();
-    if ( !setupUihFile( askForUih ) )
+    //emit signal to the embedding IDE if there is one and return 0 because
+    //no source editing is possible
+    emit fw->mainWindow()->part()->emitEditSource(fw->fileName());
+    return 0;
+/*    if ( !setupUihFile( askForUih ) )
 	return 0;
-    return MainWindow::self->openSourceEditor();
+    return MainWindow::self->openSourceEditor();*/
 }
 
 static int ui_counter = 0;

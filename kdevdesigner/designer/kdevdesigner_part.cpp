@@ -546,4 +546,9 @@ void KDevDesignerPart::formModified(bool b)
     setModified(b);
 }
 
+void KDevDesignerPart::emitEditSource(const QString &formName)
+{
+    emit editSource(designerType(), formName);
+}
+
 #include "kdevdesigner_part.moc"

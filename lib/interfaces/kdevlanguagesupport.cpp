@@ -145,4 +145,12 @@ void KDevLanguageSupport::createAccessMethods( ClassDom // theClass
 {
 }
 
+void KDevLanguageSupport::openSource( DesignerType type, const QString & formName)
+{
+    KDevDesignerIntegration *designerIntegration = designer(type);
+    if (!designerIntegration)
+        return;
+    designerIntegration->openSource(formName);
+}
+
 #include "kdevlanguagesupport.moc"

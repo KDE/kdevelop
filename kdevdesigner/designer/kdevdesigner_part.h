@@ -58,6 +58,7 @@ public:
     void emitRemovedFunction(const QString &form, KInterfaceDesigner::Function func);
 
     void emitEditFunction(const QString &formName, const QString &functionName);
+    void emitEditSource(const QString &formName);
     
 protected:
     virtual bool openFile();
