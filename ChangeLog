@@ -1,3 +1,6 @@
+2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: CKDevelop::doActivateView() removed; QWidget::setFocus() does the job ;)
+
 2001-03-25  Christian Couder <christian@kdevelop.org>
     * Bid rewrite if the DocViewManager stuff.
     * Removed the TEditInfo and DocViewNode structs.
@@ -6,7 +9,7 @@
     * Added: Instanciate new static attributes in cpp file.
     * Added: New feature: Read-Write property for new attribute and
              Automaticly implement properties methods in cpp file.
-    * Fixed: Disabled unused undo button in Classproperties dialog 
+    * Fixed: Disabled unused undo button in Classproperties dialog
              - No code yet for it...
 
  2001-03-21  jbb <jbb@kdevelop.org>
