@@ -363,6 +363,8 @@ void CppCodeCompletion::showArgHint ( QStringList functionList, const QString& s
     // m_edit->view()->paintCursor();
     m_pArgHint->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
     m_pArgHint->adjustSize();
+    QPoint pos = m_edit->view()->cursorPosition();
+    m_pArgHint->cursorPositionChanged ( pos.y(), pos.x() );
     m_pArgHint->show();
 }
 

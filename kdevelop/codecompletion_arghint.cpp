@@ -218,9 +218,8 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 
 
     int nCountDelimiter = 0;
-    int count = 1;
+    int count = 0;
     //kdDebug() << "m_nCurCol = " << m_nCurCol << " - nCol = " << nCol << endl;
-    //kdDebug() << "count = " << count << endl;
 
     QString strCurLine = m_edit->textLine( nLine );
     QString text = strCurLine.mid( m_nCurCol, nCol - m_nCurCol );
@@ -230,8 +229,6 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
     text = text
         .replace( strconst_rx, "\"\"" )
         .replace( chrconst_rx, "''" );
-
-    //kdDebug() << "text = " << text << endl;
 
     int index = 0;
     while( index < (int)text.length() ){
@@ -249,7 +246,6 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
         (nCol < m_nCurCol) ||
         (count == 0) )
     {
-        //kdDebug() << "-----------> case 1" << endl;
         m_nCurLine = m_nCurCol = 0;
         hide();
         emit argHintHided();
@@ -257,46 +253,6 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
     }
 
     setCurArg ( nCountDelimiter + 1 );
-
-
-
-
-#if 0
-    QString strCurLine = m_edit->textLine( nLine );
-    strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
-    //strCurLine = strCurLine.left ( nCol );
-    QString strLineToCursor = strCurLine.left ( nCol );
-    QString strLineAfterCursor = strCurLine.mid ( nCol, ( strCurLine.length() - nCol ) );
-
-    // only for testing
-    //strCurLine = strLineToCursor;
-
-    int nBegin = strLineToCursor.findRev ( m_strArgWrapping[0] );
-
-    if ( nBegin == -1 || // the first wrap was not found
-         nBegin != -1 && strLineToCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // || // the first and the second wrap were found before the cursor
-	//nBegin != -1 && strLineAfterCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // the first wrap was found before the cursor and the second beyond
-    {
-        hide();
-        //kdDebug() << "m_strArgWrapping = " << m_strArgWrapping << endl;
-        //kdDebug() << "nBegin = " << nBegin << endl;
-        //kdDebug() << "-----------> case 2" << endl;
-        emit argHintHided();
-        //m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
-    }
-
-    int nCountDelimiter = 0;
-
-    while ( nBegin != -1 )
-    {
-        nBegin = strLineToCursor.find ( m_strArgDelimiter, nBegin + 1 );
-
-        if ( nBegin != -1 )
-            nCountDelimiter++;
-    }
-
-    setCurArg ( nCountDelimiter + 1 );
-#endif
 }
 
 void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )
