@@ -282,7 +282,7 @@ class ConfigBool : public ConfigOption
     bool *valueRef() { return &m_value; }
     void convertStrToVal();
     void substEnvVars();
-    void setValueString(const QCString &v) { m_valueString = v; };
+    void setValueString(const QCString &v) { m_valueString = v; }
     void writeTemplate(QTextStream &t,bool sl,bool upd)
     {
       if (!sl)
