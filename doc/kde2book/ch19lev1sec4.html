@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The KDE/Qt License History</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Licensing Issues"
+HREF="ch19.html"/><LINK
+REL="PREVIOUS"
+TITLE="The License Usage by Qt"
+HREF="ch19lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch19lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch19lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch19lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch19lev1sec4"
+>19.4. The KDE/Qt License History</A
+></H1
+><P
+>Most KDE developers were satisfied with the FreeQt license, even though it was not officially free software. This was mostly because KDE could use and distribute Qt at no charge, as well as have access to the source code. Although KDE developers could not directly fix Qt bugs, in practice this never was a problem. The engineers at Trolltech proved to be very responsive to bug reports and feature requests. Put another way, even though the potential for problems existed, none actually happened.</P
+><P
+>There was a legitimate concern that Trolltech could have changed the license at any time and would have left KDE without a base library to use. In another scenario, another company that did not want to distribute Qt under the FreeQt license could have acquired Trolltech. This would have also severely hampered KDE development.</P
+><P
+>To alleviate this concern, several top KDE developers met with the Trolltech owners and formed a legally binding foundation that had jurisdiction over the FreeQt license. The foundation has four members on the board&#8212;two from the KDE project and two from Trolltech. They produced an agreement on June 22, 1998 that ensured that Qt would always have a free version.</P
+><P
+>The legally binding agreement required Trolltech to release a new free version of Qt at least every 12 months. If Trolltech did not do so, the last free version of Qt would automatically be re-licensed under the BSD free software license.</P
+><P
+>This meant, in effect, that even if a company hostile to KDE bought out Trolltech, a free version of Qt would still be available.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch19lev2sec8"
+>19.4.1. The Genesis of the QPL</A
+></H2
+><P
+>The FreeQt Foundation alleviated many of the Open Source community's fears, but not all of them. There were still two perceived problems with the situation. First, the agreement did not address the problem of distributing modifications of Qt. Second, the agreement did not address what would happen if Trolltech deliberately changed Qt to be unusable to KDE while still releasing a free version. In that latter scenario, Trolltech would not be in default of the agreement. However, it would effectively cripple KDE for at least a few months.</P
+><P
+>Note that these concerns were not likely to come true. As stated before, the KDE project had never had a problem with not being able to distribute modifications of Qt. The latter case would be a huge inconvenience if it were to happen, but its likelihood is almost nil for at least two reasons. First, the existence of KDE is almost perfect publicity for the Qt library. Trolltech would be essentially shooting itself in the foot by alienating KDE. Second, Qt is a commercial market. If Qt were to drastically change, it's likely that it would affect companies using Qt, and they would not stand for it.</P
+><P
+>Furthermore, Trolltech had a very close relationship with the KDE Project. For instance, several KDE core developers now work in very key positions in the company. This makes a hostile act against KDE almost impossible. Also, Trolltech has allowed KDE to use Qt classes such as KAction and QDOM (both of which are absolutely essential for KDE 2.0) before they were officially released in Qt itself. All in all, Trolltech and KDE have been a model in how a commercial company and an Open Source project can exist in a mutually beneficial (and almost symbiotic) relationship.</P
+><P
+>Nevertheless, the people at Trolltech were aware of the opposition they had in the free- software community and moved to correct the matter in a way acceptable to both the free- software community and its own business interests. The result was the Q Public License (QPL), an official Open Source license.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch19lev2sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch19lev2sec8"
+TITLE="The Genesis of the QPL"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch19lev2sec9"
+>19.4.2. The Evolution of the QPL</A
+></H2
+><P
+>With the release of the QPL, both the KDE Project and Trolltech assumed that all of the license fury would go away. After all, KDE was fully Open Source and now Qt was too. Unfortunately, it was not to be that simple.</P
+><P
+>The FSF and Debian Project both insisted that even though the QPL was Open Source, it was still incompatible with the GPL. Since nearly all KDE applications were written under the GPL, this meant that all KDE applications were in violation of their own licenses (or so they claimed).</P
+><P
+>The resulting <SPAN
+CLASS="QUOTE"
+>"flame wars"</SPAN
+> were never fun and never resolved to anybody's satisfaction. Concepts like <SPAN
+CLASS="QUOTE"
+>"exception clauses"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"implied exceptions"</SPAN
+> were tossed about frequently, but still there was little agreement. If you wish to see in detail what the issues were, I recommend searching various Linux related Web sites (like <A
+HREF="http://www.slashdot.org"
+TARGET="_top"
+>http://www.slashdot.org</A
+> and <A
+HREF="http://www.freshmeat.net"
+TARGET="_top"
+>http://www.freshmeat.net</A
+>) for references to the QPL and reading the actual arguments presented.</P
+><P
+>The KDE Project was sure that all KDE packages were fully legal and that the opponents were simply interpreting the legal clauses incorrectly. But working on KDE was a labor of love for most KDE developers and arguing about licenses wasn't even remotely fun. By and large, KDE developers just wanted the entire issue to go away.</P
+><P
+>Trolltech realized all of this and was in contact with both the FSF and Debian trying to resolve this once and for all. In the end, it came out that the only way to resolve this issue for all parties would be to release Qt under the LGPL or GPL.</P
+><P
+>With the release of Qt 2.2, Trolltech did just that.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch19lev2sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch19lev2sec9"
+TITLE="The Evolution of the QPL"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch19lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch19lev1sec4"
+TITLE="The KDE/Qt License History"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch19lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch19lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

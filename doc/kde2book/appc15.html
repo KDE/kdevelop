@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 9</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 8"
+HREF="appc13.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 10"
+HREF="appc17.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc13.html"
+>Prev</A
+> <A
+HREF="appc17.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC15"
+>C.9. <A
+HREF="ch09.html"
+>Chapter 9</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC16"
+>C.9.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.9.1.1. <A
+HREF="appc15.html#AEN28228"
+>What if the process of creating your window contents is a long job? Combine the <TT
+CLASS="literal"
+>QTimer</TT
+> method for long jobs with double-buffering to efficiently paint a complex scene without hanging the GUI. Your program's GUI should still respond to input while the application is painting the window. (You can easily check this by attempting to close the window while the program is painting.)</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28228"
+></A
+><B
+>C.9.1.1. </B
+>What if the process of creating your window contents is a long job? Combine the <TT
+CLASS="literal"
+>QTimer</TT
+> method for long jobs with double-buffering to efficiently paint a complex scene without hanging the GUI. Your program's GUI should still respond to input while the application is painting the window. (You can easily check this by attempting to close the window while the program is painting.)</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch09lev1sec5.html#ch09que01"
+>Listings C.28&#8211;C.30 give possible answers to Exercise 1</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist28"
+></A
+><P
+><B
+>Example C.28. klongdraw.h: Class Declaration for <TT
+CLASS="literal"
+>KLongDraw</TT
+>, a Widget That Draws a Complex Scene</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KQUICKDRAW_H__
+   3&nbsp;#define __KQUICKDRAW_H__
+   4&nbsp;
+   5&nbsp;
+   6&nbsp;#include &lt;qwidget.h&gt;
+   7&nbsp;
+   8&nbsp;class QPixmap;
+   9&nbsp;class QTimer;
+  10&nbsp;
+  11&nbsp;const int NEllipses=50000;
+  12&nbsp;
+  13&nbsp;/**
+  14&nbsp; * KLongDraw
+  15&nbsp; * Handle long drawing job while keeping UI alive.
+  16&nbsp; **/
+  17&nbsp;class KLongDraw : public QWidget
+  18&nbsp;{
+  19&nbsp; Q_OBJECT
+  20&nbsp;
+  21&nbsp; public:
+  22&nbsp;  KLongDraw (QWidget *parent, const char *name=0);
+  23&nbsp;
+  24&nbsp;  protected slots:
+  25&nbsp;    /**
+  26&nbsp;     * Redraw some of the scene then exit and check the UI.
+  27&nbsp;     **/
+  28&nbsp;    void slotDrawSome();
+  29&nbsp;
+  30&nbsp; protected:
+  31&nbsp;  /**
+  32&nbsp;   * Repaint the window using a bit-block transfer from the
+  33&nbsp;   *  off-screen buffer (a QPixmap).  Recreate the pixmap first,
+  34&nbsp;   *  if necessary.
+  35&nbsp;   **/
+  36&nbsp;  void paintEvent (QPaintEvent *);
+  37&nbsp;
+  38&nbsp;  void resizeEvent (QResizeEvent *);
+  39&nbsp; private:
+  40&nbsp;  QTimer *qtimer;
+  41&nbsp;  QPixmap *qpixmap;
+  42&nbsp;  bool bneedrecreate;
+  43&nbsp;  double x[NEllipses], y[NEllipses];
+  44&nbsp;  int w, h;
+  45&nbsp;  int total;
+  46&nbsp;};
+  47&nbsp;
+  48&nbsp;#endif
+  49&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist29"
+></A
+><P
+><B
+>Example C.29. klongdraw.cpp: Class Definition for <TT
+CLASS="literal"
+>KLongDraw</TT
+>, a Widget That Draws a Complex Scene</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;qpainter.h&gt;
+   3&nbsp;#include &lt;qtimer.h&gt;
+   4&nbsp;#include &lt;qpixmap.h&gt;
+   5&nbsp;
+   6&nbsp;#include &lt;kmenubar.h&gt;
+   7&nbsp;#include &lt;kapp.h&gt;
+   8&nbsp;#include &lt;kstdaccel.h&gt;
+   9&nbsp;
+  10&nbsp;#include "klongdraw.moc"
+  11&nbsp;
+  12&nbsp;
+  13&nbsp;KLongDraw::KLongDraw (QWidget *parent, const char *name=0) :
+  14&nbsp;  QWidget (parent, name)
+  15&nbsp;{
+  16&nbsp;  bneedrecreate=true;
+  17&nbsp;  qpixmap=0;
+  18&nbsp;
+  19&nbsp;  for (int i=0; i&lt;NEllipses; i++)
+  20&nbsp;    {
+  21&nbsp;      x[i]=(kapp-&gt;random()%1000)/1000.;
+  22&nbsp;      y[i]=(kapp-&gt;random()%1000)/1000.;
+  23&nbsp;    }
+  24&nbsp;
+  25&nbsp;  setBackgroundMode (NoBackground);
+  26&nbsp;
+  27&nbsp;  qtimer = new QTimer (this);
+  28&nbsp;  connect ( qtimer, SIGNAL (timeout()),
+  29&nbsp;            this, SLOT (slotDrawSome()) );
+  30&nbsp;}
+  31&nbsp;void
+  32&nbsp;KLongDraw::paintEvent (QPaintEvent *)
+  33&nbsp;{
+  34&nbsp;
+  35&nbsp;  if (bneedrecreate)
+  36&nbsp;    {
+  37&nbsp;      if (qpixmap!=0)
+  38&nbsp;        delete qpixmap;
+  39&nbsp;      qpixmap = new QPixmap (width(), height());
+  40&nbsp;
+  41&nbsp;      QPainter qpainter;
+  42&nbsp;      qpainter.begin (qpixmap, this);
+  43&nbsp;      qpainter.fillRect (qpixmap-&gt;rect(), white);
+  44&nbsp;
+  45&nbsp;      bitBlt (this, 0, 0, qpixmap);
+  46&nbsp;
+  47&nbsp;      w = width()/100;
+  48&nbsp;      h = height()/100;
+  49&nbsp;
+  50&nbsp;      bneedrecreate=false;
+  51&nbsp;      total=0;
+  52&nbsp;
+  53&nbsp;      qtimer-&gt;start(0);
+  54&nbsp;    }
+  55&nbsp;
+  56&nbsp;  bitBlt (this, 0, 0, qpixmap);
+  57&nbsp;
+  58&nbsp;}
+  59&nbsp;
+  60&nbsp;void
+  61&nbsp;KLongDraw::slotDrawSome()
+  62&nbsp;{
+  63&nbsp;
+  64&nbsp;  QPainter qpainter;
+  65&nbsp;  qpainter.begin (qpixmap, this);
+  66&nbsp;
+  67&nbsp;  qpainter.setBrush (blue);
+  68&nbsp;
+  69&nbsp;  int imax = total+100;
+  70&nbsp;  for (int i=total; i&lt;imax; i++)
+  71&nbsp;    qpainter.drawEllipse (x[i]*width(), y[i]*height(), w, h);
+  72&nbsp;  total = imax;
+  73&nbsp;  //This updates the window periodically with the partially-drawn scene.
+  74&nbsp;  // While this _does_ indicate progress on the update, you might,
+  75&nbsp;  // instead, update a progress bar here and only call update()
+  76&nbsp;  // after the entire scene has been drawn.
+  77&nbsp;  if (!(total%1000))
+  78&nbsp;    update();
+  79&nbsp;
+  80&nbsp;  if (total&gt;=NEllipses)
+  81&nbsp;    {
+  82&nbsp;      qtimer-&gt;stop();
+  83&nbsp;      update();
+  84&nbsp;    }
+  85&nbsp;
+  86&nbsp;
+  87&nbsp;}
+  88&nbsp;void
+  89&nbsp;KLongDraw::resizeEvent (QResizeEvent *)
+  90&nbsp;{
+  91&nbsp;  bneedrecreate = true;
+  92&nbsp;}
+  93&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist30"
+></A
+><P
+><B
+>Example C.30. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KLongDraw</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;kapp.h&gt;
+   3&nbsp;
+   4&nbsp;#include "klongdraw.h"
+   5&nbsp;
+   6&nbsp;int
+   7&nbsp;main (int argc, char *argv[])
+   8&nbsp;{
+   9&nbsp;  KApplication kapplication  (argc, argv, "klongdrawtest");
+  10&nbsp;  KLongDraw *klongdraw = new KLongDraw (0);
+  11&nbsp;
+  12&nbsp;  kapplication.setMainWidget (klongdraw);
+  13&nbsp;
+  14&nbsp;  klongdraw-&gt;show();
+  15&nbsp;  return kapplication.exec();
+  16&nbsp;}
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC16"/></TD
+></TR
+><ANNOTATION
+NAME="appC16"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC15"/></TD
+></TR
+><ANNOTATION
+NAME="appC15"
+TITLE="Chapter 9"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc13.html"
+>Prev</A
+> <A
+HREF="appc17.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

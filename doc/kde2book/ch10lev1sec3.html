@@ -1,0 +1,671 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Checking Spelling</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Complex-Function KDE Widgets"
+HREF="ch10.html"/><LINK
+REL="PREVIOUS"
+TITLE="Manipulating Images"
+HREF="ch10lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Accessing the Address Book"
+HREF="ch10lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch10lev1sec3"
+>10.3. Checking Spelling</A
+></H1
+><P
+>KDE contains a spell-checking class called <TT
+CLASS="literal"
+>KSpell</TT
+>, which has four spell checking methods:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>modalCheck()</TT
+>&#8212;Spell checks a plain text buffer using a modal spell checker dialog.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>check()</TT
+>&#8212;Spell checks a plain text buffer using a nonmodal spell checker dialog.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>checkList()</TT
+>&#8212;Spell checks a list of words. Useful for checking non-plain text formats, such as HTML, SGML, or internal formats.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>checkWord()</TT
+>&#8212;Spell checks a single word. Useful for implementing "online" (or check-as-you-type) spell checking.</P
+></LI
+></UL
+><P
+><TT
+CLASS="literal"
+>KSpell</TT
+> can use International <I
+CLASS="citetitle"
+>Ispell</I
+> <A
+HREF="http://fmg-www.cs.ucla.edu/geoff/ispell.html"
+TARGET="_top"
+>(http://fmg-www.cs.ucla.edu/geoff/ispell.html)</A
+> or <I
+CLASS="citetitle"
+>ASpell</I
+> <A
+HREF="http://metalab.unc.edu/kevina/aspell/"
+TARGET="_top"
+>(http://metalab.unc.edu/kevina/aspell/)</A
+> as a "back end" to check the spelling of words. Dictionaries are available for these programs in 19 languages at <A
+HREF="http://fmg-www.cs.ucla.edu/geoff/ispell-dictionaries.html"
+TARGET="_top"
+>http://fmg-www.cs.ucla.edu/geoff/ispell-dictionaries.html</A
+>.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch10lev2sec4"
+>10.3.1. Using <TT
+CLASS="literal"
+>KSpell</TT
+> in an Application</A
+></H2
+><P
+>We'll use <TT
+CLASS="literal"
+>modalCheck()</TT
+> in this section because it's the simplest method. If you want to include features such as highlighting misspelled words in the user's document as the spell checking proceeds, then you will need to use <TT
+CLASS="literal"
+>check()</TT
+>. KEdit, KWrite, and the KMail/KRN composer all use <TT
+CLASS="literal"
+>check()</TT
+> so that they can highlight misspelled words.</P
+><P
+>When using <TT
+CLASS="literal"
+>KSpell</TT
+> in an application, you need to offer the user a menu entry to configure the spell checker and one to start it. These menu entries have standard places. The spell checker configuration entry goes in the Options menu, and the entry to start the spell checker goes in Tools and is called <SPAN
+CLASS="QUOTE"
+>"Spelling&#8230;"</SPAN
+>.</P
+><P
+>The following code, <A
+HREF="ch10lev1sec3.html#ch10list07"
+>Listings 10.7</A
+> and <A
+HREF="ch10lev1sec3.html#ch10list08"
+>10.8</A
+>, demonstrates the use of <TT
+CLASS="literal"
+>KSpell</TT
+> in an application. This application, KSpellDemo, puts some text in its content area and offers you the option to check the spelling of the text. After the spell check is complete, the corrected text is shown (see <A
+HREF="ch10lev1sec3.html#ch10fig03"
+>Figure 10.3</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list07"
+></A
+><P
+><B
+>Example 10.7. kspelldemo.h: Class Declaration for KSpellDemo, a Simple Application that Uses <TT
+CLASS="literal"
+>KSpell</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KSPELLDEMO_H__
+   3&nbsp; 2: #define __KSPELLDEMO_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class QLabel;
+   8&nbsp; 7:
+   9&nbsp; 8: /**
+  10&nbsp;9:  * KSpellDemo
+  11&nbsp;10:  * Spell check some text with KSpell.
+  12&nbsp;11:  **/
+  13&nbsp;12: class KSpellDemo : public KTMainWindow
+  14&nbsp;13: {
+  15&nbsp;14:  Q_OBJECT
+  16&nbsp;15:  public:
+  17&nbsp;16:   KSpellDemo (const char *name=0);
+  18&nbsp;17:
+  19&nbsp;18:  public slots:
+  20&nbsp;19:   void slotSpellCheck();
+  21&nbsp;20:   void slotConfigure();
+  22&nbsp;21:
+  23&nbsp;22:  protected:
+  24&nbsp;23:   QLabel *label;
+  25&nbsp;24: };
+  26&nbsp;25:
+  27&nbsp;26: #endif
+  28&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>We derive from <TT
+CLASS="literal"
+>KTMainWindow</TT
+> here so that you can add the menubar and toolbar (see <A
+HREF="ch10lev1sec3.html#ch10fig03"
+>Figure 10.3</A
+>). The two slots, <TT
+CLASS="literal"
+>slotSpellCheck()</TT
+> and <TT
+CLASS="literal"
+>slotConfigure()</TT
+>, start the spell checker and configure it, respectively.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list08"
+></A
+><P
+><B
+>Example 10.8. kspelldemo.cpp: Class Definition for <TT
+CLASS="literal"
+>KSpellDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;stdio.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include &lt;qtabdialog.h&gt;
+   5&nbsp; 4:
+   6&nbsp; 5: #include &lt;kspell.h&gt;
+   7&nbsp; 6: #include &lt;ktmainwindow.h&gt;
+   8&nbsp; 7: #include &lt;ksconfig.h&gt;
+   9&nbsp; 8: #include &lt;kstdaction.h&gt;
+  10&nbsp; 9: #include &lt;kaction.h&gt;
+  11&nbsp;10:
+  12&nbsp;11: #include "kspelldemo.moc"
+  13&nbsp;12:
+  14&nbsp;13: KSpellDemo::KSpellDemo (const char *name=0) :
+  15&nbsp;14:   KTMainWindow (name)
+  16&nbsp;15: {
+  17&nbsp;16:
+  18&nbsp;17:   KAction *spelling = KStdAction::spelling (this, SLOT(slotSpellCheck()),
+  19&nbsp;18:       actionCollection());
+  20&nbsp;19:
+  21&nbsp;20:   new KAction ( "&amp;Configure spellchecker..., 0,
+  22&nbsp;21:         this, SLOT (slotConfigure()), actionCollection(),
+  23&nbsp;22:         "configure_spellchecker" );
+  24&nbsp;23:
+  25&nbsp;24:   createGUI();
+  26&nbsp;25:
+  27&nbsp;26:
+  28&nbsp;27:   label = new QLabel ("Som words are mispelled!", this);
+  29&nbsp;28:   setView (label);
+  30&nbsp;29: }
+  31&nbsp;30:
+  32&nbsp;31: void
+  33&nbsp;32: KSpellDemo::slotSpellCheck()
+  34&nbsp;33: {
+  35&nbsp;34:   QString text (label-&gt;text());
+  36&nbsp;35:
+  37&nbsp;36:   KSpell::modalCheck (text);
+  38&nbsp;37:   label-&gt;setText (text);
+  39&nbsp;38:}
+  40&nbsp;39:
+  41&nbsp;40: void
+  42&nbsp;41: KSpellDemo::slotConfigure()
+  43&nbsp;42: {
+  44&nbsp;43:   QTabDialog qtabdialog (0, 0, true);
+  45&nbsp;44:   qtabdialog.setCancelButton();
+  46&nbsp;45:   KSpellConfig ksconfig (&amp;qtabdialog);
+  47&nbsp;46:   qtabdialog.addTab (&amp;ksconfig, "&amp;Spellchecker");
+  48&nbsp;47:   if (qtabdialog.exec())
+  49&nbsp;48:     ksconfig.writeGlobalSettings();
+  50&nbsp;49: }
+  51&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig03"
+></A
+><P
+><B
+>Figure 10.3. KSpellDemo shows some misspelled text.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig03.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>In the constructor, you put the Spelling&#8230; and Configure spellchecker&#8230; entries in their appropriate places and also put a spell checker button on the toolbar (see lines 17&#8211;24 The layout of the user interface is described in the XML GUI file kspelldemoui.rc included on the web site.  Be sure to copy this file to its appropriate directory before running KSpellDemo: $KDEDIR/share/apps/kspelldemo/.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev2sec4"
+TITLE="Using KSpell in an Application"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch10lev2sec5"
+>10.3.2. Modal Spell Checking</A
+></H2
+><P
+>In <TT
+CLASS="literal"
+>slotSpellCheck()</TT
+>, you use the method <TT
+CLASS="literal"
+>modalCheck()</TT
+>. Checking spelling this way is especially simple because the method is static. You fill a <TT
+CLASS="literal"
+>QString</TT
+>, called <TT
+CLASS="literal"
+>text</TT
+> here, with the text that needs checking and call</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KSpell::modalCheck (text);
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>When the method returns, <TT
+CLASS="literal"
+>text</TT
+> contains the spell checked text. Interactive word replacement is handled by <TT
+CLASS="literal"
+>KSpell</TT
+>. <A
+HREF="ch10lev1sec3.html#ch10fig04"
+>Figure 10.4</A
+> shows the KSpell dialog offering suggested replacements for the misspelled word to the user. This dialog is created and maintained by <TT
+CLASS="literal"
+>KSpell</TT
+>.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig04"
+></A
+><P
+><B
+>Figure 10.4. The KSpell dialog box shows the misspelled word and offers suggestions for replacement.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig04.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>While the spell check proceeds, the user will be able to interact only with the KSpell dialog, but the rest of your GUI will still repaint itself when necessary.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev2sec5"
+TITLE="Modal Spell Checking"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch10lev2sec6"
+>10.3.3. Configuring <TT
+CLASS="literal"
+>KSpell</TT
+></A
+></H2
+><P
+>A standard configuration dialog called <TT
+CLASS="literal"
+>KSpellConfig</TT
+> is available for use in applications that use <TT
+CLASS="literal"
+>KSpell</TT
+>. The dialog lets the user choose which dictionary will be used and which back end client will be used, among other things. Standard code to use <TT
+CLASS="literal"
+>KSpellConfig</TT
+> is shown on lines 43&#8211;48. A screen shot of the <TT
+CLASS="literal"
+>KSpellConfig</TT
+> dialog box is shown in <A
+HREF="ch10lev1sec3.html#ch10fig05"
+>Figure 10.5</A
+>.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig05"
+></A
+><P
+><B
+>Figure 10.5. The <TT
+CLASS="literal"
+>KSpellConfig</TT
+> dialog box lets the user configure <TT
+CLASS="literal"
+>KSpell</TT
+>.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig05.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>If you want to save the <TT
+CLASS="literal"
+>KSpell</TT
+> settings, you should call <TT
+CLASS="literal"
+>writeGlobalSettings()</TT
+> when  the user clicks OK (that is, if <TT
+CLASS="literal"
+>qtabdialog.exec()</TT
+> returns <TT
+CLASS="literal"
+>true</TT
+>). If not, you will need to pass the instance of <TT
+CLASS="literal"
+>KSpellConfig</TT
+> that you just created to a new instance of <TT
+CLASS="literal"
+>KSpell</TT
+> so that <TT
+CLASS="literal"
+>KSpell</TT
+> knows the new configuration, and then use a method other than <TT
+CLASS="literal"
+>modalCheck()</TT
+>. See the <TT
+CLASS="literal"
+>KSpell</TT
+> reference documentation for details.</P
+><P
+>You can use the <TT
+CLASS="literal"
+>main()</TT
+> function given in <A
+HREF="ch10lev1sec3.html#ch10list09"
+>Listing 10.9</A
+> to try KSpellDemo. Be sure to link to the library libkspell by passing the option <TT
+CLASS="literal"
+>-lkspell</TT
+> to <TT
+CLASS="literal"
+>g++</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list09"
+></A
+><P
+><B
+>Example 10.9. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing KSpellDemo</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kspelldemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kspelldemo");
+  10&nbsp; 9:
+  11&nbsp;10:   KSpellDemo *kspelldemo = new KSpellDemo;
+  12&nbsp;11:
+  13&nbsp;12:   kspelldemo-&gt;show();
+  14&nbsp;13:
+  15&nbsp;14:   return kapplication.exec();
+  16&nbsp;15: }
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev2sec6"
+TITLE="Configuring KSpell"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev1sec3"
+TITLE="Checking Spelling"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

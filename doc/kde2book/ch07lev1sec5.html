@@ -1,0 +1,474 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Network Transparency</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Further KDE Compliance"
+HREF="ch07.html"/><LINK
+REL="PREVIOUS"
+TITLE="Application Resources"
+HREF="ch07lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch07lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch07lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch07lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch07lev1sec5"
+>7.5. Network Transparency</A
+></H1
+><P
+>The term <SPAN
+CLASS="QUOTE"
+>"network transparent"</SPAN
+> refers to an interface that allows a user to access remote files using the same methods as accessing local files. KDE applications should be network transparent to be KDE compliant. Luckily for you, the KDE application developers, all of the hard work of accessing remote files has been done and made available (in simplest form) through static convenience functions.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch07lev2sec7"
+>7.5.1. Programming Example</A
+></H2
+><P
+>The KDE library libkio contains the classes that implement network transparency (among other things). The class of particular interest is <TT
+CLASS="literal"
+>KIO::NetAccess</TT
+>. It contains the methods <TT
+CLASS="literal"
+>download()</TT
+> and <TT
+CLASS="literal"
+>upload()</TT
+>, which transfer files to and from remote sources. These methods work synchronously but keep your GUI alive, so they are easy to work with. The <TT
+CLASS="literal"
+>download()</TT
+> and <TT
+CLASS="literal"
+>upload()</TT
+> methods can use FTP and HTTP (or any protocol for which a handler has been written) for accessing remote files. (The protocol is identified by the protocol identifier in the URL. For example, <A
+HREF="http://www.kde.org"
+TARGET="_top"
+>http://www.kde.org</A
+> uses HTTP.)</P
+><P
+>The following program, KRemoteDemo, shows how the <TT
+CLASS="literal"
+>KIO::NetAccess</TT
+> methods <TT
+CLASS="literal"
+>download()</TT
+> and <TT
+CLASS="literal"
+>upload()</TT
+> can be used to implement basic network transparency in a KDE application.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list18"
+></A
+><P
+><B
+>Example 7.18. kremotedemo.h: Class declaration for <TT
+CLASS="literal"
+>KRemoteDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KREMOTEDEMO_H__
+   3&nbsp; 2: #define __KREMOTEDEMO_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;qstring.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: #include &lt;ktmainwindow.h&gt;
+   8&nbsp; 7: #include &lt;kurl.h&gt;
+   9&nbsp; 8:
+  10&nbsp; 9: class QMultiLineEdit;
+  11&nbsp;10: class KAction;
+  12&nbsp;11:
+  13&nbsp;12: /**
+  14&nbsp;13:  * KRemoteDemo
+  15&nbsp;14:  *
+  16&nbsp;15:  * Load and save remote and local files.
+  17&nbsp;16:  **/
+  18&nbsp;17: class KRemoteDemo : public KTMainWindow
+  19&nbsp;18: {
+  20&nbsp;19:   Q_OBJECT
+  21&nbsp;20:
+  22&nbsp;21:   public:
+  23&nbsp;22:    KRemoteDemo (const char *name=0);
+  24&nbsp;23:
+  25&nbsp;24:   protected slots:
+  26&nbsp;25:    void slotOpen();
+  27&nbsp;26:    void slotSave();
+  28&nbsp;27:
+  29&nbsp;28:   protected:
+  30&nbsp;29:    KAction *save;
+  31&nbsp;30:    KURL kurl;
+  32&nbsp;31:    QString localfilename;
+  33&nbsp;32:    QMultiLineEdit *editor;
+  34&nbsp;33: };
+  35&nbsp;34:
+  36&nbsp;35: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This is a typical class declaration. KRemoteDemo uses a <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> object as its content area and offers remote or local file opening and saving (see <A
+HREF="ch07lev1sec5.html#ch07list19"
+>Listing 7.19</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list19"
+></A
+><P
+><B
+>Example 7.19. kremotedemo.cpp: Class definition for <TT
+CLASS="literal"
+>KRemoteDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;errno.h&gt;
+   3&nbsp; 2: #include &lt;string.h&gt;
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;qmultilineedit.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: #include &lt;kapp.h&gt;
+   8&nbsp; 7: #include &lt;kstdaction.h&gt;
+   9&nbsp; 8: #include &lt;kaction.h&gt;
+  10&nbsp; 9: #include &lt;kfiledialog.h&gt;
+  11&nbsp;10: #include &lt;kio/netaccess.h&gt;
+  12&nbsp;11: #include &lt;knotifyclient.h&gt;
+  13&nbsp;12:
+  14&nbsp;13: #include "kremotedemo.moc"
+  15&nbsp;14:
+  16&nbsp;15: KRemoteDemo::KRemoteDemo (const char *name) :
+  17&nbsp;16:   KTMainWindow (name)
+  18&nbsp;17: {
+  19&nbsp;18:   KStdAction::open ( this, SLOT (slotOpen()),
+  20&nbsp;19:                 actionCollection() );
+  21&nbsp;20:   save = KStdAction::save ( this, SLOT (slotSave()),
+  22&nbsp;21:                        actionCollection() );
+  23&nbsp;22:   KStdAction::quit ( kapp, SLOT (closeAllWindows()),
+  24&nbsp;23:                 actionCollection() );
+  25&nbsp;24:   createGUI();
+  26&nbsp;25:   save-&gt;setEnabled (false);
+  27&nbsp;26:
+  28&nbsp;27:   editor = new QMultiLineEdit (this);
+  29&nbsp;28:   setView (editor);
+  30&nbsp;29: }
+  31&nbsp;30:
+  32&nbsp;31: void
+  33&nbsp;32: KRemoteDemo::slotOpen()
+  34&nbsp;33: {
+  35&nbsp;34:   kurl = KFileDialog::getOpenURL ();
+  36&nbsp;35:
+  37&nbsp;36:   if (kurl.isLocalFile())
+  38&nbsp;37:     localfilename = kurl.path();
+  39&nbsp;38:   else if (!KIO::NetAccess::download (kurl, localfilename))
+  40&nbsp;39:     {
+  41&nbsp;40:       KNotifyClient::event ("Could not download file.");
+  42&nbsp;41:       return;
+  43&nbsp;42:     }
+  44&nbsp;43:
+  45&nbsp;44:
+  46&nbsp;45:   QFile qfile (localfilename);
+  47&nbsp;46:    if (qfile.open (IO_ReadOnly))
+  48&nbsp;47:     {
+  49&nbsp;48:       char *buffer = new char [qfile.size()+1];
+  50&nbsp;49:
+  51&nbsp;50:       qfile.readBlock (buffer, qfile.size());
+  52&nbsp;51:       buffer [qfile.size()]='\0';
+  53&nbsp;52:       editor-&gt;setText (buffer);
+  54&nbsp;53:
+  55&nbsp;54:       delete buffer;
+  56&nbsp;55:     }
+  57&nbsp;56:   else
+  58&nbsp;57:     {
+  59&nbsp;58:       QString qerr;
+  60&nbsp;59:       qerr.sprintf ("Could not open file: %s", strerror (errno));
+  61&nbsp;60:       KNotifyClient::event (qerr);
+  62&nbsp;61:       return;
+  63&nbsp;62:     }
+  64&nbsp;63:   save-&gt;setEnabled (true);
+  65&nbsp;64: }
+  66&nbsp;65: 
+  67&nbsp;66: void
+  68&nbsp;67: KRemoteDemo::slotSave()
+  69&nbsp;68: {
+  70&nbsp;69:   QFile qfile (localfilename);
+  71&nbsp;70:    if (qfile.open (IO_ReadOnly))
+  72&nbsp;71:     {
+  73&nbsp;72:       qfile.writeBlock (editor-&gt;text(),
+  74&nbsp;73:                    editor-&gt;text().length() );
+  75&nbsp;74:       qfile.close();
+  76&nbsp;75:     }
+  77&nbsp;76:   else
+  78&nbsp;77:     {
+  79&nbsp;78:       QString qerr;
+  80&nbsp;79:       qerr.sprintf ("Could not write file: %s", strerror (errno));
+  81&nbsp;80:       KNotifyClient::event (qerr);
+  82&nbsp;81:       return;
+  83&nbsp;82:     }
+  84&nbsp;83:
+  85&nbsp;84:   if (!kurl.isLocalFile())
+  86&nbsp;85:     if (!KIO::NetAccess::upload (localfilename, kurl))
+  87&nbsp;86:     {
+  88&nbsp;87:       KNotifyClient::event ("Could not upload file.");
+  89&nbsp;88:       return;
+  90&nbsp;89:     }
+  91&nbsp;90: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <TT
+CLASS="literal"
+>KRemoteDemo</TT
+> constructor, lines 15&#8211;29, uses actions to create the menubar and toolbar and creates an instance of <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> for use as the content area. The action corresponding to File, Save is stored in the variable <TT
+CLASS="literal"
+>save</TT
+> so that the action can be disabled and reenabled later after a file has been loaded. (For simplicity, and to avoid straying too far from the topic, a File, Save As function is not included here, so don't be surprised when you cannot save a newly created piece of text. In a full KDE application, you should include a File, Save As function and enable it when the document changes from empty to non-empty.)</P
+><P
+>On line 36, in <TT
+CLASS="literal"
+>slotOpen()</TT
+>, you check to see whether the URL returned by <TT
+CLASS="literal"
+>getOpenURL()</TT
+> refers to a local file. If it does, you open the file pointed to by <TT
+CLASS="literal"
+>kurl.path()</TT
+>, the full path to the file. If the URL does not refer to a local file, you download the remote file using <TT
+CLASS="literal"
+>KIO::NetAccess::download()</TT
+>. The second argument to this method (see line 38) is passed by reference and, if it is an empty string, filled in upon return with the name of a local, temporary file. This local file holds a copy of the downloaded remote file. The method <TT
+CLASS="literal"
+>download()</TT
+> returns <TT
+CLASS="literal"
+>false</TT
+> if an error occurs during download.</P
+><P
+>Notice that errors are reported to the user with <TT
+CLASS="literal"
+>KNotifyClient</TT
+>. In the event of a standard C library error, include the error string (returned by the standard C library function <TT
+CLASS="literal"
+>strerror()</TT
+>) in your report to the user (see lines 60 and 81). (Refer to <A
+HREF="ch06.html"
+>Chapter 6, <SPAN
+CLASS="QUOTE"
+>"KDE Style Reference"</SPAN
+></A
+> for details on <TT
+CLASS="literal"
+>KNotifyClient</TT
+>.)</P
+><P
+>The slot <TT
+CLASS="literal"
+>slotSave()</TT
+> shows how to return an edited file to its proper local or remote place. The file is saved to the local location pointed to by the variable <TT
+CLASS="literal"
+>localfilename</TT
+>. This is either the original location of the file or the location of the temporary file created by <TT
+CLASS="literal"
+>download()</TT
+>. If it is a temporary file (if the file requested by the user was originally stored remotely), <TT
+CLASS="literal"
+>slotSave()</TT
+> uploads the file to it original location. The <TT
+CLASS="literal"
+>upload()</TT
+> method (line 88) will delete the temporary file after it has been uploaded.</P
+><P
+>When you create a full KDE application, you should treat user-requested remote and local URLs in the same fashion. Beside loading and saving from and to the URLs, you should keep both local and remote URLs in the Recent submenu of the File menu.</P
+><P
+><A
+HREF="ch07lev1sec5.html#ch07list20"
+>Listing 7.20</A
+> shows the <TT
+CLASS="literal"
+>main()</TT
+> function that you can use to create an executable application showing how <TT
+CLASS="literal"
+>KRemoteDemo</TT
+> works. You will also need to place the XML GUI file, kremotedemoui.rc (available from the Web site), in directory $KDEDIR/share/kremotedemo.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list20"
+></A
+><P
+><B
+>Example 7.20. main.cpp: A main() function suitable for testing KRemoteDemo</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kremotedemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kremotedemo");
+  10&nbsp; 9:
+  11&nbsp;10:   KRemoteDemo *KRemotedemo = new KRemoteDemo (0);
+  12&nbsp;11:
+  13&nbsp;12:   kapplication.setMainWidget (KRemotedemo);
+  14&nbsp;13:
+  15&nbsp;14:   KRemotedemo-&gt;show();
+  16&nbsp;15:   return kapplication.exec();
+  17&nbsp;16: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch07lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch07lev2sec7"
+TITLE="Programming Example"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch07lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch07lev1sec5"
+TITLE="Network Transparency"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch07lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch07lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,1294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Documenting Applications</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Creating Documentation"
+HREF="ch15.html"/><LINK
+REL="PREVIOUS"
+TITLE="Creating Documentation"
+HREF="ch15.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch15lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch15.html"
+>Prev</A
+> <A
+HREF="ch15lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch15lev1sec2"
+>15.2. Documenting Applications</A
+></H1
+><P
+>For creating application documentation, the KDE project uses the DocBook Document Type Definition (DTD), a specific instance of the Standard Generalized Markup Language (SGML). DocBook was created by the Organization for the Advancement of Structured Information Standards (OASIS), a nonprofit group, to be a standard suitable for writing technical documentation. The DocBook DTD specifies how to mark up text files so that they can be processed into good-looking technical documentation. The KDE team has created a custom DocBook style sheet (which redefines the layout of the document a bit) that can be used to turn your document into standard KDE documentation.</P
+><P
+>Your documentation should be included with your application distribution (see <A
+HREF="ch16.html"
+>Chapter 16, <SPAN
+CLASS="QUOTE"
+>"Packaging and Distributing Code"</SPAN
+></A
+> for more information) and installed in $KDEDIR/share/doc/HTML/<I
+CLASS="emphasis"
+>lang</I
+>/<I
+CLASS="emphasis"
+>appname</I
+>, where <I
+CLASS="emphasis"
+>lang</I
+> is a two-letter language code (for example, en is the code for English) and <I
+CLASS="emphasis"
+>appname</I
+> is the (all lower-case) name of your application (for example, ksimpleapp). When the user chooses the entry Contents from your application's Help menu, this documentation will be loaded (in particular, the file $KDEDIR/share/doc/HTML/<I
+CLASS="emphasis"
+>lang</I
+>/<I
+CLASS="emphasis"
+>appname</I
+>/index.html will be loaded by the application KHelpCenter).</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Prior to version 2.0, the KDE project used the LinuxDoc DTD for its documentation. You may find documentation in this format, but you should write all your new documentation using DocBook.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>If you have ever written HTML, you should be fairly comfortable with DocBook. Like HTML, DocBook documents contain mark-up tags that indicate what the various parts of the document are. It is up to a formatting program to turn this document into presentable material. The structure of a DocBook (indeed, any SGML document) is free format, which means that extra spaces (or other whitespace characters) between words or tags are ignored. The space serves only to separate different elements of the document, such as to separate one word from another. All formatting is done by the formatting program.</P
+><P
+>Consider the following document snippet:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; &lt;title&gt;Technical Documentation&lt;/title&gt;
+   3&nbsp; &lt;sect1 id=Intro&gt;
+   4&nbsp;  &lt;para&gt;
+   5&nbsp;    Welcome to a technical subject. Have no fear, this documentation will
+   6&nbsp;make it clear&#8230;or, at the least, it will be available in PostScript,
+   7&nbsp;PDF, and HTML!
+   8&nbsp;  &lt;/para&gt;
+   9&nbsp; &lt;/sect1&gt;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Technical Documentation is the document's title, as you might have guessed. The string <TT
+CLASS="literal"
+>&lt;title&gt;</TT
+> is an opening tag; it marks the beginning of a section containing the title. The string <TT
+CLASS="literal"
+>&lt;/title&gt;</TT
+> is a closing tag and marks the end of that section. All the information in a DocBook document falls between some type of opening and closing tags.</P
+><P
+>In the section <A
+HREF="ch15lev1sec2.html#ch15lev2sec9"
+><SPAN
+CLASS="QUOTE"
+>"Writing DocBook Documentation for KDE,"</SPAN
+></A
+> I discuss some of the tags that are available and examine a sample document.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec7"
+>15.2.1. Obtaining and Installing KDE DocBook Tools</A
+></H2
+><P
+>You can retrieve everything you to need start working with DocBook from the <I
+CLASS="citetitle"
+>KDE</I
+> FTP site (<A
+HREF="ftp://ftp.kde.org"
+TARGET="_top"
+>ftp://ftp.kde.org</A
+>) or one of its mirrors. In the directory pub/kde/devel/docbook/, you will find the following DocBook packages:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>sgml-common</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>jade</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>docbook</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>stylesheets</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>psgml</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>jadetex</P
+></LI
+></UL
+><P
+>The first four are required to use DocBook. psgml is an add-on for Emacs that makes creating DocBook documents easier. jadetex is needed if you intend to create LaTeX versions of your document and process them (into PostScript, for example). The KDE customizations are included in the kdelib package.</P
+><P
+>The DocBook packages are available in RPM, SRPM, and .tgz formats. You should choose the one that you prefer and that is appropriate for your system.</P
+><P
+>If you choose RPM format, you can install the packages with the command <TT
+CLASS="literal"
+>rpm -ivh</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>packagename</TT
+></I
+>. Install the packages in the order given in the preceding list.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You will need to uninstall any older versions of these packages.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>If you choose SRPM or .tgz format, you should follow the usual compiling and installation procedures.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec7"
+TITLE="Obtaining and Installing KDE DocBook Tools"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec8"
+>15.2.2. Processing DocBook Documentation</A
+></H2
+><P
+>DocBook files are processed with the utility called jade. Access to jade is given through the front end scripts jw.</P
+><P
+>You can use jw to convert your DocBook file to HTML, Rich Text Format (RTF), TeX, Postscript, or other formats. You use this script to process your DocBook file in this way:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>jw -o HTML -c /usr/share/sgml/docbook/sgml-dtd-3.1/catalog -c \</I
+>
+   3&nbsp;    <I
+CLASS="emphasis"
+>$KDEDIR/share/apps/ksgmltools/catalog -d \</I
+>
+   4&nbsp;    <I
+CLASS="emphasis"
+>$KDEDIR/share/apps/ksgmltools/stylesheets/kde.dsl#HTML</I
+> <I
+CLASS="emphasis"
+>docBookFileName</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>where <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>docBookFileName</TT
+></I
+> is the name of the source file (for example, ksimpleapp.docbook, a file that is discussed in the next section). Executing this command produces a directory called HTML, which contains the HTML files produced from <I
+CLASS="emphasis"
+>docBookFileName</I
+>. These files will be formatted in a standard KDE style.</P
+><P
+>The file kde.dsl, in describing the formatting of the resulting HTML file, requests that an image called logotp3.png be displayed. To give your newly-created HTML files access to this graphic, type</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>mkdir HTML/common</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>cp $KDEDIR/share/doc/HTML/default/common/logotp3.png HTML/common</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>A convenient script called makehtml that executes these three commands (jw, mkdir, and cp) is included on the Web site. It is used this way:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;makehtml <I
+CLASS="emphasis"
+>outputDirectory</I
+> <I
+CLASS="emphasis"
+>docBookFileName</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The first parameter, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>outputDirectory</TT
+></I
+>, is the name of a subdirectory to be created to hold the ouput files. To reproduce the commands above, use HTML as the <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>outputDirectory</TT
+></I
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec8"
+TITLE="Processing DocBook Documentation"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec9"
+>15.2.3. Writing DocBook Documentation for KDE</A
+></H2
+><P
+>The best way to start learning DocBook is to look at an example. The basic structure and tags are simple. <A
+HREF="ch15lev1sec2.html#ch15list02"
+>Listing 15.2</A
+> shows a simple DocBook file called ksimpleapp.docbook, which documents KSimpleApp, the application created in <A
+HREF="ch02.html"
+>Chapter 2, <SPAN
+CLASS="QUOTE"
+>"A Simple KDE Application."</SPAN
+></A
+></P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Since DocBook documents (see <A
+HREF="ch15lev1sec2.html#ch15list02"
+>Listing 15.2</A
+>) are plain text, you may use any text editor to create them.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch15list02"
+></A
+><P
+><B
+>Example 15.2. <TT
+CLASS="literal"
+>ksimpleapp.docbook</TT
+>: DocBook Documentation for KSimpleApp</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  1: &lt;!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN"&gt;
+   3&nbsp;  2:
+   4&nbsp;  3: &lt;Book Id=KSimpleApp Lang=en&gt;
+   5&nbsp;  4:
+   6&nbsp;  5: &lt;BookInfo&gt;
+   7&nbsp;  6:
+   8&nbsp;  7: &lt;Title&gt;KSimpleApp Documentation&lt;/Title&gt;
+   9&nbsp;  8:
+  10&nbsp;  9: &lt;AuthorGroup&gt;
+  11&nbsp; 10: &lt;Author&gt;
+  12&nbsp; 11: &lt;Firstname&gt;Joe&lt;/Firstname&gt;
+  13&nbsp; 12: &lt;Surname&gt;Developer&lt;/Surname&gt;
+  14&nbsp; 13: &lt;/Author&gt;
+  15&nbsp; 14: &lt;/AuthorGroup&gt;
+  16&nbsp; 15:
+  17&nbsp; 16: &lt;KeywordSet&gt;
+  18&nbsp; 17: &lt;Keyword&gt;KDE&lt;/Keyword&gt;
+  19&nbsp; 18: &lt;Keyword&gt;ksimpleapp&lt;/Keyword&gt;
+  20&nbsp; 19: &lt;/KeywordSet&gt;
+  21&nbsp; 20:
+  22&nbsp; 21: &lt;Date&gt;1/1/2000&lt;/Date&gt;
+  23&nbsp; 22: &lt;ReleaseInfo&gt;1.0.0&lt;/ReleaseInfo&gt;
+  24&nbsp; 23:
+  25&nbsp; 24: 
+  26&nbsp; 25: &lt;Abstract&gt;
+  27&nbsp; 26:  &lt;Para&gt;
+  28&nbsp; 27:    This is a short example of how DocBook is used to document KDE
+  29&nbsp; 28: Applications.  The basic DocBook tags are used here, but there are many
+  30&nbsp; 29: more!
+  31&nbsp; 30:  &lt;/Para&gt;
+  32&nbsp; 31: &lt;/Abstract&gt;
+  33&nbsp; 32:
+  34&nbsp; 33: &lt;/BookInfo&gt;
+  35&nbsp; 34:
+  36&nbsp; 35: &lt;Chapter Id=introduction&gt;
+  37&nbsp; 36:  &lt;Title&gt;Introduction&lt;/Title&gt;
+  38&nbsp; 37:  &lt;Para&gt;
+  39&nbsp; 38:  &lt;Application&gt;KSimpleApp&lt;/Application&gt; says "Hello!" and allows
+  40&nbsp; 39: the user to reposition text.
+  41&nbsp; 40:  &lt;/Para&gt;
+  42&nbsp; 41:
+  43&nbsp; 42: &lt;Sect1 Id=ksimpleapp-revhistory&gt;
+  44&nbsp; 43:  &lt;Title&gt;KSimpleApp Revision History&lt;/Title&gt;
+  45&nbsp; 44:  &lt;Para&gt;
+  46&nbsp; 45:   &lt;ItemizedList&gt;
+  47&nbsp; 46:    &lt;ListItem&gt;&lt;Para&gt;1.1 - Added a combobox to the
+  48&nbsp; 47:     toolbar in Exercise 2.1&lt;/Para&gt;&lt;/listitem&gt;
+  49&nbsp; 48:    &lt;ListItem&gt;&lt;Para&gt;1.0 - First version&lt;/Para&gt;&lt;/listitem&gt;
+  50&nbsp; 49:   &lt;/ItemizedList&gt;
+  51&nbsp; 50:  &lt;/Para&gt;
+  52&nbsp; 51: &lt;/Sect1&gt;
+  53&nbsp; 52: &lt;/Chapter&gt;
+  54&nbsp; 53:
+  55&nbsp; 54: &lt;Chapter Id=installation&gt;
+  56&nbsp; 55:  &lt;Title&gt;Installation&lt;/Title&gt;
+  57&nbsp; 56:  &lt;Para&gt;
+  58&nbsp; 57:   This Application does &lt;Emphasis&gt;not&lt;/Emphasis&gt; want to be installed.
+  59&nbsp; 58:  &lt;/Para&gt;
+  60&nbsp; 59: &lt;Sect1 Id=getting-ksimpleapp&gt;
+  61&nbsp; 60: &lt;Title&gt;Obtaining KSimpleApp&lt;/Title&gt;
+  62&nbsp; 61:  &lt;Para&gt;
+  63&nbsp; 62: &lt;Application&gt;KSimpleApp&lt;/Application&gt; can be found in Chapter 2 and on
+  64&nbsp; 63: the Web site for this book.
+  65&nbsp; 64:  &lt;/Para&gt;
+  66&nbsp; 65: &lt;/Sect1&gt;
+  67&nbsp; 66: 
+  68&nbsp; 67: &lt;Sect1 Id=requirements&gt;
+  69&nbsp; 68: &lt;Title&gt;Requirements&lt;/Title&gt;
+  70&nbsp; 69:  &lt;Para&gt;
+  71&nbsp; 70: You will need KDE 2.0 to run this Application.  Please visit
+  72&nbsp; 71: &lt;ulink url=http://www.kde.org&gt;
+  73&nbsp; 72:   The KDE home page&lt;/ulink&gt; to find out about KDE 2.0.
+  74&nbsp; 73:  &lt;/Para&gt;
+  75&nbsp; 74: &lt;/Sect1&gt;
+  76&nbsp; 75:
+  77&nbsp; 76: &lt;Sect1 Id=compilation&gt;
+  78&nbsp; 77:  &lt;Title&gt;Compilation and installation&lt;/Title&gt;
+  79&nbsp; 78:  &lt;Para&gt;
+  80&nbsp; 79: Compile &lt;Application&gt;KSimpleApp&lt;/Application&gt; with g++.
+  81&nbsp; 80:  &lt;/Para&gt;
+  82&nbsp; 81: &lt;/Sect1&gt;
+  83&nbsp; 82:
+  84&nbsp; 83: &lt;Sect1 Id=configuration&gt;
+  85&nbsp; 84:  &lt;Title&gt;Configuration&lt;/Title&gt;
+  86&nbsp; 85:  &lt;Para&gt;
+  87&nbsp; 86: No configuration is needed.
+  88&nbsp; 87:  &lt;/Para&gt;
+  89&nbsp; 88:
+  90&nbsp; 89: &lt;/Sect1&gt;
+  91&nbsp; 90:
+  92&nbsp; 91: &lt;/Chapter&gt;
+  93&nbsp; 92:
+  94&nbsp; 93: &lt;Chapter Id=using-kapp&gt;
+  95&nbsp; 94:  &lt;Title&gt;Using KSimpleApp&lt;/Title&gt;
+  96&nbsp; 95:
+  97&nbsp; 96:  &lt;Para&gt;
+  98&nbsp; 97: &lt;Application&gt;KSimpleApp&lt;/Application&gt; is simple to use.
+  99&nbsp; 98:  &lt;/Para&gt;
+ 100&nbsp; 99:
+ 101&nbsp;100: &lt;Sect1 Id=kapp-features&gt;
+ 102&nbsp;101:  &lt;Title&gt;KSimpleApp features&lt;/Title&gt;
+ 103&nbsp;102: 
+ 104&nbsp;103:  &lt;Para&gt;
+ 105&nbsp;104:    Well, if there were any, we'd present them here.
+ 106&nbsp;105:  &lt;/Para&gt;
+ 107&nbsp;106:
+ 108&nbsp;107: &lt;/Sect1&gt;
+ 109&nbsp;108: &lt;/Chapter&gt;
+ 110&nbsp;109:
+ 111&nbsp;110: &lt;Chapter Id=commands&gt;
+ 112&nbsp;111: &lt;Title&gt;Command Reference&lt;/Title&gt;
+ 113&nbsp;112:
+ 114&nbsp;113: &lt;Para&gt;
+ 115&nbsp;114: Type &lt;keycombo&gt;&lt;keycap&gt;Ctrl&lt;/keycap&gt;&lt;keycap&gt;q&lt;/keycap&gt;&lt;/keycombo&gt;
+ 116&nbsp;115: to quit or &lt;keycombo&gt;&lt;keycap&gt;Ctrl&lt;/keycap&gt;&lt;keycap&gt;r&lt;/keycap&gt;&lt;/keycombo&gt;
+ 117&nbsp;116: to reposition the text.
+ 118&nbsp;117:
+ 119&nbsp;118: &lt;/Para&gt;
+ 120&nbsp;119:
+ 121&nbsp;120: &lt;/Chapter&gt;
+ 122&nbsp;121:
+ 123&nbsp;122:
+ 124&nbsp;123: &lt;Chapter Id=credits&gt;
+ 125&nbsp;124:
+ 126&nbsp;125:  &lt;Title&gt;Credits and License&lt;/Title&gt;
+ 127&nbsp;126:  &lt;Para&gt;
+ 128&nbsp;127: &lt;Application&gt;KSimpleApp&lt;/Application&gt; is Copyright 2000 by Joe Developer
+ 129&nbsp;128: &lt;Email&gt;jdevel@kde.org&lt;/Email&gt; and
+ 130&nbsp;129: was written by Joe Developer and
+ 131&nbsp;130: is available under the &lt;ULink Url=common/gpl-license.html&gt;
+ 132&nbsp;131:   GNU GPL&lt;/Ulink&gt;.
+ 133&nbsp;132:  &lt;/Para&gt;
+ 134&nbsp;133:
+ 135&nbsp;134: &lt;/Chapter&gt;
+ 136&nbsp;135:
+ 137&nbsp;136: &lt;/Book&gt;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This document starts off with the line</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;&lt;!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN"&gt;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>which tells the processor, jade, that the document is a book (not an article, another DocBook type not used in KDE application documentation and not discussed here) and that it should use the DTD called -//KDE//DTD DocBook V3.1-Based Variant V1.0//EN. This DTD is an extension of the DocBook V3.1 DTD that adds support for PNG graphics. It is part of the customization of the DocBook installation performed when you installed kdesdk/ksgmltools.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>PNG graphics are preferred over GIF for use in KDE documentation because no part of PNG is patented.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>All the DocBook tags take the following form:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;&lt;tag propertyname=property&gt;
+   3&nbsp;&#8230;
+   4&nbsp;&lt;/tag&gt;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Some tags have multiple property names and some have none.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It is important to use the proper case for tags and to use closing tags even when not strictly required by SGML. Doing so will make it easier to port your documentation to the XML (Extended Markup Language) DTD that will eventually become the KDE standard.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>To process the document in <A
+HREF="ch15lev1sec2.html#ch15list02"
+>Listing 15.2</A
+>, use the command</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>makehtml HTML ksimpleapp.docbook</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This will generate the HTML documentation in a directory called HTML. <A
+HREF="ch15lev1sec2.html#ch15fig02"
+>Figure 15.2</A
+> shows the output as viewed by Konqueror.</P
+><P
+>The meanings of many of the tags in <A
+HREF="ch15lev1sec2.html#ch15list02"
+>Listing 15.2</A
+> may seem obvious, but Tables 15.1-15.3 are a complete summary of them divided into three categories: meta-information, structure and formatting. These tags should be sufficient to write much of the documentation you will need to write.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch15fig02"
+></A
+><P
+><B
+>Figure 15.2. Screenshot of the HTML output created from ksimpleapp.docbook as viewed by Konqueror.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/15fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch15table01"
+></A
+><P
+><B
+>Table 15.1. DocBook Meta-Information Tags</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Tag</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Contents of Tagged Region</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>BookInfo</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Information about the book (author, date written, and so on)</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>AuthorGroup</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Information about all authors</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Author</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A single author</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KeyWordSet</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A set of keywords relevant to the document's contents</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Keyword</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A single keyword</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Date</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The date the document was created or revised</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>ReleaseInfo</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The version of the document</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Abstract</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>An abstract for this document</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch15table02"
+></A
+><P
+><B
+>Table 15.2. DocBook Document Structure Tags</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Tag</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Contents of Tagged Region</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Book Id="</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>id</TT
+></I
+><TT
+CLASS="literal"
+>" Lang= "</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>language</TT
+></I
+><TT
+CLASS="literal"
+>"</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A book of documentation identified by <I
+CLASS="emphasis"
+>id</I
+>, written in the language <I
+CLASS="emphasis"
+>language</I
+></TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Chapter</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>One chapter of the book</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Title</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The title of a chapter, section, and so on</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Sect1, Sect2..Sect5</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A section, subsection, and so on of a chapter</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Para</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A single paragraph</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><P
+>The property <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>id</TT
+></I
+> is used when processing the document to identify the book. It may, for example, be used to place a mark in an HTML document naming the section <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>id</TT
+></I
+>: <TT
+CLASS="literal"
+>&lt;A NAME="id"&gt;</TT
+>.</P
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch15table03"
+></A
+><P
+><B
+>Table 15.3. DocBook Formatting Tags</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Tag</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Contents of Tagged Region</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Emphasis</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Emphasized Text</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>ItemizedList</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>An unnumbered list</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>ListItem</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>An element in a list</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KeyCombo</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>A combination of input actions (for example, Ctrl+Q)</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KeyCap</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Something printed on a keyboard key (for example, Ctrl)</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>Application</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The name of an application</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>ULink Url="</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>url</TT
+></I
+><TT
+CLASS="literal"
+>"</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>An anchor for the URL, <I
+CLASS="emphasis"
+>url</I
+></TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><P
+>DocBook has many more tags than those presented. They allow you to create rich, structured documents that can easily be processed by a computer. You can find out more about them from the tutorial at <A
+HREF="http://i18n.kde.org/doc/crash-course/"
+TARGET="_top"
+>http://i18n.kde.org/doc/crash-course/</A
+> or at the official DocBook home page at <A
+HREF="http://www.oasis-open.org/docbook/"
+TARGET="_top"
+>http://www.oasis-open.org/docbook/</A
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec9"
+TITLE="Writing DocBook Documentation for KDE"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev1sec2"
+TITLE="Documenting Applications"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch15.html"
+>Prev</A
+> <A
+HREF="ch15lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

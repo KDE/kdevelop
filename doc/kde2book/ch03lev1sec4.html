@@ -1,0 +1,549 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Meta Object Compiler (moc)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="The Qt Toolkit"
+HREF="ch03.html"/><LINK
+REL="PREVIOUS"
+TITLE="Signals and Slots"
+HREF="ch03lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="The Utility Classes"
+HREF="ch03lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch03lev1sec4"
+>3.4. Meta Object Compiler (<TT
+CLASS="literal"
+>moc</TT
+>)</A
+></H1
+><P
+>The Meta Object Compiler (<TT
+CLASS="literal"
+>moc</TT
+>) is a useful addition to Qt. It is a tool that saves a lot of work, and it is very simple to use.</P
+><P
+>It converts Qt class definitions into C++ code.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec10"
+>3.4.1. Using the <TT
+CLASS="literal"
+>moc</TT
+> Tool</A
+></H2
+><P
+>You probably already know that a compiler converts code into ones and zeros. The code may sometimes be understandable, but the ones and zeros are not.</P
+><P
+>The <TT
+CLASS="literal"
+>moc</TT
+> is not a compiler, although the name may suggest that. The <TT
+CLASS="literal"
+>moc</TT
+> looks in your code and searches for certain keywords. When a keyword is found, it is replaced by other code. This saves you a lot of programming because the resulting code is much more complex than the original.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec7"
+>3.4.1.1. The <TT
+CLASS="literal"
+>moc</TT
+> Keywords</A
+></H3
+><P
+>The <TT
+CLASS="literal"
+>moc</TT
+> keywords are <TT
+CLASS="literal"
+>Q_OBJECT</TT
+>, <TT
+CLASS="literal"
+>public slots:</TT
+>, <TT
+CLASS="literal"
+>protected slots:</TT
+>, <TT
+CLASS="literal"
+>private slots:</TT
+>, and <TT
+CLASS="literal"
+>signals:</TT
+>.</P
+><P
+>The <TT
+CLASS="literal"
+>Q_OBJECT</TT
+> keyword tells <TT
+CLASS="literal"
+>moc</TT
+> that the class is a Qt class.</P
+><P
+>All slots must be defined below a <TT
+CLASS="literal"
+>slots</TT
+> keyword. Slots can be public, protected, or private. You must specify the access mode before the <TT
+CLASS="literal"
+>slots</TT
+> keyword (all public slots are defined below <TT
+CLASS="literal"
+>public slots</TT
+> for example).</P
+><P
+>All signals must be defined below the <TT
+CLASS="literal"
+>signals:</TT
+> keyword. Signals are always public.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec7"
+TITLE="The moc Keywords"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec10"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec10"
+TITLE="Using the moc Tool"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec11"
+>3.4.2. Sample Use of the <TT
+CLASS="literal"
+>moc</TT
+></A
+></H2
+><P
+>You will now see how to use <TT
+CLASS="literal"
+>moc</TT
+> with a small sample program. The main window in the program contains a button. When you click the button, the slot <TT
+CLASS="literal"
+>slotButton()</TT
+> is executed. <A
+HREF="ch03lev1sec4.html#ch03list06"
+>Listing 3.6</A
+> contains the code:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list06"
+></A
+><P
+><B
+>Example 3.6. mywindow.h: Class Declaration with <TT
+CLASS="literal"
+>moc</TT
+> Keywords</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  1: #include &lt;qwidget.h&gt;
+   3&nbsp; 2: #include &lt;qpushbutton.h&gt;
+   4&nbsp; 3: 
+   5&nbsp; 4: class MyWindow : public QWidget
+   6&nbsp; 5: {
+   7&nbsp; 6:   Q_OBJECT
+   8&nbsp; 7: public:
+   9&nbsp; 8:   MyWindow();
+  10&nbsp; 9: public slots:
+  11&nbsp;10:   void slotButton();
+  12&nbsp;11: private:
+  13&nbsp;12:   QPushButton *button;
+  14&nbsp;13: };
+  15&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><A
+HREF="ch03lev1sec4.html#ch03list07"
+>Listing 3.7</A
+> shows the class implementation. You must put the class definition and class implementation in different files, because the class implementation needs the code that <TT
+CLASS="literal"
+>moc</TT
+> generates.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list07"
+></A
+><P
+><B
+>Example 3.7. mywindow.cpp: Class Implementation for <TT
+CLASS="literal"
+>MyWindow</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include "mywindow.moc"
+   3&nbsp; 2: #include &lt;iostream.h&gt;
+   4&nbsp; 3: 
+   5&nbsp; 4: MyWindow::MyWindow() : QWidget()
+   6&nbsp; 5: {
+   7&nbsp; 6:   button = new QPushButton("Click me", this);
+   8&nbsp; 7:   button-&gt;setGeometry(10,10,100,40);
+   9&nbsp; 8:   button-&gt;show();
+  10&nbsp; 9: 
+  11&nbsp;10:   connect(button, SIGNAL(clicked()), this, SLOT(slotButton()));
+  12&nbsp;11: }
+  13&nbsp;12: 
+  14&nbsp;13: void slotButton()
+  15&nbsp;14: {
+  16&nbsp;15:   cout &lt;&lt; "You clicked me" &lt;&lt; endl;
+  17&nbsp;16: }
+  18&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><A
+HREF="ch03lev1sec4.html#ch03list08"
+>Listing 3.8</A
+> shows what the main program file looks like. It uses the <TT
+CLASS="literal"
+>MyWindow</TT
+> class which you have just created.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list08"
+></A
+><P
+><B
+>Example 3.8. main.cpp: The Main Program File</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include "mywindow.h"
+   4&nbsp; 3: 
+   5&nbsp; 4: int main(int argc, char **argv)
+   6&nbsp; 5: {
+   7&nbsp; 6:   KApplication app(argc, argv);
+   8&nbsp; 7:   MyWindow window;
+   9&nbsp; 8:   window.setGeometry(100,100,200,100);
+  10&nbsp; 9:   window.setCaption("Aha!");
+  11&nbsp;10:   app.setMainWidget(&amp;window);
+  12&nbsp;11:   window.show();
+  13&nbsp;12:   return app.exec();
+  14&nbsp;13: }
+  15&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Now you will compile the program. Common C++ programs are compiled in two steps. First, all object files are created, and then the object files are linked into a program.</P
+><P
+>Creating all object files takes two steps when you are using signals and slots, because you must use <TT
+CLASS="literal"
+>moc</TT
+> first to precompile the class definitions.</P
+><P
+>Note that the main.cpp file in <A
+HREF="ch03lev1sec4.html#ch03list08"
+>Listing 3.8</A
+> can be compiled into an object file directly. No <TT
+CLASS="literal"
+>moc</TT
+> keywords are in it, nor does it include any files generated by <TT
+CLASS="literal"
+>moc</TT
+>. To create the object file for main.cpp, type the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>g++ -I$QTDIR/include -c main.cpp</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The mywindow.cpp file, containing the class declaration for <TT
+CLASS="literal"
+>MyWindow</TT
+>, can't be compiled yet. The class declaration contains some <TT
+CLASS="literal"
+>moc</TT
+> keywords (<TT
+CLASS="literal"
+>Q_OBJECT</TT
+>, <TT
+CLASS="literal"
+>public slots</TT
+>), which must be translated into C++ code first. To translate, use the <TT
+CLASS="literal"
+>moc</TT
+> tool. The following command precompiles the mywindow.h file and the result is written to <TT
+CLASS="literal"
+>mywindow.moc</TT
+>:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>moc mywindow.h -o mywindow.moc</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Now you can compile the mywindow.cpp file like so:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>g++ -I/$QTDIR/include -c mywindow.cpp</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>At this point, all object files have been created.</P
+><P
+>To link the object files into an executable program, use the following command:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>g++ -o myprog main.o mywindow.o -L/$QTDIR/lib -lqt</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The name of the executable file will be myprog.</P
+><P
+>Now you can execute your program.</P
+><P
+>I'll now give you a quick summary of the compiling process. The first step is to precompile all necessary files with <TT
+CLASS="literal"
+>moc</TT
+>. All class definitions that contains <TT
+CLASS="literal"
+>moc</TT
+> keywords must be precompiled. The second step is to create all the object files. The third and last step is to link all the object files together.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec11"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec11"
+TITLE="Sample Use of the moc"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev1sec4"
+TITLE="Meta Object Compiler (moc)"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Single-Instance Applications</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Alternative Application Types"
+HREF="ch11.html"/><LINK
+REL="PREVIOUS"
+TITLE="Alternative Application Types"
+HREF="ch11.html"/><LINK
+REL="NEXT"
+TITLE="Panel Applets"
+HREF="ch11lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch11.html"
+>Prev</A
+> <A
+HREF="ch11lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch11lev1sec2"
+>11.2. Single-Instance Applications</A
+></H1
+><P
+>Sometimes it only makes sense to run one instance of an application. Examples include Kicker, the KDE panel, Kwin the KDE window manager, and KPPP, the Internet dial-up tool.</P
+><P
+>To allow developers to create single-instance applications with minimal effort, KDE offers <TT
+CLASS="literal"
+>KUniqueApplication</TT
+>. It is a subclass of <TT
+CLASS="literal"
+>KApplication</TT
+> and thus offers all of <TT
+CLASS="literal"
+>KApplication</TT
+>'s functionality and ensures that only one instance of the application is running. To use <TT
+CLASS="literal"
+>KUniqueApplication,</TT
+> you need to modify your usual <TT
+CLASS="literal"
+>main()</TT
+> function a bit; see <A
+HREF="ch11lev1sec2.html#ch11list04"
+>Listing 11.4</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch11list04"
+></A
+><P
+><B
+>Example 11.4. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Starting a Single-Instance Application</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include "kunique.h"
+   3&nbsp; 2:
+   4&nbsp; 3: void
+   5&nbsp; 4: main (int argc, char *argv[])
+   6&nbsp; 5: {
+   7&nbsp; 6:   if (KUnique::start(argc, argv, "kunique"))
+   8&nbsp; 7:     {
+   9&nbsp; 8:       KUnique *kunique = new KUnique (argc, argv, "kunique");
+  10&nbsp; 9:       kunique-&gt;exec();
+  11&nbsp;10:     }
+  12&nbsp;11: }
+  13&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KUniqueapplication</TT
+> accomplishes the feat of starting only one application using DCOP, an interprocess communication system (see <A
+HREF="ch13.html"
+>Chapter 13, <SPAN
+CLASS="QUOTE"
+>"DCOP&#8212;Desktop Communication Protocol"</SPAN
+></A
+> for a discussion). When <TT
+CLASS="literal"
+>KUnique::start()</TT
+> is called, <TT
+CLASS="literal"
+>KUniqueApplication</TT
+> tries to register itself with DCOP under your application's name (<TT
+CLASS="literal"
+>kunique</TT
+> in this case). If that name is already in use, <TT
+CLASS="literal"
+>KUnique::start()</TT
+> returns <TT
+CLASS="literal"
+>false</TT
+> and your application exits. Otherwise, your application is registered under its name. In either case, a DCOP call is sent off, which calls the virtual method <TT
+CLASS="literal"
+>KUnique::newInstance()</TT
+> (see <A
+HREF="ch11lev1sec2.html#ch11list05"
+>Listing 11.5</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch11list05"
+></A
+><P
+><B
+>Example 11.5. kunique.cpp: Class Definition for <TT
+CLASS="literal"
+>KUnique</TT
+>, a Single-Instance Application</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kwin.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kunique.h"
+   5&nbsp; 4: #include "ksimpleapp.h"
+   6&nbsp; 5:
+   7&nbsp; 6: KUnique::KUnique (int&amp;argc, char** argv,
+   8&nbsp; 7:           const QCString&amp;rAppName = 0) :
+   9&nbsp; 8:   KUniqueApplication (argc, argv, rAppName)
+  10&nbsp; 9: {
+  11&nbsp;10:   ksimpleapp=0;
+  12&nbsp;11: }
+  13&nbsp;12:
+  14&nbsp;13: int
+  15&nbsp;14: KUnique::newInstance (QValueList&lt;QCString&gt; params)
+  16&nbsp;15: {
+  17&nbsp;16:   if (ksimpleapp==0)
+  18&nbsp;17:     {
+  19&nbsp;18:       ksimpleapp = new KSimpleApp;
+  20&nbsp;19:       ksimpleapp-&gt;show();
+  21&nbsp;20:     }
+  22&nbsp;21:   else
+  23&nbsp;22:     {
+  24&nbsp;23:       ksimpleapp-&gt;slotRepositionText();
+  25&nbsp;24:       KWin::setActiveWindow (ksimpleapp-&gt;winId());
+  26&nbsp;25:     }
+  27&nbsp;26: }
+  28&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the method <TT
+CLASS="literal"
+>newInstance()</TT
+> (lines 13-26), you either create a new instance of the main application widget (usually a subclass of <TT
+CLASS="literal"
+>KTMainWindow</TT
+>; here <TT
+CLASS="literal"
+>KSimpleApp</TT
+> is used&#8212;a main widget presented in <A
+HREF="ch02.html"
+>Chapter 2</A
+>) or, if it already exists, respond to the user's attempt to restart the application. Your application's response to a restart attempt might be the following:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>To issue a <SPAN
+CLASS="QUOTE"
+>"sorry"</SPAN
+> message with <TT
+CLASS="literal"
+>KMessageBox::sorry()</TT
+>, saying that the application is already running</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>To open the document requested, as a command-line parameter, in addition to or instead of the currently opened document</P
+></LI
+></UL
+><P
+>In any case, the response should indicate to the user that you are aware of the user's attempt to start the application. At a minimum, you should set the currently running window as the active window using the static method <TT
+CLASS="literal"
+>KWin::setActiveWindow()</TT
+>. This method is demonstrated on line 24. <TT
+CLASS="literal"
+>KUnique</TT
+> interprets a request to start the application again as a request to perform the only action it knows: to reposition the text (see <A
+HREF="ch02.html"
+>Chapter 2</A
+> for an explanation of this action).</P
+><P
+>The final bit of code needed to compile <TT
+CLASS="literal"
+>KUnique</TT
+>, the header file, is given in <A
+HREF="ch11lev1sec2.html#ch11list06"
+>Listing 11.6</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch11list06"
+></A
+><P
+><B
+>Example 11.6. kunique.h: Class Declaration for <TT
+CLASS="literal"
+>KUnique</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KUNIQUE_H__
+   3&nbsp; 2: #define __KUNIQUE_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;kuniqueapp.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class KSimpleApp;
+   8&nbsp; 7:
+   9&nbsp; 8: class KUnique : public KUniqueApplication
+  10&nbsp; 9: {
+  11&nbsp;10:  public:
+  12&nbsp;11:   KUnique (int&amp;argc, char** argv,
+  13&nbsp;12:        const QCString&amp;rAppName = 0);
+  14&nbsp;13:
+  15&nbsp;14:   int newInstance (QValueList&lt;QCString&gt; params);
+  16&nbsp;15:
+  17&nbsp;16:  private:
+  18&nbsp;17:   KSimpleApp *ksimpleapp;
+  19&nbsp;18: };
+  20&nbsp;19:
+  21&nbsp;20: #endif
+  22&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch11lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch11lev1sec2"
+TITLE="Single-Instance Applications"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch11.html"
+>Prev</A
+> <A
+HREF="ch11lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

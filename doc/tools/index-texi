@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+
+GetOptions( 'title=s' => \$title,
+            'base=s'  => \$base,
+            'map=s'   => \%mapping ) || die "Wrong options\n";
+
+print "<!DOCTYPE gideonindex>\n";
+print "<gideonindex>\n";
+print "<title>$title</title>\n";
+print "<base href=\"$base\"/>\n";
+
+for $file (@ARGV) {
+
+        open(FILE, "$file") || die "File not found: $file\n";
+
+        $indir = 0;
+
+        while (<FILE>) {
+
+                if (/\<H1\>\<A NAME=\".*\" HREF=\".*\"\>(.*)\<\/A\>\<\/H1\>/) {
+                        $index = $mapping{$1};
+#                        print "Index: $1 => $index\n";
+                } elsif (/\<DIR\>/) {
+                        $indir = 1;
+                } elsif (/\<\/DIR>/) {
+                        $indir = 0;
+                } elsif ($indir) {
+                        if (/\<LI\>\<A HREF=\"([^\"]*)\"\>([^<]*)\<\/A\>/) {
+                                unless ($lastindex eq $index) {
+                                        if ($lastindex) {
+                                                print "</$lastindex>\n";
+                                        }
+                                        print "<$index>\n";
+                                        $lastindex = $index;
+                                }
+                                $name = dehtml($2);
+                                $url = $1;
+                                print STDOUT "<entry name=\"$name\" url=\"$url\"/>\n";
+                        }
+                }
+        }
+}
+
+if ($lastindex) {
+        print "</$lastindex>\n";
+}
+print "</gideonindex>\n";
+
+sub dehtml
+{
+        my ( $str ) = @_;
+
+        $str =~ s/\<CODE\>//g;
+        $str =~ s/\<\/CODE\>//g;
+        $str =~ s/\<TT\>//g;
+        $str =~ s/\<\/TT\>//g;
+
+        return $str;
+}
+
+# Local Variables:
+# mode: perl
+# fill-column: 120
+# End:

@@ -1,0 +1,293 @@
+<HTML>
+<HEAD>
+<TITLE>SGI STL Allocator Design</title>
+</head>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+<H1> SGI STL Allocator Design</h1>
+<BODY>
+This document consists of 2 sections.
+The first discusses some of the decisions made in the implementation
+of default allocators in the SGI STL.  These decisions
+influence both the performance of the default allocator, as well
+as its behavior with leak detectors.
+<P>
+The second section describes the original design of SGI STL allocators.
+The current SGI STL also supports the allocator interface in the C++
+standard.  The interface described here is specific to the SGI STL
+and cannot be used in code that must be portable to other STL
+implementations.  Thus its use is now discouraged.  The discussion
+is nonetheless preserved both for historical reasons, and because it exposes
+some of the issues surrounding the standard interface.
+
+<H2>The SGI Default Allocator</h2>
+
+The default allocator <TT>alloc</tt> maintains its own free lists for small
+objects.  It uses an underlying system-provided allocator both to satisfy
+larger requests, and to obtain larger chunks of memory which can be subdivided
+into small objects.  Two of the detailed design decisions have proven to
+be controversial, and are explained here.
+
+<H3><TT>Alloc</tt> obtains memory from <TT>malloc</tt></h3>
+<TT>Malloc</tt> is used as the underlying system-provided allocator.
+This is a minor design decision.  <TT>::operator new</tt> could also have been
+used.  <TT>Malloc</tt> has the advantage that it allows for predictable and
+simple failure detection.  <TT>::operator new</tt> would have made this more
+complicated given the portability and thread-safety constraints, and the
+possibility of user provided new handlers.
+
+<H3><TT>Alloc</tt> does not <TT>free</tt> all memory</h3>
+Memory allocated for blocks of small objects is not returned to
+<TT>malloc</tt>.  It can only be reused by subsequent
+<TT>alloc::allocate</tt> requests of (approximately) the same size.
+Thus programs that use <TT>alloc</tt> may appear to leak memory when monitored
+by some simple leak detectors.  <I>This is intentional</i>.
+Such "leaks" do not accumulate over time.  Such "leaks" are not reported by
+garbage-collector-like leak detectors.
+<P>
+The primary design criterion for <TT>alloc</tt> was to make it no slower
+than the HP STL per-class allocators, but potentially thread-safe, and
+significantly less prone to fragmentation.  Like the HP allocators, it
+does not maintain the necessary data structures to <TT>free</tt> entire
+chunks of small objects when none of the contained small objects are in use.
+This is an intentional choice of execution time over space use.  It may not
+be appropriate for all programs.  On many systems <TT>malloc_alloc</tt>
+may be more space efficient, and can be used when that is crucial.
+<P>
+The HP allocator design returned entire memory pools when the entire
+allocator was no longer needed.  To allow this, it maintains a count of
+containers using a particular allocator.  With the SGI design, this would
+only happen when the last container disappears, which is typically just before
+program exit.  In most environments, this would be highly counterproductive;
+<TT>free</tt> would typically have to touch many long unreferenced pages
+just before the operating system reclaims them anyway.  It would often
+introduce a significant delay on program exit, and would possibly page out
+large portions of other applications.  There is nothing to be gained by this
+action, since the OS normally reclaims memory on program exit, and it
+should do so <I>without touching that memory</i>.
+<P>
+In general, we recommend that leak detection tests be run with
+<TT>malloc_alloc</tt> instead of <TT>alloc</tt>.  This yields more
+precise results with GC-based detectors (<I>e.g.</i> Pure Atria's Purify),
+and it provides useful results with detectors that simply count allocations
+and deallocations.
+<H3>No Attempt to sort free lists</h3>
+The default allocator makes no special attempt to ensure that
+consecutively allocated objects are "close" to each other, i.e. share
+a cache line or a page.  A deallocation request adds an object to
+the head of a free list, and allocations remove the last deallocated object
+of the appropriate size.  Thus allocation and deallocation each require
+a minimum number of instructions.
+<P>
+This appears to perform very well for small applications which fit into cache.
+It also performs well for regular applications that deallocate consecutively
+allocated objects consecutively.  For such applications, free lists tend to
+remain approximately in address order.  But there are no doubt applications
+for which some effort invested in approximate sorting of free lists would be
+repayed in improved cache performance.
+
+<H2>The Original SGI STL allocator interface</h2>
+The SGI specific allocator interface is much simpler than either
+the HP STL one or the interface in the C++ standard.
+Here we outline the considerations that led to this design.
+<P>
+An SGI STL allocator consists of a class with 3 required member functions,
+all of which are <TT>static</tt>:
+<DL>
+<DT><B><TT>void * allocate(size_t n)</tt></b>
+<DD>
+Allocates an object with the indicated size (in bytes).  The object
+must be sufficiently aligned for any object of the requested size.
+<DT><B><TT>void deallocate(void *p, size_t n)</tt></b>
+<DD>
+Deallocates the object p, which must have been allocated with the same
+allocator and a requested size of <TT>n</tt>.
+<DT><B><TT>void * reallocate(void *p, size_t old_sz, size_t new_sz)</tt></b>
+<DD> 
+Resize object p, previously allocated to contain old_sz bytes, so that it
+now contains new_sz bytes.  Return a pointer to the resulting object of size
+new_sz.  The functions either returns p, after suitably adjusting the
+object in-place, or it copies min(old_sz, new_sz) bytes from the old object
+into a newly allocated object, deallocates the old object, and returns a
+pointer to the new object.  Note that the copy is performed bit-wise;
+this is usually inappropriate if the object has a user defined copy
+constructor or destructor.  Fully generic container implementations do
+not normally use reallocate; however it can be a performance enhancement
+for certain container specializations.
+</dl>
+A discussion of the design decisions behind this rather simple design
+follows:
+
+<H3> Allocators are not templates </h3>
+Our allocators operate on raw, untyped  memory in the same
+way that C's <TT>malloc</tt> does.
+They know nothing about the eventual type of the object.
+This means that the
+implementor of an allocator to worry about types;
+allocators can deal with just bytes.
+We provide the <TT>simple_alloc</tt>
+adaptor to turn a byte-based allocator into one that allocates n
+objects of type T.  Type-oblivious allocators have the advantage
+that containers do not require either template template arguments or
+the "rebind" mechanism in the standard.
+<P>
+The cost is that
+allocators that really do need type information (<I>e.g.</i>
+for garbage collection) become somewhat harder to implement.
+This can be handled in a limited way by specializing
+<TT>simple_alloc</tt>.
+<P>
+(The STL standard allocators are in fact implemented with the aid of templates.
+But this is done mostly so that they can be distributed easily as .h files.)
+
+<H3> Allocators do not encapsulate pointer types </h3>
+(Largely shared with SGI standard allocators.  The standard allows allocators
+to encapsulate pointer types, but does not guarantee that standard containers
+are functional with allocators using nonstandard pointer types.)
+Unlike the HP STL, our allocators do not attempt to allow use of
+different pointer types.  They traffic only in standard void * pointers.
+There were several reasons for abandoning the HP approach:
+<UL>
+<LI>It is not really possible to define an alternate notion of pointer
+within C++ without explicit compiler support.  Doing so would also require
+the definition of a corresponding "reference" type.  But there is no class
+that behaves like a reference.  The "." field selection operation can
+only be applied to a reference.  A template function (e.g. max)
+expecting a T& will usually not work when instantiated with a
+<I>proxy</i> reference type.  Even proxy pointer types are problematic.
+Constructors require a real this pointer, not a proxy.
+
+<LI>Existing STL data structures should usually not be used in
+environments
+which require very different notions of pointers, e.g. for disk-based
+data structures.  A disk-bases set or map would require a data structure
+that is much more aware of locality issues.  The implementation would
+probably also have to deal with two different pointer types: real pointers to
+memory allocated temporaries and references to disk based objects.
+Thus even the HP STL notion of encapsulated pointer types would probably
+be insufficient.
+
+<LI>This leaves compiler supported pointers of different sizes (e.g. DOS/win16
+"far" pointers).  These no longer seem to be of much interest in a general
+purpose library.  Win32 no longer makes such distinctions.  Neither do any
+other modern (i.e. 32- or 64-bit pointer) environments of which we are aware.
+The issue will probably continue to matter for low end embedded systems,
+but those typically require somewhat nonstandard programming environments
+in any case.  Furthermore, the same template instantiation problems
+as above will apply.
+</ul>
+
+<H3> There are no allocator objects </h3>
+An allocator's behavior is completely determined by its type.  All data members
+of an allocator are static.
+<P>
+This means that containers do not need allocator members in order to
+allocate memory from the proper source.
+This avoids unneeded space overhead and/or complexity in the container code.
+<P>
+It also avoids a
+number of tricky questions about memory allocation in operations involving
+multiple containers.  For example, it would otherwise be unclear whether
+concatenation of ropes built with two different allocators should be
+acceptable and if so, which allocator should be used for the result.
+<P>
+This is occasionally a significant restriction.  For example, it is not possible
+to arrange for different containers to allocate memory mapped to different
+files by passing different allocator instances to the container constructors.
+Instead one must use one of the following alternatives:
+<UL>
+<LI> The container classes must be instantiated with different allocators,
+one for each file.  This results in different container types.  This
+forces containers that may be mapped to different files to have distinct type,
+which may be a troublesome restriction, though it also results in compile-time
+detection of errors that might otherwise be difficult to diagnose.
+
+<LI>The containers can be instantiated with a single allocator, which can be
+redirected to different files by calling additional member functions.
+The allocator must be suitably redirected before container calls that may
+allocate.
+</ul>
+
+<H3>Allocators allocate individual objects</h3>
+(Shared with standard allocators.)
+Some C++ programming texts have suggested that individual classes keep
+a free lists of frequently allocated kinds of objects, so that most allocation
+requests can be satisfied from the per-class free list.  When an allocation
+request encounters an empty free list, a potentially slower allocator (e.g.
+new or malloc) is called to allocate several of the required objects at once,
+which are then used to replenish the free list.
+<P>
+The HP STL was designed along these lines.  Allocators were intended to be
+used as the slower backup allocator.  Containers like list<T> were presumed
+to maintain their own free list.
+<P>
+Based on some small experiments, this has no performance advantage over
+directly calling the allocate function for individual objects.  In fact, the
+generated code is essentially the same.  The default allocator we provide
+is easily inlined.  Hence any calling overhead is eliminated.  If the
+object size is statically known (the case in which per-class free lists
+may be presumed to help), the address of the free list header can also be
+determined by the compiler.
+<P>
+Per-class free lists do however have many disadvantages:
+<UL>
+<LI>
+They introduce fragmentation.  Memory in the free list for class <I>A</i> cannot
+be reused by another class <I>B</i>, even if only class <I>B</i> objects are
+allocated for the remainder of program execution.  This is particularly
+unfortunate if instead of a single class <I>A</i> there are many instances
+of a template class each of which has its own free list.
+<LI>
+They make it much more difficult to construct thread-safe containers.
+A class that maintains its own free list must ensure that allocations
+from different threads on behalf of different containers cannot interfere
+with each other.  This typically means that every class must be aware
+of the underlying synchronization primitives.  If allocators allocate
+individual objects, then only allocators themselves need to address this
+issue, and most container implementations can be independent of the threading
+mechanism.
+<LI>
+Garbage collecting allocators are difficult to accommodate.  The garbage
+collector will see per-class free lists as accessible memory.  If pointers
+in these free objects are not explicitly cleared, anything they reference
+will also be retained by the collector, reducing the effectiveness of the
+collector, sometimes seriously so.
+</ul>
+<H3>Deallocate requires size argument</h3>
+We chose to require an explicit size argument, both for <TT>deallocate</tt>,
+and to describe the original size of the object in the <TT>reallocate</tt>
+call.  This means that no hidden per-object space overhead is required;
+small objects use only the space explicitly requested by the client.
+Thus, even in the absence of fragmentation, space usage is the same as for
+per-class allocators.
+<P>
+This choice also removes some time overhead in the important special case
+of fixed-size allocation.  In this case, the size of the object, and thus
+the address of the free-list header becomes a clearly recognizable
+compile-time constant.  Thus the generated code should be identical to that
+needed by a per-class free-list allocator, even if the class requires
+objects of only a single size.
+
+<H3>We include realloc-style reallocation in the interface</h3>
+This is probably the most questionable design decision.  It would
+have probably been a bit more useful to provide a version of
+<I>reallocate</i> that either changed the size of the existing object
+without copying or returned NULL.  This would have made it directly
+useful for objects with copy constructors.  It would also have avoided
+unnecessary copying in cases in which the original object had not been
+completely filled in.
+<P>
+Unfortunately, this would have prohibited use of <TT>realloc</tt> from
+the C library.  This in turn would have added complexity to many allocator
+implementations, and would have made interaction with memory-debugging
+tools more difficult.  Thus we decided against this alternative.
+<P>
+The actual version of <TT>reallocate</tt> is still quite useful 
+for container specializations to specific element types.
+The STL implementation is starting to take advantage of that.
+
+</body>
+</html>

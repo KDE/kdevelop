@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Session Management</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="KDE Style Reference"
+HREF="ch06.html"/><LINK
+REL="PREVIOUS"
+TITLE="KDE Style Reference"
+HREF="ch06.html"/><LINK
+REL="NEXT"
+TITLE="The Standard KDE Icons"
+HREF="ch06lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch06.html"
+>Prev</A
+> <A
+HREF="ch06lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch06lev1sec2"
+>6.2. Session Management</A
+></H1
+><P
+>When a user logs out from a KDE session, all running KDE applications are alerted of this event and are told to save and quit. When the user logs in again, those programs are restored and should go to the same state as they were in before.</P
+><P
+>Your <TT
+CLASS="literal"
+>main()</TT
+> function checks whether it is being restored; if so, it then triggers the restart.</P
+><P
+>In Listings 6.1&#8211;6.3, session management is shown.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch06list01"
+></A
+><P
+><B
+>Example 6.1. <TT
+CLASS="literal"
+>main.cpp</TT
+>: Example of Session Management</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: In main.cpp:
+   3&nbsp; 2:
+   4&nbsp; 3: #include "mykapp.h"
+   5&nbsp; 4: #include &lt;kapp.h&gt;
+   6&nbsp; 5: #include &lt;dcopclient.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: int main(int argc, char **argv)
+   9&nbsp; 8: {
+  10&nbsp; 9:   // &#8230; KAboutData code here &#8230;
+  11&nbsp;10:   KApplication app;
+  12&nbsp;11:
+  13&nbsp;12:   // register ourselves as a dcop client
+  14&nbsp;13:   app.dcopClient()-&gt;registerAs(app.name());
+  15&nbsp;14:
+  16&nbsp;15:   // see if we are starting with session management
+  17&nbsp;16:   if (app.isRestored())
+  18&nbsp;17:      RESTORE(MyKApp)
+  19&nbsp;18:   else
+  20&nbsp;19:   {
+  21&nbsp;20:      // no session.. just start up normally
+  22&nbsp;21:      MyKApp *widget = new MyKApp;
+  23&nbsp;22:      widget-&gt;show();
+  24&nbsp;23:   }
+  25&nbsp;24:
+  26&nbsp;25:   return app.exec();
+  27&nbsp;26: }
+  28&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch06list02"
+></A
+><P
+><B
+>Example 6.2. <TT
+CLASS="literal"
+>mykapp.h</TT
+>: Header File for Main Window</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;ktmainwindow.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: class MyKApp : public KTMainWindow
+   5&nbsp; 4: {
+   6&nbsp; 5:   // &#8230; Declaration of class &#8230;
+   7&nbsp; 6:
+   8&nbsp; 7: protected:
+   9&nbsp; 8:   void saveProperties(KConfig *);
+  10&nbsp; 9:   void readProperties(KConfig *);
+  11&nbsp;10:
+  12&nbsp;11:   // &#8230; Rest of Class declaration &#8230;
+  13&nbsp;12: };
+  14&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch06list03"
+></A
+><P
+><B
+>Example 6.3. <TT
+CLASS="literal"
+>mykapp.cpp</TT
+>: Source File for Main Window</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: void MyKApp::saveProperties(KConfig *config)
+   3&nbsp; 2: {
+   4&nbsp; 3:   // config is where you write all the options to save.
+   5&nbsp; 4:   // It's already opened and ready for your use.
+   6&nbsp; 5: }
+   7&nbsp; 6:
+   8&nbsp; 7: void MyKApp::readProperties(KConfig *config)
+   9&nbsp; 8: {
+  10&nbsp; 9:   // config will have been opened for you, just
+  11&nbsp;10:   // read what you saved in saveProperties(..)
+  12&nbsp;11:   // and recover your program.
+  13&nbsp;12: }
+  14&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>KEdit is a fine example of a simple but effective session management. In <A
+HREF="ch06lev1sec2.html#ch06list04"
+>Listing 6.4</A
+>, its session management code is shown:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch06list04"
+></A
+><P
+><B
+>Example 6.4. <TT
+CLASS="literal"
+>kedit.cpp</TT
+>: A Part of KEdit's Main Window Source File</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: void TopLevel::saveProperties(KConfig* config)
+   3&nbsp; 2: {
+   4&nbsp; 3:   // Test if document needs to be saved
+   5&nbsp; 4:   // If empty AND isn't modified, no need to save.
+   6&nbsp; 5:   if(location.isEmpty() &amp;!eframe-&gt;isModified())
+   7&nbsp; 6:     return;
+   8&nbsp; 7:
+   9&nbsp; 8:   // Store the config filename
+  10&nbsp; 9:   config-&gt;writeEntry("filename",name());
+  11&nbsp;10:   // Store the state of modification, if it's modified,
+  12&nbsp;11:   // we'll also store a temporary file elsewhere
+  13&nbsp;12:   config-&gt;writeEntry("modified",eframe-&gt;isModified());
+  14&nbsp;13:
+  15&nbsp;14:   if(eframe-&gt;isModified())
+  16&nbsp;15:   {
+  17&nbsp;16:        QString tmplocation = kapp-&gt;tempSaveName(name());
+  18&nbsp;17:        saveFile(tmplocation);
+  19&nbsp;18:   }
+  20&nbsp;19: }
+  21&nbsp;20:
+  22&nbsp;21: void TopLevel::readProperties(KConfig* config)
+  23&nbsp;22: {
+  24&nbsp;23:   QString filename = config-&gt;readEntry("filename","");
+  25&nbsp;24:   int modified = config-&gt;readNumEntry("modified",0);
+  26&nbsp;25:
+  27&nbsp;26:   if(!filename.isEmpty()&amp;modified)
+  28&nbsp;27:   {
+  29&nbsp;28:      bool ok;
+  30&nbsp;29:      QString fn = kapp-&gt;checkRecoverFile(filename,ok);
+  31&nbsp;30:
+  32&nbsp;31:      if(ok)
+  33&nbsp;32:      { // Yes, there's a temporary file, and it's 'fn'
+  34&nbsp;33:        openFile(fn,KEdit::OPEN_READWRITE);
+  35&nbsp;34:        location = filename;
+  36&nbsp;35:        eframe-&gt;setModified();
+  37&nbsp;36:        setFileCaption();
+  38&nbsp;37:      }
+  39&nbsp;38:   }
+  40&nbsp;39:   else if(!filename.isEmpty())
+  41&nbsp;40:   { // No temp file, so we just open up the previously
+  42&nbsp;41:     // opened file.
+  43&nbsp;42:     openFile(filename,KEdit::OPEN_READWRITE);
+  44&nbsp;43:     location = filename;
+  45&nbsp;44:     eframe-&gt;setModified(false);
+  46&nbsp;45:     setFileCaption();
+  47&nbsp;46:   }
+  48&nbsp;47: }
+  49&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Note that the following methods have been declared and defined by KEdit itself:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>eframe-&gt;setModified(..);</TT
+>(line 12)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>saveFile(..);</TT
+>(line 17)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>openFile(..);</TT
+>(line 33)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>setFileCaption();</TT
+>(line 36)</P
+></LI
+></UL
+><P
+>If your program does not need to open any files, you should at least store the state&#8212;the value in a calculator output, for example:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void IntCalc::saveProperties(KConfig* config)
+   3&nbsp;{
+   4&nbsp;  // Store the value
+   5&nbsp;  config-&gt;writeEntry("amount", theNumber);
+   6&nbsp;}
+   7&nbsp;
+   8&nbsp;void IntCalc::readProperties(KConfig* config)
+   9&nbsp;{
+  10&nbsp;  // Read the value, where "theNumber" is a
+  11&nbsp;  // member variable
+  12&nbsp;  theNumber = config-&gt;readNumEntry("theNumber",0);
+  13&nbsp;}
+  14&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch06lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch06lev1sec2"
+TITLE="Session Management"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch06.html"
+>Prev</A
+> <A
+HREF="ch06lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

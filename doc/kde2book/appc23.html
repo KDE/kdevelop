@@ -1,0 +1,503 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 14</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 13"
+HREF="appc22.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc22.html"
+>Prev</A
+> Next <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC23"
+>C.14. <A
+HREF="ch14.html"
+>Chapter 14</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC24"
+>C.14.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.14.1.1. <A
+HREF="appc23.html#AEN28335"
+>Implement a beep sound similar to the stereo beep at the beginning, but with a variable frequency (see <A
+HREF="appc23.html#ap-clist38"
+>Listing C.38</A
+>). Make the frequency change very slowly between 220.0 and 660.0 to achieve a siren effect. If you want to keep the source simple, don't do different things for the left and right channels.</A
+></DT
+><DT
+>C.14.1.2. <A
+HREF="appc23.html#AEN28347"
+>Complete the missing cases in the <TT
+CLASS="literal"
+>StereoBalanceControl</TT
+> module above. See <A
+HREF="appc23.html#ap-clist39"
+>Listings C.39</A
+> and <A
+HREF="appc23.html#ap-clist40"
+>C.40</A
+> for the answers.</A
+></DT
+><DT
+>C.14.1.3. <A
+HREF="appc23.html#AEN28361"
+>Rewrite the stereo beep example in a way that the beeps are spinning in circles from the left channel to the right channel and back to the left channel. <A
+HREF="appc23.html#ap-clist41"
+>Listing C.41</A
+> highlights the code to do this.</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28335"
+></A
+><B
+>C.14.1.1. </B
+>Implement a beep sound similar to the stereo beep at the beginning, but with a variable frequency (see <A
+HREF="appc23.html#ap-clist38"
+>Listing C.38</A
+>). Make the frequency change very slowly between 220.0 and 660.0 to achieve a siren effect. If you want to keep the source simple, don't do different things for the left and right channels.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch14lev1sec9.html#ch14que01"
+>The trick is to use <TT
+CLASS="literal"
+>Synth_MUL</TT
+> and <TT
+CLASS="literal"
+>Synth_ADD</TT
+> to get the range right:</A
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist38"
+></A
+><P
+><B
+>Example C.38. Implementing a Beep Sound with Variable Frequency</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;// exercise1.cc
+   3&nbsp;
+   4&nbsp;#include "artsflow.h"
+   5&nbsp;#include "connect.h"
+   6&nbsp;
+   7&nbsp;using namespace Arts;
+   8&nbsp;
+   9&nbsp;
+  10&nbsp;int main()
+  11&nbsp;{
+  12&nbsp;    Dispatcher dispatcher;
+  13&nbsp;
+  14&nbsp;    Synth_FREQUENCY freq1,freqmod;   // object creation
+  15&nbsp;    Synth_WAVE_SIN  sin1,sinmod;
+  16&nbsp;    Synth_MUL       mulmod;
+  17&nbsp;    Synth_ADD       addmod;
+  18&nbsp;    Synth_PLAY      play;
+  19&nbsp;
+  20&nbsp;    // the modulation frequency
+  21&nbsp;    setValue(freqmod, 0.3);
+  22&nbsp;    connect(freqmod, sinmod);
+  23&nbsp;
+  24&nbsp;    // bring it from the range [-1..1] to [-220..220]
+  25&nbsp;    setValue(mulmod,"invalue1",220.0);
+  26&nbsp;    connect(sinmod,mulmod,"invalue2");
+  27&nbsp;
+  28&nbsp;    // add 440, to achieve the desired range: [220..660]
+  29&nbsp;    setValue(addmod,"invalue1",440.0);
+  30&nbsp;    connect(mulmod,addmod,"invalue2");
+  31&nbsp;
+  32&nbsp;    // and use it as input for the beep generation
+  33&nbsp;    connect(addmod,freq1);
+  34&nbsp;    connect(freq1, sin1);         // object connection
+  35&nbsp;
+  36&nbsp;    connect(sin1, play, "invalue_left");
+  37&nbsp;    connect(sin1, play, "invalue_right");
+  38&nbsp;
+  39&nbsp;    // start and go ;-)
+  40&nbsp;    freq1.start(); freqmod.start();
+  41&nbsp;    sin1.start(); sinmod.start();
+  42&nbsp;    addmod.start(); mulmod.start();
+  43&nbsp;    play.start();
+  44&nbsp;    dispatcher.run();
+  45&nbsp;}
+  46&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28347"
+></A
+><B
+>C.14.1.2. </B
+>Complete the missing cases in the <TT
+CLASS="literal"
+>StereoBalanceControl</TT
+> module above. See <A
+HREF="appc23.html#ap-clist39"
+>Listings C.39</A
+> and <A
+HREF="appc23.html#ap-clist40"
+>C.40</A
+> for the answers.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; case sbLeftOnly:
+   3&nbsp;    for(i=0;i&lt;samples;i++)
+   4&nbsp;    {
+   5&nbsp;        outleft[i] = inleft[i];
+   6&nbsp;        outright[i] = inleft[i];
+   7&nbsp;    }
+   8&nbsp;    break;
+   9&nbsp;case sbRightOnly:
+  10&nbsp;    for(i=0;i&lt;samples;i++)
+  11&nbsp;    {
+  12&nbsp;        outleft[i] = inright[i];
+  13&nbsp;        outright[i] = inright[i];
+  14&nbsp;    }
+  15&nbsp;    break;
+  16&nbsp;case sbReverse:
+  17&nbsp;    for(i=0;i&lt;samples;i++)
+  18&nbsp;    {
+  19&nbsp;        outleft[i] = inright[i];
+  20&nbsp;        outright[i] = inleft[i];
+  21&nbsp;    }
+  22&nbsp;    break;
+  23&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist40"
+></A
+><P
+><B
+>Example C.40. The Missing Cases in balance.cc</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;if(strcmp(argv[1],leftonly) == 0)
+   3&nbsp;    bcontrol.balance(sbLeftOnly);
+   4&nbsp;if(strcmp(argv[1],rightonly) == 0)
+   5&nbsp;    bcontrol.balance(sbRightOnly);
+   6&nbsp;if(strcmp(argv[1],reverse) == 0)
+   7&nbsp;    bcontrol.balance(sbReverse);
+   8&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28361"
+></A
+><B
+>C.14.1.3. </B
+>Rewrite the stereo beep example in a way that the beeps are spinning in circles from the left channel to the right channel and back to the left channel. <A
+HREF="appc23.html#ap-clist41"
+>Listing C.41</A
+> highlights the code to do this.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;// exercise3.cc
+   3&nbsp;
+   4&nbsp;#include "artsflow.h"
+   5&nbsp;#include "connect.h"
+   6&nbsp;
+   7&nbsp;using namespace Arts;
+   8&nbsp;
+   9&nbsp;
+  10&nbsp;int main()
+  11&nbsp;{
+  12&nbsp;    Dispatcher dispatcher;
+  13&nbsp;
+  14&nbsp;    Synth_FREQUENCY freq1,freq2,freqspin;   // object creation
+  15&nbsp;    Synth_WAVE_SIN  sin1,sin2,sinspin;
+  16&nbsp;    Synth_MUL       mulspin1,mulspin2;
+  17&nbsp;    Synth_ADD       addspin1,addspin2;
+  18&nbsp;    Synth_MUL       mul1spin1,mul1spin2,mul2spin1,mul2spin2;
+  19&nbsp;    Synth_ADD       addleft,addright;
+  20&nbsp;    Synth_PLAY      play;
+  21&nbsp;
+  22&nbsp;    setValue(freq1, 440.0);       // set frequencies
+  23&nbsp;    setValue(freq2, 880.0);
+  24&nbsp;    setValue(freqspin, 0.4);
+  25&nbsp;
+  26&nbsp;    connect(freq1, sin1);         // object connection
+  27&nbsp;    connect(freq2, sin2);
+  28&nbsp;    connect(freqspin, sinspin);
+  29&nbsp;
+  30&nbsp;    // first side: (freqspin * 0.5) + 0.5  (is between 0..1)
+  31&nbsp;    connect(sinspin, mulspin1, "invalue1");
+  32&nbsp;    setValue(mulspin1, "invalue2", 0.5);
+  33&nbsp;    connect(mulspin1, addspin1, "invalue1");
+  34&nbsp;    setValue(addspin1, "invalue2",0.5);
+  35&nbsp;
+  36&nbsp;    // first side: (freqspin * (-0.5)) + 0.5  (is between 1..0)
+  37&nbsp;    connect(sinspin, mulspin2, "invalue1");
+  38&nbsp;    setValue(mulspin2, "invalue2", -0.5);
+  39&nbsp;    connect(mulspin2, addspin2, "invalue1");
+  40&nbsp;    setValue(addspin2, "invalue2",0.5);
+  41&nbsp;
+  42&nbsp;    // multiply sin1 with the (0..1) and (1..0) ranges
+  43&nbsp;    connect(sin1,mul1spin1,invalue1");
+  44&nbsp;    connect(addspin1,mul1spin1,"invalue2");
+  45&nbsp;    connect(sin1,mul1spin2,"invalue1");
+  46&nbsp;    connect(addspin2,mul1spin2,"invalue2");
+  47&nbsp;
+  48&nbsp;    // multiply sin2 with the (0..1) and (1..0) ranges
+  49&nbsp;    connect(sin2,mul2spin1,"invalue1");
+  50&nbsp;    connect(addspin1,mul2spin1,"invalue2");
+  51&nbsp;    connect(sin2,mul2spin2,"invalue1");
+  52&nbsp;    connect(addspin2,mul2spin2,"invalue2");
+  53&nbsp;
+  54&nbsp;    // left channel output
+  55&nbsp;    connect(mul1spin1,addleft,"invalue1");
+  56&nbsp;    connect(mul2spin2,addleft,"invalue2");
+  57&nbsp;    connect(addleft, play, "invalue_left");
+  58&nbsp;
+  59&nbsp;    // right channel output
+  60&nbsp;    connect(mul2spin1,addright,"invalue1");
+  61&nbsp;    connect(mul1spin2,addright,"invalue2");
+  62&nbsp;    connect(addright, play, "invalue_right");
+  63&nbsp;
+  64&nbsp;    // start and go ;-)
+  65&nbsp;    freq1.start(); freq2.start(); freqspin.start();
+  66&nbsp;    sin1.start(); sin2.start(); sinspin.start();
+  67&nbsp;    mulspin1.start(); mulspin2.start();
+  68&nbsp;    addspin1.start(); addspin2.start();
+  69&nbsp;    mul1spin1.start(); mul1spin2.start();
+  70&nbsp;    mul2spin1.start(); mul2spin2.start();
+  71&nbsp;    addleft.start(); addright.start();
+  72&nbsp;    play.start();
+  73&nbsp;    dispatcher.run();
+  74&nbsp;}
+  75&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC24"/></TD
+></TR
+><ANNOTATION
+NAME="appC24"
+TITLE="Exercises"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC25"
+>C.14.2. <A
+HREF="p04.html"
+>Part IV</A
+></A
+></H2
+><P
+>There are no exercises for the chapters in this part.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC25"/></TD
+></TR
+><ANNOTATION
+NAME="appC25"
+TITLE="Part IV"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC23"/></TD
+></TR
+><ANNOTATION
+NAME="appC23"
+TITLE="Chapter 14"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc22.html"
+>Prev</A
+> Next <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevDocTreeView" version="1">
+<MenuBar>
+ <Menu name="help">
+  <Action name="help_lookupindex"/>
+  <Action name="help_fulltextsearch"/>
+ </Menu>
+ <Menu name="buffers">
+  <Action name="window_doctreeview"/>
+ </Menu>
+</MenuBar>
+</kpartgui>
+

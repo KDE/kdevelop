@@ -1,0 +1,2637 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>KDE User Interface Compliance</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Fundamentals of KDE Application Programming"
+HREF="p01.html"/><LINK
+REL="PREVIOUS"
+TITLE="Exercises"
+HREF="ch04lev1sec6.html"/><LINK
+REL="NEXT"
+TITLE="Helping the User Use Your Application"
+HREF="ch05lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch04lev1sec6.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch05"
+>Chapter 5. KDE User Interface Compliance</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN6154"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch05.html#ch05lev1sec1"
+>The KDE Document-Centric Interface</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch05lev1sec2.html"
+>Helping the User Use Your Application</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch05lev1sec3.html"
+>Standard Dialog Boxes</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>KDE User Interface (UI) compliance is, in some sense, what the KDE project is all about. KDE applications should be written so that they all look and work in similar ways. This makes it easier for users to learn new applications. To comply with the KDE UI style, you need to learn to use the KDE widgets, which are provided specifically for this purpose, and actions, a concept new to KDE 2.0.</P
+><P
+><I
+CLASS="emphasis"
+>Actions</I
+> are objects (instances of the C++ class <TT
+CLASS="literal"
+>KAction</TT
+> or one of its subclasses) that represent the commands a user can issue to your application. Actions can be represented on a menubar as menu entries or on a toolbar as icons. When your application's response to a certain action changes, it changes, logically, for all representations of the action, with minimal programming effort. This chapter explains actions in more detail.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch05lev1sec1"
+>5.1. The KDE Document-Centric Interface</A
+></H1
+><P
+>Take a look at <A
+HREF="ch05.html#ch05fig01"
+>Figure 5.1</A
+>. It shows a prototypical example (KWrite) of a document-centric user interface. This sort of interface is used by applications on all the well-known desktops: KDE, CDE, GNOME, Windows, MacOS, OS/2, BeOS, and so on. The KDE incarnation (as well as others) of the interface includes a menubar, one or more toolbars, a statusbar, and a client area, as you have already learned in <A
+HREF="ch02.html"
+>Chapter 2, <SPAN
+CLASS="QUOTE"
+>"A Simple KDE Application."</SPAN
+></A
+> KDE offers standard widgets that draw and manage all these, except for the client area. The client area varies, depending on what information is being presented.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig01"
+></A
+><P
+><B
+>Figure 5.1. KWrite offers a good example of a document-centric user interface.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>More detailed standards govern the use of these widgets than those that are presented in this chapter. For example, <A
+HREF="ch06.html"
+>Chapter 6, <SPAN
+CLASS="QUOTE"
+>"KDE Style Reference,"</SPAN
+></A
+> discusses where to place common and application-specific menubar and toolbar entries. The techniques involved in laying out the menubar and toolbar are discussed in the following sections of this chapter.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch05lev2sec1"
+>5.1.1. The Menubar and the Toolbar</A
+></H2
+><P
+>The menubar and the toolbar are often discussed together because they provide access to all your applications' functions. Typically, in fact, the toolbar offers a subset of the menubar's functions.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec1"
+>5.1.1.1. The Menubar</A
+></H3
+><P
+>The menubar lists all the functions available to the user and categorizes them under a small number of headings. There are standard menu headings, such as File, Edit, and Help, and also standard menu entries, such as Open&#8230;, Save&#8230; and Quit.</P
+><P
+>To access the menu entries' functions, the user selects a menu either by first clicking the heading with the mouse or by typing the key combination of Alt and a specially designated letter in the heading (such as the F in File to open the menu). Then the menu entry can be chosen by clicking it with the mouse or by pressing a specially designated letter (indicated by an underline in the entry text). Menu entries can also be accessed by an accelerator. This is a key combination of Ctrl+(some key) that activates a function directly, bypassing the pull-down menu. For example, Ctrl+S saves a document. Accelerators are available whenever the focus is somewhere in the main window. Only the most commonly used functions have accelerators associated with them.</P
+><P
+>Menubar entries are one UI representation of actions, discussed in the next section, <SPAN
+CLASS="QUOTE"
+>"Creating and Manipulating Actions."</SPAN
+> You will rarely, if ever, need to access the menubar widget directly.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec1"
+TITLE="The Menubar"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec2"
+>5.1.1.2. The Toolbar</A
+></H3
+><P
+>Toolbars give quick access to frequently used functions listed in the menus on the menubar, such as Open, Save, Print, and so on. The user accesses these functions via buttons, line editors, or menus attached to buttons.</P
+><P
+>Unlike the menubar, more than one toolbar can be created. Each toolbar can be used to collect a different set of functions. Certain sets of functions may be appropriate only at certain times; therefore, toolbars can be hidden and shown (as needed) by the application or by the user.</P
+><P
+>Toolbar buttons are another UI representation of actions (discussed in the next section), like menubar entries. Toolbars can offer more functionality than a simple button-click, however, so you may need to access the toolbar widget (called <TT
+CLASS="literal"
+>KToolBar</TT
+>) from time to time. An example is given in the discussion in the <SPAN
+CLASS="QUOTE"
+>"Custom Actions"</SPAN
+> section, later in this chapter.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec2"
+TITLE="The Toolbar"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev2sec1"
+TITLE="The Menubar and the Toolbar"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch05lev2sec2"
+>5.1.2. Creating and Manipulating Actions</A
+></H2
+><P
+>Actions are an elegant new addition to the KDE API. Using them means that it will take less time and effort to lay out, set up, and modify your user interface, and much of your user interface will, quite naturally, follow the KDE standards.</P
+><P
+>The action concept is realized in the class <TT
+CLASS="literal"
+>KAction</TT
+>. This class holds descriptive information about the action and contains methods for adding the action to a widget, such as the toolbar or menubar, and for modifying the action. An action is described by some short text, an icon, an accelerator key combination, and a slot that should be called when the user requests that the action be performed (for example, by clicking the corresponding toolbar button). The text is displayed as the menu entry text if the action is represented as a menubar entry and as ToolTip text if the action is represented as a toolbar button. (Actions can have multiple representations; that is, they can appear both in a menu and a toolbar.) The icon is displayed next to the entry in the menu and on the toolbar button. The accelerator key combination activates the action whenever the user presses it.</P
+><P
+>For example, saving a file is a familiar action. It can be initiated by choosing File, Save, by clicking the toolbar button that looks like a floppy disk, or by pressing the key combination Ctrl+S. This action can be created in the following way:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KAction *saveaction = new KAction ("Save&#8230;", "save",, Ctrl+S, this,
+   3&nbsp;                                   SLOT(slotSaveFile()),this, "save_action");
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>However, this particular action is one of a set of standard actions that can be created in a more convenient manner, as discussed in the next section.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The action is created on the heap with the <TT
+CLASS="literal"
+>new</TT
+> operator because you want actions to persist so that they can continue to process user commands even after the method that creates them finishes (such as widgets).</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec3"
+>5.1.2.1. Standard Actions</A
+></H3
+><P
+>Some actions need to be defined again in many KDE applications. These actions should all be represented in the UI in the same way, therefore their representations are defined by a subclass of <TT
+CLASS="literal"
+>KAction</TT
+> called <TT
+CLASS="literal"
+>KStdAction</TT
+>. Some standard actions are Open, Save, and Quit. (The standard actions are listed in their entirety in <A
+HREF="ch06.html"
+>Chapter 6</A
+>.) Each of these actions can be created with a static convenience method, such as</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KStdAction::open ( this, SLOT (slotOpen()), actionCollection() );
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This method returns a pointer to an action. This action's parent is <TT
+CLASS="literal"
+>actionCollection()</TT
+>. Take a look at <A
+HREF="ch05.html#ch05list01"
+>Listing 5.1</A
+> and then I'll explain how <TT
+CLASS="literal"
+>actionCollection()</TT
+> works. <A
+HREF="ch05.html#ch05list01"
+>Listings 5.1</A
+> and <A
+HREF="ch05.html#ch05list02"
+>5.2</A
+> create a top-level widget called <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+> that shows how to handle the standard actions in the, well, standard way.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list01"
+></A
+><P
+><B
+>Example 5.1. kstdactionsdemo.cpp: Class Declaration for <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;stdio.h&gt;
+   3&nbsp; 2: 
+   4&nbsp; 3: #include &lt;qpopupmenu.h&gt;
+   5&nbsp; 4: #include &lt;qstringlist.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: #include &lt;kapp.h&gt;
+   8&nbsp; 7: #include &lt;kmenubar.h&gt;
+   9&nbsp; 8: #include &lt;kiconloader.h&gt;
+  10&nbsp; 9: #include &lt;kaction.h&gt;
+  11&nbsp;10: #include &lt;kstdaction.h&gt;
+  12&nbsp;11: 
+  13&nbsp;12: #include "kstdactionsdemo.moc"
+  14&nbsp;13: 
+  15&nbsp;14: KStdActionsDemo::KStdActionsDemo (const char *name) : KTMainWindow (name)
+  16&nbsp;15: {
+  17&nbsp;16: 
+  18&nbsp;17:   //File menu
+  19&nbsp;18:   KStdAction::openNew ( this, SLOT (slotNew()), actionCollection() );
+  20&nbsp;19:   KStdAction::open ( this, SLOT (slotOpen()), actionCollection() );
+  21&nbsp;20:   KStdAction::save ( this, SLOT (slotSave()), actionCollection() );
+  22&nbsp;21: 
+  23&nbsp;22:   recent = 
+  24&nbsp;23:     KStdAction::openRecent ( 0, 0, actionCollection());
+  25&nbsp;24:   recent-&gt;addURL (KURL("file:/samplepath/samplefile.txt"));
+  26&nbsp;25:   recent-&gt;addURL (KURL("http://www.kde.org/sampleurl.html"));
+  27&nbsp;26: 
+  28&nbsp;27:   connect ( recent, SIGNAL (urlSelected (const KURL &amp;)),
+  29&nbsp;28:         this, SLOT (slotRecent (const KURL &amp;)) );
+  30&nbsp;29: 
+  31&nbsp;30:   KStdAction::quit (kapp, SLOT (closeAllWindows()), actionCollection());
+  32&nbsp;31: 
+  33&nbsp;32:   //Edit menu
+  34&nbsp;33:   KStdAction::cut ( this, SLOT (slotCut()), actionCollection() );
+  35&nbsp;34:   KStdAction::copy ( this, SLOT (slotCut()), actionCollection() );
+  36&nbsp;35:   KStdAction::paste ( this, SLOT (slotCut()), actionCollection() );
+  37&nbsp;36:   
+  38&nbsp;37: 
+  39&nbsp;38:   createGUI();
+  40&nbsp;39: 
+  41&nbsp;40:   QLabel *dummyclientarea = new QLabel (this);
+  42&nbsp;41:   dummyclientarea-&gt;setBackgroundColor (Qt::white);
+  43&nbsp;42:   setView (dummyclientarea);
+  44&nbsp;43: }
+  45&nbsp;44: 
+  46&nbsp;45: 
+  47&nbsp;46: 
+  48&nbsp;47: void
+  49&nbsp;48: KStdActionsDemo::slotNew()
+  50&nbsp;49: {
+  51&nbsp;50:   printf ("File-&gt;New\n");
+  52&nbsp;51: }
+  53&nbsp;52: 
+  54&nbsp;53: void
+  55&nbsp;54: KStdActionsDemo::slotOpen()
+  56&nbsp;55: {
+  57&nbsp;56:   printf ("File-&gt;Open\n");
+  58&nbsp;57: }
+  59&nbsp;58: 
+  60&nbsp;59: void
+  61&nbsp;60: KStdActionsDemo::slotSave()
+  62&nbsp;61: {
+  63&nbsp;62:   printf ("File-&gt;Save\n");
+  64&nbsp;63: }
+  65&nbsp;64: 
+  66&nbsp;65: void
+  67&nbsp;66: KStdActionsDemo::slotCut()
+  68&nbsp;67: {
+  69&nbsp;68:   printf ("Edit-&gt;Cut\n");
+  70&nbsp;69: }
+  71&nbsp;70: 
+  72&nbsp;71: void
+  73&nbsp;72: KStdActionsDemo::slotCopy()
+  74&nbsp;73: {
+  75&nbsp;74:   printf ("Edit-&gt;Copy\n");
+  76&nbsp;75: }
+  77&nbsp;76: 
+  78&nbsp;77: void
+  79&nbsp;78: KStdActionsDemo::slotPaste()
+  80&nbsp;79: {
+  81&nbsp;80:   printf ("Edit-&gt;Paste\n");
+  82&nbsp;81: }
+  83&nbsp;82: 
+  84&nbsp;83: void
+  85&nbsp;84: KStdActionsDemo::slotRecent (const KURL &amp;url)
+  86&nbsp;85: {
+  87&nbsp;86:   printf ("Open recent file \%s\"\n",
+  88&nbsp;87:       (const char *) url.url());
+  89&nbsp;88: }
+  90&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Lines 18&#8211;23 and 30&#8211;35 create several of the standard actions using <TT
+CLASS="literal"
+>KStdAction</TT
+>. All these actions will appear on the menubar and toolbar.</P
+><P
+>Each of these actions has as its parent <TT
+CLASS="literal"
+>actionCollection()</TT
+>. This method (a member of <TT
+CLASS="literal"
+>KTMainWindow</TT
+>) returns a pointer to an instance of <TT
+CLASS="literal"
+>QActionCollection</TT
+> (don't look for this class in your Qt documentation just yet&#8212;the Qt classes related to actions are in the KDE CVS module kdelibs/qk right now, but they will appear in Qt sometime after version 2.1); an object that is created once per instance of <TT
+CLASS="literal"
+>KTMainWindow</TT
+> holds and serves to group your applications' actions. All the actions in this group are referenced by the method <TT
+CLASS="literal"
+>createGUI()</TT
+>, the method that <SPAN
+CLASS="QUOTE"
+>"plugs"</SPAN
+> (this is action lingo) the actions into their correct spots on the menubar and toolbar.</P
+><P
+>When you create the Recent Files menu (which lies under the File menu), pass <TT
+CLASS="literal"
+>0L</TT
+> instead of the usual <SPAN
+CLASS="QUOTE"
+>"receiver, slotname"</SPAN
+> pair. This tells <TT
+CLASS="literal"
+>KStdAction</TT
+> not to connect a slot to the action's signal called <TT
+CLASS="literal"
+>activate()</TT
+>&#8212;that's the default signal to which slots are connected when calling the <TT
+CLASS="literal"
+>KStdAction</TT
+> convenience methods. Instead, connect to the signal <TT
+CLASS="literal"
+>urlSelected (const KURL &amp;)</TT
+>(see lines 27 and 28). This signal is part of the class <TT
+CLASS="literal"
+>KRecentFilesAction</TT
+>, the type of the object returned by <TT
+CLASS="literal"
+>KStdAction::openRecent()</TT
+>. The <TT
+CLASS="literal"
+>const KURL &amp;</TT
+> argument of this signal tells which of the URLs the user chose.</P
+><P
+>On lines 24 and 25, two URLs are added to the recent files menu so that you can try out the menu in this example. You should add URLs to this after a file is saved. Be sure to save a pointer to the <TT
+CLASS="literal"
+>KRecentFilesAction</TT
+> so that you can do so.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The standard action <TT
+CLASS="literal"
+>KStdAction::openNew()</TT
+> should be connected to a slot that creates a new document. (The method name is slightly misleading. <TT
+CLASS="literal"
+>"new()"</TT
+> would be better, but <TT
+CLASS="literal"
+>new</TT
+> is a C++ keyword and, thus, not a valid method name.)</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list02"
+></A
+><P
+><B
+>Example 5.2. kstdactionsdemo.h: Class Definition for <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KSTDACTIONSDEMO_H__
+   3&nbsp; 2: #define __KSTDACTIONSDEMO_H__
+   4&nbsp; 3: 
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5: #include &lt;kurl.h&gt;
+   7&nbsp; 6: 
+   8&nbsp; 7: class KRecentFilesAction;
+   9&nbsp; 8: 
+  10&nbsp; 9: /**
+  11&nbsp;10:  * KStdActionsDemo
+  12&nbsp;11:  * Demonstrate how to use standard actions on the menubar and toolbar.
+  13&nbsp;12:  **/
+  14&nbsp;13: class KStdActionsDemo : public KTMainWindow
+  15&nbsp;14: {
+  16&nbsp;15:   Q_OBJECT
+  17&nbsp;16:  public:
+  18&nbsp;17:   /**
+  19&nbsp;18:    * Create some of the standard actions and connect them to
+  20&nbsp;19:    *  slots.
+  21&nbsp;20:    **/
+  22&nbsp;21:   KStdActionsDemo (const char *name=0);
+  23&nbsp;22: 
+  24&nbsp;23:  public slots:
+  25&nbsp;24:   void slotOpen ();
+  26&nbsp;25:   void slotNew ();
+  27&nbsp;26:   void slotSave ();
+  28&nbsp;27:   void slotRecent (const KURL &amp;);
+  29&nbsp;28:   void slotCut ();
+  30&nbsp;29:   void slotCopy ();
+  31&nbsp;30:   void slotPaste ();
+  32&nbsp;31: 
+  33&nbsp;32:  protected:
+  34&nbsp;33:   KRecentFilesAction *recent;
+  35&nbsp;34: };
+  36&nbsp;35: 
+  37&nbsp;36: #endif
+  38&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The following <TT
+CLASS="literal"
+>main()</TT
+> function does a bit more than create and display the <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+> widget. It also shows another standard piece of a KDE <TT
+CLASS="literal"
+>main()</TT
+> function, the specification of application information via the class <TT
+CLASS="literal"
+>KAboutData</TT
+>. The following information is passed to the <TT
+CLASS="literal"
+>KAboutData</TT
+> constructor:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Application name&#8212;<SPAN
+CLASS="QUOTE"
+>"kstdactionsdemo"</SPAN
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Application's <SPAN
+CLASS="QUOTE"
+>"given name"</SPAN
+>&#8212;<SPAN
+CLASS="QUOTE"
+>"KstdActionsDemo"</SPAN
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Version string&#8212;<SPAN
+CLASS="QUOTE"
+>"1.0"</SPAN
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Short description&#8212;Demonstrate standard actions</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>License identifier&#8212;<TT
+CLASS="literal"
+>KAboutData::License_GPL</TT
+> (LGPL, BSD, and Artistic)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Copyright string&#8212; <SPAN
+CLASS="QUOTE"
+>"©2000, Joe Developer"</SPAN
+> (you should use this format exactly, substituing the appropriate information)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Long description&#8212;(see <A
+HREF="ch05.html#ch05list03"
+>Listing 5.3</A
+> for this string)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Application home page</P
+></LI
+></UL
+><P
+>(The macro <TT
+CLASS="literal"
+>I18N_NOOP()</TT
+> marks the enclosed strings for translation. Translation is discussed in detail in <A
+HREF="ch07.html"
+>Chapter 7</A
+>, <SPAN
+CLASS="QUOTE"
+>"Further KDE Compliance."</SPAN
+> I have mentioned the <TT
+CLASS="literal"
+>I18N_NOOP()</TT
+> macro here to emphasize the importance of its use when specifying application information.)</P
+><P
+>The method <TT
+CLASS="literal"
+>addAuthor()</TT
+> adds some information about the application's author. You may&#8212;and should&#8212;call this method multiple times if the application has multiple authors.</P
+><P
+>The information passed to <TT
+CLASS="literal"
+>KAboutData</TT
+> is used to create a standard About box that can be activated by choosing Help, About (application name) from the standard Help menu, so your long description should be informative.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Be sure to tell the user what the application does and/or what type of data it operates on in the long description.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><TT
+CLASS="literal"
+>KAboutData</TT
+> is also used by the standard bug report submission dialog that appears in the standard Help menu. The application you create here, KStdActionsDemo, has the standard Help menu (it is created by <TT
+CLASS="literal"
+>createGUI()</TT
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list03"
+></A
+><P
+><B
+>Example 5.3. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+>
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kaboutdata.h&gt;
+   3&nbsp; 2: #include &lt;kcmdlineargs.h&gt;
+   4&nbsp; 3: #include &lt;klocale.h&gt;
+   5&nbsp; 4: #include &lt;kapp.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: #include "kstdactionsdemo.h"
+   8&nbsp; 7: 
+   9&nbsp; 8: int
+  10&nbsp; 9: main (int argc, char *argv[])
+  11&nbsp;10: {
+  12&nbsp;11:    
+  13&nbsp;12:   KAboutData aboutData( "kstdactionsdemo",
+  14&nbsp;13:                         I18N_NOOP("KstdActionsDemo"), "1.0", 
+  15&nbsp;14:                         I18N_NOOP("Demonstrate standard actions"),
+  16&nbsp;15:                         KAboutData::License_GPL,
+  17&nbsp;16:                         "(c) 2000, Joe Developer",
+  18&nbsp;17:                         I18N_NOOP("Demonstrate how to use standard"
+  19&nbsp;18:                         " actions on the menubar and toolbar."),
+  20&nbsp;19:                         "http://www.sleepyprogrammers.com/~jdevel/kstdact/" );
+  21&nbsp;20: 
+  22&nbsp;21:   aboutData.addAuthor("Joe Developer", 0, "jdevel@sleepprogrammers.com",
+  23&nbsp;22:                       "http://www.sleepyprogrammers.com/~jdevel/");
+  24&nbsp;23: 
+  25&nbsp;24:   KCmdLineArgs::init( argc, argv, &amp;aboutData );
+  26&nbsp;25: 
+  27&nbsp;26:   KApplication kapplication;
+  28&nbsp;27:   KStdActionsDemo *kstdactionsdemo = new KStdActionsDemo;
+  29&nbsp;28:   kapplication-&gt;setMainWidget(kstdactionsdemo);
+  30&nbsp;29:   kstdactionsdemo-&gt;show();
+  31&nbsp;30:   return kapplication.exec();
+  32&nbsp;31: }
+  33&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>See <A
+HREF="ch05.html#ch05fig02"
+>Figure 5.2</A
+> for a screen shot of <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+>.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig02"
+></A
+><P
+><B
+>Figure 5.2. Screen shot of <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+>.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec3"
+TITLE="Standard Actions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec4"
+>5.1.2.2. Custom Actions</A
+></H3
+><P
+>The standard actions certainly won't be all the actions you'll need for all your applications; in this section you'll see how to create custom actions and incorporate them into your application's UI.</P
+><P
+>Listings 5.4&#8211;5.7 present <TT
+CLASS="literal"
+>KCustomActions</TT
+>, a top-level widget that demonstrates how to use a few custom actions.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list04"
+></A
+><P
+><B
+>Example 5.4. kcustomactions.h: Class Declaration for <TT
+CLASS="literal"
+>KCustomActions</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KCUSTOMACTIONS_H__
+   3&nbsp; 2: #define __KCUSTOMACTIONS_H__
+   4&nbsp; 3: 
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: class KToggleAction;
+   8&nbsp; 7: class KRadioAction;
+   9&nbsp; 8: 
+  10&nbsp; 9: /**
+  11&nbsp;10:  * KCustomActions
+  12&nbsp;11:  * Create custom actions for the menubar and toolbars.
+  13&nbsp;12:  **/
+  14&nbsp;13: class KCustomActions : public KTMainWindow
+  15&nbsp;14: {
+  16&nbsp;15:   Q_OBJECT
+  17&nbsp;16:  public:
+  18&nbsp;17:   /**
+  19&nbsp;18:    * Construct the menubar and toolbars and fill
+  20&nbsp;19:    *  them with interesting things.
+  21&nbsp;20:    **/
+  22&nbsp;21:   KCustomActions (const char *name=0);
+  23&nbsp;22: 
+  24&nbsp;23:  public slots:
+  25&nbsp;24:   void slotMyEntry();
+  26&nbsp;25:   void slotLoadPage (const QString &amp;url);
+  27&nbsp;26:   void slotRectangle ();
+  28&nbsp;27:   void slotPencil ();
+  29&nbsp;28: 
+  30&nbsp;29: 
+  31&nbsp;30:  protected:
+  32&nbsp;31:   KToggleAction *checkable;
+  33&nbsp;32:   KRadioAction *rectangle, *pencil;
+  34&nbsp;33: };
+  35&nbsp;34: 
+  36&nbsp;35: #endif
+  37&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As in <TT
+CLASS="literal"
+>KStdActionsDemo</TT
+>, you declare a constructor, some slots to respond to the actions, and classwide pointers (lines 31 and 32) to some actions. Here you use two new action types: <TT
+CLASS="literal"
+>KToggleAction</TT
+> and <TT
+CLASS="literal"
+>KRadioAction</TT
+>. They are discussed following <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list05"
+></A
+><P
+><B
+>Example 5.5. kcustomactions.cpp: Class Definition for <TT
+CLASS="literal"
+>KCustomActions</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  1: #include &lt;stdio.h&gt;
+   3&nbsp;  2: 
+   4&nbsp;  3: #include &lt;qpopupmenu.h&gt;
+   5&nbsp;  4: #include &lt;qkeycode.h&gt;
+   6&nbsp;  5: 
+   7&nbsp;  6: #include &lt;kmenubar.h&gt;
+   8&nbsp;  7: #include &lt;ktoolbar.h&gt;
+   9&nbsp;  8: #include &lt;kiconloader.h&gt;
+  10&nbsp;  9: #include &lt;kaction.h&gt;
+  11&nbsp; 10: #include &lt;kstdaction.h&gt;
+  12&nbsp; 11: #include &lt;kapp.h&gt;
+  13&nbsp; 12: 
+  14&nbsp; 13: #include "kcustomactions.moc"
+  15&nbsp; 14: 
+  16&nbsp; 15: //Widget IDs for URLToolBar
+  17&nbsp; 16: const int URLLabel =0,
+  18&nbsp; 17:           URLCombo=1;
+  19&nbsp; 18: KCustomActions::KCustomActions (const char *name) : KTMainWindow (name)
+  20&nbsp; 19: {
+  21&nbsp; 20:   new KAction ("Specia&amp;l", CTRL+Key_L, 0L, 0L, 
+  22&nbsp; 21:                actionCollection(), "special");
+  23&nbsp; 22:   KStdAction::quit (kapp, SLOT(closeAllWindows()), actionCollection());
+  24&nbsp; 23: 
+  25&nbsp; 24:   KStdAction::home (0L, 0L, actionCollection());
+  26&nbsp; 25: 
+  27&nbsp; 26:   new KAction ("My &amp;Entry", 0,
+  28&nbsp; 27:                this, SLOT (slotMyEntry()), actionCollection(),
+  29&nbsp; 28:                "my_entry");
+  30&nbsp; 29:  
+  31&nbsp; 30:   checkable = new KToggleAction ("My Checkable Entry", 0,
+  32&nbsp; 31:                                  actionCollection(), "my_checkable_entry");
+  33&nbsp; 32:  
+  34&nbsp; 33:   KAction *grayentry =
+  35&nbsp; 34:     new KAction ( "My &amp;Gray Entry", "flag",
+  36&nbsp; 35:                   0, 0L, 0L, actionCollection(),
+  37&nbsp; 36:                   "my_gray_entry" );
+  38&nbsp; 37:   grayentry-&gt;setEnabled (false);
+  39&nbsp; 38: 
+  40&nbsp; 39:   //Create toolbox.
+  41&nbsp; 40: 
+  42&nbsp; 41:   rectangle =
+  43&nbsp; 42:     new KRadioAction ("Rectangle select", 
+  44&nbsp; 43:                       "rectangle_select", 0,
+  45&nbsp; 44:                       this, SLOT (slotRectangle()),
+  46&nbsp; 45:                       actionCollection(), "rectangle");
+  47&nbsp; 46:    rectangle-&gt;setExclusiveGroup ("tools");
+  48&nbsp; 47: 
+  49&nbsp; 48:   pencil =
+  50&nbsp; 49:     new KRadioAction ("Pencil", 
+  51&nbsp; 50:                       "pencil", 0,
+  52&nbsp; 51:                       this, SLOT (slotPencil()),
+  53&nbsp; 52:                       actionCollection(), "pencil");
+  54&nbsp; 53:   pencil-&gt;setExclusiveGroup ("tools");
+  55&nbsp; 54: 
+  56&nbsp; 55:   rectangle-&gt;setChecked(true);
+  57&nbsp; 56: 
+  58&nbsp; 57:   createGUI();
+  59&nbsp; 58:   toolBar("toolBoxToolBar")-&gt;setBarPos (KToolBar::Left);
+  60&nbsp; 59: 
+  61&nbsp; 60: 
+  62&nbsp; 61:   //Create second toolbar.
+  63&nbsp; 62: 
+  64&nbsp; 63:   QLabel *label = new QLabel ("URL:" toolBar("URL:,ToolBar");
+  65&nbsp; 64: 
+  66&nbsp; 65:   toolBar("URLToolBar")-&gt;
+  67&nbsp; 66:     insertWidget (URLLabel, label-&gt;sizeHint().width(), label);
+  68&nbsp; 67: 
+  69&nbsp; 68:   int indexcombo =
+  70&nbsp; 69:     toolBar("URLToolBar")-&gt;
+  71&nbsp; 70:     insertCombo (QString("http://www.kde.org"),
+  72&nbsp; 71:                  URLCombo, true,
+  73&nbsp; 72:                  SIGNAL (activated (const QString &amp;)),
+  74&nbsp; 73:                  this, SLOT (slotLoadPage (const QString &amp;)));
+  75&nbsp; 74: 
+  76&nbsp; 75:   toolBar("URLToolBar")-&gt;setItemAutoSized (indexcombo);
+  77&nbsp; 76: 
+  78&nbsp; 77: 
+  79&nbsp; 78: 
+  80&nbsp; 79:   QLabel *dummyclientarea = new QLabel (this);
+  81&nbsp; 80:   dummyclientarea-&gt;setBackgroundColor (Qt::white);
+  82&nbsp; 81:   setView (dummyclientarea);
+  83&nbsp; 82: 
+  84&nbsp; 83: }
+  85&nbsp; 84: 
+  86&nbsp; 85: void
+  87&nbsp; 86: KCustomActions::slotMyEntry()
+  88&nbsp; 87: {
+  89&nbsp; 88:   printf ("Custom-&gt;My Entry\n");
+  90&nbsp; 89: }
+  91&nbsp; 90: 
+  92&nbsp; 91: void
+  93&nbsp; 92: KCustomActions::slotLoadPage(const QString &amp;url)
+  94&nbsp; 93: {
+  95&nbsp; 94:   printf ("Load page: [%s]\n", (const char *)url);
+  96&nbsp; 95: }
+  97&nbsp; 96: 
+  98&nbsp; 97: void
+  99&nbsp; 98: KCustomActions::slotRectangle ()
+ 100&nbsp; 99: {
+ 101&nbsp;100:   if (rectangle-&gt;isChecked())
+ 102&nbsp;101:     printf ("Use rectangle select tool\n");
+ 103&nbsp;102: }
+ 104&nbsp;103: 
+ 105&nbsp;104: void
+ 106&nbsp;105: KCustomActions::slotPencil ()
+ 107&nbsp;106: {
+ 108&nbsp;107:   if (pencil-&gt;isChecked())
+ 109&nbsp;108:     printf ("Use pencil select tool\n");
+ 110&nbsp;109: }
+ 111&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You create three menus in <TT
+CLASS="literal"
+>KCustomActions</TT
+>: the File menu, the Go menu (another standard menu), and a menu called Custom. Because a customized menu contains a set of application-specific functions, you need to create each of the corresponding actions <SPAN
+CLASS="QUOTE"
+>"by hand"</SPAN
+> using <TT
+CLASS="literal"
+>KAction</TT
+>. You also create three differently styled toolbars.</P
+><P
+>The File and Go menus have predefined, KDE-wide layouts, so the actions on these menus will be put in their proper order in the menus and on the main toolbar, but you can also add application-specific entries to these menus. This is demonstrated with the action called Special created on lines 20 and 21. In the statement on lines 20 and 21, you describe the action with the <TT
+CLASS="literal"
+>KAction</TT
+> constructor, but you don't specify on which menu this action belongs.</P
+><P
+>The layout of nonstandard actions is specified in a separate file called kcustomactionsui.rc. This file is specified as the argument to and read by the <TT
+CLASS="literal"
+>createGUI()</TT
+> method (line 57). The method <TT
+CLASS="literal"
+>createGUI()</TT
+> merges this file, an XML file (given in <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+>) with a global XML layout file, thereby merging your custom action layout with the global one to create a single layout for your application.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list06"
+></A
+><P
+><B
+>Example 5.6. kcustomui.rc: XML File Describing the Layout of the <TT
+CLASS="literal"
+>KCustomActions</TT
+> UI</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: &lt;!DOCTYPE kpartgui&gt;
+   3&nbsp; 2: &lt;kpartgui name=kmenubardemo&gt;
+   4&nbsp; 3: &lt;MenuBar&gt;
+   5&nbsp; 4:   &lt;Menu name=file&gt;&lt;text&gt;&amp;File&lt;/text&gt;
+   6&nbsp; 5:     &lt;Action name=special/&gt;
+   7&nbsp; 6:   &lt;/Menu&gt;
+   8&nbsp; 7:   &lt;Menu name=custom&gt;&lt;text&gt;&amp;Custom&lt;/text&gt;
+   9&nbsp; 8:     &lt;Action name=my_entry/&gt;
+  10&nbsp; 9:     &lt;Action name=my_checkable_entry/&gt;
+  11&nbsp;10:     &lt;Action name=my_gray_entry/&gt;
+  12&nbsp;11:   &lt;/Menu&gt;
+  13&nbsp;12: &lt;/MenuBar&gt;
+  14&nbsp;13: &lt;ToolBar name=mainToolBar&gt;
+  15&nbsp;14:   &lt;Action name=my_gray_entry/&gt;
+  16&nbsp;15: &lt;/ToolBar&gt;
+  17&nbsp;16: &lt;ToolBar name=toolBoxToolBar&gt;
+  18&nbsp;17:   &lt;Action name=rectangle/&gt;
+  19&nbsp;18:   &lt;Action name=pencil/&gt;
+  20&nbsp;19: &lt;/ToolBar&gt;
+  21&nbsp;20: &lt;ToolBar name=URLToolBar/&gt;
+  22&nbsp;21: &lt;/kpartgui&gt;
+  23&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The file in <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+> is used to specify where actions should be placed on the menus and toolbars, using a predefined set of XML tags.</P
+><P
+>XML stands for eXtensible Markup Language, a subset of SGML created to simplify the storage and transmission across platforms of structured data. The words in angle brackets (such as <TT
+CLASS="literal"
+>&lt;MenuBar&gt;</TT
+>) are called tags, and they usually come in pairs, such as: <TT
+CLASS="literal"
+>&lt;MenuBar&gt;&#8230;&lt;/MenuBar&gt;</TT
+>. The pair serves to delimit the beginning and the end of a section. In the case of the <TT
+CLASS="literal"
+>&lt;MenuBar&gt;&#8230;&lt;/MenuBar&gt;</TT
+> tags, the information between the tags describes the layout of the menubar. </P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>XML files may remind you of HTML. That's because they both are types of SGML, the Standard Generalized Markup Language. All SGML files use tags in angle brackets for markup and have a similar markup format.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Some of the tags have <I
+CLASS="emphasis"
+>attributes</I
+>, which are of the form</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>attributename</I
+>="<I
+CLASS="emphasis"
+>attributevalue</I
+>"
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>For example, <TT
+CLASS="literal"
+>name=custom</TT
+> is an attribute of the <TT
+CLASS="literal"
+>&lt;Menu&gt;</TT
+> tag used in <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+>.</P
+><P
+>Finally, some tags do not come in pairs because no more information is needed to describe them than what is given in their tag name and/or tag attributes. Such a tag in <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+> is <TT
+CLASS="literal"
+>&lt;Action name="</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>actionname</TT
+></I
+><TT
+CLASS="literal"
+>"/&gt;</TT
+>. <A
+HREF="ch05.html#ch05table01"
+>Table 5.1</A
+> shows a list of the tags that are available for use in creating these KDE GUI XML files. (The file type is specified by the tag <TT
+CLASS="literal"
+>&lt;!DOCTYPE kpartgui&gt;</TT
+>. The name comes from the fact that these documents originated in the KParts component architecture. (See <A
+HREF="ch12.html"
+>Chapter 12, <SPAN
+CLASS="QUOTE"
+>"Creating and Using Components (KParts)"</SPAN
+></A
+> for more information on KParts).</P
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch05table01"
+></A
+><P
+><B
+>Table 5.1. XML Tags Used by kpartgui Files</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Tag/Tag Pair</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Use/Content</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>&lt;MenuBar&gt;&lt;/MenuBar&gt;</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description of the menubar</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>&lt;Menu name=name&gt;&lt;/Menu&gt;</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description of a menu named <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> (<I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> is not displayed)</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>&lt;text&gt;&lt;/text&gt;</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Menu title to display in the menubar</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>&lt;ToolBar name="</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+><TT
+CLASS="literal"
+>"&gt;&lt;/ToolBar&gt;</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Description of the toolbar named <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> (<I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> is not displayed)</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+><TT
+CLASS="literal"
+>&lt;Action name="</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+><TT
+CLASS="literal"
+>"/&gt;</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Put an action on a menu or toolbar. This tag falls between <TT
+CLASS="literal"
+>&lt;Menu&gt;&lt;/Menu&gt;</TT
+>tags or <TT
+CLASS="literal"
+>&lt;ToolBar&gt;&lt;/ToolBar&gt;</TT
+>tags. The string <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> is the same string that is passed as the last argument to the KAction constructor.</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><P
+>Now back to <TT
+CLASS="literal"
+>KCustomActions</TT
+>. The action called <TT
+CLASS="literal"
+>"special"</TT
+> is described on line 5 of <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+> with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;&lt;Action name="special"/&gt;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>and created on lines 21 and 22 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>. Notice that the string <TT
+CLASS="literal"
+>special</TT
+> is used in both places. The method <TT
+CLASS="literal"
+>createGUI()</TT
+> uses this string to match actions to their corresponding XML tags. This action will be inserted in the File menu in the proper place according to the KDE UI standard because you have placed the action tag inside the tags <TT
+CLASS="literal"
+>&lt;Menu name="file"&gt;&lt;/Menu&gt;</TT
+>. The <TT
+CLASS="literal"
+>name</TT
+> identifier used here is defined in the global XML KDE UI description file. You should take a look at this file to see which menus are available and what names they are given. The file is $KDEDIR/share/config/ui/ui_standards.rc.</P
+><P
+>The next menu, called Custom, contains three entries. It is shown in <A
+HREF="ch05.html#ch05fig03"
+>Figure 5.3</A
+>. The first entry, called My Entry, is created in lines 27&#8211;29 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig03"
+></A
+><P
+><B
+>Figure 5.3. The Custom menu shows checkable and disabled menu entries.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig03.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The second entry is called a checkable entry because it may or may not have a check mark placed next to it. Checkable menu entries are created with <TT
+CLASS="literal"
+>KToggleAction</TT
+> (see lines 31 and 32). The user may toggle a frequently changed option by selecting the corresponding entry from a menu. The check mark indicates whether the option is on or off. You do not specify a slot in the call to the <TT
+CLASS="literal"
+>KToggleAction</TT
+> constructor because there is no event to which to respond. When you need to know whether the option is on or off, you can check the value returned by <TT
+CLASS="literal"
+>checkable-&gt;isChecked()</TT
+>.</P
+><P
+>The last entry in the Custom menu is a disabled entry (see lines 34&#8211;48). The entry is marked as disabled by calling <TT
+CLASS="literal"
+>setEnabled (false)</TT
+>, as shown on line 38. Using disabled entries lets the user see all the functions that are included in the application, even if they aren't currently appropriate or usable. For example, a commonly disabled entry in the File menu is Save. This entry would be disabled (and displayed in a different style that would indicate to the user that it is disabled) until a document is actually opened (perhaps even until the document is changed).</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Historically, disabled menu entries were shown in gray type instead of black. Today, displays have 24-bit color and GUIs are highly configurable and themeable; therefore, disabled entries, although still visually distinguishable from enabled entries, are often styled in a way that is not simply gray (for example, KDE uses a semi-transparent effect by default).</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Lines 41&#8211;58 create a <SPAN
+CLASS="QUOTE"
+>"toolbox"</SPAN
+> toolbar. This toolbar contains a set of radio buttons representing different tools that can be used to edit the document. You have created a rectangle-select tool button and a pencil tool button. The nature of radio buttons is that only one button can be pressed down at a time (that is, the user can use only one tool at a time).</P
+><P
+>You can create radio buttons with <TT
+CLASS="literal"
+>KRadioAction</TT
+>. Each time you create one of these buttons, you insert it into a group with the method <TT
+CLASS="literal"
+>setExclusiveGroup</TT
+> <TT
+CLASS="literal"
+>(</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>"name"</TT
+></I
+><TT
+CLASS="literal"
+>)</TT
+> (see lines 46 and 53 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>). You can use any <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> you like, just be sure to use the same <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> for every button in a single radio-button group.</P
+><P
+>These toolbox buttons are placed on a separate toolbar that is named <TT
+CLASS="literal"
+>toolBoxToolBar</TT
+> on line 13 of <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+>.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You can lay out multiple toolbars with your XML KDE UI file and <TT
+CLASS="literal"
+>createGUI()</TT
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The toolbox is moved to the left side of the window (a common place to find a toolbox) on line 51 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>. When you need to access the toolbar widget directly, as done here, use the <TT
+CLASS="literal"
+>KTMainWindow</TT
+> method <TT
+CLASS="literal"
+>toolBar (</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+><TT
+CLASS="literal"
+>)</TT
+>, which returns a pointer to the toolbar named <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+>. The identifier <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> is the same one used to declare the toolbar in the XML GUI file; therefore, on line 16 of <A
+HREF="ch05.html#ch05list06"
+>Listing 5.6</A
+>, you see the toolbox toolbar declared with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;&lt;ToolBar name="toolBoxToolBar"&gt;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>and on line 58 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>, the same toolbar is referenced with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;toolBar("toolBoxToolBar")
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The final toolbar, the URL toolbar, holds a text label and a combobox. <A
+HREF="ch05.html#ch05fig04"
+>Figure 5.4</A
+> shows all the toolbars. Because text display and text entry aren't really actions, there are no corresponding <TT
+CLASS="literal"
+>KAction</TT
+> subclasses. So how do you make the toolbar?</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig04"
+></A
+><P
+><B
+>Figure 5.4. Three types of toolbars are created by KCustomActions.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig04.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>One answer is to create your own subclasses of <TT
+CLASS="literal"
+>KAction</TT
+>&#8212;perhaps <TT
+CLASS="literal"
+>KTextLabelAction</TT
+> and <TT
+CLASS="literal"
+>KComboAction</TT
+>&#8212;and create the toolbar with an XML UI file and <TT
+CLASS="literal"
+>createGUI()</TT
+>. This method, although a little extra work, provides your application with more configurability.</P
+><P
+>The simpler method is to create them by directly accessing the <TT
+CLASS="literal"
+>KToolBar</TT
+> widget (the now old-fashioned way). After setting up the UI with a call to <TT
+CLASS="literal"
+>createGUI()</TT
+>, add the extra URL toolbar. This toolbar has <I
+CLASS="emphasis"
+>id=2</I
+> and the corresponding <TT
+CLASS="literal"
+>KToolBar</TT
+> widget is created with the first call to the method <TT
+CLASS="literal"
+>toolBar()</TT
+> on line 52 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>. Lines 55&#8211;75 insert two widgets, the static text label (<TT
+CLASS="literal"
+>a QLabel</TT
+>), and the combobox into the toolbar. See the <TT
+CLASS="literal"
+>KToolBar</TT
+> documentation for details of these methods.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list07"
+></A
+><P
+><B
+>Example 5.7. kcustomactions.h: The Class Definition for <TT
+CLASS="literal"
+>KCustomActions</TT
+>
+</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KCUSTOMACTIONS_H__
+   3&nbsp; 2: #define __KCUSTOMACTIONS_H__
+   4&nbsp; 3: 
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: class KToggleAction;
+   8&nbsp; 7: class KRadioAction;
+   9&nbsp; 8: 
+  10&nbsp; 9: /**
+  11&nbsp;10:  * KcustomActions
+  12&nbsp;11:  * Create custom actions for the menubar and toolbars.
+  13&nbsp;12:  **/
+  14&nbsp;13: class KCustomActions : public KTMainWindow
+  15&nbsp;14: {
+  16&nbsp;15:   Q_OBJECT
+  17&nbsp;16:  public:
+  18&nbsp;17:   /**
+  19&nbsp;18:    * Construct the menubar and toolbars and fill
+  20&nbsp;19:    *  them with interesting things.
+  21&nbsp;20:    **/
+  22&nbsp;21:   KCustomActions (const char *name=0);
+  23&nbsp;22: 
+  24&nbsp;23:  public slots:
+  25&nbsp;24:   void slotMyEntry();
+  26&nbsp;25:   void slotLoadPage (const QString &amp;url);
+  27&nbsp;26:   void slotRectangle ();
+  28&nbsp;27:   void slotPencil ();
+  29&nbsp;28: 
+  30&nbsp;29: 
+  31&nbsp;30:  protected:
+  32&nbsp;31:   KToggleAction *checkable;
+  33&nbsp;32:   KRadioAction *rectangle, *pencil;
+  34&nbsp;33: };
+  35&nbsp;34: 
+  36&nbsp;35: #endif
+  37&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><A
+HREF="ch05.html#ch05list07"
+>Listing 5.7</A
+> declares the constructor, slots to process actions, and variables to keep track of actions (lines 31 and 32). For example, in <TT
+CLASS="literal"
+>slotRectangle()</TT
+> on line 100 of <A
+HREF="ch05.html#ch05list05"
+>Listing 5.5</A
+>, refer to the object <TT
+CLASS="literal"
+>rectangle</TT
+> to see whether the slot was called in response to the user choosing this tool or deselecting it by choosing another tool.</P
+><P
+>The following <TT
+CLASS="literal"
+>main()</TT
+> function can be used to try out <TT
+CLASS="literal"
+>KCustomActions</TT
+>. (For simplicity, you have not created an instance of <TT
+CLASS="literal"
+>KAboutData</TT
+>. However, you always should for any application you intend to distribute.)</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list08"
+></A
+><P
+><B
+>Example 5.8. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KCustomActions</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: 
+   4&nbsp; 3: #include "kcustomactions.h"
+   5&nbsp; 4: 
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kcustomactions");
+  10&nbsp; 9:   KCustomActions  *kcustomactions = new KCustomActions;
+  11&nbsp;10: 
+  12&nbsp;11:   kcustomactions-&gt;show();
+  13&nbsp;12:   return kapplication.exec();
+  14&nbsp;13: }
+  15&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec4"
+TITLE="Custom Actions"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev2sec2"
+TITLE="Creating and Manipulating Actions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch05lev2sec3"
+>5.1.3. The Statusbar</A
+></H2
+><P
+>The statusbar gives the user information about what the application is doing, what it has just completed, or what it might do if the user asks it to perform a task. Let's look at two examples: Konqueror and KWrite.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec5"
+>5.1.3.1. Konqueror</A
+></H3
+><P
+>Figure 5.5 shows Konqueror just after pressing Enter in the line editor in the toolbar. The statusbar indicates what Konqueror is doing&#8212;loading the page at <SPAN
+CLASS="QUOTE"
+>"8.0 KB/s."</SPAN
+> It also says what it has done: loaded 94% of the page so far. When the loading is complete, the statusbar says Document: Done.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig05"
+></A
+><P
+><B
+>Figure 5.5. konqueror has loaded 94% of the KDE home page and is loading at a rate of 8.0 KB/s.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig05.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>Also, when the user passes the mouse cursor over a link, the statusbar displays the full URL pointed to by the link. This shows to what page the link would bring the user.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec5"
+TITLE="Konqueror"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec6"
+>5.1.3.2. KWrite</A
+></H3
+><P
+>The statusbar used in KWrite contains status indicators that are always present at the right side of the statusbar (see <A
+HREF="ch05.html#ch05fig01"
+>Figure 5.1</A
+>). They tell the user whether the file needs saving (the asterisk indicates <SPAN
+CLASS="QUOTE"
+>"yes"</SPAN
+>), whether the user is in insert or overwrite mode, and which line and column the cursor is on.</P
+><P
+>Now create your own example. Listings 5.9&#8211;5.11 present code for KStatusBarDemo, an application that demonstrates <TT
+CLASS="literal"
+>KStatusBar</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list09"
+></A
+><P
+><B
+>Example 5.9. kstatusbardemo.h: Contains the Class Declaration for <TT
+CLASS="literal"
+>KStatusBarDemo</TT
+>, a Subclass of <TT
+CLASS="literal"
+>KTMainWindow</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KSTATUSBARDEMO_H__
+   3&nbsp; 2: #define __KSTATUSBARDEMO_H__
+   4&nbsp; 3: 
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: class QPopupStatus;
+   8&nbsp; 7: 
+   9&nbsp; 8: /**
+  10&nbsp; 9:  * KStatusBarDemo
+  11&nbsp;10:  * Demonstrates functions of KStatusBar.
+  12&nbsp;11:  **/
+  13&nbsp;12: class KStatusBarDemo : public KTMainWindow
+  14&nbsp;13: {
+  15&nbsp;14:   Q_OBJECT
+  16&nbsp;15:  public:
+  17&nbsp;16:   /**
+  18&nbsp;17:    * Construct the statusbar and fill it with interesting things.
+  19&nbsp;18:    **/
+  20&nbsp;19:   KStatusBarDemo (const char *name=0);
+  21&nbsp;20: 
+  22&nbsp;21:  public slots:
+  23&nbsp;22:   void slotChangeMode ();
+  24&nbsp;23: 
+  25&nbsp;24:  protected:
+  26&nbsp;25:   bool mode;
+  27&nbsp;26: 
+  28&nbsp;27: };
+  29&nbsp;28: 
+  30&nbsp;29: #endif
+  31&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list10"
+></A
+><P
+><B
+>Example 5.10. main.cpp: Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function That Creates and Executes <TT
+CLASS="literal"
+>kstatusbardemo</TT
+>, an Application Based on <TT
+CLASS="literal"
+>KStatusBarDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: 
+   4&nbsp; 3: #include "kstatusbardemo.h"
+   5&nbsp; 4: 
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication  (argc, argv, "kstatusbardemo");
+  10&nbsp; 9:   KStatusBarDemo *kstatusbardemo = new KStatusBarDemo;
+  11&nbsp;10: 
+  12&nbsp;11:   kstatusbardemo-&gt;show();
+  13&nbsp;12:   return kapplication.exec();
+  14&nbsp;13: }
+  15&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The statusbar in this example is a simple one. There are two areas: one for a general status message and one for a mode indicator (similar to the INS/OVT indicator used by KWrite).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list11"
+></A
+><P
+><B
+>Example 5.11. kstatusbardemo.cpp: Contains the Class Definition for <TT
+CLASS="literal"
+>KStatusBarDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kstatusbar.h&gt;
+   3&nbsp; 2: #include &lt;kapp.h&gt;
+   4&nbsp; 3: #include &lt;kstdaction.h&gt;
+   5&nbsp; 4: #include &lt;kaction.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: #include "kstatusbardemo.moc"
+   8&nbsp; 7: 
+   9&nbsp; 8: //Status bar IDs.
+  10&nbsp; 9: const int StatusBarMain = 0, StatusBarMode = 1;
+  11&nbsp;10: 
+  12&nbsp;11: KStatusBarDemo::KStatusBarDemo (const char *name) : KTMainWindow (name)
+  13&nbsp;12: {
+  14&nbsp;13:   KStdAction::quit (kapp, SLOT(closeAllWindows()), actionCollection());
+  15&nbsp;14:   new KAction ("&amp;Change Mode", 0,
+  16&nbsp;15:                this, SLOT (slotChangeMode()), actionCollection(),
+  17&nbsp;16:                "change_mode");
+  18&nbsp;17: 
+  19&nbsp;18:   createGUI();
+  20&nbsp;19: 
+  21&nbsp;20:   statusBar()-&gt;
+  22&nbsp;21:     insertItem ("Current status of application",
+  23&nbsp;22:                 StatusBarMain, 1);
+  24&nbsp;23:   statusBar()-&gt;insertItem (" Mode2 ", StatusBarMode);
+  25&nbsp;24:   statusBar()-&gt;changeItem (" Mode1 ", StatusBarMode);
+  26&nbsp;25:   mode=true;
+  27&nbsp;26: 
+  28&nbsp;27:   statusBar()-&gt;message ("Application is ready!", 2000);
+  29&nbsp;28:   
+  30&nbsp;29:   QLabel *dummyclientarea = new QLabel (this);
+  31&nbsp;30:   dummyclientarea-&gt;setBackgroundColor (Qt::white);
+  32&nbsp;31:   setView (dummyclientarea);
+  33&nbsp;32: }
+  34&nbsp;33: 
+  35&nbsp;34: 
+  36&nbsp;35: void
+  37&nbsp;36: KStatusBarDemo::slotChangeMode ()
+  38&nbsp;37: {
+  39&nbsp;38:   
+  40&nbsp;39:   if (mode)
+  41&nbsp;40:     {
+  42&nbsp;41:       statusBar()-&gt;changeItem (" Mode2 ", StatusBarMode);
+  43&nbsp;42:       mode=false;
+  44&nbsp;43:     }
+  45&nbsp;44:   else
+  46&nbsp;45:     {
+  47&nbsp;46:       statusBar()-&gt;changeItem (" Mode1 ", StatusBarMode);
+  48&nbsp;47:       mode=true;
+  49&nbsp;48:     }
+  50&nbsp;49: 
+  51&nbsp;50: }
+  52&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the <TT
+CLASS="literal"
+>KStatusBarDemo</TT
+> constructor, you first create a simple menubar containing an entry that will be used to change the mode displayed by the mode indicator. This is done in lines 14&#8211;16 of <A
+HREF="ch05.html#ch05list10"
+>Listing 5.10</A
+>. See <A
+HREF="ch05.html#ch05fig06"
+>Figure 5.6</A
+> for a screen shot. (The call to <TT
+CLASS="literal"
+>create GUI()</TT
+> on Line 18 looks for a file called kstatusbardemoui.rc in the directory $KDEDIR/share/kstatusbardemo. This file is available on the Web site.)</P
+><P
+>The mode indicator should take up a fixed amount of the statusbar and be positioned on the far right. The main message area should take up the rest of the statusbar. To partition the statusbar in this way, the mode indicator is created with a <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+> value&#8212;the third argument to <TT
+CLASS="literal"
+>insertItem()</TT
+>&#8212;of 0, meaning to use as little space as possible (see line 23), and the main message area is created with a <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+> value of 1.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig06"
+></A
+><P
+><B
+>Figure 5.6. <TT
+CLASS="literal"
+>KStatusBarDemo</TT
+> displays a message that disappears in two seconds.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig06.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>When the <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+> value is nonzero, it tells <TT
+CLASS="literal"
+>KStatusBar</TT
+> to apportion the statusbar width among the various items in amounts proportional to <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+>. When <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+> is zero, <TT
+CLASS="literal"
+>KStatusBar</TT
+> always uses the width of the text field with which the item is created. On line 23 the mode indicator is created with the text <TT
+CLASS="literal"
+>Mode2</TT
+> because this is the longer of the two possible text strings that this field will hold. In general, when the item you are inserting has a <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>stretch</TT
+></I
+> value of zero, you should always call <TT
+CLASS="literal"
+>insertItem()</TT
+> with the longest text string that field will hold to be certain that there will be enough space to fit any of the text strings.</P
+><P
+>The method <TT
+CLASS="literal"
+>KStatusBar::message()</TT
+> (see line 27) displays a temporary message on top of the entire statusbar. The message <SPAN
+CLASS="QUOTE"
+>"Application is ready!"</SPAN
+> remains visible for two seconds. The second argument tells how long, in milliseconds, the message will be visible. After it disappears, the items placed in the statusbar with <TT
+CLASS="literal"
+>insertItem()</TT
+>appear.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec6"
+TITLE="KWrite"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev2sec3"
+TITLE="The Statusbar"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch05lev2sec4"
+>5.1.4. Content Area</A
+></H2
+><P
+>The look and function of the content area varies from application to application. The goal in designing the content area is to convey some of or all the information contained in the document (where <SPAN
+CLASS="QUOTE"
+>"document"</SPAN
+> is somewhat loosely defined) to the user. If all the information cannot be displayed, the user should be able to browse or search for more. You may also want to allow the user to change (edit) the document. The style and complexity of this portion of the interface is strongly influenced by the character of the document being presented. But always remember to keep it simple.</P
+><P
+>Next, you see how some common applications implement their content areas.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec7"
+>5.1.4.1. Text Editor</A
+></H3
+><P
+>KWrite deals with the most obvious of documents&#8212;a text file. It displays an empty (usually white) rectangle with a blinking text-insertion cursor (and I-shaped cursor). The user types and sees the typed characters appear as text in the window. The user can edit the text using standard keys (Arrows, Backspace, Delete, and so on). When the text becomes too large for the window, a horizontal or vertical scrollbar appears (whichever is necessary), giving access to the unseen portions of the document. KWrite can be seen in <A
+HREF="ch05.html#ch05fig01"
+>Figure 5.1</A
+>.</P
+><P
+>KWrite uses a custom-made widget for displaying and editing its documents. KDE applications can use either the <TT
+CLASS="literal"
+>KEdit</TT
+> or <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> class for displaying and editing text in their client areas.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec7"
+TITLE="Text Editor"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec8"
+>5.1.4.2. File Manager/Browser</A
+></H3
+><P
+>Figure 5.7 shows Konqueror displaying the contents of a directory, which is the <SPAN
+CLASS="QUOTE"
+>"document"</SPAN
+> in this case. The user uses the scrollbars to see more of the directory. The user edits the "document" by adding, deleting, or renaming files or subdirectories.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig07"
+></A
+><P
+><B
+>Figure 5.7. One document displayed and edited with <TT
+CLASS="literal"
+>konqueror</TT
+> is a directory.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig07.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>Of course, Konqueror also allows navigation between documents. If you click a folder, you see its contents. If you click an HTML file, you see it rendered. FTP sites can be displayed, navigated, and so on, just like local directories. If you click a PostScript file, you will see it rendered (in the same client area, but by a different application, KGhostView), and so on. Konqueror's view is so powerful because it displays information using components&#8212;embedded applications&#8212;so that, in principle, any URL can be handled within Konqueror if a component is available to display it.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec8"
+TITLE="File Manager/Browser"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch05lev3sec9"
+>5.1.4.3. Personal Information Manager</A
+></H3
+><P
+>The KOrganizer client area consists of three parts and is shown in <A
+HREF="ch05.html#ch05fig08"
+>Figure 5.8</A
+>. On the left are the calendar and the To-Do list. On the right is the list of appointments for a given day. The calendar is used to navigate to different days and the navigator is placed to the left, as is customary. The To-Do list is presumably placed here to keep it always in view because it may contain more urgent information.</P
+><P
+>KOrganizer uses <TT
+CLASS="literal"
+>QSplitter</TT
+> to divide the left side from the right side. The vertical frame drawn by <TT
+CLASS="literal"
+>QSplitter</TT
+> can be dragged from left to right to change the layout of the client area.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig08"
+></A
+><P
+><B
+>Figure 5.8. <TT
+CLASS="literal"
+>KOrganizer</TT
+> extends the idea of a document to an appointment book.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig08.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev3sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev3sec9"
+TITLE="Personal Information Manager"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev2sec4"
+TITLE="Content Area"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev1sec1"
+TITLE="The KDE Document-Centric Interface"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch04lev1sec6.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

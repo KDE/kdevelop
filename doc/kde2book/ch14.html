@@ -1,0 +1,459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Multimedia</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Application Interaction and Integration"
+HREF="p03.html"/><LINK
+REL="PREVIOUS"
+TITLE="Summary"
+HREF="ch13lev1sec8.html"/><LINK
+REL="NEXT"
+TITLE="A First Glance at Writing Modules"
+HREF="ch14lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec8.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch14"
+>Chapter 14. Multimedia</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by Stefan Westerfeld</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN20049"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14.html#ch14lev1sec1"
+>Introducing aRts/MCOP</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14lev1sec2.html"
+>A First Glance at Writing Modules</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14lev1sec3.html"
+>MCOP</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14lev1sec4.html"
+>Standard Interfaces</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch14lev1sec5.html"
+><I
+CLASS="emphasis"
+>Implementing a</I
+> <TT
+CLASS="literal"
+>SteroEffect</TT
+></A
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14lev1sec6.html"
+>KDE Multimedia Besides MCOP</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch14lev1sec7.html"
+>The Future of MCOP</A
+></I
+></P
+></LI
+></UL
+><P
+>What has traditionally been the domain of other systems is slowly coming to Linux (and UNIX) desktops. Images, sound effects, music, and video are a fascinating way to make applications more lively and to enable whole new uses. When I was showing a KDE 2.0 preview at the CeBIT 2000, I often presented some of the multimedia stuff&#8212;nice sound effects, flashing lights, and great music. Many people who were passing by stopped and could not take their eyes off the screen. Multimedia programs capture much more attention from a user than simple, <SPAN
+CLASS="QUOTE"
+>"boring"</SPAN
+> applications that just run in a rectangular space and remain silent and unmoving.</P
+><P
+>However, those technologies will become widespread in KDE applications only if they are easily accessible for developers. Take audio as an example. KDE is supposed to run on a variety of UNIX platforms, and not all of them support sound. Among those systems that do, there are very different ways of accessing the sound driver. Writing a proper (portable) application isn't really easy.</P
+><P
+>KDE 1.0 started providing support for playing sound effects easily with the KAudioServer. Thus, a game such as KReversi could support sound without caring about portability. Using one <TT
+CLASS="literal"
+>KAudio</TT
+> class, all problems regarding different platforms, and how exactly to load, decode, and play such a file, were gone.</P
+><P
+>The idea of KDE 2.0 multimedia support remains the same: make multimedia technologies easily accessible to developers. It is the dimension that changed. For KDE 1.0, playing a wave file was about all the multimedia support you could get from the libraries. For KDE 2.0 and beyond, the idea is to really care about multimedia.</P
+><P
+>KDE 2.0 takes into consideration all audio applications&#8212;not only those that casually play a file, but everything from the heavy real-time-oriented game to the sequencer. KDE 2.0 also supports plug-ins and small modules that can easily be recombined, as well as MIDI support and video support.</P
+><P
+>The challenge of delivering multimedia in all forms to the KDE desktop is big. Thus, the KDE multimedia support should work like a glue between the applications so that the puzzle pieces already solved by various programmers will be usable in any of the applications, and the image will slowly grow complete.</P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch14lev1sec1"
+>14.1. Introducing aRts/MCOP</A
+></H1
+><P
+>The road for KDE 2.0 (and later versions) is integration through one consistent streaming-media technology. The idea is that you can write any multimedia task as little pieces, which pass multimedia streams.</P
+><P
+>Quite some time before KDE 2.0, I first heard of the plans of KAudioServer2 (from Christian Esken), which was an attempt to improve and rewrite the audioserver to support streaming media to a certain degree. On the other hand, I had been working on aRts (analog, real-time synthesis) software for quite a while and had already implemented some nice streaming support. In fact, aRts was a modular software synthesizer that worked through little plug-ins and streams between them. And, most important of all, aRts was already working great.</P
+><P
+>So, after some considerations, we decided at the KDE 2.0 Developer meeting to make aRts the base for all streaming multimedia under KDE. Many things would have to be changed to come from one synthesizer to a base for all multimedia tasks, but it was the much better approach than trying to do something completely new and different, because aRts was already proven to work.</P
+><P
+>As I see it, the important parts of streaming multimedia support are</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>An easy way to write small modules, which can be used for streaming (plug-ins).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>A way to define how these modules communicate (what types of data they accept, what properties they have, what functions they support).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>A scheduler that decides what module gets executed when&#8212;this is necessary because you usually have lots of small modules running in one task.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>A transfer layer, which ensures that modules running in different processes/applications or on different computers can communicate.</P
+></LI
+></UL
+><P
+>How these things work is probably illustrated best with a small example. Assume you want to listen to a beep while the left speaker should be playing a 440Hz frequency and the right speaker is playing a 880Hz frequency. That would look something like the following:</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch14fig01"
+></A
+><P
+><B
+>Figure 14.1. The flow graph of a stereo beep.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/14fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>As you see, the task has been divided into very small components, each of which do only a part of the whole. The frequency generators only generate the frequency (they can also be used for other wave forms), nothing more. The sine wave objects only calculate the sinus of the values they get. The play object only takes care that these things really reach your sound card. To get a first impression, the source code for this example is shown in <A
+HREF="ch14.html#ch14list01"
+>Listing 14.1</A
+>:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch14list01"
+></A
+><P
+><B
+>Example 14.1. Listening to a Stereo Beep</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: // first_example.cc
+   3&nbsp; 2:
+   4&nbsp; 3: #include "artsflow.h"
+   5&nbsp; 4: #include "connect.h"
+   6&nbsp; 5:
+   7&nbsp; 6: using namespace Arts;
+   8&nbsp; 7:
+   9&nbsp; 8: int main()
+  10&nbsp; 9: {
+  11&nbsp;10:     Dispatcher dispatcher;
+  12&nbsp;11:
+  13&nbsp;12:     Synth_FREQUENCY freq1,freq2;   // object creation
+  14&nbsp;13:     Synth_WAVE_SIN  sin1,sin2;
+  15&nbsp;14:     Synth_PLAY      play;
+  16&nbsp;15:
+  17&nbsp;16:     setValue(freq1, 440.0);       // set frequencies
+  18&nbsp;17:     setValue(freq2, 880.0);
+  19&nbsp;18:
+  20&nbsp;19:     connect(freq1, sin1);         // object connection
+  21&nbsp;20:     connect(freq2, sin2);
+  22&nbsp;21:     connect(sin1, play, "invalue_left");
+  23&nbsp;22:     connect(sin2, play, "invalue_right");
+  24&nbsp;23:
+  25&nbsp;24:     freq1.start(); freq2.start();  // start&amp;go
+  26&nbsp;25:     sin1.start(); sin2.start();
+  27&nbsp;26:     play.start();
+  28&nbsp;27:     dispatcher.run();
+  29&nbsp;28: }
+  30&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Now, while you're thinking of that simplistic example, consider <A
+HREF="ch14.html#ch14fig02"
+>Figure 14.2</A
+>:</P
+><P
+><A
+HREF="ch14.html#ch14fig02"
+>Figure 14.2</A
+> illustrates a real-life example. I've simply composed three tasks done at the same time.</P
+><P
+>First, consider the MIDI player. The MIDI-player component is probably reading a file and sending out MIDI events. These are sent through a software synthesizer, which takes the incoming MIDI events and converts them to an audio stream. This is not about your hardware wave table on the sound card; all things that we are talking about here are happening before the data is sent to the sound card.</P
+><P
+>On the other hand, there is the game. Games often have very specific requirements for how they calculate their sound, so they might have a complete engine that does this task. One example is Quake. It calculates sound effects according to the player's position, so you can orient yourself by listening closely to what you hear. In that case, the game generates a complete audio stream itself, which only will be sent to the mixer.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch14fig02"
+></A
+><P
+><B
+>Figure 14.2. A flow graph of some real-life applications running.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/14fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The next chain is the one with the microphone attached. The microphone output is sent through a pitch-shifting effect in this example. Then the output goes through the mixer, the same as everything else. Through the pitch shifting, your voice sounds higher (or lower) because the frequency changes give this a funny cartoon-character effect. If you like, you can also imagine a more <SPAN
+CLASS="QUOTE"
+>"serious"</SPAN
+> application, such as speech recognition or Internet telephony at this place.</P
+><P
+>Finally, everything is mixed in the mixer component, and then, after sending it through a last effect (which adds the reverb effect), played over your sound card.</P
+><P
+>This example shows a bit more of what the multimedia support does here. You, for instance, see that not all components that are involved are in the same process. You wouldn't want to run your Quake game inside the audioserver, which also does the other tasks. Maybe your MIDI player is also external; maybe it is a component that runs inside the audioserver. Thus, the signal flow is distributed between the processes. The components that are responsible for certain tasks run where it fits best.</P
+><P
+>You also see that different kinds of streams are involved. The first is normal audio streams, which are managed nicely by the aRts/MCOP combination (and the most convenient method). The second is the MIDI stream. These differ a lot. An audio stream always carries data. In one second, 44,100 values are passed across the stream. In contrast, a MIDI stream transmits something only when it is needed. When a note is played, a small event is sent over the stream; when nothing happens, nothing is sent.</P
+><P
+>The third type is byte audio, which refers to the way the game in that case could produce audio. Byte stream is the same format that would normally be replayed through the sound card (16 bit, little endian, 44kHz, stereo). To process such data with the mixer, it needs to go through a converter because the mixer only mixes <SPAN
+CLASS="QUOTE"
+>"real"</SPAN
+> audio streams.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec1"
+>14.1.1. Overview of This Chapter</A
+></H2
+><P
+>For two reasons, most of this chapter is about aRts/MCOP: One is that I know it very well because I wrote most of the code. The other is that I think it is the most essential part of the KDE 2.0 multimedia strategy and will provide a way to get to one unified standard for all multimedia tasks.</P
+><P
+>I start with a practical example: how to write a small module, as I mentioned in the section <A
+HREF="ch14.html#ch14lev1sec1"
+><SPAN
+CLASS="QUOTE"
+>"Introducing aRts/MCOP,"</SPAN
+></A
+> and how to use it. You'll get an impression of how it works.</P
+><P
+>Then I give more background about MCOP, the CORBA-like middleware that is the base for all multimedia tasks. In the section <A
+HREF="ch14lev1sec3.html"
+><SPAN
+CLASS="QUOTE"
+>"MCOP,"</SPAN
+></A
+> I write specifically about how MCOP enables objects to do streaming in a very natural way.</P
+><P
+>But MCOP is nothing when there are no interfaces to talk to. In the sections <A
+HREF="ch14lev1sec4.html"
+><SPAN
+CLASS="QUOTE"
+>"Standard Interfaces"</SPAN
+></A
+> and <A
+HREF="ch14lev1sec5.html"
+><SPAN
+CLASS="QUOTE"
+>"Implementing a <TT
+CLASS="literal"
+>StereoEffect</TT
+>,"</SPAN
+></A
+> you see the standard interfaces that come with KDE 2.0 and why they exist. Then you'll transform the simple example into a stereo effect.</P
+><P
+>After that, I explain a few things about other multimedia facilities that KDE offers, which are not MCOP based. For those of you who don't want to get deep into multimedia, but just have your mail application play a <SPAN
+CLASS="QUOTE"
+>"pling"</SPAN
+> when mail arrives, this may be the thing that interests you most.</P
+><P
+>Finally, this chapter ends with a view about the future. Where are we going? What are the possibilities that should be available in further versions of KDE? What can you work on when you are interested in actually improving KDE multimedia support?</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec1"
+TITLE="Overview of This Chapter"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev1sec1"
+TITLE="Introducing aRts/MCOP"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec8.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

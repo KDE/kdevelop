@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Using Dialog Boxes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Advanced KDE Widgets and UI Design Techniques"
+HREF="p02.html"/><LINK
+REL="PREVIOUS"
+TITLE="Exercises"
+HREF="ch07lev1sec7.html"/><LINK
+REL="NEXT"
+TITLE="Dialog Layout the Simple Way"
+HREF="ch08lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch07lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch08"
+>Chapter 8. Using Dialog Boxes</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by Espen Sand</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN11876"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08.html#ch08lev1sec1"
+>Getting Started with the Dialog Widgets</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec2.html"
+>Dialog Layout the Simple Way</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec3.html"
+>Dialog Modality&#8212;Modal or Modeless Dialogs</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec4.html"
+>KDE User-Interface Library (kdeui)</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec5.html"
+>Dialog Style and <TT
+CLASS="literal"
+>KDialogBase</TT
+></A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec6.html"
+>A Larger Example: The Option Dialog in KEdit</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch08lev1sec7.html"
+>User Interface Design Rules for Dialogs</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>A dialog is a very important part of an application. If the dialogs are not well-designed or suited for their task, the usefulness of the application is often greatly reduced. This chapter describes how to successfully create dialogs that are easy to use, that have a distinct KDE look and feel, and that are simple to develop and later extend and maintain by the developer. The KDE interface library (kdeui) contains several building blocks and widgets that, combined with the regular widgets and layout managers of the Qt library, provide you with what you need to get an optimal result. I emphasize the use of a framework widget named <TT
+CLASS="literal"
+>KDialogBase</TT
+>. The use of the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class greatly simplifies dialog writing because it takes care of much of the tedious work that has to be repeated for every dialog you make.</P
+><P
+>Although several interface builders are available that can create dialogs for you (see <A
+HREF="ch18.html"
+>Chapter 18, <SPAN
+CLASS="QUOTE"
+>"The KDevelop IDE: The Integrated Development Enviroment for KDE"</SPAN
+></A
+>), the KDE interface library widgets are designed to simplify a hand-coded design process. In addition, they automatically give your dialogs the look and feel recommended by the KDE style guide, which is available on the Web page: <A
+HREF="http://developer.kde.org/documentation/standards/kde/style/basics"
+TARGET="_top"
+>http://developer.kde.org/documentation/standards/kde/style/basics</A
+>. Several examples illustrate how to use these basic widgets.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec1"
+>8.1. Getting Started with the Dialog Widgets</A
+></H1
+><P
+>Let's start with an example. <A
+HREF="ch08.html#ch08fig01"
+>Figure 8.1</A
+> shows a very simple dialog that is used in the standard KDE hex editor&#8212;KHexEdit. The code in <A
+HREF="ch08.html#ch08list01"
+>Listing 8.1</A
+> shows how the dialog class is derived from <TT
+CLASS="literal"
+>KDialogBase</TT
+>. Most of the initialization of <TT
+CLASS="literal"
+>KDialogBase</TT
+> class takes place in the constructor of that class. The class definition is normally placed in a separate header file, but for simplicity it is shown here together with the regular code.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch08fig01"
+></A
+><P
+><B
+>Figure 8.1. This dialog is used to display the number of bytes currently selected in KHexEdit's editor window. The value is printed in decimal and hexadecimal.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/08fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list01"
+></A
+><P
+><B
+>Example 8.1. Simplified Listing of the <TT
+CLASS="literal"
+>SelectDialog</TT
+> Dialog Class</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: class SelectDialog : public KDialogBase
+   3&nbsp;2: {
+   4&nbsp;3:   Q_OBJECT
+   5&nbsp;4:
+   6&nbsp;5:   public:
+   7&nbsp;6:     SelectDialog( QWidget *parent=0, const char *name=0,
+   8&nbsp;7:       bool modal=false );
+   9&nbsp;8:     ~SelectDialog( void );
+  10&nbsp;9:
+  11&nbsp;10:   private:
+  12&nbsp;11:     void setSelectionSize( uint selectionSize );
+  13&nbsp;12:
+  14&nbsp;13:   private:
+  15&nbsp;14:     QLineEdit *mSelectSizeEdit;
+  16&nbsp;15:     uint mSelectionSize;
+  17&nbsp;16: };
+  18&nbsp;17:
+  19&nbsp;18: SelectDialog::SelectDialog( QWidget *parent, const char *name,
+  20&nbsp;19:                             bool modal )
+  21&nbsp;20:   :KDialogBase( parent, name, modal, i18n("Select Indicator"),
+  22&nbsp;21:                 Cancel, Cancel )
+  23&nbsp;22: {
+  24&nbsp;23:   QWidget *page = new QWidget(this);
+  25&nbsp;24:   CHECK_PTR( page );
+  26&nbsp;25:   setMainWidget( page );
+  27&nbsp;26:
+  28&nbsp;27:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+  29&nbsp;28:   CHECK_PTR( page );
+  30&nbsp;29:
+  31&nbsp;30:   QLabel *label = new QLabel( i18n("Selection size [bytes]:"), page );
+  32&nbsp;31:   CHECK_PTR( label );
+  33&nbsp;32:   topLayout-&gt;addWidget( label );
+  34&nbsp;33:
+  35&nbsp;34:   mSelectSizeEdit = new QLineEdit( page );
+  36&nbsp;35:   CHECK_PTR( mSelectSizeEdit );
+  37&nbsp;36:   mSelectSizeEdit-&gt;setMinimumWidth( fontMetrics().maxWidth()*17 );
+  38&nbsp;37:   mSelectSizeEdit-&gt;setFocusPolicy( QWidget::NoFocus );
+  39&nbsp;38:   topLayout-&gt;addWidget( mSelectSizeEdit );
+  40&nbsp;39:
+  41&nbsp;40:   topLayout-&gt;addStretch(10);
+  42&nbsp;41:
+  43&nbsp;42:   setSelectionSize(0);
+  44&nbsp;43: }
+  45&nbsp;44:
+  46&nbsp;45: SelectDialog::~SelectDialog()
+  47&nbsp;46: {
+  48&nbsp;47: }
+  49&nbsp;48:
+  50&nbsp;49: void
+  51&nbsp;50: SelectDialog::setSelectionSize( uint selectionSize )
+  52&nbsp;51: {
+  53&nbsp;52:   mSelectionSize = selectionSize;
+  54&nbsp;53:   QString msg;
+  55&nbsp;54:
+  56&nbsp;55:   msg.sprintf( "%08u, %04x:%04x", mSelectionSize, mSelectionSize&gt;&gt;16,
+  57&nbsp;56:                mSelectionSize&amp;0x0000FFFF );
+  58&nbsp;57:   mSelectSizeEdit-&gt;setText( msg );
+  59&nbsp;58: }
+  60&nbsp;59:
+  61&nbsp;60: // The dialog used as the main application window
+  62&nbsp;61:
+  63&nbsp;62: #include &lt;kcmdlineargs.h&gt;
+  64&nbsp;63: int main( int argc, char **argv )
+  65&nbsp;64: {
+  66&nbsp;65:   KCmdLineArgs::init(argc, argv, "khexedit", 0, 0);
+  67&nbsp;66:   KApplication app;
+  68&nbsp;67:   SelectDialog *dialog = new SelectDialog();
+  69&nbsp;68:   dialog-&gt;show();
+  70&nbsp;69:   int result = app.exec();
+  71&nbsp;70:   return( result );
+  72&nbsp;71: }
+  73&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <TT
+CLASS="literal"
+>KDialogBase</TT
+> widget is described in more detail in the section <A
+HREF="ch08lev1sec4.html#ch08lev2sec3"
+><SPAN
+CLASS="QUOTE"
+>"Building Blocks (Manager Widgets)"</SPAN
+></A
+> later in this chapter. Notice the signature of the constructor on line 18. These are the arguments you should at least provide when making a dialog. Note as well that in the class definition (line 6), the argument has been assigned default values. The values shown in the code are the most commonly used in KDE and Qt code and is in many respects assumed to be the standard implementation. The <TT
+CLASS="literal"
+>parent</TT
+> widget is the widget around which the dialog is centered. Normally, you use the top-level widget or your application as the parent of a dialog. The dialog will then be positioned in the center of your main application window. If the <TT
+CLASS="literal"
+>parent</TT
+> is 0 (null), the dialog is centered with respect to the desktop. The <TT
+CLASS="literal"
+>name</TT
+> is the name of the dialog widget. It should not be used for the dialog title string (often called the caption) because it is not of type <TT
+CLASS="literal"
+>QString</TT
+> (the Unicode string class). The <TT
+CLASS="literal"
+>name</TT
+> is used to identify the widget during development and is very handy if you need to dump a widget hierarchy. You can safely assign 0 to the <TT
+CLASS="literal"
+>name</TT
+> if you don't need it. The last argument, <TT
+CLASS="literal"
+>modal</TT
+>, determines the modality of the dialog. See the section <A
+HREF="ch08lev1sec3.html"
+><SPAN
+CLASS="QUOTE"
+>"Dialog Modality&#8212;Modal or Modeless Dialogs"</SPAN
+></A
+> later in this chapter for an extended description and a description of the implications of modal and modeless dialog behavior.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec1"
+TITLE="Getting Started with the Dialog Widgets"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch07lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

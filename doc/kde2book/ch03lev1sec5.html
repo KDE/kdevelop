@@ -1,0 +1,493 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The Utility Classes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="The Qt Toolkit"
+HREF="ch03.html"/><LINK
+REL="PREVIOUS"
+TITLE="Meta Object Compiler (moc)"
+HREF="ch03lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="Special Features (ImageIO, OpenGL, Mesa)"
+HREF="ch03lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch03lev1sec5"
+>3.5. The Utility Classes</A
+></H1
+><P
+>The utility classes store and process information for you. They are template classes.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec12"
+>3.5.1. Templates</A
+></H2
+><P
+>One of the newer features of C++ are templates. In a template class, the same code can handle any data type. That means you don't have to rewrite your code for all data types you might want to handle. <A
+HREF="ch03lev1sec5.html#ch03list09"
+>Listing 3.9</A
+> shows a sample template class called <TT
+CLASS="literal"
+>MyList</TT
+>. <TT
+CLASS="literal"
+>MyClass</TT
+> below handles both <TT
+CLASS="literal"
+>int</TT
+> and <TT
+CLASS="literal"
+>char</TT
+> values:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list09"
+></A
+><P
+><B
+>Example 3.9. stl.cpp: A Program That Shows How Template Classes Work</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;iostream.h&gt;
+   3&nbsp; 2: 
+   4&nbsp; 3: template &lt;class C&gt; class MyList
+   5&nbsp; 4: {
+   6&nbsp; 5:   C list[2];
+   7&nbsp; 6:   public:
+   8&nbsp; 7:     MyList(void) { }
+   9&nbsp; 8:     void insert(int index, C item){ list[index] = item; }
+  10&nbsp; 9:     C get(int index){ return list[index]; }
+  11&nbsp;10: };
+  12&nbsp;11: 
+  13&nbsp;12: int main()
+  14&nbsp;13: {
+  15&nbsp;14:   MyList&lt;int&gt; list1;
+  16&nbsp;15:   list1.insert(0, 43);
+  17&nbsp;16:   list1.insert(1, 14);
+  18&nbsp;17:   cout &lt;&lt; list1.get(0) &lt;&lt; list1.get(1) &lt;&lt; endl;
+  19&nbsp;18: 
+  20&nbsp;19:   MyList&lt;char&gt; list2;
+  21&nbsp;20:   list2.insert(0, 'a');
+  22&nbsp;21:   list2.insert(1, 'b');
+  23&nbsp;22:   cout &lt;&lt; list2.get(0) &lt;&lt; list2.get(1) &lt;&lt; endl;
+  24&nbsp;23: 
+  25&nbsp;24:   return 0;
+  26&nbsp;25: }
+  27&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The template class <TT
+CLASS="literal"
+>MyList</TT
+> can store values of any type.  The preceding example demonstrates that it can store both <TT
+CLASS="literal"
+>char</TT
+> and <TT
+CLASS="literal"
+>int</TT
+> values.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec12"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec12"
+TITLE="Templates"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec13"
+>3.5.2. Standard Template Library (STL)</A
+></H2
+><P
+>STL stands for Standard Template Library. STL is part of C++. It is a set of standard templates. These templates were created because they solve common problems such as storing values.</P
+><P
+>You can use STL in your KDE programs, although it's not recommended. Many template classes are available in Qt and KDE; you should use those instead of the STL classes if you can. The Qt and KDE classes are made especially for Qt and KDE programs.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec13"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec13"
+TITLE="Standard Template Library (STL)"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec14"
+>3.5.3. <TT
+CLASS="literal"
+>QList</TT
+>&#8212;A Qt Template Class</A
+></H2
+><P
+>This class is a Qt template class. It maintains lists. The items in the lists can be of any type.</P
+><P
+>The lists are so-called linked lists. This means that each list item stores a reference to the previous and the next list items.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec8"
+>3.5.3.1. Important Member Functions</A
+></H3
+><P
+>To append an item to the list, use the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void append(const type *<I
+CLASS="emphasis"
+>item</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>To get the first item in the list, use the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;type *first()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The first item becomes the current item.</P
+><P
+>To get the next item in the list, use</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;type *next()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The next item becomes the current item.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec8"
+TITLE="Important Member Functions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec9"
+>3.5.3.2. Sample Use of <TT
+CLASS="literal"
+>QList</TT
+></A
+></H3
+><P
+><A
+HREF="ch03lev1sec5.html#ch03list10"
+>Listing 3.10</A
+> shows how to use <TT
+CLASS="literal"
+>QList</TT
+>. I have created a simple class called <TT
+CLASS="literal"
+>MyClass</TT
+>. I use <TT
+CLASS="literal"
+>QList</TT
+> to keep a list of <TT
+CLASS="literal"
+>MyClass</TT
+> objects.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list10"
+></A
+><P
+><B
+>Example 3.10. qlist.cpp: QList Example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qlist.h&gt;
+   3&nbsp; 2: #include &lt;iostream.h&gt;
+   4&nbsp; 3: 
+   5&nbsp; 4: class MyClass{
+   6&nbsp; 5: public:
+   7&nbsp; 6:   MyClass() { t=0; }
+   8&nbsp; 7:   int get() { return t++; }
+   9&nbsp; 8: private:
+  10&nbsp; 9:   int t;
+  11&nbsp;10: };
+  12&nbsp;11: 
+  13&nbsp;12: 
+  14&nbsp;13: int main()
+  15&nbsp;14: {
+  16&nbsp;15:   QList&lt;MyClass&gt; list;
+  17&nbsp;16:   MyClass *temp;
+  18&nbsp;17: 
+  19&nbsp;18:   // Delete all list items, when the list is deleted.
+  20&nbsp;19:   list.setAutoDelete(TRUE);
+  21&nbsp;20: 
+  22&nbsp;21:   for (int i=0;i&lt;3;i++)
+  23&nbsp;23:     // Create a list item
+  24&nbsp;24:     temp = new MyClass;
+  25&nbsp;25: 
+  26&nbsp;26:     // Append the list item to the list
+  27&nbsp;27:     list.append(temp);
+  28&nbsp;28: }
+  29&nbsp;29: 
+  30&nbsp;30:   // Call the member function get() in every list item,
+  31&nbsp;31:   // and print the result on the screen.
+  32&nbsp;32:   for (temp = list.first(); temp != 0; temp=list.next())
+  33&nbsp;33:     cout &lt;&lt; temp.get() &lt;&lt; endl;
+  34&nbsp;34: 
+  35&nbsp;35:   return 0;
+  36&nbsp;36: }
+  37&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The list items in <TT
+CLASS="literal"
+>QList</TT
+> can be of any type. One possible use of <TT
+CLASS="literal"
+>QList</TT
+> is in a MDI program to keep a list of pointers to the windows.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec9"
+TITLE="Sample Use of QList"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec14"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec14"
+TITLE="QList&#8212;A Qt Template Class"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev1sec5"
+TITLE="The Utility Classes"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

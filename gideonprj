@@ -1,0 +1,33 @@
+<!DOCTYPE gideon ><gideon>
+ <general>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+ </general>
+ <kdevautoproject>
+  <ccompiler>GccOptions</ccompiler>
+  <cxxcompiler>GppOptions</cxxcompiler>
+  <f77compiler/>
+  <cflags>-g3</cflags>
+  <cxxflags>--no-exceptions</cxxflags>
+  <f77flags/>
+  <ccompilerbinary>gcc</ccompilerbinary>
+  <cxxcompilerbinary>g++</cxxcompilerbinary>
+  <f77compilerbinary/>
+  <compiler>
+   <ccompiler>GccOptions</ccompiler>
+   <cxxcompiler>GppOptions</cxxcompiler>
+   <f77compiler/>
+   <ccompilerbinary/>
+   <cxxcompilerbinary/>
+   <f77compilerbinary/>
+   <cflags/>
+   <cxxflags/>
+   <f77flags/>
+  </compiler>
+  <make>
+   <abortonerror>false</abortonerror>
+   <numberofjobs>1</numberofjobs>
+   <dontact>false</dontact>
+  </make>
+ </kdevautoproject>
+</gideon>

@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevGrepView" version="1">
+<MenuBar>
+ <Menu name="edit">
+  <Action name="edit_grep"/>
+ </Menu>
+ <Menu name="buffers">
+  <Action name="window_grep"/>
+ </Menu>
+</MenuBar>
+</kpartgui>
+

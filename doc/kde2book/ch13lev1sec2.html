@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>History</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="DCOP&#8212;Desktop Communication Protocol"
+HREF="ch13.html"/><LINK
+REL="PREVIOUS"
+TITLE="DCOP&#8212;Desktop Communication Protocol"
+HREF="ch13.html"/><LINK
+REL="NEXT"
+TITLE="Underlying Technologies"
+HREF="ch13lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch13lev1sec2"
+>13.2. History</A
+></H1
+><P
+>The UNIX programmer doesn't lack choices when there's need for interprocess communication. KDE made (and still makes) use of many of the possible technologies: pipes, sockets, X Atoms, temporary files, shared memory, CORBA, and RPC.</P
+><P
+>From a historic point of view, however, in the beginning the developers were less preoccupied by building communication means into the burgeoning code base. When information (data or commands) were to be passed around, UNIX pipes or even common temporary files were used.</P
+><P
+>With the KDE window manager&#8212;named kwm in its first iteration&#8212;becoming more mature, a more consistent need appeared for collaboration between applications. A mechanism based on X Atoms was thus introduced by kwm's author, Matthias Ettrich. This was used until the 1.1.2 version of KDE. The X Atoms are C language structures, defined and implemented in the X library. They are used by X Window as a convenient and rapid means of passing data between X clients (applications) and the X server, as well as between different X clients. Given their rather simple nature&#8212;that is, designed to answer specific needs that the X technology encounters&#8212;X Atoms have intrinsic limitations in terms of the size of data they can transfer as well as in the flexibility and complexity of the information passed through.</P
+><P
+>These limitations convinced the developers, even in early stages of the code, to search for better communication solutions. The CORBA journey and then DCOP came as a result of this search. Yet the X Atoms are still used in the second version of the KDE API, in conjunction with X ClientMessages, in the form of KIPC (see kdelibs/kdecore/kipc.h in the code base). This is a very simple and thus very efficient communication mechanism created by Geert Jansen. KIPC allows sending messages such as <SPAN
+CLASS="QUOTE"
+>"just changed"</SPAN
+> messages related to most common desktop settings that have to be sent to all the KDE-enabled applications. A good example is the <SPAN
+CLASS="QUOTE"
+>"color palette just changed"</SPAN
+> message that the Control Center sends to all KDE applications when the user chooses a new color scheme.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>For a rapid but complete understanding of KIPC, you can study the approximately 150 lines of effective code that constitute the inner details of this simple communications mechanism.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Since 1997, when work started on KOffice and other complex KDE applications, developers have started to create a fairly functional implementation of CORBA (see <A
+HREF="http://www.omg.org"
+TARGET="_top"
+>http://www.omg.org</A
+>). CORBA (Common Object Request Broker Architecture) is a complete, complex communication structure built to become an industry standard, capable of networked, cross-platform, reliable communication between any applications that subscribe to the standard.</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Functionality</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Completeness</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Availability</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Robust C++ bindings</P
+></LI
+></UL
+><P
+>Any combination of these is also why other implementations (such as the oft-proposed Orbit) were ruled out.</P
+><P
+>The satisfactory results generated by the more than year-long CORBA experience of the KOffice developers were used, in late 1998, to merge this technology in the central KDE libraries. Alas, CORBA brought other limitations&#8212;and with these last evolutions to completely embrace KDE, these limitations became obvious:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>CORBA was too complex for the requirements of the desktop paradigm.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The dynamic character of a desktop became hindered by the static nature of CORBA.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>It was difficult to convince developers of small applications that they had to read and understand thousand-page manuals before they could enable interprocess communication in their projects.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Compilation of the CORBA-enabled code base was very time-consuming and resource demanding.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>MICO had performance problems including high CPU usage and large memory consumption.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The stability of the resulting applications wasn't satisfactory.</P
+></LI
+></UL
+><P
+>A discussion started in the developer community that continued long after the final <SPAN
+CLASS="QUOTE"
+>"let's forget CORBA"</SPAN
+> decision. This discussion resulted in the conclusion that this communications technology came with too much hassle compared to the gained benefits. One more element has to be added to the picture of the KDE inter-application communication situation as depicted shortly before the creation of DCOP: all the described technologies were present and used in the KDE code base simultaneously. Also, developers often found limitations or large development difficulties that were forcing them to create workarounds to fit their needs. For example, MICO was making use of STL (the Standard Templates Library), which was not portable enough for KDE and also had important performance problems. In order to solve these problems, a large amount of effort was invested by Simon Hausmann, Torben Weis, Steffen Hansen, and many others to replace STL with QTL (the Qt Templates Library) in KDE's CORBA. At a given moment, the heterogeneity of the communication solutions and the growing pains of keeping all issues properly handled became obvious.</P
+><P
+>In this landscape, KDE developers Matthias Ettrich and Preston Brown engaged in a high-pitched development effort and created DCOP. This event coincided with the big KDE-TWO reunion, held in Erlangen, Germany, in October 1999. A new, better era thus began. An important step forward in the accomplishment of the protocol and its advanced functionalities was achieved during the third coding reunion of KDE developers, during the month of July 2000, in Trysil, Norway.</P
+><P
+>DCOP is released as free software. Based on largely available technology (ICE, the Inter-Client Exchange mechanism, available with X Window) and reasonably separate from the KDE technology, DCOP is intended as a generic interprocess communication technology. The authors keep faith that, given its qualities and the feeble resource usage, DCOP will soon become a widely spread commodity protocol.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev1sec2"
+TITLE="History"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

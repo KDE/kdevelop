@@ -1,0 +1,5 @@
+- implement all KTextEditor methods (on the way)
+- extend the KTextEditor interfaces to let it have stuff like VConfig?
+- obey the mark boolean arguments in all the insert* methods
+   -- or --
+  discuss if we should get rid of them :-)

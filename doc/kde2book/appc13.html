@@ -1,0 +1,512 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 8</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 7"
+HREF="appc11.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 9"
+HREF="appc15.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc11.html"
+>Prev</A
+> <A
+HREF="appc15.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC13"
+>C.8. <A
+HREF="ch08.html"
+>Chapter 8</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC14"
+>C.8.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.8.1.1. <A
+HREF="appc13.html#AEN28178"
+>Make a dialog box that can be used to compose and send an email message. The dialog box must contain vertically aligned <SPAN
+CLASS="QUOTE"
+>"From:"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"To:"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"Cc:"</SPAN
+>, and <SPAN
+CLASS="QUOTE"
+>"Subject:"</SPAN
+> labels each with a line edit widget to the right. The line edit widgets shall be able to display at least 20 characters regardless of the font size. Beneath the labels, add a multiline edit widget that uses the rest of the available space in the dialog box. The dialog box should have the following action buttons at the bottom: <SPAN
+CLASS="QUOTE"
+>"Address"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"Send"</SPAN
+>, and <SPAN
+CLASS="QUOTE"
+>"Cancel"</SPAN
+>. <A
+HREF="appc13.html#ap-clist26"
+>Listing C.26</A
+> demonstrates how to create the dialog box and <A
+HREF="appc13.html#ap-cfig01"
+>Figure C.1</A
+> shows this dialog box.</A
+></DT
+><DT
+>C.8.1.2. <A
+HREF="appc13.html#AEN28200"
+>Change the dialog box so that it no longer contains the <SPAN
+CLASS="QUOTE"
+>"Address"</SPAN
+> action button. Add a <SPAN
+CLASS="QUOTE"
+>"Help"</SPAN
+> button instead. Add pushbuttons labeled <SPAN
+CLASS="QUOTE"
+>"Choose&#8230;"</SPAN
+> to the right of the line edit widgets belonging to the <SPAN
+CLASS="QUOTE"
+>"To:"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"Cc:"</SPAN
+> fields. <A
+HREF="appc13.html#ap-clist27"
+>Listing C.27</A
+> shows how to create this dialog (only the constructor has changed from <A
+HREF="appc13.html#ap-clist26"
+>Listing C.26</A
+>), and <A
+HREF="appc13.html#ap-cfig02"
+>Figure C.2</A
+> depicts the outcome.</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28178"
+></A
+><B
+>C.8.1.1. </B
+>Make a dialog box that can be used to compose and send an email message. The dialog box must contain vertically aligned <SPAN
+CLASS="QUOTE"
+>"From:"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"To:"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"Cc:"</SPAN
+>, and <SPAN
+CLASS="QUOTE"
+>"Subject:"</SPAN
+> labels each with a line edit widget to the right. The line edit widgets shall be able to display at least 20 characters regardless of the font size. Beneath the labels, add a multiline edit widget that uses the rest of the available space in the dialog box. The dialog box should have the following action buttons at the bottom: <SPAN
+CLASS="QUOTE"
+>"Address"</SPAN
+>, <SPAN
+CLASS="QUOTE"
+>"Send"</SPAN
+>, and <SPAN
+CLASS="QUOTE"
+>"Cancel"</SPAN
+>. <A
+HREF="appc13.html#ap-clist26"
+>Listing C.26</A
+> demonstrates how to create the dialog box and <A
+HREF="appc13.html#ap-cfig01"
+>Figure C.1</A
+> shows this dialog box.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  1: //
+   3&nbsp;  2: // maildialog.h
+   4&nbsp;  3: //
+   5&nbsp;  4:
+   6&nbsp;  5: #ifndef _MAIL_DIALOG_H_
+   7&nbsp;  6: #define _MAIL_DIALOG_H_
+   8&nbsp;  7:
+   9&nbsp;  8: class QLineEdit;
+  10&nbsp;  9: class QMultiLineEdit;
+  11&nbsp; 10: #include &lt;kdialogbase.h&gt;
+  12&nbsp; 11:
+  13&nbsp; 12: class MailDialog : public KDialogBase
+  14&nbsp; 13: {
+  15&nbsp; 14:   Q_OBJECT
+  16&nbsp; 15:
+  17&nbsp; 16:   public:
+  18&nbsp; 17:     MailDialog(QWidget *parent=0,const char *name=0,bool modal=true);
+  19&nbsp; 18:
+  20&nbsp; 19:   protected slots:
+  21&nbsp; 20:     virtual void slotUser2();
+  22&nbsp; 21:     virtual void slotUser1();
+  23&nbsp; 22:
+  24&nbsp; 23:   private:
+  25&nbsp; 24:     QLineEdit *mFromLineEdit;
+  26&nbsp; 25:     QLineEdit *mToLineEdit;
+  27&nbsp; 26:     QLineEdit *mCcLineEdit;
+  28&nbsp; 27:     QLineEdit *mSubjectLineEdit;
+  29&nbsp; 28:     QMultiLineEdit *mBodyTextEdit;
+  30&nbsp; 29: };
+  31&nbsp; 30: #endif
+  32&nbsp; 31:
+  33&nbsp; 32: //
+  34&nbsp; 33: // maildialog.cpp
+  35&nbsp; 34: //
+  36&nbsp; 35:
+  37&nbsp; 36: #include &lt;qlabel.h&gt;
+  38&nbsp; 37: #include &lt;qlayout.h&gt;
+  39&nbsp; 38: #include &lt;qlineedit.h&gt;
+  40&nbsp; 39: #include &lt;qmultilineedit.h&gt;
+  41&nbsp; 40: #include &lt;klocale.h&gt;
+  42&nbsp; 41:
+  43&nbsp; 42: #include "maildialog.h"
+  44&nbsp; 43:
+  45&nbsp; 44: MailDialog::MailDialog( QWidget *parent, const char *name, bool modal )
+  46&nbsp; 45:   : KDialogBase( parent, name, modal, i18n("Compose Mail"),
+  47&nbsp; 46:                  User2|User1|Cancel, Ok, false, i18n("&amp;Send"),
+  48&nbsp; 47:  i18n("&amp;Address") )
+  49&nbsp; 48: {
+  50&nbsp; 49:   setPlainCaption("Compose Mail");
+  51&nbsp; 50:
+  52&nbsp; 51:   QWidget *page = new QWidget( this );
+  53&nbsp; 52:   setMainWidget(page);
+  54&nbsp; 53:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+  55&nbsp; 54:
+  56&nbsp; 55:   QGridLayout *glay = new QGridLayout(topLayout,4,2);
+  57&nbsp; 56:   QLabel *fromLabel = new QLabel( i18n("From:"), page );
+  58&nbsp; 57:   QLabel *toLabel = new QLabel( i18n("To:"), page );
+  59&nbsp; 58:   QLabel *ccLabel = new QLabel( i18n("Cc:"), page );
+  60&nbsp; 59:   QLabel *subjectLabel = new QLabel( i18n("Subject:"), page );
+  61&nbsp; 60:
+  62&nbsp; 61:   mFromLineEdit = new QLineEdit( page );
+  63&nbsp; 62:   mToLineEdit = new QLineEdit( page );
+  64&nbsp; 63:   mCcLineEdit = new QLineEdit( page );
+  65&nbsp; 64:   mSubjectLineEdit = new QLineEdit( page );
+  66&nbsp; 65:
+  67&nbsp; 66:   glay-&gt;addWidget( fromLabel, 0, 0, AlignRight );
+  68&nbsp; 67:   glay-&gt;addWidget( toLabel, 1, 0, AlignRight  );
+  69&nbsp; 68:   glay-&gt;addWidget( ccLabel, 2, 0, AlignRight  );
+  70&nbsp; 69:   glay-&gt;addWidget( subjectLabel, 3, 0, AlignRight  );
+  71&nbsp; 70:   glay-&gt;addWidget( mFromLineEdit, 0, 1 );
+  72&nbsp; 71:   glay-&gt;addWidget( mToLineEdit, 1, 1 );
+  73&nbsp; 72:   glay-&gt;addWidget( mCcLineEdit, 2, 1 );
+  74&nbsp; 73:   glay-&gt;addWidget( mSubjectLineEdit, 3, 1 );
+  75&nbsp; 74:   mFromLineEdit-&gt;setMinimumWidth(fontMetrics().maxWidth()*20);
+  76&nbsp; 75:
+  77&nbsp; 76:   mBodyTextEdit = new QMultiLineEdit( page );
+  78&nbsp; 77:   topLayout-&gt;addWidget( mBodyTextEdit, 10 );
+  79&nbsp; 78:   mBodyTextEdit-&gt;setMinimumHeight(fontMetrics().lineSpacing()*10);
+  80&nbsp; 79: }
+  81&nbsp; 80:
+  82&nbsp; 81: void
+  83&nbsp; 82: MailDialog::slotUser1() // Send
+  84&nbsp; 83: {
+  85&nbsp; 84:   // Send your mail here
+  86&nbsp; 85: }
+  87&nbsp; 86:
+  88&nbsp; 87: void
+  89&nbsp; 88: MailDialog::slotUser2() // Addresses
+  90&nbsp; 89: {
+  91&nbsp; 90:   // Open your address book here
+  92&nbsp; 91: }
+  93&nbsp; 92:
+  94&nbsp; 93:
+  95&nbsp; 94: //
+  96&nbsp; 95: // A main.cpp file used to test the dialog
+  97&nbsp; 96: //
+  98&nbsp; 97:
+  99&nbsp; 98: #include &lt;kcmdlineargs.h&gt;
+ 100&nbsp; 99: #include "maildialog.h"
+ 101&nbsp;100: int main( int argc, char **argv )
+ 102&nbsp;101: {
+ 103&nbsp;102:   KCmdLineArgs::init(argc, argv, "appname", 0, 0);
+ 104&nbsp;103:   KApplication app;
+ 105&nbsp;104:   MailDialog *dialog = new MailDialog;
+ 106&nbsp;105:   dialog-&gt;show();
+ 107&nbsp;106:   int result = app.exec();
+ 108&nbsp;107:   return result;
+ 109&nbsp;108: }
+ 110&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ap-cfig01"
+></A
+><P
+><B
+>Figure C.1. The mail dialog.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/cfig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28200"
+></A
+><B
+>C.8.1.2. </B
+>Change the dialog box so that it no longer contains the <SPAN
+CLASS="QUOTE"
+>"Address"</SPAN
+> action button. Add a <SPAN
+CLASS="QUOTE"
+>"Help"</SPAN
+> button instead. Add pushbuttons labeled <SPAN
+CLASS="QUOTE"
+>"Choose&#8230;"</SPAN
+> to the right of the line edit widgets belonging to the <SPAN
+CLASS="QUOTE"
+>"To:"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"Cc:"</SPAN
+> fields. <A
+HREF="appc13.html#ap-clist27"
+>Listing C.27</A
+> shows how to create this dialog (only the constructor has changed from <A
+HREF="appc13.html#ap-clist26"
+>Listing C.26</A
+>), and <A
+HREF="appc13.html#ap-cfig02"
+>Figure C.2</A
+> depicts the outcome.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: MailDialog::MailDialog( QWidget *parent, const char *name, bool modal )
+   3&nbsp; 2:   : KDialogBase( parent, name, modal, i18n("Compose Mail"),
+   4&nbsp; 3:                  Help|User1|Cancel, Ok, false, i18n("&amp;Send") )
+   5&nbsp; 4: {
+   6&nbsp; 5:   setPlainCaption("Compose Mail");
+   7&nbsp; 6:
+   8&nbsp; 7:   QWidget *page = new QWidget( this );
+   9&nbsp; 8:   setMainWidget(page);
+  10&nbsp; 9:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+  11&nbsp;10:
+  12&nbsp;11:   QGridLayout *glay = new QGridLayout(topLayout,4,2);
+  13&nbsp;12:   QLabel *fromLabel = new QLabel( i18n("From:"), page );
+  14&nbsp;13:   QLabel *toLabel = new QLabel( i18n("To:"), page );
+  15&nbsp;14:   QLabel *ccLabel = new QLabel( i18n("Cc:"), page );
+  16&nbsp;15:   QLabel *subjectLabel = new QLabel( i18n("Subject:"), page );
+  17&nbsp;16:
+  18&nbsp;17:   mFromLineEdit = new QLineEdit( page );
+  19&nbsp;18:   mToLineEdit = new QLineEdit( page );
+  20&nbsp;19:   mCcLineEdit = new QLineEdit( page );
+  21&nbsp;20:   mSubjectLineEdit = new QLineEdit( page );
+  22&nbsp;21:
+  23&nbsp;22:   QPushButton *toPushButton = new QPushButton( i18n("Choose&#8230;"), page );
+  24&nbsp;23:   toPushButton-&gt;setAutoDefault( false );
+  25&nbsp;24:   QPushButton *ccPushButton = new QPushButton( i18n("Choose&#8230;"), page );
+  26&nbsp;25:   ccPushButton-&gt;setAutoDefault( false );
+  27&nbsp;26:
+  28&nbsp;27:   glay-&gt;addWidget( fromLabel, 0, 0, AlignRight );
+  29&nbsp;28:   glay-&gt;addWidget( toLabel, 1, 0, AlignRight  );
+  30&nbsp;29:   glay-&gt;addWidget( ccLabel, 2, 0, AlignRight  );
+  31&nbsp;30:   glay-&gt;addWidget( subjectLabel, 3, 0, AlignRight  );
+  32&nbsp;31:   glay-&gt;addMultiCellWidget( mFromLineEdit, 0, 0, 1, 2 );
+  33&nbsp;32:   glay-&gt;addWidget( mToLineEdit, 1, 1 );
+  34&nbsp;33:   glay-&gt;addWidget( mCcLineEdit, 2, 1 );
+  35&nbsp;34:   glay-&gt;addMultiCellWidget( mSubjectLineEdit, 3, 3, 1, 2 );
+  36&nbsp;35:   mFromLineEdit-&gt;setMinimumWidth(fontMetrics().maxWidth()*20);
+  37&nbsp;36:   glay-&gt;addWidget( toPushButton, 1, 2 );
+  38&nbsp;37:   glay-&gt;addWidget( ccPushButton, 2, 2 );
+  39&nbsp;38:
+  40&nbsp;39:   mBodyTextEdit = new QMultiLineEdit( page );
+  41&nbsp;40:   topLayout-&gt;addWidget( mBodyTextEdit, 10 );
+  42&nbsp;41:   mBodyTextEdit-&gt;setMinimumHeight(fontMetrics().lineSpacing()*10);
+  43&nbsp;42: }
+  44&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ap-cfig02"
+></A
+><P
+><B
+>Figure C.2. The mail dialog with the modified layout.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/cfig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC14"/></TD
+></TR
+><ANNOTATION
+NAME="appC14"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC13"/></TD
+></TR
+><ANNOTATION
+NAME="appC13"
+TITLE="Chapter 8"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc11.html"
+>Prev</A
+> <A
+HREF="appc15.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//Netscape Comm. Corp.//DTD HTML//EN">
+<HTML>
+<HEAD>
+    <!-- SGI_COMMENT COSMOCREATE -->
+    <!-- SGI_COMMENT VERSION NUMBER="1.0" -->
+    <TITLE> STL Complexity Specifications </TITLE>
+</HEAD>
+<BODY>
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+
+<H1>
+STL Complexity Specifications</H1>
+<P>
+STL container, algorithm, and concept specifications include asymptotic 
+complexity specifications. For example, iterators are required to take 
+constant time, that is the time required by an iterator operation 
+should be no more than a fixed constant, independent of the size of the 
+container to which it refers. </P>
+<P>
+Clearly programs will still function if a program component ignores the 
+complexity specifications. Nonetheless, these specifications are an 
+important part of the interface between STL components and code that 
+uses them. If they are ignored, the performance of the resulting 
+program will often render it useless. </P>
+<P>
+As an example, consider the STL <TT><A
+HREF="Vector.html">vector</A></TT> container. Ignoring the complexity
+specification, it is possible to implement <TT>vector</TT> using the
+same underlying data structure as <TT><A
+HREF="List.html">list</A></TT>, <I>i.e.</I> as a doubly linked
+list. But for a <TT>vector</TT> of length 10,000, this would probably
+slow down an average computation of <TT>v[i]</TT> by something like a
+factor of 5,000. For a program that requires many <TT>vector</TT>
+accesses, such as a typical numerical computation, this is likely to
+change an execution time of minutes to days. </P>
+<P>
+This does not preclude the use of STL algorithms in conjunction with 
+containers or iterators that do not meet the standard complexity 
+specifications. This is occasionally quite useful, especially if the 
+code is either not performance critical, or other requirements on the 
+container make the performance specifications unrealizable. But this 
+has two potential problems. First, the algorithm may no longer be the 
+right one, or even a reasonable one, for the problem. A different 
+algorithm may be better tailored to actual relative costs of the 
+container operations. Second, the algorithm is, of course, unlikely to 
+satisfy its specified complexity constraint. </P>
+<P>
+The complexity specifications in STL are, of necessity, an 
+oversimplification. A full specification would describe exactly how the 
+running time of an operation varies with that of the operations it 
+invokes. The result would be rather unmanageable for the user, who 
+would have to be keep track of large amounts of irrelevent detail. It 
+would be overly constraining on the implementor, since overall 
+improvements on the existing algorithms may not satisfy such detailed 
+constraints. </P>
+<P>
+Concept specifications (<I>e.g.</I> <B><A
+HREF="ForwardIterator.html">Forward Iterator</A></B> or <B><A
+HREF="Container.html">Container</A></B>) specify complexity
+requirements that should be met by all instances of the concept. This
+is the minimum behavior required by operations (<I>e.g.</I> <TT><A
+HREF="sort.html">sort</A></TT>) parameterized with respect to the
+concept. Any specific instance (<I>e.g.</I> <TT><A
+HREF="Vector.html">vector</A></TT>) is likely to perform better in at
+least some cases. </P>
+<P>
+It is difficult to specify precisely when an algorithm satisfies a 
+performance constraint. Does copying a <TT>vector</TT> on a 16-bit 
+embedded processor take constant time? After all, the size of the 
+<TT><A HREF="Vector.html">vector</A></TT> is 
+limited to some value less than 65,536. Thus the number of memory 
+operations involved in the copy operation is certainly bounded by a 
+constant. It is even conceivable that the worst case <TT>vector</TT>
+copy time on this processor may be less than the worst-case time for a 
+single memory access on a machine with paged virtual memory. 
+Nonetheless, it would be intuitively wrong to describe a <TT>vector</TT>
+copy or a <TT>list</TT> traversal as being a constant time operation. 
+Even on this machine, a <TT>vector</TT> implemented as a list is 
+unlikely to yield satisfactory performance. (Of course, so would an 
+implementation that looped for a second for every <TT>vector</TT>
+ access, although that would clearly run in constant time. The point 
+here is to communicate the proper intent between implementor and user, 
+not to guard against malicious or silly implementations.) </P>
+<P>
+Fundamentally, it is difficult to define the notion of asymptotic 
+algorithm complexity precisely for real computer hardware instead of an 
+abstract machine model. Thus we settle for the following guidelines: </P>
+<OL>
+    <LI>
+    For an algorithm <I>A</I> to have running time O(<I>f(n)</I>), 
+    there must be a corresponding algorithm <I>A'</I> that is correct 
+    on machines with arbitrarily long pointer and <TT>size_t</TT>
+     types, such that <I>A</I> and <I>A'</I> perform essentially the 
+    same sequence of operations on the actual hardware. (In simple cases <I>A</I>
+     and <I>A'</I> will be the same. In other cases <I>A</I> may have 
+    been simplified with the knowledge that adresses are bounded.) For 
+    inputs of sufficiently large size <I>n</I>, <I>A'</I> must take at 
+    most time <I>Cf(n)</I>, where <I>C</I> is a constant, independent 
+    of both <I>n</I> and the address size. (Pointer, <TT>size_t</TT>, 
+    and <TT>ptrdiff_t</TT> operations are presumed to take constant 
+    time independent of their size.) 
+    <LI>
+    All container or iterator complexity specifications refer to amortized 
+    complexity. An individual operation may take longer than specified. But 
+    any sufficiently long sequence of operations on the same container or 
+    iterator will take at most as long as the corresponding sum of the 
+    specified operation costs. 
+    <LI>
+    Algorithms specify either worst-case or average case performance, and 
+    identify which. Unless otherwise stated, averages assume that container 
+    elements are chosen from a finite type with more possible values than 
+    the size of the container, and that container elements are 
+    independently uniformly distributed. 
+    <LI>
+    A complexity specification for an operation <I>f</I> assumes that 
+    operations invoked by <I>f</I> require at most the specified 
+    runtime. But algorithms generally remain appropriate if the invoked 
+    operations are no more than a logarithmic factor slower than specified 
+    in the expected case. 
+    <LI>
+    If operations are more expensive than assumed by a function <I>F</I>
+     in the current STL, then <I>F</I> will slow down at most in 
+    proportion to the added cost. Any future operations that fail to 
+    satisfy this property will make that explicit. 
+    <P>
+    To make this precise, assume <I>F</I> is specified to use time <I>f(m)</I>
+     for input of size <I>m</I>. <I>F</I> uses operations <I>G</I><SUB><I>k</I></sub>, 
+    with specified running times <I>g</I><SUB><I>k</I></sub><I>(n)</I>
+     on input size <I>n</I>. If <I>F</I> is used in a context in which 
+    each <I>G</I><SUB><I>k</I></sub> is slower than expected by at most 
+    a factor <I>h(n)</I>, then <I>F</I> slows down by at most a factor <I>h(m)</I>. 
+    This holds because none of the current algorithms ever apply the 
+    operations <I>G</I><SUB><I>k</I></sub> to inputs significantly 
+    larger than <I>m</I>. </P>
+</OL>
+
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 

@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The Classbrowser and Your Project</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="The KDevelop IDE: The Integrated Development Environment for KDE"
+HREF="ch18.html"/><LINK
+REL="PREVIOUS"
+TITLE="Getting Started with the KDE 2.0 API"
+HREF="ch18lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="The File Viewers&#8212;The Windows to Your Project Files"
+HREF="ch18lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch18lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch18lev1sec4"
+>18.4. The Classbrowser and Your Project</A
+></H1
+><P
+>Now have a closer look at the actual work of a developer and what will help you most while implementing your classes and functions: the Classbrowser and the Classtools.</P
+><P
+>While implementing KDevelop, we have thought over how to make information about the user's project as transparent as possible with a reasonably fast viewer. Users who know other IDEs are already used to the concept of a Classbrowser, but I know of at least some IDEs where this feature either doesn't work correctly or it slows down the machine so much that you need to have some resources in the back to develop at a reasonable speed. KDevelop, on the other hand, contains a Classparser that scans all files while loading a project&#8212;without affecting performance. The Classtree then displays the results of this scan and automatically updates itself either on saving by the autosave functionality or when running or compiling your application. A manual refresh can be done as well to rescan all sources. The quality and stability of the Classparser has proven so well that it is already used in various other GPL projects, such as KUML (a development tool using the Unified Modeling Language) for similar purposes.</P
+><P
+>The Classparser takes all source files, reads them, and looks up all classes, their methods and members according to their access scope (public, private, or protected, including signals or slots), their inheritance, namespaces, and global functions and attributes. Then it builds a database that stores this information and creates a Tree View that contains these classes, which can be unfolded to display their members. As a result, you can use the Classbrowser to rapidly browse your sources, keeping an overview of which names you have already used, and you can navigate down into your project. Just selecting a class opens the right header file and sets the cursor at the class declaration. Over members or C functions, it opens the right implementation file&#8212;it doesn't matter how many you like to use to implement a class&#8212;and sets the cursor at the head of the implementation. (See <A
+HREF="ch18lev1sec4.html#ch18fig07"
+>Figure 18.7</A
+>.)</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig07"
+></A
+><P
+><B
+>Figure 18.7. The KDevelop Classbrowser displaying the KDevelop source code, graphically structured with an opened class allowing direct access to methods and attributes.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig07.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>This results in a new habit of treating source files from the programmer's view. Formerly, the programmer had to take care to remember where things were declared and implemented to find them again when they were needed. When working on large projects, this is a major undertaking that often results in a time-consuming search for interfaces and their accompanying implementation. The way KDevelop treats your sources makes you totally independent of where you put something. You have access to it at any time via the Classbrowser.</P
+><P
+>The Classbrowser displays a project's objects as items collected in the following folder tree:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Classes</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Globals</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Namespaces</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Structures</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Functions</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Variables</P
+></LI
+></UL
+><P
+>Easy to understand, isn't it? Now, besides the basic functionality of simple mouse clicks over these folders and their contents, the Classviewer offers even more by pop-up menus over the items it displays.</P
+><P
+>Over the Classes folder, the menu offers</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>New File&#8212;Opens the New File dialog to create a new source file. The same can be done via the menu with File, New.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>New Class&#8212;Opens the New Class dialog to create a new class together with its sources, including constructor and destructor implementation. The dialog can also be invoked by selecting Project, New Class from the menubar.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Add Folder&#8212;Adds a folder to the Classtree and creates a <SPAN
+CLASS="QUOTE"
+>"real"</SPAN
+> folder in the project directory when the first class or file is added to that subfolder with New File or New Class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Options&#8212;Opens the Project Options dialog displaying the project options where you can set compiler flags and warnings, linker flags to set the libraries to link the project against, and <TT
+CLASS="literal"
+>make</TT
+> options to tell <TT
+CLASS="literal"
+>make</TT
+> certain settings, such as how many compilers to start simultaneously.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Graphical Classview&#8212;Shows the Classtree in a graphical Tree View, including the inheritance of the base classes.</P
+></LI
+></UL
+><P
+>Over a class, the pop-up menu allows the following options:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Go to Declaration&#8212;Opens the file containing the class declaration and sets the cursor on the declaration's first line.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Add Member Function&#8212;Opens the Add Member Function dialog to add a method to the selected class (see <A
+HREF="ch18lev1sec4.html#ch18fig08"
+>Figure 18.8</A
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Add Member Variable&#8212;Opens the Add Member Variable dialog to add a member variable to the selected class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Parent Classes&#8212;Opens the Classtools dialog with the current class and displays a tree showing all classes the selected class inherits.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Child Classes&#8212;Opens the Classtools dialog with the current class and displays all classes that inherit from the selected class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Classtool&#8212;Opens the Classtools dialog with the selected class.</P
+></LI
+></UL
+><P
+>Over a selected function in the Globals folder, the pop-up menu offers going to the declaration and definition, as well.</P
+><P
+>You see how easily you can handle your project in a more object-oriented way than what usual development has meant under UNIX when you're supported by the Classbrowser. In my experience, the Classbrowser usually significantly reduces the time of development because you do not have to look up and remember everything yourself, so it is a feature every developer will like from the start of using KDevelop.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig08"
+></A
+><P
+><B
+>Figure 18.8. The Add New Method dialog lets you easily add a method to a class, including its documentation, declaration, and an implementation head, with support for signals and slots used by Qt/KDE.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig08.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev1sec4"
+TITLE="The Classbrowser and Your Project"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch18lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Accessing the Address Book</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Complex-Function KDE Widgets"
+HREF="ch10.html"/><LINK
+REL="PREVIOUS"
+TITLE="Checking Spelling"
+HREF="ch10lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch10lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch10lev1sec4"
+>10.4. Accessing the Address Book</A
+></H1
+><P
+>The KDE user is provided with an address book that may be accessed by all KDE applications. This means that, ideally, the user will need to type in (or otherwise collect) contact information only once for someone they know, and then use it to send an email, dial the telephone, send a fax, and so on, depending on what applications become available.  You can access the addressbook with the program ABBrowser, part of KDE, or KMail, the KDE mail client.</P
+><P
+>The address book provides several pieces of information about each entry&#8212;with each entry corresponding to one contact&#8212;in a class of type <TT
+CLASS="literal"
+>AddressBook::Entry</TT
+> defined in addressbook.h Most members of <TT
+CLASS="literal"
+>Entry</TT
+> are public variables. For example, the contact's email addresses are stored in a <TT
+CLASS="literal"
+>QStringList</TT
+> called <TT
+CLASS="literal"
+>Entry::emails</TT
+>. See addressbook.h for a full list of fields.</P
+><P
+>In the next section, you learn how to select a contact and read its <TT
+CLASS="literal"
+>AddressBook::Entry</TT
+> fields.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch10lev2sec7"
+>10.4.1. Selecting a Contact</A
+></H2
+><P
+>In the most likely scenario, you will want to access information on a contact that has been chosen by the user of your application. The KDE address book library, libkab, provides a dialog box for this purpose called <TT
+CLASS="literal"
+>KabAPI</TT
+>. The following code Listings 10.10&#8211;10.12 constructs a class called <TT
+CLASS="literal"
+>KabDemo</TT
+>, executes the dialog and displays the name and first email address of the contact chosen.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list10"
+></A
+><P
+><B
+>Example 10.10. kabdemo.h: Class Declaration for KabDemo, a Demonstration of the KDE Address Book</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KABDEMO_H__
+   3&nbsp; 2: #define __KABDEMO_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;qlabel.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class KabDemo : public QLabel
+   8&nbsp; 7: {
+   9&nbsp; 8:  public:
+  10&nbsp; 9:   KabDemo (QWidget *parent, const char *name=0);
+  11&nbsp;10: };
+  12&nbsp;11:
+  13&nbsp;12: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list11"
+></A
+><P
+><B
+>Example 10.11. kabdemo.cpp: Class Definition for KabDemo</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;stdio.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include &lt;qlabel.h&gt;
+   5&nbsp; 4:
+   6&nbsp; 5: #include &lt;kabapi.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: #include "kabdemo.h"
+   9&nbsp; 8:
+  10&nbsp; 9:
+  11&nbsp;10: KabDemo::KabDemo (QWidget *parent, const char *name=0) :
+  12&nbsp;11:   QLabel ("Text", parent, name)
+  13&nbsp;12: {
+  14&nbsp;13:
+  15&nbsp;14:   KabAPI kabapi (this);
+  16&nbsp;15:   if (kabapi.init()!=AddressBook::NoError)
+  17&nbsp;16:     {
+  18&nbsp;17:       printf ("Error\n");
+  19&nbsp;18:       exit (0);
+  20&nbsp;19:     }
+  21&nbsp;20:
+  22&nbsp;21:   AddressBook::Entry entry;
+  23&nbsp;22:   KabKey key;
+  24&nbsp;23:   if (kabapi.exec())
+  25&nbsp;24:     {
+  26&nbsp;25:       switch (kabapi.getEntry(entry, key))
+  27&nbsp;26:     {
+  28&nbsp;27:     case AddressBook::NoEntry:
+  29&nbsp;28:       printf ("Nothing selected.\n");
+  30&nbsp;29:       break;
+  31&nbsp;30:     case AddressBook::NoError:
+  32&nbsp;31:       {
+  33&nbsp;32:         QString name;
+  34&nbsp;33:         kabapi.addressbook()-&gt;literalName(entry, name);
+  35&nbsp;34:         setText ("Name: "+name +"\nEmail: "+entry.emails[0]);
+  36&nbsp;35:       }
+  37&nbsp;36:       break;
+  38&nbsp;37:     default:
+  39&nbsp;38:       printf ("Internal error.\n");
+  40&nbsp;39:     }
+  41&nbsp;40:     }
+  42&nbsp;41: }
+  43&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The two most important lines in <A
+HREF="ch10lev1sec4.html#ch10list11"
+>Listing 10.11</A
+> are 15 and 23. Line 15 calls <TT
+CLASS="literal"
+>kabapi.init()</TT
+>, which opens and loads the address book, and thus needs to be called before <TT
+CLASS="literal"
+>kabapi</TT
+> can be used. Next is line 23, which calls (<TT
+CLASS="literal"
+>kabapi.exec())</TT
+>. This executes the KabAPI dialog. When it completes, <TT
+CLASS="literal"
+>kabapi</TT
+> will hold the user's selection.</P
+><P
+>Lines 25&#8211;39 show how to process the user's selection (of course, you'd want to process the various <TT
+CLASS="literal"
+>cases</TT
+> more elegantly in your application). The method <TT
+CLASS="literal"
+>kabapi.getEnty(entry, key)</TT
+> fills in <TT
+CLASS="literal"
+>entry</TT
+> and <TT
+CLASS="literal"
+>key</TT
+> with the instance <TT
+CLASS="literal"
+>AddressBook::Entry</TT
+> describing the user's selection and an associated <TT
+CLASS="literal"
+>KabKey</TT
+> (see addressbook.h for the declaration of <TT
+CLASS="literal"
+>KabKey</TT
+>). <A
+HREF="ch10lev1sec4.html#ch10fig06"
+>Figure 10.6</A
+> shows the KabAPI dialog and <A
+HREF="ch10lev1sec4.html#ch10fig07"
+>Figure 10.7</A
+> shows KabDemo displaying the results of the user's selection.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig06"
+></A
+><P
+><B
+>Figure 10.6. The KabAPI dialog box lets the user choose an entry from the address book.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig06.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig07"
+></A
+><P
+><B
+>Figure 10.7. <TT
+CLASS="literal"
+>KabDemo</TT
+> displays the results of the user's selection.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig07.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>You can use the <TT
+CLASS="literal"
+>main()</TT
+> function provided in <A
+HREF="ch10lev1sec4.html#ch10list12"
+>Listing 10.12</A
+> to complete KabDemo. You will need to link to libkab by passing the option <TT
+CLASS="literal"
+>-lkab</TT
+> to <TT
+CLASS="literal"
+>g++</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list12"
+></A
+><P
+><B
+>Example 10.12. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing KabDemo</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kabdemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kabdemo");
+  10&nbsp; 9:
+  11&nbsp;10:   KabDemo *kabdemo  = new KabDemo (0);
+  12&nbsp;11:
+  13&nbsp;12:   kabdemo-&gt;show();
+  14&nbsp;13:
+  15&nbsp;14:   return kapplication.exec();
+  16&nbsp;15: }
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev2sec7"
+TITLE="Selecting a Contact"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev1sec4"
+TITLE="Accessing the Address Book"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

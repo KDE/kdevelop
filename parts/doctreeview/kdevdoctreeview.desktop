@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Documentation tree
+Name=KDevDocTreeView
+Icon=mini-book1
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevdoctreeview

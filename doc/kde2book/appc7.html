@@ -1,0 +1,537 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 5</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 4"
+HREF="appc5.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 6"
+HREF="appc9.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc5.html"
+>Prev</A
+> <A
+HREF="appc9.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC7"
+>C.5. <A
+HREF="ch05.html"
+>Chapter 5</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC8"
+>C.5.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.5.1.1. <A
+HREF="appc7.html#AEN28044"
+>Use <TT
+CLASS="literal"
+>KStatusBar::insertWidget()</TT
+> to insert the KDE widget of your choice into the statusbar. Is the widget appropriate for the statusbar? What information does it convey to the user? (See Listings C.12&#8211;C.14.)</A
+></DT
+><DT
+>C.5.1.2. <A
+HREF="appc7.html#AEN28063"
+>Create a document-centric application that has <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> as its client area. Be sure to use <TT
+CLASS="literal"
+>KMenuBar</TT
+>, <TT
+CLASS="literal"
+>KToolBar</TT
+>, and <TT
+CLASS="literal"
+>KStatusBar</TT
+>. Include New and Quit on the File menu and <TT
+CLASS="literal"
+>New</TT
+> on the toolbar. Put the line number into the statusbar. (You will need to refer to the Qt documentation for <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> for this exercise.) See Listings C.15&#8211;C.17.</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28044"
+></A
+><B
+>C.5.1.1. </B
+>Use <TT
+CLASS="literal"
+>KStatusBar::insertWidget()</TT
+> to insert the KDE widget of your choice into the statusbar. Is the widget appropriate for the statusbar? What information does it convey to the user? (See Listings C.12&#8211;C.14.)</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KSTATWIDGET_H__
+   3&nbsp;#define __KSTATWIDGET_H__
+   4&nbsp;
+   5&nbsp;class KProgress;
+   6&nbsp;class QTimer;
+   7&nbsp;
+   8&nbsp;#include &lt;ktmainwindow.h&gt;
+   9&nbsp;
+  10&nbsp;/**
+  11&nbsp; * KStatWidget
+  12&nbsp; * Put a progress bar on the statusbar.
+  13&nbsp; **/
+  14&nbsp;class KStatWidget : public KTMainWindow
+  15&nbsp;{
+  16&nbsp; Q_OBJECT
+  17&nbsp;
+  18&nbsp; public:
+  19&nbsp;  KStatWidget (const char *name=0);
+  20&nbsp;
+  21&nbsp;  public slots:
+  22&nbsp;  /**
+  23&nbsp;   * Advance the progress bar.
+  24&nbsp;   **/
+  25&nbsp;   void slotTimeout ();
+  26&nbsp;
+  27&nbsp; private:
+  28&nbsp;  KProgress *kprogress;
+  29&nbsp;  QTimer *qtimer;
+  30&nbsp;};
+  31&nbsp;
+  32&nbsp;#endif
+  33&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist13"
+></A
+><P
+><B
+>Example C.13. kstatwidget.cpp: Class Definition for <TT
+CLASS="literal"
+>KStatWidget</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;qlabel.h&gt;
+   3&nbsp;#include &lt;qpainter.h&gt;
+   4&nbsp;#include &lt;qtimer.h&gt;
+   5&nbsp;
+   6&nbsp;#include &lt;kprogress.h&gt;
+   7&nbsp;
+   8&nbsp;#include "kstatwidget.moc"
+   9&nbsp;
+  10&nbsp;KStatWidget::KStatWidget (const char *name=0) :
+  11&nbsp;  KTMainWindow (name)
+  12&nbsp;{
+  13&nbsp;  kprogress = new KProgress (0, 100, 0,
+  14&nbsp;                            KProgress::Horizontal,
+  15&nbsp;                            statusBar());
+  16&nbsp;
+  17&nbsp;  statusBar()-&gt;insertItem ("Progress: ",1);
+  18&nbsp;
+  19&nbsp;  //This widget is stretched to fit the window.
+  20&nbsp;  statusBar()-&gt;insertWidget (kprogress, 1, 2);
+  21&nbsp;  QTimer *qtimer = new QTimer;
+  22&nbsp;  connect ( qtimer, SIGNAL (timeout()),
+  23&nbsp;            this, SLOT (slotTimeout()) );
+  24&nbsp;  qtimer-&gt;start (500);
+  25&nbsp;
+  26&nbsp;  QLabel *qlabel = new QLabel (this);
+  27&nbsp;  setView (qlabel);
+  28&nbsp;}
+  29&nbsp;
+  30&nbsp;void
+  31&nbsp;KStatWidget::slotTimeout()
+  32&nbsp;{
+  33&nbsp;  kprogress-&gt;advance (10);
+  34&nbsp;}
+  35&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist14"
+></A
+><P
+><B
+>Example C.14. main.cpp: <TT
+CLASS="literal"
+>main()</TT
+> Function, Which Can Be Used to Try <TT
+CLASS="literal"
+>KStatWidget</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;kapp.h&gt;
+   3&nbsp;
+   4&nbsp;#include "kstatwidget.h"
+   5&nbsp;
+   6&nbsp;int main (int argc, char *argv[])
+   7&nbsp;{
+   8&nbsp;  KApplication *kapplication = new KApplication (argc, argv, "kstatwidgettest");
+   9&nbsp;KStatWidget *kstatwidget = new KStatWidget (0);
+  10&nbsp;
+  11&nbsp;  kapplication-&gt;setMainWidget (kstatwidget);
+  12&nbsp;
+  13&nbsp;  kstatwidget-&gt;show();
+  14&nbsp;  kapplication-&gt;exec();
+  15&nbsp;}
+  16&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28063"
+></A
+><B
+>C.5.1.2. </B
+>Create a document-centric application that has <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> as its client area. Be sure to use <TT
+CLASS="literal"
+>KMenuBar</TT
+>, <TT
+CLASS="literal"
+>KToolBar</TT
+>, and <TT
+CLASS="literal"
+>KStatusBar</TT
+>. Include New and Quit on the File menu and <TT
+CLASS="literal"
+>New</TT
+> on the toolbar. Put the line number into the statusbar. (You will need to refer to the Qt documentation for <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> for this exercise.) See Listings C.15&#8211;C.17.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KEDITOR_H__
+   3&nbsp;#define __KEDITOR_H__
+   4&nbsp;
+   5&nbsp;#include &lt;ktmainwindow.h&gt;
+   6&nbsp;
+   7&nbsp;class QMultiLineEdit;
+   8&nbsp;
+   9&nbsp;class KEditor : public KTMainWindow
+  10&nbsp;{
+  11&nbsp; Q_OBJECT
+  12&nbsp; public:
+  13&nbsp;  KEditor (const char *name=0);
+  14&nbsp;
+  15&nbsp; protected slots:
+  16&nbsp;   /**
+  17&nbsp;    * Update the line number field in the statusbar.
+  18&nbsp;    **/
+  19&nbsp;   void slotUpdateStatusBar ();
+  20&nbsp;
+  21&nbsp; private:
+  22&nbsp;  QMultiLineEdit *qmle;
+  23&nbsp;};
+  24&nbsp;
+  25&nbsp;#endif
+  26&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist16"
+></A
+><P
+><B
+>Example C.16. keditor.cpp: Class Definition for <TT
+CLASS="literal"
+>KEditor</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;qmultilineedit.h&gt;
+   3&nbsp;
+   4&nbsp;#include &lt;kapp.h&gt;
+   5&nbsp;#include &lt;kiconloader.h&gt;
+   6&nbsp;#include &lt;kmenubar.h&gt;
+   7&nbsp;#include &lt;kstdaction.h&gt;
+   8&nbsp;#include &lt;kaction.h&gt;
+   9&nbsp;
+  10&nbsp;#include "keditor.moc"
+  11&nbsp;
+  12&nbsp;//Status Bar id
+  13&nbsp;const int SBLineNumber = 2;
+  14&nbsp;
+  15&nbsp;KEditor::KEditor (const char *name) : KTMainWindow (name)
+  16&nbsp;{
+  17&nbsp;  qmle = new QMultiLineEdit (this);
+  18&nbsp;
+  19&nbsp;  KStdAction::openNew (qmle, SLOT (clear()), actionCollection());
+  20&nbsp;  KStdAction::quit (kapp, SLOT (closeAllWindows()), actionCollection());
+  21&nbsp;
+  22&nbsp;  createGUI();
+  23&nbsp;
+  24&nbsp;  statusBar()-&gt;insertItem ("Line", 1);
+  25&nbsp;  statusBar()-&gt;insertItem ("0000", SBLineNumber);
+  26&nbsp;  slotUpdateStatusBar();
+  27&nbsp;
+  28&nbsp;  connect ( qmle, SIGNAL (textChanged()),
+  29&nbsp;            this, SLOT (slotUpdateStatusBar()) );
+  30&nbsp;
+  31&nbsp;
+  32&nbsp;  setView (qmle);
+  33&nbsp;}
+  34&nbsp;
+  35&nbsp;void
+  36&nbsp;KEditor::slotUpdateStatusBar ()
+  37&nbsp;{
+  38&nbsp;  QString linenumber;
+  39&nbsp;  int line, col;
+  40&nbsp;
+  41&nbsp;  qmle-&gt;getCursorPosition (&amp;line, &amp;col);
+  42&nbsp;  linenumber.sprintf ("%4d", line);
+  43&nbsp;
+  44&nbsp;  statusBar()-&gt;changeItem (linenumber, SBLineNumber);
+  45&nbsp;}
+  46&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist17"
+></A
+><P
+><B
+>Example C.17. main.cpp: <TT
+CLASS="literal"
+>main()</TT
+> Function, Which Can Be Used to Test <TT
+CLASS="literal"
+>KEditor</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;kapp.h&gt;
+   3&nbsp;
+   4&nbsp;#include "keditor.h"
+   5&nbsp;
+   6&nbsp;int
+   7&nbsp;main (int argc, char *argv[])
+   8&nbsp;{
+   9&nbsp;  KApplication kapplication  (argc, argv, "keditor");
+  10&nbsp;  KEditor *keditor = new KEditor (0);
+  11&nbsp;
+  12&nbsp;  kapplication.setMainWidget (keditor);
+  13&nbsp;
+  14&nbsp;  keditor-&gt;show();
+  15&nbsp;  return kapplication.exec();
+  16&nbsp;}
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC8"/></TD
+></TR
+><ANNOTATION
+NAME="appC8"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC7"/></TD
+></TR
+><ANNOTATION
+NAME="appC7"
+TITLE="Chapter 5"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc5.html"
+>Prev</A
+> <A
+HREF="appc9.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

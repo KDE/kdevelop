@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Dialog Style and KDialogBase</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="PREVIOUS"
+TITLE="KDE User-Interface Library (kdeui)"
+HREF="ch08lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="A Larger Example: The Option Dialog in KEdit"
+HREF="ch08lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec5"
+>8.5. Dialog Style and <TT
+CLASS="literal"
+>KDialogBase</TT
+></A
+></H1
+><P
+>Dialog appearance is an important topic when you are designing a dialog. The best design rule is simply to think first and to select the components that are best suited for the task. A quick sketch on a piece of paper to show how the dialog should look is helpful.</P
+><P
+>The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class has itself been designed to simplify dialog creation. It provides you with the framework that you will need every time you design a dialog. This includes standardized action buttons, an optional button separator above these buttons, methods that give you the margin and spacing you should use, and automatic dialog title creation that complies with the KDE style guide. If you use the class properly, <TT
+CLASS="literal"
+>KDialogBase</TT
+> makes sure that a certain style is enforced. This is important from an end-user perspective because the more familiar a dialog is, the easier it is to use it. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class simplifies the design process; the time you need to spend on coding and later maintaining it will be reduced. For example, as indicated in the previous code listings using <TT
+CLASS="literal"
+>KDialogBase</TT
+>, you define what kind of action buttons you want to display, but the <TT
+CLASS="literal"
+>KDialogBase</TT
+> dialog code decides where the buttons should be placed, what text and accelerators they should display, and the margins, the spacing, and the order. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class provides a number of predefined action buttons. A list of the available ones follows. The list order decides the order in which they are displayed.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Even though you should normally use the standard text and assign your special purpose actions to the <TT
+CLASS="literal"
+>UserN</TT
+> buttons, it is still possible to override the default text and accelerators by using the KDialogBase::setButtonText(&#8230;) method.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The action button order is defined by the current KDE style. When this chapter was written, no format style had been defined, but <TT
+CLASS="literal"
+>KDialogBase</TT
+> uses what has become a standard button order:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Help,Default,User3,User2,User1,Ok,Apply|Try,Cancel|Close
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <TT
+CLASS="literal"
+>|</TT
+> sign indicates that <TT
+CLASS="literal"
+>Apply</TT
+> and <TT
+CLASS="literal"
+>Try</TT
+> cannot be present at the same time, nor <TT
+CLASS="literal"
+>Cancel</TT
+> and <TT
+CLASS="literal"
+>Close</TT
+>. A stretchable space will be added to the right of the Default button. You must add your own text and accelerators to the user-definable buttons.</P
+><P
+><A
+HREF="ch08lev1sec5.html#ch08fig04"
+>Figure 8.4</A
+> illustrates the stretchable space and custom button texts as shown in a typical print dialog box. <A
+HREF="ch08lev1sec5.html#ch08list12"
+>Listing 8.12</A
+> shows the constructor signature that makes the dialog.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list12"
+></A
+><P
+><B
+>Example 8.12. Setting the Text of User-Definable Action Buttons in the Constructor</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: CPrinterDialog::CPrinterDialog( QWidget *parent, char *name, bool modal )
+   3&nbsp;2:   :KDialogBase( Tabbed, i18n("Print Document"),
+   4&nbsp;3:    Help|User2|User1|Cancel, User1, parent, name, modal, false,
+   5&nbsp;4:    i18n("&amp;Print"), i18n("Pre&amp;view") ),
+   6&nbsp;5: {
+   7&nbsp;6:   // The code has been removed in this example.
+   8&nbsp;7: }
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch08fig04"
+></A
+><P
+><B
+>Figure 8.4. Usage of user-definable action buttons and stretchable space between them. The dialog itself is based on the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class in Tabbed mode.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/08fig04.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The default button layout area is at the bottom of the dialog. The buttons are then, as you have seen, placed horizontally on a line in this area. However, it is possible to place the buttons vertically at the right edge area of the dialog as well. To accomplish this, tell <TT
+CLASS="literal"
+>KDialogBase</TT
+> to do so by using the function <TT
+CLASS="literal"
+>KDialogBase:: setButtonBoxOrientation(int orientation)</TT
+>in the constructor of your dialog. The <TT
+CLASS="literal"
+>orientation</TT
+> argument shall then be <TT
+CLASS="literal"
+>Vertical</TT
+>.</P
+><P
+>For each button, the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class provides a slot and a signal. The Apply button, when activated, executes the <TT
+CLASS="literal"
+>KDialogBase::slotApply()</TT
+>, which, in turn, emits the <TT
+CLASS="literal"
+>KDialogBase::applyClicked()</TT
+> signal. Every slot method is a virtual method; therefore, you can override it with your own slot method. This was done in <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+> where the original <TT
+CLASS="literal"
+>slotOk()</TT
+> was replaced. Note: The signal will not be emitted if you replace the default slot. Each button has a slot (for example, <TT
+CLASS="literal"
+>slotHelp()</TT
+>, <TT
+CLASS="literal"
+>slotUser2()</TT
+>) and a signal (for example, <TT
+CLASS="literal"
+>helpClicked()</TT
+>, <TT
+CLASS="literal"
+>user2Clicked()</TT
+>).</P
+><P
+>You can deduce from <A
+HREF="ch08lev1sec5.html#ch08list12"
+>Listing 8.12</A
+> and <A
+HREF="ch08lev1sec5.html#ch08fig04"
+>Figure 8.4</A
+> that the dialog title string is modified before it is displayed in the window manager (WM) field. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class code does this according to the KDE-style-guide recommendation. The style is dependent on a global setting, which the user can change, so generally, you should not assume anything about the format of the displayed text.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This can be overridden for those rare cases where you need a determinable title layout. Use <TT
+CLASS="literal"
+>KDialogBase::setPlainCaption()</TT
+> in this case.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Note that KDE does not depend on a specific window manager. There is actually no guarantee that the active window manager will show the title (although this is by far the most common behavior). Therefore, you should not depend on the title for the dialog box function. The title is not the place to print a help string.</P
+><P
+>Generally, you should not be dependent on the window manager at all. It is there for convenience. Never make a dialog box that cannot be closed or hidden without using a Close button normally provided by the window manager. Most window managers in Linux/UNIX are highly configurable, and your target user may have a window manager preference that you have not anticipated. For example, the standard window manager for the KDE 1.x versions could be configured to turn off all decorations. Some people will do that.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec5"
+TITLE="Dialog Style and KDialogBase"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

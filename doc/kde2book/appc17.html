@@ -1,0 +1,464 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 10</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 9"
+HREF="appc15.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 11"
+HREF="appc19.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc15.html"
+>Prev</A
+> <A
+HREF="appc19.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC17"
+>C.10. <A
+HREF="ch10.html"
+>Chapter 10</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC18"
+>C.10.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.10.1.1. <A
+HREF="appc17.html#AEN28255"
+>Examine the <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> reference documentation. Modify <TT
+CLASS="literal"
+>KSimpleBrowser</TT
+> to turn on Java applet and JavaScript support. Try it out. See <A
+HREF="appc17.html#ap-clist31"
+>Listings C.31</A
+> and <A
+HREF="appc17.html#ap-clist32"
+>C.32</A
+> for the answers.</A
+></DT
+><DT
+>C.10.1.2. <A
+HREF="appc17.html#AEN28272"
+>Load an image file into a <TT
+CLASS="literal"
+>QImage</TT
+> instance and perform the following image transformation on an 8-bit color image (try one of the images in $KDEDIR/share/wallpapers): Replace each color in the color table (accessed via <TT
+CLASS="literal"
+>QImage::color()</TT
+>), with</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28255"
+></A
+><B
+>C.10.1.1. </B
+>Examine the <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> reference documentation. Modify <TT
+CLASS="literal"
+>KSimpleBrowser</TT
+> to turn on Java applet and JavaScript support. Try it out. See <A
+HREF="appc17.html#ap-clist31"
+>Listings C.31</A
+> and <A
+HREF="appc17.html#ap-clist32"
+>C.32</A
+> for the answers.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KSIMPLEBROWSER_H__
+   3&nbsp;#define __KSIMPLEBROWSER_H__
+   4&nbsp;
+   5&nbsp;#include &lt;ktmainwindow.h&gt;
+   6&nbsp;
+   7&nbsp;class KHTMLPart;
+   8&nbsp;
+   9&nbsp;/**
+  10&nbsp; * KSimpleBrowser
+  11&nbsp; * A feature-limited Web browser.
+  12&nbsp; **/
+  13&nbsp;class KSimpleBrowser : public KTMainWindow
+  14&nbsp;{
+  15&nbsp; Q_OBJECT
+  16&nbsp; public:
+  17&nbsp;  KSimpleBrowser (const char *name=0);
+  18&nbsp;
+  19&nbsp; public slots:
+  20&nbsp;  void slotNewURL ();
+  21&nbsp;
+  22&nbsp; protected:
+  23&nbsp;  KHTMLPart *khtmlpart;
+  24&nbsp;};
+  25&nbsp;
+  26&nbsp;#endif
+  27&nbsp;</PRE
+></TD
+></TR
+></TABLE
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist32"
+></A
+><P
+><B
+>Example C.32. ksimplebrowser.cpp&#8212;Class Definition for <TT
+CLASS="literal"
+>KSimpleBrowser</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;khtmlview.h&gt;
+   3&nbsp;#include &lt;khtml_part.h&gt;
+   4&nbsp;
+   5&nbsp;#include "ksimplebrowser.moc"
+   6&nbsp;
+   7&nbsp;const int URLLined = 1;
+   8&nbsp;KSimpleBrowser::KSimpleBrowser (const char *name=0) :
+   9&nbsp;  KTMainWindow (name)
+  10&nbsp;{
+  11&nbsp;
+  12&nbsp;  toolBar()-&gt;insertLined ( "", URLLined,
+  13&nbsp;               SIGNAL (returnPressed ()),
+  14&nbsp;               this, SLOT (slotNewURL ()) );
+  15&nbsp;  toolBar()-&gt;setItemAutoSized (URLLined);
+  16&nbsp;
+  17&nbsp;  //Chapter 10, Exercise 1
+  18&nbsp;  khtmlpart-&gt;enableJava(true);
+  19&nbsp;  khtmlpart-&gt;enableJScript(true);
+  20&nbsp;
+  21&nbsp;  khtmlpart = new KHTMLPart (this);
+  22&nbsp;  khtmlpart-&gt;begin();
+  23&nbsp;  khtmlpart-&gt;write("&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;KSimpleBrowser&lt;/H1&gt;"
+  24&nbsp;             "&lt;P&gt;To load a web page, type its URL in the line "
+  25&nbsp;             "edit box and press enter.&lt;/P&gt;"
+  26&nbsp;             "&lt;/BODY&gt;&lt;/HTML&gt;");
+  27&nbsp;  khtmlpart-&gt;end();
+  28&nbsp;
+  29&nbsp;  setView (khtmlpart-&gt;view());
+  30&nbsp;}
+  31&nbsp;
+  32&nbsp;void
+  33&nbsp;KSimpleBrowser::slotNewURL  ()
+  34&nbsp;{
+  35&nbsp;  khtmlpart-&gt;openURL (toolBar()-&gt;getLinedText (URLLined));
+  36&nbsp;}
+  37&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28272"
+></A
+><B
+>C.10.1.2. </B
+>Load an image file into a <TT
+CLASS="literal"
+>QImage</TT
+> instance and perform the following image transformation on an 8-bit color image (try one of the images in $KDEDIR/share/wallpapers): Replace each color in the color table (accessed via <TT
+CLASS="literal"
+>QImage::color()</TT
+>), with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;   qRgb (qGray (color), qGray (color), qGray (color));
+   3&nbsp;Display the image.
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch10lev1sec6.html#ch10que02"
+>See <A
+HREF="appc17.html#ap-clist33"
+>Listings C.33</A
+> and <A
+HREF="appc17.html#ap-clist34"
+>C.34</A
+> for possible answers</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist33"
+></A
+><P
+><B
+>Example C.33. ktransform.h&#8212;Class Declaration for <TT
+CLASS="literal"
+>KTransform</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KTRANSFORM_H__
+   3&nbsp;#define __KTRANSFORM_H__
+   4&nbsp;
+   5&nbsp;#include &lt;qwidget.h&gt;
+   6&nbsp;class QImage;
+   7&nbsp;
+   8&nbsp;/**
+   9&nbsp;* KTransform
+  10&nbsp; * Transform a color image to grayscale.
+  11&nbsp; **/
+  12&nbsp;class KTransform : public QWidget
+  13&nbsp;{
+  14&nbsp; public:
+  15&nbsp;  KTransform  (const QString &amp;filename,
+  16&nbsp;           QWidget *parent, const char *name=0);
+  17&nbsp;
+  18&nbsp; protected:
+  19&nbsp;    void paintEvent (QPaintEvent *);
+  20&nbsp;
+  21&nbsp; private:
+  22&nbsp;  QImage *qimage;
+  23&nbsp;};
+  24&nbsp;
+  25&nbsp;#endif
+  26&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist34"
+></A
+><P
+><B
+>Example C.34. ktransform.cpp&#8212;Class Declaration for <TT
+CLASS="literal"
+>KTransform</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;qimage.h&gt;
+   3&nbsp;#include &lt;qpainter.h&gt;
+   4&nbsp;
+   5&nbsp;#include "ktransform.h"
+   6&nbsp;
+   7&nbsp;KTransform::KTransform (const QString &amp;filename,
+   8&nbsp;            QWidget *parent, const char *name=0) :
+   9&nbsp;  QWidget (parent, name)
+  10&nbsp;{
+  11&nbsp;  qimage = new QImage;
+  12&nbsp;  qimage-&gt;load (filename);
+  13&nbsp;
+  14&nbsp;  int i;
+  15&nbsp;  for (i=0; i&lt;qimage-&gt;numColors(); i++)
+  16&nbsp;    {
+  17&nbsp;      QRgb color = qimage-&gt;color (i);
+  18&nbsp;      QRgb gray = qRgb (qGray (color), qGray (color), qGray (color));
+  19&nbsp;      qimage-&gt;setColor (i, gray);
+  20&nbsp;    }
+  21&nbsp;
+  22&nbsp;}
+  23&nbsp;void
+  24&nbsp;KTransform::paintEvent (QPaintEvent *)
+  25&nbsp;{
+  26&nbsp;  QPainter qpainter (this);
+  27&nbsp;
+  28&nbsp;  qpainter.drawImage (0, 0, *qimage);
+  29&nbsp;}
+  30&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC18"/></TD
+></TR
+><ANNOTATION
+NAME="appC18"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC17"/></TD
+></TR
+><ANNOTATION
+NAME="appC17"
+TITLE="Chapter 10"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc15.html"
+>Prev</A
+> <A
+HREF="appc19.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

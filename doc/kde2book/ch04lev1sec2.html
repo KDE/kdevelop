@@ -1,0 +1,1125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Painting Widgets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Creating Custom KDE Widgets"
+HREF="ch04.html"/><LINK
+REL="PREVIOUS"
+TITLE="Creating Custom KDE Widgets"
+HREF="ch04.html"/><LINK
+REL="NEXT"
+TITLE="Using Child Widgets"
+HREF="ch04lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch04.html"
+>Prev</A
+> <A
+HREF="ch04lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch04lev1sec2"
+>4.2. Painting Widgets</A
+></H1
+><P
+>Although visible changes to the widget can happen at various times during the life of your application, you should paint only during a <TT
+CLASS="literal"
+>paintEvent()</TT
+>. The drawing you do in <TT
+CLASS="literal"
+>paintEvent()</TT
+> is done with the <TT
+CLASS="literal"
+>QPainter</TT
+> class. It offers pixel addressing, drawing primitives, text drawing and other, more advanced functions. Widget drawing needs to be done efficiently to provide a smooth, understandable GUI, and mechanisms are provided by Qt for doing so.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch04lev2sec6"
+>4.2.1. When Painting Occurs</A
+></H2
+><P
+>The <TT
+CLASS="literal"
+>paintEvent()</TT
+> method is called automatically when</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Your widget is shown for the first time.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>After a window has been moved to reveal some part (or all) of the widget.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The window in which the widget lies is restored after being minimized.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The window in which the widget lies is resized.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The user switches from another desktop to the desktop on which the widget's window lies.</P
+></LI
+></UL
+><P
+>You can generate paint events manually by calling <TT
+CLASS="literal"
+>QWidget::update()</TT
+>. <TT
+CLASS="literal"
+>QWidget::update()</TT
+> erases the widget before generating the paint event. You can pass arguments to <TT
+CLASS="literal"
+>update()</TT
+>, which can restrict painting only to areas (rectangles, in particular) that need it. The two equivalent forms of the method are <TT
+CLASS="literal"
+>QWidget::update (int x, int y, int width, int height)</TT
+> and <TT
+CLASS="literal"
+>QWidget::update (QRect rectangle)</TT
+>, where <TT
+CLASS="literal"
+>x</TT
+> and <TT
+CLASS="literal"
+>y</TT
+> give the upper-left corner of the rectangle, and <TT
+CLASS="literal"
+>width</TT
+> and <TT
+CLASS="literal"
+>height</TT
+> are obvious. Because <TT
+CLASS="literal"
+>update()</TT
+> places a paint event into the event queue, no painting occurs until the current method exits and control returns to the event handler. This is a good thing because other events may be waiting there to be processed, and events need to be processed in a timely manner for the GUI to operate smoothly.</P
+><P
+>You can also invoke painting of the widget by calling <TT
+CLASS="literal"
+>QWidget::repaint (int x, int y, int width, int height, bool erase)</TT
+> (or one of several convenience-method forms), where all the arguments mean the same as in the case of the <TT
+CLASS="literal"
+>update()</TT
+> method, and <TT
+CLASS="literal"
+>erase</TT
+> tells repaint whether to erase the rectangle before painting it. <TT
+CLASS="literal"
+>repaint()</TT
+> calls <TT
+CLASS="literal"
+>paintEvent()</TT
+> directly. It does not place a paint event into the event queue, so use this method with care. If you try to call <TT
+CLASS="literal"
+>repaint()</TT
+> repeatedly from a simple loop to create an animation, for example, the animation will be drawn, but the rest of your user interface will be unresponsive because the events corresponding to mouse button clicks, keyboard presses, and so on will be waiting in the queue. Even if you are not performing a task as potentially time-consuming as animation, it is generally better to use <TT
+CLASS="literal"
+>update()</TT
+> to help keep your GUI alive.</P
+><P
+>If you paint something on your widget outside the <TT
+CLASS="literal"
+>paintEvent()</TT
+>, you still need to include the logic and commands necessary to paint that same thing in <TT
+CLASS="literal"
+>paintEvent()</TT
+>. Otherwise, the painting you did would disappear the next time the widget is updated.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev2sec6"
+TITLE="When Painting Occurs"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch04lev2sec7"
+>4.2.2. Repainting Efficiently</A
+></H2
+><P
+>I mentioned earlier in this chapter that <TT
+CLASS="literal"
+>update()</TT
+> and <TT
+CLASS="literal"
+>repaint()</TT
+> may take arguments describing the rectangle that needs to be updated. The description of this rectangle is passed to <TT
+CLASS="literal"
+>paintEvent()</TT
+> through the <TT
+CLASS="literal"
+>QPaintEvent</TT
+> class, which is the argument to <TT
+CLASS="literal"
+>paintEvent()</TT
+>.</P
+><P
+>For the rectangle information to be useful, you must specifically take advantage of it in your <TT
+CLASS="literal"
+>paintEvent()</TT
+>. Unless the painting you do will always be simple and quick, you should take the time to repaint only the rectangle that is requested in the <TT
+CLASS="literal"
+>QPaintEvent</TT
+>. There are ways to improve upon this for more difficult repainting tasks, which will be covered in <A
+HREF="ch09.html"
+>Chapter 9</A
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev2sec7"
+TITLE="Repainting Efficiently"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch04lev2sec8"
+>4.2.3. Painting Your Widget with QPainter</A
+></H2
+><P
+><TT
+CLASS="literal"
+>QPainter</TT
+> is responsible for all the drawing you do with Qt. It is used to draw on widgets and offscreen buffers (pixmaps) and to generate Postscript output for printing. Specifically, <TT
+CLASS="literal"
+>QPainter</TT
+> draws on one of the objects derived from <TT
+CLASS="literal"
+>QPaintDevice</TT
+>: <TT
+CLASS="literal"
+>QWidget</TT
+>, <TT
+CLASS="literal"
+>QPixmap</TT
+>, <TT
+CLASS="literal"
+>QPrinter</TT
+>, and <TT
+CLASS="literal"
+>QPicture</TT
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev2sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev2sec8"
+TITLE="Painting Your Widget with QPainter"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch04lev2sec9"
+>4.2.4. Recording Drawing Commands with QPicture</A
+></H2
+><P
+><TT
+CLASS="literal"
+>QPicture</TT
+> is used for recording drawing commands. The commands can then be <SPAN
+CLASS="QUOTE"
+>"played back"</SPAN
+> onto another paint device (a widget, a pixmap, or a printer). To make printing easy, you could, in your reimplementation of <TT
+CLASS="literal"
+>paintEvent()</TT
+>, record all your drawing commands in a <TT
+CLASS="literal"
+>QPicture</TT
+>, and then play them back onto the widget. With the drawing commands still saved in <TT
+CLASS="literal"
+>QPicture</TT
+>, you could respond to a print command by replaying the <TT
+CLASS="literal"
+>QPicture</TT
+> onto a <TT
+CLASS="literal"
+>QPrinter</TT
+>. This is useful only in the simplest cases because</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Often, the printer output will not be the same as the screen output (consider a typical text editor, for example).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>For complex enough output, the extra time spent recording and replaying in <TT
+CLASS="literal"
+>paintEvent()</TT
+> will incur an unacceptable performance hit (which might be the case with an image-manipulation program).</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev2sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev2sec9"
+TITLE="Recording Drawing Commands with QPicture"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch04lev2sec10"
+>4.2.5. A Simple Widget</A
+></H2
+><P
+>Listings 4.2&#8211;4.4 give the code for a simple widget called <TT
+CLASS="literal"
+>KXOSquare</TT
+>. This widget draws an <TT
+CLASS="literal"
+>X</TT
+> or an <TT
+CLASS="literal"
+>O</TT
+> inside a square (see <A
+HREF="ch04lev1sec2.html#ch04fig01"
+>Figure 4.1</A
+>).</P
+><P
+>The first time this widget paints itself, it draws a black box around at its border (the box is drawn just inside the widget's borders, actually). When you click the widget with the left mouse button, it draws a blue <TT
+CLASS="literal"
+>X</TT
+> inside. When you click the widget with the right mouse button, it draws a red <TT
+CLASS="literal"
+>O</TT
+>.</P
+><P
+>Let's take a look at the class declaration. In <A
+HREF="ch04lev1sec2.html#ch04list02"
+>Listing 4.2</A
+> the widget is, as all widgets are, derived from the class <TT
+CLASS="literal"
+>QWidget</TT
+>. The state of the widget is described by one of three <TT
+CLASS="literal"
+>enum</TT
+> values: <TT
+CLASS="literal"
+>None</TT
+> (the initial state), <TT
+CLASS="literal"
+>X</TT
+>, or <TT
+CLASS="literal"
+>O</TT
+>. The widget paints itself to reflect its state in the reimplemented method <TT
+CLASS="literal"
+>paintEvent()</TT
+>. The state of the widget may be changed by calling the method <TT
+CLASS="literal"
+>newState()</TT
+>. This method has been declared as a slot so that the widget may respond to signals in a convenient way to change a widget's state. The widget emits the signal <TT
+CLASS="literal"
+>changeRequest()</TT
+> whenever the user clicks the square. It is up to the programmer using this class to use the signal appropriately. In this example, the function <TT
+CLASS="literal"
+>main()</TT
+> does the simplest thing and connects the signal to the <TT
+CLASS="literal"
+>newState()</TT
+> slot.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch04fig01"
+></A
+><P
+><B
+>Figure 4.1. KXOSquare draws a blue <TT
+CLASS="literal"
+>X</TT
+> or a red <TT
+CLASS="literal"
+>O</TT
+> in response to mouse clicks.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/04fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch04list02"
+></A
+><P
+><B
+>Example 4.2. kxosquare.cpp is the Class Declaration for <TT
+CLASS="literal"
+>KXOSquare</TT
+>, a Widget that Draws an <TT
+CLASS="literal"
+>X</TT
+> or an <TT
+CLASS="literal"
+>O</TT
+> in a Square</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: #ifndef __KXOSQUARE_H__
+   3&nbsp;2: #define __KXOSQUARE_H__
+   4&nbsp;3:
+   5&nbsp;4:
+   6&nbsp;5: #include &lt;qwidget.h&gt;
+   7&nbsp;6:
+   8&nbsp;7:
+   9&nbsp;8: /**
+  10&nbsp;9:  * KXOSquare
+  11&nbsp;10:  * Draws a square in one of three states: empty, with an X inside,
+  12&nbsp;11:  *  or with an O inside.
+  13&nbsp;12:  **/
+  14&nbsp;13: class KXOSquare : public QWidget
+  15&nbsp;14: {
+  16&nbsp;15:  Q_OBJECT
+  17&nbsp;16:
+  18&nbsp;17:  public:
+  19&nbsp;18:   enum State {None=0, X=1, O=2};
+  20&nbsp;19: 
+  21&nbsp;20:   /**
+  22&nbsp;21:    * Create the widget.
+  23&nbsp;22:    **/
+  24&nbsp;23:   KXOSquare (QWidget *parent, const char *name=0);
+  25&nbsp;24:
+  26&nbsp;25:   public slots:
+  27&nbsp;26:   /**
+  28&nbsp;27:    * Change the state of the widget to @p state.
+  29&nbsp;28:    **/
+  30&nbsp;29:     void newState (State state);
+  31&nbsp;30:
+  32&nbsp;31:  signals:
+  33&nbsp;32:   /**
+  34&nbsp;33:    * The user has requested that the state be changed to @p state
+  35&nbsp;34:    *  by clicking on the square.
+  36&nbsp;35:    **/
+  37&nbsp;36:     void changeRequest (State state);
+  38&nbsp;37:
+  39&nbsp;38:  protected:
+  40&nbsp;39:     /**
+  41&nbsp;40:      * Draw the widget.
+  42&nbsp;41:      **/
+  43&nbsp;42:     void paintEvent (QPaintEvent *);
+  44&nbsp;43:
+  45&nbsp;44:     /**
+  46&nbsp;45:      * Process mouse clicks.
+  47&nbsp;46:      **/
+  48&nbsp;47:     void mousePressEvent (QMouseEvent *);
+  49&nbsp;48:
+  50&nbsp;49:  private:
+  51&nbsp;50:   State thestate;
+  52&nbsp;51: };
+  53&nbsp;52:
+  54&nbsp;53: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>The executable is named <TT
+CLASS="literal"
+>kxosquaretest</TT
+> because this is a common way to indicate that the application exists only to test or demonstrate a widget and is not a full-fledged KDE application. I will use this form throughout the book.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+><A
+HREF="ch04lev1sec2.html#ch04list03"
+>Listing 4.3</A
+> shows that class definition for the <TT
+CLASS="literal"
+>KXOSquare</TT
+> widget.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch04list03"
+></A
+><P
+><B
+>Example 4.3. kxosquare.cpp: Class Definition for the <TT
+CLASS="literal"
+>KXOSquare</TT
+> Widget</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: #include &lt;qpainter.h&gt;
+   3&nbsp;2:
+   4&nbsp;3: #include "kxosquare.moc"
+   5&nbsp;4:
+   6&nbsp;5: KXOSquare::KXOSquare (QWidget *parent, const char *name=0) :
+   7&nbsp;6:   QWidget (parent, name)
+   8&nbsp;7: {
+   9&nbsp;8:   thestate = None;
+  10&nbsp;9: }
+  11&nbsp;10:
+  12&nbsp;11: void
+  13&nbsp;12: KXOSquare::paintEvent (QPaintEvent *)
+  14&nbsp;13: {
+  15&nbsp;14:   QPainter qpainter (this);
+  16&nbsp;15:
+  17&nbsp;16:   qpainter.drawRect (rect());
+  18&nbsp;17:
+  19&nbsp;18:   switch (thestate)
+  20&nbsp;19:     {
+  21&nbsp;20:     case X:
+  22&nbsp;21:       qpainter.setPen (QPen (Qt::blue, 3));
+  23&nbsp;22:       qpainter.drawLine (rect().x(), rect().y(),
+  24&nbsp;23:           rect().x()+rect().width(), rect().y()+rect().height());
+  25&nbsp;24:       qpainter.drawLine (rect().x(), rect().y()+rect().height(),
+  26&nbsp;25:           rect().x()+rect().width(), rect().y());
+  27&nbsp;26:       break;
+  28&nbsp;27:     case O:
+  29&nbsp;28:       qpainter.setPen (QPen (Qt::red, 3));
+  30&nbsp;29:       qpainter.drawEllipse (rect());
+  31&nbsp;30:       break;
+  32&nbsp;31:     }
+  33&nbsp;32: }
+  34&nbsp;33:
+  35&nbsp;34: void
+  36&nbsp;35: KXOSquare::mousePressEvent (QMouseEvent *mouseevent)
+  37&nbsp;36: {
+  38&nbsp;37:   switch (mouseevent-&gt;button())
+  39&nbsp;38:     {
+  40&nbsp;39:     case Qt::LeftButton:
+  41&nbsp;40:       emit changeRequest (X);
+  42&nbsp;41:       break;
+  43&nbsp;42:     case Qt::RightButton:
+  44&nbsp;43:       emit changeRequest (O);
+  45&nbsp;44:       break;
+  46&nbsp;46:
+  47&nbsp;47: }
+  48&nbsp;48:
+  49&nbsp;49: void
+  50&nbsp;50: KXOSquare::newState (State state)
+  51&nbsp;51: {
+  52&nbsp;52:   thestate = state;
+  53&nbsp;53:   update();
+  54&nbsp;54: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KXOSquare::paintEvent()</TT
+> (lines 11-32) shows a somewhat typical usage of <TT
+CLASS="literal"
+>QPainter</TT
+> in a <TT
+CLASS="literal"
+>paintEvent()</TT
+>. The <TT
+CLASS="literal"
+>QPainter</TT
+> object is created with <TT
+CLASS="literal"
+>this</TT
+> as its paint device (see line 14), meaning that it will draw on the <TT
+CLASS="literal"
+>KXOSquare</TT
+> widget. The argument, of type <TT
+CLASS="literal"
+>QPaintEvent *</TT
+>, is ignored.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Only because the items being drawn are so simple and can be rendered very quickly do you repaint the entire widget. To save time, you should paint only the rectangle specified in the <TT
+CLASS="literal"
+>QPaintEvent</TT
+> argument when the widget is complex.</P
+><P
+>You should do all of your painting inside <TT
+CLASS="literal"
+>paintEvent()</TT
+>. Since paint events are sometimes generated by the windowing system and sometimes by your application, you can be sure when <TT
+CLASS="literal"
+>paintEvent()</TT
+> will be called. If you make changes to the state of the widget in other methods and do your painting in <TT
+CLASS="literal"
+>paintEvent()</TT
+> based on the current state of the widget, then your program's logic will be simpler.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Line 22 draws the black bounding box using the <TT
+CLASS="literal"
+>QPainter</TT
+> method <TT
+CLASS="literal"
+>drawRect()</TT
+>. Other <TT
+CLASS="literal"
+>QPainter</TT
+> methods are also demonstrated:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>setPen (QPen</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>qpen)</TT
+></I
+></P
+><P
+>Sets the color used to draw lines and figure edges.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>drawLine (int</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>x1</TT
+></I
+>, <TT
+CLASS="literal"
+>int</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>y1</TT
+></I
+>, <TT
+CLASS="literal"
+>int</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>x2</TT
+></I
+>, <TT
+CLASS="literal"
+>int</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>y2</TT
+></I
+>) </P
+><P
+>Draws a line from the point <TT
+CLASS="literal"
+>(</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>x1</TT
+></I
+>, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>y1</TT
+></I
+><TT
+CLASS="literal"
+>)</TT
+> to the point <TT
+CLASS="literal"
+>(</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>x2</TT
+></I
+>, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>y2</TT
+></I
+><TT
+CLASS="literal"
+>)</TT
+>. </P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>drawEllipse (QRect</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>rect</TT
+></I
+><TT
+CLASS="literal"
+>)</TT
+> </P
+><P
+>Draws an ellipse that just fits inside the rectangle, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>rect</TT
+></I
+> (that is, the ellipse is tangent to all four sides of the rectangle). </P
+></LI
+></UL
+><P
+>The first <TT
+CLASS="literal"
+>QPen</TT
+>, defined by <TT
+CLASS="literal"
+>QPen (Qt::blue, 3)</TT
+> in line 21, is blue with a width of 3 pixels. The other <TT
+CLASS="literal"
+>QPen</TT
+>, defined in line 28, is red with a width of 3 pixels.</P
+><P
+>The next listing, <A
+HREF="ch04lev1sec2.html#ch04list04"
+>Listing 4.4</A
+>, presents a short <TT
+CLASS="literal"
+>main()</TT
+> function that creates and shows the widget. You can compile the whole program with the command</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>g++  kxosquare.cpp main.cpp -I$KDEDIR/include</I
+>
+   3&nbsp;
+   4&nbsp;       <I
+CLASS="emphasis"
+>I/usr/include/qt -L$KDEDIR/lib -lkdecore -lkdeui -o kxosquaretest</I
+>
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The option <TT
+CLASS="literal"
+>-o kxosuaretest</TT
+> tells <TT
+CLASS="literal"
+>g++</TT
+> to create an executable with name <TT
+CLASS="literal"
+>kxosquaretest</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch04list04"
+></A
+><P
+><B
+>Example 4.4. main.cpp Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function that Can Be Used to Test the Widget <TT
+CLASS="literal"
+>KXOSquare</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: #include &lt;kapp.h&gt;
+   3&nbsp;2:
+   4&nbsp;3: #include "kxosquare.h"
+   5&nbsp;4:
+   6&nbsp;5: int
+   7&nbsp;6: main (int argc, char *argv[])
+   8&nbsp;7: {
+   9&nbsp;8:   KApplication kapplication (argc, argv, "kxosquaretest");
+  10&nbsp;9:   KXOSquare *kxosquare = new KXOSquare (0);
+  11&nbsp;10:
+  12&nbsp;11:   kapplication.setMainWidget (kxosquare);
+  13&nbsp;12:   kxosquare-&gt;connect ( kxosquare, SIGNAL (changeRequest (State)),
+  14&nbsp;13:                SLOT (newState (State)) );
+  15&nbsp;14:
+  16&nbsp;15:   kxosquare-&gt;show();
+  17&nbsp;16:   return kapplication.exec();
+  18&nbsp;17: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The signal <TT
+CLASS="literal"
+>changeRequest()</TT
+> takes a variable of type <TT
+CLASS="literal"
+>KXOSquare *</TT
+> as its second argument because, as you will see next, this provides added flexibility. Notice, however, that in <TT
+CLASS="literal"
+>main()</TT
+>, line 11 of main.cpp, I call</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;kxosquare.connect ( kxosquare,
+   3&nbsp;                      SIGNAL (changeRequest (KXOSquare::State, KXOSquare *)),
+   4&nbsp;                      SLOT (newState (KXOSquare::State)) );</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The signal and slot don't have the same arguments. In this case that's just fine. It is acceptable for the slot to have fewer arguments than the signal as long as the arguments that are retained match. The following forms are not acceptable:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  connect ( pwidget1, SIGNAL (<I
+CLASS="emphasis"
+>mysignal</I
+> <I
+CLASS="emphasis"
+>(int, char)</I
+>),
+   3&nbsp;            pwidget2, SLOT (<I
+CLASS="emphasis"
+>myslot (char)</I
+>) );
+   4&nbsp;
+   5&nbsp;  connect ( pwidget1, SIGNAL (<I
+CLASS="emphasis"
+>mysignal (int, char)</I
+>),
+   6&nbsp;            pwidget2, SLOT (<I
+CLASS="emphasis"
+>myslot (int, char, char)</I
+>) );
+   7&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The following are acceptable:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  connect ( pwidget1, SIGNAL (<I
+CLASS="emphasis"
+>mysignal (int, char)</I
+>),
+   3&nbsp;            pwidget2, SLOT (<I
+CLASS="emphasis"
+>myslot (int, char)</I
+>) );
+   4&nbsp;
+   5&nbsp;  connect ( pwidget1, SIGNAL (<I
+CLASS="emphasis"
+>mysignal (int, char)</I
+>),
+   6&nbsp;            pwidget2, SLOT (<I
+CLASS="emphasis"
+>myslot (int)</I
+>) );</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev2sec10"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev2sec10"
+TITLE="A Simple Widget"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch04lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch04lev1sec2"
+TITLE="Painting Widgets"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch04.html"
+>Prev</A
+> <A
+HREF="ch04lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

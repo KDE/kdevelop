@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Embedding More Than One Part in the Same Window</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Creating and Using Components (KParts)"
+HREF="ch12.html"/><LINK
+REL="PREVIOUS"
+TITLE="Creating a KParts Application"
+HREF="ch12lev1sec7.html"/><LINK
+REL="NEXT"
+TITLE="Creating a KParts Plug-in"
+HREF="ch12lev1sec9.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch12lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch12lev1sec9.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch12lev1sec8"
+>12.8. Embedding More Than One Part in the Same Window</A
+></H1
+><P
+>The 
+			
+			
+			previous example showed how to embed a part as the single widget of a window. <TT
+CLASS="literal"
+>KParts</TT
+> also makes it possible to embed more than one part in the same window, and it handles the activation of a part when the user clicks it (or uses Tab to give it the focus). This is the task of the <TT
+CLASS="literal"
+>PartManager</TT
+>.</P
+><P
+>To display more than one part in a window, the solution is usually to use a splitter, or even nested splitters, such as in Konqueror. KOffice has another way of embedding several parts&#8212;by using frames for the child parts&#8212;but it still uses <TT
+CLASS="literal"
+>PartManager</TT
+>.
+			
+			
+		</P
+><P
+>Now modify the example to make it display, in addition to the PostScript document, the PostScript code for it. To display the text, the application uses the Notepad part in read-only mode. The two widgets will be hosted by a splitter.</P
+><P
+>Displaying raw PostScript is not very useful, but this example could, for instance, be turned into an application showing the LaTeX source and the PostScript result side by side.</P
+><P
+>&#13;			<TT
+CLASS="literal"
+>ghostviewtest.h</TT
+> needs to be modified slightly to add the following private members:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KParts::ReadOnlyPart *m_notepadpart;
+   3&nbsp;KParts::PartManager *m_manager;
+   4&nbsp;QSplitter *m_splitter;
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>&#13;			<TT
+CLASS="literal"
+>ghostviewtest.cpp</TT
+> needs to be more modified. To include the PartManager definition, use the following:
+			
+			
+			
+		</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;kparts/partmanager.h&gt;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the constructor, create the part manager and connect its main signal, <TT
+CLASS="literal"
+>activePartChanged</TT
+>, to your <TT
+CLASS="literal"
+>createGUI</TT
+> slot. This means you don't need to call <TT
+CLASS="literal"
+>createGUI</TT
+> directly; it is called every time the active part changes.</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;m_manager = new KParts::PartManager( this );
+   3&nbsp;// When the manager says the active part changes,
+   4&nbsp;// the builder updates (recreates) the GUI
+   5&nbsp;connect( m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
+   6&nbsp;         this, SLOT( createGUI( KParts::Part * ) ) );
+   7&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Then create the splitter and transform the <TT
+CLASS="literal"
+>setView</TT
+> statement into the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;m_splitter = new QSplitter( this );
+   3&nbsp;setView( m_splitter );
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>so that the main widget is now the splitter. Both parts need to be created with the splitter as a parent (instead of the window):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KLibFactory *factory = KLibLoader::self()-&gt;factory( "libkghostview" );
+   3&nbsp;if (factory)
+   4&nbsp;{
+   5&nbsp;  m_gvpart = (KParts::ReadOnlyPart *)factory-&gt;create( m_splitter,
+   6&nbsp;              "kgvpart", "KParts::ReadOnlyPart" );
+   7&nbsp;}
+   8&nbsp;else
+   9&nbsp;   kdFatal() &lt;&lt; "No libkghostview found !" &lt;&lt; endl;
+  10&nbsp;
+  11&nbsp;factory = KLibLoader::self()-&gt;factory( "libnotepad" );
+  12&nbsp;if (factory)
+  13&nbsp;  m_notepadpart = (KParts::ReadOnlyPart *)factory-&gt;create( m_splitter,
+  14&nbsp;                   "knotepadpart", "KParts::ReadOnlyPart" );
+  15&nbsp;else
+  16&nbsp;   kdFatal() &lt;&lt; "No libnotepad found !" &lt;&lt; endl;
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>After the parts are created, they should be added to the part manager. At the same time, you can specify which one should initially be active:
+			
+			
+			
+		</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;m_manager-&gt;addPart( m_gvpart, true ); // sets as the active part
+   3&nbsp;m_manager-&gt;addPart( m_notepadpart, false );
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Then the splitter can be set to a minimum size, as shown:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;m_splitter-&gt;setMinimumSize( 400, 300 );
+   3&nbsp;m_splitter-&gt;show();
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Finally, add the following line to <TT
+CLASS="literal"
+>openURL()</TT
+> to open the same URL in both parts:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;m_notepadpart-&gt;openURL( url );
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As you can see, the main idea is that the mainwindow creates a main widget (here, the splitter), creates all parts inside it, and registers the part to a part manager. Try clicking one part and then the other; each time the active part changes, the GUI is updated (both menus and toolbars) to show the GUI of the active part.</P
+><P
+>Note also the change in the window caption. This is handled by the <TT
+CLASS="literal"
+>Part</TT
+> class, which receives the <TT
+CLASS="literal"
+>GUIActivateEvent</TT
+> from the mainwindow when the part is activated or deactivated. To set a different caption for a part, you need to emit <TT
+CLASS="literal"
+>setWindowCaption</TT
+> both in <TT
+CLASS="literal"
+>openFile()</TT
+> and in <TT
+CLASS="literal"
+>guiActivateEvent()</TT
+>.
+			
+			
+			
+		</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch12lev1sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch12lev1sec8"
+TITLE="Embedding More Than One Part in the Same Window"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch12lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch12lev1sec9.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

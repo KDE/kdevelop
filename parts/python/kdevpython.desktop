@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Python scripting interface
+Name=KDevPython
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevpython

@@ -1,0 +1,351 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Underlying Technologies</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="DCOP&#8212;Desktop Communication Protocol"
+HREF="ch13.html"/><LINK
+REL="PREVIOUS"
+TITLE="History"
+HREF="ch13lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Architecture"
+HREF="ch13lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch13lev1sec3"
+>13.3. Underlying Technologies</A
+></H1
+><P
+>Before describing the programming interface and the usage details for the current implementation of DCOP, it might be of interest to get acquainted with the underlying technologies and ideas. This section is optional for a developer interested in rapidly gaining the necessary skills for KDE programming. However, even a brief look at issues related to the employed technologies will sometimes help with a better understanding of the DCOP technology itself. This section will be of great interest to the developers proceeding at creating bindings between KDE and other technologies or entities through the use of DCOP.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec1"
+>13.3.1. ICE&#8212;The Inter-Client Exchange Mechanism</A
+></H2
+><P
+>The KDE developers consider the principle of technology reuse as being of central importance. Whenever possible, existing specifications, standards, and algorithms are adopted and used. As a direct consequence of this way of thinking, the waste of effort in duplication work is diminished. Another consequence is the improved possibility for cooperation with other programming projects.</P
+><P
+>The authors of DCOP have chosen the ICE mechanism for the communication needs. The main reasons for this choice, as indicated by the main authors, are as follows:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>The ICE library comes as a standard part of X11R6, thus it is available on all platforms on which X11R6 (and KDE for that matter) exists.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>ICE is a well-established technology, used in the session management mechanism defined by X11R6.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The ICE library doesn't need a running X server to function, but benefits from other useful tools and technologies that the X Window System offers, such as providing authentication or reporting errors.</P
+></LI
+></UL
+><P
+>Detailed documentation concerning the ICE technology and the ICE library are available from public Internet resources. The <I
+CLASS="emphasis"
+>X Window System Programmer's Guide</I
+>, part of the large <I
+CLASS="emphasis"
+>X Consortium Standard</I
+>, contains a chapter (the eleventh) dedicated to ICE. This document is available at <A
+HREF="http://www.rzg.mpg.de/rzg/batch/NEC/sx4a_doc/g1ae04e/contents.html"
+TARGET="_top"
+>http://www.rzg.mpg.de/rzg/batch/NEC/sx4a_doc/g1ae04e/contents.html</A
+> or, in a hardcopy format, at <A
+HREF="ftp://ftp.x.org/pub/R6.4/xc/doc/hardcopy/ICE/"
+TARGET="_top"
+>ftp://ftp.x.org/pub/R6.4/xc/doc/hardcopy/ICE/</A
+>.</P
+><P
+>Learning more about ICE and its API is useful for developers who can't or don't want to use KDE's DCOP infrastructure, yet want to add to their application capabilities of communication with KDE applications that use DCOP. As an example, during the development of the notification system that KDE uses for application launchers, KDE developers used code based on pure ICE in order to connect to the DCOP server for broadcasting application startup notification.</P
+><P
+>A practical example of using ICE directly (other than in the DCOP engine itself) is Rik Hemsley's C wrapper API, contained in the KDE 2 libraries (kdelibs/dcop/dcopc.h and kdelibs/dcop/dcopc.c).</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec1"
+TITLE="ICE&#8212;The Inter-Client Exchange Mechanism"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec2"
+>13.3.2. Data Streaming</A
+></H2
+><P
+>Applications use DCOP to pass <I
+CLASS="emphasis"
+>data</I
+> between them. The nature and the structure of data are characterized by diversity. The DCOP transport mechanism has to ignore these characteristics of manipulated data. Thus, data has to be serialized. Serialization is the operation through which a collection of typed data items is transformed into an atypic, program-independent (and eventually even platform-independent) stream of information. Serialization has to respect a set of conversion rules that are then used accordingly in the de-serialization process.</P
+><P
+>For serialization/de-serialization, KDE uses <TT
+CLASS="literal"
+>QDataStream</TT
+> objects as defined by the Qt library. Reference documentation for QDataStream is available at <A
+HREF="http://doc.trolltech.com/qdatastream.html"
+TARGET="_top"
+>http://doc.trolltech.com/qdatastream.html</A
+>. The serialization format is described in <A
+HREF="http://doc.trolltech.com/datastreamformat.html"
+TARGET="_top"
+>http://doc.trolltech.com/datastreamformat.html</A
+>. <TT
+CLASS="literal"
+>QDataStream</TT
+> assures binary data encoding independent of operating system, hardware platform, and byte order. Writing to and reading from a generic device through <TT
+CLASS="literal"
+>QDataStream</TT
+> serialization is simple (see <A
+HREF="ch13lev1sec3.html#ch13list01"
+>Listings 13.1</A
+> and <A
+HREF="ch13lev1sec3.html#ch13list02"
+>13.2</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list01"
+></A
+><P
+><B
+>Example 13.1. Writing Through a <TT
+CLASS="literal"
+>QDataStream</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: #include &lt;qbitarray.h&gt;
+   3&nbsp;2: #include &lt;qdatastream.h&gt;
+   4&nbsp;3:
+   5&nbsp;4: QByteArray message;
+   6&nbsp;5: QDataStream stream(message, IO_WriteOnly);
+   7&nbsp;6: int data = 10;
+   8&nbsp;7: stream &lt;&lt; data; // put the data in the stream in usual way
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list02"
+></A
+><P
+><B
+>Example 13.2. Reading from a Raw <SPAN
+CLASS="QUOTE"
+>"Device"</SPAN
+> Using a <TT
+CLASS="literal"
+>QDataStream</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: #include &lt;qbitarray.h&gt;
+   3&nbsp;2: #include &lt;qdatastream.h&gt;
+   4&nbsp;3:
+   5&nbsp;4: QByteArray message;
+   6&nbsp;5: QDataStream rstream(message, IO_ReadOnly);
+   7&nbsp;6: int rdata;
+   8&nbsp;7: rstream &gt;&gt; rdata; // get the data
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You must imagine the <TT
+CLASS="literal"
+>QByteArray</TT
+> object as a piece of paper on which a message is written. The <TT
+CLASS="literal"
+>QDataStream</TT
+> object could then be the bottle in which the message can travel safely.</P
+><P
+>The data stream class implemented and used by the Qt library has many supplementary features, such as a means for setting the byte order manually, a tool for putting data in a printable form, and capabilities to operate on raw bytes collections. This technology is fast and convenient.</P
+><P
+>KDE's core libraries contain a few enhancements to <TT
+CLASS="literal"
+>QDataStream</TT
+> in the form of many new streaming operators that deal with supplementary data types that KDE classes need in DCOP (<TT
+CLASS="literal"
+>bool</TT
+>, <TT
+CLASS="literal"
+>unsigned long</TT
+>, and <TT
+CLASS="literal"
+>long</TT
+>). If you need to use these, you have to replace line 2 in the preceding listings with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;kdatastream.h&gt;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec2"
+TITLE="Data Streaming"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev1sec3"
+TITLE="Underlying Technologies"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

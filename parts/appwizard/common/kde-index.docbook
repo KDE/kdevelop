@@ -1,0 +1,100 @@
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
+ <!ENTITY $APPNAME$ "<application>$APPNAME$</application>">
+ <!ENTITY % addindex "IGNORE">
+ <![ %addindex; [ <!ENTITY docindex SYSTEM "docindex.docbook"> ]]>
+]>
+<!-- Important note: please use template.docbook instead of this file.
+     This is only the conversion of app.sgml into DocBook SGML.  
+     template.docbook gives you more information on what you can and
+     should do.  Thanks. --> 
+<book lang="en">
+  <bookinfo>
+    <title>The $APPNAME$ Handbook</title>
+    <authorgroup>
+      <author>
+	<firstname></firstname>
+	<surname>$AUTHOR$</surname>
+	<affiliation>
+	  <address><email><ulink url="mailto:$EMAIL$">$EMAIL$</ulink></email></address>
+	</affiliation>
+      </author>
+    </authorgroup>
+    <date>`date "+%d/%m/%Y"`</date>
+    <releaseinfo>Version $APP_VERSION</releaseinfo>
+    <abstract>
+      <para>SHORT DESCRIPTION GOES HERE</para>
+    </abstract>
+    <keywordset>
+      <keyword>$APPNAME$</keyword>
+    </keywordset>
+  </bookinfo>
+
+  <chapter id="introduction">
+    <title>Introduction</title>
+
+    <sect1 id="features">
+      <title>Features</title>
+      <para></para>
+    </sect1>
+  </chapter>
+
+  <chapter id="installation">
+    <title>Installation</title>
+
+    <sect1 id="how-to-obtain-$APPNAME$">
+      <title>How to obtain $APPNAME$</title>
+      <para></para>
+    </sect1>
+
+    <sect1 id="requirements">
+      <title>Requirements</title>
+      <para></para>
+    </sect1>
+
+    <sect1 id="compilation-and-installation">
+      <title>Compilation and Installation</title>
+
+      <para>Compiling $APPNAME$ is very easy.  The following should do
+	it: <screen>
+<prompt>%</prompt> <userinput><command>./configure</command></userinput>
+<prompt>%</prompt> <userinput><command>make</command></userinput>
+<prompt>%</prompt> <userinput><command>make</command> install</userinput></screen>
+      </para>
+
+      <para>That should do it! Should you run into any problems,
+	please report them to the <ulink
+	url="mailto:$EMAIL$">author</ulink></para>
+    </sect1>
+  </chapter>
+
+  <chapter id="using-$APPNAME$">
+    <title>Using $APPNAME$</title>
+    <para></para>
+  </chapter>
+
+  <chapter id="questionsanswersandtips">
+    <title>Questions, Answers, and Tips</title>
+
+    <qandaset id="faq">
+      <title>Frequently asked questions</title>
+      <qandaentry>
+	<question>
+	  <para>Question 1</para>
+	</question>
+	<answer>
+	  <para>The answer</para>
+	</answer>
+      </qandaentry>
+    </qandaset>
+
+  </chapter>
+  <![ %addindex; [ &docindex; ]]>
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+sgml-general-insert-case: lower
+End:
+-->

@@ -1,0 +1,4 @@
+# KDE Config File
+[General]
+Name=A KPart plugin
+Comment=This generates a plugin for the KHTML part.

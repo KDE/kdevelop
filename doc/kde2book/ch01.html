@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The K Desktop Environment Background</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Fundamentals of KDE Application Programming"
+HREF="p01.html"/><LINK
+REL="PREVIOUS"
+TITLE="Fundamentals of KDE Application Programming"
+HREF="p01.html"/><LINK
+REL="NEXT"
+TITLE="Why Develop with KDE?"
+HREF="ch01lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p01.html"
+>Prev</A
+> <A
+HREF="ch01lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch01"
+>Chapter 1. The K Desktop Environment Background</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN1000"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01.html#ch01lev1sec1"
+>Motivation for a Free Desktop</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec2.html"
+>Why Develop with KDE?</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec3.html"
+>KDE Organization and Resources</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec4.html"
+>System Requirements</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec5.html"
+>Obtaining and Installing KDE</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec6.html"
+>Licenses and Legalities</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch01lev1sec7.html"
+>Let's Code, Already!</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>Before I begin discussing programming, you should get to know a little bit about KDE: its motivation, goals, and the reasons for its appeal. You'll also need to install the programming libraries and documentation.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch01lev1sec1"
+>1.1. Motivation for a Free Desktop</A
+></H1
+><P
+>If you are a UNIX (or Linux, FreeBSD, and so on) user, you most likely are familiar with the look and feel of a typical (non-KDE) X desktop. The window decorations (window borders, minimize, maximize, close buttons, and so on) and the various programs that live in those windows are typically drawn in different styles and operate differently. For example, the image display and manipulation program <TT
+CLASS="literal"
+>display</TT
+>, part of the ImageMagik distribution, uses pull-down menus and buttons that look and operate very differently from those used by the popular PostScript preview program <TT
+CLASS="literal"
+>gv</TT
+>.</P
+><P
+>The pull-down menus in display are organized into a vertical list of headings in a separate window from the image being viewed, whereas the menus in <TT
+CLASS="literal"
+>gv</TT
+> are shown horizontally above and in the same window as the PostScript document, and there are other differences. These types of inconsistencies abound and make it more difficult to learn new X-based programs. If each application used the same widgets (the basic elements of the GUI, such as buttons, scrollbars, and menubars), window layout (that is, menubar at the top), and so on, the user would need only learn application-specific functions when starting to work with a new application. That is, the user would learn the interface once and could transfer that knowledge to all new applications.</P
+><P
+>When the K Desktop Environment (KDE) project began in October 1996, a standard existed&#8212;the Common Desktop Environment (CDE), which was based on the Motif widget set&#8212;that aimed to solve this problem. The main problem with this was that the Motif widget set was expensive, and thus not appropriate for free software developers (indeed, many of the popular UNIX programs are freely developed). The KDE founder, Matthias Ettrich, saw that a free desktop could be developed by combining Qt, a well-constructed widget set developed by TrollTech of Norway, with the General Public License (GPL) source code of many free software applications. If the applications were all ported to the Qt widget set according to some set of UI guidelines, users of KDE would have a desktop that contained the usual, expected functionality but also had the comfortable feel of a uniform user interface. This plan was taken a step further by adding a desktop file manager/Web browser and a panel (inspired by the CDE, Windows 95, and OS/2 panels) for launching applications.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch01lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch01lev1sec1"
+TITLE="Motivation for a Free Desktop"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p01.html"
+>Prev</A
+> <A
+HREF="ch01lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,875 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Further KDE Compliance</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Advanced KDE Widgets and UI Design Techniques"
+HREF="p02.html"/><LINK
+REL="PREVIOUS"
+TITLE="Advanced KDE Widgets and UI Design Techniques"
+HREF="p02.html"/><LINK
+REL="NEXT"
+TITLE="Application Configuration Information"
+HREF="ch07lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p02.html"
+>Prev</A
+> <A
+HREF="ch07lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch07"
+>Chapter 7. Further KDE Compliance</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN10008"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch07.html#ch07lev1sec1"
+>Drag and Drop</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch07lev1sec2.html"
+>Application Configuration Information</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch07lev1sec3.html"
+>Session Management</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch07lev1sec4.html"
+>Application Resources</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch07lev1sec5.html"
+>Network Transparency</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>Complying with KDE standards requires more than using the right widgets. Applications should offer drag-and-drop support, keep track of program options, cleanly handle session management, and make use of application resources such as translated text strings. Another important aspect of KDE compliance is called <I
+CLASS="emphasis"
+>network transparency</I
+>. This refers to allowing users to load and save remotely stored files as easily as local ones. Fortunately, the KDE libraries contain classes which simplify these tasks.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch07lev1sec1"
+>7.1. Drag and Drop</A
+></H1
+><P
+>Drag  and drop is by now a familiar aspect of operating systems. The user clicks an object and, without releasing the mouse button, moves the mouse pointer (drags the object) to another position, and then releases the button (drops the object). Usually and icon is displayed under or near the mouse pointer that indicates what kind of data is being dragged and whether the current widget lying under the pointer is a valid drop <I
+CLASS="emphasis"
+>target</I
+>.</P
+><P
+>Drag and drop is used, for example, to move a file or folder from one folder to another. The user can also drag a file onto an open application and, if the file type is appropriate, expect the application to open the file for viewing or editing. In KDE, drag and drop is also used to place applications, (in the form of <TT
+CLASS="literal"
+>.desktop</TT
+> files, discussed in <SPAN
+CLASS="QUOTE"
+>"Application Resources"</SPAN
+>) on the panel.</P
+><P
+>The Qt drag-and-drop system is based on XDND protocol. This is a publicly available drag-and-drop protocol and is used by GNOME/GTK+, Mozilla, Star Office, XEmacs, and other projects and applications. The drag types are described using public, standard MIME types, which means that drag data types should be identifiable even when the drag is coming from a non-Qt system. You can find more information about the XDND protocol at <A
+HREF="http://www.cco.caltech.edu/~jafl/xdnd/"
+TARGET="_top"
+>http://www.cco.caltech.edu/~jafl/xdnd/</A
+>.</P
+><P
+>KDE/Qt applications can also accept drops which have been dragged from Motif-based applications, such as Netscape Navigator, further integrating the user's desktop. (Currently, however, you cannot drag <I
+CLASS="emphasis"
+>from</I
+> a KDE/Qt program to a Motif program.)</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch07lev2sec1"
+>7.1.1. Responding to Drop Events</A
+></H2
+><P
+>When a user drags some data over a widget, a drag-enter event is generated. A drop generates a drop event. You can reimplement the <TT
+CLASS="literal"
+>QWidget</TT
+> handlers for these events to process drops.</P
+><P
+><A
+HREF="ch07.html#ch07list01"
+>Listings 7.1</A
+> and <A
+HREF="ch07.html#ch07list02"
+>7.2</A
+> show code for a widget called <TT
+CLASS="literal"
+>KDropDemo</TT
+>, which demonstrates how to process drop events.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list01"
+></A
+><P
+><B
+>Example 7.1. kdropdemo.h: Contains the Class Definition for the Widget <TT
+CLASS="literal"
+>KDropDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KDROPDEMO_H__
+   3&nbsp; 2: #define __KDROPDEMO_H__
+   4&nbsp; 3:
+   5&nbsp; 4:
+   6&nbsp; 5: #include &lt;qlabel.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: /**
+   9&nbsp; 8:  * KDropDemo
+  10&nbsp; 9:  * Accepts dropped URLs.
+  11&nbsp;10:  **/
+  12&nbsp;11: class KDropDemo : public QLabel
+  13&nbsp;12: {
+  14&nbsp;13:  public:
+  15&nbsp;14:   KDropDemo (QWidget *parent, const char *name=0);
+  16&nbsp;15:
+  17&nbsp;16:  protected:
+  18&nbsp;17:   void dropEvent (QDropEvent *qdropevent);
+  19&nbsp;18:   void dragEnterEvent (QDragEnterEvent *qdragenterevent);
+  20&nbsp;19: };
+  21&nbsp;20:
+  22&nbsp;21: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KDropDemo</TT
+> inherits <TT
+CLASS="literal"
+>QLabel</TT
+>, but any subclass of <TT
+CLASS="literal"
+>QWidget</TT
+> can accept drops in the same way as presented here. You just need to reimplement <TT
+CLASS="literal"
+>dragEnterEvent()</TT
+> and <TT
+CLASS="literal"
+>dropEvent()</TT
+>, as shown in <A
+HREF="ch07.html#ch07list02"
+>Listing 7.2</A
+>, to process the corresponding events.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list02"
+></A
+><P
+><B
+>Example 7.2. kdropdemo.cpp: Contains the Class Declaration for the Widget <TT
+CLASS="literal"
+>KDropDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qdragobject.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kdropdemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: KDropDemo::KDropDemo (QWidget *parent, const char *name) :
+   7&nbsp; 6:   QLabel (parent, name)
+   8&nbsp; 7: {
+   9&nbsp; 8:   setAcceptDrops(true);
+  10&nbsp; 9:   setText ("---------------No drops yet.---------------");
+  11&nbsp;10: }
+  12&nbsp;11:
+  13&nbsp;12: void
+  14&nbsp;13: KDropDemo::dragEnterEvent (QDragEnterEvent *qdragenterevent)
+  15&nbsp;14: {
+  16&nbsp;15:   qdragenterevent-&gt;accept (QTextDrag::canDecode (qdragenterevent));
+  17&nbsp;16: }
+  18&nbsp;17:
+  19&nbsp;18: void
+  20&nbsp;19: KDropDemo::dropEvent (QDropEvent *qdropevent)
+  21&nbsp;20: {
+  22&nbsp;21:   QString text;
+  23&nbsp;22:
+  24&nbsp;23:   if (QTextDrag::decode (qdropevent, text))
+  25&nbsp;24:     {
+  26&nbsp;25:       setText (text);
+  27&nbsp;26:     }
+  28&nbsp;27: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>First, you need to tell Qt that you want to accept drops by calling <TT
+CLASS="literal"
+>setAcceptDrops(true)</TT
+> in line 8. This instructs Qt to generate drag-enter and drop events for your application. Before you get a drop event for any given particular data type, you also need to announce that you are interested in it. You do this in the method <TT
+CLASS="literal"
+>dragEnterEvent()</TT
+>. The method <TT
+CLASS="literal"
+>QDragEnterEvent::accept()</TT
+> is called to tell Qt that you are interested in some data type. Line 15 says you are interested in receiving text drops.</P
+><P
+>You can determine whether the data is actually text by calling the static method <TT
+CLASS="literal"
+>QTextDrag::canDecode()</TT
+> with the pointer to the instance of <TT
+CLASS="literal"
+>QDragEnterEvent</TT
+> as an argument in the method <TT
+CLASS="literal"
+>dropEvent()</TT
+> (see lines 18&#8211;27). This makes the process somewhat transparent. Qt contains classes that support text (<TT
+CLASS="literal"
+>QTextDrag</TT
+>) and images (<TT
+CLASS="literal"
+>QImageDrag</TT
+>). To accept drags of other types, you need to examine the data's MIME type (returned by the methods <TT
+CLASS="literal"
+>QDragObject::provides()</TT
+> or <TT
+CLASS="literal"
+>QDragObject::format()</TT
+>). If you plan to drag and drop custom data types within an application, you will need to create subclasses of <TT
+CLASS="literal"
+>QDragObject</TT
+>, which will hold data of your custom types.</P
+><P
+>In <TT
+CLASS="literal"
+>dropEvent()</TT
+>, you do the interesting work. You decode the data into a <TT
+CLASS="literal"
+>QString</TT
+> using <TT
+CLASS="literal"
+>QTextDrag</TT
+> (line 23) and change the text of the <TT
+CLASS="literal"
+>QLabel</TT
+> to the new <TT
+CLASS="literal"
+>QString</TT
+>.</P
+><P
+><A
+HREF="ch07.html#ch07list03"
+>Listing 7.3</A
+> presents a simple <TT
+CLASS="literal"
+>main()</TT
+> function that you can use to try out <TT
+CLASS="literal"
+>KDropDemo</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list03"
+></A
+><P
+><B
+>Example 7.3. main.cpp: Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing the <TT
+CLASS="literal"
+>KDropDemo</TT
+> Widget</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kdropdemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kdropdemotest");
+  10&nbsp; 9:   KDropDemo kdropdemo (0);
+  11&nbsp;10:
+  12&nbsp;11:   kdropdemo.show();
+  13&nbsp;12:   kapplication.setMainWidget (&amp;kdropdemo);
+  14&nbsp;13:  return  kapplication.exec();
+  15&nbsp;14: }
+  16&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You can try this widget out by dragging a file from <TT
+CLASS="literal"
+>konqueror</TT
+> to the window. The URL of the file will be displayed in the widget. (You may have to enlarge the window to see the entire URL.) <A
+HREF="ch07.html#ch07fig01"
+>Figure 7.1</A
+> shows the results of this drag-and-drop action.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch07fig01"
+></A
+><P
+><B
+>Figure 7.1. <TT
+CLASS="literal"
+>KDropDemo</TT
+> accepts text drop events and displays the data contained in them. Here it has just accepted a URL drop from Konqueror.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/07fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch07lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch07lev2sec1"
+TITLE="Responding to Drop Events"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch07lev2sec2"
+>7.1.2. Starting a Drag</A
+></H2
+><P
+>The problem with starting a drag lies not in informing Qt that you would like it to be done, but in informing the user that it is possible. How can you do this?</P
+><P
+>The draggable objects in Konqueror are the icons representing the files or folders. This is a common enough situation (in terms of file managers) that many users are familiar with.</P
+><P
+>Netscape Navigator 4.51 places a small icon on the toolbar that is draggable and represents the page being viewed. To inform the user that they can drag this icon, a message saying so is placed in the statusbar whenever the user passes the mouse pointer over the icon. Also, a ToolTip pops up to again inform the user that the icon is draggable. (These types of help messages are discussed in the next section.)</P
+><P
+>The next example shows how to start the drag process. (Because this widget is not presented in the context of an application, this example will focus on dragging and not on the problem of informing the user that the widget is a place to start dragging.)</P
+><P
+><A
+HREF="ch07.html#ch07list04"
+>Listings 7.4</A
+>&#8211;<A
+HREF="ch07.html#ch07list06"
+>7.6</A
+> show code that demonstrates how to start a drag event.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list04"
+></A
+><P
+><B
+>Example 7.4. kdragdemo.h: Contains a Class Declaration for the Widget <TT
+CLASS="literal"
+>KDragDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KDRAGDEMO_H__
+   3&nbsp; 2: #define __KDRAGDEMO_H__
+   4&nbsp; 3:
+   5&nbsp; 4:
+   6&nbsp; 5: #include &lt;qlabel.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: /**
+   9&nbsp; 8:  * KDragDemo
+  10&nbsp; 9:  *
+  11&nbsp;10:  **/
+  12&nbsp;11: class KDragDemo : public QLabel
+  13&nbsp;12: {
+  14&nbsp;13:  public:
+  15&nbsp;14:   KDragDemo (QWidget *parent, const char *name=0);
+  16&nbsp;15:
+  17&nbsp;16:  protected:
+  18&nbsp;17:   bool dragging;
+  19&nbsp;18:
+  20&nbsp;19:   void mouseMoveEvent (QMouseEvent *qmouseevent);
+  21&nbsp;20:   void mouseReleaseEvent (QMouseEvent *qmouseevent);
+  22&nbsp;21: };
+  23&nbsp;22:
+  24&nbsp;23: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the nomenclature of XDND, the widget you are creating is a drag <I
+CLASS="emphasis"
+>source</I
+>. You can drag the text to any target that accepts text drops, such as <TT
+CLASS="literal"
+>kdropdemotest</TT
+>.</P
+><P
+>Again, we derive from <TT
+CLASS="literal"
+>QLabel</TT
+> but note that the technique presented here is valid for any subclass of <TT
+CLASS="literal"
+>QWidget</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list05"
+></A
+><P
+><B
+>Example 7.5. kdragdemo.cpp: Contains a Class Definition for the Widget <TT
+CLASS="literal"
+>KDragDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qdragobject.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include &lt;kglobalsettings.h&gt;
+   5&nbsp; 4:
+   6&nbsp; 5: #include "kdragdemo.h"
+   7&nbsp; 6:
+   8&nbsp; 7:
+   9&nbsp; 8: KDragDemo::KDragDemo (QWidget *parent, const char *name) :
+  10&nbsp; 9:   QLabel (parent, name)
+  11&nbsp;10: {
+  12&nbsp;11:   setText ("This is draggable text.");
+  13&nbsp;12: }
+  14&nbsp;13:
+  15&nbsp;14:
+  16&nbsp;15: void
+  17&nbsp;16: KDragDemo::mousePressEvent (QMouseEvent *qmouseevent)
+  18&nbsp;17: {
+  19&nbsp;18:   startposition = qmouseevent-&gt;pos();
+  20&nbsp;19: }
+  21&nbsp;20:
+  22&nbsp;21: void
+  23&nbsp;22: KDragDemo::mouseMoveEvent (QMouseEvent *qmouseevent)
+  24&nbsp;23: {
+  25&nbsp;24:   int mindragdist = KGlobalSettings::dndEventDelay();
+  26&nbsp;25:
+  27&nbsp;26:   if (qmouseevent-&gt;state()&amp;Qt::LeftButton
+  28&nbsp;27:       &amp;&amp;(   qmouseevent-&gt;pos().x() &gt; startposition.x() + mindragdist
+  29&nbsp;28:       || qmouseevent-&gt;pos().x() &lt; startposition.x() - mindragdist
+  30&nbsp;29:       || qmouseevent-&gt;pos().y() &gt; startposition.y() + mindragdist
+  31&nbsp;30:       || qmouseevent-&gt;pos().y() &lt; startposition.y() - mindragdist) )
+  32&nbsp;31:     {
+  33&nbsp;32:       QTextDrag *qtextdrag = new QTextDrag( text(), this);
+  34&nbsp;33:       qtextdrag-&gt;dragCopy();
+  35&nbsp;34:     }
+  36&nbsp;35: }
+  37&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the constructor, you set the text to be displayed in the window. The start of a drag is defined as when the user holds down the left mouse button and moves the mouse more than a certain number of pixels. That certain number is used in all KDE applications (to give them a consistent feel) and is returned by the static function <TT
+CLASS="literal"
+>KGlobalSettings::dndEventDelay()</TT
+>. You can implement this behavior by first saving the position at which the user first clicks the mouse, on line 18, in the method <TT
+CLASS="literal"
+>mousePressEvent()</TT
+>. Then, in the method  <TT
+CLASS="literal"
+>mouseMoveEvent()</TT
+> check <TT
+CLASS="literal"
+>QMouseEvent::state()</TT
+> (line 26) to see whether the mouse button is being held down&#8212;in which case the bit given by <TT
+CLASS="literal"
+>Qt::LeftButton</TT
+> will be set in <TT
+CLASS="literal"
+>QMouseEvent()::stat()</TT
+>&#8212;and see whether the user has moved more than <TT
+CLASS="literal"
+>KGlobalSettings::dndEventDelay()</TT
+> pixels in any direction from <TT
+CLASS="literal"
+>startposition</TT
+>. The first time this happens, you create a <TT
+CLASS="literal"
+>QTextDrag</TT
+> (derived from <TT
+CLASS="literal"
+>QDragObject</TT
+>) object (line 20). This object handles the communication with potential XDND targets and, since it is owned by Qt, don't delete it at any point.</P
+><P
+>On line 33, you indicate to the <TT
+CLASS="literal"
+>QTextDrag</TT
+> object that you want to allow drag-and-drop operations that result in the data being copied to the target. The types of operations are</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>DragCopy</TT
+></P
+><P
+>Copy the data from the source to the target.</P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>DragMove</TT
+></P
+><P
+>Copy the data from the source to the target, and remove it from the source.</P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>DragDefault</TT
+></P
+><P
+>The mode is determined by Qt.</P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>DragCopyOrMove</TT
+></P
+><P
+>The default mode is used unless the user holds down the control key while dragging.</P
+></LI
+></UL
+><P
+>These are constants of type <TT
+CLASS="literal"
+>DragMode</TT
+> and are defined in qdragobject.h. To use them, call <TT
+CLASS="literal"
+>QDragObject::drag()</TT
+> (with a <TT
+CLASS="literal"
+>DragMode</TT
+> as an argument instead of <TT
+CLASS="literal"
+>dragCopy())</TT
+>.</P
+><P
+>To avoid creating more instances of <TT
+CLASS="literal"
+>QTextDrag</TT
+> for each of the subsequent mouse-move events you should expect to receive, set the flag <TT
+CLASS="literal"
+>dragging</TT
+> to <TT
+CLASS="literal"
+>true</TT
+> and avoid starting new drags while this flag is still <TT
+CLASS="literal"
+>true</TT
+>. Reset it to <TT
+CLASS="literal"
+>false</TT
+> after the user releases the mouse button. This indicates the end of the drag operation regardless of whether the drop was successful.</P
+><P
+><A
+HREF="ch07.html#ch07list06"
+>Listing 7.6</A
+> is a <TT
+CLASS="literal"
+>main()</TT
+> function, which you can use to create a simple program, kdragdemotest, which you can use to test the <TT
+CLASS="literal"
+>KDragDemo</TT
+> widget. You can try kdragdemotest by dragging to kdropdemotest. You can also drag to KEdit or Konsole. <A
+HREF="ch07.html#ch07fig02"
+>Figure 7.2</A
+> shows kdragdemotest.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch07fig02"
+></A
+><P
+><B
+>Figure 7.2. kdragdemotest shows some draggable text. You can drag the text starting from anywhere inside the widget to a suitable target, such as kdropdemotest.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/07fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch07list06"
+></A
+><P
+><B
+>Example 7.6. main.cpp: Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KDragDemo</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kdragdemo.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kdragdemotest");
+  10&nbsp; 9:   KDragDemo kdragdemo (0);
+  11&nbsp;10:
+  12&nbsp;11:   kdragdemo.show();
+  13&nbsp;12:   kapplication.setMainWidget (&amp;kdragdemo);
+  14&nbsp;13:   return kapplication.exec();
+  15&nbsp;14: }
+  16&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch07lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch07lev2sec2"
+TITLE="Starting a Drag"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch07lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch07lev1sec1"
+TITLE="Drag and Drop"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p02.html"
+>Prev</A
+> <A
+HREF="ch07lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,1339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Inside the Qt Toolkit</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="The Qt Toolkit"
+HREF="ch03.html"/><LINK
+REL="PREVIOUS"
+TITLE="The Qt Toolkit"
+HREF="ch03.html"/><LINK
+REL="NEXT"
+TITLE="Signals and Slots"
+HREF="ch03lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch03lev1sec2"
+>3.2. Inside the Qt Toolkit</A
+></H1
+><P
+>The Qt toolkit contains everything you need to write your own Qt programs. Lots of classes are available. Some of them are visible and are meant to be used as user-interface classes. Some of them are invisible, and they are there to make your programming simpler.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Keep in mind that it is better to use KDE classes than QT classes, when available. That ensures that your KDE programs will look and feel like all other KDE programs. KDE may also use the KDE features better. However, you must know some Qt. The Qt features I present to you in this chapter are vital for many KDE programs.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>A utility program called the Meta Object Compiler, or <TT
+CLASS="literal"
+>moc</TT
+>, is also included with Qt. It processes header files to enable easy event handling, an important topic in modern GUI programming. I'll write more about it later in this chapter.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec1"
+>3.2.1. <TT
+CLASS="literal"
+>QObject</TT
+></A
+></H2
+><P
+><TT
+CLASS="literal"
+>QObject</TT
+> is the base class in Qt. All classes that have signals or slots must inherit from this class, directly or indirectly. <TT
+CLASS="literal"
+>QPushButton</TT
+> is an example of a class that inherits from <TT
+CLASS="literal"
+>QObject</TT
+> indirectly. <TT
+CLASS="literal"
+>QPushButton</TT
+> inherits from <TT
+CLASS="literal"
+>QWidget</TT
+>, which inherits from <TT
+CLASS="literal"
+>QObject</TT
+>. Therefore, <TT
+CLASS="literal"
+>QPushButton</TT
+> inherits indirectly from <TT
+CLASS="literal"
+>QObject</TT
+>.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Signals and slots enable easy event handling in Qt. They are explained in detail in <A
+HREF="ch03lev1sec3.html"
+><SPAN
+CLASS="QUOTE"
+>"Signals and Slots"</SPAN
+></A
+> later in this chapter.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec1"
+TITLE="QObject"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec2"
+>3.2.2. <TT
+CLASS="literal"
+>QWidget</TT
+></A
+></H2
+><P
+><TT
+CLASS="literal"
+>QWidget</TT
+> is the base class for all visible classes in Qt. The <TT
+CLASS="literal"
+>QWidget</TT
+> simply represents an empty area (see <A
+HREF="ch03lev1sec2.html#ch03fig01"
+>Figure 3.1</A
+>).</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch03fig01"
+></A
+><P
+><B
+>Figure 3.1. A <TT
+CLASS="literal"
+>QWidget</TT
+> inside a window.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/03fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>You use the <TT
+CLASS="literal"
+>QWidget</TT
+> class whenever you need an empty area. It is often used to create windows in your programs.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec1"
+>3.2.2.1. Important Member Functions</A
+></H3
+><P
+>The constructor for <TT
+CLASS="literal"
+>QWidget</TT
+> is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;QWidget(QWidget *<I
+CLASS="emphasis"
+>parent</I
+>=0, const char *<I
+CLASS="emphasis"
+>name</I
+>=0, WFlags <I
+CLASS="emphasis"
+>f</I
+>=0)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The most important parameter is <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>parent</TT
+></I
+>.</P
+><P
+>If you want to create a new window and put the widget inside it, you set <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>parent</TT
+></I
+> to <TT
+CLASS="literal"
+>0</TT
+>. The window manager will draw the window for you.</P
+><P
+>When you put your widget inside a window, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>parent</TT
+></I
+> must contain a pointer to the parent object. The parent object is the object that you want to put your widget on.</P
+><P
+>The other parameters are rarely used. The parameter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+> gives your widget a name. The parameter <I
+CLASS="emphasis"
+>f</I
+> is a flags parameter. If a window is created for the widget, you can control the behavior of the window with this parameter.</P
+><P
+>To move and resize the widget, use the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void setGeometry(int <I
+CLASS="emphasis"
+>left</I
+>, int <I
+CLASS="emphasis"
+>top</I
+>, int <I
+CLASS="emphasis"
+>width</I
+>, int <I
+CLASS="emphasis"
+>height</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>left</TT
+></I
+> and<I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>top</TT
+></I
+> parameters specify the upper-left corner of the widget. The <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>width</TT
+></I
+> and <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>height</TT
+></I
+> parameters specify the dimensions of the widget.</P
+><P
+>To show the widget, use the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void show()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Widgets are created invisible by default and must be shown to be seen.</P
+><P
+>The function that handles mouse press events is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void mousePressEvent(QMouseEvent *<I
+CLASS="emphasis"
+>event</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You can implement it if you need to create a mouse button handler. The parameter <TT
+CLASS="literal"
+>event</TT
+> gives you important information about the mouse press event (such as cursor position and button status).</P
+><P
+>The function that handles mouse move events is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void mouseMoveEvent(QMouseEvent *<I
+CLASS="emphasis"
+>event</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Implement this function if you need to handle mouse cursor move events. The mouse cursor position and button state are given by the parameter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>event</TT
+></I
+>.</P
+><P
+>The following function is called when the graphics are updated:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void paintEvent(QPaintEvent *<I
+CLASS="emphasis"
+>event</I
+>)</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You should implement this function if you have drawn graphics on the widget. Use the QPainter class to draw graphics (see the section <A
+HREF="ch03lev1sec2.html#ch03lev2sec3"
+><SPAN
+CLASS="QUOTE"
+>"Qpainter"</SPAN
+></A
+> later in this chapter). The graphics will disappear if you don't redraw them. The parameter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>event</TT
+></I
+> contains information about where the graphics needs to be updated.</P
+><P
+>The function you use to set the caption is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void setCaption(const QString &amp;<I
+CLASS="emphasis"
+>caption</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>If your widget has its own window (<TT
+CLASS="literal"
+>parent=0</TT
+>), the window title is set by this function. This is a slot (see the section <A
+HREF="ch03lev1sec3.html"
+><SPAN
+CLASS="QUOTE"
+>"Signals And Slots"</SPAN
+></A
+> later in this chapter).</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec1"
+TITLE="Important Member Functions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec2"
+>3.2.2.2. Sample Use of <TT
+CLASS="literal"
+>QWidget</TT
+></A
+></H3
+><P
+><A
+HREF="ch03lev1sec2.html#ch03list01"
+>Listing 3.1</A
+> shows how you use the <TT
+CLASS="literal"
+>QWidget</TT
+> class. The program creates an empty window. When a mouse button is pressed, the program prints <TT
+CLASS="literal"
+>Mouse Press</TT
+> on the console (shown in <A
+HREF="ch03lev1sec2.html#ch03fig02"
+>Figure 3.2</A
+>):</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list01"
+></A
+><P
+><B
+>Example 3.1. widget.cpp: A Window with Mouse Handling</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include &lt;qwidget.h&gt;
+   4&nbsp; 3: #include &lt;iostream.h&gt;
+   5&nbsp; 4: 
+   6&nbsp; 5: 
+   7&nbsp; 6: // A Window class definition
+   8&nbsp; 7: class MyWindow : public QWidget
+   9&nbsp; 8: {
+  10&nbsp; 9: public:
+  11&nbsp;10:   // Constructor, Parent is always 0 for windows
+  12&nbsp;11:   MyWindow() : QWidget() { }
+  13&nbsp;12: protected:
+  14&nbsp;13:   // This function will be called when the user presses a mouse button
+  15&nbsp;14:   void mousePressEvent(QMouseEvent *);
+  16&nbsp;15: };
+  17&nbsp;16: 
+  18&nbsp;17: 
+  19&nbsp;18: void MyWindow::mousePressEvent(QMouseEvent *)
+  20&nbsp;19: {
+  21&nbsp;20:   // Print "Mouse Press" on the console
+  22&nbsp;21:   cout &lt;&lt; "Mouse Press" &lt;&lt; endl;
+  23&nbsp;22: }
+  24&nbsp;23: 
+  25&nbsp;24: 
+  26&nbsp;25: int main(int argc, char **argv){
+  27&nbsp;26:   KApplication app(argc, argv);
+  28&nbsp;27: 
+  29&nbsp;28:   // Create a MyWindow object
+  30&nbsp;29:   MyWindow window;
+  31&nbsp;30: 
+  32&nbsp;31:   // Move and resize the MyWindow object
+  33&nbsp;32:   // left=200, top=200, width=400, height=300
+  34&nbsp;33:   window.setGeometry(200,200,400,300);
+  35&nbsp;34: 
+  36&nbsp;35:   // Main window = MyWindow object
+  37&nbsp;36:   app.setMainWidget(&amp;window);
+  38&nbsp;37: 
+  39&nbsp;38:   window.setCaption("QWidget example");
+  40&nbsp;39: 
+  41&nbsp;40:   // Show the window
+  42&nbsp;41:   window.show();
+  43&nbsp;42: 
+  44&nbsp;43:   // Go to the main loop
+  45&nbsp;44:   return app.exec();
+  46&nbsp;45: }
+  47&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch03fig02"
+></A
+><P
+><B
+>Figure 3.2. Mouse-handling window</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/03fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec2"
+TITLE="Sample Use of QWidget"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec2"
+TITLE="QWidget"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec3"
+>3.2.3. <TT
+CLASS="literal"
+>QPainter</TT
+></A
+></H2
+><P
+><TT
+CLASS="literal"
+>QWidget</TT
+> and its children cannot draw graphics, and that's why <TT
+CLASS="literal"
+>QPainter</TT
+> is needed. <TT
+CLASS="literal"
+>QPainter</TT
+> draws graphics on widgets.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec3"
+>3.2.3.1. Important Member Functions</A
+></H3
+><P
+>The constructor for <TT
+CLASS="literal"
+>QPainter</TT
+> is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;QPainter()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Before you can draw any graphics on a widget, you must call the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;bool begin(const QPaintDevice *<I
+CLASS="emphasis"
+>pd</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the parameter <TT
+CLASS="literal"
+>pd</TT
+> (Paint Device), you tell <TT
+CLASS="literal"
+>QPainter</TT
+> on what object you want to draw graphics.</P
+><P
+>To draw a line, for example, use the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void drawLine(int <I
+CLASS="emphasis"
+>x1</I
+>, int <I
+CLASS="emphasis"
+>y1</I
+>, int <I
+CLASS="emphasis"
+>x2</I
+>, int <I
+CLASS="emphasis"
+>y2</I
+>)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The parameters are simple; they define the start and end points. A line will be drawn between these two points. The coordinates are relative to the object that you draw on. This is not the only graphics operation you can perform, but it is the only one presented here. Functions are available that draw circles, bars, rectangles, and almost anything you can imagine. The Qt reference contains all the information you need. As I have written before, I recommend that you download the Qt documentation from the <I
+CLASS="citetitle"
+>trolltech</I
+> Web site <A
+HREF="http://www.trolltech.com"
+TARGET="_top"
+>(http://www.trolltech.com)</A
+>.</P
+><P
+>To flush graphics, use the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void flush();
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>QPainter</TT
+> uses a buffered system. Graphics operations are stored in memory only&#8212;they do not affect what you see on the screen. This function flushes the graphics in memory to the screen. The destructor for <TT
+CLASS="literal"
+>QPainter</TT
+> flushes automatically, you don't have to flush if your <TT
+CLASS="literal"
+>QPainter</TT
+> object is destroyed when all the graphics have been drawn.</P
+><P
+>When you don't want to draw more graphics on the current object, you can use the following function:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;bool end()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Use this function when you have been drawing on one widget, and you want to switch to another widget.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec3"
+TITLE="Important Member Functions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec4"
+>3.2.3.2. Sample Use of <TT
+CLASS="literal"
+>QPainter</TT
+></A
+></H3
+><P
+><A
+HREF="ch03lev1sec2.html#ch03list02"
+>Listing 3.2</A
+> shows you how the <TT
+CLASS="literal"
+>QPainter</TT
+> is used. The <TT
+CLASS="literal"
+>QPainter</TT
+> is used in the <TT
+CLASS="literal"
+>paintEvent</TT
+> function and is shown in <A
+HREF="ch03lev1sec2.html#ch03fig03"
+>Figure 3.3</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list02"
+></A
+><P
+><B
+>Example 3.2. Drawing a Line in a Window</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include &lt;qwidget.h&gt;
+   4&nbsp; 3: #include &lt;qpainter.h&gt;
+   5&nbsp; 4: 
+   6&nbsp; 5: class MyWindow : public Qwidget
+   7&nbsp; 6: {
+   8&nbsp; 7:   public:
+   9&nbsp; 8:     MyWindow() : QWidget() { }
+  10&nbsp; 9:   protected:
+  11&nbsp;10:     void paintEvent(QPaintEvent *);
+  12&nbsp;11: };
+  13&nbsp;12: 
+  14&nbsp;13: void MyWindow::paintEvent(QPaintEvent *)
+  15&nbsp;14: {
+  16&nbsp;15:   // Draw graphics on this object
+  17&nbsp;16:   QPainter paint(this);
+  18&nbsp;17:   // Draw a line (the destructor will make the line visible)
+  19&nbsp;18:   paint.drawLine(10,10,190,140);
+  20&nbsp;19: }
+  21&nbsp;20: 
+  22&nbsp;21: 
+  23&nbsp;22: int main(int argc, char **argv)
+  24&nbsp;23: {
+  25&nbsp;24:   KApplication app(argc, argv);
+  26&nbsp;25:   MyWindow window;
+  27&nbsp;26:   window.setGeometry(50,50,200,150);
+  28&nbsp;27:   app.setMainWidget(&amp;window);
+  29&nbsp;28:   window.setCaption("Qpainter");
+  30&nbsp;29:   window.show();
+  31&nbsp;30:   return app.exec();
+  32&nbsp;31: }
+  33&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch03fig03"
+></A
+><P
+><B
+>Figure 3.3. <TT
+CLASS="literal"
+>QPainter</TT
+> example.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/03fig03.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec4"
+TITLE="Sample Use of QPainter"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec3"
+TITLE="QPainter"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch03lev2sec4"
+>3.2.4. <TT
+CLASS="literal"
+>QPushButton</TT
+></A
+></H2
+><P
+>You use <TT
+CLASS="literal"
+>QPushButton</TT
+> when you need a button in your program. <TT
+CLASS="literal"
+>QPushButton</TT
+> is derived from the <TT
+CLASS="literal"
+>QWidget</TT
+> class.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec5"
+>3.2.4.1. Important Members</A
+></H3
+><P
+>The constructor for <TT
+CLASS="literal"
+>QPushButton</TT
+> is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;QPushButton(const QString &amp;<I
+CLASS="emphasis"
+>text</I
+>, QWidget *<I
+CLASS="emphasis"
+>parent</I
+>,
+   3&nbsp;const char *<I
+CLASS="emphasis"
+>name</I
+>=0)
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The parameter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>text</TT
+></I
+> specifies the button caption. The parameter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>parent</TT
+></I
+> is a pointer to the object that you wish to put the button on. The third parameter, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+>, is not important.</P
+><P
+>The following signal is emitted when the button is clicked:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void clicked()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Buttons can be clicked by the mouse or by the keyboard.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec5"
+TITLE="Important Members"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch03lev3sec6"
+>3.2.4.2. Sample Use of <TT
+CLASS="literal"
+>QPushButton</TT
+></A
+></H3
+><P
+>The <TT
+CLASS="literal"
+>QPushButton</TT
+> class is mainly used to put buttons inside windows. <A
+HREF="ch03lev1sec2.html#ch03list03"
+>Listing 3.3</A
+> demonstrates this and is shown in <A
+HREF="ch03lev1sec2.html#ch03fig04"
+>Figure 3.4</A
+>:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch03list03"
+></A
+><P
+><B
+>Example 3.3. A Window with a Button in It</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include &lt;qpushbutton.h&gt;
+   4&nbsp; 3: #include &lt;qwidget.h&gt;
+   5&nbsp; 4: 
+   6&nbsp; 5: 
+   7&nbsp; 6: // The window class
+   8&nbsp; 7: class MyWindow : public QWidget
+   9&nbsp; 8: {
+  10&nbsp; 9: public:
+  11&nbsp;10:   MyWindow();
+  12&nbsp;11: private:
+  13&nbsp;12:   QPushButton *button;
+  14&nbsp;13: };
+  15&nbsp;14: 
+  16&nbsp;15: 
+  17&nbsp;16: MyWindow::MyWindow() : QWidget()
+  18&nbsp;17: {
+  19&nbsp;18:   // Create a new button; caption="Button", parent=this
+  20&nbsp;19:   button = new QPushButton("Button", this);
+  21&nbsp;20: 
+  22&nbsp;21:   // Move and resize the button
+  23&nbsp;22:   button-&gt;setGeometry(50, 10, 100, 30);
+  24&nbsp;23: 
+  25&nbsp;24:   // Show the button
+  26&nbsp;25:   button-&gt;show();
+  27&nbsp;26: }
+  28&nbsp;27: 
+  29&nbsp;28: 
+  30&nbsp;29: int main(int argc, char **argv)
+  31&nbsp;30: {
+  32&nbsp;31:   KApplication app(argc, argv);
+  33&nbsp;32:   MyWindow window;
+  34&nbsp;33:   window.setGeometry(200,200,400,300);
+  35&nbsp;34:   window.setCaption("QPushButton Example");
+  36&nbsp;35:   app.setMainWidget(&amp;window);
+  37&nbsp;36:   window.show();
+  38&nbsp;37:   return app.exec();
+  39&nbsp;38: }
+  40&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch03fig04"
+></A
+><P
+><B
+>Figure 3.4. <TT
+CLASS="literal"
+>QPushButton</TT
+>.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/03fig04.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev3sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev3sec6"
+TITLE="Sample Use of QPushButton"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev2sec4"
+TITLE="QPushButton"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch03lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch03lev1sec2"
+TITLE="Inside the Qt Toolkit"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch03.html"
+>Prev</A
+> <A
+HREF="ch03lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

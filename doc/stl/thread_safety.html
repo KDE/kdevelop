@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//Netscape Comm. Corp.//DTD HTML//EN">
+<HTML>
+<HEAD>
+    <!-- SGI_COMMENT COSMOCREATE -->
+    <!-- SGI_COMMENT VERSION NUMBER="1.0" -->
+    <TITLE>SGI STL Thread-Safety </TITLE>
+</HEAD>
+<BODY>
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+
+<H1>Thread-safety for SGI STL</H1>
+<P>
+<A HREF="http://www.sgi.com/Technology/STL">SGI STL</A> provides what 
+we believe to be the most useful form of thread-safety. This explains 
+some of the design decisions made in the SGI STL implementation. </P>
+
+<H2>Client must lock shared mutable containers</H2>
+<P>
+The SGI implementation of STL is thread-safe only in the sense that 
+simultaneous accesses to distinct containers are safe, and simultaneous 
+read accesses to to shared containers are safe. If multiple threads 
+access a single container, and at least one thread may potentially 
+write, then the user is responsible for ensuring mutual exclusion 
+between the threads during the container accesses. </P>
+<P>
+This is the only way to ensure full performance for containers that do 
+not need concurrent access. Locking or other forms of synchronization 
+are typically expensive and should be avoided when not necessary. </P>
+<P>
+It is easy for the client or another library to provide the necessary 
+locking by wrapping the underlying container operations with a lock 
+acquisition and release. For example, it would be possible to provide a <TT>locked_queue</TT>
+ container adapter that provided a container with atomic queue 
+operations. </P>
+<P>
+For most clients, it would be insufficient to simply make container 
+operations atomic; larger grain atomic actions are needed. If a user's 
+code needs to increment the third element in a vector of counters, it 
+would be insuffcient to guarantee that fetching the third element and 
+storing the third element is atomic; it is also necessary to guarantee 
+that no other updates occur in the middle. Thus it would be useless for 
+vector operations to acquire the lock; the user code must provide for 
+locking in any case. </P>
+<P>
+This decision is different from that made by the Java designers. There 
+are two reasons for that. First, for security reasons Java must 
+guarantee that even in the presence of unprotected concurrent accesses 
+to a container, the integrity of the virtual machine cannot be 
+violated. Such safety constraints were clearly not a driving force 
+behind either C++ or STL. Secondly, performance was a more important 
+design goal for STL then it was for the Java standard library. </P>
+<P>
+On the other hand, this notion of thread-safety is stronger than that 
+provided by reference-counted string implementations that try to follow 
+the CD2 version of the draft standard. Such implementations require 
+locking between multiple readers of a shared string. </P>
+
+<H2>Lock implementation</H2>
+<P>
+The SGI STL implementation removes all nonconstant static data from 
+container implementations. The only potentially shared static data 
+resides in the allocator implementations. To this end, the code to 
+implement per-class node allocation in HP STL was transformed into 
+inlined code for per-size node allocation in the SGI STL allocators. 
+Currently the only explicit locking is performed inside <A
+ HREF="http://www.sgi.com/Technology/STL/Allocators.html">allocators</A>. 
+ </P>
+<P>
+Many other container implementations should also benefit from this 
+design. It will usually be possible to implement thread-safe containers 
+in portable code that does not depend on any particular thread package 
+or locking primitives. </P>
+<P>
+Alloc.h uses three different locking primitives depending on the 
+environment. In addition, it can be forced to perform no locking by 
+defining <TT>_NOTHREADS</TT>. The three styles of locking are: </P>
+<UL>
+    <LI>
+    Pthread mutexes. These are used if <TT>_PTHREADS</TT> is defined by 
+    the user. This may be done on SGI machines, but is not recommended in 
+    performance critical code with the currently (March 1997) released 
+    versions of the SGI Pthreads libraries. 
+    <LI>
+    Win32 critical sections. These are used by default for win32 
+    compilations with compiler options that request multi-threaded code. 
+    <LI>
+    An SGI specific spin-lock implementation that is usable with both 
+    pthread and sproc threads. This could serve as a prototype 
+    implementation for other platforms. This is the default on SGI/MIPS 
+    platforms. 
+</UL>
+<P>
+It would be preferable if we could always use the OS-supplied locking 
+primitives. Unfortunately, these often do not perform well, for very 
+short critical sections such as those used by the allocator. </P>
+<P>
+Allocation intensive applications using Pthreads to obtain concurrency 
+on multiprocessors should consider using pthread_alloc from <A
+ HREF="http://www.sgi.com/Technology/STL/pthread_alloc.h">pthread_alloc.h</A>. 
+It imposes the restriction that memory deallocated by a thread can only 
+be reallocated by that thread. However, it often obtains significant 
+performance advantages as a result. </P>
+
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 

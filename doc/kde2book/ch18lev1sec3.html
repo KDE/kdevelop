@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Getting Started with the KDE 2.0 API</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="The KDevelop IDE: The Integrated Development Environment for KDE"
+HREF="ch18.html"/><LINK
+REL="PREVIOUS"
+TITLE="Creating KDE 2.0 Applications"
+HREF="ch18lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="The Classbrowser and Your Project"
+HREF="ch18lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch18lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch18lev1sec3"
+>18.3. Getting Started with the KDE 2.0 API</A
+></H1
+><P
+>The main issue for a programmer who wants to write an application using libraries such as Qt and the extensions offered by KDE is where to get the information about the interfaces (the classes of the libraries) and how to use them. This is a special area where KDevelop gives you a great help, even if you choose to use a different programming environment for writing your application. Long-term emacs users, for example, might prefer to stay with their editor and write their framework themselves.</P
+><P
+>First let's look at what KDevelop offers in documentation availability:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>KDevelop ships with five handbooks in HTML format that are available for online reading and that can also be printed out using the sgmltools on the SGML files that come with the source code of KDevelop. These handbooks contain a user manual describing the whole IDE and its features, as well as an introduction to development in general, a programming handbook for KDE development, and a tutorial handbook with a guide showing how to create and run KDE/Qt applications with KDevelop (including a step-by-step introduction to using the KDE API to create a sample project and the source code of the sample program). Furthermore, the book <I
+CLASS="emphasis"
+>The KDE Library Reference Guide</I
+> contains detailed explanations about the Qt signal/slot mechanism, an explanation of the event loop of a GUI-based application, event-handling implementation and manipulation, as well as a description of the commonly used KDE classes. Finally, the <I
+CLASS="emphasis"
+>KDE 2.0 Developer's Guide</I
+> introduces the developer to some principles and guidelines toward targeting KDE 2.0 application development. The IDE also contains a complete C/C++ reference that will assist the developer in certain questions about the C and C++ programming languages.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Within KDevelop, you can generate the complete KDE API with the help of KDOC via the Setup (you may choose to generate it for KDE 1.x or KDE 2.0, whatever system you want to develop for). This includes the KDE standard libraries, the KDE base libraries (kcontrol and libkonq) for writing modules to extend Konqueror or the KDE Control Center, as well as the KOffice libraries used to create KOffice applications. You can regenerate the API documentation any time you want, especially if the API has changed or has been extended. This is a good way to get the newest set of information available. In addition, the documentation is cross-referenced with the Qt online API documentation that comes with the distribution of the Qt library. Therefore, you have full access to the inheritance structure and can easily look up relationships between KDE and Qt.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>KDevelop allows you to make search requests over the complete documentation on your system. To enable this, the system needs to have a search engine installed (available are htdig or glimpse for use with KDevelop). The search engines contain an indexing function to create a search database that it will use to look up your request and build up the results that will then be displayed as an HTML page in the documentation browser. The required indexing can be done easily via a graphical interface available in the KDevelop setup.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>KDevelop contains a documentation browser that offers direct access to the API and that works in conjunction with the documentation tree described previously. The documentation tree displays all libraries and user documentation as books containing chapters; for libraries, these are the classes that again can be unfolded to list all methods of a class and that will bring you directly where you need to go&#8212;the documentation to the exact method you want to use. Retrieving the information you need is not a matter of browsing through header files on the system, nor is it a matter of organizing bookmarks for each library in your favorite browser. With KDevelop's browsing facilities, you have the best available access to the API that you need to have to successfully develop your application within a reasonable timeframe (see <A
+HREF="ch18lev1sec3.html#ch18fig06"
+>Figure 18.6</A
+>).</P
+></LI
+></UL
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig06"
+></A
+><P
+><B
+>Figure 18.6. The KDevelop Documentation-Browser with the Tree View displaying the KDE 2.0 API down to the member functions of classes.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig06.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch18lev2sec4"
+>18.3.1. How to Search for Information</A
+></H2
+><P
+>KDevelop provides several ways to look up information about keywords, classes, or generally anything of interest to the developer that could be explained somewhere in the documentation. At first, looking up used methods within the source code can be done by setting the cursor into the method's name and then pressing the right mouse button and selecting Search: <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>expression</TT
+></I
+>. The search engine will then look up the desired information, switch to the Documentation-Browser, and display a results page containing a preview of the first result of each page. You can then select which search result seems to have the information you want&#8212;just like searching on the Internet with a search engine such as Yahoo!.</P
+><P
+>When you're switching to one result, the found expression is automatically highlighted for you. For looking up the next expression on the same page matching your search, you could use the F3 shortcut or from the View menu of KDevelop, select Repeat Search.</P
+><P
+>Other possibilities to look up expressions are</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Search for Help On dialog, available from the Help menu. This dialog allows you to enter the search expression.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Within the Documentation-Browser, you can mark text that can then be looked up with the context menu, the same as described for the editor window.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Selecting text and using the Help menu item Search Marked Text or the appropriate shortcut to call this function.</P
+></LI
+></UL
+><P
+>You'll surely like these features within KDevelop because the amount of documentation grows with the extending of the KDE/Qt API, and it would be very hard to find the functions you need if you don't know exactly which one to use or whether that functionality is provided by the libraries at all.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev2sec4"
+TITLE="How to Search for Information"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev1sec3"
+TITLE="Getting Started with the KDE 2.0 API"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch18lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

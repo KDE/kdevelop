@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>KDE Multimedia Besides MCOP</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Multimedia"
+HREF="ch14.html"/><LINK
+REL="PREVIOUS"
+TITLE="Implementing a StereoEffect"
+HREF="ch14lev1sec5.html"/><LINK
+REL="NEXT"
+TITLE="The Future of MCOP"
+HREF="ch14lev1sec7.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch14lev1sec6"
+>14.6. KDE Multimedia Besides MCOP</A
+></H1
+><P
+>As you have seen in the previous sections, MCOP is the basis of many multimedia things, and it allows you many freedoms. However, in the very common situation in which you just want to notify the user by playing a sample, there are simpler interfaces. Also, not all media types have been integrated so far; I'll try to briefly address the other possibilities that are available.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec22"
+>14.6.1. KNotify API and <TT
+CLASS="literal"
+>KAudioPlayer</TT
+></A
+></H2
+><P
+>There are two very simple ways to get a sound played in a KDE application. Of course, they use the aRts soundserver. However, they are available in the kdecore library and require no extra libraries. Thus, they are the most convenient forms of doing audio.</P
+><P
+>First is the <TT
+CLASS="literal"
+>KAudioPlayer</TT
+> class (declared in kaudioplayer.h). It is supposed to play a sound file once, and without feedback. It works like this:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KAudioPlayer::play("/var/share/foo.wav");
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You see, it's simple. It also has the capability to use signals and slots to play files. That looks like the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KAudioPlayer player("/var/share/foo.wav");
+   3&nbsp;connect(&amp;btn,SIGNAL(clicked()),&amp;player,SLOT(play()));
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>However, for some applications, configurable sound events would be nicer for the user. For instance, how can you know which sound somebody prefers when getting new mail? How can you know whether the user prefers a sound at all, and not simply a message onscreen?</P
+><P
+>Of course, every application could write the configuration for that itself. There is a better solution, however. Using the KNotify API, you create an eventsrc, where you describe your events. The user can reconfigure them later. The following is a sample eventsrc file (which needs to be installed in $KDEDIR/share/apps/keventtest/eventsrc):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;[!Global!]
+   3&nbsp;Name=keventtest
+   4&nbsp;Comment=Event Test Program
+   5&nbsp;[newmail]
+   6&nbsp;Name=New Mail
+   7&nbsp;Comment=Occurs when you've got new mail
+   8&nbsp;default_sound=/var/samples/samples/011.WAV
+   9&nbsp;default_presentation=1
+  10&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>And here is how to use it:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KNotifyClient::event("newmail");
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The user now can disable this event, specify another sound file, or make it a message box instead of a sound file in the KDE control center. This is why you should prefer events to simply playing files in most cases.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec22"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec22"
+TITLE="KNotify API and KAudioPlayer"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec23"
+>14.6.2. LibKMid</A
+></H2
+><P
+>If you want to have background MIDI music for games and similar things, there is LibKMid. It comes with the capability to read and play MIDI files. It also does fork itself, so you don't have to care that it keeps running while you do longer calculations.</P
+><P
+>I think that the following example will show the most essential things you need to know:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KMidSimpleAPI::kMidInit();
+   3&nbsp;KMidSimpleAPI::kMidLoad("fancymusic.mid");
+   4&nbsp;KMidSimpleAPI::kMidPlay();
+   5&nbsp;
+   6&nbsp;sleep(30);  /* of course, you can do anything here */
+   7&nbsp;
+   8&nbsp;KMidSimpleAPI::kMidStop();
+   9&nbsp;KmidSimpleAPI::kMidDestruct();
+  10&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The initialization and loading are done with one function call each. After you have triggered playing (<TT
+CLASS="literal"
+>kMidPlay</TT
+>), you can do anything you like (for instance, for a visual application, return into the event loop). LibKMid will care that the MIDI file keeps running in the background.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec23"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec23"
+TITLE="LibKMid"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec24"
+>14.6.3. aKtion</A
+></H2
+><P
+>Finally , a hint about aKtion. Video isn't integrated in MCOP yet. It probably will be someday. However, that doesn't mean that there is no way to play videos. Based on the xanim decoders, aKtion is able to play most common video formats. It can, of course, be used as standalone application.</P
+><P
+>However, it is also available as an embeddable part via the KParts technology. That makes it suitable for using it inside Konqueror, but also inside your application.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec24"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec24"
+TITLE="aKtion"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev1sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev1sec6"
+TITLE="KDE Multimedia Besides MCOP"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Compiler frontend
+Name=KDevMakeView
+Icon=
+ServiceTypes=KDevelop/MakeFrontend
+X-KDE-Library=libkdevoutputviews
+X-KDevelop-Args=MakeView

@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<!--
+  -- Copyright (c) 1996-1999
+  -- Silicon Graphics Computer Systems, Inc.
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Silicon Graphics makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  --
+  -- Copyright (c) 1994
+  -- Hewlett-Packard Company
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Hewlett-Packard Company makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  --
+  -->
+
+<HTML>
+  <HEAD>
+    <title>STL: What's New</title>
+  </HEAD>
+
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+
+<h1>What's New</h1>
+
+<H2>Release 3.3: June 8, 2000</H2>
+<UL>
+<LI> New feature: concept checks.  The library now does better compile-time
+     error checking to make sure that the types used to instantiate
+     library templates conform to the templates' requirements.
+<LI> Removed two non-standard-conforming extensions: the second, defaulted
+     template parameter in bitset, and the third, default template
+     parameter in deque.
+<LI> Many bug fixes, performance enhancements, and compatibility improvements.
+</UL>
+
+<H2>Release 3.2: April 22, 1999</H2>
+<UL>
+<LI> New feature: <A Href="valarray">&lt;valarray&gt;</A> header, 
+     as defined in section 26.3 of the C++ standard.
+<LI> <A Href="limits">&lt;limits&gt;</A> header is now supported
+     on compilers that lack support for constant initialization of
+     static const data members, such as Microsoft v6.0.
+<LI> Performance improvements in <tt><A href="copy.html">copy</A></tt> for compilers that
+     lack support for partial specialization of templates.
+<LI> Improved support for <tt><A href="insert_iterator.html">insert_iterator</A></tt> when used with
+     hash tables and <tt><A href="Slist.html">slist</A></tt>.
+<LI> Documentation bug fix: documentation now makes it clear which 
+     library features are standard and which are SGI extensions.
+<LI> Bug fixes.
+</UL>
+
+<H2>Release 3.13: March 11, 1999</H2>
+<P>
+<UL>
+<LI>Added a <A Href="FAQ.html">Frequently Asked Questions</A> list.
+<LI>Bug fixes, particularly in multithreading support for non-SGI compilers.
+<LI>The <tt>at</tt> member function is now supported for the <tt><A href="Vector.html">vector</A></tt>
+    and <tt><A href="Deque.html">deque</A></tt> classes.  (It was previously supported only for
+    <tt><A href="basic_string.html">string</A></tt>.)
+</UL>
+
+<H2>Release 3.12: February 2, 1999</H2>
+<P>
+<UL>
+<LI> Minor bug fixes.
+<LI> The <A Href="string">&lt;string&gt;</A> and 
+     <A Href="bitset">&lt;bitset&gt;</A> headers are now supported on
+     compilers that lack full support for member templates and partial 
+     specialization, such as Microsoft v6.0.
+<LI> Code to support multithreading has been consolidated in a single
+     file, so that system dependences are better isolated.
+</UL>
+
+<H2>Release 3.11: July 21, 1998</H2>
+<UL>
+<LI> Minor bug fixes.
+<LI> Faster <tt>operator[]</tt> in <tt><A href="Map.html">map</A></tt>.
+<LI> Algorithmic improvements in <tt><A href="find.html">find</A></tt>,
+     <tt><A href="find_if.html">find_if</A></tt>, and <tt><A href="partition.html">partition</A></tt>.
+<LI> The <A Href="stdexcept">standard exception hierarchy</A> is
+     now usable on compilers that do not provide an
+     <tt>&lt;exception&gt;</tt> header.
+</UL>
+
+<H2>Release 3.1: June 9, 1998</H2>
+This release provides several new features.
+<UL>
+<LI> Standard-conforming <tt><A href="basic_string.html">string</A></tt> and 
+     <tt><A href="bitset.html">bitset</A></tt> classes, and the 
+     <A Href="stdexcept">standard exception hierarchy</A>.
+<LI> Standard-conforming allocators, including the default allocator
+     class <tt>allocator&lt;T&gt;</tt>.  All containers now use
+     standard allocators, and all containers now support allocators
+     whose instances are distinct.  Old-style allocators, like <tt>alloc</tt>,
+     are still supported for backward compatibility.
+<LI> Algorithmic improvements in <tt><A href="search.html">search</A></tt>.
+<LI> All sequences now support the <tt>resize</tt> and <tt>assign</tt>
+     member functions.  All sequences now properly support overloaded 
+     <tt>insert</tt> member functions and constructors in the presence 
+     of member templates.
+<LI> Bug fixes in <tt><A href="Rope.html">rope</A></tt>, and minor bug fixes elsewhere.
+     Minor changes for standard conformance.
+<LI> Standard-conforming <tt>auto_ptr</tt> class.
+<LI> Internal names, such as names of function and template
+     parameters, have been changed so that they cannot conflict with
+     user names (including user macros).
+</UL>
+
+<H2>Release 3.01: October 31, 1997</H2> 
+This is a minor release.  It consists only of bug fixes (the most
+important ones are in <tt><A href="Rope.html">rope</A></tt>), small changes to reflect
+changes in the Final Draft International Standard (FDIS), and
+performance improvements in single-element insertion into containers.
+
+
+<H2>Release 3.0: October 31, 1997</H2>
+<UL> 
+<LI> Major reorganization of header files.  Headers now have the names
+     described in the draft C++ standard.  (Old header names are
+     provided as well for backward compatibility.)  The new-style
+     headers declare their contents in namespace <tt>std</tt>; the
+     old-style headers do too, but they import those declarations into
+     the global namespace with using declarations.  So, for example,
+     <tt>#include &lt;vector.h&gt;</tt> is roughly equivalent to
+     <tt>#include &lt;vector&gt;</tt> followed by the declaration
+     <tt>using std::vector;</tt>.
+<P>
+     Note that namespace <tt>std</tt> is only enabled for compilers
+     whose support for namespaces is sufficient; this is controlled by
+     the header <tt>&lt;stl_config.h&gt;</tt>.  
+
+<LI> Bug fixes, and minor changes for standard conformance.
+</UL>
+
+<H2>Release 2.03: September 9, 1997</H2>
+<UL>
+<LI> Bug fixes, most importantly in <tt><A href="Rope.html">rope</A></tt>.
+<LI> New version of <tt>reverse_iterator</tt> that takes only a single
+     template parameter, as described in the draft standard.  (This 
+     relies on <tt><A href="iterator_traits.html">iterator_traits</A></tt>, so you can only use
+     the new version of <tt>reverse_iterator</tt> if your compiler 
+     supports partial specialization.)
+<LI> New algorithms: <tt><A href="find_first_of.html">find_first_of</A></tt>,
+     <tt><A href="search_n.html">search_n</A></tt>, <tt><A href="find_end.html">find_end</A></tt>
+<LI> Changed the <A href="iterator_tags.html">iterator tag</A> classes so that they form an
+     inheritance hierarchy.
+<LI> Added the <tt>-&gt;</tt> operator to all predefined iterators 
+     (except for output iterators).
+</UL>
+
+<H2>Release 2.02: July 31, 1997</H2>
+
+<UL>
+<LI>Bug fixes, most importantly in 
+    <tt><A Href="Rope.html">rope</A></tt> and
+    <tt><A Href="Deque.html">deque</A></tt>.
+<LI>New feature: function object adaptors for member functions.  
+    This is a family of classes: 
+    <tt><A Href="mem_fun_t.html">mem_fun_t</A></tt>,
+    <tt><A Href="mem_fun_ref_t.html">mem_fun_ref_t</A></tt>,
+    <tt><A Href="mem_fun1_t.html">mem_fun1_t</A></tt>,
+    <tt><A Href="mem_fun1_ref_t.html">mem_fun1_ref_t</A></tt>.
+</UL>
+
+<H2>Release 2.01: June 30, 1997</H2>
+
+Bug fixes only, no new features.
+
+<H2>Release 2.0: June 13, 1997</H2>
+
+This is a major release, with many new features.  Here are some of the
+most important.
+
+<UL>
+<LI>Exception safety.  All STL components are now exception safe.
+<LI>New container class: <tt><A Href="Rope.html">rope</A></tt>.  A scalable
+    string representation.
+<LI>New container class: <tt><A Href="Slist.html">slist</A></tt>.  Singly
+    linked lists.
+<LI>Member templates.  If your compiler supports member templates,
+    then you will be able to use the fully general form of containers'
+    copy constructors and <tt>insert</tt> member functions.
+<LI>New mechanism for accessing <A href="Iterators.html">iterators</A>' 
+    associated type information: <tt><A Href="iterator_traits.html">iterator_traits</A></tt>.
+    (Note: you can only use <tt><A Href="iterator_traits.html">iterator_traits</A></tt>
+    if your compiler supports "partial specialization".)  
+    The algorithms
+    <tt><A href="count.html">count</A></tt>, <tt><A href="count_if.html">count_if</A></tt>,
+    and <tt><A href="distance.html">distance</A></tt> have been rewritten in
+    terms of <tt><A Href="iterator_traits.html">iterator_traits</A></tt>.
+<LI>Reimplementation of <tt><A Href="Deque.html">deque</A></tt>.  
+    <tt><A Href="Deque.html">deque</A></tt> has been completely rewritten,
+    for higher performance.
+<LI><tt>type_traits</tt> mechanism, which allows omission of null
+    constructor and destructor calls.
+<LI>New <tt><A href="temporary_buffer.html">temporary_buffer</A></tt>
+    class.  This was partially motivated by exception safety, but it
+    is also more convenient and more efficient than the old 
+    <tt><A href="get_temporary_buffer.html">get_temporary_buffer</A></tt>
+    and <tt><A href="return_temporary_buffer.html">return_temporary_buffer</A></tt>
+    functions.
+<LI>New allocator, <tt>debug_alloc</tt>, which is useful for verifying
+    the correctness of memory allocation and deallocation.
+<LI>New algorithms: 
+    <tt><A href="copy_n.html">copy_n</A></tt>, 
+    <tt><A href="lexicographical_compare_3way.html">lexicographical_compare_3way</A></tt>,
+    <tt><A href="power.html">power</A></tt>,
+    <tt><A href="uninitialized_copy_n.html">uninitialized_copy_n</A></tt>.
+<LI>Greater portability.  The SGI STL can now be compiled using
+    Microsoft Visual C++ 5.0, and Borland C++ 5.02; it should not be
+    difficult to port it to any other compiler that has good support
+    for templates.  (Specifically, any compiler that has default template
+    parameters.)  Most compiler-specific code is isolated in the file
+    <tt>stl_config.h</tt>.
+</UL>
+
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 

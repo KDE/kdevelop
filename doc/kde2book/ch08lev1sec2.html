@@ -1,0 +1,717 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Dialog Layout the Simple Way</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="PREVIOUS"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="NEXT"
+TITLE="Dialog Modality&#8212;Modal or Modeless Dialogs"
+HREF="ch08lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec2"
+>8.2. Dialog Layout the Simple Way</A
+></H1
+><P
+>When you have decided what components are needed in the dialog to accomplish the intended task, place them in such a way that the usage is intuitive for the end user. Any widget can be placed in a dialog by defining its <I
+CLASS="emphasis"
+>x</I
+> and <I
+CLASS="emphasis"
+>y</I
+> coordinates with respect to the upper-left corner of the parent widget, along with the width and height. This must be repeated for each and every widget in the dialog. In theory, this is straightforward, but in practical life several complicating factors exist:</P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>What to do when a dialog is resized? Which widgets should stretch and how much, and which remain fixed in size?</P
+></LI
+><LI
+><P
+>How much work is required when you suddenly need to add one or more widgets or perhaps remove another? This may require completely new layout code and can take considerable time to finish for complex dialogs.</P
+></LI
+><LI
+><P
+>What extra complexity do you have to add to your code to handle font and font-size changes? Remember that the users may prefer another font and/or font-size than you.</P
+></LI
+><LI
+><P
+>How easy is it, in general, to support label strings and text that have no predictable size? This is the case for KDE applications that need to support multiple languages.</P
+></LI
+></OL
+><P
+>The remedy to all these problems is to use the <TT
+CLASS="literal"
+>QLayout</TT
+> classes to manage the widgets. The widgets' size, stretchability, and position with respect to the others are easily controlled this way. <A
+HREF="ch08lev1sec2.html#ch08list02"
+>Listing 8.2</A
+> contains the same constructor using old-style manual placement (OldDialog) and the <TT
+CLASS="literal"
+>QLayout</TT
+>-based (NewDialog). The difference should easily convince you to use the <TT
+CLASS="literal"
+>QLayout</TT
+> classes and the <TT
+CLASS="literal"
+>KDialogBase</TT
+> widget class to manage the widgets, because you no longer have to use the <TT
+CLASS="literal"
+>setGeometry</TT
+><I
+CLASS="emphasis"
+>()</I
+> calls. What would you have to do in OldDialog if the string length of the first QLabel got longer or another font size should be used? Try to add a new label below the first one in the OldDialog. <A
+HREF="ch08lev1sec2.html#ch08fig02"
+>Figure 8.2</A
+> shows what the dialog looks like when it is based on QLayouts.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list02"
+></A
+><P
+><B
+>Example 8.2. The Difference Between the Old Style (Manual) Geometry Strategy and the New Based on <TT
+CLASS="literal"
+>QLayouts</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: OldDialog::OldDialog( QWidget *parent, const char *name, bool modal )
+   3&nbsp;2:   : QDialog( parent, name, modal )
+   4&nbsp;3: {
+   5&nbsp;4:   setCaption( i18n("Update Frequency") );
+   6&nbsp;5:
+   7&nbsp;6:   QLabel *label = new QLabel( this, "label" );
+   8&nbsp;7:   label-&gt;setGeometry( 16, 24, 180, 24 );
+   9&nbsp;8:   label-&gt;setText( i18n("Update frequency in seconds:") );
+  10&nbsp;9:
+  11&nbsp;10:   QScrollBar *scrollbar = new QScrollBar( this, "scrollbar" );
+  12&nbsp;11:   scrollbar-&gt;setGeometry( 24, 48, 160, 16 );
+  13&nbsp;12:   scrollbar-&gt;setOrientation( QScrollBar::Horizontal );
+  14&nbsp;13:
+  15&nbsp;14:   QLCDNumber *lcdNumber = QLCDNumber( this, "lcdnumber" );
+  16&nbsp;15:   lcdNumber-&gt;setGeometry( 192, 32, 72, 32 );
+  17&nbsp;16:   lcdNumber-&gt;setSmallDecimalPoint( false );
+  18&nbsp;17:   lcdNumber-&gt;setNumDigits( 5 );
+  19&nbsp;18:   lcdNumber-&gt;setMode( QLCDNumber::DEC );
+  20&nbsp;19:
+  21&nbsp;20:   QPushButton *okPushButton = new QPushButton( this, "ok" );
+  22&nbsp;21:   okPushButton-&gt;setGeometry( 32, 120, 80, 24 );
+  23&nbsp;22:   okPushButton-&gt;setText( i18n("&amp;OK") );
+  24&nbsp;23:
+  25&nbsp;24:   QPushButton *cancelPushButton = new QPushButton( this, "PushButton_2" );
+  26&nbsp;25:   cancelPushButton-&gt;setGeometry( 176, 120, 80, 24 );
+  27&nbsp;26:   cancelPushButton-&gt;setText( i18n("&amp;Cancel") );
+  28&nbsp;27:
+  29&nbsp;28:   resize( 288, 168 );
+  30&nbsp;29:
+  31&nbsp;30:   connect( scrollbar, SIGNAL(valueChanged(int)),
+  32&nbsp;31:      lcdNumber, SLOT(display(int)) );
+  33&nbsp;32:   connect( okPushButton, SIGNAL(clicked()), this, SLOT(accept()) );
+  34&nbsp;33:   connect( cancelPushButton, SIGNAL(clicked()), this, SLOT(reject()) );
+  35&nbsp;34: }
+  36&nbsp;35:
+  37&nbsp;36: NewDialog::NewDialog( QWidget *parent, const char* name, bool modal )
+  38&nbsp;37:   : KDialogBase( parent, name, modal, i18n("Update Frequency"),
+  39&nbsp;38:      Ok|Cancel, Ok )
+  40&nbsp;39: {
+  41&nbsp;40:   QWidget *page = new QWidget( this );
+  42&nbsp;41:   setMainWidget(page);
+  43&nbsp;42:
+  44&nbsp;43:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+  45&nbsp;44:   QHBoxLayout *hlay = new QHBoxLayout( topLayout );
+  46&nbsp;45:   QVBoxLayout *vlay = new QVBoxLayout( hlay, 10 );
+  47&nbsp;46:
+  48&nbsp;47:   QLabel *label2 = new QLabel( page, "label1" );
+  49&nbsp;48:   label-&gt;setText( i18n("Update frequency in seconds:") );
+  50&nbsp;49:   vlay-&gt;addWidget( label );
+  51&nbsp;50:
+  52&nbsp;51:   //
+  53&nbsp;52:   // It is very simple to add a new label here.
+  54&nbsp;53:   //
+  55&nbsp;54:   //QLabel *label2 = new QLabel( page, "label2" );
+  56&nbsp;55:   //label2-&gt;setText( i18n("A new label text") );
+  57&nbsp;56:   //vlay-&gt;addWidget( label2 );
+  58&nbsp;57:
+  59&nbsp;58:   QScrollBar *scrollbar = QScrollBar( page, "scrollbar" );
+  60&nbsp;59:   scrollbar-&gt;setOrientation( QScrollBar::Horizontal );
+  61&nbsp;60:   vlay-&gt;addWidget( scrollbar );
+  62&nbsp;61:
+  63&nbsp;62:   QLCDNumber *lcdNumber = QLCDNumber( page, "lcdnumber" );
+  64&nbsp;63:   lcdNumber-&gt;setSmallDecimalPoint( false );
+  65&nbsp;64:   lcdNumber-&gt;setNumDigits( 3 );
+  66&nbsp;65:   lcdNumber-&gt;setMode( QLCDNumber::DEC );
+  67&nbsp;66:   hlay-&gt;addWidget( lcdNumber, 0 );
+  68&nbsp;67:
+  69&nbsp;68:   connect( scrollbar, SIGNAL(valueChanged(int)),
+  70&nbsp;69:      lcdNumber, SLOT(display(int)) );
+  71&nbsp;70: }
+  72&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch08fig02"
+></A
+><P
+><B
+>Figure 8.2. The appearance of the dialog that is implemented in the second constructor of <A
+HREF="ch08lev1sec2.html#ch08list02"
+>Listing 8.2</A
+>.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/08fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>A <TT
+CLASS="literal"
+>QLayout</TT
+> can be vertically oriented (<TT
+CLASS="literal"
+>QVBoxLayout</TT
+>), horizontally oriented (<TT
+CLASS="literal"
+>QHBoxLayout</TT
+>) or be a grid layout (<TT
+CLASS="literal"
+>QGridLayout</TT
+>). The Qt layout mechanism is to some extent described in <A
+HREF="ch04.html"
+>Chapter 4, <SPAN
+CLASS="QUOTE"
+>"Creating Custom KDE Widgets."</SPAN
+></A
+> Therefore, in the following section, some problems that often appear when writing dialogs are described.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You can also define your own custom layout managers, but that is outside the scope of this chapter.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>The first important thing you must know is that there can be only one layout manager per widget. This constraint does not prevent you from nesting layouts. As <A
+HREF="ch08lev1sec2.html#ch08list02"
+>Listing 8.2</A
+> illustrates, a layout can be inserted into a parent layout, thus becoming a child layout. On line 43, <TT
+CLASS="literal"
+>topLayout</TT
+> is the parent of the horizontal layout <TT
+CLASS="literal"
+>hlay</TT
+>, which, in turn, is the parent of the vertical layout <TT
+CLASS="literal"
+>vlay</TT
+>.</P
+><P
+>The second constraint you must know is that a widget that is managed by a layout (a parent or a child layout) must be a child widget of the same widget that contains the layout manager. This can been seen in <A
+HREF="ch08lev1sec2.html#ch08list02"
+>Listing 8.2</A
+> on lines 58&#8211;60, where <TT
+CLASS="literal"
+>scrollbar</TT
+> is a child of <TT
+CLASS="literal"
+>page</TT
+> and is managed by <TT
+CLASS="literal"
+>vlay,</TT
+> which is a grandchild layout of <TT
+CLASS="literal"
+>topLayout</TT
+>.</P
+><P
+>A widget that is managed by a layout manager can itself contain its own layout manager. Thus you can create a hierarchy of layouts and widgets of any desired complexity. <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+> shows how the Goto dialog of KHexEdit is using a frame with a title that groups the toggle buttons. The <TT
+CLASS="literal"
+>group</TT
+> widget is managed by the <TT
+CLASS="literal"
+>topLayout</TT
+> manager and contains the <TT
+CLASS="literal"
+>gbox</TT
+> layout. <A
+HREF="ch08lev1sec2.html#ch08fig03"
+>Figure 8.3</A
+> shows the appearance of this dialog.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list03"
+></A
+><P
+><B
+>Example 8.3. The <TT
+CLASS="literal"
+>CGotoDialog</TT
+> Class Uses the <TT
+CLASS="literal"
+>KDialogBase</TT
+> Class Somewhat Differently from What Has Been Shown Earlier</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1:  class CGotoDialog : public KDialogBase
+   3&nbsp;2: {
+   4&nbsp;3:   Q_OBJECT
+   5&nbsp;4:
+   6&nbsp;5:   public:
+   7&nbsp;6:     CGotoDialog( QWidget *parent=0, const char *name=0,
+   8&nbsp;7:                  bool modal=false );
+   9&nbsp;8:     ~CGotoDialog();
+  10&nbsp;9:     void defaultFocus();
+  11&nbsp;10:
+  12&nbsp;11:   protected slots:
+  13&nbsp;12:     virtual void slotOk();
+  14&nbsp;13:
+  15&nbsp;14:   signals:
+  16&nbsp;15:     void gotoOffset( uint offset, uint bit, bool fromCursor,
+  17&nbsp;16:                      bool forward );
+  18&nbsp;17:
+  19&nbsp;18:   private:
+  20&nbsp;19:     QComboBox *mComboBox;
+  21&nbsp;20:     QCheckBox *mCheckBackward;
+  22&nbsp;21:     QCheckBox *mCheckFromCursor;
+  23&nbsp;22:     QCheckBox *mCheckVisible;
+  24&nbsp;23: };
+  25&nbsp;24:
+  26&nbsp;25: CGotoDialog::CGotoDialog( QWidget *parent, const char *name, bool modal )
+  27&nbsp;26:   :KDialogBase( Plain, i18n("Goto Offset"), Ok|Cancel, Ok, parent, name,
+  28&nbsp;27:     modal )
+  29&nbsp;28: {
+  30&nbsp;29:   QVBoxLayout *topLayout = new QVBoxLayout( plainPage(), 0,
+  31&nbsp;30:                                             spacingHint() );
+  32&nbsp;31:   CHECK_PTR(topLayout);
+  33&nbsp;32: 
+  34&nbsp;33:   QVBoxLayout *vbox = new QVBoxLayout( topLayout );
+  35&nbsp;34:   CHECK_PTR(vbox);
+  36&nbsp;35:
+  37&nbsp;36:   mComboBox = new QComboBox( true, plainPage() );
+  38&nbsp;37:   CHECK_PTR(mComboBox);
+  39&nbsp;38:   mComboBox-&gt;setMaxCount( 10 );
+  40&nbsp;39:   mComboBox-&gt;setInsertionPolicy( QComboBox::AtTop );
+  41&nbsp;40:   mComboBox-&gt;setMinimumWidth( fontMetrics().maxWidth()*17 );
+  42&nbsp;41:
+  43&nbsp;42:   QLabel *label = new QLabel( mComboBox, i18n("O&amp;ffset:"), plainPage() );
+  44&nbsp;43:   CHECK_PTR(label);
+  45&nbsp;44:
+  46&nbsp;45:   vbox-&gt;addWidget( label );
+  47&nbsp;46:   vbox-&gt;addWidget( mComboBox );
+  48&nbsp;47:
+  49&nbsp;48:   QButtonGroup *group = new QButtonGroup( i18n("Options"), plainPage() );
+  50&nbsp;49:   CHECK_PTR(group);
+  51&nbsp;50:   topLayout-&gt;addWidget( group, 10 ); // Only the group will be resized
+  52&nbsp;51:
+  53&nbsp;52:   QGridLayout *gbox = new QGridLayout( group, 4, 2, spacingHint() );
+  54&nbsp;53:   CHECK_PTR(gbox);
+  55&nbsp;54:   gbox-&gt;addRowSpacing( 0, fontMetrics().lineSpacing() );
+  56&nbsp;55:   mCheckFromCursor = new QCheckBox( i18n("&amp;From cursor"), group );
+  57&nbsp;56:   CHECK_PTR(mCheckFromCursor);
+  58&nbsp;57:   gbox-&gt;addWidget( mCheckFromCursor, 1, 0 );
+  59&nbsp;58:   mCheckBackward = new QCheckBox( i18n("&amp;Backwards"), group );
+  60&nbsp;59:   CHECK_PTR(mCheckBackward);
+  61&nbsp;60:   gbox-&gt;addWidget( mCheckBackward, 1, 1 );
+  62&nbsp;61:   mCheckVisible = new QCheckBox( i18n("&amp;Stay visible"), group );
+  63&nbsp;62:   CHECK_PTR(mCheckVisible);
+  64&nbsp;63:   gbox-&gt;addWidget( mCheckVisible, 2, 0 );
+  65&nbsp;64:   gbox-&gt;setRowStretch( 3, 10 ); // Eat up all extra space when resized.
+  66&nbsp;65:   mCheckVisible-&gt;setChecked( true );
+  67&nbsp;66:
+  68&nbsp;67:   defaultFocus();
+  69&nbsp;68: }
+  70&nbsp;69:
+  71&nbsp;70: CGotoDialog::~CGotoDialog()
+  72&nbsp;71: {
+  73&nbsp;72: }
+  74&nbsp;73:
+  75&nbsp;74: void
+  76&nbsp;75: CGotoDialog::defaultFocus()
+  77&nbsp;76: {
+  78&nbsp;77:   mComboBox-&gt;setFocus();
+  79&nbsp;78: }
+  80&nbsp;79:
+  81&nbsp;80: void
+  82&nbsp;81: CGotoDialog::slotOk()
+  83&nbsp;82: {
+  84&nbsp;83:   uint offset;
+  85&nbsp;84:   bool success = stringToOffset( mComboBox-&gt;currentText(), offset );
+  86&nbsp;85:   if( success == false )
+  87&nbsp;86:   {
+  88&nbsp;87:     return;
+  89&nbsp;88:   }
+  90&nbsp;89:
+  91&nbsp;90:   if( mCheckVisible-&gt;isChecked() == false )
+  92&nbsp;91:   {
+  93&nbsp;92:     hide();
+  94&nbsp;93:   }
+  95&nbsp;94:   emit gotoOffset( offset, 7, mCheckFromCursor-&gt;isChecked(),
+  96&nbsp;95:        mCheckBackward-&gt;isChecked() == true ? false : true );
+  97&nbsp;96: }
+  98&nbsp;97:
+  99&nbsp;98: // The dialog used as the main application window
+ 100&nbsp;99: #include &amp;lt;kcmdlineargs.h&gt;
+ 101&nbsp;100: int main( int argc, char **argv )
+ 102&nbsp;101: {
+ 103&nbsp;102:   KCmdLineArgs::init(argc, argv, "khexedit", 0, 0);
+ 104&nbsp;103:   KApplication app;
+ 105&nbsp;104:   CGotoDialog *dialog = new CGotoDialog;
+ 106&nbsp;105:   dialog-&gt;show();
+ 107&nbsp;106:   int result = app.exec();
+ 108&nbsp;107:   return result;
+ 109&nbsp;108: }
+ 110&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As can be seen from <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+>, the Plain mode in the constructor instructs <TT
+CLASS="literal"
+>KDialogBase</TT
+> to create a main widget by itself. This widget is returned by <TT
+CLASS="literal"
+>plainPage()</TT
+> and serves as the parent widget for all layouts and other widgets. A little&#8212;but important&#8212;trick is used in <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+> as well. On line 54, notice the <TT
+CLASS="literal"
+>fontMetrics().lineSpacing()</TT
+>. It reserves space so that the uppermost child widget (the From Cursor toggle button) of the frame does not obscure the title string. Never make this spacing by using a fixed integer value. It will work with the font that you use, but when the users of your application change the font size, it will break. The <TT
+CLASS="literal"
+>fontMetrics().lineSpacing()</TT
+> returns a value that depends on the font. This seems to be a missing feature in the Qt library code, so future versions of the Qt library may not require this workaround.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch08fig03"
+></A
+><P
+><B
+>Figure 8.3. The Goto dialog of <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+>.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/08fig03.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The method of first creating a widget and then the layout for each and every widget that needs it can be cumbersome if it has to be repeated for many widgets. To simplify this, the Qt library contains two widgets, <TT
+CLASS="literal"
+>QVBox</TT
+> and <TT
+CLASS="literal"
+>QHBox</TT
+>, which create the layout manager internally. These are intended for simple layouts. The widget children of a <TT
+CLASS="literal"
+>QVBox</TT
+> widget are placed vertically, and the children of <TT
+CLASS="literal"
+>QHBox</TT
+> widget are placed next to each other. A <TT
+CLASS="literal"
+>QVBox</TT
+> widget itself can, of course, be managed by a layout. <A
+HREF="ch08lev1sec2.html#ch08list04"
+>Listing 8.4</A
+> shows the constructor of <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+> but uses a <TT
+CLASS="literal"
+>QVBox</TT
+> instead of a layout. You make only one layout yourself in this example.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list04"
+></A
+><P
+><B
+>Example 8.4. The <TT
+CLASS="literal"
+>CGotoDialog</TT
+> Class Using a <TT
+CLASS="literal"
+>QVBox</TT
+> Widget to Do the Geometry Management</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: CGotoDialog::CGotoDialog( QWidget *parent, const char *name, bool modal )
+   3&nbsp;2:   :KDialogBase( Plain, i18n("Goto Offset"), Ok|Cancel, Ok, parent, name,
+   4&nbsp;3:         modal )
+   5&nbsp;4: {
+   6&nbsp;5:    QVBoxLayout *topLayout = new QVBoxLayout(plainPage(), 0, spacingHint());
+   7&nbsp;6:    CHECK_PTR(topLayout);
+   8&nbsp;7:
+   9&nbsp;8:    QVBox *topBox = new QVBox( plainPage() );
+  10&nbsp;9:    CHECK_PTR(topBox);
+  11&nbsp;10:   topBox-&gt;setSpacing( spacingHint() );
+  12&nbsp;11:   topLayout-&gt;addWidget( topBox );
+  13&nbsp;12:
+  14&nbsp;13:   QLabel *label = new QLabel( i18n("O&amp;ffset:"), topBox );
+  15&nbsp;14:   CHECK_PTR(label);
+  16&nbsp;15:
+  17&nbsp;16:   mComboBox = new QComboBox( true, topBox );
+  18&nbsp;17:   CHECK_PTR(mComboBox);
+  19&nbsp;18:   mComboBox-&gt;setMaxCount( 10 );
+  20&nbsp;19:   mComboBox-&gt;setInsertionPolicy( QComboBox::AtTop );
+  21&nbsp;20:   mComboBox-&gt;setMinimumWidth( fontMetrics().maxWidth()*17 );
+  22&nbsp;21:   label-&gt;setBuddy(mComboBox); // To get the underlining to work
+  23&nbsp;22:
+  24&nbsp;23:   QButtonGroup *group = new QButtonGroup( i18n("Options"), topBox );
+  25&nbsp;24:   CHECK_PTR(group);
+  26&nbsp;25:
+  27&nbsp;26:   QGridLayout *gbox = new QGridLayout( group, 4, 2, spacingHint() );
+  28&nbsp;27:   CHECK_PTR(gbox);
+  29&nbsp;28:   gbox-&gt;addRowSpacing( 0, fontMetrics().lineSpacing() );
+  30&nbsp;29:   mCheckFromCursor = new QCheckBox( i18n("&amp;From cursor"), group );
+  31&nbsp;30:   CHECK_PTR(mCheckFromCursor);
+  32&nbsp;31:   gbox-&gt;addWidget( mCheckFromCursor, 1, 0 );
+  33&nbsp;32:   mCheckBackward = new QCheckBox( i18n("&amp;Backwards"), group );
+  34&nbsp;33:   CHECK_PTR(mCheckBackward);
+  35&nbsp;34:   gbox-&gt;addWidget( mCheckBackward, 1, 1 );
+  36&nbsp;35:   mCheckVisible = new QCheckBox( i18n("&amp;Stay visible"), group );
+  37&nbsp;36:   CHECK_PTR(mCheckVisible);
+  38&nbsp;37:   gbox-&gt;addWidget( mCheckVisible, 2, 0 );
+  39&nbsp;38:   gbox-&gt;setRowStretch( 3, 10 ); // Eat up all extra space when resized.
+  40&nbsp;39:   mCheckVisible-&gt;setChecked( true );
+  41&nbsp;40:
+  42&nbsp;41:   defaultFocus();
+  43&nbsp;42: }
+  44&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You should keep several design issues in mind when using <TT
+CLASS="literal"
+>QLayouts</TT
+>. The following list can be considered a checklist:</P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>What spacing and margin values do you use in the <TT
+CLASS="literal"
+>QLayouts</TT
+>? Make sure you use the same values for spacing and margins for all dialogs you make, because this makes the overall appearance much better. Never use hard-coded values. Define constants in a common header file and use them without exception. As indicated in <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+>, dialogs derived from <TT
+CLASS="literal"
+>KDialogBase</TT
+> have access to a <TT
+CLASS="literal"
+>spacingHint()</TT
+> and (not shown) a <TT
+CLASS="literal"
+>marginHint()</TT
+> method. These provide the values you need. Note: Normally you can ignore the <TT
+CLASS="literal"
+>marginHint()</TT
+> because this is reserved for the space between the dialog edge and the outermost widget. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> takes care of setting up this space internally.</P
+></LI
+><LI
+><P
+>Should your dialog be resizable? In most cases, there is no reason to not allow resizing. This means that a dialog can be made larger than the default minimum size, but never smaller. The default minimum size is automatically computed by the <TT
+CLASS="literal"
+>QLayouts</TT
+> just before the dialog becomes visible. A dialog that contains editable fields or lists should always be resizable, whereas dialogs that contain widgets that require a long time to resize should perhaps be fixed. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class contains one method, <TT
+CLASS="literal"
+>disableResize()</TT
+>, which prevents the dialog from being resized. It must be called just before <TT
+CLASS="literal"
+>show()</TT
+> or <TT
+CLASS="literal"
+>exec()</TT
+>. The default behavior of <TT
+CLASS="literal"
+>KDialogBase</TT
+> is to allow resizing.</P
+></LI
+><LI
+><P
+>Which widgets in your dialog are stretchable? When you add a widget to a layout with <TT
+CLASS="literal"
+>addWidget(&#8230;)</TT
+>, you can also specify a stretch factor. The widget with the biggest stretch factor is resized the most when the layout is resized. Normally, list widgets and multiline edit widgets should be at least stretchable vertically, and anything containing an edit field should be horizontally stretchable. You can also set an empty space to be stretchable. This is done in <A
+HREF="ch08lev1sec2.html#ch08list04"
+>Listing 8.4</A
+> on line 38.</P
+></LI
+><LI
+><P
+>How does your dialog look when you change the length of the strings? Always test with both short and long strings for the various labels and so on. You will then locate potential problems long before a translation is being made or before a modification of an original string is made.</P
+></LI
+></OL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec2"
+TITLE="Dialog Layout the Simple Way"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>A Simple KDE Application</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Fundamentals of KDE Application Programming"
+HREF="p01.html"/><LINK
+REL="PREVIOUS"
+TITLE="Let's Code, Already!"
+HREF="ch01lev1sec7.html"/><LINK
+REL="NEXT"
+TITLE="Compiling a KDE Program"
+HREF="ch02lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch01lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch02lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch02"
+>Chapter 2. A Simple KDE Application</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN1413"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch02.html#ch02lev1sec1"
+><I
+CLASS="emphasis"
+>The Linux/UNIX Programmer's Desktop</I
+></A
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch02lev1sec2.html"
+><I
+CLASS="emphasis"
+>Compiling a KDE Program</I
+></A
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch02lev1sec3.html"
+><I
+CLASS="emphasis"
+>KDE Application Structure</I
+></A
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch02lev1sec4.html"
+><I
+CLASS="emphasis"
+>GUI Elements</I
+></A
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><A
+HREF="ch02lev1sec5.html"
+><I
+CLASS="emphasis"
+>Programming Conventions</I
+></A
+></P
+></LI
+></UL
+></DIV
+><P
+>The goal of the KDE project is to create a set of desktop applications that share a common user interface. To this end, the KDE developers have created a set of C++ classes that help you get the KDE look and feel with minimal effort. You create a KDE-style application by deriving the KDE class <TT
+CLASS="literal"
+>KTMainWindow</TT
+> and using the event loop (discussed in <A
+HREF="ch03.html"
+>Chapter 3, <SPAN
+CLASS="QUOTE"
+>"The Qt Toolkit"</SPAN
+></A
+>) in the class <TT
+CLASS="literal"
+>KApplication</TT
+>. These classes will handle look-and-feel issues that are common to most KDE applications, leaving you free to focus on programming the tasks unique to your application.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch02lev1sec1"
+>2.1. The Linux/UNIX Programmer's Desktop</A
+></H1
+><P
+>Now is a good time to collect the tools you will need for developing KDE software. At the very least, you need an editor to edit your source code and a way to access the C++ compiler. Optionally, you may also want to use a debugger to make the debugging of your code more efficient.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch02lev2sec1"
+>2.1.1. Necessities for Editing Code</A
+></H2
+><P
+>Several editors are available for Linux/UNIX systems. Two popular ones are vi and emacs. If you are familiar with UNIX, you will be familiar with these programs. For those of you who are new to UNIX: vi is a simple text editor with a unique, sometimes difficult, interface. It would not be familiar if you are used to a Macintosh- or Windows-based source-code editor. emacs is somewhat more familiar and has a very powerful LISP-based macro language.</P
+><P
+>If you want a more modern-feeling editor, you could try kfte or kwrite. kfte is a full-fledged source-code editor. kwrite is a simpler, general text editor, but it does provide a key-mapping more familiar to Macintosh/Windows users and syntax highlighting for C++ (as well as for other file types).</P
+><P
+>The KDE taskbar is very helpful in a bare-bones programming environment such as I am describing here. If you are editing several source-code files at once (and in separate windows) the title of each window is listed in the taskbar. Clicking that taskbar button opens and/or raises that window and gives it the focus.</P
+><P
+>To make the taskbar a little more useful, you should set the title of your window to be the name of the file you are editing. If you are using emacs, for example, you can type <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>emacs filename -T title</TT
+></I
+> to set the title of the emacs window (see <A
+HREF="ch02.html#ch02fig01"
+>Figure 2.1</A
+>). kwrite and kfte set their window titles automatically.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch02fig01"
+></A
+><P
+><B
+>Figure 2.1. It is helpful to have an editor display the filename first in the caption.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/02fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev2sec1"
+TITLE="Necessities for Editing Code"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch02lev2sec2"
+>2.1.2. Debuggers Available for Linux</A
+></H2
+><P
+>The debugger that is probably already installed on your system is called gdb, the GNU debugger. It is a command-line based utility that allows you to set breakpoints, step through programs, and view the contents of program variables.</P
+><P
+>GUI debuggers are also available. kdbg is a KDE front end to gdb. It gives a friendly, intuitive interface to gdb, which makes learning the tool much easier. It is available from <A
+HREF="http://members.telecom.at/johsixt/kdbg.html"
+TARGET="_top"
+>http://members.telecom.at/johsixt/kdbg.html</A
+>. Another GUI debugger, although not KDE-based, is DDD. It is known for its capability to display program data in graphical format, including trees and plots of array data. It is available from <A
+HREF="http://www.cs.tu-bs.de/softech/ddd/"
+TARGET="_top"
+>http://www.cs.tu-bs.de/softech/ddd/</A
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev2sec2"
+TITLE="Debuggers Available for Linux"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev1sec1"
+TITLE="The Linux/UNIX Programmer's Desktop"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch01lev1sec7.html"
+>Prev</A
+> <A
+HREF="ch02lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

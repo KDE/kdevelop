@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Packaging and Distributing Code</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Developer Tools and Support"
+HREF="p04.html"/><LINK
+REL="PREVIOUS"
+TITLE="Summary"
+HREF="ch15lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="Administrative Files"
+HREF="ch16lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch15lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch16lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch16"
+>Chapter 16. Packaging and Distributing Code</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN23623"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch16.html#ch16lev1sec1"
+>The Structure of a Package</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch16lev1sec2.html"
+>Administrative Files</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch16lev1sec3.html"
+>Distributing Your Application</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>By now you have probably become familiar with the standard form in which KDE applications and libraries are distributed. The source code is bound in a single directory in a gzipped tar file, and the program is made and installed with the commands <TT
+CLASS="literal"
+>./configure; make; make install</TT
+>. In this chapter, you learn how to create packages like this for your own applications.</P
+><P
+>The advantages to using this standard packaging method include</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>An easy and familiar compilation and installation procedure for end users.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>A simple way to construct makefiles and manage dependencies (including .moc files).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>A convenient way to adapt your source code to the system on which it is being compiled. These advantages occur because of the use of Autoconf and Automake, as well as the hard work of Stephan Kulow (who maintains the KDE packaging software) and other contributors. To use this packaging system, you need Autoconf version 2.13 or better and Automake version 1.4a or better. You will also need to have Perl installed.</P
+></LI
+></UL
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You can find out about Autoconf, Automake and Perl at the following URLs:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;http://sourceware.cygnus.com/autoconf/
+   3&nbsp;http://sourceware.cygnus.com/automake/
+   4&nbsp;http://www.perl.org
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>After you've created a working package for your application, you'll want to distribute it and get the word out to potential users. This chapter will show you how.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch16lev1sec1"
+>16.1. The Structure of a Package</A
+></H1
+><P
+>A package contains several files in addition to your source code, such as makefiles, scripts, and sources for the makefiles and scripts. A typical layout is shown in <A
+HREF="ch16.html#ch16fig01"
+>Figure 16.1</A
+>.</P
+><P
+>This layout is taken from the package kexample.tar.gz. In this chapter, you will examine it and develop it into a package for KSimpleApp, the application written in <A
+HREF="ch02.html"
+>Chapter 2, <SPAN
+CLASS="QUOTE"
+>"A Simple KDE Application."</SPAN
+></A
+></P
+><P
+>The top-level directory of a package contains some administrative scripts, including the script configure, and a makefile. The script configure runs several tests to learn about the system before the software is compiled. These tests include checking for the appropriate versions of KDE and Qt; checking for the locations of KDE, Qt, and X; checking for the presence of various utility programs; and checking for various system-dependent behaviors of programs and library functions. The file Makefile is used by the <TT
+CLASS="literal"
+>make</TT
+> utility to build and install the software, to remove files not needed for distribution, and to regenerate automatically generated files when they are needed. The script configure is generated automatically by the Autoconf from a file called configure.in and Makefile is generated by configure from the file Makefile.in. You will see how to create these files later in the section <A
+HREF="ch16lev1sec2.html#ch16lev2sec1"
+><SPAN
+CLASS="QUOTE"
+>"Configuring the Top-Level Directory."</SPAN
+></A
+></P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch16fig01"
+></A
+><P
+><B
+>Figure 16.1. The layout of a typical KDE source code package.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/16fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>There are two important subdirectories. One is given the name of your application in all lowercase letters (the subdirectory for KSimpleApp, for example, is <TT
+CLASS="literal"
+>ksimpleapp)</TT
+>, and the other is called <TT
+CLASS="literal"
+>po</TT
+>. The first subdirectory contains all the application's source code, and <TT
+CLASS="literal"
+>po</TT
+> holds translations of the string literals that are passed to the <TT
+CLASS="literal"
+>i18n()</TT
+> function.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch16lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch16lev1sec1"
+TITLE="The Structure of a Package"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch15lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch16lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

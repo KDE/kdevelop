@@ -1,0 +1,421 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Distributing Your Application</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Packaging and Distributing Code"
+HREF="ch16.html"/><LINK
+REL="PREVIOUS"
+TITLE="Administrative Files"
+HREF="ch16lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch16lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch16lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch16lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch16lev1sec3"
+>16.3. Distributing Your Application</A
+></H1
+><P
+>A few things remain to be done before you distribute your code. You should provide information about the application in text files and clean up the directories.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch16lev2sec7"
+>16.3.1. Informative Text Files</A
+></H2
+><P
+>The Linux Software Map is a project that keeps track of Linux software via small index files (see <A
+HREF="http://www.execpc.com/lsm/"
+TARGET="_top"
+>http://www.execpc.com/lsm/</A
+>). These index files are also used by the KDE project to keep track of KDE software. When you upload your file, you should upload an LSM, as the index file is called, along with your package.</P
+><P
+><A
+HREF="ch16lev1sec3.html#ch16list02"
+>Listing 16.2</A
+> presents an LSM file for the KSimpleApp package. You may copy and edit this file to describe any packages you might create.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch16list02"
+></A
+><P
+><B
+>Example 16.2. <TT
+CLASS="literal"
+>ksimpleapp-1.0.lsm</TT
+>: An LSM File for the KSimpleApp Package</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: Begin3
+   3&nbsp; 2: Title:        KSimpleApp
+   4&nbsp; 3: Version:    1.0.0
+   5&nbsp; 4: Entered-date:    19MAR2000
+   6&nbsp; 5: Description:    A simple KDE application
+   7&nbsp; 6: Keywords:    simple KDE Qt
+   8&nbsp; 7: Author:         David Sweet &lt;dsweet@kde.org&gt;
+   9&nbsp; 8: Maintained-by:  David Sweet &lt;dsweet@kde.org&gt;
+  10&nbsp; 9: Primary-site:    ftp://ftp.kde.org/pub/kde/unstable/apps/
+  11&nbsp;10: Home-Page:    http://www.kde.org/~dsweet/KDE/KSimpleApp
+  12&nbsp;11: Original-site:    None
+  13&nbsp;12: Platforms:    KDE 2.0
+  14&nbsp;13: Copying-policy: GPL
+  15&nbsp;14: End</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Most fields in this file are self-explanatory. The <TT
+CLASS="literal"
+>Primary-site:</TT
+> field (line 9) is often a directory on <A
+HREF="ftp.kde.org"
+TARGET="_top"
+>ftp.kde.org</A
+>. You should look in pub/kde/unstable/apps for a subdirectory that is appropriate for your application. The <TT
+CLASS="literal"
+>Primary-site:</TT
+> may also be on your own server. (The URLs listed here are for demonstration purposes only, and, so, are not active.) The <TT
+CLASS="literal"
+>Copying-policy:</TT
+> field (line 13) is important to include. Common licenses are GPL, LGPL, BSD, and Artistic.</P
+><P
+>The LSM file should be included in the top-level directory of the package and uploaded as a separate file to whichever site you choose to upload to. (See the section <A
+HREF="ch16lev1sec3.html#ch16lev2sec9"
+><SPAN
+CLASS="QUOTE"
+>"Uploading and Announcing Software"</SPAN
+></A
+> for more information.)</P
+><P
+>In the top-level directory, you should also include files called README and INSTALL. README should introduce the software and tell the user miscellaneous information that doesn't fit in other places. INSTALL gives the user instructions for installing the software. You should modify the standard INSTALL file that is included in the kexample package.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch16lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch16lev2sec7"
+TITLE="Informative Text Files"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch16lev2sec8"
+>16.3.2. Cleaning Up</A
+></H2
+><P
+>Before  distributing your application, you should copy the entrire directory to a directory with a name similar to ksimpleapp-1.0. That is, the name should be (<I
+CLASS="emphasis"
+>application name</I
+>)-(<I
+CLASS="emphasis"
+>version number</I
+>). It is good to make a copy so that you don't break (or have to remake) your development version.</P
+><P
+>Now, in the new directory, type</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>make maintainer-clean; make -f Makefile.dist dist.</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This removes any file that the user does not need to build the software&#8212;including Makefile.dist.</P
+><P
+>Next, tar and gzip the entire directory, like so:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>cd ..</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>tar -cvf ksimpleapp-1.0.tar ksimpleapp-1.0</I
+>
+   4&nbsp;<I
+CLASS="emphasis"
+>gzip ksimpleapp-1.0.tar</I
+>
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Again, the form of the name for the archive is important. Having a standard style makes it easier to figure out what is inside a package.</P
+><P
+>Before uploading the package, you should copy the tar.gz archive to a temporary directory and try to unpack, compile, and install it with the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;gzip -d ksimpleapp-1.0.tar.gz
+   3&nbsp;tar -xvf ksimpleapp-1.0.tar
+   4&nbsp;cd ksimpleapp-1.0
+   5&nbsp;./configure
+   6&nbsp;make
+   7&nbsp;make install
+   8&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Better yet, you should take it to a different computer and try it out.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch16lev2sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch16lev2sec8"
+TITLE="Cleaning Up"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch16lev2sec9"
+>16.3.3. Uploading and Announcing Software</A
+></H2
+><P
+>If you are distributing GPL KDE software, you may upload it to <A
+HREF="ftp://upload.kde.org/Incoming"
+TARGET="_top"
+>ftp://upload.kde.org/Incoming</A
+>.Packages uploaded here are made available for download on over one hundred KDE FTP mirror sites around the world (see <A
+HREF="http://www.kde.org/mirrors.html"
+TARGET="_top"
+>http://www.kde.org/mirrors.html</A
+> for a list of these mirrors).</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Please don't upload this sample package to upload.kde.org or any other site for testing purposes&#8212;or for any other reason. Thanks.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>Be sure to upload both the .tar.gz file and a copy of the LSM file (don't gzip or tar this copy of the LSM file).</P
+><P
+>Now you are ready to announce the release of your software! One announcement will be made automatically on the <TT
+CLASS="literal"
+>kde-announce</TT
+> mailing list. This is done automatically in response to your upload to the Incoming directory and is based on your LSM.</P
+><P
+>Another good place to announce your software is at Freshmeat, <A
+HREF="http://www.freshmeat.net"
+TARGET="_top"
+>http://www.freshmeat.net</A
+>. This is a popular place for posting and finding out about new, free software.</P
+><P
+>If your software works on Linux (which it should if you are writing with KDE), you can announce its release on the USENET newsgroup <TT
+CLASS="literal"
+>comp.os.linux.announce</TT
+>. This is a moderated newsgroup, so your post won't appear immediately. Be sure to read <A
+HREF="http://www.cs.helsinki.fi/u/mjrauhal/linux/cola-submit.html"
+TARGET="_top"
+>http://www.cs.helsinki.fi/u/mjrauhal/linux/cola-submit.html</A
+> before posting. It gives some rules and tips for posting to this list.</P
+><P
+>And now, back to work! You have to get the next version out.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch16lev2sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch16lev2sec9"
+TITLE="Uploading and Announcing Software"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch16lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch16lev1sec3"
+TITLE="Distributing Your Application"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch16lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch16lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

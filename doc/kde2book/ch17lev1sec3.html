@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Accessing Source Code in CVS</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Managing Source Code with CVS"
+HREF="ch17.html"/><LINK
+REL="PREVIOUS"
+TITLE="CVS Organization"
+HREF="ch17lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Installing and Using CVSup"
+HREF="ch17lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch17lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch17lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch17lev1sec3"
+>17.3. Accessing Source Code in CVS</A
+></H1
+><P
+>You may access source code in CVS by downloading it via FTP (snapshots), via the WWW, or by using the <TT
+CLASS="literal"
+>cvsup</TT
+> or <TT
+CLASS="literal"
+>cvs</TT
+> utilities.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch17lev2sec4"
+>17.3.1. Snapshots</A
+></H2
+><P
+>The easiest way to get code out of CVS is to download the snapshots from <A
+HREF="ftp://ftp.kde.org"
+TARGET="_top"
+>ftp://ftp.kde.org</A
+> or one of its mirrors. The snapshots are in the directory /pub/kde/unstable/CVS/snapshots. One file in this directory contains all the source code from one CVS module. Files are named in the following way:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;kdelibs990925.tar.bz2
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>That is, the filename consists of the name of the module followed by the date the snapshot was created, in YYYYMMDD format. New snapshots are created every day for the following modules:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdesupport</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdelibs</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdebase</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdeutils</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdenetwork</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kde-i18n</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdeadmin</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdegames</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdegraphics</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdemultimedia</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdenonbeta</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdesdk</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>kdetoys</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>klyx</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>koffice</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>korganizer</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch17lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch17lev2sec4"
+TITLE="Snapshots"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch17lev2sec5"
+>17.3.2. The WWW Interface to CVS</A
+></H2
+><P
+>Henner Zeller maintains a WWW interface to CVS at <A
+HREF="http://kdecvs.stud.fh-heilbronn.de/cvsweb"
+TARGET="_top"
+>http://kdecvs.stud.fh-heilbronn.de/cvsweb</A
+>. The interface allows you to browse through the modules and their subdirectories, download files, view logs for files, and recover old versions of files for any CVS branch. <A
+HREF="ch17lev1sec3.html#ch17fig01"
+>Figure 17.1</A
+> shows the WWW interface as viewed by kfm.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch17lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch17lev2sec5"
+TITLE="The WWW Interface to CVS"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch17lev2sec6"
+>17.3.3. CVSup</A
+></H2
+><P
+>CVSup is a utility for keeping a local copy of a CVS source code repository. It is faster than getting snapshots because it downloads only the differences between your copy and the copy in CVS. Another advantage is that it can be used without having a CVS account. If you want to keep up-to-date with CVS and you are not responsible for maintaining code in it, CVSup is the best choice.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch17fig01"
+></A
+><P
+><B
+>Figure 17.1. The World Wide Web interface to the KDE CVS Repository.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/17fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch17lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch17lev2sec6"
+TITLE="CVSup"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch17lev2sec7"
+>17.3.4. CVS Accounts</A
+></H2
+><P
+>CVS accounts, which enable you to read and write to CVS, are granted to developers who are maintaining code in the KDE CVS. Currently, there are about 260 such account holders. If you are maintaining code, you should consult the KDE Developer's HOWTO at <A
+HREF="http://developer.kde.org/documentation/tutorials/howto/develHOWTO.html"
+TARGET="_top"
+>http://developer.kde.org/documentation/tutorials/howto/develHOWTO.html</A
+> for information on obtaining a CVS account.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You don't need a CVS account to contribute to KDE. Software maintainers always welcome patches for bug fixes and feature implementation.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch17lev2sec7"/></TD
+></TR
+><ANNOTATION
+NAME="ch17lev2sec7"
+TITLE="CVS Accounts"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch17lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch17lev1sec3"
+TITLE="Accessing Source Code in CVS"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch17lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch17lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

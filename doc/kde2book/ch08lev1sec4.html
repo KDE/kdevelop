@@ -1,0 +1,427 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>KDE User-Interface Library (kdeui)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="PREVIOUS"
+TITLE="Dialog Modality&#8212;Modal or Modeless Dialogs"
+HREF="ch08lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="Dialog Style and KDialogBase"
+HREF="ch08lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec4"
+>8.4. KDE User-Interface Library (kdeui)</A
+></H1
+><P
+>Before you start designing a new dialog or a widget that is intended to be used in a dialog or elsewhere, make sure it has not already been made by someone else. The KDE user-interface library (kdeui) is a collection of widgets that extends the functionality of the standard Qt widget set. Generally, widgets have been added to the kdeui because the functionality they provide is not present in the Qt widget library. Another reason is that the widget code would otherwise be duplicated in many applications, and because the widgets support the KDE look and feel for issues such as dialog titles, margins, and keyboard accelerators to the interface.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch08lev2sec2"
+>8.4.1. Ready-to-Use Dialogs</A
+></H2
+><P
+>The most commonly used ready-to-use dialogs are the following:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>File selector (<TT
+CLASS="literal"
+>KFileDialog</TT
+>)&#8212;This dialog is actually not in kdeui but is in its own library.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Font selector (<TT
+CLASS="literal"
+>KFontDialog</TT
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Keyboard bindings selector (<TT
+CLASS="literal"
+>KKeyDialog</TT
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Color selector (<TT
+CLASS="literal"
+>KColorDialog</TT
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Icon selector (<TT
+CLASS="literal"
+>KIconLoaderDialog</TT
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Single line input dialog with browsing capability (<TT
+CLASS="literal"
+>KLineEditDlg</TT
+>).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Message boxes for warning, error, and information (<TT
+CLASS="literal"
+>KMessageBox</TT
+>).</P
+></LI
+></UL
+><P
+>Some of these dialogs have counterparts in the Qt library that can be used for the same task. The reason for this duality is that the KDE versions match better with the accepted KDE style guidelines. Use the KDE version when in doubt because it will improve your program's compliance with the KDE-style-guide recommendations.</P
+><P
+>If there is a dialog that serves your requirements, then use it instead of making your own! The benefits are several: The users don't have to learn a new dialog and how it works; you save a lot of time; and most of the dialogs are really easy to use, as <A
+HREF="ch08lev1sec4.html#ch08list10"
+>Listing 8.10</A
+> illustrates. The code uses the font selector to pick a font and install it in the widget.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list10"
+></A
+><P
+><B
+>Example 8.10. Using a Dialog from the kdeui Library</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: void
+   3&nbsp;2: Editor::selectFont()
+   4&nbsp;3: {
+   5&nbsp;4:   QFont fnt = font();        // Get current font
+   6&nbsp;5:   KFontDialog::getFont(fnt); // Select a new, default is current font
+   7&nbsp;6:   setFont(fnt);              // Install new font
+   8&nbsp;7: }
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Nevertheless, if you decide that you really need a dialog or a widget that is similar to an existing one, but one with an extended feature set, you should not hesitate to contact the author of the code and ask whether your requirements can be fulfilled by improving the current dialog. If you can provide code that can be merged into the existing library code without breaking compatibility, your chances for acceptance increase.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>You should also know that a widget or dialog that is used by several applications or that is generally useful might be incorporated into the library.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev2sec2"
+TITLE="Ready-to-Use Dialogs"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch08lev2sec3"
+>8.4.2. Building Blocks (Manager Widgets)</A
+></H2
+><P
+>The kdeui library provides some very important manager widgets that you must know when you make a dialog. This will greatly simplify your task and make maintaining a lot easier. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class has already been mentioned. Here is a short summary:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>KButtonBox</TT
+>&#8212;Manages a set of action buttons. You can add as many buttons as you want, and the widget will position and resize them as required. To use this widget, you must specify the text and the accelerators of the buttons. An example showing how the <TT
+CLASS="literal"
+>KButtonBox</TT
+> can be used is in <A
+HREF="ch08lev1sec4.html#ch08list11"
+>Listing 8.11</A
+>. Note that if you derive your dialog from the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class, the buttons will be prepared automatically as other examples have shown.</P
+></LI
+></UL
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list11"
+></A
+><P
+><B
+>Example 8.11. Usage of <TT
+CLASS="literal"
+>KButtonBox</TT
+> in a Dialog</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: MyDialog::MyDialog( QWidget *parent, const char *name, bool modal)
+   3&nbsp;2:  : KDialog( parent, name, modal )
+   4&nbsp;3:{
+   5&nbsp;4:  QVBoxLayout *topLayout = new QVBoxLayout( this, marginHint(),
+   6&nbsp;5:    spacingHint() );
+   7&nbsp;6:  CHECK_PTR( topLayout );
+   8&nbsp;7:
+   9&nbsp;8:  // Main body of the dialog is not shown here, just the button
+  10&nbsp;9:  // box
+  11&nbsp;10:
+  12&nbsp;11:  KButtonBox *bbox = new KButtonBox( this, KButtonBox::HORIZONTAL,
+  13&nbsp;12:    0, spacingHint() );
+  14&nbsp;13:  CHECK_PTR( bbox );
+  15&nbsp;14:  topLayout-&gt;addWidget( bbox );
+  16&nbsp;15:
+  17&nbsp;16:  buttonBox-&gt;addStretch();
+  18&nbsp;17: QPushButton *ok = bbox-&gt;addButton( i18n("&amp;Ok"), false );
+  19&nbsp;18:  QPushButton *cancel = bbox-&gt;addButton( i18n("&amp;Cancel"), false );
+  20&nbsp;19:  buttonBox-&gt;layout();
+  21&nbsp;20:  ok-&gt;setDefault( true );
+  22&nbsp;21:  connect( ok , SIGNAL(clicked()), this, SLOT(accept()) );
+  23&nbsp;22:  connect( cancel , SIGNAL(clicked()), this, SLOT(reject()) );
+  24&nbsp;23:}
+  25&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>KJanusWidget</TT
+>&#8212;This is a widget that provides a number of faces (thereby the name) or layouts. Depending on how it is initialized, it can display widgets in a tabbed fashion, in a paged tree list in a paged icon list, or on a single page. Its main use is as an internal widget in <TT
+CLASS="literal"
+>KDialogBase</TT
+>, but it can be used as a standalone widget as well. <A
+HREF="ch08lev1sec5.html#ch08fig04"
+>Figure 8.4</A
+> shows a <TT
+CLASS="literal"
+>KJanusWidget</TT
+> widget in <TT
+CLASS="literal"
+>Tabbed</TT
+> mode.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>KDialog</TT
+> (derived from <TT
+CLASS="literal"
+>QDialog</TT
+>)&#8212;This dialog widget provides resources that give you easy access to global properties concerning style settings. At the moment, you can get access to the spacing and margin sizes you should use between widgets in your dialog and a redefined <TT
+CLASS="literal"
+>setCaption()</TT
+> so that your dialog uses the proper dialog title style. If your code uses these methods, any change in the future (for example, a new margin setting as a part of a theme selection) will automatically be used in your dialog as well. See <A
+HREF="ch08lev1sec4.html#ch08list11"
+>Listing 8.11</A
+> for a typical example on how to use a <TT
+CLASS="literal"
+>KDialog</TT
+> dialog widget.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>KDialogBase</TT
+> (derived from <TT
+CLASS="literal"
+>KDialog</TT
+>)&#8212;This is a dialog frame widget. It is designed to take care of a lot of work that you would otherwise spend much time getting right for each dialog you create. It provides access to the resources of <TT
+CLASS="literal"
+>KDialog</TT
+>; it takes care of the action buttons; it draws a separator above the buttons (if you tell it to do so); it resizes itself automatically to fit the contents when shown; and it uses the <TT
+CLASS="literal"
+>KJanusWidget</TT
+> to support various dialog types. The philosophy is that you only need to worry about the contents of the dialog that performs your specific task.</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev2sec3"
+TITLE="Building Blocks (Manager Widgets)"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec4"
+TITLE="KDE User-Interface Library (kdeui)"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

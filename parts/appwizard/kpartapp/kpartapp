@@ -1,0 +1,4 @@
+# KDE Config File
+[General]
+Name=A KParts based application framework
+Comment=This generates a complex KDE application with a KParts shell and a KPart component.

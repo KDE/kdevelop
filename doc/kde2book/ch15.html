@@ -1,0 +1,1089 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Creating Documentation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Developer Tools and Support"
+HREF="p04.html"/><LINK
+REL="PREVIOUS"
+TITLE="Developer Tools and Support"
+HREF="p04.html"/><LINK
+REL="NEXT"
+TITLE="Documenting Applications"
+HREF="ch15lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p04.html"
+>Prev</A
+> <A
+HREF="ch15lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch15"
+>Chapter 15. Creating Documentation</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN22456"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch15.html#ch15lev1sec1"
+>Documenting Source Code</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch15lev1sec2.html"
+>Documenting Applications</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>Much effort is put into making the process of creating documentation simpler for other developers and end users. Standards exist for writing such documentation, as do software tools to help you turn your documentation into attractive, accessible formats. In this chapter you learn about two such standards: the KDE source-code documentation style and DocBook and their related software tools.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch15lev1sec1"
+>15.1. Documenting Source Code</A
+></H1
+><P
+>As mentioned in earlier chapters, it is important to document source code so that you and others can read and understand it later on. When you are attempting to manage a large collection of classes and functions, you will undoubtedly forget precisely how some of them work. Comments in the class declarations (in the header files), for example, can serve as a handy reference when this happens. Of course, if others want to use or change one of your classes, they will appreciate all the help they can get. If you are writing open source code, you will probably appreciate it when other developers send you patches, and again, it is easier for others to create patches if your code is documented.</P
+><P
+>In a large project, such as the KDE project, in which hundreds of developers are writing and hacking at hundreds of thousands of lines of source code, documentation becomes invaluable. The utility of such documentation was realized early on and a documentation standard was created.</P
+><P
+>KDE developers put special comments in their header files before each class and method name. These comments can be processed by a set of Perl scripts called KDOC. (This documentation style is similar to that used by JavaDoc, a Java language documentation preparation program.) KDOC can create output in HTML, DocBook, LaTeX, TeXInfo, and UNIX man page formats. The default format, HTML, is the one most commonly used in the KDE project. You can see samples of KDOC output on the KDE developers' Web site at <A
+HREF="http://developer.kde.org/documentation/library/2.0-api/classref/index.html"
+TARGET="_top"
+>http://developer.kde.org/documentation/library/2.0-api/classref/index.html</A
+>. This page contains links to documentation of the KDE 2.0 API documentation.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec1"
+>15.1.1. Obtaining and Installing KDOC</A
+></H2
+><P
+>The KDOC source code is available from <A
+HREF="http://www.ph.unimelb.edu.au/~ssk/kde/kdoc"
+TARGET="_top"
+>http://www.ph.unimelb.edu.au/~ssk/kde/kdoc</A
+> or from the KDE CVS source code repository in the module kdoc (see <A
+HREF="ch17.html"
+>Chapter 17, <SPAN
+CLASS="QUOTE"
+>"Managing Source Code with CVS"</SPAN
+></A
+> for information on retrieving modules from the source code repository).</P
+><P
+>KDE 2.0 uses KDOC 2, so if you visit the Web site (where both KDOC 1 and KDOC 2 are available), be sure to get KDOC 2.</P
+><P
+>Be sure you have Perl 5.005 (or later, see <A
+HREF="http://www.cpan.org"
+TARGET="_top"
+>http://www.cpan.org</A
+>) installed before you attempt to install KDOC 2.</P
+><P
+>If you downloaded the file (a compressed tar archive) kdoc-snapshot.tar.gz from the Web site mentioned earlier, you should unpack it with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>gzip -d kdoc-shapshot.tar.gz</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>tar -xvf kdoc-snapshot.tar</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The archive unpacks to a directory called kdoc. Change to this directory with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>cd kdoc</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>If you downloaded the CVS modules, you won't need to do any unpacking, but you will need to type</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>cd kdoc</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>make -f Makefile.cvs</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>to prepare the directory for use.</P
+><P
+>In either case&#8212;whether you downloaded the archive from the Web site or the module from CVS&#8212;you are ready to compile and install kdoc. Log in as root and type</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>./configure</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>make install</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>KDOC is installed and ready to use. (Before continuing, you should log out and log in as a nonroot user.)</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec1"
+TITLE="Obtaining and Installing KDOC"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec2"
+>15.1.2. Using KDOC</A
+></H2
+><P
+>Using KDOC is simple. You add a comment before each class declaration and inside class declarations before each method or enum declarations. These comments are C-style, like this:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;/**
+   3&nbsp; * This is a KDOC comment.
+   4&nbsp; */</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Notice that the first line begins with <TT
+CLASS="literal"
+>/**</TT
+>. The double asterisk is the signal to KDOC that it should process this comment. Comments without the double asterisk are ignored. Each subsequent line should begin with an asterisk. Note that these comments appear in header files. KDOC is not designed to process comments in source-code files.</P
+><P
+>The comments should describe the element&#8212;class, method, or enum&#8212;that they precede. Look at <A
+HREF="ch15.html#ch15list01"
+>Listing 15.1</A
+> as an example. One large comment describes the class by telling what it does, who wrote it, what version it is, and so on. The comments preceding the methods tell what function the methods perform, what their arguments mean, and so on.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch15list01"
+></A
+><P
+><B
+>Example 15.1. <TT
+CLASS="literal"
+>kdocsample.h</TT
+>: A Class Declaration Commented for Processing by KDOC</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KDOCSAMPLE_H__
+   3&nbsp; 2: #define __KDOCSAMPLE_H__
+   4&nbsp; 3:
+   5&nbsp; 4: /**
+   6&nbsp; 5:  * @libdoc A single-class library.
+   7&nbsp; 6:  *
+   8&nbsp; 7:  * This comment is the overall documentation for entire library.
+   9&nbsp; 8:  * It could appear in any one header file.
+  10&nbsp; 9:  * The single class in this library is called @ref KDocSample.
+  11&nbsp;10:  **/
+  12&nbsp;11:
+  13&nbsp;12:
+  14&nbsp;13: /**
+  15&nbsp;14:  * This header file is documented in kdoc format.
+  16&nbsp;15:  *
+  17&nbsp;16:  * This is a new paragraph of documentation because it is preceeded
+  18&nbsp;17:  * by a blank line.  The string "/**" above marks this comment as
+  19&nbsp;18:  * documentation.
+  20&nbsp;19:  *
+  21&nbsp;20:  * If this class created a widget, we might put a small screenshot
+  22&nbsp;21:  *  here:
+  23&nbsp;22:  * @image /home/dsweet/KDE/HEAD/kde/share/icons/large/hicolor/apps/go.png
+  24&nbsp;23:  * @short Sample documented header file
+  25&nbsp;24:  * @author Joe Developer &lt;jdevel@kde.org&gt;
+  26&nbsp;25:  * @version 1.0
+  27&nbsp;26:  */
+  28&nbsp;27: class KDocSample
+  29&nbsp;28: {
+  30&nbsp;29:  public:
+  31&nbsp;30:   /**
+  32&nbsp;31:    * @sect Important stuff
+  33&nbsp;32:    *
+  34&nbsp;33:    * Instantiate this class.
+  35&nbsp;34:    *
+  36&nbsp;35:    * Notes
+  37&nbsp;36:    * @li Don't forget to &#8230;
+  38&nbsp;37:    * @li Be sure to &#8230;
+  39&nbsp;38:    * @param goodstuff Some good stuff to document.
+  40&nbsp;39:    * @see getStuff
+  41&nbsp;40:    **/
+  42&nbsp;41:   KDocSample (QString goodstuff);
+  43&nbsp;42:
+  44&nbsp;43:   /**
+  45&nbsp;44:    * Retrieve the good stuff.
+  46&nbsp;45:    *
+  47&nbsp;46:    * @since one two three
+  48&nbsp;47:    * @returns The good stuff.
+  49&nbsp;48:    * @exception some_exception some_other_exception
+  50&nbsp;49:    **/
+  51&nbsp;50:   virtual QString getStuff () const;
+  52&nbsp;51: };
+  53&nbsp;52:
+  54&nbsp;53:
+  55&nbsp;54: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You can create HTML output with the following command:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>kdoc -d KDocSampleOutput -n KDocSample kdocsample.h</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This command instructs KDOC to create its HTML output&#8212;a <I
+CLASS="emphasis"
+>collection</I
+> of .html files&#8212;in the directory MyLibraryOutput (via the option <TT
+CLASS="literal"
+>-d</TT
+>) and to name the collection of files (within the documentation files) KDocSample (via the option <TT
+CLASS="literal"
+>-n</TT
+>). kdoc can take multiple filenames as input. For example,</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>kdoc -d MyLibraryOutput -n MyLibrary *.h</I
+></PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>processes all header files with the extension .h in this directory into a collection of HTML files in the directory MyLibraryOutput and titles it MyLibrary. <A
+HREF="ch15.html#ch15fig01"
+>Figure 15.1</A
+> shows some of the HTML output as viewed by Konqueror.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch15fig01"
+></A
+><P
+><B
+>Figure 15.1. Screen shot of Konqueror viewing the HTML output of kdoc given kdocsample.h as input.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/15fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>Each KDOC-formatted comment can include the following elements:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Unformatted text&#8212;Each paragraph is separated by an empty line (that is, an asterisk followed only by whitespace).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>&lt;pre&gt;&#8230;&lt;/pre&gt;</TT
+> tags&#8212;These tags mark preformatted text, such as code segments (the same as in HTML).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Tags beginning with the <TT
+CLASS="literal"
+>@</TT
+> character&#8212;One such tag, <TT
+CLASS="literal"
+>@author</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+>, tells who the author of the code is. Other possible KDOC tags are described in the next section.</P
+></LI
+></UL
+><P
+>The next sections detail tags that can be used when formatting comments for KDOC.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec2"
+TITLE="Using KDOC"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec3"
+>15.1.3. Library Documentation</A
+></H2
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@libdoc</TT
+>&#8212;Thistag marks this entire comment as library documentation. That means that it will appear on the page that indexes the library and thus should describe the functions available in the library. See <A
+HREF="http://www.ph.unimelb.edu.au/~ssk/kde/srcdoc/kio/index.html"
+TARGET="_top"
+>http://www.ph.unimelb.edu.au/~ssk/kde/srcdoc/kio/index.html</A
+> for an example.</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec3"
+TITLE="Library Documentation"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec4"
+>15.1.4. Class Documentation</A
+></H2
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@short</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>Short description</TT
+></I
+>&#8212;Offers a short description of the class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@author</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>authorName</TT
+></I
+>&#8212;Specifies the name of the author of the class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@version</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>version</TT
+></I
+>&#8212;Specifies the version of the class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@internal</TT
+>&#8212;Indicates that a class is used only internally by a library.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@deprecated</TT
+>&#8212;Indicates that a class is deprecated.</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec4"
+TITLE="Class Documentation"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec5"
+>15.1.5. Method Documentation</A
+></H2
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@param</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>parameterName description</TT
+></I
+>&#8212;Describes one of the parameters (arguments) that is passed to this function.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@returns</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>description</TT
+></I
+>&#8212;Describes the value returned by this method.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@since</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>version</TT
+></I
+>&#8212;Says that this method was added in version <I
+CLASS="emphasis"
+>version</I
+> of the class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@exception</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref1</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref2</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>&#8230;</TT
+></I
+>&#8212;Tells what exceptions might be thrown from this function.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@throws</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref1</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref2</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>&#8230;</TT
+></I
+>&#8212;Tells what exceptions might be thrown from this function. (Same as <TT
+CLASS="literal"
+>@exception</TT
+>.)</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@raises</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref1</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref2</TT
+></I
+> <I
+CLASS="emphasis"
+>&#8230;</I
+>&#8212;Tells what exceptions might be thrown from this function. (Same as <TT
+CLASS="literal"
+>@exception</TT
+>.)</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec5"
+TITLE="Method Documentation"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch15lev2sec6"
+>15.1.6. Class and Method Documentation</A
+></H2
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@see</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref1</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>re2</TT
+></I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>&#8230;</TT
+></I
+>&#8212;Provides cross-reference to one or multiple other classes or methods. The arguments <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref1</TT
+></I
+>, <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref2</TT
+></I
+>, and so on have the format <TT
+CLASS="literal"
+>Classname</TT
+> or <TT
+CLASS="literal"
+>Classname::method</TT
+>. KDOC will turn these references into hyperlinks (when producing HTML output) if it can. Note: Don't include the parentheses or arguments when naming methods. That is, use <TT
+CLASS="literal"
+>method</TT
+>, not <TT
+CLASS="literal"
+>method()</TT
+>.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@ref</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>ref</TT
+></I
+>&#8212;This is an inline cross-reference. For example, the following text:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;* Take a look at @ref KClass, it's a good one!</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>includes a hyperlinked (if possible) reference to KClass.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@image</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>pathOrUrl</TT
+></I
+>&#8212;Includes an image that can be found at the path or URL <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>pathOrURL</TT
+></I
+>.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@sect</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>sectionName</TT
+></I
+>&#8212;Starts a new section of the documentation and cells it <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>sectionName</TT
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>@li</TT
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>listItem</TT
+></I
+>&#8212;Includes a list item (<TT
+CLASS="literal"
+>&lt;LI&gt;</TT
+> in HTML) called <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>listItem</TT
+></I
+> at this point in the document.</P
+></LI
+></UL
+><P
+>The tags <TT
+CLASS="literal"
+>@see</TT
+> and <TT
+CLASS="literal"
+>@image</TT
+> need to be followed by a blank KDOC comment line. For example:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;* @see KOtherClass
+   3&nbsp;  *
+   4&nbsp;  * @version 1.0</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>is allowed, whereas</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  * @see KOtherClass
+   3&nbsp;  * @version 1.0</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>is not. The blank line tells KDOC to stop processing the <TT
+CLASS="literal"
+>@see</TT
+> or <TT
+CLASS="literal"
+>@image</TT
+> tag.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev2sec6"
+TITLE="Class and Method Documentation"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch15lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch15lev1sec1"
+TITLE="Documenting Source Code"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p04.html"
+>Prev</A
+> <A
+HREF="ch15lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

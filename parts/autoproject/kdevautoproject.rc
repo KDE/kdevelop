@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevAutoProject" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="project_build" />
+    <Action name="project_clean" />
+    <Action name="project_configure" />
+    <Action name="project_options" />
+  </Menu>
+</MenuBar>
+</kpartgui>
+

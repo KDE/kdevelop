@@ -1,0 +1,698 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>The KDevelop IDE: The Integrated Development Environment for KDE</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Developer Tools and Support"
+HREF="p04.html"/><LINK
+REL="PREVIOUS"
+TITLE="Summary"
+HREF="ch17lev1sec6.html"/><LINK
+REL="NEXT"
+TITLE="Creating KDE 2.0 Applications"
+HREF="ch18lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch17lev1sec6.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch18"
+>Chapter 18. The KDevelop IDE: The Integrated Development Environment for KDE</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by Ralf Nolden</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN25582"
+></A
+><P
+><B
+>In this chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18.html#ch18lev1sec1"
+>General Issues</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec2.html"
+>Creating KDE 2.0 Applications</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec3.html"
+>Getting Started with the KDE 2.0 API</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec4.html"
+>The Classbrowser and Your Project</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec5.html"
+>The File Viewers&#8212;The Windows to Your Project Files</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec6.html"
+>The KDevelop Debugger</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch18lev1sec7.html"
+>KDevelop 2.0&#8212;A Preview</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>Although developing applications under UNIX systems can be a lot of fun, until now the programmer was lacking a comfortable environment that takes away the usual standard activities that have to be done over and over in the process of programming. The KDevelop IDE closes this gap and makes it a joy to work within a complete, integrated development environment, combining the use of the GNU standard development tools such as the <TT
+CLASS="literal"
+>g++</TT
+> compiler and the <TT
+CLASS="literal"
+>gdb</TT
+> debugger with the advantages of a GUI-based environment that automates all standard actions and allows the developer to concentrate on the work of writing software instead of managing command-line tools. It also offers direct and quick access to source files and documentation. KDevelop primarily aims to provide the best means to rapidly set up and write KDE software; it also supports extended features such as GUI designing and translation in conjunction with other tools available especially for KDE development. The KDevelop IDE itself is published under the GNU Public License (GPL), like KDE, and is therefore publicly available at no cost&#8212;including its source code&#8212;and it may be used both for free and for commercial development.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch18lev1sec1"
+>18.1. General Issues</A
+></H1
+><P
+>Before going into the details of the IDE, let's first cover some issues that apply to development using the C and C++ programming languages in UNIX environments in general.</P
+><P
+>As you have learned, C++ is commonly used to develop KDE software. This is necessary because the Qt library on which KDE is based is also written in C++ and therefore offers interfaces to the library by C++ classes. KDE extends the Qt library by far and implements many things that are either missing in Qt or that are useful for a UNIX desktop but not on a Microsoft-based operating system. (Qt is a cross-platform toolkit, and applications written with Qt can be directly used under MS-based operating systems, either by recompiling on that environment or by compiling with a cross-compiler as a Win32 binary.)</P
+><P
+>You can, however, make use of other languages (especially scripting languages) that have a set of bindings that translates the Qt/KDE C++ classes to the other programming languages such as Python or Perl; therefore, KDE is not limited to using C++, although it is the preferred way to write KDE software.</P
+><P
+>The second issue that applies to software development is project management. An application usually consists of more than one source file, and compilation on different systems usually requires different settings for things such as compilers, paths to header file locations, and linker settings to bind all compiled object files to a binary. As you learned in <A
+HREF="ch16.html"
+>Chapter 16, <SPAN
+CLASS="QUOTE"
+>"Packaging and Distributing Code,"</SPAN
+></A
+> the management of all this is done via <TT
+CLASS="literal"
+>make</TT
+>. Writing Makefiles by hand is usually not a trivial task, and if they are specifically written for one development environment, you can never be sure that the same rules apply to any other system&#8212;not even another Linux distribution. Because of this, the GNU tools offer a development framework that automates much of the project management but still requires the developer to lay hands on the project-specific parts of the framework, which is again non-trivial.</P
+><P
+>The tools that help here are the Automake and Autoconf packages, which sometimes make things a bit simpler; however, sometimes they cause headaches because the developer wants to use C++, not fuss with Makefile generation and configure scripts. At least they ensure that the source distribution will compile automatically on almost all UNIX systems such as Linux, SCO UNIXWare, HP-UX, and the like without much trouble. This is an issue because developers like their applications to work under as many systems as possible.</P
+><P
+>You should know that when you retrieve a source package of KDE and most other applications that are available as source code for UNIX systems, you will have to compile it yourself. This has two advantages: First, the binary is specifically built on your system, and when it is cleanly built, it will run without any trouble. Second, it will install smoothly where you want it to.</P
+><P
+>Topackages:creating build a package, follow these steps: untar the <I
+CLASS="emphasis"
+>package</I
+>.tar.gz file and change to the created directory containing the source files; then enter <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>./configure</TT
+></I
+> and <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>make</TT
+></I
+> on the console. After that, you can install the software package as root with entering <TT
+CLASS="literal"
+>make install</TT
+>. This makes things so simple that even complete UNIX newbies who will probably never be interested in writing applications themselves are able to compile and install a source package. The developer, on the other hand, doesn't have to provide so much support for the installation process of the application on the user's platform, but only for the functionality.</P
+><P
+>The magic behind this is that the developer has to provide the source package only as Autoconf/Automake compatible. To write this framework, you need some knowledge that is not necessarily the developer's job&#8212;and this is where an IDE can help. It can provide programmers with the comfort of creating a complete framework and take care of the project management during the process of creating an application.</P
+><P
+>Another important issue is handling <TT
+CLASS="literal"
+>make</TT
+> and the compiler, as well as the linker, to produce the executables or libraries. These are command-line tools that require the knowledge of the according options, which are most often very cryptic and have to be learned and are easily forgotten. On the other hand, an IDE can <SPAN
+CLASS="QUOTE"
+>"remember"</SPAN
+> these things for you. An example is the following scenario: while developing your application, you will most likely program an error, and you will have to debug the binary to follow the code while executing to find exactly where that mistake happens. This requires telling the compiler to include debugging information into the binary. Then the debugger can translate the function calls in the binary to the according lines in the source files. But you will also want to switch back to optimized compilation, even if it is only to test whether everything works as expected at a reasonable performance. Here, a simple menu that says debug/release within an IDE helps enormously&#8212;even more so if it allows you to debug your program with setting breakpoints directly in the source-code editor and running a debug session within the programming environment.</P
+><P
+>Accessing documentation is the third element where an IDE can help you as a developer. Especially when using large C++ class libraries such as Qt and KDE, you will get lost without a good access to the API documentation. Fortunately, the Qt has excellent documentation, and the documentation for the KDE libraries can be created easily with the KDOC documentation tool. KDOC also can be used to document your own project, as you learned in <A
+HREF="ch15.html"
+>Chapter 15, <SPAN
+CLASS="QUOTE"
+>"Creating Documentation."</SPAN
+></A
+></P
+><P
+>Because the documentation as a whole is used as HTML files, a development environment without an IDE will look like the following: an opened browser to read the documentation, a shell to run the compiler, and one or more editor window to write the code.</P
+><P
+>After this horror scenario, which is what long-time UNIX developers have lived with for years, let's have a look at what you can expect when using KDevelop to create your applications.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch18lev2sec1"
+>18.1.1. Be User Friendly&#8212;Be Developer Friendly</A
+></H2
+><P
+>Why should users have all the ease of use when working under a graphical environment like KDE for production, such as KOffice and all the other KDE applications that make life easier, but the developers who are writing this beautiful software suffer and look at the <SPAN
+CLASS="QUOTE"
+>"normal"</SPAN
+> user jealously? That's why we made KDevelop&#8212;for programmers who dislike working under UNIX the <SPAN
+CLASS="QUOTE"
+>"old"</SPAN
+> way, who want to save time and be more productive, and who also like not only the results of their work but also how it is done. Often, new developers coming from environments that offer development systems based on a graphical user interface are afraid to switch to UNIX because they don't want to miss a comfortable environment. In the next sections, we'll walk through the KDevelop IDE to see what it looks like and what functionality is available.</P
+><P
+>When you first glance at KDevelop in <A
+HREF="ch18.html#ch18fig01"
+>Figure 18.1</A
+>, you'll notice that it looks much like other KDE applications&#8212;the main window contains the usual user interface with a menubar, toolbars, a statusbar, and a central view area that is separated into three subwindows.</P
+><P
+><A
+HREF="ch18.html#ch18fig01"
+>Figure 18.1</A
+> shows KDevelop 1.2, which is actually for running under KDE 1.1.x, but as you can see, the desktop it runs on is KDE 2.0. You may wonder what a KDE 1.x application has to do with this book covering KDE 2.0, but there is a simple answer: the 1.x series of KDevelop has been developed to be the most stable development environment so far, and we put forth a lot of effort to make it as usable as possible&#8212;even for KDE 2.0 development, which is directly supported. After two years of development, testing, and successful usage in industrial environments, KDevelop has proved to be an excellent, stable, and very friendly IDE that is today the developer's choice when starting to program with C/C++ under UNIX. Meanwhile, the KDevelop 2.0 IDE is under development by the KDevelop Team and will be made public when it reaches the same amount of functionality and stability as the 1.2 version (see <A
+HREF="ch18.html#ch18fig02"
+>Figure 18.2</A
+>).</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig01"
+></A
+><P
+><B
+>Figure 18.1. The KDevelop 1.2 main window.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig02"
+></A
+><P
+><B
+>Figure 18.2. KDevelop 1.2 editing a sample project's options.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>With KDevelop 2.0, our team will break with the traditional single-window philosophy commonly used by UNIX applications, and that is what developers have to expect: complete configurability and visibility all over the user interface of the IDE. This will make KDevelop even more attractive to users coming from other platforms and make the transition to UNIX much easier, further reducing the learning curve for handling the programming environment.</P
+><P
+>Until the release of KDevelop 2.0, we recommend using version 1.2 for production. It offers almost everything developers expect, especially stability and usability.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch18lev3sec1"
+>18.1.1.1. The KDevelop User Interface</A
+></H3
+><P
+>As seen in <A
+HREF="ch18.html#ch18fig01"
+>Figure 18.1</A
+>, the main window of KDevelop is separated into three subwindows. Each has a certain purpose and can be resized, enabled or disabled, and automatically switched on and off by a built-in autoswitch function.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H4
+CLASS="section"
+><A
+NAME="ch18lev4sec1"
+>18.1.1.1.1. The Tree View</A
+></H4
+><P
+>The left pane contains one major part called the Tree View. It is created as a tabular window containing several pages:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Class Viewer (CV)&#8212;Here, the C++ classes, C functions and structs, as well as namespaces of your project are displayed as a tree, which allows you to dive directly into the source files at the location of declaration and definition of attributes, functions, classes, and namespaces. The tree is initially built when loading a project by an amazingly fast-scanning implementation and actualized during automatic and manual saving to rematch location changes and added code to the displayed objects in the source files.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Logical File Viewer (LFV)&#8212;The LFV sorts all project files into groups dependent on their MIME type; for example, all C++ source files are collected into a folder called sources, and all C++ header files are found in a folder called headers. New groups can easily be added via a context menu specifying the name of the folder and the file types to be collected.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Real File Viewer (RFV)&#8212;Displays the project directories and files as they are located on your system and displays all files along with their status within the project as <SPAN
+CLASS="QUOTE"
+>"registered"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"CVS"</SPAN
+> or <SPAN
+CLASS="QUOTE"
+>"local."</SPAN
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Documentation Tree View (DOC)&#8212;Offers easy access to all documentation available on your system: the KDevelop handbooks, the Qt library documentation as well as the full KDE-API documentation, project documents, and self-configured additional documentation. The library documentations can be accessed down to the location of class-member function automatically opening the right page in the Documentation-Browser.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The Variable Viewer (VAR)&#8212;Active while debugging your application with the internal debugger. Here the attribute values of your application's class instances are displayed during runtime in a debugging session.</P
+></LI
+></UL
+><P
+>The Tree View is one of the most effective parts of the KDevelop user interface, offering the logistics to your project, information, and localization of source code from the <SPAN
+CLASS="QUOTE"
+>"object-oriented"</SPAN
+> point of view.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev4sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev4sec1"
+TITLE="The Tree View"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H4
+CLASS="section"
+><A
+NAME="ch18lev4sec2"
+>18.1.1.1.2. The Output View</A
+></H4
+><P
+>At the bottom of the KDevelop main window, you see the Output View. This is the second helper window that you will make use of often. Like the Tree View, it contains several pages, each for a certain purpose:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Messages&#8212;Any output that comes to KDevelop when running tools such as <TT
+CLASS="literal"
+>make</TT
+> or the KDOC documentation program will be displayed here. The messages window also brings you to the location of errors by clicking the error line of the output.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Stdout&#8212;When starting your application from within KDevelop, it sends all output you would see normally on a console into that window. Thus, you can control the behavior in a way most developers do when using the <TT
+CLASS="literal"
+>cout</TT
+> function to get status information at runtime.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Stderr&#8212;Here, the started application will put its information that is sent out via the <TT
+CLASS="literal"
+>cerr</TT
+> function to monitor error messages.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Breakpoint&#8212;Lists the breakpoints set in the source files and monitors how often the application reached the breakpoint during a debugging session.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Frame Stack&#8212;Lists the calling stack of the currently monitored application or function together with addresses.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Disassemble&#8212;A machine-instruction view that displays the currently executed code in assembler language.</P
+></LI
+></UL
+><P
+>The Output View therefore offers you the most information about the status of other applications, including the application that you are programming. Additionally, you're offered exact debugging information as well as an error-locating mechanism that brings you to the right place by a single click on the error line.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev4sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev4sec2"
+TITLE="The Output View"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H4
+CLASS="section"
+><A
+NAME="ch18lev4sec3"
+>18.1.1.1.3. The Working Area</A
+></H4
+><P
+>The window that contains the actual editor is called the <I
+CLASS="emphasis"
+>working area</I
+> and is placed at the right of the Tree View and above the Output View. This window is again split into several pages:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Resource/Header Files&#8212;The first editor window, displaying C++ header files and any other file that is not a source file to be compiled like normal text files.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>C/C++ Files&#8212;The second editor window for opening and editing C/C++ source files (*.cpp- files). Source files can be compiled separately without rebuilding the whole project when the file to compile is loaded into this editor window.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Documentation-Browser&#8212;This window is an HTML browser like KFM and is used together with the documentation tree to open the documentation for you. Results from search requests over the documentation will be displayed here for direct browsing, as well.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Tools&#8212;The Tools window is an embedding area for other applications that can be started from within KDevelop, such as KIconEdit, KTranslator, Cervesia, and the like.</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev4sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev4sec3"
+TITLE="The Working Area"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H4
+CLASS="section"
+><A
+NAME="ch18lev4sec4"
+>18.1.1.1.4. The Dialog Editor</A
+></H4
+><P
+>Because KDevelop aims to focus on KDE/Qt developers, it contains a what-you-see-is-what-you-get (WYSIWYG) Dialog Editor that integrates seamlessly into the IDE (see <A
+HREF="ch18.html#ch18fig03"
+>Figure 18.3</A
+>). The Dialog Editor can be accessed either automatically when opening or creating a dialog file or via the menu item Dialog Editor.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch18fig03"
+></A
+><P
+><B
+>Figure 18.3. The KDevelop Dialog Editor with a sample dialog ready for editing.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/18fig03.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The Dialog Editor has several advantages for a KDE/Qt developer: it lets you directly create, edit, and build GUI components and includes a preview functionality. The user interfaces can then be directly used within a project and adapted to further functionality needs. This is very easy because you can set all available properties for a GUI component, such as a push button, on the right in the Properties window. After creating a user interface, KDevelop creates the according source files in C++ as a class derived from classes provided by Qt, such as <TT
+CLASS="literal"
+>QWidget</TT
+> or <TT
+CLASS="literal"
+>QDialog</TT
+>. Thereafter, the developer implements the signals and slots into that class and adds the instantiation for calling the dialog at the desired place within the application's source code. By that, developing user interfaces for your applications is as easy as it could be with the simple steps of visually designing them and generating the source code afterward.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>It cannot be denied, however, that the current Dialog Editor has one weakness that may require you to re-edit the source code output. Because it can handle the creation of user interfaces only on the basis of fixed geometry measurements, your application will have problems with translations if the texts are longer than your English originals. This will cut off the ending, for example, on buttons and labels if these are too short to display the full translation. Thus, you need to make use of the geometry management functions provided by the Qt library and implement a layout by yourself, separated from the default output of the Dialog Editor.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>You will read more about the Dialog Editor later on when you'll have a closer look at actually developing a KDE application with KDevelop.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev4sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev4sec4"
+TITLE="The Dialog Editor"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev3sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev3sec1"
+TITLE="The KDevelop User Interface"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev2sec1"
+TITLE="Be User Friendly&#8212;Be Developer Friendly"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch18lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch18lev1sec1"
+TITLE="General Issues"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch17lev1sec6.html"
+>Prev</A
+> <A
+HREF="ch18lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

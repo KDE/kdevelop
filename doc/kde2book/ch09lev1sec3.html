@@ -1,0 +1,928 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Performing Long Jobs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Constructing A Responsive User Interface"
+HREF="ch09.html"/><LINK
+REL="PREVIOUS"
+TITLE="Speeding Up Window Updates"
+HREF="ch09lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch09lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch09lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch09lev1sec3"
+>9.3. Performing Long Jobs</A
+></H1
+><P
+>When performing long jobs, you want to</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Let the user know that the application is working and the job is progressing.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Let the user access application functions that are still available.</P
+></LI
+></UL
+><P
+>To make either of these possible, you need to first work to keep the UI alive. This entails chopping our long job into small pieces and reentering the event loop after computing each small piece. The preferred way of accomplishing this is by responding to <TT
+CLASS="literal"
+>QTimer</TT
+> events.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec3"
+>9.3.1. Using QTimer to Perform Long Jobs</A
+></H2
+><P
+>The <TT
+CLASS="literal"
+>QTimer</TT
+> class emits a signal every <TT
+CLASS="literal"
+>msec</TT
+> milliseconds in response to events it posts in the event queue. If you do all the work required for a long job in response to <TT
+CLASS="literal"
+>QTimer</TT
+> signals (that is, do our work in a slot connected to the <TT
+CLASS="literal"
+>QTimer::timeout()</TT
+> signal), this gives other events in the event queue, such as paint events, mouse press events, and so on, a chance to be processed. It is the processing of these events that will keep the UI alive.</P
+><P
+>An unacceptable alternative to this is to do all the work in a single method at once. The problem with this is that while the work is being performed, no events would be processed, and so the application's UI would <SPAN
+CLASS="QUOTE"
+>"hang"</SPAN
+>. The window would not update, mouse clicks would be ignored, and so on.</P
+><P
+>The code presented in <A
+HREF="ch09lev1sec3.html#ch09list04"
+>Listings 9.4</A
+> and <A
+HREF="ch09lev1sec3.html#ch09list05"
+>9.5</A
+> show a widget called <TT
+CLASS="literal"
+>KlongJob,</TT
+> which demonstrates how to use <TT
+CLASS="literal"
+>QTimer</TT
+> to perform a long job. <TT
+CLASS="literal"
+>KLongJob</TT
+> flips a coin one million times, counts the number of times the coin comes up heads, and computes the percentage deviation from the ideal <SPAN
+CLASS="QUOTE"
+>"50% heads"</SPAN
+>. That is, the coin is expected to come up heads about half the time, but you know that it'll always be a little different than 50 percent until you've flipped the coin an infinite number of times. This calculation is ideal for this demonstration because it takes a long time but requires very little code.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list04"
+></A
+><P
+><B
+>Example 9.4. klongjob.h: Class Definition for <TT
+CLASS="literal"
+>KLongJob</TT
+>, a Main Widget That Demonstrates How to Use <TT
+CLASS="literal"
+>QTimer</TT
+> to Perform a Long Job</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KLONGJOB_H__
+   3&nbsp; 2: #define __KLONGJOB_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class QTimer;
+   8&nbsp; 7: class QLabel;
+   9&nbsp; 8: class QPopupMenu;
+  10&nbsp; 9:
+  11&nbsp;10: /**
+  12&nbsp;11:  * KLongJob
+  13&nbsp;12:  * Handle a long job while keeping the UI alive.
+  14&nbsp;13:  **/
+  15&nbsp;14:
+  16&nbsp;15: class KLongJob : public KTMainWindow
+  17&nbsp;16: {
+  18&nbsp;17:  Q_OBJECT
+  19&nbsp;18:
+  20&nbsp;19:  public:
+  21&nbsp;20:   KLongJob (const char *name=0);
+  22&nbsp;21:
+  23&nbsp;22:  private:
+  24&nbsp;23:   int count, total;
+  25&nbsp;24:   int idstart, idstop;
+  26&nbsp;25:   QTimer *qtimer;
+  27&nbsp;26:   QLabel *qlabel;
+  28&nbsp;27:   QPopupMenu *file;
+  29&nbsp;28:
+  30&nbsp;29:  private slots:
+  31&nbsp;30:
+  32&nbsp;31:    void slotStartComputation ();
+  33&nbsp;32:    void slotStopComputation ();
+  34&nbsp;33:
+  35&nbsp;34:   /**
+  36&nbsp;35:    * Do some of the calculation.
+  37&nbsp;36:    **/
+  38&nbsp;37:   void slotComputeSome ();
+  39&nbsp;38:
+  40&nbsp;39: };
+  41&nbsp;40:
+  42&nbsp;41: #endif
+  43&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KLongJob</TT
+> is derived from <TT
+CLASS="literal"
+>KTMainWindow</TT
+> so that you can add a user interface to the program. You will see when you execute <TT
+CLASS="literal"
+>KLongJob</TT
+> how the user interface keeps working, even while the long calculation is being performed.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list05"
+></A
+><P
+><B
+>Example 9.5. klongjob.cpp: Class Declaration for <TT
+CLASS="literal"
+>KLongJob</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qtimer.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include &lt;kapp.h&gt;
+   5&nbsp; 4: #include &lt;kaction.h&gt;
+   6&nbsp; 5: #include &lt;kstdaction.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: #include "klongjob.moc"
+   9&nbsp; 8:
+  10&nbsp; 9: KLongJob::KLongJob (const char *name=0) :
+  11&nbsp;10:   KTMainWindow (name)
+  12&nbsp;11: {
+  13&nbsp;12:   start = 
+  14&nbsp;13:     new KAction ("&amp;Start", 0,  this, SLOT(slotStartComputation()), 
+  15&nbsp;14:          actionCollection(), "start");
+  16&nbsp;15:   stop =
+  17&nbsp;16:     new KAction ("Sto&amp;p", 0,  this, SLOT(slotStopComputation()), 
+  18&nbsp;17:          actionCollection(), "stop");
+  19&nbsp;18:   KStdAction::quit (kapp, SLOT (closeAllWindows()),
+  20&nbsp;19:             actionCollection());
+  21&nbsp;20:   stop-&gt;setEnabled (false);
+  22&nbsp;21:
+  23&nbsp;22:   createGUI();
+  24&nbsp;23:
+  25&nbsp;24:   qlabel = new QLabel (this);
+  26&nbsp;25:   qlabel-&gt;setAlignment (QLabel::AlignCenter);
+  27&nbsp;26:   setView (qlabel);
+  28&nbsp;27:
+  29&nbsp;28:   qtimer = new QTimer (this);
+  30&nbsp;29:   connect ( qtimer, SIGNAL (timeout()),
+  31&nbsp;30:        this, SLOT (slotComputeSome()) );
+  32&nbsp;31:
+  33&nbsp;32: }
+  34&nbsp;33:
+  35&nbsp;34: void
+  36&nbsp;35: KLongJob::slotStartComputation ()
+  37&nbsp;36: {
+  38&nbsp;37:   start-&gt;setEnabled (false);
+  39&nbsp;38:   stop-&gt;setEnabled (true);
+  40&nbsp;39:
+  41&nbsp;40:   qtimer-&gt;start (0);
+  42&nbsp;41:
+  43&nbsp;42:   count=total=0;
+  44&nbsp;43: }
+  45&nbsp;44:
+  46&nbsp;45: void
+  47&nbsp;46: KLongJob::slotStopComputation ()
+  48&nbsp;47: {
+  49&nbsp;48:   start-&gt;setEnabled (true);
+  50&nbsp;49:   stop-&gt;setEnabled (false);
+  51&nbsp;50:
+  52&nbsp;51:   qtimer-&gt;stop();
+  53&nbsp;52: }
+  54&nbsp;53:
+  55&nbsp;54: void
+  56&nbsp;55: KLongJob::slotComputeSome()
+  57&nbsp;56: {
+  58&nbsp;57:   const int NumberOfFlips = 10;
+  59&nbsp;58:   double deviation;
+  60&nbsp;59:   int i;
+  61&nbsp;60:
+  62&nbsp;61:   for (i=0; i&lt;NumberOfFlips; i++)
+  63&nbsp;62:     if (kapp-&gt;random()%2==1)
+  64&nbsp;63:       count++;
+  65&nbsp;64:   total+=NumberOfFlips;
+  66&nbsp;65:
+  67&nbsp;66:   if (!(total%5000))
+  68&nbsp;67:     {
+  69&nbsp;68:       deviation = (count - total/2.)/(double)total;
+  70&nbsp;69:       QString qstring;
+  71&nbsp;70:       qstring.sprintf ("Total flips: %10d\nDeviation from 50%% heads: %10.5f",
+  72&nbsp;71:                total, deviation);
+  73&nbsp;72:       qlabel-&gt;setText (qstring);
+  74&nbsp;73:     }
+  75&nbsp;74:
+  76&nbsp;75:   if (total&gt;=1000000)
+  77&nbsp;76:     slotStopComputation();
+  78&nbsp;77: }
+  79&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the <TT
+CLASS="literal"
+>KLongJob</TT
+> constructor, shown in <A
+HREF="ch09lev1sec3.html#ch09list05"
+>Listing 9.5</A
+>, you create a <TT
+CLASS="literal"
+>QTimer</TT
+> and connect its timeout signal to our slot <TT
+CLASS="literal"
+>slotComputeSome()</TT
+> (lines 28&#8211;30). The slot performs some of the computation every time the <TT
+CLASS="literal"
+>QTimer</TT
+> times out.</P
+><P
+>The File menu entry, Start, is connected to the slot <TT
+CLASS="literal"
+>slotStartComputation()</TT
+> (lines 12&#8211;14). In this slot you begin the computation by calling</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;qtimer-&gt;start(0)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This statement starts the <TT
+CLASS="literal"
+>QTimer</TT
+> with a timeout of <TT
+CLASS="literal"
+>0</TT
+> milliseconds. Using a value of zero here means that the <TT
+CLASS="literal"
+>timeout()</TT
+> signal will be emitted as soon as all events in the queue have been processed. In other words, a timeout event is appended to the event queue and processed in turn by Qt. If nothing is happening with our UI&#8212;that is, no events are being posted&#8212;when <TT
+CLASS="literal"
+>slotcomputeSome()</TT
+> exits, it is reentered right away with little time lost.</P
+><P
+>The slot <TT
+CLASS="literal"
+>slotcomputeSome()</TT
+> executes 10 coin flips (more precisely, it chooses randomly between 0 and 1 10 times) in lines 61&#8211;63. The classwide variables, <TT
+CLASS="literal"
+>total</TT
+> and <TT
+CLASS="literal"
+>count,</TT
+> are used to save the state of the computation between calls to <TT
+CLASS="literal"
+>slotcomputeSome()</TT
+>. After every 5,000 flips (50 calls to <TT
+CLASS="literal"
+>slotcomputeSome())</TT
+> the display is updated. I chose not to update the display after every call to <TT
+CLASS="literal"
+>slotcomputeSome()</TT
+> because updates are slow and can add a lot of time to the computation. It is important to update the display often enough to keep the user informed that things are proceeding as planned, but not so often as to add significant time to the task being performed.</P
+><P
+>It is important to realize that the user would never see the progress indicator you have created&#8212;the <SPAN
+CLASS="QUOTE"
+>"Total flips"</SPAN
+> and <SPAN
+CLASS="QUOTE"
+>"Deviation from 50% heads"</SPAN
+> messages&#8212;if you didn't return to the event queue to allow the paint events to be processed. (Whenever you change the text of a <TT
+CLASS="literal"
+>QLabel</TT
+>, it sends itself a paint event.)</P
+><P
+>Finally, after flipping the coin one million times, line 76 calls <TT
+CLASS="literal"
+>stopComputation()</TT
+>. In this method, you call</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;qtimer-&gt;stop()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>which stops <TT
+CLASS="literal"
+>qtimer</TT
+> from posting any more timeout events.</P
+><P
+>You should give <TT
+CLASS="literal"
+>KLongJob</TT
+> a try. Start the computation by choosing File, Start, and notice that you can resize the window, drag other windows over it, and even close the window while the computation is being performed.</P
+><P
+>The following <TT
+CLASS="literal"
+>main()</TT
+> function in <A
+HREF="ch09lev1sec3.html#ch09list06"
+>Listing 9.6</A
+> can be used to create an execute <TT
+CLASS="literal"
+>KLongJob</TT
+>. You will also need to place the file klongjobui.rc (available on this book's Web site) in the directory $KDEDIR/share/klongjob. You can see a screen shot of <TT
+CLASS="literal"
+>KLongJob</TT
+> in <A
+HREF="ch09lev1sec3.html#ch09fig02"
+>Figure 9.2</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list06"
+></A
+><P
+><B
+>Example 9.6. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KLongJob</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "klongjob.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "klongjobtest");
+  10&nbsp; 9:   KLongJob *klongjob = new KLongJob (0);
+  11&nbsp;10:
+  12&nbsp;11:   kapplication.setMainWidget (klongjob);
+  13&nbsp;12:
+  14&nbsp;13:   klongjob-&gt;show();
+  15&nbsp;14:   return kapplication.exec();
+  16&nbsp;15: }
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec3"
+TITLE="Using QTimer to Perform Long Jobs"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec4"
+>9.3.2. Enabling/Disabling Application Functions</A
+></H2
+><P
+>While trying out <TT
+CLASS="literal"
+>Klongjob</TT
+> you may have noticed that the Start menu entry is grayed out when the program is flipping the coin (see line 37).</P
+><P
+>It is important to disable the UI controls that give the user access to the long job if it does not make sense to start the job again. An electronic mail client, for example, should disable its Check for New Mail buttons and menu entries while it is checking for new mail (but keep the rest of its UI alive so that the user can read messages), but a Web browser does not need to disable any hyperlinks while it is attempting to connect to a remote site to download a page. If the user clicks another hyperlink while waiting, a browser, generally, cancels the pending request and starts fulfilling the new one.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch09fig02"
+></A
+><P
+><B
+>Figure 9.2. <TT
+CLASS="literal"
+>Klongjob</TT
+> performs a long calculation while still allowing user interaction.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/09fig02.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>On line 38, in the method <TT
+CLASS="literal"
+>startComputation()</TT
+>, you have enabled the File menu entry Stop. This enables the user to cancel the long job.</P
+><P
+>This is an important function to offer the user. The user may have accidentally chosen to start the job or simply decided the results weren't worth waiting for. In any event, the user should decide what the CPU cycles are being spent on.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec4"
+TITLE="Enabling/Disabling Application Functions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec5"
+>9.3.3. Speed Issues</A
+></H2
+><P
+>Clearly, performing a long computational task in the way just presented takes longer than performing it all in one method without checking the event queue, but the extra time should be considered well spent for the various reasons given previously.</P
+><P
+>When deciding how much work to do in the <TT
+CLASS="literal"
+>computeSome()</TT
+> method, consider two competing factors:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Efficiency</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Smoothness of user interaction</P
+></LI
+></UL
+><P
+>Efficiency requires more work to be done in each call to <TT
+CLASS="literal"
+>computeSome()</TT
+>, which means that a higher percentage of the overall time is spent working on the job, and thus, overall time is decreased. Smoothness of user interaction requires less time to be spent working on the job, and thus, overall time is increased. You set the amount of work small enough so that user interaction did not suffer noticeably.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec5"
+TITLE="Speed Issues"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec6"
+>9.3.4. An Alternative to <TT
+CLASS="literal"
+>QTimer</TT
+></A
+></H2
+><P
+>There is another way to process events while performing a long job. A method in the class <TT
+CLASS="literal"
+>QApplication</TT
+> (from which <TT
+CLASS="literal"
+>KApplication</TT
+> is derived), called <TT
+CLASS="literal"
+>processEvents()</TT
+>, processes all the pending events and then returns.</P
+><P
+>Using this method, write the code for the long job in one big loop and call <TT
+CLASS="literal"
+>processEvents()</TT
+> occasionally. See <A
+HREF="ch09lev1sec3.html#ch09list07"
+>Listing 9.7</A
+> for a second version of <TT
+CLASS="literal"
+>klongjob,</TT
+> which uses <TT
+CLASS="literal"
+>processEvents()</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list07"
+></A
+><P
+><B
+>Example 9.7. Modified Version of <TT
+CLASS="literal"
+>KlongJob</TT
+>, Which Uses <TT
+CLASS="literal"
+>QApplication::processEvents()</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include &lt;kaction.h&gt;
+   4&nbsp; 3: #include &lt;kstdaction.h&gt;
+   5&nbsp; 4:
+   6&nbsp; 5: #include "klongjob.moc"
+   7&nbsp; 6:
+   8&nbsp; 7: KLongJob::KLongJob (const char *name=0) :
+   9&nbsp; 8:   KTMainWindow (name)
+  10&nbsp; 9: {
+  11&nbsp;10:   start = 
+  12&nbsp;11:     new KAction ("&amp;Start", 0,  this, SLOT(slotCompute()),
+  13&nbsp;12:          actionCollection(), "start");
+  14&nbsp;13:   stop =
+  15&nbsp;14:     new KAction ("Sto&amp;p", 0,  this, SLOT(slotStopComputation()),
+  16&nbsp;15:          actionCollection(), "stop");
+  17&nbsp;16:
+  18&nbsp;17:   KStdAction::quit (kapp, SLOT(closeAllWindows()),
+  19&nbsp;18:             actionCollection());
+  20&nbsp;19:
+  21&nbsp;20:   createGUI();
+  22&nbsp;21:
+  23&nbsp;22:   stop-&gt;setEnabled (false);
+  24&nbsp;23:
+  25&nbsp;24:   qlabel = new QLabel (this);
+  26&nbsp;25:   qlabel-&gt;setAlignment (QLabel::AlignCenter);
+  27&nbsp;26:   setView (qlabel);
+  28&nbsp;27: }
+  29&nbsp;28:
+  30&nbsp;29: void
+  31&nbsp;30: KLongJob::slotStopComputation()
+  32&nbsp;31: {
+  33&nbsp;32:   bcontinuecomputation=false;
+  34&nbsp;33: }
+  35&nbsp;34:
+  36&nbsp;35: void
+  37&nbsp;36: KLongJob::slotCompute()
+  38&nbsp;37: {
+  39&nbsp;38:   double deviation;
+  40&nbsp;39:   int i;
+  41&nbsp;40:   count=total=0;
+  42&nbsp;41:
+  43&nbsp;42:   bcontinuecomputation=true;
+  44&nbsp;43:
+  45&nbsp;44:   start-&gt;setEnabled (false);
+  46&nbsp;45:   stop-&gt;setEnabled (true);
+  47&nbsp;46:
+  48&nbsp;47:   kapp-&gt;processEvents();
+  49&nbsp;48:
+  50&nbsp;49:   for (i=0; i&lt;1000000 &amp;&amp;bcontinuecomputation; i++)
+  51&nbsp;50:     {
+  52&nbsp;51:       if (kapp-&gt;random()%2==1)
+  53&nbsp;52:     count++;
+  54&nbsp;53:       total++;
+  55&nbsp;54:
+  56&nbsp;55:       if (!(total%100))
+  57&nbsp;56:     kapp-&gt;processEvents();
+  58&nbsp;57:
+  59&nbsp;58:
+  60&nbsp;59:       if (!(total%5000))
+  61&nbsp;60:     {
+  62&nbsp;61:       deviation = (count - total/2.)/(double)total;
+  63&nbsp;62:       QString qstring;
+  64&nbsp;63:       qstring.
+  65&nbsp;64:         sprintf ("Total flips: %10d\nDeviation from 50%% heads: %10.5f",
+  66&nbsp;65:              total, deviation);
+  67&nbsp;66:       qlabel-&gt;setText (qstring);
+  68&nbsp;67:     }
+  69&nbsp;68:     }
+  70&nbsp;69:
+  71&nbsp;70:   start-&gt;setEnabled (true);
+  72&nbsp;71:   stop-&gt;setEnabled (false);
+  73&nbsp;72:
+  74&nbsp;73: }
+  75&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This version of <TT
+CLASS="literal"
+>KLongJob</TT
+> looks essentially the same to the user as the previous version, but the programming style is quite different. The slot <TT
+CLASS="literal"
+>slotCompute()</TT
+> does all the work in one loop.</P
+><P
+>Every so often (after flipping the coin 100 times) in <TT
+CLASS="literal"
+>slotCompute()</TT
+>, you call (line 56)</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;     kapp-&gt;processEvents();</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>which allows the paint event that is generated by <TT
+CLASS="literal"
+>qlabel</TT
+> when you change its text (line 66) to be processed, as well as any user input or other events that have been posted.</P
+><P
+>I don't recommend using <TT
+CLASS="literal"
+>processEvents()</TT
+> for long jobs, although you will find it used this way occasionally. The problem with it is that some events can't properly be processed if they need to eventually return control to the method that called <TT
+CLASS="literal"
+>processEvents()</TT
+>. As an example, run <TT
+CLASS="literal"
+>klongjob</TT
+>, choose File, Start, and then press Ctrl+Q before the calculation finishes. You should get this message</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Segmentation fault (core dumped)
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>(or something similar). This has happened because your request to terminate the program&#8212;which included deleting the current instance of <TT
+CLASS="literal"
+>KLongJob</TT
+>&#8212;was processed, and then an attempt to return control to the method <TT
+CLASS="literal"
+>slotCompute()</TT
+>, <I
+CLASS="emphasis"
+>part of the deleted instance of</I
+> <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>KLongJob</TT
+></I
+>, was made. This problem could be circumvented, but the possibility still exists that, in a more complex program, you could run into other, similar problems. A safer and more elegant design uses the <TT
+CLASS="literal"
+>QTimer</TT
+> method described previously.</P
+><P
+>You can use the <TT
+CLASS="literal"
+>main()</TT
+> function given in <A
+HREF="ch09lev1sec3.html#ch09list06"
+>Listing 9.6</A
+> to try this program. Its UI looks the same as <A
+HREF="ch09lev1sec3.html#ch09fig02"
+>Figure 9.2</A
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec6"
+TITLE="An Alternative to QTimer"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev1sec3"
+TITLE="Performing Long Jobs"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch09lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

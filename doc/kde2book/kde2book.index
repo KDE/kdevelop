@@ -1,0 +1,979 @@
+<!DOCTYPE gideonindex>
+<gideonindex>
+<title>KDE2 Development Book</title>
+<base href="/home/bernd/kde2/share/doc/HTML/en/gideon/kde2book"/>
+<conceptindex>
+<entry name="KDE, (overview of)" url=".html"/>
+<entry name="KDE, advantages" url="ch01.html"/>
+<entry name="KDE, distributions" url="ch01lev1sec2.html"/>
+<entry name="Web sites, DKE Developers" url="ch01lev1sec2.html"/>
+<entry name="KDE, online resources" url="ch01lev1sec3.html"/>
+<entry name="Web sites, KDE" url="ch01lev1sec3.html"/>
+<entry name="email, mailing lists" url="ch01lev1sec3.html"/>
+<entry name="KDE, system requirements" url="ch01lev1sec4.html"/>
+<entry name="KDE, obtaining" url="ch01lev1sec5.html"/>
+<entry name="obtaining, KDE" url="ch01lev1sec5.html"/>
+<entry name="KDE, installing" url="ch01lev1sec5.html"/>
+<entry name="installing, KDE" url="ch01lev1sec5.html"/>
+<entry name="packages, gt-2.1.0" url="ch01lev1sec5.html"/>
+<entry name="packages, kdesupport" url="ch01lev1sec5.html"/>
+<entry name="packages, kdelibs" url="ch01lev1sec5.html"/>
+<entry name="packages, kdebase" url="ch01lev1sec5.html"/>
+<entry name="packages, kdeutils" url="ch01lev1sec5.html"/>
+<entry name="packages, kdegraphics" url="ch01lev1sec5.html"/>
+<entry name="packages, kdenetwork" url="ch01lev1sec5.html"/>
+<entry name="packages, kdegames" url="ch01lev1sec5.html"/>
+<entry name="packages, kdemultimedia" url="ch01lev1sec5.html"/>
+<entry name="packages, kdeadmin" url="ch01lev1sec5.html"/>
+<entry name="packages, kdei18n" url="ch01lev1sec5.html"/>
+<entry name="binary packages, installing" url="ch01lev1sec5.html"/>
+<entry name="source packages, installing" url="ch01lev1sec5.html"/>
+<entry name="KDE, licenses" url="ch01lev1sec6.html"/>
+<entry name="programs, text editors" url="ch02.html"/>
+<entry name="programs, debuggers" url="ch02.html"/>
+<entry name="programs, compiling" url="ch02lev1sec2.html"/>
+<entry name="compiling programs, example" url="ch02lev1sec2.html"/>
+<entry name="khello program, compiling" url="ch02lev1sec2.html"/>
+<entry name="listings, khello program" url="ch02lev1sec2.html"/>
+<entry name="environment variables, KDEDIR" url="ch02lev1sec2.html"/>
+<entry name="environment variables, QTDIR" url="ch02lev1sec2.html"/>
+<entry name="compiling programs, g++ compiler" url="ch02lev1sec2.html"/>
+<entry name="compiling programs, make utility" url="ch02lev1sec2.html"/>
+<entry name="utilities, make" url="ch02lev1sec2.html"/>
+<entry name="files, Makefiles" url="ch02lev1sec2.html"/>
+<entry name="Makefiles, example of" url="ch02lev1sec2.html"/>
+<entry name="programs, structure of" url="ch02lev1sec3.html"/>
+<entry name="classes, KApplication" url="ch02lev1sec3.html"/>
+<entry name="classes, KTMainWindow" url="ch02lev1sec3.html"/>
+<entry name="KSimpleApp program, ksimpleapp.h class declaration" url="ch02lev1sec3.html"/>
+<entry name="programs, document-centric" url="ch02lev1sec3.html"/>
+<entry name="main() method, KSimpleApp" url="ch02lev1sec3.html"/>
+<entry name="KSimpleApp program, main() method" url="ch02lev1sec3.html"/>
+<entry name="methods, show()" url="ch02lev1sec3.html"/>
+<entry name="KSimpleApp program, ksimpleapp.cpp class definition" url="ch02lev1sec4.html"/>
+<entry name="menubars, creating" url="ch02lev1sec4.html"/>
+<entry name="KSimpleApp program, menubar" url="ch02lev1sec4.html"/>
+<entry name="&amp;, (ampersand)" url="ch02lev1sec4.html"/>
+<entry name="GUIs, toolbars" url="ch02lev1sec4.html"/>
+<entry name="navigation, toolbars" url="ch02lev1sec4.html"/>
+<entry name="KSimpleApp program, toolbar" url="ch02lev1sec4.html"/>
+<entry name="methods, toolBar()" url="ch02lev1sec4.html"/>
+<entry name="KSimpleApp program, status line" url="ch02lev1sec4.html"/>
+<entry name="GUIs, status limes" url="ch02lev1sec4.html"/>
+<entry name="methods, statusBar()" url="ch02lev1sec4.html"/>
+<entry name="programming conventions, naming conventions" url="ch02lev1sec5.html"/>
+<entry name="classes, naming conventions" url="ch02lev1sec5.html"/>
+<entry name="methods, naming conventions" url="ch02lev1sec5.html"/>
+<entry name="files, naming conventions" url="ch02lev1sec5.html"/>
+<entry name="programming conventions, class documentation" url="ch02lev1sec5.html"/>
+<entry name="classes, documentation" url="ch02lev1sec5.html"/>
+<entry name="toolkits, Qt" url="ch02lev1sec7.html"/>
+<entry name="KDE, Qt toolkit" url="ch02lev1sec7.html"/>
+<entry name="programming, Qt toolkit" url="ch02lev1sec7.html"/>
+<entry name="Web sites, Trolltech" url="ch02lev1sec7.html"/>
+<entry name="X Windows programming, Qt toolkit" url="ch03.html"/>
+<entry name="Qt toolkit, overview" url="ch03lev1sec2.html"/>
+<entry name="classes, KDE versus QT" url="ch03lev1sec2.html"/>
+<entry name="Qt, moc (Meta Object Compiler)" url="ch03lev1sec2.html"/>
+<entry name="Qt, QObject class" url="ch03lev1sec2.html"/>
+<entry name="classes, QObject" url="ch03lev1sec2.html"/>
+<entry name="event handling, Qt" url="ch03lev1sec2.html"/>
+<entry name="Qt, event handling" url="ch03lev1sec2.html"/>
+<entry name="Qt, QWidget class" url="ch03lev1sec2.html"/>
+<entry name="classes, QWidget" url="ch03lev1sec2.html"/>
+<entry name="functions, QWidget class" url="ch03lev1sec2.html"/>
+<entry name="listings, QWidget class example" url="ch03lev1sec2.html"/>
+<entry name="classes, QPainter" url="ch03lev1sec2.html"/>
+<entry name="Qt, QPainter class" url="ch03lev1sec2.html"/>
+<entry name="widgets, drawing graphics on" url="ch03lev1sec2.html"/>
+<entry name="QPainter class, member function" url="ch03lev1sec2.html"/>
+<entry name="functions, QPainter class" url="ch03lev1sec2.html"/>
+<entry name="graphics, flushing" url="ch03lev1sec2.html"/>
+<entry name="listings, QPainter class example usage" url="ch03lev1sec2.html"/>
+<entry name="QPainter class, example usage (listing)" url="ch03lev1sec2.html"/>
+<entry name="classes, QPushButton" url="ch03lev1sec2.html"/>
+<entry name="Qt, QPushButton class" url="ch03lev1sec2.html"/>
+<entry name="QPushButton class, member functions" url="ch03lev1sec2.html"/>
+<entry name="functions, QPushButton class" url="ch03lev1sec2.html"/>
+<entry name="listings, QPushButton class example usage" url="ch03lev1sec2.html"/>
+<entry name="QPushButton class, listing" url="ch03lev1sec2.html"/>
+<entry name="Qt, signals" url="ch03lev1sec3.html"/>
+<entry name="signals, (Qt)" url="ch03lev1sec3.html"/>
+<entry name="slots, (Qt)" url="ch03lev1sec3.html"/>
+<entry name="Qt, slots" url="ch03lev1sec3.html"/>
+<entry name="functions, slots" url="ch03lev1sec3.html"/>
+<entry name="event handling, signals and slots" url="ch03lev1sec3.html"/>
+<entry name="slots, creating" url="ch03lev1sec3.html"/>
+<entry name="classes, slots" url="ch03lev1sec3.html"/>
+<entry name="signals, emitting" url="ch03lev1sec3.html"/>
+<entry name="slots, connecting to signals" url="ch03lev1sec3.html"/>
+<entry name="signals, connecting to slots" url="ch03lev1sec3.html"/>
+<entry name="listings, connecting slots to signals" url="ch03lev1sec3.html"/>
+<entry name="slots, parameters" url="ch03lev1sec3.html"/>
+<entry name="signals, parameters" url="ch03lev1sec3.html"/>
+<entry name="Qt, paremeters" url="ch03lev1sec3.html"/>
+<entry name="parameters, signals and slots" url="ch03lev1sec3.html"/>
+<entry name="slots, temporary classes" url="ch03lev1sec3.html"/>
+<entry name="classes, slots in temporary classes" url="ch03lev1sec3.html"/>
+<entry name="Qt, moc" url="ch03lev1sec4.html"/>
+<entry name="moc, keywords" url="ch03lev1sec4.html"/>
+<entry name="Meta Object Compiler, keywords" url="ch03lev1sec4.html"/>
+<entry name="keywords, moc" url="ch03lev1sec4.html"/>
+<entry name="slots, slotButton()" url="ch03lev1sec4.html"/>
+<entry name="listings, moc example" url="ch03lev1sec4.html"/>
+<entry name="listings, MyWindow class implementation" url="ch03lev1sec4.html"/>
+<entry name="moc, main program file example" url="ch03lev1sec4.html"/>
+<entry name="Meta Object Compiler, main program file example" url="ch03lev1sec4.html"/>
+<entry name="moc, executing programs" url="ch03lev1sec4.html"/>
+<entry name="Meta Object Compiler, executing programs" url="ch03lev1sec4.html"/>
+<entry name="Qt, utility classes" url="ch03lev1sec5.html"/>
+<entry name="classes, utility (Qt)" url="ch03lev1sec5.html"/>
+<entry name="utility classes, (Qt)" url="ch03lev1sec5.html"/>
+<entry name="templates, C++" url="ch03lev1sec5.html"/>
+<entry name="C++, templates" url="ch03lev1sec5.html"/>
+<entry name="classes, template" url="ch03lev1sec5.html"/>
+<entry name="template classes, listing" url="ch03lev1sec5.html"/>
+<entry name="listings, template classes" url="ch03lev1sec5.html"/>
+<entry name="Qt, STL" url="ch03lev1sec5.html"/>
+<entry name="STL, (Standard Template Library)" url="ch03lev1sec5.html"/>
+<entry name="templates, STL" url="ch03lev1sec5.html"/>
+<entry name="templates, QList class" url="ch03lev1sec5.html"/>
+<entry name="functions, QList class" url="ch03lev1sec5.html"/>
+<entry name="listings, QList class example" url="ch03lev1sec5.html"/>
+<entry name="Qt, ImageIO" url="ch03lev1sec6.html"/>
+<entry name="listings, ImageIO sample program" url="ch03lev1sec6.html"/>
+<entry name="Qt, OpenGL" url="ch03lev1sec6.html"/>
+<entry name="Qt, Mesa" url="ch03lev1sec6.html"/>
+<entry name="Web sites, OpenGl" url="ch03lev1sec6.html"/>
+<entry name="Web sites, Mesa" url="ch03lev1sec6.html"/>
+<entry name="widgets, QGL" url="ch03lev1sec6.html"/>
+<entry name="OpenGL, creating programs" url="ch03lev1sec6.html"/>
+<entry name="functions, QGL widget" url="ch03lev1sec6.html"/>
+<entry name="libraries, Mesa" url="ch03lev1sec6.html"/>
+<entry name="libraries, OpenGL" url="ch03lev1sec6.html"/>
+<entry name="listings, OpenGL program example" url="ch03lev1sec6.html"/>
+<entry name="OpenGL, sample program (listing)" url="ch03lev1sec6.html"/>
+<entry name="GUIs, widgets" url="ch03lev1sec8.html"/>
+<entry name="widgets, defined" url="ch04.html"/>
+<entry name="widgets, event handlers" url="ch04.html"/>
+<entry name="QWidget class, event handlers" url="ch04.html"/>
+<entry name="event handling, widgets" url="ch04.html"/>
+<entry name="event() event handler, widgets" url="ch04.html"/>
+<entry name="mousePressEvent() event handler, widgets" url="ch04.html"/>
+<entry name="mouseReleaseEvent() event handler, widgets" url="ch04.html"/>
+<entry name="mouseDoubleClickEvent() event handler, widgets" url="ch04.html"/>
+<entry name="mouseMoveEvent() event handler, widgets" url="ch04.html"/>
+<entry name="wheelEvent() event handler, widgets" url="ch04.html"/>
+<entry name="keyPressEvent() event handler, widgets" url="ch04.html"/>
+<entry name="keyReleaseEvent() event handler, widgets" url="ch04.html"/>
+<entry name="focusInEvent() event handler, widgets" url="ch04.html"/>
+<entry name="focusOutEvent() event handler, widgets" url="ch04.html"/>
+<entry name="enterEvent() event handler, widgets" url="ch04.html"/>
+<entry name="leaveEvent() event handler, widgets" url="ch04.html"/>
+<entry name="paintEvent() event handler, widgets" url="ch04.html"/>
+<entry name="moveEvent() event handler, widgets" url="ch04.html"/>
+<entry name="resizeEvent() event handler, widgets" url="ch04.html"/>
+<entry name="closeEvent() event handler, widgets" url="ch04.html"/>
+<entry name="dragEnterEvent() event handler, widgets" url="ch04.html"/>
+<entry name="dragMoveEvent() event handler, widgets" url="ch04.html"/>
+<entry name="dragLeaveEvent() event handler, widgets" url="ch04.html"/>
+<entry name="dropEvent() event handler, widgets" url="ch04.html"/>
+<entry name="showEvent() event handler, widgets" url="ch04.html"/>
+<entry name="widgets, attributes" url="ch04.html"/>
+<entry name="QWidget class, attributes" url="ch04.html"/>
+<entry name="attributes, widget attributes" url="ch04.html"/>
+<entry name="widgets, signals" url="ch04.html"/>
+<entry name="QWidget class, signals" url="ch04.html"/>
+<entry name="widgets, slots" url="ch04.html"/>
+<entry name="QWidget class, slots" url="ch04.html"/>
+<entry name="widgets, sample class declaration" url="ch04.html"/>
+<entry name="QWidget class, sample class declaration" url="ch04.html"/>
+<entry name="listings, KPushButton class declaration" url="ch04.html"/>
+<entry name="widgets, documentation" url="ch04.html"/>
+<entry name="QWidget class, documentation" url="ch04.html"/>
+<entry name="documentation, widgets" url="ch04.html"/>
+<entry name="widgets, painting" url="ch04lev1sec2.html"/>
+<entry name="painting, widgets" url="ch04lev1sec2.html"/>
+<entry name="methods, paintEvent()" url="ch04lev1sec2.html"/>
+<entry name="invoking, paint events" url="ch04lev1sec2.html"/>
+<entry name="update() method, QPainter class" url="ch04lev1sec2.html"/>
+<entry name="repainting, widgets" url="ch04lev1sec2.html"/>
+<entry name="repaint() method, QPainter class" url="ch04lev1sec2.html"/>
+<entry name="widgets, drawing commands, recording" url="ch04lev1sec2.html"/>
+<entry name="QPicture class, drawing commands, recording" url="ch04lev1sec2.html"/>
+<entry name="KXOSquare widget (painting example), kxosquare.cpp class declaration" url="ch04lev1sec2.html"/>
+<entry name="KXOSquare widget (painting example), kxosquare.cpp class definition" url="ch04lev1sec2.html"/>
+<entry name="KXOSquare widget (painting example), code analysis" url="ch04lev1sec2.html"/>
+<entry name="bounding boxes, drawing" url="ch04lev1sec2.html"/>
+<entry name="drawing, bounding boxes" url="ch04lev1sec2.html"/>
+<entry name="methods, drawRect()" url="ch04lev1sec2.html"/>
+<entry name="methods, setPen()" url="ch04lev1sec2.html"/>
+<entry name="methods, drawLine()" url="ch04lev1sec2.html"/>
+<entry name="lines, drawing" url="ch04lev1sec2.html"/>
+<entry name="drawing, lines" url="ch04lev1sec2.html"/>
+<entry name="methods, drawEllipse()" url="ch04lev1sec2.html"/>
+<entry name="ellipses, drawing" url="ch04lev1sec2.html"/>
+<entry name="drawing, ellipses" url="ch04lev1sec2.html"/>
+<entry name="KXOSquare widget (painting example), main() method" url="ch04lev1sec2.html"/>
+<entry name="testing, KXOSquare widget" url="ch04lev1sec2.html"/>
+<entry name="main() method, KXOSquare widget" url="ch04lev1sec2.html"/>
+<entry name="widgets, child widgets" url="ch04lev1sec3.html"/>
+<entry name="child widgets, KChildren example" url="ch04lev1sec3.html"/>
+<entry name="KChildren sample widget (child widget), kchildren.h class declaration" url="ch04lev1sec3.html"/>
+<entry name="KChildren sample widget (child widget), kchildren.cpp class definition" url="ch04lev1sec3.html"/>
+<entry name="KChildren sample widget (child widget), main() method" url="ch04lev1sec3.html"/>
+<entry name="main() method, KChildren widget" url="ch04lev1sec3.html"/>
+<entry name="child widgets, geometry management" url="ch04lev1sec3.html"/>
+<entry name="geometry management (widgets), QBoxLayout manager" url="ch04lev1sec3.html"/>
+<entry name="geometry management (widgets), QGridLayout manager" url="ch04lev1sec3.html"/>
+<entry name="KTicTacToe widget (geometry management example), ktictactoe.h class declaration" url="ch04lev1sec3.html"/>
+<entry name="KTicTacToe widget (geometry management example), ktictactoe.cpp class definition" url="ch04lev1sec3.html"/>
+<entry name="KTicTacToe widget (geometry management example), playing the game" url="ch04lev1sec3.html"/>
+<entry name="widgets, user input" url="ch04lev1sec4.html"/>
+<entry name="user input, widgets" url="ch04lev1sec4.html"/>
+<entry name="input (user), widgets" url="ch04lev1sec4.html"/>
+<entry name="KDisc widget (user input example), kdisc.h class declaration" url="ch04lev1sec4.html"/>
+<entry name="KDisc widget (user input example), kdisc.cpp class definition" url="ch04lev1sec4.html"/>
+<entry name="mouse clicks, handling, widgets" url="ch04lev1sec4.html"/>
+<entry name="keystrokes, handling, widgets" url="ch04lev1sec4.html"/>
+<entry name="KDisc widget (user input example), main() method" url="ch04lev1sec4.html"/>
+<entry name="main() method, KDisc" url="ch04lev1sec4.html"/>
+<entry name="UI compliance, document-centric interface" url="ch05.html"/>
+<entry name="GUIs, document-centric interface" url="ch05.html"/>
+<entry name="document-centric user interface, menubars" url="ch05.html"/>
+<entry name="document-centric user interface, toolbars" url="ch05.html"/>
+<entry name="document-centric user interface, actions" url="ch05.html"/>
+<entry name="actions, KAction class" url="ch05.html"/>
+<entry name="classes, KAction" url="ch05.html"/>
+<entry name="actions, standard actions" url="ch05.html"/>
+<entry name="classes, KStdAction" url="ch05.html"/>
+<entry name="standard actions, KStdAction class" url="ch05.html"/>
+<entry name="functions, actionCollection" url="ch05.html"/>
+<entry name="standard actions, KStdActionsDemo widget" url="ch05.html"/>
+<entry name="KStdActionsDemo widget, kstdactionsdemo.cpp class declaration" url="ch05.html"/>
+<entry name="declaring widget classes, KStdActionsDemo widget" url="ch05.html"/>
+<entry name="functions, openNew()" url="ch05.html"/>
+<entry name="KStdActionsDemo widget, kstdactionsdemo.h class definition" url="ch05.html"/>
+<entry name="defining widget classes, KStdActionsDemo widget" url="ch05.html"/>
+<entry name="functions, addAuthor()" url="ch05.html"/>
+<entry name="KStdActionsDemo widget, ,main() function" url="ch05.html"/>
+<entry name="mian() function, KStdActionsDemo widget" url="ch05.html"/>
+<entry name="actions, custom actions" url="ch05.html"/>
+<entry name="KCustomActions widget, kcustomactions.h class declaration" url="ch05.html"/>
+<entry name="declaring widget classes, KCustomActions widget" url="ch05.html"/>
+<entry name="KCustomActions widget, kcustomactions.cpp class definition" url="ch05.html"/>
+<entry name="defining widget classes, KCustomActions widget" url="ch05.html"/>
+<entry name="KCustomActions widget, kcustomui.rcp class file" url="ch05.html"/>
+<entry name="XML (Extensible Markup Language), tags" url="ch05.html"/>
+<entry name="tags, XML (Extensible Markup Language)" url="ch05.html"/>
+<entry name="functions, setExclusiveGroup()" url="ch05.html"/>
+<entry name="KCustomActions widget, toolbars" url="ch05.html"/>
+<entry name="toolbars, KCustomActions widget" url="ch05.html"/>
+<entry name="KCustomActions widget, kcustomactions.h class definition" url="ch05.html"/>
+<entry name="KCustomActions widget, main() function" url="ch05.html"/>
+<entry name="main() function, KCustomActions widget" url="ch05.html"/>
+<entry name="document-centric user interface, status bars" url="ch05.html"/>
+<entry name="status bars, Konqueror status bar" url="ch05.html"/>
+<entry name="status bars, KWrite status bar" url="ch05.html"/>
+<entry name="KStatusBarDemo widget, kstatusbardemo.h class declaration" url="ch05.html"/>
+<entry name="kstatusbardemo.h file, KStatusBarDemo widget" url="ch05.html"/>
+<entry name="declaring widget classes, KStatusBarDemo widget" url="ch05.html"/>
+<entry name="KStatusBarDemo widget, main() function" url="ch05.html"/>
+<entry name="main() function, KStatusBarDemo widget" url="ch05.html"/>
+<entry name="KStatusBarDemo widget, kstatusbardemo.cpp class definition" url="ch05.html"/>
+<entry name="kstatusbardemo.cpp file, KStatusBarDemo widget" url="ch05.html"/>
+<entry name="defining widget classes, KStatusBarDemo widget" url="ch05.html"/>
+<entry name="document-centric user interface, content areas" url="ch05.html"/>
+<entry name="content areas, KWrite" url="ch05.html"/>
+<entry name="KWrite, content area" url="ch05.html"/>
+<entry name="content areas, Konqueror" url="ch05.html"/>
+<entry name="Konqueror, content area" url="ch05.html"/>
+<entry name="content areas, KOrganizer" url="ch05.html"/>
+<entry name="KOrganizer, content area" url="ch05.html"/>
+<entry name="UI compliance, help" url="ch05lev1sec2.html"/>
+<entry name="GUIs, help" url="ch05lev1sec2.html"/>
+<entry name="help, ToolTips" url="ch05lev1sec2.html"/>
+<entry name="KHelpers widget, khelpers.h class declaration" url="ch05lev1sec2.html"/>
+<entry name="declaring widget classes, KHelpers" url="ch05lev1sec2.html"/>
+<entry name="KHelpers widget, khelpers.cpp class definition" url="ch05lev1sec2.html"/>
+<entry name="defining widget classes, KHelpers" url="ch05lev1sec2.html"/>
+<entry name="help, Tooltips" url="ch05lev1sec2.html"/>
+<entry name="KHelpers widget, main() function" url="ch05lev1sec2.html"/>
+<entry name="main() function, KHelpers widget" url="ch05lev1sec2.html"/>
+<entry name="functions, add()" url="ch05lev1sec2.html"/>
+<entry name="functions, helpMenu()" url="ch05lev1sec2.html"/>
+<entry name="functions, slotSpecialHelp()" url="ch05lev1sec2.html"/>
+<entry name="UI compliance, standard dialog boxes" url="ch05lev1sec3.html"/>
+<entry name="GUIs, standard dialog boxes" url="ch05lev1sec3.html"/>
+<entry name="dialog boxes, standard dialog boxes" url="ch05lev1sec3.html"/>
+<entry name="standard dialog boxes, sample application" url="ch05lev1sec3.html"/>
+<entry name="listings, KStandardDialogs main.cpp" url="ch05lev1sec3.html"/>
+<entry name="standard dialog boxes, KFileDialog" url="ch05lev1sec3.html"/>
+<entry name="file dialog boxes, KFileDialog" url="ch05lev1sec3.html"/>
+<entry name="functions, getOpenFileName()" url="ch05lev1sec3.html"/>
+<entry name="functions, getSaveFileName()" url="ch05lev1sec3.html"/>
+<entry name="functions, getExistingDirectory()" url="ch05lev1sec3.html"/>
+<entry name="standard dialog boxes, KFontDialog" url="ch05lev1sec3.html"/>
+<entry name="font dialog boxes, KFontDialog" url="ch05lev1sec3.html"/>
+<entry name="functions, getFont()" url="ch05lev1sec3.html"/>
+<entry name="functions, getColor()" url="ch05lev1sec3.html"/>
+<entry name="standard dialog boxes, KMessageBox" url="ch05lev1sec3.html"/>
+<entry name="font dialog boxes, KMessageBox" url="ch05lev1sec3.html"/>
+<entry name="functions, warningContinueCancel()" url="ch05lev1sec3.html"/>
+<entry name="functions, information()" url="ch05lev1sec3.html"/>
+<entry name="functions, sorry()" url="ch05lev1sec3.html"/>
+<entry name="functions, error()" url="ch05lev1sec3.html"/>
+<entry name="actions, aboutApp" url="ch06.html"/>
+<entry name="actions, aboutKDE" url="ch06.html"/>
+<entry name="actions, actualSize" url="ch06.html"/>
+<entry name="actions, addBookmark" url="ch06.html"/>
+<entry name="actions, back" url="ch06.html"/>
+<entry name="actions, configureToolbars" url="ch06.html"/>
+<entry name="actions, copy" url="ch06.html"/>
+<entry name="actions, Cut" url="ch06.html"/>
+<entry name="actions, editBookmarks" url="ch06.html"/>
+<entry name="actions, find" url="ch06.html"/>
+<entry name="actions, findNext" url="ch06.html"/>
+<entry name="actions, findPrev" url="ch06.html"/>
+<entry name="actions, firstPage" url="ch06.html"/>
+<entry name="actions, fitToHeight" url="ch06.html"/>
+<entry name="actions, fitToPage" url="ch06.html"/>
+<entry name="actions, fitToWidth" url="ch06.html"/>
+<entry name="actions, forward" url="ch06.html"/>
+<entry name="actions, goTo" url="ch06.html"/>
+<entry name="actions, gotoLine" url="ch06.html"/>
+<entry name="actions, gotoPage" url="ch06.html"/>
+<entry name="actions, help" url="ch06.html"/>
+<entry name="actions, helpContents" url="ch06.html"/>
+<entry name="actions, home" url="ch06.html"/>
+<entry name="actions, keyBindings" url="ch06.html"/>
+<entry name="actions, lastPage" url="ch06.html"/>
+<entry name="actions, mail" url="ch06.html"/>
+<entry name="actions, next" url="ch06.html"/>
+<entry name="actions, openNew" url="ch06.html"/>
+<entry name="actions, open" url="ch06.html"/>
+<entry name="actions, openRecent" url="ch06.html"/>
+<entry name="actions, paste" url="ch06.html"/>
+<entry name="actions, preferences" url="ch06.html"/>
+<entry name="actions, print" url="ch06.html"/>
+<entry name="actions, printPreview" url="ch06.html"/>
+<entry name="actions, prior" url="ch06.html"/>
+<entry name="actions, quit" url="ch06.html"/>
+<entry name="actions, redisplay" url="ch06.html"/>
+<entry name="actions, redo" url="ch06.html"/>
+<entry name="actions, replace" url="ch06.html"/>
+<entry name="actions, reportBug" url="ch06.html"/>
+<entry name="actions, revert" url="ch06.html"/>
+<entry name="actions, save" url="ch06.html"/>
+<entry name="actions, saveAs" url="ch06.html"/>
+<entry name="actions, saveOptions" url="ch06.html"/>
+<entry name="actions, selectAll" url="ch06.html"/>
+<entry name="actions, showMenubar" url="ch06.html"/>
+<entry name="actions, showStatusbar" url="ch06.html"/>
+<entry name="actions, showToolbar" url="ch06.html"/>
+<entry name="actions, spelling" url="ch06.html"/>
+<entry name="actions, undo" url="ch06.html"/>
+<entry name="actions, up" url="ch06.html"/>
+<entry name="actions, whatsThis" url="ch06.html"/>
+<entry name="actions, zoom" url="ch06.html"/>
+<entry name="actions, zoomIn" url="ch06.html"/>
+<entry name="actions, zoomOut" url="ch06.html"/>
+<entry name="commands, File menu" url="ch06.html"/>
+<entry name="commands, Edit menu" url="ch06.html"/>
+<entry name="commands, View menu" url="ch06.html"/>
+<entry name="commands, Go menu" url="ch06.html"/>
+<entry name="commands, Bookmarks menu" url="ch06.html"/>
+<entry name="commands, Tools menu" url="ch06.html"/>
+<entry name="commands, Settings menu" url="ch06.html"/>
+<entry name="commands, Help menu" url="ch06.html"/>
+<entry name="sessions, session management" url="ch06lev1sec2.html"/>
+<entry name="managing, sessions" url="ch06lev1sec2.html"/>
+<entry name="header files, session management" url="ch06lev1sec2.html"/>
+<entry name="source files, session management" url="ch06lev1sec2.html"/>
+<entry name="KEdit, session management code" url="ch06lev1sec2.html"/>
+<entry name="icons, designing" url="ch06lev1sec3.html"/>
+<entry name="designing, icons" url="ch06lev1sec3.html"/>
+<entry name="icons, PNG format" url="ch06lev1sec3.html"/>
+<entry name="PNG format, icons" url="ch06lev1sec3.html"/>
+<entry name="PNG format, (Portable Network Graphics)" url="ch06lev1sec3.html"/>
+<entry name="application icons, specifications" url="ch06lev1sec3.html"/>
+<entry name="toolbar icons, specifications" url="ch06lev1sec3.html"/>
+<entry name="toolbar icons, states" url="ch06lev1sec3.html"/>
+<entry name="states, toolbar icons" url="ch06lev1sec3.html"/>
+<entry name="icons, color depth" url="ch06lev1sec3.html"/>
+<entry name="icons, names" url="ch06lev1sec3.html"/>
+<entry name="names, icons" url="ch06lev1sec3.html"/>
+<entry name="icons, type" url="ch06lev1sec3.html"/>
+<entry name="languages, i18n() function" url="ch06lev1sec4.html"/>
+<entry name="functions, i18n()" url="ch06lev1sec4.html"/>
+<entry name="i18n() function, syntax" url="ch06lev1sec4.html"/>
+<entry name="syntax, i18n()" url="ch06lev1sec4.html"/>
+<entry name="Web sites, KDE Translator's and Documenter's Web site" url="ch06lev1sec4.html"/>
+<entry name="i18n() function, KDE Translator's and Documenter's Web site" url="ch06lev1sec4.html"/>
+<entry name="languages, translator files" url="ch06lev1sec4.html"/>
+<entry name="files, translation" url="ch06lev1sec4.html"/>
+<entry name="sound, playing" url="ch06lev1sec5.html"/>
+<entry name="playing, sound" url="ch06lev1sec5.html"/>
+<entry name="classes, KNotifyClient" url="ch06lev1sec6.html"/>
+<entry name="notifications, user" url="ch06lev1sec6.html"/>
+<entry name="users, notifications" url="ch06lev1sec6.html"/>
+<entry name="KRun class, running applications" url="ch06lev1sec7.html"/>
+<entry name="run() functions, KRun class" url="ch06lev1sec7.html"/>
+<entry name="listings, static run() functions" url="ch06lev1sec7.html"/>
+<entry name="KRun class, opening files" url="ch06lev1sec7.html"/>
+<entry name="applications, network transparency" url="ch06lev1sec8.html"/>
+<entry name="network transparency, applications" url="ch06lev1sec8.html"/>
+<entry name="classes, network transparency" url="ch06lev1sec8.html"/>
+<entry name="filenames, network transparency" url="ch06lev1sec8.html"/>
+<entry name="Web sites, Interface Hall of Shame" url="ch06lev1sec9.html"/>
+<entry name="GUIs, drag and drop" url="ch07.html"/>
+<entry name="navigation, drag and drop" url="ch07.html"/>
+<entry name="protocols, XDND" url="ch07.html"/>
+<entry name="drag and drop, XDND protocol" url="ch07.html"/>
+<entry name="Web sites, XDND protocol" url="ch07.html"/>
+<entry name="drag and drop, responding to drop events" url="ch07.html"/>
+<entry name="drop events, responding to" url="ch07.html"/>
+<entry name="event handling, drop events" url="ch07.html"/>
+<entry name="KDropDemo widget, kdropdemo.h class definition" url="ch07.html"/>
+<entry name="defining widget classes, KDropDemo widget" url="ch07.html"/>
+<entry name="KDropDemo widget, kdropdemo.cpp class declaration" url="ch07.html"/>
+<entry name="declaring widget classes, KDropDemo widget" url="ch07.html"/>
+<entry name="functions, setAcceptDrops()" url="ch07.html"/>
+<entry name="functions, dragEnterEvent()" url="ch07.html"/>
+<entry name="functions, canDecode()" url="ch07.html"/>
+<entry name="functions, dropEvent()" url="ch07.html"/>
+<entry name="KDropDemo widget, main() function" url="ch07.html"/>
+<entry name="main() function, KDropDemo widget" url="ch07.html"/>
+<entry name="drag and drop, starting a drag" url="ch07.html"/>
+<entry name="starting, drag events" url="ch07.html"/>
+<entry name="event handling, drag events" url="ch07.html"/>
+<entry name="drag events, starting" url="ch07.html"/>
+<entry name="KDragDemo widget, kdragdemo.h class definition" url="ch07.html"/>
+<entry name="defining widget classes, KDragDemo widget" url="ch07.html"/>
+<entry name="KDragDemo widget, kdragdemo.cpp class declaration" url="ch07.html"/>
+<entry name="declaring widget classes, KDragDemo widget" url="ch07.html"/>
+<entry name="KDragDemo widget, main() function" url="ch07.html"/>
+<entry name="main() function, KDragDemo widget" url="ch07.html"/>
+<entry name="files, application configuration files" url="ch07lev1sec2.html"/>
+<entry name="application configuration files, example of" url="ch07lev1sec2.html"/>
+<entry name="configuration files, example of" url="ch07lev1sec2.html"/>
+<entry name="listings, application configuration file example" url="ch07lev1sec2.html"/>
+<entry name="application configuration files, accessing" url="ch07lev1sec2.html"/>
+<entry name="accessing, application configuration files" url="ch07lev1sec2.html"/>
+<entry name="configuration files, accessing" url="ch07lev1sec2.html"/>
+<entry name="KConfigDemo widget, kconfigdemo.h class declaration" url="ch07lev1sec2.html"/>
+<entry name="declaring widget classes, KConfigDemo widget" url="ch07lev1sec2.html"/>
+<entry name="KConfigDemo widget, kconfigdemo.cpp class definition" url="ch07lev1sec2.html"/>
+<entry name="defining widget classes, KConfigDemo widget" url="ch07lev1sec2.html"/>
+<entry name="KConfigDemo widget, main() function" url="ch07lev1sec2.html"/>
+<entry name="main() function, KConfigDemo widget" url="ch07lev1sec2.html"/>
+<entry name="functions, saveProperties()" url="ch07lev1sec3.html"/>
+<entry name="functions, readProperties()" url="ch07lev1sec3.html"/>
+<entry name="functions, queryClose()" url="ch07lev1sec3.html"/>
+<entry name="KSaveAcross widget, ksaveacross.h class declaration" url="ch07lev1sec3.html"/>
+<entry name="declaring widget classes, KSaveAcross widget" url="ch07lev1sec3.html"/>
+<entry name="KSaveAcross widget, ksaveacross.cpp class definition" url="ch07lev1sec3.html"/>
+<entry name="defining widget classes, KSaveAcross widget" url="ch07lev1sec3.html"/>
+<entry name="KSaveAcross widget, main() function" url="ch07lev1sec3.html"/>
+<entry name="main() function, KSaveAcross widget" url="ch07lev1sec3.html"/>
+<entry name="resources, standard resource locations" url="ch07lev1sec4.html"/>
+<entry name="application resources, standard resource locations" url="ch07lev1sec4.html"/>
+<entry name="resources, accessing" url="ch07lev1sec4.html"/>
+<entry name="application resources, accessing" url="ch07lev1sec4.html"/>
+<entry name="accessing, resources" url="ch07lev1sec4.html"/>
+<entry name="resources, types" url="ch07lev1sec4.html"/>
+<entry name="application resources, types" url="ch07lev1sec4.html"/>
+<entry name="KResourceDemo widget, kresourcedemo.h class declaration" url="ch07lev1sec4.html"/>
+<entry name="declaring widget classes, KResourceDemo widget" url="ch07lev1sec4.html"/>
+<entry name="KResourceDemo widget, kresourcedemo.cpp class definition" url="ch07lev1sec4.html"/>
+<entry name="defining widget classes, KResourceDemo widget" url="ch07lev1sec4.html"/>
+<entry name="functions, kingioRegister()" url="ch07lev1sec4.html"/>
+<entry name="KResourceDemo widget, $KDEDIR/share/appstext.txt contents" url="ch07lev1sec4.html"/>
+<entry name="utilities, xgettext" url="ch07lev1sec4.html"/>
+<entry name="GNU, xgettext utility" url="ch07lev1sec4.html"/>
+<entry name="KResourceDemo widget, kresource.po translation template file" url="ch07lev1sec4.html"/>
+<entry name="resources, .desktop files" url="ch07lev1sec4.html"/>
+<entry name="application resources, .desktop files" url="ch07lev1sec4.html"/>
+<entry name="files, .desktop" url="ch07lev1sec4.html"/>
+<entry name="functions, download()" url="ch07lev1sec5.html"/>
+<entry name="functions, upload()" url="ch07lev1sec5.html"/>
+<entry name="KRemoteDemo widget, kremotedemo.h class declaration" url="ch07lev1sec5.html"/>
+<entry name="declaring widget classes, KRemoteDemo widget" url="ch07lev1sec5.html"/>
+<entry name="KRemoteDemo widget, kremotedemo.cpp class definition" url="ch07lev1sec5.html"/>
+<entry name="defining widget classes, KRemoteDemo widget" url="ch07lev1sec5.html"/>
+<entry name="functions, slotOpen()" url="ch07lev1sec5.html"/>
+<entry name="functions, slotSave()" url="ch07lev1sec5.html"/>
+<entry name="KRemoteDemo widget, main() function" url="ch07lev1sec5.html"/>
+<entry name="main() function, KRemoteDemo widget" url="ch07lev1sec5.html"/>
+<entry name="GUIs, dialog boxes" url="ch07lev1sec7.html"/>
+<entry name="dialog boxes, simple example" url="ch08.html"/>
+<entry name="classes, SelectDialog" url="ch08.html"/>
+<entry name="QLayout classes, code example" url="ch08lev1sec2.html"/>
+<entry name="classes, QLayout" url="ch08lev1sec2.html"/>
+<entry name="CGotoDialog example, layout" url="ch08lev1sec2.html"/>
+<entry name="QVBox widget, layout managers, creating" url="ch08lev1sec2.html"/>
+<entry name="QHBox widget, layout managers, creating" url="ch08lev1sec2.html"/>
+<entry name="QLayout classes, design issues" url="ch08lev1sec2.html"/>
+<entry name="methods, disableResize()" url="ch08lev1sec2.html"/>
+<entry name="modal dialog boxes, advantages/disadvantages" url="ch08lev1sec3.html"/>
+<entry name="modeless dialog boxes, advantages/disadvantages" url="ch08lev1sec3.html"/>
+<entry name="exec() method, QDialog class" url="ch08lev1sec3.html"/>
+<entry name="modal dialog boxes, modal dialog located on the stack" url="ch08lev1sec3.html"/>
+<entry name="modal dialog boxes, modal dialog allocated from the heap" url="ch08lev1sec3.html"/>
+<entry name="modeless dialog boxes, CGotoDialog class example" url="ch08lev1sec3.html"/>
+<entry name="CGotoDialog class, modeless dialog box" url="ch08lev1sec3.html"/>
+<entry name="modeless dialog boxes, removing from memory" url="ch08lev1sec3.html"/>
+<entry name="removing, modeless dialog boxes" url="ch08lev1sec3.html"/>
+<entry name="memory, modeless dialog boxes, removing from" url="ch08lev1sec3.html"/>
+<entry name="dialog boxes, kdeui (KDE user-interface library)" url="ch08lev1sec4.html"/>
+<entry name="libraries, kdeui (KDE user-interface library)" url="ch08lev1sec4.html"/>
+<entry name="kdeui (KDE user-interface library), dialog boxes" url="ch08lev1sec4.html"/>
+<entry name="kdeui (KDE user-interface library), manager widgets" url="ch08lev1sec4.html"/>
+<entry name="widgets, manager widgets (kdeui)" url="ch08lev1sec4.html"/>
+<entry name="dialog boxes, KDialogBase class" url="ch08lev1sec5.html"/>
+<entry name="classes, KDialogBase" url="ch08lev1sec5.html"/>
+<entry name="methods, setButtonText()" url="ch08lev1sec5.html"/>
+<entry name="methods, setPlainCaption()" url="ch08lev1sec5.html"/>
+<entry name="dialog boxes, KEdit Option dialog example" url="ch08lev1sec6.html"/>
+<entry name="KEdit, Option dialog box" url="ch08lev1sec6.html"/>
+<entry name="dialog boxes, design guidelines" url="ch08lev1sec7.html"/>
+<entry name="design guidelines, dialog boxes" url="ch08lev1sec7.html"/>
+<entry name="GUIs, responsiveness" url="ch08lev1sec9.html"/>
+<entry name="responsiveness, importance of" url="ch09.html"/>
+<entry name="responsiveness, Window updates, double-buffering" url="ch09lev1sec2.html"/>
+<entry name="Window updates, double-buffering" url="ch09lev1sec2.html"/>
+<entry name="double-buffering, example of" url="ch09lev1sec2.html"/>
+<entry name="speeding up Window updates (double-buffering), example of" url="ch09lev1sec2.html"/>
+<entry name="KQuickDraw widget, kquickdraw.h class declaration" url="ch09lev1sec2.html"/>
+<entry name="KQuickDraw widget, kquickdraw.cpp class definition" url="ch09lev1sec2.html"/>
+<entry name="KQuickDraw widget, main() method" url="ch09lev1sec2.html"/>
+<entry name="main() method, KQuickDraw" url="ch09lev1sec2.html"/>
+<entry name="double-buffering, advantages" url="ch09lev1sec2.html"/>
+<entry name="speeding up Window updates (double-buffering), advantages" url="ch09lev1sec2.html"/>
+<entry name="double-buffering, screen flicker" url="ch09lev1sec2.html"/>
+<entry name="speeding up Window updates (double-buffering), screen flicker" url="ch09lev1sec2.html"/>
+<entry name="responsiveness, long jobs, optimizing performance of" url="ch09lev1sec3.html"/>
+<entry name="jobs, long jobs, optimizing performance of" url="ch09lev1sec3.html"/>
+<entry name="optimizing performance, long jobs" url="ch09lev1sec3.html"/>
+<entry name="performance optimization, long jobs" url="ch09lev1sec3.html"/>
+<entry name="long jobs, optimizing performance of, QTimer class" url="ch09lev1sec3.html"/>
+<entry name="KLongJob widget (long job example), klongjob.h class declaration (original version)" url="ch09lev1sec3.html"/>
+<entry name="klongjob.h class declaration (KLongJob widget), original version" url="ch09lev1sec3.html"/>
+<entry name="methods, startComputation()" url="ch09lev1sec3.html"/>
+<entry name="methods, stopComputation()" url="ch09lev1sec3.html"/>
+<entry name="KLongJob widget (long job example), main() method" url="ch09lev1sec3.html"/>
+<entry name="main() method, KLongJob widget" url="ch09lev1sec3.html"/>
+<entry name="long jobs, optimizing performance of, application functions, enabling/disabling" url="ch09lev1sec3.html"/>
+<entry name="functions, enabling/disabling" url="ch09lev1sec3.html"/>
+<entry name="enabling, application functions" url="ch09lev1sec3.html"/>
+<entry name="disabling, application functinos" url="ch09lev1sec3.html"/>
+<entry name="long jobs, optimizing performance of, speed issues" url="ch09lev1sec3.html"/>
+<entry name="methods, computeSome()" url="ch09lev1sec3.html"/>
+<entry name="long jobs, optimizing performance of, processEvents() method" url="ch09lev1sec3.html"/>
+<entry name="methods, processEvents()" url="ch09lev1sec3.html"/>
+<entry name="HTML files, rendering" url="ch10.html"/>
+<entry name="rendering, HTML files" url="ch10.html"/>
+<entry name="widgets, KHTMLWidget" url="ch10.html"/>
+<entry name="KSimpleBrowser application, ksimplebrowser.h class declaration" url="ch10.html"/>
+<entry name="KSimpleBrowser application, ksimplebrowser.cpp class definition" url="ch10.html"/>
+<entry name="KSimpleBrowser application, main() method" url="ch10.html"/>
+<entry name="main() method, KSimpleBrowser" url="ch10.html"/>
+<entry name="images, suported formats" url="ch10lev1sec2.html"/>
+<entry name="graphics, supported formats" url="ch10lev1sec2.html"/>
+<entry name="Qt library, supported image formats" url="ch10lev1sec2.html"/>
+<entry name="files, image formats" url="ch10lev1sec2.html"/>
+<entry name="libkimgic library, supported image formats" url="ch10lev1sec2.html"/>
+<entry name="images, QImage class" url="ch10lev1sec2.html"/>
+<entry name="classes, QImage" url="ch10lev1sec2.html"/>
+<entry name="graphics, QImage class" url="ch10lev1sec2.html"/>
+<entry name="images, QPixmap class" url="ch10lev1sec2.html"/>
+<entry name="classes, QPixmap" url="ch10lev1sec2.html"/>
+<entry name="graphics, QPixmap class" url="ch10lev1sec2.html"/>
+<entry name="images, image view/converter application (KImageView)" url="ch10lev1sec2.html"/>
+<entry name="graphics, image view/converter application (KImageView)" url="ch10lev1sec2.html"/>
+<entry name="widets, KImageView (image viewer/converter)" url="ch10lev1sec2.html"/>
+<entry name="KImageView widget (image viewer/converter), kimageview.h class definition" url="ch10lev1sec2.html"/>
+<entry name="KImageView widget (image viewer/converter), kimageview.cpp class declaration" url="ch10lev1sec2.html"/>
+<entry name="KImageView widget (image viewer/converter), main() method" url="ch10lev1sec2.html"/>
+<entry name="main() method, KImageView widget" url="ch10lev1sec2.html"/>
+<entry name="editing, spell-checking (KSpell)" url="ch10lev1sec3.html"/>
+<entry name="widgets, KSpell (spell-checking)" url="ch10lev1sec3.html"/>
+<entry name="spell-checking (KSpell), methods" url="ch10lev1sec3.html"/>
+<entry name="KSpell (spell-checking), methods" url="ch10lev1sec3.html"/>
+<entry name="methods, modalCheck()" url="ch10lev1sec3.html"/>
+<entry name="methods, check()" url="ch10lev1sec3.html"/>
+<entry name="methods, checkList()" url="ch10lev1sec3.html"/>
+<entry name="methods, checkWord()" url="ch10lev1sec3.html"/>
+<entry name="spell-checking (KSpell), sample application" url="ch10lev1sec3.html"/>
+<entry name="KSpell (spell-checking), sample application" url="ch10lev1sec3.html"/>
+<entry name="KSpellDemo (spell-checking application), kspelldemo.h class definition" url="ch10lev1sec3.html"/>
+<entry name="widgets, names of specific widgets" url="ch10lev1sec3.html"/>
+<entry name="KSpellDemo (spell-checking application), kspelldemo.cpp class declaration" url="ch10lev1sec3.html"/>
+<entry name="spell-checking (KSpell), modal spell-checking" url="ch10lev1sec3.html"/>
+<entry name="KSpell (spell-checking), modal spell-checking" url="ch10lev1sec3.html"/>
+<entry name="spell-checking (KSpell), configuring" url="ch10lev1sec3.html"/>
+<entry name="KSpell (spell-checking), configuring" url="ch10lev1sec3.html"/>
+<entry name="configuring, spell-checking" url="ch10lev1sec3.html"/>
+<entry name="dialog boxes, KSpellConfig configuration dialog" url="ch10lev1sec3.html"/>
+<entry name="methods, writeGlobalSettings()" url="ch10lev1sec3.html"/>
+<entry name="KSpellDemo (spell-checking application), main() method" url="ch10lev1sec3.html"/>
+<entry name="main() method, KSpellDemo" url="ch10lev1sec3.html"/>
+<entry name="GUIs, address book" url="ch10lev1sec4.html"/>
+<entry name="address book, contacts, selecting" url="ch10lev1sec4.html"/>
+<entry name="contacts (address book), selecting" url="ch10lev1sec4.html"/>
+<entry name="KabDemo application (address book dialog), kabdemo.h class declaration" url="ch10lev1sec4.html"/>
+<entry name="KabDemo application (address book dialog), kabdemo.cpp class definition" url="ch10lev1sec4.html"/>
+<entry name="KabDemo application (address book dialog), main() method" url="ch10lev1sec4.html"/>
+<entry name="main() method, KabDemo" url="ch10lev1sec4.html"/>
+<entry name="dialog boxes, dialog-based application (KDialogApp)" url="ch11.html"/>
+<entry name="applications, dialog-based (KDialogApp)" url="ch11.html"/>
+<entry name="KDialogApp, (dialog-based application)" url="ch11.html"/>
+<entry name="dialog-based application (KDialogApp), kdialogapp.h class definition" url="ch11.html"/>
+<entry name="KDialogApp, kdialogapp.h class definition" url="ch11.html"/>
+<entry name="KDialogApp (dialog-based application), kdialogapp.h class definition" url="ch11.html"/>
+<entry name="dialog-based application (KDialogApp), kdialogapp.cpp class declaration" url="ch11.html"/>
+<entry name="KDialogApp, kdialogapp.cpp class declaration" url="ch11.html"/>
+<entry name="KDialogApp (dialog-based application), kdialogapp.cpp class definition" url="ch11.html"/>
+<entry name="dialog-based application (KDialogApp), main() method" url="ch11.html"/>
+<entry name="KDialogApp, main() method" url="ch11.html"/>
+<entry name="amin() method, KDialogApp" url="ch11.html"/>
+<entry name="KDialogApp (dialog-based application), main() method" url="ch11.html"/>
+<entry name="single-instance application, main() method" url="ch11lev1sec2.html"/>
+<entry name="KUniqueApplication, main() method" url="ch11lev1sec2.html"/>
+<entry name="main() method, KUniqueApplication" url="ch11lev1sec2.html"/>
+<entry name="single-instance application, kunique.cpp call definition" url="ch11lev1sec2.html"/>
+<entry name="KUniqueApplication, kunique.cpp call definition" url="ch11lev1sec2.html"/>
+<entry name="methods, newInstance()" url="ch11lev1sec2.html"/>
+<entry name="methods, setActiveWindow()" url="ch11lev1sec2.html"/>
+<entry name="single-instance application, kunique.h class definition" url="ch11lev1sec2.html"/>
+<entry name="KUniqueApplication, kunique.h class definition" url="ch11lev1sec2.html"/>
+<entry name="class definitions, ***copy from defining***" url="ch11lev1sec2.html"/>
+<entry name="class declarations, ***copy from declaring***" url="ch11lev1sec2.html"/>
+<entry name="applets, panel applet (KWeather)" url="ch11lev1sec3.html"/>
+<entry name="panel applet (KWeather), main() method" url="ch11lev1sec3.html"/>
+<entry name="KWeather applet, main() method" url="ch11lev1sec3.html"/>
+<entry name="main() method, KWeather applet" url="ch11lev1sec3.html"/>
+<entry name="panel applet (KWeather), kweather.cpp class definition" url="ch11lev1sec3.html"/>
+<entry name="KWeather applet, kweather.cpp class definition" url="ch11lev1sec3.html"/>
+<entry name="methods, setMinimumSize()" url="ch11lev1sec3.html"/>
+<entry name="panel applet (KWeather), kweather.h class definition" url="ch11lev1sec3.html"/>
+<entry name="KWeather applet, kweather.h class definition" url="ch11lev1sec3.html"/>
+<entry name="DCOP, (Desktop Communication Protocol)" url="ch12.html"/>
+<entry name="protocols, DCOP;(Desktop Communication Protocol)" url="ch12.html"/>
+<entry name="protocols, DCOP" url="ch12.html"/>
+<entry name="DCOP, goals" url="ch13.html"/>
+<entry name="DCOP, history of" url="ch13lev1sec2.html"/>
+<entry name="history of, DCOP (Desktop Communication Protocol)" url="ch13lev1sec2.html"/>
+<entry name="development history of, DCOP (Desktop Communication Protocol)" url="ch13lev1sec2.html"/>
+<entry name="DCOP, underlying technologies" url="ch13lev1sec3.html"/>
+<entry name="Web sites, ICE (Inter-Client Exchange) documentation" url="ch13lev1sec3.html"/>
+<entry name="Web sites, QDataStream documentation" url="ch13lev1sec3.html"/>
+<entry name="data streaming, writing to devices" url="ch13lev1sec3.html"/>
+<entry name="streaming data, writing to devices" url="ch13lev1sec3.html"/>
+<entry name="writing, QDataStream serialization" url="ch13lev1sec3.html"/>
+<entry name="objects, QDataStream" url="ch13lev1sec3.html"/>
+<entry name="listings, writing through QDataStream" url="ch13lev1sec3.html"/>
+<entry name="data streaming, reading devices" url="ch13lev1sec3.html"/>
+<entry name="streaming data, reading devices" url="ch13lev1sec3.html"/>
+<entry name="listings, reading from device with QDataStream" url="ch13lev1sec3.html"/>
+<entry name="DCOP, architecture" url="ch13lev1sec4.html"/>
+<entry name="architecture, DCOP (Desktop Communication Protocol)" url="ch13lev1sec4.html"/>
+<entry name="DCOP, programming interface" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), dcopClient() method" url="ch13lev1sec5.html"/>
+<entry name="methods, dcopClient()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), attach() method" url="ch13lev1sec5.html"/>
+<entry name="methods, attach()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), registerAs() method" url="ch13lev1sec5.html"/>
+<entry name="methods, registerAs()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), send() method" url="ch13lev1sec5.html"/>
+<entry name="methods, send()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), call() method" url="ch13lev1sec5.html"/>
+<entry name="methods, call()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), process() method" url="ch13lev1sec5.html"/>
+<entry name="methods, process()" url="ch13lev1sec5.html"/>
+<entry name="methods, setDefaultObject()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), transactions" url="ch13lev1sec5.html"/>
+<entry name="methods, beginTransaction()" url="ch13lev1sec5.html"/>
+<entry name="methods, endTransaction()" url="ch13lev1sec5.html"/>
+<entry name="methods, blockUserInput()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), detach() method" url="ch13lev1sec5.html"/>
+<entry name="methods, detach()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), suspend() method" url="ch13lev1sec5.html"/>
+<entry name="methods, suspend()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), resume() method" url="ch13lev1sec5.html"/>
+<entry name="methods, resume()" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), dcopIDL" url="ch13lev1sec5.html"/>
+<entry name="compilers, dcopidl" url="ch13lev1sec5.html"/>
+<entry name="programming interface (DCOP), makefile rules" url="ch13lev1sec5.html"/>
+<entry name="makefiles, DCOP (Desktop Communication Protocol)" url="ch13lev1sec5.html"/>
+<entry name="DCOP, API tools" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), isRegistered() method" url="ch13lev1sec6.html"/>
+<entry name="methods, isRegistered()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), isApplicationRegistered() method" url="ch13lev1sec6.html"/>
+<entry name="methods, isApplicationRegistered()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), registeredApplications() method" url="ch13lev1sec6.html"/>
+<entry name="methods, registeredApplications()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), remoteObjects() method" url="ch13lev1sec6.html"/>
+<entry name="methods, remoteObjects()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), remoteInterfaces() method" url="ch13lev1sec6.html"/>
+<entry name="methods, remoteInterfaces()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), remoteFunctions() method" url="ch13lev1sec6.html"/>
+<entry name="methods, remoteFunctions()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), findObject() method" url="ch13lev1sec6.html"/>
+<entry name="methods, findObject()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), senderId() method" url="ch13lev1sec6.html"/>
+<entry name="methods, senderId()" url="ch13lev1sec6.html"/>
+<entry name="API tools (DCOP), socket() method" url="ch13lev1sec6.html"/>
+<entry name="methods, socket()" url="ch13lev1sec6.html"/>
+<entry name="DCOP, message redirection technology (referencing)" url="ch13lev1sec6.html"/>
+<entry name="objects, DCOPRef" url="ch13lev1sec6.html"/>
+<entry name="DCOP, signals and slots" url="ch13lev1sec6.html"/>
+<entry name="methods, connectDCOPSignal()" url="ch13lev1sec6.html"/>
+<entry name="methods, disconnectDCOPSignal()" url="ch13lev1sec6.html"/>
+<entry name="methods, emitDCOPSignal()" url="ch13lev1sec6.html"/>
+<entry name="methods, setNotifications()" url="ch13lev1sec6.html"/>
+<entry name="DCOP, embedded K instances" url="ch13lev1sec6.html"/>
+<entry name="embedded KPart instances, DCOP (Desktop Communication Protocol)" url="ch13lev1sec6.html"/>
+<entry name="DCOP, embedded KPart instances" url="ch13lev1sec6.html"/>
+<entry name="DCOP, performance and overhead" url="ch13lev1sec6.html"/>
+<entry name="performance, DCOP (Desktop Communication Protocol)" url="ch13lev1sec6.html"/>
+<entry name="DCOP, KUniqueApplication example" url="ch13lev1sec7.html"/>
+<entry name="classes, KUniqueApplication" url="ch13lev1sec7.html"/>
+<entry name="unique applications, KUniqueApplication example" url="ch13lev1sec7.html"/>
+<entry name="KUniqueApplication class, startup" url="ch13lev1sec7.html"/>
+<entry name="KUniqueApplication class, passing command-line parameters" url="ch13lev1sec7.html"/>
+<entry name="DCOP, KNotify example" url="ch13lev1sec7.html"/>
+<entry name="classes, KNotify" url="ch13lev1sec7.html"/>
+<entry name="DCOP, dcop (shell client)" url="ch13lev1sec7.html"/>
+<entry name="clients, dcop (DCOP shell client)" url="ch13lev1sec7.html"/>
+<entry name="listings, dcop" url="ch13lev1sec7.html"/>
+<entry name="DCOP, kdcop (shell client)" url="ch13lev1sec7.html"/>
+<entry name="clients, kdcop (DCOP shell client)" url="ch13lev1sec7.html"/>
+<entry name="DCOP, dcopc interface" url="ch13lev1sec7.html"/>
+<entry name="DCOP, KXMLRPC interface" url="ch13lev1sec7.html"/>
+<entry name="Web sites, XML-RPC" url="ch13lev1sec7.html"/>
+<entry name="multimedia, aRts (analog, real-time synthesis)" url="ch14.html"/>
+<entry name="multimedia, stero beeps, playing" url="ch14.html"/>
+<entry name="sound, stereo beeps, playing" url="ch14.html"/>
+<entry name="playing, stero beeps" url="ch14.html"/>
+<entry name="listings, stereo beep, playing" url="ch14.html"/>
+<entry name="MCOP, modules, writing" url="ch14lev1sec2.html"/>
+<entry name="objects, MCOP-aware, creating" url="ch14lev1sec2.html"/>
+<entry name="listings, Example_ADD interface" url="ch14lev1sec2.html"/>
+<entry name="functions, calculateBlock" url="ch14lev1sec2.html"/>
+<entry name="files, .mcopclass files" url="ch14lev1sec2.html"/>
+<entry name="listings, Example_ADD module" url="ch14lev1sec2.html"/>
+<entry name="multimedia, MCOP" url="ch14lev1sec3.html"/>
+<entry name="MCOP, IDL syntax" url="ch14lev1sec3.html"/>
+<entry name="IDL, (interface definition language)" url="ch14lev1sec3.html"/>
+<entry name="IDL, #include statements" url="ch14lev1sec3.html"/>
+<entry name="statements, #include" url="ch14lev1sec3.html"/>
+<entry name="IDL, structs" url="ch14lev1sec3.html"/>
+<entry name="IDL, data types" url="ch14lev1sec3.html"/>
+<entry name="IDL, methods" url="ch14lev1sec3.html"/>
+<entry name="IDL, attributes" url="ch14lev1sec3.html"/>
+<entry name="streams, defining" url="ch14lev1sec3.html"/>
+<entry name="defining, streams" url="ch14lev1sec3.html"/>
+<entry name="compiler (IDL), invoking" url="ch14lev1sec3.html"/>
+<entry name="invoking, IDL compiler" url="ch14lev1sec3.html"/>
+<entry name="references, counting" url="ch14lev1sec3.html"/>
+<entry name="counting, references" url="ch14lev1sec3.html"/>
+<entry name="MCOP, reference counting" url="ch14lev1sec3.html"/>
+<entry name="references, initial object references" url="ch14lev1sec3.html"/>
+<entry name="MCOP, initial object references" url="ch14lev1sec3.html"/>
+<entry name="functions, addGlobalReference" url="ch14lev1sec3.html"/>
+<entry name="functions, getGlobalReference" url="ch14lev1sec3.html"/>
+<entry name="functions, removeGlobalReferences" url="ch14lev1sec3.html"/>
+<entry name="MCOP, stream access" url="ch14lev1sec3.html"/>
+<entry name="streams, accessing" url="ch14lev1sec3.html"/>
+<entry name="acessing, streams" url="ch14lev1sec3.html"/>
+<entry name="MCOP, module initialization" url="ch14lev1sec3.html"/>
+<entry name="modules (MCOP), initializing" url="ch14lev1sec3.html"/>
+<entry name="initializing, MCOP modules" url="ch14lev1sec3.html"/>
+<entry name="functions, streamInit()" url="ch14lev1sec3.html"/>
+<entry name="functions, streamStart()" url="ch14lev1sec3.html"/>
+<entry name="functions, streamEnd()" url="ch14lev1sec3.html"/>
+<entry name="MCOP, synchronous versus asynchronous streams" url="ch14lev1sec3.html"/>
+<entry name="streams, synchronous versus asynchronous" url="ch14lev1sec3.html"/>
+<entry name="MCOP, object connections" url="ch14lev1sec3.html"/>
+<entry name="objects, connecting" url="ch14lev1sec3.html"/>
+<entry name="connecting, objects" url="ch14lev1sec3.html"/>
+<entry name="functions, connect()" url="ch14lev1sec3.html"/>
+<entry name="interfaces, SimpleSoundServer" url="ch14lev1sec4.html"/>
+<entry name="sound, SimpleSoundServer interface" url="ch14lev1sec4.html"/>
+<entry name="functions, attach" url="ch14lev1sec4.html"/>
+<entry name="functions, detach" url="ch14lev1sec4.html"/>
+<entry name="interfaces, KMedia2" url="ch14lev1sec4.html"/>
+<entry name="interfaces, StereoEffectStack" url="ch14lev1sec4.html"/>
+<entry name="sound, StereoEffectStack interface" url="ch14lev1sec4.html"/>
+<entry name="MCOP, StereoBalanceControl sample program" url="ch14lev1sec5.html"/>
+<entry name="sound, StereoBalanceControl sample program" url="ch14lev1sec5.html"/>
+<entry name="sound, multimedia" url="ch14lev1sec5.html"/>
+<entry name="StereoBalanceControl sample program, IDL (interface definition language)" url="ch14lev1sec5.html"/>
+<entry name="StereoBalanceControl sample program, balance() function" url="ch14lev1sec5.html"/>
+<entry name="functions, balance()" url="ch14lev1sec5.html"/>
+<entry name="StereoBalanceControl sample program, makefile" url="ch14lev1sec5.html"/>
+<entry name="StereoBalanceControl sample program, running on server" url="ch14lev1sec5.html"/>
+<entry name="listings, StereoBalanceControl, running on server" url="ch14lev1sec5.html"/>
+<entry name="multimedia, KNotify API" url="ch14lev1sec6.html"/>
+<entry name="multimedia, KAudioPlayer class" url="ch14lev1sec6.html"/>
+<entry name="classes, KAudioPlayer" url="ch14lev1sec6.html"/>
+<entry name="sound, KAudioPlayer class" url="ch14lev1sec6.html"/>
+<entry name="multimedia, LibKMid" url="ch14lev1sec6.html"/>
+<entry name="sound, LibKMid" url="ch14lev1sec6.html"/>
+<entry name="MIDI, LibKMid" url="ch14lev1sec6.html"/>
+<entry name="multimedia, aKtion" url="ch14lev1sec6.html"/>
+<entry name="MCOP, future of" url="ch14lev1sec7.html"/>
+<entry name="future technology, MCOP" url="ch14lev1sec7.html"/>
+<entry name="GUIs, MCOP and" url="ch14lev1sec7.html"/>
+<entry name="scripting, MCOP" url="ch14lev1sec7.html"/>
+<entry name="documentation, KDOC" url="ch15.html"/>
+<entry name="tools, KDOC" url="ch15.html"/>
+<entry name="KDOC, downloading" url="ch15.html"/>
+<entry name="downloading, KDOC" url="ch15.html"/>
+<entry name="KDOC, installing" url="ch15.html"/>
+<entry name="installing, KDOC" url="ch15.html"/>
+<entry name="KDOC, comments" url="ch15.html"/>
+<entry name="comments, KDOC-formatted comments" url="ch15.html"/>
+<entry name="listings, kdocsample.h" url="ch15.html"/>
+<entry name="KDOC, library documentation" url="ch15.html"/>
+<entry name="libraries, documentation" url="ch15.html"/>
+<entry name="KDOC, class documentation" url="ch15.html"/>
+<entry name="KDOC, method documentation" url="ch15.html"/>
+<entry name="methods, documentation" url="ch15.html"/>
+<entry name="documentation, DocBook tools" url="ch15lev1sec2.html"/>
+<entry name="applications, documenting with DocBook tools" url="ch15lev1sec2.html"/>
+<entry name="tools, DocBook" url="ch15lev1sec2.html"/>
+<entry name="downloading, DocBook tools" url="ch15lev1sec2.html"/>
+<entry name="processing, DocBook documentation" url="ch15lev1sec2.html"/>
+<entry name="listings, ksimpleapp.docbook" url="ch15lev1sec2.html"/>
+<entry name="tags (DocBook), meta-information tags" url="ch15lev1sec2.html"/>
+<entry name="tags (DocBook), document structure tags" url="ch15lev1sec2.html"/>
+<entry name="tags (DocBook), formatting tags" url="ch15lev1sec2.html"/>
+<entry name="Web sites, DocBook" url="ch15lev1sec2.html"/>
+<entry name="code, packages" url="ch15lev1sec3.html"/>
+<entry name="packages, structure of" url="ch16.html"/>
+<entry name="packages, adminstrative files" url="ch16lev1sec2.html"/>
+<entry name="files, administrative files" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), configure" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), configure.in" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), config.h" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), config.status" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), config.cache" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), config.log" url="ch16lev1sec2.html"/>
+<entry name="packages, top-level directories" url="ch16lev1sec2.html"/>
+<entry name="top-level directories, configuring" url="ch16lev1sec2.html"/>
+<entry name="packages, subdirectories" url="ch16lev1sec2.html"/>
+<entry name="subdirectories, configuring" url="ch16lev1sec2.html"/>
+<entry name="listings, Makefile.am" url="ch16lev1sec2.html"/>
+<entry name="administrative files (packages), updating" url="ch16lev1sec2.html"/>
+<entry name="updating, administrative files" url="ch16lev1sec2.html"/>
+<entry name="packages, shared libraries" url="ch16lev1sec2.html"/>
+<entry name="shared libraries, creating" url="ch16lev1sec2.html"/>
+<entry name="packages, test results" url="ch16lev1sec2.html"/>
+<entry name="packages, make targets" url="ch16lev1sec2.html"/>
+<entry name="makefiles, targets" url="ch16lev1sec2.html"/>
+<entry name="packages, distribution" url="ch16lev1sec3.html"/>
+<entry name="distribution, packages" url="ch16lev1sec3.html"/>
+<entry name="code, distribution" url="ch16lev1sec3.html"/>
+<entry name="distribution, informative text files" url="ch16lev1sec3.html"/>
+<entry name="listings, ksimpleapp-1.0.lsm" url="ch16lev1sec3.html"/>
+<entry name="archives, creating" url="ch16lev1sec3.html"/>
+<entry name="compressed archives, creating" url="ch16lev1sec3.html"/>
+<entry name="distribution, compressed archives" url="ch16lev1sec3.html"/>
+<entry name="distribution, uploads" url="ch16lev1sec3.html"/>
+<entry name="distribution, software announcements" url="ch16lev1sec3.html"/>
+<entry name="uploading, software" url="ch16lev1sec3.html"/>
+<entry name="Web sites, Freshmeat" url="ch16lev1sec3.html"/>
+<entry name="CVS, (Concurrent Versions System)" url="ch16lev1sec4.html"/>
+<entry name="version control, CVS" url="ch17.html"/>
+<entry name="CVS, branches" url="ch17lev1sec2.html"/>
+<entry name="source code, accessing in CVS (Concurrent Version System)" url="ch17lev1sec3.html"/>
+<entry name="CVS, snapshots" url="ch17lev1sec3.html"/>
+<entry name="FTP, snapshots" url="ch17lev1sec3.html"/>
+<entry name="CVS, Web interface" url="ch17lev1sec3.html"/>
+<entry name="Web, CVS (Concurrent Version System) interface" url="ch17lev1sec3.html"/>
+<entry name="cvsup utility, advantages" url="ch17lev1sec3.html"/>
+<entry name="CVS, accounts" url="ch17lev1sec3.html"/>
+<entry name="accounts, CVS (Concurrent Version System) accounts" url="ch17lev1sec3.html"/>
+<entry name="cvsup utility, configuring" url="ch17lev1sec4.html"/>
+<entry name="configuring, cvsup utility" url="ch17lev1sec4.html"/>
+<entry name="cvs utility, configuring" url="ch17lev1sec5.html"/>
+<entry name="configuring, cvs utility" url="ch17lev1sec5.html"/>
+<entry name="cvs utility, commands" url="ch17lev1sec5.html"/>
+<entry name="commands, cvs" url="ch17lev1sec5.html"/>
+<entry name="CVS, changes, committing" url="ch17lev1sec5.html"/>
+<entry name="updating, modules (CVS)" url="ch17lev1sec5.html"/>
+<entry name="checking out, applications (CVS)" url="ch17lev1sec5.html"/>
+<entry name="deleting, CVS (Concurrent Version System) files" url="ch17lev1sec5.html"/>
+<entry name="deleting, CVS (Concurrent Version System) directories" url="ch17lev1sec5.html"/>
+<entry name="listing, CVS (Concurrent Version System) modules" url="ch17lev1sec5.html"/>
+<entry name="software development, languages" url="ch18.html"/>
+<entry name="development, languages" url="ch18.html"/>
+<entry name="software development, project management" url="ch18.html"/>
+<entry name="development, project management" url="ch18.html"/>
+<entry name="tools, Automake" url="ch18.html"/>
+<entry name="tools, Autoconf" url="ch18.html"/>
+<entry name="packages, creating" url="ch18.html"/>
+<entry name="software development, documentation" url="ch18.html"/>
+<entry name="development, documentation" url="ch18.html"/>
+<entry name="documentation, accessing" url="ch18.html"/>
+<entry name="accesssing, documentation" url="ch18.html"/>
+<entry name="KDevelop IDE, versions" url="ch18.html"/>
+<entry name="versions, KDevelop IDE" url="ch18.html"/>
+<entry name="user interface (KDevelop IDE), Tree View" url="ch18.html"/>
+<entry name="Tree View (KDevelop IDE), CV (Class Viewer)" url="ch18.html"/>
+<entry name="Tree View (KDevelop IDE), LFV (Logical File Viewer)" url="ch18.html"/>
+<entry name="File Viewers (KDevelop), LFV (Logical File Viewer)" url="ch18.html"/>
+<entry name="Tree View (KDevelop IDE), RFV (Real File Viewer)" url="ch18.html"/>
+<entry name="File Viewers (KDevelop), RFV (Real File Viewer)" url="ch18.html"/>
+<entry name="Tree View (KDevelop IDE), DOC (Documentation Tree View)" url="ch18.html"/>
+<entry name="Tree View (KDevelop IDE), VAR (Variable Viewer)" url="ch18.html"/>
+<entry name="user interface (KDevelop IDE), Output View" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Messages page" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Stdout page" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Stderr page" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Breakpoint page" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Frame Stack page" url="ch18.html"/>
+<entry name="Output View (KDevelop IDE), Disassemble page" url="ch18.html"/>
+<entry name="KDevelop IDE, working area" url="ch18.html"/>
+<entry name="user interface (KDevelop IDE), working area" url="ch18.html"/>
+<entry name="KDevelop IDE, Dialog Editor" url="ch18.html"/>
+<entry name="user interface (KDevelop IDE), Dialog Editor" url="ch18.html"/>
+<entry name="editors, Dialog Editor (KDevelop)" url="ch18.html"/>
+<entry name="Dialog Editor (KDevelop IDE), advantages" url="ch18.html"/>
+<entry name="Dialog Editor (KDevelop IDE), weaknesses" url="ch18.html"/>
+<entry name="wizards, Application Wizard (KDevelop)" url="ch18lev1sec2.html"/>
+<entry name="templates, KDevelop application templates" url="ch18lev1sec2.html"/>
+<entry name="projects, editing" url="ch18lev1sec2.html"/>
+<entry name="editing, projects" url="ch18lev1sec2.html"/>
+<entry name="KDevelop IDE, documentation" url="ch18lev1sec3.html"/>
+<entry name="documentation, KDevelop IDE" url="ch18lev1sec3.html"/>
+<entry name="searching, KDevelop documentation" url="ch18lev1sec3.html"/>
+<entry name="KDevelop IDE, Classbrowser" url="ch18lev1sec4.html"/>
+<entry name="browsers, Classbrowser (KDevelop)" url="ch18lev1sec4.html"/>
+<entry name="KDevelop IDE, Classparser" url="ch18lev1sec4.html"/>
+<entry name="parsers, Classparser (KDevelop)" url="ch18lev1sec4.html"/>
+<entry name="KDevelop IDE, File Viewers" url="ch18lev1sec5.html"/>
+<entry name="user interface (KDevelop IDE), gdb (debugger)" url="ch18lev1sec6.html"/>
+<entry name="KDevelop IDE, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="debuggers, gdb" url="ch18lev1sec6.html"/>
+<entry name="troubleshooting, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="diagnostic tools, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="tools, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="gdb debugger, options" url="ch18lev1sec6.html"/>
+<entry name="gdb debugger, enabling debugging information" url="ch18lev1sec6.html"/>
+<entry name="gdb debugger, running" url="ch18lev1sec6.html"/>
+<entry name="running, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="gdb debugger, commands" url="ch18lev1sec6.html"/>
+<entry name="commands, gdb debugger" url="ch18lev1sec6.html"/>
+<entry name="licenses, importance to projects" url="ch19.html"/>
+<entry name="licenses, LGPL (Library GNU Public License)" url="ch19lev1sec2.html"/>
+<entry name="licenses, GPL (GNU Public License)" url="ch19lev1sec2.html"/>
+<entry name="licenses, FreeQt" url="ch19lev1sec3.html"/>
+<entry name="licenses, QPL (Q Public License)" url="ch19lev1sec3.html"/>
+<entry name="licenses, history of" url="ch19lev1sec4.html"/>
+<entry name="licenses, online resources" url="ch19lev1sec5.html"/>
+<entry name="Web sites, licenses" url="ch19lev1sec5.html"/>
+</conceptindex>
+</gideonindex>

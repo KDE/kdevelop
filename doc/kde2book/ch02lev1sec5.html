@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Programming Conventions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="A Simple KDE Application"
+HREF="ch02.html"/><LINK
+REL="PREVIOUS"
+TITLE="GUI Elements"
+HREF="ch02lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch02lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch02lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch02lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch02lev1sec5"
+>2.5. Programming Conventions</A
+></H1
+><P
+>KDE developers follow certain conventions when they write KDE source code. The conventions dictate naming and documentation styles. Following them will help other developers to work with your code more easily. It will even help you. For example, you won't have to look up names of methods as often because the conventions make the names easier to remember.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch02lev2sec10"
+>2.5.1. Naming Conventions</A
+></H2
+><P
+>KDE class names begin with a capital <TT
+CLASS="literal"
+>K</TT
+>. The first letter of each word making up the class name is also capitalized. For example, you used <TT
+CLASS="literal"
+>KSimpleApp</TT
+> as your class name in the code in Listings 2.3&#8211;2.5. Note that Qt class names follow a similar convention, but they all start with a capital <TT
+CLASS="literal"
+>Q</TT
+>.</P
+><P
+>The names of methods begin with a lowercase letter, but the first letter of each successive word is capitalized. For example, the method <TT
+CLASS="literal"
+>setBackgroundColor()</TT
+>, used in the constructor for <TT
+CLASS="literal"
+>KSimpleApp</TT
+>, is named with this convention. It is a Qt method (a member of <TT
+CLASS="literal"
+>QWidget</TT
+>) and follows the convention, as do all Qt methods.</P
+><P
+>Class and method names usually consist of one or more whole words or common abbreviations (such as <SPAN
+CLASS="QUOTE"
+>"App"</SPAN
+> for application in the name <TT
+CLASS="literal"
+>KSimpleApp</TT
+>). Whole word names are easier to remember and make for more readable code.</P
+><P
+>Conventions are also used for filenames. Header files containing class definitions are given the name of the class, except that all letters are kept lowercase. The extension .h is used. Source files containing class definitions also use an all-lowercase version of the class name and carry the extension .cpp.</P
+><P
+>Prototypical examples of the naming conventions are collected in <A
+HREF="ch02lev1sec5.html#ch02table02"
+>Table 2.2</A
+>.</P
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch02table02"
+></A
+><P
+><B
+>Table 2.2. KDE Naming Conventions</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Type</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Prototype</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Class</TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>KMyGreatClass</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Method</TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>myUsefulMethod</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Class declaration file</TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>kmygreatclass.h</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Class description file</TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>kmygreatclass.cpp</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev2sec10"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev2sec10"
+TITLE="Naming Conventions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch02lev2sec11"
+>2.5.2. Class Documentation</A
+></H2
+><P
+>It is important to document the public interfaces to your classes so that others may make use of them in their programs when hacking at your code. You should also document the protected interface so that derivation is easier. <A
+HREF="ch02lev1sec3.html#ch02list03"
+>Listing 2.3</A
+> gives examples of the class documentation style. If the documentation is given in the comments in this form, it can be interpreted by a script called <TT
+CLASS="literal"
+>kdoc</TT
+>, which can create attractive, standalone documentation. <TT
+CLASS="literal"
+>kdoc</TT
+>-style documentation is covered in depth in <A
+HREF="ch15.html"
+>Chapter 15, <SPAN
+CLASS="QUOTE"
+>"Creating Documentation."</SPAN
+></A
+></P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev2sec11"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev2sec11"
+TITLE="Class Documentation"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch02lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch02lev1sec5"
+TITLE="Programming Conventions"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch02lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch02lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,269 @@
+<HTML VERSION="2.0">
+<HEAD>
+<TITLE>The Standard Template Library: Introduction</TITLE>
+<meta http-equiv="Job" content="pressrelease">
+<meta http-equiv="Keywords" content="">
+<meta http-equiv="Owner" content="John Cristofano/Ujesh Desai">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+
+
+<CENTER><H1 ALIGN="CENTER">
+Introduction to the Standard Template Library</H1>
+</CENTER><P>
+The Standard Template Library, or <I>STL</I>, is a C++ library of 
+container classes, algorithms, and iterators; it provides many of the 
+basic algorithms and data structures of computer science. The STL is a <I>generic</I>
+ library, meaning that its components are heavily parameterized: almost 
+every component in the STL is a template. You should make sure that you 
+understand how templates work in C++ before you use the STL.</P>
+<H2>
+Containers and algorithms</H2>
+<P>
+Like many class libraries, the STL includes <I>container</I> classes: 
+classes whose purpose is to contain other objects. The STL includes the 
+classes <TT><A href="Vector.html">vector</A></TT>, <TT><A href="List.html">list</A></TT>, <TT><A href="Deque.html">deque</A></TT>, <TT><A href="set.html">set</A></TT>, <TT><A href="multiset.html">multiset</A></TT>, <TT><A href="Map.html">map</A></TT>, <TT><A href="Multimap.html">multimap</A></TT>, <TT><A href="hash_set.html">hash_set</A></TT>, <TT><A href="hash_multiset.html">hash_multiset</A></TT>, <TT><A href="hash_map.html">hash_map</A></TT>, 
+and <TT><A href="hash_multimap.html">hash_multimap</A></TT>. Each of these classes is a template, 
+and can be instantiated to contain any type of object. You can, for 
+example, use a <TT>vector&lt;int&gt;</TT> in much the same way as you 
+would use an ordinary C array, except that <TT>vector</TT> eliminates 
+the chore of managing dynamic memory allocation by hand.</P>
+<PRE>
+      vector&lt;int&gt; v(3);            // Declare a vector of 3 elements.
+      v[0] = 7;
+      v[1] = v[0] + 3;
+      v[2] = v[0] + v[1];          // v[0] == 7, v[1] == 10, v[2] == 17  
+</PRE>
+<P>
+The STL also includes a large collection of <I>algorithms</I> that 
+manipulate the data stored in containers. You can reverse the order of 
+elements in a <TT>vector</TT>, for example, by using the <TT><A href="reverse.html">reverse</A></TT>
+ algorithm. </P>
+<PRE>
+      reverse(v.begin(), v.end()); // v[0] == 17, v[1] == 10, v[2] == 7
+</PRE>
+<P>
+There are two important points to notice about this call to <TT>reverse</TT>. 
+First, it is a global function, not a member function. Second, it takes 
+two arguments rather than one: it operates on a <I>range</I> of 
+elements, rather than on a container. In this particular case the range 
+happens to be the entire container <TT>v.</TT></P>
+<P>
+The reason for both of these facts is the same: <TT>reverse</TT>, like 
+other STL algorithms, is decoupled from the STL container classes. This 
+means that <TT>reverse</TT> can be used not only to reverse elements in 
+vectors, but also to reverse elements in lists, and even elements in C 
+arrays. The following program is also valid.</P>
+<PRE>
+      double A[6] = { 1.2, 1.3, 1.4, 1.5, 1.6, 1.7 };
+      reverse(A, A + 6);
+      for (int i = 0; i &lt; 6; ++i)
+        cout &lt;&lt; &quot;A[&quot; &lt;&lt; i &lt;&lt; &quot;] = &quot; &lt;&lt; A[i];
+</PRE>
+<P>
+This example uses a <I>range</I>, just like the example of reversing a <TT>vector</TT>: 
+the first argument to reverse is a pointer to the beginning of the 
+range, and the second argument points one element past the end of the 
+range. This range is denoted <TT>[A, A + 6)</TT>; the asymmetrical 
+notation is a reminder that the two endpoints are different, that the 
+first is the beginning of the range and the second is <I>one past</I>
+ the end of the range. </P>
+<H2>
+Iterators</H2>
+<P>
+In the example of reversing a C array, the arguments to <TT>reverse</TT>
+ are clearly of type <TT>double*</TT>. What are the arguments to 
+reverse if you are reversing a <TT>vector</TT>, though, or a <TT>list</TT>? 
+That is, what exactly does <TT>reverse</TT> declare its arguments to 
+be, and what exactly do <TT>v.begin()</TT> and <TT>v.end()</TT> return? </P>
+<P>
+The answer is that the arguments to <TT>reverse</TT> are <I>iterators</I>, 
+which are a generalization of pointers. Pointers themselves are 
+iterators, which is why it is possible to reverse the elements of a C 
+array. Similarly, <TT>vector</TT> declares the nested types <TT>iterator</TT>
+ and <TT>const_iterator</TT>. In the example above, the type returned 
+by <TT>v.begin()</TT> and <TT>v.end()</TT> is <TT>vector&lt;int&gt;::iterator</TT>. 
+There are also some iterators, such as <TT><A href="istream_iterator.html">istream_iterator</A></TT>
+and <TT><A href="ostream_iterator.html">ostream_iterator</A></TT>, that aren't associated with 
+containers at all. </P>
+<P>
+Iterators are the mechanism that makes it possible to decouple 
+algorithms from containers: algorithms are templates, and are 
+parameterized by the type of iterator, so they are not restricted to a 
+single type of container. Consider, for example, how to write an 
+algorithm that performs linear search through a range. This is the 
+STL's <TT><A href="find.html">find</A></TT> algorithm. </P>
+<PRE>
+      template &lt;class InputIterator, class T&gt;
+      InputIterator find(InputIterator first, InputIterator last, const T&amp; value) {
+          while (first != last &amp;&amp; *first != value) ++first;
+          return first;
+      }
+</PRE>
+<P>
+<TT>Find</TT> takes three arguments: two iterators that define a range, 
+and a value to search for in that range. It examines each iterator in 
+the range <TT>[first, last)</TT>, proceeding from the beginning 
+to the end, and stops either when it finds an iterator that points to <TT>value</TT>
+ or when it reaches the end of the range. </P>
+<P>
+<TT>First</TT> and <TT>last</TT> are declared to be of type <TT>InputIterator</TT>, 
+and <TT>InputIterator</TT> is a template parameter. That is, there 
+isn't actually any type called <TT>InputIterator</TT>: when you call <TT>find</TT>, 
+the compiler substitutes the actual type of the arguments for the 
+formal type parameters <TT>InputIterator</TT> and <TT>T</TT>. If 
+the first two arguments to <TT>find</TT> are of type <TT>int*</TT> and 
+the third is of type <TT>int</TT>, then it is as if you had called the 
+following function.</P>
+<PRE>
+      int* find(int* first, int* last, const int&amp; value) {
+          while (first != last &amp;&amp; *first != value) ++first;
+          return first;
+      }
+</PRE>
+<H2>
+Concepts and Modeling</H2>
+<P>
+One very important question to ask about any template function, not 
+just about STL algorithms, is what the set of types is that may 
+correctly be substituted for the formal template parameters. Clearly, 
+for example, <TT>int*</TT> or <TT>double*</TT> may be substituted for <TT>find</TT>'s 
+formal template parameter <TT>InputIterator</TT>. Equally clearly, <TT>int</TT>
+ or <TT>double</TT> may not: <TT>find</TT> uses the expression <TT>*first</TT>, 
+and the dereference operator makes no sense for an object of type <TT>int</TT>
+ or of type <TT>double</TT>. The basic answer, then, is that <TT>find</TT>
+ implicitly defines a set of requirements on types, and that it may be 
+instantiated with any type that satisfies those requirements. Whatever 
+type is substituted for <TT>InputIterator</TT> must provide certain 
+operations: it must be possible to compare two objects of that type for 
+equality, it must be possible to increment an object of that type, it 
+must be possible to dereference an object of that type to obtain the 
+object that it points to, and so on. </P>
+<P>
+<TT>Find</TT> isn't the only STL algorithm that has such a set of 
+requirements; the arguments to <TT><A href="for_each.html">for_each</A></TT> and <TT><A href="count.html">count</A></TT>, 
+and other algorithms, must satisfy the same requirements. These requirements are 
+sufficiently important that we give them a name: we call such a set of 
+type requirements a <I>concept</I>, and we call this particular 
+concept <B><A href="InputIterator.html">Input Iterator</A></B>. We say that a type <I>conforms to a concept</I>, or that 
+it <I>is a model of a concept</I>, if it satisfies all of those 
+requirements.  We say that <TT>int*</TT> is a model of <B>Input 
+Iterator</B> because <TT>int*</TT> provides all of the operations that 
+are specified by the <B>Input Iterator</B> requirements. </P>
+<P>
+Concepts are not a part of the C++ language; there is no way to declare 
+a concept in a program, or to declare that a particular type is a model 
+of a concept. Nevertheless, concepts are an extremely important part of 
+the STL. Using concepts makes it possible to write programs that 
+cleanly separate interface from implementation: the author of <TT>find</TT>
+ only has to consider the interface specified by the concept <B>Input 
+Iterator</B>, rather than the implementation of every possible type 
+that conforms to that concept. Similarly, if you want to use <TT>find</TT>, 
+you need only to ensure that the arguments you pass to it are models 
+of <B>Input Iterator. </B>This is the reason why <TT>find</TT> and <TT>reverse</TT>
+ can be used with <TT>list</TT>s, <TT>vector</TT>s, C arrays, and many 
+other types: programming in terms of concepts, rather than in terms of 
+specific types, makes it possible to reuse software components and to 
+combine components together. </P>
+<H2>
+Refinement</H2>
+<P>
+<B>Input Iterator</B> is, in fact, a rather weak concept: that is, it 
+imposes very few requirements. An <B>Input Iterator</B> must support a 
+subset of pointer arithmetic (it must be possible to increment an <B>Input 
+Iterator</B> using prefix and postfix <TT>operator++</TT>), but need 
+not support all operations of pointer arithmetic. This is sufficient 
+for <TT><A href="find.html">find</A></TT>, but some other algorithms require that their 
+arguments satisfy additional requirements. <TT><A href="reverse.html">Reverse</A></TT>, for 
+example, must be able to decrement its arguments as well as increment 
+them; it uses the expression <TT>--last</TT>. In terms of concepts, we 
+say that <TT>reverse</TT>'s arguments must be models of <B><A href="BidirectionalIterator.html">Bidirectional Iterator</A></B> 
+rather than <B>Input Iterator</B>. </P>
+<P>
+The <B>Bidirectional Iterator</B> concept is very similar to the <B>Input
+ Iterator</B> concept: it simply imposes some additional requirements. 
+The types that are models of <B>Bidirectional Iterator</B> are a subset 
+of the types that are models of<B> Input Iterator</B>: every type that 
+is a model of <B>Bidirectional Iterator</B> is also a model of <B>Input 
+Iterator</B>. <TT>Int*</TT>, for example, is both a model of <B>Bidirectional 
+Iterator</B> and a model of <B>Input Iterator</B>, but <TT><A href="istream_iterator.html">istream_iterator</A></TT>, 
+is only a model of  <B>Input Iterator</B>: it does not conform to the 
+more stringent <B>Bidirectional Iterator</B> requirements. </P>
+<P>
+We describe the relationship between <B>Input Iterator</B> and <B>Bidirectional 
+Iterator</B> by saying that <B>Bidirectional Iterator</B> is a <I>refinement</I>
+ of <B>Input Iterator</B>. Refinement of concepts is very much like 
+inheritance of C++ classes; the main reason we use a different word, 
+instead of just calling it &quot;inheritance&quot;, is to emphasize 
+that refinement applies to concepts rather than to actual types.</P>
+<P>
+There are actually three more iterator concepts in addition to the two 
+that we have already discussed:  the five iterator concepts are 
+<B><A href="OutputIterator.html">Output Iterator</A></B>, <B><A href="InputIterator.html">Input Iterator</A></B>, 
+<B><A href="ForwardIterator.html">Forward Iterator</A></B>, <B><A href="BidirectionalIterator.html">Bidirectional Iterator</A></B>, and 
+<B><A href="RandomAccessIterator.html">Random Access Iterator</A>;</B> <B>Forward Iterator</B> is a 
+refinement of <B>Input Iterator</B>, <B>Bidirectional Iterator</B> 
+is a refinement of <B>Forward Iterator</B>, and <B>Random Access Iterator</B>
+is a refinement of <B>Bidirectional Iterator</B>.   (<B><A href="OutputIterator.html">Output Iterator</A></B>
+is related to the other four concepts, but it is not part of the hierarchy
+of refinement: it is not a refinement of any of the other iterator concepts,
+and none of the other iterator concepts are refinements of it.)
+
+The <I><A href="Iterators.html">Iterator Overview</A></I> has more information about iterators 
+in general. </P>
+<P>
+Container classes, like iterators, are organized into a hierarchy of 
+concepts. All containers are models of the concept <B><A href="Container.html">Container</A></B>; 
+more refined concepts, such as <B><A href="Sequence.html">Sequence</A></B> and 
+<B><A href="AssociativeContainer.html">Associative Container</A></B>, describe specific types of containers. 
+</P>
+<H2>
+Other parts of the STL</H2>
+<P>
+If you understand algorithms, iterators, and containers, then you 
+understand almost everything there is to know about the STL. The STL 
+does, however, include several other types of components. </P>
+<P>
+First, the STL includes several  <I>utilities</I>: very basic concepts 
+and functions that are used in many different parts of the library. The 
+concept<B> <A href="Assignable.html">Assignable</A></B>, for example, describes types that have 
+assignment operators and copy constructors; almost all STL classes are 
+models of <B>Assignable</B>, and almost all STL algorithms require 
+their arguments to be models of <B>Assignable</B>. </P>
+<P>
+Second, the STL includes some low-level mechanisms for allocating and 
+deallocating memory. <I><A href="Allocators.html">Allocators</A></I> are very specialized, and 
+you can safely ignore them for almost all purposes. </P>
+<P>
+Finally, the STL includes a large collection of <I><A href="functors.html">function objects</A></I>, 
+also known as <I>functors</I>. Just as iterators are a generalization 
+of pointers, function objects are a generalization of functions: a 
+function object is anything that you can call using the ordinary 
+function call syntax. There are several different concepts relating to 
+function objects, including <B><A href="UnaryFunction.html">Unary Function</A></B> (a function 
+object that takes a single argument, <I>i.e.</I> one that is called as <TT>f(x)</TT>) 
+and <B><A href="BinaryFunction.html">Binary Function</A></B> (a function object that takes two 
+arguments, <I>i.e.</I> one that is called as <TT>f(x, y)</TT>). Function 
+objects are an important part of generic programming because they allow 
+abstraction not only over the types of objects, but also over the 
+operations that are being performed. </P>
+
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 

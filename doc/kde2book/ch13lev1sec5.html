@@ -1,0 +1,1761 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Description of DCOP's Programming Interface</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="DCOP&#8212;Desktop Communication Protocol"
+HREF="ch13.html"/><LINK
+REL="PREVIOUS"
+TITLE="Architecture"
+HREF="ch13lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="Developer Concerns and Tools in DCOP"
+HREF="ch13lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch13lev1sec5"
+>13.5. Description of DCOP's Programming Interface</A
+></H1
+><P
+>At its first implementation, the DCOP protocol offered only a handful of methods necessary for the proper functioning of interprocess communication. To date, it is possible to manually implement the DCOP mechanism in a program using only primordial DCOP methods: <TT
+CLASS="literal"
+>send()</TT
+>, <TT
+CLASS="literal"
+>call()</TT
+> and <TT
+CLASS="literal"
+>process()</TT
+>. An application has to make use of the default <TT
+CLASS="literal"
+>DCOPClient</TT
+> object offered by the base KDE class <TT
+CLASS="literal"
+>KApplication</TT
+> and then use the <TT
+CLASS="literal"
+>send()</TT
+> and/or <TT
+CLASS="literal"
+>call()</TT
+> methods. Also, part of the objects of an application can inherit the <TT
+CLASS="literal"
+>DCOPObject</TT
+> class and then overload the virtual <TT
+CLASS="literal"
+>process()</TT
+> method.</P
+><P
+>In order to make the use of DCOP even simpler, a compiler is provided for the DCOP IDL (Interface Description Language). This compiler, named <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>dcopidl</TT
+></I
+>, while fulfilling a job similar to CORBA's integrated IDL compiler, remains simpler to use. This is because <TT
+CLASS="literal"
+>dcopidl</TT
+>'s functioning principle is similar to Qt's <TT
+CLASS="literal"
+>moc</TT
+> pre-compiler. Special preprocessor specifiers placed in a header (.h) file are enough for <TT
+CLASS="literal"
+>dcopidl</TT
+> to automatically generate <TT
+CLASS="literal"
+>_skel.cpp</TT
+> and <TT
+CLASS="literal"
+>_stub.cpp</TT
+> files for the future DCOP client.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec3"
+>13.5.1. Starting it All</A
+></H2
+><P
+>Every application that complies with KDE's API can be easily invested with DCOP client functionality. A call to the <TT
+CLASS="literal"
+>KApplication::dcopClient()</TT
+> method determines an instantiation of a <TT
+CLASS="literal"
+>DCOPClient</TT
+> object inside the current <TT
+CLASS="literal"
+>KApplication</TT
+>. The programmer is provided with a pointer to this instance:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;DCOPClient *client = kapp-&gt;dcopClient();
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Up to here, the provided tools are inert. In order to actually enable DCOP, the client has to be <SPAN
+CLASS="QUOTE"
+>"attached"</SPAN
+> to the server. A code line such as</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;bool done = client-&gt;attach();
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>will accomplish this. At this moment, if the answer from the attaching call is true, the client is capable of communications because the <TT
+CLASS="literal"
+>dcopserver</TT
+> accepted an anonymous registration from it. For a few reasons (the most common of which is that the server is not available), the value returned by the <TT
+CLASS="literal"
+>attach()</TT
+> call can be false, in which case the <TT
+CLASS="literal"
+>KApplication</TT
+> object will pop up an error dialog box.</P
+><P
+>If the current client needs to send and also receive messages, and then process data extracted from these messages, a proper registration with the server is needed:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;QCString realAppId = client-&gt;registerAs(kapp-&gt;name());
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The parameter to <TT
+CLASS="literal"
+>registerAs()</TT
+> only suggests a registration identifier (id) for the current application. The returned value actually indicates the real application id, as decided by the server. In fact, a second parameter to <TT
+CLASS="literal"
+>registerAs()</TT
+>, which has an implicit value of true, imposes that the operating system process identifier (the PID) be attached to the application name. Application identifiers have to be allowed to differ from the requested id because an application can exist in multiple instances on the desktop at a given moment. But each instance needs a unique identifier in order for the communication to remain possible.</P
+><P
+>This chapter discusses in more detail later a special case of DCOPClient: a <TT
+CLASS="literal"
+>KUniqueApplication</TT
+>. It is important to mention that for clients based on <TT
+CLASS="literal"
+>KUniqueApplication</TT
+>, no attaching or registration to the dcopserver is needed, because in such a case these are both performed automatically.</P
+><P
+>A brief statement is required here about efficiency issues of the DCOP client implementation. If the <TT
+CLASS="literal"
+>KApplication:dcopClient()</TT
+> method never gets called or if its call is unsuccessful, a <TT
+CLASS="literal"
+>DCOPClient</TT
+> instance is not created, and hence no memory allocation occurs.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec3"
+TITLE="Starting it All"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec4"
+>13.5.2. Using <TT
+CLASS="literal"
+>send()</TT
+>, <TT
+CLASS="literal"
+>call()</TT
+>, <TT
+CLASS="literal"
+>process()</TT
+>, and Friends</A
+></H2
+><P
+>If you are a programmer who needs a better understanding of how DCOP functions, you'll want to carefully read this section. Manual usage of the desktop protocol is explained here and the syntaxes and use of the <TT
+CLASS="literal"
+>send()</TT
+>, <TT
+CLASS="literal"
+>call()</TT
+>, and <TT
+CLASS="literal"
+>process()</TT
+> methods are described. If you believe that you would be better served by an automatic mechanism, you can safely skip this section. An automatic mechanism that builds DCOP capabilities in KDE applications is described later in the chapter.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch13lev3sec1"
+>13.5.2.1. Send and Forget</A
+></H3
+><P
+>Client<SPAN
+CLASS="QUOTE"
+>"A"</SPAN
+> <I
+CLASS="emphasis"
+>sends</I
+> a message to client <SPAN
+CLASS="QUOTE"
+>"B"</SPAN
+>. The communication occurs only in one sense. The originator of the message doesn't want to know whether the recipient takes action as a consequence. This is the simplest method of communication provided by DCOP. Client <SPAN
+CLASS="QUOTE"
+>"B"</SPAN
+> doesn't need to be different from <SPAN
+CLASS="QUOTE"
+>"A"</SPAN
+> and doesn't need to be unique. Details of <I
+CLASS="emphasis"
+>broadcast</I
+> communication are covered later in this chapter. A client uses <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> as illustrated in <A
+HREF="ch13lev1sec5.html#ch13list03"
+>Listing 13.3</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list03"
+></A
+><P
+><B
+>Example 13.3. Typical Use of <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: QByteArray  data;                     // "raw support" for data
+   3&nbsp;2: QDataStream arg(data, IO_WriteOnly);  // "container" provides
+   4&nbsp;                                         // easy access to data
+   5&nbsp;3: int a_number = 3;
+   6&nbsp;4: arg &lt;&lt; a_number;                      // put information on the
+   7&nbsp;                           // "support" in the "container"
+   8&nbsp;5: if (!client-&gt;send("otherClientId",    // identify the recipient
+   9&nbsp;6:                   "anObject/aChildOject", //hierarchically designate
+  10&nbsp;                           // the targeted object
+  11&nbsp;7:                   "readAnInt(int)",   // signature of the method
+  12&nbsp;                           // that will handle sent data
+  13&nbsp;8:                   data));             // the data
+  14&nbsp;9:   kdDebug &lt;&lt; "Sending data over DCOP failed" &lt;&lt; endl;
+  15&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>First, the sender client needs to indicate the complete hierarchy of the object providing the method designated to process the sent data (line 6). Second, the method's signature, as marked in line 7, indicates the types of parameters the method accepts. It doesn't provide the type returned because the C++ standard distinguishes overloaded methods by number and types of parameters and neglects the return type.</P
+><P
+>A second form of the method <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> (see <A
+HREF="ch13lev1sec5.html#ch13list04"
+>Listing 13.4</A
+>), provided for convenience, uses <TT
+CLASS="literal"
+>QString</TT
+> (compare line 8 of <A
+HREF="ch13lev1sec5.html#ch13list03"
+>Listing 13.3</A
+> with line 5 of <A
+HREF="ch13lev1sec5.html#ch13list04"
+>Listing 13.4</A
+>) instead of <TT
+CLASS="literal"
+>QDataStream</TT
+> as a data carrier. This kind of usage occurs frequently.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list04"
+></A
+><P
+><B
+>Example 13.4. <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> with QString Data</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: bool send_fast = true;
+   3&nbsp;2: client-&gt;send("travelingInTheAlps",
+   4&nbsp;3:              "happyMan/hmWithBigVoice",
+   5&nbsp;4:              "countTheEchos(QString)", // *example*
+   6&nbsp;5:              QString("Hello World"),   // shouting off a cliff :-)
+   7&nbsp;6:             send_fast));               // use "fast" IPC mechanisms
+   8&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Line 6 in <A
+HREF="ch13lev1sec5.html#ch13list04"
+>Listing 13.4</A
+> describes the feature of DCOP that allows a client to <I
+CLASS="emphasis"
+>recommend</I
+> use of a faster mechanism of communication. Such a mechanism isn't guaranteed to always be available. It will work only during communications between clients existing on the same local machine.</P
+><P
+>As already indicated, the sender client issues the message and continues his normal functions without waiting for communication acknowledgments. This is a very common need in the desktop environment. Often, such a send-and-forget message has to be issued to many clients at once. In a hypothetical situation, a configuration module notifies all existing konsole instances about a configuration change, using <TT
+CLASS="literal"
+>"konsole_*"</TT
+> as the first parameter of <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+>.</P
+><P
+>Theoretically, a global broadcast (that is, using <SPAN
+CLASS="QUOTE"
+>"*"</SPAN
+> as a first parameter of the <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> method) is also possible. Yet, because <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> doesn't check for acknowledgments, no guarantee is offered that even one client processed the message. Wildcards are also allowed in the second parameter (the objects hierarchy). Using many wildcards in DCOP communications is a bad idea, though, because it generates large amounts of IPC traffic.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>A special mention is necessary: Use of wildcards assumes special support on the side of recipient clients. Their <TT
+CLASS="literal"
+>DCOPObject::process()</TT
+> method (see the section <A
+HREF="ch13lev1sec5.html#ch13lev3sec3"
+><SPAN
+CLASS="QUOTE"
+>"Analyze and Take Action"</SPAN
+></A
+> later in this chapter) has to offer special code for handling wildcards. This is usually available with clients built using <TT
+CLASS="literal"
+>dcopidl</TT
+> (explained further later in this chapter) but seldomly so with manually written clients.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev3sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev3sec1"
+TITLE="Send and Forget"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch13lev3sec2"
+>13.5.2.2. Call and Listen</A
+></H3
+><P
+>Client<SPAN
+CLASS="QUOTE"
+>"A"</SPAN
+> <I
+CLASS="emphasis"
+>calls</I
+> the peer client <SPAN
+CLASS="QUOTE"
+>"B"</SPAN
+> and waits for an answer. This two-way communication is achieved through the use of the <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+> method (see <A
+HREF="ch13lev1sec5.html#ch13list05"
+>Listing 13.5</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list05"
+></A
+><P
+><B
+>Example 13.5. Typical Use of <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: QByteArray  data, reply_data;    // also prepare a byte array
+   3&nbsp;                         // for the reply
+   4&nbsp; 2: QCString reply_type; // will contain the type of the reply
+   5&nbsp; 3: QDataStream arg(data, IO_WriteOnly);
+   6&nbsp; 4: int a_number = 3;
+   7&nbsp; 5: arg &lt;&lt; a_number;
+   8&nbsp; 6: if (!client-&gt;call("otherClientId",
+   9&nbsp; 7:                   "anObject/aChildOject",
+  10&nbsp; 8:                   "readAnIntAndAnswer(int)",
+  11&nbsp;             // signature of method to handle data and answer
+  12&nbsp; 9:                   data,                      // sent data
+  13&nbsp;10:                   reply_type,
+  14&nbsp;             // type of data contained in the answer
+  15&nbsp;11:                   reply_data);         // the answer
+  16&nbsp;12:   kdDebug &lt;&lt; "Calling over DCOP failed!" &lt;&lt; endl;
+  17&nbsp;13: else {
+  18&nbsp;14:   QDataStream answer(reply_data, IO_ReadOnly);
+  19&nbsp;15:   if (reply_type == "Qstring") {
+  20&nbsp;16:     QString result;
+  21&nbsp;17:     answer &gt;&gt; result;
+  22&nbsp;18:     this-&gt;doSomething(result);
+  23&nbsp;19:   } else
+  24&nbsp;20:     kdDebug &lt;&lt; "Calling over DCOP succeeded,\
+  25&nbsp;             but the answer had wrong type!" &lt;&lt; endl;
+  26&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Use of wildcards(broadcasting) isn't allowed with the <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+> method because the communication is established from peer to peer. In other words, the originator client waits for exactly one answer. Of course, this can be a problem when peer clients are registered with the server by identifiers different from their name (for example, clients registered with the form <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>appname</TT
+></I
+><TT
+CLASS="literal"
+>-</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>pid</TT
+></I
+>). Yet, the server gains heuristic capabilities that allow use of generic identifiers. This way, <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+> can use a generic but sensible name (for example, <TT
+CLASS="literal"
+>"konqueror"</TT
+>). The server will pick up and establish connection with the first available instance from the group of clients whose identifiers are matching the generic name (for example, <TT
+CLASS="literal"
+>"konqueror-NNN"</TT
+>, where <TT
+CLASS="literal"
+>"NNN"</TT
+> are operating system's process identifiers, or PIDs).</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev3sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev3sec2"
+TITLE="Call and Listen"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch13lev3sec3"
+>13.5.2.3. Analyze and Take Action</A
+></H3
+><P
+>The previous two sections described how a DCOP client can generate DCOP messages. These messages are sent over communication channels that the client establishes with the DCOP server during the initial phases (<TT
+CLASS="literal"
+>attach()</TT
+>, <TT
+CLASS="literal"
+>registerAs()</TT
+>). The server is only expected to pass the message over to the designated recipient&#8212;only this client knows how to process the transmitted data.</P
+><P
+>A client gains reception abilities through the inheritance of a special class provided by the DCOP mechanism. This usually means that a receiving client uses multiple inheritance:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>It inherits its normal parent; for example, a <TT
+CLASS="literal"
+>QWidget</TT
+>, a <TT
+CLASS="literal"
+>KCModule</TT
+>, or a <TT
+CLASS="literal"
+>KApplication</TT
+> class.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>It inherits the <TT
+CLASS="literal"
+>DCOPObject</TT
+> class available in the DCOP API.</P
+></LI
+></UL
+><P
+>A sample implementation is shown in <A
+HREF="ch13lev1sec5.html#ch13list06"
+>Listing 13.6</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list06"
+></A
+><P
+><B
+>Example 13.6. Simple Object that Implements DCOP Processing</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;File asmartwidget.h
+   3&nbsp;------------------------------------------------
+   4&nbsp; 1: #include &lt;qwidget.h&gt;
+   5&nbsp; 2: #include &lt;qlabel.h&gt;
+   6&nbsp; 3: #include &lt;qlayout.h&gt;
+   7&nbsp; 4: #include &lt;dcopobject.h&gt;
+   8&nbsp; 5:
+   9&nbsp; 6: class ASmartWidget : public QWidget, public DCOPObject {
+  10&nbsp; 7:
+  11&nbsp; 8: protected:
+  12&nbsp; 9:   QLabel *l_front;
+  13&nbsp;10:
+  14&nbsp;11: public:
+  15&nbsp;12:   ASmartWidget(const char* name);
+  16&nbsp;13:
+  17&nbsp;14:   bool setFront(QString&amp;);
+  18&nbsp;15:   QString&amp; front() { return l_front-&gt;text();};
+  19&nbsp;16:
+  20&nbsp;17: protected:
+  21&nbsp;18:   bool process(const QCString &amp;fun,  // the function to be called
+  22&nbsp;19:                const QByteArray &amp;data,
+  23&nbsp;                             // data passed to the function
+  24&nbsp;20:                QCString &amp;reply_type, // indicate what type has
+  25&nbsp;                             // the reply data
+  26&nbsp;21:                QByteArray &amp;reply_data);// the answer (reply data)
+  27&nbsp;22:
+  28&nbsp;23: };
+  29&nbsp;
+  30&nbsp;File asmartwidget.cpp
+  31&nbsp;------------------------------------------------
+  32&nbsp; 1: #include &lt;qbitarray.h&gt;
+  33&nbsp; 2: #include &lt;qdatastream.h&gt;
+  34&nbsp; 3:
+  35&nbsp; 4: ASmartWidget::ASmartWidget(const char* name):
+  36&nbsp; 5:   QWidget(name),
+  37&nbsp; 6:   DCOPObject() {
+  38&nbsp; 7:
+  39&nbsp; 8:     QVBoxLayout *lay = new QVBoxLayout (this, 10, 10);
+  40&nbsp; 9:     l_front = new QLabel(this, "Hello, I'm a smart widget);
+  41&nbsp;10:     lay-&gt;addWidget (front);
+  42&nbsp;11:
+  43&nbsp;12:   }
+  44&nbsp;13:
+  45&nbsp;14: bool ASmartWidget::setFront(QString&amp; l) {
+  46&nbsp;15:   // a bit of data processing - eventually filter contents of l
+  47&nbsp;16:   if (l.find("smart") != -1) {
+  48&nbsp;17:     l_front-&gt;setText( l );
+  49&nbsp;18:     return true;
+  50&nbsp;19:   } else
+  51&nbsp;20:     return false;
+  52&nbsp;21: }
+  53&nbsp;22:
+  54&nbsp;23: bool ASmartWidget::process(const QCString &amp;fun,
+  55&nbsp;                     const QByteArray &amp;data,
+  56&nbsp;24:                            QCString &amp;reply_type,
+  57&nbsp;                     QByteArray &amp;reply_data) {
+  58&nbsp;25:
+  59&nbsp;26:   if (fun == "setFront(QString&amp;)") {
+  60&nbsp;27:     QDataStream arg(data, IO_ReadOnly);
+  61&nbsp;28:     QString&amp; atext;
+  62&nbsp;29:     arg &gt;&gt; atext;
+  63&nbsp;30:     bool result = setFront(atext);
+  64&nbsp;31:
+  65&nbsp;32:     QDataStream answer(reply_data, IO_WriteOnly);
+  66&nbsp;33:    answer &lt;&lt; result;
+  67&nbsp;34:     reply_type = "bool";
+  68&nbsp;35:     return true;
+  69&nbsp;36:   } else {
+  70&nbsp;37:       kdDebug &lt;&lt; "Processing DCOP call failed. Function unknown!"
+  71&nbsp;            &lt;&lt; endl;
+  72&nbsp;38:       return false;
+  73&nbsp;39:   }
+  74&nbsp;40: }
+  75&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The preceding code is very easy to understand and even easier to use, in combination with what you learned already about <TT
+CLASS="literal"
+>DCOPClient::send()</TT
+> and <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+>. It is straightforward to make the preceding class a member of a proper KDE application, start this application, and then from another DCOP client, issue a <TT
+CLASS="literal"
+>send()</TT
+> of the form</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;client-&gt;send("someApplication",
+   3&nbsp;             "AsmartWidget",
+   4&nbsp;             "setFront(QString&amp;)",
+   5&nbsp;             QString("To be smart is not enough"));
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This action will make your small widget acknowledge its human-like limitations.</P
+><P
+>As previously mentioned, a <TT
+CLASS="literal"
+>DCOPObject::process()</TT
+> method becomes part of an object's interface through inheritance of the <TT
+CLASS="literal"
+>DCOPObject</TT
+> class. The programmer needs to ensure inheritance and implementation for each and every object of his application that has to offer DCOP reception capabilities. Yet, it is possible to build DCOP call processing mechanisms directly at an application-wide level. Two ways of achieving this are explained here.</P
+><P
+>The <TT
+CLASS="literal"
+>setDefaultObject()</TT
+> method accepts one unique parameter, a <TT
+CLASS="literal"
+>QCString</TT
+> that denominates the object that receives and processes all application-wide DCOP calls. Its pair method, <TT
+CLASS="literal"
+>DCOPClient::defaultObject()</TT
+>, returns a <TT
+CLASS="literal"
+>QCString</TT
+> with the name of this special object member of the application.</P
+><P
+>The API of the class <TT
+CLASS="literal"
+>DCOPClient</TT
+> also offers a <TT
+CLASS="literal"
+>DCOPClient::process()</TT
+> method. In the initial phases of the development of the DCOP technology, the <TT
+CLASS="literal"
+>process()</TT
+> capabilities were achieved by an application through inheritance from the <TT
+CLASS="literal"
+>DCOPClient</TT
+> class. The <TT
+CLASS="literal"
+>DCOPClient::process()</TT
+> method has the same definition as the <TT
+CLASS="literal"
+>DCOPObject::process()</TT
+> method. It offers a second method of implementation for application-wide DCOP call processing. Developers should prefer the use of <TT
+CLASS="literal"
+>DCOPObject</TT
+> or <TT
+CLASS="literal"
+>DCOPObjectProxy</TT
+> classes for this purpose, however.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev3sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev3sec3"
+TITLE="Analyze and Take Action"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch13lev3sec4"
+>13.5.2.4. Longer Calls Become Transactions</A
+></H3
+><P
+>Time is an important component of communications processes. This affirmation is obviously valid in the real world (information about a large storm heading to Bill's house has no value for Bill if it arrives after the storm has already calmed). And it remains valid, while gaining strong connotations, in the programming world. There are two aspects in the involvement of time in process communication:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Conjuncture&#8212;Events have to occur at the right moment (proper handling of erratic events is mandatory).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Duration&#8212;Events have to behave in a smart way in relation to the time needed for them to be transmitted and/or processed.</P
+></LI
+></UL
+><P
+>The first aspect is less important at this point in the discussion. In relation to the duration of events, the DCOP mechanism needs some explanation. As presented in the previous sections, the <TT
+CLASS="literal"
+>DCOPClient::call()</TT
+> is a blocking method. Its use implies awareness of GUI refresh issues and effective event loop treatments, as well as concerns related to the continuous processing of DCOP calls.</P
+><P
+>Fortunately, things are made easy by methods provided by the <TT
+CLASS="literal"
+>DCOPClient</TT
+> class. The family of <I
+CLASS="emphasis"
+>transaction methods</I
+> enlists the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;DCOPClientTransaction* DCOPClient::beginTransaction()
+   3&nbsp;
+   4&nbsp;Q_INT32                DCOPClient::transactionId()
+   5&nbsp;
+   6&nbsp;void
+   7&nbsp;DCOPClient::endTransaction(DCOPClientTransaction* newTr,
+   8&nbsp;                        //a handle of the negociated transaction
+   9&nbsp;                           QCString&amp; reply_type,
+  10&nbsp;                        // data type and data stream that were not
+  11&nbsp;                           QDataStream&amp; reply_data)
+  12&nbsp;// not available as an immediate answer to a call
+  13&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The signatures shown in the code are implying that a transaction lives like an object of type class <TT
+CLASS="literal"
+>DCOPClientTransaction</TT
+> (defined and implemented in the DCOP API). The transaction identifier is an integer declared with the platform-independent type macros offered by the Qt library.</P
+><P
+>Understanding the functionality offered by these methods is straightforward, as exemplified by the following code. Assume that the method of our humanly smart widget, which changed the text on the front label, executes a time-consuming filtering operation instead of simply detecting the word <SPAN
+CLASS="QUOTE"
+>"smart"</SPAN
+> in the input. The implementation of our class needs to be changed as shown in <A
+HREF="ch13lev1sec5.html#ch13list07"
+>Listing 13.7</A
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list07"
+></A
+><P
+><B
+>Example 13.7. DCOP Processing with Transactions</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;File asmartwidget.h
+   3&nbsp;------------------------------------------------
+   4&nbsp; 1: #include &lt;qwidget.h&gt;
+   5&nbsp; 2: #include &lt;qlabel.h&gt;
+   6&nbsp; 3: #include &lt;qlayout.h&gt;
+   7&nbsp; 4: #include &lt;dcopclient.h&gt;
+   8&nbsp; 5: #include &lt;dcopobject.h&gt;
+   9&nbsp; 6:
+  10&nbsp; 7: class ASmartWidget : public QWidget, public DCOPObject {
+  11&nbsp; 8: Q_OBJECT
+  12&nbsp; 9:
+  13&nbsp;10: protected:
+  14&nbsp;11:   QLabel *l_front;
+  15&nbsp;12:
+  16&nbsp;13: public:
+  17&nbsp;14:   ASmartWidget(const char* name);
+  18&nbsp;15:
+  19&nbsp;16:   void changeFront(DCOPClientTransaction*, QString&amp;);
+  20&nbsp;17:   QString&amp; front() { return l_front-&gt;text();};
+  21&nbsp;18:
+  22&nbsp;19: public slots:
+  23&nbsp;20:   void frontIsChanged(DCOPClientTransaction* ,
+  24&nbsp;                  QByteArray&amp;, QDataStream &amp;);
+  25&nbsp;21:
+  26&nbsp;22:
+  27&nbsp;23: protected:
+  28&nbsp;24:   bool process(const QCString &amp;fun,   // the function to be called
+  29&nbsp;25:                const QByteArray &amp;data,
+  30&nbsp;                              // data passed to the function
+  31&nbsp;26:                QCString &amp;reply_type,  // indicate what type has
+  32&nbsp;                            // the reply data
+  33&nbsp;27:                QByteArray &amp;reply_data);// the answer (reply data)
+  34&nbsp;28:
+  35&nbsp;29: };
+  36&nbsp;
+  37&nbsp;File asmartwidget.cpp
+  38&nbsp;------------------------------------------------
+  39&nbsp; 1: #include &lt;qbitarray.h&gt;
+  40&nbsp; 2: #include &lt;qdatastream.h&gt;
+  41&nbsp; 3:
+  42&nbsp; 4: ASmartWidget::ASmartWidget(const char* name):
+  43&nbsp; 5:   QWidget(name),
+  44&nbsp; 6:   DCOPObject() {
+  45&nbsp; 7:
+  46&nbsp; 8:     QVBoxLayout *lay = new QVBoxLayout (this, 10, 10);
+  47&nbsp; 9:     l_front = new QLabel(this, "Hello, I'm a smart widget);
+  48&nbsp;10:     lay-&gt;addWidget (front);
+  49&nbsp;11:
+  50&nbsp;12:   }
+  51&nbsp;13:
+  52&nbsp;14: void ASmartWidget::changeFront(DCOPClientTransaction* aTransaction,
+  53&nbsp;                         DCOPQString&amp; l) {
+  54&nbsp;15:
+  55&nbsp;16:   bool succeeded = false;
+  56&nbsp;17:
+  57&nbsp;18:   // time consuming data processing -
+  58&nbsp;19:   //    complex filter and cruncher for the contents of l
+  59&nbsp;20:   // for (&#8230;) {
+  60&nbsp;21:   // &#8230;
+  61&nbsp;22:   // }
+  62&nbsp;23:
+  63&nbsp;24:   if (l.find('smart') != -1) { // or other interesting condition
+  64&nbsp;25:     l_front-&gt;setText( l );
+  65&nbsp;26:     succeeded = true;
+  66&nbsp;27:   } else
+  67&nbsp;28:     succeeded = false;
+  68&nbsp;29:
+  69&nbsp;30:   frontIsChanged(aTransaction, succeeded);
+  70&nbsp;31: }
+  71&nbsp;32:
+  72&nbsp;33: bool ASmartWidget::process(const QCString &amp;fun,
+  73&nbsp;                     const QByteArray &amp;data,
+  74&nbsp;34:                            QCString &amp;reply_type,
+  75&nbsp;                      QByteArray &amp;reply_data) {
+  76&nbsp;35:
+  77&nbsp;36:   if (fun == "setFront(QString&amp;)") {
+  78&nbsp;37:
+  79&nbsp;38:     DCOPClientTransaction *myTransaction;
+  80&nbsp;39:     newTransaction = kapp-&gt;dcopClient()-&gt;beginTransaction();
+  81&nbsp;40:
+  82&nbsp;41:     QDataStream arg(data, IO_ReadOnly);
+  83&nbsp;42:     QString&amp; atext;
+  84&nbsp;43:     arg &gt;&gt; atext;
+  85&nbsp;44:
+  86&nbsp;45:     Q_INT32 trId = kapp-&gt;dcopClient()-&gt;transactionId();
+  87&nbsp;                // trId == 0 if no transaction
+  88&nbsp;46:     if (trId) {
+  89&nbsp;47:       changeFront(newTransaction, atext);
+  90&nbsp;48:      kdDebug &lt;&lt; "Transaction " &lt;&lt; trId &lt;&lt; " established!" &lt;&lt; endl;
+  91&nbsp;49:       return true;
+  92&nbsp;50      } else {
+  93&nbsp;51:       kdDebug &lt;&lt; "Processing DCOP call failed.\
+  94&nbsp;                No transaction accepted!" &lt;&lt; endl;
+  95&nbsp;52:       return false;
+  96&nbsp;53:
+  97&nbsp;54:   } else {
+  98&nbsp;55:       kdDebug &lt;&lt; "Processing DCOP call failed. Function unknown!"
+  99&nbsp;            &lt;&lt; endl;
+ 100&nbsp;56:       return false;
+ 101&nbsp;57: }
+ 102&nbsp;58:
+ 103&nbsp;59: void ASmartWidget::frontIsChanged(DCOPClientTransaction* aTransaction,
+ 104&nbsp;60:    bool data) {
+ 105&nbsp;61:   QByteArray reply_data;
+ 106&nbsp;62:   QDataStream answer(reply_data, IO_WriteOnly);
+ 107&nbsp;63:   answer &lt;&lt; data;
+ 108&nbsp;64:   QCString reply_type = "bool";
+ 109&nbsp;65:   kapp-&gt;dcopClient()-&gt;endTransaction(aTransaction,
+ 110&nbsp;                             reply_type, reply_data);
+ 111&nbsp;66:
+ 112&nbsp;67: }
+ 113&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This example makes clear that the transaction methods have a proper usage only inside the implementation of the <TT
+CLASS="literal"
+>DCOPObject::process()</TT
+> method. Using transactions is obviously more complex and a bit heavier, both in terms of programming and resource usage (more DCOP communication traffic). Of course, transactions can also generate complex puzzles of application functionality and usability. When a <TT
+CLASS="literal"
+>call()</TT
+> can be answered with a transaction, all assumptions about the linearity of caller's functioning are wrong. On the other side, the main reason for the existence of <I
+CLASS="emphasis"
+>transaction methods</I
+> is to allow implementations of non-blocking DCOP calls. Consequently, attention and consideration in the use of transactions is advised.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Another tool referring to blocking calls is the signal <TT
+CLASS="literal"
+>DCOPClient::blockUserInput(bool)</TT
+>. This signal is automatically used by <TT
+CLASS="literal"
+>KApplication</TT
+> to block (parameter is true) or release (parameter is false) the graphical interface while the client waits for an answer to a DCOP call. The programmer doesn't normally have a use for manually emitting this signal.</P
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev3sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev3sec4"
+TITLE="Longer Calls Become Transactions"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch13lev3sec5"
+>13.5.2.5. Handling the Connection</A
+></H3
+><P
+>An attached client can cut all communication with the DCOP server by detaching itself. This operation is achieved through a call to the <TT
+CLASS="literal"
+>DCOPClient::detach()</TT
+> method. Such a call is automatically performed during the client's normal stop (during the call of client's main destructor). A manual call is also allowed.</P
+><P
+>Situations may occur in which the connection with the DCOP server has to be deactivated temporarily. For example, when the user is prompted to decide upon a DCOP related situation, the program can halt communication for a while using the method <TT
+CLASS="literal"
+>DCOPClient::suspend()</TT
+>. If the user's decision allows for continuing, the program calls <TT
+CLASS="literal"
+>DCOPClient::resume()</TT
+> to reestablish the communication. The developer has to pay attention to the fact that suspending the connection for a relatively long time might be a bad idea. If other clients are attempting to perform <TT
+CLASS="literal"
+>call()</TT
+> connections to the currently suspended application, they will hang (see the section<A
+HREF="ch13lev1sec5.html#ch13lev2sec4"
+><SPAN
+CLASS="QUOTE"
+>"Using <TT
+CLASS="literal"
+>send()</TT
+>, <TT
+CLASS="literal"
+>call()</TT
+>, <TT
+CLASS="literal"
+>process()</TT
+>, and Friends,"</SPAN
+></A
+> earlier in the chapter).</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev3sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev3sec5"
+TITLE="Handling the Connection"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec4"
+TITLE="Using send(), call(), process(), and Friends"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec5"
+>13.5.3. Automated Elegance&#8212;dcopIDL</A
+></H2
+><P
+>The preceding section discussed how to proceed for a manual implementation of DCOP capabilities in a KDE application. As already mentioned, an automated way of developing DCOP support exists. To this purpose, the DCOP authors created a set of IDL compiling tools: <TT
+CLASS="literal"
+>dcopidl</TT
+> and <TT
+CLASS="literal"
+>dcopidl2cpp</TT
+>. These compilers make use of a special syntax of header files to generate standard encapsulation methods for the DCOP messaging. A new iteration of part of the smart widget code will help illustrate this (see <A
+HREF="ch13lev1sec5.html#ch13list08"
+>Listing 13.8</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list08"
+></A
+><P
+><B
+>Example 13.8. Using <TT
+CLASS="literal"
+>dcopidl</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;File asmartwidget.h
+   3&nbsp;------------------------------------------------
+   4&nbsp; 1: #include &lt;qwidget.h&gt;
+   5&nbsp; 2: #include &lt;qlabel.h&gt;
+   6&nbsp; 3: #include &lt;qlayout.h&gt;
+   7&nbsp; 4: #include &lt;dcopobject.h&gt;
+   8&nbsp; 5:
+   9&nbsp; 6: class ASmartWidget : public QWidget, public DCOPObject {
+  10&nbsp; 7: K_DCOP
+  11&nbsp; 8: Q_OBJECT
+  12&nbsp; 9:
+  13&nbsp;10: protected:
+  14&nbsp;11:   QLabel *l_front;
+  15&nbsp;12:
+  16&nbsp;13: public:
+  17&nbsp;14:   ASmartWidget(const char* name);
+  18&nbsp;15
+  19&nbsp;16:   QString&amp; front() { return l_front-&gt;text();};
+  20&nbsp;17:
+  21&nbsp;18: k_dcop:
+  22&nbsp;19:   bool changeFront(QString&amp; l);
+  23&nbsp;20:
+  24&nbsp;21: };
+  25&nbsp; File: asmartwidget,cpp
+  26&nbsp;-----------------------------------
+  27&nbsp; 1:  #include &lt;qbitarray.h&gt;
+  28&nbsp; 2:  #include &lt;qdatastream.h&gt;
+  29&nbsp; 3:  #include "asmartwidget.h"
+  30&nbsp; 4:
+  31&nbsp; 5:  ASmartWidget::ASmartWidget(const char* name)
+  32&nbsp; 6:    : QWidget(0, name),
+  33&nbsp; 7:      DCOPObject()
+  34&nbsp; 8:    {
+  35&nbsp; 9:      QVBoxLayout *lay = new QVBoxLayout (this, 10, 10);
+  36&nbsp;10:      l_front = new QLabel(this, "Hello, I'm a smart widget");
+  37&nbsp;11:      lay-&gt;addWidget (l_front);
+  38&nbsp;12:    }
+  39&nbsp;13:
+  40&nbsp;14:  bool ASmartWidget::changeFront(const QString&amp; l) {
+  41&nbsp;15:
+  42&nbsp;16:    bool succeeded = false;
+  43&nbsp;17:
+  44&nbsp;18:    if (l.find("smart") != -1) { // or other interesting condition
+  45&nbsp;19:      l_front-&gt;setText( l );
+  46&nbsp;20:      succeeded = true;
+  47&nbsp;21:    } else
+  48&nbsp;22:      succeeded = false;
+  49&nbsp;23:
+  50&nbsp;24:    return succeeded;
+  51&nbsp;25:  }
+  52&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>When comparing <A
+HREF="ch13lev1sec5.html#ch13list08"
+>Listing 13.8</A
+> with the code shown in <A
+HREF="ch13lev1sec5.html#ch13list07"
+>Listing 13.7</A
+>, the simplifications of using DCOP provided by the <TT
+CLASS="literal"
+>dcopidl</TT
+> mechanism become evident. The asmartwidget.cpp file is simplified accordingly (no need to implement the <TT
+CLASS="literal"
+>::process()</TT
+> method). New elements to pay attention to in this last code example appear in lines 7, 18, and 19.</P
+><P
+><TT
+CLASS="literal"
+>K_DCOP</TT
+> (line 7) is a preprocessor macro that helps the <TT
+CLASS="literal"
+>dcopidl</TT
+> compiler to decide that the <TT
+CLASS="literal"
+>ASmartWidget</TT
+> class has to be processed with respect to DCOP functionalities.</P
+><P
+>The construct <TT
+CLASS="literal"
+>k_dcop:</TT
+> present on line 18 is similar to standard C++ scope delimiters (<TT
+CLASS="literal"
+>public</TT
+>, <TT
+CLASS="literal"
+>private</TT
+>, <TT
+CLASS="literal"
+>protected</TT
+>) and helps the <TT
+CLASS="literal"
+>dcopidl</TT
+> compiler to detect the methods that will gain DCOP messaging envelopes. All methods entailed between a <TT
+CLASS="literal"
+>k_dcop:</TT
+> label and any other valid C++ or Qt delimiters will be included in the DCOP interface of the current object.</P
+><P
+>Finally, it's important to note that the <TT
+CLASS="literal"
+>QString</TT
+> parameter (line 19) of the <TT
+CLASS="literal"
+>changeFront()</TT
+> method has assigned an explicit name. A rule of use for the <TT
+CLASS="literal"
+>dcopidl</TT
+> compiler is that, while the C++ standard allows anonymous method parameters, <I
+CLASS="emphasis"
+>all parameters in DCOP-enabled methods need explicit names</I
+>.</P
+><P
+>Suppose you create a KDE application having <TT
+CLASS="literal"
+>ASmartWidget</TT
+> as its main widget(see <A
+HREF="ch13lev1sec5.html#ch13list09"
+>Listing 13.9</A
+>).</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list09"
+></A
+><P
+><B
+>Example 13.9. A Typical Application that Uses DCOP</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;File myapp.cpp
+   3&nbsp;-------------------------------
+   4&nbsp; 1: #include &lt;kapp.h&gt;
+   5&nbsp; 2: #include &lt;dcopclient.h&gt;
+   6&nbsp; 3: #include "asmartwidget.h"
+   7&nbsp; 4:
+   8&nbsp; 5: int main(int nargs, char** argv) {
+   9&nbsp; 6:
+  10&nbsp; 7:   KApplication* a = new KApplication(nargs, argv, "myapp");
+  11&nbsp; 8:   ASmartWidget* asw = new ASmartWidget("smart");
+  12&nbsp; 9:   a-&gt;setMainWidget(asw);
+  13&nbsp;10:
+  14&nbsp;11:   client = a.dcopClient();
+  15&nbsp;12:   client.attach();
+  16&nbsp;13:   client.registerAs("myapp");
+  17&nbsp;14:
+  18&nbsp;15:   return a.exec();
+  19&nbsp;16: }
+  20&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Line 13 shows that your application (as all applications built to receive and process DCOP messages) needs a non-anonymous registration with the <TT
+CLASS="literal"
+>dcopserver</TT
+>.</P
+><P
+>With the help of a little Makefile magic (described in the following section) and with heavy use of the <TT
+CLASS="literal"
+>dcopidl</TT
+> tools, the application will be compiled with built-in DCOP functionality. The tools will automatically generate a few files:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>asmartwidget.kidl is a helper file containing XML code generated by the dcopidl tool.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>asmartwidget_skel.cpp is a skeleton file, in which the <TT
+CLASS="literal"
+>dcopidl2cpp</TT
+> tool writes the autogenerated <TT
+CLASS="literal"
+>::process()</TT
+> method needed to envelop the DCOP enabled methods picked up by processing of the header file.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>asmartwidget_stub.h is an autogenerated header file that will be installed with the KDE system and then included in DCOP clients willing to use the DCOP interface that myapp offers.</P
+></LI
+></UL
+><P
+>A stub file can be also written by hand. <A
+HREF="ch13lev1sec5.html#ch13list10"
+>Listing 13.10</A
+> is a live example, extracted from the KDE 2 desktop panel, Kicker:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list10"
+></A
+><P
+><B
+>Example 13.10. Example of a Handmade Stub File</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef KICKER_INTERFACE_H
+   3&nbsp; 2: #define KICKER_INTERFACE_H
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;dcopobject.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class KickerInterface : virtual public DCOPObject
+   8&nbsp; 7: {
+   9&nbsp; 8:    K_DCOP
+  10&nbsp; 9:
+  11&nbsp;10:    k_dcop:
+  12&nbsp;11:
+  13&nbsp;12:        virtual void configure() = 0;
+  14&nbsp;13: };
+  15&nbsp;14:
+  16&nbsp;15: #endif // Included this file.
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>A DCOP client that wants to communicate via DCOP with the new smarter widget has only to include the published interface file (asmartwidget_stub.h). An example of the implementation of such a client is shown in <A
+HREF="ch13lev1sec5.html#ch13list11"
+>Listing 13.11</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list11"
+></A
+><P
+><B
+>Example 13.11. DCOP Client Using the Automatically Generated Interface of Another DCOP Client</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;File aclient.cpp
+   3&nbsp;---------------------------------
+   4&nbsp; 1: #include &lt;kapp.h&gt;
+   5&nbsp; 2: #include &lt;dcopclient.h&gt;
+   6&nbsp; 3: #include "asmartwidget_stub.h"
+   7&nbsp; 4:
+   8&nbsp; 5: int main( int argc, char** argv )
+   9&nbsp; 6: {
+  10&nbsp; 7:   // client doesn't need GUI hence set fourth parameter to false
+  11&nbsp; 8:   KApplication app( argc, argv, "autoclient", false);
+  12&nbsp; 9:
+  13&nbsp;10:   app.dcopClient()-&gt;attach();
+  14&nbsp;11:
+  15&nbsp;12:   ASmartWidget_stub iface( "myapp", "AsmartWidget" );
+  16&nbsp;                    // automatically generated class
+  17&nbsp;13:   iface.changeFront(QString("Now this is really smart!"));
+  18&nbsp;14: }
+  19&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Line 12 in <A
+HREF="ch13lev1sec5.html#ch13list11"
+>Listing 13.11</A
+> exemplifies the use of the automatically generated <SPAN
+CLASS="QUOTE"
+>"stub"</SPAN
+> interface. This type of usage is visibly more convenient than the manual definitions of <TT
+CLASS="literal"
+>send()</TT
+>, <TT
+CLASS="literal"
+>call()</TT
+>, and <TT
+CLASS="literal"
+>process()</TT
+> on both developed clients. The advantages become especially evident with large programming projects. Using the <TT
+CLASS="literal"
+>dcopidl</TT
+> compiler proved to be compelling enough that most KDE applications&#8212;which initially used manual DCOP interface implementations&#8212;were recently rewritten to employ this easier and better programming technique.</P
+><P
+>Looking at how things are prepared for the use of the <TT
+CLASS="literal"
+>dcopidl</TT
+> tools might raise the question of how does the compiler realize the difference between a method to be treated as a <TT
+CLASS="literal"
+>send()</TT
+> and one that will be a <TT
+CLASS="literal"
+>call()</TT
+>. The specification of the <TT
+CLASS="literal"
+>dcopidl</TT
+> tools provides the developer with the ASYNC pseudotype. ASYNC is a precompiler macro that translates to the valid C++ type <TT
+CLASS="literal"
+>void</TT
+>. The developer writes ASYNC in the header file defining the DCOP interface, in front of the definition of methods that are expected to be treated as <TT
+CLASS="literal"
+>send()</TT
+> methods. The <TT
+CLASS="literal"
+>dcopidl</TT
+> tools will interpret this marker at precompilation and invest the marked method with proper non-blocking implementations.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec5"
+TITLE="Automated Elegance&#8212;dcopIDL"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch13lev2sec6"
+>13.5.4. Makefile Magic</A
+></H2
+><P
+>In order for the automated DCOP support to be built in to an application, use of proper <TT
+CLASS="literal"
+>make</TT
+> rules is needed. A few specific additions will aid the compilation of the preceding examples when using the <TT
+CLASS="literal"
+>dcopidl</TT
+> tools:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>A rule is needed to generate the .kidl file.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Another rule will help create the _skel.cpp, _stub.h, and _stub.cpp files.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The generated _skel.cpp (and eventually _stub.cpp) source needs to be compiled.</P
+></LI
+></UL
+><P
+>Of course, the usual details related to normal project management have to be taken care of. A Makefile example is shown in <A
+HREF="ch13lev1sec5.html#ch13list12"
+>Listing 13.12</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch13list12"
+></A
+><P
+><B
+>Example 13.12. Specific Makefile Rules Needed for the DCOP Mechanism</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1:  QTDIR = /home/ctibirna/kde/2_0/qt-copy
+   3&nbsp; 2:  CXXFLAGS = -I${QTDIR}/include -I${KDEDIR}/include -I.
+   4&nbsp; 3:  LDFLAGS =  -L${QTDIR}/lib -L${KDEDIR}/lib -L/usr/X11R6/lib
+   5&nbsp; 4:  LDADD = -ldl -lqt -lICE
+   6&nbsp; 5:
+   7&nbsp; 6:  all: autoclient myapp
+   8&nbsp; 7:
+   9&nbsp; 8:  autoclient : asmartwidget_stub.o aclient.o
+  10&nbsp; 9:          g++ asmartwidget_stub.o aclient.o $(LDFLAGS) $(LDADD) -o  autoclient
+  11&nbsp;10:
+  12&nbsp;11:  myapp      : aswmartwidget.o asmartwidget_skel.o asmartwidget_moc.o  myapp.o
+  13&nbsp;12:         g++ myapp.o asmartwidget.o asmartwidget_skel.o asmartwidget_moc.o\
+  14&nbsp;13:           $(LDFLAGS) $(LDADD) -o myapp
+  15&nbsp;14:
+  16&nbsp;15:  .cpp.o:
+  17&nbsp;16:          g++ $(CXXFLAGS) -c $&lt;
+  18&nbsp;17:
+  19&nbsp;18:  asmartwidget.kidl: asmartwidget.h
+  20&nbsp;19:        dcopidl asmartwidget.h &gt; asmartwidget.kidl || rm -f  asmartwidget.kidl
+  21&nbsp;20:  asmartwidget_moc.cpp: asmartwidget.h
+  22&nbsp;21:          ${QTDIR}/bin/moc asmartwidget.h -o asmartwidget_moc.cpp
+  23&nbsp;22:  asmartwidget_skel.cpp: asmartwidget.kidl
+  24&nbsp;23:        dcopidl2cpp asmartwidget.kidl
+  25&nbsp;24:  asmartwidget_stub.cpp: asmartwidget.kidl
+  26&nbsp;25:
+  27&nbsp;26:  clean :
+  28&nbsp;27:          rm -f *.o *_moc.cpp *_skel.* *_stub.* *.kidl myapp autoclient
+  29&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The use of the standard KDE development environment makes the issue of the Makefile rules much simpler thanks to the autodetection and autogeneration of makefiles used there. Simply adding the name of the _skel.cpp file to be generated and compiled to the list of the other compilable source files is enough.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev2sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev2sec6"
+TITLE="Makefile Magic"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev1sec5"
+TITLE="Description of DCOP's Programming Interface"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

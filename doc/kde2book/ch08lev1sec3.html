@@ -1,0 +1,505 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Dialog Modality&#8212;Modal or Modeless Dialogs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="PREVIOUS"
+TITLE="Dialog Layout the Simple Way"
+HREF="ch08lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="KDE User-Interface Library (kdeui)"
+HREF="ch08lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec3"
+>8.3. Dialog Modality&#8212;Modal or Modeless Dialogs</A
+></H1
+><P
+>A dialog can be used in two ways. Basically, it either blocks access (by mouse or keyboard) to any other parts if an application while visible, or it does not impose any restrictions to what the user can do. The first approach is known as <I
+CLASS="emphasis"
+>modal dialog behavior</I
+>, and the second is <I
+CLASS="emphasis"
+>modeless dialog behavior</I
+>.</P
+><P
+>The decision when to use a modal or modeless dialog depends very much on the dialog itself and on what the purpose of the dialog is. At one extreme: In a situation where you cannot do any useful work until a decision has been made and the dialog has been closed, you can safely go for a modal dialog. A file selector is a typical example and is often implemented as a modal dialog. At the opposite end of the scale, a search dialog is modeless in most cases. Modeless dialogs introduce greater flexibility for end users because they are not forced to work in a specific pattern decided by the developer. The cost for the greater flexibility is that the code required to make a modeless dialog work as intended can be somewhat more complicated. However, if it is possible, you will normally get a better result using modeless dialogs. The standard KDE file selector can be used as a modeless dialog, and a dialog derived from the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class can be either modal or modeless.</P
+><P
+>For a developer, the main differences between modal and modeless dialogs are how the dialog becomes visible and how it can transfer information&#8212;that is, the dialog settings&#8212;to the rest of the program. <A
+HREF="ch08lev1sec3.html#ch08list05"
+>Listing 8.5</A
+> illustrates how the KDE color selector is used as a modal dialog. It is modal because the last argument is <TT
+CLASS="literal"
+>true</TT
+> (line 4 in <A
+HREF="ch08lev1sec3.html#ch08list05"
+>Listing 8.5</A
+>). Every modal dialog must use <TT
+CLASS="literal"
+>QDialog::exec()</TT
+>. This is a method that starts the dialog and returns the result only after the dialog is once again hidden. The <TT
+CLASS="literal"
+>QDialog::exec()</TT
+> on line 8 blocks access to any other part of the program but the dialog while it is active.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list05"
+></A
+><P
+><B
+>Example 8.5. A Modal Dialog Located on the Stack</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: int
+   3&nbsp; 2: getColor( QColor &amp;theColor, QWidget *parent )
+   4&nbsp; 3: {
+   5&nbsp; 4:    KColorDialog dialog( parent, "colordialog", true );
+   6&nbsp; 5:    if( theColor.isValid() )
+   7&nbsp; 6:    {
+   8&nbsp; 7:       dialog.setColor( theColor );
+   9&nbsp; 8:    }
+  10&nbsp; 9:    int result = dialog.exec();
+  11&nbsp;10:    if( result == Accepted )
+  12&nbsp;11:    {
+  13&nbsp;12:       theColor = dialog.color();
+  14&nbsp;13:    }
+  15&nbsp;14:    return result;
+  16&nbsp;15: }
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The dialog state is in this case collected by the <TT
+CLASS="literal"
+>color()</TT
+> method. Note that since the dialog object is stored on the stack, the dialog is automatically destroyed when the function returns. A modal dialog does not have to be located at the stack while it is in use. Many developers prefer the implementation shown in <A
+HREF="ch08lev1sec3.html#ch08list06"
+>Listing 8.6</A
+>. This can be a very important design decision if the dialog object is so large that a stack overflow could otherwise occur. Make sure that the dialog object is removed from memory (as shown on line 20) before the function returns. Otherwise, you will have a memory leak (bug) in your program.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list06"
+></A
+><P
+><B
+>Example 8.6. A Modal Dialog Allocated from the Heap</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: int
+   3&nbsp; 2: getColor( QColor &amp;theColor, QWidget *parent )
+   4&nbsp; 3: {
+   5&nbsp; 4:    KColorDialog *dialog = new KColorDialog( parent, "colordialog", true );
+   6&nbsp; 5:    if( dialog == 0 )
+   7&nbsp; 6:    {
+   8&nbsp; 7:       return Rejected; // Rejected is a constant defined in QDialog
+   9&nbsp; 8:    }
+  10&nbsp; 9:
+  11&nbsp;10:    if( theColor.isValid() )
+  12&nbsp;11:    {
+  13&nbsp;12:       dialog-&gt;setColor( theColor );
+  14&nbsp;13:    }
+  15&nbsp;14:    int result = dialog-&gt;exec();
+  16&nbsp;15:    if( result == Accepted )
+  17&nbsp;16:    {
+  18&nbsp;17:       theColor = dialog-&gt;color();
+  19&nbsp;18:    }
+  20&nbsp;19:
+  21&nbsp;20:    delete dialog; // Important to avoid memory leaks
+  22&nbsp;21:   
+  23&nbsp;22:    return result;
+  24&nbsp;23: }
+  25&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>When you want to use a modeless dialog, you have to do two things. First, you must allocate the dialog object from the heap (with new); second, you must make it visible with <TT
+CLASS="literal"
+>show()</TT
+>. When you call <TT
+CLASS="literal"
+>show()</TT
+> on a dialog, the method starts the dialog and then returns immediately, not waiting for the dialog to be hidden. To avoid a memory leak, you must now store the pointer as well so that you can release the memory occupied by the dialog code when the dialog is no longer needed. <A
+HREF="ch08lev1sec3.html#ch08list07"
+>Listing 8.7</A
+> shows how the <TT
+CLASS="literal"
+>CGotoDialog</TT
+> dialog class (see <A
+HREF="ch08lev1sec2.html#ch08list03"
+>Listing 8.3</A
+>) of KHexEdit is used as a modeless dialog.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list07"
+></A
+><P
+><B
+>Example 8.7. A Modeless Dialog</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: CHexEditorWidget::CHexEditorWidget()
+   3&nbsp; 2: {
+   4&nbsp; 3:   mGotoDialog = 0;
+   5&nbsp; 4: }
+   6&nbsp; 5:
+   7&nbsp; 6: CHexEditorWidget::~CHexEditorWidget()
+   8&nbsp; 7: {
+   9&nbsp; 8:   delete mGotoDialog;
+  10&nbsp; 9: }
+  11&nbsp;10:
+  12&nbsp;11: void
+  13&nbsp;12: CHexEditorWidget::gotoOffset()
+  14&nbsp;13: {
+  15&nbsp;14:   if( mGotoDialog == 0 )
+  16&nbsp;15:   {
+  17&nbsp;16:     mGotoDialog = new CGotoDialog( topLevelWidget(), "goto", false );
+  18&nbsp;17:     if( mGotoDialog == 0 )
+  19&nbsp;18:     {
+  20&nbsp;19:       return;
+  21&nbsp;20:     }
+  22&nbsp;21:     connect( mGotoDialog, SIGNAL(gotoOffset( uint, uint, bool, bool )),
+  23&nbsp;22:            mHexView, SLOT(gotoOffset( uint, uint, bool, bool )) );
+  24&nbsp;23:   }
+  25&nbsp;24:   mGotoDialog-&gt;show();
+  26&nbsp;25: }
+  27&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <TT
+CLASS="literal"
+>mGotoDialog</TT
+> is a pointer stored in the <TT
+CLASS="literal"
+>CHexEditorWidget</TT
+> class, and it is initialized to 0 in the constructor and deleted in the destructor of <TT
+CLASS="literal"
+>CHexEditorWidget</TT
+>. The first time the dialog is used, it is first allocated (line 16) and next started ( with <TT
+CLASS="literal"
+>show()</TT
+> on line 24). Then, the next time it is used, it is only started. The <TT
+CLASS="literal"
+>gotoOffset()</TT
+> function returns immediately after the dialog has been started.</P
+><P
+>When a dialog is modeless, other parts of a program have to be notified when the dialog settings are ready to be used. Because the <TT
+CLASS="literal"
+>show()</TT
+> returns immediately, the dialog must emit a signal to indicate that the data is ready. In <A
+HREF="ch08lev1sec3.html#ch08list07"
+>Listing 8.7</A
+>, the <TT
+CLASS="literal"
+>gotoOffset(&#8230;)</TT
+> signal of the <TT
+CLASS="literal"
+>CGotoDialog</TT
+> class is emitted for this purpose.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch08lev2sec1"
+>8.3.1. Removal of Modeless Dialogs</A
+></H2
+><P
+>How and when can modeless dialogs be removed from memory? First, you must store a pointer to the allocated dialog object. The memory can be released only when the dialog is no longer needed (hidden). This can be done when one of these two criteria is met:</P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>The application terminates or the parent widget is destroyed.</P
+></LI
+><LI
+><P
+>The dialog becomes hidden or is closed.</P
+></LI
+></OL
+><P
+>Option 1 is by far the simplest and is, perhaps, the best way to handle a modeless dialog. It has the advantage that you can easily hide and redisplay a dialog on the same position on the screen (which many users prefer) without extra coding. The biggest disadvantage is that it remains in memory even when it is not visible. Normally, this is done as with the dialog in <A
+HREF="ch08lev1sec3.html#ch08list07"
+>Listing 8.7</A
+>. The dialog object is destroyed in the destructor of the object that stores the pointer to the dialog.</P
+><P
+>Option 2 can be the best option if your dialog can be created quickly or is rarely used. However, if it takes a long time to prepare and set up the dialog and its contents, or if it is a lightweight dialog (uses little memory) or is used frequently, this may not be the best option.</P
+><P
+>You should never delete the dialog from within the dialog code itself. This means that <TT
+CLASS="literal"
+>delete this</TT
+> is never a safe way to do it, unless you know exactly what you do and how the library code you use works. <A
+HREF="ch08lev1sec3.html#ch08list08"
+>Listing 8.8</A
+> illustrates a dangerous attempt to release the memory the Goto dialog has allocated when the Cancel button has been activated.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list08"
+></A
+><P
+><B
+>Example 8.8. This Can Make Your Code Buggy!</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: void
+   3&nbsp;2: CGotoDialog::slotCancel()
+   4&nbsp;3: {
+   5&nbsp;4:   hide();       // Ok, will hide the dialog
+   6&nbsp;5:   delete this;  // Bad!
+   7&nbsp;6: }
+   8&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The problem with this code is that the slot is connected to a signal in the Cancel button. Remember this: When a signal is emitted from an object, it returns only after every slot method it is connected to has finished. If one of these destroys the dialog and thereby the button itself, anything can happen on the return&#8212;and perhaps even before that&#8212;because the internal variables of the button object are no longer valid. The real danger is that it can sometimes work and sometimes it can cause a segmentation fault later.</P
+><P
+>To simplify the destruction procedure, the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class emits a signal, <TT
+CLASS="literal"
+>KDialogBase::hidden()</TT
+>, whenever it receives a <TT
+CLASS="literal"
+>QHideEvent</TT
+> (becomes hidden). You can use this signal to start the destruction process. However, the same restriction applies to the slot function you used to connect to the <TT
+CLASS="literal"
+>hidden()</TT
+> signal in the previous example with the Cancel button. One common solution to avoiding this problem is to activate a one-shot timer with a zero delay. This is a safe method because even with a delay equal to zero, the timer function can be executed only when the program again runs in the main event loop. This can happen only after the signal has returned. <A
+HREF="ch08lev1sec3.html#ch08list09"
+>Listing 8.9</A
+> shows how a modeless option dialog in KJots is destroyed this way. KJots is a KDE utility application that is used to manage short text notes.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list09"
+></A
+><P
+><B
+>Example 8.9. A Secure Way to Remove a Modeless Dialog Object from Memory After It Has Been Hidden</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;1: void
+   3&nbsp;2: KJotsMain::configure()
+   4&nbsp;3: {
+   5&nbsp;4:   if( mOptionDialog == 0 )
+   6&nbsp;5:   {
+   7&nbsp;6:     mOptionDialog = new ConfigureDialog( topLevelWidget(), 0, false );
+   8&nbsp;7:     if( mOptionDialog == 0 )
+   9&nbsp;8:     {
+  10&nbsp;9:       return;
+  11&nbsp;10:     }
+  12&nbsp;11:     connect( mOptionDialog, SIGNAL(hidden()),this,SLOT(configureHide()));
+  13&nbsp;12:     connect( mOptionDialog, SIGNAL(valueChanged()),
+  14&nbsp;13:                 this, SLOT(updateConfiguration()) );
+  15&nbsp;14:   }
+  16&nbsp;15:   mOptionDialog-&gt;show();
+  17&nbsp;16: }
+  18&nbsp;17:
+  19&nbsp;18: void
+  20&nbsp;19: KJotsMain::configureHide()
+  21&nbsp;20: {
+  22&nbsp;21:   QTimer::singleShot( 0, this, SLOT(configureDestroy()) ); // Zero delay
+  23&nbsp;22: }
+  24&nbsp;23:
+  25&nbsp;24: void
+  26&nbsp;25: KJotsMain::configureDestroy()
+  27&nbsp;26: {
+  28&nbsp;27:   if( mOptionDialog != 0 &amp;&amp; mOptionDialog-&gt;isVisible() == false )
+  29&nbsp;28:   {
+  30&nbsp;29:     delete mOptionDialog;
+  31&nbsp;30:     mOptionDialog = 0;
+  32&nbsp;31:   }
+  33&nbsp;32: }
+  34&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>If you think this was a tedious method, then <TT
+CLASS="literal"
+>KDialogBase</TT
+> can help you with this as well. There is a function named <TT
+CLASS="literal"
+>KDialogBase::delayedDestruct()</TT
+> that automates the destruction process. This function will do a <TT
+CLASS="literal"
+>delete this</TT
+> but in a controlled fashion. You can call this function from the slots that normally hide the dialog. Note however that if you have stored a pointer to the dialog object outside the class as in <A
+HREF="ch08lev1sec3.html#ch08list09"
+>Listing 8.9</A
+>, then this pointer becomes a dangerous dangling pointer once the dialog has destroyed itself. You can solve this problem by using the Qt <TT
+CLASS="literal"
+>QGuardedPtr</TT
+> class to protect the external pointer.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev2sec1"
+TITLE="Removal of Modeless Dialogs"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec3"
+TITLE="Dialog Modality&#8212;Modal or Modeless Dialogs"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

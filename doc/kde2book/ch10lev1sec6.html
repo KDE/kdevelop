@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Exercises</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Complex-Function KDE Widgets"
+HREF="ch10.html"/><LINK
+REL="PREVIOUS"
+TITLE="Summary"
+HREF="ch10lev1sec5.html"/><LINK
+REL="NEXT"
+TITLE="Alternative Application Types"
+HREF="ch11.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch11.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch10lev1sec6"
+>10.6. Exercises</A
+></H1
+><P
+>See <A
+HREF="ap-c.html"
+>Appendix C, <SPAN
+CLASS="QUOTE"
+>"Answers,"</SPAN
+></A
+> for the exercise answers.</P
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>10.6.1. <A
+HREF="ch10lev1sec6.html#ch10que01"
+><A
+HREF="appc17.html#ch10ans01"
+>Examine the <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> reference documentation. Modify KSimpleBrowser to turn on Java applet and JavaScript support. Try it out.</A
+></A
+></DT
+><DT
+>10.6.2. <A
+HREF="ch10lev1sec6.html#ch10que02"
+><A
+HREF="appc17.html#ch10ans02"
+>Load an image file into a <TT
+CLASS="literal"
+>QImage</TT
+> instance and perform the following image transformation on an 8-bit color image (try one of the images in $KDEDIR/share/wallpapers): Replace each color in the color table (accessed via <TT
+CLASS="literal"
+>QImage::color()</TT
+>), with</A
+></A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="ch10que01"
+></A
+><B
+>10.6.1. </B
+><A
+HREF="appc17.html#ch10ans01"
+>Examine the <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> reference documentation. Modify KSimpleBrowser to turn on Java applet and JavaScript support. Try it out.</A
+></P
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="ch10que02"
+></A
+><B
+>10.6.2. </B
+><A
+HREF="appc17.html#ch10ans02"
+>Load an image file into a <TT
+CLASS="literal"
+>QImage</TT
+> instance and perform the following image transformation on an 8-bit color image (try one of the images in $KDEDIR/share/wallpapers): Replace each color in the color table (accessed via <TT
+CLASS="literal"
+>QImage::color()</TT
+>), with</A
+></P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;   qRgb (qGray (color), qGray (color), qGray (color));
+   3&nbsp;Display the image.
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev1sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev1sec6"
+TITLE="Exercises"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch10lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch11.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

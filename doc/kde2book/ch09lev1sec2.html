@@ -1,0 +1,579 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Speeding Up Window Updates</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Constructing A Responsive User Interface"
+HREF="ch09.html"/><LINK
+REL="PREVIOUS"
+TITLE="Constructing A Responsive User Interface"
+HREF="ch09.html"/><LINK
+REL="NEXT"
+TITLE="Performing Long Jobs"
+HREF="ch09lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09.html"
+>Prev</A
+> <A
+HREF="ch09lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch09lev1sec2"
+>9.2. Speeding Up Window Updates</A
+></H1
+><P
+>Next, you examine a technique for speeding up window draws that makes use of <TT
+CLASS="literal"
+>QPixmap</TT
+>, an offscreen buffer in which you can draw with <TT
+CLASS="literal"
+>QPainter</TT
+>. The speed increase comes from realizing that many window redraws are invoked from outside the application and not in response to a need to change the contents of the window.</P
+><P
+>The technique works like this: You draw your window contents to an offscreen buffer, a <TT
+CLASS="literal"
+>QPixmap</TT
+>, and then use a bit-block transfer (or <SPAN
+CLASS="QUOTE"
+>"bitblt"</SPAN
+>, pronounced <SPAN
+CLASS="QUOTE"
+>"bit blit"</SPAN
+>) to copy the buffer to the screen. Whenever you need to update the window, but its contents have not changed, you just bitblt the buffer to the screen again. The bit-block transfer operation is much quicker than redrawing the window contents from scratch, and on most PCs and many workstations, it is made even quicker by specialized hardware designed to perform the task (that is, 2D video accelerators). This technique is called <I
+CLASS="emphasis"
+>double-buffering</I
+>.</P
+><P
+>Let's take a look at this technique in action. <A
+HREF="ch09lev1sec2.html#ch09list01"
+>Listings 9.1</A
+> and <A
+HREF="ch09lev1sec2.html#ch09list02"
+>9.2</A
+> present a widget call <TT
+CLASS="literal"
+>KQuickDraw</TT
+>, which demonstrates double-buffering.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list01"
+></A
+><P
+><B
+>Example 9.1. kquickdraw.h: Class Declaration for <TT
+CLASS="literal"
+>KQuickDraw</TT
+>, a Widget That Demonstrates Double-buffering</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KQUICKDRAW_H__
+   3&nbsp; 2: #define __KQUICKDRAW_H__
+   4&nbsp; 3:
+   5&nbsp; 4:
+   6&nbsp; 5: #include &lt;qwidget.h&gt;
+   7&nbsp; 6:
+   8&nbsp; 7: class QPixmap;
+   9&nbsp; 8:
+  10&nbsp; 9: const int NEllipses=1000;
+  11&nbsp;10:
+  12&nbsp;11: /**
+  13&nbsp;12:  * KQuickDraw
+  14&nbsp;13:  * Quickly redraw a window.
+  15&nbsp;14:  **/
+  16&nbsp;15:
+  17&nbsp;16: class KQuickDraw : public QWidget
+  18&nbsp;17: {
+  19&nbsp;18:  public:
+  20&nbsp;19:   KQuickDraw (QWidget *parent, const char *name=0);
+  21&nbsp;20:
+  22&nbsp;21:  protected:
+  23&nbsp;22:   /**
+  24&nbsp;23:    * Repaint the window using a bit-block transfer from the
+  25&nbsp;24:    *  off-screen buffer (a QPixmap). Re-create the pixmap first,
+  26&nbsp;25:    *  if necessary.
+  27&nbsp;26:    **/
+  28&nbsp;27:   void paintEvent (QPaintEvent *);
+  29&nbsp;28:
+  30&nbsp;29:   void resizeEvent (QResizeEvent *);
+  31&nbsp;30:
+  32&nbsp;31:  private:
+  33&nbsp;32:   QPixmap *qpixmap;
+  34&nbsp;33:   bool bneedrecreate;
+  35&nbsp;34:   double x[NEllipses], y[NEllipses];
+  36&nbsp;35:
+  37&nbsp;36: };
+  38&nbsp;37:
+  39&nbsp;38: #endif
+  40&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KQuickDraw</TT
+> displays 1,000 randomly placed ellipses in its content area using a double-buffer method. A flag, <TT
+CLASS="literal"
+>bneedrecreate</TT
+>, is set to <TT
+CLASS="literal"
+>true</TT
+> whenever the window contents need to be re-created. In this program, the window contents need to be re-created (or simply created) when the program first starts and whenever the window is resized. When the window is restored after being minimized, when another window stops obscuring this window, or at other times when paint events are generated, you simply copy (bitblt) the contents of the <TT
+CLASS="literal"
+>QPixmap</TT
+> to the screen.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list02"
+></A
+><P
+><B
+>Example 9.2. kquickdraw.cpp: Class Definition for <TT
+CLASS="literal"
+>KQuickDraw</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qpainter.h&gt;
+   3&nbsp; 2: #include &lt;qpixmap.h&gt;
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;kapp.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: #include "kquickdraw.h"
+   8&nbsp; 7:
+   9&nbsp; 8:
+  10&nbsp; 9: KQuickDraw::KQuickDraw (QWidget *parent, const char *name=0) :
+  11&nbsp;10:   QWidget (parent, name)
+  12&nbsp;11: {
+  13&nbsp;12:   bneedrecreate=true;
+  14&nbsp;13:   qpixmap=0;
+  15&nbsp;14:
+  16&nbsp;15:   for (int i=0; i&lt;NEllipses; i++)
+  17&nbsp;16:     {
+  18&nbsp;17:       x[i]=(kapp-&gt;random()%100)/100.;
+  19&nbsp;18:       y[i]=(kapp-&gt;random()%100)/100.;
+  20&nbsp;19:     }
+  21&nbsp;20:
+  22&nbsp;21:   setBackgroundMode (NoBackground);
+  23&nbsp;22:       
+  24&nbsp;23: }
+  25&nbsp;24: 
+  26&nbsp;25: void
+  27&nbsp;26: KQuickDraw::paintEvent (QPaintEvent *)
+  28&nbsp;27: {
+  29&nbsp;28:
+  30&nbsp;29:   if (bneedrecreate)
+  31&nbsp;30:     {
+  32&nbsp;31:     if (qpixmap!=0)
+  33&nbsp;32:   delete qpixmap;
+  34&nbsp;33:     qpixmap = new QPixmap (width(), height());
+  35&nbsp;34:
+  36&nbsp;35:     QPainter qpainter;
+  37&nbsp;36:     qpainter.begin (qpixmap, this);
+  38&nbsp;37:     qpainter.fillRect (qpixmap-&gt;rect(), white);
+  39&nbsp;38:     qpainter.setBrush (blue);
+  40&nbsp;39:     int w = width()/10;
+  41&nbsp;40:     int h = height()/10;
+  42&nbsp;41:     for (int i=0; i&lt;NEllipses; i++)
+  43&nbsp;42:   qpainter.drawEllipse (x[i]*width(), y[i]*height(), w, h);
+  44&nbsp;43:
+  45&nbsp;44:     bneedrecreate=false;
+  46&nbsp;45:     }
+  47&nbsp;46:
+  48&nbsp;47:   bitBlt (this, 0, 0, qpixmap);
+  49&nbsp;48:
+  50&nbsp;49: }
+  51&nbsp;50:
+  52&nbsp;51: void
+  53&nbsp;52: KQuickDraw::resizeEvent (QResizeEvent *)
+  54&nbsp;53: {
+  55&nbsp;54:   bneedrecreate = true;
+  56&nbsp;55: }
+  57&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Let's look at <TT
+CLASS="literal"
+>paintEvent()</TT
+>; this is where the double-buffering is implemented. Line 29 tests to see whether the pixmap contents need to be re-created and carries out the task if necessary.</P
+><P
+>Here you have used a <TT
+CLASS="literal"
+>QPainter</TT
+> differently than before. Line 36 calls <TT
+CLASS="literal"
+>painter.begin()</TT
+> with two arguments. The first is the <TT
+CLASS="literal"
+>QPixmap</TT
+> on which you wish to draw, and the second is a pointer to the <TT
+CLASS="literal"
+>KQuickDraw</TT
+> widget. Using this form of the <TT
+CLASS="literal"
+>begin()</TT
+> method tells the object <TT
+CLASS="literal"
+>painter</TT
+> to use the default properties of the window when drawing on the pixmap. These default properties are</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>The current pen color</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The background color</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>The default font</P
+></LI
+></UL
+><P
+>Previously, when you have used <TT
+CLASS="literal"
+>QPainter</TT
+>, you have not called the <TT
+CLASS="literal"
+>begin()</TT
+> method at all. Instead, you passed a pointer to the current window to the <TT
+CLASS="literal"
+>QPainter</TT
+> constructor, and the <TT
+CLASS="literal"
+>begin()</TT
+> method was called automatically.</P
+><P
+>Finally, the offscreen pixmap is copied to the screen with the Qt function <TT
+CLASS="literal"
+>bitBlt()</TT
+> in line 47.</P
+><P
+>The <TT
+CLASS="literal"
+>main()</TT
+> function in <A
+HREF="ch09lev1sec2.html#ch09list03"
+>Listing 9.3</A
+> can be used to try out this widget. You can see it running in <A
+HREF="ch09lev1sec2.html#ch09fig01"
+>Figure 9.1</A
+></P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch09list03"
+></A
+><P
+><B
+>Example 9.3. main.cpp: A <TT
+CLASS="literal"
+>main()</TT
+> Function Suitable for Testing <TT
+CLASS="literal"
+>KQuickDraw</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "kquickdraw.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "kquickdrawtest");
+  10&nbsp; 9:   KQuickDraw *kquickdraw = new KQuickDraw (0);
+  11&nbsp;10:
+  12&nbsp;11:   kapplication.setMainWidget (kquickdraw);
+  13&nbsp;12:
+  14&nbsp;13:   kquickdraw-&gt;show();
+  15&nbsp;14:   return kapplication.exec();
+  16&nbsp;15: }
+  17&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch09fig01"
+></A
+><P
+><B
+>Figure 9.1. <TT
+CLASS="literal"
+>kquickdraw</TT
+> updates its window quickly by storing its window contents in an offscreen buffer.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/09fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec1"
+>9.2.1. Experimenting with KQuickDraw</A
+></H2
+><P
+>To get an idea of the difference double-buffering makes, comment out line 29 in <A
+HREF="ch09lev1sec2.html#ch09list02"
+>Listing 9.2</A
+>.</P
+><P
+>This will force <TT
+CLASS="literal"
+>KQuickDraw</TT
+> to re-create the pixmap every time the <TT
+CLASS="literal"
+>paintEvent()</TT
+> method is called. Now turn on opaque moving in KWin using the KDE Control Center. This property is listed under Windows, Properties and is called Display Content in Moving Windows. (Note: while you're at it, turn on Display Content in Resizing Windows, too; you'll use that in a minute.)</P
+><P
+>Now, start KQuickDraw and maximize the window. Then find another window&#8212;a <TT
+CLASS="literal"
+>konsole</TT
+>, for example&#8212;and drag it around. Notice how the slow update gives a <SPAN
+CLASS="QUOTE"
+>"ghosting"</SPAN
+> effect so that a partial second copy of the <TT
+CLASS="literal"
+>konsole</TT
+> window is visible during the move operation. (If you don't see this&#8212;well, then your computer is too fast! Try the experiment again with <TT
+CLASS="literal"
+>NEllipses</TT
+> set to 5000 or 10000. Just don't get the impression that you'll never need double-buffering. First, your users' computers might not be as fast as yours. Second, when you create applications, you may find that you are drawing things that take much longer than drawing ellipses.)</P
+><P
+>Remove the comment from line 29 and try the experiment again. Is it better this time?</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec1"
+TITLE="Experimenting with KQuickDraw"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch09lev2sec2"
+>9.2.2. Flicker-free Updates</A
+></H2
+><P
+>A second advantage exists to using double-buffering. That is, you can avoid some of the <SPAN
+CLASS="QUOTE"
+>"flicker"</SPAN
+> that occurs when you draw multiple objects on a window. This flicker occurs because the scene the user sees may change rapidly as new objects are added to the window.</P
+><P
+>Double-buffering won't help with the other major source of flicker, however. Whenever the <TT
+CLASS="literal"
+>QWidget::update()</TT
+> method is called, it clears the window, by default, to the background color. So the user sees this sequence:</P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>Window contents</P
+></LI
+><LI
+><P
+>Blank window</P
+></LI
+><LI
+><P
+>Window contents</P
+></LI
+></OL
+><P
+>You almost couldn't <I
+CLASS="emphasis"
+>design</I
+> a flicker effect any better. If you are using double-buffering, you are going to overwrite the entire window in one operation (the <TT
+CLASS="literal"
+>bitblt()</TT
+>), so there is no need to clear the window first. You can prevent Qt from clearing the window by calling</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;setBackgroundMode (NoBackground);
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>as shown in line 21.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev2sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev2sec2"
+TITLE="Flicker-free Updates"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch09lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch09lev1sec2"
+TITLE="Speeding Up Window Updates"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09.html"
+>Prev</A
+> <A
+HREF="ch09lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

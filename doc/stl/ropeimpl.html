@@ -1,0 +1,290 @@
+<HTML>
+<HEAD>
+    <TITLE> Rope Implementation Overview</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+<H1> Rope Implementation Overview</h1>
+<P>
+The rope container type included in SGI's version of the STL is based
+loosely on the ropes in the Xerox Cedar environment or C "cords", as
+described in Boehm, Atkinson, and Plass, "Ropes: An Alternative to Strings",
+<I>Software Practice and Experience 25</i>, 12 (Dec 1995), pp. 1315 - 1330.
+<P>
+A rope is represented as a pointer to <TT>_Rope_RopeRep</tt>
+structure, which represents a tree node.
+Every tree node corresponds to a piece of a rope.
+Although we refer to "tree nodes", each such piece can be
+shared between different ropes, or can even be reused in the
+same rope if the corresponding substring is repeated.
+Thus ropes are really represented as directed acyclic graphs.
+Nonetheless, we will continue to refer to trees, since
+that is both the usual case, and more intuitive.
+<P>
+Each tree node contains a size field giving the length of the rope piece,
+a depth field specifying the depth (or height) of the tree rooted at the node, 
+a boolean field indicating whether the subtree has been balanced,
+and a tag field indicating which of the four variants or subclasses
+of <TT>_Rope_RopeRep</tt> is used to represent the list.
+(The balanced bit is really of interest only for concatenation
+tree nodes, see below.)
+<P>
+It would have been possible to use virtual functions and/or RTTI
+to replace the use of the tag field.  We chose not to pursue that route,
+since the tag field can be much smaller than a vtable pointer, and the
+tag based code is probably also faster in this case.
+<P>
+The 4 subclasses of <TT>_Rope_RopeRep</tt> are:
+<OL>
+<LI> (<TT>_Rope_RopeLeaf</tt>)
+Leaves containing string characters.  Short
+ropes are usually represented as a single such node.
+In the case of the standard character type, the actual array
+of characters is <TT>NULL</tt>-terminated to allow fast generation
+of an equivalent C string.
+<LI> (<TT>_Rope_RopeConcatenation</tt>)
+Concatenation nodes.  These have two children <I>left</i>
+and <I>right</i>.  They represent the concatenation of the two
+strings represented by the <I>left</i> and <I>right</i>
+subtrees.  Concatenation of two longer ropes usually
+allocates a new concatenation node which references the two
+ropes to be concatenated.
+<LI> (<TT>_Rope_RopeFunction</tt>)
+Function nodes.  These contain a pointer to a function object
+that can be used to compute sections of the string.  This facility
+makes it possible to manipulate a rope that is computed lazily
+as the pieces are needed.  For example, it is possible to
+treat a file as a rope without
+actually reading in the entire file.  Thus a text editor can represent even
+a 100 MB file being edited as a rope, updating it with standard rope operations,
+while still consuming only very small amount of memory.
+<LI> (<TT>_Rope_RopeSubstring</tt>)
+Substring nodes.
+These contain a pointer to a base rope tree node,
+and a starting position within that rope.
+They denote a substring of the base rope.
+These are generated only
+to represent substrings of ropes that are expensive to compute explicitly.
+The base field never points to a concatenation tree node.
+If the substring operation is applied to either a
+very large leaf node (which can be built by converting a very long
+C string to a rope) or to a function node representing a long string,
+then it produces a substring node.  Substring nodes also contain a pointer
+to a function object that performs the appropriate character extraction.
+They are a subclass
+of function nodes, and a number of operations treat them simply as
+function nodes.  Many uses of ropes will never result in the generation
+of a substring node.  They are however essential for applications that
+use function nodes to lazily evaluate strings.
+</ol>
+<P>
+Only concatenation nodes have nonzero depth fields.  Depth fields are
+guaranteed to fit into a byte, since we impose a static maximum on rope
+depth.
+
+<H2>Reference Counting and Synchronization</h2>
+<P>
+The rope implementation can be compiled in two different ways.
+Normally __GC will not be defined.  In this case each tree node will
+also contain a reference count field.  This keeps track of the
+number of rope variables, concatenation nodes, or substring nodes
+that reference the tree node.  (We'll see later that references
+from some iterators are also included.)
+When the reference count of a tree node becomes zero, the
+tree node is deallocated, and reference counts of any subtrees
+are correspondingly decremented.
+<P>
+In a few cases, the reference counts are also used to allow
+in-place updates of ropes.  If the reference counts of all tree nodes
+on the path from a rope <I>R</i>'s root node to the leaf node <I>L</i> holding
+a specific character are 1, then <I>L</i> occurs exactly once in <I>R</i>,
+and in no other rope.  Thus <I>R</i> can safely be updated by updating
+<I>L</i> in place.
+<P>
+If the rope implementation is compiled with <TT>__GC</tt> defined,
+it will assume that there is an underlying garbage collector and
+inaccessible tree nodes will be automatically reclaimed.
+In this case rope must be instantiated with a suitable garbage-collecting
+allocator, and no reference count is maintained.  Thus the above optimization
+for in-place updates is also not implemented.  Since even non-destructive
+updates copy only portions of a rope, and since many rope clients will
+use them purely as immutable strings, this is often not a serious loss.
+But it may be for some applications.
+<P>
+The remainder of this section assumes that __GC is not defined, and that
+reference counts are used.
+<P>
+Since rope nodes can be shared by different ropes, which can be concurrently
+copied, updated, or destroyed by different threads, reference counts must be
+updated atomically.  This is the only explicit synchronization performed
+by the implementation, since the reference count is the only part of a
+potentially shared data structure that is updated.
+<P>
+The synchronization required for reference count updates may consume a
+significant fraction of the time required for rope operations.
+Reference count updates should be implemented in terms of an atomic
+add operation whenever such an operation is available.
+It is important that the reference count decrement operation not only
+atomically decrement the count, but also return the result as part of
+the atomic operation.  If the zero test is performed outside the atomic
+part of the operation, the same tree node may be deallocated twice.
+<P>
+On Irix and win32 platforms, the current implementation maintains
+reference counts using an atomic add operation.  A more generic
+implementation based on PThread mutexes is also provided.  But it is
+unlikely to provide optimal performance for applications that use
+ropes extensively.
+
+<H2>Allocator Use</h2>
+The rope implementation can use either standard-conforming allocators
+(compiler permitting) or SGI-style simplified allocators.
+In the former case and if there are distinct allocator instances of
+a given allocator type, the allocator instance is stored in each rope
+tree node, as well as in the rope itself.
+It is illegal to concatenate ropes built with different
+allocator instances.
+<P>
+This representation was chosen because it keeps the implementation
+comparatively clean, and the instance-less case reasonably efficient.
+The alternative of storing the allocator instance only in the rope
+would have added additional allocator arguments to many internal
+functions.  It would have been difficult to eliminate this overhead
+for allocator types that do not have distinct instances.
+
+<H2>Basic Algorithms and Rope Balancing</h2>
+Concatenation is normally implemented by allocating a new concatenation
+node, and having it refer to the two arguments to the concatenation
+operation.  Thus in most cases its execution time is independent
+of the length of strings.
+<P>
+The case in which a short rope consisting of a single leaf is concatenated
+onto the right of a rope which is either a leaf, or a concatenation node
+whose right child is a leaf, is handled specially.  In this case, if the
+leaves in question are sufficiently short, we may
+either allocate a new leaf holding the combined contents of the two
+leaves or, under the right circumstances, even update the left operand
+in place.  In order to allow the destructive update,
+the actual arrays holding leaf characters are grown in increments of 8.
+<P>
+For example, the rope "abcedefghigklmnopqrstuvwxy" might be concatenated
+to "z" as shown in the following figure:
+<IMG SRC="concat.gif">
+<P>
+Handling this case specially guarantees that ropes built
+by repeatedly concatenating short strings onto the right will be composed
+of leaves of a minimum size, and thus can be stored and processed
+efficiently.  It has a similar effect on repeated character insertions
+in the same position.
+<P>
+Although concatenation is efficient independent of the shape of the
+tree, some other operations such as retrieving the <I>i</i>th
+character, are more efficient if the tree representing the rope is
+approximately balanced.  Ropes can be rebalanced either via an
+explicit call to the <TT>balance</tt> member function, or
+implicitly as the result of a concatenation.
+Ropes are implicitly rebalanced whenever the depth is in danger of overflowing,
+or the rope both exceeds a smaller depth threshold (currently 20)
+and is below a minimum length (currently 1000).
+<P>
+The balance operation proceeds as described in the paper cited above.
+The operation is non-destructive; rebalanced pieces formerly shared with other
+ropes are no longer shared after the operation.
+As a rope is being balanced, the balanced bit is set in each concatenation
+node that has sufficiently small depth for its length.
+Tree nodes with the balanced bit set are not examined by further
+balancing operations.  Thus the balance
+operation tends to not rebalance the same substring.
+<P>
+The worst-case cost of
+rebalancing is nonetheless linear in the string.
+However, the observed behavior is that rebalancing typically consumes
+a small fraction of the running time.  Indeed, all natural ways of building
+a rope of length <I>N</i> by repeated concatenation require total time
+linear in <I>N</i>.  It is possible, but nontrivial, to design concatenation
+sequences that violate this.
+<P>
+The substring operation is performed differently depending on the tree
+node representing the root of the rope.  The operation is recursive:
+<OL>
+<LI> For a leaf node, we either return a leaf node with the substring,
+or if that would be too long, we return a subscript node.
+<LI> For a concatenation node, we return the concatenation of the appropriate
+substrings of the left and right subtrees.  We stop if we find that we need
+a zero length substring.  Similarly, we simply return a pointer to the
+entire rope when that's appropriate.
+<LI> For a substring node, we either return a short leaf node, or a new
+substring node. referring to the rope from which the original substring
+was obtained.  Thus we do not build up nested substring nodes.
+<LI> Any other function node is treated roughly as a leaf.
+</ol>
+Note that this process requires time proportional to the rope depth, and
+doesn't directly depend on the length.  The algorithm only copies pieces
+of leaf nodes at the beginning and end of the substring, and it builds new
+concatenation nodes along the paths from the root to either end of the
+substring.  The interior of the substring can remain shared with the
+original rope.
+
+<H2>Iterators</h2>
+<P>
+Iterators generated by the normal <TT>begin()</tt> and <TT>end()</tt>
+operations generate const_iterators, i.e. iterators that do not
+permit updates to the underlying rope.  Such iterators basically
+contain three kinds of information:
+<OL>
+<LI> A pointer to the root node of the rope with which the iterator
+is associated.  This pointer is not included in the reference count,
+Const_iterators become invalid if the underlying rope is modified
+or destroyed.  (In the garbage collected case they remain valid and
+continue to refer to the original pre-modification rope.)
+<LI> The position inside the rope.
+<LI> Cached information used to speed up access to sections of the
+rope close to the current position.
+</ol>
+We maintain two kinds of cache information in the iterator:
+<OL>
+<LI> The limits of a contiguous block of storage holding the characters
+surrounding the current character position, and the current offset within
+that block.  Most iterator references can be resolved with access to only
+this part of the cache.  The referenced block of storage can either be part
+of a leaf in the rope representation, or it can be a small block of characters
+reserved inside the iterator itself.  The latter is used when the iterator
+refers to a rope section represented by a function node.
+<LI> The bottom few rope nodes on the path from the root node to the leaf
+or function node currently referenced by the iterator.  This is used to
+quickly increment or decrement the iterator across node boundaries.
+We do not cache the entire path, since that would make rope iterators
+unpleasantly large.
+</ol> 
+<P>
+This implementation differs significantly from that used in the C "cord"
+package.  We do not reserve space inside iterators for a complete path
+from the root to the current node.  This change was made to accommodate
+STL code that assumes small iterators that can be cheaply passed by value.
+We try to aid such code further by providing an iterator assignment
+operation which does not copy the cache part of the iterator unless it has
+been initialized.
+<P>
+The character buffer in the iterator is needed since there is not 
+another place to cache characters returned for the evaluation of
+a function node.  (This is less of an issue with a garbage collector,
+since it turns out to be reasonably efficient to maintain such caches in
+the function object itself.  Without a garbage collector, this requires
+locking around cache accesses, which is usually unacceptable.)
+<P>
+Mutable iterators differ primarily in that they also contain a pointer
+to the rope itself (i.e. a pointer to the tree node pointer), so that they
+can be used to perform updates, and in that the rope root pointer is
+included in the reference count.  In this case the rope root pointer
+is redundant, except that it us used to detect changes in the rope, so that
+the cached information in the iterator can be invalidated.  The rope has changed
+iff the rope itself no longer points to the same node as the rope root
+pointer in the iterator.  The fact that the iterator is included in the
+reference count ensures that the root node cannot be dropped and reused.
+It also prevents the rope from being destructively updated while the
+iterator must remain valid.
+
+</body>

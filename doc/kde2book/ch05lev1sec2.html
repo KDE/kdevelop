@@ -1,0 +1,577 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Helping the User Use Your Application</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="KDE User Interface Compliance"
+HREF="ch05.html"/><LINK
+REL="PREVIOUS"
+TITLE="KDE User Interface Compliance"
+HREF="ch05.html"/><LINK
+REL="NEXT"
+TITLE="Standard Dialog Boxes"
+HREF="ch05lev1sec3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch05.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch05lev1sec2"
+>5.2. Helping the User Use Your Application</A
+></H1
+><P
+>Although you want to try to design an interface that is intuitive, you must accept that sometimes a user just won't get it. For this reason there are ways to provide users with help in varying degrees of detail. The ToolTip provides a few words to nudge a user who is stuck, statusbar messages give a little more information, the <SPAN
+CLASS="QUOTE"
+>"What's This?"</SPAN
+> gives a newer user a more useful explanation of a UI element, and Help files give full explanations of the program for users at all levels.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch05lev2sec5"
+>5.2.1. ToolTips, What's This?, and More</A
+></H2
+><P
+><A
+HREF="ch05lev1sec2.html#ch05list12"
+>Listings 5.12</A
+> and <A
+HREF="ch05lev1sec2.html#ch05list13"
+>5.13</A
+> show how to provide the four types of help just discussed: ToolTips, statusbar messages, What's This? help, and a Help file. This program, <TT
+CLASS="literal"
+>KHelpers</TT
+>, creates an empty client area and provides the user with helpful information about it.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list12"
+></A
+><P
+><B
+>Example 5.12. khelpers.h: Contains a Class Declaration for <TT
+CLASS="literal"
+>KHelpers</TT
+>, a Subclass of <TT
+CLASS="literal"
+>KTMainWindow</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KHELPERS_H__
+   3&nbsp; 2: #define __KHELPERS_H__
+   4&nbsp; 3: 
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5: 
+   7&nbsp; 6: class QPopupMenu;
+   8&nbsp; 7: 
+   9&nbsp; 8: /**
+  10&nbsp; 9:  * KHelpers
+  11&nbsp;10:  * Demonstrates functions of KMenuBar and QPopupMenu.
+  12&nbsp;11:  **/
+  13&nbsp;12: class KHelpers : public KTMainWindow
+  14&nbsp;13: {
+  15&nbsp;14:   Q_OBJECT
+  16&nbsp;15:  public:
+  17&nbsp;16:   /**
+  18&nbsp;17:    * Construct the menubar and fill it with interesting things.
+  19&nbsp;18:    **/
+  20&nbsp;19:   KHelpers (const char *name=0);
+  21&nbsp;20: 
+  22&nbsp;21:  public slots:
+  23&nbsp;22:   /**
+  24&nbsp;23:    * Provide help on menu entries in the statusbar.
+  25&nbsp;24:    **/
+  26&nbsp;25:   void slotMenuEntryHelp (int);
+  27&nbsp;26:
+  28&nbsp;27:   /**
+  29&nbsp;28:    * View a specific HTML Help file.
+  30&nbsp;29:    **/
+  31&nbsp;30:   void slotSpecialHelp();
+  32&nbsp;31: 
+  33&nbsp;32:  protected:
+  34&nbsp;33:   int idfilenew, idfileopen, idfilesave, idfilequit;
+  35&nbsp;34: };
+  36&nbsp;35: 
+  37&nbsp;36: #endif
+  38&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KHelpers</TT
+> is derived from <TT
+CLASS="literal"
+>KTMainWindow</TT
+>, which manages the menu and client area. The client area is just an empty <TT
+CLASS="literal"
+>QLabel</TT
+>, created on line 52 in <A
+HREF="ch05lev1sec2.html#ch05list13"
+>Listing 5.13</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list13"
+></A
+><P
+><B
+>Example 5.13. khelpers.cpp: Contains a Class Definition for <TT
+CLASS="literal"
+>KHelpers</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;stdio.h&gt;
+   3&nbsp; 2: 
+   4&nbsp; 3: #include &lt;qpopupmenu.h&gt;
+   5&nbsp; 4: #include &lt;qToolTip.h&gt;
+   6&nbsp; 5: #include &lt;qwhatsthis.h&gt;
+   7&nbsp; 6: 
+   8&nbsp; 7: #include &lt;kapp.h&gt;
+   9&nbsp; 8: #include &lt;kstddirs.h&gt;
+  10&nbsp; 9: #include &lt;kmenubar.h&gt;
+  11&nbsp;10: 
+  12&nbsp;11: #include "khelpers.moc"
+  13&nbsp;12: 
+  14&nbsp;13: const int HelpMessageTime = 2000;
+  15&nbsp;14: 
+  16&nbsp;15: KHelpers::KHelpers (const char *name) : KTMainWindow (name)
+  17&nbsp;16: {
+  18&nbsp;17:   QPopupMenu *file = new QPopupMenu;
+  19&nbsp;18: 
+  20&nbsp;19:   idfilenew = 
+  21&nbsp;20:     file-&gt;insertItem ("&amp;New");
+  22&nbsp;21:   idfileopen =
+  23&nbsp;22:     file-&gt;insertItem ("&amp;Open&#8230;");
+  24&nbsp;23:   idfilesave =
+  25&nbsp;24:     file-&gt;insertItem ("&amp;Save");
+  26&nbsp;25:   idfilequit =
+  27&nbsp;26:     file-&gt;insertItem ( "&amp;Quit", kapp, SLOT (closeAllWindows()) );
+  28&nbsp;27: 
+  29&nbsp;28:   connect ( file, SIGNAL (highlighted (int)),
+  30&nbsp;29:             this, SLOT (slotMenuEntryHelp (int)) );
+  31&nbsp;30: 
+  32&nbsp;31:   menuBar()-&gt;insertItem ("&amp;File", file);
+  33&nbsp;32: 
+  34&nbsp;33: 
+  35&nbsp;34:   QPopupMenu *help = 
+  36&nbsp;35:     helpMenu ("KHelpers\n"
+  37&nbsp;36:               "Copyright (C) 2000 By Joe Developer\n\n"
+  38&nbsp;37:               "KHelpers demonstrates a few of the ways "
+  39&nbsp;38:               "that your application can provide help to a user.");
+  40&nbsp;39: 
+  41&nbsp;40:   help-&gt;insertSeparator();
+  42&nbsp;41:   help-&gt;insertItem ( "Help on a special topic", this,
+  43&nbsp;42:                      SLOT (slotSpecialHelp()) );
+  44&nbsp;43: 
+  45&nbsp;44:   menuBar()-&gt;insertItem ("&amp;Help, help");
+  46&nbsp;45: 
+  47&nbsp;46:   //Create the statusbar.
+  48&nbsp;47:   statusBar();
+  49&nbsp;48: 
+  50&nbsp;49:   QLabel *clientarea = new QLabel (this);
+  51&nbsp;50:   clientarea-&gt;setBackgroundColor (Qt::white);
+  52&nbsp;51: 
+  53&nbsp;52:   QToolTip::add (clientarea, "Functionless client area");
+  54&nbsp;53:   QWhatsThis::add (clientarea, "This client area doesn't do anything.");
+  55&nbsp;54:   
+  56&nbsp;55: 
+  57&nbsp;56:   setView (clientarea);
+  58&nbsp;57: 
+  59&nbsp;58:   clientarea-&gt;setFocus();
+  60&nbsp;59: 
+  61&nbsp;60: }
+  62&nbsp;61: 
+  63&nbsp;62: 
+  64&nbsp;63: void
+  65&nbsp;64: KHelpers::slotMenuEntryHelp (int id)
+  66&nbsp;65: {
+  67&nbsp;66: 
+  68&nbsp;67:   if (id==idfilenew)
+  69&nbsp;68:     statusBar()-&gt;message("Create a new document.", HelpMessageTime);
+  70&nbsp;69:   else if (id==idfileopen)
+  71&nbsp;70:     statusBar()-&gt;message("Open a file.", HelpMessageTime);
+  72&nbsp;71:   else if (id==idfilesave)
+  73&nbsp;72:     statusBar()-&gt;message("Save the current document.", HelpMessageTime);
+  74&nbsp;73:   else if (id==idfilequit)
+  75&nbsp;74:     statusBar()-&gt;message("Quit the application.", HelpMessageTime);
+  76&nbsp;75: 
+  77&nbsp;76: }
+  78&nbsp;77: 
+  79&nbsp;78: void
+  80&nbsp;79: KHelpers::slotSpecialHelp()
+  81&nbsp;80: {
+  82&nbsp;81:   QString helpfilename (kapp-&gt;name());
+  83&nbsp;82:   helpfilename += "/specialhelp.html";
+  84&nbsp;83: 
+  85&nbsp;84:   kapp-&gt;invokeHTMLHelp (helpfilename, "");
+  86&nbsp;85: }
+  87&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The <TT
+CLASS="literal"
+>main()</TT
+> function in <A
+HREF="ch05lev1sec2.html#ch05list14"
+>Listing 5.14</A
+> can be used to compile <TT
+CLASS="literal"
+>KHelper</TT
+> into an executable.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list14"
+></A
+><P
+><B
+>Example 5.14. main.cpp: Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function That Creates and Executes <TT
+CLASS="literal"
+>KHelpers</TT
+>, an Application Based on <TT
+CLASS="literal"
+>KHelpers</TT
+></B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt; 
+   3&nbsp; 2. #include "khelpers.h"
+   4&nbsp; 3:  
+   5&nbsp; 4: int
+   6&nbsp; 5: main (int argc, char *argv[])
+   7&nbsp; 6:  {
+   8&nbsp; 7:    KApplication kapplication (argc, argv, "khelpers");
+   9&nbsp; 8:    KHelpers *khelpers = new KHelpers;
+  10&nbsp; 9:  
+  11&nbsp;10:    khelpers-&gt;show();
+  12&nbsp;11:    return kapplication.exec();
+  13&nbsp;12: }
+  14&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>This program demonstrate four types of user help: ToolTips, statusbar messages, What's This?, and Help file access.</P
+><P
+>ToolTips are short messages that give a text name or a description of a widget. They appear after the user has held the mouse pointer over a widget for a second or so. The text is usually only a few words. The message <TT
+CLASS="literal"
+>Open a file</TT
+>, for example, might appear over the toolbar button that performs that task. The messages appear in frameless windows. They disappear after the user moves the mouse pointer, and they won't reappear again until the pointer has left the widget and then returned and stayed motionless. See <A
+HREF="ch05lev1sec2.html#ch05fig09"
+>Figure 5.9</A
+> for a screen shot of the <TT
+CLASS="literal"
+>KHelpers</TT
+> window with the ToolTip displayed.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig09"
+></A
+><P
+><B
+>Figure 5.9. <TT
+CLASS="literal"
+>KHelpers</TT
+> gives ToolTip help on the client area.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig09.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>In <TT
+CLASS="literal"
+>KHelpers</TT
+>, you add a ToolTip to the client area widget using the static method <TT
+CLASS="literal"
+>QToolTip::add()</TT
+> in line 52.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig10"
+></A
+><P
+><B
+>Figure 5.10. <TT
+CLASS="literal"
+>KHelpers</TT
+> also gives What's This? help on the client area.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig10.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>What's This? help messages are longer than ToolTips&#8212;up to three paragraphs. They explain in more detail the function of a widget. They are often used to explain elements of dialog boxes (see <A
+HREF="ch08.html"
+>Chapter 8, <SPAN
+CLASS="QUOTE"
+>"Using Dialog Boxes"</SPAN
+></A
+>, for a discussion of dialog boxes).</P
+><P
+>You attach a What's This? help message to the client area in much the same way as you attach the ToolTip. Use the static function <TT
+CLASS="literal"
+>QWhatsThis::add()</TT
+> (line 53). To view the message, the user selects What's This? from the Help menu and then clicks the widget of interest. If a widget can accept the keyboard focus, Shift+F1 displays the What's This? message for the widget with focus. See <A
+HREF="ch05lev1sec2.html#ch05fig10"
+>Figure 5.10</A
+> for a screen shot of <TT
+CLASS="literal"
+>KHelpers</TT
+> displaying What's This? help on the client area.</P
+><P
+>When short messages are not enough and users want to learn how to use your application, they can read the documentation. Documentation is provided in HTML format and is accessible through the standard Help menu entry, Contents. A standard format is used for the HTML documentation, which is described in <A
+HREF="ch15.html"
+>Chapter 15, <SPAN
+CLASS="QUOTE"
+>"Creating Documentation"</SPAN
+></A
+>. A standard directory also exists for the documentation. These and other standard directories are discussed in <A
+HREF="ch07.html"
+>Chapter 7</A
+>.</P
+><P
+>To create the standard Help menu, use the method <TT
+CLASS="literal"
+>KTMainWindow::helpMenu()</TT
+>, as shown on lines 34&#8211;38. You should always use the standard Help menu. You will see that entries have been added to it after adding a separator. This is fine as long as the standard entries are there first.</P
+><P
+>The returned menu has five menu entries:</P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>Contents</P
+><P
+>Starts KHelpCenter, which displays the HTML documentation for <TT
+CLASS="literal"
+>KHelpers</TT
+>.</P
+></LI
+><LI
+><P
+>What's This</P
+><P
+>Enter <SPAN
+CLASS="QUOTE"
+>"What's This?"</SPAN
+> mode.</P
+></LI
+><LI
+><P
+>About <TT
+CLASS="literal"
+>khelpers</TT
+></P
+><P
+>Displays the text passed as the first parameter to <TT
+CLASS="literal"
+>helpMenu()</TT
+>. In general, <TT
+CLASS="literal"
+>khelpers</TT
+> will be replaced with the application's name.</P
+></LI
+><LI
+><P
+>About KDE</P
+><P
+>Displays a standard dialog box describing KDE.</P
+></LI
+><LI
+><P
+>Report bug</P
+><P
+>Report a bug to <A
+HREF="http://bugs.kde.org"
+TARGET="_top"
+>http://bugs.kde.org</A
+>.</P
+></LI
+></OL
+><P
+>To this menu, you append the entry to get <SPAN
+CLASS="QUOTE"
+>"special help."</SPAN
+> Sometimes elements of the UI need special explanation. To demonstrate how to view help on specific topics, add this <SPAN
+CLASS="QUOTE"
+>"special help"</SPAN
+> entry and load the Help file in <TT
+CLASS="literal"
+>slotSpecialHelp()</TT
+>.</P
+><P
+>The Help file is loaded for viewing on line 84. Help files for <TT
+CLASS="literal"
+>KHelpers</TT
+> are stored in the subdirectory <TT
+CLASS="literal"
+>khelpers</TT
+> in the standard Help file directory, so you construct the path <TT
+CLASS="literal"
+>khelpers/ specialhelp.html</TT
+>. Of course, you also need to create the HTML documentation and place it there if you want to view it. Creating documentation is covered in <A
+HREF="ch15.html"
+>Chapter 15</A
+>. (Trying to view the documentation will give an error because the file will not be found.)</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev2sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev2sec5"
+TITLE="ToolTips, What's This?, and More"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev1sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev1sec2"
+TITLE="Helping the User Use Your Application"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch05.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,522 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Complex-Function KDE Widgets</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Advanced KDE Widgets and UI Design Techniques"
+HREF="p02.html"/><LINK
+REL="PREVIOUS"
+TITLE="Exercises"
+HREF="ch09lev1sec5.html"/><LINK
+REL="NEXT"
+TITLE="Manipulating Images"
+HREF="ch10lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch10"
+>Chapter 10. Complex-Function KDE Widgets</A
+></H1
+><P
+><I
+CLASS="emphasis"
+>by David Sweet</I
+></P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN14474"
+></A
+><P
+><B
+>In This Chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch10.html#ch10lev1sec1"
+>Rendering HTML Files</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch10lev1sec2.html"
+>Manipulating Images</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch10lev1sec3.html"
+>Checking Spelling</A
+></I
+></P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+><I
+CLASS="emphasis"
+><A
+HREF="ch10lev1sec4.html"
+>Accessing the Address Book</A
+></I
+></P
+></LI
+></UL
+></DIV
+><P
+>Among the KDE/Qt libraries are classes that support complex functions. Using these classes can help reduce the development time of your application and can make your application function in a way more consistent with other KDE applications.</P
+><P
+>In this chapter we will discuss the following complex functions that are provided by the KDE/Qt libraries:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>HTML page rendering and browsing</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Image file loading, manipulation, and saving of image files in various formats</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Spell checking in many languages</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>KDE system-wide address book access</P
+></LI
+></UL
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch10lev1sec1"
+>10.1. Rendering HTML Files</A
+></H1
+><P
+>Both <TT
+CLASS="literal"
+>konqueror</TT
+> and <TT
+CLASS="literal"
+>khelpcenter</TT
+> need to display HTML pages. <TT
+CLASS="literal"
+>konqueror</TT
+> generates HTML and acts as a Web browser, displaying HTML pages fetched from remote machines or stored locally. The KDE Help files displayed by <TT
+CLASS="literal"
+>khelpcenter</TT
+> are in HTML format (see <A
+HREF="ch15.html"
+>Chapter 15, <SPAN
+CLASS="QUOTE"
+>"Creating Documentation"</SPAN
+></A
+>) and need to be rendered to be viewed.</P
+><P
+>Long ago, it was realized that a single HTML-rendering class could do the job for both applications, and <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> was born. It has since been completely rewritten and now supports HTML 4.0, Java applets, JavaScript, and cascading style sheets (CSS1 and some of CSS2) by the time KDE 2.0 is released.</P
+><P
+>Currently, <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> is used by KMail and KRN for rendering HTML emails and USENET news articles.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch10lev2sec1"
+>10.1.1. A Simple Web Browser</A
+></H2
+><P
+>To show how <TT
+CLASS="literal"
+>KHTMLWidget</TT
+> can be used in an application, let's construct a simple Web browser. When the application&#8212;which we'll call (consistently unimaginatively) KSimpleBrowser&#8212;starts, it displays a short HTML page of instructions telling how to use the application. Then the user can enter the URL of a Web page, such as <A
+HREF="http://www.kde.org"
+TARGET="_top"
+>http://www.kde.org</A
+>, and press Enter to view the page.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list01"
+></A
+><P
+><B
+>Example 10.1. <TT
+CLASS="literal"
+>ksimplebrowser.h:</TT
+> Class Declaration for KSimpleBrowser, a Simple Web Browser</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #ifndef __KSIMPLEBROWSER_H__
+   3&nbsp; 2: #define __KSIMPLEBROWSER_H__
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;ktmainwindow.h&gt;
+   6&nbsp; 5:
+   7&nbsp; 6: class KHTMLPart;
+   8&nbsp; 7:
+   9&nbsp; 8: /**
+  10&nbsp; 9:  * KSimpleBrowser
+  11&nbsp;10:  * A feature-limited Web browser.
+  12&nbsp;11:  **/
+  13&nbsp;12: class KSimpleBrowser : public KTMainWindow
+  14&nbsp;13: {
+  15&nbsp;14:  Q_OBJECT
+  16&nbsp;15:  public:
+  17&nbsp;16:   KSimpleBrowser (const char *name=0);
+  18&nbsp;17:
+  19&nbsp;18:  public slots:
+  20&nbsp;19:   void slotNewURL ();
+  21&nbsp;20:
+  22&nbsp;21:  protected:
+  23&nbsp;22:   KHTMLPart *khtmlpart;
+  24&nbsp;23: };
+  25&nbsp;24:
+  26&nbsp;25: #endif</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KSimpleBrowser</TT
+> is derived from <TT
+CLASS="literal"
+>KTMainWindow</TT
+>. This allows us to add a toolbar containing a line editor for entering a URL (see <A
+HREF="ch10.html#ch10list02"
+>Listing 10.2</A
+>, lines 10&#8211;13) and place an instance of <TT
+CLASS="literal"
+>KHTMLPart</TT
+> in our content area (see <A
+HREF="ch10.html#ch10list02"
+>Listing 10.2</A
+>, lines 16&#8211;24) and have it all managed by <TT
+CLASS="literal"
+>KTMainWindow</TT
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list02"
+></A
+><P
+><B
+>Example 10.2. <TT
+CLASS="literal"
+>ksimplebrowser.cpp:</TT
+> Class Definition for KSimpleBrowser</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;khtmlview.h&gt;
+   3&nbsp; 2: #include &lt;khtml_part.h&gt;
+   4&nbsp; 3:
+   5&nbsp; 4: #include "ksimplebrowser.moc"
+   6&nbsp; 5:
+   7&nbsp; 6: const int URLLined = 1;
+   8&nbsp; 7: KSimpleBrowser::KSimpleBrowser (const char *name=0) :
+   9&nbsp; 8:   KTMainWindow (name)
+  10&nbsp; 9: {
+  11&nbsp;10:
+  12&nbsp;11:   toolBar()-&gt;insertLined ( "", URLLined,
+  13&nbsp;12:                SIGNAL (returnPressed ()),
+  14&nbsp;13:                this, SLOT (slotNewURL ()) );
+  15&nbsp;14:   toolBar()-&gt;setItemAutoSized (URLLined);
+  16&nbsp;15:
+  17&nbsp;16:
+  18&nbsp;17:   khtmlpart = new KHTMLPart (this);
+  19&nbsp;18:   khtmlpart-&gt;begin();
+  20&nbsp;19:   khtmlpart-&gt;write("&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;KSimpleBrowser&lt;/H1&gt;"
+  21&nbsp;20:              "&lt;P&gt;To load a web page, type its URL in the line "
+  22&nbsp;21:              "edit box and press enter.&lt;/P&gt;"
+  23&nbsp;22:              "&lt;/BODY&gt;&lt;/HTML&gt;");
+  24&nbsp;23:   khtmlpart-&gt;end();
+  25&nbsp;24:
+  26&nbsp;25:   setView (khtmlpart-&gt;view());
+  27&nbsp;26: }
+  28&nbsp;27:
+  29&nbsp;28: void
+  30&nbsp;29: KSimpleBrowser::slotNewURL  ()
+  31&nbsp;30: {
+  32&nbsp;31:   khtmlpart-&gt;openURL (toolBar()-&gt;getLinedText (URLLined));
+  33&nbsp;32: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Short isn't it? If you compile and execute this code (using the <TT
+CLASS="literal"
+>main()</TT
+> function given in <A
+HREF="ch10.html#ch10list03"
+>Listing 10.3</A
+>) you'll find that you can view fully rendered HTML pages (including images, tables, and frames) and follow links.</P
+><P
+>In KSimpleBrowser, you use two methods of HTML rendering. The first is to create our HTML on-the-fly. The sequence of statements in lines 17&#8211;23 of <A
+HREF="ch10.html#ch10list02"
+>Listing 10.2</A
+> tells <TT
+CLASS="literal"
+>khtmlpart</TT
+> (an instance of <TT
+CLASS="literal"
+>KHTMLPart</TT
+>) to render the HTML page specified by HTML-marked text. You may call <TT
+CLASS="literal"
+>write()</TT
+> multiple times before calling <TT
+CLASS="literal"
+>end()</TT
+>, but the fewer calls you make, the faster the rendering process will be. The second way to get HTML pages rendered is to instruct <TT
+CLASS="literal"
+>khtmlwpart</TT
+> to open a URL. The URL may be of type <TT
+CLASS="literal"
+>file://</TT
+>, <TT
+CLASS="literal"
+>http://</TT
+>, <TT
+CLASS="literal"
+>ftp://</TT
+>, or any type that points to a valid HTML page. This means that you can load local or remote files using the same techniques. The method <TT
+CLASS="literal"
+>KHTMLPart::openURL()</TT
+>, used in line 30 of <A
+HREF="ch10.html#ch10list02"
+>Listing 10.2</A
+>, loads the Web page. This method returns immediately while the rendering continues in the background.</P
+><P
+>When compiling Listings 10.1&#8211;10.3, you need to  pass the option <TT
+CLASS="literal"
+>-lkhtml</TT
+> to <TT
+CLASS="literal"
+>g++</TT
+>. This tells <TT
+CLASS="literal"
+>g++</TT
+> to link the program against libkhtml, the library that contains <TT
+CLASS="literal"
+>KHTMLPart</TT
+>. <A
+HREF="ch10.html#ch10fig01"
+>Figure 10.1</A
+> shows KSimpleBrowser displaying the initial instructions page.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch10list03"
+></A
+><P
+><B
+>Example 10.3. <TT
+CLASS="literal"
+>main.cpp:</TT
+> A <TT
+CLASS="literal"
+>main()</TT
+> Function that Creates and Executes KSimpleBrowser</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include "ksimplebrowser.h"
+   5&nbsp; 4:
+   6&nbsp; 5: int
+   7&nbsp; 6: main (int argc, char *argv[])
+   8&nbsp; 7: {
+   9&nbsp; 8:   KApplication kapplication (argc, argv, "ksimplebrowser");
+  10&nbsp; 9:
+  11&nbsp;10:   KSimpleBrowser *ksimplebrowser  = new KSimpleBrowser;
+  12&nbsp;11:
+  13&nbsp;12:   ksimplebrowser-&gt;show();
+  14&nbsp;13:
+  15&nbsp;14:   return kapplication.exec();
+  16&nbsp;15: }</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch10fig01"
+></A
+><P
+><B
+>Figure 10.1. KSimpleBrowser displaying the initial instructions page.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/10fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev2sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev2sec1"
+TITLE="A Simple Web Browser"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch10lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch10lev1sec1"
+TITLE="Rendering HTML Files"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch09lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch10lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

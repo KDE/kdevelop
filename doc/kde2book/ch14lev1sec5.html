@@ -1,0 +1,598 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Implementing a StereoEffect</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Multimedia"
+HREF="ch14.html"/><LINK
+REL="PREVIOUS"
+TITLE="Standard Interfaces"
+HREF="ch14lev1sec4.html"/><LINK
+REL="NEXT"
+TITLE="KDE Multimedia Besides MCOP"
+HREF="ch14lev1sec6.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch14lev1sec5"
+>14.5. Implementing a <TT
+CLASS="literal"
+>StereoEffect</TT
+></A
+></H1
+><P
+>After you know how server-side object creation works, what stereo effects are, and how you can get them running, it would be a nice idea to actually do this in an example. Next, let's write something similar to <TT
+CLASS="literal"
+>Example_ADD</TT
+> that works like a <TT
+CLASS="literal"
+>StereoEffect</TT
+>.</P
+><P
+>First, what should it do? I thought it may be useful to emulate the standard options you have for balance at every amplifier: keep stereo as it is, keep left channel only, keep right channel only, reverse channels, and downmix stereo.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec19"
+>14.5.1. IDL Again</A
+></H2
+><P
+>First, you need a representation for these states. That is done best using an enumeration value. So you get the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;artsflow.idl&gt;
+   3&nbsp;enum StereoBalanceState { sbThrough, sbLeftOnly,
+   4&nbsp;              sbRightOnly, sbReverse, sbDownMix };
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Then, you need to make the interface derive from <TT
+CLASS="literal"
+>StereoEffect</TT
+>. Thus, no streams need to be declared at all because <TT
+CLASS="literal"
+>StereoEffect</TT
+> already does this. The interface looks as simple as this:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;interface StereoBalanceControl : Arts::StereoEffect {
+   3&nbsp;    attribute StereoBalanceState balance;
+   4&nbsp;};
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>That's all. Put it into a file balance.idl and invoke <TT
+CLASS="literal"
+>mcopidl</TT
+>:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;<I
+CLASS="emphasis"
+>$ mcopidl -I$KDEDIR/include/arts balance.idl</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec19"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec19"
+TITLE="IDL Again"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec20"
+>14.5.2. The Code</A
+></H2
+><P
+>Now to the implementation. First to the attribute stuff; these are mapped, as I mentioned previously, to two functions: one that changes the value and one that queries it. They are both called <TT
+CLASS="literal"
+>balance</TT
+>. One gets a parameter to set a new value, and one returns the old value. You should also have an internal variable to store the current state (it's called <TT
+CLASS="literal"
+>_balance</TT
+> here), and initialize this properly in the C++ constructor. Up to now, you have the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include "balance.h"
+   3&nbsp;#include &lt;stdsynthmodule.h&gt;
+   4&nbsp;
+   5&nbsp;using namespace Arts;
+   6&nbsp;
+   7&nbsp;class StereoBalanceControl_impl : public
+   8&nbsp;    StereoBalanceControl_skel, StdSynthModule
+   9&nbsp;{
+  10&nbsp;private:
+  11&nbsp;    StereoBalanceState _balance;
+  12&nbsp;public:
+  13&nbsp;    StereoBalanceControl_impl() : _balance(sbThrough) {}
+  14&nbsp;    StereoBalanceState balance()    { return _balance; }
+  15&nbsp;    void balance(StereoBalanceState b) { _balance = b; }
+  16&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The method that is still missing is <TT
+CLASS="literal"
+>calculateBlock</TT
+>. The most important thing to watch here is that the volume doesn't change through our balance control. That means, for downmix (mixing the left and right stereo channels to mono output), you shouldn't simply add everything, but divide by two. The other cases shouldn't be hard to handle. Here is the rest of the code, then, while you are left with some cases to write, too:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;    void calculateBlock(unsigned long samples)
+   3&nbsp;{
+   4&nbsp;        unsigned long i;
+   5&nbsp;        switch (_balance) {
+   6&nbsp;            case sbThrough:
+   7&nbsp;                for(i=0;i&lt;samples;i++)
+   8&nbsp;                {
+   9&nbsp;                    outleft[i] = inleft[i];
+  10&nbsp;                    outright[i] = inright[i];
+  11&nbsp;                }
+  12&nbsp;                break;
+  13&nbsp;            case sbDownMix:
+  14&nbsp;                for(i=0;i&lt;samples;i++)
+  15&nbsp;                {
+  16&nbsp;                    float mix = (inleft[i]+inright[i])/2;
+  17&nbsp;                    outleft[i] = mix;
+  18&nbsp;                    outright[i] = mix;
+  19&nbsp;                }
+  20&nbsp;                break;
+  21&nbsp;            /* exercise : implement the other cases */
+  22&nbsp;        };
+  23&nbsp;    }
+  24&nbsp;};
+  25&nbsp;REGISTER_IMPLEMENTATION(StereoBalanceControl_impl);
+  26&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec20"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec20"
+TITLE="The Code"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec21"
+>14.5.3. Using the Effect</A
+></H2
+><P
+>Because you want to be able to load and use the effect inside the server, put it into a library that can be dynamically loaded. To do so, you'll also create a class definition called StereoBalanceControl.mcopclass, with the following content:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Library=libstereobalancecontrol.la
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Because making is a bit difficult, the following is a makefile again, for making the whole module:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;LIBDIR=$(KDEDIR)/lib
+   3&nbsp;CXX=libtool --mode=compile g++
+   4&nbsp;CXXFLAGS=-I$(KDEDIR)/include/arts
+   5&nbsp;LD=libtool --mode=link g++
+   6&nbsp;LDFLAGS=-module -rpath $(LIBDIR) -L$(LIBDIR) -lartsflow \
+   7&nbsp;                     -lartsflow_idl -lmcop -ldl
+   8&nbsp;CP=libtool --mode=install cp
+   9&nbsp;TARGET=libstereobalancecontrol.la
+  10&nbsp;OBJS=balance.lo balance_impl.lo
+  11&nbsp;
+  12&nbsp;all: $(TARGET)
+  13&nbsp;
+  14&nbsp;install: $(TARGET)
+  15&nbsp;    $(CP) $(TARGET) $(LIBDIR)
+  16&nbsp;    $(CP) StereoBalanceControl.mcopclass $(LIBDIR)
+  17&nbsp;
+  18&nbsp;libstereobalancecontrol.la: $(OBJS)
+  19&nbsp;    $(LD) -o $(TARGET) $(LDFLAGS) $(OBJS)
+  20&nbsp;
+  21&nbsp;balance_impl.lo: balance_impl.cc
+  22&nbsp;    $(CXX) $(CXXFLAGS) -c balance_impl.cc
+  23&nbsp;
+  24&nbsp;balance.lo: balance.cc
+  25&nbsp;    $(CXX) $(CXXFLAGS) -c balance.cc
+  26&nbsp;
+  27&nbsp;balance.cc: balance.idl
+  28&nbsp;    mcopidl $(CXXFLAGS) balance.idl
+  29&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Thus, compilation and installation are simply done with</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;$ <I
+CLASS="emphasis"
+>make</I
+>
+   3&nbsp;$ <I
+CLASS="emphasis"
+>make install</I
+>
+   4&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>although you may need to do the last as root (that is, <TT
+CLASS="literal"
+>su root -c 'make install'</TT
+>). Okay, now you have installed an effect, which should be dynamically loadable into the server. To try it out, <A
+HREF="ch14lev1sec5.html#ch14list04"
+>Listing 14.4</A
+> is a test program:</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch14list04"
+></A
+><P
+><B
+>Example 14.4. Running StereoBalanceControl on the Server</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include "balance.h"
+   3&nbsp; 2: #include &lt;soundserver.h&gt;
+   4&nbsp; 3: #include &lt;stdio.h&gt;
+   5&nbsp; 4:
+   6&nbsp; 5: using namespace Arts;
+   7&nbsp; 6:
+   8&nbsp; 7: void fail(char *why) { printf("%s\n",why); exit(1); }
+   9&nbsp; 8:
+  10&nbsp; 9: int main(int argc, char **argv)
+  11&nbsp; 10: {
+  12&nbsp;11:     if(argc != 2) fail("use two arguments");
+  13&nbsp;12:
+  14&nbsp;13:     Dispatcher dispatcher;
+  15&nbsp;14:     SimpleSoundServer server(Reference("global:Arts_SimpleSoundServer"));
+  16&nbsp;15:     if(server.isNull()) fail("can't connect server");
+  17&nbsp;16:
+  18&nbsp;17:     StereoBalanceControl bcontrol;
+  19&nbsp;18:     bcontrol = DynamicCast(server.createObject("StereoBalanceControl"));
+  20&nbsp;19:     if(bcontrol.isNull()) fail("can't create object");
+  21&nbsp;20:
+  22&nbsp;21:     if(strcmp(argv[1],"downmix") == 0)
+  23&nbsp;22:         bcontrol.balance(sbDownMix);
+  24&nbsp;23:     if(strcmp(argv[1],"through") == 0)
+  25&nbsp;24:         bcontrol.balance(sbThrough);
+  26&nbsp;25:     /* add the others possibilities, if you like */
+  27&nbsp;26:     bcontrol.start();
+  28&nbsp;27:
+  29&nbsp;28:     StereoEffectStack effectstack = server.outstack();
+  30&nbsp;29:     long id=effectstack.insertBottom(bcontrol,"Balance");
+  31&nbsp;30:     printf("type return to quit\n"); getchar();
+  32&nbsp;31:     effectstack.remove(id);
+  33&nbsp;32:     return 0;
+  34&nbsp;33: }
+  35&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Finally, to get that running, do the following: First compile</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;$ <I
+CLASS="emphasis"
+>g++ -o setbalance setbalance.cc  -I$KDEDIR/include/arts</I
+>
+   3&nbsp;<I
+CLASS="emphasis"
+>-L$KDEDIR/lib -lsoundserver_idl -lartsflow -lartsflow_idl</I
+>
+   4&nbsp;<I
+CLASS="emphasis"
+>-lstereobalancecontrol -lmcop -ldl</I
+>
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>That is everything in one line. Then call <TT
+CLASS="literal"
+>ldconfig</TT
+> as root (to get your freshly installed library registered):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;$ <I
+CLASS="emphasis"
+>su root -c 'ldconfig'</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Make sure that something is running on the soundserver (for instance, listen to an MP3 or .wav), and then type</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;$ <I
+CLASS="emphasis"
+>setbalance downmix</I
+>
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>That should downmix the stuff that is played. As you can see, running objects server side is really easy through MCOP. Imagine what the overhead would be like if you needed to transfer all data from the server to the setbalance program, which would do the calculations, and you had to transfer everything back again.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec21"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec21"
+TITLE="Using the Effect"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev1sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev1sec5"
+TITLE="Implementing a StereoEffect"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec4.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec6.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

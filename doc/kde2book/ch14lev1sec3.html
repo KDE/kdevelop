@@ -1,0 +1,1844 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>MCOP</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Multimedia"
+HREF="ch14.html"/><LINK
+REL="PREVIOUS"
+TITLE="A First Glance at Writing Modules"
+HREF="ch14lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Standard Interfaces"
+HREF="ch14lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch14lev1sec3"
+>14.3. MCOP</A
+></H1
+><P
+>MCOP does a number of things for you. What probably impacts the way you work with multimedia objects most is the network transparency every MCOP object gets. You can interact in the same way with MCOP objects whether they are executed in the same process, in a different process on the same computer, or on a different computer.</P
+><P
+>In any case, MCOP objects are more than just C++ objects. So now I'll describe the details you need to know when using MCOP.</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec8"
+>14.3.1. The IDL Language</A
+></H2
+><P
+>The interface definition language (IDL) serves one purpose: defining which interfaces certain objects offer. In contrast to <SPAN
+CLASS="QUOTE"
+>"normal"</SPAN
+> C++ classes you define when programming C++ applications, all interfaces you define in MCOP IDL are supposed to be network transparent.</P
+><P
+>For that reason, it is not possible, for example, to simply make a function in an interface that returns a void-pointer. The same is valid for parameters. Also, you can't simply say, <SPAN
+CLASS="QUOTE"
+>"Well, this function takes a block of data of 1024 bytes,"</SPAN
+> because depending on what you put into that block, the different byte order on different machines would make your interface not work correctly across the network.</P
+><P
+>So what definitions can you actually put into your IDL files?</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+><TT
+CLASS="literal"
+>#include</TT
+> statements that include other .idl files</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Custom data types that are either</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Enumerations&#8212;Such as <TT
+CLASS="literal"
+>enum</TT
+> in C/C++</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Structs&#8212;Such as <TT
+CLASS="literal"
+>struct</TT
+> in C/C++</P
+></LI
+></UL
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Interfaces, which may inherit other interfaces and contain the following:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Methods that work with some well-known types</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Streams, such as audio streams, event streams, or byte streams</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Attributes</P
+></LI
+></UL
+></LI
+></UL
+><P
+>Let's start with <TT
+CLASS="literal"
+>includes</TT
+>. They look like</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;artsflow.idl&gt;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>and will be searched in all paths you gave to <TT
+CLASS="literal"
+>mcopidl</TT
+> with the <TT
+CLASS="literal"
+>-I</TT
+> option. Their purpose is to ensure that <TT
+CLASS="literal"
+>mcopidl</TT
+> knows each type (and can decide if, for instance, <TT
+CLASS="literal"
+>User</TT
+> is an interface, a structure, or an enumeration value). Including files will generate a corresponding <TT
+CLASS="literal"
+>#include</TT
+> in the generated C++ source. That means if example_add.idl includes artsflow.idl, example_add.h will also include artsflow.h.</P
+><P
+>Then, there are the capabilities to define custom data types. The easiest are <I
+CLASS="emphasis"
+>enumeration values</I
+> (with the same syntax as in C++), for instance (taken from core.idl):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;enum MethodType { methodOneway = 1, methodTwoway = 2 };
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Also, very similar to the C++ syntax are <TT
+CLASS="literal"
+>struct</TT
+>s, such as</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;struct User {
+   3&nbsp;    string name, password;
+   4&nbsp;    long uid;
+   5&nbsp;    sequence&lt;string&gt; nicknames; // variable size of nicks
+   6&nbsp;};
+   7&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The simple types you can use are <TT
+CLASS="literal"
+>long</TT
+>, <TT
+CLASS="literal"
+>string</TT
+>, <TT
+CLASS="literal"
+>float</TT
+>, <TT
+CLASS="literal"
+>byte</TT
+>, <TT
+CLASS="literal"
+>boolean</TT
+>, and it is also possible to write <TT
+CLASS="literal"
+>sequence&lt;</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>sometype</TT
+></I
+><TT
+CLASS="literal"
+>&gt;</TT
+> to get a variable size sequence (which roughly corresponds to arrays/pointers in C++).</P
+><P
+>All type concepts are there only to make defining interfaces with methods and attributes possible in a reasonable way. As I said earlier, because any MCOP interface should be network transparent, MCOP must know what types you pass around and how to deal with them.</P
+><P
+>So here is how you do <I
+CLASS="emphasis"
+>interfaces</I
+>, first of all, with simple <I
+CLASS="emphasis"
+>methods</I
+><I
+CLASS="emphasis"
+>:</I
+></P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;interface HelloWorld /* : here you could inherit */ {
+   3&nbsp;    void hello(User toWhichUser, boolean friendly);
+   4&nbsp;};
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As you see, you can pass structures to methods, the same as you can pass normal values. The same is true for the return code. It is also possible to pass object references (simply by specifying the name of an interface as return code or parameter). You can also have <TT
+CLASS="literal"
+>oneway</TT
+> methods, which provide send-and-forget behavior. However, note that calling a <TT
+CLASS="literal"
+>oneway</TT
+> method returns immediately, so you can't rely on the fact that the method is done when your code goes on. Here is a <TT
+CLASS="literal"
+>oneway</TT
+> method:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;oneway void play(string filename); // send-and-forget
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Finally, there are <I
+CLASS="emphasis"
+>attributes</I
+>, which are declared as follows:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;interface Window {
+   3&nbsp;    attribute long width, height, x, y;
+   4&nbsp;    readonly attribute handle;
+   5&nbsp;};
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Here you see that there are two types of attributes: those that can be read and written and those that are read-only. It makes sense that for an X11 window, for instance, the window handle can only be read, whereas the position and size could be modified by writing the attribute. Here is a look at the C++ code necessary to read/write attributes:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Window w;
+   3&nbsp;w.x(10);   // writing (that »means« w.x = 10)
+   4&nbsp;w.y(10);
+   5&nbsp;
+   6&nbsp;// reading
+   7&nbsp;cout &lt;&lt; "moved window " &lt;&lt; w.handle()&lt;&lt; " to "
+   8&nbsp;     &lt;&lt; " pos " &lt;&lt; w.x() &lt;&lt; ", " &lt;&lt; w.y() &lt;&lt; endl;
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Now to the last part&#8212;the most important part, <I
+CLASS="emphasis"
+>streams</I
+>. The syntax for defining streams is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;[ async ] in/out [ multi ] <I
+CLASS="emphasis"
+>type</I
+> stream <I
+CLASS="emphasis"
+>name</I
+> [ , <I
+CLASS="emphasis"
+>name</I
+> &#8230;];
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><A
+HREF="ch14lev1sec3.html#ch14table01"
+>Table 14.1</A
+> explains the stream's syntax.</P
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch14table01"
+></A
+><P
+><B
+>Table 14.1. Defining Streams in the.idl File</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Element</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Description</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>[ async ]</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Used to make a stream asynchronous. Asynchronous streams are those that transfer data only sometimes&#8212;not continuously&#8212;or that can't always produce data when you ask them to. More about that in the section <A
+HREF="ch14lev1sec3.html#ch14lev2sec14"
+><SPAN
+CLASS="QUOTE"
+>"Synchronous versus Asynchronous Streams."</SPAN
+></A
+></TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>in/out</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>This gives the direction of the stream: incoming or outgoing</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>[ multi ]</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Used to say that this stream can accept multiple connections. For instance, if you have a mixer that can mix any number of audio signals, it would have a multi-input stream. There are no multi-out streams.</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>type</TT
+></I
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The data type that gets streamed. Audio is a way to say <TT
+CLASS="literal"
+>float</TT
+>, because all audio data will really be passed around as floats. Not all data types are allowed for streaming</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>stream</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>This means that you want to declare a stream.</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>name</TT
+></I
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>The name of the stream. You can define many streams at once (if they have the same parameters) by giving more than one name here.</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><P
+>The normal streaming type you'll mostly use is <TT
+CLASS="literal"
+>audio</TT
+> (and this is a synchronous stream). Internally, this audio data is represented as <TT
+CLASS="literal"
+>float</TT
+>. Mostly, you'll define streams as shown next:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;interface Synth_MUL : SynthModule {
+   3&nbsp;    in audio stream invalue1,invalue2;
+   4&nbsp;    out audio stream outvalue;
+   5&nbsp;};
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>If you inherit from an interface that already has streams, it may even happen that you don't need to add anything at all; for instance:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;interface StereoFFTScope : StereoEffect {
+   3&nbsp;    readonly attribute sequence&lt;float&gt; scope;
+   4&nbsp;};
+   5&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In this example, appropriate streams are inherited from <TT
+CLASS="literal"
+>StereoEffect</TT
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec8"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec8"
+TITLE="The IDL Language"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec9"
+>14.3.2. Invoking the IDL Compiler</A
+></H2
+><P
+>The IDL compiler is easy to use. It is called as shown next:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;mcopidl <I
+CLASS="emphasis"
+>flags</I
+> file.idl
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>flags</TT
+></I
+> specify the flags used when processing the IDL file. The IDL compiler then creates file.cc and file.h, which contain the necessary classes to enable network transparency, scheduling, and other gimmicks. With the <TT
+CLASS="literal"
+>-I</TT
+> flag, you can add include paths to search. If you want to add multiple paths, use <TT
+CLASS="literal"
+>-I</TT
+> more than once.</P
+><P
+>If you want to integrate an <TT
+CLASS="literal"
+>mcopidl</TT
+> call into the <TT
+CLASS="literal"
+>make</TT
+> process, the following (which can be used to build the example mentioned previously) could be some inspiration:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;MCOPIDL=mcopidl
+   3&nbsp;MCOPINC=-I$(KDEDIR)/include/arts
+   4&nbsp;MCOPLIB=-L$(KDEDIR)/lib -lartsflow -lartsflow_idl -lmcop -ldl
+   5&nbsp;SRCS=example_add.cc example_add_test.cc example_add_impl.cc
+   6&nbsp;
+   7&nbsp;all: example_add_test
+   8&nbsp;
+   9&nbsp;example_add_test: $(SRCS)
+  10&nbsp;    gcc -o example_add_test $(MCOPINC) $(SRCS) $(MCOPLIB)
+  11&nbsp;
+  12&nbsp;example_add.cc: example_add.idl
+  13&nbsp;    $(MCOPIDL) $(MCOPINC) example_add.idl
+  14&nbsp;
+  15&nbsp;example_add.h: example_add.cc
+  16&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Of course, you'll need to adapt that a bit. For Automake, for instance, it's a good idea to put example_add.cc/example_add.h in the metasources section.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec9"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec9"
+TITLE="Invoking the IDL Compiler"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec10"
+>14.3.3. Reference Counting</A
+></H2
+><P
+>When you write</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Synth_PLAY p;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>in your source code, you create a reference to a <TT
+CLASS="literal"
+>Synth_PLAY</TT
+> object, not a <TT
+CLASS="literal"
+>Synth_PLAY</TT
+> object itself. What happens is that as soon as you actually try to use <TT
+CLASS="literal"
+>p</TT
+>, an implementation is created for you. That happens, for instance, as soon as you write</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;p.start();
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Because this is only a reference, writing things such as</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Synth_PLAY q = p;
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>doesn't create a second <TT
+CLASS="literal"
+>Synth_PLAY</TT
+> object, but only makes <TT
+CLASS="literal"
+>q</TT
+> point to the same object as <TT
+CLASS="literal"
+>p</TT
+>. MCOP keeps track of how many references point to a certain object. If this count goes to zero, the object is freed.</P
+><P
+>Thus, you never need to care about pointers when using MCOP objects, and you also don't need the <TT
+CLASS="literal"
+>new</TT
+> or <TT
+CLASS="literal"
+>delete</TT
+> operators.</P
+><P
+>One of the nice things is that this reference counting works even in the distributed case. If you have a server process that hands out an object reference to a client process (for instance, as return code), the object on the server will not be freed, unless the client no longer holds references to the object.</P
+><P
+>MCOP is so smart that it recognizes client crashes. That means if you (as server) create an object specifically for one client and that client doesn't need it anymore (or crashes), the object will be removed.</P
+><P
+>Of course, this works only if you don't hold any references to the object yourself inside the server.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec10"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec10"
+TITLE="Reference Counting"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec11"
+>14.3.4. Initial Object References</A
+></H2
+><P
+>When you have everything&#8212;interface definitions, implementations, and a server (for instance a soundserver), how does the client start talking to the interface?</P
+><P
+>For this problem, the MCOP object manager (which you can access with <TT
+CLASS="literal"
+>ObjectManager::the()</TT
+>) provides these functions:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;class ObjectManager {    // from objectmanager.h
+   3&nbsp;    [&#8230;]
+   4&nbsp;    bool addGlobalReference(Object *object,
+   5&nbsp;         std::string name);
+   6&nbsp;    std::string getGlobalReference(std::string name);
+   7&nbsp;    void removeGlobalReferences();
+   8&nbsp;};
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>With <TT
+CLASS="literal"
+>addGlobalReference</TT
+>, you can say, <SPAN
+CLASS="QUOTE"
+>"I have implemented an object, and everybody can use it under the name&#8230;."</SPAN
+> For instance, the aRts soundserver <TT
+CLASS="literal"
+>artsd</TT
+> makes a <TT
+CLASS="literal"
+>SimpleSoundServer</TT
+> interface available under the name <TT
+CLASS="literal"
+>Arts_SimpleSoundServer</TT
+>.</P
+><P
+>With <TT
+CLASS="literal"
+>getGlobalReference</TT
+>, you can get a string that you can convert into an object reference again. And finally, <TT
+CLASS="literal"
+>removeGlobalReferences</TT
+> can be used to remove all global references you have added.</P
+><P
+>These global references are shared among all MCOP-aware processes. There are currently two strategies of doing so. Either in the /tmp/mcop-<I
+CLASS="emphasis"
+>username</I
+> directory or on the X11 server. Whichever one is used depends on the user's configuration.</P
+><P
+>The following is a very useful shortcut to getting global references:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;SimpleSoundServer server(
+   3&nbsp;    Reference("global:Arts_SimpleSoundServer"));
+   4&nbsp;
+   5&nbsp;if(server.isNull()) { /* error handling */ }
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>After these lines, you can use the <TT
+CLASS="literal"
+>SimpleSoundServer</TT
+> as if it were a local object. For instance, call</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;server.play("/usr/local/share/pling.wav");
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>and your requests will be sent to the <TT
+CLASS="literal"
+>artsd</TT
+> soundserver.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec11"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec11"
+TITLE="Initial Object References"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec12"
+>14.3.5. Accessing Streams</A
+></H2
+><P
+>Most of the time when you're dealing with streams, you'll write <TT
+CLASS="literal"
+>calculateBlock</TT
+> implementations. And most of the time when you write those, they'll access only synchronous audio streams. In that case, the only thing you need to do is to process all samples you read from the streams&#8212;for instance, in one <TT
+CLASS="literal"
+>for</TT
+> loop like the following (from our <TT
+CLASS="literal"
+>Example_ADD</TT
+> from the beginning):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void calculateBlock(unsigned long samples)
+   3&nbsp;{
+   4&nbsp;    unsigned long i;
+   5&nbsp;    for(i=0;i != cycles;i++)
+   6&nbsp;        outvalue[i] = invalue1[i] + invalue2[i];
+   7&nbsp;}
+   8&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As you see, the streams have been mapped to simple <TT
+CLASS="literal"
+>float *</TT
+> pointers by the <TT
+CLASS="literal"
+>mcopidl</TT
+> compiler. In your <TT
+CLASS="literal"
+>calculateBlock</TT
+> function</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>The scheduler will supply you with <TT
+CLASS="literal"
+>samples</TT
+> input values.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>You must fill all output streams exactly with <TT
+CLASS="literal"
+>samples</TT
+> values (if you have nothing to write, write 0.0 values instead).</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>You may not modify the pointer itself.</P
+></LI
+></UL
+><P
+>For multiple input streams (which are declared with the <TT
+CLASS="literal"
+>multi</TT
+> keyword in the IDL), the mapping isn't <TT
+CLASS="literal"
+>float *</TT
+>, but <TT
+CLASS="literal"
+>float **</TT
+>. When <TT
+CLASS="literal"
+>calculateBlock</TT
+> is called, the <TT
+CLASS="literal"
+>float **</TT
+> will point to an array of <TT
+CLASS="literal"
+>float *</TT
+> buffers, and the end is marked by a null pointer. So you can use a code fragment like that to process multi-input streams:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void calculateBlock(unsigned long samples)
+   3&nbsp;{
+   4&nbsp;    float *inp;
+   5&nbsp;    for(int sig=0;(inp = invalue[sig]) != 0;sig++)
+   6&nbsp;    {
+   7&nbsp;        /* process input from inp here */
+   8&nbsp;    }
+   9&nbsp;}
+  10&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Here, the same rules as those for single streams apply, with the addition that</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Your code should handle the case in which no input at all is connected to the multi-input stream properly, as well.</P
+></LI
+></UL
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec12"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec12"
+TITLE="Accessing Streams"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec13"
+>14.3.6. Module Initialization</A
+></H2
+><P
+>Module initialization and deinitialization happens through a number of ways. They are chronologically listed here. As most modules don't need all the initialization facilities provided by the <TT
+CLASS="literal"
+>SynthModule</TT
+> interface, a small class has been written that implements all of them as empty methods. Thus, you can rewrite only the parts you need while leaving, for instance, <TT
+CLASS="literal"
+>streamStart()</TT
+> untouched/empty. It is called <TT
+CLASS="literal"
+>StdSynthModule</TT
+>, and it gets used through inheritance, such as the following (example from synth_add_impl.cc):</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include "stdsynthmodule.h"
+   3&nbsp;using namespace Arts;
+   4&nbsp;class Synth_ADD_impl :public Synth_ADD_skel, StdSynthModule
+   5&nbsp;[&#8230;]
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec1"
+>14.3.6.1. C++ Constructor</A
+></H3
+><P
+>First, , there is the traditional C++ <I
+CLASS="emphasis"
+>constructor</I
+>. You can use this as always&#8212;to allocate resources that your module will need in any case, to initialize members with certain values, and so on.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec1"
+TITLE="C++ Constructor"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec2"
+>14.3.6.2. Attributes</A
+></H3
+><P
+>Later on, the user of the module (or some automatic mechanism, such as the flowgraph based initialization <TT
+CLASS="literal"
+>artsbuilder</TT
+> will do) will set the attributes. You should accept all changes there in any order. For instance, if your module relies on a <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>filename</TT
+></I
+> attribute and a <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>format</TT
+></I
+> attribute, it is a valid usage of your module, first to set the <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>filename</TT
+></I
+>, then the <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>format</TT
+></I
+>, and then choose another <I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>filename</TT
+></I
+> again. Also, querying your attributes at that phase should return sensible values. <TT
+CLASS="literal"
+>artsbuilder</TT
+> will provide some RAD-like component development, so your modules should be configurable gracefully and fully over the attributes (and not over special initialization functions).</P
+><P
+>Setting and getting attributes is valid at any point in time between the constructor and destructor, especially while the module is running.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec2"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec2"
+TITLE="Attributes"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec3"
+>14.3.6.3. <TT
+CLASS="literal"
+>streamInit</TT
+></A
+></H3
+><P
+>After all attributes have been set completely, the <TT
+CLASS="literal"
+>streamInit()</TT
+> function is called (before your module is started). In that function, you should do all that is necessary before actually starting. For some modules, a difference exists between that initialization phase and actually starting. For example, consider the sound card I/O. In the <TT
+CLASS="literal"
+>streamInit()</TT
+> function, it opens the sound card, sets the parameters, allocates the buffers, and prepares anything.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec3"
+TITLE="streamInit"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec4"
+>14.3.6.4. <TT
+CLASS="literal"
+>streamStart</TT
+></A
+></H3
+><P
+>Finally , in <TT
+CLASS="literal"
+>streamStart()</TT
+> only the last bit is done. In the case of our sounddriver, only the <TT
+CLASS="literal"
+>IOManager</TT
+> registration is done, which actually causes writing. The idea is that initialize should do all operations that may take longer (for instance, allocating and filling a 16KB buffer may, under ugly circumstances, take longer because it needs to get swapped in first). On the other hand, registering an I/O watch should be fast. After <TT
+CLASS="literal"
+>streamStart()</TT
+> has been called, the module will be ready to go. The <TT
+CLASS="literal"
+>calculateBlock</TT
+> function gets called as soon as the scheduler thinks it is necessary.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec4"
+TITLE="streamStart"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec5"
+>14.3.6.5. <TT
+CLASS="literal"
+>streamEnd</TT
+></A
+></H3
+><P
+>Finally , when your module gets stopped, <TT
+CLASS="literal"
+>streamEnd()</TT
+> is called. That function should undo all effects caused by <TT
+CLASS="literal"
+>streamStart()</TT
+> and <TT
+CLASS="literal"
+>streamInit()</TT
+>. Note that the scheduler may decide not to free your module immediately, but to fill it with new attributes and use it again for some other task. Therefore, don't do things in the constructor/destructor that really belong to <TT
+CLASS="literal"
+>streamInit()</TT
+>/<TT
+CLASS="literal"
+>streamEnd()</TT
+>.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec5"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec5"
+TITLE="streamEnd"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H3
+CLASS="section"
+><A
+NAME="ch14lev3sec6"
+>14.3.6.6. C++ Destructor</A
+></H3
+><P
+>Eventually, when everything is done, the C++ destructor gets called, where you can free things you have set up in the constructor.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev3sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev3sec6"
+TITLE="C++ Destructor"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec13"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec13"
+TITLE="Module Initialization"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec14"
+>14.3.7. Synchronous Versus Asynchronous Streams</A
+></H2
+><P
+>Synchronous streams are used whenever samples are happening at periodic time intervals and your module can, when given a certain amount of input, guarantee producing the same amount of output. For most modules, such as those that add signals or process them with other calculations, this should be no problem. However, modules that depend on external resources, such as the piano player that generates the MIDI events or the network connection that supplies the data, can't make such guarantees.</P
+><P
+>The same can be true for consuming data as well. Modules that depend on the external network connection to receive everything they send can make only limited guarantees that the data you feed into them really disappears.</P
+><P
+>Thus, asynchronous streams offer a greater amount of control. They send around the data in packets. The basic idea is this: the sender sends packets, and the receiver receives packets and acknowledges when they have been processed completely (see <A
+HREF="ch14lev1sec3.html#ch14fig05"
+>Figure 14.5</A
+>).</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch14fig05"
+></A
+><P
+><B
+>Figure 14.5. How asynchronous streaming works.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/14fig05.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>There are now two basic forms of behavior for a sender: <I
+CLASS="emphasis"
+>push delivery</I
+> and <I
+CLASS="emphasis"
+>pull delivery</I
+>.</P
+><P
+>Push delivery occurs when the sender only casually generates a data packet. This is true, for instance, for a MIDI receiver connected to an external MIDI keyboard. Events are generated only when the human player plays some notes. The MIDI sender can assume that in this case it can simply put things into packets and the receiver should be able to process what it gets in time.</P
+><P
+>The API for doing so is simple: suppose the stream is called <TT
+CLASS="literal"
+>outdata</TT
+>, and the datatype that is being sent is <TT
+CLASS="literal"
+>byte</TT
+>:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;DataPacket&lt;mcopbyte&gt; *packet;
+   3&nbsp;packet = outdata.allocPacket(15);  // alloc 15 bytes
+   4&nbsp;strcpy((char *)packet-&gt;contents,"Hello World");
+   5&nbsp;packet-&gt;size = strlen("Hello World");
+   6&nbsp;packet-&gt;send();
+   7&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>As you can see, you can shrink the size of the data sent after allocating the packet. The purpose of this is that you can use system functions such as <TT
+CLASS="literal"
+>read()</TT
+> or <TT
+CLASS="literal"
+>write()</TT
+>, for instance, directly on the buffer inside the data packet and, after that, decide how many of these bytes should be sent. Sending data packets with zero length frees them immediately.</P
+><P
+>Now to the other case, that happens if you want to send a sample stream of bytes asynchronously from inside an application (such as the game Quake) to the soundserver. There you want synchronization with the receiver; that is, you want to send packets only as fast as the receiver processes them.</P
+><P
+>Push delivery works like that: you get calls from the scheduler when you should produce packets. To initialize the process, you ask the scheduler to prepoll <I
+CLASS="emphasis"
+>x</I
+> packets with the size <I
+CLASS="emphasis"
+>y</I
+>. Then it will ask you <I
+CLASS="emphasis"
+>x</I
+> times to fill such a packet. They are sent to the receiver(s). When they have processed them, they will come back, and you will be asked to refill the packets.</P
+><P
+>Starting the process happens with something like the following:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;outdata.setPull(8, 1024);
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>After that call, you'll be asked eight times to refill a packet of 1024 bytes. These packets will be sent to the receiver(s). After they have processed the packets, you'll get new requests to refill packets. Thus, the only thing you need to get this working is a refill routine:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void request_outdata(DataPacket&lt;mcopbyte&gt; *packet)
+   3&nbsp;{
+   4&nbsp;    packet-&gt;size = 1024;
+   5&nbsp;    for(int i = 0;i &lt; 1024; i++)
+   6&nbsp;        packet-&gt;contents[i] = (mcopbyte)'A';
+   7&nbsp;    packet-&gt;send();
+   8&nbsp;}
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>and that is it.</P
+><P
+>For the receiver, things are even simpler. As soon as it gets packets, the <TT
+CLASS="literal"
+>process_</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>streamname</TT
+></I
+> function is called, and it should call <TT
+CLASS="literal"
+>packet-&gt;process</TT
+> as soon as it is really done processing a packet. A process function for a byte stream that prints everything to <TT
+CLASS="literal"
+>stdout</TT
+> would be:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void process_indata(DataPacket&lt;mcopbyte&gt; *inpacket)
+   3&nbsp;{
+   4&nbsp;    char *instring = (char *)inpacket-&gt;contents;
+   5&nbsp;    for(int i=0;i&lt;inpacket-&gt;size;i++)
+   6&nbsp;        putchar(instring[i]);
+   7&nbsp;    inpacket-&gt;processed();
+   8&nbsp;}
+   9&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>The receiver may delay the process called and do it some time after the <TT
+CLASS="literal"
+>process_</TT
+><I
+CLASS="emphasis"
+><TT
+CLASS="literal"
+>streamname</TT
+></I
+> function, as well, if that is when the packet is really processed.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec14"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec14"
+TITLE="Synchronous Versus Asynchronous Streams"/></TABLE
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="ch14lev2sec15"
+>14.3.8. Connecting Objects</A
+></H2
+><P
+>Objects can be connected with the <TT
+CLASS="literal"
+>connect()</TT
+> function, which is declared in connect.h. The concept of default ports plays a certain role here. The standard syntax for connect is</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;connect(from_object, from_port, to_object, to_port);
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>However, this can be simplified when the objects have suitable default ports. For instance, all objects with only one incoming/outgoing stream default to using them in connect, so that the following connect operations are the same:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;Synth_FREQUENCY freq;
+   3&nbsp;Synth_WAVE_SIN wave;
+   4&nbsp;connect(freq,"pos",wave,"pos");
+   5&nbsp;connect(freq,wave);
+   6&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>For modules with more than one port, default ports usually work as well (for example, <TT
+CLASS="literal"
+>Synth_PLAY</TT
+> with <TT
+CLASS="literal"
+>invalue_left</TT
+> and <TT
+CLASS="literal"
+>invalue_right</TT
+> defaults to using both as default ports). You can find exactly which modules they are for with the help of the IDL files.</P
+><P
+>Under the <TT
+CLASS="literal"
+>node()</TT
+>/<TT
+CLASS="literal"
+>_node()</TT
+> accessor of every <TT
+CLASS="literal"
+>SynthModule</TT
+> is a more complete API for modules. There, the <TT
+CLASS="literal"
+>connect</TT
+>/<TT
+CLASS="literal"
+>disconnect</TT
+>/<TT
+CLASS="literal"
+>start</TT
+>/<TT
+CLASS="literal"
+>stop</TT
+> functions are defined. At the time of this writing, MCOP is still a work in progress. Probably, disconnect and stop will be available soon under <TT
+CLASS="literal"
+>stop()</TT
+> like <TT
+CLASS="literal"
+>start()</TT
+> and <TT
+CLASS="literal"
+>disconnect()</TT
+> similar to <TT
+CLASS="literal"
+>connect()</TT
+> with default ports and anything else.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev2sec15"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev2sec15"
+TITLE="Connecting Objects"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch14lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch14lev1sec3"
+TITLE="MCOP"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch14lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch14lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,662 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Standard Dialog Boxes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="KDE User Interface Compliance"
+HREF="ch05.html"/><LINK
+REL="PREVIOUS"
+TITLE="Helping the User Use Your Application"
+HREF="ch05lev1sec2.html"/><LINK
+REL="NEXT"
+TITLE="Summary"
+HREF="ch05lev1sec4.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch05lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch05lev1sec3"
+>5.3. Standard Dialog Boxes</A
+></H1
+><P
+>KDE offers several dialog boxes for common tasks, as described in <A
+HREF="ch05lev1sec3.html#ch05table02"
+>Table 5.2</A
+>.</P
+><DIV
+CLASS="table"
+><HR/><A
+NAME="ch05table02"
+></A
+><P
+><B
+>Table 5.2. Dialog Boxes Available for Common Tasks</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Dialog Box</I
+></TH
+><TH
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><I
+CLASS="emphasis"
+>Task</I
+></TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KFileDialog</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Selecting a file</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KFontDialog</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Selecting a font</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KColorDialog</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Selecting a color</TD
+></TR
+><TR
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="literal"
+>KMessageBox</TT
+></TD
+><TD
+WIDTH="50%"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Displaying a short message</TD
+></TR
+></TBODY
+></TABLE
+><HR/></DIV
+><P
+>Other dialog boxes are available, but they are more complex or more specialized and thus are discussed elsewhere (see <A
+HREF="ch06.html"
+>Chapters 6</A
+>, <A
+HREF="ch08.html"
+>8</A
+>, and <A
+HREF="ch10.html"
+>10</A
+>).</P
+><P
+>Using these dialog boxes makes it easier to perform the common tasks of requesting file names, fonts, and so on from the user. More importantly, it makes providing answers to these questions for your application the same as for any other. Thus, if you use these dialog boxes, the user will have less new material to learn to use your application.</P
+><P
+>In the following program (<A
+HREF="ch05lev1sec3.html#ch05list15"
+>Listing 5.15</A
+>), named kstandarddialogs by the call to <TT
+CLASS="literal"
+>KApplication</TT
+> on line 10, you see how easily the dialog boxes previously listed can be used. They all provide static methods for retrieving precisely the information you are interested in without instantiating the class, but they may also be subclassed so that their functionality can be altered or extended.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch05list15"
+></A
+><P
+><B
+>Example 5.15. main.cpp: Contains a <TT
+CLASS="literal"
+>main()</TT
+> Function That Demonstrates Various KDE and Qt Dialog Boxes</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;kapp.h&gt;
+   3&nbsp; 2: #include &lt;kfiledialog.h&gt;
+   4&nbsp; 3: #include &lt;kfontdialog.h&gt;
+   5&nbsp; 4: #include &lt;kcolordlg.h&gt;
+   6&nbsp; 5: #include &lt;kmessagebox.h&gt;
+   7&nbsp; 6: 
+   8&nbsp; 7: int
+   9&nbsp; 8: main (int argc, char *argv[])
+  10&nbsp; 9: {
+  11&nbsp;10:   KApplication kapplication (argc, argv, "kstandarddialogs");
+  12&nbsp;11: 
+  13&nbsp;12:   if (KMessageBox::
+  14&nbsp;13:       warningContinueCancel (0, "Are you sure you want to see this demo?",
+  15&nbsp;14:                              "Demo program", "See demo") ==
+  16&nbsp;15:       KMessageBox::Cancel)
+  17&nbsp;16:     exit (0);
+  18&nbsp;17: 
+  19&nbsp;18:   QString filename = KFileDialog::getOpenFileName ();
+  20&nbsp;19: 
+  21&nbsp;20:   if (filename != "")
+  22&nbsp;21:     {
+  23&nbsp;22:       QString message;
+  24&nbsp;23:       message.sprintf ("The file you selected was \"/home/dsweet/KDE/BOOK/CH05/KStandardDialogs/main.cpp\,   // \&gt;%s\".",
+  25&nbsp;24:                        (const char *)filename);
+  26&nbsp;25:       
+  27&nbsp;26:       KMessageBox::information (0, message, "File selected");
+  28&nbsp;27:     }
+  29&nbsp;28: 
+  30&nbsp;29:   QFont qfont;
+  31&nbsp;30:   if (KFontDialog::getFont (qfont))
+  32&nbsp;31:     {
+  33&nbsp;32:       QString message;
+  34&nbsp;33:       message.sprintf ("Sorry, but you selected \%d point %s\"",
+  35&nbsp;34:                        qfont.pointSize(),
+  36&nbsp;35:                        (const char *) qfont.family());
+  37&nbsp;36: 
+  38&nbsp;37: 
+  39&nbsp;38:       KMessageBox::sorry (0, message, "Font selected");
+  40&nbsp;39:     }
+  41&nbsp;40: 
+  42&nbsp;41:   QColor qcolor;
+  43&nbsp;42:   if (KColorDialog::getColor (qcolor))
+  44&nbsp;43:     {
+  45&nbsp;44:       QString message;
+  46&nbsp;45:       message.sprintf ("Oh no! The color you selected "
+  47&nbsp;46:                        "was (R,G,B)=(%d,%d,%d).",
+  48&nbsp;47:                        qcolor.red(), qcolor.green(), qcolor.blue());
+  49&nbsp;48:       
+  50&nbsp;49:       KMessageBox::error (0, message, "Error:  Color selected");
+  51&nbsp;50:     }      
+  52&nbsp;51:   
+  53&nbsp;52:  return 0;
+  54&nbsp;53: }
+  55&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>You have used all these dialog boxes from <TT
+CLASS="literal"
+>main()</TT
+>. No need exists to create a main widget or even start the application. All these dialog boxes are modal, which means that they have their own local event loops. (Before you can display a window, you still need to create a <TT
+CLASS="literal"
+>KApplication</TT
+> so that it can perform some initialization, however.)</P
+><P
+>Each of the dialog boxes, except for <TT
+CLASS="literal"
+>KMessageBox,</TT
+> works in basically the same way. You can call a static method to start the dialog box and you are given back the object selected by the user.</P
+><P
+><TT
+CLASS="literal"
+>KFileDialog</TT
+> has three static methods that you will often find useful:</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>getOpenFileName()</TT
+>&#8212;Ask for the name of a file to open.</P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>getSaveFileName()</TT
+>&#8212;Ask for the name of a file to save.</P
+></LI
+><LI
+STYLE="list-style-type: none"
+><P
+><TT
+CLASS="literal"
+>getExistingDirectory()</TT
+>&#8212;Ask for the name of a directory.</P
+></LI
+></UL
+><P
+>These methods return a <TT
+CLASS="literal"
+>QString</TT
+> containing the filename or an empty string if no filename was chosen (that is, the user clicked the Cancel button). See line 18 for usage and <A
+HREF="ch05lev1sec3.html#ch05fig11"
+>Figure 5.11</A
+> for a screen shot of the file selector dialog box.</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>To use <TT
+CLASS="literal"
+>KFileDialog</TT
+> you must link your program with <TT
+CLASS="literal"
+>-lkfile</TT
+>. The other dialog boxes covered here are in part of the standard libraries.</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig11"
+></A
+><P
+><B
+>Figure 5.11. KStandardDialogs uses <TT
+CLASS="literal"
+>KFileDialog</TT
+> to let the user choose a file.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig11.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+>The method <TT
+CLASS="literal"
+>KFontDialog::getFont()</TT
+>, used on line 30, takes a <TT
+CLASS="literal"
+>QFont</TT
+> object as an argument and fills it with the font chosen by the user. If the user cancels the operation, <TT
+CLASS="literal"
+>getFont()</TT
+> returns the constant <TT
+CLASS="literal"
+>Qt::Rejected</TT
+>. See <A
+HREF="ch05lev1sec3.html#ch05fig12"
+>Figure 5.12</A
+> for a screen shot of the font selector dialog box.</P
+><P
+>The color selector works just like the font selector. The method<TT
+CLASS="literal"
+> KFontDialog::getColor()</TT
+>, used on line 42, takes a <TT
+CLASS="literal"
+>QColor</TT
+> object as an argument and fills it with the color chosen by the user. The method returns <TT
+CLASS="literal"
+>Qt::Rejected</TT
+> if the user clicks the Cancel button (see <A
+HREF="ch05lev1sec3.html#ch05fig13"
+>Figure 5.13</A
+>).</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig12"
+></A
+><P
+><B
+>Figure 5.12. KStandardDialogs uses <TT
+CLASS="literal"
+>KFontDialog</TT
+> to let the user choose a font.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig12.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig13"
+></A
+><P
+><B
+>Figure 5.13. KStandardDialogs uses <TT
+CLASS="literal"
+>KColorDialog</TT
+> to let the user choose a color.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig13.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><P
+><TT
+CLASS="literal"
+>KMessageBox</TT
+> can display several types of messages:</P
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KMessageBox::warningContinueCancel()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Displays a warning dialog box and gives the user the option to continue with the operation or cancel it. The final argument to this method is the text string that will be placed on the Continue button. In this sample program, you ask users whether they would really like to see the demo, and you put See Demo on the Continue button.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig14"
+></A
+><P
+><B
+>Figure 5.14. <TT
+CLASS="literal"
+>KMessageBox::warningContinueCancel()</TT
+> displays this style dialog box.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig14.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KMessageBox::information()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Tells the user something informative, but not related to an error (see <A
+HREF="ch05lev1sec3.html#ch05fig15"
+>Figure 5.15</A
+>)</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig15"
+></A
+><P
+><B
+>Figure 5.15. <TT
+CLASS="literal"
+>KMessageBox::information()</TT
+> displays this style dialog box.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig15.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KMessageBox::sorry()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Tells the user that some requested action is not allowed (see <A
+HREF="ch05lev1sec3.html#ch05fig16"
+>Figure 5.16</A
+>).</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig16"
+></A
+><P
+><B
+>Figure 5.16. <TT
+CLASS="literal"
+>KMessageBox::sorry()</TT
+> displays this style dialog box.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig16.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="informalexample"
+><HR/><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;KMessageBox::error()
+   3&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>Tells the user that some error has occurred in the execution of a task (see <A
+HREF="ch05lev1sec3.html#ch05fig17"
+>Figure 5.17</A
+>).
+</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch05fig17"
+></A
+><P
+><B
+>Figure 5.17. <TT
+CLASS="literal"
+>KMessageBox::error()</TT
+> displays this style dialog box.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/05fig17.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch05lev1sec3"/></TD
+></TR
+><ANNOTATION
+NAME="ch05lev1sec3"
+TITLE="Standard Dialog Boxes"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch05lev1sec2.html"
+>Prev</A
+> <A
+HREF="ch05lev1sec4.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

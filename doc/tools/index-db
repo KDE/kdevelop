@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+# I freely admit that this program sucks :-)
+# Feel free to rewrite it with a real xml parser
+
+use Getopt::Long;
+
+GetOptions( 'title=s' => \$title,
+            'base=s'  => \$base ) || die "Wrong options\n";
+
+print "<!DOCTYPE gideonindex>\n";
+print "<gideonindex>\n";
+print "<title>$title</title>\n";
+print "<base href=\"$base\"/>\n";
+print "<conceptindex>\n";
+
+for $file (@ARGV) {
+
+        open(FILE, $file) || die "Could not open file: $file\n";
+
+        while (<FILE>) {
+                if (/\<section\s+id=\"(ch.*lev1sec.*)\"\>/) {
+                        $url = $1;
+                        if ($url =~ /ch(.*)lev1sec1/) {
+                                $url = "ch$1";
+                        }
+                }
+
+                while (/\<indexterm\>\<primary\>([^<]*)\<\/primary\>\<secondary\>([^<]*)\<\/secondary\>\<\/indexterm\>(.*)/) {
+                        $name = "$1, $2";
+                        print "<entry name=\"$name\" url=\"$url.html\"/>\n" unless grep($_ eq $name, @names);
+                        @names = (@names, $name);
+                        #print "remain: $3\n";
+                        $_ = $3;
+                }
+        }
+
+        close(FILE);
+}
+
+print "</conceptindex>\n";
+print "</gideonindex>\n";
+
+# Local Variables:
+# mode: perl
+# fill-column: 120
+# End:

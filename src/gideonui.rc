@@ -1,0 +1,60 @@
+<!DOCTYPE kpartgui >
+<kpartgui version="1" name="gideon" >
+<MenuBar>
+  <Menu name="file">
+    <text>&amp;File</text>
+    <Merge/>
+    <Action name="project_new"/>
+    <Action name="project_open"/>
+    <Action name="project_open_recent"/>
+    <Action name="project_close"/>
+    <Action name="project_import"/>
+    <DefineGroup name="project"/>
+    <Separator/>
+    <Action name="file_splitvertically"/>
+    <Action name="file_splithorizontally"/>
+    <Action name="file_closewindow"/>
+    <Action name="file_killbuffer"/>
+  </Menu>
+  <Menu name="edit">
+    <text>&amp;Edit</text>
+    <DefineGroup name="undoredo"/>
+    <Separator/>
+    <DefineGroup name="cutcopypaste"/>
+    <Separator/>
+    <DefineGroup name="find"/>
+    <Merge/>
+  </Menu>
+  <Menu name="view">
+    <text>&amp;View</text>
+    <Action name="view_selectviews"/>
+    <Action name="view_outputviews"/>
+    <Separator/>
+    <Merge/>
+  </Menu>
+  <Menu name="build">
+    <text>&amp;Build</text>
+    <Merge/>
+  </Menu>
+  <Menu name="buffers">
+    <text>&amp;Buffers</text>
+    <ActionList name="buffer_list"/>
+    <Merge/>
+  </Menu>
+  <Menu name="settings">
+    <text>&amp;Settings</text>
+    <Action name="settings_customize"/>
+  </Menu>
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Merge/>
+  </Menu>
+</MenuBar>
+<ToolBar position="Top" iconText="IconOnly" noMerge="1" name="mainToolBar" fullWidth="false" >
+  <Action name="project_open" />
+  <Separator/>
+  <Merge/>
+  <Action name="stop_processes"/>
+  <Action name="help_whats_this"/>
+</ToolBar>
+</kpartgui>

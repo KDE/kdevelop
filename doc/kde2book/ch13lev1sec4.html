@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Architecture</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="DCOP&#8212;Desktop Communication Protocol"
+HREF="ch13.html"/><LINK
+REL="PREVIOUS"
+TITLE="Underlying Technologies"
+HREF="ch13lev1sec3.html"/><LINK
+REL="NEXT"
+TITLE="Description of DCOP's Programming Interface"
+HREF="ch13lev1sec5.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch13lev1sec4"
+>13.4. Architecture</A
+></H1
+><P
+>The main actor in the in the DCOP world is the <I
+CLASS="emphasis"
+>client</I
+>. Every program needing to communicate has only to become a DCOP client. A DCOP server (an executable named, surprisingly enough, <I
+CLASS="emphasis"
+>dcopserver</I
+>), runs permanently on the desktop and acts as a dispatcher for messages all clients are passing. The dispatching is completely transparent to the clients. Hence, from their strict point of view, clients are peers of each other.</P
+><P
+>The protocol supports both <SPAN
+CLASS="QUOTE"
+>"send and forget"</SPAN
+> (like a mail message) and <SPAN
+CLASS="QUOTE"
+>"call then listen"</SPAN
+> (like a telephone call) functionalities. The DCOP server provides a means for client registration. Only clients that are implementing data processing need to register with the server (that is, clients that will receive and process messages have to make themselves known to the DCOP server). The calling-only clients can use the messaging mechanisms anonymously.</P
+><P
+>All communications are performed using data serialized by means of the <TT
+CLASS="literal"
+>QDataStream</TT
+> technology just described.</P
+><P
+>Messages can be</P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>Method Calls&#8212;In this case, the name of the object in the receptor client that implements the called method.</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>Signal Emissions&#8212;This allows Qt-style signal/slot communications over DCOP.</P
+></LI
+></UL
+><P
+>Knowing the receptor client for an issued message isn't mandatory because message broadcasts are allowed. Usually, however, the receptor client is specified.</P
+><P
+><A
+HREF="ch13lev1sec4.html#ch13fig01"
+>Figure 13.1</A
+> offers a graphical presentation of the DCOP client/server architecture.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch13fig01"
+></A
+><P
+><B
+>Figure 13.1. The client/server architecture of DCOP.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/13fig01.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch13lev1sec4"/></TD
+></TR
+><ANNOTATION
+NAME="ch13lev1sec4"
+TITLE="Architecture"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch13lev1sec3.html"
+>Prev</A
+> <A
+HREF="ch13lev1sec5.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//Netscape Comm. Corp.//DTD HTML//EN">
+<!--
+  -- Copyright (c) 1999
+  -- Silicon Graphics Computer Systems, Inc.
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Silicon Graphics makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  --
+  -->
+
+<HTML>
+<HEAD>
+    <TITLE>SGI STL: Frequently Asked Questions</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+<H1>Frequently Asked Questions</H1>
+<H2>about the SGI Standard Template Library</H2>
+
+<hr>
+
+<P><b>Is the STL Y2K compliant?</b>
+<br>
+Yes.  The STL does not store or manipulate dates in any way, so there
+are no year 2000 issues.  
+
+<P><b>Can I download this entire site for offline viewing?</b>
+<br>
+Yes.  From the <A Href="index.html">home page</A>, go to the <b>Download
+the STL</b> page.  You will find links
+for downloading the entire STL documentation as a single <tt>zip</tt>,
+<tt>tar</tt>, or <tt>tar.gz</tt> file.
+<P>
+The documentation is a collection of <tt>HTML</tt> files.  It
+does not exist in the form of  a single text or 
+PostScript<FONT Size="-1"><SUP>TM</SUP></FONT> document.  The
+<A Href="other_resources.html">Other Resources</A> page lists
+several books about the STL.
+
+<P><b>Which compilers are supported?</b>
+<br>
+The STL has been tested on these compilers: SGI 7.1 and later, or 7.0
+with the -n32 or -64 flag;  gcc 2.8 or egcs 1.x; Microsoft 5.0 and
+later.  (But see below.)  Boris Fomitchev distributes a
+<A Href="http://www.metabyte.com/~fbp/stl/index.html">port</A> for
+some other compilers.
+<P>
+If you succeed in using the SGI STL with some other compiler, please
+<A href="mailto:stl@sgi.com">let us know</A>, and please tell us what
+modifications (if any) you had to make.  We expect that most of the
+changes will be restricted to the <tt>&lt;stl_config.h&gt;</tt> header.
+
+<P><b>What about older SGI compilers?</b>
+<br>
+
+Given the rate of improvement in C++ implementations, SGI strongly
+recommends that you upgrade your compiler.  If this is not possible,
+you might try the version of the STL for older Borland and Microsoft
+compilers (see the <b>Download the STL</b> page), or Boris Fomitchev's
+<A Href="http://www.metabyte.com/~fbp/stl/index.html">port</A>.  Neither
+of these is supported.
+
+<P><b>How do I install the SGI STL?</b>
+<br>
+You should unpack the STL include files in a new directory, and then
+use the <tt>-I</tt> (or <tt>/I</tt>) option to direct the compiler to
+look there first.  We don't recommend overwriting the vendor's include
+files.
+<P>
+At present the SGI STL consists entirely of header files.  You don't have
+to build or link in any additional runtime libraries.
+
+<P><b>Are there any compatibility issues with Visual C++?</b>
+<br>
+Visual C++ provides its own STL implementation, and some of the other
+Microsoft C++ library headers may rely on that implementation.  In
+particular, the SGI STL has not been tested in combination with
+Microsoft's new <tt>&lt;iostream&gt;</tt> header.  It has been used
+successfully with the older <tt>&lt;iostream.h&gt;</tt> header.
+
+<P><b>Is the SGI STL thread safe?</b>
+<br>
+Yes.  However, you should be aware that not everyone uses the
+phrase &quot;thread safe&quot; the same way.  See our 
+<A Href="thread_safety.html">discussion of thread safety</A>
+for our design goals.
+
+<P><B>Are hash tables part of the C++ standard?</b>
+<br>
+No.  The hash table classes (<tt><A href="hash_set.html">hash_set</A></tt>, <tt><A href="hash_map.html">hash_map</A></tt>
+<tt><A href="hash_multiset.html">hash_multiset</A></tt> <tt><A href="hash_multimap.html">hash_multimap</A></tt> <tt><A href="hash.html">hash</A></tt>)
+are an extension.  They may be added to a future revision of the C++
+standard.
+<P>
+The <tt><A href="Rope.html">rope</A></tt> and <tt><A href="Slist.html">slist</A></tt> classes are also extensions.
+
+<P><B>Why is <tt>list&lt;&gt;::size()</tt> linear time?</b>
+<br>
+The <tt>size()</tt> member function, for <tt><A href="List.html">list</A></tt> and
+<tt><A href="Slist.html">slist</A></tt>, takes time proportional to the number of elements
+in the list.  This was a deliberate tradeoff.  The only way to get a
+constant-time <tt>size()</tt> for linked lists would be to maintain an
+extra member variable containing the list's size.  This would require
+taking extra time to update that variable (it would make
+<tt>splice()</tt> a linear time operation, for example), and it would
+also make the list larger.  Many list algorithms don't require that
+extra word (algorithms that do require it might do better with vectors
+than with lists), and, when it is necessary to maintain an explicit
+size count, it's something that users can do themselves.
+<P>
+This choice is permitted by the C++ standard.  The standard says that
+<tt>size()</tt> &quot;should&quot; be constant time, and 
+&quot;should&quot; does not mean the same thing as &quot;shall&quot;.
+This is the officially recommended ISO wording for saying that an
+implementation is supposed to do something unless there is a good
+reason not to.
+<P>
+One implication of linear time <tt>size()</tt>: you should never write
+<pre>
+  if (L.size() == 0)
+    ...
+</pre>
+Instead, you should write
+<pre>
+  if (L.empty())
+    ...
+</pre>
+
+<P><B>Why doesn't <tt>map</tt>'s operator&lt; use the <tt>map</tt>'s
+   comparison function?</b>
+<br>
+A <tt>map</tt> has a notion of comparison, since one of its template 
+parameters is a comparison function.  However, <tt>operator&lt;</tt>
+for maps uses the elements' <tt>operator&lt;</tt> rather than that
+comparison function.  This appears odd, but it is deliberate and we
+believe that it is correct.
+<P>
+At the most trivial level, this isn't a bug in our implementation
+because it's what's mandated by the C++ standard.  (The behavior of
+<tt>operator&lt;</tt> is described in Table 65, in section 23.1.)
+<P>
+A more interesting question: is the requirement in the standard correct,
+or is there actually a bug in the standard?
+<P>
+We believe that the requirements in the standard are correct.
+<P>
+First, there's a consistency argument: <tt>operator&lt;</tt> for a
+<tt><A href="Vector.html">vector</A></tt> (or <tt><A href="Deque.html">deque</A></tt>, or <tt><A href="List.html">list</A></tt>) uses
+the element's <tt>operator&lt;</tt>.  Should <tt><A href="Map.html">map</A></tt>'s
+<tt>operator&lt;</tt> do something else, just because there is another
+plausible way to compare objects?  It's reasonable to say, for all
+containers, that <tt>operator&lt;</tt> always means
+<tt>operator&lt;</tt>, and that if you need a different kind of
+comparison you can explicitly use <tt><A href="lexicographical_compare.html">lexicographical_compare</A></tt>.
+<P>
+Second, if we did use the <tt><A href="Map.html">map</A></tt>'s comparison function,
+there would be a problem: which one do we use?  There are two
+<tt>map</tt> arguments, and, while we know that their comparison
+functions have the same type, we don't know that they have the same
+behavior.  The comparison function, after all, is a function object,
+and it might have internal state that affects the comparison.  (You
+might have a function object to compare strings, for example, with a
+boolean flag that determines whether the comparison is
+case-sensitive.)
+<P>
+There's also a related question, incidentally: how should
+<tt>operator==</tt> behave for sets?  A <tt>set</tt>'s comparison
+function induces an equivalence relation, so, just as you can use the
+<tt>set</tt>'s comparison function for lexicographical ordering, you
+could also use it for a version of equality.  Again, though, we define
+<tt>operator==(const set&amp;, const set&amp;)</tt> so that it just
+calls the elements' <tt>operator==</tt>.
+
+<P><b>Why does a <tt>vector</tt> expand its storage by a factor of two
+   when it performs a reallocation?</b>
+<br>
+Expanding a <tt><A href="Vector.html">vector</A></tt> by a factor of two is a time-space tradeoff;
+it means that each element will (on average) be copied twice
+when you're building a <tt><A href="Vector.html">vector</A></tt> one element at a time, and that
+the ratio of wasted to used space is at most 1.  (In general,
+if the exponent for expansion is r, the worst case wasted/used ratio is
+r - 1 and the number of times an element is copied approaches
+r/(r - 1).  If r = 1.25, for example, then elements are copied
+five times instead of twice.)
+<P> 
+If you need to control <tt><A href="Vector.html">vector</A></tt>'s memory usage more finely,
+you can use the member functions <tt>capacity()</tt> and
+<tt>reserve()</tt> instead of relying on automatic reallocation.
+
+<P><b>Why do the <i>pop</i> member functions return <tt>void</tt>?</b>
+<br>
+All of the STL's <i>pop</i> member functions (<tt>pop_back</tt> in
+<tt><A href="Vector.html">vector</A></tt>, <tt><A href="List.html">list</A></tt>, and <tt><A href="Deque.html">deque</A></tt>; 
+<tt>pop_front</tt> in <tt><A href="List.html">list</A></tt>, <tt><A href="Slist.html">slist</A></tt>, and
+<tt><A href="Deque.html">deque</A></tt>; <tt>pop</tt> in <tt><A href="stack.html">stack</A></tt>, 
+<tt><A href="queue.html">queue</A></tt>, and <tt><A href="priority_queue.html">priority_queue</A></tt>) return <tt>void</tt>,
+rather than returning the element that was removed.  This is for the
+sake of efficiency.
+<P>
+If the <tt>pop</tt> member functions were to return the element
+that was removed then they would have to return it by value rather
+than by reference.  (The element is being removed, so there wouldn't
+be anything for a reference to point to.)  Return by value, however,
+would be inefficient; it would involve at least one unnecessary copy
+constructor invocation.  The <tt>pop</tt> member functions return 
+nothing because it is impossible for them to return a value in a way
+that is both correct and efficient.
+<P>
+If you need to retrieve the value and then remove it, you can perform
+the two operations explicitly.  For example:
+<pre>
+  std::stack&lt;T&gt; s;
+  ...
+  T old_value = s.top();  
+  s.pop();
+</pre>
+
+<P><b>How do I sort a range in descending order instead of ascending?</b>
+<pre>
+sort(first, last, greater&lt;T&gt;());
+</pre>
+(Note that it must be <tt>greater</tt>, not <tt>greater_eq</tt>.  The
+comparison function <tt>f</tt> must be one such that <tt>f(x, x)</tt>
+is <tt>false</tt> for every <tt>x</tt>.)
+
+<P><b>Why am I getting uninitialized memory reads from Purify<FONT SIZE="-1"><SUP>TM</SUP></FONT>?</b>
+<br>
+We believe that the uninitialized memory read (UMR) messages in STL
+data structures are artifacts and can be ignored.
+<P>
+There are a number of reasons the compiler might generate reads from
+uninitialized memory (<i>e.g.</i> structure padding, inheritance from
+empty base classes, which still have nonzero size).  Purify tries to
+deal with this by distinguishing between uninitialized memory reads
+(UMR) and uninitialized memory copies (UMC).  The latter are not
+displayed by default.
+
+The distinction between the two isn't completely clear, but appears to
+be somewhat heuristic.  The validity of the heuristic seems to depend
+on compiler optimizations, etc.  As a result, some perfectly
+legitimate code generates UMR messages.  It's unfortunately often hard
+to tell whether a UMR message represents a genuine problem or just an
+artifact.
+
+<P><b>Why does Bounds Checker<FONT SIZE="-1"><SUP>TM</SUP></FONT> say that I have memory leaks?</b>
+<br>
+This is not an STL bug.  It is an artifact of certain kinds of leak detectors.
+<P>
+In the default STL allocator, memory allocated for blocks of small
+objects is not returned to <tt>malloc</tt>. It can only be reused by
+subsequent <tt>allocate</tt> requests of (approximately) the same
+size. Thus programs that use the default may appear to leak memory
+when monitored by certain kinds of simple leak detectors. This is
+intentional. Such &quot;leaks&quot; do not accumulate over time. Such
+&quot;leaks&quot; are not reported by garbage-collector-like leak
+detectors.
+<P>
+The primary design criterion for the default STL allocator was to make
+it no slower than the HP STL per-class allocators, but potentially
+thread-safe, and significantly less prone to fragmentation. Like the
+HP allocators, it does not maintain the necessary data structures to
+free entire chunks of small objects when none of the contained small
+objects are in use. This is an intentional choice of execution time
+over space use. It may not be appropriate for all programs. On many
+systems <tt>malloc_alloc</tt> may be more space efficient, and can be
+used when that is crucial.
+<P>
+The HP allocator design returned entire memory pools when the entire
+allocator was no longer needed. To allow this, it maintains a count of
+containers using a particular allocator. With the SGI design, this
+would only happen when the last container disappears, which is
+typically just before program exit. In most environments, this would
+be highly counterproductive; <tt>free</tt> would typically have to
+touch many long unreferenced pages just before the operating system
+reclaims them anyway. It would often introduce a significant delay on
+program exit, and would possibly page out large portions of other
+applications. There is nothing to be gained by this action, since the
+OS reclaims memory on program exit anyway, and it should do so
+without touching that memory.
+<p>
+In general, we recommend that leak detection tests be run with
+<tt>malloc_alloc</tt>. This yields more precise results with GC-based
+detectors (<i>e.g.</i> Pure Atria's Purify<FONT SIZE="-1"><SUP>TM</SUP></FONT>), 
+and it provides useful results even with detectors that simply count
+allocations and deallocations.
+
+<br>
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 

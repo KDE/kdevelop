@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Creating and Using Components (KParts)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Application Interaction and Integration"
+HREF="p03.html"/><LINK
+REL="PREVIOUS"
+TITLE="Application Interaction and Integration"
+HREF="p03.html"/><LINK
+REL="NEXT"
+TITLE="The KDE Component Framework"
+HREF="ch12lev1sec2.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="chapter"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p03.html"
+>Prev</A
+> <A
+HREF="ch12lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="ch12"
+>Chapter 12. Creating and Using Components (KParts)</A
+></H1
+><P
+>&#13;		<I
+CLASS="emphasis"
+>by David Faure</I
+>
+	</P
+><DIV
+CLASS="highlights"
+><A
+NAME="AEN16434"
+></A
+><P
+><B
+>In this chapter</B
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12.html#ch12lev1sec1"
+>The Difference Between Components and Widgets</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec2.html"
+>The KDE Component Framework</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec3.html"
+>Describing User Interface in XML</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec4.html"
+>Read-Only and Read/Write Parts</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec5.html"
+>Creating a Part</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec6.html"
+>Making a Part Available Using Shared Libraries</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec7.html"
+>Creating a KParts Application</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec8.html"
+>Embedding More Than One Part in the Same Window</A
+>
+					</I
+>
+				</P
+></LI
+><LI
+STYLE="list-style-type: disc"
+><P
+>&#13;					<I
+CLASS="emphasis"
+>&#13;						<A
+HREF="ch12lev1sec9.html"
+>Creating a KParts Plug-in</A
+>
+					</I
+>
+				</P
+></LI
+></UL
+></DIV
+><P
+>The 
+		
+		main idea behind components is reusability. Often, an application wants to use a functionality that another application provides. Of course, the way to do that is simply to create a shared library that both applications use. But without a standard framework for this, it means both applications are very much coupled to the library's API and will need to be changed if the applications decide to use another library instead. Furthermore, integrating the shared functionality has to be done manually by every application.</P
+><P
+>A framework for components enables an application to use a component it never heard of&#8212;and wasn't specifically adapted for&#8212;because both the application and the component comply to the framework and know what to expect from each other. An existing component can be replaced with a new implementation of the same functionality, without changing a single line of code in the application, because the interface remains the same.</P
+><P
+>The framework presented here concerns elaborate graphical components, such as an image viewer, a text editor, a mail composer, and so on. Simpler graphical components are usually widgets; I refine this distinction in the next section. Nongraphical components, such as a parser or a string manipulation class, are usually libraries with a specific Application Programming Interface (API).</P
+><P
+>Similar frameworks for graphical components exist for a different environment, such as IBM and Apple's OpenDoc, Microsoft's OLE, Gnome's Bonobo, and KDE's previous OpenParts.
+		
+	</P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch12lev1sec1"
+>12.1. The Difference Between Components and Widgets</A
+></H1
+><P
+>A KDE 
+			
+			component is called a part, and it encapsulates three things: a widget, the functionality that comes with it, and the user interface for this functionality.</P
+><P
+>The usual example is a text editor component. Its widget is a multiline text widget; its functionality might include Search And Replace, Copy, Cut, Paste, Undo, Redo, Spell Checking. To make it possible for the user to access this functionality, the component also provides the user interface for it: menu items and toolbar buttons.</P
+><P
+>An application using this component will get the widget embedded into a parent widget it provides, as well as the component's user interface merged into its own menubar and toolbars. This is like embedding a MS Excel document into MS Word, an example everybody knows, or when embedding a KSpread document into KWord, an example that will hopefully become very well known as well.</P
+><P
+>Another example of very useful component is an image viewer. When using KDE's file manager (Konqueror), clicking an image file opens the image viewer component from KDE's image viewer (KView) and shows it inside Konqueror's window. The part provides actions for zoom in, zoom out, rotate, reset to original size, and orientation.
+			
+			
+		</P
+><DIV
+CLASS="note"
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="note.png"
+HSPACE="5"
+ALT="Note"/></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Note that KOffice parts are a bit different because they don't embed as a full window, but as a frame into the parent's view, which can be moved, resized, and even rotated&#8212;a functionality only KOffice has. This and the document/view architecture of KOffice applications mean that the framework for KOffice parts, although based on KParts, is much more elaborate and out of topic here.</P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>So, when do you use a part and when do you use a widget?</P
+><P
+>Use a widget when all the functionality is in the widget itself and doesn't need additional user interface (menu items or toolbar buttons). A button is a widget, a multiline edit is a widget, but a text editor with all the functionality previously mentioned is a part. As you can see there is no problem choosing which one to use.
+			
+			
+		</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch12lev1sec1"/></TD
+></TR
+><ANNOTATION
+NAME="ch12lev1sec1"
+TITLE="The Difference Between Components and Widgets"/></TABLE
+></DIV
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="p03.html"
+>Prev</A
+> <A
+HREF="ch12lev1sec2.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

@@ -1,0 +1,551 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>A Larger Example: The Option Dialog in KEdit</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Using Dialog Boxes"
+HREF="ch08.html"/><LINK
+REL="PREVIOUS"
+TITLE="Dialog Style and KDialogBase"
+HREF="ch08lev1sec5.html"/><LINK
+REL="NEXT"
+TITLE="User Interface Design Rules for Dialogs"
+HREF="ch08lev1sec7.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="ch08lev1sec6"
+>8.6. A Larger Example: The Option Dialog in KEdit</A
+></H1
+><P
+>This section describes a real, and quite big, dialog&#8212;the Option dialog of KEdit. It is based on the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class used in <TT
+CLASS="literal"
+>IconList</TT
+> mode. <A
+HREF="ch08lev1sec6.html#ch08fig05"
+>Figure 8.5</A
+> shows what this dialog looks like. This way of representing data is effective when you want to keep the number of dialog boxes to a minimum.</P
+><P
+>It may seem complicated to make such a dialog, but in fact it is very easy. As a bonus, it is also easy to add or remove a page without interfering with the rest of the code. <A
+HREF="ch08lev1sec6.html#ch08list13"
+>Listing 8.13</A
+> shows how the dialog code is partitioned. A good technique is to deal with each page of the dialog in a separate function or even as a separate class. The first approach is used here. This way, you keep the code clean and easy to understand. The <TT
+CLASS="literal"
+>setupColorPage()</TT
+> method starting on Line 105 creates the color page. The method <TT
+CLASS="literal"
+>KdialogBase::addPage(&#8230;)</TT
+> prepares the page and returns the top level widget of the page. An icon list layout is selected by specifying <TT
+CLASS="literal"
+>IconList</TT
+> in the <TT
+CLASS="literal"
+>KDialogBase</TT
+> constructor. If you change the flag to <TT
+CLASS="literal"
+>Tabbed</TT
+> or <TT
+CLASS="literal"
+>IconList,</TT
+> the dialog will switch to a tabbed or a tree list shaped dialog respectively. This feature is especially useful when you make a dialog in <TT
+CLASS="literal"
+>Tabbed</TT
+> mode, but after a while realize that too many tabs are present in the dialog (the Qt library does not support multiple rows of tabs). You can then easily switch to a <TT
+CLASS="literal"
+>TreeList</TT
+> or <TT
+CLASS="literal"
+>IconList</TT
+> layout by changing only the flag. The <TT
+CLASS="literal"
+>KDialogBase</TT
+> class will take care of the rest; no redesign is required.</P
+><DIV
+CLASS="figure"
+><HR/><A
+NAME="ch08fig05"
+></A
+><P
+><B
+>Figure 8.5. The KEdit Option dialog. The dialog is based on the <TT
+CLASS="literal"
+>KDialogBase</TT
+> class in <TT
+CLASS="literal"
+>IconList</TT
+> mode.</B
+></P
+><DIV
+CLASS="mediaobject"
+><P
+><IMG
+SRC="graphics/08fig05.gif"
+></IMG
+></P
+></DIV
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ch08list13"
+></A
+><P
+><B
+>Example 8.13. The KEdit Dialog Code, Somewhat Simplified</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;  1:
+   3&nbsp;  2: class COptionDialog : public KDialogBase
+   4&nbsp;  3: {
+   5&nbsp;  4:   Q_OBJECT
+   6&nbsp;  5:
+   7&nbsp;  6:   public:
+   8&nbsp;  7:     enum Page
+   9&nbsp;  8:     {
+  10&nbsp;  9:       page_font = 0,
+  11&nbsp; 10:       page_color,
+  12&nbsp; 11:       page_spell,
+  13&nbsp; 12:       page_misc,
+  14&nbsp; 13:       page_max
+  15&nbsp; 14:     };
+  16&nbsp; 15:
+  17&nbsp; 16:     COptionDialog( QWidget *parent = 0, char *name = 0, bool modal = false );
+  18&nbsp; 17:     ~COptionDialog();
+  19&nbsp; 18:
+  20&nbsp; 19:     void setFont( const SFontState &amp;font );
+  21&nbsp; 20:     void setColor( const SColorState &amp;color );
+  22&nbsp; 21:     void setSpell( const SSpellState &amp;spell );
+  23&nbsp; 22:     void setMisc( const SMiscState &amp;misc );
+  24&nbsp; 23:     void setState( const SOptionState &amp;state );
+  25&nbsp; 24:
+  26&nbsp; 25:   public slots:
+  27&nbsp; 26:
+  28&nbsp; 27:     virtual void slotDefault();
+  29&nbsp; 28:     virtual void slotOk();
+  30&nbsp; 29:     virtual void slotApply();
+  31&nbsp; 30:
+  32&nbsp; 31:   private:
+  33&nbsp; 32:     struct SFontWidgets
+  34&nbsp; 33:     {
+  35&nbsp; 34:       KFontChooser *chooser;
+  36&nbsp; 35:     };
+  37&nbsp; 36:
+  38&nbsp; 37:     struct SColorWidgets
+  39&nbsp; 38:     {
+  40&nbsp; 39:       KColorButton *fgColor;
+  41&nbsp; 40:       KColorButton *bgColor;
+  42&nbsp; 41:     };
+  43&nbsp; 42:
+  44&nbsp; 43:     struct SSpellWidgets
+  45&nbsp; 44:     {
+  46&nbsp; 45:       KSpellConfig *config;
+  47&nbsp; 46:     };
+  48&nbsp; 47:
+  49&nbsp; 48:     struct SMiscWidgets
+  50&nbsp; 49:     {
+  51&nbsp; 50:       QComboBox *wrapCombo;
+  52&nbsp; 51:       QLabel    *wrapLabel;
+  53&nbsp; 52:       QLineEdit *wrapInput;
+  54&nbsp; 53:       QCheckBox *backupCheck;
+  55&nbsp; 54:       QLineEdit *mailInput;
+  56&nbsp; 55:     };
+  57&nbsp; 56:
+  58&nbsp; 57:   private slots:
+  59&nbsp; 58:     void wrapMode( int mode );
+  60&nbsp; 59:
+  61&nbsp; 60:   private:
+  62&nbsp; 61:     void setupFontPage();
+  63&nbsp; 62:     void setupColorPage();
+  64&nbsp; 63:     void setupSpellPage();
+  65&nbsp; 64:     void setupMiscPage();
+  66&nbsp; 65:
+  67&nbsp; 66:   signals:
+  68&nbsp; 67:     void fontChoice( const SFontState &amp;font );
+  69&nbsp; 68:     void colorChoice( const SColorState &amp;color );
+  70&nbsp; 69:     void spellChoice( const SSpellState &amp;spell );
+  71&nbsp; 70:     void miscChoice( const SMiscState &amp;misc );
+  72&nbsp; 71:
+  73&nbsp; 72:   private:
+  74&nbsp; 73:     SOptionState   mState;
+  75&nbsp; 74:     SColorWidgets  mColor;
+  76&nbsp; 75:     SFontWidgets   mFont;
+  77&nbsp; 76:     SSpellWidgets  mSpell;
+  78&nbsp; 77:     SMiscWidgets   mMisc;
+  79&nbsp; 78: };
+  80&nbsp; 79:
+  81&nbsp; 80:
+  82&nbsp; 81:
+  83&nbsp; 82:
+  84&nbsp; 83:
+  85&nbsp; 84: COptionDialog::COptionDialog( QWidget *parent, char *name, bool modal )
+  86&nbsp; 85:   :KDialogBase( Iconist, i18n("Options"), Help|Default|Apply|Ok|Cancel,
+  87&nbsp; 86:          Ok, parent, name, modal, true )
+  88&nbsp; 87: {
+  89&nbsp; 88:   setHelp( "kedit/index.html", QString::null ); // When Help is pressed
+  90&nbsp; 89:
+  91&nbsp; 90:   setupFontPage();
+  92&nbsp; 91:   setupColorPage();
+  93&nbsp; 92:   setupSpellPage();
+  94&nbsp; 93:   setupMiscPage();
+  95&nbsp; 94: }
+  96&nbsp; 95:
+  97&nbsp; 96: COptionDialog::~COptionDialog()
+  98&nbsp; 97: {
+  99&nbsp; 98: }
+ 100&nbsp; 99:
+ 101&nbsp;100:
+ 102&nbsp;101: void
+ 103&nbsp;102: COptionDialog::setupFontPage()
+ 104&nbsp;103: {
+ 105&nbsp;104:   QVBox *page = addVBoxPage( i18n("Font"),
+ 106&nbsp;105:     i18n("Editor font" ), UserIcon("fonts") );
+ 107&nbsp;106:   mFont.chooser = new KFontChooser( page, "font", false, QStringList(),
+ 108&nbsp;107:     false, 6 );
+ 109&nbsp;108:   mFont.chooser-&gt;setSampleText( i18n("KEdit editor font") );
+ 110&nbsp;109: }
+ 111&nbsp;110:
+ 112&nbsp;111:
+ 113&nbsp;112: void
+ 114&nbsp;113: COptionDialog::setupColorPage()
+ 115&nbsp;114: {
+ 116&nbsp;115:   QFrame *page = addPage( i18n("Color"), i18n("Text color in editor area"),
+ 117&nbsp;116:     UserIcon("colors") );
+ 118&nbsp;117:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+ 119&nbsp;118:   if( topLayout == 0 ) { return; }
+ 120&nbsp;119:
+ 121&nbsp;120:   QGridLayout *gbox = new QGridLayout( 2, 2 );
+ 122&nbsp;121:   topLayout-&gt;addLayout(gbox);
+ 123&nbsp;122:
+ 124&nbsp;123:   QLabel *label;
+ 125&nbsp;124:   mColor.fgColor = new KColorButton( page );
+ 126&nbsp;125:   mColor.bgColor = new KColorButton( page );
+ 127&nbsp;126:   label = new QLabel( mColor.fgColor, "Foreground color", page );
+ 128&nbsp;127:   label = new QLabel( mColor.bgColor, "Background color", page );
+ 129&nbsp;128:
+ 130&nbsp;129:   gbox-&gt;addWidget( label, 0, 0 );
+ 131&nbsp;130:   gbox-&gt;addWidget( label, 1, 0 );
+ 132&nbsp;131:   gbox-&gt;addWidget( mColor.fgColor, 0, 1 );
+ 133&nbsp;132:   gbox-&gt;addWidget( mColor.bgColor, 1, 1 );
+ 134&nbsp;133:
+ 135&nbsp;134:   topLayout-&gt;addStretch(10);
+ 136&nbsp;135: }
+ 137&nbsp;136:
+ 138&nbsp;137:
+ 139&nbsp;138: void
+ 140&nbsp;139: COptionDialog::setupSpellPage()
+ 141&nbsp;140: {
+ 142&nbsp;141:   QFrame *page = addPage( i18n("Spelling"), i18n("Spell checker behaviour"),
+ 143&nbsp;142:     SmallIcon("spell") );
+ 144&nbsp;143:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+ 145&nbsp;144:   if( topLayout == 0 ) { return; }
+ 146&nbsp;145:
+ 147&nbsp;146:   mSpell.config = new KSpellConfig( page, "spell");
+ 148&nbsp;147:   topLayout-&gt;addWidget( mSpell.config );
+ 149&nbsp;148:
+ 150&nbsp;149:   topLayout-&gt;addStretch(10);
+ 151&nbsp;150: }
+ 152&nbsp;151:
+ 153&nbsp;152:
+ 154&nbsp;153: void
+ 155&nbsp;154: COptionDialog::setupMiscPage()
+ 156&nbsp;155: {
+ 157&nbsp;156:   QFrame *page = addPage( i18n("Miscellaneous"), i18n("Various properties"),
+ 158&nbsp;157:     UserIcon("misc") );
+ 159&nbsp;158:   QVBoxLayout *topLayout = new QVBoxLayout( page, 0, spacingHint() );
+ 160&nbsp;159:   if( topLayout == 0 ) { return; }
+ 161&nbsp;160:
+ 162&nbsp;161:   QGridLayout *gbox = new QGridLayout( 5, 2 );
+ 163&nbsp;162:   topLayout-&gt;addLayout( gbox );
+ 164&nbsp;163:
+ 165&nbsp;164:   QString text;
+ 166&nbsp;165:
+ 167&nbsp;166:   text = i18n("Word Wrap");
+ 168&nbsp;167:   QLabel *label = new QLabel( text, page, "wraplabel" );
+ 169&nbsp;168:   gbox-&gt;addWidget( label, 0, 0 );
+ 170&nbsp;169:   QStringList wrapList;
+ 171&nbsp;170:   wrapList.append( i18n("Disable wrapping") );
+ 172&nbsp;171:   wrapList.append( i18n("Let editor width decide") );
+ 173&nbsp;172:   wrapList.append( i18n("At specified column") );
+ 174&nbsp;173:   mMisc.wrapCombo = new QComboBox( false, page );
+ 175&nbsp;174:   connect(mMisc.wrapCombo,SIGNAL(activated(int)),this,SLOT (wrapMode(int)));
+ 176&nbsp;175:   mMisc.wrapCombo-&gt;insertStringList( wrapList );
+ 177&nbsp;176:   gbox-&gt;addWidget( mMisc.wrapCombo, 0, 1 );
+ 178&nbsp;177:
+ 179&nbsp;178:   text = i18n("Wrap Column");
+ 180&nbsp;179:   mMisc.wrapLabel = new QLabel( text, page, "wrapcolumn" );
+ 181&nbsp;180:   gbox-&gt;addWidget( mMisc.wrapLabel, 1, 0 );
+ 182&nbsp;181:   mMisc.wrapInput = new QLineEdit( page, "values" );
+ 183&nbsp;182:   mMisc.wrapInput-&gt;setMinimumWidth( fontMetrics().maxWidth()*10 );
+ 184&nbsp;183:   gbox-&gt;addWidget( mMisc.wrapInput, 1, 1 );
+ 185&nbsp;184:
+ 186&nbsp;185:   gbox-&gt;addRowSpacing( 2, spacingHint()*2 ); 
+ 187&nbsp;186:
+ 188&nbsp;187:   text = i18n("Make backup when saving a file");
+ 189&nbsp;188:   mMisc.backupCheck = new QCheckBox( text, page, "backup" );
+ 190&nbsp;189:   gbox-&gt;addMultiCellWidget( mMisc.backupCheck, 3, 3, 0, 1 );
+ 191&nbsp;190:
+ 192&nbsp;191:   mMisc.mailInput = new QLineEdit( page, "mailcmd" );
+ 193&nbsp;192:   mMisc.mailInput-&gt;setMinimumWidth(fontMetrics().maxWidth()*10);
+ 194&nbsp;193:   text = i18n("Mail Command");
+ 195&nbsp;194:   label = new QLabel( text, page,mailcmdlabel );
+ 196&nbsp;195:   gbox-&gt;addWidget( label, 4, 0 );
+ 197&nbsp;196:   gbox-&gt;addWidget( mMisc.mailInput, 4, 1 );
+ 198&nbsp;197:
+ 199&nbsp;198:   topLayout-&gt;addStretch(10);
+ 200&nbsp;199: }
+ 201&nbsp;200:
+ 202&nbsp;201:
+ 203&nbsp;202: void
+ 204&nbsp;203: COptionDialog::wrapMode( int mode )
+ 205&nbsp;204: {
+ 206&nbsp;205:   bool state = mode == 2 ? true : false;
+ 207&nbsp;206:   mMisc.wrapInput-&gt;setEnabled( state );
+ 208&nbsp;207:   mMisc.wrapLabel-&gt;setEnabled( state );
+ 209&nbsp;208: }
+ 210&nbsp;209:
+ 211&nbsp;210:
+ 212&nbsp;211: void
+ 213&nbsp;212: COptionDialog::slotOk()
+ 214&nbsp;213: {
+ 215&nbsp;214:   slotApply();
+ 216&nbsp;215:   accept();
+ 217&nbsp;216: }
+ 218&nbsp;217:
+ 219&nbsp;218:
+ 220&nbsp;219: void
+ 221&nbsp;220: COptionDialog::slotApply()
+ 222&nbsp;221: {
+ 223&nbsp;222:   switch( activePageIndex() )
+ 224&nbsp;223:   {
+ 225&nbsp;224:     case page_font:
+ 226&nbsp;225:       mState.font.font = mFont.chooser-&gt;font();
+ 227&nbsp;226:       emit fontChoice( mState.font );
+ 228&nbsp;227:     break;
+ 229&nbsp;228:
+ 230&nbsp;229:     case page_color:
+ 231&nbsp;230:       mState.color.textFg = mColor.fgColor-&gt;color();
+ 232&nbsp;231:       mState.color.textBg = mColor.bgColor-&gt;color();
+ 233&nbsp;232:       emit colorChoice( mState.color );
+ 234&nbsp;233:     break;
+ 235&nbsp;234:
+ 236&nbsp;235:     case page_spell:
+ 237&nbsp;236:       mState.spell.config = *mSpell.config;
+ 238&nbsp;237:       emit spellChoice( mState.spell );
+ 239&nbsp;238:     break;
+ 240&nbsp;239:
+ 241&nbsp;240:     case page_misc:
+ 242&nbsp;241:       mState.misc.wrapMode    = mMisc.wrapCombo-&gt;currentItem();
+ 243&nbsp;242:       mState.misc.backupCheck = mMisc.backupCheck-&gt;isChecked();
+ 244&nbsp;243:       mState.misc.wrapColumn  = mMisc.wrapInput-&gt;text().toInt();
+ 245&nbsp;244:       mState.misc.mailCommand = mMisc.mailInput-&gt;text();
+ 246&nbsp;245:       emit miscChoice( mState.misc );
+ 247&nbsp;246:     break;
+ 248&nbsp;247:   }
+ 249&nbsp;248: }
+ 250&nbsp;249:
+ 251&nbsp;250:
+ 252&nbsp;251: void
+ 253&nbsp;252: COptionDialog::slotDefault()
+ 254&nbsp;253: {
+ 255&nbsp;254:   //
+ 256&nbsp;255:   // The constructors store the default settings.
+ 257&nbsp;256:   //
+ 258&nbsp;257:   switch( activePageIndex() )
+ 259&nbsp;258:   {
+ 260&nbsp;259:     case page_font:
+ 261&nbsp;260:       setFont( SFontState() );
+ 262&nbsp;261:     break;
+ 263&nbsp;262:
+ 264&nbsp;263:     case page_color:
+ 265&nbsp;264:       setColor( SColorState() );
+ 266&nbsp;265:     break;
+ 267&nbsp;266:
+ 268&nbsp;267:     case page_spell:
+ 269&nbsp;268:       setSpell( SSpellState() );
+ 270&nbsp;269:     break;
+ 271&nbsp;270:
+ 272&nbsp;271:     case page_misc:
+ 273&nbsp;272:       setMisc( SMiscState() );
+ 274&nbsp;273:     break;
+ 275&nbsp;274:   }
+ 276&nbsp;275: }
+ 277&nbsp;276:
+ 278&nbsp;277:
+ 279&nbsp;278: void
+ 280&nbsp;279: COptionDialog::setFont( const SFontState &amp;font )
+ 281&nbsp;280: {
+ 282&nbsp;281:   mState.font = font;
+ 283&nbsp;282:   mFont.chooser-&gt;setFont( font.font, false );
+ 284&nbsp;283: }
+ 285&nbsp;284:
+ 286&nbsp;285:
+ 287&nbsp;286: void
+ 288&nbsp;287: COptionDialog::setColor( const SColorState &amp;color )
+ 289&nbsp;288: {
+ 290&nbsp;289:   mState.color = color;
+ 291&nbsp;290:   mColor.fgColor-&gt;setColor( color.textFg );
+ 292&nbsp;291:   mColor.bgColor-&gt;setColor( color.textBg );
+ 293&nbsp;292: }
+ 294&nbsp;293:
+ 295&nbsp;294:
+ 296&nbsp;295: void
+ 297&nbsp;296: COptionDialog::setSpell( const SSpellState &amp;spell )
+ 298&nbsp;297: {
+ 299&nbsp;298:   *mSpell.config = spell.config;
+ 300&nbsp;299: }
+ 301&nbsp;300:
+ 302&nbsp;301:
+ 303&nbsp;302: void
+ 304&nbsp;303: COptionDialog::setMisc( const SMiscState &amp;misc )
+ 305&nbsp;304: {
+ 306&nbsp;305:   mState.misc = misc;
+ 307&nbsp;306:   mMisc.wrapCombo-&gt;setCurrentItem( misc.wrapMode );
+ 308&nbsp;307:   mMisc.wrapInput-&gt;setText( QString().setNum(misc.wrapColumn) );
+ 309&nbsp;308:   mMisc.backupCheck-&gt;setChecked( misc.backupCheck );
+ 310&nbsp;309:   mMisc.mailInput-&gt;setText( misc.mailCommand );
+ 311&nbsp;310:   wrapMode( mMisc.wrapCombo-&gt;currentItem() );
+ 312&nbsp;311: }
+ 313&nbsp;312:
+ 314&nbsp;313:
+ 315&nbsp;314: void
+ 316&nbsp;315: COptionDialog::setState( const SOptionState &amp;state )
+ 317&nbsp;316: {
+ 318&nbsp;317:   setFont( state.font );
+ 319&nbsp;318:   setColor( state.color );
+ 320&nbsp;319:   setSpell( state.spell );
+ 321&nbsp;320:   setMisc( state.misc );
+ 322&nbsp;321: }
+ 323&nbsp;322:
+ 324&nbsp;323:
+ 325&nbsp;324: // The dialog used as the main application window
+ 326&nbsp;325: #include &amp;lt;kcmdlineargs.h&gt;
+ 327&nbsp;326: int main( int argc, char **argv )
+ 328&nbsp;327: {
+ 329&nbsp;328:   KCmdLineArgs::init(argc, argv, "kedit", 0, 0);
+ 330&nbsp;329:   KApplication app;
+ 331&nbsp;330:   COptionDialog *dialog = new COptionDialog():
+ 332&nbsp;331:   dialog-&gt;show();
+ 333&nbsp;332:   int result = app.exec();
+ 334&nbsp;333:   return( result );
+ 335&nbsp;334: }
+ 336&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><P
+>In the constructor, the path to the Help file is set. If you have specified a Help button, you should make sure the help path is defined. If you do not specify a path, the PC bell will make a short alarm when the user activates the Help button. You can disable (gray out) any button by using the <TT
+CLASS="literal"
+>KDialogBase::enableButton(&#8230;)</TT
+> method. Notice how the <TT
+CLASS="literal"
+>spacingHint()</TT
+> function is used everywhere to get identical spacing as on line 117. You never have to worry again that the spacing use the same value as well.</P
+><P
+>The dialog has embedded a regular font selector widget in the Font page starting on line 101. This is the same widget that is used in the font selector dialog. By doing it this way, the user has one less dialog to remember while the familiar font selector interface remains intact but embedded into a larger dialog. The interface becomes easier to understand and remember.</P
+><P
+>The kind of dialog boxes that contain many settings should always include a Default button. When activated, this button resets the dialog settings of the displayed page to the default hard-coded settings. By having this kind of feature, you will get more satisfied users. Many people are reluctant to try the available options because they are afraid to <SPAN
+CLASS="QUOTE"
+>"destroy"</SPAN
+> the program. By providing a way to reset any settings to a known state, this fear will often vanish.</P
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="ch08lev1sec6"/></TD
+></TR
+><ANNOTATION
+NAME="ch08lev1sec6"
+TITLE="A Larger Example: The Option Dialog in KEdit"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ch08lev1sec5.html"
+>Prev</A
+> <A
+HREF="ch08lev1sec7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

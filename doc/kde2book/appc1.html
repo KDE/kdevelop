@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 2</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 3"
+HREF="appc3.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ap-c.html"
+>Prev</A
+> <A
+HREF="appc3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC1"
+>C.2. <A
+HREF="ch02.html"
+>Chapter 2</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC2"
+>C.2.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.2.1.1. <A
+HREF="appc1.html#AEN27902"
+>Referring to the KDE class documentation for <TT
+CLASS="literal"
+>KToolBar</TT
+>, modify <TT
+CLASS="literal"
+>KSimpleApp</TT
+> to include a line editor on the toolbar.</A
+></DT
+><DT
+>C.2.1.2. <A
+HREF="appc1.html#AEN27919"
+>Modify <TT
+CLASS="literal"
+>KSimpleApp</TT
+> to put a <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> widget in the content area instead of a <TT
+CLASS="literal"
+>QLabel</TT
+>. Replace all the references to the Reposition Text function with a function that clears the widget. You will need to refer to the Qt class documentation for <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+>.</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN27902"
+></A
+><B
+>C.2.1.1. </B
+>Referring to the KDE class documentation for <TT
+CLASS="literal"
+>KToolBar</TT
+>, modify <TT
+CLASS="literal"
+>KSimpleApp</TT
+> to include a line editor on the toolbar.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch02lev1sec7.html#ch02que01"
+>ksimpleapp.h and ksimpleapp.cpp were modified. You may use main.cpp, given in <A
+HREF="ch02lev1sec3.html#ch02list04"
+>Listing 2.4</A
+>, to create a complete application. <A
+HREF="appc1.html#ap-clist01"
+>Listings C.1</A
+> and <A
+HREF="appc1.html#ap-clist02"
+>C.2</A
+> display these modifications</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist01"
+></A
+><P
+><B
+>Example C.1. Modified ksimpleapp.h</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;ktmainwindow.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: /**
+   5&nbsp; 4:  * This is a simple KDE application.
+   6&nbsp; 5:  * @author David Sweet &lt;dsweet@kde.org&gt;
+   7&nbsp; 6:  **/
+   8&nbsp; 7:
+   9&nbsp; 8: class QLabel;
+  10&nbsp; 9:
+  11&nbsp;10: class KSimpleApp : public KTMainWindow
+  12&nbsp;11: {
+  13&nbsp;12:  Q_OBJECT
+  14&nbsp;13:
+  15&nbsp;14:  public:
+  16&nbsp;15:   /**
+  17&nbsp;16:    * Create the widget.
+  18&nbsp;17:    **/
+  19&nbsp;18:   KSimpleApp (const char *name=0);
+  20&nbsp;19:
+  21&nbsp;20:   public slots:
+  22&nbsp;21:     /**
+  23&nbsp;22:      * Reposition the text in the context area. The user will
+  24&nbsp;23:      *  cycle through: left, center, and right.
+  25&nbsp;24:      **/
+  26&nbsp;25:     void slotRepositionText();
+  27&nbsp;26:
+  28&nbsp;27:   /**
+  29&nbsp;28:    * Close the window (thus quitting the application).
+  30&nbsp;29:    **/
+  31&nbsp;30:   void slotClose();
+  32&nbsp;31:
+  33&nbsp;32:   /**
+  34&nbsp;33:    * Chapter 2, Exercise 1
+  35&nbsp;34:    * Respond to an Enter keypress.
+  36&nbsp;35:    **/
+  37&nbsp;36:   void slotEnterPressed();
+  38&nbsp;37:
+  39&nbsp;38:  private:
+  40&nbsp;39:   QLabel *text;
+  41&nbsp;40:   int alignment [3], indexalignment;
+  42&nbsp;41: };
+  43&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist02"
+></A
+><P
+><B
+>Example C.2. Modified ksimpleapp.cpp</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qlabel.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: #include &lt;kstdaccel.h&gt;
+   5&nbsp; 4: #include &lt;kiconloader.h&gt;
+   6&nbsp; 5: #include &lt;kmenubar.h&gt;
+   7&nbsp; 6: #include &lt;kapp.h&gt;
+   8&nbsp; 7:
+   9&nbsp; 8: #include "ksimpleapp.moc"
+  10&nbsp; 9:
+  11&nbsp;10: KSimpleApp::KSimpleApp (const char *name) :
+  12&nbsp;11:   KTMainWindow (name)
+  13&nbsp;12: {
+  14&nbsp;13:   KStdAccel keys;
+  15&nbsp;14:
+  16&nbsp;15:   QPopupMenu *filemenu = new QPopupMenu;
+  17&nbsp;16:   filemenu-&gt;insertItem (BarIcon ("idea"), "&amp;Reposition Text",
+  18&nbsp;17:                    this, SLOT (slotRepositionText()),
+  19&nbsp;18:                    CTRL+Key_R);
+  20&nbsp;19:   filemenu-&gt;insertSeparator();
+  21&nbsp;20:   filemenu-&gt;insertItem ("&amp;Quit", this, SLOT (slotClose()), keys.quit());
+  22&nbsp;21:
+  23&nbsp;22:   menuBar()-&gt;insertItem ("&amp;File", filemenu);
+  24&nbsp;23:
+  25&nbsp;24:   const int buttonid = 1;
+  26&nbsp;25:   toolBar()-&gt;insertButton ( BarIcon("idea"), buttonid,
+  27&nbsp;26:                        SIGNAL(clicked()), this,
+  28&nbsp;27:                        SLOT (slotRepositionText()), true,
+  29&nbsp;28:                        "Reposition text" );
+  30&nbsp;29:
+  31&nbsp;30:   //Chapter 2, Exercise 1
+  32&nbsp;31:   const int linedid = 2;
+  33&nbsp;32:   toolBar()-&gt;insertLined ("Initial text", linedid,
+  34&nbsp;33:                      SIGNAL(returnPressed()), this,
+  35&nbsp;34:                      SLOT (slotEnterPressed()), true);
+  36&nbsp;35:
+  37&nbsp;36:   statusBar()-&gt;message ("Ready!");
+  38&nbsp;37:
+  39&nbsp;38:   text = new QLabel ("Hello!", this);
+  40&nbsp;39:   text-&gt;setBackgroundColor (Qt::white);
+  41&nbsp;40:   alignment [0] = QLabel::AlignLeft | QLabel::AlignVCenter;
+  42&nbsp;41:   alignment [1] = QLabel::AlignHCenter | QLabel::AlignVCenter;
+  43&nbsp;42:   alignment [2] = QLabel::AlignRight | QLabel::AlignVCenter;
+  44&nbsp;43:   indexalignment = 0;
+  45&nbsp;44:
+  46&nbsp;45:   text-&gt;setAlignment (alignment [indexalignment]);
+  47&nbsp;46:   setView (text);
+  48&nbsp;47:
+  49&nbsp;48: }
+  50&nbsp;49:
+  51&nbsp;50: //Chapter 2, Exercise 1
+  52&nbsp;51: void
+  53&nbsp;52: KSimpleApp::slotEnterPressed()
+  54&nbsp;53: {
+  55&nbsp;54:   //You would process the Enter keypress here.
+  56&nbsp;55: }
+  57&nbsp;56:
+  58&nbsp;57: void
+  59&nbsp;58: KSimpleApp::slotRepositionText ()
+  60&nbsp;59: {
+  61&nbsp;60:   indexalignment = (indexalignment+1)%3;
+  62&nbsp;61:   text-&gt;setAlignment (alignment[indexalignment]);
+  63&nbsp;62:
+  64&nbsp;63:   statusBar()-&gt;message ("Repositioned text in content area", 1000);
+  65&nbsp;64: }
+  66&nbsp;65:
+  67&nbsp;66: void
+  68&nbsp;67: KSimpleApp::slotClose()
+  69&nbsp;68: {
+  70&nbsp;69:   close();
+  71&nbsp;70: }
+  72&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN27919"
+></A
+><B
+>C.2.1.2. </B
+>Modify <TT
+CLASS="literal"
+>KSimpleApp</TT
+> to put a <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+> widget in the content area instead of a <TT
+CLASS="literal"
+>QLabel</TT
+>. Replace all the references to the Reposition Text function with a function that clears the widget. You will need to refer to the Qt class documentation for <TT
+CLASS="literal"
+>QMultiLineEdit</TT
+>.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch02lev1sec7.html#ch02que02"
+>ksimpleapp.h and ksimpleapp.cpp were modified. You may use main.cpp, given in <A
+HREF="ch02lev1sec3.html#ch02list04"
+>Listing 2.4</A
+>, to create a complete application.</A
+></P
+><P
+>Modifications to <A
+HREF="appc1.html#ap-clist03"
+>Listings C.3</A
+> and <A
+HREF="appc1.html#ap-clist04"
+>C.4</A
+> are marked in comments.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist03"
+></A
+><P
+><B
+>Example C.3. Modified ksimpleapp.h</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;ktmainwindow.h&gt;
+   3&nbsp; 2:
+   4&nbsp; 3: /**
+   5&nbsp; 4:  * This is a simple KDE application.
+   6&nbsp; 5:  * @author David Sweet &lt;dsweet@kde.org&gt;
+   7&nbsp; 6:  **/
+   8&nbsp; 7:
+   9&nbsp; 8: class QLabel;
+  10&nbsp; 9: class QMultiLineEdit;
+  11&nbsp;10:
+  12&nbsp;11: class KSimpleApp : public KTMainWindow
+  13&nbsp;12: {
+  14&nbsp;13:  Q_OBJECT
+  15&nbsp;14:
+  16&nbsp;15:  public:
+  17&nbsp;16:   /**
+  18&nbsp;17:    * Create the widget.
+  19&nbsp;18:    **/
+  20&nbsp;19:   KSimpleApp (const char *name=0);
+  21&nbsp;20:
+  22&nbsp;21:   public slots:
+  23&nbsp;22:     /**
+  24&nbsp;23:      * Chapter 2, Exercise 2
+  25&nbsp;24:      * Clear the text in the content area.
+  26&nbsp;25:      **/
+  27&nbsp;26:     void slotClearText();
+  28&nbsp;27:
+  29&nbsp;28:   /**
+  30&nbsp;29:    * Close the window (thus quitting the application).
+  31&nbsp;30:    **/
+  32&nbsp;31:   void slotClose();
+  33&nbsp;32:
+  34&nbsp;33:  private:
+  35&nbsp;34:   QLabel *text;
+  36&nbsp;35:   int alignment [3], indexalignment;
+  37&nbsp;36:   //Chapter 2, Exercise 2
+  38&nbsp;37:   QMultiLineEdit *editor;
+  39&nbsp;38: };
+  40&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist04"
+></A
+><P
+><B
+>Example C.4. Modified ksimpleapp.cpp</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp; 1: #include &lt;qlabel.h&gt;
+   3&nbsp; 2: #include &lt;qmultilineedit.h&gt;
+   4&nbsp; 3:
+   5&nbsp; 4: #include &lt;kstdaccel.h&gt;
+   6&nbsp; 5: #include &lt;kiconloader.h&gt;
+   7&nbsp; 6: #include &lt;kmenubar.h&gt;
+   8&nbsp; 7: #include &lt;kapp.h&gt;
+   9&nbsp; 8:
+  10&nbsp; 9: #include "ksimpleapp.moc"
+  11&nbsp;10:
+  12&nbsp;11: KSimpleApp::KSimpleApp (const char *name) :
+  13&nbsp;12:   KTMainWindow (name)
+  14&nbsp;13: {
+  15&nbsp;14:   KStdAccel keys;
+  16&nbsp;15:
+  17&nbsp;16:   QPopupMenu *filemenu = new QPopupMenu;
+  18&nbsp;17:   //Chapter 2, Exercise 2
+  19&nbsp;18:   filemenu-&gt;insertItem (BarIcon ("idea"), "&amp;Clear text",
+  20&nbsp;19:                    this, SLOT (slotClearText()),
+  21&nbsp;20:                    CTRL+Key_C);
+  22&nbsp;21:   filemenu-&gt;insertSeparator();
+  23&nbsp;22:   filemenu-&gt;insertItem ("&amp;Quit", this, SLOT (slotClose()), keys.quit());
+  24&nbsp;23:
+  25&nbsp;24:   menuBar()-&gt;insertItem ("&amp;File", filemenu);
+  26&nbsp;25:
+  27&nbsp;26:   const int buttonid = 1;
+  28&nbsp;27:   //Chapter 2, Exercise 2
+  29&nbsp;28:   toolBar()-&gt;insertButton ( BarIcon("idea"), buttonid,
+  30&nbsp;29:                        SIGNAL(clicked()), this,
+  31&nbsp;30:                        SLOT (slotClearText()), true,
+  32&nbsp;31:                        "Clear text" );
+  33&nbsp;32:
+  34&nbsp;33:
+  35&nbsp;34:   statusBar()-&gt;message ("Ready!");
+  36&nbsp;35:
+  37&nbsp;36:
+  38&nbsp;37:   //Chapter 2, Exercise 2
+  39&nbsp;38:   editor = new QMultiLineEdit (this);
+  40&nbsp;39:   editor-&gt;setText ("Initial text.");
+  41&nbsp;40:
+  42&nbsp;41:   setView (editor);
+  43&nbsp;42:
+  44&nbsp;43: }
+  45&nbsp;44:
+  46&nbsp;45: void
+  47&nbsp;46: KSimpleApp::slotClearText ()
+  48&nbsp;47: {
+  49&nbsp;48:   //Chapter 2, Exercise 2
+  50&nbsp;49:   editor-&gt;setText ("");
+  51&nbsp;50:   statusBar()-&gt;message ("Cleared text in content area", 1000);
+  52&nbsp;51: }
+  53&nbsp;52:
+  54&nbsp;53: void
+  55&nbsp;54: KSimpleApp::slotClose()
+  56&nbsp;55: {
+  57&nbsp;56:   close();
+  58&nbsp;57: }
+  59&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC2"/></TD
+></TR
+><ANNOTATION
+NAME="appC2"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC1"/></TD
+></TR
+><ANNOTATION
+NAME="appC1"
+TITLE="Chapter 2"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="ap-c.html"
+>Prev</A
+> <A
+HREF="appc3.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

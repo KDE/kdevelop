@@ -1,0 +1,766 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Chapter 4</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.54"/><LINK
+REL="HOME"
+TITLE="KDE 2.0 Development"
+HREF="index.html"/><LINK
+REL="UP"
+TITLE="Answers"
+HREF="ap-c.html"/><LINK
+REL="PREVIOUS"
+TITLE="Chapter 3"
+HREF="appc3.html"/><LINK
+REL="NEXT"
+TITLE="Chapter 5"
+HREF="appc7.html"/><META
+HTTP-EQUIV="Content-Style-Type"
+CONTENT="text/css"/><LINK
+REL="stylesheet"
+HREF="kde-common.css"
+TYPE="text/css"/><META
+HTTP-EQUIV="Content-Type"
+CONTENT="text/html; charset=iso-8859-1"/><META
+HTTP-EQUIV="Content-Language"
+CONTENT="en"/><LINK
+REL="stylesheet"
+HREF="kde-localised.css"
+TYPE="text/css"
+TITLE="KDE-English"/><LINK
+REL="stylesheet"
+HREF="kde-default.css"
+TYPE="text/css"
+TITLE="KDE-Default"/></HEAD
+><BODY
+CLASS="section"
+LINK="#336699"
+VLINK="#336699"
+ALINK="#336699"
+BGCOLOR="#FFFFFF"
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc3.html"
+>Prev</A
+> <A
+HREF="appc7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H1
+CLASS="section"
+><A
+NAME="appC5"
+>C.4. <A
+HREF="ch04.html"
+>Chapter 4</A
+></A
+></H1
+><P
+></P
+><DIV
+CLASS="section"
+><TABLE
+WIDTH="100%"
+CELLPADDING="0"
+CELLSPACING="0"
+BORDER="0"
+ALIGN="CENTER"
+><TR
+><TD
+WIDTH="90%"
+><H2
+CLASS="section"
+><A
+NAME="appC6"
+>C.4.1. Exercises</A
+></H2
+><DIV
+CLASS="qandaset"
+><DL
+><DT
+>C.4.1.1. <A
+HREF="appc5.html#AEN27971"
+>Modify the method <TT
+CLASS="literal"
+>KTicTacToe::processClicks()</TT
+> so that the user is required to take turns between X and O.</A
+></DT
+><DT
+>C.4.1.2. <A
+HREF="appc5.html#AEN27982"
+>Reimplement <TT
+CLASS="literal"
+>KXOSquare::sizeHint()</TT
+> and use this method appropriately in the constructor of <TT
+CLASS="literal"
+>KTicTacToe</TT
+>. Compare what happens now when you resize the window to what happened before.</A
+></DT
+><DT
+>C.4.1.3. <A
+HREF="appc5.html#AEN27999"
+>What's the difference between <TT
+CLASS="literal"
+>QPen</TT
+> and <TT
+CLASS="literal"
+>QBrush</TT
+>? Examine the <TT
+CLASS="literal"
+>KDisc</TT
+> code and consult the Qt documentation.</A
+></DT
+><DT
+>C.4.1.4. <A
+HREF="appc5.html#AEN28012"
+>Get to know <TT
+CLASS="literal"
+>QPainter</TT
+>. Construct different <TT
+CLASS="literal"
+>QPen</TT
+>s and <TT
+CLASS="literal"
+>QBrush</TT
+>es in <TT
+CLASS="literal"
+>KDisc</TT
+>. Draw figures other than a disc.</A
+></DT
+><DT
+>C.4.1.5. <A
+HREF="appc5.html#AEN28026"
+>Try using <TT
+CLASS="literal"
+>mousePressEvent()</TT
+> instead of <TT
+CLASS="literal"
+>mouseReleaseEvent()</TT
+> in <TT
+CLASS="literal"
+>KDisc</TT
+>. Can you tell the difference? Which feels right?</A
+></DT
+></DL
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN27971"
+></A
+><B
+>C.4.1.1. </B
+>Modify the method <TT
+CLASS="literal"
+>KTicTacToe::processClicks()</TT
+> so that the user is required to take turns between X and O.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch04lev1sec6.html#ch04que01"
+><A
+HREF="appc5.html#ap-clist07"
+>Listing C.7</A
+> highlights the modified ktictactoe.cpp file</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist07"
+></A
+><P
+><B
+>Example C.7. Modified ktictactoe.cpp File</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#include &lt;qlayout.h&gt;
+   3&nbsp;#include &lt;qlabel.h&gt;
+   4&nbsp;
+   5&nbsp;#include "ktictactoe.moc"
+   6&nbsp;
+   7&nbsp;KTicTacToe::KTicTacToe (QWidget *parent, const char *name) :
+   8&nbsp;  QWidget (parent, name)
+   9&nbsp;{
+  10&nbsp;  int row, col;
+  11&nbsp;
+  12&nbsp;  QGridLayout *layout = new QGridLayout (this, 4, 3);
+  13&nbsp;
+  14&nbsp;  const int rowlabel0 = 0, rowlabel1 = 0, collabel0 = 0, collabel1 = 2,
+  15&nbsp;    rowsquares0 = 1, rowsquares1 = 4, colsquares0 = 0, colsquares1 = 3;
+  16&nbsp;  for (row=rowsquares0; row&lt;rowsquares1; row++)
+  17&nbsp;    for (col=colsquares0; col&lt;colsquares1; col++)
+  18&nbsp;      {
+  19&nbsp;        KXOSquare *kxosquare = new KXOSquare (this);
+  20&nbsp;        layout-&gt;addWidget (kxosquare, row, col);
+  21&nbsp;        connect ( kxosquare,
+  22&nbsp;                 SIGNAL (changeRequest (KXOSquare *, KXOSquare::State)),
+  23&nbsp;                 SLOT (processClicks (KXOSquare *, KXOSquare::State)) );
+  24&nbsp;      }
+  25&nbsp;
+  26&nbsp;  QLabel *label = new QLabel ("Tic-Tac-Toe, this);
+  27&nbsp;  label-&gt;setAlignment (Qt::AlignCenter);
+  28&nbsp;  layout-&gt;addMultiCellWidget (label,
+  29&nbsp;                             rowlabel0, rowlabel1,
+  30&nbsp;                             collabel0, collabel1);
+  31&nbsp;}
+  32&nbsp;
+  33&nbsp;void
+  34&nbsp;KTicTacToe::processClicks (KXOSquare *square, KXOSquare::State state)
+  35&nbsp;{
+  36&nbsp;  //Chapter 4, Exercise 1
+  37&nbsp;  if (state!=previousstate)
+  38&nbsp;    {
+  39&nbsp;      square-&gt;newState (state);
+  40&nbsp;      previousstate=state;
+  41&nbsp;    }
+  42&nbsp;}
+  43&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN27982"
+></A
+><B
+>C.4.1.2. </B
+>Reimplement <TT
+CLASS="literal"
+>KXOSquare::sizeHint()</TT
+> and use this method appropriately in the constructor of <TT
+CLASS="literal"
+>KTicTacToe</TT
+>. Compare what happens now when you resize the window to what happened before.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch04lev1sec6.html#ch04que02"
+>Listings C.8&#8211;C.10 demonstrate this</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist08"
+></A
+><P
+><B
+>Example C.8. Modified ktictactoe.h Method</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KTICTACTOE_H__
+   3&nbsp;#define __KTICTACTOE_H__
+   4&nbsp;
+   5&nbsp;#include &lt;qarray.h&gt;
+   6&nbsp;#include &lt;qwidget.h&gt;
+   7&nbsp;
+   8&nbsp;#include "kxosquare.h"
+   9&nbsp;
+  10&nbsp;/**
+  11&nbsp; * KTicTacToe
+  12&nbsp; * Draw and manage a Tic-Tac-Toe board using KXOSquare.
+  13&nbsp; **/
+  14&nbsp;class KTicTacToe : public QWidget
+  15&nbsp;{
+  16&nbsp; Q_OBJECT
+  17&nbsp;
+  18&nbsp; public:
+  19&nbsp;  /**
+  20&nbsp;   * Create an empty game board.
+  21&nbsp;   **/
+  22&nbsp;  KTicTacToe (QWidget *parent, const char *name=0);
+  23&nbsp;
+  24&nbsp;
+  25&nbsp; protected slots:
+  26&nbsp;   /**
+  27&nbsp;    * Process user input.
+  28&nbsp;    **/
+  29&nbsp;   void processClicks (KXOSquare *, KXOSquare::State);
+  30&nbsp;};
+  31&nbsp;
+  32&nbsp;#endif
+  33&nbsp;                Modified ktictactoe.cpp
+  34&nbsp;#include &lt;qlayout.h&gt;
+  35&nbsp;#include &lt;qlabel.h&gt;
+  36&nbsp;#include "ktictactoe.moc"
+  37&nbsp;
+  38&nbsp;KTicTacToe::KTicTacToe (QWidget *parent, const char *name) :
+  39&nbsp;  QWidget (parent, name)
+  40&nbsp;{
+  41&nbsp;  int row, col;
+  42&nbsp;
+  43&nbsp;  QGridLayout *layout = new QGridLayout (this, 4, 3);
+  44&nbsp;
+  45&nbsp;  const int rowlabel0 = 0, rowlabel1 = 0, collabel0 = 0, collabel1 = 2,
+  46&nbsp;    rowsquares0 = 1, rowsquares1 = 4, colsquares0 = 0, colsquares1 = 3;
+  47&nbsp;
+  48&nbsp;  for (row=rowsquares0; row&lt;rowsquares1; row++)
+  49&nbsp;    for (col=colsquares0; col&lt;colsquares1; col++)
+  50&nbsp;      {
+  51&nbsp;        KXOSquare *kxosquare = new KXOSquare (this);
+  52&nbsp;        //Chapter 4, Exercise 2
+  53&nbsp;        kxosquare-&gt;setMinimumSize (kxosquare-&gt;sizeHint());
+  54&nbsp;
+  55&nbsp;        layout-&gt;addWidget (kxosquare, row, col);
+  56&nbsp;        connect ( kxosquare,
+  57&nbsp;                 SIGNAL (changeRequest (KXOSquare *, KXOSquare::State)),
+  58&nbsp;                 SLOT (processClicks (KXOSquare *, KXOSquare::State)) );
+  59&nbsp;      }
+  60&nbsp;
+  61&nbsp;  QLabel *label = new QLabel ("Tic-Tac-Toe", this);
+  62&nbsp;  label-&gt;setAlignment (Qt::AlignCenter);
+  63&nbsp;  layout-&gt;addMultiCellWidget (label,
+  64&nbsp;                            rowlabel0, rowlabel1,
+  65&nbsp;                            collabel0, collabel1);
+  66&nbsp;}
+  67&nbsp;
+  68&nbsp;
+  69&nbsp;void
+  70&nbsp;KTicTacToe::processClicks (KXOSquare *square, KXOSquare::State state)
+  71&nbsp;{
+  72&nbsp;  //In this simple example, just pass along the click to the appropriate
+  73&nbsp;  // square.
+  74&nbsp;  square-&gt;newState (state);
+  75&nbsp;}
+  76&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist09"
+></A
+><P
+><B
+>Example C.9. Modified kxosquare.h Method</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KXOSQUARE_H__
+   3&nbsp;#define __KXOSQUARE_H__
+   4&nbsp;
+   5&nbsp;
+   6&nbsp;#include &lt;qwidget.h&gt;
+   7&nbsp;#include &lt;qsize.h&gt;
+   8&nbsp;
+   9&nbsp;/**
+  10&nbsp; * KXOSquare
+  11&nbsp; * Draws a square in one of three states: empty, with an X inside,
+  12&nbsp; *  or with an O inside.
+  13&nbsp; **/
+  14&nbsp;class KXOSquare : public QWidget
+  15&nbsp;{
+  16&nbsp; Q_OBJECT
+  17&nbsp;
+  18&nbsp; public:
+  19&nbsp;  enum State {None=0, X=1, O=2};
+  20&nbsp;
+  21&nbsp;  /**
+  22&nbsp;   * Create the widget.
+  23&nbsp;   **/
+  24&nbsp;  KXOSquare (QWidget *parent, const char *name=0);
+  25&nbsp;
+  26&nbsp;  /**
+  27&nbsp;   * Chapter 4, Exercise 2
+  28&nbsp;   * Return a recommended size for this widget.
+  29&nbsp;   **/
+  30&nbsp;  QSize sizeHint() const;
+  31&nbsp;
+  32&nbsp;  public slots:
+  33&nbsp;  /**
+  34&nbsp;   * Change the state of the widget to &lt;i&gt;state&lt;/i&gt;.
+  35&nbsp;   **/
+  36&nbsp;    void newState (State state);
+  37&nbsp;
+  38&nbsp; signals:
+  39&nbsp;  /**
+  40&nbsp;   * The user has requested that the state be changed to &lt;i&gt;state&lt;/i&gt;
+  41&nbsp;   *  by clicking on the square.
+  42&nbsp;   **/
+  43&nbsp;    void changeRequest (KXOSquare *, KXOSquare::State state);
+  44&nbsp;
+  45&nbsp; protected:
+  46&nbsp;    /**
+  47&nbsp;     * Draw the widget.
+  48&nbsp;     **/
+  49&nbsp;    void paintEvent (QPaintEvent *);
+  50&nbsp;
+  51&nbsp;    /**
+  52&nbsp;     * Process mouse clicks.
+  53&nbsp;     **/
+  54&nbsp;    void mousePressEvent (QMouseEvent *);
+  55&nbsp;
+  56&nbsp; private:
+  57&nbsp;  State thestate;
+  58&nbsp;};
+  59&nbsp;
+  60&nbsp;#endif
+  61&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist10"
+></A
+><P
+><B
+>Example C.10. Modified kxosquare.cpp Method</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;#ifndef __KXOSQUARE_H__
+   3&nbsp;#define __KXOSQUARE_H__
+   4&nbsp;
+   5&nbsp;
+   6&nbsp;#include &lt;qwidget.h&gt;
+   7&nbsp;#include &lt;qsize.h&gt;
+   8&nbsp;
+   9&nbsp;/**
+  10&nbsp; * KXOSquare
+  11&nbsp; * Draws a square in one of three state: empty, with an X inside,
+  12&nbsp; *  or with an O inside.
+  13&nbsp; **/
+  14&nbsp;class KXOSquare : public QWidget
+  15&nbsp;{
+  16&nbsp; Q_OBJECT
+  17&nbsp;
+  18&nbsp; public:
+  19&nbsp;  enum State {None=0, X=1, O=2};
+  20&nbsp;
+  21&nbsp;  /**
+  22&nbsp;   * Create the widget.
+  23&nbsp;   **/
+  24&nbsp;  KXOSquare (QWidget *parent, const char *name=0);
+  25&nbsp;
+  26&nbsp;  /**
+  27&nbsp;   * Chapter 4, Exercise 2
+  28&nbsp;   * Return a recommended size for this widget.
+  29&nbsp;   **/
+  30&nbsp;  QSize sizeHint() const;
+  31&nbsp;
+  32&nbsp;  public slots:
+  33&nbsp;  /**
+  34&nbsp;   * Change the state of the widget to &lt;i&gt;state&lt;/i&gt;.
+  35&nbsp;   **/
+  36&nbsp;    void newState (State state);
+  37&nbsp;
+  38&nbsp; signals:
+  39&nbsp;  /**
+  40&nbsp;   * The user has requested that the state be changed to &lt;i&gt;state&lt;/i&gt;
+  41&nbsp;   *  by clicking on the square.
+  42&nbsp;   **/
+  43&nbsp;    void changeRequest (KXOSquare *, KXOSquare::State state);
+  44&nbsp;
+  45&nbsp; protected:
+  46&nbsp;    /**
+  47&nbsp;     * Draw the widget.
+  48&nbsp;     **/
+  49&nbsp;    void paintEvent (QPaintEvent *);
+  50&nbsp;
+  51&nbsp;    /**
+  52&nbsp;     * Process mouse clicks.
+  53&nbsp;     **/
+  54&nbsp;    void mousePressEvent (QMouseEvent *);
+  55&nbsp;
+  56&nbsp; private:
+  57&nbsp;  State thestate;
+  58&nbsp;};
+  59&nbsp;
+  60&nbsp;#endif
+  61&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN27999"
+></A
+><B
+>C.4.1.3. </B
+>What's the difference between <TT
+CLASS="literal"
+>QPen</TT
+> and <TT
+CLASS="literal"
+>QBrush</TT
+>? Examine the <TT
+CLASS="literal"
+>KDisc</TT
+> code and consult the Qt documentation.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch04lev1sec6.html#ch04que03"
+><TT
+CLASS="literal"
+>QPen</TT
+> is passed to <TT
+CLASS="literal"
+>QPainter::setPen()</TT
+> to determine the color of points and outlines of geometric figures that are drawn. A <TT
+CLASS="literal"
+>QBrush</TT
+> is passed to <TT
+CLASS="literal"
+>QPainter::setBrush()</TT
+> to determine the color of the interiors of geometric figures</A
+>.</P
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28012"
+></A
+><B
+>C.4.1.4. </B
+>Get to know <TT
+CLASS="literal"
+>QPainter</TT
+>. Construct different <TT
+CLASS="literal"
+>QPen</TT
+>s and <TT
+CLASS="literal"
+>QBrush</TT
+>es in <TT
+CLASS="literal"
+>KDisc</TT
+>. Draw figures other than a disc.</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch04lev1sec6.html#ch04que04"
+><A
+HREF="appc5.html#ap-clist11"
+>Listing C.11</A
+> lists the modified methods from kdisc.cpp</A
+>.</P
+><DIV
+CLASS="example"
+><HR/><A
+NAME="ap-clist11"
+></A
+><P
+><B
+>Example C.11. Modified Methods from kdisc.cpp</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>   1&nbsp;
+   2&nbsp;void
+   3&nbsp;KDisc::paintEvent (QPaintEvent *)
+   4&nbsp;{
+   5&nbsp;  QPainter painter (this);
+   6&nbsp;
+   7&nbsp;  //Chapter 4, Exercise 4
+   8&nbsp;
+   9&nbsp;  painter.setPen ( QPen (QColor (200, 100, 0), 1) );
+  10&nbsp;  painter.setBrush ( QBrush (Qt::green, Qt::SolidPattern) );
+  11&nbsp;
+  12&nbsp;  painter.drawPie (discposition.x(), discposition.y(),
+  13&nbsp;                      45, 45, 0, 4760);
+  14&nbsp;}
+  15&nbsp;void
+  16&nbsp;KDisc::mouseMoveEvent (QMouseEvent *qmouseevent)
+  17&nbsp;{
+  18&nbsp;
+  19&nbsp;  if (qmouseevent-&gt;state()==Qt::LeftButton)
+  20&nbsp;    {
+  21&nbsp;      //Chapter 4, Exercise 4
+  22&nbsp;      QPoint qpoint = qmouseevent-&gt;pos();
+  23&nbsp;      qpoint.setX(qpoint.x() - 45/2);
+  24&nbsp;      qpoint.setY(qpoint.y() - 45/2);
+  25&nbsp;      discposition = qpoint;
+  26&nbsp;      update();
+  27&nbsp;    }
+  28&nbsp;
+  29&nbsp;}
+  30&nbsp;</PRE
+></TD
+></TR
+></TABLE
+><HR/></DIV
+></DIV
+></DIV
+><DIV
+CLASS="qandaentry"
+><DIV
+CLASS="question"
+><P
+><A
+NAME="AEN28026"
+></A
+><B
+>C.4.1.5. </B
+>Try using <TT
+CLASS="literal"
+>mousePressEvent()</TT
+> instead of <TT
+CLASS="literal"
+>mouseReleaseEvent()</TT
+> in <TT
+CLASS="literal"
+>KDisc</TT
+>. Can you tell the difference? Which feels right?</P
+></DIV
+><DIV
+CLASS="answer"
+><P
+><B
+> </B
+><A
+HREF="ch04lev1sec6.html#ch04que05"
+>Using <TT
+CLASS="literal"
+>mouseReleaseEvent()</TT
+> feels right, of course. (Would I have asked otherwise? ;) If you use <TT
+CLASS="literal"
+>mousePressEvent()</TT
+>, the action happens as soon as you press the button</A
+>.</P
+></DIV
+></DIV
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC6"/></TD
+></TR
+><ANNOTATION
+NAME="appC6"
+TITLE="Exercises"/></TABLE
+></DIV
+></TD
+><TD
+WIDTH="10%"
+VALIGN="BOTTOM"
+ALIGN="CENTER"
+><ANNMARK
+NAME="appC5"/></TD
+></TR
+><ANNOTATION
+NAME="appC5"
+TITLE="Chapter 4"/></TABLE
+></DIV
+><DIV
+ALIGN="RIGHT"
+CLASS="NAVBAR"
+><P
+><A
+HREF="appc3.html"
+>Prev</A
+> <A
+HREF="appc7.html"
+>Next</A
+> <A
+HREF="index.html"
+>Table of Contents</A
+></P
+></DIV
+><HR
+WIDTH="100%"
+SIZE="2"
+ALIGN="CENTER"
+NOSHADE="NOSHADE"/></BODY
+></HTML
+>

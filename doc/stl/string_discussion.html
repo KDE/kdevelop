@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//Netscape Comm. Corp.//DTD HTML//EN">
+<!--
+  -- Copyright (c) 1996-1999
+  -- Silicon Graphics Computer Systems, Inc.
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Silicon Graphics makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  --
+  -- Copyright (c) 1994
+  -- Hewlett-Packard Company
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  Hewlett-Packard Company makes no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  --
+  -->
+
+<HTML>
+<HEAD>
+    <TITLE> Strings in SGI STL</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+ALINK="#ff0000"> 
+<IMG SRC="CorpID.gif" 
+     ALT="SGI" HEIGHT="43" WIDTH="151"> 
+<!--end header-->
+<H1>Strings in SGI STL </H1>
+This is an attempt to answer some of the questions related to the use
+of strings with SGI STL.
+
+<H2>
+What's wrong with the string class defined by the draft standard?
+</h2>
+There are several problems, but the most serious ones relate to the
+specification for lifetimes of references to characters in a string.
+The second committee draft disallows the expression
+<NOBR><SAMP>s[1] == s[2]</samp></nobr>
+where s is a nonconstant
+string.  This is not simply an oversight; current reference counted
+implementations may fail for more complicated examples.  They may fail even
+for <NOBR><SAMP>s[1] == s[2]</samp></nobr> if the string <samp>s</samp> is
+simultaneously examined (merely examined, not necessarily modified) by
+another thread.  It is hard to define precisely what constitutes a
+correct use of one of the current reference counted implementation.
+<P>
+This problem was partially addressed at the July 1997 meeting of the
+C++ standardization committee; the solution was to adopt more
+complicated rules about reference lifetimes.  Unfortunately, these new
+rules still do not address the multi-threading issues.
+<P>
+A related problem was pointed out in the French national body comments
+on the second committee draft.  The following program produces the
+wrong answer for most reference counted <tt>basic_string</tt>
+implementations that we have tested; the problem is that, if two
+strings share a common representation, they are vulnerable to
+modification through a pre-existing reference or iterator.
+<PRE>
+# include &ltstring&gt
+# include &ltstdio.h&gt
+
+main() {
+   string s("abc");
+   string t;
+   char &amp c(s[1]);
+
+   t = s;	// Data typically shared between s and t.
+   c = 'z';     // How many strings does this modify?
+   if (t[1] == 'z') {
+        printf("wrong\n");
+   } else {
+        printf("right\n");
+   }
+}
+</pre>
+<P>
+The draft standard (as well as common sense) says that updating a
+reference to one of <tt>s</tt>'s elements should only modify
+<tt>s</tt>, not <tt>t</tt> as well; the fact that <tt>s</tt> and
+<tt>t</tt> might share a representation is an implementation detail
+that should have no effect on program behavior.  Given the design of
+<tt>basic_string</tt>, though, it is very difficult for a
+reference-counted implementation to satisfy that requirement.
+<P>
+The only known way for a reference-counted implementation to avoid
+this problem is to mark a string as unsharable whenever there might be
+an existing reference or iterator to that string.  That is, whenever a
+program obtains a reference or an iterator to a string (<I>e.g.</i> by
+using <TT>operator[]</tt> or <tt>begin()</tt>), that particular string
+will no longer use reference counting; assignment and copy
+construction will copy the string's elements instead of just copying a
+pointer.  (We are not aware of any implementation that uses this 
+technique and that also attempts to be thread-safe.)
+<p>
+This is a drastic solution: since almost all ways of referring to
+characters involve references or iterators, this solution implies, in
+effect, that the only strings that can be reference-counted are the
+ones that are never used.  In practice, then, a reference counted
+implementation of <tt>basic_string</tt> can't achieve the performance
+gains that one might otherwise expect, since reference counting is
+forbidden in all but a few special cases.
+<P>
+A different solution is to abandon the goal of reference-counted
+strings altogether, and to provide a non-reference-counted
+implementation of <TT>basic_string</tt> instead.  The draft standard
+permits non-reference-counted implementations, and several vendors
+already provide them.  The performance characteristics
+of a non-reference-counted <TT>basic_string</tt> are predicable,
+and are very similar to those of a <TT>vector&ltchar&gt</tt>: 
+copying a string, for example, is always an <i>O(N)</i>
+operation.
+<P>
+In this implementation, <A href="basic_string.html">basic_string</A>
+does not use reference counting.
+
+<H2>
+I have been using a reference counted implementation, and it works fine.
+Why haven't I seen problems?
+</h2>
+The current implementations do work correctly, most of the time:
+preserving a reference to a character in a string is uncommon.
+(Although preserving iterators to strings may be more frequent, and
+exactly the same issues apply to iterators.)  Some less contrived
+sequential programs also fail, though, or else behave differently on
+different platforms.  
+<P>
+Multi-threaded applications that use a reference counted
+<tt>basic_string</tt> are likely to fail intermittently, perhaps once
+every few months; these intermittent failures are difficult to
+reproduce and debug.  But it is likely that a large fraction of
+multi-threaded clients will fail occasionally, thus making such a
+library completely inappropriate for multi-threaded use.
+
+<H2>
+So what should I use to represent strings?
+</h2>
+There are several possible options, which are appropriate under different
+circumstances:
+<DL>
+<DT><B><A HREF="Rope.html">Ropes</A></b>
+<DD>
+Use the <TT><A HREF="Rope.html">rope</A></TT> package provided by the
+SGI STL.  This provides all functionality that's likely to be needed.
+Its interface is similar to the current draft standard, but different
+enough to allow a correct and thread-safe implementation.  It should
+perform reasonably well for all applications that do not require very
+frequent small updates to strings.  It is the only alternative that
+scales well to very long strings, <i>i.e.</i> that could easily be used to
+represent a mail message or a text file as a single string.
+<P>
+The disadvantages are:
+<UL>
+<LI> Single character replacements are slow.  Consequently STL algorithms
+are likely to be slow when updating ropes.  (Insertions near the beginning
+take roughly the same amount of time as single character replacements, and
+much less time than corresponding insertions for the other string
+alternatives.)
+<LI>
+The <TT><A HREF="Rope.html">rope</A></TT> implementation stretches
+current compiler technology.  Portability and compilation time may be
+an issue in the short term.  Pthread performance on non-SGI platforms
+will be an issue until someone provides machine-specific fast
+reference counting code.  (This is also likely to be an issue for
+other reference counted implementations.)
+</ul>
+<DT><B>C strings</b>
+<DD>
+This is likely to be the most efficient way to represent a large
+collection of very short strings.  It is by far the most space
+efficient alternative for small strings.  For short strings, the C
+library functions in <tt>&lt;string.h&gt;</tt> provide an efficient set of
+tools for manipulating such strings.  They allow easy communication
+with the C library.  The primary disadvantages are that
+<UL>
+<LI> Operations such as concatenation and substring are much more
+expensive than for <TT><A HREF="Rope.html">ropes</A></TT> if the
+strings are long.  A C string is not a good representation for a text
+file in an editor.
+<LI> The user needs to be aware of sharing between string representations.
+If strings are assigned by copying pointers, an update to one string may
+affect another.
+<LI>C strings provide no help in storage management.  This may be a
+major issue, although a garbage collector can help alleviate it.
+</ul>
+<DT><B><A Href="Vector.html">vector</A>&lt;char&gt;</b>
+<DD>
+If a string is treated primarily as an array of characters, with
+frequent in-place updates, it is reasonable to represent it as <TT><A
+Href="Vector.html">vector</A>&lt;char&gt;</tt> or <TT><A
+Href="Vector.html">vector</A>&lt;wchar_t&gt;</tt>.  The same is true
+if it will be modified by STL container algorithms.  Unlike C strings,
+vectors handle internal storage management automatically, and
+operations that modify the length of a string are generally more
+convenient.
+<P>
+Disadvantages are:
+<UL>
+<LI>Vector assignments are much more expensive than C string pointer
+assignments; the only way to share string representations is to pass
+pointers or references to vectors.
+<LI>Most operations on entire strings (<I>e.g.</i> assignment, concatenation)
+do not scale well to long strings.
+<LI>A number of standard string operations (<I>e.g.</i> concatenation
+and substring) are not provided with the usual syntax, and must be
+expressed using generic STL algorithms.  This is usually not hard.
+<LI>Conversion to C strings is currently slow, even for short strings.
+That may change in future implementations.
+</ul>
+</dl>
+<H2>What about <TT>mstring.h</tt>, as supplied with SGI's 7.1 compiler?</h2>
+This package was a minimal adaptation of the freely available Modena
+strings package.  It was intended as a stopgap.  We do not intend to 
+develop it further.
+<P>
+It shares some of the reference lifetime problems of other
+implementations that try to conform to the draft standard.  Its exact
+semantics were never well-defined.  Under rare conditions, it will
+have unexpected semantics for single-threaded applications.  It fails
+on the example given above.  We strongly discourage use for
+multi-threaded applications.
+
+<!--start footer--> 
+<HR SIZE="6">
+<A href="http://www.sgi.com/"><IMG SRC="surf.gif" HEIGHT="54" WIDTH="54" 
+        ALT="[Silicon Surf]"></A>
+<A HREF="index.html"><IMG SRC="stl_home.gif" 
+        HEIGHT="54" WIDTH="54" ALT="[STL Home]"></A>
+<BR>
+<FONT SIZE="-2">
+<A href="http://www.sgi.com/Misc/sgi_info.html" TARGET="_top">Copyright &copy; 
+1999 Silicon Graphics, Inc.</A> All Rights Reserved.</FONT>
+<FONT SIZE="-3"><a href="http://www.sgi.com/Misc/external.list.html" TARGET="_top">TrademarkInformation</A>
+</FONT>
+<P>
+</BODY>
+</HTML> 
