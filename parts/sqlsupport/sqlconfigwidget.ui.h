@@ -92,6 +92,10 @@ public:
 	}
     }
 
+    virtual void setText(const QString& bogus)
+    {
+        QTableItem::setText(QString().fill('*', bogus.length()));
+    }
     QString password;
 };
 
@@ -160,22 +164,26 @@ void SqlConfigWidget::updateButtons()
 void SqlConfigWidget::testDb()
 {
     static const QString cName( "SqlConfigWidgetTest" );
-
     int cr = dbTable->currentRow();
+    if (cr < 0)
+        return;
+
     QSqlDatabase* db = QSqlDatabase::addDatabase( dbTable->text( cr, 0 ), cName );
     db->setDatabaseName( dbTable->text( cr, 1 ) );
     db->setHostName( dbTable->text( cr, 2 ) );
     bool ok;
     int port = dbTable->text( cr, 3 ).toInt( &ok );
     if (ok && port >= 0)
-	db->setPort( port );
-    if ( db->open( dbTable->text( cr, 4 ), dbTable->text( cr, 5 ) ) ) {
-	KMessageBox::information( this, i18n("Connection successful") );
-	db->close();
+        db->setPort( port );
+    QString pass = ((PasswordTableItem*)dbTable->item( cr, 5 ))->password;
+
+    if ( db->open( dbTable->text( cr, 4 ), pass ) ) {
+        KMessageBox::information( this, i18n("Connection successful") );
+        db->close();
     } else {
-	KMessageBox::detailedSorry( this, i18n("Unable to connect to database server"),
-				    db->lastError().driverText() + "\n" +
-				    db->lastError().databaseText() );
+        KMessageBox::detailedSorry( this, i18n("Unable to connect to database server"),
+                db->lastError().driverText() + "\n" +
+                db->lastError().databaseText() );
     }
 
     db = 0;
@@ -225,9 +233,8 @@ void SqlConfigWidget::loadConfig()
 
         addRow( dbTable );
         int row = dbTable->numRows() - 2;
-        for ( int ii = 0; ii < 5; ii++ )
+        for ( int ii = 0; ii < 6; ii++ )
             dbTable->setText( row, ii, db[ii] );
-        dbTable->setText(row, 5, QString().fill(QChar('*'), db[5].length()));
         ((PasswordTableItem*)dbTable->item( row, 5 ))->password = SQLSupportPart::cryptStr( db[5] );
 
         i++;
