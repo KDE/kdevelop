@@ -6,3 +6,4 @@ Comment=Ada Project
 Name=KDevAdaProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevadaproject
+X-KDevelop-Language=Ada
