@@ -54,26 +54,29 @@ class ProjectSpace : public KDevComponent {
     public: 
   ProjectSpace(QObject* parent=0,const char* name=0);
   ~ProjectSpace();
-
+  //++++++ from the KDevComponent interface +++++++
   virtual QList<KAction> kdevNodeActions(KDevNode* pNode);
-
+  virtual void setupGUI();
 
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
-
   /** returns the default files groups, can be used in ProjectView...*/
   virtual QList<FileGroup> defaultFileGroups();
+
+  //++++++++ project related methods +++++++++++
   /** returns all registered projects*/
   QList<Project>* allProjects();
+  /** returns a lsit of all registered directories in this projectspace */
+  virtual QStringList allDirectories();
   Project* project(QString projectName);
-
-  virtual void setupGUI();
   void addProject(Project* prj);
   void removeProject(QString name);
   void setCurrentProject(Project* prj);
   void setCurrentProject(QString name);
   Project* currentProject();
+  QStringList allProjectNames();
   
+  //++++++++ general projectspace properties ++++++++
   /** set the projectspace name*/
   void setName(QString name);
   void setAbsolutePath(QString path);
@@ -90,30 +93,29 @@ class ProjectSpace : public KDevComponent {
   /** set the email, stored in the user file */
   void setEmail(QString email);
   void setCompany(QString company);
-
-  /** method to fill up a string template with actual projectspace info
-   */
+  /** method to fill up a string template with actual projectspace info */
   void setInfosInString(QString& text);
-
-  /*_____some get methods_____*/
-	// member
   /** returns the name of the projectspace*/
   QString name();
   /** Fetch the name of the version control system */
   QString VCSystem();
-  /** Fetch the authors name. stored in the *_local files*/
+  /** Fetch the authors name. stored in the user projectspace file*/
   QString author();
   /** Fetch the author's initials. stored in the *_local files*/
   QString initials();
-  /** Fetch the authors eMail-address,  stored in the *_local files */
+  /** Fetch the authors eMail-address,  stored in the user projectspace file */
   QString email();
   QString company();
   QString programmingLanguage();
-  QStringList allProjectNames();
   
-  /***/
+  /** generate default files, 
+   * is used by the application wizard to generated all needed files, 
+   * for instance the admin dir in automake projects*/
   virtual void generateDefaultFiles();
-  virtual void modifyDefaultFiles();
+
+  /** this methods update all project administration files:
+      Makefiles, configure.in and so*/
+  virtual void updateAdminFiles();
 	
   virtual QDomDocument* writeGlobalDocument();
   virtual QDomDocument* writeUserDocument();
@@ -153,18 +155,14 @@ protected:
   QString m_name;
   /** the current absolute path to the projectspace */
   QString m_path;
-	
   /** the programming language for the projectspace
       needed to load the correct languagesupport*/
-  
   QString m_language;
   // static
   /** projectspace template, name*/
   QString m_projectspaceTemplate;
-
   /** all projects in the ProjectSpace*/
   QList<Project>* m_pProjects;
-
   /** current active project*/
   Project* m_pCurrentProject;
   /** absolute*/
@@ -172,7 +170,6 @@ protected:
   /** absolute */
   QString m_projectspaceFile;
   QString m_version;
-
   // current User profile
   QString m_email;      // Author e-mail address.
   QString m_company;    // Company name.

@@ -31,24 +31,23 @@ Q_OBJECT
  virtual ~AutomakeProjectSpace();
  
  virtual void setupGUI();
- virtual void modifyDefaultFiles();
+ virtual void updateAdminFiles();
  /** Store the additional arguments for configure,stored in the *_user files */
-  void setConfigureArgs(QString args);
-  /** Fetch the commandline additional arguments for configure */
-  QString configureArgs();
-
-  /** add the data to the psElement (Projectspace)*/
-  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-  virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
-
-  virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-  virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
-
-  protected slots:
+ void setConfigureArgs(QString args);
+ /** Fetch the commandline additional arguments for configure */
+ QString configureArgs();
+ /** add the data to the psElement (Projectspace)*/
+ virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+ virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
+ 
+ virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+ virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
+ 
+ protected slots:
   virtual void updateMakefilesAm();
-
+ 
  protected:
-  QString  m_configureArgs;
+ QString  m_configureArgs;
 
 };
 

@@ -106,7 +106,7 @@ void Project::setAbsolutePath(QString path){
   m_userProjectFile = m_absPath + "/." + m_name + ".kdevprj2";
 }
 /** generate/modifiy the Makefile*/
-void Project::updateMakefile(){
+void Project::updateMakefile(QString directory,QTextStream& stream,QString target){
 }
 void Project::addFile(RegisteredFile* pFile){
   m_pFiles->append(pFile);
@@ -243,6 +243,43 @@ Project* Project::createNewProject(QString projecttypeName,QObject* parent){
     kdDebug(9030) << "couldn't create the project "<<  service->library()  << endl;
   }
   return prj;
+}
+
+/*----------------------------------------------- CProject::getType()
+ * getType()
+ *   Return the type of file based on the extension.
+ *
+ * Parameters:
+ *   aFile           The file to check.
+ *
+ * Returns:
+ *   ProjectFileType The filetype.
+ *   DATA            If unknown.
+ *-----------------------------------------------------------------*/
+QString Project::getType(QString absFileName){
+  QString retVal="DATA";
+  
+  QString ext(absFileName);
+  int pos = ext.findRev('.');
+
+  if (pos == -1 ){ return retVal;} // not found, so DATA
+  ext = ext.right(ext.length()-pos);
+  
+  //ext = rindex( aFile, '.' );
+  if( !ext.isEmpty() ){
+    // Convert to lowercase.
+    ext = ext.lower();
+    
+    // Check for a known extension.
+    if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
+	ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" || ext == ".ui" )
+      retVal = "SOURCE";
+    else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" || ext == ".H" || ext == ".hh" )
+      retVal = "HEADER";
+    else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
+      retVal = "LEXICAL";
+  }
+  return retVal;
 }
 
 #include "project.moc"

@@ -95,6 +95,7 @@ void AppWizard::accept(){
   else{
     kdDebug(9030) << "ConfigFile successfully written" << endl;
   }
+  m_pProjectspace->updateAdminFiles(); // generte configure.in.in, Makefileam's or similar
   QWizard::accept();
 }
 

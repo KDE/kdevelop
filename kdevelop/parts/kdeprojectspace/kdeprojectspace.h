@@ -22,40 +22,41 @@
 #include <klibloader.h>
 #include <kaboutdata.h>
 
-/** handles all po's for every binary project...
-  *@author Sandy Meier
-  */
+/** handles all KDE related features: po's for every binary project...
+ *@author Sandy Meier
+ */
 
 class KDEProjectSpace : public AutomakeProjectSpace  {
 Q_OBJECT
-public: 
-	KDEProjectSpace(QObject* parent=0,const char* name=0);
-	~KDEProjectSpace();
-	
-	virtual	void modifyDefaultFiles();
-	virtual void setupGUI();
-	virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-	virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
-	
-	virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-	virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
-	virtual KAboutData* aboutPlugin();
-	QList<FileGroup> defaultFileGroups();
-
-	protected slots:
+  public: 
+ KDEProjectSpace(QObject* parent=0,const char* name=0);
+ ~KDEProjectSpace();
+ 
+ virtual void updateAdminFiles();
+ virtual void setupGUI();
+ virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+ virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
+ 
+ virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+ virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
+ virtual KAboutData* aboutPlugin();
+ QList<FileGroup> defaultFileGroups();
+ QStringList allDirectories();
+ 
+ protected slots:
   void slotProjectAddNewTranslationFile();
-	virtual void updateMakefilesAm();
-	virtual void slotBuildMake();
-	virtual void slotBuildRebuildAll();
-	virtual void slotBuildCleanRebuildAll();
-	virtual void slotBuildExecute();
-	virtual void slotBuildExecuteWithArgs();
-	virtual void slotBuildDistClean();
-	virtual void slotBuildAutoconf();
-	virtual void slotBuildConfigure();
-
-
+ virtual void updateMakefilesAm();
+ virtual void slotBuildMake();
+ virtual void slotBuildRebuildAll();
+ virtual void slotBuildCleanRebuildAll();
+ virtual void slotBuildExecute();
+ virtual void slotBuildExecuteWithArgs();
+ virtual void slotBuildDistClean();
+ virtual void slotBuildAutoconf();
+ virtual void slotBuildConfigure();
+ 
+ 
  protected:
-	KAboutData* m_pAboutData;
+ KAboutData* m_pAboutData;
 };
 #endif

@@ -31,6 +31,8 @@ public:
   KDEBinaryProjectPlugin( QObject *parent=0, const char *name=0);
   ~KDEBinaryProjectPlugin();
   virtual KAboutData* aboutPlugin();
+  virtual void updateMakefile(QString directory,QTextStream& stream,QString target=QString::null);
+
 protected:
 	KAboutData* m_pAboutData;
 };

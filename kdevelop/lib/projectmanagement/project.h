@@ -63,8 +63,14 @@ class Project : public QObject {
   void setRelativePath(QString path);
   QString absolutePath();
   QString relativePath();
-  /** generate/modifiy the Makefile*/
-  virtual void updateMakefile();
+  QString getType(QString absFileName);
+  /** generate/modify the Makefile
+   * if target == QString::null write the custom targets, 
+   * otherwise write line for the requested target
+   * for example 
+   * bin_PROGRAMS,install-data-local...
+   */
+  virtual void updateMakefile(QString directory,QTextStream& stream,QString target=QString::null);
 
   virtual void addFile(RegisteredFile* file);
   /** include in distribution,install no*/

@@ -198,10 +198,8 @@ void ProjectSpace::generateDefaultFiles(){
   proc << "tar";
   proc << args;
   proc.start(KProcess::Block,KProcess::AllOutput);
-  
-  modifyDefaultFiles();
 }
-void ProjectSpace::modifyDefaultFiles(){
+void ProjectSpace::updateAdminFiles(){
   
 }
 /*_____some get methods_____*/
@@ -879,4 +877,8 @@ void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
   KIO::FileCopyJob* pJob = KIO::file_copy(srcURL,destURL);
   emit sigAddedFileToProject(pNewFileNode); // inform the other components
 }
+QStringList ProjectSpace::allDirectories(){
+}
+
+
 #include "projectspace.moc"

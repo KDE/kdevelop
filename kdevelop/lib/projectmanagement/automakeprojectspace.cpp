@@ -28,8 +28,8 @@ AutomakeProjectSpace::~AutomakeProjectSpace(){
 void AutomakeProjectSpace::setupGUI(){
   ProjectSpace::setupGUI();
 }
-void AutomakeProjectSpace::modifyDefaultFiles(){
-  ProjectSpace::modifyDefaultFiles();
+void AutomakeProjectSpace::updateAdminFiles(){
+  ProjectSpace::updateAdminFiles();
   QFile file(m_path + "/configure.in");
   if ( file.open(IO_ReadOnly) ) {    // file opened successfully
     QTextStream t( &file );        // use a text stream

@@ -25,8 +25,25 @@ KDEBinaryProjectPlugin::KDEBinaryProjectPlugin(QObject *parent, const char *name
 //  cerr  << "enter KDEBinaryProjectPlugin::KDEBinaryProjectPlugin" << endl;
   m_pAboutData=0;
 }
+
 KDEBinaryProjectPlugin::~KDEBinaryProjectPlugin(){
 }
+
+void KDEBinaryProjectPlugin::updateMakefile(QString directory,QTextStream& stream,QString target){
+  cerr << "\nkdevelop (KDE Binary Project) enter updateMakefile";
+  if(target == "bin_PROGRAMS"){
+    stream << " " << m_name;
+  }
+  if(target == QString::null){
+    if(absolutePath() == directory){ // write the main target
+      stream << "# KDE binary target\n";
+      stream << m_name << "_SOURCES = ";
+      stream << m_name << "_METASOURCES = AUTO\n";
+      stream << m_name << "_LDFLAGS = $(all_libraries) $(KDE_RPATH)\n";
+    }
+  }
+}
+
 KAboutData* KDEBinaryProjectPlugin::aboutPlugin(){
   if (m_pAboutData == 0){
     m_pAboutData= new KAboutData( "KDEBinaryProject", I18N_NOOP("KDE Project (Binary)"),
