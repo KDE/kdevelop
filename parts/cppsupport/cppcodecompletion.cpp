@@ -177,7 +177,9 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_activeEditor   = 0;
     m_activeCompletion = 0;
     m_ccTimer = new QTimer( this );
-    connect( m_ccTimer, SIGNAL(timeout()), this, SLOT(completeText()) );
+    m_ccLine = 0;
+    m_ccColumn = 0;
+    connect( m_ccTimer, SIGNAL(timeout()), this, SLOT(slotTimeout()) );
 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
@@ -190,6 +192,25 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
 CppCodeCompletion::~CppCodeCompletion( )
 {
+}
+
+void CppCodeCompletion::slotTimeout()
+{
+    if( !m_activeCursor || !m_activeEditor || !m_activeCompletion )
+        return;
+
+    uint nLine, nCol;    
+    m_activeCursor->cursorPositionReal( &nLine, &nCol );
+    
+    if( nLine != m_ccLine || nCol != m_ccColumn )
+	return;;
+    
+    QString textLine = m_activeEditor->textLine( nLine );
+    QChar ch = textLine[ nCol ];;
+    if( ch.isLetterOrNumber() || ch == '_' )
+	return;
+        
+    completeText();
 }
 
 void
@@ -278,6 +299,9 @@ CppCodeCompletion::slotTextChanged()
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
+    m_ccLine = nLine;
+    m_ccColumn = nCol;
+    
     if ( ch == "(" || ch == "." || ch2 == "->" || ch2 == "::" ){
     	m_ccTimer->start( 500, true );
     }
@@ -542,7 +566,7 @@ CppCodeCompletion::completeText( )
     if( !m_activeCursor || !m_activeEditor || !m_activeCompletion )
         return;
 
-    uint nLine, nCol;
+    uint nLine, nCol;    
     m_activeCursor->cursorPositionReal( &nLine, &nCol );
 
     QString strCurLine = m_activeEditor->textLine( nLine );
@@ -557,7 +581,7 @@ CppCodeCompletion::completeText( )
 	QChar c = strCurLine[ pos ];
 	if( !(c.isLetterOrNumber() || c == '_') )
 	    return;
-    }
+    } 
  
     if( ch == "(" ){
         --nCol;

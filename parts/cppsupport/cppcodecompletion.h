@@ -73,6 +73,7 @@ private slots:
     void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
     void slotTextChanged();
     void slotFileParsed( const QString& fileName );
+    void slotTimeout();
 
 private:
     QGuardedPtr<CppSupportPart> m_pSupport;
@@ -86,6 +87,9 @@ private:
     bool m_bArgHintShow;
     bool m_bCompletionBoxShow;
     bool m_bCodeCompletion;
+
+    private: unsigned int m_ccLine;
+    private: unsigned int m_ccColumn;
 };
 
 #endif
