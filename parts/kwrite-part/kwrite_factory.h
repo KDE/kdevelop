@@ -19,8 +19,7 @@ class KWritePartFactory : public KParts::Factory
 public:
   KWritePartFactory();
   virtual ~KWritePartFactory();
-  virtual KParts::Part* createPartObject( QWidget *parentWidget, const char *widgetName,
-                                          QObject *parent, const char *name,
+  virtual QObject *createObject( QObject *parent, const char *name,
                                           const char *classname, const QStringList &args );
   static KInstance* instance();
 

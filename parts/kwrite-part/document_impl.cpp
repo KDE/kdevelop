@@ -4,10 +4,12 @@
 #include <qtabwidget.h>
 
 
+#include "kwrite_factory.h"
 #include "document_impl.h"
 #include "clipboard_iface_impl.h"
 #include "undo_iface_impl.h"
 #include "cursor_iface_impl.h"
+
 
 #include "kwrite/kwdoc.h"
 #include "kwrite/kwview.h"
@@ -16,16 +18,29 @@
 using namespace KEditor;
 
 
-DocumentImpl::DocumentImpl(Editor *parent, QWidget *parentWidget)
+DocumentImpl::DocumentImpl(Editor *parent)
   : Document(parent)
 {
+  setInstance( KWritePartFactory::instance() );
+  
   m_document = new KWriteDoc(HlManager::self(), "");
-  m_view = static_cast<KWrite*>(m_document->createView(parentWidget, ""));
+  m_view = static_cast<KWrite*>(m_document->createView(0, ""));
+  setWidget(m_view);
 
+  // register with the view manager
+  parent->addView(m_view);
+     
   // create interfaces
   new ClipboardIfaceImpl(m_view, this, parent);
   new CursorIfaceImpl(m_view, this, parent);
   new UndoIfaceImpl(m_view, this, parent);
+
+  setXMLFile("kwriteeditor_part.rc", true);
+   
+  // register with the part manager
+  parent->addPart(this);
+  
+  m_view->setFocus();
 }
 
 
@@ -66,12 +81,6 @@ bool DocumentImpl::save(QString filename)
   rename(filename);
 
   return true;
-}
-
-
-KWrite *DocumentImpl::widget()
-{
-  return m_view;
 }
 
 

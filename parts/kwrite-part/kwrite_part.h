@@ -8,7 +8,6 @@
 #include <kparts/part.h>
 
 
-class QTabWidget;
 class KURL;
 
 
@@ -22,16 +21,12 @@ class KWritePart : public KEditor::Editor
 
 public:
 
-  KWritePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name);
+  KWritePart(QObject *parent, const char *name);
   virtual ~KWritePart();
 
 
   virtual KEditor::Document *getDocument(const QString &filename=QString::null);
-  virtual void closeDocument(KEditor::Document *doc);
   virtual KEditor::Document *currentDocument();
-
-
-  QTabWidget *tabWidget() { return _stack; };
 
   QList <DocumentImpl> _documents;
 
@@ -40,11 +35,6 @@ private slots:
 
   void fileNameChanged(QString name);
   void currentChanged(QWidget *widget);
-
-
-private:
-
-  QTabWidget *_stack;
 
 };
 

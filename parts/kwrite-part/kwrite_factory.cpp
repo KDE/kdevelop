@@ -34,12 +34,11 @@ KWritePartFactory::~KWritePartFactory()
   s_instance = 0L;
 }
 
-KParts::Part* KWritePartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
-    QObject *parent, const char *name,
+QObject* KWritePartFactory::createObject(QObject *parent, const char *name,
     const char *, const QStringList &)
 {
   // Create an instance of our Part
-  KWritePart* obj = new KWritePart( parentWidget, widgetName, parent, name );
+  KWritePart* obj = new KWritePart(parent, name );
 
   return obj;
 }

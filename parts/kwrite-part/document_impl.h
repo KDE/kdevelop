@@ -15,13 +15,11 @@ class DocumentImpl : public KEditor::Document
 
 public:
 
-  DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget=0);
+  DocumentImpl(KEditor::Editor *parent);
   virtual ~DocumentImpl();
   
   virtual bool load(QString filename);
   virtual bool save(QString filename);
-
-  KWrite *widget();
 
 
 private:
