@@ -8,6 +8,7 @@ Name[da]=KDevelop Projektimportør
 Name[de]=Projekt-Import für KDevelop
 Name[es]=Importador de proyectos de KDevelop
 Name[et]=KDevelopi projekti importija
+Name[eu]=KDevelop-en proiektu inportatzailea
 Name[fr]=Importation de projet KDevelop
 Name[hu]=KDevelop projektimportáló
 Name[it]=Importatore di progetto di KDevelop
@@ -15,10 +16,11 @@ Name[pl]=KDevelop: import projektu
 Name[pt]=Importador de Projectos do KDevelop
 Name[pt_BR]=Importador de Projeto para o KDevelop
 Name[ru]=Импорт проектов KDevelop
+Name[sl]=Uvoz projektov v KDevelop
 Name[sr]=KDevelop-ов увозник за пројекте
-Name[sr@Latn]=KDevelop-ов увозник за пројекте
+Name[sr@Latn]=KDevelop-ov uvoznik za projekte
 Name[sv]=KDevelop projektimport
-Name[xx]=xxKDevelop Project Importerxx
+Name[uk]=Імпорт проектів для KDevelop
 
 [PropertyDef::X-KDevelop-ProjectImporter]
 Type=QString

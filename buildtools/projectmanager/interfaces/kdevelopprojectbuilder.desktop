@@ -8,6 +8,7 @@ Name[da]=KDevelop Projektbygger
 Name[de]=Projekterstellung für KDevelop
 Name[es]=Constructor de projectos de KDevelop
 Name[et]=KDevelopi projektiehitaja
+Name[eu]=KDevelop-en proiektu eraikitzailea
 Name[fr]=Créateur de projet pour KDevelop
 Name[hu]=KDevelop projektkezelő
 Name[it]=Compilatore di progetto di KDevelop
@@ -15,10 +16,11 @@ Name[pl]=Budowanie projektu w KDevelopie
 Name[pt]=Construtor de Projectos do KDevelop
 Name[pt_BR]=Construtor de Projeto do KDevelop
 Name[ru]=Интерфейс сборки проектов KDevelop
+Name[sl]=Projektni graditelj v KDevelopu
 Name[sr]=KDevelop-ов градилац пројекта
-Name[sr@Latn]=KDevelop-ов градилац пројекта
+Name[sr@Latn]=KDevelop-ov gradilac projekta
 Name[sv]=KDevelop projektbyggare
-Name[xx]=xxKDevelop Project Builderxx
+Name[uk]=Програма збирання проектів KDevelop
 
 [PropertyDef::X-KDevelop-ProjectBuilder]
 Type=QString

@@ -23,6 +23,7 @@ Description[it]=ioslave per Subversion
 Description[pt]='Ioslave' para Subversion
 Description[pt_BR]=ioslave de Subversão
 Description[ru]=Обработчик ввода-вывода Subversion
+Description[sl]=ioslave za Subversion
 Description[sv]=Subversion I/O-slav
 Description[uk]=Підлеглий В/В Subversion
 maxInstances=5

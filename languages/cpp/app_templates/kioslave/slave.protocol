@@ -20,5 +20,6 @@ Description[pl]=kioslave dla %{APPNAMELC}
 Description[pt]=Um 'kioslave' para %{APPNAMELC}
 Description[pt_BR]=Um kioslave para %{APPNAMELC}
 Description[ru]=Обработчик ввода-вывода для %{APPNAMELC}
+Description[sl]=kioslave za %{APPNAMELC}
 Description[sv]=En I/O-slav för %{APPNAMELC}
 Description[uk]=Підлеглий В/В (kioslave) для %{APPNAMELC}
