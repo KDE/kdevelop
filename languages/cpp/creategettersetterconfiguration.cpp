@@ -55,3 +55,6 @@ void CreateGetterSetterConfiguration::store( )
 	DomUtil::writeBoolEntry(*m_settings, defaultPath + "/inlineGet", m_isInlineGet );
 	DomUtil::writeBoolEntry(*m_settings, defaultPath + "/inlineSet", m_isInlineSet );
 }
+
+#include "creategettersetterconfiguration.moc"
+
