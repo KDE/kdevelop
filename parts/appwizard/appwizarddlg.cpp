@@ -78,6 +78,10 @@
 #include "profilesupport.h"
 #include "filetemplate.h"
 
+#include "propeditor/property.h"
+#include "propeditor/multiproperty.h"
+#include "propeditor/propertylist.h"
+#include "propeditor/propertyeditor.h"
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
     : AppWizardDialogBase(parent, name,true), m_pCurrentAppInfo(0), 
@@ -124,6 +128,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         kdDebug(9010) << (*it) << endl;
 
         ApplicationInfo *info = new ApplicationInfo;
+		info->propValues = new PropertyLib::PropertyList();
 		info->templateFile = KGlobal::dirs()->findResource("apptemplates", *it);
         info->templateName = (*it);
 
@@ -192,10 +197,12 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				QString name = templateConfig.readEntry( "Value" );
 				QString label = templateConfig.readEntry( "Comment" );
 				QString type = templateConfig.readEntry( "ValueType", "String" );
-				autoKey key( name, label);
-				QVariant value = templateConfig.readPropertyEntry( "Default", QVariant::nameToType( type.latin1() ) );
-				value.cast( QVariant::nameToType( type.latin1() ) );  // fix this in kdelibs...
-				info->subValues.insert( key, value );
+				QVariant::Type variantType = QVariant::nameToType( type.latin1());
+				QVariant value = templateConfig.readPropertyEntry( "Default", variantType );
+				value.cast( variantType );  // fix this in kdelibs...
+				if( !name.isEmpty() && !label.isEmpty() )
+					info->propValues->addProperty( new PropertyLib::Property( (int)variantType, name, label, value ) );
+				
 			}
 			else if( type == "install" ) // copy dir
 			{
@@ -468,8 +475,11 @@ void AppWizardDialog::accept()
 	templateArchive.close();
 
 	// Build KMacroExpander map
-	m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap);
-
+	//m_customOptions->dataForm()->fillPropertyMap(&m_pCurrentAppInfo->subMap);
+	PropertyLib::PropertyList::Iterator idx = m_pCurrentAppInfo->propValues->begin();
+	for( ; idx != m_pCurrentAppInfo->propValues->end(); ++idx)
+		m_pCurrentAppInfo->subMap.insert( idx.data()->name(), idx.data()->value().toString() );
+	
 	m_pCurrentAppInfo->subMap.insert("src", archDir.name() );
 	m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
 	m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
@@ -810,9 +820,9 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
         //projectNameChanged(); // set the dest new
 
 		// Populate new custom options form
-		m_customOptions = new AutoForm( &m_pCurrentAppInfo->subValues, custom_options );
-
-		custom_options->adjustSize();
+		m_customOptions = new PropertyLib::PropertyEditor( custom_options );
+		m_customOptions->populateProperties(info->propValues);
+		
 
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);

@@ -36,8 +36,13 @@ class ProfileSupport;
 #include "kdevvcsintegrator.h"
 #include "appwizarddlgbase.h"
 #include "vcs_form.h"
-#include "autoform.h"
+//#include "autoform.h"
 #include "kdevlicense.h"
+
+namespace PropertyLib {
+	class PropertyList;
+	class PropertyEditor;
+}
 
 struct installFile
 {
@@ -78,7 +83,9 @@ struct ApplicationInfo
 	QMap<QString,QString> subMapXML;
     QStringList includes;
     
-    AutoPropertyMap subValues;
+	//QMap<autoKey,QVariant> subValues;
+	PropertyLib::PropertyList *propValues;
+	
     QValueList<installFile> fileList;
     QValueList<installArchive> archList;
     QValueList<installDir> dirList;
@@ -176,7 +183,7 @@ private: //data
 //    QDict<KDevVersionControl> m_availVcs;
 	
     QHBoxLayout *m_custom_options_layout;
-    AutoForm *m_customOptions;
+	PropertyLib::PropertyEditor *m_customOptions;
     AppWizardPart *m_part;
     QWidget *m_lastPage;
     QPtrList<KTempFile> m_tempFiles;
