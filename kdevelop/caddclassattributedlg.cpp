@@ -251,6 +251,8 @@ void CAddClassAttributeDlg::setCallbacks()
 CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
 {
   CParsedAttribute *aAttr = new CParsedAttribute();
+  QString comment;
+
   aAttr->setType( typeEdit.text() );
   aAttr->setName( nameEdit.text() );
 
@@ -263,7 +265,9 @@ CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
   
   aAttr->setIsStatic( staticCb.isChecked() );
   aAttr->setIsConst( constCb.isChecked() );
-  aAttr->setComment( docEdit.text() );
+
+  comment = "/** " + docEdit.text() + " */";
+  aAttr->setComment( comment );
 
   return aAttr;
 }

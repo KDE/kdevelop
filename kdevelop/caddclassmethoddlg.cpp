@@ -265,17 +265,17 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   int lpPos;
   QString decl;
   CParsedMethod *aMethod = new CParsedMethod();
+  QString comment;
 
   aMethod->setType( typeEdit.text() );
   
   decl = declEdit.text();
-  lpPos = decl.find( '(' );
 
-  // If no arguments the whole declaration is the name
+  // If no arguments we add ().
   if( lpPos == -1 )
+    aMethod->setName( decl + "()" );
+  else // Else just 
     aMethod->setName( decl );
-  else // Else just until the (.
-    aMethod->setName( decl.left( lpPos ) );
   
   if( publicRb.isChecked() )
     aMethod->setExport( PUBLIC );
@@ -288,7 +288,8 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   aMethod->setIsConst( constCb.isChecked() );
   aMethod->setIsVirtual( virtualCb.isChecked() );
 
-  aMethod->setComment( docEdit.text() );
+  comment = "/** " + docEdit.text() + " */";
+  aMethod->setComment( comment );
 
   return aMethod;
 }
