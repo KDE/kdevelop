@@ -171,12 +171,13 @@ public:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {NoType, Sources, Headers, Forms,Images,IDLs };
+    enum GroupType {NoType, Sources, Headers, Forms,Images,IDLs, InstallRoot, InstallGroup};
 
     static GroupType groupTypeForExtension(const QString &ext);
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
+    QPtrList<GroupItem> installs;
     QPtrList<FileItem> files;
     GroupType groupType;
     SubprojectItem *owner;

@@ -71,6 +71,8 @@ ProjectItem::ProjectItem(Type type, ProjectItem *parent, const QString &text)
 {}
 
 
+
+
 /**
  * Class SubprojectItem
  */
@@ -198,6 +200,8 @@ GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text, const Q
     files.setAutoDelete(true);
     setPixmap(0, SmallIcon("tar"));
 }
+
+
 
 GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
 {
@@ -649,10 +653,26 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
     for (; it2.current(); ++it2)
     {
         listviewControl->insertItem(*it2);
-        QPtrListIterator<FileItem> it3((*it2)->files);
-        for (; it3.current(); ++it3)
-            (*it2)->insertItem(*it3);
-        (*it2)->setOpen(true);
+        if ((*it2)->groupType==GroupItem::InstallRoot)
+        {
+          QPtrListIterator<GroupItem> it3((*it2)->installs);
+          for (; it3.current(); ++it3)
+          {
+              (*it2)->insertItem(*it3);
+              QPtrListIterator<FileItem> it4((*it3)->files);
+              for (; it4.current(); ++it4)
+                  (*it3)->insertItem(*it4);
+              (*it3)->setOpen(true);              
+          }
+          (*it2)->setOpen(true);
+        }
+        else
+        {
+          QPtrListIterator<FileItem> it3((*it2)->files);
+          for (; it3.current(); ++it3)
+              (*it2)->insertItem(*it3);
+          (*it2)->setOpen(true);
+        }
     }
   }
   else
@@ -1798,10 +1818,46 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
     subBuffer->getValues("IMAGES",item->images,item->images_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
-
+    QStringList installs,installs_exclude;
+    subBuffer->getValues("INSTALLS",installs,installs_exclude);
+    
     // Create list view items
 
-    GroupItem * titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
+    GroupItem * titem = createGroupItem(GroupItem::InstallRoot, "INSTALLS",scopeString);
+    titem->owner = item;
+    item->groups.append(titem);
+    if (!installs.isEmpty())
+    {
+      QStringList::iterator it = installs.begin();
+      for (;it!=installs.end();it++)
+      {
+        if ((*it)=="target")
+          continue;
+        QStringList files,files_excl,path,path_excl;
+        subBuffer->getValues((*it)+".files",files,files_excl);        
+        subBuffer->getValues((*it)+".path",path,path_excl);        
+        
+        GroupItem* institem = createGroupItem(GroupItem::InstallGroup, *it ,scopeString);
+        institem->owner = item;
+        titem->installs.append(institem);
+        
+        if (!files.isEmpty())
+        {
+          QStringList::iterator it2 = files.begin();
+          for (;it2!=files.end();it2++)
+          {
+            FileItem *fitem = createFileItem(*it2);
+            institem->files.append(fitem);
+          }
+        }
+        
+
+      }
+    }
+   
+    
+    
+    titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
     titem->owner = item;
     item->groups.append(titem);
     if (!item->images.isEmpty()) {
