@@ -234,17 +234,11 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>0</hsizetype>
+                                        <hsizetype>1</hsizetype>
                                         <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>70</width>
-                                        <height>30</height>
-                                    </size>
                                 </property>
                                 <property name="text">
                                     <string>&amp;Add</string>
@@ -262,7 +256,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>0</hsizetype>
+                                        <hsizetype>1</hsizetype>
                                         <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
@@ -272,12 +266,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <size>
                                         <width>0</width>
                                         <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>70</width>
-                                        <height>30</height>
                                     </size>
                                 </property>
                                 <property name="text">
@@ -296,17 +284,11 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>0</hsizetype>
+                                        <hsizetype>1</hsizetype>
                                         <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>70</width>
-                                        <height>30</height>
-                                    </size>
                                 </property>
                                 <property name="text">
                                     <string>Move &amp;Up</string>
@@ -324,7 +306,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 </property>
                                 <property name="sizePolicy">
                                     <sizepolicy>
-                                        <hsizetype>0</hsizetype>
+                                        <hsizetype>1</hsizetype>
                                         <vsizetype>0</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
@@ -334,12 +316,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <size>
                                         <width>0</width>
                                         <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>70</width>
-                                        <height>30</height>
                                     </size>
                                 </property>
                                 <property name="text">
