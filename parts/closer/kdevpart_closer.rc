@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui>
-<kpartplugin name="closer" library="libcloserplugin" version="1">
-<MenuBar>
-  <Menu name="window">
-    <Action name="closer"/>
-    <Separator/>
- </Menu>
-</MenuBar>
-</kpartplugin>

@@ -1,9 +1,0 @@
-/** \class CloserPart
-Part for closing selected windows
-
-This is a very simple plugin, the only purpose of which is to display
-a dialog showing the currenly open files and offering to close them.
-
-\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
-
-*/

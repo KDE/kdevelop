@@ -1,9 +1,0 @@
-[Protocol]
-exec=kio_chm
-protocol=ms-its
-input=none
-output=filesystem
-reading=true
-defaultMimetype=text/html
-Description=A kioslave for displaying WinHelp files
-Icon=help

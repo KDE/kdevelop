@@ -1,9 +1,0 @@
-[Protocol]
-exec=kio_kdeapi
-protocol=kdeapi
-input=none
-output=filesystem
-reading=true
-listing=Name
-determineMimetypeFromExtension=false
-Icon=khelpcenter
