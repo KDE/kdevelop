@@ -50,6 +50,10 @@ KTabBar, bug fixes, Gideon Release:
 PartExplorer, (bugs for) CvsPart:
   Mario Scalas <mario.scalas@libero.it>
 
+Pascal support and project parts, Filecreate GUI,
+Documentation viewer improvements
+  Alexander Dymo <cloudtemple@mksat.net>
+
 Other software included in the source package:
 
 * KDE 2.0 Development Book
