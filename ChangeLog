@@ -1,4 +1,25 @@
-2004-02-15 KDevelop authors <kdevelop-devel@kde.org>
+2004-02-28 (3.0.2 tagged) KDevelop authors <kdevelop-devel@kde.org>
+   * Much improved KDevelop User Manual.
+   * C++ parser twice as fast and more memory efficient.
+   * Configuration script now allows to disable the compilation of certain KDevelop parts.
+   * Faster/lighter configuration dialogs - the heaviest pages are now demand-loaded.
+   * FileGroups plugin now smarter at applying regexps - much faster for common group definitions (Bug 72831)
+   * Removed performance bottleneck that made the initial parsing of a project very slow. (Bug 73671)
+   * Grep plugin: Don't sometimes crash when interrupting a find while a build is running.
+   * Grep plugin: Don't confuse files with very similar filenames and avoid potentially slow O(n) lookup.
+   * Grep plugin: Don't show garbage hits - clean up after a previous interrupted run.
+   * A new "Simple Designer based KDE application" template was added.
+   * The infamous "Gentoo-crash" finally found and fixed. (Bug 73346)
+   * A case where a running program that produced a lot of debug output could crash KDevelop (Bug 67217, Bug 71858)
+   * Bug 73045 : switching docks when no file is loaded crash kdevelop.
+   * Bug 73672 : kdevelop looks weird after previewing forms in KUIViewer.
+   * Bug 73716 : close all in context menu with two changed documents doesn't respond to cancel properly.
+   * Bug 74585 : Unable to debug Hello World C++ program.
+   * Bug 74650 : Drop-down lists of toolbar combo views don't appear with UI effects on.
+   * Bug 74712 : Automake 1.8.x not supported.
+   * Bug 74955 : Crash when working with Java ant projects.
+
+2004-02-15 (3.0.1 tagged) KDevelop authors <kdevelop-devel@kde.org>
     * User Manual.
     * Fixed many typos.
     * Restructured and updated the todo file.
