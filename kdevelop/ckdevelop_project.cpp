@@ -1638,7 +1638,7 @@ void CKDevelop::slotTagSwitchTo()
   CEditWidget* pEditView = m_docViewManager->currentEditView();
   if (!pEditView) return;
   slotStatusMsg(i18n("Switch between Source and Header Files..."));
-
+  bool useCTags = (bCTags && hasProject())?true:false ;
   QFileInfo curFileInfo = QFileInfo(pEditView->getName());
   QString curFileName = curFileInfo.fileName();
   QString curFileExt = curFileInfo.extension(FALSE);
@@ -1646,7 +1646,7 @@ void CKDevelop::slotTagSwitchTo()
   // this assumes that your source files end in .cpp or .cxx - that's BAD !!!
   bool bToHeader = true;
   if (m_docViewManager->curDocIsHeaderFile()) {
-    if (bCTags) {
+    if (useCTags) {
       int ntags;
       ctags_dlg->searchTags(switchToName+".cxx",&ntags);
       if (ntags) {
@@ -1668,7 +1668,7 @@ void CKDevelop::slotTagSwitchTo()
   kdDebug() << "current filename: " << curFileName << "\n";
   kdDebug() << "switch to filename: " << switchToName << "\n";
   // we can do this the easy...
-  if (bCTags) {
+  if (useCTags) {
     kdDebug() << "lookup file using CTags database, fast.\n";
     ctags_dlg->slotGotoFile(switchToName);
   }
@@ -1676,19 +1676,27 @@ void CKDevelop::slotTagSwitchTo()
   else {
     kdDebug() << "lookup file in current Project, slow.\n";
     CProject* pPrj=getProject();
-    QStrList* sfiles = (bToHeader?&pPrj->getHeaders():&pPrj->getSources());
-    QString fName=QString::null;
-    char* pFile=sfiles->first();
-    //kdDebug() << "selected files: \n" ;
-    while (pFile) {
-      fName = QFileInfo(pFile).fileName();
-      //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
-      if (fName==switchToName) {
-        kdDebug() << "gotcha! switching to " << pFile << "\n";
-        switchToFile(QString(pFile));
-        break;
+    if (pPrj) {
+      QStrList* sfiles = (bToHeader?&pPrj->getHeaders():&pPrj->getSources());
+      QString fName=QString::null;
+      char* pFile=sfiles->first();
+      //kdDebug() << "selected files: \n" ;
+      while (pFile) {
+        fName = QFileInfo(pFile).fileName();
+        //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
+        if (fName==switchToName) {
+          kdDebug() << "gotcha! switching to " << pFile << "\n";
+          switchToFile(QString(pFile));
+          break;
+        }
+        pFile = sfiles->next();
       }
-      pFile = sfiles->next();
+    }
+    else {
+      // simple workaround for when no project is loaded
+      QString fName=QFileInfo(switchToName).fileName();
+      if (!fName.isEmpty())
+        switchToFile(fName);
     }
   }
   slotStatusMsg(i18n("Ready."));

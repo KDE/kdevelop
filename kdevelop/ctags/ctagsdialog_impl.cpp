@@ -154,6 +154,7 @@ void searchTagsDialogImpl::searchTags(const QString& text, int* ntags, const CTa
   if (!ntags||!prj) return;
   CTagsDataBase& tagsDB = prj->ctagsDataBase();
   *ntags=0;
+  if (taglist) *taglist=0L;
   if (tagsDB.is_initialized()) {
     kdDebug() << "searchTagsDialogImpl::searchTag: found tags data base\n";
     if (taglist) {

@@ -303,6 +303,7 @@ bool CTagsDataBase::reload()
 int CTagsDataBase::nCTags(const QString& tag) const
 {
   if (!m_init) return 0;
+  if (tag.isEmpty()) return 0;
   CTagList* ctaglist = m_taglistdict[tag];
   if (!ctaglist) return 0;
   return ctaglist->count();
@@ -313,5 +314,6 @@ int CTagsDataBase::nCTags(const QString& tag) const
 const CTagList* CTagsDataBase::ctaglist(const QString& tag) const
 {
   if (!m_init) return 0L;
+  if (tag.isEmpty()) return 0L;
   return m_taglistdict[tag];
 }
