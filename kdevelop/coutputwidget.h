@@ -25,7 +25,7 @@
 /** the view for the compiler and tools-output
   *@author Sandy Meier
   */
-class COutputWidget : public KEdit {
+ class COutputWidget : public KEdit {
   Q_OBJECT
 public:
   /**contructor*/

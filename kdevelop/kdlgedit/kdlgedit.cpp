@@ -15,7 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "items.h"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
@@ -38,6 +37,7 @@
 #include "kdlgpropertybase.h"
 #define DONTINC_ALL
 #define INC_WIDGET
+#include "items.h"
 #include "kdlgloader.h"
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
@@ -462,7 +462,8 @@ QString KDlgEdit::getRelativeName(QString abs_filename){
   // normalize it a little bit
   abs_filename.replace(QRegExp("///"),"/"); // remove ///
   abs_filename.replace(QRegExp("//"),"/"); // remove //
-  abs_filename.replace(QRegExp(prj->getProjectDir()),"");
+  //abs_filename.replace(QRegExp(prj->getProjectDir()),"");
+  abs_filename.remove (0, prj->getProjectDir().length());
   return abs_filename;
 }
   
