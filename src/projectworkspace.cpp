@@ -18,26 +18,20 @@ void ProjectWorkspace::save()
   // No, these things are exactly what the project file is for
 
   QDomDocument* dom = API::getInstance()->projectDom();
-  QDomElement el = DomUtil::createElementByPath( *dom, "/workspace" );
+  QDomElement el = DomUtil::createElementByPath( *dom, "/workspace/openfiles" );
   saveFileList( el );
 }
 
 void ProjectWorkspace::restore()
 {
   QDomDocument* dom = API::getInstance()->projectDom();
-  QDomElement wsElement = dom->documentElement()
-       .namedItem( "workspace" ).toElement();
+  QDomElement el = DomUtil::elementByPath( *dom, "/workspace/openfiles" );
   
-  restoreFileList( wsElement );
+  restoreFileList( el );
 }
 
 void ProjectWorkspace::saveFileList( QDomElement& wsElement)
 {
-  QDomElement openfiles = DomUtil::namedChildElement( wsElement, "openfiles" );
-    
-  // clear old entries
-  DomUtil::makeEmpty( openfiles );
-    
   QPtrListIterator<KParts::Part> it( *PartController::getInstance()->parts() );
   for ( ; it.current(); ++it ) {
     KParts::ReadOnlyPart* ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
@@ -53,15 +47,13 @@ void ProjectWorkspace::saveFileList( QDomElement& wsElement)
     file.setAttribute( "url", url );
     if (docpart)
         file.setAttribute( "context", docpart->context() );
-    openfiles.appendChild( file );
+    wsElement.appendChild( file );
   }
 }
 
 void ProjectWorkspace::restoreFileList( const QDomElement& wsElement )
 {
-  QDomElement file = wsElement
-       .namedItem( "openfiles" ).toElement()
-       .firstChild().toElement();
+  QDomElement file = wsElement.firstChild().toElement();
   for( ; !file.isNull(); file = file.nextSibling().toElement() ) {
     if( file.tagName() != "file" )
       continue;
