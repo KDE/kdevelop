@@ -1,0 +1,207 @@
+What you need to do in order to setup Ht://Dig for using with KDevelop.
+
+1. If you use Ht://Dig v3.1.x patch the sources with this
+   (http://www.geocities.com/alexismikhailov/htdig_3_1_x.diff.zip)
+   file.
+2. Copy htdig.conf into {kde_global_dir}/share/apps/kdevelop/tools/.
+
+If you already use Ht://Dig to index your local documents and don't
+want to litter database with links to development docs perform actions
+in part I and go to part II. Otherwise skip part I and go to part II
+directly.
+
+-------------- I ---------------
+3. Copy files from {htdig_dir}/common (for 3.1.x of htdig) or
+   {htdig_dir}/share/htdig (for 3.2.x of htdig) to some location
+   (f.e. {kde_global_dir}/share/apps/kdevelop/htdig/common).
+4. Modify URL's in .html files for 'common' dir to be file://localhost urls
+   f.e. <img src="file://localhost/opt/www/htdocs/htdig/htdig.png">.
+5. Modify htdig.conf (sample included in the end of this README).
+5.1. Set database_dir to some location
+     (f.e. {kde_global_dir}/share/apps/kdevelop/htdig/db).
+5.2. Set common_dir to point to the location you have copied files into
+     in step 1.
+--------------- II -------------
+6. Modify htdig.conf.
+6.1. Set 'limit_urls_to' to 'file://' (without quotes of course).
+6.2. Set 'maximum_pages' to '1'.
+6.3. If you want to index documents that cointain 'noindex' tag
+     (all Qt docs) patch htdig with this
+     (http://www.geocities.com/alexismikhailov/htdig_3_1_x_noindex.diff.zip)
+     for htdig 3.1.x or this
+     (http://www.geocities.com/alexismikhailov/htdig_3_2_x_noindex.diff.zip)
+     patch and set 'ignore_noindex' to 'true'.
+6.4. Set 'star_image' to 'file://localhost' type.
+6.5. Set 'local_urls' to 'file://localhost=' for htdig 3.1.x and
+     to 'file://=' for htdig 3.2.x. As soon as my patches for
+     file:// support will be integrated (or someone else will
+     create this thing) you won't need this step (for htdig 3.2.x).
+
+
+#=======================================================================
+#
+# Example config file for ht://Dig.
+#
+# This configuration file is used by all the programs that make up ht://Dig.
+# Please refer to the attribute reference manual for more details on what
+# can be put into this file.  (http://www.htdig.org/confindex.html)
+# Note that most attributes have very reasonable default values so you
+# really only have to add attributes here if you want to change the defaults.
+#
+# What follows are some of the common attributes you might want to change.
+#
+
+#
+# Specify where the database files need to go.  Make sure that there is
+# plenty of free disk space available for the databases.  They can get
+# pretty big.
+#
+database_dir:		/usr/local/kde/share/apps/kdevelop/htdig/db
+
+#
+# This specifies the URL where the robot (htdig) will start.  You can specify
+# multiple URLs here.  Just separate them by some whitespace.
+# The example here will cause the ht://Dig homepage and related pages to be
+# indexed.
+# You could also index all the URLs in a file like so:
+# start_url:	       `${common_dir}/start.url`
+#
+#start_url:		file://localhost/usr/local/kde/share/doc/HTML/en/kdevelop/
+#http://localhost/
+#http://www.htdig.org/
+
+#
+# This attribute limits the scope of the indexing process.  The default is to
+# set it to the same as the start_url above.  This way only pages that are on
+# the sites specified in the start_url attribute will be indexed and it will
+# reject any URLs that go outside of those sites.
+#
+# Keep in mind that the value for this attribute is just a list of string
+# patterns. As long as URLs contain at least one of the patterns it will be
+# seen as part of the scope of the index.
+#
+limit_urls_to:		file://
+#${start_url}
+
+#
+# If there are particular pages that you definately do NOT want to index, you
+# can use the exclude_urls attribute.  The value is a list of string patterns.
+# If a URL matches any of the patterns, it will NOT be indexed.  This is
+# useful to exclude things like virtual web trees or database accesses.  By
+# default, all CGI URLs will be excluded.  (Note that the /cgi-bin/ convention
+# may not work on your web server.  Check the  path prefix used on your web
+# server.)
+#
+exclude_urls:		/cgi-bin/ .cgi
+
+#
+# The string htdig will send in every request to identify the robot.  Change
+# this to your email address.
+#
+maintainer:		unconfigured@htdig.searchengine.maintainer
+
+#
+# The excerpts that are displayed in long results rely on stored information
+# in the index databases.  The compiled default only stores 512 characters of
+# text from each document (this excludes any HTML markup...)  If you plan on
+# using the excerpts you probably want to make this larger.  The only concern
+# here is that more disk space is going to be needed to store the additional
+# information.  Since disk space is cheap (! :-)) you might want to set this
+# to a value so that a large percentage of the documents that you are going
+# to be indexing are stored completely in the database.  At SDSU we found
+# that by setting this value to about 50k the index would get 97% of all
+# documents completely and only 3% was cut off at 50k.  You probably want to
+# experiment with this value.
+# Note that if you want to set this value low, you probably want to set the
+# excerpt_show_top attribute to false so that the top excerpt_length characters
+# of the document are always shown.
+#
+max_head_length:	10000
+
+#
+# To limit network connections, ht://Dig will only pull up to a certain limit
+# of bytes. This prevents the indexing from dying because the server keeps
+# sending information. However, several FAQs happen because people have files
+# bigger than the default limit of 100KB. This sets the default a bit higher.
+# (see <http://www.htdig.org/FAQ.html> for more)
+#
+max_doc_size:		200000
+
+#
+# Depending on your needs, you might want to enable some of the fuzzy search
+# algorithms.  There are several to choose from and you can use them in any
+# combination you feel comfortable with.  Each algorithm will get a weight
+# assigned to it so that in combinations of algorithms, certain algorithms get
+# preference over others.  Note that the weights only affect the ranking of
+# the results, not the actual searching.
+# The available algorithms are:
+#	exact
+#	endings
+#	synonyms
+#	soundex
+#	metaphone
+# By default only the "exact" algorithm is used with weight 1.
+# Note that if you are going to use any of the algorithms other than "exact",
+# you need to use the htfuzzy program to generate the databases that each
+# algorithm requires.
+#
+search_algorithm:	exact:1 synonyms:0.5 endings:0.1
+
+common_dir:	/usr/local/kde/share/apps/kdevelop/htdig/common
+maximum_pages:	1
+ignore_noindex: true
+
+#
+# The following are the templates used in the builtin search results
+# The default is to use compiled versions of these files, which produces
+# slightly faster results. However, uncommenting these lines makes it
+# very easy to change the format of search results.
+# See <http://www.htdig.org/hts_templates.html for more details.
+#
+# template_map: Long long ${common_dir}/long.html \
+#		Short short ${common_dir}/short.html
+# template_name: long
+
+#
+# The following are used to change the text for the page index.
+# The defaults are just boring text numbers.  These images spice
+# up the result pages quite a bit.  (Feel free to do whatever, though)
+#
+next_page_text:		<img src=/opt/www/htdocs/htdig/buttonr.png border=0 align=middle width=30 height=30 alt=next>
+no_next_page_text:
+prev_page_text:		<img src=/opt/www/htdocs/htdig/buttonl.png border=0 align=middle width=30 height=30 alt=prev>
+no_prev_page_text:
+page_number_text:	"<img src=/opt/www/htdocs/htdig/button1.gif border=0 align=middle width=30 height=30 alt=1>" \
+			"<img src=/opt/www/htdocs/htdig/button2.png border=0 align=middle width=30 height=30 alt=2>" \
+			"<img src=/htdig/button3.gif border=0 align=middle width=30 height=30 alt=3>" \
+			"<img src=/htdig/button4.gif border=0 align=middle width=30 height=30 alt=4>" \
+			"<img src=/htdig/button5.gif border=0 align=middle width=30 height=30 alt=5>" \
+			"<img src=/htdig/button6.gif border=0 align=middle width=30 height=30 alt=6>" \
+			"<img src=/htdig/button7.gif border=0 align=middle width=30 height=30 alt=7>" \
+			"<img src=/htdig/button8.gif border=0 align=middle width=30 height=30 alt=8>" \
+			"<img src=/htdig/button9.gif border=0 align=middle width=30 height=30 alt=9>" \
+			"<img src=/htdig/button10.gif border=0 align=middle width=30 height=30 alt=10>"
+#
+# To make the current page stand out, we will put a border arround the
+# image for that page.
+#
+no_page_number_text:	"<img src=/opt/www/htdocs/htdig/button1.png border=2 align=middle width=30 height=30 alt=1>" \
+			"<img src=/htdig/button2.gif border=2 align=middle width=30 height=30 alt=2>" \
+			"<img src=/htdig/button3.gif border=2 align=middle width=30 height=30 alt=3>" \
+			"<img src=/htdig/button4.gif border=2 align=middle width=30 height=30 alt=4>" \
+			"<img src=/htdig/button5.gif border=2 align=middle width=30 height=30 alt=5>" \
+			"<img src=/htdig/button6.gif border=2 align=middle width=30 height=30 alt=6>" \
+			"<img src=/htdig/button7.gif border=2 align=middle width=30 height=30 alt=7>" \
+			"<img src=/htdig/button8.gif border=2 align=middle width=30 height=30 alt=8>" \
+			"<img src=/htdig/button9.gif border=2 align=middle width=30 height=30 alt=9>" \
+			"<img src=/htdig/button10.gif border=2 align=middle width=30 height=30 alt=10>"
+
+star_image:	file://localhost/opt/www/htdocs/htdig/star.png
+star_blank:	file://localhost/opt/www/htdocs/htdig/star_blank.png
+
+# local variables:
+local_urls: file://localhost=
+#local_urls: file://=
+# mode: text
+# eval: (if (eq window-system 'x) (progn (setq font-lock-keywords (list '("^#.*" . font-lock-keyword-face) '("^[a-zA-Z][^ :]+" . font-lock-function-name-face) '("[+$]*:" . font-lock-comment-face) )) (font-lock-mode)))
+# end:
