@@ -8,373 +8,82 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>592</width>
-            <height>480</height>
+            <width>489</width>
+            <height>300</height>
         </rect>
     </property>
     <property name="caption">
         <string>Make Options</string>
     </property>
-    <widget class="QCheckBox">
+    <grid>
         <property name="name">
-            <cstring>dontact_box</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>34</y>
-                <width>570</width>
-                <height>17</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Only display commands without actually executing them</string>
-        </property>
-    </widget>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer31</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>210</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>371</x>
-                <y>109</y>
-                <width>210</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer30</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Preferred</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>20</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>250</x>
-                <y>57</y>
-                <width>20</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer36</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>210</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>371</x>
-                <y>83</y>
-                <width>210</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>abort_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>11</y>
-                <width>570</width>
-                <height>17</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Abort on first error</string>
-        </property>
-    </widget>
-    <spacer>
-        <property name="name">
-            <cstring>Spacer32</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Vertical</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>20</width>
-                <height>150</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>250</x>
-                <y>319</y>
-                <width>20</width>
-                <height>150</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>140</y>
-                <width>480</width>
-                <height>169</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Environment Variables</string>
-        </property>
-        <widget class="QListView">
-            <column>
-                <property name="text">
-                    <string>Name</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Value</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
+        <widget class="QLabel" row="3" column="0">
             <property name="name">
-                <cstring>listview</cstring>
+                <cstring>jobs_label</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>18</y>
-                    <width>380</width>
-                    <height>140</height>
-                </rect>
+            <property name="text">
+                <string>Number of simultaneous jobs:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>makebin_label</cstring>
+            </property>
+            <property name="text">
+                <string>Name of make executable:</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>env_var_group</cstring>
+            </property>
+            <property name="title">
+                <string>Environment Variables</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>makebin_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="3" column="1">
+            <property name="name">
+                <cstring>jobs_box</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>7</vsizetype>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property name="showSortIndicator">
-                <bool>true</bool>
+            <property name="maxValue">
+                <number>30</number>
             </property>
-            <property name="resizeMode">
-                <enum>AllColumns</enum>
+            <property name="minValue">
+                <number>1</number>
             </property>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>Layout2</cstring>
+                <cstring>abort_box</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>400</x>
-                    <y>20</y>
-                    <width>68</width>
-                    <height>58</height>
-                </rect>
+            <property name="text">
+                <string>Abort on first error</string>
             </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>addvar_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Add...</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>removevar_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Remove</string>
-                    </property>
-                </widget>
-            </vbox>
         </widget>
-        <spacer>
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>Spacer12</cstring>
+                <cstring>dontact_box</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="text">
+                <string>Only display commands without actually executing them</string>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>76</height>
-                </size>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>430</x>
-                    <y>80</y>
-                    <width>16</width>
-                    <height>76</height>
-                </rect>
-            </property>
-        </spacer>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>makebin_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>83</y>
-                <width>172</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Name of make executable:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>jobs_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>109</y>
-                <width>193</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Number of simultaneous jobs:</string>
-        </property>
-    </widget>
-    <widget class="QSpinBox">
-        <property name="name">
-            <cstring>jobs_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>215</x>
-                <y>110</y>
-                <width>150</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="maxValue">
-            <number>30</number>
-        </property>
-        <property name="minValue">
-            <number>1</number>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>makebin_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>215</x>
-                <y>84</y>
-                <width>150</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </widget>
+        </widget>
+    </grid>
 </widget>
-<connections>
-    <connection>
-        <sender>addvar_button</sender>
-        <signal>clicked()</signal>
-        <receiver>make_options_widget</receiver>
-        <slot>addVarClicked()</slot>
-    </connection>
-    <connection>
-        <sender>removevar_button</sender>
-        <signal>clicked()</signal>
-        <receiver>make_options_widget</receiver>
-        <slot>removeVarClicked()</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>addVarClicked()</slot>
-    <slot>removeVarClicked()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

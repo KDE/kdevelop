@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 John Firebaugh                                     *
+ *   jfirebaugh@kde.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,35 +11,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _RUNOPTIONSWIDGET_H_
-#define _RUNOPTIONSWIDGET_H_
+#ifndef _ENVIRONMENTVARIABLESWIDGET_H_
+#define _ENVIRONMENTVARIABLESWIDGET_H_
 
-#include "runoptionswidgetbase.h"
+#include "environmentvariableswidgetbase.h"
 
 #include <qdom.h>
 
-class EnvironmentVariablesWidget;
 
-
-class RunOptionsWidget : public RunOptionsWidgetBase
+class EnvironmentVariablesWidget : public EnvironmentVariablesWidgetBase
 {
     Q_OBJECT
-    
+
 public:
-    RunOptionsWidget( QDomDocument &dom, const QString &configGroup,
-                      const QString &projectDirectory, QWidget *parent=0, const char *name=0 );
-    ~RunOptionsWidget();
+    EnvironmentVariablesWidget( QDomDocument &dom, const QString &configGroup,
+                       QWidget *parent=0, const char *name=0 );
+    ~EnvironmentVariablesWidget();
 
 public slots:
     void accept();
 
 private:
-    virtual void browseMainProgram();
-    
+    virtual void addVarClicked();
+    virtual void removeVarClicked();
+
     QDomDocument &m_dom;
     QString m_configGroup;
-    QString m_projectDirectory;
-    EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 
 #endif

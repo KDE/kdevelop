@@ -16,6 +16,7 @@
 
 #include <qdom.h>
 
+class EnvironmentVariablesWidget;
 
 class MakeOptionsWidget : public MakeOptionsWidgetBase
 {
@@ -30,11 +31,9 @@ public slots:
     void accept();
 
 private:
-    virtual void addVarClicked();
-    virtual void removeVarClicked();
-
     QDomDocument &m_dom;
     QString m_configGroup;
+    EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 
 #endif

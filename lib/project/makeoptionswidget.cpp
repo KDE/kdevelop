@@ -15,48 +15,23 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlistview.h>
+#include <qgroupbox.h>
+
 #include "domutil.h"
-#include "addenvvardlg.h"
-
-
-void MakeOptionsWidget::addVarClicked()
-{
-    AddEnvvarDialog dlg;
-    if (!dlg.exec())
-        return;
-
-    (void) new QListViewItem(listview, dlg.varname(), dlg.value());
-}
-
-
-void MakeOptionsWidget::removeVarClicked()
-{
-    delete listview->currentItem();
-}
-
+#include "environmentvariableswidget.h"
 
 MakeOptionsWidget::MakeOptionsWidget(QDomDocument &dom, const QString &configGroup,
                                    QWidget *parent, const char *name)
     : MakeOptionsWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
+    env_var_group->setColumnLayout( 1, Qt::Vertical );
+    m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup, env_var_group );
+
     abort_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/abortonerror"));
     jobs_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(dom, configGroup + "/make/makebin"));
-    
-	DomUtil::PairList list =
-        DomUtil::readPairListEntry(dom, configGroup + "/makeenvvars", "envvar", "name", "value");
-    
-    QListViewItem *lastItem = 0;
-
-    DomUtil::PairList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
-        QListViewItem *newItem = new QListViewItem(listview, (*it).first, (*it).second);
-        if (lastItem)
-            newItem->moveItem(lastItem);
-        lastItem = newItem;
-    }
 }
 
 
@@ -71,14 +46,7 @@ void MakeOptionsWidget::accept()
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
 
-    DomUtil::PairList list;
-    QListViewItem *item = listview->firstChild();
-    while (item) {
-        list << DomUtil::Pair(item->text(0), item->text(1));
-        item = item->nextSibling();
-    }
-
-    DomUtil::writePairListEntry(m_dom, m_configGroup + "/makeenvvars", "envvar", "name", "value", list);
+    m_environmentVariablesWidget->accept();
 }
 
 #include "makeoptionswidget.moc"
