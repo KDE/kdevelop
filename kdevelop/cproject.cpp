@@ -45,8 +45,7 @@ CProject::CProject(const QString& file) :
   valid(false),
   topMakefile(QString::null),
   cvsMakefile(QString::null),
-  m_ctagsDataBase(),
-  m_ctags_cmd()
+  m_ctagsDataBase()
 {
   ptStringMap = new QString[(unsigned)PT_END_POS];
   ptStringMap[ CORBA_SOURCE ] = "CORBA_SOURCE";

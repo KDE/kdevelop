@@ -1087,13 +1087,40 @@ void CKDevelop::resizeEvent( QResizeEvent *pRSE)
    setSysButtonsAtMenuPosition();
 }
 
-///** access to the print_process */
-//KShellProcess* CKDevelop::print_process() const
-//{
-//        return &m_print_process;
-//}
-///** access to the print preview process */
-//KShellProcess* CKDevelop::preview_process() const
-//{
-//        return &m_preview_process;
-//}
+/** create a tags file for the current CProject */
+void CKDevelop::create_tags()
+{
+  kdDebug() << "creating tags file\n";
+  // collect all files belonging to the project
+  QString files;
+  QStrListIterator isrc(getProject()->getSources());
+  while (isrc)
+  {
+      files = files + *isrc + " ";
+      ++isrc;
+  }
+  QStrListIterator ihdr(getProject()->getHeaders());
+  while (ihdr)
+  {
+      files = files + *ihdr + " ";
+      ++ihdr;
+  }
+  // set the name of the output file
+  QString tagfile = getProject()->getProjectDir() + "/tags";
+  // set the ctags command
+  shell_process.clearArguments();
+  shell_process << m_CTagsCmdLine.command();
+  shell_process << m_CTagsCmdLine.totals();
+  shell_process << m_CTagsCmdLine.excmd_pattern();
+  shell_process << m_CTagsCmdLine.file_scope();
+  shell_process << m_CTagsCmdLine.file_tags();
+  shell_process << m_CTagsCmdLine.c_types();
+  shell_process << m_CTagsCmdLine.fortran_types();
+  shell_process << m_CTagsCmdLine.exclude();
+  shell_process << m_CTagsCmdLine.fields();
+  shell_process << "-f" ;
+  shell_process << tagfile ;
+  shell_process << files ;
+  // run it
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+}

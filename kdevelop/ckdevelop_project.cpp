@@ -1164,14 +1164,14 @@ void CKDevelop::slotProjectLoadTags()
     // if create and creation unsuccesful return
     return;
   }
-  prj->ctagsDataBase().reload();
+  prj->ctagsDataBase().load(filename);
   kdDebug() << "loading tags file completed, time: " << dt.elapsed()/1000.0 << " [s]\n";
 }
 
 void CKDevelop::slotProjectMakeTags()
 {
   slotStatusMsg(i18n("Creating tags file..."));
-  prj->ctagsDataBase().create_tags(shell_process,*prj);
+  create_tags();
 }
 
 void CKDevelop::slotAddSpec(QString path)
@@ -1572,7 +1572,7 @@ void CKDevelop::slotTagOpenFile(QString text)
 {
   kdDebug() << "CKDevelop::slotTagOpenFile looking for " << text << "\n";
   CTagsDataBase& tagsDB = prj->ctagsDataBase();
-  if (tagsDB.is_init()) {
+  if (tagsDB.is_initialized()) {
     kdDebug() << "found tags data base\n";
     if (const CTagList* taglist = tagsDB.ctaglist(text))
     {

@@ -506,8 +506,6 @@ public: // Public methods
   /** access to ctags database */
   CTagsDataBase& ctagsDataBase() {return m_ctagsDataBase;}
 
-  /** access to ctags command */
-  CtagsCommand& ctags_cmd() {return m_ctags_cmd;}
 protected:
 
   /** Write an entry to the project file.
@@ -560,9 +558,6 @@ private: // Protected attributes
 
   /** ctags database object */
   CTagsDataBase m_ctagsDataBase;
-
-  /** ctags command, and command line options */
-  CtagsCommand m_ctags_cmd;
 };
 /**
  * return a pointer to the current CProject object

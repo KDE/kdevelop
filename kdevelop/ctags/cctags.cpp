@@ -16,8 +16,9 @@
  ***************************************************************************/
 
 #include <kdebug.h>
-#include <kprocess.h>
-#include "../cproject.h"
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qfileinfo.h>
 #include "cctags.h"
 
 /**
@@ -65,7 +66,7 @@ void CTag::parse_ext()
 
 
 CTagsDataBase::CTagsDataBase()
-  : m_init(false), m_taglistdict(17,true), m_file(QString::null)
+  : m_init(false), m_taglistdict(17,true), m_filelist()
 {
   m_taglistdict.setAutoDelete(true);
   kdDebug() << "in ctags constructor\n";
@@ -74,51 +75,12 @@ CTagsDataBase::~CTagsDataBase()
 {
 }
 
-/** create a tags file for a CProject */
-void CTagsDataBase::create_tags(KShellProcess& process, CProject& project)
-{
-  kdDebug() << "creating tags file\n";
-  // collect all files belonging to the project
-  QString files;
-  QStrListIterator isrc(project.getSources());
-  while (isrc)
-  {
-      files = files + *isrc + " ";
-      ++isrc;
-  }
-  QStrListIterator ihdr(project.getHeaders());
-  while (ihdr)
-  {
-      files = files + *ihdr + " ";
-      ++ihdr;
-  }
-  // get the ctags command
-  CtagsCommand& cmd = project.ctags_cmd();
-  // set the name of the output file
-  m_file = project.getProjectDir() + "/tags";
-  // use a shell_process that was already set up
-  process.clearArguments();
-  process << cmd.m_command;
-  process << cmd.m_totals;
-  process << cmd.m_excmd_pattern;
-  process << cmd.m_file_scope;
-  process << cmd.m_file_tags;
-  process << cmd.m_c_types;
-  process << cmd.m_fortran_types;
-  process << cmd.m_exclude;
-  process << cmd.m_fields;
-  process << "-f" ;
-  process << m_file ;
-  process << files ;
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-}
-
 
 /** load a tags file and create the search database */
-void CTagsDataBase::load()
+void CTagsDataBase::load(const QString& file)
 {
-  if (!QFileInfo(m_file).exists()) return;
-  QFile tagsfile(m_file);
+  if (!QFileInfo(file).exists()) return;
+  QFile tagsfile(file);
   if (tagsfile.open(IO_ReadOnly)) {
     kdDebug() << "tags file opened succefully, now reading...\n" ;
     QTextStream ts(&tagsfile);
@@ -170,6 +132,7 @@ void CTagsDataBase::load()
     return;
   }
   tagsfile.close();
+  m_filelist.append(file);
   m_init = true;
 }
 
@@ -186,12 +149,25 @@ void CTagsDataBase::unload()
 }
 
 
+/** clear, unload database and remove file list */
+void CTagsDataBase::clear()
+{
+  unload();
+  m_filelist.clear();
+}
+
+
 /** reload, unload current and load regenerated search database */
 void CTagsDataBase::reload()
 {
   if (m_init) unload();
-  load();
+  QStringList::Iterator it;
+  for (it=m_filelist.begin();it!=m_filelist.end();++it)
+  {
+    load(*it);
+  }
 }
+
 
 /** the number of CTag entries found for a tag */
 int CTagsDataBase::nCTags(const QString& tag) const

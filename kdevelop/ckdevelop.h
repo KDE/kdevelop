@@ -21,6 +21,8 @@
 
 #include "cproject.h"
 #include "ctreehandler.h"
+#include "ctags/cctags_interf.h"
+
 #include "resource.h"
 #include "kpp/kpp.h"
 #include <kdialog.h>
@@ -824,11 +826,9 @@ protected: // Protected methods
 
 public: // Public methods
 
-//  /** access to the print_process */
-//  KShellProcess* print_process() const ;
-//  /** access to the print preview process */
-//  KShellProcess* preview_process() const ;
-//
+  /** create a ctags file for the current CProject */
+  void create_tags();
+
   bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
@@ -1074,6 +1074,9 @@ private:
 
   KDevSession* m_pKDevSession;
   /************* END MDI additions ********************/
+
+  /** command and command line arguments to create a ctags file */
+  CTagsCommandLine m_CTagsCmdLine;
 
 private slots:
     void slotdoneWithKpp();

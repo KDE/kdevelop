@@ -81,8 +81,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
-//  ,m_print_process("/bin/sh")
-//  ,m_preview_process("/bin/sh")
   ,dbgController(0L)
   ,dbgToolbar(0L)
   ,var_viewer(0L)
@@ -93,6 +91,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,dbgInternal(false)
   ,m_docViewManager(0L)
   ,m_pKDevSession(0L)
+  ,m_CTagsCmdLine()
 {
   m_pTaskBar->hide();
 

@@ -357,7 +357,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     if ((!str.isEmpty()) && prj)
     {
       CTagsDataBase& tagsDB = prj->ctagsDataBase();
-      if (tagsDB.is_init()) {
+      if (tagsDB.is_initialized()) {
         kdDebug() << "found tags data base\n";
         // remember that we are searching for searchtext not for str!
         const CTagList* taglist = tagsDB.ctaglist(searchtext);

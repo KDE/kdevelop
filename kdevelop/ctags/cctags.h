@@ -2,8 +2,8 @@
                           cctags.h  -  description
                              -------------------
     begin                : Wed Feb 21 2001
-    copyright            : (C) 2001 by kdevelop-team
-    email                : kdevelop-team@kdevelop.org
+    copyright            : (C) 2001 rokrau (Roland Krause)
+    email                : rokrau@yahoo.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,11 +19,9 @@
 #define CCTAGS_H
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qdict.h>
-
-class KShellProcess;
-class CProject;
 
 /**
  * ctags support for kdevelop
@@ -118,59 +116,26 @@ public:
   CTagsDataBase();
   /** destructor */
   ~CTagsDataBase();
-  /** create a tags file for a CProject */
-  void create_tags(KShellProcess& process, CProject& project);
   /** load a tags file and create the search database */
-  void load();
-  /** unload, i.e. destroy the current search database */
+  void load(const QString& file);
+  /** unload, remove search database but keep file list */
   void unload();
-  /** reload, unload current and load regenerated search database */
+  /** reload, unload and reload current search database */
   void reload();
+  /** clear, unload database and remove file list */
+  void clear();
   /** the number of CTag entries found for a tag */
   int nCTags(const QString& tag) const ;
   /** return the list of CTag entries for a tag */
   const CTagList* ctaglist(const QString& tag) const ;
   /** return whether CTagsDataBase is initialized */
-  bool is_init() const {return m_init;}
+  bool is_initialized() const {return m_init;}
 private:
   /** true if search database is initialized */
   bool m_init;
   /** searchable database */
   CTagListDict m_taglistdict;
   /** tagfile name from which the database was created */
-  QString m_file;
-};
-/**
- * \class CtagsCommand
- *
- * \brief ctags command and command line options
- *
- * \author rokrau@yahoo.com
- **/
-class CtagsCommand {
-  friend class CTagsDataBase;
-public:
-  CtagsCommand() {
-    m_command = "ctags";
-    m_totals = "--totals=yes";
-    m_excmd_pattern = "--excmd=pattern";
-    m_file_scope = "--file-scope=yes";
-    m_file_tags = "--file-tags=yes";
-    m_c_types = "--c-types=+px";
-    m_fortran_types = "--fortran-types=-l+L";
-    m_exclude = "--exclude=\"*.inc *.bck glimpse*\"";
-    m_fields = "--fields=+i";
-  }
-  ~CtagsCommand() {}
-private:
-  QString m_command;
-  QString m_totals;
-  QString m_excmd_pattern;
-  QString m_file_scope;
-  QString m_file_tags;
-  QString m_c_types;
-  QString m_fortran_types;
-  QString m_exclude;
-  QString m_fields;
+  QStringList m_filelist;
 };
 #endif
