@@ -1,16 +1,23 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY grep "<application>grep</application>">
-  <!ENTITY egrep "<application>egrep</application>">
-  <!ENTITY ctags "<application>ctags</application>">
+  <!ENTITY grep "<command>grep</command>">
+  <!ENTITY egrep "<command>egrep</command>">
+  <!ENTITY ctags "<command>ctags</command>">
+  <!ENTITY automake "<command>automake</command>">
+  <!ENTITY autoconf "<command>autoconf</command>">
+  <!ENTITY libtool "<command>libtool</command>">
   <!ENTITY doxygen "<application>doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY CVS "<application>CVS</application>">
   <!ENTITY cvs "<application>cvs</application>">
   <!ENTITY ssh "<application>ssh</application>">
+  <!ENTITY python "<application>Python</application>">
+  <!ENTITY perl "<application>Perl</application>">
+  <!ENTITY php "<application>PHP</application>">
+  <!ENTITY apache "<application>Apache</application>">
   <!ENTITY kappname "&kdevelop;">
-  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % addindex "INCLUDE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
@@ -55,6 +62,7 @@ Development Environment (Gideon)</para>
 <keyword>KDE</keyword>
 <keyword>KDevelop</keyword>
 <keyword>IDE</keyword>
+<keyword>development</keyword>
 <keyword>programming</keyword>
 </keywordset>
 
@@ -63,19 +71,89 @@ Development Environment (Gideon)</para>
 <chapter id="overview">
 <title>Overview: Development on UNIX</title>
 
+<para>
+From the beginning, UNIX has maintained two very different development
+paradigms. One is the world of system programming languages, where the source 
+code is compiled to machine code by a <emphasis>compiler</emphasis>. The 
+programming language C is an example for this. UNIX was the first operating 
+system kernel to be written in a high level language instead of assembler
+which was common before that time. The other paradigm is the world of
+scripting languages which began with the shell which was at the same time the 
+user's interface to the operating system and a very high level programming 
+language. Elementary building blocks in a shell script are small utility
+programs like <command>grep</command>, <command>sed</command>
+and <command>find</command> which do some tightly defined job and 
+which are connected to each other via pipes.
+</para>
+
+<para>
+As time has gone by, both worlds have evolved. While C is still used mainly as
+a system programming language, C++ as a variant of C enriched by 
+object-oriented and genericity extensions has found its place for the 
+development of complex applications in the 1990's. FORTRAN77 and Ada still
+have their stronghold in numerical applications. 
+</para>
+
+<para>
+In the scripting area, there has been a shift away from the shell, which suffers
+from portability concerns, to languages which unify all commonly needed
+functionality in their standard libraries, while still being able to interface
+to the outside through pipes when necessary. &perl; has become popular as a
+text processing and system administration language. In the beginning of the 
+World Wide Web, CGI scripts written in &perl; were a widely used method to
+create dynamic web pages from databases. Today, this method has been mostly
+replaced mostly by the <command>mod_perl</command> plugin for the
+&apache; web server. Among &perl;'s strengths are its built-in support for 
+advanced regular expression expression matching and its rich archive of
+freely distributed modules <ulink url="http://cpan.org">CPAN</ulink>.
+</para>
+
+<para>
+&python; shines by the elegance of its class system and the ease and
+flexibility with which external libraries can be wrapped, in a way that they
+appear like standard &python; classes and functions. In contrast to &perl;,
+&python; has a clear and concise embedding API, which makes it the language
+of choice for making C and C++ programs scriptable. &php; was invented as a
+language directly embeddable into HTML pages and consequently has its main
+uses in delivering dynamic content in the web.
+</para>
+
+<para>
+All these scripting languages have in common that they are widely portable
+between UNIX variants, &Microsoft; &Windows;, &Mac; OS or even VMS. Also,
+they all have implementations that are freely distributable.
+</para>
+
+<para>
+
+</para>
+
+
 <simplesect id="overview-buildsystems">
 <title>Build systems</title>
 
 <para>
+With a compiled language, the basic tools you need are the compiler (which 
+turns source code into object files) and the linker (which binds several
+object files and libraries together into one executable). When you have a
+large project consisting of possibly hundreds of source code files, the
+process of compiling may become quite laborsome. You do not want to recompile
+all files each time you have changed only some of them. Instead, you only want
+to compile those files which are affected by the changes. In general, it is
+not obvious which these are. When you change a function prototype in a 
+header file, you need to compile all files which include this header file.
 </para>
 
-</simplesect>
-
-
-<simplesect id="overview-debugging">
-<title>Debugging</title>
-
 <para>
+A tool which takes care of recompilations is <command>make</command>.
+It takes as input a so-called <filename>Makefile</filename>, which declares
+some <emphasis>targets</emphasis>, the commands which are to be executed
+to "make" the target, and a set of <emphasis>dependencies</emphasis>. We
+cannot go into the details here. However, we recommend that you make yourself
+accustomed to the syntax of <command>make</command>. Even if you
+normally do not use it directly, an understanding of the fundamentals of
+the build system can be useful. See the <ulink url="info://make/Top">
+<citetitle>GNU Make Manual</citetitle></ulink>.
 </para>
 
 </simplesect>
@@ -89,12 +167,12 @@ Development Environment (Gideon)</para>
 
 </simplesect>
 
-
-
 </chapter>
+
 
 <chapter id="kdevelopoverview">
 <title>&kdevelop; Overview</title>
+
 <sect1 id="howto">
 <title>How to obtain KDevelop</title>
 <para>
@@ -110,6 +188,7 @@ for details on how to obtain the &kdevelop; source code.
 </para> 
 
 </sect1>
+
 
 <sect1 id="requirements">
 <title>&kdevelop; Requirements</title>
@@ -145,6 +224,7 @@ of the &kdevelop; distribution:
 </para>
 
 </sect1>
+
 </chapter>
 
 
@@ -219,11 +299,8 @@ of the &kdevelop; distribution:
 <textobject><phrase>Screenshot</phrase></textobject>
 </mediaobject></screenshot>
 
-<para>
-</para>
-
-
 </sect2>
+
 </sect1>
 
 <sect1 id="parts">
@@ -231,6 +308,7 @@ of the &kdevelop; distribution:
 <para>KDevelop 3.0 offers extensible modules, or parts, to be loaded at runtime and on demand.  This 
 allows developers to only turn on features that they need or want for their development.
 </para>
+
 <para>
 Some of the parts are considered global - that is, they effect the entire operation of &kdevelop;.
 For example, the uimode part allows a developer to select which user interface they wish to use.
@@ -241,6 +319,8 @@ Other parts are project specfic, and are only utilized when a project of that ty
 Automake Manager, for example, only needs to be active when an Automake based project is currently 
 loaded.  Otherwise, this part will not be active.
 </para>
+
+</sect1>
 
 <para>
 Active parts can have many effects on the &kdevelop;.  Depending on their function, they may add extra menus,
@@ -304,8 +384,6 @@ extra menu items, extra tool buttons, etc.
 </tbody></tgroup>
 </table>
 
-</sect1>
-
 <sect1 id="makesystems">
 <title>Project Management Systems</title>
 
@@ -342,6 +420,7 @@ handle qmake based projects (.pro files) within the GUI.
 </sect2>
 
 </sect1>
+
 </chapter>
 
 
@@ -410,10 +489,11 @@ This utility can be used to convert older &kdevelop; project files to 3.0 files.
 
 <sect1 id="keyboardmapping">
 <title>Keyboard mapping</title>
+<indexterm zone="keyboardmapping"><primary>keybindings</primary></indexterm>
 
 <para>
 In the following, we will list the default keybindings of the
-the default editor. You can configure them as you like (how?)
+default editor. You can configure them as you like (how?)
 </para>
 
 <informaltable>
@@ -595,8 +675,10 @@ Redo
 
 <sect1 id="searchinggrepping">
 <title>Searching and grepping</title>
+<indexterm zone="searchinggrepping"><primary>searching</primary></indexterm>
+<indexterm zone="searchinggrepping"><primary>finding</primary></indexterm>
 
-<sect2 id="searching">
+<simplesect id="searching">
 <title>Searching for text</title>
 
 <para>
@@ -604,10 +686,15 @@ Redo
 <keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
 </para>
 
-</sect2>
+</simplesect>
  
-<sect2 id="isearch">
+
+<simplesect id="isearch">
 <title>ISearch</title>
+<indexterm zone="isearch"><primary>isearch</primary></indexterm>
+<indexterm zone="isearch"><primary>incremental search</primary></indexterm>
+<indexterm zone="isearch"><primary>search</primary><secondary>incremental</secondary></indexterm>
+
 <para>
 The conventional search with <menuchoice><guimenu>Edit</guimenu>
 <guimenuitem>Find</guimenuitem></menuchoice> requires you to specify the full 
@@ -617,10 +704,13 @@ incrementally. If you click into the edit field labeled
 type. You will find that often the desired term is already found after typing
 in 3 or 4 letters.
 </para>
-</sect2>
 
-<sect2 id="grep">
+</simplesect>
+
+
+<simplesect id="grep">
 <title>Grep</title>
+<indexterm zone="grep"><primary>search</primary><secondary>in files</secondary></indexterm>
 
 <para>
 Both search mechanisms described above are restricted to searching within one
@@ -738,7 +828,7 @@ your editor, you may get some mismatches in the line number, or some found
 items will be invalid. You can avoid this by saving all files beforehand.
 </para>
 
-</sect2>
+</simplesect>
 
 </sect1>
   
@@ -838,6 +928,7 @@ be put below more specific ones. For example, an asterisk for the
 
 <chapter id="classbrowser">
 <title>The class browser</title>
+<indexterm zone="classbrowser"><primary>class browser</primary></indexterm>
 
 <para>
 When working on a project in an object-oriented language, your emphasis when
@@ -897,6 +988,7 @@ with an empty implementation.
 
 </sect1>
 
+
 <sect1 id="classtools">
 <title>Class tools</title>
 
@@ -944,11 +1036,100 @@ Fortran projects. Projects for scripting languages like Python and
 PHP work very differently.
 </para>
 
+<para>
+In <xref linkend="overview-buildsystems"/> we have given a rough overview of
+the build systems commonly in use on UNIX systems. We now give a detailed
+introduction into the project management modules supported by &kdevelop;
+The most important one is the <command>autoproject</command> plugin which
+serves as a frontend to the collection of scripts sometimes referred to as
+GNU autotools (&automake;, &autoconf;, &libtool;). Almost all application
+templates use this project management.
+</para>
+
+<para>
+In addition, &kdevelop; contains the <command>customproject</command> plugin,
+which can be used for projects for which you maintain your own 
+<filename>Makefiles</filename>, but also for projects that use the tool
+<command>ant</command> which is very common in the Java world, or projects
+using <command>qmake</command>.
+</para>
+
+
 <sect1 id="autoproject">
+<title>Automake projects</title>
+<indexterm zone="autoproject"><primary><command>autoproject</command></primary></indexterm>
+<indexterm zone="autoproject"><primary>&automake;</primary></indexterm>
+<indexterm zone="autoproject"><primary>&autoconf;</primary></indexterm>
+<indexterm zone="autoproject"><primary>&libtool;</primary></indexterm>
+
+<para>
+</para>
+
+
+<simplesect id="autoconf">
+<title>Autoconf</title>
+<indexterm zone="autoconf"><primary><filename>configure</filename> script</primary></indexterm>
+<indexterm zone="autoconf"><primary><filename>config.status</filename> script</primary></indexterm>
+<indexterm zone="autoconf"><primary><filename>Makefile.in</filename></primary></indexterm>
+<indexterm zone="autoconf"><primary><filename>config.h.in</filename></primary></indexterm>
+
+<figure id="flow-configure" float="1">
+<title>Effect of the configure script</title>
+<mediaobject>
+<imageobject><imagedata fileref="configure.png"/></imageobject>
+</mediaobject>
+</figure>
+
+<para>
+<filename>Makefile.in</filename> into <filename>Makefile</filename>
+</para>
+
+<programlisting>
+prefix = @prefix@
+INSTALL = @INSTALL@
+build_triplet = @build@
+CXX = @CXX@
+</programlisting>
+
+<programlisting>
+prefix = /home/bernd/kde3
+INSTALL = /usr/bin/ginstall -c -p
+build_triplet = i686-pc-linux-gnu
+CXX = g++
+</programlisting>
+
+<para>
+<filename>config.h.in</filename> into <filename>config.h</filename>
+</para>
+
+<programlisting>
+/* Define if you have libz */
+#undef HAVE_LIBZ
+/* The size of a `int', as computed by sizeof. */
+#undef SIZEOF_INT
+</programlisting>
+
+<programlisting>
+/* Define if you have libz */
+#define HAVE_LIBZ 1
+/* The size of a `int', as computed by sizeof. */
+#define SIZEOF_INT 4
+</programlisting>
+
+</simplesect>
+
+
+<simplesect id="automake">
 <title>Automake</title>
 
 <para>
 </para>
+
+</simplesect>
+
+
+<simplesect id="automakemanager">
+<title>KDevelop's automake manager</title>
 
 <figure id="screenshot-automakemanager" float="1">
 <title>A screenshot of the Automake manager</title>
@@ -957,12 +1138,39 @@ PHP work very differently.
 </mediaobject>
 </figure>
 
+</simplesect>
+
+
+<simplesect id="automakelibrary">
+<title>Building and installing libraries</title>
+
+<para>
+<itemizedlist>
+<listitem><para>
+  -rpath
+</para></listitem>
+<listitem><para>
+  PIC
+</para></listitem>
+<listitem><para>
+  static
+</para></listitem>
+<listitem><para>
+  plugins: no-undefined
+</para></listitem>
+</itemizedlist>
+</para>
+
+</simplesect>
+
 </sect1>
 
 
 
 <sect1 id="customproject">
 <title>Custom Makefiles and build scripts</title>
+<indexterm zone="customproject"><primary><filename>Makefile</filename></primary></indexterm>
+<indexterm zone="customproject"><primary><filename>build.xml</filename></primary></indexterm>
 
 <para>
 </para>
@@ -988,8 +1196,144 @@ PHP work very differently.
 </chapter>
 
 
+
+<chapter id="advancedautoproject">
+<title>Advanced autoproject usage</title>
+<indexterm zone="advancedautoproject"><primary>&automake;</primary></indexterm>
+
+<sect1 id="buildconfigurations">
+<title>Multiple build configurations</title>
+<indexterm zone="buildconfigurations"><primary>build configurations</primary><secondary>multiple</secondary></indexterm>
+
+<para>
+
+</para>
+
+</sect1>
+
+
+<sect1 id="crosscompiling">
+<title>Cross-compiling</title>
+<indexterm zone="crosscompiling"><primary>cross compiling</primary></indexterm>
+<indexterm zone="crosscompiling"><primary>compiling</primary><secondary>cross</secondary></indexterm>
+<indexterm zone="crosscompiling"><primary><option>--host</option></primary></indexterm>
+
+<para>
+When you have suitable cross compilers available, you can cross compile your
+programs for processors and operating systems different from the system where
+&kdevelop; and the compiler is running. The GNU compiler collection GCC can
+be configured and compiled as a cross compiler if you compile it yourself.
+Consult the <ulink url="info://gcc/Cross-Compiler">GCC info pages</ulink> for
+more information. Some Linux distributions also provide binary packages.
+</para>
+
+<para>
+An automake based package can easily be cross-compiled by specifying the
+<option>--host</option> option to the configure script and setting the
+<envar>CC</envar> and <envar>CXX</envar> environment variables to the
+respective cross compiler binaries. Often you want to switch between a
+the cross-compiled version of your application and one compiled for your
+development system. For this, it is advantageous to use &kdevelop; capability
+of creating multiple build configurations, as explained in 
+<xref linkend="buildconfigurations"/>. Once you have created a new build
+configuration for cross-compiling in the 
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options...</guimenuitem></menuchoice> dialog, add
+the option
+</para>
+
+<para><screen>
+<option>--host=</option><replaceable>platform</replaceable>
+</screen></para>
+
+<para>
+to the configure options. The <replaceable>platform</replaceable> name
+is a tuple of the form
+</para>
+
+<programlisting>cpu-vendor-os</programlisting>
+<para>or</para>
+<programlisting>cpu-vendor-kernel-os</programlisting>
+
+<para>
+For many combinations, you can use a short form, for instance
+<wordasword>i386-linux</wordasword> or <wordasword>arm-elf</wordasword>.
+</para>
+
+</sect1>
+
+
+<sect1 id="qtembedded">
+<title>Qt/Embedded</title>
+<indexterm zone="qtembedded"><primary>embedded</primary><secondary>Qt</secondary></indexterm>
+<indexterm zone="qtembedded"><primary>Qt/Embedded</primary></indexterm>
+<indexterm zone="qtembedded"><primary>Qtopia</primary></indexterm>
+<indexterm zone="qtembedded"><primary>framebuffer</primary></indexterm>
+
+<para>
+Qt/Embedded is a version of the Qt library that does not use the X window
+system, but draws directly to the framebuffer on Linux systems. It is
+therefore interesting for embedded systems which have tight restrictions
+on the memory usage of the whole system. Its API is fully compatible with
+the one of the X11 version.
+</para>
+
+<para>
+Developing an application for Qt/Embedded with &kdevelop; is not very different
+from developing a program for the X11 version of Qt. In fact, you can use the
+same codebase for both versions. If you use the autoproject project
+management, you switch to the embedded version by passing the argument
+<option>--enable-embedded</option> to the configure script. You can set
+this in the <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Project Options...</guimenuitem></menuchoice> dialog under
+<guilabel>Configure Options</guilabel>. With the option
+<option>--with-qt-dir=DIR</option> you set the directory in which Qt/Embedded
+is installed.
+</para>
+
+<para>
+After configuring and compiling your application with these options, it will
+link with the <filename>libqpe.so</filename> library. This version of your
+application will not normally run when you use X11. In order to test it, 
+run it under the control of the program <application>qvfb</application> 
+(Qt Virtual Frame Buffer). This is done by starting 
+<application>qvfb</application> and then starting your application with
+</para>
+
+<para><screen><command>
+app <option>-qws</option> <option>-display QVFb:0</option>
+</command></screen></para>
+
+<para>
+Naturally, when you have a working version of your application, you 
+will want to use it on the target processor. For this, it will probably
+be convenient to create multiple build configurations, as explained above,
+so that you can quickly switch between the version running on your development
+system and the version running on the target system.
+</para>
+
+<para>
+Applications for Qt/Embedded normally run as single applications on the
+device they are designed for. Trolltech also supports Qtopia, which is a 
+collection of applications for PIM, web browsing and various other areas that
+work together in a consistent manner. It is the standard environment for
+instance on the Sharp Zaurus. You can write applications that integrate into
+this environment by using the Qtopia SDK. This implies making your application
+class a subclass of <classname>QPEApplication</classname> and linking to the
+library <filename>libqpe.so</filename>. If you develop your application with
+the autoproject project management, you have to add
+<option>--enable-qtopia</option> to the configure options.
+</para>
+
+</sect1>
+
+</chapter>
+
+
+
 <chapter id="debugger">
 <title>The debugger</title>
+<indexterm zone="debugger"><primary>debugger</primary></indexterm>
 
 <para>
 For C and C++, &kdevelop; contains an internal debugger that is directly
@@ -1048,6 +1392,7 @@ The debugger frontend offers several views "into" the process:
 <listitem>
 <formalpara>
 <title>Variables</title>
+<indexterm zone="debugger"><primary>watch variables</primary></indexterm>
 <para>
 This window lists the values of all local variables at the current execution
 point of the program. It covers the variables in the complete call stack,
@@ -1069,6 +1414,7 @@ via the context menu.
 <listitem>
 <formalpara>
 <title>Breakpoints</title>
+<indexterm zone="debugger"><primary>breakpoints</primary></indexterm>
 <para>
 </para>
 </formalpara>
@@ -1077,6 +1423,7 @@ via the context menu.
 <listitem>
 <formalpara>
 <title>Frame stack</title>
+<indexterm zone="debugger"><primary>frame stack</primary></indexterm>
 <para>
 </para>
 </formalpara>
@@ -1085,6 +1432,7 @@ via the context menu.
 <listitem>
 <formalpara>
 <title>Disassemble</title>
+<indexterm zone="debugger"><primary>disassemble</primary></indexterm>
 <para>
 </para>
 </formalpara>
@@ -1107,6 +1455,9 @@ via the context menu.
 
 <formalpara>
 <title>Display mangled names</title>
+<indexterm zone="debugger"><primary>name mangling</primary></indexterm>
+<indexterm zone="debugger"><primary>mangling</primary><secondary>name</secondary></indexterm>
+
 <para>
 In C++, function names in the executable are "mangled", i.e. the function
 names include information about the argument types. This is necessary in 
@@ -1124,6 +1475,9 @@ they are easily readable. Alternatively, you can decide to see mangled names.
 
 <formalpara>
 <title>Try setting BPs on lib load</title>
+<indexterm zone="debugger"><primary>lazy breakpoints</primary></indexterm>
+<indexterm zone="debugger"><primary>breakpoints</primary><secondary>lazy</secondary></indexterm>
+
 <para>
 The debugger backend <application>gdb</application> does not allow to set
 breakpoints within code that is not currently loaded. In a highly modular
@@ -1139,6 +1493,9 @@ breakpoints.
 
 <formalpara>
 <title>Enable floating toolbar</title>
+<indexterm zone="debugger"><primary>debugger toolbar</primary></indexterm>
+<indexterm zone="debugger"><primary>toolbar</primary><secondary>debugger</secondary></indexterm>
+
 <para>
 </para>
 </formalpara>
@@ -1169,6 +1526,8 @@ breakpoints.
 
 <chapter id="cvs">
 <title>Using CVS</title>
+<indexterm zone="cvs"><primary>CVS</primary></indexterm>
+<indexterm zone="cvs"><primary>revision control</primary></indexterm>
 
 <para>
 &CVS; is the revision control system which many open source projects -
@@ -1281,6 +1640,7 @@ SourceForge documentation.
 
 <chapter id="externalprogs">
 <title>Leveraging external programs</title>
+<indexterm zone="externalprogs"><primary>programs</primary><secondary>external</secondary></indexterm>
 
 <para>
 Although &kdevelop; is a so-called "Integrated" development environment, it
@@ -1308,6 +1668,7 @@ Other tools will be discussed in the chapter <xref linkend="plugintools"/>.
 
 <chapter id="plugintools">
 <title>Plugin Tools</title>
+<indexterm zone="plugintools"><primary>plugins</primary></indexterm>
 
 <para>
 &kdevelop; contains a large number of little tools that help you to perform
@@ -1325,6 +1686,8 @@ into memory.
 <listitem>
 <formalpara>
 <title>The abbrev plugin</title>
+<indexterm zone="plugintools"><primary><command>abbrev</command></primary></indexterm>
+
 <para>
 This plugin expands abbreviations into frequently used code snippets. It is
 activated by pressing <keycombo><keycap>Ctrl</keycap>
@@ -1349,6 +1712,8 @@ dialog under <guibutton>Abbreviations</guibutton>
 <listitem>
 <formalpara>
 <title>The filter plugin</title>
+<indexterm zone="plugintools"><primary><command>filter</command></primary></indexterm>
+
 <para>
 This offers two features. If you select <menuchoice><guimenu>Tools</guimenu>
 <guimenuitem>Execute command</guimenuitem></menuchoice>, you can enter a shell
@@ -1371,6 +1736,10 @@ command is then inserted into the editor.
 <listitem>
 <formalpara>
 <title>The doxygen plugin</title>
+<indexterm zone="plugintools"><primary>&doxygen;</primary></indexterm>
+<indexterm zone="plugintools"><primary>documentation tool</primary></indexterm>
+<indexterm zone="plugintools"><primary>API documentation</primary></indexterm>
+
 <para>
 This one helps you to use the &doxygen; API documentation tool 
 (<ulink url="http://www.doxygen.org"/>). You can select 
@@ -1392,6 +1761,8 @@ is very similar to the &doxywizard; tool.
 <listitem>
 <formalpara>
 <title>The ctags plugin</title>
+<indexterm zone="plugintools"><primary>&ctags;</primary></indexterm>
+
 <para>
 Although the class browser gives you extensive insight into the symbols and
 classes of your project, you may also want to use the ctags tool. In particular,
@@ -1441,6 +1812,10 @@ the button <guibutton>Regenerate</guibutton>.
 <listitem>
 <formalpara>
 <title>The astyle plugin</title>
+<indexterm zone="plugintools"><primary><command>astyle</command></primary></indexterm>
+<indexterm zone="plugintools"><primary><application>Artistic Style</application></primary></indexterm>
+<indexterm zone="plugintools"><primary>indentation</primary></indexterm>
+
 <para>
 </para>
 </formalpara>
@@ -1449,6 +1824,10 @@ the button <guibutton>Regenerate</guibutton>.
 <listitem>
 <formalpara>
 <title>The regexptest plugin</title>
+<indexterm zone="plugintools"><primary><command>regexptest</command></primary></indexterm>
+<indexterm zone="plugintools"><primary>debugging</primary><secondary>regular expressions</secondary></indexterm>
+<indexterm zone="plugintools"><primary>regular expressions</primary><secondary>debugging</secondary></indexterm>
+
 <para>
 Designing with regular expressions can be hard work. Often the first try at an
 expression matches too many strings. In particular, when working with a
@@ -1479,6 +1858,9 @@ the content of the matched subgroups will be shown in a list box.
 <listitem>
 <formalpara>
 <title>The konsole plugin</title>
+<indexterm zone="plugintools"><primary><command>konsole</command></primary></indexterm>
+<indexterm zone="plugintools"><primary>terminal</primary><secondary>embedded</secondary></indexterm>
+
 <para>
 </para>
 </formalpara>
@@ -1490,27 +1872,48 @@ the content of the matched subgroups will be shown in a list box.
 
 
 
-<chapter id="bibliography">
+<appendix id="bibliography">
 <title>Bibliography</title>
 
 <bibliography>
 
 <biblioentry>
-<title>Advanced Programming in the UNIX(R) Environment</title>
-<edition>1st edition</edition>
-<pubdate>June 1992</pubdate>
-<author><firstname>W. Richard</firstname><surname>Stevens</surname></author>
-<publisher><publishername>Addison-Wesley Pub Co</publishername></publisher>
-<isbn>0201563177</isbn>
+<title><ulink url="info://make/Top">GNU Make Manual</ulink></title>
+<authorgroup>
+<author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
+<author><firstname>Roland</firstname><surname>McGrath</surname></author>
+</authorgroup>
 </biblioentry>
 
 <biblioentry>
-<title>Thinking in C++, Volume 1: Introduction to Standard C++</title>
-<edition>2nd Edition</edition>
-<pubdate>April 15, 2000</pubdate>
-<author><firstname>Bruce</firstname><surname>Eckel</surname></author>
-<publisher><publishername>Prentice Hall</publishername></publisher>
-<isbn>0139798099</isbn>
+<title><ulink url="info://automake/Top">GNU Automake</ulink></title>
+<authorgroup>
+<author><firstname>David</firstname><surname>MacKenzie</surname></author>
+<author><firstname>Tom</firstname><surname>Tromey</surname></author>
+</authorgroup>
+</biblioentry>
+
+<biblioentry>
+<title><ulink url="info://autoconf/Top">GNU Autoconf</ulink></title>
+<authorgroup>
+<author><firstname>David</firstname><surname>MacKenzie</surname></author>
+<author><firstname>Ben</firstname><surname>Elliston</surname></author>
+</authorgroup>
+</biblioentry>
+
+<biblioentry>
+<title><ulink url="info://gcc/Top">Using the GNU Compiler Collection</ulink></title>
+<author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
+</biblioentry>
+
+<biblioentry>
+<title><ulink url="info://libtool/Top">GNU Libtool</ulink></title>
+<authorgroup>
+<author><firstname>Gordon</firstname><surname>Matzigkeit</surname></author>
+<author><firstname>Alexandre</firstname><surname>Oliva</surname></author>
+<author><firstname>Thomas</firstname><surname>Tanner</surname></author>
+<author><firstname>Gary V.</firstname><surname>Vaughan</surname></author>
+</authorgroup>
 </biblioentry>
 
 <biblioentry>
@@ -1524,7 +1927,26 @@ the content of the matched subgroups will be shown in a list box.
 <author><firstname>Ian Lance</firstname><surname>Taylor</surname></author>
 </authorgroup>
 <publisher><publishername>New Riders Publishing</publishername></publisher>
-<isbn>1578701902</isbn>
+<isbn>ISBN 1578701902</isbn>
+</biblioentry>
+
+
+<biblioentry>
+<title>Advanced Programming in the UNIX(R) Environment</title>
+<edition>1st edition</edition>
+<pubdate>June 1992</pubdate>
+<author><firstname>W. Richard</firstname><surname>Stevens</surname></author>
+<publisher><publishername>Addison-Wesley Pub Co</publishername></publisher>
+<isbn>ISBN 0201563177</isbn>
+</biblioentry>
+
+<biblioentry>
+<title>Thinking in C++, Volume 1: Introduction to Standard C++</title>
+<edition>2nd Edition</edition>
+<pubdate>April 15, 2000</pubdate>
+<author><firstname>Bruce</firstname><surname>Eckel</surname></author>
+<publisher><publishername>Prentice Hall</publishername></publisher>
+<isbn>ISBN 0139798099</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1536,7 +1958,7 @@ the content of the matched subgroups will be shown in a list box.
 <author><firstname>Moshe</firstname><surname>Bar</surname></author>
 </authorgroup>
 <publisher><publishername>The Coriolis Group</publishername></publisher>
-<isbn>158880173X</isbn>
+<isbn>ISBN 158880173X</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1548,7 +1970,7 @@ the content of the matched subgroups will be shown in a list box.
 <author><firstname>Kevin</firstname><surname>Tatroe</surname></author>
 </authorgroup>
 <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-<isbn>1565926102</isbn>
+<isbn>ISBN 1565926102</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1557,7 +1979,7 @@ the content of the matched subgroups will be shown in a list box.
 <pubdate>March 2001</pubdate>
 <author><firstname>Mark</firstname><surname>Lutz</surname></author>
 <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-<isbn>0596000855</isbn>
+<isbn>ISBN 0596000855</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1566,7 +1988,7 @@ the content of the matched subgroups will be shown in a list box.
 <pubdate>January 2002</pubdate>
 <author><firstname>Boudewijn</firstname><surname>Rempt</surname></author>
 <publisher><publishername>Opendocs Llc</publishername></publisher>
-<isbn>0970033044</isbn>
+<isbn>ISBN 0970033044</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1580,7 +2002,7 @@ the content of the matched subgroups will be shown in a list box.
 <author><firstname>Jon</firstname><surname>Orwant</surname></author>
 </authorgroup>
 <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-<isbn>0596000278</isbn>
+<isbn>ISBN 0596000278</isbn>
 </biblioentry>
 
 <biblioentry>
@@ -1593,7 +2015,7 @@ the content of the matched subgroups will be shown in a list box.
 <author><firstname>Tom</firstname><surname>Phoenix</surname></author>
 </authorgroup>
 <publisher><publishername>O'Reilly &amp; Associates</publishername></publisher>
-<isbn>0596001320</isbn>
+<isbn>ISBN 0596001320</isbn>
 </biblioentry>
 
 </bibliography>
@@ -1601,12 +2023,12 @@ the content of the matched subgroups will be shown in a list box.
 <para>
 </para>
 
-</chapter>
+</appendix>
 
 
 
-<chapter id="appendix">
-<title>Appendix</title>
+<appendix id="misc">
+<title>Further information</title>
 
 
 <simplesect id="gettinginformation">
@@ -1630,15 +2052,16 @@ the content of the matched subgroups will be shown in a list box.
 <simplesect id="licensing">
 <title>Licensing</title>
 
-<para>
-</para>
-
 &underFDL;
 &underGPL;
 
 </simplesect>
 
 
-</chapter>
+</appendix>
+
+
+
+<index id="indexchapter"/>
 
 </book>
