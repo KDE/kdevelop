@@ -686,90 +686,99 @@ Während Sie die Menüleiste erstellen, möchten Sie eine Methode für das Kommando 
 
 Dies erzeugt einen Menüeintrag im "Edit" Menü, der, wenn aktiviert, direkt den Slot <tt>cut()</tt> der Instanz 
 <tt>view</tt> aufruft, wobei wir davon ausgehen, daß Sie diese Instanz als <tt>QMultiLineEdit</tt> erzeugt und sie zum 
-Ansichtsbereich gemacht haben. 
-The multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
-itself and so there is no need to inherit from <tt>QMultiLineEdit</tt> to create a view area that is capable of such actions. They are
-ready to use and make application development very fast- you just need the application instance and the main window including the
-connections to your view area and you're done ! That means, a simple editor can be written by creating one single class that defines
-the main window behavoir and how to save and read files into the editor - just some basic slots your main view has to implement itself.
+Ansichtsbereich gemacht haben. Der Slot des MultiLineEdit wird aufgerufen und schneidet als Reaktion den ausgewählten Text aus, 
+die Funktionalität dazu wird bereits von der Klasse selbst zur Verfügung gestellt, es gibt also keine Notwendigkeit von 
+<tt>QMultiLineEdit</tt> zu erben, um einen Ansichtsbereich zu erzeugen, der fähig zu solchen Aktionen ist. Diese Funktionen können 
+sofort aufgerufen werden und machen das Erstellen von Anwendungen sehr schnell- Sie brauchen nur die Anwendungsinstanz und das 
+Hauptfendter mit den Verbindungen zu Ihrem Ansichtsbereich und das ist alles ! Das bedeutet, ein einfacher Editor kann geschrieben 
+werden, indem man eine einzige Klasse erzeugt, die das Hauptfenster definiert und wie man Datei in und aus dem Editor schreibt und 
+ließt- nur einige Basisslots die Ihre Hauptansicht selbst implementieren muß. 
 
-But here is the reason why we're now introducing this mysterious Document-View model: You have to provide methods by your own to read
-and write the actual files you want to edit with the <tt>QMultiLineEdit</tt> view-area <bf>within</bf> the main window's interface.
-Yes, this is obviously the easiest thing to do in this case, and the most logic. Now, if we have a look at the files and their contents
-as a so-called "Document", which we can subscribe with the attribute of an "Object" in C++ terminology, the next step is just a little
-one: If I have a document, a view and a main window- why don't I separate these three objects from each other ? We could easily create
-a small class that is responsible for reading in a file into a text stream and then call the view to draw the text visible to the user.
-The same applies to saving the file again- the document class should then provide a saving method that retrieves the text from the view
-again and saves it as a file. In the example these two methods would be the only actions that are needed to be done by a document
-class, because the edit-view already provides all methods basically needed for and editor by slots and you can manipulate the content
-of the view by them directly.
+Aber hier ist nun der Grund für dieses mysteriöse Document-View Modell: Sie müssen selbst Methoden zur Verfügung stellen, um die 
+Dateien, die Sie mit dem <tt>QMultiLineEdit</tt> Ansichtsbereich lesen und schreiben zu können, und zwar <bf>innerhalb</bf> des 
+Hauptfensterinterfaces. Ja, das ist offensichtlich der einfachste Weg und der logischste. Nun, wenn die Dateien und ihren Inhalt 
+als ein sogenanntes "Dokument" betrachten, das wir mit dem Attribut eines "Objektes" in der C++ Terminologie beschreiben, ist der 
+nächste Schritt nur ein kleiner: Ich habe ein Dokument, eine Ansicht und ein Hauptfenster- warum trenne ich diese drei Objekte 
+nicht voneinander? Wir könnten auf einfache Weise eine kleine Klasse erzeugen, die eine Datei in einen Text Stream ließt und dann 
+die Ansicht aufrufen, um diesen Text für den Benutzer sichtbar zu machen. Dasselbe gilt auch wieder für das Speichern der Datei- 
+Die document Klasse sollte dann eine Methode anbieten, den Text aus der Ansicht zu lesen und als Datei zu speichern. im Beispiel 
+wären diese beiden Methoden die einzigen Aktionen die von der document Klasse ausgeführt werden müssten, weil die Edit Ansicht 
+bereits alle Methoden über Slots bereitstellt, die für einen Editor benötigt werden, und Sie können den Inhalt der Ansicht direkt 
+über diese Slots manipulieren. 
 
-Now, the main idea behind the need for this separation into three objects (document, view, main window) instead of the minimum of two,
-the view and the main window, is the question: what if I want to give the user the possibility to work with a file by <bf>two</bf> or
-even more views ? Such things can even be done within one main window by splitters or deviders containing two view instances which
-shall both display <bf>one</bf> file. There it is: the solution can only be that if the user manipulates the file contents in one view,
-the other view has to be notified about that and to actualize its contents. Otherwise a bad scenario will occur: if the user closes one
-view where he added something at the end of the file which he cutted out at the beginning of the file <bf>in</bf> the other view, the
-file will be saved later by still containing the cutted section, because if the second and last view did not recognize this, it still
-contains the text without modification from the beginning plus the inserted one. This means that both views have to be synchronized by
-their contents they are displaying and that can be done if all views get notified about each action that the user does, which view he
-actually uses should be equal. That means that finally a document class is needed to be the one and only holder of the true contents of
-the document and is providing the views the possibility to manipulate the contents.
+Nun, die Haupidee hinter dieser Aufteilung in drei Objekte (Dokument, Ansicht, Hauptfenster) anstatt der minimal zwei, der Ansicht 
+und dem Hauptfenster, ist folgende Frage: Was, wenn ich dem Benutzer die Möglichkeit geben will mit <bf>zwei</bf> oder sogar mehr 
+Ansichten zu arbeiten? Solche Dinge kann man sogar mit nur einem Hauptfenster durch Trenner erreichen, wobei zwei Instanzen 
+<bf>einer</bf> Datei angezeigt werden. Die Lösung kann dann nur sein, daß wenn der Benutzer den Dateiinhalt in einem Fenster 
+verändert, die andere Ansicht darüber informiert wird und ihren Inhalt aktualisieren muß. Sonst würde folgendes passieren: Wenn 
+der Benutzer in einer Ansicht am Anfang etwas ausschneidet, dann am Ende der <bf>anderen</bf> Ansicht einfügt und dann die erste 
+Ansicht schließt, würde die Datei mit beiden Teilen gespeichert, weil die zweite Ansicht nichts von dem Ausschneiden weiß. Das 
+bedeutet, daß die beiden Asichten synchronisiert werden müssen und das kann erreicht werden, indem alle Ansichten ständig über 
+alle Benutzeraktionen informiert werden, welche Ansicht der User tatsächlich verwendet sollte egal sein. Das bedeutet, daß 
+schließlich eine Dokumentklasse benötigt wird, die alleine den wahren Inhalt des Dokumentes enthält und den Ansichten die 
+Möglichkeit bietet, diesen zu verändern.
 
-I hope this has given some insight into this model, although in most cases it seems that the programmer can live without it - equally
-to just using a provided class as the view area or writing a widget on his own to handle user interaction, as long as you represent
-<bf>one</bf> document or file by <bf>one</bf> view area, the view can be responsible for the data as well and only provide methods to
-retrieve or set the document contents for actions like reading a file or saving it. The next model to describe, the Multiple Document
-Interface, will make a difference at this point- there you will see the actual need and the functionality the Document-View model
-provides.
+Ich hoffe, dies konnte einen Einblick in dieses Modell geben, obwohl es in den meisten Fällen so scheint, als ob der Programmierer 
+ohne es leben könne- genauso könnte er auch ein Widget selber schreiben, das die Benutzeraktionen behandelt, anstatt einfach eine 
+vorgebene Klasse als Ansichtsbereich zu verwenden, solange Sie nur <bf>ein</bf> Dokument in <bf>einem</bf> Ansichtsbereich 
+präsentieren, kann die Ansicht auch für die Daten verantwortlich sein und nur Methoden zum Lesen oder Speichern einer Datei zur 
+Verfügung stellen. Das nächste beschriebene Modell wird sich in diesem Punkt unterscheiden- dort werden Sie die tatsächliche 
+Notwendigkeit und die Funktionalität, die die Document Klasse bereitstellt, erkennen.
 
-<sect>The Multiple Document Interface (MDI)
+<sect>Das Multiple Document Interface (MDI)
 <p>
-As the last section described the Document-View model, you will probably guess what MDI means. Users that come from other Operating
-Systems than Unix/Linux are used to it as well as programmers developing for those platforms. While X-Window applications traditionally
-are more targeting towards functionality and stability, Unix users are used to single windows that provide functionality, therefore
-even the Document-View model is often not needed to create applications. With Qt as a multi-platform toolkit, developers are having
-even more choice - developing for MS Windows(tm) as well as for Unix systems. While on Windows the lack of creating applications that
-are capable of handling so-called child windows has been getting to some kind of standard, this is adressed by the Qt 2.1 library, but
-on the other hand Unix users can profit from this architecture as well.
+Da der letzte Abschnitt das Document View Modell beschrieben hat, können Sie sicher erraten, was MDI bedeutet. Benutzer die von 
+anderen Plattformen als Unix/Linux kommen, sowie die Programmierer, die für diese Plattformen entwickeln, sind daran gewöhnt. Da 
+X-Window Applikationen traditionell mehr auf Funktionalität und Stabilität abzielen, sind Unix Anwender an einzelne Fenster 
+gewöhnt, die Funktionalität bieten, weshalb oft nicht einmal das Document View Modell benötigt wird um Anwendungen zu erstellen. 
+Mit Qt als Multi-Platform Werkzeug, haben Entwickler sogar noch mehr Auswahl- die Entwicklung für sowohl Unix, als auch 
+MS Windows(tm). Während auf Windows Applikationen, die sogenannte Kind Fenster verwalten können zu einer Art Standard geworden 
+sind, darauf zielt die Qt 2.1 Bibliothek ab, können auch Unix Benutzer von dieser Architektur profitieren. 
 
-What is now the meaning of MDI ? An MDI application generally has the same concept of a usual application that has, as described above,
-one application instance and a main window. The view area now make the difference: you don't directly use a view that represents data
-and provides interaction to manipulate that data but a view that handles other windows looking like top-level windows. These windows
-are now representing the former view area and the main difference is that the interaction chain changes from
+Was ist nun die Bedeutung von MDI? Eine MDI Applikation hat das gleiche Konzept, wie eine gewöhnliche Anwendung, die, wie oben 
+beschrieben, eine Anwendungsinstanz und ein Hauptfenster hat. Der Ansichtsbereich macht nun den Unterschied: Sie verwenden nicht 
+direkt eine Ansicht, die Daten repräsentiert und Interaktion zur Manipulation der Daten bereitstellt, sondern eine Ansicht, die 
+andere Fenster verwaltet, die wie top-level Fenster aussehen. Diese Fenster repräsentieren nun den ehemaligen Ansichtsbereich und 
+der Hauptunterschied ist, daß die Interaktionskette sich von
 
 <tscreen><verb>
-application instance -> main window -> view
+Applikations Instanz -> Hauptfenster -> Ansicht
 
-to
+nach
 
-appliation instance -> main window -> view -> active child window
+Applikations Instanz -> Hauptfenster -> Ansicht -> Aktives Kind Fenster
 </verb></tscreen>
+ändert.
 
-The view now is capable of several actions:
+Die Ansicht beherrscht nun verschiedene Aktionen:
 <itemize>
-<item>creating as much child windows as the user requests
-<item>providing methods to retrieve the currently active child window
-<item>maintaining a list of open views
-<item>managing the child window behavoir for maximize, minimize such as a window manager does for top-level windows
-</itemize>
+<item>Erzeugen von so vielen Kind Fenstern, wie der Benutzer anfordert
+<item>Zur Verfügung stellen von Methoden, zur Ermittlung des aktiven Kind Fensters
+<item>Verwaltung einer Liste offener Ansichten
+<item>Verwaltung das Verhalten des Kind Fensters bei maximieren, minimieren, so wie es der Fenstermanager für to-level 
+Fenster macht
+</itemize> 
 
-Now, you can use "complete" widgets like the <tt>QMultiLineEdit</tt> as child windows like for an application that only provides one
-window and each child window is responsible for it's own data. That could be described as "Multiple Document Interface", whereby each
-child window is equal to a single document. The application then manages the usual actions such as providing methods for the child
-window interaction such as cut or copy. Extending this concept with the document-view model enhances the possibilities by far: imagine
-that you can open as much windows as you like within the main window and that a new child window can be a new view of a document that
-is already shown by another child window. The management for this requires a separation into the already described three objects model,
-but doesn't limit the actual number of instances of the documents as well as the views.
+Nun, Sie können komplette Widgets wie <tt>QMultiLineEdit</tt> als Kind Fenster für Anwendungen verwenden, die nur ein Fenster 
+bereitstellen und jedes Fenster ist für seine eigenen Daten verantwortlich. Dies könnte als Multiple Document Interface 
+beschrieben werden, wobei jedes Fenster wie ein einzelnes Dokument ist. Die Anwendung verwaltet dann die üblichen Aktionen, wie 
+bereitstellen von Methoden zur Interaktion, wie Ausschneiden und Kopieren. Die Erweiterungen dieses Konzepts um das Document View 
+Modell, verbessert die Möglichkeiten bei weitem: stellen Sie sich vor, daß Sie innerhalb des Haupfensters so viele Fenster öffnen 
+können wie Sie wollen und das ein Kind Fenster, die neue Ansicht eines Dokuments sein kann, das bereits in einem anderen Kind 
+Fenster gezeigt wird. Die Verwaltung hierfür macht die schon beschriebene Aufteilung in das drei Objekte Modell nötig, aber 
+limitiert weder die Anzahl der tatsächlichen Instanzen noch die der Ansichten.
 
-Fortunately, Qt 2.1 contains the possibility to create such applications and KDevelop provides you with the according application
-frameworks for both, Qt-only programs as well as KDE 2 applications with the same interface methods- so it is adequate wether you want
-to develop for one of these. Using KDE 2 interfaces will offer you still more possibilites by library functions as well as
-inter-process communication, but those are special aspects that are to cover by separate introductions to these techniques.
+Glücklicherweise enthält Qt 2.1 die Möglichkeit solche Anwendungen zu schreiben und KDevelop bietet Ihnen die entsprechenden 
+Anwendungsschablonen für beides, sowohl nur-Qt Programme als auch KDE 2 Programme mit denselben Interface Methoden- Sie können 
+also beide Typen adequat erstellen. Die Verwendung des KDE 2 Interfaces bietet Ihnen sogar noch mehr Möglichkeiten durch 
+Bibliotheksfunktionen sowie Interprozesskommunikation, dies sind jedoch spezielle Aspekte die durch separate Einführungen 
+abgedeckt werden müssen.
 
-Now you are prepared for following the development for KDE 2 - just follow the next chapter to get a first look at the functionality
-already provided by KDevelop when creating applications. There, we will generate the framework for our tutorial application
-<em>KScribble</em> and describe the practical aspects of programming MDI applications.
+Sie sind nun vorbereitet der Entwicklung für KDE 2 zu folgen- folgen Sie einfach dem nächsten Kapitel, um einen ersten Einblick in 
+die Funktionalität zu erhalten, die bereits von KDevelop zur Verfügung gestellt wird, wenn sie Anendungen erstellen. Dort werden 
+wir das Framework für unsere Beispielanwendung <em/KScribble/ generieren und die praktischen Aspekte der Programmierung von MDI 
+Applikationen beschreiben.
+
 
 <chapt>Das MDI Framework
 <p>
