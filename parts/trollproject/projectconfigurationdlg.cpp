@@ -777,7 +777,8 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
 {
   if (radioLibrary->isChecked())
   {
-    libGroup->setEnabled(true);  
+    libGroup->setEnabled(true);
+    staticRadio->setChecked(true);
   } else {
     libGroup->setEnabled(false);
   }
