@@ -1110,6 +1110,8 @@ void CKDevelop::create_tags()
   // set the ctags command
   shell_process.clearArguments();
   shell_process << m_CTagsCmdLine.command();
+  shell_process << m_CTagsCmdLine.append();
+  shell_process << m_CTagsCmdLine.sort();
   shell_process << m_CTagsCmdLine.totals();
   shell_process << m_CTagsCmdLine.excmd_pattern();
   shell_process << m_CTagsCmdLine.file_scope();

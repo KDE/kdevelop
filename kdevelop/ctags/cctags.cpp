@@ -63,7 +63,17 @@ void CTag::parse_ext()
     else {}
   }
 }
-
+int CTag::line() const
+{
+  bool ok = false;
+  int l,ip;
+  // strip ;
+  if ((ip=m_excmd.find(";")) > 0)
+    l = m_excmd.left(ip).toInt(&ok);
+  else
+    l = m_excmd.toInt(&ok);
+  return ok?l:1;
+}
 
 CTagsDataBase::CTagsDataBase()
   : m_init(false), m_taglistdict(17,true), m_filelist()
@@ -105,13 +115,6 @@ void CTagsDataBase::load(const QString& file)
         QStringList::Iterator pfile = ++it;
         QStringList::Iterator pexcmd = ++it;
         QStringList::Iterator pext = ++it;
-        //kdDebug() << "1 tag    2 filename    3 ex command    4 ctags ext\n" ;
-        //if (*ptag=="CTagsDataBase") {
-        //  kdDebug() << (*ptag).latin1() << "    "
-        //            << (*pfile).latin1() << "    "
-        //            << (*pexcmd).latin1() << "    "
-        //            << (*pext).latin1() << "\n";
-        //}
         CTagList* pTagList = m_taglistdict[*ptag];
         if (!pTagList) {
           pTagList = new CTagList(*ptag);
@@ -122,7 +125,7 @@ void CTagsDataBase::load(const QString& file)
           m_taglistdict.insert(*ptag,pTagList);
         }
         // we can probably avoid one expensive copy here if we
-        // chage the taglist from a QValuelist to a Qlist
+        // change the taglist from a QValuelist to a Qlist
         pTagList->append(CTag(*pfile,*pexcmd,*pext));
       }
     }
@@ -177,6 +180,7 @@ int CTagsDataBase::nCTags(const QString& tag) const
   if (!ctaglist) return 0;
   return ctaglist->count();
 }
+
 
 /** return the list of CTag entries for a tag */
 const CTagList* CTagsDataBase::ctaglist(const QString& tag) const

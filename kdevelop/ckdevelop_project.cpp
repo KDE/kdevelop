@@ -1584,10 +1584,11 @@ void CKDevelop::slotTagOpenFile(QString text)
       {
         const CTag& tag = (*taglist)[it];
         char t = tag.type();
-        kdDebug() << "tag number: " << it << " type= " << t << "\n";
-        if (t=='F') { // filename
-          kdDebug() << "open file " << tag.file() << "\n";
-          switchToFile(tag.file());
+        if (t=='F') {
+          kdDebug() << "tag number: " << it << " type= " << char(t) << "\n";
+          kdDebug() << "open file " << tag.file()
+                    << "at line "   << tag.line()  << "\n";
+          switchToFile(tag.file(),tag.line());
         }
       }
     }
@@ -1596,14 +1597,113 @@ void CKDevelop::slotTagOpenFile(QString text)
 /**
  * Find and open files that contain definition corresponding to tag
  */
-void CKDevelop::slotTagDefinition(QString tag)
+void CKDevelop::slotTagDefinition(QString text)
 {
-  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << tag << "\n";
+  kdDebug() << "CKDevelop::slotTagDefinition looking for " << text << "\n";
+  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+  if (tagsDB.is_initialized()) {
+    kdDebug() << "found tags data base\n";
+    if (const CTagList* taglist = tagsDB.ctaglist(text))
+    {
+      int ntags = taglist->count();
+      kdDebug() << "found: " << ntags << " entries for: "
+                << text << "\n";
+      /* if we find only one instance of the tag we can directly
+       * goto the line in the file */
+      if (ntags == 1) {
+        int it = 0;
+        const CTag& tag = (*taglist)[it];
+        char t = tag.type();
+        kdDebug() << "tag number: " << it << " type= " << t << "\n";
+        kdDebug() << "open file " << tag.file()
+                  << "at line "   << tag.line()  << "\n";
+        switchToFile(tag.file(),tag.line());
+      }
+      /* in the case of multiple instances we show a dialog
+       * and let the user pick where he wants to go */
+      else {
+        // so this code isnt complete yet but again,
+        // the intention is to filter out the declaration
+        // related options that the user has
+        for (int it=0; it<ntags; ++it)
+        {
+          const CTag& tag = (*taglist)[it];
+          char t = tag.type();
+          switch (t) {
+            case 'd': // macro definitions (and #undef names)
+            case 'f': // function definitions
+            case 'S': // S subroutines (fortran)
+            case 't': // typedefs
+            case 'v': // v variable definitions
+              kdDebug() << "tag number: " << it << " type= " << t << "\n";
+              kdDebug() << "open file " << tag.file()
+                        << "at line "   << tag.line()  << "\n";
+              switchToFile(tag.file(),tag.line());
+            break;
+            default:
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 /**
  * Find and open files that contain declaration corresponding to tag
  */
-void CKDevelop::slotTagDeclaration(QString tag)
+void CKDevelop::slotTagDeclaration(QString text)
 {
-  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << tag << "\n";
+  kdDebug() << "CKDevelop::slotTagDeclaration looking for " << text << "\n";
+  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+  if (tagsDB.is_initialized()) {
+    kdDebug() << "found tags data base\n";
+    if (const CTagList* taglist = tagsDB.ctaglist(text))
+    {
+      int ntags = taglist->count();
+      kdDebug() << "found: " << ntags << " entries for: "
+                << text << "\n";
+      /* if we find only one instance of the tag we can directly
+       * goto the line in the file */
+      if (ntags == 1) {
+        int it = 0;
+        const CTag& tag = (*taglist)[it];
+        char t = tag.type();
+        kdDebug() << "tag number: " << it << " type= " << t << "\n";
+        kdDebug() << "open file " << tag.file()
+                  << "at line "   << tag.line()  << "\n";
+        switchToFile(tag.file(),tag.line());
+      }
+      /* in the case of multiple instances we show a dialog
+       * and let the user pick where he wants to go */
+      else {
+        // so this code isnt complete yet but again,
+        // the intention is to filter out the declaration
+        // related options that the user has
+        for (int it=0; it<ntags; ++it)
+        {
+          const CTag& tag = (*taglist)[it];
+          char t = tag.type();
+          switch (t) {
+            case 'c': // c classes
+            case 'e': // enumerators
+            case 'g': // enumeration names
+            case 'L': // fortran locals
+            case 'm': // class, struct, or union members
+            case 'n': // namespaces
+            case 'p': // function prototypes and declarations
+            case 's': // structure names
+            case 'u': // union names
+            case 'x': // x extern and forward variable declarations
+              kdDebug() << "tag number: " << it << " type= " << t << "\n";
+              kdDebug() << "open file " << tag.file()
+                        << "at line "   << tag.line()  << "\n";
+              switchToFile(tag.file(),tag.line());
+            break;
+            default:
+            break;
+          }
+        }
+      }
+    }
+  }
 }

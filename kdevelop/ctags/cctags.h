@@ -61,6 +61,8 @@ public:
   QString file() const {return m_file;}
   /** return stripped search pattern for kwrite based editor */
   QString pattern() ;
+  /** return line number extracted from excmd */
+  int line() const ;
 protected:
   void parse_ext(); // parse exuberant extension
 private:
