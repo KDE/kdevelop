@@ -50,6 +50,8 @@
 #include <kprocess.h>
 #include <klineeditdlg.h>
 #include <kdeversion.h>
+#include <kurlrequesterdlg.h>
+#include <kurlrequester.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -1894,15 +1896,13 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         if (r == idSetInstObjPath)
         {
-	  bool ok = FALSE;
-          QString tmp_install_path = KLineEditDlg::getText(
-                              i18n( "Choose Install Path" ),
-                              i18n( "Please enter a path "
-                                    "(example /usr/local/share/... ):" ),
-                              titem->install_path, &ok, this );
-          if ( ok )
+          KURLRequesterDlg dialog(i18n( "Choose Install Path" ), i18n( "Please enter a path "
+                                    "(example /usr/local/share/... ):" ), this, 0);
+          dialog.urlRequester()->setMode(KFile::Directory);
+          dialog.urlRequester()->setURL(titem->install_path);
+          if (dialog.exec() == QDialog::Accepted)
           {
-            titem->install_path = tmp_install_path;
+            titem->install_path = dialog.urlRequester()->url();
             updateProjectFile(titem->owner);
           }
         }
