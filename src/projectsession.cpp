@@ -199,7 +199,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 ////    }
 
     if (context.isEmpty()) {
-      int line;
+      int line = 0;
       if (viewEl.hasAttribute("line")) {
         line = viewEl.attribute("line", "0").toInt();
       }
