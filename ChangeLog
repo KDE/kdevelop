@@ -1,4 +1,8 @@
 2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: repaired design mistake in rewritten DocViewMan: KWrite docs can have several views, consider that at closing
+    * that's why I added 2 methods KWriteDoc::viewCount() and KWriteDoc::viewList()
+
+2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: CKDevelop::doActivateView() removed; QWidget::setFocus() does the job ;)
 
 2001-03-25  Christian Couder <christian@kdevelop.org>
