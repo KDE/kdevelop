@@ -32,6 +32,10 @@ distpartPart::distpartPart(KDevApi *api, QObject *parent, const char *name)
 
   QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
 
+  // set up package
+  KURL projectURL;  // we need to get this from the base project
+  thePackage = new packageBase();
+  thePackage->loadFile(projectURL);
 }
 
 

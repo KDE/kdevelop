@@ -11,9 +11,9 @@ public:
    virtual ~packageBase();
 
 // Generic accessors and mutators for child classes
-   virtual bool generatePackage(QString &errorCode) = 0;
-   virtual bool loadFile(KURL theFile) = 0;
-
+   virtual bool generatePackage(QString &errorCode);
+   virtual bool loadFile(KURL theFile);
+   virtual bool saveFile(KURL theFile);
    virtual void setAppName(QString text = "");
    virtual void setAppVersion(QString text = "");
    virtual void setAppRevision(QString text = "");

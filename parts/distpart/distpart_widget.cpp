@@ -16,7 +16,7 @@ distpartWidget::distpartWidget(distpartPart *part)
            this, SLOT(slotcustomProjectCheckBoxChanged()));
     connect(uploadCustomCheckBox, SIGNAL(released()),
            this, SLOT(slotuploadCustomCheckBoxChanged()));
-    
+
 }
 
 
@@ -25,23 +25,44 @@ distpartWidget::~distpartWidget()
 }
 
 //    QPushButton* okayPushButton;
-void distpartWidget::slotokayPushButtonPressed() { }
+void distpartWidget::slotokayPushButtonPressed()
+{
+   emit okay();
+}
 //    QPushButton* cancelPushButton;
-void distpartWidget::slotcancelPushButtonPressed() { }
+void distpartWidget::slotcancelPushButtonPressed()
+{
+   emit cancel();
+}
 //    QPushButton* help_PushButton;
-void distpartWidget::slothelp_PushButtonPressed() { }
+void distpartWidget::slothelp_PushButtonPressed()
+{
+   emit help();
+}
 //    QPushButton* createSrcArchPushButton;
-void distpartWidget::slotcreateSrcArchPushButtonPressed() { }
+void distpartWidget::slotcreateSrcArchPushButtonPressed()
+{
+}
 //    QPushButton* resetSrcPushButton;
-void distpartWidget::slotresetSrcPushButtonPressed() { }
+void distpartWidget::slotresetSrcPushButtonPressed()
+{
+}
 //    QPushButton* buildAllPushButton;
-void distpartWidget::slotbuildAllPushButtonPressed() { }
+void distpartWidget::slotbuildAllPushButtonPressed()
+{
+}
 //    QPushButton* exportSPECPushButton;
-void distpartWidget::slotexportSPECPushButtonPressed() { }
+void distpartWidget::slotexportSPECPushButtonPressed()
+{
+}
 //    QPushButton* importSPECPushButton;
-void distpartWidget::slotimportPushButtonPressed() { }
+void distpartWidget::slotimportPushButtonPressed()
+{
+}
 //    QPushButton* srcPackagePushButton;
-void distpartWidget::slotsrcPackagePushButtonPressed() { }
+void distpartWidget::slotsrcPackagePushButtonPressed()
+{
+}
 //    QPushButton* genHTMLPushButton;
 void distpartWidget::slotgenHTMLPushButtonPressed()
 {

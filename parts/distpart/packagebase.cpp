@@ -13,6 +13,15 @@ packageBase::packageBase()
 packageBase::~packageBase()
 {
 }
+bool packageBase::generatePackage(QString &error)
+{
+}
+bool packageBase::saveFile(KURL theFile)
+{
+}
+bool packageBase::loadFile(KURL theFile)
+{
+}
 void packageBase::setAppName(QString text)
 {
 }

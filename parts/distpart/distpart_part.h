@@ -11,6 +11,8 @@
 #include <kdevpart.h>
 #include <kaction.h>
 
+#include "packagebase.h"
+
 class distpartWidget;
 
 
@@ -27,7 +29,7 @@ public slots:
   void show();
 
 private:
-
+  packageBase *thePackage;
   QGuardedPtr<distpartWidget> m_widget;
   KAction *m_action;
 };

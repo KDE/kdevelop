@@ -21,11 +21,27 @@ class KParts::ReadOnlyPart;
 class distpartWidget : public distpart_ui
 {
   Q_OBJECT
-    
+
 public:
-		  
+
   distpartWidget(distpartPart *part);
   ~distpartWidget();
+
+signals:
+    void okay();
+    void cancel();
+    void help();
+    void createsrc();
+    void resetsrc();
+    void buildall();
+    void savespec();
+    void loadspec();
+    void srcrpm();
+    void genhtml();
+    void resethtml();
+    void upload();
+    void resetupload();
+
 // Accessors and mutators to control GUI
 // Connect Slots to the following widgets
 
@@ -68,6 +84,7 @@ public slots:
     void slotcustomProjectCheckBoxChanged();
 //  QCheckBox* uploadCustomCheckBox;
     void slotuploadCustomCheckBoxChanged();
+
 public:
     bool getcustomProjectCheckBoxState();
     void setcustomProjectCheckBoxState(bool state);
