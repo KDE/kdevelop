@@ -158,7 +158,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_iLastCursorCorner=QEXTMDI_NORESIZE;
    setMouseTracking(TRUE);
 
-   setMinimumSize( QSize( 30, m_pCaption->heightHint()));
+   setMinimumSize( QSize( QEXTMDI_MDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint()));
 
    m_pSystemMenu = new QPopupMenu();
 }
@@ -438,6 +438,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+         setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
          setGeometry(m_restoredRect);
          break;
@@ -448,6 +449,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          m_pClient->show();
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
+         setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
          // reset to normal-captionbar
          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
@@ -468,7 +470,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          m_pClient->show();
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
-         setMaximumSize(32767,32767);
+         setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          // reset to maximize-captionbar
          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
          m_pMinimize->setPixmap( *m_pMinButtonPixmap);
@@ -485,7 +487,8 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
          show();
-         setMaximumSize(32767,32767);
+         m_pClient->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+         setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
          setGeometry(-m_pClient->x(), -m_pClient->y(),
@@ -591,13 +594,17 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 	if(w->parent()!=this){
 		//reparent to this widget , no flags , point , show it
       QPoint pnt2(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
-      QSize mins = w->minimumSize();
-      QSize maxs = w->maximumSize();
+      QSize mincs = w->minimumSize();
+      QSize maxcs = w->maximumSize();
       w->setMinimumSize(0,0);
-      w->setMaximumSize(32767,32767);
-     	w->reparent(this,0,pnt2,w->isVisible()); //Flags get lost thru recreate! (DND too!)
-     	w->setMinimumSize(mins.width(),mins.height());
-     	w->setMaximumSize(maxs.width(),maxs.height());
+      w->setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
+
+     	// min/max sizes, flags, DND get lost. :-(
+     	w->reparent(this,0,pnt2,w->isVisible());
+     	
+     	w->setMinimumSize(mincs.width(),mincs.height());
+     	w->setMaximumSize(maxcs.width(),maxcs.height());
+      setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
    } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
 	
    linkChildren( pFocPolDict);
@@ -629,15 +636,17 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
   QDict<FocusPolicy>* pFocPolDict;
   pFocPolDict = unlinkChildren();
 
-  // get name of focused child widget
-  QWidget* focusedChildWidget = m_pClient->focusedChildWidget();
-  const char* nameOfFocusedWidget = "";
-  if( focusedChildWidget != 0)
-    nameOfFocusedWidget = focusedChildWidget->name();
+   // get name of focused child widget
+   QWidget* focusedChildWidget = m_pClient->focusedChildWidget();
+   const char* nameOfFocusedWidget = "";
+   if( focusedChildWidget != 0)
+      nameOfFocusedWidget = focusedChildWidget->name();
 
-  //Kewl...the reparent function has a small prob now..
-  //the new toplelvel widgets gets not reenabled for dnd
-  m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,TRUE);
+   QSize mins = m_pClient->minimumSize();
+   QSize maxs = m_pClient->maximumSize();
+   m_pClient->reparent(0,0,mapToGlobal(pos())-pos()+positionOffset,TRUE);
+   m_pClient->setMinimumSize(mins.width(),mins.height());
+   m_pClient->setMaximumSize(maxs.width(),maxs.height());
 
   // remember the focus policies using the dictionary and reset them
   QObjectList *list = m_pClient->queryList( "QWidget" );
@@ -775,7 +784,7 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
    //Resize the caption
    int captionHeight=m_pCaption->heightHint();
    int captionWidth=width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-   m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth,	captionHeight);
+   m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth, captionHeight);
    //The buttons are caption children
 #ifdef _OS_WIN32_
    m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
@@ -894,7 +903,7 @@ void QextMdiChildFrm::switchToMinimizeLayout()
       clientMinWidth = m_pManager->m_defaultChildFrmSize.width();
    m_pClient->hide();
 
-   setMinimumWidth(0);
+   setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
    setFixedHeight(m_pCaption->height()+QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+QEXTMDI_MDI_CHILDFRM_SEPARATOR);
 
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);

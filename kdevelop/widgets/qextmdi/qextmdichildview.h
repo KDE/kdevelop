@@ -231,11 +231,17 @@ signals:
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }
-// I don't know how to deal with this...
 /** Return the caption of the child window (this is differnet from the caption on the button on the taskbar) */
 inline const QString& QextMdiChildView::caption(){ return m_szCaption; }
-/** Retrun the caption of the button on hte task bar */
+/** Return the caption of the button on hte task bar */
 inline const QString& QextMdiChildView::tabCaption(){ return m_sTabCaption; }
-inline QextMdiChildFrm *QextMdiChildView::mdiParent(){ return (QextMdiChildFrm *)parent(); }
+inline QextMdiChildFrm *QextMdiChildView::mdiParent()
+{
+   QWidget* pw = parentWidget();
+   if( pw != 0L)
+      if( pw->inherits("QextMdiChildFrm"))
+         return (QextMdiChildFrm *)pw;
+   return 0L;
+}
 
 #endif //_QEXTMDICHILDVIEW_H_

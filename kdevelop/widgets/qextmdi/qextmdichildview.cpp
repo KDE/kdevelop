@@ -450,10 +450,10 @@ void QextMdiChildView::setMaximumSize( int maxw, int maxh)
 {
    if( mdiParent() != 0L) {
       int w = maxw + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-      if( maxw == 32767) w = 32767;
+      if( w > QWIDGETSIZE_MAX) w = QWIDGETSIZE_MAX;
       int h = maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + mdiParent()->captionHeight();
-      if( maxh == 32767) w = 32767;
-      mdiParent()->setMaximumSize( maxw, maxh);
+      if( h > QWIDGETSIZE_MAX) h = QWIDGETSIZE_MAX;
+      mdiParent()->setMaximumSize( w, h);
    }
    QWidget::setMaximumSize( maxw, maxh);
 }
