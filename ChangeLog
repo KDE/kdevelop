@@ -1,3 +1,7 @@
+1999-07-18 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* fixed some bugs, when generating bool properties (kdlgedit)
+	* finished the "make manual" dialog implementation
+
 1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added Kurt Granroth's IOSlaves article to KDE 2 Handbook
   * converted english docs to use the png logo

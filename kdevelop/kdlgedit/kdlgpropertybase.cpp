@@ -128,11 +128,13 @@ void KDlgPropertyBase::dumpBoolPropCall(QTextStream *stream, QString methname,
 {
     // iffalse == true  -> dump only if property is false
     // iffalse == false -> dump only if property is true
-    if (iffalse && propValueAsBool(name))
+    if (iffalse && propValueAsBool(name)){
 	return;
-    if (!iffalse && !propValueAsBool(name))
+    }
+
+    if (getPropValue(name) == ""){
 	return;
-    if (name = "") return;
+    }
     
     dumpPropCall(stream, methname, getPropValue(name));
 }

@@ -57,7 +57,7 @@ KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name,
 	did_know_label->setMinimumSize( 0, 0 );
 	did_know_label->setMaximumSize( 32767, 32767 );
 	{
-		QFont font( "Arial", 14, 75, 0 );
+	    QFont font( "Helvetica", 14, 75, 0 );
 		font.setStyleHint( (QFont::StyleHint)0 );
 		font.setCharSet( (QFont::CharSet)0 );
 		did_know_label->setFont( font );

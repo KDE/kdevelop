@@ -1432,7 +1432,7 @@ void CKAppWizard::slotProcessExited() {
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
   if (userdoc->isChecked()) {
-    project->setSGMLFile ("index.sgml");
+    project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.sgml");
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");

@@ -1346,10 +1346,11 @@ void CKDevelop::slotHelpAPI(){
 }
 void CKDevelop::slotHelpManual(){
   if(project){
-    unsigned int index = prj->getSGMLFile().length()-4;
+
     QString name = prj->getSGMLFile().copy();
-    name.remove(index,4);
-    QString doc_file=prj->getProjectDir() + prj->getSubDir() + "docs/en/" + name + "html";
+    QFileInfo finfo(name);
+ 
+    QString doc_file = finfo.dirPath() +"/"+finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
     	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
     				i18n("The Project manual documentation is not present.\n" 

@@ -21,7 +21,6 @@
 
 //Generated area. DO NOT EDIT!!!(begin)
 #include <qwidget.h>
-#include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlabel.h>
@@ -38,13 +37,16 @@
 class CMakeManualDlg : public QDialog  {
    Q_OBJECT
 public: 
-	CMakeManualDlg(QWidget *parent=0, const char *name=0);
+	CMakeManualDlg(QWidget *parent=0, const char *name=0,QString manual_file="");
 	~CMakeManualDlg();
+	
+	/**public access attribute, contains "ksgml2html" or "sgml2html"*/
+	QString program;
+	QString file;
 
 protected: 
 	void initDialog();
 	//Generated area. DO NOT EDIT!!!(begin)
-	QGroupBox *QGroupBox_1;
 	QPushButton *ok_button;
 	QPushButton *cancel_button;
 	QLineEdit *file_edit;

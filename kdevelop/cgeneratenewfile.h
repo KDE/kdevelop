@@ -2,7 +2,6 @@
                     cgeneratenewfile.h -
                              -------------------                                         
 
-    version              :                                   
     begin                : 1 Oct  1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -43,6 +42,7 @@ public:
   QString genKDELnkFile(QString abs_name,CProject* prj);
   QString genLSMFile(QString abs_name,CProject* prj);
   QString genIcon(QString abs_name);
+  QString genNifFile(QString abs_name);
   
 };
 #endif

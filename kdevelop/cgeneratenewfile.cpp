@@ -21,6 +21,7 @@
 #include <qfileinfo.h>
 #include "cgeneratenewfile.h"
 #include "cproject.h"
+#include <kprocess.h>
 
 CGenerateNewFile::CGenerateNewFile(){
 }
@@ -246,4 +247,14 @@ QString CGenerateNewFile::genIcon(QString abs_name){
   }
   file.close();  
   return file.name();
+}
+QString CGenerateNewFile::genNifFile(QString abs_name){
+    KShellProcess process;
+    QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+
+    process.clearArguments();
+    process << "cp"; // copy is your friend :-)
+    process << nif_template;
+    process << abs_name;
+    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
 }

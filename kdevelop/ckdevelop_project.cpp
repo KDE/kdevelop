@@ -734,7 +734,7 @@ void CKDevelop::slotProjectAPI(){
 
 void CKDevelop::slotProjectManual(){
 
-    CMakeManualDlg dlg;
+    CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
     if(dlg.exec()){
 	
 	showOutputView(true);
@@ -743,15 +743,33 @@ void CKDevelop::slotProjectManual(){
 	//  slotFileSaveAll();
 	slotStatusMsg(i18n("Creating project Manual..."));
 	messages_widget->clear();
-	QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
-	bool ksgml;
-        process.clearArguments();
-        process << (ksgml? "ksgml2html" : "sgml2html");
-        process << prj->getSGMLFile();
-        process << "en";
-        process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	
+	bool ksgml = true;
+	if(dlg.program == "sgml2html") ksgml = false;
+	prj->setSGMLFile(dlg.file);
+	CGenerateNewFile generator;
+	QFileInfo info(dlg.file);
+	
+	if(ksgml){
+	    
+	    QString nif_file = info.dirPath() + "/" + info.baseName()+ ".nif";
+	    if(!QFile::exists(nif_file)){
+		generator.genNifFile(nif_file);
+	    }
+	}
+	QDir::setCurrent(info.dirPath());
+        shell_process.clearArguments();
+	if(ksgml){
+	    shell_process << "ksgml2html";
+	    shell_process << info.fileName();
+	    shell_process << "en";
+	}
+	else{
+	    shell_process << "sgml2html";
+	    shell_process << info.fileName();
+	}
+        shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
     }
-  
 }
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
@@ -1038,5 +1056,6 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
 
 
