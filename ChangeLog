@@ -1,3 +1,6 @@
+2003-07-07 Mario Scalas <mario.scalas@libero.it>
+	* Added tag/branching feature to legacy CVS integration. 
+
 2003-07-06 Alexander Dymo <cloudtemple@mksat.net>
     * Implemented Delphi compiler plugin
 
