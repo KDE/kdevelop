@@ -38,8 +38,27 @@ framework as well (which has the differences as mentioned above: other method ca
 <P>Now we will start jumping into development by creating the frame application for <EM>KScribble</EM>. Start KDevelop and choose
 "Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
 contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
-from the Qt section.
+from the Qt section. Then select "Next", enter "KScribble" as project name and "1.0" as version number. Add your name
+and email address into the according fields and you're done. Click on the "Create" button and KDevelop will generate our first version
+of <EM>KScribble</EM> while you can watch the output in the last page of the wizard. Finally, press "Exit" to return to KDevelop. In
+the output window you will see an additional message showing that the messages file has been set up for your project, which will be
+important to translate KScribble into other languages.
 <P>
+<H3><A NAME="ss4.2">4.2 Overview</A>
+</H3>
+
+<P>Now it is important to have an understanding where to find what in the generated sources and where your place as a programmer can be
+found to make <EM>KScribble</EM> a unique KDE application.
+<P>First of all, in the Classviewer you will see three already created classes, <CODE>KScribbleApp</CODE>, <CODE>KScribbleDoc</CODE> and
+<CODE>KScribbleView</CODE>. As explained above, each of them has a certain part within the application; the App class builds the main
+window and coordinates user interaction, the Doc class maintains the documents that an application can manipulate; finally the View
+class is responsible for user interaction with the child windows and communicates with the document connected to it. This has several
+consequences: to make a good use of the provided functionality, the programmer is bound to use the given View class. By default, the
+View inherits <CODE>QWidget</CODE> as a minimum requirement, but you're by far not limited to that. But inheriting from another class is
+not too much work and finally there is also the possibility to use a <CODE>QMainWindow</CODE> or <CODE>KTMainWindow</CODE> for example as the
+class to inherit and use another class that manages the view.
+<P>In the next chapter we'll continue with extending <EM>KScribble</EM> to manage it's documents. After that we'll implement the user
+interaction and you will see the first functionality that is unique to our application: we can draw pictures, load and save them.
 <P>
 <P>
 <P ALIGN="RIGHT">

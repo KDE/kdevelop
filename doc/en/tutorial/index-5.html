@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Copyright </TITLE>
+<TITLE>KDE Application Tutorials: Defining the Documents</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,36 +14,155 @@
  
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-4.html">Previous</A>
+<A HREF="index-6.html">Next</A>
+<A HREF="index-4.html">Previous</A>
 <A HREF="index.html#toc5">Table of Contents</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s5">5. Copyright </A> </H3>
+<H3><A NAME="s5">5. Defining the Documents</A></H3>
 
 <P>
-<BLOCKQUOTE><CODE>
-<PRE>
-
-KDevelop Copyright 1998,1999 The KDevelop Team.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-</PRE>
-</CODE></BLOCKQUOTE>
+<P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
+application has to manage and how it will do that. So this will naturally require to define the document structure first by extending
+the document class, in our example <CODE>KScribbleDoc</CODE>. This class is stored in two files, <CODE>kscribbledoc.h</CODE>, containing the
+class declaration, and <CODE>kscribbledoc.cpp</CODE>, where we will find the implementation of the class methods.
+<P>As <EM>KScribble</EM> will be a drawing application, we have to think what kind storing system we could use. The Qt library has a lot
+of possibilites which we will widely use and a lot of advantages especially for drawing operations and graphical data handling.
+Therefore, we will use an instance of the class <CODE>QPixmap</CODE> to serve us as a buffer - an invisible pixmap which we will use to
+draw into from the view instance. This also makes using multiple windows or views for the same document possible, as each view
+connected to the document will redraw it's contents whenever one of the views changed the buffer data.
+<P>To add our data buffer, simply click on the <CODE>KScribbleDoc</CODE> item in the class viewer to open the class declaration in the editor.
+There we will also add some more what is needed: We'll use a <CODE>QPen</CODE> to draw with, a class that defines colors, pen width etc.
+<P>#include 
+<P>at the beginning of the header file where the other already used Qt headers are placed. Within the class declaration, add:
+<P>protected:
+QPixmap buffer;
+<P>
+<P>
+<P>////////////////////////// kscribbledoc.h
+<P>#include #include #include 
+<P>class declaration
+<P>const QString&amp; title() const;
+<P>QPen currentPen(){ return pen;};     
+<P>int penWidth()
+{ return pen.width(); }
+<P>public slots:
+/** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
+* As this view normally repaints itself, it is excluded from the paintEvent.
+*/
+void updateAllViews(KScribbleView *sender);
+<P>protected:
+<P>QPen pen;
+QPointArray polyline;
+QPixmap buffer;
+<P>private:
+/** the modified flag of the current document */
+bool modified;
+<P>//////////////////////////
+kscribbledoc.cpp
+<P>bool KScribbleDoc::newDocument()
+{
+/////////////////////////////////////////////////
+// TODO: Add your document initialization code here
+pen=QPen( Qt::red, 3 );
+polyline=QPointArray(3);
+/////////////////////////////////////////////////
+modified=false;
+return true;
+}
+<P>bool KScribbleDoc::openDocument(const QString , const char *format /*=0*/)
+{
+<P>QFile f( filename );
+if ( !f.open( IO_ReadOnly ) )
+return false;
+/////////////////////////////////////////////////
+// TODO: Add your document opening code here
+if(!buffer.load( filename, "PNG" ))
+return false;
+/////////////////////////////////////////////////
+f.close();
+<P>
+<P>bool KScribbleDoc::saveDocument(const QString , const char *format /*=0*/)
+{
+QFile f( filename );
+if ( !f.open( IO_WriteOnly ) )
+return false;
+<P>/////////////////////////////////////////////////
+// TODO: Add your document saving code here
+if(!buffer.save( filename, "PNG" ))
+return false;
+/////////////////////////////////////////////////
+<P>f.close();
+<P>//////////////////////////
+kscribbleview.h
+<P>protected:
+/** Pointer to the document connected to the widget */
+KScribbleDoc *doc;
+<P>virtual void mousePressEvent( QMouseEvent *e );
+virtual void mouseReleaseEvent( QMouseEvent *e );
+virtual void mouseMoveEvent( QMouseEvent *e );
+virtual void resizeEvent( QResizeEvent *e );
+virtual void paintEvent( QPaintEvent *e );
+<P>private:
+bool mousePressed;
+/////////////////////////
+kscribbleview.cpp
+void KScribbleView::mousePressEvent( QMouseEvent *e )
+{
+mousePressed = TRUE;
+doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = e->pos();
+doc->updateAllViews(this);
+}
+<P>void KScribbleView::mouseReleaseEvent( QMouseEvent * )
+{
+mousePressed = FALSE;
+doc->updateAllViews(this);
+}
+<P>void KScribbleView::mouseMoveEvent( QMouseEvent *e )
+{
+if ( mousePressed ) {
+<P>QPainter painter;
+painter.begin( >buffer );
+painter.setPen( doc->currentPen() );
+doc->polyline[2] = doc->polyline[1];
+doc->polyline[1] = doc->polyline[0];
+doc->polyline[0] = e->pos();
+painter.drawPolyline( doc->polyline );
+painter.end();
+<P>QRect r = doc->polyline.boundingRect();
+r = r.normalize();
+r.setLeft( r.left() - doc->penWidth() );
+r.setTop( r.top() - doc->penWidth() );
+r.setRight( r.right() + doc->penWidth() );
+r.setBottom( r.bottom() + doc->penWidth() );
+<P>doc->setModified();
+doc->updateAllViews(this);
+bitBlt( this, r.x(), r.y(), >buffer, r.x(), r.y(), r.width(), r.height() );
+}
+}
+<P>void KScribbleView::resizeEvent( QResizeEvent *e )
+{
+QWidget::resizeEvent( e );
+<P>int w = width() > doc->buffer.width() ?
+width() : doc->buffer.width();
+int h = height() > doc->buffer.height() ?
+height() : doc->buffer.height();
+<P>QPixmap tmp( doc->buffer );
+doc->buffer.resize( w, h );
+doc->buffer.fill( Qt::white );
+bitBlt( >buffer, 0, 0, , 0, 0, tmp.width(), tmp.height() );
+}
+<P>void KScribbleView::paintEvent( QPaintEvent *e )
+{
+QWidget::paintEvent( e );
+<P>QRect r = e->rect();
+<P>bitBlt( this, r.x(), r.y(), >buffer, r.x(), r.y(), r.width(), r.height() );
+}
+/////////////////////////////////////
 <P>
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-4.html">Previous</A>
+<A HREF="index-6.html">Next</A>
+<A HREF="index-4.html">Previous</A>
 <A HREF="index.html#toc5">Table of Contents</A>
 </P>
 <CENTER>
