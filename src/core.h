@@ -16,7 +16,6 @@ class Core : public KDevCore
 
 public:
 
-  static void createInstance();
   static Core *getInstance();
 
   ~Core();

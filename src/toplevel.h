@@ -21,7 +21,6 @@ public:
 
   void raiseView(QWidget *view);
 
-  static void createInstance(QWidget *parent=0, const char *name=0);
   static TopLevel *getInstance();
 
   void createGUI(KParts::Part *part);

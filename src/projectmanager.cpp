@@ -55,8 +55,6 @@ ProjectManager *ProjectManager::s_instance = 0;
 
 ProjectManager::ProjectManager()
 {
-  s_instance = this;
-
   m_info = 0;
 }
 
@@ -67,15 +65,10 @@ ProjectManager::~ProjectManager()
 }
 
 
-void ProjectManager::createInstance()
+ProjectManager *ProjectManager::getInstance()
 {
   if (!s_instance)
     s_instance = new ProjectManager;
-}
-
-
-ProjectManager *ProjectManager::getInstance()
-{
   return s_instance;
 }
 

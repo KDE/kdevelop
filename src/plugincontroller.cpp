@@ -28,25 +28,20 @@
 PluginController *PluginController::s_instance = 0;
 
 
-void PluginController::createInstance()
+PluginController *PluginController::getInstance()
 {
   if (!s_instance)
     s_instance = new PluginController();
-}
-
-
-PluginController *PluginController::getInstance()
-{
   return s_instance;
 }
 
 
 PluginController::PluginController()
 {
+  s_instance = this;
+
   loadDefaultParts();
   loadGlobalPlugins();
-
-  Core::getInstance()->doEmitCoreInitialized();
 }
 
 

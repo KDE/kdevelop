@@ -26,7 +26,6 @@ public:
 
   ~ProjectManager();
 
-  static void createInstance();
   static ProjectManager *getInstance();
 
   void loadProject(const QString &fileName);

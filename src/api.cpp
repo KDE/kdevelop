@@ -33,16 +33,10 @@ ClassStore *API::ccClassStore()
 }
 
 
-void API::createInstance()
+API *API::getInstance()
 {
   if (!s_instance)
     s_instance = new API;
-}
-
-
-
-API *API::getInstance()
-{
   return s_instance;
 }
 

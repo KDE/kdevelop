@@ -51,15 +51,10 @@ TopLevel::~TopLevel()
 }
 
 
-void TopLevel::createInstance(QWidget *parent, const char *name)
-{
-  if (!s_instance)
-    s_instance = new TopLevel(parent, name);
-}
-
-
 TopLevel *TopLevel::getInstance()
 {
+  if (!s_instance)
+    s_instance = new TopLevel(0, "toplevel");
   return s_instance;
 }
 

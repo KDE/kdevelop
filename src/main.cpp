@@ -8,10 +8,8 @@
 
 
 #include "toplevel.h"
-#include "core.h"
-#include "api.h"
 #include "plugincontroller.h"
-#include "projectmanager.h"
+#include "core.h"
 
 
 int main(int argc, char *argv[])
@@ -39,17 +37,11 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
-  // Note: the order is important here!
-  API::createInstance();
-  TopLevel::createInstance();
-  Core::createInstance();
-  PluginController::createInstance();
-  ProjectManager::createInstance();
-
   app.setTopWidget(TopLevel::getInstance());
-  TopLevel::getInstance()->show();
-
   TopLevel::getInstance()->loadSettings();
+  (void) PluginController::getInstance();
+  
+  TopLevel::getInstance()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
 

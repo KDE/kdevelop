@@ -18,7 +18,6 @@ public:
   virtual ClassStore *ccClassStore();
 
   
-  static void createInstance();
   static API *getInstance();
 
   ~API();

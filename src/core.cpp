@@ -19,16 +19,10 @@
 Core *Core::s_instance = 0;
 
 
-void Core::createInstance()
+Core *Core::getInstance()
 {
   if (!s_instance)
     s_instance = new Core;
-}
-
-
-
-Core *Core::getInstance()
-{
   return s_instance;
 }
 
