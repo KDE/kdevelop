@@ -27,12 +27,12 @@
 #include <qvaluelist.h>
 #include <qvaluestack.h>
 
-class ParserPrivateData;
+struct ParserPrivateData;
 
 class Driver;
 class Lexer;
 class Token;
-class Error;
+struct Error;
 
 class Parser
 {

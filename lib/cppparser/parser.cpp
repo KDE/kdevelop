@@ -33,12 +33,6 @@
 
 using namespace std;
 
-#ifdef Q_OS_WIN32
-QT_STATIC_CONST_IMPL Error& Errors::InternalError = Error( 1, -1, i18n("Internal Error") );
-QT_STATIC_CONST_IMPL Error& Errors::SyntaxError = Error( 2, -1, i18n("Syntax Error before '%1'") );
-QT_STATIC_CONST_IMPL Error& Errors::ParseError = Error( 3, -1, i18n("Parse Error before '%1'") );
-#endif
-
 #define ADVANCE(tk, descr) \
 { \
   const Token& token = lex->lookAhead( 0 ); \
@@ -396,8 +390,9 @@ bool Parser::parseName( NameAST::Node& node )
 
     while( true ){
         ClassOrNamespaceNameAST::Node n;
-        if( !parseUnqualifiedName(n) )
+        if( !parseUnqualifiedName(n) ) {
 	    return false;
+	}
 
 	if( lex->lookAhead(0) == Token_scope ){
 	    lex->nextToken();
@@ -1583,8 +1578,9 @@ bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 	    AST::Node n = CreateNode<AST>();
 	    UPDATE_POS( n, startNode, lex->index() );
 	    ast->addNode( n );
-	} else
+	} else {
 	    break;
+    }
     }
 
     if( ast->nodeList().count() == 0 )
@@ -2307,8 +2303,9 @@ bool Parser::parseUnqualifiedName( ClassOrNamespaceNameAST::Node& node )
 	if( !parseOperatorFunctionId(n) )
 	    return false;
 	ast->setName( n );
-    } else
+    } else {
 	return false;
+    }
 
     if( !isDestructor ){
 
@@ -2838,6 +2835,8 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 
     int start = lex->index();
 
+    // that is for the case '__declspec(dllexport) int ...' or
+    // '__declspec(dllexport) inline int ...', etc.
     GroupAST::Node winDeclSpec;
     parseWinDeclSpec( winDeclSpec );
 
@@ -2849,6 +2848,10 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 
     if( hasStorageSpec && !hasFunSpec )
         parseFunctionSpecifier( funSpec );
+
+    // that is for the case 'friend __declspec(dllexport) ....'
+    GroupAST::Node winDeclSpec2;
+    parseWinDeclSpec( winDeclSpec2 );
 
     GroupAST::Node cv;
     parseCvQualify( cv );

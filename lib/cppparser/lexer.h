@@ -142,7 +142,7 @@ enum SkipType {
     SkipWordAndArguments
 };
 
-class LexerData;
+struct LexerData;
 
 class Token
 {
