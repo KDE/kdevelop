@@ -46,7 +46,7 @@
 #include <kfiledialog.h>
 #include <kfile.h>
 #include <kapplication.h>
-
+#include <kstringhandler.h> 
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
 
@@ -595,7 +595,8 @@ void AppWizardDialog::projectLocationChanged()
 {
   // Jakob Simon-Gaarde: Got tired of the anoying bug with the appname/location confussion.
   // This version insures WYSIWYG and checks pathvalidity
-  finalLoc_label->setText(dest_edit->url() + (dest_edit->url().right(1)=="/" ? "":"/") + appname_edit->text().lower());
+  QString temp( dest_edit->url() + (dest_edit->url().right(1)=="/" ? "":"/") + appname_edit->text().lower() );
+  finalLoc_label->setText( KStringHandler::csqueeze( temp, 60 ) );
   QDir qd(dest_edit->url());
   QFileInfo fi(dest_edit->url() + "/" + appname_edit->text().lower());
   if (!qd.exists() || appname_edit->displayText().isEmpty()||fi.exists())
