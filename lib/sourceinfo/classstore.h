@@ -124,6 +124,10 @@ public:
      */
     QValueList<ParsedClass*> getClassesByParent(const QString &name);
     /**
+     * Returns the list of parents of the named class.
+     */
+    //    QValueList<ParsedClass*> getClassParents(const QString &name);
+    /**
      * Returns a list of all classes which have a given class
      * as a member variable (aka "clients" of the class).
      */

@@ -20,6 +20,7 @@
 #include <kpopupmenu.h>
 
 #include "kdevlanguagesupport.h"
+#include "kdevproject.h"
 
 #include "classstore.h"
 #include "classtooldlg.h"
@@ -106,6 +107,32 @@ void ClassViewWidget::buildTree(bool fromScratch)
 }
 
 
+/**
+ * Determines the folder where a class defined in file fileName
+ * is stored. This works by removing two levels below the project
+ * directory, if it is in a subdirectory that deep. Otherwise a
+ * null string is returned.
+ * Examples:
+ *   determineFolder("/proj/src/include/foo.cpp", "/proj") => "src/include"
+ *   determineFolder("/proj/src/bla.cpp, "/proj") => null
+ *   determineFolder("/proj/bar.cpp", "/proj") => null
+ */
+static QString determineFolder(QString fileName, QString projectDir)
+{
+    projectDir += "/";
+    if (!fileName.startsWith(projectDir))
+        return QString::null;
+    fileName.remove(0, projectDir.length());
+    int pos1 = fileName.find('/');
+    if (pos1 == -1)
+        return QString::null;
+    int pos2 = fileName.find('/', pos1+1);
+    if (pos2 == -1)
+        return QString::null;
+    return fileName.left(pos2);
+}
+
+
 void ClassViewWidget::buildTreeByCategory(bool fromScratch)
 {
     TreeState oldTreeState;
@@ -127,8 +154,41 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         ilastItem = 0;
         QValueList<ParsedClass*> classList = store->getSortedClassList();
         QValueList<ParsedClass*>::ConstIterator it;
-        for (it = classList.begin(); it != classList.end(); ++it)
-            ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
+
+        // Make a list of all directories 2 levels under the project directory
+        QString projectDir = m_part->project()->projectDirectory();
+        QStringList dirNames;
+        for (it = classList.begin(); it != classList.end(); ++it) {
+            QString fileName = (*it)->definedInFile();
+            QString dirName = determineFolder(fileName, projectDir);
+            if (!dirName.isNull() && !dirNames.contains(dirName))
+                dirNames.append(dirName);
+        }
+
+        // Create folders
+        dirNames.sort();
+        QMap<QString, ClassTreeItem*> folders;
+        
+        QStringList::ConstIterator sit;
+        for (sit = dirNames.begin(); sit != dirNames.end(); ++sit) {
+            ilastItem = new ClassTreeOrganizerItem(lastItem, ilastItem, *sit);
+            folders.insert(*sit, ilastItem);
+        }
+
+        // Put classes into folders (if appropriate) or directly into the organizer item
+        for (it = classList.begin(); it != classList.end(); ++it) {
+            QString fileName = (*it)->definedInFile();
+            QString dirName = determineFolder(fileName, projectDir);
+            QMap<QString, ClassTreeItem*>::ConstIterator fit = folders.find(dirName);
+            if (fit == folders.end())
+                ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
+            else {
+                QListViewItem *iilastItem = (*fit)->firstChild();
+                while (iilastItem)
+                    iilastItem = iilastItem->nextSibling();
+                (void) new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it);
+            }
+        }
         if (fromScratch)
             lastItem->setOpen(true);
     }

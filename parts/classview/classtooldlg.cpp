@@ -352,8 +352,8 @@ void ClassToolDialog::buildTree()
             break;
         case ViewSuppliers:
             {
-                QValueList<ParsedClass*> list = m_part->classStore()->getClassSuppliers( currentClass->name() );
-                class_tree->insertClassAndClasses( currentClass, list );
+                QValueList<ParsedClass*> list = m_part->classStore()->getClassSuppliers(currentClass->name());
+                class_tree->insertClassAndClasses(currentClass, list);
             }
             break;
         case ViewMethods:

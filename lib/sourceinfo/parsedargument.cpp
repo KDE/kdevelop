@@ -84,8 +84,10 @@ void ParsedArgument::setName( const QString &name)
  *-----------------------------------------------------------------*/
 void ParsedArgument::setType(const QString &type)
 {
+#ifndef NDEBUG
     if (type.isEmpty())
-        kdDebug(9000) << "ParsedArgument::setType() with empty type for " << name() << endl;
+        kdDebug(9005) << "ParsedArgument::setType() with empty type for " << name() << endl;
+#endif
     
     _type = type.stripWhiteSpace();
 }

@@ -60,8 +60,10 @@ ParsedParent::~ParsedParent()
  *-----------------------------------------------------------------*/
 void ParsedParent::setName(const QString &name)
 {
+#ifndef NDEBUG
     if (name.isEmpty())
-        kdDebug(9000) << "ParsedParent::setName() with empty name" << endl;
+        kdDebug(9005) << "ParsedParent::setName() with empty name" << endl;
+#endif
     
     _name = name;
 }

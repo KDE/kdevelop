@@ -80,8 +80,10 @@ ParsedAttribute::~ParsedAttribute()
  *-----------------------------------------------------------------*/
 void ParsedAttribute::setType(const QString &type)
 {
+#ifndef NDEBUG
     if (type.isEmpty())
-        kdDebug(9000) << "ParsedAttribute::setType() with empty type for " << name() << endl;
+        kdDebug(9005) << "ParsedAttribute::setType() with empty type for " << name() << endl;
+#endif
 
     _type = type;
     _type = _type.stripWhiteSpace();

@@ -1,4 +1,9 @@
-2002-05-28
+2002-05-30  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* In class view, arrange classes in folders if they
+	  are more than one level below the project directory
+
+2002-05-29  John Firebaugh <jfirebaugh@kde.org>
 	* Added ProjectWorkspace. Save and restore opened files with project.
 
 2002-05-29  Harald Fernengel <harry@kdevelop.org>
