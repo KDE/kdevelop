@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
+#include <kdialogbase.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -27,6 +28,8 @@
 
 #include "filegroupswidget.h"
 #include "filegroupsconfigwidget.h"
+
+#define FILEGROUPS_OPTIONS 1
 
 typedef KDevGenericFactory<FileGroupsPart> FileGroupsFactory;
 static const KAboutData data("kdevfilegroups", I18N_NOOP("File Group View"), "1.0");
@@ -46,8 +49,11 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
                                        "in groups which can be configured in project settings dialog, <b>File Groups</b> tab."));
     mainWindow()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("File groups in the project directory"));
 
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-             this, SLOT(projectConfigWidget(KDialogBase*)) );
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createProjectConfigPage( i18n("File Groups"), FILEGROUPS_OPTIONS );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+
 
     // File groups
     connect( project(), SIGNAL(addedFilesToProject(const QStringList&)),
@@ -67,6 +73,7 @@ FileGroupsPart::~FileGroupsPart()
     if (m_filegroups)
         mainWindow()->removeView(m_filegroups);
     delete m_filegroups;
+	delete _configProxy;
 }
 
 void FileGroupsPart::refresh()
@@ -79,9 +86,11 @@ void FileGroupsPart::refresh()
     QTimer::singleShot(0, m_filegroups, SLOT(refresh()));
 }
 
-void FileGroupsPart::projectConfigWidget(KDialogBase *dlg)
+void FileGroupsPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("File Groups"));
-    FileGroupsConfigWidget *w = new FileGroupsConfigWidget(this, vbox, "file groups config widget");
-    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+	if ( pagenumber == FILEGROUPS_OPTIONS )
+	{
+		FileGroupsConfigWidget *w = new FileGroupsConfigWidget(this, page, "file groups config widget");
+		connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+	}
 }

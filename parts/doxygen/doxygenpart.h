@@ -26,6 +26,9 @@ class DoxygenDialog;
 class QPopupMenu;
 class Context;
 class KAction;
+class KDialogBase;
+class ConfigWidgetProxy;
+
 namespace KParts{
     class Part;
 }
@@ -49,7 +52,8 @@ private slots:
      * a configuration file. The file name is "Doxyfile" and it's stored
      * in the project root.
      */
-    void projectConfigWidget(KDialogBase *dlg);
+//    void projectConfigWidget(KDialogBase *dlg);
+	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
     /** run doxygen to generate API documentation */
     void slotDoxygen();
@@ -92,6 +96,7 @@ private:
     void adjustDoxyfile();
 
     DoxygenDialog *m_dialog;
+	ConfigWidgetProxy * _configProxy;
 
     //needed for doxygen preview
     KProcess m_process;

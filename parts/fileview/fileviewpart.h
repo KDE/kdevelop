@@ -13,6 +13,7 @@
 #define _FILEVIEWPART_H_
 
 #include <qguardedptr.h>
+#include <configwidgetproxy.h>
 #include "kdevplugin.h"
 #include "vcscolorsconfigwidget.h"
 
@@ -31,13 +32,14 @@ public:
     static VCSColors vcsColors;
 
 private slots:
-    void projectConfigWidget( KDialogBase *dlg );
+	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
 private:
     void loadSettings();
     void storeSettings();
 
     QGuardedPtr<PartWidget> m_widget;
+	ConfigWidgetProxy * _configProxy;
 };
 
 #endif

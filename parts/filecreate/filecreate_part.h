@@ -30,6 +30,7 @@ namespace FileCreate {
 
 class KDialogBase;
 class FCConfigWidget;
+class ConfigWidgetProxy;
 
 using namespace FileCreate;
 
@@ -115,8 +116,7 @@ public slots:
 
 protected slots:
   void slotNoteFiletype(const FileType * filetype);
-  void configWidget(KDialogBase *dlg);
-  void projectConfigWidget(KDialogBase *dlg);
+  void insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int );
 
 private:
   /**
@@ -172,7 +172,7 @@ private:
   const FileType * m_filedialogFiletype;
 
   bool m_useSideTab;
-
+  ConfigWidgetProxy * _configProxy;
 };
 
 

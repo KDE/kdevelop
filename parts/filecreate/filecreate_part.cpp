@@ -30,6 +30,7 @@
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
+#include "configwidgetproxy.h"
 
 #include "filetemplate.h"
 #include "domutil.h"
@@ -42,6 +43,9 @@
 #include "filecreate_filedialog.h"
 #include "filecreate_newfile.h"
 #include "fcconfigwidget.h"
+
+#define PROJECTSETTINGSPAGE 1
+#define GLOBALSETTINGSPAGE 2
 
 static const KAboutData data("kdevfilecreate", I18N_NOOP("New File Wizard"), "1.0");
 
@@ -57,9 +61,12 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   setXMLFile("kdevpart_filecreate.rc");
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
-  connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
-  connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
-  connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)));
+  
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createProjectConfigPage( i18n("New File Wizard"), PROJECTSETTINGSPAGE );
+	_configProxy->createProjectConfigPage( i18n("New File Wizard"), GLOBALSETTINGSPAGE );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
   KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
@@ -90,22 +97,30 @@ FileCreatePart::~FileCreatePart()
        delete chooser;
     }
   }
+  delete _configProxy;
 }
 
-void FileCreatePart::configWidget(KDialogBase *dlg)
+void FileCreatePart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("New File Wizard"));
-  FCConfigWidget *w = new FCConfigWidget(this, true, vbox, "filecreate config widget");
-  connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+	kdDebug() << k_funcinfo << endl;
+	
+	switch( pagenumber )
+	{
+		case PROJECTSETTINGSPAGE:
+		{
+			FCConfigWidget* w = new FCConfigWidget( this, false, page, "filecreate config widget" );
+			connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
+		}
+		break;
+		
+		case GLOBALSETTINGSPAGE:
+		{
+			FCConfigWidget *w = new FCConfigWidget( this, true, page, "filecreate config widget" );
+			connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+		}
+		break;
+	}
 }
-
-void FileCreatePart::projectConfigWidget( KDialogBase* dlg )
-{
-  QVBox* vbox = dlg->addVBoxPage(i18n("New File Wizard"));
-  FCConfigWidget* w = new FCConfigWidget( this, false, vbox, "filecreate config widget" );
-  connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
-}
-
 
 void FileCreatePart::selectWidget(int widgetNumber) {
   if (m_selectedWidget==widgetNumber) return;
@@ -194,7 +209,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
   QDomElement fileTypes = DomUtil::elementByPath(dom,"/kdevfilecreate/filetypes");
   if (!fileTypes.isNull()) {
     for(QDomNode node = fileTypes.firstChild();!node.isNull();node=node.nextSibling()) {
-      kapp->processEvents();
+//      kapp->processEvents();
 
       if (node.isElement() && node.nodeName()=="type") {
         QDomElement element = node.toElement();
@@ -214,7 +229,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
         if (node.hasChildNodes()) {
           for(QDomNode subnode = node.firstChild();!subnode.isNull();subnode=subnode.nextSibling()) {
             kdDebug(9034) << "subnode: " << subnode.nodeName().latin1() << endl;
-            kapp->processEvents();
+//            kapp->processEvents();
             if (subnode.isElement() && subnode.nodeName()=="subtype") {
               QDomElement subelement = subnode.toElement();
               FileType * subtype = new FileType;
@@ -290,127 +305,6 @@ FileType * FileCreatePart::getEnabledType(const QString & ex, const QString subt
 }
 
 // KDevFileCreate interface
-
-// This is the old way -- to be removed if everyone's OK with the new way!
-#if 0
-KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype) {
-
-  KDevCreateFile::CreatedFile result;
-  KURL projectURL( project()->projectDirectory() );
-  KURL selectedURL;
-
-  KDialogBase * dialogBase = NULL;
-  FriendlyWidget * filetypeWidget = NULL;
-
-  FileDialog * fileDialogWidget = NULL;
-
-  // If the file type (extension) is unknown, we're going to need to ask
-  if (ext.isNull()) {
-    m_filedialogFiletype = NULL;
-    filetypeWidget = new FriendlyWidget(this);
-    connect( filetypeWidget->signaller(), SIGNAL(filetypeSelected(const FileType *) ) ,
-             this, SLOT(slotNoteFiletype(const FileType *)) );
-    filetypeWidget->refresh();
-  }
-
-
-  // If the directory was supplied, it was relative to the project dir
-  if (!dir.isNull()) dir = project()->projectDirectory() + "/" + dir;
-
-  // If the file name or path is unknown, we're going to need to ask
-  if (dir.isNull() || name.isNull()) {
-
-    // if no path is known, start at project root
-    if (dir.isNull())
-      dir=project()->projectDirectory();
-
-    fileDialogWidget = new FileDialog(dir, "*." + ext, 0, "New file", true, filetypeWidget);
-
-    dialogBase = fileDialogWidget;
-
-  }
-
-  // if no dialog has been created but there's a widget to be displayed,
-  // create a holding dialog and swallow the widget
-  if (!dialogBase && filetypeWidget) {
-    dialogBase = new KDialogBase(KDialogBase::Swallow, QString("New file"), KDialogBase::Ok|KDialogBase::Cancel,
-                                   KDialogBase::Ok, 0, "New file", true);
-    dialogBase->setMainWidget(filetypeWidget);
-  }
-
-
-  // if there's a dialog display it
-  if (dialogBase) {
-
-    kdDebug(9034) << "Calling dialog..." << endl;
-    int fdResult = dialogBase->exec();
-    kdDebug(9034) << "Exited dialog..." << endl;
-
-    // deal with the results...
-
-    // if cancel was pressed, abort
-    if (fdResult==QDialog::Rejected) {
-      result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
-      delete dialogBase;
-      return result;
-    }
-
-    // if there was a file path to be selected, store it
-    if (fileDialogWidget) {
-      selectedURL = fileDialogWidget->selectedURL();
-      if (!projectURL.isParentOf(selectedURL)) {
-        delete dialogBase;
-        result.status = KDevCreateFile::CreatedFile::STATUS_NOTWITHINPROJECT;
-        return result;
-      }
-    }
-
-    // if there was a type to be chosen, store it
-    if (filetypeWidget) {
-      filetypeWidget = NULL; // deleted already as reparented in KFileDialog or KDialogBase
-      if (m_filedialogFiletype) {
-        ext = m_filedialogFiletype->ext();
-        subtype = m_filedialogFiletype->subtypeRef();
-      }
-    }
-
-    delete dialogBase; dialogBase=NULL;
-
-  } else {
-    // we know the directory and filename
-    selectedURL = dir + "/" + name;
-  }
-
-  // work out the path relative to the project directory
-  QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
-
-  // add appropriate extension, if not already there
-  if (!relToProj.endsWith("." + ext)) relToProj+="." + ext;
-
-  QString filename = URLUtil::filename(relToProj);
-
-  kdDebug(9034) << "relative to proj dir = " << relToProj << endl;
-  kdDebug(9034) << "filename = " << filename << endl;
-
-  // add in subtype, if specified
-  if (!subtype.isEmpty())
-    ext += "-" + subtype;
-
-  // create file from template, and add it to the project
-  if (FileTemplate::exists(this, ext)) {
-    if (FileTemplate::copy(this, ext, project()->projectDirectory() + relToProj))
-      project()->addFile(relToProj.mid(1));
-  }
-
-
-  // tell the caller what we did
-  result.filename = filename;
-  result.dir = URLUtil::directory(relToProj);
-  result.status = KDevCreateFile::CreatedFile::STATUS_OK;
-  return result;
-
-}
-#endif
 
 KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype)
 {
@@ -548,7 +442,7 @@ void FileCreatePart::slotInitialize( )
   if (!globalXMLFile.isNull() &&
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
     kdDebug(9034) << "Reading global template info..." << endl;
-    kapp->processEvents();
+//    kapp->processEvents();
     readTypes(globalDom, m_filetypes, false);
 
     // use side tab or not?
@@ -566,7 +460,7 @@ void FileCreatePart::slotInitialize( )
   for(QDomNode node = useGlobalTypes.firstChild();
       !node.isNull();node=node.nextSibling()) {
 
-    kapp->processEvents();
+//    kapp->processEvents();
 
     if (node.isElement() && node.nodeName()=="type") {
       QDomElement element = node.toElement();
