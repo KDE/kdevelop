@@ -71,7 +71,7 @@ void AppOutputViewPart::stopApplication()
     core()->running( this, false );
 }
 
-void AppOutputViewPart::slotProcessExited( KProcess * )
+void AppOutputViewPart::slotProcessExited()
 {
     core()->running( this, false );
 }
