@@ -11,8 +11,8 @@ installGNU();
 installDocbook();
 
 print "Installing application framework\n";
-mkdir( "${dest}/src" );
-mkdir( "${dest}/po" );
+mkdir( "${dest}/src", 0777 );
+mkdir( "${dest}/po", 0777 );
 install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-${APPNAMELC}-app.png");
 install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-${APPNAMELC}-app.png");
 install( "${src}/template-common/app.desktop",         "${dest}/src/${APPNAMELC}.desktop" );

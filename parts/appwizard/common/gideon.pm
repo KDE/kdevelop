@@ -53,7 +53,7 @@ sub initGideon
         $APPNAMEUC = uc $APPNAME;
 
         print "Making destination directory\n";
-        mkdir( "${dest}" );
+        mkdir( "${dest}", 0777 );
 }
 
 
@@ -106,9 +106,9 @@ sub installGNU()
 sub installDocbook()
 {
         print "Installing Docbook template\n";
-        mkdir( "${dest}/doc" );
+        mkdir( "${dest}/doc", 0777 );
         install( "${src}/template-common/kde-doc-Makefile.am", "${dest}/doc/Makefile.am" );
-        mkdir( "${dest}/doc/en" );
+        mkdir( "${dest}/doc/en", 0777 );
         install( "${src}/template-common/kde-doc-en-Makefile.am", "${dest}/doc/en/Makefile.am" );
         install( "${src}/template-common/kde-index.docbook", "${dest}/doc/en/index.docbook" );
 }
