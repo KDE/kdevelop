@@ -44,28 +44,28 @@ public:
     CreatedFile( const CreatedFile& source )
       : dir( source.dir ), filename( source.filename ),
         ext( source.ext ), subtype( source.subtype ),
-	status( source.status ), addToProject(false) {}
+        status( source.status ), addToProject(false) {}
 
     CreatedFile& operator = ( const CreatedFile& source )
     {
-	dir = source.dir;
-	filename = source.filename;
-	ext = source.ext;
-	subtype = source.subtype;
-	status = source.status;
-        addToProject = source.addToProject;
-	return( *this );
+      dir = source.dir;
+      filename = source.filename;
+      ext = source.ext;
+      subtype = source.subtype;
+      status = source.status;
+      addToProject = source.addToProject;
+      return( *this );
     }
 
     bool operator == ( const CreatedFile& source ) const
     {
-        return
-           dir == source.dir &&
-	   filename == source.filename &&
-	   ext == source.ext &&
-	   subtype == source.subtype &&
-	   status == source.status &&
-           addToProject == source.addToProject;
+      return
+        dir == source.dir &&
+        filename == source.filename &&
+        ext == source.ext &&
+        subtype == source.subtype &&
+        status == source.status &&
+        addToProject == source.addToProject;
     }
 
     // this should be private
