@@ -137,15 +137,13 @@ sub replaceValuesInFile {
   my $wordlength = 0;
   my $word = "";
   my $replace = "";
-  my $newfile = $overDirectory . "/newfile.txt";
-
-  open (INPUT,$oldfile) || die "cannot open file: $oldfile";
-  open (OUTPUT,">$newfile");
-
+ 
+  open (INPUT,"<$oldfile") || die "cannot open file: $oldfile";
   # setup filename replacement...
   $hashref->{"|FILENAME|"}=$oldfile;
   $hashref->{"|FILENAME|"}=$newfilename if ($newfilename);
-
+ my @lines;
+  my $i=0;
   while ( defined ($line = <INPUT> ))
   {
     # scan the hash
@@ -168,13 +166,15 @@ sub replaceValuesInFile {
       }
     }
 
-    print OUTPUT $line;
+ $lines[$i++]=$line;
   }
   close (INPUT);
+  open (OUTPUT,">$oldfile") || die "cannot open file: $oldfile";
+  foreach $line (@lines) {
+      print OUTPUT $line;
+  } 
   close (OUTPUT);
-  unlink ($oldfile);
-  rename ($newfile,$oldfile);
-  unlink ($newfile);
+ 
 }
 
 

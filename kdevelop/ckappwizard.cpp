@@ -1163,6 +1163,7 @@ void CKAppWizard::okPermited() {
   entries << "LOGMESSAGE\n";
   entries << QString(messageline->text()) + "\n";
 
+  entries.close();
 
   namelow = nameline->text();
   namelow = namelow.lower();

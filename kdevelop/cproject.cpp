@@ -60,7 +60,7 @@ bool CProject::readProject(){
   if(str.contains( PROJECT_VERSION_STR ) ){
     return false;
   }
-  
+  qfile.close();
   QFileInfo fileinfo(prjfile);
   dir = fileinfo.dirPath() + "/";
   setSourcesHeaders();
@@ -924,6 +924,7 @@ void CProject::setKDevelopWriteArea(QString makefile){
     for(str = list.first();str != 0;str = list.next()){
       stream << str + "\n";
     }
+    file.close();
   }
 }
 
@@ -1016,7 +1017,7 @@ void CProject::updateConfigureIn(){
       stream << str + "\n";
     }
   }
-  
+  file.close();
  
 }
 void  CProject::writeWorkspace(TWorkspace ws){

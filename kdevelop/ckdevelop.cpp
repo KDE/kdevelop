@@ -2133,7 +2133,7 @@ void CKDevelop::slotHelpAbout(){
   aboutmsg.setCaption(i18n("About KDevelop..."));
   aboutmsg.setButtonText(1, i18n("OK"));
   aboutmsg.setText(i18n("\t   KDevelop Version "+version+" \n\n"
-  											"\t(c) 1998,1999 The KDevelop Team \n\n"
+  											"\t(c) 1998,1999,2000 The KDevelop Team \n\n"
                         "Sandy Meier <smeier@rz.uni-potsdam.de>\n"
                         "Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
                         "Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>\n"
