@@ -14,6 +14,7 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+#include <qregexp.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -210,8 +211,15 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
         return;
     }
 
+    // strip the ==== headers
+    static QRegExp rx( "(^|\\n)====.*====\\n" );
+    rx.setMinimal( true );
+    QString strippedDiff = diff;
+    strippedDiff.replace( rx, QString::null );
+    qDebug ( "got diff:\n" + strippedDiff );
+
     Q_ASSERT( diffFrontend() );
-    diffFrontend()->showDiff( diff );    
+    diffFrontend()->showDiff( strippedDiff );
 }
 
 #include "perforcepart.moc"
