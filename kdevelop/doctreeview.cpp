@@ -531,6 +531,17 @@ void DocTreeOthersFolder::refresh()
 {
     QStrList others;
     
+    // remove the child-items because the items are regenareted below,
+    // otherwise they would appear twice
+    QListViewItem* child1 = firstChild();
+    QListViewItem* child2 = 0;
+
+    while( child1 ) {
+	child2 = child1->nextSibling();
+	delete child1;
+	child1 = child2;
+    }
+
     ListViewFolderItem::refresh();
 
     KConfig *config = kapp->getConfig();
