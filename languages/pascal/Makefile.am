@@ -1,6 +1,6 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(DB3INCLUDES) $(all_includes)
 SUBDIRS = file_templates app_templates compiler doc
 
 kde_module_LTLIBRARIES = libkdevpascalsupport.la

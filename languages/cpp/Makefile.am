@@ -2,7 +2,7 @@
 
 SUBDIRS = templates subclassing_template newclass_templates file_templates app_templates compiler pcsimporter debugger doc
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/cppparser $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/cppparser $(DB3INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

@@ -411,6 +411,32 @@ dnl  **********
 
 AC_DEFUN(KDEV_CHECK_BDB,
 [
+  ac_db_includedir=""
+  ac_db_libdir=""
+  ac_db_lib="db"
+  AC_ARG_WITH(db_includedir,
+[  --with-db-includedir=DIR    
+                          where the DB3 headers are installed ],
+[
+  ac_db_includedir="-I$withval"
+],
+  ac_db_includedir=""
+)
+  AC_ARG_WITH(db_libdir,
+[  --with-db-libdir=DIR    where the DB3 libraries are installed ],
+[
+  ac_db_libdir="-L$withval"
+],
+  ac_db_libdir=""
+)
+  AC_ARG_WITH(db_lib,
+[  --with-db-lib=LIB       library name for the DB3 library ],
+[
+  ac_db_lib=$withval
+],
+ac_db_lib=db
+)
+
   AC_MSG_CHECKING(for Berkeley DB >= 3)
 
   AC_CACHE_VAL(ac_cv_bdb,
@@ -420,7 +446,7 @@ AC_DEFUN(KDEV_CHECK_BDB,
 
     save_CXXFLAGS="$CXXFLAGS"
 
-    CXXFLAGS="$CXXFLAGS -ldb"
+    CXXFLAGS="$CXXFLAGS $ac_db_includedir $ac_db_libdir -l$ac_db_lib"
 
     AC_TRY_LINK([
       #include <db.h>
@@ -467,6 +493,13 @@ AC_DEFUN(KDEV_CHECK_BDB,
     fi
   fi
 
+DB3LIB="$ac_db_lib"
+DB3INCLUDES="$ac_db_includedir"
+DB3LDFLAGS="$ac_db_libdir"
+AC_SUBST(DB3LIB)
+AC_SUBST(DB3INCLUDES)
+AC_SUBST(DB3LDFLAGS)
+
   AC_DEFINE_UNQUOTED(BDB_OPEN_HACK, $bdb_open_hack, [account for Berkeley DB API different from v4.1 onwards])
 ])
 
@@ -478,7 +511,7 @@ AC_DEFUN(KDEV_CHECK_MDI,
 [
   AC_MSG_CHECKING(whether to use kmdi lib from kdelibs)
   AC_CACHE_VAL(ac_cv_mdi_setup,
-  [ 
+  [
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     save_CXXFLAGS="$CXXFLAGS"
@@ -504,13 +537,13 @@ AC_DEFUN(KDEV_CHECK_MDI,
     QEXTMDIR=""
     KDEVMDI_INCLUDES=""
     AC_MSG_RESULT(yes)
-  else		   
+  else
     LIB_KDEVMDI='$(top_builddir)/lib/qextmdi/libkdevelopqextmdi.la'
     QEXTMDIR="qextmdi"
     KDEVMDI_INCLUDES='-I$(top_srcdir)/lib/qextmdi'
     AC_MSG_RESULT(no)
   fi
- 
+
   AC_SUBST(LIB_KDEVMDI)
   AC_SUBST(KDEVMDI_INCLUDES)
   AC_SUBST(QEXTMDIR)
