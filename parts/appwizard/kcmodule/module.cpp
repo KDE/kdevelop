@@ -62,7 +62,7 @@ extern "C"
 
     KCModule *create_$APPNAME$(QWidget *parent, const char *name)
     {
-        return new $APPNAME$(parent, "$APPNAME$);
+        return new $APPNAME$(parent, "$APPNAME$");
     }
 }
 
