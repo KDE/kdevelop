@@ -185,6 +185,14 @@ public:
    */
    virtual void maximize(bool bAnimate);
    /**
+   * Returns the geometry that will be restored by calling restore().
+   */
+   QRect restoreGeometry();
+   /**
+   * Sets the geometry that will be restored by calling restore().
+   */
+   void  setRestoreGeometry(const QRect& newRestGeo);
+   /**
    * Interpose in event loop of all current child widgets.
    * Must be recalled after dynamic adding of new child widgets!
    */
@@ -267,6 +275,10 @@ public slots:
    * Calls QWidget::show but also for it's parent widget if attached 
    */
    virtual void show();
+   /** 
+   * Calls QWidget::hide() or it's parent widget hide() if attached 
+   */
+   virtual void hide();
    /** 
    * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.

@@ -189,6 +189,31 @@ void QextMdiChildView::showMaximized()
 
 void QextMdiChildView::maximize(){ maximize(TRUE); }
 
+//============== restoreGeometry ================//
+
+QRect QextMdiChildView::restoreGeometry()
+{
+   if (mdiParent()) {
+      return mdiParent()->restoreGeometry();
+   }
+   else {
+      // XXX not really supported, may be we must use Windows or X11 funtions
+      return geometry();
+   }
+}
+
+//============== setRestoreGeometry ================//
+
+void  QextMdiChildView::setRestoreGeometry(const QRect& newRestGeo)
+{
+   if (mdiParent()) {
+      mdiParent()->setRestoreGeometry(newRestGeo);
+   }
+   else {
+      // XXX not supported, may be we must use Windows or X11 funtions
+   }
+}
+
 //============== attach ================//
 
 void QextMdiChildView::attach()
@@ -216,8 +241,7 @@ bool QextMdiChildView::isMinimized()
 bool QextMdiChildView::isMaximized()
 {
    if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Maximized);
-   if( size() == maximumSize()) return TRUE;
-   else return FALSE;
+   else return QWidget::isMaximized();
 }
 
 //============== restore ================//
@@ -289,8 +313,12 @@ QPixmap * QextMdiChildView::myIconPtr()
 
 //============= focusInEvent ===============//
 
-void QextMdiChildView::focusInEvent(QFocusEvent *)
+void QextMdiChildView::focusInEvent(QFocusEvent *e)
 {
+   // every widget get a FocusInEvent when a popup menu is opened!?! -> maybe bug of QT
+   if (e->reason() == QFocusEvent::Popup) {
+      return;
+   }
    // XXX TODO: call QWidget::focusInEvent() ???
 
    //qDebug("ChildView::focusInEvent");
@@ -307,7 +335,6 @@ void QextMdiChildView::focusInEvent(QFocusEvent *)
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
    }
-
    emit gotFocus(this);
 }
 
@@ -535,3 +562,14 @@ void QextMdiChildView::show()
       mdiParent()->show();
    QWidget::show();
 }
+
+//============= hide ===============//
+
+void QextMdiChildView::hide()
+{
+   if( mdiParent() != 0L)
+      mdiParent()->hide();
+   QWidget::hide();
+}
+
+
