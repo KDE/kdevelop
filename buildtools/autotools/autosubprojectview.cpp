@@ -184,7 +184,7 @@ void AutoSubprojectView::initActions()
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
-	otherAction = new KAction( i18n( "Manage custom commands..." ), 0, 0,
+	otherAction = new KAction( i18n( "Manage Custom Commands..." ), 0, 0,
 		this, SLOT( slotManageBuildCommands() ), actions, "manage custom commands" );
 	otherAction->setWhatsThis(i18n("<b>Manage custom commands</b><p>Allows to create, edit and delete custom build commands which appears in the subproject context menu.<br>"));
 
