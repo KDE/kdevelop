@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("John Birch", "Debugger frontend", "jbb@kdevelop.org");
     aboutData.addAuthor("Sandy Meier", "PHP support, context menu stuff", "smeier@kdevelop.org");
     aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");
+    aboutData.addAuthor("Ian Reinhart Geiser", "Application templates", "geiseri@yahoo.com");
     aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "Several parts, htdig indexing", "hoelzer@kde.org");
     aboutData.addAuthor("The KWrite authors", "editor component", "kwrite-devel@kde.org");
     aboutData.addAuthor("Robert Moniot", "ftnchek documentation", "moniot@fordham.edu");
