@@ -12,23 +12,28 @@
 #ifndef PROJECTCONFIGURATIONDLG_H
 #define PROJECTCONFIGURATIONDLG_H
 
+enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
+enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
+enum QMakeDepends      {QD_QT=1,QD_OPENGL=2,QD_THREAD=4,QD_X11=8};
+enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
+
 #include "projectconfigurationdlgbase.h"
 #include "trollprojectwidget.h"
 
-enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
-enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
-enum QMakeDepends      {QD_QT,QD_OPENGL,QD_THREAD,QD_X11};
+struct ProjectConfiguration;
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
 public:
-                         ProjectConfigurationDlg(TrollProjectWidget *caller,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+                         ProjectConfigurationDlg(ProjectConfiguration *conf,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+                         ~ProjectConfigurationDlg();
+  void                   UpdateControls();
 
 public slots:
-  virtual QMakeBuildMode getBuildMode();
+  virtual void           updateProjectConfiguration();
 
 protected:
-  TrollProjectWidget *m_trollProjectWidget;
+  ProjectConfiguration *m_projectConfiguration;
 
 };
 

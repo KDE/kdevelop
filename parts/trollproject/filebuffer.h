@@ -30,7 +30,8 @@ public:
 
   // basic methods
   void            bufferFile(const QString &fileName);
-  void            appendBufferText(QStringList buffer) {m_buffer+=buffer;}
+  void            appendBufferText(const QStringList &buffer) {m_buffer+=buffer;}
+  void            removeComments();
   Caret           findInBuffer(const QString &subString,const Caret& startPos,bool nvlToMax=false);
   void            saveBuffer(const QString &filename);
   void            dumpBuffer();
@@ -57,10 +58,11 @@ public:
 
   // Variable value handling
   void            removeValues(const QString &variable);
-  QString         getValues(const QString &variable);
+  bool            getValues(const QString &variable,QStringList &plusValues, QStringList &minusValues);
   void            setValues(const QString &variable,QString values,int valuesPerRow=3)
                   {setValues(variable,QStringList::split(' ',values),valuesPerRow);}
   void            setValues(const QString &variable,QStringList values,int valuesPerRow=3);
+  bool            getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
 
 private:
   QString         m_scopeName;

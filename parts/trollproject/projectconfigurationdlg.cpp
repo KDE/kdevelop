@@ -10,17 +10,53 @@
  ***************************************************************************/
 
 #include "projectconfigurationdlg.h"
+#include <qradiobutton.h>
 
-ProjectConfigurationDlg::ProjectConfigurationDlg(TrollProjectWidget *caller,QWidget* parent, const char* name, bool modal, WFlags fl)
+ProjectConfigurationDlg::ProjectConfigurationDlg(ProjectConfiguration *conf,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
-  m_trollProjectWidget = caller;
+  m_projectConfiguration = conf;
+  UpdateControls();
 }
 
 
-QMakeBuildMode ProjectConfigurationDlg::getBuildMode()
-//====================================================
+ProjectConfigurationDlg::~ProjectConfigurationDlg()
+//==============================================
 {
-  return QBM_DEBUG;
+}
+
+
+void ProjectConfigurationDlg::updateProjectConfiguration()
+//=======================================================
+{
+  if (radioApplication->isChecked())
+    m_projectConfiguration->m_template = QTMP_APPLICATION;
+  else if (radioLibrary->isChecked())
+    m_projectConfiguration->m_template = QTMP_LIBRARY;
+  else if (radioSubdirs->isChecked())
+    m_projectConfiguration->m_template = QTMP_SUBDIRS;
+  QDialog::accept();
+}
+
+
+void ProjectConfigurationDlg::UpdateControls()
+//============================================
+{
+  QRadioButton *activeTemplate=NULL;
+  // Project template
+  switch (m_projectConfiguration->m_template)
+  {
+    case QTMP_APPLICATION:
+      activeTemplate = radioApplication;
+      break;
+    case QTMP_LIBRARY:
+      activeTemplate = radioLibrary;
+      break;
+    case QTMP_SUBDIRS:
+      activeTemplate = radioSubdirs;
+      break;
+  }
+  if (activeTemplate)
+    activeTemplate->setChecked(true);
 }

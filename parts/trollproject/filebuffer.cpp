@@ -13,14 +13,13 @@
 #include "filebuffer.h"
 #include <qmessagebox.h>
 
-
 /**
  * Destructor
  */
 FileBuffer::~FileBuffer()
 //=======================
 {
-  for ( FileBufferList::Iterator it = m_subBuffers.begin(); it != m_subBuffers.end(); ++it ) 
+  for ( FileBufferList::Iterator it = m_subBuffers.begin(); it != m_subBuffers.end(); ++it )
     delete *it;
   m_subBuffers.clear();
 }
@@ -33,7 +32,7 @@ FileBuffer::~FileBuffer()
 Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, bool nvlToMax)
 //===========================================================================================
 {
-  // ATTENTION: This method is central for the class. It almost all other methods rely on it
+  // ATTENTION: This method is central for the class. Almost all other methods rely on it
   //            so be careful!
   unsigned int i=startPos.m_row;
   QString line = m_buffer[i++];
@@ -42,7 +41,12 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   {
     int idxSeek = line.find(subString);
     if (line.find(subString)!=-1)
+    {
+      if (startPos.m_row == (int) i-1)
+        // first line in search so start idx should be added to result idx
+	idxSeek = idxSeek + startPos.m_idx;
       return Caret(i-1,idxSeek);
+    }
     if (i<m_buffer.count())
       line = m_buffer[i];
   }
@@ -51,6 +55,26 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   else
     return Caret(-1,-1);
 }
+
+/**
+ * removeComments does as name implies. For the time being this rather drastic
+ * cut into manual applied comments is inavoidable.
+ */
+void FileBuffer::removeComments()
+//===============================
+{
+  for (int i=0; i<m_buffer.count(); i++)
+  {
+    QString tmp = m_buffer[i].simplifyWhiteSpace();
+    if (tmp[0]=='#')
+    {
+      pop(i);
+      i--;
+    }
+  }
+
+}
+
 
 /**
  * Pop a line from the buffer
@@ -87,8 +111,8 @@ void FileBuffer::splitScopeString(QString scopeString,QString &scopeName, QStrin
       scopeName = scopeString.left(kolonPos).simplifyWhiteSpace();
       scopeRest = scopeString.right(scopeString.length()-kolonPos-1);
     }
-  }  
-} 
+  }
+}
 
 /**
  * Get the subBuffer representing a certain scope (s1:s2:s3:...:sn).
@@ -106,7 +130,7 @@ FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
     return NULL;
   return m_subBuffers[idx]->getSubBuffer(scopeStringRest);
 }
-  
+
 /**
  * Set values for a variable. (variable = value_1 value_2 valu_3 ... value_n)
  */
@@ -136,8 +160,9 @@ void FileBuffer::setValues(const QString &variable,QStringList values,int values
  * Get values for a variable.
  * Returns: values as a whitespace separated list. (value_1 value_2 ... value_n)
  */
-QString FileBuffer::getValues(const QString &variable)
-//====================================================
+/*
+bool FileBuffer::getValues(const QString &variable,QStringList &plusList, QStringList &minusList)
+//===============================================================================================
 {
   Caret curPos(0,0);
   QString valueString="";
@@ -152,6 +177,9 @@ QString FileBuffer::getValues(const QString &variable)
     }
     Caret eqSign = findInBuffer("=",variablePos);
     QString line=m_buffer[eqSign.m_row];
+    if (line[eqSign.m_idx-1]=='-')
+    {
+    }
     if (line[eqSign.m_idx-1]!='+')
       valueString = "";
     else
@@ -174,6 +202,67 @@ QString FileBuffer::getValues(const QString &variable)
   }
   return valueString.simplifyWhiteSpace();
 }
+*/
+
+/**
+ * Get values for a variable.
+ * Returns: values as a whitespace separated list. (value_1 value_2 ... value_n)
+ */
+bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStringList &minusList)
+//=======================================================================================================
+{
+  Caret curPos(0,0);
+  QStringList plusValues;
+  QStringList minusValues;
+  QStringList curValues;
+  bool finished = false;
+  while (!finished)
+  {
+    Caret variablePos(findInBuffer(variable,curPos));
+    if (variablePos==Caret(-1,-1))
+    {
+      finished=true;
+      continue;
+    }
+    Caret eqSign = findInBuffer("=",variablePos);
+    QString line=m_buffer[eqSign.m_row];
+    QChar effectOperator = line[eqSign.m_idx-1];
+    long lineNum=eqSign.m_row;
+    curValues.clear();
+    line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
+    while (line!="")
+    {
+      if (line[line.length()-1]=='\\')
+      {
+        line = line.left(line.length()-1).simplifyWhiteSpace();
+        curValues += QStringList::split(" ",line);
+        lineNum++;
+        line = m_buffer[lineNum];
+        continue;
+      }
+      curValues += QStringList::split(" ",line);
+      line = "";
+    }
+    if (QString("+-*~").find(effectOperator)==-1)
+      plusValues.clear();
+    if (effectOperator=='-')
+      minusValues += curValues;
+    else
+    {
+      // remove from minus list if in curvalues
+      for (int i=0; i<curValues.count(); i++)
+        minusValues.remove(curValues[i]);
+      // add curvalues to pluslist
+      plusValues += curValues;
+    }
+    curPos = Caret(lineNum+1,0);
+  }
+  plusList = plusValues;
+  minusList = minusValues;
+  return true;
+}
+
+
 
 /**
  * Remove values for a variable.
@@ -221,6 +310,7 @@ void FileBuffer::bufferFile(const QString &fileName)
     }
   }
   dataFile.close();
+  removeComments();
 }
 
 /**
@@ -280,7 +370,7 @@ QStringList FileBuffer::getBufferTextInDepth()
       subBuffer[j] = "  " + subBuffer[j];
     resBuffer += subBuffer;
     resBuffer.append("}");
-  } 
+  }
   return resBuffer;
 }
 
@@ -358,18 +448,25 @@ QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
   for (int i=0; i<blockEnd.m_row-blockStart.m_row-1; i++)
     pop(poprow);
   QString tmp = m_buffer[poprow];
-  if (blockEnd.m_idx >= tmp.length()-1)
+  if (blockEnd.m_idx >= (int) tmp.length()-1)
     pop(poprow);
   else
     m_buffer[poprow] = tmp.right(tmp.length()-blockEnd.m_idx-1);
   return result;
 }
 
+/**
+ * Handling qmake scopes means handling two types og scopes 
+ * 1. bracket scopes s1:s2:...:sn{ . . . }
+ * 2. non-bracketscopes s1:s2:...:sn:v1 = ... [\ ... [\ ...]]
+ */
 bool FileBuffer::handleScopes()
 //=============================
 {
+  bool parseError = false;
   unsigned int i;
   Caret pos(0,0);
+  // Bracket scopes
   while (true)
   {
     Caret startScope,endScope;
@@ -378,12 +475,15 @@ bool FileBuffer::handleScopes()
     pos = Caret(startScope.m_row,0);
     // is it a qmake valid scope ident | ident1:ident2:...:identn
     if (startScope.m_idx==0)
-      return false;
+    {
+      break;
+      parseError = true;
+    }
 
     QStringList subBuffer;
     QString tmp = m_buffer[startScope.m_row];
     QStringList scopeNames = QStringList::split(":",tmp.left(startScope.m_idx));
-    // clean scopenames
+    // clean-up scopenames
     for (i=0;i<scopeNames.count();i++)
       scopeNames[i]=scopeNames[i].simplifyWhiteSpace();
     if (scopeNames.count()>1)
@@ -402,16 +502,16 @@ bool FileBuffer::handleScopes()
       tmp = subBuffer[0];
       subBuffer[0] = tmp.right(tmp.length()-1);
       tmp = subBuffer[subBuffer.count()-1];
-      subBuffer[subBuffer.count()-1] = tmp.left(tmp.length()-1);   
+      subBuffer[subBuffer.count()-1] = tmp.left(tmp.length()-1);
     }
-    
+
     // clear scopenesting
     pop(startScope.m_row);
-    int subBufferIdx = findChildBuffer(scopeNames[0]);    
+    int subBufferIdx = findChildBuffer(scopeNames[0]);
     FileBuffer *subBufferObject;
     if (subBufferIdx==-1)
     {
-      subBufferObject = new FileBuffer();   
+      subBufferObject = new FileBuffer();
       m_subBuffers.append(subBufferObject);
     }
     else
@@ -420,13 +520,43 @@ bool FileBuffer::handleScopes()
     subBufferObject->appendBufferText(subBuffer);
     subBufferObject->handleScopes();
   }
-
+  //Non bracket scopes
+  pos = Caret(0,0);
+  while (true)
+  {
+    Caret kolonPos = findInBuffer(":",pos);
+    if (kolonPos == Caret(-1,-1))
+      break;
+    QString scopeLine = pop(kolonPos.m_row);
+    int equalPos = scopeLine.find('=',kolonPos.m_idx);
+    if (equalPos == -1)
+    {
+      // Parse error
+      parseError = true;
+      break;
+    }
+    int idxScopeStringEnd = scopeLine.findRev(':',equalPos);
+    QString scopeString = scopeLine.left(idxScopeStringEnd);
+    scopeLine = scopeLine.right(scopeLine.length()-idxScopeStringEnd-1);
+    scopeLine = scopeLine.simplifyWhiteSpace();
+    makeScope(scopeString);
+    FileBuffer *subBufferObject = getSubBuffer(scopeString);
+    subBufferObject->appendBufferText(scopeLine);
+    while (scopeLine[scopeLine.length()-1] == '\\')
+    {
+      scopeLine = pop(kolonPos.m_row);
+      scopeLine = scopeLine.simplifyWhiteSpace();
+      subBufferObject->appendBufferText(scopeLine);
+    }
+    pos = Caret(kolonPos.m_row,0);
+  }
+  return parseError;
 }
 
 int FileBuffer::findChildBuffer(const QString &scopeName)
 //==============================================================
 {
-  for (int i=0; i<m_subBuffers.count(); i++)
+  for (unsigned int i=0; i<m_subBuffers.count(); i++)
     if (m_subBuffers[i]->getScopeName()==scopeName)
       return i;
   return -1;
@@ -476,7 +606,6 @@ QStringList FileBuffer::getAllScopeNames(int depth)
 
 }
 
-
 QStringList FileBuffer::getChildScopeNames()
 //========================================
 {
@@ -486,4 +615,21 @@ QStringList FileBuffer::getChildScopeNames()
   return result;
 }
 
-
+bool FileBuffer::getAllExcludeValues(const QString &variable,QStringList &minusValues, int depth)
+//==============================================================================================
+{
+  unsigned int i;
+  QStringList plusDummy,minusTmp;
+  for (i=0; i<m_subBuffers.count(); i++)
+    m_subBuffers[i]->getAllExcludeValues(variable,minusValues,depth+1);
+  if (depth)
+  {
+    for (i=0; i<minusValues.count(); i++)
+      minusValues[i] = getScopeName() + ":" + minusValues[i];
+  }
+  getValues(variable,plusDummy,minusTmp);
+  for (i=0; i<minusTmp.count(); i++)
+    minusTmp[i] = getScopeName() + "-" + minusTmp[i];
+  minusValues += minusTmp;
+  return true;
+}

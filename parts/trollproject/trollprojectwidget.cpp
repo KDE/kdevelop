@@ -41,7 +41,6 @@
 #include "kdevtoplevel.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
-#include "projectconfigurationdlg.h"
 
 /**
  * Class ProjectViewItem
@@ -65,6 +64,7 @@ SubprojectItem::SubprojectItem(QListView *parent, const QString &text, const QSt
     : ProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
+    configuration.m_template = QTMP_APPLICATION;
     init();
 }
 
@@ -73,6 +73,7 @@ SubprojectItem::SubprojectItem(SubprojectItem *parent, const QString &text,const
     : ProjectItem(Subproject, parent, text)
 {
     this->scopeString=scopeString;
+    configuration.m_template = QTMP_APPLICATION;
     init();
 }
 
@@ -397,14 +398,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     else if (r == idTestDlg)
     {
-      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(this);
+      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(spitem->configuration));
       dlg->exec();
-      QMakeBuildMode mode;
-      mode = dlg->getBuildMode();
-      if (mode==QBM_DEBUG)
-        KMessageBox::error(this,i18n("Debug"));
-      else
-        KMessageBox::error(this,i18n("Release"));
     }
 
 
@@ -626,23 +621,12 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
       item=sitem;
     }
 
-    QString values;
+    QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
-    values = subBuffer->getValues("INTERFACES");
-    if (values != "")
-      item->interfaces = QStringList::split(' ',values);
-
-    values = subBuffer->getValues("FORMS");
-    if (values != "")
-      item->forms = QStringList::split(' ',values);
-
-    values = subBuffer->getValues("SOURCES");
-    if (values != "")
-      item->sources = QStringList::split(' ',values);
-
-    values = subBuffer->getValues("HEADERS");
-    if (values != "")
-      item->headers = QStringList::split(' ',values);
+    subBuffer->getValues("INTERFACES",item->interfaces,minusListDummy);
+    subBuffer->getValues("FORMS",item->forms,minusListDummy);
+    subBuffer->getValues("SOURCES",item->sources,minusListDummy);
+    subBuffer->getValues("HEADERS",item->headers,minusListDummy);
 
     // Create list view items
     GroupItem *titem = createGroupItem(GroupItem::Interfaces, "INTERFACES",scopeString);
@@ -705,20 +689,18 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.handleScopes();
 
     parseScope(item,"",&(item->m_FileBuffer));
-    QString values = item->m_FileBuffer.getValues("SUBDIRS");
-
-    if (values != "")
+    QStringList plusListDummy;
+    QStringList lst;
+    item->m_FileBuffer.getValues("SUBDIRS",lst,plusListDummy);
+    item->subdirs = lst;
+    QStringList::Iterator it;
+    for (it = lst.begin(); it != lst.end(); ++it)
     {
-        QStringList lst = QStringList::split( ' ', values );
-        item->subdirs = lst;
-        QStringList::Iterator it;
-        for (it = lst.begin(); it != lst.end(); ++it) {
-            SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
-            newitem->subdir = *it;
-            newitem->m_RootBuffer = &(newitem->m_FileBuffer);
-            newitem->path = item->path + "/" + (*it);
-            parse(newitem);
-        }
+      SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
+      newitem->subdir = *it;
+      newitem->m_RootBuffer = &(newitem->m_FileBuffer);
+      newitem->path = item->path + "/" + (*it);
+      parse(newitem);
     }
 
 }

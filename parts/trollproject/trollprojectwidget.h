@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include "filebuffer.h"
+#include "projectconfigurationdlg.h"
 
 class TrollProjectPart;
 class KListView;
@@ -29,6 +30,19 @@ class SubprojectItem;
 class GroupItem;
 class FileItem;
 class FileBuffer;
+
+
+/**
+ * Structure that holds a projects configuration
+ */
+struct ProjectConfiguration
+{
+  QMakeTemplate   m_template;
+  QMakeBuildMode  m_buildMode;
+  QMakeWarnings   m_warnings;
+  int             m_requirements;
+};
+
 
 /**
  * Base class for all items appearing in ProjectOverview and ProjectDetails.
@@ -72,6 +86,8 @@ public:
     QStringList headers;
     QStringList forms;
     QStringList interfaces;
+
+    ProjectConfiguration configuration;
 
     FileBuffer m_FileBuffer;
     FileBuffer *m_RootBuffer;

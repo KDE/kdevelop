@@ -24,9 +24,6 @@
     <property name="caption">
         <string>Qmake Project Configuration</string>
     </property>
-    <property name="toolTip" stdset="0">
-        <string>Requires support for multi-threaded application or library.</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -219,6 +216,9 @@
                                 <property name="text">
                                     <string>&amp;Thread</string>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires support for multi-threaded application or library.</string>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -284,16 +284,16 @@
 </widget>
 <connections>
     <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
         <sender>buttonCancel</sender>
         <signal>clicked()</signal>
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>updateProjectConfiguration()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -311,5 +311,8 @@
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>
+<slots>
+    <slot>updateProjectConfiguration()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
