@@ -1978,9 +1978,9 @@ void KWrite::initSearch(SConfig &s, int flags) {
     const char *line = textLine->getText();
     int (*cmpfct)(const char *, const char *, unsigned int);
     if ( s.flags & sfCaseSensitive )
-      cmpfct= strncmp;
+      cmpfct= qstrncmp;
     else
-      cmpfct= strnicmp;
+      cmpfct= qstrnicmp;
     if ( s.flags & sfBackward )
     {
       if ( static_cast<int>(s.cursor.x)-static_cast<int>(strlen(searchFor)) >= 0 )

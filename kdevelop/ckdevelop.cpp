@@ -89,6 +89,7 @@
 #include <qtoolbar.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
+#include <qpainter.h>
 
 #include <stdlib.h>
 #include <ctype.h>
