@@ -630,6 +630,14 @@ CppCodeCompletion::completeText( )
                             scope += s;
                         }
 
+                        if( scope.endsWith("::") ){
+                           scope = scope.left( scope.length() - 2 );
+                        }
+
+                        if( scope.startsWith("::") ){
+                           scope = scope.mid( 2 );
+                        }
+
                         if( !scope.isNull() ){
 	                    SimpleVariable var;
 	                    var.type = scope;
