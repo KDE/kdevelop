@@ -18,6 +18,7 @@
 #include <kglobal.h>
 #include <kinstance.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 #include "kdevlanguagesupport.h"
 #include "kdevproject.h"
@@ -109,27 +110,25 @@ void ClassViewWidget::buildTree(bool fromScratch)
 
 /**
  * Determines the folder where a class defined in file fileName
- * is stored. This works by removing two levels below the project
- * directory, if it is in a subdirectory that deep. Otherwise a
- * null string is returned.
+ * is stored. If it is in $(top_srcdir) a null string is returned.
  * Examples:
  *   determineFolder("/proj/src/include/foo.cpp", "/proj") => "src/include"
- *   determineFolder("/proj/src/bla.cpp, "/proj") => null
  *   determineFolder("/proj/bar.cpp", "/proj") => null
  */
+
 static QString determineFolder(QString fileName, QString projectDir)
 {
+    kdDebug() << "determineFolder "  << fileName << ", " << projectDir << endl;
     projectDir += "/";
+    // filename must be a path all right, consider assert'ing this
     if (!fileName.startsWith(projectDir))
         return QString::null;
-    fileName.remove(0, projectDir.length());
-    int pos1 = fileName.find('/');
-    if (pos1 == -1)
+    fileName.remove(0, projectDir.length()); // get relative path
+    int pos = fileName.findRev('/');
+    if (pos == -1)
         return QString::null;
-    int pos2 = fileName.find('/', pos1+1);
-    if (pos2 == -1)
-        return QString::null;
-    return fileName.left(pos2);
+    else
+        return fileName.left(pos);
 }
 
 
@@ -155,13 +154,13 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         QValueList<ParsedClass*> classList = store->getSortedClassList();
         QValueList<ParsedClass*>::ConstIterator it;
 
-        // Make a list of all directories 2 levels under the project directory
+        // Make a list of all directories under the project directory
         QString projectDir = m_part->project()->projectDirectory();
         QStringList dirNames;
         for (it = classList.begin(); it != classList.end(); ++it) {
             QString fileName = (*it)->definedInFile();
             QString dirName = determineFolder(fileName, projectDir);
-            if (!dirName.isNull() && !dirNames.contains(dirName))
+            if (!dirName.isNull() && !dirNames.contains(dirName))  // TODO: O(n^2), not good style
                 dirNames.append(dirName);
         }
 
