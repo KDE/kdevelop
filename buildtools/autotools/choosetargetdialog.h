@@ -1,9 +1,9 @@
 /***************************************************************************
-                             -------------------
-    begin                : 29.11.2002
-    copyright            : (C) 2002 by Victor Röder
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+                            -------------------
+   begin                : 29.11.2002
+   copyright            : (C) 2002 by Victor Röder
+   email                : victor_roeder@gmx.de
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -13,7 +13,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef _CHOOSETARGETDIALOG_H_
 #define _CHOOSETARGETDIALOG_H_
 
@@ -30,7 +30,9 @@ class ChooseTargetDialog : public ChooseTargetDlgBase
 {
 
 public:
-	ChooseTargetDialog(AutoProjectWidget* widget, AutoProjectPart* part, QStringList fileList, QWidget* parent = 0, const char* name = 0);
+	ChooseTargetDialog( AutoProjectWidget* widget, AutoProjectPart* part,
+	                    QStringList fileList, QWidget* parent = 0,
+	                    const char* name = 0 );
 	~ChooseTargetDialog();
 
 private:
@@ -40,14 +42,14 @@ private:
 	QPtrList <SubprojectItem> m_subprojectList;
 	SubprojectItem* m_choosenSubproject;
 	TargetItem* m_choosenTarget;
-	
+
 public:
 	TargetItem* choosenTarget();
 	SubprojectItem* choosenSubproject();
-	
+
 private slots:
-	void slotActiveTargetToggled(bool);
-	void slotChooseTargetToggled(bool);
+	void slotActiveTargetToggled( bool );
+	void slotChooseTargetToggled( bool );
 	void slotSubprojectChanged ( const QString& );
 	void slotTargetChanged ( const QString& );
 	void slotSubprojectTextChanged ( const QString& );
@@ -57,4 +59,5 @@ protected:
 	virtual void accept ();
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

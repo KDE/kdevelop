@@ -1,9 +1,9 @@
 /***************************************************************************
-                             -------------------
-    begin                : 12/21/2002
-    copyright            : (C) 2002 by Victor R�er
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+                            -------------------
+   begin                : 12/21/2002
+   copyright            : (C) 2002 by Victor R�er
+   email                : victor_roeder@gmx.de
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -38,20 +38,22 @@ class AddExistingDirectoriesDialog : public AddExistingDlgBase
 	Q_OBJECT
 
 public:
-  AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-  ~AddExistingDirectoriesDialog();
+	AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget,
+	                               SubprojectItem* spitem, QWidget* parent = 0, 
+	                               const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	~AddExistingDirectoriesDialog();
 
 private:
-    FileSelectorWidget* sourceSelector;
-    KImportIconView* importView;
+	FileSelectorWidget* sourceSelector;
+	KImportIconView* importView;
 
-    AutoProjectPart* m_part;
+	AutoProjectPart* m_part;
 	AutoProjectWidget* m_widget;
 
 	TargetItem* m_titem;
 	SubprojectItem* m_spitem;
 
-    KFileItemList m_importList;
+	KFileItemList m_importList;
 
 protected:
 	void init();
@@ -67,4 +69,6 @@ protected slots:
 	void slotOk();
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
+

@@ -1,17 +1,17 @@
 /*
-   KDevelop Autotools Support
-   Copyright (c) 2001-2002 by Bernd Gehrmann <bernd@kdevelop.org>
-   Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
-   Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
+  KDevelop Autotools Support
+  Copyright (c) 2001-2002 by Bernd Gehrmann <bernd@kdevelop.org>
+  Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
+  Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
 
- ***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************
+***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************
 */
 
 #ifndef _AUTOPROJECTWIDGET_H_
@@ -49,10 +49,10 @@ class AutoProjectWidget : public QVBox
 	friend class RemoveFileDialog;
 	friend class TargetOptionsDialog;  // to access projectDom() via m_part->projectDom()
 public:
-	AutoProjectWidget(AutoProjectPart *part, bool kde);
+	AutoProjectWidget( AutoProjectPart *part, bool kde );
 	~AutoProjectWidget();
 
-	void openProject(const QString &dirName);
+	void openProject( const QString &dirName );
 	void closeProject();
 
 	/**
@@ -83,13 +83,15 @@ public:
 	* Are we in KDE mode?
 	*/
 	bool kdeMode() const
-	{ return m_kdeMode; }
+	{
+		return m_kdeMode;
+	}
 
 	/**
 	* Sets the given target active. The argument is given
 	* relative to the project directory.
 	*/
-	void setActiveTarget(const QString &targetPath);
+	void setActiveTarget( const QString &targetPath );
 	/**
 	* Returns the active target as path relative to
 	* the project directory.
@@ -98,16 +100,16 @@ public:
 
 	/**
 	* Adds a file to the active target.
-        * If the file does not contain a "/" character, it is added
-        * to the active target.
-        * If it does contain "/" character(s), ... @todo .. add to appropriate target
+	* If the file does not contain a "/" character, it is added
+	* to the active target.
+	* If it does contain "/" character(s), ... @todo .. add to appropriate target
 	*/
-	void addFiles(const QStringList &list);
+	void addFiles( const QStringList &list );
 	/**
 	* Removes the file fileName from the directory directory.
 	* (not implemented currently)
 	*/
-	void removeFiles(const QStringList &list);
+	void removeFiles( const QStringList &list );
 
 	/**
 	* Returns the currently selected target. Returns 0 if
@@ -130,13 +132,13 @@ public:
 	/**
 	* Creates a TargetItem instance without a parent item.
 	*/
-	TargetItem *createTargetItem(const QString &name,
-				     const QString &prefix, const QString &primary, 
-				     bool take=true );
+	TargetItem *createTargetItem( const QString &name,
+	                              const QString &prefix, const QString &primary,
+	                              bool take = true );
 	/**
 	* Creates a FileItem instance without a parent item.
 	*/
-	FileItem *createFileItem(const QString &name, SubprojectItem *subproject);
+	FileItem *createFileItem( const QString &name, SubprojectItem *subproject );
 
 	/**
 	 * Returns the Subproject that contains the Active Target. The Active Target is a special target
@@ -151,70 +153,71 @@ public:
 	 */
 	TargetItem* activeTarget();
 
-        /**
-         * Returns the sub project item, if any, for a given path. The path supplied can be either
-         * absolute, or relative to the project directory. If no subproject item is found for the
-         * path, null is returned.
-         */
-        SubprojectItem* subprojectItemForPath(const QString & path, bool pathIsAbsolute=false);
-
-        /**
-         * Returns the projectdir-relative path for a target item
-         */
-        QString pathForTarget(const TargetItem *item) const;
-
-        /**
-         * Adds file fileName to target titem in subproject spitem
-         */
-        void addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem);
-
-        /**
-	 * Restores the last settings of the AutoProjectWidget
+	/**
+	 * Returns the sub project item, if any, for a given path. The path supplied can be either
+	 * absolute, or relative to the project directory. If no subproject item is found for the
+	 * path, null is returned.
 	 */
+	SubprojectItem* subprojectItemForPath( const QString & path, bool pathIsAbsolute = false );
+
+	/**
+	 * Returns the projectdir-relative path for a target item
+	 */
+	QString pathForTarget( const TargetItem *item ) const;
+
+	/**
+	 * Adds file fileName to target titem in subproject spitem
+	 */
+	void addToTarget( const QString & fileName, SubprojectItem* spitem, TargetItem* titem );
+
+	/**
+	* Restores the last settings of the AutoProjectWidget
+	*/
 	void restoreSession ( const QDomElement* el );
 
 	/**
 	 * Saves the latest changes of the AutoProjectWidget to the session file.
 	 */
 	void saveSession ( QDomElement* el );
-	
+
 	AutoSubprojectView* getSubprojectView ();
 	AutoDetailsView* getDetailsView ();
-		
+
 
 	void emitAddedFile ( const QString& name );
-	void emitAddedFiles(const QStringList &fileList);
+	void emitAddedFiles( const QStringList &fileList );
 	void emitRemovedFile ( const QString& name );
-	void emitRemovedFiles(const QStringList &fileList);
+	void emitRemovedFiles( const QStringList &fileList );
 
-	void parse(SubprojectItem *item);
- 
-        enum AutoProjectView { SubprojectView, DetailsView };
-        void setLastFocusedView(AutoProjectView view);
+	void parse( SubprojectItem *item );
+
+	enum AutoProjectView { SubprojectView, DetailsView };
+	void setLastFocusedView( AutoProjectView view );
 
 public slots:
-	void slotOverviewSelectionChanged(QListViewItem *item);
+	void slotOverviewSelectionChanged( QListViewItem *item );
 
 protected:
 	void initOverview ( QWidget* parent );
 	void initDetailview ( QWidget* parent );
 	void initActions ();
-        
-        virtual void focusInEvent(QFocusEvent *e);
+
+	virtual void focusInEvent( QFocusEvent *e );
 
 private:
 
 	AutoSubprojectView* m_subprojectView;
 	AutoDetailsView* m_detailView;
-	
+
 	bool m_kdeMode;
 	AutoProjectPart *m_part;
 	SubprojectItem *m_activeSubproject;
 	TargetItem *m_activeTarget;
 	TargetItem *m_choosenTarget;
 	SubprojectItem *m_shownSubproject;
- 
-        AutoProjectView m_lastFocusedView;
+
+	AutoProjectView m_lastFocusedView;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

@@ -1,9 +1,9 @@
 /***************************************************************************
-                             -------------------
-    begin                : Frag' mich was leichteres
-    copyright            : (C) 2002 by Victor Röder
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+                            -------------------
+   begin                : Frag' mich was leichteres
+   copyright            : (C) 2002 by Victor Röder
+   email                : victor_roeder@gmx.de
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -37,27 +37,29 @@ class TargetItem;
 class KFileItem;
 
 class AddExistingFilesDialog : public AddExistingDlgBase
-{ 
-    Q_OBJECT
+{
+	Q_OBJECT
 
 public:
-    AddExistingFilesDialog( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-    ~AddExistingFilesDialog();
+	AddExistingFilesDialog( AutoProjectPart* part, AutoProjectWidget *widget, 
+	                        SubprojectItem* spitem, TargetItem* titem, QWidget* parent = 0,
+	                        const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	~AddExistingFilesDialog();
 
 private:
-    FileSelectorWidget* sourceSelector;
-    KImportIconView* importView;
+	FileSelectorWidget* sourceSelector;
+	KImportIconView* importView;
 
-    AutoProjectPart* m_part;
+	AutoProjectPart* m_part;
 	AutoProjectWidget* m_widget;
 
 	TargetItem* m_titem;
 	SubprojectItem* m_spitem;
-	
-  	KFileItemList m_importList;
+
+	KFileItemList m_importList;
 
 protected:
-// 	virtual void resizeEvent ( QResizeEvent* ev );
+	// 	virtual void resizeEvent ( QResizeEvent* ev );
 	void init();
 	void importItems ();
 
@@ -72,3 +74,4 @@ protected slots:
 };
 
 #endif // ADDEXISTINGFILESDLG_H
+// kate: indent-mode csands; tab-width 4;

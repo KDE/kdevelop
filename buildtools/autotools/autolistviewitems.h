@@ -31,22 +31,28 @@ class ProjectItem : public QListViewItem
 public:
 	enum Type { Subproject, Target, File };
 
-	ProjectItem(Type type, QListView *parent, const QString &text);
-	ProjectItem(Type type, ProjectItem *parent, const QString &text);
+	ProjectItem( Type type, QListView *parent, const QString &text );
+	ProjectItem( Type type, ProjectItem *parent, const QString &text );
 
-	void paintCell(QPainter *p, const QColorGroup &cg,
-				int column, int width, int alignment);
-	void setBold(bool b)
-	{ bld = b; }
+	void paintCell( QPainter *p, const QColorGroup &cg,
+	                int column, int width, int alignment );
+	void setBold( bool b )
+	{
+		bld = b;
+	}
 	bool isBold() const
-	{ return bld; }
+	{
+		return bld;
+	}
 	Type type()
-	{ return typ; }
+	{
+		return typ;
+	}
 
 private:
 	Type typ;
 	bool bld;
-	
+
 };
 
 
@@ -56,9 +62,9 @@ private:
 class SubprojectItem : public ProjectItem
 {
 public:
-	SubprojectItem(QListView *parent, const QString &text);
-	SubprojectItem(SubprojectItem *parent, const QString &text);
-	
+	SubprojectItem( QListView *parent, const QString &text );
+	SubprojectItem( SubprojectItem *parent, const QString &text );
+
 	/** name of the directory */
 	QString subdir;
 	/** absolute path */
@@ -93,7 +99,7 @@ class TargetItem : public ProjectItem
 public:
 	//enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
 
-	TargetItem(QListView *lv, bool group, const QString &text);
+	TargetItem( QListView *lv, bool group, const QString &text );
 
 	// Target kind - not used currently
 	//TargetKind kind;
@@ -123,14 +129,15 @@ class FileItem : public ProjectItem
 {
 
 public:
-	FileItem(QListView *lv, const QString &text, bool set_is_subst = false );
+	FileItem( QListView *lv, const QString &text, bool set_is_subst = false );
 	void changeSubstitution();
-	void changeMakefileEntry(const QString&);
+	void changeMakefileEntry( const QString& );
 
 	QString name;
 	QString uiFileLink;
 	const bool is_subst;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;
 

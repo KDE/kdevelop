@@ -1,9 +1,9 @@
 /***************************************************************************
-                             -------------------
-    begin                : 21.11.2002
-    copyright            : (C) 2002 by Victor Röder
-    email                : victor_roeder@gmx.de
- ***************************************************************************/
+                            -------------------
+   begin                : 21.11.2002
+   copyright            : (C) 2002 by Victor Röder
+   email                : victor_roeder@gmx.de
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -13,7 +13,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef _REMOVETARGETDLG_H_
 #define _REMOVETARGETDLG_H_
 
@@ -34,21 +34,22 @@ class RemoveTargetDialog : public RemoveTargetDlgBase
 {
 
 public:
-	RemoveTargetDialog(  AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
-						TargetItem *titem, QWidget* parent = 0, const char* name = 0 );
+	RemoveTargetDialog( AutoProjectWidget *widget, AutoProjectPart* part, SubprojectItem *spitem,
+	                    TargetItem *titem, QWidget* parent = 0, const char* name = 0 );
 	~RemoveTargetDialog();
-	
+
 private:
 	SubprojectItem* m_spitem;
 	TargetItem* m_titem;
 	AutoProjectWidget* m_widget;
 	AutoProjectPart* m_part;
-	
+
 	QPtrList <SubprojectItem> dependentSubprojects;
-	
+
 protected:
 	void init ();
 	virtual void accept();
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

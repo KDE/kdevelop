@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////
 // Qt specific include files
 #include <qwidget.h>
-#include <qtimer.h>
+#include <qtimer.h> 
 //////////////////////////////////////////////////////////////////////
 // KDE specific include files
 #include <kfiledetailview.h>
@@ -37,11 +37,12 @@
 	*@author Björn Sahlström
   */
 
-class KFileDnDDetailView : public KFileDetailView {
-   Q_OBJECT
-public: 
+class KFileDnDDetailView : public KFileDetailView
+{
+	Q_OBJECT
+public:
 	/**  */
-	KFileDnDDetailView(QWidget *parent=0, const char *name=0);
+	KFileDnDDetailView( QWidget *parent = 0, const char *name = 0 );
 	/**  */
 	virtual ~KFileDnDDetailView();
 	/**
@@ -51,7 +52,10 @@ public:
 	/**
 	* @returns wether DnD is enabled or not.
 	*/
-	bool isDnDEnabled() const { return m_dndEnabled; }
+	bool isDnDEnabled() const
+	{
+		return m_dndEnabled;
+	}
 	/**
 	*Sets the auto open time, which means the time that will
 	*elapse before a directory is automatically opened after entered by DnD.
@@ -63,18 +67,21 @@ public:
 	*Set this to true if you want the view to use it's auto open functionallity otherwhise set it to false.
 	*By default this is turned ON.
 	*/
-	void useAutoOpenTimer( bool on=true );
+	void useAutoOpenTimer( bool on = true );
 	/**
 	*@returns true if auto open functionallity is turned ON (default), otherwhise false
 	*@see #useAutoOpenTimer
 	*@see #setAutoOpenTime
 	*/
-	bool isAutoOpening() const { return m_useAutoOpenTimer; }
+	bool isAutoOpening() const
+	{
+		return m_useAutoOpenTimer;
+	}
 	/** */
 	virtual void readConfig( KConfig*, const QString& group = QString::null );
 	/** */
 	virtual void writeConfig( KConfig*, const QString& group = QString::null );
-signals: // Signals
+signals:  // Signals
 	/**
 	* Emitted whenever an decodable item is dropped in the view.
 	* Note: The @ref QDropEvent contains a @ref KURLDrag object.
@@ -90,12 +97,12 @@ signals: // Signals
 	*@param urls contains a list of all dropped @ref KURL
 	*/
 	void dropped( KFileView*, KURL::List& urls );
-protected slots: // Protected slots
+protected slots:  // Protected slots
 	/**
 	* Called when the auto timer times out. Open the current folder.
 	*/
 	void slotOpenFolder();
-protected: //Protected Methods
+protected:  //Protected Methods
 	/**  */
 	virtual void contentsDragEnterEvent( QDragEnterEvent *e );
 	/**  */
@@ -115,8 +122,8 @@ protected: //Protected Methods
 	/**
 	* @returns true if we can decode the drag and support the action
 	*/
-	virtual bool acceptDrag(QDropEvent* event) const;
-protected: // Private attributes
+	virtual bool acceptDrag( QDropEvent* event ) const;
+protected:  // Private attributes
 	QTimer m_autoOpenTimer;
 	int m_autoOpenTime;
 	bool m_useAutoOpenTimer;
@@ -125,4 +132,5 @@ protected: // Private attributes
 	bool m_dndEnabled;
 };
 
-#endif
+#endif 
+// kate: indent-mode csands; tab-width 4;

@@ -357,3 +357,5 @@ void AutoProjectTool::configureinSaveMakefiles(QString configureinpath, QStringL
 
 	configurein.close();
 }
+
+//kate: indent-mode csands; space-indent off; tab-width 4;

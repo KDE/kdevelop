@@ -1,16 +1,16 @@
 /*
-   KDevelop Autotools Support
-   Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
-   Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
+  KDevelop Autotools Support
+  Copyright (c) 2002 by Victor Roeder <victor_roeder@gmx.de>
+  Copyright (c) 2005 by Matt Rogers <mattr@kde.org>
 
- ***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************
+***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************
 */
 
 #ifndef AUTOSUBPROJECTVIEW_H
@@ -31,7 +31,7 @@ class KListView;
 
 namespace AutoProjectPrivate
 {
-    bool isHeader( const QString& fileName );
+	bool isHeader( const QString& fileName );
 }
 
 
@@ -39,86 +39,89 @@ class AutoSubprojectView : protected AutoProjectViewBase
 {
 	Q_OBJECT
 
-	public:
-		AutoSubprojectView(AutoProjectWidget* widget, AutoProjectPart* part, QWidget *parent, const char *name);
-		virtual ~AutoSubprojectView();
+public:
+	AutoSubprojectView( AutoProjectWidget* widget, AutoProjectPart* part, QWidget *parent, const char *name );
+	virtual ~AutoSubprojectView();
 
-	public:
-		void loadMakefileams ( const QString& dir );
+public:
+	void loadMakefileams ( const QString& dir );
 
-		void parse(SubprojectItem *item);
-		KListView* listView() const { return m_listView; }
+	void parse( SubprojectItem *item );
+	KListView* listView() const
+	{
+		return m_listView;
+	}
 
-		TargetItem *findNoinstHeaders(SubprojectItem *item);
-	
-	signals:
-		void selectionChanged( QListViewItem* );
+	TargetItem *findNoinstHeaders( SubprojectItem *item );
 
-	protected:
-		void initActions ();
+signals:
+	void selectionChanged( QListViewItem* );
 
-		void parseKDEDOCS(SubprojectItem *item,
-		                  const QString &lhs, const QString &rhs);
-		void parseKDEICON(SubprojectItem *item,
-		                  const QString &lhs, const QString &rhs);
-		void parsePrimary(SubprojectItem *item,
-		                  const QString &lhs, const QString &rhs);
-		void parsePrefix(SubprojectItem *item,
-		                  const QString &lhs, const QString &rhs);
-		void parseSUBDIRS(SubprojectItem *item,
-		                  const QString &lhs, const QString &rhs);
-		virtual void focusOutEvent(QFocusEvent *e);
-		void expandCollapse( QListViewItem * item, bool expand );
-		void expandCollapseFirst( QListViewItem * item, bool expand );
+protected:
+	void initActions ();
 
-	private:
-		AutoProjectWidget* m_widget;
-		AutoProjectPart* m_part;
-		QStringList headers;
+	void parseKDEDOCS( SubprojectItem *item,
+	                   const QString &lhs, const QString &rhs );
+	void parseKDEICON( SubprojectItem *item,
+	                   const QString &lhs, const QString &rhs );
+	void parsePrimary( SubprojectItem *item,
+	                   const QString &lhs, const QString &rhs );
+	void parsePrefix( SubprojectItem *item,
+	                  const QString &lhs, const QString &rhs );
+	void parseSUBDIRS( SubprojectItem *item,
+	                   const QString &lhs, const QString &rhs );
+	virtual void focusOutEvent( QFocusEvent *e );
+	void expandCollapse( QListViewItem * item, bool expand );
+	void expandCollapseFirst( QListViewItem * item, bool expand );
 
-		bool m_kdeMode;
+private:
+	AutoProjectWidget* m_widget;
+	AutoProjectPart* m_part;
+	QStringList headers;
 
-		AutoToolsAction* addApplicationAction;
-		AutoToolsAction* subProjectOptionsAction;
-		AutoToolsAction* addSubprojectAction;
-		KAction* addExistingSubprojectAction;
-		AutoToolsAction* addTargetAction;
-		AutoToolsAction* addServiceAction;
-		AutoToolsAction* buildSubprojectAction;
-		KAction* removeSubprojectAction;
-		KAction* cleanSubprojectAction;
-		KAction* forceReeditSubprojectAction;
-		KAction* installSubprojectAction;
-		KAction* installSuSubprojectAction;
-		KAction* otherAction;
-		KAction* expandAction;
-		KAction* collapseAction;
+	bool m_kdeMode;
 
-		QStringList m_commandList;
-		QValueList<int> m_commandTypeList;
+	AutoToolsAction* addApplicationAction;
+	AutoToolsAction* subProjectOptionsAction;
+	AutoToolsAction* addSubprojectAction;
+	KAction* addExistingSubprojectAction;
+	AutoToolsAction* addTargetAction;
+	AutoToolsAction* addServiceAction;
+	AutoToolsAction* buildSubprojectAction;
+	KAction* removeSubprojectAction;
+	KAction* cleanSubprojectAction;
+	KAction* forceReeditSubprojectAction;
+	KAction* installSubprojectAction;
+	KAction* installSuSubprojectAction;
+	KAction* otherAction;
+	KAction* expandAction;
+	KAction* collapseAction;
 
-	private slots:
-		void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-		//void slotSubprojectExecuted(QListViewItem* item);
-		void slotSelectionChanged( QListViewItem* item );
-		void slotAddApplication();
-		void slotSubprojectOptions();
-		void slotAddSubproject();
-		void slotAddExistingSubproject();
-		void slotAddTarget();
-		void slotAddService();
-		void slotBuildSubproject();
-		void slotRemoveSubproject();
-		void slotForceReeditSubproject();
-		void slotInstallSubproject();
-		void slotInstallSuSubproject();
-		void slotCleanSubproject();
-		void slotManageBuildCommands();
-		void slotCustomBuildCommand(int);
-		void slotExpandTree();
-		void slotCollapseTree();
+	QStringList m_commandList;
+	QValueList<int> m_commandTypeList;
+
+private slots:
+	void slotContextMenu( KListView *, QListViewItem *item, const QPoint &p );
+	//void slotSubprojectExecuted(QListViewItem* item);
+	void slotSelectionChanged( QListViewItem* item );
+	void slotAddApplication();
+	void slotSubprojectOptions();
+	void slotAddSubproject();
+	void slotAddExistingSubproject();
+	void slotAddTarget();
+	void slotAddService();
+	void slotBuildSubproject();
+	void slotRemoveSubproject();
+	void slotForceReeditSubproject();
+	void slotInstallSubproject();
+	void slotInstallSuSubproject();
+	void slotCleanSubproject();
+	void slotManageBuildCommands();
+	void slotCustomBuildCommand( int );
+	void slotExpandTree();
+	void slotCollapseTree();
 };
 
 #endif
 
-//kate: tab-width 4; space-indent off;
+// kate: indent-mode csands; tab-width 4;

@@ -384,3 +384,5 @@ void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
 }
 
 #include "addexistingdirectoriesdlg.moc"
+
+//kate: indent-mode csands; tab-width 4; space-indent off;
