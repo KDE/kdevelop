@@ -16,6 +16,9 @@
 #include <kparts/part.h>
 #include <qdom.h>
 #include <kaction.h>
+#if (QT_VERSION >= 300)
+#include <qptrlist.h>
+#endif
 
 class KDevCore;
 class KDevProject;
