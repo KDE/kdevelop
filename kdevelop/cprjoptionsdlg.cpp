@@ -1475,18 +1475,19 @@ void CPrjOptionsDlg::ok(){
   text+=" -j";
   text+= m_job_number->text();
 
-  QString str;
-  str.setStr(m_set_modify_line->text());
-  if (!str.isEmpty()) {
+  QString *str1 = new QString(m_set_modify_line->text());
+  if (!str1->isEmpty()) {
     text+=" -W";
     text+= m_set_modify_line->text();
   }
+  delete (str1);
 
-  str.setStr(m_optional_line->text());
-  if (!str.isEmpty()) {
+  QString *str2 = new QString(m_optional_line->text());
+  if (!str2->isEmpty()) {
     text+=" ";
     text+= m_optional_line->text();
   }
+  delete (str2);
 
   prj_info->setMakeOptions (text);
 

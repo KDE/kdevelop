@@ -237,6 +237,7 @@ void CKAppWizard::initPages(){
   directoryline->setMaxLength( 32767 );
   directoryline->setEchoMode( QLineEdit::Normal );
   directoryline->setFrame( TRUE );
+  directoryline->setReadOnly ( TRUE );
 
   directoryload = new QPushButton( widget1, "directoryload" );
   directoryload->setGeometry( 440, 50, 30, 30 );
@@ -1745,7 +1746,14 @@ void CKAppWizard::slotProcessExited() {
 	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
     } 
     project->addFileToProject (namelow + "/docs/en/index.html",fileInfo);
-    
+    QFile gif (directory + "/" + namelow + "/docs/en/" + namelow + ".gif");
+    if (gif.exists()) {
+      fileInfo.rel_name = namelow + "/docs/en/" + namelow + ".gif";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = true;
+      project->addFileToProject (namelow + "/docs/en/" + namelow + ".gif",fileInfo);
+    }
   }
   
   
