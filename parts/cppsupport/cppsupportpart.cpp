@@ -131,6 +131,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setWhatsThis( i18n("Generate a new class") );
 
     m_pParser      = 0;
+	m_pCCParser    = 0;
     m_pCompletion  = 0;
 
     withcpp = false;
@@ -328,7 +329,7 @@ CppSupportPart::projectOpened( )
              this, SLOT( addedFileToProject( const QString & ) ) );
     connect( project( ), SIGNAL( removedFileFromProject( const QString &) ),
              this, SLOT( removedFileFromProject( const QString & ) ) );
-
+			 
     // standard project classstore - displayed in classview - widget
     m_pParser     = new CClassParser( classStore( ) );
 
