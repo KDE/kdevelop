@@ -1,3 +1,9 @@
+2000-09-30  Sandy Meier  <smeier@kdevelop.org>
+	* "set active Project" is now a KAction in Projectspace and not in KDevelopCore anymore
+	* libprojectmanagment ported to our new namingconvention
+	* removed plugin baseclass from libprojectmanagment 
+		(all Plugins/KDevComponents should implement a aboutPlugin() instead
+
 2000-09-29   Sandy Meier <smeier@kdevelop.org>
 	* it is now possible to add more then one Project to a Projectspace
 	* implemented "Set active Project"
