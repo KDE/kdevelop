@@ -33,6 +33,7 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "debugger.h"
+#include "newmainwindow.h"
 
 
 #include "editorproxy.h"
@@ -96,36 +97,53 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
 
 void EditorProxy::installPopup( KParts::Part * part )
 {
+
 	if ( part->inherits("KTextEditor::Document") && part->widget())
 	{
 		PopupMenuInterface *iface = dynamic_cast<PopupMenuInterface*>(part->widget());
 		if (iface)
 		{
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
-			
+
 			QPopupMenu * popup = static_cast<QPopupMenu*>( part->factory()->container("ktexteditor_popup", view ) );
-			
-			if (!popup) {
+
+			if (!popup)
+			{
 				kdWarning() << k_funcinfo << "Popup not found!" << endl;
 				return;
 			}
-			
-			// I'm not sure if this is papering over a bug in xmlgui or not, but this test is
-			// needed in order to avoid multiple close actions in the popup menu in some cases
-			KAction * action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
-			if ( action && !action->isPlugged( popup ) )
+
+			KAction * action = NULL;
+			//If there is a tab for this file, we don't need to plug the closing menu entries here
+			switch (dynamic_cast<NewMainWindow*>(TopLevel::getInstance())->getTabWidgetVisibility())
 			{
-				popup->insertSeparator( 0 );
-				action->plug( popup, 0 );
+			case KMdi::AlwaysShowTabs:
+				break;
+			case KMdi::ShowWhenMoreThanOneTab:
+				if(PartController::getInstance()->parts()->count() > 1)
+					break;
+			case KMdi::NeverShowTabs:
+				// I'm not sure if this is papering over a bug in xmlgui or not, but this test is
+				// needed in order to avoid multiple close actions in the popup menu in some cases
+				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+				if ( action && !action->isPlugged( popup ) )
+				{
+					popup->insertSeparator( 0 );
+					action->plug( popup, 0 );
+				}
+				action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+				if ( action && !action->isPlugged( popup ) )
+					action->plug( popup, 1 );
+				break;
+			default:
+				break;
 			}
-			action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
-			if ( action && !action->isPlugged( popup ) )
-				action->plug( popup, 1 );
-			
+
+
 			iface->installPopup( popup );
-					
+
 			connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
-			
+
 			// ugly hack: mark the "original" items
 			m_popupIds.resize(popup->count());
 			for (uint index=0; index < popup->count(); ++index)
@@ -133,7 +151,6 @@ void EditorProxy::installPopup( KParts::Part * part )
 		}
 	}
 }
-
 
 void EditorProxy::popupAboutToShow()
 {

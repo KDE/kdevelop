@@ -65,7 +65,11 @@ public:
   void init();
 
   void setUserInterfaceMode(const QString& uiMode);
-
+  
+  //This is needed because KMdiMainFrame::tabWidgetVisibility() is protected (for
+  //whatever reason) and this value is needed in EditorProxy
+  KMdi::TabWidgetVisibility getTabWidgetVisibility() { return tabWidgetVisibility(); }
+  
 public slots:
 
   void createGUI(KParts::Part *part);
