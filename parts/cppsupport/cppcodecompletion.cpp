@@ -767,6 +767,7 @@ CppCodeCompletion::getEntryListForStruct( const QString& strStruct )
     QValueList< KTextEditor::CompletionEntry > entryList;
 
     // FIXME: is this right for namespaces?
+    // or should it be store->getStructByName()?
     ParsedScopeContainer* pScope = m_pCCStore->globalScope();
     if( pScope ){
 

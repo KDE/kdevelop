@@ -238,14 +238,7 @@ void CClassParser::fillInParsedStruct( ParsedContainer *aContainer )
   if( aStruct != NULL && !aStruct->name().isEmpty() )
   {
     aContainer->addStruct( aStruct );
-
-    // This was done in prior versions to maintain a list
-    // of all structs in all namespaces. Doesn't seem
-    // need currently.
-    // Always add structs to the global container.
-    //    if( aContainer != &store->globalContainer )
-    //      store->globalContainer.addStruct( aStruct );
-
+    store->addStruct( aStruct );
   }
 }
 

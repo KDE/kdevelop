@@ -66,6 +66,15 @@ public:
      */
     ParsedClass *getClassByName(const QString &name);
     /**
+     * Tells if a struct exists in the store. See hasClass().
+     */
+    bool hasStruct(const QString &name);
+    /**
+     * Returns a class from the store using its scoped
+     * name. See getClassByName().
+     */
+    ParsedStruct *getStructByName(const QString &name);
+    /**
      * Checks if a scope exists in the store. The name
      * argument must specify the full scoped name in
      * the "Foo.Bar".
@@ -134,6 +143,10 @@ public:
      * _also_ have to add the class to a namespace.
      */
     void addClass(ParsedClass *klass);
+    /**
+     * Adds a struct definition. See addClass().
+     */
+    void addStruct(ParsedStruct *strukt);
     /**
      * Adds a scope definition. Source parsers must use this method
      * so the class store can maintain a list of all scopes. They
@@ -206,7 +219,11 @@ private:
      * regenerated with regenerateIndex().
      */
     QMap<QString, ParsedClass*> m_allClasses;
-
+    /**
+     * Mapping from struct name to ParsedStruct objects.
+     * See m_allClasses.
+     */
+    QMap<QString, ParsedStruct*> m_allStructs;
     /**
      * Mapping from scope name to ParsedScopeContainer objects. See
      * also m_allClasses.

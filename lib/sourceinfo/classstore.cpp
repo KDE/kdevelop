@@ -90,13 +90,17 @@ ParsedClass *ClassStore::getClassByName(const QString &name)
 }
 
 
-void ClassStore::addScope(ParsedScopeContainer *scope)
+bool ClassStore::hasStruct(const QString &name)
 {
-    REQUIRE( "Valid scope", scope != NULL );
-    REQUIRE( "Valid scope name", !scope->name().isEmpty() );
-    REQUIRE( "Unique scope path", !hasScope( scope->path() ) );
-    
-    m_allScopes.insert(scope->path(), scope);
+    return m_allStructs.contains(name);
+}
+
+
+ParsedStruct *ClassStore::getStructByName(const QString &name)
+{
+    QMap<QString, ParsedStruct*>::ConstIterator it;
+    it = m_allStructs.find(name);
+    return (it != m_allStructs.end())? (*it) : 0;
 }
 
 
@@ -107,6 +111,26 @@ void ClassStore::addClass(ParsedClass *klass)
     REQUIRE( "Unique classpath", !hasClass( klass->path() ) );
 
     m_allClasses.insert(klass->path(), klass);
+}
+
+
+void ClassStore::addStruct(ParsedStruct *strukt)
+{
+    REQUIRE( "Valid struct", strukt != NULL );
+    REQUIRE( "Valid structname", !strukt->name().isEmpty() );
+    REQUIRE( "Unique structpath", !hasStruct( strukt->path() ) );
+
+    m_allStructs.insert(strukt->path(), strukt);
+}
+
+
+void ClassStore::addScope(ParsedScopeContainer *scope)
+{
+    REQUIRE( "Valid scope", scope != NULL );
+    REQUIRE( "Valid scope name", !scope->name().isEmpty() );
+    REQUIRE( "Unique scope path", !hasScope( scope->path() ) );
+    
+    m_allScopes.insert(scope->path(), scope);
 }
 
 
@@ -427,6 +451,7 @@ void ClassStore::wipeout()
     kdDebug(9005) << "ClassStore::wipeout start" << endl;
     m_globalScope->clear();
     m_allClasses.clear();
+    m_allStructs.clear();
     m_allScopes.clear();
     kdDebug(9005) << "ClassStore::wipeout end" << endl;
 }
