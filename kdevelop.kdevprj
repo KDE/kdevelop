@@ -7,14 +7,14 @@ ldflags=
 [General]
 AMChanged=false
 author=Ralf Nolden
-configure_args=--with-qt-dir=/usr/lib/qt-2.2.2 --prefix=/opt/kde2
+configure_args=--with-qt-dir=/usr/lib/qt-2.2 --prefix=/opt/kde2
 dir_where_make_will_be_called=./
 email=Ralf.Nolden@post.rwth-aachen.de
 execute_args=
 kdevprj_version=1.0beta2
 lfv_open_groups=XML GUI rc-files,Sources,Others
 make_options=-j1
-makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdevelop/kwrite_part/Makefile.am,kdevelop/plugins/prjstat/Makefile.am,kdevelop/plugins/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/parts/dbg/Makefile.am,kdevelop/widgets/checklistbox/Makefile.am,kdevelop/widgets/Makefile.am,kdevelop/widgets/qextmdi/Makefile.am,kdevelop/widgets/dockwidgets/Makefile.am,kdevelop/parts/doctreeview/Makefile.am,kdevelop/parts/Makefile.am,kdevelop/lib/general/Makefile.am,kdevelop/lib/kidetexteditor/Makefile.am,kdevelop/parts/classview/Makefile.am,kdevelop/parts/grepview/Makefile.am,kdevelop/parts/outputviews/Makefile.am,kdevelop/parts/qextmdimainfrmview/Makefile.am,kdevelop/parts/cppsupport/Makefile.am,kdevelop/parts/cvs/Makefile.am,kdevelop/parts/editor/Makefile.am,kdevelop/widgets/qextmdi/src/Makefile.am,kdevelop/widgets/qextmdi/include/Makefile.am,kdevelop/widgets/qextmdi/res/Makefile.am,kdevelop/parts/buglist/Makefile.am,
+makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdevelop/kwrite_part/Makefile.am,kdevelop/plugins/prjstat/Makefile.am,kdevelop/plugins/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/parts/dbg/Makefile.am,kdevelop/widgets/checklistbox/Makefile.am,kdevelop/widgets/Makefile.am,kdevelop/widgets/qextmdi/Makefile.am,kdevelop/widgets/dockwidgets/Makefile.am,kdevelop/parts/doctreeview/Makefile.am,kdevelop/parts/Makefile.am,kdevelop/lib/general/Makefile.am,kdevelop/lib/kidetexteditor/Makefile.am,kdevelop/parts/classview/Makefile.am,kdevelop/parts/grepview/Makefile.am,kdevelop/parts/outputviews/Makefile.am,kdevelop/parts/qextmdimainfrmview/Makefile.am,kdevelop/parts/cppsupport/Makefile.am,kdevelop/parts/cvs/Makefile.am,kdevelop/parts/editor/Makefile.am,kdevelop/widgets/qextmdi/src/Makefile.am,kdevelop/widgets/qextmdi/include/Makefile.am,kdevelop/widgets/qextmdi/res/Makefile.am,kdevelop/parts/buglist/Makefile.am,doc/kdevelop2/Makefile.am,doc/Makefile.am
 modifyMakefiles=false
 project_name=KDevelop
 project_type=mini_kde
@@ -35,7 +35,10 @@ groups=icons (xpm),XML GUI rc-files,desktop-Files,Headers,Sources,Dialogs,Transl
 icons (xpm)=*.xpm,
 [Makefile.am]
 files=kdevelop.kdevprj
-sub_dirs=kdevelop,po
+sub_dirs=kdevelop,po,doc
+type=normal
+[doc/Makefile.am]
+sub_dirs=kdevelop2
 type=normal
 [kdevelop.kdevprj]
 dist=true

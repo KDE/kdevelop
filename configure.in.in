@@ -53,4 +53,5 @@ doc/tutorial/Makefile \
 doc/kde_libref/Makefile \
 doc/addendum/Makefile \
 doc/cref/Makefile \
-) 
+doc/kdevelop2/Makefile \
+)

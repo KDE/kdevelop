@@ -1,4 +1,4 @@
-SUBDIRS = welcome manual programming tutorial kde_libref addendum cref
+SUBDIRS = welcome manual programming tutorial kde_libref addendum cref kdevelop2
 
 tools_DATA = documentation tip.database
 
