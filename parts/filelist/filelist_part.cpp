@@ -26,7 +26,7 @@
 #include "filelist_widget.h"
 #include "filelist_part.h"
 
-static const KAboutData data("kdevfilelist", I18N_NOOP("FileList"), "1.0");
+static const KAboutData data("kdevfilelist", I18N_NOOP("File List"), "1.0");
 
 typedef KDevGenericFactory<FileListPart> filelistFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( &data ) )
@@ -56,7 +56,7 @@ FileListPart::~FileListPart()
     delete m_widget;
 }
 
-// @todo remove. use partcontroller's method instead 
+// @todo remove. use partcontroller's method instead
 KURL::List FileListPart::openFiles()
 {
     KURL::List openfiles;

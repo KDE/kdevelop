@@ -262,7 +262,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
         "<b>Libraries</b>"));
 
 
-    action = new KAction(i18n("Examine Core File"), "core", 0,
+    action = new KAction(i18n("Examine Core File..."), "core", 0,
                          this, SLOT(slotExamineCore()),
                          actionCollection(), "debug_core");
     action->setToolTip( i18n("Examine core file") );

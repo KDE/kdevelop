@@ -97,7 +97,7 @@ void ProjectManager::createActions( KActionCollection* ac )
   action->setWhatsThis(i18n("<b>Open project</b><p>Opens a KDevelop3 or KDevelop2 project."));
 
   m_openRecentProjectAction =
-    new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
+    new KRecentFilesAction(i18n("Open &Recent Project"), 0,
                           this, SLOT(loadProject(const KURL &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setToolTip(i18n("Open recent project"));
@@ -169,14 +169,14 @@ void ProjectManager::slotProjectOptions()
   config->setGroup("Project Settings Dialog");
   int height = config->readNumEntry( "Height", 600 );
   int width = config->readNumEntry( "Width", 800 );
-  
+
   dlg.resize( width, height );
-  
+
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
 
   saveProjectFile();
-  
+
   config->setGroup("Project Settings Dialog");
   config->writeEntry( "Height", dlg.size().height() );
   config->writeEntry( "Width", dlg.size().width() );
@@ -247,7 +247,7 @@ bool ProjectManager::loadProject(const KURL &url)
         i18n("Are you sure you want to reopen the current project?")) == KMessageBox::No)
       return false;
   }
-  
+
   TopLevel::getInstance()->main()->menuBar()->setEnabled( false );
   kapp->setOverrideCursor( waitCursor );
 
@@ -256,14 +256,14 @@ bool ProjectManager::loadProject(const KURL &url)
 	m_openRecentProjectAction->setCurrentItem( -1 );
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
-	return false;  
+	return false;
   }
 
   m_info = new ProjectInfo;
   m_info->m_projectURL = url;
 
   QTimer::singleShot( 0, this, SLOT(slotLoadProject()) );
-  
+
   // no one cares about this value
   return true;
 }
@@ -303,10 +303,10 @@ void ProjectManager::slotLoadProject( )
   loadLocalParts();
 
   // shall we try to load a session file from network?? Probably not.
-	if (m_info->m_projectURL.isLocalFile()) 
+	if (m_info->m_projectURL.isLocalFile())
 	{
 		// first restore the project session stored in a .kdevses file
-		if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() )) 
+		if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() ))
 		{
 			kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
 		}
@@ -321,9 +321,9 @@ void ProjectManager::slotLoadProject( )
 
   TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
   kapp->restoreOverrideCursor();
-  
+
   TopLevel::getInstance()->statusBar()->message( i18n("Project loaded."), 3000 );
-  
+
   return;
 }
 
@@ -334,11 +334,11 @@ bool ProjectManager::closeProject( bool exiting )
     return true;
 
   // save the session if it is a local file
-	if (m_info->m_projectURL.isLocalFile()) 
+	if (m_info->m_projectURL.isLocalFile())
 	{
 		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
 	}
-  
+
   if ( !PartController::getInstance()->querySaveFiles() )
     return false;
 
@@ -368,7 +368,7 @@ bool ProjectManager::closeProject( bool exiting )
   {
     PartController::getInstance()->slotCloseAllWindows();
   }
-  
+
   return true;
 }
 
@@ -587,7 +587,7 @@ void ProjectManager::loadLocalParts()
 {
 	// Make sure to refresh load/ignore lists
 	getGeneralInfo();
-	
+
 	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
 	PluginController::getInstance()->loadLocalParts( m_info, m_info->m_loadParts, m_info->m_ignoreParts );
 }

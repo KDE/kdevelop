@@ -35,7 +35,7 @@ FileListWidget::FileListWidget(FileListPart *part)
 	header()->hide();
 	setRootIsDecorated( false );
 	setResizeMode( QListView::LastColumn );
-	
+
 	setSelectionMode( QListView::Extended );
 
 	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
@@ -49,12 +49,12 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
 		this, SLOT( popupMenu(QListViewItem *, const QPoint & , int ) ) );
-		
-	connect( _part->partController(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
+
+	connect( _part->partController(), SIGNAL(documentChangedState(const KURL &, DocumentState)),
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
-	
+
 	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
-	
+
 	refreshFileList();
 }
 
@@ -87,7 +87,7 @@ void FileListWidget::maybeTip( QPoint const & p )
 				default:
 					message = item->url().prettyURL();
 			}
-			
+
 			tip( r, message );
 		}
 		else
@@ -114,10 +114,10 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 void FileListWidget::refreshFileList( )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	KListView::clear();
-	
-	KURL::List list( _part->openFiles() );	
+
+	KURL::List list( _part->openFiles() );
 	QValueListIterator<KURL> it = list.begin();
 	while ( it != list.end() )
 	{
@@ -161,7 +161,7 @@ void FileListWidget::partRemoved()
 void FileListWidget::itemClicked( QListViewItem * item )
 {
 	if ( !item ) return;
-	
+
 	FileListItem * listItem = static_cast<FileListItem*>( item );
 	_part->partController()->activatePart( _part->partController()->partForURL( listItem->url() ) );
 }
@@ -199,14 +199,14 @@ void FileListWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 	if ( item )
 	{
 		KPopupMenu popup;
-		popup.insertTitle( i18n("FileList") );
-		popup.insertItem( i18n("Close Selected"), this, SLOT(closeSelectedFiles()) );        
+		popup.insertTitle( i18n("File List") );
+		popup.insertItem( i18n("Close Selected"), this, SLOT(closeSelectedFiles()) );
 		popup.insertItem( i18n("Save Selected"), this, SLOT(saveSelectedFiles()) );
 		popup.insertItem( i18n("Reload Selected"), this, SLOT(reloadSelectedFiles()) );
-		
+
 		FileContext context( getSelectedURLs() );
         _part->core()->fillContextMenu( &popup, &context );
-		
+
 		popup.exec(p);
 	}
 }
@@ -222,7 +222,7 @@ KURL::List FileListWidget::getSelectedURLs( )
 			list << item->url();
 		}
 		item = static_cast<FileListItem*>( item->nextSibling() );
-	}	
+	}
 	return list;
 }
 
@@ -240,7 +240,7 @@ void FileListWidget::reloadSelectedFiles( )
 {
 	_part->partController()->revertFiles( getSelectedURLs() );
 }
-			
+
 #include "filelist_widget.moc"
 
 // kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;

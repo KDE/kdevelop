@@ -326,7 +326,7 @@
                     </sizepolicy>
                 </property>
                 <property name="title">
-                    <string>General Options:</string>
+                    <string>General Options</string>
                 </property>
                 <hbox>
                     <property name="name">
