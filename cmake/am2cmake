@@ -16,7 +16,7 @@ class BuildTarget
       @skels=Array.new
       @am=Array.new
    end
-   
+
    def addSourceFiles(files)
       files.split.each do |currentSource|
          if currentSource =~ /^\S+\.ui$/
@@ -28,9 +28,9 @@ class BuildTarget
          end
       end
    end
-   
+
    attr_reader :name, :type, :sources, :uis, :skels
-   
+
 end
 
 class CMakeFile
@@ -41,30 +41,30 @@ class CMakeFile
       @listsFile=@path+"CMakeLists.txt"
 
       @targets=Array.new
-      
-      @includeDirs=""
+
+      @includeDirs=Array.new
       @subDirs=""
-      
+
       parseFile
    end
-   
+
    def parseFile
       @lines=IO.readlines(@amFile)
       cummLine=""
       appendNextLine=false
       for line in @lines do
          appendNextLine=(line[line.length-2, 1]=='\\')
-         
+
          if appendNextLine
             cummLine+=" "+line[0, line.length-2]
          else
             cummLine+=" "+line[0, line.length-1]
-            if not cummLine.empty? 
+            if not cummLine.empty?
                evalLine(cummLine)
                cummLine=""
             end
          end
-      end   
+      end
    end
 
    def findTarget(line)
@@ -76,7 +76,7 @@ class CMakeFile
          targetName=$1
          type=Executable
       end
-      
+
       @targets.each do |buildTarget|
          if (type==Executable)
             if (buildTarget.type==Executable) && (buildTarget.name==targetName)
@@ -88,14 +88,14 @@ class CMakeFile
             end
          end
       end
-      
+
       return BuildTarget.new("Dummy", NoTarget)
    end
-   
+
    def addTarget(line)
       type=NoTarget
       targets=""
-      
+
       if line =~ /^\s*lib_LTLIBRARIES\s*=\s*(\S+.*)/
          targets=$1
          type=SharedLib
@@ -111,7 +111,7 @@ class CMakeFile
       else
          return false
       end
-      
+
       if type==Executable
          targets.split.each{ |current| @targets.push(BuildTarget.new(current, type)) }
       else
@@ -119,38 +119,46 @@ class CMakeFile
       end
       return true
    end
-               
+
    def addSourcesToTarget(line)
       buildTarget=findTarget(line)
       if buildTarget.type==NoTarget
          return
       end
-         
+
       if buildTarget.type==Executable
          line =~ /^\s*\S+_SOURCES\s*=\s*(\S+.*)$/
       else
          line =~ /^\s*lib\S+_la_SOURCES\s*=\s*(\S+.*)$/
       end
       buildTarget.addSourceFiles($1)
-   end 
-   
+   end
+
+   def addIncludeDirectories(includeDirs)
+      includeDirs.split.each do |dir|
+         if dir =~ /^\s*-I\$\(top_srcdir\)(\S+)/
+            @includeDirs.push("${CMAKE_SOURCE_DIR}"+$1)
+         end
+      end
+   end
+
    def evalLine(line)
       if line =~ /^\s*METASOURCES\s*=\s*AUTO\s*$/
          @automoc=true
          return
       end
-      
+
       if addTarget(line)
          return
       end
-      
+
       if line =~ /^\s*\S+_SOURCES\s*=/
          addSourcesToTarget(line)
          return
       end
-      
+
       if line =~ /^\s*INCLUDES\s*=\s*(\S+.*)$/
-         @includeDirs=$1
+         addIncludeDirectories($1)
          return
       end
 
@@ -159,32 +167,37 @@ class CMakeFile
       end
 
    end
-      
+
    def createListsFile
       prevLines=Array.new
-      if FileTest.exists?(@listsFile)
-         printf("file exists: %s\n", @listsFile)
-         prevLines=File.new(@listsFile, "r").readlines
-      end
-      
+#      if FileTest.exists?(@listsFile)
+##         printf("file exists: %s\n", @listsFile)
+#         prevLines=File.new(@listsFile, "r").readlines
+#      end
+
       file=File.new(@listsFile, "w+");
       if not @subDirs.empty?
          file.printf("SUBDIRS( %s )\n\n", @subDirs)
       end
+      if not @includeDirs.empty?
+         file.printf("INCLUDE_DIRECTORIES( ")
+         @includeDirs.each{ |dir| file.printf("%s ", dir) }
+         file.printf(")\n\n")
+      end
       @targets.each do |buildTarget|
-         if buildTarget.type==SharedLib 
+         if buildTarget.type==SharedLib
             srcsName=buildTarget.name+"_LIB_SRCS"
-         elsif buildTarget.type==StaticLib 
+         elsif buildTarget.type==StaticLib
             srcsName=buildTarget.name+"_STAT_SRCS"
-         elsif buildTarget.type==Part 
+         elsif buildTarget.type==Part
             srcsName=buildTarget.name+"_PART_SRCS"
          else
             srcsName=buildTarget.name+"_SRCS"
          end
          uisName=buildTarget.name+"_UI"
          skelsName=buildTarget.name+"_DCOP_SRCS"
-         
-         if not buildTarget.sources.empty?   
+
+         if not buildTarget.sources.empty?
             file.printf("SET(%s\n", srcsName)
             buildTarget.sources.each{ |currentFile| file.printf("%s\n", currentFile)}
             file.printf(")\n\n")
@@ -192,28 +205,28 @@ class CMakeFile
                file.printf("KDE_AUTOMOC(${%s})\n\n", srcsName)
             end
          end
-         
+
          if not buildTarget.uis.empty?
             file.printf("SET( %s\n", uisName)
             buildTarget.uis.each{ |currentFile| file.printf("%s\n", currentFile)}
             file.printf(")\n\n")
-            
+
             file.printf("KDE_ADD_UI_FILES(%s ${%s} )\n\n", srcsName, uisName)
          end
-         
+
          if not buildTarget.skels.empty?
             file.printf("SET( %s\n", skelsName)
             buildTarget.skels.each{ |currentFile| file.printf("%s\n", currentFile)}
             file.printf(")\n\n")
-            
+
             file.printf("KDE_ADD_DCOP_SKELS(%s ${%s})\n\n", srcsName, skelsName)
          end
-         
-         if buildTarget.type==SharedLib 
+
+         if buildTarget.type==SharedLib
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
-         elsif buildTarget.type==StaticLib 
+         elsif buildTarget.type==StaticLib
             file.printf("ADD_LIBRARY(%s STATIC ${%s})\n\n", buildTarget.name, srcsName)
-         elsif buildTarget.type==Part 
+         elsif buildTarget.type==Part
             file.printf("ADD_LIBRARY(%s SHARED ${%s})\n\n", buildTarget.name, srcsName)
          else
             file.printf("ADD_EXECUTABLE(%s ${%s})\n\n", buildTarget.name, srcsName)
@@ -221,7 +234,7 @@ class CMakeFile
       end
       file.printf("\n\n#original Makefile.am contents follow:\n\n")
       @lines.each{ |line| file.printf("#%s", line)}
-      if !prevLines.empty? 
+      if !prevLines.empty?
          file.printf("\n#######################\n#previous CMakeLists.txt contents follow:\n\n")
          prevLines.each{ |line| file.printf("#%s", line)}
       end
@@ -234,4 +247,5 @@ def convertAmFile(amFile)
 end
 
 Dir["**/Makefile.am"].each{ |currentFile| convertAmFile(currentFile)}
+
 
