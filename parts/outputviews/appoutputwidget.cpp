@@ -76,7 +76,7 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 
 void AppOutputWidget::insertStdoutLine(const QString &line)
 {
-	fprintf(stderr, "RGR: insertStdoutLine(%s)", line.latin1());
+	kdDebug(9004) << k_funcinfo << line << endl;
 	strList.append(QString("o-")+line);
 	ProcessWidget::insertStdoutLine(line);
 }
@@ -84,7 +84,7 @@ void AppOutputWidget::insertStdoutLine(const QString &line)
 
 void AppOutputWidget::insertStderrLine(const QString &line)
 {
-	fprintf(stderr, "RGR: insertStderrLine(%s)", line.latin1());
+	kdDebug(9004) << k_funcinfo << line << endl;
 	strList.append(QString("e-")+line);
 	ProcessWidget::insertStderrLine(line);
 }
