@@ -629,7 +629,10 @@ void CppSupportPart::slotSwitchHeader()
         candidates << (base + "cpp");
         candidates << (base + "cxx");
         candidates << (base + "C");
-    } else if (QStringList::split(',', "c,cc,cpp,cxx,C").contains(ext)) {
+        candidates << (base + "m");
+        candidates << (base + "mm");
+        candidates << (base + "M");
+    } else if (QStringList::split(',', "c,cc,cpp,cxx,C,m,mm,M").contains(ext)) {
         candidates << (base + "h");
         candidates << (base + "hxx");
 	candidates << (base + "hpp");
@@ -667,7 +670,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 QStringList CppSupportPart::fileFilters()
 {
     if (withcpp)
-        return QStringList::split(",", "*.c,*.cpp,*.cxx,*.cc,*.C,*.h,*.hxx,*.hpp");
+        return QStringList::split(",", "*.c,*.cpp,*.cxx,*.cc,*.C,*.m,*.mm,*.M,*.h,*.hxx,*.hpp");
     else
         return QStringList::split(",", "*.c,*.h");
 }
@@ -676,7 +679,7 @@ QStringList CppSupportPart::fileFilters()
 QStringList CppSupportPart::fileExtensions()
 {
     if (withcpp)
-        return QStringList::split(",", "c,cpp,cxx,cc,C,h,hxx,hpp");
+        return QStringList::split(",", "c,cpp,cxx,cc,C,m,mm,M,h,hxx,hpp");
     else
         return QStringList::split(",", "c,h");
 }
