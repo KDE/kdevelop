@@ -309,7 +309,7 @@ KParts::Part *PartController::partForURL(const KURL &url)
   for ( ; it.current(); ++it)
   {
     KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-    if (urlIsEqual(url, ro_part->url()))
+    if (ro_part && urlIsEqual(url, ro_part->url()))
       return ro_part;
   }
 
