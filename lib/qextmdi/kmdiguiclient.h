@@ -42,6 +42,7 @@ public:
     virtual ~KMDIGUIClient();
 
     void addToolView(KMdiToolViewAccessor*);
+
 private slots:
     void clientAdded( KXMLGUIClient *client );
     void setupActions();

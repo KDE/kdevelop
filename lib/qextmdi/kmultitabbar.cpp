@@ -61,7 +61,7 @@ KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMulti
 	}
 	else
 	{
-		box=new QHBox(viewport());
+		box=new QWidget(viewport());
 		mainLayout=new QHBoxLayout(box);
 		mainLayout->setAutoAdd(true);
 		box->setFixedHeight(24);
@@ -80,8 +80,8 @@ void KMultiTabBarInternal::setStyle(enum KMultiTabBar::KMultiTabBarStyle style)
 
 	if  ( (m_style==KMultiTabBar::KDEV3) ||
 		(m_style==KMultiTabBar::KDEV3ICON ) ) {
-		resizeEvent(0);		
-	}	
+		resizeEvent(0);
+	}
         viewport()->repaint();
 }
 

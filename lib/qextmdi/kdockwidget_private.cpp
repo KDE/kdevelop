@@ -35,7 +35,7 @@ KDockSplitter::KDockSplitter(QWidget *parent, const char *name, Orientation orie
   fixedWidth1=-1;
   fixedHeight0=-1;
   fixedHeight1=-1;
-   
+
   m_orientation = orient;
   mOpaqueResize = false;
   mKeepSize = false;
@@ -103,7 +103,7 @@ void KDockSplitter::activate(QWidget *c0, QWidget *c1)
 void KDockSplitter::delayedResize()
 {
 	kdDebug()<<"*********************** DELAYED RESIZE !!!!!!!!!!!!!!!"<<endl;
-	resizeEvent(0);	
+	resizeEvent(0);
 }*/
 
 void KDockSplitter::setForcedFixedWidth(KDockWidget *dw,int w)
@@ -113,14 +113,14 @@ void KDockSplitter::setForcedFixedWidth(KDockWidget *dw,int w)
 	{
                 fixedWidth0=w;
 //		setupMinMaxSize();
-		savedXPos=xpos;
+                savedXPos=xpos;
 		setSeparatorPos(w*factor/width(),true);
 //		kdDebug()<<"Set forced fixed width for widget 0 :"<<w<<endl;
 	}
         else
 	{
                 fixedWidth1=w;
-		savedXPos=xpos;
+                savedXPos=xpos;
 		setSeparatorPos((width()-w)*factor/width(),true);
 //		kdDebug()<<"Set forced fixed width for widget 1 :"<<w<<endl;
 //		kdDebug()<<"Width() :"<<width()<<endl;
@@ -207,6 +207,12 @@ void KDockSplitter::setSeparatorPos(int pos, bool do_resize)
     resizeEvent(0);
 }
 
+void KDockSplitter::setSeparatorPosX( int pos, bool do_resize )
+{
+  savedXPos = pos;
+  setSeparatorPos( pos, do_resize );
+}
+
 int KDockSplitter::separatorPos() const
 {
   return xpos;
@@ -229,7 +235,7 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
           } else {
           xpos = factor * checkValue( child0->width()+1 ) / width();
 	  }
-      
+
           }
       }
           else
@@ -274,12 +280,12 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
 			divider->raise();
 	        	      if (m_orientation == Horizontal){
         	        	child0->setGeometry(0, 0, width(), position);
-	                	child1->setGeometry(0, dc->m_nonOverlapSize+4, width(), 
+	                	child1->setGeometry(0, dc->m_nonOverlapSize+4, width(),
 						height()-dc->m_nonOverlapSize-4);
 	        	        divider->setGeometry(0, position, width(), 4);
 	        	      } else {
         	        	child0->setGeometry(0, 0, position, height());
-		                child1->setGeometry(dc->m_nonOverlapSize+4, 0, 
+		                child1->setGeometry(dc->m_nonOverlapSize+4, 0,
 						width()-dc->m_nonOverlapSize-4, height());
         		        divider->setGeometry(position, 0, 4, height());
 		              }
@@ -320,7 +326,7 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
 	}
 
 	}
-	
+
   }
 }
 

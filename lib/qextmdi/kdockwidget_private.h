@@ -44,7 +44,7 @@ class KDockSplitter : public QWidget
 {
   Q_OBJECT
 public:
-  KDockSplitter(QWidget *parent= 0, const char *name= 0, Orientation orient= Vertical, int pos= 50, bool highResolution=false);  
+  KDockSplitter(QWidget *parent= 0, const char *name= 0, Orientation orient= Vertical, int pos= 50, bool highResolution=false);
   virtual ~KDockSplitter(){};
 
   void activate(QWidget *c0, QWidget *c1 = 0L);
@@ -52,6 +52,16 @@ public:
 
   int separatorPos() const;
   void setSeparatorPos(int pos, bool do_resize = true);
+  /**
+   * For usage from outside.
+   * If the splitter is in fixed position when called,
+   * the value of @p pos will be saved and used when the splitter
+   * is restored.
+   * If @p do_resize is true, the size will be changed unless the splitter
+   * is in fixed mode.
+   */
+  // ### please come up with a nicer name
+  void setSeparatorPosX(int pos, bool do_resize=false);
 
   virtual bool eventFilter(QObject *, QEvent *);
   virtual bool event( QEvent * );
@@ -84,7 +94,7 @@ protected:
 /*
 protected slots:
   void delayedResize();*/
-  
+
 private:
   void setupMinMaxSize();
 
@@ -123,7 +133,7 @@ private:
 /**
  * resizing enum
  **/
- 
+
 
 
 /**
@@ -143,7 +153,7 @@ public slots:
   void slotFocusEmbeddedWidget(QWidget* w = 0L);
 
 public:
- enum KDockWidgetResize 
+ enum KDockWidgetResize
 {ResizeLeft,ResizeTop,ResizeRight,ResizeBottom,ResizeBottomLeft,ResizeTopLeft,ResizeBottomRight,ResizeTopRight};
 
   int index;

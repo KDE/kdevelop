@@ -27,7 +27,7 @@
 #ifndef _KMDILISTITERATOR_H_
 #define _KMDILISTITERATOR_H_
 
-#include <kmdiiterator.h>
+#include "kmdiiterator.h"
 
 template<class I> class QPtrList;
 template<class I> class QPtrListIterator;

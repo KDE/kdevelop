@@ -341,7 +341,9 @@ void KDockWidgetHeader::setDragPanel( KDockWidgetHeaderDrag* nd )
   layout->addWidget( closeButton );
   layout->activate();
   kdDebug()<<"KdockWidgetHeader::setDragPanel:minimum height="<<layout->minimumSize().height()<<endl;
+#ifdef __GNUC__
 #warning FIXME
+#endif
   drag->setFixedHeight( closeButton->height()); // /*layout->minimumS*/sizeHint().height() );
 }
 

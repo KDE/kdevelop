@@ -51,7 +51,7 @@
 class QTimer;
 class QPopupMenu;
 class QMenuBar;
-#include <kmditoolviewaccessor.h>
+#include "kmditoolviewaccessor.h"
 
 class QToolButton;
 
@@ -70,7 +70,7 @@ class KMdiMainFrmPrivate;
 class KMdiViewCloseEvent : public QCustomEvent
 {
 public:
-   KMdiViewCloseEvent( KMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
+   KMdiViewCloseEvent( KMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {}
 };
 
 /**
@@ -682,7 +682,8 @@ protected slots: // Protected slots
    * internally used to handle click on view close button (TabPage mode, only)
    */
    void closeViewButtonPressed();
-signals:
+
+   signals:
    /**
    * Signals the last attached KMdiChildView has been closed
    */
@@ -722,7 +723,6 @@ signals:
     void toggleLeft();
     void toggleRight();
     void toggleBottom();
-
 };
 
 #endif //_KMDIMAINFRM_H_

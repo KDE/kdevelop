@@ -961,6 +961,12 @@ void KMdiChildFrm::doResize(bool captionOnly)
    }
 }
 
+static bool hasParent(QObject* par, QObject* o) {
+	while (o && o!=par)
+		o = o->parent();
+	return o==par;
+}
+
 //============= eventFilter ===============//
 
 bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
@@ -983,7 +989,8 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       break;
    case QEvent::MouseButtonPress:
       {
-         if ( (QWidget*)obj != m_pClient ) {
+//         if ( (QWidget*)obj != m_pClient ) {
+         if (!hasParent(m_pClient, obj)) {
             bool bIsSecondClick = false;
             if (m_timeMeasure.elapsed() <= QApplication::doubleClickInterval()) {
                bIsSecondClick = true;  // of a possible double click

@@ -48,6 +48,7 @@ static const char* const not_close_xpm[]={
 KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position, int flags)
 : QWidget(parent),KDockContainer()
 {
+  m_tabSwitching = false;     
   m_block=false;
   m_inserted=-1;
   m_mainWin = win;
@@ -55,6 +56,7 @@ KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position
   mTabCnt=0;
   m_position = position;
   m_previousTab=-1;
+  m_separatorPos = 17;
 
   kdDebug(760)<<"KMdiDockContainer created"<<endl;
 
@@ -99,7 +101,7 @@ KMdiDockContainer::KMdiDockContainer(QWidget *parent, QWidget *win, int position
 }
 
 void KMdiDockContainer::setStyle(int style) {
-	if (m_tb)  m_tb->setStyle(KMultiTabBar::KMultiTabBarStyle(style));
+        if (m_tb)  m_tb->setStyle(KMultiTabBar::KMultiTabBarStyle(style));
 }
 
 KMdiDockContainer::~KMdiDockContainer()
@@ -130,6 +132,15 @@ void KMdiDockContainer::init()
   {
     parentDockWidget()->setForcedFixedHeight(m_tb->height());
     activateOverlapMode(m_tb->height());
+  }
+
+  // try to restore splitter size
+  if ( parentDockWidget() && parentDockWidget()->parent() )
+  {
+    KDockSplitter *sp= static_cast<KDockSplitter*>(parentDockWidget()->
+                parent()->qt_cast("KDockSplitter"));
+    if ( sp )
+      sp->setSeparatorPosX( m_separatorPos );
   }
 }
 
@@ -252,8 +263,8 @@ void KMdiDockContainer::removeWidget(KDockWidget* dwdg)
   if (!m_map.contains(w)) return;
   int id=m_map[w];
   if (m_tb->isTabRaised(id)) {
-	  m_tb->setTab(id,false);
-	  tabClicked(id);
+          m_tb->setTab(id,false);
+          tabClicked(id);
   }
   m_tb->removeTab(id);
   m_ws->removeWidget(w);
@@ -280,9 +291,9 @@ void KMdiDockContainer::undockWidget(KDockWidget *dwdg)
 
   int id=m_map[w];
   if (m_tb->isTabRaised(id)) {
-	  kdDebug(760)<<"Wiget has been undocked, setting tab down"<<endl;
-	  m_tb->setTab(id,false);
-	  tabClicked(id);
+          kdDebug(760)<<"Wiget has been undocked, setting tab down"<<endl;
+          m_tb->setTab(id,false);
+          tabClicked(id);
   }
 }
 
@@ -323,6 +334,14 @@ void KMdiDockContainer::tabClicked(int t)
   }
   else
   {
+       // try save splitter position
+      if ( parentDockWidget() && parentDockWidget()->parent() )
+      {
+        KDockSplitter *sp= static_cast<KDockSplitter*>(parentDockWidget()->
+                    parent()->qt_cast("KDockSplitter"));
+        if ( sp )
+          m_separatorPos = sp->separatorPos();
+      }
     m_previousTab=t;
 //    oldtab=-1;
     if (m_block) return;
@@ -334,6 +353,8 @@ void KMdiDockContainer::tabClicked(int t)
     }
     m_block=false;
     m_ws->hide ();
+
+
   kdDebug(760)<<"Fixed Width:"<<m_tb->width()<<endl;
   if (m_vertical)
   parentDockWidget()->setForcedFixedWidth(m_tb->width()+2); // strange why it worked before at all
@@ -486,6 +507,15 @@ void KMdiDockContainer::save(KConfig* cfg,const QString& group_or_prefix)
   if (isOverlapMode()) cfg->writeEntry("overlapMode","true");
     else cfg->writeEntry("overlapMode","false");
 
+  // try to save the splitter position
+  if ( parentDockWidget() && parentDockWidget()->parent() )
+  {
+    KDockSplitter *sp= static_cast<KDockSplitter*>(parentDockWidget()->
+                parent()->qt_cast("KDockSplitter"));
+    if ( sp )
+      cfg->writeEntry( "separatorPos", m_separatorPos );
+  }
+
   QPtrList<KMultiTabBarTab>* tl=m_tb->tabs();
   QPtrListIterator<KMultiTabBarTab> it(*tl);
   QStringList::Iterator it2=itemNames.begin();
@@ -522,6 +552,7 @@ void KMdiDockContainer::load(KConfig* cfg,const QString& group_or_prefix)
   else
     deactivateOverlapMode();
 
+  m_separatorPos = cfg->readNumEntry( "separatorPos", 18 );
 
   int i=0;
   QString raise;

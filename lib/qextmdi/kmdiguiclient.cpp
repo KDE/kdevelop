@@ -22,6 +22,7 @@
 
 #include <qpopupmenu.h>
 #include <kapplication.h>
+#include <kconfig.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
 #include <klocale.h>
@@ -151,11 +152,13 @@ KXMLGUIClient( mdiMainFrm )
     m_gotoToolDockMenu->insert(new KAction(i18n("Next Tool View"),ALT+CTRL+Key_Right,m_mdiMainFrm,SLOT(nextToolViewInDock()),
 		actionCollection(),"kmdi_next_toolview"));
 
+    actionCollection()->readShortcutSettings( "Shortcuts", kapp->config() );
 }
 
 KMDIGUIClient::~KMDIGUIClient()
 {
 
+//     actionCollection()->writeShortcutSettings( "KMDI Shortcuts", kapp->config() );
     for (uint i=0;i<m_toolViewActions.count();i++)
 	    disconnect(m_toolViewActions.at(i),0,this,0);
 
@@ -164,7 +167,6 @@ KMDIGUIClient::~KMDIGUIClient()
     m_documentViewActions.setAutoDelete( false );
     m_documentViewActions.clear();
 }
-
 
 void KMDIGUIClient::changeViewMode(int id) {
 	switch (id) {
@@ -209,8 +211,8 @@ void KMDIGUIClient::setupActions()
       if (m_toolViewActions.count()<3)
 	for (uint i=0;i<m_toolViewActions.count();i++)
 		addList.append(m_toolViewActions.at(i));
-      else
-        addList.append(m_toolMenu);
+	else
+      addList.append(m_toolMenu);
       if (m_mdiMode==KMdi::IDEAlMode) addList.append(m_gotoToolDockMenu);
       if (m_mdiModeAction) addList.append(m_mdiModeAction);
       kdDebug(760)<<"KMDIGUIClient::setupActions: plugActionList"<<endl;
@@ -221,12 +223,25 @@ void KMDIGUIClient::setupActions()
 
 void KMDIGUIClient::addToolView(KMdiToolViewAccessor* mtva) {
 	kdDebug(760)<<"*****void KMDIGUIClient::addToolView(KMdiToolViewAccessor* mtva)*****"<<endl;
+//	kdDebug()<<"name: "<<mtva->wrappedWidget()->name()<<endl;
+	QString aname = QString("kmdi_toolview_") + mtva->wrappedWidget()->name();
+
+	// try to read the action shortcut
+	KShortcut sc;
+	KConfig *cfg = kapp->config();
+	QString _grp = cfg->group();
+	cfg->setGroup("Shortcuts");
+// 	if ( cfg->hasKey( aname ) )
+		sc = KShortcut( cfg->readEntry( aname, "" ) );
+	cfg->setGroup( _grp );
 	KAction *a=new ToggleToolViewAction(i18n("Show %1").arg(mtva->wrappedWidget()->caption()),
-		QString::null,dynamic_cast<KDockWidget*>(mtva->wrapperWidget()),m_mdiMainFrm,actionCollection() );
+		/*QString::null*/sc,dynamic_cast<KDockWidget*>(mtva->wrapperWidget()),
+		m_mdiMainFrm,actionCollection(), aname.latin1() );
 	connect(a,SIGNAL(destroyed(QObject*)),this,SLOT(actionDeleted(QObject*)));
 	m_toolViewActions.append(a);
 	m_toolMenu->insert(a);
 	mtva->d->action=a;
+
 	setupActions();
 }
 
@@ -269,3 +284,4 @@ void KMDIGUIClient::mdiModeHasBeenChangedTo(KMdi::MdiMode mode) {
 }
 
 
+// kate: space-indent off;
