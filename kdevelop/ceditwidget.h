@@ -207,14 +207,20 @@ protected: // Protected methods
 protected slots:
   void slotLookUp();
   void slotManpage();
+  void slotEmitTagOpenFile();
+  void slotEmitTagDefinition();
+  void slotEmitTagDeclaration();
 
 public slots:
-	/** user wants run to the cursor position */
-	void slotRunToCursor();
-	/** user wants add the search text to the watch variable list */
-	void slotAddWatchVariable();
+  /** user wants run to the cursor position */
+  void slotRunToCursor();
+  /** user wants add the search text to the watch variable list */
+  void slotAddWatchVariable();
 
 signals:
+ void tagOpenFile(QString text);
+ void tagDefinition(QString text);
+ void tagDeclaration(QString text);
  void manpage(QString text);
  void lookUp(QString text);
  void grepText(QString text);

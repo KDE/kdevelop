@@ -1565,3 +1565,45 @@ void SaveAllDialog::cancel()
 }
 
 /***************************************************************************/
+/**
+ * Open the file that corresponds to tag
+ */
+void CKDevelop::slotTagOpenFile(QString text)
+{
+  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << text << "\n";
+  CTagsDataBase& tagsDB = prj->ctagsDataBase();
+  if (tagsDB.is_init()) {
+    kdDebug() << "found tags data base\n";
+    if (const CTagList* taglist = tagsDB.ctaglist(text))
+    {
+      int ntags = taglist->count();
+      kdDebug() << "found: " << ntags << " entries for: "
+                << text << "\n";
+      // should only be one but we can open all we find
+      for (int it=0; it<ntags; ++it)
+      {
+        const CTag& tag = (*taglist)[it];
+        char t = tag.type();
+        kdDebug() << "tag number: " << it << " type= " << t << "\n";
+        if (t=='F') { // filename
+          kdDebug() << "open file " << tag.file() << "\n";
+          switchToFile(tag.file());
+        }
+      }
+    }
+  }
+}
+/**
+ * Find and open files that contain definition corresponding to tag
+ */
+void CKDevelop::slotTagDefinition(QString tag)
+{
+  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << tag << "\n";
+}
+/**
+ * Find and open files that contain declaration corresponding to tag
+ */
+void CKDevelop::slotTagDeclaration(QString tag)
+{
+  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << tag << "\n";
+}

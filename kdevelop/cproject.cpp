@@ -16,6 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ckdevelop.h"
 #include "cproject.h"
 
 #include "vc/versioncontrol.h"
@@ -1873,4 +1874,21 @@ bool CProject::isEmpty() {
 	QStrList all;
 	getAllFiles(all);
 	return all.isEmpty();
+}
+
+/**
+ * CProject* currentProject();
+ *
+ * Purpose: Return a pointer to the current CProject object
+ *          This is at least a little bit nicer than accessing
+ *          the global CKDevelop object directly.
+ * Author:  rokrau
+ * In:      N/A
+ * Out:     N/A
+ * Return:  a pointer to the current CProject
+ **/
+CProject* currentProject()
+{
+  CKDevelop* gkdevelop = dynamic_cast<CKDevelop*>(qApp->mainWidget());
+  return gkdevelop?gkdevelop->getProject():0L;
 }

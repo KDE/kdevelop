@@ -714,6 +714,10 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
   if(!pEW) return 0L;
   pEW->setCaption(pDoc->fileName());
 
+  // connec the tag related functionality
+  connect( pEW, SIGNAL(tagOpenFile(QString)),m_pParent, SLOT(slotTagOpenFile(QString)));
+  connect( pEW, SIGNAL(tagDefinition(QString)),m_pParent, SLOT(slotTagDefinition(QString)));
+  connect( pEW, SIGNAL(tagDeclaration(QString)),m_pParent, SLOT(slotTagDeclaration(QString)));
   //connect the editor lookup function with slotHelpSText
   connect( pEW, SIGNAL(manpage(QString)),m_pParent, SLOT(slotHelpManpage(QString)));
   connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));

@@ -20,6 +20,49 @@
 #include "../cproject.h"
 #include "cctags.h"
 
+/**
+ *  parse extension that exuberant ctags appends to excmd
+ *  we currently only look a the type (or kind) of the tag
+ **/
+void CTag::parse_ext()
+{
+  // split extension which is tab seperated, according to ctags manual
+  QChar sep('\t');
+  QStringList extlist = QStringList::split(sep,m_ext);
+  int n_ext = extlist.count();
+  if (n_ext==0) return ;
+  for (QStringList::Iterator it=extlist.begin() ; it!=extlist.end() ; ++it)
+  {
+    QString key, value;
+    char c=':'; // the seperator for key:value pairs
+    int np=(*it).find(c);
+    // if no seperator, this must be a kind key
+    if (np==-1) {
+      key = "kind";
+      value = (*it);
+    }
+    else {
+      key = (*it).left(np);
+      value = (*it).right(np+1);
+    }
+    // indicates the type, or kind, of tag
+    if (key=="kind")
+    {
+      m_type = value[0].latin1();
+    }
+    // Indicates the visibility of this class member
+    else if (key=="acces") {}
+    // Indicates that the tag has file-limited visibility.
+    else if (key=="file") {}
+    // indicates a implementation (abstract vs. concrete, "virtual" or "pure virtual")
+    else if (key=="implementation") {}
+    // comma-separated list of classes from which this class is derived
+    else if (key=="inherits") {}
+    // unknown
+    else {}
+  }
+}
+
 
 CTagsDataBase::CTagsDataBase()
   : m_init(false), m_taglistdict(), m_file(QString::null)
@@ -142,4 +185,20 @@ void CTagsDataBase::reload()
 {
   if (m_init) unload();
   load();
+}
+
+/** the number of CTag entries found for a tag */
+int CTagsDataBase::nCTags(const QString& tag) const
+{
+  if (!m_init) return 0;
+  CTagList* ctaglist = m_taglistdict[tag];
+  if (!ctaglist) return 0;
+  return ctaglist->count();
+}
+
+/** return the list of CTag entries for a tag */
+const CTagList* CTagsDataBase::ctaglist(const QString& tag) const
+{
+  if (!m_init) return 0L;
+  return m_taglistdict[tag];
 }

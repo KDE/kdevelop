@@ -32,7 +32,7 @@ class KSimpleConfig;
 // the currently supported version.
 #define KDEVELOP_PRJ_VERSION "1.3"
 
-/** This type defines the different types that can 
+/** This type defines the different types that can
   * exist in a project. 
   * @author Jonas Nordin
   */
@@ -564,4 +564,11 @@ private: // Protected attributes
   /** ctags command, and command line options */
   CtagsCommand m_ctags_cmd;
 };
+/**
+ * return a pointer to the current CProject object
+ * this is at least a little bit nicer than accessing
+ * the global CKDevelop object directly
+ * author: rokrau
+ **/
+CProject* currentProject();
 #endif

@@ -46,18 +46,30 @@ class CTag {
 public:
   /** default constructor */
   CTag() :
-    m_file(QString::null), m_excmd(QString::null), m_ext(QString::null)
+    m_file(QString::null), m_excmd(QString::null),
+    m_ext(QString::null), m_type(' ')
     {}
   /** constructor, requires filename, ex command and extension as arguments */
   CTag(QString _file, QString _excmd, QString _ext) :
-    m_file(_file), m_excmd(_excmd), m_ext(_ext)
-    {}
+    m_file(_file), m_excmd(_excmd), m_ext(_ext), m_type(' ')
+    {
+      parse_ext();
+    }
   /** destructor */
  ~CTag() {}
-//private: not yet
+  /** return the tag type */
+  char type() const {return m_type;}
+  /** return the file name */
+  QString file() const {return m_file;}
+  /** return stripped search pattern for kwrite based editor */
+  QString pattern() ;
+protected:
+  void parse_ext(); // parse exuberant extension
+private:
   QString m_file;   // file name
   QString m_excmd;  // vi (ex) search command
   QString m_ext;    // exuberant ctags extension
+  char    m_type;   // tag type from ctags extension
 };
 /**
  * \class CTagList
@@ -78,7 +90,7 @@ public:
   CTagList(QString _tag) : QValueList<CTag>(), m_tag(_tag) {}
   /** destructor */
   ~CTagList() {}
-//private: not yet
+private:
   QString m_tag;    // tag name
 };
 /**
@@ -106,7 +118,6 @@ public:
   CTagsDataBase();
   /** destructor */
   ~CTagsDataBase();
-//private:
   /** create a tags file for a CProject */
   void create_tags(KShellProcess& process, CProject& project);
   /** load a tags file and create the search database */
@@ -115,6 +126,12 @@ public:
   void unload();
   /** reload, unload current and load regenerated search database */
   void reload();
+  /** the number of CTag entries found for a tag */
+  int nCTags(const QString& tag) const ;
+  /** return the list of CTag entries for a tag */
+  const CTagList* ctaglist(const QString& tag) const ;
+  /** return whether CTagsDataBase is initialized */
+  bool is_init() const {return m_init;}
 private:
   /** true if search database is initialized */
   bool m_init;
@@ -137,9 +154,12 @@ public:
     m_command = "ctags";
     m_totals = "--totals=yes";
     m_excmd_pattern = "--excmd=pattern";
-    m_file_scope = "--file-scope=no";
+    m_file_scope = "--file-scope=yes";
     m_file_tags = "--file-tags=yes";
-    m_ctypes = "--c-types=+C+p";
+    m_ctypes = "--c-types=+px";
+    m_fortran_types = "--fortran-types=-l+L";
+    m_exclude = "*.inc *.bck glimpse*";
+    m_fields = "+i";
   }
   ~CtagsCommand() {}
 private:
@@ -149,5 +169,8 @@ private:
   QString m_file_scope;
   QString m_file_tags;
   QString m_ctypes;
+  QString m_fortran_types;
+  QString m_exclude;
+  QString m_fields;
 };
 #endif

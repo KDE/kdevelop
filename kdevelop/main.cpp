@@ -30,7 +30,7 @@
 #include <kcmdlineargs.h>
 #include <kglobal.h>
 #include <klocale.h>
-
+#include <kdebug.h>
 
 static const char *description =
         I18N_NOOP("The KDevelop C/C++ Integrated Development Environment");
@@ -101,6 +101,11 @@ int main(int argc, char* argv[])
       delete install;
     }
     CKDevelop* kdevelop = new CKDevelop();
+    /* rokrau: i believe this has to be set by hand           *
+     * and i hope this doesnt screw things up badly,           *
+     * the guys on #kde wouldn't give me an answer, no really */
+    a.setMainWidget(kdevelop);
+
     kdevelop->completeStartup(args->count() == 0);
 
     if (bInstall)

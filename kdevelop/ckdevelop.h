@@ -746,6 +746,18 @@ public:
    * Creates and shows a new MDI view window depending on the last focused view type
    */
   void slotCreateNewViewWindow();
+  /**
+   * Open the file that corresponds to tag
+   */
+  void slotTagOpenFile(QString tag);
+  /**
+   * Find and open files that contain definition corresponding to tag
+   */
+  void slotTagDefinition(QString tag);
+  /**
+   * Find and open files that contain declaration corresponding to tag
+   */
+  void slotTagDeclaration(QString tag);
 
 protected: // Protected methods
 

@@ -18,7 +18,7 @@
 
 #include "ceditwidget.h"
 
-//#include <kdebug.h>
+#include <kdebug.h>
 #include "kwdoc.h"
 #include "highlight.h"
 #include "cproject.h"
@@ -69,8 +69,9 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->setItemEnabled(ID_EDIT_PASTE,false);
 
   pop->insertSeparator();
-  pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotTagsGotoDefinition()),0,ID_EDIT_TAGS_DEFINITION);
-  pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotTagsGotoDeclaration()),0,ID_EDIT_TAGS_DECLARATION);
+  pop->insertItem(/*SmallIconSet("grep"),*/i18n("Open File"),this,SLOT(slotEmitTagOpenFile()),0,ID_EDIT_TAGS_OPEN);
+  pop->insertItem(/*SmallIconSet("grep"),*/i18n("Goto Definition"),this,SLOT(slotEmitTagDefinition()),0,ID_EDIT_TAGS_DEFINITION);
+  pop->insertItem(/*SmallIconSet("grep"),*/i18n("Goto Declaration"),this,SLOT(slotEmitTagDeclaration()),0,ID_EDIT_TAGS_DECLARATION);
 
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
@@ -345,10 +346,59 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
 
-    // lookup string class definition in tags database
-    pop->changeItem(SmallIconSet("help"),i18n("Goto Definition: ") + str,ID_EDIT_TAGS_DEFINITION); // tag file search
-    pop->changeItem(SmallIconSet("help"),i18n("Goto Declaration: ") + str,ID_EDIT_TAGS_DECLARATION); // tag file search
-
+    // these are disabled by default
+    pop->setItemEnabled(ID_EDIT_TAGS_OPEN,false);
+    pop->setItemEnabled(ID_EDIT_TAGS_DEFINITION,false);
+    pop->setItemEnabled(ID_EDIT_TAGS_DECLARATION,false);
+    CProject* prj = currentProject();
+    if ((!str.isEmpty()) && prj)
+    {
+      CTagsDataBase& tagsDB = prj->ctagsDataBase();
+      if (tagsDB.is_init()) {
+        kdDebug() << "found tags data base\n";
+        // remember that we are searching for searchtext not for str!
+        if (const CTagList* taglist = tagsDB.ctaglist(searchtext))
+        {
+          int ntags = taglist->count();
+          kdDebug() << "found: " << ntags << " entries for: "
+                    << searchtext << "\n";
+          for (int it=0; it<ntags; ++it)
+          {
+            const CTag& tag = (*taglist)[it];
+            char t = tag.type();
+            kdDebug() << "tag number: " << it << " type= " << t << "\n";
+            switch (t) {
+              case 'F': // filename
+                pop->setItemEnabled(ID_EDIT_TAGS_OPEN,true);
+                pop->changeItem(/*SmallIconSet("help"),*/i18n("Open File: ") + str,ID_EDIT_TAGS_OPEN);
+              break;
+              case 'd': // macro definitions (and #undef names)
+              case 'f': // function definitions
+              case 'S': // S subroutines (fortran)
+              case 't': // typedefs
+              case 'v': // v variable definitions
+                pop->setItemEnabled(ID_EDIT_TAGS_DEFINITION,true);
+                pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Definition: ") + str,ID_EDIT_TAGS_DEFINITION); // tag file search
+              break;
+              case 'c': // c classes
+              case 'e': // enumerators
+              case 'g': // enumeration names
+              case 'L': // fortran locals
+              case 'm': // class, struct, or union members
+              case 'n': // namespaces
+              case 'p': // function prototypes and declarations
+              case 's': // structure names
+              case 'u': // union names
+              case 'x': // x extern and forward variable declarations
+              default:
+                pop->setItemEnabled(ID_EDIT_TAGS_DECLARATION,true);
+                pop->changeItem(/*SmallIconSet("help"),*/i18n("Goto Declaration: ") + str,ID_EDIT_TAGS_DECLARATION);
+              break;
+            }
+          }
+        }
+      }
+    }
     pop->changeItem(SmallIconSet("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(SmallIconSet("help"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
     pop->changeItem(SmallIconSet("help"),i18n("manpage: ") + str,ID_HELP_MANPAGE);
@@ -364,6 +414,15 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
  *                                                                   *
  ********************************************************************/
 
+void CEditWidget::slotEmitTagOpenFile(){
+  emit tagOpenFile(searchtext);
+}
+void CEditWidget::slotEmitTagDefinition(){
+  emit tagDefinition(searchtext);
+}
+void CEditWidget::slotEmitTagDeclaration(){
+  emit tagDeclaration(searchtext);
+}
 void CEditWidget::slotManpage(){
   emit manpage("man:/"+searchtext+"(3)");
 }
