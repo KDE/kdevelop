@@ -42,11 +42,11 @@ class SnippetWidget : public KListView, public QToolTip
   Q_OBJECT
 
 public:
-
     SnippetWidget(SnippetPart *part);
     ~SnippetWidget();
     QPtrList<SnippetItem> * getList() { return (&_list); }
     void writeConfig();
+    void initConfigOldVersion(KConfig *cfg);
     SnippetConfig *  getSnippetConfig() { return (&_SnippetConfig); }
 
 
@@ -55,7 +55,6 @@ private slots:
 
 protected:
     SnippetPart * m_part;
-    SnippetDlg * m_dialog;
     void maybeTip( const QPoint & );
     bool acceptDrag (QDropEvent *event) const;
 
@@ -75,6 +74,7 @@ public slots:
     void slotRemove();
     void slotEdit();
     void slotAdd();
+    void slotAddGroup();
 
 protected slots:
     void showPopupMenu( QListViewItem * item, const QPoint & p, int );

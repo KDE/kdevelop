@@ -35,6 +35,7 @@
 #include <kdebug.h>
 #include <qdragobject.h>
 #include <qtimer.h>
+#include <kcombobox.h>
 
 #include <kdevcore.h>
 #include "kdevcore.h"
@@ -51,9 +52,6 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
 		: KListView(0, "snippet widget"), QToolTip( viewport() ),
 		m_part( part )
 {
-
-    m_dialog = new SnippetDlg(this, "SnippetDlg", true);
-
     // init the QPtrList
     _list.setAutoDelete(TRUE);
 
@@ -65,6 +63,7 @@ SnippetWidget::SnippetWidget(SnippetPart *part)
     setAcceptDrops(true);
     setDragEnabled(false);
     setDropVisualizer(false);
+    setRootIsDecorated(true);
 
     //connect the signals
     connect( this, SIGNAL( contextMenuRequested ( QListViewItem *, const QPoint & , int ) ),
@@ -83,7 +82,16 @@ SnippetWidget::~SnippetWidget()
 {
   writeConfig();
   delete _cfg;
-  _list.clear();
+
+  /* We need to delete the child items before the parent items
+     otherwise KDevelop would crash on exiting */
+  SnippetItem * item;
+  while (_list.count() > 0) {
+    for (item=_list.first(); item; item=_list.next()) {
+      if (item->childCount() == 0)
+          _list.remove(item);
+    }
+  }
 }
 
 
@@ -93,12 +101,47 @@ SnippetWidget::~SnippetWidget()
  */
 void SnippetWidget::slotAdd()
 {
-  kdDebug(26) << "Ender slotAdd()" << endl;
-  m_dialog->snippetName->clear();
-  m_dialog->snippetText->clear();
+  kdDebug(9035) << "Ender slotAdd()" << endl;
+  SnippetDlg dlg(this, "SnippetDlg", true);
 
-  if (m_dialog->exec() == QDialog::Accepted) {
-    _list.append( new SnippetItem(this, m_dialog->snippetName->text(), m_dialog->snippetText->text()) );
+  /*check if the user clicked a SnippetGroup
+    If not, we set the group variable to the SnippetGroup 
+    which the selected item is a child of*/
+  SnippetGroup * group = dynamic_cast<SnippetGroup*>(selectedItem());
+  if (!group)
+    group = dynamic_cast<SnippetGroup*>(selectedItem()->parent());
+  
+  /*fill the combobox with the names of all SnippetGroup entries*/
+  for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+    if (dynamic_cast<SnippetGroup*>(it)) {
+      dlg.cbGroup->insertItem(it->getName());
+    }
+  }
+  dlg.cbGroup->setCurrentText(group->getName());
+  
+  if (dlg.exec() == QDialog::Accepted) {
+      group = dynamic_cast<SnippetGroup*>(SnippetItem::findItemByName(dlg.cbGroup->currentText(), _list));
+      _list.append( new SnippetItem(group, dlg.snippetName->text(), dlg.snippetText->text()) );
+  }
+}
+
+
+/*!
+    \fn SnippetWidget::slotAddGroup()
+    Opens the didalog to add a snippet
+ */
+void SnippetWidget::slotAddGroup()
+{
+  kdDebug(9035) << "Ender slotAddGroup()" << endl;
+  SnippetDlg dlg(this, "SnippetDlg", true);
+  dlg.snippetText->setEnabled(false);
+  dlg.snippetText->setText("GROUP");
+  delete dlg.cbGroup;
+  delete dlg.textLabelGroup;
+  dlg.setCaption(i18n("Add Group"));
+
+  if (dlg.exec() == QDialog::Accepted) {
+    _list.append( new SnippetGroup(this, dlg.snippetName->text(), SnippetGroup::getMaxId()) );
   }
 }
 
@@ -111,12 +154,27 @@ void SnippetWidget::slotRemove()
 {
   //get current data
   QListViewItem * item = currentItem();
-  SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
-  if (!pSnippet)
+  SnippetItem *snip = dynamic_cast<SnippetItem*>( item );
+  SnippetGroup *group = dynamic_cast<SnippetGroup*>( item );
+  if (!snip)
     return;
 
-  removeItem(item);
-  _list.remove(pSnippet);
+  if (group) {
+    if (group->childCount() > 0 &&
+        KMessageBox::questionYesNo(this, i18n("Do you really want to remove this group and all it's snippets?")) 
+        == KMessageBox::No)
+      return;
+
+    for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+      if (it->getParent() == group->getId()) {
+        kdDebug(9035) << "remove " << it->getName() << endl;
+        _list.remove(it);
+      }
+    }
+  }
+
+  kdDebug(9035) << "remove " << snip->getName() << endl;
+  _list.remove(snip);
 }
 
 
@@ -135,20 +193,45 @@ void SnippetWidget::slotEdit()
     return;
 
   //init the dialog
-  m_dialog->snippetName->setText(pSnippet->getName());
-  m_dialog->snippetText->setText(pSnippet->getText());
-  m_dialog->btnAdd->setText(i18n("&Apply"));
-
-  if (m_dialog->exec() == QDialog::Accepted) {
-    //update the KListView and the SnippetItem
-    item->setText( 0, m_dialog->snippetName->text() );
-    pSnippet->setName( m_dialog->snippetName->text() );
-    pSnippet->setText( m_dialog->snippetText->text() );
-
-    setSelected(item, TRUE);
+  SnippetDlg dlg(this, "SnippetDlg", true);
+  dlg.snippetName->setText(pSnippet->getName());
+  dlg.snippetText->setText(pSnippet->getText());
+  dlg.btnAdd->setText(i18n("&Apply"));
+  
+  if (dynamic_cast<SnippetGroup*>(item)){
+    dlg.snippetText->setEnabled(FALSE);
+    delete dlg.cbGroup;
+    dlg.cbGroup = NULL;
+    delete dlg.textLabelGroup;
+    dlg.setCaption(i18n("Edit Group"));
+  } else {
+    dlg.setCaption(i18n("Edit Snippet"));
+    /*fill the combobox with the names of all SnippetGroup entries*/
+    for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+      if (dynamic_cast<SnippetGroup*>(it)) {
+        dlg.cbGroup->insertItem(it->getName());
+      }
+    }
+    dlg.cbGroup->setCurrentText(SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName());
   }
 
-  m_dialog->btnAdd->setText(i18n("Add"));
+  if (dlg.exec() == QDialog::Accepted) {
+    //update the KListView and the SnippetItem
+    item->setText( 0, dlg.snippetName->text() );
+    pSnippet->setName( dlg.snippetName->text() );
+    pSnippet->setText( dlg.snippetText->text() );
+
+    /* if the user changed the parent we need to move the snippet */
+    if (dlg.cbGroup != NULL && 
+        SnippetItem::findGroupById(pSnippet->getParent(), _list)->getName() != dlg.cbGroup->currentText()) {
+      SnippetGroup * newGroup = dynamic_cast<SnippetGroup*>(SnippetItem::findItemByName(dlg.cbGroup->currentText(), _list));
+      pSnippet->parent()->takeItem(pSnippet);
+      newGroup->insertItem(pSnippet);
+      pSnippet->resetParent();
+    }
+    
+    setSelected(item, TRUE);
+  }
 }
 
 
@@ -160,7 +243,7 @@ void SnippetWidget::slotEdit()
 void SnippetWidget::slotListDblClicked(QListViewItem * item, const QPoint &, int)
 {
   SnippetItem *pSnippet = dynamic_cast<SnippetItem*>( item );
-  if (!pSnippet)
+  if (!pSnippet || dynamic_cast<SnippetGroup*>(item))
       return;
 
   //process variables if any, then insert into the active view
@@ -204,22 +287,43 @@ void SnippetWidget::writeConfig()
                                      //they get overwritten by a more recent entry
   _cfg->setGroup("SnippetPart");
 
-  _cfg->writeEntry("snippetCount", _list.count());
   SnippetItem *item;
+  SnippetGroup *group;
   QString strKeyName="";
   QString strKeyText="";
-  int iCount = 1;
+  QString strKeyId="";
+  
+  int iSnipCount = 0;
+  int iGroupCount = 0;
+
   for ( item = _list.first(); item; item = _list.next() ) {  //write the snippet-list
-    strKeyName=QString("snippetName_%1").arg(iCount);
-    strKeyText=QString("snippetText_%1").arg(iCount);
+    kdDebug(9035) << "SnippetWidget::writeConfig() " << item->getName() << endl;
+    if (group = dynamic_cast<SnippetGroup*>(item)) {
+      kdDebug(9035) << "-->GROUP " << item->getName() << group->getId() << " " << iGroupCount<< endl;
+      strKeyName=QString("snippetGroupName_%1").arg(iGroupCount);
+      strKeyId=QString("snippetGroupId_%1").arg(iGroupCount);
 
-    _cfg->writeEntry(strKeyName, item->getName());
-    _cfg->writeEntry(strKeyText, item->getText());
-
-    iCount++;
+      _cfg->writeEntry(strKeyName, group->getName());
+      _cfg->writeEntry(strKeyId, group->getId());
+      iGroupCount++;
+    } else if (dynamic_cast<SnippetItem*>(item)) {
+      kdDebug(9035) << "-->ITEM " << item->getName() << item->getParent() << " " << iSnipCount << endl;
+      strKeyName=QString("snippetName_%1").arg(iSnipCount);
+      strKeyText=QString("snippetText_%1").arg(iSnipCount);
+      strKeyId=QString("snippetParent_%1").arg(iSnipCount);
+    
+      _cfg->writeEntry(strKeyName, item->getName());
+      _cfg->writeEntry(strKeyText, item->getText());
+      _cfg->writeEntry(strKeyId, item->getParent());
+      iSnipCount++;
+    } else {
+      kdDebug(9035) << "-->ERROR " << item->getName() << endl;
+    }
   }
+  _cfg->writeEntry("snippetCount", iSnipCount);
+  _cfg->writeEntry("snippetGroupCount", iGroupCount);
 
-  iCount = 1;
+  int iCount = 1;
   QMap<QString, QString>::Iterator it;
   for ( it = _mapSaved.begin(); it != _mapSaved.end(); ++it ) {  //write the saved variable values
     if (it.data().length()<=0) continue;  //is the saved value has no length -> no need to save it
@@ -247,6 +351,37 @@ void SnippetWidget::writeConfig()
 
 
 /*!
+    This function was introduced together with the grouping-feature.
+    As far as some guys might have some snippets stored in the "old" way
+    we need to create a "DEFAULT" group into which we can import all snippets
+ */
+void SnippetWidget::initConfigOldVersion(KConfig *cfg)
+{
+  SnippetGroup * group = new SnippetGroup(this, "DEFAULT", 1);
+  _list.append(group);
+  
+  int iCount = cfg->readNumEntry("snippetCount", 0);
+  QString strKeyName="";
+  QString strKeyText="";
+  for ( int i=0; i<iCount; i++) {  //read the snippet-list
+    strKeyName=QString("snippetName_%1").arg(i);
+    strKeyText=QString("snippetText_%1").arg(i);
+
+    QString strNameVal="";
+    QString strTextVal="";
+
+    strNameVal = cfg->readEntry(strKeyName, "");
+    strTextVal = cfg->readEntry(strKeyText, "");
+
+    if (strNameVal != "" && strTextVal != "") {
+      SnippetItem * item = new SnippetItem(group, strNameVal, strTextVal);
+      _list.append(item);
+    }
+  }
+}
+
+
+/*!
     \fn SnippetWidget::initConfig()
     Initial read the cofig file
  */
@@ -257,31 +392,69 @@ void SnippetWidget::initConfig()
 
   _cfg->setGroup("SnippetPart");
 
-  int iCount = _cfg->readNumEntry("snippetCount", 0);
   QString strKeyName="";
   QString strKeyText="";
+  QString strKeyId="";
   SnippetItem *item;
+  SnippetGroup *group;
 
-  for ( int i=1; i<=iCount; i++) {  //read the snippet-list
-    strKeyName=QString("snippetName_%1").arg(i);
-    strKeyText=QString("snippetText_%1").arg(i);
+  kdDebug(9035) << "SnippetWidget::initConfig() " << endl;
+
+  //if entry doesn't get found, this will return -1 which we will need a bit later
+  int iCount = _cfg->readNumEntry("snippetGroupCount", -1);
+  
+  for ( int i=0; i<iCount; i++) {  //read the group-list
+    strKeyName=QString("snippetGroupName_%1").arg(i);
+    strKeyId=QString("snippetGroupId_%1").arg(i);
 
     QString strNameVal="";
-    QString strTextVal="";
+    int iIdVal=-1;
 
     strNameVal = _cfg->readEntry(strKeyName, "");
-    strTextVal = _cfg->readEntry(strKeyText, "");
+    iIdVal = _cfg->readNumEntry(strKeyId, -1);
+    kdDebug(9035) << "Read group " << strNameVal << " " << iIdVal << endl;
 
-    if (strNameVal != "" && strTextVal != "") {
-      item = new SnippetItem(this, strNameVal, strTextVal);
-      _list.append(item);
+    if (strNameVal != "" && iIdVal != -1) {
+      group = new SnippetGroup(this, strNameVal, iIdVal);
+      kdDebug(9035) << "Created group " << group->getName() << " " << group->getId() << endl;
+      _list.append(group);
     }
   }
-
+  
+  /* Check if the snippetGroupCount property has been found
+     if iCount is -1 this means, that the user has his snippets
+     stored without groups. Therefore we will call the 
+     initConfigOldVersion() function below */
+  if (iCount != -1) {
+    iCount = _cfg->readNumEntry("snippetCount", 0);
+    for ( int i=0; i<iCount; i++) {  //read the snippet-list
+        strKeyName=QString("snippetName_%1").arg(i);
+        strKeyText=QString("snippetText_%1").arg(i);
+        strKeyId=QString("snippetParent_%1").arg(i);
+    
+        QString strNameVal="";
+        QString strTextVal="";
+        int iParentVal = -1;
+    
+        strNameVal = _cfg->readEntry(strKeyName, "");
+        strTextVal = _cfg->readEntry(strKeyText, "");
+        iParentVal = _cfg->readNumEntry(strKeyId, -1);
+        kdDebug(9035) << "Read item " << strNameVal << " " << iParentVal << endl;
+    
+        if (strNameVal != "" && strTextVal != "" && iParentVal != -1) {
+        item = new SnippetItem(SnippetItem::findGroupById(iParentVal, _list), strNameVal, strTextVal);
+        kdDebug(9035) << "Created item " << item->getName() << " " << item->getParent() << endl;
+        _list.append(item);
+        }
+    }
+  } else {
+    kdDebug(9035) << "found old version of snippet-configfile" << endl;
+    initConfigOldVersion(_cfg);
+  }
 
   iCount = _cfg->readNumEntry("snippetSavedCount", 0);
 
-  for ( int i=1; i<=iCount; i++) {  //read the snippet-list
+  for ( int i=1; i<=iCount; i++) {  //read the saved-values and store in QMap
     strKeyName=QString("snippetSavedName_%1").arg(i);
     strKeyText=QString("snippetSavedVal_%1").arg(i);
 
@@ -317,7 +490,9 @@ void SnippetWidget::maybeTip( const QPoint & p )
 
 	QRect r = itemRect( item );
 
-	if ( item && r.isValid() && _SnippetConfig.useToolTips() )
+	if (!dynamic_cast<SnippetGroup*>(item) && 
+        r.isValid() && 
+        _SnippetConfig.useToolTips() )
 	{
 		tip( r, item->getText() );  //show the tip
 	}
@@ -331,19 +506,19 @@ void SnippetWidget::showPopupMenu( QListViewItem * item, const QPoint & p, int )
 {
 	KPopupMenu popup;
 
+	SnippetItem * selectedItem = static_cast<SnippetItem *>(item);
 	if ( item ) {
-		SnippetItem * selectedItem = static_cast<SnippetItem *>(item);
+		popup.insertTitle( selectedItem->getName() );
 
-		popup.insertTitle( i18n("Snippet: ") + selectedItem->getName() );
-
-		popup.insertItem( i18n("Add..."), this, SLOT( slotAdd() ) );
+		popup.insertItem( i18n("Add Item..."), this, SLOT( slotAdd() ) );
+		popup.insertItem( i18n("Add Group..."), this, SLOT( slotAddGroup() ) );
 		popup.insertItem( i18n("Edit..."), this, SLOT( slotEdit() ) );
 		popup.insertItem( i18n("Remove"), this, SLOT( slotRemove() ) );
 
 	} else {
 		popup.insertTitle(i18n("Code Snippets"));
 
-		popup.insertItem( i18n("Add..."), this, SLOT( slotAdd() ) );
+		popup.insertItem( i18n("Add Group..."), this, SLOT( slotAddGroup() ) );
 	}
 
 	popup.exec(p);
@@ -660,13 +835,20 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
  */
 bool SnippetWidget::acceptDrag (QDropEvent *event) const
 {
-  kdDebug(9035) << "Format: " << event->format() << endl;
+  kdDebug(9035) << "Format: " << event->format() << "" << event->pos() << endl;
+  
+  QListViewItem * item = itemAt(event->pos());
 
-  if (QString(event->format()).startsWith("text/plain") &&
-      static_cast<SnippetWidget *>(event->source()) != this)
-    return true;
-  else
-    return false;
+  if (item &&
+      QString(event->format()).startsWith("text/plain") &&
+      static_cast<SnippetWidget *>(event->source()) != this) {
+    kdDebug(9035) << "returning TRUE " << endl;
+    return TRUE;
+  } else {
+    kdDebug(9035) << "returning FALSE" << endl;
+    event->acceptAction(FALSE);
+    return FALSE;
+  }
 }
 
 //  fn SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *after)
@@ -675,8 +857,12 @@ bool SnippetWidget::acceptDrag (QDropEvent *event) const
     If it is emitted, we need to construct a new snippet entry with
     the data given
  */
-void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *)
+void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *item)
 {
+  SnippetGroup *group = dynamic_cast<SnippetGroup *>(item);
+  if (!group)
+    group = dynamic_cast<SnippetGroup *>(item->parent());
+
   QCString dropped;
   QByteArray data = e->encodedData("text/plain");
   if ( e->provides("text/plain") && data.size()>0 ) {
@@ -684,12 +870,23 @@ void SnippetWidget::slotDropped(QDropEvent *e, QListViewItem *)
     QString encData(data.data());
     kdDebug(9035) << "encData: " << encData << endl;
 
-    //... then refill the dialog with the given data
-    m_dialog->snippetName->clear();
-    m_dialog->snippetText->setText(encData);
+    //... then fill the dialog with the given data
+    SnippetDlg dlg(this, "SnippetDlg", true);
+    dlg.snippetName->clear();
+    dlg.snippetText->setText(encData);
+    
+    /*fill the combobox with the names of all SnippetGroup entries*/
+    for (SnippetItem *it=_list.first(); it; it=_list.next()) {
+      if (dynamic_cast<SnippetGroup*>(it)) {
+        dlg.cbGroup->insertItem(it->getName());
+      }
+    }
+    dlg.cbGroup->setCurrentText(group->getName());
 
-    if (m_dialog->exec() == QDialog::Accepted) {
-      _list.append( new SnippetItem(this, m_dialog->snippetName->text(), m_dialog->snippetText->text()) );
+    if (dlg.exec() == QDialog::Accepted) {
+      /* get the group that the user selected with the combobox */
+      group = dynamic_cast<SnippetGroup*>(SnippetItem::findItemByName(dlg.cbGroup->currentText(), _list));
+      _list.append( new SnippetItem(group, dlg.snippetName->text(), dlg.snippetText->text()) );
     }
   }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SnippetDlg</class>
 <widget class="QDialog">
     <property name="name">
@@ -70,7 +70,18 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer row="3" column="0">
+                <widget class="KLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>snippetName</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Courier</family>
+                            <pointsize>11</pointsize>
+                        </font>
+                    </property>
+                </widget>
+                <spacer row="4" column="0">
                     <property name="name">
                         <cstring>spacer2</cstring>
                     </property>
@@ -83,33 +94,22 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>149</height>
+                            <height>80</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="KLineEdit" row="0" column="1">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
                         <cstring>snippetName</cstring>
                     </property>
-                    <property name="font">
-                        <font>
-                            <family>Courier</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
                 </widget>
-                <widget class="KTextEdit" row="1" column="1" rowspan="3" colspan="1">
-                    <property name="name">
-                        <cstring>snippetText</cstring>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <family>Courier</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QLabel" row="2" column="0">
                     <property name="name">
                         <cstring>textLabel2</cstring>
                     </property>
@@ -123,18 +123,15 @@
                         <cstring>snippetText</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>textLabelGroup</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Name:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>snippetName</cstring>
+                        <string>Group:</string>
                     </property>
                 </widget>
-                <widget class="QToolButton" row="2" column="0">
+                <widget class="QToolButton" row="3" column="0">
                     <property name="name">
                         <cstring>toolBtnHelp</cstring>
                     </property>
@@ -148,13 +145,29 @@
                         <string>Click here to get to know how to use variables in a snippet</string>
                     </property>
                 </widget>
+                <widget class="KComboBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>cbGroup</cstring>
+                    </property>
+                </widget>
+                <widget class="KTextEdit" row="2" column="1" rowspan="3" colspan="1">
+                    <property name="name">
+                        <cstring>snippetText</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Courier</family>
+                            <pointsize>11</pointsize>
+                        </font>
+                    </property>
+                </widget>
             </grid>
         </widget>
     </grid>
 </widget>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="660">789c85cfcd6e83300c07f03b4f11c10d4d29014241d51e61d38e93a61dec24145a3ea4ad3b4cd3de7dd809a587490d87e6f7afed24bb54bcbe3c8974177d5ee0d21b613af810a9fd1ac7efb7f7c79f28569550b5507ba1e2872896c288e77972b4c7659f64bc88e059d41a88c9ca2a27b69e6556f1bf7d60b92f88ce536735126da06e4ae21cd83486688879532ba389e740edd9110bb5722096aa51c6124f449d2f939847620500968bc72bf98113b14674aee2b72f2b01fa1071d9870c8c5d6c1d52eab3f6481142e7e8d767fd0979c1d95db3845b25b6c35687c04db21db63a0cad238f0de7fa689af126935ce5a3f57e74453e932ebd65feec9b77ac2329ba9349001fddcee337dfeffd77de1ac9f8f710fd0115979f14</data>
+        <data format="PNG" length="450">89504e470d0a1a0a0000000d4948445200000010000000120806000000523b5e6a0000018949444154789cb592314b03411085bf0b5bac60113b2d2d531f86131bb1b3106c2278b595824542fc0536a276263669a3a0a0767616c29e21b29d709da5a43216420e3c588b33e7dd5e62e7c0b2c5bc37f3e6cd38baaf2106044471c44abd6be0032893fb7b178c4307da19e31d1528a4903fe496a9acef11be8470bd9312a875e06b08774db2a1fbda41f7352a50b0da30bb57af86ed8e01f2cff3cdf291366c1e17f2a5288e90428280c17004973b14a277c1d3ed2995a535180d73a9921432f1e0734438f880ed4e5126805c607e169899cb1788e20804d06b13deb7920eb5df226ed535499111200b0a7e3db0e7b63c68dcbc196a67c59c0ad4df453cdf1c3fbe4f36174cea81141215282727cff3691c9cd03cbf9968ae0a9493bb83ecefee9f9aca4683f0f9a1b0ff31590a996c215de58f92288e8072b21dcbf52c9918a62ba8baa6c0cc90c7b892dd39bd8b2961e3d33bc82a40249df07cf0fc94acfbdab1f1533d58a977cd6efd1016d7d2026ed535365ed8b3a7c95e9bf656bb30828dfb670fac98e4c137fbdd27869f43ed560000000049454e44ae426082</data>
     </image>
 </images>
 <connections>
@@ -177,6 +190,13 @@
         <slot>slotHelp()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>snippetName</tabstop>
+    <tabstop>cbGroup</tabstop>
+    <tabstop>snippetText</tabstop>
+    <tabstop>btnAdd</tabstop>
+    <tabstop>btnCancel</tabstop>
+</tabstops>
 <includes>
     <include location="local" impldecl="in implementation">snippetdlg.ui.h</include>
 </includes>
@@ -188,6 +208,7 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>
