@@ -44,7 +44,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   : QDialog(parent,name,modal,f){
   
   prj = p_prj;
-  setCaption(i18n("New File..."));    
+  setCaption(i18n("New File"));    
 
 	QVBoxLayout * main_layout = new QVBoxLayout( this, LAYOUT_BORDER );
 	QHBoxLayout * hlayout = new QHBoxLayout();

@@ -60,7 +60,7 @@ const char *template_str[] = {
 GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     : QDialog(parent, name, false), childproc(0)
 {
-    setCaption(i18n("Search in Files..."));
+    setCaption(i18n("Search in Files"));
 
     config = KGlobal::config();
     config->setGroup("GrepDialog");

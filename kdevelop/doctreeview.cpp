@@ -1001,7 +1001,7 @@ void DocTreeView::slotRightButtonPressed(QListViewItem *item,
 void DocTreeView::slotAddDocumentation()
 {
     CDocTreePropDlg dlg;
-    dlg.setCaption(i18n("Add Entry..."));
+    dlg.setCaption(i18n("Add Entry"));
     if (!dlg.exec())
         return;
     
@@ -1052,7 +1052,7 @@ void DocTreeView::slotDocumentationProp()
     QString filename = config->readEntry(name);
     
     CDocTreePropDlg dlg;
-    dlg.setCaption(i18n("Properties..."));
+    dlg.setCaption(i18n("Properties"));
     dlg.name_edit->setText(name);
     dlg.name_edit->setEnabled(false);
     dlg.file_edit->setText(filename);
