@@ -131,7 +131,7 @@ QListViewItem *CTreeView::findByName( const char *aName )
  *-----------------------------------------------------------------*/
 void CTreeView::contentsMousePressEvent(QMouseEvent * event)
 {
-#warning FIXME: Something's still wrong here...
+#warning FIXME: Something´s still wrong here...
   // Save the mousebutton.
   mouseBtn = event->button();
 
