@@ -338,12 +338,19 @@ void AutoSubprojectView::slotRemoveSubproject()
 	KMessageBox::sorry(this, i18n("There is no config.status in the project root build directory. Run 'Configure' first"));
 	return;
     }
-    
+
     QStringList list = QStringList::split( QRegExp("[ \t]"), parent->variables["SUBDIRS"] );
     QStringList::Iterator it = list.find( spitem->subdir );
-    if( it == list.end() ){
-	KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
-	return;
+    QString subdirToRemove = spitem->subdir;
+    bool topsubdirs = true;
+    if ((parent->variables["SUBDIRS"].find("$(TOPSUBDIRS)") == -1)
+        && (parent->variables["SUBDIRS"].find("$(AUTODIRS)") == -1))
+    {
+        topsubdirs = false;
+        if( it == list.end() ){
+            KMessageBox::sorry(this, i18n("There is no subproject %1 in SUBDIRS").arg(spitem->subdir));
+            return;
+        }
     }
 
     RemoveSubprojectDialog dlg;
@@ -353,8 +360,11 @@ void AutoSubprojectView::slotRemoveSubproject()
 
 	bool removeSources = dlg.removeCheckBox->isChecked();
 
+    if (!topsubdirs)
+    {
 	list.remove( it );
 	parent->variables[ "SUBDIRS" ] = list.join( " " );
+    }
 
 	parent->listView()->setSelected( parent, true );
 	kapp->processEvents( 500 );
@@ -402,9 +412,29 @@ void AutoSubprojectView::slotRemoveSubproject()
 	
 	// Adjust SUBDIRS variable in containing Makefile.am
 	QMap<QString,QString> replaceMap;
+    if (parent->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
+    {
+        QFile subdirsfile( parent->path + "/subdirs" );
+        QStringList topdirs;
+        if ( subdirsfile.open( IO_ReadOnly ) )
+        {
+            QTextStream subdirsstream( &subdirsfile );
+            while (!subdirsstream.atEnd())
+                topdirs.append(subdirsstream.readLine());
+            subdirsfile.close();
+        }
+        topdirs.remove(subdirToRemove);
+        if ( subdirsfile.open( IO_WriteOnly | IO_Truncate ) )
+        {
+            QTextStream subdirsstream( &subdirsfile );
+            for (QStringList::const_iterator it = topdirs.begin(); it != topdirs.end(); ++it)
+                subdirsstream << *it << endl;
+            subdirsfile.close();
+        }
+    }
 	replaceMap.insert( "SUBDIRS", parent->variables["SUBDIRS"] );
 	AutoProjectTool::modifyMakefileam( parent->path + "/Makefile.am", replaceMap );
-	
+
 	QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
 	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
 	

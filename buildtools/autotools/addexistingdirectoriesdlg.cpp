@@ -186,10 +186,26 @@ void AddExistingDirectoriesDialog::slotOk()
         QString name = *it;
 
         // Adjust SUBDIRS variable in containing Makefile.am
-        m_spitem->variables["SUBDIRS"] += (" " + name);
-        QMap<QString,QString> replaceMap;
-        replaceMap.insert("SUBDIRS", m_spitem->variables["SUBDIRS"]);
-        AutoProjectTool::modifyMakefileam(m_spitem->path + "/Makefile.am", replaceMap);
+        if (m_spitem->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
+        {
+            QFile subdirsfile( m_spitem->path + "/subdirs" );
+            if ( subdirsfile.open( IO_WriteOnly | IO_Append ) )
+            {
+                QTextStream subdirsstream( &subdirsfile );
+                subdirsstream << name << endl;
+                subdirsfile.close();
+            }
+        }
+        else if (m_spitem->variables["SUBDIRS"].find("$(AUTODIRS)") != -1)
+        {
+        }
+        else
+        {
+            m_spitem->variables["SUBDIRS"] += (" " + name);
+            QMap<QString,QString> replaceMap;
+            replaceMap.insert("SUBDIRS", m_spitem->variables["SUBDIRS"]);
+            AutoProjectTool::modifyMakefileam(m_spitem->path + "/Makefile.am", replaceMap);
+        }
 
         // Create new item in tree view
         SubprojectItem *newitem = new SubprojectItem(m_spitem, name);

@@ -106,10 +106,26 @@ void AddSubprojectDialog::accept()
     }
 
     // Adjust SUBDIRS variable in containing Makefile.am
-    m_subProject->variables["SUBDIRS"] += (" " + name);
-    QMap<QString,QString> replaceMap;
-    replaceMap.insert("SUBDIRS", m_subProject->variables["SUBDIRS"]);
-    AutoProjectTool::modifyMakefileam(m_subProject->path + "/Makefile.am", replaceMap);
+    if (m_subProject->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
+    {
+        QFile subdirsfile( m_subProject->path + "/subdirs" );
+        if ( subdirsfile.open( IO_WriteOnly | IO_Append ) )
+        {
+            QTextStream subdirsstream( &subdirsfile );
+            subdirsstream << name << endl;
+            subdirsfile.close();
+        }
+    }
+    else if (m_subProject->variables["SUBDIRS"].find("$(AUTODIRS)") != -1)
+    {
+    }
+    else
+    {
+        m_subProject->variables["SUBDIRS"] += (" " + name);
+        QMap<QString,QString> replaceMap;
+        replaceMap.insert("SUBDIRS", m_subProject->variables["SUBDIRS"]);
+        AutoProjectTool::modifyMakefileam(m_subProject->path + "/Makefile.am", replaceMap);
+    }
 
     // Create new item in tree view
     SubprojectItem *newitem = new SubprojectItem(m_subProject, name);
