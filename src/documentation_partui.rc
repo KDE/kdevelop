@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui version="1" name="DocumentationPart" >
+<MenuBar>
+  <Menu name="file" noMerge="0"><text>&amp;File</text>
+    <Action name="print_doc" group="print_merge"/>
+  </Menu>
+</MenuBar>
+
+</kpartgui>

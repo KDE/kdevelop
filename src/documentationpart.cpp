@@ -2,10 +2,13 @@
 #include <qfile.h>
 
 #include <kaction.h>
+#include <kstdaction.h>
+#include <kstddirs.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
+#include <khtmlview.h>
 
 #include "kdevmainwindow.h"
 #include "partcontroller.h"
@@ -18,6 +21,8 @@
 DocumentationPart::DocumentationPart()
   : KHTMLPart(0L, 0L, 0L, "DocumentationPart", BrowserViewGUI )
 {
+  setXMLFile(locate("data", "kdevelop/documentation_partui.rc"), true);
+  
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );
 
@@ -25,7 +30,7 @@ DocumentationPart::DocumentationPart()
   connect(this, SIGNAL(completed()), this, SLOT(slotCompleted()));
   connect(this, SIGNAL(canceled(const QString &)), this, SLOT(slotCancelled(const QString &)));
 
-  KActionCollection * actions = new KActionCollection( this );
+  KActionCollection * actions = actionCollection();// new KActionCollection( this );
   reloadAction = new KAction( i18n( "Reload" ), "reload", 0,
     this, SLOT( slotReload() ), actions, "doc_reload" );
   reloadAction->setWhatsThis(i18n("<b>Reload</b><p>Reloads the current document."));
@@ -35,6 +40,7 @@ DocumentationPart::DocumentationPart()
   duplicateAction = new KAction( i18n( "Duplicate Window" ), "window_new", 0,
     this, SLOT( slotDuplicate() ), actions, "doc_dup" );
   duplicateAction->setWhatsThis(i18n("<b>Duplicate window</b><p>Opens current document in a new window."));
+  printAction = KStdAction::print(this, SLOT(slotPrint()), actions, "print_doc");
 
   connect( this, SIGNAL(popupMenu(const QString &, const QPoint &)), this, SLOT(popup(const QString &, const QPoint &)));
 }
@@ -73,6 +79,8 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
   m_popup->insertSeparator();
   reloadAction->plug(m_popup);
   stopAction->plug(m_popup);
+  m_popup->insertSeparator();
+  printAction->plug(m_popup);
   m_popup->insertSeparator();
 
 /*  if (!url.isEmpty())
@@ -310,6 +318,11 @@ void DocumentationPart::slotCancelled( const QString & /*errMsg*/ )
 void DocumentationPart::slotDuplicate( )
 {
     PartController::getInstance()->showDocument(url(), m_context + "dup");
+}
+
+void DocumentationPart::slotPrint( )
+{
+    view()->print();
 }
 
 #include "documentationpart.moc"

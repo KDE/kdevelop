@@ -34,6 +34,7 @@ private slots:
   void slotReload();
   void slotStop();
   void slotDuplicate();
+  void slotPrint();
 
 private:
 
@@ -41,6 +42,7 @@ private:
   KAction *stopAction;
   KAction *reloadAction;
   KAction *duplicateAction;
+  KAction *printAction;
 };
 
 
