@@ -5,6 +5,8 @@ use gideon;
 initGideon();
 installLicense();
 
+print "Installing project file\n";
+install( "${src}/template-kpartapp/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
 print "Installing application sources\n";
 install( "${src}/template-kdevpartjava/src-Makefile.am", "${dest}/Makefile.am" );
 install( "${src}/template-kdevpartjava/kdevpartjava_part.java",  "${dest}/${APPNAME}Part.java" );

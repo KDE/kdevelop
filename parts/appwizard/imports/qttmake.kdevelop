@@ -3,9 +3,9 @@
  <general>
   <projectmanagement>KDevTrollProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
-  <ignoreparts>
-   <part>KDevJavaDebugger</part>
-  </ignoreparts>
+  <keywords>
+   <keyword>Qt</keyword>
+  </keywords>
  </general>
  <kdevfileview>
   <groups>

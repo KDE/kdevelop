@@ -4,8 +4,6 @@
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Python</primarylanguage>
   <ignoreparts>
-   <part>KDevDebugger</part>
-   <part>KDevJavaDebugger</part>
    <part>KDevFileView</part>
   </ignoreparts>
  </general>
@@ -17,6 +15,7 @@
  <kdevdoctreeview>
   <ignoretocs>
    <toc>gtk</toc>
+   <toc>kde</toc>
    <toc>gnustep</toc>
    <toc>php</toc>
    <toc>perl</toc>

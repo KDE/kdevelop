@@ -3,10 +3,10 @@
  <general>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
+  <keywords>
+   <keyword>GNOME</keyword>
+  </keywords>
  </general>
-  <ignoreparts>
-   <part>KDevJavaDebugger</part>
-  </ignoreparts>
  <kdevautoproject>
   <general>
    <mainprogram>src/$APPNAMELC</mainprogram>

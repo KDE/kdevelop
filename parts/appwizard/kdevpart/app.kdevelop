@@ -1,28 +1,39 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
-  <projectmanagement>KDevAutoProject</projectmanagement>
-  <primarylanguage>Java</primarylanguage>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>KDE</keyword>
+   <keyword>KDevelop</keyword>
   </keywords>
  </general>
  <kdevautoproject>
   <run>
-   <mainprogram>src/$APPNAMELC</mainprogram>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
   </run>
  </kdevautoproject>
  <kdevfileview>
   <groups>
-   <group pattern="*.java" name="Sources" />
+   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
    <group pattern="*.ui" name="User Interface" />
    <group pattern="*.png" name="Icons" />
    <group pattern="*.po;*.ts" name="Translations" />
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
  <kdevdebugger>
   <general>
+   <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
 </kdevelop>

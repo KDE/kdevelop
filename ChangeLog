@@ -1,3 +1,7 @@
+2001-07-12  Sandy Meier   <smeier@kdevelop.org>
+	* implemented extended plugin loading as discussed on Linuxtag 2001
+	  see HACKING how you can use it
+	
 2001-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added for CustomProject part for projects not based

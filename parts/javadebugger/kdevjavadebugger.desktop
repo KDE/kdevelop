@@ -7,3 +7,4 @@ Icon=
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevjavadebugger
 X-KDevelop-Scope=Project
+X-KDevelop-ProgrammingLanguages=Java

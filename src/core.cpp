@@ -486,13 +486,32 @@ void Core::openProject()
     QString language = primarylanguageEl.firstChild().toText().data();
     kdDebug(9000) << "Primary language: " << language << endl;
 
+    // check for ignore parts
     QStringList ignoreparts;
     QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
     QDomElement partEl = ignorepartsEl.firstChild().toElement();
     while (!partEl.isNull()) {
-        if (partEl.tagName() == "part")
-            ignoreparts << partEl.firstChild().toText().data();
-        partEl = partEl.nextSibling().toElement();
+      if (partEl.tagName() == "part")
+	ignoreparts << partEl.firstChild().toText().data();
+      partEl = partEl.nextSibling().toElement();
+    }
+    // check for load parts
+    QStringList loadparts;
+    QDomElement loadpartsEl = generalEl.namedItem("loadparts").toElement();
+    QDomElement loadpartEl = loadpartsEl.firstChild().toElement();
+    while (!loadpartEl.isNull()) {
+        if (loadpartEl.tagName() == "part")
+            loadparts << loadpartEl.firstChild().toText().data();
+        loadpartEl = loadpartEl.nextSibling().toElement();
+    }
+    // check for keywords
+    QStringList keywords;
+    QDomElement keywordsEl = generalEl.namedItem("keywords").toElement();
+    QDomElement keywordEl = keywordsEl.firstChild().toElement();
+    while (!keywordEl.isNull()) {
+      if (keywordEl.tagName() == "keyword")
+	keywords << keywordEl.firstChild().toText().data();
+      keywordEl = keywordEl.nextSibling().toElement();
     }
 
     // Load project part
@@ -516,16 +535,89 @@ void Core::openProject()
     } else
         KMessageBox::sorry(win, i18n("No language plugin for %1 found.").arg(language));
 
+
+
     // Load local parts
     KTrader::OfferList localOffers
         = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"),
                                  QString::fromLatin1("[X-KDevelop-Scope] == 'Project'")); 
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {
-        if (ignoreparts.contains((*it)->name()))
-            continue;
-        KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
-        initPart(part);
-        localParts.append(part);
+      
+      if (ignoreparts.contains((*it)->name())){
+	continue; // do nothing
+      }
+      
+      if (loadparts.contains((*it)->name())){ // load the part if in loadparts
+	KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
+	initPart(part);
+	localParts.append(part);
+      }
+      
+      else { // check if the "new" part should be loaded or ignored
+	QVariant var = (*it)->property("X-KDevelop-ProgrammingLanguages");
+	QStringList langlist = var.asStringList();
+	if(langlist.contains(language) || langlist.isEmpty()){ // empty means it support all languages
+	  // the language is ok, now check if the keywords match
+	  bool keywordsMatch = true;
+	  QStringList serviceKeywords = (*it)->keywords();
+	  QStringList::Iterator is = serviceKeywords.begin();
+	  while ( is != serviceKeywords.end() ){
+	    if(keywords.contains(*is) ==0 && keywordsMatch){ // no match
+	      keywordsMatch = false;
+	      kdDebug(9000) << "ignoreParts because Keyword doesn't match: " << (*it)->name() << endl;
+	      ignoreparts << (*it)->name();
+	    }
+	    is++;
+	  }
+	  // the language and all keywords match or no keywords available
+	  if(keywordsMatch){
+	    loadparts << (*it)->name();
+	    KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
+	    initPart(part);
+	    localParts.append(part);
+	  }
+	}
+	else {
+	  // the language doesn't match
+	  ignoreparts << (*it)->name();
+	}
+      }
+    }
+    
+    // store the ignore parts to the projectfile    
+    if (ignorepartsEl.isNull()) {
+      ignorepartsEl = api->projectDom->createElement("ignoreparts");
+      generalEl.appendChild(ignorepartsEl);
+    }
+    
+    // Clear old entries
+    while (!ignorepartsEl.firstChild().isNull()){
+      ignorepartsEl.removeChild(ignorepartsEl.firstChild());
+    }
+    QStringList::Iterator ignoreIterator = ignoreparts.begin();
+    while ( ignoreIterator != ignoreparts.end()){
+      QDomElement partEl = api->projectDom->createElement("part");
+      partEl.appendChild(api->projectDom->createTextNode(*ignoreIterator));
+      ignorepartsEl.appendChild(partEl);
+      ignoreIterator++;
+    }
+    
+    // store the loaded parts
+    if (loadpartsEl.isNull()) {
+      loadpartsEl = api->projectDom->createElement("loadparts");
+      generalEl.appendChild(loadpartsEl);
+    }
+
+    // Clear old entries
+    while (!loadpartsEl.firstChild().isNull()){
+      loadpartsEl.removeChild(loadpartsEl.firstChild());
+    }
+    QStringList::Iterator loadIterator = loadparts.begin();
+    while ( loadIterator != loadparts.end()){
+      QDomElement partEl = api->projectDom->createElement("part");
+      partEl.appendChild(api->projectDom->createTextNode(*loadIterator));
+      loadpartsEl.appendChild(partEl);
+      loadIterator++;
     }
 
     QFileInfo fi(projectFile);

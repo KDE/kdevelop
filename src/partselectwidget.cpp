@@ -128,33 +128,58 @@ void PartSelectWidget::readProjectConfig()
 
 void PartSelectWidget::saveProjectConfig()
 {
-    QDomElement docEl = m_projectDom.documentElement();
-    QDomElement generalEl = docEl.namedItem("general").toElement();
-    
-    QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
-    if (ignorepartsEl.isNull()) {
-        ignorepartsEl = m_projectDom.createElement("ignoreparts");
-        generalEl.appendChild(ignorepartsEl);
+  QCheckListItem *item=0;
+  QDomElement docEl = m_projectDom.documentElement();
+  QDomElement generalEl = docEl.namedItem("general").toElement();
+  
+  // store ignoreparts
+  QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
+  if (ignorepartsEl.isNull()) {
+    ignorepartsEl = m_projectDom.createElement("ignoreparts");
+    generalEl.appendChild(ignorepartsEl);
+  }
+  
+  // Clear old entries
+  while (!ignorepartsEl.firstChild().isNull())
+    ignorepartsEl.removeChild(ignorepartsEl.firstChild());
+  
+  QListViewItemIterator it1(lv);
+  QStringList::Iterator it2;
+  for (it2 = names.begin();
+       it1.current() && it2 != names.end();
+       ++it1, ++it2) {
+    item = static_cast<QCheckListItem*>(it1.current());
+    if (!item->isOn()) {
+      QDomElement partEl = m_projectDom.createElement("part");
+      partEl.appendChild(m_projectDom.createTextNode(*it2));
+      ignorepartsEl.appendChild(partEl);
+      kdDebug(9000) << "Appending " << (*it2) << endl;
     }
-
-    // Clear old entries
-    while (!ignorepartsEl.firstChild().isNull())
-        ignorepartsEl.removeChild(ignorepartsEl.firstChild());
-
-    QListViewItemIterator it1(lv);
-    QStringList::Iterator it2;
-    for (it2 = names.begin();
-         it1.current() && it2 != names.end();
-         ++it1, ++it2) {
-        QCheckListItem *item = static_cast<QCheckListItem*>(it1.current());
-        if (!item->isOn()) {
-            QDomElement partEl = m_projectDom.createElement("part");
-            partEl.appendChild(m_projectDom.createTextNode(*it2));
-            ignorepartsEl.appendChild(partEl);
-            kdDebug(9000) << "Appending " << (*it2) << endl;
-        }
+  }
+  
+  // store loadparts
+  QDomElement loadpartsEl = generalEl.namedItem("loadparts").toElement();
+  if (loadpartsEl.isNull()) {
+    loadpartsEl = m_projectDom.createElement("loadparts");
+    generalEl.appendChild(loadpartsEl);
+  }
+  // Clear old entries
+  while (!loadpartsEl.firstChild().isNull())
+    loadpartsEl.removeChild(loadpartsEl.firstChild());
+  
+  QListViewItemIterator itl1(lv);
+  for (it2 = names.begin();
+       itl1.current() && it2 != names.end();
+       ++itl1, ++it2) {
+    item = static_cast<QCheckListItem*>(itl1.current());
+    if (item->isOn()) {
+      QDomElement partEl = m_projectDom.createElement("part");
+      partEl.appendChild(m_projectDom.createTextNode(*it2));
+      loadpartsEl.appendChild(partEl);
+      kdDebug(9000) << "Appending " << (*it2) << endl;
     }
-    kdDebug(9000) << "xml:" << m_projectDom.toString() << endl;
+  }
+  kdDebug(9000) << "xml:" << m_projectDom.toString() << endl;
 }
 
 

@@ -6,3 +6,4 @@ Name=KDevTipOfDay
 Icon=kdevelop
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevtipofday
+X-KDevelop-Scope=Global

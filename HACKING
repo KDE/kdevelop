@@ -6,6 +6,24 @@ A small guide how to extend Gideon via plugins:
     If you install this file into $(kde_servicesdir), your
     plugin will automatically be loaded.
 
+    You can change the default loading by changing some settings in your foo.desktop file:
+	#set it to "Global" or "Project"
+	X-KDevelop-Scope=
+	#you can add a list of programming language which are supported by your plugin
+	#if your plugin works with all languages leave the field empty
+	X-KDevelop-ProgrammingLanguages=
+	#you can add a list of keywords, the plugin will be only loaded if all keywords match with the 
+	#keywords in the projectfile
+	Keywords=
+
+	an example from the Java Debugger Plugin:
+	#######################
+	X-KDevelop-Scope=Project
+	X-KDevelop-ProgrammingLanguages=Java
+	Keywords=
+	##########################
+    
+
 2.) Create a factory class FooFactory which inherits KDevFactory. Put a
     section
     

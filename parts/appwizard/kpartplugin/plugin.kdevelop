@@ -3,9 +3,9 @@
  <general>
   <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
-  <ignoreparts>
-   <part>KDevJavaDebugger</part>
-  </ignoreparts>
+  <keywords>
+   <keyword>KDE</keyword>
+  </keywords>
  </general>
  <kdevautoproject>
   <general>

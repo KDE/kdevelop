@@ -5,7 +5,7 @@ templatedir = ${appwizarddatadir}/templates
 
 kdevpartjava_DATA = src-Makefile.am kdevpartjava_part.java \
 	kdevpartjava_factory.h kdevpartjava_factory.cpp kdevpartjava_factory.java kdevpartjava_widget.java \
-	kdevpartjava_part.rc kdevpartjava.desktop
+	kdevpartjava_part.rc kdevpartjava.desktop app.kdevelop
 template_DATA = kdevpartjava
 
 DISTCLEANFILES = script.local

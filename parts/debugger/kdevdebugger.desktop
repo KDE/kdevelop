@@ -7,3 +7,4 @@ Icon=
 ServiceTypes=KDevelop/Part
 X-KDE-Library=libkdevdebugger
 X-KDevelop-Scope=Project
+X-KDevelop-ProgrammingLanguages=C,C++

@@ -20,6 +20,7 @@
    <toc>gnustep</toc>
    <toc>php</toc>
    <toc>perl</toc>
+   <toc>kde</toc>
   </ignoretocs>
  </kdevdoctreeview>
 </kdevelop>
