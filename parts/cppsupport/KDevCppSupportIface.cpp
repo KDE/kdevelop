@@ -21,3 +21,4 @@ void KDevCppSupportIface::parseProject()
     m_cppSupport->parseProject();
 }
 
+#include "KDevCppSupportIface.moc"

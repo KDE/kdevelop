@@ -32,3 +32,4 @@ void KDevFilterIface::shellFilter()
     m_part->slotShellFilter();
 }
 
+#include "kdevfilteriface.moc"

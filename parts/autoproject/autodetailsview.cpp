@@ -423,3 +423,4 @@ void AutoDetailsView::slotSetActiveTarget()
 	DomUtil::writeEntry( dom, "/kdevautoproject/general/activetarget", targetPath );
 }
 
+#include "autodetailsview.moc"

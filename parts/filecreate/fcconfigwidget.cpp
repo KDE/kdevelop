@@ -416,3 +416,4 @@ void FCConfigWidget::loadFileTypes(QPtrList<FileType> list, QListView *view, boo
     }
 }
 
+#include "fcconfigwidget.moc"
