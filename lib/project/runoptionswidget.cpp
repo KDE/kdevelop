@@ -57,6 +57,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
             customDirectory_radio->setChecked(true);
         else
             executableDirectory_radio->setChecked(true);
+    directoryRadioChanged();
 
     // Read the custom directory, store it in a KURL and update it's edit box
     QString customRunDirectory = DomUtil::readEntry(dom, configGroup + "/run/customdirectory");
