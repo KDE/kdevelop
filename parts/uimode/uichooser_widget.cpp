@@ -19,12 +19,12 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  if (config->readEntry("MajorUIMode", "sdi") == "sdi")
+  if (config->readEntry("MajorUIMode", "IDEAl") == "IDEAl")
   {
     modeIDEA->setChecked(true);
     return;
   }
-  
+
   int mdi = config->readNumEntry("MDI mode", 1);
 
   switch (mdi)
@@ -44,16 +44,16 @@ void UIChooserWidget::load()
 
 void UIChooserWidget::save()
 {
-  KConfig *config = kapp->config();   
+  KConfig *config = kapp->config();
   config->setGroup("UI");
 
   if (modeIDEA->isChecked())
   {
-    config->writeEntry("MajorUIMode", "sdi");
+    config->writeEntry("MajorUIMode", "IDEAl");
   }
   else
   {
-    config->writeEntry("MajorUIMode", "mdi");
+    config->writeEntry("MajorUIMode", "QextMDI");
 
     if (modeTab->isChecked())
       config->writeEntry("MDI mode", 2);
