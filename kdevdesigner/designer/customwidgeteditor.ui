@@ -259,7 +259,7 @@
                                     <string>Select a Pixmap</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>&lt;b&gt;Select a pixmap file.&lt;/b&gt;&lt;p&gt;The pixmap will be used to represent the widget in forms.&lt;/b&gt;</string>
+                                    <string>&lt;b&gt;Select a pixmap file.&lt;/b&gt;&lt;p&gt;The pixmap will be used to represent the widget in forms.&lt;/p&gt;</string>
                                 </property>
                             </widget>
                         </hbox>
