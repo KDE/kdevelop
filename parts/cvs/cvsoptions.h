@@ -45,8 +45,8 @@ public:
 	void setRemove( const QString &p );
 	QString remove();
 
-	void setReplace( const QString &p );
-	QString replace();
+	void setRevert( const QString &p );
+	QString revert();
 
 	void setDiff( const QString &p );
 	QString diff();
@@ -64,7 +64,7 @@ private:
 	QString m_update;
 	QString m_add;
 	QString m_remove;
-	QString m_replace;
+	QString m_revert;
 	QString m_diff;
 	QString m_log;
 	QString m_rsh;

@@ -22,7 +22,7 @@
 #define default_update	QString::fromLatin1("-dP")
 #define default_add		QString::fromLatin1("")
 #define default_remove	QString::fromLatin1("-f")
-#define default_replace	QString::fromLatin1("-C -d -P")
+#define default_revert	QString::fromLatin1("-C -d -P")
 #define default_diff	QString::fromLatin1("-u3 -p")
 #define default_log		QString::fromLatin1("")
 #define default_rsh		QString::fromLatin1("")
@@ -32,7 +32,7 @@ CvsOptions *CvsOptions::m_instance = 0;
 CvsOptions::CvsOptions()
 	: m_cvs(default_cvs), m_commit(default_commit),
 	m_update(default_update), m_add(default_add),
-	m_remove(default_remove), m_replace(default_replace),
+	m_remove(default_remove), m_revert(default_revert),
 	m_diff(default_diff), m_log(default_log),
 	m_rsh(default_rsh)
 {
@@ -62,7 +62,7 @@ void CvsOptions::save( QDomDocument &dom )
 	DomUtil::writeEntry( dom, "/kdevcvs/logoptions", m_log );
 	DomUtil::writeEntry( dom, "/kdevcvs/updateoptions", m_update );
 	DomUtil::writeEntry( dom, "/kdevcvs/removeoptions", m_remove );
-	DomUtil::writeEntry( dom, "/kdevcvs/replaceoptions", m_replace );
+	DomUtil::writeEntry( dom, "/kdevcvs/revertoptions", m_revert );
 	DomUtil::writeEntry( dom, "/kdevcvs/diffoptions", m_diff );
 	DomUtil::writeEntry( dom, "/kdevcvs/rshoptions", m_rsh );
 }
@@ -77,7 +77,7 @@ void CvsOptions::load( const QDomDocument &dom )
 	m_log     = DomUtil::readEntry( dom, "/kdevcvs/logoptions", default_log );
 	m_update  = DomUtil::readEntry( dom, "/kdevcvs/updateoptions", default_update );
 	m_remove  = DomUtil::readEntry( dom, "/kdevcvs/removeoptions", default_remove );
-	m_replace = DomUtil::readEntry( dom, "/kdevcvs/replaceoptions", default_replace );
+	m_revert  = DomUtil::readEntry( dom, "/kdevcvs/revertoptions", default_revert );
 	m_diff    = DomUtil::readEntry( dom, "/kdevcvs/diffoptions", default_diff );
 	m_rsh     = DomUtil::readEntry( dom, "/kdevcvs/rshoptions", default_rsh );
 }
@@ -132,14 +132,14 @@ QString CvsOptions::remove()
 	return m_remove;
 }
 
-void CvsOptions::setReplace( const QString &p )
+void CvsOptions::setRevert( const QString &p )
 {
-	m_replace = p;
+	m_revert = p;
 }
 
-QString CvsOptions::replace()
+QString CvsOptions::revert()
 {
-	return m_replace;
+	return m_revert;
 }
 
 void CvsOptions::setDiff( const QString &p )

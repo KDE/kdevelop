@@ -21,7 +21,6 @@
 class Context;
 class QPopupMenu;
 class KDialogBase;
-class KURL;
 class KAction;
 class CvsWidget;
 class CvsForm;
@@ -73,9 +72,17 @@ private slots:
 	void slotUpdate();
 	void slotAdd();
 	void slotRemove();
-	void slotReplace();
+	void slotRevert();
 	void slotLog();
 	void slotDiff();
+
+        void slotActionCommit();
+        void slotActionUpdate();
+        void slotActionAdd();
+        void slotActionRemove();
+        void slotActionRevert();
+        void slotActionLog();
+        void slotActionDiff();
 
 	void slotProjectOpened();
 	void slotProjectClosed();
@@ -93,45 +100,38 @@ private slots:
 
 private:
 	// This implements commit operation: it is reused in several parts.
-	QString buildCommitCmd( const QString _directoryName, const QString &_fileName, const QString _logMessage );
+	QString buildCvsCommand( const QString& fileName, const QString& cmd, const QString& options ) const;
 
 	void init();
+
+        // Cvs operations.
+        void commit( const QString& fileName );
+        void update(  const QString& fileName );
+        void add( const QString& fileName );
+        void remove( const QString& fileName );
+        void revert( const QString& fileName );
+        void log( const QString& fileName );
+        void diff( const QString& fileName );
 
 	// Setup actions.
 	void setupActions();
 	// Updates Url forn the currently focused document
-	bool retrieveUrlFocusedDocument();
+	QString currentDocument();
 	// Retrieves the fileName and dirName from the pathUrl
 	bool findPaths();
 	// Returns true if the file or directory indicated in @p url has been registered in the CVS
 	// (if not, returns false since it avoid performing CVS operation)
 	bool isRegisteredInRepository();
-	// Call this every time a slot for cvs operations starts!! (It will setup the
-	// state (file/dir URL, ...).
-	// It will also display proper error messages so the caller must only exit if
-	// it fails (return false); if return true than basic requisites for cvs operation
-	// are satisfied.
-	bool prepareOperation();
-	// Call this every time a slot for cvs operations ends!! (It will restore the state for a new
-	// operation).
-	void doneOperation();
 
 	// The value for overriding the $CVS_RSH env variable
 	QString cvs_rsh() const;
-	// Contains the url of the file or direcly for which the service has been invoked
-	KURL pathUrl;
-	// Contains the directory name
-	QString dirName;
-	// Contains the fileName (relative to dir)
-	QString fileName;
+	// Contains the url of the file for which the service has been invoked
+	QString popupfile;
 	// Reference to widget integrated in the "bottom tabbar" (IDEAL)
 	QGuardedPtr<CvsWidget> m_widget;
 	// This is a pointer to the d->form used for collecting data about CVS project creation (used
 	// by the ApplicationWizard in example)
 	QGuardedPtr<CvsForm> m_cvsConfigurationForm;
-	// True if invoked from menu, false otherwise (i.e. called from context menu)
-	// FIXME: Ok this is a very bad hack but I see no other solution for now.
-	bool invokedFromMenu;
 
 	// Shell process reference (i.e. used by 'cvs diff')
 	KProcess* proc;
@@ -145,7 +145,7 @@ private:
 		*actionAdd,
 		*actionRemove,
 		*actionUpdate,
-		*actionReplace;
+		*actionRevert;
 };
 
 #endif
