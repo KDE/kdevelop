@@ -34,8 +34,8 @@
 GppCompilerOptionsWidget::GppCompilerOptionsWidget(QWidget *parent, const char *name, QWidget* pdlg)
 	 : GppCompilerOptionsWidgetBase(parent,name){
 	compilerFlagsPreview->setReadOnly(true);
-	connect(pdlg, SIGNAL(WidgetStarted(KDevCompiler*)), this, SLOT(slotWidgetStarted(KDevCompiler*)));
-	connect(pdlg, SIGNAL(ButtonApplyClicked(KDevCompiler*)), this, SLOT(slotButtonApplyClicked(KDevCompiler*)));
+	connect(pdlg, SIGNAL(WidgetStarted()), this, SLOT(slotWidgetStarted()));
+	connect(pdlg, SIGNAL(ButtonApplyClicked()), this, SLOT(slotButtonApplyClicked()));
 }
 
 GppCompilerOptionsWidget::~GppCompilerOptionsWidget(){
@@ -50,23 +50,25 @@ void GppCompilerOptionsWidget::slotFlagsToolButtonClicked(){
 }
 
 // reads the compiler flags
-void GppCompilerOptionsWidget::slotWidgetStarted(KDevCompiler *kdc){
-	if (*(kdc->name()) == "c++"){
-  	compilerFlagsPreview->setText(*(kdc->flags()));
-	}
+void GppCompilerOptionsWidget::slotWidgetStarted(){
+ 	compilerFlagsPreview->setText(*(m_pKDevCompiler->flags()));
 }
 
 // writess the compiler flags
-void GppCompilerOptionsWidget::slotButtonApplyClicked(KDevCompiler *kdc){
-	if (*(kdc->name()) == "c++"){
-		compilerFlagsPreview->setText(compilerFlagsPreview->text() + " " + gppCompilerFlags->text());
+void GppCompilerOptionsWidget::slotButtonApplyClicked(){
+ 	if (gppCompilerFlags->text() != ""){
+	  compilerFlagsPreview->setText(compilerFlagsPreview->text() + " " + gppCompilerFlags->text());
 		gppCompilerFlags->setText("");
-  	kdc->setFlags(compilerFlagsPreview->text());
-  }
+	}
+  m_pKDevCompiler->setFlags(compilerFlagsPreview->text());
 }
 
 void GppCompilerOptionsWidget::slotClearAllClicked(){
   compilerFlagsPreview->setText("");
+}
+
+void GppCompilerOptionsWidget::setCompiler(KDevCompiler* kdc){
+	m_pKDevCompiler = kdc;
 }
 
 GeneralTabGpp::GeneralTabGpp(QWidget *parent, const char *name)
