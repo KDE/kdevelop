@@ -274,7 +274,7 @@ bool CKDevelop::fileSaveAs(){
   int message_result=KMessageBox::Yes; // simulate ok state... this could change by one of the following messageboxes
 
   if (!m_docViewManager->currentEditView())
-    return;
+    return false;
 
   oldName = m_docViewManager->currentEditView()->getName();
   if (bAutosave)
