@@ -29,7 +29,7 @@
   class MyLexer : public yyFlexLexer
   {
     public:
-    char *gettext() {return yytext;};
+    char *getText() {return yytext;};
   };
 
   /* Line where a comment starts. */
@@ -192,7 +192,7 @@ static bool beginComment(MyLexer *lex)
 
 static void inComment(MyLexer *lex)
 {
-  char *text=lex->gettext();
+  char *text=lex->getText();
   comment+=text;
 };
 
