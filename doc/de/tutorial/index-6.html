@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Application Concepts</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Anwendungs Konzepte</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,55 +18,56 @@
  <A HREF="index-5.html">Zurück</A>
  <A HREF="index.html#toc6">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s6">6. Application Concepts</A></H3>
+<H3><A NAME="s6">6. Anwendungs Konzepte</A></H3>
 
-<P>This chapter now introduces you into the ideas of the application models mentioned already: the MDI (Multiple Document Interface) and
-the Document-View model. A basic introduction into the Document-View model and the generating of a project with KDevelop is already
-given in 
-<A HREF="../programming/index.html">The KDevelop Programming Handbook</A>, but based on a Single Document Interface
-(SDI). In any case, you should be familiar with the basics of the KDE and Qt classes that are explained in 
-<A HREF="../kde_libref/index.html">The KDE Library Reference Guide</A>, there the base classes of the underlying libraries are
-explained in detail and how to use them, with an additional description of the Qt signal-slot mechanism and event handling.
-<P>As a guideline, you should know already:
+<P>Dieses Kapitel stellt Ihnen die Ideen der bereits erwähnten Applikationsmodelle vor: das MDI (Multiple Document Interface) und das 
+Document View Modell. Eine Basiseinführung in das Doc-View Modell und die Generierung eines Projektes mit KDevelop ist schon in 
+<A HREF="../programming/index.html">The KDevelop Programming Handbook</A> enthalten, aber auf Basis des Single Document 
+Interface (SDI). In jedem Falle, sollten Sie mit den Grundlagen der KDE und Qt Klassen vertraut sein, die in 
+<A HREF="../kde_libref/index.html">The KDE Library Reference Guide</A> erklärt sind, die Basisklassen der darunterliegenden 
+Bibliotheken und ihre Verwendung werden dort im Detail beschrieben, außerdem finden Sie zusätzlich eine Beschreibung des Qt 
+Signal-Slot Verfahrens und der Ereignisverarbeitung.
+<P>Als Anhaltspunkt sollten Sie bereits wissen:
 <UL>
-<LI>that every KDE application needs one instance of <CODE>KApplication</CODE> (for a Qt application one instance of
-<CODE>QApplication</CODE>)</LI>
-<LI>generally a main window is inherited from <CODE>KTMainWindow</CODE> for KDE (for a Qt application inherited from
-<CODE>QMainWindow</CODE>)</LI>
-<LI>that events (e.g. keyboard presses or mouse movements) are sent to the application by the underlying window system</LI>
-<LI>that <CODE>QWidget</CODE> as the base class for all visible Graphical User Interface (GUI) components provides specialized event
-handlers by virtual functions that filter out the according events by reimplementing <CODE>QObject::event()</CODE></LI>
-<LI>that the Qt signal-slot mechanism means basically that a component can send out signals and a receiver can connect to those
-signals to process some actions</LI>
-<LI>that this mechanism avoids inheriting classes for GUI components because the signals inform you about e.g. mouse presses  where
-appropriate for a wiget</LI>
+<LI>Das jede KDE Applikation eine Instanz von <CODE>KApplication</CODE> (bei Qt eine Instanze von <CODE>QApplication</CODE>) benötigt</LI>
+<LI>Generell ein Main Fenster von <CODE>KTMainWindow</CODE> bei KDE (for Qt von <CODE>QMainWindow</CODE>) abgeleitet ist</LI>
+<LI>Das Ereignisse (z.B. Tastendrücke oder Mausbewegungen) von darunterliegenden Window System an die Anwendung gesendet 
+werden</LI>
+<LI>Das <CODE>QWidget</CODE> als Basisklasse für alle Graphical User Interface (GUI) Komponenten spezialisierte Event Handler durch 
+virtuelle Functionen bereitstellt, die die entsprechenden Events durch Reimplementation von <CODE>QObject::event()</CODE> ausfiltern </LI>
+<LI>Das das Qt Signal-Slot Verfahren bedeutet, das eine Komponente Signale aussendet und ein Empfänger sich mit diesen Signalen 
+verbinden kann, um bestimmte Aktionen auszuführen.</LI>
+<LI>Das dieser Mechanismus es unnötig macht, Klassen für GUI Komponenten zu beerben, weil die Signale Sie über z.B. 
+Mausereignisse informieren, wo es passend für ein Widget ist.</LI>
 </UL>
 <P>
-<H3><A NAME="ss6.1">6.1 The Document-View Model</A>
+<H3><A NAME="ss6.1">6.1 Das Document-View Modell</A>
 </H3>
 
-<P>The Document-View Model is one of the most basic concepts in application design that rely on graphical user interfaces. Therefore, a
-certain understanding of the why is needed to see that although the programmer has other possibilities, it makes sense to make use of
-it. But first let's follow the usual design of a typical KDE / Qt application:
-<P>Your application instance provides the first connection to your application and is the starting point of the event handling for a
-program. The program itself represents itself to the user by a Graphical User Interface which is most often called a main-window. The
-main window then provides the appropriate functions for the user such as key accelerators, a menubar, toolbar and a statusbar. In the
-center it contains a so-called "view-area" which means that this part is an instance of another class, usually called a "View". The
-view instance is created when the main window gets constructed at program start and has to be set as the view area component with a
-method provided by the main window: <CODE>setView(your_view)</CODE> for KDE applications using <CODE>KTMainWindow</CODE>,
-<CODE>setCentralWidget(your_view)</CODE> for a Qt application using <CODE>QMainWindow</CODE>. Now, the view obviously is the area that is
-responsible for interacting with the user to manipulate the data that it represents. As an example, you could use a
-<CODE>QMultiLineEdit</CODE> as a view and you will have an editor. Then you can use the provided slots of the view for connections to
-menubar or toolbar command like this:
-<P>While creating the menubar, you want to provide a method for the command "cut" in the "Edit" menu:
+<P>Das Document-View Modell ist eines der grundlegendsten Konzepte für Anwendungsdesign, das auf GUI basiert. Daher ist ein gewisses 
+Verständnis für das Warum nötig, um zu sehen, daß es Sinn macht es zu benutzen, obwohl der Programmiere andere Möglichkeiten hat. 
+Lassen Sie uns aber zuerst einen Blick auf das normale Design einer typischen KDE / Qt Applikation werfen:
+<P>Die Instanz Ihrer Anwendung stellt die erste Verbindung zu Ihrer Applikation zu Verfügung und ist der Startpunkt der 
+Ereignisbehandlung eines Programms. Das Programm selber präsentiert sich dem Benutzer über eine graphische Benutzerschnittstelle, 
+die meisten Hauptfenster genannt wird. Das Hauptfenster stellt dann dem Benutzer die erforderlichen Funktionen zur Verfügung, wie 
+Tastenkürzel, eine Menüleiste, eine Werkzeugleiste und eine Statuszeile. Im Zentrum befindet sich ein sogenannter 
+"Ansichtsbereich", was bedeutet, daß dieser Bereich die Instanz einer anderen Klasse ist, normalerweise "Ansicht" genannt. Diese 
+Instanz wird erzeugt, wenn das Hauptfenster beim Programmstart konstruiert wird und muß mit Hilfe einer Methode des Hauptfensters 
+zum Ansichtsbereich gemacht werden: <CODE>setView(your_view)</CODE> bei KDE Applikationen die <CODE>KTMainWindow</CODE> verwenden,
+<CODE>setCentralWidget(your_view)</CODE> bei Qt Applikationen die <CODE>QMainWindow</CODE> verwenden. Nun, offensichtlich is die Ansicht 
+der Bereich, der verantwortlich für die Interaktion mit dem Benutzer ist, wenn die Daten, die er represäntiert manipuliert werden 
+sollen. Zum Beispiel könnten Sie <CODE>QMultiLineEdit</CODE> als Ansicht verwenden, und Sie hätten einen Editor. Dann können Sie die 
+gegebenen Slots der Ansicht zur Kommunikation mit der Menüleiste oder der Werkzeugleiste folgendermaßen verwenden:
+<P>Während Sie die Menüleiste erstellen, möchten Sie eine Methode für das Kommando "Cut" im "Edit" Menü bereitstellen:
 <BLOCKQUOTE><CODE>
 <PRE>
   pEditMenu->insertItem(BarIcon("editcut"), i18n("Cu&amp;t"),view, SLOT(cut()),KAccel::Cut, ID_EDIT_CUT);
 </PRE>
 </CODE></BLOCKQUOTE>
-<P>This creates a menu item in the "Edit" menu, that, when activated, directly calls the slot <CODE>cut()</CODE> of the instance
-<CODE>view</CODE>, whereby we suppose you have created this instance as a <CODE>QMultiLineEdit</CODE> and set as the view area. The
-multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
+<P>Dies erzeugt einen Menüeintrag im "Edit" Menü, der, wenn aktiviert, direkt den Slot <CODE>cut()</CODE> der Instanz 
+<CODE>view</CODE> aufruft, wobei wir davon ausgehen, daß Sie diese Instanz als <CODE>QMultiLineEdit</CODE> erzeugt und sie zum 
+Ansichtsbereich gemacht haben. 
+The multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
 itself and so there is no need to inherit from <CODE>QMultiLineEdit</CODE> to create a view area that is capable of such actions. They are
 ready to use and make application development very fast- you just need the application instance and the main window including the
 connections to your view area and you're done ! That means, a simple editor can be written by creating one single class that defines

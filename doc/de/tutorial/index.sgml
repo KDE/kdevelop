@@ -493,191 +493,201 @@ fortzufahren, die mit QT geliefert werden.
 Im nächsten Kapitel werden Sie mit Hilfe der Beispielanwendung <em>KScribble</em> an die Entwicklung für KDE 2 herangeführt. KScribble ist eine kleine 
 Zeichenanwendung, an der Ihnen die Konzepte des Anwendungsdesigns gezeigt werden und an der Sie sehen wie Sie Ihr Programm implementieren.
 
-<chapt>Creating KDE Applications
+<chapt> KDE Applikationen erstellen
 <p>
-This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
-to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
-model and the multiple document interface (MDI) model.
+Dieses Handbuch versucht Ihnen das KDE/Qt Anwendungsdesign zu zeigen, indem Schritt für Schritt eine Beispielanwendung erstellt wird.
+Das Hauptziel ist, ein gewisses Verständnis dafür zu entwickeln, wie zwei der wichtigsten Ideen der graphischen Benutzeroberfläche verwirklicht 
+sind: das Document View Modell und das Multiple Document Interface (MDI) Modell.
 
-By this, you will also get a good idea of concepts that are coming up ahead: KDE 2 and the Qt 2.1 library, bringing new enhancements
-and technology to the programmer's hands that will improve application design and widen the possibilities that are open to use.
-Keywords such as widget themes, Inter-Process Communication and embedded applications are popularly talked about and will allow even
-more than one can think about right now.
+Dadurch erhalten Sie eine gute Vorstellung von den Konzepten, die demnächst kommen werden: KDE 2 und die Qt 2.1 Bibliothek, die dem Programmierer 
+neue Erweiterungen und Technologien an die Hand geben, die das Anwendungsdesign verbessern und die zur Verfügung stehenden Möglichkeiten erweitern werde. 
+Schlüsselworte wie Widget Themen, Interprozesskommunikation und eingebettete Anwendungen sind populäre Gesprächsthemen und werden sogar mehr ermöglichen, 
+als Sie sich im Moment vorstellen können.
 
-Therefore, KDevelop 1.1, still based on KDE 1.1.x, provides developers some of the most requested possibilities: developing
-applications for KDE 2, while still running a stable desktop environment. This also implies that this tutorial will be based on a KDE 2
-application that already makes use of Qt-2.1, offering a solution for the mentioned MDI model - which we provide as a ready-to-go frame
-application. During this tutorial you will get a clear insight on how it works and this will also make it much easier to understand the
-document-view model as well - which is hard to understand even for advanced programmers. That will help you create other type of
-applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
-let's just go inside it - you will see what's coming up on you and how easy it actually is.
+Deshalb bietet KDevelop 1.1, das noch auf KDE 1.1.x basiert, Programmierern einige der meistgeforderten Möglichkeiten: Entwicklung von KDE 2 Anwendungen, 
+während Sie noch auf einer stabilen Oberfläche sind. Sie ahnen schon, daß diese Einführung auf einer KDE 2 Anwendung basiert, die schon Gebrauch von 
+Qt-2.1 macht und eine Lösung für das erwähnte MDI Modell bietet - angeboten als "ready-to-go" Anwendung. In dieser Einführung werden Sie eine klare Einsicht 
+in die Funktionweise erhalten, wie es funktioniert und das wird es auch viel einfacher machen, das Document View Modell zu verstehen, was sogar für 
+erfahrene Programmierer schwierig ist. Dies wird Ihnen helfen andere Typen von Anwendungen zu schreiben, die ebenfalls das Document View Modell verwenden, 
+auch wenn sie nur ein einziges Fenster enthalten und die Notwendigkeit nicht offensichtlich ist. Aber lassen Sie uns einfach beginnen - Sie werden sehen was auf Sie 
+zukommt und wie einfach es tatsächlich ist.
 
-The further chapters of the tutorial cover the following several steps:
+Die weiteren Kapitel dieser Einführung behandeln die folgenden Schritte:
 <itemize>
-<item>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.
-<item>understanding the basic concepts of MDI and document-view model.
-<item>creating the generic framework for <em>KScribble</em> and explaining the concept of the framework.
-<item>implementing the document class, who will provide the interface to read and write the document data as well as maintaining the
-document.
-<item>implementing the view class to visualize the data. This class also takes over the interaction with the user.
-<item>adding dialogs to set the pen width and color of the pen to draw with, including their integration into the toolbar and menubar
-<item>changing the view from the default <tt>QWidget</tt> inheritance to a scrollable view.
+<item>Installation von KDE 2 (Bibliotheken) und Einstellungen in KDevelop zur Erzeugung von KDE 2 Anwendungen.
+<item>Verstehen der grundlegenden Konzepte der MDI und Document View Modelle.
+<item>Erzeugen des generischen Layouts für <em>KScribble</em> und Erklärung des Layoutkonzeptes.
+<item>Implementierung der document Klasse, die die Schnittstelle zum Lesen und Schreiben der Dokumentdaten zur Verfügung stellt,
+sowie das Dokument verwaltet.
+<item>Implementierung der view Klasse zur Visualisierung der Daten. Diese Klasse übernimmt auch die Interaktion mit dem Benutzer.
+<item>Hinzufügen von Dialogen zur Einstellung der Stiftgröße und -farbe des Stiftes, mit dem gezeichnet wird, und deren Integration
+in die Werkzeug- und Menüleiste.
+<item>Ändern der Ansicht der Standard <tt>QWidget</tt> Vererbung in eine rollbare Ansicht.
 </itemize>
 
-The tutorial example itself is based on the code found in the scribble example application that comes with the Qt library. The source
-of the original example can also be found within the Qt documentation, section examples.
+Das Beispiel selbst basiert auf dem Code, den Sie in der <em/scribble/ Beispielanwendung finden können, die mit der Qt-Bibliothek
+geliefert wird. Die Quellen des Originals können Sie auch in der Qt Dokumentation im Abschnitt Beispiele finden.
 
-<chapt>Installing KDE 2
+<chapt>Installation von KDE 2
 <p>
-In this chapter we will first go through a couple of steps that will help you set up KDevelop for creating KDE 2 / Qt 2.x
-applications. The requirements are:
+In diesem Kapitel werden wir zunächst einige Schritte unternehmen, die Ihnen helfen KDevelop für die Erstellung von KDE 2 / Qt 2.x
+Anwendungen vorzubereiten. Erforderlich sind:
 <itemize>
-<item>a current Qt-2.1 snapshot available at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
-<item>a current KDE 2 snapshot of the packages <tt>kdesupport</tt> and <tt>kdelibs</tt>
+<item>ein aktueller Qt-2.1 Snapshot erhältlich auf <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item>ein aktueller KDE 2 Snapshot der Pakete <tt>kdesupport</tt> and <tt>kdelibs</tt>
 </itemize>
 
-Both the Qt-2.1 and KDE 2 libraries are currently under development but are to be expected as final and changes to be expected for the
-final versions are marginal and may not even affect your application. This means you're getting to know the newest libraries coming up-
-and you're in charge of a valuable time-saving to create your application even before the libraries are completed.
+Sowohl die Qt-2.1 als auch die KDE 2 Bibliotheken befinden sich zur Zeit in der Entwicklung werden aber als "final" betrachtet
+und die Änderungen, die für die tatsächlichen Release Versionen erwartet werden sind äußerst gering und werden möglicherweise
+Ihre Anwendungen in keiner Weise berühren. Das bedeutet, daß Sie die neuesten Bibliotheken kennenlernen werden und es Ihnen
+möglich ist wertvolle Zeit zu sparen, indem Sie Ihre Anwendung entwickeln können bevor die Bibliotheken überhaupt fertig sind.
 
-The following sections describe what to do in detail within three steps:
+Die folgenden Abschnitte beschreiben im Detail, in drei Schritten was zu tun ist:
 <itemize>
-<item>installing the Qt library
-<item>installing the KDE libraries
-<item>setting up KDevelop
+<item>Installieren der Qt Bibliothek
+<item>Installieren der KDE Bibliothek
+<item>KDevelop einstellen
 </itemize>
 
-Then you're ready to go and we'll proceed with creating the first step of the example program <em>KScribble</em> in the next chapter.
+Dann sind Sie bereit und wir werden im nächsten Kapitel mit dem ersten Schritt zur Erstellung des Beispielprogramm <em>KScribble</em>
+fortfahren.
 
-
-<sect>Setting up Qt-2.1
+<sect>Vorbereitung von Qt-2.1
 <p>
-This first step will lead you to the minimum requirement to follow our example- which implies that there is a possibility to avoid
-installing KDE 2 if you're only interested in creating Qt-only programs. As Qt-2.1 contains all needed classes and KDevelop providing a
-project template for multiple document interface applications for Qt-2.1 as well based on the same framecode that is used in the KDE 2
-template, you should have no problem at all following the example with a Qt-only application.
+Dieser erste Schritt wird Sie zur Minimalanforderung für unser Beispielprogramm führen- woraus hervorgeht, daß es nicht nötig ist
+KDE 2 zu installieren, wenn Sie nur daran interessiert sind "nur-Qt" Programme zu entwickeln. Da Qt-2.1 alle benötigten Klassen
+enthält und KDevelop auch eine Projektschablone für Qt-2.1 MDI Anwendungen zur Verfügung stellt, die auf dem gleichen Rahmencode
+basiert, der in der KDE 2 Schablone verwendet wird, sollten Sie kein Problem haben dem Beispiel mit einer "nur-Qt Anwendung" zu
+folgen.
 
-Now, to get the newest Qt library, get a recent version from the Troll Tech website at <htmlurl url="http://www.troll.no"
-name="http://www.troll.no">, section download. Then change to root and copy the tarball to the directory where your currently used Qt
-version is placed as well - on a SuSE Linux system this would be <tt>/usr/lib</tt>, where you should have a directory for either
-qt-1.44 or qt-2.0.2, depending on the distribution version. Untar the library sources with
+Nun, um die neueste Qt Bibliothek zu bekommen, holen Sie sich eine neue Version von der Troll Tech Website unter
+<htmlurl url="http://www.troll.no" name="http://www.troll.no">, Sektion Download. Wechseln Sie dann nach root und kopieren
+Sie das Tarball in das Verzeichnis, in dem sich auch Ihre bisherige Qt Version befindet - auf einem SuSE Linux System wäre
+das <tt>/usr/lib</tt>. Dort sollte sich entweder ein Verzeichnis für qt-1.44 oder qt-2.0.2 befinden, je nach Distributionsversion.
+Entpacken Sie die Bibliotheksquellen mit
 
 <tt>tar zxvf qtxxx.tar.gz</tt>
 
-depending on the name of the tarball. Then set the environment variable <tt>QTDIR</tt> to point to the directory where your new Qt-2.1
-library is placed with e.g. <tt>setenv QTDIR=/usr/lib/qt-2.1</tt>. Another solution would be to move the qt-1.44 directory, usually
-just named qt, to qt-1.44 and create a symlink that for now has to point to qt-2.1, after the library is build, change it back to
-point to the qt-1.44 directory.
+abhängig vom Namen des tarballs. Setzen Sie dann die Umgebungsvariable <tt>QTDIR</tt> so, daß sie auf das Verzeichnis zeigt, in dem
+sich Ihre neue Qt-2.1 Bibliothek befindet, z.B. mit <tt>setenv QTDIR=/usr/lib/qt-2.1</tt>.Eine andere Lösung wäre es, das qt-1.44
+Verzeichnis, daß normalerweise nur qt heißt, in qt-1.44 umzubenennen und einen symlink qt zu erzeugen, der auf qt-2.1 zeigt. Nachdem
+die Bibliothek erzeugt ist, lassen Sie ihn wieder auf qt-1.44 zeigen.
 
-Change to the Qt-2.1 directory and type:
+Wechseln Sie in das Qt-2.1 Verzeichnis und geben Sie ein:
 <tscreen><verb>
 ./configure
 make
 </verb></tscreen>
 
-You can change back your QTDIR variable to point to your qt-1.44 installation after successfully
-compiling the Qt-2.1 library.
+Nachdem Sie die Qt-2.1 Bibliotheken erfolgreich erstellt haben, können Sie die QTDIR Variable wieder auf Ihre Qt-1.44 zeigen lassen.
 
-Now switch to the directory <tt>/usr/lib/qt-2.1/lib</tt> and copy the created libraries to <tt>/usr/lib</tt> <bf>exept</bf> the
-symbolic link <tt>libqt.so</tt>.
+Wechseln Sie nun in das Verzeichnis <tt>/usr/lib/qt-2.1/lib</tt> und kopieren Sie alle erzeugten Bibliotheken <bf>außer</bf> dem
+symbolischen Link <tt>libqt.so</tt> nach <tt>/usr/lib</tt>.
 
-Then you're done with Qt and you can proceed to the next step, setting up KDE 2 libraries. If you want to develop for Qt only, proceed
-to section Setting up KDevelop.
+Sie sind nun fertig mit Qt und zum nächsten Schritt weitergehen, dem Einrichten der KDE 2 Bibliotheken. Wenn Sie nur für Qt entwickeln
+wollen, gehen Sie weiter zum Abschnitt <ref id="Einrichten von KDevelop" name="Einrichten von KDevelop">.
 
-<sect>Setting up KDE 2 Libraries
+<sect>Einrichten der KDE 2 Bibliotheken
 <p>
 
-The second step leads you to install the needed KDE libraries. Download a recent snapshot of the library packages <tt>kdesupport</tt>
-and <tt>kdelibs</tt> from <htmlurl url="http://www.kde.org" name="http://www.kde.org">. Then things will go a bit easier than for the
-Qt library. Just untar the sources to your directory and change to the kdesupport directory first. There, type:
+Der zweite Schritt ist das Installieren der benötigten KDE Bibliotheken. Laden Sie einen neuen Snapshot der Bibliothekspakete
+<tt>kdesupport</tt> und <tt>kdelibs</tt> von <htmlurl url="http://www.kde.org" name="http://www.kde.org"> herunter. Danach wird es
+etwas einfacher als bei den Qt Bibliotheken. Packen Sie einfach die Quellen in Ihrem Verzeichnis aus und wechseln Sie zuerst
+in das kdesupport Verzeichnis. Geben Sie dort ein:
 
 <tscreen><verb>
 ./configure --with-qt-dir=/usr/lib/qt-2.1 --prefix=/opt/kde2
 make
 
-and as root:
+und als root:
 
 make install
 </verb></tscreen>
 
-This will install the kdesupport package to the directory given in the --prefix option and compile using the new build Qt-2.1 library,
-to which you give the path to configure by the option --with-qt-dir.
+Dies wird das kdesupport Paket in dem Verzeichnis installieren, das Sie mit der --prefix Option angegeben haben und kompiliert
+mit der neu erstellten Qt-2.1 Bibliothek, deren Pfad Sie mit der Option --with-qt-dir angegeben haben.
 
-The same applies to the kdelibs package, just change to the kdelibs directory and type the same as above for the kdesupport package.
+Dasselbe gilt für das kdelibs Paket, wechseln Sie einfach in das kdelibs Verzeichnis, und geben Sie das gleiche wie beim kdesupport
+Paket ein.
 
-Then you're done with setting up the requirements for the needed libraries to build a KDE 2 application.
+Sie haben nun alle Bibliotheken, die zum erstellen einer KDE 2 Applikation erforderlich sind.
 
-As a note aside, the KDE library package contains support for automatic HTML documentation generation, which you can easily get by
-installing KDoc, version 2.x. Then type <tt>makekdedoc</tt> in your kdelibs directory and KDoc will create the HTML documentation in a
-subdirectory <tt>srcdoc</tt>. In KDevelop you can access the KDE library documentation online with setting the KDE library
-documentation path in the KDevelop Setup dialog to point to <tt>kdelibs/srcdoc</tt>. On the same way set your Qt-Online documentation
-path in KDevelop to point to <tt>/usr/lib/qt-2.1/html</tt>, so you can access the documentation right away from within KDevelop.
+Nebenbei bemerkt, das KDE Bibliothekspaket enthält sie Unterstützung zur automatischen Generierung der HTML Dokumentation, die
+auf einfache Weise erhalten können, indem Sie Kdoc installieren. Geben Sie dann im kdelibs Verzeichnis <tt>makekdedoc</tt> ein
+und Kdoc erstellt die Bibliotheksdokumentation im Unterverzeichnis <tt>srcdoc</tt>. In KDevelop können Sie online auf die Dokumentation
+zugreifen, wenn Sie im Setup Dialog den Pfad zur KDE Bibliotheksdokumentation auf <tt>kdelibs/srcdoc</tt> einstellen. Auf die gleiche
+Art und Weise geben Sie auch den Pfad zu Ihrer Qt Dokumentation an, indem Sie <tt>/usr/lib/qt-2.1/html</tt> einstellen und so die
+Dokumentation direkt aus KDevelop heraus erreichen können.
 
-If you successfully installed the Qt-2.1 and KDE 2 libraries, you're just one step away from creating your first KDE 2 application, you
-just need to give KDevelop the needed information where you installed the libraries - which we'll do in the next section.
+Wenn Sie erfolgreich die Qt-2.1 und KDE 2 Bibliotheken installiert haben, fehlt nur noch ein Schritt bis zur Erstellung Ihrer
+ersten KDE 2 Applikation, Sie müssen nur KDevelop die nötigen Informationen geben, wo Sie die Bibliotheken installiert haben. Dies
+werden wir im nächsten Abschnitt machen.
 
-<sect>Setting up KDevelop
+<sect>Einrichten von KDevelop <label id="Einrichten von KDevelop">
 <p>
-This part is somewhat the easiest in the whole configuration process for KDE 2 development: Setting up KDevelop. Just open KDevelop,
-then select "Options"->"KDevelop Setup" to access the KDevelop configuration. There, change to the last page, titled "Path". This page
-contains two entry fields, one for the Qt library and one for the KDE 2 libraries. As you have successfully installed everything,
-select <tt>/usr/lib/qt-2.1</tt> for the Qt-2.x library path and <tt>/opt/kde2</tt> for the KDE 2 library path. Press the "OK" button
-and you're done.
+Dieser Teil ist der einfachste des ganzen Konfigurationsprozesses für die KDE 2 Entwicklung: das Einrichten von KDevelop.
+Öffnen Sie einfach KDevelop und wählen Sie "Einstellungen"->"KDevelop Setup" um die KDevelop Konfiguration zu erreichen.
+Wechseln Sie dort zur letzten Seite namens "Pfad". Diese Seite enthält zwei Eingabefelder, eins für die Qt und eins für die
+KDE 2 Bibliotheken. Da Sie alles erfolgreich installiert haben, wählen Sie <tt>/usr/lib/qt-2.1</tt> für den Qt-2.x
+Bibliothekspfad und <tt>/opt/kde2</tt> für KDE 2. Drücken Sie dann den "OK" Knopf und Sie sind fertig.
 
-Users that only want to develop for Qt-2.x (including the current Qt-2.0.2 version) just have to set the Qt-2.x library path.
+Benutzer, die nur für Qt-2.x (inklusive der aktuellen Qt-2.0.2 Version) entwickeln wollen, müssen nur den Qt-2.x Pfad setzen..
 
-Now we can proceed to the next chapter where we will create the first step of the <em>KScribble</em> example.
+Wir können nun zum nächsten Kapitel weitergehen, in dem wir den ersten Schritt des <em>KScribble</em> Beispielprogrammes erstellen
+werden.
 
 
-<chapt>Application Concepts
+<chapt>Anwendungs Konzepte
 <p>
-This chapter now introduces you into the ideas of the application models mentioned already: the MDI (Multiple Document Interface) and
-the Document-View model. A basic introduction into the Document-View model and the generating of a project with KDevelop is already
-given in <htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook">, but based on a Single Document Interface
-(SDI). In any case, you should be familiar with the basics of the KDE and Qt classes that are explained in <htmlurl
-url="../kde_libref/index.html" name="The KDE Library Reference Guide">, there the base classes of the underlying libraries are
-explained in detail and how to use them, with an additional description of the Qt signal-slot mechanism and event handling.
+Dieses Kapitel stellt Ihnen die Ideen der bereits erwähnten Applikationsmodelle vor: das MDI (Multiple Document Interface) und das 
+Document View Modell. Eine Basiseinführung in das Doc-View Modell und die Generierung eines Projektes mit KDevelop ist schon in 
+<htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook"> enthalten, aber auf Basis des Single Document 
+Interface (SDI). In jedem Falle, sollten Sie mit den Grundlagen der KDE und Qt Klassen vertraut sein, die in <htmlurl
+url="../kde_libref/index.html" name="The KDE Library Reference Guide"> erklärt sind, die Basisklassen der darunterliegenden 
+Bibliotheken und ihre Verwendung werden dort im Detail beschrieben, außerdem finden Sie zusätzlich eine Beschreibung des Qt 
+Signal-Slot Verfahrens und der Ereignisverarbeitung.
 
-As a guideline, you should know already:
+Als Anhaltspunkt sollten Sie bereits wissen:
 <itemize>
-<item>that every KDE application needs one instance of <tt>KApplication</tt> (for a Qt application one instance of
-<tt>QApplication</tt>)
-<item>generally a main window is inherited from <tt>KTMainWindow</tt> for KDE (for a Qt application inherited from
-<tt>QMainWindow</tt>)
-<item>that events (e.g. keyboard presses or mouse movements) are sent to the application by the underlying window system
-<item>that <tt>QWidget</tt> as the base class for all visible Graphical User Interface (GUI) components provides specialized event
-handlers by virtual functions that filter out the according events by reimplementing <tt>QObject::event()</tt>
-<item>that the Qt signal-slot mechanism means basically that a component can send out signals and a receiver can connect to those
-signals to process some actions
-<item>that this mechanism avoids inheriting classes for GUI components because the signals inform you about e.g. mouse presses  where
-appropriate for a wiget
+<item>Das jede KDE Applikation eine Instanz von <tt>KApplication</tt> (bei Qt eine Instanze von <tt>QApplication</tt>) benötigt
+<item>Generell ein Main Fenster von <tt>KTMainWindow</tt> bei KDE (for Qt von <tt>QMainWindow</tt>) abgeleitet ist
+<item>Das Ereignisse (z.B. Tastendrücke oder Mausbewegungen) von darunterliegenden Window System an die Anwendung gesendet 
+werden
+<item>Das <tt>QWidget</tt> als Basisklasse für alle Graphical User Interface (GUI) Komponenten spezialisierte Event Handler durch 
+virtuelle Functionen bereitstellt, die die entsprechenden Events durch Reimplementation von <tt>QObject::event()</tt> ausfiltern 
+<item>Das das Qt Signal-Slot Verfahren bedeutet, das eine Komponente Signale aussendet und ein Empfänger sich mit diesen Signalen 
+verbinden kann, um bestimmte Aktionen auszuführen.
+<item>Das dieser Mechanismus es unnötig macht, Klassen für GUI Komponenten zu beerben, weil die Signale Sie über z.B. 
+Mausereignisse informieren, wo es passend für ein Widget ist.
 </itemize>
 
-<sect>The Document-View Model
+<sect>Das Document-View Modell
 <p>
-The Document-View Model is one of the most basic concepts in application design that rely on graphical user interfaces. Therefore, a
-certain understanding of the why is needed to see that although the programmer has other possibilities, it makes sense to make use of
-it. But first let's follow the usual design of a typical KDE / Qt application:
+Das Document-View Modell ist eines der grundlegendsten Konzepte für Anwendungsdesign, das auf GUI basiert. Daher ist ein gewisses 
+Verständnis für das Warum nötig, um zu sehen, daß es Sinn macht es zu benutzen, obwohl der Programmiere andere Möglichkeiten hat. 
+Lassen Sie uns aber zuerst einen Blick auf das normale Design einer typischen KDE / Qt Applikation werfen:
 
-Your application instance provides the first connection to your application and is the starting point of the event handling for a
-program. The program itself represents itself to the user by a Graphical User Interface which is most often called a main-window. The
-main window then provides the appropriate functions for the user such as key accelerators, a menubar, toolbar and a statusbar. In the
-center it contains a so-called "view-area" which means that this part is an instance of another class, usually called a "View". The
-view instance is created when the main window gets constructed at program start and has to be set as the view area component with a
-method provided by the main window: <tt>setView(your_view)</tt> for KDE applications using <tt>KTMainWindow</tt>,
-<tt>setCentralWidget(your_view)</tt> for a Qt application using <tt>QMainWindow</tt>. Now, the view obviously is the area that is
-responsible for interacting with the user to manipulate the data that it represents. As an example, you could use a
-<tt>QMultiLineEdit</tt> as a view and you will have an editor. Then you can use the provided slots of the view for connections to
-menubar or toolbar command like this:
+Die Instanz Ihrer Anwendung stellt die erste Verbindung zu Ihrer Applikation zu Verfügung und ist der Startpunkt der 
+Ereignisbehandlung eines Programms. Das Programm selber präsentiert sich dem Benutzer über eine graphische Benutzerschnittstelle, 
+die meisten Hauptfenster genannt wird. Das Hauptfenster stellt dann dem Benutzer die erforderlichen Funktionen zur Verfügung, wie 
+Tastenkürzel, eine Menüleiste, eine Werkzeugleiste und eine Statuszeile. Im Zentrum befindet sich ein sogenannter 
+"Ansichtsbereich", was bedeutet, daß dieser Bereich die Instanz einer anderen Klasse ist, normalerweise "Ansicht" genannt. Diese 
+Instanz wird erzeugt, wenn das Hauptfenster beim Programmstart konstruiert wird und muß mit Hilfe einer Methode des Hauptfensters 
+zum Ansichtsbereich gemacht werden: <tt>setView(your_view)</tt> bei KDE Applikationen die <tt>KTMainWindow</tt> verwenden,
+<tt>setCentralWidget(your_view)</tt> bei Qt Applikationen die <tt>QMainWindow</tt> verwenden. Nun, offensichtlich is die Ansicht 
+der Bereich, der verantwortlich für die Interaktion mit dem Benutzer ist, wenn die Daten, die er represäntiert manipuliert werden 
+sollen. Zum Beispiel könnten Sie <tt>QMultiLineEdit</tt> als Ansicht verwenden, und Sie hätten einen Editor. Dann können Sie die 
+gegebenen Slots der Ansicht zur Kommunikation mit der Menüleiste oder der Werkzeugleiste folgendermaßen verwenden:
 
-While creating the menubar, you want to provide a method for the command "cut" in the "Edit" menu:
+Während Sie die Menüleiste erstellen, möchten Sie eine Methode für das Kommando "Cut" im "Edit" Menü bereitstellen:
 <tscreen><verb>
   pEditMenu->insertItem(BarIcon("editcut"), i18n("Cu&amp;t"),view, SLOT(cut()),KAccel::Cut, ID_EDIT_CUT);
 </verb></tscreen>
 
-This creates a menu item in the "Edit" menu, that, when activated, directly calls the slot <tt>cut()</tt> of the instance
-<tt>view</tt>, whereby we suppose you have created this instance as a <tt>QMultiLineEdit</tt> and set as the view area. The
-multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
+Dies erzeugt einen Menüeintrag im "Edit" Menü, der, wenn aktiviert, direkt den Slot <tt>cut()</tt> der Instanz 
+<tt>view</tt> aufruft, wobei wir davon ausgehen, daß Sie diese Instanz als <tt>QMultiLineEdit</tt> erzeugt und sie zum 
+Ansichtsbereich gemacht haben. 
+The multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
 itself and so there is no need to inherit from <tt>QMultiLineEdit</tt> to create a view area that is capable of such actions. They are
 ready to use and make application development very fast- you just need the application instance and the main window including the
 connections to your view area and you're done ! That means, a simple editor can be written by creating one single class that defines
@@ -761,72 +771,77 @@ Now you are prepared for following the development for KDE 2 - just follow the n
 already provided by KDevelop when creating applications. There, we will generate the framework for our tutorial application
 <em>KScribble</em> and describe the practical aspects of programming MDI applications.
 
-<chapt>The MDI Framework
+<chapt>Das MDI Framework
 <p>
-If you're already familiar with previous versions of KDevelop, you will know that your IDE uses so-called "frameworks" as a starting
-point of application development. These frameworks by default contain a support for a generic document-view model, but were limited to
-SDI (Single Document Interface, one window with one view area) model structures. From KDevelop 1.1 on, the application wizard is
-capable of a lot more than the previous versions: it offers some new project types especially for those developers that want to stay
-up-to-date with the upcoming KDE 2 as well as for Qt 2.1. One major extension are MDI application frameworks for both, KDE 2 and Qt
-2.1. These frameworks differ only in the use of some library functions such as file dialogs or message boxes as well as the used
-toolbar and statusbar classes - the KDE version uses KDE 2 methods, the Qt version the according Qt functions.
+Wenn Sie bereits frühere Versionen von KDevelop kennen, werden Sie wissen, daß Ihre IDE sogenannte "frameworks" als Startpunkt der 
+Anwendungsentwicklung verwendet. Diese Frameworks enthalten standardmäßig eine Unterstützung für ein generisches Document View 
+Modell, waren aber bisher auf SDI Strukturen (Single Document Interface, <em/ein/ Fenster mit <em/einem/ Ansichtsbereich) 
+limitiert. Seit KDevelop 1.1, kann der Application Wizard eine Menge mehr als die vorhergehenden Versionen: er bietet einige neue 
+Projekttypen insbesondere für jene Programmierer an, die up-to-date mit der kommenden KDE 2, sowie mit Qt 2.1 bleiben wollen. Eine 
+der Haupterweiterungen sind MDI Frameworks für beide, sowohl KDE 2 als auch Qt 2.1. Sie unterscheiden sich nur in der Verwendung 
+einiger Bibliotheksfunktionen wie Dateidialoge oder Message Boxen, sowie den verwendeten Werkzeugleisten- und Statuszeilenklassen- 
+die KDE Version verwendet KDE 2 Methoden, die Qt Version die entsprechenden Qt Funktionen.
 
-To create the fist step of this tutorial application <em>KScribble</em>, be sure that you have followed the instructions in chapter 2
-of this tutorial handbook: setting up KDE 2. If that went all right, nothing can go wrong. If you couldn't set up the KDE 2 libraries,
-be sure that you have Qt-2.1 installed and set up KDevelop for that at least. You can follow this tutorial by choosing the according Qt
-framework as well (which has the differences as mentioned above: other method calls for dialogs and GUI components).
+Zur Erstellung des ersten Schrittes der Beispielanwendung <em>KScribble</em>, müssen Sie sicherstellen, daß Sie die Anweisungen in 
+Kapitel 5 dieser Anleitung befolgt haben: Installation von KDE 2. Wenn das alles funktioniert hat, kann nichts schiefgehen. Wenn 
+Sie die KDE 2 Bibliotheken nicht installieren konnten, stellen Sie sicher, daß Qt 2.1 installiert wurde und konfigurieren Sie 
+KDevelop wenigstens für Qt 2.1. Sie können dieser Anleitung auch folgen, wenn Sie das entsprechende Qt Framework wählen (mit den 
+oben beschriebenen Unterschieden: andere Methodenaufrufe für Dialoge und GUI Komponenten).
 
-<sect>Creating an MDI Framework
+<sect>Erzeugen eines MDI Frameworks
 <p>
-Now we will start jumping into development by creating the frame application for <em>KScribble</em>. Start KDevelop and choose
-"Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
-contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
-from the Qt section. Then select "Next", enter "KScribble" as project name and "1.0" as version number. Add your name
-and email address into the according fields and you're done. Click on the "Create" button and KDevelop will generate our first version
-of <em>KScribble</em> while you can watch the output in the last page of the wizard. Finally, press "Exit" to return to KDevelop. In
-the output window you will see an additional message showing that the messages file has been set up for your project, which will be
-important to translate <em>KScribble</em> into other languages.
+Nun werden wir uns in die Entwicklung stürzen, indem wir den Rahmen für <em/KScribble/ erzeugen. Starten Sie KDevelop und wählen 
+Sie "Projekt"-"Neu" aus dem Menü um den Applikation Wizard zu starten. Auf der ersten Seite wird Ihnen ein Baum mit Projekttypen 
+angezeigt. Dieser enthält KDE und Qt Projekte. Wählen Sie "KDE 2 MDI" aus dem KDE Abschnitt. Wenn Sie nur Qt 2.1 installiert 
+haben, wählen Sie "Qt 2.1 MDI" aus dem Qt Abschnitt. Dann wählen Sie "Weiter", geben "KScribble" als Projeknamen und 1.0 als 
+Versionsnummer ein. Fügen Sie Ihren Namen und E-Mail Adresse in die entsprechenden Felder ein, fertig. Klicken Sie auf den 
+"Erzeugen" Knopf und KDevelop wird unsere erste Version von <em/KScribble/ erzeugen, waährend Sie die Ausgabe auf der letzten 
+Seite des AppWiz verfolgen können. Schließlich drücken Sie noch "Beenden" um zu KDevelop zurückzukehren. Im Ausgabefenster sehen 
+Sie eine weitere Meldung, daß die Message Datei für Ihr Projekt erstellt wurde, was wichtig sein wird, wenn Sie <em/KScribble/ in 
+andere Sprachen übersetzen.
 
-<sect>Overview
+<sect>Übersicht
 <p>
-Now it is important to have an understanding where to find what in the generated sources and where your place as a programmer can be
-found to make <em>KScribble</em> a unique KDE application.
+Nun ist es wichtig, daß Sie wissen Wo Sie Was in den generierten Quellen finden und wo Ihr Platz als Programmierer ist, damit 
+<em/KScribble/ eine einzigartige KDE Applikation wird.
 
-First of all, in the Classviewer you will see three already created classes, <tt>KScribbleApp</tt>, <tt>KScribbleDoc</tt> and
-<tt>KScribbleView</tt>. As explained above, each of them has a certain part within the application; the App class builds the main
-window and coordinates user interaction, the Doc class maintains the documents that an application can manipulate; finally the View
-class is responsible for user interaction with the child windows and communicates with the document connected to it. This has several
-consequences: to make a good use of the provided functionality, the programmer is bound to use the given View class. By default, the
-View inherits <tt>QWidget</tt> as a minimum requirement, but you're by far not limited to that. But inheriting from another class is
-not too much work and finally there is also the possibility to use a <tt>QMainWindow</tt> or <tt>KTMainWindow</tt> for example as the
-class to inherit and use another class that manages the view.
+Zunächst einmal sehen Sie in der Klassenansicht drei, bereits erzeugte Klassen, <tt>KScribbleApp</tt>, <tt>KScribbleDoc</tt> und
+<tt>KScribbleView</tt>. Wie oben erklärt, spielt jede von ihnen eine bestimmte Rolle in Ihrer Anwendung; die App Klasse bildet das 
+Hauptfenster und koordiniert die Benutzerinteraktion, die Doc Klasse verwaltet die Dokumente, die eine Anwendung manipulieren 
+kann; schließlich ist die View Klasse verantwortlich für die Benutzerinteraktion mit den Kind Fenstern und kommuniziert mit dem 
+ihr angeschlossenen Dokument. Dies hat verschiedene Konsequenzen: um guten Nutzen aus der gegebenen Funktionalität zu ziehen, muß 
+sich der Programmierer an die gegebene View Klasse halten. Standardmäßig erbt die Ansicht <tt>QWidget</tt> als minimale 
+Anforderung, aber Sie sind bei weitem nicht darauf beschränkt. Von einer anderen Klasse zu erben, ist nicht allzuviel Arbeit und 
+schließlich gibt es noch die Möglichkeit z.B. <tt>QMainWindow</tt> oder <tt>KTMainWindow</tt> als zu beerbende Klasse zu verwenden 
+und eine andere Klasse für der Verwaltung der Ansicht zu benutzen.
 
-In the next chapter we'll continue with extending <em>KScribble</em> to manage it's documents. After that we'll implement the user
-interaction and you will see the first functionality that is unique to our application: we can draw pictures, load and save them.
+Im nächsten Kapitel werden wir fortfahren <em/KScribble/ um die Verwaltung seiner Dokumente zu erweitern. Danach werden wir die 
+Benutzerinteraktion implementieren und Sie werden die erste Funktionalität unserer Anwendung sehen: wir können Bilder zeichnen, 
+sie laden und sie speichern.
 
 
-<chapt>Defining the Documents
-<p>
-
-The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
-to and from files and offer methods to manipulate the data. As <em>KScribble</em> will be a simple drawing application that operates on
-graphical data, we will use the Qt class <tt>QPixmap</tt> for storing our paintings while it is edited. <tt>QPixmap</tt> also offers
-simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
-reading and one for writing. Further, we need to define a pen that draws into a document, set it's width and color and make it
-available for the view class to retrieve the pen - actually you want the view offering the drawing methods, but the document as the
-central element for all views has to hold the pen originally, because two views of the same document would otherwise use different
-pens!
-
-Therefore to define how our document class should work, we will add one instance of <tt>QPixmap</tt>, one of <tt>QPen</tt> and edit the
-methods <tt>newDocument()</tt>, <tt>openDocument()</tt> and <tt>saveDocument()</tt>.
-
-<sect>Adding the Instances
+<chapt>Definieren der Dokumente
 <p>
 
-Open the file <tt>kscribbledoc.h</tt> by selecting it in one of the fileviewers or by a click on the classviewer over the class
-<tt>KScribbleDoc</tt>. Then add the lines marked with -> from the following code snippet:
+Der erste Schritt beim Erstellen einer Applikation, die aud dem Document-View Modell basiert, sollte immer sein, sich zu überlegen
+welche Arten von Daten die Anwendung verwalten muß. Dies entscheidet, wie die view Klasse aussehen wird, aber besonders, wie die
+document Klasse Daten in und aus Dateien lesen und schreiben wird und welche Methoden angeboten werden, um die Daten zu manipulieren.
+Da <em>KScribble</em> eine einfache Zeichenanwendung sein wird, die mit graphischen Daten umgeht, werden wir die Qt Klasse
+<tt>QPixmap</tt> verwenden, um unsere Daten zu speichen während wir editieren. <tt>QPixmap</tt> bietet auch einfache Methoden, Bilder
+in und aus Dateien zu lesen und zu schreiben, so daß die Serialisation mit zwei Zeilen erreicht werden kann, eine zum Lesen und eine
+zum Schreiben. Weiterhin müssen wir einen Stift definieren, der in ein Dokument schreibt, seine Breite und Farbe einstellen und der
+view Klasse ermöglichen den Stift anzusprechen - tatsächlich wollen Sie, daß die Ansicht die Zeichenmethoden anbietet, aber das
+Dokument als zentrales Element für alle Ansichten, muß das Original des Stiftes besitzen, da sonst verschiedene Ansichten desselben
+Dokuments verschiedene Stifte verwenden würden!
 
+Daher fügen wir zur Definition der Arbeitsweise unserer document Klasse eine Instanz von <tt>QPixmap</tt> und eine von
+<tt>QPen</tt> hinzu und editieren die Methoden <tt>newDocument()</tt>, <tt>openDocument()</tt> und <tt>saveDocument()</tt>.
+
+<sect>Hinzufügen der Instanzen
+<p>
+
+Öffnen Sie die Datei <tt>kscribbledoc.h</tt> durch Auswahl in einer der Baumansichten oder durch einen Klick in der Klassenansicht
+über <tt>KScribbleDoc</tt>. Dann fügen Sie die mit -> markierten Zeilen aus dem folgenden Code Ausschnit hinzu:
 
 <code>
 ->  #include <qpixmap.h>
@@ -855,15 +870,16 @@ Open the file <tt>kscribbledoc.h</tt> by selecting it in one of the fileviewers 
         bool modified;
 </code>
 
-As you see, we added pen and buffer as well as <tt>currentPen()</tt> and <tt>penWidth()</tt>. As pen is declared private, we offer a
-possibility to retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to
-add them to the implementation file, where we're turning to now.
+Wie Sie sehen, haben wir pen und buffer, sowie <tt>currentPen()</tt> und <tt>penWidth()</tt> hinzugefügt. Da pen als private deklariert
+ist, bieten wir eine Möglichkeit sowohl auf den Stift selber, als auch auf die Stiftbreite zuzugreifen. Da diese bereits in der
+Klassendeklaration implementiert sind, müssen wir sie nicht der Implementationsdatei hinzufügen, der wir uns nun zuwenden.
 
-<sect>Initialization of the Document
+<sect>Initialisierung des Dokuments
 <p>
 
-Select the method <tt>newDocument()</tt> in the <tt>KScribbleDoc</tt> class to jump to the method declaration. Here, we're only adding
-one line, marked with the arrow:
+Wählen Sie die Methode <tt>newDocument()</tt> in der <tt>KScribbleDoc</tt> Klasse um zur Methodendeklaration zu springen. Hier fügen wir
+nur eine mit dem Pfeil markierte Zeile ein:
+
 <code>
   kscribbledoc.cpp
 
@@ -878,13 +894,14 @@ one line, marked with the arrow:
   }
 </code>
 
-This initializes the pen with the color black and width of 3 pixels; the <tt>QPen</tt> class has some more constructors, but this one lasts our
-needs here.
+Dies initialisiert den Stift mit der Farbe Schwarz und einer Weite von drei Pixeln; die <tt>QPen</tt> Klasse hat noch einige weitere
+Konstruktoren, aber dieser hier reicht für unsere Zwecke.
 
-<sect>Implementing the Serialization
+<sect>Implementierung der Serialisation
 <p>
 
-What is left to do is to define how to open and save our pictures. This is done in the according methods:
+Was noch zu tun ist, ist zu definieren, wie wir unsere Bilder öffnen und speichern wollen. Dies wird in den entsprechenden Methoden
+erledigt:
 
 <code>
     bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
@@ -917,39 +934,42 @@ What is left to do is to define how to open and save our pictures. This is done 
 
 </code>
 
-Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
-<tt>filename</tt> is opened, because that is done automatically by the load and save methods of <tt>QPixmap</tt>, which we add instead. Other
-documents may open a file and read in its contents such as text lines or whatever, so the <tt>QFile</tt> methods are already present in the
-codeframe. As <tt>save()</tt> and <tt>load()</tt> return a boolean value if the operation was successful, we're returning false if not,
-so the rest of the framework gets a return value and can give out warnings if the operation was not successful.
-The <tt>load()</tt> and <tt>save()</tt> methods now are already provided in <tt>QPixmap</tt>. They require the filename and the format as
-argument; the source framework on the other hand <bf>does not</bf> call the document methods with the format yet. If only one format is
-used, it lasts to set the format here. other methods could detect the format for example- but we will turn to this later. For now,
-we're using "PNG" as format; see <tt>QImageIO</tt> for more details about the image formats that can be opened.
+Fügen Sie wieder die Zeilen mit dem Pfeil Ihrem Code hinzu. Was wir getan haben, ist die Zeilen, in denen <tt>Dateiname</tt> geöffnet
+wird, auszukommentieren, weil die automatisch von den Laden- und Speichermethoden von <tt>QPixmap</tt> erledigt wird, die wir
+stattdessen hinzufügen. Andere Dokumente mögen Dateien öffnen und deren Inhalt, Textzeilen oder was auch immer, lesen, weshalb
+die <tt>QFile</tt> Methoden schon im Frame enthalten sind.Da <tt>save()</tt> und <tt>load()</tt> bei Erfolg einen Boolschen Wert
+zurückliefern, Geben wir false zurück, wenn nicht, so daß der Rest der Anwendung einen Returnwert erhält und Warnungen ausgibt, wenn
+die Operation nicht erfolgreich war. Die <tt>load()</tt> und <tt>save()</tt> Methoden sind nun schon in <tt>QPixmap</tt> enthalten.
+Sie benötigen den Dateinamen und das Format als Argument; die Quellen rufen die document Methoden jedoch noch <bf>nicht</bf> mit dem
+Format auf. Wenn nur <em/ein/ Format verwendet wird, reicht es, dieses hier zu setzen, andere Methoden könnten das Format zum
+Beispiel ermitteln - aber wir werden später noch einmal darauf zurückkommen. Für jetzt verwenden wir "PNG" als Format; sehen Sie unter
+<tt>QImageIO</tt> nach, um mehr über Bildformate zu erfahren.
 
-Now we're already finished defining our document structure. The <tt>QPixmap</tt> buffer serves us as a buffer storing the original picture
-contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
-pen is done in <tt>newDocument()</tt>. This method is always called after the constructor within the framework internally, so you
-should add document instances initializations there as we did with the pen.
+Nun sind wir fast mit der Definition unserer Dokumentstruktur fertig. Der <tt>QPixmap</tt> Puffer dient uns als Speicher für unser
+Originalbild, während wir daran arbeiten. Der Stift ist gültig für alle Ansichten, die mit dem Dokument verbunden sind. Beachten Sie,
+daß die Initialisierung des Stiftes in <tt>newDocument</tt> erfolgt. Diese Methode wird immer intern nach dem Konstruktor aufgerufen,
+Sie sollten also dort document Instanzinitialisierungen vornehmen, wie wir es mit dem Stift gemacht haben.
 
-In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
-document- and then we'll be ready to paint !
+Im nächsten Kapitel werden wir uns der view Klasse widmen, um zu definieren, wie die Ansicht mit dem Benutzer kooperieren soll und
+wie sie auf das Dokument zugreift- und dann sind wir bereit zu zeichnen !
 
-<chapt>Defining the View
+<chapt>Definieren der Ansicht
 <p>
 
-<sect>Interactivity with the User
+<sect>Interaktion mit dem Benutzer
 <p>
 
-In this chapter we'll turn to the view class of <em>KScribble</em> to define how the child windows shall work. First of all, we notice that
-KScribbleView is derived from <tt>QWidget</tt> by default. That is the minimum requirement for a child window, but it lasts already to fullfill
-our needs. When it comes to defining a new widget's behavoir, we need to know how the user shall interact with the window. In our
-example, this would be obviously the mouse. Therefore, we have to overwrite some virtual methods from <tt>QWidget</tt> that process mouse
-events the widget receives. What we need is to know when the user presses a mouse button, because the drawing shall only take place
-when the mouse is pressed. Then we need to know when the mouse is moved (to know where it moves to) as well as when it is released-to
-finish the stroke the user has drawn. Further we want our picture to be painted on the window and resized if the user decides to resize
-the window he draws into. As members we will also add a <tt>QPointArray</tt> polyline and a boolean value mousePressed. Add the code with the
-arrow to your include file for the class KScribbleView:
+In diesem Kapitel werden wir uns der view Klasse von <em/KScribble/ zuwenden um zu definieren, wie die Kind Fenster arbeiten sollen. 
+Als erstes sehen wir, daß KScribbleView standarmäßig von <tt>QWidget</tt> abgeleitet ist. Das ist die Mindestanforderung für ein 
+Kindfenster, aber es reicht bereits für unsere Bedürfnisse aus. Wenn es darum geht, das Verhalten eines neuen Widgets zu definieren, 
+müssen wir wissen, wir der Benutzer mit dem Fenster interagieren soll. In unserem Beispiel, soll dies offensichtlich mit Hilfe der Maus 
+geschehen. Daher müssen wir einige virtuelle Methoden von <tt>QWidget</tt> überschreiben, die die Mausereignisse verarbeiten die unser 
+Widget empfängt. Was wir wissen müssen, ist wann der Benutzer eine Maustaste drückt, weil nur gezeichnet werden soll, wenn eine 
+Maustaste gedrückt ist. Außerdem müssen wir wissen, wann die Maus bewegt wird (und wohin), sowie den Zeitpunkt, an dem Maustaste 
+losgelassen wird, da dann der Zeichenzug beendet ist. Weiterhin wollen wir, daß unser Bild im Fenster gezeichnet wird und seine 
+Größe angepasst wird, wenn der Benutzer sich entschließt, das Fenster in der Größe zu verändern. Wir werden auch ein Member 
+<tt>QPointArray</tt> und einen Boolschen Wert mousePressed hinzufügen. Fügen Sie den mit dem Pfeil gekennzeichneten Code Ihrer Klasse 
+KScribbleView hinzu:
 
 <code>
    kscribbleview.h
@@ -979,17 +999,19 @@ arrow to your include file for the class KScribbleView:
 </code>
 
 
-<sect>Reimplementing Event Handlers
+<sect>Reimplementierung von Event Handlern
 <p>
 
-Now we're coming to the actual implementation of the event handlers. As explained in <htmlurl url="../kde_libref/index.html" name="The
-KDE Library Reference Guide">, Qt has a good way of handling user events, especially when they target on to widgets. <tt>QWidget</tt> as a
-baseclass preselects the events and provides basic event handlers which, as they are declared as virtual, we can overwrite to define
-how our widget shall react on user actions. One is already overwritten: the <tt>closeEvent()</tt> method. This is needed, because our
-main window, represented in the App class, already preselects closing child windows and handles this; therefore the default event
-handler, which just accepts the closing, must be overwritten to prevent that and let the App class do the job.
+Wir kommen jetzt zu der tatsächlichen Implementierung der Ereignis Handler. Wie in <htmlurl url="../kde_libref/index.html" name="The
+KDE Library Reference Guide"> erkärt, hat Qt gute Methoden Ereignisse zu behandeln, besonders wenn die Ziele Widgets sind. 
+<tt>QWidget</tt> als Basisklasse, preselektiert die Events und stellt Basis Event Handler zur Verfügung, die, da sie als virtuell 
+deklariert sind, überladen werden können, so daß wir definieren können, wie unser Widget auf Ereignisse reagieren soll. 
+Eine Methode ist bereits überladen: die <tt>closeEvent()</tt> Methode. Dies ist notwendig, weil unser Hauptfenster, repräsentiert in der 
+App Klasse, bereits das Schließen von Kind Fenstern preselektiert und dies behandelt; daher muß der Standard Event Handler, der nur 
+das Schließen akzeptiert, überschrieben werden um dies zu vermeiden und die App Klasse diese Arbeit machen zu lassen.
 
-First of all, we have to declare the widget default behavoir in the constructor by initializing members and setting predefined values:
+Als erstes müssen wir im Konstruktor das Standardverhalten des Widgets deklarieren, indem wir Member initialisieren und vordefinierte 
+Werte setzen:
 
 <code>
     kscribbleview.cpp
@@ -1007,10 +1029,11 @@ First of all, we have to declare the widget default behavoir in the constructor 
     }
 </code>
 
-We're setting the background to NoBackground, a cursor (crossCursor) and initialize mousePressed and polyline. Then we'll start
-implementing our first event handler, <tt>mousePressEvent()</tt>, to recognize when the user presses the mouse and where:
+Wir setzen den Hintergrund auf NoBackground, einen Cursor (crossCursor) und initialisieren mousePressed und polyline. Nun beginnen 
+wir mit der Implementation unseres ersten Ereignis Handlers, <tt>mousePressEvent()</tt>, um zu erkennen wann der Benutzer 
+die Maus drückt und wo.
 
-Note: the following implementations have to be inserted completely, so the lines to add are not marked with an arrow !
+Beachten Sie: Die folgenden Implementationen müssen komplett eingefügt werden, es gibt also keinen Pfeil !
 
 <code>
 void KScribbleView::mousePressEvent( QMouseEvent *e )
@@ -1020,10 +1043,10 @@ void KScribbleView::mousePressEvent( QMouseEvent *e )
 }
 </code>
 
-Here, we're setting mousePressed to true, so we have stored this event somehow. The second line is not so obvious: we're storing the
-position where the mouse was pressed into our array's first three elements. As the array is a <tt>QPointArray</tt>, it can store values of the
-type <tt>QPoint</tt> (which contain an x and y value themselves). What we will do with this array is to store positions of the mouse and create
-the drawing routine from there in the mouseMoveEvent:
+Hier setzen wir mousePressed auf true, wir haben das Event also irgendwie behandelt. Die zeite Zeile ist nicht so offensichtlich: wir 
+speichern die Position, an der die Maustaste gedrückt wurde in den ersten drei Elementen unseres Feldes. Da das Feld ein 
+<tt>QPointArray</tt> ist, kann es Werte vom Typ <tt>QPoint</tt> speichern (die selber wieder einen x und y Wert enthalten). Wir werden in 
+diesem Feld Mauspositionen speichern und daraus die Zeichenroutine im mouseMoveEvent entwickeln:
 
 <code>
 void KScribbleView::mouseMoveEvent( QMouseEvent *e )
@@ -1052,34 +1075,34 @@ void KScribbleView::mouseMoveEvent( QMouseEvent *e )
 }
 </code>
 
-This event handler is probably the most difficult, so we will do a step-by-step walkthrough to understand what's been done. First of
-all, the event handler receives all mouse movements over the widget. But as we're only interested in the move if the mouse is pressed,
-because that is the time to draw, we have to ask if mousePressed is true. That has been done by the <tt>mousePressEvent()</tt> event
-handler before, so we don't have to take care for more. Now we're starting the painting action. First we create a <tt>QPainter</tt> and let it
-draw into the buffer of the document. This is important, because the document's buffer contains the real contents, the view only acts
-as a communicator between the document and the user. We get the pen from the document instance as well by calling
-<tt>currentPen()</tt>. The next three lines assign the values inside the polyline <tt>QPoint</tt> array, setting point 2 to 1, 1 to 0 and 0 to
-the point to where the move went (this is the contents of the event we're interested in). Assuming we've just pressed the mouse (so all
-three values of the array contain the pressing position) and the first mouse move event appears that contains the first position to
-draw a line to; this value is moved into the first position in the array again. You may wonder why we need three points in the array
-then, if we're only interested to draw a line from one position to the next. The following lines explain that: after drawing into our
-buffer is finished (with <tt>drawPolyline()</tt> and <tt>painter.end()</tt>), we create a rectangle r and use <tt>boundingRect()</tt>
-from <tt>QPointArray</tt> to get a <tt>QRect</tt> that contains all three points. Therefore we need three values to have a most-complete rectangle. Then
-we use <tt>normalize()</tt> to have the leftmost and topmost values the smallest (as coordinates are counted from top->bottom and
-left->right). The next thing to do is adapt the size of the rectangle by the size of the pen, because the pen has a thickness we get
-with <tt>penWidth()</tt> and widen the rectangle by the width of the pen. (Imagine the mouse movement was only two pixels away but the
-pen thickness is set to ten- then the rectangle wouldn't contain the whole painted area).
-
-Finally, we set the document modified and use the <tt>bitBlt()</tt> function to copy the rectangle out of the buffer into the widget.
-bitBlt operates bitwise and is very fast, so that it is a good method to copy the painted area from the buffer on the widget instead of
-repainting the whole window. It's arguments are: first the object to draw to (the destination), here it is our widget, so we have to
-use the pointer <bf>this</bf>. The next two arguments give the destination topleft position to start copying to, then follows the
-source to draw from with it's coordinates now including the width and height. As the pixmap coordinates are the same as the coordinates
-that the widget uses (because our pixmap is drawn into the topleft corner), the coordinates for the source and destination topleft
-point are the same. This is something to watch out for in some of the next step, so it may be mentioned here already.
-
-Next comes what happens if we release the mouse button. Then the drawing has to stop when we move the mouse again, so we set
-mousePressed to false here:
+Dieser Event Handler ist wahrscheinlich der schwierigste, wir werden ihn also Schritt für Schritt durchgehen, um zu verstehen was 
+gemacht wird. Als erstes empfängt der Handler alle Mausbewegungen über dem Widget. Da wir aber nur an Bewegungen interessiert sind 
+wenn gleichzeitig eine Maustaste gedrückt ist, weil dann gezeichnet werden muß, haben wir gefragt ob mousePressed true ist. 
+Dies wurde vom <tt>mousePressEvent()</tt> Handler bereits gemacht, daher brauchen wir uns darum nicht weiter zu kümmern. Nun 
+beginnen wir zu zeichnen. Als erstes erzeugen wir einen <tt>QPainter</tt> und lassen ihn in den Puffer des Dokumentes zeichnen. 
+Das ist wichtig, da der Puffer die wirklichen Daten enthält, die Ansicht dient nur als Kommunikator zwischen Dokument und 
+Benutzer. Den Stift holen wir ebenfalls aus der Dokumentinstanz, indem wir <tt>currentPen()</tt> aufrufen. Die nächsten drei 
+Zeilen weisen die Werte des polyline <tt>QPoint</tt> zu und setzen Punkt 2 auf 1, 1 auf 0 und 0 auf den Punkt an den die 
+Mausbewegung ging (das ist der Wert an dem wir interessiert sind). Angenommen wir haben gerade die Maus gedrückt (also enthalten 
+alle Werte diese Position) und das erste Mausereignis, das die Position enthält, zu der eine Linie gezeichnet werden soll, findet 
+statt; dann wird dieser Wert wieder in das erste Element des Feldes eingetragen. Sie mögen sich fragen, warum wir dann drei 
+Elemente im Feld brauchen, wenn wir nur eine Linie von einer zu nächsten Position zeichnen wollen. Die folgenden Zeilen erklären 
+das: nachdem die Übertragung in unseren Puffer erfolgt ist (mit <tt>drawPolyline()</tt> und <tt>painter.end()</tt>), erstellen wir 
+ein Rechteck r und verwenden <tt>boundingRect()</tt> von <tt>QPointArray</tt> um ein <tt>QRect</tt> zu erhalten, das alle drei 
+Punkte enthält. Daher brauchen wir die drei Punkten, um ein fast fertiges Rechteck zu erhalten. Dann verwenden wir 
+<tt>normalize()</tt>, damit der linke, obere Wert am kleinsten ist (da Koordinaten von links, oben nach rechts, unten zunehmen). 
+Das nächste ist, die Größe des Rechtecks der Breite des Stiftes anzupassen, weil der Stift eine bestimmte Breite hat, die wir mit 
+<tt>penWidth()</tt> ermitteln, und das Rechteck um die Breite des Stiftes zu erweitern (Stellen Sie sich vor, die Maus wäre nur um 
+zwei Pixel bewegt worden, der Stift hätte aber eine Breite von 10 Pixeln, dann würde das Rechteck nicht den ganzen gezeichneten 
+Bereich enthalten). Schließlich markieren wir das Dokument noch als modifiziert und verwenden die <tt>bitBlt()</tt> Funktion, um 
+das Rechteck aus dem Puffer in das Widget zu kopieren. bitBlt arbeitet bitweise und idt sehr schnell, dies ist also eine 
+gute Methode den gezeichneten Bereich in das Widget zu kopieren, anstatt das ganze Widget neuzuzeichnen. Seine Argumente sind: 
+Erst das Objekt in das gezeichnet werden soll (das Ziel), in diesem Fall ist es unser Widget, wir müssen also den Zeiger 
+<bf>this</bf> verwenden. Die nächsten beiden Argumente sind die linke, obere Ecke des Zieles gefolgt von der Quelle mit deren Höhe 
+und Breite. Da die pixmap Koordinaten die gleichen sind, die auch unser Widget verwendet (weil unser Pixmap in der linken oberen 
+Ecke gezeichnet wurde), sind die Koordinaten für den linken, oberen Punkt bei Quelle und Ziel identisch. Darauf muß in einem der 
+nächsten Schritte geachtet werden, daher wird es hier schon erwähnt. Als nächstes kommt, was beim Loslassen der Maustaste 
+geschieht. Es muß dann aufgehört werden bei Mausbewegung zu zeichnen, also setzen wir mousePressed auf false:
 
 <code>
 void KScribbleView::mouseReleaseEvent( QMouseEvent * ) {
@@ -1087,16 +1110,18 @@ void KScribbleView::mouseReleaseEvent( QMouseEvent * ) {
 }
 </code>
 
-Now we have finished implementing the user interaction when it comes to the actual drawing operations. The example shows it's not too
-complicated to use a document-view model. Just create your document instance so that it contains the contents and copy the contents to
-your view.
+Wir sind jetz mit der Implementierung der Benutzerinteraktion fertig, was die Zeichenfunktione angeht. Das Beispiel zeigt, daß es 
+nicht alzu kompliziert ist ein Document View Modell zu benutzen. Erzeugen Sie nur die Dokumentinstanz, so daß sie die Inhalte 
+enthält und kopieren Sie die Inhalte in Ihre Ansicht. 
 
-<sect>Painting and Resizing the Document
+
+<sect>Zeichnen und Größe des Dokuments ändern.
 <p>
 
-What is left to do are two other virtual event handlers that need a reimplementation. First of all, we have to take care that our
-picture gets painted into the window when something else happens: when you open another window that obscures the painting - then you
-change to your painting again, but it won't be there, unless your paint event gets processed to redraw the picture:
+Übrig bleiben zwei virtuelle Handler, die reimplementiert werden müssen. Als erstes müssen wir darauf achten, daß unser Bild im 
+Fenstergezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
+nicht mehr da sein, wenn sie wieder zu Ihrer Zeichnung wechseln, es sei denn, Ihr Zeichenereignis wird ausgeführt, so daß das 
+Bild neu gezeichnet wird: 
 
 <code>
 void KScribbleView::paintEvent( QPaintEvent *e )
@@ -1109,18 +1134,18 @@ void KScribbleView::paintEvent( QPaintEvent *e )
 }
 </code>
 
-This method also uses <tt>bitBlt()</tt> to draw the picture from the buffer into the widget. Here, we only need the rectangle that gets
-repainted, so we retrieve the geometry from the event ( <tt>e->rect()</tt> ) and use the coordinates for <tt>bitBlt()</tt>, just as we
-did in the <tt>mouseMoveEvent()</tt>.
+Diese Methode verwendet ebenfalls <tt>bitBlt()</tt> zum Zeichnen des Puffers in das Widget. Hier brauchen wir nur den Ausschnitt 
+der, neugezeichnet wird, also holen wir uns die Geometrie des Events ( <tt>e->rect()</tt> ) und verwenden die Koordinaten für 
+<tt>bitBlt()</tt> genau wie wir es bei <tt>mouseMoveEvent()</tt> gemacht haben.
 
-The only thing where we didn't do anything about is the size of the pixmap. We didn't set it anywhere - we did not even use the pixmap
-in the document class except for loading and saving - but these methods aren't called when creating a new picture. So it seems our
-pixmap doesn't have a size nor a predefined background at all (even if we would have set the size, the contents would be random colors
-because it is uninitialized).
-On the other hand we have the fact that the KScribbleView instances get resized when they show up- at least with the minimum size. This
-is the point where we can add the initialization as well, because the user can change the size manually and the widget will receive a
-resize event as well. For reasons of simplicity, we want to set the pixmap size the same size the widget has. All this is done in the
-event handler <tt>resizeEvent()</tt>:
+Das einzige, um das wir uns nicht gekümmert haben, ist die Größe des Pixmaps. Wir haben sie nirgendwo gesetzt - wir haben noch 
+nicht einmal das Pixmap aus der document Klasse benutzt, außer zum Laden und Speichern- aber diese Methoden werden nicht 
+aufgerufen, wenn ein neues Bild erzeugt wird. Es scheint also unser Pixmap weder eine Größe noch einen vordefinierten Hintergrund 
+(selbst wenn wir die Größe gesetzt hätten, wären die Inhalte zufällige Farben, weil es nicht initialisiert wurde). Andererseits 
+haben wir die Tatsache, daß die KScribbleView Instanzen in der Größe angepasst werden, wenn sie angezeigt werden- wenigstens auf 
+die Minimalgröße. Das ist der Punkt, an dem wir auch die Initialisierung vornehmen können, weil der Benutzer die Größe manuell 
+ändern kann und das Widget ebenfalls ein resize Event erhält. Aus Gründen der Einfachheit, setzen wir die Pixmap Größe gleich der 
+Widgetgröße. All dies geschieht im Event Handler <tt>resizeEvent()</tt>:
 
 <code>
 void KScribbleView::resizeEvent( QResizeEvent *e )
@@ -1138,16 +1163,18 @@ void KScribbleView::resizeEvent( QResizeEvent *e )
   bitBlt( &amp;doc->buffer, 0, 0, &amp;tmp, 0, 0, tmp.width(), tmp.height() );
 }
 </code>
-Here, we first call the resizeEvent handler or <tt>QWidget</tt>. Then we calculate the size of our picture - because we can resize a window to
-make it smaller or bigger, we have to separate these two cases: if we resize to a smaller geometry, the picture shall still contain
-it's contents. On the other hand, if we resize to a bigger widget, we have to resize the pixmap as well to that bigger size. The
-calculated values are stored in w and h. But before the resize takes place, we create a copy of our pixmap in the document in tmp. Then
-we resize the buffer (the document), fill it with white color and then copy back the contents from tmp into buffer. This resizes our
-pixmap always syncronous with the widget that displays it but doesn't loose contents which is outside the visible area if the resizing
-makes the widget smaller.
 
-Now our first application has gained a step where we can test it's functionality. Just hit "Run" in KDevelop and after <em>KScribble</em> shows
-up, you're ready to paint your first picture with it !
+Hier wird zunächst der resizeEvent Handler von <tt>QWidget</tt> aufgerufen. Dann berechnen wir die Größe unseres Bildes- da wir 
+ein Fenster sowohl kleiner als auch größer machen können, müssen wir diese beiden Fälle unterscheiden: wenn wir verkleinern, soll 
+das Bild immer noch seinen gesamten Inhalt behalten. Wenn wir jedoch das Widget vergrößern, müssen wir das Pixmap auch auf diese 
+neue Größe bringen. Die errechneten Werte werden in w und h gespeichert. Bevor jedoch die Größe verändert wird, erzeugen wir eine 
+Kopie des Pixmaps in tmp. Dann verändern wir den Puffer (das Dokument), füllen es mit weißer Farbe und kopieren dann den Inhalt 
+von tmp in den Puffer zurück. Die ändert unser Pixmap immer synchron mit dem Widget, von dem es angezeigt wird, aber es verliert 
+nicht die Daten, die außerhalb des sichtbaren Bereiches liegen, wenn das Widget verkleinert wird.
+
+Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwendung testen können. Drücken Sie "Ausführen" und 
+nachdem <em>KScribble</em> angezeigt wird, sind Sie bereit, Ihr erstes Bild damit zu zeichnen !
+
 
 <chapt>Extending the GUI
 <p>
@@ -1945,16 +1972,54 @@ void KScribbleApp::slotFileSaveAs()
 }
 </code>
 
-<sect>Final Conclusion
+<chapt>Adding Printing Functionality
 <p>
 
-This has been the last step of our tutorial. All in all, we learned how to create KDE applications with KDevelop, compile and execute
-programs and to give an application the functionality to make it a new one in the row of the daily growing number of freely available
-KDE programs. We hope you had fun reading and learning by the means of our tutorial and KDevelop, and although there is much more to
-discover when it comes to KDE and Qt application design and usage of the class libraries, you won a first insight into the ease of
-development for KDE with KDevelop.
+In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
+do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
+<em>KScribble</em> or chooses "Print" from the "File" menu, the <tt>slotFilePrint()</tt> method is called in <tt>KScribbleApp</tt>.
+This method detects which child window is currently activ and creates a printer instance of the class <tt>QPrinter</tt>. Then it calls
+the widget´s printing method, <tt>KScribbleView::print()</tt>. Here, the framework already contains the base implementation - which
+already shows you that for printing you just have to use <tt>QPainter</tt> which then draws on the printer. This method also calls the
+printing dialog.
 
-  	
+What we have to do here is to use <tt>QPainter</tt> methods to draw the pixmap of the document connected to the view. As
+<tt>QPainter</tt> already offers a whole set of methods <tt>drawPixmap()</tt>, we will of course use one of them:
+
+<code>
+void KScribbleView::print(QPrinter *pPrinter)
+{
+  if (pPrinter->setup(this))
+  {
+    QPainter p;
+    p.begin(pPrinter);
+    	  	
+    ///////////////////////////////
+    // TODO: add your printing code here
+->	p.drawPixmap(0,0,doc->buffer);
+    ///////////////////////////////
+    p.end();
+  }
+}
+</code>
+
+Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
+
+You can just go ahead and test it - now you can print any graphics that <em>KScribble</em> is able to open.
+
+This is now the end of our trour through creating a KDE 2 application. You can find the source package of KScribble
+completely with an extension that adds cut, copy, paste and undo functions as well as drag´n drop here:
+
+<htmlurl
+url="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz"name="$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz">   	
+The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
+After untarring the tarball with <tt>tar zxvf kscribble-1.0.tar.gz</tt>, load the project and call "Automake and autoconf" from the
+"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
+and Qt 2.1, so you have to change them manually to match your installation path for these options.
+
+The appendix also contains the complete sourcecode for this package to read through online.
+
+	
 <chapt>Copyright <label id="Copyright"> <p> 
 
 <tscreen><verb> 
@@ -1977,4 +2042,2546 @@ nicht, so schreiben Sie an die Free Software Foundation,
 Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
 
 </verb></tscreen>
+
+<appendix><chapt>KScribble-1.0 Example Sourcecode
+<p>
+
+<sect>Project Tarball
+<p>
+The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
+After untarring the tarball with <tt>tar zxvf kscribble-1.0.tar.gz</tt>, load the project and call "Automake and autoconf" from the
+"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
+and Qt 2.1, so you have to change them manually to match your installation path for these options.
+
+<htmlurl
+url="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz"name="$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz">   	
+
+<sect>main.cpp
+<p>
+<code>
+/***************************************************************************
+                          main.cpp  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
+#include <klocale.h>
+
+#include "kscribble.h"
+
+static const char *description =
+	I18N_NOOP("KDE 2 example application");
+
+static KCmdLineOptions options[] =
+{
+  { "+[File]", I18N_NOOP("image file to open"), 0 },
+  { 0, 0, 0 }
+};
+
+
+int main(int argc, char *argv[])
+{
+	KAboutData aboutData( "kscribble", I18N_NOOP("KScribble"),
+		VERSION, description, KAboutData::License_GPL,
+		"(c) 2000, Ralf Nolden");
+	aboutData.addAuthor("Ralf Nolden",0, "rnolden@kdevelop.de");
+	KCmdLineArgs::init( argc, argv, &amp;aboutData );
+	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+
+  KApplication app;
+  KImageIO::registerFormats();
+
+  if (app.isRestored())
+  {
+    RESTORE(KScribbleApp);
+  }
+  else
+  {
+    KScribbleApp *kscribble = new KScribbleApp();
+    kscribble->show();
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+		
+		if (args->count())
+			for(int i=0;i<args->count();i++)
+        kscribble->openDocumentFile(args->arg(i));
+		else
+		  kscribble->openDocumentFile();
+		
+		args->clear();
+  }
+
+  return app.exec();
+}
+</code>
+
+<sect>kscribble.h
+<p>
+<code>
+/***************************************************************************
+                          kscribble.h  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef KSCRIBBLE_H
+#define KSCRIBBLE_H
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+// include files for Qt
+#include <qstrlist.h>
+#include <qworkspace.h>
+
+// include files for KDE
+#include <kapp.h>
+#include <ktmainwindow.h>
+#include <kaccel.h>
+#include <kimgio.h>
+
+// forward declaration of the KScribble classes
+class KScribbleDoc;
+class KScribbleView;
+
+/**
+  * The base class for KScribble application windows. It sets up the main
+  * window and reads the config file as well as providing a menubar, toolbar
+  * and statusbar. In initView(), your main view is created as the MDI child window manager.
+  * Child windows are created in createClient(), which gets a document instance as it's document to
+  * display whereby one document can have several views.The MDI child is an instance of KScribbleView,
+  * the document an instance of KScribbleDoc.
+  * KScribbleApp reimplements the methods that KTMainWindow provides for main window handling and supports
+  * full session management as well as keyboard accelerator configuration by using KAccel.
+  * @see KTMainWindow
+  * @see KApplication
+  * @see KConfig
+  * @see KAccel
+  *
+  * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team.
+  * @version KDevelop version 1.1 code generation
+  */
+class KScribbleApp : public KTMainWindow
+{
+  Q_OBJECT
+
+  public:
+    /** construtor of KScribbleApp, calls all init functions to create the application.
+     * @see initMenuBar initToolBar
+     */
+    KScribbleApp();
+    ~KScribbleApp();
+    /** enables menuentries/toolbar items
+     */
+    void enableCommand(int id_);
+    /** disables menuentries/toolbar items
+     */
+    void disableCommand(int id_);
+    /** opens a file specified by commandline option
+     */
+    void openDocumentFile(const char *file=0);
+
+  protected:
+    /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
+     * default implementation (only returns true), this overridden function retrieves all modified documents
+     * from the open document list and asks the user to select which files to save before exiting the application.
+     * @see KTMainWindow#queryClose
+     * @see KTMainWindow#closeEvent
+     */
+    virtual bool queryClose();
+    /** queryExit is called by KTMainWindow when the last window of the application is going to be closed
+     * during the closeEvent().
+     * Against the default implementation that just returns true, this calls saveOptions() to save the
+     * settings of the last window's properties.
+     * @see KTMainWindow#queryExit
+     * @see KTMainWindow#closeEvent
+     */
+    virtual bool queryExit();
+    /** saves the window properties for each open window during session end to the session config file,
+     * including saving the currently opened file by a temporary filename provided by KApplication.
+     * @see KTMainWindow#saveProperties
+     */
+    virtual void saveProperties(KConfig *_cfg);
+    /** reads the session config file and restores the application's state including the last
+     * opened files and documents by reading the temporary files saved by saveProperties()
+     * @see KTMainWindow#readProperties
+     */
+    virtual void readProperties(KConfig *_cfg);
+    /** event filter to catch close events for MDI child windows and is installed in createClient() on every
+      *child window. Closing a window calls the eventFilter first which removes the view from the connected
+      * documents' view list. If the last view is going to be closed, the eventFilter() tests if the document
+      * is modified; if yes, it asks the user to save the document. If the document title contains "Untitled",
+      * slotFileSaveAs() gets called to get a save name and path.
+      */
+    virtual bool eventFilter(QObject* object, QEvent* event);
+    /** creates a new child window. The document that will be connected to it
+     * has to be created before and the instances filled, with e.g. openDocument().
+     * Then call createClient() to get a new MDI child window.
+     * @see KScribbleDoc#addView
+     * @see KScribbleDoc#openDocument
+     * @param doc pointer to the document instance that the view will
+     * be connected to.
+     */
+    void createClient(KScribbleDoc* doc);
+    /** accepts drag events for images */
+    virtual void dragEnterEvent( QDragEnterEvent* );
+    /** accepts drops and opens a new document
+      * for each drop */
+    virtual void dropEvent( QDropEvent* );
+
+  private slots:
+  	/** sets the main application window title each time the active MDI child window changes. */
+		void setWndTitle(QWidget*);
+    /** switch argument for slot selection by menu or toolbar ID */
+    void commandCallback(int id_);
+    /** switch argument for Statusbar help entries on slot selection. Add your ID's help
+      * here for toolbars and menubar entries. */
+    void statusCallback(int id_);
+    /** add a opened file to the recent file list and update recent file menu*/
+    void addRecentFile(const QString &amp;file);
+    /** clears the document in the actual view to reuse it as the new document */
+    void slotFileNew();
+    /** open a file and load it into the document*/
+    void slotFileOpen();
+    /** opens a file from the recent files menu */
+    void slotFileOpenRecent(int id_);
+    /** save a document */
+    void slotFileSave();
+    /** save a document by a new filename*/
+    void slotFileSaveAs();
+    /** asks for saving if the file is modified, then closes the actual file and window*/
+    void slotFileClose();
+    /** print the actual file */
+    void slotFilePrint();
+		/** closes all documents and quits the application.*/
+    void slotFileQuit();
+		/** reverts the last user action for the active window */
+    void slotEditUndo();
+    /** put the marked text/object into the clipboard and remove
+     *	it from the document
+     */
+    void slotEditCut();
+    /** put the marked text/object into the clipboard
+     */
+    void slotEditCopy();
+    /** paste the clipboard into the document
+     */
+    void slotEditPaste();
+    /** clears the current document */
+    void slotEditClearAll();
+    /** sets the pen width */
+    void slotPenBrush();
+    /** sets the pen color */
+    void slotPenColor();
+    /** toggles the toolbar
+     */
+    void slotViewToolBar();
+    /** toggles the statusbar
+     */
+    void slotViewStatusBar();
+		/** creates a new view for the document in the active child window and adds the new view to the
+		 * list of views the document maintains.
+		 */
+		void slotWindowNewWindow();
+    /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
+     * @param text the text that is displayed in the statusbar
+     */
+    void slotStatusMsg(const QString &amp;text);
+    /** changes the status message of the whole statusbar for two seconds, then restores the last status.
+     * This is used to display statusbar messages that give information about actions for
+     * toolbar icons and menuentries.
+     * @param text the text that is displayed in the statusbar
+     */
+    void slotStatusHelpMsg(const QString &amp;text);
+  	/** gets called when the window menu is activated; recreates the window menu with all opened window titles. */
+    void windowMenuAboutToShow();
+    /** activates the MDI child widget when it gets selected from the window menu. */
+    void windowMenuActivated( int id );
+
+  private:
+    /** save general Options like all bar positions and status as well as the geometry and
+     * the recent file list to the configuration file
+     */ 	
+    void saveOptions();
+    /** read general Options again and initialize all variables like the recent file list
+     */
+    void readOptions();
+    /** initKeyAccel creates the keyboard accelerator items for the available slots and changes the menu accelerators.
+     * @see KAccel
+     */
+    void initKeyAccel();
+    /** initMenuBar creates the menubar and inserts the menupopups as well as creating the helpMenu.
+     */
+    void initMenuBar();
+    /** this creates the toolbars.
+     */
+    void initToolBar();
+    /** sets up the statusbar for the main window by initialzing a statuslabel.
+     */
+    void initStatusBar();
+
+    /** Creates the main view of the KTMainWindow instance and initializes the MDI view area including any needed
+    	* connections.
+     */
+    void initView();
+
+    /** contains the recently used filenames */
+    QStrList recentFiles;
+
+    /** the configuration object of the application */
+    KConfig *config;
+    /** the key accelerator container */
+    KAccel *keyAccel;
+    /** the recent file menu containing the last five opened files */
+    QPopupMenu *pRecentFileMenu;
+		/** the file menu */
+		QPopupMenu* pFileMenu;
+		/** the edit menu */
+		QPopupMenu* pEditMenu;
+		/** the pen menu */
+    QPopupMenu* pPenMenu;		
+		/** the view menu */
+		QPopupMenu* pViewMenu;
+    /** the window menu */
+    QPopupMenu *pWindowMenu;
+		/** pWorkspace is the MDI frame widget that handles MDI child widgets. Inititalized in
+		 * initView()
+		 */
+    QWorkspace *pWorkspace;
+		/** the printer instance */
+    QPrinter *printer;
+		/** a counter that gets increased each time the user creates a new document with "File"->"New" */
+    int untitledCount;
+    /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
+     * removes this document from the list. The document list is checked for modified documents when the user
+     * is about to close the application. */
+    QList<KScribbleDoc> *pDocList;	
+
+};
+
+#endif // KSCRIBBLE_H
+</code>
+
+<sect>kscribble.cpp
+<p>
+<code>
+/***************************************************************************
+                          kscribble.cpp  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+// include files for QT
+#include <qdir.h>
+#include <qprinter.h>
+#include <qvbox.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
+#include <qtoolbutton.h>
+#include <qimage.h>
+#include <qdragobject.h>
+
+
+// include files for KDE
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+#include <kcolordlg.h>
+#include <kmenubar.h>
+#include <klocale.h>
+#include <kconfig.h>
+
+// application specific includes
+#include "kscribble.h"
+#include "kscribbleview.h"
+#include "kscribbledoc.h"
+#include "resource.h"
+#include "kpenbrushdlg.h"
+
+
+KScribbleApp::KScribbleApp()
+{
+  config=kapp->config();
+  printer = new QPrinter;
+	untitledCount=0;
+  pDocList = new QList<KScribbleDoc>();
+  pDocList->setAutoDelete(true);
+  setAcceptDrops(true);
+
+  ///////////////////////////////////////////////////////////////////
+  // call inits to invoke all other construction parts
+  initMenuBar();
+  initToolBar();
+  initStatusBar();
+  initKeyAccel();
+  initView();
+	
+  readOptions();
+
+  ///////////////////////////////////////////////////////////////////
+  // disable menu and toolbar items at startup
+  disableCommand(ID_EDIT_UNDO);
+}
+
+KScribbleApp::~KScribbleApp()
+{
+  delete printer;
+}
+
+void KScribbleApp::initKeyAccel()
+{
+  keyAccel = new KAccel(this);
+	
+  // fileMenu accelerators
+  keyAccel->connectItem(KStdAccel::New, this, SLOT(slotFileNew()));
+  keyAccel->connectItem(KStdAccel::Open, this, SLOT(slotFileOpen()));
+  keyAccel->connectItem(KStdAccel::Save, this, SLOT(slotFileSave()));
+  keyAccel->connectItem(KStdAccel::Close, this, SLOT(slotFileClose()));
+  keyAccel->connectItem(KStdAccel::Print, this, SLOT(slotFilePrint()));
+  keyAccel->connectItem(KStdAccel::Quit, this, SLOT(slotFileQuit()));
+  // editMenu accelerators
+  keyAccel->connectItem(KStdAccel::Cut, this, SLOT(slotEditCut()));
+  keyAccel->connectItem(KStdAccel::Copy, this, SLOT(slotEditCopy()));
+  keyAccel->connectItem(KStdAccel::Paste, this, SLOT(slotEditPaste()));
+
+  keyAccel->connectItem(KStdAccel::Help, this, SLOT(appHelpActivated()));
+			
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_NEW, KStdAccel::New);
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_OPEN, KStdAccel::Open);
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_SAVE, KStdAccel::Save);
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_CLOSE, KStdAccel::Close);
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_PRINT, KStdAccel::Print);
+  keyAccel->changeMenuAccel(pFileMenu, ID_FILE_QUIT, KStdAccel::Quit);
+
+  keyAccel->changeMenuAccel(pEditMenu, ID_EDIT_CUT, KStdAccel::Cut);
+  keyAccel->changeMenuAccel(pEditMenu, ID_EDIT_COPY, KStdAccel::Copy);
+  keyAccel->changeMenuAccel(pEditMenu, ID_EDIT_PASTE, KStdAccel::Paste);
+
+  keyAccel->readSettings();	
+}
+
+void KScribbleApp::initMenuBar()
+{
+  ///////////////////////////////////////////////////////////////////
+  // MENUBAR
+  pRecentFileMenu = new QPopupMenu(this);
+  connect(pRecentFileMenu, SIGNAL(activated(int)), SLOT(slotFileOpenRecent(int)));
+
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry file-Menu
+  pFileMenu = new QPopupMenu(this);
+  pFileMenu->insertItem(BarIcon("filenew"), i18n("&amp;New"), ID_FILE_NEW);
+  pFileMenu->insertItem(BarIcon("fileopen"), i18n("&amp;Open..."), ID_FILE_OPEN);
+  pFileMenu->insertItem(i18n("Open &amp;recent"), pRecentFileMenu, ID_FILE_OPEN_RECENT);
+
+  pFileMenu->insertItem(i18n("&amp;Close"), ID_FILE_CLOSE);
+  pFileMenu->insertSeparator();
+  pFileMenu->insertItem(BarIcon("filefloppy") ,i18n("&amp;Save"), ID_FILE_SAVE);
+  pFileMenu->insertItem(i18n("Save &amp;As..."), ID_FILE_SAVE_AS);
+  pFileMenu->insertSeparator();
+  pFileMenu->insertItem(BarIcon("fileprint"), i18n("&amp;Print..."), ID_FILE_PRINT);
+  pFileMenu->insertSeparator();
+  pFileMenu->insertItem(i18n("E&amp;xit"), ID_FILE_QUIT);
+	
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry edit-Menu
+  pEditMenu = new QPopupMenu(this);
+  pEditMenu->insertItem(BarIcon("undo"), i18n("&amp;Undo"), ID_EDIT_UNDO);
+  pEditMenu->insertSeparator();
+  pEditMenu->insertItem(BarIcon("editcut"), i18n("Cu&amp;t"), ID_EDIT_CUT);
+  pEditMenu->insertItem(BarIcon("editcopy"), i18n("&amp;Copy"), ID_EDIT_COPY);
+  pEditMenu->insertItem(BarIcon("editpaste"), i18n("&amp;Paste"), ID_EDIT_PASTE);
+  pEditMenu->insertItem(BarIcon("delete"),i18n("&amp;Clear All"), ID_EDIT_CLEAR_ALL);
+
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry pen-Menu
+  pPenMenu = new QPopupMenu();
+  pPenMenu->insertItem(i18n("&amp;Color"), ID_PEN_COLOR);
+  pPenMenu->insertItem(i18n("&amp;Brush"), ID_PEN_BRUSH);
+
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry view-Menu
+  pViewMenu = new QPopupMenu(this);
+  pViewMenu->setCheckable(true);
+  pViewMenu->insertItem(i18n("&amp;Toolbar"), ID_VIEW_TOOLBAR);
+  pViewMenu->insertItem(i18n("&amp;Statusbar"), ID_VIEW_STATUSBAR);
+
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry window-Menu
+  pWindowMenu = new QPopupMenu(this);
+  pWindowMenu->setCheckable(true);
+
+
+  ///////////////////////////////////////////////////////////////////
+  // menuBar entry helpMenu
+  QPopupMenu* pHelpMenu = helpMenu(i18n("KScribble" VERSION "\n\n(c) 2000 by\n"
+                                  "Ralf Nolden\nRalf.Nolden@post.rwth-aachen.de"));
+
+  ///////////////////////////////////////////////////////////////////
+  // MENUBAR CONFIGURATION
+  // insert your popup menus with the according menubar entries in the order
+  // they will appear later from left to right
+  menuBar()->insertItem(i18n("&amp;File"), pFileMenu);
+  menuBar()->insertItem(i18n("&amp;Edit"), pEditMenu);
+  menuBar()->insertItem(i18n("&amp;Pen"), pPenMenu);
+  menuBar()->insertItem(i18n("&amp;View"), pViewMenu);
+  menuBar()->insertItem(i18n("&amp;Window"), pWindowMenu );
+  menuBar()->insertItem(i18n("&amp;Help"), pHelpMenu);
+
+  ///////////////////////////////////////////////////////////////////
+  // CONNECT THE MENU SLOTS WITH SIGNALS
+  // for execution slots and statusbar messages
+  connect(pFileMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+  connect(pFileMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  connect(pEditMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+  connect(pEditMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  connect(pPenMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+  connect(pPenMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  connect(pViewMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+  connect(pViewMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+  connect(pWindowMenu, SIGNAL(aboutToShow() ), SLOT( windowMenuAboutToShow() ) );
+  connect(pWindowMenu, SIGNAL(activated(int)), SLOT(commandCallback(int)));
+  connect(pWindowMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
+}
+
+void KScribbleApp::initToolBar()
+{
+
+  ///////////////////////////////////////////////////////////////////
+  // TOOLBAR
+  toolBar()->insertButton(BarIcon("filenew"), ID_FILE_NEW, true, i18n("New File"));
+  toolBar()->insertButton(BarIcon("fileopen"), ID_FILE_OPEN, true, i18n("Open File"));
+  toolBar()->insertButton(BarIcon("filefloppy"), ID_FILE_SAVE, true, i18n("Save File"));
+  toolBar()->insertButton(BarIcon("fileprint"), ID_FILE_PRINT, true, i18n("Print"));
+  toolBar()->insertSeparator();
+  toolBar()->insertButton(BarIcon("editcut"), ID_EDIT_CUT, true, i18n("Cut"));
+  toolBar()->insertButton(BarIcon("editcopy"), ID_EDIT_COPY, true, i18n("Copy"));
+  toolBar()->insertButton(BarIcon("editpaste"), ID_EDIT_PASTE, true, i18n("Paste"));
+  toolBar()->insertSeparator();
+  toolBar()->insertButton(BarIcon("pencolor"), ID_PEN_COLOR, true, i18n("Color") );
+  toolBar()->insertButton(BarIcon("penwidth"), ID_PEN_BRUSH, true, i18n("Width") );
+  toolBar()->insertSeparator();
+  toolBar()->insertButton(BarIcon("help"), ID_HELP_CONTENTS, SIGNAL(clicked()),
+  				this, SLOT(appHelpActivated()), true,i18n("Help"));
+
+  QToolButton *btnwhat = QWhatsThis::whatsThisButton(toolBar());
+  QToolTip::add(btnwhat, i18n("What's this...?"));
+  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+
+  ///////////////////////////////////////////////////////////////////
+  // INSERT YOUR APPLICATION SPECIFIC TOOLBARS HERE WITH toolBar(n)
+
+
+  ///////////////////////////////////////////////////////////////////
+  // CONNECT THE TOOLBAR SLOTS WITH SIGNALS - add new created toolbars by their according number
+  // connect for invoking the slot actions
+  connect(toolBar(), SIGNAL(clicked(int)), SLOT(commandCallback(int)));
+  // connect for the status help on holing icons pressed with the mouse button
+  connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
+
+}
+
+void KScribbleApp::initStatusBar()
+{
+  ///////////////////////////////////////////////////////////////////
+  // STATUSBAR
+  // TODO: add your own items you need for displaying current application status.
+  statusBar()->insertItem(i18n("Ready."), ID_STATUS_MSG);
+}
+
+
+void KScribbleApp::initView()
+{
+  ////////////////////////////////////////////////////////////////////
+  // here the main view of the KTMainWindow is created by a background box and
+  // the QWorkspace instance for MDI view.
+  QVBox* view_back = new QVBox( this );
+  view_back->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  pWorkspace = new QWorkspace( view_back );
+	connect(pWorkspace, SIGNAL(clientActivated(QWidget*)), this, SLOT(setWndTitle(QWidget*)));
+  setView(view_back);
+}
+
+void KScribbleApp::setWndTitle(QWidget*){
+	setCaption(pWorkspace->activeClient()->caption());
+}
+
+void KScribbleApp::enableCommand(int id_)
+{
+  ///////////////////////////////////////////////////////////////////
+  // enable menu and toolbar functions by their ID's
+  menuBar()->setItemEnabled(id_, true);
+  toolBar()->setItemEnabled(id_, true);
+}
+
+void KScribbleApp::disableCommand(int id_)
+{
+  ///////////////////////////////////////////////////////////////////
+  // disable menu and toolbar functions by their ID's
+  menuBar()->setItemEnabled(id_, false);
+  toolBar()->setItemEnabled(id_, false);
+}
+
+void KScribbleApp::addRecentFile(const QString &amp;file)
+{
+  if(recentFiles.contains(file))
+    return; // it's already there
+
+  if( recentFiles.count() < 5)
+    recentFiles.prepend(file);
+  else{
+    recentFiles.remove(recentFiles.last());
+    recentFiles.prepend(file);
+  }
+
+  pRecentFileMenu->clear();
+
+  for ( int i =0 ; i < (int)recentFiles.count(); i++){
+    pRecentFileMenu->insertItem(recentFiles.at(i));
+  }
+
+}
+
+void KScribbleApp::createClient(KScribbleDoc* doc)
+{
+  KScribbleView* w = new KScribbleView(doc, pWorkspace,0,WDestructiveClose);
+	w->installEventFilter(this);
+  doc->addView(w);
+	w->setIcon(kapp->miniIcon());
+  if ( pWorkspace->clientList().isEmpty() ) // show the very first window in maximized mode
+	  w->showMaximized();
+  else
+  	w->show();
+}
+
+void KScribbleApp::openDocumentFile(const char* file)
+{
+  slotStatusMsg(i18n("Opening file..."));
+  KScribbleDoc* doc;
+	// check, if document already open. If yes, set the focus to the first view
+  for(doc=pDocList->first(); doc > 0; doc=pDocList->next())
+  {
+  	if(doc->pathName()==file)
+  	{
+ 	  	KScribbleView* view=doc->firstView();	
+ 	  	view->setFocus();
+ 			return;
+ 		}
+  }
+  doc = new KScribbleDoc();
+  pDocList->append(doc);
+  doc->newDocument();
+	// Creates an untitled window if file is 0	
+	if(!file)
+	{
+		untitledCount+=1;
+		QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+		doc->setPathName(fileName);
+		doc->setTitle(fileName);
+	}
+	// Open the file
+	else
+  {
+    QString format=QImageIO::imageFormat(file);
+	  if(!doc->openDocument(file,format))
+  		KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
+		addRecentFile(file);
+	}
+	// create the window
+  createClient(doc);
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+
+void KScribbleApp::saveOptions()
+{	
+  config->setGroup("General Options");
+  config->writeEntry("Geometry", size());
+  config->writeEntry("Show Toolbar", toolBar()->isVisible());
+  config->writeEntry("Show Statusbar",statusBar()->isVisible());
+  config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+  config->writeEntry("Recent Files", recentFiles);
+}
+
+
+void KScribbleApp::readOptions()
+{
+	
+  config->setGroup("General Options");
+
+  // bar status settings
+  bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+  menuBar()->setItemChecked(ID_VIEW_TOOLBAR, bViewToolbar);
+  if(!bViewToolbar)
+  {
+     enableToolBar(KToolBar::Hide);
+  }
+	
+  bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+  menuBar()->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
+  if(!bViewStatusbar)
+  {
+    enableStatusBar(KStatusBar::Hide);
+  }
+
+  // bar position settings
+  KToolBar::BarPosition toolBarPos;
+  toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
+  toolBar()->setBarPos(toolBarPos);
+
+  // initialize the recent file list
+  config->readListEntry("Recent Files",recentFiles);
+
+  for (int i=0; i < (int) recentFiles.count(); i++)
+  {
+    pRecentFileMenu->insertItem(recentFiles.at(i));
+  }
+
+  QSize size=config->readSizeEntry("Geometry");
+  if(!size.isEmpty())
+  {
+    resize(size);
+  }
+  else
+    resize(400,350);
+
+}
+
+void KScribbleApp::saveProperties(KConfig *_cfg)
+{
+
+}
+
+
+void KScribbleApp::readProperties(KConfig* _cfg)
+{
+}		
+
+bool KScribbleApp::queryClose()
+{
+
+  QStringList saveFiles;
+  KScribbleDoc* doc;
+  if(pDocList->isEmpty())
+  	return true;
+
+  for(doc=pDocList->first(); doc!=0;doc=pDocList->next()){
+  	if(doc->isModified())
+      saveFiles.append(doc->title());
+  }
+  if(saveFiles.isEmpty())
+  	return true;
+  			
+  switch (KMessageBox::questionYesNoList(this,
+      i18n("One or more documents have been modified.\nSave changes before exiting?"),saveFiles)) 		
+  {
+  	case KMessageBox::Yes:
+  		for(doc=pDocList->first(); doc!=0;doc=pDocList->next()){
+  		  if(doc->title().contains(i18n("Untitled")))
+  			  slotFileSaveAs();
+        else
+        {
+          if(!doc->saveDocument(doc->pathName())){
+        	  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+            return false;
+          }
+        }
+       }
+      return true;
+  	case KMessageBox::No:
+  	default:
+      return true;
+  }
+}
+
+bool KScribbleApp::queryExit()
+{
+  saveOptions();
+  return true;
+}
+
+bool KScribbleApp::eventFilter(QObject* object, QEvent* event){
+	if(event->type() == QEvent::Close)
+	{
+		QCloseEvent* e=(QCloseEvent*)event;
+		KScribbleView* pView=(KScribbleView*)object;
+		KScribbleDoc* pDoc=pView->getDocument();
+		if(pDoc->canCloseFrame(pView))
+		{
+ 			pDoc->removeView(pView);
+ 			if(!pDoc->firstView())
+		 		pDocList->remove(pDoc);
+ 			
+			e->accept();
+  		//////////////	
+  		if(pWorkspace->clientList().count()==1)
+  			setPlainCaption(kapp->caption());
+  		else
+  			setCaption(pWorkspace->activeClient()->caption());			
+  		//////////////
+		}
+		else
+			e->ignore();
+	}
+	return QWidget::eventFilter( object, event );    // standard event processing
+}
+
+/////////////////////////////////////////////////////////////////////
+// SLOT IMPLEMENTATION
+/////////////////////////////////////////////////////////////////////
+
+
+void KScribbleApp::slotFileNew()
+{
+  slotStatusMsg(i18n("Creating new document..."));
+
+	openDocumentFile();
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileOpen()
+{
+  slotStatusMsg(i18n("Opening file..."));
+	
+  QString fileToOpen=KFileDialog::getOpenFileName(QDir::currentDirPath(),
+            KImageIO::pattern(KImageIO::Reading), this, i18n("Open File..."));
+  if(!fileToOpen.isEmpty())
+  {
+		openDocumentFile(fileToOpen);		
+  }
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileOpenRecent(int id_)
+{
+  slotStatusMsg(i18n("Opening file..."));
+  	
+  openDocumentFile(pRecentFileMenu->text(id_));
+	
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileSave()
+{
+  slotStatusMsg(i18n("Saving file..."));
+	KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+	if( m )
+	{
+	  KScribbleDoc* doc =	m->getDocument();
+	  if(doc->title().contains(i18n("Untitled")))
+	   slotFileSaveAs();
+	  else
+  	  if(!doc->saveDocument(doc->pathName()))
+  		  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+  }
+	
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileSaveAs()
+{
+  slotStatusMsg(i18n("Saving file with a new filename..."));
+
+  QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
+  if(!newName.isEmpty())
+  {
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    if( m )
+    {
+      KScribbleDoc* doc =	m->getDocument();
+  	  QString format=QFileInfo(newName).extension();
+  	  format=format.upper();
+		  if(!doc->saveDocument(newName,format))
+  	  {
+  		  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+				return;
+			}
+      doc->changedViewList();
+      setWndTitle(m);
+    }
+		
+  }
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileClose()
+{
+  slotStatusMsg(i18n("Closing file..."));
+	
+	KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+	if( m )
+	{
+		KScribbleDoc* doc=m->getDocument();
+    doc->closeDocument();
+  }
+
+	
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFilePrint()
+{
+  slotStatusMsg(i18n("Printing..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+		m->print( printer );
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotFileQuit()
+{
+  slotStatusMsg(i18n("Exiting..."));
+  saveOptions();
+  // close the first window, the list makes the next one the first again.
+  // This ensures that queryClose() is called on each window to ask for closing
+  KTMainWindow* w;
+  if(memberList)
+  {
+    for(w=memberList->first(); w!=0; w=memberList->first())
+    {
+      // only close the window if the closeEvent is accepted. If the user
+      // presses Cancel on the saveModified() dialog,
+      // the window and the application stay open.
+      if(!w->close())
+			break;
+    }
+  }	
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotEditUndo()
+{
+  slotStatusMsg(i18n("Reverting last action..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+//		m->undo();
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotEditCut()
+{
+  slotStatusMsg(i18n("Cutting selection..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+		m->cutSelection();	
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotEditCopy()
+{
+  slotStatusMsg(i18n("Copying selection to clipboard..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+		m->copySelection();
+		
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotEditPaste()
+{
+  slotStatusMsg(i18n("Inserting clipboard contents..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+		m->pasteSelection();
+		
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotEditClearAll()
+{
+  slotStatusMsg(i18n("Clearing the document contents..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m ){
+		KScribbleDoc* pDoc = m->getDocument();
+		pDoc->editClearAll();
+	}
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotPenBrush()
+{
+  slotStatusMsg(i18n("Setting brush width..."));
+
+  // get one window with document for a current pen width
+  QWidgetList windows = pWorkspace->clientList();
+  KScribbleView* m = (KScribbleView*)windows.at(0);
+	KScribbleDoc* pDoc = m->getDocument();
+  int curr_width=pDoc->penWidth();
+
+  // create the dialog, get the new width and set the pen width for all documents
+  KPenBrushDlg* dlg= new KPenBrushDlg(curr_width,this);
+  if(dlg->exec()){
+    int width=dlg->width();
+  	for ( int i = 0; i < int(windows.count()); ++i )
+  	{
+    	m = (KScribbleView*)windows.at(i);
+    	if ( m )
+    	{
+    		pDoc = m->getDocument();
+        pDoc->setPenWidth(width);
+    	}
+  	}
+  }
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotPenColor()
+{
+  slotStatusMsg(i18n("Selecting pen color..."));
+
+  QColor myColor;
+  int result = KColorDialog::getColor( myColor, this );
+  if ( result == KColorDialog::Accepted )
+  {
+  	QWidgetList windows = pWorkspace->clientList();
+  	KScribbleDoc* pDoc;
+  	KScribbleView* m;
+  	for ( int i = 0; i < int(windows.count()); ++i )
+  	{
+    	m = (KScribbleView*)windows.at(i);
+    	if ( m )
+    	{
+    		pDoc = m->getDocument();
+    	  pDoc->setPenColor(myColor);
+    	}
+  	}
+	}
+  slotStatusMsg(i18n("Ready."));
+}
+
+
+void KScribbleApp::slotViewToolBar()
+{
+  slotStatusMsg(i18n("Toggle the toolbar..."));
+  ///////////////////////////////////////////////////////////////////
+  // turn Toolbar on or off
+  if( menuBar()->isItemChecked(ID_VIEW_TOOLBAR))
+  {
+    menuBar()->setItemChecked(ID_VIEW_TOOLBAR, false);
+    enableToolBar(KToolBar::Hide);
+  }
+  else
+  {
+    menuBar()->setItemChecked(ID_VIEW_TOOLBAR, true);
+    enableToolBar(KToolBar::Show);
+  }		
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotViewStatusBar()
+{
+  slotStatusMsg(i18n("Toggle the statusbar..."));
+  ///////////////////////////////////////////////////////////////////
+  //turn Statusbar on or off
+  if( menuBar()->isItemChecked(ID_VIEW_STATUSBAR))
+  {
+    menuBar()->setItemChecked(ID_VIEW_STATUSBAR, false);
+    enableStatusBar(KStatusBar::Hide);
+  }
+  else
+  {
+    menuBar()->setItemChecked(ID_VIEW_STATUSBAR, true);
+    enableStatusBar(KStatusBar::Show);
+  }
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotWindowNewWindow()
+{
+  slotStatusMsg(i18n("Opening a new application window..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m ){
+ 		KScribbleDoc* doc = m->getDocument();
+  	createClient(doc);
+	}
+
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KScribbleApp::slotStatusMsg(const QString &amp;text)
+{
+  ///////////////////////////////////////////////////////////////////
+  // change status message permanently
+  statusBar()->clear();
+  statusBar()->changeItem(text, ID_STATUS_MSG);
+}
+
+
+void KScribbleApp::slotStatusHelpMsg(const QString &amp;text)
+{
+  ///////////////////////////////////////////////////////////////////
+  // change status message of whole statusbar temporary (text, msec)
+  statusBar()->message(text, 2000);
+}
+
+void KScribbleApp::windowMenuAboutToShow()
+{
+	pWindowMenu->clear();
+	
+	pWindowMenu->insertItem(i18n("&amp;New Window"), ID_WINDOW_NEW_WINDOW);
+  pWindowMenu->insertItem(i18n("&amp;Cascade"),
+                          pWorkspace, SLOT(cascade() ),0 , ID_WINDOW_CASCADE );
+  pWindowMenu->insertItem(i18n("&amp;Tile"),
+                          pWorkspace, SLOT(tile() ),0 , ID_WINDOW_TILE );
+	
+	if ( pWorkspace->clientList().isEmpty() ) {
+		disableCommand(ID_WINDOW_NEW_WINDOW);
+		disableCommand(ID_WINDOW_CASCADE);
+		disableCommand(ID_WINDOW_TILE);
+	}
+	
+	pWindowMenu->insertSeparator();
+	
+	QWidgetList windows = pWorkspace->clientList();
+	for ( int i = 0; i < int(windows.count()); ++i ) {
+		int id = pWindowMenu->insertItem(QString("&amp;%1 ").arg(i+1)+windows.at(i)->caption(),
+		                                 this, SLOT( windowMenuActivated( int ) ) );
+		pWindowMenu->setItemParameter( id, i );
+	  pWindowMenu->setItemChecked( id, pWorkspace->activeClient() == windows.at(i) );
+	}
+}
+
+void KScribbleApp::windowMenuActivated( int id )
+{
+  QWidget* w = pWorkspace->clientList().at( id );
+  if ( w )
+		w->setFocus();
+}
+
+
+void KScribbleApp::commandCallback(int id_)
+{
+  switch (id_)
+  {
+    case ID_FILE_NEW:
+    	 slotFileNew();
+         break;
+
+    case ID_FILE_OPEN:
+         slotFileOpen();
+         break;
+
+    case ID_FILE_SAVE:
+         slotFileSave();
+         break;
+
+    case ID_FILE_SAVE_AS:
+         slotFileSaveAs();
+         break;
+
+    case ID_FILE_CLOSE:
+         slotFileClose();
+         break;
+
+    case ID_FILE_PRINT:
+         slotFilePrint();
+         break;
+
+    case ID_FILE_QUIT:
+         slotFileQuit();
+         break;
+
+    case ID_EDIT_CUT:
+         slotEditCut();
+         break;
+
+    case ID_EDIT_COPY:
+         slotEditCopy();
+         break;
+
+    case ID_EDIT_PASTE:
+         slotEditPaste();
+         break;
+
+    case ID_EDIT_CLEAR_ALL:
+         slotEditClearAll();
+         break;
+
+    case ID_PEN_BRUSH:
+         slotPenBrush();
+         break;
+
+    case ID_PEN_COLOR:
+         slotPenColor();
+         break;
+
+    case ID_VIEW_TOOLBAR:
+         slotViewToolBar();
+         break;
+
+    case ID_VIEW_STATUSBAR:
+         slotViewStatusBar();
+         break;
+
+    case ID_WINDOW_NEW_WINDOW:
+         slotWindowNewWindow();
+    	 break;
+
+    default:
+         break;
+  }
+}
+
+void KScribbleApp::statusCallback(int id_)
+{
+  switch (id_)
+  {
+    case ID_FILE_NEW:
+         slotStatusHelpMsg(i18n("Creates a new document"));
+         break;
+
+    case ID_FILE_OPEN:
+         slotStatusHelpMsg(i18n("Opens an existing document"));
+         break;
+
+    case ID_FILE_OPEN_RECENT:
+         slotStatusHelpMsg(i18n("Opens a recently used file"));
+         break;
+
+    case ID_FILE_SAVE:
+         slotStatusHelpMsg(i18n("Saves the currently active document"));
+         break;
+
+    case ID_FILE_SAVE_AS:
+         slotStatusHelpMsg(i18n("Saves the currently active document as under a new filename"));
+         break;
+
+    case ID_FILE_CLOSE:
+         slotStatusHelpMsg(i18n("Closes the currently active document"));
+         break;
+
+    case ID_FILE_PRINT:
+         slotStatusHelpMsg(i18n("Prints out the actual document"));
+         break;
+
+    case ID_FILE_QUIT:
+         slotStatusHelpMsg(i18n("Quits the application"));
+         break;
+
+    case ID_EDIT_UNDO:
+         slotStatusHelpMsg(i18n("Reverts the last editing action"));
+         break;
+
+    case ID_EDIT_CUT:
+         slotStatusHelpMsg(i18n("Cuts the selected section and puts it to the clipboard"));
+         break;
+
+    case ID_EDIT_COPY:
+         slotStatusHelpMsg(i18n("Copies the selected section to the clipboard"));
+         break;
+
+    case ID_EDIT_PASTE:
+         slotStatusHelpMsg(i18n("Pastes the clipboard contents to actual position"));
+         break;
+
+    case ID_EDIT_CLEAR_ALL:
+         slotStatusHelpMsg(i18n("Clears the document contents"));
+         break;
+
+    case ID_PEN_BRUSH:
+         slotStatusHelpMsg(i18n("Sets the pen width"));
+         break;
+
+    case ID_PEN_COLOR:
+         slotStatusHelpMsg(i18n("Sets the current pen color"));
+         break;
+
+    case ID_VIEW_TOOLBAR:
+         slotStatusHelpMsg(i18n("Enables/disables the toolbar"));
+         break;
+
+    case ID_VIEW_STATUSBAR:
+         slotStatusHelpMsg(i18n("Enables/disables the statusbar"));
+         break;
+
+    case ID_WINDOW_NEW_WINDOW:
+         slotStatusHelpMsg(i18n("Opens a new view for the current document"));
+         break;
+
+    case ID_WINDOW_CASCADE:
+         slotStatusHelpMsg(i18n("Cascades all windows"));
+         break;
+
+    case ID_WINDOW_TILE:
+         slotStatusHelpMsg(i18n("Tiles all windows"));
+         break;
+
+    default:
+         break;
+  }
+}
+/** accepts drops and opens a new document
+for each drop */
+void KScribbleApp::dropEvent( QDropEvent* e){
+
+  QImage img;
+  if ( QImageDrag::decode(e, img) )
+  {
+    KScribbleDoc* doc = new KScribbleDoc();
+		untitledCount+=1;
+		QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+		doc->setPathName(fileName);
+		doc->setTitle(fileName);
+    doc->newDocument();
+    pDocList->append(doc);
+    KPixmap tmp;
+    tmp.resize(img.size());
+    tmp.convertFromImage(img);
+    doc->setPixmap(tmp);
+    doc->resizeDocument(tmp.size());
+    doc->setModified();
+    createClient(doc);
+  }
+}
+/** accepts drag events for images */
+void KScribbleApp::dragEnterEvent( QDragEnterEvent* e){
+  e->accept(QImageDrag::canDecode(e));
+}
+</code>
+
+<sect>kscribbledoc.h
+<p>
+<code>
+/***************************************************************************
+                          kscribbledoc.h  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef KSCRIBBLEDOC_H
+#define KSCRIBBLEDOC_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+// include files for QT
+#include <qobject.h>
+#include <qstring.h>
+#include <qlist.h>
+
+#include <qsize.h>
+#include <qpen.h>
+#include <qpoint.h>
+//#include <qpixmap.h>
+#include <qpointarray.h>
+
+#include <kpixmap.h>
+
+
+// forward declaration of the KScribble classes
+class KScribbleView;
+
+/**	KScribbleDoc provides a document object for a document-view model.
+  *
+  * The KScribbleDoc class provides a document object that can be used in conjunction with the classes
+  * KScribbleApp and KScribbleView to create a document-view model for MDI (Multiple Document Interface)
+  * KDE 2 applications based on KApplication and KTMainWindow as main classes and QWorkspace as MDI manager widget.
+  * Thereby, the document object is created by the KScribbleApp instance (and kept in a document list) and contains
+  * the document structure with the according methods for manipulating the document
+  * data by KScribbleView objects. Also, KScribbleDoc contains the methods for serialization of the document data
+  * from and to files.
+  * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team. 	
+  * @version KDevelop version 1.1 code generation
+  */
+class KScribbleDoc : public QObject
+{
+  Q_OBJECT
+
+  friend KScribbleView;
+
+  public:
+    /** Constructor for the fileclass of the application */
+    KScribbleDoc();
+    /** Destructor for the fileclass of the application */
+    ~KScribbleDoc();
+
+    /** adds a view to the document which represents the document contents. Usually this is your main view. */
+    void addView(KScribbleView *view);
+    /** removes a view from the list of currently connected views */
+    void removeView(KScribbleView *view);
+		/** gets called if a view is removed or added */
+		void changedViewList();
+    /** returns the first view instance */
+		KScribbleView* firstView(){ return pViewList->first(); };
+		/** returns true, if the requested view is the last view of the document */
+    bool isLastView();
+    /** This method gets called when the user is about to close a frame window. It checks, if more than one view
+    	* is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
+    	* modified, the user gets asked if he wants to save the document.
+    	*/
+		bool canCloseFrame(KScribbleView* pFrame);
+    /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
+    void setModified(bool _m=true){ modified=_m; };
+    /** returns if the document is modified or not. Use this to determine if your document needs
+      * saving by the user on closing.
+      */
+    bool isModified(){ return modified; };
+    /** deletes the document's contents */
+    void deleteContents();
+    /** initializes the document generally */
+    bool newDocument();
+    /** closes the acutal document */
+    void closeDocument();
+    /** loads the document by filename and format and emits the updateViews() signal */
+    bool openDocument(const QString &amp;filename, const char *format=0);
+    /** saves the document under filename and format.*/	
+    bool saveDocument(const QString &amp;filename, const char *format=0);
+    /** sets the path to the file connected with the document */
+    void setPathName(const QString &amp;name);
+    /** returns the pathname of the current document file*/
+    const QString&amp; pathName() const;
+
+    /** sets the filename of the document */
+    void setTitle(const QString &amp;title);
+    /** returns the title of the document */
+    const QString&amp; title() const;
+    /** get the current Pen */
+    const QPen currentPen(){ return pen;};	
+		/** returns the pen width */
+		const int penWidth() { return pen.width(); }
+    /** returns the pen color */
+    const QColor penColor(){ return pen.color(); }
+    /** sets the pen width */
+    void setPenWidth( int w ){ pen.setWidth( w ); }
+		/** sets the pen color */
+  	void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
+    /** sets the pen style by a second toolbar */
+    void setPenStyle( PenStyle s){ pen.setStyle(s);}
+    /** clears the document contents */
+    void editClearAll();
+
+    /** get the document size */
+    const QSize docSize(){ return size;};
+  /** sets the pixmap contents. Used by KScribbleApp
+    to create a new document by drop events */
+    void setPixmap(KPixmap pix) { buffer=pix;};
+    void resizeDocument(QSize m_size) { size=m_size; };
+  public slots:
+    /** calls repaint() on all views connected to the document object and is called by the view by
+     * which the document has been changed.
+     * As this view normally repaints itself, it is excluded from the paintEvent.
+     */
+    void updateAllViews(KScribbleView *sender);
+	
+	protected:
+	
+		QPen pen;
+		QPointArray polyline;
+		KPixmap buffer;
+ 	
+  private:
+    /** the modified flag of the current document */
+    bool modified;
+    QString m_title;
+    QString m_filename;
+    /** the list of the views currently connected to the document */
+    QList<KScribbleView> *pViewList;	
+    QSize size;
+};
+
+#endif // KSCRIBBLEDOC_H
+
+</code>
+
+<sect>kscribbledoc.cpp
+<p>
+<code>
+/***************************************************************************
+                          kscribbledoc.cpp  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+// include files for Qt
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qwidget.h>
+
+// include files for KDE
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+
+// application specific includes
+#include "kscribbledoc.h"
+#include "kscribble.h"
+#include "kscribbleview.h"
+
+
+KScribbleDoc::KScribbleDoc()
+{
+  pViewList = new QList<KScribbleView>;
+  pViewList->setAutoDelete(false);
+}
+
+KScribbleDoc::~KScribbleDoc()
+{
+  delete pViewList;
+}
+
+void KScribbleDoc::addView(KScribbleView *view)
+{
+  pViewList->append(view);
+	changedViewList();
+}
+
+void KScribbleDoc::removeView(KScribbleView *view)
+{
+	  pViewList->remove(view);
+	  if(!pViewList->isEmpty())
+			changedViewList();
+		else
+			deleteContents();
+}
+
+void KScribbleDoc::changedViewList(){	
+	
+	KScribbleView *w;
+	if((int)pViewList->count() == 1){
+  	w=pViewList->first();
+  	w->setCaption(m_title);
+	}
+	else{	
+		int i;
+    for( i=1,w=pViewList->first(); w!=0; i++, w=pViewList->next())
+  		w->setCaption(QString(m_title+":%1").arg(i));	
+	}
+}
+
+bool KScribbleDoc::isLastView() {
+  return ((int) pViewList->count() == 1);
+}
+
+
+void KScribbleDoc::updateAllViews(KScribbleView *sender)
+{
+  KScribbleView *w;
+  for(w=pViewList->first(); w!=0; w=pViewList->next())
+  {
+		  w->update(sender);
+  }
+
+}
+
+void KScribbleDoc::setPathName(const QString &amp;name)
+{
+  m_filename=name;
+	m_title=QFileInfo(name).fileName();
+}
+
+const QString&amp; KScribbleDoc::pathName() const
+{
+  return m_filename;
+}
+
+void KScribbleDoc::setTitle(const QString &amp;title)
+{
+  m_title=title;
+}
+
+const QString &amp;KScribbleDoc::title() const
+{
+  return m_title;
+}
+
+
+void KScribbleDoc::closeDocument()
+{
+  KScribbleView *w;
+  if(!isLastView())
+  {
+    for(w=pViewList->first(); w!=0; w=pViewList->next())
+    {
+   	 	if(!w->close())
+ 				break;
+    }
+	}
+  if(isLastView())
+  {
+  	w=pViewList->first();
+  	w->close();
+  }
+}
+
+bool KScribbleDoc::newDocument()
+{
+  /////////////////////////////////////////////////
+  // TODO: Add your document initialization code here
+  size=QSize(300,200 );
+  pen=QPen( Qt::black, 3 );
+  polyline=QPointArray(3);
+  buffer.resize(size);
+  buffer.fill( Qt::white );
+  /////////////////////////////////////////////////
+  modified=false;
+  return true;
+}
+
+bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
+{
+
+	QFile f( filename );
+//	if ( !f.open( IO_ReadOnly ) )
+//		return false;
+  /////////////////////////////////////////////////
+  // TODO: Add your document opening code here
+	if(!buffer.load( filename, format ))
+		return false;
+	size=buffer.size();
+  /////////////////////////////////////////////////
+//	f.close();
+	
+  modified=false;
+  m_filename=filename;
+	m_title=QFileInfo(f).fileName();
+  return true;
+}
+
+bool KScribbleDoc::saveDocument(const QString &amp;filename, const char *format /*=0*/)
+{
+	QFile f( filename );
+//	if ( !f.open( IO_WriteOnly ) )
+//		return false;
+
+  /////////////////////////////////////////////////
+  // TODO: Add your document saving code here
+	if(!buffer.save( filename, format ))
+		return false;
+  /////////////////////////////////////////////////
+
+//  f.close();
+
+  modified=false;
+  m_filename=filename;
+	m_title=QFileInfo(f).fileName();
+  return true;
+}
+
+void KScribbleDoc::deleteContents()
+{
+  /////////////////////////////////////////////////
+  // TODO: Add implementation to delete the document contents
+  buffer.fill( Qt::white );
+  /////////////////////////////////////////////////
+
+}
+
+bool KScribbleDoc::canCloseFrame(KScribbleView* pFrame)
+{
+  if(!isLastView())
+    return true;
+  		
+  bool ret=false;
+  if(isModified())
+  {
+    QString saveName;
+    switch(KMessageBox::warningYesNoCancel(pFrame, i18n("The current file has been modified.\n"
+    "Do you want to save it?"),title()))
+    {
+    case KMessageBox::Yes:
+      if(title().contains(i18n("Untitled")))
+      {
+        saveName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                             i18n("*|All files"), pFrame, i18n("Save as..."));
+        if(saveName.isEmpty())
+        return false;
+      }
+      else
+       saveName=pathName();
+					
+      if(!saveDocument(saveName))
+      {
+        switch(KMessageBox::warningYesNo(pFrame,i18n("Could not save the current document !\n"
+                          "Close anyway ?"), i18n("I/O Error !")))
+        {
+          case KMessageBox::Yes:
+            ret=true;
+          case KMessageBox::No:
+            ret=false;
+        }	        			
+      }
+      else
+        ret=true;
+        break;
+    case KMessageBox::No:
+      ret=true;
+      break;
+    case KMessageBox::Cancel:
+    default:
+      ret=false; 				
+      break;
+    }
+  }
+  else
+    ret=true;
+		
+  return ret;
+}
+
+void KScribbleDoc::editClearAll()
+{
+  deleteContents();
+  setModified();
+  updateAllViews(0);
+}
+
+</code>
+
+<sect>kscribbleview.h
+<p>
+<code>
+/***************************************************************************
+                          kscribbleview.h  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef KSCRIBBLEVIEW_H
+#define KSCRIBBLEVIEW_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+// include files for Qt
+#include <qscrollview.h>
+#include <kpixmap.h>
+
+class KScribbleDoc;
+
+/** The KScribbleView class provides the view widget for the document instance connected to it and is displayed
+ * as a MDI child window in the main view area of the KScribbleApp class instance. The KScribbleApp
+ * class also has an eventFilter()  method that gets installed on every KScribbleView instance to
+ * control events of the type QEvent::Close.The document connected to the view instance keeps a list
+ * of all view that represent the document contents as there can be more than one view. Views get created in
+ * KScribbleApp::createClient() and automatically added to the list of views.
+ * The KScribbleView class inherits QWidget as a base. Another possible inheritance besides specialized
+ + widgets could be QMainWindow so that you can easily set up the main area of your view by setting another view
+ * as main widget (QMainWindow::setMainWidget() ).
+ * NOTE: The close event always has to be empty (DON`T CALL QWidget::closeEvent(e) in closeEvent())
+ * because the installed event filter can only manage a forward implementation. If the QCloseEvent
+ * is received by the KScribbleView, the overwritten event handler has to do nothing as the eventFilter
+ * has set accept() or ignore() already. If QWidget::closeEvent() is called again, the default event
+ * handler will accept the close event and the window gets destroyed even if the installed eventFilter
+ * has set the event to be ignored.	
+ * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team.
+ * @version KDevelop version 1.1 code generation
+ */
+class KScribbleView : public QScrollView
+{
+  Q_OBJECT
+
+  friend KScribbleDoc;
+
+  public:
+    /** Constructor for the view
+    	* @param pDoc  your document instance that the view represents. Create a document
+    	* before calling the constructor or connect an already existing document to a new MDI child widget.*/
+    KScribbleView(KScribbleDoc* pDoc, QWidget* parent, const char *name, int wflags);
+    /** Destructor for the main view */
+    ~KScribbleView();
+    /** returns a pointer to the document connected to the view*/
+    KScribbleDoc *getDocument() const;
+    /** gets called to redraw the document contents if it has been modified */
+    void update(KScribbleView* pSender);
+    /** contains the implementation for printing functionality and gets called by KScribbleApp::slotFilePrint() */
+    void print(QPrinter *pPrinter);
+    /** cuts out a selection */
+    void cutSelection();
+    /** copies a selection to the clipboard */
+    void copySelection();
+    /** pastes the clipboard contents to a selection that can be inserted into the picture */
+    void pasteSelection();
+    		
+  protected:
+	
+    /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
+    * KScribbleView's are processed by KScribbleApp::eventFilter(), so this overwitten closeEvent is necessary
+    * and has to be empty. Don't overwrite this method !
+    */
+    virtual void closeEvent(QCloseEvent* );
+    /** overwritten to interpret key events for scrollbars */
+    virtual void keyPressEvent( QKeyEvent* );
+    /** changed from mousePressEvent() overwriting QScrollView method */
+    virtual void viewportMousePressEvent( QMouseEvent* );
+    /** changed from mouseReleaseEvent() overwriting QScrollView method */
+    virtual void viewportMouseReleaseEvent( QMouseEvent* );
+    /** On paste actions inserts the pasted clipboard contents */
+    virtual void viewportMouseDoubleClickEvent(QMouseEvent* e);
+    /** changed from mouseMoveEvent() overwriting QScrollView method */
+    virtual void viewportMouseMoveEvent( QMouseEvent* );
+    /** changed from resizeEvent() overwriting QScrollView method */
+//    virtual void viewportResizeEvent( QResizeEvent* );
+    /** changed from paintEvent() overwriting QScrollView method */
+    virtual void viewportPaintEvent( QPaintEvent* );
+    	
+    virtual void viewportDragEnterEvent ( QDragEnterEvent * );
+
+    virtual void viewportDragMoveEvent ( QDragMoveEvent * );
+
+    virtual void viewportDragLeaveEvent ( QDragLeaveEvent * );
+
+    virtual void viewportDropEvent ( QDropEvent * );
+	
+    /** the document instance */
+    KScribbleDoc *doc;
+  		
+  private:
+    KPixmap tmp;
+    QRect select;
+    QClipboard *cb;
+    enum Action{IDLE=0, DRAW, SELECT, PASTE, DRAG} action;
+};
+
+#endif // KSCRIBBLEVIEW_H
+
+</code>
+
+<sect>kscribbleview.cpp
+<p>
+<code>
+/***************************************************************************
+                          kscribbleview.cpp  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+#include <iostream.h>
+
+// include files for Qt
+#include <qprinter.h>
+#include <qpainter.h>
+#include <qdir.h>
+#include <qsize.h>
+#include <qclipboard.h>
+#include <qimage.h>
+#include <qdragobject.h>
+
+// include files for KDE
+#include <kiconloader.h>
+
+// application specific includes
+#include "kscribbleview.h"
+#include "kscribbledoc.h"
+#include "kscribble.h"
+
+
+KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* name, int wflags)
+ : QScrollView(parent, name, wflags | WPaintClever | WNorthWestGravity | WRepaintNoErase)
+{
+  cb = QApplication::clipboard();
+  viewport()->setAcceptDrops(true);
+  setDragAutoScroll(true);
+  doc=pDoc;
+  action=IDLE;
+  viewport()->setCursor( Qt::crossCursor );
+  QSize size=doc->docSize();
+  resizeContents(size.width(), size.height());
+  resize(size);
+}
+
+KScribbleView::~KScribbleView()
+{
+}
+
+KScribbleDoc *KScribbleView::getDocument() const
+{
+  return doc;
+}
+
+void KScribbleView::update(KScribbleView* pSender){
+  if(pSender != this)
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+}
+
+void KScribbleView::print(QPrinter *pPrinter)
+{
+  if (pPrinter->setup(this))
+  {
+    QPainter p;
+    p.begin(pPrinter);
+    	  	
+    ///////////////////////////////
+    // TODO: add your printing code here
+    p.drawPixmap(0,0,doc->buffer);
+    ///////////////////////////////
+    p.end();
+  }
+}
+
+/** cuts out a selection */
+void KScribbleView::cutSelection(){
+  select=select.normalize();
+  QPixmap cb_pix;
+  cb_pix.resize(select.size());
+  // copy selection to cb_pix and copy to clipboard
+  bitBlt(&amp;cb_pix, 0, 0,
+         &amp;doc->buffer, select.x()+contentsX(),  select.y()+contentsY(), cb_pix.width(), cb_pix.height());
+  cb->setPixmap(cb_pix);
+  // fill cb_pix with white and copy to selection area
+  cb_pix.fill(Qt::white);
+  bitBlt(&amp;doc->buffer, select.x()+contentsX(), select.y()+contentsY(),
+         &amp;cb_pix, 0, 0, cb_pix.width(), cb_pix.height());
+  action = IDLE;
+  doc->setModified();
+  doc->updateAllViews(this);
+  viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+}
+/** copies a selection to the clipboard */
+void KScribbleView::copySelection(){
+  select=select.normalize();
+  QPixmap cb_pix;
+  cb_pix.resize(select.size());
+  // copy selection to cb_pix and copy to clipboard
+  bitBlt(&amp;cb_pix, 0, 0,
+         &amp;doc->buffer, select.x()+contentsX(),  select.y()+contentsY(),cb_pix.width(), cb_pix.height());
+  cb->setPixmap(cb_pix);
+  action = IDLE;
+  viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+}
+/** pastes the clipboard contents to a selection that can be inserted into the picture */
+void KScribbleView::pasteSelection(){
+  select=cb->pixmap().rect();
+  action = PASTE;
+  viewport()->setCursor( Qt::sizeAllCursor );
+}
+
+void KScribbleView::closeEvent(QCloseEvent* e){
+
+// DO NOT CALL QWidget::closeEvent(e) here !!
+// This will accept the closing by QCloseEvent::accept() by default.
+// The installed eventFilter() in KScribbleApp takes care for closing the widget
+// or ignoring the close event
+		
+}
+
+void KScribbleView::keyPressEvent( QKeyEvent *e )
+{
+  switch (e->key())
+  {
+    case Key_Right:
+	    scrollBy( 10, 0 );
+	    break;
+    case Key_Left:
+	    scrollBy( -10,0);
+	    break;
+    case Key_Up:
+	    scrollBy( 0, -10 );
+	    break;
+    case Key_Down:
+	    scrollBy( 0, 10 );
+	    break;
+    case Key_Home:
+	    setContentsPos(0,0);
+	    break;
+    case Key_End:
+	    setContentsPos(0,viewport()->height()-viewport()->height());
+	    break;
+    case Key_PageUp:
+	    scrollBy( 0, -viewport()->height() );
+	    break;
+    case Key_PageDown:
+	    scrollBy( 0, viewport()->height() );
+	    break;
+  }
+
+}
+
+void KScribbleView::viewportMousePressEvent( QMouseEvent *e )
+{
+  if ( e->button() == LeftButton &amp;&amp; action == IDLE)
+  {
+    action=DRAW;
+    doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = viewportToContents(e->pos());
+    doc->updateAllViews(this);
+  }
+  else if ( e->button() == RightButton &amp;&amp; action == IDLE)
+  {
+    action = SELECT;
+    QPoint pt=e->pos();
+    int x = pt.x() > contentsWidth() ? contentsWidth() : pt.x();
+    int y = pt.y() > contentsHeight() ? contentsHeight() : pt.y();
+    select.setLeft(x-1);
+    select.setTop(y-1);
+    select.setRight(x-1);
+    select.setBottom(y-1);
+  }
+  else if( action == SELECT )
+  {
+    action = IDLE;
+    select=select.normalize();
+    // drag
+    if(select.contains(e->pos(), true)) // point inside the selection
+    {
+      tmp.resize(select.size());
+      bitBlt(&amp;tmp, 0, 0,
+             &amp;doc->buffer, select.x()+contentsX(),  select.y()+contentsY(), tmp.width(), tmp.height());
+      QImage img =tmp.convertToImage();
+      QDragObject *d = new QImageDrag( img, viewport() );
+      d->setPixmap(BarIcon("filenew"));
+      d->drag();
+    }
+    // remove selection
+    else
+      viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  }
+  else if( action == PASTE )
+  {
+    if ( e->button() == RightButton )
+    {
+      action = IDLE;
+      viewport()->setCursor( Qt::crossCursor );
+    }
+  	QPoint mv_pt (viewport()->height(), viewport()->width());
+    if(QRect(0,0,mv_pt.x(),mv_pt.y()).contains(e->pos()))
+      select.moveCenter(e->pos());
+  	else
+  	{
+  	  select.moveBottomRight(mv_pt);
+  	}
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  }
+}
+
+void KScribbleView::viewportMouseReleaseEvent( QMouseEvent *e )
+{
+  if ( action == DRAW )
+  {
+    action = IDLE;
+    doc->updateAllViews(this);
+  }
+  if ( action == SELECT)
+  {
+    QPoint pt=e->pos();
+    int x = pt.x() > 0 ? pt.x() : 0;
+    int y = pt.y() > 0 ? pt.y() : 0;
+    select.setRight(x);
+    select.setBottom(y);
+    QSize size=doc->docSize();
+    select = select.intersect(QRect(0,0,size.width(), size.height()));	
+  }
+}
+
+/** On paste actions inserts the pasted clipboard contents
+ */
+void KScribbleView::viewportMouseDoubleClickEvent(QMouseEvent* e)
+{
+  if( action == PASTE )
+  {
+    action = IDLE;
+    select.moveCenter(e->pos());
+  	viewport()->setCursor( Qt::crossCursor );
+    QPixmap cb_pix;
+    cb_pix.resize(cb->pixmap().size());
+    cb_pix=cb->pixmap();
+	  bitBlt( &amp;doc->buffer, contentsX()+select.x(), contentsY()+select.y(),
+	          &amp;cb_pix, 0,0 , select.width(),select.height() );
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+	  doc->setModified();
+	  doc->updateAllViews(this);
+  }
+
+}
+
+void KScribbleView::viewportMouseMoveEvent( QMouseEvent *e )
+{
+  if ( action == DRAW )
+  {		
+    QPainter painter;
+    painter.begin( &amp;doc->buffer );
+    painter.setPen( doc->currentPen() );
+    doc->polyline[2] = doc->polyline[1];
+    doc->polyline[1] = doc->polyline[0];
+    doc->polyline[0] = viewportToContents(e->pos());
+    painter.drawPolyline( doc->polyline );
+    painter.end();
+
+    QRect r = doc->polyline.boundingRect();
+    r = r.normalize();
+    r.setLeft( r.left() - doc->penWidth() );
+    r.setTop( r.top() - doc->penWidth() );
+    r.setRight( r.right() + doc->penWidth() );
+    r.setBottom( r.bottom() + doc->penWidth() );
+
+    bitBlt(viewport(), r.x()-contentsX(), r.y()-contentsY() ,
+           &amp;doc->buffer, r.x(), r.y(), r.width(), r.height() );
+    doc->setModified();
+    doc->updateAllViews(this);
+  }
+  if ( action == SELECT )
+  {
+    QPoint pt=e->pos();
+    select.setWidth(select.x()+pt.x());
+    select.setHeight(select.y()+pt.y());
+    select.setRight(pt.x());
+    select.setBottom(pt.y());
+    QSize size=doc->docSize();
+    select = select.intersect(QRect(0,0,size.width(), size.height()));	
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  }
+  if( action == PASTE )
+  {
+  	QPoint mv_pt (viewport()->height(), viewport()->width());
+    if(QRect(0,0,mv_pt.x(),mv_pt.y()).contains(e->pos()))
+      select.moveCenter(e->pos());
+    else
+    {
+      select.moveBottomRight(mv_pt);
+    }
+    QRect pm_rect=cb->pixmap().rect();
+    select.setWidth(pm_rect.width());
+    select.setHeight(pm_rect.height());
+    QSize size=doc->docSize();
+    select = select.intersect(QRect(0,0,size.width(), size.height()));	
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+    doc->setModified();
+    doc->updateAllViews(this);
+  }
+}
+
+//void KScribbleView::viewportResizeEvent( QResizeEvent *e )
+//{
+//}
+
+void KScribbleView::viewportPaintEvent( QPaintEvent *e )
+{
+  bitBlt( viewport(),0,0, &amp;doc->buffer,contentsX() ,contentsY() );
+
+  if( action == PASTE )
+  {
+    tmp.resize(cb->pixmap().size());
+    tmp=cb->pixmap();
+  }
+  if( action == PASTE || action == DRAG )
+  {
+    QSize size=doc->docSize();
+    select = select.intersect(QRect(0,0,size.width(), size.height()));	
+    if(select.intersects(e->rect()))
+      bitBlt(viewport(), select.x(), select.y(), &amp;tmp, 0, 0, select.width(), select.height());
+  }
+  if( action == PASTE || action == DRAG || action == SELECT )
+  {
+//    if(select.intersects(e->rect()))
+//    {
+      QPainter paint_area;
+      paint_area.begin(viewport());
+      paint_area.setPen(QPen(Qt::black, 0, DashLine));
+      paint_area.drawRect( select );
+      paint_area.end();
+//    }
+  }
+  QScrollView::viewportPaintEvent(e);
+}
+
+void  KScribbleView::viewportDragEnterEvent ( QDragEnterEvent * e)
+{
+  e->accept(QImageDrag::canDecode(e));
+  action = DRAG;
+}
+
+void  KScribbleView::viewportDragMoveEvent ( QDragMoveEvent * e)
+{
+  QImage img;
+  if ( QImageDrag::decode(e, img) ){
+    tmp.resize(img.size());
+    tmp.convertFromImage(img);
+    select.setWidth(tmp.width());
+    select.setHeight(tmp.height());
+    select.moveCenter(e->pos());
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  }
+}
+
+void  KScribbleView::viewportDragLeaveEvent ( QDragLeaveEvent * )
+{
+  action = IDLE;
+  viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+}
+
+void  KScribbleView::viewportDropEvent ( QDropEvent * e)
+{
+  QImage img;
+  if ( QImageDrag::decode(e, img) )
+  {
+    tmp.resize(img.size());
+    tmp.convertFromImage(img);
+    select.setWidth(tmp.width());
+    select.setHeight(tmp.height());
+    select.moveCenter(e->pos());
+    bitBlt(&amp;doc->buffer, select.x()+contentsX(), select.y()+contentsY(),
+           &amp;tmp, 0, 0, tmp.width(), tmp.height());
+    doc->setModified();
+    doc->updateAllViews(this);
+  }
+  action = IDLE;
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+}
+
+</code>
+
+<sect>kpenbrushdlg.h
+<p>
+<code>
+/***************************************************************************
+                          kpenbrushdlg.h  -  description
+                             -------------------
+    begin                : Fri Jul 23 1999
+    copyright            : (C) 1999 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
+#ifndef KPENBRUSHDLG_H
+#define KPENBRUSHDLG_H
+
+//Generated area. DO NOT EDIT!!!(begin)
+#include <qwidget.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+//Generated area. DO NOT EDIT!!!(end)
+
+#include <qdialog.h>
+#include <klocale.h>
+
+/**
+  *@author Ralf Nolden
+  */
+
+class KPenBrushDlg : public QDialog  {
+   Q_OBJECT
+public:
+  KPenBrushDlg(int curr, QWidget *parent=0, const char *name=0);
+  ~KPenBrushDlg();
+
+  int width() { return width_spbox->value(); };
+	
+protected slots:
+  void slotDefault();
+
+protected:
+  void initDialog();
+  //Generated area. DO NOT EDIT!!!(begin)
+  QSpinBox *width_spbox;
+  QLabel *width_label;
+  QPushButton *default_btn;
+  QPushButton *ok_btn;
+  QPushButton *cancel_btn;
+  //Generated area. DO NOT EDIT!!!(end)
+
+private:
+};
+
+#endif
+
+
+</code>
+
+<sect>kpenbrushdlg.cpp
+<p>
+<code>
+/***************************************************************************
+                          kpenbrushdlg.cpp  -  description
+                             -------------------
+    begin                : Fri Jul 23 1999
+    copyright            : (C) 1999 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "kpenbrushdlg.h"
+#include <qwhatsthis.h>
+#include <kapp.h>
+
+KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name)
+  : QDialog(parent,name,true,WStyle_ContextHelp)
+{
+	initDialog();
+  QWhatsThis::add(width_spbox,i18n("Select brush width"));
+
+	width_spbox->setValue(curr);
+	connect(default_btn, SIGNAL(clicked()), this, SLOT(slotDefault()));
+	connect(ok_btn, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(cancel_btn, SIGNAL(clicked()), this, SLOT(reject()));
+}
+
+KPenBrushDlg::~KPenBrushDlg(){
+}
+
+void KPenBrushDlg::slotDefault(){
+  width_spbox->setValue(3);
+}
+
+</code>
+
+<sect>kpenbrushdlgdata.cpp
+<p>
+<code>
+/**********************************************************************
+            --- KDevelop (KDlgEdit)  generated file ---
+
+            Last generated: Fri Jul 23 10:43:10 1999
+
+            DO NOT EDIT!!!  This file will be automatically
+            regenerated by KDevelop.  All changes will be lost.
+
+**********************************************************************/
+#include <kapp.h>
+#include "kpenbrushdlg.h"
+
+void  KPenBrushDlg::initDialog(){
+  this->resize(370,210);
+  this->setMinimumSize(0,0);
+  width_spbox= new QSpinBox(this,"width_spbox");
+  width_spbox->setGeometry(150,50,100,25);
+  width_spbox->setMinimumSize(0,0);
+  width_spbox->setValue(1);
+  width_spbox->setRange(1,99);
+
+  width_label= new QLabel(this,"width_label");
+  width_label->setGeometry(20,50,120,25);
+  width_label->setMinimumSize(0,0);
+  width_label->setText(i18n("Pen Width:"));
+
+  default_btn= new QPushButton(this,"default");
+  default_btn->setGeometry(30,160,100,30);
+  default_btn->setMinimumSize(0,0);
+  default_btn->setText(i18n("Default"));
+  default_btn->setAutoDefault(true);
+
+  ok_btn= new QPushButton(this,"ok");
+  ok_btn->setGeometry(140,160,100,30);
+  ok_btn->setMinimumSize(0,0);
+  ok_btn->setText(i18n("OK"));
+  ok_btn->setAutoDefault(true);
+
+  cancel_btn= new QPushButton(this,"cancel");
+  cancel_btn->setGeometry(250,160,100,30);
+  cancel_btn->setMinimumSize(0,0);
+  cancel_btn->setText(i18n("Cancel"));
+  cancel_btn->setAutoDefault(true);
+
+}
+</code>
+
+<sect>resource.h
+<p>
+<code>
+/***************************************************************************
+                          resource.h  -  description
+                             -------------------
+    begin                : Mon Jan 31 11:05:05 CET 2000
+    copyright            : (C) 2000 by Ralf Nolden
+    email                : Ralf.Nolden@post.rwth-aachen.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef RESOURCE_H
+#define RESOURCE_H
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+///////////////////////////////////////////////////////////////////
+// resource.h  -- contains macros used for commands
+
+
+///////////////////////////////////////////////////////////////////
+// COMMAND VALUES FOR MENUBAR AND TOOLBAR ENTRIES
+
+
+///////////////////////////////////////////////////////////////////
+// File-menu entries
+#define ID_FILE_NEW                 10010
+#define ID_FILE_OPEN                10020
+#define ID_FILE_OPEN_RECENT         10030
+#define ID_FILE_CLOSE               10040
+
+#define ID_FILE_SAVE                10050
+#define ID_FILE_SAVE_AS             10060
+
+#define ID_FILE_PRINT               10070
+
+#define ID_FILE_QUIT                10080
+
+///////////////////////////////////////////////////////////////////
+// Edit-menu entries
+#define ID_EDIT_UNDO                11010
+#define ID_EDIT_COPY                11020
+#define ID_EDIT_CUT                 11030
+#define ID_EDIT_PASTE               11040
+#define ID_EDIT_CLEAR_ALL           11050
+
+///////////////////////////////////////////////////////////////////
+// Pen-menu entries
+#define ID_PEN_COLOR                14010
+#define ID_PEN_BRUSH                14020
+
+///////////////////////////////////////////////////////////////////
+// Draw-menu entries
+#define ID_DRAW_FIND                15010
+#define ID_DRAW_FREEHAND            15020
+#define ID_DRAW_LINE                15030
+#define ID_DRAW_RECT                15040
+#define ID_DRAW_RECT_FILL           15050
+#define ID_DRAW_CIRCLE              15060
+#define ID_DRAW_CIRCLE_FILL         15070
+#define ID_DRAW_ELLIPSE             15080
+#define ID_DRAW_ELLIPSE_FILL        15090
+#define ID_DRAW_SPRAY               15100
+#define ID_DRAW_FILL                15110
+#define ID_DRAW_ERASE               15120
+
+///////////////////////////////////////////////////////////////////
+// View-menu entries
+#define ID_VIEW_TOOLBAR             12010
+#define ID_VIEW_STATUSBAR           12020
+
+///////////////////////////////////////////////////////////////////
+// Window-menu entries
+#define ID_WINDOW_NEW_WINDOW        13010
+#define ID_WINDOW_CASCADE           13020
+#define ID_WINDOW_TILE              13030
+
+///////////////////////////////////////////////////////////////////
+// Help-menu entries
+#define ID_HELP_CONTENTS            1002
+#define ID_HELP_WHATS_THIS          1003
+///////////////////////////////////////////////////////////////////
+// General application values
+#define ID_STATUS_MSG               1001
+#define TOOLS_TOOLBAR               1
+#endif // RESOURCE_H
+
+</code>
+
 </book>

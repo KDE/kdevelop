@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Copyright </TITLE>
+<TITLE>KDE Anwendungs Tutorials: Adding Printing Functionality</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -14,38 +14,58 @@
  
 <P ALIGN="RIGHT">
 
-Weiter <A HREF="index-12.html">Zurück</A>
+<A HREF="index-14.html">Weiter</A>
+ <A HREF="index-12.html">Zurück</A>
  <A HREF="index.html#toc13">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="Copyright"></A> <A NAME="s13">13. Copyright </A> </H3>
+<H3><A NAME="s13">13. Adding Printing Functionality</A></H3>
 
-<P> 
 <P>
-<BLOCKQUOTE><CODE>
+<P>In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
+do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
+<EM>KScribble</EM> or chooses "Print" from the "File" menu, the <CODE>slotFilePrint()</CODE> method is called in <CODE>KScribbleApp</CODE>.
+This method detects which child window is currently activ and creates a printer instance of the class <CODE>QPrinter</CODE>. Then it calls
+the widget´s printing method, <CODE>KScribbleView::print()</CODE>. Here, the framework already contains the base implementation - which
+already shows you that for printing you just have to use <CODE>QPainter</CODE> which then draws on the printer. This method also calls the
+printing dialog.
+<P>What we have to do here is to use <CODE>QPainter</CODE> methods to draw the pixmap of the document connected to the view. As
+<CODE>QPainter</CODE> already offers a whole set of methods <CODE>drawPixmap()</CODE>, we will of course use one of them:
+<P>
+<HR>
 <PRE>
- 
-
-KDevelop Copyright 1998,1999 The KDevelop Team.
-
-Dieses Programm ist Freie Software; Sie können Sie  
-weitergeben und/oder  verändern entsprechend den 
-Bestimmungen der GNU General Public License, wie von der 
-Free Software Foundation veröffentlicht, entweder 
-entsprechend Version 2 der Bestimmungen oder (nach ihrer 
-Wahl) jeder späteren Version. Dieses Programm wird in der 
-Hoffnung, daß es nützlich ist, aber OHNE EINE GARANTIE 
-verbreitet; sogar ohne die implizite Garantie der 
-MARKTGÄNGIGKEIT oder EIGNUNG FüR EINEN BESTIMMTEN ZWECK. 
-Lesen Sie die GNU General Public License, um weitere Details 
-zu erfahren. Sie sollten eine Kopie der GNU General Public 
-License zusammen mit diesem Programm erhalten haben; wenn 
-nicht, so schreiben Sie an die Free Software Foundation, 
-Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+void KScribbleView::print(QPrinter *pPrinter)
+{
+  if (pPrinter->setup(this))
+  {
+    QPainter p;
+    p.begin(pPrinter);
+                
+    ///////////////////////////////
+    // TODO: add your printing code here
+->      p.drawPixmap(0,0,doc->buffer);
+    ///////////////////////////////
+    p.end();
+  }
+}
 </PRE>
-</CODE></BLOCKQUOTE>
+<HR>
+<P>Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
+<P>You can just go ahead and test it - now you can print any graphics that <EM>KScribble</EM> is able to open.
+<P>This is now the end of our trour through creating a KDE 2 application. You can find the source package of KScribble
+completely with an extension that adds cut, copy, paste and undo functions as well as drag´n drop here:
+<P>
+<A HREF="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz">$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz</A>        
+The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
+After untarring the tarball with <CODE>tar zxvf kscribble-1.0.tar.gz</CODE>, load the project and call "Automake and autoconf" from the
+"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
+and Qt 2.1, so you have to change them manually to match your installation path for these options.
+<P>The appendix also contains the complete sourcecode for this package to read through online.
+<P>
+<P>
 <P ALIGN="RIGHT">
 
-Weiter <A HREF="index-12.html">Zurück</A>
+<A HREF="index-14.html">Weiter</A>
+ <A HREF="index-12.html">Zurück</A>
  <A HREF="index.html#toc13">Inhaltsverzeichnis</A>
 </P>
 <CENTER>

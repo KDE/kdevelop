@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Defining the Documents</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Definieren der Dokumente</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,28 +18,28 @@
  <A HREF="index-7.html">Zurück</A>
  <A HREF="index.html#toc8">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s8">8. Defining the Documents</A></H3>
+<H3><A NAME="s8">8. Definieren der Dokumente</A></H3>
 
 <P>
-<P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
-to and from files and offer methods to manipulate the data. As <EM>KScribble</EM> will be a simple drawing application that operates on
-graphical data, we will use the Qt class <CODE>QPixmap</CODE> for storing our paintings while it is edited. <CODE>QPixmap</CODE> also offers
-simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
-reading and one for writing. Further, we need to define a pen that draws into a document, set it's width and color and make it
-available for the view class to retrieve the pen - actually you want the view offering the drawing methods, but the document as the
-central element for all views has to hold the pen originally, because two views of the same document would otherwise use different
-pens!
-<P>Therefore to define how our document class should work, we will add one instance of <CODE>QPixmap</CODE>, one of <CODE>QPen</CODE> and edit the
-methods <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>.
+<P>Der erste Schritt beim Erstellen einer Applikation, die aud dem Document-View Modell basiert, sollte immer sein, sich zu überlegen
+welche Arten von Daten die Anwendung verwalten muß. Dies entscheidet, wie die view Klasse aussehen wird, aber besonders, wie die
+document Klasse Daten in und aus Dateien lesen und schreiben wird und welche Methoden angeboten werden, um die Daten zu manipulieren.
+Da <EM>KScribble</EM> eine einfache Zeichenanwendung sein wird, die mit graphischen Daten umgeht, werden wir die Qt Klasse
+<CODE>QPixmap</CODE> verwenden, um unsere Daten zu speichen während wir editieren. <CODE>QPixmap</CODE> bietet auch einfache Methoden, Bilder
+in und aus Dateien zu lesen und zu schreiben, so daß die Serialisation mit zwei Zeilen erreicht werden kann, eine zum Lesen und eine
+zum Schreiben. Weiterhin müssen wir einen Stift definieren, der in ein Dokument schreibt, seine Breite und Farbe einstellen und der
+view Klasse ermöglichen den Stift anzusprechen - tatsächlich wollen Sie, daß die Ansicht die Zeichenmethoden anbietet, aber das
+Dokument als zentrales Element für alle Ansichten, muß das Original des Stiftes besitzen, da sonst verschiedene Ansichten desselben
+Dokuments verschiedene Stifte verwenden würden!
+<P>Daher fügen wir zur Definition der Arbeitsweise unserer document Klasse eine Instanz von <CODE>QPixmap</CODE> und eine von
+<CODE>QPen</CODE> hinzu und editieren die Methoden <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> und <CODE>saveDocument()</CODE>.
 <P>
-<H3><A NAME="ss8.1">8.1 Adding the Instances</A>
+<H3><A NAME="ss8.1">8.1 Hinzufügen der Instanzen</A>
 </H3>
 
 <P>
-<P>Open the file <CODE>kscribbledoc.h</CODE> by selecting it in one of the fileviewers or by a click on the classviewer over the class
-<CODE>KScribbleDoc</CODE>. Then add the lines marked with -> from the following code snippet:
-<P>
+<P>Öffnen Sie die Datei <CODE>kscribbledoc.h</CODE> durch Auswahl in einer der Baumansichten oder durch einen Klick in der Klassenansicht
+über <CODE>KScribbleDoc</CODE>. Dann fügen Sie die mit -> markierten Zeilen aus dem folgenden Code Ausschnit hinzu:
 <P>
 <HR>
 <PRE>
@@ -69,16 +69,17 @@ methods <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> and <CODE>saveDo
         bool modified;
 </PRE>
 <HR>
-<P>As you see, we added pen and buffer as well as <CODE>currentPen()</CODE> and <CODE>penWidth()</CODE>. As pen is declared private, we offer a
-possibility to retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to
-add them to the implementation file, where we're turning to now.
+<P>Wie Sie sehen, haben wir pen und buffer, sowie <CODE>currentPen()</CODE> und <CODE>penWidth()</CODE> hinzugefügt. Da pen als private deklariert
+ist, bieten wir eine Möglichkeit sowohl auf den Stift selber, als auch auf die Stiftbreite zuzugreifen. Da diese bereits in der
+Klassendeklaration implementiert sind, müssen wir sie nicht der Implementationsdatei hinzufügen, der wir uns nun zuwenden.
 <P>
-<H3><A NAME="ss8.2">8.2 Initialization of the Document</A>
+<H3><A NAME="ss8.2">8.2 Initialisierung des Dokuments</A>
 </H3>
 
 <P>
-<P>Select the method <CODE>newDocument()</CODE> in the <CODE>KScribbleDoc</CODE> class to jump to the method declaration. Here, we're only adding
-one line, marked with the arrow:
+<P>Wählen Sie die Methode <CODE>newDocument()</CODE> in der <CODE>KScribbleDoc</CODE> Klasse um zur Methodendeklaration zu springen. Hier fügen wir
+nur eine mit dem Pfeil markierte Zeile ein:
+<P>
 <HR>
 <PRE>
   kscribbledoc.cpp
@@ -94,14 +95,15 @@ one line, marked with the arrow:
   }
 </PRE>
 <HR>
-<P>This initializes the pen with the color black and width of 3 pixels; the <CODE>QPen</CODE> class has some more constructors, but this one lasts our
-needs here.
+<P>Dies initialisiert den Stift mit der Farbe Schwarz und einer Weite von drei Pixeln; die <CODE>QPen</CODE> Klasse hat noch einige weitere
+Konstruktoren, aber dieser hier reicht für unsere Zwecke.
 <P>
-<H3><A NAME="ss8.3">8.3 Implementing the Serialization</A>
+<H3><A NAME="ss8.3">8.3 Implementierung der Serialisation</A>
 </H3>
 
 <P>
-<P>What is left to do is to define how to open and save our pictures. This is done in the according methods:
+<P>Was noch zu tun ist, ist zu definieren, wie wir unsere Bilder öffnen und speichern wollen. Dies wird in den entsprechenden Methoden
+erledigt:
 <P>
 <HR>
 <PRE>
@@ -134,21 +136,22 @@ needs here.
 ->      //f.close();
 </PRE>
 <HR>
-<P>Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
-<CODE>filename</CODE> is opened, because that is done automatically by the load and save methods of <CODE>QPixmap</CODE>, which we add instead. Other
-documents may open a file and read in its contents such as text lines or whatever, so the <CODE>QFile</CODE> methods are already present in the
-codeframe. As <CODE>save()</CODE> and <CODE>load()</CODE> return a boolean value if the operation was successful, we're returning false if not,
-so the rest of the framework gets a return value and can give out warnings if the operation was not successful.
-The <CODE>load()</CODE> and <CODE>save()</CODE> methods now are already provided in <CODE>QPixmap</CODE>. They require the filename and the format as
-argument; the source framework on the other hand <B>does not</B> call the document methods with the format yet. If only one format is
-used, it lasts to set the format here. other methods could detect the format for example- but we will turn to this later. For now,
-we're using "PNG" as format; see <CODE>QImageIO</CODE> for more details about the image formats that can be opened.
-<P>Now we're already finished defining our document structure. The <CODE>QPixmap</CODE> buffer serves us as a buffer storing the original picture
-contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
-pen is done in <CODE>newDocument()</CODE>. This method is always called after the constructor within the framework internally, so you
-should add document instances initializations there as we did with the pen.
-<P>In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
-document- and then we'll be ready to paint !
+<P>Fügen Sie wieder die Zeilen mit dem Pfeil Ihrem Code hinzu. Was wir getan haben, ist die Zeilen, in denen <CODE>Dateiname</CODE> geöffnet
+wird, auszukommentieren, weil die automatisch von den Laden- und Speichermethoden von <CODE>QPixmap</CODE> erledigt wird, die wir
+stattdessen hinzufügen. Andere Dokumente mögen Dateien öffnen und deren Inhalt, Textzeilen oder was auch immer, lesen, weshalb
+die <CODE>QFile</CODE> Methoden schon im Frame enthalten sind.Da <CODE>save()</CODE> und <CODE>load()</CODE> bei Erfolg einen Boolschen Wert
+zurückliefern, Geben wir false zurück, wenn nicht, so daß der Rest der Anwendung einen Returnwert erhält und Warnungen ausgibt, wenn
+die Operation nicht erfolgreich war. Die <CODE>load()</CODE> und <CODE>save()</CODE> Methoden sind nun schon in <CODE>QPixmap</CODE> enthalten.
+Sie benötigen den Dateinamen und das Format als Argument; die Quellen rufen die document Methoden jedoch noch <B>nicht</B> mit dem
+Format auf. Wenn nur <EM>ein</EM> Format verwendet wird, reicht es, dieses hier zu setzen, andere Methoden könnten das Format zum
+Beispiel ermitteln - aber wir werden später noch einmal darauf zurückkommen. Für jetzt verwenden wir "PNG" als Format; sehen Sie unter
+<CODE>QImageIO</CODE> nach, um mehr über Bildformate zu erfahren.
+<P>Nun sind wir fast mit der Definition unserer Dokumentstruktur fertig. Der <CODE>QPixmap</CODE> Puffer dient uns als Speicher für unser
+Originalbild, während wir daran arbeiten. Der Stift ist gültig für alle Ansichten, die mit dem Dokument verbunden sind. Beachten Sie,
+daß die Initialisierung des Stiftes in <CODE>newDocument</CODE> erfolgt. Diese Methode wird immer intern nach dem Konstruktor aufgerufen,
+Sie sollten also dort document Instanzinitialisierungen vornehmen, wie wir es mit dem Stift gemacht haben.
+<P>Im nächsten Kapitel werden wir uns der view Klasse widmen, um zu definieren, wie die Ansicht mit dem Benutzer kooperieren soll und
+wie sie auf das Dokument zugreift- und dann sind wir bereit zu zeichnen !
 <P>
 <P ALIGN="RIGHT">
 
