@@ -105,6 +105,9 @@ public: // Public methods
   /** Check and get a tooltip for a point. */
   void tip( const QPoint &p, QRect &r, QString &str );
 
+  /** Fetches the currently selected class from the store. */
+  CParsedClass *getCurrentClass();
+
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
@@ -253,9 +256,6 @@ private: // Private methods
    * @param str Resulting treestring.
    */
   void buildTreeStr( QListViewItem *item, QString &str );
-
-  /** Fetches the currently selected class from the store. */
-  CParsedClass *getCurrentClass();
 
   /**
    * Return this view as a treestring.

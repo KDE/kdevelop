@@ -176,7 +176,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
   REQUIRE( "Valid class name", aClassName != NULL );
 
-  CAddClassMethodDlg dlg(this, "methodDlg" );
+  CAddClassMethodDlg dlg( class_tree, this, "methodDlg");
   
   if (bAutosave)
     saveTimer->stop();

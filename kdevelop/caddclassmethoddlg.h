@@ -35,6 +35,7 @@ class CParsedMethod;
 #include <qmultilinedit.h>
 #include <qlayout.h> 
 
+class CClassView;
 /** Dialog to create a new method for a class. 
  * @author Jonas Nordin
  */
@@ -43,7 +44,7 @@ class CAddClassMethodDlg : public QDialog
   Q_OBJECT
 public: // Constructor & Destructor
 
-  CAddClassMethodDlg( QWidget *parent=0, const char *name=0 );
+  CAddClassMethodDlg(CClassView* class_tree, QWidget *parent=0, const char *name=0 );
 
 public: // Public queries
 
@@ -113,9 +114,14 @@ protected: // Private widgets
   /** This method is const. */
   QCheckBox constCb;
 
+  QPushButton cloneBtn;
+
   QPushButton okBtn;
   QPushButton cancelBtn;
   QLabel btnFill;
+
+	/** pointer to all the classes */
+  CClassView* classtree;
 
 protected slots:
 
@@ -134,6 +140,9 @@ private: // Private methods
   void setWidgetValues();
   void setCallbacks();
 
+public slots: // Public slots
+  /** look up method to overload */
+  void slotCloneClicked();
 };
 
 #endif

@@ -21,43 +21,46 @@
 
 
 #include "caddclassmethoddlg.h"
+#include "cclonefunctiondlg.h"
 #include "./classparser/ParsedMethod.h"
 
 #include <kmessagebox.h>
 #include <qwhatsthis.h>
 #include <klocale.h>
 
-CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
-  : QDialog( parent, name, true ),
-    topLayout( this, 5 ),
-    functionLayout( 9, 3, 5, "functionLayout" ),
-    accessLayout( 3, 5,5, "accessLayout" ),
-    typeLayout( 3, 5, 5, "typeLayout" ),
-    modifierLayout( 3, 6,5, "modifierLayout" ),
-    buttonLayout( 5, "buttonLayout" ),
-    modifierGrp( this, "modifierGrp" ),
-    typeGrp( this, "typeGrp" ),
-    functionGrp( this, "functionGrp" ),
-    accessGrp( this, "accessGrp" ),
-    typeLbl( this, "typeLbl" ),
-    typeEdit( this, "typeEdit" ),
-    declLbl( this, "declLbl" ),
-    declEdit( this, "declEdit" ),
-    docLbl( this, "docLbl" ),
-    docEdit( this, "docEdit" ),
-    publicRb( this, "publicRb" ),
-    protectedRb( this, "protectedRb" ),
-    privateRb( this, "privateRb" ),
-    methodRb( this, "methodRb" ),
-    slotRb( this, "slotRb" ),
-    signalRb( this, "signalRb" ),
-    virtualCb( this, "virtualCb" ),
-    pureCb( this, "pureCb" ),
-    staticCb( this, "staticCb" ),
-    constCb( this, "constCb" ),
-    okBtn( this, "okBtn" ),
-    cancelBtn( this, "cancelBtn" ),
-    btnFill( this, "btnFill" )
+CAddClassMethodDlg::CAddClassMethodDlg(CClassView* class_tree, QWidget *parent, const char *name ) :
+  QDialog( parent, name, true ),
+  topLayout( this, 5 ),
+  functionLayout( 9, 3, 5, "functionLayout" ),
+  accessLayout( 3, 5,5, "accessLayout" ),
+  typeLayout( 3, 5, 5, "typeLayout" ),
+  modifierLayout( 3, 6,5, "modifierLayout" ),
+  buttonLayout( 5, "buttonLayout" ),
+  modifierGrp( this, "modifierGrp" ),
+  typeGrp( this, "typeGrp" ),
+  functionGrp( this, "functionGrp" ),
+  accessGrp( this, "accessGrp" ),
+  typeLbl( this, "typeLbl" ),
+  typeEdit( this, "typeEdit" ),
+  declLbl( this, "declLbl" ),
+  declEdit( this, "declEdit" ),
+  docLbl( this, "docLbl" ),
+  docEdit( this, "docEdit" ),
+  publicRb( this, "publicRb" ),
+  protectedRb( this, "protectedRb" ),
+  privateRb( this, "privateRb" ),
+  methodRb( this, "methodRb" ),
+  slotRb( this, "slotRb" ),
+  signalRb( this, "signalRb" ),
+  virtualCb( this, "virtualCb" ),
+  pureCb( this, "pureCb" ),
+  staticCb( this, "staticCb" ),
+  constCb( this, "constCb" ),
+  cloneBtn( this, "cloneBtn" ),
+  okBtn( this, "okBtn" ),
+  cancelBtn( this, "cancelBtn" ),
+  btnFill( this, "btnFill" ),
+  classtree(class_tree)
 {
   setCaption( i18n("Add class member") );
 
@@ -68,6 +71,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
 void CAddClassMethodDlg::setWidgetValues()
 {
   // Top layout
+  topLayout.addWidget( &cloneBtn );
   topLayout.addLayout( &functionLayout );
   topLayout.addLayout( &accessLayout );
   topLayout.addLayout( &typeLayout );
@@ -169,6 +173,11 @@ void CAddClassMethodDlg::setWidgetValues()
   constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
 
+  //cloneBtn.setGeometry( 10, 370, 100, 30 );
+  cloneBtn.setFixedSize( 100, 30 );
+  cloneBtn.setText( i18n("Clone") );
+  cloneBtn.setDefault( TRUE );
+
   okBtn.setGeometry( 10, 370, 100, 30 );
   okBtn.setFixedSize( 100, 30 );
   okBtn.setText( i18n("OK") );
@@ -249,6 +258,7 @@ void CAddClassMethodDlg::setCallbacks()
   connect( &virtualCb, SIGNAL ( clicked() ), SLOT( slotVirtualClicked() ) );
 
   // Ok and cancel buttons.
+  connect( &cloneBtn, SIGNAL( clicked() ), SLOT( slotCloneClicked() ) );
   connect( &okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
   connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
 }
@@ -345,3 +355,44 @@ void CAddClassMethodDlg::enterEvent(QEvent* event){
     QDialog::enterEvent(event);
     typeEdit.setFocus();
 }
+/** look up method to overload */
+void CAddClassMethodDlg::slotCloneClicked(){
+
+  CCloneFunctionDlg volDlg(classtree, this, "volnameDlg");
+
+  if (volDlg.exec()) {
+    CParsedMethod* res = volDlg.getMethod();
+    if (! res)
+    	return;
+    	
+    // copy type and declaration
+    QString str;
+    typeEdit.setText(res->type);;
+    declEdit.setText(res->asString(str));
+
+    // the comment needs some adjustment
+    str = res->comment;
+    // remove /** and */
+    str.replace( QRegExp("^/\\** *"), "" );
+    str.replace( QRegExp(" *\\**/$"), "" );
+    // clean up line breaks
+    str.replace( QRegExp("\n *\\** *"), "\n" );
+    docEdit.setText(str);
+
+    // all the buttons
+   	privateRb.setChecked( res->isPrivate() );
+    protectedRb.setChecked( res->isProtected() );
+    publicRb.setChecked( res->isPublic() );
+    constCb.setChecked( res->isConst );
+
+    methodRb.setChecked( true ); // ??
+    slotRb.setChecked( res->isSlot );
+    signalRb.setChecked( res->isSignal );
+
+    constCb.setChecked( res->isConst);
+    staticCb.setChecked( res->isStatic );
+    pureCb.setChecked( res->isPure );
+    virtualCb.setChecked( res->isVirtual );
+  }
+}
+

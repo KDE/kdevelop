@@ -193,15 +193,19 @@ bool testWw(char c) {
   return !(data[c >> 3] & (1 << (c & 7)));
 }
 
+// ---------------------------------------------------------------------------
 
 HlItem::HlItem(int attribute, int context)
   : attr(attribute), ctx(context) {
 }
 
+// ---------------------------------------------------------------------------
+
 HlItemWw::HlItemWw(int attribute, int context)
   : HlItem(attribute,context) {
 }
 
+// ---------------------------------------------------------------------------
 
 HlCharDetect::HlCharDetect(int attribute, int context, char c)
   : HlItem(attribute,context), sChar(c) {
@@ -214,6 +218,8 @@ const char *HlCharDetect::checkHgl(const char *str) {
 
 }
 
+// ---------------------------------------------------------------------------
+
 Hl2CharDetect::Hl2CharDetect(int attribute, int context, const char *s)
   : HlItem(attribute,context) {
   sChar[0] = s[0];
@@ -224,6 +230,8 @@ const char *Hl2CharDetect::checkHgl(const char *str) {
   if (str[0] == sChar[0] && str[1] == sChar[1]) return str + 2;
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlStringDetect::HlStringDetect(int attribute, int context, const char *s)
   : HlItem(attribute,context) {
@@ -240,6 +248,8 @@ const char *HlStringDetect::checkHgl(const char *s) {
   if (memcmp(s,str,len) == 0) return s + len;
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlRangeDetect::HlRangeDetect(int attribute, int context, const char *s)
   : HlItem(attribute,context) {
@@ -258,6 +268,7 @@ const char *HlRangeDetect::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
 
 KeywordData::KeywordData(const char *str) {
   len = strlen(str);
@@ -268,6 +279,8 @@ KeywordData::KeywordData(const char *str) {
 KeywordData::~KeywordData() {
   delete s;
 }
+
+// ---------------------------------------------------------------------------
 
 HlKeyword::HlKeyword(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -307,6 +320,7 @@ const char *HlKeyword::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
 
 HlCaseInsensitiveKeyword::HlCaseInsensitiveKeyword(int attribute, int context)
   : HlKeyword(attribute,context) {
@@ -330,6 +344,7 @@ const char *HlCaseInsensitiveKeyword::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
 
 HlInt::HlInt(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -343,6 +358,8 @@ const char *HlInt::checkHgl(const char *str) {
   if (s > str) return s;
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlFloat::HlFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -374,6 +391,8 @@ const char *HlFloat::checkHgl(const char *s) {
   if (b) return s; else return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlCSymbol::HlCSymbol(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -394,6 +413,8 @@ const char *HlCSymbol::checkHgl(const char *str) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlCInt::HlCInt(int attribute, int context)
   : HlInt(attribute,context) {
 }
@@ -404,6 +425,8 @@ const char *HlCInt::checkHgl(const char *s) {
   if (s && (*s == 'L' || *s == 'l' || *s == 'U' || *s == 'u')) s++;
   return s;
 }
+
+// ---------------------------------------------------------------------------
 
 HlCOct::HlCOct(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -424,6 +447,8 @@ const char *HlCOct::checkHgl(const char *str) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlCHex::HlCHex(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -443,6 +468,8 @@ const char *HlCHex::checkHgl(const char *str) {
   return 0L;
 }
  
+// ---------------------------------------------------------------------------
+
 HlCFloat::HlCFloat(int attribute, int context)
   : HlFloat(attribute,context) {
 }
@@ -454,6 +481,8 @@ const char *HlCFloat::checkHgl(const char *s) {
   return s;
 }
 
+// ---------------------------------------------------------------------------
+
 HlLineContinue::HlLineContinue(int attribute, int context)
   : HlItem(attribute,context) {
 }
@@ -463,6 +492,7 @@ const char *HlLineContinue::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
 
 HlCStringChar::HlCStringChar(int attribute, int context)
   : HlItem(attribute,context) {
@@ -537,6 +567,7 @@ const char *HlCStringChar::checkHgl(const char *str) {
   return checkEscapedChar(str);
 }
 
+// ---------------------------------------------------------------------------
 
 HlCChar::HlCChar(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -553,6 +584,8 @@ const char *HlCChar::checkHgl(const char *str) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlCPrep::HlCPrep(int attribute, int context)
   : HlItem(attribute,context) {
 }
@@ -567,6 +600,8 @@ const char *HlCPrep::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlHtmlTag::HlHtmlTag(int attribute, int context)
   : HlItem(attribute,context) {
 }
@@ -576,6 +611,8 @@ const char *HlHtmlTag::checkHgl(const char *s) {
   while (*s != ' ' && *s != '\t' && *s != '>' && *s != '\0') s++;
   return s;
 }
+
+// ---------------------------------------------------------------------------
 
 HlHtmlValue::HlHtmlValue(int attribute, int context)
   : HlItem(attribute,context) {
@@ -595,9 +632,13 @@ const char *HlHtmlValue::checkHgl(const char *s) {
   return s;
 }
 
+// ---------------------------------------------------------------------------
+
 HlShellComment::HlShellComment(int attribute, int context)
   : HlCharDetect(attribute,context,'#') {
 }
+
+// ---------------------------------------------------------------------------
 
 HlMHex::HlMHex(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -612,6 +653,8 @@ const char *HlMHex::checkHgl(const char *s) {
   }
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlAdaDec::HlAdaDec(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -631,6 +674,8 @@ const char *HlAdaDec::checkHgl(const char *s) {
   }
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlAdaBaseN::HlAdaBaseN(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -669,6 +714,8 @@ const char *HlAdaBaseN::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlAdaFloat::HlAdaFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -694,6 +741,8 @@ const char *HlAdaFloat::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlAdaChar::HlAdaChar(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -702,6 +751,8 @@ const char *HlAdaChar::checkHgl(const char *s) {
   if (s[0] == '\'' && s[1] && s[2] == '\'') return s + 3;
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlSatherClassname::HlSatherClassname(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -718,6 +769,8 @@ const char *HlSatherClassname::checkHgl(const char *s) {
   }
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlSatherIdent::HlSatherIdent(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -736,6 +789,8 @@ const char *HlSatherIdent::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlSatherDec::HlSatherDec(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -749,6 +804,8 @@ const char *HlSatherDec::checkHgl(const char *s) {
   }
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlSatherBaseN::HlSatherBaseN(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -776,6 +833,8 @@ const char *HlSatherBaseN::checkHgl(const char *s) {
   }
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlSatherFloat::HlSatherFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
@@ -807,6 +866,8 @@ const char *HlSatherFloat::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlSatherChar::HlSatherChar(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
@@ -831,6 +892,8 @@ const char *HlSatherChar::checkHgl(const char *s) {
     return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlSatherString::HlSatherString(int attribute, int context)
   : HlItemWw(attribute, context) {
 }
@@ -850,6 +913,8 @@ const char *HlSatherString::checkHgl(const char *s) {
   return 0L;
 }
 
+
+// ---------------------------------------------------------------------------
 
 HlLatexTag::HlLatexTag(int attribute, int context)
   : HlItem(attribute, context) {
@@ -871,6 +936,8 @@ const char *HlLatexTag::checkHgl(const char *s) {
   return 0L;
 }
 
+// ---------------------------------------------------------------------------
+
 HlLatexChar::HlLatexChar(int attribute, int context)
   : HlItem(attribute, context) {
 }
@@ -885,6 +952,8 @@ const char *HlLatexChar::checkHgl(const char *s) {
   } */
   return 0L;
 }
+
+// ---------------------------------------------------------------------------
 
 HlLatexParam::HlLatexParam(int attribute, int context)
   : HlItem(attribute, context) {
@@ -901,7 +970,8 @@ const char *HlLatexParam::checkHgl(const char *s) {
   return 0L;
 }
 
-//--------
+// ---------------------------------------------------------------------------
+
 ItemStyle::ItemStyle() : selCol(Qt::white), bold(false), italic(false) {
 }
 
@@ -910,12 +980,16 @@ ItemStyle::ItemStyle(const QColor &col, const QColor &selCol,
   : col(col), selCol(selCol), bold(bold), italic(italic) {
 }
 
+// ---------------------------------------------------------------------------
+
 ItemFont::ItemFont() :
   family("courier"),
   size(12),
   charset("")
 {
 }
+
+// ---------------------------------------------------------------------------
 
 ItemData::ItemData(const QString& name, int defStyleNum) :
   name(name),
@@ -935,12 +1009,16 @@ ItemData::ItemData(const QString& name, int defStyleNum,
   defFont(true) {
 }
 
+// ---------------------------------------------------------------------------
+
 HlData::HlData(const QString& wildcards, const QString& mimetypes) :
   wildcards(wildcards),
   mimetypes(mimetypes)
 {
   itemDataList.setAutoDelete(true);
 }
+
+// ---------------------------------------------------------------------------
 
 Highlight::Highlight(const QString& name) :
 	iName(name),
@@ -981,9 +1059,6 @@ HlData *Highlight::getData() {
 
   config = getKConfig();
 
-//  iWildcards = config->readEntry("Wildcards");
-//  iMimetypes = config->readEntry("Mimetypes");
-//  hlData = new HlData(iWildcards,iMimetypes);
   hlData = new HlData(
     config->readEntry("Wildcards",dw),config->readEntry("Mimetypes",dm));
   getItemDataList(hlData->itemDataList,config);
@@ -994,9 +1069,6 @@ void Highlight::setData(HlData *hlData) {
   KConfig *config;
 
   config = getKConfig();
-
-//  iWildcards = hlData->wildcards;
-//  iMimetypes = hlData->mimetypes;
 
   config->writeEntry("Wildcards",hlData->wildcards);
   config->writeEntry("Mimetypes",hlData->mimetypes);
@@ -1062,13 +1134,6 @@ void Highlight::release() {
   if (refCount == 0) done();
 }
 
-/*
-bool Highlight::isInWord(char ch) {
-  static char data[] = {0,0,0,0,0,0,255,3,254,255,255,135,254,255,255,7};
-  if (ch & 128) return true;
-  return data[ch >> 3] & (1 << (ch & 7));
-}
-*/
 int Highlight::doHighlight(int, TextLine *textLine) {
 
   textLine->setAttribs(0,0,textLine->length());
@@ -1108,11 +1173,14 @@ bool Highlight::containsMimetype(const QString& mimetype)
   return w.find(";"+mimetype+ ";") != -1;
 }
 
+// ---------------------------------------------------------------------------
+
 HlContext::HlContext(int attribute, int lineEndContext)
   : attr(attribute), ctx(lineEndContext) {
   items.setAutoDelete(true);
 }
 
+// ---------------------------------------------------------------------------
 
 GenHighlight::GenHighlight(const char *name) : Highlight(name) {
 }
@@ -1172,6 +1240,7 @@ void GenHighlight::done() {
   for (z = 0; z < nContexts; z++) delete contextList[z];
 }
 
+// ---------------------------------------------------------------------------
 
 CHighlight::CHighlight(const QString& name) :
   GenHighlight(name)
@@ -1253,6 +1322,7 @@ void CHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(cTypes);
 }
 
+// ---------------------------------------------------------------------------
 
 CppHighlight::CppHighlight(const QString& name) : CHighlight(name) {
   dw = "*.cpp;*.h;*.C;*.cc";
@@ -1269,6 +1339,8 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(cTypes);
   dataType->addList(cppTypes);
 }
+
+// ---------------------------------------------------------------------------
 
 PascalHighlight::PascalHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.pp;*.pas;*.inc";
@@ -1329,6 +1401,8 @@ void PascalHighlight::makeContextList() {
   dataType->addList(pascalTypes);
 }
 
+// ---------------------------------------------------------------------------
+
 IdlHighlight::IdlHighlight(const QString& name) : CHighlight(name) {
   dw = "*.idl";
   dm = "text/x-idl-src";
@@ -1342,6 +1416,7 @@ void IdlHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(idlTypes);
 }
 
+// ---------------------------------------------------------------------------
 
 JavaHighlight::JavaHighlight(const QString& name) : CHighlight(name) {
   dw = "*.java";
@@ -1357,6 +1432,7 @@ void JavaHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(javaTypes);
 }
 
+// ---------------------------------------------------------------------------
 
 HtmlHighlight::HtmlHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.html;*.htm";
@@ -1394,6 +1470,7 @@ void HtmlHighlight::makeContextList() {
     c->items.append(new HlCharDetect(3,0,'>'));
 }
 
+// ---------------------------------------------------------------------------
 
 BashHighlight::BashHighlight(const QString& name) : GenHighlight(name) {
   dm = "text/x-shellscript";
@@ -1432,6 +1509,7 @@ void BashHighlight::makeContextList() {
   keyword->addList(bashKeywords);
 }
 
+// ---------------------------------------------------------------------------
 
 ModulaHighlight::ModulaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.md;*.mi";
@@ -1471,6 +1549,7 @@ void ModulaHighlight::makeContextList() {
   keyword->addList(modulaKeywords);
 }
 
+// ---------------------------------------------------------------------------
 
 AdaHighlight::AdaHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.a";
@@ -1511,6 +1590,7 @@ void AdaHighlight::makeContextList() {
   keyword->addList(adaKeywords);
 }
 
+// ---------------------------------------------------------------------------
 
 PythonHighlight::PythonHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.py";
@@ -1569,6 +1649,8 @@ void PythonHighlight::makeContextList() {
 
   keyword->addList(pythonKeywords);
 }
+
+// ---------------------------------------------------------------------------
 
 PerlHighlight::PerlHighlight(const QString& name) : Highlight(name) {
   dw = "*.pl";
@@ -1804,6 +1886,8 @@ void PerlHighlight::done() {
   delete keyword;
 }
 
+// ---------------------------------------------------------------------------
+
 SatherHighlight::SatherHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.sa";
   dm = "text/x-sather-src";
@@ -1853,6 +1937,8 @@ void SatherHighlight::makeContextList() {
   spec_feat->addList(satherSpecFeatureNames);
 }
 
+// ---------------------------------------------------------------------------
+
 LatexHighlight::LatexHighlight(const QString& name) : GenHighlight(name) {
   dw = "*.tex;*.sty";
   dm = "text/x-tex";
@@ -1883,9 +1969,7 @@ void LatexHighlight::makeContextList() {
   contextList[1] = new HlContext(4,0);
 }
 
-//--------
-
-
+// ---------------------------------------------------------------------------
 
 HlManager::HlManager() : QObject(0L) {
 
@@ -1910,7 +1994,8 @@ HlManager::~HlManager() {
 }
 
 Highlight *HlManager::getHl(int n) {
-  if (n < 0 || n >= (int) hlList.count()) n = 0;
+  if (n < 0 || n >= (int) hlList.count())
+    n = 0;
   return hlList.at(n);
 }
 
@@ -1927,7 +2012,8 @@ int HlManager::nameFind(const QString& name) {
   int z;
 
   for (z = hlList.count() - 1; z > 0; z--) {
-    if (hlList.at(z)->iName == name) break;
+    if (hlList.at(z)->iName == name)
+      break;
   }
   return z;
 }
@@ -1959,12 +2045,13 @@ int HlManager::findByMimetype(const QString& filename)
     KMimeMagic* magic = KMimeMagic::self();
     magic->setFollowLinks(true);
     KMimeMagicResult *result = magic->findFileType(filename);
-
-    // Get the highlight class for this mime type
-    for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
+    if (result && result->mimeType())
     {
-      if (result->mimeType() && highlight->containsMimetype(result->mimeType()))
-        return hlList.at();
+      for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
+      {
+        if (highlight->containsMimetype(result->mimeType()))
+          return hlList.at();
+      }
     }
   }
   return -1;
@@ -1981,44 +2068,6 @@ int HlManager::getHighlight(const QString& filename)
     return hl;
 
   return defaultHl();
-
-//  KMimeMagic* magic = KMimeMagic::self();
-//  magic->setFollowLinks(true);
-//  KMimeMagicResult *result = magic->findFileType(filename);
-//
-//  // Get the highlight class for this mime type
-//  for (Highlight *highlight = hlList.first(); highlight != 0L; highlight = hlList.next())
-//  {
-//    if (highlight->containsMimetype(result->mimeType()))
-//      return hlList.at();
-//  }
-
-  //highlight detection
-//  if (fName.isEmpty()) return;
-//  pos = fName.findRev('/') +1;
-//  hl = hlManager->wildcardFind(&test[pos]);
-//  if (hl == -1) {
-//    // fill the detection buffer with the contents of the text
-//    const int HOWMANY = 1024;
-//    char buf[HOWMANY];
-//    int bufpos = 0, len;
-//    TextLine *textLine;
-//
-//    for (textLine = contents.first(); textLine != 0L; textLine = contents.next()) {
-//      len = textLine->length();
-//      if (bufpos + len > HOWMANY) len = HOWMANY - bufpos;
-//      memcpy(&buf[bufpos], textLine->getText(), len);
-//      bufpos += len;
-//      if (bufpos >= HOWMANY) break;
-//    }
-//    hl = hlManager->mimeFind(buf, bufpos, &test[pos]);
-//  }
-//  setHighlight(hl);
-//
-//	// Read bookmarks, breakpoints, ...
-//	readFileConfig();
-//
-//  updateViews();
 }
 
 
@@ -2166,94 +2215,7 @@ void HlManager::setHlDataList(HlDataList &list) {
   emit changed();
 }
 
-
-//-----
-
-//"ripped" from kfontdialog
-//bool getKDEFontList(QStrList &fontList) {
-//
-//  QString s;
-//
-//  //TODO replace by QDir::homePath();
-//  s = locate("config","kdefonts");
-//  if (s.isEmpty())
-//    return false;
-//
-//  QFile fontfile(s);
-////  if (!fontfile.exists()) return false;
-//  if(!fontfile.open(IO_ReadOnly))
-//    return false;
-////  if (!fontfile.isReadable()) return false;
-//
-//  QTextStream t(&fontfile);
-//  while (!t.eof()) {
-//    s = t.readLine();
-//    s = s.stripWhiteSpace();
-//    if (!s.isEmpty()) fontList.append(s);
-//  }
-//  fontfile.close();
-//  return true;
-//}
-//
-//void getXFontList(QStrList &fontList) {
-//  Display *kde_display;
-//  int numFonts;
-//  char** fontNames;
-//  char* fontName;
-//  QString qfontname;
-//  int i, dash, dash_two;
-//
-//  kde_display = XOpenDisplay( 0L );
-//  fontNames = XListFonts(kde_display, "*", 32767, &numFonts);
-//
-//  for(i = 0; i < numFonts; i++) {
-//    fontName = fontNames[i];
-//    if (*fontName != '-') {
-//      // The font name doesn't start with a dash -- an alias
-//      // so we ignore it. It is debatable whether this is the right
-//      // behaviour so I leave the following snippet of code around.
-//      // Just uncomment it if you want those aliases to be inserted as well.
-//
-//      /*
-//      qfontname = fontName;
-//      if(fontlist.find(qfontname) == -1)
-//          fontlist.inSort(qfontname);
-//      */
-//      continue;
-//    }
-//
-//    qfontname = fontName;
-//    dash = qfontname.find ('-', 1); // find next dash
-//    if (dash == -1) continue; // No dash such next dash -- this shouldn't happen.
-//                              // but what do I care -- lets skip it.
-//
-//    // the font name is between the second and third dash so:
-//    // let's find the third dash:
-//    dash_two = qfontname.find ('-', dash + 1);
-//    if (dash == -1) continue; // No such next dash -- this shouldn't happen.
-//                              // but what do I care -- lets skip it.
-//
-//    // fish the name of the font info string
-//    qfontname = qfontname.mid(dash +1, dash_two - dash -1);
-//    if (!qfontname.contains("open look", TRUE)) {
-//      if (qfontname != "nil") {
-//        if (fontList.find(qfontname) == -1) fontList.inSort(qfontname);
-//      }
-//    }
-//  }
-//
-//  XFreeFontNames(fontNames);
-//  XCloseDisplay(kde_display);
-//}
-//
-//void getFontList(QStrList &fontList) {
-//
-//  //try to get KDE fonts
-//  if (getKDEFontList(fontList)) return;
-//  //not successful: get X fonts
-//  getXFontList(fontList);
-//}
-
+// ---------------------------------------------------------------------------
 
 StyleChanger::StyleChanger(QWidget *parent) :
 QWidget(parent)
@@ -2310,6 +2272,8 @@ void StyleChanger::changed() {
     style->italic = italic->isChecked();
   }
 }
+
+// ---------------------------------------------------------------------------
 
 FontChanger::FontChanger(QWidget *parent) :
   QWidget(parent)
@@ -2406,7 +2370,7 @@ void FontChanger::displayCharsets() {
     charsetCombo->setCurrentItem(z);
 }
 
-//---------
+// ---------------------------------------------------------------------------
 
 DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
   ItemFont *font, QWidget *parent) : QDialog(parent,0L,true) {
@@ -2461,6 +2425,7 @@ void DefaultsDialog::changed(int z) {
   styleChanger->setRef(itemStyleList->at(z));
 }
 
+// ---------------------------------------------------------------------------
 
 HighlightDialog::HighlightDialog(HlManager *hlManager,
   HlDataList *highlightDataList, int hlNumber, QWidget *parent)
