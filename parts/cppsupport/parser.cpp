@@ -116,11 +116,6 @@ void Parser::syntaxError()
     (void) reportError( Errors::SyntaxError );
 }
 
-void Parser::parseError()
-{
-    (void) reportError( Errors::ParseError );
-}
-
 bool Parser::skipUntil( int token )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntil()" << endl;
@@ -619,7 +614,7 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 
 	TypeSpecifierAST::Node spec;
 	if( !parseSimpleTypeSpecifier(spec) ){
-	    parseError();
+	    syntaxError();
 	    return false;
 	}
         spec->setCvQualify( cv );
@@ -657,7 +652,7 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
 	lex->nextToken();
 
 	if( !parseTemplateArgument(templArg) ){
-	    parseError();
+	    syntaxError();
 	    break;
 	}
 	node->addArgument( templArg );
@@ -1307,7 +1302,7 @@ bool Parser::parseTemplateParameterList( AST::Node& /*node*/ )
 	lex->nextToken();
 	
 	if( !parseTemplateParameter(param) ){
-	    parseError();
+	    syntaxError();
 	    break;
 	}
     }
@@ -1357,7 +1352,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 
 		    AST::Node typeId;
 		    if( !parseTypeId(typeId) ){
-			parseError();
+			syntaxError();
 		    }
 		}
 	}
@@ -1381,7 +1376,7 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 		    
 		    AST::Node typeId;
 		    if( !parseTypeId(typeId) ){
-			parseError();
+			syntaxError();
 		    }
 		}
 	}
@@ -1557,7 +1552,7 @@ bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
 	lex->nextToken();
 
 	if( !parseInitDeclarator(decl) ){
-	    parseError();
+	    syntaxError();
 	    break;
 	}
 	ast->addInitDeclarator( decl );

@@ -122,20 +122,21 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
     lexer->addSkipWord( "_ROPE_SWAP_SPECIALIZATION", SkipWordAndArguments );
     lexer->addSkipWord( "__ROPE_DEFINE_ALLOCS", SkipWordAndArguments );
-    
+
     // antlr
     lexer->addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
-    
+
     // gnu
     lexer->addSkipWord( "__extension__" );
     lexer->addSkipWord( "__attribute__", SkipWordAndArguments );
-    
+
     // kde
     lexer->addSkipWord( "K_SYCOCATYPE", SkipWordAndArguments );
     lexer->addSkipWord( "EXPORT_DOCKCLASS" );
     lexer->addSkipWord( "K_EXPORT_COMPONENT_FACTORY", SkipWordAndArguments );
-
+    lexer->addSkipWord( "K_SYCOCAFACTORY", SkipWordAndArguments );
+    
     // qt
     lexer->addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
     lexer->addSkipWord( "Q_ENUMS", SkipWordAndArguments );

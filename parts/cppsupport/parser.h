@@ -36,7 +36,6 @@ private:
     virtual bool reportError( const Error& err );
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
     /*TODO: remove*/ virtual void syntaxError();
-    /*TODO: remove*/ virtual void parseError();
 
 public /*rules*/ :
 
