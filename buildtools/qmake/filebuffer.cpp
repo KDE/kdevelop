@@ -152,6 +152,7 @@ FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
 void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append, int valuesPerRow)
 //======================================================================================================================
 {
+  QStringList temp;
   unsigned int i;
   QString line;
   ValuesIgnore* valIgnore = getValuesIgnore(variable);
@@ -180,13 +181,17 @@ void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer
     {
       if (i != values.count()-1)
         line = line + "\\";
-      m_buffer.append(line);
+      temp.append(line);
       line = spacing;
     }
   }
 
   if (i % valuesPerRow)
-    m_buffer.append(line);
+    temp.append( line );
+
+  /* last to first */
+  for ( int i = temp.count()-1; i >= 0; i-- )
+    m_buffer.prepend( temp[i] );
 }
 
 /**
