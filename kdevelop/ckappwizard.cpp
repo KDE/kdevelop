@@ -1970,9 +1970,6 @@ void CKAppWizard::slotDefaultClicked() {
   pm.load(locate("appdata", "pics/normalApp.png"));
 
   setTitle(page4, i18n("Headertemplate for .cpp-files"));
-#warning FIXME ????
-//  if (page==4)
-//    showPage(page4);
 
   cppheader->setText( i18n("headertemplate for .cpp-files") );
 
@@ -2979,18 +2976,18 @@ void CKAppWizard::slotLocationButtonClicked()
 
 void CKAppWizard::slotVSBoxChanged(int item)
 {
-  bool disable = (item == 0);
-  messageline->setEnabled(disable);
-  logMessage->setEnabled(disable);
-  vendorline->setEnabled(disable);
-  vendorTag->setEnabled(disable);
-  releaseline->setEnabled(disable);
-  releaseTag->setEnabled(disable);
-  vsInstall->setEnabled(disable);
-  projectVSLocation->setEnabled(disable);
-  vsLocation->setEnabled(disable);
-  locationbutton->setEnabled(disable);
-  qtarch_ButtonGroup_1->setEnabled(disable);
+  bool enable = (item != 0);
+  messageline->setEnabled(enable);
+  logMessage->setEnabled(enable);
+  vendorline->setEnabled(enable);
+  vendorTag->setEnabled(enable);
+  releaseline->setEnabled(enable);
+  releaseTag->setEnabled(enable);
+  vsInstall->setEnabled(enable);
+  projectVSLocation->setEnabled(enable);
+  vsLocation->setEnabled(enable);
+  locationbutton->setEnabled(enable);
+  qtarch_ButtonGroup_1->setEnabled(enable);
 }
 
 void CKAppWizard::slotVendorEntry(const QString&)
