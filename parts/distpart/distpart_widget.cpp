@@ -45,7 +45,7 @@
 #include <qstringlist.h>
 #include <qtabwidget.h>
 #include "kdevmakefrontend.h"
-#include <kprogress.h> 
+#include <kprogress.h>
 
 #include <qerrormessage.h>
 #include "specsupport.h"
@@ -128,7 +128,7 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 		       "-" +
 		       getversionLineEditText() +
 		       ((getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz");
-		       
+
     KTar tar(filename, dist);
     if ( tar.open(IO_WriteOnly) )
     {
@@ -137,7 +137,7 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 	prog->show();
 	for( uint idx = 0; idx < files.count(); ++idx)
 	{
-		if ( !tar.addLocalFile( m_part->project()->projectDirectory() + "/" + files[idx], files[idx]) )
+		if ( !tar.addLocalFile( m_part->project()->projectDirectory() + "/" + files[idx], getappNameFormatLineEditText() + "/" + files[idx]) )
 		{
 			kdDebug() << "Failed to write file " << files[idx] << endl;
 		}
@@ -151,13 +151,13 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
 	prog->hide();
 	delete prog;
 	KMessageBox::information(this, "Archive made at: " + filename,"Archive Done");
-	
+
     }
     else
     {
     	kdDebug() << "Failed to open archive..." << endl;
-    }    
-    
+    }
+
 }
 
 //    QPushButton* resetSrcPushButton;
@@ -460,7 +460,7 @@ QString DistpartDialog::getSourceName() {
 
 void DistpartDialog::loadSettings() {
     QDomDocument &dom = *m_part->projectDom();
-    
+
      srcDistFileListBox->insertStringList( m_part->project()->distFiles() );
 
     // First Tab
