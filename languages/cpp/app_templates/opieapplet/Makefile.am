@@ -1,5 +1,5 @@
 dataFiles = Makefile.am Example.png  app.kdevelop  app.pro \
-	simpleimpl.cpp simpleimpl.h opieapplet
+	simpleimpl.cpp simpleimpl.h
 
 templateName = opieapplet
 

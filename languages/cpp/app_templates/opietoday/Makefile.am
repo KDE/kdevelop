@@ -1,6 +1,6 @@
 dataFiles = Makefile.am Example.png  app.kdevelop  app.pro exampleplugin.cpp \
 	examplepluginimpl.cpp  examplepluginwidget.cpp exampleplugin.h \
-	examplepluginimpl.h  examplepluginwidget.h opietoday
+	examplepluginimpl.h  examplepluginwidget.h
 
 templateName = opietoday
 
