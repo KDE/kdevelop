@@ -30,6 +30,7 @@
 #include "doctreeview.h"
 #include "./dbg/brkptmanager.h"
 #include "ckonsolewidget.h"
+#include "docviewman.h"
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -758,6 +759,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     return;
   }
 
+//FB----------anfang-vom-abschnitt-altes-behandeln----------
 
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
@@ -827,6 +829,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
   bool found = false;
 
+//FB---------ende-der-behandlung-der-alten-datei--------
+
   // See if we already have the file wanted in our list of saved files.
   for(info=edit_infos.first();info != 0;info=edit_infos.next())
   {
@@ -837,6 +841,11 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
       break;
     }
   }
+
+  // get the document type
+  int docType = DocViewMan::Header;
+  if (CProject::getType(filename) == CPP_SOURCE)
+    docType = DocViewMan::Source;
 
   // Not found or needing a reload causes the file to be read from disk and the
   // info reset.
@@ -857,15 +866,32 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     info->cursor_col = 0;
     info->last_modified = fileinfo.lastModified();
 
-    edit_widget->clear();
-    // update the widget
-    edit_widget->loadFile(filename,1);
+//FB    edit_widget->clear();
+    int docId = m_docViewManager->findDoc( filename);
+    if (docId == -1) {
+      docId = m_docViewManager->createDoc( docType, filename);
+      if (docId != -1)
+        edit_widget = (CEditWidget*) m_docViewManager->createView( docId);
+    }
+    else {
+      // view doesn't already exist, create it
+      edit_widget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+      // update the widget
+    }
+    m_docViewManager->loadDoc( docId, filename,1);
+//FB    edit_widget->loadFile(filename,1);
   }
   else
   {
     // The file is in the list so use the saved text
     edit_widget->setText(info->text);
   }
+
+  // update the pointers
+  if (docType == DocViewMan::Source)
+    cpp_widget = edit_widget;
+  else
+    header_widget = edit_widget;
 
   edit_widget->toggleModified(info->modified);
 
@@ -1352,4 +1378,11 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
     }
   }
   return false;
+}
+
+/** additionally adapt the position of MDI system buttons when in maximized mode */
+void CKDevelop::resizeEvent( QResizeEvent *pRSE)
+{
+   QextMdiMainFrm::resizeEvent( pRSE);
+   setSysButtonsAtMenuPosition();
 }

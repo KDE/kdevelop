@@ -49,9 +49,10 @@ HlManager hlManager; //highlight manager
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(QWidget* parent, const char* name) :
-  KWrite(new KWriteDoc(&hlManager), parent, name)
-{  
+CEditWidget::CEditWidget(QWidget* parent, const char* name,KWriteDoc* doc) :
+//FB  KWrite(new KWriteDoc(&hlManager), parent, name)
+  KWrite(doc, parent, name)
+{
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);

@@ -39,6 +39,8 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/disassemble.h"
 
+#include "docviewman.h"
+
 #include <kaccel.h>
 #include <kapp.h>
 #include <kcursor.h>
@@ -72,7 +74,7 @@
 #include <iostream.h>
 #include <krun.h>
 
-CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
+CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop"),
   process("/bin/sh"),
   appl_process("/bin/sh"),
   shell_process("/bin/sh"),
@@ -86,6 +88,7 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   disassemble(0),
   dbg_widget(0),
   dbgInternal(false)
+  ,m_docViewManager(0)
 {
 
   doctool = DT_KDOC;
@@ -106,6 +109,8 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
     start_logo->show();
   }
 
+  // ********* MDI stuff (falk) *******
+  m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
 
   // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
   // We need to know what debugger we are using to set the
@@ -168,40 +173,46 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-  maindock = createDockWidget( "Editor",SmallIcon("kdevelop") );
-  setView(maindock);
-  setMainDockWidget( maindock );
-  maindock->setEnableDocking( KDockWidget::DockNone);   // We cannot remove this window
+//FB  maindock = createDockWidget( "Editor",SmallIcon("kdevelop") );
+//FB  setView(maindock);
+//FB  setMainDockWidget( maindock );
+//FB  maindock->setEnableDocking( KDockWidget::DockNone);   // We cannot remove this window
 
   treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0L, i18n("Tree-View"));
   outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
  
-  s_tab_view = new CTabCtl(maindock);
-  maindock->setWidget( s_tab_view );
+//FB  s_tab_view = new CTabCtl(maindock);
+  s_tab_view = new CTabCtl(0L);//FB
+  s_tab_view->show();//FB
+//FB  maindock->setWidget( s_tab_view );
 	
-  t_tab_view = new CTabCtl(treedock);
-  treedock->setWidget(t_tab_view);
+//FB  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
+  o_tab_view = new CTabCtl(0L, "output_tabview","output_widget");//FB
+//FB  outputdock->setWidget(o_tab_view);
+  addToolWindow(o_tab_view, KDockWidget::DockBottom, m_pMdi, 70);//FB
 
-  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
-  outputdock->setWidget(o_tab_view);
+//FB  t_tab_view = new CTabCtl(treedock);
+  t_tab_view = new CTabCtl(0L);//FB
+//FB  treedock->setWidget(t_tab_view);
+  addToolWindow(t_tab_view, KDockWidget::DockLeft, m_pMdi, 35);//FB
 
   if (config->hasGroup("dock_setting_default"))
   {
 		// use the last placements
-    readDockConfig(config);
+//FB    readDockConfig(config);
   }
   else
   {
     // Set the default window placement
-    outputdock->manualDock(maindock, KDockWidget::DockBottom, 80/*size relation in %*/);
-    treedock->manualDock(maindock, KDockWidget::DockLeft, 30/*size relation in %*/);
+//FB    outputdock->manualDock(maindock, KDockWidget::DockBottom, 80/*size relation in %*/);
+//FB    treedock->manualDock(maindock, KDockWidget::DockLeft, 30/*size relation in %*/);
   }
   // do not allow to pull off the dockwidgets to desktop or to tab mode
   // the probs which would be introduced are too hard to handle (in KDevelop-1.x ;-)
-  outputdock->setEnableDocking( KDockWidget::DockCorner);
-  treedock->setEnableDocking( KDockWidget::DockCorner);
-  outputdock->setDockSite( KDockWidget::DockCorner);
-  treedock->setDockSite( KDockWidget::DockCorner);
+//FB  outputdock->setEnableDocking( KDockWidget::DockCorner);
+//FB  treedock->setEnableDocking( KDockWidget::DockCorner);
+//FB  outputdock->setDockSite( KDockWidget::DockCorner);
+//FB  treedock->setDockSite( KDockWidget::DockCorner);
 
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
@@ -250,7 +261,12 @@ void CKDevelop::initView()
   ////////////////////////////
   s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
-  header_widget = new CEditWidget(s_tab_view,"header");
+//FB  header_widget = new CEditWidget(s_tab_view,"header");
+//FB  header_widget = new CEditWidget(0L,"header");//FB
+  int newDocId = m_docViewManager->createDoc(DocViewMan::Header, "");
+  if (newDocId != -1)
+    header_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
+
   header_widget->setFocusPolicy(QWidget::StrongFocus);
 
   header_widget->setFont(KGlobalSettings::fixedFont());
@@ -258,16 +274,22 @@ void CKDevelop::initView()
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
   header_widget->doc()->readConfig(config);
-
+  header_widget->show();//FB
 
   edit_widget=header_widget;
-  cpp_widget = new CEditWidget(s_tab_view,"cpp");
+//FB  cpp_widget = new CEditWidget(s_tab_view,"cpp");
+//FB  cpp_widget = new CEditWidget(0L,"cpp");//FB
+  newDocId = m_docViewManager->createDoc(DocViewMan::Source, "");
+  if (newDocId != -1)
+    cpp_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
+
   cpp_widget->setFocusPolicy(QWidget::StrongFocus);
   cpp_widget->setFont(KGlobalSettings::fixedFont());
   cpp_widget->setName(i18n("Untitled.cpp"));
   config->setGroup("KWrite Options");
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);
+   cpp_widget->show();//FB
 
   // init the 2 first kedits
   TEditInfo* edit1 = new TEditInfo;
@@ -275,15 +297,21 @@ void CKDevelop::initView()
   edit1->filename = header_widget->getName();
   edit2->filename = cpp_widget->getName();
 
-  browser_widget = new CDocBrowser(s_tab_view,"browser");
+//FB  browser_widget = new CDocBrowser(s_tab_view,"browser");
+  newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
+  if (newDocId != -1) {
+    m_docViewManager->createView( newDocId);
+    browser_widget = (CDocBrowser*) m_docViewManager->docPointer( newDocId);
+    browser_widget->show();//FB
+  }
 
   prev_was_search_result= false;
   //init
   browser_widget->setDocBrowserOptions();
 
-  s_tab_view->addTab(header_widget,SmallIcon("source_h"),i18n("Header/Reso&urce Files"));
-  s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
-  s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
+//FB  s_tab_view->addTab(header_widget,SmallIcon("source_h"),i18n("Header/Reso&urce Files"));
+//FB  s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
+//FB  s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
 
   ////////////////////////
   // Outputwindow
@@ -892,7 +920,8 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
   menu_buffers = new QPopupMenu;
-  menuBar()->insertItem(i18n("&Window"), menu_buffers);
+//FB  menuBar()->insertItem(i18n("&Window"), menu_buffers);
+  menuBar()->insertItem(i18n("&Window"), windowMenu());//FB
   menuBar()->insertSeparator();
 
   ///////////////////////////////////////////////////////////////////
@@ -1008,6 +1037,8 @@ void CKDevelop::initMenuBar(){
   //connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(classbrowser_popup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
+  // QextMDI wants to know which one the menubar is, needs it for maximized mode
+  setMenuForSDIModeSysButtons( menuBar());
 }
 
 /*------------------------------------------ CKDevelop::initToolBar()

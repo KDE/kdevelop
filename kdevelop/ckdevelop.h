@@ -29,7 +29,7 @@
 #include <kmainwindow.h>
 #include <khelpmenu.h>
 #include <kcompletion.h>
-#include <kdockwidget.h>
+#include <widgets/qextmdi/include/qextmdimainfrm.h>
 
 #include <kopenwith.h>
 #include <kprocess.h>
@@ -84,11 +84,16 @@ class Breakpoint;
 class Disassemble;
 class DbgToolbar;
 class KStatusBarLabel;
+
 class Kpp;
+
+// MDI and related classes
+class DocViewMan;
+
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public KDockMainWindow{
+class CKDevelop : public QextMdiMainFrm {
   Q_OBJECT
 public:
   /**constructor*/
@@ -787,6 +792,10 @@ protected:
    * session */
   void readProperties(KConfig* );
 	
+  /** overridden from it's base class method, additionally moves the MDI system buttons (in maximized mode)
+   */
+  virtual void resizeEvent( QResizeEvent *pRSE);
+
 private:
   KFileOpenWithHandler fowh;
   //the menus for kdevelop main
@@ -982,6 +991,11 @@ private:
 
 /** RPM stuff **/
       Kpp *rpmbuilder;
+
+  /***************** MDI additions ********************/
+  DocViewMan* m_docViewManager;
+  /************* END MDI additions ********************/
+
 private slots:
     void slotdoneWithKpp();
     void slotrpmBuildProcess();

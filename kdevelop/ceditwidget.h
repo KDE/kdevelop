@@ -29,7 +29,14 @@ class CEditWidget : public KWrite {
 
 public: // Constructor and destructor
 
-  CEditWidget(QWidget* parent=0,const char* name=0);
+  /** Constructs the object which is a special KWrite widget.
+   * @param parent        The parent for the QWidget constructor.
+   * @param name          The object name for the QObject constructor.
+   * @param doc           The pointer to the KWrite document for the KWrite constructor.
+   */
+  CEditWidget(QWidget* parent=0,const char* name=0,KWriteDoc* doc=0);
+  /** Destroys the object.
+   */
   ~CEditWidget();
 
 public: // Public methods to set attribute values
@@ -218,7 +225,7 @@ signals:
 private:
 // KSpell *kspell;
 // KSpellConfig *ksc;
- int spell_offset;
+  int spell_offset;
 };
 
 #endif
