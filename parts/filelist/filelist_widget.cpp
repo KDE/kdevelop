@@ -38,6 +38,8 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 	connect( this, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+	
+	partChanged();
 }
 
 
@@ -67,6 +69,7 @@ void FileListWidget::partChanged()
 		++it;
 	}
 
+	activePartChanged( _part->partController()->activePart() );
 }
 
 void FileListWidget::itemClicked( QListViewItem * item )
