@@ -110,6 +110,7 @@ if ($processes{VSSUPPORT} eq "cvs") {
 #  system ("cp $copysrc $copydes");
  
   $copysrc = $templatedir . "/cvsignore_template";
+  $copydes = $overDirectory . "/.cvsignore";
   copy ("$copysrc", "$copydes");
   
   $copydes = $underDirectory . "/templates/.cvsignore";
@@ -417,7 +418,10 @@ sub condCreateApiDoc {
 	mkdir ("api", 0777);
       if ($processes{KDOC_CALL})
       {
-	system ("$processes{KDOC_CALL}");
+        my $call=$processes{KDOC_CALL};
+        $call =~ s/\|UNDERDIRECTORY\|/$underDirectory/eg;
+
+	system ("$call");
       }
       else
       {

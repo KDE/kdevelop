@@ -1176,19 +1176,22 @@ void CKAppWizard::generateEntries(const QString &filename) {
     entries << "yes\n";
   else entries << "no\n";
   entries << "KDOC_CALL\n";
+
+  QString target_dir=QString(vsBox->text(vsBox->currentItem())).lower();
+
 #ifdef WITH_KDOC2
   bool bCreateKDoc;
 
   config->setGroup("General Options");
   bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
   if (bCreateKDoc)
-   entries << QString("kdoc -p -d")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
 	idx_path+link+" -n "+nameline->text()+" *.h\n";
   else
-   entries << QString("kdoc -p -d")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
 	idx_path+link+" *.h\n";
 #else
-   entries << QString("kdoc -p -d ")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api -L")+
 	idx_path+link+" "+nameline->text()+" *.h\n";
 #endif
   entries << "USER\n";
@@ -1277,7 +1280,7 @@ void CKAppWizard::okPermited() {
 
   dir.mkdir(prjdir);
   if (!dir.exists())
-     dir.setCurrent(prjdir);
+    dir.setCurrent(prjdir);
 
   KShellProcess p;
   QString copysrc;
