@@ -71,3 +71,12 @@ void SplashScreen::showMessage(const QString &message)
   m_message->setText(message);
   kapp->processEvents();
 }
+
+bool SplashScreen::eventFilter(QObject* obj, QEvent* e)
+{
+  if (obj == m_message && e->type() == QEvent::MouseButtonRelease) {
+    m_splash->close(true);
+    return true;
+  }
+  return false;
+}

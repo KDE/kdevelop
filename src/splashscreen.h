@@ -16,6 +16,7 @@ public:
   SplashScreen();
   ~SplashScreen();
 
+  virtual bool eventFilter(QObject* obj, QEvent* e);
 
 public slots:
 
