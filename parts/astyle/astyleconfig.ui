@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>568</width>
-            <height>363</height>
+            <height>365</height>
         </rect>
     </property>
     <property name="caption">
@@ -33,28 +33,11 @@
                 <attribute name="title">
                     <string>&amp;General</string>
                 </attribute>
-                <grid>
+                <hbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="1" column="0">
-                        <property name="name">
-                            <cstring>Spacer1</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>StyleGroup</cstring>
                         </property>
@@ -136,24 +119,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="1" column="1">
-                        <property name="name">
-                            <cstring>Spacer1_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="0" column="1">
+                    <widget class="QGroupBox">
                         <property name="name">
                             <cstring>GroupBox4</cstring>
                         </property>
@@ -444,7 +410,7 @@
                             </widget>
                         </grid>
                     </widget>
-                </grid>
+                </hbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -540,7 +506,7 @@
                                     <cstring>Fill_Spaces</cstring>
                                 </property>
                                 <property name="focusPolicy">
-                                    <enum>TabFocus</enum>
+                                    <enum>NoFocus</enum>
                                 </property>
                                 <property name="text">
                                     <string>Use s&amp;paces:</string>
