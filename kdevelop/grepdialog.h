@@ -59,8 +59,8 @@ private:
     void processOutput();
     void finish();
     
-    QLineEdit *template_edit, *dir_edit;
-    QComboBox *files_combo, *pattern_combo;
+    QLineEdit *template_edit;
+    QComboBox *files_combo, *pattern_combo, *dir_combo;
     QCheckBox *recursive_box;
     QListBox *resultbox;
     QPushButton *search_button, *cancel_button;
@@ -69,6 +69,7 @@ private:
     QString buf;
     KConfig* config;
     QStringList lastSearchItems;
+    QStringList lastSearchPaths;
 };
 
 

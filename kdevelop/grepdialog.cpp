@@ -61,6 +61,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     config = KGlobal::config();
     config->setGroup("GrepDialog");
     lastSearchItems = config->readListEntry("LastSearchItems");
+    lastSearchPaths = config->readListEntry("LastSearchPaths");
 
     QGridLayout *layout = new QGridLayout(this, 6, 3, 10, 4);
     layout->setColStretch(0, 10);
@@ -130,16 +131,18 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     QBoxLayout *dir_layout = new QHBoxLayout(4);
     input_layout->addLayout(dir_layout, 3, 1);
     
-    dir_edit = new QLineEdit(this);
-    dir_label->setBuddy(dir_edit);
-    dir_edit->setText(dirname);
-    dir_edit->setMinimumSize(dir_edit->sizeHint());
-    dir_layout->addWidget(dir_edit, 10);
+    dir_combo = new QComboBox(true, this);
+    dir_combo->insertStringList(lastSearchPaths);
+    dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
+    dir_combo->setEditText(dirname);
+    dir_combo->setMinimumSize(dir_combo->sizeHint());
+    dir_label->setBuddy(dir_combo);
+    dir_layout->addWidget(dir_combo, 10);
 
     QPushButton *dir_button = new QPushButton(this, "dirButton");
 		QPixmap pix = SmallIcon("fileopen");
     dir_button->setPixmap(pix);
-    dir_button->setFixedHeight(dir_edit->sizeHint().height());
+    dir_button->setFixedHeight(dir_combo->sizeHint().height());
     dir_button->setFixedWidth(30);
     dir_layout->addWidget(dir_button);
     
@@ -217,6 +220,10 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "and edit it here. The string %s in the template is replaced\n"
 			 "by the pattern input field, resulting in the regular expression\n"
 			 "to search for."));
+    QWhatsThis::add(dir_combo,
+		    i18n("Enter the directory which contains the files you want to search in."));
+    QWhatsThis::add(recursive_box,
+		    i18n("Check this box to search in all subdirectories."));
     QWhatsThis::add(resultbox,
 		    i18n("The results of the grep run are listed here. Select a\n"
 			 "filename/line number combination and press Enter or doubleclick\n"
@@ -248,7 +255,7 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::dirButtonClicked()
 {
-    dir_edit->setText(KFileDialog::getExistingDirectory(dir_edit->text()));
+    dir_combo->setEditText(KFileDialog::getExistingDirectory(dir_combo->currentText()));
 }
 
 
@@ -322,11 +329,11 @@ void GrepDialog::slotSearch()
     status_label->setText(i18n("Searching..."));
 
     QString pattern = template_edit->text();
-    pattern.replace(QRegExp("%s"), pattern_combo->lineEdit()->text());
+    pattern.replace(QRegExp("%s"), pattern_combo->currentText());
     pattern.replace(QRegExp("'"), "'\\''");
 
     QString filepattern = "`find '";
-    filepattern += dir_edit->text();
+    filepattern += dir_combo->currentText();
     filepattern += "'";
     if (!recursive_box->isChecked())
         filepattern += " -maxdepth 1";
@@ -352,7 +359,7 @@ void GrepDialog::slotSearch()
 
 void GrepDialog::slotSearchFor(QString pattern){
     slotClear();
-    pattern_combo->lineEdit()->setText(pattern);
+    pattern_combo->setEditText(pattern);
     slotSearch();
 }
 
@@ -368,16 +375,24 @@ void GrepDialog::finish()
     childproc = 0;
 
     config->setGroup("GrepDialog");
-    if (lastSearchItems.contains(pattern_combo->lineEdit()->text()) == 0) {
-        pattern_combo->insertItem(pattern_combo->lineEdit()->text(), 0);
-        lastSearchItems.prepend(pattern_combo->lineEdit()->text());
+    if (lastSearchItems.contains(pattern_combo->currentText()) == 0) {
+        pattern_combo->insertItem(pattern_combo->currentText(), 0);
+        lastSearchItems.prepend(pattern_combo->currentText());
         if (lastSearchItems.count() > 10) {
             lastSearchItems.remove(lastSearchItems.fromLast());
             pattern_combo->removeItem(pattern_combo->count() - 1);
         }
         config->writeEntry("LastSearchItems", lastSearchItems);
     }
-
+    if (lastSearchPaths.contains(dir_combo->currentText()) == 0) {
+        dir_combo->insertItem(dir_combo->currentText(), 0);
+        lastSearchPaths.prepend(dir_combo->currentText());
+        if (lastSearchPaths.count() > 10) {
+            lastSearchPaths.remove(lastSearchPaths.fromLast());
+            dir_combo->removeItem(dir_combo->count() - 1);
+        }
+        config->writeEntry("LastSearchPaths", lastSearchPaths);
+    }
 }
 
 
@@ -424,6 +439,6 @@ void GrepDialog::slotClear()
 
 
 void  GrepDialog::setDirName(QString dir){
-    dir_edit->setText(dir);
+    dir_combo->setEditText(dir);
 }
 #include "grepdialog.moc"

@@ -520,8 +520,20 @@ void CKDevelop::slotProjectOpen()
 
 void CKDevelop::slotProjectOpenRecent(int id)
 {
-  slotProjectOpenCmdl(getProjectAsString(id));
-  shuffleProjectToTop(id);
+
+  QString proj = getProjectAsString(id);
+
+  if (QFile::exists(proj)) {
+    slotProjectOpenCmdl(proj);
+    shuffleProjectToTop(id);
+  } else {
+    int answer=KMessageBox::questionYesNo(this,i18n("This project does no longer exist. Do you want to remove it from the list?"),
+                                            i18n("File not Found: ") + proj);
+    if (answer==KMessageBox::Yes) {
+      qDebug(QString("id: %1").arg(id));
+      recent_projects_menu->removeItem(id);
+    }
+  }
 }
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
