@@ -1,3 +1,16 @@
+2001-03-04 Omid Givi <omid@kdevelop.org>
+	* Implemented 'Project General Information' in the
+	  Project Options Dialog. 
+	* Implemented 'Linker Options' in the Project Options
+	  Dialog. Every project can hold its own linker options
+	  if needed.
+	* Defined base class KDevLinker which holds linker
+	  dependant attributes. (analog to KDevCompiler)
+	* Defined the same for KDevMake.
+	* Added the service types for KDevLinker and KDevMake.
+	* Implemented the service for linker LD as a plugin
+	* Reanmiated Project Options for some visual enhancements.
+	
 2001-02-27 Omid Givi <omid@kdevelop.org>
 	* Added ServiceType for the KDevCompiler
 	* Defined the specializations of the class KDevCompiler as
