@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox1</cstring>
@@ -28,7 +27,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Parsing</string>
+                <string>&amp;Parsing</string>
             </property>
             <vbox>
                 <property name="name">
@@ -47,7 +46,7 @@
                                 <cstring>bgParserCheckbox</cstring>
                             </property>
                             <property name="text">
-                                <string>Enable background parsing</string>
+                                <string>&amp;Enable background parsing</string>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -101,7 +100,7 @@
                 <cstring>groupBox3</cstring>
             </property>
             <property name="title">
-                <string>Special Headers</string>
+                <string>&amp;Special Headers</string>
             </property>
             <grid>
                 <property name="name">
@@ -150,6 +149,9 @@
                     <property name="text">
                         <string>Move &amp;Down</string>
                     </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget class="QPushButton" row="2" column="1">
                     <property name="name">
@@ -157,6 +159,9 @@
                     </property>
                     <property name="text">
                         <string>Move &amp;Up</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="0" column="1">
@@ -166,6 +171,9 @@
                     <property name="text">
                         <string>&amp;Add</string>
                     </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="1">
                     <property name="name">
@@ -173,6 +181,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Remove</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
                     </property>
                 </widget>
             </grid>
@@ -227,11 +238,9 @@
     <tabstop>pushButton6</tabstop>
 </tabstops>
 <includes>
-    <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <slots>
     <slot>init()</slot>
     <slot>destroy()</slot>
@@ -243,6 +252,8 @@
     <slot>moveUpSpecialHeader()</slot>
     <slot>moveDownSpecialHeader()</slot>
 </slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>klistview.h</includehint>
 </includehints>

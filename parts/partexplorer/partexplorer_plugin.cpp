@@ -37,8 +37,10 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
     m_widget = new PartExplorerForm( mainWindow()->main()->centralWidget() );
 //    mainWindow()->embedSelectView( m_widget, i18n("PartExplorer"), i18n("Query system services"));
 
-    (void)new KAction( i18n("Show &Part Explorer window"), 0, this, SLOT(slotShowForm()),
+    KAction *action = new KAction( i18n("&Part Explorer"), 0, this, SLOT(slotShowForm()),
         actionCollection(), "show_partexplorerform" );
+    action->setToolTip(i18n("KTrader query execution"));
+    action->setWhatsThis(i18n("<b>Part explorer</b><p>Shows a dialog for KTrader query execution. Search your KDE documentation for more information about KDE services and KTrader."));
 }
 
 PartExplorerPlugin::~PartExplorerPlugin()

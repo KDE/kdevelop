@@ -25,7 +25,7 @@ void ServiceComboBox::insertStringList(QComboBox *combo, const QValueList<KServi
     QValueList<KService::Ptr>::ConstIterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         combo->insertItem((*it)->comment());
-        (*names) << (*it)->name();
+        (*names) << (*it)->desktopEntryName();
         (*execs) << (*it)->exec();
         kdDebug() << "insertStringList item " << (*it)->name() << "," << (*it)->exec() << endl;
     }

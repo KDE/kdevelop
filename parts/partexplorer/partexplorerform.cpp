@@ -15,6 +15,7 @@
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <qwhatsthis.h>
+#include <qlabel.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -81,7 +82,7 @@ public:
 
 PartExplorerForm::PartExplorerForm( QWidget *parent )
     : KDialogBase( parent, "parteplorerform", false,
-        i18n("Part Explorer -- A services lister"), User1 | Close, User1, true )
+        i18n("Part Explorer -- A Services Lister"), User1 | Close, User1, true )
 {
     m_base = new PartExplorerFormBase( this, "partexplorerformbase", 0 );
     m_resultsList = new ResultsList( m_base );
@@ -91,9 +92,11 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
         m_resultsList->sizePolicy().hasHeightForWidth() ) );
-    QWhatsThis::add( m_resultsList, i18n("<h2>Matching services</h2>Results (if any) are shown grouped by matching service name.") );
+    QWhatsThis::add( m_resultsList, i18n("<b>Matching services</b><p>Results (if any) are shown grouped by matching service name.") );
+    m_base->resultsLabel->setBuddy(m_resultsList);
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );
+    m_base->typeEdit->setFocus();
 
     // User1 button text
     setButtonText( User1, i18n("&Search") );

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>PHPConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>514</width>
+            <width>593</width>
             <height>298</height>
         </rect>
     </property>
@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QTabWidget" row="0" column="0">
             <property name="name">
                 <cstring>TabWidget1</cstring>
@@ -29,13 +28,12 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Invocation</string>
+                    <string>&amp;Invocation</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QLabel" row="0" column="0">
                         <property name="name">
                             <cstring>select_label</cstring>
@@ -55,7 +53,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton" row="0" column="0">
                                 <property name="name">
                                     <cstring>callPHPDirectly_radio</cstring>
@@ -64,7 +61,7 @@
                                     <bool>true</bool>
                                 </property>
                                 <property name="text">
-                                    <string>Calling the PHP interpreter directly</string>
+                                    <string>Calling the &amp;PHP interpreter directly</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton" row="2" column="0">
@@ -72,25 +69,19 @@
                                     <cstring>callWebserver_radio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Using an existing webserver (local or remote)</string>
+                                    <string>Using an &amp;existing webserver (local or remote)</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1</cstring>
                                 </property>
-                                <property name="font">
-                                    <font>
-                                        <family>adobe-helvetica</family>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
                                 <property name="text">
-                                    <string>The php executable is called directly. Ideal for developers who want to develop terminal or graphical applications in PHP. 
-You need a correctly installed php cgi version.</string>
+                                    <string>&lt;font size="+1"&gt;The php executable is called directly. Ideal for developers who want to develop terminal or graphical applications in PHP. 
+You need a correctly installed php cgi version.&lt;/font&gt;</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignVCenter|AlignLeft</set>
+                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
                                 </property>
                                 <property name="hAlign" stdset="0">
                                 </property>
@@ -101,18 +92,12 @@ You need a correctly installed php cgi version.</string>
                                 <property name="name">
                                     <cstring>TextLabel1_4</cstring>
                                 </property>
-                                <property name="font">
-                                    <font>
-                                        <family>adobe-helvetica</family>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
                                 <property name="text">
-                                    <string>Uses an existing webserver. The pages are previewed in 
-the internal web browser. Please make sure that the webserver was compiled with PHP support.</string>
+                                    <string>&lt;font size="+1"&gt;Uses an existing webserver. The pages are previewed in 
+the internal web browser. Please make sure that the webserver was compiled with PHP support.&lt;/font&gt;</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignVCenter|AlignLeft</set>
+                                    <set>WordBreak|AlignVCenter|AlignLeft</set>
                                 </property>
                                 <property name="hAlign" stdset="0">
                                 </property>
@@ -120,7 +105,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         </grid>
                     </widget>
                     <spacer row="1" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer5</cstring>
                         </property>
                         <property name="orientation">
@@ -140,6 +125,14 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         <property name="name">
                             <cstring>PixmapLabel1</cstring>
                         </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>4</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
                         <property name="pixmap">
                             <pixmap>image0</pixmap>
                         </property>
@@ -154,19 +147,21 @@ the internal web browser. Please make sure that the webserver was compiled with 
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Webserver</string>
+                    <string>&amp;Webserver</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QLabel" row="0" column="0">
                         <property name="name">
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Project root URL on webserver:</string>
+                            <string>Project &amp;root URL on webserver:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>weburl_edit</cstring>
                         </property>
                     </widget>
                     <widget class="QLineEdit" row="0" column="1">
@@ -179,13 +174,12 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <cstring>ButtonGroup1</cstring>
                         </property>
                         <property name="title">
-                            <string>File</string>
+                            <string>&amp;File</string>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton" row="1" column="0">
                                 <property name="name">
                                     <cstring>useDefaultFile_radio</cstring>
@@ -216,7 +210,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         </grid>
                     </widget>
                     <spacer row="2" column="1">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer12</cstring>
                         </property>
                         <property name="orientation">
@@ -239,13 +233,12 @@ the internal web browser. Please make sure that the webserver was compiled with 
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Shell</string>
+                    <string>&amp;Shell</string>
                 </attribute>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QLayoutWidget" row="0" column="0">
                         <property name="name">
                             <cstring>Layout5</cstring>
@@ -257,7 +250,6 @@ the internal web browser. Please make sure that the webserver was compiled with 
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <widget class="QLineEdit" row="1" column="0">
                                 <property name="name">
                                     <cstring>exe_edit</cstring>
@@ -275,6 +267,9 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                         <width>20</width>
                                         <height>0</height>
                                     </size>
+                                </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
                                 </property>
                                 <property name="text">
                                     <string>...</string>
@@ -298,11 +293,11 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                         <height>0</height>
                                     </size>
                                 </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
+                                </property>
                                 <property name="text">
                                     <string>...</string>
-                                </property>
-                                <property name="pixmap">
-                                    <pixmap></pixmap>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="4" column="0">
@@ -310,7 +305,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                     <cstring>zend_checkbox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Load Zend extension:</string>
+                                    <string>Load &amp;Zend extension:</string>
                                 </property>
                             </widget>
                             <widget class="QLineEdit" row="5" column="0">
@@ -326,7 +321,7 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                     <cstring>phpini_checkbox</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Use 'php.ini' file in this directory:</string>
+                                    <string>&amp;Use 'php.ini' file in this directory:</string>
                                 </property>
                             </widget>
                             <widget class="QToolButton" row="3" column="1">
@@ -342,6 +337,9 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                         <height>0</height>
                                     </size>
                                 </property>
+                                <property name="focusPolicy">
+                                    <enum>TabFocus</enum>
+                                </property>
                                 <property name="text">
                                     <string>...</string>
                                 </property>
@@ -351,7 +349,10 @@ the internal web browser. Please make sure that the webserver was compiled with 
                                     <cstring>TextLabel1_3_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>PHP executable:</string>
+                                    <string>PHP &amp;executable:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>exe_edit</cstring>
                                 </property>
                             </widget>
                             <widget class="QLineEdit" row="3" column="0">
@@ -365,28 +366,11 @@ the internal web browser. Please make sure that the webserver was compiled with 
                         </grid>
                     </widget>
                     <spacer row="1" column="0">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer11</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="0" column="1">
-                        <property name="name" stdset="0">
-                            <cstring>Spacer28</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -422,15 +406,31 @@ the internal web browser. Please make sure that the webserver was compiled with 
         <slot>slotPHPExeButtonClicked()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>callPHPDirectly_radio</tabstop>
+    <tabstop>callWebserver_radio</tabstop>
+    <tabstop>TabWidget1</tabstop>
+    <tabstop>weburl_edit</tabstop>
+    <tabstop>useDefaultFile_radio</tabstop>
+    <tabstop>useDefaultFile_edit</tabstop>
+    <tabstop>exe_edit</tabstop>
+    <tabstop>exe_button</tabstop>
+    <tabstop>phpini_checkbox</tabstop>
+    <tabstop>phpini_edit</tabstop>
+    <tabstop>phpini_button</tabstop>
+    <tabstop>zend_checkbox</tabstop>
+    <tabstop>zend_edit</tabstop>
+    <tabstop>zend_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot>slotAboutClicked()</slot>
     <slot>slotPHPExeButtonClicked()</slot>
     <slot>slotPHPIniButtonClicked()</slot>
     <slot>slotZendButtonClicked()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

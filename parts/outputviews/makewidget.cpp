@@ -687,17 +687,22 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 	pMenu->insertSeparator();
 	int id = pMenu->insertItem(i18n("Line Wrapping"), this, SLOT(toggleLineWrapping()) );
 	pMenu->setItemChecked(id, m_bLineWrapping);
+    pMenu->setWhatsThis(id, i18n("<b>Line wrapping</b><p>Enables or disables wrapping of command lines displayed."));
 
 	pMenu->insertSeparator();
 	id = pMenu->insertItem(i18n("Very Short Compiler Output"), this, SLOT(slotVeryShortCompilerOutput()) );
+    pMenu->setWhatsThis(id, i18n("<b>Very short compiler output</b><p>Displays only warnings, errors and the file names which are compiled."));
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eVeryShort);
 	id = pMenu->insertItem(i18n("Short Compiler Output"), this, SLOT(slotShortCompilerOutput()) );
+    pMenu->setWhatsThis(id, i18n("<b>Short compiler output</b><p>Suppresses all the compiler flags and formats to something readable."));
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eShort);
 	id = pMenu->insertItem(i18n("Full Compiler Output"), this, SLOT(slotFullCompilerOutput()) );
+    pMenu->setWhatsThis(id, i18n("<b>Full compiler output</b><p>Displays unmodified compiler output."));
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eFull);
 
 	pMenu->insertSeparator();
 	id = pMenu->insertItem(i18n("Show Directory Navigation Messages"), this, SLOT(toggleShowDirNavigMessages()));
+    pMenu->setWhatsThis(id, i18n("<b>Show directory navigation messages</b><p>Shows <b>cd</b> commands that are executed while building."));
 	pMenu->setItemChecked(id, DirectoryItem::getShowDirectoryMessages());
 
 	return pMenu;

@@ -56,9 +56,9 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
     QDomDocument &dom = *part->projectDom();
     QString prefix = "/kdevautoproject/configurations/" + m_part->currentBuildConfig() + "/";
 
-    ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler");
-    cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
-    f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
+    ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler", "kdevgccoptions");
+    cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler", "kdevgppoptions");
+    f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler", "kdevg77options");
 
     if (!KService::serviceByDesktopName(ccompiler))
         cflags_button->setEnabled(false);

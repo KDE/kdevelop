@@ -21,6 +21,7 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qvbox.h>
+#include <qwhatsthis.h>
 
 #include <kaction.h>
 #include <kapplication.h>
@@ -76,13 +77,18 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   action = new KAction( i18n("&Run"), "exec",Key_F9,
 			this, SLOT(slotRun()),
 			actionCollection(), "build_execute" );
+  action->setToolTip(i18n("Run"));
+  action->setWhatsThis(i18n("<b>Run</b><p>Executes script on a terminal or a webserver."));
 
   action = new KAction( i18n("&New Class..."),0,
 			this, SLOT(slotNewClass()),
 			actionCollection(), "project_new_class" );
+  action->setToolTip(i18n("New class"));
+  action->setWhatsThis(i18n("<b>New class</b><p>Runs New Class wizard."));
 
   m_phpErrorView = new PHPErrorView(this);
-  mainWindow()->embedOutputView(m_phpErrorView, i18n("PHP"), i18n("PHP"));
+  QWhatsThis::add(m_phpErrorView, i18n("<b>PHP problems</b><p>This view shows PHP parser warnings, errors, and fatal errors."));
+  mainWindow()->embedOutputView(m_phpErrorView, i18n("PHP Problems"), i18n("PHP Problems"));
   connect(m_phpErrorView,SIGNAL(fileSelected(const QString&,int)),
 	  this,SLOT(slotErrorMessageSelected(const QString&,int)));
 

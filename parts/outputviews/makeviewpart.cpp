@@ -38,22 +38,24 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     m_widget = new MakeWidget(this);
     m_widget->setIcon( SmallIcon("exec") );
     m_widget->setCaption(i18n("Messages Output"));
-    QWhatsThis::add(m_widget, i18n("Messages output\n\n"
+    QWhatsThis::add(m_widget, i18n("<b>Messages output</b><p>"
                                    "The messages window shows the output of the compiler and "
-                                   "used utilities like kdoc reference documentation. "
+                                   "used build tools like make, ant, uic, dcopidl etc. "
                                    "For compiler error messages, click on the error message. "
                                    "This will automatically open the source file and set the "
                                    "cursor to the line that caused the compiler error/warning."));
 
-    mainWindow()->embedOutputView(m_widget, i18n("Messages"), i18n("compiler output messages"));
+    mainWindow()->embedOutputView(m_widget, i18n("Messages"), i18n("Compiler output messages"));
 
     KAction *action;
     action = new KAction( i18n("&Next Error"), Key_F4, m_widget, SLOT(nextError()),
                           actionCollection(), "view_next_error");
-    action->setStatusText( i18n("Switches to the file and line where the next error was reported from") );
+    action->setToolTip( i18n("Go to the next error") );
+    action->setWhatsThis(i18n("<b>Next error</b><p>Switches to the file and line where the next error was reported from."));
     action = new KAction( i18n("&Previous Error"), SHIFT+Key_F4, m_widget, SLOT(prevError()),
                           actionCollection(), "view_previous_error");
-    action->setStatusText( i18n("Switches to the file and line where the previous error was reported from") );
+    action->setToolTip( i18n("Go to the previous error") );
+    action->setWhatsThis(i18n("<b>Previous error</b><p>Switches to the file and line where the previous error was reported from."));
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );

@@ -262,10 +262,12 @@ void ProblemReporter::configure()
 
 void ProblemReporter::configWidget( KDialogBase* dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Pascal Parsing"));
+    //FIXME: adymo: use problem reporter configuration
+    Q_UNUSED(dlg);
+/*    QVBox *vbox = dlg->addVBoxPage(i18n("Pascal Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
-    connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
+    connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));*/
 }
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )

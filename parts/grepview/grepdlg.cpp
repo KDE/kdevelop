@@ -111,7 +111,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     files_combo->insertStrList(filepatterns);
     layout->addWidget(files_combo, 2, 1);
 
-    QLabel *dir_label = new QLabel(i18n("Di&rectory:"), this);
+    QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
     layout->addWidget(dir_label, 3, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *dir_layout = new QHBoxLayout(4);
@@ -140,7 +140,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     dir_layout->addWidget(recursive_box);
 
 # ifdef IGNORE_SCM_DIRS
-    ignore_scm_box = new QCheckBox(i18n("&Skip SCM dirs"), this);
+    ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
     ignore_scm_box->setChecked(true);
     dir_layout->addSpacing(10);
     dir_layout->addWidget(ignore_scm_box);
@@ -150,7 +150,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     layout->addLayout(button_layout, 5, 1);
     QPushButton *search_button = new QPushButton(i18n("&Search"), this);
     search_button->setDefault(true);
-    QPushButton *done_button = new QPushButton(i18n("Cancel"), this);
+    QPushButton *done_button = new QPushButton(i18n("&Cancel"), this);
     button_layout->addStretch();
     button_layout->addWidget(search_button);
     button_layout->addWidget(done_button);

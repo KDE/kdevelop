@@ -44,7 +44,8 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 
   KPopupMenu *sub = new KPopupMenu(popup);
 
-  sub->insertItem(i18n("Open as UTF-8"), this, SLOT(openAsEncoding(int)));
+  int id = sub->insertItem(i18n("Open as UTF-8"), this, SLOT(openAsEncoding(int)));
+  sub->setWhatsThis(id, i18n("<b>Open as UTF-8</b><p>Open this file in KDevelop as UTF-8 encoded text."));
 
   QString mimeType = KMimeType::findByURL(m_url, 0, true, true)->name();
   KTrader::OfferList offers = KTrader::self()->query(mimeType, "Type == 'Application'");
@@ -61,13 +62,15 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     }
     sub->insertSeparator();
 
-    popup->insertItem(i18n("Open With"), sub);
+    id = popup->insertItem(i18n("Open With"), sub);
+    popup->setWhatsThis(id, i18n("<b>Open With</b><p>Lists all applications that can be used to open the selected file."));
 
     // make sure the generic "Open with ..." entry gets appended to the submenu
     popup = sub;
   }
 
-  popup->insertItem(i18n("Open With..."), this, SLOT(openWithDialog()));
+  id = popup->insertItem(i18n("Open With..."), this, SLOT(openWithDialog()));
+  popup->setWhatsThis(id, i18n("<b>Open With...</b><p>Provides a dialog to choose the application to open the selected file."));
 }
 
 

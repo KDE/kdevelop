@@ -51,7 +51,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   QWhatsThis::add(diffWidget, i18n("<b>Difference Viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
     "For example if you have Kompare installed, Difference Viewer can use it's graphical diff view."));
-  mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
+  mainWindow()->embedOutputView( diffWidget, nm, i18n("Output of the diff command") );
 
   KAction *action = new KAction( i18n("Difference Viewer..."), 0,
 	       this, SLOT(slotExecDiff()),

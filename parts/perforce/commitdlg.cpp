@@ -39,21 +39,29 @@ CommitDialog::CommitDialog( QWidget *parent, const char *name )
     edit->setMinimumSize(fm.width("0")*40, fm.lineSpacing()*3);
 
     QVBoxLayout *layout = new QVBoxLayout( w, 0, spacingHint() );
-    layout->addWidget(new QLabel(i18n("Enter description:"), w));
+    QLabel *editLabel = new QLabel(i18n("&Enter description:"), w);
+    editLabel->setBuddy(edit);
+    layout->addWidget(editLabel);
     layout->addWidget(edit);
 
     w = new QWidget( this, "details widget" );
-    
+
     clientEdit = new KLineEdit( w );
     userEdit = new KLineEdit( w );
     filesBox = new KListBox( w );
 
     layout = new QVBoxLayout( w, 0, spacingHint() );
-    layout->addWidget( new QLabel(i18n("Client:"), w) );
+    QLabel *clientLabel = new QLabel(i18n("C&lient:"), w);
+    clientLabel->setBuddy(clientEdit);
+    layout->addWidget(clientLabel);
     layout->addWidget( clientEdit );
-    layout->addWidget( new QLabel(i18n("User:"), w) );
+    QLabel *userLabel = new QLabel(i18n("&User:"), w);
+    userLabel->setBuddy(userEdit);
+    layout->addWidget( userLabel );
     layout->addWidget( userEdit );
-    layout->addWidget( new QLabel(i18n("File(s):"), w) );
+    QLabel *filesLabel = new QLabel(i18n("&File(s):"), w);
+    filesLabel->setBuddy(filesBox);
+    layout->addWidget( filesLabel );
     layout->addWidget( filesBox );
 
     setDetailsWidget( w );

@@ -157,7 +157,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
 
     m_problemReporter = new ProblemReporter( this );
     m_problemReporter->setIcon( SmallIcon("info") );
-    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
+    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -169,8 +169,8 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
-    action->setStatusText( i18n("Generate a new class") );
-    action->setWhatsThis( i18n("Generate a new class") );
+    action->setToolTip( i18n("Generate a new class") );
+    action->setWhatsThis( i18n("<b>New Class</b>Generates a new class.<p>") );
 
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,

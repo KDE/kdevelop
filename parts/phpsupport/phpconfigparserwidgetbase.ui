@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>PHPConfigParserWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,7 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>GroupBox13</cstring>
@@ -31,7 +30,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QCheckBox" row="1" column="0">
                     <property name="name">
                         <cstring>codeHinting_checkbox</cstring>
@@ -45,7 +43,7 @@
                         <cstring>codeCompletion_checkbox</cstring>
                     </property>
                     <property name="text">
-                        <string>Enable code &amp;completion</string>
+                        <string>Enable code comp&amp;letion</string>
                     </property>
                 </widget>
             </grid>
@@ -61,13 +59,12 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QCheckBox" row="0" column="0">
                     <property name="name">
                         <cstring>realtimeParsing_checkbox</cstring>
                     </property>
                     <property name="text">
-                        <string>Enable realtime parser</string>
+                        <string>Enable &amp;realtime parser</string>
                     </property>
                 </widget>
             </grid>
@@ -82,6 +79,12 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <spacer row="1" column="1">
             <property name="name">
@@ -93,6 +96,12 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
         <spacer row="0" column="2">
             <property name="name">
@@ -103,6 +112,12 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
     </grid>

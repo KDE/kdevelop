@@ -30,13 +30,13 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 {
     m_widget = new KonsoleViewWidget(this);
 
-    QWhatsThis::add(m_widget, i18n("Konsole\n\n"
+    QWhatsThis::add(m_widget, i18n("<b>Konsole</b><p>"
         "This window contains an embedded konsole window. It will try to follow you when "
         "you navigate in the source directories")
     );
 
     m_widget->setIcon( SmallIcon("konsole") );
-    mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("embedded console window"));
+    mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }
 
 

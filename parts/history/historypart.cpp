@@ -57,10 +57,14 @@ void HistoryPart::setupActions()
   m_backAction = new KToolBarPopupAction(i18n("&Back"), "back", 0,
     			this, SLOT(backActivated()),
   			actionCollection(), "history_back");
+  m_backAction->setToolTip(i18n("Back"));
+  m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the browsing history."));
 
   m_forwardAction = new KToolBarPopupAction(i18n("&Forward"), "forward", 0,
 		 	this, SLOT(forwardActivated()),
 			actionCollection(), "history_forward");
+  m_forwardAction->setToolTip(i18n("Forward"));
+  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the browsing history."));
 
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
 	 this, SLOT(backAboutToShow()));

@@ -13,19 +13,21 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Form1</string>
+        <string>New Class</string>
     </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Class name:</string>
+                <string>Class &amp;name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_classNameEdit</cstring>
             </property>
         </widget>
         <spacer row="5" column="0" rowspan="1" colspan="3">
@@ -52,6 +54,9 @@
             <property name="text">
                 <string>&amp;OK</string>
             </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
         </widget>
         <widget class="QPushButton" row="5" column="5" rowspan="1" colspan="2">
             <property name="name">
@@ -76,7 +81,10 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>Base class:</string>
+                <string>&amp;Base class:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_baseClassEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
@@ -84,7 +92,10 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Class template:</string>
+                <string>Class &amp;template:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_classTemplate</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -92,7 +103,10 @@
                 <cstring>TextLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>Directory:</string>
+                <string>&amp;Directory:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_dirEdit</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -100,12 +114,18 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>File name:</string>
+                <string>&amp;File name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_fileNameEdit</cstring>
             </property>
         </widget>
         <widget class="QToolButton" row="2" column="6">
             <property name="name">
                 <cstring>m_dirButton</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>TabFocus</enum>
             </property>
             <property name="text">
                 <string>...</string>
@@ -124,11 +144,6 @@
         <widget class="QTextEdit" row="4" column="0" rowspan="1" colspan="7">
             <property name="name">
                 <cstring>m_classTemplate</cstring>
-            </property>
-            <property name="font">
-                <font>
-                    <family>Fixed [Misc]</family>
-                </font>
             </property>
             <property name="text">
                 <string>&lt;?php
@@ -164,6 +179,16 @@ class CLASSNAME extends BASECLASS {
         <slot>reject()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>m_classNameEdit</tabstop>
+    <tabstop>m_baseClassEdit</tabstop>
+    <tabstop>m_fileNameEdit</tabstop>
+    <tabstop>m_dirEdit</tabstop>
+    <tabstop>m_dirButton</tabstop>
+    <tabstop>m_classTemplate</tabstop>
+    <tabstop>m_okButton</tabstop>
+    <tabstop>m_cancelButton</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in declaration">klineedit.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>

@@ -44,22 +44,22 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("find"));
     m_widget->setCaption(i18n("Grep Output"));
-    QWhatsThis::add(m_widget, i18n("Grep\n\n"
+    QWhatsThis::add(m_widget, i18n("<b>Grep</b><p>"
                                    "This window contains the output of a grep "
                                    "command. Clicking on an item in the list "
                                    "will automatically open the corresponding "
                                    "source file and set the cursor to the line "
                                    "with the match."));
 
-    mainWindow()->embedOutputView(m_widget, i18n("Grep"), i18n("output of the grep command"));
-    
+    mainWindow()->embedOutputView(m_widget, i18n("Grep"), i18n("Output of the grep command"));
+
     KAction *action;
-    
+
     action = new KAction(i18n("&Find in files..."), "grep", CTRL+ALT+Key_F,
                          this, SLOT(slotGrep()),
                          actionCollection(), "edit_grep");
-    action->setStatusText( i18n("Searches for expressions over several files") );
-    action->setWhatsThis( i18n("Search in files\n\n"
+    action->setToolTip( i18n("Search for expressions over several files") );
+    action->setWhatsThis( i18n("<b>Find in files</b><p>"
                                "Opens the search in files dialog. There you "
                                "can enter a regular expression which is then "
                                "searched for within all files in the directories "
@@ -106,8 +106,10 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
     QString ident = econtext->currentWord();
     if (!ident.isEmpty()) {
         m_popupstr = ident;
-        popup->insertItem( i18n("Grep: %1").arg(ident),
+        int id = popup->insertItem( i18n("Grep: %1").arg(ident),
                            this, SLOT(slotContextGrep()) );
+        popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the search in files dialog "
+                               "and sets the pattern to a text under the cursor."));
     }
 }
 

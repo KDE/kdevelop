@@ -58,9 +58,15 @@ PascalProjectPart::PascalProjectPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
+    action->setToolTip(i18n("Build project"));
+    action->setWhatsThis(i18n("<b>Build project</b><p>Runs the compiler on a main source file of the project. "
+        "The compiler and the main source file can be set in project settings, <b>Pascal Compiler</b> tab."));
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
+    action->setToolTip(i18n("Execute program"));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run options</b> tab. "
+        "If nothing is set, the binary file with the same name as the main source file name is executed."));
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );

@@ -35,12 +35,12 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
     m_widget = new AppOutputWidget(this);
     m_widget->setIcon( SmallIcon("openterm") );
     m_widget->setCaption(i18n("Application Output"));
-    QWhatsThis::add(m_widget, i18n("Application output\n\n"
+    QWhatsThis::add(m_widget, i18n("<b>Application output</b><p>"
                                    "The stdout/stderr output window is a replacement for "
                                    "terminal-based application communication. Running terminal "
                                    "applications use this instead of a terminal window."));
 
-    mainWindow()->embedOutputView(m_widget, i18n("Application"), i18n("output of the executed user program"));
+    mainWindow()->embedOutputView(m_widget, i18n("Application"), i18n("Output of the executed user program"));
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );

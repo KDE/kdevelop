@@ -1,11 +1,3 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="KDevPascalSupport" version="1">
-<MenuBar>
- <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="plugin_action"/>
- </Menu>
-</MenuBar>
-<ToolBar name="extraToolBar">
-  <Action name="plugin_action"/>
-</ToolBar>
+<kpartplugin name="KDevPascalSupport" version="2">
 </kpartplugin>

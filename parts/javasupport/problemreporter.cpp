@@ -43,6 +43,7 @@
 #include <kurl.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kdialogbase.h>
 
 #include <kconfig.h>
 
@@ -50,7 +51,8 @@
 #include <qregexp.h>
 #include <qvbox.h>
 #include <qfileinfo.h>
-#include <kdialogbase.h>
+#include <qwhatsthis.h>
+#include <qgroupbox.h>
 
 
 class ProblemItem: public KListViewItem
@@ -83,6 +85,13 @@ ProblemReporter::ProblemReporter( JavaSupportPart* part, QWidget* parent, const 
       m_document( 0 ),
       m_markIface( 0 )
 {
+    QWhatsThis::add(this, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+        "It displays TODO entries, FIXME's and errors reported by a language parser. "
+        "To add a TODO or FIXME entry, just type<br>"
+        "<tt>//@todo my todo</tt><br>"
+        "<tt>//TODO: my todo</tt><br>"
+        "<tt>//FIXME: fix this</tt>"));
+
     addColumn( i18n("Level") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
@@ -232,6 +241,8 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Java Parsing"));
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
+    //FIXME: adymo: unused functionality
+    w->groupBox3->hide();
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
 }

@@ -24,7 +24,7 @@
         <string>PartExplorer</string>
     </property>
     <property name="toolTip" stdset="0">
-        <string>This is a front-end to KDE's KTrader class: search your KDE documentation for more info about KDE services' trading</string>
+        <string>This is a front-end to KDE's KTrader: search your KDE documentation for more information about KDE services and KTrader</string>
     </property>
     <vbox>
         <property name="name">
@@ -43,7 +43,10 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>KDE service type:</string>
+                <string>KDE service &amp;type:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>typeEdit</cstring>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
@@ -65,7 +68,7 @@
                 <string></string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;h2&gt;Service type&lt;/h2&gt;Here you put the Service type (i.e. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;)</string>
+                <string>&lt;b&gt;Service type&lt;/b&gt;&lt;p&gt;Put here the Service type (i.e. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;).</string>
             </property>
         </widget>
         <widget class="QLabel">
@@ -81,7 +84,10 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Additional constraints:</string>
+                <string>&amp;Additional constraints:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>costraintsText</cstring>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
@@ -99,16 +105,19 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="tabChangesFocus">
+                <bool>true</bool>
+            </property>
             <property name="toolTip" stdset="0">
                 <string></string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;h2&gt;Constraints&lt;/h2&gt;You can further refine your query by writing additional constraints in you query such as i. e. &lt;i&gt;([X-KDevelop-Scope]='Global')&lt;/i&gt;)</string>
+                <string>&lt;b&gt;Constraints&lt;/b&gt;Refine your query by writing additional constraints such as &lt;i&gt;([X-KDevelop-Scope]='Global')&lt;/i&gt;).</string>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>textLabel1_3</cstring>
+                <cstring>resultsLabel</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -119,7 +128,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Results</string>
+                <string>&amp;Results</string>
             </property>
         </widget>
     </vbox>
