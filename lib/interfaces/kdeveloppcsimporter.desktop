@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/PCSImporter
+X-KDE-Derived=KDevelop/Plugin
+Name=KDevelop PCS Importer
+
+[PropertyDef::X-KDevelop-PCSImporter]
+Type=QString
