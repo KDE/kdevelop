@@ -110,7 +110,11 @@ void CClassParser::emptyStack()
  *-----------------------------------------------------------------*/
 bool CClassParser::commentInRange( CParsedItem *aItem )
 {
-  assert( aItem != NULL );
+  //assert( aItem != NULL );
+  if(aItem == 0){
+    cerr << "ERROR!!! in parser CClassParser::commentInRange: \n";
+    return false;
+  }
 
   int range;
 
@@ -198,8 +202,13 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
 {
-  assert( aContainer != NULL );
-  assert( lexem == '{' );
+  //  assert( aContainer != NULL );
+  //  assert( lexem == '{' );
+  if(aContainer == 0 ){
+    cerr << "ERROR!!! in parser CClassParser::fillInParsedStruct: \n";
+    return;
+  }
+
 
   CParsedStruct *aStruct = new CParsedStruct();
 
@@ -1260,6 +1269,11 @@ CParsedClass *CClassParser::parseClassHeader()
 
   // The classname is at the top of the stack.
   aLexem = lexemStack.pop();
+  
+  if(aLexem == 0) {
+    cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+    return 0;
+  }
   fully_qualified_name += aLexem->text;
   aClass->setName( fully_qualified_name /* aLexem->text */);
   delete aLexem;
@@ -1549,8 +1563,12 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
  *-----------------------------------------------------------------*/
 void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
 {
-  assert( aContainer != NULL );
-
+  //  assert( aContainer != NULL );
+  if(aContainer == 0 ){
+    cerr << "ERROR!!! in parser CClassParser::fillInParsedStruct: \n";
+    return;
+  }
+ 
   switch( lexem )
   {
     case CPENUM:
@@ -1741,7 +1759,11 @@ void CClassParser::parseFile( ifstream &file )
  *-----------------------------------------------------------------*/
 bool CClassParser::parse( const char *file )
 {
-  assert( file != NULL );
+  //  assert( file != NULL );
+  if(file == 0 ){
+    cerr << "ERROR!!! in parser  CClassParser::parse( const char *file ): \n";
+    return true;
+  }
 
   ifstream f( file );
   currentFile = file;

@@ -32,6 +32,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream.h>
 
 #define CLASSPREFIX "[CLASS]"
 
@@ -94,7 +95,7 @@ CPersistantClassStore::~CPersistantClassStore()
 
 void CPersistantClassStore::setPath( const char *aPath )
 {
-  assert( !isOpen );
+  //  assert( !isOpen );
 
   path = aPath;
 }
@@ -103,7 +104,7 @@ void CPersistantClassStore::setPath( const char *aPath )
 /** Set the name of the file to read/write. */
 void CPersistantClassStore::setFilename( const char *aFilename )
 {
-  assert( !isOpen );
+  //  assert( !isOpen );
 
   filename = aFilename;
 }
@@ -117,7 +118,7 @@ void CPersistantClassStore::setFilename( const char *aFilename )
 /** Open the file. */
 bool CPersistantClassStore::open()
 {
-  assert( !isOpen );
+  //  assert( !isOpen );
 
 //   DbInfo info;
 
@@ -151,7 +152,7 @@ bool CPersistantClassStore::open()
 /** Close the file. */
 void CPersistantClassStore::close()
 {
-  assert( isOpen );
+  //  assert( isOpen );
 
 //   db->close( 0 );
   isOpen = false;
@@ -160,9 +161,9 @@ void CPersistantClassStore::close()
 /** Store a class in the database. */
 void CPersistantClassStore::storeClass( CParsedClass *aClass )
 {
-  assert( isOpen );
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
+  //  assert( isOpen );
+  //  assert( aClass != NULL );
+  //  assert( !aClass->name.isEmpty() );
 
 //   QString keyStr;
 //   QString dataStr;
@@ -189,7 +190,11 @@ void CPersistantClassStore::storeClass( CParsedClass *aClass )
 /** Has the store been created? */
 bool CPersistantClassStore::exists()
 {
-  assert( !filename.isEmpty() );
+  //  assert( !filename.isEmpty() );
+  if(filename.isEmpty() ){
+    cerr << "ERROR!!! in parser CPersistantClassStore::exists( : \n";
+    return false;
+  }
 
   FILE *aFile;
   bool retVal;
@@ -214,7 +219,7 @@ bool CPersistantClassStore::exists()
 /** Check if a class exists in the store. */
 bool CPersistantClassStore::hasClass( const char *aName )
 {
-  assert( isOpen );
+  //  assert( isOpen );
 
 //   QString keyStr;
 //   Dbt data;
@@ -235,8 +240,12 @@ bool CPersistantClassStore::hasClass( const char *aName )
 /** Fetch a class from the database using its' name. */
 CParsedClass *CPersistantClassStore::getClassByName( const char *aName )
 {
-  assert( isOpen );
-  assert( aName != NULL && strlen( aName ) > 0 );
+  //  assert( isOpen );
+  //  assert( aName != NULL && strlen( aName ) > 0 );
+   if(aName == 0 ){
+     cerr << "ERROR!!! in parser CParsedClass *CPersistantClassStore::getClassByName( : \n";
+    return 0;
+  }
 
 //   QString keyStr;
 //   Dbt data;

@@ -84,7 +84,11 @@ CClassTreeNode::~CClassTreeNode()
  *-----------------------------------------------------------------*/
 void CClassTreeNode::setClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
+  //  assert( aClass != NULL );
+   if(aClass == 0 ){
+    cerr << "ERROR!!! in parser  CClassStore::setClass: \n";
+    return 0;
+  }
 
   theClass = aClass;
 }
@@ -101,7 +105,11 @@ void CClassTreeNode::setClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassTreeNode::addChild( CClassTreeNode *aChild )
 {
-  assert( aChild != NULL );
+  //  assert( aChild != NULL );
+  if(aChild == 0 ){
+    cerr << "ERROR!!! in parser  CClassTreeNode::addChild: \n";
+    return 0;
+  }
 
   children.append( aChild );
 }

@@ -153,9 +153,14 @@ void CClassStore::storeAll()
  *-----------------------------------------------------------------*/
 void CClassStore::addClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( !hasClass( aClass->name ) );
+  //  assert( aClass != NULL );
+  //  assert( !aClass->name.isEmpty() );
+  //  assert( !hasClass( aClass->name ) );
+  if(aClass == 0 ){
+    cerr << "ERROR!!! in parser  CClassStore::addClass(: \n";
+    return;
+  }
+
 
   globalContainer.addClass( aClass );
 
@@ -175,9 +180,13 @@ void CClassStore::addClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassStore::removeClass( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-  assert( hasClass( aName ) );
+  //  assert( aName != NULL );
+  //  assert( strlen( aName ) > 0 );
+  //  assert( hasClass( aName ) );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser  CClassStore::removeClass(: \n";
+    return;
+  }
 
   globalContainer.removeClass( aName );
 
@@ -363,8 +372,12 @@ bool CClassStore::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CClassStore::getClassByName( const char *aName )
 {
-  assert( aName != NULL );
-
+  //  assert( aName != NULL );
+  if( aName == 0) {
+    cerr << "ERROR!!! in parser: CClassStore::getClassByName\n";
+    return 0;
+  }
+  
   CParsedClass *aClass;
 
   if( globalStore.isOpen && globalStore.hasClass( aName ) )
@@ -415,7 +428,11 @@ QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
 {
-  assert( aName != NULL );
+  //  assert( aName != NULL );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser  CClassStore::getClassClients(: \n";
+    return 0;
+  }
 
   bool exit;
   CParsedClass *aClass;
@@ -459,8 +476,12 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
 {
-  assert( aName != NULL );
-  assert( hasClass( aName ) );
+  //  assert( aName != NULL );
+  //  assert( hasClass( aName ) );
+   if(aName == 0 ){
+    cerr << "ERROR!!! in parser  QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName ): \n";
+    return 0;
+  }
 
   CParsedClass *aClass;
   CParsedClass *toAdd;

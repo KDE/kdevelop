@@ -1,3 +1,8 @@
+1999-11-17 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commented out all assert in classparser and added some "error correction code"
+	 this much improve the stability!!
+	* fixed some other bugs in classparser
+	
 1999-11-13 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* if cvs is enabled the workspace isn't saved anymore, this reduced merging conflict in *.kdevprj
 	* commited patch by Ralf Palsa <rpalsa@eso.org> (fixed kdevelop --setup segfault, if logo is disabled
