@@ -27,7 +27,7 @@
   - Debugger
     - (gdb/jdb/??? integration)
   - Compiler plugins
-	.
+  - KDevLang project template
   .
 
 \section Expl Explanations, hints, tips, and all around Good Things To Know, regarding that list
@@ -176,6 +176,9 @@ write a <B>debugger support</B>. KDevelop already provides GDB support
 \section Compiler Compiler plugins
 
 There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options. Compiler plugins must implement KDevCompilerOptions interface.
+
+\section KDevLang KDevLang project template
+KDevelop ships with KDevLang project template. It is a simple language support prototype that can be used when developing language support plugins with KDevelop. The template is located in <code>parts/appwizard/kdevlang</code> and it can also can be found in new application wizard in KDevelop.
 
 \section MiscInf Other Info
 

@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kdevlangdir = ${appwizarddatadir}/template-kdevlang
 templatedir = ${appwizarddatadir}/templates
 
-kdevlang_DATA = src-Makefile.am kdevlang_part.cpp kdevlang_part.h
-		kdevlang.rc kdevlang.desktop app.kdevelop kdevlang-configure.in.in
+kdevlang_DATA = src-Makefile.am kdevlang_part.cpp kdevlang_part.h kdevlang.rc kdevlang.desktop app.kdevelop kdevlang-configure.in.in
 template_DATA = kdevlang
 
 DISTCLEANFILES = script.local
@@ -17,5 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(mkinstalldirs) $(DESTDIR)$(kdevpart2dir)
+	$(mkinstalldirs) $(DESTDIR)$(kdevlangdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kdevlangdir)/script

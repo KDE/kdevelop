@@ -1,10 +1,17 @@
 #include <qwhatsthis.h>
+#include <qtimer.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kdevelop/kdevcore.h>
+#include <kdevelop/kdevpartcontroller.h>
+#include <kdevelop/kdevproject.h>
+#include <kaction.h>
+#include <kdebug.h>
+#include <kapplication.h>
 
-#include "$APPNAMELC$_widget.h"
+//#include "$APPNAMELC$_widget.h"
 #include "$APPNAMELC$_part.h"
 
 typedef KGenericFactory<$APPNAME$Part> $APPNAME$Factory;
@@ -14,12 +21,12 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
 : KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "$APPNAME$Part" )
 {
 	setInstance($APPNAME$Factory::instance());
-	setXMLFile("kdevlang_${APPNAMELC}.rc");
+	setXMLFile("kdevlang_$APPNAMELC$.rc");
 
 
 	m_build = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
 
-	kdDebug() << "Creating BashSupportPart" << endl;
+	kdDebug() << "Creating $APPNAMELC$ Part" << endl;
 
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -36,7 +43,7 @@ $APPNAME$Part::~$APPNAME$Part()
 	delete m_build;
 }
 
-Features $APPNAME$Part::features()
+KDevLanguageSupport::Features $APPNAME$Part::features()
 {
 	return Features(Variables | Functions);
 }
@@ -137,7 +144,7 @@ void $APPNAME$Part::parse()
 }
 void $APPNAME$Part::slotActivePartChanged(KParts::Part *part)
 {
-	kdDebug() << "Changeing active part..." <<
+	kdDebug() << "Changeing active part..." << endl;
 }
 
 #include "$APPNAMELC$_part.moc"
