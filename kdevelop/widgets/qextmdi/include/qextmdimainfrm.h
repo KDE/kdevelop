@@ -30,15 +30,15 @@
 #define _QEXTMDIMAINFRM_H_
 
 #ifndef NO_KDE2
-#  include <kmainwindow.h>
-#  include <kmenubar.h>
-#  include <kpopupmenu.h>
-#  include "kparts/dockmainwindow.h"
+#include <kmainwindow.h>
+#include <kmenubar.h>
+#include <kpopupmenu.h>
+#include "kparts/dockmainwindow.h"
 #else
-#  include <qmainwindow.h>
-#  include <qmenubar.h>
-#  include <qpopupmenu.h>
-#  include "dummykpartsdockmainwindow.h"
+#include <qmainwindow.h>
+#include <qmenubar.h>
+#include <qpopupmenu.h>
+#include "dummykpartsdockmainwindow.h"
 #endif
 
 #include <qlist.h>
