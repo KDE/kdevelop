@@ -45,6 +45,10 @@ public slots:
      * (colored in the current implementation).
      */
     virtual void insertStderrLine(const QString &line) = 0;
+    /**
+     * Clears the output view
+     */
+    virtual void clearView() = 0;
 };
 
 #endif

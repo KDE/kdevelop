@@ -116,4 +116,9 @@ void AppOutputViewPart::insertStderrLine(const QString &line)
     m_widget->insertStderrLine(line);
 }
 
+void AppOutputViewPart::clearView()
+{
+    m_widget->clear();
+}
+
 #include "appoutputviewpart.moc"

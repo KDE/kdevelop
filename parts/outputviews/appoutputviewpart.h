@@ -33,6 +33,7 @@ public:
     virtual bool isRunning();
     virtual void insertStdoutLine(const QString &line);
     virtual void insertStderrLine(const QString &line);
+    virtual void clearView();
 
 signals:
     void processExited();

@@ -682,6 +682,7 @@ void DebuggerPart::slotRun()
     {
         mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
         mainWindow()->raiseView(gdbOutputWidget);
+        appFrontend()->clearView();
         startDebugger();
     }
     else
