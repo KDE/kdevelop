@@ -32,7 +32,7 @@ ckdevelProject::~ckdevelProject(){
 /** This will load the selected project file and populate the internal data structure. */
 bool ckdevelProject::loadProject(QString qsFileName){
   bool bGoodFile = false;
-  bool bFlag = false; // States when the [General] tag has been found
+//  bool bFlag = false; // States when the [General] tag has been found
   QRegExp regexAuthor( "^author=*", TRUE, FALSE );
   QRegExp regexEmail("^email=*", TRUE, FALSE);
   QRegExp regexInfo("^short_info=*", TRUE, FALSE);

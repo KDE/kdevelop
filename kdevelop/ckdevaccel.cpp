@@ -109,7 +109,6 @@ void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
                              const QObject* receiver, const char* member,
                              bool activate)
 {
-#warning FIXME
     if (KStdAccel::action(accel)) // && !aKeyDict[ KStdAccel::action(accel) ]){
         insertStdItem(accel);
 

@@ -1,3 +1,8 @@
+2001-05-11  jbb <jbb@kdevelop.org>
+    * Patch from August Hörandl <august.hoerandl@gmx.at>
+      updates clone dialog
+    * remove warnings from code
+    
 2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
     * new feature: now cursor positions in views are saved/restored to/from .kdevses-Session
 

@@ -29,9 +29,10 @@
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qcombobox.h>
-#include "./classparser/ClassParser.h"
+
 class CClassView;
 class CParsedMethod;
+class CParsedClass;
 
 /**clone an existing function/method
   *@author The KDevelop Team
@@ -42,37 +43,32 @@ class CCloneFunctionDlg : public QDialog  {
 public: 
 	CCloneFunctionDlg(CClassView* class_tree, QWidget *parent=0, const char *name=0);
   /** get the selected method */
-  CParsedMethod* getMethod();
+  bool getMethod(QString& type, QString& decl, QString& comment,
+                  bool& ispriv, bool& isprot, bool& ispub);
+private:
+  CParsedMethod* searchMethod(CParsedClass* theClass, QString selected);
+
 protected slots:
   void OK();
 
 protected: // Private widgets
 
-  ///////////////////////////////
-  // Layouts
-  ///////////////////////////////
 
-  /** Main layout for the dialog. */
-  QVBoxLayout topLayout;
-
-  /** Layout for function definition. */
-  QVBoxLayout functionLayout;
-
-  /** Layout for the ok/cancel buttons. */
-  QHBoxLayout buttonLayout;
+  /** Layouts */
+  QGridLayout* Form1Layout;
+  QVBoxLayout* LayoutAll;
+  QHBoxLayout* LayoutButton;
 
   /** listboxes */
-  QComboBox allclasses;
-  QComboBox methods;
+  QComboBox* allclasses;
+  QComboBox* methods;
 
-  ///////////////////////////////
-  // Button groups
-  //////////////////////////////
-
-  QPushButton okBtn;
-  QPushButton cancelBtn;
+  /** Button groups */
+  QPushButton* okBtn;
+  QPushButton* cancelBtn;
 
 	/** pointer to all the classes */
+	QString classname;
   CClassView* classtree;
 
 private slots: // Private slots

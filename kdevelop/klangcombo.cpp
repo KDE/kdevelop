@@ -59,10 +59,7 @@ void KLanguageCombo::insertLanguage(const char *lang)
   if(style() == MotifStyle){
     pm.fill(colorGroup().background());
   }
-#warning FIXME windowcolor is ???
-//  else{
-//    pm.fill(kapp->windowColor);
-//  }
+
   p.begin(&pm);
   p.drawText(24,1,w-24,16,AlignLeft | AlignTop,output);
   if (!flag.isNull()){

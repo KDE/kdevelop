@@ -286,8 +286,15 @@ void CParsedMethod::asCppCode( QString &str )
     // Take the path and replace all . with ::
     aPath = path();
     aPath.replace( QRegExp( "\\." ), "::" );
+
+   // if its a friend we are inserting a template: no need for class:: and friend
+   if (type.contains( QRegExp("^friend")) != 0) {
+     aPath.replace( QRegExp("^.*::"), "" );
+   }
     str += type + " " + aPath;
     
+   str.replace( QRegExp("friend ") , "");
+
     if( isConst )
       str += " const";
     

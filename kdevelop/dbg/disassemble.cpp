@@ -146,7 +146,7 @@ void Disassemble::getNextDisplay()
 
     // restrict this to a managable size - some functions are _big_
     QString endAddress;
-    endAddress.sprintf("0x%x", address_+128);
+    endAddress.sprintf("0x%x", (unsigned int) (address_+128L));
     emit disassemble(currentAddress_, endAddress);
   }
   else

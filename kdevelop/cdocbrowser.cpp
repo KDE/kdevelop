@@ -32,6 +32,7 @@
 #include <kprocess.h>
 #include <krun.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 
 #include "resource.h"
 
@@ -68,7 +69,7 @@ bool CDocBrowser::forceDefaults;
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   KHTMLPart(parent, name)
 {
-  debug("Creating CDocBrowser !"); 
+  kdDebug() << "Creating CDocBrowser !" << endl;
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(SmallIconSet("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -87,12 +88,12 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
   connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
-  debug("End CDocBrowser creation !"); 
+  kdDebug() << "End CDocBrowser creation !" << endl;
 }
 
 CDocBrowser::~CDocBrowser(){
 
-  debug("deleting CDocBrowser !");
+  kdDebug() << "deleting CDocBrowser !" << endl;
 
   delete doc_pop;
   doc_pop=0l;
@@ -102,11 +103,11 @@ CDocBrowser::~CDocBrowser(){
 
 void CDocBrowser::slotViewInKFM()
 {
-  debug("CDocBrowser::slotViewInKFM !\n");
+  kdDebug() << "CDocBrowser::slotViewInKFM !" << endl;
   new KRun(currentURL());
 }
 
-void CDocBrowser::showURL(const QString& url, bool reload)
+void CDocBrowser::showURL(const QString& url, bool /*reload*/)
 {
   if (url.isEmpty())
     return;
@@ -207,7 +208,7 @@ void CDocBrowser::setDocBrowserOptions(){
 
 void CDocBrowser::slotDocFontSize(int size){
 
-  debug("CDocBrowser::slotDocFontSize !\n");
+  kdDebug() << "CDocBrowser::slotDocFontSize !" << endl;
 
   fSize = size;
 //  KHTMLView* htmlview=view();
@@ -227,7 +228,7 @@ void CDocBrowser::slotDocFontSize(int size){
 
 void CDocBrowser::slotDocStandardFont(const QString& n){
 
-  debug("CDocBrowser::slotDocStandardFont !\n");
+  kdDebug() << "CDocBrowser::slotDocStandardFont !" << endl;
 
   standardFont = n;
 //  KHTMLView* htmlview=view();
@@ -240,7 +241,7 @@ void CDocBrowser::slotDocStandardFont(const QString& n){
 
 void CDocBrowser::slotDocFixedFont(const QString& n){
 
-  debug("CDocBrowser::slotDocFixedFont !\n");
+  kdDebug() << "CDocBrowser::slotDocFixedFont !" << endl;
 
   fixedFont = n;
 //  KHTMLView* htmlview=view();
@@ -251,11 +252,11 @@ void CDocBrowser::slotDocFixedFont(const QString& n){
 //  emit enableMenuItems();
 }
 
-void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
-  const QColor &link, const QColor &vlink, const bool uline, const bool force)
+void CDocBrowser::slotDocColorsChanged( const QColor &/*bg*/, const QColor &/*text*/,
+  const QColor &/*link*/, const QColor &/*vlink*/, const bool /*uline*/, const bool /*force*/)
 {
 
-  debug("CDocBrowser::slotDocColorsChanged !\n");
+  kdDebug() << "CDocBrowser::slotDocColorsChanged !" << endl;
 
 //  KHTMLView* htmlview=view();
 //  htmlview->setForceDefault( force );
@@ -270,7 +271,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 
 void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
 
-  debug("CDocBrowser::slotPopupMenu !\n");
+  kdDebug() << "CDocBrowser::slotPopupMenu !" << endl;
 
   QString text;
   int pos;
@@ -312,7 +313,7 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
 
 void CDocBrowser::slotCopyText()
 {
-  debug("CDocBrowser::slotCopyText !\n");
+  kdDebug() << "CDocBrowser::slotCopyText !" << endl;
 
   QString text = selectedText();
   if (!text.isEmpty())
@@ -324,56 +325,46 @@ void CDocBrowser::slotCopyText()
 
 void CDocBrowser::slotFindTextNext(QString str){
 
-  debug("CDocBrowser::slotFindTextNext !\n");
-
+  kdDebug() << "CDocBrowser::slotFindTextNext !" << endl;
   findTextNext(QRegExp(str), true);
 }
 
 void CDocBrowser::slotSearchText(){
 
-  debug("CDocBrowser::slotSearchText !\n");
-
+  kdDebug() << "CDocBrowser::slotSearchText !" << endl;
   emit signalSearchText();
 }
 
 void CDocBrowser::slotManpage()
 {
-  debug("CDocBrowser::slotManpage\n");
+  kdDebug() << "CDocBrowser::slotManpage" << endl;
   QString text = "man:/"+selectedText()+"(3)";
   emit signalManpage(text);
 }
 
 void CDocBrowser::slotGrepText(){
 
-  debug("CDocBrowser::slotGrepText !\n");
-
+  kdDebug() << "CDocBrowser::slotGrepText !" << endl;
   QString text = selectedText();
-
   emit signalGrepText(text);
 }
 
 void CDocBrowser::slotURLBack(){
 
-  debug("CDocBrowser::slotURLBack !\n");
-
+  kdDebug() << "CDocBrowser::slotURLBack !" << endl;
   emit signalURLBack();
 }
 
 void CDocBrowser::slotURLForward(){
 
-  debug("CDocBrowser::slotURLForward !\n");
-
+  kdDebug() << "CDocBrowser::slotURLForward !" << endl;
   emit signalURLForward();
 }
 
 void CDocBrowser::slotSetFileTitle( const QString& title ){
 
-  debug("CDocBrowser::slotSetFileTitle !\n");
-
-  debug("view : %d !\n", view());
-
-  debug("title : %s !\n", title.data());
-
+  kdDebug() << "CDocBrowser::slotSetFileTitle :" << endl;
+  kdDebug() << "view : " << view() << " title : " << title.data() << endl;
   m_title= title;
 }
 
@@ -392,21 +383,13 @@ void  CDocBrowser::urlSelected ( const QString &url, int button, int state, cons
 
 void  CDocBrowser::doSearchDialog()
 {
-  debug("CDocBrowser::doSearchDialog !\n");
+  kdDebug() << "CDocBrowser::doSearchDialog" << endl;
 
   CFindDocTextDlg help_srch_dlg(view(),"Search_for_Help_on");
   connect(&help_srch_dlg, SIGNAL(signalFind(QString)),
 	  this, SLOT(slotFindTextNext(QString)));
   help_srch_dlg.exec();
 }
-
-//
-// KDE Help Options
-//
-// (c) Martin R. Jones 1996
-//
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -543,7 +526,7 @@ void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
 
 void CDocBrowserFont::slotApplyPressed()
 {
-  debug("CDocBrowserFont::slotApplyPressed !\n");
+  kdDebug() << "CDocBrowserFont::slotApplyPressed !" << endl;
 
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
@@ -562,7 +545,7 @@ void CDocBrowserFont::slotApplyPressed()
 
 void CDocBrowserFont::slotFontSize( int i )
 {
-  debug("CDocBrowserFont::slotFontSize !\n");
+  kdDebug() << "CDocBrowserFont::slotFontSize !" << endl;
 
   if(i==0)
     fSize=10;
@@ -574,15 +557,13 @@ void CDocBrowserFont::slotFontSize( int i )
 
 void CDocBrowserFont::slotStandardFont( const QFont& n )
 {
-  debug("CDocBrowserFont::slotStandardFont !\n");
-
+  kdDebug() << "CDocBrowserFont::slotStandardFont !" << endl;
   stdName = n;
 }
 
 void CDocBrowserFont::slotFixedFont( const QFont& n )
 {
-  debug("CDocBrowserFont::slotFixedFont !\n");
-
+  kdDebug() << "CDocBrowserFont::slotFixedFont !" << endl;
   fixedName = n;
 }
 

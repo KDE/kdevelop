@@ -354,7 +354,7 @@ void GrepDialog::slotSearch()
     connect( childproc, SIGNAL(receivedStdout(KProcess *, char *, int)),
          SLOT(receivedOutput(KProcess *, char *, int)) );
     // actually it should be checked whether the process was started succesfully
-    bool success=childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
+    /*bool success=*/childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 void GrepDialog::slotSearchFor(QString pattern){

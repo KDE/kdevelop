@@ -1280,16 +1280,15 @@ void CClassPropertiesDlgImpl::slotClone()
 CCloneFunctionDlg volDlg(class_tree, this, "volnameDlg");
 
   if (volDlg.exec()) {
-    CParsedMethod* res = volDlg.getMethod();
-    if (! res)
+    QString type, decl, str;
+    bool isPrivate, isProtected, isPublic;
+    if (! volDlg.getMethod(type, decl, str, isPrivate, isProtected, isPublic ))
     	return;
    	
    // copy type and declaration
-   QString str;
-   leMethType_2 -> setText(res->type);;
-   leMethDeclare_2 -> setText(res->asString(str));
+   leMethType_2 -> setText(type);;
+   leMethDeclare_2 -> setText(decl);
       // the comment needs some adjustment
-   str = res->comment;
    // remove /** and */
    str.replace( QRegExp("^/\\** *"), "" );
    str.replace( QRegExp(" *\\**/$"), "" );
@@ -1298,18 +1297,9 @@ CCloneFunctionDlg volDlg(class_tree, this, "volnameDlg");
 	meMethDoc_2 -> setText(str);
 
     	// all the buttons
-   	rbMethPrivate_2  -> setChecked( res->isPrivate() );
-    	rbMethProtected_2 -> setChecked( res->isProtected() );
-    	rbMethPublic_2 -> setChecked( res->isPublic() );
-     	
-   	//methodRb.setChecked( true ); // ??
-    	//slotRb.setChecked( res->isSlot );
-    	//signalRb.setChecked( res->isSignal );
-
-    	chMethConst_2 -> setChecked( res->isConst);
-    	chMethStatic_2 -> setChecked( res->isStatic );
-    	chMethPure_2 -> setChecked( res->isPure );
-    	chMethVirtual_2 -> setChecked( res->isVirtual );
+   rbMethPrivate_2  -> setChecked( isPrivate );
+   rbMethProtected_2 -> setChecked( isProtected );
+   rbMethPublic_2 -> setChecked( isPublic );
   }
 }	
 

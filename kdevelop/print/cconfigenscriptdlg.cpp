@@ -2943,7 +2943,7 @@ void CConfigEnscriptDlg::loadSettings() {
   underlayAngleDefault->setChecked(false);
   }
   underlayAngle->setValue((settings->readEntry("UnderlayAngle")).toInt());
-  underlayGray->setValue((settings->readEntry("UnderlayGray")).toFloat());
+  underlayGray->setValue((int)(settings->readEntry("UnderlayGray")).toFloat());
   underlayStyle->setCurrentItem((settings->readEntry("UnderlayStyle")).toInt());
   slotLoginClicked();
   slotUnderlayButtonClicked();

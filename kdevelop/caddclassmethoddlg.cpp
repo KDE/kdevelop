@@ -358,6 +358,8 @@ void CAddClassMethodDlg::enterEvent(QEvent* event){
 /** look up method to overload */
 void CAddClassMethodDlg::slotCloneClicked(){
 
+//#warning "FIXME: this file isn't used anymore - AH"
+#if 0
   CCloneFunctionDlg volDlg(classtree, this, "volnameDlg");
 
   if (volDlg.exec()) {
@@ -386,14 +388,15 @@ void CAddClassMethodDlg::slotCloneClicked(){
     constCb.setChecked( res->isConst );
 
     methodRb.setChecked( true ); // ??
-    slotRb.setChecked( res->isSlot );
-    signalRb.setChecked( res->isSignal );
+//??    slotRb.setChecked( res->isSlot );
+//??    signalRb.setChecked( res->isSignal );
 
     constCb.setChecked( res->isConst);
     staticCb.setChecked( res->isStatic );
     pureCb.setChecked( res->isPure );
     virtualCb.setChecked( res->isVirtual );
   }
+#endif
 }
 
 #include "caddclassmethoddlg.moc"

@@ -938,11 +938,6 @@ void CKAppWizard::initPages()
   QToolTip::add(output,i18n("Displays the normal output of the project generator"));
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
-  // go to page 2 then to page 1
-//#warning FIXME do these have a reason?
-//  gotoPage(1);
-//  gotoPage(0);
-
 }
 
 // connection to directoryload

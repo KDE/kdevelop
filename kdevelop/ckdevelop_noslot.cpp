@@ -1056,7 +1056,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
   refreshTrees();  // always used
 }
 
-void CKDevelop::saveProperties(KConfig* sess_config){
+void CKDevelop::saveProperties(KConfig* /*sess_config*/){
 	
   if(project){
     kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
