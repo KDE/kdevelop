@@ -37,7 +37,6 @@
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
 #include "caddnewtranslationdlg.h"
-#include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
 #include "cgeneratenewfile.h"
 #include "componentmanager.h"
@@ -821,3 +820,4 @@ void CKDevelop::newSubDir(){
 
   messages_widget->startJob();
 }
+

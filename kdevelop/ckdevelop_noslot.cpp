@@ -15,7 +15,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "./kdlgedit/kdlgedit.h"
+
 #include <iostream.h>
 
 #include <qprogressdialog.h>
@@ -29,15 +29,12 @@
 
 #include "ckdevelop.h"
 #include "cclassview.h"
-#include "kswallow.h"
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
 #include "ceditwidget.h"
-#include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgreadmedlg.h"
 #include "editorview.h"
 #include "dlgedit/dialogview.h"
 #include "dlgedit/dialogwidget.h"
@@ -944,3 +941,4 @@ void CKDevelop::resizeEvent(QResizeEvent* rse){
   // if necessary, adjust the 4 system buttons of a maximized MDI view to the right-hand side
   mdi_main_frame->setSysButtonsAtMenuPosition();
 }
+

@@ -41,7 +41,6 @@
 #include <kmenubar.h>
 #include <qtabdialog.h>
 
-#include "./kdlgedit/kdlgedit.h"
 #include "ctoolsconfigdlg.h"
 #include "ktipofday.h"
 
@@ -2642,6 +2641,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 

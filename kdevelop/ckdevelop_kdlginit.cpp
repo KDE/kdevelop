@@ -24,7 +24,6 @@
 #include "ckdevelop.h"
 #include "componentmanager.h"
 
-#include "./kdlgedit/kdlgedit.h"
 #include "./kwrite/kwview.h"
 #include "./kwrite/kguicommand.h"
 
@@ -33,3 +32,4 @@ extern KGuiCmdManager cmdMngr;
 
 
   
+
