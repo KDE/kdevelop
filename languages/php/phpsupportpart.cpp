@@ -32,6 +32,7 @@
 #include <kprocess.h>
 #include <kregexp.h>
 #include <kstatusbar.h>
+#include <kparts/browserextension.h>
 
 #include <kdevcore.h>
 #include <kdevproject.h>
@@ -259,6 +260,12 @@ void PHPSupportPart::executeOnWebserver(){
     file = configData->getWebDefaultFile();
   }
   m_phpExeOutput="";
+  KParts::BrowserExtension* be = m_htmlView->browserExtension();
+  if(be){
+    KParts::URLArgs urlArgs( be->urlArgs() );
+    urlArgs.reload = true;
+    be->setURLArgs( urlArgs );
+  }
   m_htmlView->openURL(KURL(weburl + file));
   m_htmlView->show();
 }
