@@ -124,12 +124,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/sheidric/kdevelop/kdevelop/main.cpp,/home/sheidric/kdevelop/kdevelop/kwrite/highlight.cpp,/home/sheidric/kdevelop/kdevelop/kdlgedit/kdlgedit.cpp,
+openfiles=Untitled.h,Untitled.cpp,/home/jrz/kdevelop/kdevelop/main.cpp,/home/jrz/kdevelop/kdevelop/ckdevinstall.cpp,/home/jrz/kdevelop/kdevelop/kwrite/kwdialog.h,/home/jrz/kdevelop/kdevelop/kwrite/highlight.cpp,/home/jrz/kdevelop/kdevelop/kwrite/highlight.h,/home/jrz/kdevelop/kdevelop/ckdevelop.cpp,
 show_outputview=true
-show_treeview=false
-header_file=Untitled.h
-cpp_file=/home/sheidric/kdevelop/kdevelop/kdlgedit/kdlgedit.cpp
-browser_file=file:/home/sheidric/docs/kdecore/KConfig.html
+show_treeview=true
+header_file=/home/jrz/kdevelop/kdevelop/kwrite/highlight.h
+cpp_file=/home/jrz/kdevelop/kdevelop/kwrite/highlight.cpp
+browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/addendum/index-5.html
 [kdevelop/pics/mini/CVpublic_var.xpm]
 install_location=
 dist=true
@@ -1697,6 +1697,7 @@ sgml_file=/home/rnolden/Development/kdevelop/doc/en/welcome/index.sgml
 short_info=,
 email=
 kdevprj_version=0.3
+configure_args=
 modifyMakefiles=true
 [po/de.po]
 install_location=

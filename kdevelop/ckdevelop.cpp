@@ -896,9 +896,15 @@ void CKDevelop::slotToolsTool(int tool){
 	switchToKDevelop();
     
     showOutputView(false);
-    
+
     QString argument=tools_argument.at(tool);
-    s_tab_view->setCurrentTab(TOOLS);
+ 		
+		// This allows us to replace the macro %H with the header file name, %S with the source file name
+		// and %D with the project directory name.  Any others we should have?
+    argument.replace( QRegExp("%H"), header_widget->getName() );
+		argument.replace( QRegExp("%S"), cpp_widget->getName() );
+    argument.replace( QRegExp("%D"), prj->getProjectDir() );
+		s_tab_view->setCurrentTab(TOOLS);
     swallow_widget->sWClose(false);
     if(argument.isEmpty()){
   	swallow_widget->setExeString(tools_exe.at(tool));

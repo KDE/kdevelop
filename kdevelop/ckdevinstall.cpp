@@ -409,6 +409,24 @@ void CKDevInstall::slotAuto() // proceed >>
     config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
     config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
     config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+	
+		config->setGroup("IDL Highlight");
+    config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Mimetypes","text/x-idl-src");
+    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Wildcards","*.idl");
+    config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
+    config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+    config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
+    config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
+
 
     config->setGroup("Java Highlight");
     config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,èñf@");
