@@ -2329,7 +2329,7 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
     CToolsConfigDlg configdlg(this,"configdlg");
     configdlg.show();
 
-    tools_menu->clear();
+//    tools_menu->clear();
     setToolmenuEntries();
     slotStatusMsg(i18n("Ready."));
 }
@@ -3816,9 +3816,11 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
       else
         makeWidgetDockVisible(log_file_tree->parentWidget());
     }
-    if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
-      enableCommand(ID_BUILD_COMPILE_FILE);
-    }
+// needs to be fixed (rokrau 02/17/02)
+//    if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
+//      enableCommand(ID_BUILD_COMPILE_FILE);
+//    }
+//
     m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
@@ -4168,9 +4170,10 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
    || !isToolViewVisible(doc_tree)
    || ((dbgController != 0L) && !isToolViewVisible(var_viewer))
      ) {
-    if (view_menu)
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW, false);
-    toolBar()->setButton(ID_VIEW_TREEVIEW, false);
+// FIXME (rokrau 02/17/02)
+//    if (view_menu)
+//        view_menu->setItemChecked(ID_VIEW_TREEVIEW, false);
+//    toolBar()->setButton(ID_VIEW_TREEVIEW, false);
   }
 
   // check if any output view widget is invisible now, if yes -> set output toolbar-button off
@@ -4185,9 +4188,10 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
    || ((dbgController != 0L) && !isToolViewVisible(dbg_widget))
 #endif
      ) {
-    if (view_menu)
-      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, false);
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, false);
+// FIXME (rokrau 02/17/02)
+//    if (view_menu)
+//      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, false);
+//    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, false);
   }
 }
 

@@ -36,6 +36,7 @@ class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
 class CKDevAccel;
+class KPopupMenu;
 
 //=============================================================================
 // class DocViewMan
@@ -119,8 +120,8 @@ public:
   /** */
   void doClearBookmarks();
 
-  /** Install the new bookmark popup */
-  void installBMPopup(QPopupMenu *p);
+  /** set the KPopupMenu pointer for the doc bookmark popup */
+  void setDocBMPopup(KPopupMenu *p);
 
   /** */
   void connectBMPopup();
@@ -335,7 +336,7 @@ private:
 
   QStrList                  m_docBookmarksList;
   QStrList                  m_docBookmarksTitleList;
-  QPopupMenu*               m_pDocBookmarksMenu;
+  KPopupMenu*               m_pDocBookmarksMenu;
 
   Kate::Document*           m_pCurEditDoc;
   Kate::View*               m_pCurEditView;

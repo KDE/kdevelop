@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstddirs.h>
+#include <kpopupmenu.h>
 
 #include <kate/document.h>
 #include <kate/view.h>
@@ -1509,31 +1510,32 @@ QString DocViewMan::docName(QObject* pDoc) const
 //-----------------------------------------------------------------------------
 // Connect to the signals of the bookmark popup menus
 //-----------------------------------------------------------------------------
-void DocViewMan::installBMPopup(QPopupMenu * bm_menu)
+void DocViewMan::setDocBMPopup(KPopupMenu* pDocBookmarksMenu)
 {
-  debug("DocViewMan::installBMPopup");
-
-    // Install editor bookmark popup menu
-  QPopupMenu* code_bookmarks = new QPopupMenu();
-
-  connect(code_bookmarks,SIGNAL(aboutToShow()),
-          this,SLOT(updateCodeBMPopup()));
-  connect(code_bookmarks,SIGNAL(activated(int)),
-          this,SLOT(gotoCodeBookmark(int)));
-
-
-  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-                      i18n("Code &Window"),code_bookmarks,31000);
-
-    // Install browser bookmark popup menu
-  m_pDocBookmarksMenu = new QPopupMenu();
-
+	m_pDocBookmarksMenu = pDocBookmarksMenu;
+//  debug("DocViewMan::installBMPopup");
+//
+//    // Install editor bookmark popup menu
+//  QPopupMenu* code_bookmarks = new QPopupMenu();
+//
+//  connect(code_bookmarks,SIGNAL(aboutToShow()),
+//          this,SLOT(updateCodeBMPopup()));
+//  connect(code_bookmarks,SIGNAL(activated(int)),
+//          this,SLOT(gotoCodeBookmark(int)));
+//
+//
+//  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+//                      i18n("Code &Window"),code_bookmarks,31000);
+//
+//    // Install browser bookmark popup menu
+//  m_pDocBookmarksMenu = new QPopupMenu();
+//
   connect(m_pDocBookmarksMenu,SIGNAL(activated(int)),
           this,SLOT(gotoDocBookmark(int)));
-
-  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
-                      i18n("&Browser Window"), m_pDocBookmarksMenu,31010);
-
+//
+//  bm_menu->insertItem(SmallIconSet("bookmark_folder"),
+//                      i18n("&Browser Window"), m_pDocBookmarksMenu,31010);
+//
 }
 
 //-----------------------------------------------------------------------------

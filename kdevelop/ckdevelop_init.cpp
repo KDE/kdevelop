@@ -81,7 +81,7 @@
 
 CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,bStartupIsPending(true)
-  ,view_menu(0L)
+//  ,view_menu(0L)
   ,process("/bin/sh")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
@@ -168,6 +168,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   }
 
 	createGUI(0L);
+	stateChanged("no_file");
 	stateChanged("no_project");
 	show();
 
@@ -296,9 +297,8 @@ void CKDevelop::initView()
  *-----------------------------------------------------------------*/
 void CKDevelop::initMenuBar(){
 
-
-///////////////////////////////////////////////////////////////////
-// File
+	///////////////////////////////////////////////////////////////////
+	// File
 	KAction*
 	pAction = KStdAction::openNew(this,
 	          SLOT(slotFileNew()),actionCollection(),"file_new");
@@ -328,8 +328,8 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotFileQuit()),actionCollection(),"file_quit");
 	pAction->setStatusText(i18n("Exits the program"));
 
-///////////////////////////////////////////////////////////////////
-// Edit-menu entries
+	///////////////////////////////////////////////////////////////////
+	// Edit-menu entries
 	pAction = KStdAction::undo(m_docViewManager,
 	          SLOT(slotEditUndo()),actionCollection(),"edit_undo");
 	pAction = KStdAction::redo(m_docViewManager,
@@ -369,8 +369,8 @@ void CKDevelop::initMenuBar(){
 	pAction = new KAction(i18n("Invert Selection"),0,m_docViewManager,
 	          SLOT(slotEditInvertSelection()),actionCollection(),"edit_invert_selection");
 
-  ///////////////////////////////////////////////////////////////////
-  // View-menu entries
+	///////////////////////////////////////////////////////////////////
+	// View-menu entries
 	pAction = KStdAction::gotoLine(this,
 	          SLOT(slotViewGotoLine()),actionCollection(),"view_goto");
 	pAction = new KAction(i18n("&Next Error"),0,this,
@@ -379,7 +379,8 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotViewPreviousError()),actionCollection(),"view_prev_error");
 	pAction = new KAction(i18n("&Dialog Editor"),SmallIconSet("newwidget"),0,this,
 	          SLOT(startDesigner()),actionCollection(),"view_designer");
-
+// the state of these Actions is not yet being saved in the config file,
+// therefore we set the checked state true (rokrau 02/17/02)
 	KToggleAction*
 	pToggleAction = new KToggleAction(i18n("All &Tree Tool-Views"),0,this,
 	                SLOT(slotViewTTreeView()),actionCollection(),"view_tree_all");
@@ -447,21 +448,18 @@ void CKDevelop::initMenuBar(){
 	pAction = new KAction(i18n("&Refresh"),SmallIconSet("reload"),0,this,
 	          SLOT(slotViewRefresh()),actionCollection(),"view_refresh");
 
-  ///////////////////////////////////////////////////////////////////
-  // Project-menu entries
+	///////////////////////////////////////////////////////////////////
+	// Project-menu entries
 	pAction = new KAction(i18n("New..."),SmallIconSet("window_new"),0,this,
 	          SLOT(slotProjectNewAppl()),actionCollection(),"project_new");
-
 	pAction = new KAction(i18n("Generate Project File..."),SmallIconSet("wizard"),0,this,
 	          SLOT(slotProjectGenerate()),actionCollection(),"project_generate");
 	pAction = new KAction(i18n("&Open..."),SmallIconSet("project_open"),0,this,
 	          SLOT(slotProjectOpen()),actionCollection(),"project_open");
-//
-//  recent_projects_menu = new QPopupMenu();
-//  connect( recent_projects_menu, SIGNAL(activated(int)), ) );
-//  pAction = new KAction(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
-//
-	KStdAction::openRecent(this,SLOT(slotProjectOpenRecent(int)),actionCollection(),"project_open_recent");
+	// we store a pointer to the recent projects action
+	pRecentProjects =
+	KStdAction::openRecent(this,SLOT(slotProjectOpenRecent(const KURL&)),
+	                       actionCollection(),"project_open_recent");
 	pAction = new KAction(i18n("C&lose"),SmallIconSet("fileclose"),0,this,SLOT(slotProjectClose()),actionCollection(),"project_close");
 	pAction = new KAction(i18n("&New Class..."),SmallIconSet("classnew"),0,this,
 	          SLOT(slotProjectNewClass()),actionCollection(),"project_new_class");
@@ -469,6 +467,7 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotProjectAddExistingFiles()),actionCollection(),"project_add_file");
 	pAction = new KAction(i18n("Add new &Translation File..."),SmallIconSet("locale"),0,this,
 	          SLOT(slotProjectAddNewTranslationFile()),actionCollection(),"project_nwe_trans");
+// we really should reimplement this
 //  pAction = new KAction(i18n("&Remove File from Project"),0,this,
 //  //			   SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
 	pAction = new KAction(i18n("&File Properties..."),SmallIconSet("file_properties"),0,this,
@@ -498,10 +497,9 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotProjectLoadTags()),actionCollection(),"project_load_tags");
 	pAction = new KAction(i18n("O&ptions..."),SmallIconSet("configure"),0,this,
 	          SLOT(slotProjectOptions()),actionCollection(),"project_options");
-	pAction->setEnabled(false);
 
-  ///////////////////////////////////////////////////////////////////
-  // Build-menu entries
+	///////////////////////////////////////////////////////////////////
+	// Build-menu entries
 	pAction = new KAction(i18n("Compile &File"),SmallIconSet("compfile"),0,this,
 	          SLOT(slotBuildCompileFile()),actionCollection(),"build_compile");
 	pAction = new KAction(i18n("&Make"),SmallIconSet("make_kdevelop"),0,this,
@@ -557,20 +555,17 @@ void CKDevelop::initMenuBar(){
 	          SLOT(slotDebugInterrupt()),actionCollection(),"debug_interrupts");
 	pAction = new KAction(i18n("Stop"),SmallIconSet("stop"),0,this,
 	          SLOT(slotDebugStop()),actionCollection(),"debug_stop");
+	///////////////////////////////////////////////////////////////////
+	// Tools-menu entries
+	// these are now generated on the fly in setToolmenuEntries() (rokrau 02/18/02)
 
-  ///////////////////////////////////////////////////////////////////
-//  // Tools-menu entries
-//for now I am going to leave this menu as it is (rokrau 02/10/02)
-//	tools_menu = new QPopupMenu;
-//	menuBar()->insertItem(i18n("&Tools"), tools_menu);
-//	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
-
-  ///////////////////////////////////////////////////////////////////
-  // Options-menu entries
+	///////////////////////////////////////////////////////////////////
+	// Options-menu entries
 //	pAction = new KAction(i18n("&Enscript..."),0,this,
 //	          SLOT(slotOptionsConfigureEnscript()),actionCollection(),"options_enscript");
 	pAction = new KAction(i18n("&Editor..."),SmallIconSet("edit"),0,this,
 	          SLOT(slotOptionsEditor()),actionCollection(),"options_editor");
+// these are no longer needed since we just call the kate part
 //	pAction = new KAction(i18n("Editor &Colors..."),0,this,
 //	          SLOT(slotOptionsEditorColors()),actionCollection(),"options_editor_colors");
 //	pAction = new KAction(i18n("Editor &Defaults..."),0,this,
@@ -584,36 +579,39 @@ void CKDevelop::initMenuBar(){
 	pAction = new KAction(i18n("&KDevelop Setup..."),SmallIconSet("configure"),0,this,
 	          SLOT(slotOptionsKDevelop()),actionCollection(),"options_setup");
 
-  ///////////////////////////////////////////////////////////////////
-  // Window-menu entries
-  //   menu_buffers = new QPopupMenu;
+	///////////////////////////////////////////////////////////////////
+	// Window-menu entries
+	//   menu_buffers = new QPopupMenu;
 //for now I am going to leave this menu as it is (rokrau 02/10/02)
 	menuBar()->insertItem(i18n("&Window"), windowMenu());
 	menuBar()->insertSeparator();
 
-  ///////////////////////////////////////////////////////////////////
-  // Bookmarks-menu entries
-//for now I am going to leave this menu as it is (rokrau 02/10/02)
-	bookmarks_menu=new QPopupMenu;
-	bookmarks_menu->insertItem(SmallIconSet("bookmark_add"),i18n("&Toggle Bookmark"),this,SLOT(slotBookmarksToggle()),0,ID_BOOKMARKS_TOGGLE);
-	bookmarks_menu->insertItem(i18n("&Next Bookmark"),this,SLOT(slotBookmarksNext()),0,ID_BOOKMARKS_NEXT);
-	bookmarks_menu->insertItem(i18n("&Previous Bookmark"),this,SLOT(slotBookmarksPrevious()),0,ID_BOOKMARKS_PREVIOUS);
-	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
-	bookmarks_menu->insertSeparator();
-	m_docViewManager->installBMPopup(bookmarks_menu);
-	menuBar()->insertItem(i18n("Book&marks"),bookmarks_menu);
+	///////////////////////////////////////////////////////////////////
+	// Bookmarks-menu entries
+	pAction = new KAction(i18n("&Toggle Bookmark"),SmallIconSet("bookmark_add"),0,this,
+	          SLOT(slotBookmarksToggle()),actionCollection(),"bookmarks_toggle");
+	pAction = new KAction(i18n("&Next Bookmark"),0,this,
+	          SLOT(slotBookmarksNext()),actionCollection(),"bookmarks_next");
+	pAction = new KAction(i18n("&Previous Bookmark"),0,this,
+	          SLOT(slotBookmarksPrevious()),actionCollection(),"bookmarks_prev");
+	pAction = new KAction(i18n("&Clear Bookmarks"),0,this,
+	          SLOT(slotBookmarksClear()),actionCollection(),"bookmarks_clear");
+	KActionMenu*
+	pActionMenu = new KActionMenu(i18n("Code &Window"),SmallIconSet("bookmark_folder"),
+	              actionCollection(),"bookmarks_code");
+	KPopupMenu* pCodeBookmarksPopup = pActionMenu->popupMenu();
+	pActionMenu = new KActionMenu(i18n("&Browser Window"),SmallIconSet("bookmark_folder"),
+	              actionCollection(),"bookmarks_browser");
+	KPopupMenu* pDocBookmarksPopup = pActionMenu->popupMenu();
+	// set the KPopupMenu for the document view manager
+	m_docViewManager->setDocBMPopup(pDocBookmarksPopup);
 
-  ///////////////////////////////////////////////////////////////////
-  // Help-menu entries
-  QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));
-  QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
-  QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
-  QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
-
-  //const KAboutData *aboutData = KGlobal::instance()->aboutData();
-  //help_menu = new KHelpMenu( this, aboutData);
-  //KPopupMenu *help = help_menu->menu();
-  //help->clear(); //clear that damn stuff in there
+	///////////////////////////////////////////////////////////////////
+	// Help-menu entries
+	QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));
+	QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
+	QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
+	QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
 	pAction = new KAction(i18n("&Back"),SmallIconSet("back"),0,this,
 	          SLOT(slotHelpBack()),actionCollection(),"help_back");
 	pAction = new KAction(i18n("&Forward"),SmallIconSet("forward"),0,this,
@@ -679,7 +677,7 @@ void CKDevelop::initMenuBar(){
 
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
-  																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
+                                  SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
 
 
 ///////////////////////////////////////////////////////////////////
@@ -695,13 +693,11 @@ void CKDevelop::initMenuBar(){
 //  connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 //  connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 //  connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  //connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(classbrowser_popup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
   // QextMDI wants to know which one the menubar is, needs it for maximized mode
   setMenuForSDIModeSysButtons( menuBar());
-
-	stateChanged("no_project");
 }
 
 /*------------------------------------------ CKDevelop::initToolBar()

@@ -68,59 +68,6 @@
 #include <config.h>
 #endif
 
-void CKDevelop::setupRecentProjectMenu()
-{
-//    QStringList list=config->readListEntry("Recent Projects");
-//  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-//    addRecentProject((*it));
-}
-
-void CKDevelop::saveRecentProjectMenu()
-{
-//    QStringList list;
-//  for (uint index=0; index < recent_projects_menu->count(); index++)
-//  {
-//    int id = recent_projects_menu->idAt(index);
-//    QString menuFile = recent_projects_menu->text(id);
-//    list.append(menuFile);
-//  }
-//    config->writeEntry("Recent Projects", list);
-}
-
-void CKDevelop::shuffleProjectToTop(int id)
-{
-//  QString file = recent_projects_menu->text(id);
-//  if (!file.isEmpty())
-//  {
-//    recent_projects_menu->removeItem(id);
-//    recent_projects_menu->insertItem(file, (int) -1, (int)0);
-//  }
-}
-
-QString CKDevelop::getProjectAsString(int id)
-{
-//  return recent_projects_menu->text(id);
-}
-
-void CKDevelop::addRecentProject(const QString& file)
-{
-//  for (uint index=0; index < recent_projects_menu->count(); index++)
-//  {
-//    int id = recent_projects_menu->idAt(index);
-//    QString menuFile = recent_projects_menu->text(id);
-//    if (menuFile == file)
-//    {
-////      shuffleProjectToTop(id);
-//      return;
-//    }
-//  }
-//
-//  if (recent_projects_menu->count() > 7)
-//    recent_projects_menu->removeItemAt(7);
-//
-//  // Add it at the top of the menu
-//  recent_projects_menu->insertItem(file, (int)-1, (int)0);
-}
 
 SaveAllDialog::SaveAllResult 
 CKDevelop::doProjectSaveAllDialog(const QString &filename)
@@ -761,8 +708,9 @@ void CKDevelop::setToolMenuProcess(bool enable){
   }
 }
 
-void CKDevelop::switchToWorkspace(int id){
-  workspace = id;
+
+//void CKDevelop::switchToWorkspace(int id){
+//  workspace = id;
 //  if(id == 1){
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_1,true);
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
@@ -778,8 +726,8 @@ void CKDevelop::switchToWorkspace(int id){
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_2,false);
 //    project_menu->setItemChecked(ID_PROJECT_WORKSPACES_3,true);
 //  }
-  prj->getWorkspace(id);
-}
+//  prj->getWorkspace(id);
+//}
 
 void CKDevelop::showOutputView(bool show)
 {
@@ -934,7 +882,8 @@ void CKDevelop::readOptions()
 //  make_with_cmd=config->readEntry("MakeWith","");
 
 	config->setGroup("Files");
-	setupRecentProjectMenu();
+	pRecentProjects->loadEntries(config,"Recent Projects");
+
 
 	doctool = config->readNumEntry("doc_tool_type");
 	KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
@@ -1064,7 +1013,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
 */
 
-  saveRecentProjectMenu();
+  pRecentProjects->saveEntries(config,"Recent Projects");
 
   //MB serializes menuoptions
   config->writeEntry("doc_tool_type",doctool);

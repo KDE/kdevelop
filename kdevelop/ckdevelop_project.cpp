@@ -110,9 +110,9 @@ bool CKDevelop::slotProjectClose()
       //clear all edit_infos before starting a new project
       // edit_infos.clear(); now in doProjectClose (Christian)
       
-      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
-      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+//      toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
       // close all documents
      	 m_docViewManager->doCloseAllDocs();
@@ -124,32 +124,34 @@ bool CKDevelop::slotProjectClose()
       delete prj;
       prj = 0;
 
-      KAction* pFileNewAction = actionCollection()->action("file_new");
-      pFileNewAction->setEnabled(false);
+      stateChanged("no_file");
+      stateChanged("no_project");
+//      KAction* pFileNewAction = actionCollection()->action("file_new");
+//      pFileNewAction->setEnabled(false);
       //disableCommand(ID_FILE_NEW);
       // doc menu
-      disableCommand(ID_HELP_PROJECT_API);
-      disableCommand(ID_HELP_USER_MANUAL);
+//      disableCommand(ID_HELP_PROJECT_API);
+//      disableCommand(ID_HELP_USER_MANUAL);
       // build menu
-      setToolMenuProcess(false);  
-      disableCommand(ID_BUILD_STOP);
-      disableCommand(ID_BUILD_AUTOCONF);
+//      setToolMenuProcess(false);
+//      disableCommand(ID_BUILD_STOP);
+//      disableCommand(ID_BUILD_AUTOCONF);
       
       // prj menu
-      disableCommand(ID_PROJECT_CLOSE);
-      disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-      disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-      disableCommand(ID_PROJECT_REMOVE_FILE);
-      disableCommand(ID_PROJECT_NEW_CLASS);
-      disableCommand(ID_PROJECT_FILE_PROPERTIES);
-      disableCommand(ID_PROJECT_OPTIONS);
-      disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-      
-      disableCommand(ID_CV_WIZARD);
-      disableCommand(ID_CV_GRAPHICAL_VIEW);
-      disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-      disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-      disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
+//      disableCommand(ID_PROJECT_CLOSE);
+//      disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+//      disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+//      disableCommand(ID_PROJECT_REMOVE_FILE);
+//      disableCommand(ID_PROJECT_NEW_CLASS);
+//      disableCommand(ID_PROJECT_FILE_PROPERTIES);
+//      disableCommand(ID_PROJECT_OPTIONS);
+//      disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+//
+//      disableCommand(ID_CV_WIZARD);
+//      disableCommand(ID_CV_GRAPHICAL_VIEW);
+//      disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+//      disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+//      disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
       file_open_popup->clear();
       file_open_list.clear();
@@ -554,28 +556,42 @@ void CKDevelop::slotProjectOpen()
   CProject* pProj = projectOpenCmdl_Part1(str);
   if (pProj != 0L) {
     projectOpenCmdl_Part2(pProj);
+    // later we will change the whole project business to work on KURLs instead
+    // then this can be removed (rokrau 02/17/02)
+    KURL url;
+    url.setPath(str);
+    pRecentProjects->addURL(url);
   }
 }
 
-void CKDevelop::slotProjectOpenRecent(int id)
+void CKDevelop::slotProjectOpenRecent(const KURL& url)
 {
-  QString proj = getProjectAsString(id);
+	kdDebug() << "in CKDevelop::slotProjectOpenRecent(), selected :"
+	          << url.filename() << "\n";
+
+//  QString proj = getProjectAsString(id);
+// FIXME until we use KURLs to open projects we need to stick with this
+// quirky code... (rokrau 02/17/02)
+  QString proj = url.filename();
 
   if (QFile::exists(proj)) {
     CProject* pProj = projectOpenCmdl_Part1(proj);
     if (pProj != 0L) {
       projectOpenCmdl_Part2(pProj);
+      pRecentProjects->addURL(url);
     }
-    shuffleProjectToTop(id);
+//    shuffleProjectToTop(id);
   } else {
     int answer=KMessageBox::questionYesNo(this,i18n("This project does no longer exist. Do you want to remove it from the list?"),
                                             i18n("File not Found: ") + proj);
     if (answer==KMessageBox::Yes) {
-      recent_projects_menu->removeItem(id);
+      pRecentProjects->removeURL(url);
+//      recent_projects_menu->removeItem(id);
+
     }
   }
 }
-
+// however split this method should be kicked in the arse
 CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
 {
   prjname.replace(QRegExp("file:"),"");
@@ -617,18 +633,18 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
     if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
       debug("error during restoring of the KDevelop session !\n");
     }
-                else{ //fill in the configs into the toolbar
-                  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-                        compile_combo->clear();
-                        QStringList configs=m_pKDevSession->getCompileConfigs();
-                        configs.prepend(i18n("(Default)"));
-                        compile_combo->insertStringList(configs);
-                        compile_combo->setEnabled(true);
-                        int idx = configs.findIndex(m_pKDevSession->getLastCompile());
-                        if(idx==-1)
-                                idx=configs.findIndex(i18n("(Default)"));
-                        compile_combo->setCurrentItem(idx);
-                }
+    else{ //fill in the configs into the toolbar
+      KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+      compile_combo->clear();
+      QStringList configs=m_pKDevSession->getCompileConfigs();
+      configs.prepend(i18n("(Default)"));
+      compile_combo->insertStringList(configs);
+      compile_combo->setEnabled(true);
+      int idx = configs.findIndex(m_pKDevSession->getLastCompile());
+      if(idx==-1)
+        idx=configs.findIndex(i18n("(Default)"));
+      compile_combo->setCurrentItem(idx);
+    }
     return pProj; // but it's unfinished here, we will call projectOpenCmdl_Part2 later
   }
   else {
@@ -638,9 +654,11 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
       prjname);
 
     // enable the GUI again
-    project_menu->setEnabled(true);
-    enableCommand(ID_PROJECT_OPEN);
-    accel->setEnabled(true);
+		stateChanged("no_file");
+		stateChanged("no_project");
+//    project_menu->setEnabled(true);
+//    enableCommand(ID_PROJECT_OPEN);
+//    accel->setEnabled(true);
     slotStatusMsg(i18n("Ready."));
   }
   return 0L;
@@ -659,9 +677,11 @@ void CKDevelop::projectOpenCmdl_Part2(CProject* pProj)
   }
 
   // enable the GUI again
-  project_menu->setEnabled(true);
-  enableCommand(ID_PROJECT_OPEN);
-  accel->setEnabled(true);
+	stateChanged("no_file");
+	stateChanged("no_project");
+//  project_menu->setEnabled(true);
+//  enableCommand(ID_PROJECT_OPEN);
+//  accel->setEnabled(true);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -917,112 +937,115 @@ void CKDevelop::slotProjectMessages(){
 }
 
 void CKDevelop::slotProjectAPI(){
-  //MB
-  if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
-  {
-      QString dir = prj->getProjectDir() + "/";
-      QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
-         if(!QFileInfo(doxconf).exists())
-       {
-             KMessageBox::error(0,
-                                     i18n("Doxygen configuration file not found\n"
-                             "Generate a valid one:\n"        
-                             "Project->API Doc Tool->Configure doxygen"),
-                             i18n("Error"));
-            return;
-       }
-    slotDebugStop();
-    showOutputView(true);
-    setToolMenuProcess(false);
-//    error_parser->toogleOff();
-    slotFileSaveAll();
-    slotStatusMsg(i18n("Creating project API-Documentation..."));
-    messages_widget->start();
-    shell_process.clearArguments();
-    shell_process << QString("cd '")+ dir + "' && ";
-    shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
-    next_job="fv_refresh";
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-      beep=true;
-       return;
-  }
-  else{  // Use KDOC 2.x
-    //MB end
-    if(!CToolClass::searchProgram("kdoc")){
-      return;
-    }
-    slotDebugStop();
-    showOutputView(true);
 
-    setToolMenuProcess(false);
-//    error_parser->toogleOff();
-    slotFileSaveAll();
-    slotStatusMsg(i18n("Creating project API-Documentation..."));
-    messages_widget->start();
+// FIXME (rokrau 02/17/02)
 
-    config->setGroup("Doc_Location");
-    QString idx_path, link;
-    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-            + "/kdoc-reference";
-    if (!idx_path.isEmpty())
-    {
-      QDir d;
-      d.setPath(idx_path);
-      if(!d.exists())
-        return;
-      QString libname;
-      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
-      QFileInfoListIterator it( *fileList ); // iterator
-      QFileInfo *fi; // the current file info
-      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
-        libname=fi->fileName();  // get the filename
-        if(fi->isFile())
-        {
-          libname=fi->baseName();  // get only the base of the filename as library name
-          if (libname != QString("libkmid")) { // workaround for a strange behaviour of kdoc: don't try libkmid
-            link+=" -l"+libname;
-          }
-        }
-        ++it; // increase the iterator
-      }
-    }
-
-    QDir d(prj->getProjectDir());
-    int dirlength = d.absPath().length()+1;
-
-    QString sources;
-    QStrList headerlist(prj->getHeaders());
-    QStrListIterator it(headerlist);
-    for (; it.current(); ++it)
-    {
-      QString file = it.current();
-      file.remove(0, dirlength);
-      sources += file;
-      sources += " ";
-    }
-    QDir::setCurrent(prj->getProjectDir());
-    shell_process.clearArguments();
-    shell_process << "kdoc";
-    shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
-    if (!link.isEmpty())
-    {
-      shell_process << ("-L" + idx_path);
-      shell_process << link;
-    }
-
-    bool bCreateKDoc;
-    config->setGroup("General Options");
-    bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
-    if (bCreateKDoc)
-     shell_process << QString("-n ")+prj->getProjectName();
-
-    if (!sources.isEmpty())
-        shell_process << sources;
-
-    next_job="fv_refresh";
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-    beep=true;
-  }
+//  //MB
+//  if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
+//  {
+//      QString dir = prj->getProjectDir() + "/";
+//      QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
+//         if(!QFileInfo(doxconf).exists())
+//       {
+//             KMessageBox::error(0,
+//                                     i18n("Doxygen configuration file not found\n"
+//                             "Generate a valid one:\n"
+//                             "Project->API Doc Tool->Configure doxygen"),
+//                             i18n("Error"));
+//            return;
+//       }
+//    slotDebugStop();
+//    showOutputView(true);
+//    setToolMenuProcess(false);
+////    error_parser->toogleOff();
+//    slotFileSaveAll();
+//    slotStatusMsg(i18n("Creating project API-Documentation..."));
+//    messages_widget->start();
+//    shell_process.clearArguments();
+//    shell_process << QString("cd '")+ dir + "' && ";
+//    shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
+//    next_job="fv_refresh";
+//    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+//      beep=true;
+//       return;
+//  }
+//  else{  // Use KDOC 2.x
+//    //MB end
+//    if(!CToolClass::searchProgram("kdoc")){
+//      return;
+//    }
+//    slotDebugStop();
+//    showOutputView(true);
+//
+//    setToolMenuProcess(false);
+////    error_parser->toogleOff();
+//    slotFileSaveAll();
+//    slotStatusMsg(i18n("Creating project API-Documentation..."));
+//    messages_widget->start();
+//
+//    config->setGroup("Doc_Location");
+//    QString idx_path, link;
+//    idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+//            + "/kdoc-reference";
+//    if (!idx_path.isEmpty())
+//    {
+//      QDir d;
+//      d.setPath(idx_path);
+//      if(!d.exists())
+//        return;
+//      QString libname;
+//      const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+//      QFileInfoListIterator it( *fileList ); // iterator
+//      QFileInfo *fi; // the current file info
+//      while ( (fi=it.current()) ) {  // traverse all kdoc reference files
+//        libname=fi->fileName();  // get the filename
+//        if(fi->isFile())
+//        {
+//          libname=fi->baseName();  // get only the base of the filename as library name
+//          if (libname != QString("libkmid")) { // workaround for a strange behaviour of kdoc: don't try libkmid
+//            link+=" -l"+libname;
+//          }
+//        }
+//        ++it; // increase the iterator
+//      }
+//    }
+//
+//    QDir d(prj->getProjectDir());
+//    int dirlength = d.absPath().length()+1;
+//
+//    QString sources;
+//    QStrList headerlist(prj->getHeaders());
+//    QStrListIterator it(headerlist);
+//    for (; it.current(); ++it)
+//    {
+//      QString file = it.current();
+//      file.remove(0, dirlength);
+//      sources += file;
+//      sources += " ";
+//    }
+//    QDir::setCurrent(prj->getProjectDir());
+//    shell_process.clearArguments();
+//    shell_process << "kdoc";
+//    shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
+//    if (!link.isEmpty())
+//    {
+//      shell_process << ("-L" + idx_path);
+//      shell_process << link;
+//    }
+//
+//    bool bCreateKDoc;
+//    config->setGroup("General Options");
+//    bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+//    if (bCreateKDoc)
+//     shell_process << QString("-n ")+prj->getProjectName();
+//
+//    if (!sources.isEmpty())
+//        shell_process << sources;
+//
+//    next_job="fv_refresh";
+//    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+//    beep=true;
+//  }
 }
 
 //MB
@@ -1491,8 +1514,9 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
   lNewProject->setCvsMakefile();
 
 // TODO: Add function to read last opened files from project to restore project workspace
-
-  switchToWorkspace(prj->getCurrentWorkspaceNumber());
+  // the whole Workspace concept was never really implemented I suppose
+  // so let's mark it for removal
+  //switchToWorkspace(prj->getCurrentWorkspaceNumber());
   // set the menus enable
   // file menu
   
@@ -1539,7 +1563,7 @@ void CKDevelop::readProjectFile(QString file, CProject* lNewProject)
     enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
     enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
   }
-  addRecentProject(file);
+  //addRecentProject(file);
 }
 
 
