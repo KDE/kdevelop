@@ -1,3 +1,6 @@
+2001-07-23  Harald Fernengel  <harry@bnro.de>
+    * fix: Wheelmouse works now fine after reaching top or bottom of document
+
 2001-07-23  rokrau@yahoo.com
     * fix: one NULL pointer crash in docviewman
     * several enhancements to the ctags browse implementation
