@@ -29,6 +29,7 @@
 #include <klineedit.h>
 #include <kio/job.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 
 using namespace KIO;
 
