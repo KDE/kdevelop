@@ -94,7 +94,7 @@ public: // Public methods to set attribute values
 public: // Public attributes
 
   /** Return the object as a string(for tooltips etc) */
-  const char *asString( QString &str );
+  QString asString( QString &str );
 
   /** Output this object to stdout */
   void out();
@@ -112,7 +112,7 @@ public: // Public queries
   void asCppCode( QString &buf );
 
   /** Return a string made for persistant storage. */
-  virtual const char *asPersistantString( QString &dataStr );
+  virtual QString asPersistantString( QString &dataStr );
 
   /** Is the supplied method equal to this one
     * (regarding type, name and signature)? */

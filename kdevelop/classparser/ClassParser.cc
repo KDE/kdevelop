@@ -63,6 +63,7 @@ enum
 CClassParser::CClassParser()
 {
   reset();
+  lexemStack.setAutoDelete(true);
 }
 
 /*------------------------------------- CClassParser::~CClassParser()
@@ -95,8 +96,9 @@ CClassParser::~CClassParser()
  *-----------------------------------------------------------------*/
 void CClassParser::emptyStack()
 {
-  while( !lexemStack.isEmpty() )
-    delete lexemStack.pop();
+  lexemStack.clear();
+//  while( !lexemStack.isEmpty() )
+//    delete lexemStack.pop();
 }
 
 /*------------------------------------ CClassParser::commentInRange()

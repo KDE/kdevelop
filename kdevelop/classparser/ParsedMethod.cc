@@ -102,7 +102,7 @@ void CParsedMethod::addArgument( CParsedArgument *anArg )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-const char *CParsedMethod::asString( QString &str )
+QString CParsedMethod::asString( QString &str )
 {
   CParsedArgument *arg;
   QString argString;
@@ -139,7 +139,6 @@ const char *CParsedMethod::asString( QString &str )
 void CParsedMethod::out()
 {
   CParsedArgument *arg;
-//  char buf[10];
 
   if( !comment.isEmpty() )
     kdDebug() << "    " << comment << "\n";
@@ -184,14 +183,10 @@ void CParsedMethod::out()
   }
 
   kdDebug() << ( isConst ? " ) const\n" : " )\n" );
-//  sprintf( buf, "%d", declaredOnLine );
   kdDebug() << "      declared @ line " << declaredOnLine << " - ";
-//  sprintf( buf, "%d", declarationEndsOnLine );
   kdDebug() << declarationEndsOnLine << "\n";
   kdDebug() << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
-//  sprintf( buf, "%d", definedOnLine );
   kdDebug() << "@ line " << definedOnLine << " - ";
-//  sprintf( buf, "%d", definitionEndsOnLine );
   kdDebug() << definitionEndsOnLine << "\n";
 }
 
@@ -309,7 +304,7 @@ void CParsedMethod::asCppCode( QString &str )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-const char *CParsedMethod::asPersistantString( QString &dataStr )
+QString CParsedMethod::asPersistantString( QString &dataStr )
 {
   QString str;
   QString intStr;

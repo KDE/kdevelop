@@ -70,10 +70,10 @@ CParsedArgument::~CParsedArgument()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedArgument::setName( const char *aName )
+void CParsedArgument::setName( const QString& aName )
 {
-  REQUIRE( "Valid name", aName != NULL );
-  REQUIRE( "Valid name length", strlen( aName ) > 0 );
+//  REQUIRE( "Valid name", aName != NULL );
+  REQUIRE( "Valid name length", !aName.isEmpty() );
 
   name = aName;
   name = name.stripWhiteSpace();
@@ -89,10 +89,10 @@ void CParsedArgument::setName( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedArgument::setType( const char *aType )
+void CParsedArgument::setType( const QString& aType )
 {
-  REQUIRE( "Valid type", aType != NULL );
-  REQUIRE( "Valid type length", strlen( aType ) > 0 );
+//  REQUIRE( "Valid type", aType != NULL );
+  REQUIRE( "Valid type length", !aType.isEmpty() );
   
   type = aType;
   type = type.stripWhiteSpace();

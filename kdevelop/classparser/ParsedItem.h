@@ -131,7 +131,7 @@ public: // Public methods to set attribute values
   /** Set the name. 
    * @param aName The new name.
    */
-  inline void setName( const char *aName )           { name = aName; }
+  inline void setName( const QString& aName )           { name = aName; }
 
   /** Set the export scope. 
    * @param aExport The new export status.
@@ -143,7 +143,7 @@ public: // Public methods to set attribute values
    *
    * @param aScope The scope-
    */
-  inline void setDeclaredInScope( const char *aScope ) { declaredInScope = aScope; }
+  inline void setDeclaredInScope( const QString& aScope ) { declaredInScope = aScope; }
 
   /** Set the line where the item was defined. 
    * @param aLine 0-based line on which the item is defined.
@@ -168,22 +168,22 @@ public: // Public methods to set attribute values
   /** Set the line where the item was defined. 
    * @param aFile Absoulute filename of the file the item is defined in.
    */
-  void setDefinedInFile( const char *aFile )  { definedInFile = aFile; }
+  void setDefinedInFile( const QString& aFile )  { definedInFile = aFile; }
 
   /** Set the file where the item was declared. 
    * @param aFile Absoulute filename of the file the item is defined in.
    */
-  void setDeclaredInFile( const char *aFile ) { declaredInFile = aFile; }
+  void setDeclaredInFile( const QString& aFile ) { declaredInFile = aFile; }
 
   /** Set the comment of this item.
    * @param aComment Comment that belongs to this item.
    */
-  void setComment( const char *aComment )     { comment = aComment; }
+  void setComment( const QString& aComment )     { comment = aComment; }
 
   /** Clear all item declaration fields */
-  void clearDeclaration()     {	declaredInFile = (const char *) NULL;
-  								declaredOnLine = -1;
-  								declarationEndsOnLine = -1; }
+  void clearDeclaration()     { declaredInFile = QString::null;
+                                declaredOnLine = -1;
+                                declarationEndsOnLine = -1; }
 
   /** Clear all item definition fields */
   void clearDefinition ()     { 	definedInFile = declaredInFile;
@@ -204,7 +204,7 @@ public: // Virtual methods to be defined by children.
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asString( QString &str ) { str = name; return str; }
+  virtual QString asString( QString &str ) { str = name; return str; }
 
   /** Output this object to stdout */
   virtual void out() = 0;
@@ -213,7 +213,7 @@ public: // Virtual methods to be defined by children.
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asPersistantString( QString &str ) = 0;
+  virtual QString asPersistantString( QString &str ) = 0;
 
   /** Initialize the object from a persistant string. 
    * @param str String to initialize from.

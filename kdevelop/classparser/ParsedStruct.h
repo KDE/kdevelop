@@ -40,7 +40,7 @@ public: // Implementation of virtual methods
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asPersistantString( QString & ) { return NULL;}
+  virtual QString asPersistantString( QString & ) { return NULL;}
 
   /** Initialize the object from a persistant string. 
    * @param str String to initialize from.

@@ -204,7 +204,7 @@ void CParsedAttribute::asHeaderCode( QString &str )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-const char * CParsedAttribute::asString( QString &str )
+QString CParsedAttribute::asString( QString &str )
 {
   str=type;
 
@@ -299,7 +299,7 @@ bool CParsedAttribute::isEqual( CParsedAttribute &attr )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-const char *CParsedAttribute::asPersistantString( QString &dataStr )
+QString CParsedAttribute::asPersistantString( QString &dataStr )
 {
   QString intStr;
 

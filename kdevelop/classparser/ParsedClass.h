@@ -161,7 +161,7 @@ public: // Implementation of virtual methods
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asPersistantString( QString &dataStr );
+  virtual QString asPersistantString( QString &dataStr );
 
   /** Initialize the object from a persistant string. 
    * @param str String to initialize from.

@@ -76,13 +76,13 @@ public: // Implementation of virtual methods
   virtual void asHeaderCode( QString &str );
 
   /** Return the object as a string(for tooltips etc) */
-  virtual const char *asString( QString &str );
+  virtual QString asString( QString &str );
 
   /** Output this object to stdout */
   virtual void out();
 
   /** Return a string made for persistant storage. */
-  virtual const char *asPersistantString( QString &str );
+  virtual QString asPersistantString( QString &str );
 
   /** Initialize the object from a persistant string. */
   virtual int fromPersistantString( const char *, int) {return 0;}

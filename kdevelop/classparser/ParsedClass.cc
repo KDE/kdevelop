@@ -555,7 +555,7 @@ void CParsedClass::out()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-const char *CParsedClass::asPersistantString( QString &dataStr )
+QString CParsedClass::asPersistantString( QString &dataStr )
 {
   CParsedParent *aParent;
   CParsedMethod *aMethod;
