@@ -129,51 +129,51 @@ void AutoSubprojectView::initActions()
 
 	subProjectOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
 	                                       this, SLOT( slotSubprojectOptions() ), actions, "subproject options" );
-    subProjectOptionsAction->setWhatsThis(i18n("Options<p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
+    subProjectOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Subproject options dialog that provides settings for compiler, include paths, prefixes and build order."));
 	addSubprojectAction = new KAction( i18n( "Add Subproject..." ), "folder_new", 0,
 	                                   this, SLOT( slotAddSubproject() ), actions, "add subproject" );
-    addSubprojectAction->setWhatsThis(i18n("Add subproject<p>New subproject in currently selected subproject."));
+    addSubprojectAction->setWhatsThis(i18n("<b>Add subproject</b><p>New subproject in currently selected subproject."));
 	removeSubprojectAction = new KAction( i18n( "Remove Subproject..." ), "folder_remove", 0,
 	                                   this, SLOT( slotRemoveSubproject() ), actions, "remove subproject" );
-    removeSubprojectAction->setWhatsThis(i18n("Remove subproject<p>Asks if the target should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
+    removeSubprojectAction->setWhatsThis(i18n("<b>Remove subproject</b><p>Asks if the target should be also removed from disk. Only subprojects which do not hold other subprojects can be removed."));
     addExistingSubprojectAction = new KAction( i18n( "Add Existing Subprojects..." ), "fileimport", 0,
 	                                           this, SLOT( slotAddExistingSubproject() ), actions, "add existing subproject" );
-    addExistingSubprojectAction->setWhatsThis(i18n("Add existing subprojects<p>Imports subprojects containing Makefile.am."));
+    addExistingSubprojectAction->setWhatsThis(i18n("<b>Add existing subprojects</b><p>Imports subprojects containing Makefile.am."));
     addTargetAction = new KAction( i18n( "Add Target..." ), "targetnew_kdevelop", 0,
 	                               this, SLOT( slotAddTarget() ), actions, "add target" );
-    addTargetAction->setWhatsThis(i18n("Add target<p>Target can be a binary program, library, script, also a collection of data or header files."));
+    addTargetAction->setWhatsThis(i18n("<b>Add target</b><p>Target can be a binary program, library, script, also a collection of data or header files."));
     addServiceAction = new KAction( i18n( "Add Service..." ), "servicenew_kdevelop", 0,
 	                                this, SLOT( slotAddService() ), actions, "add service" );
-    addServiceAction->setWhatsThis(i18n("Add service<p>Creates a service .desktop file."));
+    addServiceAction->setWhatsThis(i18n("<b>Add service</b><p>Creates a service .desktop file."));
     addApplicationAction = new KAction( i18n( "Add Application..." ), "window_new", 0,
 	                                    this, SLOT( slotAddApplication() ), actions, "add application" );
-    addApplicationAction->setWhatsThis(i18n("Add application<p>Creates an application .desktop file."));
+    addApplicationAction->setWhatsThis(i18n("<b>Add application</b><p>Creates an application .desktop file."));
     buildSubprojectAction = new KAction( i18n( "Build" ), "launch", 0,
 	                                     this, SLOT( slotBuildSubproject() ), actions, "add build subproject" );
-    buildSubprojectAction->setWhatsThis(i18n("Build<p>Runs <b>make</b> from the directory of the selected subproject.<br>"
+    buildSubprojectAction->setWhatsThis(i18n("<b>Build</b><p>Runs <b>make</b> from the directory of the selected subproject.<br>"
                                              "Environment variables and make arguments can be specified "
                                              "in the project settings dialog, <b>Make Options</b> tab."));
     forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
 	                                     this, SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
-    forceReeditSubprojectAction->setWhatsThis(i18n("Force Reedit<p>Runs <b>make force-reedit</b> from the directory of the selected subproject.<br>"
+    forceReeditSubprojectAction->setWhatsThis(i18n("<b>Force Reedit</b><p>Runs <b>make force-reedit</b> from the directory of the selected subproject.<br>"
                                                    "This recreates makefile (tip: and solves most of .moc related problems)<br>"
                                                    "Environment variables and make arguments can be specified "
                                                    "in the project settings dialog, <b>Make Options</b> tab."));
     cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0,
 	                                     this, SLOT( slotCleanSubproject() ), actions, "clean subproject" );
-    cleanSubprojectAction->setWhatsThis(i18n("Clean<p>Runs <b>make clean</b> from the directory of the selected subproject.<br>"
+    cleanSubprojectAction->setWhatsThis(i18n("<b>Clean</b><p>Runs <b>make clean</b> from the directory of the selected subproject.<br>"
                                              "Environment variables and make arguments can be specified "
                                              "in the project settings dialog, <b>Make Options</b> tab."));
     if (!m_part->isKDE())
         forceReeditSubprojectAction->setEnabled(false);
 	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0,
 	                                     this, SLOT( slotInstallSubproject() ), actions, "install subproject" );
-    installSubprojectAction->setWhatsThis(i18n("Install<p>Runs <b>make install</b> from the directory of the selected subproject.<br>"
+    installSubprojectAction->setWhatsThis(i18n("<b>Install</b><p>Runs <b>make install</b> from the directory of the selected subproject.<br>"
                                              "Environment variables and make arguments can be specified "
                                              "in the project settings dialog, <b>Make Options</b> tab."));
 	installSuSubprojectAction = new KAction( i18n( "Install (as root user)" ), 0, 0,
 	                                     this, SLOT( slotInstallSuSubproject() ), actions, "install subproject as root" );
-    installSuSubprojectAction->setWhatsThis(i18n("Install as root user<p>Runs <b>make install</b> command from the directory of the selected subproject with root priviledges.<br>"
+    installSuSubprojectAction->setWhatsThis(i18n("<b>Install as root user</b><p>Runs <b>make install</b> command from the directory of the selected subproject with root priviledges.<br>"
                               "It is executed via kdesu command.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));

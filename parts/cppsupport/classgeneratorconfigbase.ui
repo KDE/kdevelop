@@ -27,7 +27,7 @@
                 <cstring>groupBox7_2</cstring>
             </property>
             <property name="title">
-                <string>Class Templates</string>
+                <string>Class &amp;Templates</string>
             </property>
             <grid>
                 <property name="name">
@@ -99,7 +99,10 @@
                         <cstring>textLabel3_2</cstring>
                     </property>
                     <property name="text">
-                        <string>#ifndef - #define names:</string>
+                        <string>#ifndef - #&amp;define names:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>defcase_box</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -107,7 +110,10 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>File names:</string>
+                        <string>&amp;File names:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>filecase_box</cstring>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="0">
@@ -183,7 +189,10 @@
                         <cstring>textLabel3_3</cstring>
                     </property>
                     <property name="text">
-                        <string>Superclass file names:</string>
+                        <string>&amp;Superclass file names:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>supercase_box</cstring>
                     </property>
                 </widget>
             </grid>
@@ -204,7 +213,7 @@
                         <cstring>author_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Include author name in class documentation</string>
+                        <string>Include &amp;author name in class documentation</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="1" column="0">
@@ -212,7 +221,7 @@
                         <cstring>doc_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Generate empty documentation strings</string>
+                        <string>Generate &amp;empty documentation strings</string>
                     </property>
                 </widget>
             </grid>
@@ -222,7 +231,7 @@
                 <cstring>reformat_box</cstring>
             </property>
             <property name="text">
-                <string>Reformat source before creating files</string>
+                <string>&amp;Reformat source before creating files</string>
             </property>
         </widget>
     </grid>
@@ -244,12 +253,12 @@
     <tabstop>author_box</tabstop>
     <tabstop>doc_box</tabstop>
 </tabstops>
-<slots>
-    <slot access="protected">templateTypeChanged(int type)</slot>
-</slots>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
+<slots>
+    <slot access="protected">templateTypeChanged(int type)</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

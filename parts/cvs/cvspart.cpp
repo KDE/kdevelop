@@ -33,6 +33,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
+#include <qwhatsthis.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
@@ -163,6 +164,7 @@ void CvsPart::init()
     m_widget = new CvsWidget( this );
     m_widget->setIcon( SmallIcon("db") );
     mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
+    QWhatsThis::add(m_widget, i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows results of cvs command execution."));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -170,30 +172,50 @@ void CvsPart::init()
 void CvsPart::setupActions()
 {
 
-    KAction * action = new KAction( i18n("CVS Repository"), 0, this, SLOT(slotCheckOut()),
+/*    KAction * action = new KAction( i18n("CVS Repository"), 0, this, SLOT(slotCheckOut()),
         actionCollection(), "cvs_checkout" );
-    action->setStatusText( i18n("Check-out from an existing CVS repository") );
+    action->setStatusText( i18n("Check-out from an existing CVS repository") );*/
     actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotActionCommit()),
         actionCollection(), "cvs_commit" );
+    actionCommit->setToolTip(i18n("Commit"));
+    actionCommit->setWhatsThis(i18n("<b>Commit</b><p>Performs <b>cvs commit</b> command. Use this command when you wish to ''publish'' your changes to other developers, by incorporating them in the source repository."));
     actionDiff = new KAction( i18n("Diff"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvs_diff" );
+    actionDiff->setToolTip(i18n("Diff"));
+    actionDiff->setWhatsThis(i18n("<b>Diff</b><p>Performs <b>cvs diff</b> command. Shows differences between files in working directory and source repository, or between two revisions in source repository."));
     actionLog = new KAction( i18n("Log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvs_log" );
+    actionLog->setToolTip(i18n("Log"));
+    actionLog->setWhatsThis(i18n("<b>Log</b><p>Performs <b>cvs log</b> command. Displays log information."));
     actionAdd = new KAction( i18n("Add"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvs_add" );
+    actionAdd->setToolTip(i18n("Add"));
+    actionAdd->setWhatsThis(i18n("<b>Add</b><p>Performs <b>cvs add</b> command. Adds a new file or directory to the repository."));
     actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotActionRemove()),
         actionCollection(), "cvs_remove" );
+    actionRemove->setToolTip(i18n("Remove from repository"));
+    actionRemove->setWhatsThis(i18n("<b>Remove from repository</b><p>Performs <b>cvs remove</b> command. Removes files from the source repository."));
     actionUpdate = new KAction( i18n("Update"), 0, this, SLOT(slotActionUpdate()),
         actionCollection(), "cvs_update" );
+    actionUpdate->setToolTip(i18n("Update"));
+    actionUpdate->setWhatsThis(i18n("<b>Update</b><p>Performs <b>cvs update</b> command. Brings your working directory up to date with changes from the repository."));
     actionRevert = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotActionRevert()),
         actionCollection(), "cvs_revert" );
+    actionRevert->setToolTip(i18n("Replace with copy from repository"));
+    actionRevert->setWhatsThis(i18n("<b>Replace with copy from repository</b><p>Performs <b>cvs revert</b> command. Replaces your version of file with the version contained in the repository."));
     actionTag = new KAction( i18n("Tag/Branch Selected File(s)"), 0, this, SLOT(slotTag()),
         actionCollection(), "cvs_tag" );
+    actionTag->setToolTip(i18n("Tag/branch selected file(s)"));
+    actionTag->setWhatsThis(i18n("<b>Tag/branch selected file(s)</b><p>Performs <b>cvs tag</b> command. Specifies a symbolic tag for files in the repository."));
 
     actionAddToIgnoreList = new KAction( i18n("Ignore This File When Doing CVS Operation"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvs_ignore" );
+    actionAddToIgnoreList->setToolTip(i18n("Ignore this file when doing CVS operation"));
+    actionAddToIgnoreList->setWhatsThis(i18n("<b>Ignore this file when doing CVS operation</b><p>Puts the name of this file onto a .cvsignore list."));
     actionRemoveFromIgnoreList = new KAction( i18n("Do Not Ignore This File When Doing CVS Operation"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvs_donot_ignore" );
+    actionRemoveFromIgnoreList->setToolTip(i18n("Do not ignore this file when soing CVS operation"));
+    actionRemoveFromIgnoreList->setWhatsThis(i18n("<b>Do not ignore this file when soing CVS operation</b><p>Removes the name of this file from a .cvsignore list."));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -335,26 +357,37 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         KPopupMenu *subMenu = new KPopupMenu( popup );
 //        subMenu->insertTitle( i18n("Available Actions") );
 
-        subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
-        subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
-        subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
-        subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
-        subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
+        int id = subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
+        subMenu->setWhatsThis(id, i18n("<b>Commit</b><p>Performs <b>cvs commit</b> command. Use this command when you wish to ''publish'' your changes to other developers, by incorporating them in the source repository."));
+        id = subMenu->insertItem( actionLog->text(), this, SLOT(slotLog()) );
+        subMenu->setWhatsThis(id, i18n("<b>Log</b><p>Performs <b>cvs log</b> command. Displays log information."));
+        id = subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
+        subMenu->setWhatsThis(id, i18n("<b>Update</b><p>Performs <b>cvs update</b> command. Brings your working directory up to date with changes from the repository."));
+        id = subMenu->insertItem( actionAdd->text(), this, SLOT(slotAdd()) );
+        subMenu->setWhatsThis(id, i18n("<b>Add</b><p>Performs <b>cvs add</b> command. Adds a new file or directory to the repository."));
+        id = subMenu->insertItem( actionDiff->text(), this, SLOT(slotDiff()) );
+        subMenu->setWhatsThis(id, i18n("<b>Diff</b><p>Performs <b>cvs diff</b> command. Shows differences between files in working directory and source repository, or between two revisions in source repository."));
 
         subMenu->insertSeparator();
 
-        subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
-        subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
-        subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
+        id = subMenu->insertItem( actionRemove->text(), this, SLOT(slotRemove()) );
+        subMenu->setWhatsThis(id, i18n("<b>Remove from repository</b><p>Performs <b>cvs remove</b> command. Removes files from the source repository."));
+        id = subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
+        subMenu->setWhatsThis(id, i18n("<b>Replace with copy from repository</b><p>Performs <b>cvs revert</b> command. Replaces your version of file with the version contained in the repository."));
+        id = subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
+        subMenu->setWhatsThis(id, i18n("<b>Tag/branch selected file(s)</b><p>Performs <b>cvs tag</b> command. Specifies a symbolic tag for files in the repository."));
 
         subMenu->insertSeparator();
 
-        subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
-        subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+        id = subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Ignore this file when doing CVS operation</b><p>Puts the name of this file onto a .cvsignore list."));
+        id = subMenu->insertItem( actionRemoveFromIgnoreList->text(), this, SLOT(slotRemoveFromIgnoreList()) );
+        subMenu->setWhatsThis(id, i18n("<b>Do not ignore this file when soing CVS operation</b><p>Removes the name of this file from a .cvsignore list."));
 
         // Now insert in parent menu
         popup->insertSeparator();
-        popup->insertItem( i18n("CVS"), subMenu );
+        id = popup->insertItem( i18n("CVS"), subMenu );
+        popup->setWhatsThis(id, i18n("<b>CVS</b><p>Concurrent Versions System operations."));
     }
 }
 

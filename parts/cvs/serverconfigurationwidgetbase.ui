@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>526</width>
-            <height>199</height>
+            <height>194</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -27,6 +27,23 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>loginGroupBox</cstring>
@@ -42,277 +59,207 @@
             <property name="title">
                 <string>Server Configuration</string>
             </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>0</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>1</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>2</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>3</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>4</string>
-                    </property>
-                </item>
+            <grid>
                 <property name="name">
-                    <cstring>compressionLevelComboBox</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>375</x>
-                        <y>43</y>
-                        <width>117</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>serverNameLineEdit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>96</y>
-                        <width>153</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>serverPathLineEdit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>293</x>
-                        <y>96</y>
-                        <width>199</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="KIntNumInput">
-                <property name="name">
-                    <cstring>serverPortNumInput</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>173</x>
-                        <y>94</y>
-                        <width>112</width>
-                        <height>24</height>
-                    </rect>
-                </property>
-                <property name="value">
-                    <number>2401</number>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>userNameLineEdit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>147</x>
-                        <y>43</y>
-                        <width>138</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout8</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>128</y>
-                        <width>475</width>
-                        <height>27</height>
-                    </rect>
-                </property>
-                <hbox>
+                <widget class="QLineEdit" row="3" column="0">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>serverNameLineEdit</cstring>
                     </property>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer1</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>320</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>loginButton</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="0">
+                    <item>
                         <property name="text">
-                            <string>Login</string>
+                            <string>local</string>
                         </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel5</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>375</x>
-                        <y>22</y>
-                        <width>117</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Compression level:</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>293</x>
-                        <y>73</y>
-                        <width>199</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Path on server (i.e. /home/kde):</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>73</y>
-                        <width>153</width>
-                        <height>17</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Server (i.e. cvs.kde.org):</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>173</x>
-                        <y>73</y>
-                        <width>112</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Port:</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>147</x>
-                        <y>22</y>
-                        <width>138</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Username:</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>22</y>
-                        <width>127</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Connection method:</string>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>local</string>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>pserver</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>ext</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>connectionMethodComboBox</cstring>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>pserver</string>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
                     </property>
-                </item>
-                <item>
                     <property name="text">
-                        <string>ext</string>
+                        <string>Connection &amp;method:</string>
                     </property>
-                </item>
+                    <property name="buddy" stdset="0">
+                        <cstring>connectionMethodComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Server (i.e. cvs.kde.org):</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>serverNameLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="1" column="2">
+                    <item>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>1</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>2</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>3</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>4</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>5</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>compressionLevelComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Compression le&amp;vel:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>compressionLevelComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="2">
+                    <property name="name">
+                        <cstring>textLabel2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Pat&amp;h on server (i.e. /home/kde):</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>serverPathLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="2">
+                    <property name="name">
+                        <cstring>serverPathLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="3" column="1">
+                    <property name="name">
+                        <cstring>serverPortNumInput</cstring>
+                    </property>
+                    <property name="value">
+                        <number>2401</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="1">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Port:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>serverPortNumInput</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Username:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>userNameLineEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>userNameLineEdit</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <hbox>
                 <property name="name">
-                    <cstring>connectionMethodComboBox</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>12</x>
-                        <y>43</y>
-                        <width>127</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>433</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>loginButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Login</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>connectionMethodComboBox</tabstop>
+    <tabstop>userNameLineEdit</tabstop>
+    <tabstop>compressionLevelComboBox</tabstop>
+    <tabstop>serverNameLineEdit</tabstop>
+    <tabstop>serverPortNumInput</tabstop>
+    <tabstop>serverPathLineEdit</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>knuminput.h</includehint>

@@ -35,7 +35,7 @@
                         <cstring>executableDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>Run from the directory where the executable is</string>
+                        <string>Run from the directory where the &amp;executable is</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -49,7 +49,7 @@
                         <cstring>buildDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>Run from the BUILD directory:</string>
+                        <string>Run from the &amp;BUILD directory:</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>1</number>
@@ -68,7 +68,7 @@
                         <cstring>customDirectory_radio</cstring>
                     </property>
                     <property name="text">
-                        <string>Custom directory:</string>
+                        <string>C&amp;ustom directory:</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>2</number>
@@ -120,7 +120,7 @@
                         <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Main program:</string>
+                        <string>&amp;Main program:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
@@ -155,7 +155,7 @@
                         <cstring>progargs_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Program arguments:</string>
+                        <string>Program &amp;arguments:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>progargs_edit</cstring>
@@ -176,7 +176,7 @@
                 <cstring>env_var_group</cstring>
             </property>
             <property name="title">
-                <string>Environment Variables</string>
+                <string>Environment &amp;Variables</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -192,7 +192,7 @@
                         <cstring>startinterminal_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Start in external terminal</string>
+                        <string>Start in external &amp;terminal</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Start the main program in an external terminal (konsole)</string>
@@ -203,7 +203,7 @@
                         <cstring>autocompile_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Automatically compile before execution</string>
+                        <string>Automatically com&amp;pile before execution</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>If the program is not up-to-date with the source code, compile it before starting it's execution</string>
@@ -234,9 +234,16 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>executableDirectory_radio</tabstop>
+    <tabstop>buildDirectory_radio</tabstop>
+    <tabstop>customDirectory_radio</tabstop>
+    <tabstop>customRunDirectory_edit</tabstop>
+    <tabstop>browseCustomButton</tabstop>
     <tabstop>mainprogram_edit</tabstop>
+    <tabstop>browseMainButton</tabstop>
     <tabstop>progargs_edit</tabstop>
     <tabstop>startinterminal_box</tabstop>
+    <tabstop>autocompile_box</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

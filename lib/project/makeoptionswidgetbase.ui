@@ -24,7 +24,10 @@
                 <cstring>jobs_label</cstring>
             </property>
             <property name="text">
-                <string>Number of simultaneous jobs:</string>
+                <string>Number of simultaneous &amp;jobs:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>jobs_box</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -32,7 +35,10 @@
                 <cstring>makebin_label</cstring>
             </property>
             <property name="text">
-                <string>Name of make executable:</string>
+                <string>Name of make &amp;executable:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>makebin_edit</cstring>
             </property>
         </widget>
         <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="2">
@@ -40,7 +46,7 @@
                 <cstring>env_var_group</cstring>
             </property>
             <property name="title">
-                <string>Environment Variables</string>
+                <string>Environment &amp;Variables</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="2" column="1">
@@ -72,7 +78,7 @@
                 <cstring>abort_box</cstring>
             </property>
             <property name="text">
-                <string>Abort on first error</string>
+                <string>&amp;Abort on first error</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
@@ -80,11 +86,17 @@
                 <cstring>dontact_box</cstring>
             </property>
             <property name="text">
-                <string>Only display commands without actually executing them</string>
+                <string>Only di&amp;splay commands without actually executing them</string>
             </property>
         </widget>
     </grid>
 </widget>
+<tabstops>
+    <tabstop>abort_box</tabstop>
+    <tabstop>dontact_box</tabstop>
+    <tabstop>makebin_edit</tabstop>
+    <tabstop>jobs_box</tabstop>
+</tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>

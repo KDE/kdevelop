@@ -230,9 +230,11 @@ void CreatePCSDialog::slotSelected( const QString & )
 	KDevPCSImporter* importer = static_cast<PCSListViewItem*>( importerListView->selectedItem() )->importer();
 	m_settings = importer->createSettingsPage( settingsPage );
 	setNextEnabled( currentPage(), false );
+    setHelpEnabled( currentPage(), false );
 	connect( m_settings, SIGNAL(enabled(int)), this, SLOT(setNextPageEnabled(int)) );
 
 	if( m_settings )
+        setHelpEnabled( m_settings, false );
 	    m_settings->show();
     } else if( currentPage() == finalPage ) {
 	setBackEnabled( currentPage(), false );

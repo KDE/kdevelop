@@ -144,7 +144,10 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Type:</string>
+                                <string>T&amp;ype:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>returnType</cstring>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -165,7 +168,10 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Declarator:</string>
+                                <string>D&amp;eclarator:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>declarator</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -198,7 +204,10 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Storage:</string>
+                                <string>S&amp;torage:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>storage</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -206,7 +215,10 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Access:</string>
+                                <string>Acce&amp;ss:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>access</cstring>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -247,20 +259,6 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                    <property name="accel">
-                        <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -385,8 +383,10 @@
     <tabstop>storage</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonHelp</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">init()</slot>
     <slot access="protected">destroy()</slot>
@@ -395,9 +395,6 @@
     <slot>currentChanged(QListViewItem*)</slot>
     <slot>updateGUI()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

@@ -22,6 +22,7 @@
 #include <qwhatsthis.h>
 #include <qlistview.h>
 #include <qfileinfo.h>
+#include <qlineedit.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -67,6 +68,8 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     m_widget = new ClassViewWidget(this);
     m_widget->setIcon( SmallIcon("view_tree") );
     mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
+    QWhatsThis::add(m_widget, i18n("<b>Class browser</b><p>"
+            "The class browser shows all namespaces, classes and namespace and class members in a project."));
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
@@ -99,26 +102,28 @@ void ClassViewPart::setupActions( )
 {
     m_followCode = new KAction(i18n("Synchronize"), "dirsynch", 0, this, SLOT(syncCombos()), actionCollection(), "sync_combos");
     m_followCode->setToolTip(i18n("Synchronize selectors"));
-    m_followCode->setWhatsThis(i18n("<b>Synchronize</b>\nSynchronize namespaces, classes and functions selectors with code."));
+    m_followCode->setWhatsThis(i18n("<b>Synchronize</b><p>Synchronize namespaces, classes and functions selectors with the current position in code."));
 
     m_namespaces = new KListViewAction( new KComboView(true, 150, 0, "m_namespaces_combo"), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo", true );
     connect( m_namespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(QListViewItem*)) );
+    connect( m_namespaces->view(), SIGNAL(focusGranted()), this, SLOT(focusNamespaces()) );
+    connect( m_namespaces->view(), SIGNAL(focusLost()), this, SLOT(unfocusNamespaces()) );
     m_namespaces->setToolTip(i18n("Namespaces"));
-    m_namespaces->setWhatsThis(i18n("<b>Namespace Selector</b>\nSelect a namespace to view classes and functions contained in it."));
+    m_namespaces->setWhatsThis(i18n("<b>Namespace selector</b><p>Select a namespace to view classes and functions contained in it."));
 
     m_classes = new KListViewAction( new KComboView(true, 150, 0, "m_classes_combo"), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo", true );
     connect( m_classes->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(QListViewItem*)) );
     connect( m_classes->view(), SIGNAL(focusGranted()), this, SLOT(focusClasses()) );
     connect( m_classes->view(), SIGNAL(focusLost()), this, SLOT(unfocusClasses()) );
     m_classes->setToolTip(i18n("Classes"));
-    m_classes->setWhatsThis(i18n("<b>Class Selector</b>\nSelect a class to view it's members."));
+    m_classes->setWhatsThis(i18n("<b>Class selector</b><p>Select a class to view it's members."));
 
     m_functions = new KListViewAction( new KComboView(true, 300, 0, "m_functions_combo"), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo", true );
     connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );
     connect( m_functions->view(), SIGNAL(focusGranted()), this, SLOT(focusFunctions()) );
     connect( m_functions->view(), SIGNAL(focusLost()), this, SLOT(unfocusFunctions()) );
     m_functions->setToolTip(i18n("Functions"));
-    m_functions->setWhatsThis(i18n("<b>Function Selector</b>\nSelect a function to jump to it's definition or declaration."));
+    m_functions->setWhatsThis(i18n("<b>Function selector</b><p>Select a function to jump to it's definition or declaration."));
 
 //    m_namespaces->view()->setMinimumWidth(150);
 //    m_classes->view()->setMinimumWidth(150);
@@ -127,14 +132,21 @@ void ClassViewPart::setupActions( )
     m_popupAction  = new KToolBarPopupAction(i18n("Class Browser Actions"), "classwiz", 0,
                                            this, SLOT(switchedViewPopup()),
                                            actionCollection(), "view_popup");
-    m_popupAction->setToolTip(i18n("Class Browser Actions"));
+    m_popupAction->setToolTip(i18n("Class browser actions"));
+    m_popupAction->setWhatsThis(i18n("<b>Class browser actions</b><p>A menu for commonly used class browser actions "
+                                     "like switch between function declaration and definition, "
+                                     "add classes, methods and attributes, "
+                                     "graphical class viewer."));
     m_popupAction->setDelayed(false);
     KPopupMenu *popup = m_popupAction->popupMenu();
     //TODO: check if language support has namespaces, classes, etc.
 //    KDevLanguageSupport::Features features = languageSupport()->features();
-    popup->insertItem(i18n("Go to Function Declaration"), this, SLOT(goToFunctionDeclaration()));
-    popup->insertItem(i18n("Go to Function Definition"), this, SLOT(goToFunctionDefinition()));
-    popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(goToClassDeclaration()));
+    int id = popup->insertItem(i18n("Go to Function Declaration"), this, SLOT(goToFunctionDeclaration()));
+    popup->setWhatsThis(id, i18n("<b>Go to function declaration</b><p>Opens a file where the function is declared and jumps to the declaration line."));
+    id = popup->insertItem(i18n("Go to Function Definition"), this, SLOT(goToFunctionDefinition()));
+    popup->setWhatsThis(id, i18n("<b>Go to function definition</b><p>Opens a file where the function is defined (implemented) and jumps to the definition line."));
+    id = popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(goToClassDeclaration()));
+    popup->setWhatsThis(id, i18n("<b>Go to class declaration</b><p>Opens a file where the class is declared and jumps to the declaration line."));
 
     //TODO: not applicable to c++ but can be useful for ada and pascal where namespace is contained
     //in a single compilation unit
@@ -147,16 +159,27 @@ void ClassViewPart::setupActions( )
     if (hasAddMethod || hasAddAttribute || hasNewClass)
         popup->insertSeparator();
     if (hasNewClass)
-        popup->insertItem(SmallIcon("classnew"), i18n("Add Class..."), this, SLOT(selectedAddClass()));
+    {
+        id = popup->insertItem(SmallIcon("classnew"), i18n("New Class..."), this, SLOT(selectedAddClass()));
+        popup->setWhatsThis(id, i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
+    }
 #if 0 /// FIXME: seems that the 'access attribute' of the 'CodeModel' is wrong!!!!!
     if (hasAddMethod)
-        popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
+    {
+        id = popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
+        popup->setWhatsThis(id, i18n("<b>Add method</b><p>Calls the <b>New Method</b> wizard."));
+    }
     if (hasAddAttribute)
-        popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
+    {
+        id = popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
+        popup->setWhatsThis(id, i18n("<b>Add attribute</b><p>Calls the <b>New Attribute</b> wizard."));
+    }
 #endif
 
     popup->insertSeparator();
-    popup->insertItem(i18n("Graphical Class Hierarchy"), this, SLOT(graphicalClassView()));
+    id = popup->insertItem(i18n("Graphical Class Hierarchy"), this, SLOT(graphicalClassView()));
+    popup->setWhatsThis(id, i18n("<b>Graphical class hierarchy</b><p>Displays inheritance relationship between classes in project. "
+                                 "Note, it does not display classes outside inheritance hierarchy."));
 }
 
 void ClassViewPart::refresh( )
@@ -188,7 +211,8 @@ void ClassViewPart::selectFunction( QListViewItem * item )
         sync = false;
         return;
     }
-    FunctionItem *fi = dynamic_cast<FunctionItem*>(item);
+    //adymo: this jumps to declaration - commented
+/*  FunctionItem *fi = dynamic_cast<FunctionItem*>(item);
     if (!fi)
         return;
     int startLine, startColumn;
@@ -200,6 +224,36 @@ void ClassViewPart::selectFunction( QListViewItem * item )
     {
         fi->dom()->getStartPosition( &startLine, &startColumn );
         partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }*/
+
+    //adymo: this jumps to definition or declaration if the definition is not found
+    FunctionItem *fi = dynamic_cast<FunctionItem*>(item);
+    if (!fi)
+        return;
+    int startLine, startColumn;
+
+    FunctionDefinitionList lst;
+    FileList fileList = codeModel()->fileList();
+    CodeModelUtils::findFunctionDefinitions( FindOp(fi->dom()), fileList, lst );
+
+    if( lst.isEmpty() )
+    {   //definition not found, try declaration instead
+        int startLine, startColumn;
+        fi->dom()->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
+    }
+    else
+    {   //jump to definition
+        FunctionDefinitionDom fun = lst.front();
+        QString path = QFileInfo( fi->dom()->fileName() ).dirPath( true );
+
+        for( FunctionDefinitionList::Iterator it=lst.begin(); it!=lst.end(); ++it ){
+        if( path == QFileInfo((*it)->fileName()).dirPath(true) )
+            fun = *it;
+        }
+
+        fun->getStartPosition( &startLine, &startColumn );
+        partController()->editDocument( KURL(fun->fileName()), startLine );
     }
 }
 
@@ -318,24 +372,30 @@ void ClassViewPart::focusClasses( )
 {
     if (m_classes->view()->currentText() == EmptyClasses)
         m_classes->view()->setCurrentText("");
+//    else
+//        m_classes->view()->lineEdit()->selectAll();
 }
 
 void ClassViewPart::focusFunctions( )
 {
     if (m_functions->view()->currentText() == EmptyFunctions)
         m_functions->view()->setCurrentText("");
+//    else
+//        m_functions->view()->lineEdit()->selectAll();
 }
 
 void ClassViewPart::unfocusClasses( )
 {
     if (m_classes->view()->currentText().isEmpty())
         m_classes->view()->setCurrentText(EmptyClasses);
+//    m_classes->view()->lineEdit()->deselect();
 }
 
 void ClassViewPart::unfocusFunctions( )
 {
     if (m_functions->view()->currentText().isEmpty())
         m_functions->view()->setCurrentText(EmptyFunctions);
+//    m_functions->view()->lineEdit()->deselect();
 }
 
 void ClassViewPart::syncCombos( )
@@ -608,6 +668,16 @@ ClassDom ClassViewPart::syncClasses( const NamespaceDom & dom )
 
 FunctionDom ClassViewPart::syncFunctions( const ClassDom & dom )
 {
+}
+
+void ClassViewPart::focusNamespaces( )
+{
+    //m_namespaces->view()->lineEdit()->selectAll();
+}
+
+void ClassViewPart::unfocusNamespaces( )
+{
+//    m_namespaces->view()->lineEdit()->deselect();
 }
 
 #include "classviewpart.moc"

@@ -65,22 +65,41 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
+    action->setToolTip(i18n("Build project"));
+    action->setWhatsThis(i18n("<b>Build project</b><p>Runs <b>make</b> from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Build Options</b> tab."));
 
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
                           actionCollection(), "build_compilefile" );
+    action->setToolTip(i18n("Compile file"));
+    action->setWhatsThis(i18n("<b>Compile file</b><p>Runs <b>make filename.o</b> command from the directory where 'filename' is the name of currently opened file.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Build Options</b> tab."));
 
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
+    action->setToolTip(i18n("Clean project"));
+    action->setWhatsThis(i18n("<b>Clean project</b><p>Runs <b>make clean</b> command from the project directory.<br>"
+                              "Environment variables and make arguments can be specified "
+                              "in the project settings dialog, <b>Build Options</b> tab."));
 
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
+    action->setToolTip(i18n("Execute program"));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab. "
+                            "If it is not specified then the active target is used to determine the application to run."));
 
     KActionMenu *menu = new KActionMenu( i18n("Build &Target"),
                                          actionCollection(), "build_target" );
     m_targetMenu = menu->popupMenu();
+    menu->setToolTip(i18n("Build target"));
+    menu->setWhatsThis(i18n("<b>Build target</b><p>Runs <b>make targetname</b> from the project directory (targetname is the name of the target selected).<br>"
+                            "Environment variables and make arguments can be specified "
+                            "in the project settings dialog, <b>Build Options</b> tab."));
 
     connect( m_targetMenu, SIGNAL(aboutToShow()),
              this, SLOT(updateTargetMenu()) );
@@ -113,11 +132,11 @@ void CustomProjectPart::projectConfigWidget(KDialogBase *dlg)
 
     CustomBuildOptionsWidget *w2 = new CustomBuildOptionsWidget(*projectDom(), buildtab);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
-    buildtab->addTab(w2, i18n("Build"));
+    buildtab->addTab(w2, i18n("&Build"));
 
     MakeOptionsWidget *w3 = new MakeOptionsWidget(*projectDom(), "/kdevcustomproject", buildtab);
     connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
-    buildtab->addTab(w3, i18n("Make"));
+    buildtab->addTab(w3, i18n("Ma&ke"));
 
     w2->setMakeOptionsWidget(buildtab, w3);
 }
@@ -140,11 +159,19 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     popup->insertSeparator();
     if (inProject)
-        popup->insertItem( i18n("Remove From Project: %1").arg(popupstr),
+    {
+        int id = popup->insertItem( i18n("Remove From Project: %1").arg(popupstr),
                            this, SLOT(slotRemoveFromProject()) );
+        popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
+            "Note that the file should be manually excluded from corresponding makefile or build.xml."));
+    }
     else
-        popup->insertItem( i18n("Add to Project: %1").arg(popupstr),
+    {
+        int id = popup->insertItem( i18n("Add to Project: %1").arg(popupstr),
                            this, SLOT(slotAddToProject()) );
+        popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
+            "Note that the file should be manually added to corresponding makefile or build.xml."));
+    }
 }
 
 

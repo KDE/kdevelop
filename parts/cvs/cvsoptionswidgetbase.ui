@@ -24,7 +24,10 @@
                 <cstring>m_cvsLabel</cstring>
             </property>
             <property name="text">
-                <string>CVS options:</string>
+                <string>C&amp;VS options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_cvsEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -37,7 +40,10 @@
                 <cstring>m_commitLabel</cstring>
             </property>
             <property name="text">
-                <string>Commit options:</string>
+                <string>Co&amp;mmit options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_commitEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -50,7 +56,10 @@
                 <cstring>m_updateLabel</cstring>
             </property>
             <property name="text">
-                <string>Update options:</string>
+                <string>&amp;Update options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_updateEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -63,7 +72,10 @@
                 <cstring>m_addLabel</cstring>
             </property>
             <property name="text">
-                <string>Add options:</string>
+                <string>&amp;Add options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_addEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -76,7 +88,10 @@
                 <cstring>m_removeLabel</cstring>
             </property>
             <property name="text">
-                <string>Remove options:</string>
+                <string>&amp;Remove options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_removeEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -89,7 +104,10 @@
                 <cstring>m_diffLabel</cstring>
             </property>
             <property name="text">
-                <string>Diff options:</string>
+                <string>&amp;Diff options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_diffEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -110,7 +128,10 @@
                 <cstring>m_logLabel</cstring>
             </property>
             <property name="text">
-                <string>Log options:</string>
+                <string>&amp;Log options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_logEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">
@@ -123,7 +144,10 @@
                 <cstring>m_rshLabel</cstring>
             </property>
             <property name="text">
-                <string>Remote shell (CVS_RSH):</string>
+                <string>Remote &amp;shell (CVS_RSH):</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_rshEdit</cstring>
             </property>
         </widget>
         <widget class="QLineEdit">

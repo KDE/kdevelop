@@ -39,8 +39,8 @@ CloserPart::CloserPart(QObject *parent, const char *name, const QStringList& )
 
     KAction * action = new KAction( i18n("Close Selected Windows..."), CTRL+ALT+Key_W, this,
         SLOT( openDialog() ), actionCollection(), "closer" );
-
-    action->setStatusText( i18n("Select windows to close") );
+    action->setToolTip( i18n("Select windows to close") );
+    action->setWhatsThis(i18n("<b>Close selected windows</b><p>Provides a dialog to select files which will be closed."));
 
     core()->insertNewAction( action );
 }

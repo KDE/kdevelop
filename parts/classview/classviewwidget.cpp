@@ -61,21 +61,27 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     connect( m_part->core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
 
     QStringList lst;
-    lst << i18n( "KDevelop 3.x mode" ) << i18n( "KDevelop 2.x mode" ) << i18n( "Java like mode" );
+    lst << i18n( "Group by Directories" ) << i18n( "Plain List" ) << i18n( "Java Like Mode" );
     m_actionViewMode = new KSelectAction( i18n("View Mode"), KShortcut(), m_part->actionCollection(), "classview_mode" );
     m_actionViewMode->setItems( lst );
+    m_actionViewMode->setWhatsThis(i18n("<b>View mode</b><p>Class browser items can be grouped by directories, listed in a plain or java like view."));
 
     m_actionNewClass = new KAction( i18n("New Class..."), KShortcut(), this, SLOT(slotNewClass()),
 				    m_part->actionCollection(), "classview_new_class" );
+    m_actionNewClass->setWhatsThis(i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
     m_actionAddMethod = new KAction( i18n("Add Method..."), KShortcut(), this, SLOT(slotAddMethod()),
 				    m_part->actionCollection(), "classview_add_method" );
+    m_actionAddMethod->setWhatsThis(i18n("<b>Add method</b><p>Calls the <b>New Method</b> wizard."));
     m_actionAddAttribute = new KAction( i18n("Add Attribute..."), KShortcut(), this, SLOT(slotAddAttribute()),
 				    m_part->actionCollection(), "classview_add_attribute" );
+    m_actionAddAttribute->setWhatsThis(i18n("<b>Add attribute</b><p>Calls the <b>New Attribute</b> wizard."));
 
-    m_actionOpenDeclaration = new KAction( i18n("Open declaration"), KShortcut(), this, SLOT(slotOpenDeclaration()),
+    m_actionOpenDeclaration = new KAction( i18n("Open Declaration"), KShortcut(), this, SLOT(slotOpenDeclaration()),
 				    m_part->actionCollection(), "classview_open_declaration" );
-    m_actionOpenImplementation = new KAction( i18n("Open implementation"), KShortcut(), this, SLOT(slotOpenImplementation()),
+    m_actionOpenDeclaration->setWhatsThis(i18n("<b>Open declaration</b><p>Opens a file where the selected item is declared and jumps to the declaration line."));
+    m_actionOpenImplementation = new KAction( i18n("Open Implementation"), KShortcut(), this, SLOT(slotOpenImplementation()),
 				    m_part->actionCollection(), "classview_open_implementation" );
+    m_actionOpenImplementation->setWhatsThis(i18n("<b>Open implementation</b><p>Opens a file where the selected item is defined (implemented) and jumps to the definition line."));
 
     KConfig* config = m_part->instance()->config();
     config->setGroup( "General" );
@@ -253,16 +259,20 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     m_actionOpenImplementation->plug( &menu );
     menu.insertSeparator();
 
+    bool sep = false;
     if( item && item->isClass() ){
         m_actionAddMethod->plug( &menu );
 	m_actionAddAttribute->plug( &menu );
+        sep = true;
     }
 
     if( item && item->model() ){
 	CodeModelItemContext context( item->model() );
 	m_part->core()->fillContextMenu( &menu, &context );
+//        sep = true;
     }
-    menu.insertSeparator();
+    if (sep)
+        menu.insertSeparator();
 
     int oldViewMode = viewMode();
     m_actionViewMode->plug( &menu );

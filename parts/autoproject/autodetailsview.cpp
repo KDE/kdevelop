@@ -72,28 +72,28 @@ void AutoDetailsView::initActions()
 
 	targetOptionsAction = new KAction( i18n( "Options..." ), "configure", 0,
 	                                   this, SLOT( slotTargetOptions() ), actions, "target options" );
-    targetOptionsAction->setWhatsThis(i18n("Options<p>Target options dialog that provides settings for LDFLAGS, LIBADD and DEPENDENCIES."));
+    targetOptionsAction->setWhatsThis(i18n("<b>Options</b><p>Target options dialog that provides settings for LDFLAGS, LIBADD and DEPENDENCIES."));
 	addNewFileAction = new KAction( i18n( "Create New File..." ), "filenew", 0,
 	                                this, SLOT( slotAddNewFile() ), actions, "add new file" );
-    addNewFileAction->setWhatsThis(i18n("Create new file<p>New file will be created using <b>FileCreate</b> part if it is available."));
+    addNewFileAction->setWhatsThis(i18n("<b>Create new file</b><p>New file will be created using <b>FileCreate</b> part if it is available."));
 	addExistingFileAction = new KAction( i18n( "Add Existing Files..." ), "fileimport", 0,
 	                                     this, SLOT( slotAddExistingFile() ), actions, "add existing file" );
-    addExistingFileAction->setWhatsThis(i18n("Add existing files<p>Header files will not be included in SOURCES list of a target. "
+    addExistingFileAction->setWhatsThis(i18n("<b>Add existing files</b><p>Header files will not be included in SOURCES list of a target. "
                                              "They will be added to noinst_HEADERS instead."));
 	addIconAction = new KAction( i18n( "Add Icon..." ), "iconadd_kdevelop", 0,
 	                             this, SLOT( slotAddIcon() ), actions, "add icon" );
-    addIconAction->setWhatsThis(i18n("Add icon<p>Modifies KDEICON target."));
+    addIconAction->setWhatsThis(i18n("<b>Add icon</b><p>Modifies KDEICON target."));
 	buildTargetAction = new KAction( i18n( "Build Target..." ), "launch", 0,
 	                                 this, SLOT( slotBuildTarget() ), actions, "build target" );
-    buildTargetAction->setWhatsThis(i18n("Build target<p>Constructs a series of make commands to build the selected target. "
+    buildTargetAction->setWhatsThis(i18n("<b>Build target</b><p>Constructs a series of make commands to build the selected target. "
                                          "Also builds dependent targets."));
 	setActiveTargetAction = new KAction( i18n( "Make Target Active" ), "", 0,
 	                                     this, SLOT( slotSetActiveTarget() ), actions, "set active target" );
-    setActiveTargetAction->setWhatsThis(i18n("Make target active<p>New files and classes by default go to an active target. "
+    setActiveTargetAction->setWhatsThis(i18n("<b>Make target active</b><p>New files and classes by default go to an active target. "
                                              "<b>Build Active Target</b> menu command builds it."));
 	removeDetailAction = new KAction( i18n( "Remove" ), "editdelete", 0,
 	                                  this, SLOT( slotRemoveDetail() ), actions, "remove detail" );
-    removeDetailAction->setWhatsThis(i18n("Remove<p>Shows a list of targets dependent on the selected target or file and asks for removal. Also asks if the target or file should be removed from disk."));
+    removeDetailAction->setWhatsThis(i18n("<b>Remove</b><p>Shows a list of targets dependent on the selected target or file and asks for removal. Also asks if the target or file should be removed from disk."));
 
 	connect( this, SIGNAL( executed( QListViewItem* ) ),
 	         this, SLOT( slotDetailsExecuted( QListViewItem* ) ) );
@@ -349,17 +349,17 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		FileContext context( m_widget->selectedSubproject()->path + "/" + fitem->name, false );
 
 		int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget...") );
-        popup.setWhatsThis(idSubclassWidget, i18n("Subclass widget<p>Launches <b>Subclassing</b> wizard. "
+        popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
         int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
-        popup.setWhatsThis(idUISubclasses, i18n("List of subclasses<p>Shows subclasses list editor. "
+        popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));
 		int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
-        popup.setWhatsThis(idUpdateWidgetclass, i18n("Edit ui-subclass<p>Launches <b>Subclassing</b> wizard "
+        popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
                            "and prompts to implement missing in childclass slots and functions."));
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
-        popup.setWhatsThis(idViewUIH, i18n("Open ui.h file<p>Opens .ui.h file assotiated with the selected .ui."));
+        popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file assotiated with the selected .ui."));
 
 		if (!fitem->name.contains(QRegExp("ui$")))
 		{

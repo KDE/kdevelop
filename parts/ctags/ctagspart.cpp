@@ -45,6 +45,8 @@ CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     action = new KAction( i18n("CTags..."), 0,
                           this, SLOT(slotSearchTags()),
                           actionCollection(), "tools_ctags" );
+    action->setToolTip(i18n("CTags dialog"));
+    action->setWhatsThis(i18n("<b>CTags</b><p>Allows to create tags database and provides a dialog to search in tags database."));
 
     mOccuresTagsDlg = 0;
     mOccuresTagsDlg = new OccuresTagsDlg;
@@ -92,10 +94,14 @@ void CTagsPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
     
     m_contextString = ident;
-    popup->insertItem( i18n("Go to ctags Declaration: %1").arg(ident),
+    int id = popup->insertItem( i18n("Go to ctags Declaration: %1").arg(ident),
                        this, SLOT(slotGotoDeclaration()) );
-    popup->insertItem( i18n("Go to ctags Definition: %1").arg(ident),
+    popup->setWhatsThis(id, i18n("<b>Go to ctags declaration</b><p>Searches in the tags database for a symbol "
+        "under the cursor and opens a file that contains the symbol declaration."));
+    id = popup->insertItem( i18n("Go to ctags Definition: %1").arg(ident),
                        this, SLOT(slotGotoDefinition()) );
+    popup->setWhatsThis(id, i18n("<b>Go to ctags definition</b><p>Searches in the tags database for a symbol "
+        "under the cursor and opens a file that contains the symbol definition."));
 }
 
 

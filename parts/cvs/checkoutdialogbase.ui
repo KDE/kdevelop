@@ -48,7 +48,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Fetch</string>
+                        <string>&amp;Fetch</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Fetch modules list from server</string>
@@ -90,7 +90,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Server path (you must be already logged in):</string>
+                        <string>Server &amp;path (you must be already logged in):</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>serverPathLineEdit</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -106,7 +109,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>CVS_RSH:</string>
+                        <string>CVS_RS&amp;H:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cvsRshComboBox</cstring>
                     </property>
                 </widget>
                 <spacer row="2" column="0" rowspan="1" colspan="2">
@@ -141,7 +147,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Modules on Server</string>
+                <string>&amp;Modules on Server</string>
             </property>
             <vbox>
                 <property name="name">
@@ -198,7 +204,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Check-Out</string>
+                                <string>Chec&amp;k-Out</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Fetch modules list from server</string>
@@ -213,5 +219,12 @@
         </widget>
     </vbox>
 </widget>
+<tabstops>
+    <tabstop>cvsRshComboBox</tabstop>
+    <tabstop>serverPathLineEdit</tabstop>
+    <tabstop>fetchModulesButton</tabstop>
+    <tabstop>modulesListBox</tabstop>
+    <tabstop>checkoutModuleButton</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

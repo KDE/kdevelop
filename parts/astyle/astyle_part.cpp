@@ -38,7 +38,7 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
 			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
   _action->setEnabled(false);
   _action->setToolTip(i18n("Reformat source"));
-  _action->setWhatsThis(i18n("Reformat source<p>Source reformatting functionality using <b>astyle</b> library. "
+  _action->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting functionality using <b>astyle</b> library. "
                              "Also available in <b>New Class</b> and <b>Subclassing</b> wizards."));
 
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));

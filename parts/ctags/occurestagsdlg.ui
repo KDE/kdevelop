@@ -69,5 +69,9 @@
         <slot>close()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>mOcurresList</tabstop>
+    <tabstop>mCancelBtn</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -72,8 +72,10 @@ private slots:
     void selectedAddMethod();
     void selectedAddAttribute();
 
+    void focusNamespaces();
     void focusClasses();
     void focusFunctions();
+    void unfocusNamespaces();
     void unfocusClasses();
     void unfocusFunctions();
 

@@ -153,6 +153,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
 void CCConfigWidget::slotNewPCS( )
 {
     CreatePCSDialog dlg( m_pPart, m_pPart->mainWindow()->main() );
+    dlg.importerListView->setFocus();
     dlg.exec();
 }
 

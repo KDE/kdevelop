@@ -42,7 +42,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	_widget->setCaption(i18n("Bookmarks"));
 	_widget->setIcon(SmallIcon("bookmark"));
 
-	QWhatsThis::add(_widget, i18n("Bookmarks\n\n"
+	QWhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
 			"The bookmark viewer shows all the source bookmarks in the project."));
 
 	mainWindow()->embedSelectView(_widget, i18n("Bookmarks"), i18n("source bookmarks"));

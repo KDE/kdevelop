@@ -250,7 +250,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <string>&amp;Add</string>
                                 </property>
                                 <property name="autoDefault">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="3" column="0">
@@ -284,7 +284,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <string>&amp;Remove</string>
                                 </property>
                                 <property name="autoDefault">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="4" column="0">
@@ -312,7 +312,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <string>Move &amp;Up</string>
                                 </property>
                                 <property name="autoDefault">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="5" column="0">
@@ -346,7 +346,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <string>Move &amp;Down</string>
                                 </property>
                                 <property name="autoDefault">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -700,9 +700,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <property name="text">
                                                 <string>C&amp;reate Constructor &gt;&gt;</string>
                                             </property>
-                                            <property name="autoDefault">
-                                                <bool>false</bool>
-                                            </property>
                                         </widget>
                                         <widget class="QPushButton">
                                             <property name="name">
@@ -724,9 +721,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             </property>
                                             <property name="text">
                                                 <string>C&amp;lear Selection</string>
-                                            </property>
-                                            <property name="autoDefault">
-                                                <bool>false</bool>
                                             </property>
                                         </widget>
                                         <spacer>
@@ -830,7 +824,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 <cstring>tab</cstring>
                             </property>
                             <attribute name="title">
-                                <string>Methods &amp;Overriding</string>
+                                <string>Methods Ov&amp;erriding</string>
                             </attribute>
                             <vbox>
                                 <property name="name">
@@ -1010,6 +1004,9 @@ Namespace1::Namespace2::...::NamespaceN</string>
                     </property>
                     <property name="text">
                         <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QPushButton">

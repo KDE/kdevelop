@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>747</width>
-            <height>307</height>
+            <width>859</width>
+            <height>210</height>
         </rect>
     </property>
     <property name="caption">
@@ -52,7 +52,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Add / Edit...</string>
+                <string>A&amp;dd / Edit...</string>
             </property>
         </widget>
         <widget class="QPushButton" row="1" column="1">
@@ -68,7 +68,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Remove</string>
+                <string>&amp;Remove</string>
             </property>
         </widget>
         <widget class="QListView" row="0" column="0" rowspan="3" colspan="1">
@@ -128,13 +128,18 @@
         <slot>removeVarClicked()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>listview</tabstop>
+    <tabstop>addvar_button</tabstop>
+    <tabstop>removevar_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot>addVarClicked()</slot>
     <slot>removeVarClicked()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

@@ -70,13 +70,13 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           this, SLOT(slotExpandText()),
                           actionCollection(), "edit_expandtext" );
     action->setToolTip( i18n("Expand current word") );
-    action->setWhatsThis( i18n("Expand current word<p>Current word can be completed using the list of similar words in source files.") );
+    action->setWhatsThis( i18n("<b>Expand current word</b><p>Current word can be completed using the list of similar words in source files.") );
 
     action = new KAction( i18n("Expand Abbreviation"), CTRL + Key_L,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
     action->setToolTip( i18n("Expand abbreviation") );
-    action->setWhatsThis( i18n("Expand abbreviation<p>Enable and configure abbreviations in <b>KDevelop Settings</b>, <b>Abbrevations</b> tab.") );
+    action->setWhatsThis( i18n("<b>Expand abbreviation</b><p>Enable and configure abbreviations in <b>KDevelop Settings</b>, <b>Abbrevations</b> tab.") );
 
     load();
 

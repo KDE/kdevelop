@@ -15,6 +15,9 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qapplication.h>
+#include <qwhatsthis.h>
+
+#include <klocale.h>
 
 static const char * resize_xpm[] = {
 "9 18 2 1",
@@ -48,6 +51,7 @@ ResizableCombo::ResizableCombo(KComboView *view, QWidget *parent, const char *na
 
     m_sizer = new MyPushButton(this);
     m_sizer->setPixmap(QPixmap(resize_xpm));
+    QWhatsThis::add(m_sizer, i18n("Drag this to resize the combobox."));
     connect(m_sizer, SIGNAL(pressed()), this, SLOT(startResize()));
     connect(m_sizer, SIGNAL(released()), this, SLOT(stopResize()));
     l->addWidget(m_sizer);

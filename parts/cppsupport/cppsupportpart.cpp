@@ -188,8 +188,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action = new KAction(i18n("Switch Header/Implementation"), SHIFT+Key_F12,
                          this, SLOT(slotSwitchHeader()),
                          actionCollection(), "edit_switchheader");
-    action->setStatusText( i18n("Switch between header and implementation files") );
-    action->setWhatsThis( i18n("Switch between header and implementation files\n\n"
+    action->setToolTip( i18n("Switch between header and implementation files") );
+    action->setWhatsThis( i18n("<b>Switch Header/Implementation</b><p>"
                                "If you are currently looking at a header file, this "
                                "brings you to the corresponding implementation file. "
                                "If you are looking at an implementation file (.cpp etc.), "
@@ -199,19 +199,24 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
                          this, SLOT(slotCompleteText()),
                          actionCollection(), "edit_complete_text");
-    action->setStatusText( i18n("Complete current expression") );
-    action->setWhatsThis( i18n("Complete current expression") );
+    action->setToolTip( i18n("Complete current expression") );
+    action->setWhatsThis( i18n("<b>Complete Text</p><p>Completes current expression using "
+                               "memory class store for the current project and persistant class stores "
+                               "for external libraries.") );
     action->setEnabled(false);
 
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
+    action->setToolTip(i18n("Make member"));
+    action->setWhatsThis(i18n("<b>Make member</b><p>Creates a class member function in implementation file "
+                              "based on the member declaration at the current line."));
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
-    action->setStatusText( i18n("Generate a new class") );
-    action->setWhatsThis( i18n("Generate a new class") );
+    action->setToolTip( i18n("Generate a new class") );
+    action->setWhatsThis( i18n("<b>New Class</b><p>Calls the <b>New Class</b> wizard.") );
 
     m_pCompletion  = 0;
 
@@ -434,9 +439,14 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_activeVariable = 0;
 
     if( context->hasType(Context::EditorContext) ){
-	popup->insertSeparator();
-	popup->insertItem( i18n( "Switch Header/Implementation"),
-			   this, SLOT( slotSwitchHeader() ) );
+        popup->insertSeparator();
+        int id = popup->insertItem( i18n( "Switch Header/Implementation"),
+                this, SLOT( slotSwitchHeader() ) );
+        popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
+                                      "If you are currently looking at a header file, this "
+                                      "brings you to the corresponding implementation file. "
+                                      "If you are looking at an implementation file (.cpp etc.), "
+                                      "this brings you to the corresponding header file.") );
 
        kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
        if( codeModel()->hasFile(m_activeFileName) ){
@@ -448,7 +458,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
            if( codeModel()->hasFile(candidate1) ){
                QPopupMenu* m = new QPopupMenu( popup );
-               popup->insertItem( i18n("Go to definition"), m );
+               id = popup->insertItem( i18n("Go to definition"), m );
+               popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
+                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 
                const FileDom file = codeModel()->fileByName( candidate1 );
                const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
@@ -475,7 +487,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
            {
                 QPopupMenu* m2 = new QPopupMenu( popup );
-                popup->insertItem( i18n("Go to declaration"), m2 );
+                id = popup->insertItem( i18n("Go to declaration"), m2 );
+                popup->setWhatsThis(id, i18n("<b>Go to declaration</b><p>Provides a menu to select available function declarations "
+                    "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 
                 FileDom file2 = codeModel()->fileByName( candidate );
                 kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
@@ -511,15 +525,18 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	if (m_contextFileName.isEmpty())
 	    return;
 
-	popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
+	id = popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
 			   this, SLOT(slotGotoIncludeFile()) );
+    popup->setWhatsThis(id, i18n("<b>Goto include file</b><p>Opens an include file under the cursor position."));
 
     } else if( context->hasType(Context::CodeModelItemContext) ){
 	const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
 
 	if( mcontext->item()->isClass() ){
 	    m_activeClass = (ClassModel*) mcontext->item();
-	    popup->insertItem( i18n("Extract Interface..."), this, SLOT(slotExtractInterface()) );
+	    int id = popup->insertItem( i18n("Extract Interface..."), this, SLOT(slotExtractInterface()) );
+        popup->setWhatsThis(id, i18n("<b>Extract interface</b><p>Extracts interface from the selected class and creates a new class with this interface. "
+            "No implementation code is extracted and no implementation code is created."));
 	} else if( mcontext->item()->isFunction() ){
 	    m_activeFunction = (FunctionModel*) mcontext->item();
 	}

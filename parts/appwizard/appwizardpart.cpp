@@ -42,7 +42,7 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
                           this, SLOT(slotNewProject()),
                           actionCollection(), "project_new" );
     action->setToolTip( i18n("Generate a new project from a template") );
-    action->setWhatsThis( i18n("New project<p>"
+    action->setWhatsThis( i18n("<b>New project</b><p>"
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
@@ -51,7 +51,7 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
                           this, SLOT(slotImportProject()),
                           actionCollection(), "project_import" );
     action->setToolTip( i18n("Import existing project") );
-    action->setWhatsThis( i18n("Import existing project<p>Creates a project file for a given directory.") );
+    action->setWhatsThis( i18n("<b>Import existing project</b><p>Creates a project file for a given directory.") );
 }
 
 

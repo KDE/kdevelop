@@ -28,7 +28,7 @@
                     <cstring>fileTemplatesPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>General</string>
+                    <string>&amp;General</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -68,7 +68,10 @@
                                     <cstring>TextLabel3</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Interface suffix:</string>
+                                    <string>&amp;Interface suffix:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>interface_suffix</cstring>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -76,7 +79,10 @@
                                     <cstring>TextLabel4</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Implementation suffix:</string>
+                                    <string>I&amp;mplementation suffix:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>implementation_suffix</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -105,7 +111,7 @@
                     <cstring>codeCompletionPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Code Completion</string>
+                    <string>Code Comp&amp;letion</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -124,7 +130,7 @@
                                     <cstring>checkAutomaticCodeCompletion</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic code completion</string>
+                                    <string>Automatic c&amp;ode completion</string>
                                 </property>
                             </widget>
                             <widget class="KIntNumInput">
@@ -137,7 +143,7 @@
                                     <cstring>checkAutomaticArgumentsHint</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Automatic arguments hint</string>
+                                    <string>Automatic &amp;arguments hint</string>
                                 </property>
                             </widget>
                             <widget class="KIntNumInput">
@@ -216,7 +222,7 @@
                                     <cstring>newPCSButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add Persistant Class Store...</string>
+                                    <string>Add &amp;Persistant Class Store...</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -239,7 +245,10 @@
     <tabstop>implementation_suffix</tabstop>
     <tabstop>codecompletion_tab</tabstop>
     <tabstop>checkAutomaticCodeCompletion</tabstop>
+    <tabstop>inputCodeCompletion</tabstop>
     <tabstop>checkAutomaticArgumentsHint</tabstop>
+    <tabstop>inputArgumentsHint</tabstop>
+    <tabstop>newPCSButton</tabstop>
     <tabstop>advancedOptions</tabstop>
 </tabstops>
 <includes>

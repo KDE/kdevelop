@@ -44,6 +44,8 @@ BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStrin
 
 	KAction *action;
 	action = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
+    action->setToolTip(i18n("Run"));
+    action->setWhatsThis(i18n("<b>Run</b>Starts an application.<p>"));
 
 	kdDebug() << "Creating BashSupportPart" << endl;
 

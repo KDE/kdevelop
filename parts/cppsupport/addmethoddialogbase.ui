@@ -155,7 +155,10 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Return type:</string>
+                                <string>Return T&amp;ype:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>returnType</cstring>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -176,7 +179,10 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Declarator:</string>
+                                <string>D&amp;eclarator:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>declarator</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -224,7 +230,10 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Storage:</string>
+                                <string>S&amp;torage:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>storage</cstring>
                             </property>
                         </widget>
                         <widget class="QCheckBox" row="1" column="2">
@@ -232,7 +241,7 @@
                                 <cstring>isInline</cstring>
                             </property>
                             <property name="text">
-                                <string>Inline</string>
+                                <string>&amp;Inline</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -240,7 +249,10 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Access:</string>
+                                <string>Acce&amp;ss:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>access</cstring>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -292,7 +304,7 @@
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>Implementation File</string>
+                <string>I&amp;mplementation File</string>
             </property>
             <hbox>
                 <property name="name">
@@ -318,6 +330,9 @@
                     <property name="name">
                         <cstring>browseButton</cstring>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>TabFocus</enum>
+                    </property>
                     <property name="text">
                         <string>...</string>
                     </property>
@@ -335,21 +350,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                    <property name="accel">
-                        <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -497,10 +497,14 @@
     <tabstop>access</tabstop>
     <tabstop>storage</tabstop>
     <tabstop>isInline</tabstop>
+    <tabstop>sourceFile</tabstop>
+    <tabstop>browseButton</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonHelp</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">init()</slot>
     <slot access="protected">destroy()</slot>
@@ -510,9 +514,6 @@
     <slot>updateGUI()</slot>
     <slot>browseImplementationFile()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

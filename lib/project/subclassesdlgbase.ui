@@ -93,10 +93,13 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Related subclass location:</string>
+                <string>Related subclass &amp;location:</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignVCenter</set>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>subclass_url</cstring>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">

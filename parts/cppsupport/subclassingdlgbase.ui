@@ -35,7 +35,10 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Specialize following slots:</string>
+                        <string>&amp;Specialize following slots:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_slotView</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
@@ -56,7 +59,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Class name:</string>
+                        <string>C&amp;lass name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_edClassName</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -72,7 +78,10 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>File name:</string>
+                        <string>F&amp;ile name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_edFileName</cstring>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
@@ -145,7 +154,7 @@
                         <cstring>reformat_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Reformat source</string>
+                        <string>Re&amp;format source</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="4" column="2">
@@ -161,7 +170,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Reformat source by default</string>
+                        <string>Reformat source by &amp;default</string>
                     </property>
                 </widget>
             </grid>
@@ -172,6 +181,9 @@
             </property>
             <property name="text">
                 <string>C&amp;reate</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QPushButton" row="1" column="2">
