@@ -57,15 +57,15 @@ public:
 	SubprojectItem(QListView *parent, const QString &text);
 	SubprojectItem(SubprojectItem *parent, const QString &text);
 	
-	/* name of the directory */
+	/** name of the directory */
 	QString subdir;
-	/* absolute path */
+	/** absolute path */
 	QString path;
-	/* mapping from prefix to path */
+	/** mapping from prefix to path */
 	QMap<QString, QString> prefixes;
-	/* mapping from variable name to value */
+	/** mapping from variable name to value */
 	QMap<QString, QString> variables;
-	/* list of targets */
+	/** list of targets */
 	QPtrList<TargetItem> targets;
 	
 	QString relativePath();
@@ -93,25 +93,25 @@ public:
 
 	TargetItem(QListView *lv, bool group, const QString &text);
 
-	// Target kind - not used currently
-	//    TargetKind kind;
-	// Name of target, e.g. foo
+	//! Target kind - not used currently
+	//!    TargetKind kind;
+	//! Name of target, e.g. foo
 	QString name;
-	// One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
-	// In addition to these automake primaries, we use KDEICON and KDEDOCS
-	// for am_edit magic
+	//! One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
+	//! In addition to these automake primaries, we use KDEICON and KDEDOCS
+	//! for am_edit magic
 	QString primary;
-	// May be bin, pkglib, noinst, check, sbin, pkgdata, java...
+	//! May be bin, pkglib, noinst, check, sbin, pkgdata, java...
 	QString prefix;
-	// Content of foo_SOURCES (or java_JAVA) assignment
+	//! Content of foo_SOURCES (or java_JAVA) assignment
 	QPtrList<FileItem> sources;
-	// Content of foo_LDFLAGS assignment
+	//! Content of foo_LDFLAGS assignment
 	QString ldflags;
-	// Content of foo_LDADD assignment
+	//! Content of foo_LDADD assignment
 	QString ldadd;
-	// Content of foo_LIBADD assignment
+	//! Content of foo_LIBADD assignment
 	QString libadd;
-	// Content of foo_DEPENDENCIES assignment
+	//! Content of foo_DEPENDENCIES assignment
 	QString dependencies;
 };
 
