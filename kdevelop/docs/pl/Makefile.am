@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = tipdatabase 
+EXTRA_DIST = tipdatabase index.sgml
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/pl/kdevelop/
