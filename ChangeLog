@@ -1,3 +1,7 @@
+2001-04-18  F@lk Brettschneider <falk@kdevelop.org>
+    * moved the MDI mode selection to Options->KDevelop->user_interface
+    * bugfix: concerning the visibility of the MDI view taskbar
+
 2001-04-17  F@lk Brettschneider <falk@kdevelop.org>
     * likely the bugfix for the crash when closing an MDI view
 
