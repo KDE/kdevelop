@@ -565,8 +565,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
                               bool bForceReload, bool bShowModifiedBox)
 {
 
-  debug("switching to %s !\n", filename.data());
-
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
     // not links in files or hardlinks. The _real_ solution
@@ -585,8 +583,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //FB  lastfile = pCurEditWidget->getName();
 //FB  lasttab = s_tab_view->getCurrentTab();
 
-  debug("getting file info !\n");
-
   QFileInfo fileInfo(filename);
   // check if the file exists
   if(!fileInfo.exists() && !isUntitled(filename)){
@@ -595,8 +591,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   }
 
   QString ext = fileInfo.extension(false);
-
-  debug("url stuffing !\n");
 
   KURL url;
   url.setFileName(filename);
