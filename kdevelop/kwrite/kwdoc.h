@@ -183,8 +183,9 @@ class KWriteDoc : public QObject {
     void clearBookmarks();
     void updateBMPopup(QPopupMenu* popup);
     void gotoBookmark(QString &text);
-
     KWrite* getKWrite();
+    QList<KWriteView> viewList() { return views; };
+    int viewCount();
 
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);

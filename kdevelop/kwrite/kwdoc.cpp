@@ -3296,4 +3296,9 @@ KWrite* KWriteDoc::getKWrite()
   }
 }
 
+int KWriteDoc::viewCount()
+{
+  return views.count();
+}
+
 #include "kwdoc.moc"

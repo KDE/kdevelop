@@ -676,8 +676,11 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 {
   debug("DocViewMan::closeKWriteDoc !\n");
 
-  CEditWidget* pView = getFirstEditView(pDoc);
-  if(pView) {
+  QList<KWriteView> views = pDoc->viewList();
+  QListIterator<KWriteView>  itViews(views);
+  for (; itViews.current() != 0; ++itViews) {
+    CEditWidget* pView = (CEditWidget*) itViews.current()->parentWidget();
+    if (!pView) continue;
     disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
                this, SLOT(slot_gotFocus(CEditWidget*)));
     // remove the view from MDI and delete the view
@@ -1223,7 +1226,9 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   //  emit sig_lastViewClosed();
   // }
 
-  closeKWriteDoc(pDoc); 
+  if (pDoc->viewCount() == 0) {
+    closeKWriteDoc(pDoc);
+  }
 }
 
 //-----------------------------------------------------------------------------
