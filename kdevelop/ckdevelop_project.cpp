@@ -770,36 +770,26 @@ void CKDevelop::slotProjectAPI(){
   QString idx_path, link;
   idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
           + "/kdoc-reference";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
-       QFileInfo(idx_path + "/qt.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/qt.kdoc").exists() )
-#endif
-      link += " -lqt";
-  // This could me made a lot smarter...
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
-       QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() )
-#endif
-      link += " -lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() ||
-       QFileInfo(idx_path + "/khtmlw.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() )
-#endif
-      link += " -lkhtmlw";
-#ifdef WITH_KDOC2
-  if ( QFileInfo(idx_path + "/khtml.kdoc").exists() ||
-      QFileInfo(idx_path + "/khtml.kdoc.gz").exists() )
-#else
-  if ( QFileInfo(idx_path + "/khtml.kdoc").exists())
-#endif
-      link += " -lkhtml";
-
+  if (!idx_path.isEmpty())
+  {
+    QDir d;
+    d.setPath(idx_path);
+    if(!d.exists())
+      return;
+    QString libname;
+    const QFileInfoList *fileList = d.entryInfoList(); // get the file info list
+    QFileInfoListIterator it( *fileList ); // iterator
+    QFileInfo *fi; // the current file info
+    while ( (fi=it.current()) ) {  // traverse all kdoc reference files
+      libname=fi->fileName();  // get the filename
+      if(fi->isFile())
+      {
+        libname=fi->baseName();  // get only the base of the filename as library name
+        link+=" -l"+libname;
+      }
+      ++it; // increase the iterator
+    }
+  }
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
   int dirlength = QDir::currentDirPath().length()+1;
 
@@ -816,7 +806,7 @@ void CKDevelop::slotProjectAPI(){
 
   shell_process.clearArguments();
   shell_process << "kdoc";
-  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  shell_process << "-p -z -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);

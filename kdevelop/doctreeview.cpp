@@ -477,7 +477,7 @@ void DocTreeKDELibsFolder::refresh()
         if(!libname.contains("qt.kdoc") && fi->isFile()) // exclude qt.kdoc || qt.kdoc.gz and everything except files
         {
           libname=fi->baseName();  // get only the base of the filename as library name
-          list.append(new DocTreeKDELibsBook(this, libname+ i18n(" Library"), libname)); // append to the doctree
+          list.append(new DocTreeKDELibsBook(this, libname+ i18n("-Library"), libname)); // append to the doctree
         }
         ++it; // increase the iterator
       }
