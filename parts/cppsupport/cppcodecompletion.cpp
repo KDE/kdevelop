@@ -158,19 +158,21 @@ struct CppCodeCompletionData
         QPair<int, int> pt = qMakePair( line, column );
 
         QPtrListIterator<RecoveryPoint> it( recoveryPoints );
+	RecoveryPoint* recPt = 0;
+
         while( it.current() ){
             QPair<int, int> startPt = qMakePair( it.current()->startLine, it.current()->startColumn );
             QPair<int, int> endPt = qMakePair( it.current()->endLine, it.current()->endColumn );
 
-            if( (startPt < pt || startPt == pt) && (pt < endPt || pt == endPt) ){
-                kdDebug(9007) << "found recovery point " << it.current()->scope.join("::") << endl;
-                return it.current();
-            }
+	    if( pt < startPt )
+	        break;
+
+	    recPt = it.current();
 
             ++it;
         }
 
-        return 0;
+        return recPt;
     }
 
 };
@@ -645,6 +647,7 @@ CppCodeCompletion::completeText( )
 	    Parser parser( &d, &lexer );
 
 	    parser.parseDeclaration( recoveredDecl );
+	    //kdDebug(9007) << "recoveredDecl = " << recoveredDecl.get() << endl;
 	    if( recoveredDecl.get() ){
 
 		bool isFunDef = recoveredDecl->nodeType() == NodeType_FunctionDefinition;
@@ -1688,7 +1691,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
         }
     }
 #endif
-    
+
     return c;
 }
 

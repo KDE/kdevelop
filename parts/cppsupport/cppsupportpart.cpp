@@ -104,7 +104,7 @@ void showMemUsage()
 {}
 #endif
 
-enum { PCS_VERSION = 2 };
+enum { PCS_VERSION = 3 };
 
 class CppDriver: public KDevDriver
 {
@@ -408,9 +408,9 @@ void
 CppSupportPart::projectClosed( )
 {
     kdDebug( 9007 ) << "projectClosed( )" << endl;
-    
+
     saveProjectSourceInfo();
-    
+
     m_pCompletionConfig->store();
 
     if( m_backgroundParser )
@@ -726,26 +726,26 @@ CppSupportPart::parseProject( )
     bar->show( );
 
     QDir d( m_projectDirectory );
-    
+
     QDataStream stream;
     QMap< QString, QPair<uint, Q_LONG> > pcs;
-    
+
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
 	int numFiles = 0;
 	stream >> numFiles;
-    
+
 	for( int i=0; i<numFiles; ++i ){
 	    QString fn;
 	    uint ts;
 	    Q_LONG offset;
-	    
+
 	    stream >> fn >> ts >> offset;
 	    pcs[ fn ] = qMakePair( ts, offset );
 	}
     }
- 
+
     int n = 0;
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
@@ -1221,17 +1221,17 @@ void CppSupportPart::addClass( )
 void CppSupportPart::saveProjectSourceInfo( )
 {
     const FileList fileList = codeModel()->fileList();
-    
+
     if( !project() || fileList.isEmpty() )
 	return;
-    
+
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( !f.open( IO_WriteOnly ) )
 	return;
-    
+
     QDataStream stream( &f );
     QMap<QString, Q_ULONG> offsets;
-    
+
     stream << int( fileList.size() );
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
 	const FileDom dom = (*it);
@@ -1239,19 +1239,19 @@ void CppSupportPart::saveProjectSourceInfo( )
 	offsets.insert( dom->name(), stream.device()->at() );
 	stream << (Q_ULONG)0; // dummy offset
     }
-    
+
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){
 	const FileDom dom = (*it);
 	int offset = stream.device()->at();
-	
+
 	dom->write( stream );
-	
+
 	int end = stream.device()->at();
-	
+
 	stream.device()->at( offsets[dom->name()] );
 	stream << offset;
 	stream.device()->at( end );
-    }    
+    }
 }
 
 #include "cppsupportpart.moc"
