@@ -154,8 +154,6 @@ public:
     SourceProvider* sourceProvider();
     void setSourceProvider( SourceProvider* sourceProvider );
 
-    void setGeneratePreprocessedOutput( bool b );
-
     virtual void reset();
 
     virtual void parseFile( const QString& fileName, bool onlyPreProcesss=false, bool force=false );
@@ -208,7 +206,6 @@ private:
     QMap<QString, TranslationUnitAST*> m_parsedUnits;
     QStringList m_includePaths;
     uint depresolv : 1;
-    uint m_generatePreprocessedOutput : 1;
     Lexer *lexer;
     SourceProvider* m_sourceProvider;
 
