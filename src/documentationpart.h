@@ -18,6 +18,8 @@ public:
   virtual bool openURL(const KURL &url);
   static QString resolveEnvVarsInURL(const QString& url);
 
+signals:
+  void fileNameChanged();
 
 private slots:
  
