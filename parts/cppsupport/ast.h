@@ -68,6 +68,7 @@ enum NodeType
     NodeType_DeclarationStatement,
     NodeType_TranslationUnit,
     NodeType_FunctionDefinition,
+    NodeType_ExpressionStatement,
 
     NodeType_Custom = 2000
 };
@@ -252,10 +253,25 @@ class BaseSpecifierAST: public AST
 {
 public:
     typedef std::auto_ptr<BaseSpecifierAST> Node;
+    enum { Type = NodeType_BaseSpecifier };
     
 public:
     BaseSpecifierAST();
     virtual ~BaseSpecifierAST();
+    
+    AST* isVirtual() { return m_isVirtual.get(); }
+    void setIsVirtual( AST::Node& isVirtual );
+    
+    AST* access() { return m_access.get(); }
+    void setAccess( AST::Node& access );
+    
+    NameAST* name() { return m_name.get(); }
+    void setName( NameAST::Node& name );
+    
+private:
+    AST::Node m_isVirtual;
+    AST::Node m_access;
+    NameAST::Node m_name;
             
 private:
     BaseSpecifierAST( const BaseSpecifierAST& source );
@@ -266,6 +282,7 @@ class BaseClauseAST: public AST
 {
 public:
     typedef std::auto_ptr<BaseClauseAST> Node;
+    enum { Type = NodeType_BaseClause };
     
 public:
     BaseClauseAST();
@@ -704,11 +721,33 @@ public:
 public:
     StatementAST();
     virtual ~StatementAST();
-    
+
 private:
     StatementAST( const StatementAST& source );
     void operator = ( const StatementAST& source );
 };
+
+class ExpressionStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<ExpressionStatementAST> Node;
+    enum { Type = NodeType_ExpressionStatement };
+
+public:
+    ExpressionStatementAST();
+    virtual ~ExpressionStatementAST();
+
+    AST* expression() { return m_expression.get(); }
+    void setExpression( AST::Node& expression );
+
+private:
+    AST::Node m_expression;
+
+private:
+    ExpressionStatementAST( const ExpressionStatementAST& source );
+    void operator = ( const ExpressionStatementAST& source );
+};
+
 
 class IfStatementAST: public StatementAST
 {

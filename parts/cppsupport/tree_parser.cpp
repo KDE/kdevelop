@@ -125,7 +125,9 @@ void TreeParser::parseTemplateDeclaration( TemplateDeclarationAST* decl )
 void TreeParser::parseSimpleDeclaration( SimpleDeclarationAST* decl )
 {
     //kdDebug(9007) << "TreeParser::parseSimpleDeclaration()" << endl;
-    Q_UNUSED( decl );
+    TypeSpecifierAST* typeSpec = decl->typeSpec();
+    if( typeSpec && !decl->initDeclaratorList() )
+        parseTypeSpecifier( typeSpec );
 }
 
 void TreeParser::parseFunctionDefinition( FunctionDefinitionAST* def )
@@ -151,11 +153,11 @@ void TreeParser::parseTypeSpecifier( TypeSpecifierAST* typeSpec )
     case NodeType_ClassSpecifier:
 	parseClassSpecifier( static_cast<ClassSpecifierAST*>(typeSpec) );
 	break;
-	
+
     case NodeType_EnumSpecifier:
 	parseEnumSpecifier( static_cast<EnumSpecifierAST*>(typeSpec) );
 	break;
-	
+
     case NodeType_ElaboratedTypeSpecifier:
 	parseElaboratedTypeSpecifier( static_cast<ElaboratedTypeSpecifierAST*>(typeSpec) );
 	break;
@@ -168,7 +170,7 @@ void TreeParser::parseClassSpecifier( ClassSpecifierAST* classSpec )
     QPtrList<DeclarationAST> declarations = classSpec->declarations();
     for( QPtrListIterator<DeclarationAST> it(declarations); it.current(); ++it ){
 	parseDeclaration( it.current() );
-    }    
+    }
 }
 
 void TreeParser::parseEnumSpecifier( EnumSpecifierAST* enumSpec )

@@ -16,6 +16,7 @@
 #include "problemreporter.h"
 #include "implementmethodsdialog.h"
 #include "backgroundparser.h"
+#include "store_walker.h"
 #include "ast.h"
 #include "ast_utils.h"
 
@@ -310,6 +311,7 @@ CppSupportPart::slotEnablePersistantClassStore( bool setEnable )
 		kdDebug( 9007 ) << "failed removing file " << pcsFile << ppFileExt( ) << endl;
 	}
     }
+    
 }
 
 
@@ -1123,7 +1125,17 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassPar
         return;
 
     store->removeWithReferences( fileName );
+#if 1
     parser->parse( fileName );
+#else
+    m_backgroundParser->lock();
+    TranslationUnitAST* translationUnit =  m_backgroundParser->translationUnit( fileName );
+    if( translationUnit ){
+	StoreWalker walker( fileName, store );
+	walker.parseTranslationUnit( translationUnit );
+    }
+    m_backgroundParser->unlock();
+#endif
 }
 
 

@@ -173,14 +173,12 @@ Unit* BackgroundParser::findOrCreateUnit( const QString& fileName )
 
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
-    TranslationUnitAST* ast = 0;
     Unit* u = findOrCreateUnit( fileName );
     return u ? u->translationUnit : 0;
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
-    QValueList<Problem> problems;
     Unit* u = findOrCreateUnit( fileName );
     return u ? u->problems : QValueList<Problem>();
 }

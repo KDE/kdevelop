@@ -86,10 +86,12 @@ QString nodeTypeToString( NodeType type )
 	return "TranslationUnit";
     case NodeType_FunctionDefinition:
 	return "FunctionDefinition";
-    case NodeType_Custom:	
+    case NodeType_ExpressionStatement:
+	return "ExpressionStatement";
+    case NodeType_Custom:
 	return "Custom";
     }
-    
+
     return QString::null;
 }
 
@@ -594,11 +596,8 @@ void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
 
 void ClassSpecifierAST::setBaseClause( BaseClauseAST::Node& baseClause )
 {
-    if( m_baseClause.get() )
-	m_baseClause->setParent( 0 );
-
     m_baseClause = baseClause;
-    m_baseClause->setParent( this );
+    if( m_baseClause.get() ) m_baseClause->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -707,6 +706,24 @@ BaseSpecifierAST::BaseSpecifierAST()
 
 BaseSpecifierAST::~BaseSpecifierAST()
 {
+}
+
+void BaseSpecifierAST::setIsVirtual( AST::Node& isVirtual )
+{
+    m_isVirtual = isVirtual;
+    if( m_isVirtual.get() ) m_isVirtual->setParent( this );
+}
+
+void BaseSpecifierAST::setAccess( AST::Node& access )
+{
+    m_access = access;
+    if( m_access.get() ) m_access->setParent( this );
+}
+
+void BaseSpecifierAST::setName( NameAST::Node& name )
+{
+    m_name = name;
+    if( m_name.get() ) m_name->setParent( this );
 }
 
 // ------------------------------------------------------------------------
@@ -1090,4 +1107,19 @@ void DeclarationStatementAST::setDeclaration( DeclarationAST::Node& declaration 
 {
     m_declaration = declaration;
     if( m_declaration.get() ) m_declaration->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+ExpressionStatementAST::ExpressionStatementAST()
+{
+}
+
+ExpressionStatementAST::~ExpressionStatementAST()
+{
+}
+
+void ExpressionStatementAST::setExpression( AST::Node& expression )
+{
+    m_expression = expression;
+    if( m_expression.get() ) m_expression->setParent( this );
 }

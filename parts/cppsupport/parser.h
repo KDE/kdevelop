@@ -47,7 +47,7 @@ public:
     {
 	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column;
     }
-    
+
     QString text() const { return m_text; }
     int line() const { return m_line; }
     int column() const { return m_column; }
@@ -124,7 +124,7 @@ public /*rules*/ :
     bool parseTypeParameter( AST::Node& node );
     bool parseParameterDeclaration( AST::Node& node );
     bool parseTypeId( AST::Node& node );
-    bool parseAbstractDeclarator( AST::Node& node );
+    bool parseAbstractDeclarator( DeclaratorAST::Node& node );
     bool parseParameterDeclarationList( AST::Node& node );
     bool parseMemberSpecification( DeclarationAST::Node& node );
     bool parseAccessSpecifier( AST::Node& node );
@@ -139,12 +139,12 @@ public /*rules*/ :
     bool parseFunctionBody( StatementListAST::Node& node );
 
     // expression
-    bool skipExpression();
-    bool skipConstantExpression();
-    bool skipCommaExpression();
-    bool skipAssignmentExpression();
-    bool skipExpressionStatement();
-    
+    bool skipExpression( AST::Node& node );
+    bool skipConstantExpression( AST::Node& node );
+    bool skipCommaExpression( AST::Node& node );
+    bool skipAssignmentExpression( AST::Node& node );
+    bool skipExpressionStatement( StatementAST::Node& node );
+
 #if 0
     bool parseExpression( AST::Node& node );
     bool parsePrimaryExpression( AST::Node& node );

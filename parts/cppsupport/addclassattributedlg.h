@@ -29,7 +29,7 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qmultilinedit.h>
+#include <qtextedit.h>
 #include <qlayout.h> 
 #include <klineedit.h>
 #include "parsedattribute.h"
@@ -86,7 +86,7 @@ public: // Public widgets
     QLabel nameLbl;
     QLineEdit nameEdit;
     QLabel docLbl;
-    QMultiLineEdit docEdit;
+    QTextEdit docEdit;
     
     QRadioButton publicRb;
     QRadioButton protectedRb;

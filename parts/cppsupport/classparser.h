@@ -19,8 +19,9 @@
 #define _CLASSPARSER_H_
 
 #include <qstring.h>
-#include <qlist.h>
-#include <qstack.h>
+#include <qptrlist.h>
+#include <qptrstack.h>
+using namespace std;
 #include <FlexLexer.h>
 #include <fstream.h>
 #include "tokenizer.h"

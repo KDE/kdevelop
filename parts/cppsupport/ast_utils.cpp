@@ -35,7 +35,7 @@ AST* findNodeAt( AST* node, int line, int column )
     node->getEndPosition( &endLine, &endColumn );
 
     if( (line > startLine || (line == startLine && column >= startColumn)) &&
-        (line < endLine || (line == endLine && column <= endColumn)) ){
+        (line < endLine || (line == endLine && column < endColumn)) ){
 
         QPtrList<AST> children = node->children();
 	QPtrListIterator<AST> it( children );
