@@ -1,3 +1,14 @@
+2003-05-16 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
+    * Trollproject: Support for custom installation groups or qmake install objects
+      Each install object tells "make install" to copy user specified filesgroups to
+      a certain location.      
+      example:
+         doxy.files += docs/*.html \
+                       docs/*.css
+         doxy.path = /usr/doc/appname
+         INSTALLS += doxy
+      
+
 2003-05-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Updated BookmarksPart - added tooltips && RMB actions
 
