@@ -35,7 +35,7 @@
 #include <ktempfile.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevappfrontend.h"
 #include "kdevdifffrontend.h"
 #include "commitdlg.h"

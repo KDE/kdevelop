@@ -24,7 +24,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "domutil.h"
 #include "fileviewpart.h"
 
@@ -242,7 +242,7 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
         return;
 
     m_part->partController()->editDocument( ftitem->url() );
-    m_part->topLevel()->lowerView( this );
+    m_part->mainWindow()->lowerView( this );
 }
 
 void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPoint &p )

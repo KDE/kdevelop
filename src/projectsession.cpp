@@ -133,7 +133,10 @@ void ProjectSession::recreateDocs(QDomElement& el)
   // loop over all docs
   int nDoc = 0;
   QDomElement docEl;
-  for (docEl = docsAndViewsEl.firstChild().toElement(), nDoc = 0; nDoc < nNrOfDocs; nDoc++, docEl = docEl.nextSibling().toElement()) {
+  for (docEl = docsAndViewsEl.firstChild().toElement(), nDoc = 0;
+       nDoc < nNrOfDocs; 
+       nDoc++, docEl = docEl.nextSibling().toElement()) 
+  {
     // read the document name and type
     QString docName = docEl.attribute( "URL", "");
     if (!docName.isEmpty() /* && URL::exists(docName)*/) {
@@ -143,36 +146,12 @@ void ProjectSession::recreateDocs(QDomElement& el)
     }
   }
 
-////  QextMdiChildView* pLastView = 0L;
-////  QextMdiChildFrm*  pLastFrm = 0L;
-////  QextMdiIterator<QextMdiChildView*>* winListIter = pMainWidget->createIterator();
-////  for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
-////    pLastView = winListIter->currentItem();
-////    if (bMaxMode && pLastView->isAttached()) {
-////      pLastFrm = pLastView->mdiParent();
-////    }
-////  }
-////  // evil hack (of Falk): resize the childframe again 'cause of event timing probs with resizing
-////  if (bMaxMode && pLastFrm && pLastFrm->parentWidget()) {
-////    QApplication::sendPostedEvents();
-////    pLastFrm->setGeometry(-QEXTMDI_MDI_CHILDFRM_BORDER,
-////                          -QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
-////                          pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-////                          pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
-////  }
-////  // show the last (the one above all)
-////  if (pLastView) {
-////    pLastView->show();
-////    QApplication::sendPostedEvents();
-////    // show the rest
-////    for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
-////      winListIter->currentItem()->show();
-////    }
-////  }
+  if (nNrOfDocs > 0) {
+      API::getInstance()->mainWindow()->callCommand("qextmdi-UI: do hack on session loading finished");
+  }
 ////  if (bTaskBarWasOn) {
 ////     pMainWidget->showViewTaskBar();
 ////  }
-////  delete winListIter; winListIter = NULL;
 }
 
 //---------------------------------------------------------------------------

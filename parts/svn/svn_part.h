@@ -25,7 +25,7 @@
 #include <kdialogbase.h>
 #include <subversion-1/svn_client.h>
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "commitdlg.h"
 
 class SvnPart : public KDevPlugin

@@ -9,7 +9,7 @@
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 
 class HistoryEntry
@@ -40,7 +40,7 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 
   m_recentList = new QListBox;
   m_recentList->setCaption(i18n("Recent files"));
-  topLevel()->embedSelectView(m_recentList, i18n("Recent"), i18n("recent files"));
+  mainWindow()->embedSelectView(m_recentList, i18n("Recent"), i18n("recent files"));
   connect(m_recentList, SIGNAL(selected(const QString &)),
 	  this, SLOT(recentFileSelected(const QString &)));
 
@@ -56,7 +56,7 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 HistoryPart::~HistoryPart()
 {
   if (m_recentList)
-    topLevel()->removeView(m_recentList);
+    mainWindow()->removeView(m_recentList);
   delete m_recentList;
 }
 
@@ -190,7 +190,7 @@ void HistoryPart::recentFileSelected(const QString &url)
 {
   KURL theURL(url);
  
-  topLevel()->lowerView(m_recentList);
+  mainWindow()->lowerView(m_recentList);
 
   KParts::Part *part = 0;
 
@@ -210,7 +210,7 @@ void HistoryPart::recentFileSelected(const QString &url)
     partController()->setActivePart(part);
     if (part->widget())
     {
-      topLevel()->raiseView(part->widget());
+      mainWindow()->raiseView(part->widget());
       part->widget()->setFocus();
     }
 
@@ -251,7 +251,7 @@ void HistoryPart::restoreState()
   partController()->setActivePart(entry->m_part);
   if (entry->m_part->widget())
   {
-    topLevel()->raiseView(entry->m_part->widget());
+    mainWindow()->raiseView(entry->m_part->widget());
     entry->m_part->widget()->setFocus();
   }
 

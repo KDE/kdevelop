@@ -21,7 +21,7 @@
 
 #include "appoutputviewpart.h"
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
     : ProcessWidget(0, "app output widget")
@@ -49,8 +49,8 @@ void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 	QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
 	if (row && assertMatch.exactMatch(row->text())) {
 		m_part->partController()->editDocument(assertMatch.cap(2), assertMatch.cap(3).toInt() - 1);
-		m_part->topLevel()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
-		m_part->topLevel()->lowerView(this);
+		m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
+		m_part->mainWindow()->lowerView(this);
 	}
 }
 

@@ -15,7 +15,7 @@
 #include <kdevapi.h>
 #include <kdevcore.h>
 #include <kdevproject.h>
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 
 #include <ktip.h>
@@ -40,7 +40,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 	connect(core(),SIGNAL(projectOpened()),this,SLOT(slotProjectOpened()));
 
     m_filetree->setCaption(i18n("File Selector"));
-	topLevel()->embedSelectView(m_filetree, i18n("File Selector"), i18n("file selector"));
+	mainWindow()->embedSelectView(m_filetree, i18n("File Selector"), i18n("file selector"));
 
 }
 
@@ -48,7 +48,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 FileSelectorPart::~FileSelectorPart()
 {
   if (m_filetree)
-    topLevel()->removeView(m_filetree);
+    mainWindow()->removeView(m_filetree);
   delete m_filetree;
 }
 
@@ -58,7 +58,7 @@ void FileSelectorPart::fileSelected(const KFileItem *file)
   KURL u(file->url());
 
   partController()->editDocument( u );
-  topLevel()->lowerView(m_filetree);
+  mainWindow()->lowerView(m_filetree);
 }
 
 void FileSelectorPart::slotProjectOpened(){

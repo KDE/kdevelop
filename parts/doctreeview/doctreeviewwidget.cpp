@@ -37,7 +37,7 @@
 
 #include "kdevcore.h"
 #include "domutil.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 
@@ -1038,7 +1038,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
 
     kdDebug(9002) << "Showing: " << ident << endl;
     m_part->partController()->showDocument(KURL(ident), dtitem->context());
-    m_part->topLevel()->lowerView(this);
+    m_part->mainWindow()->lowerView(this);
 }
 
 

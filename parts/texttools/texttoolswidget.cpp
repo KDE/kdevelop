@@ -22,7 +22,7 @@
 #include <ktexteditor/selectioninterface.h>
 #include <ktexteditor/editinterface.h>
 
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "texttoolspart.h"
 
@@ -138,7 +138,7 @@ void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
         }
     }
 
-    m_part->topLevel()->lowerView(this);
+    m_part->mainWindow()->lowerView(this);
 }
 
 

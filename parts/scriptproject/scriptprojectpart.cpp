@@ -27,7 +27,7 @@
 
 #include "domutil.h"
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
 #include "scriptoptionswidget.h"

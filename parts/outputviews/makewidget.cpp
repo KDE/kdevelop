@@ -32,7 +32,7 @@
 #include <kconfig.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "processlinemaker.h"
 
@@ -197,7 +197,7 @@ void MakeWidget::startNextJob()
     dirstack.clear();
     dirstack.push(new QString(dir));
 
-    m_part->topLevel()->raiseView(this);
+    m_part->mainWindow()->raiseView(this);
     m_part->core()->running(m_part, true);
 }
 
@@ -256,8 +256,8 @@ void MakeWidget::nextError()
             setCursorPosition(parag, 0);
             ensureCursorVisible();
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
-            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
-            m_part->topLevel()->lowerView(this);
+            m_part->mainWindow()->statusBar()->message( (*it)->text, 10000 );
+            m_part->mainWindow()->lowerView(this);
             return;
         }
 
@@ -284,8 +284,8 @@ void MakeWidget::prevError()
             setCursorPosition(parag, 0);
             ensureCursorVisible();
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
-            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
-            m_part->topLevel()->lowerView(this);
+            m_part->mainWindow()->statusBar()->message( (*it)->text, 10000 );
+            m_part->mainWindow()->lowerView(this);
             return;
         }
 
@@ -323,8 +323,8 @@ void MakeWidget::searchItem(int parag)
         if ((*it)->parag == parag)
         {
             m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
-            m_part->topLevel()->statusBar()->message( (*it)->text, 10000 );
-            m_part->topLevel()->lowerView(this);
+            m_part->mainWindow()->statusBar()->message( (*it)->text, 10000 );
+            m_part->mainWindow()->lowerView(this);
         }
         if ((*it)->parag >= parag)
             return;
@@ -371,7 +371,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 
     insertLine2(s, t);
 
-    m_part->topLevel()->statusBar()->message(QString("%1: %2").arg(currentCommand).arg(s), 3000);
+    m_part->mainWindow()->statusBar()->message(QString("%1: %2").arg(currentCommand).arg(s), 3000);
     m_part->core()->running(m_part, false);
 
     // Defensive programming: We emit this with a single shot timer so that we go once again

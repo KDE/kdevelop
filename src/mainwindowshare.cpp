@@ -98,23 +98,23 @@ void MainWindowShare::createActions()
 
 
   m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
-  m_toggleMainToolbar->setText("&Main Toolbar");
+  m_toggleMainToolbar->setText(i18n("Show &Main Toolbar"));
   m_toggleMainToolbar->setStatusText( i18n("Hides or shows the main toolbar") );
 
   m_toggleBuildToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBuildToolbar()),m_pMainWnd->actionCollection(), "settings_build_toolbar");
-  m_toggleBuildToolbar->setText("&Build Toolbar");
+  m_toggleBuildToolbar->setText(i18n("Show &Build Toolbar"));
   m_toggleBuildToolbar->setStatusText( i18n("Hides or shows the build toolbar") );
 
   m_toggleViewToolbar = KStdAction::showToolbar(this, SLOT(slotToggleViewToolbar()),m_pMainWnd->actionCollection(), "settings_view_toolbar");
-  m_toggleViewToolbar->setText("&View Toolbar");
+  m_toggleViewToolbar->setText(i18n("Show &View Toolbar"));
   m_toggleViewToolbar->setStatusText( i18n("Hides or shows the view toolbar") );
 
   m_toggleBrowserToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBrowserToolbar()),m_pMainWnd->actionCollection(), "settings_browser_toolbar");
-  m_toggleBrowserToolbar->setText("&Browser Toolbar");
+  m_toggleBrowserToolbar->setText(i18n("Show &Browser Toolbar"));
   m_toggleBrowserToolbar->setStatusText( i18n("Hides or shows the browser toolbar") );
 
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
-  m_toggleStatusbar->setText("&Statusbar");
+  m_toggleStatusbar->setText(i18n("Show &Statusbar"));
   m_toggleStatusbar->setStatusText( i18n("Hides or shows the statusbar") );
 }
 

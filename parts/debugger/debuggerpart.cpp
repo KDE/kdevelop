@@ -30,7 +30,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
 #include "kdevdebugger.h"
@@ -64,9 +64,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     setXMLFile("kdevdebugger.rc");
 
-    statusBarIndicator = new QLabel(" ", topLevel()->statusBar());
+    statusBarIndicator = new QLabel(" ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
-    topLevel()->statusBar()->addWidget(statusBarIndicator, 0, true);
+    mainWindow()->statusBar()->addWidget(statusBarIndicator, 0, true);
     statusBarIndicator->show();
     
     //
@@ -88,8 +88,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    topLevel()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
-    topLevel()->setViewAvailable(variableWidget, false);
+    mainWindow()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
+    mainWindow()->setViewAvailable(variableWidget, false);
 
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -100,7 +100,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
-    topLevel()->embedOutputView(breakpointWidget, i18n("Breakpoints"), i18n("debugger breakpoints"));
+    mainWindow()->embedOutputView(breakpointWidget, i18n("Breakpoints"), i18n("debugger breakpoints"));
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -113,8 +113,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
-    topLevel()->setViewAvailable(framestackWidget, false);
+    mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
+    mainWindow()->setViewAvailable(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -126,12 +126,12 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "instruction using the debuggers toolbar "
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
-    topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble view"));
-    topLevel()->setViewAvailable(disassembleWidget, false);
+    mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble view"));
+    mainWindow()->setViewAvailable(disassembleWidget, false);
     
     gdbOutputWidget = new ProcessWidget(0);
-    topLevel()->embedOutputView(gdbOutputWidget, i18n("GDB"), i18n("GDB output"));
-    topLevel()->setViewAvailable(gdbOutputWidget, false);
+    mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"), i18n("GDB output"));
+    mainWindow()->setViewAvailable(gdbOutputWidget, false);
     
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -243,7 +243,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          this, SLOT(slotDisableBreakpoint()),
                          actionCollection(), "debug_disable_breakpoint");
                          
-    connect( topLevel()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
+    connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
     
     connect( core(), SIGNAL(projectOpened()),
@@ -294,15 +294,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 DebuggerPart::~DebuggerPart()
 {
     if (variableWidget)
-        topLevel()->removeView(variableWidget);
+        mainWindow()->removeView(variableWidget);
     if (breakpointWidget)
-        topLevel()->removeView(breakpointWidget);
+        mainWindow()->removeView(breakpointWidget);
     if (framestackWidget)
-        topLevel()->removeView(framestackWidget);
+        mainWindow()->removeView(framestackWidget);
     if (disassembleWidget)
-        topLevel()->removeView(disassembleWidget);
+        mainWindow()->removeView(disassembleWidget);
     if(gdbOutputWidget)
-        topLevel()->removeView(gdbOutputWidget);
+        mainWindow()->removeView(gdbOutputWidget);
     
     delete variableWidget;
     delete breakpointWidget;
@@ -482,7 +482,7 @@ void DebuggerPart::startDebugger()
         }
         if( !info.exists() ) {
             KMessageBox::error(
-                topLevel()->main(),
+                mainWindow()->main(),
                 i18n("Could not locate the debugging shell '%1'.").arg( shell ),
                 i18n("Debugging shell not found.") );
             return;
@@ -504,10 +504,10 @@ void DebuggerPart::startDebugger()
                                "been activated or the interrupt was pressed).") );
     
 
-    topLevel()->setViewAvailable(variableWidget, true);
-    topLevel()->setViewAvailable(framestackWidget, true);
-    topLevel()->setViewAvailable(disassembleWidget, true);
-    topLevel()->setViewAvailable(gdbOutputWidget, true);
+    mainWindow()->setViewAvailable(variableWidget, true);
+    mainWindow()->setViewAvailable(framestackWidget, true);
+    mainWindow()->setViewAvailable(disassembleWidget, true);
+    mainWindow()->setViewAvailable(gdbOutputWidget, true);
     
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
@@ -537,10 +537,10 @@ void DebuggerPart::stopDebugger()
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     
-    topLevel()->setViewAvailable(variableWidget, false);
-    topLevel()->setViewAvailable(framestackWidget, false);
-    topLevel()->setViewAvailable(disassembleWidget, false);
-    topLevel()->setViewAvailable(gdbOutputWidget, false);
+    mainWindow()->setViewAvailable(variableWidget, false);
+    mainWindow()->setViewAvailable(framestackWidget, false);
+    mainWindow()->setViewAvailable(disassembleWidget, false);
+    mainWindow()->setViewAvailable(gdbOutputWidget, false);
 
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
@@ -561,10 +561,10 @@ void DebuggerPart::stopDebugger()
 void DebuggerPart::slotRun()
 {
     if( controller->stateIsOn( s_dbgNotStarted ) ) {
-      topLevel()->statusBar()->message(i18n("Debugging program"), 1000);
+      mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
       startDebugger();
     } else {
-      topLevel()->statusBar()->message(i18n("Continuing program"), 1000);
+      mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
     }
     controller->slotRun();
 }
@@ -572,14 +572,14 @@ void DebuggerPart::slotRun()
 
 void DebuggerPart::slotExamineCore()
 {
-    topLevel()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
+    mainWindow()->statusBar()->message(i18n("Choose a core file to examine..."), 1000);
 
     QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
     QString coreFile = KFileDialog::getOpenFileName(dirName);
     if (coreFile.isNull())
         return;
 
-    topLevel()->statusBar()->message(i18n("Examining core file %1").arg(coreFile), 1000);
+    mainWindow()->statusBar()->message(i18n("Examining core file %1").arg(coreFile), 1000);
 
     startDebugger();
     controller->slotCoreFile(coreFile);
@@ -588,14 +588,14 @@ void DebuggerPart::slotExamineCore()
 
 void DebuggerPart::slotAttachProcess()
 {
-    topLevel()->statusBar()->message(i18n("Choose a process to attach to..."), 1000);
+    mainWindow()->statusBar()->message(i18n("Choose a process to attach to..."), 1000);
 
     Dbg_PS_Dialog dlg;
     if (!dlg.exec() || !dlg.pidSelected())
         return;
 
     int pid = dlg.pidSelected();
-    topLevel()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
+    mainWindow()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
     
     startDebugger();
     controller->slotAttachTo(pid);
@@ -724,7 +724,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     statusBarIndicator->setText(stateIndicator);
     if (!msg.isEmpty())
-        topLevel()->statusBar()->message(msg, 3000);
+        mainWindow()->statusBar()->message(msg, 3000);
 }
 
 
@@ -761,7 +761,7 @@ void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
   if (!generalEl.isNull()) {
     bool enableFloatingToolBar = bool(generalEl.attribute( "dbgToolbar", "0").toInt());
     if (enableFloatingToolBar) {
-      floatingToolBar = new DbgToolBar(this, topLevel()->main());
+      floatingToolBar = new DbgToolBar(this, mainWindow()->main());
       floatingToolBar->show();
     }
   }

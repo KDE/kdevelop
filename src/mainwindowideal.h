@@ -27,10 +27,10 @@
 class KTabZoomWidget;
 class MainWindowShare;
 
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 
-class MainWindowIDEAl : public KParts::MainWindow, public KDevTopLevel
+class MainWindowIDEAl : public KParts::MainWindow, public KDevMainWindow
 {
   Q_OBJECT
 

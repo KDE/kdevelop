@@ -32,7 +32,7 @@
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
@@ -63,7 +63,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the subproject selected in the overview."));
     
-    topLevel()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("Automake Manager"));
+    mainWindow()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("Automake Manager"));
 
     KAction *action;
 
@@ -139,7 +139,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 AutoProjectPart::~AutoProjectPart()
 {
     if (m_widget)
-        topLevel()->removeView(m_widget);
+        mainWindow()->removeView(m_widget);
     delete m_widget;
 }
 

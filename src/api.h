@@ -12,8 +12,8 @@ class API : public KDevApi
 {
 public:
 
-  virtual KDevTopLevel *topLevel();
-  virtual bool topLevelValid();
+  virtual KDevMainWindow *mainWindow();
+  virtual bool mainWindowValid();
   virtual KDevPartController *partController();
   virtual KDevCore *core();
   virtual ClassStore *classStore();

@@ -12,7 +12,7 @@
 
 #include <kdevcore.h>
 #include <kdevpartcontroller.h>
-#include <kdevtoplevel.h>
+#include <kdevmainwindow.h>
 #include <kdevproject.h>
 
 #include "valgrind_part.h"
@@ -144,7 +144,7 @@ void ValgrindWidget::executed( QListViewItem* lvi )
 {
   Q_ASSERT( _part );
   Q_ASSERT( _part->partController() );
-  Q_ASSERT( _part->topLevel() );
+  Q_ASSERT( _part->mainWindow() );
   
   if ( !lvi || lvi->rtti() != VALLISTVIEWITEMRTTI )
     return;
@@ -163,8 +163,8 @@ void ValgrindWidget::executed( QListViewItem* lvi )
   if ( vli ) {
     // display the file
     _part->partController()->editDocument( vli->fileName(), vli->line() );
-    _part->topLevel()->statusBar()->message( vli->message(), 10000 );
-    _part->topLevel()->lowerView( this );
+    _part->mainWindow()->statusBar()->message( vli->message(), 10000 );
+    _part->mainWindow()->lowerView( this );
   }
 }
 

@@ -2,7 +2,7 @@
 #define __TOPLEVEL_H__
 
 
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 
 /*! \mainpage GIDEON ARCHITECTURE
@@ -15,10 +15,10 @@ TBD.
 
 \section framework Framework
 \subsection toplevel_object The Toplevel Opject
-There is only one toplevel object of class KDevTopLevel in Gideon. It can be accessed through the static function
+There is only one toplevel object of class KDevMainWindow in Gideon. It can be accessed through the static function
 TopLevel::getInstance() (see TopLevel).
 
-KDevTopLevel has two derived classes. One is used for the SDI mode (Single Document Interface), the other for the
+KDevMainWindow has two derived classes. One is used for the SDI mode (Single Document Interface), the other for the
 MDI modes (Multiple Document Interface).They are named TopLevelSDI and TopLevelMDI, respectively.
 
 \subsection SDI Single Document Interface Mode
@@ -29,7 +29,7 @@ MDI modes (Multiple Document Interface).They are named TopLevelSDI and TopLevelM
 
 
 
-/**\brief This class handles the single object of type KDevTopLevel.
+/**\brief This class handles the single object of type KDevMainWindow.
 
 It is completely static (all methods and attributes).
 */
@@ -38,14 +38,14 @@ class TopLevel
 {
 public:
 
-  static KDevTopLevel *getInstance();                                 //!< Get a pointer to the single KDevTopLevel object
-  static bool topLevelValid();
-  static void          invalidateInstance(KDevTopLevel *instance);    //!< Signal that the object has been (or is about to be) destroyed
+  static KDevMainWindow *getInstance();                                 //!< Get a pointer to the single KDevTopLevel object
+  static bool mainWindowValid();
+  static void invalidateInstance(KDevMainWindow *instance);             //!< Signal that the object has been (or is about to be) destroyed
 
 
 private:
 
-  static KDevTopLevel *s_instance;                                    //!< Pointer to the single KDevTopLevel object or 0L
+  static KDevMainWindow *s_instance;                                    //!< Pointer to the single KDevTopLevel object or 0L
   
 };
 

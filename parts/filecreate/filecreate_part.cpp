@@ -24,7 +24,7 @@
 #include <kaction.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 
@@ -98,10 +98,10 @@ bool FileCreatePart::setWidget(TypeChooser * widg) {
     disconnect( typeChooserWidget()->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
     QWidget * as_widget2 = typeChooserWidgetAsQWidget();
     if (as_widget2)
-      topLevel()->removeView(as_widget2);
+      mainWindow()->removeView(as_widget2);
   }
   connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-  topLevel()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
+  mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
   return true;
 }
 
@@ -198,7 +198,7 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
 
   openCreatedFile(createdFile);
 
-  topLevel()->lowerView( typeChooserWidgetAsQWidget() );
+  mainWindow()->lowerView( typeChooserWidgetAsQWidget() );
 }
 
 void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {

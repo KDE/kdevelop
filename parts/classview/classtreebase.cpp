@@ -24,7 +24,7 @@
 
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 
@@ -533,7 +533,7 @@ void ClassTreeBase::slotItemExecuted( QListViewItem* item )
 	ctitem->getImplementation(&toFile, &toLine);
     }
     m_part->partController()->editDocument(toFile, toLine);
-    m_part->topLevel()->lowerView(this);
+    m_part->mainWindow()->lowerView(this);
 }
 
 
@@ -553,7 +553,7 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
         int toLine = -1;
         ctitem->getDeclaration(&toFile, &toLine);
         m_part->partController()->editDocument(toFile, toLine);
-        m_part->topLevel()->lowerView(this);
+        m_part->mainWindow()->lowerView(this);
     }
 }
 

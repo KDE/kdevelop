@@ -24,7 +24,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "domutil.h"
 
@@ -141,7 +141,7 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 
     FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(item);
     m_part->partController()->editDocument(QString("file://") + m_part->project()->projectDirectory() + "/" + fgfitem->fileName());
-    m_part->topLevel()->lowerView(this);
+    m_part->mainWindow()->lowerView(this);
 }
 
 

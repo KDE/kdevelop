@@ -23,7 +23,7 @@ class KDevAppFrontend;
 class ClassStore;
 class QDomDocument;
 class KDevPartController;
-class KDevTopLevel;
+class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
@@ -38,8 +38,8 @@ public:
     KDevApi();
     virtual ~KDevApi();
 
-    virtual KDevTopLevel *topLevel() = 0;
-    virtual bool topLevelValid() = 0;
+    virtual KDevMainWindow *mainWindow() = 0;
+    virtual bool mainWindowValid() = 0;
     virtual KDevPartController *partController() = 0;
     virtual KDevCore *core() = 0;
     virtual ClassStore *classStore() = 0;

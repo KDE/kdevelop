@@ -25,7 +25,7 @@
 
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 
@@ -58,7 +58,7 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
                                       "and implementations. The right button popup menu allows more specialized "
                                       "functionality."));
 
-    topLevel()->embedSelectView(m_classtree, i18n("Classes"), i18n("class browser"));
+    mainWindow()->embedSelectView(m_classtree, i18n("Classes"), i18n("class browser"));
 
     classes_action = new ClassListAction(this, i18n("Classes"), 0,
                                          this, SLOT(selectedClass()),
@@ -82,8 +82,8 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
 ClassViewPart::~ClassViewPart()
 {
     for (QWidget *w=m_widgets.first(); w != 0; w = m_widgets.next())
-      topLevel()->removeView(w);
-    topLevel()->removeView(m_classtree);
+      mainWindow()->removeView(w);
+    mainWindow()->removeView(m_classtree);
 
     // In contrast to other widgets, we can have any number of class tool
     // dialogs. That's why we don't use QGuardedPtr here, but instead let
@@ -179,8 +179,8 @@ void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
 {
     m_widgets.append(dlg);
     dlg->setIcon(UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
-    topLevel()->embedSelectView(dlg, i18n("Classtools"), i18n("classtools"));
-    topLevel()->raiseView(dlg);
+    mainWindow()->embedSelectView(dlg, i18n("Classtools"), i18n("classtools"));
+    mainWindow()->raiseView(dlg);
 }
 
 

@@ -7,7 +7,7 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp kdevlanguagesupport.
 			       kdevcompileroptions.cpp kdevpartcontroller.cpp kdevapi.cpp \
 			       kdevdifffrontend.cpp KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
-			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
+			       KDevCoreIface.skel KDevCoreIface.cpp kdevmainwindow.cpp \
 			       KDevPartControllerIface.skel KDevPartControllerIface.cpp \
 			       kdevplugin.cpp kdevdebugger.cpp kdevglobalversioncontrol.cpp \
 			       kdevglobalversioncontrol.h kdevcreatefile.cpp \

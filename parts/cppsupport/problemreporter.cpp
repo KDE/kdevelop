@@ -19,7 +19,7 @@
 #include "problemreporter.h"
 #include "cppsupportpart.h"
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "configproblemreporter.h"
 #include "backgroundparser.h"
 

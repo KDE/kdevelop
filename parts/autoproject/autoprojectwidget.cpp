@@ -39,7 +39,7 @@
 #include <kaction.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "domutil.h"
 #include "misc.h"
@@ -842,7 +842,7 @@ void AutoProjectWidget::slotDetailsExecuted( QListViewItem *item )
 	QString dirName = m_shownSubproject->path;
 	FileItem *fitem = static_cast<FileItem*>( item );
 	m_part->partController() ->editDocument( KURL( dirName + "/" + fitem->name ) );
-	m_part->topLevel() ->lowerView( this );
+	m_part->mainWindow() ->lowerView( this );
 }
 
 
@@ -943,7 +943,7 @@ void AutoProjectWidget::slotBuildSubproject()
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, QString::fromLatin1( "" ) );
 
-	m_part->topLevel() ->lowerView( this );
+	m_part->mainWindow() ->lowerView( this );
 }
 
 
@@ -1035,7 +1035,7 @@ void AutoProjectWidget::slotBuildTarget()
 	QString relpath = m_shownSubproject->path.mid( projectDirectory().length() );
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, titem->name );
 
-	m_part->topLevel() ->lowerView( this );
+	m_part->mainWindow() ->lowerView( this );
 }
 
 

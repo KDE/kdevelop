@@ -86,8 +86,8 @@
     <Action name="settings_build_toolbar"/>
     <Action name="settings_view_toolbar"/>
     <Action name="settings_browser_toolbar"/>
-    <Action name="settings_statusbar"/>
     <Action name="settings_viewbar"/>
+    <Action name="settings_statusbar"/>
     <Separator />
     <Action name="settings_configure_shortcuts" />
     <Action name="settings_configure_toolbars" />

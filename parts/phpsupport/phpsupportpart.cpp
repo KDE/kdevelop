@@ -33,7 +33,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 #include <kdevpartcontroller.h>
@@ -84,7 +84,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 			actionCollection(), "project_new_class" );
 
   m_phpErrorView = new PHPErrorView(this);
-  topLevel()->embedOutputView(m_phpErrorView, i18n("PHP"), i18n("PHP"));
+  mainWindow()->embedOutputView(m_phpErrorView, i18n("PHP"), i18n("PHP"));
   connect(m_phpErrorView,SIGNAL(fileSelected(const QString&,int)),
 	  this,SLOT(slotErrorMessageSelected(const QString&,int)));
 
@@ -97,7 +97,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 	  this, SLOT(slotPHPExeExited(KProcess*)));
 
   m_htmlView = new PHPHTMLView();
-  topLevel()->embedPartView(m_htmlView->view(), i18n("PHP"));
+  mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
@@ -182,7 +182,7 @@ void PHPSupportPart::slotNewClass(){
 void PHPSupportPart::slotRun(){
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){
-    topLevel()->raiseView(m_phpErrorView);
+    mainWindow()->raiseView(m_phpErrorView);
     PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;
     if(mode == PHPConfigData::Web){
       executeOnWebserver();
@@ -256,7 +256,7 @@ void PHPSupportPart::executeInTerminal(){
   QString file;
   if(m_htmlView==0){
     m_htmlView = new PHPHTMLView();
-    topLevel()->embedPartView(m_htmlView->view(), i18n("PHP"));
+    mainWindow()->embedPartView(m_htmlView->view(), i18n("PHP"));
   }
   m_htmlView->show();
   m_htmlView->begin();
@@ -341,10 +341,10 @@ void PHPSupportPart::initialParse(){
     kapp->setOverrideCursor(waitCursor);
     QStringList files = project()->allFiles();
     int n = 0;
-    QProgressBar *bar = new QProgressBar(files.count(), topLevel()->statusBar());
+    QProgressBar *bar = new QProgressBar(files.count(), mainWindow()->statusBar());
     bar->setMinimumWidth(120);
     bar->setCenterIndicator(true);
-    topLevel()->statusBar()->addWidget(bar);
+    mainWindow()->statusBar()->addWidget(bar);
     bar->show();
 
     for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
@@ -354,7 +354,7 @@ void PHPSupportPart::initialParse(){
       maybeParse(project()->projectDirectory() + "/" + *it);
       ++n;
     }
-    topLevel()->statusBar()->removeWidget(bar);
+    mainWindow()->statusBar()->removeWidget(bar);
     delete bar;
     emit updatedSourceInfo();
     kapp->restoreOverrideCursor();

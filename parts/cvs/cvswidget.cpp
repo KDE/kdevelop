@@ -3,7 +3,7 @@
 #include <qregexp.h>
 
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevcore.h"
 #include "cvswidget.h"
 #include "cvswidget.moc"
@@ -59,7 +59,7 @@ CvsWidget::~CvsWidget() {}
 
 
 void CvsWidget::startCommand(QString &dir, QString &command) {
-    m_part->topLevel()->raiseView(this);
+    m_part->mainWindow()->raiseView(this);
     m_part->core()->running(m_part, true);
     this->dir = dir;
     startJob(dir,command);
@@ -71,7 +71,7 @@ void CvsWidget::lineHighlighted(int line) {
         CvsListBoxItem *ci = static_cast<CvsListBoxItem*>(i);
 	if (ci->containsFileName()) {
 	    m_part->partController()->editDocument(dir + "/" + ci->fileName());
-	    m_part->topLevel()->lowerView(this);
+	    m_part->mainWindow()->lowerView(this);
 	}
     }
 }

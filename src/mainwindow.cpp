@@ -242,6 +242,9 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
 
 void MainWindow::init()
 {
+#if (KDE_VERSION > 305)
+//  setStandardToolBarMenuEnabled( true );
+#endif
   setXMLFile("gideonui.rc");
 
   createFramework();
@@ -374,7 +377,7 @@ void MainWindow::createActions()
   m_pMainWindowShare->createActions();
   
   m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),actionCollection(), "settings_viewbar");
-  m_toggleViewbar->setText("&Viewbar");
+  m_toggleViewbar->setText(i18n("Show &Viewbar"));
   m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
   showViewTaskBar(); // because start state must be equal to the action state
   if (m_mdiMode == QextMdi::TabPageMode) {
@@ -409,7 +412,7 @@ QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
   return pMDICover;
 }
 
-void MainWindow::embedPartView(QWidget *view, const QString &name, const QString& fullName)
+void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QString& fullName)
 {
   QextMdiChildView *child = wrapper(view, fullName);
   m_captionDict.insert(fullName, child);
@@ -1194,6 +1197,33 @@ void MainWindow::setUserInterfaceMode(const QString& uiMode)
     }
     else if (uiMode == "Toplevel") {
 	switchToToplevelMode();
+    }
+}
+
+void MainWindow::callCommand(const QString& command)
+{
+    if (isInMaximizedChildFrmMode() && (command == "qextmdi-UI: do hack on session loading finished")
+    && (mdiMode() == QextMdi::ChildframeMode)) {
+	QextMdiChildView* pLastView = 0L;
+	QextMdiChildFrm*  pLastFrm = 0L;
+	QextMdiIterator<QextMdiChildView*>* winListIter = createIterator();
+	for (winListIter->first(); !winListIter->isDone(); winListIter->next()){
+	    pLastView = winListIter->currentItem();
+	    if (pLastView->isAttached()) {
+		pLastFrm = pLastView->mdiParent();
+	    }
+	}
+	// evil hack (of Falk): resize the childframe again 'cause of event timing probs with resizing
+	if (pLastFrm && pLastFrm->parentWidget()) {
+	    QApplication::sendPostedEvents();
+	    pLastFrm->setGeometry(
+		-QEXTMDI_MDI_CHILDFRM_BORDER,
+		-QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
+		pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+		pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR 
+		+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
+	}
+	delete winListIter;
     }
 }
 

@@ -38,7 +38,7 @@
 #include <qstringlist.h>
 
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevcore.h"
 #include "classstore.h"
 #include "parsedscopecontainer.h"
@@ -260,7 +260,7 @@ CppCodeCompletion::slotCursorPositionChanged()
     m_pCursorIface->cursorPosition(&nLine, &nCol);
     QString text = typingTypeOf( nLine, nCol );
     if( !text.isEmpty( ) )
-	m_pSupport->topLevel()->statusBar()->message( text, 1000 );
+	m_pSupport->mainWindow()->statusBar()->message( text, 1000 );
 }
 
 QString
@@ -1326,7 +1326,7 @@ CppCodeCompletion::typeOf( )
     }
 
     kdDebug(9007) << "the type of expression is " << type << endl;
-    m_pSupport->topLevel()->statusBar()->message( type.isEmpty() ? i18n("no type for expression") : type, 1000 );
+    m_pSupport->mainWindow()->statusBar()->message( type.isEmpty() ? i18n("no type for expression") : type, 1000 );
 
     QStringList functionList;
     QString strFunction;

@@ -35,7 +35,7 @@
 
 #include "domutil.h"
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
@@ -164,7 +164,7 @@ void CustomProjectPart::openProject(const QString &dirName, const QString &proje
                 m_sourceFiles << s;
         }
     } else {
-        int r = KMessageBox::questionYesNo(topLevel()->main(),
+        int r = KMessageBox::questionYesNo(mainWindow()->main(),
                                            i18n("This project does not contain any files yet.\n"
                                                 "Populate it with all C/C++/Java files below "
                                                 "the project directory?"));
@@ -333,7 +333,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
         QFileInfo fi(dir + "/Makefile");
 	QFileInfo fi2(dir + "/makefile");
         if (!fi.exists() && !fi2.exists()) {
-            KMessageBox::information(topLevel()->main(),
+            KMessageBox::information(mainWindow()->main(),
                                      i18n("There is no Makefile in this directory."));
             return;
         }

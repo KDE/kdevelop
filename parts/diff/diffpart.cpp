@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 
 #include "diffpart.h"
@@ -44,7 +44,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget = new DiffWidget();
   QString nm( i18n( "Difference Viewer" ) );
   diffWidget->setCaption( nm );
-  topLevel()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
+  mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
 
   (void) new KAction( i18n("Difference Viewer..."), 0,
                         this, SLOT(slotExecDiff()),
@@ -184,7 +184,7 @@ void DiffPart::openURL( const KURL& url )
 {
   diffWidget->slotClear();
   diffWidget->openURL( url );
-  topLevel()->raiseView( diffWidget );
+  mainWindow()->raiseView( diffWidget );
 /*
   DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
 
@@ -197,14 +197,14 @@ void DiffPart::openURL( const KURL& url )
 void DiffPart::showMessage( const QString& message )
 {
   diffWidget->showMessage( message );
-  topLevel()->raiseView( diffWidget );
+  mainWindow()->raiseView( diffWidget );
 }
 
 void DiffPart::showDiff( const QString& diff )
 {
   diffWidget->slotClear();
   diffWidget->setDiff( diff );
-  topLevel()->raiseView( diffWidget );
+  mainWindow()->raiseView( diffWidget );
 /*
   DiffDlg* diffDlg = new DiffDlg( 0, "diffDlg" );
 

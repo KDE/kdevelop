@@ -48,7 +48,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "classstore.h"
 #include "kdevpartcontroller.h"
 
@@ -97,7 +97,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(activePartChanged(KParts::Part*)));
 
     m_problemReporter = new ProblemReporter( this );
-    topLevel( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
+    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -175,8 +175,8 @@ CppSupportPart::~CppSupportPart()
     m_backgroundParser->reparse();
     m_backgroundParser->wait();
     
-    topLevel( )->removeView( m_pCHWidget );
-    topLevel( )->removeView( m_problemReporter );
+    mainWindow( )->removeView( m_pCHWidget );
+    mainWindow( )->removeView( m_problemReporter );
     
     delete m_backgroundParser;
     delete m_pParser;
@@ -205,7 +205,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
 	emit fileParsed( fileName );
-	// topLevel()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
+	// mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
     }
 }
 
@@ -315,7 +315,7 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 
     if( setEnable == false ){
         if( m_pCHWidget ){
-            topLevel( )->removeView( m_pCHWidget );
+            mainWindow( )->removeView( m_pCHWidget );
             delete m_pCHWidget;
             m_pCHWidget = 0;
         }
@@ -324,14 +324,14 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
     // enable it
     else {
         if( m_pCHWidget )
-            topLevel( )->removeView( m_pCHWidget );
+            mainWindow( )->removeView( m_pCHWidget );
         else
             m_pCHWidget = new CppSupportWidget( this );
 
         if( setOutputView )
-            topLevel( )->embedOutputView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
+            mainWindow( )->embedOutputView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
         else
-            topLevel( )->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
+            mainWindow( )->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
     }
 }
 
@@ -952,9 +952,9 @@ CppSupportPart::initialParse( )
 bool
 CppSupportPart::restorePreParsedClassStore( ClassStore* cs, const QString fileToLoad )
 {
-    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
     label->setMinimumWidth( 600 );
-    topLevel( )->statusBar( )->addWidget( label );
+    mainWindow( )->statusBar( )->addWidget( label );
     label->show( );
     label->setText( i18n( "Wait please - loading classstore file: %1" )
                     .arg( fileToLoad ) );
@@ -971,11 +971,11 @@ CppSupportPart::restorePreParsedClassStore( ClassStore* cs, const QString fileTo
     else
         kdDebug( 9007 ) << "failed loading file '" << fileToLoad << "'" << endl;
 
-    topLevel( )->statusBar( )->removeWidget( label );
+    mainWindow( )->statusBar( )->removeWidget( label );
     delete label;
 
     kapp->restoreOverrideCursor( );
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
 
     return success;
 }
@@ -984,9 +984,9 @@ CppSupportPart::restorePreParsedClassStore( ClassStore* cs, const QString fileTo
 bool
 CppSupportPart::parseProject( )
 {
-    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
     label->setMinimumWidth( 600 );
-    topLevel( )->statusBar( )->addWidget( label );
+    mainWindow( )->statusBar( )->addWidget( label );
     label->show( );
 
     kapp->processEvents( );
@@ -994,10 +994,10 @@ CppSupportPart::parseProject( )
 
     QStringList files = reorder( project( )->allFiles( ) );
 
-    QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
+    QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
     bar->setCenterIndicator( true );
-    topLevel( )->statusBar( )->addWidget( bar );
+    mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
 
     int n = 0;
@@ -1014,13 +1014,13 @@ CppSupportPart::parseProject( )
     kdDebug( 9007 ) << "updating sourceinfo" << endl;
     emit updatedSourceInfo( );
 
-    topLevel( )->statusBar( )->removeWidget( bar );
+    mainWindow( )->statusBar( )->removeWidget( bar );
     delete bar;
-    topLevel( )->statusBar( )->removeWidget( label );
+    mainWindow( )->statusBar( )->removeWidget( label );
     delete label;
 
     kapp->restoreOverrideCursor( );
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
 
     return true;
 }
@@ -1032,14 +1032,14 @@ CppSupportPart::createProjectPCS( const QString fileToSave )
     if( !parseProject( ) )
 	return false;
 
-    topLevel( )->statusBar( )->message( i18n( "Saving Project File: %1" )
+    mainWindow( )->statusBar( )->message( i18n( "Saving Project File: %1" )
                 			.arg( fileToSave ) );
     if( !classStore( )->storeAll( fileToSave ) ){
 	// KMessageBox for user ?
         kdDebug( 9007 ) << "failed saving file '" << fileToSave << "'" << endl;
     }
 
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
 
     return true;
 }
@@ -1059,9 +1059,9 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store, CClassPar
 bool
 CppSupportPart::createPreParsePCS( const QString fileToSave )
 {
-    QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
+    QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
     label->setMinimumWidth( 600 );
-    topLevel( )->statusBar( )->addWidget( label );
+    mainWindow( )->statusBar( )->addWidget( label );
     label->show( );
 
     kapp->processEvents( );
@@ -1075,10 +1075,10 @@ CppSupportPart::createPreParsePCS( const QString fileToSave )
 
     label->setText( i18n( "Preparsing" ) );
 
-    QProgressBar* bar = new QProgressBar( 0, topLevel( )->statusBar( ) );
+    QProgressBar* bar = new QProgressBar( 0, mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
     bar->setCenterIndicator( true );
-    topLevel( )->statusBar( )->addWidget( bar );
+    mainWindow( )->statusBar( )->addWidget( bar );
     bar->show( );
 
     QDir    dirObject;
@@ -1109,13 +1109,13 @@ CppSupportPart::createPreParsePCS( const QString fileToSave )
         kdDebug( 9007 ) << "failed saving file " << fileToSave << endl;
     }
 
-    topLevel( )->statusBar( )->removeWidget( bar );
+    mainWindow( )->statusBar( )->removeWidget( bar );
     delete bar;
-    topLevel( )->statusBar( )->removeWidget( label );
+    mainWindow( )->statusBar( )->removeWidget( label );
     delete label;
 
     kapp->restoreOverrideCursor( );
-    topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
+    mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
 
     // could be overridden later if file operations fail
     return true;

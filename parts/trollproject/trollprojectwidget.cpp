@@ -42,7 +42,7 @@
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
 
@@ -543,7 +543,7 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(pvitem);
     m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
-    m_part->topLevel()->lowerView(this);
+    m_part->mainWindow()->lowerView(this);
 }
 
 
@@ -601,7 +601,7 @@ void TrollProjectWidget::slotBuildProject()
   QString dircmd = "cd "+dir + " && " ;
   QString buildcmd = "make";
   m_part->queueCmd(dir,dircmd + buildcmd);
-  m_part->topLevel()->lowerView(this);
+  m_part->mainWindow()->lowerView(this);
 }
 
 void TrollProjectWidget::slotRebuildProject()
@@ -627,7 +627,7 @@ void TrollProjectWidget::slotRebuildProject()
   QString dircmd = "cd "+dir + " && " ;
   QString rebuildcmd = "make clean && make";
   m_part->queueCmd(dir,dircmd + rebuildcmd);
-  m_part->topLevel()->lowerView(this);
+  m_part->mainWindow()->lowerView(this);
 }
 
 void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
@@ -739,12 +739,12 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     else if (r == idBuild)
     {
         m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
-        m_part->topLevel()->lowerView(this);
+        m_part->mainWindow()->lowerView(this);
     }
     else if (r == idQmake)
     {
         m_part->startQMakeCommand(projectDirectory() + relpath);
-        m_part->topLevel()->lowerView(this);
+        m_part->mainWindow()->lowerView(this);
     }
     else if (r == idProjectConfiguration)
     {

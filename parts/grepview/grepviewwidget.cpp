@@ -19,7 +19,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 
 #include "grepdlg.h"
@@ -171,7 +171,7 @@ void GrepViewWidget::searchActivated()
     command += KShellProcess::quote(pattern);
     startJob("", command);
 
-    m_part->topLevel()->raiseView(this);
+    m_part->mainWindow()->raiseView(this);
     m_part->core()->running(m_part, true);
 }
 
@@ -199,7 +199,7 @@ void GrepViewWidget::lineHighlighted(int line)
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
             m_part->partController()->editDocument(gi->filename(), gi->linenumber());
-            m_part->topLevel()->lowerView(this);
+            m_part->mainWindow()->lowerView(this);
         }
 }
 

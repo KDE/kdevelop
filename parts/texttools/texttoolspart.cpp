@@ -18,7 +18,7 @@
 #include <ktexteditor/editinterface.h>
 
 #include "kdevpartcontroller.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 #include "texttoolswidget.h"
 
@@ -42,7 +42,7 @@ TextToolsPart::TextToolsPart(QObject *parent, const char *name, const QStringLis
 TextToolsPart::~TextToolsPart()
 {
     if (m_widget)
-        topLevel()->removeView(m_widget);
+        mainWindow()->removeView(m_widget);
     delete m_widget;
 }
 
@@ -56,7 +56,7 @@ void TextToolsPart::createWidget()
     m_widget->setCaption(i18n("Text Structure"));
     QWhatsThis::add(m_widget, i18n("Text Structure\n\n"
                                      "This browser shows the structure of your HTML text."));
-    topLevel()->embedSelectView(m_widget, i18n("Text Structure"), i18n("text structure"));
+    mainWindow()->embedSelectView(m_widget, i18n("Text Structure"), i18n("text structure"));
 }
 
 

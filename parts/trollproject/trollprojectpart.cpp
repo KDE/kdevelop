@@ -26,7 +26,7 @@
 
 #include "domutil.h"
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
@@ -54,7 +54,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                                    ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
 
-    topLevel()->embedSelectViewRight(m_widget, i18n("QMake Manager"), i18n("project manager"));
+    mainWindow()->embedSelectViewRight(m_widget, i18n("QMake Manager"), i18n("project manager"));
 
     KAction *action;
 
@@ -82,7 +82,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 TrollProjectPart::~TrollProjectPart()
 {
     if (m_widget)
-        topLevel()->removeView(m_widget);
+        mainWindow()->removeView(m_widget);
     delete m_widget;
 }
 

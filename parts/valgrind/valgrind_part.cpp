@@ -10,7 +10,7 @@
 #include <kdebug.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevproject.h"
 
 #include "valgrind_widget.h"
@@ -44,7 +44,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   (void) new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
 		      SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
   
-  topLevel()->embedOutputView( m_widget, "Valgrind", "Valgrind memory leak check" );
+  mainWindow()->embedOutputView( m_widget, "Valgrind", "Valgrind memory leak check" );
 }
 
 
@@ -137,7 +137,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   proc->clearArguments();  
   *proc << valExec << valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
-  topLevel()->raiseView( m_widget );
+  mainWindow()->raiseView( m_widget );
   core()->running( this, true );
 
   _lastExec = exec;

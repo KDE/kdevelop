@@ -18,7 +18,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
@@ -64,7 +64,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
-    topLevel()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
+    mainWindow()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
 
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
@@ -77,7 +77,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
 
 JavaSupportPart::~JavaSupportPart()
 {
-    topLevel()->removeView( d->problemReporter );
+    mainWindow()->removeView( d->problemReporter );
     delete( d->problemReporter );
 
     delete( d );
@@ -134,7 +134,7 @@ void JavaSupportPart::initialParse()
         emit updatedSourceInfo();
 
         kapp->restoreOverrideCursor();
-        topLevel()->statusBar()->message( i18n("Found 1 problem", "Found %n problems", d->problemReporter->childCount()) );
+        mainWindow()->statusBar()->message( i18n("Found 1 problem", "Found %n problems", d->problemReporter->childCount()) );
     }
 }
 
@@ -150,7 +150,7 @@ void JavaSupportPart::maybeParse(const QString &fileName)
     if( !fileExtensions().contains( QFileInfo( fileName ).extension() ) )
         return;
 
-    topLevel()->statusBar()->message( i18n("Parsing file: %1").arg(fileName) );
+    mainWindow()->statusBar()->message( i18n("Parsing file: %1").arg(fileName) );
     classStore()->removeWithReferences( fileName );
     parse( fileName );
 }

@@ -25,7 +25,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "ctagskinds.h"
 #include "ctagsdlg.h"
@@ -159,11 +159,11 @@ bool CTagsPart::ensureTagsLoaded()
     
     QFileInfo fi(project()->projectDirectory() + "/tags");
     if (!fi.exists()) {
-        int r = KMessageBox::questionYesNo(topLevel()->main(), i18n("A ctags file for this project does not exist yet. Create it now?"));
+        int r = KMessageBox::questionYesNo(mainWindow()->main(), i18n("A ctags file for this project does not exist yet. Create it now?"));
         if (r != KMessageBox::Yes)
             return false;
         if (!createTagsFile()) {
-            KMessageBox::sorry(topLevel()->main(), i18n("Could not create tags file"));
+            KMessageBox::sorry(mainWindow()->main(), i18n("Could not create tags file"));
             return false;
         }
     }

@@ -26,7 +26,7 @@ class KDevAppFrontend;
 class ClassStore;
 class KDevApi;
 class KDevPartController;
-class KDevTopLevel;
+class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
@@ -55,11 +55,11 @@ public:
     /**
      * Gives a reference to the toplevel widget.
      */
-    KDevTopLevel *topLevel();
+    KDevMainWindow *mainWindow();
     /**
-     * Indicates whether a valid toplevel widget is active.
+     * Indicates whether a valid main window is active.
      */
-    bool topLevelValid();
+    bool mainWindowValid();
 
     /**
      * Gives a reference to the application core

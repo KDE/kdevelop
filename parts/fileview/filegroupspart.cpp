@@ -23,7 +23,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 #include "filegroupswidget.h"
 #include "filegroupsconfigwidget.h"
@@ -42,7 +42,7 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
     QWhatsThis::add(m_filegroups, i18n("File Group View\n\n"
                                        "The file group viewer shows all files of the project, "
                                        "in groups which can be configured by you."));
-    topLevel()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("all files of the project"));
+    mainWindow()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("all files of the project"));
   
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -62,7 +62,7 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
 FileGroupsPart::~FileGroupsPart()
 {
     if (m_filegroups)
-        topLevel()->removeView(m_filegroups);
+        mainWindow()->removeView(m_filegroups);
     delete m_filegroups;
 }
 

@@ -19,14 +19,14 @@ KDevPlugin::~KDevPlugin()
 {
 }
 
-KDevTopLevel *KDevPlugin::topLevel()
+KDevMainWindow *KDevPlugin::mainWindow()
 {
-    return m_api->topLevel();
+    return m_api->mainWindow();
 }
 
-bool KDevPlugin::topLevelValid()
+bool KDevPlugin::mainWindowValid()
 {
-    return m_api->topLevelValid();
+    return m_api->mainWindowValid();
 }
 
 KDevCore *KDevPlugin::core()

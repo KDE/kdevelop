@@ -21,7 +21,7 @@
 #include <kiconloader.h>
 
 #include "kdevcore.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "grepviewwidget.h"
 
 
@@ -51,7 +51,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                                    "source file and set the cursor to the line "
                                    "with the match."));
 
-    topLevel()->embedOutputView(m_widget, i18n("Grep"), i18n("output of the grep command"));
+    mainWindow()->embedOutputView(m_widget, i18n("Grep"), i18n("output of the grep command"));
     
     KAction *action;
     

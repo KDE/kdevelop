@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 #include "uichooser_part.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "uichooser_widget.h"
 
 UIChooserWidget::UIChooserWidget(QWidget *parent, const char *name)
@@ -98,13 +98,13 @@ void UIChooserWidget::accept()
   if (modeIDEA->isChecked()) { // immediate switch not supported yet 
   }
   else if (modeTab->isChecked()) {
-      m_pMyPart->topLevel()->setUserInterfaceMode("TabPage");
+      m_pMyPart->mainWindow()->setUserInterfaceMode("TabPage");
   }
   else if (modeToplevel->isChecked()) {
-      m_pMyPart->topLevel()->setUserInterfaceMode("Toplevel");
+      m_pMyPart->mainWindow()->setUserInterfaceMode("Toplevel");
   }
   else if (modeMDI->isChecked()) {
-      m_pMyPart->topLevel()->setUserInterfaceMode("Childframe");
+      m_pMyPart->mainWindow()->setUserInterfaceMode("Childframe");
   }
 }
 

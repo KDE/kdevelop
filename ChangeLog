@@ -1,3 +1,14 @@
+2003-02-04 F@lk Brettschneider <falk@kdevelop.org>
+	* interface changed: KDevTopLevel renamed to KDevMainWindow, topLevel() renamed to mainWindow()
+	* bugfix: proper work of session restoring of maximized views in Childframe mode
+	* bugfix: avoid doubled menu entries for switch for showing/hiding of toolbars
+
+2003-02-03 F@lk Brettschneider <falk@kdevelop.org>
+	* bugfix: env vars now possible for URL of documentation views, means Qt docu works again
+	* bugfix: show full filename in view caption (Childframe UI mode)
+	* bugfix: use default icon for views in case that an icon wasn't assigned
+	* bugfix: use 16x16 size for view icons (Childframe UI mode)
+	
 2003-02-01 Alexander Dymo <cloudtemple@mksat.net>
 	* parts/cppsupport:
 	  - Advanced Inheritance feature in "New Class" dialog:

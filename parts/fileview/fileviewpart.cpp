@@ -23,7 +23,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 #include "filetreewidget.h"
 
@@ -42,7 +42,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     QWhatsThis::add(m_filetree, i18n("File Tree\n\n"
                                      "The file viewer shows all files of the project "
                                      "in a tree layout."));
-    topLevel()->embedSelectView(m_filetree, i18n("File Tree"), i18n("view on the project directory"));
+    mainWindow()->embedSelectView(m_filetree, i18n("File Tree"), i18n("view on the project directory"));
         
     // File tree
     connect( project(), SIGNAL(addedFilesToProject(const QStringList&)),
@@ -55,6 +55,6 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
 FileViewPart::~FileViewPart()
 {
     if (m_filetree)
-        topLevel()->removeView(m_filetree);
+        mainWindow()->removeView(m_filetree);
     delete m_filetree;
 }

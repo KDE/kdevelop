@@ -27,8 +27,8 @@
 #include "kdevcore.h"
 #include "misc.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
-#include <kdevpartcontroller.h>
+#include "kdevmainwindow.h"
+#include "kdevpartcontroller.h"
 
 #include "docsearchdlg.h"
 #include "docindexdlg.h"
@@ -62,7 +62,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                                    "documentation and the KDevelop manuals. It can "
                                    "be configured individually."));
     
-    topLevel()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("documentation browser"));
+    mainWindow()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("documentation browser"));
 
     KAction *action;
 
@@ -210,7 +210,7 @@ void DocTreeViewPart::slotManpage()
 
 void DocTreeViewPart::slotRaiseWidget()
 {
-    topLevel()->raiseView(m_widget);
+    mainWindow()->raiseView(m_widget);
 }
 
 

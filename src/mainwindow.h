@@ -1,5 +1,5 @@
 /***************************************************************************
-  mainwindow.h - KDevelop main widget for all QextMDI-based user
+  kdevmainwindow.h - KDevelop main widget for all QextMDI-based user
                    interface modes (Childframe, TabPage, Toplevel)
                              -------------------
     begin                : 22 Dec 2002
@@ -28,7 +28,7 @@
 #include <qextmdichildview.h>
 
 
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 class QDomElement;
 class ViewMenuAction;
@@ -39,7 +39,7 @@ class MainWindowShare;
 
 
 */
-class MainWindow : public QextMdiMainFrm, public KDevTopLevel
+class MainWindow : public QextMdiMainFrm, public KDevMainWindow
 {
   Q_OBJECT
 
@@ -71,6 +71,8 @@ public:
   void realClose();
 
   virtual void setUserInterfaceMode(const QString& uiMode);
+  
+  virtual void callCommand(const QString& command);
   
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);

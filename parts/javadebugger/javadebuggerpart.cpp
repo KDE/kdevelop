@@ -25,7 +25,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 #include "kdevpartcontroller.h"
 #include "kdevdebugger.h"
 
@@ -68,8 +68,8 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    topLevel()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
-    topLevel()->setViewAvailable(variableWidget, false);
+    mainWindow()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
+    mainWindow()->setViewAvailable(variableWidget, false);
     
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -80,7 +80,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
-    topLevel()->embedOutputView(breakpointWidget, i18n("&Breakpoints"), i18n("debugger breakpoints"));
+    mainWindow()->embedOutputView(breakpointWidget, i18n("&Breakpoints"), i18n("debugger breakpoints"));
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -93,8 +93,8 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"), i18n("debugger function call stack"));
-    topLevel()->setViewAvailable(framestackWidget, false);
+    mainWindow()->embedOutputView(framestackWidget, i18n("&Frame Stack"), i18n("debugger function call stack"));
+    mainWindow()->setViewAvailable(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -106,8 +106,8 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                             "instruction using the debuggers toolbar "
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
-    topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble"));
-    topLevel()->setViewAvailable(disassembleWidget, false);
+    mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble"));
+    mainWindow()->setViewAvailable(disassembleWidget, false);
 
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -220,10 +220,10 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
 
 JavaDebuggerPart::~JavaDebuggerPart()
 {
-    topLevel()->removeView(variableWidget);
-    topLevel()->removeView(breakpointWidget);
-    topLevel()->removeView(framestackWidget);
-    topLevel()->removeView(disassembleWidget);
+    mainWindow()->removeView(variableWidget);
+    mainWindow()->removeView(breakpointWidget);
+    mainWindow()->removeView(framestackWidget);
+    mainWindow()->removeView(disassembleWidget);
   
     delete variableWidget;
     delete breakpointWidget;
@@ -317,9 +317,9 @@ void JavaDebuggerPart::startDebugger()
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
     
-    topLevel()->setViewAvailable(variableWidget, true);
-    topLevel()->setViewAvailable(framestackWidget, true);
-    topLevel()->setViewAvailable(disassembleWidget, true);
+    mainWindow()->setViewAvailable(variableWidget, true);
+    mainWindow()->setViewAvailable(framestackWidget, true);
+    mainWindow()->setViewAvailable(disassembleWidget, true);
 
     // Floatinging tool bar can wait until later :-)
     //    if (enableFloatingToolBar) {
@@ -338,7 +338,7 @@ void JavaDebuggerPart::slotRun()
     if (controller)
         slotStop();
 
-    topLevel()->statusBar()->message(i18n("Debugging program"));
+    mainWindow()->statusBar()->message(i18n("Debugging program"));
     
     startDebugger();
     controller->slotRun();
@@ -362,9 +362,9 @@ void JavaDebuggerPart::slotStop()
     ac->action("debug_stepout")->setEnabled(false);
     ac->action("debug_memview")->setEnabled(false);
 
-    topLevel()->setViewAvailable(variableWidget, false);
-    topLevel()->setViewAvailable(framestackWidget, false);
-    topLevel()->setViewAvailable(disassembleWidget, false);
+    mainWindow()->setViewAvailable(variableWidget, false);
+    mainWindow()->setViewAvailable(framestackWidget, false);
+    mainWindow()->setViewAvailable(disassembleWidget, false);
 
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
@@ -479,7 +479,7 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
     kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
 
     if (!msg.isEmpty())
-        topLevel()->statusBar()->message(msg);
+        mainWindow()->statusBar()->message(msg);
 }
 
 

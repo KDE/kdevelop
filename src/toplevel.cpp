@@ -10,15 +10,15 @@
 #include "mainwindowideal.h"
 
 
-KDevTopLevel *TopLevel::s_instance = 0;
+KDevMainWindow *TopLevel::s_instance = 0;
 
 
-bool TopLevel::topLevelValid()
+bool TopLevel::mainWindowValid()
 {
   return s_instance != 0;
 }
 
-KDevTopLevel *TopLevel::getInstance()
+KDevMainWindow *TopLevel::getInstance()
 {
   if (!s_instance)
   {
@@ -52,7 +52,7 @@ KDevTopLevel *TopLevel::getInstance()
   return s_instance;
 }
 
-void TopLevel::invalidateInstance(KDevTopLevel *instance) 
+void TopLevel::invalidateInstance(KDevMainWindow *instance) 
 {
   if ( s_instance == instance )
     s_instance = 0;

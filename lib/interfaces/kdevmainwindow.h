@@ -1,5 +1,5 @@
 /***************************************************************************
-  kdevtoplevel.h - Interface to the main window of KDevelop
+  kdevmainwindow.h - Interface to the main window of KDevelop
 			     -------------------
     begin                : ?
     copyright            : (C) 2003 by the KDevelop team
@@ -21,7 +21,7 @@
 class KStatusBar;
 class KMainWindow;
 
-class KDevTopLevel
+class KDevMainWindow
 {
 public:
 
@@ -48,6 +48,9 @@ public:
   virtual void realClose();
 
   virtual void setUserInterfaceMode(const QString& /*uiMode*/) {}
+  
+  // this allows to order the mainwindow to do anything special, we use it to trigger the execution of a hack
+  virtual void callCommand(const QString& /*command*/) {}
 };
 
 

@@ -11,14 +11,14 @@
 API *API::s_instance = 0;
 
 
-KDevTopLevel *API::topLevel()
+KDevMainWindow *API::mainWindow()
 {
   return TopLevel::getInstance();
 }
 
-bool API::topLevelValid()
+bool API::mainWindowValid()
 {
-  return TopLevel::topLevelValid();
+  return TopLevel::mainWindowValid();
 }
 
 KDevPartController *API::partController()

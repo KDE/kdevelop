@@ -30,7 +30,7 @@
 #include "execcommand.h"
 #include "cvsoptionswidget.h"
 #include "domutil.h"
-#include "kdevtoplevel.h"
+#include "kdevmainwindow.h"
 
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
@@ -45,12 +45,12 @@ default_remove("-f"),default_diff("-u3 -p"),default_log(""),default_rsh("") {
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     m_widget = new CvsWidget(this);
-    topLevel()->embedOutputView(m_widget, i18n("CVS"), i18n("cvs output"));
+    mainWindow()->embedOutputView(m_widget, i18n("CVS"), i18n("cvs output"));
     
 }
 
 CvsPart::~CvsPart() {
-    if (m_widget) topLevel()->removeView(m_widget); // Inform toplevel, that the output view is gone
+    if (m_widget) mainWindow()->removeView(m_widget); // Inform toplevel, that the output view is gone
     delete m_widget;
 }
 
