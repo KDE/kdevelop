@@ -123,5 +123,5 @@ Source=%{src}/hi22-action-plugin.png
 Dest=%{dest}/src/hi32-action-plugin.png
 
 [MSG]
-Type=install
+Type=message
 Comment=A plugin for Kate was created at %{dest}
