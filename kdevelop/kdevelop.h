@@ -34,14 +34,9 @@ public:
   ~KDevelop();
 
 public slots:
-  void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption);
+  /** Embed the widgets of components in the GUI. */
+  void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
 
-  /** Embed the widgets of components in the dockwidget-based GUI.
-    Which dockwidget gets which widget depends on the object name.
-    This method should be called in the initialization part of every certain component
-  */
-  void embedToolViewInGUI(QWidget* w);
-	
 protected slots: // Protected slots
   /** reimplemented from KParts::MainWindow */
   void slotSetStatusBarText( const QString &text);
@@ -52,13 +47,6 @@ private:
   /** initializes the help messages (whats this and
       statusbar help) on the KActions */
   void initHelp();
-
-  /** creates and inits all tool and information views */
-  void initCoveringDockViews();
-
-  /** loads the components */
-  void initComponents();
-  void loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio);
 
   // File Actions
 
