@@ -647,7 +647,10 @@ void QextMdiChildFrm::linkChildren( QDict<FocusPolicy>* pFocPolDict)
       QWidget* widg = (QWidget*)obj;
       ++it;
       FocusPolicy* pFocPol = pFocPolDict->find(widg->name()); // remember the focus policy from before the reparent
-      widg->setFocusPolicy( *pFocPol);
+      if( pFocPol != 0)
+         widg->setFocusPolicy( *pFocPol);
+      else
+         qDebug("Warning: no such entry in widget-name list (QextMdiChildFrm::linkChildren). Should not happen!");
       widg->installEventFilter(this);
    }
    delete list;                        // delete the list, not the objects
