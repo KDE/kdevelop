@@ -1,5 +1,6 @@
 #include <qpainter.h>
 #include <qsizepolicy.h>
+#include <qstyle.h>
 
 
 #include "ktabzoombutton.h"
@@ -15,18 +16,15 @@ public:
 
 
 KTabZoomButton::KTabZoomButton(const QString &text, QWidget *parent, KTabZoomPosition::Position pos, const char *name)
-  : QToolButton(parent, name)
+  : QPushButton(text, parent, name)
 {
   d = new KTabZoomButtonPrivate;
   
   d->m_position = pos;
-  
-  setAutoRaise(true);
 
-  setUsesTextLabel(true);
-  setTextLabel(text);
+  setFlat(true);
   setToggleButton(true);
-  
+
   setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 }
 
@@ -37,31 +35,61 @@ KTabZoomButton::~KTabZoomButton()
 }
 
 
-void KTabZoomButton::drawButtonLabel(QPainter *p)
+void KTabZoomButton::drawButton(QPainter *p)
 {
+  int w = fontMetrics().width(text()) + 2*fontMetrics().width('m');
+  int h = fontMetrics().height()+2;
+
+  QPixmap pixmap(w, h);
+  QPainter painter(&pixmap);
+  
+  pixmap.fill(eraseColor());
+  
+  QStyle::SFlags flags = QStyle::Style_Default;
+  if (isEnabled())
+    flags |= QStyle::Style_Enabled;
+  if (isDown())
+    flags |= QStyle::Style_Down;
+  if (isOn())
+    flags |= QStyle::Style_On;
+  if (! isFlat() && ! isDown())
+    flags |= QStyle::Style_Raised;
+
+  style().drawControl(QStyle::CE_PushButton, &painter, this, QRect(0,0,w,h), colorGroup(), flags);
+  style().drawControl(QStyle::CE_PushButtonLabel, &painter, this, QRect(0,0,w,h), colorGroup(), flags);
+
+  if (hasFocus())
+    style().drawPrimitive(QStyle::PE_FocusRect, &painter, QRect(1,1,w-2,h-2), colorGroup(), flags);
+  
   switch (d->m_position)
   {
   case KTabZoomPosition::Top:
   case KTabZoomPosition::Bottom:
-    QToolButton::drawButtonLabel(p);
+    p->drawPixmap(0,0, pixmap);
     break;
 
   case KTabZoomPosition::Left:
-    p->rotate(270.0);
-    p->drawText(-height(), 0, height(), width(), Qt::AlignCenter, textLabel());
+    p->rotate(-90);
+    p->drawPixmap(-height(), 0, pixmap);
     break;
 
   case KTabZoomPosition::Right:
     p->rotate(90);
-    p->drawText(0, -width(), height(), width(), Qt::AlignCenter, textLabel());
+    p->drawPixmap(0,-width(), pixmap);
     break;
-  }
+  }		   
+}
+
+
+void KTabZoomButton::drawButtonLabel(QPainter *p)
+{
+  drawButton(p);
 }
 
 
 QSize KTabZoomButton::sizeHint () const
 {
-  int w = fontMetrics().width(textLabel()) + 2*fontMetrics().width('m');
+  int w = fontMetrics().width(text()) + 2*fontMetrics().width('m');
 
   if (d->m_position == KTabZoomPosition::Top || d->m_position == KTabZoomPosition::Bottom)
     return QSize(w, fontMetrics().height()+2);

@@ -1,3 +1,8 @@
+2002-06-12  Matthias Hölzer-Klüpfel <mhk@kde.org>
+
+	* Improved buttons in IDEAl mode: added keyboard navigation 
+	  and styleability.
+
 2002-06-12  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Compiling of single files in auto and custom project parts

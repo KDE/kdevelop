@@ -2,7 +2,7 @@
 #define __K_TABZOOMBUTTON_H__
 
 
-#include <qtoolbutton.h>
+#include <qpushbutton.h>
 
 
 #include "ktabzoomposition.h"
@@ -10,7 +10,7 @@
 
 class KTabZoomButtonPrivate;
 
-class KTabZoomButton : public QToolButton
+class KTabZoomButton : public QPushButton
 {
   Q_OBJECT
 
@@ -23,6 +23,7 @@ public:
 protected:
 
   virtual void drawButtonLabel(QPainter *);
+  virtual void drawButton(QPainter *);
   virtual QSize sizeHint() const;
 
 
