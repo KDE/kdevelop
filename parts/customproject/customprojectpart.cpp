@@ -427,12 +427,11 @@ void CustomProjectPart::updateTargetMenu()
         }
     } else {
         QFile f(buildDirectory() + "/Makefile");
-        if (!f.open(IO_ReadOnly)) {
+	if (!f.exists())
 	    f.setName( buildDirectory() + "/makefile" );
-	    if ( !f.open(IO_ReadOnly) ) {
-                kdDebug(9025) << "No Makefile" << endl;
-                return;
-	    }
+        if (!f.open(IO_ReadOnly)) {
+            kdDebug(9025) << "No Makefile" << endl;
+            return;
         }
         QTextStream stream(&f);
         QRegExp re(".PHONY\\s*:(.*)");
