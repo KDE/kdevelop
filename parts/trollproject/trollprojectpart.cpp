@@ -16,7 +16,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
-
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
@@ -25,6 +25,8 @@
 #include <qmessagebox.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
+#include <kprocess.h>
+#include <makeoptionswidget.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -99,12 +101,40 @@ TrollProjectPart::~TrollProjectPart()
     delete m_widget;
 }
 
+QString TrollProjectPart::makeEnvironment()
+{
+    // Get the make environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), "/kdevtrollproject/make/envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+#if (KDE_VERSION > 305)
+        environstr += KProcess::quote((*it).second);
+#else
+        environstr += KShellProcess::quote((*it).second);
+#endif
+        environstr += " ";
+    }
+    return environstr;
+}
 
 void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"));
     RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject",projectDirectory(), vbox);
+    
+    vbox = dlg->addVBoxPage(i18n("Make Options"));
+    MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
+    connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
+
     connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
 }
 
@@ -227,6 +257,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
       QString dircmd = "cd ";
       dircmd += dir;
       dircmd += " && ";
+      cmdline.prepend(makeEnvironment());
       makeFrontend()->queueCommand(dir, dircmd + cmdline);
     }
 
@@ -249,7 +280,8 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
-
+    
+    cmdline.prepend(makeEnvironment());
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 
@@ -270,7 +302,8 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
-
+    
+    cmdline.prepend(makeEnvironment());
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
 }
 

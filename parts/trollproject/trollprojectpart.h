@@ -64,6 +64,7 @@ private:
     void startQMakeCommand(const QString &dir);
     void execute(const QString &directory, const QString &command);
     void queueCmd(const QString &dir, const QString &cmd);
+    QString makeEnvironment();
 
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_qmakeHeader;
