@@ -161,7 +161,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_problemReporter = 0;
 
     m_functionHintTimer = new QTimer( this );
-    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
+//    connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
 
     setXMLFile( "kdevcppsupport.rc" );
 
@@ -1716,7 +1716,7 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDo
 
 void CppSupportPart::slotCursorPositionChanged()
 {
-    m_functionHintTimer->changeInterval( 1000 );
+//    m_functionHintTimer->changeInterval( 1000 );
 }
 
 void CppSupportPart::slotFunctionHint( )
