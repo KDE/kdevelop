@@ -1,5 +1,5 @@
 
-EXTRA_DIST =cref.html logotp3.gif tipdatabase \
+EXTRA_DIST =cref.html logotp3.png tipdatabase \
 						index.sgml programming.sgml tutorial.sgml kde_libref.sgml add_kdedoc.sgml \
 						index.html index-1.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html   \
 						index-9.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html index-16.html\
@@ -16,7 +16,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) tipdatabase $(kde_htmldir)/en/kdevelop/tipdatabase
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
-	$(INSTALL_DATA) logotp3.gif $(kde_htmldir)/en/kdevelop/logotp3.gif
+	$(INSTALL_DATA) logotp3.png $(kde_htmldir)/en/kdevelop/logotp3.png
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) cref.html $(kde_htmldir)/en/kdevelop/cref.html
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/
