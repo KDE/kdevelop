@@ -551,6 +551,7 @@ void QEditorPart::setupHighlighting()
     mode->name = "c++";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.cpp" << "*.cxx" << "*.cc" << "*.C" << "*.c++" << "*.c" <<
+                       "*.m" << "*.mm" << "*.M" << "*.inl" << "*.tlh" << "*.diff" <<
                        "*.h" << "*.hpp" << "*.hh" << "*.hxx" << "*.h++" << "*.H";
     m_modes.append( mode );
 
