@@ -1,3 +1,6 @@
+2002-12-17 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+	* Still working on extended DOM path/automatic subclassing from ui-templates in qmake-projects
+
 2002-12-17 F@lk Brettschneider <falk@kdevelop.org>
 	* Childframe UI mode (not maximized): opening of new views fixed concerning the positioning and resizing
 
