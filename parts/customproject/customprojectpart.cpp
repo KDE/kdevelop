@@ -409,8 +409,9 @@ void CustomProjectPart::slotClean()
 void CustomProjectPart::slotExecute()
 {
     QString program = projectDirectory() + "/" + project()->mainProgram();
-    
-    DomUtil::PairList envvars = 
+    program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
+
+    DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/envvars", "envvar", "name", "value");
 
     QString environstr;
