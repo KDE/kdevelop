@@ -219,7 +219,7 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_debug_menu->insertSeparator();
 
   kdlg_debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run"),              ID_DEBUG_RUN);
-  kdlg_debug_menu->insertItem(Icon("dbgrun.xpm"),      i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
+  kdlg_debug_menu->insertItem(Icon("dbgrunto.xpm"),    i18n("Run to cursor"),    ID_DEBUG_RUN_CURSOR);
   kdlg_debug_menu->insertItem(Icon("dbgnext.xpm"),     i18n("Step over"),        ID_DEBUG_NEXT);
   kdlg_debug_menu->insertItem(Icon("dbgnextinst.xpm"), i18n("Step over instr."), ID_DEBUG_NEXT_INST);
   kdlg_debug_menu->insertItem(Icon("dbgstep.xpm"),     i18n("Step into"),        ID_DEBUG_STEP);
