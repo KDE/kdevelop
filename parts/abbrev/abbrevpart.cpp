@@ -243,7 +243,7 @@ void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
             currentCol += s.length();
         }
 
-        if( i != l.count()-1 ){
+        if( i != (int)l.count()-1 ){
             editiface->insertLine( ++currentLine, spaces );
             currentCol = spaces.length();
             //pView->keyReturn();

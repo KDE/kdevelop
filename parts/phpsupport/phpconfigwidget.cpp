@@ -109,7 +109,7 @@ void PHPConfigWidget::slotAboutClicked()
   m_phpInfo="";
 }
 
-void PHPConfigWidget::slotReceivedPHPInfo (KProcess* proc, char* buffer, int buflen){
+void PHPConfigWidget::slotReceivedPHPInfo (KProcess* /*proc*/, char* buffer, int buflen){
   m_phpInfo += QCString(buffer,buflen+1);
 }
 void PHPConfigWidget::slotPHPExeButtonClicked(){

@@ -209,7 +209,7 @@ static PyObject *pydcopc_demarshal_QString(PyObject */*self*/, PyObject *arg)
     // return Py_BuildValue((char*)"(u#s#)", str.unicode(), str.length(), data.data()+advance, data.size()-advance);
 
     Py_UNICODE *p = new Py_UNICODE[str.length()];
-    for (int i=0; i < str.length(); ++i)
+    for (int i=0; i < (int)str.length(); ++i)
         p[i] = str.at(i).unicode();
     PyObject *obj = Py_BuildValue((char*)"(u#s#)", p, str.length(), data.data()+advance, data.size()-advance);
     delete p;

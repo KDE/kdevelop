@@ -489,7 +489,6 @@ void ParsedClass::out()
     ParsedParent *aParent;
     ParsedMethod *aMethod;
     //ParsedSignalSlot *aSS;
-    char *str;
 
     if ( !comment().isEmpty() )
         kdDebug(9005) << comment() << endl;

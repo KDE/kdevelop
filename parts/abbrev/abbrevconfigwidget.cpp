@@ -21,7 +21,7 @@
 
 
 AbbrevConfigWidget::AbbrevConfigWidget(AbbrevPart *part, QWidget *parent, const char *name)
-    : AbbrevConfigWidgetBase(parent, "abbrev config widget")
+    : AbbrevConfigWidgetBase(parent, name)
 {
     m_part = part;
     

@@ -256,7 +256,7 @@ void PersistantClassStore::storeMethod ( ParsedMethod* pMethod )
 	if ( m_bIsOpen ) ( *m_pStream ) << ( *pMethod );
 }
 
-void PersistantClassStore::storeStruct ( ParsedStruct* pStruct )
+void PersistantClassStore::storeStruct ( ParsedStruct* /*pStruct*/ )
 {
 	//if ( m_bIsOpen ) ( *m_pStream ) << ( *pStruct );
 }

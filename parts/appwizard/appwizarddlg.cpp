@@ -475,7 +475,6 @@ void AppWizardDialog::insertCategoryIntoTreeView(const QString &completeCategory
 
 ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
 {
-    ApplicationInfo *info = 0;
     QListIterator<ApplicationInfo> it(m_appsInfo);
     for (; it.current(); ++it)
         if (it.current()->item == item)

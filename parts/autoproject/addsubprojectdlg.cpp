@@ -31,6 +31,7 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
     : QDialog(parent, name, true)
 {
     setCaption(("Add Subproject"));
+    setIcon(SmallIcon("folder_new.png"));
     
     QLabel *name_label = new QLabel(i18n("&Name:"), this);
     name_edit = new QLineEdit(this);
@@ -58,9 +59,7 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
 
-    setIcon ( SmallIcon ( "folder_new.png" ) );
-
-    subProject = item;
+    m_subProject = item;
     m_widget = widget;
     m_part = part;
 }
@@ -79,7 +78,7 @@ void AddSubprojectDialog::accept()
         return;
     }
 
-    QListViewItem *childItem = subProject->firstChild();
+    QListViewItem *childItem = m_subProject->firstChild();
     while (childItem) {
         if (name == static_cast<SubprojectItem*>(childItem)->subdir) {
             KMessageBox::sorry(this, i18n("A subproject with this name already exists"));
@@ -88,29 +87,29 @@ void AddSubprojectDialog::accept()
         childItem = childItem->nextSibling();
     }
 
-    QString relmakefile = (subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
+    QString relmakefile = (m_subProject->path + "/" + name + "/Makefile").mid(m_widget->projectDirectory().length()+1);
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
-    QDir dir(subProject->path);
+    QDir dir(m_subProject->path);
     if (!dir.mkdir(name)) {
         KMessageBox::sorry(this, i18n("Could not create subdirectory %1").arg(name));
         return;
     }
 
     // Adjust SUBDIRS variable in containing Makefile.am
-    subProject->variables["SUBDIRS"] += (" " + name);
+    m_subProject->variables["SUBDIRS"] += (" " + name);
     QMap<QString,QString> replaceMap;
-    replaceMap.insert("SUBDIRS", subProject->variables["SUBDIRS"]);
-    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+    replaceMap.insert("SUBDIRS", m_subProject->variables["SUBDIRS"]);
+    AutoProjectTool::modifyMakefileam(m_subProject->path + "/Makefile.am", replaceMap);
 
     // Create new item in tree view
-    SubprojectItem *newitem = new SubprojectItem(subProject, name);
+    SubprojectItem *newitem = new SubprojectItem(m_subProject, name);
     newitem->subdir = name;
-    newitem->path = subProject->path + "/" + name;
-    newitem->variables["INCLUDES"] = subProject->variables["INCLUDES"];
+    newitem->path = m_subProject->path + "/" + name;
+    newitem->variables["INCLUDES"] = m_subProject->variables["INCLUDES"];
     newitem->setOpen(true);
     
     // Move to the bottom of the list
-    QListViewItem *lastItem = subProject->firstChild();
+    QListViewItem *lastItem = m_subProject->firstChild();
     while (lastItem->nextSibling())
         lastItem = lastItem->nextSibling();
     if (lastItem != newitem)

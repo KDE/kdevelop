@@ -47,7 +47,7 @@ RegexpTestDialog::~RegexpTestDialog()
 {}
 
 
-void RegexpTestDialog::showEvent(QShowEvent *e)
+void RegexpTestDialog::showEvent(QShowEvent *)
 {
     KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
         (m_part->partController()->activePart());

@@ -135,11 +135,11 @@ FileSelectorWidget::~FileSelectorWidget()
 {
 }
 
-void FileSelectorWidget::dragEnterEvent ( QDragEnterEvent* ev )
+void FileSelectorWidget::dragEnterEvent ( QDragEnterEvent* /*ev*/ )
 {
 }
 
-void FileSelectorWidget::dropEvent ( QDropEvent* ev )
+void FileSelectorWidget::dropEvent ( QDropEvent* /*ev*/ )
 {
     kdDebug ( 9000 ) << "Dropped" << endl;
 

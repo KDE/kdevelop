@@ -1024,7 +1024,7 @@ char *JDBController::parse(char *buf)
 
 // **************************************************************************
 
-void JDBController::setBreakpoint(const QCString &/*BPSetCmd*/, int key)
+void JDBController::setBreakpoint(const QCString &/*BPSetCmd*/, int /*key*/)
 {
 //    queueCmd(new JDBSetBreakpointCommand("", key));
 }
@@ -1052,7 +1052,7 @@ void JDBController::modifyBreakpoint(Breakpoint *)
 /**
  * Start a JDB debugging session
 */
-void JDBController::slotStart(const QString &application, const QString &args, const QString &sDbgShell)
+void JDBController::slotStart(const QString &/*application*/, const QString &args, const QString &sDbgShell)
 {
     ASSERT (!dbgProcess_ && !tty_);
     

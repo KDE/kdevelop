@@ -77,7 +77,7 @@ void ToolsConfig::showEvent(QShowEvent *e)
 void ToolsConfig::checkButtons()
 {
   _toList->setEnabled(_tree->selectedItem() && !_tree->selectedItem()->firstChild());
-  _toTree->setEnabled(_list->currentItem() >= 0 || _list->currentItem() < _list->count());
+  _toTree->setEnabled(_list->currentItem() >= 0 || _list->currentItem() < (int)_list->count());
 }
 
 

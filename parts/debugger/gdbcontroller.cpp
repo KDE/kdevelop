@@ -747,8 +747,8 @@ void GDBController::parseProgramLocation(char *buf)
     // This is soooo easy in perl...
     QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[abcdef0-9]+$");
     QRegExp regExp2(":0x[abcdef0-9]+$");
-    int linePos;
-    int addressPos;
+    int linePos=0;
+    int addressPos=0;
     if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
         ((addressPos  = regExp2.match(buf, 0)) >= 0)) {
         actOnProgramPause(QString(" "));

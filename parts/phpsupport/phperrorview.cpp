@@ -22,7 +22,7 @@
 
 using namespace std;
 
-PHPErrorView::PHPErrorView(PHPSupportPart *part) : QListBox(0,"PHP Error View") {
+PHPErrorView::PHPErrorView(PHPSupportPart */*part*/) : QListBox(0,"PHP Error View") {
   connect(this,SIGNAL(selected(int)),this,SLOT(slotItemSelected(int)));
 }
 

@@ -82,7 +82,7 @@ void FramestackWidget::addItem(QCString s) {
         currentList_->append(s);            // This copies the string (deepcopies = true above)
 }
 
-void FramestackWidget::parseJDBBacktraceList(char *str)
+void FramestackWidget::parseJDBBacktraceList(char */*str*/)
 {
 }
 

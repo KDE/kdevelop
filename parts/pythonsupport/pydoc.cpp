@@ -68,7 +68,7 @@ QCString PydocProtocol::errorMessage()
 }
 
 
-void PydocProtocol::stat(const KURL &url)
+void PydocProtocol::stat(const KURL &/*url*/)
 {
     UDSAtom uds_atom;
     uds_atom.m_uds = KIO::UDS_FILE_TYPE;

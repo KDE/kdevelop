@@ -143,7 +143,6 @@ QString ParsedMethod::asString()
 void ParsedMethod::out()
 {
     ParsedArgument *arg;
-    char buf[10];
 
     if ( !comment().isEmpty() )
         kdDebug(9005) << "    " << comment() << endl;

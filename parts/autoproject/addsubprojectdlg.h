@@ -34,7 +34,7 @@ private:
     
     QLineEdit *name_edit;
 
-    SubprojectItem *subProject;
+    SubprojectItem *m_subProject;
     AutoProjectWidget *m_widget;
     AutoProjectPart *m_part;
 };
