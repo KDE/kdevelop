@@ -132,6 +132,10 @@ void DocDoxygenPlugin::autoSetupPlugin()
     }
     if (!doxyDocDir.isEmpty())
     {
+        config->setGroup("Search Settings");
+        config->writeEntry("The KDE API Reference (The KDE API Reference)", true);
+        config->setGroup("Index Settings");
+        config->writeEntry("The KDE API Reference (The KDE API Reference)", true);
         config->setGroup("Locations");
         config->writePathEntry("The KDE API Reference (The KDE API Reference)", doxyDocDir + QString("/index.html"));
     }
