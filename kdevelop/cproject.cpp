@@ -693,7 +693,7 @@ void CProject::updateMakefileAm(QString makefile){
 	  if (config.readBoolEntry("install") && config.readEntry("type") == "SCRIPT"){
 	    install_exec_str = install_exec_str + "\t$(mkinstalldirs) " 
 	      + getDir(config.readEntry("install_location")) + "\n";
-	    install_exec_str = install_exec_str + "\t$(INSTALL_EXEC) " +
+	    install_exec_str = install_exec_str + "\t$(INSTALL_SCRIPT) " +
 	      getName(str2) + " " + config.readEntry("install_location") + "\n";
 	    install_exec = true;
 	  }
