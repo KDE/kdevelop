@@ -1,9 +1,4 @@
 
-// $APPNAME$ - Screensaver Template from KDevelop
-//
-// Copyright (c)  Ian Reinhart Geiser
-//
-
 #ifndef __$APPNAME$_H__
 #define __$APPNAME$_H__
 
@@ -32,7 +27,7 @@ private slots:
     void slotCancelPressed();
 
 private:
-	void readSettings();
+    void readSettings();
     $APPNAME$ *saver;
 };
 

@@ -1,9 +1,4 @@
 
-// $APPNAMELC$ - Screensaver Template from KDevelop
-//
-// Copyright (c)  Ian Reinhart Geiser
-//
-
 #include <stdlib.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -14,7 +9,7 @@
 #include "$APPNAMELC$.h"
 #include "$APPNAMELC$ui.h"
 
-// libkscreensaver interface
+//! libkscreensaver interface
 extern "C"
 {
     const char *kss_applicationName = "$APPNAMELC$.kss";
@@ -35,8 +30,7 @@ extern "C"
 }
 
 //-----------------------------------------------------------------------------
-// dialog to setup screen saver parameters
-//
+//! dialog to setup screen saver parameters
 $APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
         : $APPNAME$UI( parent, name, TRUE )
 {
@@ -48,8 +42,8 @@ $APPNAME$Setup::$APPNAME$Setup( QWidget *parent, const char *name )
              SLOT( slotCancelPressed() ) );
 }
 
-// read settings from config file
 
+//! read settings from config file
 void $APPNAME$Setup::readSettings()
 {
     KConfig *config = KGlobal::config();
@@ -59,8 +53,8 @@ void $APPNAME$Setup::readSettings()
     CheckBox1->setChecked(config->readBoolEntry( "somesetting", false ));
 }
 
-// Ok pressed - save settings and exit
 
+//! Ok pressed - save settings and exit
 void $APPNAME$Setup::slotOkPressed()
 {
     KConfig *config = KGlobal::config();
@@ -89,9 +83,8 @@ $APPNAME$::$APPNAME$( WId id ) : KScreenSaver( id )
 $APPNAME$::~$APPNAME$()
 {}
 
-// read configuration settings from config file
 
-
+//! read configuration settings from config file
 void $APPNAME$::readSettings()
 {
     KConfig *config = KGlobal::config();
@@ -110,4 +103,3 @@ void $APPNAME$::blank()
     //
     erase();
 }
-

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #ifndef _$APPNAMEUC$_H_
 #define _$APPNAMEUC$_H_
@@ -23,8 +20,8 @@ class KURL;
  * menus, toolbars, and status bars.
  *
  * @short Main window class
- * @author $AUTHOR <$EMAIL>
- * @version $APP_VERSION
+ * @author $AUTHOR$ <$EMAIL$>
+ * @version $VERSION$
  */
 class $APPNAME$ : public KMainWindow
 {
