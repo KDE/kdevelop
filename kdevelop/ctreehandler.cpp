@@ -252,6 +252,8 @@ void CTreeHandler::readIcons()
   // Load the icons
   icons[ THFOLDER ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
   icons[ THCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
+  icons[ THPROJECT ] = new QPixmap( il->loadMiniIcon( "kwm.xpm" ) );
+  icons[ THBOOK ] = new QPixmap( il->loadMiniIcon( "mini-book1.xpm" ) );
   icons[ THSTRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
   icons[ THPUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
   icons[ THPROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
@@ -261,6 +263,9 @@ void CTreeHandler::readIcons()
   icons[ THPROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
   icons[ THPRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
   icons[ THGLOBAL_FUNCTION ] = new QPixmap( pixDir + "CVglobal_meth.xpm");
+  icons[ THC_FILE ] = new QPixmap( il->loadMiniIcon( "c_src.xpm" ) );
+  icons[ THINSTALLED_FILE ] = new QPixmap( pixDir + "inst_file.xpm");
+  
 
   CTreeHandler::iconsRead = true;
 }
