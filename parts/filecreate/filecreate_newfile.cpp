@@ -87,7 +87,7 @@ namespace FileCreate {
 
   void NewFileChooser::addType(const FileType * filetype) {
     m_typeInCombo[m_filetypes->count()]=filetype;
-    m_filetypes->insertItem( filetype->name() );
+    m_filetypes->insertItem( filetype->name() + " (." + filetype->ext() + ")" );
   }
 
   void NewFileChooser::setCurrent(const FileType *filetype) {
