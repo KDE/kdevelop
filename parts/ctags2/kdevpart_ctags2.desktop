@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=CTags is a source navigation tool with support for many languages. When loaded it provides a context menu for finding type declarations/definitions and also a query dialog. http://ctags.sourceforge.net/
+Comment[xx]=xxctags2xx
+Name=KDevCTags2
+GenericName=CTags Frontend (2)
+GenericName[xx]=xxCTags Frontend (2)xx
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Project
+X-KDE-Library=libkdevctags2
+X-KDevelop-Version=1

@@ -1,0 +1,16 @@
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+
+kde_module_LTLIBRARIES = libkdevctags2.la
+libkdevctags2_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkdevctags2_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+
+libkdevctags2_la_SOURCES = ctags2_part.cpp readtags.c ctags2_widgetbase.ui ctags2_widget.cpp tags.cpp ctagskinds.cpp
+
+METASOURCES = AUTO
+
+servicedir = $(kde_servicesdir)
+service_DATA = kdevpart_ctags2.desktop
+
+rcdir = $(kde_datadir)/kdevctags2
+
+noinst_HEADERS = ctags2_widget.h tags.h readtags.h  ctagskinds.h
